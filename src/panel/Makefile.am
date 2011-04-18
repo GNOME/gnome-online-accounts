@@ -17,7 +17,7 @@ ccpanelsdir = $(libdir)/control-center-1/panels
 ccpanels_LTLIBRARIES = libgoa-panel.la
 
 libgoa_panel_la_SOURCES =					\
-	goapanel.c						\
+	goapanel.h			goapanel.c		\
 	$(NULL)
 
 libgoa_panel_la_CFLAGS =					\

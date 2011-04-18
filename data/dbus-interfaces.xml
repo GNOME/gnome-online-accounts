@@ -1,0 +1,46 @@
+<!DOCTYPE node PUBLIC
+"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node name="/" xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
+
+  <!-- ********************************************************************** -->
+
+  <!--
+      org.gnome.OnlineAccounts.Account:
+
+      The base account type.
+  -->
+  <interface name="org.gnome.OnlineAccounts.Account">
+    <!-- Type: The type of the account.
+         Known values include
+         <variablelist>
+         <varlistentry><term>google</term><listitem><para>The account is a Google Account. See the #org.gnome.OnlineAccounts.GoogleAccount D-Bus interface for more details.</para></listitem></varlistentry>
+         </variablelist>
+    -->
+    <property name="Type" type="s" access="read"/>
+
+    <!-- Id: An identifier for this account. -->
+    <property name="Id" type="s" access="read"/>
+
+    <!-- Name: A human-readable description for the account. -->
+    <property name="Name" type="s" access="read"/>
+  </interface>
+
+  <!--
+      org.gnome.OnlineAccounts.GoogleAccount:
+
+      A Google Account. Objects implementing this interface also
+      implements the #org.gnome.OnlineAccounts.Account interface.
+  -->
+  <interface name="org.gnome.OnlineAccounts.GoogleAccount">
+  </interface>
+
+  <!--
+      org.gnome.OnlineAccounts.Manager:
+
+      The account manager type.
+  -->
+  <interface name="org.gnome.OnlineAccounts.Manager">
+  </interface>
+
+</node>

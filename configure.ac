@@ -52,6 +52,7 @@ AC_OUTPUT([
 Makefile
 data/Makefile
 src/Makefile
+src/goa/Makefile
 src/panel/Makefile
 po/Makefile.in
 ])

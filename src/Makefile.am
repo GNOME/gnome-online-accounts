@@ -1,4 +1,4 @@
 
 NULL =
 
-SUBDIRS = panel
+SUBDIRS = goa panel

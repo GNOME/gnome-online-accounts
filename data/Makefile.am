@@ -16,6 +16,7 @@ pkgdata_DATA =						\
 EXTRA_DIST =						\
 	$(desktop_in_files)				\
 	$(pkgdata_DATA)					\
+	dbus-interfaces.xml				\
 	$(NULL)
 
 DISTCLEANFILES =					\
