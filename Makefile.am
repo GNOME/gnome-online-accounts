@@ -1,5 +1,5 @@
 
 NULL =
 
-SUBDIRS = src
+SUBDIRS = data src
 

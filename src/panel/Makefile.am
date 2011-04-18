@@ -13,21 +13,24 @@ INCLUDES = \
 	$(WARN_CFLAGS)						\
 	$(NULL)
 
-bin_PROGRAMS = goapanel
+ccpanelsdir = $(libdir)/control-center-1/panels
+ccpanels_LTLIBRARIES = libgoa-panel.la
 
-goapanel_SOURCES = 						\
+libgoa_panel_la_SOURCES =					\
 	goapanel.c						\
 	$(NULL)
 
-goapanel_CFLAGS =						\
+libgoa_panel_la_CFLAGS =					\
 	$(GLIB_CFLAGS) 						\
 	$(GTK_CFLAGS)						\
 	$(GNOME_CONTROL_CENTER_CFLAGS)				\
 	$(NULL)
 
-goapanel_LDADD = 						\
+libgoa_panel_la_LIBADD = 					\
 	$(GLIB_LIBS) 						\
 	$(GTK_LIBS)						\
 	$(GNOME_CONTROL_CENTER_LIBS)				\
 	$(NULL)
 
+clean-local :
+	rm -f *~
