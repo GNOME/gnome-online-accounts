@@ -24,6 +24,8 @@ GNOME_MAINTAINER_MODE_DEFINES
 # Libraries
 #
 
+GTK_DOC_CHECK([1.3])
+
 PKG_CHECK_MODULES(GLIB, [glib-2.0 gio-2.0 >= 2.28.0])
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
@@ -55,6 +57,8 @@ src/Makefile
 src/goa/Makefile
 src/panel/Makefile
 po/Makefile.in
+doc/Makefile
+doc/version.xml
 ])
 
 dnl ==========================================================================
@@ -76,4 +80,5 @@ echo "
         cppflags:                   ${CPPFLAGS}
 
         Maintainer mode:            ${USE_MAINTAINER_MODE}
+        Building api docs:          ${enable_gtk_doc}
 "

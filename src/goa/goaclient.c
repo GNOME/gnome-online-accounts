@@ -9,6 +9,15 @@
 G_LOCK_DEFINE_STATIC (init_lock);
 
 /**
+ * SECTION:goaclient
+ * @title: GoaClient
+ * @short_description: Object for accessing account information
+ *
+ * #GoaClient is used for accessing the GNOME Online Accounts service
+ * from a client program.
+ */
+
+/**
  * GoaClient:
  *
  * The #GoaClient structure contains only private data and should

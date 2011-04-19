@@ -1,5 +1,5 @@
 
 NULL =
 
-SUBDIRS = data src
+SUBDIRS = data src doc
 

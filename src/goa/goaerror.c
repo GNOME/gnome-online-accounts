@@ -7,7 +7,7 @@
 /**
  * SECTION:goaerror
  * @title: GoaError
- * @short_description: Possible errors that can be returned
+ * @short_description: Error codes
  *
  * Error codes and D-Bus errors.
  */

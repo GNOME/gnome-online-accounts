@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY version SYSTEM "version.xml">
+]>
+<book id="goa" xmlns:xi="http://www.w3.org/2003/XInclude">
+  <bookinfo>
+    <title>GNOME Online Accounts Reference Manual</title>
+    <releaseinfo>Version &version;</releaseinfo>
+    <authorgroup>
+      <author>
+	<firstname>David</firstname>
+	<surname>Zeuthen</surname>
+	<affiliation>
+	  <address>
+	    <email>zeuthen@gmail.com</email>
+	  </address>
+	</affiliation>
+      </author>
+    </authorgroup>
+
+    <copyright>
+      <year>2011</year>
+      <holder>The GOA Authors</holder>
+    </copyright>
+
+    <legalnotice>
+      <para>
+	Permission is granted to copy, distribute and/or modify this
+	document under the terms of the <citetitle>GNU Free
+	Documentation License</citetitle>, Version 1.1 or any later
+	version published by the Free Software Foundation with no
+	Invariant Sections, no Front-Cover Texts, and no Back-Cover
+	Texts. You may obtain a copy of the <citetitle>GNU Free
+	Documentation License</citetitle> from the Free Software
+	Foundation by visiting <ulink type="http"
+	url="http://www.fsf.org">their Web site</ulink> or by writing
+	to:
+	<address>
+          <street>51 Franklin Street</street>, Suite 500
+          <city>Boston</city>, <state>MA</state> <postcode>02110-1335</postcode>
+          <country>USA</country>
+	</address>
+      </para>
+      <para>
+	Many of the names used by companies to distinguish their
+	products and services are claimed as trademarks. Where those
+	names appear in any GNOME documentation, and those trademarks
+	are made aware to the members of the GNOME project, the names
+	have been printed in caps or initial caps.
+      </para>
+    </legalnotice>
+  </bookinfo>
+
+  <part id="overview">
+    <title>GNOME Online Accounts Overview</title>
+  </part>
+
+  <part id="ref-dbus">
+    <title>D-Bus API Reference</title>
+    <chapter id="ref-dbus-overview">
+      <title>Overview</title>
+      <sect1 id="ref-dbus-well-known-name">
+        <title>The org.gnome.OnlineAccounts bus name</title>
+        <para>
+          The D-Bus name <literal>org.gnome.OnlineAccounts</literal>
+          on the system bus is used by the GOA daemon, <link
+          linkend="goa-daemon.8">goa-daemon</link>. If this daemon
+          isn't running, it will be started if D-Bus messages are sent
+          to the name.
+        </para>
+      </sect1>
+      <sect1 id="ref-dbus-well-known-object">
+        <title>The /org/gnome/OnlineAccounts object</title>
+        <para>
+          The process that owns the well-known D-Bus name <link
+          linkend="ref-dbus-well-known-name">org.gnome.OnlineAccounts</link>
+          on the session bus (typically <link
+          linkend="goa-daemon.8">goa-daemon</link>) exports an object
+          at the well-known path
+          <literal>/org/gnome/OnlineAccounts</literal>.  This object
+          implements the <ulink
+          url="http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-objectmanager">org.freedesktop.DBus.ObjectManager</ulink>
+          interface and should be used by clients to discover other
+          objects.
+        </para>
+      </sect1>
+    </chapter>
+
+    <chapter>
+      <title>D-Bus Interfaces</title>
+      <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.Manager.xml"/>
+      <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.Account.xml"/>
+      <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.GoogleAccount.xml"/>
+    </chapter>
+  </part>
+
+  <part id="ref-library">
+    <title>Library API Reference</title>
+      <xi:include href="xml/goaclient.xml"/>
+      <xi:include href="xml/goaerror.xml"/>
+      <xi:include href="xml/GoaManager.xml"/>
+      <xi:include href="xml/GoaAccount.xml"/>
+      <xi:include href="xml/GoaGoogleAccount.xml"/>
+      <xi:include href="xml/GoaObjectManagerClient.xml"/>
+  </part>
+
+  <index>
+    <title>Index</title>
+  </index>
+
+  <chapter id="gio-hierarchy">
+    <title>Object Hierarchy</title>
+      <xi:include href="xml/tree_index.sgml"/>
+  </chapter>
+</book>
