@@ -60,6 +60,7 @@ Makefile
 data/Makefile
 src/Makefile
 src/goa/Makefile
+src/daemon/Makefile
 src/panel/Makefile
 po/Makefile.in
 doc/Makefile
