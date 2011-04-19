@@ -50,16 +50,24 @@ content_files =			\
 	$(NULL)
 
 expand_content_files =		\
+	goa-daemon.xml		\
 	$(NULL)
 
 extra_files =			\
 	$(NULL)
 
+man_MANS = 			\
+	goa-daemon.8		\
+	$(NULL)
+
+.xml.8:
+	$(XSLTPROC) -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
+
 include $(top_srcdir)/gtk-doc.make
 
-
 EXTRA_DIST +=			\
-	version.xml.in
+	version.xml.in		\
+	$(NULL)
 
 CLEANFILES +=   		\
 	$(DOC_MODULE)-decl-list.txt	\
