@@ -73,14 +73,10 @@ libgoa_la_SOURCES =						\
 
 libgoa_la_CFLAGS =						\
 	$(GLIB_CFLAGS) 						\
-	$(GTK_CFLAGS)						\
-	$(GNOME_CONTROL_CENTER_CFLAGS)				\
 	$(NULL)
 
 libgoa_la_LIBADD = 						\
 	$(GLIB_LIBS) 						\
-	$(GTK_LIBS)						\
-	$(GNOME_CONTROL_CENTER_LIBS)				\
 	$(NULL)
 
 clean-local :
