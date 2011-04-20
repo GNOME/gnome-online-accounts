@@ -71,18 +71,27 @@
         </para>
       </sect1>
       <sect1 id="ref-dbus-well-known-object">
-        <title>The /org/gnome/OnlineAccounts object</title>
+        <title>The /org/gnome/OnlineAccounts and /org/gnome/OnlineAccounts/Manager objects</title>
         <para>
           The process that owns the well-known D-Bus name <link
           linkend="ref-dbus-well-known-name">org.gnome.OnlineAccounts</link>
           on the session bus (typically <link
           linkend="goa-daemon.8">goa-daemon</link>) exports an object
           at the well-known path
-          <literal>/org/gnome/OnlineAccounts</literal>.  This object
+          <literal>/org/gnome/OnlineAccounts</literal>. This object
           implements the <ulink
           url="http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-objectmanager">org.freedesktop.DBus.ObjectManager</ulink>
           interface and should be used by clients to discover other
           objects.
+        </para>
+        <para>
+          One of the objects in the
+          <literal>/org/gnome/OnlineAccounts</literal> hierarchy
+          is an object at the path
+          <literal>/org/gnome/OnlineAccounts/Manager</literal> which
+          implements the <link
+          linkend="gdbus-interface-org-gnome-OnlineAccounts-Manager.top_of_page">org.gnome.OnlineAccounts.Manager</link>
+          interface.
         </para>
       </sect1>
     </chapter>

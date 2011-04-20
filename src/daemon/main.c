@@ -28,6 +28,7 @@
 #include <gio/gio.h>
 
 #include "gposixsignal.h"
+#include "goadaemon.h"
 
 /* ---------------------------------------------------------------------------------------------------- */
 
@@ -40,12 +41,15 @@ static GOptionEntry opt_entries[] =
   {"no-sigint", 0, 0, G_OPTION_ARG_NONE, &opt_no_sigint, "Do not handle SIGINT for controlled shutdown", NULL},
   {NULL }
 };
+static GoaDaemon *the_daemon = NULL;
 
 static void
 on_bus_acquired (GDBusConnection *connection,
                  const gchar     *name,
                  gpointer         user_data)
 {
+  if (connection != NULL)
+    the_daemon = goa_daemon_new ();
   g_print ("Connected to the session bus\n");
 }
 
@@ -133,6 +137,8 @@ main (int    argc,
   ret = 0;
 
  out:
+  if (the_daemon != NULL)
+    g_object_unref (the_daemon);
   if (sigint_id > 0)
     g_source_remove (sigint_id);
   if (name_owner_id != 0)
