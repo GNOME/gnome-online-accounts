@@ -45,6 +45,8 @@ GoaClient          *goa_client_new_finish         (GAsyncResult        *res,
 GoaClient          *goa_client_new_sync           (GCancellable        *cancellable,
                                                    GError             **error);
 GDBusObjectManager *goa_client_get_object_manager (GoaClient           *client);
+GList              *goa_client_get_accounts       (GoaClient           *client);
+
 
 G_END_DECLS
 

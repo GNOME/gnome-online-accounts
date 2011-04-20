@@ -1,7 +1,8 @@
 
 NULL =
 
-INCLUDES = \
+INCLUDES = 							\
+	-I$(top_builddir)/src -I$(top_srcdir)/src		\
 	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\" 		\
 	-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\" 		\
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" 			\
@@ -10,6 +11,7 @@ INCLUDES = \
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" 		\
 	-DPACKAGE_LIB_DIR=\""$(libdir)"\" 			\
 	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT			\
+	-DGOA_API_IS_SUBJECT_TO_CHANGE				\
 	$(WARN_CFLAGS)						\
 	$(NULL)
 
@@ -18,6 +20,7 @@ ccpanels_LTLIBRARIES = libgoa-panel.la
 
 libgoa_panel_la_SOURCES =					\
 	goapanel.h			goapanel.c		\
+	goapanelaccountsmodel.h		goapanelaccountsmodel.c	\
 	$(NULL)
 
 libgoa_panel_la_CFLAGS =					\
@@ -30,6 +33,7 @@ libgoa_panel_la_LIBADD = 					\
 	$(GLIB_LIBS) 						\
 	$(GTK_LIBS)						\
 	$(GNOME_CONTROL_CENTER_LIBS)				\
+	$(top_builddir)/src/goa/libgoa.la			\
 	$(NULL)
 
 clean-local :

@@ -57,6 +57,10 @@ struct _GoaClient
 typedef struct
 {
   GObjectClass parent_class;
+
+  void (*account_added) (GoaClient *client, GDBusObject *object);
+  void (*account_removed) (GoaClient *client, GDBusObject *object);
+  void (*account_changed) (GoaClient *client, GDBusObject *object);
 } GoaClientClass;
 
 enum
@@ -65,8 +69,31 @@ enum
   PROP_OBJECT_MANAGER
 };
 
+enum
+{
+  ACCOUNT_ADDED_SIGNAL,
+  ACCOUNT_REMOVED_SIGNAL,
+  ACCOUNT_CHANGED_SIGNAL,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
+
 static void initable_iface_init       (GInitableIface      *initable_iface);
 static void async_initable_iface_init (GAsyncInitableIface *async_initable_iface);
+
+static void on_object_added (GDBusObjectManager   *manager,
+                             GDBusObject          *object,
+                             gpointer              user_data);
+static void on_object_removed (GDBusObjectManager   *manager,
+                               GDBusObject          *object,
+                               gpointer              user_data);
+static void on_interface_proxy_properties_changed (GDBusObjectManagerClient   *manager,
+                                                   GDBusObjectProxy           *object_proxy,
+                                                   GDBusProxy                 *interface_proxy,
+                                                   GVariant                   *changed_properties,
+                                                   const gchar* const         *invalidated_properties,
+                                                   gpointer                    user_data);
 
 G_DEFINE_TYPE_WITH_CODE (GoaClient, goa_client, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init)
@@ -81,7 +108,13 @@ goa_client_finalize (GObject *object)
   if (client->initialization_error != NULL)
     g_error_free (client->initialization_error);
 
-  g_object_unref (client->object_manager);
+  if (client->object_manager != NULL)
+    {
+      g_signal_handlers_disconnect_by_func (client->object_manager, G_CALLBACK (on_object_added), client);
+      g_signal_handlers_disconnect_by_func (client->object_manager, G_CALLBACK (on_object_removed), client);
+      g_signal_handlers_disconnect_by_func (client->object_manager, G_CALLBACK (on_interface_proxy_properties_changed), client);
+      g_object_unref (client->object_manager);
+    }
 
   G_OBJECT_CLASS (goa_client_parent_class)->finalize (object);
 }
@@ -139,6 +172,66 @@ goa_client_class_init (GoaClientClass *klass)
                                                         G_TYPE_DBUS_OBJECT_MANAGER,
                                                         G_PARAM_READABLE |
                                                         G_PARAM_STATIC_STRINGS));
+
+  /**
+   * GoaClient::account-added:
+   * @client: The #GoaClient object emitting the signal.
+   * @account: The #GDBusObject for the added account.
+   *
+   * Emitted when @account has been added. See
+   * goa_client_get_accounts() for information about how to use this
+   * object.
+   */
+  signals[ACCOUNT_ADDED_SIGNAL] =
+    g_signal_new ("account-added",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GoaClientClass, account_added),
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_DBUS_OBJECT);
+
+  /**
+   * GoaClient::account-removed:
+   * @client: The #GoaClient object emitting the signal.
+   * @account: The #GDBusObject for the removed account.
+   *
+   * Emitted when @account has been removed.
+   */
+  signals[ACCOUNT_REMOVED_SIGNAL] =
+    g_signal_new ("account-removed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GoaClientClass, account_removed),
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_DBUS_OBJECT);
+
+  /**
+   * GoaClient::account-changed:
+   * @client: The #GoaClient object emitting the signal.
+   * @account: The #GDBusObject for the account with a change.
+   *
+   * Emitted when something on @account changes.
+   */
+  signals[ACCOUNT_CHANGED_SIGNAL] =
+    g_signal_new ("account-changed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GoaClientClass, account_changed),
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_DBUS_OBJECT);
+
 }
 
 /**
@@ -250,6 +343,18 @@ initable_init (GInitable     *initable,
                                                                        &client->initialization_error);
   if (client->object_manager == NULL)
     goto out;
+  g_signal_connect (client->object_manager,
+                    "object-added",
+                    G_CALLBACK (on_object_added),
+                    client);
+  g_signal_connect (client->object_manager,
+                    "object-removed",
+                    G_CALLBACK (on_object_removed),
+                    client);
+  g_signal_connect (client->object_manager,
+                    "interface-proxy-properties-changed",
+                    G_CALLBACK (on_interface_proxy_properties_changed),
+                    client);
 
   ret = TRUE;
 
@@ -291,3 +396,78 @@ goa_client_get_object_manager (GoaClient        *client)
   g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
   return client->object_manager;
 }
+
+/**
+ * goa_client_get_accounts:
+ * @client: A #GoaClient.
+ *
+ * Gets all accounts that @client knows about. The result is a list of
+ * #GDBusObject instances where each object at least has an
+ * #GoaAccount interface (that can be obtained via e.g. the
+ * GOA_GET_ACCOUNT() macro) but may also implement other interfaces
+ * such as #GoaGoogleAccount. Use goa_account_get_account_type() to
+ * find out.
+ *
+ * Returns: (transfer full) (element-type GDBusObject): A list of #GDBusObject objects.
+ */
+GList *
+goa_client_get_accounts (GoaClient *client)
+{
+  GList *ret;
+  GList *objects;
+  GList *l;
+
+  g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
+
+  ret = NULL;
+  objects = g_dbus_object_manager_get_objects (client->object_manager);
+  for (l = objects; l != NULL; l = l->next)
+    {
+      GDBusObject *object = G_DBUS_OBJECT (l->data);
+
+      if (GOA_PEEK_ACCOUNT (object) != NULL)
+        {
+          ret = g_list_prepend (ret, g_object_ref (object));
+        }
+    }
+  g_list_foreach (objects, (GFunc) g_object_unref, NULL);
+  g_list_free (objects);
+
+  return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
+on_object_added (GDBusObjectManager   *manager,
+                 GDBusObject          *object,
+                 gpointer              user_data)
+{
+  GoaClient *client = GOA_CLIENT (user_data);
+  if (GOA_PEEK_ACCOUNT (object) != NULL)
+    g_signal_emit (client, signals[ACCOUNT_ADDED_SIGNAL], 0, object);
+}
+
+static void
+on_object_removed (GDBusObjectManager   *manager,
+                   GDBusObject          *object,
+                   gpointer              user_data)
+{
+  GoaClient *client = GOA_CLIENT (user_data);
+  if (GOA_PEEK_ACCOUNT (object) != NULL)
+    g_signal_emit (client, signals[ACCOUNT_REMOVED_SIGNAL], 0, object);
+}
+
+static void
+on_interface_proxy_properties_changed (GDBusObjectManagerClient   *manager,
+                                       GDBusObjectProxy           *object_proxy,
+                                       GDBusProxy                 *interface_proxy,
+                                       GVariant                   *changed_properties,
+                                       const gchar* const         *invalidated_properties,
+                                       gpointer                    user_data)
+{
+  GoaClient *client = GOA_CLIENT (user_data);
+  if (GOA_PEEK_ACCOUNT (object_proxy) != NULL)
+    g_signal_emit (client, signals[ACCOUNT_CHANGED_SIGNAL], 0, object_proxy);
+}
+

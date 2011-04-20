@@ -24,7 +24,10 @@
 
 #include <glib/gi18n-lib.h>
 
+#include <goa/goa.h>
+
 #include "goapanel.h"
+#include "goapanelaccountsmodel.h"
 
 typedef struct _GoaPanelClass GoaPanelClass;
 
@@ -33,6 +36,11 @@ struct _GoaPanel
   CcPanel parent_instance;
 
   GtkBuilder *builder;
+
+  GoaClient *client;
+
+  GtkTreeView *accounts_treeview;
+  GoaPanelAccountsModel *accounts_model;
 };
 
 struct _GoaPanelClass
@@ -47,6 +55,10 @@ goa_panel_finalize (GObject *object)
 {
   GoaPanel *panel = GOA_PANEL (object);
 
+  if (panel->accounts_model != NULL)
+    g_object_unref (panel->accounts_model);
+  if (panel->client != NULL)
+    g_object_unref (panel->client);
   g_object_unref (panel->builder);
 
   G_OBJECT_CLASS (goa_panel_parent_class)->finalize (object);
@@ -58,6 +70,8 @@ goa_panel_init (GoaPanel *panel)
   GtkWidget *w;
   GError *error;
   GtkStyleContext *context;
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *renderer;
 
   panel->builder = gtk_builder_new ();
   error = NULL;
@@ -82,6 +96,32 @@ goa_panel_init (GoaPanel *panel)
   gtk_widget_set_size_request (w, 0, 400);
   gtk_widget_reparent (w, GTK_WIDGET (panel));
   gtk_widget_show_all (w);
+
+  panel->accounts_treeview = GTK_TREE_VIEW (gtk_builder_get_object (panel->builder, "accounts-tree-treeview"));
+
+  /* TODO: probably want to avoid _sync() ... */
+  error = NULL;
+  panel->client = goa_client_new_sync (NULL /* GCancellable */, &error);
+  if (panel->client == NULL)
+    {
+      g_warning ("Error getting a GoaClient: %s (%s, %d)",
+                 error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+  panel->accounts_model = goa_panel_accounts_model_new (panel->client);
+  gtk_tree_view_set_model (panel->accounts_treeview, GTK_TREE_MODEL (panel->accounts_model));
+
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_append_column (panel->accounts_treeview, column);
+
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_tree_view_column_pack_start (column, renderer, FALSE);
+  gtk_tree_view_column_set_attributes (column,
+                                       renderer,
+                                       "markup", GOA_PANEL_ACCOUNTS_MODEL_COLUMN_NAME,
+                                       NULL);
 
  out:
   ;
