@@ -39,14 +39,25 @@ struct _GoaPanel
 
   GoaClient *client;
 
-  GtkTreeView *accounts_treeview;
   GoaPanelAccountsModel *accounts_model;
+
+  GtkWidget *accounts_treeview;
+
+  GtkWidget *google_account_name;
+  GtkWidget *google_email_address;
+  GtkWidget *google_mail_switch;
+  GtkWidget *google_chat_switch;
+  GtkWidget *google_contacts_switch;
+  GtkWidget *google_calendar_switch;
 };
 
 struct _GoaPanelClass
 {
   CcPanelClass parent_class;
 };
+
+static void on_tree_view_selection_changed (GtkTreeSelection *selection,
+                                            gpointer          user_data);
 
 G_DEFINE_DYNAMIC_TYPE (GoaPanel, goa_panel, CC_TYPE_PANEL);
 
@@ -55,6 +66,9 @@ goa_panel_finalize (GObject *object)
 {
   GoaPanel *panel = GOA_PANEL (object);
 
+  g_signal_handlers_disconnect_by_func (gtk_tree_view_get_selection (GTK_TREE_VIEW (panel->accounts_treeview)),
+                                        G_CALLBACK (on_tree_view_selection_changed),
+                                        panel);
   if (panel->accounts_model != NULL)
     g_object_unref (panel->accounts_model);
   if (panel->client != NULL)
@@ -63,6 +77,19 @@ goa_panel_finalize (GObject *object)
 
   G_OBJECT_CLASS (goa_panel_parent_class)->finalize (object);
 }
+
+static GtkWidget *
+add_switch (GoaPanel    *panel,
+            const gchar *hbox_id)
+{
+  GtkWidget *ret;
+  ret = gtk_switch_new ();
+  gtk_switch_set_active (GTK_SWITCH (ret), TRUE);
+  gtk_box_pack_start (GTK_BOX (gtk_builder_get_object (panel->builder, hbox_id)),
+                      ret, FALSE, TRUE, 0);
+  return ret;
+}
+
 
 static void
 goa_panel_init (GoaPanel *panel)
@@ -91,13 +118,21 @@ goa_panel_init (GoaPanel *panel)
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_INLINE_TOOLBAR);
   gtk_style_context_set_junction_sides (context, GTK_JUNCTION_TOP);
 
-  w = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-top-widget"));
-  /* TODO: not sure this is quite the right way to force minimum size */
-  gtk_widget_set_size_request (w, 0, 400);
-  gtk_widget_reparent (w, GTK_WIDGET (panel));
-  gtk_widget_show_all (w);
+  gtk_notebook_set_show_tabs (GTK_NOTEBOOK (gtk_builder_get_object (panel->builder, "accounts-notebook")), FALSE);
 
-  panel->accounts_treeview = GTK_TREE_VIEW (gtk_builder_get_object (panel->builder, "accounts-tree-treeview"));
+  panel->accounts_treeview = GTK_WIDGET (gtk_builder_get_object (panel->builder, "accounts-tree-treeview"));
+  g_signal_connect (gtk_tree_view_get_selection (GTK_TREE_VIEW (panel->accounts_treeview)),
+                    "changed",
+                    G_CALLBACK (on_tree_view_selection_changed),
+                    panel);
+
+  /* Google Account */
+  panel->google_account_name = GTK_WIDGET (gtk_builder_get_object (panel->builder, "google-account-name"));
+  panel->google_email_address = GTK_WIDGET (gtk_builder_get_object (panel->builder, "google-email-address"));
+  panel->google_mail_switch = add_switch (panel, "google-mail-hbox");
+  panel->google_chat_switch = add_switch (panel, "google-chat-hbox");
+  panel->google_contacts_switch = add_switch (panel, "google-contacts-hbox");
+  panel->google_calendar_switch = add_switch (panel, "google-calendar-hbox");
 
   /* TODO: probably want to avoid _sync() ... */
   error = NULL;
@@ -111,10 +146,10 @@ goa_panel_init (GoaPanel *panel)
     }
 
   panel->accounts_model = goa_panel_accounts_model_new (panel->client);
-  gtk_tree_view_set_model (panel->accounts_treeview, GTK_TREE_MODEL (panel->accounts_model));
+  gtk_tree_view_set_model (GTK_TREE_VIEW (panel->accounts_treeview), GTK_TREE_MODEL (panel->accounts_model));
 
   column = gtk_tree_view_column_new ();
-  gtk_tree_view_append_column (panel->accounts_treeview, column);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (panel->accounts_treeview), column);
 
   renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
@@ -124,7 +159,11 @@ goa_panel_init (GoaPanel *panel)
                                        NULL);
 
  out:
-  ;
+  w = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-top-widget"));
+  /* TODO: not sure this is quite the right way to force minimum size */
+  gtk_widget_set_size_request (w, 0, 400);
+  gtk_widget_reparent (w, GTK_WIDGET (panel));
+  gtk_widget_show_all (w);
 }
 
 static void
@@ -164,4 +203,82 @@ g_io_module_load (GIOModule *module)
 void
 g_io_module_unload (GIOModule *module)
 {
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
+show_page (GoaPanel *panel,
+           gint page_num)
+{
+  GtkNotebook *notebook;
+  notebook = GTK_NOTEBOOK (gtk_builder_get_object (panel->builder, "accounts-notebook"));
+  gtk_notebook_set_current_page (notebook, page_num);
+}
+
+static void
+show_page_nothing_selected (GoaPanel *panel)
+{
+  show_page (panel, 0);
+}
+
+static void
+show_page_no_ui (GoaPanel *panel)
+{
+  show_page (panel, 1);
+}
+
+static void
+show_page_google_account (GoaPanel    *panel,
+                          GDBusObject *object)
+{
+  GoaAccount *account;
+  GoaGoogleAccount *google_account;
+  gchar *s;
+
+  account = GOA_PEEK_ACCOUNT (object);
+  google_account = GOA_PEEK_GOOGLE_ACCOUNT (object);
+
+  show_page (panel, 2);
+  gtk_label_set_text (GTK_LABEL (panel->google_email_address),
+                      goa_google_account_get_email_address (google_account));
+  s = g_strdup_printf ("<big><b>%s</b></big>", goa_account_get_name (account));
+  gtk_label_set_markup (GTK_LABEL (panel->google_account_name), s);
+  g_free (s);
+
+  /* TODO: subscribe to changes etc. */
+}
+
+static void
+on_tree_view_selection_changed (GtkTreeSelection *selection,
+                                gpointer          user_data)
+{
+  GoaPanel *panel = GOA_PANEL (user_data);
+  GtkTreeIter iter;
+
+  if (gtk_tree_selection_get_selected (selection, NULL, &iter))
+    {
+      GDBusObject *object;
+
+      gtk_tree_model_get (GTK_TREE_MODEL (panel->accounts_model),
+                          &iter,
+                          GOA_PANEL_ACCOUNTS_MODEL_COLUMN_DBUS_OBJECT, &object,
+                          -1);
+
+      if (GOA_PEEK_GOOGLE_ACCOUNT (object))
+        {
+          show_page_google_account (panel, object);
+        }
+      else
+        {
+          show_page_no_ui (panel);
+        }
+      g_object_unref (object);
+    }
+  else
+    {
+      show_page_nothing_selected (panel);
+    }
+
+  g_debug ("selection changed");
 }
