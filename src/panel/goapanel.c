@@ -351,7 +351,6 @@ add_google_account (GoaPanel   *panel,
   escaped_scope = g_uri_escape_string (scope, NULL, TRUE);
   url = g_strdup_printf ("https://accounts.google.com/o/oauth2/auth"
                          "?response_type=code"
-                         /* use p.fd.o until https://groups.google.com/group/oauth2-dev/browse_thread/thread/e0016525aa6a2d4f is resolved */
                          "&redirect_uri=urn:ietf:wg:oauth:2.0:oob"
                          "&client_id=%s"
                          "&scope=%s",
