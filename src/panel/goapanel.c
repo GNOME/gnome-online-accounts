@@ -311,7 +311,7 @@ on_web_view_notify_title (GObject     *object,
   if (title != NULL && g_str_has_prefix (title, "Success "))
     {
       const gchar *code = title + sizeof "Success " - 1;
-      g_print ("Yay, authz code is `%s'\n", code);
+      g_print ("Yay, authz code is `%s' (url %s)\n", code, webkit_web_view_get_uri (web_view));
     }
 }
 

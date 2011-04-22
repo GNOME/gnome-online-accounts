@@ -33,10 +33,11 @@ INCLUDES = \
 	$(GIO_CFLAGS)			\
 	$(NULL)
 
-GTKDOC_LIBS = 					\
-	$(GLIB_LIBS)				\
-	$(GIO_LIBS)				\
-	$(top_builddir)/src/goa/libgoa.la	\
+GTKDOC_LIBS = 						\
+	$(GLIB_LIBS)					\
+	$(GIO_LIBS)					\
+	$(top_builddir)/src/goa/libgoa.la		\
+	$(top_builddir)/src/goa/libgoa-backend.la	\
 	$(NULL)
 
 # Extra options to supply to gtkdoc-mkdb

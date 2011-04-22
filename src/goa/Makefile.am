@@ -11,7 +11,6 @@ INCLUDES = 							\
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" 		\
 	-DPACKAGE_LIB_DIR=\""$(libdir)"\" 			\
 	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT			\
-	-DGOA_COMPILATION					\
 	$(WARN_CFLAGS)						\
 	$(NULL)
 
@@ -63,21 +62,54 @@ libgoa_la_HEADERS =						\
 
 libgoa_la_SOURCES =						\
 	goa.h							\
-	goaclient.h		goaclient.c			\
-	goaerror.h		goaerror.c			\
-	goa-generated.h		goa-generated.c			\
+	goaclient.h			goaclient.c		\
+	goaerror.h			goaerror.c		\
+	goa-generated.h			goa-generated.c		\
 	goatypes.h						\
 	goaenums.h						\
-	goaenumtypes.h		goaenumtypes.c			\
+	goaenumtypes.h			goaenumtypes.c		\
 	$(NULL)
 
 libgoa_la_CFLAGS =						\
+	-DGOA_COMPILATION					\
 	$(GLIB_CFLAGS) 						\
 	$(NULL)
 
 libgoa_la_LIBADD = 						\
 	$(GLIB_LIBS) 						\
 	$(NULL)
+
+# ----------------------------------------------------------------------------------------------------
+
+lib_LTLIBRARIES += libgoa-backend.la
+
+libgoa_backend_ladir = $(includedir)/goa/goa
+
+libgoa_backend_la_HEADERS =					\
+	goabackend.h						\
+	goabackendtypes.h					\
+	goabackendservice.h					\
+	$(NULL)
+
+libgoa_backend_la_SOURCES =					\
+	goabackend.h						\
+	goabackendtypes.h					\
+	goabackendservice.h		goabackendservice.c	\
+	$(NULL)
+
+libgoa_backend_la_CFLAGS =					\
+	-DGOA_BACKEND_COMPILATION				\
+	-DGOA_API_IS_SUBJECT_TO_CHANGE				\
+	$(GLIB_CFLAGS) 						\
+	$(GTK_CFLAGS) 						\
+	$(NULL)
+
+libgoa_backend_la_LIBADD = 					\
+	$(GLIB_LIBS) 						\
+	$(GTK_LIBS) 						\
+	$(NULL)
+
+# ----------------------------------------------------------------------------------------------------
 
 clean-local :
 	rm -f *~ goa-generated-doc-*.xml $(dbus_built_sources) $(enum_built_sources)
