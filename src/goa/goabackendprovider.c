@@ -24,6 +24,7 @@
 #include <glib/gi18n-lib.h>
 
 #include "goabackendprovider.h"
+#include "goabackendgoogleprovider.h"
 
 /**
  * SECTION:goabackendprovider
@@ -62,12 +63,36 @@ goa_backend_provider_get_provider_type (GoaBackendProvider *provider)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static void
+ensure_ep_and_builtins (void)
+{
+  static gsize once_init_value = 0;
+
+  if (g_once_init_enter (&once_init_value))
+    {
+      GIOExtensionPoint *extension_point;
+      static volatile GType type = 0;
+
+      extension_point = g_io_extension_point_register (GOA_BACKEND_PROVIDER_EXTENSION_POINT_NAME);
+      g_io_extension_point_set_required_type (extension_point, GOA_TYPE_BACKEND_PROVIDER);
+
+      type = GOA_TYPE_BACKEND_GOOGLE_PROVIDER;
+      type = type; /* for -Wunused-but-set-variable */
+
+      g_once_init_leave (&once_init_value, 1);
+    }
+}
+
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 /**
  * goa_backend_provider_get_for_provider_type:
  * @provider_type: A provider type.
  *
- * Looks up the "goa-backend-provider" extension points and returns a
- * #GoaBackendProvider for @provider_type, if any.
+ * Looks up the %GOA_BACKEND_PROVIDER_EXTENSION_POINT_NAME extension
+ * point and returns a newly created #GoaBackendProvider for
+ * @provider_type, if any.
  *
  * Returns: (transfer full): A #GoaBackendProvider (that must be freed
  * with g_object_unref()) or %NULL if not found.
@@ -79,12 +104,50 @@ goa_backend_provider_get_for_provider_type (const gchar *provider_type)
   GIOExtensionPoint *extension_point;
   GoaBackendProvider *ret;
 
+  ensure_ep_and_builtins ();
+
   ret = NULL;
 
   extension_point = g_io_extension_point_lookup (GOA_BACKEND_PROVIDER_EXTENSION_POINT_NAME);
   extension = g_io_extension_point_get_extension_by_name (extension_point, provider_type);
   if (extension != NULL)
     ret = GOA_BACKEND_PROVIDER (g_object_new (g_io_extension_get_type (extension), NULL));
+  return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+/**
+ * goa_backend_provider_get_all:
+ *
+ * Looks up the %GOA_BACKEND_PROVIDER_EXTENSION_POINT_NAME extension
+ * point and returns a newly created #GoaBackendProvider for each
+ * provider type encountered.
+ *
+ * Returns: (transfer full) (element-type GoaBackendProvider): A list
+ *   of element providers that should be freed with g_list_free()
+ *   after each element has been freed with g_object_unref().
+ */
+GList *
+goa_backend_provider_get_all (void)
+{
+  GList *ret;
+  GList *extensions;
+  GList *l;
+  GIOExtensionPoint *extension_point;
+
+  ensure_ep_and_builtins ();
+
+  ret = NULL;
+  extension_point = g_io_extension_point_lookup (GOA_BACKEND_PROVIDER_EXTENSION_POINT_NAME);
+  extensions = g_io_extension_point_get_extensions (extension_point);
+  /* TODO: what if there are two extensions with the same name? */
+  for (l = extensions; l != NULL; l = l->next)
+    {
+      GIOExtension *extension = l->data;
+      ret = g_list_prepend (ret, g_object_new (g_io_extension_get_type (extension), NULL));
+    }
+  ret = g_list_reverse (ret);
   return ret;
 }
 

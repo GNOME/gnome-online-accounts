@@ -82,6 +82,7 @@ const gchar        *goa_backend_provider_get_provider_type (GoaBackendProvider *
  */
 #define GOA_BACKEND_PROVIDER_EXTENSION_POINT_NAME "goa-backend-provider"
 
+GList               *goa_backend_provider_get_all (void);
 GoaBackendProvider  *goa_backend_provider_get_for_provider_type (const gchar *provider_type);
 
 G_END_DECLS
