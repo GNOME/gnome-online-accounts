@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include <string.h>
 #include <glib/gi18n-lib.h>
 
 #include <goa/goa.h>
@@ -41,6 +42,8 @@ struct _GoaPanel
 
   GoaPanelAccountsModel *accounts_model;
 
+  GtkWidget *toolbar;
+  GtkWidget *toolbar_add_button;
   GtkWidget *accounts_treeview;
 
   GtkWidget *google_account_name;
@@ -58,6 +61,9 @@ struct _GoaPanelClass
 
 static void on_tree_view_selection_changed (GtkTreeSelection *selection,
                                             gpointer          user_data);
+
+static void on_toolbar_add_button_clicked (GtkToolButton *button,
+                                           gpointer       user_data);
 
 G_DEFINE_DYNAMIC_TYPE (GoaPanel, goa_panel, CC_TYPE_PANEL);
 
@@ -90,7 +96,6 @@ add_switch (GoaPanel    *panel,
   return ret;
 }
 
-
 static void
 goa_panel_init (GoaPanel *panel)
 {
@@ -112,9 +117,16 @@ goa_panel_init (GoaPanel *panel)
       goto out;
     }
 
+  panel->toolbar = GTK_WIDGET (gtk_builder_get_object (panel->builder, "accounts-tree-toolbar"));
+  panel->toolbar_add_button = GTK_WIDGET (gtk_builder_get_object (panel->builder, "accounts-tree-toolbutton-add"));
+  g_signal_connect (panel->toolbar_add_button,
+                    "clicked",
+                    G_CALLBACK (on_toolbar_add_button_clicked),
+                    panel);
+
   context = gtk_widget_get_style_context (GTK_WIDGET (gtk_builder_get_object (panel->builder, "accounts-tree-scrolledwindow")));
   gtk_style_context_set_junction_sides (context, GTK_JUNCTION_BOTTOM);
-  context = gtk_widget_get_style_context (GTK_WIDGET (gtk_builder_get_object (panel->builder, "accounts-tree-toolbar")));
+  context = gtk_widget_get_style_context (panel->toolbar);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_INLINE_TOOLBAR);
   gtk_style_context_set_junction_sides (context, GTK_JUNCTION_TOP);
 
@@ -282,3 +294,175 @@ on_tree_view_selection_changed (GtkTreeSelection *selection,
 
   g_debug ("selection changed");
 }
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+#include <webkit/webkit.h>
+
+static void
+on_web_view_notify_title (GObject     *object,
+                          GParamSpec  *pspec,
+                          gpointer     user_data)
+{
+  WebKitWebView *web_view = WEBKIT_WEB_VIEW (object);
+  const gchar *title;
+
+  title = webkit_web_view_get_title (web_view);
+  if (title != NULL && g_str_has_prefix (title, "Success "))
+    {
+      const gchar *code = title + sizeof "Success " - 1;
+      g_print ("Yay, authz code is `%s'\n", code);
+    }
+}
+
+static void
+add_google_account (GoaPanel   *panel,
+                    GtkWidget  *dialog,
+                    GtkWidget  *vbox)
+{
+  SoupSession *session;
+  SoupCookieJar *cookie_jar;
+  GtkWidget *scrolled_window;
+  GtkWidget *web_view;
+  const gchar *client_id;
+  const gchar *scope;
+  gchar *escaped_scope;
+  gchar *url;
+
+  /* The upstream client id is for GNOME
+   *
+   *  108305240709-9tncnurl91sh2i0isqnpc7l397sojst2.apps.googleusercontent.com
+   *
+   * and is managed by David Zeuthen <zeuthen@gmail.com>. Distributors
+   * may change this to their own client id (or not?). TODO: maybe
+   * make client_id a configure option in case downstream distributors
+   * want to change it.
+   */
+  client_id = "108305240709-9tncnurl91sh2i0isqnpc7l397sojst2.apps.googleusercontent.com";
+  scope =
+    "https://www.googleapis.com/auth/userinfo#email " /* view email address */
+    "https://mail.google.com/mail/feed/atom "         /* email */
+    "https://www.google.com/m8/feeds "                /* contacts */
+    "https://www.google.com/calendar/feeds "          /* calendar */
+    "https://picasaweb.google.com/data "              /* picassa */
+    ;
+  // Use Lattitude? "https://www.googleapis.com/auth/latitude"
+
+  escaped_scope = g_uri_escape_string (scope, NULL, TRUE);
+  url = g_strdup_printf ("https://accounts.google.com/o/oauth2/auth"
+                         "?response_type=code"
+                         /* use p.fd.o until https://groups.google.com/group/oauth2-dev/browse_thread/thread/e0016525aa6a2d4f is resolved */
+                         "&redirect_uri=urn:ietf:wg:oauth:2.0:oob"
+                         "&client_id=%s"
+                         "&scope=%s",
+                         client_id,
+                         escaped_scope);
+
+  /* Ensure we use an empty non-persistent cookie to avoid login
+   * credentials being reused...
+   */
+  session = webkit_get_default_session ();
+  soup_session_remove_feature_by_type (session, SOUP_TYPE_COOKIE_JAR);
+  cookie_jar = soup_cookie_jar_new ();
+  soup_session_add_feature (session, SOUP_SESSION_FEATURE (cookie_jar));
+
+  /* TODO: we might need to add some more web browser UI to make this
+   * work...
+   */
+  web_view = webkit_web_view_new ();
+  webkit_web_view_load_uri (WEBKIT_WEB_VIEW (web_view), url);
+  g_signal_connect (web_view,
+                    "notify::title",
+                    G_CALLBACK (on_web_view_notify_title),
+                    /* data */ NULL);
+
+  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_set_size_request (scrolled_window, 500, 400);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+                                  GTK_POLICY_AUTOMATIC,
+                                  GTK_POLICY_AUTOMATIC);
+  gtk_container_add (GTK_CONTAINER (scrolled_window), web_view);
+  gtk_container_add (GTK_CONTAINER (vbox), scrolled_window);
+  gtk_widget_show_all (scrolled_window);
+
+  g_object_unref (cookie_jar);
+  g_free (escaped_scope);
+  g_free (url);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
+on_toolbar_add_button_clicked (GtkToolButton *button,
+                               gpointer       user_data)
+{
+  GoaPanel *panel = GOA_PANEL (user_data);
+  GtkWidget *add_account_button;
+  GtkWidget *dialog;
+  GtkWidget *combo_box;
+  GtkWidget *w;
+  gint response;
+  GList *children;
+  GList *l;
+
+  dialog = gtk_dialog_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), 12);
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+  gtk_window_set_transient_for (GTK_WINDOW (dialog),
+                                GTK_WINDOW (cc_shell_get_toplevel (cc_panel_get_shell (CC_PANEL (panel)))));
+
+  w = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-add-account-top-widget"));
+  gtk_widget_reparent (w, gtk_dialog_get_content_area (GTK_DIALOG (dialog)));
+
+  /* Start at page 0 */
+  w = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-add-account-notebook"));
+  gtk_notebook_set_show_tabs (GTK_NOTEBOOK (w), FALSE);
+  gtk_notebook_set_current_page (GTK_NOTEBOOK (w), 0);
+
+  /* Nuke children added during previous run */
+  w = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-add-account-vbox"));
+  children = gtk_container_get_children (GTK_CONTAINER (w));
+  for (l = children; l != NULL; l = l->next)
+    gtk_container_remove (GTK_CONTAINER (w), GTK_WIDGET (l->data));
+  g_list_free (children);
+
+  combo_box = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-add-account-combobox"));
+  gtk_combo_box_text_remove_all (GTK_COMBO_BOX_TEXT (combo_box));
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo_box), "google", _("Google Account"));
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo_box), "facebook", _("Facebook"));
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
+
+  gtk_dialog_add_button (GTK_DIALOG (dialog),
+                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+  add_account_button = gtk_dialog_add_button (GTK_DIALOG (dialog),
+                                              _("_Add account..."), GTK_RESPONSE_OK);
+
+  combo_box = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-add-account-combobox"));
+
+  gtk_widget_show_all (dialog);
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (response != GTK_RESPONSE_OK)
+    {
+      gtk_widget_hide (dialog);
+      goto out;
+    }
+
+  w = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-add-account-notebook"));
+  gtk_notebook_set_current_page (GTK_NOTEBOOK (w), 1);
+  gtk_widget_hide (add_account_button);
+
+  /* TODO: check type from combo_box */
+
+  w = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-add-account-vbox"));
+  add_google_account (panel, dialog, w);
+
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_hide (dialog);
+
+  g_print ("Final Response was %d\n", response);
+
+ out:
+  ;
+}
+
