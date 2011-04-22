@@ -24,19 +24,19 @@
 #error "Only <goa/goabackend.h> can be included directly."
 #endif
 
-#ifndef __GOA_BACKEND_GOOGLE_SERVICE_H__
-#define __GOA_BACKEND_GOOGLE_SERVICE_H__
+#ifndef __GOA_BACKEND_GOOGLE_PROVIDER_H__
+#define __GOA_BACKEND_GOOGLE_PROVIDER_H__
 
 #include <goa/goabackendtypes.h>
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_BACKEND_GOOGLE_SERVICE         (goa_backend_google_service_get_type ())
-#define GOA_BACKEND_GOOGLE_SERVICE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_BACKEND_GOOGLE_SERVICE, GoaBackendGoogleService))
-#define GOA_IS_BACKEND_GOOGLE_SERVICE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_BACKEND_GOOGLE_SERVICE))
+#define GOA_TYPE_BACKEND_GOOGLE_PROVIDER         (goa_backend_google_provider_get_type ())
+#define GOA_BACKEND_GOOGLE_PROVIDER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_BACKEND_GOOGLE_PROVIDER, GoaBackendGoogleProvider))
+#define GOA_IS_BACKEND_GOOGLE_PROVIDER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_BACKEND_GOOGLE_PROVIDER))
 
-GType               goa_backend_google_service_get_type           (void) G_GNUC_CONST;
+GType               goa_backend_google_provider_get_type           (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GOA_BACKEND_GOOGLE_SERVICE_H__ */
+#endif /* __GOA_BACKEND_GOOGLE_PROVIDER_H__ */

@@ -88,14 +88,14 @@ libgoa_backend_ladir = $(includedir)/goa/goa
 libgoa_backend_la_HEADERS =						\
 	goabackend.h							\
 	goabackendtypes.h						\
-	goabackendservice.h						\
+	goabackendprovider.h						\
 	$(NULL)
 
 libgoa_backend_la_SOURCES =						\
 	goabackend.h							\
 	goabackendtypes.h						\
-	goabackendservice.h		goabackendservice.c		\
-	goabackendgoogleservice.h	goabackendgoogleservice.c	\
+	goabackendprovider.h		goabackendprovider.c		\
+	goabackendgoogleprovider.h	goabackendgoogleprovider.c	\
 	$(NULL)
 
 libgoa_backend_la_CFLAGS =					\

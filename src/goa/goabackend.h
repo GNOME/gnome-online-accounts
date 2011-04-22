@@ -29,7 +29,8 @@
 
 #define __GOA_BACKEND_INSIDE_GOA_BACKEND_H__
 #include <goa/goabackendtypes.h>
-#include <goa/goaservice.h>
+#include <goa/goabackendprovider.h>
+#include <goa/goabackendgoogleprovider.h>
 #undef __GOA_BACKEND_INSIDE_GOA_BACKEND_H__
 
 #endif /* __GOA_BACKEND_H__ */

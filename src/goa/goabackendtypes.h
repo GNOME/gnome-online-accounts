@@ -31,10 +31,10 @@
 
 G_BEGIN_DECLS
 
-struct _GoaBackendService;
-typedef struct _GoaBackendService GoaBackendService;
-struct _GoaBackendGoogleService;
-typedef struct _GoaBackendGoogleService GoaBackendGoogleService;
+struct _GoaBackendProvider;
+typedef struct _GoaBackendProvider GoaBackendProvider;
+struct _GoaBackendGoogleProvider;
+typedef struct _GoaBackendGoogleProvider GoaBackendGoogleProvider;
 
 G_END_DECLS
 
