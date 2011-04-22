@@ -200,6 +200,9 @@ goa_error_get_type
 <FILE>goabackendservice</FILE>
 GoaBackendService
 GoaBackendServiceClass
+goa_backend_service_get_service_type
+GOA_BACKEND_SERVICE_EXTENSION_POINT_NAME
+goa_backend_service_get_for_service_type
 <SUBSECTION Standard>
 GOA_BACKEND_SERVICE
 GOA_BACKEND_SERVICE_CLASS
@@ -209,4 +212,14 @@ GOA_IS_BACKEND_SERVICE_CLASS
 GOA_TYPE_BACKEND_SERVICE
 GoaBackendServicePrivate
 goa_backend_service_get_type
+</SECTION>
+
+<SECTION>
+<FILE>goabackendgoogleservice</FILE>
+GoaBackendGoogleService
+<SUBSECTION Standard>
+GOA_BACKEND_GOOGLE_SERVICE
+GOA_IS_BACKEND_GOOGLE_SERVICE
+GOA_TYPE_BACKEND_GOOGLE_SERVICE
+goa_backend_google_service_get_type
 </SECTION>

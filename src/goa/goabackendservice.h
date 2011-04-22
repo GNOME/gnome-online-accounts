@@ -32,9 +32,9 @@
 G_BEGIN_DECLS
 
 #define GOA_TYPE_BACKEND_SERVICE         (goa_backend_service_get_type ())
-#define GOA_BACKEND_SERVICE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_BACKEND_SERVICE, GoaBackendBackendService))
-#define GOA_BACKEND_SERVICE_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GOA_TYPE_BACKEND_SERVICE, GoaBackendBackendServiceClass))
-#define GOA_BACKEND_SERVICE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GOA_TYPE_BACKEND_SERVICE, GoaBackendBackendServiceClass))
+#define GOA_BACKEND_SERVICE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_BACKEND_SERVICE, GoaBackendService))
+#define GOA_BACKEND_SERVICE_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GOA_TYPE_BACKEND_SERVICE, GoaBackendServiceClass))
+#define GOA_BACKEND_SERVICE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GOA_TYPE_BACKEND_SERVICE, GoaBackendServiceClass))
 #define GOA_IS_BACKEND_SERVICE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_BACKEND_SERVICE))
 #define GOA_IS_BACKEND_SERVICE_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GOA_TYPE_BACKEND_SERVICE))
 
@@ -57,6 +57,7 @@ struct _GoaBackendService
 /**
  * GoaBackendServiceClass:
  * @parent_class: The parent class.
+ * @get_service_type: Virtual function for goa_backend_service_get_service_type().
  *
  * Class structure for #GoaBackendService.
  */
@@ -64,12 +65,24 @@ struct _GoaBackendServiceClass
 {
   GObjectClass parent_class;
 
+  const gchar *(*get_service_type) (GoaBackendService *service);
+
   /*< private >*/
   /* Padding for future expansion */
   gpointer goa_reserved[32];
 };
 
-GType               goa_backend_service_get_type           (void) G_GNUC_CONST;
+GType               goa_backend_service_get_type         (void) G_GNUC_CONST;
+const gchar        *goa_backend_service_get_service_type (GoaBackendService *service);
+
+/**
+ * GOA_BACKEND_SERVICE_EXTENSION_POINT_NAME:
+ *
+ * Extension point for #GoaBackendService implementations.
+ */
+#define GOA_BACKEND_SERVICE_EXTENSION_POINT_NAME "goa-backend-service"
+
+GoaBackendService  *goa_backend_service_get_for_service_type (const gchar *service_type);
 
 G_END_DECLS
 

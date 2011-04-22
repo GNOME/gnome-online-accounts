@@ -85,16 +85,17 @@ lib_LTLIBRARIES += libgoa-backend.la
 
 libgoa_backend_ladir = $(includedir)/goa/goa
 
-libgoa_backend_la_HEADERS =					\
-	goabackend.h						\
-	goabackendtypes.h					\
-	goabackendservice.h					\
+libgoa_backend_la_HEADERS =						\
+	goabackend.h							\
+	goabackendtypes.h						\
+	goabackendservice.h						\
 	$(NULL)
 
-libgoa_backend_la_SOURCES =					\
-	goabackend.h						\
-	goabackendtypes.h					\
-	goabackendservice.h		goabackendservice.c	\
+libgoa_backend_la_SOURCES =						\
+	goabackend.h							\
+	goabackendtypes.h						\
+	goabackendservice.h		goabackendservice.c		\
+	goabackendgoogleservice.h	goabackendgoogleservice.c	\
 	$(NULL)
 
 libgoa_backend_la_CFLAGS =					\

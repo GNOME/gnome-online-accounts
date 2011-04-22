@@ -44,3 +44,47 @@ static void
 goa_backend_service_class_init (GoaBackendServiceClass *klass)
 {
 }
+
+/**
+ * goa_backend_service_get_service_type:
+ * @service: A #GoaBackendService.
+ *
+ * Gets the type of @service.
+ *
+ * Returns: (transfer none): A string owned by @service, do not free.
+ */
+const gchar *
+goa_backend_service_get_service_type (GoaBackendService *service)
+{
+  g_return_val_if_fail (GOA_IS_BACKEND_SERVICE (service), NULL);
+  return GOA_BACKEND_SERVICE_GET_CLASS (service)->get_service_type (service);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+/**
+ * goa_backend_service_get_for_service_type:
+ * @service_type: A service type.
+ *
+ * Looks up the "goa-backend-service" extension points and returns a
+ * #GoaBackendService for @service_type, if any.
+ *
+ * Returns: (transfer full): A #GoaBackendService (that must be freed
+ * with g_object_unref()) or %NULL if not found.
+ */
+GoaBackendService *
+goa_backend_service_get_for_service_type (const gchar *service_type)
+{
+  GIOExtension *extension;
+  GIOExtensionPoint *extension_point;
+  GoaBackendService *ret;
+
+  ret = NULL;
+
+  extension_point = g_io_extension_point_lookup (GOA_BACKEND_SERVICE_EXTENSION_POINT_NAME);
+  extension = g_io_extension_point_get_extension_by_name (extension_point, service_type);
+  if (extension != NULL)
+    ret = GOA_BACKEND_SERVICE (g_object_new (g_io_extension_get_type (extension), NULL));
+  return ret;
+}
+

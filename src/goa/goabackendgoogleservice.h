@@ -24,18 +24,19 @@
 #error "Only <goa/goabackend.h> can be included directly."
 #endif
 
-#ifndef __GOA_BACKEND_TYPES_H__
-#define __GOA_BACKEND_TYPES_H__
+#ifndef __GOA_BACKEND_GOOGLE_SERVICE_H__
+#define __GOA_BACKEND_GOOGLE_SERVICE_H__
 
-#include <goa/goa.h>
+#include <goa/goabackendtypes.h>
 
 G_BEGIN_DECLS
 
-struct _GoaBackendService;
-typedef struct _GoaBackendService GoaBackendService;
-struct _GoaBackendGoogleService;
-typedef struct _GoaBackendGoogleService GoaBackendGoogleService;
+#define GOA_TYPE_BACKEND_GOOGLE_SERVICE         (goa_backend_google_service_get_type ())
+#define GOA_BACKEND_GOOGLE_SERVICE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_BACKEND_GOOGLE_SERVICE, GoaBackendGoogleService))
+#define GOA_IS_BACKEND_GOOGLE_SERVICE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_BACKEND_GOOGLE_SERVICE))
+
+GType               goa_backend_google_service_get_type           (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GOA_BACKEND_TYPES_H__ */
+#endif /* __GOA_BACKEND_GOOGLE_SERVICE_H__ */
