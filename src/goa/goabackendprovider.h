@@ -58,6 +58,7 @@ struct _GoaBackendProvider
  * GoaBackendProviderClass:
  * @parent_class: The parent class.
  * @get_provider_type: Virtual function for goa_backend_provider_get_provider_type().
+ * @get_name: Virtual function for goa_backend_provider_get_name().
  *
  * Class structure for #GoaBackendProvider.
  */
@@ -66,14 +67,16 @@ struct _GoaBackendProviderClass
   GObjectClass parent_class;
 
   const gchar *(*get_provider_type) (GoaBackendProvider *provider);
+  const gchar *(*get_name) (GoaBackendProvider *provider);
 
   /*< private >*/
   /* Padding for future expansion */
   gpointer goa_reserved[32];
 };
 
-GType               goa_backend_provider_get_type         (void) G_GNUC_CONST;
+GType               goa_backend_provider_get_type          (void) G_GNUC_CONST;
 const gchar        *goa_backend_provider_get_provider_type (GoaBackendProvider *provider);
+const gchar        *goa_backend_provider_get_name          (GoaBackendProvider *provider);
 
 /**
  * GOA_BACKEND_PROVIDER_EXTENSION_POINT_NAME:

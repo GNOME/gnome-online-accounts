@@ -46,6 +46,7 @@ struct _GoaBackendGoogleProviderClass
 };
 
 static const gchar *goa_backend_google_provider_get_provider_type (GoaBackendProvider *_provider);
+static const gchar *goa_backend_google_provider_get_name          (GoaBackendProvider *_provider);
 
 /**
  * SECTION:goabackendgoogleprovider
@@ -73,12 +74,19 @@ goa_backend_google_provider_class_init (GoaBackendGoogleProviderClass *klass)
 
   provider_klass = GOA_BACKEND_PROVIDER_CLASS (klass);
   provider_klass->get_provider_type = goa_backend_google_provider_get_provider_type;
+  provider_klass->get_name          = goa_backend_google_provider_get_name;
 }
 
 static const gchar *
 goa_backend_google_provider_get_provider_type (GoaBackendProvider *_provider)
 {
   return "google";
+}
+
+static const gchar *
+goa_backend_google_provider_get_name (GoaBackendProvider *_provider)
+{
+  return _("Google Account");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

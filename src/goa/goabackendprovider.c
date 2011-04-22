@@ -61,6 +61,22 @@ goa_backend_provider_get_provider_type (GoaBackendProvider *provider)
   return GOA_BACKEND_PROVIDER_GET_CLASS (provider)->get_provider_type (provider);
 }
 
+/**
+ * goa_backend_provider_get_name:
+ * @provider: A #GoaBackendProvider.
+ *
+ * Gets a localized name for @provider that is suitable for display in
+ * an user interface.
+ *
+ * Returns: (transfer none): A string owned by @provider, do not free.
+ */
+const gchar *
+goa_backend_provider_get_name (GoaBackendProvider *provider)
+{
+  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), NULL);
+  return GOA_BACKEND_PROVIDER_GET_CLASS (provider)->get_name (provider);
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
