@@ -163,7 +163,9 @@ goa_backend_provider_get_access_token_supported (GoaBackendProvider *provider)
  *
  * When the access token is ready, @callback is invoked in the <link
  * linkend="g-main-context-push-thread-default">thread-default main
- * loop</link> this function was called from.
+ * loop</link> this function was called from. You can then call
+ * goa_backend_provider_get_access_token_finish() to get the result of
+ * the operation.
  */
 void
 goa_backend_provider_get_access_token (GoaBackendProvider   *provider,
@@ -186,6 +188,10 @@ goa_backend_provider_get_access_token (GoaBackendProvider   *provider,
  * @error: Return location for error or %NULL.
  *
  * Finishes an operation started with goa_backend_provider_get_access_token().
+ *
+ * If this fails with the %GOA_ERROR_NOT_AUTHORIZED error, then the
+ * accounts #org.gnome.OnlineAccounts.Account:NeedsAttention property
+ * will be set to %TRUE so the user can service the account.
  *
  * Returns: (transfer full): The access token or %NULL if @error is set.
  */

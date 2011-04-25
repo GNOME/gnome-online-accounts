@@ -54,6 +54,15 @@
       -->
     <property name="Id" type="s" access="read"/>
 
+    <!-- NeedsAttention: Set to TRUE if the account is in need of attention.
+
+         This is used when a human operator is needed to service the
+         account (e.g. for authentication and/or authorization). It is
+         typically raises if an application fails to obtain an access
+         token.
+      -->
+    <property name="NeedsAttention" type="b" access="read"/>
+
     <!-- Name: A human-readable description for the account.
 
          This property may change if the user e.g. renames the

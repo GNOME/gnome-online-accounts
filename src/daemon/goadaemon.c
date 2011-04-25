@@ -812,11 +812,23 @@ get_access_token_cb (GoaBackendProvider  *provider,
   access_token = goa_backend_provider_get_access_token_finish (provider, &expires_in, res, &error);
   if (access_token == NULL)
     {
+      if (error->domain == GOA_ERROR && error->code == GOA_ERROR_NOT_AUTHORIZED)
+        {
+          GoaAccount *account;
+          account = goa_object_peek_account (data->object);
+          goa_account_set_needs_attention (account, TRUE);
+          g_dbus_interface_skeleton_flush (G_DBUS_INTERFACE_SKELETON (account));
+          /* TODO: syslog */
+          g_print ("Setting NeedsAttention to TRUE because GetAccessToken() failed for %s with: %s (%s, %d)\n",
+                   g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)),
+                   error->message, g_quark_to_string (error->domain), error->code);
+        }
       g_dbus_method_invocation_return_gerror (data->invocation, error);
       g_error_free (error);
     }
   else
     {
+      /* TODO: clear NeedsAttention flag if set? */
       goa_access_token_based_complete_get_access_token (goa_object_peek_access_token_based (data->object),
                                                         data->invocation,
                                                         access_token,
@@ -836,6 +848,8 @@ on_handle_get_access_token (GoaAccessTokenBased   *instance,
   GoaAccount *account;
   GoaBackendProvider *provider;
   AccessTokenData *data;
+
+  /* TODO: log what app is requesting access */
 
   object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (instance)));
   account = goa_object_get_account (object);

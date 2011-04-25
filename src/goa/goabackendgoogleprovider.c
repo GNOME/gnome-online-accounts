@@ -611,9 +611,17 @@ get_access_token_cb (SoupSession *session,
 
   if (message->status_code != SOUP_STATUS_OK)
     {
+      gint error_code;
+      /* Only force NeedsAttention to TRUE (by returning NOT_AUTHORIZED) if
+       * the server tells out we are doing it wrong
+       */
+      if (SOUP_STATUS_IS_CLIENT_ERROR (message->status_code))
+        error_code = GOA_ERROR_NOT_AUTHORIZED;
+      else
+        error_code = GOA_ERROR_FAILED;
       g_simple_async_result_set_error (data->simple,
                                        GOA_ERROR,
-                                       GOA_ERROR_FAILED,
+                                       error_code,
                                        _("Expected status 200 when requesting access token, instead got status %d (%s)"),
                                        message->status_code,
                                        message->reason_phrase);
@@ -635,7 +643,7 @@ get_access_token_cb (SoupSession *session,
     {
       g_simple_async_result_set_error (data->simple,
                                        GOA_ERROR,
-                                       GOA_ERROR_FAILED,
+                                       GOA_ERROR_NOT_AUTHORIZED, /* force NeedsAttention to TRUE */
                                        _("Didn't find access_token in JSON data"));
       goto out;
     }
@@ -669,8 +677,8 @@ find_password_cb (GnomeKeyringResult  result,
     {
       g_simple_async_result_set_error (data->simple,
                                        GOA_ERROR,
-                                       GOA_ERROR_FAILED,
-                                       _("Failed to retrieve the authorization code from the keyring: %s"),
+                                       GOA_ERROR_NOT_AUTHORIZED, /* force NeedsAttention to TRUE */
+                                       _("Failed to retrieve refresh_token from the keyring: %s"),
                                        gnome_keyring_result_to_message (result));
       g_simple_async_result_complete_in_idle (data->simple);
       get_access_token_data_unref (data);
