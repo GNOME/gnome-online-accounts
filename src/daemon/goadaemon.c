@@ -430,8 +430,8 @@ update_account_object (GoaDaemon           *daemon,
     }
 
   goa_account_set_id (account, g_strrstr (g_dbus_object_get_object_path (G_DBUS_OBJECT (object)), "/") + 1);
-  goa_account_set_name (account, type);
   goa_account_set_account_type (account, type);
+  goa_account_set_name (account, name);
 
   /* TODO: some kind of GoaAccountProvider subclass stuff */
   if (g_strcmp0 (type, "google") == 0)
