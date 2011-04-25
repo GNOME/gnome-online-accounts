@@ -32,6 +32,7 @@
 #include <glib/gi18n.h>
 
 #include "goadaemon.h"
+#include "goa/goabackend.h"
 
 struct _GoaDaemon
 {
@@ -65,6 +66,10 @@ static gboolean on_add_account (GoaManager            *object,
                                 const gchar           *name,
                                 GVariant              *details,
                                 gpointer               user_data);
+
+static gboolean on_handle_get_access_token (GoaAccessTokenBased   *object,
+                                            GDBusMethodInvocation *invocation,
+                                            gpointer               user_data);
 
 static void goa_daemon_reload_configuration (GoaDaemon *daemon);
 
@@ -373,8 +378,10 @@ update_account_object (GoaDaemon           *daemon,
                        gboolean             just_added)
 {
   GoaAccount *account;
+  GoaAccessTokenBased *access_token_based;
   gboolean ret;
-  gchar *s;
+  gchar *name;
+  gchar *type;
 
   g_return_val_if_fail (GOA_IS_DAEMON (daemon), FALSE);
   g_return_val_if_fail (G_IS_DBUS_OBJECT_SKELETON (object), FALSE);
@@ -382,48 +389,73 @@ update_account_object (GoaDaemon           *daemon,
   g_return_val_if_fail (key_file != NULL, FALSE);
 
   ret = FALSE;
+  name = NULL;
+  type = NULL;
+  account = NULL;
+  access_token_based = NULL;
 
   g_debug ("updating %s %d", g_dbus_object_get_object_path (G_DBUS_OBJECT (object)), just_added);
 
+  type = g_key_file_get_string (key_file, group, "Type", NULL);
+  name = g_key_file_get_string (key_file, group, "Name", NULL);
   if (just_added)
     {
+      GoaBackendProvider *provider;
+
       account = goa_account_skeleton_new ();
       goa_object_skeleton_set_account (object, account);
+
+      provider = goa_backend_provider_get_for_provider_type (type);
+      if (provider == NULL)
+        {
+          /* TODO: syslog */
+          g_warning ("Unsupported account type %s for id %s (no provider)", type, goa_account_get_id (account));
+          goto out;
+        }
+      if (goa_backend_provider_get_access_token_supported (provider))
+        {
+          access_token_based = goa_access_token_based_skeleton_new ();
+          g_signal_connect (access_token_based,
+                            "handle-get-access-token",
+                            G_CALLBACK (on_handle_get_access_token),
+                            daemon);
+          goa_object_skeleton_set_access_token_based (object, access_token_based);
+        }
+      g_object_unref (provider);
     }
   else
     {
       account = goa_object_get_account (GOA_OBJECT (object));
+      access_token_based = goa_object_get_access_token_based (GOA_OBJECT (object));
     }
 
   goa_account_set_id (account, g_strrstr (g_dbus_object_get_object_path (G_DBUS_OBJECT (object)), "/") + 1);
-  s = g_key_file_get_string (key_file, group, "Name", NULL);
-  goa_account_set_name (account, s);
-  g_free (s);
+  goa_account_set_name (account, type);
+  goa_account_set_account_type (account, type);
 
-  s = g_key_file_get_string (key_file, group, "Type", NULL);
-  goa_account_set_account_type (account, s);
   /* TODO: some kind of GoaAccountProvider subclass stuff */
-  if (g_strcmp0 (s, "google") == 0)
+  if (g_strcmp0 (type, "google") == 0)
     {
       if (!update_account_object_google (daemon, object, group, key_file, just_added))
         {
-          g_free (s);
           goto out;
         }
     }
   else
     {
       /* TODO: syslog */
-      g_warning ("Unsupported account type %s for id %s", s, goa_account_get_id (account));
-      g_free (s);
+      g_warning ("Unsupported account type %s for id %s", type, goa_account_get_id (account));
       goto out;
     }
-  g_free (s);
 
   ret = TRUE;
 
  out:
   g_object_unref (account);
+  if (access_token_based != NULL)
+    g_object_unref (access_token_based);
+  g_free (type);
+  g_free (name);
   return ret;
 }
 
@@ -745,6 +777,79 @@ on_add_account (GoaManager             *manager,
   g_free (path);
   if (key_file != NULL)
     g_key_file_free (key_file);
+
+  return TRUE; /* invocation was handled */
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct
+{
+  GoaDaemon *daemon;
+  GoaObject *object;
+  GDBusMethodInvocation *invocation;
+} AccessTokenData;
+
+static void
+access_token_data_free (AccessTokenData *data)
+{
+  g_object_unref (data->daemon);
+  g_object_unref (data->object);
+  g_free (data);
+}
+
+static void
+get_access_token_cb (GoaBackendProvider  *provider,
+                     GAsyncResult        *res,
+                     gpointer             user_data)
+{
+  AccessTokenData *data = user_data;
+  GError *error;
+  gchar *access_token;
+  gint expires_in;
+
+  error = NULL;
+  access_token = goa_backend_provider_get_access_token_finish (provider, &expires_in, res, &error);
+  if (access_token == NULL)
+    {
+      g_dbus_method_invocation_return_gerror (data->invocation, error);
+      g_error_free (error);
+    }
+  else
+    {
+      goa_access_token_based_complete_get_access_token (goa_object_peek_access_token_based (data->object),
+                                                        data->invocation,
+                                                        access_token,
+                                                        expires_in);
+      g_free (access_token);
+    }
+  access_token_data_free (data);
+}
+
+static gboolean
+on_handle_get_access_token (GoaAccessTokenBased   *instance,
+                            GDBusMethodInvocation *invocation,
+                            gpointer               user_data)
+{
+  GoaDaemon *daemon = GOA_DAEMON (user_data);
+  GoaObject *object;
+  GoaAccount *account;
+  GoaBackendProvider *provider;
+  AccessTokenData *data;
+
+  object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (instance)));
+  account = goa_object_get_account (object);
+  provider = goa_backend_provider_get_for_provider_type (goa_account_get_account_type (account));
+
+  data = g_new0 (AccessTokenData, 1);
+  data->daemon = g_object_ref (daemon);
+  data->object = g_object_ref (object);
+  data->invocation = invocation;
+  goa_backend_provider_get_access_token (provider,
+                                         object,
+                                         NULL, /* GCancellable* */
+                                         (GAsyncReadyCallback) get_access_token_cb,
+                                         data);
 
   return TRUE; /* invocation was handled */
 }

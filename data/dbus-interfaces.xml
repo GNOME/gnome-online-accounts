@@ -108,7 +108,7 @@
       account (for example <email>user@gmail.com</email>).
 
       Objects implementing this interface also implement the
-      #org.gnome.OnlineAccounts.Account interface.
+      #org.gnome.OnlineAccounts.Account and #org.gnome.OnlineAccounts.AccessTokenBased interfaces.
 
       When creating this kind of account via the
       org.gnome.OnlineAccounts.Manager.AddAccount() method, you need
@@ -116,12 +116,34 @@
       the @details parameter.
   -->
   <interface name="org.gnome.OnlineAccounts.GoogleAccount">
-
     <!-- EmailAddress: The email address identifying the account.
 
          This value cannot be changed once set.
       -->
     <property name="EmailAddress" type="s" access="read"/>
+  </interface>
+
+  <!--
+      org.gnome.OnlineAccounts.AccessTokenBased:
+
+      An account object implements this interface if it is based on
+      access tokens such as e.g. <ulink
+      url="http://en.wikipedia.org/wiki/OAuth">OAuth</ulink>.
+  -->
+  <interface name="org.gnome.OnlineAccounts.AccessTokenBased">
+    <!--
+      GetAccessToken:
+      @access_token: The access token that can be used to access online services.
+      @expires_in: The duration that the returned token is valid for, in seconds or 0 if unknown.
+
+      Use this method to obtains an access token to access services
+      for the account. Because networking is involved, this method may
+      take a very long time to complete.
+    -->
+    <method name="GetAccessToken">
+      <arg name="access_token" type="s" direction="out"/>
+      <arg name="expires_in" type="i" direction="out"/>
+    </method>
   </interface>
 
   <!--

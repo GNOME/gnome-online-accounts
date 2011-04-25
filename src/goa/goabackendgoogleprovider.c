@@ -74,6 +74,16 @@ static GoaObject   *goa_backend_google_provider_add_account       (GoaBackendPro
                                                                    GtkBox             *vbox,
                                                                    GError            **error);
 
+static gboolean     goa_backend_google_provider_get_access_token_supported (GoaBackendProvider   *provider);
+static void         goa_backend_google_provider_get_access_token           (GoaBackendProvider   *provider,
+                                                                            GoaObject            *object,
+                                                                            GCancellable         *cancellable,
+                                                                            GAsyncReadyCallback   callback,
+                                                                            gpointer              user_data);
+static gchar       *goa_backend_google_provider_get_access_token_finish    (GoaBackendProvider   *provider,
+                                                                            gint                 *out_expires_in,
+                                                                            GAsyncResult         *res,
+                                                                            GError              **error);
 
 /**
  * SECTION:goabackendgoogleprovider
@@ -100,9 +110,12 @@ goa_backend_google_provider_class_init (GoaBackendGoogleProviderClass *klass)
   GoaBackendProviderClass *provider_klass;
 
   provider_klass = GOA_BACKEND_PROVIDER_CLASS (klass);
-  provider_klass->get_provider_type = goa_backend_google_provider_get_provider_type;
-  provider_klass->get_name          = goa_backend_google_provider_get_name;
-  provider_klass->add_account       = goa_backend_google_provider_add_account;
+  provider_klass->get_provider_type          = goa_backend_google_provider_get_provider_type;
+  provider_klass->get_name                   = goa_backend_google_provider_get_name;
+  provider_klass->add_account                = goa_backend_google_provider_add_account;
+  provider_klass->get_access_token_supported = goa_backend_google_provider_get_access_token_supported;
+  provider_klass->get_access_token           = goa_backend_google_provider_get_access_token;
+  provider_klass->get_access_token_finish    = goa_backend_google_provider_get_access_token_finish;
 }
 
 static const gchar *
@@ -147,9 +160,10 @@ on_web_view_notify_title (GObject     *object,
 }
 
 static gchar *
-get_access_token_sync (SoupSession  *session,
-                       const gchar  *authorization_code,
-                       GError      **error)
+get_access_and_refresh_token_sync (SoupSession  *session,
+                                   const gchar  *authorization_code,
+                                   gchar       **out_refresh_token,
+                                   GError      **error)
 {
   SoupMessage *message;
   gint code;
@@ -158,6 +172,7 @@ get_access_token_sync (SoupSession  *session,
   SoupBuffer *buffer;
   JsonParser *parser;
   JsonObject *json_object;
+  const gchar *refresh_token;
 
   g_return_val_if_fail (authorization_code != NULL, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
@@ -197,6 +212,15 @@ get_access_token_sync (SoupSession  *session,
       goto out;
     }
   json_object = json_node_get_object (json_parser_get_root (parser));
+  refresh_token = json_object_get_string_member (json_object, "refresh_token");
+  if (refresh_token == NULL)
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Didn't find refresh_token in JSON data"));
+      goto out;
+    }
   ret = g_strdup (json_object_get_string_member (json_object, "access_token"));
   if (ret == NULL)
     {
@@ -206,6 +230,9 @@ get_access_token_sync (SoupSession  *session,
                    _("Didn't find access_token in JSON data"));
       goto out;
     }
+
+  if (out_refresh_token != NULL)
+    *out_refresh_token = g_strdup (refresh_token);
 
  out:
   if (parser != NULL)
@@ -339,6 +366,7 @@ goa_backend_google_provider_add_account (GoaBackendProvider *_provider,
   gint response;
   AddData data;
   gchar *access_token;
+  gchar *refresh_token;
   gchar *email_address;
   GList *accounts;
   GList *l;
@@ -353,6 +381,7 @@ goa_backend_google_provider_add_account (GoaBackendProvider *_provider,
   ret = NULL;
   session = NULL;
   access_token = NULL;
+  refresh_token = NULL;
   email_address = NULL;
   accounts = NULL;
   password_description = NULL;
@@ -425,10 +454,11 @@ goa_backend_google_provider_add_account (GoaBackendProvider *_provider,
 
   /* OK, we now have the authorization code... now we need to get the
    * email address (to e.g. check if the account already exists on
-   * @client).. for that we need to get a (short-lived) access token..
+   * @client).. for that we need to get a (short-lived) access token
+   * and a refresh_token
    */
   session = soup_session_sync_new ();
-  access_token = get_access_token_sync (session, data.authorization_code, error);
+  access_token = get_access_and_refresh_token_sync (session, data.authorization_code, &refresh_token, error);
   if (access_token == NULL)
     goto out;
 
@@ -475,11 +505,11 @@ goa_backend_google_provider_add_account (GoaBackendProvider *_provider,
   if (data.error != NULL)
     goto out;
 
-  password_description = g_strdup_printf (_("Google OAuth2 authorization code for %s"), email_address);
+  password_description = g_strdup_printf (_("Google OAuth2 refresh code for %s"), email_address);
   gnome_keyring_store_password (&keyring_password_schema,
                                 NULL, /* default keyring */
                                 password_description,
-                                data.authorization_code,
+                                refresh_token,
                                 store_password_cb,
                                 &data,
                                 NULL, /* GDestroyNotify */
@@ -519,6 +549,206 @@ goa_backend_google_provider_add_account (GoaBackendProvider *_provider,
   if (data.loop != NULL)
     g_main_loop_unref (data.loop);
   g_free (access_token);
+  g_free (refresh_token);
+  return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gboolean
+goa_backend_google_provider_get_access_token_supported (GoaBackendProvider   *provider)
+{
+  return TRUE;
+}
+
+typedef struct
+{
+  volatile gint ref_count;
+
+  GoaObject *object;
+  GSimpleAsyncResult *simple;
+  SoupSession *session;
+  SoupMessage *message;
+
+  gchar *access_token;
+  gint expires_in;
+} GetAccessTokenData;
+
+static void
+get_access_token_data_unref (GetAccessTokenData *data)
+{
+  if (g_atomic_int_dec_and_test (&data->ref_count))
+    {
+      g_object_unref (data->object);
+      g_object_unref (data->simple);
+      g_object_unref (data->session);
+      g_object_unref (data->message);
+      g_free (data->access_token);
+      g_slice_free (GetAccessTokenData, data);
+    }
+}
+
+static GetAccessTokenData *
+get_access_token_data_ref (GetAccessTokenData *data)
+{
+  g_atomic_int_inc (&data->ref_count);
+  return data;
+}
+
+static void
+get_access_token_cb (SoupSession *session,
+                     SoupMessage *message,
+                     gpointer     user_data)
+{
+  GetAccessTokenData *data = user_data;
+  SoupBuffer *buffer;
+  JsonParser *parser;
+  JsonObject *json_object;
+  GError *error;
+
+  buffer = NULL;
+  parser = NULL;
+
+  if (message->status_code != SOUP_STATUS_OK)
+    {
+      g_simple_async_result_set_error (data->simple,
+                                       GOA_ERROR,
+                                       GOA_ERROR_FAILED,
+                                       _("Expected status 200 when requesting access token, instead got status %d (%s)"),
+                                       message->status_code,
+                                       message->reason_phrase);
+      goto out;
+    }
+
+  buffer = soup_message_body_flatten (message->response_body);
+  parser = json_parser_new ();
+  error = NULL;
+  if (!json_parser_load_from_data (parser, buffer->data, buffer->length, &error))
+    {
+      g_prefix_error (&error, _("Error parsing response as JSON: "));
+      g_simple_async_result_take_error (data->simple, error);
+      goto out;
+    }
+  json_object = json_node_get_object (json_parser_get_root (parser));
+  data->access_token = g_strdup (json_object_get_string_member (json_object, "access_token"));
+  if (data->access_token == NULL)
+    {
+      g_simple_async_result_set_error (data->simple,
+                                       GOA_ERROR,
+                                       GOA_ERROR_FAILED,
+                                       _("Didn't find access_token in JSON data"));
+      goto out;
+    }
+
+  data->expires_in = 0;
+  if (json_object_has_member (json_object, "expires_in"))
+    data->expires_in = json_object_get_int_member (json_object, "expires_in");
+
+  g_simple_async_result_set_op_res_gpointer (data->simple,
+                                             get_access_token_data_ref (data),
+                                             (GDestroyNotify) get_access_token_data_unref);
+
+ out:
+  if (parser != NULL)
+    g_object_unref (parser);
+  if (buffer != NULL)
+    soup_buffer_free (buffer);
+  g_simple_async_result_complete_in_idle (data->simple);
+  get_access_token_data_unref (data);
+}
+
+static void
+find_password_cb (GnomeKeyringResult  result,
+                  const gchar        *refresh_token,
+                  gpointer            user_data)
+{
+  GetAccessTokenData *data = user_data;
+  gchar *body;
+
+  if (result != GNOME_KEYRING_RESULT_OK)
+    {
+      g_simple_async_result_set_error (data->simple,
+                                       GOA_ERROR,
+                                       GOA_ERROR_FAILED,
+                                       _("Failed to retrieve the authorization code from the keyring: %s"),
+                                       gnome_keyring_result_to_message (result));
+      g_simple_async_result_complete_in_idle (data->simple);
+      get_access_token_data_unref (data);
+      goto out;
+    }
+
+  /* Swell. Now get the access code as per http://code.google.com/apis/accounts/docs/OAuth2.html */
+  data->message = soup_message_new ("POST", "https://accounts.google.com/o/oauth2/token");
+  soup_message_headers_append (data->message->request_headers, "Content-Type", "application/x-www-form-urlencoded");
+  body = g_strdup_printf ("client_id=%s&"
+                          "client_secret=%s&"
+                          "refresh_token=%s&"
+                          "grant_type=refresh_token",
+                          GOOGLE_CLIENT_ID,
+                          GOOGLE_CLIENT_SECRET,
+                          refresh_token);
+  g_debug ("body=%s", body);
+  soup_message_body_append (data->message->request_body, SOUP_MEMORY_TAKE, body, strlen (body));
+  soup_session_queue_message (data->session,
+                              g_object_ref (data->message),
+                              get_access_token_cb,
+                              data);
+
+ out:
+  ;
+}
+
+static void
+goa_backend_google_provider_get_access_token (GoaBackendProvider   *provider,
+                                              GoaObject            *object,
+                                              GCancellable         *cancellable,
+                                              GAsyncReadyCallback   callback,
+                                              gpointer              user_data)
+{
+  GetAccessTokenData *data;
+  const gchar *email_address;
+
+  data = g_slice_new0 (GetAccessTokenData);
+  data->ref_count = 1;
+  data->object = g_object_ref (object);
+  data->session = soup_session_async_new ();
+  data->simple = g_simple_async_result_new (G_OBJECT (provider),
+                                            callback,
+                                            user_data,
+                                            goa_backend_google_provider_get_access_token);
+
+  email_address = goa_google_account_get_email_address (goa_object_peek_google_account (object));
+
+  /* First, get the authorization code from gnome-keyring */
+  gnome_keyring_find_password (&keyring_password_schema,
+                               find_password_cb,
+                               data,
+                               NULL, /* GDestroyNotify */
+                               "goa-google-email-address", email_address,
+                               NULL);
+}
+
+static gchar *
+goa_backend_google_provider_get_access_token_finish (GoaBackendProvider   *provider,
+                                                     gint                 *out_expires_in,
+                                                     GAsyncResult         *res,
+                                                     GError              **error)
+{
+  GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
+  GetAccessTokenData *data;
+  gchar *ret;
+
+  g_warn_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (provider), goa_backend_google_provider_get_access_token));
+
+  if (g_simple_async_result_propagate_error (simple, error))
+    return NULL;
+
+  data = g_simple_async_result_get_op_res_gpointer (simple);
+
+  ret = g_strdup (data->access_token);
+  if (out_expires_in != NULL)
+    *out_expires_in = data->expires_in;
+
   return ret;
 }
 

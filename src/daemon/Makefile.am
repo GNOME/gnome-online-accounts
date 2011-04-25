@@ -12,6 +12,7 @@ INCLUDES = 							\
 	-DPACKAGE_LIB_DIR=\""$(libdir)"\" 			\
 	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT			\
 	-DGOA_API_IS_SUBJECT_TO_CHANGE				\
+	-DGOA_BACKEND_API_IS_SUBJECT_TO_CHANGE			\
 	$(WARN_CFLAGS)						\
 	$(NULL)
 
@@ -26,11 +27,14 @@ goa_daemon_SOURCES = 						\
 
 goa_daemon_CFLAGS =						\
 	$(GLIB_CFLAGS) 						\
+	$(GTK_CFLAGS)						\
 	$(NULL)
 
 goa_daemon_LDADD = 						\
 	$(GLIB_LIBS) 						\
 	$(top_builddir)/src/goa/libgoa.la			\
+	$(top_builddir)/src/goa/libgoa-backend.la		\
+	$(GTK_LIBS)						\
 	$(NULL)
 
 clean-local :

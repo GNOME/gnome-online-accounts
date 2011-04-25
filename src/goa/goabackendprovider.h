@@ -59,8 +59,10 @@ struct _GoaBackendProvider
  * @parent_class: The parent class.
  * @get_provider_type: Virtual function for goa_backend_provider_get_provider_type().
  * @get_name: Virtual function for goa_backend_provider_get_name().
- * @add_account_interactive: Virtual function for goa_backend_provider_add_account_interactive().
  * @add_account: Virtual function for goa_backend_provider_add_account().
+ * @get_access_token_supported: Virtual function for goa_backend_provider_get_access_token_supported().
+ * @get_access_token: Virtual function for goa_backend_provider_get_access_token().
+ * @get_access_token_finish: Virtual function for goa_backend_provider_get_access_token_finish().
  *
  * Class structure for #GoaBackendProvider.
  */
@@ -76,6 +78,18 @@ struct _GoaBackendProviderClass
                                      GtkBox             *vbox,
                                      GError            **error);
 
+  /* AccessTokenBased support */
+  gboolean     (*get_access_token_supported)    (GoaBackendProvider   *provider);
+  void         (*get_access_token)              (GoaBackendProvider   *provider,
+                                                 GoaObject            *object,
+                                                 GCancellable         *cancellable,
+                                                 GAsyncReadyCallback   callback,
+                                                 gpointer              user_data);
+  gchar       *(*get_access_token_finish)       (GoaBackendProvider   *provider,
+                                                 gint                 *out_expires_in,
+                                                 GAsyncResult         *res,
+                                                 GError               **error);
+
   /*< private >*/
   /* Padding for future expansion */
   gpointer goa_reserved[32];
@@ -89,6 +103,17 @@ GoaObject          *goa_backend_provider_add_account       (GoaBackendProvider  
                                                             GtkDialog           *dialog,
                                                             GtkBox              *vbox,
                                                             GError             **error);
+
+gboolean     goa_backend_provider_get_access_token_supported (GoaBackendProvider   *provider);
+void         goa_backend_provider_get_access_token           (GoaBackendProvider   *provider,
+                                                              GoaObject            *object,
+                                                              GCancellable         *cancellable,
+                                                              GAsyncReadyCallback   callback,
+                                                              gpointer              user_data);
+gchar       *goa_backend_provider_get_access_token_finish    (GoaBackendProvider   *provider,
+                                                              gint                 *out_expires_in,
+                                                              GAsyncResult         *res,
+                                                              GError              **error);
 
 /**
  * GOA_BACKEND_PROVIDER_EXTENSION_POINT_NAME:
