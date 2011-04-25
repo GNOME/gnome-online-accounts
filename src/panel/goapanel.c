@@ -303,6 +303,7 @@ on_toolbar_add_button_clicked (GtkToolButton *button,
                                gpointer       user_data)
 {
   GoaPanel *panel = GOA_PANEL (user_data);
+  GtkWidget *cancel_button;
   GtkWidget *add_account_button;
   GtkWidget *dialog;
   GtkWidget *combo_box;
@@ -352,8 +353,8 @@ on_toolbar_add_button_clicked (GtkToolButton *button,
     }
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
 
-  gtk_dialog_add_button (GTK_DIALOG (dialog),
-                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+  cancel_button = gtk_dialog_add_button (GTK_DIALOG (dialog),
+                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
   add_account_button = gtk_dialog_add_button (GTK_DIALOG (dialog),
                                               _("_Add account..."), GTK_RESPONSE_OK);
 
@@ -382,14 +383,32 @@ on_toolbar_add_button_clicked (GtkToolButton *button,
                                              &error);
   if (object != NULL)
     {
-      /* TODO: navigate to newly created */
+      GtkTreeIter iter;
+      /* navigate to newly created object */
+      if (goa_panel_accounts_model_get_iter_for_object (panel->accounts_model,
+                                                        object,
+                                                        &iter))
+        {
+          g_debug ("foo");
+          gtk_tree_selection_select_iter (gtk_tree_view_get_selection (GTK_TREE_VIEW (panel->accounts_treeview)),
+                                          &iter);
+        }
       g_object_unref (object);
       gtk_widget_hide (dialog);
     }
   else
     {
-      /* TODO: show error in dialog */
-      g_warning ("TODO: show warning %s (%s, %d)", error->message, g_quark_to_string (error->domain), error->code);
+      if (!(error->domain == GOA_ERROR && error->code == GOA_ERROR_DIALOG_DISMISSED))
+        {
+          w = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-add-account-error-label"));
+          gtk_label_set_text (GTK_LABEL (w), error->message);
+          w = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-add-account-notebook"));
+          gtk_notebook_set_current_page (GTK_NOTEBOOK (w), 2);
+          gtk_widget_hide (cancel_button);
+          gtk_dialog_add_button (GTK_DIALOG (dialog),
+                                 GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
+          gtk_dialog_run (GTK_DIALOG (dialog));
+        }
       g_error_free (error);
       gtk_widget_hide (dialog);
     }

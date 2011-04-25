@@ -25,6 +25,7 @@
 
 #include <webkit/webkit.h>
 #include <json-glib/json-glib.h>
+#include <gnome-keyring.h>
 
 #include "goabackendprovider.h"
 #include "goabackendgoogleprovider.h"
@@ -36,6 +37,15 @@
  */
 #define GOOGLE_CLIENT_ID     "108305240709-9tncnurl91sh2i0isqnpc7l397sojst2.apps.googleusercontent.com"
 #define GOOGLE_CLIENT_SECRET "6RoXohmMzFzAnoFEXc0BNW7g"
+
+static const GnomeKeyringPasswordSchema keyring_password_schema =
+{
+  GNOME_KEYRING_ITEM_GENERIC_SECRET,
+  {
+    { "goa-google-email-address", GNOME_KEYRING_ATTRIBUTE_TYPE_STRING },
+    { NULL, 0 }
+  }
+};
 
 /**
  * GoaBackendGoogleProvider:
@@ -114,6 +124,8 @@ typedef struct
   GtkDialog *dialog;
   gchar *authorization_code;
   GError *error;
+  GMainLoop *loop;
+  gchar *account_object_path;
 } AddData;
 
 static void
@@ -278,6 +290,35 @@ get_email_address_sync (SoupSession  *session,
   return ret;
 }
 
+static void
+add_account_cb (GoaManager   *manager,
+                GAsyncResult *res,
+                gpointer      user_data)
+{
+  AddData *data = user_data;
+  goa_manager_call_add_account_finish (manager,
+                                       &data->account_object_path,
+                                       res,
+                                       &data->error);
+  g_main_loop_quit (data->loop);
+}
+
+static void
+store_password_cb (GnomeKeyringResult result,
+                   gpointer           user_data)
+{
+  AddData *data = user_data;
+  if (result != GNOME_KEYRING_RESULT_OK)
+    {
+      g_set_error (&data->error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Failed to store the result in the keyring: %s"),
+                   gnome_keyring_result_to_message (result));
+    }
+  g_main_loop_quit (data->loop);
+}
+
 static GoaObject *
 goa_backend_google_provider_add_account (GoaBackendProvider *_provider,
                                          GoaClient          *client,
@@ -299,6 +340,9 @@ goa_backend_google_provider_add_account (GoaBackendProvider *_provider,
   AddData data;
   gchar *access_token;
   gchar *email_address;
+  GList *accounts;
+  GList *l;
+  gchar *password_description;
 
   g_return_val_if_fail (GOA_IS_BACKEND_GOOGLE_PROVIDER (provider), NULL);
   g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
@@ -310,10 +354,13 @@ goa_backend_google_provider_add_account (GoaBackendProvider *_provider,
   session = NULL;
   access_token = NULL;
   email_address = NULL;
+  accounts = NULL;
+  password_description = NULL;
 
   /* TODO: check with NM whether we're online, if not - return error */
 
   memset (&data, '\0', sizeof (AddData));
+  data.loop = g_main_loop_new (NULL, FALSE);
 
   scope =
     "https://www.googleapis.com/auth/userinfo#email " /* view email address */
@@ -390,22 +437,66 @@ goa_backend_google_provider_add_account (GoaBackendProvider *_provider,
   if (email_address == NULL)
     goto out;
 
+  g_debug ("Wee email_address=%s", email_address);
+
   /* OK, got the email address... see if there's already an account
    * with this email address
    */
-#if 0
   accounts = goa_client_get_accounts (client);
   for (l = accounts; l != NULL; l = l->next)
     {
-      GoaObject *object = G_DBUS_OBJECT (l->data);
+      GoaObject *object = GOA_OBJECT (l->data);
+      GoaGoogleAccount *gaccount;
+
+      gaccount = goa_object_peek_google_account (object);
+      if (gaccount == NULL)
+        continue;
+
+      if (g_strcmp0 (goa_google_account_get_email_address (gaccount), email_address) == 0)
+        {
+          g_set_error (&data.error,
+                       GOA_ERROR,
+                       GOA_ERROR_ACCOUNT_EXISTS,
+                       _("There is already a Google account with the email address %s"),
+                       email_address);
+          goto out;
+        }
     }
-#endif
 
-  g_debug ("Wee email_address=%s", email_address);
+  goa_manager_call_add_account (goa_client_get_manager (client),
+                                "google",
+                                email_address, /* Name */
+                                g_variant_new_parsed ("{'EmailAddress': %s}",
+                                                      email_address),
+                                NULL, /* GCancellable* */
+                                (GAsyncReadyCallback) add_account_cb,
+                                &data);
+  g_main_loop_run (data.loop);
+  if (data.error != NULL)
+    goto out;
 
-  /* TODO: use */
-  ret = g_object_ref (client);
+  password_description = g_strdup_printf (_("Google OAuth2 authorization code for %s"), email_address);
+  gnome_keyring_store_password (&keyring_password_schema,
+                                NULL, /* default keyring */
+                                password_description,
+                                data.authorization_code,
+                                store_password_cb,
+                                &data,
+                                NULL, /* GDestroyNotify */
+                                "goa-google-email-address", email_address,
+                                NULL);
+
+  g_main_loop_run (data.loop);
+  if (data.error != NULL)
+    goto out;
+
+  ret = GOA_OBJECT (g_dbus_object_manager_get_object (goa_client_get_object_manager (client),
+                                                      data.account_object_path));
+
  out:
+  g_free (password_description);
+  g_list_foreach (accounts, (GFunc) g_object_unref, NULL);
+  g_list_free (accounts);
   g_free (email_address);
   if (session != NULL)
     g_object_unref (session);
@@ -424,6 +515,9 @@ goa_backend_google_provider_add_account (GoaBackendProvider *_provider,
     }
 
   g_free (data.authorization_code);
+  g_free (data.account_object_path);
+  if (data.loop != NULL)
+    g_main_loop_unref (data.loop);
   g_free (access_token);
   return ret;
 }

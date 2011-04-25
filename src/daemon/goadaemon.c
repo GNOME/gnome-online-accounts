@@ -59,6 +59,13 @@ static void on_file_monitor_changed (GFileMonitor     *monitor,
                                      GFileMonitorEvent event_type,
                                      gpointer          user_data);
 
+static gboolean on_add_account (GoaManager            *object,
+                                GDBusMethodInvocation *invocation,
+                                const gchar           *type,
+                                const gchar           *name,
+                                GVariant              *details,
+                                gpointer               user_data);
+
 static void goa_daemon_reload_configuration (GoaDaemon *daemon);
 
 G_DEFINE_TYPE (GoaDaemon, goa_daemon, G_TYPE_OBJECT);
@@ -155,7 +162,10 @@ goa_daemon_init (GoaDaemon *daemon)
 
   /* Create and export Manager */
   daemon->manager = goa_manager_skeleton_new ();
-  /* TODO: connect to signals for handling AddAccount()/RemoveAccount() methods */
+  g_signal_connect (daemon->manager,
+                    "handle-add-account",
+                    G_CALLBACK (on_add_account),
+                    daemon);
   object = goa_object_skeleton_new ("/org/gnome/OnlineAccounts/Manager");
   goa_object_skeleton_set_manager (object, daemon->manager);
   g_dbus_object_manager_server_export (daemon->object_manager, G_DBUS_OBJECT_SKELETON (object));
@@ -611,3 +621,130 @@ goa_daemon_reload_configuration (GoaDaemon *daemon)
   g_list_free (key_files_to_free);
 }
 
+static gchar *
+generate_new_id (GoaDaemon *daemon)
+{
+  GDateTime *dt;
+  gchar *ret;
+
+  dt = g_date_time_new_now_local ();
+  ret = g_date_time_format (dt, "account_%s"); /* seconds since Epoch */
+  /* TODO: handle collisions */
+  g_date_time_unref (dt);
+
+  return ret;
+}
+
+static gboolean
+on_add_account (GoaManager             *manager,
+                GDBusMethodInvocation  *invocation,
+                const gchar            *type,
+                const gchar            *name,
+                GVariant               *details,
+                gpointer                user_data)
+{
+  GoaDaemon *daemon = GOA_DAEMON (user_data);
+  GKeyFile *key_file;
+  GError *error;
+  gchar *path;
+  gchar *id;
+  gchar *group;
+  gchar *data;
+  gsize length;
+  gchar *object_path;
+  GVariantIter iter;
+  const gchar *key;
+  const gchar *value;
+
+  /* TODO: could check for @type */
+
+  key_file = NULL;
+  path = NULL;
+  id = NULL;
+  group = NULL;
+  data = NULL;
+  object_path = NULL;
+
+  key_file = g_key_file_new ();
+  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
+  error = NULL;
+  if (!g_file_get_contents (path,
+                            &data,
+                            &length,
+                            &error))
+    {
+      if (error->domain == G_FILE_ERROR && error->code == G_FILE_ERROR_NOENT)
+        {
+          g_error_free (error);
+        }
+      else
+        {
+          g_prefix_error (&error, "Error loading file %s: ", path);
+          g_dbus_method_invocation_return_gerror (invocation, error);
+          goto out;
+        }
+    }
+  else
+    {
+      if (length > 0)
+        {
+          error = NULL;
+          if (!g_key_file_load_from_data (key_file, data, length, G_KEY_FILE_KEEP_COMMENTS, &error))
+            {
+              g_prefix_error (&error, "Error parsing key-value-file %s: ", path);
+              g_dbus_method_invocation_return_gerror (invocation, error);
+              goto out;
+            }
+        }
+    }
+
+  id = generate_new_id (daemon);
+  group = g_strdup_printf ("Account %s", id);
+  g_key_file_set_string (key_file, group, "Type", type);
+  g_key_file_set_string (key_file, group, "Name", name);
+
+  g_variant_iter_init (&iter, details);
+  while (g_variant_iter_next (&iter, "{&s&s}", &key, &value))
+    {
+      g_key_file_set_string (key_file, group, key, value);
+    }
+
+  g_free (data);
+  error = NULL;
+  data = g_key_file_to_data (key_file,
+                             &length,
+                             &error);
+  if (data == NULL)
+    {
+      g_prefix_error (&error, "Error generating key-value-file: ");
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      goto out;
+    }
+
+  error = NULL;
+  if (!g_file_set_contents (path,
+                            data,
+                            length,
+                            &error))
+    {
+      g_prefix_error (&error, "Error writing key-value-file %s: ", path);
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      goto out;
+    }
+
+  goa_daemon_reload_configuration (daemon);
+
+  object_path = g_strdup_printf ("/org/gnome/OnlineAccounts/Accounts/%s", id);
+  goa_manager_complete_add_account (manager, invocation, object_path);
+
+ out:
+  g_free (object_path);
+  g_free (data);
+  g_free (group);
+  g_free (id);
+  g_free (path);
+  if (key_file != NULL)
+    g_key_file_free (key_file);
+
+  return TRUE; /* invocation was handled */
+}

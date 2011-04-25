@@ -43,9 +43,12 @@ enum
   GOA_PANEL_ACCOUNTS_MODEL_N_COLUMNS
 };
 
-GType                   goa_panel_accounts_model_get_type   (void) G_GNUC_CONST;
-GoaPanelAccountsModel  *goa_panel_accounts_model_new        (GoaClient      *client);
-GoaClient              *goa_panel_accounts_model_get_client (GoaPanelAccountsModel *model);
+GType                   goa_panel_accounts_model_get_type            (void) G_GNUC_CONST;
+GoaPanelAccountsModel  *goa_panel_accounts_model_new                 (GoaClient      *client);
+GoaClient              *goa_panel_accounts_model_get_client          (GoaPanelAccountsModel *model);
+gboolean                goa_panel_accounts_model_get_iter_for_object (GoaPanelAccountsModel  *model,
+                                                                      GoaObject              *object,
+                                                                      GtkTreeIter            *iter);
 
 
 G_END_DECLS

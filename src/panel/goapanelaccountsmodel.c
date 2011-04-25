@@ -46,6 +46,11 @@ enum
 
 static void init_model (GoaPanelAccountsModel *model);
 
+static gboolean
+find_iter_for_object (GoaPanelAccountsModel *model,
+                      GoaObject             *object,
+                      GtkTreeIter           *out_iter);
+
 static void on_account_added (GoaClient   *client,
                               GoaObject   *object,
                               gpointer     user_data);
@@ -218,6 +223,27 @@ goa_panel_accounts_model_get_client (GoaPanelAccountsModel *model)
   return model->client;
 }
 
+/**
+ * goa_panel_accounts_model_get_iter_for_object:
+ * @model: A #GoaPanelAccountsModel.
+ * @object: A #GoaObject.
+ * @iter: (out): Return location for #GtkTreeIter.
+ *
+ * Finds @model<!-- -->'s row for @object.
+ *
+ * Returns: %TRUE if @iter was set, %FALSE if @object wasn't found.
+ */
+gboolean
+goa_panel_accounts_model_get_iter_for_object (GoaPanelAccountsModel  *model,
+                                              GoaObject              *object,
+                                              GtkTreeIter            *iter)
+{
+  g_return_val_if_fail (GOA_IS_PANEL_ACCOUNTS_MODEL (model), FALSE);
+  g_return_val_if_fail (GOA_IS_OBJECT (object), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+  return find_iter_for_object (model, object, iter);
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 typedef struct
@@ -378,4 +404,3 @@ on_account_changed (GoaClient   *client,
   GoaPanelAccountsModel *model = GOA_PANEL_ACCOUNTS_MODEL (user_data);
   update_account (model, object);
 }
-

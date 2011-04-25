@@ -398,6 +398,34 @@ goa_client_get_object_manager (GoaClient        *client)
 }
 
 /**
+ * goa_client_get_manager:
+ * @client: A #GoaClient.
+ *
+ * Gets the #GoaManager for @client.
+ *
+ * Returns: (transfer none): A #GoaManager. Do not free, the returned
+ * object belongs to @client.
+ */
+GoaManager *
+goa_client_get_manager (GoaClient *client)
+{
+  GDBusObject *object;
+  GoaManager *manager;
+
+  manager = NULL;
+  object = g_dbus_object_manager_get_object (client->object_manager, "/org/gnome/OnlineAccounts/Manager");
+  if (object == NULL)
+    goto out;
+
+  manager = goa_object_peek_manager (GOA_OBJECT (object));
+
+ out:
+  if (object != NULL)
+    g_object_unref (object);
+  return manager;
+}
+
+/**
  * goa_client_get_accounts:
  * @client: A #GoaClient.
  *

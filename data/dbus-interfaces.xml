@@ -112,8 +112,8 @@
 
       When creating this kind of account via the
       org.gnome.OnlineAccounts.Manager.AddAccount() method, you need
-      to include an <literal>EmailAddress</literal> string property in
-      the @construct_properties parameter.
+      to include an <literal>EmailAddress</literal> element in
+      the @details parameter.
   -->
   <interface name="org.gnome.OnlineAccounts.GoogleAccount">
 
@@ -134,7 +134,10 @@
     <!--
         AddAccount:
         @type: The type of account to create. See the #org.gnome.OnlineAccounts:Type property for known types.
-        @construct_properties: The properties to create the account with. See each interface (e.g. #org.gnome.OnlineAccounts.GoogleAccount) for details on what this parameter needs to include.
+        @name: The human readable name of the account (cf. the #org.gnome.OnlineAccounts:Name property).
+        @details: Details about the account. See each interface
+        (e.g. #org.gnome.OnlineAccounts.GoogleAccount) for details of
+        what other elements to include.
         @account_object_path: The object path of the created account.
 
         Creates a new account. Note that this does not create an
@@ -142,7 +145,8 @@
     -->
     <method name="AddAccount">
       <arg name="type" type="s" direction="in"/>
-      <arg name="construct_properties" type="a{sv}" direction="in"/>
+      <arg name="name" type="s" direction="in"/>
+      <arg name="details" type="a{ss}" direction="in"/>
       <arg name="account_object_path" type="o" direction="out"/>
     </method>
 
