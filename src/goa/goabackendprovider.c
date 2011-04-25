@@ -79,6 +79,63 @@ goa_backend_provider_get_name (GoaBackendProvider *provider)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+/**
+ * goa_backend_provider_add_account:
+ * @provider: A #GoaBackendProvider.
+ * @client: A #GoaClient.
+ * @dialog: A #GtkDialog.
+ * @vbox: A vertically oriented #GtkBox to put content in.
+ * @error: Return location for error or %NULL.
+ *
+ * This method brings up the user interface necessary to create a new
+ * account on @client of the type for @provider, interacts with the
+ * user to get all information needed and creates the account.
+ *
+ * The passed in @dialog widget is guaranteed to be visible with @vbox
+ * being empty and the only visible widget in @dialog's content
+ * area. The dialog has exactly one action widget, a cancel button
+ * with response id GTK_RESPONSE_CANCEL. Implementations are free to
+ * add additional action widgets, as needed.
+ *
+ * If an account was successfully created, a #GoaObject for the
+ * created account is returned. If @dialog is dismissed, %NULL is
+ * returned and @error is set to %GOA_ERROR_DIALOG_DISMISSED. If an
+ * account couldn't be created then @error is set.
+ *
+ * The caller will always show an error dialog if @error is set unless
+ * the error is %GOA_ERROR_DIALOG_DISMISSED.
+ *
+ * Implementations should run the <link
+ * linkend="g_main_context_default">default main loop</link> while
+ * interacting with the user and may do so using e.g. gtk_dialog_run()
+ * on @dialog.
+ *
+ * Returns: The #GoaObject for the created account (must be relased
+ *   with g_object_unref()) or %NULL if @error is set.
+ */
+GoaObject *
+goa_backend_provider_add_account (GoaBackendProvider *provider,
+                                  GoaClient          *client,
+                                  GtkDialog          *dialog,
+                                  GtkBox             *vbox,
+                                  GError            **error)
+{
+  GoaObject *ret;
+
+  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), NULL);
+  g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
+  g_return_val_if_fail (GTK_IS_DIALOG (dialog), NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  ret = GOA_BACKEND_PROVIDER_GET_CLASS (provider)->add_account (provider, client, dialog, vbox, error);
+
+  g_warn_if_fail ((ret == NULL && (error == NULL || *error != NULL)) || GOA_IS_OBJECT (ret));
+
+  return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static void
 ensure_ep_and_builtins (void)
 {

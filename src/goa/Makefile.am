@@ -101,11 +101,15 @@ libgoa_backend_la_SOURCES =						\
 libgoa_backend_la_CFLAGS =					\
 	-DGOA_BACKEND_COMPILATION				\
 	-DGOA_API_IS_SUBJECT_TO_CHANGE				\
+	$(WEBKIT_GTK_CFLAGS)					\
+	$(JSON_GLIB_CFLAGS)					\
 	$(GLIB_CFLAGS) 						\
 	$(GTK_CFLAGS) 						\
 	$(NULL)
 
 libgoa_backend_la_LIBADD = 					\
+	$(WEBKIT_GTK_LIBS)					\
+	$(JSON_GLIB_LIBS)					\
 	$(GLIB_LIBS) 						\
 	$(GTK_LIBS) 						\
 	$(NULL)

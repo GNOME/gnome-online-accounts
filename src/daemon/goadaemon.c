@@ -138,7 +138,7 @@ static void
 goa_daemon_init (GoaDaemon *daemon)
 {
   static volatile GQuark goa_error_domain = 0;
-  GDBusObjectSkeleton *object;
+  GoaObjectSkeleton *object;
   gchar *path;
 
   /* this will force associating errors in the GOA_ERROR error domain
@@ -156,9 +156,9 @@ goa_daemon_init (GoaDaemon *daemon)
   /* Create and export Manager */
   daemon->manager = goa_manager_skeleton_new ();
   /* TODO: connect to signals for handling AddAccount()/RemoveAccount() methods */
-  object = g_dbus_object_skeleton_new ("/org/gnome/OnlineAccounts/Manager");
-  g_dbus_object_skeleton_add_interface (object, G_DBUS_INTERFACE_SKELETON (daemon->manager));
-  g_dbus_object_manager_server_export (daemon->object_manager, object);
+  object = goa_object_skeleton_new ("/org/gnome/OnlineAccounts/Manager");
+  goa_object_skeleton_set_manager (object, daemon->manager);
+  g_dbus_object_manager_server_export (daemon->object_manager, G_DBUS_OBJECT_SKELETON (object));
   g_object_unref (object);
 
   /* create ~/.config/goa-1.0 and ~/.config/goa-1.0/accounts.conf.d directories */
@@ -312,7 +312,7 @@ add_config_file (const gchar   *path,
 
 static gboolean
 update_account_object_google (GoaDaemon           *daemon,
-                              GDBusObjectSkeleton *object,
+                              GoaObjectSkeleton   *object,
                               const gchar         *group,
                               GKeyFile            *key_file,
                               gboolean             just_added)
@@ -324,15 +324,15 @@ update_account_object_google (GoaDaemon           *daemon,
 
   ret = FALSE;
 
-  account = GOA_GET_ACCOUNT (object);
+  account = goa_object_get_account (GOA_OBJECT (object));
   if (just_added)
     {
       google_account = goa_google_account_skeleton_new ();
-      g_dbus_object_skeleton_add_interface (object, G_DBUS_INTERFACE_SKELETON (google_account));
+      goa_object_skeleton_set_google_account (object, google_account);
     }
   else
     {
-      google_account = GOA_GET_GOOGLE_ACCOUNT (object);
+      google_account = goa_object_get_google_account (GOA_OBJECT (object));
     }
 
   s = g_key_file_get_string (key_file, group, "EmailAddress", NULL);
@@ -357,7 +357,7 @@ update_account_object_google (GoaDaemon           *daemon,
 /* returns FALSE if object is not (or no longer) valid */
 static gboolean
 update_account_object (GoaDaemon           *daemon,
-                       GDBusObjectSkeleton *object,
+                       GoaObjectSkeleton   *object,
                        const gchar         *group,
                        GKeyFile            *key_file,
                        gboolean             just_added)
@@ -378,11 +378,11 @@ update_account_object (GoaDaemon           *daemon,
   if (just_added)
     {
       account = goa_account_skeleton_new ();
-      g_dbus_object_skeleton_add_interface (object, G_DBUS_INTERFACE_SKELETON (account));
+      goa_object_skeleton_set_account (object, account);
     }
   else
     {
-      account = GOA_GET_ACCOUNT (object);
+      account = goa_object_get_account (GOA_OBJECT (object));
     }
 
   goa_account_set_id (account, g_strrstr (g_dbus_object_get_object_path (G_DBUS_OBJECT (object)), "/") + 1);
@@ -444,9 +444,9 @@ process_config_entries (GoaDaemon  *daemon,
     existing_objects = g_dbus_object_manager_get_objects (G_DBUS_OBJECT_MANAGER (daemon->object_manager));
     for (l = existing_objects; l != NULL; l = l->next)
       {
-        GDBusObject *object = G_DBUS_OBJECT (l->data);
+        GoaObject *object = GOA_OBJECT (l->data);
         const gchar *object_path;
-        object_path = g_dbus_object_get_object_path (object);
+        object_path = g_dbus_object_get_object_path (G_DBUS_OBJECT (object));
         if (g_str_has_prefix (object_path, "/org/gnome/OnlineAccounts/Accounts/"))
           existing_object_paths = g_list_prepend (existing_object_paths, g_strdup (object_path));
       }
@@ -491,7 +491,7 @@ process_config_entries (GoaDaemon  *daemon,
   for (l = added; l != NULL; l = l->next)
     {
       const gchar *object_path = l->data;
-      GDBusObjectSkeleton *object;
+      GoaObjectSkeleton *object;
       gchar *group;
       GKeyFile *key_file;
 
@@ -501,10 +501,10 @@ process_config_entries (GoaDaemon  *daemon,
       key_file = g_hash_table_lookup (group_name_to_key_file, group);
       g_warn_if_fail (key_file != NULL);
 
-      object = g_dbus_object_skeleton_new (object_path);
+      object = goa_object_skeleton_new (object_path);
       if (update_account_object (daemon, object, group, key_file, TRUE))
         {
-          g_dbus_object_manager_server_export (daemon->object_manager, object);
+          g_dbus_object_manager_server_export (daemon->object_manager, G_DBUS_OBJECT_SKELETON (object));
         }
       g_object_unref (object);
       g_free (group);
@@ -512,7 +512,7 @@ process_config_entries (GoaDaemon  *daemon,
   for (l = unchanged; l != NULL; l = l->next)
     {
       const gchar *object_path = l->data;
-      GDBusObject *object;
+      GoaObject *object;
       gchar *group;
       GKeyFile *key_file;
 
@@ -522,9 +522,9 @@ process_config_entries (GoaDaemon  *daemon,
       key_file = g_hash_table_lookup (group_name_to_key_file, group);
       g_warn_if_fail (key_file != NULL);
 
-      object = g_dbus_object_manager_get_object (G_DBUS_OBJECT_MANAGER (daemon->object_manager), object_path);
+      object = GOA_OBJECT (g_dbus_object_manager_get_object (G_DBUS_OBJECT_MANAGER (daemon->object_manager), object_path));
       g_warn_if_fail (object != NULL);
-      if (!update_account_object (daemon, G_DBUS_OBJECT_SKELETON (object), group, key_file, FALSE))
+      if (!update_account_object (daemon, GOA_OBJECT_SKELETON (object), group, key_file, FALSE))
         {
           g_warn_if_fail (g_dbus_object_manager_server_unexport (daemon->object_manager, object_path));
         }

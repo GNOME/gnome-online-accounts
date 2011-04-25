@@ -28,6 +28,7 @@
 #define __GOA_BACKEND_TYPES_H__
 
 #include <goa/goa.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

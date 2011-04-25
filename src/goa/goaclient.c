@@ -176,9 +176,9 @@ goa_client_class_init (GoaClientClass *klass)
   /**
    * GoaClient::account-added:
    * @client: The #GoaClient object emitting the signal.
-   * @account: The #GDBusObject for the added account.
+   * @object: The #GoaObject for the added account.
    *
-   * Emitted when @account has been added. See
+   * Emitted when @object has been added. See
    * goa_client_get_accounts() for information about how to use this
    * object.
    */
@@ -192,14 +192,14 @@ goa_client_class_init (GoaClientClass *klass)
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE,
                   1,
-                  G_TYPE_DBUS_OBJECT);
+                  GOA_TYPE_OBJECT);
 
   /**
    * GoaClient::account-removed:
    * @client: The #GoaClient object emitting the signal.
-   * @account: The #GDBusObject for the removed account.
+   * @object: The #GoaObject for the removed account.
    *
-   * Emitted when @account has been removed.
+   * Emitted when @object has been removed.
    */
   signals[ACCOUNT_REMOVED_SIGNAL] =
     g_signal_new ("account-removed",
@@ -211,14 +211,14 @@ goa_client_class_init (GoaClientClass *klass)
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE,
                   1,
-                  G_TYPE_DBUS_OBJECT);
+                  GOA_TYPE_OBJECT);
 
   /**
    * GoaClient::account-changed:
    * @client: The #GoaClient object emitting the signal.
-   * @account: The #GDBusObject for the account with a change.
+   * @object: The #GoaObject for the account with changes.
    *
-   * Emitted when something on @account changes.
+   * Emitted when something on @object changes.
    */
   signals[ACCOUNT_CHANGED_SIGNAL] =
     g_signal_new ("account-changed",
@@ -230,7 +230,7 @@ goa_client_class_init (GoaClientClass *klass)
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE,
                   1,
-                  G_TYPE_DBUS_OBJECT);
+                  GOA_TYPE_OBJECT);
 
 }
 
@@ -402,13 +402,14 @@ goa_client_get_object_manager (GoaClient        *client)
  * @client: A #GoaClient.
  *
  * Gets all accounts that @client knows about. The result is a list of
- * #GDBusObject instances where each object at least has an
- * #GoaAccount interface (that can be obtained via e.g. the
- * GOA_GET_ACCOUNT() macro) but may also implement other interfaces
- * such as #GoaGoogleAccount. Use goa_account_get_account_type() to
- * find out.
+ * #GoaObject instances where each object at least has an #GoaAccount
+ * interface (that can be obtained via the goa_object_get_account()
+ * method) but may also implement other interfaces such as
+ * #GoaGoogleAccount.
  *
- * Returns: (transfer full) (element-type GDBusObject): A list of #GDBusObject objects.
+ * Returns: (transfer full) (element-type GoaObject): A list of
+ * #GoaObject instances that must be freed with g_list_free() after
+ * each element has been freed with g_object_unref().
  */
 GList *
 goa_client_get_accounts (GoaClient *client)
@@ -423,12 +424,10 @@ goa_client_get_accounts (GoaClient *client)
   objects = g_dbus_object_manager_get_objects (client->object_manager);
   for (l = objects; l != NULL; l = l->next)
     {
-      GDBusObject *object = G_DBUS_OBJECT (l->data);
+      GoaObject *object = GOA_OBJECT (l->data);
 
-      if (GOA_PEEK_ACCOUNT (object) != NULL)
-        {
-          ret = g_list_prepend (ret, g_object_ref (object));
-        }
+      if (goa_object_peek_account (object) != NULL)
+        ret = g_list_prepend (ret, g_object_ref (object));
     }
   g_list_foreach (objects, (GFunc) g_object_unref, NULL);
   g_list_free (objects);
@@ -444,7 +443,7 @@ on_object_added (GDBusObjectManager   *manager,
                  gpointer              user_data)
 {
   GoaClient *client = GOA_CLIENT (user_data);
-  if (GOA_PEEK_ACCOUNT (object) != NULL)
+  if (goa_object_peek_account (GOA_OBJECT (object)) != NULL)
     g_signal_emit (client, signals[ACCOUNT_ADDED_SIGNAL], 0, object);
 }
 
@@ -454,7 +453,7 @@ on_object_removed (GDBusObjectManager   *manager,
                    gpointer              user_data)
 {
   GoaClient *client = GOA_CLIENT (user_data);
-  if (GOA_PEEK_ACCOUNT (object) != NULL)
+  if (goa_object_peek_account (GOA_OBJECT (object)) != NULL)
     g_signal_emit (client, signals[ACCOUNT_REMOVED_SIGNAL], 0, object);
 }
 
@@ -467,7 +466,7 @@ on_interface_proxy_properties_changed (GDBusObjectManagerClient   *manager,
                                        gpointer                    user_data)
 {
   GoaClient *client = GOA_CLIENT (user_data);
-  if (GOA_PEEK_ACCOUNT (object_proxy) != NULL)
+  if (goa_object_peek_account (GOA_OBJECT (object_proxy)) != NULL)
     g_signal_emit (client, signals[ACCOUNT_CHANGED_SIGNAL], 0, object_proxy);
 }
 

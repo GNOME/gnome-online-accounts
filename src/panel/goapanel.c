@@ -26,6 +26,7 @@
 #include <glib/gi18n-lib.h>
 
 #include <goa/goa.h>
+#include <goa/goabackend.h>
 
 #include "goapanel.h"
 #include "goapanelaccountsmodel.h"
@@ -241,15 +242,15 @@ show_page_no_ui (GoaPanel *panel)
 }
 
 static void
-show_page_google_account (GoaPanel    *panel,
-                          GDBusObject *object)
+show_page_google_account (GoaPanel   *panel,
+                          GoaObject  *object)
 {
   GoaAccount *account;
   GoaGoogleAccount *google_account;
   gchar *s;
 
-  account = GOA_PEEK_ACCOUNT (object);
-  google_account = GOA_PEEK_GOOGLE_ACCOUNT (object);
+  account = goa_object_peek_account (object);
+  google_account = goa_object_peek_google_account (object);
 
   show_page (panel, 2);
   gtk_label_set_text (GTK_LABEL (panel->google_email_address),
@@ -270,14 +271,14 @@ on_tree_view_selection_changed (GtkTreeSelection *selection,
 
   if (gtk_tree_selection_get_selected (selection, NULL, &iter))
     {
-      GDBusObject *object;
+      GoaObject *object;
 
       gtk_tree_model_get (GTK_TREE_MODEL (panel->accounts_model),
                           &iter,
-                          GOA_PANEL_ACCOUNTS_MODEL_COLUMN_DBUS_OBJECT, &object,
+                          GOA_PANEL_ACCOUNTS_MODEL_COLUMN_OBJECT, &object,
                           -1);
 
-      if (GOA_PEEK_GOOGLE_ACCOUNT (object))
+      if (goa_object_peek_google_account (object))
         {
           show_page_google_account (panel, object);
         }
@@ -297,100 +298,6 @@ on_tree_view_selection_changed (GtkTreeSelection *selection,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-#include <webkit/webkit.h>
-
-static void
-on_web_view_notify_title (GObject     *object,
-                          GParamSpec  *pspec,
-                          gpointer     user_data)
-{
-  WebKitWebView *web_view = WEBKIT_WEB_VIEW (object);
-  const gchar *title;
-
-  title = webkit_web_view_get_title (web_view);
-  if (title != NULL && g_str_has_prefix (title, "Success "))
-    {
-      const gchar *code = title + sizeof "Success " - 1;
-      g_print ("Yay, authz code is `%s' (url %s)\n", code, webkit_web_view_get_uri (web_view));
-    }
-}
-
-static void
-add_google_account (GoaPanel   *panel,
-                    GtkWidget  *dialog,
-                    GtkWidget  *vbox)
-{
-  SoupSession *session;
-  SoupCookieJar *cookie_jar;
-  GtkWidget *scrolled_window;
-  GtkWidget *web_view;
-  const gchar *client_id;
-  const gchar *scope;
-  gchar *escaped_scope;
-  gchar *url;
-
-  /* The upstream client id is for GNOME
-   *
-   *  108305240709-9tncnurl91sh2i0isqnpc7l397sojst2.apps.googleusercontent.com
-   *
-   * and is managed by David Zeuthen <zeuthen@gmail.com>. Distributors
-   * may change this to their own client id (or not?). TODO: maybe
-   * make client_id a configure option in case downstream distributors
-   * want to change it.
-   */
-  client_id = "108305240709-9tncnurl91sh2i0isqnpc7l397sojst2.apps.googleusercontent.com";
-  scope =
-    "https://www.googleapis.com/auth/userinfo#email " /* view email address */
-    "https://mail.google.com/mail/feed/atom "         /* email */
-    "https://www.google.com/m8/feeds "                /* contacts */
-    "https://www.google.com/calendar/feeds "          /* calendar */
-    "https://picasaweb.google.com/data "              /* picassa */
-    ;
-  // Use Lattitude? "https://www.googleapis.com/auth/latitude"
-
-  escaped_scope = g_uri_escape_string (scope, NULL, TRUE);
-  url = g_strdup_printf ("https://accounts.google.com/o/oauth2/auth"
-                         "?response_type=code"
-                         "&redirect_uri=urn:ietf:wg:oauth:2.0:oob"
-                         "&client_id=%s"
-                         "&scope=%s",
-                         client_id,
-                         escaped_scope);
-
-  /* Ensure we use an empty non-persistent cookie to avoid login
-   * credentials being reused...
-   */
-  session = webkit_get_default_session ();
-  soup_session_remove_feature_by_type (session, SOUP_TYPE_COOKIE_JAR);
-  cookie_jar = soup_cookie_jar_new ();
-  soup_session_add_feature (session, SOUP_SESSION_FEATURE (cookie_jar));
-
-  /* TODO: we might need to add some more web browser UI to make this
-   * work...
-   */
-  web_view = webkit_web_view_new ();
-  webkit_web_view_load_uri (WEBKIT_WEB_VIEW (web_view), url);
-  g_signal_connect (web_view,
-                    "notify::title",
-                    G_CALLBACK (on_web_view_notify_title),
-                    /* data */ NULL);
-
-  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_set_size_request (scrolled_window, 500, 400);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
-                                  GTK_POLICY_AUTOMATIC,
-                                  GTK_POLICY_AUTOMATIC);
-  gtk_container_add (GTK_CONTAINER (scrolled_window), web_view);
-  gtk_container_add (GTK_CONTAINER (vbox), scrolled_window);
-  gtk_widget_show_all (scrolled_window);
-
-  g_object_unref (cookie_jar);
-  g_free (escaped_scope);
-  g_free (url);
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
 static void
 on_toolbar_add_button_clicked (GtkToolButton *button,
                                gpointer       user_data)
@@ -401,8 +308,15 @@ on_toolbar_add_button_clicked (GtkToolButton *button,
   GtkWidget *combo_box;
   GtkWidget *w;
   gint response;
+  GList *providers;
+  GoaBackendProvider *provider;
   GList *children;
   GList *l;
+  GoaObject *object;
+  GError *error;
+
+  provider = NULL;
+  providers = NULL;
 
   dialog = gtk_dialog_new ();
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 12);
@@ -428,8 +342,14 @@ on_toolbar_add_button_clicked (GtkToolButton *button,
 
   combo_box = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-add-account-combobox"));
   gtk_combo_box_text_remove_all (GTK_COMBO_BOX_TEXT (combo_box));
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo_box), "google", _("Google Account"));
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo_box), "facebook", _("Facebook"));
+  providers = goa_backend_provider_get_all ();
+  for (l = providers; l != NULL; l = l->next)
+    {
+      GoaBackendProvider *provider = GOA_BACKEND_PROVIDER (l->data);
+      gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo_box),
+                                 goa_backend_provider_get_provider_type (provider),
+                                 goa_backend_provider_get_name (provider));
+    }
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
 
   gtk_dialog_add_button (GTK_DIALOG (dialog),
@@ -451,17 +371,33 @@ on_toolbar_add_button_clicked (GtkToolButton *button,
   gtk_notebook_set_current_page (GTK_NOTEBOOK (w), 1);
   gtk_widget_hide (add_account_button);
 
-  /* TODO: check type from combo_box */
+  provider = goa_backend_provider_get_for_provider_type (gtk_combo_box_get_active_id (GTK_COMBO_BOX (combo_box)));
+  g_assert (provider != NULL);
 
-  w = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-add-account-vbox"));
-  add_google_account (panel, dialog, w);
-
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_hide (dialog);
-
-  g_print ("Final Response was %d\n", response);
+  error = NULL;
+  object = goa_backend_provider_add_account (provider,
+                                             panel->client,
+                                             GTK_DIALOG (dialog),
+                                             GTK_BOX (gtk_builder_get_object (panel->builder, "goa-add-account-vbox")),
+                                             &error);
+  if (object != NULL)
+    {
+      /* TODO: navigate to newly created */
+      g_object_unref (object);
+      gtk_widget_hide (dialog);
+    }
+  else
+    {
+      /* TODO: show error in dialog */
+      g_warning ("TODO: show warning %s (%s, %d)", error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      gtk_widget_hide (dialog);
+    }
 
  out:
-  ;
+  if (provider != NULL)
+    g_object_unref (provider);
+  g_list_foreach (providers, (GFunc) g_object_unref, NULL);
+  g_list_free (providers);
 }
 

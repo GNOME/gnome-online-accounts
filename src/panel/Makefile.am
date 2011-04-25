@@ -12,6 +12,7 @@ INCLUDES = 							\
 	-DPACKAGE_LIB_DIR=\""$(libdir)"\" 			\
 	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT			\
 	-DGOA_API_IS_SUBJECT_TO_CHANGE				\
+	-DGOA_BACKEND_API_IS_SUBJECT_TO_CHANGE			\
 	$(WARN_CFLAGS)						\
 	$(NULL)
 
@@ -27,7 +28,6 @@ libgoa_panel_la_CFLAGS =					\
 	$(GLIB_CFLAGS) 						\
 	$(GTK_CFLAGS)						\
 	$(GNOME_CONTROL_CENTER_CFLAGS)				\
-	$(WEBKIT_GTK_CFLAGS)					\
 	$(NULL)
 
 libgoa_panel_la_LDFLAGS = 					\
@@ -38,8 +38,8 @@ libgoa_panel_la_LIBADD = 					\
 	$(GLIB_LIBS) 						\
 	$(GTK_LIBS)						\
 	$(GNOME_CONTROL_CENTER_LIBS)				\
-	$(WEBKIT_GTK_LIBS)					\
 	$(top_builddir)/src/goa/libgoa.la			\
+	$(top_builddir)/src/goa/libgoa-backend.la		\
 	$(NULL)
 
 clean-local :

@@ -35,17 +35,19 @@ G_BEGIN_DECLS
  * GoaError:
  * @GOA_ERROR_FAILED: The operation failed.
  * @GOA_ERROR_NOT_SUPPORTED: The operation is not supported.
+ * @GOA_ERROR_DIALOG_DISMISSED: The dialog was dismissed.
  *
  * Error codes for the #GOA_ERROR error domain and the
  * corresponding D-Bus error names.
  */
 typedef enum
 {
-  GOA_ERROR_FAILED,                     /* org.gnome.OnlineAccounts.Error.Failed */
-  GOA_ERROR_NOT_SUPPORTED               /* org.gnome.OnlineAccounts.Error.NotSupported */
+  GOA_ERROR_FAILED,           /* org.gnome.OnlineAccounts.Error.Failed */
+  GOA_ERROR_NOT_SUPPORTED,    /* org.gnome.OnlineAccounts.Error.NotSupported */
+  GOA_ERROR_DIALOG_DISMISSED  /* org.gnome.OnlineAccounts.Error.DialogDismissed */
 } GoaError;
 
-#define GOA_ERROR_NUM_ENTRIES  (GOA_ERROR_NOT_SUPPORTED + 1)
+#define GOA_ERROR_NUM_ENTRIES  (GOA_ERROR_DIALOG_DISMISSED + 1)
 
 G_END_DECLS
 

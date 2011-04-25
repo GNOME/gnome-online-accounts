@@ -22,8 +22,6 @@ goa_manager_proxy_new_for_bus_sync
 GoaManagerSkeleton
 GoaManagerSkeletonClass
 goa_manager_skeleton_new
-GOA_GET_MANAGER
-GOA_PEEK_MANAGER
 <SUBSECTION Standard>
 GOA_TYPE_MANAGER
 GOA_IS_MANAGER
@@ -46,6 +44,50 @@ GoaManagerSkeletonPrivate
 goa_manager_get_type
 goa_manager_proxy_get_type
 goa_manager_skeleton_get_type
+</SECTION>
+
+<SECTION>
+<FILE>GoaObject</FILE>
+<TITLE>GoaObject</TITLE>
+GoaObject
+GoaObjectIface
+goa_object_get_manager
+goa_object_get_account
+goa_object_get_google_account
+goa_object_peek_manager
+goa_object_peek_account
+goa_object_peek_google_account
+GoaObjectProxy
+GoaObjectProxyClass
+goa_object_proxy_new
+GoaObjectSkeleton
+GoaObjectSkeletonClass
+goa_object_skeleton_new
+goa_object_skeleton_set_manager
+goa_object_skeleton_set_account
+goa_object_skeleton_set_google_account
+<SUBSECTION Standard>
+goa_object_get_type
+goa_object_proxy_get_type
+goa_object_skeleton_get_type
+GoaObjectProxyPrivate
+GoaObjectSkeletonPrivate
+GOA_IS_OBJECT
+GOA_IS_OBJECT_PROXY
+GOA_IS_OBJECT_PROXY_CLASS
+GOA_IS_OBJECT_SKELETON
+GOA_IS_OBJECT_SKELETON_CLASS
+GOA_OBJECT
+GOA_OBJECT_GET_IFACE
+GOA_OBJECT_PROXY
+GOA_OBJECT_PROXY_CLASS
+GOA_OBJECT_PROXY_GET_CLASS
+GOA_OBJECT_SKELETON
+GOA_OBJECT_SKELETON_CLASS
+GOA_OBJECT_SKELETON_GET_CLASS
+GOA_TYPE_OBJECT
+GOA_TYPE_OBJECT_PROXY
+GOA_TYPE_OBJECT_SKELETON
 </SECTION>
 
 <SECTION>
@@ -77,8 +119,6 @@ goa_account_proxy_new_for_bus_sync
 GoaAccountSkeleton
 GoaAccountSkeletonClass
 goa_account_skeleton_new
-GOA_GET_ACCOUNT
-GOA_PEEK_ACCOUNT
 <SUBSECTION Standard>
 GOA_TYPE_ACCOUNT
 GOA_IS_ACCOUNT
@@ -122,8 +162,6 @@ goa_google_account_proxy_new_for_bus_sync
 GoaGoogleAccountSkeleton
 GoaGoogleAccountSkeletonClass
 goa_google_account_skeleton_new
-GOA_GET_GOOGLE_ACCOUNT
-GOA_PEEK_GOOGLE_ACCOUNT
 <SUBSECTION Standard>
 GOA_TYPE_GOOGLE_ACCOUNT
 GOA_IS_GOOGLE_ACCOUNT
@@ -202,6 +240,7 @@ GoaBackendProvider
 GoaBackendProviderClass
 goa_backend_provider_get_provider_type
 goa_backend_provider_get_name
+goa_backend_provider_add_account
 GOA_BACKEND_PROVIDER_EXTENSION_POINT_NAME
 goa_backend_provider_get_all
 goa_backend_provider_get_for_provider_type

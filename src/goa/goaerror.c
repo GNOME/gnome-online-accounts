@@ -36,7 +36,8 @@
 static const GDBusErrorEntry dbus_error_entries[] =
 {
   {GOA_ERROR_FAILED,                       "org.freedesktop.Goa.Error.Failed"},
-  {GOA_ERROR_NOT_SUPPORTED,                "org.freedesktop.Goa.Error.NotSupported"}
+  {GOA_ERROR_NOT_SUPPORTED,                "org.freedesktop.Goa.Error.NotSupported"},
+  {GOA_ERROR_DIALOG_DISMISSED,             "org.gnome.OnlineAccounts.Error.DialogDismissed"}
 };
 
 GQuark

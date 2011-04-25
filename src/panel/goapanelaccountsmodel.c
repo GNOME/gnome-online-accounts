@@ -47,15 +47,15 @@ enum
 static void init_model (GoaPanelAccountsModel *model);
 
 static void on_account_added (GoaClient   *client,
-                              GDBusObject *object,
+                              GoaObject   *object,
                               gpointer     user_data);
 
 static void on_account_removed (GoaClient   *client,
-                                GDBusObject *object,
+                                GoaObject   *object,
                                 gpointer     user_data);
 
 static void on_account_changed (GoaClient   *client,
-                                GDBusObject *object,
+                                GoaObject   *object,
                                 gpointer     user_data);
 
 G_DEFINE_TYPE (GoaPanelAccountsModel, goa_panel_accounts_model, GTK_TYPE_LIST_STORE);
@@ -128,7 +128,7 @@ goa_panel_accounts_model_constructed (GObject *object)
 
   types[0] = G_TYPE_STRING;
   types[1] = G_TYPE_STRING;
-  types[2] = G_TYPE_DBUS_OBJECT;
+  types[2] = GOA_TYPE_OBJECT;
   G_STATIC_ASSERT (3 == GOA_PANEL_ACCOUNTS_MODEL_N_COLUMNS);
   gtk_list_store_set_column_types (GTK_LIST_STORE (model),
                                    GOA_PANEL_ACCOUNTS_MODEL_N_COLUMNS,
@@ -222,7 +222,7 @@ goa_panel_accounts_model_get_client (GoaPanelAccountsModel *model)
 
 typedef struct
 {
-  GDBusObject *object;
+  GoaObject *object;
   GtkTreeIter iter;
   gboolean found;
 } FindIterData;
@@ -234,13 +234,13 @@ find_iter_for_object_cb (GtkTreeModel  *model,
                          gpointer       user_data)
 {
   FindIterData *data = user_data;
-  GDBusObject *iter_object;
+  GoaObject *iter_object;
 
   iter_object = NULL;
 
   gtk_tree_model_get (model,
                       iter,
-                      GOA_PANEL_ACCOUNTS_MODEL_COLUMN_DBUS_OBJECT, &iter_object,
+                      GOA_PANEL_ACCOUNTS_MODEL_COLUMN_OBJECT, &iter_object,
                       -1);
   if (iter_object == NULL)
     goto out;
@@ -260,7 +260,7 @@ find_iter_for_object_cb (GtkTreeModel  *model,
 
 static gboolean
 find_iter_for_object (GoaPanelAccountsModel *model,
-                      GDBusObject           *object,
+                      GoaObject             *object,
                       GtkTreeIter           *out_iter)
 {
   FindIterData data;
@@ -282,22 +282,22 @@ find_iter_for_object (GoaPanelAccountsModel *model,
 
 static void
 set_values (GoaPanelAccountsModel  *model,
-            GDBusObject            *object,
+            GoaObject              *object,
             GtkTreeIter            *iter)
 {
   GoaAccount *account;
-  account = GOA_PEEK_ACCOUNT (object);
+  account = goa_object_peek_account (object);
   gtk_list_store_set (GTK_LIST_STORE (model),
                       iter,
                       GOA_PANEL_ACCOUNTS_MODEL_COLUMN_NAME, goa_account_get_name (account),
                       GOA_PANEL_ACCOUNTS_MODEL_COLUMN_SORT_KEY, goa_account_get_id (account),
-                      GOA_PANEL_ACCOUNTS_MODEL_COLUMN_DBUS_OBJECT, object,
+                      GOA_PANEL_ACCOUNTS_MODEL_COLUMN_OBJECT, object,
                       -1);
 }
 
 static void
 add_account (GoaPanelAccountsModel  *model,
-             GDBusObject            *object)
+             GoaObject              *object)
 {
   GtkTreeIter iter;
   gtk_list_store_insert (GTK_LIST_STORE (model),
@@ -308,12 +308,12 @@ add_account (GoaPanelAccountsModel  *model,
 
 static void
 remove_account (GoaPanelAccountsModel  *model,
-                GDBusObject            *object)
+                GoaObject              *object)
 {
   GtkTreeIter iter;
   if (!find_iter_for_object (model, object, &iter))
     {
-      g_warning ("Error removing object %s - not in tree", g_dbus_object_get_object_path (object));
+      g_warning ("Error removing object %s - not in tree", g_dbus_object_get_object_path (G_DBUS_OBJECT (object)));
     }
   else
     {
@@ -323,12 +323,12 @@ remove_account (GoaPanelAccountsModel  *model,
 
 static void
 update_account (GoaPanelAccountsModel  *model,
-                GDBusObject            *object)
+                GoaObject              *object)
 {
   GtkTreeIter iter;
   if (!find_iter_for_object (model, object, &iter))
     {
-      g_warning ("Error updating object %s - not in tree", g_dbus_object_get_object_path (object));
+      g_warning ("Error updating object %s - not in tree", g_dbus_object_get_object_path (G_DBUS_OBJECT (object)));
     }
   else
     {
@@ -345,7 +345,7 @@ init_model (GoaPanelAccountsModel *model)
   accounts = goa_client_get_accounts (model->client);
   for (l = accounts; l != NULL; l = l->next)
     {
-      GDBusObject *object = G_DBUS_OBJECT (l->data);
+      GoaObject *object = GOA_OBJECT (l->data);
       add_account (model, object);
     }
   g_list_foreach (accounts, (GFunc) g_object_unref, NULL);
@@ -354,7 +354,7 @@ init_model (GoaPanelAccountsModel *model)
 
 static void
 on_account_added (GoaClient   *client,
-                  GDBusObject *object,
+                  GoaObject   *object,
                   gpointer     user_data)
 {
   GoaPanelAccountsModel *model = GOA_PANEL_ACCOUNTS_MODEL (user_data);
@@ -363,7 +363,7 @@ on_account_added (GoaClient   *client,
 
 static void
 on_account_removed (GoaClient   *client,
-                    GDBusObject *object,
+                    GoaObject   *object,
                     gpointer     user_data)
 {
   GoaPanelAccountsModel *model = GOA_PANEL_ACCOUNTS_MODEL (user_data);
@@ -372,7 +372,7 @@ on_account_removed (GoaClient   *client,
 
 static void
 on_account_changed (GoaClient   *client,
-                    GDBusObject *object,
+                    GoaObject   *object,
                     gpointer     user_data)
 {
   GoaPanelAccountsModel *model = GOA_PANEL_ACCOUNTS_MODEL (user_data);
