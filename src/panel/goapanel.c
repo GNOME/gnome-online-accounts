@@ -506,11 +506,13 @@ on_toolbar_add_button_clicked (GtkToolButton *button,
                                gpointer       user_data)
 {
   GoaPanel *panel = GOA_PANEL (user_data);
-  GtkWidget *cancel_button;
+  GtkWindow *parent;
   GtkWidget *add_account_button;
   GtkWidget *dialog;
+  GtkWidget *vbox;
+  GtkWidget *label;
+  GtkWidget *table;
   GtkWidget *combo_box;
-  GtkWidget *w;
   gint response;
   GList *providers;
   GoaBackendProvider *provider;
@@ -522,30 +524,22 @@ on_toolbar_add_button_clicked (GtkToolButton *button,
   provider = NULL;
   providers = NULL;
 
+  parent = GTK_WINDOW (cc_shell_get_toplevel (cc_panel_get_shell (CC_PANEL (panel))));
+
   dialog = gtk_dialog_new ();
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 12);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-  gtk_window_set_transient_for (GTK_WINDOW (dialog),
-                                GTK_WINDOW (cc_shell_get_toplevel (cc_panel_get_shell (CC_PANEL (panel)))));
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
 
-  w = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-add-account-top-widget"));
-  gtk_widget_reparent (w, gtk_dialog_get_content_area (GTK_DIALOG (dialog)));
+  vbox = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+  gtk_box_set_spacing (GTK_BOX (vbox), 12);
 
-  /* Start at page 0 */
-  w = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-add-account-notebook"));
-  gtk_notebook_set_show_tabs (GTK_NOTEBOOK (w), FALSE);
-  gtk_notebook_set_current_page (GTK_NOTEBOOK (w), 0);
+  label = gtk_label_new (_("To add a new account, first select the account type"));
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
 
-  /* Nuke children added during previous run */
-  w = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-add-account-vbox"));
-  children = gtk_container_get_children (GTK_CONTAINER (w));
-  for (l = children; l != NULL; l = l->next)
-    gtk_container_remove (GTK_CONTAINER (w), GTK_WIDGET (l->data));
-  g_list_free (children);
-
-  combo_box = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-add-account-combobox"));
-  gtk_combo_box_text_remove_all (GTK_COMBO_BOX_TEXT (combo_box));
+  label = gtk_label_new (_("Account Type:"));
+  combo_box = gtk_combo_box_text_new ();
   providers = goa_backend_provider_get_all ();
   for (l = providers; l != NULL; l = l->next)
     {
@@ -556,33 +550,51 @@ on_toolbar_add_button_clicked (GtkToolButton *button,
     }
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
 
-  cancel_button = gtk_dialog_add_button (GTK_DIALOG (dialog),
-                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-  add_account_button = gtk_dialog_add_button (GTK_DIALOG (dialog),
-                                              _("_Add account..."), GTK_RESPONSE_OK);
+  table = gtk_table_new (1, 2, FALSE);
+  gtk_table_set_col_spacings (GTK_TABLE (table), 10);
+  gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, TRUE, 0);
 
-  combo_box = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-add-account-combobox"));
+  gtk_table_attach (GTK_TABLE (table), label,
+                    0, 1,
+                    0, 1,
+                    GTK_FILL, GTK_FILL, 0, 0);
+  gtk_table_attach (GTK_TABLE (table), combo_box,
+                    1, 2,
+                    0, 1,
+                    GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
+
+  gtk_dialog_add_button (GTK_DIALOG (dialog),
+                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+  add_account_button = gtk_dialog_add_button (GTK_DIALOG (dialog),
+                                              _("_Add..."), GTK_RESPONSE_OK);
 
   gtk_widget_show_all (dialog);
   response = gtk_dialog_run (GTK_DIALOG (dialog));
   if (response != GTK_RESPONSE_OK)
     {
-      gtk_widget_hide (dialog);
+      gtk_widget_destroy (dialog);
       goto out;
     }
-
-  w = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-add-account-notebook"));
-  gtk_notebook_set_current_page (GTK_NOTEBOOK (w), 1);
   gtk_widget_hide (add_account_button);
 
   provider = goa_backend_provider_get_for_provider_type (gtk_combo_box_get_active_id (GTK_COMBO_BOX (combo_box)));
   g_assert (provider != NULL);
 
+  /* Prepare GtkDialog for the provider */
+  children = gtk_container_get_children (GTK_CONTAINER (vbox));
+  for (l = children; l != NULL; l = l->next)
+    {
+      GtkWidget *child = GTK_WIDGET (l->data);
+      if (child != gtk_dialog_get_action_area (GTK_DIALOG (dialog)))
+        gtk_container_remove (GTK_CONTAINER (vbox), child);
+    }
+  g_list_free (children);
+
   error = NULL;
   object = goa_backend_provider_add_account (provider,
                                              panel->client,
                                              GTK_DIALOG (dialog),
-                                             GTK_BOX (gtk_builder_get_object (panel->builder, "goa-add-account-vbox")),
+                                             GTK_BOX (vbox),
                                              &error);
   if (object != NULL)
     {
@@ -596,23 +608,26 @@ on_toolbar_add_button_clicked (GtkToolButton *button,
                                           &iter);
         }
       g_object_unref (object);
-      gtk_widget_hide (dialog);
+      gtk_widget_destroy (dialog);
     }
   else
     {
+      gtk_widget_destroy (dialog);
       if (!(error->domain == GOA_ERROR && error->code == GOA_ERROR_DIALOG_DISMISSED))
         {
-          w = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-add-account-error-label"));
-          gtk_label_set_text (GTK_LABEL (w), error->message);
-          w = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-add-account-notebook"));
-          gtk_notebook_set_current_page (GTK_NOTEBOOK (w), 2);
-          gtk_widget_hide (cancel_button);
-          gtk_dialog_add_button (GTK_DIALOG (dialog),
-                                 GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
+          dialog = gtk_message_dialog_new (parent,
+                                           GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                           GTK_MESSAGE_ERROR,
+                                           GTK_BUTTONS_CLOSE,
+                                           _("Error creating account"));
+          gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                                    "%s",
+                                                    error->message);
+          gtk_widget_show_all (dialog);
           gtk_dialog_run (GTK_DIALOG (dialog));
+          gtk_widget_destroy (dialog);
         }
       g_error_free (error);
-      gtk_widget_hide (dialog);
     }
 
  out:
