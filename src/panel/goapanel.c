@@ -152,7 +152,6 @@ goa_panel_init (GoaPanel *panel)
                     G_CALLBACK (on_tree_view_selection_changed),
                     panel);
 
-  /* Google Account */
   panel->accounts_vbox = GTK_WIDGET (gtk_builder_get_object (panel->builder, "accounts-vbox"));
 
   /* TODO: probably want to avoid _sync() ... */
@@ -385,6 +384,7 @@ show_page_account (GoaPanel  *panel,
   GoaBackendProvider *provider;
   GoaAccount *account;
   GoaGoogleAccount *gaccount;
+  GoaFacebookAccount *fbaccount;
   const gchar *provider_type;
   gchar *s;
 
@@ -401,6 +401,7 @@ show_page_account (GoaPanel  *panel,
 
   account = goa_object_peek_account (object);
   gaccount = goa_object_peek_google_account (object);
+  fbaccount = goa_object_peek_facebook_account (object);
   provider_type = goa_account_get_account_type (account);
   provider = goa_backend_provider_get_for_provider_type (provider_type);
 
@@ -450,6 +451,10 @@ show_page_account (GoaPanel  *panel,
   if (gaccount != NULL)
     {
       add_row (table, row++, _("Email Address"), goa_google_account_get_email_address (gaccount));
+    }
+  if (fbaccount != NULL)
+    {
+      add_row (table, row++, _("User Name"), goa_facebook_account_get_user_name (fbaccount));
     }
 
   gtk_widget_show_all (panel->accounts_vbox);
