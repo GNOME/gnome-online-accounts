@@ -61,6 +61,10 @@ static void on_tree_view_selection_changed (GtkTreeSelection *selection,
 static void on_toolbar_add_button_clicked (GtkToolButton *button,
                                            gpointer       user_data);
 
+static void on_account_changed (GoaClient  *client,
+                                GoaObject  *object,
+                                gpointer    user_data);
+
 G_DEFINE_DYNAMIC_TYPE (GoaPanel, goa_panel, CC_TYPE_PANEL);
 
 static void
@@ -74,7 +78,12 @@ goa_panel_finalize (GObject *object)
   if (panel->accounts_model != NULL)
     g_object_unref (panel->accounts_model);
   if (panel->client != NULL)
-    g_object_unref (panel->client);
+    {
+      g_signal_handlers_disconnect_by_func (panel->client,
+                                            G_CALLBACK (on_account_changed),
+                                            panel);
+      g_object_unref (panel->client);
+    }
   g_object_unref (panel->builder);
 
   G_OBJECT_CLASS (goa_panel_parent_class)->finalize (object);
@@ -147,6 +156,10 @@ goa_panel_init (GoaPanel *panel)
       g_error_free (error);
       goto out;
     }
+  g_signal_connect (panel->client,
+                    "account-changed",
+                    G_CALLBACK (on_account_changed),
+                    panel);
 
   panel->accounts_model = goa_panel_accounts_model_new (panel->client);
   gtk_tree_view_set_model (GTK_TREE_VIEW (panel->accounts_treeview), GTK_TREE_MODEL (panel->accounts_model));
@@ -430,6 +443,8 @@ show_page_account (GoaPanel  *panel,
     g_object_unref (provider);
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+
 static void
 on_tree_view_selection_changed (GtkTreeSelection *selection,
                                 gpointer          user_data)
@@ -450,6 +465,29 @@ on_tree_view_selection_changed (GtkTreeSelection *selection,
   else
     {
       show_page_nothing_selected (panel);
+    }
+}
+
+static void
+on_account_changed (GoaClient  *client,
+                    GoaObject  *object,
+                    gpointer    user_data)
+{
+  GoaPanel *panel = GOA_PANEL (user_data);
+  GtkTreeIter iter;
+
+  if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (panel->accounts_treeview)),
+                                       NULL,
+                                       &iter))
+    {
+      GoaObject *selected_object;
+      gtk_tree_model_get (GTK_TREE_MODEL (panel->accounts_model),
+                          &iter,
+                          GOA_PANEL_ACCOUNTS_MODEL_COLUMN_OBJECT, &selected_object,
+                          -1);
+      if (selected_object == object)
+        show_page_account (panel, selected_object);
+      g_object_unref (selected_object);
     }
 }
 
