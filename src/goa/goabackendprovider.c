@@ -25,6 +25,7 @@
 
 #include "goabackendprovider.h"
 #include "goabackendgoogleprovider.h"
+#include "goabackendfacebookprovider.h"
 
 /**
  * SECTION:goabackendprovider
@@ -302,6 +303,7 @@ ensure_ep_and_builtins (void)
       g_io_extension_point_set_required_type (extension_point, GOA_TYPE_BACKEND_PROVIDER);
 
       type = GOA_TYPE_BACKEND_GOOGLE_PROVIDER;
+      type = GOA_TYPE_BACKEND_FACEBOOK_PROVIDER;
       type = type; /* for -Wunused-but-set-variable */
 
       g_once_init_leave (&once_init_value, 1);

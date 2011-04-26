@@ -37,6 +37,7 @@
          Known values include
          <variablelist>
          <varlistentry><term>google</term><listitem><para>The account is a Google Account. See the #org.gnome.OnlineAccounts.GoogleAccount D-Bus interface for more details.</para></listitem></varlistentry>
+         <varlistentry><term>facebook</term><listitem><para>The account is a Facebook Account. See the #org.gnome.OnlineAccounts.FacebookAccount D-Bus interface for more details.</para></listitem></varlistentry>
          </variablelist>
     -->
     <property name="Type" type="s" access="read">
@@ -130,7 +131,7 @@
 
       When creating this kind of account via the
       org.gnome.OnlineAccounts.Manager.AddAccount() method, you need
-      to include an <literal>EmailAddress</literal> element in
+      to include an <literal>Identity</literal> element in
       the @details parameter.
   -->
   <interface name="org.gnome.OnlineAccounts.GoogleAccount">
@@ -139,6 +140,27 @@
          This value cannot be changed once set.
       -->
     <property name="EmailAddress" type="s" access="read"/>
+  </interface>
+
+  <!--
+      org.gnome.OnlineAccounts.FacebookAccount:
+
+      A Facebook Account.
+
+      Objects implementing this interface also implement the
+      #org.gnome.OnlineAccounts.Account and #org.gnome.OnlineAccounts.AccessTokenBased interfaces.
+
+      When creating this kind of account via the
+      org.gnome.OnlineAccounts.Manager.AddAccount() method, you need
+      to include an <literal>Identity</literal> element in
+      the @details parameter.
+  -->
+  <interface name="org.gnome.OnlineAccounts.FacebookAccount">
+    <!-- UserName: The user name identifying the account.
+
+         This value cannot be changed once set.
+      -->
+    <property name="UserName" type="s" access="read"/>
   </interface>
 
   <!--

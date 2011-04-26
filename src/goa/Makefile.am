@@ -95,7 +95,9 @@ libgoa_backend_la_SOURCES =						\
 	goabackend.h							\
 	goabackendtypes.h						\
 	goabackendprovider.h		goabackendprovider.c		\
+	goabackendoauth2provider.h	goabackendoauth2provider.c	\
 	goabackendgoogleprovider.h	goabackendgoogleprovider.c	\
+	goabackendfacebookprovider.h	goabackendfacebookprovider.c	\
 	$(NULL)
 
 libgoa_backend_la_CFLAGS =					\

@@ -30,7 +30,9 @@
 #define __GOA_BACKEND_INSIDE_GOA_BACKEND_H__
 #include <goa/goabackendtypes.h>
 #include <goa/goabackendprovider.h>
+#include <goa/goabackendoauth2provider.h>
 #include <goa/goabackendgoogleprovider.h>
+#include <goa/goabackendfacebookprovider.h>
 #undef __GOA_BACKEND_INSIDE_GOA_BACKEND_H__
 
 #endif /* __GOA_BACKEND_H__ */
