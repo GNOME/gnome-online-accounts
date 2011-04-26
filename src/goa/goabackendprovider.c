@@ -177,6 +177,44 @@ goa_backend_provider_refresh_account (GoaBackendProvider  *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
+ * goa_backend_provider_build_object:
+ * @provider: A #GoaBackendProvider.
+ * @object: The #GoaObjectSkeleton that is being built.
+ * @key_file: The #GKeyFile with configuation data.
+ * @group: The group in @key_file to get data from.
+ * @error: Return location for error or %NULL.
+ *
+ * This method is called when construction account #GoaObject<!-- -->
+ * from configuration data - it basically provides a way to add
+ * provider-specific information.
+ *
+ * The passed in @object will have a #GoaAccount interface
+ * set. Implementations should validate and use data from @key_file to
+ * add more interfaces to @object.
+ *
+ * Note that this may be called on already exported objects - for
+ * example on configuration files reload.
+ *
+ * Returns: %TRUE if data was valid, %FALSE if @error is set.
+ */
+gboolean
+goa_backend_provider_build_object (GoaBackendProvider  *provider,
+                                   GoaObjectSkeleton   *object,
+                                   GKeyFile            *key_file,
+                                   const gchar         *group,
+                                   GError             **error)
+{
+  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (GOA_IS_OBJECT_SKELETON (object) && goa_object_peek_account (GOA_OBJECT (object)) != NULL, FALSE);
+  g_return_val_if_fail (key_file != NULL, FALSE);
+  g_return_val_if_fail (group != NULL, FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+  return GOA_BACKEND_PROVIDER_GET_CLASS (provider)->build_object (provider, object, key_file, group, error);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+/**
  * goa_backend_provider_get_access_token_supported:
  * @provider: A #GoaBackendProvider.
  *

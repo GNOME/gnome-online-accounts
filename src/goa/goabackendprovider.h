@@ -61,6 +61,7 @@ struct _GoaBackendProvider
  * @get_name: Virtual function for goa_backend_provider_get_name().
  * @add_account: Virtual function for goa_backend_provider_add_account().
  * @refresh_account: Virtual function for goa_backend_provider_refresh_account().
+ * @build_object: Virtual function for goa_backend_provider_build_object().
  * @get_access_token_supported: Virtual function for goa_backend_provider_get_access_token_supported().
  * @get_access_token: Virtual function for goa_backend_provider_get_access_token().
  * @get_access_token_finish: Virtual function for goa_backend_provider_get_access_token_finish().
@@ -82,6 +83,11 @@ struct _GoaBackendProviderClass
                                      GoaClient          *client,
                                      GoaObject          *object,
                                      GtkWindow          *parent,
+                                     GError            **error);
+  gboolean     (*build_object)      (GoaBackendProvider *provider,
+                                     GoaObjectSkeleton  *object,
+                                     GKeyFile           *key_file,
+                                     const gchar        *group,
                                      GError            **error);
 
   /* AccessTokenBased support */
@@ -113,6 +119,11 @@ gboolean            goa_backend_provider_refresh_account   (GoaBackendProvider  
                                                             GoaClient           *client,
                                                             GoaObject           *object,
                                                             GtkWindow           *parent,
+                                                            GError             **error);
+gboolean            goa_backend_provider_build_object      (GoaBackendProvider  *provider,
+                                                            GoaObjectSkeleton   *object,
+                                                            GKeyFile            *key_file,
+                                                            const gchar         *group,
                                                             GError             **error);
 
 gboolean     goa_backend_provider_get_access_token_supported (GoaBackendProvider   *provider);

@@ -356,50 +356,6 @@ add_config_file (const gchar   *path,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static gboolean
-update_account_object_google (GoaDaemon           *daemon,
-                              GoaObjectSkeleton   *object,
-                              const gchar         *group,
-                              GKeyFile            *key_file,
-                              gboolean             just_added)
-{
-  GoaAccount *account;
-  GoaGoogleAccount *google_account;
-  gboolean ret;
-  gchar *s;
-
-  ret = FALSE;
-
-  account = goa_object_get_account (GOA_OBJECT (object));
-  if (just_added)
-    {
-      google_account = goa_google_account_skeleton_new ();
-      goa_object_skeleton_set_google_account (object, google_account);
-    }
-  else
-    {
-      google_account = goa_object_get_google_account (GOA_OBJECT (object));
-    }
-
-  s = g_key_file_get_string (key_file, group, "EmailAddress", NULL);
-  if (s == NULL /* || !is_valid_email_address () */)
-    {
-      /* TODO: syslog */
-      g_warning ("Invalid email address %s for id %s", s, goa_account_get_id (account));
-      g_free (s);
-      goto out;
-    }
-  goa_google_account_set_email_address (google_account, s);
-  g_free (s);
-
-  ret = TRUE;
-
- out:
-  g_object_unref (google_account);
-  g_object_unref (account);
-  return ret;
-}
-
 /* returns FALSE if object is not (or no longer) valid */
 static gboolean
 update_account_object (GoaDaemon           *daemon,
@@ -410,9 +366,11 @@ update_account_object (GoaDaemon           *daemon,
 {
   GoaAccount *account;
   GoaAccessTokenBased *access_token_based;
+  GoaBackendProvider *provider;
   gboolean ret;
   gchar *name;
   gchar *type;
+  GError *error;
 
   g_return_val_if_fail (GOA_IS_DAEMON (daemon), FALSE);
   g_return_val_if_fail (G_IS_DBUS_OBJECT_SKELETON (object), FALSE);
@@ -431,28 +389,8 @@ update_account_object (GoaDaemon           *daemon,
   name = g_key_file_get_string (key_file, group, "Name", NULL);
   if (just_added)
     {
-      GoaBackendProvider *provider;
-
       account = goa_account_skeleton_new ();
       goa_object_skeleton_set_account (object, account);
-
-      provider = goa_backend_provider_get_for_provider_type (type);
-      if (provider == NULL)
-        {
-          /* TODO: syslog */
-          g_warning ("Unsupported account type %s for id %s (no provider)", type, goa_account_get_id (account));
-          goto out;
-        }
-      if (goa_backend_provider_get_access_token_supported (provider))
-        {
-          access_token_based = goa_access_token_based_skeleton_new ();
-          g_signal_connect (access_token_based,
-                            "handle-get-access-token",
-                            G_CALLBACK (on_handle_get_access_token),
-                            daemon);
-          goa_object_skeleton_set_access_token_based (object, access_token_based);
-        }
-      g_object_unref (provider);
     }
   else
     {
@@ -464,24 +402,42 @@ update_account_object (GoaDaemon           *daemon,
   goa_account_set_account_type (account, type);
   goa_account_set_name (account, name);
 
-  /* TODO: some kind of GoaAccountProvider subclass stuff */
-  if (g_strcmp0 (type, "google") == 0)
-    {
-      if (!update_account_object_google (daemon, object, group, key_file, just_added))
-        {
-          goto out;
-        }
-    }
-  else
+  provider = goa_backend_provider_get_for_provider_type (type);
+  if (provider == NULL)
     {
       /* TODO: syslog */
-      g_warning ("Unsupported account type %s for id %s", type, goa_account_get_id (account));
+      g_warning ("Unsupported account type %s for id %s (no provider)", type, goa_account_get_id (account));
+      goto out;
+    }
+
+  if (just_added)
+    {
+      if (goa_backend_provider_get_access_token_supported (provider))
+        {
+          access_token_based = goa_access_token_based_skeleton_new ();
+          g_signal_connect (access_token_based,
+                            "handle-get-access-token",
+                            G_CALLBACK (on_handle_get_access_token),
+                            daemon);
+          goa_object_skeleton_set_access_token_based (object, access_token_based);
+        }
+    }
+
+  error = NULL;
+  if (!goa_backend_provider_build_object (provider, object, key_file, group, &error))
+    {
+      /* TODO: syslog */
+      g_warning ("Error parsing account: %s (%s, %d)",
+                 error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
       goto out;
     }
 
   ret = TRUE;
 
  out:
+  if (provider != NULL)
+    g_object_unref (provider);
   g_object_unref (account);
   if (access_token_based != NULL)
     g_object_unref (access_token_based);

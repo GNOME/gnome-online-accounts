@@ -78,6 +78,11 @@ static gboolean     goa_backend_google_provider_refresh_account   (GoaBackendPro
                                                                    GoaObject           *object,
                                                                    GtkWindow           *parent,
                                                                    GError             **error);
+static gboolean     goa_backend_google_provider_build_object      (GoaBackendProvider  *provider,
+                                                                   GoaObjectSkeleton   *object,
+                                                                   GKeyFile            *key_file,
+                                                                   const gchar         *group,
+                                                                   GError             **error);
 
 static gboolean     goa_backend_google_provider_get_access_token_supported (GoaBackendProvider   *provider);
 static void         goa_backend_google_provider_get_access_token           (GoaBackendProvider   *provider,
@@ -112,16 +117,17 @@ goa_backend_google_provider_init (GoaBackendGoogleProvider *client)
 static void
 goa_backend_google_provider_class_init (GoaBackendGoogleProviderClass *klass)
 {
-  GoaBackendProviderClass *provider_klass;
+  GoaBackendProviderClass *provider_class;
 
-  provider_klass = GOA_BACKEND_PROVIDER_CLASS (klass);
-  provider_klass->get_provider_type          = goa_backend_google_provider_get_provider_type;
-  provider_klass->get_name                   = goa_backend_google_provider_get_name;
-  provider_klass->add_account                = goa_backend_google_provider_add_account;
-  provider_klass->refresh_account            = goa_backend_google_provider_refresh_account;
-  provider_klass->get_access_token_supported = goa_backend_google_provider_get_access_token_supported;
-  provider_klass->get_access_token           = goa_backend_google_provider_get_access_token;
-  provider_klass->get_access_token_finish    = goa_backend_google_provider_get_access_token_finish;
+  provider_class = GOA_BACKEND_PROVIDER_CLASS (klass);
+  provider_class->get_provider_type          = goa_backend_google_provider_get_provider_type;
+  provider_class->get_name                   = goa_backend_google_provider_get_name;
+  provider_class->add_account                = goa_backend_google_provider_add_account;
+  provider_class->refresh_account            = goa_backend_google_provider_refresh_account;
+  provider_class->build_object               = goa_backend_google_provider_build_object;
+  provider_class->get_access_token_supported = goa_backend_google_provider_get_access_token_supported;
+  provider_class->get_access_token           = goa_backend_google_provider_get_access_token;
+  provider_class->get_access_token_finish    = goa_backend_google_provider_get_access_token_finish;
 }
 
 static const gchar *
@@ -955,6 +961,53 @@ goa_backend_google_provider_get_access_token_finish (GoaBackendProvider   *provi
   if (out_expires_in != NULL)
     *out_expires_in = data->expires_in;
 
+  return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gboolean
+goa_backend_google_provider_build_object (GoaBackendProvider  *provider,
+                                          GoaObjectSkeleton   *object,
+                                          GKeyFile            *key_file,
+                                          const gchar         *group,
+                                          GError             **error)
+{
+  GoaAccount *account;
+  GoaGoogleAccount *google_account;
+  gboolean ret;
+  gchar *email_address;
+
+  ret = FALSE;
+
+  account = goa_object_get_account (GOA_OBJECT (object));
+  google_account = goa_object_get_google_account (GOA_OBJECT (object));
+  if (google_account == NULL)
+    {
+      google_account = goa_google_account_skeleton_new ();
+      goa_object_skeleton_set_google_account (object, google_account);
+    }
+
+  email_address = g_key_file_get_string (key_file, group, "EmailAddress", NULL);
+  if (email_address == NULL /* || !is_valid_email_address () */)
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   "Invalid email address %s for id %s",
+                   email_address,
+                   goa_account_get_id (account));
+      goto out;
+    }
+
+  goa_google_account_set_email_address (google_account, email_address);
+
+  ret = TRUE;
+
+ out:
+  g_free (email_address);
+  g_object_unref (google_account);
+  g_object_unref (account);
   return ret;
 }
 
