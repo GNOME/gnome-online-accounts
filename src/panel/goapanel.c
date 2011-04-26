@@ -112,6 +112,7 @@ goa_panel_init (GoaPanel *panel)
   GtkStyleContext *context;
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
+  GtkTreeIter iter;
 
   panel->builder = gtk_builder_new ();
   error = NULL;
@@ -191,6 +192,12 @@ goa_panel_init (GoaPanel *panel)
                                        renderer,
                                        "visible", GOA_PANEL_ACCOUNTS_MODEL_COLUMN_ATTENTION_NEEDED,
                                        NULL);
+
+  /* Select the first row, if any */
+  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (panel->accounts_model),
+                                     &iter))
+    gtk_tree_selection_select_iter (gtk_tree_view_get_selection (GTK_TREE_VIEW (panel->accounts_treeview)),
+                                    &iter);
 
  out:
   w = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-top-widget"));
