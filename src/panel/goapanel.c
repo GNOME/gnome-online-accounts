@@ -171,6 +171,16 @@ goa_panel_init (GoaPanel *panel)
                                        "markup", GOA_PANEL_ACCOUNTS_MODEL_COLUMN_NAME,
                                        NULL);
 
+  renderer = gtk_cell_renderer_pixbuf_new ();
+  gtk_tree_view_column_pack_end (column, renderer, FALSE);
+  g_object_set (G_OBJECT (renderer),
+                "icon-name", "dialog-warning-symbolic",
+                NULL);
+  gtk_tree_view_column_set_attributes (column,
+                                       renderer,
+                                       "visible", GOA_PANEL_ACCOUNTS_MODEL_COLUMN_ATTENTION_NEEDED,
+                                       NULL);
+
  out:
   w = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-top-widget"));
   /* TODO: not sure this is quite the right way to force minimum size */

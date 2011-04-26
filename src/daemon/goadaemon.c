@@ -816,19 +816,22 @@ get_access_token_cb (GoaBackendProvider  *provider,
         {
           GoaAccount *account;
           account = goa_object_peek_account (data->object);
-          goa_account_set_needs_attention (account, TRUE);
-          g_dbus_interface_skeleton_flush (G_DBUS_INTERFACE_SKELETON (account));
-          /* TODO: syslog */
-          g_print ("Setting NeedsAttention to TRUE because GetAccessToken() failed for %s with: %s (%s, %d)\n",
-                   g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)),
-                   error->message, g_quark_to_string (error->domain), error->code);
+          if (!goa_account_get_attention_needed (account))
+            {
+              goa_account_set_attention_needed (account, TRUE);
+              g_dbus_interface_skeleton_flush (G_DBUS_INTERFACE_SKELETON (account));
+              /* TODO: syslog */
+              g_print ("Setting AttentionNeeded to TRUE because GetAccessToken() failed for %s with: %s (%s, %d)\n",
+                       g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)),
+                       error->message, g_quark_to_string (error->domain), error->code);
+            }
         }
       g_dbus_method_invocation_return_gerror (data->invocation, error);
       g_error_free (error);
     }
   else
     {
-      /* TODO: clear NeedsAttention flag if set? */
+      /* TODO: clear AttentionNeeded flag if set? */
       goa_access_token_based_complete_get_access_token (goa_object_peek_access_token_based (data->object),
                                                         data->invocation,
                                                         access_token,
