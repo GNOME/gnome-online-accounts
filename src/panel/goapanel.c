@@ -164,7 +164,7 @@ goa_panel_init (GoaPanel *panel)
   renderer = gtk_cell_renderer_pixbuf_new ();
   gtk_tree_view_column_pack_end (column, renderer, FALSE);
   g_object_set (G_OBJECT (renderer),
-                "icon-name", "dialog-warning-symbolic",
+                "icon-name", "dialog-error-symbolic",
                 NULL);
   gtk_tree_view_column_set_attributes (column,
                                        renderer,

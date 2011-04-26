@@ -28,6 +28,7 @@ goa_daemon_SOURCES = 						\
 goa_daemon_CFLAGS =						\
 	$(GLIB_CFLAGS) 						\
 	$(GTK_CFLAGS)						\
+	$(LIBNOTIFY_CFLAGS)					\
 	$(NULL)
 
 goa_daemon_LDADD = 						\
@@ -35,6 +36,7 @@ goa_daemon_LDADD = 						\
 	$(top_builddir)/src/goa/libgoa.la			\
 	$(top_builddir)/src/goa/libgoa-backend.la		\
 	$(GTK_LIBS)						\
+	$(LIBNOTIFY_LIBS)					\
 	$(NULL)
 
 clean-local :
