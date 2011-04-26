@@ -64,12 +64,12 @@ static void on_file_monitor_changed (GFileMonitor     *monitor,
                                      GFileMonitorEvent event_type,
                                      gpointer          user_data);
 
-static gboolean on_add_account (GoaManager            *object,
-                                GDBusMethodInvocation *invocation,
-                                const gchar           *type,
-                                const gchar           *name,
-                                GVariant              *details,
-                                gpointer               user_data);
+static gboolean on_manager_handle_add_account (GoaManager            *object,
+                                               GDBusMethodInvocation *invocation,
+                                               const gchar           *type,
+                                               const gchar           *name,
+                                               GVariant              *details,
+                                               gpointer               user_data);
 
 static gboolean on_handle_get_access_token (GoaAccessTokenBased   *object,
                                             GDBusMethodInvocation *invocation,
@@ -83,6 +83,10 @@ static gboolean on_account_handle_set_name (GoaAccount            *account,
                                             GDBusMethodInvocation *invocation,
                                             const gchar           *name,
                                             gpointer               user_data);
+
+static gboolean on_account_handle_remove (GoaAccount            *account,
+                                          GDBusMethodInvocation *invocation,
+                                          gpointer               user_data);
 
 static void goa_daemon_reload_configuration (GoaDaemon *daemon);
 
@@ -196,7 +200,7 @@ goa_daemon_init (GoaDaemon *daemon)
   daemon->manager = goa_manager_skeleton_new ();
   g_signal_connect (daemon->manager,
                     "handle-add-account",
-                    G_CALLBACK (on_add_account),
+                    G_CALLBACK (on_manager_handle_add_account),
                     daemon);
   object = goa_object_skeleton_new ("/org/gnome/OnlineAccounts/Manager");
   goa_object_skeleton_set_manager (object, daemon->manager);
@@ -563,6 +567,9 @@ process_config_entries (GoaDaemon  *daemon,
       g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
                                             G_CALLBACK (on_account_handle_clear_attention_needed),
                                             daemon);
+      g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
+                                            G_CALLBACK (on_account_handle_remove),
+                                            daemon);
       g_debug ("removing %s", object_path);
       g_warn_if_fail (g_dbus_object_manager_server_unexport (daemon->object_manager, object_path));
     }
@@ -591,6 +598,10 @@ process_config_entries (GoaDaemon  *daemon,
                             "handle-clear-attention-needed",
                             G_CALLBACK (on_account_handle_clear_attention_needed),
                             daemon);
+          g_signal_connect (goa_object_peek_account (GOA_OBJECT (object)),
+                            "handle-remove",
+                            G_CALLBACK (on_account_handle_remove),
+                            daemon);
         }
       g_object_unref (object);
       g_free (group);
@@ -617,6 +628,9 @@ process_config_entries (GoaDaemon  *daemon,
                                                 daemon);
           g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
                                                 G_CALLBACK (on_account_handle_clear_attention_needed),
+                                                daemon);
+          g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
+                                                G_CALLBACK (on_account_handle_remove),
                                                 daemon);
           g_warn_if_fail (g_dbus_object_manager_server_unexport (daemon->object_manager, object_path));
         }
@@ -718,12 +732,12 @@ generate_new_id (GoaDaemon *daemon)
 }
 
 static gboolean
-on_add_account (GoaManager             *manager,
-                GDBusMethodInvocation  *invocation,
-                const gchar            *type,
-                const gchar            *name,
-                GVariant               *details,
-                gpointer                user_data)
+on_manager_handle_add_account (GoaManager             *manager,
+                               GDBusMethodInvocation  *invocation,
+                               const gchar            *type,
+                               const gchar            *name,
+                               GVariant               *details,
+                               gpointer                user_data)
 {
   GoaDaemon *daemon = GOA_DAEMON (user_data);
   GKeyFile *key_file;
@@ -1017,6 +1031,8 @@ on_account_handle_set_name (GoaAccount            *account,
 
   goa_daemon_reload_configuration (daemon);
 
+  goa_account_complete_set_name (account, invocation);
+
  out:
   g_free (data);
   g_free (existing_name);
@@ -1151,3 +1167,103 @@ goa_daemon_update_notifications (GoaDaemon *daemon)
   g_list_free (objects);
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gboolean
+on_account_handle_remove (GoaAccount            *account,
+                          GDBusMethodInvocation *invocation,
+                          gpointer               user_data)
+{
+  GoaDaemon *daemon = GOA_DAEMON (user_data);
+  GKeyFile *key_file;
+  gchar *path;
+  gchar *group;
+  gchar *name;
+  gchar *data;
+  gsize length;
+  GError *error;
+
+  path = NULL;
+  group = NULL;
+  key_file = NULL;
+  name = NULL;
+  data = NULL;
+
+  if (g_strcmp0 (goa_account_get_name (account), name) == 0)
+    {
+      goa_account_complete_set_name (account, invocation);
+      goto out;
+    }
+
+  /* update key-file - right now we only support removing the account
+   * if the entry is in ~/.config/goa-1.0/accounts.conf
+   */
+
+  key_file = g_key_file_new ();
+  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
+
+  error = NULL;
+  if (!g_key_file_load_from_file (key_file,
+                                  path,
+                                  G_KEY_FILE_KEEP_COMMENTS,
+                                  &error))
+    {
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      g_error_free (error);
+      goto out;
+    }
+
+  group = g_strdup_printf ("Account %s", goa_account_get_id (account));
+
+  error = NULL;
+  name = g_key_file_get_string (key_file, group, "Name", &error);
+  if (name == NULL)
+    {
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      g_error_free (error);
+      goto out;
+    }
+
+  error = NULL;
+  if (!g_key_file_remove_group (key_file, group, &error))
+    {
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      g_error_free (error);
+      goto out;
+    }
+
+  error = NULL;
+  data = g_key_file_to_data (key_file,
+                             &length,
+                             &error);
+  if (data == NULL)
+    {
+      g_prefix_error (&error, "Error generating key-value-file: ");
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      goto out;
+    }
+
+  error = NULL;
+  if (!g_file_set_contents (path,
+                            data,
+                            length,
+                            &error))
+    {
+      g_prefix_error (&error, "Error writing key-value-file %s: ", path);
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      goto out;
+    }
+
+  goa_daemon_reload_configuration (daemon);
+
+  goa_account_complete_remove (account, invocation);
+
+ out:
+  g_free (data);
+  g_free (name);
+  if (key_file != NULL)
+    g_key_file_free (key_file);
+  g_free (group);
+  g_free (path);
+  return TRUE; /* invocation was handled */
+}

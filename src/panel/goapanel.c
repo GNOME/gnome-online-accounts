@@ -46,6 +46,7 @@ struct _GoaPanel
 
   GtkWidget *toolbar;
   GtkWidget *toolbar_add_button;
+  GtkWidget *toolbar_remove_button;
   GtkWidget *accounts_treeview;
   GtkWidget *accounts_vbox;
 };
@@ -60,6 +61,8 @@ static void on_tree_view_selection_changed (GtkTreeSelection *selection,
 
 static void on_toolbar_add_button_clicked (GtkToolButton *button,
                                            gpointer       user_data);
+static void on_toolbar_remove_button_clicked (GtkToolButton *button,
+                                              gpointer       user_data);
 
 static void on_account_changed (GoaClient  *client,
                                 GoaObject  *object,
@@ -127,6 +130,11 @@ goa_panel_init (GoaPanel *panel)
   g_signal_connect (panel->toolbar_add_button,
                     "clicked",
                     G_CALLBACK (on_toolbar_add_button_clicked),
+                    panel);
+  panel->toolbar_remove_button = GTK_WIDGET (gtk_builder_get_object (panel->builder, "accounts-tree-toolbutton-remove"));
+  g_signal_connect (panel->toolbar_remove_button,
+                    "clicked",
+                    G_CALLBACK (on_toolbar_remove_button_clicked),
                     panel);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (gtk_builder_get_object (panel->builder, "accounts-tree-scrolledwindow")));
@@ -614,3 +622,73 @@ on_toolbar_add_button_clicked (GtkToolButton *button,
   g_list_free (providers);
 }
 
+static void
+remove_account_cb (GoaAccount    *account,
+                   GAsyncResult  *res,
+                   gpointer       user_data)
+{
+  GoaPanel *panel = GOA_PANEL (user_data);
+  GError *error;
+
+  error = NULL;
+  if (!goa_account_call_remove_finish (account, res, &error))
+    {
+      GtkWidget *dialog;
+      dialog = gtk_message_dialog_new (GTK_WINDOW (cc_shell_get_toplevel (cc_panel_get_shell (CC_PANEL (panel)))),
+                                       GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                       GTK_MESSAGE_ERROR,
+                                       GTK_BUTTONS_CLOSE,
+                                       _("Error removing account"));
+      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                                "%s",
+                                                error->message);
+      gtk_widget_show_all (dialog);
+      gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy (dialog);
+      g_error_free (error);
+    }
+  g_object_unref (panel);
+}
+
+static void
+on_toolbar_remove_button_clicked (GtkToolButton *button,
+                                  gpointer       user_data)
+{
+  GoaPanel *panel = GOA_PANEL (user_data);
+  GtkTreeIter iter;
+
+  if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (panel->accounts_treeview)),
+                                       NULL,
+                                       &iter))
+    {
+      GoaObject *object;
+      GtkWidget *dialog;
+      gint response;
+
+      gtk_tree_model_get (GTK_TREE_MODEL (panel->accounts_model),
+                          &iter,
+                          GOA_PANEL_ACCOUNTS_MODEL_COLUMN_OBJECT, &object,
+                          -1);
+
+      dialog = gtk_message_dialog_new (GTK_WINDOW (cc_shell_get_toplevel (cc_panel_get_shell (CC_PANEL (panel)))),
+                                       GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                       GTK_MESSAGE_QUESTION,
+                                       GTK_BUTTONS_CANCEL,
+                                       _("Are you sure you want to remove the account?"));
+      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                                _("This will not remove the account on the server."));
+      gtk_dialog_add_button (GTK_DIALOG (dialog), _("Delete"), GTK_RESPONSE_OK);
+      gtk_widget_show_all (dialog);
+      response = gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy (dialog);
+
+      if (response == GTK_RESPONSE_OK)
+        {
+          goa_account_call_remove (goa_object_peek_account (object),
+                                   NULL, /* GCancellable */
+                                   (GAsyncReadyCallback) remove_account_cb,
+                                   g_object_ref (panel));
+        }
+      g_object_unref (object);
+    }
+}

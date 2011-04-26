@@ -108,6 +108,14 @@
     <!-- ClearAttentionNeeded: Clears the #org.gnome.OnlineAccounts.Account:AttentionNeeded property -->
     <method name="ClearAttentionNeeded"/>
 
+    <!--
+        Remove:
+
+        Removes the account. Note that this does not removes the
+        account at the remote service.
+    -->
+    <method name="Remove"/>
+
   </interface>
 
   <!--
@@ -187,16 +195,6 @@
       <arg name="account_object_path" type="o" direction="out"/>
     </method>
 
-    <!--
-        RemoveAccount:
-        @account_object_path: The object path of account to delete.
-
-        Deletes an account. Note that this does not delete the account
-        at the remote service.
-    -->
-    <method name="RemoveAccount">
-      <arg name="account_object_path" type="o" direction="in"/>
-    </method>
   </interface>
 
 </node>
