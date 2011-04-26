@@ -73,6 +73,11 @@ static GoaObject   *goa_backend_google_provider_add_account       (GoaBackendPro
                                                                    GtkDialog          *dialog,
                                                                    GtkBox             *vbox,
                                                                    GError            **error);
+static gboolean     goa_backend_google_provider_refresh_account   (GoaBackendProvider  *provider,
+                                                                   GoaClient           *client,
+                                                                   GoaObject           *object,
+                                                                   GtkWindow           *parent,
+                                                                   GError             **error);
 
 static gboolean     goa_backend_google_provider_get_access_token_supported (GoaBackendProvider   *provider);
 static void         goa_backend_google_provider_get_access_token           (GoaBackendProvider   *provider,
@@ -113,6 +118,7 @@ goa_backend_google_provider_class_init (GoaBackendGoogleProviderClass *klass)
   provider_klass->get_provider_type          = goa_backend_google_provider_get_provider_type;
   provider_klass->get_name                   = goa_backend_google_provider_get_name;
   provider_klass->add_account                = goa_backend_google_provider_add_account;
+  provider_klass->refresh_account            = goa_backend_google_provider_refresh_account;
   provider_klass->get_access_token_supported = goa_backend_google_provider_get_access_token_supported;
   provider_klass->get_access_token           = goa_backend_google_provider_get_access_token;
   provider_klass->get_access_token_finish    = goa_backend_google_provider_get_access_token_finish;
@@ -138,8 +144,7 @@ typedef struct
   gchar *authorization_code;
   GError *error;
   GMainLoop *loop;
-  gchar *account_object_path;
-} AddData;
+} IdentifyData;
 
 static void
 on_web_view_notify_title (GObject     *object,
@@ -147,7 +152,7 @@ on_web_view_notify_title (GObject     *object,
                           gpointer     user_data)
 {
   WebKitWebView *web_view = WEBKIT_WEB_VIEW (object);
-  AddData *data = user_data;
+  IdentifyData *data = user_data;
   const gchar *title;
 
   title = webkit_web_view_get_title (web_view);
@@ -317,44 +322,17 @@ get_email_address_sync (SoupSession  *session,
   return ret;
 }
 
-static void
-add_account_cb (GoaManager   *manager,
-                GAsyncResult *res,
-                gpointer      user_data)
+static gboolean
+get_tokens_and_identity (GoaBackendGoogleProvider *provider,
+                         GtkDialog                *dialog,
+                         GtkBox                   *vbox,
+                         gchar                   **out_authorization_code,
+                         gchar                   **out_access_token,
+                         gchar                   **out_refresh_token,
+                         gchar                   **out_email_address,
+                         GError                  **error)
 {
-  AddData *data = user_data;
-  goa_manager_call_add_account_finish (manager,
-                                       &data->account_object_path,
-                                       res,
-                                       &data->error);
-  g_main_loop_quit (data->loop);
-}
-
-static void
-store_password_cb (GnomeKeyringResult result,
-                   gpointer           user_data)
-{
-  AddData *data = user_data;
-  if (result != GNOME_KEYRING_RESULT_OK)
-    {
-      g_set_error (&data->error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   _("Failed to store the result in the keyring: %s"),
-                   gnome_keyring_result_to_message (result));
-    }
-  g_main_loop_quit (data->loop);
-}
-
-static GoaObject *
-goa_backend_google_provider_add_account (GoaBackendProvider *_provider,
-                                         GoaClient          *client,
-                                         GtkDialog          *dialog,
-                                         GtkBox             *vbox,
-                                         GError            **error)
-{
-  GoaBackendGoogleProvider *provider = GOA_BACKEND_GOOGLE_PROVIDER (_provider);
-  GoaObject *ret;
+  gboolean ret;
   SoupSession *webkit_soup_session;
   SoupSession *session;
   SoupCookieJar *cookie_jar;
@@ -364,31 +342,25 @@ goa_backend_google_provider_add_account (GoaBackendProvider *_provider,
   gchar *escaped_scope;
   gchar *url;
   gint response;
-  AddData data;
+  IdentifyData data;
   gchar *access_token;
   gchar *refresh_token;
   gchar *email_address;
-  GList *accounts;
-  GList *l;
-  gchar *password_description;
 
-  g_return_val_if_fail (GOA_IS_BACKEND_GOOGLE_PROVIDER (provider), NULL);
-  g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
-  g_return_val_if_fail (GTK_IS_DIALOG (dialog), NULL);
-  g_return_val_if_fail (GTK_IS_BOX (vbox), NULL);
-  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+  g_return_val_if_fail (GOA_IS_BACKEND_GOOGLE_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (GTK_IS_DIALOG (dialog), FALSE);
+  g_return_val_if_fail (GTK_IS_BOX (vbox), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  ret = NULL;
+  ret = FALSE;
   session = NULL;
   access_token = NULL;
   refresh_token = NULL;
   email_address = NULL;
-  accounts = NULL;
-  password_description = NULL;
 
   /* TODO: check with NM whether we're online, if not - return error */
 
-  memset (&data, '\0', sizeof (AddData));
+  memset (&data, '\0', sizeof (IdentifyData));
   data.loop = g_main_loop_new (NULL, FALSE);
 
   scope =
@@ -467,6 +439,176 @@ goa_backend_google_provider_add_account (GoaBackendProvider *_provider,
   if (email_address == NULL)
     goto out;
 
+  ret = TRUE;
+
+ out:
+  if (data.error != NULL)
+    {
+      g_propagate_error (error, data.error);
+      g_assert (!ret);
+    }
+  else
+    {
+      g_assert (ret);
+      if (out_authorization_code != NULL)
+        *out_authorization_code = g_strdup (data.authorization_code);
+      if (out_access_token != NULL)
+        *out_access_token = g_strdup (access_token);
+      if (out_refresh_token != NULL)
+        *out_refresh_token = g_strdup (refresh_token);
+      if (out_email_address != NULL)
+        *out_email_address = g_strdup (email_address);
+    }
+
+  g_free (email_address);
+  if (session != NULL)
+    g_object_unref (session);
+  g_object_unref (cookie_jar);
+  g_free (escaped_scope);
+  g_free (url);
+
+  g_free (data.authorization_code);
+  if (data.loop != NULL)
+    g_main_loop_unref (data.loop);
+  g_free (access_token);
+  g_free (refresh_token);
+  return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct
+{
+  GError *error;
+  GMainLoop *loop;
+} StoreTokenData;
+
+static void
+store_password_cb (GnomeKeyringResult result,
+                   gpointer           user_data)
+{
+  StoreTokenData *data = user_data;
+  if (result != GNOME_KEYRING_RESULT_OK)
+    {
+      g_set_error (&data->error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Failed to store the result in the keyring: %s"),
+                   gnome_keyring_result_to_message (result));
+    }
+  g_main_loop_quit (data->loop);
+}
+
+static gboolean
+store_tokens (const gchar  *email_address,
+              const gchar  *refresh_token,
+              GError      **error)
+{
+  gchar *password_description;
+  gboolean ret;
+  StoreTokenData data;
+
+  ret = FALSE;
+
+  memset (&data, '\0', sizeof (StoreTokenData));
+  data.loop = g_main_loop_new (NULL, FALSE);
+
+  password_description = g_strdup_printf (_("Google OAuth2 refresh token for %s"), email_address);
+  gnome_keyring_store_password (&keyring_password_schema,
+                                NULL, /* default keyring */
+                                password_description,
+                                refresh_token,
+                                store_password_cb,
+                                &data,
+                                NULL, /* GDestroyNotify */
+                                "goa-google-email-address", email_address,
+                                NULL);
+  g_main_loop_run (data.loop);
+  if (data.error != NULL)
+    goto out;
+
+  ret = TRUE;
+
+ out:
+  if (data.error != NULL)
+    {
+      g_propagate_error (error, data.error);
+      g_assert (!ret);
+    }
+  else
+    {
+      g_assert (ret);
+    }
+  g_free (password_description);
+  g_main_loop_unref (data.loop);
+  return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct
+{
+  GError *error;
+  GMainLoop *loop;
+  gchar *account_object_path;
+} AddData;
+
+static void
+add_account_cb (GoaManager   *manager,
+                GAsyncResult *res,
+                gpointer      user_data)
+{
+  AddData *data = user_data;
+  goa_manager_call_add_account_finish (manager,
+                                       &data->account_object_path,
+                                       res,
+                                       &data->error);
+  g_main_loop_quit (data->loop);
+}
+
+static GoaObject *
+goa_backend_google_provider_add_account (GoaBackendProvider *_provider,
+                                         GoaClient          *client,
+                                         GtkDialog          *dialog,
+                                         GtkBox             *vbox,
+                                         GError            **error)
+{
+  GoaBackendGoogleProvider *provider = GOA_BACKEND_GOOGLE_PROVIDER (_provider);
+  GoaObject *ret;
+  gchar *authorization_code;
+  gchar *access_token;
+  gchar *refresh_token;
+  gchar *email_address;
+  GList *accounts;
+  GList *l;
+  AddData data;
+
+  g_return_val_if_fail (GOA_IS_BACKEND_GOOGLE_PROVIDER (provider), NULL);
+  g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
+  g_return_val_if_fail (GTK_IS_DIALOG (dialog), NULL);
+  g_return_val_if_fail (GTK_IS_BOX (vbox), NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  ret = NULL;
+  authorization_code = NULL;
+  access_token = NULL;
+  refresh_token = NULL;
+  email_address = NULL;
+  accounts = NULL;
+
+  memset (&data, '\0', sizeof (AddData));
+  data.loop = g_main_loop_new (NULL, FALSE);
+
+  if (!get_tokens_and_identity (provider,
+                                dialog,
+                                vbox,
+                                &authorization_code,
+                                &access_token,
+                                &refresh_token,
+                                &email_address,
+                                &data.error))
+    goto out;
+
   g_debug ("Wee email_address=%s", email_address);
 
   /* OK, got the email address... see if there's already an account
@@ -505,35 +647,13 @@ goa_backend_google_provider_add_account (GoaBackendProvider *_provider,
   if (data.error != NULL)
     goto out;
 
-  password_description = g_strdup_printf (_("Google OAuth2 refresh code for %s"), email_address);
-  gnome_keyring_store_password (&keyring_password_schema,
-                                NULL, /* default keyring */
-                                password_description,
-                                refresh_token,
-                                store_password_cb,
-                                &data,
-                                NULL, /* GDestroyNotify */
-                                "goa-google-email-address", email_address,
-                                NULL);
-
-  g_main_loop_run (data.loop);
-  if (data.error != NULL)
+  if (!store_tokens (email_address, refresh_token, &data.error))
     goto out;
 
   ret = GOA_OBJECT (g_dbus_object_manager_get_object (goa_client_get_object_manager (client),
                                                       data.account_object_path));
 
  out:
-  g_free (password_description);
-  g_list_foreach (accounts, (GFunc) g_object_unref, NULL);
-  g_list_free (accounts);
-  g_free (email_address);
-  if (session != NULL)
-    g_object_unref (session);
-  g_object_unref (cookie_jar);
-  g_free (escaped_scope);
-  g_free (url);
-
   if (data.error != NULL)
     {
       g_propagate_error (error, data.error);
@@ -544,10 +664,90 @@ goa_backend_google_provider_add_account (GoaBackendProvider *_provider,
       g_assert (ret != NULL);
     }
 
-  g_free (data.authorization_code);
+  g_list_foreach (accounts, (GFunc) g_object_unref, NULL);
+  g_list_free (accounts);
+  g_free (email_address);
+  g_free (authorization_code);
+  g_free (access_token);
+  g_free (refresh_token);
   g_free (data.account_object_path);
   if (data.loop != NULL)
     g_main_loop_unref (data.loop);
+  return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gboolean
+goa_backend_google_provider_refresh_account (GoaBackendProvider  *_provider,
+                                             GoaClient           *client,
+                                             GoaObject           *object,
+                                             GtkWindow           *parent,
+                                             GError             **error)
+{
+  GoaBackendGoogleProvider *provider = GOA_BACKEND_GOOGLE_PROVIDER (_provider);
+  GtkWidget *dialog;
+  gchar *authorization_code;
+  gchar *access_token;
+  gchar *refresh_token;
+  gchar *email_address;
+  const gchar *existing_email_address;
+  gboolean ret;
+
+  g_return_val_if_fail (GOA_IS_BACKEND_GOOGLE_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (GOA_IS_CLIENT (client), FALSE);
+  g_return_val_if_fail (GOA_IS_OBJECT (object), FALSE);
+  g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  authorization_code = NULL;
+  access_token = NULL;
+  refresh_token = NULL;
+  email_address = NULL;
+
+  dialog = gtk_dialog_new_with_buttons (NULL,
+                                        parent,
+                                        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                        GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
+                                        NULL);
+  gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+  gtk_widget_show_all (dialog);
+
+  if (!get_tokens_and_identity (provider,
+                                GTK_DIALOG (dialog),
+                                GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))),
+                                &authorization_code,
+                                &access_token,
+                                &refresh_token,
+                                &email_address,
+                                error))
+    goto out;
+
+  existing_email_address = goa_google_account_get_email_address (goa_object_peek_google_account (object));
+  if (g_strcmp0 (email_address, existing_email_address) != 0)
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Was asked to login to the account %s, but logged into account %s"),
+                   existing_email_address,
+                   email_address);
+      goto out;
+    }
+
+  if (!store_tokens (email_address, refresh_token, error))
+    goto out;
+
+  /* Clear the AttentionNeeded property */
+  goa_account_set_attention_needed (goa_object_peek_account (object), FALSE);
+
+  ret = TRUE;
+
+ out:
+  gtk_widget_destroy (dialog);
+
+  g_free (email_address);
+  g_free (authorization_code);
   g_free (access_token);
   g_free (refresh_token);
   return ret;
@@ -695,7 +895,6 @@ find_password_cb (GnomeKeyringResult  result,
                           GOOGLE_CLIENT_ID,
                           GOOGLE_CLIENT_SECRET,
                           refresh_token);
-  g_debug ("body=%s", body);
   soup_message_body_append (data->message->request_body, SOUP_MEMORY_TAKE, body, strlen (body));
   soup_session_queue_message (data->session,
                               g_object_ref (data->message),

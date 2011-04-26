@@ -137,6 +137,46 @@ goa_backend_provider_add_account (GoaBackendProvider *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
+ * goa_backend_provider_refresh_account:
+ * @provider: A #GoaBackendProvider.
+ * @client: A #GoaClient.
+ * @object: A #GoaObject with a #GoaAccount interface.
+ * @parent: (allow-none): Transient parent of dialogs or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * This method brings up the user interface necessary for refreshing
+ * the credentials for the account specified by @object. This
+ * typically involves having the user log in to the account again.
+ *
+ * Implementations should use @parent (unless %NULL) as the transient
+ * parent of any created windows/dialogs.
+ *
+ * Implementations should run the <link
+ * linkend="g_main_context_default">default main loop</link> while
+ * interacting with the user.
+ *
+ * Returns: %TRUE if the account has been refreshed, %FALSE if @error
+ * is set.
+ */
+gboolean
+goa_backend_provider_refresh_account (GoaBackendProvider  *provider,
+                                      GoaClient           *client,
+                                      GoaObject           *object,
+                                      GtkWindow           *parent,
+                                      GError             **error)
+{
+  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (GOA_IS_CLIENT (client), FALSE);
+  g_return_val_if_fail (GOA_IS_OBJECT (object) && goa_object_peek_account (object) != NULL, FALSE);
+  g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  return GOA_BACKEND_PROVIDER_GET_CLASS (provider)->refresh_account (provider, client, object, parent, error);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+/**
  * goa_backend_provider_get_access_token_supported:
  * @provider: A #GoaBackendProvider.
  *

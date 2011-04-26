@@ -46,13 +46,7 @@ struct _GoaPanel
   GtkWidget *toolbar;
   GtkWidget *toolbar_add_button;
   GtkWidget *accounts_treeview;
-
-  GtkWidget *google_account_name;
-  GtkWidget *google_email_address;
-  GtkWidget *google_mail_switch;
-  GtkWidget *google_chat_switch;
-  GtkWidget *google_contacts_switch;
-  GtkWidget *google_calendar_switch;
+  GtkWidget *accounts_vbox;
 };
 
 struct _GoaPanelClass
@@ -140,12 +134,7 @@ goa_panel_init (GoaPanel *panel)
                     panel);
 
   /* Google Account */
-  panel->google_account_name = GTK_WIDGET (gtk_builder_get_object (panel->builder, "google-account-name"));
-  panel->google_email_address = GTK_WIDGET (gtk_builder_get_object (panel->builder, "google-email-address"));
-  panel->google_mail_switch = add_switch (panel, "google-mail-hbox");
-  panel->google_chat_switch = add_switch (panel, "google-chat-hbox");
-  panel->google_contacts_switch = add_switch (panel, "google-contacts-hbox");
-  panel->google_calendar_switch = add_switch (panel, "google-calendar-hbox");
+  panel->accounts_vbox = GTK_WIDGET (gtk_builder_get_object (panel->builder, "accounts-vbox"));
 
   /* TODO: probably want to avoid _sync() ... */
   error = NULL;
@@ -246,30 +235,169 @@ show_page_nothing_selected (GoaPanel *panel)
 }
 
 static void
-show_page_no_ui (GoaPanel *panel)
+add_row (GtkWidget    *table,
+         guint         row,
+         const gchar  *key,
+         const gchar  *value)
 {
-  show_page (panel, 1);
+  GtkWidget *label;
+
+  label = gtk_label_new (key);
+  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_table_attach (GTK_TABLE (table), label,
+                    0, 1,
+                    row, row + 1,
+                    GTK_FILL, GTK_FILL, 0, 0);
+  label = gtk_label_new (value);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_table_attach (GTK_TABLE (table), label,
+                    1, 2,
+                    row, row + 1,
+                    GTK_FILL, GTK_FILL, 0, 0);
 }
 
 static void
-show_page_google_account (GoaPanel   *panel,
-                          GoaObject  *object)
+on_info_bar_response (GtkInfoBar *info_bar,
+                      gint        response_id,
+                      gpointer    user_data)
 {
+  GoaPanel *panel = GOA_PANEL (user_data);
+  GtkTreeIter iter;
+
+  if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (panel->accounts_treeview)),
+                                       NULL,
+                                       &iter))
+    {
+      GoaBackendProvider *provider;
+      const gchar *provider_type;
+      GoaAccount *account;
+      GoaObject *object;
+      GtkWindow *parent;
+      GError *error;
+
+      gtk_tree_model_get (GTK_TREE_MODEL (panel->accounts_model),
+                          &iter,
+                          GOA_PANEL_ACCOUNTS_MODEL_COLUMN_OBJECT, &object,
+                          -1);
+
+      account = goa_object_peek_account (object);
+      provider_type = goa_account_get_account_type (account);
+      provider = goa_backend_provider_get_for_provider_type (provider_type);
+
+      parent = GTK_WINDOW (cc_shell_get_toplevel (cc_panel_get_shell (CC_PANEL (panel))));
+
+      error = NULL;
+      if (!goa_backend_provider_refresh_account (provider,
+                                                 panel->client,
+                                                 object,
+                                                 parent,
+                                                 &error))
+        {
+          if (!(error->domain == GOA_ERROR && error->code == GOA_ERROR_DIALOG_DISMISSED))
+            {
+              GtkWidget *dialog;
+              dialog = gtk_message_dialog_new (parent,
+                                               GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                               GTK_MESSAGE_ERROR,
+                                               GTK_BUTTONS_CLOSE,
+                                               _("Error logging into the account"));
+              gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                                        "%s",
+                                                        error->message);
+              gtk_widget_show_all (dialog);
+              gtk_dialog_run (GTK_DIALOG (dialog));
+              gtk_widget_destroy (dialog);
+            }
+          g_error_free (error);
+        }
+      g_object_unref (provider);
+      g_object_unref (object);
+    }
+}
+
+static void
+show_page_account (GoaPanel  *panel,
+                   GoaObject *object)
+{
+  GList *children;
+  GList *l;
+  GtkWidget *table;
+  GtkWidget *bar;
+  GtkWidget *label;
+  guint row;
+  GoaBackendProvider *provider;
   GoaAccount *account;
-  GoaGoogleAccount *google_account;
+  GoaGoogleAccount *gaccount;
+  const gchar *provider_type;
   gchar *s;
 
-  account = goa_object_peek_account (object);
-  google_account = goa_object_peek_google_account (object);
+  row = 0;
+  provider = NULL;
 
-  show_page (panel, 2);
-  gtk_label_set_text (GTK_LABEL (panel->google_email_address),
-                      goa_google_account_get_email_address (google_account));
+  show_page (panel, 1);
+
+  /* Out with the old */
+  children = gtk_container_get_children (GTK_CONTAINER (panel->accounts_vbox));
+  for (l = children; l != NULL; l = l->next)
+    gtk_container_remove (GTK_CONTAINER (panel->accounts_vbox), GTK_WIDGET (l->data));
+  g_list_free (children);
+
+  account = goa_object_peek_account (object);
+  gaccount = goa_object_peek_google_account (object);
+  provider_type = goa_account_get_account_type (account);
+  provider = goa_backend_provider_get_for_provider_type (provider_type);
+
+  /* And in with the new */
+  if (goa_account_get_attention_needed (account))
+    {
+      bar = gtk_info_bar_new ();
+      label = gtk_label_new (_("The connection to this account has expired. Please log in again."));
+      gtk_container_add (GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (bar))), label);
+      if (provider != NULL)
+        gtk_info_bar_add_button (GTK_INFO_BAR (bar), _("_Log In"), GTK_RESPONSE_OK);
+      gtk_box_pack_start (GTK_BOX (panel->accounts_vbox), bar, FALSE, TRUE, 0);
+      g_signal_connect (bar, "response", G_CALLBACK (on_info_bar_response), panel);
+    }
+
+  table = gtk_table_new (3, 2, FALSE);
+  gtk_table_set_row_spacings (GTK_TABLE (table), 10);
+  gtk_table_set_col_spacings (GTK_TABLE (table), 10);
+  gtk_box_pack_start (GTK_BOX (panel->accounts_vbox), table, FALSE, TRUE, 0);
+
+  label = gtk_label_new (NULL);
   s = g_strdup_printf ("<big><b>%s</b></big>", goa_account_get_name (account));
-  gtk_label_set_markup (GTK_LABEL (panel->google_account_name), s);
+  gtk_label_set_markup (GTK_LABEL (label), s);
+  g_free (s);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_table_attach (GTK_TABLE (table), label,
+                    1, 2,
+                    row, row + 1,
+                    GTK_FILL, GTK_FILL, 0, 0);
+  row++;
+
+  if (provider != NULL)
+    {
+      s = g_strdup (goa_backend_provider_get_name (provider));
+    }
+  else
+    {
+      /* Translators: Shown as "Account Type" when the UI doesn't support the provider type.
+       * The %s is the provider type (e.g. 'google').
+       */
+      s = g_strdup_printf (_("%s (Unsupported)"), provider_type);
+    }
+  add_row (table, row++, _("Account Type"), s);
   g_free (s);
 
-  /* TODO: subscribe to changes etc. */
+  if (gaccount != NULL)
+    {
+      add_row (table, row++, _("Email Address"), goa_google_account_get_email_address (gaccount));
+    }
+
+  gtk_widget_show_all (panel->accounts_vbox);
+
+  if (provider != NULL)
+    g_object_unref (provider);
 }
 
 static void
@@ -282,28 +410,17 @@ on_tree_view_selection_changed (GtkTreeSelection *selection,
   if (gtk_tree_selection_get_selected (selection, NULL, &iter))
     {
       GoaObject *object;
-
       gtk_tree_model_get (GTK_TREE_MODEL (panel->accounts_model),
                           &iter,
                           GOA_PANEL_ACCOUNTS_MODEL_COLUMN_OBJECT, &object,
                           -1);
-
-      if (goa_object_peek_google_account (object))
-        {
-          show_page_google_account (panel, object);
-        }
-      else
-        {
-          show_page_no_ui (panel);
-        }
+      show_page_account (panel, object);
       g_object_unref (object);
     }
   else
     {
       show_page_nothing_selected (panel);
     }
-
-  g_debug ("selection changed");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -399,7 +516,6 @@ on_toolbar_add_button_clicked (GtkToolButton *button,
                                                         object,
                                                         &iter))
         {
-          g_debug ("foo");
           gtk_tree_selection_select_iter (gtk_tree_view_get_selection (GTK_TREE_VIEW (panel->accounts_treeview)),
                                           &iter);
         }

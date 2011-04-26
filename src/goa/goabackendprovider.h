@@ -60,6 +60,7 @@ struct _GoaBackendProvider
  * @get_provider_type: Virtual function for goa_backend_provider_get_provider_type().
  * @get_name: Virtual function for goa_backend_provider_get_name().
  * @add_account: Virtual function for goa_backend_provider_add_account().
+ * @refresh_account: Virtual function for goa_backend_provider_refresh_account().
  * @get_access_token_supported: Virtual function for goa_backend_provider_get_access_token_supported().
  * @get_access_token: Virtual function for goa_backend_provider_get_access_token().
  * @get_access_token_finish: Virtual function for goa_backend_provider_get_access_token_finish().
@@ -76,6 +77,11 @@ struct _GoaBackendProviderClass
                                      GoaClient          *client,
                                      GtkDialog          *dialog,
                                      GtkBox             *vbox,
+                                     GError            **error);
+  gboolean     (*refresh_account)   (GoaBackendProvider *provider,
+                                     GoaClient          *client,
+                                     GoaObject          *object,
+                                     GtkWindow          *parent,
                                      GError            **error);
 
   /* AccessTokenBased support */
@@ -96,12 +102,17 @@ struct _GoaBackendProviderClass
 };
 
 GType               goa_backend_provider_get_type          (void) G_GNUC_CONST;
-const gchar        *goa_backend_provider_get_provider_type (GoaBackendProvider *provider);
-const gchar        *goa_backend_provider_get_name          (GoaBackendProvider *provider);
+const gchar        *goa_backend_provider_get_provider_type (GoaBackendProvider  *provider);
+const gchar        *goa_backend_provider_get_name          (GoaBackendProvider  *provider);
 GoaObject          *goa_backend_provider_add_account       (GoaBackendProvider  *provider,
                                                             GoaClient           *client,
                                                             GtkDialog           *dialog,
                                                             GtkBox              *vbox,
+                                                            GError             **error);
+gboolean            goa_backend_provider_refresh_account   (GoaBackendProvider  *provider,
+                                                            GoaClient           *client,
+                                                            GoaObject           *object,
+                                                            GtkWindow           *parent,
                                                             GError             **error);
 
 gboolean     goa_backend_provider_get_access_token_supported (GoaBackendProvider   *provider);

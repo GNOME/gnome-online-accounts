@@ -57,11 +57,9 @@
     <!-- AttentionNeeded: Set to TRUE if the account is in need of attention.
 
          This is used when a human operator is needed to service the
-         account (e.g. for authentication and/or authorization). It is
-         e.g. set to TRUE if an application fails to obtain an access
-         token.
+         account (e.g. for authentication and/or authorization).
       -->
-    <property name="AttentionNeeded" type="b" access="read"/>
+    <property name="AttentionNeeded" type="b" access="readwrite"/>
 
     <!-- Name: A human-readable description for the account.
 
@@ -148,6 +146,11 @@
       Use this method to obtains an access token to access services
       for the account. Because networking is involved, this method may
       take a very long time to complete.
+
+      If this method fails because the token service indicates that
+      authentication is needed, the
+      #org.gnome.OnlineAccounts.Account:AttentionNeeded property is
+      set to TRUE.
     -->
     <method name="GetAccessToken">
       <arg name="access_token" type="s" direction="out"/>
