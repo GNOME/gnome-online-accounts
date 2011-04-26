@@ -609,8 +609,6 @@ goa_backend_google_provider_add_account (GoaBackendProvider *_provider,
                                 &data.error))
     goto out;
 
-  g_debug ("Wee email_address=%s", email_address);
-
   /* OK, got the email address... see if there's already an account
    * with this email address
    */
