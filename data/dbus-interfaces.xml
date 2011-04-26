@@ -31,10 +31,6 @@
       org.gnome.OnlineAccounts.Account:
 
       The base account interface.
-
-      TODO: need properties/methods (e.g. "b AttentionNeeded") for whether the user needs to do an auth dance. And for whether we do such checks in the background
-
-      TODO: need a way to get auth token and/or username/password combos.
   -->
   <interface name="org.gnome.OnlineAccounts.Account">
     <!-- Type: The type of the account.
@@ -59,14 +55,14 @@
          This is used when a human operator is needed to service the
          account (e.g. for authentication and/or authorization).
       -->
-    <property name="AttentionNeeded" type="b" access="readwrite"/>
+    <property name="AttentionNeeded" type="b" access="read"/>
 
     <!-- Name: A human-readable description for the account.
 
          This property may change if the user e.g. renames the
          account.
       -->
-    <property name="Name" type="s" access="readwrite"/>
+    <property name="Name" type="s" access="read"/>
 
     <!-- SupportedSources: A list of possible sources that this account can be used for.
 
@@ -104,6 +100,13 @@
     -->
     <property name="SourceNames" type="a{ss}" access="read"/>
 
+    <!-- SetName: Sets the name. -->
+    <method name="SetName">
+      <arg name="name" type="s" direction="in"/>
+    </method>
+
+    <!-- ClearAttentionNeeded: Clears the #org.gnome.OnlineAccounts.Account:AttentionNeeded property -->
+    <method name="ClearAttentionNeeded"/>
 
   </interface>
 

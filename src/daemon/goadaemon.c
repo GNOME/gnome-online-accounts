@@ -71,6 +71,15 @@ static gboolean on_handle_get_access_token (GoaAccessTokenBased   *object,
                                             GDBusMethodInvocation *invocation,
                                             gpointer               user_data);
 
+static gboolean on_account_handle_clear_attention_needed (GoaAccount            *account,
+                                                          GDBusMethodInvocation *invocation,
+                                                          gpointer               user_data);
+
+static gboolean on_account_handle_set_name (GoaAccount            *account,
+                                            GDBusMethodInvocation *invocation,
+                                            const gchar           *name,
+                                            gpointer               user_data);
+
 static void goa_daemon_reload_configuration (GoaDaemon *daemon);
 
 G_DEFINE_TYPE (GoaDaemon, goa_daemon, G_TYPE_OBJECT);
@@ -527,6 +536,15 @@ process_config_entries (GoaDaemon  *daemon,
   for (l = removed; l != NULL; l = l->next)
     {
       const gchar *object_path = l->data;
+      GoaObject *object;
+      object = GOA_OBJECT (g_dbus_object_manager_get_object (G_DBUS_OBJECT_MANAGER (daemon->object_manager), object_path));
+      g_warn_if_fail (object != NULL);
+      g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
+                                            G_CALLBACK (on_account_handle_set_name),
+                                            daemon);
+      g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
+                                            G_CALLBACK (on_account_handle_clear_attention_needed),
+                                            daemon);
       g_debug ("removing %s", object_path);
       g_warn_if_fail (g_dbus_object_manager_server_unexport (daemon->object_manager, object_path));
     }
@@ -547,6 +565,14 @@ process_config_entries (GoaDaemon  *daemon,
       if (update_account_object (daemon, object, group, key_file, TRUE))
         {
           g_dbus_object_manager_server_export (daemon->object_manager, G_DBUS_OBJECT_SKELETON (object));
+          g_signal_connect (goa_object_peek_account (GOA_OBJECT (object)),
+                            "handle-set-name",
+                            G_CALLBACK (on_account_handle_set_name),
+                            daemon);
+          g_signal_connect (goa_object_peek_account (GOA_OBJECT (object)),
+                            "handle-clear-attention-needed",
+                            G_CALLBACK (on_account_handle_clear_attention_needed),
+                            daemon);
         }
       g_object_unref (object);
       g_free (group);
@@ -568,6 +594,12 @@ process_config_entries (GoaDaemon  *daemon,
       g_warn_if_fail (object != NULL);
       if (!update_account_object (daemon, GOA_OBJECT_SKELETON (object), group, key_file, FALSE))
         {
+          g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
+                                                G_CALLBACK (on_account_handle_set_name),
+                                                daemon);
+          g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
+                                                G_CALLBACK (on_account_handle_clear_attention_needed),
+                                                daemon);
           g_warn_if_fail (g_dbus_object_manager_server_unexport (daemon->object_manager, object_path));
         }
       g_object_unref (object);
@@ -868,5 +900,108 @@ on_handle_get_access_token (GoaAccessTokenBased   *instance,
                                          (GAsyncReadyCallback) get_access_token_cb,
                                          data);
 
+  return TRUE; /* invocation was handled */
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gboolean
+on_account_handle_clear_attention_needed (GoaAccount            *account,
+                                          GDBusMethodInvocation *invocation,
+                                          gpointer               user_data)
+{
+  goa_account_set_attention_needed (account, FALSE);
+  goa_account_complete_clear_attention_needed (account, invocation);
+  return TRUE; /* invocation was handled */
+}
+
+static gboolean
+on_account_handle_set_name (GoaAccount            *account,
+                            GDBusMethodInvocation *invocation,
+                            const gchar           *name,
+                            gpointer               user_data)
+{
+  GoaDaemon *daemon = GOA_DAEMON (user_data);
+  GKeyFile *key_file;
+  gchar *path;
+  gchar *group;
+  gchar *existing_name;
+  gchar *data;
+  gsize length;
+  GError *error;
+
+  path = NULL;
+  group = NULL;
+  key_file = NULL;
+  existing_name = NULL;
+  data = NULL;
+
+  if (g_strcmp0 (goa_account_get_name (account), name) == 0)
+    {
+      goa_account_complete_set_name (account, invocation);
+      goto out;
+    }
+
+  /* update key-file - right now we only support change the Name if the
+   * entry is in ~/.config/goa-1.0/accounts.conf
+   */
+
+  key_file = g_key_file_new ();
+  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
+
+  error = NULL;
+  if (!g_key_file_load_from_file (key_file,
+                                  path,
+                                  G_KEY_FILE_KEEP_COMMENTS,
+                                  &error))
+    {
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      g_error_free (error);
+      goto out;
+    }
+
+  group = g_strdup_printf ("Account %s", goa_account_get_id (account));
+
+  error = NULL;
+  existing_name = g_key_file_get_string (key_file, group, "Name", &error);
+  if (existing_name == NULL)
+    {
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      g_error_free (error);
+      goto out;
+    }
+  g_key_file_set_string (key_file, group, "Name", name);
+
+  error = NULL;
+  data = g_key_file_to_data (key_file,
+                             &length,
+                             &error);
+  if (data == NULL)
+    {
+      g_prefix_error (&error, "Error generating key-value-file: ");
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      goto out;
+    }
+
+  error = NULL;
+  if (!g_file_set_contents (path,
+                            data,
+                            length,
+                            &error))
+    {
+      g_prefix_error (&error, "Error writing key-value-file %s: ", path);
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      goto out;
+    }
+
+  goa_daemon_reload_configuration (daemon);
+
+ out:
+  g_free (data);
+  g_free (existing_name);
+  if (key_file != NULL)
+    g_key_file_free (key_file);
+  g_free (group);
+  g_free (path);
   return TRUE; /* invocation was handled */
 }

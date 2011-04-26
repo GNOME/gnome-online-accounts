@@ -30,6 +30,7 @@
 
 #include "goapanel.h"
 #include "goapanelaccountsmodel.h"
+#include "goaeditablelabel.h"
 
 typedef struct _GoaPanelClass GoaPanelClass;
 
@@ -316,6 +317,33 @@ on_info_bar_response (GtkInfoBar *info_bar,
 }
 
 static void
+on_name_editing_done (GoaEditableLabel *editable_label,
+                      gpointer          user_data)
+{
+  GoaPanel *panel = GOA_PANEL (user_data);
+  GtkTreeIter iter;
+
+  if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (panel->accounts_treeview)),
+                                       NULL,
+                                       &iter))
+    {
+      GoaObject *object;
+      GoaAccount *account;
+
+      gtk_tree_model_get (GTK_TREE_MODEL (panel->accounts_model),
+                          &iter,
+                          GOA_PANEL_ACCOUNTS_MODEL_COLUMN_OBJECT, &object,
+                          -1);
+
+      account = goa_object_peek_account (object);
+      goa_account_call_set_name (account,
+                                 goa_editable_label_get_text (editable_label),
+                                 NULL, /* GCancellable */
+                                 NULL, NULL); /* callback, user_data */
+    }
+}
+
+static void
 show_page_account (GoaPanel  *panel,
                    GoaObject *object)
 {
@@ -324,6 +352,7 @@ show_page_account (GoaPanel  *panel,
   GtkWidget *table;
   GtkWidget *bar;
   GtkWidget *label;
+  GtkWidget *editable_label;
   guint row;
   GoaBackendProvider *provider;
   GoaAccount *account;
@@ -364,12 +393,13 @@ show_page_account (GoaPanel  *panel,
   gtk_table_set_col_spacings (GTK_TABLE (table), 10);
   gtk_box_pack_start (GTK_BOX (panel->accounts_vbox), table, FALSE, TRUE, 0);
 
-  label = gtk_label_new (NULL);
-  s = g_strdup_printf ("<big><b>%s</b></big>", goa_account_get_name (account));
-  gtk_label_set_markup (GTK_LABEL (label), s);
-  g_free (s);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), label,
+  editable_label = goa_editable_label_new ();
+  goa_editable_label_set_text (GOA_EDITABLE_LABEL (editable_label), goa_account_get_name (account));
+  goa_editable_label_set_editable (GOA_EDITABLE_LABEL (editable_label), TRUE);
+  goa_editable_label_set_scale (GOA_EDITABLE_LABEL (editable_label), 1.2);
+  goa_editable_label_set_weight (GOA_EDITABLE_LABEL (editable_label), 700);
+  g_signal_connect (editable_label, "editing-done", G_CALLBACK (on_name_editing_done), panel);
+  gtk_table_attach (GTK_TABLE (table), editable_label,
                     1, 2,
                     row, row + 1,
                     GTK_FILL, GTK_FILL, 0, 0);

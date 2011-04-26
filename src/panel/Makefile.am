@@ -22,6 +22,7 @@ ccpanels_LTLIBRARIES = libgoa-panel.la
 libgoa_panel_la_SOURCES =					\
 	goapanel.h			goapanel.c		\
 	goapanelaccountsmodel.h		goapanelaccountsmodel.c	\
+	goaeditablelabel.h		goaeditablelabel.c	\
 	$(NULL)
 
 libgoa_panel_la_CFLAGS =					\

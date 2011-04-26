@@ -738,8 +738,9 @@ goa_backend_google_provider_refresh_account (GoaBackendProvider  *_provider,
   if (!store_tokens (email_address, refresh_token, error))
     goto out;
 
-  /* Clear the AttentionNeeded property */
-  goa_account_set_attention_needed (goa_object_peek_account (object), FALSE);
+  goa_account_call_clear_attention_needed (goa_object_peek_account (object),
+                                           NULL, /* GCancellable */
+                                           NULL, NULL); /* callback, user_data */
 
   ret = TRUE;
 
