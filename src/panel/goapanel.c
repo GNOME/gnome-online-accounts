@@ -699,7 +699,7 @@ on_toolbar_remove_button_clicked (GtkToolButton *button,
                                        _("Are you sure you want to remove the account?"));
       gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                                 _("This will not remove the account on the server."));
-      gtk_dialog_add_button (GTK_DIALOG (dialog), _("Delete"), GTK_RESPONSE_OK);
+      gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Remove"), GTK_RESPONSE_OK);
       gtk_widget_show_all (dialog);
       response = gtk_dialog_run (GTK_DIALOG (dialog));
       gtk_widget_destroy (dialog);
