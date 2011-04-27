@@ -106,8 +106,8 @@ goa_backend_facebook_provider_get_scope (GoaBackendOAuth2Provider *provider)
   /* see https://developers.facebook.com/docs/authentication/permissions/ */
   return
     "user_events,"
-    "read_mailbox"
-    ;
+    "read_mailbox,"
+    "offline_access";
 }
 
 static const gchar *
