@@ -85,26 +85,62 @@ goa_backend_oauth2_provider_get_client_secret (GoaBackendOAuth2Provider *provide
   return GOA_BACKEND_OAUTH2_PROVIDER_GET_CLASS (provider)->get_client_secret (provider);
 }
 
-gchar *
-goa_backend_oauth2_provider_get_identity_sync (GoaBackendOAuth2Provider  *provider,
-                                               const gchar               *access_token,
-                                               GCancellable              *cancellable,
-                                               GError                   **error)
+/**
+ * goa_backend_oauth2_provider_get_identity:
+ * @provider: A #GoaBackendOAuth2Provider.
+ * @access_token: A valid OAuth 2.0 access token.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: The function to call when the request is satisfied.
+ * @user_data: Pointer to pass to @callback.
+ *
+ * Function that returns the identity corresponding to
+ * @access_token. This is a pure virtual function - a subclass must
+ * provide an implementation.
+ *
+ * The identity is needed because all authentication happens out of
+ * band. The only requirement is that the returned identity is unique
+ * - for example, for #GoaBackendGoogleProvider the returned identity
+ * is the email address, for #GoaBackendFacebookProvider it's the user
+ * name.
+ *
+ * When the result is ready, @callback will be called in the the <link
+ * linkend="g-main-context-push-thread-default">thread-default main
+ * loop</link> this function was called from. You can then call
+ * goa_backend_oauth2_provider_get_identity_finish() to get the result
+ * of the operation.
+ */
+void
+goa_backend_oauth2_provider_get_identity (GoaBackendOAuth2Provider *provider,
+                                          const gchar              *access_token,
+                                          GCancellable             *cancellable,
+                                          GAsyncReadyCallback       callback,
+                                          gpointer                  user_data)
 {
-  g_return_val_if_fail (GOA_IS_BACKEND_OAUTH2_PROVIDER (provider), NULL);
-  g_return_val_if_fail (access_token != NULL, NULL);
-  g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), NULL);
-  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-  return GOA_BACKEND_OAUTH2_PROVIDER_GET_CLASS (provider)->get_identity_sync (provider, access_token, cancellable, error);
+  g_return_if_fail (GOA_IS_BACKEND_OAUTH2_PROVIDER (provider));
+  g_return_if_fail (access_token != NULL);
+  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+  GOA_BACKEND_OAUTH2_PROVIDER_GET_CLASS (provider)->get_identity (provider, access_token, cancellable, callback, user_data);
 }
 
-const gchar *
-goa_backend_oauth2_provider_get_identity_from_object (GoaBackendOAuth2Provider *provider,
-                                                      GoaObject                *object)
+/**
+ * goa_backend_oauth2_provider_get_identity_finish:
+ * @provider: A #GoaBackendOAuth2Provider.
+ * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to goa_backend_oauth2_provider_get_access_token().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with goa_backend_oauth2_provider_get_identity().
+ *
+ * Returns: The identity or %NULL if error is set. The returned string
+ * must be freed with g_free().
+ */
+gchar *
+goa_backend_oauth2_provider_get_identity_finish (GoaBackendOAuth2Provider *provider,
+                                                 GAsyncResult             *res,
+                                                 GError                   **error)
 {
   g_return_val_if_fail (GOA_IS_BACKEND_OAUTH2_PROVIDER (provider), NULL);
-  g_return_val_if_fail (GOA_IS_OBJECT (object), NULL);
-  return GOA_BACKEND_OAUTH2_PROVIDER_GET_CLASS (provider)->get_identity_from_object (provider, object);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+  return GOA_BACKEND_OAUTH2_PROVIDER_GET_CLASS (provider)->get_identity_finish (provider, res, error);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -351,6 +387,8 @@ typedef struct
   gchar *access_token;
   gchar *refresh_token;
   gint expires_in;
+
+  gchar *identity;
 } IdentifyData;
 
 G_GNUC_UNUSED static void
@@ -418,13 +456,23 @@ get_tokens_and_identity_on_get_tokens_cb (GoaBackendOAuth2Provider *provider,
                                           gpointer                  user_data)
 {
   IdentifyData *data = user_data;
-
   data->access_token = get_tokens_finish (provider,
                                           &data->refresh_token,
                                           &data->expires_in,
                                           res,
                                           &data->error);
+  g_main_loop_quit (data->loop);
+}
 
+static void
+get_tokens_and_identity_on_get_identity_cb (GoaBackendOAuth2Provider *provider,
+                                            GAsyncResult             *res,
+                                            gpointer                  user_data)
+{
+  IdentifyData *data = user_data;
+  data->identity = goa_backend_oauth2_provider_get_identity_finish (provider,
+                                                                    res,
+                                                                    &data->error);
   g_main_loop_quit (data->loop);
 }
 
@@ -445,7 +493,6 @@ get_tokens_and_identity (GoaBackendOAuth2Provider *provider,
   GtkWidget *web_view;
   gchar *url;
   IdentifyData data;
-  gchar *identity;
   gchar *escaped_redirect_uri;
   gchar *escaped_client_id;
   gchar *escaped_scope;
@@ -456,7 +503,6 @@ get_tokens_and_identity (GoaBackendOAuth2Provider *provider,
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   ret = FALSE;
-  identity = NULL;
   escaped_redirect_uri = NULL;
   escaped_client_id = NULL;
   escaped_scope = NULL;
@@ -538,11 +584,13 @@ get_tokens_and_identity (GoaBackendOAuth2Provider *provider,
   if (data.access_token == NULL)
     goto out;
 
-  identity = goa_backend_oauth2_provider_get_identity_sync (provider,
-                                                            data.access_token,
-                                                            NULL, /* TODO: Cancellable */
-                                                            &data.error);
-  if (identity == NULL)
+  goa_backend_oauth2_provider_get_identity (provider,
+                                            data.access_token,
+                                            NULL, /* TODO: GCancellable */
+                                            (GAsyncReadyCallback) get_tokens_and_identity_on_get_identity_cb,
+                                            &data);
+  g_main_loop_run (data.loop);
+  if (data.identity == NULL)
     goto out;
 
   ret = TRUE;
@@ -558,7 +606,7 @@ get_tokens_and_identity (GoaBackendOAuth2Provider *provider,
       if (out_refresh_token != NULL)
         *out_refresh_token = g_strdup (data.refresh_token);
       if (out_identity != NULL)
-        *out_identity = g_strdup (identity);
+        *out_identity = g_strdup (data.identity);
     }
   else
     {
@@ -566,7 +614,7 @@ get_tokens_and_identity (GoaBackendOAuth2Provider *provider,
       g_propagate_error (error, data.error);
     }
 
-  g_free (identity);
+  g_free (data.identity);
   g_object_unref (cookie_jar);
   g_free (url);
 
@@ -669,7 +717,7 @@ goa_backend_oauth2_provider_add_account (GoaBackendProvider *_provider,
       GoaObject *object = GOA_OBJECT (l->data);
       const gchar *identity_from_object;
 
-      identity_from_object = goa_backend_oauth2_provider_get_identity_from_object (provider, object);
+      identity_from_object = goa_oauth2_based_get_identity (goa_object_peek_oauth2_based (object));
       if (g_strcmp0 (identity_from_object, identity) == 0)
         {
           g_set_error (&data.error,
@@ -806,7 +854,7 @@ goa_backend_oauth2_provider_refresh_account (GoaBackendProvider  *_provider,
                                 error))
     goto out;
 
-  existing_identity = goa_backend_oauth2_provider_get_identity_from_object (provider, object);
+  existing_identity = goa_oauth2_based_get_identity (goa_object_peek_oauth2_based (object));
   if (g_strcmp0 (identity, existing_identity) != 0)
     {
       g_set_error (error,
@@ -1016,7 +1064,7 @@ goa_backend_oauth2_provider_get_access_token (GoaBackendOAuth2Provider   *provid
                                             user_data,
                                             goa_backend_oauth2_provider_get_access_token);
 
-  identity = goa_backend_oauth2_provider_get_identity_from_object (provider, object);
+  identity = goa_oauth2_based_get_identity (goa_object_peek_oauth2_based (object));
 
   /* First, get the authorization code from the keyring */
   goa_backend_provider_lookup_credentials (GOA_BACKEND_PROVIDER (provider),
@@ -1077,6 +1125,9 @@ goa_backend_oauth2_provider_build_object (GoaBackendProvider  *provider,
                                           GError             **error)
 {
   GoaOAuth2Based *oauth2_based;
+  gchar *identity;
+
+  identity = NULL;
 
   oauth2_based = goa_object_get_oauth2_based (GOA_OBJECT (object));
   if (oauth2_based != NULL)
@@ -1089,8 +1140,20 @@ goa_backend_oauth2_provider_build_object (GoaBackendProvider  *provider,
                     G_CALLBACK (on_handle_get_access_token),
                     NULL);
 
+  identity = g_key_file_get_string (key_file, group, "Identity", NULL);
+  if (identity == NULL)
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   "No Identity key");
+      goto out;
+    }
+  goa_oauth2_based_set_identity (oauth2_based, identity);
+
  out:
   g_object_unref (oauth2_based);
+  g_free (identity);
   return TRUE;
 }
 

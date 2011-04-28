@@ -23,7 +23,7 @@
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
-#include <libsoup/soup.h>
+#include <rest/rest-proxy.h>
 #include <json-glib/json-glib.h>
 
 #include "goabackendprovider.h"
@@ -49,9 +49,6 @@ struct _GoaBackendGoogleProviderClass
   GoaBackendOAuth2ProviderClass parent_class;
 };
 
-static const gchar *goa_backend_google_provider_get_provider_type (GoaBackendProvider *_provider);
-static const gchar *goa_backend_google_provider_get_name          (GoaBackendProvider *_provider);
-
 /**
  * SECTION:goabackendgoogleprovider
  * @title: GoaBackendGoogleProvider
@@ -69,39 +66,39 @@ G_DEFINE_TYPE_WITH_CODE (GoaBackendGoogleProvider, goa_backend_google_provider, 
 /* ---------------------------------------------------------------------------------------------------- */
 
 static const gchar *
-goa_backend_google_provider_get_provider_type (GoaBackendProvider *_provider)
+get_provider_type (GoaBackendProvider *_provider)
 {
   return "google";
 }
 
 static const gchar *
-goa_backend_google_provider_get_name (GoaBackendProvider *_provider)
+get_name (GoaBackendProvider *_provider)
 {
   return _("Google Account");
 }
 
 static const gchar *
-goa_backend_google_provider_get_dialog_uri (GoaBackendOAuth2Provider *provider)
+get_dialog_uri (GoaBackendOAuth2Provider *provider)
 {
   return "https://accounts.google.com/o/oauth2/auth";
 }
 
 
 static const gchar *
-goa_backend_google_provider_get_authorization_uri (GoaBackendOAuth2Provider *provider)
+get_authorization_uri (GoaBackendOAuth2Provider *provider)
 {
   return "https://accounts.google.com/o/oauth2/token";
 }
 
 
 static const gchar *
-goa_backend_google_provider_get_redirect_uri (GoaBackendOAuth2Provider *provider)
+get_redirect_uri (GoaBackendOAuth2Provider *provider)
 {
   return "https://www.gnome.org/goa-1.0/oauth2";
 }
 
 static const gchar *
-goa_backend_google_provider_get_scope (GoaBackendOAuth2Provider *provider)
+get_scope (GoaBackendOAuth2Provider *provider)
 {
   return
     "https://www.googleapis.com/auth/userinfo#email " /* view email address */
@@ -113,60 +110,143 @@ goa_backend_google_provider_get_scope (GoaBackendOAuth2Provider *provider)
 }
 
 static const gchar *
-goa_backend_google_provider_get_client_id (GoaBackendOAuth2Provider *provider)
+get_client_id (GoaBackendOAuth2Provider *provider)
 {
   return "108305240709.apps.googleusercontent.com";
 }
 
 static const gchar *
-goa_backend_google_provider_get_client_secret (GoaBackendOAuth2Provider *provider)
+get_client_secret (GoaBackendOAuth2Provider *provider)
 {
   return "_xDuWutH-QcwiVI079hRrIfE";
 }
 
-static gchar *
-goa_backend_google_provider_get_identity_sync (GoaBackendOAuth2Provider  *provider,
-                                               const gchar               *access_token,
-                                               GCancellable              *cancellable,
-                                               GError                   **error)
+/* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct
 {
-  SoupSession *session;
-  SoupMessage *message;
-  gint code;
+  volatile gint ref_count;
+  GSimpleAsyncResult *simple;
+  RestProxyCall *call;
+} GetIdentityData;
+
+static GetIdentityData *
+get_identity_data_ref (GetIdentityData *data)
+{
+  g_atomic_int_inc (&data->ref_count);
+  return data;
+}
+
+static void
+get_identity_data_unref (GetIdentityData *data)
+{
+  if (g_atomic_int_dec_and_test (&data->ref_count))
+    {
+      g_object_unref (data->simple);
+      g_object_unref (data->call);
+      g_slice_free (GetIdentityData, data);
+    }
+}
+
+static void
+get_identity_cb (RestProxyCall *call,
+                 const GError  *error,
+                 GObject       *weak_object,
+                 gpointer       user_data)
+{
+  GetIdentityData *data = user_data;
+  if (error != NULL)
+    {
+      g_simple_async_result_set_from_error (data->simple, error);
+      goto out;
+    }
+  g_simple_async_result_set_op_res_gpointer (data->simple,
+                                             get_identity_data_ref (data),
+                                             (GDestroyNotify) get_identity_data_unref);
+ out:
+  g_simple_async_result_complete_in_idle (data->simple);
+  get_identity_data_unref (data);
+}
+
+
+static void
+get_identity (GoaBackendOAuth2Provider  *provider,
+                                          const gchar               *access_token,
+                                          GCancellable              *cancellable,
+                                          GAsyncReadyCallback       callback,
+                                          gpointer                  user_data)
+{
+  GetIdentityData *data;
+  RestProxy *proxy;
+  GError *error;
+  gchar *s;
+
+  data = g_slice_new0 (GetIdentityData);
+  data->ref_count = 1;
+  data->simple = g_simple_async_result_new (G_OBJECT (provider),
+                                            callback,
+                                            user_data,
+                                            get_identity);
+
+  proxy = rest_proxy_new ("https://www.googleapis.com/userinfo/email", FALSE);
+  data->call = rest_proxy_new_call (proxy);
+  rest_proxy_call_set_method (data->call, "GET");
+  rest_proxy_call_add_param (data->call, "alt", "json");
+  s = g_strdup_printf ("OAuth %s", access_token);
+  rest_proxy_call_add_header (data->call, "Authorization", s);
+  g_free (s);
+
+  error = NULL;
+  if (!rest_proxy_call_async (data->call,
+                              get_identity_cb,
+                              NULL, /* weak_object */
+                              data,
+                              &error))
+    {
+      g_simple_async_result_take_error (data->simple, error);
+      g_simple_async_result_complete_in_idle (data->simple);
+      get_identity_data_unref (data);
+    }
+  g_object_unref (proxy);
+}
+
+
+static gchar *
+get_identity_finish (GoaBackendOAuth2Provider  *provider,
+                                                 GAsyncResult              *res,
+                                                 GError                   **error)
+{
+  GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
+  GetIdentityData *data;
   gchar *ret;
-  SoupBuffer *buffer;
   JsonParser *parser;
   JsonObject *json_object;
   JsonObject *json_data_object;
-  gchar *s;
-
-  g_return_val_if_fail (access_token != NULL, NULL);
-  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
   ret = NULL;
-  buffer = NULL;
   parser = NULL;
-  session = NULL;
 
-  session = soup_session_sync_new ();
-  message = soup_message_new ("GET", "https://www.googleapis.com/userinfo/email?alt=json");
-  s = g_strdup_printf ("OAuth %s", access_token);
-  soup_message_headers_append (message->request_headers, "Authorization", s);
-  g_free (s);
-  code = soup_session_send_message (session, message);
-  if (code != SOUP_STATUS_OK)
+  if (g_simple_async_result_propagate_error (simple, error))
+    goto out;
+
+  data = g_simple_async_result_get_op_res_gpointer (simple);
+
+  if (rest_proxy_call_get_status_code (data->call) != 200)
     {
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
-                   _("Expected status 200 when requesting email address, instead got status %d"),
-                   code);
+                   _("Expected status 200 when requesting email address, instead got status %d (%s)"),
+                   rest_proxy_call_get_status_code (data->call),
+                   rest_proxy_call_get_status_message (data->call));
       goto out;
     }
 
-  buffer = soup_message_body_flatten (message->response_body);
   parser = json_parser_new ();
-  if (!json_parser_load_from_data (parser, buffer->data, buffer->length, error))
+  if (!json_parser_load_from_data (parser,
+                                   rest_proxy_call_get_payload (data->call),
+                                   rest_proxy_call_get_payload_length (data->call),
+                                   error))
     {
       g_prefix_error (error, _("Error parsing response as JSON: "));
       goto out;
@@ -195,25 +275,10 @@ goa_backend_google_provider_get_identity_sync (GoaBackendOAuth2Provider  *provid
  out:
   if (parser != NULL)
     g_object_unref (parser);
-  if (buffer != NULL)
-    soup_buffer_free (buffer);
-  g_object_unref (message);
-  if (session != NULL)
-    g_object_unref (session);
   return ret;
 }
 
-static const gchar *
-goa_backend_google_provider_get_identity_from_object (GoaBackendOAuth2Provider *provider,
-                                                      GoaObject                *object)
-{
-  GoaGoogleAccount *gaccount;
-  gaccount = goa_object_peek_google_account (object);
-  if (gaccount == NULL)
-    return NULL;
-  return goa_google_account_get_email_address (gaccount);
-}
-
+/* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
 goa_backend_google_provider_build_object (GoaBackendProvider  *provider,
@@ -287,17 +352,17 @@ goa_backend_google_provider_class_init (GoaBackendGoogleProviderClass *klass)
   GoaBackendOAuth2ProviderClass *oauth2_class;
 
   provider_class = GOA_BACKEND_PROVIDER_CLASS (klass);
-  provider_class->get_provider_type          = goa_backend_google_provider_get_provider_type;
-  provider_class->get_name                   = goa_backend_google_provider_get_name;
+  provider_class->get_provider_type          = get_provider_type;
+  provider_class->get_name                   = get_name;
   provider_class->build_object               = goa_backend_google_provider_build_object;
 
   oauth2_class = GOA_BACKEND_OAUTH2_PROVIDER_CLASS (klass);
-  oauth2_class->get_dialog_uri           = goa_backend_google_provider_get_dialog_uri;
-  oauth2_class->get_authorization_uri    = goa_backend_google_provider_get_authorization_uri;
-  oauth2_class->get_redirect_uri         = goa_backend_google_provider_get_redirect_uri;
-  oauth2_class->get_scope                = goa_backend_google_provider_get_scope;
-  oauth2_class->get_client_id            = goa_backend_google_provider_get_client_id;
-  oauth2_class->get_client_secret        = goa_backend_google_provider_get_client_secret;
-  oauth2_class->get_identity_sync        = goa_backend_google_provider_get_identity_sync;
-  oauth2_class->get_identity_from_object = goa_backend_google_provider_get_identity_from_object;
+  oauth2_class->get_dialog_uri           = get_dialog_uri;
+  oauth2_class->get_authorization_uri    = get_authorization_uri;
+  oauth2_class->get_redirect_uri         = get_redirect_uri;
+  oauth2_class->get_scope                = get_scope;
+  oauth2_class->get_client_id            = get_client_id;
+  oauth2_class->get_client_secret        = get_client_secret;
+  oauth2_class->get_identity             = get_identity;
+  oauth2_class->get_identity_finish      = get_identity_finish;
 }

@@ -23,7 +23,7 @@
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
-#include <libsoup/soup.h>
+#include <rest/rest-proxy.h>
 #include <json-glib/json-glib.h>
 
 #include "goabackendprovider.h"
@@ -49,9 +49,6 @@ struct _GoaBackendFacebookProviderClass
   GoaBackendOAuth2ProviderClass parent_class;
 };
 
-static const gchar *goa_backend_facebook_provider_get_provider_type (GoaBackendProvider *_provider);
-static const gchar *goa_backend_facebook_provider_get_name          (GoaBackendProvider *_provider);
-
 /**
  * SECTION:goabackendfacebookprovider
  * @title: GoaBackendFacebookProvider
@@ -69,39 +66,39 @@ G_DEFINE_TYPE_WITH_CODE (GoaBackendFacebookProvider, goa_backend_facebook_provid
 /* ---------------------------------------------------------------------------------------------------- */
 
 static const gchar *
-goa_backend_facebook_provider_get_provider_type (GoaBackendProvider *_provider)
+get_provider_type (GoaBackendProvider *_provider)
 {
   return "facebook";
 }
 
 static const gchar *
-goa_backend_facebook_provider_get_name (GoaBackendProvider *_provider)
+get_name (GoaBackendProvider *_provider)
 {
   return _("Facebook Account");
 }
 
 static const gchar *
-goa_backend_facebook_provider_get_dialog_uri (GoaBackendOAuth2Provider *provider)
+get_dialog_uri (GoaBackendOAuth2Provider *provider)
 {
   return "https://www.facebook.com/dialog/oauth";
 }
 
 
 static const gchar *
-goa_backend_facebook_provider_get_authorization_uri (GoaBackendOAuth2Provider *provider)
+get_authorization_uri (GoaBackendOAuth2Provider *provider)
 {
   return "https://graph.facebook.com/oauth/access_token";
 }
 
 
 static const gchar *
-goa_backend_facebook_provider_get_redirect_uri (GoaBackendOAuth2Provider *provider)
+get_redirect_uri (GoaBackendOAuth2Provider *provider)
 {
   return "https://www.gnome.org/goa-1.0/oauth2?callback=1";
 }
 
 static const gchar *
-goa_backend_facebook_provider_get_scope (GoaBackendOAuth2Provider *provider)
+get_scope (GoaBackendOAuth2Provider *provider)
 {
   /* see https://developers.facebook.com/docs/authentication/permissions/ */
   return
@@ -111,59 +108,138 @@ goa_backend_facebook_provider_get_scope (GoaBackendOAuth2Provider *provider)
 }
 
 static const gchar *
-goa_backend_facebook_provider_get_client_id (GoaBackendOAuth2Provider *provider)
+get_client_id (GoaBackendOAuth2Provider *provider)
 {
   return "103995033022129";
 }
 
 static const gchar *
-goa_backend_facebook_provider_get_client_secret (GoaBackendOAuth2Provider *provider)
+get_client_secret (GoaBackendOAuth2Provider *provider)
 {
   return "c3a9f8d49188a6dd8b596df48a90b94a";
 }
 
-static gchar *
-goa_backend_facebook_provider_get_identity_sync (GoaBackendOAuth2Provider  *provider,
-                                                 const gchar               *access_token,
-                                                 GCancellable              *cancellable,
-                                                 GError                   **error)
+/* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct
 {
-  SoupSession *session;
-  SoupMessage *message;
-  gint code;
+  volatile gint ref_count;
+  GSimpleAsyncResult *simple;
+  RestProxyCall *call;
+} GetIdentityData;
+
+static GetIdentityData *
+get_identity_data_ref (GetIdentityData *data)
+{
+  g_atomic_int_inc (&data->ref_count);
+  return data;
+}
+
+static void
+get_identity_data_unref (GetIdentityData *data)
+{
+  if (g_atomic_int_dec_and_test (&data->ref_count))
+    {
+      g_object_unref (data->simple);
+      g_object_unref (data->call);
+      g_slice_free (GetIdentityData, data);
+    }
+}
+
+static void
+get_identity_cb (RestProxyCall *call,
+                 const GError  *error,
+                 GObject       *weak_object,
+                 gpointer       user_data)
+{
+  GetIdentityData *data = user_data;
+  if (error != NULL)
+    {
+      g_simple_async_result_set_from_error (data->simple, error);
+      goto out;
+    }
+  g_simple_async_result_set_op_res_gpointer (data->simple,
+                                             get_identity_data_ref (data),
+                                             (GDestroyNotify) get_identity_data_unref);
+ out:
+  g_simple_async_result_complete_in_idle (data->simple);
+  get_identity_data_unref (data);
+}
+
+
+static void
+get_identity (GoaBackendOAuth2Provider  *provider,
+              const gchar               *access_token,
+              GCancellable              *cancellable,
+              GAsyncReadyCallback       callback,
+              gpointer                  user_data)
+{
+  GetIdentityData *data;
+  RestProxy *proxy;
+  GError *error;
+
+  data = g_slice_new0 (GetIdentityData);
+  data->ref_count = 1;
+  data->simple = g_simple_async_result_new (G_OBJECT (provider),
+                                            callback,
+                                            user_data,
+                                            get_identity);
+
+  proxy = rest_proxy_new ("https://graph.facebook.com/me", FALSE);
+  data->call = rest_proxy_new_call (proxy);
+  rest_proxy_call_set_method (data->call, "GET");
+  rest_proxy_call_add_param (data->call, "access_token", access_token);
+
+  error = NULL;
+  if (!rest_proxy_call_async (data->call,
+                              get_identity_cb,
+                              NULL, /* weak_object */
+                              data,
+                              &error))
+    {
+      g_simple_async_result_take_error (data->simple, error);
+      g_simple_async_result_complete_in_idle (data->simple);
+      get_identity_data_unref (data);
+    }
+  g_object_unref (proxy);
+}
+
+
+static gchar *
+get_identity_finish (GoaBackendOAuth2Provider  *provider,
+                     GAsyncResult              *res,
+                     GError                   **error)
+{
+  GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
+  GetIdentityData *data;
   gchar *ret;
-  SoupBuffer *buffer;
   JsonParser *parser;
   JsonObject *json_object;
-  gchar *s;
-
-  g_return_val_if_fail (access_token != NULL, NULL);
-  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
   ret = NULL;
-  buffer = NULL;
   parser = NULL;
-  session = NULL;
 
-  session = soup_session_sync_new ();
-  s = g_strdup_printf ("https://graph.facebook.com/me?access_token=%s", access_token);
-  message = soup_message_new ("GET", s);
-  g_free (s);
-  code = soup_session_send_message (session, message);
-  if (code != SOUP_STATUS_OK)
+  if (g_simple_async_result_propagate_error (simple, error))
+    goto out;
+
+  data = g_simple_async_result_get_op_res_gpointer (simple);
+
+  if (rest_proxy_call_get_status_code (data->call) != 200)
     {
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
-                   _("Expected status 200 when requesting data, instead got status %d (%s)"),
-                   code,
-                   message->reason_phrase);
+                   _("Expected status 200 when requesting email address, instead got status %d (%s)"),
+                   rest_proxy_call_get_status_code (data->call),
+                   rest_proxy_call_get_status_message (data->call));
       goto out;
     }
 
-  buffer = soup_message_body_flatten (message->response_body);
   parser = json_parser_new ();
-  if (!json_parser_load_from_data (parser, buffer->data, buffer->length, error))
+  if (!json_parser_load_from_data (parser,
+                                   rest_proxy_call_get_payload (data->call),
+                                   rest_proxy_call_get_payload_length (data->call),
+                                   error))
     {
       g_prefix_error (error, _("Error parsing response as JSON: "));
       goto out;
@@ -183,25 +259,10 @@ goa_backend_facebook_provider_get_identity_sync (GoaBackendOAuth2Provider  *prov
  out:
   if (parser != NULL)
     g_object_unref (parser);
-  if (buffer != NULL)
-    soup_buffer_free (buffer);
-  g_object_unref (message);
-  if (session != NULL)
-    g_object_unref (session);
   return ret;
 }
 
-static const gchar *
-goa_backend_facebook_provider_get_identity_from_object (GoaBackendOAuth2Provider *provider,
-                                                      GoaObject                *object)
-{
-  GoaFacebookAccount *gaccount;
-  gaccount = goa_object_peek_facebook_account (object);
-  if (gaccount == NULL)
-    return NULL;
-  return goa_facebook_account_get_user_name (gaccount);
-}
-
+/* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
 goa_backend_facebook_provider_build_object (GoaBackendProvider  *provider,
@@ -274,17 +335,17 @@ goa_backend_facebook_provider_class_init (GoaBackendFacebookProviderClass *klass
   GoaBackendOAuth2ProviderClass *oauth2_class;
 
   provider_class = GOA_BACKEND_PROVIDER_CLASS (klass);
-  provider_class->get_provider_type          = goa_backend_facebook_provider_get_provider_type;
-  provider_class->get_name                   = goa_backend_facebook_provider_get_name;
+  provider_class->get_provider_type          = get_provider_type;
+  provider_class->get_name                   = get_name;
   provider_class->build_object               = goa_backend_facebook_provider_build_object;
 
   oauth2_class = GOA_BACKEND_OAUTH2_PROVIDER_CLASS (klass);
-  oauth2_class->get_dialog_uri           = goa_backend_facebook_provider_get_dialog_uri;
-  oauth2_class->get_authorization_uri    = goa_backend_facebook_provider_get_authorization_uri;
-  oauth2_class->get_redirect_uri         = goa_backend_facebook_provider_get_redirect_uri;
-  oauth2_class->get_scope                = goa_backend_facebook_provider_get_scope;
-  oauth2_class->get_client_id            = goa_backend_facebook_provider_get_client_id;
-  oauth2_class->get_client_secret        = goa_backend_facebook_provider_get_client_secret;
-  oauth2_class->get_identity_sync        = goa_backend_facebook_provider_get_identity_sync;
-  oauth2_class->get_identity_from_object = goa_backend_facebook_provider_get_identity_from_object;
+  oauth2_class->get_dialog_uri           = get_dialog_uri;
+  oauth2_class->get_authorization_uri    = get_authorization_uri;
+  oauth2_class->get_redirect_uri         = get_redirect_uri;
+  oauth2_class->get_scope                = get_scope;
+  oauth2_class->get_client_id            = get_client_id;
+  oauth2_class->get_client_secret        = get_client_secret;
+  oauth2_class->get_identity             = get_identity;
+  oauth2_class->get_identity_finish      = get_identity_finish;
 }

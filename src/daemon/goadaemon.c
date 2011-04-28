@@ -1027,7 +1027,6 @@ account_on_attention_needed_notify (GObject     *object,
                                     gpointer     user_data)
 {
   GoaDaemon *daemon = GOA_DAEMON (user_data);
-  g_debug ("woot");
   goa_daemon_update_notifications (daemon);
 }
 
