@@ -137,6 +137,27 @@ gchar       *goa_backend_provider_get_access_token_finish    (GoaBackendProvider
                                                               GAsyncResult         *res,
                                                               GError              **error);
 
+void goa_backend_provider_store_credentials (GoaBackendProvider   *provider,
+                                             const gchar          *identity,
+                                             GHashTable           *credentials,
+                                             GCancellable         *cancellable,
+                                             GAsyncReadyCallback   callback,
+                                             gpointer              user_data);
+
+gboolean goa_backend_provider_store_credentials_finish (GoaBackendProvider   *provider,
+                                                        GAsyncResult         *res,
+                                                        GError              **error);
+
+void goa_backend_provider_lookup_credentials (GoaBackendProvider   *provider,
+                                              const gchar          *identity,
+                                              GCancellable         *cancellable,
+                                              GAsyncReadyCallback   callback,
+                                              gpointer              user_data);
+
+GHashTable *goa_backend_provider_lookup_credentials_finish (GoaBackendProvider   *provider,
+                                                            GAsyncResult         *res,
+                                                            GError              **error);
+
 /**
  * GOA_BACKEND_PROVIDER_EXTENSION_POINT_NAME:
  *

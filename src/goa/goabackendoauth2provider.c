@@ -27,20 +27,6 @@
 #include <rest/oauth2-proxy.h>
 #include <webkit/webkit.h>
 #include <json-glib/json-glib.h>
-#include <gnome-keyring.h>
-
-static const GnomeKeyringPasswordSchema keyring_password_schema =
-{
-  GNOME_KEYRING_ITEM_GENERIC_SECRET,
-  {
-    { "goa-oauth2-identity", GNOME_KEYRING_ATTRIBUTE_TYPE_STRING },
-    { NULL, 0 }
-  }
-};
-
-#include <webkit/webkit.h>
-#include <json-glib/json-glib.h>
-#include <gnome-keyring.h>
 
 #include "goabackendprovider.h"
 #include "goabackendoauth2provider.h"
@@ -601,97 +587,6 @@ typedef struct
 {
   GError *error;
   GMainLoop *loop;
-} StoreTokenData;
-
-static void
-store_password_cb (GnomeKeyringResult result,
-                   gpointer           user_data)
-{
-  StoreTokenData *data = user_data;
-  if (result != GNOME_KEYRING_RESULT_OK)
-    {
-      g_set_error (&data->error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   _("Failed to store the result in the keyring: %s"),
-                   gnome_keyring_result_to_message (result));
-    }
-  g_main_loop_quit (data->loop);
-}
-
-static gboolean
-store_tokens (GoaBackendOAuth2Provider  *provider,
-              const gchar               *identity,
-              const gchar               *authorization_code,
-              const gchar               *refresh_token,
-              GError                   **error)
-{
-  gchar *password_description;
-  gboolean ret;
-  StoreTokenData data;
-  gchar *key;
-  GString *str;
-  gchar *enc;
-
-  ret = FALSE;
-
-  memset (&data, '\0', sizeof (StoreTokenData));
-  data.loop = g_main_loop_new (NULL, FALSE);
-
-  str = g_string_new ("authorization_code=");
-  enc = g_base64_encode ((guchar *) authorization_code, strlen (authorization_code));
-  g_string_append (str, enc);
-  g_free (enc);
-  if (refresh_token != NULL)
-    {
-      g_string_append (str, " refresh_token=");
-      enc = g_base64_encode ((guchar *) refresh_token, strlen (refresh_token));
-      g_string_append (str, enc);
-      g_free (enc);
-    }
-
-  key = g_strdup_printf ("%s:%s",
-                         goa_backend_provider_get_provider_type (GOA_BACKEND_PROVIDER (provider)),
-                         identity);
-  password_description = g_strdup_printf (_("OAuth2 credentials for %s"), key);
-  gnome_keyring_store_password (&keyring_password_schema,
-                                NULL, /* default keyring */
-                                password_description,
-                                str->str,
-                                store_password_cb,
-                                &data,
-                                NULL, /* GDestroyNotify */
-                                "goa-oauth2-identity", key,
-                                NULL);
-  g_main_loop_run (data.loop);
-  if (data.error != NULL)
-    goto out;
-
-  ret = TRUE;
-
- out:
-  g_string_free (str, TRUE);
-  g_free (key);
-  if (data.error != NULL)
-    {
-      g_propagate_error (error, data.error);
-      g_assert (!ret);
-    }
-  else
-    {
-      g_assert (ret);
-    }
-  g_free (password_description);
-  g_main_loop_unref (data.loop);
-  return ret;
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-typedef struct
-{
-  GError *error;
-  GMainLoop *loop;
   gchar *account_object_path;
 } AddData;
 
@@ -705,6 +600,18 @@ add_account_cb (GoaManager   *manager,
                                        &data->account_object_path,
                                        res,
                                        &data->error);
+  g_main_loop_quit (data->loop);
+}
+
+static void
+store_credentials_cb (GoaBackendProvider   *provider,
+                      GAsyncResult         *res,
+                      gpointer              user_data)
+{
+  AddData *data = user_data;
+  goa_backend_provider_store_credentials_finish (provider,
+                                                 res,
+                                                 &data->error);
   g_main_loop_quit (data->loop);
 }
 
@@ -724,6 +631,7 @@ goa_backend_oauth2_provider_add_account (GoaBackendProvider *_provider,
   GList *accounts;
   GList *l;
   AddData data;
+  GHashTable *credentials;
 
   g_return_val_if_fail (GOA_IS_BACKEND_OAUTH2_PROVIDER (provider), NULL);
   g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
@@ -737,6 +645,7 @@ goa_backend_oauth2_provider_add_account (GoaBackendProvider *_provider,
   refresh_token = NULL;
   identity = NULL;
   accounts = NULL;
+  credentials = NULL;
 
   memset (&data, '\0', sizeof (AddData));
   data.loop = g_main_loop_new (NULL, FALSE);
@@ -784,7 +693,18 @@ goa_backend_oauth2_provider_add_account (GoaBackendProvider *_provider,
   if (data.error != NULL)
     goto out;
 
-  if (!store_tokens (provider, identity, authorization_code, refresh_token, &data.error))
+  credentials = g_hash_table_new (g_str_hash, g_str_equal);
+  g_hash_table_insert (credentials, "authorization_code", authorization_code);
+  if (refresh_token != NULL)
+    g_hash_table_insert (credentials, "refresh_token", refresh_token);
+  goa_backend_provider_store_credentials (GOA_BACKEND_PROVIDER (provider),
+                                          identity,
+                                          credentials,
+                                          NULL, /* GCancellable */
+                                          (GAsyncReadyCallback) store_credentials_cb,
+                                          &data);
+  g_main_loop_run (data.loop);
+  if (data.error != NULL)
     goto out;
 
   ret = GOA_OBJECT (g_dbus_object_manager_get_object (goa_client_get_object_manager (client),
@@ -801,6 +721,8 @@ goa_backend_oauth2_provider_add_account (GoaBackendProvider *_provider,
       g_assert (ret != NULL);
     }
 
+  if (credentials != NULL)
+    g_hash_table_unref (credentials);
   g_list_foreach (accounts, (GFunc) g_object_unref, NULL);
   g_list_free (accounts);
   g_free (identity);
@@ -814,6 +736,24 @@ goa_backend_oauth2_provider_add_account (GoaBackendProvider *_provider,
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct
+{
+  GMainLoop *loop;
+  GError *error;
+} RefreshAccountData;
+
+static void
+refresh_credentials_store_credentials_cb (GoaBackendProvider   *provider,
+                                          GAsyncResult         *res,
+                                          gpointer              user_data)
+{
+  RefreshAccountData *data = user_data;
+  goa_backend_provider_store_credentials_finish (provider,
+                                                 res,
+                                                 &data->error);
+  g_main_loop_quit (data->loop);
+}
 
 static gboolean
 goa_backend_oauth2_provider_refresh_account (GoaBackendProvider  *_provider,
@@ -829,7 +769,9 @@ goa_backend_oauth2_provider_refresh_account (GoaBackendProvider  *_provider,
   gchar *refresh_token;
   gchar *identity;
   const gchar *existing_identity;
+  GHashTable *credentials;
   gboolean ret;
+  RefreshAccountData data;
 
   g_return_val_if_fail (GOA_IS_BACKEND_OAUTH2_PROVIDER (provider), FALSE);
   g_return_val_if_fail (GOA_IS_CLIENT (client), FALSE);
@@ -841,6 +783,10 @@ goa_backend_oauth2_provider_refresh_account (GoaBackendProvider  *_provider,
   access_token = NULL;
   refresh_token = NULL;
   identity = NULL;
+  credentials = NULL;
+
+  memset (&data, '\0', sizeof (RefreshAccountData));
+  data.loop = g_main_loop_new (NULL, FALSE);
 
   dialog = gtk_dialog_new_with_buttons (NULL,
                                         parent,
@@ -872,8 +818,22 @@ goa_backend_oauth2_provider_refresh_account (GoaBackendProvider  *_provider,
       goto out;
     }
 
-  if (!store_tokens (provider, identity, authorization_code, refresh_token, error))
-    goto out;
+  credentials = g_hash_table_new (g_str_hash, g_str_equal);
+  g_hash_table_insert (credentials, "authorization_code", authorization_code);
+  if (refresh_token != NULL)
+    g_hash_table_insert (credentials, "refresh_token", refresh_token);
+  goa_backend_provider_store_credentials (GOA_BACKEND_PROVIDER (provider),
+                                          identity,
+                                          credentials,
+                                          NULL, /* GCancellable */
+                                          (GAsyncReadyCallback) refresh_credentials_store_credentials_cb,
+                                          &data);
+  g_main_loop_run (data.loop);
+  if (data.error != NULL)
+    {
+      g_propagate_error (error, data.error);
+      goto out;
+    }
 
   goa_account_call_clear_attention_needed (goa_object_peek_account (object),
                                            NULL, /* GCancellable */
@@ -884,10 +844,13 @@ goa_backend_oauth2_provider_refresh_account (GoaBackendProvider  *_provider,
  out:
   gtk_widget_destroy (dialog);
 
+  if (credentials != NULL)
+    g_hash_table_unref (credentials);
   g_free (identity);
   g_free (authorization_code);
   g_free (access_token);
   g_free (refresh_token);
+  g_main_loop_unref (data.loop);
   return ret;
 }
 
@@ -948,7 +911,12 @@ get_access_token_on_get_tokens_cb (GoaBackendOAuth2Provider  *provider,
                                           &error);
   if (data->access_token == NULL)
     {
-      g_simple_async_result_take_error (data->simple, error);
+      g_simple_async_result_set_error (data->simple,
+                                       GOA_ERROR,
+                                       GOA_ERROR_NOT_AUTHORIZED,
+                                       _("Failed to get tokens: %s (%s, %d)"),
+                                       error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
     }
   else
     {
@@ -961,52 +929,40 @@ get_access_token_on_get_tokens_cb (GoaBackendOAuth2Provider  *provider,
 }
 
 static void
-get_access_token_on_find_password_cb (GnomeKeyringResult  result,
-                                      const gchar        *encoded_password,
-                                      gpointer            user_data)
+lookup_credentials_cb (GoaBackendProvider *provider,
+                       GAsyncResult       *res,
+                       gpointer            user_data)
 {
   GetAccessTokenData *data = user_data;
-  gchar **tokens;
-  gchar *authorization_code;
-  gchar *refresh_token;
-  guint n;
+  GHashTable *credentials;
+  const gchar *authorization_code;
+  const gchar *refresh_token;
+  GError *error;
 
-  tokens = NULL;
-  authorization_code = NULL;
-  refresh_token = NULL;
-
-  if (result != GNOME_KEYRING_RESULT_OK)
+  error = NULL;
+  credentials = goa_backend_provider_lookup_credentials_finish (provider, res, &error);
+  if (credentials == NULL)
     {
       g_simple_async_result_set_error (data->simple,
                                        GOA_ERROR,
                                        GOA_ERROR_NOT_AUTHORIZED, /* force NeedsAttention to TRUE */
-                                       _("Failed to retrieve refresh_token from the keyring: %s"),
-                                       gnome_keyring_result_to_message (result));
+                                       _("Credentials not found in keyring: %s"),
+                                       error->message);
+      g_error_free (error);
       g_simple_async_result_complete_in_idle (data->simple);
       get_access_token_data_unref (data);
       goto out;
     }
 
-  tokens = g_strsplit (encoded_password, " ", -1);
-  for (n = 0; tokens[n] != NULL; n++)
-    {
-      gsize len;
-      if (g_str_has_prefix (tokens[n], "authorization_code="))
-        {
-          authorization_code = (gchar *) g_base64_decode (tokens[n] + sizeof "authorization_code=" - 1, &len);
-        }
-      else if (g_str_has_prefix (tokens[n], "refresh_token="))
-        {
-          refresh_token = (gchar *) g_base64_decode (tokens[n] + sizeof "refresh_token=" - 1, &len);
-        }
-    }
+  authorization_code = g_hash_table_lookup (credentials, "authorization_code");
+  refresh_token = g_hash_table_lookup (credentials, "refresh_token");
 
   if (authorization_code == NULL)
     {
       g_simple_async_result_set_error (data->simple,
                                        GOA_ERROR,
                                        GOA_ERROR_NOT_AUTHORIZED, /* force NeedsAttention to TRUE */
-                                       _("Keyring does not contain authorization_code"));
+                                       _("Credentials does not contain authorization_code"));
       g_simple_async_result_complete_in_idle (data->simple);
       get_access_token_data_unref (data);
       goto out;
@@ -1020,9 +976,7 @@ get_access_token_on_find_password_cb (GnomeKeyringResult  result,
               data);
 
  out:
-  g_free (authorization_code);
-  g_free (refresh_token);
-  g_strfreev (tokens);
+  g_hash_table_unref (credentials);
 }
 
 static void
@@ -1046,17 +1000,13 @@ goa_backend_oauth2_provider_get_access_token (GoaBackendProvider   *_provider,
                                             goa_backend_oauth2_provider_get_access_token);
 
   identity = goa_backend_oauth2_provider_get_identity_from_object (provider, object);
-  data->key = g_strdup_printf ("%s:%s",
-                               goa_backend_provider_get_provider_type (GOA_BACKEND_PROVIDER (provider)),
-                               identity);
 
-  /* First, get the authorization code from gnome-keyring */
-  gnome_keyring_find_password (&keyring_password_schema,
-                               get_access_token_on_find_password_cb,
-                               data,
-                               NULL, /* GDestroyNotify */
-                               "goa-oauth2-identity", data->key,
-                               NULL);
+  /* First, get the authorization code from the keyring */
+  goa_backend_provider_lookup_credentials (GOA_BACKEND_PROVIDER (provider),
+                                           identity,
+                                           cancellable,
+                                           (GAsyncReadyCallback) lookup_credentials_cb,
+                                           data);
 }
 
 static gchar *
