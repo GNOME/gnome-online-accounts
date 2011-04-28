@@ -227,7 +227,18 @@ goa_backend_google_provider_build_object (GoaBackendProvider  *provider,
   gboolean ret;
   gchar *email_address;
 
+  email_address = NULL;
+  account = NULL;
+  google_account = NULL;
   ret = FALSE;
+
+  /* Chain up */
+  if (!GOA_BACKEND_PROVIDER_CLASS (goa_backend_google_provider_parent_class)->build_object (provider,
+                                                                                            object,
+                                                                                            key_file,
+                                                                                            group,
+                                                                                            error))
+    goto out;
 
   account = goa_object_get_account (GOA_OBJECT (object));
   google_account = goa_object_get_google_account (GOA_OBJECT (object));
@@ -255,8 +266,10 @@ goa_backend_google_provider_build_object (GoaBackendProvider  *provider,
 
  out:
   g_free (email_address);
-  g_object_unref (google_account);
-  g_object_unref (account);
+  if (google_account != NULL)
+    g_object_unref (google_account);
+  if (account != NULL)
+    g_object_unref (account);
   return ret;
 }
 

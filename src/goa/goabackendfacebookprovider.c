@@ -205,17 +205,28 @@ goa_backend_facebook_provider_get_identity_from_object (GoaBackendOAuth2Provider
 
 static gboolean
 goa_backend_facebook_provider_build_object (GoaBackendProvider  *provider,
-                                          GoaObjectSkeleton   *object,
-                                          GKeyFile            *key_file,
-                                          const gchar         *group,
-                                          GError             **error)
+                                            GoaObjectSkeleton   *object,
+                                            GKeyFile            *key_file,
+                                            const gchar         *group,
+                                            GError             **error)
 {
   GoaAccount *account;
   GoaFacebookAccount *facebook_account;
   gboolean ret;
   gchar *user_name;
 
+  user_name = NULL;
+  account = NULL;
+  facebook_account = NULL;
   ret = FALSE;
+
+  /* Chain up */
+  if (!GOA_BACKEND_PROVIDER_CLASS (goa_backend_facebook_provider_parent_class)->build_object (provider,
+                                                                                              object,
+                                                                                              key_file,
+                                                                                              group,
+                                                                                              error))
+    goto out;
 
   account = goa_object_get_account (GOA_OBJECT (object));
   facebook_account = goa_object_get_facebook_account (GOA_OBJECT (object));
@@ -242,9 +253,10 @@ goa_backend_facebook_provider_build_object (GoaBackendProvider  *provider,
   ret = TRUE;
 
  out:
-  g_free (user_name);
-  g_object_unref (facebook_account);
-  g_object_unref (account);
+  if (facebook_account != NULL)
+    g_object_unref (facebook_account);
+  if (account != NULL)
+    g_object_unref (account);
   return ret;
 }
 

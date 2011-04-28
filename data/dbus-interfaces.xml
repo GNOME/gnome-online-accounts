@@ -127,7 +127,8 @@
       account (for example <email>user@gmail.com</email>).
 
       Objects implementing this interface also implement the
-      #org.gnome.OnlineAccounts.Account and #org.gnome.OnlineAccounts.AccessTokenBased interfaces.
+      #org.gnome.OnlineAccounts.Account and
+      #org.gnome.OnlineAccounts.OAuth2Based interfaces.
 
       When creating this kind of account via the
       org.gnome.OnlineAccounts.Manager.AddAccount() method, you need
@@ -148,7 +149,8 @@
       A Facebook Account.
 
       Objects implementing this interface also implement the
-      #org.gnome.OnlineAccounts.Account and #org.gnome.OnlineAccounts.AccessTokenBased interfaces.
+      #org.gnome.OnlineAccounts.Account and
+      #org.gnome.OnlineAccounts.OAuth2Based interfaces.
 
       When creating this kind of account via the
       org.gnome.OnlineAccounts.Manager.AddAccount() method, you need
@@ -164,26 +166,26 @@
   </interface>
 
   <!--
-      org.gnome.OnlineAccounts.AccessTokenBased:
+      org.gnome.OnlineAccounts.OAuth2Based:
 
-      An account object implements this interface if it is based on
-      access tokens such as e.g. <ulink
-      url="http://en.wikipedia.org/wiki/OAuth">OAuth</ulink>.
+      An account object implements this interface if <ulink
+      url="http://oauth.net/2/">OAuth 2.0</ulink> is used to control
+      access.
   -->
-  <interface name="org.gnome.OnlineAccounts.AccessTokenBased">
+  <interface name="org.gnome.OnlineAccounts.OAuth2Based">
     <!--
       GetAccessToken:
-      @access_token: The access token that can be used to access online services.
+      @access_token: The access token.
       @expires_in: The duration that the returned token is valid for, in seconds or 0 if unknown.
 
       Use this method to obtains an access token to access services
-      for the account. Because networking is involved, this method may
+      for an account. Because networking is involved, this method may
       take a very long time to complete.
 
       If this method fails because the token service indicates that
-      authentication is needed, the
-      #org.gnome.OnlineAccounts.Account:AttentionNeeded property is
-      set to TRUE.
+      authorization has expired, the
+      #org.gnome.OnlineAccounts.Account:AttentionNeeded property will
+      be set to TRUE.
     -->
     <method name="GetAccessToken">
       <arg name="access_token" type="s" direction="out"/>

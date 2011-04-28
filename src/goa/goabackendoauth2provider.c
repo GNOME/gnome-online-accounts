@@ -856,12 +856,6 @@ goa_backend_oauth2_provider_refresh_account (GoaBackendProvider  *_provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static gboolean
-goa_backend_oauth2_provider_get_access_token_supported (GoaBackendProvider   *provider)
-{
-  return TRUE;
-}
-
 typedef struct
 {
   volatile gint ref_count;
@@ -979,16 +973,19 @@ lookup_credentials_cb (GoaBackendProvider *provider,
   g_hash_table_unref (credentials);
 }
 
-static void
-goa_backend_oauth2_provider_get_access_token (GoaBackendProvider   *_provider,
-                                              GoaObject            *object,
-                                              GCancellable         *cancellable,
-                                              GAsyncReadyCallback   callback,
-                                              gpointer              user_data)
+void
+goa_backend_oauth2_provider_get_access_token (GoaBackendOAuth2Provider   *provider,
+                                              GoaObject                  *object,
+                                              GCancellable               *cancellable,
+                                              GAsyncReadyCallback         callback,
+                                              gpointer                    user_data)
 {
-  GoaBackendOAuth2Provider *provider = GOA_BACKEND_OAUTH2_PROVIDER (_provider);
   GetAccessTokenData *data;
   const gchar *identity;
+
+  g_return_if_fail (GOA_IS_BACKEND_OAUTH2_PROVIDER (provider));
+  g_return_if_fail (GOA_IS_OBJECT (object));
+  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   data = g_slice_new0 (GetAccessTokenData);
   data->ref_count = 1;
@@ -1009,18 +1006,19 @@ goa_backend_oauth2_provider_get_access_token (GoaBackendProvider   *_provider,
                                            data);
 }
 
-static gchar *
-goa_backend_oauth2_provider_get_access_token_finish (GoaBackendProvider   *provider,
-                                                     gint                 *out_expires_in,
-                                                     GAsyncResult         *res,
-                                                     GError              **error)
+gchar *
+goa_backend_oauth2_provider_get_access_token_finish (GoaBackendOAuth2Provider   *provider,
+                                                     gint                       *out_expires_in,
+                                                     GAsyncResult               *res,
+                                                     GError                    **error)
 {
   GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
   GetAccessTokenData *data;
   gchar *ret;
 
-  g_warn_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (provider),
-                                                  goa_backend_oauth2_provider_get_access_token));
+  g_return_val_if_fail (GOA_IS_BACKEND_OAUTH2_PROVIDER (provider), NULL);
+  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (provider),
+                                                        goa_backend_oauth2_provider_get_access_token), NULL);
 
   if (g_simple_async_result_propagate_error (simple, error))
     return NULL;
@@ -1032,6 +1030,37 @@ goa_backend_oauth2_provider_get_access_token_finish (GoaBackendProvider   *provi
     *out_expires_in = data->expires_in;
 
   return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gboolean on_handle_get_access_token (GoaOAuth2Based        *object,
+                                            GDBusMethodInvocation *invocation,
+                                            gpointer               user_data);
+
+static gboolean
+goa_backend_oauth2_provider_build_object (GoaBackendProvider  *provider,
+                                          GoaObjectSkeleton   *object,
+                                          GKeyFile            *key_file,
+                                          const gchar         *group,
+                                          GError             **error)
+{
+  GoaOAuth2Based *oauth2_based;
+
+  oauth2_based = goa_object_get_oauth2_based (GOA_OBJECT (object));
+  if (oauth2_based != NULL)
+    goto out;
+
+  oauth2_based = goa_oauth2_based_skeleton_new ();
+  goa_object_skeleton_set_oauth2_based (object, oauth2_based);
+  g_signal_connect (oauth2_based,
+                    "handle-get-access-token",
+                    G_CALLBACK (on_handle_get_access_token),
+                    NULL);
+
+ out:
+  g_object_unref (oauth2_based);
+  return TRUE;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -1049,8 +1078,100 @@ goa_backend_oauth2_provider_class_init (GoaBackendOAuth2ProviderClass *klass)
   provider_class = GOA_BACKEND_PROVIDER_CLASS (klass);
   provider_class->add_account                = goa_backend_oauth2_provider_add_account;
   provider_class->refresh_account            = goa_backend_oauth2_provider_refresh_account;
-  provider_class->get_access_token_supported = goa_backend_oauth2_provider_get_access_token_supported;
-  provider_class->get_access_token           = goa_backend_oauth2_provider_get_access_token;
-  provider_class->get_access_token_finish    = goa_backend_oauth2_provider_get_access_token_finish;
+  provider_class->build_object               = goa_backend_oauth2_provider_build_object;
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct
+{
+  GoaObject *object;
+  GDBusMethodInvocation *invocation;
+} AccessTokenData;
+
+static void
+access_token_data_free (AccessTokenData *data)
+{
+  g_object_unref (data->object);
+  g_free (data);
+}
+
+static void
+get_access_token_cb (GoaBackendOAuth2Provider  *provider,
+                     GAsyncResult              *res,
+                     gpointer                   user_data)
+{
+  AccessTokenData *data = user_data;
+  GError *error;
+  gchar *access_token;
+  gint expires_in;
+
+  error = NULL;
+  access_token = goa_backend_oauth2_provider_get_access_token_finish (provider, &expires_in, res, &error);
+  if (access_token == NULL)
+    {
+      if (error->domain == GOA_ERROR && error->code == GOA_ERROR_NOT_AUTHORIZED)
+        {
+          GoaAccount *account;
+          account = goa_object_peek_account (data->object);
+          if (!goa_account_get_attention_needed (account))
+            {
+              goa_account_set_attention_needed (account, TRUE);
+              g_dbus_interface_skeleton_flush (G_DBUS_INTERFACE_SKELETON (account));
+              /* TODO: syslog */
+              g_print ("Setting AttentionNeeded to TRUE because GetAccessToken() failed for %s with: %s (%s, %d)\n",
+                       g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)),
+                       error->message, g_quark_to_string (error->domain), error->code);
+            }
+        }
+      g_dbus_method_invocation_return_gerror (data->invocation, error);
+      g_error_free (error);
+    }
+  else
+    {
+      GoaAccount *account;
+      account = goa_object_peek_account (data->object);
+
+      /* clear AttentionNeeded flag if set */
+      if (goa_account_get_attention_needed (account))
+        {
+          goa_account_set_attention_needed (account, FALSE);
+          g_dbus_interface_skeleton_flush (G_DBUS_INTERFACE_SKELETON (account));
+        }
+      goa_oauth2_based_complete_get_access_token (goa_object_peek_oauth2_based (data->object),
+                                                  data->invocation,
+                                                  access_token,
+                                                  expires_in);
+      g_free (access_token);
+    }
+  access_token_data_free (data);
+}
+
+static gboolean
+on_handle_get_access_token (GoaOAuth2Based        *interface,
+                            GDBusMethodInvocation *invocation,
+                            gpointer               user_data)
+{
+  GoaObject *object;
+  GoaAccount *account;
+  GoaBackendProvider *provider;
+  AccessTokenData *data;
+
+  /* TODO: maybe log what app is requesting access */
+
+  object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (interface)));
+  account = goa_object_peek_account (object);
+  provider = goa_backend_provider_get_for_provider_type (goa_account_get_account_type (account));
+
+  data = g_new0 (AccessTokenData, 1);
+  data->object = g_object_ref (object);
+  data->invocation = invocation;
+  goa_backend_oauth2_provider_get_access_token (GOA_BACKEND_OAUTH2_PROVIDER (provider),
+                                                object,
+                                                NULL, /* GCancellable* */
+                                                (GAsyncReadyCallback) get_access_token_cb,
+                                                data);
+  g_object_unref (provider);
+
+  return TRUE; /* invocation was handled */
+}

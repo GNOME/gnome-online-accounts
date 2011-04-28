@@ -102,6 +102,15 @@ gchar       *goa_backend_oauth2_provider_get_identity_sync        (GoaBackendOAu
                                                                    GError                   **error);
 const gchar *goa_backend_oauth2_provider_get_identity_from_object (GoaBackendOAuth2Provider *provider,
                                                                    GoaObject                *object);
+void         goa_backend_oauth2_provider_get_access_token         (GoaBackendOAuth2Provider   *provider,
+                                                                   GoaObject                  *object,
+                                                                   GCancellable               *cancellable,
+                                                                   GAsyncReadyCallback         callback,
+                                                                   gpointer                    user_data);
+gchar       *goa_backend_oauth2_provider_get_access_token_finish (GoaBackendOAuth2Provider    *provider,
+                                                                  gint                        *out_expires_in,
+                                                                  GAsyncResult                *res,
+                                                                  GError                     **error);
 
 G_END_DECLS
 

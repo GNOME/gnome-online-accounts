@@ -71,10 +71,6 @@ static gboolean on_manager_handle_add_account (GoaManager            *object,
                                                GVariant              *details,
                                                gpointer               user_data);
 
-static gboolean on_handle_get_access_token (GoaAccessTokenBased   *object,
-                                            GDBusMethodInvocation *invocation,
-                                            gpointer               user_data);
-
 static gboolean on_account_handle_clear_attention_needed (GoaAccount            *account,
                                                           GDBusMethodInvocation *invocation,
                                                           gpointer               user_data);
@@ -90,10 +86,12 @@ static gboolean on_account_handle_remove (GoaAccount            *account,
 
 static void goa_daemon_reload_configuration (GoaDaemon *daemon);
 
-static void goa_daemon_update_notifications (GoaDaemon *daemon);
-
 static void on_notification_closed (NotifyNotification *notification,
                                     gpointer            user_data);
+
+static void account_on_attention_needed_notify (GObject     *object,
+                                                GParamSpec  *pspec,
+                                                gpointer     user_data);
 
 G_DEFINE_TYPE (GoaDaemon, goa_daemon, G_TYPE_OBJECT);
 
@@ -365,7 +363,6 @@ update_account_object (GoaDaemon           *daemon,
                        gboolean             just_added)
 {
   GoaAccount *account;
-  GoaAccessTokenBased *access_token_based;
   GoaBackendProvider *provider;
   gboolean ret;
   gchar *name;
@@ -381,7 +378,6 @@ update_account_object (GoaDaemon           *daemon,
   name = NULL;
   type = NULL;
   account = NULL;
-  access_token_based = NULL;
 
   g_debug ("updating %s %d", g_dbus_object_get_object_path (G_DBUS_OBJECT (object)), just_added);
 
@@ -395,7 +391,6 @@ update_account_object (GoaDaemon           *daemon,
   else
     {
       account = goa_object_get_account (GOA_OBJECT (object));
-      access_token_based = goa_object_get_access_token_based (GOA_OBJECT (object));
     }
 
   goa_account_set_id (account, g_strrstr (g_dbus_object_get_object_path (G_DBUS_OBJECT (object)), "/") + 1);
@@ -408,19 +403,6 @@ update_account_object (GoaDaemon           *daemon,
       /* TODO: syslog */
       g_warning ("Unsupported account type %s for id %s (no provider)", type, goa_account_get_id (account));
       goto out;
-    }
-
-  if (just_added)
-    {
-      if (goa_backend_provider_get_access_token_supported (provider))
-        {
-          access_token_based = goa_access_token_based_skeleton_new ();
-          g_signal_connect (access_token_based,
-                            "handle-get-access-token",
-                            G_CALLBACK (on_handle_get_access_token),
-                            daemon);
-          goa_object_skeleton_set_access_token_based (object, access_token_based);
-        }
     }
 
   error = NULL;
@@ -439,8 +421,6 @@ update_account_object (GoaDaemon           *daemon,
   if (provider != NULL)
     g_object_unref (provider);
   g_object_unref (account);
-  if (access_token_based != NULL)
-    g_object_unref (access_token_based);
   g_free (type);
   g_free (name);
   return ret;
@@ -518,6 +498,9 @@ process_config_entries (GoaDaemon  *daemon,
       object = GOA_OBJECT (g_dbus_object_manager_get_object (G_DBUS_OBJECT_MANAGER (daemon->object_manager), object_path));
       g_warn_if_fail (object != NULL);
       g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
+                                            G_CALLBACK (account_on_attention_needed_notify),
+                                            daemon);
+      g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
                                             G_CALLBACK (on_account_handle_set_name),
                                             daemon);
       g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
@@ -546,6 +529,10 @@ process_config_entries (GoaDaemon  *daemon,
       if (update_account_object (daemon, object, group, key_file, TRUE))
         {
           g_dbus_object_manager_server_export (daemon->object_manager, G_DBUS_OBJECT_SKELETON (object));
+          g_signal_connect (goa_object_peek_account (GOA_OBJECT (object)),
+                            "notify::attention-needed",
+                            G_CALLBACK (account_on_attention_needed_notify),
+                            daemon);
           g_signal_connect (goa_object_peek_account (GOA_OBJECT (object)),
                             "handle-set-name",
                             G_CALLBACK (on_account_handle_set_name),
@@ -579,6 +566,9 @@ process_config_entries (GoaDaemon  *daemon,
       g_warn_if_fail (object != NULL);
       if (!update_account_object (daemon, GOA_OBJECT_SKELETON (object), group, key_file, FALSE))
         {
+          g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
+                                                G_CALLBACK (account_on_attention_needed_notify),
+                                                daemon);
           g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
                                                 G_CALLBACK (on_account_handle_set_name),
                                                 daemon);
@@ -803,106 +793,14 @@ on_manager_handle_add_account (GoaManager             *manager,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-typedef struct
-{
-  GoaDaemon *daemon;
-  GoaObject *object;
-  GDBusMethodInvocation *invocation;
-} AccessTokenData;
-
-static void
-access_token_data_free (AccessTokenData *data)
-{
-  g_object_unref (data->daemon);
-  g_object_unref (data->object);
-  g_free (data);
-}
-
-static void
-get_access_token_cb (GoaBackendProvider  *provider,
-                     GAsyncResult        *res,
-                     gpointer             user_data)
-{
-  AccessTokenData *data = user_data;
-  GError *error;
-  gchar *access_token;
-  gint expires_in;
-
-  error = NULL;
-  access_token = goa_backend_provider_get_access_token_finish (provider, &expires_in, res, &error);
-  if (access_token == NULL)
-    {
-      if (error->domain == GOA_ERROR && error->code == GOA_ERROR_NOT_AUTHORIZED)
-        {
-          GoaAccount *account;
-          account = goa_object_peek_account (data->object);
-          if (!goa_account_get_attention_needed (account))
-            {
-              goa_account_set_attention_needed (account, TRUE);
-              g_dbus_interface_skeleton_flush (G_DBUS_INTERFACE_SKELETON (account));
-              /* TODO: syslog */
-              g_print ("Setting AttentionNeeded to TRUE because GetAccessToken() failed for %s with: %s (%s, %d)\n",
-                       g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)),
-                       error->message, g_quark_to_string (error->domain), error->code);
-            }
-          goa_daemon_update_notifications (data->daemon);
-        }
-      g_dbus_method_invocation_return_gerror (data->invocation, error);
-      g_error_free (error);
-    }
-  else
-    {
-      /* TODO: clear AttentionNeeded flag if set? */
-      goa_access_token_based_complete_get_access_token (goa_object_peek_access_token_based (data->object),
-                                                        data->invocation,
-                                                        access_token,
-                                                        expires_in);
-      g_free (access_token);
-    }
-  access_token_data_free (data);
-}
-
-static gboolean
-on_handle_get_access_token (GoaAccessTokenBased   *instance,
-                            GDBusMethodInvocation *invocation,
-                            gpointer               user_data)
-{
-  GoaDaemon *daemon = GOA_DAEMON (user_data);
-  GoaObject *object;
-  GoaAccount *account;
-  GoaBackendProvider *provider;
-  AccessTokenData *data;
-
-  /* TODO: log what app is requesting access */
-
-  object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (instance)));
-  account = goa_object_get_account (object);
-  provider = goa_backend_provider_get_for_provider_type (goa_account_get_account_type (account));
-
-  data = g_new0 (AccessTokenData, 1);
-  data->daemon = g_object_ref (daemon);
-  data->object = g_object_ref (object);
-  data->invocation = invocation;
-  goa_backend_provider_get_access_token (provider,
-                                         object,
-                                         NULL, /* GCancellable* */
-                                         (GAsyncReadyCallback) get_access_token_cb,
-                                         data);
-
-  return TRUE; /* invocation was handled */
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
 static gboolean
 on_account_handle_clear_attention_needed (GoaAccount            *account,
                                           GDBusMethodInvocation *invocation,
                                           gpointer               user_data)
 {
-  GoaDaemon *daemon = GOA_DAEMON (user_data);
+  /* GoaDaemon *daemon = GOA_DAEMON (user_data); */
   goa_account_set_attention_needed (account, FALSE);
   goa_account_complete_clear_attention_needed (account, invocation);
-  goa_daemon_update_notifications (daemon);
   return TRUE; /* invocation was handled */
 }
 
@@ -1121,6 +1019,16 @@ goa_daemon_update_notifications (GoaDaemon *daemon)
 
   g_list_foreach (objects, (GFunc) g_object_unref, NULL);
   g_list_free (objects);
+}
+
+static void
+account_on_attention_needed_notify (GObject     *object,
+                                    GParamSpec  *pspec,
+                                    gpointer     user_data)
+{
+  GoaDaemon *daemon = GOA_DAEMON (user_data);
+  g_debug ("woot");
+  goa_daemon_update_notifications (daemon);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
