@@ -973,6 +973,26 @@ lookup_credentials_cb (GoaBackendProvider *provider,
   g_hash_table_unref (credentials);
 }
 
+/**
+ * goa_backend_oauth2_provider_get_access_token:
+ * @provider: A #GoaBackendOAuth2Provider.
+ * @object: A #GoaObject.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: The function to call when the request is satisfied.
+ * @user_data: Pointer to pass to @callback.
+ *
+ * Gets an access token for @object. The token is obtained using
+ * either the <emphasis>authorization code</emphasis> or
+ * <emphasis>refresh token</emphasis> obtained when the service was
+ * authorized. In either case, the network is involved so the request
+ * will take a long time.
+ *
+ * When the result is ready, @callback will be called in the the <link
+ * linkend="g-main-context-push-thread-default">thread-default main
+ * loop</link> this function was called from. You can then call
+ * goa_backend_oauth2_provider_get_access_token_finish() to get the
+ * result of the operation.
+ */
 void
 goa_backend_oauth2_provider_get_access_token (GoaBackendOAuth2Provider   *provider,
                                               GoaObject                  *object,
@@ -1006,6 +1026,17 @@ goa_backend_oauth2_provider_get_access_token (GoaBackendOAuth2Provider   *provid
                                            data);
 }
 
+/**
+ * goa_backend_oauth2_provider_get_access_token_finish:
+ * @provider: A #GoaBackendOAuth2Provider.
+ * @out_expires_in: (out): Return location for how many seconds the returned token is valid (0 if unknown) for or %NULL.
+ * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to goa_backend_oauth2_provider_get_access_token().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with goa_backend_oauth2_provider_get_access_token().
+ *
+ * Returns: The access token or %NULL if error is set. The returned string must be freed with g_free().
+ */
 gchar *
 goa_backend_oauth2_provider_get_access_token_finish (GoaBackendOAuth2Provider   *provider,
                                                      gint                       *out_expires_in,
