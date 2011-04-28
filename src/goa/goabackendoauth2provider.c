@@ -24,6 +24,7 @@
 #include <glib/gi18n-lib.h>
 #include <stdlib.h>
 
+#include <rest/oauth2-proxy.h>
 #include <webkit/webkit.h>
 #include <json-glib/json-glib.h>
 #include <gnome-keyring.h>
@@ -124,11 +125,246 @@ goa_backend_oauth2_provider_get_identity_from_object (GoaBackendOAuth2Provider *
 
 typedef struct
 {
+  volatile gint ref_count;
+  GSimpleAsyncResult *simple;
+  RestProxyCall *call;
+  gchar *access_token;
+  gchar *refresh_token;
+  gint expires_in;
+} GetTokensData;
+
+static GetTokensData *
+get_tokens_data_ref (GetTokensData *data)
+{
+  g_atomic_int_inc (&data->ref_count);
+  return data;
+}
+
+static void
+get_tokens_data_unref (GetTokensData *data)
+{
+  if (g_atomic_int_dec_and_test (&data->ref_count))
+    {
+      g_object_unref (data->simple);
+      g_object_unref (data->call);
+      g_free (data->access_token);
+      g_free (data->refresh_token);
+      g_slice_free (GetTokensData, data);
+    }
+}
+
+static void
+get_tokens_on_call_cb (RestProxyCall  *call,
+                       const GError   *error,
+                       GObject        *weak_object,
+                       gpointer        user_data)
+{
+  GetTokensData *data = user_data;
+  guint status_code;
+  const gchar *payload;
+  gsize payload_length;
+
+  if (error != NULL)
+    {
+      g_simple_async_result_set_from_error (data->simple, error);
+      goto out;
+    }
+
+  status_code = rest_proxy_call_get_status_code (call);
+  if (status_code != 200)
+    {
+      g_simple_async_result_set_error (data->simple,
+                                       GOA_ERROR,
+                                       GOA_ERROR_FAILED,
+                                       _("Expected status 200 when requesting access token, instead got status %d (%s)"),
+                                       status_code,
+                                       rest_proxy_call_get_status_message (call));
+      goto out;
+    }
+
+  payload = rest_proxy_call_get_payload (call);
+  payload_length = rest_proxy_call_get_payload_length (call);
+  /* some older OAuth2 implementations does not return json - handle that too */
+  if (g_str_has_prefix (payload, "access_token="))
+    {
+      GHashTable *hash;
+      const gchar *expires_in_str;
+      hash = soup_form_decode (payload);
+      data->access_token = g_strdup (g_hash_table_lookup (hash, "access_token"));
+      if (data->access_token == NULL)
+        {
+          g_simple_async_result_set_error (data->simple,
+                                           GOA_ERROR,
+                                           GOA_ERROR_FAILED,
+                                           _("Didn't find access_token in non-JSON data"));
+          g_hash_table_unref (hash);
+          goto out;
+        }
+      /* refresh_token is optional */
+      data->refresh_token = g_hash_table_lookup (hash, "refresh_token");
+      /* expires_in is optional */
+      expires_in_str = g_hash_table_lookup (hash, "expires_in");
+      /* sometimes "expires_in" appears as "expires" */
+      if (expires_in_str == NULL)
+        expires_in_str = g_hash_table_lookup (hash, "expires");
+      if (expires_in_str != NULL)
+        data->expires_in = atoi (expires_in_str);
+      g_hash_table_unref (hash);
+    }
+  else
+    {
+      GError *local_error;
+      JsonParser *parser;
+      JsonObject *object;
+
+      local_error = NULL;
+      parser = json_parser_new ();
+      if (!json_parser_load_from_data (parser, payload, payload_length, &local_error))
+        {
+          g_prefix_error (&local_error, _("Error parsing response as JSON: "));
+          g_simple_async_result_take_error (data->simple, local_error);
+          g_object_unref (parser);
+          goto out;
+        }
+      object = json_node_get_object (json_parser_get_root (parser));
+      data->access_token = g_strdup (json_object_get_string_member (object, "access_token"));
+      if (data->access_token == NULL)
+        {
+          g_simple_async_result_set_error (data->simple,
+                                           GOA_ERROR,
+                                           GOA_ERROR_FAILED,
+                                           _("Didn't find access_token in JSON data"));
+          goto out;
+        }
+      /* refresh_token is optional... */
+      if (json_object_has_member (object, "refresh_token"))
+        data->refresh_token = g_strdup (json_object_get_string_member (object, "refresh_token"));
+      if (json_object_has_member (object, "expires_in"))
+        data->expires_in = json_object_get_int_member (object, "expires_in");
+      g_object_unref (parser);
+    }
+
+
+  g_simple_async_result_set_op_res_gpointer (data->simple,
+                                             get_tokens_data_ref (data),
+                                             (GDestroyNotify) get_tokens_data_unref);
+
+ out:
+  g_simple_async_result_complete (data->simple);
+  get_tokens_data_unref (data);
+}
+
+static void
+get_tokens (GoaBackendOAuth2Provider *provider,
+            const gchar              *authorization_code,
+            const gchar              *refresh_token,
+            GCancellable             *cancellable,
+            GAsyncReadyCallback       callback,
+            gpointer                  user_data)
+{
+  GetTokensData *data;
+  RestProxy *proxy;
+  GError *error;
+
+  g_return_if_fail (GOA_IS_BACKEND_OAUTH2_PROVIDER (provider));
+  g_return_if_fail (authorization_code != NULL);
+  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+
+  data = g_slice_new0 (GetTokensData);
+  data->ref_count = 1;
+  data->simple = g_simple_async_result_new (G_OBJECT (provider),
+                                            callback,
+                                            user_data,
+                                            get_tokens);
+
+  proxy = rest_proxy_new (goa_backend_oauth2_provider_get_authorization_uri (provider), FALSE);
+  data->call = rest_proxy_new_call (proxy);
+  rest_proxy_call_set_method (data->call, "POST");
+  rest_proxy_call_add_header (data->call, "Content-Type", "application/x-www-form-urlencoded");
+  if (refresh_token != NULL)
+    {
+      /* Swell, we have a refresh code - just use that */
+      rest_proxy_call_add_param (data->call, "client_id", goa_backend_oauth2_provider_get_client_id (provider));
+      rest_proxy_call_add_param (data->call, "client_secret", goa_backend_oauth2_provider_get_client_secret (provider));
+      rest_proxy_call_add_param (data->call, "grant_type", "refresh_token");
+      rest_proxy_call_add_param (data->call, "refresh_token", refresh_token);
+    }
+  else
+    {
+      /* No refresh code.. request an access token using the authorization code instead */
+      rest_proxy_call_add_param (data->call, "client_id", goa_backend_oauth2_provider_get_client_id (provider));
+      rest_proxy_call_add_param (data->call, "client_secret", goa_backend_oauth2_provider_get_client_secret (provider));
+      rest_proxy_call_add_param (data->call, "grant_type", "authorization_code");
+      rest_proxy_call_add_param (data->call, "code", authorization_code);
+      rest_proxy_call_add_param (data->call, "redirect_uri", goa_backend_oauth2_provider_get_redirect_uri (provider));
+    }
+
+  error = NULL;
+  if (!rest_proxy_call_async (data->call,
+                              get_tokens_on_call_cb,
+                              NULL, /* TODO: weak_object for GCancellable */
+                              data,
+                              &error))
+    {
+      g_simple_async_result_take_error (data->simple, error);
+      g_simple_async_result_complete_in_idle (data->simple);
+      get_tokens_data_unref (data);
+    }
+
+  g_object_unref (proxy);
+}
+
+static gchar *
+get_tokens_finish (GoaBackendOAuth2Provider   *provider,
+                   gchar                     **out_refresh_token,
+                   gint                       *out_expires_in,
+                   GAsyncResult               *res,
+                   GError                    **error)
+{
+  GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
+  GetTokensData *data;
+  gchar *ret;
+
+  g_return_val_if_fail (GOA_IS_BACKEND_OAUTH2_PROVIDER (provider), NULL);
+  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (provider), get_tokens), NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  ret = NULL;
+
+  if (g_simple_async_result_propagate_error (simple, error))
+    goto out;
+
+  data = g_simple_async_result_get_op_res_gpointer (simple);
+  if (out_refresh_token != NULL)
+    {
+      *out_refresh_token = data->refresh_token;
+      data->refresh_token = NULL;
+    }
+  if (out_expires_in != NULL)
+    {
+      *out_expires_in = data->expires_in;
+    }
+
+  ret = data->access_token;
+  data->access_token = NULL;
+
+ out:
+  return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct
+{
   GoaBackendOAuth2Provider *provider;
   GtkDialog *dialog;
   gchar *authorization_code;
   GError *error;
   GMainLoop *loop;
+
+  gchar *access_token;
+  gchar *refresh_token;
+  gint expires_in;
 } IdentifyData;
 
 G_GNUC_UNUSED static void
@@ -137,137 +373,6 @@ print_header (const gchar *name,
               gpointer     user_data)
 {
   g_print ("header: `%s' -> `%s'\n", name, value);
-}
-
-
-static gchar *
-get_access_and_refresh_token_sync (GoaBackendOAuth2Provider *provider,
-                                   SoupSession  *session,
-                                   const gchar  *authorization_code,
-                                   gchar       **out_refresh_token,
-                                   gint         *out_expires_in,
-                                   GError      **error)
-{
-  SoupMessage *message;
-  gint code;
-  gchar *body;
-  gchar *ret;
-  SoupBuffer *buffer;
-  JsonParser *parser;
-  JsonObject *json_object;
-  const gchar *refresh_token;
-  const gchar *expires_in_str;
-  gint expires_in;
-  gchar *body_url_encoded;
-
-  g_return_val_if_fail (authorization_code != NULL, NULL);
-  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-
-  ret = NULL;
-  buffer = NULL;
-  parser = NULL;
-  body = NULL;
-  expires_in_str = NULL;
-  refresh_token = NULL;
-  expires_in = 0;
-
-  message = soup_message_new ("POST",
-                              goa_backend_oauth2_provider_get_authorization_uri (provider));
-  soup_message_headers_append (message->request_headers, "Content-Type", "application/x-www-form-urlencoded");
-  body = g_strdup_printf ("client_id=%s&"
-                          "client_secret=%s&"
-                          "grant_type=authorization_code&"
-                          "code=%s&"
-                          "redirect_uri=%s",
-                          goa_backend_oauth2_provider_get_client_id (provider),
-                          goa_backend_oauth2_provider_get_client_secret (provider),
-                          authorization_code,
-                          goa_backend_oauth2_provider_get_redirect_uri (provider));
-  body_url_encoded = g_uri_escape_string (body, "&=", TRUE);
-  soup_message_body_append (message->request_body, SOUP_MEMORY_TAKE, body_url_encoded, strlen (body_url_encoded));
-  code = soup_session_send_message (session, message);
-
-  if (code != SOUP_STATUS_OK)
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   _("Expected status 200 when requesting access token, instead got status %d (%s)"),
-                   code,
-                   message->reason_phrase);
-      goto out;
-    }
-
-  buffer = soup_message_body_flatten (message->response_body);
-
-  //soup_message_headers_foreach (message->response_headers, print_header, NULL);
-  //g_print ("body: `%s'\n", buffer->data);
-
-  /* some older OAuth2 implementations does not return json - handle that too */
-  if (g_str_has_prefix (buffer->data, "access_token="))
-    {
-      GHashTable *hash;
-      hash = soup_form_decode (buffer->data);
-      ret = g_strdup (g_hash_table_lookup (hash, "access_token"));
-      if (ret == NULL)
-        {
-          g_set_error (error,
-                       GOA_ERROR,
-                       GOA_ERROR_FAILED,
-                       _("Didn't find access_token in non-JSON data"));
-          g_hash_table_unref (hash);
-          goto out;
-        }
-      /* refresh_token is optional */
-      refresh_token = g_hash_table_lookup (hash, "refresh_token");
-      /* expires_in is optional */
-      expires_in_str = g_hash_table_lookup (hash, "expires_in");
-      if (expires_in_str == NULL)
-        expires_in_str = g_hash_table_lookup (hash, "expires");
-      g_hash_table_unref (hash);
-    }
-  else
-    {
-      parser = json_parser_new ();
-      if (!json_parser_load_from_data (parser, buffer->data, buffer->length, error))
-        {
-          g_prefix_error (error, _("Error parsing response `%s' as JSON: "), buffer->data);
-          goto out;
-        }
-      json_object = json_node_get_object (json_parser_get_root (parser));
-      ret = g_strdup (json_object_get_string_member (json_object, "access_token"));
-      if (ret == NULL)
-        {
-          g_set_error (error,
-                       GOA_ERROR,
-                       GOA_ERROR_FAILED,
-                       _("Didn't find access_token in JSON data"));
-          goto out;
-        }
-      /* refresh_token is optional... */
-      refresh_token = json_object_get_string_member (json_object, "refresh_token");
-      expires_in_str = json_object_get_string_member (json_object, "expires_in");
-    }
-
- out:
-  if (ret)
-    {
-      if (out_refresh_token != NULL)
-        *out_refresh_token = g_strdup (refresh_token);
-      if (expires_in_str != NULL)
-        expires_in = atoi (expires_in_str);
-      if (out_expires_in != NULL)
-        *out_expires_in = expires_in;
-    }
-
-  g_free (body);
-  if (parser != NULL)
-    g_object_unref (parser);
-  if (buffer != NULL)
-    soup_buffer_free (buffer);
-  g_object_unref (message);
-
-  return ret;
 }
 
 static gboolean
@@ -280,9 +385,14 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
 {
   IdentifyData *data = user_data;
   const gchar *redirect_uri;
+  const gchar *requested_uri;
 
+  /* TODO: use oauth2_proxy_extract_access_token() */
+
+  requested_uri = webkit_network_request_get_uri (request);
+  //g_debug ("requested_uri is %s", requested_uri);
   redirect_uri = goa_backend_oauth2_provider_get_redirect_uri (data->provider);
-  if (g_str_has_prefix (webkit_network_request_get_uri (request), redirect_uri))
+  if (g_str_has_prefix (requested_uri, redirect_uri))
     {
       SoupMessage *message;
       SoupURI *uri;
@@ -316,6 +426,22 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
     }
 }
 
+static void
+get_tokens_and_identity_on_get_tokens_cb (GoaBackendOAuth2Provider *provider,
+                                          GAsyncResult             *res,
+                                          gpointer                  user_data)
+{
+  IdentifyData *data = user_data;
+
+  data->access_token = get_tokens_finish (provider,
+                                          &data->refresh_token,
+                                          &data->expires_in,
+                                          res,
+                                          &data->error);
+
+  g_main_loop_quit (data->loop);
+}
+
 static gboolean
 get_tokens_and_identity (GoaBackendOAuth2Provider *provider,
                          GtkDialog                *dialog,
@@ -328,20 +454,15 @@ get_tokens_and_identity (GoaBackendOAuth2Provider *provider,
 {
   gboolean ret;
   SoupSession *webkit_soup_session;
-  SoupSession *session;
   SoupCookieJar *cookie_jar;
   GtkWidget *scrolled_window;
   GtkWidget *web_view;
-  const gchar *scope;
-  const gchar *redirect_uri;
-  gchar *escaped_scope;
-  gchar *escaped_redirect_uri;
   gchar *url;
   IdentifyData data;
-  gchar *access_token;
-  gchar *refresh_token;
-  gint expires_in;
   gchar *identity;
+  gchar *escaped_redirect_uri;
+  gchar *escaped_client_id;
+  gchar *escaped_scope;
 
   g_return_val_if_fail (GOA_IS_BACKEND_OAUTH2_PROVIDER (provider), FALSE);
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), FALSE);
@@ -349,10 +470,10 @@ get_tokens_and_identity (GoaBackendOAuth2Provider *provider,
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   ret = FALSE;
-  session = NULL;
-  access_token = NULL;
-  refresh_token = NULL;
   identity = NULL;
+  escaped_redirect_uri = NULL;
+  escaped_client_id = NULL;
+  escaped_scope = NULL;
 
   /* TODO: check with NM whether we're online, if not - return error */
 
@@ -360,10 +481,10 @@ get_tokens_and_identity (GoaBackendOAuth2Provider *provider,
   data.provider = provider;
   data.loop = g_main_loop_new (NULL, FALSE);
 
-  scope = goa_backend_oauth2_provider_get_scope (provider);
-  redirect_uri = goa_backend_oauth2_provider_get_redirect_uri (provider);
-  escaped_scope = g_uri_escape_string (scope, NULL, TRUE);
-  escaped_redirect_uri = g_uri_escape_string (redirect_uri, NULL, TRUE);
+  /* TODO: use oauth2_proxy_build_login_url_full() */
+  escaped_redirect_uri = g_uri_escape_string (goa_backend_oauth2_provider_get_redirect_uri (provider), NULL, TRUE);
+  escaped_client_id = g_uri_escape_string (goa_backend_oauth2_provider_get_client_id (provider), NULL, TRUE);
+  escaped_scope = g_uri_escape_string (goa_backend_oauth2_provider_get_scope (provider), NULL, TRUE);
   url = g_strdup_printf ("%s"
                          "?response_type=code"
                          "&redirect_uri=%s"
@@ -371,8 +492,10 @@ get_tokens_and_identity (GoaBackendOAuth2Provider *provider,
                          "&scope=%s",
                          goa_backend_oauth2_provider_get_dialog_uri (provider),
                          escaped_redirect_uri,
-                         goa_backend_oauth2_provider_get_client_id (provider),
+                         escaped_client_id,
                          escaped_scope);
+  //g_debug ("url = %s", url);
+
   /* Ensure we use an empty non-persistent cookie to avoid login
    * credentials being reused...
    */
@@ -399,9 +522,7 @@ get_tokens_and_identity (GoaBackendOAuth2Provider *provider,
   gtk_container_add (GTK_CONTAINER (scrolled_window), web_view);
   gtk_container_add (GTK_CONTAINER (vbox), scrolled_window);
   gtk_widget_show_all (scrolled_window);
-
   data.dialog = dialog;
-
   gtk_dialog_run (GTK_DIALOG (dialog));
   if (data.authorization_code == NULL)
     {
@@ -421,18 +542,18 @@ get_tokens_and_identity (GoaBackendOAuth2Provider *provider,
    * @client).. for that we need to get a (short-lived) access token
    * and a refresh_token
    */
-  session = soup_session_sync_new ();
-  access_token = get_access_and_refresh_token_sync (provider,
-                                                    session,
-                                                    data.authorization_code,
-                                                    &refresh_token,
-                                                    &expires_in,
-                                                    &data.error);
-  if (access_token == NULL)
+  get_tokens (provider,
+              data.authorization_code,
+              NULL, /* refresh_token */
+              NULL, /* GCancellable */
+              (GAsyncReadyCallback) get_tokens_and_identity_on_get_tokens_cb,
+              &data);
+  g_main_loop_run (data.loop);
+  if (data.access_token == NULL)
     goto out;
 
   identity = goa_backend_oauth2_provider_get_identity_sync (provider,
-                                                            access_token,
+                                                            data.access_token,
                                                             NULL, /* TODO: Cancellable */
                                                             &data.error);
   if (identity == NULL)
@@ -447,9 +568,9 @@ get_tokens_and_identity (GoaBackendOAuth2Provider *provider,
       if (out_authorization_code != NULL)
         *out_authorization_code = g_strdup (data.authorization_code);
       if (out_access_token != NULL)
-        *out_access_token = g_strdup (access_token);
+        *out_access_token = g_strdup (data.access_token);
       if (out_refresh_token != NULL)
-        *out_refresh_token = g_strdup (refresh_token);
+        *out_refresh_token = g_strdup (data.refresh_token);
       if (out_identity != NULL)
         *out_identity = g_strdup (identity);
     }
@@ -460,18 +581,17 @@ get_tokens_and_identity (GoaBackendOAuth2Provider *provider,
     }
 
   g_free (identity);
-  if (session != NULL)
-    g_object_unref (session);
   g_object_unref (cookie_jar);
-  g_free (escaped_scope);
-  g_free (escaped_redirect_uri);
   g_free (url);
 
   g_free (data.authorization_code);
   if (data.loop != NULL)
     g_main_loop_unref (data.loop);
-  g_free (access_token);
-  g_free (refresh_token);
+  g_free (data.access_token);
+  g_free (data.refresh_token);
+  g_free (escaped_redirect_uri);
+  g_free (escaped_client_id);
+  g_free (escaped_scope);
   return ret;
 }
 
@@ -786,8 +906,6 @@ typedef struct
   GoaBackendOAuth2Provider *provider;
   GoaObject *object;
   GSimpleAsyncResult *simple;
-  SoupSession *session;
-  SoupMessage *message;
   gchar *key;
 
   gchar *access_token;
@@ -801,8 +919,6 @@ get_access_token_data_unref (GetAccessTokenData *data)
     {
       g_object_unref (data->object);
       g_object_unref (data->simple);
-      g_object_unref (data->session);
-      g_object_unref (data->message);
       g_free (data->access_token);
       g_free (data->key);
       g_slice_free (GetAccessTokenData, data);
@@ -817,112 +933,39 @@ get_access_token_data_ref (GetAccessTokenData *data)
 }
 
 static void
-get_access_token_cb (SoupSession *session,
-                     SoupMessage *message,
-                     gpointer     user_data)
+get_access_token_on_get_tokens_cb (GoaBackendOAuth2Provider  *provider,
+                                   GAsyncResult              *res,
+                                   gpointer                   user_data)
 {
   GetAccessTokenData *data = user_data;
-  SoupBuffer *buffer;
-  JsonParser *parser;
-  JsonObject *json_object;
   GError *error;
 
-  buffer = NULL;
-  parser = NULL;
-
-  if (message->status_code != SOUP_STATUS_OK)
+  error = NULL;
+  data->access_token = get_tokens_finish (provider,
+                                          NULL, /* out_refresh_token */
+                                          &data->expires_in,
+                                          res,
+                                          &error);
+  if (data->access_token == NULL)
     {
-      gint error_code;
-      /* Only force NeedsAttention to TRUE (by returning NOT_AUTHORIZED) if
-       * the server tells out we are doing it wrong
-       */
-      if (SOUP_STATUS_IS_CLIENT_ERROR (message->status_code))
-        error_code = GOA_ERROR_NOT_AUTHORIZED;
-      else
-        error_code = GOA_ERROR_FAILED;
-      g_simple_async_result_set_error (data->simple,
-                                       GOA_ERROR,
-                                       error_code,
-                                       _("Expected status 200 when requesting access token, instead got status %d (%s)"),
-                                       message->status_code,
-                                       message->reason_phrase);
-      goto out;
-    }
-
-  buffer = soup_message_body_flatten (message->response_body);
-
-  /* some older OAuth2 implementations does not return json - handle that too */
-  if (g_str_has_prefix (buffer->data, "access_token="))
-    {
-      GHashTable *hash;
-      const gchar *expires_in_str;
-      hash = soup_form_decode (buffer->data);
-      data->access_token = g_strdup (g_hash_table_lookup (hash, "access_token"));
-      if (data->access_token == NULL)
-        {
-          g_set_error (&error,
-                       GOA_ERROR,
-                       GOA_ERROR_FAILED,
-                       _("Didn't find access_token in non-JSON data"));
-          g_hash_table_unref (hash);
-          goto out;
-        }
-      /* expires_in is optional */
-      expires_in_str = g_hash_table_lookup (hash, "expires_in");
-      if (expires_in_str == NULL)
-        expires_in_str = g_hash_table_lookup (hash, "expires");
-      data->expires_in = 0;
-      if (expires_in_str != NULL)
-        data->expires_in = atoi (expires_in_str);
-      g_hash_table_unref (hash);
+      g_simple_async_result_take_error (data->simple, error);
     }
   else
     {
-      parser = json_parser_new ();
-      error = NULL;
-      if (!json_parser_load_from_data (parser, buffer->data, buffer->length, &error))
-        {
-          g_prefix_error (&error, _("Error parsing response as JSON: "));
-          g_simple_async_result_take_error (data->simple, error);
-          goto out;
-        }
-      json_object = json_node_get_object (json_parser_get_root (parser));
-      data->access_token = g_strdup (json_object_get_string_member (json_object, "access_token"));
-
-      data->expires_in = 0;
-      if (json_object_has_member (json_object, "expires_in"))
-        data->expires_in = json_object_get_int_member (json_object, "expires_in");
+      g_simple_async_result_set_op_res_gpointer (data->simple,
+                                                 get_access_token_data_ref (data),
+                                                 (GDestroyNotify) get_access_token_data_unref);
     }
-
-  if (data->access_token == NULL)
-    {
-      g_simple_async_result_set_error (data->simple,
-                                       GOA_ERROR,
-                                       GOA_ERROR_NOT_AUTHORIZED, /* force NeedsAttention to TRUE */
-                                       _("Didn't find access_token in response"));
-      goto out;
-    }
-
-  g_simple_async_result_set_op_res_gpointer (data->simple,
-                                             get_access_token_data_ref (data),
-                                             (GDestroyNotify) get_access_token_data_unref);
-
- out:
-  if (parser != NULL)
-    g_object_unref (parser);
-  if (buffer != NULL)
-    soup_buffer_free (buffer);
   g_simple_async_result_complete_in_idle (data->simple);
   get_access_token_data_unref (data);
 }
 
 static void
-find_password_cb (GnomeKeyringResult  result,
-                  const gchar        *encoded_password,
-                  gpointer            user_data)
+get_access_token_on_find_password_cb (GnomeKeyringResult  result,
+                                      const gchar        *encoded_password,
+                                      gpointer            user_data)
 {
   GetAccessTokenData *data = user_data;
-  gchar *body;
   gchar **tokens;
   gchar *authorization_code;
   gchar *refresh_token;
@@ -969,40 +1012,12 @@ find_password_cb (GnomeKeyringResult  result,
       goto out;
     }
 
-  data->message = soup_message_new ("POST",
-                                    goa_backend_oauth2_provider_get_authorization_uri (data->provider));
-  soup_message_headers_append (data->message->request_headers,
-                               "Content-Type", "application/x-www-form-urlencoded");
-  if (refresh_token != NULL)
-    {
-      /* Swell, we have a refresh code - use that */
-      body = g_strdup_printf ("client_id=%s&"
-                              "client_secret=%s&"
-                              "refresh_token=%s&"
-                              "grant_type=refresh_token",
-                              goa_backend_oauth2_provider_get_client_id (data->provider),
-                              goa_backend_oauth2_provider_get_client_secret (data->provider),
-                              refresh_token);
-    }
-  else
-    {
-      /* No refresh code.. request an access token using the authorization code instead */
-      body = g_strdup_printf ("client_id=%s&"
-                              "client_secret=%s&"
-                              "grant_type=authorization_code&"
-                              "code=%s&"
-                              "redirect_uri=%s",
-                              goa_backend_oauth2_provider_get_client_id (data->provider),
-                              goa_backend_oauth2_provider_get_client_secret (data->provider),
-                              authorization_code,
-                              goa_backend_oauth2_provider_get_redirect_uri (data->provider));
-    }
-  soup_message_body_append (data->message->request_body, SOUP_MEMORY_TAKE, body, strlen (body));
-  g_print ("body: `%s'\n", body);
-  soup_session_queue_message (data->session,
-                              g_object_ref (data->message),
-                              get_access_token_cb,
-                              data);
+  get_tokens (data->provider,
+              authorization_code,
+              refresh_token,
+              NULL, /* GCancellable */
+              (GAsyncReadyCallback) get_access_token_on_get_tokens_cb,
+              data);
 
  out:
   g_free (authorization_code);
@@ -1025,7 +1040,6 @@ goa_backend_oauth2_provider_get_access_token (GoaBackendProvider   *_provider,
   data->ref_count = 1;
   data->provider = provider;
   data->object = g_object_ref (object);
-  data->session = soup_session_async_new ();
   data->simple = g_simple_async_result_new (G_OBJECT (provider),
                                             callback,
                                             user_data,
@@ -1038,7 +1052,7 @@ goa_backend_oauth2_provider_get_access_token (GoaBackendProvider   *_provider,
 
   /* First, get the authorization code from gnome-keyring */
   gnome_keyring_find_password (&keyring_password_schema,
-                               find_password_cb,
+                               get_access_token_on_find_password_cb,
                                data,
                                NULL, /* GDestroyNotify */
                                "goa-oauth2-identity", data->key,
