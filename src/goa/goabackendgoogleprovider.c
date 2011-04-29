@@ -83,13 +83,11 @@ get_dialog_uri (GoaBackendOAuth2Provider *provider)
   return "https://accounts.google.com/o/oauth2/auth";
 }
 
-
 static const gchar *
 get_authorization_uri (GoaBackendOAuth2Provider *provider)
 {
   return "https://accounts.google.com/o/oauth2/token";
 }
-
 
 static const gchar *
 get_redirect_uri (GoaBackendOAuth2Provider *provider)
@@ -171,10 +169,10 @@ get_identity_cb (RestProxyCall *call,
 
 static void
 get_identity (GoaBackendOAuth2Provider  *provider,
-                                          const gchar               *access_token,
-                                          GCancellable              *cancellable,
-                                          GAsyncReadyCallback       callback,
-                                          gpointer                  user_data)
+              const gchar               *access_token,
+              GCancellable              *cancellable,
+              GAsyncReadyCallback       callback,
+              gpointer                  user_data)
 {
   GetIdentityData *data;
   RestProxy *proxy;
@@ -213,8 +211,8 @@ get_identity (GoaBackendOAuth2Provider  *provider,
 
 static gchar *
 get_identity_finish (GoaBackendOAuth2Provider  *provider,
-                                                 GAsyncResult              *res,
-                                                 GError                   **error)
+                     GAsyncResult              *res,
+                     GError                   **error)
 {
   GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
   GetIdentityData *data;
