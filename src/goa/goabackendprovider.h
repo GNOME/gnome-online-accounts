@@ -69,6 +69,7 @@ struct _GoaBackendProviderClass
 {
   GObjectClass parent_class;
 
+  /* pure virtual */
   const gchar *(*get_provider_type) (GoaBackendProvider *provider);
   const gchar *(*get_name)          (GoaBackendProvider *provider);
   GoaObject   *(*add_account)       (GoaBackendProvider *provider,

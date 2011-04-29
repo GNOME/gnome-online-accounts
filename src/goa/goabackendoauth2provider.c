@@ -36,7 +36,29 @@
  * @title: GoaBackendOAuth2Provider
  * @short_description: Abstract base class for OAuth 2.0 providers
  *
- * #GoaBackendOAuth2Provider is a base class for all OAuth 2.0 based providers.
+ * #GoaBackendOAuth2Provider is an abstract base class for <ulink
+ * url="http://tools.ietf.org/html/draft-ietf-oauth-v2-15">OAuth
+ * 2.0</ulink> based providers.
+ *
+ * Subclasses must implement
+ * #GoaBackendOAuth2ProviderClass.get_authorization_uri,
+ * #GoaBackendOAuth2ProviderClass.get_token_uri,
+ * #GoaBackendOAuth2ProviderClass.get_redirect_uri,
+ * #GoaBackendOAuth2ProviderClass.get_scope,
+ * #GoaBackendOAuth2ProviderClass.get_client_id,
+ * #GoaBackendOAuth2ProviderClass.get_client_secret,
+ * #GoaBackendOAuth2ProviderClass.get_identity and
+ * #GoaBackendOAuth2ProviderClass.get_identity_finish methods.
+ *
+ * Additionally, the
+ * #GoaBackendProviderClass.get_provider_type,
+ * #GoaBackendProviderClass.get_name,
+ * #GoaBackendProviderClass.build_object (this should chain up to its
+ * parent class) methods must be implemented.
+ *
+ * Note that the #GoaBackendProviderClass.add_account and
+ * #GoaBackendProviderClass.refresh_account methods do not need to be
+ * implemented - this type implements these methods.
  */
 
 G_DEFINE_ABSTRACT_TYPE (GoaBackendOAuth2Provider, goa_backend_oauth2_provider, GOA_TYPE_BACKEND_PROVIDER);
@@ -256,6 +278,9 @@ goa_backend_oauth2_provider_get_client_secret (GoaBackendOAuth2Provider *provide
  * loop</link> this method was called from. You can then call
  * goa_backend_oauth2_provider_get_identity_finish() to get the result
  * of the operation.
+ *
+ * This is a pure virtual method - a subclass must provide an
+ * implementation.
  */
 void
 goa_backend_oauth2_provider_get_identity (GoaBackendOAuth2Provider *provider,
@@ -277,6 +302,9 @@ goa_backend_oauth2_provider_get_identity (GoaBackendOAuth2Provider *provider,
  * @error: Return location for error or %NULL.
  *
  * Finishes an operation started with goa_backend_oauth2_provider_get_identity().
+ *
+ * This is a pure virtual method - a subclass must provide an
+ * implementation.
  *
  * Returns: The identity or %NULL if error is set. The returned string
  * must be freed with g_free().

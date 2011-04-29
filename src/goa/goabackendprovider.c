@@ -33,7 +33,7 @@
  * @title: GoaBackendProvider
  * @short_description: Abstract base class for providers
  *
- * #GoaBackendProvider is the base type that all providers implement.
+ * #GoaBackendProvider is the base type for all providers.
  */
 
 G_DEFINE_ABSTRACT_TYPE (GoaBackendProvider, goa_backend_provider, G_TYPE_OBJECT);
@@ -54,6 +54,9 @@ goa_backend_provider_class_init (GoaBackendProviderClass *klass)
  *
  * Gets the type of @provider.
  *
+ * This is a pure virtual method - a subclass must provide an
+ * implementation.
+ *
  * Returns: (transfer none): A string owned by @provider, do not free.
  */
 const gchar *
@@ -69,6 +72,9 @@ goa_backend_provider_get_provider_type (GoaBackendProvider *provider)
  *
  * Gets a localized name for @provider that is suitable for display in
  * an user interface.
+ *
+ * This is a pure virtual method - a subclass must provide an
+ * implementation.
  *
  * Returns: (transfer none): A string owned by @provider, do not free.
  */
@@ -111,6 +117,9 @@ goa_backend_provider_get_name (GoaBackendProvider *provider)
  * linkend="g_main_context_default">default main loop</link> while
  * interacting with the user and may do so using e.g. gtk_dialog_run()
  * on @dialog.
+ *
+ * This is a pure virtual method - a subclass must provide an
+ * implementation.
  *
  * Returns: The #GoaObject for the created account (must be relased
  *   with g_object_unref()) or %NULL if @error is set.
@@ -157,6 +166,9 @@ goa_backend_provider_add_account (GoaBackendProvider *provider,
  * linkend="g_main_context_default">default main loop</link> while
  * interacting with the user.
  *
+ * This is a pure virtual method - a subclass must provide an
+ * implementation.
+ *
  * Returns: %TRUE if the account has been refreshed, %FALSE if @error
  * is set.
  */
@@ -196,6 +208,9 @@ goa_backend_provider_refresh_account (GoaBackendProvider  *provider,
  *
  * Note that this may be called on already exported objects - for
  * example on configuration files reload.
+ *
+ * This is a pure virtual method - a subclass must provide an
+ * implementation.
  *
  * Returns: %TRUE if data was valid, %FALSE if @error is set.
  */
@@ -350,6 +365,8 @@ store_password_cb (GnomeKeyringResult result,
  * loop</link> this function was called from. You can then call
  * goa_backend_provider_store_credentials_finish() to get the result
  * of the operation.
+ *
+ * This is a convenience method (not virtual) that subclasses can use.
  */
 void
 goa_backend_provider_store_credentials (GoaBackendProvider   *provider,
@@ -424,6 +441,8 @@ goa_backend_provider_store_credentials (GoaBackendProvider   *provider,
  * @error: Return location for error or %NULL.
  *
  * Finishes an operation started with goa_backend_provider_store_credentials().
+ *
+ * This is a convenience method (not virtual) that subclasses can use.
  *
  * Returns: %TRUE if the credentials was successfully stored, %FALSE
  * if @error is set.
@@ -520,6 +539,8 @@ find_password_cb (GnomeKeyringResult  result,
  * loop</link> this function was called from. You can then call
  * goa_backend_provider_lookup_credentials_finish() to get the result
  * of the operation.
+ *
+ * This is a convenience method (not virtual) that subclasses can use.
  */
 void
 goa_backend_provider_lookup_credentials (GoaBackendProvider   *provider,
@@ -560,6 +581,8 @@ goa_backend_provider_lookup_credentials (GoaBackendProvider   *provider,
  * @error: Return location for error or %NULL.
  *
  * Finishes an operation started with goa_backend_provider_lookup_credentials().
+ *
+ * This is a convenience method (not virtual) that subclasses can use.
  *
  * Returns: (element-type utf8 utf8) (transfer full): A #GHashTable
  * with credentials or %NULL if @error is set. Free with
