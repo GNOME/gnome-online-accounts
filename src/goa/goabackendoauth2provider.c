@@ -65,6 +65,40 @@ G_DEFINE_ABSTRACT_TYPE (GoaBackendOAuth2Provider, goa_backend_oauth2_provider, G
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static gboolean
+goa_backend_oauth2_provider_get_use_external_browser_default (GoaBackendOAuth2Provider  *provider)
+{
+  return FALSE;
+}
+
+/**
+ * goa_backend_oauth2_provider_get_use_external_browser:
+ * @provider: A #GoaBackendOAuth2Provider.
+ *
+ * Returns whether an external browser (the users default browser)
+ * should be used for user interaction.
+ *
+ * If an external browser is used, then the dialogs presented in
+ * goa_backend_provider_add_account() and
+ * goa_backend_provider_refresh_account() will show a simple "Paste
+ * authorization code here" instructions along with an entry and
+ * button.
+ *
+ * This is a virtual method where the default implementation returns
+ * %FALSE.
+ *
+ * Returns: %TRUE if the user interaction should happen in an external
+ * browser, %FALSE to use an embedded browser widget.
+ */
+gboolean
+goa_backend_oauth2_provider_get_use_external_browser (GoaBackendOAuth2Provider *provider)
+{
+  g_return_val_if_fail (GOA_IS_BACKEND_OAUTH2_PROVIDER (provider), FALSE);
+  return GOA_BACKEND_OAUTH2_PROVIDER_GET_CLASS (provider)->get_use_external_browser (provider);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static gchar *
 goa_backend_oauth2_provider_build_authorization_uri_default (GoaBackendOAuth2Provider  *provider,
                                                              const gchar               *authorization_uri,
@@ -627,6 +661,19 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
 }
 
 static void
+on_entry_changed (GtkEditable *editable,
+                  gpointer     user_data)
+{
+  IdentifyData *data = user_data;
+  gboolean sensitive;
+
+  g_free (data->authorization_code);
+  data->authorization_code = g_strdup (gtk_entry_get_text (GTK_ENTRY (editable)));
+  sensitive = data->authorization_code != NULL && (strlen (data->authorization_code) > 0);
+  gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, sensitive);
+}
+
+static void
 get_tokens_and_identity_on_get_tokens_cb (GoaBackendOAuth2Provider *provider,
                                           GAsyncResult             *res,
                                           gpointer                  user_data)
@@ -663,10 +710,6 @@ get_tokens_and_identity (GoaBackendOAuth2Provider *provider,
                          GError                  **error)
 {
   gboolean ret;
-  SoupSession *webkit_soup_session;
-  SoupCookieJar *cookie_jar;
-  GtkWidget *scrolled_window;
-  GtkWidget *web_view;
   gchar *url;
   IdentifyData data;
   gchar *escaped_redirect_uri;
@@ -700,32 +743,76 @@ get_tokens_and_identity (GoaBackendOAuth2Provider *provider,
                                                               escaped_scope);
   //g_debug ("url = %s", url);
 
-  /* Ensure we use an empty non-persistent cookie to avoid login
-   * credentials being reused...
-   */
-  webkit_soup_session = webkit_get_default_session ();
-  soup_session_remove_feature_by_type (webkit_soup_session, SOUP_TYPE_COOKIE_JAR);
-  cookie_jar = soup_cookie_jar_new ();
-  soup_session_add_feature (webkit_soup_session, SOUP_SESSION_FEATURE (cookie_jar));
+  if (goa_backend_oauth2_provider_get_use_external_browser (provider))
+    {
+      GtkWidget *label;
+      GtkWidget *entry;
+      gchar *escaped_url;
+      gchar *markup;
 
-  /* TODO: we might need to add some more web browser UI to make this
-   * work...
-   */
-  web_view = webkit_web_view_new ();
-  webkit_web_view_load_uri (WEBKIT_WEB_VIEW (web_view), url);
-  g_signal_connect (web_view,
-                    "navigation-policy-decision-requested",
-                    G_CALLBACK (on_web_view_navigation_policy_decision_requested),
-                    &data);
+      escaped_url = g_markup_escape_text (url, -1);
+      markup = g_strdup_printf (_("Paste authorization code obtained from the <a href=\"%s\">authorization page</a>:"),
+                                escaped_url);
+      g_free (escaped_url);
 
-  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_set_size_request (scrolled_window, 500, 400);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
-                                  GTK_POLICY_AUTOMATIC,
-                                  GTK_POLICY_AUTOMATIC);
-  gtk_container_add (GTK_CONTAINER (scrolled_window), web_view);
-  gtk_container_add (GTK_CONTAINER (vbox), scrolled_window);
-  gtk_widget_show_all (scrolled_window);
+      label = gtk_label_new (NULL);
+      gtk_label_set_markup (GTK_LABEL (label), markup);
+      g_free (markup);
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
+      entry = gtk_entry_new ();
+      gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
+      gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, TRUE, 0);
+      gtk_widget_grab_focus (entry);
+      gtk_widget_show_all (GTK_WIDGET (vbox));
+
+      gtk_dialog_add_button (dialog, GTK_STOCK_OK, GTK_RESPONSE_OK);
+      gtk_dialog_set_default_response (dialog, GTK_RESPONSE_OK);
+      gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_OK, FALSE);
+      g_signal_connect (entry, "changed", G_CALLBACK (on_entry_changed), &data);
+
+      if (!gtk_show_uri (NULL,
+                         url,
+                         GDK_CURRENT_TIME,
+                         &data.error))
+        {
+          goto out;
+        }
+    }
+  else
+    {
+      GtkWidget *scrolled_window;
+      GtkWidget *web_view;
+      SoupSession *webkit_soup_session;
+      SoupCookieJar *cookie_jar;
+
+      /* Ensure we use an empty non-persistent cookie to avoid login
+       * credentials being reused...
+       */
+      webkit_soup_session = webkit_get_default_session ();
+      soup_session_remove_feature_by_type (webkit_soup_session, SOUP_TYPE_COOKIE_JAR);
+      cookie_jar = soup_cookie_jar_new ();
+      soup_session_add_feature (webkit_soup_session, SOUP_SESSION_FEATURE (cookie_jar));
+      g_object_unref (cookie_jar);
+
+      /* TODO: we might need to add some more web browser UI to make this
+       * work...
+       */
+      web_view = webkit_web_view_new ();
+      webkit_web_view_load_uri (WEBKIT_WEB_VIEW (web_view), url);
+      g_signal_connect (web_view,
+                        "navigation-policy-decision-requested",
+                        G_CALLBACK (on_web_view_navigation_policy_decision_requested),
+                        &data);
+
+      scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+      gtk_widget_set_size_request (scrolled_window, 500, 400);
+      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+                                      GTK_POLICY_AUTOMATIC,
+                                      GTK_POLICY_AUTOMATIC);
+      gtk_container_add (GTK_CONTAINER (scrolled_window), web_view);
+      gtk_container_add (GTK_CONTAINER (vbox), scrolled_window);
+      gtk_widget_show_all (scrolled_window);
+    }
   data.dialog = dialog;
   gtk_dialog_run (GTK_DIALOG (dialog));
   if (data.authorization_code == NULL)
@@ -740,6 +827,12 @@ get_tokens_and_identity (GoaBackendOAuth2Provider *provider,
       goto out;
     }
   g_assert (data.error == NULL);
+
+  /* OK, we are done interacting with the user ... but before we can
+   * make up our mind, there are two more RPC calls to make and these
+   * call may take some time. So hide the dialog immediately.
+   */
+  gtk_widget_hide (GTK_WIDGET (dialog));
 
   /* OK, we now have the authorization code... now we need to get the
    * email address (to e.g. check if the account already exists on
@@ -787,7 +880,6 @@ get_tokens_and_identity (GoaBackendOAuth2Provider *provider,
     }
 
   g_free (data.identity);
-  g_object_unref (cookie_jar);
   g_free (url);
 
   g_free (data.authorization_code);
@@ -1013,6 +1105,7 @@ goa_backend_oauth2_provider_refresh_account (GoaBackendProvider  *_provider,
                                         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                         GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
                                         NULL);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), 12);
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
   gtk_widget_show_all (dialog);
 
@@ -1346,7 +1439,8 @@ goa_backend_oauth2_provider_class_init (GoaBackendOAuth2ProviderClass *klass)
   provider_class->refresh_account            = goa_backend_oauth2_provider_refresh_account;
   provider_class->build_object               = goa_backend_oauth2_provider_build_object;
 
-  klass->build_authorization_uri = goa_backend_oauth2_provider_build_authorization_uri_default;
+  klass->build_authorization_uri  = goa_backend_oauth2_provider_build_authorization_uri_default;
+  klass->get_use_external_browser = goa_backend_oauth2_provider_get_use_external_browser_default;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

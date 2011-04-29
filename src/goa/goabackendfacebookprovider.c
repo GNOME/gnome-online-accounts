@@ -321,6 +321,12 @@ goa_backend_facebook_provider_build_object (GoaBackendProvider  *provider,
   return ret;
 }
 
+static gboolean
+get_use_external_browser (GoaBackendOAuth2Provider *provider)
+{
+  return TRUE;
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
@@ -348,4 +354,5 @@ goa_backend_facebook_provider_class_init (GoaBackendFacebookProviderClass *klass
   oauth2_class->get_client_secret        = get_client_secret;
   oauth2_class->get_identity             = get_identity;
   oauth2_class->get_identity_finish      = get_identity_finish;
+  oauth2_class->get_use_external_browser = get_use_external_browser;
 }

@@ -64,9 +64,10 @@ struct _GoaBackendOAuth2Provider
  * @get_scope: Virtual function for goa_backend_oauth2_provider_get_scope().
  * @get_client_id: Virtual function for goa_backend_oauth2_provider_get_client_id().
  * @get_client_secret: Virtual function for goa_backend_oauth2_provider_get_client_secret().
- * @build_authorization_uri: Virtual function for goa_backend_oauth2_provider_build_authorization_uri().
  * @get_identity: Virtual function for goa_backend_oauth2_provider_get_identity().
  * @get_identity_finish: Virtual function for goa_backend_oauth2_provider_get_identity_finish().
+ * @build_authorization_uri: Virtual function for goa_backend_oauth2_provider_build_authorization_uri().
+ * @get_use_external_browser: Virtual function for goa_backend_oauth2_provider_get_use_external_browser().
  *
  * Class structure for #GoaBackendOAuth2Provider.
  */
@@ -81,15 +82,6 @@ struct _GoaBackendOAuth2ProviderClass
   const gchar *(*get_scope)              (GoaBackendOAuth2Provider  *provider);
   const gchar *(*get_client_id)          (GoaBackendOAuth2Provider  *provider);
   const gchar *(*get_client_secret)      (GoaBackendOAuth2Provider  *provider);
-
-  /* virtual but with default implementation */
-  gchar *(*build_authorization_uri) (GoaBackendOAuth2Provider  *provider,
-                                     const gchar               *authorization_uri,
-                                     const gchar               *escaped_redirect_uri,
-                                     const gchar               *escaped_client_id,
-                                     const gchar               *escaped_scope);
-
-  /* pure virtual */
   void         (*get_identity)           (GoaBackendOAuth2Provider  *provider,
                                           const gchar               *access_token,
                                           GCancellable              *cancellable,
@@ -98,6 +90,14 @@ struct _GoaBackendOAuth2ProviderClass
   gchar       *(*get_identity_finish)    (GoaBackendOAuth2Provider  *provider,
                                           GAsyncResult              *res,
                                           GError                   **error);
+
+  /* virtual but with default implementation */
+  gchar    *(*build_authorization_uri)  (GoaBackendOAuth2Provider  *provider,
+                                         const gchar               *authorization_uri,
+                                         const gchar               *escaped_redirect_uri,
+                                         const gchar               *escaped_client_id,
+                                         const gchar               *escaped_scope);
+  gboolean  (*get_use_external_browser) (GoaBackendOAuth2Provider  *provider);
 
   /*< private >*/
   /* Padding for future expansion */
@@ -119,12 +119,6 @@ void         goa_backend_oauth2_provider_get_identity             (GoaBackendOAu
 gchar       *goa_backend_oauth2_provider_get_identity_finish      (GoaBackendOAuth2Provider *provider,
                                                                    GAsyncResult             *res,
                                                                    GError                   **error);
-gchar       *goa_backend_oauth2_provider_build_authorization_uri  (GoaBackendOAuth2Provider  *provider,
-                                                                   const gchar               *authorization_uri,
-                                                                   const gchar               *escaped_redirect_uri,
-                                                                   const gchar               *escaped_client_id,
-                                                                   const gchar               *escaped_scope);
-
 void         goa_backend_oauth2_provider_get_access_token         (GoaBackendOAuth2Provider   *provider,
                                                                    GoaObject                  *object,
                                                                    GCancellable               *cancellable,
@@ -134,6 +128,15 @@ gchar       *goa_backend_oauth2_provider_get_access_token_finish (GoaBackendOAut
                                                                   gint                        *out_expires_in,
                                                                   GAsyncResult                *res,
                                                                   GError                     **error);
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+gchar       *goa_backend_oauth2_provider_build_authorization_uri  (GoaBackendOAuth2Provider  *provider,
+                                                                   const gchar               *authorization_uri,
+                                                                   const gchar               *escaped_redirect_uri,
+                                                                   const gchar               *escaped_client_id,
+                                                                   const gchar               *escaped_scope);
+gboolean     goa_backend_oauth2_provider_get_use_external_browser (GoaBackendOAuth2Provider  *provider);
 
 G_END_DECLS
 

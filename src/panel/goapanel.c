@@ -587,7 +587,7 @@ on_toolbar_add_button_clicked (GtkToolButton *button,
       gtk_widget_destroy (dialog);
       goto out;
     }
-  gtk_widget_hide (add_account_button);
+  gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (add_account_button)), add_account_button);
 
   provider = goa_backend_provider_get_for_provider_type (gtk_combo_box_get_active_id (GTK_COMBO_BOX (combo_box)));
   g_assert (provider != NULL);
