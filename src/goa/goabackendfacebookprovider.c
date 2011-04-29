@@ -78,14 +78,14 @@ get_name (GoaBackendProvider *_provider)
 }
 
 static const gchar *
-get_dialog_uri (GoaBackendOAuth2Provider *provider)
+get_authorization_uri (GoaBackendOAuth2Provider *provider)
 {
   return "https://www.facebook.com/dialog/oauth";
 }
 
 
 static const gchar *
-get_authorization_uri (GoaBackendOAuth2Provider *provider)
+get_token_uri (GoaBackendOAuth2Provider *provider)
 {
   return "https://graph.facebook.com/oauth/access_token";
 }
@@ -340,8 +340,8 @@ goa_backend_facebook_provider_class_init (GoaBackendFacebookProviderClass *klass
   provider_class->build_object               = goa_backend_facebook_provider_build_object;
 
   oauth2_class = GOA_BACKEND_OAUTH2_PROVIDER_CLASS (klass);
-  oauth2_class->get_dialog_uri           = get_dialog_uri;
   oauth2_class->get_authorization_uri    = get_authorization_uri;
+  oauth2_class->get_token_uri            = get_token_uri;
   oauth2_class->get_redirect_uri         = get_redirect_uri;
   oauth2_class->get_scope                = get_scope;
   oauth2_class->get_client_id            = get_client_id;

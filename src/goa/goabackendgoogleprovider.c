@@ -78,13 +78,13 @@ get_name (GoaBackendProvider *_provider)
 }
 
 static const gchar *
-get_dialog_uri (GoaBackendOAuth2Provider *provider)
+get_authorization_uri (GoaBackendOAuth2Provider *provider)
 {
   return "https://accounts.google.com/o/oauth2/auth";
 }
 
 static const gchar *
-get_authorization_uri (GoaBackendOAuth2Provider *provider)
+get_token_uri (GoaBackendOAuth2Provider *provider)
 {
   return "https://accounts.google.com/o/oauth2/token";
 }
@@ -355,8 +355,8 @@ goa_backend_google_provider_class_init (GoaBackendGoogleProviderClass *klass)
   provider_class->build_object               = goa_backend_google_provider_build_object;
 
   oauth2_class = GOA_BACKEND_OAUTH2_PROVIDER_CLASS (klass);
-  oauth2_class->get_dialog_uri           = get_dialog_uri;
   oauth2_class->get_authorization_uri    = get_authorization_uri;
+  oauth2_class->get_token_uri            = get_token_uri;
   oauth2_class->get_redirect_uri         = get_redirect_uri;
   oauth2_class->get_scope                = get_scope;
   oauth2_class->get_client_id            = get_client_id;

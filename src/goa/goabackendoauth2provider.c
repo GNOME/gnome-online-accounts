@@ -43,13 +43,87 @@ G_DEFINE_ABSTRACT_TYPE (GoaBackendOAuth2Provider, goa_backend_oauth2_provider, G
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-const gchar *
-goa_backend_oauth2_provider_get_dialog_uri (GoaBackendOAuth2Provider *provider)
+static gchar *
+goa_backend_oauth2_provider_build_authorization_uri_default (GoaBackendOAuth2Provider  *provider,
+                                                             const gchar               *authorization_uri,
+                                                             const gchar               *escaped_redirect_uri,
+                                                             const gchar               *escaped_client_id,
+                                                             const gchar               *escaped_scope)
 {
-  g_return_val_if_fail (GOA_IS_BACKEND_OAUTH2_PROVIDER (provider), NULL);
-  return GOA_BACKEND_OAUTH2_PROVIDER_GET_CLASS (provider)->get_dialog_uri (provider);
+  return g_strdup_printf ("%s"
+                          "?response_type=code"
+                          "&redirect_uri=%s"
+                          "&client_id=%s"
+                          "&scope=%s",
+                          authorization_uri,
+                          escaped_redirect_uri,
+                          escaped_client_id,
+                          escaped_scope);
 }
 
+/**
+ * goa_backend_oauth2_provider_build_authorization_uri:
+ * @provider: A #GoaBackendOAuth2Provider.
+ * @authorization_uri: An authorization URI.
+ * @escaped_redirect_uri: An escaped redirect URI
+ * @escaped_client_id: An escaped client id
+ * @escaped_scope: The escaped scope.
+ *
+ * Builds the URI that can be opened in a web browser (or embedded web
+ * browser widget) to start authenticating an user.
+ *
+ * The default implementation just returns the expected URI
+ * (e.g. <literal>http://example.com/dialog/oauth2?response_type=code&redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb&client_id=foo&scope=email%20stuff</literal>)
+ * - override (and chain up) if you e.g. need to to pass additional
+ * parameters.
+ *
+ * The @authorization_uri, @escaped_redirect_uri, @escaped_client_id
+ * and @escaped_scope parameters originate from the result of the
+ * the goa_backend_oauth2_provider_get_authorization_uri(), goa_backend_oauth2_provider_get_redirect_uri(), goa_backend_oauth2_provider_get_client_id()
+ * and goa_backend_oauth2_provider_get_scope() methods with the latter
+ * three escaped using g_uri_escape_string().
+ *
+ * Returns: (transfer full): An authorization URI that must be freed with g_free().
+ */
+gchar *
+goa_backend_oauth2_provider_build_authorization_uri (GoaBackendOAuth2Provider  *provider,
+                                                     const gchar               *authorization_uri,
+                                                     const gchar               *escaped_redirect_uri,
+                                                     const gchar               *escaped_client_id,
+                                                     const gchar               *escaped_scope)
+{
+  g_return_val_if_fail (GOA_IS_BACKEND_OAUTH2_PROVIDER (provider), NULL);
+  g_return_val_if_fail (authorization_uri != NULL, NULL);
+  g_return_val_if_fail (escaped_redirect_uri != NULL, NULL);
+  g_return_val_if_fail (escaped_client_id != NULL, NULL);
+  g_return_val_if_fail (escaped_scope != NULL, NULL);
+  return GOA_BACKEND_OAUTH2_PROVIDER_GET_CLASS (provider)->build_authorization_uri (provider,
+                                                                                    authorization_uri,
+                                                                                    escaped_redirect_uri,
+                                                                                    escaped_client_id,
+                                                                                    escaped_scope);
+}
+
+/**
+ * goa_backend_oauth2_provider_get_authorization_uri:
+ * @provider: A #GoaBackendOAuth2Provider.
+ *
+ * Gets the <ulink
+ * url="http://tools.ietf.org/html/draft-ietf-oauth-v2-15#section-2.1">authorization
+ * endpoint</ulink> used for authenticating the user and obtaining
+ * authorization.
+ *
+ * You should not include any parameters in the returned URI. If you
+ * need to include additional parameters than the standard ones,
+ * override #GoaBackendOAuth2ProviderClass.build_authorization_uri -
+ * see goa_backend_oauth2_provider_build_authorization_uri() for more
+ * details.
+ *
+ * This is a pure virtual method - a subclass must provide an
+ * implementation.
+ *
+ * Returns: (transfer none): A string owned by @provider - do not free.
+ */
 const gchar *
 goa_backend_oauth2_provider_get_authorization_uri (GoaBackendOAuth2Provider *provider)
 {
@@ -57,6 +131,41 @@ goa_backend_oauth2_provider_get_authorization_uri (GoaBackendOAuth2Provider *pro
   return GOA_BACKEND_OAUTH2_PROVIDER_GET_CLASS (provider)->get_authorization_uri (provider);
 }
 
+/**
+ * goa_backend_oauth2_provider_get_token_uri:
+ * @provider: A #GoaBackendOAuth2Provider.
+ *
+ * Gets the <ulink
+ * url="http://tools.ietf.org/html/draft-ietf-oauth-v2-15#section-2.2">token
+ * endpoint</ulink> used for obtaining an access token.
+ *
+ * You should not include any parameters in the returned URI.
+ *
+ * This is a pure virtual method - a subclass must provide an
+ * implementation.
+ *
+ * Returns: (transfer none): A string owned by @provider - do not free.
+ */
+const gchar *
+goa_backend_oauth2_provider_get_token_uri (GoaBackendOAuth2Provider *provider)
+{
+  g_return_val_if_fail (GOA_IS_BACKEND_OAUTH2_PROVIDER (provider), NULL);
+  return GOA_BACKEND_OAUTH2_PROVIDER_GET_CLASS (provider)->get_token_uri (provider);
+}
+
+/**
+ * goa_backend_oauth2_provider_get_redirect_uri:
+ * @provider: A #GoaBackendOAuth2Provider.
+ *
+ * Gets the <ulink
+ * url="http://tools.ietf.org/html/draft-ietf-oauth-v2-15#section-2.1.1">redirect_uri</ulink>
+ * used when requesting authorization.
+ *
+ * This is a pure virtual method - a subclass must provide an
+ * implementation.
+ *
+ * Returns: (transfer none): A string owned by @provider - do not free.
+ */
 const gchar *
 goa_backend_oauth2_provider_get_redirect_uri (GoaBackendOAuth2Provider *provider)
 {
@@ -64,6 +173,19 @@ goa_backend_oauth2_provider_get_redirect_uri (GoaBackendOAuth2Provider *provider
   return GOA_BACKEND_OAUTH2_PROVIDER_GET_CLASS (provider)->get_redirect_uri (provider);
 }
 
+/**
+ * goa_backend_oauth2_provider_get_scope:
+ * @provider: A #GoaBackendOAuth2Provider.
+ *
+ * Gets the <ulink
+ * url="http://tools.ietf.org/html/draft-ietf-oauth-v2-15#section-2.1.1">scope</ulink>
+ * used when requesting authorization.
+ *
+ * This is a pure virtual method - a subclass must provide an
+ * implementation.
+ *
+ * Returns: (transfer none): A string owned by @provider - do not free.
+ */
 const gchar *
 goa_backend_oauth2_provider_get_scope (GoaBackendOAuth2Provider *provider)
 {
@@ -71,6 +193,19 @@ goa_backend_oauth2_provider_get_scope (GoaBackendOAuth2Provider *provider)
   return GOA_BACKEND_OAUTH2_PROVIDER_GET_CLASS (provider)->get_scope (provider);
 }
 
+/**
+ * goa_backend_oauth2_provider_get_client_id:
+ * @provider: A #GoaBackendOAuth2Provider.
+ *
+ * Gets the <ulink
+ * url="http://tools.ietf.org/html/draft-ietf-oauth-v2-15#section-3">client_id</ulink>
+ * identifying the client.
+ *
+ * This is a pure virtual method - a subclass must provide an
+ * implementation.
+ *
+ * Returns: (transfer none): A string owned by @provider - do not free.
+ */
 const gchar *
 goa_backend_oauth2_provider_get_client_id (GoaBackendOAuth2Provider *provider)
 {
@@ -78,6 +213,19 @@ goa_backend_oauth2_provider_get_client_id (GoaBackendOAuth2Provider *provider)
   return GOA_BACKEND_OAUTH2_PROVIDER_GET_CLASS (provider)->get_client_id (provider);
 }
 
+/**
+ * goa_backend_oauth2_provider_get_client_secret:
+ * @provider: A #GoaBackendOAuth2Provider.
+ *
+ * Gets the <ulink
+ * url="http://tools.ietf.org/html/draft-ietf-oauth-v2-15#section-3">client_secret</ulink>
+ * associated with the client.
+ *
+ * This is a pure virtual method - a subclass must provide an
+ * implementation.
+ *
+ * Returns: (transfer none): A string owned by @provider - do not free.
+ */
 const gchar *
 goa_backend_oauth2_provider_get_client_secret (GoaBackendOAuth2Provider *provider)
 {
@@ -93,8 +241,8 @@ goa_backend_oauth2_provider_get_client_secret (GoaBackendOAuth2Provider *provide
  * @callback: The function to call when the request is satisfied.
  * @user_data: Pointer to pass to @callback.
  *
- * Function that returns the identity corresponding to
- * @access_token. This is a pure virtual function - a subclass must
+ * Method that returns the identity corresponding to
+ * @access_token. This is a pure virtual method - a subclass must
  * provide an implementation.
  *
  * The identity is needed because all authentication happens out of
@@ -105,7 +253,7 @@ goa_backend_oauth2_provider_get_client_secret (GoaBackendOAuth2Provider *provide
  *
  * When the result is ready, @callback will be called in the the <link
  * linkend="g-main-context-push-thread-default">thread-default main
- * loop</link> this function was called from. You can then call
+ * loop</link> this method was called from. You can then call
  * goa_backend_oauth2_provider_get_identity_finish() to get the result
  * of the operation.
  */
@@ -299,7 +447,7 @@ get_tokens (GoaBackendOAuth2Provider *provider,
                                             user_data,
                                             get_tokens);
 
-  proxy = rest_proxy_new (goa_backend_oauth2_provider_get_authorization_uri (provider), FALSE);
+  proxy = rest_proxy_new (goa_backend_oauth2_provider_get_token_uri (provider), FALSE);
   data->call = rest_proxy_new_call (proxy);
   rest_proxy_call_set_method (data->call, "POST");
   rest_proxy_call_add_header (data->call, "Content-Type", "application/x-www-form-urlencoded");
@@ -517,15 +665,11 @@ get_tokens_and_identity (GoaBackendOAuth2Provider *provider,
   escaped_redirect_uri = g_uri_escape_string (goa_backend_oauth2_provider_get_redirect_uri (provider), NULL, TRUE);
   escaped_client_id = g_uri_escape_string (goa_backend_oauth2_provider_get_client_id (provider), NULL, TRUE);
   escaped_scope = g_uri_escape_string (goa_backend_oauth2_provider_get_scope (provider), NULL, TRUE);
-  url = g_strdup_printf ("%s"
-                         "?response_type=code"
-                         "&redirect_uri=%s"
-                         "&client_id=%s"
-                         "&scope=%s",
-                         goa_backend_oauth2_provider_get_dialog_uri (provider),
-                         escaped_redirect_uri,
-                         escaped_client_id,
-                         escaped_scope);
+  url = goa_backend_oauth2_provider_build_authorization_uri (provider,
+                                                              goa_backend_oauth2_provider_get_authorization_uri (provider),
+                                                              escaped_redirect_uri,
+                                                              escaped_client_id,
+                                                              escaped_scope);
   //g_debug ("url = %s", url);
 
   /* Ensure we use an empty non-persistent cookie to avoid login
@@ -1037,7 +1181,7 @@ lookup_credentials_cb (GoaBackendProvider *provider,
  *
  * When the result is ready, @callback will be called in the the <link
  * linkend="g-main-context-push-thread-default">thread-default main
- * loop</link> this function was called from. You can then call
+ * loop</link> this method was called from. You can then call
  * goa_backend_oauth2_provider_get_access_token_finish() to get the
  * result of the operation.
  */
@@ -1173,6 +1317,8 @@ goa_backend_oauth2_provider_class_init (GoaBackendOAuth2ProviderClass *klass)
   provider_class->add_account                = goa_backend_oauth2_provider_add_account;
   provider_class->refresh_account            = goa_backend_oauth2_provider_refresh_account;
   provider_class->build_object               = goa_backend_oauth2_provider_build_object;
+
+  klass->build_authorization_uri = goa_backend_oauth2_provider_build_authorization_uri_default;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
