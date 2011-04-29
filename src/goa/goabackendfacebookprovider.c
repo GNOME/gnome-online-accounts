@@ -324,7 +324,7 @@ goa_backend_facebook_provider_build_object (GoaBackendProvider  *provider,
 static gboolean
 get_use_external_browser (GoaBackendOAuth2Provider *provider)
 {
-  return TRUE;
+  return FALSE;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
