@@ -121,11 +121,12 @@ gchar       *goa_backend_oauth2_provider_get_identity_finish      (GoaBackendOAu
                                                                    GError                   **error);
 void         goa_backend_oauth2_provider_get_access_token         (GoaBackendOAuth2Provider   *provider,
                                                                    GoaObject                  *object,
+                                                                   gboolean                    force_refresh,
                                                                    GCancellable               *cancellable,
                                                                    GAsyncReadyCallback         callback,
                                                                    gpointer                    user_data);
 gchar       *goa_backend_oauth2_provider_get_access_token_finish (GoaBackendOAuth2Provider    *provider,
-                                                                  gint                        *out_expires_in,
+                                                                  gint                        *out_access_token_expires_in,
                                                                   GAsyncResult                *res,
                                                                   GError                     **error);
 
