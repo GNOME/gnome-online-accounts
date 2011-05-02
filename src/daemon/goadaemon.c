@@ -84,6 +84,10 @@ static gboolean on_account_handle_remove (GoaAccount            *account,
                                           GDBusMethodInvocation *invocation,
                                           gpointer               user_data);
 
+static gboolean on_account_handle_ensure_credentials (GoaAccount            *account,
+                                                      GDBusMethodInvocation *invocation,
+                                                      gpointer               user_data);
+
 static void goa_daemon_reload_configuration (GoaDaemon *daemon);
 
 static void on_notification_closed (NotifyNotification *notification,
@@ -545,6 +549,10 @@ process_config_entries (GoaDaemon  *daemon,
                             "handle-remove",
                             G_CALLBACK (on_account_handle_remove),
                             daemon);
+          g_signal_connect (goa_object_peek_account (GOA_OBJECT (object)),
+                            "handle-ensure-credentials",
+                            G_CALLBACK (on_account_handle_ensure_credentials),
+                            daemon);
         }
       g_object_unref (object);
       g_free (group);
@@ -577,6 +585,9 @@ process_config_entries (GoaDaemon  *daemon,
                                                 daemon);
           g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
                                                 G_CALLBACK (on_account_handle_remove),
+                                                daemon);
+          g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
+                                                G_CALLBACK (on_account_handle_ensure_credentials),
                                                 daemon);
           g_warn_if_fail (g_dbus_object_manager_server_unexport (daemon->object_manager, object_path));
         }
@@ -1130,3 +1141,91 @@ on_account_handle_remove (GoaAccount            *account,
   g_free (path);
   return TRUE; /* invocation was handled */
 }
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct
+{
+  GoaDaemon *daemon;
+  GoaObject *object;
+  GDBusMethodInvocation *invocation;
+} EnsureCredentialsData;
+
+static EnsureCredentialsData *
+ensure_credentials_data_new (GoaDaemon             *daemon,
+                             GoaObject             *object,
+                             GDBusMethodInvocation *invocation)
+{
+  EnsureCredentialsData *data;
+  data = g_slice_new0 (EnsureCredentialsData);
+  data->daemon = g_object_ref (daemon);
+  data->object = g_object_ref (object);
+  data->invocation = invocation;
+  return data;
+}
+
+static void
+ensure_credentials_data_unref (EnsureCredentialsData *data)
+{
+  g_object_unref (data->daemon);
+  g_object_unref (data->object);
+  g_slice_free (EnsureCredentialsData, data);
+}
+
+static void
+ensure_credentials_cb (GoaBackendProvider *provider,
+                       GAsyncResult       *res,
+                       gpointer            user_data)
+{
+  EnsureCredentialsData *data = user_data;
+  gint expires_in;
+  GError *error;
+
+  error= NULL;
+  if (!goa_backend_provider_ensure_credentials_finish (provider, &expires_in, res, &error))
+    {
+      g_dbus_method_invocation_return_gerror (data->invocation, error);
+      g_error_free (error);
+    }
+  else
+    {
+      goa_account_complete_ensure_credentials (goa_object_peek_account (data->object),
+                                               data->invocation,
+                                               expires_in);
+    }
+  ensure_credentials_data_unref (data);
+}
+
+static gboolean
+on_account_handle_ensure_credentials (GoaAccount            *account,
+                                      GDBusMethodInvocation *invocation,
+                                      gpointer               user_data)
+{
+  GoaDaemon *daemon = GOA_DAEMON (user_data);
+  GoaBackendProvider *provider;
+  GoaObject *object;
+
+  object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (account)));
+  provider = goa_backend_provider_get_for_provider_type (goa_account_get_account_type (account));
+  if (provider == NULL)
+    {
+      /* TODO: syslog */
+      g_dbus_method_invocation_return_error (invocation,
+                                             GOA_ERROR,
+                                             GOA_ERROR_FAILED,
+                                             "Unsupported account type %s for id %s (no provider)",
+                                             goa_account_get_account_type (account),
+                                             goa_account_get_id (account));
+      goto out;
+    }
+
+  goa_backend_provider_ensure_credentials (provider,
+                                           object,
+                                           NULL, /* GCancellable */
+                                           (GAsyncReadyCallback) ensure_credentials_cb,
+                                           ensure_credentials_data_new (daemon, object, invocation));
+
+ out:
+  return TRUE; /* invocation was handled */
+}
+

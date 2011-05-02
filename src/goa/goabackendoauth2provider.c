@@ -56,9 +56,10 @@
  * #GoaBackendProviderClass.build_object (this should chain up to its
  * parent class) methods must be implemented.
  *
- * Note that the #GoaBackendProviderClass.add_account and
- * #GoaBackendProviderClass.refresh_account methods do not need to be
- * implemented - this type implements these methods.
+ * Note that the #GoaBackendProviderClass.add_account,
+ * #GoaBackendProviderClass.refresh_account,
+ * #GoaBackendProviderClass.ensure_credentials and
+ * #GoaBackendProviderClass.ensure_credentials_finish.
  */
 
 G_DEFINE_ABSTRACT_TYPE (GoaBackendOAuth2Provider, goa_backend_oauth2_provider, GOA_TYPE_BACKEND_PROVIDER);
@@ -943,7 +944,7 @@ goa_backend_oauth2_provider_add_account (GoaBackendProvider *_provider,
   GList *accounts;
   GList *l;
   AddData data;
-  GHashTable *credentials;
+  GVariantBuilder builder;
 
   g_return_val_if_fail (GOA_IS_BACKEND_OAUTH2_PROVIDER (provider), NULL);
   g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
@@ -957,7 +958,6 @@ goa_backend_oauth2_provider_add_account (GoaBackendProvider *_provider,
   refresh_token = NULL;
   identity = NULL;
   accounts = NULL;
-  credentials = NULL;
 
   memset (&data, '\0', sizeof (AddData));
   data.loop = g_main_loop_new (NULL, FALSE);
@@ -979,17 +979,21 @@ goa_backend_oauth2_provider_add_account (GoaBackendProvider *_provider,
   for (l = accounts; l != NULL; l = l->next)
     {
       GoaObject *object = GOA_OBJECT (l->data);
-      const gchar *identity_from_object;
-
-      identity_from_object = goa_oauth2_based_get_identity (goa_object_peek_oauth2_based (object));
-      if (g_strcmp0 (identity_from_object, identity) == 0)
+      GoaOAuth2Based *oauth2_based;
+      oauth2_based = goa_object_peek_oauth2_based (object);
+      if (oauth2_based != NULL)
         {
-          g_set_error (&data.error,
-                       GOA_ERROR,
-                       GOA_ERROR_ACCOUNT_EXISTS,
-                       _("There is already an account for the identity %s"),
-                       identity);
-          goto out;
+          const gchar *identity_from_object;
+          identity_from_object = goa_oauth2_based_get_identity (oauth2_based);
+          if (g_strcmp0 (identity_from_object, identity) == 0)
+            {
+              g_set_error (&data.error,
+                           GOA_ERROR,
+                           GOA_ERROR_ACCOUNT_EXISTS,
+                           _("There is already an account for the identity %s"),
+                           identity);
+              goto out;
+            }
         }
     }
 
@@ -1005,13 +1009,13 @@ goa_backend_oauth2_provider_add_account (GoaBackendProvider *_provider,
   if (data.error != NULL)
     goto out;
 
-  credentials = g_hash_table_new (g_str_hash, g_str_equal);
-  g_hash_table_insert (credentials, "authorization_code", authorization_code);
+  g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
+  g_variant_builder_add (&builder, "{sv}", "authorization_code", g_variant_new_string (authorization_code));
   if (refresh_token != NULL)
-    g_hash_table_insert (credentials, "refresh_token", refresh_token);
+    g_variant_builder_add (&builder, "{sv}", "refresh_token", g_variant_new_string (refresh_token));
   goa_backend_provider_store_credentials (GOA_BACKEND_PROVIDER (provider),
                                           identity,
-                                          credentials,
+                                          g_variant_builder_end (&builder),
                                           NULL, /* GCancellable */
                                           (GAsyncReadyCallback) store_credentials_cb,
                                           &data);
@@ -1033,8 +1037,6 @@ goa_backend_oauth2_provider_add_account (GoaBackendProvider *_provider,
       g_assert (ret != NULL);
     }
 
-  if (credentials != NULL)
-    g_hash_table_unref (credentials);
   g_list_foreach (accounts, (GFunc) g_object_unref, NULL);
   g_list_free (accounts);
   g_free (identity);
@@ -1081,7 +1083,7 @@ goa_backend_oauth2_provider_refresh_account (GoaBackendProvider  *_provider,
   gchar *refresh_token;
   gchar *identity;
   const gchar *existing_identity;
-  GHashTable *credentials;
+  GVariantBuilder builder;
   gboolean ret;
   RefreshAccountData data;
 
@@ -1095,7 +1097,6 @@ goa_backend_oauth2_provider_refresh_account (GoaBackendProvider  *_provider,
   access_token = NULL;
   refresh_token = NULL;
   identity = NULL;
-  credentials = NULL;
 
   memset (&data, '\0', sizeof (RefreshAccountData));
   data.loop = g_main_loop_new (NULL, FALSE);
@@ -1131,13 +1132,13 @@ goa_backend_oauth2_provider_refresh_account (GoaBackendProvider  *_provider,
       goto out;
     }
 
-  credentials = g_hash_table_new (g_str_hash, g_str_equal);
-  g_hash_table_insert (credentials, "authorization_code", authorization_code);
+  g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
+  g_variant_builder_add (&builder, "{sv}", "authorization_code", g_variant_new_string (authorization_code));
   if (refresh_token != NULL)
-    g_hash_table_insert (credentials, "refresh_token", refresh_token);
+    g_variant_builder_add (&builder, "{sv}", "refresh_token", g_variant_new_string (refresh_token));
   goa_backend_provider_store_credentials (GOA_BACKEND_PROVIDER (provider),
                                           identity,
-                                          credentials,
+                                          g_variant_builder_end (&builder),
                                           NULL, /* GCancellable */
                                           (GAsyncReadyCallback) refresh_credentials_store_credentials_cb,
                                           &data);
@@ -1157,8 +1158,6 @@ goa_backend_oauth2_provider_refresh_account (GoaBackendProvider  *_provider,
  out:
   gtk_widget_destroy (dialog);
 
-  if (credentials != NULL)
-    g_hash_table_unref (credentials);
   g_free (identity);
   g_free (authorization_code);
   g_free (access_token);
@@ -1241,7 +1240,10 @@ lookup_credentials_cb (GoaBackendProvider *provider,
                        gpointer            user_data)
 {
   GetAccessTokenData *data = user_data;
-  GHashTable *credentials;
+  GVariant *credentials;
+  GVariantIter iter;
+  const gchar *key;
+  GVariant *value;
   const gchar *authorization_code;
   const gchar *refresh_token;
   GError *error;
@@ -1261,8 +1263,15 @@ lookup_credentials_cb (GoaBackendProvider *provider,
       goto out;
     }
 
-  authorization_code = g_hash_table_lookup (credentials, "authorization_code");
-  refresh_token = g_hash_table_lookup (credentials, "refresh_token");
+  g_variant_iter_init (&iter, credentials);
+  while (g_variant_iter_next (&iter, "{&sv}", &key, &value))
+    {
+      if (g_strcmp0 (key, "authorization_code") == 0)
+        authorization_code = g_variant_dup_string (value, NULL);
+      else if (g_strcmp0 (key, "refresh_token") == 0)
+        refresh_token = g_variant_dup_string (value, NULL);
+      g_variant_unref (value);
+    }
 
   if (authorization_code == NULL)
     {
@@ -1283,7 +1292,7 @@ lookup_credentials_cb (GoaBackendProvider *provider,
               data);
 
  out:
-  g_hash_table_unref (credentials);
+  ;
 }
 
 /**
@@ -1424,6 +1433,181 @@ goa_backend_oauth2_provider_build_object (GoaBackendProvider  *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+typedef struct
+{
+  volatile gint ref_count;
+  GSimpleAsyncResult *simple;
+  GoaObject *object;
+  GCancellable *cancellable;
+
+  gchar *access_token;
+  gint   access_token_expires_in;
+
+  gboolean forced;
+
+  gchar *identity;
+
+} CheckCredentialsData;
+
+static CheckCredentialsData *
+ensure_credentials_data_ref (CheckCredentialsData *data)
+{
+  g_atomic_int_inc (&data->ref_count);
+  return data;
+}
+
+static void
+ensure_credentials_data_unref (CheckCredentialsData *data)
+{
+  if (g_atomic_int_dec_and_test (&data->ref_count))
+    {
+      g_object_unref (data->object);
+      if (data->cancellable != NULL)
+        g_object_unref (data->cancellable);
+      g_free (data->identity);
+      g_free (data->access_token);
+      g_slice_free (CheckCredentialsData, data);
+    }
+}
+
+static void
+ensure_credentials_get_access_token_cb (GoaBackendOAuth2Provider *provider,
+                                        GAsyncResult             *res,
+                                        gpointer                  user_data);
+
+static void
+ensure_credentials_get_identity_cb (GoaBackendOAuth2Provider *provider,
+                                    GAsyncResult             *res,
+                                    gpointer                  user_data)
+{
+  CheckCredentialsData *data = user_data;
+  GError *error;
+
+  error = NULL;
+  data->identity = goa_backend_oauth2_provider_get_identity_finish (provider,
+                                                                    res,
+                                                                    &error);
+  if (data->identity == NULL)
+    {
+      /* OK, try again, with forcing the locally cached credentials to be refreshed */
+      if (!data->forced)
+        {
+          data->forced = TRUE;
+          g_free (data->access_token);
+          data->access_token = NULL;
+          data->access_token_expires_in = 0;
+          goa_backend_oauth2_provider_get_access_token (provider,
+                                                        data->object,
+                                                        /* TRUE, force_refresh */
+                                                        data->cancellable,
+                                                        (GAsyncReadyCallback) ensure_credentials_get_access_token_cb,
+                                                        ensure_credentials_data_ref (data));
+          goto out;
+        }
+      else
+        {
+          g_simple_async_result_take_error (data->simple, error);
+          g_simple_async_result_complete (data->simple);
+          g_object_unref (data->simple);
+          goto out;
+        }
+    }
+
+  /* TODO: maybe check with the identity we have */
+  g_simple_async_result_set_op_res_gpointer (data->simple,
+                                             ensure_credentials_data_ref (data),
+                                             (GDestroyNotify) ensure_credentials_data_unref);
+  g_simple_async_result_complete (data->simple);
+  g_object_unref (data->simple);
+
+ out:
+  ensure_credentials_data_unref (data);
+}
+
+static void
+ensure_credentials_get_access_token_cb (GoaBackendOAuth2Provider *provider,
+                                        GAsyncResult             *res,
+                                        gpointer                  user_data)
+{
+  CheckCredentialsData *data = user_data;
+  GError *error;
+
+  error = NULL;
+  data->access_token = goa_backend_oauth2_provider_get_access_token_finish (provider,
+                                                                            &data->access_token_expires_in,
+                                                                            res,
+                                                                            &error);
+  if (data->access_token == NULL)
+    {
+      g_simple_async_result_take_error (data->simple, error);
+      g_simple_async_result_complete (data->simple);
+      g_object_unref (data->simple);
+      goto out;
+    }
+
+  goa_backend_oauth2_provider_get_identity (provider,
+                                            data->access_token,
+                                            data->cancellable,
+                                            (GAsyncReadyCallback) ensure_credentials_get_identity_cb,
+                                            ensure_credentials_data_ref (data));
+
+ out:
+  ensure_credentials_data_unref (data);
+}
+
+static void
+goa_backend_oauth2_provider_ensure_credentials (GoaBackendProvider   *provider,
+                                                GoaObject            *object,
+                                                GCancellable         *cancellable,
+                                                GAsyncReadyCallback   callback,
+                                                gpointer              user_data)
+{
+  CheckCredentialsData *data;
+
+  data = g_slice_new0 (CheckCredentialsData);
+  data->object = g_object_ref (object);
+  data->ref_count = 1;
+  data->simple = g_simple_async_result_new (G_OBJECT (provider),
+                                            callback,
+                                            user_data,
+                                            goa_backend_oauth2_provider_ensure_credentials);
+  data->cancellable = cancellable != NULL ? g_object_ref (cancellable) : NULL;
+  goa_backend_oauth2_provider_get_access_token (GOA_BACKEND_OAUTH2_PROVIDER (provider),
+                                                data->object,
+                                                /* FALSE, force_refresh */
+                                                data->cancellable,
+                                                (GAsyncReadyCallback) ensure_credentials_get_access_token_cb,
+                                                data);
+}
+
+static gboolean
+goa_backend_oauth2_provider_ensure_credentials_finish (GoaBackendProvider  *provider,
+                                                       gint                *out_expires_in,
+                                                       GAsyncResult        *res,
+                                                       GError             **error)
+{
+  GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
+  CheckCredentialsData *data;
+  gboolean ret;
+
+  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), FALSE);
+
+  ret = FALSE;
+
+  if (g_simple_async_result_propagate_error (simple, error))
+    goto out;
+
+  ret = TRUE;
+  data = g_simple_async_result_get_op_res_gpointer (simple);
+  if (out_expires_in != NULL)
+    *out_expires_in = data->access_token_expires_in;
+
+ out:
+  return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static void
 goa_backend_oauth2_provider_init (GoaBackendOAuth2Provider *client)
 {
@@ -1438,6 +1622,8 @@ goa_backend_oauth2_provider_class_init (GoaBackendOAuth2ProviderClass *klass)
   provider_class->add_account                = goa_backend_oauth2_provider_add_account;
   provider_class->refresh_account            = goa_backend_oauth2_provider_refresh_account;
   provider_class->build_object               = goa_backend_oauth2_provider_build_object;
+  provider_class->ensure_credentials         = goa_backend_oauth2_provider_ensure_credentials;
+  provider_class->ensure_credentials_finish  = goa_backend_oauth2_provider_ensure_credentials_finish;
 
   klass->build_authorization_uri  = goa_backend_oauth2_provider_build_authorization_uri_default;
   klass->get_use_external_browser = goa_backend_oauth2_provider_get_use_external_browser_default;

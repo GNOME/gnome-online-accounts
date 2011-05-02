@@ -62,6 +62,8 @@ struct _GoaBackendProvider
  * @add_account: Virtual function for goa_backend_provider_add_account().
  * @refresh_account: Virtual function for goa_backend_provider_refresh_account().
  * @build_object: Virtual function for goa_backend_provider_build_object().
+ * @ensure_credentials: Virtual function for goa_backend_provider_ensure_credentials().
+ * @ensure_credentials_finish: Virtual function for goa_backend_provider_ensure_credentials_finish().
  *
  * Class structure for #GoaBackendProvider.
  */
@@ -87,6 +89,18 @@ struct _GoaBackendProviderClass
                                      GKeyFile           *key_file,
                                      const gchar        *group,
                                      GError            **error);
+
+  /* virtual but with defaut implementation */
+  void (*ensure_credentials) (GoaBackendProvider  *provider,
+                              GoaObject            *object,
+                              GCancellable         *cancellable,
+                              GAsyncReadyCallback   callback,
+                              gpointer              user_data);
+
+  gboolean (*ensure_credentials_finish) (GoaBackendProvider  *provider,
+                                         gint                *out_expires_in,
+                                         GAsyncResult        *res,
+                                         GError             **error);
 
   /*< private >*/
   /* Padding for future expansion */
@@ -114,7 +128,7 @@ gboolean            goa_backend_provider_build_object      (GoaBackendProvider  
 
 void goa_backend_provider_store_credentials (GoaBackendProvider   *provider,
                                              const gchar          *identity,
-                                             GHashTable           *credentials,
+                                             GVariant             *credentials,
                                              GCancellable         *cancellable,
                                              GAsyncReadyCallback   callback,
                                              gpointer              user_data);
@@ -129,9 +143,21 @@ void goa_backend_provider_lookup_credentials (GoaBackendProvider   *provider,
                                               GAsyncReadyCallback   callback,
                                               gpointer              user_data);
 
-GHashTable *goa_backend_provider_lookup_credentials_finish (GoaBackendProvider   *provider,
-                                                            GAsyncResult         *res,
-                                                            GError              **error);
+GVariant *goa_backend_provider_lookup_credentials_finish (GoaBackendProvider   *provider,
+                                                          GAsyncResult         *res,
+                                                          GError              **error);
+
+void goa_backend_provider_ensure_credentials (GoaBackendProvider   *provider,
+                                              GoaObject            *object,
+                                              GCancellable         *cancellable,
+                                              GAsyncReadyCallback   callback,
+                                              gpointer              user_data);
+
+gboolean goa_backend_provider_ensure_credentials_finish (GoaBackendProvider  *provider,
+                                                         gint                *out_expires_in,
+                                                         GAsyncResult        *res,
+                                                         GError             **error);
+
 
 /**
  * GOA_BACKEND_PROVIDER_EXTENSION_POINT_NAME:

@@ -38,6 +38,7 @@
          <variablelist>
          <varlistentry><term>google</term><listitem><para>The account is a Google Account. See the #org.gnome.OnlineAccounts.GoogleAccount D-Bus interface for more details.</para></listitem></varlistentry>
          <varlistentry><term>facebook</term><listitem><para>The account is a Facebook Account. See the #org.gnome.OnlineAccounts.FacebookAccount D-Bus interface for more details.</para></listitem></varlistentry>
+         <varlistentry><term>yahoo</term><listitem><para>The account is a Yahoo Account. See the #org.gnome.OnlineAccounts.YahooAccount D-Bus interface for more details.</para></listitem></varlistentry>
          </variablelist>
     -->
     <property name="Type" type="s" access="read">
@@ -117,6 +118,19 @@
     -->
     <method name="Remove"/>
 
+    <!--
+        EnsureCredentials:
+        @expires_in: The duration that the cached credentials are valid for, in seconds or 0 if unknown.
+
+        Ensures that valid credentials exist for the account and
+        returns how long they are still valid for, if known.
+
+        Returns an error if the cached credentials are not valid. TODO: specify what errors can be returned.
+    -->
+    <method name="EnsureCredentials">
+      <arg name="expires_in" type="i" direction="out"/>
+    </method>
+
   </interface>
 
   <!--
@@ -166,6 +180,28 @@
   </interface>
 
   <!--
+      org.gnome.OnlineAccounts.YahooAccount:
+
+      A Yahoo Account.
+
+      Objects implementing this interface also implement the
+      #org.gnome.OnlineAccounts.Account and
+      #org.gnome.OnlineAccounts.OAuthBased interfaces.
+
+      When creating this kind of account via the
+      org.gnome.OnlineAccounts.Manager.AddAccount() method, you need
+      to include an <literal>Identity</literal> element in
+      the @details parameter.
+  -->
+  <interface name="org.gnome.OnlineAccounts.YahooAccount">
+    <!-- GUID: The guid identifying the account.
+
+         This value cannot be changed once set.
+      -->
+    <property name="GUID" type="s" access="read"/>
+  </interface>
+
+  <!--
       org.gnome.OnlineAccounts.OAuth2Based:
 
       An account object implements this interface if <ulink
@@ -189,6 +225,39 @@
     -->
     <method name="GetAccessToken">
       <arg name="access_token" type="s" direction="out"/>
+      <arg name="expires_in" type="i" direction="out"/>
+    </method>
+
+    <!-- Identity: The identity that was authenticated. -->
+    <property name="Identity" type="s" access="read"/>
+  </interface>
+
+  <!--
+      org.gnome.OnlineAccounts.OAuthBased:
+
+      An account object implements this interface if <ulink
+      url="http://oauth.net">OAuth 1.0</ulink> is used to control
+      access.
+  -->
+  <interface name="org.gnome.OnlineAccounts.OAuthBased">
+    <!--
+      GetAccessToken:
+      @access_token: The access token.
+      @access_token_secret: The access token secret.
+      @expires_in: The duration that the returned token is valid for, in seconds or 0 if unknown.
+
+      Use this method to obtains an access token to access services
+      for an account. Because networking is involved, this method may
+      take a very long time to complete.
+
+      If this method fails because the token service indicates that
+      authorization has expired, the
+      #org.gnome.OnlineAccounts.Account:AttentionNeeded property will
+      be set to TRUE.
+    -->
+    <method name="GetAccessToken">
+      <arg name="access_token" type="s" direction="out"/>
+      <arg name="access_token_secret" type="s" direction="out"/>
       <arg name="expires_in" type="i" direction="out"/>
     </method>
 
