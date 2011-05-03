@@ -1106,7 +1106,7 @@ goa_backend_oauth_provider_add_account (GoaBackendProvider *_provider,
       if (oauth_based == NULL)
         continue;
 
-      if (g_strcmp0 (goa_account_get_account_type (account),
+      if (g_strcmp0 (goa_account_get_provider_type (account),
                      goa_backend_provider_get_provider_type (GOA_BACKEND_PROVIDER (provider))) != 0)
         continue;
 
@@ -2010,7 +2010,7 @@ on_handle_get_access_token (GoaOAuthBased        *interface,
 
   object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (interface)));
   account = goa_object_peek_account (object);
-  provider = goa_backend_provider_get_for_provider_type (goa_account_get_account_type (account));
+  provider = goa_backend_provider_get_for_provider_type (goa_account_get_provider_type (account));
 
   data = g_new0 (AccessTokenData, 1);
   data->object = g_object_ref (object);

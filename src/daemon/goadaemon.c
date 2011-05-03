@@ -396,7 +396,7 @@ update_account_object (GoaDaemon           *daemon,
     }
 
   goa_account_set_id (account, g_strrstr (g_dbus_object_get_object_path (G_DBUS_OBJECT (object)), "/") + 1);
-  goa_account_set_account_type (account, type);
+  goa_account_set_provider_type (account, type);
   goa_account_set_name (account, name);
 
   provider = goa_backend_provider_get_for_provider_type (type);
@@ -1231,7 +1231,7 @@ on_account_handle_ensure_credentials (GoaAccount            *account,
   GoaObject *object;
 
   object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (account)));
-  provider = goa_backend_provider_get_for_provider_type (goa_account_get_account_type (account));
+  provider = goa_backend_provider_get_for_provider_type (goa_account_get_provider_type (account));
   if (provider == NULL)
     {
       /* TODO: syslog */
@@ -1239,7 +1239,7 @@ on_account_handle_ensure_credentials (GoaAccount            *account,
                                              GOA_ERROR,
                                              GOA_ERROR_FAILED,
                                              "Unsupported account type %s for id %s (no provider)",
-                                             goa_account_get_account_type (account),
+                                             goa_account_get_provider_type (account),
                                              goa_account_get_id (account));
       goto out;
     }

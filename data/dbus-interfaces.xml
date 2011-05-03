@@ -33,7 +33,7 @@
       The base account interface.
   -->
   <interface name="org.gnome.OnlineAccounts.Account">
-    <!-- Type: The type of the account.
+    <!-- ProviderType: The provider of the account.
          Known values include
          <variablelist>
          <varlistentry><term>google</term><listitem><para>The account is a Google Account. See the #org.gnome.OnlineAccounts.GoogleAccount D-Bus interface for more details.</para></listitem></varlistentry>
@@ -42,10 +42,7 @@
          <varlistentry><term>twitter</term><listitem><para>The account is a Twitter Account. See the #org.gnome.OnlineAccounts.TwitterAccount D-Bus interface for more details.</para></listitem></varlistentry>
          </variablelist>
     -->
-    <property name="Type" type="s" access="read">
-      <!-- Avoid getting renamed to type_ because we clash with the GType get_type() function -->
-      <annotation name="org.gtk.GDBus.C.Name" value="AccountType"/>
-    </property>
+    <property name="ProviderType" type="s" access="read"/>
 
     <!-- Id: An identifier for this account.
          This identifier cannot be changed and should never be

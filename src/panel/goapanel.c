@@ -309,7 +309,7 @@ on_info_bar_response (GtkInfoBar *info_bar,
                           -1);
 
       account = goa_object_peek_account (object);
-      provider_type = goa_account_get_account_type (account);
+      provider_type = goa_account_get_provider_type (account);
       provider = goa_backend_provider_get_for_provider_type (provider_type);
 
       parent = GTK_WINDOW (cc_shell_get_toplevel (cc_panel_get_shell (CC_PANEL (panel))));
@@ -402,7 +402,7 @@ show_page_account (GoaPanel  *panel,
   account = goa_object_peek_account (object);
   gaccount = goa_object_peek_google_account (object);
   fbaccount = goa_object_peek_facebook_account (object);
-  provider_type = goa_account_get_account_type (account);
+  provider_type = goa_account_get_provider_type (account);
   provider = goa_backend_provider_get_for_provider_type (provider_type);
 
   /* And in with the new */
