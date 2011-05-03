@@ -24,35 +24,19 @@
 #error "Only <goa/goabackend.h> can be included directly."
 #endif
 
-#ifndef __GOA_BACKEND_TYPES_H__
-#define __GOA_BACKEND_TYPES_H__
+#ifndef __GOA_BACKEND_TWITTER_PROVIDER_H__
+#define __GOA_BACKEND_TWITTER_PROVIDER_H__
 
-#include <goa/goa.h>
-#include <gtk/gtk.h>
+#include <goa/goabackendtypes.h>
 
 G_BEGIN_DECLS
 
-struct _GoaBackendProvider;
-typedef struct _GoaBackendProvider GoaBackendProvider;
+#define GOA_TYPE_BACKEND_TWITTER_PROVIDER         (goa_backend_twitter_provider_get_type ())
+#define GOA_BACKEND_TWITTER_PROVIDER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_BACKEND_TWITTER_PROVIDER, GoaBackendTwitterProvider))
+#define GOA_IS_BACKEND_TWITTER_PROVIDER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_BACKEND_TWITTER_PROVIDER))
 
-struct _GoaBackendOAuthProvider;
-typedef struct _GoaBackendOAuthProvider GoaBackendOAuthProvider;
-
-struct _GoaBackendOAuth2Provider;
-typedef struct _GoaBackendOAuth2Provider GoaBackendOAuth2Provider;
-
-struct _GoaBackendGoogleProvider;
-typedef struct _GoaBackendGoogleProvider GoaBackendGoogleProvider;
-
-struct _GoaBackendFacebookProvider;
-typedef struct _GoaBackendFacebookProvider GoaBackendFacebookProvider;
-
-struct _GoaBackendYahooProvider;
-typedef struct _GoaBackendYahooProvider GoaBackendYahooProvider;
-
-struct _GoaBackendTwitterProvider;
-typedef struct _GoaBackendTwitterProvider GoaBackendTwitterProvider;
+GType               goa_backend_twitter_provider_get_type           (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GOA_BACKEND_TYPES_H__ */
+#endif /* __GOA_BACKEND_TWITTER_PROVIDER_H__ */

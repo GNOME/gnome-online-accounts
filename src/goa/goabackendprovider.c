@@ -28,6 +28,7 @@
 #include "goabackendgoogleprovider.h"
 #include "goabackendfacebookprovider.h"
 #include "goabackendyahooprovider.h"
+#include "goabackendtwitterprovider.h"
 
 /**
  * SECTION:goabackendprovider
@@ -351,6 +352,7 @@ ensure_ep_and_builtins (void)
       type = GOA_TYPE_BACKEND_GOOGLE_PROVIDER;
       type = GOA_TYPE_BACKEND_FACEBOOK_PROVIDER;
       type = GOA_TYPE_BACKEND_YAHOO_PROVIDER;
+      type = GOA_TYPE_BACKEND_TWITTER_PROVIDER;
       type = type; /* for -Wunused-but-set-variable */
 
       g_once_init_leave (&once_init_value, 1);

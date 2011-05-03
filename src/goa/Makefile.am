@@ -100,6 +100,7 @@ libgoa_backend_la_SOURCES =						\
 	goabackendgoogleprovider.h	goabackendgoogleprovider.c	\
 	goabackendfacebookprovider.h	goabackendfacebookprovider.c	\
 	goabackendyahooprovider.h	goabackendyahooprovider.c	\
+	goabackendtwitterprovider.h	goabackendtwitterprovider.c	\
 	$(NULL)
 
 libgoa_backend_la_CFLAGS =					\

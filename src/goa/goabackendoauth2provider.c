@@ -1020,28 +1020,35 @@ goa_backend_oauth2_provider_add_account (GoaBackendProvider *_provider,
                                 &data.error))
     goto out;
 
-  /* OK, got the email address... see if there's already an account
-   * with this email address
+  /* OK, got the identity... see if there's already an account
+   * of this type with the given identity
    */
   accounts = goa_client_get_accounts (client);
   for (l = accounts; l != NULL; l = l->next)
     {
       GoaObject *object = GOA_OBJECT (l->data);
+      GoaAccount *account;
       GoaOAuth2Based *oauth2_based;
+      const gchar *identity_from_object;
+
+      account = goa_object_peek_account (object);
       oauth2_based = goa_object_peek_oauth2_based (object);
-      if (oauth2_based != NULL)
+      if (oauth2_based == NULL)
+        continue;
+
+      if (g_strcmp0 (goa_account_get_account_type (account),
+                     goa_backend_provider_get_provider_type (GOA_BACKEND_PROVIDER (provider))) != 0)
+        continue;
+
+      identity_from_object = goa_oauth2_based_get_identity (oauth2_based);
+      if (g_strcmp0 (identity_from_object, identity) == 0)
         {
-          const gchar *identity_from_object;
-          identity_from_object = goa_oauth2_based_get_identity (oauth2_based);
-          if (g_strcmp0 (identity_from_object, identity) == 0)
-            {
-              g_set_error (&data.error,
-                           GOA_ERROR,
-                           GOA_ERROR_ACCOUNT_EXISTS,
-                           _("There is already an account for the identity %s"),
-                           identity);
-              goto out;
-            }
+          g_set_error (&data.error,
+                       GOA_ERROR,
+                       GOA_ERROR_ACCOUNT_EXISTS,
+                       _("There is already an account for the identity %s"),
+                       identity);
+          goto out;
         }
     }
 

@@ -39,6 +39,7 @@
          <varlistentry><term>google</term><listitem><para>The account is a Google Account. See the #org.gnome.OnlineAccounts.GoogleAccount D-Bus interface for more details.</para></listitem></varlistentry>
          <varlistentry><term>facebook</term><listitem><para>The account is a Facebook Account. See the #org.gnome.OnlineAccounts.FacebookAccount D-Bus interface for more details.</para></listitem></varlistentry>
          <varlistentry><term>yahoo</term><listitem><para>The account is a Yahoo Account. See the #org.gnome.OnlineAccounts.YahooAccount D-Bus interface for more details.</para></listitem></varlistentry>
+         <varlistentry><term>twitter</term><listitem><para>The account is a Twitter Account. See the #org.gnome.OnlineAccounts.TwitterAccount D-Bus interface for more details.</para></listitem></varlistentry>
          </variablelist>
     -->
     <property name="Type" type="s" access="read">
@@ -106,7 +107,7 @@
 
       Objects implementing this interface also implement the
       #org.gnome.OnlineAccounts.Account and
-      #org.gnome.OnlineAccounts.OAuth2Based interfaces.
+      #org.gnome.OnlineAccounts.OAuthBased interfaces.
 
       When creating this kind of account via the
       org.gnome.OnlineAccounts.Manager.AddAccount() method, you need
@@ -163,6 +164,28 @@
          This value cannot be changed once set.
       -->
     <property name="GUID" type="s" access="read"/>
+  </interface>
+
+  <!--
+      org.gnome.OnlineAccounts.TwitterAccount:
+
+      A Twitter Account.
+
+      Objects implementing this interface also implement the
+      #org.gnome.OnlineAccounts.Account and
+      #org.gnome.OnlineAccounts.OAuthBased interfaces.
+
+      When creating this kind of account via the
+      org.gnome.OnlineAccounts.Manager.AddAccount() method, you need
+      to include an <literal>Identity</literal> element in
+      the @details parameter.
+  -->
+  <interface name="org.gnome.OnlineAccounts.TwitterAccount">
+    <!-- Id: The user id identifying the account.
+
+         This value cannot be changed once set.
+      -->
+    <property name="Id" type="s" access="read"/>
   </interface>
 
   <!--
