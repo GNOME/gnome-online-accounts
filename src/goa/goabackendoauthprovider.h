@@ -68,6 +68,7 @@ struct _GoaBackendOAuthProvider
  * @get_identity_finish: Virtual function for goa_backend_oauth_provider_get_identity_finish().
  * @build_authorization_uri: Virtual function for goa_backend_oauth_provider_build_authorization_uri().
  * @get_use_external_browser: Virtual function for goa_backend_oauth_provider_get_use_external_browser().
+ * @get_request_uri_params: Virtual function for goa_backend_oauth_provider_get_request_uri_params().
  *
  * Class structure for #GoaBackendOAuthProvider.
  */
@@ -94,10 +95,11 @@ struct _GoaBackendOAuthProviderClass
                                           GError                   **error);
 
   /* virtual but with default implementation */
-  gchar    *(*build_authorization_uri)  (GoaBackendOAuthProvider  *provider,
+  gchar     *(*build_authorization_uri)  (GoaBackendOAuthProvider  *provider,
                                          const gchar               *authorization_uri,
                                          const gchar               *escaped_oauth_token);
-  gboolean  (*get_use_external_browser) (GoaBackendOAuthProvider  *provider);
+  gboolean   (*get_use_external_browser) (GoaBackendOAuthProvider  *provider);
+  gchar    **(*get_request_uri_params)   (GoaBackendOAuthProvider  *provider);
 
   /*< private >*/
   /* Padding for future expansion */
@@ -108,6 +110,7 @@ GType        goa_backend_oauth_provider_get_type                 (void) G_GNUC_C
 const gchar *goa_backend_oauth_provider_get_consumer_key         (GoaBackendOAuthProvider  *provider);
 const gchar *goa_backend_oauth_provider_get_consumer_secret      (GoaBackendOAuthProvider  *provider);
 const gchar *goa_backend_oauth_provider_get_request_uri          (GoaBackendOAuthProvider  *provider);
+gchar      **goa_backend_oauth_provider_get_request_uri_params   (GoaBackendOAuthProvider  *provider);
 const gchar *goa_backend_oauth_provider_get_authorization_uri    (GoaBackendOAuthProvider  *provider);
 const gchar *goa_backend_oauth_provider_get_token_uri            (GoaBackendOAuthProvider  *provider);
 const gchar *goa_backend_oauth_provider_get_callback_uri         (GoaBackendOAuthProvider  *provider);

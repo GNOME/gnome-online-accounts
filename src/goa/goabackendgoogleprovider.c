@@ -23,11 +23,11 @@
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
-#include <rest/rest-proxy.h>
+#include <rest/oauth-proxy.h>
 #include <json-glib/json-glib.h>
 
 #include "goabackendprovider.h"
-#include "goabackendoauth2provider.h"
+#include "goabackendoauthprovider.h"
 #include "goabackendgoogleprovider.h"
 
 /**
@@ -39,14 +39,14 @@
 struct _GoaBackendGoogleProvider
 {
   /*< private >*/
-  GoaBackendOAuth2Provider parent_instance;
+  GoaBackendOAuthProvider parent_instance;
 };
 
 typedef struct _GoaBackendGoogleProviderClass GoaBackendGoogleProviderClass;
 
 struct _GoaBackendGoogleProviderClass
 {
-  GoaBackendOAuth2ProviderClass parent_class;
+  GoaBackendOAuthProviderClass parent_class;
 };
 
 /**
@@ -57,7 +57,7 @@ struct _GoaBackendGoogleProviderClass
  * #GoaBackendGoogleProvider is used for handling Google accounts.
  */
 
-G_DEFINE_TYPE_WITH_CODE (GoaBackendGoogleProvider, goa_backend_google_provider, GOA_TYPE_BACKEND_OAUTH2_PROVIDER,
+G_DEFINE_TYPE_WITH_CODE (GoaBackendGoogleProvider, goa_backend_google_provider, GOA_TYPE_BACKEND_OAUTH_PROVIDER,
                          g_io_extension_point_implement (GOA_BACKEND_PROVIDER_EXTENSION_POINT_NAME,
 							 g_define_type_id,
 							 "google",
@@ -78,45 +78,60 @@ get_name (GoaBackendProvider *_provider)
 }
 
 static const gchar *
-get_authorization_uri (GoaBackendOAuth2Provider *provider)
+get_consumer_key (GoaBackendOAuthProvider *provider)
 {
-  return "https://accounts.google.com/o/oauth2/auth";
+  return "anonymous";
 }
 
 static const gchar *
-get_token_uri (GoaBackendOAuth2Provider *provider)
+get_consumer_secret (GoaBackendOAuthProvider *provider)
 {
-  return "https://accounts.google.com/o/oauth2/token";
+  return "anonymous";
 }
 
 static const gchar *
-get_redirect_uri (GoaBackendOAuth2Provider *provider)
+get_request_uri (GoaBackendOAuthProvider *provider)
 {
-  return "https://www.gnome.org/goa-1.0/oauth2";
+  return "https://www.google.com/accounts/OAuthGetRequestToken";
+}
+
+static gchar **
+get_request_uri_params (GoaBackendOAuthProvider *provider)
+{
+  GPtrArray *p;
+  p = g_ptr_array_new ();
+  g_ptr_array_add (p, g_strdup ("xoauth_displayname"));
+  g_ptr_array_add (p, g_strdup ("GNOME"));
+
+  g_ptr_array_add (p, g_strdup ("scope"));
+  g_ptr_array_add (p, g_strdup (
+    /* Display email address: cf. https://sites.google.com/site/oauthgoog/Home/emaildisplayscope */
+    "https://www.googleapis.com/auth/userinfo#email "
+    /* IMAP, SMTP access: http://code.google.com/apis/gmail/oauth/protocol.html */
+    "https://mail.google.com/ "
+    /* Calendar data API: http://code.google.com/apis/calendar/data/2.0/developers_guide.html */
+    "https://www.google.com/calendar/feeds"));
+  g_ptr_array_add (p, NULL);
+  return (gchar **) g_ptr_array_free (p, FALSE);
+}
+
+
+static const gchar *
+get_authorization_uri (GoaBackendOAuthProvider *provider)
+{
+  return "https://www.google.com/accounts/OAuthAuthorizeToken";
 }
 
 static const gchar *
-get_scope (GoaBackendOAuth2Provider *provider)
+get_token_uri (GoaBackendOAuthProvider *provider)
 {
-  return
-    "https://www.googleapis.com/auth/userinfo#email " /* view email address */
-    "https://mail.google.com/mail/feed/atom "         /* email */
-    "https://www.google.com/m8/feeds "                /* contacts */
-    "https://www.google.com/calendar/feeds "          /* calendar */
-    "https://picasaweb.google.com/data "              /* picassa */
-    ;
+  return "https://www.google.com/accounts/OAuthGetAccessToken";
 }
 
 static const gchar *
-get_client_id (GoaBackendOAuth2Provider *provider)
+get_callback_uri (GoaBackendOAuthProvider *provider)
 {
-  return "108305240709.apps.googleusercontent.com";
-}
-
-static const gchar *
-get_client_secret (GoaBackendOAuth2Provider *provider)
-{
-  return "_xDuWutH-QcwiVI079hRrIfE";
+  return "https://www.gnome.org/goa-1.0/oauth";
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -168,8 +183,9 @@ get_identity_cb (RestProxyCall *call,
 
 
 static void
-get_identity (GoaBackendOAuth2Provider  *provider,
+get_identity (GoaBackendOAuthProvider   *provider,
               const gchar               *access_token,
+              const gchar               *access_token_secret,
               GCancellable              *cancellable,
               GAsyncReadyCallback       callback,
               gpointer                  user_data)
@@ -177,7 +193,6 @@ get_identity (GoaBackendOAuth2Provider  *provider,
   GetIdentityData *data;
   RestProxy *proxy;
   GError *error;
-  gchar *s;
 
   data = g_slice_new0 (GetIdentityData);
   data->ref_count = 1;
@@ -186,13 +201,15 @@ get_identity (GoaBackendOAuth2Provider  *provider,
                                             user_data,
                                             get_identity);
 
-  proxy = rest_proxy_new ("https://www.googleapis.com/userinfo/email", FALSE);
+  proxy = oauth_proxy_new (goa_backend_oauth_provider_get_consumer_key (provider),
+                           goa_backend_oauth_provider_get_consumer_secret (provider),
+                           "https://www.googleapis.com/userinfo/email",
+                           FALSE);
+  oauth_proxy_set_token (OAUTH_PROXY (proxy), access_token);
+  oauth_proxy_set_token_secret (OAUTH_PROXY (proxy), access_token_secret);
   data->call = rest_proxy_new_call (proxy);
   rest_proxy_call_set_method (data->call, "GET");
   rest_proxy_call_add_param (data->call, "alt", "json");
-  s = g_strdup_printf ("OAuth %s", access_token);
-  rest_proxy_call_add_header (data->call, "Authorization", s);
-  g_free (s);
 
   error = NULL;
   if (!rest_proxy_call_async (data->call,
@@ -210,7 +227,7 @@ get_identity (GoaBackendOAuth2Provider  *provider,
 
 
 static gchar *
-get_identity_finish (GoaBackendOAuth2Provider  *provider,
+get_identity_finish (GoaBackendOAuthProvider   *provider,
                      GAsyncResult              *res,
                      GError                   **error)
 {
@@ -338,6 +355,14 @@ goa_backend_google_provider_build_object (GoaBackendProvider  *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static gboolean
+get_use_external_browser (GoaBackendOAuthProvider *provider)
+{
+  return FALSE;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static void
 goa_backend_google_provider_init (GoaBackendGoogleProvider *client)
 {
@@ -347,20 +372,22 @@ static void
 goa_backend_google_provider_class_init (GoaBackendGoogleProviderClass *klass)
 {
   GoaBackendProviderClass *provider_class;
-  GoaBackendOAuth2ProviderClass *oauth2_class;
+  GoaBackendOAuthProviderClass *oauth_class;
 
   provider_class = GOA_BACKEND_PROVIDER_CLASS (klass);
   provider_class->get_provider_type          = get_provider_type;
   provider_class->get_name                   = get_name;
   provider_class->build_object               = goa_backend_google_provider_build_object;
 
-  oauth2_class = GOA_BACKEND_OAUTH2_PROVIDER_CLASS (klass);
-  oauth2_class->get_authorization_uri    = get_authorization_uri;
-  oauth2_class->get_token_uri            = get_token_uri;
-  oauth2_class->get_redirect_uri         = get_redirect_uri;
-  oauth2_class->get_scope                = get_scope;
-  oauth2_class->get_client_id            = get_client_id;
-  oauth2_class->get_client_secret        = get_client_secret;
-  oauth2_class->get_identity             = get_identity;
-  oauth2_class->get_identity_finish      = get_identity_finish;
+  oauth_class = GOA_BACKEND_OAUTH_PROVIDER_CLASS (klass);
+  oauth_class->get_identity             = get_identity;
+  oauth_class->get_identity_finish      = get_identity_finish;
+  oauth_class->get_consumer_key         = get_consumer_key;
+  oauth_class->get_consumer_secret      = get_consumer_secret;
+  oauth_class->get_request_uri          = get_request_uri;
+  oauth_class->get_request_uri_params   = get_request_uri_params;
+  oauth_class->get_authorization_uri    = get_authorization_uri;
+  oauth_class->get_token_uri            = get_token_uri;
+  oauth_class->get_callback_uri         = get_callback_uri;
+  oauth_class->get_use_external_browser = get_use_external_browser;
 }

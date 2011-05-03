@@ -258,6 +258,35 @@ goa_backend_oauth_provider_get_request_uri (GoaBackendOAuthProvider *provider)
 }
 
 /**
+ * goa_backend_oauth_provider_get_request_uri_params:
+ * @provider: A #GoaBackendOAuthProvider.
+ *
+ * Gets additional parameters for the request URI.
+ *
+ * http://tools.ietf.org/html/rfc5849#section-2.1
+ *
+ * This is a virtual method where the default implementation returns
+ * %NULL.
+ *
+ * Returns: (transfer full): %NULL (for no parameters) or a
+ * %NULL-terminated array of (key, value) pairs that will be added to
+ * the URI. The caller will free the returned value with g_strfreev().
+ */
+gchar **
+goa_backend_oauth_provider_get_request_uri_params (GoaBackendOAuthProvider *provider)
+{
+  g_return_val_if_fail (GOA_IS_BACKEND_OAUTH_PROVIDER (provider), NULL);
+  return GOA_BACKEND_OAUTH_PROVIDER_GET_CLASS (provider)->get_request_uri_params (provider);
+}
+
+static gchar **
+goa_backend_oauth_provider_get_request_uri_params_default (GoaBackendOAuthProvider *provider)
+{
+  g_return_val_if_fail (GOA_IS_BACKEND_OAUTH_PROVIDER (provider), NULL);
+  return NULL;
+}
+
+/**
  * goa_backend_oauth_provider_get_authorization_uri:
  * @provider: A #GoaBackendOAuthProvider.
  *
@@ -490,7 +519,6 @@ get_tokens (GoaBackendOAuthProvider *provider,
   GetTokensData *data;
   RestProxy *proxy;
   GError *error;
-  gchar *s;
 
   g_return_if_fail (GOA_IS_BACKEND_OAUTH_PROVIDER (provider));
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
@@ -502,32 +530,18 @@ get_tokens (GoaBackendOAuthProvider *provider,
                                             user_data,
                                             get_tokens);
 
-  proxy = rest_proxy_new (goa_backend_oauth_provider_get_token_uri (provider), FALSE);
+  proxy = oauth_proxy_new (goa_backend_oauth_provider_get_consumer_key (provider),
+                           goa_backend_oauth_provider_get_consumer_secret (provider),
+                           goa_backend_oauth_provider_get_token_uri (provider),
+                           FALSE);
+  oauth_proxy_set_token (OAUTH_PROXY (proxy), token);
+  oauth_proxy_set_token_secret (OAUTH_PROXY (proxy), token_secret);
   data->call = rest_proxy_new_call (proxy);
   rest_proxy_call_set_method (data->call, "POST");
-  s = g_strdup_printf ("%d", g_random_int ());
-  rest_proxy_call_add_param (data->call, "oauth_nonce", s);
-  g_free (s);
-  s = g_strdup_printf ("%" G_GINT64_FORMAT, (gint64) time (NULL));
-  rest_proxy_call_add_param (data->call, "oauth_timestamp", s);
-  g_free (s);
-  rest_proxy_call_add_param (data->call, "oauth_consumer_key", goa_backend_oauth_provider_get_consumer_key (provider));
   if (verifier != NULL)
     rest_proxy_call_add_param (data->call, "oauth_verifier", verifier);
   if (session_handle != NULL)
     rest_proxy_call_add_param (data->call, "oauth_session_handle", session_handle);
-  rest_proxy_call_add_param (data->call, "oauth_token", token);
-  rest_proxy_call_add_param (data->call, "oauth_signature_method", "plaintext");
-  gchar *s1;
-  gchar *s2;
-  s1 = g_uri_escape_string (goa_backend_oauth_provider_get_consumer_secret (provider), NULL, TRUE);
-  s2 = g_uri_escape_string (token_secret, NULL, TRUE);
-  s = g_strdup_printf ("%s&%s", s1, s2);
-  g_free (s1);
-  g_free (s2);
-  rest_proxy_call_add_param (data->call, "oauth_signature", s);
-  g_free (s);
-  rest_proxy_call_add_param (data->call, "oauth_version", "1.0");
   error = NULL;
   if (!rest_proxy_call_async (data->call,
                               get_tokens_on_call_cb,
@@ -686,6 +700,8 @@ get_tokens_and_identity_on_get_identity_cb (GoaBackendOAuthProvider *provider,
   data->identity = goa_backend_oauth_provider_get_identity_finish (provider,
                                                                    res,
                                                                    &data->error);
+  if (&data->error != NULL)
+    g_prefix_error (&data->error, _("Error getting identity: "));
   g_main_loop_quit (data->loop);
 }
 
@@ -703,6 +719,8 @@ get_tokens_and_identity_on_get_tokens_cb (GoaBackendOAuthProvider *provider,
                                           &data->session_handle_expires_in,
                                           res,
                                           &data->error);
+  if (&data->error != NULL)
+    g_prefix_error (&data->error, _("Error getting an Access Token: "));
   g_main_loop_quit (data->loop);
 }
 
@@ -725,8 +743,9 @@ get_tokens_and_identity (GoaBackendOAuthProvider *provider,
   RestProxy *proxy;
   RestProxyCall *call;
   GHashTable *f;
-  gchar *s;
   gboolean use_external_browser;
+  gchar **request_params;
+  guint n;
 
   g_return_val_if_fail (GOA_IS_BACKEND_OAUTH_PROVIDER (provider), FALSE);
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), FALSE);
@@ -738,6 +757,7 @@ get_tokens_and_identity (GoaBackendOAuthProvider *provider,
   proxy = NULL;
   call = NULL;
   url = NULL;
+  request_params = NULL;
 
   use_external_browser = goa_backend_oauth_provider_get_use_external_browser (provider);
 
@@ -747,27 +767,29 @@ get_tokens_and_identity (GoaBackendOAuthProvider *provider,
   data.provider = provider;
   data.loop = g_main_loop_new (NULL, FALSE);
 
-  proxy = rest_proxy_new (goa_backend_oauth_provider_get_request_uri (provider), FALSE);
+  proxy = oauth_proxy_new (goa_backend_oauth_provider_get_consumer_key (provider),
+                           goa_backend_oauth_provider_get_consumer_secret (provider),
+                           goa_backend_oauth_provider_get_request_uri (provider), FALSE);
   call = rest_proxy_new_call (proxy);
   rest_proxy_call_set_method (call, "POST");
-  s = g_strdup_printf ("%d", g_random_int ());
-  rest_proxy_call_add_param (call, "oauth_nonce", s);
-  g_free (s);
-  s = g_strdup_printf ("%" G_GINT64_FORMAT, (gint64) time (NULL));
-  rest_proxy_call_add_param (call, "oauth_timestamp", s);
-  g_free (s);
-  rest_proxy_call_add_param (call, "oauth_consumer_key", goa_backend_oauth_provider_get_consumer_key (provider));
-  rest_proxy_call_add_param (call, "oauth_signature_method", "plaintext");
-  s = g_strdup_printf ("%s&", goa_backend_oauth_provider_get_consumer_secret (provider));
-  rest_proxy_call_add_param (call, "oauth_signature", s);
-  g_free (s);
-  rest_proxy_call_add_param (call, "oauth_version", "1.0");
   if (use_external_browser)
     rest_proxy_call_add_param (call, "oauth_callback", "oob");
   else
     rest_proxy_call_add_param (call, "oauth_callback", goa_backend_oauth_provider_get_callback_uri (provider));
+
+  request_params = goa_backend_oauth_provider_get_request_uri_params (provider);
+  if (request_params != NULL)
+    {
+      g_assert (g_strv_length (request_params) % 2 == 0);
+      for (n = 0; request_params[n] != NULL; n += 2)
+        rest_proxy_call_add_param (call, request_params[n], request_params[n+1]);
+    }
+
   if (!rest_proxy_call_sync (call, &data.error))
-    goto out;
+    {
+      g_prefix_error (&data.error, _("Error getting a Request Token: "));
+      goto out;
+    }
   if (rest_proxy_call_get_status_code (call) != 200)
     {
       g_set_error (&data.error,
@@ -957,6 +979,7 @@ get_tokens_and_identity (GoaBackendOAuthProvider *provider,
   g_free (data.request_token);
   g_free (data.request_token_secret);
 
+  g_strfreev (request_params);
   if (proxy != NULL)
     g_object_unref (proxy);
   return ret;
@@ -1074,17 +1097,21 @@ goa_backend_oauth_provider_add_account (GoaBackendProvider *_provider,
   for (l = accounts; l != NULL; l = l->next)
     {
       GoaObject *object = GOA_OBJECT (l->data);
-      const gchar *identity_from_object;
-
-      identity_from_object = goa_oauth_based_get_identity (goa_object_peek_oauth_based (object));
-      if (g_strcmp0 (identity_from_object, identity) == 0)
+      GoaOAuthBased *oauth_based;
+      oauth_based = goa_object_peek_oauth_based (object);
+      if (oauth_based != NULL)
         {
-          g_set_error (&data.error,
-                       GOA_ERROR,
-                       GOA_ERROR_ACCOUNT_EXISTS,
-                       _("There is already an account for the identity %s"),
-                       identity);
-          goto out;
+          const gchar *identity_from_object;
+          identity_from_object = goa_oauth_based_get_identity (oauth_based);
+          if (g_strcmp0 (identity_from_object, identity) == 0)
+            {
+              g_set_error (&data.error,
+                           GOA_ERROR,
+                           GOA_ERROR_ACCOUNT_EXISTS,
+                           _("There is already an account for the identity %s"),
+                           identity);
+              goto out;
+            }
         }
     }
 
@@ -1911,6 +1938,7 @@ goa_backend_oauth_provider_class_init (GoaBackendOAuthProviderClass *klass)
 
   klass->build_authorization_uri  = goa_backend_oauth_provider_build_authorization_uri_default;
   klass->get_use_external_browser = goa_backend_oauth_provider_get_use_external_browser_default;
+  klass->get_request_uri_params   = goa_backend_oauth_provider_get_request_uri_params_default;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
