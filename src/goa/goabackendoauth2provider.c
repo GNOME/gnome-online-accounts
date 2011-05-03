@@ -1214,9 +1214,9 @@ goa_backend_oauth2_provider_refresh_account (GoaBackendProvider  *_provider,
       goto out;
     }
 
-  goa_account_call_clear_attention_needed (goa_object_peek_account (object),
-                                           NULL, /* GCancellable */
-                                           NULL, NULL); /* callback, user_data */
+  goa_account_call_ensure_credentials (goa_object_peek_account (object),
+                                       NULL, /* GCancellable */
+                                       NULL, NULL); /* callback, user_data */
 
   ret = TRUE;
 
@@ -1324,7 +1324,6 @@ get_access_token_get_tokens_cb (GoaBackendOAuth2Provider  *provider,
     {
       g_simple_async_result_set_error (data->simple,
                                        GOA_ERROR,
-                                       /* force NeedsAttention to TRUE only if it's an authorization error */
                                        is_authorization_error (error) ? GOA_ERROR_NOT_AUTHORIZED : GOA_ERROR_FAILED,
                                        _("Failed to refresh access token: %s (%s, %d)"),
                                        error->message, g_quark_to_string (error->domain), error->code);
@@ -1381,7 +1380,7 @@ get_access_token_lookup_credentials_cb (GoaBackendProvider *provider,
     {
       g_simple_async_result_set_error (data->simple,
                                        GOA_ERROR,
-                                       GOA_ERROR_NOT_AUTHORIZED, /* force NeedsAttention to TRUE */
+                                       GOA_ERROR_NOT_AUTHORIZED,
                                        _("Credentials not found in keyring: %s (%s, %d)"),
                                        error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
@@ -1408,7 +1407,7 @@ get_access_token_lookup_credentials_cb (GoaBackendProvider *provider,
     {
       g_simple_async_result_set_error (data->simple,
                                        GOA_ERROR,
-                                       GOA_ERROR_NOT_AUTHORIZED, /* force NeedsAttention to TRUE */
+                                       GOA_ERROR_NOT_AUTHORIZED,
                                        _("Credentials does not contain access_token"));
       g_simple_async_result_complete_in_idle (data->simple);
       g_object_unref (data->simple);
@@ -1888,34 +1887,11 @@ get_access_token_cb (GoaBackendOAuth2Provider  *provider,
   access_token = goa_backend_oauth2_provider_get_access_token_finish (provider, &access_token_expires_in, res, &error);
   if (access_token == NULL)
     {
-      if (error->domain == GOA_ERROR && error->code == GOA_ERROR_NOT_AUTHORIZED)
-        {
-          GoaAccount *account;
-          account = goa_object_peek_account (data->object);
-          if (!goa_account_get_attention_needed (account))
-            {
-              goa_account_set_attention_needed (account, TRUE);
-              g_dbus_interface_skeleton_flush (G_DBUS_INTERFACE_SKELETON (account));
-              /* TODO: syslog */
-              g_print ("Setting AttentionNeeded to TRUE because GetAccessToken() failed for %s with: %s (%s, %d)\n",
-                       g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)),
-                       error->message, g_quark_to_string (error->domain), error->code);
-            }
-        }
       g_dbus_method_invocation_return_gerror (data->invocation, error);
       g_error_free (error);
     }
   else
     {
-      GoaAccount *account;
-      account = goa_object_peek_account (data->object);
-
-      /* clear AttentionNeeded flag if set */
-      if (goa_account_get_attention_needed (account))
-        {
-          goa_account_set_attention_needed (account, FALSE);
-          g_dbus_interface_skeleton_flush (G_DBUS_INTERFACE_SKELETON (account));
-        }
       goa_oauth2_based_complete_get_access_token (goa_object_peek_oauth2_based (data->object),
                                                   data->invocation,
                                                   access_token,

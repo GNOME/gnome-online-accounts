@@ -72,9 +72,6 @@
       <arg name="name" type="s" direction="in"/>
     </method>
 
-    <!-- ClearAttentionNeeded: Clears the #org.gnome.OnlineAccounts.Account:AttentionNeeded property -->
-    <method name="ClearAttentionNeeded"/>
-
     <!--
         Remove:
 
@@ -88,9 +85,15 @@
         @expires_in: The duration that the cached credentials are valid for, in seconds or 0 if unknown.
 
         Ensures that valid credentials exist for the account and
-        returns how long they are still valid for, if known.
+        returns how long they are still valid for, if known. Returns
+        an error if the cached credentials are not valid or
+        non-existant.
 
-        Returns an error if the cached credentials are not valid. TODO: specify what errors can be returned.
+        If this method fails because the token service indicates that
+        authorization has expired, the
+        #org.gnome.OnlineAccounts.Account:AttentionNeeded property
+        will be set to TRUE. On the other hand, if this property was
+        already TRUE and this method succeeds, it is set to FALSE.
     -->
     <method name="EnsureCredentials">
       <arg name="expires_in" type="i" direction="out"/>
@@ -204,11 +207,6 @@
       Use this method to obtains an access token to access services
       for an account. Because networking is involved, this method may
       take a very long time to complete.
-
-      If this method fails because the token service indicates that
-      authorization has expired, the
-      #org.gnome.OnlineAccounts.Account:AttentionNeeded property will
-      be set to TRUE.
     -->
     <method name="GetAccessToken">
       <arg name="access_token" type="s" direction="out"/>

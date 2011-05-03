@@ -32,6 +32,8 @@
 #include <glib/gi18n.h>
 #include <libnotify/notify.h>
 #include <gio/gdesktopappinfo.h>
+#include <rest/rest-proxy.h>
+#include <libsoup/soup.h>
 
 #include "goadaemon.h"
 #include "goa/goabackend.h"
@@ -70,10 +72,6 @@ static gboolean on_manager_handle_add_account (GoaManager            *object,
                                                const gchar           *name,
                                                GVariant              *details,
                                                gpointer               user_data);
-
-static gboolean on_account_handle_clear_attention_needed (GoaAccount            *account,
-                                                          GDBusMethodInvocation *invocation,
-                                                          gpointer               user_data);
 
 static gboolean on_account_handle_set_name (GoaAccount            *account,
                                             GDBusMethodInvocation *invocation,
@@ -508,9 +506,6 @@ process_config_entries (GoaDaemon  *daemon,
                                             G_CALLBACK (on_account_handle_set_name),
                                             daemon);
       g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
-                                            G_CALLBACK (on_account_handle_clear_attention_needed),
-                                            daemon);
-      g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
                                             G_CALLBACK (on_account_handle_remove),
                                             daemon);
       g_debug ("removing %s", object_path);
@@ -540,10 +535,6 @@ process_config_entries (GoaDaemon  *daemon,
           g_signal_connect (goa_object_peek_account (GOA_OBJECT (object)),
                             "handle-set-name",
                             G_CALLBACK (on_account_handle_set_name),
-                            daemon);
-          g_signal_connect (goa_object_peek_account (GOA_OBJECT (object)),
-                            "handle-clear-attention-needed",
-                            G_CALLBACK (on_account_handle_clear_attention_needed),
                             daemon);
           g_signal_connect (goa_object_peek_account (GOA_OBJECT (object)),
                             "handle-remove",
@@ -579,9 +570,6 @@ process_config_entries (GoaDaemon  *daemon,
                                                 daemon);
           g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
                                                 G_CALLBACK (on_account_handle_set_name),
-                                                daemon);
-          g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
-                                                G_CALLBACK (on_account_handle_clear_attention_needed),
                                                 daemon);
           g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
                                                 G_CALLBACK (on_account_handle_remove),
@@ -803,17 +791,6 @@ on_manager_handle_add_account (GoaManager             *manager,
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
-
-static gboolean
-on_account_handle_clear_attention_needed (GoaAccount            *account,
-                                          GDBusMethodInvocation *invocation,
-                                          gpointer               user_data)
-{
-  /* GoaDaemon *daemon = GOA_DAEMON (user_data); */
-  goa_account_set_attention_needed (account, FALSE);
-  goa_account_complete_clear_attention_needed (account, invocation);
-  return TRUE; /* invocation was handled */
-}
 
 static gboolean
 on_account_handle_set_name (GoaAccount            *account,
@@ -1172,6 +1149,27 @@ ensure_credentials_data_unref (EnsureCredentialsData *data)
   g_slice_free (EnsureCredentialsData, data);
 }
 
+static gboolean
+is_authorization_error (GError *error)
+{
+  gboolean ret;
+
+  g_return_val_if_fail (error != NULL, FALSE);
+
+  ret = FALSE;
+  if (error->domain == REST_PROXY_ERROR || error->domain == SOUP_HTTP_ERROR)
+    {
+      if (SOUP_STATUS_IS_CLIENT_ERROR (error->code))
+        ret = TRUE;
+    }
+  else if (error->domain == GOA_ERROR)
+    {
+      if (error->code == GOA_ERROR_NOT_AUTHORIZED)
+        ret = TRUE;
+    }
+  return ret;
+}
+
 static void
 ensure_credentials_cb (GoaBackendProvider *provider,
                        GAsyncResult       *res,
@@ -1184,11 +1182,38 @@ ensure_credentials_cb (GoaBackendProvider *provider,
   error= NULL;
   if (!goa_backend_provider_ensure_credentials_finish (provider, &expires_in, res, &error))
     {
+      /* Set AttentionNeeded only if the error is an authorization error */
+      if (is_authorization_error (error))
+        {
+          GoaAccount *account;
+          account = goa_object_peek_account (data->object);
+          if (!goa_account_get_attention_needed (account))
+            {
+              goa_account_set_attention_needed (account, TRUE);
+              g_dbus_interface_skeleton_flush (G_DBUS_INTERFACE_SKELETON (account));
+              /* TODO: syslog */
+              g_print ("%s: Setting AttentionNeeded to TRUE because EnsureCredentials() failed with: %s (%s, %d)\n",
+                       g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)),
+                       error->message, g_quark_to_string (error->domain), error->code);
+            }
+        }
       g_dbus_method_invocation_return_gerror (data->invocation, error);
       g_error_free (error);
     }
   else
     {
+      GoaAccount *account;
+      account = goa_object_peek_account (data->object);
+
+      /* Clear AttentionNeeded flag if set */
+      if (goa_account_get_attention_needed (account))
+        {
+          goa_account_set_attention_needed (account, FALSE);
+          g_dbus_interface_skeleton_flush (G_DBUS_INTERFACE_SKELETON (account));
+          /* TODO: syslog */
+          g_print ("%s: Setting AttentionNeeded to FALSE because EnsureCredentials() succeded\n",
+                   g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)));
+        }
       goa_account_complete_ensure_credentials (goa_object_peek_account (data->object),
                                                data->invocation,
                                                expires_in);
