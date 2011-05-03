@@ -334,7 +334,7 @@ goa_backend_yahoo_provider_build_object (GoaBackendProvider  *provider,
 static gboolean
 get_use_external_browser (GoaBackendOAuthProvider *provider)
 {
-  return TRUE;
+  return FALSE;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
