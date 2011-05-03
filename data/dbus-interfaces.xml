@@ -66,42 +66,6 @@
       -->
     <property name="Name" type="s" access="read"/>
 
-    <!-- SupportedSources: A list of possible sources that this account can be used for.
-
-         Known sources include:
-         <variablelist>
-         <varlistentry><term>messages</term><listitem><para>Used for email and similar communication media.</para></listitem></varlistentry>
-         <varlistentry><term>events</term><listitem><para>Used for calendar appointments and upcoming events.</para></listitem></varlistentry>
-         <varlistentry><term>chat</term><listitem><para>E.g. instant messaging.</para></listitem></varlistentry>
-         <varlistentry><term>contacts</term><listitem><para>Used for contacts.</para></listitem></varlistentry>
-         </variablelist>
-
-         This property normally doesn't change. It can change in e.g. a newer software version.
-    -->
-    <property name="SupportedSources" type="as" access="read"/>
-
-    <!-- EnabledSources: The user-configured sources this account should be used for.
-
-         This property may change if the user e.g. reconfigures the account.
-
-         Known sources are listed in the documentation for the #org.gnome.OnlineAccounts.Account:SupportedSources property.
-    -->
-    <property name="EnabledSources" type="as" access="readwrite"/>
-
-    <!-- SourceNames:
-
-         A property that contains the "branded" name that should be displayed in the UI rather than a generic string such as "Chat" or "E-Mail". For example, for a Google Account, this property may contain the following
-         <variablelist>
-         <varlistentry><term>messages</term><listitem><para>GMail</para></listitem></varlistentry>
-         <varlistentry><term>events</term><listitem><para>Calendar</para></listitem></varlistentry>
-         <varlistentry><term>chat</term><listitem><para>Talk</para></listitem></varlistentry>
-         <varlistentry><term>contacts</term><listitem><para>Contacts</para></listitem></varlistentry>
-         </variablelist>
-
-         This property normally doesn't change. It can change in e.g. a newer software version.
-    -->
-    <property name="SourceNames" type="a{ss}" access="read"/>
-
     <!-- SetName: Sets the name. -->
     <method name="SetName">
       <arg name="name" type="s" direction="in"/>
