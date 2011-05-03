@@ -142,6 +142,8 @@ typedef struct
   volatile gint ref_count;
   GSimpleAsyncResult *simple;
   RestProxyCall *call;
+  gchar *id;
+  gchar *name;
 } GetIdentityData;
 
 static GetIdentityData *
@@ -156,30 +158,95 @@ get_identity_data_unref (GetIdentityData *data)
 {
   if (g_atomic_int_dec_and_test (&data->ref_count))
     {
-      g_object_unref (data->simple);
       g_object_unref (data->call);
+      g_free (data->id);
+      g_free (data->name);
       g_slice_free (GetIdentityData, data);
     }
 }
 
 static void
 get_identity_cb (RestProxyCall *call,
-                 const GError  *error,
+                 const GError  *passed_error,
                  GObject       *weak_object,
                  gpointer       user_data)
 {
   GetIdentityData *data = user_data;
-  if (error != NULL)
+  JsonParser *parser;
+  JsonObject *json_object;
+  GError *error;
+
+  parser = NULL;
+
+  if (passed_error != NULL)
     {
-      g_simple_async_result_set_from_error (data->simple, error);
+      g_simple_async_result_set_from_error (data->simple, passed_error);
+      g_simple_async_result_complete_in_idle (data->simple);
+      g_object_unref (data->simple);
       goto out;
     }
+
+  if (rest_proxy_call_get_status_code (data->call) != 200)
+    {
+      g_simple_async_result_set_error (data->simple,
+                                       GOA_ERROR,
+                                       GOA_ERROR_FAILED,
+                                       _("Expected status 200 when verifying credentials, instead got status %d (%s)"),
+                                       rest_proxy_call_get_status_code (data->call),
+                                       rest_proxy_call_get_status_message (data->call));
+      g_simple_async_result_complete_in_idle (data->simple);
+      g_object_unref (data->simple);
+      goto out;
+    }
+
+  parser = json_parser_new ();
+  error = NULL;
+  if (!json_parser_load_from_data (parser,
+                                   rest_proxy_call_get_payload (data->call),
+                                   rest_proxy_call_get_payload_length (data->call),
+                                   &error))
+    {
+      g_prefix_error (&error, _("Error parsing response as JSON: "));
+      g_simple_async_result_take_error (data->simple, error);
+      g_simple_async_result_complete_in_idle (data->simple);
+      g_object_unref (data->simple);
+      goto out;
+    }
+
+  json_object = json_node_get_object (json_parser_get_root (parser));
+  data->id = g_strdup (json_object_get_string_member (json_object, "id_str"));
+  if (data->id == NULL)
+    {
+      g_simple_async_result_set_error (data->simple,
+                                       GOA_ERROR,
+                                       GOA_ERROR_FAILED,
+                                       _("Didn't find id_str in JSON data"));
+      g_simple_async_result_complete_in_idle (data->simple);
+      g_object_unref (data->simple);
+      goto out;
+    }
+  data->name = g_strdup (json_object_get_string_member (json_object, "screen_name"));
+  if (data->name == NULL)
+    {
+      g_simple_async_result_set_error (data->simple,
+                                       GOA_ERROR,
+                                       GOA_ERROR_FAILED,
+                                       _("Didn't find screen_name in JSON data"));
+      g_simple_async_result_complete_in_idle (data->simple);
+      g_object_unref (data->simple);
+      goto out;
+    }
+
   g_simple_async_result_set_op_res_gpointer (data->simple,
                                              get_identity_data_ref (data),
                                              (GDestroyNotify) get_identity_data_unref);
- out:
   g_simple_async_result_complete_in_idle (data->simple);
+  g_object_unref (data->simple);
+
+ out:
   get_identity_data_unref (data);
+  if (parser != NULL)
+    g_object_unref (parser);
 }
 
 
@@ -220,6 +287,7 @@ get_identity (GoaBackendOAuthProvider   *provider,
     {
       g_simple_async_result_take_error (data->simple, error);
       g_simple_async_result_complete_in_idle (data->simple);
+      g_object_unref (data->simple);
       get_identity_data_unref (data);
     }
   g_object_unref (proxy);
@@ -228,58 +296,25 @@ get_identity (GoaBackendOAuthProvider   *provider,
 
 static gchar *
 get_identity_finish (GoaBackendOAuthProvider   *provider,
+                     gchar                    **out_name,
                      GAsyncResult              *res,
                      GError                   **error)
 {
   GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
   GetIdentityData *data;
   gchar *ret;
-  JsonParser *parser;
-  JsonObject *json_object;
 
   ret = NULL;
-  parser = NULL;
 
   if (g_simple_async_result_propagate_error (simple, error))
     goto out;
 
   data = g_simple_async_result_get_op_res_gpointer (simple);
-
-  if (rest_proxy_call_get_status_code (data->call) != 200)
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   _("Expected status 200 when verifying credentials, instead got status %d (%s)"),
-                   rest_proxy_call_get_status_code (data->call),
-                   rest_proxy_call_get_status_message (data->call));
-      goto out;
-    }
-
-  parser = json_parser_new ();
-  if (!json_parser_load_from_data (parser,
-                                   rest_proxy_call_get_payload (data->call),
-                                   rest_proxy_call_get_payload_length (data->call),
-                                   error))
-    {
-      g_prefix_error (error, _("Error parsing response as JSON: "));
-      goto out;
-    }
-
-  json_object = json_node_get_object (json_parser_get_root (parser));
-  ret = g_strdup (json_object_get_string_member (json_object, "id_str"));
-  if (ret == NULL)
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   _("Didn't find id_str in JSON data"));
-      goto out;
-    }
+  ret = g_strdup (data->id);
+  if (out_name != NULL)
+    *out_name = g_strdup (data->name);
 
  out:
-  if (parser != NULL)
-    g_object_unref (parser);
   return ret;
 }
 

@@ -91,6 +91,7 @@ struct _GoaBackendOAuthProviderClass
                                           GAsyncReadyCallback        callback,
                                           gpointer                   user_data);
   gchar       *(*get_identity_finish)    (GoaBackendOAuthProvider  *provider,
+                                          gchar                   **out_name,
                                           GAsyncResult              *res,
                                           GError                   **error);
 
@@ -121,6 +122,7 @@ void         goa_backend_oauth_provider_get_identity             (GoaBackendOAut
                                                                   GAsyncReadyCallback       callback,
                                                                   gpointer                  user_data);
 gchar       *goa_backend_oauth_provider_get_identity_finish      (GoaBackendOAuthProvider  *provider,
+                                                                  gchar                   **out_name,
                                                                   GAsyncResult             *res,
                                                                   GError                   **error);
 void         goa_backend_oauth_provider_get_access_token         (GoaBackendOAuthProvider  *provider,

@@ -356,14 +356,16 @@ goa_backend_oauth_provider_get_callback_uri (GoaBackendOAuthProvider *provider)
  * @user_data: Pointer to pass to @callback.
  *
  * Method that returns the identity corresponding to @access_token and
- * @access_token_secret. This is a pure virtual method - a subclass
- * must provide an implementation.
+ * @access_token_secret.
  *
  * The identity is needed because all authentication happens out of
  * band. The only requirement is that the returned identity is unique
  * - for example, for #GoaBackendGoogleProvider the returned identity
  * is the email address, for #GoaBackendFacebookProvider it's the user
- * name.
+ * name. In addition to the identity, an implementation also returns a
+ * <emphasis>name</emphasis> that is more suitable for presentation
+ * (the identity could be a GUID for example) and doesn't have to be
+ * unique.
  *
  * When the result is ready, @callback will be called in the the <link
  * linkend="g-main-context-push-thread-default">thread-default main
@@ -391,6 +393,7 @@ goa_backend_oauth_provider_get_identity (GoaBackendOAuthProvider *provider,
 /**
  * goa_backend_oauth_provider_get_identity_finish:
  * @provider: A #GoaBackendOAuthProvider.
+ * @out_name: (out): Return location for name or %NULL.
  * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to goa_backend_oauth_provider_get_identity().
  * @error: Return location for error or %NULL.
  *
@@ -403,13 +406,14 @@ goa_backend_oauth_provider_get_identity (GoaBackendOAuthProvider *provider,
  * must be freed with g_free().
  */
 gchar *
-goa_backend_oauth_provider_get_identity_finish (GoaBackendOAuthProvider *provider,
-                                                 GAsyncResult             *res,
-                                                 GError                   **error)
+goa_backend_oauth_provider_get_identity_finish (GoaBackendOAuthProvider  *provider,
+                                                gchar                   **out_name,
+                                                GAsyncResult             *res,
+                                                GError                  **error)
 {
   g_return_val_if_fail (GOA_IS_BACKEND_OAUTH_PROVIDER (provider), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-  return GOA_BACKEND_OAUTH_PROVIDER_GET_CLASS (provider)->get_identity_finish (provider, res, error);
+  return GOA_BACKEND_OAUTH_PROVIDER_GET_CLASS (provider)->get_identity_finish (provider, out_name, res, error);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -618,6 +622,7 @@ typedef struct
   gchar *oauth_verifier;
 
   gchar *identity;
+  gchar *name;
 
   gchar *request_token;
   gchar *request_token_secret;
@@ -698,6 +703,7 @@ get_tokens_and_identity_on_get_identity_cb (GoaBackendOAuthProvider *provider,
 {
   IdentifyData *data = user_data;
   data->identity = goa_backend_oauth_provider_get_identity_finish (provider,
+                                                                   &data->name,
                                                                    res,
                                                                    &data->error);
   if (&data->error != NULL)
@@ -734,6 +740,7 @@ get_tokens_and_identity (GoaBackendOAuthProvider *provider,
                          gchar                   **out_session_handle,
                          gint                     *out_session_handle_expires_in,
                          gchar                   **out_identity,
+                         gchar                   **out_name,
                          GError                  **error)
 {
   gboolean ret;
@@ -959,6 +966,8 @@ get_tokens_and_identity (GoaBackendOAuthProvider *provider,
         *out_session_handle_expires_in = data.session_handle_expires_in;
       if (out_identity != NULL)
         *out_identity = g_strdup (data.identity);
+      if (out_name != NULL)
+        *out_name = g_strdup (data.name);
     }
   else
     {
@@ -966,6 +975,7 @@ get_tokens_and_identity (GoaBackendOAuthProvider *provider,
       g_propagate_error (error, data.error);
     }
 
+  g_free (data.name);
   g_free (data.identity);
   g_free (url);
 
@@ -1058,6 +1068,7 @@ goa_backend_oauth_provider_add_account (GoaBackendProvider *_provider,
   gchar *session_handle;
   gint session_handle_expires_in;
   gchar *identity;
+  gchar *name;
   GList *accounts;
   GList *l;
   AddData data;
@@ -1073,6 +1084,7 @@ goa_backend_oauth_provider_add_account (GoaBackendProvider *_provider,
   access_token = NULL;
   access_token_secret = NULL;
   identity = NULL;
+  name = NULL;
   accounts = NULL;
 
   memset (&data, '\0', sizeof (AddData));
@@ -1087,6 +1099,7 @@ goa_backend_oauth_provider_add_account (GoaBackendProvider *_provider,
                                 &session_handle,
                                 &session_handle_expires_in,
                                 &identity,
+                                &name,
                                 &data.error))
     goto out;
 
@@ -1124,7 +1137,7 @@ goa_backend_oauth_provider_add_account (GoaBackendProvider *_provider,
 
   goa_manager_call_add_account (goa_client_get_manager (client),
                                 goa_backend_provider_get_provider_type (GOA_BACKEND_PROVIDER (provider)),
-                                identity, /* Name */
+                                name, /* Name */
                                 g_variant_new_parsed ("{'Identity': %s}",
                                                       identity),
                                 NULL, /* GCancellable* */
@@ -1172,6 +1185,7 @@ goa_backend_oauth_provider_add_account (GoaBackendProvider *_provider,
   g_list_foreach (accounts, (GFunc) g_object_unref, NULL);
   g_list_free (accounts);
   g_free (identity);
+  g_free (name);
   g_free (access_token);
   g_free (access_token_secret);
   g_free (data.account_object_path);
@@ -1251,6 +1265,7 @@ goa_backend_oauth_provider_refresh_account (GoaBackendProvider  *_provider,
                                 &session_handle,
                                 &session_handle_expires_in,
                                 &identity,
+                                NULL, /* out_name */
                                 error))
     goto out;
 
@@ -1797,6 +1812,7 @@ ensure_credentials_get_identity_cb (GoaBackendOAuthProvider *provider,
 
   error = NULL;
   data->identity = goa_backend_oauth_provider_get_identity_finish (provider,
+                                                                   NULL, /* out_name */
                                                                    res,
                                                                    &error);
   if (data->identity == NULL)

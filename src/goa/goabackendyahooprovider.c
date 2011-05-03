@@ -120,6 +120,11 @@ typedef struct
   volatile gint ref_count;
   GSimpleAsyncResult *simple;
   RestProxyCall *call;
+  GoaBackendOAuthProvider *provider;
+  gchar *access_token;
+  gchar *access_token_secret;
+  gchar *id;
+  gchar *name;
 } GetIdentityData;
 
 static GetIdentityData *
@@ -134,32 +139,212 @@ get_identity_data_unref (GetIdentityData *data)
 {
   if (g_atomic_int_dec_and_test (&data->ref_count))
     {
-      g_object_unref (data->simple);
       g_object_unref (data->call);
+      g_free (data->id);
+      g_free (data->name);
+      g_object_unref (data->provider);
+      g_free (data->access_token);
+      g_free (data->access_token_secret);
       g_slice_free (GetIdentityData, data);
     }
 }
 
 static void
+get_identity_usercard_cb (RestProxyCall *call,
+                          const GError  *passed_error,
+                          GObject       *weak_object,
+                          gpointer       user_data)
+{
+  GetIdentityData *data = user_data;
+  JsonParser *parser;
+  JsonObject *json_object;
+  JsonObject *json_data_object;
+  GError *error;
+
+  parser = NULL;
+
+  if (passed_error != NULL)
+    {
+      g_simple_async_result_set_from_error (data->simple, passed_error);
+      g_simple_async_result_complete_in_idle (data->simple);
+      g_object_unref (data->simple);
+      goto out;
+    }
+
+  if (rest_proxy_call_get_status_code (data->call) != 200)
+    {
+      g_simple_async_result_set_error (data->simple,
+                                       GOA_ERROR,
+                                       GOA_ERROR_FAILED,
+                                       _("Expected status 200 when requesting usercard, instead got status %d (%s)"),
+                                       rest_proxy_call_get_status_code (data->call),
+                                       rest_proxy_call_get_status_message (data->call));
+      g_simple_async_result_complete_in_idle (data->simple);
+      g_object_unref (data->simple);
+      goto out;
+    }
+
+  parser = json_parser_new ();
+  error = NULL;
+  if (!json_parser_load_from_data (parser,
+                                   rest_proxy_call_get_payload (data->call),
+                                   rest_proxy_call_get_payload_length (data->call),
+                                   &error))
+    {
+      g_prefix_error (&error, _("Error parsing response as JSON: "));
+      g_simple_async_result_take_error (data->simple, error);
+      g_simple_async_result_complete_in_idle (data->simple);
+      g_object_unref (data->simple);
+      goto out;
+    }
+
+  json_object = json_node_get_object (json_parser_get_root (parser));
+
+  json_data_object = json_object_get_object_member (json_object, "profile");
+  if (json_data_object == NULL)
+    {
+      g_simple_async_result_set_error (data->simple,
+                                       GOA_ERROR,
+                                       GOA_ERROR_FAILED,
+                                       _("Didn't find profile member in JSON data"));
+      g_simple_async_result_complete_in_idle (data->simple);
+      g_object_unref (data->simple);
+      goto out;
+    }
+
+  data->name = g_strdup (json_object_get_string_member (json_data_object, "nickname"));
+  if (data->name == NULL)
+    {
+      g_simple_async_result_set_error (data->simple,
+                                       GOA_ERROR,
+                                       GOA_ERROR_FAILED,
+                                       _("Didn't find nickname member in JSON data"));
+      g_simple_async_result_complete_in_idle (data->simple);
+      g_object_unref (data->simple);
+      goto out;
+    }
+
+  g_simple_async_result_set_op_res_gpointer (data->simple,
+                                             get_identity_data_ref (data),
+                                             (GDestroyNotify) get_identity_data_unref);
+  g_simple_async_result_complete_in_idle (data->simple);
+  g_object_unref (data->simple);
+
+ out:
+  get_identity_data_unref (data);
+  if (parser != NULL)
+    g_object_unref (parser);
+}
+
+static void
 get_identity_cb (RestProxyCall *call,
-                 const GError  *error,
+                 const GError  *passed_error,
                  GObject       *weak_object,
                  gpointer       user_data)
 {
   GetIdentityData *data = user_data;
-  if (error != NULL)
+  JsonParser *parser;
+  JsonObject *json_object;
+  JsonObject *json_data_object;
+  RestProxy *proxy;
+  GError *error;
+
+  parser = NULL;
+  proxy = NULL;
+
+  if (passed_error != NULL)
     {
-      g_simple_async_result_set_from_error (data->simple, error);
+      g_simple_async_result_set_from_error (data->simple, passed_error);
+      g_simple_async_result_complete_in_idle (data->simple);
+      g_object_unref (data->simple);
       goto out;
     }
-  g_simple_async_result_set_op_res_gpointer (data->simple,
-                                             get_identity_data_ref (data),
-                                             (GDestroyNotify) get_identity_data_unref);
- out:
-  g_simple_async_result_complete_in_idle (data->simple);
-  get_identity_data_unref (data);
-}
 
+  if (rest_proxy_call_get_status_code (data->call) != 200)
+    {
+      g_simple_async_result_set_error (data->simple,
+                                       GOA_ERROR,
+                                       GOA_ERROR_FAILED,
+                                       _("Expected status 200 when requesting guid, instead got status %d (%s)"),
+                                       rest_proxy_call_get_status_code (data->call),
+                                       rest_proxy_call_get_status_message (data->call));
+      g_simple_async_result_complete_in_idle (data->simple);
+      g_object_unref (data->simple);
+      goto out;
+    }
+
+  parser = json_parser_new ();
+  error = NULL;
+  if (!json_parser_load_from_data (parser,
+                                   rest_proxy_call_get_payload (data->call),
+                                   rest_proxy_call_get_payload_length (data->call),
+                                   &error))
+    {
+      g_prefix_error (&error, _("Error parsing response as JSON: "));
+      g_simple_async_result_take_error (data->simple, error);
+      g_simple_async_result_complete_in_idle (data->simple);
+      g_object_unref (data->simple);
+      goto out;
+    }
+
+  json_object = json_node_get_object (json_parser_get_root (parser));
+  json_data_object = json_object_get_object_member (json_object, "guid");
+  if (json_data_object == NULL)
+    {
+      g_simple_async_result_set_error (data->simple,
+                                       GOA_ERROR,
+                                       GOA_ERROR_FAILED,
+                                       _("Didn't find guid member in JSON data"));
+      g_simple_async_result_complete_in_idle (data->simple);
+      g_object_unref (data->simple);
+      goto out;
+    }
+
+  data->id = g_strdup (json_object_get_string_member (json_data_object, "value"));
+  if (data->id == NULL)
+    {
+      g_simple_async_result_set_error (data->simple,
+                                       GOA_ERROR,
+                                       GOA_ERROR_FAILED,
+                                       _("Didn't find value member in JSON data"));
+      g_simple_async_result_complete_in_idle (data->simple);
+      g_object_unref (data->simple);
+      goto out;
+    }
+
+  /* OK, got the GUID, now get the name via http://developer.yahoo.com/social/rest_api_guide/usercard-resource.html */
+  proxy = oauth_proxy_new_with_token (goa_backend_oauth_provider_get_consumer_key (data->provider),
+                                      goa_backend_oauth_provider_get_consumer_secret (data->provider),
+                                      data->access_token,
+                                      data->access_token_secret,
+                                      "http://social.yahooapis.com/v1/user/%s/profile/usercard",
+                                      TRUE);
+  rest_proxy_bind (proxy, data->id);
+  g_object_unref (data->call);
+  data->call = rest_proxy_new_call (proxy);
+  rest_proxy_call_set_method (data->call, "GET");
+  rest_proxy_call_add_param (data->call, "format", "json");
+
+  error = NULL;
+  if (!rest_proxy_call_async (data->call,
+                              get_identity_usercard_cb,
+                              NULL, /* weak_object */
+                              get_identity_data_ref (data),
+                              &error))
+    {
+      g_simple_async_result_take_error (data->simple, error);
+      g_simple_async_result_complete_in_idle (data->simple);
+      g_object_unref (data->simple);
+      goto out;
+    }
+
+ out:
+  get_identity_data_unref (data);
+  if (parser != NULL)
+    g_object_unref (parser);
+  if (proxy != NULL)
+    g_object_unref (proxy);
+}
 
 static void
 get_identity (GoaBackendOAuthProvider  *provider,
@@ -179,6 +364,9 @@ get_identity (GoaBackendOAuthProvider  *provider,
                                             callback,
                                             user_data,
                                             get_identity);
+  data->provider = g_object_ref (provider);
+  data->access_token = g_strdup (access_token);
+  data->access_token_secret = g_strdup (access_token_secret);
 
   proxy = oauth_proxy_new_with_token (goa_backend_oauth_provider_get_consumer_key (provider),
                                       goa_backend_oauth_provider_get_consumer_secret (provider),
@@ -199,6 +387,7 @@ get_identity (GoaBackendOAuthProvider  *provider,
     {
       g_simple_async_result_take_error (data->simple, error);
       g_simple_async_result_complete_in_idle (data->simple);
+      g_object_unref (data->simple);
       get_identity_data_unref (data);
     }
   g_object_unref (proxy);
@@ -207,67 +396,25 @@ get_identity (GoaBackendOAuthProvider  *provider,
 
 static gchar *
 get_identity_finish (GoaBackendOAuthProvider  *provider,
+                     gchar                   **out_name,
                      GAsyncResult              *res,
                      GError                   **error)
 {
   GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
   GetIdentityData *data;
   gchar *ret;
-  JsonParser *parser;
-  JsonObject *json_object;
-  JsonObject *json_data_object;
 
   ret = NULL;
-  parser = NULL;
 
   if (g_simple_async_result_propagate_error (simple, error))
     goto out;
 
   data = g_simple_async_result_get_op_res_gpointer (simple);
+  ret = g_strdup (data->id);
+  if (out_name != NULL)
+    *out_name = g_strdup (data->name);
 
-  if (rest_proxy_call_get_status_code (data->call) != 200)
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   _("Expected status 200 when requesting guid, instead got status %d (%s)"),
-                   rest_proxy_call_get_status_code (data->call),
-                   rest_proxy_call_get_status_message (data->call));
-      goto out;
-    }
-
-  parser = json_parser_new ();
-  if (!json_parser_load_from_data (parser,
-                                   rest_proxy_call_get_payload (data->call),
-                                   rest_proxy_call_get_payload_length (data->call),
-                                   error))
-    {
-      g_prefix_error (error, _("Error parsing response as JSON: "));
-      goto out;
-    }
-
-  json_object = json_node_get_object (json_parser_get_root (parser));
-  json_data_object = json_object_get_object_member (json_object, "guid");
-  if (json_data_object == NULL)
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   _("Didn't find guid member in JSON data"));
-      goto out;
-    }
-  ret = g_strdup (json_object_get_string_member (json_data_object, "value"));
-  if (ret == NULL)
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   _("Didn't find value member in JSON data"));
-      goto out;
-    }
  out:
-  if (parser != NULL)
-    g_object_unref (parser);
   return ret;
 }
 
