@@ -194,7 +194,7 @@ goa_daemon_init (GoaDaemon *daemon)
   daemon->connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
 
   /* Create object manager */
-  daemon->object_manager = g_dbus_object_manager_server_new (daemon->connection, "/org/gnome/OnlineAccounts");
+  daemon->object_manager = g_dbus_object_manager_server_new ("/org/gnome/OnlineAccounts");
 
   /* Create and export Manager */
   daemon->manager = goa_manager_skeleton_new ();
@@ -233,6 +233,9 @@ goa_daemon_init (GoaDaemon *daemon)
 
   /* prime the list of accounts */
   goa_daemon_reload_configuration (daemon);
+
+  /* Export objects */
+  g_dbus_object_manager_server_set_connection (daemon->object_manager, daemon->connection);
 }
 
 static void
