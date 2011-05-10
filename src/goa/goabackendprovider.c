@@ -301,6 +301,79 @@ goa_backend_provider_ensure_credentials_finish (GoaBackendProvider  *provider,
   return GOA_BACKEND_PROVIDER_GET_CLASS (provider)->ensure_credentials_finish (provider, out_expires_in, res, error);
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct
+{
+  GAsyncResult *res;
+  GMainContext *context;
+  GMainLoop *loop;
+} EnsureCredentialsSyncData;
+
+static void
+ensure_credentials_sync_cb (GoaBackendOAuthProvider   *provider,
+                            GAsyncResult              *res,
+                            gpointer                   user_data)
+{
+  EnsureCredentialsSyncData *data = user_data;
+  data->res = g_object_ref (res);
+  g_main_loop_quit (data->loop);
+}
+
+/**
+ * goa_backend_provider_ensure_credentials_sync:
+ * @provider: A #GoaBackendProvider.
+ * @object: A #GoaObject with a #GoaAccount interface.
+ * @out_expires_in: (out): Return location for how long the expired credentials are good for (0 if unknown) or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Like goa_backend_provider_ensure_credentials() but blocks the
+ * calling thread until an answer is received.
+ *
+ * Returns: %TRUE if the credentials for the passed #GoaObject are valid, %FALSE if @error is set.
+ */
+gboolean
+goa_backend_provider_ensure_credentials_sync (GoaBackendProvider     *provider,
+                                              GoaObject              *object,
+                                              gint                   *out_expires_in,
+                                              GCancellable           *cancellable,
+                                              GError                **error)
+{
+  EnsureCredentialsSyncData *data;
+  gboolean ret;
+
+  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (GOA_IS_OBJECT (object), FALSE);
+  g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  data = g_new0 (EnsureCredentialsSyncData, 1);
+  data->context = g_main_context_new ();
+  data->loop = g_main_loop_new (data->context, FALSE);
+
+  g_main_context_push_thread_default (data->context);
+
+  goa_backend_provider_ensure_credentials (provider,
+                                           object,
+                                           cancellable,
+                                           (GAsyncReadyCallback) ensure_credentials_sync_cb,
+                                           data);
+  g_main_loop_run (data->loop);
+  ret = goa_backend_provider_ensure_credentials_finish (provider,
+                                                        out_expires_in,
+                                                        data->res,
+                                                        error);
+
+  g_main_context_pop_thread_default (data->context);
+
+  g_main_context_unref (data->context);
+  g_main_loop_unref (data->loop);
+  g_object_unref (data->res);
+  g_free (data);
+  return ret;
+}
+
 static void
 goa_backend_provider_ensure_credentials_real (GoaBackendProvider   *provider,
                                               GoaObject            *object,

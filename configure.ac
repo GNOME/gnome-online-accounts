@@ -63,6 +63,8 @@ PKG_CHECK_MODULES(REST, [rest-0.7])
 AC_SUBST(REST_CFLAGS)
 AC_SUBST(REST_LIBS)
 
+GOBJECT_INTROSPECTION_CHECK([0.6.2])
+
 # Internationalization
 #
 
@@ -82,6 +84,7 @@ src/Makefile
 src/goa/Makefile
 src/daemon/Makefile
 src/panel/Makefile
+src/examples/Makefile
 po/Makefile.in
 doc/Makefile
 doc/version.xml
@@ -104,6 +107,7 @@ echo "
         compiler:                   ${CC}
         cflags:                     ${CFLAGS}
         cppflags:                   ${CPPFLAGS}
+	introspection:		    ${found_introspection}
 
         Maintainer mode:            ${USE_MAINTAINER_MODE}
         Building api docs:          ${enable_gtk_doc}

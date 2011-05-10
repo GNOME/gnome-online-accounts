@@ -1,4 +1,4 @@
 
 NULL =
 
-SUBDIRS = goa daemon panel
+SUBDIRS = goa daemon panel examples

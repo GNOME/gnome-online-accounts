@@ -90,7 +90,7 @@ struct _GoaBackendProviderClass
                                      const gchar        *group,
                                      GError            **error);
 
-  /* virtual but with defaut implementation */
+  /* virtual but with default implementation */
   void (*ensure_credentials) (GoaBackendProvider  *provider,
                               GoaObject            *object,
                               GCancellable         *cancellable,
@@ -157,6 +157,12 @@ gboolean goa_backend_provider_ensure_credentials_finish (GoaBackendProvider  *pr
                                                          gint                *out_expires_in,
                                                          GAsyncResult        *res,
                                                          GError             **error);
+
+gboolean goa_backend_provider_ensure_credentials_sync (GoaBackendProvider     *provider,
+                                                       GoaObject              *object,
+                                                       gint                   *out_expires_in,
+                                                       GCancellable           *cancellable,
+                                                       GError                **error);
 
 
 /**

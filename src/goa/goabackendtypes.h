@@ -28,6 +28,7 @@
 #define __GOA_BACKEND_TYPES_H__
 
 #include <goa/goa.h>
+#include <goa/goabackendenums.h>
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
@@ -52,6 +53,21 @@ typedef struct _GoaBackendYahooProvider GoaBackendYahooProvider;
 
 struct _GoaBackendTwitterProvider;
 typedef struct _GoaBackendTwitterProvider GoaBackendTwitterProvider;
+
+struct _GoaBackendImapAuth;
+typedef struct _GoaBackendImapAuth GoaBackendImapAuth;
+
+struct _GoaBackendImapAuthOAuth;
+typedef struct _GoaBackendImapAuthOAuth GoaBackendImapAuthOAuth;
+
+struct _GoaBackendImapClient;
+typedef struct _GoaBackendImapClient GoaBackendImapClient;
+
+struct _GoaBackendImapMessage;
+typedef struct _GoaBackendImapMessage GoaBackendImapMessage;
+
+struct _GoaBackendImapMail;
+typedef struct _GoaBackendImapMail GoaBackendImapMail;
 
 G_END_DECLS
 

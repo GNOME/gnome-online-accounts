@@ -28,6 +28,7 @@
 #define __GOA_BACKEND_OAUTH_PROVIDER_H__
 
 #include <goa/goabackendtypes.h>
+#include <goa/goabackendprovider.h>
 
 G_BEGIN_DECLS
 
@@ -135,6 +136,13 @@ gchar       *goa_backend_oauth_provider_get_access_token_finish  (GoaBackendOAut
                                                                   gchar                    **out_access_token_secret,
                                                                   gint                     *out_access_token_expires_in,
                                                                   GAsyncResult             *res,
+                                                                  GError                  **error);
+gchar       *goa_backend_oauth_provider_get_access_token_sync    (GoaBackendOAuthProvider  *provider,
+                                                                  GoaObject                *object,
+                                                                  gboolean                  force_refresh,
+                                                                  gchar                   **out_access_token_secret,
+                                                                  gint                     *out_access_token_expires_in,
+                                                                  GCancellable             *cancellable,
                                                                   GError                  **error);
 
 /* ---------------------------------------------------------------------------------------------------- */

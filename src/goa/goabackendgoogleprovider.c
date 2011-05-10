@@ -30,6 +30,9 @@
 #include "goabackendoauthprovider.h"
 #include "goabackendgoogleprovider.h"
 
+#include "goabackendimapmail.h"
+#include "goabackendimapauthoauth.h"
+
 /**
  * GoaBackendGoogleProvider:
  *
@@ -328,12 +331,14 @@ goa_backend_google_provider_build_object (GoaBackendProvider  *provider,
 {
   GoaAccount *account;
   GoaGoogleAccount *google_account;
+  GoaMail *mail;
   gboolean ret;
   gchar *email_address;
 
   email_address = NULL;
   account = NULL;
   google_account = NULL;
+  mail = NULL;
   ret = FALSE;
 
   /* Chain up */
@@ -366,10 +371,27 @@ goa_backend_google_provider_build_object (GoaBackendProvider  *provider,
 
   goa_google_account_set_email_address (google_account, email_address);
 
+  mail = goa_object_get_mail (GOA_OBJECT (object));
+  if (mail == NULL)
+    {
+      GoaBackendImapAuth *auth;
+      gchar *request_uri;
+      request_uri = g_strdup_printf ("https://mail.google.com/mail/b/%s/imap/", email_address);
+      auth = goa_backend_imap_auth_oauth_new (GOA_BACKEND_OAUTH_PROVIDER (provider),
+                                              GOA_OBJECT (object),
+                                              request_uri);
+      mail = goa_backend_imap_mail_new ("imap.gmail.com", TRUE, auth);
+      goa_object_skeleton_set_mail (object, mail);
+      g_object_unref (auth);
+      g_free (request_uri);
+    }
+
   ret = TRUE;
 
  out:
   g_free (email_address);
+  if (mail != NULL)
+    g_object_unref (mail);
   if (google_account != NULL)
     g_object_unref (google_account);
   if (account != NULL)
@@ -415,3 +437,5 @@ goa_backend_google_provider_class_init (GoaBackendGoogleProviderClass *klass)
   oauth_class->get_callback_uri         = get_callback_uri;
   oauth_class->get_use_external_browser = get_use_external_browser;
 }
+
+/* ---------------------------------------------------------------------------------------------------- */

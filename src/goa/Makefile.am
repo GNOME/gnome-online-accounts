@@ -1,5 +1,6 @@
 
 NULL =
+CLEANFILES =
 
 INCLUDES = 							\
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
@@ -41,8 +42,19 @@ goaenumtypes.c: goaenums.h goaenumtypes.c.template
 	 cd $(srcdir) && glib-mkenums --template goaenumtypes.c.template goaenums.h ) > 	\
 	   goaenumtypes.c.tmp && mv goaenumtypes.c.tmp goaenumtypes.c
 
+goabackendenumtypes.h: goabackendenums.h goabackendenumtypes.h.template
+	( top_builddir=`cd $(top_builddir) && pwd`; 							\
+	 cd $(srcdir) && glib-mkenums --template goabackendenumtypes.h.template goabackendenums.h ) > 	\
+	   goabackendenumtypes.h.tmp && mv goabackendenumtypes.h.tmp goabackendenumtypes.h
+
+goabackendenumtypes.c: goabackendenums.h goabackendenumtypes.c.template
+	( top_builddir=`cd $(top_builddir) && pwd`; 							\
+	 cd $(srcdir) && glib-mkenums --template goabackendenumtypes.c.template goabackendenums.h ) > 	\
+	   goabackendenumtypes.c.tmp && mv goabackendenumtypes.c.tmp goabackendenumtypes.c
+
 enum_built_sources =							\
 	goaenumtypes.h			goaenumtypes.c			\
+	goabackendenumtypes.h		goabackendenumtypes.c		\
 	$(NULL)
 
 # ----------------------------------------------------------------------------------------------------
@@ -79,6 +91,38 @@ libgoa_la_LIBADD = 						\
 	$(GLIB_LIBS) 						\
 	$(NULL)
 
+if HAVE_INTROSPECTION
+girdir = $(INTROSPECTION_GIRDIR)
+gir_DATA = Goa-1.0.gir
+
+typelibsdir = $(INTROSPECTION_TYPELIBDIR)
+typelibs_DATA = Goa-1.0.typelib
+
+Goa-1.0.gir: libgoa.la $(INTROSPECTION_SCANNER) Makefile.am
+	$(INTROSPECTION_SCANNER) -v 				\
+		--warn-all					\
+		--namespace Goa 				\
+		--nsversion=1.0 				\
+		--include=Gio-2.0 				\
+		--library=goa		 			\
+		--output $@ 					\
+		--pkg=glib-2.0 					\
+		--pkg=gobject-2.0 				\
+		--pkg=gio-2.0 					\
+		--libtool=$(top_builddir)/libtool		\
+		--c-include='goa/goa.h'				\
+                -I$(top_srcdir)/src	 			\
+	        -DGOA_COMPILATION                   		\
+		$(libgoa_la_SOURCES)				\
+		$(NULL)
+
+Goa-1.0.typelib: Goa-1.0.gir $(INTROSPECTION_COMPILER)
+	$(INTROSPECTION_COMPILER) $< -o $@
+
+CLEANFILES += $(gir_DATA) $(typelibs_DATA)
+
+endif # HAVE_INTROSPECTION
+
 # ----------------------------------------------------------------------------------------------------
 
 lib_LTLIBRARIES += libgoa-backend.la
@@ -89,6 +133,18 @@ libgoa_backend_la_HEADERS =						\
 	goabackend.h							\
 	goabackendtypes.h						\
 	goabackendprovider.h						\
+	goabackendoauthprovider.h					\
+	goabackendoauth2provider.h					\
+	goabackendgoogleprovider.h					\
+	goabackendfacebookprovider.h					\
+	goabackendyahooprovider.h					\
+	goabackendtwitterprovider.h					\
+	goabackendimapauth.h						\
+	goabackendimapauthoauth.h					\
+	goabackendimapclient.h						\
+	goabackendimapmessage.h						\
+	goabackendenums.h						\
+	goabackendenumtypes.h						\
 	$(NULL)
 
 libgoa_backend_la_SOURCES =						\
@@ -101,6 +157,13 @@ libgoa_backend_la_SOURCES =						\
 	goabackendfacebookprovider.h	goabackendfacebookprovider.c	\
 	goabackendyahooprovider.h	goabackendyahooprovider.c	\
 	goabackendtwitterprovider.h	goabackendtwitterprovider.c	\
+	goabackendimapprivate.h						\
+	goabackendimapauth.h		goabackendimapauth.c		\
+	goabackendimapauthoauth.h	goabackendimapauthoauth.c	\
+	goabackendimapclient.h		goabackendimapclient.c		\
+	goabackendimapmessage.h		goabackendimapmessage.c		\
+	goabackendimapmail.h		goabackendimapmail.c		\
+	goabackendenumtypes.h		goabackendenumtypes.c		\
 	$(NULL)
 
 libgoa_backend_la_CFLAGS =					\

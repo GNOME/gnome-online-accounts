@@ -1596,6 +1596,9 @@ goa_backend_oauth_provider_get_access_token_do_one (GetAccessTokenData *data)
  * loop</link> this method was called from. You can then call
  * goa_backend_oauth_provider_get_access_token_finish() to get the
  * result of the operation.
+ *
+ * See goa_backend_oauth_provider_get_access_token_sync() for the
+ * synchronous, blocking version of this method.
  */
 void
 goa_backend_oauth_provider_get_access_token (GoaBackendOAuthProvider  *provider,
@@ -1706,6 +1709,90 @@ goa_backend_oauth_provider_get_access_token_finish (GoaBackendOAuthProvider   *p
     *out_access_token_secret = g_strdup (data->access_token_secret);
   if (out_access_token_expires_in != NULL)
     *out_access_token_expires_in = data->access_token_expires_in;
+
+  return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct
+{
+  GAsyncResult *res;
+  GMainContext *context;
+  GMainLoop *loop;
+} GetAccessTokenSyncData;
+
+static void
+get_access_token_sync_cb (GoaBackendOAuthProvider   *provider,
+                          GAsyncResult              *res,
+                          gpointer                   user_data)
+{
+  GetAccessTokenSyncData *data = user_data;
+  data->res = g_object_ref (res);
+  g_main_loop_quit (data->loop);
+}
+
+/**
+ * goa_backend_oauth_provider_get_access_token_sync:
+ * @provider: A #GoaBackendOAuthProvider.
+ * @object: A #GoaObject.
+ * @force_refresh: If set to %TRUE, forces a refresh of the access token, if possible.
+ * @out_access_token_secret: (out): The secret for the return access token.
+ * @out_access_token_expires_in: (out): Return location for how many seconds the returned token is valid for (0 if unknown) or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously gets an access token for @object. The calling thread
+ * is blocked while the operation is pending.
+ *
+ * See goa_backend_oauth_provider_get_access_token() for the
+ * asynchronous non-blocking version and more details.
+ *
+ * Returns: The access token or %NULL if error is set. The returned
+ * string must be freed with g_free().
+ */
+gchar *
+goa_backend_oauth_provider_get_access_token_sync (GoaBackendOAuthProvider   *provider,
+                                                  GoaObject                 *object,
+                                                  gboolean                   force_refresh,
+                                                  gchar                    **out_access_token_secret,
+                                                  gint                      *out_access_token_expires_in,
+                                                  GCancellable              *cancellable,
+                                                  GError                   **error)
+{
+  GetAccessTokenSyncData *data;
+  gchar *ret;
+
+  g_return_val_if_fail (GOA_IS_BACKEND_OAUTH_PROVIDER (provider), NULL);
+  g_return_val_if_fail (GOA_IS_OBJECT (object), NULL);
+  g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  data = g_new0 (GetAccessTokenSyncData, 1);
+  data->context = g_main_context_new ();
+  data->loop = g_main_loop_new (data->context, FALSE);
+
+  g_main_context_push_thread_default (data->context);
+
+  goa_backend_oauth_provider_get_access_token (provider,
+                                               object,
+                                               force_refresh,
+                                               cancellable,
+                                               (GAsyncReadyCallback) get_access_token_sync_cb,
+                                               data);
+  g_main_loop_run (data->loop);
+  ret = goa_backend_oauth_provider_get_access_token_finish (provider,
+                                                            out_access_token_secret,
+                                                            out_access_token_expires_in,
+                                                            data->res,
+                                                            error);
+
+  g_main_context_pop_thread_default (data->context);
+
+  g_main_context_unref (data->context);
+  g_main_loop_unref (data->loop);
+  g_object_unref (data->res);
+  g_free (data);
 
   return ret;
 }
