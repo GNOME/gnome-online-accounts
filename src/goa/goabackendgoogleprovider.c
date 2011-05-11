@@ -139,78 +139,60 @@ get_callback_uri (GoaBackendOAuthProvider *provider)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-typedef struct
+static gchar *
+get_identity_sync (GoaBackendOAuthProvider  *provider,
+                   const gchar              *access_token,
+                   const gchar              *access_token_secret,
+                   gchar                   **out_name,
+                   GCancellable             *cancellable,
+                   GError                  **error)
 {
-  volatile gint ref_count;
-  GSimpleAsyncResult *simple;
+  RestProxy *proxy;
   RestProxyCall *call;
-  gchar *id;
-} GetIdentityData;
-
-static GetIdentityData *
-get_identity_data_ref (GetIdentityData *data)
-{
-  g_atomic_int_inc (&data->ref_count);
-  return data;
-}
-
-static void
-get_identity_data_unref (GetIdentityData *data)
-{
-  if (g_atomic_int_dec_and_test (&data->ref_count))
-    {
-      g_object_unref (data->call);
-      g_free (data->id);
-      g_slice_free (GetIdentityData, data);
-    }
-}
-
-static void
-get_identity_cb (RestProxyCall *call,
-                 const GError  *passed_error,
-                 GObject       *weak_object,
-                 gpointer       user_data)
-{
-  GetIdentityData *data = user_data;
   JsonParser *parser;
   JsonObject *json_object;
   JsonObject *json_data_object;
-  GError *error;
+  gchar *ret;
+  gchar *email;
 
+  ret = NULL;
+  proxy = NULL;
+  call = NULL;
   parser = NULL;
+  email = NULL;
 
-  if (passed_error != NULL)
-    {
-      g_simple_async_result_set_from_error (data->simple, passed_error);
-      g_simple_async_result_complete_in_idle (data->simple);
-      g_object_unref (data->simple);
-      goto out;
-    }
+  /* TODO: cancellable */
 
-  if (rest_proxy_call_get_status_code (data->call) != 200)
+  proxy = oauth_proxy_new_with_token (goa_backend_oauth_provider_get_consumer_key (provider),
+                                      goa_backend_oauth_provider_get_consumer_secret (provider),
+                                      access_token,
+                                      access_token_secret,
+                                      "https://www.googleapis.com/userinfo/email",
+                                      FALSE);
+  call = rest_proxy_new_call (proxy);
+  rest_proxy_call_set_method (call, "GET");
+  rest_proxy_call_add_param (call, "alt", "json");
+
+  if (!rest_proxy_call_sync (call, error))
+    goto out;
+  if (rest_proxy_call_get_status_code (call) != 200)
     {
-      g_simple_async_result_set_error (data->simple,
-                                       GOA_ERROR,
-                                       GOA_ERROR_FAILED,
-                                       _("Expected status 200 when requesting email address, instead got status %d (%s)"),
-                                       rest_proxy_call_get_status_code (data->call),
-                                       rest_proxy_call_get_status_message (data->call));
-      g_simple_async_result_complete_in_idle (data->simple);
-      g_object_unref (data->simple);
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Expected status 200 when requesting guid, instead got status %d (%s)"),
+                   rest_proxy_call_get_status_code (call),
+                   rest_proxy_call_get_status_message (call));
       goto out;
     }
 
   parser = json_parser_new ();
-  error = NULL;
   if (!json_parser_load_from_data (parser,
-                                   rest_proxy_call_get_payload (data->call),
-                                   rest_proxy_call_get_payload_length (data->call),
-                                   &error))
+                                   rest_proxy_call_get_payload (call),
+                                   rest_proxy_call_get_payload_length (call),
+                                   error))
     {
-      g_prefix_error (&error, _("Error parsing response as JSON: "));
-      g_simple_async_result_take_error (data->simple, error);
-      g_simple_async_result_complete_in_idle (data->simple);
-      g_object_unref (data->simple);
+      g_prefix_error (error, _("Error parsing response as JSON: "));
       goto out;
     }
 
@@ -218,105 +200,35 @@ get_identity_cb (RestProxyCall *call,
   json_data_object = json_object_get_object_member (json_object, "data");
   if (json_data_object == NULL)
     {
-      g_simple_async_result_set_error (data->simple,
-                                       GOA_ERROR,
-                                       GOA_ERROR_FAILED,
-                                       _("Didn't find data member in JSON data"));
-      g_simple_async_result_complete_in_idle (data->simple);
-      g_object_unref (data->simple);
-      goto out;
-    }
-  data->id = g_strdup (json_object_get_string_member (json_data_object, "email"));
-  if (data->id == NULL)
-    {
-      g_simple_async_result_set_error (data->simple,
-                                       GOA_ERROR,
-                                       GOA_ERROR_FAILED,
-                                       _("Didn't find email member in JSON data"));
-      g_simple_async_result_complete_in_idle (data->simple);
-      g_object_unref (data->simple);
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Didn't find data member in JSON data"));
       goto out;
     }
 
-  g_simple_async_result_set_op_res_gpointer (data->simple,
-                                             get_identity_data_ref (data),
-                                             (GDestroyNotify) get_identity_data_unref);
-  g_simple_async_result_complete_in_idle (data->simple);
-  g_object_unref (data->simple);
-
- out:
-  get_identity_data_unref (data);
-  if (parser != NULL)
-    g_object_unref (parser);
-}
-
-
-static void
-get_identity (GoaBackendOAuthProvider   *provider,
-              const gchar               *access_token,
-              const gchar               *access_token_secret,
-              GCancellable              *cancellable,
-              GAsyncReadyCallback       callback,
-              gpointer                  user_data)
-{
-  GetIdentityData *data;
-  RestProxy *proxy;
-  GError *error;
-
-  data = g_slice_new0 (GetIdentityData);
-  data->ref_count = 1;
-  data->simple = g_simple_async_result_new (G_OBJECT (provider),
-                                            callback,
-                                            user_data,
-                                            get_identity);
-
-  proxy = oauth_proxy_new (goa_backend_oauth_provider_get_consumer_key (provider),
-                           goa_backend_oauth_provider_get_consumer_secret (provider),
-                           "https://www.googleapis.com/userinfo/email",
-                           FALSE);
-  oauth_proxy_set_token (OAUTH_PROXY (proxy), access_token);
-  oauth_proxy_set_token_secret (OAUTH_PROXY (proxy), access_token_secret);
-  data->call = rest_proxy_new_call (proxy);
-  rest_proxy_call_set_method (data->call, "GET");
-  rest_proxy_call_add_param (data->call, "alt", "json");
-
-  error = NULL;
-  if (!rest_proxy_call_async (data->call,
-                              get_identity_cb,
-                              NULL, /* weak_object */
-                              data,
-                              &error))
+  email = g_strdup (json_object_get_string_member (json_data_object, "email"));
+  if (email == NULL)
     {
-      g_simple_async_result_take_error (data->simple, error);
-      g_simple_async_result_complete_in_idle (data->simple);
-      g_object_unref (data->simple);
-      get_identity_data_unref (data);
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Didn't find email member in JSON data"));
+      goto out;
     }
-  g_object_unref (proxy);
-}
 
 
-static gchar *
-get_identity_finish (GoaBackendOAuthProvider   *provider,
-                     gchar                   **out_name,
-                     GAsyncResult              *res,
-                     GError                   **error)
-{
-  GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
-  GetIdentityData *data;
-  gchar *ret;
-
-  ret = NULL;
-
-  if (g_simple_async_result_propagate_error (simple, error))
-    goto out;
-
-  data = g_simple_async_result_get_op_res_gpointer (simple);
-  ret = g_strdup (data->id);
+  ret = email;
+  email = NULL;
   if (out_name != NULL)
-    *out_name = g_strdup (data->id);
+    *out_name = g_strdup (ret); /* for now: use email as name */
 
  out:
+  g_free (email);
+  if (call != NULL)
+    g_object_unref (call);
+  if (proxy != NULL)
+    g_object_unref (proxy);
   return ret;
 }
 
@@ -426,8 +338,7 @@ goa_backend_google_provider_class_init (GoaBackendGoogleProviderClass *klass)
   provider_class->build_object               = goa_backend_google_provider_build_object;
 
   oauth_class = GOA_BACKEND_OAUTH_PROVIDER_CLASS (klass);
-  oauth_class->get_identity             = get_identity;
-  oauth_class->get_identity_finish      = get_identity_finish;
+  oauth_class->get_identity_sync        = get_identity_sync;
   oauth_class->get_consumer_key         = get_consumer_key;
   oauth_class->get_consumer_secret      = get_consumer_secret;
   oauth_class->get_request_uri          = get_request_uri;

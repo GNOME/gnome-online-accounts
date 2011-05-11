@@ -62,8 +62,7 @@ struct _GoaBackendProvider
  * @add_account: Virtual function for goa_backend_provider_add_account().
  * @refresh_account: Virtual function for goa_backend_provider_refresh_account().
  * @build_object: Virtual function for goa_backend_provider_build_object().
- * @ensure_credentials: Virtual function for goa_backend_provider_ensure_credentials().
- * @ensure_credentials_finish: Virtual function for goa_backend_provider_ensure_credentials_finish().
+ * @ensure_credentials_sync: Virtual function for goa_backend_provider_ensure_credentials_sync().
  *
  * Class structure for #GoaBackendProvider.
  */
@@ -91,16 +90,11 @@ struct _GoaBackendProviderClass
                                      GError            **error);
 
   /* virtual but with default implementation */
-  void (*ensure_credentials) (GoaBackendProvider  *provider,
-                              GoaObject            *object,
-                              GCancellable         *cancellable,
-                              GAsyncReadyCallback   callback,
-                              gpointer              user_data);
-
-  gboolean (*ensure_credentials_finish) (GoaBackendProvider  *provider,
-                                         gint                *out_expires_in,
-                                         GAsyncResult        *res,
-                                         GError             **error);
+  gboolean (*ensure_credentials_sync) (GoaBackendProvider  *provider,
+                                       GoaObject           *object,
+                                       gint                *out_expires_in,
+                                       GCancellable        *cancellable,
+                                       GError             **error);
 
   /*< private >*/
   /* Padding for future expansion */
@@ -126,26 +120,16 @@ gboolean            goa_backend_provider_build_object      (GoaBackendProvider  
                                                             const gchar         *group,
                                                             GError             **error);
 
-void goa_backend_provider_store_credentials (GoaBackendProvider   *provider,
-                                             const gchar          *identity,
-                                             GVariant             *credentials,
-                                             GCancellable         *cancellable,
-                                             GAsyncReadyCallback   callback,
-                                             gpointer              user_data);
+gboolean goa_backend_provider_store_credentials_sync (GoaBackendProvider   *provider,
+                                                      const gchar          *identity,
+                                                      GVariant             *credentials,
+                                                      GCancellable         *cancellable,
+                                                      GError              **error);
 
-gboolean goa_backend_provider_store_credentials_finish (GoaBackendProvider   *provider,
-                                                        GAsyncResult         *res,
+GVariant *goa_backend_provider_lookup_credentials_sync (GoaBackendProvider   *provider,
+                                                        const gchar          *identity,
+                                                        GCancellable         *cancellable,
                                                         GError              **error);
-
-void goa_backend_provider_lookup_credentials (GoaBackendProvider   *provider,
-                                              const gchar          *identity,
-                                              GCancellable         *cancellable,
-                                              GAsyncReadyCallback   callback,
-                                              gpointer              user_data);
-
-GVariant *goa_backend_provider_lookup_credentials_finish (GoaBackendProvider   *provider,
-                                                          GAsyncResult         *res,
-                                                          GError              **error);
 
 void goa_backend_provider_ensure_credentials (GoaBackendProvider   *provider,
                                               GoaObject            *object,

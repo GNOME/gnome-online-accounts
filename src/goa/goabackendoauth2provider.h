@@ -64,8 +64,7 @@ struct _GoaBackendOAuth2Provider
  * @get_scope: Virtual function for goa_backend_oauth2_provider_get_scope().
  * @get_client_id: Virtual function for goa_backend_oauth2_provider_get_client_id().
  * @get_client_secret: Virtual function for goa_backend_oauth2_provider_get_client_secret().
- * @get_identity: Virtual function for goa_backend_oauth2_provider_get_identity().
- * @get_identity_finish: Virtual function for goa_backend_oauth2_provider_get_identity_finish().
+ * @get_identity_sync: Virtual function for goa_backend_oauth2_provider_get_identity_sync().
  * @build_authorization_uri: Virtual function for goa_backend_oauth2_provider_build_authorization_uri().
  * @get_use_external_browser: Virtual function for goa_backend_oauth2_provider_get_use_external_browser().
  *
@@ -82,14 +81,10 @@ struct _GoaBackendOAuth2ProviderClass
   const gchar *(*get_scope)              (GoaBackendOAuth2Provider  *provider);
   const gchar *(*get_client_id)          (GoaBackendOAuth2Provider  *provider);
   const gchar *(*get_client_secret)      (GoaBackendOAuth2Provider  *provider);
-  void         (*get_identity)           (GoaBackendOAuth2Provider  *provider,
+  gchar       *(*get_identity_sync)      (GoaBackendOAuth2Provider  *provider,
                                           const gchar               *access_token,
-                                          GCancellable              *cancellable,
-                                          GAsyncReadyCallback        callback,
-                                          gpointer                   user_data);
-  gchar       *(*get_identity_finish)    (GoaBackendOAuth2Provider  *provider,
                                           gchar                    **out_name,
-                                          GAsyncResult              *res,
+                                          GCancellable              *cancellable,
                                           GError                   **error);
 
   /* virtual but with default implementation */
@@ -112,25 +107,17 @@ const gchar *goa_backend_oauth2_provider_get_redirect_uri         (GoaBackendOAu
 const gchar *goa_backend_oauth2_provider_get_scope                (GoaBackendOAuth2Provider  *provider);
 const gchar *goa_backend_oauth2_provider_get_client_id            (GoaBackendOAuth2Provider  *provider);
 const gchar *goa_backend_oauth2_provider_get_client_secret        (GoaBackendOAuth2Provider  *provider);
-void         goa_backend_oauth2_provider_get_identity             (GoaBackendOAuth2Provider *provider,
-                                                                   const gchar              *access_token,
-                                                                   GCancellable             *cancellable,
-                                                                   GAsyncReadyCallback       callback,
-                                                                   gpointer                  user_data);
-gchar       *goa_backend_oauth2_provider_get_identity_finish      (GoaBackendOAuth2Provider *provider,
-                                                                   gchar                   **out_name,
-                                                                   GAsyncResult             *res,
+gchar       *goa_backend_oauth2_provider_get_identity_sync        (GoaBackendOAuth2Provider  *provider,
+                                                                   const gchar               *access_token,
+                                                                   gchar                    **out_name,
+                                                                   GCancellable              *cancellable,
                                                                    GError                   **error);
-void         goa_backend_oauth2_provider_get_access_token         (GoaBackendOAuth2Provider   *provider,
-                                                                   GoaObject                  *object,
-                                                                   gboolean                    force_refresh,
-                                                                   GCancellable               *cancellable,
-                                                                   GAsyncReadyCallback         callback,
-                                                                   gpointer                    user_data);
-gchar       *goa_backend_oauth2_provider_get_access_token_finish (GoaBackendOAuth2Provider    *provider,
-                                                                  gint                        *out_access_token_expires_in,
-                                                                  GAsyncResult                *res,
-                                                                  GError                     **error);
+gchar       *goa_backend_oauth2_provider_get_access_token_sync    (GoaBackendOAuth2Provider  *provider,
+                                                                   GoaObject                 *object,
+                                                                   gboolean                   force_refresh,
+                                                                   gint                      *out_access_token_expires_in,
+                                                                   GCancellable              *cancellable,
+                                                                   GError                   **error);
 
 /* ---------------------------------------------------------------------------------------------------- */
 

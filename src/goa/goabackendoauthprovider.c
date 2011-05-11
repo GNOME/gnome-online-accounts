@@ -50,9 +50,8 @@
  * #GoaBackendOAuthProviderClass.get_request_uri,
  * #GoaBackendOAuthProviderClass.get_authorization_uri,
  * #GoaBackendOAuthProviderClass.get_token_uri,
- * #GoaBackendOAuthProviderClass.get_callback_uri,
- * #GoaBackendOAuthProviderClass.get_identity and
- * #GoaBackendOAuthProviderClass.get_identity_finish methods.
+ * #GoaBackendOAuthProviderClass.get_callback_uri and
+ * #GoaBackendOAuthProviderClass.get_identity_sync methods.
  *
  * Additionally, the
  * #GoaBackendProviderClass.get_provider_type,
@@ -61,15 +60,14 @@
  * parent class) methods must be implemented.
  *
  * Note that the #GoaBackendProviderClass.add_account,
- * #GoaBackendProviderClass.refresh_account,
- * #GoaBackendProviderClass.ensure_credentials and
- * #GoaBackendProviderClass.ensure_credentials_finish methods do not
+ * #GoaBackendProviderClass.refresh_account and
+ * #GoaBackendProviderClass.ensure_credentials_sync methods do not
  * need to be implemented - this type implements these methods.
  */
 
-G_DEFINE_ABSTRACT_TYPE (GoaBackendOAuthProvider, goa_backend_oauth_provider, GOA_TYPE_BACKEND_PROVIDER);
+G_LOCK_DEFINE_STATIC (provider_lock);
 
-G_LOCK_DEFINE_STATIC (queue_lock);
+G_DEFINE_ABSTRACT_TYPE (GoaBackendOAuthProvider, goa_backend_oauth_provider, GOA_TYPE_BACKEND_PROVIDER);
 
 static gboolean
 is_authorization_error (GError *error)
@@ -87,7 +85,15 @@ is_authorization_error (GError *error)
   return ret;
 }
 
-static void
+G_GNUC_UNUSED static void
+print_header (const gchar *name,
+              const gchar *value,
+              gpointer     user_data)
+{
+  g_print ("header: `%s' -> `%s'\n", name, value);
+}
+
+G_GNUC_UNUSED static void
 _print_response (RestProxyCall *call)
 {
   GHashTable *headers;
@@ -347,13 +353,13 @@ goa_backend_oauth_provider_get_callback_uri (GoaBackendOAuthProvider *provider)
 }
 
 /**
- * goa_backend_oauth_provider_get_identity:
+ * goa_backend_oauth_provider_get_identity_sync:
  * @provider: A #GoaBackendOAuthProvider.
  * @access_token: A valid OAuth 1.0 access token.
  * @access_token_secret: The valid secret for @access_token.
+ * @out_name: (out): Return location for name or %NULL.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: The function to call when the request is satisfied.
- * @user_data: Pointer to pass to @callback.
+ * @error: Return location for error or %NULL.
  *
  * Method that returns the identity corresponding to @access_token and
  * @access_token_secret.
@@ -363,41 +369,11 @@ goa_backend_oauth_provider_get_callback_uri (GoaBackendOAuthProvider *provider)
  * - for example, for #GoaBackendGoogleProvider the returned identity
  * is the email address, for #GoaBackendFacebookProvider it's the user
  * name. In addition to the identity, an implementation also returns a
- * <emphasis>name</emphasis> that is more suitable for presentation
- * (the identity could be a GUID for example) and doesn't have to be
- * unique.
+ * <emphasis>name</emphasis> in @out_name that is more suitable for
+ * presentation (the identity could be a GUID for example) and doesn't
+ * have to be unique.
  *
- * When the result is ready, @callback will be called in the the <link
- * linkend="g-main-context-push-thread-default">thread-default main
- * loop</link> this method was called from. You can then call
- * goa_backend_oauth_provider_get_identity_finish() to get the result
- * of the operation.
- *
- * This is a pure virtual method - a subclass must provide an
- * implementation.
- */
-void
-goa_backend_oauth_provider_get_identity (GoaBackendOAuthProvider *provider,
-                                         const gchar              *access_token,
-                                         const gchar              *access_token_secret,
-                                         GCancellable             *cancellable,
-                                         GAsyncReadyCallback       callback,
-                                         gpointer                  user_data)
-{
-  g_return_if_fail (GOA_IS_BACKEND_OAUTH_PROVIDER (provider));
-  g_return_if_fail (access_token != NULL);
-  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
-  GOA_BACKEND_OAUTH_PROVIDER_GET_CLASS (provider)->get_identity (provider, access_token, access_token_secret, cancellable, callback, user_data);
-}
-
-/**
- * goa_backend_oauth_provider_get_identity_finish:
- * @provider: A #GoaBackendOAuthProvider.
- * @out_name: (out): Return location for name or %NULL.
- * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to goa_backend_oauth_provider_get_identity().
- * @error: Return location for error or %NULL.
- *
- * Finishes an operation started with goa_backend_oauth_provider_get_identity().
+ * The calling thread is blocked while the identity is obtained.
  *
  * This is a pure virtual method - a subclass must provide an
  * implementation.
@@ -406,133 +382,53 @@ goa_backend_oauth_provider_get_identity (GoaBackendOAuthProvider *provider,
  * must be freed with g_free().
  */
 gchar *
-goa_backend_oauth_provider_get_identity_finish (GoaBackendOAuthProvider  *provider,
-                                                gchar                   **out_name,
-                                                GAsyncResult             *res,
-                                                GError                  **error)
+goa_backend_oauth_provider_get_identity_sync (GoaBackendOAuthProvider *provider,
+                                              const gchar              *access_token,
+                                              const gchar              *access_token_secret,
+                                              gchar                   **out_name,
+                                              GCancellable             *cancellable,
+                                              GError                  **error)
 {
   g_return_val_if_fail (GOA_IS_BACKEND_OAUTH_PROVIDER (provider), NULL);
+  g_return_val_if_fail (access_token != NULL, NULL);
+  g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-  return GOA_BACKEND_OAUTH_PROVIDER_GET_CLASS (provider)->get_identity_finish (provider, out_name, res, error);
+  return GOA_BACKEND_OAUTH_PROVIDER_GET_CLASS (provider)->get_identity_sync (provider, access_token, access_token_secret, out_name, cancellable, error);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-typedef struct
+static gchar *
+get_tokens_sync (GoaBackendOAuthProvider  *provider,
+                 const gchar              *token,
+                 const gchar              *token_secret,
+                 const gchar              *session_handle, /* may be NULL */
+                 const gchar              *verifier,       /* may be NULL */
+                 gchar                   **out_access_token_secret,
+                 gint                     *out_access_token_expires_in,
+                 gchar                   **out_session_handle,
+                 gint                     *out_session_handle_expires_in,
+                 GCancellable             *cancellable,
+                 GError                  **error)
 {
-  volatile gint ref_count;
-  GSimpleAsyncResult *simple;
+  RestProxy *proxy;
   RestProxyCall *call;
-  gchar *access_token;
-  gchar *access_token_secret;
-  gchar *session_handle;
-  gint access_token_expires_in;
-  gint session_handle_expires_in;
-} GetTokensData;
-
-static GetTokensData *
-get_tokens_data_ref (GetTokensData *data)
-{
-  g_atomic_int_inc (&data->ref_count);
-  return data;
-}
-
-static void
-get_tokens_data_unref (GetTokensData *data)
-{
-  if (g_atomic_int_dec_and_test (&data->ref_count))
-    {
-      g_object_unref (data->call);
-      g_free (data->access_token);
-      g_free (data->access_token_secret);
-      g_free (data->session_handle);
-      g_slice_free (GetTokensData, data);
-    }
-}
-
-static void
-get_tokens_on_call_cb (RestProxyCall  *call,
-                       const GError   *error,
-                       GObject        *weak_object,
-                       gpointer        user_data)
-{
-  GetTokensData *data = user_data;
+  gchar *ret;
   guint status_code;
   GHashTable *f;
   const gchar *expires_in_str;
+  gchar *ret_access_token;
+  gchar *ret_access_token_secret;
+  gint ret_access_token_expires_in;
+  gchar *ret_session_handle;
+  gint ret_session_handle_expires_in;
 
-  if (error != NULL)
-    {
-      g_simple_async_result_set_from_error (data->simple, error);
-      goto out;
-    }
-
-  status_code = rest_proxy_call_get_status_code (call);
-  if (status_code != 200)
-    {
-      g_simple_async_result_set_error (data->simple,
-                                       GOA_ERROR,
-                                       GOA_ERROR_FAILED,
-                                       _("Expected status 200 when requesting access token, instead got status %d (%s)"),
-                                       status_code,
-                                       rest_proxy_call_get_status_message (call));
-      goto out;
-    }
-
-  f = soup_form_decode (rest_proxy_call_get_payload (call));
-  data->access_token = g_strdup (g_hash_table_lookup (f, "oauth_token"));
-  data->access_token_secret = g_strdup (g_hash_table_lookup (f, "oauth_token_secret"));
-  data->session_handle = g_strdup (g_hash_table_lookup (f, "oauth_session_handle"));
-  expires_in_str = g_hash_table_lookup (f, "oauth_expires_in");
-  if (expires_in_str != NULL)
-    data->access_token_expires_in = atoi (expires_in_str);
-  expires_in_str = g_hash_table_lookup (f, "oauth_authorization_expires_in");
-  if (expires_in_str != NULL)
-    data->session_handle_expires_in = atoi (expires_in_str);
-  g_hash_table_unref (f);
-
-  if (data->access_token == NULL || data->access_token_secret == NULL)
-    {
-      g_simple_async_result_set_error (data->simple,
-                                       GOA_ERROR,
-                                       GOA_ERROR_FAILED,
-                                       _("Missing access_token or access_token_secret headers in response"));
-      goto out;
-    }
-
-  g_simple_async_result_set_op_res_gpointer (data->simple,
-                                             get_tokens_data_ref (data),
-                                             (GDestroyNotify) get_tokens_data_unref);
-
- out:
-  g_simple_async_result_complete (data->simple);
-  g_object_unref (data->simple);
-  get_tokens_data_unref (data);
-}
-
-static void
-get_tokens (GoaBackendOAuthProvider *provider,
-            const gchar              *token,
-            const gchar              *token_secret,
-            const gchar              *session_handle, /* may be NULL */
-            const gchar              *verifier, /* may be NULL */
-            GCancellable             *cancellable,
-            GAsyncReadyCallback       callback,
-            gpointer                  user_data)
-{
-  GetTokensData *data;
-  RestProxy *proxy;
-  GError *error;
-
-  g_return_if_fail (GOA_IS_BACKEND_OAUTH_PROVIDER (provider));
-  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
-
-  data = g_slice_new0 (GetTokensData);
-  data->ref_count = 1;
-  data->simple = g_simple_async_result_new (G_OBJECT (provider),
-                                            callback,
-                                            user_data,
-                                            get_tokens);
+  ret = NULL;
+  ret_access_token = NULL;
+  ret_access_token_secret = NULL;
+  ret_access_token_expires_in = 0;
+  ret_session_handle = NULL;
+  ret_session_handle_expires_in = 0;
 
   proxy = oauth_proxy_new (goa_backend_oauth_provider_get_consumer_key (provider),
                            goa_backend_oauth_provider_get_consumer_secret (provider),
@@ -540,73 +436,73 @@ get_tokens (GoaBackendOAuthProvider *provider,
                            FALSE);
   oauth_proxy_set_token (OAUTH_PROXY (proxy), token);
   oauth_proxy_set_token_secret (OAUTH_PROXY (proxy), token_secret);
-  data->call = rest_proxy_new_call (proxy);
-  rest_proxy_call_set_method (data->call, "POST");
+  call = rest_proxy_new_call (proxy);
+  rest_proxy_call_set_method (call, "POST");
   if (verifier != NULL)
-    rest_proxy_call_add_param (data->call, "oauth_verifier", verifier);
+    rest_proxy_call_add_param (call, "oauth_verifier", verifier);
   if (session_handle != NULL)
-    rest_proxy_call_add_param (data->call, "oauth_session_handle", session_handle);
-  error = NULL;
-  if (!rest_proxy_call_async (data->call,
-                              get_tokens_on_call_cb,
-                              NULL, /* TODO: weak_object for GCancellable */
-                              data,
-                              &error))
-    {
-      g_simple_async_result_take_error (data->simple, error);
-      g_simple_async_result_complete_in_idle (data->simple);
-      g_object_unref (data->simple);
-      get_tokens_data_unref (data);
-    }
-  g_object_unref (proxy);
-}
-
-static gchar *
-get_tokens_finish (GoaBackendOAuthProvider   *provider,
-                   gchar                     **out_access_token_secret,
-                   gint                       *out_access_token_expires_in,
-                   gchar                     **out_session_handle,
-                   gint                       *out_session_handle_expires_in,
-                   GAsyncResult               *res,
-                   GError                    **error)
-{
-  GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
-  GetTokensData *data;
-  gchar *ret;
-
-  g_return_val_if_fail (GOA_IS_BACKEND_OAUTH_PROVIDER (provider), NULL);
-  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (provider), get_tokens), NULL);
-  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-
-  ret = NULL;
-
-  if (g_simple_async_result_propagate_error (simple, error))
+    rest_proxy_call_add_param (call, "oauth_session_handle", session_handle);
+  /* TODO: cancellable support? */
+  if (!rest_proxy_call_sync (call, error))
     goto out;
 
-  data = g_simple_async_result_get_op_res_gpointer (simple);
+  status_code = rest_proxy_call_get_status_code (call);
+  if (status_code != 200)
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Expected status 200 when requesting access token, instead got status %d (%s)"),
+                   status_code,
+                   rest_proxy_call_get_status_message (call));
+      goto out;
+    }
+
+  f = soup_form_decode (rest_proxy_call_get_payload (call));
+  ret_access_token = g_strdup (g_hash_table_lookup (f, "oauth_token"));
+  ret_access_token_secret = g_strdup (g_hash_table_lookup (f, "oauth_token_secret"));
+  ret_session_handle = g_strdup (g_hash_table_lookup (f, "oauth_session_handle"));
+  expires_in_str = g_hash_table_lookup (f, "oauth_expires_in");
+  if (expires_in_str != NULL)
+    ret_access_token_expires_in = atoi (expires_in_str);
+  expires_in_str = g_hash_table_lookup (f, "oauth_authorization_expires_in");
+  if (expires_in_str != NULL)
+    ret_session_handle_expires_in = atoi (expires_in_str);
+  g_hash_table_unref (f);
+
+  if (ret_access_token == NULL || ret_access_token_secret == NULL)
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Missing access_token or access_token_secret headers in response"));
+      goto out;
+    }
+
+  ret = ret_access_token; ret_access_token = NULL;
   if (out_access_token_secret != NULL)
     {
-      *out_access_token_secret = data->access_token_secret;
-      data->access_token_secret = NULL;
+      *out_access_token_secret = ret_access_token_secret;
+      ret_access_token_secret = NULL;
     }
   if (out_access_token_expires_in != NULL)
-    {
-      *out_access_token_expires_in = data->access_token_expires_in;
-    }
+    *out_access_token_expires_in = ret_access_token_expires_in;
   if (out_session_handle != NULL)
     {
-      *out_session_handle = data->session_handle;
-      data->session_handle = NULL;
+      *out_session_handle = ret_session_handle;
+      ret_session_handle = NULL;
     }
   if (out_session_handle_expires_in != NULL)
-    {
-      *out_session_handle_expires_in = data->session_handle_expires_in;
-    }
-
-  ret = data->access_token;
-  data->access_token = NULL;
+    *out_session_handle_expires_in = ret_session_handle_expires_in;
 
  out:
+  g_free (ret_access_token);
+  g_free (ret_access_token_secret);
+  g_free (ret_session_handle);
+  if (call != NULL)
+    g_object_unref (call);
+  if (proxy != NULL)
+    g_object_unref (proxy);
   return ret;
 }
 
@@ -632,14 +528,6 @@ typedef struct
   gchar *session_handle;
   gint session_handle_expires_in;
 } IdentifyData;
-
-G_GNUC_UNUSED static void
-print_header (const gchar *name,
-              const gchar *value,
-              gpointer     user_data)
-{
-  g_print ("header: `%s' -> `%s'\n", name, value);
-}
 
 static gboolean
 on_web_view_navigation_policy_decision_requested (WebKitWebView             *webView,
@@ -696,40 +584,6 @@ on_entry_changed (GtkEditable *editable,
   gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, sensitive);
 }
 
-static void
-get_tokens_and_identity_on_get_identity_cb (GoaBackendOAuthProvider *provider,
-                                            GAsyncResult             *res,
-                                            gpointer                  user_data)
-{
-  IdentifyData *data = user_data;
-  data->identity = goa_backend_oauth_provider_get_identity_finish (provider,
-                                                                   &data->name,
-                                                                   res,
-                                                                   &data->error);
-  if (&data->error != NULL)
-    g_prefix_error (&data->error, _("Error getting identity: "));
-  g_main_loop_quit (data->loop);
-}
-
-static void
-get_tokens_and_identity_on_get_tokens_cb (GoaBackendOAuthProvider *provider,
-                                          GAsyncResult            *res,
-                                          gpointer                 user_data)
-{
-  IdentifyData *data = user_data;
-
-  data->access_token = get_tokens_finish (provider,
-                                          &data->access_token_secret,
-                                          &data->access_token_expires_in,
-                                          &data->session_handle,
-                                          &data->session_handle_expires_in,
-                                          res,
-                                          &data->error);
-  if (&data->error != NULL)
-    g_prefix_error (&data->error, _("Error getting an Access Token: "));
-  g_main_loop_quit (data->loop);
-}
-
 static gboolean
 get_tokens_and_identity (GoaBackendOAuthProvider *provider,
                          GtkDialog                *dialog,
@@ -774,6 +628,7 @@ get_tokens_and_identity (GoaBackendOAuthProvider *provider,
   data.provider = provider;
   data.loop = g_main_loop_new (NULL, FALSE);
 
+  /* TODO: run in worker thread */
   proxy = oauth_proxy_new (goa_backend_oauth_provider_get_consumer_key (provider),
                            goa_backend_oauth_provider_get_consumer_secret (provider),
                            goa_backend_oauth_provider_get_request_uri (provider), FALSE);
@@ -791,7 +646,6 @@ get_tokens_and_identity (GoaBackendOAuthProvider *provider,
       for (n = 0; request_params[n] != NULL; n += 2)
         rest_proxy_call_add_param (call, request_params[n], request_params[n+1]);
     }
-
   if (!rest_proxy_call_sync (call, &data.error))
     {
       g_prefix_error (&data.error, _("Error getting a Request Token: "));
@@ -807,7 +661,6 @@ get_tokens_and_identity (GoaBackendOAuthProvider *provider,
                    rest_proxy_call_get_status_message (call));
       goto out;
     }
-  _print_response (call);
   f = soup_form_decode (rest_proxy_call_get_payload (call));
   data.request_token = g_strdup (g_hash_table_lookup (f, "oauth_token"));
   data.request_token_secret = g_strdup (g_hash_table_lookup (f, "oauth_token_secret"));
@@ -923,27 +776,37 @@ get_tokens_and_identity (GoaBackendOAuthProvider *provider,
    * (short-lived) access token and session_handle (used to refresh the
    * access token)..
    */
-  get_tokens (provider,
-              data.request_token,
-              data.request_token_secret,
-              NULL, /* session_handle */
-              data.oauth_verifier,
-              NULL, /* GCancellable */
-              (GAsyncReadyCallback) get_tokens_and_identity_on_get_tokens_cb,
-              &data);
-  g_main_loop_run (data.loop);
-  if (data.access_token == NULL)
-    goto out;
 
-  goa_backend_oauth_provider_get_identity (provider,
-                                           data.access_token,
-                                           data.access_token_secret,
-                                           NULL, /* TODO: GCancellable */
-                                           (GAsyncReadyCallback) get_tokens_and_identity_on_get_identity_cb,
-                                           &data);
-  g_main_loop_run (data.loop);
+  /* TODO: run in worker thread */
+  data.access_token = get_tokens_sync (provider,
+                                       data.request_token,
+                                       data.request_token_secret,
+                                       NULL, /* session_handle */
+                                       data.oauth_verifier,
+                                       &data.access_token_secret,
+                                       &data.access_token_expires_in,
+                                       &data.session_handle,
+                                       &data.session_handle_expires_in,
+                                       NULL, /* GCancellable */
+                                       &data.error);
+  if (data.access_token == NULL)
+    {
+      g_prefix_error (&data.error, _("Error getting an Access Token: "));
+      goto out;
+    }
+
+  /* TODO: run in worker thread */
+  data.identity = goa_backend_oauth_provider_get_identity_sync (provider,
+                                                                data.access_token,
+                                                                data.access_token_secret,
+                                                                &data.name,
+                                                                NULL, /* TODO: GCancellable */
+                                                                &data.error);
   if (data.identity == NULL)
-    goto out;
+    {
+      g_prefix_error (&data.error, _("Error getting identity: "));
+      goto out;
+    }
 
   ret = TRUE;
 
@@ -1017,18 +880,6 @@ add_account_cb (GoaManager   *manager,
   g_main_loop_quit (data->loop);
 }
 
-static void
-store_credentials_cb (GoaBackendProvider   *provider,
-                      GAsyncResult         *res,
-                      gpointer              user_data)
-{
-  AddData *data = user_data;
-  goa_backend_provider_store_credentials_finish (provider,
-                                                 res,
-                                                 &data->error);
-  g_main_loop_quit (data->loop);
-}
-
 static gint64
 duration_to_abs_usec (gint duration_sec)
 {
@@ -1055,10 +906,10 @@ abs_usec_to_duration (gint64 abs_usec)
 
 static GoaObject *
 goa_backend_oauth_provider_add_account (GoaBackendProvider *_provider,
-                                         GoaClient          *client,
-                                         GtkDialog          *dialog,
-                                         GtkBox             *vbox,
-                                         GError            **error)
+                                        GoaClient          *client,
+                                        GtkDialog          *dialog,
+                                        GtkBox             *vbox,
+                                        GError            **error)
 {
   GoaBackendOAuthProvider *provider = GOA_BACKEND_OAUTH_PROVIDER (_provider);
   GoaObject *ret;
@@ -1083,6 +934,7 @@ goa_backend_oauth_provider_add_account (GoaBackendProvider *_provider,
   ret = NULL;
   access_token = NULL;
   access_token_secret = NULL;
+  session_handle = NULL;
   identity = NULL;
   name = NULL;
   accounts = NULL;
@@ -1135,6 +987,10 @@ goa_backend_oauth_provider_add_account (GoaBackendProvider *_provider,
         }
     }
 
+  /* we want the GoaClient to update before this method returns (so it
+   * can create a proxy for the new object) so run the mainloop while
+   * waiting for this to complete
+   */
   goa_manager_call_add_account (goa_client_get_manager (client),
                                 goa_backend_provider_get_provider_type (GOA_BACKEND_PROVIDER (provider)),
                                 name, /* Name */
@@ -1158,14 +1014,12 @@ goa_backend_oauth_provider_add_account (GoaBackendProvider *_provider,
   if (session_handle_expires_in > 0)
     g_variant_builder_add (&builder, "{sv}", "session_handle_expires_at",
                            g_variant_new_int64 (duration_to_abs_usec (session_handle_expires_in)));
-  goa_backend_provider_store_credentials (GOA_BACKEND_PROVIDER (provider),
-                                          identity,
-                                          g_variant_builder_end (&builder),
-                                          NULL, /* GCancellable */
-                                          (GAsyncReadyCallback) store_credentials_cb,
-                                          &data);
-  g_main_loop_run (data.loop);
-  if (data.error != NULL)
+  /* TODO: run in worker thread */
+  if (!goa_backend_provider_store_credentials_sync (GOA_BACKEND_PROVIDER (provider),
+                                                    identity,
+                                                    g_variant_builder_end (&builder),
+                                                    NULL, /* GCancellable */
+                                                    &data.error))
     goto out;
 
   ret = GOA_OBJECT (g_dbus_object_manager_get_object (goa_client_get_object_manager (client),
@@ -1188,6 +1042,7 @@ goa_backend_oauth_provider_add_account (GoaBackendProvider *_provider,
   g_free (name);
   g_free (access_token);
   g_free (access_token_secret);
+  g_free (session_handle);
   g_free (data.account_object_path);
   if (data.loop != NULL)
     g_main_loop_unref (data.loop);
@@ -1196,30 +1051,12 @@ goa_backend_oauth_provider_add_account (GoaBackendProvider *_provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-typedef struct
-{
-  GMainLoop *loop;
-  GError *error;
-} RefreshAccountData;
-
-static void
-refresh_credentials_store_credentials_cb (GoaBackendProvider   *provider,
-                                          GAsyncResult         *res,
-                                          gpointer              user_data)
-{
-  RefreshAccountData *data = user_data;
-  goa_backend_provider_store_credentials_finish (provider,
-                                                 res,
-                                                 &data->error);
-  g_main_loop_quit (data->loop);
-}
-
 static gboolean
 goa_backend_oauth_provider_refresh_account (GoaBackendProvider  *_provider,
-                                             GoaClient           *client,
-                                             GoaObject           *object,
-                                             GtkWindow           *parent,
-                                             GError             **error)
+                                            GoaClient           *client,
+                                            GoaObject           *object,
+                                            GtkWindow           *parent,
+                                            GError             **error)
 {
   GoaBackendOAuthProvider *provider = GOA_BACKEND_OAUTH_PROVIDER (_provider);
   GtkWidget *dialog;
@@ -1232,7 +1069,6 @@ goa_backend_oauth_provider_refresh_account (GoaBackendProvider  *_provider,
   const gchar *existing_identity;
   GVariantBuilder builder;
   gboolean ret;
-  RefreshAccountData data;
 
   g_return_val_if_fail (GOA_IS_BACKEND_OAUTH_PROVIDER (provider), FALSE);
   g_return_val_if_fail (GOA_IS_CLIENT (client), FALSE);
@@ -1242,10 +1078,8 @@ goa_backend_oauth_provider_refresh_account (GoaBackendProvider  *_provider,
 
   access_token = NULL;
   access_token_secret = NULL;
+  session_handle = NULL;
   identity = NULL;
-
-  memset (&data, '\0', sizeof (RefreshAccountData));
-  data.loop = g_main_loop_new (NULL, FALSE);
 
   dialog = gtk_dialog_new_with_buttons (NULL,
                                         parent,
@@ -1292,18 +1126,13 @@ goa_backend_oauth_provider_refresh_account (GoaBackendProvider  *_provider,
   if (session_handle_expires_in > 0)
     g_variant_builder_add (&builder, "{sv}", "session_handle_expires_at",
                            g_variant_new_int64 (duration_to_abs_usec (session_handle_expires_in)));
-  goa_backend_provider_store_credentials (GOA_BACKEND_PROVIDER (provider),
-                                          identity,
-                                          g_variant_builder_end (&builder),
-                                          NULL, /* GCancellable */
-                                          (GAsyncReadyCallback) refresh_credentials_store_credentials_cb,
-                                          &data);
-  g_main_loop_run (data.loop);
-  if (data.error != NULL)
-    {
-      g_propagate_error (error, data.error);
-      goto out;
-    }
+  /* TODO: run in worker thread */
+  if (!goa_backend_provider_store_credentials_sync (GOA_BACKEND_PROVIDER (provider),
+                                                    identity,
+                                                    g_variant_builder_end (&builder),
+                                                    NULL, /* GCancellable */
+                                                    error))
+    goto out;
 
   goa_account_call_ensure_credentials (goa_object_peek_account (object),
                                        NULL, /* GCancellable */
@@ -1317,419 +1146,16 @@ goa_backend_oauth_provider_refresh_account (GoaBackendProvider  *_provider,
   g_free (identity);
   g_free (access_token);
   g_free (access_token_secret);
-  g_main_loop_unref (data.loop);
+  g_free (session_handle);
   return ret;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-typedef struct
-{
-  volatile gint ref_count;
-
-  GoaBackendOAuthProvider *provider;
-  GoaObject *object;
-  GSimpleAsyncResult *simple;
-  GCancellable *cancellable;
-
-  gboolean force_refresh;
-
-  gchar *access_token;
-  gchar *access_token_secret;
-  gint access_token_expires_in;
-  gchar *session_handle;
-  gint session_handle_expires_in;
-} GetAccessTokenData;
-
-static void goa_backend_oauth_provider_dequeue_and_do_next (GetAccessTokenData *data);
-
 static void
-get_access_token_data_unref (GetAccessTokenData *data)
+free_mutex (GMutex *mutex)
 {
-  if (g_atomic_int_dec_and_test (&data->ref_count))
-    {
-      goa_backend_oauth_provider_dequeue_and_do_next (data);
-
-      g_object_unref (data->object);
-      if (data->cancellable != NULL)
-        g_object_unref (data->cancellable);
-      g_free (data->access_token);
-      g_free (data->access_token_secret);
-      g_free (data->session_handle);
-      g_slice_free (GetAccessTokenData, data);
-    }
-}
-
-static GetAccessTokenData *
-get_access_token_data_ref (GetAccessTokenData *data)
-{
-  g_atomic_int_inc (&data->ref_count);
-  return data;
-}
-
-static void
-get_access_token_store_credentials_cb (GoaBackendProvider   *provider,
-                                       GAsyncResult         *res,
-                                       gpointer              user_data)
-{
-  GetAccessTokenData *data = user_data;
-  GError *error;
-
-  error = NULL;
-  if (!goa_backend_provider_store_credentials_finish (provider, res, &error))
-    {
-      g_warning ("Error storing credentials in keyring: %s (%s, %d)",
-                 error->message, g_quark_to_string (error->domain), error->code);
-      g_simple_async_result_take_error (data->simple, error);
-    }
-  else
-    {
-      //g_debug ("Returning refreshed credentials (expires in %d seconds)", data->access_token_expires_in);
-
-      g_simple_async_result_set_op_res_gpointer (data->simple,
-                                                 get_access_token_data_ref (data),
-                                                 (GDestroyNotify) get_access_token_data_unref);
-    }
-  g_simple_async_result_complete_in_idle (data->simple);
-  g_object_unref (data->simple);
-  get_access_token_data_unref (data);
-}
-
-static void
-get_access_token_get_tokens_cb (GoaBackendOAuthProvider  *provider,
-                                GAsyncResult              *res,
-                                gpointer                   user_data)
-{
-  GetAccessTokenData *data = user_data;
-  GVariantBuilder builder;
-  GError *error;
-  const gchar *identity;
-
-  error = NULL;
-  data->access_token = get_tokens_finish (provider,
-                                          &data->access_token_secret,
-                                          &data->access_token_expires_in,
-                                          &data->session_handle,
-                                          &data->session_handle_expires_in,
-                                          res,
-                                          &error);
-  if (data->access_token == NULL)
-    {
-      g_simple_async_result_set_error (data->simple,
-                                       GOA_ERROR,
-                                       is_authorization_error (error) ? GOA_ERROR_NOT_AUTHORIZED : GOA_ERROR_FAILED,
-                                       _("Failed to refresh access token: %s (%s, %d)"),
-                                       error->message, g_quark_to_string (error->domain), error->code);
-      g_simple_async_result_complete_in_idle (data->simple);
-      g_object_unref (data->simple);
-      g_error_free (error);
-      goto out;
-    }
-
-  /* Good. Now update the keyring with the refreshed credentials */
-  g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
-  g_variant_builder_add (&builder, "{sv}", "access_token", g_variant_new_string (data->access_token));
-  g_variant_builder_add (&builder, "{sv}", "access_token_secret", g_variant_new_string (data->access_token_secret));
-  if (data->access_token_expires_in > 0)
-    g_variant_builder_add (&builder, "{sv}", "access_token_expires_at",
-                           g_variant_new_int64 (duration_to_abs_usec (data->access_token_expires_in)));
-  if (data->session_handle != NULL)
-    g_variant_builder_add (&builder, "{sv}", "session_handle", g_variant_new_string (data->session_handle));
-  if (data->session_handle_expires_in > 0)
-    g_variant_builder_add (&builder, "{sv}", "session_handle_expires_at",
-                           g_variant_new_int64 (duration_to_abs_usec (data->session_handle_expires_in)));
-
-  identity = goa_oauth_based_get_identity (goa_object_peek_oauth_based (data->object));
-  goa_backend_provider_store_credentials (GOA_BACKEND_PROVIDER (provider),
-                                          identity,
-                                          g_variant_builder_end (&builder),
-                                          data->cancellable, /* GCancellable */
-                                          (GAsyncReadyCallback) get_access_token_store_credentials_cb,
-                                          get_access_token_data_ref (data));
- out:
-  get_access_token_data_unref (data);
-}
-
-static void
-get_access_token_lookup_credentials_cb (GoaBackendProvider *provider,
-                                        GAsyncResult       *res,
-                                        gpointer            user_data)
-{
-  GetAccessTokenData *data = user_data;
-  GVariant *credentials;
-  GVariantIter iter;
-  const gchar *key;
-  GVariant *value;
-  GError *error;
-
-  error = NULL;
-  credentials = goa_backend_provider_lookup_credentials_finish (provider, res, &error);
-  if (credentials == NULL)
-    {
-      g_simple_async_result_set_error (data->simple,
-                                       GOA_ERROR,
-                                       GOA_ERROR_NOT_AUTHORIZED,
-                                       _("Credentials not found in keyring: %s (%s, %d)"),
-                                       error->message, g_quark_to_string (error->domain), error->code);
-      g_error_free (error);
-      g_simple_async_result_complete_in_idle (data->simple);
-      g_object_unref (data->simple);
-      goto out;
-    }
-
-  g_variant_iter_init (&iter, credentials);
-  while (g_variant_iter_next (&iter, "{&sv}", &key, &value))
-    {
-      if (g_strcmp0 (key, "access_token") == 0)
-        data->access_token = g_variant_dup_string (value, NULL);
-      else if (g_strcmp0 (key, "access_token_secret") == 0)
-        data->access_token_secret = g_variant_dup_string (value, NULL);
-      else if (g_strcmp0 (key, "access_token_expires_at") == 0)
-        data->access_token_expires_in = abs_usec_to_duration (g_variant_get_int64 (value));
-      else if (g_strcmp0 (key, "session_handle") == 0)
-        data->session_handle = g_variant_dup_string (value, NULL);
-      else if (g_strcmp0 (key, "session_handle_expires_at") == 0)
-        data->session_handle_expires_in = abs_usec_to_duration (g_variant_get_int64 (value));
-      g_variant_unref (value);
-    }
-
-  if (data->access_token == NULL || data->access_token_secret == NULL)
-    {
-      g_simple_async_result_set_error (data->simple,
-                                       GOA_ERROR,
-                                       GOA_ERROR_NOT_AUTHORIZED,
-                                       _("Credentials does not contain access_token or access_token_secret"));
-      g_simple_async_result_complete_in_idle (data->simple);
-      g_object_unref (data->simple);
-      goto out;
-    }
-
-  /* if we can't refresh the token, just return it no matter what */
-  if (data->session_handle == NULL)
-    {
-      //g_debug ("Returning locally cached credentials that cannot be refreshed");
-      g_simple_async_result_set_op_res_gpointer (data->simple,
-                                                 get_access_token_data_ref (data),
-                                                 (GDestroyNotify) get_access_token_data_unref);
-      g_simple_async_result_complete_in_idle (data->simple);
-      g_object_unref (data->simple);
-      goto out;
-    }
-
-  /* If access_token is still "fresh enough" (e.g. more than ten
-   * minutes of life left in it), just return it unless we've been
-   * asked to forcibly refresh it
-   */
-  if (!data->force_refresh && data->access_token_expires_in > 10*60)
-    {
-      //g_debug ("Returning locally cached credentials (expires in %d seconds)", data->access_token_expires_in);
-      g_simple_async_result_set_op_res_gpointer (data->simple,
-                                                 get_access_token_data_ref (data),
-                                                 (GDestroyNotify) get_access_token_data_unref);
-      g_simple_async_result_complete_in_idle (data->simple);
-      g_object_unref (data->simple);
-      goto out;
-    }
-
-  //g_debug ("Refreshing locally cached credentials (expires in %d seconds, force_refresh=%d)", data->access_token_expires_in, data->force_refresh);
-
-  /* Otherwise, refresh it */
-  get_tokens (data->provider,
-              data->access_token,
-              data->access_token_secret,
-              data->session_handle,
-              NULL, /* verifier */
-              data->cancellable,
-              (GAsyncReadyCallback) get_access_token_get_tokens_cb,
-              get_access_token_data_ref (data));
-
- out:
-  get_access_token_data_unref (data);
-  if (credentials != NULL)
-    g_variant_unref (credentials);
-}
-
-/* must hold lock while calling */
-static void
-goa_backend_oauth_provider_get_access_token_do_one (GetAccessTokenData *data)
-{
-  const gchar *identity;
-
-  //g_debug ("running %p", data);
-
-  /* First, get the credentials from the keyring */
-  identity = goa_oauth_based_get_identity (goa_object_peek_oauth_based (data->object));
-  goa_backend_provider_lookup_credentials (GOA_BACKEND_PROVIDER (data->provider),
-                                           identity,
-                                           data->cancellable,
-                                           (GAsyncReadyCallback) get_access_token_lookup_credentials_cb,
-                                           data);
-}
-
-/**
- * goa_backend_oauth_provider_get_access_token:
- * @provider: A #GoaBackendOAuthProvider.
- * @object: A #GoaObject.
- * @force_refresh: If set to %TRUE, forces a refresh of the access token, if possible.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: The function to call when the request is satisfied.
- * @user_data: Pointer to pass to @callback.
- *
- * Gets an access token for @object. The resulting token is typically
- * read from the local cache so most of the time only a local
- * roundtrip to the storage for the token cache
- * (e.g. <command>gnome-keyring-daemon</command>) is needed. However,
- * the operation may involve refreshing the token with the service
- * provider so a full network round-trip may be needed.
- *
- * Note that multiple calls are serialized to avoid multiple
- * outstanding requests to the service provider.
- *
- * This operation may fail if e.g. unable to refresh the credentials
- * or if network connectivity is not available. Note that even if a
- * token is returned, the returned token isn't guaranteed to work -
- * use goa_backend_provider_ensure_credentials() if you need stronger
- * guarantees.
- *
- * When the result is ready, @callback will be called in the the <link
- * linkend="g-main-context-push-thread-default">thread-default main
- * loop</link> this method was called from. You can then call
- * goa_backend_oauth_provider_get_access_token_finish() to get the
- * result of the operation.
- *
- * See goa_backend_oauth_provider_get_access_token_sync() for the
- * synchronous, blocking version of this method.
- */
-void
-goa_backend_oauth_provider_get_access_token (GoaBackendOAuthProvider  *provider,
-                                             GoaObject                *object,
-                                             gboolean                  force_refresh,
-                                             GCancellable             *cancellable,
-                                             GAsyncReadyCallback       callback,
-                                             gpointer                  user_data)
-{
-  GetAccessTokenData *data;
-  GPtrArray *queue;
-
-  g_return_if_fail (GOA_IS_BACKEND_OAUTH_PROVIDER (provider));
-  g_return_if_fail (GOA_IS_OBJECT (object));
-  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
-
-  data = g_slice_new0 (GetAccessTokenData);
-  data->ref_count = 1;
-  data->provider = provider;
-  data->object = g_object_ref (object);
-  data->cancellable = cancellable != NULL ? g_object_ref (cancellable) : NULL;
-  data->force_refresh = force_refresh;
-  data->simple = g_simple_async_result_new (G_OBJECT (provider),
-                                            callback,
-                                            user_data,
-                                            goa_backend_oauth_provider_get_access_token);
-
-  G_LOCK (queue_lock);
-  queue = g_object_get_data (G_OBJECT (data->object), "goa-oauth-get-access-token-queue");
-  if (queue == NULL)
-    {
-      queue = g_ptr_array_new ();
-      g_object_set_data_full (G_OBJECT (data->object),
-                              "goa-oauth-get-access-token-queue",
-                              queue,
-                              (GDestroyNotify) g_ptr_array_unref);
-      g_ptr_array_add (queue, data);
-      //g_debug ("nothing in queue");
-      goa_backend_oauth_provider_get_access_token_do_one (data);
-    }
-  else
-    {
-      //g_debug ("enqueing %p", data);
-      g_ptr_array_add (queue, data);
-    }
-  G_UNLOCK (queue_lock);
-}
-
-static void
-goa_backend_oauth_provider_dequeue_and_do_next (GetAccessTokenData *data)
-{
-  GPtrArray *queue;
-  GetAccessTokenData *next;
-
-  G_LOCK (queue_lock);
-  queue = g_object_get_data (G_OBJECT (data->object), "goa-oauth-get-access-token-queue");
-  //g_debug ("dequeing %p", data);
-  g_assert (queue != NULL);
-  g_assert (data == g_ptr_array_remove_index (queue, 0));
-  if (queue->len == 0)
-    {
-      //g_debug ("queue is now empty");
-      g_object_set_data (G_OBJECT (data->object), "goa-oauth-get-access-token-queue", NULL);
-    }
-  else
-    {
-      next = g_ptr_array_index (queue, 0);
-      //g_debug ("next in queue is %p", next);
-      goa_backend_oauth_provider_get_access_token_do_one (next);
-    }
-  G_UNLOCK (queue_lock);
-}
-
-/**
- * goa_backend_oauth_provider_get_access_token_finish:
- * @provider: A #GoaBackendOAuthProvider.
- * @out_access_token_secret: (out): The secret for the return access token.
- * @out_access_token_expires_in: (out): Return location for how many seconds the returned token is valid for (0 if unknown) or %NULL.
- * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to goa_backend_oauth_provider_get_access_token().
- * @error: Return location for error or %NULL.
- *
- * Finishes an operation started with goa_backend_oauth_provider_get_access_token().
- *
- * Returns: The access token or %NULL if error is set. The returned string must be freed with g_free().
- */
-gchar *
-goa_backend_oauth_provider_get_access_token_finish (GoaBackendOAuthProvider   *provider,
-                                                    gchar                    **out_access_token_secret,
-                                                    gint                      *out_access_token_expires_in,
-                                                    GAsyncResult              *res,
-                                                    GError                   **error)
-{
-  GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
-  GetAccessTokenData *data;
-  gchar *ret;
-
-  g_return_val_if_fail (GOA_IS_BACKEND_OAUTH_PROVIDER (provider), NULL);
-  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (provider),
-                                                        goa_backend_oauth_provider_get_access_token), NULL);
-
-  if (g_simple_async_result_propagate_error (simple, error))
-    return NULL;
-
-  data = g_simple_async_result_get_op_res_gpointer (simple);
-
-  ret = g_strdup (data->access_token);
-  if (out_access_token_secret != NULL)
-    *out_access_token_secret = g_strdup (data->access_token_secret);
-  if (out_access_token_expires_in != NULL)
-    *out_access_token_expires_in = data->access_token_expires_in;
-
-  return ret;
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-typedef struct
-{
-  GAsyncResult *res;
-  GMainContext *context;
-  GMainLoop *loop;
-} GetAccessTokenSyncData;
-
-static void
-get_access_token_sync_cb (GoaBackendOAuthProvider   *provider,
-                          GAsyncResult              *res,
-                          gpointer                   user_data)
-{
-  GetAccessTokenSyncData *data = user_data;
-  data->res = g_object_ref (res);
-  g_main_loop_quit (data->loop);
+  g_mutex_free (mutex);
 }
 
 /**
@@ -1745,8 +1171,21 @@ get_access_token_sync_cb (GoaBackendOAuthProvider   *provider,
  * Synchronously gets an access token for @object. The calling thread
  * is blocked while the operation is pending.
  *
- * See goa_backend_oauth_provider_get_access_token() for the
- * asynchronous non-blocking version and more details.
+ * The resulting token is typically read from the local cache so most
+ * of the time only a local roundtrip to the storage for the token
+ * cache (e.g. <command>gnome-keyring-daemon</command>) is
+ * needed. However, the operation may involve refreshing the token
+ * with the service provider so a full network round-trip may be
+ * needed.
+ *
+ * Note that multiple calls are serialized to avoid multiple
+ * outstanding requests to the service provider.
+ *
+ * This operation may fail if e.g. unable to refresh the credentials
+ * or if network connectivity is not available. Note that even if a
+ * token is returned, the returned token isn't guaranteed to work -
+ * use goa_backend_provider_ensure_credentials_sync() if you need
+ * stronger guarantees.
  *
  * Returns: The access token or %NULL if error is set. The returned
  * string must be freed with g_free().
@@ -1760,39 +1199,202 @@ goa_backend_oauth_provider_get_access_token_sync (GoaBackendOAuthProvider   *pro
                                                   GCancellable              *cancellable,
                                                   GError                   **error)
 {
-  GetAccessTokenSyncData *data;
+  const gchar *identity;
+  GVariant *credentials;
+  GVariantIter iter;
+  const gchar *key;
+  GVariant *value;
+  gchar *access_token;
+  gchar *access_token_secret;
+  gchar *session_handle;
+  gchar *access_token_for_refresh;
+  gchar *access_token_secret_for_refresh;
+  gchar *session_handle_for_refresh;
+  gint access_token_expires_in;
+  gint session_handle_expires_in;
+  gboolean success;
+  GVariantBuilder builder;
   gchar *ret;
+  GMutex *lock;
 
   g_return_val_if_fail (GOA_IS_BACKEND_OAUTH_PROVIDER (provider), NULL);
   g_return_val_if_fail (GOA_IS_OBJECT (object), NULL);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  data = g_new0 (GetAccessTokenSyncData, 1);
-  data->context = g_main_context_new ();
-  data->loop = g_main_loop_new (data->context, FALSE);
+  ret = NULL;
+  credentials = NULL;
+  access_token = NULL;
+  access_token_secret = NULL;
+  access_token_expires_in = 0;
+  session_handle = NULL;
+  session_handle_expires_in = 0;
+  access_token_for_refresh = NULL;
+  access_token_secret_for_refresh = NULL;
+  session_handle_for_refresh = NULL;
+  success = FALSE;
 
-  g_main_context_push_thread_default (data->context);
+  /* provider_lock is too coarse, use a per-object lock instead */
+  G_LOCK (provider_lock);
+  lock = g_object_get_data (G_OBJECT (object), "-goa-backend-oauth-provider-get-access-token-lock");
+  if (lock == NULL)
+    {
+      lock = g_mutex_new ();
+      g_object_set_data_full (G_OBJECT (object),
+                              "-goa-backend-oauth-provider-get-access-token-lock",
+                              lock,
+                              (GDestroyNotify) free_mutex);
+    }
+  G_UNLOCK (provider_lock);
 
-  goa_backend_oauth_provider_get_access_token (provider,
-                                               object,
-                                               force_refresh,
-                                               cancellable,
-                                               (GAsyncReadyCallback) get_access_token_sync_cb,
-                                               data);
-  g_main_loop_run (data->loop);
-  ret = goa_backend_oauth_provider_get_access_token_finish (provider,
-                                                            out_access_token_secret,
-                                                            out_access_token_expires_in,
-                                                            data->res,
-                                                            error);
+  g_mutex_lock (lock);
 
-  g_main_context_pop_thread_default (data->context);
+  /* First, get the credentials from the keyring */
+  identity = goa_oauth_based_get_identity (goa_object_peek_oauth_based (object));
+  credentials = goa_backend_provider_lookup_credentials_sync (GOA_BACKEND_PROVIDER (provider),
+                                                              identity,
+                                                              cancellable,
+                                                              error);
+  if (credentials == NULL)
+    {
+      if (error != NULL)
+        {
+          g_prefix_error (error, _("Credentials not found in keyring (%s, %d): "),
+                          g_quark_to_string ((*error)->domain), (*error)->code);
+          (*error)->domain = GOA_ERROR;
+          (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
+        }
+      goto out;
+    }
 
-  g_main_context_unref (data->context);
-  g_main_loop_unref (data->loop);
-  g_object_unref (data->res);
-  g_free (data);
+  g_variant_iter_init (&iter, credentials);
+  while (g_variant_iter_next (&iter, "{&sv}", &key, &value))
+    {
+      if (g_strcmp0 (key, "access_token") == 0)
+        access_token = g_variant_dup_string (value, NULL);
+      else if (g_strcmp0 (key, "access_token_secret") == 0)
+        access_token_secret = g_variant_dup_string (value, NULL);
+      else if (g_strcmp0 (key, "access_token_expires_at") == 0)
+        access_token_expires_in = abs_usec_to_duration (g_variant_get_int64 (value));
+      else if (g_strcmp0 (key, "session_handle") == 0)
+        session_handle = g_variant_dup_string (value, NULL);
+      else if (g_strcmp0 (key, "session_handle_expires_at") == 0)
+        session_handle_expires_in = abs_usec_to_duration (g_variant_get_int64 (value));
+      g_variant_unref (value);
+    }
+
+  if (access_token == NULL || access_token_secret == NULL)
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_NOT_AUTHORIZED,
+                   _("Credentials does not contain access_token or access_token_secret"));
+      goto out;
+    }
+
+  /* if we can't refresh the token, just return it no matter what */
+  if (session_handle == NULL)
+    {
+      g_debug ("Returning locally cached credentials that cannot be refreshed");
+      success = TRUE;
+      goto out;
+    }
+
+  /* If access_token is still "fresh enough" (e.g. more than ten
+   * minutes of life left in it), just return it unless we've been
+   * asked to forcibly refresh it
+   */
+  if (!force_refresh && access_token_expires_in > 10*60)
+    {
+      g_debug ("Returning locally cached credentials (expires in %d seconds)", access_token_expires_in);
+      success = TRUE;
+      goto out;
+    }
+
+  g_debug ("Refreshing locally cached credentials (expires in %d seconds, force_refresh=%d)", access_token_expires_in, force_refresh);
+
+  /* Otherwise, refresh it */
+  access_token_for_refresh        = access_token; access_token = NULL;
+  access_token_secret_for_refresh = access_token_secret; access_token_secret = NULL;
+  session_handle_for_refresh      = session_handle; session_handle = NULL;
+  access_token = get_tokens_sync (provider,
+                                  access_token_for_refresh,
+                                  access_token_secret_for_refresh,
+                                  session_handle_for_refresh,
+                                  NULL, /* verifier */
+                                  &access_token_secret,
+                                  &access_token_expires_in,
+                                  &session_handle,
+                                  &session_handle_expires_in,
+                                  cancellable,
+                                  error);
+  if (access_token == NULL)
+    {
+      if (error != NULL)
+        {
+          g_prefix_error (error, _("Failed to refresh access token (%s, %d): "),
+                          g_quark_to_string ((*error)->domain), (*error)->code);
+          (*error)->code = is_authorization_error (*error) ? GOA_ERROR_NOT_AUTHORIZED : GOA_ERROR_FAILED;
+          (*error)->domain = GOA_ERROR;
+        }
+      goto out;
+    }
+
+  /* Good. Now update the keyring with the refreshed credentials */
+  g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
+  g_variant_builder_add (&builder, "{sv}", "access_token", g_variant_new_string (access_token));
+  g_variant_builder_add (&builder, "{sv}", "access_token_secret", g_variant_new_string (access_token_secret));
+  if (access_token_expires_in > 0)
+    g_variant_builder_add (&builder, "{sv}", "access_token_expires_at",
+                           g_variant_new_int64 (duration_to_abs_usec (access_token_expires_in)));
+  if (session_handle != NULL)
+    g_variant_builder_add (&builder, "{sv}", "session_handle", g_variant_new_string (session_handle));
+  if (session_handle_expires_in > 0)
+    g_variant_builder_add (&builder, "{sv}", "session_handle_expires_at",
+                           g_variant_new_int64 (duration_to_abs_usec (session_handle_expires_in)));
+
+  identity = goa_oauth_based_get_identity (goa_object_peek_oauth_based (object));
+  /* TODO: run in worker thread */
+  if (!goa_backend_provider_store_credentials_sync (GOA_BACKEND_PROVIDER (provider),
+                                                    identity,
+                                                    g_variant_builder_end (&builder),
+                                                    cancellable,
+                                                    error))
+    {
+      if (error != NULL)
+        {
+          g_prefix_error (error, _("Error storing credentials in keyring (%s, %d): "),
+                          g_quark_to_string ((*error)->domain), (*error)->code);
+          (*error)->domain = GOA_ERROR;
+          (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
+        }
+      goto out;
+    }
+
+  success = TRUE;
+
+ out:
+  if (success)
+    {
+      ret = access_token; access_token = NULL;
+      g_assert (ret != NULL);
+      if (out_access_token_secret != NULL)
+        {
+          *out_access_token_secret = access_token_secret; access_token_secret = NULL;
+        }
+      if (out_access_token_expires_in != NULL)
+        *out_access_token_expires_in = access_token_expires_in;
+    }
+  g_free (access_token);
+  g_free (access_token_secret);
+  g_free (session_handle);
+  g_free (access_token_for_refresh);
+  g_free (access_token_secret_for_refresh);
+  g_free (session_handle_for_refresh);
+  if (credentials != NULL)
+    g_variant_unref (credentials);
+
+  g_mutex_unlock (lock);
 
   return ret;
 }
@@ -1820,6 +1422,9 @@ goa_backend_oauth_provider_build_object (GoaBackendProvider  *provider,
     goto out;
 
   oauth_based = goa_oauth_based_skeleton_new ();
+  /* Ensure D-Bus method invocations run in their own thread */
+  g_dbus_interface_skeleton_set_flags (G_DBUS_INTERFACE_SKELETON (oauth_based),
+                                       G_DBUS_INTERFACE_SKELETON_FLAGS_HANDLE_METHOD_INVOCATIONS_IN_THREAD);
   goa_object_skeleton_set_oauth_based (object, oauth_based);
   g_signal_connect (oauth_based,
                     "handle-get-access-token",
@@ -1845,186 +1450,72 @@ goa_backend_oauth_provider_build_object (GoaBackendProvider  *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-typedef struct
+static gboolean
+goa_backend_oauth_provider_ensure_credentials_sync (GoaBackendProvider   *_provider,
+                                                    GoaObject            *object,
+                                                    gint                 *out_expires_in,
+                                                    GCancellable         *cancellable,
+                                                    GError             **error)
 {
-  volatile gint ref_count;
-  GSimpleAsyncResult *simple;
-  GoaObject *object;
-  GCancellable *cancellable;
-
+  GoaBackendOAuthProvider *provider = GOA_BACKEND_OAUTH_PROVIDER (_provider);
+  gboolean ret;
   gchar *access_token;
   gchar *access_token_secret;
-  gint   access_token_expires_in;
-
-  gboolean forced;
-
+  gint access_token_expires_in;
   gchar *identity;
+  gboolean force_refresh;
 
-} CheckCredentialsData;
+  ret = FALSE;
+  access_token = NULL;
+  access_token_secret = NULL;
+  identity = NULL;
+  force_refresh = FALSE;
 
-static CheckCredentialsData *
-ensure_credentials_data_ref (CheckCredentialsData *data)
-{
-  g_atomic_int_inc (&data->ref_count);
-  return data;
-}
+ again:
+  access_token = goa_backend_oauth_provider_get_access_token_sync (provider,
+                                                                   object,
+                                                                   force_refresh,
+                                                                   &access_token_secret,
+                                                                   &access_token_expires_in,
+                                                                   cancellable,
+                                                                   error);
+  if (access_token == NULL)
+    goto out;
 
-static void
-ensure_credentials_data_unref (CheckCredentialsData *data)
-{
-  if (g_atomic_int_dec_and_test (&data->ref_count))
-    {
-      g_object_unref (data->object);
-      if (data->cancellable != NULL)
-        g_object_unref (data->cancellable);
-      g_free (data->identity);
-      g_free (data->access_token);
-      g_free (data->access_token_secret);
-      g_slice_free (CheckCredentialsData, data);
-    }
-}
-
-static void
-ensure_credentials_get_access_token_cb (GoaBackendOAuthProvider *provider,
-                                        GAsyncResult            *res,
-                                        gpointer                 user_data);
-
-static void
-ensure_credentials_get_identity_cb (GoaBackendOAuthProvider *provider,
-                                    GAsyncResult            *res,
-                                    gpointer                 user_data)
-{
-  CheckCredentialsData *data = user_data;
-  GError *error;
-
-  error = NULL;
-  data->identity = goa_backend_oauth_provider_get_identity_finish (provider,
-                                                                   NULL, /* out_name */
-                                                                   res,
-                                                                   &error);
-  if (data->identity == NULL)
+  identity = goa_backend_oauth_provider_get_identity_sync (provider,
+                                                           access_token,
+                                                           access_token_secret,
+                                                           NULL, /* out_name */
+                                                           cancellable,
+                                                           error);
+  if (identity == NULL)
     {
       /* OK, try again, with forcing the locally cached credentials to be refreshed */
-      if (!data->forced)
+      if (!force_refresh)
         {
-          data->forced = TRUE;
-          g_free (data->access_token);
-          g_free (data->access_token_secret);
-          data->access_token = NULL;
-          data->access_token_secret = NULL;
-          data->access_token_expires_in = 0;
-          goa_backend_oauth_provider_get_access_token (GOA_BACKEND_OAUTH_PROVIDER (provider),
-                                                       data->object,
-                                                       TRUE, /* force_refresh */
-                                                       data->cancellable,
-                                                       (GAsyncReadyCallback) ensure_credentials_get_access_token_cb,
-                                                       ensure_credentials_data_ref (data));
-          goto out;
+          force_refresh = TRUE;
+          g_free (access_token); access_token = NULL;
+          g_free (access_token_secret); access_token_secret = NULL;
+          goto again;
         }
       else
         {
-          g_simple_async_result_take_error (data->simple, error);
-          g_simple_async_result_complete (data->simple);
-          g_object_unref (data->simple);
           goto out;
         }
     }
 
   /* TODO: maybe check with the identity we have */
-
-  g_simple_async_result_set_op_res_gpointer (data->simple,
-                                             ensure_credentials_data_ref (data),
-                                             (GDestroyNotify) ensure_credentials_data_unref);
-  g_simple_async_result_complete (data->simple);
-  g_object_unref (data->simple);
-
- out:
-  ensure_credentials_data_unref (data);
-}
-
-static void
-ensure_credentials_get_access_token_cb (GoaBackendOAuthProvider *provider,
-                                        GAsyncResult            *res,
-                                        gpointer                 user_data)
-{
-  CheckCredentialsData *data = user_data;
-  GError *error;
-
-  error = NULL;
-  data->access_token = goa_backend_oauth_provider_get_access_token_finish (provider,
-                                                                           &data->access_token_secret,
-                                                                           &data->access_token_expires_in,
-                                                                           res,
-                                                                           &error);
-  if (data->access_token == NULL)
-    {
-      g_simple_async_result_take_error (data->simple, error);
-      g_simple_async_result_complete (data->simple);
-      g_object_unref (data->simple);
-      goto out;
-    }
-
-  goa_backend_oauth_provider_get_identity (provider,
-                                           data->access_token,
-                                           data->access_token_secret,
-                                           data->cancellable,
-                                           (GAsyncReadyCallback) ensure_credentials_get_identity_cb,
-                                           ensure_credentials_data_ref (data));
-
- out:
-  ensure_credentials_data_unref (data);
-}
-
-static void
-goa_backend_oauth_provider_ensure_credentials (GoaBackendProvider   *provider,
-                                               GoaObject            *object,
-                                               GCancellable         *cancellable,
-                                               GAsyncReadyCallback   callback,
-                                               gpointer              user_data)
-{
-  CheckCredentialsData *data;
-
-  data = g_slice_new0 (CheckCredentialsData);
-  data->object = g_object_ref (object);
-  data->ref_count = 1;
-  data->simple = g_simple_async_result_new (G_OBJECT (provider),
-                                            callback,
-                                            user_data,
-                                            goa_backend_oauth_provider_ensure_credentials);
-  data->cancellable = cancellable != NULL ? g_object_ref (cancellable) : NULL;
-  goa_backend_oauth_provider_get_access_token (GOA_BACKEND_OAUTH_PROVIDER (provider),
-                                               data->object,
-                                               FALSE, /* force_refresh */
-                                               data->cancellable,
-                                               (GAsyncReadyCallback) ensure_credentials_get_access_token_cb,
-                                               data);
-}
-
-static gboolean
-goa_backend_oauth_provider_ensure_credentials_finish (GoaBackendProvider  *provider,
-                                                      gint                *out_expires_in,
-                                                      GAsyncResult        *res,
-                                                      GError             **error)
-{
-  GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
-  CheckCredentialsData *data;
-  gboolean ret;
-
-  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), FALSE);
-
-  ret = FALSE;
-
-  if (g_simple_async_result_propagate_error (simple, error))
-    goto out;
-
   ret = TRUE;
-  data = g_simple_async_result_get_op_res_gpointer (simple);
   if (out_expires_in != NULL)
-    *out_expires_in = data->access_token_expires_in;
+    *out_expires_in = access_token_expires_in;
 
  out:
+  g_free (identity);
+  g_free (access_token);
+  g_free (access_token_secret);
   return ret;
 }
+
 
 /* ---------------------------------------------------------------------------------------------------- */
 
@@ -2042,8 +1533,7 @@ goa_backend_oauth_provider_class_init (GoaBackendOAuthProviderClass *klass)
   provider_class->add_account                = goa_backend_oauth_provider_add_account;
   provider_class->refresh_account            = goa_backend_oauth_provider_refresh_account;
   provider_class->build_object               = goa_backend_oauth_provider_build_object;
-  provider_class->ensure_credentials         = goa_backend_oauth_provider_ensure_credentials;
-  provider_class->ensure_credentials_finish  = goa_backend_oauth_provider_ensure_credentials_finish;
+  provider_class->ensure_credentials_sync    = goa_backend_oauth_provider_ensure_credentials_sync;
 
   klass->build_authorization_uri  = goa_backend_oauth_provider_build_authorization_uri_default;
   klass->get_use_external_browser = goa_backend_oauth_provider_get_use_external_browser_default;
@@ -2052,53 +1542,7 @@ goa_backend_oauth_provider_class_init (GoaBackendOAuthProviderClass *klass)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-typedef struct
-{
-  GoaObject *object;
-  GDBusMethodInvocation *invocation;
-} AccessTokenData;
-
-static void
-access_token_data_free (AccessTokenData *data)
-{
-  g_object_unref (data->object);
-  g_free (data);
-}
-
-static void
-get_access_token_cb (GoaBackendOAuthProvider  *provider,
-                     GAsyncResult              *res,
-                     gpointer                   user_data)
-{
-  AccessTokenData *data = user_data;
-  GError *error;
-  gchar *access_token;
-  gchar *access_token_secret;
-  gint access_token_expires_in;
-
-  error = NULL;
-  access_token = goa_backend_oauth_provider_get_access_token_finish (provider,
-                                                                     &access_token_secret,
-                                                                     &access_token_expires_in,
-                                                                     res,
-                                                                     &error);
-  if (access_token == NULL)
-    {
-      g_dbus_method_invocation_return_gerror (data->invocation, error);
-      g_error_free (error);
-    }
-  else
-    {
-      goa_oauth_based_complete_get_access_token (goa_object_peek_oauth_based (data->object),
-                                                 data->invocation,
-                                                 access_token,
-                                                 access_token_secret,
-                                                 access_token_expires_in);
-      g_free (access_token);
-    }
-  access_token_data_free (data);
-}
-
+/* runs in a thread dedicated to handling @invocation */
 static gboolean
 on_handle_get_access_token (GoaOAuthBased        *interface,
                             GDBusMethodInvocation *invocation,
@@ -2107,24 +1551,43 @@ on_handle_get_access_token (GoaOAuthBased        *interface,
   GoaObject *object;
   GoaAccount *account;
   GoaBackendProvider *provider;
-  AccessTokenData *data;
+  GError *error;
+  gchar *access_token;
+  gchar *access_token_secret;
+  gint access_token_expires_in;
 
   /* TODO: maybe log what app is requesting access */
+
+  access_token = NULL;
+  access_token_secret = NULL;
 
   object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (interface)));
   account = goa_object_peek_account (object);
   provider = goa_backend_provider_get_for_provider_type (goa_account_get_provider_type (account));
 
-  data = g_new0 (AccessTokenData, 1);
-  data->object = g_object_ref (object);
-  data->invocation = invocation;
-  goa_backend_oauth_provider_get_access_token (GOA_BACKEND_OAUTH_PROVIDER (provider),
-                                               object,
-                                               FALSE, /* force_refresh */
-                                               NULL, /* GCancellable* */
-                                               (GAsyncReadyCallback) get_access_token_cb,
-                                               data);
+  error = NULL;
+  access_token = goa_backend_oauth_provider_get_access_token_sync (GOA_BACKEND_OAUTH_PROVIDER (provider),
+                                                                   object,
+                                                                   FALSE, /* force_refresh */
+                                                                   &access_token_secret,
+                                                                   &access_token_expires_in,
+                                                                   NULL, /* GCancellable* */
+                                                                   &error);
+  if (access_token == NULL)
+    {
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      g_error_free (error);
+    }
+  else
+    {
+      goa_oauth_based_complete_get_access_token (interface,
+                                                 invocation,
+                                                 access_token,
+                                                 access_token_secret,
+                                                 access_token_expires_in);
+    }
+  g_free (access_token);
+  g_free (access_token_secret);
   g_object_unref (provider);
-
   return TRUE; /* invocation was handled */
 }

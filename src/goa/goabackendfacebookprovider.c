@@ -121,181 +121,96 @@ get_client_secret (GoaBackendOAuth2Provider *provider)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-typedef struct
+static gchar *
+get_identity_sync (GoaBackendOAuth2Provider  *provider,
+                   const gchar               *access_token,
+                   gchar                    **out_name,
+                   GCancellable              *cancellable,
+                   GError                   **error)
 {
-  volatile gint ref_count;
-  GSimpleAsyncResult *simple;
+  RestProxy *proxy;
   RestProxyCall *call;
-  gchar *id;
-  gchar *name;
-} GetIdentityData;
-
-static GetIdentityData *
-get_identity_data_ref (GetIdentityData *data)
-{
-  g_atomic_int_inc (&data->ref_count);
-  return data;
-}
-
-static void
-get_identity_data_unref (GetIdentityData *data)
-{
-  if (g_atomic_int_dec_and_test (&data->ref_count))
-    {
-      g_object_unref (data->call);
-      g_free (data->id);
-      g_free (data->name);
-      g_slice_free (GetIdentityData, data);
-    }
-}
-
-static void
-get_identity_cb (RestProxyCall *call,
-                 const GError  *passed_error,
-                 GObject       *weak_object,
-                 gpointer       user_data)
-{
-  GetIdentityData *data = user_data;
   JsonParser *parser;
   JsonObject *json_object;
-  GError *error;
+  gchar *ret;
+  gchar *id;
+  gchar *name;
 
+  ret = NULL;
+  proxy = NULL;
+  call = NULL;
   parser = NULL;
+  id = NULL;
+  name = NULL;
 
-  if (passed_error != NULL)
-    {
-      g_simple_async_result_set_from_error (data->simple, passed_error);
-      g_simple_async_result_complete_in_idle (data->simple);
-      g_object_unref (data->simple);
-      goto out;
-    }
+  /* TODO: cancellable */
 
-  if (rest_proxy_call_get_status_code (data->call) != 200)
+  proxy = rest_proxy_new ("https://graph.facebook.com/me", FALSE);
+  call = rest_proxy_new_call (proxy);
+  rest_proxy_call_set_method (call, "GET");
+  rest_proxy_call_add_param (call, "access_token", access_token);
+
+  if (!rest_proxy_call_sync (call, error))
+    goto out;
+  if (rest_proxy_call_get_status_code (call) != 200)
     {
-      g_simple_async_result_set_error (data->simple,
-                                       GOA_ERROR,
-                                       GOA_ERROR_FAILED,
-                                       _("Expected status 200 when verifying credentials, instead got status %d (%s)"),
-                                       rest_proxy_call_get_status_code (data->call),
-                                       rest_proxy_call_get_status_message (data->call));
-      g_simple_async_result_complete_in_idle (data->simple);
-      g_object_unref (data->simple);
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Expected status 200 when requesting guid, instead got status %d (%s)"),
+                   rest_proxy_call_get_status_code (call),
+                   rest_proxy_call_get_status_message (call));
       goto out;
     }
 
   parser = json_parser_new ();
-  error = NULL;
   if (!json_parser_load_from_data (parser,
-                                   rest_proxy_call_get_payload (data->call),
-                                   rest_proxy_call_get_payload_length (data->call),
-                                   &error))
+                                   rest_proxy_call_get_payload (call),
+                                   rest_proxy_call_get_payload_length (call),
+                                   error))
     {
-      g_prefix_error (&error, _("Error parsing response as JSON: "));
-      g_simple_async_result_take_error (data->simple, error);
-      g_simple_async_result_complete_in_idle (data->simple);
-      g_object_unref (data->simple);
+      g_prefix_error (error, _("Error parsing response as JSON: "));
       goto out;
     }
 
   json_object = json_node_get_object (json_parser_get_root (parser));
-  data->id = g_strdup (json_object_get_string_member (json_object, "username"));
-  if (data->id == NULL)
+  id = g_strdup (json_object_get_string_member (json_object, "username"));
+  if (id == NULL)
     {
-      g_simple_async_result_set_error (data->simple,
-                                       GOA_ERROR,
-                                       GOA_ERROR_FAILED,
-                                       _("Didn't find username in JSON data"));
-      g_simple_async_result_complete_in_idle (data->simple);
-      g_object_unref (data->simple);
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Didn't find username member in JSON data"));
       goto out;
     }
-  data->name = g_strdup (json_object_get_string_member (json_object, "name"));
-  if (data->name == NULL)
+  name = g_strdup (json_object_get_string_member (json_object, "name"));
+  if (name == NULL)
     {
-      g_simple_async_result_set_error (data->simple,
-                                       GOA_ERROR,
-                                       GOA_ERROR_FAILED,
-                                       _("Didn't find name in JSON data"));
-      g_simple_async_result_complete_in_idle (data->simple);
-      g_object_unref (data->simple);
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Didn't find name member in JSON data"));
       goto out;
     }
 
-  g_simple_async_result_set_op_res_gpointer (data->simple,
-                                             get_identity_data_ref (data),
-                                             (GDestroyNotify) get_identity_data_unref);
-  g_simple_async_result_complete_in_idle (data->simple);
-  g_object_unref (data->simple);
-
- out:
-  get_identity_data_unref (data);
-  if (parser != NULL)
-    g_object_unref (parser);
-}
-
-
-static void
-get_identity (GoaBackendOAuth2Provider   *provider,
-              const gchar                *access_token,
-              GCancellable               *cancellable,
-              GAsyncReadyCallback        callback,
-              gpointer                   user_data)
-{
-  GetIdentityData *data;
-  RestProxy *proxy;
-  GError *error;
-
-  data = g_slice_new0 (GetIdentityData);
-  data->ref_count = 1;
-  data->simple = g_simple_async_result_new (G_OBJECT (provider),
-                                            callback,
-                                            user_data,
-                                            get_identity);
-
-  proxy = rest_proxy_new ("https://graph.facebook.com/me", FALSE);
-  data->call = rest_proxy_new_call (proxy);
-  rest_proxy_call_add_param (data->call, "access_token", access_token);
-  rest_proxy_call_set_method (data->call, "GET");
-
-  error = NULL;
-  if (!rest_proxy_call_async (data->call,
-                              get_identity_cb,
-                              NULL, /* weak_object */
-                              data,
-                              &error))
-    {
-      g_simple_async_result_take_error (data->simple, error);
-      g_simple_async_result_complete_in_idle (data->simple);
-      g_object_unref (data->simple);
-      get_identity_data_unref (data);
-    }
-  g_object_unref (proxy);
-}
-
-
-static gchar *
-get_identity_finish (GoaBackendOAuth2Provider   *provider,
-                     gchar                     **out_name,
-                     GAsyncResult               *res,
-                     GError                    **error)
-{
-  GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
-  GetIdentityData *data;
-  gchar *ret;
-
-  ret = NULL;
-
-  if (g_simple_async_result_propagate_error (simple, error))
-    goto out;
-
-  data = g_simple_async_result_get_op_res_gpointer (simple);
-  ret = g_strdup (data->id);
+  ret = id;
+  id = NULL;
   if (out_name != NULL)
-    *out_name = g_strdup (data->name);
+    {
+      *out_name = name;
+      name = NULL;
+    }
 
  out:
+  g_free (id);
+  g_free (name);
+  if (call != NULL)
+    g_object_unref (call);
+  if (proxy != NULL)
+    g_object_unref (proxy);
   return ret;
 }
+
 
 /* ---------------------------------------------------------------------------------------------------- */
 
@@ -387,7 +302,6 @@ goa_backend_facebook_provider_class_init (GoaBackendFacebookProviderClass *klass
   oauth2_class->get_scope                = get_scope;
   oauth2_class->get_client_id            = get_client_id;
   oauth2_class->get_client_secret        = get_client_secret;
-  oauth2_class->get_identity             = get_identity;
-  oauth2_class->get_identity_finish      = get_identity_finish;
+  oauth2_class->get_identity_sync        = get_identity_sync;
   oauth2_class->get_use_external_browser = get_use_external_browser;
 }

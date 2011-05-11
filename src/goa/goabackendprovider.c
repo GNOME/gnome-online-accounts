@@ -38,16 +38,11 @@
  * #GoaBackendProvider is the base type for all providers.
  */
 
-static void goa_backend_provider_ensure_credentials_real (GoaBackendProvider   *provider,
-                                                          GoaObject            *object,
-                                                          GCancellable         *cancellable,
-                                                          GAsyncReadyCallback   callback,
-                                                          gpointer              user_data);
-
-static gboolean goa_backend_provider_ensure_credentials_finish_real (GoaBackendProvider  *provider,
-                                                                     gint                *out_expires_in,
-                                                                     GAsyncResult        *res,
-                                                                     GError             **error);
+static gboolean goa_backend_provider_ensure_credentials_sync_real (GoaBackendProvider   *provider,
+                                                                   GoaObject            *object,
+                                                                   gint                 *out_expires_in,
+                                                                   GCancellable         *cancellable,
+                                                                   GError              **error);
 
 G_DEFINE_ABSTRACT_TYPE (GoaBackendProvider, goa_backend_provider, G_TYPE_OBJECT);
 
@@ -59,8 +54,7 @@ goa_backend_provider_init (GoaBackendProvider *client)
 static void
 goa_backend_provider_class_init (GoaBackendProviderClass *klass)
 {
-  klass->ensure_credentials = goa_backend_provider_ensure_credentials_real;
-  klass->ensure_credentials_finish = goa_backend_provider_ensure_credentials_finish_real;
+  klass->ensure_credentials_sync = goa_backend_provider_ensure_credentials_sync_real;
 }
 
 /**
@@ -246,6 +240,48 @@ goa_backend_provider_build_object (GoaBackendProvider  *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+typedef struct
+{
+  GoaObject *object;
+  gint expires_in;
+} EnsureCredentialsData;
+
+static EnsureCredentialsData *
+ensure_credentials_data_new (GoaObject *object)
+{
+  EnsureCredentialsData *data;
+  data = g_new0 (EnsureCredentialsData, 1);
+  data->object = g_object_ref (object);
+  return data;
+}
+
+static void
+ensure_credentials_data_free (EnsureCredentialsData *data)
+{
+  g_object_unref (data->object);
+  g_free (data);
+}
+
+static void
+ensure_credentials_in_thread_func (GSimpleAsyncResult *simple,
+                                   GObject            *object,
+                                   GCancellable       *cancellable)
+{
+  EnsureCredentialsData *data;
+  GError *error;
+
+  data = g_simple_async_result_get_op_res_gpointer (simple);
+
+  error = NULL;
+  if (!goa_backend_provider_ensure_credentials_sync (GOA_BACKEND_PROVIDER (object),
+                                                     data->object,
+                                                     &data->expires_in,
+                                                     cancellable,
+                                                     &error))
+    g_simple_async_result_take_error (simple, error);
+}
+
+
 /**
  * goa_backend_provider_ensure_credentials:
  * @provider: A #GoaBackendProvider.
@@ -273,9 +309,24 @@ goa_backend_provider_ensure_credentials (GoaBackendProvider   *provider,
                                          GAsyncReadyCallback   callback,
                                          gpointer              user_data)
 {
+  GSimpleAsyncResult *simple;
+
   g_return_if_fail (GOA_IS_BACKEND_PROVIDER (provider));
+  g_return_if_fail (GOA_IS_OBJECT (object));
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
-  GOA_BACKEND_PROVIDER_GET_CLASS (provider)->ensure_credentials (provider, object, cancellable, callback, user_data);
+
+  simple = g_simple_async_result_new (G_OBJECT (provider),
+                                      callback,
+                                      user_data,
+                                      goa_backend_provider_ensure_credentials);
+  g_simple_async_result_set_op_res_gpointer (simple,
+                                             ensure_credentials_data_new (object),
+                                             (GDestroyNotify) ensure_credentials_data_free);
+  g_simple_async_result_run_in_thread (simple,
+                                       ensure_credentials_in_thread_func,
+                                       G_PRIORITY_DEFAULT,
+                                       cancellable);
+  g_object_unref (simple);
 }
 
 /**
@@ -295,30 +346,31 @@ goa_backend_provider_ensure_credentials_finish (GoaBackendProvider  *provider,
                                                 GAsyncResult        *res,
                                                 GError             **error)
 {
+  GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
+  gboolean ret;
+  EnsureCredentialsData *data;
+
+  ret = FALSE;
+
   g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), FALSE);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (res), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-  return GOA_BACKEND_PROVIDER_GET_CLASS (provider)->ensure_credentials_finish (provider, out_expires_in, res, error);
+
+  g_warn_if_fail (g_simple_async_result_get_source_tag (simple) == goa_backend_provider_ensure_credentials);
+
+  if (g_simple_async_result_propagate_error (simple, error))
+    goto out;
+
+  ret = TRUE;
+  data = g_simple_async_result_get_op_res_gpointer (simple);
+  if (out_expires_in != NULL)
+    *out_expires_in = data->expires_in;
+
+ out:
+  return ret;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
-
-typedef struct
-{
-  GAsyncResult *res;
-  GMainContext *context;
-  GMainLoop *loop;
-} EnsureCredentialsSyncData;
-
-static void
-ensure_credentials_sync_cb (GoaBackendOAuthProvider   *provider,
-                            GAsyncResult              *res,
-                            gpointer                   user_data)
-{
-  EnsureCredentialsSyncData *data = user_data;
-  data->res = g_object_ref (res);
-  g_main_loop_quit (data->loop);
-}
 
 /**
  * goa_backend_provider_ensure_credentials_sync:
@@ -340,71 +392,25 @@ goa_backend_provider_ensure_credentials_sync (GoaBackendProvider     *provider,
                                               GCancellable           *cancellable,
                                               GError                **error)
 {
-  EnsureCredentialsSyncData *data;
-  gboolean ret;
-
   g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), FALSE);
-  g_return_val_if_fail (GOA_IS_OBJECT (object), FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-
-  data = g_new0 (EnsureCredentialsSyncData, 1);
-  data->context = g_main_context_new ();
-  data->loop = g_main_loop_new (data->context, FALSE);
-
-  g_main_context_push_thread_default (data->context);
-
-  goa_backend_provider_ensure_credentials (provider,
-                                           object,
-                                           cancellable,
-                                           (GAsyncReadyCallback) ensure_credentials_sync_cb,
-                                           data);
-  g_main_loop_run (data->loop);
-  ret = goa_backend_provider_ensure_credentials_finish (provider,
-                                                        out_expires_in,
-                                                        data->res,
-                                                        error);
-
-  g_main_context_pop_thread_default (data->context);
-
-  g_main_context_unref (data->context);
-  g_main_loop_unref (data->loop);
-  g_object_unref (data->res);
-  g_free (data);
-  return ret;
-}
-
-static void
-goa_backend_provider_ensure_credentials_real (GoaBackendProvider   *provider,
-                                              GoaObject            *object,
-                                              GCancellable         *cancellable,
-                                              GAsyncReadyCallback   callback,
-                                              gpointer              user_data)
-{
-  GSimpleAsyncResult *simple;
-  simple = g_simple_async_result_new (G_OBJECT (provider),
-                                      callback,
-                                      user_data,
-                                      goa_backend_provider_ensure_credentials_real);
-  g_simple_async_result_set_error (simple,
-                                   GOA_ERROR,
-                                   GOA_ERROR_NOT_SUPPORTED,
-                                   "Not implemented");
-  g_simple_async_result_complete_in_idle (simple);
-  g_object_unref (simple);
+  return GOA_BACKEND_PROVIDER_GET_CLASS (provider)->ensure_credentials_sync (provider, object, out_expires_in, cancellable, error);
 }
 
 static gboolean
-goa_backend_provider_ensure_credentials_finish_real (GoaBackendProvider  *provider,
-                                                     gint                *out_expires_in,
-                                                     GAsyncResult        *res,
-                                                     GError             **error)
+goa_backend_provider_ensure_credentials_sync_real (GoaBackendProvider  *provider,
+                                                   GoaObject           *object,
+                                                   gint                *out_expires_in,
+                                                   GCancellable        *cancellable,
+                                                   GError             **error)
 {
-  GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
-  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), FALSE);
-  if (g_simple_async_result_propagate_error (simple, error))
-    return FALSE;
-  return TRUE;
+  g_set_error (error,
+               GOA_ERROR,
+               GOA_ERROR_NOT_SUPPORTED,
+               _("ensure_credentials_sync not been implemented on type %s"),
+               g_type_name (G_TYPE_FROM_INSTANCE (provider)));
+  return FALSE;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -511,68 +517,45 @@ static const GnomeKeyringPasswordSchema keyring_password_schema =
   }
 };
 
-static void
-store_password_cb (GnomeKeyringResult result,
-                   gpointer           user_data)
-{
-  GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (user_data);
-
-  if (result != GNOME_KEYRING_RESULT_OK)
-    {
-      g_simple_async_result_set_error (simple,
-                                       GOA_ERROR,
-                                       GOA_ERROR_FAILED,
-                                       _("Failed to store credentials in the keyring: %s"),
-                                       gnome_keyring_result_to_message (result));
-    }
-  g_simple_async_result_complete_in_idle (simple);
-  g_object_unref (simple);
-}
-
 /**
- * goa_backend_provider_store_credentials:
+ * goa_backend_provider_store_credentials_sync:
  * @provider: A #GoaBackendProvider.
  * @identity: The identity to store credentials for.
  * @credentials: The credentials to store.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: The function to call when the request is satisfied.
- * @user_data: Pointer to pass to @callback.
+ * @error: Return location for error or %NULL.
  *
  * Stores @credentials for @identity in the key-ring. If @credentials
  * is floating, it is consumed.
  *
- * When the result is ready, @callback will be called in the the <link
- * linkend="g-main-context-push-thread-default">thread-default main
- * loop</link> this function was called from. You can then call
- * goa_backend_provider_store_credentials_finish() to get the result
- * of the operation.
+ * The calling thread is blocked while waiting for a reply.
  *
  * This is a convenience method (not virtual) that subclasses can use.
+ *
+ * Returns: %TRUE if the credentials was successfully stored, %FALSE
+ * if @error is set.
  */
-void
-goa_backend_provider_store_credentials (GoaBackendProvider   *provider,
-                                        const gchar          *identity,
-                                        GVariant             *credentials,
-                                        GCancellable         *cancellable,
-                                        GAsyncReadyCallback   callback,
-                                        gpointer              user_data)
+gboolean
+goa_backend_provider_store_credentials_sync (GoaBackendProvider   *provider,
+                                             const gchar          *identity,
+                                             GVariant             *credentials,
+                                             GCancellable         *cancellable,
+                                             GError              **error)
 {
-  GSimpleAsyncResult *simple;
+  gboolean ret;
   gchar *credentials_str;
   gchar *password_description;
   gchar *password_key;
+  GnomeKeyringResult result;
 
-  g_return_if_fail (GOA_IS_BACKEND_PROVIDER (provider));
-  g_return_if_fail (identity != NULL);
-  g_return_if_fail (credentials != NULL);
-  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (identity != NULL, FALSE);
+  g_return_val_if_fail (credentials != NULL, FALSE);
+  g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   /* TODO: use GCancellable */
-
-  simple = g_simple_async_result_new (G_OBJECT (provider),
-                                      callback,
-                                      user_data,
-                                      goa_backend_provider_store_credentials);
+  ret = FALSE;
 
   credentials_str = g_variant_print (credentials, TRUE);
   g_variant_ref_sink (credentials);
@@ -584,186 +567,106 @@ goa_backend_provider_store_credentials (GoaBackendProvider   *provider,
   password_description = g_strdup_printf (_("GOA %s credentials for identity %s"),
                                           goa_backend_provider_get_provider_type (GOA_BACKEND_PROVIDER (provider)),
                                           identity);
-  gnome_keyring_store_password (&keyring_password_schema,
-                                NULL, /* default keyring */
-                                password_description,
-                                credentials_str,
-                                store_password_cb,
-                                simple,
-                                NULL, /* GDestroyNotify */
-                                "goa-identity", password_key,
-                                NULL);
-
-  g_free (credentials_str);
-  g_free (password_key);
-  g_free (password_description);
-}
-
-/**
- * goa_backend_provider_store_credentials_finish:
- * @provider: A #GoaBackendProvider.
- * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to goa_backend_provider_store_credentials().
- * @error: Return location for error or %NULL.
- *
- * Finishes an operation started with goa_backend_provider_store_credentials().
- *
- * This is a convenience method (not virtual) that subclasses can use.
- *
- * Returns: %TRUE if the credentials was successfully stored, %FALSE
- * if @error is set.
- */
-gboolean
-goa_backend_provider_store_credentials_finish (GoaBackendProvider   *provider,
-                                               GAsyncResult         *res,
-                                               GError              **error)
-{
-  GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
-  gboolean ret;
-
-  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), FALSE);
-  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (provider), goa_backend_provider_store_credentials), FALSE);
-  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-
-  ret = FALSE;
-
-  if (g_simple_async_result_propagate_error (simple, error))
-    goto out;
+  result = gnome_keyring_store_password_sync (&keyring_password_schema,
+                                              NULL, /* default keyring */
+                                              password_description,
+                                              credentials_str,
+                                              "goa-identity", password_key,
+                                              NULL);
+  if (result != GNOME_KEYRING_RESULT_OK)
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED, /* TODO: more specific */
+                   _("Failed to store credentials in the keyring: %s"),
+                   gnome_keyring_result_to_message (result));
+      goto out;
+    }
 
   ret = TRUE;
 
  out:
+  g_free (credentials_str);
+  g_free (password_key);
+  g_free (password_description);
   return ret;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static void
-find_password_cb (GnomeKeyringResult  result,
-                  const gchar        *returned_password,
-                  gpointer            user_data)
-{
-  GSimpleAsyncResult *simple = user_data;
-  GVariant *ret;
-  GError *error;
-
-  if (result != GNOME_KEYRING_RESULT_OK)
-    {
-      g_simple_async_result_set_error (simple,
-                                       GOA_ERROR,
-                                       GOA_ERROR_FAILED, /* TODO: more specific */
-                                       _("Failed to retrieve credentials from the keyring: %s"),
-                                       gnome_keyring_result_to_message (result));
-      goto out;
-    }
-
-  error = NULL;
-  ret = g_variant_parse (NULL, /* GVariantType */
-                         returned_password,
-                         NULL, /* limit */
-                         NULL, /* endptr */
-                         &error);
-  if (ret == NULL)
-    {
-      g_simple_async_result_take_error (simple, error);
-      goto out;
-    }
-  if (g_variant_is_floating (ret))
-    g_variant_ref_sink (ret);
-  g_simple_async_result_set_op_res_gpointer (simple, ret, (GDestroyNotify) g_variant_unref);
-
- out:
-  g_simple_async_result_complete_in_idle (simple);
-  g_object_unref (simple);
-}
-
-
 /**
- * goa_backend_provider_lookup_credentials:
+ * goa_backend_provider_lookup_credentials_sync:
  * @provider: A #GoaBackendProvider.
  * @identity: The identity to look up credentials for.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: The function to call when the request is satisfied.
- * @user_data: Pointer to pass to @callback.
+ * @error: Return location for error or %NULL.
  *
  * Looks up credentials in the keyring for @identity previously stored
  * with goa_backend_provider_store_credentials().
  *
- * When the result is ready, @callback will be called in the the <link
- * linkend="g-main-context-push-thread-default">thread-default main
- * loop</link> this function was called from. You can then call
- * goa_backend_provider_lookup_credentials_finish() to get the result
- * of the operation.
- *
- * This is a convenience method (not virtual) that subclasses can use.
- */
-void
-goa_backend_provider_lookup_credentials (GoaBackendProvider   *provider,
-                                         const gchar          *identity,
-                                         GCancellable         *cancellable,
-                                         GAsyncReadyCallback   callback,
-                                         gpointer              user_data)
-{
-  GSimpleAsyncResult *simple;
-  gchar *password_key;
-
-  g_return_if_fail (GOA_IS_BACKEND_PROVIDER (provider));
-  g_return_if_fail (identity != NULL);
-  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
-
-  simple = g_simple_async_result_new (G_OBJECT (provider),
-                                      callback,
-                                      user_data,
-                                      goa_backend_provider_lookup_credentials);
-
-  password_key = g_strdup_printf ("%s:%s",
-                                  goa_backend_provider_get_provider_type (GOA_BACKEND_PROVIDER (provider)),
-                                  identity);
-
-  gnome_keyring_find_password (&keyring_password_schema,
-                               find_password_cb,
-                               simple,
-                               NULL, /* GDestroyNotify */
-                               "goa-identity", password_key,
-                               NULL);
-  g_free (password_key);
-}
-
-/**
- * goa_backend_provider_lookup_credentials_finish:
- * @provider: A #GoaBackendProvider.
- * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to goa_backend_provider_lookup_credentials().
- * @error: Return location for error or %NULL.
- *
- * Finishes an operation started with goa_backend_provider_lookup_credentials().
+ * The calling thread is blocked while waiting for a reply.
  *
  * This is a convenience method (not virtual) that subclasses can use.
  *
  * Returns: (transfer full): A #GVariant (never floating)
  * with credentials or %NULL if @error is set. Free with
- * g_hash_table_unref().
+ * g_variant_unref().
  */
 GVariant *
-goa_backend_provider_lookup_credentials_finish (GoaBackendProvider   *provider,
-                                                GAsyncResult         *res,
-                                                GError              **error)
+goa_backend_provider_lookup_credentials_sync (GoaBackendProvider   *provider,
+                                              const gchar          *identity,
+                                              GCancellable         *cancellable,
+                                              GError              **error)
 {
-  GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
+  gchar *password_key;
   GVariant *ret;
+  GnomeKeyringResult result;
+  gchar *returned_password;
 
-  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), FALSE);
-  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (provider), goa_backend_provider_lookup_credentials), FALSE);
-  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), NULL);
+  g_return_val_if_fail (identity != NULL, NULL);
+  g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
   ret = NULL;
+  password_key = NULL;
+  returned_password = NULL;
 
-  if (g_simple_async_result_propagate_error (simple, error))
-    goto out;
+  password_key = g_strdup_printf ("%s:%s",
+                                  goa_backend_provider_get_provider_type (GOA_BACKEND_PROVIDER (provider)),
+                                  identity);
 
-  ret = g_simple_async_result_get_op_res_gpointer (simple);
-  g_assert (!g_variant_is_floating (ret));
-  g_variant_ref (ret);
+  result = gnome_keyring_find_password_sync (&keyring_password_schema,
+                                             &returned_password,
+                                             "goa-identity", password_key,
+                                             NULL);
+  if (result != GNOME_KEYRING_RESULT_OK)
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED, /* TODO: more specific */
+                   _("Failed to retrieve credentials from the keyring: %s"),
+                   gnome_keyring_result_to_message (result));
+      goto out;
+    }
+
+  ret = g_variant_parse (NULL, /* GVariantType */
+                         returned_password,
+                         NULL, /* limit */
+                         NULL, /* endptr */
+                         error);
+  if (ret == NULL)
+    {
+      g_prefix_error (error, _("Error parsing result obtained from the keyring: "));
+      goto out;
+    }
+
+  if (g_variant_is_floating (ret))
+    g_variant_ref_sink (ret);
 
  out:
+  gnome_keyring_free_password (returned_password);
+  g_free (password_key);
   return ret;
 }
 

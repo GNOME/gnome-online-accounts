@@ -1138,10 +1138,10 @@ handle_search_response (GoaBackendImapClient  *client,
   GArray *array;
   guint n;
 
-  array = g_array_sized_new (FALSE,
+  array = g_array_sized_new (TRUE,
                              FALSE,
                              sizeof (gint),
-                             100);
+                             20);
 
   /* TODO: this could be done more efficiently but I'm pretty lazy */
   tokens = g_strsplit (data, " ", -1);
@@ -1458,7 +1458,7 @@ goa_backend_imap_client_get_num_messages (GoaBackendImapClient  *client)
  *
  * Returns: (transfer full) (element-type GoaBackendImapMessage): A
  * list of messages that should be freed with g_list_free() after each
- * element has been freed with goa_imap_message_unref().
+ * element has been freed with goa_backend_imap_message_unref().
  */
 GList *
 goa_backend_imap_client_get_messages (GoaBackendImapClient  *client)
@@ -1740,12 +1740,13 @@ goa_backend_imap_client_do_refresh (GoaBackendImapClient  *client,
     }
   else
     {
-      guint n;
+      gint n;
       if (client->search_result != NULL)
         {
           client->search_result = NULL;
           g_free (client->search_result);
         }
+      client->num_search_result = 0;
       response = goa_backend_imap_client_run_command_sync (client,
                                                            "SEARCH UNSEEN",
                                                            cancellable,
@@ -1753,15 +1754,18 @@ goa_backend_imap_client_do_refresh (GoaBackendImapClient  *client,
       if (response == NULL)
         goto out;
       g_free (response);
-      for (n = client->query_offset; n < client->num_search_result && n < client->query_size; n++)
+      if (client->search_result != NULL)
         {
-          /* TODO: maybe compress into ranges - not sure it matters
-           * as the query is really small
-           */
-          if (n > 0)
-            g_string_append_c (request_str, ',');
-          g_string_append_printf (request_str, "%d", client->search_result[n]);
-          num_fetches++;
+          for (n = client->query_offset; n < client->num_search_result && n < client->query_size; n++)
+            {
+              /* TODO: maybe compress into ranges - not sure it matters
+               * as the query is really small
+               */
+              if (n > 0)
+                g_string_append_c (request_str, ',');
+              g_string_append_printf (request_str, "%d", client->search_result[n]);
+              num_fetches++;
+            }
         }
     }
 
