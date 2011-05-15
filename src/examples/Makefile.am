@@ -15,17 +15,17 @@ INCLUDES = 							\
 	$(WARN_CFLAGS)						\
 	$(NULL)
 
-noinst_PROGRAMS = mail-query
+noinst_PROGRAMS = mail-monitor
 
-mail_query_SOURCES = 						\
-				mail-query.c			\
+mail_monitor_SOURCES = 						\
+				mail-monitor.c			\
 	$(NULL)
 
-mail_query_CFLAGS =						\
+mail_monitor_CFLAGS =						\
 	$(GLIB_CFLAGS) 						\
 	$(NULL)
 
-mail_query_LDADD = 						\
+mail_monitor_LDADD = 						\
 	$(GLIB_LIBS) 						\
 	$(top_builddir)/src/goa/libgoa.la			\
 	$(NULL)

@@ -35,44 +35,29 @@ G_BEGIN_DECLS
 #define GOA_BACKEND_IMAP_CLIENT(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_BACKEND_IMAP_CLIENT, GoaBackendImapClient))
 #define GOA_IS_BACKEND_IMAP_CLIENT(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_BACKEND_IMAP_CLIENT))
 
-GType                  goa_backend_imap_client_get_type         (void) G_GNUC_CONST;
-void                   goa_backend_imap_client_new              (const gchar           *host_and_port,
-                                                                 gboolean               use_tls,
-                                                                 GoaBackendImapAuth    *auth,
-                                                                 const gchar           *criteria,
-                                                                 guint                  query_offset,
-                                                                 guint                  query_size,
-                                                                 GCancellable          *cancellable,
-                                                                 GAsyncReadyCallback    callback,
-                                                                 gpointer               user_data);
-GoaBackendImapClient  *goa_backend_imap_client_new_finish       (GAsyncResult          *res,
-                                                                 GError               **error);
-GoaBackendImapClient  *goa_backend_imap_client_new_sync         (const gchar           *host_and_port,
-                                                                 gboolean               use_tls,
-                                                                 GoaBackendImapAuth    *auth,
-                                                                 const gchar           *criteria,
-                                                                 guint                  query_offset,
-                                                                 guint                  query_size,
-                                                                 GCancellable          *cancellable,
-                                                                 GError               **error);
+GType                  goa_backend_imap_client_get_type            (void) G_GNUC_CONST;
+GoaBackendImapClient  *goa_backend_imap_client_new                 (void);
+gboolean               goa_backend_imap_client_connect_sync        (GoaBackendImapClient  *client,
+                                                                    const gchar           *host_and_port,
+                                                                    gboolean               use_tls,
+                                                                    GoaBackendImapAuth    *auth,
+                                                                    GCancellable          *cancellable,
+                                                                    GError               **error);
+gchar                 *goa_backend_imap_client_run_command_sync    (GoaBackendImapClient  *client,
+                                                                    const gchar           *command,
+                                                                    GCancellable          *cancellable,
+                                                                    GError               **error);
 
-gboolean               goa_backend_imap_client_get_closed       (GoaBackendImapClient  *client);
-void                   goa_backend_imap_client_close            (GoaBackendImapClient  *client);
+gboolean               goa_backend_imap_client_idle_sync           (GoaBackendImapClient  *client,
+                                                                    guint                  max_idle_seconds,
+                                                                    GCancellable          *cancellable,
+                                                                    GError               **error);
 
-gint                   goa_backend_imap_client_get_num_unread   (GoaBackendImapClient  *client);
-gint                   goa_backend_imap_client_get_num_messages (GoaBackendImapClient  *client);
-GList                 *goa_backend_imap_client_get_messages     (GoaBackendImapClient  *client);
+gboolean               goa_backend_imap_client_disconnect_sync     (GoaBackendImapClient  *client,
+                                                                    GCancellable          *cancellable,
+                                                                    GError               **error);
 
-void                   goa_backend_imap_client_refresh          (GoaBackendImapClient  *client,
-                                                                 GCancellable          *cancellable,
-                                                                 GAsyncReadyCallback    callback,
-                                                                 gpointer               user_data);
-gboolean               goa_backend_imap_client_refresh_finish   (GoaBackendImapClient  *client,
-                                                                 GAsyncResult          *res,
-                                                                 GError               **error);
-gboolean               goa_backend_imap_client_refresh_sync     (GoaBackendImapClient  *client,
-                                                                 GCancellable          *cancellable,
-                                                                 GError               **error);
+// TODO: gint                   goa_backend_imap_client_get_socket_fd    (GoaBackendImapClient  *client);
 
 
 G_END_DECLS

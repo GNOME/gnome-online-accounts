@@ -63,9 +63,6 @@ typedef struct _GoaBackendImapAuthOAuth GoaBackendImapAuthOAuth;
 struct _GoaBackendImapClient;
 typedef struct _GoaBackendImapClient GoaBackendImapClient;
 
-struct _GoaBackendImapMessage;
-typedef struct _GoaBackendImapMessage GoaBackendImapMessage;
-
 struct _GoaBackendImapMail;
 typedef struct _GoaBackendImapMail GoaBackendImapMail;
 

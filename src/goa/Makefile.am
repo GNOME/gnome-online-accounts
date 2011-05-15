@@ -142,7 +142,6 @@ libgoa_backend_la_HEADERS =						\
 	goabackendimapauth.h						\
 	goabackendimapauthoauth.h					\
 	goabackendimapclient.h						\
-	goabackendimapmessage.h						\
 	goabackendenums.h						\
 	goabackendenumtypes.h						\
 	$(NULL)
@@ -157,11 +156,9 @@ libgoa_backend_la_SOURCES =						\
 	goabackendfacebookprovider.h	goabackendfacebookprovider.c	\
 	goabackendyahooprovider.h	goabackendyahooprovider.c	\
 	goabackendtwitterprovider.h	goabackendtwitterprovider.c	\
-	goabackendimapprivate.h						\
 	goabackendimapauth.h		goabackendimapauth.c		\
 	goabackendimapauthoauth.h	goabackendimapauthoauth.c	\
 	goabackendimapclient.h		goabackendimapclient.c		\
-	goabackendimapmessage.h		goabackendimapmessage.c		\
 	goabackendimapmail.h		goabackendimapmail.c		\
 	goabackendenumtypes.h		goabackendenumtypes.c		\
 	$(NULL)

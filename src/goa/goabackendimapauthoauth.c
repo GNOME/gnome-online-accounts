@@ -386,6 +386,7 @@ calculate_xoauth_params (const gchar  *request_uri,
                          const gchar  *access_token,
                          const gchar  *access_token_secret)
 {
+  gchar *signature;
   GHashTable *params;
   gchar *nonce;
   gchar *timestamp;
@@ -425,14 +426,9 @@ calculate_xoauth_params (const gchar  *request_uri,
 
       g_free (k);
       g_free (v);
-
-      g_print ("key %s=`%s'\n", key, value);
     }
   g_list_free (keys);
 
-  g_print ("normalized: `%s'\n", normalized->str);
-
-  gchar *signature;
   signature = sign_hmac (consumer_secret,
                          access_token_secret,
                          "GET",
