@@ -352,9 +352,10 @@
          @subject: The subject of the message.
          @excerpt: Plain-text excerpt of the message.
          @uri: An URI that can be used to open the message or blank if no such URI exists.
-         @extras: Other information about the message (currently unused).
 
          Signal emitted when a new message is received.
+
+         TODO: When gnome-shell can handle GVariant instances then add extras back: @extras: Other information about the message (currently unused).
     -->
     <signal name="MessageReceived" type="">
       <arg name="uid" type="s"/>
@@ -362,7 +363,7 @@
       <arg name="subject" type="s"/>
       <arg name="excerpt" type="s"/>
       <arg name="uri" type="s"/>
-      <arg name="extras" type="a{sv}"/>
+      <!-- arg name="extras" type="a{sv}"/ -->
     </signal>
   </interface>
 

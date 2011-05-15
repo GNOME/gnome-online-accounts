@@ -506,7 +506,7 @@ imap_client_handle_fetch_response (ImapClientData  *data,
   const gchar *subject_header;
   gchar *uid_str;
   gchar *uri;
-  GVariantBuilder extras_builder;
+  /* GVariantBuilder extras_builder; */
 
   g_return_if_fail (message_seqnum >= 1);
   g_return_if_fail (params != NULL);
@@ -572,8 +572,8 @@ imap_client_handle_fetch_response (ImapClientData  *data,
   /* TODO: set this */
   uri = g_strdup ("");
 
-  /* extras is currently unused */
-  g_variant_builder_init (&extras_builder, G_VARIANT_TYPE_VARDICT);
+  /* extras is currently unused (and not currently in the D-Bus signature) */
+  /* g_variant_builder_init (&extras_builder, G_VARIANT_TYPE_VARDICT); */
 
   /* Emit D-Bus message */
   goa_mail_monitor_emit_message_received (data->monitor_data->monitor,
@@ -581,8 +581,8 @@ imap_client_handle_fetch_response (ImapClientData  *data,
                                           from_header,
                                           subject_header,
                                           excerpt,
-                                          uri,
-                                          g_variant_builder_end (&extras_builder));
+                                          uri);
+  /* g_variant_builder_end (&extras_builder)); */
  out:
   if (!parsed)
     {
