@@ -750,7 +750,7 @@ imap_client_sync_single (ImapClientData *data)
        */
       error = NULL;
       if (!goa_backend_imap_client_idle_sync (client,
-                                              25 * 1000,
+                                              25 * 60,
                                               data->monitor_data->imap_cancellable,
                                               &error))
         {
