@@ -799,7 +799,7 @@ imap_client_sync_single (ImapClientData *data)
                                                 NULL, /* GCancellable */
                                                 &error))
     {
-      g_warning ("Error closing connection: %s (%s, %d)",
+      g_warning ("%s:Error closing connection: %s (%s, %d)",
                  G_STRFUNC,
                  error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
