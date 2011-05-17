@@ -25,6 +25,10 @@ goa_daemon_SOURCES = 						\
 	gposixsignal.h		gposixsignal.c			\
 	$(NULL)
 
+goa_daemon_CPPFLAGS =						\
+	-DG_LOG_DOMAIN=\"goa-daemon\"				\
+	$(NULL)
+
 goa_daemon_CFLAGS =						\
 	$(GLIB_CFLAGS) 						\
 	$(GTK_CFLAGS)						\

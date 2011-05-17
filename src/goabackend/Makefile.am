@@ -43,6 +43,7 @@ libgoa_backend_1_0_la_HEADERS =						\
 	goabackendtypes.h						\
 	goabackendenums.h						\
 	goabackendenumtypes.h						\
+	goalogging.h							\
 	goaprovider.h							\
 	goaoauthprovider.h						\
 	goaoauth2provider.h						\
@@ -62,6 +63,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goabackendenums.h						\
 	goabackendenumtypes.h		goabackendenumtypes.c		\
 	goaprovider.h			goaprovider.c			\
+	goalogging.h			goalogging.c			\
 	goaoauthprovider.h		goaoauthprovider.c		\
 	goaoauth2provider.h		goaoauth2provider.c		\
 	goagoogleprovider.h		goagoogleprovider.c		\
@@ -72,6 +74,10 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goaimapauthoauth.h		goaimapauthoauth.c		\
 	goaimapclient.h			goaimapclient.c			\
 	goaimapmail.h			goaimapmail.c			\
+	$(NULL)
+
+libgoa_backend_1_0_la_CPPFLAGS =				\
+	-DG_LOG_DOMAIN=\"GoaBackend\"				\
 	$(NULL)
 
 libgoa_backend_1_0_la_CFLAGS =					\

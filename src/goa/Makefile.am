@@ -72,6 +72,10 @@ libgoa_1_0_la_SOURCES =						\
 	goaenumtypes.h			goaenumtypes.c		\
 	$(NULL)
 
+libgoa_1_0_la_CPPFLAGS =					\
+	-DG_LOG_DOMAIN=\"Goa\"					\
+	$(NULL)
+
 libgoa_1_0_la_CFLAGS =						\
 	-DGOA_COMPILATION					\
 	$(GLIB_CFLAGS) 						\

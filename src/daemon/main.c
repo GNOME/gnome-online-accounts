@@ -27,8 +27,11 @@
 #include <signal.h>
 #include <gio/gio.h>
 
+#include <goabackend/goabackend.h>
+
 #include "gposixsignal.h"
 #include "goadaemon.h"
+
 
 /* ---------------------------------------------------------------------------------------------------- */
 
@@ -50,7 +53,7 @@ on_bus_acquired (GDBusConnection *connection,
 {
   if (connection != NULL)
     the_daemon = goa_daemon_new ();
-  g_print ("Connected to the session bus\n");
+  goa_info ("Connected to the session bus");
 }
 
 static void
@@ -58,7 +61,7 @@ on_name_lost (GDBusConnection *connection,
               const gchar     *name,
               gpointer         user_data)
 {
-  g_print ("Lost (or failed to acquire) the name %s on the session message bus\n", name);
+  goa_info ("Lost (or failed to acquire) the name %s on the session message bus", name);
   g_main_loop_quit (loop);
 }
 
@@ -67,13 +70,13 @@ on_name_acquired (GDBusConnection *connection,
                   const gchar     *name,
                   gpointer         user_data)
 {
-  g_print ("Acquired the name %s on the session message bus\n", name);
+  goa_info ("Acquired the name %s on the session message bus", name);
 }
 
 static gboolean
 on_sigint (gpointer user_data)
 {
-  g_print ("Caught SIGINT. Initiating shutdown.\n");
+  goa_info ("Caught SIGINT. Initiating shutdown.");
   g_main_loop_quit (loop);
   return FALSE;
 }
@@ -101,12 +104,12 @@ main (int    argc,
   error = NULL;
   if (!g_option_context_parse (opt_context, &argc, &argv, &error))
     {
-      g_printerr ("Error parsing options: %s\n", error->message);
+      goa_error ("Error parsing options: %s", error->message);
       g_error_free (error);
       goto out;
     }
 
-  g_print ("goa-daemon version %s starting\n", PACKAGE_VERSION);
+  goa_notice ("goa-daemon version %s starting", PACKAGE_VERSION);
 
   loop = g_main_loop_new (NULL, FALSE);
 
@@ -130,7 +133,7 @@ main (int    argc,
                                   NULL,
                                   NULL);
 
-  g_print ("Entering main event loop\n");
+  goa_info ("Entering main event loop");
 
   g_main_loop_run (loop);
 
@@ -148,7 +151,7 @@ main (int    argc,
   if (opt_context != NULL)
     g_option_context_free (opt_context);
 
-  g_print ("goa-daemon version %s exiting\n", PACKAGE_VERSION);
+  goa_notice ("goa-daemon version %s exiting", PACKAGE_VERSION);
 
   return ret;
 }

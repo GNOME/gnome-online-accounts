@@ -384,7 +384,7 @@ update_account_object (GoaDaemon           *daemon,
   type = NULL;
   account = NULL;
 
-  g_debug ("updating %s %d", g_dbus_object_get_object_path (G_DBUS_OBJECT (object)), just_added);
+  goa_debug ("updating %s %d", g_dbus_object_get_object_path (G_DBUS_OBJECT (object)), just_added);
 
   type = g_key_file_get_string (key_file, group, "Type", NULL);
   name = g_key_file_get_string (key_file, group, "Name", NULL);
@@ -511,7 +511,7 @@ process_config_entries (GoaDaemon  *daemon,
       g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
                                             G_CALLBACK (on_account_handle_remove),
                                             daemon);
-      g_debug ("removing %s", object_path);
+      goa_debug ("removing %s", object_path);
       g_warn_if_fail (g_dbus_object_manager_server_unexport (daemon->object_manager, object_path));
     }
   for (l = added; l != NULL; l = l->next)
@@ -521,7 +521,7 @@ process_config_entries (GoaDaemon  *daemon,
       gchar *group;
       GKeyFile *key_file;
 
-      g_debug ("adding %s", object_path);
+      goa_debug ("adding %s", object_path);
 
       group = object_path_to_group (object_path);
       key_file = g_hash_table_lookup (group_name_to_key_file, group);
@@ -558,7 +558,7 @@ process_config_entries (GoaDaemon  *daemon,
       gchar *group;
       GKeyFile *key_file;
 
-      g_debug ("unchanged %s", object_path);
+      goa_debug ("unchanged %s", object_path);
 
       group = object_path_to_group (object_path);
       key_file = g_hash_table_lookup (group_name_to_key_file, group);

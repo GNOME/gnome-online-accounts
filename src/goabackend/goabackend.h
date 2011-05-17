@@ -29,6 +29,7 @@
 
 #define __GOA_BACKEND_INSIDE_GOA_BACKEND_H__
 #include <goabackend/goabackendtypes.h>
+#include <goabackend/goalogging.h>
 #include <goabackend/goaprovider.h>
 #include <goabackend/goaoauthprovider.h>
 #include <goabackend/goaoauth2provider.h>
