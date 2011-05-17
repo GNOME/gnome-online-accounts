@@ -37,7 +37,7 @@ goaenumtypes.h: goaenums.h goaenumtypes.h.template
 	 cd $(srcdir) && glib-mkenums --template goaenumtypes.h.template goaenums.h ) > 	\
 	   goaenumtypes.h.tmp && mv goaenumtypes.h.tmp goaenumtypes.h
 
-goaenumtypes.c: goaenums.h goaenumtypes.c.template
+goaenumtypes.c: goaenums.h goaenumtypes.h goaenumtypes.c.template
 	( top_builddir=`cd $(top_builddir) && pwd`; 						\
 	 cd $(srcdir) && glib-mkenums --template goaenumtypes.c.template goaenums.h ) > 	\
 	   goaenumtypes.c.tmp && mv goaenumtypes.c.tmp goaenumtypes.c
@@ -48,20 +48,21 @@ enum_built_sources =							\
 
 # ----------------------------------------------------------------------------------------------------
 
-lib_LTLIBRARIES = libgoa.la
+lib_LTLIBRARIES = libgoa-1.0.la
 
-libgoa_ladir = $(includedir)/goa/goa
+libgoa_1_0_ladir = $(includedir)/goa-1.0/goa
 
-libgoa_la_HEADERS =						\
+libgoa_1_0_la_HEADERS =						\
 	goa.h							\
 	goaclient.h						\
 	goaerror.h						\
 	goatypes.h						\
 	goaenums.h						\
 	goaenumtypes.h						\
+	goa-generated.h						\
 	$(NULL)
 
-libgoa_la_SOURCES =						\
+libgoa_1_0_la_SOURCES =						\
 	goa.h							\
 	goaclient.h			goaclient.c		\
 	goaerror.h			goaerror.c		\
@@ -71,14 +72,21 @@ libgoa_la_SOURCES =						\
 	goaenumtypes.h			goaenumtypes.c		\
 	$(NULL)
 
-libgoa_la_CFLAGS =						\
+libgoa_1_0_la_CFLAGS =						\
 	-DGOA_COMPILATION					\
 	$(GLIB_CFLAGS) 						\
 	$(NULL)
 
-libgoa_la_LIBADD = 						\
+libgoa_1_0_la_LIBADD = 						\
 	$(GLIB_LIBS) 						\
 	$(NULL)
+
+# ----------------------------------------------------------------------------------------------------
+
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = goa-1.0.pc
+
+# ----------------------------------------------------------------------------------------------------
 
 if HAVE_INTROSPECTION
 girdir = $(INTROSPECTION_GIRDIR)
@@ -87,13 +95,13 @@ gir_DATA = Goa-1.0.gir
 typelibsdir = $(INTROSPECTION_TYPELIBDIR)
 typelibs_DATA = Goa-1.0.typelib
 
-Goa-1.0.gir: libgoa.la $(INTROSPECTION_SCANNER) Makefile.am
+Goa-1.0.gir: libgoa-1.0.la $(INTROSPECTION_SCANNER) Makefile.am
 	$(INTROSPECTION_SCANNER) -v 				\
 		--warn-all					\
 		--namespace Goa 				\
 		--nsversion=1.0 				\
 		--include=Gio-2.0 				\
-		--library=goa		 			\
+		--library=goa-1.0	 			\
 		--output $@ 					\
 		--pkg=glib-2.0 					\
 		--pkg=gobject-2.0 				\
@@ -102,7 +110,7 @@ Goa-1.0.gir: libgoa.la $(INTROSPECTION_SCANNER) Makefile.am
 		--c-include='goa/goa.h'				\
                 -I$(top_srcdir)/src	 			\
 	        -DGOA_COMPILATION                   		\
-		$(libgoa_la_SOURCES)				\
+		$(libgoa_1_0_la_SOURCES)			\
 		$(NULL)
 
 Goa-1.0.typelib: Goa-1.0.gir $(INTROSPECTION_COMPILER)

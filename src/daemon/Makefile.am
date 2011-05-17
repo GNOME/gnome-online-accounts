@@ -34,8 +34,8 @@ goa_daemon_CFLAGS =						\
 
 goa_daemon_LDADD = 						\
 	$(GLIB_LIBS) 						\
-	$(top_builddir)/src/goa/libgoa.la			\
-	$(top_builddir)/src/goabackend/libgoa-backend.la	\
+	$(top_builddir)/src/goa/libgoa-1.0.la			\
+	$(top_builddir)/src/goabackend/libgoa-backend-1.0.la	\
 	$(GTK_LIBS)						\
 	$(LIBNOTIFY_LIBS)					\
 	$(REST_LIBS)						\

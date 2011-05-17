@@ -82,7 +82,9 @@ Makefile
 data/Makefile
 src/Makefile
 src/goa/Makefile
+src/goa/goa-1.0.pc
 src/goabackend/Makefile
+src/goabackend/goa-backend-1.0.pc
 src/daemon/Makefile
 src/panel/Makefile
 src/examples/Makefile

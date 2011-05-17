@@ -24,7 +24,7 @@
 #define __GOA_BACKEND_H__
 
 #if !defined(GOA_BACKEND_API_IS_SUBJECT_TO_CHANGE) && !defined(GOA_BACKEND_COMPILATION)
-#error  libgoa-backend is unstable API. You must define GOA_API_IS_SUBJECT_TO_CHANGE before including goabackend/goabackend.h
+#error  libgoa-backend is unstable API. You must define GOA_BACKEND_API_IS_SUBJECT_TO_CHANGE before including goabackend/goabackend.h
 #endif
 
 #define __GOA_BACKEND_INSIDE_GOA_BACKEND_H__

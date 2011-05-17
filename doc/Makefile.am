@@ -36,8 +36,8 @@ INCLUDES = \
 GTKDOC_LIBS = 							\
 	$(GLIB_LIBS)						\
 	$(GIO_LIBS)						\
-	$(top_builddir)/src/goa/libgoa.la			\
-	$(top_builddir)/src/goabackend/libgoa-backend.la	\
+	$(top_builddir)/src/goa/libgoa-1.0.la			\
+	$(top_builddir)/src/goabackend/libgoa-backend-1.0.la	\
 	$(NULL)
 
 # Extra options to supply to gtkdoc-mkdb

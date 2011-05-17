@@ -34,11 +34,11 @@ enum_built_sources =							\
 
 # ----------------------------------------------------------------------------------------------------
 
-lib_LTLIBRARIES = libgoa-backend.la
+lib_LTLIBRARIES = libgoa-backend-1.0.la
 
-libgoa_backend_ladir = $(includedir)/goa/goabackend
+libgoa_backend_1_0_ladir = $(includedir)/goa-1.0/goabackend
 
-libgoa_backend_la_HEADERS =						\
+libgoa_backend_1_0_la_HEADERS =						\
 	goabackend.h							\
 	goabackendtypes.h						\
 	goabackendenums.h						\
@@ -53,9 +53,10 @@ libgoa_backend_la_HEADERS =						\
 	goaimapauth.h							\
 	goaimapauthoauth.h						\
 	goaimapclient.h							\
+	goaimapmail.h							\
 	$(NULL)
 
-libgoa_backend_la_SOURCES =						\
+libgoa_backend_1_0_la_SOURCES =						\
 	goabackend.h							\
 	goabackendtypes.h						\
 	goabackendenums.h						\
@@ -73,7 +74,7 @@ libgoa_backend_la_SOURCES =						\
 	goaimapmail.h			goaimapmail.c			\
 	$(NULL)
 
-libgoa_backend_la_CFLAGS =					\
+libgoa_backend_1_0_la_CFLAGS =					\
 	-DGOA_BACKEND_COMPILATION				\
 	-DGOA_API_IS_SUBJECT_TO_CHANGE				\
 	$(WEBKIT_GTK_CFLAGS)					\
@@ -84,7 +85,7 @@ libgoa_backend_la_CFLAGS =					\
 	$(REST_CFLAGS)						\
 	$(NULL)
 
-libgoa_backend_la_LIBADD = 					\
+libgoa_backend_1_0_la_LIBADD = 					\
 	$(WEBKIT_GTK_LIBS)					\
 	$(JSON_GLIB_LIBS)					\
 	$(GLIB_LIBS) 						\
@@ -92,6 +93,11 @@ libgoa_backend_la_LIBADD = 					\
 	$(GNOME_KEYRING_LIBS)					\
 	$(REST_LIBS)						\
 	$(NULL)
+
+# ----------------------------------------------------------------------------------------------------
+
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = goa-backend-1.0.pc
 
 # ----------------------------------------------------------------------------------------------------
 

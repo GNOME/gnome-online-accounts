@@ -39,8 +39,8 @@ libgoa_panel_la_LIBADD = 					\
 	$(GLIB_LIBS) 						\
 	$(GTK_LIBS)						\
 	$(GNOME_CONTROL_CENTER_LIBS)				\
-	$(top_builddir)/src/goa/libgoa.la			\
-	$(top_builddir)/src/goabackend/libgoa-backend.la	\
+	$(top_builddir)/src/goa/libgoa-1.0.la			\
+	$(top_builddir)/src/goabackend/libgoa-backend-1.0.la	\
 	$(NULL)
 
 clean-local :

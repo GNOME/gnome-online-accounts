@@ -27,7 +27,7 @@ mail_monitor_CFLAGS =						\
 
 mail_monitor_LDADD = 						\
 	$(GLIB_LIBS) 						\
-	$(top_builddir)/src/goa/libgoa.la			\
+	$(top_builddir)/src/goa/libgoa-1.0.la			\
 	$(NULL)
 
 clean-local :
