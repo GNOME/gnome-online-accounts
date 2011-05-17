@@ -42,19 +42,8 @@ goaenumtypes.c: goaenums.h goaenumtypes.c.template
 	 cd $(srcdir) && glib-mkenums --template goaenumtypes.c.template goaenums.h ) > 	\
 	   goaenumtypes.c.tmp && mv goaenumtypes.c.tmp goaenumtypes.c
 
-goabackendenumtypes.h: goabackendenums.h goabackendenumtypes.h.template
-	( top_builddir=`cd $(top_builddir) && pwd`; 							\
-	 cd $(srcdir) && glib-mkenums --template goabackendenumtypes.h.template goabackendenums.h ) > 	\
-	   goabackendenumtypes.h.tmp && mv goabackendenumtypes.h.tmp goabackendenumtypes.h
-
-goabackendenumtypes.c: goabackendenums.h goabackendenumtypes.c.template
-	( top_builddir=`cd $(top_builddir) && pwd`; 							\
-	 cd $(srcdir) && glib-mkenums --template goabackendenumtypes.c.template goabackendenums.h ) > 	\
-	   goabackendenumtypes.c.tmp && mv goabackendenumtypes.c.tmp goabackendenumtypes.c
-
 enum_built_sources =							\
 	goaenumtypes.h			goaenumtypes.c			\
-	goabackendenumtypes.h		goabackendenumtypes.c		\
 	$(NULL)
 
 # ----------------------------------------------------------------------------------------------------
@@ -122,66 +111,6 @@ Goa-1.0.typelib: Goa-1.0.gir $(INTROSPECTION_COMPILER)
 CLEANFILES += $(gir_DATA) $(typelibs_DATA)
 
 endif # HAVE_INTROSPECTION
-
-# ----------------------------------------------------------------------------------------------------
-
-lib_LTLIBRARIES += libgoa-backend.la
-
-libgoa_backend_ladir = $(includedir)/goa/goa
-
-libgoa_backend_la_HEADERS =						\
-	goabackend.h							\
-	goabackendtypes.h						\
-	goabackendprovider.h						\
-	goabackendoauthprovider.h					\
-	goabackendoauth2provider.h					\
-	goabackendgoogleprovider.h					\
-	goabackendfacebookprovider.h					\
-	goabackendyahooprovider.h					\
-	goabackendtwitterprovider.h					\
-	goabackendimapauth.h						\
-	goabackendimapauthoauth.h					\
-	goabackendimapclient.h						\
-	goabackendenums.h						\
-	goabackendenumtypes.h						\
-	$(NULL)
-
-libgoa_backend_la_SOURCES =						\
-	goabackend.h							\
-	goabackendtypes.h						\
-	goabackendprovider.h		goabackendprovider.c		\
-	goabackendoauthprovider.h	goabackendoauthprovider.c	\
-	goabackendoauth2provider.h	goabackendoauth2provider.c	\
-	goabackendgoogleprovider.h	goabackendgoogleprovider.c	\
-	goabackendfacebookprovider.h	goabackendfacebookprovider.c	\
-	goabackendyahooprovider.h	goabackendyahooprovider.c	\
-	goabackendtwitterprovider.h	goabackendtwitterprovider.c	\
-	goabackendimapauth.h		goabackendimapauth.c		\
-	goabackendimapauthoauth.h	goabackendimapauthoauth.c	\
-	goabackendimapclient.h		goabackendimapclient.c		\
-	goabackendimapmail.h		goabackendimapmail.c		\
-	goabackendenumtypes.h		goabackendenumtypes.c		\
-	$(NULL)
-
-libgoa_backend_la_CFLAGS =					\
-	-DGOA_BACKEND_COMPILATION				\
-	-DGOA_API_IS_SUBJECT_TO_CHANGE				\
-	$(WEBKIT_GTK_CFLAGS)					\
-	$(JSON_GLIB_CFLAGS)					\
-	$(GLIB_CFLAGS) 						\
-	$(GTK_CFLAGS) 						\
-	$(GNOME_KEYRING_CFLAGS)					\
-	$(REST_CFLAGS)						\
-	$(NULL)
-
-libgoa_backend_la_LIBADD = 					\
-	$(WEBKIT_GTK_LIBS)					\
-	$(JSON_GLIB_LIBS)					\
-	$(GLIB_LIBS) 						\
-	$(GTK_LIBS) 						\
-	$(GNOME_KEYRING_LIBS)					\
-	$(REST_LIBS)						\
-	$(NULL)
 
 # ----------------------------------------------------------------------------------------------------
 

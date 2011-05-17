@@ -24,37 +24,37 @@
 #include <glib/gi18n-lib.h>
 #include <stdlib.h>
 
-#include "goabackendimapauth.h"
+#include "goaimapauth.h"
 
 /**
- * SECTION:goabackendimapauth
- * @title: GoaBackendImapAuth
+ * SECTION:goaimapauth
+ * @title: GoaImapAuth
  * @short_description: Helper type for authenticating IMAP connections
  *
- * #GoaBackendImapAuth is an abstract type used for authenticating
- * IMAP connections. See #GoaBackendImapAuthOAuth for a concrete
+ * #GoaImapAuth is an abstract type used for authenticating
+ * IMAP connections. See #GoaImapAuthOAuth for a concrete
  * implementation.
  */
 
-G_DEFINE_ABSTRACT_TYPE (GoaBackendImapAuth, goa_backend_imap_auth, G_TYPE_OBJECT);
+G_DEFINE_ABSTRACT_TYPE (GoaImapAuth, goa_imap_auth, G_TYPE_OBJECT);
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_backend_imap_auth_init (GoaBackendImapAuth *client)
+goa_imap_auth_init (GoaImapAuth *client)
 {
 }
 
 static void
-goa_backend_imap_auth_class_init (GoaBackendImapAuthClass *klass)
+goa_imap_auth_class_init (GoaImapAuthClass *klass)
 {
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
- * goa_backend_imap_auth_run_sync:
- * @auth: A #GoaBackendImapAuth.
+ * goa_imap_auth_run_sync:
+ * @auth: A #GoaImapAuth.
  * @input: A valid #GDataInputStream.
  * @output: A valid #GDataOutputStream.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
@@ -68,17 +68,17 @@ goa_backend_imap_auth_class_init (GoaBackendImapAuthClass *klass)
  * set.
  */
 gboolean
-goa_backend_imap_auth_run_sync (GoaBackendImapAuth  *auth,
-                                GDataInputStream    *input,
-                                GDataOutputStream   *output,
-                                GCancellable        *cancellable,
-                                GError             **error)
+goa_imap_auth_run_sync (GoaImapAuth         *auth,
+                        GDataInputStream    *input,
+                        GDataOutputStream   *output,
+                        GCancellable        *cancellable,
+                        GError             **error)
 {
-  g_return_val_if_fail (GOA_IS_BACKEND_IMAP_AUTH (auth), FALSE);
+  g_return_val_if_fail (GOA_IS_IMAP_AUTH (auth), FALSE);
   g_return_val_if_fail (G_IS_DATA_INPUT_STREAM (input), FALSE);
   g_return_val_if_fail (G_IS_DATA_OUTPUT_STREAM (output), FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
-  return GOA_BACKEND_IMAP_AUTH_GET_CLASS (auth)->run_sync (auth, input, output, cancellable, error);
+  return GOA_IMAP_AUTH_GET_CLASS (auth)->run_sync (auth, input, output, cancellable, error);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

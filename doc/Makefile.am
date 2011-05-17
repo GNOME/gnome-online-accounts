@@ -13,10 +13,10 @@ DOC_MAIN_SGML_FILE=$(DOC_MODULE)-docs.xml
 SCAN_OPTIONS=
 
 # The directory containing the source code. Relative to $(srcdir)
-DOC_SOURCE_DIR=$(top_srcdir)/src/goa
+DOC_SOURCE_DIR=$(top_srcdir)/src
 
-HFILE_GLOB=$(top_srcdir)/src/goa/*.h
-CFILE_GLOB=$(top_srcdir)/src/goa/*.c
+HFILE_GLOB=$(top_srcdir)/src/goa/*.h $(top_srcdir)/src/goabackend/*.h
+CFILE_GLOB=$(top_srcdir)/src/goa/*.c $(top_srcdir)/src/goabackend/*.c
 
 # Headers to ignore
 IGNORE_HFILES=				\
@@ -33,11 +33,11 @@ INCLUDES = \
 	$(GIO_CFLAGS)			\
 	$(NULL)
 
-GTKDOC_LIBS = 						\
-	$(GLIB_LIBS)					\
-	$(GIO_LIBS)					\
-	$(top_builddir)/src/goa/libgoa.la		\
-	$(top_builddir)/src/goa/libgoa-backend.la	\
+GTKDOC_LIBS = 							\
+	$(GLIB_LIBS)						\
+	$(GIO_LIBS)						\
+	$(top_builddir)/src/goa/libgoa.la			\
+	$(top_builddir)/src/goabackend/libgoa-backend.la	\
 	$(NULL)
 
 # Extra options to supply to gtkdoc-mkdb

@@ -26,39 +26,39 @@
 #include <rest/rest-proxy.h>
 #include <json-glib/json-glib.h>
 
-#include "goabackendprovider.h"
-#include "goabackendoauth2provider.h"
-#include "goabackendfacebookprovider.h"
+#include "goaprovider.h"
+#include "goaoauth2provider.h"
+#include "goafacebookprovider.h"
 
 /**
- * GoaBackendFacebookProvider:
+ * GoaFacebookProvider:
  *
- * The #GoaBackendFacebookProvider structure contains only private data and should
+ * The #GoaFacebookProvider structure contains only private data and should
  * only be accessed using the provided API.
  */
-struct _GoaBackendFacebookProvider
+struct _GoaFacebookProvider
 {
   /*< private >*/
-  GoaBackendOAuth2Provider parent_instance;
+  GoaOAuth2Provider parent_instance;
 };
 
-typedef struct _GoaBackendFacebookProviderClass GoaBackendFacebookProviderClass;
+typedef struct _GoaFacebookProviderClass GoaFacebookProviderClass;
 
-struct _GoaBackendFacebookProviderClass
+struct _GoaFacebookProviderClass
 {
-  GoaBackendOAuth2ProviderClass parent_class;
+  GoaOAuth2ProviderClass parent_class;
 };
 
 /**
- * SECTION:goabackendfacebookprovider
- * @title: GoaBackendFacebookProvider
+ * SECTION:goafacebookprovider
+ * @title: GoaFacebookProvider
  * @short_description: A provider for Facebook
  *
- * #GoaBackendFacebookProvider is used for handling Facebook accounts.
+ * #GoaFacebookProvider is used for handling Facebook accounts.
  */
 
-G_DEFINE_TYPE_WITH_CODE (GoaBackendFacebookProvider, goa_backend_facebook_provider, GOA_TYPE_BACKEND_OAUTH2_PROVIDER,
-                         g_io_extension_point_implement (GOA_BACKEND_PROVIDER_EXTENSION_POINT_NAME,
+G_DEFINE_TYPE_WITH_CODE (GoaFacebookProvider, goa_facebook_provider, GOA_TYPE_OAUTH2_PROVIDER,
+                         g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
 							 g_define_type_id,
 							 "facebook",
 							 0));
@@ -66,39 +66,39 @@ G_DEFINE_TYPE_WITH_CODE (GoaBackendFacebookProvider, goa_backend_facebook_provid
 /* ---------------------------------------------------------------------------------------------------- */
 
 static const gchar *
-get_provider_type (GoaBackendProvider *_provider)
+get_provider_type (GoaProvider *_provider)
 {
   return "facebook";
 }
 
 static const gchar *
-get_name (GoaBackendProvider *_provider)
+get_name (GoaProvider *_provider)
 {
   return _("Facebook Account");
 }
 
 static const gchar *
-get_authorization_uri (GoaBackendOAuth2Provider *provider)
+get_authorization_uri (GoaOAuth2Provider *provider)
 {
   return "https://www.facebook.com/dialog/oauth";
 }
 
 
 static const gchar *
-get_token_uri (GoaBackendOAuth2Provider *provider)
+get_token_uri (GoaOAuth2Provider *provider)
 {
   return "https://graph.facebook.com/oauth/access_token";
 }
 
 
 static const gchar *
-get_redirect_uri (GoaBackendOAuth2Provider *provider)
+get_redirect_uri (GoaOAuth2Provider *provider)
 {
   return "https://www.gnome.org/goa-1.0/oauth2?callback=1";
 }
 
 static const gchar *
-get_scope (GoaBackendOAuth2Provider *provider)
+get_scope (GoaOAuth2Provider *provider)
 {
   /* see https://developers.facebook.com/docs/authentication/permissions/ */
   return
@@ -108,13 +108,13 @@ get_scope (GoaBackendOAuth2Provider *provider)
 }
 
 static const gchar *
-get_client_id (GoaBackendOAuth2Provider *provider)
+get_client_id (GoaOAuth2Provider *provider)
 {
   return "103995033022129";
 }
 
 static const gchar *
-get_client_secret (GoaBackendOAuth2Provider *provider)
+get_client_secret (GoaOAuth2Provider *provider)
 {
   return "c3a9f8d49188a6dd8b596df48a90b94a";
 }
@@ -122,11 +122,11 @@ get_client_secret (GoaBackendOAuth2Provider *provider)
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
-get_identity_sync (GoaBackendOAuth2Provider  *provider,
-                   const gchar               *access_token,
-                   gchar                    **out_name,
-                   GCancellable              *cancellable,
-                   GError                   **error)
+get_identity_sync (GoaOAuth2Provider  *provider,
+                   const gchar        *access_token,
+                   gchar             **out_name,
+                   GCancellable       *cancellable,
+                   GError            **error)
 {
   RestProxy *proxy;
   RestProxyCall *call;
@@ -215,11 +215,11 @@ get_identity_sync (GoaBackendOAuth2Provider  *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-goa_backend_facebook_provider_build_object (GoaBackendProvider  *provider,
-                                            GoaObjectSkeleton   *object,
-                                            GKeyFile            *key_file,
-                                            const gchar         *group,
-                                            GError             **error)
+build_object (GoaProvider         *provider,
+              GoaObjectSkeleton   *object,
+              GKeyFile            *key_file,
+              const gchar         *group,
+              GError             **error)
 {
   GoaAccount *account;
   GoaFacebookAccount *facebook_account;
@@ -232,11 +232,11 @@ goa_backend_facebook_provider_build_object (GoaBackendProvider  *provider,
   ret = FALSE;
 
   /* Chain up */
-  if (!GOA_BACKEND_PROVIDER_CLASS (goa_backend_facebook_provider_parent_class)->build_object (provider,
-                                                                                              object,
-                                                                                              key_file,
-                                                                                              group,
-                                                                                              error))
+  if (!GOA_PROVIDER_CLASS (goa_facebook_provider_parent_class)->build_object (provider,
+                                                                              object,
+                                                                              key_file,
+                                                                              group,
+                                                                              error))
     goto out;
 
   account = goa_object_get_account (GOA_OBJECT (object));
@@ -272,7 +272,7 @@ goa_backend_facebook_provider_build_object (GoaBackendProvider  *provider,
 }
 
 static gboolean
-get_use_external_browser (GoaBackendOAuth2Provider *provider)
+get_use_external_browser (GoaOAuth2Provider *provider)
 {
   return FALSE;
 }
@@ -280,22 +280,22 @@ get_use_external_browser (GoaBackendOAuth2Provider *provider)
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_backend_facebook_provider_init (GoaBackendFacebookProvider *client)
+goa_facebook_provider_init (GoaFacebookProvider *client)
 {
 }
 
 static void
-goa_backend_facebook_provider_class_init (GoaBackendFacebookProviderClass *klass)
+goa_facebook_provider_class_init (GoaFacebookProviderClass *klass)
 {
-  GoaBackendProviderClass *provider_class;
-  GoaBackendOAuth2ProviderClass *oauth2_class;
+  GoaProviderClass *provider_class;
+  GoaOAuth2ProviderClass *oauth2_class;
 
-  provider_class = GOA_BACKEND_PROVIDER_CLASS (klass);
+  provider_class = GOA_PROVIDER_CLASS (klass);
   provider_class->get_provider_type          = get_provider_type;
   provider_class->get_name                   = get_name;
-  provider_class->build_object               = goa_backend_facebook_provider_build_object;
+  provider_class->build_object               = build_object;
 
-  oauth2_class = GOA_BACKEND_OAUTH2_PROVIDER_CLASS (klass);
+  oauth2_class = GOA_OAUTH2_PROVIDER_CLASS (klass);
   oauth2_class->get_authorization_uri    = get_authorization_uri;
   oauth2_class->get_token_uri            = get_token_uri;
   oauth2_class->get_redirect_uri         = get_redirect_uri;

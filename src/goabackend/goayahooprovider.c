@@ -26,39 +26,39 @@
 #include <rest/oauth-proxy.h>
 #include <json-glib/json-glib.h>
 
-#include "goabackendprovider.h"
-#include "goabackendoauthprovider.h"
-#include "goabackendyahooprovider.h"
+#include "goaprovider.h"
+#include "goaoauthprovider.h"
+#include "goayahooprovider.h"
 
 /**
- * GoaBackendYahooProvider:
+ * GoaYahooProvider:
  *
- * The #GoaBackendYahooProvider structure contains only private data and should
+ * The #GoaYahooProvider structure contains only private data and should
  * only be accessed using the provided API.
  */
-struct _GoaBackendYahooProvider
+struct _GoaYahooProvider
 {
   /*< private >*/
-  GoaBackendOAuthProvider parent_instance;
+  GoaOAuthProvider parent_instance;
 };
 
-typedef struct _GoaBackendYahooProviderClass GoaBackendYahooProviderClass;
+typedef struct _GoaYahooProviderClass GoaYahooProviderClass;
 
-struct _GoaBackendYahooProviderClass
+struct _GoaYahooProviderClass
 {
-  GoaBackendOAuthProviderClass parent_class;
+  GoaOAuthProviderClass parent_class;
 };
 
 /**
- * SECTION:goabackendyahooprovider
- * @title: GoaBackendYahooProvider
+ * SECTION:goayahooprovider
+ * @title: GoaYahooProvider
  * @short_description: A provider for Yahoo
  *
- * #GoaBackendYahooProvider is used for handling Yahoo accounts.
+ * #GoaYahooProvider is used for handling Yahoo accounts.
  */
 
-G_DEFINE_TYPE_WITH_CODE (GoaBackendYahooProvider, goa_backend_yahoo_provider, GOA_TYPE_BACKEND_OAUTH_PROVIDER,
-                         g_io_extension_point_implement (GOA_BACKEND_PROVIDER_EXTENSION_POINT_NAME,
+G_DEFINE_TYPE_WITH_CODE (GoaYahooProvider, goa_yahoo_provider, GOA_TYPE_OAUTH_PROVIDER,
+                         g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
 							 g_define_type_id,
 							 "yahoo",
 							 0));
@@ -66,49 +66,49 @@ G_DEFINE_TYPE_WITH_CODE (GoaBackendYahooProvider, goa_backend_yahoo_provider, GO
 /* ---------------------------------------------------------------------------------------------------- */
 
 static const gchar *
-get_provider_type (GoaBackendProvider *_provider)
+get_provider_type (GoaProvider *_provider)
 {
   return "yahoo";
 }
 
 static const gchar *
-get_name (GoaBackendProvider *_provider)
+get_name (GoaProvider *_provider)
 {
   return _("Yahoo Account");
 }
 
 static const gchar *
-get_consumer_key (GoaBackendOAuthProvider *provider)
+get_consumer_key (GoaOAuthProvider *provider)
 {
   return "dj0yJmk9VnBYMGpGRVFBUVl3JmQ9WVdrOWNWZDZiVTUwTldNbWNHbzlPVFF5TURrNE5UWXkmcz1jb25zdW1lcnNlY3JldCZ4PTQ0";
 }
 
 static const gchar *
-get_consumer_secret (GoaBackendOAuthProvider *provider)
+get_consumer_secret (GoaOAuthProvider *provider)
 {
   return "33dd9ebe9f5724deabe657eff1de7c3f151cf7eb";
 }
 
 static const gchar *
-get_request_uri (GoaBackendOAuthProvider *provider)
+get_request_uri (GoaOAuthProvider *provider)
 {
   return "https://api.login.yahoo.com/oauth/v2/get_request_token";
 }
 
 static const gchar *
-get_authorization_uri (GoaBackendOAuthProvider *provider)
+get_authorization_uri (GoaOAuthProvider *provider)
 {
   return "https://api.login.yahoo.com/oauth/v2/request_auth";
 }
 
 static const gchar *
-get_token_uri (GoaBackendOAuthProvider *provider)
+get_token_uri (GoaOAuthProvider *provider)
 {
   return "https://api.login.yahoo.com/oauth/v2/get_token";
 }
 
 static const gchar *
-get_callback_uri (GoaBackendOAuthProvider *provider)
+get_callback_uri (GoaOAuthProvider *provider)
 {
   return "https://www.gnome.org/goa-1.0/oauth";
 }
@@ -116,12 +116,12 @@ get_callback_uri (GoaBackendOAuthProvider *provider)
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
-get_identity_sync (GoaBackendOAuthProvider  *provider,
-                   const gchar              *access_token,
-                   const gchar              *access_token_secret,
-                   gchar                   **out_name,
-                   GCancellable             *cancellable,
-                   GError                  **error)
+get_identity_sync (GoaOAuthProvider  *provider,
+                   const gchar       *access_token,
+                   const gchar       *access_token_secret,
+                   gchar            **out_name,
+                   GCancellable      *cancellable,
+                   GError           **error)
 {
   RestProxy *proxy;
   RestProxyCall *call;
@@ -141,8 +141,8 @@ get_identity_sync (GoaBackendOAuthProvider  *provider,
 
   /* TODO: cancellable */
 
-  proxy = oauth_proxy_new_with_token (goa_backend_oauth_provider_get_consumer_key (provider),
-                                      goa_backend_oauth_provider_get_consumer_secret (provider),
+  proxy = oauth_proxy_new_with_token (goa_oauth_provider_get_consumer_key (provider),
+                                      goa_oauth_provider_get_consumer_secret (provider),
                                       access_token,
                                       access_token_secret,
                                       "http://social.yahooapis.com/v1/me/guid",
@@ -198,8 +198,8 @@ get_identity_sync (GoaBackendOAuthProvider  *provider,
   /* OK, got the GUID, now get the name via http://developer.yahoo.com/social/rest_api_guide/usercard-resource.html */
   g_object_unref (proxy);
   g_object_unref (call);
-  proxy = oauth_proxy_new_with_token (goa_backend_oauth_provider_get_consumer_key (provider),
-                                      goa_backend_oauth_provider_get_consumer_secret (provider),
+  proxy = oauth_proxy_new_with_token (goa_oauth_provider_get_consumer_key (provider),
+                                      goa_oauth_provider_get_consumer_secret (provider),
                                       access_token,
                                       access_token_secret,
                                       "http://social.yahooapis.com/v1/user/%s/profile/usercard",
@@ -276,11 +276,11 @@ get_identity_sync (GoaBackendOAuthProvider  *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-goa_backend_yahoo_provider_build_object (GoaBackendProvider  *provider,
-                                          GoaObjectSkeleton   *object,
-                                          GKeyFile            *key_file,
-                                          const gchar         *group,
-                                          GError             **error)
+build_object (GoaProvider         *provider,
+              GoaObjectSkeleton   *object,
+              GKeyFile            *key_file,
+              const gchar         *group,
+              GError             **error)
 {
   GoaAccount *account;
   GoaYahooAccount *yahoo_account;
@@ -293,11 +293,11 @@ goa_backend_yahoo_provider_build_object (GoaBackendProvider  *provider,
   ret = FALSE;
 
   /* Chain up */
-  if (!GOA_BACKEND_PROVIDER_CLASS (goa_backend_yahoo_provider_parent_class)->build_object (provider,
-                                                                                            object,
-                                                                                            key_file,
-                                                                                            group,
-                                                                                            error))
+  if (!GOA_PROVIDER_CLASS (goa_yahoo_provider_parent_class)->build_object (provider,
+                                                                           object,
+                                                                           key_file,
+                                                                           group,
+                                                                           error))
     goto out;
 
   account = goa_object_get_account (GOA_OBJECT (object));
@@ -334,7 +334,7 @@ goa_backend_yahoo_provider_build_object (GoaBackendProvider  *provider,
 }
 
 static gboolean
-get_use_external_browser (GoaBackendOAuthProvider *provider)
+get_use_external_browser (GoaOAuthProvider *provider)
 {
   return FALSE;
 }
@@ -342,22 +342,22 @@ get_use_external_browser (GoaBackendOAuthProvider *provider)
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_backend_yahoo_provider_init (GoaBackendYahooProvider *client)
+goa_yahoo_provider_init (GoaYahooProvider *client)
 {
 }
 
 static void
-goa_backend_yahoo_provider_class_init (GoaBackendYahooProviderClass *klass)
+goa_yahoo_provider_class_init (GoaYahooProviderClass *klass)
 {
-  GoaBackendProviderClass *provider_class;
-  GoaBackendOAuthProviderClass *oauth_class;
+  GoaProviderClass *provider_class;
+  GoaOAuthProviderClass *oauth_class;
 
-  provider_class = GOA_BACKEND_PROVIDER_CLASS (klass);
-  provider_class->get_provider_type          = get_provider_type;
-  provider_class->get_name                   = get_name;
-  provider_class->build_object               = goa_backend_yahoo_provider_build_object;
+  provider_class = GOA_PROVIDER_CLASS (klass);
+  provider_class->get_provider_type     = get_provider_type;
+  provider_class->get_name              = get_name;
+  provider_class->build_object          = build_object;
 
-  oauth_class = GOA_BACKEND_OAUTH_PROVIDER_CLASS (klass);
+  oauth_class = GOA_OAUTH_PROVIDER_CLASS (klass);
   oauth_class->get_identity_sync        = get_identity_sync;
   oauth_class->get_consumer_key         = get_consumer_key;
   oauth_class->get_consumer_secret      = get_consumer_secret;

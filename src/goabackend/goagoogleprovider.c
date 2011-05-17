@@ -26,42 +26,42 @@
 #include <rest/oauth-proxy.h>
 #include <json-glib/json-glib.h>
 
-#include "goabackendprovider.h"
-#include "goabackendoauthprovider.h"
-#include "goabackendgoogleprovider.h"
+#include "goaprovider.h"
+#include "goaoauthprovider.h"
+#include "goagoogleprovider.h"
 
-#include "goabackendimapmail.h"
-#include "goabackendimapauthoauth.h"
+#include "goaimapmail.h"
+#include "goaimapauthoauth.h"
 
 /**
- * GoaBackendGoogleProvider:
+ * GoaGoogleProvider:
  *
- * The #GoaBackendGoogleProvider structure contains only private data and should
+ * The #GoaGoogleProvider structure contains only private data and should
  * only be accessed using the provided API.
  */
-struct _GoaBackendGoogleProvider
+struct _GoaGoogleProvider
 {
   /*< private >*/
-  GoaBackendOAuthProvider parent_instance;
+  GoaOAuthProvider parent_instance;
 };
 
-typedef struct _GoaBackendGoogleProviderClass GoaBackendGoogleProviderClass;
+typedef struct _GoaGoogleProviderClass GoaGoogleProviderClass;
 
-struct _GoaBackendGoogleProviderClass
+struct _GoaGoogleProviderClass
 {
-  GoaBackendOAuthProviderClass parent_class;
+  GoaOAuthProviderClass parent_class;
 };
 
 /**
- * SECTION:goabackendgoogleprovider
- * @title: GoaBackendGoogleProvider
+ * SECTION:goagoogleprovider
+ * @title: GoaGoogleProvider
  * @short_description: A provider for Google
  *
- * #GoaBackendGoogleProvider is used for handling Google accounts.
+ * #GoaGoogleProvider is used for handling Google accounts.
  */
 
-G_DEFINE_TYPE_WITH_CODE (GoaBackendGoogleProvider, goa_backend_google_provider, GOA_TYPE_BACKEND_OAUTH_PROVIDER,
-                         g_io_extension_point_implement (GOA_BACKEND_PROVIDER_EXTENSION_POINT_NAME,
+G_DEFINE_TYPE_WITH_CODE (GoaGoogleProvider, goa_google_provider, GOA_TYPE_OAUTH_PROVIDER,
+                         g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
 							 g_define_type_id,
 							 "google",
 							 0));
@@ -69,37 +69,37 @@ G_DEFINE_TYPE_WITH_CODE (GoaBackendGoogleProvider, goa_backend_google_provider, 
 /* ---------------------------------------------------------------------------------------------------- */
 
 static const gchar *
-get_provider_type (GoaBackendProvider *_provider)
+get_provider_type (GoaProvider *_provider)
 {
   return "google";
 }
 
 static const gchar *
-get_name (GoaBackendProvider *_provider)
+get_name (GoaProvider *_provider)
 {
   return _("Google Account");
 }
 
 static const gchar *
-get_consumer_key (GoaBackendOAuthProvider *provider)
+get_consumer_key (GoaOAuthProvider *provider)
 {
   return "anonymous";
 }
 
 static const gchar *
-get_consumer_secret (GoaBackendOAuthProvider *provider)
+get_consumer_secret (GoaOAuthProvider *provider)
 {
   return "anonymous";
 }
 
 static const gchar *
-get_request_uri (GoaBackendOAuthProvider *provider)
+get_request_uri (GoaOAuthProvider *provider)
 {
   return "https://www.google.com/accounts/OAuthGetRequestToken";
 }
 
 static gchar **
-get_request_uri_params (GoaBackendOAuthProvider *provider)
+get_request_uri_params (GoaOAuthProvider *provider)
 {
   GPtrArray *p;
   p = g_ptr_array_new ();
@@ -118,21 +118,20 @@ get_request_uri_params (GoaBackendOAuthProvider *provider)
   return (gchar **) g_ptr_array_free (p, FALSE);
 }
 
-
 static const gchar *
-get_authorization_uri (GoaBackendOAuthProvider *provider)
+get_authorization_uri (GoaOAuthProvider *provider)
 {
   return "https://www.google.com/accounts/OAuthAuthorizeToken";
 }
 
 static const gchar *
-get_token_uri (GoaBackendOAuthProvider *provider)
+get_token_uri (GoaOAuthProvider *provider)
 {
   return "https://www.google.com/accounts/OAuthGetAccessToken";
 }
 
 static const gchar *
-get_callback_uri (GoaBackendOAuthProvider *provider)
+get_callback_uri (GoaOAuthProvider *provider)
 {
   return "https://www.gnome.org/goa-1.0/oauth";
 }
@@ -140,12 +139,12 @@ get_callback_uri (GoaBackendOAuthProvider *provider)
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
-get_identity_sync (GoaBackendOAuthProvider  *provider,
-                   const gchar              *access_token,
-                   const gchar              *access_token_secret,
-                   gchar                   **out_name,
-                   GCancellable             *cancellable,
-                   GError                  **error)
+get_identity_sync (GoaOAuthProvider  *provider,
+                   const gchar       *access_token,
+                   const gchar       *access_token_secret,
+                   gchar            **out_name,
+                   GCancellable      *cancellable,
+                   GError           **error)
 {
   RestProxy *proxy;
   RestProxyCall *call;
@@ -163,8 +162,8 @@ get_identity_sync (GoaBackendOAuthProvider  *provider,
 
   /* TODO: cancellable */
 
-  proxy = oauth_proxy_new_with_token (goa_backend_oauth_provider_get_consumer_key (provider),
-                                      goa_backend_oauth_provider_get_consumer_secret (provider),
+  proxy = oauth_proxy_new_with_token (goa_oauth_provider_get_consumer_key (provider),
+                                      goa_oauth_provider_get_consumer_secret (provider),
                                       access_token,
                                       access_token_secret,
                                       "https://www.googleapis.com/userinfo/email",
@@ -235,11 +234,11 @@ get_identity_sync (GoaBackendOAuthProvider  *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-goa_backend_google_provider_build_object (GoaBackendProvider  *provider,
-                                          GoaObjectSkeleton   *object,
-                                          GKeyFile            *key_file,
-                                          const gchar         *group,
-                                          GError             **error)
+build_object (GoaProvider         *provider,
+              GoaObjectSkeleton   *object,
+              GKeyFile            *key_file,
+              const gchar         *group,
+              GError             **error)
 {
   GoaAccount *account;
   GoaGoogleAccount *google_account;
@@ -254,11 +253,11 @@ goa_backend_google_provider_build_object (GoaBackendProvider  *provider,
   ret = FALSE;
 
   /* Chain up */
-  if (!GOA_BACKEND_PROVIDER_CLASS (goa_backend_google_provider_parent_class)->build_object (provider,
-                                                                                            object,
-                                                                                            key_file,
-                                                                                            group,
-                                                                                            error))
+  if (!GOA_PROVIDER_CLASS (goa_google_provider_parent_class)->build_object (provider,
+                                                                            object,
+                                                                            key_file,
+                                                                            group,
+                                                                            error))
     goto out;
 
   account = goa_object_get_account (GOA_OBJECT (object));
@@ -286,13 +285,13 @@ goa_backend_google_provider_build_object (GoaBackendProvider  *provider,
   mail = goa_object_get_mail (GOA_OBJECT (object));
   if (mail == NULL)
     {
-      GoaBackendImapAuth *auth;
+      GoaImapAuth *auth;
       gchar *request_uri;
       request_uri = g_strdup_printf ("https://mail.google.com/mail/b/%s/imap/", email_address);
-      auth = goa_backend_imap_auth_oauth_new (GOA_BACKEND_OAUTH_PROVIDER (provider),
-                                              GOA_OBJECT (object),
-                                              request_uri);
-      mail = goa_backend_imap_mail_new ("imap.gmail.com", TRUE, auth);
+      auth = goa_imap_auth_oauth_new (GOA_OAUTH_PROVIDER (provider),
+                                      GOA_OBJECT (object),
+                                      request_uri);
+      mail = goa_imap_mail_new ("imap.gmail.com", TRUE, auth);
       goa_object_skeleton_set_mail (object, mail);
       g_object_unref (auth);
       g_free (request_uri);
@@ -314,7 +313,7 @@ goa_backend_google_provider_build_object (GoaBackendProvider  *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-get_use_external_browser (GoaBackendOAuthProvider *provider)
+get_use_external_browser (GoaOAuthProvider *provider)
 {
   return FALSE;
 }
@@ -322,22 +321,22 @@ get_use_external_browser (GoaBackendOAuthProvider *provider)
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_backend_google_provider_init (GoaBackendGoogleProvider *client)
+goa_google_provider_init (GoaGoogleProvider *client)
 {
 }
 
 static void
-goa_backend_google_provider_class_init (GoaBackendGoogleProviderClass *klass)
+goa_google_provider_class_init (GoaGoogleProviderClass *klass)
 {
-  GoaBackendProviderClass *provider_class;
-  GoaBackendOAuthProviderClass *oauth_class;
+  GoaProviderClass *provider_class;
+  GoaOAuthProviderClass *oauth_class;
 
-  provider_class = GOA_BACKEND_PROVIDER_CLASS (klass);
+  provider_class = GOA_PROVIDER_CLASS (klass);
   provider_class->get_provider_type          = get_provider_type;
   provider_class->get_name                   = get_name;
-  provider_class->build_object               = goa_backend_google_provider_build_object;
+  provider_class->build_object               = build_object;
 
-  oauth_class = GOA_BACKEND_OAUTH_PROVIDER_CLASS (klass);
+  oauth_class = GOA_OAUTH_PROVIDER_CLASS (klass);
   oauth_class->get_identity_sync        = get_identity_sync;
   oauth_class->get_consumer_key         = get_consumer_key;
   oauth_class->get_consumer_secret      = get_consumer_secret;

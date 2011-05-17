@@ -36,7 +36,7 @@
 #include <libsoup/soup.h>
 
 #include "goadaemon.h"
-#include "goa/goabackend.h"
+#include "goabackend/goabackend.h"
 
 struct _GoaDaemon
 {
@@ -368,7 +368,7 @@ update_account_object (GoaDaemon           *daemon,
                        gboolean             just_added)
 {
   GoaAccount *account;
-  GoaBackendProvider *provider;
+  GoaProvider *provider;
   gboolean ret;
   gchar *name;
   gchar *type;
@@ -402,7 +402,7 @@ update_account_object (GoaDaemon           *daemon,
   goa_account_set_provider_type (account, type);
   goa_account_set_name (account, name);
 
-  provider = goa_backend_provider_get_for_provider_type (type);
+  provider = goa_provider_get_for_provider_type (type);
   if (provider == NULL)
     {
       /* TODO: syslog */
@@ -411,7 +411,7 @@ update_account_object (GoaDaemon           *daemon,
     }
 
   error = NULL;
-  if (!goa_backend_provider_build_object (provider, object, key_file, group, &error))
+  if (!goa_provider_build_object (provider, object, key_file, group, &error))
     {
       /* TODO: syslog */
       g_warning ("Error parsing account: %s (%s, %d)",
@@ -1174,16 +1174,16 @@ is_authorization_error (GError *error)
 }
 
 static void
-ensure_credentials_cb (GoaBackendProvider *provider,
-                       GAsyncResult       *res,
-                       gpointer            user_data)
+ensure_credentials_cb (GoaProvider   *provider,
+                       GAsyncResult  *res,
+                       gpointer       user_data)
 {
   EnsureCredentialsData *data = user_data;
   gint expires_in;
   GError *error;
 
   error= NULL;
-  if (!goa_backend_provider_ensure_credentials_finish (provider, &expires_in, res, &error))
+  if (!goa_provider_ensure_credentials_finish (provider, &expires_in, res, &error))
     {
       /* Set AttentionNeeded only if the error is an authorization error */
       if (is_authorization_error (error))
@@ -1230,11 +1230,11 @@ on_account_handle_ensure_credentials (GoaAccount            *account,
                                       gpointer               user_data)
 {
   GoaDaemon *daemon = GOA_DAEMON (user_data);
-  GoaBackendProvider *provider;
+  GoaProvider *provider;
   GoaObject *object;
 
   object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (account)));
-  provider = goa_backend_provider_get_for_provider_type (goa_account_get_provider_type (account));
+  provider = goa_provider_get_for_provider_type (goa_account_get_provider_type (account));
   if (provider == NULL)
     {
       /* TODO: syslog */
@@ -1247,11 +1247,11 @@ on_account_handle_ensure_credentials (GoaAccount            *account,
       goto out;
     }
 
-  goa_backend_provider_ensure_credentials (provider,
-                                           object,
-                                           NULL, /* GCancellable */
-                                           (GAsyncReadyCallback) ensure_credentials_cb,
-                                           ensure_credentials_data_new (daemon, object, invocation));
+  goa_provider_ensure_credentials (provider,
+                                   object,
+                                   NULL, /* GCancellable */
+                                   (GAsyncReadyCallback) ensure_credentials_cb,
+                                   ensure_credentials_data_new (daemon, object, invocation));
 
  out:
   return TRUE; /* invocation was handled */

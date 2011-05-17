@@ -21,22 +21,26 @@
  */
 
 #if !defined (__GOA_BACKEND_INSIDE_GOA_BACKEND_H__) && !defined (GOA_BACKEND_COMPILATION)
-#error "Only <goa/goabackend.h> can be included directly."
+#error "Only <goabackend/goabackend.h> can be included directly."
 #endif
 
-#ifndef __GOA_BACKEND_GOOGLE_PROVIDER_H__
-#define __GOA_BACKEND_GOOGLE_PROVIDER_H__
+#ifndef __GOA_IMAP_AUTH_OAUTH_H__
+#define __GOA_IMAP_AUTH_OAUTH_H__
 
-#include <goa/goabackendtypes.h>
+#include <goabackend/goabackendtypes.h>
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_BACKEND_GOOGLE_PROVIDER         (goa_backend_google_provider_get_type ())
-#define GOA_BACKEND_GOOGLE_PROVIDER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_BACKEND_GOOGLE_PROVIDER, GoaBackendGoogleProvider))
-#define GOA_IS_BACKEND_GOOGLE_PROVIDER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_BACKEND_GOOGLE_PROVIDER))
+#define GOA_TYPE_IMAP_AUTH_OAUTH         (goa_imap_auth_oauth_get_type ())
+#define GOA_IMAP_AUTH_OAUTH(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_IMAP_AUTH_OAUTH, GoaImapAuthOAuth))
+#define GOA_IS_IMAP_AUTH_OAUTH(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_IMAP_AUTH_OAUTH))
 
-GType               goa_backend_google_provider_get_type           (void) G_GNUC_CONST;
+
+GType        goa_imap_auth_oauth_get_type (void) G_GNUC_CONST;
+GoaImapAuth *goa_imap_auth_oauth_new (GoaOAuthProvider  *provider,
+                                      GoaObject         *object,
+                                      const gchar       *request_uri);
 
 G_END_DECLS
 
-#endif /* __GOA_BACKEND_GOOGLE_PROVIDER_H__ */
+#endif /* __GOA_IMAP_AUTH_OAUTH_H__ */

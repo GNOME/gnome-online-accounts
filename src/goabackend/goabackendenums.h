@@ -21,7 +21,7 @@
  */
 
 #if !defined (__GOA_BACKEND_INSIDE_GOA_BACKEND_H__) && !defined (GOA_BACKEND_COMPILATION)
-#error "Only <goa/goabackend.h> can be included directly."
+#error "Only <goabackend/goabackend.h> can be included directly."
 #endif
 
 #ifndef __GOA_BACKEND_ENUMS_H__

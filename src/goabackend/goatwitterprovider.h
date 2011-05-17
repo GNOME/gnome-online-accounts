@@ -21,22 +21,22 @@
  */
 
 #if !defined (__GOA_BACKEND_INSIDE_GOA_BACKEND_H__) && !defined (GOA_BACKEND_COMPILATION)
-#error "Only <goa/goabackend.h> can be included directly."
+#error "Only <goabackend/goabackend.h> can be included directly."
 #endif
 
-#ifndef __GOA_BACKEND_TWITTER_PROVIDER_H__
-#define __GOA_BACKEND_TWITTER_PROVIDER_H__
+#ifndef __GOA_TWITTER_PROVIDER_H__
+#define __GOA_TWITTER_PROVIDER_H__
 
-#include <goa/goabackendtypes.h>
+#include <goabackend/goabackendtypes.h>
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_BACKEND_TWITTER_PROVIDER         (goa_backend_twitter_provider_get_type ())
-#define GOA_BACKEND_TWITTER_PROVIDER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_BACKEND_TWITTER_PROVIDER, GoaBackendTwitterProvider))
-#define GOA_IS_BACKEND_TWITTER_PROVIDER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_BACKEND_TWITTER_PROVIDER))
+#define GOA_TYPE_TWITTER_PROVIDER   (goa_twitter_provider_get_type ())
+#define GOA_TWITTER_PROVIDER(o)     (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_TWITTER_PROVIDER, GoaTwitterProvider))
+#define GOA_IS_TWITTER_PROVIDER(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_TWITTER_PROVIDER))
 
-GType               goa_backend_twitter_provider_get_type           (void) G_GNUC_CONST;
+GType goa_twitter_provider_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GOA_BACKEND_TWITTER_PROVIDER_H__ */
+#endif /* __GOA_TWITTER_PROVIDER_H__ */

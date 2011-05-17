@@ -26,7 +26,7 @@
 #include <glib/gi18n-lib.h>
 
 #include <goa/goa.h>
-#include <goa/goabackend.h>
+#include <goabackend/goabackend.h>
 
 #include "goapanel.h"
 #include "goapanelaccountsmodel.h"
@@ -296,7 +296,7 @@ on_info_bar_response (GtkInfoBar *info_bar,
                                        NULL,
                                        &iter))
     {
-      GoaBackendProvider *provider;
+      GoaProvider *provider;
       const gchar *provider_type;
       GoaAccount *account;
       GoaObject *object;
@@ -310,16 +310,16 @@ on_info_bar_response (GtkInfoBar *info_bar,
 
       account = goa_object_peek_account (object);
       provider_type = goa_account_get_provider_type (account);
-      provider = goa_backend_provider_get_for_provider_type (provider_type);
+      provider = goa_provider_get_for_provider_type (provider_type);
 
       parent = GTK_WINDOW (cc_shell_get_toplevel (cc_panel_get_shell (CC_PANEL (panel))));
 
       error = NULL;
-      if (!goa_backend_provider_refresh_account (provider,
-                                                 panel->client,
-                                                 object,
-                                                 parent,
-                                                 &error))
+      if (!goa_provider_refresh_account (provider,
+                                         panel->client,
+                                         object,
+                                         parent,
+                                         &error))
         {
           if (!(error->domain == GOA_ERROR && error->code == GOA_ERROR_DIALOG_DISMISSED))
             {
@@ -381,7 +381,7 @@ show_page_account (GoaPanel  *panel,
   GtkWidget *label;
   GtkWidget *editable_label;
   guint row;
-  GoaBackendProvider *provider;
+  GoaProvider *provider;
   GoaAccount *account;
   GoaGoogleAccount *gaccount;
   GoaFacebookAccount *fbaccount;
@@ -403,7 +403,7 @@ show_page_account (GoaPanel  *panel,
   gaccount = goa_object_peek_google_account (object);
   fbaccount = goa_object_peek_facebook_account (object);
   provider_type = goa_account_get_provider_type (account);
-  provider = goa_backend_provider_get_for_provider_type (provider_type);
+  provider = goa_provider_get_for_provider_type (provider_type);
 
   /* And in with the new */
   if (goa_account_get_attention_needed (account))
@@ -436,7 +436,7 @@ show_page_account (GoaPanel  *panel,
 
   if (provider != NULL)
     {
-      s = g_strdup (goa_backend_provider_get_name (provider));
+      s = g_strdup (goa_provider_get_name (provider));
     }
   else
     {
@@ -527,7 +527,7 @@ on_toolbar_add_button_clicked (GtkToolButton *button,
   GtkWidget *combo_box;
   gint response;
   GList *providers;
-  GoaBackendProvider *provider;
+  GoaProvider *provider;
   GList *children;
   GList *l;
   GoaObject *object;
@@ -552,13 +552,13 @@ on_toolbar_add_button_clicked (GtkToolButton *button,
 
   label = gtk_label_new (_("Account Type:"));
   combo_box = gtk_combo_box_text_new ();
-  providers = goa_backend_provider_get_all ();
+  providers = goa_provider_get_all ();
   for (l = providers; l != NULL; l = l->next)
     {
-      GoaBackendProvider *provider = GOA_BACKEND_PROVIDER (l->data);
+      GoaProvider *provider = GOA_PROVIDER (l->data);
       gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo_box),
-                                 goa_backend_provider_get_provider_type (provider),
-                                 goa_backend_provider_get_name (provider));
+                                 goa_provider_get_provider_type (provider),
+                                 goa_provider_get_name (provider));
     }
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
 
@@ -589,7 +589,7 @@ on_toolbar_add_button_clicked (GtkToolButton *button,
     }
   gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (add_account_button)), add_account_button);
 
-  provider = goa_backend_provider_get_for_provider_type (gtk_combo_box_get_active_id (GTK_COMBO_BOX (combo_box)));
+  provider = goa_provider_get_for_provider_type (gtk_combo_box_get_active_id (GTK_COMBO_BOX (combo_box)));
   g_assert (provider != NULL);
 
   /* Prepare GtkDialog for the provider */
@@ -603,11 +603,11 @@ on_toolbar_add_button_clicked (GtkToolButton *button,
   g_list_free (children);
 
   error = NULL;
-  object = goa_backend_provider_add_account (provider,
-                                             panel->client,
-                                             GTK_DIALOG (dialog),
-                                             GTK_BOX (vbox),
-                                             &error);
+  object = goa_provider_add_account (provider,
+                                     panel->client,
+                                     GTK_DIALOG (dialog),
+                                     GTK_BOX (vbox),
+                                     &error);
   if (object != NULL)
     {
       GtkTreeIter iter;

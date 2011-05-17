@@ -24,19 +24,19 @@
 #include <glib/gi18n-lib.h>
 #include <stdlib.h>
 
-#include "goabackendimapauth.h"
-#include "goabackendimapclient.h"
+#include "goaimapauth.h"
+#include "goaimapclient.h"
 
 /* The timeout used for non-IDLE commands */
 #define COMMAND_TIMEOUT_SEC 30
 
 /**
- * GoaBackendImapClient:
+ * GoaImapClient:
  *
- * The #GoaBackendImapClient structure contains only private data and should
+ * The #GoaImapClient structure contains only private data and should
  * only be accessed using the provided API.
  */
-struct _GoaBackendImapClient
+struct _GoaImapClient
 {
   /*< private >*/
   GObject parent_instance;
@@ -54,21 +54,21 @@ struct _GoaBackendImapClient
   GMutex *lock;
 };
 
-typedef struct _GoaBackendImapClientClass GoaBackendImapClientClass;
+typedef struct _GoaImapClientClass GoaImapClientClass;
 
-struct _GoaBackendImapClientClass
+struct _GoaImapClientClass
 {
   GObjectClass parent_class;
-  void (*untagged_response) (GoaBackendImapClient  *client,
+  void (*untagged_response) (GoaImapClient  *client,
                              const gchar           *response);
 };
 
 /**
- * SECTION:goabackendimapclient
- * @title: GoaBackendImapClient
+ * SECTION:goaimapclient
+ * @title: GoaImapClient
  * @short_description: A simple IMAP client
  *
- * #GoaBackendImapClient provides a way to talk to
+ * #GoaImapClient provides a way to talk to
  * <ulink url="http://tools.ietf.org/html/rfc3501">IMAP</ulink>
  * servers.
  */
@@ -81,14 +81,14 @@ enum
 
 static guint signals[LAST_SIGNAL] = {0};
 
-G_DEFINE_TYPE (GoaBackendImapClient, goa_backend_imap_client, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GoaImapClient, goa_imap_client, G_TYPE_OBJECT);
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_backend_imap_client_finalize (GObject *object)
+goa_imap_client_finalize (GObject *object)
 {
-  GoaBackendImapClient *client = GOA_BACKEND_IMAP_CLIENT (object);
+  GoaImapClient *client = GOA_IMAP_CLIENT (object);
 
   g_clear_object (&client->sc);
   g_clear_object (&client->c);
@@ -96,26 +96,26 @@ goa_backend_imap_client_finalize (GObject *object)
   g_clear_object (&client->dos);
   g_mutex_free (client->lock);
 
-  G_OBJECT_CLASS (goa_backend_imap_client_parent_class)->finalize (object);
+  G_OBJECT_CLASS (goa_imap_client_parent_class)->finalize (object);
 }
 
 static void
-goa_backend_imap_client_init (GoaBackendImapClient *client)
+goa_imap_client_init (GoaImapClient *client)
 {
   client->lock = g_mutex_new ();
 }
 
 static void
-goa_backend_imap_client_class_init (GoaBackendImapClientClass *klass)
+goa_imap_client_class_init (GoaImapClientClass *klass)
 {
   GObjectClass *gobject_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
-  gobject_class->finalize     = goa_backend_imap_client_finalize;
+  gobject_class->finalize     = goa_imap_client_finalize;
 
   /**
-   * GoaBackendImapClient::untagged-response:
-   * @client: The #GoaBackendImapClient emitting the signal.
+   * GoaImapClient::untagged-response:
+   * @client: The #GoaImapClient emitting the signal.
    * @untagged_response: The untagged response.
    *
    * Signal emitted every an <ulink
@@ -123,13 +123,13 @@ goa_backend_imap_client_class_init (GoaBackendImapClientClass *klass)
    * response</ulink> has been received.
    *
    * This signal is emitted in the same thread that calls the
-   * goa_backend_imap_client_run_command_sync() method.
+   * goa_imap_client_run_command_sync() method.
    */
   signals[UNTAGGED_RESPONSE_SIGNAL] =
     g_signal_new ("untagged-response",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GoaBackendImapClientClass, untagged_response),
+                  G_STRUCT_OFFSET (GoaImapClientClass, untagged_response),
                   NULL,
                   NULL,
                   g_cclosure_marshal_VOID__STRING,
@@ -141,37 +141,37 @@ goa_backend_imap_client_class_init (GoaBackendImapClientClass *klass)
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
- * goa_backend_imap_client_new:
+ * goa_imap_client_new:
  *
- * Creates a new #GoaBackendImapClient instance.
+ * Creates a new #GoaImapClient instance.
  *
  * Typical usage includes connecting to the
- * #GoaBackendImapClient::untagged-response signals and then invoking
- * goa_backend_imap_client_connect_sync().
+ * #GoaImapClient::untagged-response signals and then invoking
+ * goa_imap_client_connect_sync().
  *
- * You can then use goa_backend_imap_client_connect_sync(),
- * goa_backend_imap_client_idle_sync() and the
- * #GoaBackendImapClient::untagged-response handler to interact with
+ * You can then use goa_imap_client_connect_sync(),
+ * goa_imap_client_idle_sync() and the
+ * #GoaImapClient::untagged-response handler to interact with
  * the IMAP server. If the connection fails then the appropriate error
  * e.g. #G_IO_ERROR_TIMED_OUT or %G_IO_ERROR_NETWORK_UNREACHABLE is
  * returned.
  *
  * You can only make a single successful connection with each
- * #GoaBackendImapClient instance - just create a new instance if the
+ * #GoaImapClient instance - just create a new instance if the
  * connection breaks and you need to reconnect.
  *
- * Returns: (transfer full): A #GoaBackendImapClient that should be freed with g_object_unref().
+ * Returns: (transfer full): A #GoaImapClient that should be freed with g_object_unref().
  */
-GoaBackendImapClient *
-goa_backend_imap_client_new (void)
+GoaImapClient *
+goa_imap_client_new (void)
 {
-  return GOA_BACKEND_IMAP_CLIENT (g_object_new (GOA_TYPE_BACKEND_IMAP_CLIENT, NULL));
+  return GOA_IMAP_CLIENT (g_object_new (GOA_TYPE_IMAP_CLIENT, NULL));
 }
 
 
 /**
- * goa_backend_imap_client_connect_sync:
- * @client: A #GoaBackendImapClient.
+ * goa_imap_client_connect_sync:
+ * @client: A #GoaImapClient.
  * @host_and_port: The name and optionally port to connect to.
  * @use_tls: Whether TLS should be used.
  * @auth: Object used for authenticating the connection.
@@ -186,18 +186,18 @@ goa_backend_imap_client_new (void)
  * worked, %FALSE if @error is set.
  */
 gboolean
-goa_backend_imap_client_connect_sync (GoaBackendImapClient  *client,
-                                      const gchar           *host_and_port,
-                                      gboolean               use_tls,
-                                      GoaBackendImapAuth    *auth,
-                                      GCancellable          *cancellable,
-                                      GError               **error)
+goa_imap_client_connect_sync (GoaImapClient  *client,
+                              const gchar    *host_and_port,
+                              gboolean        use_tls,
+                              GoaImapAuth    *auth,
+                              GCancellable   *cancellable,
+                              GError        **error)
 {
   gboolean ret;
 
-  g_return_val_if_fail (GOA_IS_BACKEND_IMAP_CLIENT (client), FALSE);
+  g_return_val_if_fail (GOA_IS_IMAP_CLIENT (client), FALSE);
   g_return_val_if_fail (host_and_port != NULL, FALSE);
-  g_return_val_if_fail (GOA_IS_BACKEND_IMAP_AUTH (auth), FALSE);
+  g_return_val_if_fail (GOA_IS_IMAP_AUTH (auth), FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
@@ -238,7 +238,7 @@ goa_backend_imap_client_connect_sync (GoaBackendImapClient  *client,
   g_data_input_stream_set_newline_type (client->dis, G_DATA_STREAM_NEWLINE_TYPE_CR_LF);
 
   /* Authenticate via the passed in auth helper */
-  if (!goa_backend_imap_auth_run_sync (auth,
+  if (!goa_imap_auth_run_sync (auth,
                                        client->dis,
                                        client->dos,
                                        cancellable,
@@ -263,8 +263,8 @@ goa_backend_imap_client_connect_sync (GoaBackendImapClient  *client,
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
- * goa_backend_imap_client_run_command_sync:
- * @client: A #GoaBackendImapClient.
+ * goa_imap_client_run_command_sync:
+ * @client: A #GoaImapClient.
  * @command: The command to run.
  * @cancellable: A #GCancellable or %NULL.
  * @error: Return location for error.
@@ -285,13 +285,13 @@ goa_backend_imap_client_connect_sync (GoaBackendImapClient  *client,
  * <literal>DONE</literal> is written out automatically.
  * While this method <emphasis>can</emphasis> be used for to submit
  * the <literal>IDLE</literal> IMAP command, the
- * goa_backend_imap_client_idle_sync() method should be used instead.
+ * goa_imap_client_idle_sync() method should be used instead.
  *
  * The timeout on the underlying socket will be set to 30 seconds
  * except for the the <literal>IDLE</literal> command which never
  * times out.
  *
- * Note that #GoaBackendImapClient::untagged-response signals are
+ * Note that #GoaImapClient::untagged-response signals are
  * emitted in the <emphasis role="strong">same</emphasis> thread that
  * you call this method from - not the
  * <link linkend="g-main-context-push-thread-default">thread-default main loop</link>
@@ -301,10 +301,10 @@ goa_backend_imap_client_connect_sync (GoaBackendImapClient  *client,
  * Returns: The response or %NULL if error is set.
  */
 gchar *
-goa_backend_imap_client_run_command_sync (GoaBackendImapClient  *client,
-                                          const gchar           *command,
-                                          GCancellable          *cancellable,
-                                          GError               **error)
+goa_imap_client_run_command_sync (GoaImapClient  *client,
+                                  const gchar    *command,
+                                  GCancellable   *cancellable,
+                                  GError        **error)
 {
   gchar *s;
   gchar *tag;
@@ -315,7 +315,7 @@ goa_backend_imap_client_run_command_sync (GoaBackendImapClient  *client,
   gboolean idle_has_sent_done;
   GError *local_error;
 
-  g_return_val_if_fail (GOA_IS_BACKEND_IMAP_CLIENT (client), NULL);
+  g_return_val_if_fail (GOA_IS_IMAP_CLIENT (client), NULL);
   g_return_val_if_fail (command != NULL, NULL);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
@@ -514,7 +514,7 @@ goa_backend_imap_client_run_command_sync (GoaBackendImapClient  *client,
 
 typedef struct
 {
-  GoaBackendImapClient  *client;
+  GoaImapClient  *client;
   GCancellable *local_cancellable;
   gboolean timed_out;
 } IdleData;
@@ -554,8 +554,8 @@ cancelled_while_idling_cb (GCancellable *cancellable,
 }
 
 /**
- * goa_backend_imap_client_idle_sync:
- * @client: A #GoaBackendImapClient.
+ * goa_imap_client_idle_sync:
+ * @client: A #GoaImapClient.
  * @max_idle_seconds: Max number of seconds to idle for. This should be no longer than 29 minutes.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
@@ -572,7 +572,7 @@ cancelled_while_idling_cb (GCancellable *cancellable,
  * url="http://tools.ietf.org/html/rfc2177">IDLE</ulink> command then
  * it is used. Otherwise: TODO: handle servers not using IMAP IDLE.
  *
- * Note that #GoaBackendImapClient::untagged-response signals are
+ * Note that #GoaImapClient::untagged-response signals are
  * emitted in the <emphasis role="strong">same</emphasis> thread that
  * you call this method from - not the
  * <link linkend="g-main-context-push-thread-default">thread-default main loop</link>
@@ -582,10 +582,10 @@ cancelled_while_idling_cb (GCancellable *cancellable,
  * Returns: %TRUE if the request completed, %FALSE if @error is set.
  */
 gboolean
-goa_backend_imap_client_idle_sync (GoaBackendImapClient  *client,
-                                   guint                  max_idle_seconds,
-                                   GCancellable          *cancellable,
-                                   GError               **error)
+goa_imap_client_idle_sync (GoaImapClient  *client,
+                           guint           max_idle_seconds,
+                           GCancellable   *cancellable,
+                           GError        **error)
 {
   GError *local_error;
   gboolean ret;
@@ -594,7 +594,7 @@ goa_backend_imap_client_idle_sync (GoaBackendImapClient  *client,
   IdleData data;
   gulong cancelled_id;
 
-  g_return_val_if_fail (GOA_IS_BACKEND_IMAP_CLIENT (client), FALSE);
+  g_return_val_if_fail (GOA_IS_IMAP_CLIENT (client), FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
@@ -627,7 +627,7 @@ goa_backend_imap_client_idle_sync (GoaBackendImapClient  *client,
    * (TODO: actually handle IDLE not being available)
    */
   local_error = NULL;
-  response = goa_backend_imap_client_run_command_sync (client,
+  response = goa_imap_client_run_command_sync (client,
                                                        "IDLE",
                                                        data.local_cancellable,
                                                        &local_error);
@@ -662,8 +662,8 @@ goa_backend_imap_client_idle_sync (GoaBackendImapClient  *client,
 }
 
 /**
- * goa_backend_imap_client_disconnect_sync:
- * @client: A #GoaBackendImapClient.
+ * goa_imap_client_disconnect_sync:
+ * @client: A #GoaImapClient.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
@@ -673,13 +673,13 @@ goa_backend_imap_client_idle_sync (GoaBackendImapClient  *client,
  * Returns: %TRUE if the connection was closed, %FALSE if @error is set.
  */
 gboolean
-goa_backend_imap_client_disconnect_sync (GoaBackendImapClient  *client,
-                                         GCancellable          *cancellable,
-                                         GError               **error)
+goa_imap_client_disconnect_sync (GoaImapClient  *client,
+                                 GCancellable   *cancellable,
+                                 GError        **error)
 {
   gboolean ret;
 
-  g_return_val_if_fail (GOA_IS_BACKEND_IMAP_CLIENT (client), FALSE);
+  g_return_val_if_fail (GOA_IS_IMAP_CLIENT (client), FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 

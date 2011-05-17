@@ -24,40 +24,40 @@
 #include <glib/gi18n-lib.h>
 #include <stdlib.h>
 
-#include "goabackendimapauth.h"
-#include "goabackendimapauthoauth.h"
-#include "goabackendoauthprovider.h"
+#include "goaimapauth.h"
+#include "goaimapauthoauth.h"
+#include "goaoauthprovider.h"
 
 /**
- * SECTION:goabackendimapauthoauth
- * @title: GoaBackendImapAuthOAuth
+ * SECTION:goaimapauthoauth
+ * @title: GoaImapAuthOAuth
  * @short_description: XOAUTH authentication method for IMAP
  *
- * #GoaBackendImapAuthOAuth implements the <ulink
+ * #GoaImapAuthOAuth implements the <ulink
  * url="http://code.google.com/apis/gmail/oauth/protocol.html">XOAUTH</ulink>
  * authentication method for IMAP.
  */
 
 /**
- * GoaBackendImapAuthOAuth:
+ * GoaImapAuthOAuth:
  *
- * The #GoaBackendImapAuthOAuth structure contains only private data
+ * The #GoaImapAuthOAuth structure contains only private data
  * and should only be accessed using the provided API.
  */
-struct _GoaBackendImapAuthOAuth
+struct _GoaImapAuthOAuth
 {
-  GoaBackendImapAuth parent_instance;
+  GoaImapAuth parent_instance;
 
-  GoaBackendOAuthProvider *provider;
+  GoaOAuthProvider *provider;
   GoaObject *object;
   gchar *request_uri;
 };
 
 typedef struct
 {
-  GoaBackendImapAuthClass parent_class;
+  GoaImapAuthClass parent_class;
 
-} GoaBackendImapAuthOAuthClass;
+} GoaImapAuthOAuthClass;
 
 enum
 {
@@ -67,34 +67,34 @@ enum
   PROP_REQUEST_URI
 };
 
-static gboolean goa_backend_imap_auth_oauth_run_sync (GoaBackendImapAuth  *_auth,
-                                                      GDataInputStream    *input,
-                                                      GDataOutputStream   *output,
-                                                      GCancellable        *cancellable,
-                                                      GError             **error);
+static gboolean goa_imap_auth_oauth_run_sync (GoaImapAuth         *_auth,
+                                              GDataInputStream    *input,
+                                              GDataOutputStream   *output,
+                                              GCancellable        *cancellable,
+                                              GError             **error);
 
-G_DEFINE_TYPE (GoaBackendImapAuthOAuth, goa_backend_imap_auth_oauth, GOA_TYPE_BACKEND_IMAP_AUTH);
+G_DEFINE_TYPE (GoaImapAuthOAuth, goa_imap_auth_oauth, GOA_TYPE_IMAP_AUTH);
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_backend_imap_auth_oauth_finalize (GObject *object)
+goa_imap_auth_oauth_finalize (GObject *object)
 {
-  GoaBackendImapAuthOAuth *auth = GOA_BACKEND_IMAP_AUTH_OAUTH (object);
+  GoaImapAuthOAuth *auth = GOA_IMAP_AUTH_OAUTH (object);
 
   g_object_unref (auth->provider);
   g_object_unref (auth->object);
 
-  G_OBJECT_CLASS (goa_backend_imap_auth_oauth_parent_class)->finalize (object);
+  G_OBJECT_CLASS (goa_imap_auth_oauth_parent_class)->finalize (object);
 }
 
 static void
-goa_backend_imap_auth_oauth_get_property (GObject      *object,
-                                          guint         prop_id,
-                                          GValue       *value,
-                                          GParamSpec   *pspec)
+goa_imap_auth_oauth_get_property (GObject      *object,
+                                  guint         prop_id,
+                                  GValue       *value,
+                                  GParamSpec   *pspec)
 {
-  GoaBackendImapAuthOAuth *auth = GOA_BACKEND_IMAP_AUTH_OAUTH (object);
+  GoaImapAuthOAuth *auth = GOA_IMAP_AUTH_OAUTH (object);
 
   switch (prop_id)
     {
@@ -117,12 +117,12 @@ goa_backend_imap_auth_oauth_get_property (GObject      *object,
 }
 
 static void
-goa_backend_imap_auth_oauth_set_property (GObject      *object,
-                                          guint         prop_id,
-                                          const GValue *value,
-                                          GParamSpec   *pspec)
+goa_imap_auth_oauth_set_property (GObject      *object,
+                                  guint         prop_id,
+                                  const GValue *value,
+                                  GParamSpec   *pspec)
 {
-  GoaBackendImapAuthOAuth *auth = GOA_BACKEND_IMAP_AUTH_OAUTH (object);
+  GoaImapAuthOAuth *auth = GOA_IMAP_AUTH_OAUTH (object);
 
   switch (prop_id)
     {
@@ -148,42 +148,42 @@ goa_backend_imap_auth_oauth_set_property (GObject      *object,
 
 
 static void
-goa_backend_imap_auth_oauth_init (GoaBackendImapAuthOAuth *client)
+goa_imap_auth_oauth_init (GoaImapAuthOAuth *client)
 {
 }
 
 static void
-goa_backend_imap_auth_oauth_class_init (GoaBackendImapAuthOAuthClass *klass)
+goa_imap_auth_oauth_class_init (GoaImapAuthOAuthClass *klass)
 {
   GObjectClass *gobject_class;
-  GoaBackendImapAuthClass *auth_class;
+  GoaImapAuthClass *auth_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
-  gobject_class->finalize     = goa_backend_imap_auth_oauth_finalize;
-  gobject_class->get_property = goa_backend_imap_auth_oauth_get_property;
-  gobject_class->set_property = goa_backend_imap_auth_oauth_set_property;
+  gobject_class->finalize     = goa_imap_auth_oauth_finalize;
+  gobject_class->get_property = goa_imap_auth_oauth_get_property;
+  gobject_class->set_property = goa_imap_auth_oauth_set_property;
 
-  auth_class = GOA_BACKEND_IMAP_AUTH_CLASS (klass);
-  auth_class->run_sync = goa_backend_imap_auth_oauth_run_sync;
+  auth_class = GOA_IMAP_AUTH_CLASS (klass);
+  auth_class->run_sync = goa_imap_auth_oauth_run_sync;
 
   /**
-   * GoaBackendImapAuthOAuth:provider:
+   * GoaImapAuthOAuth:provider:
    *
-   * The #GoaBackendOAuthProvider object to use when calculating the XOAUTH mechanism parameter.
+   * The #GoaOAuthProvider object to use when calculating the XOAUTH mechanism parameter.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_PROVIDER,
                                    g_param_spec_object ("provider",
                                                         "provider",
                                                         "provider",
-                                                        GOA_TYPE_BACKEND_OAUTH_PROVIDER,
+                                                        GOA_TYPE_OAUTH_PROVIDER,
                                                         G_PARAM_READABLE |
                                                         G_PARAM_WRITABLE |
                                                         G_PARAM_CONSTRUCT_ONLY |
                                                         G_PARAM_STATIC_STRINGS));
 
   /**
-   * GoaBackendImapAuthOAuth:object:
+   * GoaImapAuthOAuth:object:
    *
    * The #GoaObject object to use when calculating the XOAUTH mechanism parameter.
    */
@@ -199,7 +199,7 @@ goa_backend_imap_auth_oauth_class_init (GoaBackendImapAuthOAuthClass *klass)
                                                         G_PARAM_STATIC_STRINGS));
 
   /**
-   * GoaBackendImapAuthOAuth:request-uri:
+   * GoaImapAuthOAuth:request-uri:
    *
    * The request URI to use when calculating the XOAUTH mechanism parameter.
    */
@@ -218,23 +218,23 @@ goa_backend_imap_auth_oauth_class_init (GoaBackendImapAuthOAuthClass *klass)
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
- * goa_backend_imap_auth_oauth_new:
- * @provider: A #GoaBackendOAuthProvider.
+ * goa_imap_auth_oauth_new:
+ * @provider: A #GoaOAuthProvider.
  * @object: An account object.
  * @request_uri: The request URI to use.
  *
- * Creates a new #GoaBackendImapAuth to be used for XOAUTH authentication.
+ * Creates a new #GoaImapAuth to be used for XOAUTH authentication.
  *
- * Returns: (type GoaBackendImapAuthOAuth): A #GoaBackendImapAuthOAuth. Free with g_object_unref().
+ * Returns: (type GoaImapAuthOAuth): A #GoaImapAuthOAuth. Free with g_object_unref().
  */
-GoaBackendImapAuth *
-goa_backend_imap_auth_oauth_new (GoaBackendOAuthProvider  *provider,
-                                 GoaObject                *object,
-                                 const gchar              *request_uri)
+GoaImapAuth *
+goa_imap_auth_oauth_new (GoaOAuthProvider  *provider,
+                         GoaObject         *object,
+                         const gchar       *request_uri)
 {
-  g_return_val_if_fail (GOA_IS_BACKEND_OAUTH_PROVIDER (provider), NULL);
+  g_return_val_if_fail (GOA_IS_OAUTH_PROVIDER (provider), NULL);
   g_return_val_if_fail (GOA_IS_OBJECT (object), NULL);
-  return GOA_BACKEND_IMAP_AUTH (g_object_new (GOA_TYPE_BACKEND_IMAP_AUTH_OAUTH,
+  return GOA_IMAP_AUTH (g_object_new (GOA_TYPE_IMAP_AUTH_OAUTH,
                                               "provider", provider,
                                               "object", object,
                                               "request-uri", request_uri,
@@ -492,13 +492,13 @@ calculate_xoauth_param (const gchar  *request_uri,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-goa_backend_imap_auth_oauth_run_sync (GoaBackendImapAuth  *_auth,
-                                      GDataInputStream    *input,
-                                      GDataOutputStream   *output,
-                                      GCancellable        *cancellable,
-                                      GError             **error)
+goa_imap_auth_oauth_run_sync (GoaImapAuth         *_auth,
+                              GDataInputStream    *input,
+                              GDataOutputStream   *output,
+                              GCancellable        *cancellable,
+                              GError             **error)
 {
-  GoaBackendImapAuthOAuth *auth = GOA_BACKEND_IMAP_AUTH_OAUTH (_auth);
+  GoaImapAuthOAuth *auth = GOA_IMAP_AUTH_OAUTH (_auth);
   gchar *access_token;
   gchar *access_token_secret;
   gchar *xoauth_param;
@@ -513,19 +513,19 @@ goa_backend_imap_auth_oauth_run_sync (GoaBackendImapAuth  *_auth,
   response = NULL;
   ret = FALSE;
 
-  access_token = goa_backend_oauth_provider_get_access_token_sync (auth->provider,
-                                                                   auth->object,
-                                                                   FALSE,  /* force_refresh */
-                                                                   &access_token_secret,
-                                                                   NULL,   /* out_access_token_expires_in */
-                                                                   NULL,   /* GCancellable */
-                                                                   error); /* GError */
+  access_token = goa_oauth_provider_get_access_token_sync (auth->provider,
+                                                           auth->object,
+                                                           FALSE,  /* force_refresh */
+                                                           &access_token_secret,
+                                                           NULL,   /* out_access_token_expires_in */
+                                                           NULL,   /* GCancellable */
+                                                           error); /* GError */
   if (access_token == NULL)
     goto out;
 
   xoauth_param = calculate_xoauth_param (auth->request_uri,
-                                         goa_backend_oauth_provider_get_consumer_key (auth->provider),
-                                         goa_backend_oauth_provider_get_consumer_secret (auth->provider),
+                                         goa_oauth_provider_get_consumer_key (auth->provider),
+                                         goa_oauth_provider_get_consumer_secret (auth->provider),
                                          access_token,
                                          access_token_secret,
                                          error);

@@ -24,42 +24,42 @@
 #include <glib/gi18n-lib.h>
 #include <gnome-keyring.h>
 
-#include "goabackendprovider.h"
-#include "goabackendgoogleprovider.h"
-#include "goabackendfacebookprovider.h"
-#include "goabackendyahooprovider.h"
-#include "goabackendtwitterprovider.h"
+#include "goaprovider.h"
+#include "goagoogleprovider.h"
+#include "goafacebookprovider.h"
+#include "goayahooprovider.h"
+#include "goatwitterprovider.h"
 
 /**
- * SECTION:goabackendprovider
- * @title: GoaBackendProvider
+ * SECTION:goaprovider
+ * @title: GoaProvider
  * @short_description: Abstract base class for providers
  *
- * #GoaBackendProvider is the base type for all providers.
+ * #GoaProvider is the base type for all providers.
  */
 
-static gboolean goa_backend_provider_ensure_credentials_sync_real (GoaBackendProvider   *provider,
-                                                                   GoaObject            *object,
-                                                                   gint                 *out_expires_in,
-                                                                   GCancellable         *cancellable,
-                                                                   GError              **error);
+static gboolean goa_provider_ensure_credentials_sync_real (GoaProvider   *provider,
+                                                           GoaObject     *object,
+                                                           gint          *out_expires_in,
+                                                           GCancellable  *cancellable,
+                                                           GError       **error);
 
-G_DEFINE_ABSTRACT_TYPE (GoaBackendProvider, goa_backend_provider, G_TYPE_OBJECT);
+G_DEFINE_ABSTRACT_TYPE (GoaProvider, goa_provider, G_TYPE_OBJECT);
 
 static void
-goa_backend_provider_init (GoaBackendProvider *client)
+goa_provider_init (GoaProvider *client)
 {
 }
 
 static void
-goa_backend_provider_class_init (GoaBackendProviderClass *klass)
+goa_provider_class_init (GoaProviderClass *klass)
 {
-  klass->ensure_credentials_sync = goa_backend_provider_ensure_credentials_sync_real;
+  klass->ensure_credentials_sync = goa_provider_ensure_credentials_sync_real;
 }
 
 /**
- * goa_backend_provider_get_provider_type:
- * @provider: A #GoaBackendProvider.
+ * goa_provider_get_provider_type:
+ * @provider: A #GoaProvider.
  *
  * Gets the type of @provider.
  *
@@ -69,15 +69,15 @@ goa_backend_provider_class_init (GoaBackendProviderClass *klass)
  * Returns: (transfer none): A string owned by @provider, do not free.
  */
 const gchar *
-goa_backend_provider_get_provider_type (GoaBackendProvider *provider)
+goa_provider_get_provider_type (GoaProvider *provider)
 {
-  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), NULL);
-  return GOA_BACKEND_PROVIDER_GET_CLASS (provider)->get_provider_type (provider);
+  g_return_val_if_fail (GOA_IS_PROVIDER (provider), NULL);
+  return GOA_PROVIDER_GET_CLASS (provider)->get_provider_type (provider);
 }
 
 /**
- * goa_backend_provider_get_name:
- * @provider: A #GoaBackendProvider.
+ * goa_provider_get_name:
+ * @provider: A #GoaProvider.
  *
  * Gets a localized name for @provider that is suitable for display in
  * an user interface.
@@ -88,17 +88,17 @@ goa_backend_provider_get_provider_type (GoaBackendProvider *provider)
  * Returns: (transfer none): A string owned by @provider, do not free.
  */
 const gchar *
-goa_backend_provider_get_name (GoaBackendProvider *provider)
+goa_provider_get_name (GoaProvider *provider)
 {
-  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), NULL);
-  return GOA_BACKEND_PROVIDER_GET_CLASS (provider)->get_name (provider);
+  g_return_val_if_fail (GOA_IS_PROVIDER (provider), NULL);
+  return GOA_PROVIDER_GET_CLASS (provider)->get_name (provider);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
- * goa_backend_provider_add_account:
- * @provider: A #GoaBackendProvider.
+ * goa_provider_add_account:
+ * @provider: A #GoaProvider.
  * @client: A #GoaClient.
  * @dialog: A #GtkDialog.
  * @vbox: A vertically oriented #GtkBox to put content in.
@@ -134,20 +134,20 @@ goa_backend_provider_get_name (GoaBackendProvider *provider)
  *   with g_object_unref()) or %NULL if @error is set.
  */
 GoaObject *
-goa_backend_provider_add_account (GoaBackendProvider *provider,
-                                  GoaClient          *client,
-                                  GtkDialog          *dialog,
-                                  GtkBox             *vbox,
-                                  GError            **error)
+goa_provider_add_account (GoaProvider  *provider,
+                          GoaClient    *client,
+                          GtkDialog    *dialog,
+                          GtkBox       *vbox,
+                          GError      **error)
 {
   GoaObject *ret;
 
-  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), NULL);
+  g_return_val_if_fail (GOA_IS_PROVIDER (provider), NULL);
   g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  ret = GOA_BACKEND_PROVIDER_GET_CLASS (provider)->add_account (provider, client, dialog, vbox, error);
+  ret = GOA_PROVIDER_GET_CLASS (provider)->add_account (provider, client, dialog, vbox, error);
 
   g_warn_if_fail ((ret == NULL && (error == NULL || *error != NULL)) || GOA_IS_OBJECT (ret));
 
@@ -157,8 +157,8 @@ goa_backend_provider_add_account (GoaBackendProvider *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
- * goa_backend_provider_refresh_account:
- * @provider: A #GoaBackendProvider.
+ * goa_provider_refresh_account:
+ * @provider: A #GoaProvider.
  * @client: A #GoaClient.
  * @object: A #GoaObject with a #GoaAccount interface.
  * @parent: (allow-none): Transient parent of dialogs or %NULL.
@@ -182,26 +182,26 @@ goa_backend_provider_add_account (GoaBackendProvider *provider,
  * is set.
  */
 gboolean
-goa_backend_provider_refresh_account (GoaBackendProvider  *provider,
-                                      GoaClient           *client,
-                                      GoaObject           *object,
-                                      GtkWindow           *parent,
-                                      GError             **error)
+goa_provider_refresh_account (GoaProvider  *provider,
+                              GoaClient    *client,
+                              GoaObject    *object,
+                              GtkWindow    *parent,
+                              GError      **error)
 {
-  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
   g_return_val_if_fail (GOA_IS_CLIENT (client), FALSE);
   g_return_val_if_fail (GOA_IS_OBJECT (object) && goa_object_peek_account (object) != NULL, FALSE);
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  return GOA_BACKEND_PROVIDER_GET_CLASS (provider)->refresh_account (provider, client, object, parent, error);
+  return GOA_PROVIDER_GET_CLASS (provider)->refresh_account (provider, client, object, parent, error);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
- * goa_backend_provider_build_object:
- * @provider: A #GoaBackendProvider.
+ * goa_provider_build_object:
+ * @provider: A #GoaProvider.
  * @object: The #GoaObjectSkeleton that is being built.
  * @key_file: The #GKeyFile with configuation data.
  * @group: The group in @key_file to get data from.
@@ -224,18 +224,18 @@ goa_backend_provider_refresh_account (GoaBackendProvider  *provider,
  * Returns: %TRUE if data was valid, %FALSE if @error is set.
  */
 gboolean
-goa_backend_provider_build_object (GoaBackendProvider  *provider,
-                                   GoaObjectSkeleton   *object,
-                                   GKeyFile            *key_file,
-                                   const gchar         *group,
-                                   GError             **error)
+goa_provider_build_object (GoaProvider         *provider,
+                           GoaObjectSkeleton   *object,
+                           GKeyFile            *key_file,
+                           const gchar         *group,
+                           GError             **error)
 {
-  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
   g_return_val_if_fail (GOA_IS_OBJECT_SKELETON (object) && goa_object_peek_account (GOA_OBJECT (object)) != NULL, FALSE);
   g_return_val_if_fail (key_file != NULL, FALSE);
   g_return_val_if_fail (group != NULL, FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-  return GOA_BACKEND_PROVIDER_GET_CLASS (provider)->build_object (provider, object, key_file, group, error);
+  return GOA_PROVIDER_GET_CLASS (provider)->build_object (provider, object, key_file, group, error);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -273,18 +273,18 @@ ensure_credentials_in_thread_func (GSimpleAsyncResult *simple,
   data = g_simple_async_result_get_op_res_gpointer (simple);
 
   error = NULL;
-  if (!goa_backend_provider_ensure_credentials_sync (GOA_BACKEND_PROVIDER (object),
-                                                     data->object,
-                                                     &data->expires_in,
-                                                     cancellable,
-                                                     &error))
+  if (!goa_provider_ensure_credentials_sync (GOA_PROVIDER (object),
+                                             data->object,
+                                             &data->expires_in,
+                                             cancellable,
+                                             &error))
     g_simple_async_result_take_error (simple, error);
 }
 
 
 /**
- * goa_backend_provider_ensure_credentials:
- * @provider: A #GoaBackendProvider.
+ * goa_provider_ensure_credentials:
+ * @provider: A #GoaProvider.
  * @object: A #GoaObject with a #GoaAccount interface.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @callback: The function to call when the request is satisfied.
@@ -295,7 +295,7 @@ ensure_credentials_in_thread_func (GSimpleAsyncResult *simple,
  * When the result is ready, @callback will be called in the the <link
  * linkend="g-main-context-push-thread-default">thread-default main
  * loop</link> this function was called from. You can then call
- * goa_backend_provider_ensure_credentials_finish() to get the result
+ * goa_provider_ensure_credentials_finish() to get the result
  * of the operation.
  *
  * This is a virtual method where the default implemention simply returns
@@ -303,22 +303,22 @@ ensure_credentials_in_thread_func (GSimpleAsyncResult *simple,
  * another implementation.
  */
 void
-goa_backend_provider_ensure_credentials (GoaBackendProvider   *provider,
-                                         GoaObject            *object,
-                                         GCancellable         *cancellable,
-                                         GAsyncReadyCallback   callback,
-                                         gpointer              user_data)
+goa_provider_ensure_credentials (GoaProvider          *provider,
+                                 GoaObject            *object,
+                                 GCancellable         *cancellable,
+                                 GAsyncReadyCallback   callback,
+                                 gpointer              user_data)
 {
   GSimpleAsyncResult *simple;
 
-  g_return_if_fail (GOA_IS_BACKEND_PROVIDER (provider));
+  g_return_if_fail (GOA_IS_PROVIDER (provider));
   g_return_if_fail (GOA_IS_OBJECT (object));
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   simple = g_simple_async_result_new (G_OBJECT (provider),
                                       callback,
                                       user_data,
-                                      goa_backend_provider_ensure_credentials);
+                                      goa_provider_ensure_credentials);
   g_simple_async_result_set_op_res_gpointer (simple,
                                              ensure_credentials_data_new (object),
                                              (GDestroyNotify) ensure_credentials_data_free);
@@ -330,18 +330,18 @@ goa_backend_provider_ensure_credentials (GoaBackendProvider   *provider,
 }
 
 /**
- * goa_backend_provider_ensure_credentials_finish:
- * @provider: A #GoaBackendProvider.
+ * goa_provider_ensure_credentials_finish:
+ * @provider: A #GoaProvider.
  * @out_expires_in: (out): Return location for how long the expired credentials are good for (0 if unknown) or %NULL.
- * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to goa_backend_provider_ensure_credentials().
+ * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to goa_provider_ensure_credentials().
  * @error: Return location for error or %NULL.
  *
- * Finishes an operation started with goa_backend_provider_ensure_credentials().
+ * Finishes an operation started with goa_provider_ensure_credentials().
  *
  * Returns: %TRUE if the credentials for the passed #GoaObject are valid, %FALSE if @error is set.
  */
 gboolean
-goa_backend_provider_ensure_credentials_finish (GoaBackendProvider  *provider,
+goa_provider_ensure_credentials_finish (GoaProvider  *provider,
                                                 gint                *out_expires_in,
                                                 GAsyncResult        *res,
                                                 GError             **error)
@@ -352,11 +352,11 @@ goa_backend_provider_ensure_credentials_finish (GoaBackendProvider  *provider,
 
   ret = FALSE;
 
-  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (res), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  g_warn_if_fail (g_simple_async_result_get_source_tag (simple) == goa_backend_provider_ensure_credentials);
+  g_warn_if_fail (g_simple_async_result_get_source_tag (simple) == goa_provider_ensure_credentials);
 
   if (g_simple_async_result_propagate_error (simple, error))
     goto out;
@@ -373,37 +373,37 @@ goa_backend_provider_ensure_credentials_finish (GoaBackendProvider  *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
- * goa_backend_provider_ensure_credentials_sync:
- * @provider: A #GoaBackendProvider.
+ * goa_provider_ensure_credentials_sync:
+ * @provider: A #GoaProvider.
  * @object: A #GoaObject with a #GoaAccount interface.
  * @out_expires_in: (out): Return location for how long the expired credentials are good for (0 if unknown) or %NULL.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
- * Like goa_backend_provider_ensure_credentials() but blocks the
+ * Like goa_provider_ensure_credentials() but blocks the
  * calling thread until an answer is received.
  *
  * Returns: %TRUE if the credentials for the passed #GoaObject are valid, %FALSE if @error is set.
  */
 gboolean
-goa_backend_provider_ensure_credentials_sync (GoaBackendProvider     *provider,
-                                              GoaObject              *object,
-                                              gint                   *out_expires_in,
-                                              GCancellable           *cancellable,
-                                              GError                **error)
+goa_provider_ensure_credentials_sync (GoaProvider     *provider,
+                                      GoaObject       *object,
+                                      gint            *out_expires_in,
+                                      GCancellable    *cancellable,
+                                      GError         **error)
 {
-  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-  return GOA_BACKEND_PROVIDER_GET_CLASS (provider)->ensure_credentials_sync (provider, object, out_expires_in, cancellable, error);
+  return GOA_PROVIDER_GET_CLASS (provider)->ensure_credentials_sync (provider, object, out_expires_in, cancellable, error);
 }
 
 static gboolean
-goa_backend_provider_ensure_credentials_sync_real (GoaBackendProvider  *provider,
-                                                   GoaObject           *object,
-                                                   gint                *out_expires_in,
-                                                   GCancellable        *cancellable,
-                                                   GError             **error)
+goa_provider_ensure_credentials_sync_real (GoaProvider   *provider,
+                                           GoaObject     *object,
+                                           gint          *out_expires_in,
+                                           GCancellable  *cancellable,
+                                           GError       **error)
 {
   g_set_error (error,
                GOA_ERROR,
@@ -425,13 +425,13 @@ ensure_ep_and_builtins (void)
       GIOExtensionPoint *extension_point;
       static volatile GType type = 0;
 
-      extension_point = g_io_extension_point_register (GOA_BACKEND_PROVIDER_EXTENSION_POINT_NAME);
-      g_io_extension_point_set_required_type (extension_point, GOA_TYPE_BACKEND_PROVIDER);
+      extension_point = g_io_extension_point_register (GOA_PROVIDER_EXTENSION_POINT_NAME);
+      g_io_extension_point_set_required_type (extension_point, GOA_TYPE_PROVIDER);
 
-      type = GOA_TYPE_BACKEND_GOOGLE_PROVIDER;
-      type = GOA_TYPE_BACKEND_FACEBOOK_PROVIDER;
-      type = GOA_TYPE_BACKEND_YAHOO_PROVIDER;
-      type = GOA_TYPE_BACKEND_TWITTER_PROVIDER;
+      type = GOA_TYPE_GOOGLE_PROVIDER;
+      type = GOA_TYPE_FACEBOOK_PROVIDER;
+      type = GOA_TYPE_YAHOO_PROVIDER;
+      type = GOA_TYPE_TWITTER_PROVIDER;
       type = type; /* for -Wunused-but-set-variable */
 
       g_once_init_leave (&once_init_value, 1);
@@ -442,49 +442,49 @@ ensure_ep_and_builtins (void)
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
- * goa_backend_provider_get_for_provider_type:
+ * goa_provider_get_for_provider_type:
  * @provider_type: A provider type.
  *
- * Looks up the %GOA_BACKEND_PROVIDER_EXTENSION_POINT_NAME extension
- * point and returns a newly created #GoaBackendProvider for
+ * Looks up the %GOA_PROVIDER_EXTENSION_POINT_NAME extension
+ * point and returns a newly created #GoaProvider for
  * @provider_type, if any.
  *
- * Returns: (transfer full): A #GoaBackendProvider (that must be freed
+ * Returns: (transfer full): A #GoaProvider (that must be freed
  * with g_object_unref()) or %NULL if not found.
  */
-GoaBackendProvider *
-goa_backend_provider_get_for_provider_type (const gchar *provider_type)
+GoaProvider *
+goa_provider_get_for_provider_type (const gchar *provider_type)
 {
   GIOExtension *extension;
   GIOExtensionPoint *extension_point;
-  GoaBackendProvider *ret;
+  GoaProvider *ret;
 
   ensure_ep_and_builtins ();
 
   ret = NULL;
 
-  extension_point = g_io_extension_point_lookup (GOA_BACKEND_PROVIDER_EXTENSION_POINT_NAME);
+  extension_point = g_io_extension_point_lookup (GOA_PROVIDER_EXTENSION_POINT_NAME);
   extension = g_io_extension_point_get_extension_by_name (extension_point, provider_type);
   if (extension != NULL)
-    ret = GOA_BACKEND_PROVIDER (g_object_new (g_io_extension_get_type (extension), NULL));
+    ret = GOA_PROVIDER (g_object_new (g_io_extension_get_type (extension), NULL));
   return ret;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
- * goa_backend_provider_get_all:
+ * goa_provider_get_all:
  *
- * Looks up the %GOA_BACKEND_PROVIDER_EXTENSION_POINT_NAME extension
- * point and returns a newly created #GoaBackendProvider for each
+ * Looks up the %GOA_PROVIDER_EXTENSION_POINT_NAME extension
+ * point and returns a newly created #GoaProvider for each
  * provider type encountered.
  *
- * Returns: (transfer full) (element-type GoaBackendProvider): A list
+ * Returns: (transfer full) (element-type GoaProvider): A list
  *   of element providers that should be freed with g_list_free()
  *   after each element has been freed with g_object_unref().
  */
 GList *
-goa_backend_provider_get_all (void)
+goa_provider_get_all (void)
 {
   GList *ret;
   GList *extensions;
@@ -494,7 +494,7 @@ goa_backend_provider_get_all (void)
   ensure_ep_and_builtins ();
 
   ret = NULL;
-  extension_point = g_io_extension_point_lookup (GOA_BACKEND_PROVIDER_EXTENSION_POINT_NAME);
+  extension_point = g_io_extension_point_lookup (GOA_PROVIDER_EXTENSION_POINT_NAME);
   extensions = g_io_extension_point_get_extensions (extension_point);
   /* TODO: what if there are two extensions with the same name? */
   for (l = extensions; l != NULL; l = l->next)
@@ -518,8 +518,8 @@ static const GnomeKeyringPasswordSchema keyring_password_schema =
 };
 
 /**
- * goa_backend_provider_store_credentials_sync:
- * @provider: A #GoaBackendProvider.
+ * goa_provider_store_credentials_sync:
+ * @provider: A #GoaProvider.
  * @identity: The identity to store credentials for.
  * @credentials: The credentials to store.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
@@ -536,11 +536,11 @@ static const GnomeKeyringPasswordSchema keyring_password_schema =
  * if @error is set.
  */
 gboolean
-goa_backend_provider_store_credentials_sync (GoaBackendProvider   *provider,
-                                             const gchar          *identity,
-                                             GVariant             *credentials,
-                                             GCancellable         *cancellable,
-                                             GError              **error)
+goa_provider_store_credentials_sync (GoaProvider   *provider,
+                                     const gchar   *identity,
+                                     GVariant      *credentials,
+                                     GCancellable  *cancellable,
+                                     GError       **error)
 {
   gboolean ret;
   gchar *credentials_str;
@@ -548,7 +548,7 @@ goa_backend_provider_store_credentials_sync (GoaBackendProvider   *provider,
   gchar *password_key;
   GnomeKeyringResult result;
 
-  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
   g_return_val_if_fail (identity != NULL, FALSE);
   g_return_val_if_fail (credentials != NULL, FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
@@ -562,10 +562,10 @@ goa_backend_provider_store_credentials_sync (GoaBackendProvider   *provider,
   g_variant_unref (credentials);
 
   password_key = g_strdup_printf ("%s:%s",
-                                  goa_backend_provider_get_provider_type (GOA_BACKEND_PROVIDER (provider)),
+                                  goa_provider_get_provider_type (GOA_PROVIDER (provider)),
                                   identity);
   password_description = g_strdup_printf (_("GOA %s credentials for identity %s"),
-                                          goa_backend_provider_get_provider_type (GOA_BACKEND_PROVIDER (provider)),
+                                          goa_provider_get_provider_type (GOA_PROVIDER (provider)),
                                           identity);
   result = gnome_keyring_store_password_sync (&keyring_password_schema,
                                               NULL, /* default keyring */
@@ -595,14 +595,14 @@ goa_backend_provider_store_credentials_sync (GoaBackendProvider   *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
- * goa_backend_provider_lookup_credentials_sync:
- * @provider: A #GoaBackendProvider.
+ * goa_provider_lookup_credentials_sync:
+ * @provider: A #GoaProvider.
  * @identity: The identity to look up credentials for.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Looks up credentials in the keyring for @identity previously stored
- * with goa_backend_provider_store_credentials().
+ * with goa_provider_store_credentials().
  *
  * The calling thread is blocked while waiting for a reply.
  *
@@ -613,17 +613,17 @@ goa_backend_provider_store_credentials_sync (GoaBackendProvider   *provider,
  * g_variant_unref().
  */
 GVariant *
-goa_backend_provider_lookup_credentials_sync (GoaBackendProvider   *provider,
-                                              const gchar          *identity,
-                                              GCancellable         *cancellable,
-                                              GError              **error)
+goa_provider_lookup_credentials_sync (GoaProvider   *provider,
+                                      const gchar   *identity,
+                                      GCancellable  *cancellable,
+                                      GError       **error)
 {
   gchar *password_key;
   GVariant *ret;
   GnomeKeyringResult result;
   gchar *returned_password;
 
-  g_return_val_if_fail (GOA_IS_BACKEND_PROVIDER (provider), NULL);
+  g_return_val_if_fail (GOA_IS_PROVIDER (provider), NULL);
   g_return_val_if_fail (identity != NULL, NULL);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
@@ -633,7 +633,7 @@ goa_backend_provider_lookup_credentials_sync (GoaBackendProvider   *provider,
   returned_password = NULL;
 
   password_key = g_strdup_printf ("%s:%s",
-                                  goa_backend_provider_get_provider_type (GOA_BACKEND_PROVIDER (provider)),
+                                  goa_provider_get_provider_type (GOA_PROVIDER (provider)),
                                   identity);
 
   result = gnome_keyring_find_password_sync (&keyring_password_schema,

@@ -28,29 +28,29 @@
 #include <json-glib/json-glib.h>
 #include <stdlib.h>
 
-#include "goabackendimapauth.h"
-#include "goabackendimapclient.h"
-#include "goabackendimapmail.h"
+#include "goaimapauth.h"
+#include "goaimapclient.h"
+#include "goaimapmail.h"
 
 /**
- * GoaBackendImapMail:
+ * GoaImapMail:
  *
- * The #GoaBackendImapMail structure contains only private data and should
+ * The #GoaImapMail structure contains only private data and should
  * only be accessed using the provided API.
  */
-struct _GoaBackendImapMail
+struct _GoaImapMail
 {
   /*< private >*/
   GoaMailSkeleton parent_instance;
 
   gchar *host_and_port;
   gboolean use_tls;
-  GoaBackendImapAuth *auth;
+  GoaImapAuth *auth;
 };
 
-typedef struct _GoaBackendImapMailClass GoaBackendImapMailClass;
+typedef struct _GoaImapMailClass GoaImapMailClass;
 
-struct _GoaBackendImapMailClass
+struct _GoaImapMailClass
 {
   GoaMailSkeletonClass parent_class;
 };
@@ -64,40 +64,40 @@ enum
 };
 
 /**
- * SECTION:goabackendimapmail
- * @title: GoaBackendImapMail
+ * SECTION:goaimapmail
+ * @title: GoaImapMail
  * @short_description: Implementation of the #GoaMail interface for IMAP servers
  *
- * #GoaBackendImapMail is an implementation of the #GoaMail D-Bus
- * interface that uses a #GoaBackendImapClient instance to speak to a
+ * #GoaImapMail is an implementation of the #GoaMail D-Bus
+ * interface that uses a #GoaImapClient instance to speak to a
  * remote IMAP server.
  */
 
-static void goa_backend_imap_mail__goa_mail_iface_init (GoaMailIface *iface);
+static void goa_imap_mail__goa_mail_iface_init (GoaMailIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GoaBackendImapMail, goa_backend_imap_mail, GOA_TYPE_MAIL_SKELETON,
-                         G_IMPLEMENT_INTERFACE (GOA_TYPE_MAIL, goa_backend_imap_mail__goa_mail_iface_init));
+G_DEFINE_TYPE_WITH_CODE (GoaImapMail, goa_imap_mail, GOA_TYPE_MAIL_SKELETON,
+                         G_IMPLEMENT_INTERFACE (GOA_TYPE_MAIL, goa_imap_mail__goa_mail_iface_init));
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_backend_imap_mail_finalize (GObject *object)
+goa_imap_mail_finalize (GObject *object)
 {
-  GoaBackendImapMail *mail = GOA_BACKEND_IMAP_MAIL (object);
+  GoaImapMail *mail = GOA_IMAP_MAIL (object);
 
   g_free (mail->host_and_port);
   g_object_unref (mail->auth);
 
-  G_OBJECT_CLASS (goa_backend_imap_mail_parent_class)->finalize (object);
+  G_OBJECT_CLASS (goa_imap_mail_parent_class)->finalize (object);
 }
 
 static void
-goa_backend_imap_mail_get_property (GObject      *object,
-                                    guint         prop_id,
-                                    GValue       *value,
-                                    GParamSpec   *pspec)
+goa_imap_mail_get_property (GObject      *object,
+                            guint         prop_id,
+                            GValue       *value,
+                            GParamSpec   *pspec)
 {
-  GoaBackendImapMail *mail = GOA_BACKEND_IMAP_MAIL (object);
+  GoaImapMail *mail = GOA_IMAP_MAIL (object);
 
   switch (prop_id)
     {
@@ -120,12 +120,12 @@ goa_backend_imap_mail_get_property (GObject      *object,
 }
 
 static void
-goa_backend_imap_mail_set_property (GObject      *object,
-                                    guint         prop_id,
-                                    const GValue *value,
-                                    GParamSpec   *pspec)
+goa_imap_mail_set_property (GObject      *object,
+                            guint         prop_id,
+                            const GValue *value,
+                            GParamSpec   *pspec)
 {
-  GoaBackendImapMail *mail = GOA_BACKEND_IMAP_MAIL (object);
+  GoaImapMail *mail = GOA_IMAP_MAIL (object);
 
   switch (prop_id)
     {
@@ -148,7 +148,7 @@ goa_backend_imap_mail_set_property (GObject      *object,
 }
 
 static void
-goa_backend_imap_mail_init (GoaBackendImapMail *mail)
+goa_imap_mail_init (GoaImapMail *mail)
 {
   /* Ensure D-Bus method invocations run in their own thread */
   g_dbus_interface_skeleton_set_flags (G_DBUS_INTERFACE_SKELETON (mail),
@@ -156,14 +156,14 @@ goa_backend_imap_mail_init (GoaBackendImapMail *mail)
 }
 
 static void
-goa_backend_imap_mail_class_init (GoaBackendImapMailClass *klass)
+goa_imap_mail_class_init (GoaImapMailClass *klass)
 {
   GObjectClass *gobject_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
-  gobject_class->finalize = goa_backend_imap_mail_finalize;
-  gobject_class->set_property = goa_backend_imap_mail_set_property;
-  gobject_class->get_property = goa_backend_imap_mail_get_property;
+  gobject_class->finalize = goa_imap_mail_finalize;
+  gobject_class->set_property = goa_imap_mail_set_property;
+  gobject_class->get_property = goa_imap_mail_get_property;
 
   g_object_class_install_property (gobject_class,
                                    PROP_HOST_AND_PORT,
@@ -192,7 +192,7 @@ goa_backend_imap_mail_class_init (GoaBackendImapMailClass *klass)
                                    g_param_spec_object ("auth",
                                                         "auth",
                                                         "auth",
-                                                        GOA_TYPE_BACKEND_IMAP_AUTH,
+                                                        GOA_TYPE_IMAP_AUTH,
                                                         G_PARAM_READABLE |
                                                         G_PARAM_WRITABLE |
                                                         G_PARAM_CONSTRUCT_ONLY |
@@ -202,22 +202,22 @@ goa_backend_imap_mail_class_init (GoaBackendImapMailClass *klass)
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
- * goa_backend_imap_mail_new:
+ * goa_imap_mail_new:
  * @host_and_port: The name and optionally port to connect to.
  * @use_tls: Whether TLS should be used.
  * @auth: Object used for authenticating the connection.
  *
  * Creates a new #GoaMail object.
  *
- * Returns: (type GoaBackendImapMail): A new #GoaMail instance.
+ * Returns: (type GoaImapMail): A new #GoaMail instance.
  */
 GoaMail *
-goa_backend_imap_mail_new (const gchar         *host_and_port,
-                           gboolean             use_tls,
-                           GoaBackendImapAuth  *auth)
+goa_imap_mail_new (const gchar  *host_and_port,
+                   gboolean      use_tls,
+                   GoaImapAuth  *auth)
 {
   g_return_val_if_fail (host_and_port != NULL, NULL);
-  return GOA_MAIL (g_object_new (GOA_TYPE_BACKEND_IMAP_MAIL,
+  return GOA_MAIL (g_object_new (GOA_TYPE_IMAP_MAIL,
                                  "host-and-port", host_and_port,
                                  "use-tls", use_tls,
                                  "auth", auth,
@@ -230,7 +230,7 @@ typedef struct
 {
   volatile gint ref_count;
 
-  GoaBackendImapMail *mail;
+  GoaImapMail *mail;
   GoaMailMonitor *monitor;
 
   /* Used so we can nuke the monitor if the creator vanishes */
@@ -602,9 +602,9 @@ imap_client_handle_fetch_response (ImapClientData  *data,
 }
 
 static void
-imap_client_on_untagged_response (GoaBackendImapClient  *client,
-                                  const gchar           *response,
-                                  gpointer               user_data)
+imap_client_on_untagged_response (GoaImapClient  *client,
+                                  const gchar    *response,
+                                  gpointer        user_data)
 {
   ImapClientData *data = user_data;
   gchar s[64+1];
@@ -644,18 +644,18 @@ imap_client_sync_single (ImapClientData *data)
 {
   GError *error;
   gchar *response;
-  GoaBackendImapClient *client;
+  GoaImapClient *client;
 
   /* Get ourselves an IMAP client and connect to the server */
   data->num_exists = -1;
-  client = goa_backend_imap_client_new ();
+  client = goa_imap_client_new ();
   error = NULL;
-  if (!goa_backend_imap_client_connect_sync (client,
-                                             data->monitor_data->mail->host_and_port,
-                                             data->monitor_data->mail->use_tls,
-                                             data->monitor_data->mail->auth,
-                                             NULL, /* GCancellable */
-                                             &error))
+  if (!goa_imap_client_connect_sync (client,
+                                     data->monitor_data->mail->host_and_port,
+                                     data->monitor_data->mail->use_tls,
+                                     data->monitor_data->mail->auth,
+                                     NULL, /* GCancellable */
+                                     &error))
     goto out;
 
   /* Houston, we have a connection */
@@ -668,10 +668,10 @@ imap_client_sync_single (ImapClientData *data)
 
   /* First, select the INBOX - this is guaranteed to emit the EXISTS untagged response */
   error = NULL;
-  response = goa_backend_imap_client_run_command_sync (client,
-                                                       "SELECT INBOX",
-                                                       NULL, /* GCancellable */
-                                                       &error);
+  response = goa_imap_client_run_command_sync (client,
+                                               "SELECT INBOX",
+                                               NULL, /* GCancellable */
+                                               &error);
   if (response == NULL)
     goto out;
   g_free (response);
@@ -694,10 +694,10 @@ imap_client_sync_single (ImapClientData *data)
       /* If the connection is closed/severed, this is the way we find out since
        * the IDLE command submitted above disables timeouts
        */
-      response = goa_backend_imap_client_run_command_sync (client,
-                                                           "NOOP",
-                                                           NULL, /* GCancellable */
-                                                           &error);
+      response = goa_imap_client_run_command_sync (client,
+                                                   "NOOP",
+                                                   NULL, /* GCancellable */
+                                                   &error);
       if (response == NULL)
         goto out;
       g_free (response);
@@ -728,7 +728,7 @@ imap_client_sync_single (ImapClientData *data)
                            "BODY.PEEK[TEXT]<0.1000>"
                            ")");
           error = NULL;
-          response = goa_backend_imap_client_run_command_sync (client,
+          response = goa_imap_client_run_command_sync (client,
                                                                request_str->str,
                                                                NULL, /* GCancellable */
                                                                &error);
@@ -749,10 +749,10 @@ imap_client_sync_single (ImapClientData *data)
        * in RFC 2177: http://tools.ietf.org/html/rfc2177
        */
       error = NULL;
-      if (!goa_backend_imap_client_idle_sync (client,
-                                              25 * 60,
-                                              data->monitor_data->imap_cancellable,
-                                              &error))
+      if (!goa_imap_client_idle_sync (client,
+                                      25 * 60,
+                                      data->monitor_data->imap_cancellable,
+                                      &error))
         {
           if (error->domain == G_IO_ERROR && error->code == G_IO_ERROR_CANCELLED)
             {
@@ -795,9 +795,9 @@ imap_client_sync_single (ImapClientData *data)
                                         G_CALLBACK (imap_client_on_untagged_response),
                                         data);
   error = NULL;
-  if (!goa_backend_imap_client_disconnect_sync (client,
-                                                NULL, /* GCancellable */
-                                                &error))
+  if (!goa_imap_client_disconnect_sync (client,
+                                        NULL, /* GCancellable */
+                                        &error))
     {
       g_warning ("%s:Error closing connection: %s (%s, %d)",
                  G_STRFUNC,
@@ -972,7 +972,7 @@ static gboolean
 handle_create_monitor (GoaMail                *_mail,
                        GDBusMethodInvocation  *invocation)
 {
-  GoaBackendImapMail *mail = GOA_BACKEND_IMAP_MAIL (_mail);
+  GoaImapMail *mail = GOA_IMAP_MAIL (_mail);
   gchar *monitor_object_path;
   GError *error;
   MonitorData *data;
@@ -1050,7 +1050,7 @@ handle_create_monitor (GoaMail                *_mail,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_backend_imap_mail__goa_mail_iface_init (GoaMailIface *iface)
+goa_imap_mail__goa_mail_iface_init (GoaMailIface *iface)
 {
   iface->handle_create_monitor = handle_create_monitor;
 }

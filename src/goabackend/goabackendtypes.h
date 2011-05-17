@@ -21,50 +21,50 @@
  */
 
 #if !defined (__GOA_BACKEND_INSIDE_GOA_BACKEND_H__) && !defined (GOA_BACKEND_COMPILATION)
-#error "Only <goa/goabackend.h> can be included directly."
+#error "Only <goabackend/goabackend.h> can be included directly."
 #endif
 
 #ifndef __GOA_BACKEND_TYPES_H__
 #define __GOA_BACKEND_TYPES_H__
 
 #include <goa/goa.h>
-#include <goa/goabackendenums.h>
+#include <goabackend/goabackendenums.h>
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-struct _GoaBackendProvider;
-typedef struct _GoaBackendProvider GoaBackendProvider;
+struct _GoaProvider;
+typedef struct _GoaProvider GoaProvider;
 
-struct _GoaBackendOAuthProvider;
-typedef struct _GoaBackendOAuthProvider GoaBackendOAuthProvider;
+struct _GoaOAuthProvider;
+typedef struct _GoaOAuthProvider GoaOAuthProvider;
 
-struct _GoaBackendOAuth2Provider;
-typedef struct _GoaBackendOAuth2Provider GoaBackendOAuth2Provider;
+struct _GoaOAuth2Provider;
+typedef struct _GoaOAuth2Provider GoaOAuth2Provider;
 
-struct _GoaBackendGoogleProvider;
-typedef struct _GoaBackendGoogleProvider GoaBackendGoogleProvider;
+struct _GoaGoogleProvider;
+typedef struct _GoaGoogleProvider GoaGoogleProvider;
 
-struct _GoaBackendFacebookProvider;
-typedef struct _GoaBackendFacebookProvider GoaBackendFacebookProvider;
+struct _GoaFacebookProvider;
+typedef struct _GoaFacebookProvider GoaFacebookProvider;
 
-struct _GoaBackendYahooProvider;
-typedef struct _GoaBackendYahooProvider GoaBackendYahooProvider;
+struct _GoaYahooProvider;
+typedef struct _GoaYahooProvider GoaYahooProvider;
 
-struct _GoaBackendTwitterProvider;
-typedef struct _GoaBackendTwitterProvider GoaBackendTwitterProvider;
+struct _GoaTwitterProvider;
+typedef struct _GoaTwitterProvider GoaTwitterProvider;
 
-struct _GoaBackendImapAuth;
-typedef struct _GoaBackendImapAuth GoaBackendImapAuth;
+struct _GoaImapAuth;
+typedef struct _GoaImapAuth GoaImapAuth;
 
-struct _GoaBackendImapAuthOAuth;
-typedef struct _GoaBackendImapAuthOAuth GoaBackendImapAuthOAuth;
+struct _GoaImapAuthOAuth;
+typedef struct _GoaImapAuthOAuth GoaImapAuthOAuth;
 
-struct _GoaBackendImapClient;
-typedef struct _GoaBackendImapClient GoaBackendImapClient;
+struct _GoaImapClient;
+typedef struct _GoaImapClient GoaImapClient;
 
-struct _GoaBackendImapMail;
-typedef struct _GoaBackendImapMail GoaBackendImapMail;
+struct _GoaImapMail;
+typedef struct _GoaImapMail GoaImapMail;
 
 G_END_DECLS
 

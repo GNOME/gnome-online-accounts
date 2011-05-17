@@ -20,26 +20,26 @@
  * Author: David Zeuthen <davidz@redhat.com>
  */
 
-#if !defined (__GOA_BACKEND_INSIDE_GOA_BACKEND_H__) && !defined (GOA_BACKEND_COMPILATION)
-#error "Only <goa/goabackend.h> can be included directly."
+#ifndef __GOA_BACKEND_H__
+#define __GOA_BACKEND_H__
+
+#if !defined(GOA_BACKEND_API_IS_SUBJECT_TO_CHANGE) && !defined(GOA_BACKEND_COMPILATION)
+#error  libgoa-backend is unstable API. You must define GOA_API_IS_SUBJECT_TO_CHANGE before including goabackend/goabackend.h
 #endif
 
-#ifndef __GOA_BACKEND_IMAP_MAIL_H__
-#define __GOA_BACKEND_IMAP_MAIL_H__
+#define __GOA_BACKEND_INSIDE_GOA_BACKEND_H__
+#include <goabackend/goabackendtypes.h>
+#include <goabackend/goaprovider.h>
+#include <goabackend/goaoauthprovider.h>
+#include <goabackend/goaoauth2provider.h>
+#include <goabackend/goagoogleprovider.h>
+#include <goabackend/goafacebookprovider.h>
+#include <goabackend/goayahooprovider.h>
+#include <goabackend/goatwitterprovider.h>
+#include <goabackend/goaimapauth.h>
+#include <goabackend/goaimapauthoauth.h>
+#include <goabackend/goaimapclient.h>
+#include <goabackend/goaimapmail.h>
+#undef __GOA_BACKEND_INSIDE_GOA_BACKEND_H__
 
-#include <goa/goabackendtypes.h>
-
-G_BEGIN_DECLS
-
-#define GOA_TYPE_BACKEND_IMAP_MAIL  (goa_backend_imap_mail_get_type ())
-#define GOA_BACKEND_IMAP_MAIL(o)    (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_BACKEND_IMAP_MAIL, GoaBackendImapMail))
-#define GOA_IS_BACKEND_IMAP_MAIL(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_BACKEND_IMAP_MAIL))
-
-GType    goa_backend_imap_mail_get_type (void) G_GNUC_CONST;
-GoaMail *goa_backend_imap_mail_new      (const gchar         *host_and_port,
-                                         gboolean             use_tls,
-                                         GoaBackendImapAuth  *auth);
-
-G_END_DECLS
-
-#endif /* __GOA_BACKEND_IMAP_MAIL_H__ */
+#endif /* __GOA_BACKEND_H__ */
