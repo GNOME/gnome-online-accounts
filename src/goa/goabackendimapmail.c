@@ -950,6 +950,22 @@ monitor_on_handle_close (GoaMailMonitor        *monitor,
   return TRUE; /* invocation was handled */
 }
 
+/* runs in thread dedicated to the method invocation */
+static gboolean
+monitor_on_handle_simulate_message_received (GoaMailMonitor        *monitor,
+                                             GDBusMethodInvocation *invocation,
+                                             const gchar           *uid,
+                                             const gchar           *from,
+                                             const gchar           *subject,
+                                             const gchar           *excerpt,
+                                             const gchar           *uri,
+                                             gpointer               user_data)
+{
+  goa_mail_monitor_emit_message_received (monitor, uid, from, subject, excerpt, uri);
+  goa_mail_monitor_complete_simulate_message_received (monitor, invocation);
+  return TRUE; /* invocation was handled */
+}
+
 
 /* runs in thread dedicated to the method invocation */
 static gboolean
@@ -981,6 +997,10 @@ handle_create_monitor (GoaMail                *_mail,
   g_signal_connect (data->monitor,
                     "handle-close",
                     G_CALLBACK (monitor_on_handle_close),
+                    data);
+  g_signal_connect (data->monitor,
+                    "handle-simulate-message-received",
+                    G_CALLBACK (monitor_on_handle_simulate_message_received),
                     data);
 
   monitor_object_path = g_strdup_printf ("/org/gnome/OnlineAccounts/mail_monitors/%d", _g_monitor_count++);

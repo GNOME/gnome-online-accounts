@@ -357,7 +357,7 @@
 
          TODO: When gnome-shell can handle GVariant instances then add extras back: @extras: Other information about the message (currently unused).
     -->
-    <signal name="MessageReceived" type="">
+    <signal name="MessageReceived">
       <arg name="uid" type="s"/>
       <arg name="from" type="s"/>
       <arg name="subject" type="s"/>
@@ -365,6 +365,15 @@
       <arg name="uri" type="s"/>
       <!-- arg name="extras" type="a{sv}"/ -->
     </signal>
+
+    <method name="SimulateMessageReceived">
+      <arg name="uid" type="s" direction="in"/>
+      <arg name="from" type="s" direction="in"/>
+      <arg name="subject" type="s" direction="in"/>
+      <arg name="excerpt" type="s" direction="in"/>
+      <arg name="uri" type="s" direction="in"/>
+      <!-- arg name="extras" type="a{sv}"/ -->
+    </method>
   </interface>
 
 </node>
