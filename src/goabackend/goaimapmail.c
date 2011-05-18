@@ -28,6 +28,7 @@
 #include <json-glib/json-glib.h>
 #include <stdlib.h>
 
+#include "goalogging.h"
 #include "goaimapauth.h"
 #include "goaimapclient.h"
 #include "goaimapmail.h"
@@ -472,8 +473,8 @@ parse_rfc822_headers (const gchar *rfc822_headers)
         }
       else
         {
-          g_warning ("%s: ignoring mysterious line `%s' whilst parsing `%s'",
-                     G_STRFUNC, line, rfc822_headers);
+          goa_warning ("%s: ignoring mysterious line `%s' whilst parsing `%s'",
+                       G_STRFUNC, line, rfc822_headers);
         }
     }
   g_strfreev (lines);
@@ -586,12 +587,12 @@ imap_client_handle_fetch_response (ImapClientData  *data,
  out:
   if (!parsed)
     {
-      /* Use g_warning() since we want bug-reports to improve the FETCH parser */
-      g_warning ("Was unable to parse FETCH response for message with sequence number %d and parameters `%s'. "
-                 "Please report this to %s",
-                 message_seqnum,
-                 params,
-                 PACKAGE_BUGREPORT);
+      /* Use goa_warning() since we want bug-reports in order to improve the FETCH parser */
+      goa_warning ("Was unable to parse FETCH response for message with sequence number %d and parameters `%s'. "
+                   "Please report this to %s",
+                   message_seqnum,
+                   params,
+                   PACKAGE_BUGREPORT);
     }
   g_free (uri);
   g_free (uid_str);
@@ -666,6 +667,8 @@ imap_client_sync_single (ImapClientData *data)
                     G_CALLBACK (imap_client_on_untagged_response),
                     data);
 
+  goa_debug ("Submitting command: SELECT INBOX");
+
   /* First, select the INBOX - this is guaranteed to emit the EXISTS untagged response */
   error = NULL;
   response = goa_imap_client_run_command_sync (client,
@@ -691,6 +694,8 @@ imap_client_sync_single (ImapClientData *data)
    */
   while (TRUE)
     {
+      goa_debug ("Submitting command: NOOP");
+
       /* If the connection is closed/severed, this is the way we find out since
        * the IDLE command submitted above disables timeouts
        */
@@ -701,6 +706,8 @@ imap_client_sync_single (ImapClientData *data)
       if (response == NULL)
         goto out;
       g_free (response);
+
+      goa_debug ("EXISTS delta: %d", data->num_exists - data->last_num_exists);
 
       /* Fetch newly received messages, if any - the D-Bus signal will
        * get emitted from imap_client_handle_fetch_response() that
@@ -728,6 +735,7 @@ imap_client_sync_single (ImapClientData *data)
                            "BODY.PEEK[TEXT]<0.1000>"
                            ")");
           error = NULL;
+          goa_debug ("Submitting command: %s", request_str->str);
           response = goa_imap_client_run_command_sync (client,
                                                                request_str->str,
                                                                NULL, /* GCancellable */
@@ -744,6 +752,8 @@ imap_client_sync_single (ImapClientData *data)
       data->monitor_data->imap_num_refreshes += 1;
       g_cond_broadcast (data->monitor_data->imap_counter_cond);
       g_mutex_unlock (data->monitor_data->imap_counter_lock);
+
+      goa_debug ("Idling");
 
       /* Never idle for more than 25 minutes cf. the recommendation
        * in RFC 2177: http://tools.ietf.org/html/rfc2177
@@ -784,12 +794,13 @@ imap_client_sync_single (ImapClientData *data)
 
   if (error != NULL)
     {
-      /* g_debug ("leaving serve loop: error: %s (%s, %d)", error->message, g_quark_to_string (error->domain), error->code); */
+      goa_debug ("IMAP connection failed: error: %s (%s, %d)",
+                 error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
     }
   else
     {
-      /* g_debug ("leaving serve loop without error"); */
+      goa_debug ("IMAP connection closed");
     }
   g_signal_handlers_disconnect_by_func (client,
                                         G_CALLBACK (imap_client_on_untagged_response),
@@ -799,9 +810,8 @@ imap_client_sync_single (ImapClientData *data)
                                         NULL, /* GCancellable */
                                         &error))
     {
-      g_warning ("%s:Error closing connection: %s (%s, %d)",
-                 G_STRFUNC,
-                 error->message, g_quark_to_string (error->domain), error->code);
+      goa_warning ("Error closing connection: %s (%s, %d)",
+                   error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
     }
   g_object_unref (client);
@@ -815,15 +825,25 @@ imap_client_sync (MonitorData *data)
   imap_data = g_slice_new0 (ImapClientData);
   imap_data->monitor_data = monitor_data_ref (data);
 
+  goa_debug ("Using thread for IMAP client at %s for account %s",
+             data->mail->host_and_port,
+             g_dbus_object_get_object_path (g_dbus_interface_get_object (G_DBUS_INTERFACE (data->mail))));
+
   while (TRUE)
     {
       GPollFD poll_fd;
+
+      goa_debug ("Connecting to IMAP server at %s for account %s",
+                 data->mail->host_and_port,
+                 g_dbus_object_get_object_path (g_dbus_interface_get_object (G_DBUS_INTERFACE (data->mail))));
 
       /* tries connecting - blocks until the connection is closed */
       imap_client_sync_single (imap_data);
 
       if (data->imap_request_close)
         goto out;
+
+      goa_debug ("Not connected anymore. Sleeping until Refresh() is called...");
 
       /* Wait to get woken up */
       if (g_cancellable_make_pollfd (data->imap_cancellable, &poll_fd))
@@ -850,6 +870,8 @@ imap_client_sync (MonitorData *data)
   data->imap_num_connections_failed = -1;
   g_cond_broadcast (data->imap_counter_cond);
   g_mutex_unlock (data->imap_counter_lock);
+
+  goa_debug ("Exiting IMAP client thread");
 
   monitor_data_unref (imap_data->monitor_data);
   g_slice_free (ImapClientData, imap_data);
@@ -923,8 +945,8 @@ monitor_on_handle_refresh (GoaMailMonitor        *monitor,
   /* should never end up here but if we do, make sure
    * the bug reporters can give us something useful
    */
-  g_warning ("Unexpected state while trying to refresh: refreshed=%d connection_failed=%d closed=%d num_attempts=%d",
-             refreshed, connection_failed, closed, num_attempts);
+  goa_warning ("Unexpected state while trying to refresh: refreshed=%d connection_failed=%d closed=%d num_attempts=%d",
+               refreshed, connection_failed, closed, num_attempts);
   g_dbus_method_invocation_return_error (invocation,
                                          GOA_ERROR,
                                          GOA_ERROR_FAILED,
@@ -979,6 +1001,10 @@ handle_create_monitor (GoaMail                *_mail,
   static gint _g_monitor_count = 0;
 
   monitor_object_path = NULL;
+
+  goa_debug ("Creating mail monitor for %s on account %s",
+             g_dbus_method_invocation_get_sender (invocation),
+             g_dbus_object_get_object_path (g_dbus_interface_get_object (G_DBUS_INTERFACE (mail))));
 
   data = g_slice_new0 (MonitorData);
   data->ref_count = 1;

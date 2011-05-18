@@ -23,6 +23,9 @@
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
+#include <sys/types.h>
+#include <sys/syscall.h>
+
 #include <syslog.h>
 
 #include "goalogging.h"
@@ -202,13 +205,12 @@ goa_log (GoaLogLevel     level,
       g_assert_not_reached ();
       break;
     }
-  g_print ("%s%s%s.%03d:%s %s%s%s:%s %s %s[%s, %s()]%s\n",
-           _color_get (_COLOR_BOLD_ON), _color_get (_COLOR_FG_YELLOW),
-           time_buf, (gint) now.tv_usec / 1000,
-           _color_get (_COLOR_RESET),
-           level_color_str,
-           _color_get (_COLOR_BOLD_ON), level_str,
-           _color_get (_COLOR_RESET),
+  gchar *thread_str;
+  thread_str = g_strdup_printf ("%d", (gint) syscall (SYS_gettid));
+  g_print ("%s%s%s.%03d:%s%s%s[%s]%s:%s%s%s:%s %s %s[%s, %s()]%s\n",
+           _color_get (_COLOR_BOLD_ON), _color_get (_COLOR_FG_YELLOW), time_buf, (gint) now.tv_usec / 1000, _color_get (_COLOR_RESET),
+           _color_get (_COLOR_FG_MAGENTA), _color_get (_COLOR_BOLD_ON), thread_str, _color_get (_COLOR_RESET),
+           level_color_str, _color_get (_COLOR_BOLD_ON), level_str, _color_get (_COLOR_RESET),
            message,
            _color_get (_COLOR_FG_BLACK), location, function, _color_get (_COLOR_RESET));
   if (level >= GOA_LOG_LEVEL_NOTICE)
