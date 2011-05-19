@@ -24,23 +24,24 @@
 #error "Only <goabackend/goabackend.h> can be included directly."
 #endif
 
-#ifndef __GOA_IMAP_MAIL_H__
-#define __GOA_IMAP_MAIL_H__
+#ifndef __GOA_IMAP_AUTH_LOGIN_H__
+#define __GOA_IMAP_AUTH_LOGIN_H__
 
 #include <goabackend/goabackendtypes.h>
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_IMAP_MAIL  (goa_imap_mail_get_type ())
-#define GOA_IMAP_MAIL(o)    (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_IMAP_MAIL, GoaImapMail))
-#define GOA_IS_IMAP_MAIL(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_IMAP_MAIL))
+#define GOA_TYPE_IMAP_AUTH_LOGIN         (goa_imap_auth_login_get_type ())
+#define GOA_IMAP_AUTH_LOGIN(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_IMAP_AUTH_LOGIN, GoaImapAuthLogin))
+#define GOA_IS_IMAP_AUTH_LOGIN(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_IMAP_AUTH_LOGIN))
 
-GType    goa_imap_mail_get_type (void) G_GNUC_CONST;
-GoaMail *goa_imap_mail_new      (const gchar  *host_and_port,
-                                 gboolean      use_tls,
-                                 gboolean      ignore_bad_tls,
-                                 GoaImapAuth  *auth);
+
+GType        goa_imap_auth_login_get_type (void) G_GNUC_CONST;
+GoaImapAuth *goa_imap_auth_login_new (GoaProvider       *provider,
+                                      GoaObject         *object,
+                                      const gchar       *user_name,
+                                      const gchar       *password);
 
 G_END_DECLS
 
-#endif /* __GOA_IMAP_MAIL_H__ */
+#endif /* __GOA_IMAP_AUTH_LOGIN_H__ */

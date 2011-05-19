@@ -291,7 +291,10 @@ build_object (GoaProvider         *provider,
       auth = goa_imap_auth_oauth_new (GOA_OAUTH_PROVIDER (provider),
                                       GOA_OBJECT (object),
                                       request_uri);
-      mail = goa_imap_mail_new ("imap.gmail.com", TRUE, auth);
+      mail = goa_imap_mail_new ("imap.gmail.com",
+                                TRUE,  /* use_tls */
+                                FALSE, /* ignore_bad_tls */
+                                auth);
       goa_object_skeleton_set_mail (object, mail);
       g_object_unref (auth);
       g_free (request_uri);

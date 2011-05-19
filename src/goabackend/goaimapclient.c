@@ -175,6 +175,7 @@ goa_imap_client_new (void)
  * @client: A #GoaImapClient.
  * @host_and_port: The name and optionally port to connect to.
  * @use_tls: Whether TLS should be used.
+ * @ignore_bad_tls: Whether errors (e.g. %G_TLS_ERROR_BAD_CERTIFICATE) about TLS certificates should be ignored.
  * @auth: Object used for authenticating the connection.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
@@ -190,6 +191,7 @@ gboolean
 goa_imap_client_connect_sync (GoaImapClient  *client,
                               const gchar    *host_and_port,
                               gboolean        use_tls,
+                              gboolean        ignore_bad_tls,
                               GoaImapAuth    *auth,
                               GCancellable   *cancellable,
                               GError        **error)
@@ -219,7 +221,11 @@ goa_imap_client_connect_sync (GoaImapClient  *client,
   if (use_tls)
     g_socket_client_set_tls (client->sc, TRUE);
 
-  /* TODO: TLS validation etc etc */
+  if (ignore_bad_tls)
+    {
+      /* TODO: is it correct to just pass 0? */
+      g_socket_client_set_tls_validation_flags (client->sc, 0);
+    }
 
   client->c = g_socket_client_connect_to_host (client->sc,
                                                host_and_port,

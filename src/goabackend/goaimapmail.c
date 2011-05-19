@@ -46,6 +46,7 @@ struct _GoaImapMail
 
   gchar *host_and_port;
   gboolean use_tls;
+  gboolean ignore_bad_tls;
   GoaImapAuth *auth;
 };
 
@@ -61,6 +62,7 @@ enum
   PROP_0,
   PROP_HOST_AND_PORT,
   PROP_USE_TLS,
+  PROP_IGNORE_BAD_TLS,
   PROP_AUTH
 };
 
@@ -110,6 +112,10 @@ goa_imap_mail_get_property (GObject      *object,
       g_value_set_boolean (value, mail->use_tls);
       break;
 
+    case PROP_IGNORE_BAD_TLS:
+      g_value_set_boolean (value, mail->ignore_bad_tls);
+      break;
+
     case PROP_AUTH:
       g_value_set_object (value, mail->auth);
       break;
@@ -136,6 +142,10 @@ goa_imap_mail_set_property (GObject      *object,
 
     case PROP_USE_TLS:
       mail->use_tls = g_value_get_boolean (value);
+      break;
+
+    case PROP_IGNORE_BAD_TLS:
+      mail->ignore_bad_tls = g_value_get_boolean (value);
       break;
 
     case PROP_AUTH:
@@ -189,6 +199,17 @@ goa_imap_mail_class_init (GoaImapMailClass *klass)
                                                          G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_property (gobject_class,
+                                   PROP_IGNORE_BAD_TLS,
+                                   g_param_spec_boolean ("ignore-bad-tls",
+                                                         "ignore-bad-tls",
+                                                         "ignore-bad-tls",
+                                                         TRUE,
+                                                         G_PARAM_READABLE |
+                                                         G_PARAM_WRITABLE |
+                                                         G_PARAM_CONSTRUCT_ONLY |
+                                                         G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_property (gobject_class,
                                    PROP_AUTH,
                                    g_param_spec_object ("auth",
                                                         "auth",
@@ -206,6 +227,7 @@ goa_imap_mail_class_init (GoaImapMailClass *klass)
  * goa_imap_mail_new:
  * @host_and_port: The name and optionally port to connect to.
  * @use_tls: Whether TLS should be used.
+ * @ignore_bad_tls: Whether errors (e.g. %G_TLS_ERROR_BAD_CERTIFICATE) about TLS certificates should be ignored.
  * @auth: Object used for authenticating the connection.
  *
  * Creates a new #GoaMail object.
@@ -215,12 +237,14 @@ goa_imap_mail_class_init (GoaImapMailClass *klass)
 GoaMail *
 goa_imap_mail_new (const gchar  *host_and_port,
                    gboolean      use_tls,
+                   gboolean      ignore_bad_tls,
                    GoaImapAuth  *auth)
 {
   g_return_val_if_fail (host_and_port != NULL, NULL);
   return GOA_MAIL (g_object_new (GOA_TYPE_IMAP_MAIL,
                                  "host-and-port", host_and_port,
                                  "use-tls", use_tls,
+                                 "ignore-bad-tls", ignore_bad_tls,
                                  "auth", auth,
                                  NULL));
 }
@@ -376,7 +400,7 @@ fetch_check (const gchar *data,
   ret = FALSE;
 
   key_len = strlen (key);
-  if (strncmp (data + *pos, key, key_len) == 0 && data[*pos + key_len] == ' ')
+  if (g_ascii_strncasecmp (data + *pos, key, key_len) == 0 && data[*pos + key_len] == ' ')
     {
       ret = TRUE;
       *pos += key_len + 1;
@@ -683,7 +707,7 @@ imap_client_handle_fetch_response (ImapClientData  *data,
   if (!parsed)
     {
       /* Use goa_warning() since we want bug-reports in order to improve the FETCH parser */
-      goa_warning ("Was unable to parse FETCH response for message with sequence number %d and parameters `%s'. "
+      goa_warning ("Failed parsing FETCH response for message with sequence number %d and parameters `%s'. "
                    "Please report this to %s",
                    message_seqnum,
                    params,
@@ -844,6 +868,7 @@ imap_client_sync_single (ImapClientData *data)
   if (!goa_imap_client_connect_sync (client,
                                      data->monitor_data->mail->host_and_port,
                                      data->monitor_data->mail->use_tls,
+                                     data->monitor_data->mail->ignore_bad_tls,
                                      data->monitor_data->mail->auth,
                                      NULL, /* GCancellable */
                                      &error))
@@ -1234,6 +1259,7 @@ typedef gboolean (*ImapHelperFunc) (GoaImapClient  *client,
 static gboolean
 imap_helper (const gchar    *host_and_port,
              gboolean        use_tls,
+             gboolean        ignore_bad_tls,
              GoaImapAuth    *auth,
              guint           uidvalidity,
              ImapHelperFunc  func,
@@ -1257,6 +1283,7 @@ imap_helper (const gchar    *host_and_port,
   if (!goa_imap_client_connect_sync (client,
                                      host_and_port,
                                      use_tls,
+                                     ignore_bad_tls,
                                      auth,
                                      NULL, /* GCancellable */
                                      error))
@@ -1366,6 +1393,7 @@ monitor_on_handle_add_star (GoaMailMonitor        *monitor,
                              data->starred_folder);
   imap_helper (data->mail->host_and_port,
                data->mail->use_tls,
+               data->mail->ignore_bad_tls,
                data->mail->auth,
                (message_uid >> 32),
                add_star_func,
@@ -1442,15 +1470,15 @@ monitor_on_handle_mark_as_spam (GoaMailMonitor        *monitor,
       goto out;
     }
 
-  requests = g_new0 (gchar*, 4);
+  requests = g_new0 (gchar*, 3);
   requests[0] = g_strdup_printf ("UID COPY %d %s",
                                  (gint) (message_uid & 0xffffffff),
                                  data->spam_folder);
   requests[1] = g_strdup_printf ("UID STORE %d +FLAGS (\\Deleted)",
                                  (gint) (message_uid & 0xffffffff));
-  requests[2] = g_strdup_printf ("EXPUNGE");
   imap_helper (data->mail->host_and_port,
                data->mail->use_tls,
+               data->mail->ignore_bad_tls,
                data->mail->auth,
                (message_uid >> 32),
                mark_as_spam_func,

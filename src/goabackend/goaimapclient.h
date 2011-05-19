@@ -40,6 +40,7 @@ GoaImapClient  *goa_imap_client_new               (void);
 gboolean        goa_imap_client_connect_sync      (GoaImapClient  *client,
                                                    const gchar    *host_and_port,
                                                    gboolean        use_tls,
+                                                   gboolean        ignore_bad_tls,
                                                    GoaImapAuth    *auth,
                                                    GCancellable   *cancellable,
                                                    GError        **error);

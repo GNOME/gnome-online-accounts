@@ -36,6 +36,9 @@ G_BEGIN_DECLS
 struct _GoaProvider;
 typedef struct _GoaProvider GoaProvider;
 
+struct _GoaGenericProvider;
+typedef struct _GoaGenericProvider GoaGenericProvider;
+
 struct _GoaOAuthProvider;
 typedef struct _GoaOAuthProvider GoaOAuthProvider;
 
@@ -56,6 +59,9 @@ typedef struct _GoaTwitterProvider GoaTwitterProvider;
 
 struct _GoaImapAuth;
 typedef struct _GoaImapAuth GoaImapAuth;
+
+struct _GoaImapAuthLogin;
+typedef struct _GoaImapAuthLogin GoaImapAuthLogin;
 
 struct _GoaImapAuthOAuth;
 typedef struct _GoaImapAuthOAuth GoaImapAuthOAuth;

@@ -29,6 +29,7 @@
 #include "goafacebookprovider.h"
 #include "goayahooprovider.h"
 #include "goatwitterprovider.h"
+#include "goagenericprovider.h"
 
 /**
  * SECTION:goaprovider
@@ -44,6 +45,12 @@ static gboolean goa_provider_ensure_credentials_sync_real (GoaProvider   *provid
                                                            GCancellable  *cancellable,
                                                            GError       **error);
 
+static gboolean goa_provider_build_object_real (GoaProvider         *provider,
+                                                GoaObjectSkeleton   *object,
+                                                GKeyFile            *key_file,
+                                                const gchar         *group,
+                                                GError             **error);
+
 G_DEFINE_ABSTRACT_TYPE (GoaProvider, goa_provider, G_TYPE_OBJECT);
 
 static void
@@ -54,6 +61,7 @@ goa_provider_init (GoaProvider *client)
 static void
 goa_provider_class_init (GoaProviderClass *klass)
 {
+  klass->build_object = goa_provider_build_object_real;
   klass->ensure_credentials_sync = goa_provider_ensure_credentials_sync_real;
 }
 
@@ -413,6 +421,17 @@ goa_provider_ensure_credentials_sync_real (GoaProvider   *provider,
   return FALSE;
 }
 
+static gboolean
+goa_provider_build_object_real (GoaProvider         *provider,
+                                GoaObjectSkeleton   *object,
+                                GKeyFile            *key_file,
+                                const gchar         *group,
+                                GError             **error)
+{
+  /* does nothing */
+  return TRUE;
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
@@ -432,6 +451,7 @@ ensure_ep_and_builtins (void)
       type = GOA_TYPE_FACEBOOK_PROVIDER;
       type = GOA_TYPE_YAHOO_PROVIDER;
       type = GOA_TYPE_TWITTER_PROVIDER;
+      type = GOA_TYPE_GENERIC_PROVIDER;
       type = type; /* for -Wunused-but-set-variable */
 
       g_once_init_leave (&once_init_value, 1);

@@ -45,6 +45,7 @@ libgoa_backend_1_0_la_HEADERS =						\
 	goabackendenumtypes.h						\
 	goalogging.h							\
 	goaprovider.h							\
+	goagenericprovider.h						\
 	goaoauthprovider.h						\
 	goaoauth2provider.h						\
 	goagoogleprovider.h						\
@@ -52,6 +53,7 @@ libgoa_backend_1_0_la_HEADERS =						\
 	goayahooprovider.h						\
 	goatwitterprovider.h						\
 	goaimapauth.h							\
+	goaimapauthlogin.h						\
 	goaimapauthoauth.h						\
 	goaimapclient.h							\
 	goaimapmail.h							\
@@ -64,6 +66,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goabackendenumtypes.h		goabackendenumtypes.c		\
 	goaprovider.h			goaprovider.c			\
 	goalogging.h			goalogging.c			\
+	goagenericprovider.h		goagenericprovider.c		\
 	goaoauthprovider.h		goaoauthprovider.c		\
 	goaoauth2provider.h		goaoauth2provider.c		\
 	goagoogleprovider.h		goagoogleprovider.c		\
@@ -71,6 +74,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goayahooprovider.h		goayahooprovider.c		\
 	goatwitterprovider.h		goatwitterprovider.c		\
 	goaimapauth.h			goaimapauth.c			\
+	goaimapauthlogin.h		goaimapauthlogin.c		\
 	goaimapauthoauth.h		goaimapauthoauth.c		\
 	goaimapclient.h			goaimapclient.c			\
 	goaimapmail.h			goaimapmail.c			\
