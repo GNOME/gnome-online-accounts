@@ -24,6 +24,7 @@
 #include <glib/gi18n-lib.h>
 #include <stdlib.h>
 
+#include "goalogging.h"
 #include "goaimapauth.h"
 #include "goaimapclient.h"
 
@@ -355,6 +356,7 @@ goa_imap_client_run_command_sync (GoaImapClient  *client,
 
   tag = g_strdup_printf ("T%05d ", client->tag++);
   s = g_strconcat (tag, command, "\r\n", NULL);
+  goa_debug ("Submitting command `%s'", s);
   if (!g_data_output_stream_put_string (client->dos, s, cancellable, error))
     {
       g_prefix_error (error, "Error putting string: ");
@@ -367,6 +369,7 @@ goa_imap_client_run_command_sync (GoaImapClient  *client,
  again:
   local_error = NULL;
   s = g_data_input_stream_read_line (client->dis, NULL, cancellable, &local_error);
+  goa_debug ("Received response `%s'", s);
   if (s == NULL)
     {
       if (local_error != NULL)
@@ -442,6 +445,7 @@ goa_imap_client_run_command_sync (GoaImapClient  *client,
               g_free (s);
               goto out;
             }
+          goa_debug ("Read literal string of %" G_GSIZE_FORMAT " bytes", lit_len);
           /* include the original CRLF, then the literal string */
           g_string_append (response, "\r\n");
           g_string_append_len (response, lit, lit_len);

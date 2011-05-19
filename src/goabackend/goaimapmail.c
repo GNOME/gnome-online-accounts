@@ -237,7 +237,11 @@ typedef struct
   /* Used so we can nuke the monitor if the creator vanishes */
   guint name_watcher_id;
 
-  /* Use to communicate with the thread running the IMAP client */
+  /* Set only when we are connected */
+  gchar       *spam_folder;
+  gchar       *starred_folder;
+
+  /* Used to communicate with the thread running the IMAP client */
   GCancellable *imap_cancellable;
   gboolean      imap_request_close;
   GMutex       *imap_counter_lock;
@@ -262,6 +266,10 @@ monitor_data_unref (MonitorData *data)
       g_clear_object (&data->monitor);
       if (data->name_watcher_id)
         g_bus_unwatch_name (data->name_watcher_id);
+
+      g_free (data->spam_folder);
+      g_free (data->starred_folder);
+
       g_clear_object (&data->imap_cancellable);
       if (data->imap_counter_lock != NULL)
         g_mutex_free (data->imap_counter_lock);
@@ -303,8 +311,31 @@ typedef struct
   gint         last_num_exists;
 
   gint         uidvalidity;
+
+  gchar      **caps;
+  gchar       *caps_string;
 } ImapClientData;
 
+static gboolean
+imap_client_has_capability (ImapClientData *data,
+                            const gchar    *capability)
+{
+  guint n;
+  gboolean ret;
+
+  ret = FALSE;
+
+  for (n = 0; data->caps != NULL && data->caps[n] != NULL; n++)
+    {
+      if (g_strcmp0 (data->caps[n], capability) == 0)
+        {
+          ret = TRUE;
+          goto out;
+        }
+    }
+ out:
+  return ret;
+}
 
 static gboolean
 parse_int (const gchar *s,
@@ -351,6 +382,39 @@ fetch_check (const gchar *data,
       *pos += key_len + 1;
       goto out;
     }
+ out:
+  return ret;
+}
+
+static gchar **
+fetch_parenthesized_list (const gchar *data,
+                          guint       *pos)
+{
+  gchar **ret;
+  gchar *s;
+  guint start_pos;
+
+  g_return_val_if_fail (data != NULL, FALSE);
+  g_return_val_if_fail (pos != NULL, FALSE);
+
+  ret = NULL;
+
+  if (data[*pos] != '(')
+    goto out;
+  *pos += 1;
+  start_pos = *pos;
+
+  while (data[*pos] != ')' && data[*pos] != '\0')
+    *pos += 1;
+  if (data[*pos] != ')')
+    goto out;
+
+  s = g_strndup (data + start_pos, *pos - start_pos);
+  ret = g_strsplit (s, " ", -1);
+  g_free (s);
+
+  *pos += 1;
+
  out:
   return ret;
 }
@@ -403,6 +467,35 @@ fetch_int (const gchar *data,
 
  out:
   g_free (str_value);
+  return ret;
+}
+
+static gchar *
+fetch_quoted_string (const gchar *data,
+                     guint       *pos)
+{
+  gchar *ret;
+  guint start_pos;
+
+  g_return_val_if_fail (data != NULL, FALSE);
+  g_return_val_if_fail (pos != NULL, FALSE);
+
+  ret = NULL;
+
+  if (data[*pos] != '"')
+    goto out;
+  *pos += 1;
+
+  start_pos = *pos;
+
+  while (data[*pos] != '"' && data[*pos] != '\0')
+    *pos += 1;
+
+  ret = g_strndup (data + start_pos, *pos - start_pos);
+
+  *pos += 1;
+
+ out:
   return ret;
 }
 
@@ -582,7 +675,9 @@ imap_client_handle_fetch_response (ImapClientData  *data,
                                           from_header,
                                           subject_header,
                                           excerpt,
-                                          uri);
+                                          uri,
+                                          data->monitor_data->spam_folder != NULL,
+                                          data->monitor_data->starred_folder != NULL);
   /* g_variant_builder_end (&extras_builder)); */
  out:
   if (!parsed)
@@ -600,6 +695,78 @@ imap_client_handle_fetch_response (ImapClientData  *data,
     g_hash_table_unref (headers);
   g_free (rfc822_headers);
   g_free (excerpt);
+}
+
+static void
+imap_client_handle_xlist_response (ImapClientData  *data,
+                                   const gchar     *response)
+{
+  guint pos;
+  gchar **flags;
+  gchar *delimiter;
+  gchar *name;
+  gboolean is_spam;
+  gboolean is_starred;
+  guint n;
+
+  flags = NULL;
+  delimiter = NULL;
+  name = NULL;
+  is_spam = FALSE;
+  is_starred = FALSE;
+
+  /* http://code.google.com/apis/gmail/imap/#xlist and
+   * http://tools.ietf.org/html/rfc3501#section-7.2.2
+   *
+   * Example: XLIST (\HasChildren \HasNoChildren \Starred) "/" "[Gmail]/Starred"
+   */
+  pos = sizeof "XLIST " - 1;
+  flags = fetch_parenthesized_list (response, &pos);
+  if (flags == NULL)
+    {
+      goa_warning ("Error extracting flags from XLIST response `%s'", response);
+      goto out;
+    }
+  pos += 1;
+  delimiter = fetch_quoted_string (response, &pos);
+  if (delimiter == NULL)
+    {
+      goa_warning ("Error extracting delimiter from XLIST response `%s'", response);
+      goto out;
+    }
+  pos += 1;
+  name = fetch_quoted_string (response, &pos);
+  if (name == NULL)
+    {
+      goa_warning ("Error extracting name from XLIST response `%s'", response);
+      goto out;
+    }
+
+  for (n = 0; flags[n] != NULL; n++)
+    {
+      if (g_strcmp0 (flags[n], "\\Spam") == 0)
+        is_spam = TRUE;
+      else if (g_strcmp0 (flags[n], "\\Starred") == 0)
+        is_starred = TRUE;
+    }
+
+  if (is_spam)
+    {
+      goa_info ("Setting the Spam folder to `%s'", name);
+      g_free (data->monitor_data->spam_folder);
+      data->monitor_data->spam_folder = g_strdup (name);
+    }
+  else if (is_starred)
+    {
+      goa_info ("Setting the Starred folder to `%s'", name);
+      g_free (data->monitor_data->starred_folder);
+      data->monitor_data->starred_folder = g_strdup (name);
+    }
+
+ out:
+  g_strfreev (flags);
+  g_free (delimiter);
+  g_free (name);
 }
 
 static void
@@ -634,9 +801,21 @@ imap_client_on_untagged_response (GoaImapClient  *client,
         params++;
       imap_client_handle_fetch_response (data, i, params);
     }
+  else if (g_str_has_prefix (response, "CAPABILITY "))
+    {
+      /* http://tools.ietf.org/html/rfc3501#section-7.2.1 */
+      g_strfreev (data->caps);
+      g_free (data->caps_string);
+      data->caps_string = g_strdup (response + sizeof "CAPABILITY " - 1);
+      data->caps = g_strsplit (data->caps_string, " ", -1);
+    }
+  else if (g_str_has_prefix (response, "XLIST "))
+    {
+      imap_client_handle_xlist_response (data, response);
+    }
   else
     {
-      /* g_debug ("unhandled untagged response `%s'", response); */
+      goa_debug ("unhandled untagged response `%s'", response);
     }
 }
 
@@ -647,9 +826,20 @@ imap_client_sync_single (ImapClientData *data)
   gchar *response;
   GoaImapClient *client;
 
+  g_strfreev (data->caps);
+  g_free (data->caps_string);
+  data->caps = NULL;
+  data->caps_string = NULL;
+
   /* Get ourselves an IMAP client and connect to the server */
   data->num_exists = -1;
   client = goa_imap_client_new ();
+
+  g_signal_connect (client,
+                    "untagged-response",
+                    G_CALLBACK (imap_client_on_untagged_response),
+                    data);
+
   error = NULL;
   if (!goa_imap_client_connect_sync (client,
                                      data->monitor_data->mail->host_and_port,
@@ -662,12 +852,45 @@ imap_client_sync_single (ImapClientData *data)
   /* Houston, we have a connection */
   goa_mail_monitor_set_connected (data->monitor_data->monitor, TRUE);
 
-  g_signal_connect (client,
-                    "untagged-response",
-                    G_CALLBACK (imap_client_on_untagged_response),
-                    data);
+  /* Request capabilities unless we received them already */
+  if (data->caps == NULL)
+    {
+      /* http://tools.ietf.org/html/rfc3501#section-6.1.1 */
+      error = NULL;
+      response = goa_imap_client_run_command_sync (client,
+                                                   "CAPABILITY",
+                                                   NULL, /* GCancellable */
+                                                   &error);
+      if (response == NULL)
+        goto out;
+      g_free (response);
+    }
+  if (!imap_client_has_capability (data, "IMAP4rev1"))
+    {
+      g_set_error (&error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   "Expected capability IMAP4rev1 but server reported: %s",
+                   data->caps_string);
+      goto out;
+    }
+  goa_info ("IMAP Server reported capabilities: %s", data->caps_string);
 
-  goa_debug ("Submitting command: SELECT INBOX");
+  /* If available, use the XLIST command to find the Spam and Starred folders */
+  if (imap_client_has_capability (data, "XLIST"))
+    {
+      /* http://code.google.com/apis/gmail/imap/#xlist and
+       * http://tools.ietf.org/html/rfc3501#section-6.3.8
+       */
+      error = NULL;
+      response = goa_imap_client_run_command_sync (client,
+                                                   "XLIST \"\" \"*\"",
+                                                   NULL, /* GCancellable */
+                                                   &error);
+      if (response == NULL)
+        goto out;
+      g_free (response);
+    }
 
   /* First, select the INBOX - this is guaranteed to emit the EXISTS untagged response */
   error = NULL;
@@ -694,8 +917,6 @@ imap_client_sync_single (ImapClientData *data)
    */
   while (TRUE)
     {
-      goa_debug ("Submitting command: NOOP");
-
       /* If the connection is closed/severed, this is the way we find out since
        * the IDLE command submitted above disables timeouts
        */
@@ -735,7 +956,6 @@ imap_client_sync_single (ImapClientData *data)
                            "BODY.PEEK[TEXT]<0.1000>"
                            ")");
           error = NULL;
-          goa_debug ("Submitting command: %s", request_str->str);
           response = goa_imap_client_run_command_sync (client,
                                                                request_str->str,
                                                                NULL, /* GCancellable */
@@ -794,13 +1014,13 @@ imap_client_sync_single (ImapClientData *data)
 
   if (error != NULL)
     {
-      goa_debug ("IMAP connection failed: error: %s (%s, %d)",
-                 error->message, g_quark_to_string (error->domain), error->code);
+      goa_info ("IMAP connection failed: error: %s (%s, %d)",
+                error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
     }
   else
     {
-      goa_debug ("IMAP connection closed");
+      goa_info ("IMAP connection closed");
     }
   g_signal_handlers_disconnect_by_func (client,
                                         G_CALLBACK (imap_client_on_untagged_response),
@@ -825,17 +1045,17 @@ imap_client_sync (MonitorData *data)
   imap_data = g_slice_new0 (ImapClientData);
   imap_data->monitor_data = monitor_data_ref (data);
 
-  goa_debug ("Using thread for IMAP client at %s for account %s",
-             data->mail->host_and_port,
-             g_dbus_object_get_object_path (g_dbus_interface_get_object (G_DBUS_INTERFACE (data->mail))));
+  goa_info ("Using thread for IMAP client at %s for account %s",
+            data->mail->host_and_port,
+            g_dbus_object_get_object_path (g_dbus_interface_get_object (G_DBUS_INTERFACE (data->mail))));
 
   while (TRUE)
     {
       GPollFD poll_fd;
 
-      goa_debug ("Connecting to IMAP server at %s for account %s",
-                 data->mail->host_and_port,
-                 g_dbus_object_get_object_path (g_dbus_interface_get_object (G_DBUS_INTERFACE (data->mail))));
+      goa_info ("Connecting to IMAP server at %s for account %s",
+                data->mail->host_and_port,
+                g_dbus_object_get_object_path (g_dbus_interface_get_object (G_DBUS_INTERFACE (data->mail))));
 
       /* tries connecting - blocks until the connection is closed */
       imap_client_sync_single (imap_data);
@@ -843,7 +1063,7 @@ imap_client_sync (MonitorData *data)
       if (data->imap_request_close)
         goto out;
 
-      goa_debug ("Not connected anymore. Sleeping until Refresh() is called...");
+      goa_info ("Not connected anymore. Sleeping until Refresh() is called...");
 
       /* Wait to get woken up */
       if (g_cancellable_make_pollfd (data->imap_cancellable, &poll_fd))
@@ -871,9 +1091,11 @@ imap_client_sync (MonitorData *data)
   g_cond_broadcast (data->imap_counter_cond);
   g_mutex_unlock (data->imap_counter_lock);
 
-  goa_debug ("Exiting IMAP client thread");
+  goa_info ("Exiting IMAP client thread");
 
   monitor_data_unref (imap_data->monitor_data);
+  g_strfreev (imap_data->caps);
+  g_free (imap_data->caps_string);
   g_slice_free (ImapClientData, imap_data);
 }
 
@@ -981,13 +1203,270 @@ monitor_on_handle_simulate_message_received (GoaMailMonitor        *monitor,
                                              const gchar           *subject,
                                              const gchar           *excerpt,
                                              const gchar           *uri,
+                                             gboolean               can_be_marked_as_spam,
+                                             gboolean               can_be_starred,
                                              gpointer               user_data)
 {
-  goa_mail_monitor_emit_message_received (monitor, uid, from, subject, excerpt, uri);
+  goa_mail_monitor_emit_message_received (monitor, uid, from, subject, excerpt, uri, can_be_marked_as_spam, can_be_starred);
   goa_mail_monitor_complete_simulate_message_received (monitor, invocation);
   return TRUE; /* invocation was handled */
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
+on_untagged_response_uidvalidity (GoaImapClient  *client,
+                                  const gchar    *response,
+                                  gpointer        user_data)
+{
+  guint *uidvalidity = user_data;
+  guint n;
+
+  if (sscanf (response, "OK [UIDVALIDITY %d]", &n) == 1)
+    *uidvalidity = n;
+}
+
+
+typedef gboolean (*ImapHelperFunc) (GoaImapClient  *client,
+                                    gpointer        user_data,
+                                    GError        **error);
+
+static gboolean
+imap_helper (const gchar    *host_and_port,
+             gboolean        use_tls,
+             GoaImapAuth    *auth,
+             guint           uidvalidity,
+             ImapHelperFunc  func,
+             gpointer        func_user_data,
+             GError        **error)
+{
+  GoaImapClient *client;
+  gchar *response;
+  guint read_uidvalidity;
+  gboolean ret;
+
+  client = NULL;
+  read_uidvalidity = 0;
+  ret = FALSE;
+
+  client = goa_imap_client_new ();
+  g_signal_connect (client,
+                    "untagged-response",
+                    G_CALLBACK (on_untagged_response_uidvalidity),
+                    &read_uidvalidity);
+  if (!goa_imap_client_connect_sync (client,
+                                     host_and_port,
+                                     use_tls,
+                                     auth,
+                                     NULL, /* GCancellable */
+                                     error))
+    goto out;
+
+  response = goa_imap_client_run_command_sync (client,
+                                               "SELECT INBOX",
+                                               NULL, /* GCancellable */
+                                               error);
+  if (response == NULL)
+    goto out;
+  g_free (response);
+
+  if (read_uidvalidity != uidvalidity)
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   "UID validity does not match");
+      goto out;
+    }
+
+  if (!func (client, func_user_data, error))
+    goto out;
+
+  ret = TRUE;
+
+ out:
+  if (client != NULL)
+    {
+      GError *local_error;
+
+      g_signal_handlers_disconnect_by_func (client,
+                                            G_CALLBACK (on_untagged_response_uidvalidity),
+                                            &uidvalidity);
+
+      local_error = NULL;
+      if (!goa_imap_client_disconnect_sync (client,
+                                            NULL, /* GCancellable */
+                                            &local_error))
+        {
+          goa_warning ("Error closing connection: %s (%s, %d)",
+                       local_error->message, g_quark_to_string (local_error->domain), local_error->code);
+          g_error_free (local_error);
+        }
+      g_object_unref (client);
+    }
+
+  return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gboolean
+add_star_func (GoaImapClient   *client,
+               gpointer         user_data,
+               GError         **error)
+{
+  const gchar *request = user_data;
+  gchar *response;
+  response = goa_imap_client_run_command_sync (client,
+                                               request,
+                                               NULL, /* GCancellable */
+                                               error);
+  if (response == NULL)
+    return FALSE;
+  g_free (response);
+  return TRUE;
+}
+
+/* runs in thread dedicated to the method invocation */
+static gboolean
+monitor_on_handle_add_star (GoaMailMonitor        *monitor,
+                            GDBusMethodInvocation *invocation,
+                            const gchar           *message_uid_as_str,
+                            gpointer               user_data)
+{
+  MonitorData *data = user_data;
+  GError *error;
+  guint64 message_uid;
+  gchar *request;
+  gchar *endp;
+
+  request = NULL;
+  error = NULL;
+
+  monitor_data_ref (data);
+
+  if (data->starred_folder == NULL)
+    {
+      error = g_error_new (GOA_ERROR,
+                           GOA_ERROR_FAILED,
+                           "Starred folder not found");
+      goto out;
+    }
+  message_uid = strtoll (message_uid_as_str, &endp, 10);
+  if (*endp != '\0' || endp == message_uid_as_str)
+    {
+      error = g_error_new (GOA_ERROR,
+                           GOA_ERROR_FAILED,
+                           "Given message UID is not valid");
+      goto out;
+    }
+
+  request = g_strdup_printf ("UID COPY %d %s",
+                             (gint) (message_uid & 0xffffffff),
+                             data->starred_folder);
+  imap_helper (data->mail->host_and_port,
+               data->mail->use_tls,
+               data->mail->auth,
+               (message_uid >> 32),
+               add_star_func,
+               request,
+               &error);
+ out:
+  if (error == NULL)
+    goa_mail_monitor_complete_add_star (monitor, invocation);
+  else
+    g_dbus_method_invocation_take_error (invocation, error);
+  g_free (request);
+  monitor_data_unref (data);
+  return TRUE; /* invocation was handled */
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+
+static gboolean
+mark_as_spam_func (GoaImapClient   *client,
+                   gpointer         user_data,
+                   GError         **error)
+{
+  const gchar **requests = user_data;
+  gboolean ret;
+  guint n;
+
+  ret = FALSE;
+  for (n = 0; requests[n] != NULL; n++)
+    {
+      gchar *response;
+      response = goa_imap_client_run_command_sync (client, requests[n], NULL, error);
+      if (response == NULL)
+        goto out;
+      g_free (response);
+    }
+  ret = TRUE;
+
+ out:
+  return ret;
+}
+
+/* runs in thread dedicated to the method invocation */
+static gboolean
+monitor_on_handle_mark_as_spam (GoaMailMonitor        *monitor,
+                                GDBusMethodInvocation *invocation,
+                                const gchar           *message_uid_as_str,
+                                gpointer               user_data)
+{
+  MonitorData *data = user_data;
+  GError *error;
+  guint64 message_uid;
+  gchar **requests;
+  gchar *endp;
+
+  requests = NULL;
+  error = NULL;
+
+  monitor_data_ref (data);
+
+  if (data->spam_folder == NULL)
+    {
+      error = g_error_new (GOA_ERROR,
+                           GOA_ERROR_FAILED,
+                           "Spam folder not found");
+      goto out;
+    }
+  message_uid = strtoll (message_uid_as_str, &endp, 10);
+  if (*endp != '\0' || endp == message_uid_as_str)
+    {
+      error = g_error_new (GOA_ERROR,
+                           GOA_ERROR_FAILED,
+                           "Given message UID is not valid");
+      goto out;
+    }
+
+  requests = g_new0 (gchar*, 4);
+  requests[0] = g_strdup_printf ("UID COPY %d %s",
+                                 (gint) (message_uid & 0xffffffff),
+                                 data->spam_folder);
+  requests[1] = g_strdup_printf ("UID STORE %d +FLAGS (\\Deleted)",
+                                 (gint) (message_uid & 0xffffffff));
+  requests[2] = g_strdup_printf ("EXPUNGE");
+  imap_helper (data->mail->host_and_port,
+               data->mail->use_tls,
+               data->mail->auth,
+               (message_uid >> 32),
+               mark_as_spam_func,
+               requests,
+               &error);
+ out:
+  if (error == NULL)
+    goa_mail_monitor_complete_mark_as_spam (monitor, invocation);
+  else
+    g_dbus_method_invocation_take_error (invocation, error);
+  g_strfreev (requests);
+  monitor_data_unref (data);
+  return TRUE; /* invocation was handled */
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
 
 /* runs in thread dedicated to the method invocation */
 static gboolean
@@ -1002,9 +1481,9 @@ handle_create_monitor (GoaMail                *_mail,
 
   monitor_object_path = NULL;
 
-  goa_debug ("Creating mail monitor for %s on account %s",
-             g_dbus_method_invocation_get_sender (invocation),
-             g_dbus_object_get_object_path (g_dbus_interface_get_object (G_DBUS_INTERFACE (mail))));
+  goa_info ("Creating mail monitor for %s on account %s",
+            g_dbus_method_invocation_get_sender (invocation),
+            g_dbus_object_get_object_path (g_dbus_interface_get_object (G_DBUS_INTERFACE (mail))));
 
   data = g_slice_new0 (MonitorData);
   data->ref_count = 1;
@@ -1023,6 +1502,14 @@ handle_create_monitor (GoaMail                *_mail,
   g_signal_connect (data->monitor,
                     "handle-close",
                     G_CALLBACK (monitor_on_handle_close),
+                    data);
+  g_signal_connect (data->monitor,
+                    "handle-add-star",
+                    G_CALLBACK (monitor_on_handle_add_star),
+                    data);
+  g_signal_connect (data->monitor,
+                    "handle-mark-as-spam",
+                    G_CALLBACK (monitor_on_handle_mark_as_spam),
                     data);
   g_signal_connect (data->monitor,
                     "handle-simulate-message-received",

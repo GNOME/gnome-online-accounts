@@ -352,10 +352,12 @@
          @subject: The subject of the message.
          @excerpt: Plain-text excerpt of the message.
          @uri: An URI that can be used to open the message or blank if no such URI exists.
+         @can_be_marked_as_spam: TRUE if the message can be marked as Spam.
+         @can_be_starred: TRUE if the message can be Starred.
 
          Signal emitted when a new message is received.
 
-         TODO: When gnome-shell can handle GVariant instances then add extras back: @extras: Other information about the message (currently unused).
+         TODO: When gnome-shell can handle GVariant instances then add extras back and fold can_be* stuff into it: @extras: Other information about the message (currently unused).
     -->
     <signal name="MessageReceived">
       <arg name="uid" type="s"/>
@@ -363,8 +365,34 @@
       <arg name="subject" type="s"/>
       <arg name="excerpt" type="s"/>
       <arg name="uri" type="s"/>
+      <arg name="can_be_marked_as_spam" type="b"/>
+      <arg name="can_be_starred" type="b"/>
       <!-- arg name="extras" type="a{sv}"/ -->
     </signal>
+
+    <!-- AddStar:
+         @uid: Unique ID of message.
+
+         Adds a star to a message. The @uid parameter should be
+         obtained from a
+         #org.gnome.OnlineAccounts.Mail.Monitor::MessageReceived
+         signal where the @can_be_starred parameter was %TRUE.
+    -->
+    <method name="AddStar">
+      <arg name="uid" type="s" direction="in"/>
+    </method>
+
+    <!-- MarkAsSpam:
+         @uid: Unique ID of message.
+
+         Marks a message as spam. The @uid parameter should be
+         obtained from a
+         #org.gnome.OnlineAccounts.Mail.Monitor::MessageReceived
+         signal where the @can_be_starred parameter was %TRUE.
+    -->
+    <method name="MarkAsSpam">
+      <arg name="uid" type="s" direction="in"/>
+    </method>
 
     <method name="SimulateMessageReceived">
       <arg name="uid" type="s" direction="in"/>
@@ -372,6 +400,8 @@
       <arg name="subject" type="s" direction="in"/>
       <arg name="excerpt" type="s" direction="in"/>
       <arg name="uri" type="s" direction="in"/>
+      <arg name="can_be_marked_as_spam" type="b" direction="in"/>
+      <arg name="can_be_starred" type="b" direction="in"/>
       <!-- arg name="extras" type="a{sv}"/ -->
     </method>
   </interface>
