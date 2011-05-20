@@ -24,6 +24,7 @@
 #include <glib/gi18n-lib.h>
 #include <gnome-keyring.h>
 
+#include "goalogging.h"
 #include "goaprovider.h"
 #include "goagoogleprovider.h"
 #include "goafacebookprovider.h"
@@ -251,81 +252,6 @@ goa_provider_show_account (GoaProvider         *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-/**
- * goa_util_add_row_widget:
- * @table: A #GtkTable.
- * @label_text: The text to insert on the left side.
- * @widget: A widget to insert on the right side.
- *
- * Utility function to add @label_text and @widget to @table.
- */
-void
-goa_util_add_row_widget (GtkTable     *table,
-                         const gchar  *label_text,
-                         GtkWidget    *widget)
-{
-  GtkWidget *label;
-  gchar *s;
-  guint num_rows;
-
-  g_return_if_fail (GTK_IS_TABLE (table));
-  g_return_if_fail (label_text != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  s = g_strdup_printf ("<span foreground=\"#555555\">%s</span>", label_text);
-
-  gtk_table_get_size (table, &num_rows, NULL);
-
-  label = gtk_label_new (NULL);
-  gtk_label_set_markup (GTK_LABEL (label), s);
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-  gtk_table_attach (table, label,
-                    0, 1,
-                    num_rows, num_rows + 1,
-                    GTK_FILL, GTK_FILL, 0, 0);
-  gtk_table_attach (table, widget,
-                    1, 2,
-                    num_rows, num_rows + 1,
-                    GTK_FILL, GTK_FILL, 0, 0);
-
-  g_free (s);
-}
-
-/**
- * goa_util_add_row:
- * @table: A #GtkTable.
- * @label_text: The text to insert on the left side.
- * @value_markup: The markup to insert on the right side.
- *
- * Utility function to add @label_text and @value_text to @table.
- */
-void
-goa_util_add_row (GtkTable     *table,
-                  const gchar  *label_text,
-                  const gchar  *value_markup)
-{
-  GtkWidget *label;
-  label = gtk_label_new (NULL);
-  gtk_label_set_markup (GTK_LABEL (label), value_markup);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-  goa_util_add_row_widget (table, label_text, label);
-}
-
-static void
-on_name_editing_done (GoaEditableLabel *editable_label,
-                      gpointer          user_data)
-{
-  GoaObject *object = GOA_OBJECT (user_data);
-  GoaAccount *account;
-
-  account = goa_object_peek_account (object);
-  goa_account_call_set_name (account,
-                             goa_editable_label_get_text (editable_label),
-                             NULL, /* GCancellable */
-                             NULL, NULL); /* callback, user_data */
-}
-
 static void
 goa_provider_show_account_real (GoaProvider         *provider,
                                 GoaClient           *client,
@@ -333,25 +259,10 @@ goa_provider_show_account_real (GoaProvider         *provider,
                                 GtkBox              *vbox,
                                 GtkTable            *table)
 {
-  GoaAccount *account;
   GtkWidget *elabel;
-  guint num_rows;
-
-  account = goa_object_peek_account (object);
-
-  gtk_table_get_size (table, &num_rows, NULL);
-
-  elabel = goa_editable_label_new ();
-  goa_editable_label_set_text (GOA_EDITABLE_LABEL (elabel), goa_account_get_name (account));
-  goa_editable_label_set_editable (GOA_EDITABLE_LABEL (elabel), TRUE);
+  elabel = goa_util_add_row_editable_label_from_keyfile (table, object, NULL, "Name", TRUE);
   goa_editable_label_set_scale (GOA_EDITABLE_LABEL (elabel), 1.2);
   goa_editable_label_set_weight (GOA_EDITABLE_LABEL (elabel), 700);
-  g_signal_connect (elabel, "editing-done", G_CALLBACK (on_name_editing_done), object);
-
-  gtk_table_attach (table, elabel,
-                    1, 2,
-                    num_rows, num_rows + 1,
-                    GTK_FILL, GTK_FILL, 0, 0);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -845,3 +756,244 @@ goa_provider_lookup_credentials_sync (GoaProvider   *provider,
   return ret;
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+
+/**
+ * goa_util_add_row_widget:
+ * @table: A #GtkTable.
+ * @label_text: (allow-none): The text to insert on the left side or %NULL for no label.
+ * @widget: A widget to insert on the right side.
+ *
+ * Utility function to add @label_text and @widget to @table.
+ *
+ * Returns: (transfer none): The #GtkWidget that was inserted (e.g. @widget itself).
+ */
+GtkWidget *
+goa_util_add_row_widget (GtkTable     *table,
+                         const gchar  *label_text,
+                         GtkWidget    *widget)
+{
+  GtkWidget *label;
+  guint num_rows;
+
+  g_return_val_if_fail (GTK_IS_TABLE (table), NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  gtk_table_get_size (table, &num_rows, NULL);
+
+  if (label_text != NULL)
+    {
+      gchar *s;
+      s = g_strdup_printf ("<span foreground=\"#555555\">%s</span>", label_text);
+      label = gtk_label_new (NULL);
+      gtk_label_set_markup (GTK_LABEL (label), s);
+      gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+      gtk_table_attach (table, label,
+                        0, 1,
+                        num_rows, num_rows + 1,
+                        GTK_FILL, GTK_FILL, 0, 0);
+      g_free (s);
+    }
+  gtk_table_attach (table, widget,
+                    1, 2,
+                    num_rows, num_rows + 1,
+                    GTK_FILL, GTK_FILL, 0, 0);
+  return widget;
+}
+
+/**
+ * goa_util_add_row_label:
+ * @table: A #GtkTable.
+ * @label_text: (allow-none): The text to insert on the left side or %NULL for no label.
+ * @value_markup: The markup to insert on the right side.
+ *
+ * Utility function to add @label_text and @value_text to @table.
+ *
+ * Returns: (transfer none): The #GtkLabel that was inserted.
+ */
+GtkWidget *
+goa_util_add_row_label (GtkTable     *table,
+                        const gchar  *label_text,
+                        const gchar  *value_markup)
+{
+  GtkWidget *label;
+  label = gtk_label_new (NULL);
+  gtk_label_set_markup (GTK_LABEL (label), value_markup);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+  return goa_util_add_row_widget (table, label_text, label);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct {
+  GoaObject *object;
+  gchar *key;
+} KeyFileEditableData;
+
+static KeyFileEditableData *
+keyfile_editable_data_new (GoaObject   *object,
+                           const gchar *key)
+{
+  KeyFileEditableData *data;
+  data = g_slice_new (KeyFileEditableData);
+  data->object = g_object_ref (object);
+  data->key = g_strdup (key);
+  return data;
+}
+
+static void
+keyfile_editable_data_free (KeyFileEditableData *data)
+{
+  g_object_unref (data->object);
+  g_free (data->key);
+  g_slice_free (KeyFileEditableData, data);
+}
+
+static void
+keyfile_editable_on_editing_done (GtkEditable  *editable,
+                                  gpointer      user_data)
+{
+  KeyFileEditableData *data = user_data;
+  GoaAccount *account;
+  GError *error;
+  GKeyFile *key_file;
+  gchar *contents;
+  gsize length;
+
+  account = goa_object_peek_account (data->object);
+
+  key_file = g_key_file_new ();
+  error = NULL;
+  if (!g_key_file_load_from_file (key_file,
+                                  goa_account_get_keyfile_path (account),
+                                  G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS,
+                                  &error))
+    {
+      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
+                   goa_account_get_keyfile_path (account),
+                   error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+  g_key_file_set_string (key_file,
+                         goa_account_get_keyfile_group (account),
+                         data->key,
+                         goa_editable_label_get_text (GOA_EDITABLE_LABEL (editable)));
+
+  error = NULL;
+  contents = g_key_file_to_data (key_file,
+                                 &length,
+                                 &error);
+  if (contents == NULL)
+    {
+      g_prefix_error (&error,
+                      "Error generating key-value-file %s: ",
+                      goa_account_get_keyfile_path (account));
+      goa_warning ("%s (%s, %d)",
+                   error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+  error = NULL;
+  if (!g_file_set_contents (goa_account_get_keyfile_path (account),
+                            contents,
+                            length,
+                            &error))
+    {
+      g_prefix_error (&error,
+                      "Error writing key-value-file %s: ",
+                      goa_account_get_keyfile_path (account));
+      goa_warning ("%s (%s, %d)",
+                   error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+ out:
+  g_key_file_free (key_file);
+}
+
+/**
+ * goa_util_add_row_editable_label:
+ * @table: A #GtkTable.
+ * @object: A #GoaObject for an account.
+ * @label_text: (allow-none): The text to insert on the left side or %NULL for no label.
+ * @key: The key in the key-value file for @object to look up.
+ * @editable: Whether the widget should be editable
+ *
+ * Adds a #GoaEditableLabel to @table that reads its value from the
+ * key-value file for @object using @key. If it's edited, the new
+ * value is written back to the key-value file.
+ *
+ * Returns: (transfer none): The #GoaEditableLabel that was inserted.
+ */
+GtkWidget *
+goa_util_add_row_editable_label_from_keyfile (GtkTable     *table,
+                                              GoaObject    *object,
+                                              const gchar  *label_text,
+                                              const gchar  *key,
+                                              gboolean      editable)
+{
+  GoaAccount *account;
+  GtkWidget *elabel;
+  GKeyFile *key_file;
+  GError *error;
+  gchar *value;
+
+  key_file = NULL;
+  value = NULL;
+
+  account = goa_object_peek_account (object);
+  elabel = goa_editable_label_new ();
+
+  key_file = g_key_file_new ();
+  error = NULL;
+  if (!g_key_file_load_from_file (key_file,
+                                  goa_account_get_keyfile_path (account),
+                                  G_KEY_FILE_NONE,
+                                  &error))
+    {
+      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
+                   goa_account_get_keyfile_path (account),
+                   error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+  value = g_key_file_get_string (key_file,
+                                 goa_account_get_keyfile_group (account),
+                                 key,
+                                 &error);
+  if (value == NULL)
+    {
+      goa_warning ("Error extracting key %s from keyfile %s: %s (%s, %d)",
+                   key,
+                   goa_account_get_keyfile_path (account),
+                   error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+  goa_editable_label_set_text (GOA_EDITABLE_LABEL (elabel), value);
+
+  if (editable)
+    {
+      goa_editable_label_set_editable (GOA_EDITABLE_LABEL (elabel), TRUE);
+      g_signal_connect_data (elabel,
+                             "editing-done",
+                             G_CALLBACK (keyfile_editable_on_editing_done),
+                             keyfile_editable_data_new (object, key),
+                             (GClosureNotify) keyfile_editable_data_free,
+                             0); /* GConnectFlags */
+    }
+
+ out:
+  g_free (value);
+  if (key_file != NULL)
+    g_key_file_free (key_file);
+  return goa_util_add_row_widget (table, label_text, elabel);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */

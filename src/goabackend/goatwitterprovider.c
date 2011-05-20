@@ -310,16 +310,11 @@ show_account (GoaProvider         *provider,
               GtkBox              *vbox,
               GtkTable            *table)
 {
-  GoaTwitterAccount *taccount;
-
   /* Chain up */
   GOA_PROVIDER_CLASS (goa_twitter_provider_parent_class)->show_account (provider, client, object, vbox, table);
 
-  /* TODO: look up screenname */
-  taccount = goa_object_get_twitter_account (object);
-  goa_util_add_row (table,
-                    _("Account Number"),
-                    goa_twitter_account_get_id (taccount));
+  /* TODO: look up screenname from account number */
+  goa_util_add_row_editable_label_from_keyfile (table, object, _("Account Number"), "Identity", FALSE);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

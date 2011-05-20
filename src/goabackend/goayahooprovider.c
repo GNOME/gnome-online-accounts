@@ -348,16 +348,11 @@ show_account (GoaProvider         *provider,
               GtkBox              *vbox,
               GtkTable            *table)
 {
-  GoaYahooAccount *taccount;
-
   /* Chain up */
   GOA_PROVIDER_CLASS (goa_yahoo_provider_parent_class)->show_account (provider, client, object, vbox, table);
 
-  /* TODO: look up email address / screenname */
-  taccount = goa_object_get_yahoo_account (object);
-  goa_util_add_row (table,
-                    _("GUID"),
-                    goa_yahoo_account_get_guid (taccount));
+  /* TODO: look up email address / screenname from GUID */
+  goa_util_add_row_editable_label_from_keyfile (table, object, _("GUID"), "Identity", FALSE);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

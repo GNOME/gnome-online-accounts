@@ -153,13 +153,6 @@ gboolean     goa_provider_ensure_credentials_sync   (GoaProvider         *provid
                                                      GCancellable        *cancellable,
                                                      GError             **error);
 
-void goa_util_add_row_widget (GtkTable     *table,
-                              const gchar  *label_text,
-                              GtkWidget    *widget);
-void goa_util_add_row (GtkTable     *table,
-                       const gchar  *label_text,
-                       const gchar  *value_markup);
-
 /**
  * GOA_PROVIDER_EXTENSION_POINT_NAME:
  *
@@ -169,6 +162,18 @@ void goa_util_add_row (GtkTable     *table,
 
 GList        *goa_provider_get_all (void);
 GoaProvider  *goa_provider_get_for_provider_type (const gchar *provider_type);
+
+GtkWidget *goa_util_add_row_widget (GtkTable     *table,
+                                    const gchar  *label_text,
+                                    GtkWidget    *widget);
+GtkWidget *goa_util_add_row_label  (GtkTable     *table,
+                                    const gchar  *label_text,
+                                    const gchar  *value_markup);
+GtkWidget *goa_util_add_row_editable_label_from_keyfile (GtkTable     *table,
+                                                         GoaObject    *object,
+                                                         const gchar  *label_text,
+                                                         const gchar  *key,
+                                                         gboolean      editable);
 
 G_END_DECLS
 

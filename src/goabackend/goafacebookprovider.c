@@ -286,15 +286,10 @@ show_account (GoaProvider         *provider,
               GtkBox              *vbox,
               GtkTable            *table)
 {
-  GoaFacebookAccount *fbaccount;
-
   /* Chain up */
   GOA_PROVIDER_CLASS (goa_facebook_provider_parent_class)->show_account (provider, client, object, vbox, table);
 
-  fbaccount = goa_object_get_facebook_account (object);
-  goa_util_add_row (table,
-                    _("User Name"),
-                    goa_facebook_account_get_user_name (fbaccount));
+  goa_util_add_row_editable_label_from_keyfile (table, object, _("User Name"), "Identity", FALSE);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

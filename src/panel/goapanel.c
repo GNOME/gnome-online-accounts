@@ -360,8 +360,8 @@ show_page_account (GoaPanel  *panel,
     }
 
   table = gtk_table_new (3, 2, FALSE);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 10);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 10);
+  gtk_table_set_row_spacings (GTK_TABLE (table), 0);
+  gtk_table_set_col_spacings (GTK_TABLE (table), 4);
   gtk_box_pack_start (GTK_BOX (panel->accounts_vbox), table, FALSE, TRUE, 0);
 
   if (provider != NULL)

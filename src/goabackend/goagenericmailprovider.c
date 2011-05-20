@@ -28,6 +28,7 @@
 #include "goagenericmailprovider.h"
 #include "goaimapclient.h"
 #include "goaimapauthlogin.h"
+#include "goaeditablelabel.h"
 
 #include "goaimapmail.h"
 
@@ -823,15 +824,11 @@ show_account (GoaProvider         *provider,
               GtkBox              *vbox,
               GtkTable            *table)
 {
-  GoaMail *mail;
-
   /* Chain up */
   GOA_PROVIDER_CLASS (goa_generic_mail_provider_parent_class)->show_account (provider, client, object, vbox, table);
 
-  mail = goa_object_get_mail (object);
-  goa_util_add_row (table,
-                    _("Email Address"),
-                    goa_mail_get_email_address (mail));
+  goa_util_add_row_editable_label_from_keyfile (table, object, _("Email Address"), "EmailAddress", FALSE);
+  goa_util_add_row_editable_label_from_keyfile (table, object, _("IMAP Server"), "ImapHost", TRUE);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
