@@ -303,9 +303,36 @@ diff_sorted_lists (GList *list1,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+typedef struct
+{
+  GKeyFile *key_file;
+  gchar *path;
+} KeyFileData;
+
+static void
+key_file_data_free (KeyFileData *data)
+{
+  /* the key_file member is freed elsewhere */
+  g_free (data->path);
+  g_slice_free (KeyFileData, data);
+}
+
+static KeyFileData *
+key_file_data_new (GKeyFile    *key_file,
+                   const gchar *path)
+{
+  KeyFileData *data;
+  data = g_slice_new (KeyFileData);
+  data->key_file = key_file;
+  data->path = g_strdup (path);
+  return data;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static void
 add_config_file (const gchar   *path,
-                 GHashTable    *group_name_to_key_file,
+                 GHashTable    *group_name_to_key_file_data,
                  GList        **key_files_to_free)
 {
   GKeyFile *key_file;
@@ -340,9 +367,9 @@ add_config_file (const gchar   *path,
         {
           if (g_str_has_prefix (groups[n], "Account "))
             {
-              g_hash_table_insert (group_name_to_key_file,
+              g_hash_table_insert (group_name_to_key_file_data,
                                    groups[n], /* steals string */
-                                   key_file);
+                                   key_file_data_new (key_file, path));
             }
           else
             {
@@ -363,6 +390,7 @@ add_config_file (const gchar   *path,
 static gboolean
 update_account_object (GoaDaemon           *daemon,
                        GoaObjectSkeleton   *object,
+                       const gchar         *path,
                        const gchar         *group,
                        GKeyFile            *key_file,
                        gboolean             just_added)
@@ -399,6 +427,8 @@ update_account_object (GoaDaemon           *daemon,
     }
 
   goa_account_set_id (account, g_strrstr (g_dbus_object_get_object_path (G_DBUS_OBJECT (object)), "/") + 1);
+  goa_account_set_keyfile_path (account, path);
+  goa_account_set_keyfile_group (account, group);
   goa_account_set_provider_type (account, type);
   goa_account_set_name (account, name);
 
@@ -440,11 +470,11 @@ object_path_to_group (const gchar *object_path)
 
 static void
 process_config_entries (GoaDaemon  *daemon,
-                        GHashTable *group_name_to_key_file)
+                        GHashTable *group_name_to_key_file_data)
 {
   GHashTableIter iter;
   const gchar *id;
-  GKeyFile *key_file;
+  KeyFileData *key_file_data;
   GList *existing_object_paths;
   GList *config_object_paths;
   GList *added;
@@ -469,8 +499,8 @@ process_config_entries (GoaDaemon  *daemon,
   }
 
   config_object_paths = NULL;
-  g_hash_table_iter_init (&iter, group_name_to_key_file);
-  while (g_hash_table_iter_next (&iter, (gpointer*) &id, (gpointer*)  &key_file))
+  g_hash_table_iter_init (&iter, group_name_to_key_file_data);
+  while (g_hash_table_iter_next (&iter, (gpointer*) &id, (gpointer*) &key_file_data))
     {
       gchar *object_path;
 
@@ -519,16 +549,21 @@ process_config_entries (GoaDaemon  *daemon,
       const gchar *object_path = l->data;
       GoaObjectSkeleton *object;
       gchar *group;
-      GKeyFile *key_file;
+      KeyFileData *key_file_data;
 
       goa_debug ("adding %s", object_path);
 
       group = object_path_to_group (object_path);
-      key_file = g_hash_table_lookup (group_name_to_key_file, group);
-      g_warn_if_fail (key_file != NULL);
+      key_file_data = g_hash_table_lookup (group_name_to_key_file_data, group);
+      g_warn_if_fail (key_file_data != NULL);
 
       object = goa_object_skeleton_new (object_path);
-      if (update_account_object (daemon, object, group, key_file, TRUE))
+      if (update_account_object (daemon,
+                                 object,
+                                 key_file_data->path,
+                                 group,
+                                 key_file_data->key_file,
+                                 TRUE))
         {
           g_dbus_object_manager_server_export (daemon->object_manager, G_DBUS_OBJECT_SKELETON (object));
           g_signal_connect (goa_object_peek_account (GOA_OBJECT (object)),
@@ -556,17 +591,22 @@ process_config_entries (GoaDaemon  *daemon,
       const gchar *object_path = l->data;
       GoaObject *object;
       gchar *group;
-      GKeyFile *key_file;
+      KeyFileData *key_file_data;
 
       goa_debug ("unchanged %s", object_path);
 
       group = object_path_to_group (object_path);
-      key_file = g_hash_table_lookup (group_name_to_key_file, group);
-      g_warn_if_fail (key_file != NULL);
+      key_file_data = g_hash_table_lookup (group_name_to_key_file_data, group);
+      g_warn_if_fail (key_file_data != NULL);
 
       object = GOA_OBJECT (g_dbus_object_manager_get_object (G_DBUS_OBJECT_MANAGER (daemon->object_manager), object_path));
       g_warn_if_fail (object != NULL);
-      if (!update_account_object (daemon, GOA_OBJECT_SKELETON (object), group, key_file, FALSE))
+      if (!update_account_object (daemon,
+                                  GOA_OBJECT_SKELETON (object),
+                                  key_file_data->path,
+                                  group,
+                                  key_file_data->key_file,
+                                  FALSE))
         {
           g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
                                                 G_CALLBACK (account_on_attention_needed_notify),
@@ -607,13 +647,16 @@ static void
 goa_daemon_reload_configuration (GoaDaemon *daemon)
 {
   GList *key_files_to_free;
-  GHashTable *group_name_to_key_file;
+  GHashTable *group_name_to_key_file_data;
   GDir *dir;
   gchar *path;
   gchar *dir_path;
 
   key_files_to_free = NULL;
-  group_name_to_key_file = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  group_name_to_key_file_data = g_hash_table_new_full (g_str_hash,
+                                                       g_str_equal,
+                                                       g_free,
+                                                       (GDestroyNotify) key_file_data_free);
 
   /* First read system config files at /etc/goa-1.0/accounts.conf.d/ */
   dir_path = PACKAGE_SYSCONF_DIR "/goa-1.0/accounts.conf.d";
@@ -626,7 +669,7 @@ goa_daemon_reload_configuration (GoaDaemon *daemon)
           if (g_str_has_suffix (name, ".conf"))
             {
               path = g_strdup_printf ("%s/%s", dir_path, name);
-              add_config_file (path, group_name_to_key_file, &key_files_to_free);
+              add_config_file (path, group_name_to_key_file_data, &key_files_to_free);
               g_free (path);
             }
         }
@@ -644,7 +687,7 @@ goa_daemon_reload_configuration (GoaDaemon *daemon)
           if (g_str_has_suffix (name, ".conf"))
             {
               path = g_strdup_printf ("%s/%s", dir_path, name);
-              add_config_file (path, group_name_to_key_file, &key_files_to_free);
+              add_config_file (path, group_name_to_key_file_data, &key_files_to_free);
               g_free (path);
             }
         }
@@ -654,13 +697,13 @@ goa_daemon_reload_configuration (GoaDaemon *daemon)
 
   /* Finally the main user config file at $HOME/.config/goa-1.0/accounts.conf */
   path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
-  add_config_file (path, group_name_to_key_file, &key_files_to_free);
+  add_config_file (path, group_name_to_key_file_data, &key_files_to_free);
   g_free (path);
 
-  /* now process the group_name_to_key_file hash table */
-  process_config_entries (daemon, group_name_to_key_file);
+  /* now process the group_name_to_key_file_data hash table */
+  process_config_entries (daemon, group_name_to_key_file_data);
 
-  g_hash_table_unref (group_name_to_key_file);
+  g_hash_table_unref (group_name_to_key_file_data);
   g_list_foreach (key_files_to_free, (GFunc) g_key_file_free, NULL);
   g_list_free (key_files_to_free);
 }
