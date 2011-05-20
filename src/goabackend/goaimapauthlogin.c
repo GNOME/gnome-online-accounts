@@ -84,8 +84,8 @@ goa_imap_auth_login_finalize (GObject *object)
 {
   GoaImapAuthLogin *auth = GOA_IMAP_AUTH_LOGIN (object);
 
-  g_object_unref (auth->provider);
-  g_object_unref (auth->object);
+  g_clear_object (&auth->provider);
+  g_clear_object (&auth->object);
   g_free (auth->user_name);
   g_free (auth->password);
 
@@ -181,7 +181,7 @@ goa_imap_auth_login_class_init (GoaImapAuthLoginClass *klass)
   /**
    * GoaImapAuthLogin:provider:
    *
-   * The #GoaProvider object for the account.
+   * The #GoaProvider object for the account or %NULL.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_PROVIDER,
@@ -229,7 +229,14 @@ goa_imap_auth_login_class_init (GoaImapAuthLoginClass *klass)
   /**
    * GoaImapAuthLogin:password:
    *
-   * The password (TODO: if %NULL, look up via the keyring).
+   * The password or %NULL.
+   *
+   * If this is %NULL, the credentials are looked up using
+   * goa_provider_lookup_credentials_sync() using the
+   * #GoaImapAuthLogin:provider and #GoaImapAuthLogin:object for
+   * @provider and @object. The credentials are expected to be a
+   * %G_VARIANT_VARDICT and the key <literal>imap-password</literal>
+   * is used to look up the password.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_PASSWORD,
@@ -247,10 +254,10 @@ goa_imap_auth_login_class_init (GoaImapAuthLoginClass *klass)
 
 /**
  * goa_imap_auth_login_new:
- * @provider: A #GoaLoginProvider.
- * @object: An account object.
+ * @provider: (allow-none): A #GoaLoginProvider or %NULL.
+ * @object: (allow-none): An account object or %NULL.
  * @user_name: The user name to use.
- * @password: The password to use.
+ * @password: (allow-none): The password to use or %NULL to look it up (see the #GoaImapAuthLogin:password property).
  *
  * Creates a new #GoaImapAuth to be used for username/password authentication.
  *
@@ -262,8 +269,8 @@ goa_imap_auth_login_new (GoaProvider       *provider,
                          const gchar       *user_name,
                          const gchar       *password)
 {
-  g_return_val_if_fail (GOA_IS_PROVIDER (provider), NULL);
-  g_return_val_if_fail (GOA_IS_OBJECT (object), NULL);
+  g_return_val_if_fail (provider == NULL || GOA_IS_PROVIDER (provider), NULL);
+  g_return_val_if_fail (object == NULL || GOA_IS_OBJECT (object), NULL);
   g_return_val_if_fail (user_name != NULL, NULL);
   return GOA_IMAP_AUTH (g_object_new (GOA_TYPE_IMAP_AUTH_LOGIN,
                                       "provider", provider,
@@ -286,14 +293,51 @@ goa_imap_auth_login_run_sync (GoaImapAuth         *_auth,
   gchar *request;
   gchar *response;
   gboolean ret;
+  gchar *password;
 
   request = NULL;
   response = NULL;
+  password = NULL;
   ret = FALSE;
 
   /* TODO: support looking up the password from the keyring */
+  if (auth->password != NULL)
+    {
+      password = g_strdup (auth->password);
+    }
+  else if (auth->provider != NULL && auth->object != NULL)
+    {
+      GVariant *credentials;
+      credentials = goa_provider_lookup_credentials_sync (auth->provider,
+                                                          auth->object,
+                                                          cancellable,
+                                                          error);
+      if (credentials == NULL)
+        {
+          g_prefix_error (error, "Error looking up credentials for IMAP LOGIN in keyring: ");
+          goto out;
+        }
+      if (!g_variant_lookup (credentials, "imap-password", "s", &password))
+        {
+          g_set_error (error,
+                       GOA_ERROR,
+                       GOA_ERROR_FAILED,
+                       "Did not find imap-password in credentials");
+          g_variant_unref (credentials);
+          goto out;
+        }
+      g_variant_unref (credentials);
+    }
+  else
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   "Cannot do IMAP LOGIN without a password");
+      goto out;
+    }
 
-  request = g_strdup_printf ("A001 LOGIN %s %s\r\n", auth->user_name, auth->password);
+  request = g_strdup_printf ("A001 LOGIN %s %s\r\n", auth->user_name, password);
   if (!g_data_output_stream_put_string (output, request, cancellable, error))
     goto out;
 
@@ -322,5 +366,6 @@ goa_imap_auth_login_run_sync (GoaImapAuth         *_auth,
  out:
   g_free (response);
   g_free (request);
+  g_free (password);
   return ret;
 }

@@ -921,6 +921,9 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
   if (data.error != NULL)
     goto out;
 
+  ret = GOA_OBJECT (g_dbus_object_manager_get_object (goa_client_get_object_manager (client),
+                                                      data.account_object_path));
+
   g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&builder, "{sv}", "authorization_code", g_variant_new_string (authorization_code));
   g_variant_builder_add (&builder, "{sv}", "access_token", g_variant_new_string (access_token));
@@ -931,14 +934,11 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
     g_variant_builder_add (&builder, "{sv}", "refresh_token", g_variant_new_string (refresh_token));
   /* TODO: run in worker thread */
   if (!goa_provider_store_credentials_sync (GOA_PROVIDER (provider),
-                                            identity,
+                                            ret,
                                             g_variant_builder_end (&builder),
                                             NULL, /* GCancellable */
                                             &data.error))
     goto out;
-
-  ret = GOA_OBJECT (g_dbus_object_manager_get_object (goa_client_get_object_manager (client),
-                                                      data.account_object_path));
 
  out:
   if (data.error != NULL)
@@ -1037,10 +1037,10 @@ goa_oauth2_provider_refresh_account (GoaProvider  *_provider,
   if (refresh_token != NULL)
     g_variant_builder_add (&builder, "{sv}", "refresh_token", g_variant_new_string (refresh_token));
   if (!goa_provider_store_credentials_sync (GOA_PROVIDER (provider),
-                                                    identity,
-                                                    g_variant_builder_end (&builder),
-                                                    NULL, /* GCancellable */
-                                                    error))
+                                            object,
+                                            g_variant_builder_end (&builder),
+                                            NULL, /* GCancellable */
+                                            error))
     goto out;
 
   goa_account_call_ensure_credentials (goa_object_peek_account (object),
@@ -1106,7 +1106,6 @@ goa_oauth2_provider_get_access_token_sync (GoaOAuth2Provider  *provider,
                                            GCancellable       *cancellable,
                                            GError            **error)
 {
-  const gchar *identity;
   GVariant *credentials;
   GVariantIter iter;
   const gchar *key;
@@ -1151,9 +1150,8 @@ goa_oauth2_provider_get_access_token_sync (GoaOAuth2Provider  *provider,
   g_mutex_lock (lock);
 
   /* First, get the credentials from the keyring */
-  identity = goa_oauth2_based_get_identity (goa_object_peek_oauth2_based (object));
   credentials = goa_provider_lookup_credentials_sync (GOA_PROVIDER (provider),
-                                                      identity,
+                                                      object,
                                                       cancellable,
                                                       error);
   if (credentials == NULL)
@@ -1253,9 +1251,8 @@ goa_oauth2_provider_get_access_token_sync (GoaOAuth2Provider  *provider,
   if (refresh_token != NULL)
     g_variant_builder_add (&builder, "{sv}", "refresh_token", g_variant_new_string (refresh_token));
 
-  identity = goa_oauth2_based_get_identity (goa_object_peek_oauth2_based (object));
   if (!goa_provider_store_credentials_sync (GOA_PROVIDER (provider),
-                                            identity,
+                                            object,
                                             g_variant_builder_end (&builder),
                                             cancellable,
                                             error))

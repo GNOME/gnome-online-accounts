@@ -201,9 +201,11 @@
       @access_token: The access token.
       @expires_in: The duration that the returned token is valid for, in seconds or 0 if unknown.
 
-      Use this method to obtains an access token to access services
-      for an account. Because networking is involved, this method may
-      take a very long time to complete.
+      Use this method to obtain an access token that can be used to
+      access services for the account. Because networking is involved,
+      this method may take a very long time to complete.
+
+      Note that calls to this method are logged.
     -->
     <method name="GetAccessToken">
       <arg name="access_token" type="s" direction="out"/>
@@ -228,14 +230,11 @@
       @access_token_secret: The access token secret.
       @expires_in: The duration that the returned token is valid for, in seconds or 0 if unknown.
 
-      Use this method to obtains an access token to access services
-      for an account. Because networking is involved, this method may
-      take a very long time to complete.
+      Use this method to obtain an access token that can be used to to
+      access services for the account. Because networking is involved,
+      this method may take a very long time to complete.
 
-      If this method fails because the token service indicates that
-      authorization has expired, the
-      #org.gnome.OnlineAccounts.Account:AttentionNeeded property will
-      be set to TRUE.
+      Note that calls to this method are logged.
     -->
     <method name="GetAccessToken">
       <arg name="access_token" type="s" direction="out"/>
@@ -245,6 +244,33 @@
 
     <!-- Identity: The identity that was authenticated. -->
     <property name="Identity" type="s" access="read"/>
+  </interface>
+
+  <!--
+      org.gnome.OnlineAccounts.PasswordBased:
+
+      An account object implements this interface if a stored password
+      is used to obtain access.
+  -->
+  <interface name="org.gnome.OnlineAccounts.PasswordBased">
+    <!--
+      GetPassword:
+      @id: An identifier describing what password to get.
+      @password: The password.
+
+      Use this method to obtain the passwords used to access the
+      account.
+
+      If the account is for a mail account, nnown values for @id
+      includes <literal>imap-password</literal> and
+      <literal>smtp-password</literal>.
+
+      Note that calls to this method are logged.
+    -->
+    <method name="GetPassword">
+      <arg name="id" type="s" direction="in"/>
+      <arg name="password" type="s" direction="out"/>
+    </method>
   </interface>
 
   <!--

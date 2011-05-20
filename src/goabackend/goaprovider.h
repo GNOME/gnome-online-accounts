@@ -120,12 +120,12 @@ gboolean     goa_provider_build_object              (GoaProvider         *provid
                                                      const gchar         *group,
                                                      GError             **error);
 gboolean     goa_provider_store_credentials_sync    (GoaProvider         *provider,
-                                                     const gchar         *identity,
+                                                     GoaObject           *object,
                                                      GVariant            *credentials,
                                                      GCancellable        *cancellable,
                                                      GError             **error);
 GVariant    *goa_provider_lookup_credentials_sync   (GoaProvider         *provider,
-                                                     const gchar         *identity,
+                                                     GoaObject           *object,
                                                      GCancellable        *cancellable,
                                                      GError             **error);
 void         goa_provider_ensure_credentials        (GoaProvider         *provider,

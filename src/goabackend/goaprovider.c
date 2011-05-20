@@ -540,7 +540,7 @@ static const GnomeKeyringPasswordSchema keyring_password_schema =
 /**
  * goa_provider_store_credentials_sync:
  * @provider: A #GoaProvider.
- * @identity: The identity to store credentials for.
+ * @object: The account to store credentials for.
  * @credentials: The credentials to store.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
@@ -557,7 +557,7 @@ static const GnomeKeyringPasswordSchema keyring_password_schema =
  */
 gboolean
 goa_provider_store_credentials_sync (GoaProvider   *provider,
-                                     const gchar   *identity,
+                                     GoaObject     *object,
                                      GVariant      *credentials,
                                      GCancellable  *cancellable,
                                      GError       **error)
@@ -567,15 +567,18 @@ goa_provider_store_credentials_sync (GoaProvider   *provider,
   gchar *password_description;
   gchar *password_key;
   GnomeKeyringResult result;
+  const gchar *identity;
 
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
-  g_return_val_if_fail (identity != NULL, FALSE);
+  g_return_val_if_fail (GOA_IS_OBJECT (object) && goa_object_peek_account (object) != NULL, FALSE);
   g_return_val_if_fail (credentials != NULL, FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   /* TODO: use GCancellable */
   ret = FALSE;
+
+  identity = goa_account_get_id (goa_object_peek_account (object));
 
   credentials_str = g_variant_print (credentials, TRUE);
   g_variant_ref_sink (credentials);
@@ -617,7 +620,7 @@ goa_provider_store_credentials_sync (GoaProvider   *provider,
 /**
  * goa_provider_lookup_credentials_sync:
  * @provider: A #GoaProvider.
- * @identity: The identity to look up credentials for.
+ * @object: The account to store credentials for.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
@@ -634,7 +637,7 @@ goa_provider_store_credentials_sync (GoaProvider   *provider,
  */
 GVariant *
 goa_provider_lookup_credentials_sync (GoaProvider   *provider,
-                                      const gchar   *identity,
+                                      GoaObject     *object,
                                       GCancellable  *cancellable,
                                       GError       **error)
 {
@@ -642,15 +645,18 @@ goa_provider_lookup_credentials_sync (GoaProvider   *provider,
   GVariant *ret;
   GnomeKeyringResult result;
   gchar *returned_password;
+  const gchar *identity;
 
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), NULL);
-  g_return_val_if_fail (identity != NULL, NULL);
+  g_return_val_if_fail (GOA_IS_OBJECT (object) && goa_object_peek_account (object) != NULL, FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
   ret = NULL;
   password_key = NULL;
   returned_password = NULL;
+
+  identity = goa_account_get_id (goa_object_peek_account (object));
 
   password_key = g_strdup_printf ("%s:%s",
                                   goa_provider_get_provider_type (GOA_PROVIDER (provider)),
