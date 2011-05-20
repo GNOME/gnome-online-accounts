@@ -30,7 +30,6 @@
 
 #include "goapanel.h"
 #include "goapanelaccountsmodel.h"
-#include "goaeditablelabel.h"
 
 typedef struct _GoaPanelClass GoaPanelClass;
 

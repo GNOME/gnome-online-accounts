@@ -72,6 +72,9 @@ typedef struct _GoaImapClient GoaImapClient;
 struct _GoaImapMail;
 typedef struct _GoaImapMail GoaImapMail;
 
+struct _GoaEditableLabel;
+typedef struct _GoaEditableLabel GoaEditableLabel;
+
 G_END_DECLS
 
 #endif /* __GOA_BACKEND_TYPES_H__ */
