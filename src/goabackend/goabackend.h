@@ -31,7 +31,7 @@
 #include <goabackend/goabackendtypes.h>
 #include <goabackend/goalogging.h>
 #include <goabackend/goaprovider.h>
-#include <goabackend/goagenericprovider.h>
+#include <goabackend/goagenericmailprovider.h>
 #include <goabackend/goaoauthprovider.h>
 #include <goabackend/goaoauth2provider.h>
 #include <goabackend/goagoogleprovider.h>

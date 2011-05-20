@@ -24,19 +24,19 @@
 #error "Only <goabackend/goabackend.h> can be included directly."
 #endif
 
-#ifndef __GOA_GENERIC_PROVIDER_H__
-#define __GOA_GENERIC_PROVIDER_H__
+#ifndef __GOA_GENERIC_MAIL_PROVIDER_H__
+#define __GOA_GENERIC_MAIL_PROVIDER_H__
 
 #include <goabackend/goabackendtypes.h>
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_GENERIC_PROVIDER   (goa_generic_provider_get_type ())
-#define GOA_GENERIC_PROVIDER(o)     (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_GENERIC_PROVIDER, GoaGenericProvider))
-#define GOA_IS_GENERIC_PROVIDER(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_GENERIC_PROVIDER))
+#define GOA_TYPE_GENERIC_MAIL_PROVIDER   (goa_generic_mail_provider_get_type ())
+#define GOA_GENERIC_MAIL_PROVIDER(o)     (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_GENERIC_MAIL_PROVIDER, GoaGenericMailProvider))
+#define GOA_IS_GENERIC_MAIL_PROVIDER(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_GENERIC_MAIL_PROVIDER))
 
-GType goa_generic_provider_get_type (void) G_GNUC_CONST;
+GType goa_generic_mail_provider_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GOA_GENERIC_PROVIDER_H__ */
+#endif /* __GOA_GENERIC_MAIL_PROVIDER_H__ */

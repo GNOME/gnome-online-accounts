@@ -45,7 +45,7 @@ libgoa_backend_1_0_la_HEADERS =						\
 	goabackendenumtypes.h						\
 	goalogging.h							\
 	goaprovider.h							\
-	goagenericprovider.h						\
+	goagenericmailprovider.h					\
 	goaoauthprovider.h						\
 	goaoauth2provider.h						\
 	goagoogleprovider.h						\
@@ -66,7 +66,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goabackendenumtypes.h		goabackendenumtypes.c		\
 	goaprovider.h			goaprovider.c			\
 	goalogging.h			goalogging.c			\
-	goagenericprovider.h		goagenericprovider.c		\
+	goagenericmailprovider.h	goagenericmailprovider.c	\
 	goaoauthprovider.h		goaoauthprovider.c		\
 	goaoauth2provider.h		goaoauth2provider.c		\
 	goagoogleprovider.h		goagoogleprovider.c		\

@@ -24,43 +24,43 @@
 #include <glib/gi18n-lib.h>
 
 #include "goaprovider.h"
-#include "goagenericprovider.h"
+#include "goagenericmailprovider.h"
 #include "goaimapauthlogin.h"
 
 #include "goaimapmail.h"
 
 /**
- * GoaGenericProvider:
+ * GoaGenericMailProvider:
  *
- * The #GoaGenericProvider structure contains only private data and should
+ * The #GoaGenericMailProvider structure contains only private data and should
  * only be accessed using the provided API.
  */
-struct _GoaGenericProvider
+struct _GoaGenericMailProvider
 {
   /*< private >*/
   GoaProvider parent_instance;
 };
 
-typedef struct _GoaGenericProviderClass GoaGenericProviderClass;
+typedef struct _GoaGenericMailProviderClass GoaGenericMailProviderClass;
 
-struct _GoaGenericProviderClass
+struct _GoaGenericMailProviderClass
 {
   GoaProviderClass parent_class;
 };
 
 /**
- * SECTION:goagenericprovider
- * @title: GoaGenericProvider
- * @short_description: A provider for standards-based Internet services
+ * SECTION:goagenericmailprovider
+ * @title: GoaGenericMailProvider
+ * @short_description: A provider for standards-based mail servers
  *
- * #GoaGenericProvider is used to access generic standards-based
- * Internet services.
+ * #GoaGenericMailProvider is used to access standards-based Internet
+ * mail servers.
  */
 
-G_DEFINE_TYPE_WITH_CODE (GoaGenericProvider, goa_generic_provider, GOA_TYPE_PROVIDER,
+G_DEFINE_TYPE_WITH_CODE (GoaGenericMailProvider, goa_generic_mail_provider, GOA_TYPE_PROVIDER,
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
 							 g_define_type_id,
-							 "generic",
+							 "generic_mail",
 							 0));
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -68,13 +68,13 @@ G_DEFINE_TYPE_WITH_CODE (GoaGenericProvider, goa_generic_provider, GOA_TYPE_PROV
 static const gchar *
 get_provider_type (GoaProvider *_provider)
 {
-  return "generic";
+  return "generic_mail";
 }
 
 static const gchar *
 get_name (GoaProvider *_provider)
 {
-  return _("Generic Account");
+  return _("Mail Server");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -103,11 +103,11 @@ build_object (GoaProvider         *provider,
   ret = FALSE;
 
   /* Chain up */
-  if (!GOA_PROVIDER_CLASS (goa_generic_provider_parent_class)->build_object (provider,
-                                                                             object,
-                                                                             key_file,
-                                                                             group,
-                                                                             error))
+  if (!GOA_PROVIDER_CLASS (goa_generic_mail_provider_parent_class)->build_object (provider,
+                                                                                  object,
+                                                                                  key_file,
+                                                                                  group,
+                                                                                  error))
     goto out;
 
   account = goa_object_get_account (GOA_OBJECT (object));
@@ -118,7 +118,7 @@ build_object (GoaProvider         *provider,
   imap_ignore_bad_tls = g_key_file_get_boolean (key_file, group, "ImapIgnoreBadTls", NULL);
   imap_user_name = g_key_file_get_string (key_file, group, "ImapUserName", NULL);
   imap_password = g_key_file_get_string (key_file, group, "ImapPassword", NULL);
-  /* TODO: want this from the keyring */
+
   mail = goa_object_get_mail (GOA_OBJECT (object));
   if (imap_host_and_port != NULL)
     {
@@ -170,12 +170,12 @@ ensure_credentials_sync (GoaProvider         *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_generic_provider_init (GoaGenericProvider *client)
+goa_generic_mail_provider_init (GoaGenericMailProvider *client)
 {
 }
 
 static void
-goa_generic_provider_class_init (GoaGenericProviderClass *klass)
+goa_generic_mail_provider_class_init (GoaGenericMailProviderClass *klass)
 {
   GoaProviderClass *provider_class;
 

@@ -36,8 +36,8 @@ G_BEGIN_DECLS
 struct _GoaProvider;
 typedef struct _GoaProvider GoaProvider;
 
-struct _GoaGenericProvider;
-typedef struct _GoaGenericProvider GoaGenericProvider;
+struct _GoaGenericMailProvider;
+typedef struct _GoaGenericMailProvider GoaGenericMailProvider;
 
 struct _GoaOAuthProvider;
 typedef struct _GoaOAuthProvider GoaOAuthProvider;
