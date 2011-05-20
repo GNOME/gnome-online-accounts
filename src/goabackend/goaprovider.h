@@ -169,11 +169,17 @@ GtkWidget *goa_util_add_row_widget (GtkTable     *table,
 GtkWidget *goa_util_add_row_label  (GtkTable     *table,
                                     const gchar  *label_text,
                                     const gchar  *value_markup);
+
 GtkWidget *goa_util_add_row_editable_label_from_keyfile (GtkTable     *table,
                                                          GoaObject    *object,
                                                          const gchar  *label_text,
                                                          const gchar  *key,
                                                          gboolean      editable);
+
+GtkWidget *goa_util_add_row_switch_from_keyfile (GtkTable     *table,
+                                                 GoaObject    *object,
+                                                 const gchar  *label_text,
+                                                 const gchar  *key);
 
 G_END_DECLS
 

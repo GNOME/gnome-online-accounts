@@ -336,6 +336,7 @@ show_account (GoaProvider         *provider,
   GOA_PROVIDER_CLASS (goa_google_provider_parent_class)->show_account (provider, client, object, vbox, table);
 
   goa_util_add_row_editable_label_from_keyfile (table, object, _("Email Address"), "Identity", FALSE);
+  goa_util_add_row_switch_from_keyfile (table, object, _("GMail"), "GoogleMailEnabled");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

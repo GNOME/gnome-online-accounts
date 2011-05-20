@@ -917,7 +917,7 @@ keyfile_editable_on_editing_done (GtkEditable  *editable,
 }
 
 /**
- * goa_util_add_row_editable_label:
+ * goa_util_add_row_editable_label_from_keyfile:
  * @table: A #GtkTable.
  * @object: A #GoaObject for an account.
  * @label_text: (allow-none): The text to insert on the left side or %NULL for no label.
@@ -968,15 +968,18 @@ goa_util_add_row_editable_label_from_keyfile (GtkTable     *table,
                                  &error);
   if (value == NULL)
     {
-      goa_warning ("Error extracting key %s from keyfile %s: %s (%s, %d)",
-                   key,
-                   goa_account_get_keyfile_path (account),
-                   error->message, g_quark_to_string (error->domain), error->code);
+      /* this is not fatal (think upgrade-path) */
+      goa_debug ("Error getting value for key %s from keyfile %s: %s (%s, %d)",
+                 key,
+                 goa_account_get_keyfile_path (account),
+                 error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }
 
   goa_editable_label_set_text (GOA_EDITABLE_LABEL (elabel), value);
+
+ out:
 
   if (editable)
     {
@@ -989,11 +992,156 @@ goa_util_add_row_editable_label_from_keyfile (GtkTable     *table,
                              0); /* GConnectFlags */
     }
 
- out:
   g_free (value);
   if (key_file != NULL)
     g_key_file_free (key_file);
   return goa_util_add_row_widget (table, label_text, elabel);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
+keyfile_switch_on_notify_active (GObject      *object,
+                                 GParamSpec   *pspec,
+                                 gpointer      user_data)
+{
+  KeyFileEditableData *data = user_data;
+  GoaAccount *account;
+  GError *error;
+  GKeyFile *key_file;
+  gchar *contents;
+  gsize length;
+
+  account = goa_object_peek_account (data->object);
+
+  key_file = g_key_file_new ();
+  error = NULL;
+  if (!g_key_file_load_from_file (key_file,
+                                  goa_account_get_keyfile_path (account),
+                                  G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS,
+                                  &error))
+    {
+      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
+                   goa_account_get_keyfile_path (account),
+                   error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+  g_key_file_set_boolean (key_file,
+                          goa_account_get_keyfile_group (account),
+                          data->key,
+                          gtk_switch_get_active (GTK_SWITCH (object)));
+
+  error = NULL;
+  contents = g_key_file_to_data (key_file,
+                                 &length,
+                                 &error);
+  if (contents == NULL)
+    {
+      g_prefix_error (&error,
+                      "Error generating key-value-file %s: ",
+                      goa_account_get_keyfile_path (account));
+      goa_warning ("%s (%s, %d)",
+                   error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+  error = NULL;
+  if (!g_file_set_contents (goa_account_get_keyfile_path (account),
+                            contents,
+                            length,
+                            &error))
+    {
+      g_prefix_error (&error,
+                      "Error writing key-value-file %s: ",
+                      goa_account_get_keyfile_path (account));
+      goa_warning ("%s (%s, %d)",
+                   error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+ out:
+  g_key_file_free (key_file);
+}
+
+/**
+ * goa_util_add_row_switch_from_keyfile:
+ * @table: A #GtkTable.
+ * @object: A #GoaObject for an account.
+ * @label_text: (allow-none): The text to insert on the left side or %NULL for no label.
+ * @key: The key in the key-value file for @object to look up.
+ *
+ * Adds a #GoaEditableLabel to @table that reads its value from the
+ * key-value file for @object using @key. If it's edited, the new
+ * value is written back to the key-value file.
+ *
+ * Returns: (transfer none): The #GoaEditableLabel that was inserted.
+ */
+GtkWidget *
+goa_util_add_row_switch_from_keyfile (GtkTable     *table,
+                                      GoaObject    *object,
+                                      const gchar  *label_text,
+                                      const gchar  *key)
+{
+  GoaAccount *account;
+  GtkWidget *hbox;
+  GtkWidget *switch_;
+  GKeyFile *key_file;
+  GError *error;
+  gboolean value;
+
+  key_file = NULL;
+
+  account = goa_object_peek_account (object);
+  switch_ = gtk_switch_new ();
+
+  key_file = g_key_file_new ();
+  error = NULL;
+  if (!g_key_file_load_from_file (key_file,
+                                  goa_account_get_keyfile_path (account),
+                                  G_KEY_FILE_NONE,
+                                  &error))
+    {
+      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
+                   goa_account_get_keyfile_path (account),
+                   error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+  value = g_key_file_get_boolean (key_file,
+                                  goa_account_get_keyfile_group (account),
+                                  key,
+                                  &error);
+  if (error != NULL)
+    {
+      /* this is not fatal (think upgrade-path) */
+      goa_debug ("Error getting boolean value for key %s from keyfile %s: %s (%s, %d)",
+                 key,
+                 goa_account_get_keyfile_path (account),
+                 error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+  gtk_switch_set_active (GTK_SWITCH (switch_), value);
+
+ out:
+  g_signal_connect_data (switch_,
+                         "notify::active",
+                         G_CALLBACK (keyfile_switch_on_notify_active),
+                         keyfile_editable_data_new (object, key),
+                         (GClosureNotify) keyfile_editable_data_free,
+                         0); /* GConnectFlags */
+  if (key_file != NULL)
+    g_key_file_free (key_file);
+
+  hbox = gtk_hbox_new (0, FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox), switch_, FALSE, TRUE, 0);
+  goa_util_add_row_widget (table, label_text, hbox);
+  return switch_;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
