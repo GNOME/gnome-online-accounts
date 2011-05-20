@@ -102,6 +102,7 @@ build_object (GoaProvider         *provider,
   gboolean imap_ignore_bad_tls;
   gchar *imap_user_name;
   gchar *imap_password;
+  gchar *email_address;
 
   account = NULL;
   mail = NULL;
@@ -109,6 +110,7 @@ build_object (GoaProvider         *provider,
   imap_host_and_port = NULL;
   imap_user_name = NULL;
   imap_password = NULL;
+  email_address = NULL;
   ret = FALSE;
 
   /* Chain up */
@@ -122,6 +124,7 @@ build_object (GoaProvider         *provider,
   account = goa_object_get_account (GOA_OBJECT (object));
 
   /* mail */
+  email_address = g_key_file_get_string (key_file, group, "EmailAddress", NULL);
   imap_host_and_port = g_key_file_get_string (key_file, group, "ImapHost", NULL);
   imap_use_tls = g_key_file_get_boolean (key_file, group, "ImapUseTls", NULL);
   imap_ignore_bad_tls = g_key_file_get_boolean (key_file, group, "ImapIgnoreBadTls", NULL);
@@ -147,6 +150,8 @@ build_object (GoaProvider         *provider,
         goa_object_skeleton_set_mail (object, NULL);
     }
 
+  /* TODO: support substitutions a'la ${USERNAME}@redhat.com for e.g. system-wide .conf files */
+  goa_mail_set_email_address (mail, email_address);
 
   password_based = goa_object_get_password_based (GOA_OBJECT (object));
   if (password_based == NULL)
@@ -165,6 +170,7 @@ build_object (GoaProvider         *provider,
   ret = TRUE;
 
  out:
+  g_free (email_address);
   if (password_based != NULL)
     g_object_unref (password_based);
   if (mail != NULL)
@@ -754,6 +760,8 @@ add_account (GoaProvider    *_provider,
    * waiting for this to complete
    */
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{ss}"));
+  g_variant_builder_add (&builder, "{ss}", "EmailAddress",
+                         gtk_entry_get_text (GTK_ENTRY (data.intro_address_entry)));
   g_variant_builder_add (&builder, "{ss}", "ImapHost",
                          gtk_entry_get_text (GTK_ENTRY (data.imap_server_entry)));
   g_variant_builder_add (&builder, "{ss}", "ImapUserName",
@@ -809,6 +817,26 @@ add_account (GoaProvider    *_provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
+show_account (GoaProvider         *provider,
+              GoaClient           *client,
+              GoaObject           *object,
+              GtkBox              *vbox,
+              GtkTable            *table)
+{
+  GoaMail *mail;
+
+  /* Chain up */
+  GOA_PROVIDER_CLASS (goa_generic_mail_provider_parent_class)->show_account (provider, client, object, vbox, table);
+
+  mail = goa_object_get_mail (object);
+  goa_util_add_row (table,
+                    _("Email Address"),
+                    goa_mail_get_email_address (mail));
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
 goa_generic_mail_provider_init (GoaGenericMailProvider *provider)
 {
 }
@@ -823,6 +851,7 @@ goa_generic_mail_provider_class_init (GoaGenericMailProviderClass *klass)
   provider_class->get_name                   = get_name;
   provider_class->add_account                = add_account;
   provider_class->build_object               = build_object;
+  provider_class->show_account               = show_account;
   provider_class->ensure_credentials_sync    = ensure_credentials_sync;
 }
 

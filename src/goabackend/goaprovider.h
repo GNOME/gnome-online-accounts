@@ -95,6 +95,11 @@ struct _GoaProviderClass
                                        gint                *out_expires_in,
                                        GCancellable        *cancellable,
                                        GError             **error);
+  void     (*show_account)            (GoaProvider         *provider,
+                                       GoaClient           *client,
+                                       GoaObject           *object,
+                                       GtkBox              *vbox,
+                                       GtkTable            *table);
 
   /*< private >*/
   /* Padding for future expansion */
@@ -114,6 +119,11 @@ gboolean     goa_provider_refresh_account           (GoaProvider         *provid
                                                      GoaObject           *object,
                                                      GtkWindow           *parent,
                                                      GError             **error);
+void         goa_provider_show_account              (GoaProvider         *provider,
+                                                     GoaClient           *client,
+                                                     GoaObject           *object,
+                                                     GtkBox              *vbox,
+                                                     GtkTable            *table);
 gboolean     goa_provider_build_object              (GoaProvider         *provider,
                                                      GoaObjectSkeleton   *object,
                                                      GKeyFile            *key_file,
@@ -143,6 +153,12 @@ gboolean     goa_provider_ensure_credentials_sync   (GoaProvider         *provid
                                                      GCancellable        *cancellable,
                                                      GError             **error);
 
+void goa_util_add_row_widget (GtkTable     *table,
+                              const gchar  *label_text,
+                              GtkWidget    *widget);
+void goa_util_add_row (GtkTable     *table,
+                       const gchar  *label_text,
+                       const gchar  *value_markup);
 
 /**
  * GOA_PROVIDER_EXTENSION_POINT_NAME:

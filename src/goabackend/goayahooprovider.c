@@ -342,6 +342,27 @@ get_use_external_browser (GoaOAuthProvider *provider)
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
+show_account (GoaProvider         *provider,
+              GoaClient           *client,
+              GoaObject           *object,
+              GtkBox              *vbox,
+              GtkTable            *table)
+{
+  GoaYahooAccount *taccount;
+
+  /* Chain up */
+  GOA_PROVIDER_CLASS (goa_yahoo_provider_parent_class)->show_account (provider, client, object, vbox, table);
+
+  /* TODO: look up email address / screenname */
+  taccount = goa_object_get_yahoo_account (object);
+  goa_util_add_row (table,
+                    _("GUID"),
+                    goa_yahoo_account_get_guid (taccount));
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
 goa_yahoo_provider_init (GoaYahooProvider *client)
 {
 }
@@ -356,6 +377,7 @@ goa_yahoo_provider_class_init (GoaYahooProviderClass *klass)
   provider_class->get_provider_type     = get_provider_type;
   provider_class->get_name              = get_name;
   provider_class->build_object          = build_object;
+  provider_class->show_account          = show_account;
 
   oauth_class = GOA_OAUTH_PROVIDER_CLASS (klass);
   oauth_class->get_identity_sync        = get_identity_sync;

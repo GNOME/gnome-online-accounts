@@ -298,6 +298,8 @@ build_object (GoaProvider         *provider,
       goa_object_skeleton_set_mail (object, mail);
       g_object_unref (auth);
       g_free (request_uri);
+
+      goa_mail_set_email_address (mail, email_address);
     }
 
   ret = TRUE;
@@ -324,6 +326,26 @@ get_use_external_browser (GoaOAuthProvider *provider)
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
+show_account (GoaProvider         *provider,
+              GoaClient           *client,
+              GoaObject           *object,
+              GtkBox              *vbox,
+              GtkTable            *table)
+{
+  GoaGoogleAccount *gaccount;
+
+  /* Chain up */
+  GOA_PROVIDER_CLASS (goa_google_provider_parent_class)->show_account (provider, client, object, vbox, table);
+
+  gaccount = goa_object_get_google_account (object);
+  goa_util_add_row (table,
+                    _("Email Address"),
+                    goa_google_account_get_email_address (gaccount));
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
 goa_google_provider_init (GoaGoogleProvider *client)
 {
 }
@@ -338,6 +360,7 @@ goa_google_provider_class_init (GoaGoogleProviderClass *klass)
   provider_class->get_provider_type          = get_provider_type;
   provider_class->get_name                   = get_name;
   provider_class->build_object               = build_object;
+  provider_class->show_account               = show_account;
 
   oauth_class = GOA_OAUTH_PROVIDER_CLASS (klass);
   oauth_class->get_identity_sync        = get_identity_sync;

@@ -280,6 +280,26 @@ get_use_external_browser (GoaOAuth2Provider *provider)
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
+show_account (GoaProvider         *provider,
+              GoaClient           *client,
+              GoaObject           *object,
+              GtkBox              *vbox,
+              GtkTable            *table)
+{
+  GoaFacebookAccount *fbaccount;
+
+  /* Chain up */
+  GOA_PROVIDER_CLASS (goa_facebook_provider_parent_class)->show_account (provider, client, object, vbox, table);
+
+  fbaccount = goa_object_get_facebook_account (object);
+  goa_util_add_row (table,
+                    _("User Name"),
+                    goa_facebook_account_get_user_name (fbaccount));
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
 goa_facebook_provider_init (GoaFacebookProvider *client)
 {
 }
@@ -294,6 +314,7 @@ goa_facebook_provider_class_init (GoaFacebookProviderClass *klass)
   provider_class->get_provider_type          = get_provider_type;
   provider_class->get_name                   = get_name;
   provider_class->build_object               = build_object;
+  provider_class->show_account               = show_account;
 
   oauth2_class = GOA_OAUTH2_PROVIDER_CLASS (klass);
   oauth2_class->get_authorization_uri    = get_authorization_uri;

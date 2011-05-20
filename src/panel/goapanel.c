@@ -262,28 +262,6 @@ show_page_nothing_selected (GoaPanel *panel)
 }
 
 static void
-add_row (GtkWidget    *table,
-         guint         row,
-         const gchar  *key,
-         const gchar  *value)
-{
-  GtkWidget *label;
-
-  label = gtk_label_new (key);
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), label,
-                    0, 1,
-                    row, row + 1,
-                    GTK_FILL, GTK_FILL, 0, 0);
-  label = gtk_label_new (value);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), label,
-                    1, 2,
-                    row, row + 1,
-                    GTK_FILL, GTK_FILL, 0, 0);
-}
-
-static void
 on_info_bar_response (GtkInfoBar *info_bar,
                       gint        response_id,
                       gpointer    user_data)
@@ -343,33 +321,6 @@ on_info_bar_response (GtkInfoBar *info_bar,
 }
 
 static void
-on_name_editing_done (GoaEditableLabel *editable_label,
-                      gpointer          user_data)
-{
-  GoaPanel *panel = GOA_PANEL (user_data);
-  GtkTreeIter iter;
-
-  if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (panel->accounts_treeview)),
-                                       NULL,
-                                       &iter))
-    {
-      GoaObject *object;
-      GoaAccount *account;
-
-      gtk_tree_model_get (GTK_TREE_MODEL (panel->accounts_model),
-                          &iter,
-                          GOA_PANEL_ACCOUNTS_MODEL_COLUMN_OBJECT, &object,
-                          -1);
-
-      account = goa_object_peek_account (object);
-      goa_account_call_set_name (account,
-                                 goa_editable_label_get_text (editable_label),
-                                 NULL, /* GCancellable */
-                                 NULL, NULL); /* callback, user_data */
-    }
-}
-
-static void
 show_page_account (GoaPanel  *panel,
                    GoaObject *object)
 {
@@ -378,16 +329,10 @@ show_page_account (GoaPanel  *panel,
   GtkWidget *table;
   GtkWidget *bar;
   GtkWidget *label;
-  GtkWidget *editable_label;
-  guint row;
   GoaProvider *provider;
   GoaAccount *account;
-  GoaGoogleAccount *gaccount;
-  GoaFacebookAccount *fbaccount;
   const gchar *provider_type;
-  gchar *s;
 
-  row = 0;
   provider = NULL;
 
   show_page (panel, 1);
@@ -399,8 +344,6 @@ show_page_account (GoaPanel  *panel,
   g_list_free (children);
 
   account = goa_object_peek_account (object);
-  gaccount = goa_object_peek_google_account (object);
-  fbaccount = goa_object_peek_facebook_account (object);
   provider_type = goa_account_get_provider_type (account);
   provider = goa_provider_get_for_provider_type (provider_type);
 
@@ -421,39 +364,13 @@ show_page_account (GoaPanel  *panel,
   gtk_table_set_col_spacings (GTK_TABLE (table), 10);
   gtk_box_pack_start (GTK_BOX (panel->accounts_vbox), table, FALSE, TRUE, 0);
 
-  editable_label = goa_editable_label_new ();
-  goa_editable_label_set_text (GOA_EDITABLE_LABEL (editable_label), goa_account_get_name (account));
-  goa_editable_label_set_editable (GOA_EDITABLE_LABEL (editable_label), TRUE);
-  goa_editable_label_set_scale (GOA_EDITABLE_LABEL (editable_label), 1.2);
-  goa_editable_label_set_weight (GOA_EDITABLE_LABEL (editable_label), 700);
-  g_signal_connect (editable_label, "editing-done", G_CALLBACK (on_name_editing_done), panel);
-  gtk_table_attach (GTK_TABLE (table), editable_label,
-                    1, 2,
-                    row, row + 1,
-                    GTK_FILL, GTK_FILL, 0, 0);
-  row++;
-
   if (provider != NULL)
     {
-      s = g_strdup (goa_provider_get_name (provider));
-    }
-  else
-    {
-      /* Translators: Shown as "Account Type" when the UI doesn't support the provider type.
-       * The %s is the provider type (e.g. 'google').
-       */
-      s = g_strdup_printf (_("%s (Unsupported)"), provider_type);
-    }
-  add_row (table, row++, _("Account Type"), s);
-  g_free (s);
-
-  if (gaccount != NULL)
-    {
-      add_row (table, row++, _("Email Address"), goa_google_account_get_email_address (gaccount));
-    }
-  if (fbaccount != NULL)
-    {
-      add_row (table, row++, _("User Name"), goa_facebook_account_get_user_name (fbaccount));
+      goa_provider_show_account (provider,
+                                 panel->client,
+                                 object,
+                                 GTK_BOX (panel->accounts_vbox),
+                                 GTK_TABLE (table));
     }
 
   gtk_widget_show_all (panel->accounts_vbox);

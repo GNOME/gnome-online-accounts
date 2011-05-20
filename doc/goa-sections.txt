@@ -49,7 +49,6 @@ GoaObject
 GoaObjectIface
 goa_object_get_manager
 goa_object_get_account
-goa_object_get_generic_mail_account
 goa_object_get_google_account
 goa_object_get_facebook_account
 goa_object_get_yahoo_account
@@ -61,7 +60,6 @@ goa_object_get_mail
 goa_object_get_mail_monitor
 goa_object_peek_manager
 goa_object_peek_account
-goa_object_peek_generic_mail_account
 goa_object_peek_google_account
 goa_object_peek_facebook_account
 goa_object_peek_yahoo_account
@@ -79,7 +77,6 @@ GoaObjectSkeletonClass
 goa_object_skeleton_new
 goa_object_skeleton_set_manager
 goa_object_skeleton_set_account
-goa_object_skeleton_set_generic_mail_account
 goa_object_skeleton_set_google_account
 goa_object_skeleton_set_facebook_account
 goa_object_skeleton_set_yahoo_account
@@ -543,6 +540,7 @@ goa_provider_get_name
 goa_provider_build_object
 goa_provider_add_account
 goa_provider_refresh_account
+goa_provider_show_account
 goa_provider_store_credentials_sync
 goa_provider_lookup_credentials_sync
 goa_provider_ensure_credentials
@@ -672,6 +670,8 @@ goa_mail_call_create_monitor
 goa_mail_call_create_monitor_finish
 goa_mail_call_create_monitor_sync
 goa_mail_complete_create_monitor
+goa_mail_get_email_address
+goa_mail_set_email_address
 GoaMailProxy
 GoaMailProxyClass
 goa_mail_proxy_new

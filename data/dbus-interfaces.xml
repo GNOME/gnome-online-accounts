@@ -325,6 +325,13 @@
     <method name="CreateMonitor">
       <arg name="monitor_object" type="o" direction="out"/>
     </method>
+
+    <!-- EmailAddress:
+         The email address for the account or blank if there is no
+         such address or if it isnt' known or isn't in a standard
+         format.
+      -->
+    <property name="EmailAddress" type="s" access="read"/>
   </interface>
 
   <!--

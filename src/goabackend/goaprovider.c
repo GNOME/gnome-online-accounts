@@ -31,6 +31,8 @@
 #include "goatwitterprovider.h"
 #include "goagenericmailprovider.h"
 
+#include "goaeditablelabel.h"
+
 /**
  * SECTION:goaprovider
  * @title: GoaProvider
@@ -51,6 +53,12 @@ static gboolean goa_provider_build_object_real (GoaProvider         *provider,
                                                 const gchar         *group,
                                                 GError             **error);
 
+static void goa_provider_show_account_real (GoaProvider         *provider,
+                                            GoaClient           *client,
+                                            GoaObject           *object,
+                                            GtkBox              *vbox,
+                                            GtkTable            *table);
+
 G_DEFINE_ABSTRACT_TYPE (GoaProvider, goa_provider, G_TYPE_OBJECT);
 
 static void
@@ -63,6 +71,7 @@ goa_provider_class_init (GoaProviderClass *klass)
 {
   klass->build_object = goa_provider_build_object_real;
   klass->ensure_credentials_sync = goa_provider_ensure_credentials_sync_real;
+  klass->show_account = goa_provider_show_account_real;
 }
 
 /**
@@ -203,6 +212,146 @@ goa_provider_refresh_account (GoaProvider  *provider,
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   return GOA_PROVIDER_GET_CLASS (provider)->refresh_account (provider, client, object, parent, error);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+/**
+ * goa_provider_show_account:
+ * @provider: A #GoaProvider.
+ * @client: A #GoaClient.
+ * @object: A #GoaObject with a #GoaAccount interface.
+ * @dialog: A #GtkDialog.
+ * @vbox: A vertically oriented #GtkBox to put content in.
+ * @table: A table which is the first element of vbox.
+ *
+ * Method used to add widgets in the control panel for the account
+ * represented by @object.
+ *
+ * This is a virtual method with an implementation that adds widgets
+ * for editing the name and the icon. A subclass should chain up
+ * (before adding their own widgets to @vbox and @table) if they want
+ * to expose such functionality.
+ */
+void
+goa_provider_show_account (GoaProvider         *provider,
+                           GoaClient           *client,
+                           GoaObject           *object,
+                           GtkBox              *vbox,
+                           GtkTable            *table)
+{
+  g_return_if_fail (GOA_IS_PROVIDER (provider));
+  g_return_if_fail (GOA_IS_CLIENT (client));
+  g_return_if_fail (GOA_IS_OBJECT (object) && goa_object_peek_account (object) != NULL);
+  g_return_if_fail (GTK_IS_BOX (vbox));
+  g_return_if_fail (GTK_IS_TABLE (table));
+
+  GOA_PROVIDER_GET_CLASS (provider)->show_account (provider, client, object, vbox, table);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+/**
+ * goa_util_add_row_widget:
+ * @table: A #GtkTable.
+ * @label_text: The text to insert on the left side.
+ * @widget: A widget to insert on the right side.
+ *
+ * Utility function to add @label_text and @widget to @table.
+ */
+void
+goa_util_add_row_widget (GtkTable     *table,
+                         const gchar  *label_text,
+                         GtkWidget    *widget)
+{
+  GtkWidget *label;
+  gchar *s;
+  guint num_rows;
+
+  g_return_if_fail (GTK_IS_TABLE (table));
+  g_return_if_fail (label_text != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  s = g_strdup_printf ("<span foreground=\"#555555\">%s</span>", label_text);
+
+  gtk_table_get_size (table, &num_rows, NULL);
+
+  label = gtk_label_new (NULL);
+  gtk_label_set_markup (GTK_LABEL (label), s);
+  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_table_attach (table, label,
+                    0, 1,
+                    num_rows, num_rows + 1,
+                    GTK_FILL, GTK_FILL, 0, 0);
+  gtk_table_attach (table, widget,
+                    1, 2,
+                    num_rows, num_rows + 1,
+                    GTK_FILL, GTK_FILL, 0, 0);
+
+  g_free (s);
+}
+
+/**
+ * goa_util_add_row:
+ * @table: A #GtkTable.
+ * @label_text: The text to insert on the left side.
+ * @value_markup: The markup to insert on the right side.
+ *
+ * Utility function to add @label_text and @value_text to @table.
+ */
+void
+goa_util_add_row (GtkTable     *table,
+                  const gchar  *label_text,
+                  const gchar  *value_markup)
+{
+  GtkWidget *label;
+  label = gtk_label_new (NULL);
+  gtk_label_set_markup (GTK_LABEL (label), value_markup);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+  goa_util_add_row_widget (table, label_text, label);
+}
+
+static void
+on_name_editing_done (GoaEditableLabel *editable_label,
+                      gpointer          user_data)
+{
+  GoaObject *object = GOA_OBJECT (user_data);
+  GoaAccount *account;
+
+  account = goa_object_peek_account (object);
+  goa_account_call_set_name (account,
+                             goa_editable_label_get_text (editable_label),
+                             NULL, /* GCancellable */
+                             NULL, NULL); /* callback, user_data */
+}
+
+static void
+goa_provider_show_account_real (GoaProvider         *provider,
+                                GoaClient           *client,
+                                GoaObject           *object,
+                                GtkBox              *vbox,
+                                GtkTable            *table)
+{
+  GoaAccount *account;
+  GtkWidget *elabel;
+  guint num_rows;
+
+  account = goa_object_peek_account (object);
+
+  gtk_table_get_size (table, &num_rows, NULL);
+
+  elabel = goa_editable_label_new ();
+  goa_editable_label_set_text (GOA_EDITABLE_LABEL (elabel), goa_account_get_name (account));
+  goa_editable_label_set_editable (GOA_EDITABLE_LABEL (elabel), TRUE);
+  goa_editable_label_set_scale (GOA_EDITABLE_LABEL (elabel), 1.2);
+  goa_editable_label_set_weight (GOA_EDITABLE_LABEL (elabel), 700);
+  g_signal_connect (elabel, "editing-done", G_CALLBACK (on_name_editing_done), object);
+
+  gtk_table_attach (table, elabel,
+                    1, 2,
+                    num_rows, num_rows + 1,
+                    GTK_FILL, GTK_FILL, 0, 0);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
