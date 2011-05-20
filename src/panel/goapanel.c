@@ -178,7 +178,7 @@ goa_panel_init (GoaPanel *panel)
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
   gtk_tree_view_column_set_attributes (column,
                                        renderer,
-                                       "markup", GOA_PANEL_ACCOUNTS_MODEL_COLUMN_NAME,
+                                       "markup", GOA_PANEL_ACCOUNTS_MODEL_COLUMN_MARKUP,
                                        NULL);
 
   renderer = gtk_cell_renderer_pixbuf_new ();

@@ -24,6 +24,8 @@
 
 #include <glib/gi18n-lib.h>
 
+#include <goabackend/goabackend.h>
+
 #include "goapanelaccountsmodel.h"
 
 struct _GoaPanelAccountsModel
@@ -135,7 +137,8 @@ goa_panel_accounts_model_constructed (GObject *object)
   types[1] = G_TYPE_STRING;
   types[2] = GOA_TYPE_OBJECT;
   types[3] = G_TYPE_BOOLEAN;
-  G_STATIC_ASSERT (4 == GOA_PANEL_ACCOUNTS_MODEL_N_COLUMNS);
+  types[4] = G_TYPE_STRING;
+  G_STATIC_ASSERT (5 == GOA_PANEL_ACCOUNTS_MODEL_N_COLUMNS);
   gtk_list_store_set_column_types (GTK_LIST_STORE (model),
                                    GOA_PANEL_ACCOUNTS_MODEL_N_COLUMNS,
                                    types);
@@ -313,14 +316,37 @@ set_values (GoaPanelAccountsModel  *model,
             GtkTreeIter            *iter)
 {
   GoaAccount *account;
+  GoaProvider *provider;
+  const gchar *type;
+  gchar *provider_name;
+  gchar *markup;
+
   account = goa_object_peek_account (object);
+
+  type = goa_account_get_provider_type (account);
+  provider = goa_provider_get_for_provider_type (type);
+  if (provider != NULL)
+    provider_name = g_strdup (goa_provider_get_name (provider));
+  else
+    provider_name = g_strdup_printf (_("Unknown Provider (%s)"), type);
+
+  markup = g_strdup_printf ("<b>%s</b>\n"
+                            "<small><span foreground=\"#555555\">%s</span></small>",
+                            goa_account_get_name (account),
+                            provider_name);
+
   gtk_list_store_set (GTK_LIST_STORE (model),
                       iter,
                       GOA_PANEL_ACCOUNTS_MODEL_COLUMN_NAME, goa_account_get_name (account),
                       GOA_PANEL_ACCOUNTS_MODEL_COLUMN_SORT_KEY, goa_account_get_id (account),
                       GOA_PANEL_ACCOUNTS_MODEL_COLUMN_OBJECT, object,
                       GOA_PANEL_ACCOUNTS_MODEL_COLUMN_ATTENTION_NEEDED, goa_account_get_attention_needed (account),
+                      GOA_PANEL_ACCOUNTS_MODEL_COLUMN_MARKUP, markup,
                       -1);
+
+  g_free (markup);
+  g_free (provider_name);
+  g_clear_object (&provider);
 }
 
 static void
