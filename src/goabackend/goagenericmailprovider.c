@@ -827,8 +827,23 @@ show_account (GoaProvider         *provider,
   /* Chain up */
   GOA_PROVIDER_CLASS (goa_generic_mail_provider_parent_class)->show_account (provider, client, object, vbox, table);
 
+  /* TODO: passwords */
+
   goa_util_add_row_editable_label_from_keyfile (table, object, _("Email Address"), "EmailAddress", FALSE);
+
+  goa_util_add_heading (table, _("Receiving Mail"));
+
   goa_util_add_row_editable_label_from_keyfile (table, object, _("IMAP Server"), "ImapHost", TRUE);
+  goa_util_add_row_editable_label_from_keyfile (table, object, _("User Name"), "ImapUserName", TRUE);
+  goa_util_add_row_check_button_from_keyfile (table, object, NULL, "ImapUseTls", _("Use s_ecure connection"));
+  goa_util_add_row_check_button_from_keyfile (table, object, NULL, "ImapIgnoreBadTls", _("_Don't check certificates"));
+
+  goa_util_add_heading (table, _("Sending Mail"));
+
+  goa_util_add_row_editable_label_from_keyfile (table, object, _("SMTP Server"), "SmtpHost", TRUE);
+  goa_util_add_row_editable_label_from_keyfile (table, object, _("User Name"), "SmtpUserName", TRUE);
+  goa_util_add_row_check_button_from_keyfile (table, object, NULL, "SmtpUseTls", _("Use s_ecure connection"));
+  goa_util_add_row_check_button_from_keyfile (table, object, NULL, "SmtpIgnoreBadTls", _("_Don't check certificates"));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

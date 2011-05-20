@@ -163,6 +163,11 @@ gboolean     goa_provider_ensure_credentials_sync   (GoaProvider         *provid
 GList        *goa_provider_get_all (void);
 GoaProvider  *goa_provider_get_for_provider_type (const gchar *provider_type);
 
+/* ---------------------------------------------------------------------------------------------------- */
+
+GtkWidget *goa_util_add_heading (GtkTable     *table,
+                                 const gchar  *heading_text);
+
 GtkWidget *goa_util_add_row_widget (GtkTable     *table,
                                     const gchar  *label_text,
                                     GtkWidget    *widget);
@@ -180,6 +185,14 @@ GtkWidget *goa_util_add_row_switch_from_keyfile (GtkTable     *table,
                                                  GoaObject    *object,
                                                  const gchar  *label_text,
                                                  const gchar  *key);
+
+GtkWidget *
+goa_util_add_row_check_button_from_keyfile (GtkTable     *table,
+                                            GoaObject    *object,
+                                            const gchar  *label_text,
+                                            const gchar  *key,
+                                            const gchar  *value_mnemonic);
+
 
 G_END_DECLS
 

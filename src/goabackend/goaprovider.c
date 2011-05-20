@@ -1074,11 +1074,11 @@ keyfile_switch_on_notify_active (GObject      *object,
  * @label_text: (allow-none): The text to insert on the left side or %NULL for no label.
  * @key: The key in the key-value file for @object to look up.
  *
- * Adds a #GoaEditableLabel to @table that reads its value from the
- * key-value file for @object using @key. If it's edited, the new
- * value is written back to the key-value file.
+ * Adds a #GtkSwitch to @table that reads its #GtkSwitch:active value
+ * from the key-value file for @object using @key. If it's switched,
+ * the new value is written back to the key-value file.
  *
- * Returns: (transfer none): The #GoaEditableLabel that was inserted.
+ * Returns: (transfer none): The #GtkSwitch that was inserted.
  */
 GtkWidget *
 goa_util_add_row_switch_from_keyfile (GtkTable     *table,
@@ -1145,3 +1145,180 @@ goa_util_add_row_switch_from_keyfile (GtkTable     *table,
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
+
+static void
+keyfile_check_button_on_notify_active (GObject      *object,
+                                       GParamSpec   *pspec,
+                                       gpointer      user_data)
+{
+  KeyFileEditableData *data = user_data;
+  GoaAccount *account;
+  GError *error;
+  GKeyFile *key_file;
+  gchar *contents;
+  gsize length;
+
+  account = goa_object_peek_account (data->object);
+
+  key_file = g_key_file_new ();
+  error = NULL;
+  if (!g_key_file_load_from_file (key_file,
+                                  goa_account_get_keyfile_path (account),
+                                  G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS,
+                                  &error))
+    {
+      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
+                   goa_account_get_keyfile_path (account),
+                   error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+  g_key_file_set_boolean (key_file,
+                          goa_account_get_keyfile_group (account),
+                          data->key,
+                          gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (object)));
+
+  error = NULL;
+  contents = g_key_file_to_data (key_file,
+                                 &length,
+                                 &error);
+  if (contents == NULL)
+    {
+      g_prefix_error (&error,
+                      "Error generating key-value-file %s: ",
+                      goa_account_get_keyfile_path (account));
+      goa_warning ("%s (%s, %d)",
+                   error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+  error = NULL;
+  if (!g_file_set_contents (goa_account_get_keyfile_path (account),
+                            contents,
+                            length,
+                            &error))
+    {
+      g_prefix_error (&error,
+                      "Error writing key-value-file %s: ",
+                      goa_account_get_keyfile_path (account));
+      goa_warning ("%s (%s, %d)",
+                   error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+ out:
+  g_key_file_free (key_file);
+}
+
+/**
+ * goa_util_add_row_check_button_from_keyfile:
+ * @table: A #GtkTable.
+ * @object: A #GoaObject for an account.
+ * @label_text: (allow-none): The text to insert on the left side or %NULL for no label.
+ * @key: The key in the key-value file for @object to look up.
+ * @value_mnemonic: The mnemonic text to use for the check button.
+ *
+ * Adds a #GtkCheckButton to @table that reads its value from the
+ * key-value file for @object using @key. If it's toggled, the new
+ * value is written back to the key-value file.
+ *
+ * Returns: (transfer none): The #GtkCheckButton that was inserted.
+ */
+GtkWidget *
+goa_util_add_row_check_button_from_keyfile (GtkTable     *table,
+                                            GoaObject    *object,
+                                            const gchar  *label_text,
+                                            const gchar  *key,
+                                            const gchar  *value_mnemonic)
+{
+  GoaAccount *account;
+  GtkWidget *check_button;
+  GKeyFile *key_file;
+  GError *error;
+  gboolean value;
+
+  key_file = NULL;
+
+  account = goa_object_peek_account (object);
+  check_button = gtk_check_button_new_with_mnemonic (value_mnemonic);
+
+  key_file = g_key_file_new ();
+  error = NULL;
+  if (!g_key_file_load_from_file (key_file,
+                                  goa_account_get_keyfile_path (account),
+                                  G_KEY_FILE_NONE,
+                                  &error))
+    {
+      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
+                   goa_account_get_keyfile_path (account),
+                   error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+  value = g_key_file_get_boolean (key_file,
+                                  goa_account_get_keyfile_group (account),
+                                  key,
+                                  &error);
+  if (error != NULL)
+    {
+      /* this is not fatal (think upgrade-path) */
+      goa_debug ("Error getting boolean value for key %s from keyfile %s: %s (%s, %d)",
+                 key,
+                 goa_account_get_keyfile_path (account),
+                 error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), value);
+
+ out:
+  g_signal_connect_data (check_button,
+                         "notify::active",
+                         G_CALLBACK (keyfile_check_button_on_notify_active),
+                         keyfile_editable_data_new (object, key),
+                         (GClosureNotify) keyfile_editable_data_free,
+                         0); /* GConnectFlags */
+  if (key_file != NULL)
+    g_key_file_free (key_file);
+
+  return goa_util_add_row_widget (table, label_text, check_button);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+/**
+ * goa_util_add_heading:
+ * @table: A #GtkTable.
+ * @heading_text: The text for the heading.
+ *
+ * Utility function to add a heading to @table.
+ *
+ * Returns: (transfer none): The #GtkWidget that was inserted.
+ */
+GtkWidget *
+goa_util_add_heading (GtkTable     *table,
+                      const gchar  *heading_text)
+{
+  GtkWidget *label;
+  guint num_rows;
+  gchar *s;
+
+  gtk_table_get_size (table, &num_rows, NULL);
+  s = g_strdup_printf ("<b>%s</b>", heading_text);
+  label = gtk_label_new (NULL);
+  gtk_label_set_markup (GTK_LABEL (label), s);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_margin_top (label, 6);
+  gtk_widget_set_margin_bottom (label, 6);
+  gtk_table_attach (table, label,
+                    0, 1,
+                    num_rows, num_rows + 1,
+                    GTK_FILL, GTK_FILL, 0, 0);
+  g_free (s);
+
+  return label;
+}
