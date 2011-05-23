@@ -761,6 +761,7 @@ add_account (GoaProvider    *_provider,
    * waiting for this to complete
    */
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{ss}"));
+  g_variant_builder_add (&builder, "{ss}", "Enabled", "true");
   g_variant_builder_add (&builder, "{ss}", "EmailAddress",
                          gtk_entry_get_text (GTK_ENTRY (data.intro_address_entry)));
   g_variant_builder_add (&builder, "{ss}", "ImapHost",
@@ -824,26 +825,78 @@ show_account (GoaProvider         *provider,
               GtkBox              *vbox,
               GtkTable            *table)
 {
+  gchar *email_address;
+  gchar *imap_host;
+  gchar *imap_user_name;
+  gboolean imap_use_tls;
+  gboolean imap_ignore_bad_tls;
+  gchar *smtp_host;
+  gchar *smtp_user_name;
+  gboolean smtp_use_tls;
+  gboolean smtp_ignore_bad_tls;
+  GString *str;
+
   /* Chain up */
   GOA_PROVIDER_CLASS (goa_generic_mail_provider_parent_class)->show_account (provider, client, object, vbox, table);
 
-  /* TODO: passwords */
+  email_address = goa_util_lookup_keyfile_string (object, "EmailAddress");
+  goa_util_add_row_label (table, _("Email Address"), email_address);
 
-  goa_util_add_row_editable_label_from_keyfile (table, object, _("Email Address"), "EmailAddress", FALSE);
+  imap_host = goa_util_lookup_keyfile_string (object, "ImapHost");
+  imap_user_name = goa_util_lookup_keyfile_string (object, "ImapUserName");
+  imap_use_tls = goa_util_lookup_keyfile_boolean (object, "ImapUseTls");
+  imap_ignore_bad_tls = goa_util_lookup_keyfile_boolean (object, "ImapIgnoreBadTls");
+  str = g_string_new (imap_host);
+  if (g_strcmp0 (g_get_user_name (), imap_user_name) != 0)
+    g_string_append_printf (str, "\n<small>%s: %s</small>",
+                            _("User Name"),
+                            imap_user_name);
+  if (imap_use_tls)
+    {
+      if (imap_ignore_bad_tls)
+        g_string_append_printf (str, "\n<small><span foreground=\"red\">%s</span></small>",
+                                _("Transport Security without Certificate Checks"));
+    }
+  else
+    {
+      g_string_append_printf (str, "\n<small><span foreground=\"red\">%s</span></small>",
+                              _("No Transport Security"));
+    }
+  goa_util_add_row_label (table, _("IMAP Server"), str->str);
+  g_string_free (str, TRUE);
 
-  goa_util_add_heading (table, _("Receiving Mail"));
+  smtp_host = goa_util_lookup_keyfile_string (object, "SmtpHost");
+  smtp_user_name = goa_util_lookup_keyfile_string (object, "SmtpUserName");
+  smtp_use_tls = goa_util_lookup_keyfile_boolean (object, "SmtpUseTls");
+  smtp_ignore_bad_tls = goa_util_lookup_keyfile_boolean (object, "SmtpIgnoreBadTls");
+  str = g_string_new (smtp_host);
+  if (g_strcmp0 (g_get_user_name (), smtp_user_name) != 0)
+    g_string_append_printf (str, "\n<small>%s: %s</small>",
+                            _("User Name"),
+                            smtp_user_name);
+  if (smtp_use_tls)
+    {
+      if (smtp_ignore_bad_tls)
+        g_string_append_printf (str, "\n<small><span foreground=\"red\">%s</span></small>",
+                                _("Transport Security without Certificate Checks"));
+    }
+  else
+    {
+      g_string_append_printf (str, "\n<small><span foreground=\"red\">%s</span></small>",
+                              _("No Transport Security"));
+    }
+  goa_util_add_row_label (table, _("SMTP Server"), str->str);
+  g_string_free (str, TRUE);
 
-  goa_util_add_row_editable_label_from_keyfile (table, object, _("IMAP Server"), "ImapHost", TRUE);
-  goa_util_add_row_editable_label_from_keyfile (table, object, _("User Name"), "ImapUserName", TRUE);
-  goa_util_add_row_check_button_from_keyfile (table, object, NULL, "ImapUseTls", _("Use s_ecure connection"));
-  goa_util_add_row_check_button_from_keyfile (table, object, NULL, "ImapIgnoreBadTls", _("_Don't check certificates"));
+  goa_util_add_row_switch_from_keyfile (table, object, _("Enabled"), "Enabled");
 
-  goa_util_add_heading (table, _("Sending Mail"));
+  /* TODO: we could have a "Edit" button */
 
-  goa_util_add_row_editable_label_from_keyfile (table, object, _("SMTP Server"), "SmtpHost", TRUE);
-  goa_util_add_row_editable_label_from_keyfile (table, object, _("User Name"), "SmtpUserName", TRUE);
-  goa_util_add_row_check_button_from_keyfile (table, object, NULL, "SmtpUseTls", _("Use s_ecure connection"));
-  goa_util_add_row_check_button_from_keyfile (table, object, NULL, "SmtpIgnoreBadTls", _("_Don't check certificates"));
+  g_free (smtp_host);
+  g_free (smtp_user_name);
+  g_free (imap_host);
+  g_free (imap_user_name);
+  g_free (email_address);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

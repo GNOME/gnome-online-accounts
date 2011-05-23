@@ -163,6 +163,33 @@ goa_oauth_provider_get_use_external_browser (GoaOAuthProvider *provider)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static void
+goa_oauth_provider_add_account_key_values_default (GoaOAuthProvider  *provider,
+                                                   GVariantBuilder   *builder)
+{
+  /* do nothing */
+}
+
+/**
+ * goa_oauth_provider_add_account_key_values:
+ * @provider: A #GoaProvider.
+ * @builder: A #GVariantBuilder for a <literal>a{ss}</literal> variant.
+ *
+ * Hook for implementations to add key/value pairs to the key-file
+ * when creating an account.
+ *
+ * This is a virtual method where the default implementation does nothing.
+ */
+void
+goa_oauth_provider_add_account_key_values (GoaOAuthProvider  *provider,
+                                           GVariantBuilder   *builder)
+{
+  g_return_if_fail (GOA_IS_OAUTH_PROVIDER (provider));
+  return GOA_OAUTH_PROVIDER_GET_CLASS (provider)->add_account_key_values (provider, builder);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static gchar *
 goa_oauth_provider_build_authorization_uri_default (GoaOAuthProvider  *provider,
                                                     const gchar       *authorization_uri,
@@ -992,11 +1019,13 @@ goa_oauth_provider_add_account (GoaProvider *_provider,
    * can create a proxy for the new object) so run the mainloop while
    * waiting for this to complete
    */
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{ss}"));
+  g_variant_builder_add (&builder, "{ss}", "Identity", identity);
+  goa_oauth_provider_add_account_key_values (provider, &builder);
   goa_manager_call_add_account (goa_client_get_manager (client),
                                 goa_provider_get_provider_type (GOA_PROVIDER (provider)),
                                 name, /* Name */
-                                g_variant_new_parsed ("{'Identity': %s}",
-                                                      identity),
+                                g_variant_builder_end (&builder),
                                 NULL, /* GCancellable* */
                                 (GAsyncReadyCallback) add_account_cb,
                                 &data);
@@ -1536,6 +1565,7 @@ goa_oauth_provider_class_init (GoaOAuthProviderClass *klass)
   klass->build_authorization_uri  = goa_oauth_provider_build_authorization_uri_default;
   klass->get_use_external_browser = goa_oauth_provider_get_use_external_browser_default;
   klass->get_request_uri_params   = goa_oauth_provider_get_request_uri_params_default;
+  klass->add_account_key_values   = goa_oauth_provider_add_account_key_values_default;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

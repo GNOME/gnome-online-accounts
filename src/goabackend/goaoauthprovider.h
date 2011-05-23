@@ -97,6 +97,8 @@ struct _GoaOAuthProviderClass
                                             const gchar       *escaped_oauth_token);
   gboolean     (*get_use_external_browser) (GoaOAuthProvider  *provider);
   gchar      **(*get_request_uri_params)   (GoaOAuthProvider  *provider);
+  void         (*add_account_key_values)   (GoaOAuthProvider  *provider,
+                                            GVariantBuilder   *builder);
 
   /*< private >*/
   /* Padding for future expansion */
@@ -128,6 +130,8 @@ gchar       *goa_oauth_provider_build_authorization_uri  (GoaOAuthProvider  *pro
                                                           const gchar       *authorization_uri,
                                                           const gchar       *escaped_oauth_token);
 gboolean     goa_oauth_provider_get_use_external_browser (GoaOAuthProvider  *provider);
+void         goa_oauth_provider_add_account_key_values   (GoaOAuthProvider  *provider,
+                                                          GVariantBuilder   *builder);
 
 G_END_DECLS
 

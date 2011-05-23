@@ -336,7 +336,16 @@ show_account (GoaProvider         *provider,
   GOA_PROVIDER_CLASS (goa_google_provider_parent_class)->show_account (provider, client, object, vbox, table);
 
   goa_util_add_row_editable_label_from_keyfile (table, object, _("Email Address"), "Identity", FALSE);
-  goa_util_add_row_switch_from_keyfile (table, object, _("GMail"), "GoogleMailEnabled");
+  goa_util_add_row_switch_from_keyfile (table, object, _("Mail"), "MailEnabled");
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
+add_account_key_values (GoaOAuthProvider  *provider,
+                        GVariantBuilder   *builder)
+{
+  g_variant_builder_add (builder, "{ss}", "MailEnabled", "true");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -368,6 +377,7 @@ goa_google_provider_class_init (GoaGoogleProviderClass *klass)
   oauth_class->get_token_uri            = get_token_uri;
   oauth_class->get_callback_uri         = get_callback_uri;
   oauth_class->get_use_external_browser = get_use_external_browser;
+  oauth_class->add_account_key_values   = add_account_key_values;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

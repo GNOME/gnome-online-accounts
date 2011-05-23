@@ -820,8 +820,105 @@ goa_util_add_row_label (GtkTable     *table,
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), value_markup);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_margin_top (label, 6);
+  gtk_widget_set_margin_bottom (label, 6);
+  gtk_widget_set_margin_left (label, 6);
   gtk_label_set_selectable (GTK_LABEL (label), TRUE);
   return goa_util_add_row_widget (table, label_text, label);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+gchar *
+goa_util_lookup_keyfile_string (GoaObject    *object,
+                                const gchar  *key)
+{
+  GoaAccount *account;
+  GError *error;
+  GKeyFile *key_file;
+  gchar *ret;
+
+  ret = NULL;
+
+  account = goa_object_peek_account (object);
+
+  key_file = g_key_file_new ();
+  error = NULL;
+  if (!g_key_file_load_from_file (key_file,
+                                  goa_account_get_keyfile_path (account),
+                                  G_KEY_FILE_NONE,
+                                  &error))
+    {
+      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
+                   goa_account_get_keyfile_path (account),
+                   error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+  ret = g_key_file_get_string (key_file,
+                               goa_account_get_keyfile_group (account),
+                               key,
+                               &error);
+  if (ret == NULL)
+    {
+      /* this is not fatal (think upgrade-path) */
+      goa_debug ("Error getting value for key %s in group `%s' from keyfile %s: %s (%s, %d)",
+                 key,
+                 goa_account_get_keyfile_group (account),
+                 goa_account_get_keyfile_path (account),
+                 error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+ out:
+  return ret;
+}
+
+gboolean
+goa_util_lookup_keyfile_boolean (GoaObject    *object,
+                                 const gchar  *key)
+{
+  GoaAccount *account;
+  GError *error;
+  GKeyFile *key_file;
+  gboolean ret;
+
+  ret = NULL;
+
+  account = goa_object_peek_account (object);
+
+  key_file = g_key_file_new ();
+  error = NULL;
+  if (!g_key_file_load_from_file (key_file,
+                                  goa_account_get_keyfile_path (account),
+                                  G_KEY_FILE_NONE,
+                                  &error))
+    {
+      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
+                   goa_account_get_keyfile_path (account),
+                   error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+  ret = g_key_file_get_boolean (key_file,
+                                goa_account_get_keyfile_group (account),
+                                key,
+                                &error);
+  if (error != NULL)
+    {
+      /* this is not fatal (think upgrade-path) */
+      goa_debug ("Error getting boolean value for key %s in group `%s' from keyfile %s: %s (%s, %d)",
+                 key,
+                 goa_account_get_keyfile_group (account),
+                 goa_account_get_keyfile_path (account),
+                 error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+ out:
+  return ret;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -969,8 +1066,9 @@ goa_util_add_row_editable_label_from_keyfile (GtkTable     *table,
   if (value == NULL)
     {
       /* this is not fatal (think upgrade-path) */
-      goa_debug ("Error getting value for key %s from keyfile %s: %s (%s, %d)",
+      goa_debug ("Error getting value for key %s in group `%s' from keyfile %s: %s (%s, %d)",
                  key,
+                 goa_account_get_keyfile_group (account),
                  goa_account_get_keyfile_path (account),
                  error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
@@ -1118,8 +1216,9 @@ goa_util_add_row_switch_from_keyfile (GtkTable     *table,
   if (error != NULL)
     {
       /* this is not fatal (think upgrade-path) */
-      goa_debug ("Error getting boolean value for key %s from keyfile %s: %s (%s, %d)",
+      goa_debug ("Error getting boolean value for key %s in group `%s' from keyfile %s: %s (%s, %d)",
                  key,
+                 goa_account_get_keyfile_group (account),
                  goa_account_get_keyfile_path (account),
                  error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
@@ -1265,8 +1364,9 @@ goa_util_add_row_check_button_from_keyfile (GtkTable     *table,
   if (error != NULL)
     {
       /* this is not fatal (think upgrade-path) */
-      goa_debug ("Error getting boolean value for key %s from keyfile %s: %s (%s, %d)",
+      goa_debug ("Error getting boolean value for key %s in group `%s' from keyfile %s: %s (%s, %d)",
                  key,
+                 goa_account_get_keyfile_group (account),
                  goa_account_get_keyfile_path (account),
                  error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);

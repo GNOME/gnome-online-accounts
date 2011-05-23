@@ -175,6 +175,14 @@ GtkWidget *goa_util_add_row_label  (GtkTable     *table,
                                     const gchar  *label_text,
                                     const gchar  *value_markup);
 
+gchar *
+goa_util_lookup_keyfile_string (GoaObject    *object,
+                                const gchar  *key);
+
+gboolean
+goa_util_lookup_keyfile_boolean (GoaObject    *object,
+                                 const gchar  *key);
+
 GtkWidget *goa_util_add_row_editable_label_from_keyfile (GtkTable     *table,
                                                          GoaObject    *object,
                                                          const gchar  *label_text,
