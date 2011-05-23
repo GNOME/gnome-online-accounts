@@ -104,6 +104,7 @@ build_object (GoaProvider         *provider,
   gchar *imap_user_name;
   gchar *imap_password;
   gchar *email_address;
+  gboolean enabled;
 
   account = NULL;
   mail = NULL;
@@ -125,34 +126,42 @@ build_object (GoaProvider         *provider,
   account = goa_object_get_account (GOA_OBJECT (object));
 
   /* mail */
-  email_address = g_key_file_get_string (key_file, group, "EmailAddress", NULL);
-  imap_host_and_port = g_key_file_get_string (key_file, group, "ImapHost", NULL);
-  imap_use_tls = g_key_file_get_boolean (key_file, group, "ImapUseTls", NULL);
-  imap_ignore_bad_tls = g_key_file_get_boolean (key_file, group, "ImapIgnoreBadTls", NULL);
-  imap_user_name = g_key_file_get_string (key_file, group, "ImapUserName", NULL);
-  imap_password = g_key_file_get_string (key_file, group, "ImapPassword", NULL);
   mail = goa_object_get_mail (GOA_OBJECT (object));
-  if (imap_host_and_port != NULL)
+  enabled = g_key_file_get_boolean (key_file, group, "Enabled", NULL);
+  if (enabled)
     {
-      if (mail == NULL)
+      email_address = g_key_file_get_string (key_file, group, "EmailAddress", NULL);
+      imap_host_and_port = g_key_file_get_string (key_file, group, "ImapHost", NULL);
+      imap_use_tls = g_key_file_get_boolean (key_file, group, "ImapUseTls", NULL);
+      imap_ignore_bad_tls = g_key_file_get_boolean (key_file, group, "ImapIgnoreBadTls", NULL);
+      imap_user_name = g_key_file_get_string (key_file, group, "ImapUserName", NULL);
+      imap_password = g_key_file_get_string (key_file, group, "ImapPassword", NULL);
+      if (imap_host_and_port != NULL)
         {
-          GoaImapAuth *auth;
-          if (imap_user_name == NULL)
-            imap_user_name = g_strdup (g_get_user_name ());
-          auth = goa_imap_auth_login_new (provider, GOA_OBJECT (object), imap_user_name, imap_password);
-          mail = goa_imap_mail_new (imap_host_and_port, imap_use_tls, imap_ignore_bad_tls, auth);
-          goa_object_skeleton_set_mail (object, mail);
-          g_object_unref (auth);
+          if (mail == NULL)
+            {
+              GoaImapAuth *auth;
+              if (imap_user_name == NULL)
+                imap_user_name = g_strdup (g_get_user_name ());
+              auth = goa_imap_auth_login_new (provider, GOA_OBJECT (object), imap_user_name, imap_password);
+              mail = goa_imap_mail_new (imap_host_and_port, imap_use_tls, imap_ignore_bad_tls, auth);
+              goa_object_skeleton_set_mail (object, mail);
+              g_object_unref (auth);
+            }
         }
+      else
+        {
+          if (mail != NULL)
+            goa_object_skeleton_set_mail (object, NULL);
+        }
+      /* TODO: support substitutions a'la ${USERNAME}@redhat.com for e.g. system-wide .conf files */
+      goa_mail_set_email_address (mail, email_address);
     }
   else
     {
       if (mail != NULL)
         goa_object_skeleton_set_mail (object, NULL);
     }
-
-  /* TODO: support substitutions a'la ${USERNAME}@redhat.com for e.g. system-wide .conf files */
-  goa_mail_set_email_address (mail, email_address);
 
   password_based = goa_object_get_password_based (GOA_OBJECT (object));
   if (password_based == NULL)

@@ -245,6 +245,7 @@ build_object (GoaProvider         *provider,
   GoaMail *mail;
   gboolean ret;
   gchar *email_address;
+  gboolean mail_enabled;
 
   email_address = NULL;
   account = NULL;
@@ -283,24 +284,34 @@ build_object (GoaProvider         *provider,
   goa_google_account_set_email_address (google_account, email_address);
 
   mail = goa_object_get_mail (GOA_OBJECT (object));
-  if (mail == NULL)
+  mail_enabled = g_key_file_get_boolean (key_file, group, "MailEnabled", NULL);
+  if (mail_enabled)
     {
-      GoaImapAuth *auth;
-      gchar *request_uri;
-      request_uri = g_strdup_printf ("https://mail.google.com/mail/b/%s/imap/", email_address);
-      auth = goa_imap_auth_oauth_new (GOA_OAUTH_PROVIDER (provider),
-                                      GOA_OBJECT (object),
-                                      request_uri);
-      mail = goa_imap_mail_new ("imap.gmail.com",
-                                TRUE,  /* use_tls */
-                                FALSE, /* ignore_bad_tls */
-                                auth);
-      goa_object_skeleton_set_mail (object, mail);
-      g_object_unref (auth);
-      g_free (request_uri);
+      if (mail == NULL)
+        {
+          GoaImapAuth *auth;
+          gchar *request_uri;
+          request_uri = g_strdup_printf ("https://mail.google.com/mail/b/%s/imap/", email_address);
+          auth = goa_imap_auth_oauth_new (GOA_OAUTH_PROVIDER (provider),
+                                          GOA_OBJECT (object),
+                                          request_uri);
+          mail = goa_imap_mail_new ("imap.gmail.com",
+                                    TRUE,  /* use_tls */
+                                    FALSE, /* ignore_bad_tls */
+                                    auth);
+          goa_object_skeleton_set_mail (object, mail);
+          g_object_unref (auth);
+          g_free (request_uri);
 
-      goa_mail_set_email_address (mail, email_address);
+          goa_mail_set_email_address (mail, email_address);
+        }
     }
+  else
+    {
+      if (mail != NULL)
+        goa_object_skeleton_set_mail (object, NULL);
+    }
+
 
   ret = TRUE;
 
