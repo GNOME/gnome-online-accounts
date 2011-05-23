@@ -53,6 +53,8 @@ struct _GoaDaemon
   GoaManager *manager;
 
   NotifyNotification *notification;
+
+  guint config_timeout_id;
 };
 
 typedef struct
@@ -101,6 +103,11 @@ static void
 goa_daemon_finalize (GObject *object)
 {
   GoaDaemon *daemon = GOA_DAEMON (object);
+
+  if (daemon->config_timeout_id != 0)
+    {
+      g_source_remove (daemon->config_timeout_id);
+    }
 
   if (daemon->notification != NULL)
     {
@@ -160,6 +167,18 @@ create_monitor (const gchar *path, gboolean is_dir)
   return monitor;
 }
 
+static gboolean
+on_config_file_monitor_timeout (gpointer user_data)
+{
+  GoaDaemon *daemon = GOA_DAEMON (user_data);
+
+  daemon->config_timeout_id = 0;
+  goa_info ("Reloading configuration files\n");
+  goa_daemon_reload_configuration (daemon);
+
+  return FALSE;
+}
+
 static void
 on_file_monitor_changed (GFileMonitor      *monitor,
                          GFile             *file,
@@ -168,10 +187,10 @@ on_file_monitor_changed (GFileMonitor      *monitor,
                          gpointer           user_data)
 {
   GoaDaemon *daemon = GOA_DAEMON (user_data);
-  if (event_type == G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT)
+
+  if (daemon->config_timeout_id == 0)
     {
-      g_print ("Reloading configuration files\n");
-      goa_daemon_reload_configuration (daemon);
+      daemon->config_timeout_id = g_timeout_add (200, on_config_file_monitor_timeout, daemon);
     }
 }
 
