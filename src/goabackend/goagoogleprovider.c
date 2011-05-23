@@ -336,7 +336,9 @@ show_account (GoaProvider         *provider,
   GOA_PROVIDER_CLASS (goa_google_provider_parent_class)->show_account (provider, client, object, vbox, table);
 
   goa_util_add_row_editable_label_from_keyfile (table, object, _("Email Address"), "Identity", FALSE);
+  goa_util_add_heading (table, _("Use this account for"));
   goa_util_add_row_switch_from_keyfile (table, object, _("Mail"), "MailEnabled");
+  goa_util_add_row_switch_from_keyfile (table, object, _("Calendar"), "CalendarEnabled");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -346,6 +348,7 @@ add_account_key_values (GoaOAuthProvider  *provider,
                         GVariantBuilder   *builder)
 {
   g_variant_builder_add (builder, "{ss}", "MailEnabled", "true");
+  g_variant_builder_add (builder, "{ss}", "CalendarEnabled", "true");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
