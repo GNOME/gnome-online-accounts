@@ -94,6 +94,14 @@ static void on_interface_proxy_properties_changed (GDBusObjectManagerClient   *m
                                                    GVariant                   *changed_properties,
                                                    const gchar* const         *invalidated_properties,
                                                    gpointer                    user_data);
+static void on_interface_added (GDBusObjectManager   *manager,
+                                GDBusObject          *object,
+                                GDBusInterface       *interface,
+                                gpointer              user_data);
+static void on_interface_removed (GDBusObjectManager   *manager,
+                                  GDBusObject          *object,
+                                  GDBusInterface       *interface,
+                                  gpointer              user_data);
 
 G_DEFINE_TYPE_WITH_CODE (GoaClient, goa_client, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init)
@@ -113,6 +121,8 @@ goa_client_finalize (GObject *object)
       g_signal_handlers_disconnect_by_func (client->object_manager, G_CALLBACK (on_object_added), client);
       g_signal_handlers_disconnect_by_func (client->object_manager, G_CALLBACK (on_object_removed), client);
       g_signal_handlers_disconnect_by_func (client->object_manager, G_CALLBACK (on_interface_proxy_properties_changed), client);
+      g_signal_handlers_disconnect_by_func (client->object_manager, G_CALLBACK (on_interface_added), client);
+      g_signal_handlers_disconnect_by_func (client->object_manager, G_CALLBACK (on_interface_removed), client);
       g_object_unref (client->object_manager);
     }
 
@@ -355,6 +365,14 @@ initable_init (GInitable     *initable,
                     "interface-proxy-properties-changed",
                     G_CALLBACK (on_interface_proxy_properties_changed),
                     client);
+  g_signal_connect (client->object_manager,
+                    "interface-added",
+                    G_CALLBACK (on_interface_added),
+                    client);
+  g_signal_connect (client->object_manager,
+                    "interface-removed",
+                    G_CALLBACK (on_interface_removed),
+                    client);
 
   ret = TRUE;
 
@@ -498,3 +516,24 @@ on_interface_proxy_properties_changed (GDBusObjectManagerClient   *manager,
     g_signal_emit (client, signals[ACCOUNT_CHANGED_SIGNAL], 0, object_proxy);
 }
 
+static void
+on_interface_added (GDBusObjectManager   *manager,
+                    GDBusObject          *object,
+                    GDBusInterface       *interface,
+                    gpointer              user_data)
+{
+  GoaClient *client = GOA_CLIENT (user_data);
+  if (goa_object_peek_account (GOA_OBJECT (object)) != NULL)
+    g_signal_emit (client, signals[ACCOUNT_CHANGED_SIGNAL], 0, object);
+}
+
+static void
+on_interface_removed (GDBusObjectManager   *manager,
+                      GDBusObject          *object,
+                      GDBusInterface       *interface,
+                      gpointer              user_data)
+{
+  GoaClient *client = GOA_CLIENT (user_data);
+  if (goa_object_peek_account (GOA_OBJECT (object)) != NULL)
+    g_signal_emit (client, signals[ACCOUNT_CHANGED_SIGNAL], 0, object);
+}
