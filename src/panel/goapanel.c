@@ -351,7 +351,7 @@ show_page_account (GoaPanel  *panel,
   if (goa_account_get_attention_needed (account))
     {
       bar = gtk_info_bar_new ();
-      label = gtk_label_new (_("The connection to this account has expired. Please log in again."));
+      label = gtk_label_new (_("Expired credentials. Please log in again."));
       gtk_container_add (GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (bar))), label);
       if (provider != NULL)
         gtk_info_bar_add_button (GTK_INFO_BAR (bar), _("_Log In"), GTK_RESPONSE_OK);
