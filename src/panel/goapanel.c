@@ -91,18 +91,6 @@ goa_panel_finalize (GObject *object)
   G_OBJECT_CLASS (goa_panel_parent_class)->finalize (object);
 }
 
-static GtkWidget *
-add_switch (GoaPanel    *panel,
-            const gchar *hbox_id)
-{
-  GtkWidget *ret;
-  ret = gtk_switch_new ();
-  gtk_switch_set_active (GTK_SWITCH (ret), TRUE);
-  gtk_box_pack_start (GTK_BOX (gtk_builder_get_object (panel->builder, hbox_id)),
-                      ret, FALSE, TRUE, 0);
-  return ret;
-}
-
 static void
 goa_panel_init (GoaPanel *panel)
 {
