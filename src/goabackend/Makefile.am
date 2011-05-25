@@ -57,7 +57,7 @@ libgoa_backend_1_0_la_HEADERS =						\
 	goaimapauthlogin.h						\
 	goaimapauthoauth.h						\
 	goaimapclient.h							\
-	goaimapmail.h							\
+	goainternetmail.h						\
 	$(NULL)
 
 libgoa_backend_1_0_la_SOURCES =						\
@@ -79,7 +79,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goaimapauthlogin.h		goaimapauthlogin.c		\
 	goaimapauthoauth.h		goaimapauthoauth.c		\
 	goaimapclient.h			goaimapclient.c			\
-	goaimapmail.h			goaimapmail.c			\
+	goainternetmail.h		goainternetmail.c		\
 	$(NULL)
 
 libgoa_backend_1_0_la_CPPFLAGS =				\

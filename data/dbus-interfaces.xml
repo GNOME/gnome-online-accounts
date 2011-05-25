@@ -338,6 +338,75 @@
          format.
       -->
     <property name="EmailAddress" type="s" access="read"/>
+
+    <!-- ImapSupported:
+         Set to %TRUE if the messages for the account can be accessed
+         and manipulated using the
+         <ulink url="http://tools.ietf.org/html/rfc3501">IMAP</ulink>
+         protocol.
+      -->
+    <property name="ImapSupported" type="b" access="read"/>
+
+    <!-- ImapHost:
+         The IMAP server to use.
+
+         This may be in any of a number of recognized formats; an IPv6
+         address, an IPv4 address, or a domain name. A port override
+         may be specified in the usual way with a colon. Ports may be
+         given as decimal numbers or symbolic names
+         (cf. the <filename>/etc/services</filename> file).
+
+         If a port override is not given, then applications should try
+         to connect to port 993 if
+         #org.gnome.OnlineAccounts.Mail:ImapUseTls is %TRUE and port
+         143 if not.
+    -->
+    <property name="ImapHost" type="s" access="read"/>
+
+    <!-- ImapUseTls: Whether TLS should be used to establish the connection. -->
+    <property name="ImapUseTls" type="b" access="read"/>
+
+    <!-- ImapUserName:
+         The user name to use for logging in.
+
+         This may be blank if username/password authentication isn't
+         used or if the user name of the current user should be used.
+    -->
+    <property name="ImapUserName" type="s" access="read"/>
+
+    <!-- SmtpSupported:
+         Set to %TRUE if the
+         <ulink url="http://tools.ietf.org/html/rfc5321">SMTP</ulink>
+         protocol can be used to send messages for the account.
+      -->
+    <property name="SmtpSupported" type="b" access="read"/>
+
+    <!-- SmtpHost:
+         The SMTP server to use.
+
+         This may be in any of a number of recognized formats; an IPv6
+         address, an IPv4 address, or a domain name. A port override
+         may be specified in the usual way with a colon. Ports may be
+         given as decimal numbers or symbolic names
+         (cf. the <filename>/etc/services</filename> file).
+
+         If a port override is not given, then applications should try
+         to connect to port 465 if
+         #org.gnome.OnlineAccounts.Mail:SmtpUseTls is %TRUE and port
+         587 (or 25) if not.
+    -->
+    <property name="SmtpHost" type="s" access="read"/>
+
+    <!-- SmtpUseTls: Whether TLS should be used to establish the connection. -->
+    <property name="SmtpUseTls" type="b" access="read"/>
+
+    <!-- SmtpUserName:
+         The user name to use for logging in.
+
+         This may be blank if username/password authentication isn't
+         used or if the user name of the current user should be used.
+    -->
+    <property name="SmtpUserName" type="s" access="read"/>
   </interface>
 
   <!--

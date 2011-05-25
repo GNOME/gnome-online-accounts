@@ -24,23 +24,29 @@
 #error "Only <goabackend/goabackend.h> can be included directly."
 #endif
 
-#ifndef __GOA_IMAP_MAIL_H__
-#define __GOA_IMAP_MAIL_H__
+#ifndef __GOA_INTERNET_MAIL_H__
+#define __GOA_INTERNET_MAIL_H__
 
 #include <goabackend/goabackendtypes.h>
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_IMAP_MAIL  (goa_imap_mail_get_type ())
-#define GOA_IMAP_MAIL(o)    (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_IMAP_MAIL, GoaImapMail))
-#define GOA_IS_IMAP_MAIL(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_IMAP_MAIL))
+#define GOA_TYPE_INTERNET_MAIL  (goa_internet_mail_get_type ())
+#define GOA_INTERNET_MAIL(o)    (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_INTERNET_MAIL, GoaInternetMail))
+#define GOA_IS_INTERNET_MAIL(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_INTERNET_MAIL))
 
-GType    goa_imap_mail_get_type (void) G_GNUC_CONST;
-GoaMail *goa_imap_mail_new      (const gchar  *host_and_port,
-                                 gboolean      use_tls,
-                                 gboolean      ignore_bad_tls,
-                                 GoaImapAuth  *auth);
+GType    goa_internet_mail_get_type (void) G_GNUC_CONST;
+GoaMail *goa_internet_mail_new      (const gchar  *imap_host,
+                                     const gchar  *imap_user_name,
+                                     gboolean      imap_use_tls,
+                                     gboolean      imap_ignore_bad_tls,
+                                     GoaImapAuth  *imap_auth,
+                                     const gchar  *smtp_host,
+                                     const gchar  *smtp_user_name,
+                                     gboolean      smtp_use_tls,
+                                     gboolean      smtp_ignore_bad_tls);
+
 
 G_END_DECLS
 
-#endif /* __GOA_IMAP_MAIL_H__ */
+#endif /* __GOA_INTERNET_MAIL_H__ */

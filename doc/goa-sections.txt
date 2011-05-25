@@ -124,6 +124,10 @@ goa_account_get_attention_needed
 goa_account_set_attention_needed
 goa_account_get_name
 goa_account_set_name
+goa_account_get_keyfile_group
+goa_account_set_keyfile_group
+goa_account_get_keyfile_path
+goa_account_set_keyfile_path
 goa_account_call_set_name
 goa_account_call_set_name_finish
 goa_account_call_set_name_sync
@@ -666,6 +670,7 @@ goa_twitter_provider_get_type
 <FILE>GoaMail</FILE>
 GoaMail
 GoaMailIface
+goa_mail_override_properties
 goa_mail_interface_info
 goa_mail_call_create_monitor
 goa_mail_call_create_monitor_finish
@@ -673,6 +678,22 @@ goa_mail_call_create_monitor_sync
 goa_mail_complete_create_monitor
 goa_mail_get_email_address
 goa_mail_set_email_address
+goa_mail_get_imap_host
+goa_mail_set_imap_host
+goa_mail_get_imap_supported
+goa_mail_set_imap_supported
+goa_mail_get_imap_use_tls
+goa_mail_set_imap_use_tls
+goa_mail_get_imap_user_name
+goa_mail_set_imap_user_name
+goa_mail_get_smtp_host
+goa_mail_get_smtp_supported
+goa_mail_set_smtp_supported
+goa_mail_set_smtp_host
+goa_mail_get_smtp_use_tls
+goa_mail_set_smtp_use_tls
+goa_mail_get_smtp_user_name
+goa_mail_set_smtp_user_name
 GoaMailProxy
 GoaMailProxyClass
 goa_mail_proxy_new
@@ -776,14 +797,14 @@ goa_imap_client_get_type
 </SECTION>
 
 <SECTION>
-<FILE>goaimapmail</FILE>
-GoaImapMail
-goa_imap_mail_new
+<FILE>goainternetmail</FILE>
+GoaInternetMail
+goa_internet_mail_new
 <SUBSECTION Standard>
-GOA_IMAP_MAIL
-GOA_IS_IMAP_MAIL
-GOA_TYPE_IMAP_MAIL
-goa_imap_mail_get_type
+GOA_INTERNET_MAIL
+GOA_IS_INTERNET_MAIL
+GOA_TYPE_INTERNET_MAIL
+goa_internet_mail_get_type
 </SECTION>
 
 <SECTION>
@@ -834,5 +855,18 @@ goa_info
 goa_notice
 goa_warning
 goa_error
+<SUBSECTION Standard>
+</SECTION>
+
+<SECTION>
+<FILE>goautil</FILE>
+goa_util_add_heading
+goa_util_add_row_check_button_from_keyfile
+goa_util_add_row_editable_label_from_keyfile
+goa_util_add_row_label
+goa_util_add_row_switch_from_keyfile
+goa_util_add_row_widget
+goa_util_lookup_keyfile_boolean
+goa_util_lookup_keyfile_string
 <SUBSECTION Standard>
 </SECTION>

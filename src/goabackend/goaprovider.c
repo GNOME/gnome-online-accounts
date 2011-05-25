@@ -798,6 +798,14 @@ goa_provider_lookup_credentials_sync (GoaProvider   *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
+ * SECTION:goautil
+ * @title: Utilities
+ * @short_description: Various utility routines
+ *
+ * Various utility routines.
+ */
+
+/**
  * goa_util_add_row_widget:
  * @table: A #GtkTable.
  * @label_text: (allow-none): The text to insert on the left side or %NULL for no label.

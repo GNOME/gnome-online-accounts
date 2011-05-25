@@ -31,28 +31,28 @@
 #include "goalogging.h"
 #include "goaimapauth.h"
 #include "goaimapclient.h"
-#include "goaimapmail.h"
+#include "goainternetmail.h"
 
 /**
- * GoaImapMail:
+ * GoaInternetMail:
  *
- * The #GoaImapMail structure contains only private data and should
+ * The #GoaInternetMail structure contains only private data and should
  * only be accessed using the provided API.
  */
-struct _GoaImapMail
+struct _GoaInternetMail
 {
   /*< private >*/
   GoaMailSkeleton parent_instance;
 
-  gchar *host_and_port;
-  gboolean use_tls;
-  gboolean ignore_bad_tls;
-  GoaImapAuth *auth;
+  gboolean imap_ignore_bad_tls;
+  GoaImapAuth *imap_auth;
+
+  gboolean smtp_ignore_bad_tls;
 };
 
-typedef struct _GoaImapMailClass GoaImapMailClass;
+typedef struct _GoaInternetMailClass GoaInternetMailClass;
 
-struct _GoaImapMailClass
+struct _GoaInternetMailClass
 {
   GoaMailSkeletonClass parent_class;
 };
@@ -60,64 +60,57 @@ struct _GoaImapMailClass
 enum
 {
   PROP_0,
-  PROP_HOST_AND_PORT,
-  PROP_USE_TLS,
-  PROP_IGNORE_BAD_TLS,
-  PROP_AUTH
+  PROP_IMAP_IGNORE_BAD_TLS,
+  PROP_IMAP_AUTH,
+  PROP_SMTP_IGNORE_BAD_TLS
 };
 
 /**
- * SECTION:goaimapmail
- * @title: GoaImapMail
- * @short_description: Implementation of the #GoaMail interface for IMAP servers
+ * SECTION:goainternetmail
+ * @title: GoaInternetMail
+ * @short_description: Implementation of the #GoaMail interface for standards-based Internet Mail.
  *
- * #GoaImapMail is an implementation of the #GoaMail D-Bus
- * interface that uses a #GoaImapClient instance to speak to a
- * remote IMAP server.
+ * #GoaInternetMail is an implementation of the #GoaMail D-Bus
+ * interface for IMAP and SMTP servers.
  */
 
-static void goa_imap_mail__goa_mail_iface_init (GoaMailIface *iface);
+static void goa_internet_mail__goa_mail_iface_init (GoaMailIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GoaImapMail, goa_imap_mail, GOA_TYPE_MAIL_SKELETON,
-                         G_IMPLEMENT_INTERFACE (GOA_TYPE_MAIL, goa_imap_mail__goa_mail_iface_init));
+G_DEFINE_TYPE_WITH_CODE (GoaInternetMail, goa_internet_mail, GOA_TYPE_MAIL_SKELETON,
+                         G_IMPLEMENT_INTERFACE (GOA_TYPE_MAIL, goa_internet_mail__goa_mail_iface_init));
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_imap_mail_finalize (GObject *object)
+goa_internet_mail_finalize (GObject *object)
 {
-  GoaImapMail *mail = GOA_IMAP_MAIL (object);
+  GoaInternetMail *mail = GOA_INTERNET_MAIL (object);
 
-  g_free (mail->host_and_port);
-  g_object_unref (mail->auth);
+  g_object_unref (mail->imap_auth);
 
-  G_OBJECT_CLASS (goa_imap_mail_parent_class)->finalize (object);
+  G_OBJECT_CLASS (goa_internet_mail_parent_class)->finalize (object);
 }
 
 static void
-goa_imap_mail_get_property (GObject      *object,
-                            guint         prop_id,
-                            GValue       *value,
-                            GParamSpec   *pspec)
+goa_internet_mail_get_property (GObject      *object,
+                                guint         prop_id,
+                                GValue       *value,
+                                GParamSpec   *pspec)
 {
-  GoaImapMail *mail = GOA_IMAP_MAIL (object);
+  GoaInternetMail *mail = GOA_INTERNET_MAIL (object);
 
   switch (prop_id)
     {
-    case PROP_HOST_AND_PORT:
-      g_value_set_string (value, mail->host_and_port);
+    case PROP_IMAP_IGNORE_BAD_TLS:
+      g_value_set_boolean (value, mail->imap_ignore_bad_tls);
       break;
 
-    case PROP_USE_TLS:
-      g_value_set_boolean (value, mail->use_tls);
+    case PROP_IMAP_AUTH:
+      g_value_set_object (value, mail->imap_auth);
       break;
 
-    case PROP_IGNORE_BAD_TLS:
-      g_value_set_boolean (value, mail->ignore_bad_tls);
-      break;
-
-    case PROP_AUTH:
-      g_value_set_object (value, mail->auth);
+    case PROP_SMTP_IGNORE_BAD_TLS:
+      g_value_set_boolean (value, mail->smtp_ignore_bad_tls);
       break;
 
     default:
@@ -127,29 +120,25 @@ goa_imap_mail_get_property (GObject      *object,
 }
 
 static void
-goa_imap_mail_set_property (GObject      *object,
-                            guint         prop_id,
-                            const GValue *value,
-                            GParamSpec   *pspec)
+goa_internet_mail_set_property (GObject      *object,
+                                guint         prop_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
 {
-  GoaImapMail *mail = GOA_IMAP_MAIL (object);
+  GoaInternetMail *mail = GOA_INTERNET_MAIL (object);
 
   switch (prop_id)
     {
-    case PROP_HOST_AND_PORT:
-      mail->host_and_port = g_value_dup_string (value);
+    case PROP_IMAP_IGNORE_BAD_TLS:
+      mail->imap_ignore_bad_tls = g_value_get_boolean (value);
       break;
 
-    case PROP_USE_TLS:
-      mail->use_tls = g_value_get_boolean (value);
+    case PROP_IMAP_AUTH:
+      mail->imap_auth = g_value_dup_object (value);
       break;
 
-    case PROP_IGNORE_BAD_TLS:
-      mail->ignore_bad_tls = g_value_get_boolean (value);
-      break;
-
-    case PROP_AUTH:
-      mail->auth = g_value_dup_object (value);
+    case PROP_SMTP_IGNORE_BAD_TLS:
+      mail->smtp_ignore_bad_tls = g_value_get_boolean (value);
       break;
 
     default:
@@ -159,7 +148,7 @@ goa_imap_mail_set_property (GObject      *object,
 }
 
 static void
-goa_imap_mail_init (GoaImapMail *mail)
+goa_internet_mail_init (GoaInternetMail *mail)
 {
   /* Ensure D-Bus method invocations run in their own thread */
   g_dbus_interface_skeleton_set_flags (G_DBUS_INTERFACE_SKELETON (mail),
@@ -167,85 +156,92 @@ goa_imap_mail_init (GoaImapMail *mail)
 }
 
 static void
-goa_imap_mail_class_init (GoaImapMailClass *klass)
+goa_internet_mail_class_init (GoaInternetMailClass *klass)
 {
   GObjectClass *gobject_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
-  gobject_class->finalize = goa_imap_mail_finalize;
-  gobject_class->set_property = goa_imap_mail_set_property;
-  gobject_class->get_property = goa_imap_mail_get_property;
+  gobject_class->finalize     = goa_internet_mail_finalize;
+  gobject_class->set_property = goa_internet_mail_set_property;
+  gobject_class->get_property = goa_internet_mail_get_property;
 
   g_object_class_install_property (gobject_class,
-                                   PROP_HOST_AND_PORT,
-                                   g_param_spec_string ("host-and-port",
-                                                        "host-and-port",
-                                                        "host-and-port",
-                                                        NULL,
-                                                        G_PARAM_READABLE |
-                                                        G_PARAM_WRITABLE |
-                                                        G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_property (gobject_class,
-                                   PROP_USE_TLS,
-                                   g_param_spec_boolean ("use-tls",
-                                                         "use-tls",
-                                                         "use-tls",
-                                                         TRUE,
+                                   PROP_IMAP_IGNORE_BAD_TLS,
+                                   g_param_spec_boolean ("imap-ignore-bad-tls",
+                                                         "imap-ignore-bad-tls",
+                                                         "imap-ignore-bad-tls",
+                                                         FALSE,
                                                          G_PARAM_READABLE |
                                                          G_PARAM_WRITABLE |
                                                          G_PARAM_CONSTRUCT_ONLY |
                                                          G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_property (gobject_class,
-                                   PROP_IGNORE_BAD_TLS,
-                                   g_param_spec_boolean ("ignore-bad-tls",
-                                                         "ignore-bad-tls",
-                                                         "ignore-bad-tls",
-                                                         TRUE,
-                                                         G_PARAM_READABLE |
-                                                         G_PARAM_WRITABLE |
-                                                         G_PARAM_CONSTRUCT_ONLY |
-                                                         G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_property (gobject_class,
-                                   PROP_AUTH,
-                                   g_param_spec_object ("auth",
-                                                        "auth",
-                                                        "auth",
+                                   PROP_IMAP_AUTH,
+                                   g_param_spec_object ("imap-auth",
+                                                        "imap-auth",
+                                                        "imap-auth",
                                                         GOA_TYPE_IMAP_AUTH,
                                                         G_PARAM_READABLE |
                                                         G_PARAM_WRITABLE |
                                                         G_PARAM_CONSTRUCT_ONLY |
                                                         G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_SMTP_IGNORE_BAD_TLS,
+                                   g_param_spec_boolean ("smtp-ignore-bad-tls",
+                                                         "smtp-ignore-bad-tls",
+                                                         "smtp-ignore-bad-tls",
+                                                         FALSE,
+                                                         G_PARAM_READABLE |
+                                                         G_PARAM_WRITABLE |
+                                                         G_PARAM_CONSTRUCT_ONLY |
+                                                         G_PARAM_STATIC_STRINGS));
+
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
- * goa_imap_mail_new:
- * @host_and_port: The name and optionally port to connect to.
- * @use_tls: Whether TLS should be used.
- * @ignore_bad_tls: Whether errors (e.g. %G_TLS_ERROR_BAD_CERTIFICATE) about TLS certificates should be ignored.
- * @auth: Object used for authenticating the connection.
+ * goa_internet_mail_new:
+ * @imap_host: The IMAP server.
+ * @imap_user_name: (allow-none): The user name to use.
+ * @imap_use_tls: Whether TLS should be used connections to the IMAP server.
+ * @imap_ignore_bad_tls: Whether errors (e.g. %G_TLS_ERROR_BAD_CERTIFICATE) about TLS certificates while connecting to @imap_host should be ignored.
+ * @imap_auth: Object used for authenticating the IMAP connection.
+ * @smtp_host: The SMTP server.
+ * @smtp_user_name: (allow-none): The user name to use.
+ * @smtp_use_tls: Whether TLS should be used connections to the SMTP server.
+ * @smtp_ignore_bad_tls: Whether errors (e.g. %G_TLS_ERROR_BAD_CERTIFICATE) about TLS certificates while connecting to @smtp_host should be ignored.
  *
  * Creates a new #GoaMail object.
  *
- * Returns: (type GoaImapMail): A new #GoaMail instance.
+ * Returns: (type GoaInternetMail): A new #GoaMail instance.
  */
 GoaMail *
-goa_imap_mail_new (const gchar  *host_and_port,
-                   gboolean      use_tls,
-                   gboolean      ignore_bad_tls,
-                   GoaImapAuth  *auth)
+goa_internet_mail_new (const gchar  *imap_host,
+                       const gchar  *imap_user_name,
+                       gboolean      imap_use_tls,
+                       gboolean      imap_ignore_bad_tls,
+                       GoaImapAuth  *imap_auth,
+                       const gchar  *smtp_host,
+                       const gchar  *smtp_user_name,
+                       gboolean      smtp_use_tls,
+                       gboolean      smtp_ignore_bad_tls)
 {
-  g_return_val_if_fail (host_and_port != NULL, NULL);
-  return GOA_MAIL (g_object_new (GOA_TYPE_IMAP_MAIL,
-                                 "host-and-port", host_and_port,
-                                 "use-tls", use_tls,
-                                 "ignore-bad-tls", ignore_bad_tls,
-                                 "auth", auth,
+  g_return_val_if_fail (imap_host != NULL, NULL);
+  return GOA_MAIL (g_object_new (GOA_TYPE_INTERNET_MAIL,
+                                 "imap-supported", TRUE,
+                                 "imap-host", imap_host,
+                                 "imap-user-name", imap_user_name,
+                                 "imap-use-tls", imap_use_tls,
+                                 "imap-ignore-bad-tls", imap_ignore_bad_tls,
+                                 "imap-auth", imap_auth,
+                                 "smtp-supported", TRUE,
+                                 "smtp-host", smtp_host,
+                                 "smtp-user-name", smtp_user_name,
+                                 "smtp-use-tls", smtp_use_tls,
+                                 "smtp-ignore-bad-tls", smtp_ignore_bad_tls,
                                  NULL));
 }
 
@@ -255,7 +251,7 @@ typedef struct
 {
   volatile gint ref_count;
 
-  GoaImapMail *mail;
+  GoaInternetMail *mail;
   GoaMailMonitor *monitor;
 
   /* Used so we can nuke the monitor if the creator vanishes */
@@ -866,10 +862,10 @@ imap_client_sync_single (ImapClientData *data)
 
   error = NULL;
   if (!goa_imap_client_connect_sync (client,
-                                     data->monitor_data->mail->host_and_port,
-                                     data->monitor_data->mail->use_tls,
-                                     data->monitor_data->mail->ignore_bad_tls,
-                                     data->monitor_data->mail->auth,
+                                     goa_mail_get_imap_host (GOA_MAIL (data->monitor_data->mail)),
+                                     goa_mail_get_imap_use_tls (GOA_MAIL (data->monitor_data->mail)),
+                                     data->monitor_data->mail->imap_ignore_bad_tls,
+                                     data->monitor_data->mail->imap_auth,
                                      NULL, /* GCancellable */
                                      &error))
     goto out;
@@ -1071,7 +1067,7 @@ imap_client_sync (MonitorData *data)
   imap_data->monitor_data = monitor_data_ref (data);
 
   goa_info ("Using thread for IMAP client at %s for account %s",
-            data->mail->host_and_port,
+            goa_mail_get_imap_host (GOA_MAIL (data->mail)),
             g_dbus_object_get_object_path (g_dbus_interface_get_object (G_DBUS_INTERFACE (data->mail))));
 
   while (TRUE)
@@ -1079,7 +1075,7 @@ imap_client_sync (MonitorData *data)
       GPollFD poll_fd;
 
       goa_info ("Connecting to IMAP server at %s for account %s",
-                data->mail->host_and_port,
+                goa_mail_get_imap_host (GOA_MAIL (data->mail)),
                 g_dbus_object_get_object_path (g_dbus_interface_get_object (G_DBUS_INTERFACE (data->mail))));
 
       /* tries connecting - blocks until the connection is closed */
@@ -1257,9 +1253,9 @@ typedef gboolean (*ImapHelperFunc) (GoaImapClient  *client,
                                     GError        **error);
 
 static gboolean
-imap_helper (const gchar    *host_and_port,
-             gboolean        use_tls,
-             gboolean        ignore_bad_tls,
+imap_helper (const gchar    *imap_host,
+             gboolean        imap_use_tls,
+             gboolean        imap_ignore_bad_tls,
              GoaImapAuth    *auth,
              guint           uidvalidity,
              ImapHelperFunc  func,
@@ -1281,9 +1277,9 @@ imap_helper (const gchar    *host_and_port,
                     G_CALLBACK (on_untagged_response_uidvalidity),
                     &read_uidvalidity);
   if (!goa_imap_client_connect_sync (client,
-                                     host_and_port,
-                                     use_tls,
-                                     ignore_bad_tls,
+                                     imap_host,
+                                     imap_use_tls,
+                                     imap_ignore_bad_tls,
                                      auth,
                                      NULL, /* GCancellable */
                                      error))
@@ -1391,10 +1387,10 @@ monitor_on_handle_add_star (GoaMailMonitor        *monitor,
   request = g_strdup_printf ("UID COPY %d %s",
                              (gint) (message_uid & 0xffffffff),
                              data->starred_folder);
-  imap_helper (data->mail->host_and_port,
-               data->mail->use_tls,
-               data->mail->ignore_bad_tls,
-               data->mail->auth,
+  imap_helper (goa_mail_get_imap_host (GOA_MAIL (data->mail)),
+               goa_mail_get_imap_use_tls (GOA_MAIL (data->mail)),
+               data->mail->imap_ignore_bad_tls,
+               data->mail->imap_auth,
                (message_uid >> 32),
                add_star_func,
                request,
@@ -1476,10 +1472,10 @@ monitor_on_handle_mark_as_spam (GoaMailMonitor        *monitor,
                                  data->spam_folder);
   requests[1] = g_strdup_printf ("UID STORE %d +FLAGS (\\Deleted)",
                                  (gint) (message_uid & 0xffffffff));
-  imap_helper (data->mail->host_and_port,
-               data->mail->use_tls,
-               data->mail->ignore_bad_tls,
-               data->mail->auth,
+  imap_helper (goa_mail_get_imap_host (GOA_MAIL (data->mail)),
+               goa_mail_get_imap_use_tls (GOA_MAIL (data->mail)),
+               data->mail->imap_ignore_bad_tls,
+               data->mail->imap_auth,
                (message_uid >> 32),
                mark_as_spam_func,
                requests,
@@ -1501,7 +1497,7 @@ static gboolean
 handle_create_monitor (GoaMail                *_mail,
                        GDBusMethodInvocation  *invocation)
 {
-  GoaImapMail *mail = GOA_IMAP_MAIL (_mail);
+  GoaInternetMail *mail = GOA_INTERNET_MAIL (_mail);
   gchar *monitor_object_path;
   GError *error;
   MonitorData *data;
@@ -1591,7 +1587,7 @@ handle_create_monitor (GoaMail                *_mail,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_imap_mail__goa_mail_iface_init (GoaMailIface *iface)
+goa_internet_mail__goa_mail_iface_init (GoaMailIface *iface)
 {
   iface->handle_create_monitor = handle_create_monitor;
 }

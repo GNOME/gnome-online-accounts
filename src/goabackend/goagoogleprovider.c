@@ -30,7 +30,7 @@
 #include "goaoauthprovider.h"
 #include "goagoogleprovider.h"
 
-#include "goaimapmail.h"
+#include "goainternetmail.h"
 #include "goaimapauthoauth.h"
 
 /**
@@ -289,18 +289,23 @@ build_object (GoaProvider         *provider,
     {
       if (mail == NULL)
         {
-          GoaImapAuth *auth;
+          GoaImapAuth *imap_auth;
           gchar *request_uri;
           request_uri = g_strdup_printf ("https://mail.google.com/mail/b/%s/imap/", email_address);
-          auth = goa_imap_auth_oauth_new (GOA_OAUTH_PROVIDER (provider),
-                                          GOA_OBJECT (object),
-                                          request_uri);
-          mail = goa_imap_mail_new ("imap.gmail.com",
-                                    TRUE,  /* use_tls */
-                                    FALSE, /* ignore_bad_tls */
-                                    auth);
+          imap_auth = goa_imap_auth_oauth_new (GOA_OAUTH_PROVIDER (provider),
+                                               GOA_OBJECT (object),
+                                               request_uri);
+          mail = goa_internet_mail_new ("imap.gmail.com",
+                                        "",                /* user_name */
+                                        TRUE,              /* use_tls */
+                                        FALSE,             /* ignore_bad_tls */
+                                        imap_auth,
+                                        "smtp.gmail.com",
+                                        "",                /* user_name */
+                                        TRUE,              /* use_tls */
+                                        FALSE);            /* ignore_bad_tls */
           goa_object_skeleton_set_mail (object, mail);
-          g_object_unref (auth);
+          g_object_unref (imap_auth);
           g_free (request_uri);
 
           goa_mail_set_email_address (mail, email_address);

@@ -69,8 +69,8 @@ typedef struct _GoaImapAuthOAuth GoaImapAuthOAuth;
 struct _GoaImapClient;
 typedef struct _GoaImapClient GoaImapClient;
 
-struct _GoaImapMail;
-typedef struct _GoaImapMail GoaImapMail;
+struct _GoaInternetMail;
+typedef struct _GoaInternetMail GoaInternetMail;
 
 struct _GoaEditableLabel;
 typedef struct _GoaEditableLabel GoaEditableLabel;

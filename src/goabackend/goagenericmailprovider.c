@@ -30,7 +30,7 @@
 #include "goaimapauthlogin.h"
 #include "goaeditablelabel.h"
 
-#include "goaimapmail.h"
+#include "goainternetmail.h"
 
 /**
  * GoaGenericMailProvider:
@@ -98,21 +98,29 @@ build_object (GoaProvider         *provider,
   GoaMail *mail;
   GoaPasswordBased *password_based;
   gboolean ret;
-  gchar *imap_host_and_port;
-  gboolean imap_use_tls;
-  gboolean imap_ignore_bad_tls;
+  gchar *email_address;
+  gchar *imap_host;
   gchar *imap_user_name;
   gchar *imap_password;
-  gchar *email_address;
+  gboolean imap_use_tls;
+  gboolean imap_ignore_bad_tls;
+  gchar *smtp_host;
+  gchar *smtp_user_name;
+  gchar *smtp_password;
+  gboolean smtp_use_tls;
+  gboolean smtp_ignore_bad_tls;
   gboolean enabled;
 
   account = NULL;
   mail = NULL;
   password_based = NULL;
-  imap_host_and_port = NULL;
+  email_address = NULL;
+  imap_host = NULL;
   imap_user_name = NULL;
   imap_password = NULL;
-  email_address = NULL;
+  smtp_host = NULL;
+  smtp_user_name = NULL;
+  smtp_password = NULL;
   ret = FALSE;
 
   /* Chain up */
@@ -131,22 +139,37 @@ build_object (GoaProvider         *provider,
   if (enabled)
     {
       email_address = g_key_file_get_string (key_file, group, "EmailAddress", NULL);
-      imap_host_and_port = g_key_file_get_string (key_file, group, "ImapHost", NULL);
-      imap_use_tls = g_key_file_get_boolean (key_file, group, "ImapUseTls", NULL);
-      imap_ignore_bad_tls = g_key_file_get_boolean (key_file, group, "ImapIgnoreBadTls", NULL);
+
+      imap_host = g_key_file_get_string (key_file, group, "ImapHost", NULL);
       imap_user_name = g_key_file_get_string (key_file, group, "ImapUserName", NULL);
       imap_password = g_key_file_get_string (key_file, group, "ImapPassword", NULL);
-      if (imap_host_and_port != NULL)
+      imap_use_tls = g_key_file_get_boolean (key_file, group, "ImapUseTls", NULL);
+      imap_ignore_bad_tls = g_key_file_get_boolean (key_file, group, "ImapIgnoreBadTls", NULL);
+
+      smtp_host = g_key_file_get_string (key_file, group, "SmtpHost", NULL);
+      smtp_user_name = g_key_file_get_string (key_file, group, "SmtpUserName", NULL);
+      smtp_password = g_key_file_get_string (key_file, group, "SmtpPassword", NULL);
+      smtp_use_tls = g_key_file_get_boolean (key_file, group, "SmtpUseTls", NULL);
+      smtp_ignore_bad_tls = g_key_file_get_boolean (key_file, group, "SmtpIgnoreBadTls", NULL);
+      if (imap_host != NULL && smtp_host != NULL)
         {
           if (mail == NULL)
             {
-              GoaImapAuth *auth;
+              GoaImapAuth *imap_auth;
               if (imap_user_name == NULL)
                 imap_user_name = g_strdup (g_get_user_name ());
-              auth = goa_imap_auth_login_new (provider, GOA_OBJECT (object), imap_user_name, imap_password);
-              mail = goa_imap_mail_new (imap_host_and_port, imap_use_tls, imap_ignore_bad_tls, auth);
+              imap_auth = goa_imap_auth_login_new (provider, GOA_OBJECT (object), imap_user_name, imap_password);
+              mail = goa_internet_mail_new (imap_host,
+                                            imap_user_name,
+                                            imap_use_tls,
+                                            imap_ignore_bad_tls,
+                                            imap_auth,
+                                            smtp_host,
+                                            smtp_user_name,
+                                            smtp_use_tls,
+                                            smtp_ignore_bad_tls);
               goa_object_skeleton_set_mail (object, mail);
-              g_object_unref (auth);
+              g_object_unref (imap_auth);
             }
         }
       else
@@ -185,9 +208,12 @@ build_object (GoaProvider         *provider,
     g_object_unref (password_based);
   if (mail != NULL)
     g_object_unref (mail);
-  g_free (imap_host_and_port);
+  g_free (imap_host);
   g_free (imap_user_name);
   g_free (imap_password);
+  g_free (smtp_host);
+  g_free (smtp_user_name);
+  g_free (smtp_password);
   if (account != NULL)
     g_object_unref (account);
   return ret;

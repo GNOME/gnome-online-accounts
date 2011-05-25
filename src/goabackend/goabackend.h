@@ -43,7 +43,7 @@
 #include <goabackend/goaimapauthlogin.h>
 #include <goabackend/goaimapauthoauth.h>
 #include <goabackend/goaimapclient.h>
-#include <goabackend/goaimapmail.h>
+#include <goabackend/goainternetmail.h>
 #undef __GOA_BACKEND_INSIDE_GOA_BACKEND_H__
 
 #endif /* __GOA_BACKEND_H__ */
