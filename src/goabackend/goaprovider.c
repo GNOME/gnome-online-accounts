@@ -518,7 +518,7 @@ goa_provider_build_object_real (GoaProvider         *provider,
 guint
 goa_provider_get_credentials_generation (GoaProvider *provider)
 {
-  g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (GOA_IS_PROVIDER (provider), 0);
   return GOA_PROVIDER_GET_CLASS (provider)->get_credentials_generation (provider);
 }
 
