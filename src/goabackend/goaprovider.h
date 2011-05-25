@@ -63,6 +63,7 @@ struct _GoaProvider
  * @refresh_account: Virtual function for goa_provider_refresh_account().
  * @build_object: Virtual function for goa_provider_build_object().
  * @ensure_credentials_sync: Virtual function for goa_provider_ensure_credentials_sync().
+ * @get_credentials_generation: Virtual function for goa_provider_get_credentials_generation().
  *
  * Class structure for #GoaProvider.
  */
@@ -100,6 +101,7 @@ struct _GoaProviderClass
                                        GoaObject           *object,
                                        GtkBox              *vbox,
                                        GtkTable            *table);
+  guint    (*get_credentials_generation) (GoaProvider   *provider);
 
   /*< private >*/
   /* Padding for future expansion */
@@ -152,6 +154,8 @@ gboolean     goa_provider_ensure_credentials_sync   (GoaProvider         *provid
                                                      gint                *out_expires_in,
                                                      GCancellable        *cancellable,
                                                      GError             **error);
+guint        goa_provider_get_credentials_generation (GoaProvider        *provider);
+
 
 /**
  * GOA_PROVIDER_EXTENSION_POINT_NAME:

@@ -60,6 +60,8 @@ static void goa_provider_show_account_real (GoaProvider         *provider,
                                             GtkBox              *vbox,
                                             GtkTable            *table);
 
+static guint goa_provider_get_credentials_generation_real (GoaProvider *provider);
+
 G_DEFINE_ABSTRACT_TYPE (GoaProvider, goa_provider, G_TYPE_OBJECT);
 
 static void
@@ -73,6 +75,7 @@ goa_provider_class_init (GoaProviderClass *klass)
   klass->build_object = goa_provider_build_object_real;
   klass->ensure_credentials_sync = goa_provider_ensure_credentials_sync_real;
   klass->show_account = goa_provider_show_account_real;
+  klass->get_credentials_generation = goa_provider_get_credentials_generation_real;
 }
 
 /**
@@ -494,6 +497,39 @@ goa_provider_build_object_real (GoaProvider         *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+/**
+ * goa_provider_get_credentials_generation:
+ * @provider: A #GoaProvider.
+ *
+ * Gets the generation of credentials being used for the provider.
+ *
+ * Implementations should bump this number when changes are introduced
+ * that may render existing credentials unusable.
+ *
+ * For example, if an additional scope is requested (e.g. access to
+ * contacts data) while obtaining credentials, then this number needs
+ * to be bumped since existing credentials are not good for the added
+ * scope.
+ *
+ * This is a virtual method where the default implemention returns 0.
+ *
+ * Returns: The current generation of credentials.
+ */
+guint
+goa_provider_get_credentials_generation (GoaProvider *provider)
+{
+  g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
+  return GOA_PROVIDER_GET_CLASS (provider)->get_credentials_generation (provider);
+}
+
+static guint
+goa_provider_get_credentials_generation_real (GoaProvider *provider)
+{
+  return 0;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static void
 ensure_ep_and_builtins (void)
 {
@@ -644,8 +680,9 @@ goa_provider_store_credentials_sync (GoaProvider   *provider,
   g_variant_ref_sink (credentials);
   g_variant_unref (credentials);
 
-  password_key = g_strdup_printf ("%s:%s",
+  password_key = g_strdup_printf ("%s:gen%d:%s",
                                   goa_provider_get_provider_type (GOA_PROVIDER (provider)),
+                                  goa_provider_get_credentials_generation (GOA_PROVIDER (provider)),
                                   identity);
   password_description = g_strdup_printf (_("GOA %s credentials for identity %s"),
                                           goa_provider_get_provider_type (GOA_PROVIDER (provider)),
@@ -718,8 +755,9 @@ goa_provider_lookup_credentials_sync (GoaProvider   *provider,
 
   identity = goa_account_get_id (goa_object_peek_account (object));
 
-  password_key = g_strdup_printf ("%s:%s",
+  password_key = g_strdup_printf ("%s:gen%d:%s",
                                   goa_provider_get_provider_type (GOA_PROVIDER (provider)),
+                                  goa_provider_get_credentials_generation (GOA_PROVIDER (provider)),
                                   identity);
 
   result = gnome_keyring_find_password_sync (&keyring_password_schema,
