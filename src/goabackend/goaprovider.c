@@ -884,7 +884,7 @@ goa_util_lookup_keyfile_boolean (GoaObject    *object,
   GKeyFile *key_file;
   gboolean ret;
 
-  ret = NULL;
+  ret = FALSE;
 
   account = goa_object_peek_account (object);
 
