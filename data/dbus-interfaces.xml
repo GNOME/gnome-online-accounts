@@ -111,12 +111,17 @@
       #org.gnome.OnlineAccounts.Account and
       #org.gnome.OnlineAccounts.OAuthBased interfaces.
 
-      The object may implement #org.gnome.OnlineAccounts.Mail (if mail is enabled).
+      The object may implement #org.gnome.OnlineAccounts.Mail,
+      #org.gnome.OnlineAccounts.Calendar and
+      #org.gnome.OnlineAccounts.Contacts depending on the account and
+      the user's preferences.
 
       When creating this kind of account via the
       org.gnome.OnlineAccounts.Manager.AddAccount() method, you need
-      to include an <literal>Identity</literal> and
-      <literal>MailEnabled</literal> elements in the @details
+      to include an <literal>Identity</literal>,
+      <literal>MailEnabled</literal>,
+      <literal>CalendarEnabled</literal>
+      and <literal>ContactsEnabled</literal> elements in the @details
       parameter.
   -->
   <interface name="org.gnome.OnlineAccounts.GoogleAccount">
@@ -513,6 +518,24 @@
       <arg name="can_be_starred" type="b" direction="in"/>
       <!-- arg name="extras" type="a{sv}"/ -->
     </method>
+  </interface>
+
+  <!--
+      org.gnome.OnlineAccounts.Calendar:
+
+      An account object implements this interface if it provides
+      calendar-like capabilities.
+  -->
+  <interface name="org.gnome.OnlineAccounts.Calendar">
+  </interface>
+
+  <!--
+      org.gnome.OnlineAccounts.Contacts:
+
+      An account object implements this interface if it provides
+      contacts-like capabilities.
+  -->
+  <interface name="org.gnome.OnlineAccounts.Contacts">
   </interface>
 
 </node>

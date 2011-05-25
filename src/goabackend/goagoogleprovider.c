@@ -113,9 +113,20 @@ get_request_uri_params (GoaOAuthProvider *provider)
     /* IMAP, SMTP access: http://code.google.com/apis/gmail/oauth/protocol.html */
     "https://mail.google.com/ "
     /* Calendar data API: http://code.google.com/apis/calendar/data/2.0/developers_guide.html */
-    "https://www.google.com/calendar/feeds"));
+    "https://www.google.com/calendar/feeds "
+    /* Contacts API: http://code.google.com/apis/contacts/docs/3.0/developers_guide.html */
+    "https://www.google.com/m8/feeds/"));
   g_ptr_array_add (p, NULL);
+
+  /* NOTE: Increase the number returned in get_crededentials_generation if adding scopes */
+
   return (gchar **) g_ptr_array_free (p, FALSE);
+}
+
+static guint
+get_credentials_generation (GoaProvider *provider)
+{
+  return 1;
 }
 
 static const gchar *
@@ -243,14 +254,20 @@ build_object (GoaProvider         *provider,
   GoaAccount *account;
   GoaGoogleAccount *google_account;
   GoaMail *mail;
+  GoaCalendar *calendar;
+  GoaContacts *contacts;
   gboolean ret;
   gchar *email_address;
   gboolean mail_enabled;
+  gboolean calendar_enabled;
+  gboolean contacts_enabled;
 
   email_address = NULL;
   account = NULL;
   google_account = NULL;
   mail = NULL;
+  calendar = NULL;
+  contacts = NULL;
   ret = FALSE;
 
   /* Chain up */
@@ -317,11 +334,47 @@ build_object (GoaProvider         *provider,
         goa_object_skeleton_set_mail (object, NULL);
     }
 
+  calendar = goa_object_get_calendar (GOA_OBJECT (object));
+  calendar_enabled = g_key_file_get_boolean (key_file, group, "CalendarEnabled", NULL);
+  if (calendar_enabled)
+    {
+      if (calendar == NULL)
+        {
+          calendar = goa_calendar_skeleton_new ();
+          goa_object_skeleton_set_calendar (object, calendar);
+        }
+    }
+  else
+    {
+      if (calendar != NULL)
+        goa_object_skeleton_set_calendar (object, NULL);
+    }
+
+  contacts = goa_object_get_contacts (GOA_OBJECT (object));
+  contacts_enabled = g_key_file_get_boolean (key_file, group, "ContactsEnabled", NULL);
+  if (contacts_enabled)
+    {
+      if (contacts == NULL)
+        {
+          contacts = goa_contacts_skeleton_new ();
+          goa_object_skeleton_set_contacts (object, contacts);
+        }
+    }
+  else
+    {
+      if (contacts != NULL)
+        goa_object_skeleton_set_contacts (object, NULL);
+    }
+
 
   ret = TRUE;
 
  out:
   g_free (email_address);
+  if (contacts != NULL)
+    g_object_unref (contacts);
+  if (calendar != NULL)
+    g_object_unref (calendar);
   if (mail != NULL)
     g_object_unref (mail);
   if (google_account != NULL)
@@ -355,6 +408,7 @@ show_account (GoaProvider         *provider,
   goa_util_add_heading (table, _("Use this account for"));
   goa_util_add_row_switch_from_keyfile (table, object, _("Mail"), "MailEnabled");
   goa_util_add_row_switch_from_keyfile (table, object, _("Calendar"), "CalendarEnabled");
+  goa_util_add_row_switch_from_keyfile (table, object, _("Contacts"), "ContactsEnabled");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -365,6 +419,7 @@ add_account_key_values (GoaOAuthProvider  *provider,
 {
   g_variant_builder_add (builder, "{ss}", "MailEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "CalendarEnabled", "true");
+  g_variant_builder_add (builder, "{ss}", "ContactsEnabled", "true");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -385,6 +440,7 @@ goa_google_provider_class_init (GoaGoogleProviderClass *klass)
   provider_class->get_name                   = get_name;
   provider_class->build_object               = build_object;
   provider_class->show_account               = show_account;
+  provider_class->get_credentials_generation = get_credentials_generation;
 
   oauth_class = GOA_OAUTH_PROVIDER_CLASS (klass);
   oauth_class->get_identity_sync        = get_identity_sync;
