@@ -59,7 +59,7 @@
   <part id="ref-dbus">
     <title>D-Bus API Reference</title>
     <chapter id="ref-dbus-overview">
-      <title>Overview</title>
+      <title>Objects &amp; Names</title>
       <sect1 id="ref-dbus-well-known-name">
         <title>The org.gnome.OnlineAccounts bus name</title>
         <para>
@@ -97,57 +97,81 @@
     </chapter>
 
     <chapter>
-      <title>D-Bus Interfaces</title>
+      <title>Core Interfaces</title>
       <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.Manager.xml"/>
       <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.Account.xml"/>
+    </chapter>
+    <chapter>
+      <title>Credentials Interfaces</title>
+      <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.PasswordBased.xml"/>
+      <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.OAuthBased.xml"/>
+      <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.OAuth2Based.xml"/>
+    </chapter>
+    <chapter>
+      <title>Service-specific Interfaces</title>
+      <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.Mail.xml"/>
+      <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.Mail.Monitor.xml"/>
+    </chapter>
+    <chapter>
+      <title>Provider-specific Interfaces</title>
       <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.GoogleAccount.xml"/>
       <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.FacebookAccount.xml"/>
       <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.YahooAccount.xml"/>
       <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.TwitterAccount.xml"/>
-      <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.PasswordBased.xml"/>
-      <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.OAuthBased.xml"/>
-      <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.OAuth2Based.xml"/>
-      <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.Mail.xml"/>
-      <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.Mail.Monitor.xml"/>
     </chapter>
   </part>
 
   <part id="ref-library">
     <title>Client Library API Reference</title>
-      <xi:include href="xml/goaclient.xml"/>
-      <xi:include href="xml/goaerror.xml"/>
+    <xi:include href="xml/goaclient.xml"/>
+    <xi:include href="xml/goaerror.xml"/>
+    <chapter id="ref-library-generated">
+      <title>Generated Code</title>
       <xi:include href="xml/GoaObject.xml"/>
       <xi:include href="xml/GoaObjectManagerClient.xml"/>
       <xi:include href="xml/GoaManager.xml"/>
       <xi:include href="xml/GoaAccount.xml"/>
-      <xi:include href="xml/GoaGoogleAccount.xml"/>
-      <xi:include href="xml/GoaFacebookAccount.xml"/>
-      <xi:include href="xml/GoaYahooAccount.xml"/>
-      <xi:include href="xml/GoaTwitterAccount.xml"/>
       <xi:include href="xml/GoaPasswordBased.xml"/>
       <xi:include href="xml/GoaOAuthBased.xml"/>
       <xi:include href="xml/GoaOAuth2Based.xml"/>
       <xi:include href="xml/GoaMail.xml"/>
       <xi:include href="xml/GoaMailMonitor.xml"/>
+      <xi:include href="xml/GoaGoogleAccount.xml"/>
+      <xi:include href="xml/GoaFacebookAccount.xml"/>
+      <xi:include href="xml/GoaYahooAccount.xml"/>
+      <xi:include href="xml/GoaTwitterAccount.xml"/>
+    </chapter>
   </part>
 
   <part id="ref-backend-library">
     <title>Backend Library API Reference</title>
+    <chapter>
+      <title>Core</title>
       <xi:include href="xml/goalog.xml"/>
       <xi:include href="xml/goautil.xml"/>
       <xi:include href="xml/goaprovider.xml"/>
-      <xi:include href="xml/goagenericmailprovider.xml"/>
       <xi:include href="xml/goaoauthprovider.xml"/>
       <xi:include href="xml/goaoauth2provider.xml"/>
-      <xi:include href="xml/goagoogleprovider.xml"/>
-      <xi:include href="xml/goafacebookprovider.xml"/>
-      <xi:include href="xml/goayahooprovider.xml"/>
-      <xi:include href="xml/goatwitterprovider.xml"/>
+    </chapter>
+    <chapter>
+      <title>Service Implementations</title>
+      <xi:include href="xml/goainternetmail.xml"/>
+    </chapter>
+    <chapter>
+      <title>IMAP Client</title>
       <xi:include href="xml/goaimapauth.xml"/>
       <xi:include href="xml/goaimapauthlogin.xml"/>
       <xi:include href="xml/goaimapauthoauth.xml"/>
       <xi:include href="xml/goaimapclient.xml"/>
-      <xi:include href="xml/goainternetmail.xml"/>
+    </chapter>
+    <chapter>
+      <title>Providers</title>
+      <xi:include href="xml/goagenericmailprovider.xml"/>
+      <xi:include href="xml/goagoogleprovider.xml"/>
+      <xi:include href="xml/goafacebookprovider.xml"/>
+      <xi:include href="xml/goayahooprovider.xml"/>
+      <xi:include href="xml/goatwitterprovider.xml"/>
+    </chapter>
   </part>
 
   <part id="tools-fileformats">
