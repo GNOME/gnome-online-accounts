@@ -369,8 +369,8 @@ ensure_credentials_in_thread_func (GSimpleAsyncResult *simple,
  * goa_provider_ensure_credentials_finish() to get the result
  * of the operation.
  *
- * This is a virtual method where the default implemention simply returns
- * the %GOA_ERROR_NOT_SUPPORTED error. A subclass may provide
+ * This is a virtual method where the default implementation simply
+ * returns the %GOA_ERROR_NOT_SUPPORTED error. A subclass may provide
  * another implementation.
  */
 void
@@ -511,7 +511,8 @@ goa_provider_build_object_real (GoaProvider         *provider,
  * to be bumped since existing credentials are not good for the added
  * scope.
  *
- * This is a virtual method where the default implemention returns 0.
+ * This is a virtual method where the default implementation returns
+ * 0.
  *
  * Returns: The current generation of credentials.
  */
