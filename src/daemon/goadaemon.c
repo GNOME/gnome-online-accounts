@@ -75,11 +75,6 @@ static gboolean on_manager_handle_add_account (GoaManager            *object,
                                                GVariant              *details,
                                                gpointer               user_data);
 
-static gboolean on_account_handle_set_name (GoaAccount            *account,
-                                            GDBusMethodInvocation *invocation,
-                                            const gchar           *name,
-                                            gpointer               user_data);
-
 static gboolean on_account_handle_remove (GoaAccount            *account,
                                           GDBusMethodInvocation *invocation,
                                           gpointer               user_data);
@@ -555,9 +550,6 @@ process_config_entries (GoaDaemon  *daemon,
                                             G_CALLBACK (account_on_attention_needed_notify),
                                             daemon);
       g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
-                                            G_CALLBACK (on_account_handle_set_name),
-                                            daemon);
-      g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
                                             G_CALLBACK (on_account_handle_remove),
                                             daemon);
       goa_debug ("removing %s", object_path);
@@ -588,10 +580,6 @@ process_config_entries (GoaDaemon  *daemon,
           g_signal_connect (goa_object_peek_account (GOA_OBJECT (object)),
                             "notify::attention-needed",
                             G_CALLBACK (account_on_attention_needed_notify),
-                            daemon);
-          g_signal_connect (goa_object_peek_account (GOA_OBJECT (object)),
-                            "handle-set-name",
-                            G_CALLBACK (on_account_handle_set_name),
                             daemon);
           g_signal_connect (goa_object_peek_account (GOA_OBJECT (object)),
                             "handle-remove",
@@ -629,9 +617,6 @@ process_config_entries (GoaDaemon  *daemon,
         {
           g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
                                                 G_CALLBACK (account_on_attention_needed_notify),
-                                                daemon);
-          g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
-                                                G_CALLBACK (on_account_handle_set_name),
                                                 daemon);
           g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
                                                 G_CALLBACK (on_account_handle_remove),
@@ -857,99 +842,6 @@ on_manager_handle_add_account (GoaManager             *manager,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static gboolean
-on_account_handle_set_name (GoaAccount            *account,
-                            GDBusMethodInvocation *invocation,
-                            const gchar           *name,
-                            gpointer               user_data)
-{
-  GoaDaemon *daemon = GOA_DAEMON (user_data);
-  GKeyFile *key_file;
-  gchar *path;
-  gchar *group;
-  gchar *existing_name;
-  gchar *data;
-  gsize length;
-  GError *error;
-
-  path = NULL;
-  group = NULL;
-  key_file = NULL;
-  existing_name = NULL;
-  data = NULL;
-
-  if (g_strcmp0 (goa_account_get_name (account), name) == 0)
-    {
-      goa_account_complete_set_name (account, invocation);
-      goto out;
-    }
-
-  /* update key-file - right now we only support change the Name if the
-   * entry is in ~/.config/goa-1.0/accounts.conf
-   */
-
-  key_file = g_key_file_new ();
-  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
-
-  error = NULL;
-  if (!g_key_file_load_from_file (key_file,
-                                  path,
-                                  G_KEY_FILE_KEEP_COMMENTS,
-                                  &error))
-    {
-      g_dbus_method_invocation_return_gerror (invocation, error);
-      g_error_free (error);
-      goto out;
-    }
-
-  group = g_strdup_printf ("Account %s", goa_account_get_id (account));
-
-  error = NULL;
-  existing_name = g_key_file_get_string (key_file, group, "Name", &error);
-  if (existing_name == NULL)
-    {
-      g_dbus_method_invocation_return_gerror (invocation, error);
-      g_error_free (error);
-      goto out;
-    }
-  g_key_file_set_string (key_file, group, "Name", name);
-
-  error = NULL;
-  data = g_key_file_to_data (key_file,
-                             &length,
-                             &error);
-  if (data == NULL)
-    {
-      g_prefix_error (&error, "Error generating key-value-file: ");
-      g_dbus_method_invocation_return_gerror (invocation, error);
-      goto out;
-    }
-
-  error = NULL;
-  if (!g_file_set_contents (path,
-                            data,
-                            length,
-                            &error))
-    {
-      g_prefix_error (&error, "Error writing key-value-file %s: ", path);
-      g_dbus_method_invocation_return_gerror (invocation, error);
-      goto out;
-    }
-
-  goa_daemon_reload_configuration (daemon);
-
-  goa_account_complete_set_name (account, invocation);
-
- out:
-  g_free (data);
-  g_free (existing_name);
-  if (key_file != NULL)
-    g_key_file_free (key_file);
-  g_free (group);
-  g_free (path);
-  return TRUE; /* invocation was handled */
-}
-
 static void
 notification_cb (NotifyNotification *notification,
                  gchar              *action,
@@ -1107,7 +999,7 @@ on_account_handle_remove (GoaAccount            *account,
 
   if (g_strcmp0 (goa_account_get_name (account), name) == 0)
     {
-      goa_account_complete_set_name (account, invocation);
+      goa_account_complete_remove (account, invocation);
       goto out;
     }
 

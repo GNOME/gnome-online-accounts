@@ -40,6 +40,7 @@
          <varlistentry><term>facebook</term><listitem><para>The account is a Facebook Account. See the #org.gnome.OnlineAccounts.FacebookAccount D-Bus interface for more details.</para></listitem></varlistentry>
          <varlistentry><term>yahoo</term><listitem><para>The account is a Yahoo Account. See the #org.gnome.OnlineAccounts.YahooAccount D-Bus interface for more details.</para></listitem></varlistentry>
          <varlistentry><term>twitter</term><listitem><para>The account is a Twitter Account. See the #org.gnome.OnlineAccounts.TwitterAccount D-Bus interface for more details.</para></listitem></varlistentry>
+         <varlistentry><term>generic_mail</term><listitem><para>The account is a Mail Account for Internet-based mail. See the #org.gnome.OnlineAccounts.Mail D-Bus interface for more details.</para></listitem></varlistentry>
          </variablelist>
     -->
     <property name="ProviderType" type="s" access="read"/>
@@ -56,7 +57,7 @@
     <!-- KeyfileGroup: The group name in #org.gnome.OnlineAccounts.Account:KeyfilePath for the account. -->
     <property name="KeyfileGroup" type="s" access="read"/>
 
-    <!-- AttentionNeeded: Set to TRUE if the account is in need of attention.
+    <!-- AttentionNeeded: Set to %TRUE if the account is in need of attention.
 
          This is used when a human operator is needed to service the
          account (e.g. for authentication and/or authorization).
@@ -70,11 +71,6 @@
       -->
     <property name="Name" type="s" access="read"/>
 
-    <!-- SetName: Sets the name. -->
-    <method name="SetName">
-      <arg name="name" type="s" direction="in"/>
-    </method>
-
     <!--
         Remove:
 
@@ -85,7 +81,7 @@
 
     <!--
         EnsureCredentials:
-        @expires_in: The duration that the cached credentials are valid for, in seconds or 0 if unknown.
+        @expires_in: The duration that the cached credentials are valid for, in seconds, or 0 if unknown.
 
         Ensures that valid credentials exist for the account and
         returns how long they are still valid for, if known. Returns
@@ -95,8 +91,8 @@
         If this method fails because the token service indicates that
         authorization has expired, the
         #org.gnome.OnlineAccounts.Account:AttentionNeeded property
-        will be set to TRUE. On the other hand, if this property was
-        already TRUE and this method succeeds, it is set to FALSE.
+        will be set to %TRUE. On the other hand, if this property was
+        already %TRUE and this method succeeds, it is set to %FALSE.
     -->
     <method name="EnsureCredentials">
       <arg name="expires_in" type="i" direction="out"/>
@@ -108,17 +104,20 @@
       org.gnome.OnlineAccounts.GoogleAccount:
 
       A Google Account, either a <emphasis>hosted</emphasis> account
-      (for example <email>user@mycollege.edu</email>) or a regular
-      account (for example <email>user@gmail.com</email>).
+      (for example <email>user&#64;mycollege.edu</email>) or a regular
+      account (for example <email>user&#64;gmail.com</email>).
 
       Objects implementing this interface also implement the
       #org.gnome.OnlineAccounts.Account and
       #org.gnome.OnlineAccounts.OAuthBased interfaces.
 
+      The object may implement #org.gnome.OnlineAccounts.Mail (if mail is enabled).
+
       When creating this kind of account via the
       org.gnome.OnlineAccounts.Manager.AddAccount() method, you need
-      to include an <literal>Identity</literal> element in
-      the @details parameter.
+      to include an <literal>Identity</literal> and
+      <literal>MailEnabled</literal> elements in the @details
+      parameter.
   -->
   <interface name="org.gnome.OnlineAccounts.GoogleAccount">
     <!-- EmailAddress: The email address identifying the account.
@@ -139,8 +138,8 @@
 
       When creating this kind of account via the
       org.gnome.OnlineAccounts.Manager.AddAccount() method, you need
-      to include an <literal>Identity</literal> element in
-      the @details parameter.
+      to include an <literal>Identity</literal> element in the
+      @details parameter.
   -->
   <interface name="org.gnome.OnlineAccounts.FacebookAccount">
     <!-- UserName: The user name identifying the account.
@@ -161,8 +160,8 @@
 
       When creating this kind of account via the
       org.gnome.OnlineAccounts.Manager.AddAccount() method, you need
-      to include an <literal>Identity</literal> element in
-      the @details parameter.
+      to include an <literal>Identity</literal> element in the
+      @details parameter.
   -->
   <interface name="org.gnome.OnlineAccounts.YahooAccount">
     <!-- GUID: The guid identifying the account.
@@ -183,8 +182,8 @@
 
       When creating this kind of account via the
       org.gnome.OnlineAccounts.Manager.AddAccount() method, you need
-      to include an <literal>Identity</literal> element in
-      the @details parameter.
+      to include an <literal>Identity</literal> element in the
+      @details parameter.
   -->
   <interface name="org.gnome.OnlineAccounts.TwitterAccount">
     <!-- Id: The user id identifying the account.
@@ -198,14 +197,14 @@
       org.gnome.OnlineAccounts.OAuth2Based:
 
       An account object implements this interface if <ulink
-      url="http://oauth.net/2/">OAuth 2.0</ulink> is used to control
-      access.
+      url="http://oauth.net/2/">OAuth 2.0</ulink> tokens are used for
+      accessing it.
   -->
   <interface name="org.gnome.OnlineAccounts.OAuth2Based">
     <!--
       GetAccessToken:
       @access_token: The access token.
-      @expires_in: The duration that the returned token is valid for, in seconds or 0 if unknown.
+      @expires_in: The duration that the returned token is valid for, in seconds, or 0 if unknown.
 
       Use this method to obtain an access token that can be used to
       access services for the account. Because networking is involved,
@@ -226,15 +225,15 @@
       org.gnome.OnlineAccounts.OAuthBased:
 
       An account object implements this interface if <ulink
-      url="http://oauth.net">OAuth 1.0</ulink> is used to control
-      access.
+      url="http://oauth.net">OAuth 1.0</ulink> tokens are used for
+      accessing it.
   -->
   <interface name="org.gnome.OnlineAccounts.OAuthBased">
     <!--
       GetAccessToken:
       @access_token: The access token.
       @access_token_secret: The access token secret.
-      @expires_in: The duration that the returned token is valid for, in seconds or 0 if unknown.
+      @expires_in: The duration that the returned token is valid for, in seconds, or 0 if unknown.
 
       Use this method to obtain an access token that can be used to to
       access services for the account. Because networking is involved,
@@ -255,8 +254,8 @@
   <!--
       org.gnome.OnlineAccounts.PasswordBased:
 
-      An account object implements this interface if a stored password
-      is used to obtain access.
+      An account object implements this interface if one or more
+      passwords are used for accessing it.
   -->
   <interface name="org.gnome.OnlineAccounts.PasswordBased">
     <!--
@@ -267,8 +266,9 @@
       Use this method to obtain the passwords used to access the
       account.
 
-      If the account is for a mail account, nnown values for @id
-      includes <literal>imap-password</literal> and
+      If the account is for a mail account (see
+      #org.gnome.OnlineAccounts.Mail), known values for @id includes
+      <literal>imap-password</literal> and
       <literal>smtp-password</literal>.
 
       Note that calls to this method are logged.
@@ -289,10 +289,8 @@
     <!--
         AddAccount:
         @type: The type of account to create. See the #org.gnome.OnlineAccounts:Type property for known types.
-        @name: The human readable name of the account (cf. the #org.gnome.OnlineAccounts:Name property).
-        @details: Details about the account. See each interface
-        (e.g. #org.gnome.OnlineAccounts.GoogleAccount) for details of
-        what other elements to include.
+        @name: The human readable name of the account (cf. the #org.gnome.OnlineAccounts.Account:Name property).
+        @details: Details about the account. See each interface (e.g. #org.gnome.OnlineAccounts.GoogleAccount) for details of what other elements to include.
         @account_object_path: The object path of the created account.
 
         Creates a new account. Note that this does not create an
@@ -313,10 +311,6 @@
 
       An account object implements this interface if it provides
       email-like messaging capabilities.
-
-      TODO: have a way to open an user agent for a message uid
-      obtained from a Mail.Monitor. Also have a way to download the
-      full message (multipart message? ugh).
   -->
   <interface name="org.gnome.OnlineAccounts.Mail">
     <!--
@@ -325,8 +319,9 @@
 
       Creates a new #org.gnome.OnlineAccounts.Mail.Monitor object for
       listening to incoming mail messages. The returned object will
-      stay alive until org.gnome.OnlineAccounts.Mail.Monitor.Close()
-      is called or the caller vanishes from the message bus.
+      stay alive until its
+      org.gnome.OnlineAccounts.Mail.Monitor.Close() is called or the
+      caller vanishes from the message bus.
     -->
     <method name="CreateMonitor">
       <arg name="monitor_object" type="o" direction="out"/>
@@ -420,9 +415,9 @@
   <interface name="org.gnome.OnlineAccounts.Mail.Monitor">
 
     <!-- Connected:
-         TRUE if currently connected to the server, FALSE if not.
+         %TRUE if currently connected to the server, %FALSE if not.
 
-         If FALSE, a client should periodically call the
+         If %FALSE, a client should periodically call the
          org.gnome.OnlineAccounts.Mail.Monitor.Refresh() method when
          network connectivity is available.
     -->
@@ -438,8 +433,8 @@
 
          As a side-effect, this also updates the
          #org.gnome.OnlineAccounts.Mail.Monitor:Connected property -
-         specifically this property might bet se to FALSE (in case
-         network connectivity was lost) or TRUE (in case network
+         specifically this property might bet se to %FALSE (in case
+         network connectivity was lost) or %TRUE (in case network
          connectivity was acquired).
 
          This method won't return until the check is done so it is
@@ -460,8 +455,8 @@
          @subject: The subject of the message.
          @excerpt: Plain-text excerpt of the message.
          @uri: An URI that can be used to open the message or blank if no such URI exists.
-         @can_be_marked_as_spam: TRUE if the message can be marked as Spam.
-         @can_be_starred: TRUE if the message can be Starred.
+         @can_be_marked_as_spam: %TRUE if the message can be marked as Spam.
+         @can_be_starred: %TRUE if the message can be Starred.
 
          Signal emitted when a new message is received.
 
