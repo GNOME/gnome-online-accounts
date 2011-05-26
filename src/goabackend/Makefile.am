@@ -46,18 +46,12 @@ libgoa_backend_1_0_la_HEADERS =						\
 	goalogging.h							\
 	goaeditablelabel.h						\
 	goaprovider.h							\
-	goagenericmailprovider.h					\
 	goaoauthprovider.h						\
 	goaoauth2provider.h						\
 	goagoogleprovider.h						\
 	goafacebookprovider.h						\
 	goayahooprovider.h						\
 	goatwitterprovider.h						\
-	goaimapauth.h							\
-	goaimapauthlogin.h						\
-	goaimapauthoauth.h						\
-	goaimapclient.h							\
-	goainternetmail.h						\
 	$(NULL)
 
 libgoa_backend_1_0_la_SOURCES =						\
@@ -68,18 +62,12 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goaeditablelabel.h		goaeditablelabel.c		\
 	goaprovider.h			goaprovider.c			\
 	goalogging.h			goalogging.c			\
-	goagenericmailprovider.h	goagenericmailprovider.c	\
 	goaoauthprovider.h		goaoauthprovider.c		\
 	goaoauth2provider.h		goaoauth2provider.c		\
 	goagoogleprovider.h		goagoogleprovider.c		\
 	goafacebookprovider.h		goafacebookprovider.c		\
 	goayahooprovider.h		goayahooprovider.c		\
 	goatwitterprovider.h		goatwitterprovider.c		\
-	goaimapauth.h			goaimapauth.c			\
-	goaimapauthlogin.h		goaimapauthlogin.c		\
-	goaimapauthoauth.h		goaimapauthoauth.c		\
-	goaimapclient.h			goaimapclient.c			\
-	goainternetmail.h		goainternetmail.c		\
 	$(NULL)
 
 libgoa_backend_1_0_la_CPPFLAGS =				\

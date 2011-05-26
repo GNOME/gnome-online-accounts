@@ -32,18 +32,12 @@
 #include <goabackend/goalogging.h>
 #include <goabackend/goaeditablelabel.h>
 #include <goabackend/goaprovider.h>
-#include <goabackend/goagenericmailprovider.h>
 #include <goabackend/goaoauthprovider.h>
 #include <goabackend/goaoauth2provider.h>
 #include <goabackend/goagoogleprovider.h>
 #include <goabackend/goafacebookprovider.h>
 #include <goabackend/goayahooprovider.h>
 #include <goabackend/goatwitterprovider.h>
-#include <goabackend/goaimapauth.h>
-#include <goabackend/goaimapauthlogin.h>
-#include <goabackend/goaimapauthoauth.h>
-#include <goabackend/goaimapclient.h>
-#include <goabackend/goainternetmail.h>
 #undef __GOA_BACKEND_INSIDE_GOA_BACKEND_H__
 
 #endif /* __GOA_BACKEND_H__ */

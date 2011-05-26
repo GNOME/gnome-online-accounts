@@ -30,7 +30,6 @@
 #include "goafacebookprovider.h"
 #include "goayahooprovider.h"
 #include "goatwitterprovider.h"
-#include "goagenericmailprovider.h"
 
 #include "goaeditablelabel.h"
 
@@ -548,7 +547,6 @@ ensure_ep_and_builtins (void)
       type = GOA_TYPE_FACEBOOK_PROVIDER;
       type = GOA_TYPE_YAHOO_PROVIDER;
       type = GOA_TYPE_TWITTER_PROVIDER;
-      type = GOA_TYPE_GENERIC_MAIL_PROVIDER;
       type = type; /* for -Wunused-but-set-variable */
 
       g_once_init_leave (&once_init_value, 1);
