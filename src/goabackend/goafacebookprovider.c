@@ -222,13 +222,11 @@ build_object (GoaProvider         *provider,
               GError             **error)
 {
   GoaAccount *account;
-  GoaFacebookAccount *facebook_account;
   gboolean ret;
   gchar *user_name;
 
   user_name = NULL;
   account = NULL;
-  facebook_account = NULL;
   ret = FALSE;
 
   /* Chain up */
@@ -240,12 +238,6 @@ build_object (GoaProvider         *provider,
     goto out;
 
   account = goa_object_get_account (GOA_OBJECT (object));
-  facebook_account = goa_object_get_facebook_account (GOA_OBJECT (object));
-  if (facebook_account == NULL)
-    {
-      facebook_account = goa_facebook_account_skeleton_new ();
-      goa_object_skeleton_set_facebook_account (object, facebook_account);
-    }
 
   user_name = g_key_file_get_string (key_file, group, "Identity", NULL);
   if (user_name == NULL)
@@ -259,13 +251,9 @@ build_object (GoaProvider         *provider,
       goto out;
     }
 
-  goa_facebook_account_set_user_name (facebook_account, user_name);
-
   ret = TRUE;
 
  out:
-  if (facebook_account != NULL)
-    g_object_unref (facebook_account);
   if (account != NULL)
     g_object_unref (account);
   return ret;

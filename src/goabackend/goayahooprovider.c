@@ -283,13 +283,11 @@ build_object (GoaProvider         *provider,
               GError             **error)
 {
   GoaAccount *account;
-  GoaYahooAccount *yahoo_account;
   gboolean ret;
   gchar *guid;
 
   guid = NULL;
   account = NULL;
-  yahoo_account = NULL;
   ret = FALSE;
 
   /* Chain up */
@@ -301,12 +299,6 @@ build_object (GoaProvider         *provider,
     goto out;
 
   account = goa_object_get_account (GOA_OBJECT (object));
-  yahoo_account = goa_object_get_yahoo_account (GOA_OBJECT (object));
-  if (yahoo_account == NULL)
-    {
-      yahoo_account = goa_yahoo_account_skeleton_new ();
-      goa_object_skeleton_set_yahoo_account (object, yahoo_account);
-    }
 
   guid = g_key_file_get_string (key_file, group, "Identity", NULL);
   if (guid == NULL)
@@ -320,14 +312,10 @@ build_object (GoaProvider         *provider,
       goto out;
     }
 
-  goa_yahoo_account_set_guid (yahoo_account, guid);
-
   ret = TRUE;
 
  out:
   g_free (guid);
-  if (yahoo_account != NULL)
-    g_object_unref (yahoo_account);
   if (account != NULL)
     g_object_unref (account);
   return ret;

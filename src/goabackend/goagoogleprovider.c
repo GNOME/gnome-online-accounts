@@ -252,7 +252,6 @@ build_object (GoaProvider         *provider,
               GError             **error)
 {
   GoaAccount *account;
-  GoaGoogleAccount *google_account;
   GoaMail *mail;
   GoaCalendar *calendar;
   GoaContacts *contacts;
@@ -264,7 +263,6 @@ build_object (GoaProvider         *provider,
 
   email_address = NULL;
   account = NULL;
-  google_account = NULL;
   mail = NULL;
   calendar = NULL;
   contacts = NULL;
@@ -279,12 +277,6 @@ build_object (GoaProvider         *provider,
     goto out;
 
   account = goa_object_get_account (GOA_OBJECT (object));
-  google_account = goa_object_get_google_account (GOA_OBJECT (object));
-  if (google_account == NULL)
-    {
-      google_account = goa_google_account_skeleton_new ();
-      goa_object_skeleton_set_google_account (object, google_account);
-    }
 
   email_address = g_key_file_get_string (key_file, group, "Identity", NULL);
   if (email_address == NULL /* || !is_valid_email_address () */)
@@ -297,8 +289,6 @@ build_object (GoaProvider         *provider,
                    goa_account_get_id (account));
       goto out;
     }
-
-  goa_google_account_set_email_address (google_account, email_address);
 
   mail = goa_object_get_mail (GOA_OBJECT (object));
   mail_enabled = g_key_file_get_boolean (key_file, group, "MailEnabled", NULL);
@@ -377,8 +367,6 @@ build_object (GoaProvider         *provider,
     g_object_unref (calendar);
   if (mail != NULL)
     g_object_unref (mail);
-  if (google_account != NULL)
-    g_object_unref (google_account);
   if (account != NULL)
     g_object_unref (account);
   return ret;

@@ -242,13 +242,11 @@ build_object (GoaProvider         *provider,
               GError             **error)
 {
   GoaAccount *account;
-  GoaTwitterAccount *twitter_account;
   gboolean ret;
   gchar *id;
 
   id = NULL;
   account = NULL;
-  twitter_account = NULL;
   ret = FALSE;
 
   /* Chain up */
@@ -260,12 +258,6 @@ build_object (GoaProvider         *provider,
     goto out;
 
   account = goa_object_get_account (GOA_OBJECT (object));
-  twitter_account = goa_object_get_twitter_account (GOA_OBJECT (object));
-  if (twitter_account == NULL)
-    {
-      twitter_account = goa_twitter_account_skeleton_new ();
-      goa_object_skeleton_set_twitter_account (object, twitter_account);
-    }
 
   id = g_key_file_get_string (key_file, group, "Identity", NULL);
   if (id == NULL)
@@ -279,14 +271,10 @@ build_object (GoaProvider         *provider,
       goto out;
     }
 
-  goa_twitter_account_set_id (twitter_account, id);
-
   ret = TRUE;
 
  out:
   g_free (id);
-  if (twitter_account != NULL)
-    g_object_unref (twitter_account);
   if (account != NULL)
     g_object_unref (account);
   return ret;
