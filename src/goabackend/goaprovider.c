@@ -878,27 +878,31 @@ goa_util_lookup_keyfile_string (GoaObject    *object,
   GoaAccount *account;
   GError *error;
   GKeyFile *key_file;
+  gchar *path;
+  gchar *group;
   gchar *ret;
 
   ret = NULL;
 
   account = goa_object_peek_account (object);
+  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
+  group = g_strdup_printf ("Account %s", goa_account_get_id (account));
 
   key_file = g_key_file_new ();
   error = NULL;
   if (!g_key_file_load_from_file (key_file,
-                                  goa_account_get_keyfile_path (account),
+                                  path,
                                   G_KEY_FILE_NONE,
                                   &error))
     {
       goa_warning ("Error loading keyfile %s: %s (%s, %d)",
-                   goa_account_get_keyfile_path (account),
+                   path,
                    error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }
   ret = g_key_file_get_string (key_file,
-                               goa_account_get_keyfile_group (account),
+                               group,
                                key,
                                &error);
   if (ret == NULL)
@@ -906,14 +910,16 @@ goa_util_lookup_keyfile_string (GoaObject    *object,
       /* this is not fatal (think upgrade-path) */
       goa_debug ("Error getting value for key %s in group `%s' from keyfile %s: %s (%s, %d)",
                  key,
-                 goa_account_get_keyfile_group (account),
-                 goa_account_get_keyfile_path (account),
+                 group,
+                 path,
                  error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }
 
  out:
+  g_free (group);
+  g_free (path);
   return ret;
 }
 
@@ -924,27 +930,31 @@ goa_util_lookup_keyfile_boolean (GoaObject    *object,
   GoaAccount *account;
   GError *error;
   GKeyFile *key_file;
+  gchar *path;
+  gchar *group;
   gboolean ret;
 
   ret = FALSE;
 
   account = goa_object_peek_account (object);
+  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
+  group = g_strdup_printf ("Account %s", goa_account_get_id (account));
 
   key_file = g_key_file_new ();
   error = NULL;
   if (!g_key_file_load_from_file (key_file,
-                                  goa_account_get_keyfile_path (account),
+                                  path,
                                   G_KEY_FILE_NONE,
                                   &error))
     {
       goa_warning ("Error loading keyfile %s: %s (%s, %d)",
-                   goa_account_get_keyfile_path (account),
+                   path,
                    error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }
   ret = g_key_file_get_boolean (key_file,
-                                goa_account_get_keyfile_group (account),
+                                group,
                                 key,
                                 &error);
   if (error != NULL)
@@ -952,14 +962,16 @@ goa_util_lookup_keyfile_boolean (GoaObject    *object,
       /* this is not fatal (think upgrade-path) */
       goa_debug ("Error getting boolean value for key %s in group `%s' from keyfile %s: %s (%s, %d)",
                  key,
-                 goa_account_get_keyfile_group (account),
-                 goa_account_get_keyfile_path (account),
+                 group,
+                 path,
                  error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }
 
  out:
+  g_free (group);
+  g_free (path);
   return ret;
 }
 
@@ -997,27 +1009,31 @@ keyfile_editable_on_editing_done (GtkEditable  *editable,
   GoaAccount *account;
   GError *error;
   GKeyFile *key_file;
+  gchar *path;
+  gchar *group;
   gchar *contents;
   gsize length;
 
   account = goa_object_peek_account (data->object);
+  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
+  group = g_strdup_printf ("Account %s", goa_account_get_id (account));
 
   key_file = g_key_file_new ();
   error = NULL;
   if (!g_key_file_load_from_file (key_file,
-                                  goa_account_get_keyfile_path (account),
+                                  path,
                                   G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS,
                                   &error))
     {
       goa_warning ("Error loading keyfile %s: %s (%s, %d)",
-                   goa_account_get_keyfile_path (account),
+                   path,
                    error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }
 
   g_key_file_set_string (key_file,
-                         goa_account_get_keyfile_group (account),
+                         group,
                          data->key,
                          goa_editable_label_get_text (GOA_EDITABLE_LABEL (editable)));
 
@@ -1029,7 +1045,7 @@ keyfile_editable_on_editing_done (GtkEditable  *editable,
     {
       g_prefix_error (&error,
                       "Error generating key-value-file %s: ",
-                      goa_account_get_keyfile_path (account));
+                      path);
       goa_warning ("%s (%s, %d)",
                    error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
@@ -1037,14 +1053,14 @@ keyfile_editable_on_editing_done (GtkEditable  *editable,
     }
 
   error = NULL;
-  if (!g_file_set_contents (goa_account_get_keyfile_path (account),
+  if (!g_file_set_contents (path,
                             contents,
                             length,
                             &error))
     {
       g_prefix_error (&error,
                       "Error writing key-value-file %s: ",
-                      goa_account_get_keyfile_path (account));
+                      path);
       goa_warning ("%s (%s, %d)",
                    error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
@@ -1053,6 +1069,8 @@ keyfile_editable_on_editing_done (GtkEditable  *editable,
 
  out:
   g_key_file_free (key_file);
+  g_free (group);
+  g_free (path);
 }
 
 /**
@@ -1079,6 +1097,8 @@ goa_util_add_row_editable_label_from_keyfile (GtkTable     *table,
   GoaAccount *account;
   GtkWidget *elabel;
   GKeyFile *key_file;
+  gchar *path;
+  gchar *group;
   GError *error;
   gchar *value;
 
@@ -1087,22 +1107,24 @@ goa_util_add_row_editable_label_from_keyfile (GtkTable     *table,
 
   account = goa_object_peek_account (object);
   elabel = goa_editable_label_new ();
+  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
+  group = g_strdup_printf ("Account %s", goa_account_get_id (account));
 
   key_file = g_key_file_new ();
   error = NULL;
   if (!g_key_file_load_from_file (key_file,
-                                  goa_account_get_keyfile_path (account),
+                                  path,
                                   G_KEY_FILE_NONE,
                                   &error))
     {
       goa_warning ("Error loading keyfile %s: %s (%s, %d)",
-                   goa_account_get_keyfile_path (account),
+                   path,
                    error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }
   value = g_key_file_get_string (key_file,
-                                 goa_account_get_keyfile_group (account),
+                                 group,
                                  key,
                                  &error);
   if (value == NULL)
@@ -1110,8 +1132,8 @@ goa_util_add_row_editable_label_from_keyfile (GtkTable     *table,
       /* this is not fatal (think upgrade-path) */
       goa_debug ("Error getting value for key %s in group `%s' from keyfile %s: %s (%s, %d)",
                  key,
-                 goa_account_get_keyfile_group (account),
-                 goa_account_get_keyfile_path (account),
+                 group,
+                 path,
                  error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
@@ -1133,6 +1155,8 @@ goa_util_add_row_editable_label_from_keyfile (GtkTable     *table,
     }
 
   g_free (value);
+  g_free (group);
+  g_free (path);
   if (key_file != NULL)
     g_key_file_free (key_file);
   return goa_util_add_row_widget (table, label_text, elabel);
@@ -1149,27 +1173,31 @@ keyfile_switch_on_notify_active (GObject      *object,
   GoaAccount *account;
   GError *error;
   GKeyFile *key_file;
+  gchar *path;
+  gchar *group;
   gchar *contents;
   gsize length;
 
   account = goa_object_peek_account (data->object);
+  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
+  group = g_strdup_printf ("Account %s", goa_account_get_id (account));
 
   key_file = g_key_file_new ();
   error = NULL;
   if (!g_key_file_load_from_file (key_file,
-                                  goa_account_get_keyfile_path (account),
+                                  path,
                                   G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS,
                                   &error))
     {
       goa_warning ("Error loading keyfile %s: %s (%s, %d)",
-                   goa_account_get_keyfile_path (account),
+                   path,
                    error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }
 
   g_key_file_set_boolean (key_file,
-                          goa_account_get_keyfile_group (account),
+                          group,
                           data->key,
                           gtk_switch_get_active (GTK_SWITCH (object)));
 
@@ -1181,7 +1209,7 @@ keyfile_switch_on_notify_active (GObject      *object,
     {
       g_prefix_error (&error,
                       "Error generating key-value-file %s: ",
-                      goa_account_get_keyfile_path (account));
+                      path);
       goa_warning ("%s (%s, %d)",
                    error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
@@ -1189,14 +1217,14 @@ keyfile_switch_on_notify_active (GObject      *object,
     }
 
   error = NULL;
-  if (!g_file_set_contents (goa_account_get_keyfile_path (account),
+  if (!g_file_set_contents (path,
                             contents,
                             length,
                             &error))
     {
       g_prefix_error (&error,
                       "Error writing key-value-file %s: ",
-                      goa_account_get_keyfile_path (account));
+                      path);
       goa_warning ("%s (%s, %d)",
                    error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
@@ -1205,6 +1233,8 @@ keyfile_switch_on_notify_active (GObject      *object,
 
  out:
   g_key_file_free (key_file);
+  g_free (group);
+  g_free (path);
 }
 
 /**
@@ -1230,6 +1260,8 @@ goa_util_add_row_switch_from_keyfile (GtkTable     *table,
   GtkWidget *hbox;
   GtkWidget *switch_;
   GKeyFile *key_file;
+  gchar *path;
+  gchar *group;
   GError *error;
   gboolean value;
 
@@ -1237,22 +1269,24 @@ goa_util_add_row_switch_from_keyfile (GtkTable     *table,
 
   account = goa_object_peek_account (object);
   switch_ = gtk_switch_new ();
+  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
+  group = g_strdup_printf ("Account %s", goa_account_get_id (account));
 
   key_file = g_key_file_new ();
   error = NULL;
   if (!g_key_file_load_from_file (key_file,
-                                  goa_account_get_keyfile_path (account),
+                                  path,
                                   G_KEY_FILE_NONE,
                                   &error))
     {
       goa_warning ("Error loading keyfile %s: %s (%s, %d)",
-                   goa_account_get_keyfile_path (account),
+                   path,
                    error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }
   value = g_key_file_get_boolean (key_file,
-                                  goa_account_get_keyfile_group (account),
+                                  group,
                                   key,
                                   &error);
   if (error != NULL)
@@ -1260,8 +1294,8 @@ goa_util_add_row_switch_from_keyfile (GtkTable     *table,
       /* this is not fatal (think upgrade-path) */
       goa_debug ("Error getting boolean value for key %s in group `%s' from keyfile %s: %s (%s, %d)",
                  key,
-                 goa_account_get_keyfile_group (account),
-                 goa_account_get_keyfile_path (account),
+                 group,
+                 path,
                  error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
@@ -1278,6 +1312,8 @@ goa_util_add_row_switch_from_keyfile (GtkTable     *table,
                          0); /* GConnectFlags */
   if (key_file != NULL)
     g_key_file_free (key_file);
+  g_free (group);
+  g_free (path);
 
   hbox = gtk_hbox_new (0, FALSE);
   gtk_box_pack_start (GTK_BOX (hbox), switch_, FALSE, TRUE, 0);
@@ -1296,27 +1332,31 @@ keyfile_check_button_on_notify_active (GObject      *object,
   GoaAccount *account;
   GError *error;
   GKeyFile *key_file;
+  gchar *path;
+  gchar *group;
   gchar *contents;
   gsize length;
 
   account = goa_object_peek_account (data->object);
+  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
+  group = g_strdup_printf ("Account %s", goa_account_get_id (account));
 
   key_file = g_key_file_new ();
   error = NULL;
   if (!g_key_file_load_from_file (key_file,
-                                  goa_account_get_keyfile_path (account),
+                                  path,
                                   G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS,
                                   &error))
     {
       goa_warning ("Error loading keyfile %s: %s (%s, %d)",
-                   goa_account_get_keyfile_path (account),
+                   path,
                    error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }
 
   g_key_file_set_boolean (key_file,
-                          goa_account_get_keyfile_group (account),
+                          group,
                           data->key,
                           gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (object)));
 
@@ -1328,7 +1368,7 @@ keyfile_check_button_on_notify_active (GObject      *object,
     {
       g_prefix_error (&error,
                       "Error generating key-value-file %s: ",
-                      goa_account_get_keyfile_path (account));
+                      path);
       goa_warning ("%s (%s, %d)",
                    error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
@@ -1336,14 +1376,14 @@ keyfile_check_button_on_notify_active (GObject      *object,
     }
 
   error = NULL;
-  if (!g_file_set_contents (goa_account_get_keyfile_path (account),
+  if (!g_file_set_contents (path,
                             contents,
                             length,
                             &error))
     {
       g_prefix_error (&error,
                       "Error writing key-value-file %s: ",
-                      goa_account_get_keyfile_path (account));
+                      path);
       goa_warning ("%s (%s, %d)",
                    error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
@@ -1352,6 +1392,8 @@ keyfile_check_button_on_notify_active (GObject      *object,
 
  out:
   g_key_file_free (key_file);
+  g_free (group);
+  g_free (path);
 }
 
 /**
@@ -1378,6 +1420,8 @@ goa_util_add_row_check_button_from_keyfile (GtkTable     *table,
   GoaAccount *account;
   GtkWidget *check_button;
   GKeyFile *key_file;
+  gchar *path;
+  gchar *group;
   GError *error;
   gboolean value;
 
@@ -1385,22 +1429,24 @@ goa_util_add_row_check_button_from_keyfile (GtkTable     *table,
 
   account = goa_object_peek_account (object);
   check_button = gtk_check_button_new_with_mnemonic (value_mnemonic);
+  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
+  group = g_strdup_printf ("Account %s", goa_account_get_id (account));
 
   key_file = g_key_file_new ();
   error = NULL;
   if (!g_key_file_load_from_file (key_file,
-                                  goa_account_get_keyfile_path (account),
+                                  path,
                                   G_KEY_FILE_NONE,
                                   &error))
     {
       goa_warning ("Error loading keyfile %s: %s (%s, %d)",
-                   goa_account_get_keyfile_path (account),
+                   path,
                    error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }
   value = g_key_file_get_boolean (key_file,
-                                  goa_account_get_keyfile_group (account),
+                                  group,
                                   key,
                                   &error);
   if (error != NULL)
@@ -1408,8 +1454,8 @@ goa_util_add_row_check_button_from_keyfile (GtkTable     *table,
       /* this is not fatal (think upgrade-path) */
       goa_debug ("Error getting boolean value for key %s in group `%s' from keyfile %s: %s (%s, %d)",
                  key,
-                 goa_account_get_keyfile_group (account),
-                 goa_account_get_keyfile_path (account),
+                 group,
+                 path,
                  error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
@@ -1426,6 +1472,8 @@ goa_util_add_row_check_button_from_keyfile (GtkTable     *table,
                          0); /* GConnectFlags */
   if (key_file != NULL)
     g_key_file_free (key_file);
+  g_free (group);
+  g_free (path);
 
   return goa_util_add_row_widget (table, label_text, check_button);
 }

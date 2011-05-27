@@ -23,8 +23,6 @@
 /* TODO:
  *
  * - Document files, directories and file formats somewhere.
- *   - /etc/goa-1.0/accounts.conf.d/
- *   - $HOME/.config/goa-1.0/accounts.conf.d/
  *   - $HOME/.config/goa-1.0/accounts.conf
  */
 
@@ -222,8 +220,8 @@ goa_daemon_init (GoaDaemon *daemon)
   g_dbus_object_manager_server_export (daemon->object_manager, G_DBUS_OBJECT_SKELETON (object));
   g_object_unref (object);
 
-  /* create ~/.config/goa-1.0 and ~/.config/goa-1.0/accounts.conf.d directories */
-  path = g_strdup_printf ("%s/goa-1.0/accounts.d", g_get_user_config_dir ());
+  /* create ~/.config/goa-1.0 directory */
+  path = g_strdup_printf ("%s/goa-1.0", g_get_user_config_dir ());
   if (g_mkdir_with_parents (path, 0755) != 0)
     {
       /* TODO: syslog */
@@ -232,14 +230,6 @@ goa_daemon_init (GoaDaemon *daemon)
   g_free (path);
 
   /* set up file monitoring */
-  daemon->system_conf_dir_monitor = create_monitor (PACKAGE_SYSCONF_DIR "/goa-1.0/accounts.conf.d", TRUE);
-  if (daemon->system_conf_dir_monitor != NULL)
-    g_signal_connect (daemon->system_conf_dir_monitor, "changed", G_CALLBACK (on_file_monitor_changed), daemon);
-  path = g_strdup_printf ("%s/goa-1.0/accounts.d", g_get_user_config_dir ());
-  daemon->home_conf_dir_monitor = create_monitor (path, TRUE);
-  if (daemon->home_conf_dir_monitor != NULL)
-    g_signal_connect (daemon->home_conf_dir_monitor, "changed", G_CALLBACK (on_file_monitor_changed), daemon);
-  g_free (path);
   path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
   daemon->home_conf_file_monitor = create_monitor (path, FALSE);
   if (daemon->home_conf_file_monitor != NULL)
@@ -444,8 +434,6 @@ update_account_object (GoaDaemon           *daemon,
     }
 
   goa_account_set_id (account, g_strrstr (g_dbus_object_get_object_path (G_DBUS_OBJECT (object)), "/") + 1);
-  goa_account_set_keyfile_path (account, path);
-  goa_account_set_keyfile_group (account, group);
   goa_account_set_provider_type (account, type);
   goa_account_set_identity (account, identity);
   goa_account_set_presentation_identity (account, presentation_identity);
@@ -656,9 +644,7 @@ goa_daemon_reload_configuration (GoaDaemon *daemon)
 {
   GList *key_files_to_free;
   GHashTable *group_name_to_key_file_data;
-  GDir *dir;
   gchar *path;
-  gchar *dir_path;
 
   key_files_to_free = NULL;
   group_name_to_key_file_data = g_hash_table_new_full (g_str_hash,
@@ -666,44 +652,7 @@ goa_daemon_reload_configuration (GoaDaemon *daemon)
                                                        g_free,
                                                        (GDestroyNotify) key_file_data_free);
 
-  /* First read system config files at /etc/goa-1.0/accounts.conf.d/ */
-  dir_path = PACKAGE_SYSCONF_DIR "/goa-1.0/accounts.conf.d";
-  dir = g_dir_open (dir_path, 0 /* flags */, NULL);
-  if (dir != NULL)
-    {
-      const gchar *name;
-      while ((name = g_dir_read_name (dir)) != NULL)
-        {
-          if (g_str_has_suffix (name, ".conf"))
-            {
-              path = g_strdup_printf ("%s/%s", dir_path, name);
-              add_config_file (path, group_name_to_key_file_data, &key_files_to_free);
-              g_free (path);
-            }
-        }
-      g_dir_close (dir);
-    }
-
-  /* Then read user config files at $HOME/.config/goa-1.0/accounts.conf.d/ */
-  dir_path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
-  dir = g_dir_open (dir_path, 0 /* flags */, NULL);
-  if (dir != NULL)
-    {
-      const gchar *name;
-      while ((name = g_dir_read_name (dir)) != NULL)
-        {
-          if (g_str_has_suffix (name, ".conf"))
-            {
-              path = g_strdup_printf ("%s/%s", dir_path, name);
-              add_config_file (path, group_name_to_key_file_data, &key_files_to_free);
-              g_free (path);
-            }
-        }
-      g_dir_close (dir);
-    }
-  g_free (dir_path);
-
-  /* Finally the main user config file at $HOME/.config/goa-1.0/accounts.conf */
+  /* Read the main user config file at $HOME/.config/goa-1.0/accounts.conf */
   path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
   add_config_file (path, group_name_to_key_file_data, &key_files_to_free);
   g_free (path);
