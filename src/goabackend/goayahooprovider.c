@@ -119,7 +119,7 @@ static gchar *
 get_identity_sync (GoaOAuthProvider  *provider,
                    const gchar       *access_token,
                    const gchar       *access_token_secret,
-                   gchar            **out_name,
+                   gchar            **out_presentation_identity,
                    GCancellable      *cancellable,
                    GError           **error)
 {
@@ -130,14 +130,14 @@ get_identity_sync (GoaOAuthProvider  *provider,
   JsonObject *json_data_object;
   gchar *ret;
   gchar *guid;
-  gchar *name;
+  gchar *presentation_identity;
 
   ret = NULL;
   proxy = NULL;
   call = NULL;
   parser = NULL;
   guid = NULL;
-  name = NULL;
+  presentation_identity = NULL;
 
   /* TODO: cancellable */
 
@@ -195,7 +195,7 @@ get_identity_sync (GoaOAuthProvider  *provider,
       goto out;
     }
 
-  /* OK, got the GUID, now get the name via http://developer.yahoo.com/social/rest_api_guide/usercard-resource.html */
+  /* OK, got the GUID, now get the presentation_identity via http://developer.yahoo.com/social/rest_api_guide/usercard-resource.html */
   g_object_unref (proxy);
   g_object_unref (call);
   proxy = oauth_proxy_new_with_token (goa_oauth_provider_get_consumer_key (provider),
@@ -245,8 +245,8 @@ get_identity_sync (GoaOAuthProvider  *provider,
       goto out;
     }
 
-  name = g_strdup (json_object_get_string_member (json_data_object, "nickname"));
-  if (name == NULL)
+  presentation_identity = g_strdup (json_object_get_string_member (json_data_object, "nickname"));
+  if (presentation_identity == NULL)
     {
       g_set_error (error,
                    GOA_ERROR,
@@ -257,14 +257,14 @@ get_identity_sync (GoaOAuthProvider  *provider,
 
   ret = guid;
   guid = NULL;
-  if (out_name != NULL)
+  if (out_presentation_identity != NULL)
     {
-      *out_name = name;
-      name = NULL;
+      *out_presentation_identity = presentation_identity;
+      presentation_identity = NULL;
     }
 
  out:
-  g_free (name);
+  g_free (presentation_identity);
   g_free (guid);
   if (call != NULL)
     g_object_unref (call);
@@ -282,12 +282,8 @@ build_object (GoaProvider         *provider,
               const gchar         *group,
               GError             **error)
 {
-  GoaAccount *account;
   gboolean ret;
-  gchar *guid;
 
-  guid = NULL;
-  account = NULL;
   ret = FALSE;
 
   /* Chain up */
@@ -298,26 +294,9 @@ build_object (GoaProvider         *provider,
                                                                            error))
     goto out;
 
-  account = goa_object_get_account (GOA_OBJECT (object));
-
-  guid = g_key_file_get_string (key_file, group, "Identity", NULL);
-  if (guid == NULL)
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   "Invalid identity %s for id %s",
-                   guid,
-                   goa_account_get_id (account));
-      goto out;
-    }
-
   ret = TRUE;
 
  out:
-  g_free (guid);
-  if (account != NULL)
-    g_object_unref (account);
   return ret;
 }
 
@@ -340,7 +319,7 @@ show_account (GoaProvider         *provider,
   GOA_PROVIDER_CLASS (goa_yahoo_provider_parent_class)->show_account (provider, client, object, vbox, table);
 
   /* TODO: look up email address / screenname from GUID */
-  goa_util_add_row_editable_label_from_keyfile (table, object, _("GUID"), "Identity", FALSE);
+  goa_util_add_row_editable_label_from_keyfile (table, object, _("Name"), "PresentationIdentity", FALSE);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

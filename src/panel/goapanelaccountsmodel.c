@@ -134,11 +134,10 @@ goa_panel_accounts_model_constructed (GObject *object)
   GType types[GOA_PANEL_ACCOUNTS_MODEL_N_COLUMNS];
 
   types[0] = G_TYPE_STRING;
-  types[1] = G_TYPE_STRING;
-  types[2] = GOA_TYPE_OBJECT;
-  types[3] = G_TYPE_BOOLEAN;
-  types[4] = G_TYPE_STRING;
-  G_STATIC_ASSERT (5 == GOA_PANEL_ACCOUNTS_MODEL_N_COLUMNS);
+  types[1] = GOA_TYPE_OBJECT;
+  types[2] = G_TYPE_BOOLEAN;
+  types[3] = G_TYPE_STRING;
+  G_STATIC_ASSERT (4 == GOA_PANEL_ACCOUNTS_MODEL_N_COLUMNS);
   gtk_list_store_set_column_types (GTK_LIST_STORE (model),
                                    GOA_PANEL_ACCOUNTS_MODEL_N_COLUMNS,
                                    types);
@@ -332,12 +331,11 @@ set_values (GoaPanelAccountsModel  *model,
 
   markup = g_strdup_printf ("<b>%s</b>\n"
                             "<small><span foreground=\"#555555\">%s</span></small>",
-                            goa_account_get_name (account),
-                            provider_name);
+                            provider_name,
+                            goa_account_get_presentation_identity (account));
 
   gtk_list_store_set (GTK_LIST_STORE (model),
                       iter,
-                      GOA_PANEL_ACCOUNTS_MODEL_COLUMN_NAME, goa_account_get_name (account),
                       GOA_PANEL_ACCOUNTS_MODEL_COLUMN_SORT_KEY, goa_account_get_id (account),
                       GOA_PANEL_ACCOUNTS_MODEL_COLUMN_OBJECT, object,
                       GOA_PANEL_ACCOUNTS_MODEL_COLUMN_ATTENTION_NEEDED, goa_account_get_attention_needed (account),

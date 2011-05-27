@@ -67,6 +67,7 @@ struct _GoaOAuth2Provider
  * @get_identity_sync: Virtual function for goa_oauth2_provider_get_identity_sync().
  * @build_authorization_uri: Virtual function for goa_oauth2_provider_build_authorization_uri().
  * @get_use_external_browser: Virtual function for goa_oauth2_provider_get_use_external_browser().
+ * @add_account_key_values: Virtual function for goa_oauth2_provider_add_account_key_values().
  *
  * Class structure for #GoaOAuth2Provider.
  */
@@ -83,7 +84,7 @@ struct _GoaOAuth2ProviderClass
   const gchar *(*get_client_secret)        (GoaOAuth2Provider  *provider);
   gchar       *(*get_identity_sync)        (GoaOAuth2Provider  *provider,
                                             const gchar        *access_token,
-                                            gchar             **out_name,
+                                            gchar             **out_presentation_identity,
                                             GCancellable       *cancellable,
                                             GError            **error);
 
@@ -94,6 +95,8 @@ struct _GoaOAuth2ProviderClass
                                             const gchar        *escaped_client_id,
                                             const gchar        *escaped_scope);
   gboolean     (*get_use_external_browser) (GoaOAuth2Provider  *provider);
+  void         (*add_account_key_values)   (GoaOAuth2Provider  *provider,
+                                            GVariantBuilder    *builder);
 
   /*< private >*/
   /* Padding for future expansion */
@@ -109,7 +112,7 @@ const gchar *goa_oauth2_provider_get_client_id            (GoaOAuth2Provider  *p
 const gchar *goa_oauth2_provider_get_client_secret        (GoaOAuth2Provider  *provider);
 gchar       *goa_oauth2_provider_get_identity_sync        (GoaOAuth2Provider  *provider,
                                                            const gchar        *access_token,
-                                                           gchar             **out_name,
+                                                           gchar             **out_presentation_identity,
                                                            GCancellable       *cancellable,
                                                            GError            **error);
 gchar       *goa_oauth2_provider_get_access_token_sync    (GoaOAuth2Provider  *provider,
@@ -124,6 +127,8 @@ gchar       *goa_oauth2_provider_build_authorization_uri  (GoaOAuth2Provider  *p
                                                            const gchar        *escaped_client_id,
                                                            const gchar        *escaped_scope);
 gboolean     goa_oauth2_provider_get_use_external_browser (GoaOAuth2Provider  *provider);
+void         goa_oauth2_provider_add_account_key_values   (GoaOAuth2Provider  *provider,
+                                                           GVariantBuilder    *builder);
 
 G_END_DECLS
 

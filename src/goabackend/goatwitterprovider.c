@@ -95,28 +95,6 @@ get_request_uri (GoaOAuthProvider *provider)
   return "https://api.twitter.com/oauth/request_token";
 }
 
-static gchar **
-get_request_uri_params (GoaOAuthProvider *provider)
-{
-  return NULL;
-  GPtrArray *p;
-  p = g_ptr_array_new ();
-  g_ptr_array_add (p, g_strdup ("xoauth_displayname"));
-  g_ptr_array_add (p, g_strdup ("GNOME"));
-
-  g_ptr_array_add (p, g_strdup ("scope"));
-  g_ptr_array_add (p, g_strdup (
-    /* Display email address: cf. https://sites.twitter.com/site/oauthgoog/Home/emaildisplayscope */
-    "https://www.twitterapis.com/auth/userinfo#email "
-    /* IMAP, SMTP access: http://code.twitter.com/apis/gmail/oauth/protocol.html */
-    "https://mail.twitter.com/ "
-    /* Calendar data API: http://code.twitter.com/apis/calendar/data/2.0/developers_guide.html */
-    "https://www.twitter.com/calendar/feeds"));
-  g_ptr_array_add (p, NULL);
-  return (gchar **) g_ptr_array_free (p, FALSE);
-}
-
-
 static const gchar *
 get_authorization_uri (GoaOAuthProvider *provider)
 {
@@ -141,7 +119,7 @@ static gchar *
 get_identity_sync (GoaOAuthProvider  *provider,
                    const gchar       *access_token,
                    const gchar       *access_token_secret,
-                   gchar            **out_name,
+                   gchar            **out_presentation_identity,
                    GCancellable      *cancellable,
                    GError           **error)
 {
@@ -151,14 +129,14 @@ get_identity_sync (GoaOAuthProvider  *provider,
   JsonObject *json_object;
   gchar *ret;
   gchar *id;
-  gchar *name;
+  gchar *presentation_identity;
 
   ret = NULL;
   proxy = NULL;
   call = NULL;
   parser = NULL;
   id = NULL;
-  name = NULL;
+  presentation_identity = NULL;
 
   /* TODO: cancellable */
 
@@ -204,8 +182,8 @@ get_identity_sync (GoaOAuthProvider  *provider,
                    _("Didn't find id_str member in JSON data"));
       goto out;
     }
-  name = g_strdup (json_object_get_string_member (json_object, "screen_name"));
-  if (name == NULL)
+  presentation_identity = g_strdup (json_object_get_string_member (json_object, "screen_name"));
+  if (presentation_identity == NULL)
     {
       g_set_error (error,
                    GOA_ERROR,
@@ -216,15 +194,15 @@ get_identity_sync (GoaOAuthProvider  *provider,
 
   ret = id;
   id = NULL;
-  if (out_name != NULL)
+  if (out_presentation_identity != NULL)
     {
-      *out_name = name;
-      name = NULL;
+      *out_presentation_identity = presentation_identity;
+      presentation_identity = NULL;
     }
 
  out:
   g_free (id);
-  g_free (name);
+  g_free (presentation_identity);
   if (call != NULL)
     g_object_unref (call);
   if (proxy != NULL)
@@ -241,42 +219,20 @@ build_object (GoaProvider         *provider,
               const gchar         *group,
               GError             **error)
 {
-  GoaAccount *account;
   gboolean ret;
-  gchar *id;
-
-  id = NULL;
-  account = NULL;
   ret = FALSE;
 
   /* Chain up */
   if (!GOA_PROVIDER_CLASS (goa_twitter_provider_parent_class)->build_object (provider,
-                                                                                            object,
-                                                                                            key_file,
-                                                                                            group,
-                                                                                            error))
+                                                                             object,
+                                                                             key_file,
+                                                                             group,
+                                                                             error))
     goto out;
-
-  account = goa_object_get_account (GOA_OBJECT (object));
-
-  id = g_key_file_get_string (key_file, group, "Identity", NULL);
-  if (id == NULL)
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   "Invalid identity %s for id %s",
-                   id,
-                   goa_account_get_id (account));
-      goto out;
-    }
 
   ret = TRUE;
 
  out:
-  g_free (id);
-  if (account != NULL)
-    g_object_unref (account);
   return ret;
 }
 
@@ -300,9 +256,7 @@ show_account (GoaProvider         *provider,
 {
   /* Chain up */
   GOA_PROVIDER_CLASS (goa_twitter_provider_parent_class)->show_account (provider, client, object, vbox, table);
-
-  /* TODO: look up screenname from account number */
-  goa_util_add_row_editable_label_from_keyfile (table, object, _("Account Number"), "Identity", FALSE);
+  goa_util_add_row_editable_label_from_keyfile (table, object, _("User Name"), "PresentationIdentity", FALSE);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -329,7 +283,6 @@ goa_twitter_provider_class_init (GoaTwitterProviderClass *klass)
   oauth_class->get_consumer_key         = get_consumer_key;
   oauth_class->get_consumer_secret      = get_consumer_secret;
   oauth_class->get_request_uri          = get_request_uri;
-  oauth_class->get_request_uri_params   = get_request_uri_params;
   oauth_class->get_authorization_uri    = get_authorization_uri;
   oauth_class->get_token_uri            = get_token_uri;
   oauth_class->get_callback_uri         = get_callback_uri;

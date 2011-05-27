@@ -231,10 +231,10 @@ goa_provider_refresh_account (GoaProvider  *provider,
  * Method used to add widgets in the control panel for the account
  * represented by @object.
  *
- * This is a virtual method with an implementation that adds widgets
- * for editing the name and the icon. A subclass should chain up
- * (before adding their own widgets to @vbox and @table) if they want
- * to expose such functionality.
+ * This is a virtual method with an implementation that (currently)
+ * does nothing. A subclass should chain up (before adding their own
+ * widgets to @vbox and @table) if they want to expose such
+ * functionality.
  */
 void
 goa_provider_show_account (GoaProvider         *provider,
@@ -261,10 +261,7 @@ goa_provider_show_account_real (GoaProvider         *provider,
                                 GtkBox              *vbox,
                                 GtkTable            *table)
 {
-  GtkWidget *elabel;
-  elabel = goa_util_add_row_editable_label_from_keyfile (table, object, NULL, "Name", TRUE);
-  goa_editable_label_set_scale (GOA_EDITABLE_LABEL (elabel), 1.2);
-  goa_editable_label_set_weight (GOA_EDITABLE_LABEL (elabel), 700);
+  /* For now, don't do anything */
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

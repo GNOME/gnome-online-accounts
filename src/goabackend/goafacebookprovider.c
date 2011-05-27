@@ -124,7 +124,7 @@ get_client_secret (GoaOAuth2Provider *provider)
 static gchar *
 get_identity_sync (GoaOAuth2Provider  *provider,
                    const gchar        *access_token,
-                   gchar             **out_name,
+                   gchar             **out_presentation_identity,
                    GCancellable       *cancellable,
                    GError            **error)
 {
@@ -134,14 +134,14 @@ get_identity_sync (GoaOAuth2Provider  *provider,
   JsonObject *json_object;
   gchar *ret;
   gchar *id;
-  gchar *name;
+  gchar *presentation_identity;
 
   ret = NULL;
   proxy = NULL;
   call = NULL;
   parser = NULL;
   id = NULL;
-  name = NULL;
+  presentation_identity = NULL;
 
   /* TODO: cancellable */
 
@@ -174,7 +174,7 @@ get_identity_sync (GoaOAuth2Provider  *provider,
     }
 
   json_object = json_node_get_object (json_parser_get_root (parser));
-  id = g_strdup (json_object_get_string_member (json_object, "username"));
+  id = g_strdup (json_object_get_string_member (json_object, "id"));
   if (id == NULL)
     {
       g_set_error (error,
@@ -183,8 +183,8 @@ get_identity_sync (GoaOAuth2Provider  *provider,
                    _("Didn't find username member in JSON data"));
       goto out;
     }
-  name = g_strdup (json_object_get_string_member (json_object, "name"));
-  if (name == NULL)
+  presentation_identity = g_strdup (json_object_get_string_member (json_object, "username"));
+  if (presentation_identity == NULL)
     {
       g_set_error (error,
                    GOA_ERROR,
@@ -195,15 +195,15 @@ get_identity_sync (GoaOAuth2Provider  *provider,
 
   ret = id;
   id = NULL;
-  if (out_name != NULL)
+  if (out_presentation_identity != NULL)
     {
-      *out_name = name;
-      name = NULL;
+      *out_presentation_identity = presentation_identity;
+      presentation_identity = NULL;
     }
 
  out:
   g_free (id);
-  g_free (name);
+  g_free (presentation_identity);
   if (call != NULL)
     g_object_unref (call);
   if (proxy != NULL)
@@ -221,13 +221,7 @@ build_object (GoaProvider         *provider,
               const gchar         *group,
               GError             **error)
 {
-  GoaAccount *account;
   gboolean ret;
-  gchar *user_name;
-
-  user_name = NULL;
-  account = NULL;
-  ret = FALSE;
 
   /* Chain up */
   if (!GOA_PROVIDER_CLASS (goa_facebook_provider_parent_class)->build_object (provider,
@@ -237,25 +231,9 @@ build_object (GoaProvider         *provider,
                                                                               error))
     goto out;
 
-  account = goa_object_get_account (GOA_OBJECT (object));
-
-  user_name = g_key_file_get_string (key_file, group, "Identity", NULL);
-  if (user_name == NULL)
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   "Invalid identity %s for id %s",
-                   user_name,
-                   goa_account_get_id (account));
-      goto out;
-    }
-
   ret = TRUE;
 
  out:
-  if (account != NULL)
-    g_object_unref (account);
   return ret;
 }
 
@@ -277,7 +255,7 @@ show_account (GoaProvider         *provider,
   /* Chain up */
   GOA_PROVIDER_CLASS (goa_facebook_provider_parent_class)->show_account (provider, client, object, vbox, table);
 
-  goa_util_add_row_editable_label_from_keyfile (table, object, _("User Name"), "Identity", FALSE);
+  goa_util_add_row_editable_label_from_keyfile (table, object, _("User Name"), "PresentationIdentity", FALSE);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

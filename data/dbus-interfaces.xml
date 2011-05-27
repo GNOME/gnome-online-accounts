@@ -63,12 +63,27 @@
       -->
     <property name="AttentionNeeded" type="b" access="read"/>
 
-    <!-- Name: A human-readable description for the account.
+    <!-- Identity:
+         A string that uniquely identifies the account at the
+         provider.
 
-         This property may change if the user e.g. renames the
+         Note that this may be the same string for different kinds of
+         providers (for example, if the user is using the same
+         email-address for several providers) - use
+         #org.gnome.OnlineAccounts.Account:Id to uniquely identify the
          account.
-      -->
-    <property name="Name" type="s" access="read"/>
+
+         This string might not be suitable for presentation in an user
+         interface - use
+         #org.gnome.OnlineAccounts.Account:PresentationIdentity instead.
+    -->
+    <property name="Identity" type="s" access="read"/>
+
+    <!-- PresentationIdentity:
+         Like the #org.gnome.OnlineAccounts.Account:Identity property but
+         suitable for presentation in an user interface.
+    -->
+    <property name="PresentationIdentity" type="s" access="read"/>
 
     <!--
         Remove:
@@ -122,9 +137,6 @@
       <arg name="access_token" type="s" direction="out"/>
       <arg name="expires_in" type="i" direction="out"/>
     </method>
-
-    <!-- Identity: The identity that was authenticated. -->
-    <property name="Identity" type="s" access="read"/>
   </interface>
 
   <!--
@@ -158,9 +170,6 @@
 
     <!-- ConsumerSecret: The consumer secret. -->
     <property name="ConsumerSecret" type="s" access="read"/>
-
-    <!-- Identity: The identity that was authenticated. -->
-    <property name="Identity" type="s" access="read"/>
   </interface>
 
   <!--
@@ -200,17 +209,19 @@
 
     <!--
         AddAccount:
-        @type: The type of account to create. See the #org.gnome.OnlineAccounts:Type property for known types.
-        @name: The human readable name of the account (cf. the #org.gnome.OnlineAccounts.Account:Name property).
-        @details: Details about the account. See each interface (e.g. #org.gnome.OnlineAccounts.GoogleAccount) for details of what other elements to include.
+        @provider: The account provider. See the #org.gnome.OnlineAccounts.Account:ProviderType property for known providers.
+        @identity: The identity of the account (cf. the #org.gnome.OnlineAccounts.Account:Identity property).
+        @presentation_identity: The identity of the account that is suitable for display in an user interface (cf. the #org.gnome.OnlineAccounts.Account:PresentationIdentity property).
+        @details: Extra key/value pairs to set.
         @account_object_path: The object path of the created account.
 
         Creates a new account. Note that this does not create an
         account at the remote service.
     -->
     <method name="AddAccount">
-      <arg name="type" type="s" direction="in"/>
-      <arg name="name" type="s" direction="in"/>
+      <arg name="provider" type="s" direction="in"/>
+      <arg name="identity" type="s" direction="in"/>
+      <arg name="presentation_identity" type="s" direction="in"/>
       <arg name="details" type="a{ss}" direction="in"/>
       <arg name="account_object_path" type="o" direction="out"/>
     </method>

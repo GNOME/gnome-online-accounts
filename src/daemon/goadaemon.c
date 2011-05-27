@@ -70,8 +70,9 @@ static void on_file_monitor_changed (GFileMonitor     *monitor,
 
 static gboolean on_manager_handle_add_account (GoaManager            *object,
                                                GDBusMethodInvocation *invocation,
-                                               const gchar           *type,
-                                               const gchar           *name,
+                                               const gchar           *provider,
+                                               const gchar           *identity,
+                                               const gchar           *presentation_identity,
                                                GVariant              *details,
                                                gpointer               user_data);
 
@@ -412,7 +413,8 @@ update_account_object (GoaDaemon           *daemon,
   GoaAccount *account;
   GoaProvider *provider;
   gboolean ret;
-  gchar *name;
+  gchar *identity;
+  gchar *presentation_identity;
   gchar *type;
   GError *error;
 
@@ -422,14 +424,15 @@ update_account_object (GoaDaemon           *daemon,
   g_return_val_if_fail (key_file != NULL, FALSE);
 
   ret = FALSE;
-  name = NULL;
+  identity = NULL;
   type = NULL;
   account = NULL;
 
   goa_debug ("updating %s %d", g_dbus_object_get_object_path (G_DBUS_OBJECT (object)), just_added);
 
-  type = g_key_file_get_string (key_file, group, "Type", NULL);
-  name = g_key_file_get_string (key_file, group, "Name", NULL);
+  type = g_key_file_get_string (key_file, group, "Provider", NULL);
+  identity = g_key_file_get_string (key_file, group, "Identity", NULL);
+  presentation_identity = g_key_file_get_string (key_file, group, "PresentationIdentity", NULL);
   if (just_added)
     {
       account = goa_account_skeleton_new ();
@@ -444,7 +447,8 @@ update_account_object (GoaDaemon           *daemon,
   goa_account_set_keyfile_path (account, path);
   goa_account_set_keyfile_group (account, group);
   goa_account_set_provider_type (account, type);
-  goa_account_set_name (account, name);
+  goa_account_set_identity (account, identity);
+  goa_account_set_presentation_identity (account, presentation_identity);
 
   provider = goa_provider_get_for_provider_type (type);
   if (provider == NULL)
@@ -471,7 +475,7 @@ update_account_object (GoaDaemon           *daemon,
     g_object_unref (provider);
   g_object_unref (account);
   g_free (type);
-  g_free (name);
+  g_free (identity);
   return ret;
 }
 
@@ -729,8 +733,9 @@ generate_new_id (GoaDaemon *daemon)
 static gboolean
 on_manager_handle_add_account (GoaManager             *manager,
                                GDBusMethodInvocation  *invocation,
-                               const gchar            *type,
-                               const gchar            *name,
+                               const gchar            *provider,
+                               const gchar            *identity,
+                               const gchar            *presentation_identity,
                                GVariant               *details,
                                gpointer                user_data)
 {
@@ -791,8 +796,9 @@ on_manager_handle_add_account (GoaManager             *manager,
 
   id = generate_new_id (daemon);
   group = g_strdup_printf ("Account %s", id);
-  g_key_file_set_string (key_file, group, "Type", type);
-  g_key_file_set_string (key_file, group, "Name", name);
+  g_key_file_set_string (key_file, group, "Provider", provider);
+  g_key_file_set_string (key_file, group, "Identity", identity);
+  g_key_file_set_string (key_file, group, "PresentationIdentity", presentation_identity);
 
   g_variant_iter_init (&iter, details);
   while (g_variant_iter_next (&iter, "{&s&s}", &key, &value))
@@ -986,7 +992,6 @@ on_account_handle_remove (GoaAccount            *account,
   GKeyFile *key_file;
   gchar *path;
   gchar *group;
-  gchar *name;
   gchar *data;
   gsize length;
   GError *error;
@@ -994,14 +999,7 @@ on_account_handle_remove (GoaAccount            *account,
   path = NULL;
   group = NULL;
   key_file = NULL;
-  name = NULL;
   data = NULL;
-
-  if (g_strcmp0 (goa_account_get_name (account), name) == 0)
-    {
-      goa_account_complete_remove (account, invocation);
-      goto out;
-    }
 
   /* update key-file - right now we only support removing the account
    * if the entry is in ~/.config/goa-1.0/accounts.conf
@@ -1022,15 +1020,6 @@ on_account_handle_remove (GoaAccount            *account,
     }
 
   group = g_strdup_printf ("Account %s", goa_account_get_id (account));
-
-  error = NULL;
-  name = g_key_file_get_string (key_file, group, "Name", &error);
-  if (name == NULL)
-    {
-      g_dbus_method_invocation_return_gerror (invocation, error);
-      g_error_free (error);
-      goto out;
-    }
 
   error = NULL;
   if (!g_key_file_remove_group (key_file, group, &error))
@@ -1068,7 +1057,6 @@ on_account_handle_remove (GoaAccount            *account,
 
  out:
   g_free (data);
-  g_free (name);
   if (key_file != NULL)
     g_key_file_free (key_file);
   g_free (group);

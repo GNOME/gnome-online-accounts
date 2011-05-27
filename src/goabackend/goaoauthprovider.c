@@ -385,7 +385,7 @@ goa_oauth_provider_get_callback_uri (GoaOAuthProvider *provider)
  * @provider: A #GoaOAuthProvider.
  * @access_token: A valid OAuth 1.0 access token.
  * @access_token_secret: The valid secret for @access_token.
- * @out_name: (out): Return location for name or %NULL.
+ * @out_presentation_identity: (out): Return location for presentation identity or %NULL.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
@@ -393,13 +393,9 @@ goa_oauth_provider_get_callback_uri (GoaOAuthProvider *provider)
  * @access_token_secret.
  *
  * The identity is needed because all authentication happens out of
- * band. The only requirement is that the returned identity is unique
- * - for example, for #GoaGoogleProvider the returned identity
- * is the email address, for #GoaFacebookProvider it's the user
- * name. In addition to the identity, an implementation also returns a
- * <emphasis>name</emphasis> in @out_name that is more suitable for
- * presentation (the identity could be a GUID for example) and doesn't
- * have to be unique.
+ * band. In addition to the identity, an implementation also returns a
+ * <emphasis>presentation identity</emphasis> that is more suitable
+ * for presentation (the identity could be a GUID for example).
  *
  * The calling thread is blocked while the identity is obtained.
  *
@@ -413,7 +409,7 @@ gchar *
 goa_oauth_provider_get_identity_sync (GoaOAuthProvider *provider,
                                       const gchar      *access_token,
                                       const gchar      *access_token_secret,
-                                      gchar           **out_name,
+                                      gchar           **out_presentation_identity,
                                       GCancellable     *cancellable,
                                       GError          **error)
 {
@@ -421,7 +417,7 @@ goa_oauth_provider_get_identity_sync (GoaOAuthProvider *provider,
   g_return_val_if_fail (access_token != NULL, NULL);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-  return GOA_OAUTH_PROVIDER_GET_CLASS (provider)->get_identity_sync (provider, access_token, access_token_secret, out_name, cancellable, error);
+  return GOA_OAUTH_PROVIDER_GET_CLASS (provider)->get_identity_sync (provider, access_token, access_token_secret, out_presentation_identity, cancellable, error);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -546,7 +542,7 @@ typedef struct
   gchar *oauth_verifier;
 
   gchar *identity;
-  gchar *name;
+  gchar *presentation_identity;
 
   gchar *request_token;
   gchar *request_token_secret;
@@ -622,7 +618,7 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
                          gchar           **out_session_handle,
                          gint             *out_session_handle_expires_in,
                          gchar           **out_identity,
-                         gchar           **out_name,
+                         gchar           **out_presentation_identity,
                          GError          **error)
 {
   gboolean ret;
@@ -827,7 +823,7 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
   data.identity = goa_oauth_provider_get_identity_sync (provider,
                                                                 data.access_token,
                                                                 data.access_token_secret,
-                                                                &data.name,
+                                                                &data.presentation_identity,
                                                                 NULL, /* TODO: GCancellable */
                                                                 &data.error);
   if (data.identity == NULL)
@@ -857,8 +853,8 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
         *out_session_handle_expires_in = data.session_handle_expires_in;
       if (out_identity != NULL)
         *out_identity = g_strdup (data.identity);
-      if (out_name != NULL)
-        *out_name = g_strdup (data.name);
+      if (out_presentation_identity != NULL)
+        *out_presentation_identity = g_strdup (data.presentation_identity);
     }
   else
     {
@@ -866,7 +862,7 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
       g_propagate_error (error, data.error);
     }
 
-  g_free (data.name);
+  g_free (data.presentation_identity);
   g_free (data.identity);
   g_free (url);
 
@@ -947,7 +943,7 @@ goa_oauth_provider_add_account (GoaProvider *_provider,
   gchar *session_handle;
   gint session_handle_expires_in;
   gchar *identity;
-  gchar *name;
+  gchar *presentation_identity;
   GList *accounts;
   GList *l;
   AddData data;
@@ -964,7 +960,7 @@ goa_oauth_provider_add_account (GoaProvider *_provider,
   access_token_secret = NULL;
   session_handle = NULL;
   identity = NULL;
-  name = NULL;
+  presentation_identity = NULL;
   accounts = NULL;
 
   memset (&data, '\0', sizeof (AddData));
@@ -979,7 +975,7 @@ goa_oauth_provider_add_account (GoaProvider *_provider,
                                 &session_handle,
                                 &session_handle_expires_in,
                                 &identity,
-                                &name,
+                                &presentation_identity,
                                 &data.error))
     goto out;
 
@@ -1003,7 +999,7 @@ goa_oauth_provider_add_account (GoaProvider *_provider,
                      goa_provider_get_provider_type (GOA_PROVIDER (provider))) != 0)
         continue;
 
-      identity_from_object = goa_oauth_based_get_identity (oauth_based);
+      identity_from_object = goa_account_get_identity (account);
       if (g_strcmp0 (identity_from_object, identity) == 0)
         {
           g_set_error (&data.error,
@@ -1020,11 +1016,11 @@ goa_oauth_provider_add_account (GoaProvider *_provider,
    * waiting for this to complete
    */
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{ss}"));
-  g_variant_builder_add (&builder, "{ss}", "Identity", identity);
   goa_oauth_provider_add_account_key_values (provider, &builder);
   goa_manager_call_add_account (goa_client_get_manager (client),
                                 goa_provider_get_provider_type (GOA_PROVIDER (provider)),
-                                name, /* Name */
+                                identity,
+                                presentation_identity,
                                 g_variant_builder_end (&builder),
                                 NULL, /* GCancellable* */
                                 (GAsyncReadyCallback) add_account_cb,
@@ -1069,7 +1065,7 @@ goa_oauth_provider_add_account (GoaProvider *_provider,
   g_list_foreach (accounts, (GFunc) g_object_unref, NULL);
   g_list_free (accounts);
   g_free (identity);
-  g_free (name);
+  g_free (presentation_identity);
   g_free (access_token);
   g_free (access_token_secret);
   g_free (session_handle);
@@ -1129,11 +1125,11 @@ goa_oauth_provider_refresh_account (GoaProvider  *_provider,
                                 &session_handle,
                                 &session_handle_expires_in,
                                 &identity,
-                                NULL, /* out_name */
+                                NULL, /* out_presentation_identity */
                                 error))
     goto out;
 
-  existing_identity = goa_oauth_based_get_identity (goa_object_peek_oauth_based (object));
+  existing_identity = goa_account_get_identity (goa_object_peek_account (object));
   if (g_strcmp0 (identity, existing_identity) != 0)
     {
       g_set_error (error,
@@ -1462,17 +1458,6 @@ goa_oauth_provider_build_object (GoaProvider         *provider,
                     G_CALLBACK (on_handle_get_access_token),
                     NULL);
 
-  identity = g_key_file_get_string (key_file, group, "Identity", NULL);
-  if (identity == NULL)
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   "No Identity key");
-      goto out;
-    }
-  goa_oauth_based_set_identity (oauth_based, identity);
-
  out:
   g_object_unref (oauth_based);
   g_free (identity);
@@ -1516,7 +1501,7 @@ goa_oauth_provider_ensure_credentials_sync (GoaProvider    *_provider,
   identity = goa_oauth_provider_get_identity_sync (provider,
                                                            access_token,
                                                            access_token_secret,
-                                                           NULL, /* out_name */
+                                                           NULL, /* out_presentation_identity */
                                                            cancellable,
                                                            error);
   if (identity == NULL)

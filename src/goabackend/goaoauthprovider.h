@@ -69,6 +69,7 @@ struct _GoaOAuthProvider
  * @build_authorization_uri: Virtual function for goa_oauth_provider_build_authorization_uri().
  * @get_use_external_browser: Virtual function for goa_oauth_provider_get_use_external_browser().
  * @get_request_uri_params: Virtual function for goa_oauth_provider_get_request_uri_params().
+ * @add_account_key_values: Virtual function for goa_oauth_provider_add_account_key_values().
  *
  * Class structure for #GoaOAuthProvider.
  */
@@ -87,7 +88,7 @@ struct _GoaOAuthProviderClass
   gchar       *(*get_identity_sync)        (GoaOAuthProvider  *provider,
                                             const gchar       *access_token,
                                             const gchar       *access_token_secret,
-                                            gchar            **out_name,
+                                            gchar            **out_presentation_identity,
                                             GCancellable      *cancellable,
                                             GError           **error);
 
@@ -116,7 +117,7 @@ const gchar *goa_oauth_provider_get_callback_uri         (GoaOAuthProvider  *pro
 gchar       *goa_oauth_provider_get_identity_sync        (GoaOAuthProvider  *provider,
                                                           const gchar       *access_token,
                                                           const gchar       *access_token_secret,
-                                                          gchar            **out_name,
+                                                          gchar            **out_presentation_identity,
                                                           GCancellable      *cancellable,
                                                           GError           **error);
 gchar       *goa_oauth_provider_get_access_token_sync    (GoaOAuthProvider  *provider,

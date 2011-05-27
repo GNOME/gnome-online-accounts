@@ -150,7 +150,7 @@ static gchar *
 get_identity_sync (GoaOAuthProvider  *provider,
                    const gchar       *access_token,
                    const gchar       *access_token_secret,
-                   gchar            **out_name,
+                   gchar            **out_presentation_identity,
                    GCancellable      *cancellable,
                    GError           **error)
 {
@@ -227,8 +227,8 @@ get_identity_sync (GoaOAuthProvider  *provider,
 
   ret = email;
   email = NULL;
-  if (out_name != NULL)
-    *out_name = g_strdup (ret); /* for now: use email as name */
+  if (out_presentation_identity != NULL)
+    *out_presentation_identity = g_strdup (ret); /* for now: use email as presentation identity */
 
  out:
   g_free (email);
@@ -253,12 +253,10 @@ build_object (GoaProvider         *provider,
   GoaCalendar *calendar;
   GoaContacts *contacts;
   gboolean ret;
-  gchar *email_address;
   gboolean mail_enabled;
   gboolean calendar_enabled;
   gboolean contacts_enabled;
 
-  email_address = NULL;
   account = NULL;
   mail = NULL;
   calendar = NULL;
@@ -275,18 +273,7 @@ build_object (GoaProvider         *provider,
 
   account = goa_object_get_account (GOA_OBJECT (object));
 
-  email_address = g_key_file_get_string (key_file, group, "Identity", NULL);
-  if (email_address == NULL /* || !is_valid_email_address () */)
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   "Invalid identity %s for id %s",
-                   email_address,
-                   goa_account_get_id (account));
-      goto out;
-    }
-
+  /* Email */
   mail = goa_object_get_mail (GOA_OBJECT (object));
   mail_enabled = g_key_file_get_boolean (key_file, group, "MailEnabled", NULL);
   if (mail_enabled)
@@ -295,7 +282,7 @@ build_object (GoaProvider         *provider,
         {
           mail = goa_mail_skeleton_new ();
           g_object_set (G_OBJECT (mail),
-                        "email-address",   email_address,
+                        "email-address",   goa_account_get_identity (account),
                         "imap-host",       "imap.gmail.com",
                         "imap-user-name",  "",
                         "imap-use-tls",    TRUE,
@@ -312,6 +299,7 @@ build_object (GoaProvider         *provider,
         goa_object_skeleton_set_mail (object, NULL);
     }
 
+  /* Calendar */
   calendar = goa_object_get_calendar (GOA_OBJECT (object));
   calendar_enabled = g_key_file_get_boolean (key_file, group, "CalendarEnabled", NULL);
   if (calendar_enabled)
@@ -328,6 +316,7 @@ build_object (GoaProvider         *provider,
         goa_object_skeleton_set_calendar (object, NULL);
     }
 
+  /* Contacts */
   contacts = goa_object_get_contacts (GOA_OBJECT (object));
   contacts_enabled = g_key_file_get_boolean (key_file, group, "ContactsEnabled", NULL);
   if (contacts_enabled)
@@ -348,7 +337,6 @@ build_object (GoaProvider         *provider,
   ret = TRUE;
 
  out:
-  g_free (email_address);
   if (contacts != NULL)
     g_object_unref (contacts);
   if (calendar != NULL)
