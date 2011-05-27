@@ -52,7 +52,7 @@
  *
  * Additionally, the
  * #GoaProviderClass.get_provider_type,
- * #GoaProviderClass.get_name,
+ * #GoaProviderClass.get_provider_name,
  * #GoaProviderClass.build_object (this should chain up to its
  * parent class) methods must be implemented.
  *

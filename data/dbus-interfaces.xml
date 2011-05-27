@@ -33,16 +33,35 @@
       The base account interface.
   -->
   <interface name="org.gnome.OnlineAccounts.Account">
-    <!-- ProviderType: The provider of the account.
-         Known values include
-         <variablelist>
-         <varlistentry><term>google</term><listitem><para>The account is a Google Account.</para></listitem></varlistentry>
-         <varlistentry><term>facebook</term><listitem><para>The account is a Facebook Account.</para></listitem></varlistentry>
-         <varlistentry><term>yahoo</term><listitem><para>The account is a Yahoo Account.</para></listitem></varlistentry>
-         <varlistentry><term>twitter</term><listitem><para>The account is a Twitter Account.</para></listitem></varlistentry>
-         </variablelist>
+    <!--
+        ProviderType:
+        The type of provider of the account.
+
+        This value describes how data is accessed, e.g. what API
+        applications should use. Use
+        #org.gnome.OnlineAccounts.Account:ProviderName for the name of
+        the provider (which might differ from the provider name in
+        hosted scenarios) to display in the user interface.
     -->
     <property name="ProviderType" type="s" access="read"/>
+
+    <!--
+        ProviderName:
+        The name of the provider to display in the user interface.
+    -->
+    <property name="ProviderName" type="s" access="read"/>
+
+    <!--
+        ProviderIcon:
+        The icon/logo of the provider.
+
+        This is a serialized <ulink
+        url="http://developer.gnome.org/gio/unstable/GIcon.html">GIcon</ulink>
+        - use e.g. <ulink
+        url="http://developer.gnome.org/gio/unstable/GIcon.html#g-icon-new-for-string">g_icon_new_for_string()</ulink>
+        to create an instance.
+    -->
+    <property name="ProviderIcon" type="s" access="read"/>
 
     <!-- Id: An identifier for this account.
          This identifier cannot be changed and should never be

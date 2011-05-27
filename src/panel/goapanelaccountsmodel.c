@@ -137,7 +137,8 @@ goa_panel_accounts_model_constructed (GObject *object)
   types[1] = GOA_TYPE_OBJECT;
   types[2] = G_TYPE_BOOLEAN;
   types[3] = G_TYPE_STRING;
-  G_STATIC_ASSERT (4 == GOA_PANEL_ACCOUNTS_MODEL_N_COLUMNS);
+  types[4] = G_TYPE_ICON;
+  G_STATIC_ASSERT (5 == GOA_PANEL_ACCOUNTS_MODEL_N_COLUMNS);
   gtk_list_store_set_column_types (GTK_LIST_STORE (model),
                                    GOA_PANEL_ACCOUNTS_MODEL_N_COLUMNS,
                                    types);
@@ -315,23 +316,24 @@ set_values (GoaPanelAccountsModel  *model,
             GtkTreeIter            *iter)
 {
   GoaAccount *account;
-  GoaProvider *provider;
-  const gchar *type;
-  gchar *provider_name;
+  GIcon *icon;
   gchar *markup;
+  GError *error;
 
   account = goa_object_peek_account (object);
 
-  type = goa_account_get_provider_type (account);
-  provider = goa_provider_get_for_provider_type (type);
-  if (provider != NULL)
-    provider_name = g_strdup (goa_provider_get_name (provider));
-  else
-    provider_name = g_strdup_printf (_("Unknown Provider (%s)"), type);
+  error = NULL;
+  icon = g_icon_new_for_string (goa_account_get_provider_icon (account), &error);
+  if (icon == NULL)
+    {
+      goa_warning ("Error creating GIcon for account: %s (%s, %d)",
+                   error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+    }
 
   markup = g_strdup_printf ("<b>%s</b>\n"
                             "<small><span foreground=\"#555555\">%s</span></small>",
-                            provider_name,
+                            goa_account_get_provider_name (account),
                             goa_account_get_presentation_identity (account));
 
   gtk_list_store_set (GTK_LIST_STORE (model),
@@ -340,11 +342,11 @@ set_values (GoaPanelAccountsModel  *model,
                       GOA_PANEL_ACCOUNTS_MODEL_COLUMN_OBJECT, object,
                       GOA_PANEL_ACCOUNTS_MODEL_COLUMN_ATTENTION_NEEDED, goa_account_get_attention_needed (account),
                       GOA_PANEL_ACCOUNTS_MODEL_COLUMN_MARKUP, markup,
+                      GOA_PANEL_ACCOUNTS_MODEL_COLUMN_ICON, icon,
                       -1);
 
   g_free (markup);
-  g_free (provider_name);
-  g_clear_object (&provider);
+  g_clear_object (&icon);
 }
 
 static void

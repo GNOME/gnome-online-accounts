@@ -162,6 +162,16 @@ goa_panel_init (GoaPanel *panel)
   column = gtk_tree_view_column_new ();
   gtk_tree_view_append_column (GTK_TREE_VIEW (panel->accounts_treeview), column);
 
+  renderer = gtk_cell_renderer_pixbuf_new ();
+  gtk_tree_view_column_pack_start (column, renderer, FALSE);
+  g_object_set (G_OBJECT (renderer),
+                "stock-size", GTK_ICON_SIZE_DIALOG,
+                NULL);
+  gtk_tree_view_column_set_attributes (column,
+                                       renderer,
+                                       "gicon", GOA_PANEL_ACCOUNTS_MODEL_COLUMN_ICON,
+                                       NULL);
+
   renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
   gtk_tree_view_column_set_attributes (column,
@@ -460,9 +470,12 @@ on_toolbar_add_button_clicked (GtkToolButton *button,
   for (l = providers; l != NULL; l = l->next)
     {
       GoaProvider *provider = GOA_PROVIDER (l->data);
+      gchar *provider_name;
+      provider_name = goa_provider_get_provider_name (provider, NULL);
       gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo_box),
                                  goa_provider_get_provider_type (provider),
-                                 goa_provider_get_name (provider));
+                                 provider_name);
+      g_free (provider_name);
     }
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
 

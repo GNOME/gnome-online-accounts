@@ -406,6 +406,9 @@ update_account_object (GoaDaemon           *daemon,
   gchar *identity;
   gchar *presentation_identity;
   gchar *type;
+  gchar *name;
+  GIcon *icon;
+  gchar *serialized_icon;
   GError *error;
 
   g_return_val_if_fail (GOA_IS_DAEMON (daemon), FALSE);
@@ -417,6 +420,9 @@ update_account_object (GoaDaemon           *daemon,
   identity = NULL;
   type = NULL;
   account = NULL;
+  name = NULL;
+  icon = NULL;
+  serialized_icon = NULL;
 
   goa_debug ("updating %s %d", g_dbus_object_get_object_path (G_DBUS_OBJECT (object)), just_added);
 
@@ -433,11 +439,6 @@ update_account_object (GoaDaemon           *daemon,
       account = goa_object_get_account (GOA_OBJECT (object));
     }
 
-  goa_account_set_id (account, g_strrstr (g_dbus_object_get_object_path (G_DBUS_OBJECT (object)), "/") + 1);
-  goa_account_set_provider_type (account, type);
-  goa_account_set_identity (account, identity);
-  goa_account_set_presentation_identity (account, presentation_identity);
-
   provider = goa_provider_get_for_provider_type (type);
   if (provider == NULL)
     {
@@ -445,6 +446,17 @@ update_account_object (GoaDaemon           *daemon,
       g_warning ("Unsupported account type %s for id %s (no provider)", type, goa_account_get_id (account));
       goto out;
     }
+
+  name = goa_provider_get_provider_name (provider, GOA_OBJECT (object));
+  icon = goa_provider_get_provider_icon (provider, GOA_OBJECT (object));
+  serialized_icon = g_icon_to_string (icon);
+
+  goa_account_set_id (account, g_strrstr (g_dbus_object_get_object_path (G_DBUS_OBJECT (object)), "/") + 1);
+  goa_account_set_provider_type (account, type);
+  goa_account_set_provider_name (account, name);
+  goa_account_set_provider_icon (account, serialized_icon);
+  goa_account_set_identity (account, identity);
+  goa_account_set_presentation_identity (account, presentation_identity);
 
   error = NULL;
   if (!goa_provider_build_object (provider, object, key_file, group, &error))
@@ -459,6 +471,10 @@ update_account_object (GoaDaemon           *daemon,
   ret = TRUE;
 
  out:
+  g_free (serialized_icon);
+  if (icon != NULL)
+    g_object_unref (icon);
+  g_free (name);
   if (provider != NULL)
     g_object_unref (provider);
   g_object_unref (account);

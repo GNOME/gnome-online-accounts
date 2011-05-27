@@ -1,4 +1,6 @@
 
+SUBDIRS = icons
+
 NULL =
 
 desktopdir = $(datadir)/applications

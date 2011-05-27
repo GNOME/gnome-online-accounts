@@ -61,6 +61,9 @@ static void goa_provider_show_account_real (GoaProvider         *provider,
 
 static guint goa_provider_get_credentials_generation_real (GoaProvider *provider);
 
+static GIcon *goa_provider_get_provider_icon_default (GoaProvider *provider,
+                                                      GoaObject   *object);
+
 G_DEFINE_ABSTRACT_TYPE (GoaProvider, goa_provider, G_TYPE_OBJECT);
 
 static void
@@ -75,6 +78,7 @@ goa_provider_class_init (GoaProviderClass *klass)
   klass->ensure_credentials_sync = goa_provider_ensure_credentials_sync_real;
   klass->show_account = goa_provider_show_account_real;
   klass->get_credentials_generation = goa_provider_get_credentials_generation_real;
+  klass->get_provider_icon = goa_provider_get_provider_icon_default;
 }
 
 /**
@@ -96,22 +100,62 @@ goa_provider_get_provider_type (GoaProvider *provider)
 }
 
 /**
- * goa_provider_get_name:
+ * goa_provider_get_provider_name:
  * @provider: A #GoaProvider.
+ * @object: (allow-none): A #GoaObject for an account.
  *
- * Gets a localized name for @provider that is suitable for display in
- * an user interface.
+ * Gets a name for @provider and @object that is suitable for display
+ * in an user interface. The returned value may depend on @object (if
+ * it's not %NULL) - for example, hosted accounts might return a
+ * different name.
  *
  * This is a pure virtual method - a subclass must provide an
  * implementation.
  *
- * Returns: (transfer none): A string owned by @provider, do not free.
+ * Returns: (transfer full): A string that should be freed with g_free().
  */
-const gchar *
-goa_provider_get_name (GoaProvider *provider)
+gchar *
+goa_provider_get_provider_name (GoaProvider *provider,
+                                GoaObject   *object)
 {
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), NULL);
-  return GOA_PROVIDER_GET_CLASS (provider)->get_name (provider);
+  return GOA_PROVIDER_GET_CLASS (provider)->get_provider_name (provider, object);
+}
+
+/**
+ * goa_provider_get_provider_icon:
+ * @provider: A #GoaProvider.
+ * @object: A #GoaObject for an account.
+ *
+ * Gets an icon for @provider and @object that is suitable for display
+ * in an user interface. The returned value may depend on @object -
+ * for example, hosted accounts might return a different icon.
+ *
+ * This is a virtual method with a default implementation that returns
+ * a #GThemedIcon with fallbacks constructed from the name
+ * <literal>goa-account-TYPE</literal> where <literal>TYPE</literal>
+ * is the return value of goa_provider_get_provider_type().
+ *
+ * Returns: (transfer full): An icon that should be freed with g_object_unref().
+ */
+GIcon *
+goa_provider_get_provider_icon (GoaProvider *provider,
+                                GoaObject   *object)
+{
+  g_return_val_if_fail (GOA_IS_PROVIDER (provider), NULL);
+  return GOA_PROVIDER_GET_CLASS (provider)->get_provider_icon (provider, object);
+}
+
+static GIcon *
+goa_provider_get_provider_icon_default (GoaProvider *provider,
+                                        GoaObject   *object)
+{
+  GIcon *ret;
+  gchar *s;
+  s = g_strdup_printf ("goa-account-%s", goa_provider_get_provider_type (provider));
+  ret = g_themed_icon_new_with_default_fallbacks (s);
+  g_free (s);
+  return ret;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

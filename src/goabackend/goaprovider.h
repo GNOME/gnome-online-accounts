@@ -58,7 +58,8 @@ struct _GoaProvider
  * GoaProviderClass:
  * @parent_class: The parent class.
  * @get_provider_type: Virtual function for goa_provider_get_provider_type().
- * @get_name: Virtual function for goa_provider_get_name().
+ * @get_provider_name: Virtual function for goa_provider_get_provider_name().
+ * @get_provider_icon: Virtual function for goa_provider_get_provider_icon().
  * @add_account: Virtual function for goa_provider_add_account().
  * @refresh_account: Virtual function for goa_provider_refresh_account().
  * @build_object: Virtual function for goa_provider_build_object().
@@ -73,7 +74,10 @@ struct _GoaProviderClass
 
   /* pure virtual */
   const gchar *(*get_provider_type) (GoaProvider        *provider);
-  const gchar *(*get_name)          (GoaProvider        *provider);
+  gchar       *(*get_provider_name) (GoaProvider        *provider,
+                                     GoaObject          *object);
+  GIcon       *(*get_provider_icon) (GoaProvider        *provider,
+                                     GoaObject          *object);
   GoaObject   *(*add_account)       (GoaProvider        *provider,
                                      GoaClient          *client,
                                      GtkDialog          *dialog,
@@ -110,7 +114,10 @@ struct _GoaProviderClass
 
 GType        goa_provider_get_type                  (void) G_GNUC_CONST;
 const gchar *goa_provider_get_provider_type         (GoaProvider         *provider);
-const gchar *goa_provider_get_name                  (GoaProvider         *provider);
+gchar       *goa_provider_get_provider_name         (GoaProvider         *provider,
+                                                     GoaObject           *object);
+GIcon       *goa_provider_get_provider_icon         (GoaProvider         *provider,
+                                                     GoaObject           *object);
 GoaObject   *goa_provider_add_account               (GoaProvider         *provider,
                                                      GoaClient           *client,
                                                      GtkDialog           *dialog,

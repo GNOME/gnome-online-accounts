@@ -71,10 +71,11 @@ get_provider_type (GoaProvider *_provider)
   return "twitter";
 }
 
-static const gchar *
-get_name (GoaProvider *_provider)
+static gchar *
+get_provider_name (GoaProvider *_provider,
+                   GoaObject   *object)
 {
-  return _("Twitter Account");
+  return g_strdup (_("Twitter"));
 }
 
 static const gchar *
@@ -274,7 +275,7 @@ goa_twitter_provider_class_init (GoaTwitterProviderClass *klass)
 
   provider_class = GOA_PROVIDER_CLASS (klass);
   provider_class->get_provider_type     = get_provider_type;
-  provider_class->get_name              = get_name;
+  provider_class->get_provider_name     = get_provider_name;
   provider_class->build_object          = build_object;
   provider_class->show_account          = show_account;
 

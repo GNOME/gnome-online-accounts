@@ -71,10 +71,11 @@ get_provider_type (GoaProvider *_provider)
   return "facebook";
 }
 
-static const gchar *
-get_name (GoaProvider *_provider)
+static gchar *
+get_provider_name (GoaProvider *_provider,
+                   GoaObject   *object)
 {
-  return _("Facebook Account");
+  return g_strdup (_("Facebook"));
 }
 
 static const gchar *
@@ -273,7 +274,7 @@ goa_facebook_provider_class_init (GoaFacebookProviderClass *klass)
 
   provider_class = GOA_PROVIDER_CLASS (klass);
   provider_class->get_provider_type          = get_provider_type;
-  provider_class->get_name                   = get_name;
+  provider_class->get_provider_name          = get_provider_name;
   provider_class->build_object               = build_object;
   provider_class->show_account               = show_account;
 
