@@ -52,6 +52,7 @@ content_files =			\
 
 expand_content_files =		\
 	goa-daemon.xml		\
+	goa-overview.xml	\
 	$(NULL)
 
 extra_files =			\

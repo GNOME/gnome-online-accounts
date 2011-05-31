@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<!DOCTYPE part PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY version SYSTEM "version.xml">
+]>
+<part id="overview">
+  <title>GNOME Online Accounts Overview</title>
+
+  <chapter id="overview-writing">
+    <title>Writing GOA applications</title>
+    <para>
+      The term <emphasis>GOA application</emphasis> is used to
+      describe applications or libraries that are using the <link
+      linkend="ref-dbus">GNOME Online Accounts D-Bus APIs</link>
+      either directly or through the <link
+      linkend="ref-library">supplied client library</link>.
+    </para>
+
+    <sect1>
+      <title>Account Objects</title>
+      <para>
+        A GOA application typically creates #GoaClient object to get a
+        list of accounts and listen for changes. Each account provide
+        one or more specific services (such as <link
+        linkend="gdbus-org.gnome.OnlineAccounts.Mail">mail</link>,
+        <link
+        linkend="gdbus-org.gnome.OnlineAccounts.Calendar">calendaring</link>
+        or <link
+        linkend="gdbus-org.gnome.OnlineAccounts.Contacts">contacts</link>)
+        so the application will need to set up a filter for the
+        services it is interested in. For example, a mail application
+        would only be interested in GOA accounts with mail- and
+        contacts-services, not accounts with
+        calendaring-services. Applications can use methods on the
+        #GoaObject type (such as goa_object_peek_mail()) to check what
+        kind of services an account provides. Note that this list can
+        change at run-time if e.g. the user toggles a <guilabel>Use
+        account for Mail</guilabel> check-button.
+      </para>
+      <para>
+        Applications may use the <link
+        linkend="gdbus-property-org-gnome-OnlineAccounts-Account.Id">Account.Id</link>
+        property as a unique key to store information obtained from
+        an account.
+      </para>
+      <para>
+        Applications must not destroy data if an account object is
+        removed (e.g. when the #GoaClient::account-removed signal is
+        emitted) - for example, if the <command>goa-daemon</command>
+        program crashes or is restarted on software upgrade, account
+        objects will be removed only to be added back the next time
+        <command>goa-daemon</command> is started.
+      </para>
+      <para>
+        Applications should use the
+        <link linkend="gdbus-property-org-gnome-OnlineAccounts-Account.ProviderName">Account.ProviderIcon</link>,
+        <link linkend="gdbus-property-org-gnome-OnlineAccounts-Account.ProviderName">Account.ProviderName</link>
+        and
+        <link linkend="gdbus-property-org-gnome-OnlineAccounts-Account.ProviderName">Account.PresentationIdentity</link>
+        properties when presenting an account in an user interface.
+        For example, for a hypothetical online services provider Acme,
+        this would be the Acme Logo, the word "Acme" and the identity
+        could be either an email address such as
+        <email><![CDATA[some.name@acme.com]]></email> or an user
+        handle such as <literal>davidz25</literal> or
+        <literal>chunkylover53</literal>.
+      </para>
+    </sect1>
+
+    <sect1>
+      <title>Accessing Services</title>
+      <para>
+        A GOA application needs to handle service-specific protocols
+        and quirks itself. Some service-types, such as <link
+        linkend="gdbus-org.gnome.OnlineAccounts.Mail">mail</link>, may
+        use standard protocols such as <ulink
+        url="http://tools.ietf.org/html/rfc3501">IMAP</ulink> or
+        <ulink url="http://tools.ietf.org/html/rfc5321">SMTP</ulink>
+        but they also may not. GOA applications should always look at
+        the <link
+        linkend="gdbus-property-org-gnome-OnlineAccounts-Account.ProviderType">Account.ProviderType</link>
+        property to infer what kind of protocol and endpoint to use.
+      </para>
+    </sect1>
+
+    <sect1>
+      <title>Credentials Handling</title>
+      <para>
+        For accessing a service, the application typically needs to
+        present credentials. The application can request the
+        credentials via GOA. First the application should invoke the
+        <link
+        linkend="gdbus-method-org-gnome-OnlineAccounts-Account.EnsureCredentials">Account.EnsureCredentials()</link>
+        method on the account object. If this succeeds, the
+        application can request the credentials using e.g.  <link
+        linkend="gdbus-method-org-gnome-OnlineAccounts-OAuthBased.GetAccessToken">OAuthBased.GetAccessToken()</link>
+        or <link
+        linkend="gdbus-method-org-gnome-OnlineAccounts-OAuth2Based.GetAccessToken">OAuth2Based.GetAccessToken()</link>
+        depending on what kind of credentials the account is using.
+        If the service returns an authorization error (say, the access
+        token expired), the application should call <link
+        linkend="gdbus-method-org-gnome-OnlineAccounts-Account.EnsureCredentials">Account.EnsureCredentials()</link>
+        again to e.g. renew the credentials.
+      </para>
+      <para>
+        On the other hand, if <link
+        linkend="gdbus-method-org-gnome-OnlineAccounts-Account.EnsureCredentials">Account.EnsureCredentials()</link>
+        ever fails, then the user will get notified that there is a
+        problem with the account so he can take actions to fix it.
+        Applications can listen to changes on the <link
+        linkend="gdbus-property-org-gnome-OnlineAccounts-Account.AttentionNeeded">Account.AttentionNeeded</link>
+        property to get notified when it's time to try accessing the
+        account again.
+      </para>
+      <para>
+        Note that the implementation for a provider may switch from
+        e.g. OAuth to OAuth2 in a newer release of GNOME Online
+        Accounts. Therefore, applications must never assume that the
+        #GoaObject for an account implements a fixed set of
+        interfaces.
+      </para>
+    </sect1>
+
+  </chapter>
+</part>

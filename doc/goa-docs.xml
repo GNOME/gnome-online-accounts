@@ -52,9 +52,7 @@
     </legalnotice>
   </bookinfo>
 
-  <part id="overview">
-    <title>GNOME Online Accounts Overview</title>
-  </part>
+  <xi:include href="xml/goa-overview.xml"/>
 
   <part id="ref-dbus">
     <title>D-Bus API Reference</title>
@@ -98,8 +96,8 @@
 
     <chapter>
       <title>Core Interfaces</title>
-      <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.Manager.xml"/>
       <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.Account.xml"/>
+      <xi:include href="../src/goa/goa-generated-doc-org.gnome.OnlineAccounts.Manager.xml"/>
     </chapter>
     <chapter>
       <title>Credentials Interfaces</title>
