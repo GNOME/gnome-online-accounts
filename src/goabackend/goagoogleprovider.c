@@ -81,13 +81,13 @@ get_provider_name (GoaProvider *_provider,
 static const gchar *
 get_consumer_key (GoaOAuthProvider *provider)
 {
-  return "anonymous";
+  return GOA_GOOGLE_CONSUMER_KEY;
 }
 
 static const gchar *
 get_consumer_secret (GoaOAuthProvider *provider)
 {
-  return "anonymous";
+  return GOA_GOOGLE_CONSUMER_SECRET;
 }
 
 static const gchar *

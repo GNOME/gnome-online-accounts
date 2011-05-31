@@ -81,13 +81,13 @@ get_provider_name (GoaProvider *_provider,
 static const gchar *
 get_consumer_key (GoaOAuthProvider *provider)
 {
-  return "tlVEAXvkgqr0VUFyqVQ";
+  return GOA_TWITTER_CONSUMER_KEY;
 }
 
 static const gchar *
 get_consumer_secret (GoaOAuthProvider *provider)
 {
-  return "RN2FBARWy7scDmWFwfhIA6Qwf6kPYxZ0PIpVWzgpdU";
+  return GOA_TWITTER_CONSUMER_SECRET;
 }
 
 static const gchar *

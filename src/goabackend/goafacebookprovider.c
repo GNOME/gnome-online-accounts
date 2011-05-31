@@ -111,13 +111,13 @@ get_scope (GoaOAuth2Provider *provider)
 static const gchar *
 get_client_id (GoaOAuth2Provider *provider)
 {
-  return "103995033022129";
+  return GOA_FACEBOOK_CLIENT_ID;
 }
 
 static const gchar *
 get_client_secret (GoaOAuth2Provider *provider)
 {
-  return "c3a9f8d49188a6dd8b596df48a90b94a";
+  return GOA_FACEBOOK_CLIENT_SECRET;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

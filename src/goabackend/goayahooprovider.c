@@ -81,13 +81,13 @@ get_provider_name (GoaProvider *_provider,
 static const gchar *
 get_consumer_key (GoaOAuthProvider *provider)
 {
-  return "dj0yJmk9VnBYMGpGRVFBUVl3JmQ9WVdrOWNWZDZiVTUwTldNbWNHbzlPVFF5TURrNE5UWXkmcz1jb25zdW1lcnNlY3JldCZ4PTQ0";
+  return GOA_YAHOO_CONSUMER_KEY;
 }
 
 static const gchar *
 get_consumer_secret (GoaOAuthProvider *provider)
 {
-  return "33dd9ebe9f5724deabe657eff1de7c3f151cf7eb";
+  return GOA_YAHOO_CONSUMER_SECRET;
 }
 
 static const gchar *

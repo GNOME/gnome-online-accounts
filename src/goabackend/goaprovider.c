@@ -584,11 +584,20 @@ ensure_ep_and_builtins (void)
       extension_point = g_io_extension_point_register (GOA_PROVIDER_EXTENSION_POINT_NAME);
       g_io_extension_point_set_required_type (extension_point, GOA_TYPE_PROVIDER);
 
+#ifdef GOA_GOOGLE_ENABLED
       type = GOA_TYPE_GOOGLE_PROVIDER;
-      type = GOA_TYPE_FACEBOOK_PROVIDER;
+#endif
+#ifdef GOA_YAHOO_ENABLED
       type = GOA_TYPE_YAHOO_PROVIDER;
+#endif
+#ifdef GOA_TWITTER_ENABLED
       type = GOA_TYPE_TWITTER_PROVIDER;
-      type = type; /* for -Wunused-but-set-variable */
+#endif
+#ifdef GOA_FACEBOOK_ENABLED
+      type = GOA_TYPE_FACEBOOK_PROVIDER;
+#endif
+
+      type = type; /* silence -Wunused-but-set-variable */
 
       g_once_init_leave (&once_init_value, 1);
     }
