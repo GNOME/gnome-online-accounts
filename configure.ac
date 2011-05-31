@@ -89,61 +89,61 @@ if test "$enable_google" != "no"; then
 fi
 
 # Twitter
-with_twitter_consumer_key=tlVEAXvkgqr0VUFyqVQ
+with_twitter_consumer_key=not_set
 AC_ARG_WITH([twitter-consumer-key=KEY],
             [AS_HELP_STRING([--with-twitter-consumer-key],
                             [Twitter OAuth 1.0 consumer key])],
                             [],
                             [])
 AC_DEFINE_UNQUOTED(GOA_TWITTER_CONSUMER_KEY, ["$with_twitter_consumer_key"], [Twitter OAuth 1.0 consumer key])
-with_twitter_consumer_secret=RN2FBARWy7scDmWFwfhIA6Qwf6kPYxZ0PIpVWzgpdU
+with_twitter_consumer_secret=not_set
 AC_ARG_WITH([twitter-consumer-secret=SECRET],
             [AS_HELP_STRING([--with-twitter-consumer-secret],
                             [Twitter OAuth 1.0 consumer secret])],
                             [],
                             [])
 AC_DEFINE_UNQUOTED(GOA_TWITTER_CONSUMER_SECRET, ["$with_twitter_consumer_secret"], [Twitter OAuth 1.0 consumer secret])
-AC_ARG_ENABLE([twitter], [AS_HELP_STRING([--enable-twitter], [Enable Twitter provider])], [], [enable_twitter=yes])
+AC_ARG_ENABLE([twitter], [AS_HELP_STRING([--enable-twitter], [Enable Twitter provider])], [], [enable_twitter=no])
 if test "$enable_twitter" != "no"; then
   AC_DEFINE(GOA_TWITTER_ENABLED, 1, [Enable Twitter data provider])
 fi
 
 # Yahoo
-with_yahoo_consumer_key=dj0yJmk9VnBYMGpGRVFBUVl3JmQ9WVdrOWNWZDZiVTUwTldNbWNHbzlPVFF5TURrNE5UWXkmcz1jb25zdW1lcnNlY3JldCZ4PTQ0
+with_yahoo_consumer_key=not_set
 AC_ARG_WITH([yahoo-consumer-key=KEY],
             [AS_HELP_STRING([--with-yahoo-consumer-key],
                             [Yahoo OAuth 1.0 consumer key])],
                             [],
                             [])
 AC_DEFINE_UNQUOTED(GOA_YAHOO_CONSUMER_KEY, ["$with_yahoo_consumer_key"], [Yahoo OAuth 1.0 consumer key])
-with_yahoo_consumer_secret=33dd9ebe9f5724deabe657eff1de7c3f151cf7eb
+with_yahoo_consumer_secret=not_set
 AC_ARG_WITH([yahoo-consumer-secret=SECRET],
             [AS_HELP_STRING([--with-yahoo-consumer-secret],
                             [Yahoo OAuth 1.0 consumer secret])],
                             [],
                             [])
 AC_DEFINE_UNQUOTED(GOA_YAHOO_CONSUMER_SECRET, ["$with_yahoo_consumer_secret"], [Yahoo OAuth 1.0 consumer secret])
-AC_ARG_ENABLE([yahoo], [AS_HELP_STRING([--enable-yahoo], [Enable Yahoo provider])], [], [enable_yahoo=yes])
+AC_ARG_ENABLE([yahoo], [AS_HELP_STRING([--enable-yahoo], [Enable Yahoo provider])], [], [enable_yahoo=no])
 if test "$enable_yahoo" != "no"; then
   AC_DEFINE(GOA_YAHOO_ENABLED, 1, [Enable Yahoo data provider])
 fi
 
 # Facebook
-with_facebook_client_id=103995033022129
+with_facebook_client_id=not_set
 AC_ARG_WITH([facebook-client-id=ID],
             [AS_HELP_STRING([--with-facebook-client-id],
                             [Facebook OAuth 2.0 client id])],
                             [],
                             [])
 AC_DEFINE_UNQUOTED(GOA_FACEBOOK_CLIENT_ID, ["$with_facebook_client_id"], [Facebook OAuth 2.0 client id])
-with_facebook_client_secret=c3a9f8d49188a6dd8b596df48a90b94a
+with_facebook_client_secret=not_set
 AC_ARG_WITH([facebook-client-secret=SECRET],
             [AS_HELP_STRING([--with-facebook-client-secret],
                             [Facebook OAuth 2.0 client secret])],
                             [],
                             [])
 AC_DEFINE_UNQUOTED(GOA_FACEBOOK_CLIENT_SECRET, ["$with_facebook_client_secret"], [Facebook OAuth 2.0 client secret])
-AC_ARG_ENABLE([facebook], [AS_HELP_STRING([--enable-facebook], [Enable Facebook provider])], [], [enable_facebook=yes])
+AC_ARG_ENABLE([facebook], [AS_HELP_STRING([--enable-facebook], [Enable Facebook provider])], [], [enable_facebook=no])
 if test "$enable_facebook" != "no"; then
   AC_DEFINE(GOA_FACEBOOK_ENABLED, 1, [Enable Facebook data provider])
 fi

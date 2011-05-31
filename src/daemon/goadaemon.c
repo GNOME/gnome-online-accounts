@@ -443,7 +443,7 @@ update_account_object (GoaDaemon           *daemon,
   if (provider == NULL)
     {
       /* TODO: syslog */
-      g_warning ("Unsupported account type %s for id %s (no provider)", type, goa_account_get_id (account));
+      goa_warning ("Unsupported account type %s for identity %s (no provider)", type, identity);
       goto out;
     }
 
