@@ -18,7 +18,7 @@ INCLUDES = 							\
 
 # ----------------------------------------------------------------------------------------------------
 
-dbus_built_sources = goa-generated.c goa-generated.h
+dbus_built_sources = goa-generated.c goa-generated.h goa-generated-doc-org.gnome.OnlineAccounts.Account.xml
 BUILT_SOURCES = $(dbus_built_sources)
 
 $(dbus_built_sources) : Makefile.am $(top_srcdir)/data/dbus-interfaces.xml
