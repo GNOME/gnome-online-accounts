@@ -367,7 +367,7 @@ remove_account (GoaPanelAccountsModel  *model,
   GtkTreeIter iter;
   if (!find_iter_for_object (model, object, &iter))
     {
-      g_warning ("Error removing object %s - not in tree", g_dbus_object_get_object_path (G_DBUS_OBJECT (object)));
+      goa_warning ("Error removing object %s - not in tree", g_dbus_object_get_object_path (G_DBUS_OBJECT (object)));
     }
   else
     {
@@ -382,7 +382,7 @@ update_account (GoaPanelAccountsModel  *model,
   GtkTreeIter iter;
   if (!find_iter_for_object (model, object, &iter))
     {
-      g_warning ("Error updating object %s - not in tree", g_dbus_object_get_object_path (G_DBUS_OBJECT (object)));
+      goa_warning ("Error updating object %s - not in tree", g_dbus_object_get_object_path (G_DBUS_OBJECT (object)));
     }
   else
     {

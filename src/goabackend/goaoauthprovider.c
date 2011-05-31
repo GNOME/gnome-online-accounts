@@ -86,47 +86,6 @@ is_authorization_error (GError *error)
   return ret;
 }
 
-G_GNUC_UNUSED static void
-print_header (const gchar *name,
-              const gchar *value,
-              gpointer     user_data)
-{
-  g_print ("header: `%s' -> `%s'\n", name, value);
-}
-
-G_GNUC_UNUSED static void
-_print_response (RestProxyCall *call)
-{
-  GHashTable *headers;
-  GHashTable *form;
-  GHashTableIter iter;
-  const gchar *key;
-  const gchar *value;
-  const gchar *payload;
-
-  headers = rest_proxy_call_get_response_headers (call);
-  if (headers != NULL)
-    {
-      g_hash_table_iter_init (&iter, headers);
-      while (g_hash_table_iter_next (&iter, (gpointer) &key, (gpointer) &value))
-        g_print ("Header %s: %s\n", key, value);
-      g_hash_table_unref (headers);
-    }
-
-  payload = rest_proxy_call_get_payload (call);
-  if (payload != NULL)
-    {
-      form = soup_form_decode (payload);
-      if (form != NULL)
-        {
-          g_hash_table_iter_init (&iter, form);
-          while (g_hash_table_iter_next (&iter, (gpointer) &key, (gpointer) &value))
-            g_print ("Form   %s: %s\n", key, value);
-          g_hash_table_unref (form);
-        }
-    }
-}
-
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
@@ -793,8 +752,6 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
    * call may take some time. So hide the dialog immediately.
    */
   gtk_widget_hide (GTK_WIDGET (dialog));
-
-  g_print ("woot verifier is %s\n", data.oauth_verifier);
 
   /* OK, we now have the request token... we can exchange that for a
    * (short-lived) access token and session_handle (used to refresh the

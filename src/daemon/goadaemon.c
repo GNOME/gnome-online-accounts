@@ -20,12 +20,6 @@
  * Author: David Zeuthen <davidz@redhat.com>
  */
 
-/* TODO:
- *
- * - Document files, directories and file formats somewhere.
- *   - $HOME/.config/goa-1.0/accounts.conf
- */
-
 #include "config.h"
 #include <glib/gi18n.h>
 #include <libnotify/notify.h>
@@ -149,11 +143,10 @@ create_monitor (const gchar *path, gboolean is_dir)
 
   if (monitor == NULL)
     {
-      /* TODO: syslog */
-      g_warning ("Error monitoring %s at %s: %s (%s, %d)",
-                 is_dir ? "directory" : "file",
-                 path,
-                 error->message, g_quark_to_string (error->domain), error->code);
+      goa_warning ("Error monitoring %s at %s: %s (%s, %d)",
+                   is_dir ? "directory" : "file",
+                   path,
+                   error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
     }
   g_object_unref (file);
@@ -224,8 +217,7 @@ goa_daemon_init (GoaDaemon *daemon)
   path = g_strdup_printf ("%s/goa-1.0", g_get_user_config_dir ());
   if (g_mkdir_with_parents (path, 0755) != 0)
     {
-      /* TODO: syslog */
-      g_warning ("Error creating directory %s: %m", path);
+      goa_warning ("Error creating directory %s: %m", path);
     }
   g_free (path);
 
@@ -353,10 +345,9 @@ add_config_file (const gchar   *path,
     {
       if (!(error->domain == G_FILE_ERROR && error->code == G_FILE_ERROR_NOENT))
         {
-          /* TODO: syslog */
-          g_warning ("Error loading %s: %s (%s, %d)",
-                     path,
-                     error->message, g_quark_to_string (error->domain), error->code);
+          goa_warning ("Error loading %s: %s (%s, %d)",
+                       path,
+                       error->message, g_quark_to_string (error->domain), error->code);
         }
       g_error_free (error);
       g_key_file_free (key_file);
@@ -378,8 +369,7 @@ add_config_file (const gchar   *path,
             }
           else
             {
-              /* TODO: syslog */
-              g_warning ("Unexpected group \"%s\" in file %s", groups[n], path);
+              goa_warning ("Unexpected group \"%s\" in file %s", groups[n], path);
               g_free (groups[n]);
             }
         }
@@ -442,7 +432,6 @@ update_account_object (GoaDaemon           *daemon,
   provider = goa_provider_get_for_provider_type (type);
   if (provider == NULL)
     {
-      /* TODO: syslog */
       goa_warning ("Unsupported account type %s for identity %s (no provider)", type, identity);
       goto out;
     }
@@ -461,9 +450,8 @@ update_account_object (GoaDaemon           *daemon,
   error = NULL;
   if (!goa_provider_build_object (provider, object, key_file, group, &error))
     {
-      /* TODO: syslog */
-      g_warning ("Error parsing account: %s (%s, %d)",
-                 error->message, g_quark_to_string (error->domain), error->code);
+      goa_warning ("Error parsing account: %s (%s, %d)",
+                   error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }
@@ -530,8 +518,7 @@ process_config_entries (GoaDaemon  *daemon,
       object_path = g_strdup_printf ("/org/gnome/OnlineAccounts/Accounts/%s", id + sizeof "Account " - 1);
       if (strstr (id + sizeof "Account " - 1, "/") != NULL || !g_variant_is_object_path (object_path))
         {
-          /* TODO: syslog */
-          g_warning ("`%s' is not a valid account identifier", id);
+          goa_warning ("`%s' is not a valid account identifier", id);
           g_free (object_path);
           continue;
         }
@@ -833,8 +820,8 @@ notification_cb (NotifyNotification *notification,
                           ctx,
                           &error))
     {
-      g_warning ("Error launching: %s (%s, %d)",
-                 error->message, g_quark_to_string (error->domain), error->code);
+      goa_warning ("Error launching: %s (%s, %d)",
+                   error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
     }
   g_object_unref (app);
@@ -898,8 +885,8 @@ goa_daemon_update_notifications (GoaDaemon *daemon)
           error = NULL;
           if (!notify_notification_show (daemon->notification, &error))
             {
-              g_warning ("Error showing notification: %s (%s, %d)",
-                         error->message, g_quark_to_string (error->domain), error->code);
+              goa_warning ("Error showing notification: %s (%s, %d)",
+                           error->message, g_quark_to_string (error->domain), error->code);
               g_error_free (error);
               g_object_unref (daemon->notification);
               daemon->notification = NULL;
@@ -921,8 +908,8 @@ goa_daemon_update_notifications (GoaDaemon *daemon)
           error = NULL;
           if (!notify_notification_close (daemon->notification, &error))
             {
-              g_warning ("Error closing notification: %s (%s, %d)",
-                         error->message, g_quark_to_string (error->domain), error->code);
+              goa_warning ("Error closing notification: %s (%s, %d)",
+                           error->message, g_quark_to_string (error->domain), error->code);
               g_error_free (error);
             }
           g_signal_handlers_disconnect_by_func (daemon->notification,
@@ -1101,10 +1088,9 @@ ensure_credentials_cb (GoaProvider   *provider,
             {
               goa_account_set_attention_needed (account, TRUE);
               g_dbus_interface_skeleton_flush (G_DBUS_INTERFACE_SKELETON (account));
-              /* TODO: syslog */
-              g_print ("%s: Setting AttentionNeeded to TRUE because EnsureCredentials() failed with: %s (%s, %d)\n",
-                       g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)),
-                       error->message, g_quark_to_string (error->domain), error->code);
+              goa_notice ("%s: Setting AttentionNeeded to TRUE because EnsureCredentials() failed with: %s (%s, %d)",
+                          g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)),
+                          error->message, g_quark_to_string (error->domain), error->code);
             }
         }
       g_dbus_method_invocation_return_gerror (data->invocation, error);
@@ -1120,9 +1106,8 @@ ensure_credentials_cb (GoaProvider   *provider,
         {
           goa_account_set_attention_needed (account, FALSE);
           g_dbus_interface_skeleton_flush (G_DBUS_INTERFACE_SKELETON (account));
-          /* TODO: syslog */
-          g_print ("%s: Setting AttentionNeeded to FALSE because EnsureCredentials() succeded\n",
-                   g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)));
+          goa_notice ("%s: Setting AttentionNeeded to FALSE because EnsureCredentials() succeded\n",
+                      g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)));
         }
       goa_account_complete_ensure_credentials (goa_object_peek_account (data->object),
                                                data->invocation,
@@ -1144,7 +1129,6 @@ on_account_handle_ensure_credentials (GoaAccount            *account,
   provider = goa_provider_get_for_provider_type (goa_account_get_provider_type (account));
   if (provider == NULL)
     {
-      /* TODO: syslog */
       g_dbus_method_invocation_return_error (invocation,
                                              GOA_ERROR,
                                              GOA_ERROR_FAILED,

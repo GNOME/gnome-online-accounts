@@ -107,8 +107,8 @@ goa_panel_init (GoaPanel *panel)
                                  PACKAGE_DATA_DIR "/goa/goapanel.ui",
                                  &error) == 0)
     {
-      g_warning ("Error loading UI file: %s (%s, %d)",
-                 error->message, g_quark_to_string (error->domain), error->code);
+      goa_warning ("Error loading UI file: %s (%s, %d)",
+                   error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }
@@ -146,8 +146,8 @@ goa_panel_init (GoaPanel *panel)
   panel->client = goa_client_new_sync (NULL /* GCancellable */, &error);
   if (panel->client == NULL)
     {
-      g_warning ("Error getting a GoaClient: %s (%s, %d)",
-                 error->message, g_quark_to_string (error->domain), error->code);
+      goa_warning ("Error getting a GoaClient: %s (%s, %d)",
+                   error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }

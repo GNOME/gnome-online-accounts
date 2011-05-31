@@ -547,7 +547,6 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
   /* TODO: use oauth2_proxy_extract_access_token() */
 
   requested_uri = webkit_network_request_get_uri (request);
-  //g_debug ("requested_uri is %s", requested_uri);
   redirect_uri = goa_oauth2_provider_get_redirect_uri (data->provider);
   if (g_str_has_prefix (requested_uri, redirect_uri))
     {
@@ -640,7 +639,6 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
                                                      escaped_redirect_uri,
                                                      escaped_client_id,
                                                      escaped_scope);
-  //g_debug ("url = %s", url);
 
   if (goa_oauth2_provider_get_use_external_browser (provider))
     {
