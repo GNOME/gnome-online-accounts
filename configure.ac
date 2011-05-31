@@ -1,4 +1,4 @@
-AC_INIT([goa],[0.1],[https://bugzilla.gnome.org/enter_bug.cgi?product=goa],[goa])
+AC_INIT([gnome-online-accounts],[3.1.0],[https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts],[gnome-online-accounts])
 
 AM_INIT_AUTOMAKE([1.9 foreign dist-bzip2 no-dist-gzip])
 AC_CONFIG_SRCDIR([src])
@@ -69,7 +69,7 @@ GOBJECT_INTROSPECTION_CHECK([0.6.2])
 #
 
 IT_PROG_INTLTOOL([$INTLTOOL_REQUIRED])
-GETTEXT_PACKAGE=goa
+GETTEXT_PACKAGE=gnome-online-accounts
 AC_SUBST([GETTEXT_PACKAGE])
 AM_GLIB_GNU_GETTEXT
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[gettext domain])
