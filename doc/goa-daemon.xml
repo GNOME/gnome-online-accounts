@@ -25,16 +25,48 @@
   </refsynopsisdiv>
 
 
-  <refsect1><title>DESCRIPTION</title>
+  <refsect1>
+    <title>DESCRIPTION</title>
     <para>
-      <emphasis><refentrytitle>goa-daemon</refentrytitle></emphasis>
-      provides the <emphasis>org.gnome.OnlineAccounts</emphasis> name
-      on the session message bus. Users or administrators should never
-      need to start this daemon as it will be automatically started by
+      The <command>goa-daemon</command> program provides the
+      <emphasis>org.gnome.OnlineAccounts</emphasis> name on the
+      session message bus. Users or administrators should never need
+      to start this daemon as it will be automatically started by
       <citerefentry><refentrytitle>dbus-daemon</refentrytitle><manvolnum>1</manvolnum></citerefentry>
       whenever an application sends a D-Bus message to the
       <emphasis>org.gnome.OnlineAccounts</emphasis> name on the
       session bus.
+    </para>
+  </refsect1>
+
+  <refsect1>
+    <title>CONFIGURATION FILE</title>
+    <para>
+      The <command>goa-daemon</command> program stores configuration
+      in the
+      <filename>$XDG_CONFIG_HOME/goa-1.0/accounts.conf</filename>
+      (typically
+      <filename>~/.config/goa-1.0/accounts.conf</filename>)
+      file. The format of this file is private and 3rd party programs
+      or libraries should never read it. This file does not contain
+      any passwords or secrets.
+    </para>
+    <para>
+     See the <ulink
+     url="http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html">XDG
+     Base Directory Specification</ulink> for more information about
+     <literal>$XDG_CONFIG_HOME</literal>.
+    </para>
+  </refsect1>
+
+  <refsect1>
+    <title>SECRETS</title>
+    <para>
+      The <command>goa-daemon</command> program stores secrets (such as
+      OAuth tokens) in
+      <ulink url="https://live.gnome.org/GnomeKeyring">GNOME Keyring</ulink>.
+      The format of the stored secrets is private and 3rd party
+      programs or libraries should never read, modify or delete these secrets.
     </para>
   </refsect1>
 
@@ -72,7 +104,7 @@
     <para>
       Please send bug reports to either the distribution bug tracker
       or the upstream bug tracker at
-      <ulink url="https://bugzilla.gnome.org/enter_bug.cgi?product=goa"></ulink>.
+      <ulink url="https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts"></ulink>.
     </para>
   </refsect1>
 
