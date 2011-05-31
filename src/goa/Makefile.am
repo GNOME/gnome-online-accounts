@@ -1,6 +1,7 @@
 
 NULL =
 CLEANFILES =
+EXTRA_DIST =
 
 INCLUDES = 							\
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
@@ -45,6 +46,8 @@ goaenumtypes.c: goaenums.h goaenumtypes.h goaenumtypes.c.template
 enum_built_sources =							\
 	goaenumtypes.h			goaenumtypes.c			\
 	$(NULL)
+
+EXTRA_DIST += goaenumtypes.h.template goaenumtypes.c.template
 
 # ----------------------------------------------------------------------------------------------------
 
@@ -113,6 +116,9 @@ Goa-1.0.gir: libgoa-1.0.la $(INTROSPECTION_SCANNER) Makefile.am
 		--libtool=$(top_builddir)/libtool		\
 		--c-include='goa/goa.h'				\
                 -I$(top_srcdir)/src	 			\
+                -I$(top_srcdir)/src/goa	 			\
+                -I$(top_builddir)/src	 			\
+                -I$(top_builddir)/src/goa 			\
 	        -DGOA_COMPILATION                   		\
 		$(libgoa_1_0_la_SOURCES)			\
 		$(NULL)

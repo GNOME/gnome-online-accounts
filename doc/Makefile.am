@@ -65,9 +65,16 @@ man_MANS = 			\
 .xml.8:
 	$(XSLTPROC) -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
 
+if ENABLE_GTK_DOC
 include $(top_srcdir)/gtk-doc.make
+else
+EXTRA_DIST =
+CLEANFILES =
+endif
 
 EXTRA_DIST +=			\
+	goa-daemon.xml		\
+	goa-overview.xml	\
 	version.xml.in		\
 	$(NULL)
 
@@ -85,5 +92,6 @@ CLEANFILES +=   		\
 	$(DOC_MODULE).prerequisites	\
 	$(DOC_MODULE).signals		\
 	*.stamp				\
+	*.8				\
 	-rf xml html tmpl		\
 	$(NULL)

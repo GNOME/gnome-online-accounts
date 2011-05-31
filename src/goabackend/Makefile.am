@@ -1,6 +1,7 @@
 
 NULL =
 CLEANFILES =
+EXTRA_DIST =
 
 INCLUDES = 							\
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
@@ -31,6 +32,8 @@ goabackendenumtypes.c: goabackendenums.h goabackendenumtypes.c.template goabacke
 enum_built_sources =							\
 	goabackendenumtypes.h		goabackendenumtypes.c		\
 	$(NULL)
+
+EXTRA_DIST += goabackendenumtypes.h.template goabackendenumtypes.c.template
 
 # ----------------------------------------------------------------------------------------------------
 
