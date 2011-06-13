@@ -30,14 +30,16 @@ libgoa_panel_la_CFLAGS =					\
 	$(GNOME_CONTROL_CENTER_CFLAGS)				\
 	$(NULL)
 
-libgoa_panel_la_LDFLAGS = 					\
-	`pkg-config --libs webkitgtk-3.0` \
+libgoa_panel_la_LDFLAGS = 			\
+	-avoid-version -no-undefined		\
+	-export-symbols-regex '^g_io_module_(load|unload)'
 	$(NULL)
 
 libgoa_panel_la_LIBADD = 					\
 	$(GLIB_LIBS) 						\
 	$(GTK_LIBS)						\
 	$(GNOME_CONTROL_CENTER_LIBS)				\
+	$(WEBKITGTK_LIBS)					\
 	$(top_builddir)/src/goa/libgoa-1.0.la			\
 	$(top_builddir)/src/goabackend/libgoa-backend-1.0.la	\
 	$(NULL)
