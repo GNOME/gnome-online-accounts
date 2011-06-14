@@ -253,15 +253,18 @@ build_object (GoaProvider         *provider,
   GoaMail *mail;
   GoaCalendar *calendar;
   GoaContacts *contacts;
+  GoaChat *chat;
   gboolean ret;
   gboolean mail_enabled;
   gboolean calendar_enabled;
   gboolean contacts_enabled;
+  gboolean chat_enabled;
 
   account = NULL;
   mail = NULL;
   calendar = NULL;
   contacts = NULL;
+  chat = NULL;
   ret = FALSE;
 
   /* Chain up */
@@ -338,10 +341,29 @@ build_object (GoaProvider         *provider,
         goa_object_skeleton_set_contacts (object, NULL);
     }
 
+  /* Chat */
+  chat = goa_object_get_chat (GOA_OBJECT (object));
+  chat_enabled = g_key_file_get_boolean (key_file, group, "ChatEnabled", NULL);
+  if (chat_enabled)
+    {
+      if (chat == NULL)
+        {
+          chat = goa_chat_skeleton_new ();
+          goa_object_skeleton_set_chat (object, chat);
+        }
+    }
+  else
+    {
+      if (chat != NULL)
+        goa_object_skeleton_set_chat (object, NULL);
+    }
+
 
   ret = TRUE;
 
  out:
+  if (chat != NULL)
+    g_object_unref (chat);
   if (contacts != NULL)
     g_object_unref (contacts);
   if (calendar != NULL)
@@ -378,6 +400,7 @@ show_account (GoaProvider         *provider,
   goa_util_add_row_switch_from_keyfile (table, object, _("Mail"), "MailEnabled");
   goa_util_add_row_switch_from_keyfile (table, object, _("Calendar"), "CalendarEnabled");
   goa_util_add_row_switch_from_keyfile (table, object, _("Contacts"), "ContactsEnabled");
+  goa_util_add_row_switch_from_keyfile (table, object, _("Chat"), "ChatEnabled");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -389,6 +412,7 @@ add_account_key_values (GoaOAuthProvider  *provider,
   g_variant_builder_add (builder, "{ss}", "MailEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "CalendarEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "ContactsEnabled", "true");
+  g_variant_builder_add (builder, "{ss}", "ChatEnabled", "true");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
