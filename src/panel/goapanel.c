@@ -149,7 +149,7 @@ goa_panel_init (GoaPanel *panel)
       goa_warning ("Error getting a GoaClient: %s (%s, %d)",
                    error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
-      goto out;
+      return;
     }
   g_signal_connect (panel->client,
                     "account-changed",
