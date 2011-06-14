@@ -46,3 +46,5 @@ libgoa_panel_la_LIBADD = 					\
 
 clean-local :
 	rm -f *~
+
+-include $(top_srcdir)/git.mk

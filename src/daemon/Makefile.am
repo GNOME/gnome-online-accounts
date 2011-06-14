@@ -47,3 +47,5 @@ goa_daemon_LDADD = 						\
 
 clean-local :
 	rm -f *~
+
+-include $(top_srcdir)/git.mk

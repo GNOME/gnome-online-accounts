@@ -95,3 +95,5 @@ CLEANFILES +=   		\
 	*.8				\
 	-rf xml html tmpl		\
 	$(NULL)
+
+-include $(top_srcdir)/git.mk
