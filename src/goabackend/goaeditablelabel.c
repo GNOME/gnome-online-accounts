@@ -68,6 +68,7 @@ goa_editable_label_set_text (GoaEditableLabel *e,
 {
         GoaEditableLabelPrivate *priv;
         gchar *tmp;
+        const gchar *label_text;
         GtkWidget *label;
 
         priv = e->priv;
@@ -78,12 +79,13 @@ goa_editable_label_set_text (GoaEditableLabel *e,
 
         gtk_entry_set_text (priv->entry, tmp);
 
-        if (tmp == NULL || tmp[0] == '\0')
-                tmp = EMPTY_TEXT;
+        label_text = tmp;
+        if (label_text == NULL || label_text[0] == '\0')
+                label_text = EMPTY_TEXT;
 
-        gtk_label_set_text (priv->label, tmp);
+        gtk_label_set_text (priv->label, label_text);
         label = gtk_bin_get_child (GTK_BIN (priv->button));
-        gtk_label_set_text (GTK_LABEL (label), tmp);
+        gtk_label_set_text (GTK_LABEL (label), label_text);
 
         g_object_notify (G_OBJECT (e), "text");
 }

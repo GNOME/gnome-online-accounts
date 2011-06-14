@@ -555,7 +555,6 @@ process_config_entries (GoaDaemon  *daemon,
       const gchar *object_path = l->data;
       GoaObjectSkeleton *object;
       gchar *group;
-      KeyFileData *key_file_data;
 
       goa_debug ("adding %s", object_path);
 
@@ -593,7 +592,6 @@ process_config_entries (GoaDaemon  *daemon,
       const gchar *object_path = l->data;
       GoaObject *object;
       gchar *group;
-      KeyFileData *key_file_data;
 
       goa_debug ("unchanged %s", object_path);
 

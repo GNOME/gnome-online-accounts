@@ -469,8 +469,9 @@ on_toolbar_add_button_clicked (GtkToolButton *button,
   providers = goa_provider_get_all ();
   for (l = providers; l != NULL; l = l->next)
     {
-      GoaProvider *provider = GOA_PROVIDER (l->data);
       gchar *provider_name;
+
+      provider = GOA_PROVIDER (l->data);
       provider_name = goa_provider_get_provider_name (provider, NULL);
       gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo_box),
                                  goa_provider_get_provider_type (provider),

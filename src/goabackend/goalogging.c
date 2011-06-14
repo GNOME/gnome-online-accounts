@@ -149,6 +149,7 @@ goa_log (GoaLogLevel     level,
   const gchar *level_color_str;
   gint syslog_priority;
   static gboolean have_called_openlog = FALSE;
+  gchar *thread_str;
 
   va_start (var_args, format);
   message = g_strdup_vprintf (format, var_args);
@@ -205,7 +206,7 @@ goa_log (GoaLogLevel     level,
       g_assert_not_reached ();
       break;
     }
-  gchar *thread_str;
+
   thread_str = g_strdup_printf ("%d", (gint) syscall (SYS_gettid));
   g_print ("%s%s%s.%03d:%s%s%s[%s]%s:%s%s%s:%s %s %s[%s, %s()]%s\n",
            _color_get (_COLOR_BOLD_ON), _color_get (_COLOR_FG_YELLOW), time_buf, (gint) now.tv_usec / 1000, _color_get (_COLOR_RESET),

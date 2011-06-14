@@ -133,12 +133,14 @@ goa_panel_accounts_model_constructed (GObject *object)
   GoaPanelAccountsModel *model = GOA_PANEL_ACCOUNTS_MODEL (object);
   GType types[GOA_PANEL_ACCOUNTS_MODEL_N_COLUMNS];
 
+  G_STATIC_ASSERT (5 == GOA_PANEL_ACCOUNTS_MODEL_N_COLUMNS);
+
   types[0] = G_TYPE_STRING;
   types[1] = GOA_TYPE_OBJECT;
   types[2] = G_TYPE_BOOLEAN;
   types[3] = G_TYPE_STRING;
   types[4] = G_TYPE_ICON;
-  G_STATIC_ASSERT (5 == GOA_PANEL_ACCOUNTS_MODEL_N_COLUMNS);
+
   gtk_list_store_set_column_types (GTK_LIST_STORE (model),
                                    GOA_PANEL_ACCOUNTS_MODEL_N_COLUMNS,
                                    types);
