@@ -104,7 +104,7 @@ goa_panel_init (GoaPanel *panel)
   panel->builder = gtk_builder_new ();
   error = NULL;
   if (gtk_builder_add_from_file (panel->builder,
-                                 PACKAGE_DATA_DIR "/goa/goapanel.ui",
+                                 PACKAGE_DATA_DIR "/gnome-online-accounts/goapanel.ui",
                                  &error) == 0)
     {
       goa_warning ("Error loading UI file: %s (%s, %d)",
