@@ -281,16 +281,18 @@ build_object (GoaProvider         *provider,
     {
       if (mail == NULL)
         {
+          const gchar *email_address;
+          email_address = goa_account_get_identity (account);
           mail = goa_mail_skeleton_new ();
           g_object_set (G_OBJECT (mail),
-                        "email-address",   goa_account_get_identity (account),
+                        "email-address",   email_address,
                         "imap-supported",  TRUE,
                         "imap-host",       "imap.gmail.com",
-                        "imap-user-name",  "",
+                        "imap-user-name",  email_address,
                         "imap-use-tls",    TRUE,
                         "smtp-supported",  TRUE,
                         "smtp-host",       "smtp.gmail.com",
-                        "smtp-user-name",  "",
+                        "smtp-user-name",  email_address,
                         "smtp-use-tls",    TRUE,
                         NULL);
           goa_object_skeleton_set_mail (object, mail);
