@@ -197,8 +197,6 @@ goa_panel_init (GoaPanel *panel)
 
  out:
   w = GTK_WIDGET (gtk_builder_get_object (panel->builder, "goa-top-widget"));
-  /* TODO: not sure this is quite the right way to force minimum size */
-  gtk_widget_set_size_request (w, 0, 400);
   gtk_widget_reparent (w, GTK_WIDGET (panel));
   gtk_widget_show_all (w);
 }
