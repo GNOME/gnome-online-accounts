@@ -1,6 +1,8 @@
 
 NULL =
 
+SUBDIRS = icons
+
 servicedir       = $(datadir)/dbus-1/services
 service_in_files = org.gnome.OnlineAccounts.service.in
 service_DATA     = $(service_in_files:.service.in=.service)
