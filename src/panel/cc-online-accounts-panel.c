@@ -28,8 +28,8 @@
 #include <goa/goa.h>
 #include <goabackend/goabackend.h>
 
-#include "goapanel.h"
-#include "goapanelaccountsmodel.h"
+#include "cc-online-accounts-panel.h"
+#include "cc-online-accounts-model.h"
 
 typedef struct _GoaPanelClass GoaPanelClass;
 

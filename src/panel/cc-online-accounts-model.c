@@ -26,7 +26,7 @@
 
 #include <goabackend/goabackend.h>
 
-#include "goapanelaccountsmodel.h"
+#include "cc-online-accounts-model.h"
 
 struct _GoaPanelAccountsModel
 {

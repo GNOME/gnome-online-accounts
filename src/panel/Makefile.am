@@ -20,9 +20,10 @@ ccpanelsdir = $(libdir)/control-center-1/panels
 ccpanels_LTLIBRARIES = libgoa-panel.la
 
 libgoa_panel_la_SOURCES =					\
-	goapanel.h			goapanel.c		\
-	goapanelaccountsmodel.h		goapanelaccountsmodel.c	\
-	$(NULL)
+	cc-online-accounts-panel.c				\
+	cc-online-accounts-panel.h				\
+	cc-online-accounts-model.c				\
+	cc-online-accounts-model.h
 
 libgoa_panel_la_CFLAGS =					\
 	$(GLIB_CFLAGS) 						\
