@@ -113,7 +113,11 @@ get_request_uri_params (GoaOAuthProvider *provider)
     /* Calendar data API: http://code.google.com/apis/calendar/data/2.0/developers_guide.html */
     "https://www.google.com/calendar/feeds "
     /* Contacts API: http://code.google.com/apis/contacts/docs/3.0/developers_guide.html */
-    "https://www.google.com/m8/feeds/"));
+    "https://www.google.com/m8/feeds/ "
+    /* Documents API: http://code.google.com/apis/documents/docs/3.0/developers_guide_protocol.html */
+    "https://docs.google.com/feeds/ "
+    "https://spreadsheets.google.com/feeds/ "
+    "https://docs.googleusercontent.com/"));
   g_ptr_array_add (p, NULL);
 
   /* NOTE: Increase the number returned in get_crededentials_generation if adding scopes */
@@ -124,7 +128,7 @@ get_request_uri_params (GoaOAuthProvider *provider)
 static guint
 get_credentials_generation (GoaProvider *provider)
 {
-  return 1;
+  return 2;
 }
 
 static const gchar *
@@ -254,17 +258,20 @@ build_object (GoaProvider         *provider,
   GoaCalendar *calendar;
   GoaContacts *contacts;
   GoaChat *chat;
+  GoaDocuments *documents;
   gboolean ret;
   gboolean mail_enabled;
   gboolean calendar_enabled;
   gboolean contacts_enabled;
   gboolean chat_enabled;
+  gboolean documents_enabled;
 
   account = NULL;
   mail = NULL;
   calendar = NULL;
   contacts = NULL;
   chat = NULL;
+  documents = NULL;
   ret = FALSE;
 
   /* Chain up */
@@ -358,10 +365,30 @@ build_object (GoaProvider         *provider,
         goa_object_skeleton_set_chat (object, NULL);
     }
 
+  /* Documents */
+  documents = goa_object_get_documents (GOA_OBJECT (object));
+  documents_enabled = g_key_file_get_boolean (key_file, group, "DocumentsEnabled", NULL);
+
+  if (documents_enabled)
+    {
+      if (documents == NULL)
+        {
+          documents = goa_documents_skeleton_new ();
+          goa_object_skeleton_set_documents (object, documents);
+        }
+    }
+  else
+    {
+      if (documents != NULL)
+        goa_object_skeleton_set_documents (object, NULL);
+    }
+
 
   ret = TRUE;
 
  out:
+  if (documents != NULL)
+    g_object_unref (documents);
   if (chat != NULL)
     g_object_unref (chat);
   if (contacts != NULL)
@@ -401,6 +428,7 @@ show_account (GoaProvider         *provider,
   goa_util_add_row_switch_from_keyfile (table, object, _("Calendar"), "CalendarEnabled");
   goa_util_add_row_switch_from_keyfile (table, object, _("Contacts"), "ContactsEnabled");
   goa_util_add_row_switch_from_keyfile (table, object, _("Chat"), "ChatEnabled");
+  goa_util_add_row_switch_from_keyfile (table, object, _("Documents"), "DocumentsEnabled");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -413,6 +441,7 @@ add_account_key_values (GoaOAuthProvider  *provider,
   g_variant_builder_add (builder, "{ss}", "CalendarEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "ContactsEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "ChatEnabled", "true");
+  g_variant_builder_add (builder, "{ss}", "DocumentsEnabled", "true");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
