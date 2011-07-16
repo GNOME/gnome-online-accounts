@@ -1,0 +1,297 @@
+# gnome-online-accounts ja.po.
+# Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-online-accounts package.
+# Takeshi AIHANA <takeshi.aihana@gmail.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-online-accounts master\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-07-16 12:49+0900\n"
+"PO-Revision-Date: 2011-07-16 12:55+0900\n"
+"Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
+"Language-Team: Japanese <takeshi.aihana@gmail.com>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../src/daemon/goadaemon.c:871
+msgid "An online account needs attention"
+msgstr "オンライン・アカウントの利用には注意が必要です"
+
+#: ../src/daemon/goadaemon.c:878
+msgid "Open Online Accounts..."
+msgstr "オンライン・アカウントを開く..."
+
+#: ../src/goabackend/goafacebookprovider.c:78
+msgid "Facebook"
+msgstr "Facebook"
+
+#: ../src/goabackend/goafacebookprovider.c:161
+#: ../src/goabackend/goagoogleprovider.c:191
+#: ../src/goabackend/goatwitterprovider.c:160
+#: ../src/goabackend/goayahooprovider.c:162
+#, c-format
+msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+msgstr ""
+"guid を要求した時に返されるステータスは 200 を期待していましたが、代わりに受"
+"け取ったステータスは %d (%s) でした"
+
+#: ../src/goabackend/goafacebookprovider.c:173
+#: ../src/goabackend/goagoogleprovider.c:203
+#: ../src/goabackend/goaoauth2provider.c:476
+#: ../src/goabackend/goatwitterprovider.c:172
+#: ../src/goabackend/goayahooprovider.c:174
+msgid "Error parsing response as JSON: "
+msgstr "JSON からの応答の解析に失敗しました: "
+
+#: ../src/goabackend/goafacebookprovider.c:184
+#, c-format
+msgid "Didn't find username member in JSON data"
+msgstr "JSON データの中に username メンバが見つかりませんでした"
+
+#: ../src/goabackend/goafacebookprovider.c:193
+#, c-format
+msgid "Didn't find name member in JSON data"
+msgstr "JSON データの中に name メンバが見つかりませんでした"
+
+#: ../src/goabackend/goafacebookprovider.c:259
+#: ../src/goabackend/goatwitterprovider.c:260
+msgid "User Name"
+msgstr "ユーザ名"
+
+#: ../src/goabackend/goagoogleprovider.c:78
+msgid "Google"
+msgstr "Google"
+
+#: ../src/goabackend/goagoogleprovider.c:214
+#, c-format
+msgid "Didn't find data member in JSON data"
+msgstr "JSON データの中に data メンバがありませんでした"
+
+#: ../src/goabackend/goagoogleprovider.c:224
+#, c-format
+msgid "Didn't find email member in JSON data"
+msgstr "JSON データの中に email メンバがありませんでした"
+
+#: ../src/goabackend/goagoogleprovider.c:398
+msgid "Email Address"
+msgstr "E-メール・アドレス"
+
+#: ../src/goabackend/goagoogleprovider.c:399
+msgid "Use this account for"
+msgstr "このアカウントの用途:"
+
+#: ../src/goabackend/goagoogleprovider.c:400
+msgid "Mail"
+msgstr "メール"
+
+#: ../src/goabackend/goagoogleprovider.c:401
+msgid "Calendar"
+msgstr "カレンダ"
+
+#: ../src/goabackend/goagoogleprovider.c:402
+msgid "Contacts"
+msgstr "連絡先"
+
+#: ../src/goabackend/goagoogleprovider.c:403
+msgid "Chat"
+msgstr "チャット"
+
+#: ../src/goabackend/goaoauth2provider.c:431
+#: ../src/goabackend/goaoauthprovider.c:438
+#, c-format
+msgid ""
+"Expected status 200 when requesting access token, instead got status %d (%s)"
+msgstr ""
+"token を要求した時に返されるステータスは 200 を期待していましたが、代わりに受"
+"け取ったステータスは %d (%s) でした"
+
+#: ../src/goabackend/goaoauth2provider.c:451
+#, c-format
+msgid "Didn't find access_token in non-JSON data"
+msgstr "JSON 以外のデータの中に access_token がありませんでした"
+
+#: ../src/goabackend/goaoauth2provider.c:487
+#, c-format
+msgid "Didn't find access_token in JSON data"
+msgstr "JSON データの中に access_token がありませんでした"
+
+#: ../src/goabackend/goaoauth2provider.c:571
+#, c-format
+msgid "Authorization response was \"%s\""
+msgstr "認証の応答は \"%s\" でした"
+
+#: ../src/goabackend/goaoauth2provider.c:651
+#, c-format
+msgid ""
+"Paste authorization code obtained from the <a href=\"%s\">authorization "
+"page</a>:"
+msgstr "<a href=\"%s\">認証のページ</a>で得られた認証コードを入力して下さい:"
+
+#: ../src/goabackend/goaoauth2provider.c:722
+#: ../src/goabackend/goaoauthprovider.c:744
+#, c-format
+msgid "Dialog was dismissed"
+msgstr "ダイアログが消されました"
+
+#: ../src/goabackend/goaoauth2provider.c:746
+#: ../src/goabackend/goaoauthprovider.c:775
+msgid "Error getting an Access Token: "
+msgstr "アクセス用トークンの取得エラー: "
+
+#: ../src/goabackend/goaoauth2provider.c:758
+#: ../src/goabackend/goaoauthprovider.c:788
+msgid "Error getting identity: "
+msgstr "身元情報の取得エラー: "
+
+#: ../src/goabackend/goaoauth2provider.c:923
+#: ../src/goabackend/goaoauthprovider.c:965
+#, c-format
+msgid "There is already an account for the identity %s"
+msgstr "次の身元情報のアカウントは既に存在しています: %s"
+
+#: ../src/goabackend/goaoauth2provider.c:1048
+#: ../src/goabackend/goaoauthprovider.c:1095
+#, c-format
+msgid "Was asked to login as %s, but logged in as %s"
+msgstr "%s でログインしたものの最終的に %s でのログインになりました"
+
+#: ../src/goabackend/goaoauth2provider.c:1184
+#: ../src/goabackend/goaoauthprovider.c:1243
+#, c-format
+msgid "Credentials not found in keyring (%s, %d): "
+msgstr "キーリング (%s, %d) の中に証明書が見つかりませんでした: "
+
+#: ../src/goabackend/goaoauth2provider.c:1211
+#, c-format
+msgid "Credentials does not contain access_token"
+msgstr "証明書に access_token が含まれていません"
+
+#: ../src/goabackend/goaoauth2provider.c:1250
+#: ../src/goabackend/goaoauthprovider.c:1316
+#, c-format
+msgid "Failed to refresh access token (%s, %d): "
+msgstr "アクセス用トークン (%s, %d) の更新エラー: "
+
+#: ../src/goabackend/goaoauth2provider.c:1285
+#: ../src/goabackend/goaoauthprovider.c:1346
+#, c-format
+msgid "Error storing credentials in keyring (%s, %d): "
+msgstr "証明書をキーリングの (%s, %d) に保存できませんでした: "
+
+#: ../src/goabackend/goaoauthprovider.c:461
+#, c-format
+msgid "Missing access_token or access_token_secret headers in response"
+msgstr ""
+"受信した応答の中に access_token または access_token_secret のヘッダがありませ"
+"ん"
+
+#: ../src/goabackend/goaoauthprovider.c:634
+msgid "Error getting a Request Token: "
+msgstr "リクエスト用トークンの取得エラー: "
+
+#: ../src/goabackend/goaoauthprovider.c:642
+#, c-format
+msgid "Expected 200 for getting a Request Token, got %d (%s)"
+msgstr ""
+"リクエスト用のトークンの取得で返されるステータスは 200 を期待していましたが、"
+"受け取ったステータスは %d (%s) でした"
+
+#: ../src/goabackend/goaoauthprovider.c:656
+#, c-format
+msgid "Missing request_token or request_token_secret headers in response"
+msgstr ""
+"受信した応答の中に request_token または request_token_secret のヘッダがありま"
+"せん"
+
+#: ../src/goabackend/goaoauthprovider.c:672
+#, c-format
+msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
+msgstr "<a href=\"%s\">認証のページ</a>で得られたトークンを入力して下さい:"
+
+#: ../src/goabackend/goaoauthprovider.c:1272
+#, c-format
+msgid "Credentials does not contain access_token or access_token_secret"
+msgstr "証明書に access_token や access_token_secret が含まれていません"
+
+#: ../src/goabackend/goaprovider.c:522
+#, c-format
+msgid "ensure_credentials_sync not been implemented on type %s"
+msgstr "%s では ensure_credentials_sync は未だ利用できません"
+
+#: ../src/goabackend/goaprovider.c:736
+#, c-format
+msgid "GOA %s credentials for identity %s"
+msgstr "GOA の %s は %s を正しく認識しました"
+
+#. TODO: more specific
+#: ../src/goabackend/goaprovider.c:750
+#, c-format
+msgid "Failed to store credentials in the keyring: %s"
+msgstr "キーリングの中に証明書を保存できませんでした: %s"
+
+#. TODO: more specific
+#: ../src/goabackend/goaprovider.c:821
+#, c-format
+msgid "Failed to retrieve credentials from the keyring: %s"
+msgstr "キーリングから証明書を取得できませんでした: %s"
+
+#: ../src/goabackend/goaprovider.c:833
+msgid "Error parsing result obtained from the keyring: "
+msgstr "キーリングから取得した結果の解析に失敗しました: "
+
+#: ../src/goabackend/goatwitterprovider.c:78
+msgid "Twitter"
+msgstr "Twitter"
+
+#: ../src/goabackend/goatwitterprovider.c:183
+#, c-format
+msgid "Didn't find id_str member in JSON data"
+msgstr "JSON データの中に id str メンバがありませんでした"
+
+#: ../src/goabackend/goatwitterprovider.c:192
+#, c-format
+msgid "Didn't find screen_name member in JSON data"
+msgstr "JSON データの中に screen_name メンバがありませんでした"
+
+#: ../src/goabackend/goayahooprovider.c:78
+msgid "Yahoo"
+msgstr "Yahoo"
+
+#: ../src/goabackend/goayahooprovider.c:185
+#, c-format
+msgid "Didn't find guid member in JSON data"
+msgstr "JSON データの中に guid メンバがありませんでした"
+
+#: ../src/goabackend/goayahooprovider.c:195
+#, c-format
+msgid "Didn't find value member in JSON data"
+msgstr "JSON データの中に value メンバがありませんでした"
+
+#: ../src/goabackend/goayahooprovider.c:221
+#, c-format
+msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+msgstr ""
+"name を要求した時に返されるステータスは 200 を期待していましたが、代わりに受"
+"け取ったステータスは %d (%s) でした"
+
+#: ../src/goabackend/goayahooprovider.c:234
+msgid "Error parsing usercard response as JSON: "
+msgstr "JSON からの usercard 応答の解析に失敗しました: "
+
+#: ../src/goabackend/goayahooprovider.c:245
+#, c-format
+msgid "Didn't find profile member in JSON data"
+msgstr "JSON データの中に profile メンバがありませんでした"
+
+#: ../src/goabackend/goayahooprovider.c:255
+#, c-format
+msgid "Didn't find nickname member in JSON data"
+msgstr "JSON データの中に nickname メンバがありませんでした"
+
+#. TODO: look up email address / screenname from GUID
+#: ../src/goabackend/goayahooprovider.c:323
+msgid "Name"
+msgstr "名前"
