@@ -1272,7 +1272,7 @@ goa_oauth_provider_get_access_token_sync (GoaOAuthProvider   *provider,
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_NOT_AUTHORIZED,
-                   _("Credentials does not contain access_token or access_token_secret"));
+                   _("Credentials do not contain access_token or access_token_secret"));
       goto out;
     }
 
