@@ -648,6 +648,7 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
       gchar *markup;
 
       escaped_url = g_markup_escape_text (url, -1);
+      /* Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window */
       markup = g_strdup_printf (_("Paste authorization code obtained from the <a href=\"%s\">authorization page</a>:"),
                                 escaped_url);
       g_free (escaped_url);

@@ -435,6 +435,7 @@ get_tokens_sync (GoaOAuthProvider  *provider,
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
+                   /* Translators: the %d is a HTTP status code and the %s is a textual description of it */
                    _("Expected status 200 when requesting access token, instead got status %d (%s)"),
                    status_code,
                    rest_proxy_call_get_status_message (call));
@@ -639,7 +640,8 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
       g_set_error (&data.error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
-                   _("Expected 200 for getting a Request Token, got %d (%s)"),
+                   /* Translators: the %d is a HTTP status code and the %s is a textual description of it */
+                   _("Expected status 200 for getting a Request Token, instead got status %d (%s)"),
                    rest_proxy_call_get_status_code (call),
                    rest_proxy_call_get_status_message (call));
       goto out;
@@ -669,6 +671,7 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
       gchar *markup;
 
       escaped_url = g_markup_escape_text (url, -1);
+      /* Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window */
       markup = g_strdup_printf (_("Paste token obtained from the <a href=\"%s\">authorization page</a>:"),
                                 escaped_url);
       g_free (escaped_url);

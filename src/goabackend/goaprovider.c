@@ -519,7 +519,7 @@ goa_provider_ensure_credentials_sync_real (GoaProvider   *provider,
   g_set_error (error,
                GOA_ERROR,
                GOA_ERROR_NOT_SUPPORTED,
-               _("ensure_credentials_sync not been implemented on type %s"),
+               _("ensure_credentials_sync is not implemented on type %s"),
                g_type_name (G_TYPE_FROM_INSTANCE (provider)));
   return FALSE;
 }
@@ -733,6 +733,7 @@ goa_provider_store_credentials_sync (GoaProvider   *provider,
                                   goa_provider_get_provider_type (GOA_PROVIDER (provider)),
                                   goa_provider_get_credentials_generation (GOA_PROVIDER (provider)),
                                   identity);
+  /* Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo' */
   password_description = g_strdup_printf (_("GOA %s credentials for identity %s"),
                                           goa_provider_get_provider_type (GOA_PROVIDER (provider)),
                                           identity);
