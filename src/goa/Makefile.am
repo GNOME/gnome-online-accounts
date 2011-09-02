@@ -102,7 +102,7 @@ gir_DATA = Goa-1.0.gir
 typelibsdir = $(INTROSPECTION_TYPELIBDIR)
 typelibs_DATA = Goa-1.0.typelib
 
-Goa-1.0.gir: libgoa-1.0.la $(INTROSPECTION_SCANNER) Makefile.am
+Goa-1.0.gir: $(libgoa_1_0_la_SOURCES)
 	$(INTROSPECTION_SCANNER) -v 				\
 		--warn-all					\
 		--namespace Goa 				\
@@ -120,8 +120,11 @@ Goa-1.0.gir: libgoa-1.0.la $(INTROSPECTION_SCANNER) Makefile.am
                 -I$(top_builddir)/src	 			\
                 -I$(top_builddir)/src/goa 			\
 	        -DGOA_COMPILATION                   		\
-		$(libgoa_1_0_la_SOURCES)			\
+		$^						\
 		$(NULL)
+
+Goa-1.0.gir: libgoa-1.0.la $(INTROSPECTION_SCANNER) Makefile.am
+
 
 Goa-1.0.typelib: Goa-1.0.gir $(INTROSPECTION_COMPILER)
 	$(INTROSPECTION_COMPILER) $< -o $@
