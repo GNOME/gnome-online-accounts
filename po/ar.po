@@ -1,0 +1,310 @@
+# Arabic translation for gnome-online-accounts.
+# Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-online-accounts package.
+# Abdalrahim G. Fakhouri <abdilra7eem@yahoo.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-online-accounts master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"online-accounts&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-09-02 18:12+0000\n"
+"PO-Revision-Date: 2011-09-03 00:18+0300\n"
+"Last-Translator: Abdalrahim G. Fakhouri <abdilra7eem@yahoo.com>\n"
+"Language-Team: Arabic <doc@arabeyes.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Virtaal 0.7.0\n"
+"X-Project-Style: gnome\n"
+
+#: ../src/daemon/goadaemon.c:871
+msgid "An online account needs attention"
+msgstr ""
+
+#: ../src/daemon/goadaemon.c:878
+msgid "Open Online Accounts..."
+msgstr ""
+
+#: ../src/goabackend/goafacebookprovider.c:78
+msgid "Facebook"
+msgstr "فيسبوك"
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goafacebookprovider.c:161
+#: ../src/goabackend/goagoogleprovider.c:195
+#: ../src/goabackend/goatwitterprovider.c:160
+#: ../src/goabackend/goayahooprovider.c:163
+#, c-format
+msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+msgstr ""
+"النتيجة المتوقعة عند طلب المعرّف العالمي الفريد GUID هي 200؛ عوضاً عن هذا، تم "
+"الحصول على النتيجة %d (%s)"
+
+#: ../src/goabackend/goafacebookprovider.c:173
+#: ../src/goabackend/goagoogleprovider.c:207
+#: ../src/goabackend/goaoauth2provider.c:476
+#: ../src/goabackend/goatwitterprovider.c:172
+#: ../src/goabackend/goayahooprovider.c:175
+msgid "Error parsing response as JSON: "
+msgstr "خطأ في إعراب الردّ على أنّه JSON"
+
+#: ../src/goabackend/goafacebookprovider.c:184
+#, c-format
+msgid "Didn't find username member in JSON data"
+msgstr "لم يتمّ العثور على اسم مستخدم في بيانات JSON"
+
+#: ../src/goabackend/goafacebookprovider.c:193
+#, fuzzy, c-format
+msgid "Didn't find name member in JSON data"
+msgstr "لم يُعثر على اسم في بيانات JSON"
+
+#: ../src/goabackend/goafacebookprovider.c:259
+#: ../src/goabackend/goatwitterprovider.c:260
+msgid "User Name"
+msgstr "اسم المستخدم"
+
+#: ../src/goabackend/goagoogleprovider.c:78
+msgid "Google"
+msgstr "جوجل"
+
+#: ../src/goabackend/goagoogleprovider.c:218
+#, fuzzy, c-format
+msgid "Didn't find data member in JSON data"
+msgstr "لم يُعثر على بيانات في بيانات JSON"
+
+#: ../src/goabackend/goagoogleprovider.c:228
+#, fuzzy, c-format
+msgid "Didn't find email member in JSON data"
+msgstr "لم يُعثر على بريد إلكتروني في بيانات JSON"
+
+#: ../src/goabackend/goagoogleprovider.c:425
+msgid "Email Address"
+msgstr "عنوان البريد الإلكتروني"
+
+#: ../src/goabackend/goagoogleprovider.c:426
+msgid "Use this account for"
+msgstr "استخدام هذا الحساب لـ"
+
+#: ../src/goabackend/goagoogleprovider.c:427
+msgid "Mail"
+msgstr "بريد"
+
+#: ../src/goabackend/goagoogleprovider.c:428
+msgid "Calendar"
+msgstr "تقويم"
+
+#: ../src/goabackend/goagoogleprovider.c:429
+msgid "Contacts"
+msgstr "متراسلون"
+
+#: ../src/goabackend/goagoogleprovider.c:430
+msgid "Chat"
+msgstr "دردشة"
+
+#: ../src/goabackend/goagoogleprovider.c:431
+msgid "Documents"
+msgstr "مستندات"
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goaoauth2provider.c:431
+#: ../src/goabackend/goaoauthprovider.c:439
+#, c-format
+msgid ""
+"Expected status 200 when requesting access token, instead got status %d (%s)"
+msgstr ""
+"النتيجة المتوقعة عند طلب رمز الوصول هي 200؛ عوضاً عن هذا، تم الحصول على "
+"النتيجة %d (%s)"
+
+#: ../src/goabackend/goaoauth2provider.c:451
+#, fuzzy, c-format
+msgid "Didn't find access_token in non-JSON data"
+msgstr "لم يُعثر على رمز تحقّق في بيانات غير JSON"
+
+#: ../src/goabackend/goaoauth2provider.c:487
+#, fuzzy, c-format
+msgid "Didn't find access_token in JSON data"
+msgstr "لم يُعثر على بريد إلكتروني في بيانات JSON"
+
+#: ../src/goabackend/goaoauth2provider.c:571
+#, c-format
+msgid "Authorization response was \"%s\""
+msgstr "ردّ التخويل \"%s\""
+
+#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
+#: ../src/goabackend/goaoauth2provider.c:652
+#, c-format
+msgid ""
+"Paste authorization code obtained from the <a href=\"%s\">authorization "
+"page</a>:"
+msgstr "الصق كود التخويل الذي تحصل عليه من <a href=\"%s\">صفحة التخويل</a>:"
+
+#: ../src/goabackend/goaoauth2provider.c:723
+#: ../src/goabackend/goaoauthprovider.c:747
+#, fuzzy, c-format
+msgid "Dialog was dismissed"
+msgstr "أغلقت نافذة الحوار"
+
+#: ../src/goabackend/goaoauth2provider.c:747
+#: ../src/goabackend/goaoauthprovider.c:778
+msgid "Error getting an Access Token: "
+msgstr "خطأ في الحصول على رمز الوصول"
+
+#: ../src/goabackend/goaoauth2provider.c:759
+#: ../src/goabackend/goaoauthprovider.c:791
+msgid "Error getting identity: "
+msgstr "خطأ في الحصول على هويّة"
+
+#: ../src/goabackend/goaoauth2provider.c:924
+#: ../src/goabackend/goaoauthprovider.c:968
+#, c-format
+msgid "There is already an account for the identity %s"
+msgstr "هناك حساب موجود مسبقاً للهوية %s"
+
+#: ../src/goabackend/goaoauth2provider.c:1049
+#: ../src/goabackend/goaoauthprovider.c:1098
+#, c-format
+msgid "Was asked to login as %s, but logged in as %s"
+msgstr "طُلب الولوج كـ%s، لكن تم الولوج كـ%s"
+
+#: ../src/goabackend/goaoauth2provider.c:1185
+#: ../src/goabackend/goaoauthprovider.c:1246
+#, c-format
+msgid "Credentials not found in keyring (%s, %d): "
+msgstr "لم يُعثر على الشهادات في حلقة المفاتيح (%s, %d): "
+
+#: ../src/goabackend/goaoauth2provider.c:1212
+#, c-format
+msgid "Credentials do not contain access_token"
+msgstr "لا تحوي الشهادات رمز وصول"
+
+#: ../src/goabackend/goaoauth2provider.c:1251
+#: ../src/goabackend/goaoauthprovider.c:1319
+#, c-format
+msgid "Failed to refresh access token (%s, %d): "
+msgstr "فشل تحديث رمز الوصول (%s, %d): "
+
+#: ../src/goabackend/goaoauth2provider.c:1286
+#: ../src/goabackend/goaoauthprovider.c:1349
+#, c-format
+msgid "Error storing credentials in keyring (%s, %d): "
+msgstr "خطأ في حفظ الشهادات في حلقة المفاتيح (%s, %d): "
+
+#: ../src/goabackend/goaoauthprovider.c:462
+#, c-format
+msgid "Missing access_token or access_token_secret headers in response"
+msgstr "رمز الوصول أو ترويسة \"رمز الوصول السرّي\" في الردّ مفقودة"
+
+#: ../src/goabackend/goaoauthprovider.c:635
+msgid "Error getting a Request Token: "
+msgstr "خطأ في الحصول على رمز الطلب"
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goaoauthprovider.c:644
+#, c-format
+msgid ""
+"Expected status 200 for getting a Request Token, instead got status %d (%s)"
+msgstr ""
+"النتيجة المتوقعة للحصول على رمز الطلب هي 200؛ عوضاً عن هذا، تم الحصول على "
+"النتيجة %d (%s)"
+
+#: ../src/goabackend/goaoauthprovider.c:658
+#, fuzzy, c-format
+msgid "Missing request_token or request_token_secret headers in response"
+msgstr "رمز الطلب أو ترويسة \"رمز الطلب السرّي\" في الردّ مفقودة"
+
+#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
+#: ../src/goabackend/goaoauthprovider.c:675
+#, c-format
+msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
+msgstr "الصق الرمز الذي تحصل عليه من <a href=\"%s\">صفحة التخويل</a>:"
+
+#: ../src/goabackend/goaoauthprovider.c:1275
+#, c-format
+msgid "Credentials do not contain access_token or access_token_secret"
+msgstr "لا تحوي الشهادات رمز وصول أو رمز وصول سرّيّ"
+
+#: ../src/goabackend/goaprovider.c:522
+#, c-format
+msgid "ensure_credentials_sync is not implemented on type %s"
+msgstr ""
+
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#: ../src/goabackend/goaprovider.c:737
+#, c-format
+msgid "GOA %s credentials for identity %s"
+msgstr ""
+
+#. TODO: more specific
+#: ../src/goabackend/goaprovider.c:751
+#, c-format
+msgid "Failed to store credentials in the keyring: %s"
+msgstr "فشل حفظ الشهادات في حلقة المفاتيح: %s"
+
+#. TODO: more specific
+#: ../src/goabackend/goaprovider.c:822
+#, c-format
+msgid "Failed to retrieve credentials from the keyring: %s"
+msgstr "فشل جلب الشهادات من حلقة المفاتيح: %s"
+
+#: ../src/goabackend/goaprovider.c:834
+msgid "Error parsing result obtained from the keyring: "
+msgstr "خطأ في إعراب النتائج التي تم الحصول عليها من حلقة المفاتيح: "
+
+#: ../src/goabackend/goatwitterprovider.c:78
+msgid "Twitter"
+msgstr "تويتر"
+
+#: ../src/goabackend/goatwitterprovider.c:183
+#, fuzzy, c-format
+msgid "Didn't find id_str member in JSON data"
+msgstr "لم يتمّ العثور على هوية في بيانات JSON"
+
+#: ../src/goabackend/goatwitterprovider.c:192
+#, fuzzy, c-format
+msgid "Didn't find screen_name member in JSON data"
+msgstr "لم يتمّ العثور على اسم الشاشة في بيانات JSON"
+
+#: ../src/goabackend/goayahooprovider.c:78
+#, fuzzy
+msgid "Yahoo"
+msgstr "ياهو"
+
+#: ../src/goabackend/goayahooprovider.c:186
+#, c-format
+msgid "Didn't find guid member in JSON data"
+msgstr "لم يتمّ العثور على المعرف العالمي الفريد GUID في بيانات JSON"
+
+#: ../src/goabackend/goayahooprovider.c:196
+#, fuzzy, c-format
+msgid "Didn't find value member in JSON data"
+msgstr "لم يتمّ العثور على قيمة في بيانات JSON"
+
+#: ../src/goabackend/goayahooprovider.c:222
+#, c-format
+msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+msgstr ""
+"النتيجة المتوقعة عند طلب الاسم هي 200؛ عوضاً عن هذا، تم الحصول على النتيجة %d "
+"(%s)"
+
+#: ../src/goabackend/goayahooprovider.c:235
+#, fuzzy
+msgid "Error parsing usercard response as JSON: "
+msgstr "خطأ في إعراب بطاقة مستخدم على أنّها JSON"
+
+#: ../src/goabackend/goayahooprovider.c:246
+#, fuzzy, c-format
+msgid "Didn't find profile member in JSON data"
+msgstr "لم يتمّ العثور على ملف شخصي في بيانات JSON"
+
+#: ../src/goabackend/goayahooprovider.c:256
+#, fuzzy, c-format
+msgid "Didn't find nickname member in JSON data"
+msgstr "لم يتمّ العثور على اسم مستعار في بيانات JSON"
+
+#. TODO: look up email address / screenname from GUID
+#: ../src/goabackend/goayahooprovider.c:324
+msgid "Name"
+msgstr "الاسم"
