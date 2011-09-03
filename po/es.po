@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-08-31 14:37+0000\n"
-"PO-Revision-Date: 2011-08-31 19:22+0200\n"
+"POT-Creation-Date: 2011-08-31 19:47+0000\n"
+"PO-Revision-Date: 2011-09-03 13:33+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -176,7 +176,6 @@ msgstr "No se encontraron las credenciales en el depósito de claves (%s, %d): "
 
 #: ../src/goabackend/goaoauth2provider.c:1212
 #, c-format
-#| msgid "Credentials does not contain access_token"
 msgid "Credentials do not contain access_token"
 msgstr "Las credenciales no contienen el «access_token»"
 
@@ -207,9 +206,6 @@ msgstr "Error al obtener el «token» solicitado: "
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauthprovider.c:644
 #, c-format
-#| msgid ""
-#| "Expected status 200 when requesting access token, instead got status %d "
-#| "(%s)"
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr ""
@@ -231,7 +227,6 @@ msgstr ""
 
 #: ../src/goabackend/goaoauthprovider.c:1275
 #, c-format
-#| msgid "Credentials does not contain access_token"
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Las credenciales no contienen «access_token» o «access_token_secret»"
 
@@ -250,17 +245,17 @@ msgstr "Credenciales GOA de %s para la identidad %s"
 #: ../src/goabackend/goaprovider.c:751
 #, c-format
 msgid "Failed to store credentials in the keyring: %s"
-msgstr ""
+msgstr "Falló al almacenar las credenciales en el depósito de claves: %s"
 
 #. TODO: more specific
 #: ../src/goabackend/goaprovider.c:822
 #, c-format
 msgid "Failed to retrieve credentials from the keyring: %s"
-msgstr ""
+msgstr "Falló al obtener las credenciales del depósito de claves: %s"
 
 #: ../src/goabackend/goaprovider.c:834
 msgid "Error parsing result obtained from the keyring: "
-msgstr ""
+msgstr "Error analizando el resultado obtenido del depósito de claves:"
 
 #: ../src/goabackend/goatwitterprovider.c:78
 msgid "Twitter"
@@ -269,12 +264,12 @@ msgstr "Twitter"
 #: ../src/goabackend/goatwitterprovider.c:183
 #, c-format
 msgid "Didn't find id_str member in JSON data"
-msgstr ""
+msgstr "No se encontró el miembro «id_str» en los datos JSON"
 
 #: ../src/goabackend/goatwitterprovider.c:192
 #, c-format
 msgid "Didn't find screen_name member in JSON data"
-msgstr ""
+msgstr "No se encontró el miembro «screen_name» en los datos JSON"
 
 #: ../src/goabackend/goayahooprovider.c:78
 msgid "Yahoo"
@@ -283,26 +278,28 @@ msgstr "Yahoo"
 #: ../src/goabackend/goayahooprovider.c:186
 #, c-format
 msgid "Didn't find guid member in JSON data"
-msgstr ""
+msgstr "No se encontró el miembro «guid» en los datos JSON"
 
 #: ../src/goabackend/goayahooprovider.c:196
 #, c-format
 msgid "Didn't find value member in JSON data"
-msgstr ""
+msgstr "No se encontró el miembro de valor en los datos JSON"
 
 #: ../src/goabackend/goayahooprovider.c:222
 #, c-format
 msgid "Expected status 200 when requesting name, instead got status %d (%s)"
 msgstr ""
+"Se esperaba un estado 200 al solicitar el nombre, en su lugar se obtuvo el "
+"estado %d (%s)"
 
 #: ../src/goabackend/goayahooprovider.c:235
 msgid "Error parsing usercard response as JSON: "
-msgstr ""
+msgstr "Error al analizar la respuesta de la tarjeta de usuario como JSON:"
 
 #: ../src/goabackend/goayahooprovider.c:246
 #, c-format
 msgid "Didn't find profile member in JSON data"
-msgstr ""
+msgstr "No se encontró el miembro de perfil en los datos JSON"
 
 #: ../src/goabackend/goayahooprovider.c:256
 #, c-format
