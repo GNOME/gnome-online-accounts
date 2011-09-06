@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-08-31 10:10+0000\n"
-"PO-Revision-Date: 2011-08-31 16:51+0330\n"
+"POT-Creation-Date: 2011-08-31 14:37+0000\n"
+"PO-Revision-Date: 2011-09-06 19:06+0330\n"
 "Last-Translator: Arash Mousavi <mousavi.arash@gmail.com>\n"
 "Language-Team: Persian\n"
 "MIME-Version: 1.0\n"
@@ -30,10 +30,11 @@ msgstr "بازکردن حساب‌های برخط..."
 msgid "Facebook"
 msgstr "فیس‌بوک"
 
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:161
 #: ../src/goabackend/goagoogleprovider.c:195
 #: ../src/goabackend/goatwitterprovider.c:160
-#: ../src/goabackend/goayahooprovider.c:162
+#: ../src/goabackend/goayahooprovider.c:163
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr "در هنگام درخواست guid انتظار وضعیت ۲۰۰ را داشتیم، در عوض وضعیت %Id دریافت شد (%s)"
@@ -42,7 +43,7 @@ msgstr "در هنگام درخواست guid انتظار وضعیت ۲۰۰ را 
 #: ../src/goabackend/goagoogleprovider.c:207
 #: ../src/goabackend/goaoauth2provider.c:476
 #: ../src/goabackend/goatwitterprovider.c:172
-#: ../src/goabackend/goayahooprovider.c:174
+#: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
 msgstr "خطا در تجزیه پاسخ به عنوان JSON:"
 
@@ -103,8 +104,9 @@ msgstr "گپ"
 msgid "Documents"
 msgstr "اسناد"
 
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauth2provider.c:431
-#: ../src/goabackend/goaoauthprovider.c:438
+#: ../src/goabackend/goaoauthprovider.c:439
 #, c-format
 msgid "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr "در هنگام درخواست رمز دسترسی (access token) انتظار وضعیت ۲۰۰ را داشتیم، در عوض وضعیت %Id دریافت شد (%s)"
@@ -124,114 +126,124 @@ msgstr "در اطلاعات JSON بخش رمز دسترسی (access_token) پی�
 msgid "Authorization response was \"%s\""
 msgstr "پاسخ به تصدیق هویت «%s» بود"
 
-#: ../src/goabackend/goaoauth2provider.c:651
+#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
+#: ../src/goabackend/goaoauth2provider.c:652
 #, c-format
 msgid "Paste authorization code obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "کد تصدیق هویت در یافت شده از <a href=\"%s\">صفحه تصدیق هویت</a> اینجا وارد کنید:"
 
-#: ../src/goabackend/goaoauth2provider.c:722
-#: ../src/goabackend/goaoauthprovider.c:744
+#: ../src/goabackend/goaoauth2provider.c:723
+#: ../src/goabackend/goaoauthprovider.c:747
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "محاوره رد شد"
 
-#: ../src/goabackend/goaoauth2provider.c:746
-#: ../src/goabackend/goaoauthprovider.c:775
+#: ../src/goabackend/goaoauth2provider.c:747
+#: ../src/goabackend/goaoauthprovider.c:778
 msgid "Error getting an Access Token: "
 msgstr "خطا در هنگام دریافت رمز دسترسی: "
 
-#: ../src/goabackend/goaoauth2provider.c:758
-#: ../src/goabackend/goaoauthprovider.c:788
+#: ../src/goabackend/goaoauth2provider.c:759
+#: ../src/goabackend/goaoauthprovider.c:791
 msgid "Error getting identity: "
 msgstr "خطا در هنگام دریافت شناسه: "
 
-#: ../src/goabackend/goaoauth2provider.c:923
-#: ../src/goabackend/goaoauthprovider.c:965
+#: ../src/goabackend/goaoauth2provider.c:924
+#: ../src/goabackend/goaoauthprovider.c:968
 #, c-format
 msgid "There is already an account for the identity %s"
 msgstr "در حال حاضر یک حساب برای شناسه %s وجود دارد"
 
-#: ../src/goabackend/goaoauth2provider.c:1048
-#: ../src/goabackend/goaoauthprovider.c:1095
+#: ../src/goabackend/goaoauth2provider.c:1049
+#: ../src/goabackend/goaoauthprovider.c:1098
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "ما درخواست ورود به عنوان %s را داشتیم، اما به عنوان %s وارد شد"
 
-#: ../src/goabackend/goaoauth2provider.c:1184
-#: ../src/goabackend/goaoauthprovider.c:1243
+#: ../src/goabackend/goaoauth2provider.c:1185
+#: ../src/goabackend/goaoauthprovider.c:1246
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "گواهینامه در دسته‌کلید پیدا نشد (%s، %Id): "
 
-#: ../src/goabackend/goaoauth2provider.c:1211
+#: ../src/goabackend/goaoauth2provider.c:1212
 #, c-format
-msgid "Credentials does not contain access_token"
-msgstr "گواهینامه حاوی رمز دسترسی (access_token) نیست"
+#| msgid "Credentials does not contain access_token"
+msgid "Credentials do not contain access_token"
+msgstr "گواهینامه‌ها حاوی رمز دسترسی (access_token) نیستند"
 
-#: ../src/goabackend/goaoauth2provider.c:1250
-#: ../src/goabackend/goaoauthprovider.c:1316
+#: ../src/goabackend/goaoauth2provider.c:1251
+#: ../src/goabackend/goaoauthprovider.c:1319
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "نوسازی رمز دسترسی شکست خورد (%s، %Id): "
 
-#: ../src/goabackend/goaoauth2provider.c:1285
-#: ../src/goabackend/goaoauthprovider.c:1346
+#: ../src/goabackend/goaoauth2provider.c:1286
+#: ../src/goabackend/goaoauthprovider.c:1349
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "خطا در هنگام ذخیره کردن گواهینامه در دسته‌کلید (%s، %Id): "
 
-#: ../src/goabackend/goaoauthprovider.c:461
+#: ../src/goabackend/goaoauthprovider.c:462
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "موارد access_token یا access_token_secret در سرصفحه پاسخ پیدا نشد"
 
-#: ../src/goabackend/goaoauthprovider.c:634
+#: ../src/goabackend/goaoauthprovider.c:635
 msgid "Error getting a Request Token: "
 msgstr "خطا در هنگام دریافت رمز درخواست: "
 
-#: ../src/goabackend/goaoauthprovider.c:642
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goaoauthprovider.c:644
 #, c-format
-msgid "Expected 200 for getting a Request Token, got %d (%s)"
-msgstr "انتظار ۲۰۰ را هنگام دریفت رمز درخواست داشتیم، %Id دریافت شد (%s)"
+#| msgid ""
+#| "Expected status 200 when requesting access token, instead got status %d (%"
+#| "s)"
+msgid "Expected status 200 for getting a Request Token, instead got status %d (%s)"
+msgstr "در هنگام درخواست رمز درخواست (Request Token) انتظار وضعیت ۲۰۰ را داشتیم، در عوض وضعیت %Id دریافت شد (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:656
+#: ../src/goabackend/goaoauthprovider.c:658
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "موارد request_token یا request_token در سرصفحه پاسخ پیدا نشد"
 
-#: ../src/goabackend/goaoauthprovider.c:672
+#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
+#: ../src/goabackend/goaoauthprovider.c:675
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "رمز دریافت شده از <a href=\"%s\">صفحه تصدیق هویت</a> را وارد کنید:"
 
-#: ../src/goabackend/goaoauthprovider.c:1272
+#: ../src/goabackend/goaoauthprovider.c:1275
 #, c-format
-msgid "Credentials does not contain access_token or access_token_secret"
-msgstr "گواهینامه حاوی access_token یا access_token_secret نیست"
+#| msgid "Credentials does not contain access_token or access_token_secret"
+msgid "Credentials do not contain access_token or access_token_secret"
+msgstr "گواهینامه‌ها حاوی access_token یا access_token_secret نیستند"
 
 #: ../src/goabackend/goaprovider.c:522
 #, c-format
-msgid "ensure_credentials_sync not been implemented on type %s"
+#| msgid "ensure_credentials_sync not been implemented on type %s"
+msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "مورد ensure_credentials_sync برای انواع %s اجرا نشده است"
 
-#: ../src/goabackend/goaprovider.c:736
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#: ../src/goabackend/goaprovider.c:737
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "گواهینامه GOA %s برای شناسه %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:750
+#: ../src/goabackend/goaprovider.c:751
 #, c-format
 msgid "Failed to store credentials in the keyring: %s"
 msgstr "ذخیره‌سازی گواهینامه در دسته‌کلید شکست خورد: %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:821
+#: ../src/goabackend/goaprovider.c:822
 #, c-format
 msgid "Failed to retrieve credentials from the keyring: %s"
 msgstr "دریافت گواهینامه از دسته‌کلید شکست خورد: %s"
 
-#: ../src/goabackend/goaprovider.c:833
+#: ../src/goabackend/goaprovider.c:834
 msgid "Error parsing result obtained from the keyring: "
 msgstr "خطا در هنگام تجزیه نتیجه دریافت شده از دسته‌کلید: "
 
@@ -253,37 +265,39 @@ msgstr "در اطلاعات JSON بخش screen_name پیدا نشد"
 msgid "Yahoo"
 msgstr "یاهو"
 
-#: ../src/goabackend/goayahooprovider.c:185
+#: ../src/goabackend/goayahooprovider.c:186
 #, c-format
 msgid "Didn't find guid member in JSON data"
 msgstr "در اطلاعات JSON بخش guid پیدا نشد"
 
-#: ../src/goabackend/goayahooprovider.c:195
+#: ../src/goabackend/goayahooprovider.c:196
 #, c-format
 msgid "Didn't find value member in JSON data"
 msgstr "در اطلاعات JSON بخش value پیدا نشد"
 
-#: ../src/goabackend/goayahooprovider.c:221
+#: ../src/goabackend/goayahooprovider.c:222
 #, c-format
 msgid "Expected status 200 when requesting name, instead got status %d (%s)"
 msgstr "انتظار وضعیت ۲۰۰ را در هنگام درخواست نام داشتیم، در عوض وضعیت %Id دریافت شد (%s)"
 
-#: ../src/goabackend/goayahooprovider.c:234
+#: ../src/goabackend/goayahooprovider.c:235
 msgid "Error parsing usercard response as JSON: "
 msgstr "خطا در هنگام تجزیه پاسخ usercard به عنوان JSON: "
 
-#: ../src/goabackend/goayahooprovider.c:245
+#: ../src/goabackend/goayahooprovider.c:246
 #, c-format
 msgid "Didn't find profile member in JSON data"
 msgstr "در اطلاعات JSON بخش مجموعه‌تنظیمات پیدا نشد"
 
-#: ../src/goabackend/goayahooprovider.c:255
+#: ../src/goabackend/goayahooprovider.c:256
 #, c-format
 msgid "Didn't find nickname member in JSON data"
 msgstr "در اطلاعات JSON بخش نام‌مستعار پیدا نشد"
 
 #. TODO: look up email address / screenname from GUID
-#: ../src/goabackend/goayahooprovider.c:323
+#: ../src/goabackend/goayahooprovider.c:324
 msgid "Name"
 msgstr "نام"
 
+#~ msgid "Expected 200 for getting a Request Token, got %d (%s)"
+#~ msgstr "انتظار ۲۰۰ را هنگام دریفت رمز درخواست داشتیم، %Id دریافت شد (%s)"
