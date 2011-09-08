@@ -25,6 +25,7 @@
 #include <stdlib.h>
 
 #include <rest/oauth-proxy.h>
+#include <libsoup/soup-gnome.h>
 #include <webkit/webkit.h>
 #include <json-glib/json-glib.h>
 
@@ -706,10 +707,13 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
       SoupSession *webkit_soup_session;
       SoupCookieJar *cookie_jar;
 
+      webkit_soup_session = webkit_get_default_session ();
+      /* Get the proxy configuration from the GNOME settings */
+      soup_session_add_feature_by_type (webkit_soup_session, SOUP_TYPE_PROXY_RESOLVER_GNOME);
+
       /* Ensure we use an empty non-persistent cookie to avoid login
        * credentials being reused...
        */
-      webkit_soup_session = webkit_get_default_session ();
       soup_session_remove_feature_by_type (webkit_soup_session, SOUP_TYPE_COOKIE_JAR);
       cookie_jar = soup_cookie_jar_new ();
       soup_session_add_feature (webkit_soup_session, SOUP_SESSION_FEATURE (cookie_jar));

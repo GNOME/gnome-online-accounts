@@ -86,6 +86,7 @@ libgoa_backend_1_0_la_CFLAGS =					\
 	$(GTK_CFLAGS) 						\
 	$(GNOME_KEYRING_CFLAGS)					\
 	$(REST_CFLAGS)						\
+	$(LIBSOUP_CFLAGS)					\
 	$(NULL)
 
 libgoa_backend_1_0_la_LIBADD = 					\
@@ -95,6 +96,7 @@ libgoa_backend_1_0_la_LIBADD = 					\
 	$(GTK_LIBS) 						\
 	$(GNOME_KEYRING_LIBS)					\
 	$(REST_LIBS)						\
+	$(LIBSOUP_LIBS)						\
 	$(NULL)
 
 # ----------------------------------------------------------------------------------------------------
