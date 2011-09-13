@@ -2,19 +2,22 @@
 # Copyright (C) 2011 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-online-accounts package.
 # Luca Ferretti <lferrett@gnome.org>, 2011.
+# Claudio Arseni <claudio.arseni@ubuntu.com>, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-23 17:07+0200\n"
-"PO-Revision-Date: 2011-07-23 17:11+0200\n"
-"Last-Translator: Luca Ferretti <lferret@gnome.org>\n"
-"Language-Team: Italian <tp@lists.linux.org>\n"
-"Language: \n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"online-accounts&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-09-08 19:43+0000\n"
+"PO-Revision-Date: 2011-09-09 00:02+0200\n"
+"Last-Translator: Claudio Arseni <claudio.arseni@ubuntu.com>\n"
+"Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
 #: ../src/daemon/goadaemon.c:871
 msgid "An online account needs attention"
@@ -28,31 +31,34 @@ msgstr "Apri account online..."
 msgid "Facebook"
 msgstr "Facebook"
 
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:161
 #: ../src/goabackend/goagoogleprovider.c:195
 #: ../src/goabackend/goatwitterprovider.c:160
-#: ../src/goabackend/goayahooprovider.c:162
+#: ../src/goabackend/goayahooprovider.c:163
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
-msgstr "Atteso stato 200 durante la richiesta di guid, ottenuto invece lo stato %d (%s)"
+msgstr ""
+"Atteso stato 200 durante la richiesta di guid, ottenuto invece lo stato %d (%"
+"s)"
 
 #: ../src/goabackend/goafacebookprovider.c:173
 #: ../src/goabackend/goagoogleprovider.c:207
 #: ../src/goabackend/goaoauth2provider.c:476
 #: ../src/goabackend/goatwitterprovider.c:172
-#: ../src/goabackend/goayahooprovider.c:174
+#: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
 msgstr "Errore nell'elaborare la risposta come JSON: "
 
 #: ../src/goabackend/goafacebookprovider.c:184
 #, c-format
 msgid "Didn't find username member in JSON data"
-msgstr "Impossibile trovare il membro nome utente nei dati JSON"
+msgstr "Non è stato trovato il membro username nei dati JSON"
 
 #: ../src/goabackend/goafacebookprovider.c:193
 #, c-format
 msgid "Didn't find name member in JSON data"
-msgstr ""
+msgstr "Non è stato trovato il membro name nei dati JSON"
 
 #: ../src/goabackend/goafacebookprovider.c:259
 #: ../src/goabackend/goatwitterprovider.c:260
@@ -66,12 +72,12 @@ msgstr "Google"
 #: ../src/goabackend/goagoogleprovider.c:218
 #, c-format
 msgid "Didn't find data member in JSON data"
-msgstr ""
+msgstr "Non è stato trovato il membro data nei dati JSON"
 
 #: ../src/goabackend/goagoogleprovider.c:228
 #, c-format
 msgid "Didn't find email member in JSON data"
-msgstr ""
+msgstr "Non è stato trovato il membro email nei dati JSON"
 
 #: ../src/goabackend/goagoogleprovider.c:425
 msgid "Email Address"
@@ -101,189 +107,207 @@ msgstr "Chat"
 msgid "Documents"
 msgstr "Documenti"
 
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauth2provider.c:431
-#: ../src/goabackend/goaoauthprovider.c:438
+#: ../src/goabackend/goaoauthprovider.c:439
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr ""
+"Atteso stato 200 durante la richiesta del token di accesso, ottenuto invece "
+"lo stato %d (%s)"
 
 #: ../src/goabackend/goaoauth2provider.c:451
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
-msgstr ""
+msgstr "Non è stato trovato access_token nei dati non-JSON"
 
 #: ../src/goabackend/goaoauth2provider.c:487
 #, c-format
 msgid "Didn't find access_token in JSON data"
-msgstr ""
+msgstr "Non è stato trovato access_token nei dati JSON"
 
 #: ../src/goabackend/goaoauth2provider.c:571
 #, c-format
 msgid "Authorization response was \"%s\""
-msgstr ""
+msgstr "La risposta di autorizzazione è stata \"%s\""
 
-#: ../src/goabackend/goaoauth2provider.c:651
+#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
+#: ../src/goabackend/goaoauth2provider.c:652
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
 "page</a>:"
 msgstr ""
+"Incollare il codice di autorizzazione ottenuto dalla <a href=\"%s\">pagina "
+"di autorizzazione</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:722
-#: ../src/goabackend/goaoauthprovider.c:744
+#: ../src/goabackend/goaoauth2provider.c:723
+#: ../src/goabackend/goaoauthprovider.c:747
 #, c-format
 msgid "Dialog was dismissed"
-msgstr ""
+msgstr "Il dialogo è stato respinto"
 
-#: ../src/goabackend/goaoauth2provider.c:746
-#: ../src/goabackend/goaoauthprovider.c:775
+#: ../src/goabackend/goaoauth2provider.c:747
+#: ../src/goabackend/goaoauthprovider.c:778
 msgid "Error getting an Access Token: "
-msgstr ""
+msgstr "Errore nell'ottenere il token di accesso: "
 
-#: ../src/goabackend/goaoauth2provider.c:758
-#: ../src/goabackend/goaoauthprovider.c:788
+#: ../src/goabackend/goaoauth2provider.c:759
+#: ../src/goabackend/goaoauthprovider.c:791
 msgid "Error getting identity: "
-msgstr ""
+msgstr "Errore nell'ottenere l'identità: "
 
-#: ../src/goabackend/goaoauth2provider.c:923
-#: ../src/goabackend/goaoauthprovider.c:965
+#: ../src/goabackend/goaoauth2provider.c:924
+#: ../src/goabackend/goaoauthprovider.c:968
 #, c-format
 msgid "There is already an account for the identity %s"
-msgstr ""
+msgstr "C'è già un account per l'identità %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1048
-#: ../src/goabackend/goaoauthprovider.c:1095
+#: ../src/goabackend/goaoauth2provider.c:1049
+#: ../src/goabackend/goaoauthprovider.c:1098
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
-msgstr ""
+msgstr "È stato richiesto di accedere come %s, ma l'accesso è avvenuto come %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1184
-#: ../src/goabackend/goaoauthprovider.c:1243
+#: ../src/goabackend/goaoauth2provider.c:1185
+#: ../src/goabackend/goaoauthprovider.c:1246
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
-msgstr ""
+msgstr "Credenziali non trovate nel portachiavi (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1211
+#: ../src/goabackend/goaoauth2provider.c:1212
 #, c-format
-msgid "Credentials does not contain access_token"
-msgstr ""
+msgid "Credentials do not contain access_token"
+msgstr "Le credenziali non contengono access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1250
-#: ../src/goabackend/goaoauthprovider.c:1316
+#: ../src/goabackend/goaoauth2provider.c:1251
+#: ../src/goabackend/goaoauthprovider.c:1319
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
-msgstr ""
+msgstr "Aggiornamento del token di accesso non riuscito (%s, %d):"
 
-#: ../src/goabackend/goaoauth2provider.c:1285
-#: ../src/goabackend/goaoauthprovider.c:1346
+#: ../src/goabackend/goaoauth2provider.c:1286
+#: ../src/goabackend/goaoauthprovider.c:1349
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
-msgstr ""
+msgstr "Errore nel memorizzare le credenziali nel portachiavi (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:461
+#: ../src/goabackend/goaoauthprovider.c:462
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr ""
+"Nella risposta mancano le intestazione access_token o access_token_secret"
 
-#: ../src/goabackend/goaoauthprovider.c:634
+#: ../src/goabackend/goaoauthprovider.c:635
 msgid "Error getting a Request Token: "
-msgstr ""
+msgstr "Errore nell'ottenere un token di richiesta:"
 
-#: ../src/goabackend/goaoauthprovider.c:642
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goaoauthprovider.c:644
 #, c-format
-msgid "Expected 200 for getting a Request Token, got %d (%s)"
+msgid ""
+"Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr ""
+"Atteso stato 200 per l'ottenimento di un token di richiesta, ottenuto invece "
+"lo stato %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:656
+#: ../src/goabackend/goaoauthprovider.c:658
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr ""
+"Nella risposta mancano le intestazione request_token o request_token_secret"
 
-#: ../src/goabackend/goaoauthprovider.c:672
+#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
+#: ../src/goabackend/goaoauthprovider.c:675
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr ""
+"Incollare il token ottenuto dalla <a href=\"%s\">pagina di autorizzazione</"
+"a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1272
+#: ../src/goabackend/goaoauthprovider.c:1275
 #, c-format
-msgid "Credentials does not contain access_token or access_token_secret"
-msgstr ""
+msgid "Credentials do not contain access_token or access_token_secret"
+msgstr "Le credenziali non contengono access_token o access_token_secret"
 
 #: ../src/goabackend/goaprovider.c:522
 #, c-format
-msgid "ensure_credentials_sync not been implemented on type %s"
-msgstr ""
+msgid "ensure_credentials_sync is not implemented on type %s"
+msgstr "ensure_credentials_sync non è implementato sul tipo %s"
 
-#: ../src/goabackend/goaprovider.c:736
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#: ../src/goabackend/goaprovider.c:737
 #, c-format
 msgid "GOA %s credentials for identity %s"
-msgstr ""
+msgstr "Credenziali GOA %s per l'identità %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:750
+#: ../src/goabackend/goaprovider.c:751
 #, c-format
 msgid "Failed to store credentials in the keyring: %s"
-msgstr ""
+msgstr "Archiviazione delle credenziali nel portachiavi non riuscita: %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:821
+#: ../src/goabackend/goaprovider.c:822
 #, c-format
 msgid "Failed to retrieve credentials from the keyring: %s"
-msgstr ""
+msgstr "Recupero delle credenziali dal portachiavi non riuscito: %s"
 
-#: ../src/goabackend/goaprovider.c:833
+#: ../src/goabackend/goaprovider.c:834
 msgid "Error parsing result obtained from the keyring: "
-msgstr ""
+msgstr "Errore nell'analisi del risultato ottenuto dal portachiavi: "
 
 #: ../src/goabackend/goatwitterprovider.c:78
 msgid "Twitter"
-msgstr ""
+msgstr "Twitter"
 
 #: ../src/goabackend/goatwitterprovider.c:183
 #, c-format
 msgid "Didn't find id_str member in JSON data"
-msgstr ""
+msgstr "Non è stato trovato il membro id_str nei dati JSON"
 
 #: ../src/goabackend/goatwitterprovider.c:192
 #, c-format
 msgid "Didn't find screen_name member in JSON data"
-msgstr ""
+msgstr "Non è stato trovato il membro screen_name nei dati JSON"
 
 #: ../src/goabackend/goayahooprovider.c:78
 msgid "Yahoo"
 msgstr "Yahoo"
 
-#: ../src/goabackend/goayahooprovider.c:185
+#: ../src/goabackend/goayahooprovider.c:186
 #, c-format
 msgid "Didn't find guid member in JSON data"
-msgstr ""
+msgstr "Non è stato trovato il membro guid nei dati JSON"
 
-#: ../src/goabackend/goayahooprovider.c:195
+#: ../src/goabackend/goayahooprovider.c:196
 #, c-format
 msgid "Didn't find value member in JSON data"
-msgstr ""
+msgstr "Non è stato trovato il membro value nei dati JSON"
 
-#: ../src/goabackend/goayahooprovider.c:221
+#: ../src/goabackend/goayahooprovider.c:222
 #, c-format
 msgid "Expected status 200 when requesting name, instead got status %d (%s)"
 msgstr ""
+"Atteso stato 200 durante la richiesta di name, ottenuto invece lo stato %d (%"
+"s)"
 
-#: ../src/goabackend/goayahooprovider.c:234
+#: ../src/goabackend/goayahooprovider.c:235
 msgid "Error parsing usercard response as JSON: "
-msgstr ""
+msgstr "Errore nell'elaborare la risposta usercard come JSON: "
 
-#: ../src/goabackend/goayahooprovider.c:245
+#: ../src/goabackend/goayahooprovider.c:246
 #, c-format
 msgid "Didn't find profile member in JSON data"
-msgstr ""
+msgstr "Non è stato trovato il membro profile nei dati JSON"
 
-#: ../src/goabackend/goayahooprovider.c:255
+#: ../src/goabackend/goayahooprovider.c:256
 #, c-format
 msgid "Didn't find nickname member in JSON data"
-msgstr ""
+msgstr "Non è stato trovato il membro nickname nei dati JSON"
 
 #. TODO: look up email address / screenname from GUID
-#: ../src/goabackend/goayahooprovider.c:323
+#: ../src/goabackend/goayahooprovider.c:324
 msgid "Name"
 msgstr "Nome"
