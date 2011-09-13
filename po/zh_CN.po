@@ -1,0 +1,299 @@
+# Chinese (China) translation for gnome-online-accounts.
+# Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-online-accounts package.
+# Yinghua_Wang <wantinghard@gmail.com>, 2011.
+# YunQiang Su <wzssyqa@gmail.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-online-accounts master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"online-accounts&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-09-01 10:20+0000\n"
+"PO-Revision-Date: 2011-09-13 21:57+0800\n"
+"Last-Translator: YunQiang Su <wzssyqa@gmail.com>\n"
+"Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bits\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ../src/daemon/goadaemon.c:871
+msgid "An online account needs attention"
+msgstr "有在线账户需要关注"
+
+#: ../src/daemon/goadaemon.c:878
+msgid "Open Online Accounts..."
+msgstr "打开在线账户..."
+
+#: ../src/goabackend/goafacebookprovider.c:78
+msgid "Facebook"
+msgstr "Facebook"
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goafacebookprovider.c:161
+#: ../src/goabackend/goagoogleprovider.c:195
+#: ../src/goabackend/goatwitterprovider.c:160
+#: ../src/goabackend/goayahooprovider.c:163
+#, c-format
+msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+msgstr "在请求 guid 时应得到状态 200，但却得到了状态 %d (%s)"
+
+#: ../src/goabackend/goafacebookprovider.c:173
+#: ../src/goabackend/goagoogleprovider.c:207
+#: ../src/goabackend/goaoauth2provider.c:476
+#: ../src/goabackend/goatwitterprovider.c:172
+#: ../src/goabackend/goayahooprovider.c:175
+msgid "Error parsing response as JSON: "
+msgstr "将响应解析为 JSON 出错："
+
+#: ../src/goabackend/goafacebookprovider.c:184
+#, c-format
+msgid "Didn't find username member in JSON data"
+msgstr "在 JSON 数据中未发现 username(用户名) 成员"
+
+#: ../src/goabackend/goafacebookprovider.c:193
+#, c-format
+msgid "Didn't find name member in JSON data"
+msgstr "在 JSON 数据中未发现 name(姓名) 成员"
+
+#: ../src/goabackend/goafacebookprovider.c:259
+#: ../src/goabackend/goatwitterprovider.c:260
+msgid "User Name"
+msgstr "用户姓"
+
+#: ../src/goabackend/goagoogleprovider.c:78
+msgid "Google"
+msgstr "Google"
+
+#: ../src/goabackend/goagoogleprovider.c:218
+#, c-format
+msgid "Didn't find data member in JSON data"
+msgstr "在 JSON 数据中未发现 data(数据) 成员"
+
+#: ../src/goabackend/goagoogleprovider.c:228
+#, c-format
+msgid "Didn't find email member in JSON data"
+msgstr "在 JSON 数据中未发现 email(电子邮箱) 成员"
+
+#: ../src/goabackend/goagoogleprovider.c:425
+msgid "Email Address"
+msgstr "电子邮件地址"
+
+#: ../src/goabackend/goagoogleprovider.c:426
+msgid "Use this account for"
+msgstr "将此账户用于"
+
+#: ../src/goabackend/goagoogleprovider.c:427
+msgid "Mail"
+msgstr "邮件"
+
+#: ../src/goabackend/goagoogleprovider.c:428
+msgid "Calendar"
+msgstr "日历"
+
+#: ../src/goabackend/goagoogleprovider.c:429
+msgid "Contacts"
+msgstr "联系人"
+
+#: ../src/goabackend/goagoogleprovider.c:430
+msgid "Chat"
+msgstr "聊天"
+
+#: ../src/goabackend/goagoogleprovider.c:431
+msgid "Documents"
+msgstr "文档"
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goaoauth2provider.c:431
+#: ../src/goabackend/goaoauthprovider.c:439
+#, c-format
+msgid ""
+"Expected status 200 when requesting access token, instead got status %d (%s)"
+msgstr "在请求访问令牌时应得到状态 200，但却得到了状态 %d (%s)"
+
+#: ../src/goabackend/goaoauth2provider.c:451
+#, c-format
+msgid "Didn't find access_token in non-JSON data"
+msgstr "在非 JSON 数据中未找到 access_token"
+
+#: ../src/goabackend/goaoauth2provider.c:487
+#, c-format
+msgid "Didn't find access_token in JSON data"
+msgstr "在 JSON 数据中未找到 access_token"
+
+#: ../src/goabackend/goaoauth2provider.c:571
+#, c-format
+msgid "Authorization response was \"%s\""
+msgstr "认证响应为“%s”"
+
+#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
+#: ../src/goabackend/goaoauth2provider.c:652
+#, c-format
+msgid ""
+"Paste authorization code obtained from the <a href=\"%s\">authorization "
+"page</a>:"
+msgstr "请粘贴从<a href=\"%s\">认证页面</a>获得的认证代码："
+
+#: ../src/goabackend/goaoauth2provider.c:723
+#: ../src/goabackend/goaoauthprovider.c:747
+#, fuzzy, c-format
+msgid "Dialog was dismissed"
+msgstr "对话框被关掉"
+
+#: ../src/goabackend/goaoauth2provider.c:747
+#: ../src/goabackend/goaoauthprovider.c:778
+msgid "Error getting an Access Token: "
+msgstr "获取访问令牌出错："
+
+#: ../src/goabackend/goaoauth2provider.c:759
+#: ../src/goabackend/goaoauthprovider.c:791
+#, fuzzy
+msgid "Error getting identity: "
+msgstr "获取实体出错："
+
+#: ../src/goabackend/goaoauth2provider.c:924
+#: ../src/goabackend/goaoauthprovider.c:968
+#, fuzzy, c-format
+msgid "There is already an account for the identity %s"
+msgstr "已经有账户与实体 %s 对应"
+
+#: ../src/goabackend/goaoauth2provider.c:1049
+#: ../src/goabackend/goaoauthprovider.c:1098
+#, c-format
+msgid "Was asked to login as %s, but logged in as %s"
+msgstr "要求以 %s 身份登录，但却登录为 %s"
+
+#: ../src/goabackend/goaoauth2provider.c:1185
+#: ../src/goabackend/goaoauthprovider.c:1246
+#, c-format
+msgid "Credentials not found in keyring (%s, %d): "
+msgstr "在密钥环(%s，%d)中找不到证书："
+
+#: ../src/goabackend/goaoauth2provider.c:1212
+#, c-format
+msgid "Credentials do not contain access_token"
+msgstr "证书中不包含 access_token(访问令牌)"
+
+#: ../src/goabackend/goaoauth2provider.c:1251
+#: ../src/goabackend/goaoauthprovider.c:1319
+#, c-format
+msgid "Failed to refresh access token (%s, %d): "
+msgstr "刷新访问令牌(%s，%d)失败："
+
+#: ../src/goabackend/goaoauth2provider.c:1286
+#: ../src/goabackend/goaoauthprovider.c:1349
+#, c-format
+msgid "Error storing credentials in keyring (%s, %d): "
+msgstr "存储密钥环(%s，%d)中的证书出错："
+
+#: ../src/goabackend/goaoauthprovider.c:462
+#, c-format
+msgid "Missing access_token or access_token_secret headers in response"
+msgstr "响应中缺少 access_token 或 access_token_secret 头"
+
+#: ../src/goabackend/goaoauthprovider.c:635
+msgid "Error getting a Request Token: "
+msgstr "获取响应令牌出错："
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goaoauthprovider.c:644
+#, c-format
+msgid ""
+"Expected status 200 for getting a Request Token, instead got status %d (%s)"
+msgstr "获取响应令牌时应得到状态 200，但却得到了状态 %d(%s)"
+
+#: ../src/goabackend/goaoauthprovider.c:658
+#, c-format
+msgid "Missing request_token or request_token_secret headers in response"
+msgstr "响应中缺少 request_token 或 request_token_secret 头"
+
+#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
+#: ../src/goabackend/goaoauthprovider.c:675
+#, c-format
+msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
+msgstr "请粘贴从<a href=\"%s\">认证页面</a>获得的令牌："
+
+#: ../src/goabackend/goaoauthprovider.c:1275
+#, c-format
+msgid "Credentials do not contain access_token or access_token_secret"
+msgstr "证书中不含 access_token 或 access_token_secret"
+
+#: ../src/goabackend/goaprovider.c:522
+#, c-format
+msgid "ensure_credentials_sync is not implemented on type %s"
+msgstr "ensure_credentials_sync 未在 %s 类型上实现"
+
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#: ../src/goabackend/goaprovider.c:737
+#, fuzzy, c-format
+msgid "GOA %s credentials for identity %s"
+msgstr "实体 %2$s 的 GOA %1$s 证书"
+
+#. TODO: more specific
+#: ../src/goabackend/goaprovider.c:751
+#, c-format
+msgid "Failed to store credentials in the keyring: %s"
+msgstr "存储密钥环中的证书失败：%s"
+
+#. TODO: more specific
+#: ../src/goabackend/goaprovider.c:822
+#, c-format
+msgid "Failed to retrieve credentials from the keyring: %s"
+msgstr "从密钥环中取出证书失败：%s"
+
+#: ../src/goabackend/goaprovider.c:834
+msgid "Error parsing result obtained from the keyring: "
+msgstr "解析从密钥环获取的结果出错："
+
+#: ../src/goabackend/goatwitterprovider.c:78
+msgid "Twitter"
+msgstr "Twitter"
+
+#: ../src/goabackend/goatwitterprovider.c:183
+#, c-format
+msgid "Didn't find id_str member in JSON data"
+msgstr "在 JSON 数据中未找到 id_str(标识字符串) 成员"
+
+#: ../src/goabackend/goatwitterprovider.c:192
+#, c-format
+msgid "Didn't find screen_name member in JSON data"
+msgstr "在 JSON 数据中未找到 screen_name(显示姓名) 成员"
+
+#: ../src/goabackend/goayahooprovider.c:78
+msgid "Yahoo"
+msgstr "Yahoo"
+
+#: ../src/goabackend/goayahooprovider.c:186
+#, c-format
+msgid "Didn't find guid member in JSON data"
+msgstr "在 JSON 数据中未找到 guid(组用户标识) 成员"
+
+#: ../src/goabackend/goayahooprovider.c:196
+#, c-format
+msgid "Didn't find value member in JSON data"
+msgstr "在 JSON 数据中未找到 value(值) 成员"
+
+#: ../src/goabackend/goayahooprovider.c:222
+#, c-format
+msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+msgstr "在获取姓名时应得到状态 200，但却得到了状态 %d (%s)"
+
+#: ../src/goabackend/goayahooprovider.c:235
+msgid "Error parsing usercard response as JSON: "
+msgstr "将用户卡响应解析为 JSON 出错："
+
+#: ../src/goabackend/goayahooprovider.c:246
+#, c-format
+msgid "Didn't find profile member in JSON data"
+msgstr "在 JSON 数据中未找到 profile(个人资料) 成员"
+
+#: ../src/goabackend/goayahooprovider.c:256
+#, c-format
+msgid "Didn't find nickname member in JSON data"
+msgstr "在 JSON 数据中未找到 nickname(昵称) 成员"
+
+#. TODO: look up email address / screenname from GUID
+#: ../src/goabackend/goayahooprovider.c:324
+msgid "Name"
+msgstr "姓名"
