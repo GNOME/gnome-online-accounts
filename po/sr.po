@@ -1,0 +1,304 @@
+# Serbian translation for gnome-online-accounts.
+# Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-online-accounts package.
+# Мирослав Николић <miroslavnikolic@rocketmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-online-accounts master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"online-accounts&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-09-10 17:18+0000\n"
+"PO-Revision-Date: 2011-09-11 18:23+0200\n"
+"Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
+"Language-Team: Serbian <gnom@prevod.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sr\n"
+"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 :    n%"
+"10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Virtaal 0.7.0\n"
+"X-Project-Style: gnome\n"
+
+#: ../src/daemon/goadaemon.c:871
+msgid "An online account needs attention"
+msgstr "Један налог на мрежи захтева пажњу"
+
+#: ../src/daemon/goadaemon.c:878
+msgid "Open Online Accounts..."
+msgstr "Отвори налоге на мрежи..."
+
+#: ../src/goabackend/goafacebookprovider.c:78
+msgid "Facebook"
+msgstr "Фејсбук"
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goafacebookprovider.c:161
+#: ../src/goabackend/goagoogleprovider.c:195
+#: ../src/goabackend/goatwitterprovider.c:160
+#: ../src/goabackend/goayahooprovider.c:163
+#, c-format
+msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+msgstr ""
+"Очекивах стање 200 приликом потраживања гуид-а, али добих стање %d (%s)"
+
+#: ../src/goabackend/goafacebookprovider.c:173
+#: ../src/goabackend/goagoogleprovider.c:207
+#: ../src/goabackend/goaoauth2provider.c:476
+#: ../src/goabackend/goatwitterprovider.c:172
+#: ../src/goabackend/goayahooprovider.c:175
+msgid "Error parsing response as JSON: "
+msgstr "Грешка у анализи одговора као ЈСОН:"
+
+#: ../src/goabackend/goafacebookprovider.c:184
+#, c-format
+msgid "Didn't find username member in JSON data"
+msgstr "Нисам нашао члана корисничког имена у ЈСОН подацима"
+
+#: ../src/goabackend/goafacebookprovider.c:193
+#, c-format
+msgid "Didn't find name member in JSON data"
+msgstr "Нисам нашао члана имена у ЈСОН подацима"
+
+#: ../src/goabackend/goafacebookprovider.c:259
+#: ../src/goabackend/goatwitterprovider.c:260
+msgid "User Name"
+msgstr "Корисничко име"
+
+#: ../src/goabackend/goagoogleprovider.c:78
+msgid "Google"
+msgstr "Гугл"
+
+#: ../src/goabackend/goagoogleprovider.c:218
+#, c-format
+msgid "Didn't find data member in JSON data"
+msgstr "Нисам нашао члана података у ЈСОН подацима"
+
+#: ../src/goabackend/goagoogleprovider.c:228
+#, c-format
+msgid "Didn't find email member in JSON data"
+msgstr "Нисам нашао члана е-поште у ЈСОН подацима"
+
+#: ../src/goabackend/goagoogleprovider.c:425
+msgid "Email Address"
+msgstr "Адреса е‑поште"
+
+#: ../src/goabackend/goagoogleprovider.c:426
+msgid "Use this account for"
+msgstr "Користи овај налог за"
+
+#: ../src/goabackend/goagoogleprovider.c:427
+msgid "Mail"
+msgstr "Пошту"
+
+#: ../src/goabackend/goagoogleprovider.c:428
+msgid "Calendar"
+msgstr "Календар"
+
+#: ../src/goabackend/goagoogleprovider.c:429
+msgid "Contacts"
+msgstr "Контакте"
+
+#: ../src/goabackend/goagoogleprovider.c:430
+msgid "Chat"
+msgstr "Ћаскање"
+
+#: ../src/goabackend/goagoogleprovider.c:431
+msgid "Documents"
+msgstr "Документа"
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goaoauth2provider.c:431
+#: ../src/goabackend/goaoauthprovider.c:439
+#, c-format
+msgid ""
+"Expected status 200 when requesting access token, instead got status %d (%s)"
+msgstr ""
+"Очекивах стање 200 приликом потраживања чина приступа, али добих стање %d (%"
+"s)"
+
+#: ../src/goabackend/goaoauth2provider.c:451
+#, c-format
+msgid "Didn't find access_token in non-JSON data"
+msgstr "Нисам нашао чин_приступа у не-ЈСОН подацима"
+
+#: ../src/goabackend/goaoauth2provider.c:487
+#, c-format
+msgid "Didn't find access_token in JSON data"
+msgstr "Нисам нашао чин_приступа у ЈСОН подацима"
+
+#: ../src/goabackend/goaoauth2provider.c:571
+#, c-format
+msgid "Authorization response was \"%s\""
+msgstr "Одговор овлашћења беше „%s“"
+
+#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
+#: ../src/goabackend/goaoauth2provider.c:652
+#, c-format
+msgid ""
+"Paste authorization code obtained from the <a href=\"%s\">authorization "
+"page</a>:"
+msgstr ""
+"Код убацивања овлашћења је добијен са <a href=\"%s\">странице овлашћења</a>:"
+
+#: ../src/goabackend/goaoauth2provider.c:723
+#: ../src/goabackend/goaoauthprovider.c:747
+#, c-format
+msgid "Dialog was dismissed"
+msgstr "Прозорче је смењено"
+
+#: ../src/goabackend/goaoauth2provider.c:747
+#: ../src/goabackend/goaoauthprovider.c:778
+msgid "Error getting an Access Token: "
+msgstr "Грешка приликом добављања Чина приступа:"
+
+#: ../src/goabackend/goaoauth2provider.c:759
+#: ../src/goabackend/goaoauthprovider.c:791
+msgid "Error getting identity: "
+msgstr "Грешка приликом добављања идентитета:"
+
+#: ../src/goabackend/goaoauth2provider.c:924
+#: ../src/goabackend/goaoauthprovider.c:968
+#, c-format
+msgid "There is already an account for the identity %s"
+msgstr "Већ постоји налог за идентитет %s"
+
+#: ../src/goabackend/goaoauth2provider.c:1049
+#: ../src/goabackend/goaoauthprovider.c:1098
+#, c-format
+msgid "Was asked to login as %s, but logged in as %s"
+msgstr "Затражено је да се пријавите као %s, али сте се пријавили као %s"
+
+#: ../src/goabackend/goaoauth2provider.c:1185
+#: ../src/goabackend/goaoauthprovider.c:1246
+#, c-format
+msgid "Credentials not found in keyring (%s, %d): "
+msgstr "Пуномоћства нису пронађена у привеску кључева (%s, %d): "
+
+#: ../src/goabackend/goaoauth2provider.c:1212
+#, c-format
+msgid "Credentials do not contain access_token"
+msgstr "Пуномоћства не садрже чин_приступа"
+
+#: ../src/goabackend/goaoauth2provider.c:1251
+#: ../src/goabackend/goaoauthprovider.c:1319
+#, c-format
+msgid "Failed to refresh access token (%s, %d): "
+msgstr "Нисам успео да освежим чин приступа (%s, %d):"
+
+#: ../src/goabackend/goaoauth2provider.c:1286
+#: ../src/goabackend/goaoauthprovider.c:1349
+#, c-format
+msgid "Error storing credentials in keyring (%s, %d): "
+msgstr "Грешка у складиштењу пуномоћства у привезак кључева (%s, %d):"
+
+#: ../src/goabackend/goaoauthprovider.c:462
+#, c-format
+msgid "Missing access_token or access_token_secret headers in response"
+msgstr "Недостаје заглавље чина_приступа или тајна_чина_приступа у одговору"
+
+#: ../src/goabackend/goaoauthprovider.c:635
+msgid "Error getting a Request Token: "
+msgstr "Грешке приликом добављања Чина захтева: "
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goaoauthprovider.c:644
+#, c-format
+msgid ""
+"Expected status 200 for getting a Request Token, instead got status %d (%s)"
+msgstr "Очекивах стање 200 за добављање Чина захтева, али добих стање %d (%s)"
+
+#: ../src/goabackend/goaoauthprovider.c:658
+#, c-format
+msgid "Missing request_token or request_token_secret headers in response"
+msgstr "Недостаје заглавље чина_захтева или тајна_чина_захтева у одговору"
+
+#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
+#: ../src/goabackend/goaoauthprovider.c:675
+#, c-format
+msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
+msgstr "Чин убацивања је добијен са <a href=\"%s\">странице овлашћења</a>:"
+
+#: ../src/goabackend/goaoauthprovider.c:1275
+#, c-format
+msgid "Credentials do not contain access_token or access_token_secret"
+msgstr "Пуномоћства не садрже чин_приступа или тајну_чина_приступа"
+
+#: ../src/goabackend/goaprovider.c:522
+#, c-format
+msgid "ensure_credentials_sync is not implemented on type %s"
+msgstr "Осигурај_усаглашавање_пуномоћства није примењено на врсти %s"
+
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#: ../src/goabackend/goaprovider.c:737
+#, c-format
+msgid "GOA %s credentials for identity %s"
+msgstr "ГОА %s пуномоћства за идентитет %s"
+
+#. TODO: more specific
+#: ../src/goabackend/goaprovider.c:751
+#, c-format
+msgid "Failed to store credentials in the keyring: %s"
+msgstr "Нисам успео да сачувам пуномоћства у привеску кључева: %s"
+
+#. TODO: more specific
+#: ../src/goabackend/goaprovider.c:822
+#, c-format
+msgid "Failed to retrieve credentials from the keyring: %s"
+msgstr "Нисам успео да довучем пуномоћства из привеска кључева: %s"
+
+#: ../src/goabackend/goaprovider.c:834
+msgid "Error parsing result obtained from the keyring: "
+msgstr "Грешка у анализи резултата добијених из привеска кључева: "
+
+#: ../src/goabackend/goatwitterprovider.c:78
+msgid "Twitter"
+msgstr "Твитер"
+
+#: ../src/goabackend/goatwitterprovider.c:183
+#, c-format
+msgid "Didn't find id_str member in JSON data"
+msgstr "Нисам нашао члана иб_стр-а у ЈСОН подацима"
+
+#: ../src/goabackend/goatwitterprovider.c:192
+#, c-format
+msgid "Didn't find screen_name member in JSON data"
+msgstr "Нисам нашао члана назива_екрана у ЈСОН подацима"
+
+#: ../src/goabackend/goayahooprovider.c:78
+msgid "Yahoo"
+msgstr "Јаху"
+
+#: ../src/goabackend/goayahooprovider.c:186
+#, c-format
+msgid "Didn't find guid member in JSON data"
+msgstr "Нисам нашао члана гуид-а у ЈСОН подацима"
+
+#: ../src/goabackend/goayahooprovider.c:196
+#, c-format
+msgid "Didn't find value member in JSON data"
+msgstr "Нисам нашао члана вредности у ЈСОН подацима"
+
+#: ../src/goabackend/goayahooprovider.c:222
+#, c-format
+msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+msgstr "Очекивах стање 200 приликом потраживања имена, али добих стање %d (%s)"
+
+#: ../src/goabackend/goayahooprovider.c:235
+msgid "Error parsing usercard response as JSON: "
+msgstr "Грешка у анализи одговора корисничке картице као ЈСОН:"
+
+#: ../src/goabackend/goayahooprovider.c:246
+#, c-format
+msgid "Didn't find profile member in JSON data"
+msgstr "Нисам нашао члана профила у ЈСОН подацима"
+
+#: ../src/goabackend/goayahooprovider.c:256
+#, c-format
+msgid "Didn't find nickname member in JSON data"
+msgstr "Нисам нашао члана надимка у ЈСОН подацима"
+
+#. TODO: look up email address / screenname from GUID
+#: ../src/goabackend/goayahooprovider.c:324
+msgid "Name"
+msgstr "Име"
