@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-17 03:16+0000\n"
-"PO-Revision-Date: 2011-09-17 17:49+0100\n"
+"POT-Creation-Date: 2011-09-19 00:46+0000\n"
+"PO-Revision-Date: 2011-09-19 11:30+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
-"Language: Slovenian\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: Slovenian\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n%100==4 ? 3 : 0);\n"
 "X-Poedit-Country: SLOVENIA\n"
 "X-Poedit-Language: Slovenian\n"
@@ -23,7 +23,7 @@ msgstr ""
 
 #: ../src/daemon/goadaemon.c:871
 msgid "An online account needs attention"
-msgstr ""
+msgstr "Spletni račun zahteva pozornost"
 
 #: ../src/daemon/goadaemon.c:878
 msgid "Open Online Accounts..."
@@ -40,7 +40,7 @@ msgstr "Facebook"
 #: ../src/goabackend/goayahooprovider.c:163
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
-msgstr ""
+msgstr "Pričakovano je stanje 200 pri zahtevi guid, vrnjeno pa je stanje %d (%s)"
 
 #: ../src/goabackend/goafacebookprovider.c:173
 #: ../src/goabackend/goagoogleprovider.c:207
@@ -48,17 +48,17 @@ msgstr ""
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
-msgstr ""
+msgstr "Napaka razčlenjevanja odziva kot JSON: "
 
 #: ../src/goabackend/goafacebookprovider.c:184
 #, c-format
 msgid "Didn't find username member in JSON data"
-msgstr ""
+msgstr "Ni mogoče najti uporabniškega imena stika med podatki JSON "
 
 #: ../src/goabackend/goafacebookprovider.c:193
 #, c-format
 msgid "Didn't find name member in JSON data"
-msgstr ""
+msgstr "Ni mogoče najti imena stika med podatki JSON "
 
 #: ../src/goabackend/goafacebookprovider.c:259
 #: ../src/goabackend/goatwitterprovider.c:260
@@ -72,12 +72,12 @@ msgstr "Google"
 #: ../src/goabackend/goagoogleprovider.c:218
 #, c-format
 msgid "Didn't find data member in JSON data"
-msgstr ""
+msgstr "Ni mogoče najti podatkov stika med podatki JSON "
 
 #: ../src/goabackend/goagoogleprovider.c:228
 #, c-format
 msgid "Didn't find email member in JSON data"
-msgstr ""
+msgstr "Ni mogoče najti elektronske pošte stika med podatki JSON"
 
 #: ../src/goabackend/goagoogleprovider.c:425
 msgid "Email Address"
@@ -112,40 +112,39 @@ msgstr "Dokumenti"
 #: ../src/goabackend/goaoauthprovider.c:439
 #, c-format
 msgid "Expected status 200 when requesting access token, instead got status %d (%s)"
-msgstr ""
+msgstr "Pričakovano je stanje 200 pri zahtevi žetona dostopa, vrnjeno pa je stanje %d (%s)"
 
 #: ../src/goabackend/goaoauth2provider.c:451
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
-msgstr ""
+msgstr "Ni mogoče najti žetona dostopa med podatki, ki ne spadajo k JSON "
 
 #: ../src/goabackend/goaoauth2provider.c:487
 #, c-format
 msgid "Didn't find access_token in JSON data"
-msgstr ""
+msgstr "Ni mogoče najti žetona dostopa med podatki JSON "
 
 #: ../src/goabackend/goaoauth2provider.c:571
-#, fuzzy, c-format
+#, c-format
 msgid "Authorization response was \"%s\""
-msgstr "Navidezno zapisovanje je bilo uspešno."
+msgstr "Odziv overitve je \"%s\""
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
 #: ../src/goabackend/goaoauth2provider.c:652
 #, c-format
 msgid "Paste authorization code obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr ""
+msgstr "Prilepi kodo overitve pridobljeno preko <a href=\"%s\">strani overitve</a>:"
 
 #: ../src/goabackend/goaoauth2provider.c:723
 #: ../src/goabackend/goaoauthprovider.c:747
-#, fuzzy, c-format
+#, c-format
 msgid "Dialog was dismissed"
-msgstr "Navidezno zapisovanje je bilo uspešno."
+msgstr "Pogovorno okno je bilo opuščeno"
 
 #: ../src/goabackend/goaoauth2provider.c:747
 #: ../src/goabackend/goaoauthprovider.c:778
-#, fuzzy
 msgid "Error getting an Access Token: "
-msgstr "Napaka pridobivanja šifrirnega ključa: %s"
+msgstr "Napaka pridobivanja žetona dostopa:"
 
 #: ../src/goabackend/goaoauth2provider.c:759
 #: ../src/goabackend/goaoauthprovider.c:791
@@ -156,97 +155,94 @@ msgstr "Napaka med pridobivanjem istovetnosti:"
 #: ../src/goabackend/goaoauthprovider.c:968
 #, c-format
 msgid "There is already an account for the identity %s"
-msgstr ""
+msgstr "Za uporabnika %s je že ustvarjen račun"
 
 #: ../src/goabackend/goaoauth2provider.c:1049
 #: ../src/goabackend/goaoauthprovider.c:1098
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
-msgstr ""
+msgstr "Zahtevana je prijava %s, prijavljen pa je uporabnik %s"
 
 #: ../src/goabackend/goaoauth2provider.c:1185
 #: ../src/goabackend/goaoauthprovider.c:1246
-#, fuzzy, c-format
+#, c-format
 msgid "Credentials not found in keyring (%s, %d): "
-msgstr "Podpisovanje ključa, ki ni v zbirki."
+msgstr "Poverila v zbirki ključev ni mogoče najti (%s, %d):"
 
 #: ../src/goabackend/goaoauth2provider.c:1212
 #, c-format
 msgid "Credentials do not contain access_token"
-msgstr ""
+msgstr "Poverila ne vključujejo žetona dostopa"
 
 #: ../src/goabackend/goaoauth2provider.c:1251
 #: ../src/goabackend/goaoauthprovider.c:1319
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to refresh access token (%s, %d): "
-msgstr "Ni mogoč dostop do vira nastavitev: %s\n"
+msgstr "Osveževanje žetona dostopa je spodletelo (%s, %d): "
 
 #: ../src/goabackend/goaoauth2provider.c:1286
 #: ../src/goabackend/goaoauthprovider.c:1349
-#, fuzzy, c-format
+#, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
-msgstr "Napaka med shranjevanjem šifrirnega gesla v zbirko ključev"
+msgstr "Napaka med shranjevanjem poverila v zbirko ključev (%s, %d):"
 
 #: ../src/goabackend/goaoauthprovider.c:462
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
-msgstr ""
+msgstr "Manjka glava žetona dostopa oziroma skritega žetona dostopa v odzivu"
 
 #: ../src/goabackend/goaoauthprovider.c:635
-#, fuzzy
 msgid "Error getting a Request Token: "
-msgstr ""
-"Napaka povezave:\n"
-"slaba zahteva"
+msgstr "Napaka pridobivanja žetona zahteve:"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauthprovider.c:644
 #, c-format
 msgid "Expected status 200 for getting a Request Token, instead got status %d (%s)"
-msgstr ""
+msgstr "Pričakovano je stanje 200 pri pridobivanju žetona zahteve, vrnjeno pa je stanje %d (%s)"
 
 #: ../src/goabackend/goaoauthprovider.c:658
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
-msgstr ""
+msgstr "Manjka glava žetona zahteve oziroma skritega žetona zahteve v odzivu"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
 #: ../src/goabackend/goaoauthprovider.c:675
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr ""
+msgstr "Prilepi žeton pridobljen preko <a href=\"%s\">strani overitve</a>:"
 
 #: ../src/goabackend/goaoauthprovider.c:1275
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
-msgstr ""
+msgstr "Poverila ne vsebujejo žetona dostopa oziroma skritega žetona dostopa"
 
 #: ../src/goabackend/goaprovider.c:522
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
-msgstr ""
+msgstr "zahteva usklajevanja poverila ni podprta za vrsto %s"
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
 #: ../src/goabackend/goaprovider.c:737
-#, fuzzy, c-format
+#, c-format
 msgid "GOA %s credentials for identity %s"
-msgstr "Neveljavna uporabniška poverila za %s"
+msgstr "Poverila GOA %s za %s"
 
 #. TODO: more specific
 #: ../src/goabackend/goaprovider.c:751
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to store credentials in the keyring: %s"
-msgstr "Shranjevanju pošte v začasno datoteko %s  je spodletelo: %s"
+msgstr "Shranjevanje poverila v zbirko ključev je spodletelo: %s"
 
 #. TODO: more specific
 #: ../src/goabackend/goaprovider.c:822
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to retrieve credentials from the keyring: %s"
-msgstr "Napaka med pridobivanjem seznama souporabe s strežnika"
+msgstr "Pridobivanje poverila iz zbirke ključev je spodletelo: %s"
 
 #: ../src/goabackend/goaprovider.c:834
 msgid "Error parsing result obtained from the keyring: "
-msgstr ""
+msgstr "Napaka razčlenjevanja rezultatov pridobljenih preko zbirke ključev:"
 
 #: ../src/goabackend/goatwitterprovider.c:78
 msgid "Twitter"
@@ -255,12 +251,12 @@ msgstr "Twitter"
 #: ../src/goabackend/goatwitterprovider.c:183
 #, c-format
 msgid "Didn't find id_str member in JSON data"
-msgstr ""
+msgstr "Ni mogoče najti id_str stika med podatki JSON "
 
 #: ../src/goabackend/goatwitterprovider.c:192
 #, c-format
 msgid "Didn't find screen_name member in JSON data"
-msgstr ""
+msgstr "Ni mogoče najti prikaznega imena stika med podatki JSON "
 
 #: ../src/goabackend/goayahooprovider.c:78
 msgid "Yahoo"
@@ -269,31 +265,31 @@ msgstr "Yahoo"
 #: ../src/goabackend/goayahooprovider.c:186
 #, c-format
 msgid "Didn't find guid member in JSON data"
-msgstr ""
+msgstr "Ni mogoče najti guid stika med podatki JSON "
 
 #: ../src/goabackend/goayahooprovider.c:196
 #, c-format
 msgid "Didn't find value member in JSON data"
-msgstr ""
+msgstr "Ni mogoče najti vrednosti stika med podatki JSON "
 
 #: ../src/goabackend/goayahooprovider.c:222
 #, c-format
 msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-msgstr ""
+msgstr "Pričakovano je stanje 200 pri zahtevi podatka imena, vrnjeno pa je stanje %d (%s)"
 
 #: ../src/goabackend/goayahooprovider.c:235
 msgid "Error parsing usercard response as JSON: "
-msgstr ""
+msgstr "Napaka razčlenjevanja odziva usercard kot JSON:"
 
 #: ../src/goabackend/goayahooprovider.c:246
 #, c-format
 msgid "Didn't find profile member in JSON data"
-msgstr ""
+msgstr "Ni mogoče najti profila stika med podatki JSON "
 
 #: ../src/goabackend/goayahooprovider.c:256
 #, c-format
 msgid "Didn't find nickname member in JSON data"
-msgstr ""
+msgstr "Ni mogoče najti vzdevka stika med podatki JSON "
 
 #. TODO: look up email address / screenname from GUID
 #: ../src/goabackend/goayahooprovider.c:324
