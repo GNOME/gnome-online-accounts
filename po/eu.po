@@ -1,0 +1,308 @@
+# Basque translation for gnome-online-accounts.
+# Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-online-accounts package.
+# Julen Ruiz Aizpuru <julenx@gmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-online-accounts master\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-09-23 17:59+0200\n"
+"PO-Revision-Date: 2011-09-23 17:59+0200\n"
+"Last-Translator: \n"
+"Language-Team: American English <kde-i18n-doc@kde.org>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.0\n"
+"X-Project-Style: gnome\n"
+
+#: ../src/daemon/goadaemon.c:871
+msgid "An online account needs attention"
+msgstr "Lineako kontu batek arreta behar du"
+
+#: ../src/daemon/goadaemon.c:878
+msgid "Open Online Accounts..."
+msgstr "Ireki lineako kontuak..."
+
+#: ../src/goabackend/goafacebookprovider.c:78
+msgid "Facebook"
+msgstr "Facebook"
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goafacebookprovider.c:161
+#: ../src/goabackend/goagoogleprovider.c:195
+#: ../src/goabackend/goatwitterprovider.c:160
+#: ../src/goabackend/goayahooprovider.c:163
+#, c-format
+msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+msgstr ""
+"'200' egoera espero zen guid-a eskatzean, horren ordez '%d' egoera jaso da "
+"(%s)"
+
+#: ../src/goabackend/goafacebookprovider.c:173
+#: ../src/goabackend/goagoogleprovider.c:207
+#: ../src/goabackend/goaoauth2provider.c:477
+#: ../src/goabackend/goatwitterprovider.c:172
+#: ../src/goabackend/goayahooprovider.c:175
+msgid "Error parsing response as JSON: "
+msgstr "Errorea erantzuna JSON gisa analizatzean: "
+
+#: ../src/goabackend/goafacebookprovider.c:184
+#, c-format
+msgid "Didn't find username member in JSON data"
+msgstr "Ez da 'username' kiderik aurkitu JSON datuetan"
+
+#: ../src/goabackend/goafacebookprovider.c:193
+#, c-format
+msgid "Didn't find name member in JSON data"
+msgstr "Ez da 'name' kiderik aurkitu JSON datuetan"
+
+#: ../src/goabackend/goafacebookprovider.c:259
+#: ../src/goabackend/goatwitterprovider.c:260
+msgid "User Name"
+msgstr "Erabiltzaile-izena"
+
+#: ../src/goabackend/goagoogleprovider.c:78
+msgid "Google"
+msgstr "Google"
+
+#: ../src/goabackend/goagoogleprovider.c:218
+#, c-format
+msgid "Didn't find data member in JSON data"
+msgstr "Ez da 'data' kiderik aurkitu JSON datuetan"
+
+#: ../src/goabackend/goagoogleprovider.c:228
+#, c-format
+msgid "Didn't find email member in JSON data"
+msgstr "Ez da 'email' kiderik aurkitu JSON datuetan"
+
+#: ../src/goabackend/goagoogleprovider.c:425
+msgid "Email Address"
+msgstr "Helbide elektronikoa"
+
+#: ../src/goabackend/goagoogleprovider.c:426
+msgid "Use this account for"
+msgstr "Erabili kontu hau honetarako:"
+
+#: ../src/goabackend/goagoogleprovider.c:427
+msgid "Mail"
+msgstr "Posta"
+
+#: ../src/goabackend/goagoogleprovider.c:428
+msgid "Calendar"
+msgstr "Egutegia"
+
+#: ../src/goabackend/goagoogleprovider.c:429
+msgid "Contacts"
+msgstr "Kontaktuak"
+
+#: ../src/goabackend/goagoogleprovider.c:430
+msgid "Chat"
+msgstr "Berriketa"
+
+#: ../src/goabackend/goagoogleprovider.c:431
+msgid "Documents"
+msgstr "Dokumentuak"
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goaoauth2provider.c:432
+#: ../src/goabackend/goaoauthprovider.c:440
+#, c-format
+msgid ""
+"Expected status 200 when requesting access token, instead got status %d (%s)"
+msgstr ""
+"'200' egoera espero zen atzipen-tokena eskatzean, horren ordez '%d' egoera "
+"jaso da (%s)"
+
+#: ../src/goabackend/goaoauth2provider.c:452
+#, c-format
+msgid "Didn't find access_token in non-JSON data"
+msgstr "Ez da 'access_token' aurkitu JSON ez den datuetan"
+
+#: ../src/goabackend/goaoauth2provider.c:488
+#, c-format
+msgid "Didn't find access_token in JSON data"
+msgstr "Ez da 'access_token' aurkitu JSON datuetan"
+
+#: ../src/goabackend/goaoauth2provider.c:572
+#, c-format
+msgid "Authorization response was \"%s\""
+msgstr "Baimenaren erantzuna \"%s\" da"
+
+#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
+#: ../src/goabackend/goaoauth2provider.c:653
+#, c-format
+msgid ""
+"Paste authorization code obtained from the <a href=\"%s\">authorization "
+"page</a>:"
+msgstr "Itsasi <a href=\"%s\">baimen-orritik</a> eskuratutako baimen-kodea:"
+
+#: ../src/goabackend/goaoauth2provider.c:727
+#: ../src/goabackend/goaoauthprovider.c:751
+#, c-format
+msgid "Dialog was dismissed"
+msgstr "Elkarrizketa-koadroa itxi egin da"
+
+#: ../src/goabackend/goaoauth2provider.c:751
+#: ../src/goabackend/goaoauthprovider.c:782
+msgid "Error getting an Access Token: "
+msgstr "Errorea atzipen-tokena lortzean: "
+
+#: ../src/goabackend/goaoauth2provider.c:763
+#: ../src/goabackend/goaoauthprovider.c:795
+msgid "Error getting identity: "
+msgstr "Errorea identitatea lortzean: "
+
+#: ../src/goabackend/goaoauth2provider.c:928
+#: ../src/goabackend/goaoauthprovider.c:972
+#, c-format
+msgid "There is already an account for the identity %s"
+msgstr "Badago lehendik ere kontu bat %s identitaterako"
+
+#: ../src/goabackend/goaoauth2provider.c:1053
+#: ../src/goabackend/goaoauthprovider.c:1102
+#, c-format
+msgid "Was asked to login as %s, but logged in as %s"
+msgstr "%s gisa saioa hasteko eskatu da baina %s gisa hasi da saioa"
+
+#: ../src/goabackend/goaoauth2provider.c:1189
+#: ../src/goabackend/goaoauthprovider.c:1250
+#, c-format
+msgid "Credentials not found in keyring (%s, %d): "
+msgstr "Ez da kredentzialik aurkitu gako-sortan (%s, %d): "
+
+#: ../src/goabackend/goaoauth2provider.c:1216
+#, c-format
+msgid "Credentials do not contain access_token"
+msgstr "Kredentzialek ez daukate 'access_token'"
+
+#: ../src/goabackend/goaoauth2provider.c:1255
+#: ../src/goabackend/goaoauthprovider.c:1323
+#, c-format
+msgid "Failed to refresh access token (%s, %d): "
+msgstr "Huts egin du atzipen-tokena freskatzean (%s, %d): "
+
+#: ../src/goabackend/goaoauth2provider.c:1290
+#: ../src/goabackend/goaoauthprovider.c:1353
+#, c-format
+msgid "Error storing credentials in keyring (%s, %d): "
+msgstr "Errorea kredentzialak gako-sortan gordetzean (%s, %d): "
+
+#: ../src/goabackend/goaoauthprovider.c:463
+#, c-format
+msgid "Missing access_token or access_token_secret headers in response"
+msgstr ""
+"'access_token' edo 'access_token_secret' goiburuak falta dira erantzunean"
+
+#: ../src/goabackend/goaoauthprovider.c:636
+msgid "Error getting a Request Token: "
+msgstr "Errorea eskaera-tokena lortzean: "
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goaoauthprovider.c:645
+#, c-format
+msgid ""
+"Expected status 200 for getting a Request Token, instead got status %d (%s)"
+msgstr ""
+"'200' egoera espero zen eskaera-tokena lortzeko, horren ordez '%d' egoera "
+"jaso da (%s)"
+
+#: ../src/goabackend/goaoauthprovider.c:659
+#, c-format
+msgid "Missing request_token or request_token_secret headers in response"
+msgstr ""
+"'request_token' edo 'request_token_secret' goiburuak falta dira erantzunean"
+
+#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
+#: ../src/goabackend/goaoauthprovider.c:676
+#, c-format
+msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
+msgstr "Itsatsi <a href=\"%s\">baimen-orritik</a> eskuratutako tokena:"
+
+#: ../src/goabackend/goaoauthprovider.c:1279
+#, c-format
+msgid "Credentials do not contain access_token or access_token_secret"
+msgstr "Kredentzialek ez daukate 'access_token' edo 'access_token_secret'"
+
+#: ../src/goabackend/goaprovider.c:522
+#, c-format
+msgid "ensure_credentials_sync is not implemented on type %s"
+msgstr "'ensure_credentials_sync' ez dago inplementatuta %s motan"
+
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#: ../src/goabackend/goaprovider.c:737
+#, c-format
+msgid "GOA %s credentials for identity %s"
+msgstr "GOA %s kredentzialak %s identitatearentzako"
+
+#. TODO: more specific
+#: ../src/goabackend/goaprovider.c:751
+#, c-format
+msgid "Failed to store credentials in the keyring: %s"
+msgstr "Huts egin du kredentzialak gako-sortan gordetzean: %s"
+
+#. TODO: more specific
+#: ../src/goabackend/goaprovider.c:822
+#, c-format
+msgid "Failed to retrieve credentials from the keyring: %s"
+msgstr "Huts egin du kredentzialak gako-sortatik eskuratzean: %s"
+
+#: ../src/goabackend/goaprovider.c:834
+msgid "Error parsing result obtained from the keyring: "
+msgstr "Errorea gako-sortatik eskuratutako erantzuna analizatzean: "
+
+#: ../src/goabackend/goatwitterprovider.c:78
+msgid "Twitter"
+msgstr "Twitter"
+
+#: ../src/goabackend/goatwitterprovider.c:183
+#, c-format
+msgid "Didn't find id_str member in JSON data"
+msgstr "Ez da 'id_str' kidea aurkitu JSON datuetan"
+
+#: ../src/goabackend/goatwitterprovider.c:192
+#, c-format
+msgid "Didn't find screen_name member in JSON data"
+msgstr "Ez da 'screen_name' kidea aurkitu JSON datuetan"
+
+#: ../src/goabackend/goayahooprovider.c:78
+msgid "Yahoo"
+msgstr "Yahoo"
+
+#: ../src/goabackend/goayahooprovider.c:186
+#, c-format
+msgid "Didn't find guid member in JSON data"
+msgstr "Ez da 'guid' kidea aurkitu JSON datuetan"
+
+#: ../src/goabackend/goayahooprovider.c:196
+#, c-format
+msgid "Didn't find value member in JSON data"
+msgstr "Ez da 'value' kidea aurkitu JSON datuetan"
+
+#: ../src/goabackend/goayahooprovider.c:222
+#, c-format
+msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+msgstr ""
+"'200' egoera espero zen izena eskatzean, horren ordez '%d' egoera jaso da "
+"(%s)"
+
+#: ../src/goabackend/goayahooprovider.c:235
+msgid "Error parsing usercard response as JSON: "
+msgstr "Errorea erabiltzaile-txartelaren erantzuna JSON gisa analizatzean: "
+
+#: ../src/goabackend/goayahooprovider.c:246
+#, c-format
+msgid "Didn't find profile member in JSON data"
+msgstr "Ez da 'profile' kiderik aurkitu JSON datuetan"
+
+#: ../src/goabackend/goayahooprovider.c:256
+#, c-format
+msgid "Didn't find nickname member in JSON data"
+msgstr "Ez da 'nickname' kiderik aurkitu JSON datuetan"
+
+#. TODO: look up email address / screenname from GUID
+#: ../src/goabackend/goayahooprovider.c:324
+msgid "Name"
+msgstr "Izena"
