@@ -207,7 +207,12 @@ goa_log (GoaLogLevel     level,
       break;
     }
 
+ /* TODO: Need to find a portable way of getting the thread ID (#660177) */
+#ifdef SYS_gettid
   thread_str = g_strdup_printf ("%d", (gint) syscall (SYS_gettid));
+#else
+  thread_str = g_strdup_printf ("%d", (gint) getpid());
+#endif /* SYS_gettid */
   g_print ("%s%s%s.%03d:%s%s%s[%s]%s:%s%s%s:%s %s %s[%s, %s()]%s\n",
            _color_get (_COLOR_BOLD_ON), _color_get (_COLOR_FG_YELLOW), time_buf, (gint) now.tv_usec / 1000, _color_get (_COLOR_RESET),
            _color_get (_COLOR_FG_MAGENTA), _color_get (_COLOR_BOLD_ON), thread_str, _color_get (_COLOR_RESET),
