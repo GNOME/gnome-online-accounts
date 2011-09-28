@@ -810,7 +810,7 @@ notification_cb (NotifyNotification *notification,
   /* TODO: Hmm, would be nice to set the screen, timestamp etc etc */
   ctx = g_app_launch_context_new ();
 
-  app = g_desktop_app_info_new ("goa-prefs.desktop");
+  app = g_desktop_app_info_new ("gnome-online-accounts-panel.desktop");
 
   error = NULL;
   if (!g_app_info_launch (G_APP_INFO (app),
