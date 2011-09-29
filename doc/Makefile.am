@@ -63,7 +63,7 @@ man_MANS = 			\
 	$(NULL)
 
 .xml.8:
-	$(XSLTPROC) -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
+	$(XSLTPROC) --nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
 
 if ENABLE_GTK_DOC
 include $(top_srcdir)/gtk-doc.make
