@@ -466,13 +466,11 @@ get_tokens_sync (GoaOAuth2Provider  *provider,
     }
   else
     {
-      GError *local_error;
       JsonParser *parser;
       JsonObject *object;
 
-      local_error = NULL;
       parser = json_parser_new ();
-      if (!json_parser_load_from_data (parser, payload, payload_length, &local_error))
+      if (!json_parser_load_from_data (parser, payload, payload_length, error))
         {
           g_prefix_error (error, _("Error parsing response as JSON: "));
           g_object_unref (parser);
@@ -745,7 +743,7 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
                                        &data.refresh_token,
                                        &data.access_token_expires_in,
                                        NULL, /* GCancellable */
-                                       error);
+                                       &data.error);
   if (data.access_token == NULL)
     {
       g_prefix_error (&data.error, _("Error getting an Access Token: "));
@@ -757,7 +755,7 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
                                                          data.access_token,
                                                          &data.presentation_identity,
                                                          NULL, /* TODO: GCancellable */
-                                                         error);
+                                                         &data.error);
   if (data.identity == NULL)
     {
       g_prefix_error (&data.error, _("Error getting identity: "));
