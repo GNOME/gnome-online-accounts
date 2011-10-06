@@ -105,7 +105,8 @@ get_scope (GoaOAuth2Provider *provider)
   return
     "user_events,"
     "read_mailbox,"
-    "offline_access";
+    "offline_access,"
+    "xmpp_login";
 }
 
 static const gchar *
@@ -222,7 +223,9 @@ build_object (GoaProvider         *provider,
               const gchar         *group,
               GError             **error)
 {
-  gboolean ret;
+  GoaChat *chat = NULL;
+  gboolean chat_enabled;
+  gboolean ret = FALSE;
 
   /* Chain up */
   if (!GOA_PROVIDER_CLASS (goa_facebook_provider_parent_class)->build_object (provider,
@@ -232,9 +235,29 @@ build_object (GoaProvider         *provider,
                                                                               error))
     goto out;
 
+  /* Chat */
+  chat = goa_object_get_chat (GOA_OBJECT (object));
+  chat_enabled = g_key_file_get_boolean (key_file, group, "ChatEnabled", NULL);
+  if (chat_enabled)
+    {
+      if (chat == NULL)
+        {
+          chat = goa_chat_skeleton_new ();
+          goa_object_skeleton_set_chat (object, chat);
+        }
+    }
+  else
+    {
+      if (chat != NULL)
+        goa_object_skeleton_set_chat (object, NULL);
+    }
+
   ret = TRUE;
 
  out:
+  if (chat != NULL)
+    g_object_unref (chat);
+
   return ret;
 }
 
@@ -257,6 +280,16 @@ show_account (GoaProvider         *provider,
   GOA_PROVIDER_CLASS (goa_facebook_provider_parent_class)->show_account (provider, client, object, vbox, table);
 
   goa_util_add_row_editable_label_from_keyfile (table, object, _("User Name"), "PresentationIdentity", FALSE);
+  goa_util_add_row_switch_from_keyfile (table, object, _("Chat"), "ChatEnabled");
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
+add_account_key_values (GoaOAuth2Provider *provider,
+                        GVariantBuilder   *builder)
+{
+  g_variant_builder_add (builder, "{ss}", "ChatEnabled", "true");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -287,4 +320,5 @@ goa_facebook_provider_class_init (GoaFacebookProviderClass *klass)
   oauth2_class->get_client_secret        = get_client_secret;
   oauth2_class->get_identity_sync        = get_identity_sync;
   oauth2_class->get_use_external_browser = get_use_external_browser;
+  oauth2_class->add_account_key_values   = add_account_key_values;
 }
