@@ -1335,6 +1335,10 @@ goa_oauth2_provider_build_object (GoaProvider         *provider,
     goto out;
 
   oauth2_based = goa_oauth2_based_skeleton_new ();
+  goa_oauth2_based_set_client_id (oauth2_based,
+                                    goa_oauth2_provider_get_client_id (GOA_OAUTH2_PROVIDER (provider)));
+  goa_oauth2_based_set_client_secret (oauth2_based,
+                                       goa_oauth2_provider_get_client_secret (GOA_OAUTH2_PROVIDER (provider)));
   /* Ensure D-Bus method invocations run in their own thread */
   g_dbus_interface_skeleton_set_flags (G_DBUS_INTERFACE_SKELETON (oauth2_based),
                                        G_DBUS_INTERFACE_SKELETON_FLAGS_HANDLE_METHOD_INVOCATIONS_IN_THREAD);
