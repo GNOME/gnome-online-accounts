@@ -82,6 +82,13 @@ get_provider_name (GoaProvider *_provider,
   return g_strdup (_("Windows Live"));
 }
 
+static GIcon *
+get_provider_icon (GoaProvider *provider,
+                   GoaObject   *object)
+{
+  return g_themed_icon_new_with_default_fallbacks ("goa-account-msn");
+}
+
 static const gchar *
 get_authorization_uri (GoaOAuth2Provider *provider)
 {
@@ -311,6 +318,7 @@ goa_messenger_provider_class_init (GoaMessengerProviderClass *klass)
   provider_class = GOA_PROVIDER_CLASS (klass);
   provider_class->get_provider_type          = get_provider_type;
   provider_class->get_provider_name          = get_provider_name;
+  provider_class->get_provider_icon          = get_provider_icon;
   provider_class->build_object               = build_object;
   provider_class->show_account               = show_account;
 
