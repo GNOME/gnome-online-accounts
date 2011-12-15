@@ -1,6 +1,7 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
  * Copyright (C) 2011 Red Hat, Inc.
+ * Copyright (C) 2011 Collabora Ltd.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,49 +18,27 @@
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  *
- * Author: David Zeuthen <davidz@redhat.com>
+ * Authors: David Zeuthen <davidz@redhat.com>
+ *          Xavier Claessens <xclaesse@gmail.com>
  */
 
 #if !defined (__GOA_BACKEND_INSIDE_GOA_BACKEND_H__) && !defined (GOA_BACKEND_COMPILATION)
 #error "Only <goabackend/goabackend.h> can be included directly."
 #endif
 
-#ifndef __GOA_BACKEND_TYPES_H__
-#define __GOA_BACKEND_TYPES_H__
+#ifndef __GOA_MESSENGER_PROVIDER_H__
+#define __GOA_MESSENGER_PROVIDER_H__
 
-#include <goa/goa.h>
-#include <goabackend/goabackendenums.h>
-#include <gtk/gtk.h>
+#include <goabackend/goabackendtypes.h>
 
 G_BEGIN_DECLS
 
-struct _GoaProvider;
-typedef struct _GoaProvider GoaProvider;
+#define GOA_TYPE_MESSENGER_PROVIDER   (goa_messenger_provider_get_type ())
+#define GOA_MESSENGER_PROVIDER(o)     (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_MESSENGER_PROVIDER, GoaFacebookProvider))
+#define GOA_IS_MESSENGER_PROVIDER(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_MESSENGER_PROVIDER))
 
-struct _GoaOAuthProvider;
-typedef struct _GoaOAuthProvider GoaOAuthProvider;
-
-struct _GoaOAuth2Provider;
-typedef struct _GoaOAuth2Provider GoaOAuth2Provider;
-
-struct _GoaGoogleProvider;
-typedef struct _GoaGoogleProvider GoaGoogleProvider;
-
-struct _GoaFacebookProvider;
-typedef struct _GoaFacebookProvider GoaFacebookProvider;
-
-struct _GoaYahooProvider;
-typedef struct _GoaYahooProvider GoaYahooProvider;
-
-struct _GoaTwitterProvider;
-typedef struct _GoaTwitterProvider GoaTwitterProvider;
-
-struct _GoaEditableLabel;
-typedef struct _GoaEditableLabel GoaEditableLabel;
-
-struct _GoaMessengerProvider;
-typedef struct _GoaMessengerProvider GoaMessengerProvider;
+GType goa_messenger_provider_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GOA_BACKEND_TYPES_H__ */
+#endif /* __GOA_MESSENGER_PROVIDER_H__ */

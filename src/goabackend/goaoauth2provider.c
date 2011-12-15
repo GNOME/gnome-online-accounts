@@ -391,6 +391,7 @@ get_tokens_sync (GoaOAuth2Provider  *provider,
   gchar *ret_refresh_token;
   const gchar *payload;
   gsize payload_length;
+  const gchar *client_secret;
 
   ret = NULL;
   ret_access_token = NULL;
@@ -399,24 +400,26 @@ get_tokens_sync (GoaOAuth2Provider  *provider,
 
   proxy = rest_proxy_new (goa_oauth2_provider_get_token_uri (provider), FALSE);
   call = rest_proxy_new_call (proxy);
-  rest_proxy_call_set_method (call, "POST");
-  rest_proxy_call_add_header (call, "Content-Type", "application/x-www-form-urlencoded");
+
+  rest_proxy_call_set_method (call, "GET");
+  rest_proxy_call_add_param (call, "client_id", goa_oauth2_provider_get_client_id (provider));
+  rest_proxy_call_add_param (call, "redirect_uri", goa_oauth2_provider_get_redirect_uri (provider));
+
+  client_secret = goa_oauth2_provider_get_client_secret (provider);
+  if (client_secret != NULL)
+    rest_proxy_call_add_param (call, "client_secret", client_secret);
+
   if (refresh_token != NULL)
     {
       /* Swell, we have a refresh code - just use that */
-      rest_proxy_call_add_param (call, "client_id", goa_oauth2_provider_get_client_id (provider));
-      rest_proxy_call_add_param (call, "client_secret", goa_oauth2_provider_get_client_secret (provider));
       rest_proxy_call_add_param (call, "grant_type", "refresh_token");
       rest_proxy_call_add_param (call, "refresh_token", refresh_token);
     }
   else
     {
       /* No refresh code.. request an access token using the authorization code instead */
-      rest_proxy_call_add_param (call, "client_id", goa_oauth2_provider_get_client_id (provider));
-      rest_proxy_call_add_param (call, "client_secret", goa_oauth2_provider_get_client_secret (provider));
       rest_proxy_call_add_param (call, "grant_type", "authorization_code");
       rest_proxy_call_add_param (call, "code", authorization_code);
-      rest_proxy_call_add_param (call, "redirect_uri", goa_oauth2_provider_get_redirect_uri (provider));
     }
 
   /* TODO: cancellable support? */
