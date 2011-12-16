@@ -165,14 +165,14 @@ if test "$enable_facebook" != "no"; then
 fi
 
 # Messenger
-AC_ARG_ENABLE([messenger], [AS_HELP_STRING([--enable-messenger], [Enable Messenger provider])], [], [enable_messenger=no])
+AC_ARG_ENABLE([messenger], [AS_HELP_STRING([--enable-messenger], [Enable Messenger provider])], [], [enable_messenger=yes])
 AC_ARG_WITH(messenger-client-id,
             [AS_HELP_STRING([--with-messenger-client-id],
                             [Messenger OAuth 2.0 client id])],
                             [],
                             [])
 if test "$with_messenger_client_id" = ""; then
-  with_messenger_client_id=not_set
+  with_messenger_client_id=0000000044067703
 fi
 AC_DEFINE_UNQUOTED(GOA_MESSENGER_CLIENT_ID, ["$with_messenger_client_id"], [Messenger OAuth 2.0 client id])
 if test "$enable_messenger" != "no"; then
