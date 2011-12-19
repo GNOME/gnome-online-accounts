@@ -54,11 +54,11 @@ struct _GoaWindowsLiveProviderClass
 };
 
 /**
- * SECTION:goawindows_liveprovider
+ * SECTION:goawindowsliveprovider
  * @title: GoaWindowsLiveProvider
- * @short_description: A provider for WindowsLive
+ * @short_description: A provider for Windows Live accounts
  *
- * #GoaWindowsLiveProvider is used for handling WindowsLive accounts.
+ * #GoaWindowsLiveProvider is used for handling Windows Live accounts.
  */
 
 G_DEFINE_TYPE_WITH_CODE (GoaWindowsLiveProvider, goa_windows_live_provider, GOA_TYPE_OAUTH2_PROVIDER,

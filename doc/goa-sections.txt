@@ -3,6 +3,7 @@
 GoaManager
 GoaManagerIface
 goa_manager_interface_info
+goa_manager_override_properties
 goa_manager_call_add_account
 goa_manager_call_add_account_finish
 goa_manager_call_add_account_sync
@@ -54,6 +55,8 @@ goa_object_get_oauth2_based
 goa_object_get_mail
 goa_object_get_calendar
 goa_object_get_contacts
+goa_object_get_chat
+goa_object_get_documents
 goa_object_peek_manager
 goa_object_peek_account
 goa_object_peek_oauth_based
@@ -61,6 +64,8 @@ goa_object_peek_oauth2_based
 goa_object_peek_mail
 goa_object_peek_calendar
 goa_object_peek_contacts
+goa_object_peek_chat
+goa_object_peek_documents
 GoaObjectProxy
 GoaObjectProxyClass
 goa_object_proxy_new
@@ -74,6 +79,8 @@ goa_object_skeleton_set_oauth2_based
 goa_object_skeleton_set_mail
 goa_object_skeleton_set_calendar
 goa_object_skeleton_set_contacts
+goa_object_skeleton_set_chat
+goa_object_skeleton_set_documents
 <SUBSECTION Standard>
 goa_object_get_type
 goa_object_proxy_get_type
@@ -105,18 +112,24 @@ GoaAccountIface
 goa_account_interface_info
 goa_account_override_properties
 goa_account_get_provider_type
+goa_account_dup_provider_type
 goa_account_set_provider_type
 goa_account_get_provider_name
+goa_account_dup_provider_name
 goa_account_set_provider_name
 goa_account_get_provider_icon
+goa_account_dup_provider_icon
 goa_account_set_provider_icon
 goa_account_get_id
+goa_account_dup_id
 goa_account_set_id
 goa_account_get_attention_needed
 goa_account_set_attention_needed
 goa_account_get_identity
+goa_account_dup_identity
 goa_account_set_identity
 goa_account_get_presentation_identity
+goa_account_dup_presentation_identity
 goa_account_set_presentation_identity
 goa_account_call_ensure_credentials
 goa_account_call_ensure_credentials_finish
@@ -166,6 +179,7 @@ goa_account_skeleton_get_type
 GoaOAuth2Based
 GoaOAuth2BasedIface
 goa_oauth2_based_interface_info
+goa_oauth2_based_override_properties
 goa_oauth2_based_get_client_id
 goa_oauth2_based_set_client_id
 goa_oauth2_based_dup_client_id
@@ -222,8 +236,10 @@ goa_oauth_based_call_get_access_token_finish
 goa_oauth_based_call_get_access_token_sync
 goa_oauth_based_complete_get_access_token
 goa_oauth_based_get_consumer_key
+goa_oauth_based_dup_consumer_key
 goa_oauth_based_set_consumer_key
 goa_oauth_based_get_consumer_secret
+goa_oauth_based_dup_consumer_secret
 goa_oauth_based_set_consumer_secret
 GoaOAuthBasedProxy
 GoaOAuthBasedProxyClass
@@ -404,6 +420,16 @@ goa_google_provider_get_type
 </SECTION>
 
 <SECTION>
+<FILE>goawindowsliveprovider</FILE>
+GoaWindowsLiveProvider
+<SUBSECTION Standard>
+GOA_WINDOWS_LIVE_PROVIDER
+GOA_IS_WINDOWS_LIVE_PROVIDER
+GOA_TYPE_WINDOWS_LIVE_PROVIDER
+goa_windows_live_provider_get_type
+</SECTION>
+
+<SECTION>
 <FILE>goafacebookprovider</FILE>
 GoaFacebookProvider
 <SUBSECTION Standard>
@@ -440,22 +466,27 @@ GoaMailIface
 goa_mail_override_properties
 goa_mail_interface_info
 goa_mail_get_email_address
+goa_mail_dup_email_address
 goa_mail_set_email_address
 goa_mail_get_imap_host
+goa_mail_dup_imap_host
 goa_mail_set_imap_host
 goa_mail_get_imap_supported
 goa_mail_set_imap_supported
 goa_mail_get_imap_use_tls
 goa_mail_set_imap_use_tls
 goa_mail_get_imap_user_name
+goa_mail_dup_imap_user_name
 goa_mail_set_imap_user_name
 goa_mail_get_smtp_host
+goa_mail_dup_smtp_host
+goa_mail_set_smtp_host
 goa_mail_get_smtp_supported
 goa_mail_set_smtp_supported
-goa_mail_set_smtp_host
 goa_mail_get_smtp_use_tls
 goa_mail_set_smtp_use_tls
 goa_mail_get_smtp_user_name
+goa_mail_dup_smtp_user_name
 goa_mail_set_smtp_user_name
 GoaMailProxy
 GoaMailProxyClass
@@ -497,6 +528,7 @@ goa_mail_skeleton_get_type
 GoaCalendar
 GoaCalendarIface
 goa_calendar_interface_info
+goa_calendar_override_properties
 GoaCalendarProxy
 GoaCalendarProxyClass
 goa_calendar_proxy_new
@@ -537,6 +569,7 @@ goa_calendar_skeleton_get_type
 GoaContacts
 GoaContactsIface
 goa_contacts_interface_info
+goa_contacts_override_properties
 GoaContactsProxy
 GoaContactsProxyClass
 goa_contacts_proxy_new
@@ -577,6 +610,7 @@ goa_contacts_skeleton_get_type
 GoaChat
 GoaChatIface
 goa_chat_interface_info
+goa_chat_override_properties
 GoaChatProxy
 GoaChatProxyClass
 goa_chat_proxy_new
@@ -617,6 +651,7 @@ goa_chat_skeleton_get_type
 GoaDocuments
 GoaDocumentsIface
 goa_documents_interface_info
+goa_documents_override_properties
 GoaDocumentsProxy
 GoaDocumentsProxyClass
 goa_documents_proxy_new
