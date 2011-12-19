@@ -112,7 +112,7 @@ get_redirect_uri (GoaOAuth2Provider *provider)
 static const gchar *
 get_scope (GoaOAuth2Provider *provider)
 {
-  return "wl.windows_live,"
+  return "wl.messenger,"
          "wl.offline_access,"
          "wl.emails";
 }
