@@ -30,7 +30,7 @@
 #include "goafacebookprovider.h"
 #include "goayahooprovider.h"
 #include "goatwitterprovider.h"
-#include "goamessengerprovider.h"
+#include "goawindowsliveprovider.h"
 
 #include "goaeditablelabel.h"
 
@@ -598,8 +598,8 @@ ensure_ep_and_builtins (void)
       type = GOA_TYPE_FACEBOOK_PROVIDER;
 #endif
 
-#ifdef GOA_MESSENGER_ENABLED
-      type = GOA_TYPE_MESSENGER_PROVIDER;
+#ifdef GOA_WINDOWS_LIVE_ENABLED
+      type = GOA_TYPE_WINDOWS_LIVE_PROVIDER;
 #endif
 
       type = type; /* silence -Wunused-but-set-variable */

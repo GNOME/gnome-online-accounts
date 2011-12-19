@@ -57,8 +57,8 @@ typedef struct _GoaTwitterProvider GoaTwitterProvider;
 struct _GoaEditableLabel;
 typedef struct _GoaEditableLabel GoaEditableLabel;
 
-struct _GoaMessengerProvider;
-typedef struct _GoaMessengerProvider GoaMessengerProvider;
+struct _GoaWindowsLiveProvider;
+typedef struct _GoaWindowsLiveProvider GoaWindowsLiveProvider;
 
 G_END_DECLS
 

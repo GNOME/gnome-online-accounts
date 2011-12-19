@@ -26,19 +26,19 @@
 #error "Only <goabackend/goabackend.h> can be included directly."
 #endif
 
-#ifndef __GOA_MESSENGER_PROVIDER_H__
-#define __GOA_MESSENGER_PROVIDER_H__
+#ifndef __GOA_WINDOWS_LIVE_PROVIDER_H__
+#define __GOA_WINDOWS_LIVE_PROVIDER_H__
 
 #include <goabackend/goabackendtypes.h>
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_MESSENGER_PROVIDER   (goa_messenger_provider_get_type ())
-#define GOA_MESSENGER_PROVIDER(o)     (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_MESSENGER_PROVIDER, GoaFacebookProvider))
-#define GOA_IS_MESSENGER_PROVIDER(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_MESSENGER_PROVIDER))
+#define GOA_TYPE_WINDOWS_LIVE_PROVIDER   (goa_windows_live_provider_get_type ())
+#define GOA_WINDOWS_LIVE_PROVIDER(o)     (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_WINDOWS_LIVE_PROVIDER, GoaFacebookProvider))
+#define GOA_IS_WINDOWS_LIVE_PROVIDER(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_WINDOWS_LIVE_PROVIDER))
 
-GType goa_messenger_provider_get_type (void) G_GNUC_CONST;
+GType goa_windows_live_provider_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GOA_MESSENGER_PROVIDER_H__ */
+#endif /* __GOA_WINDOWS_LIVE_PROVIDER_H__ */

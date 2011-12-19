@@ -55,7 +55,7 @@ libgoa_backend_1_0_la_HEADERS =						\
 	goafacebookprovider.h						\
 	goayahooprovider.h						\
 	goatwitterprovider.h						\
-	goamessengerprovider.h						\
+	goawindowsliveprovider.h					\
 	$(NULL)
 
 libgoa_backend_1_0_la_SOURCES =						\
@@ -72,7 +72,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goafacebookprovider.h		goafacebookprovider.c		\
 	goayahooprovider.h		goayahooprovider.c		\
 	goatwitterprovider.h		goatwitterprovider.c		\
-	goamessengerprovider.h		goamessengerprovider.c		\
+	goawindowsliveprovider.h	goawindowsliveprovider.c	\
 	$(NULL)
 
 libgoa_backend_1_0_la_CPPFLAGS =				\

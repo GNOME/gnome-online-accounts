@@ -164,19 +164,24 @@ if test "$enable_facebook" != "no"; then
   AC_DEFINE(GOA_FACEBOOK_ENABLED, 1, [Enable Facebook data provider])
 fi
 
-# Messenger
-AC_ARG_ENABLE([messenger], [AS_HELP_STRING([--enable-messenger], [Enable Messenger provider])], [], [enable_messenger=yes])
-AC_ARG_WITH(messenger-client-id,
-            [AS_HELP_STRING([--with-messenger-client-id],
-                            [Messenger OAuth 2.0 client id])],
+# Windows Live
+AC_ARG_ENABLE([windows-live], [AS_HELP_STRING([--enable-windows-live],
+                                              [Enable Windows Live provider])],
+                                              [],
+                                              [enable_windows_live=yes])
+AC_ARG_WITH(windows-live-client-id,
+            [AS_HELP_STRING([--with-windows-live-client-id],
+                            [Windows Live OAuth 2.0 client id])],
                             [],
                             [])
-if test "$with_messenger_client_id" = ""; then
-  with_messenger_client_id=0000000044067703
+if test "$with_windows_live_client_id" = ""; then
+  with_windows_live_client_id=0000000044067703
 fi
-AC_DEFINE_UNQUOTED(GOA_MESSENGER_CLIENT_ID, ["$with_messenger_client_id"], [Messenger OAuth 2.0 client id])
-if test "$enable_messenger" != "no"; then
-  AC_DEFINE(GOA_MESSENGER_ENABLED, 1, [Enable Messenger data provider])
+AC_DEFINE_UNQUOTED(GOA_WINDOWS_LIVE_CLIENT_ID,
+                   ["$with_windows_live_client_id"],
+                   [Windows Live OAuth 2.0 client id])
+if test "$enable_windows_live" != "no"; then
+  AC_DEFINE(GOA_WINDOWS_LIVE_ENABLED, 1, [Enable Windows Live data provider])
 fi
 
 # Internationalization
@@ -236,7 +241,7 @@ echo "
 	Twitter provider:           ${enable_twitter} (OAuth 1.0, key:${with_twitter_consumer_key} secret:${with_twitter_consumer_secret})
 	Yahoo provider:             ${enable_yahoo} (OAuth 1.0, key:${with_yahoo_consumer_key} secret:${with_yahoo_consumer_secret})
 	Facebook provider:          ${enable_facebook} (OAuth 2.0, id:${with_facebook_client_id} secret:${with_facebook_client_secret})
-	Messenger provider:         ${enable_messenger} (OAuth 2.0, id:${with_messenger_client_id})
+	Windows Live provider:      ${enable_windows_live} (OAuth 2.0, id:${with_windows_live_client_id})
 
         Maintainer mode:            ${USE_MAINTAINER_MODE}
         Building api docs:          ${enable_gtk_doc}

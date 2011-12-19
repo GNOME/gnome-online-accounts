@@ -32,36 +32,36 @@
 
 #include "goaprovider.h"
 #include "goaoauth2provider.h"
-#include "goamessengerprovider.h"
+#include "goawindowsliveprovider.h"
 
 /**
- * GoaMessengerProvider:
+ * GoaWindowsLiveProvider:
  *
- * The #GoaMessengerProvider structure contains only private data and should
+ * The #GoaWindowsLiveProvider structure contains only private data and should
  * only be accessed using the provided API.
  */
-struct _GoaMessengerProvider
+struct _GoaWindowsLiveProvider
 {
   /*< private >*/
   GoaOAuth2Provider parent_instance;
 };
 
-typedef struct _GoaMessengerProviderClass GoaMessengerProviderClass;
+typedef struct _GoaWindowsLiveProviderClass GoaWindowsLiveProviderClass;
 
-struct _GoaMessengerProviderClass
+struct _GoaWindowsLiveProviderClass
 {
   GoaOAuth2ProviderClass parent_class;
 };
 
 /**
- * SECTION:goamessengerprovider
- * @title: GoaMessengerProvider
- * @short_description: A provider for Messenger
+ * SECTION:goawindows_liveprovider
+ * @title: GoaWindowsLiveProvider
+ * @short_description: A provider for WindowsLive
  *
- * #GoaMessengerProvider is used for handling Messenger accounts.
+ * #GoaWindowsLiveProvider is used for handling WindowsLive accounts.
  */
 
-G_DEFINE_TYPE_WITH_CODE (GoaMessengerProvider, goa_messenger_provider, GOA_TYPE_OAUTH2_PROVIDER,
+G_DEFINE_TYPE_WITH_CODE (GoaWindowsLiveProvider, goa_windows_live_provider, GOA_TYPE_OAUTH2_PROVIDER,
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
 							 g_define_type_id,
 							 "windows_live",
@@ -112,7 +112,7 @@ get_redirect_uri (GoaOAuth2Provider *provider)
 static const gchar *
 get_scope (GoaOAuth2Provider *provider)
 {
-  return "wl.messenger,"
+  return "wl.windows_live,"
          "wl.offline_access,"
          "wl.emails";
 }
@@ -120,7 +120,7 @@ get_scope (GoaOAuth2Provider *provider)
 static const gchar *
 get_client_id (GoaOAuth2Provider *provider)
 {
-  return GOA_MESSENGER_CLIENT_ID;
+  return GOA_WINDOWS_LIVE_CLIENT_ID;
 }
 
 static const gchar *
@@ -238,7 +238,7 @@ build_object (GoaProvider         *provider,
   gboolean ret = FALSE;
 
   /* Chain up */
-  if (!GOA_PROVIDER_CLASS (goa_messenger_provider_parent_class)->build_object (provider,
+  if (!GOA_PROVIDER_CLASS (goa_windows_live_provider_parent_class)->build_object (provider,
                                                                               object,
                                                                               key_file,
                                                                               group,
@@ -287,7 +287,7 @@ show_account (GoaProvider         *provider,
               GtkTable            *table)
 {
   /* Chain up */
-  GOA_PROVIDER_CLASS (goa_messenger_provider_parent_class)->show_account (provider, client, object, vbox, table);
+  GOA_PROVIDER_CLASS (goa_windows_live_provider_parent_class)->show_account (provider, client, object, vbox, table);
 
   goa_util_add_row_editable_label_from_keyfile (table, object, _("User Name"), "PresentationIdentity", FALSE);
   goa_util_add_row_switch_from_keyfile (table, object, _("Chat"), "ChatEnabled");
@@ -305,12 +305,12 @@ add_account_key_values (GoaOAuth2Provider *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_messenger_provider_init (GoaMessengerProvider *client)
+goa_windows_live_provider_init (GoaWindowsLiveProvider *client)
 {
 }
 
 static void
-goa_messenger_provider_class_init (GoaMessengerProviderClass *klass)
+goa_windows_live_provider_class_init (GoaWindowsLiveProviderClass *klass)
 {
   GoaProviderClass *provider_class;
   GoaOAuth2ProviderClass *oauth2_class;
