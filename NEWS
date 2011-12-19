@@ -1,4 +1,40 @@
 ==================================================
+gnome-online-accounts 3.3.0
+==================================================
+
+gnome-online-accounts provides interfaces so applications and
+libraries in GNOME can access the user's online accounts.
+
+Changes since 3.2.0:
+
+ David Zeuthen (5):
+      Post-release version bump to 3.3.0
+      GoaWindowsLiveProvider: fix scope
+      Remove unused org.gnome.OnlineAccounts.PasswordBased D-Bus interface
+      Fix up docs
+      Update NEWS for release
+
+ Jasper Lievisse Adriaanse (2):
+      Kludge around lack of gettid(2) syscall on various systems.
+      Fix typo in xsltproc argument name.
+
+ Matthias Clasen (1):
+      Launch the right preferences
+
+ Xavier Claessens (8):
+      Make sure there is an error set when returning FALSE
+      GoaOAuth2Based: Add ClientId and ClientSecret properties
+      GoaFacebookProvider: Add Chat
+      Add Windows Live oauth2
+      Provide icon for windows-live service
+      Enable windows-live by default
+      Rename Messenger to WindowsLive
+      Also rename in POTFILES
+
+David Zeuthen,
+December 19, 2011
+
+==================================================
 gnome-online-accounts 3.2.0
 ==================================================
 
