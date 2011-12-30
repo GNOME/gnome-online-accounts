@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gnome Online Account\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-22 14:54+0200\n"
-"PO-Revision-Date: 2011-10-22 15:02+0200\n"
+"POT-Creation-Date: 2011-12-30 10:54+0200\n"
+"PO-Revision-Date: 2011-12-30 10:55+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <sh.yaron@gmail.com>\n"
 "Language: he\n"
@@ -35,6 +35,7 @@ msgstr "Facebook"
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:162
 #: ../src/goabackend/goagoogleprovider.c:195
+#: ../src/goabackend/goawindowsliveprovider.c:170
 #: ../src/goabackend/goatwitterprovider.c:160
 #: ../src/goabackend/goayahooprovider.c:163
 #, c-format
@@ -43,7 +44,8 @@ msgstr "הציפייה הייתה למצב 200 בעת בקשת מזהה הקבו
 
 #: ../src/goabackend/goafacebookprovider.c:174
 #: ../src/goabackend/goagoogleprovider.c:207
-#: ../src/goabackend/goaoauth2provider.c:475
+#: ../src/goabackend/goawindowsliveprovider.c:182
+#: ../src/goabackend/goaoauth2provider.c:478
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
@@ -60,12 +62,14 @@ msgid "Didn't find name member in JSON data"
 msgstr "לא נמצא חבר שם בנתוני ה־JSON"
 
 #: ../src/goabackend/goafacebookprovider.c:282
+#: ../src/goabackend/goawindowsliveprovider.c:292
 #: ../src/goabackend/goatwitterprovider.c:260
 msgid "User Name"
 msgstr "שם משתמש"
 
 #: ../src/goabackend/goafacebookprovider.c:283
 #: ../src/goabackend/goagoogleprovider.c:430
+#: ../src/goabackend/goawindowsliveprovider.c:293
 msgid "Chat"
 msgstr "צ׳אט"
 
@@ -107,80 +111,94 @@ msgstr "אנשי קשר"
 msgid "Documents"
 msgstr "מסמכים"
 
+#: ../src/goabackend/goawindowsliveprovider.c:82
+msgid "Windows Live"
+msgstr "Windows Live"
+
+#: ../src/goabackend/goawindowsliveprovider.c:193
+#, c-format
+msgid "Didn't find id member in JSON data"
+msgstr "לא נמצא חבר מזהה בנתוני ה־JSON"
+
+#: ../src/goabackend/goawindowsliveprovider.c:204
+#, c-format
+msgid "Didn't find account email member in JSON data"
+msgstr "לא נמצא חבר כתובת דוא״ל החשבון בנתוני ה־JSON"
+
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:432
+#: ../src/goabackend/goaoauth2provider.c:435
 #: ../src/goabackend/goaoauthprovider.c:440
 #, c-format
 msgid "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr "הציפייה הייתה למצב 200 בעת בקשת אסימון גישה, במקום התקבל המצב %d ‏(%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:452
+#: ../src/goabackend/goaoauth2provider.c:455
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "לא נמצא access_token (אסימון גישה) בנתונים שאינם JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:486
+#: ../src/goabackend/goaoauth2provider.c:489
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "לא נמצא access_token (אסימון גישה) בנתוני ה־JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:570
+#: ../src/goabackend/goaoauth2provider.c:573
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "התגובה לאימות הייתה “%s“"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:651
+#: ../src/goabackend/goaoauth2provider.c:654
 #, c-format
 msgid "Paste authorization code obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "נא להדביק את קוד האימות שהתקבל מ<a href=\"%s\">דף האימות</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:725
+#: ../src/goabackend/goaoauth2provider.c:728
 #: ../src/goabackend/goaoauthprovider.c:751
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "הדו־שיח נזנח"
 
-#: ../src/goabackend/goaoauth2provider.c:749
+#: ../src/goabackend/goaoauth2provider.c:752
 #: ../src/goabackend/goaoauthprovider.c:782
 msgid "Error getting an Access Token: "
 msgstr "שגיאה בקבלת אסימון לגישה:"
 
-#: ../src/goabackend/goaoauth2provider.c:761
+#: ../src/goabackend/goaoauth2provider.c:764
 #: ../src/goabackend/goaoauthprovider.c:795
 msgid "Error getting identity: "
 msgstr "שגיאה בקבלת הזהות:"
 
-#: ../src/goabackend/goaoauth2provider.c:926
+#: ../src/goabackend/goaoauth2provider.c:929
 #: ../src/goabackend/goaoauthprovider.c:972
 #, c-format
 msgid "There is already an account for the identity %s"
 msgstr "כבר יש חשבון עבור הזהות %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1051
+#: ../src/goabackend/goaoauth2provider.c:1054
 #: ../src/goabackend/goaoauthprovider.c:1102
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "ביקשנו להיכנס בתור %s, אך בוצעה כניסה בתור %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1187
+#: ../src/goabackend/goaoauth2provider.c:1190
 #: ../src/goabackend/goaoauthprovider.c:1250
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "פרטי הגישה לא נמצאו בקבוצת המפתחות (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1214
+#: ../src/goabackend/goaoauth2provider.c:1217
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "פרטי הגישה אינם מכילים access_token (אסימון גישה)"
 
-#: ../src/goabackend/goaoauth2provider.c:1253
+#: ../src/goabackend/goaoauth2provider.c:1256
 #: ../src/goabackend/goaoauthprovider.c:1323
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "רענון אסימון הגישה נכשל (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1288
+#: ../src/goabackend/goaoauth2provider.c:1291
 #: ../src/goabackend/goaoauthprovider.c:1353
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
@@ -217,30 +235,30 @@ msgstr "האסימון שהודבק התקבל מ<a href=\"%s\">דף האימו�
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "פרטי הגישה אינם מכילים access_token או access_token_secret"
 
-#: ../src/goabackend/goaprovider.c:522
+#: ../src/goabackend/goaprovider.c:523
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "התכונה ensure_credentials_sync אינה מיושמת בסוג %s"
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:737
+#: ../src/goabackend/goaprovider.c:742
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "פרטי הגישה %s של מנהל החשבונות המקוונים של GNOME עבור הזהות %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:751
+#: ../src/goabackend/goaprovider.c:756
 #, c-format
 msgid "Failed to store credentials in the keyring: %s"
 msgstr "אירע כשל באחסון פרטי הגישה בקבוצת המפתחות: %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:822
+#: ../src/goabackend/goaprovider.c:827
 #, c-format
 msgid "Failed to retrieve credentials from the keyring: %s"
 msgstr "אירע כשל בקבלת פרטי הגישה מקבוצת המפתחות: %s"
 
-#: ../src/goabackend/goaprovider.c:834
+#: ../src/goabackend/goaprovider.c:839
 msgid "Error parsing result obtained from the keyring: "
 msgstr "אירע כשל בעת ניתוח התוצאה שהתקבלה מקבוצת המפתחות:"
 
