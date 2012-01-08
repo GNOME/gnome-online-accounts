@@ -1,14 +1,15 @@
 # Bulgarian translation of gnome-online-accounts po-file.
-# Copyright (C) 2011 Free Software Foundation, Inc.
+# Copyright (C) 2011, 2012 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-online-accounts package.
 # Ivaylo Valkov <eivaylo@e-valkov.org>, 2011.
+# Alexander Shopov <ash@kambanaria.org>, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-25 17:26+0300\n"
-"PO-Revision-Date: 2011-09-25 17:25+0300\n"
+"POT-Creation-Date: 2012-01-08 09:03+0200\n"
+"PO-Revision-Date: 2012-01-08 09:03+0200\n"
 "Last-Translator: Ivaylo Valkov <ivaylo@e-valkov.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "Language: bg\n"
@@ -30,8 +31,9 @@ msgid "Facebook"
 msgstr "Фейсбук"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:161
+#: ../src/goabackend/goafacebookprovider.c:162
 #: ../src/goabackend/goagoogleprovider.c:195
+#: ../src/goabackend/goawindowsliveprovider.c:170
 #: ../src/goabackend/goatwitterprovider.c:160
 #: ../src/goabackend/goayahooprovider.c:163
 #, c-format
@@ -39,28 +41,36 @@ msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr ""
 "Беше върнат отговор „%d (%s)“ при получаване на „guid“. Очакваше се 200."
 
-#: ../src/goabackend/goafacebookprovider.c:173
+#: ../src/goabackend/goafacebookprovider.c:174
 #: ../src/goabackend/goagoogleprovider.c:207
-#: ../src/goabackend/goaoauth2provider.c:477
+#: ../src/goabackend/goawindowsliveprovider.c:182
+#: ../src/goabackend/goaoauth2provider.c:478
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
 msgstr "Неуспешен анализ на отговора във формат JSON: "
 
-#: ../src/goabackend/goafacebookprovider.c:184
+#: ../src/goabackend/goafacebookprovider.c:185
 #, c-format
 msgid "Didn't find username member in JSON data"
 msgstr "Ключът „username“ не беше намерен в данните във формат JSON"
 
-#: ../src/goabackend/goafacebookprovider.c:193
+#: ../src/goabackend/goafacebookprovider.c:194
 #, c-format
 msgid "Didn't find name member in JSON data"
 msgstr "Ключът „name“ не беше намерен в данните във формат JSON"
 
-#: ../src/goabackend/goafacebookprovider.c:259
+#: ../src/goabackend/goafacebookprovider.c:282
+#: ../src/goabackend/goawindowsliveprovider.c:292
 #: ../src/goabackend/goatwitterprovider.c:260
 msgid "User Name"
 msgstr "Потребител"
+
+#: ../src/goabackend/goafacebookprovider.c:283
+#: ../src/goabackend/goagoogleprovider.c:430
+#: ../src/goabackend/goawindowsliveprovider.c:293
+msgid "Chat"
+msgstr "Разговори"
 
 #: ../src/goabackend/goagoogleprovider.c:78
 msgid "Google"
@@ -96,16 +106,28 @@ msgstr "Календар"
 msgid "Contacts"
 msgstr "Контакти"
 
-#: ../src/goabackend/goagoogleprovider.c:430
-msgid "Chat"
-msgstr "Разговори"
-
 #: ../src/goabackend/goagoogleprovider.c:431
 msgid "Documents"
 msgstr "Документи"
 
+#: ../src/goabackend/goawindowsliveprovider.c:82
+msgid "Windows Live"
+msgstr "Уиндоус Лайв"
+
+#: ../src/goabackend/goawindowsliveprovider.c:193
+#, c-format
+msgid "Didn't find id member in JSON data"
+msgstr "Данните за идентификатор не бяха намерени в данните във формат JSON"
+
+#: ../src/goabackend/goawindowsliveprovider.c:204
+#, c-format
+msgid "Didn't find account email member in JSON data"
+msgstr ""
+"Данните за е-пощата към регистрацията не бяха намерени в данните във формат "
+"JSON"
+
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:432
+#: ../src/goabackend/goaoauth2provider.c:435
 #: ../src/goabackend/goaoauthprovider.c:440
 #, c-format
 msgid ""
@@ -114,24 +136,24 @@ msgstr ""
 "Беше върнат отговор „%d (%s)“ при получаване на код за достъп. Очакваше се "
 "200."
 
-#: ../src/goabackend/goaoauth2provider.c:452
+#: ../src/goabackend/goaoauth2provider.c:455
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr ""
 "Ключът „access_token“ не беше немерен в данните във формат различен от JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:488
+#: ../src/goabackend/goaoauth2provider.c:489
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "Ключът „access_token“ не беше намерен в данните във формат JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:572
+#: ../src/goabackend/goaoauth2provider.c:573
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "При опит за упълномощаване се получи отговор „%s“"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:653
+#: ../src/goabackend/goaoauth2provider.c:654
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
@@ -140,52 +162,52 @@ msgstr ""
 "Въведете кода за упълномощаване от <a href=\"%s\">страницата за "
 "упълномощаване</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:727
+#: ../src/goabackend/goaoauth2provider.c:728
 #: ../src/goabackend/goaoauthprovider.c:751
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "Прозорецът беше затворен"
 
-#: ../src/goabackend/goaoauth2provider.c:751
+#: ../src/goabackend/goaoauth2provider.c:752
 #: ../src/goabackend/goaoauthprovider.c:782
 msgid "Error getting an Access Token: "
 msgstr "Неуспешно получаване на код за достъп: "
 
-#: ../src/goabackend/goaoauth2provider.c:763
+#: ../src/goabackend/goaoauth2provider.c:764
 #: ../src/goabackend/goaoauthprovider.c:795
 msgid "Error getting identity: "
 msgstr "Неуспешно получаване на самоличност: "
 
-#: ../src/goabackend/goaoauth2provider.c:928
+#: ../src/goabackend/goaoauth2provider.c:929
 #: ../src/goabackend/goaoauthprovider.c:972
 #, c-format
 msgid "There is already an account for the identity %s"
 msgstr "Вече съществува регистрация за самоличността „%s“"
 
-#: ../src/goabackend/goaoauth2provider.c:1053
+#: ../src/goabackend/goaoauth2provider.c:1054
 #: ../src/goabackend/goaoauthprovider.c:1102
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "Трябваше да влезете като „%s“, но вие влязохте като „%s“"
 
-#: ../src/goabackend/goaoauth2provider.c:1189
+#: ../src/goabackend/goaoauth2provider.c:1190
 #: ../src/goabackend/goaoauthprovider.c:1250
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "Данните за регистрацията липсват в ключодържателя (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1216
+#: ../src/goabackend/goaoauth2provider.c:1217
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Данните за регистрацията не съдържат ключа „access_token“"
 
-#: ../src/goabackend/goaoauth2provider.c:1255
+#: ../src/goabackend/goaoauth2provider.c:1256
 #: ../src/goabackend/goaoauthprovider.c:1323
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Неуспешно обновяване на кода за достъп (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1290
+#: ../src/goabackend/goaoauth2provider.c:1291
 #: ../src/goabackend/goaoauthprovider.c:1353
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
@@ -233,30 +255,30 @@ msgstr ""
 "Данните за регистрацията не съдържат ключа „access_token“ или "
 "„access_token_secret“"
 
-#: ../src/goabackend/goaprovider.c:522
+#: ../src/goabackend/goaprovider.c:523
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "Методът „ensure_credentials_sync“ не съществува за обекти от вида „%s“"
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:737
+#: ../src/goabackend/goaprovider.c:742
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Данни за самоличността „%2$s“, предоставени от %1$s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:751
+#: ../src/goabackend/goaprovider.c:756
 #, c-format
 msgid "Failed to store credentials in the keyring: %s"
 msgstr "Неуспешно запазване на данните за регистрацията в ключодържателя: %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:822
+#: ../src/goabackend/goaprovider.c:827
 #, c-format
 msgid "Failed to retrieve credentials from the keyring: %s"
 msgstr "Неуспешно извличане на данните за регистрацията от ключодържателя: %s"
 
-#: ../src/goabackend/goaprovider.c:834
+#: ../src/goabackend/goaprovider.c:839
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Грешка при анализа на данните извлечени от ключодържателя: "
 
