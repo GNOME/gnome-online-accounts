@@ -1,306 +1,134 @@
-# Brazilian Portuguese translation for gnome-online-accounts.
-# Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
-# This file is distributed under the same license as the gnome-online-accounts package.
+# Brazilian Portuguese translation for glib-networking.
+# Copyright (C) 2011 glib-networking's COPYRIGHT HOLDER
+# This file is distributed under the same license as the glib-networking package.
+# André Gondim <andregondim@ubuntu.com>, 2011.
 # Djavan Fagundes <djavan@comum.org>, 2011.
+# Guilherme Barbosa Ferreira <eu@guilhermeferreira.info>, 2012.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-online-accounts master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-02 14:05+0000\n"
-"PO-Revision-Date: 2011-09-06 11:22-0200\n"
-"Last-Translator: Djavan Fagundes <djavan@comum.org>\n"
+"Project-Id-Version: glib-networking master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=glib&keywords=I18N+L10N&component=network\n"
+"POT-Creation-Date: 2011-12-20 01:27+0000\n"
+"PO-Revision-Date: 2012-01-03 16:09-0400\n"
+"Last-Translator: Guilherme Barbosa Ferreira <eu@guilhermeferreira.info>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
-"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.6.1\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../src/daemon/goadaemon.c:871
-msgid "An online account needs attention"
-msgstr "Uma conta online precisa de atenção"
+#: ../proxy/libproxy/glibproxyresolver.c:150
+msgid "Proxy resolver internal error."
+msgstr "Erro interno do resolvedor de proxy."
 
-#: ../src/daemon/goadaemon.c:878
-msgid "Open Online Accounts..."
-msgstr "Abrir contas on-line..."
-
-#: ../src/goabackend/goafacebookprovider.c:78
-msgid "Facebook"
-msgstr "Facebook"
-
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:161
-#: ../src/goabackend/goagoogleprovider.c:195
-#: ../src/goabackend/goatwitterprovider.c:160
-#: ../src/goabackend/goayahooprovider.c:163
+#: ../tls/gnutls/gtlscertificate-gnutls.c:173
 #, c-format
-msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
-msgstr ""
-"Status esperado 200 ao solicitar guid, ao invés disso obteve status %d (%s)"
+msgid "Could not parse DER certificate: %s"
+msgstr "Não foi possível analisar certificado DER: %s"
 
-#: ../src/goabackend/goafacebookprovider.c:173
-#: ../src/goabackend/goagoogleprovider.c:207
-#: ../src/goabackend/goaoauth2provider.c:476
-#: ../src/goabackend/goatwitterprovider.c:172
-#: ../src/goabackend/goayahooprovider.c:175
-msgid "Error parsing response as JSON: "
-msgstr "Erro ao analisar a resposta como JSON:"
-
-#: ../src/goabackend/goafacebookprovider.c:184
+#: ../tls/gnutls/gtlscertificate-gnutls.c:194
 #, c-format
-msgid "Didn't find username member in JSON data"
-msgstr "Não encontrou membro nome de usuário nos dados JSON"
+msgid "Could not parse PEM certificate: %s"
+msgstr "Não foi possível analisar certificado PEM: %s"
 
-#: ../src/goabackend/goafacebookprovider.c:193
+#: ../tls/gnutls/gtlscertificate-gnutls.c:225
 #, c-format
-msgid "Didn't find name member in JSON data"
-msgstr "Não encontrou membro nome em dados JSON"
+msgid "Could not parse DER private key: %s"
+msgstr "Não foi possível analisar chave privada DER: %s"
 
-#: ../src/goabackend/goafacebookprovider.c:259
-#: ../src/goabackend/goatwitterprovider.c:260
-msgid "User Name"
-msgstr "Nome do usuário"
-
-#: ../src/goabackend/goagoogleprovider.c:78
-msgid "Google"
-msgstr "Google"
-
-#: ../src/goabackend/goagoogleprovider.c:218
+#: ../tls/gnutls/gtlscertificate-gnutls.c:256
 #, c-format
-msgid "Didn't find data member in JSON data"
-msgstr "Não encontrou membro dados em dados JSON"
+msgid "Could not parse PEM private key: %s"
+msgstr "Não foi possível analisar chave privada PEM: %s"
 
-#: ../src/goabackend/goagoogleprovider.c:228
+#: ../tls/gnutls/gtlscertificate-gnutls.c:296
+msgid "No certificate data provided"
+msgstr "Nenhum dado de certificado fornecido"
+
+#: ../tls/gnutls/gtlsclientconnection-gnutls.c:349
+msgid "Server required TLS certificate"
+msgstr "Servidor requer certificado TLS"
+
+#: ../tls/gnutls/gtlsconnection-gnutls.c:202
 #, c-format
-msgid "Didn't find email member in JSON data"
-msgstr "Não encontrou membro email em dados JSON"
+msgid "Could not create TLS connection: %s"
+msgstr "Não foi possível criar conexão TLS: %s"
 
-#: ../src/goabackend/goagoogleprovider.c:425
-msgid "Email Address"
-msgstr "Endereço de email"
+#: ../tls/gnutls/gtlsconnection-gnutls.c:481
+msgid "Peer failed to perform TLS handshake"
+msgstr "Peer falhou ao realizar negociação TLS"
 
-#: ../src/goabackend/goagoogleprovider.c:426
-msgid "Use this account for"
-msgstr "Usar essa conta para"
+#: ../tls/gnutls/gtlsconnection-gnutls.c:501
+msgid "Peer requested illegal TLS rehandshake"
+msgstr "O peer requisitou uma negociação TLS ilegal"
 
-#: ../src/goabackend/goagoogleprovider.c:427
-msgid "Mail"
-msgstr "E-mail"
+#: ../tls/gnutls/gtlsconnection-gnutls.c:519
+msgid "TLS connection closed unexpectedly"
+msgstr "Conexão TLS fechou inesperadamente"
 
-#: ../src/goabackend/goagoogleprovider.c:428
-msgid "Calendar"
-msgstr "Calendário"
-
-#: ../src/goabackend/goagoogleprovider.c:429
-msgid "Contacts"
-msgstr "Contatos"
-
-#: ../src/goabackend/goagoogleprovider.c:430
-msgid "Chat"
-msgstr "Bate-papo"
-
-#: ../src/goabackend/goagoogleprovider.c:431
-msgid "Documents"
-msgstr "Documentos"
-
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:431
-#: ../src/goabackend/goaoauthprovider.c:439
+#: ../tls/gnutls/gtlsconnection-gnutls.c:814
+#: ../tls/gnutls/gtlsconnection-gnutls.c:840
 #, c-format
+msgid "Error performing TLS handshake: %s"
+msgstr "Erro executando negociação TLS: %s"
+
+#: ../tls/gnutls/gtlsconnection-gnutls.c:888
+msgid "Unacceptable TLS certificate"
+msgstr "Certificado TLS inaceitável"
+
+#: ../tls/gnutls/gtlsconnection-gnutls.c:1025
+#, c-format
+msgid "Error reading data from TLS socket: %s"
+msgstr "Erro ao ler dados do socket TLS: %s"
+
+#: ../tls/gnutls/gtlsconnection-gnutls.c:1051
+#, c-format
+msgid "Error writing data to TLS socket: %s"
+msgstr "Erro ao gravar dados do socket TLS: %s"
+
+#: ../tls/gnutls/gtlsconnection-gnutls.c:1097
+#, c-format
+msgid "Error performing TLS close: %s"
+msgstr "Erro ao executar fechamento TLS: %s"
+
+#: ../tls/gnutls/gtlsserverconnection-gnutls.c:103
+msgid "Certificate has no private key"
+msgstr "Certificado não tem chave privada"
+
+#: ../tls/pkcs11/gpkcs11pin.c:108
 msgid ""
-"Expected status 200 when requesting access token, instead got status %d (%s)"
+"This is the last chance to enter the PIN correctly before the token is "
+"locked."
 msgstr ""
-"Status esperado 200 ao solicitar token de acesso, ao invés disso obteve status "
-"%d (%s)"
+"Esta é a última chance para inserir o PIN corretamente antes que o token "
+"seja bloqueado."
 
-#: ../src/goabackend/goaoauth2provider.c:451
-#, c-format
-msgid "Didn't find access_token in non-JSON data"
-msgstr "Não encontrou access_token em dados não-JSON"
-
-#: ../src/goabackend/goaoauth2provider.c:487
-#, c-format
-msgid "Didn't find access_token in JSON data"
-msgstr "Não encontrou access_token em dados JSON"
-
-#: ../src/goabackend/goaoauth2provider.c:571
-#, c-format
-msgid "Authorization response was \"%s\""
-msgstr "Resposta de autorização foi \"%s\""
-
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:652
-#, c-format
+#: ../tls/pkcs11/gpkcs11pin.c:110
 msgid ""
-"Paste authorization code obtained from the <a href=\"%s\">authorization "
-"page</a>:"
+"Several PIN attempts have been incorrect, and the token will be locked after "
+"further failures."
 msgstr ""
-"Cole o código de autorização obtido a partir da <a href=\"%s\">página de "
-"autorização</a>:"
+"Várias tentativas do PIN estavam incorretas, o token será bloqueado após mais "
+"falhas."
 
-#: ../src/goabackend/goaoauth2provider.c:723
-#: ../src/goabackend/goaoauthprovider.c:747
-#, c-format
-msgid "Dialog was dismissed"
-msgstr "O diálogo foi fechado"
+#: ../tls/pkcs11/gpkcs11pin.c:112
+msgid "The PIN entered is incorrect."
+msgstr "O PIN inserido está incorreto"
 
-#: ../src/goabackend/goaoauth2provider.c:747
-#: ../src/goabackend/goaoauthprovider.c:778
-msgid "Error getting an Access Token: "
-msgstr "Erro ao obter um token de acesso:"
+#: ../tls/pkcs11/gpkcs11slot.c:446
+msgid "Module"
+msgstr "Módulo"
 
-#: ../src/goabackend/goaoauth2provider.c:759
-#: ../src/goabackend/goaoauthprovider.c:791
-msgid "Error getting identity: "
-msgstr "Erro ao obter identidade:"
-
-#: ../src/goabackend/goaoauth2provider.c:924
-#: ../src/goabackend/goaoauthprovider.c:968
-#, c-format
-msgid "There is already an account for the identity %s"
-msgstr "Já existe uma conta para a identidade %s"
-
-#: ../src/goabackend/goaoauth2provider.c:1049
-#: ../src/goabackend/goaoauthprovider.c:1098
-#, c-format
-msgid "Was asked to login as %s, but logged in as %s"
-msgstr "Foi convidado a entrar como %s, mas logado como %s"
-
-#: ../src/goabackend/goaoauth2provider.c:1185
-#: ../src/goabackend/goaoauthprovider.c:1246
-#, c-format
-msgid "Credentials not found in keyring (%s, %d): "
-msgstr "Credenciais não encontradas no chaveiro (%s, %d):"
-
-#: ../src/goabackend/goaoauth2provider.c:1212
-#, c-format
-msgid "Credentials do not contain access_token"
-msgstr "As credenciais não contêm access_token"
-
-#: ../src/goabackend/goaoauth2provider.c:1251
-#: ../src/goabackend/goaoauthprovider.c:1319
-#, c-format
-msgid "Failed to refresh access token (%s, %d): "
-msgstr "Falha ao atualizar o token de acesso (%s, %d):"
-
-#: ../src/goabackend/goaoauth2provider.c:1286
-#: ../src/goabackend/goaoauthprovider.c:1349
-#, c-format
-msgid "Error storing credentials in keyring (%s, %d): "
-msgstr "Erro ao armazenar credenciais no chaveiro (%s, %d):"
-
-#: ../src/goabackend/goaoauthprovider.c:462
-#, c-format
-msgid "Missing access_token or access_token_secret headers in response"
-msgstr "Faltando cabeçalhos access_token ou access_token_secret em resposta"
-
-#: ../src/goabackend/goaoauthprovider.c:635
-msgid "Error getting a Request Token: "
-msgstr "Erro ao obter uma solicitação de token:"
-
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:644
-#, c-format
-msgid ""
-"Expected status 200 for getting a Request Token, instead got status %d (%s)"
+#: ../tls/pkcs11/gpkcs11slot.c:447
+msgid "PKCS#11 Module Pointer"
 msgstr ""
-"Esperado status 200 para obter um token de solicitação, ao invés disso foi "
-"obtido estado %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:658
-#, c-format
-msgid "Missing request_token or request_token_secret headers in response"
-msgstr "Faltando cabeçalhos request_token ou request_token_secret em resposta"
+#: ../tls/pkcs11/gpkcs11slot.c:454
+msgid "Slot ID"
+msgstr "Slot ID"
 
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:675
-#, c-format
-msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr "Cole o token obtido a partir da <a href=\"%s\">página de autorização</a>:"
-
-#: ../src/goabackend/goaoauthprovider.c:1275
-#, c-format
-msgid "Credentials do not contain access_token or access_token_secret"
-msgstr "As credenciais não contêm access_token ou access_token_secret"
-
-#: ../src/goabackend/goaprovider.c:522
-#, c-format
-msgid "ensure_credentials_sync is not implemented on type %s"
-msgstr "ensure_credentials_sync não está implementada no tipo %s"
-
-#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:737
-#, c-format
-msgid "GOA %s credentials for identity %s"
-msgstr "Credenciais GOA %s para a identidade %s"
-
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:751
-#, c-format
-msgid "Failed to store credentials in the keyring: %s"
-msgstr "Falhou ao armazenar credenciais no chaveiro: %s"
-
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:822
-#, c-format
-msgid "Failed to retrieve credentials from the keyring: %s"
-msgstr "Falhou ao recuperar as credenciais do chaveiro: %s"
-
-#: ../src/goabackend/goaprovider.c:834
-msgid "Error parsing result obtained from the keyring: "
-msgstr "Erro ao analisar o resultado do chaveiro:"
-
-#: ../src/goabackend/goatwitterprovider.c:78
-msgid "Twitter"
-msgstr "Twitter"
-
-#: ../src/goabackend/goatwitterprovider.c:183
-#, c-format
-msgid "Didn't find id_str member in JSON data"
-msgstr "Não encontrou membro id_str em dados JSON"
-
-#: ../src/goabackend/goatwitterprovider.c:192
-#, c-format
-msgid "Didn't find screen_name member in JSON data"
-msgstr "Não encontrou membro screen_name nos dados JSON"
-
-#: ../src/goabackend/goayahooprovider.c:78
-msgid "Yahoo"
-msgstr "Yahoo"
-
-#: ../src/goabackend/goayahooprovider.c:186
-#, c-format
-msgid "Didn't find guid member in JSON data"
-msgstr "Não encontrou membro guid em dados JSON"
-
-#: ../src/goabackend/goayahooprovider.c:196
-#, c-format
-msgid "Didn't find value member in JSON data"
-msgstr "Não encontrou membro valor em JSON dados"
-
-#: ../src/goabackend/goayahooprovider.c:222
-#, c-format
-msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+#: ../tls/pkcs11/gpkcs11slot.c:455
+msgid "PKCS#11 Slot Identifier"
 msgstr ""
-"Status esperado 200 ao solicitar nome, ao vez disso obteve status %d (%s)"
-
-#: ../src/goabackend/goayahooprovider.c:235
-msgid "Error parsing usercard response as JSON: "
-msgstr "Erro ao analisar a resposta de usercard como JSON:"
-
-#: ../src/goabackend/goayahooprovider.c:246
-#, c-format
-msgid "Didn't find profile member in JSON data"
-msgstr "Não encontrou membro perfil em JSON dados"
-
-#: ../src/goabackend/goayahooprovider.c:256
-#, c-format
-msgid "Didn't find nickname member in JSON data"
-msgstr "Não encontrou membro apelido nos dados JSON"
-
-#. TODO: look up email address / screenname from GUID
-#: ../src/goabackend/goayahooprovider.c:324
-msgid "Name"
-msgstr "Nome"
