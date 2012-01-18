@@ -55,6 +55,7 @@ libgoa_backend_1_0_la_HEADERS =						\
 	goafacebookprovider.h						\
 	goayahooprovider.h						\
 	goatwitterprovider.h						\
+	goaflickrprovider.h						\
 	goawindowsliveprovider.h					\
 	$(NULL)
 
@@ -78,6 +79,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goafacebookprovider.h		goafacebookprovider.c		\
 	goayahooprovider.h		goayahooprovider.c		\
 	goatwitterprovider.h		goatwitterprovider.c		\
+	goaflickrprovider.h		goaflickrprovider.c		\
 	goawindowsliveprovider.h	goawindowsliveprovider.c	\
 	goautils.h			goautils.c			\
 	goaspinnerbutton.h		goaspinnerbutton.c		\

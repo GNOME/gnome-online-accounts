@@ -91,6 +91,30 @@ if test "$enable_exchange" != "no"; then
   AC_DEFINE(GOA_EXCHANGE_ENABLED, 1, [Enable Microsoft Exchange data provider])
 fi
 
+# Flickr
+AC_ARG_ENABLE([flickr], [AS_HELP_STRING([--enable-flickr], [Enable Flickr provider])], [], [enable_flickr=no])
+AC_ARG_WITH(flickr-consumer-key,
+            [AS_HELP_STRING([--with-flickr-consumer-key],
+                            [Flickr OAuth 1.0 consumer key])],
+                            [],
+                            [])
+AC_ARG_WITH(flickr-consumer-secret,
+            [AS_HELP_STRING([--with-flickr-consumer-secret],
+                            [Flickr OAuth 1.0 consumer secret])],
+                            [],
+                            [])
+if test "$with_flickr_consumer_key" = ""; then
+  with_flickr_consumer_key=ed00ad7e0869897506e23c0d18e34d01
+fi
+if test "$with_flickr_consumer_secret" = ""; then
+  with_flickr_consumer_secret=ebd556dd187188b1
+fi
+AC_DEFINE_UNQUOTED(GOA_FLICKR_CONSUMER_KEY, ["$with_flickr_consumer_key"], [Flickr OAuth 1.0 consumer key])
+AC_DEFINE_UNQUOTED(GOA_FLICKR_CONSUMER_SECRET, ["$with_flickr_consumer_secret"], [Flickr OAuth 1.0 consumer secret])
+if test "$enable_flickr" != "no"; then
+  AC_DEFINE(GOA_FLICKR_ENABLED, 1, [Enable Flickr data provider])
+fi
+
 # Google
 AC_ARG_ENABLE([google], [AS_HELP_STRING([--enable-google], [Enable Google provider])], [], [enable_google=yes])
 AC_ARG_WITH(google-consumer-key,
@@ -344,6 +368,7 @@ echo "
 	cppflags:                       ${CPPFLAGS}
 	introspection:		        ${found_introspection}
 
+	Flickr provider:                ${enable_flickr} (OAuth 1.0, key:${with_flickr_consumer_key} secret:${with_flickr_consumer_secret})
 	Google provider:                ${enable_google} (OAuth 2.0, id:${with_google_client_id} secret:${with_google_client_secret})
 	Microsoft Exchange provider:    ${enable_exchange}
 	Kerberos provider:              ${enable_kerberos}
