@@ -11,9 +11,22 @@ INCLUDES = 							\
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" 		\
 	-DPACKAGE_LIB_DIR=\""$(libdir)"\" 			\
 	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT			\
-	-DGOA_API_IS_SUBJECT_TO_CHANGE				\
 	$(WARN_CFLAGS)						\
 	$(NULL)
+
+noinst_PROGRAMS = list-providers list-accounts tweet
+
+list_providers_SOURCES = list-providers.c
+list_providers_CFLAGS = $(GLIB_CFLAGS) $(GTK_CFLAGS)
+list_providers_LDADD = $(GLIB_LIBS) $(GTK_CFLAGS) ../goabackend/libgoa-backend-1.0.la ../goa/libgoa-1.0.la
+
+list_accounts_SOURCES = list-accounts.c
+list_accounts_CFLAGS = $(GLIB_CFLAGS)
+list_accounts_LDADD = $(GLIB_LIBS) ../goa/libgoa-1.0.la
+
+tweet_SOURCES = tweet.c
+tweet_CFLAGS = $(GLIB_CFLAGS) $(REST_CFLAGS)
+tweet_LDADD = $(GLIB_LIBS) $(REST_LIBS) ../goa/libgoa-1.0.la
 
 clean-local :
 	rm -f *~
