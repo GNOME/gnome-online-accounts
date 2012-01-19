@@ -58,9 +58,13 @@ expand_content_files =		\
 extra_files =			\
 	$(NULL)
 
-man_MANS = 			\
+man_MANS =
+
+if ENABLE_DOCUMENTATION
+man_MANS +=			\
 	goa-daemon.8		\
 	$(NULL)
+endif
 
 .xml.8:
 	$(XSLTPROC) --nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<

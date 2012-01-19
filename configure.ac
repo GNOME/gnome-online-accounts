@@ -21,9 +21,15 @@ GNOME_DEBUG_CHECK
 GNOME_COMPILE_WARNINGS([maximum])
 GNOME_MAINTAINER_MODE_DEFINES
 
-AC_PATH_PROG([XSLTPROC], [xsltproc])
-if test -z "$XSLTPROC"; then
-  AC_MSG_ERROR([xsltproc is needed])
+AC_ARG_ENABLE([documentation],
+	AS_HELP_STRING([--enable-documentation], [enable man pages and HTML]),
+	[], [enable_documentation=yes])
+AM_CONDITIONAL(ENABLE_DOCUMENTATION, test x$enable_documentation = xyes)
+if test x$enable_documentation = xyes; then
+   AC_PATH_PROG([XSLTPROC], [xsltproc])
+   if test -z "$XSLTPROC"; then
+     AC_MSG_ERROR([xsltproc is needed])
+   fi
 fi
 
 GTK_DOC_CHECK([1.3])
