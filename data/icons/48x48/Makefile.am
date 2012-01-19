@@ -7,6 +7,7 @@ icon_DATA = 				\
 	goa-account-google.png		\
 	goa-account-owncloud.png	\
 	goa-account-twitter.png		\
+	goa-account-flickr.png		\
 	goa-account-yahoo.png		\
 	$(NULL)
 
