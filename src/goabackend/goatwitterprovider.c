@@ -154,6 +154,7 @@ get_identity_sync (GoaOAuthProvider  *provider,
                                       "https://api.twitter.com/1/account/verify_credentials.json",
                                       FALSE);
   call = rest_proxy_new_call (proxy);
+  rest_proxy_call_add_param (call, "skip_status", "true");
 
   if (!rest_proxy_call_sync (call, error))
     goto out;
