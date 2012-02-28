@@ -2,16 +2,16 @@
 # Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
 #
-# Dr.T.Vasudevan <agnihot3@gmail.com>, 2011.
+# Dr.T.Vasudevan <agnihot3@gmail.com>, 2011, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
-"cgi?product=gnome-online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-02 03:21+0000\n"
-"PO-Revision-Date: 2011-09-02 19:23+0530\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-02-28 17:33+0530\n"
+"PO-Revision-Date: 2012-02-28 17:40+0530\n"
 "Last-Translator: Dr.T.Vasudevan <agnihot3@gmail.com>\n"
 "Language-Team: Tamil <ta@li.org>\n"
+"Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -31,38 +31,47 @@ msgid "Facebook"
 msgstr "பேஸ்புக்"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:161
+#: ../src/goabackend/goafacebookprovider.c:162
 #: ../src/goabackend/goagoogleprovider.c:195
+#: ../src/goabackend/goawindowsliveprovider.c:170
 #: ../src/goabackend/goatwitterprovider.c:160
 #: ../src/goabackend/goayahooprovider.c:163
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr ""
-"ஸ்டேடஸ் 200  guid ஐ கோரியபோது எதிர்பார்க்கப்பட்டது, அதற்கு பதில் ஸ்டேடஸ் %d "
-"(%s) கிடைத்தது"
+"ஸ்டேடஸ் 200  guid ஐ கோரியபோது எதிர்பார்க்கப்பட்டது, அதற்கு பதில் ஸ்டேடஸ் %d (%s) "
+"கிடைத்தது"
 
-#: ../src/goabackend/goafacebookprovider.c:173
+#: ../src/goabackend/goafacebookprovider.c:174
 #: ../src/goabackend/goagoogleprovider.c:207
-#: ../src/goabackend/goaoauth2provider.c:476
+#: ../src/goabackend/goawindowsliveprovider.c:182
+#: ../src/goabackend/goaoauth2provider.c:478
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
 msgstr "ஜெசன் ஆக பதிலை அலகிடும்போது பிழை:"
 
-#: ../src/goabackend/goafacebookprovider.c:184
+#: ../src/goabackend/goafacebookprovider.c:185
 #, c-format
 msgid "Didn't find username member in JSON data"
 msgstr "ஜெசன் தரவில் பயனர் பெயரை காணவில்லை"
 
-#: ../src/goabackend/goafacebookprovider.c:193
+#: ../src/goabackend/goafacebookprovider.c:194
 #, c-format
 msgid "Didn't find name member in JSON data"
 msgstr "ஜெசன் தரவில் பெயர் உறுப்பினரை காணவில்லை"
 
-#: ../src/goabackend/goafacebookprovider.c:259
+#: ../src/goabackend/goafacebookprovider.c:282
+#: ../src/goabackend/goawindowsliveprovider.c:292
 #: ../src/goabackend/goatwitterprovider.c:260
 msgid "User Name"
 msgstr "பயனர் பெயர்"
+
+#: ../src/goabackend/goafacebookprovider.c:283
+#: ../src/goabackend/goagoogleprovider.c:430
+#: ../src/goabackend/goawindowsliveprovider.c:293
+msgid "Chat"
+msgstr "அரட்டை"
 
 #: ../src/goabackend/goagoogleprovider.c:78
 msgid "Google"
@@ -98,163 +107,166 @@ msgstr "நாள்காட்டி"
 msgid "Contacts"
 msgstr "தொடர்புகள்"
 
-#: ../src/goabackend/goagoogleprovider.c:430
-msgid "Chat"
-msgstr "அரட்டை"
-
 #: ../src/goabackend/goagoogleprovider.c:431
 msgid "Documents"
 msgstr "ஆவணங்கள்"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:431
-#: ../src/goabackend/goaoauthprovider.c:439
-#, c-format
-msgid ""
-"Expected status 200 when requesting access token, instead got status %d (%s)"
-msgstr ""
-"ஸ்டேடஸ் 200  அணுகல் டோகன்  ஐ கோரியபோது எதிர்பார்க்கப்பட்டது, அதற்கு பதில் "
-"ஸ்டேடஸ் %d (%s) கிடைத்தது"
+#: ../src/goabackend/goawindowsliveprovider.c:82
+msgid "Windows Live"
+msgstr "விண்டோஸ் லைவ் "
 
-#: ../src/goabackend/goaoauth2provider.c:451
+#: ../src/goabackend/goawindowsliveprovider.c:193
+#, c-format
+msgid "Didn't find id member in JSON data"
+msgstr "ஜெசன் தரவில் ஐடி உறுப்பினரை காணவில்லை"
+
+#: ../src/goabackend/goawindowsliveprovider.c:204
+#, c-format
+msgid "Didn't find account email member in JSON data"
+msgstr "ஜெசன் தரவில் கணக்கு மின்னஞ்சல் உறுப்பினரை காணவில்லை"
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goaoauth2provider.c:435
+#: ../src/goabackend/goaoauthprovider.c:440
+#, c-format
+msgid "Expected status 200 when requesting access token, instead got status %d (%s)"
+msgstr ""
+"ஸ்டேடஸ் 200  அணுகல் டோகன்  ஐ கோரியபோது எதிர்பார்க்கப்பட்டது, அதற்கு பதில் ஸ்டேடஸ் %d (%s) "
+"கிடைத்தது"
+
+#: ../src/goabackend/goaoauth2provider.c:455
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "ஜெசன் அல்லாத தரவில் அணுகல் டோகன் காணவில்லை"
 
-#: ../src/goabackend/goaoauth2provider.c:487
+#: ../src/goabackend/goaoauth2provider.c:489
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "ஜெசன்  தரவில் அணுகல் டோகன் காணவில்லை"
 
-#: ../src/goabackend/goaoauth2provider.c:571
+#: ../src/goabackend/goaoauth2provider.c:573
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "அதிகாரமளிப்பு பதில்  \"%s\""
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:652
+#: ../src/goabackend/goaoauth2provider.c:654
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
 "page</a>:"
 msgstr ""
-" <a href=\"%s\">authorization page</a> இலிருந்து கிடைத்த அதிகாரமளிப்பு "
-"குறியீட்டை இங்கு ஒட்டவும் :"
+" <a href=\"%s\">authorization page</a> இலிருந்து கிடைத்த அதிகாரமளிப்பு குறியீட்டை "
+"இங்கு ஒட்டவும் :"
 
-#: ../src/goabackend/goaoauth2provider.c:723
-#: ../src/goabackend/goaoauthprovider.c:747
+#: ../src/goabackend/goaoauth2provider.c:728
+#: ../src/goabackend/goaoauthprovider.c:751
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "உரையாடல் அனுப்பி வைக்கப்பட்டது"
 
-#: ../src/goabackend/goaoauth2provider.c:747
-#: ../src/goabackend/goaoauthprovider.c:778
+#: ../src/goabackend/goaoauth2provider.c:752
+#: ../src/goabackend/goaoauthprovider.c:782
 msgid "Error getting an Access Token: "
 msgstr "அணுகல் டோகனை பெறுவதில் பிழை:"
 
-#: ../src/goabackend/goaoauth2provider.c:759
-#: ../src/goabackend/goaoauthprovider.c:791
+#: ../src/goabackend/goaoauth2provider.c:764
+#: ../src/goabackend/goaoauthprovider.c:795
 msgid "Error getting identity: "
 msgstr "அடையாளத்தை பெறுவதில் பிழை:"
 
-#: ../src/goabackend/goaoauth2provider.c:924
-#: ../src/goabackend/goaoauthprovider.c:968
+#: ../src/goabackend/goaoauth2provider.c:929
+#: ../src/goabackend/goaoauthprovider.c:972
 #, c-format
 msgid "There is already an account for the identity %s"
 msgstr "%s அடையாளத்துக்கு ஏற்கெனெவே ஒரு கணக்கு உள்ளது."
 
-#: ../src/goabackend/goaoauth2provider.c:1049
-#: ../src/goabackend/goaoauthprovider.c:1098
+#: ../src/goabackend/goaoauth2provider.c:1054
+#: ../src/goabackend/goaoauthprovider.c:1102
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "%s ஆக உள் நுழைய கேட்டோம், ஆனால் %s ஆக உள்நுழைந்துள்ளோம்."
 
-#: ../src/goabackend/goaoauth2provider.c:1185
-#: ../src/goabackend/goaoauthprovider.c:1246
+#: ../src/goabackend/goaoauth2provider.c:1190
+#: ../src/goabackend/goaoauthprovider.c:1250
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "விசைவளையத்தில் அறிமுக ஆவணங்கள் காணவில்லை (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1212
+#: ../src/goabackend/goaoauth2provider.c:1217
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "அறிமுக ஆவணங்களில் அணுகல்_டோக்கன் இல்லை"
 
-#: ../src/goabackend/goaoauth2provider.c:1251
-#: ../src/goabackend/goaoauthprovider.c:1319
+#: ../src/goabackend/goaoauth2provider.c:1256
+#: ../src/goabackend/goaoauthprovider.c:1323
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "அணுகல் டோக்கனை புதுப்பிக்க இயலவில்லை (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1286
-#: ../src/goabackend/goaoauthprovider.c:1349
+#: ../src/goabackend/goaoauth2provider.c:1291
+#: ../src/goabackend/goaoauthprovider.c:1353
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "விசை வளையத்தில் அறிமுக ஆவணம் சேமிக்கும் போது பிழை (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:462
+#: ../src/goabackend/goaoauthprovider.c:463
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
-msgstr ""
-"அணுகல்_டோகன்  அல்லது அணுகல்_டோகன்_ரகசியம் தலைப்புகள் பதிலில் காணவில்லை"
+msgstr "அணுகல்_டோகன்  அல்லது அணுகல்_டோகன்_ரகசியம் தலைப்புகள் பதிலில் காணவில்லை"
 
-#: ../src/goabackend/goaoauthprovider.c:635
+#: ../src/goabackend/goaoauthprovider.c:636
 msgid "Error getting a Request Token: "
 msgstr "கோரிக்கை டோகன் பெறுவதில் பிழை:"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:644
+#: ../src/goabackend/goaoauthprovider.c:645
 #, c-format
-msgid ""
-"Expected status 200 for getting a Request Token, instead got status %d (%s)"
+msgid "Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr ""
-"ஸ்டேடஸ் 200  கோரிக்கை டோகன்  ஐ பெறும்போது எதிர்பார்க்கப்பட்டது, அதற்கு "
-"பதில் ஸ்டேடஸ் %d (%s) கிடைத்தது"
+"ஸ்டேடஸ் 200  கோரிக்கை டோகன்  ஐ பெறும்போது எதிர்பார்க்கப்பட்டது, அதற்கு பதில் ஸ்டேடஸ் %d "
+"(%s) கிடைத்தது"
 
-#: ../src/goabackend/goaoauthprovider.c:658
+#: ../src/goabackend/goaoauthprovider.c:659
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
-msgstr ""
-"கோரிக்கை_டோகன்  அல்லது கோரிக்கை_டோகன்_ரகசியம் தலைப்புகள் பதிலில் காணவில்லை"
+msgstr "கோரிக்கை_டோகன்  அல்லது கோரிக்கை_டோகன்_ரகசியம் தலைப்புகள் பதிலில் காணவில்லை"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:675
+#: ../src/goabackend/goaoauthprovider.c:676
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr ""
-" <a href=\"%s\">authorization page</a> இலிருந்து கிடைத்த டோகனை இங்கு "
-"ஒட்டவும் :"
+msgstr " <a href=\"%s\">authorization page</a> இலிருந்து கிடைத்த டோகனை இங்கு ஒட்டவும் :"
 
-#: ../src/goabackend/goaoauthprovider.c:1275
+#: ../src/goabackend/goaoauthprovider.c:1279
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "அறிமுக ஆவணங்களில் அணுகல்_டோக்கன் அல்லது அணுகல்_டோக்கன்_ரகசியம் இல்லை"
 
-#: ../src/goabackend/goaprovider.c:522
+#: ../src/goabackend/goaprovider.c:523
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
-msgstr ""
-" %s வகையில் அறிமுகஆவணங்கள்_ஒத்திசைவதை_உறுதிசெய் செயல்படுத்தப் படவில்லை"
+msgstr " %s வகையில் அறிமுகஆவணங்கள்_ஒத்திசைவதை_உறுதிசெய் செயல்படுத்தப் படவில்லை"
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:737
+#: ../src/goabackend/goaprovider.c:742
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "GOA %s அறிமுக ஆவணம் %s அடையாளத்துக்கு"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:751
+#: ../src/goabackend/goaprovider.c:756
 #, c-format
 msgid "Failed to store credentials in the keyring: %s"
 msgstr "விசை வளையத்தில் அறிமுக ஆவணம் சேமித்தல் தோல்வி: %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:822
+#: ../src/goabackend/goaprovider.c:827
 #, c-format
 msgid "Failed to retrieve credentials from the keyring: %s"
 msgstr "விசை வளையத்தில்  இருந்து அறிமுக ஆவணம்  மீட்பது தோல்வியுற்றது: %s"
 
-#: ../src/goabackend/goaprovider.c:834
+#: ../src/goabackend/goaprovider.c:839
 msgid "Error parsing result obtained from the keyring: "
 msgstr "விசை வளையத்தில் இருந்து கிடைத்த விடையை பகுப்பதில் பிழை:"
 
@@ -290,8 +302,8 @@ msgstr "ஜெசன் தரவில் மதிப்பு உறுப்
 #, c-format
 msgid "Expected status 200 when requesting name, instead got status %d (%s)"
 msgstr ""
-"பெயரை வேண்டுகையில் ஸ்டேடஸ் 200   எதிர்பார்க்கப்பட்டது, அதற்கு பதில் ஸ்டேடஸ் "
-"%d (%s) கிடைத்தது"
+"பெயரை வேண்டுகையில் ஸ்டேடஸ் 200   எதிர்பார்க்கப்பட்டது, அதற்கு பதில் ஸ்டேடஸ் %d (%s) "
+"கிடைத்தது"
 
 #: ../src/goabackend/goayahooprovider.c:235
 msgid "Error parsing usercard response as JSON: "
@@ -311,5 +323,4 @@ msgstr "ஜெசன் தரவில் செல்லப்பெயர் 
 #: ../src/goabackend/goayahooprovider.c:324
 msgid "Name"
 msgstr "பெயர்"
-
 
