@@ -1,14 +1,16 @@
-# Persian translation for gnome-online-accounts.
-# Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
-# This file is distributed under the same license as the gnome-online-accounts package.
-# Arash Mousavi <mousavi.arash@gmail.com>, 2011.
+# Persian translation for gnome-contacts.
+# Copyright (C) 2011 Iranian Free Software Users Group (IFSUG.org) translation team
+# Copyright (C) 2011 gnome-contacts's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-contacts package.
+# Arash Mousavi <mousavi.arash@gmail.com>, 2011, 2012.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-online-accounts master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-08-31 14:37+0000\n"
-"PO-Revision-Date: 2011-09-06 19:06+0330\n"
+"Project-Id-Version: gnome-contacts master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"contacts&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-12-19 14:31+0000\n"
+"PO-Revision-Date: 2011-10-24 01:54+0330\n"
 "Last-Translator: Arash Mousavi <mousavi.arash@gmail.com>\n"
 "Language-Team: Persian\n"
 "MIME-Version: 1.0\n"
@@ -17,287 +19,557 @@ msgstr ""
 "X-Poedit-Language: Persian\n"
 "X-Poedit-Country: IRAN, ISLAMIC REPUBLIC OF\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../src/daemon/goadaemon.c:871
-msgid "An online account needs attention"
-msgstr "یک حساب برخط نیاز به توجه دارد"
-
-#: ../src/daemon/goadaemon.c:878
-msgid "Open Online Accounts..."
-msgstr "بازکردن حساب‌های برخط..."
-
-#: ../src/goabackend/goafacebookprovider.c:78
-msgid "Facebook"
-msgstr "فیس‌بوک"
-
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:161
-#: ../src/goabackend/goagoogleprovider.c:195
-#: ../src/goabackend/goatwitterprovider.c:160
-#: ../src/goabackend/goayahooprovider.c:163
-#, c-format
-msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
-msgstr "در هنگام درخواست guid انتظار وضعیت ۲۰۰ را داشتیم، در عوض وضعیت %Id دریافت شد (%s)"
-
-#: ../src/goabackend/goafacebookprovider.c:173
-#: ../src/goabackend/goagoogleprovider.c:207
-#: ../src/goabackend/goaoauth2provider.c:476
-#: ../src/goabackend/goatwitterprovider.c:172
-#: ../src/goabackend/goayahooprovider.c:175
-msgid "Error parsing response as JSON: "
-msgstr "خطا در تجزیه پاسخ به عنوان JSON:"
-
-#: ../src/goabackend/goafacebookprovider.c:184
-#, c-format
-msgid "Didn't find username member in JSON data"
-msgstr "در اطلاعات JSON بخش نام کاربری پیدا نشد"
-
-#: ../src/goabackend/goafacebookprovider.c:193
-#, c-format
-msgid "Didn't find name member in JSON data"
-msgstr "در اطلاعات JSON بخش نام پیدا نشد"
-
-#: ../src/goabackend/goafacebookprovider.c:259
-#: ../src/goabackend/goatwitterprovider.c:260
-msgid "User Name"
-msgstr "نام کاربری"
-
-#: ../src/goabackend/goagoogleprovider.c:78
-msgid "Google"
-msgstr "گوگل"
-
-#: ../src/goabackend/goagoogleprovider.c:218
-#, c-format
-msgid "Didn't find data member in JSON data"
-msgstr "در اطلاعات JSON بخش اطلاعات پیدا نشد"
-
-#: ../src/goabackend/goagoogleprovider.c:228
-#, c-format
-msgid "Didn't find email member in JSON data"
-msgstr "در اطلاعات JSON بخش پست‌الکترونیکی پیدا نشد"
-
-#: ../src/goabackend/goagoogleprovider.c:425
-msgid "Email Address"
-msgstr "آدرس پست‌الکترونیکی"
-
-#: ../src/goabackend/goagoogleprovider.c:426
-msgid "Use this account for"
-msgstr "استفاده از این حساب برای"
-
-#: ../src/goabackend/goagoogleprovider.c:427
-msgid "Mail"
-msgstr "پست‌الکترونیکی"
-
-#: ../src/goabackend/goagoogleprovider.c:428
-msgid "Calendar"
-msgstr "تقویم"
-
-#: ../src/goabackend/goagoogleprovider.c:429
+#: ../data/gnome-contacts.desktop.in.in.h:1 ../src/contacts-app.vala:113
+#: ../src/main.vala:24
 msgid "Contacts"
 msgstr "آشناها"
 
-#: ../src/goabackend/goagoogleprovider.c:430
+#: ../src/contacts-app.vala:73
+#, c-format
+msgid "No contact with id %s found"
+msgstr "هیچ آشنایی با نشاسه %s پیدا نشد"
+
+#: ../src/contacts-app.vala:74 ../src/contacts-app.vala:92
+msgid "Contact not found"
+msgstr "آشنا پیدا نشد"
+
+#: ../src/contacts-app.vala:91
+#, c-format
+msgid "No contact with email address %s found"
+msgstr "هیج آشنایی با آدرس پست‌الکترونیکی %s پیدا نشد"
+
+#: ../src/contacts-app.vala:139
+#, c-format
+msgid "Contact deleted: \"%s\""
+msgstr ""
+
+#: ../src/contacts-app.vala:189
+msgid "Show contact with this individual id"
+msgstr "نمایش آشنا با این شناسه یگانه"
+
+#: ../src/contacts-app.vala:191
+msgid "Show contact with this email address"
+msgstr "نمایش آشنا با این آدرس پست‌الکترونیکی"
+
+#: ../src/contacts-app.vala:198
+msgid "— contact management"
+msgstr "— مدیریت آشنا"
+
+#: ../src/contacts-avatar-menu.vala:109
+msgid "Browse for more pictures"
+msgstr "مرور برای عکس‌های بیشتر"
+
+#: ../src/contacts-avatar-menu.vala:191
+msgid "Browse for more pictures..."
+msgstr "مرور برای عکس‌های بیشتر..."
+
+#: ../src/contacts-contact-pane.vala:597
+msgid "Links"
+msgstr "پیوندها"
+
+#: ../src/contacts-contact-pane.vala:598
+#, fuzzy
+#| msgctxt "url-link"
+#| msgid "Link"
+msgid "Link"
+msgstr "پیوند"
+
+#: ../src/contacts-contact-pane.vala:685 ../src/contacts-contact-pane.vala:686
+#: ../src/contacts-new-contact-dialog.vala:85
+#: ../src/contacts-new-contact-dialog.vala:120
+msgid "Email"
+msgstr "پست الکترونیکی"
+
+#: ../src/contacts-contact-pane.vala:727
+#: ../src/contacts-new-contact-dialog.vala:94
+#: ../src/contacts-new-contact-dialog.vala:125
+msgid "Phone"
+msgstr ""
+
+#: ../src/contacts-contact-pane.vala:728
+msgid "Phone number"
+msgstr "شماره تلفن"
+
+#: ../src/contacts-contact-pane.vala:788 ../src/contacts-contact-pane.vala:789
 msgid "Chat"
 msgstr "گپ"
 
-#: ../src/goabackend/goagoogleprovider.c:431
-msgid "Documents"
-msgstr "اسناد"
+#: ../src/contacts-contact-pane.vala:851
+msgid "January"
+msgstr ""
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:431
-#: ../src/goabackend/goaoauthprovider.c:439
-#, c-format
-msgid "Expected status 200 when requesting access token, instead got status %d (%s)"
-msgstr "در هنگام درخواست رمز دسترسی (access token) انتظار وضعیت ۲۰۰ را داشتیم، در عوض وضعیت %Id دریافت شد (%s)"
+#: ../src/contacts-contact-pane.vala:852
+msgid "February"
+msgstr ""
 
-#: ../src/goabackend/goaoauth2provider.c:451
-#, c-format
-msgid "Didn't find access_token in non-JSON data"
-msgstr "در اطلاعات non-JSON قسمت access_token پیدا نشد"
+#: ../src/contacts-contact-pane.vala:853
+msgid "March"
+msgstr ""
 
-#: ../src/goabackend/goaoauth2provider.c:487
-#, c-format
-msgid "Didn't find access_token in JSON data"
-msgstr "در اطلاعات JSON بخش رمز دسترسی (access_token) پیدا نشد"
+#: ../src/contacts-contact-pane.vala:854
+msgid "April"
+msgstr ""
 
-#: ../src/goabackend/goaoauth2provider.c:571
-#, c-format
-msgid "Authorization response was \"%s\""
-msgstr "پاسخ به تصدیق هویت «%s» بود"
+#: ../src/contacts-contact-pane.vala:855
+msgid "May"
+msgstr ""
 
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:652
-#, c-format
-msgid "Paste authorization code obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr "کد تصدیق هویت در یافت شده از <a href=\"%s\">صفحه تصدیق هویت</a> اینجا وارد کنید:"
+#: ../src/contacts-contact-pane.vala:856
+msgid "June"
+msgstr ""
 
-#: ../src/goabackend/goaoauth2provider.c:723
-#: ../src/goabackend/goaoauthprovider.c:747
-#, c-format
-msgid "Dialog was dismissed"
-msgstr "محاوره رد شد"
+#: ../src/contacts-contact-pane.vala:857
+msgid "July"
+msgstr ""
 
-#: ../src/goabackend/goaoauth2provider.c:747
-#: ../src/goabackend/goaoauthprovider.c:778
-msgid "Error getting an Access Token: "
-msgstr "خطا در هنگام دریافت رمز دسترسی: "
+#: ../src/contacts-contact-pane.vala:858
+msgid "August"
+msgstr ""
 
-#: ../src/goabackend/goaoauth2provider.c:759
-#: ../src/goabackend/goaoauthprovider.c:791
-msgid "Error getting identity: "
-msgstr "خطا در هنگام دریافت شناسه: "
+#: ../src/contacts-contact-pane.vala:859
+msgid "September"
+msgstr ""
 
-#: ../src/goabackend/goaoauth2provider.c:924
-#: ../src/goabackend/goaoauthprovider.c:968
-#, c-format
-msgid "There is already an account for the identity %s"
-msgstr "در حال حاضر یک حساب برای شناسه %s وجود دارد"
+#: ../src/contacts-contact-pane.vala:860
+#, fuzzy
+#| msgid "Other"
+msgid "October"
+msgstr "بقیه"
 
-#: ../src/goabackend/goaoauth2provider.c:1049
-#: ../src/goabackend/goaoauthprovider.c:1098
-#, c-format
-msgid "Was asked to login as %s, but logged in as %s"
-msgstr "ما درخواست ورود به عنوان %s را داشتیم، اما به عنوان %s وارد شد"
+#: ../src/contacts-contact-pane.vala:861
+#, fuzzy
+#| msgid "Phone number"
+msgid "November"
+msgstr "شماره تلفن"
 
-#: ../src/goabackend/goaoauth2provider.c:1185
-#: ../src/goabackend/goaoauthprovider.c:1246
-#, c-format
-msgid "Credentials not found in keyring (%s, %d): "
-msgstr "گواهینامه در دسته‌کلید پیدا نشد (%s، %Id): "
+#: ../src/contacts-contact-pane.vala:862
+msgid "December"
+msgstr ""
 
-#: ../src/goabackend/goaoauth2provider.c:1212
-#, c-format
-#| msgid "Credentials does not contain access_token"
-msgid "Credentials do not contain access_token"
-msgstr "گواهینامه‌ها حاوی رمز دسترسی (access_token) نیستند"
+#: ../src/contacts-contact-pane.vala:899 ../src/contacts-contact-pane.vala:900
+msgid "Birthday"
+msgstr "تولد"
 
-#: ../src/goabackend/goaoauth2provider.c:1251
-#: ../src/goabackend/goaoauthprovider.c:1319
-#, c-format
-msgid "Failed to refresh access token (%s, %d): "
-msgstr "نوسازی رمز دسترسی شکست خورد (%s، %Id): "
+#: ../src/contacts-contact-pane.vala:972 ../src/contacts-contact-pane.vala:973
+msgid "Nickname"
+msgstr "نام مستعار"
 
-#: ../src/goabackend/goaoauth2provider.c:1286
-#: ../src/goabackend/goaoauthprovider.c:1349
-#, c-format
-msgid "Error storing credentials in keyring (%s, %d): "
-msgstr "خطا در هنگام ذخیره کردن گواهینامه در دسته‌کلید (%s، %Id): "
+#: ../src/contacts-contact-pane.vala:1062
+#: ../src/contacts-contact-pane.vala:1063
+#, fuzzy
+#| msgid "Notes"
+msgid "Note"
+msgstr "یادداشت‌ها"
 
-#: ../src/goabackend/goaoauthprovider.c:462
-#, c-format
-msgid "Missing access_token or access_token_secret headers in response"
-msgstr "موارد access_token یا access_token_secret در سرصفحه پاسخ پیدا نشد"
+#: ../src/contacts-contact-pane.vala:1201
+#, fuzzy
+#| msgid "Postal Address"
+msgid "Addresses"
+msgstr "آدرس پستی"
 
-#: ../src/goabackend/goaoauthprovider.c:635
-msgid "Error getting a Request Token: "
-msgstr "خطا در هنگام دریافت رمز درخواست: "
+#: ../src/contacts-contact-pane.vala:1202
+#: ../src/contacts-new-contact-dialog.vala:103
+#: ../src/contacts-new-contact-dialog.vala:130
+#, fuzzy
+#| msgid "Postal Address"
+msgid "Address"
+msgstr "آدرس پستی"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:644
-#, c-format
-#| msgid ""
-#| "Expected status 200 when requesting access token, instead got status %d (%"
-#| "s)"
-msgid "Expected status 200 for getting a Request Token, instead got status %d (%s)"
-msgstr "در هنگام درخواست رمز درخواست (Request Token) انتظار وضعیت ۲۰۰ را داشتیم، در عوض وضعیت %Id دریافت شد (%s)"
+#: ../src/contacts-contact-pane.vala:1331
+#, fuzzy, c-format
+#| msgid "Select contacts to link to %s"
+msgid "Add contact data to %s\n"
+msgstr "آشناها را برای لینک کردن به %s انتخاب کنید"
 
-#: ../src/goabackend/goaoauthprovider.c:658
-#, c-format
-msgid "Missing request_token or request_token_secret headers in response"
-msgstr "موارد request_token یا request_token در سرصفحه پاسخ پیدا نشد"
+#: ../src/contacts-contact-pane.vala:1836
+#, fuzzy
+#| msgid "Enter email address"
+msgid "Select email address"
+msgstr "آدرس پست‌الکترونیکی را وارد کنید"
 
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:675
-#, c-format
-msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr "رمز دریافت شده از <a href=\"%s\">صفحه تصدیق هویت</a> را وارد کنید:"
+#: ../src/contacts-contact-pane.vala:1908
+msgid "Select what to call"
+msgstr ""
 
-#: ../src/goabackend/goaoauthprovider.c:1275
-#, c-format
-#| msgid "Credentials does not contain access_token or access_token_secret"
-msgid "Credentials do not contain access_token or access_token_secret"
-msgstr "گواهینامه‌ها حاوی access_token یا access_token_secret نیستند"
+#: ../src/contacts-contact-pane.vala:1971
+msgid "Select chat account"
+msgstr ""
 
-#: ../src/goabackend/goaprovider.c:522
-#, c-format
-#| msgid "ensure_credentials_sync not been implemented on type %s"
-msgid "ensure_credentials_sync is not implemented on type %s"
-msgstr "مورد ensure_credentials_sync برای انواع %s اجرا نشده است"
+#: ../src/contacts-contact-pane.vala:2035
+msgid "Add/Remove Linked Contacts..."
+msgstr "اضافه/حذف آشناهای پیوند شده..."
 
-#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:737
-#, c-format
-msgid "GOA %s credentials for identity %s"
-msgstr "گواهینامه GOA %s برای شناسه %s"
+#. Utils.add_menu_item (context_menu,_("Send..."));
+#: ../src/contacts-contact-pane.vala:2039
+msgid "Delete"
+msgstr "حذف"
 
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:751
-#, c-format
-msgid "Failed to store credentials in the keyring: %s"
-msgstr "ذخیره‌سازی گواهینامه در دسته‌کلید شکست خورد: %s"
+#: ../src/contacts-contact.vala:445
+msgid "Unknown status"
+msgstr "وضعیت ناشناس"
 
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:822
-#, c-format
-msgid "Failed to retrieve credentials from the keyring: %s"
-msgstr "دریافت گواهینامه از دسته‌کلید شکست خورد: %s"
+#: ../src/contacts-contact.vala:447
+msgid "Offline"
+msgstr "برون خط"
 
-#: ../src/goabackend/goaprovider.c:834
-msgid "Error parsing result obtained from the keyring: "
-msgstr "خطا در هنگام تجزیه نتیجه دریافت شده از دسته‌کلید: "
+#: ../src/contacts-contact.vala:451
+msgid "Error"
+msgstr "خطا"
 
-#: ../src/goabackend/goatwitterprovider.c:78
+#: ../src/contacts-contact.vala:453
+msgid "Available"
+msgstr "در دسترس"
+
+#: ../src/contacts-contact.vala:455
+msgid "Away"
+msgstr "غایب"
+
+#: ../src/contacts-contact.vala:457
+msgid "Extended away"
+msgstr "غایب ممتد"
+
+#: ../src/contacts-contact.vala:459
+msgid "Busy"
+msgstr "مشغول"
+
+#: ../src/contacts-contact.vala:461
+msgid "Hidden"
+msgstr "مخفی"
+
+#: ../src/contacts-contact.vala:601
+msgid "Street"
+msgstr "خیابان"
+
+#: ../src/contacts-contact.vala:601
+msgid "Extension"
+msgstr "افزونه"
+
+#: ../src/contacts-contact.vala:601
+msgid "City"
+msgstr "شهر"
+
+#: ../src/contacts-contact.vala:601
+msgid "State/Province"
+msgstr "ایالت/استان"
+
+#: ../src/contacts-contact.vala:601
+msgid "Zip/Postal Code"
+msgstr "کدپستی"
+
+#: ../src/contacts-contact.vala:601
+msgid "PO box"
+msgstr "صندوق پستی"
+
+#: ../src/contacts-contact.vala:601
+msgid "Country"
+msgstr "کشور"
+
+#: ../src/contacts-contact.vala:657
+msgid "Google Talk"
+msgstr "گوگل تاک"
+
+#: ../src/contacts-contact.vala:658
+msgid "Ovi Chat"
+msgstr "گپ Ovi"
+
+#: ../src/contacts-contact.vala:659 ../src/contacts-contact.vala:938
+msgid "Facebook"
+msgstr "فیس‌بوک"
+
+#: ../src/contacts-contact.vala:660
+msgid "Livejournal"
+msgstr "Livejournal"
+
+#: ../src/contacts-contact.vala:661
+msgid "AOL Instant Messenger"
+msgstr "پیام‌رسان فوری AOL"
+
+#: ../src/contacts-contact.vala:662
+msgid "Gadu-Gadu"
+msgstr "Gadu-Gadu"
+
+#: ../src/contacts-contact.vala:663
+msgid "Novell Groupwise"
+msgstr "Novell Groupwise"
+
+#: ../src/contacts-contact.vala:664
+msgid "ICQ"
+msgstr "ICQ"
+
+#: ../src/contacts-contact.vala:665
+msgid "IRC"
+msgstr "IRC"
+
+#: ../src/contacts-contact.vala:666
+msgid "Jabber"
+msgstr "Jabber"
+
+#: ../src/contacts-contact.vala:667
+msgid "Local network"
+msgstr "شبکه محلی"
+
+#: ../src/contacts-contact.vala:668
+msgid "Windows Live Messenger"
+msgstr "پیام‌رسان زنده ویندوز"
+
+#: ../src/contacts-contact.vala:669
+msgid "MySpace"
+msgstr "MySpace"
+
+#: ../src/contacts-contact.vala:670
+msgid "MXit"
+msgstr "MXit"
+
+#: ../src/contacts-contact.vala:671
+msgid "Napster"
+msgstr "Napster"
+
+#: ../src/contacts-contact.vala:672
+msgid "Tencent QQ"
+msgstr "Tencent QQ"
+
+#: ../src/contacts-contact.vala:673
+msgid "IBM Lotus Sametime"
+msgstr "IBM Lotus Sametime"
+
+#: ../src/contacts-contact.vala:674
+msgid "SILC"
+msgstr "SILC"
+
+#: ../src/contacts-contact.vala:675
+msgid "sip"
+msgstr "sip"
+
+#: ../src/contacts-contact.vala:676
+msgid "Skype"
+msgstr "اسکایپ"
+
+#: ../src/contacts-contact.vala:677
+msgid "Telephony"
+msgstr "Telephony"
+
+#: ../src/contacts-contact.vala:678
+msgid "Trepia"
+msgstr "Trepia"
+
+#: ../src/contacts-contact.vala:679 ../src/contacts-contact.vala:680
+msgid "Yahoo! Messenger"
+msgstr "پیام‌رسان یاهو!"
+
+#: ../src/contacts-contact.vala:681
+msgid "Zephyr"
+msgstr "Zephyr"
+
+#: ../src/contacts-contact.vala:941
 msgid "Twitter"
 msgstr "توییتر"
 
-#: ../src/goabackend/goatwitterprovider.c:183
+#: ../src/contacts-contact.vala:980
+msgid "Unexpected internal error: created contact was not found"
+msgstr "خطا داخلی غیرمنتظره: آشنا ساخته شده پیدا نشد"
+
+#: ../src/contacts-esd-setup.c:588
+msgid "Personal"
+msgstr ""
+
+#: ../src/contacts-esd-setup.c:613
+msgid "Local Contact"
+msgstr "آشنا محلی"
+
+#: ../src/contacts-esd-setup.c:620
+msgid "Google"
+msgstr "گوگل"
+
+#: ../src/contacts-link-dialog.vala:88
+msgid "Link Contact"
+msgstr "پیوند کردن آشنا"
+
+#: ../src/contacts-link-dialog.vala:113
 #, c-format
-msgid "Didn't find id_str member in JSON data"
-msgstr "در اطلاعات JSON بخش id_str پیدا نشد"
+msgid "Select contacts to link to %s"
+msgstr "آشناها را برای لینک کردن به %s انتخاب کنید"
 
-#: ../src/goabackend/goatwitterprovider.c:192
+#: ../src/contacts-link-dialog.vala:162
+msgctxt "link-contacts-button"
+msgid "Link"
+msgstr "پیوند"
+
+#: ../src/contacts-link-dialog.vala:181
+msgid "Currently linked:"
+msgstr "در حال حاضر پیوند شده:"
+
+#: ../src/contacts-list-pane.vala:148
+msgid ""
+"Connect to an account,\n"
+"import or add contacts"
+msgstr ""
+"اتصال به یک حساب،\n"
+"وارد یا اضافه کردن آشناها"
+
+#: ../src/contacts-list-pane.vala:154
+msgid "Online Accounts"
+msgstr "حساب‌های برخط"
+
+#: ../src/contacts-new-contact-dialog.vala:35
+msgid "New contact"
+msgstr "آشنای جدید"
+
+#: ../src/contacts-new-contact-dialog.vala:41
+#, fuzzy
+#| msgid "Back to Contact"
+msgid "Create Contact"
+msgstr "بازگشت به آشنا"
+
+#: ../src/contacts-new-contact-dialog.vala:67
+msgid ""
+"Add or \n"
+"select a picture"
+msgstr ""
+
+#: ../src/contacts-new-contact-dialog.vala:77
+msgid "Contact Name"
+msgstr "نام آشنا"
+
+#: ../src/contacts-new-contact-dialog.vala:112
+#, fuzzy
+#| msgid "Add detail"
+msgid "Add Detail"
+msgstr "اضافه کردن جزئیات"
+
+#: ../src/contacts-new-contact-dialog.vala:210
+msgid "You must specify a contact name"
+msgstr ""
+
+#: ../src/contacts-new-contact-dialog.vala:317
+msgid "No primary addressbook configured\n"
+msgstr ""
+
+#: ../src/contacts-new-contact-dialog.vala:338
 #, c-format
-msgid "Didn't find screen_name member in JSON data"
-msgstr "در اطلاعات JSON بخش screen_name پیدا نشد"
+msgid "Unable to create new contacts: %s\n"
+msgstr "نمی‌توان آشنای جدیدی ایجاد کرد: %s\n"
 
-#: ../src/goabackend/goayahooprovider.c:78
-msgid "Yahoo"
-msgstr "یاهو"
+#: ../src/contacts-new-contact-dialog.vala:349
+msgid "Unable to find newly created contact\n"
+msgstr "نمی‌توان آشنا تازه ایجاد شده را پیدا کرد\n"
 
-#: ../src/goabackend/goayahooprovider.c:186
-#, c-format
-msgid "Didn't find guid member in JSON data"
-msgstr "در اطلاعات JSON بخش guid پیدا نشد"
+#: ../src/contacts-types.vala:113 ../src/contacts-types.vala:133
+#: ../src/contacts-types.vala:234 ../src/contacts-types.vala:324
+msgid "Other"
+msgstr "بقیه"
 
-#: ../src/goabackend/goayahooprovider.c:196
-#, c-format
-msgid "Didn't find value member in JSON data"
-msgstr "در اطلاعات JSON بخش value پیدا نشد"
+#: ../src/contacts-types.vala:121
+msgid "Custom..."
+msgstr "سفارشی..."
 
-#: ../src/goabackend/goayahooprovider.c:222
-#, c-format
-msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-msgstr "انتظار وضعیت ۲۰۰ را در هنگام درخواست نام داشتیم، در عوض وضعیت %Id دریافت شد (%s)"
+#. List most specific first, always in upper case
+#: ../src/contacts-types.vala:289 ../src/contacts-types.vala:320
+msgid "Home"
+msgstr "خانه"
 
-#: ../src/goabackend/goayahooprovider.c:235
-msgid "Error parsing usercard response as JSON: "
-msgstr "خطا در هنگام تجزیه پاسخ usercard به عنوان JSON: "
+#: ../src/contacts-types.vala:290 ../src/contacts-types.vala:315
+msgid "Work"
+msgstr "کار"
 
-#: ../src/goabackend/goayahooprovider.c:246
-#, c-format
-msgid "Didn't find profile member in JSON data"
-msgstr "در اطلاعات JSON بخش مجموعه‌تنظیمات پیدا نشد"
+#. List most specific first, always in upper case
+#: ../src/contacts-types.vala:314
+msgid "Assistant"
+msgstr "دستیار"
 
-#: ../src/goabackend/goayahooprovider.c:256
-#, c-format
-msgid "Didn't find nickname member in JSON data"
-msgstr "در اطلاعات JSON بخش نام‌مستعار پیدا نشد"
+#: ../src/contacts-types.vala:316
+msgid "Work Fax"
+msgstr "فکس کاری"
 
-#. TODO: look up email address / screenname from GUID
-#: ../src/goabackend/goayahooprovider.c:324
-msgid "Name"
-msgstr "نام"
+#: ../src/contacts-types.vala:317
+msgid "Callback"
+msgstr "پاسخ به تماس"
 
-#~ msgid "Expected 200 for getting a Request Token, got %d (%s)"
-#~ msgstr "انتظار ۲۰۰ را هنگام دریفت رمز درخواست داشتیم، %Id دریافت شد (%s)"
+#: ../src/contacts-types.vala:318
+msgid "Car"
+msgstr "ماشین"
+
+#: ../src/contacts-types.vala:319
+msgid "Company"
+msgstr "شرکت"
+
+#: ../src/contacts-types.vala:321
+msgid "Home Fax"
+msgstr "فکس خانگی"
+
+#: ../src/contacts-types.vala:322
+msgid "ISDN"
+msgstr "ISDN"
+
+#: ../src/contacts-types.vala:323
+msgid "Mobile"
+msgstr "تلفن همراه"
+
+#: ../src/contacts-types.vala:325
+msgid "Fax"
+msgstr "فکس"
+
+#: ../src/contacts-types.vala:326
+msgid "Pager"
+msgstr "پیجر"
+
+#: ../src/contacts-types.vala:327
+msgid "Radio"
+msgstr "رادیو"
+
+#: ../src/contacts-types.vala:328
+msgid "Telex"
+msgstr "تلکس"
+
+#. To translators: TTY is Teletypewriter
+#: ../src/contacts-types.vala:330
+msgid "TTY"
+msgstr "TTY"
+
+#. Translators: This is the header for the list of suggested contacts to
+#. link to the current contact
+#: ../src/contacts-view.vala:89
+msgid "Suggestion"
+msgid_plural "Suggestions"
+msgstr[0] "پیشنهاد"
+msgstr[1] "پیشنهادها"
+
+#~ msgid "Enter nickname"
+#~ msgstr "نام مستعار وارد کنید"
+
+#~ msgid "Alias"
+#~ msgstr "نام مستعار"
+
+#~ msgid "Enter alias"
+#~ msgstr "نام مستعاد وارد کنید"
+
+#~ msgid "Enter phone number"
+#~ msgstr "شماره تلفن را وارد کنید"
+
+#~ msgid "Enter link"
+#~ msgstr "وارد کردن وپیوند"
+
+#~ msgid "Enter name"
+#~ msgstr "وارد کردن نام"
+
+#~ msgid "Address copied to clipboard"
+#~ msgstr "آدرس در تخته‌گیره رونوشت شد"
+
+#~ msgid "Department"
+#~ msgstr "قسمت"
+
+#~ msgid "Profession"
+#~ msgstr "حرفه"
+
+#~ msgid "Title"
+#~ msgstr "عنوان"
+
+#~ msgid "Manager"
+#~ msgstr "مدیر"
+
+#~ msgid "Edit"
+#~ msgstr "ویرایش"
+
+#~ msgid "More"
+#~ msgstr "بیشتر"
