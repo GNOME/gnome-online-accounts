@@ -18,6 +18,7 @@
  * Boston, MA 02111-1307, USA.
  *
  * Author: David Zeuthen <davidz@redhat.com>
+ *         Cosimo Alfarano <cosimo.alfarano@collabora.co.uk>
  */
 
 #include "config.h"
@@ -554,28 +555,88 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
     {
       SoupMessage *message;
       SoupURI *uri;
-      GHashTable *key_value_pairs;
 
       message = webkit_network_request_get_message (request);
       uri = soup_message_get_uri (message);
-      key_value_pairs = soup_form_decode (uri->query);
 
-      data->authorization_code = g_strdup (g_hash_table_lookup (key_value_pairs, "code"));
-      if (data->authorization_code != NULL)
+      /* Two cases:
+       * the data we look for might be in the query part or in the fragment
+       * part of the URI.
+       *
+       * Currently only facebook client-side flow uses the fragment to pass
+       * the access_token and expiration, though, so we are actually looking
+       * for the auth code in the query and the access_token in the fragment.
+       * This might need changes (FIXME) to be more generalized */
+      if (soup_uri_get_query (uri) != NULL)
         {
-          gtk_dialog_response (data->dialog, GTK_RESPONSE_OK);
+          /* case 1, the data we are expecting is in the query part of the URI */
+          GHashTable *key_value_pairs;
+
+          key_value_pairs = soup_form_decode (uri->query);
+
+          data->authorization_code = g_strdup (g_hash_table_lookup (key_value_pairs, "code"));
+          if (data->authorization_code != NULL)
+            {
+              gtk_dialog_response (data->dialog, GTK_RESPONSE_OK);
+            }
+          else
+            {
+              g_set_error (&data->error,
+                           GOA_ERROR,
+                           GOA_ERROR_NOT_AUTHORIZED,
+                           _("Authorization response was \"%s\""),
+                           (const gchar *) g_hash_table_lookup (key_value_pairs, "error"));
+              gtk_dialog_response (data->dialog, GTK_RESPONSE_CLOSE);
+            }
+          g_hash_table_unref (key_value_pairs);
+          webkit_web_policy_decision_ignore (policy_decision);
+        }
+      else if (soup_uri_get_fragment (uri) != NULL)
+        {
+          /* case 2, the data we are expecting is in the fragment part of the
+           * URI */
+          GHashTable *key_value_pairs;
+
+          /* fragment is encoded into a key/value pairs for the token and
+           * expiration values, using the same syntax as a URL query */
+          key_value_pairs = soup_form_decode (soup_uri_get_fragment (uri));
+
+          /* we might use oauth2_proxy_extract_access_token() here but we need
+           * also to extract the expire time */
+          data->access_token = g_strdup (g_hash_table_lookup (key_value_pairs, "access_token"));
+          if (data->access_token != NULL)
+            {
+              gchar *expires_in_str = NULL;
+
+              expires_in_str = g_hash_table_lookup (key_value_pairs, "expires_in");
+              /* sometimes "expires_in" appears as "expires" */
+              if (expires_in_str == NULL)
+                expires_in_str = g_hash_table_lookup (key_value_pairs, "expires");
+
+              if (expires_in_str != NULL)
+                 data->access_token_expires_in = atoi (expires_in_str);
+
+              gtk_dialog_response (data->dialog, GTK_RESPONSE_OK);
+            }
+          else
+            {
+              g_set_error (&data->error,
+                           GOA_ERROR,
+                           GOA_ERROR_NOT_AUTHORIZED,
+                           _("Authorization response was \"%s\""),
+                           (const gchar *) g_hash_table_lookup (key_value_pairs, "error"));
+              gtk_dialog_response (data->dialog, GTK_RESPONSE_CLOSE);
+            }
+          g_hash_table_unref (key_value_pairs);
+          webkit_web_policy_decision_ignore (policy_decision);
         }
       else
         {
-          g_set_error (&data->error,
-                       GOA_ERROR,
-                       GOA_ERROR_NOT_AUTHORIZED,
-                       _("Authorization response was \"%s\""),
-                       (const gchar *) g_hash_table_lookup (key_value_pairs, "error"));
-          gtk_dialog_response (data->dialog, GTK_RESPONSE_CLOSE);
+          /* this actually means that something unexpected happened, either we
+           * did something wrong or the provider's flow changed */
+          goa_debug ("URI format not recognized, DEFAULT BEHAVIOUR");
+          return FALSE;
         }
-      g_hash_table_unref (key_value_pairs);
-      webkit_web_policy_decision_ignore (policy_decision);
       return TRUE; /* ignore the request */
     }
   else
@@ -720,7 +781,11 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
     }
   data.dialog = dialog;
   gtk_dialog_run (GTK_DIALOG (dialog));
-  if (data.authorization_code == NULL)
+
+  /* we can have either the auth code, with which we'll obtain the token, or
+   * the token directly if we are using a client side flow, since we don't
+   * need to pass the code to the remote application */
+  if (data.authorization_code == NULL && data.access_token == NULL)
     {
       if (data.error == NULL)
         {
@@ -735,25 +800,30 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
 
   gtk_widget_hide (GTK_WIDGET (dialog));
 
-  /* OK, we now have the authorization code... now we need to get the
-   * email address (to e.g. check if the account already exists on
-   * @client).. for that we need to get a (short-lived) access token
-   * and a refresh_token
-   */
-
-  /* TODO: run in worker thread */
-  data.access_token = get_tokens_sync (provider,
-                                       data.authorization_code,
-                                       NULL, /* refresh_token */
-                                       &data.refresh_token,
-                                       &data.access_token_expires_in,
-                                       NULL, /* GCancellable */
-                                       &data.error);
-  if (data.access_token == NULL)
+  if (data.authorization_code != NULL)
     {
-      g_prefix_error (&data.error, _("Error getting an Access Token: "));
-      goto out;
+      /* OK, we now have the authorization code... now we need to get the
+       * email address (to e.g. check if the account already exists on
+       * @client).. for that we need to get a (short-lived) access token
+       * and a refresh_token
+       */
+
+      /* TODO: run in worker thread */
+      data.access_token = get_tokens_sync (provider,
+                                           data.authorization_code,
+                                           NULL, /* refresh_token */
+                                           &data.refresh_token,
+                                           &data.access_token_expires_in,
+                                           NULL, /* GCancellable */
+                                           &data.error);
+      if (data.access_token == NULL)
+        {
+          g_prefix_error (&data.error, _("Error getting an Access Token: "));
+          goto out;
+        }
     }
+
+  g_assert (data.access_token != NULL);
 
   /* TODO: run in worker thread */
   data.identity = goa_oauth2_provider_get_identity_sync (provider,
@@ -956,7 +1026,8 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
                                                       data.account_object_path));
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
-  g_variant_builder_add (&builder, "{sv}", "authorization_code", g_variant_new_string (authorization_code));
+  if (authorization_code != NULL)
+    g_variant_builder_add (&builder, "{sv}", "authorization_code", g_variant_new_string (authorization_code));
   g_variant_builder_add (&builder, "{sv}", "access_token", g_variant_new_string (access_token));
   if (access_token_expires_in > 0)
     g_variant_builder_add (&builder, "{sv}", "access_token_expires_at",
@@ -1060,7 +1131,8 @@ goa_oauth2_provider_refresh_account (GoaProvider  *_provider,
     }
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
-  g_variant_builder_add (&builder, "{sv}", "authorization_code", g_variant_new_string (authorization_code));
+  if (authorization_code != NULL)
+    g_variant_builder_add (&builder, "{sv}", "authorization_code", g_variant_new_string (authorization_code));
   g_variant_builder_add (&builder, "{sv}", "access_token", g_variant_new_string (access_token));
   if (access_token_expires_in > 0)
     g_variant_builder_add (&builder, "{sv}", "access_token_expires_at",
