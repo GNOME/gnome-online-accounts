@@ -18,6 +18,7 @@
  * Boston, MA 02111-1307, USA.
  *
  * Author: David Zeuthen <davidz@redhat.com>
+ *         Cosimo Alfarano <cosimo.alfarano@collabora.co.uk>
  */
 
 #include "config.h"
@@ -29,6 +30,7 @@
 #include "goaprovider.h"
 #include "goaoauth2provider.h"
 #include "goafacebookprovider.h"
+#include "goalogging.h"
 
 /**
  * GoaFacebookProvider:
@@ -78,6 +80,29 @@ get_provider_name (GoaProvider *_provider,
   return g_strdup (_("Facebook"));
 }
 
+/* facebook client flow sends a different auth query then the base
+ * OAuth2Provider */
+static gchar *
+build_authorization_uri (GoaOAuth2Provider  *provider,
+                         const gchar        *authorization_uri,
+                         const gchar        *escaped_redirect_uri,
+                         const gchar        *escaped_client_id,
+                         const gchar        *escaped_scope)
+{
+  gchar *uri;
+
+  uri = g_strdup_printf ("%s"
+                          "?response_type=token"
+                          "&redirect_uri=%s"
+                          "&client_id=%s"
+                          "&scope=%s",
+                          authorization_uri,
+                          escaped_redirect_uri,
+                          escaped_client_id,
+                          escaped_scope);
+  return uri;
+}
+
 static const gchar *
 get_authorization_uri (GoaOAuth2Provider *provider)
 {
@@ -88,25 +113,29 @@ get_authorization_uri (GoaOAuth2Provider *provider)
 static const gchar *
 get_token_uri (GoaOAuth2Provider *provider)
 {
-  return "https://graph.facebook.com/oauth/access_token";
+  /* Not used in client-side auth flow, since the access token is obtained
+   * directly from the authorization phase (get_authorization_uri()) */
+  return NULL;
 }
 
 
 static const gchar *
 get_redirect_uri (GoaOAuth2Provider *provider)
 {
-  return "https://www.gnome.org/goa-1.0/oauth2?callback=1";
+  return "https://www.facebook.com/connect/login_success.html";
 }
 
 static const gchar *
 get_scope (GoaOAuth2Provider *provider)
 {
   /* see https://developers.facebook.com/docs/authentication/permissions/ */
+  /* Note: Email is requested to obtain a human understandable unique Id  */
   return
     "user_events,"
     "read_mailbox,"
     "offline_access,"
-    "xmpp_login";
+    "xmpp_login,"
+    "email";
 }
 
 static const gchar *
@@ -118,7 +147,10 @@ get_client_id (GoaOAuth2Provider *provider)
 static const gchar *
 get_client_secret (GoaOAuth2Provider *provider)
 {
-  return GOA_FACEBOOK_CLIENT_SECRET;
+  /* not used in Facebook's Client Flow Auth, we don't want to use anything
+   * even if passed at configture time, since it would interfere with the URL
+   * creation */
+  return NULL;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -156,6 +188,11 @@ get_identity_sync (GoaOAuth2Provider  *provider,
     goto out;
   if (rest_proxy_call_get_status_code (call) != 200)
     {
+      /* 400 means that the access_token has expired, but there is no reason
+       * to handle it here, in case it is expired AttentionNeeded will be set
+       * to TRUE. Everytime the user logs with a valid access token, the
+       * expiration time for this token will be extended by facebook, allowing
+       * virtually infinite lasting tokens */
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
@@ -185,7 +222,7 @@ get_identity_sync (GoaOAuth2Provider  *provider,
                    _("Didn't find username member in JSON data"));
       goto out;
     }
-  presentation_identity = g_strdup (json_object_get_string_member (json_object, "username"));
+  presentation_identity = g_strdup (json_object_get_string_member (json_object, "email"));
   if (presentation_identity == NULL)
     {
       g_set_error (error,
@@ -279,7 +316,8 @@ show_account (GoaProvider         *provider,
   /* Chain up */
   GOA_PROVIDER_CLASS (goa_facebook_provider_parent_class)->show_account (provider, client, object, vbox, table);
 
-  goa_util_add_row_editable_label_from_keyfile (table, object, _("User Name"), "PresentationIdentity", FALSE);
+  goa_util_add_row_editable_label_from_keyfile (table, object, _("Email Address"), "PresentationIdentity", FALSE);
+  goa_util_add_heading (table, _("Use this account for"));
   goa_util_add_row_switch_from_keyfile (table, object, _("Chat"), "ChatEnabled");
 }
 
@@ -314,6 +352,7 @@ goa_facebook_provider_class_init (GoaFacebookProviderClass *klass)
   oauth2_class = GOA_OAUTH2_PROVIDER_CLASS (klass);
   oauth2_class->get_authorization_uri    = get_authorization_uri;
   oauth2_class->get_token_uri            = get_token_uri;
+  oauth2_class->build_authorization_uri  = build_authorization_uri;
   oauth2_class->get_redirect_uri         = get_redirect_uri;
   oauth2_class->get_scope                = get_scope;
   oauth2_class->get_client_id            = get_client_id;
