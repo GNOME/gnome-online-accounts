@@ -1,16 +1,15 @@
 # Korean translation for gnome-online-accounts.
 # Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
-# Seong-ho Cho <darkcircle.0426@gmail.com>, 2011.
+# Seong-ho Cho <darkcircle.0426@gmail.com>, 2011-2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-24 20:23+0000\n"
-"PO-Revision-Date: 2011-09-24 02:12+0900\n"
-"Last-Translator: Seong-ho, Cho <darkcircle.0426@gmail.com>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-12-19 14:59+0000\n"
+"PO-Revision-Date: 2012-03-07 04:56+0900\n"
+"Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>\n"
 "Language-Team: Korean <gnome-kr@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,36 +29,45 @@ msgid "Facebook"
 msgstr "페이스북"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:161
+#: ../src/goabackend/goafacebookprovider.c:162
 #: ../src/goabackend/goagoogleprovider.c:195
+#: ../src/goabackend/goawindowsliveprovider.c:170
 #: ../src/goabackend/goatwitterprovider.c:160
 #: ../src/goabackend/goayahooprovider.c:163
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr "guid를 요청하는데 상태 200을 기대했지만, %d 상태를 가져왔습니다 (%s) "
 
-#: ../src/goabackend/goafacebookprovider.c:173
+#: ../src/goabackend/goafacebookprovider.c:174
 #: ../src/goabackend/goagoogleprovider.c:207
-#: ../src/goabackend/goaoauth2provider.c:477
+#: ../src/goabackend/goawindowsliveprovider.c:182
+#: ../src/goabackend/goaoauth2provider.c:478
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
 msgstr "JSON 형태의 응답을 해석하는데 오류가 발생했습니다:"
 
-#: ../src/goabackend/goafacebookprovider.c:184
+#: ../src/goabackend/goafacebookprovider.c:185
 #, c-format
 msgid "Didn't find username member in JSON data"
 msgstr "JSON 데이터에서 username 멤버를 찾을 수 없습니다"
 
-#: ../src/goabackend/goafacebookprovider.c:193
+#: ../src/goabackend/goafacebookprovider.c:194
 #, c-format
 msgid "Didn't find name member in JSON data"
 msgstr "JSON 데이터에서 name 멤버를 찾을 수 없습니다"
 
-#: ../src/goabackend/goafacebookprovider.c:259
+#: ../src/goabackend/goafacebookprovider.c:282
+#: ../src/goabackend/goawindowsliveprovider.c:292
 #: ../src/goabackend/goatwitterprovider.c:260
 msgid "User Name"
 msgstr "사용자 이름"
+
+#: ../src/goabackend/goafacebookprovider.c:283
+#: ../src/goabackend/goagoogleprovider.c:430
+#: ../src/goabackend/goawindowsliveprovider.c:293
+msgid "Chat"
+msgstr "대화"
 
 #: ../src/goabackend/goagoogleprovider.c:78
 msgid "Google"
@@ -95,92 +103,101 @@ msgstr "달력"
 msgid "Contacts"
 msgstr "연락처"
 
-#: ../src/goabackend/goagoogleprovider.c:430
-msgid "Chat"
-msgstr "대화"
-
 #: ../src/goabackend/goagoogleprovider.c:431
 msgid "Documents"
 msgstr "문서"
 
+# NOTE: "윈도우즈 라이브 메신저"로 번역
+#: ../src/goabackend/goawindowsliveprovider.c:82
+msgid "Windows Live"
+msgstr "윈도우즈 라이브 메신저"
+
+#: ../src/goabackend/goawindowsliveprovider.c:193
+#, c-format
+#| msgid "Didn't find guid member in JSON data"
+msgid "Didn't find id member in JSON data"
+msgstr "JSON 데이터의 id 멤버를 찾을 수 없습니다"
+
+#: ../src/goabackend/goawindowsliveprovider.c:204
+#, c-format
+#| msgid "Didn't find email member in JSON data"
+msgid "Didn't find account email member in JSON data"
+msgstr "JSON 데이터에서 계정 email 멤버를 찾을 수 없습니다"
+
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:432
+#: ../src/goabackend/goaoauth2provider.c:435
 #: ../src/goabackend/goaoauthprovider.c:440
 #, c-format
-msgid ""
-"Expected status 200 when requesting access token, instead got status %d (%s)"
-msgstr ""
-"접근 토큰을 요청하는데 상태 200을 기대했지만, %d 상태를 가져왔습니다 (%s) "
+msgid "Expected status 200 when requesting access token, instead got status %d (%s)"
+msgstr "접근 토큰을 요청하는데 상태 200을 기대했지만, %d 상태를 가져왔습니다 (%s) "
 
-#: ../src/goabackend/goaoauth2provider.c:452
+#: ../src/goabackend/goaoauth2provider.c:455
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "비 JSON 데이터의 access_token을 찾을 수 없습니다"
 
-#: ../src/goabackend/goaoauth2provider.c:488
+#: ../src/goabackend/goaoauth2provider.c:489
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "JSON 데이터의 access_token을 찾을 수 없습니다"
 
-#: ../src/goabackend/goaoauth2provider.c:572
+#: ../src/goabackend/goaoauth2provider.c:573
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "인증 응답으로 \"%s\"이(가) 왔습니다"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:653
+#: ../src/goabackend/goaoauth2provider.c:654
 #, c-format
-msgid ""
-"Paste authorization code obtained from the <a href=\"%s\">authorization "
-"page</a>:"
+msgid "Paste authorization code obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "<a href=\"%s\">인증 페이지</a>로 부터 얻어낸 인증 코드를 붙입니다:"
 
-#: ../src/goabackend/goaoauth2provider.c:727
+#: ../src/goabackend/goaoauth2provider.c:728
 #: ../src/goabackend/goaoauthprovider.c:751
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "대화 상자가 닫혔습니다"
 
-#: ../src/goabackend/goaoauth2provider.c:751
+#: ../src/goabackend/goaoauth2provider.c:752
 #: ../src/goabackend/goaoauthprovider.c:782
 msgid "Error getting an Access Token: "
 msgstr "접근 토큰을 가져오는데 오류가 발생했습니다:"
 
-#: ../src/goabackend/goaoauth2provider.c:763
+#: ../src/goabackend/goaoauth2provider.c:764
 #: ../src/goabackend/goaoauthprovider.c:795
 msgid "Error getting identity: "
 msgstr "신원 정보를 가져오는데 오류가 발생했습니다:"
 
-#: ../src/goabackend/goaoauth2provider.c:928
+#: ../src/goabackend/goaoauth2provider.c:929
 #: ../src/goabackend/goaoauthprovider.c:972
 #, c-format
 msgid "There is already an account for the identity %s"
 msgstr "신원 정보 %s을(를) 위한 계정이 이미 존재합니다"
 
-#: ../src/goabackend/goaoauth2provider.c:1053
+#: ../src/goabackend/goaoauth2provider.c:1054
 #: ../src/goabackend/goaoauthprovider.c:1102
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "%s(으)로 로그인하기를 요청받았지만, %s(으)로 로그인 하였습니다."
 
-#: ../src/goabackend/goaoauth2provider.c:1189
+#: ../src/goabackend/goaoauth2provider.c:1190
 #: ../src/goabackend/goaoauthprovider.c:1250
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "자격정보가 키링 (%s, %d)에 없습니다:"
 
-#: ../src/goabackend/goaoauth2provider.c:1216
+#: ../src/goabackend/goaoauth2provider.c:1217
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "자격 정보에 access_token이 없습니다"
 
-#: ../src/goabackend/goaoauth2provider.c:1255
+#: ../src/goabackend/goaoauth2provider.c:1256
 #: ../src/goabackend/goaoauthprovider.c:1323
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "접근 토큰 (%s, %d)을 새로 고치는데 실패했습니다 :"
 
-#: ../src/goabackend/goaoauth2provider.c:1290
+#: ../src/goabackend/goaoauth2provider.c:1291
 #: ../src/goabackend/goaoauthprovider.c:1353
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
@@ -198,10 +215,8 @@ msgstr "요청 토큰을 가져오는데 오류가 발생했습니다:"
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauthprovider.c:645
 #, c-format
-msgid ""
-"Expected status 200 for getting a Request Token, instead got status %d (%s)"
-msgstr ""
-"요청 토큰을 가져오는데 상태 200을 기대했지만, %d 상태를 가져왔습니다 (%s)"
+msgid "Expected status 200 for getting a Request Token, instead got status %d (%s)"
+msgstr "요청 토큰을 가져오는데 상태 200을 기대했지만, %d 상태를 가져왔습니다 (%s)"
 
 #: ../src/goabackend/goaoauthprovider.c:659
 #, c-format
@@ -219,30 +234,30 @@ msgstr "<a href=\"%s\">인증 페이지</a>로부터 획득한 토큰을 붙입�
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "자격정보에 access_token이나 access_token_secret이 없습니다"
 
-#: ../src/goabackend/goaprovider.c:522
+#: ../src/goabackend/goaprovider.c:523
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "유형 %s에 ensure_credentials_sync가 구현되지 않았습니다"
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:737
+#: ../src/goabackend/goaprovider.c:742
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "GOA %s이(가) %s의 동일성을 위해 자격을 부여합니다"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:751
+#: ../src/goabackend/goaprovider.c:756
 #, c-format
 msgid "Failed to store credentials in the keyring: %s"
 msgstr "키링의 자격정보를 저장하는데 실패했습니다: %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:822
+#: ../src/goabackend/goaprovider.c:827
 #, c-format
 msgid "Failed to retrieve credentials from the keyring: %s"
 msgstr "키링의 자격정보를 가져오는데 실패했습니다: %s"
 
-#: ../src/goabackend/goaprovider.c:834
+#: ../src/goabackend/goaprovider.c:839
 msgid "Error parsing result obtained from the keyring: "
 msgstr "키링으로부터 가져온 결과를 해석하는데 오류가 발생했습니다:"
 
@@ -297,3 +312,4 @@ msgstr "JSON 데이터의 nickname 멤버를 찾울 수 없습니다"
 #: ../src/goabackend/goayahooprovider.c:324
 msgid "Name"
 msgstr "이름"
+
