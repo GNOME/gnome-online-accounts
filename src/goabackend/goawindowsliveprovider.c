@@ -289,8 +289,12 @@ show_account (GoaProvider         *provider,
   /* Chain up */
   GOA_PROVIDER_CLASS (goa_windows_live_provider_parent_class)->show_account (provider, client, object, vbox, table);
 
-  goa_util_add_row_editable_label_from_keyfile (table, object, _("User Name"), "PresentationIdentity", FALSE);
-  goa_util_add_row_switch_from_keyfile (table, object, _("Chat"), "ChatEnabled");
+  goa_util_add_account_info (table, object);
+
+  goa_util_add_row_switch_from_keyfile_with_blurb (GTK_TABLE (table), object,
+                                                   _("Use for"),
+                                                   "ChatEnabled",
+                                                   _("Chat"));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
