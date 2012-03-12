@@ -207,13 +207,18 @@ GtkWidget *goa_util_add_row_switch_from_keyfile (GtkTable     *table,
                                                  const gchar  *label_text,
                                                  const gchar  *key);
 
+GtkWidget *goa_util_add_row_switch_from_keyfile_with_blurb (GtkTable     *table,
+                                                            GoaObject    *object,
+                                                            const gchar  *label_text,
+                                                            const gchar  *key,
+                                                            const gchar  *blurb);
+
 GtkWidget *
 goa_util_add_row_check_button_from_keyfile (GtkTable     *table,
                                             GoaObject    *object,
                                             const gchar  *label_text,
                                             const gchar  *key,
                                             const gchar  *value_mnemonic);
-
 
 G_END_DECLS
 

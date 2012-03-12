@@ -1037,8 +1037,54 @@ goa_util_lookup_keyfile_boolean (GoaObject    *object,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static gboolean
+get_boolean_from_keyfile (GoaAccount *account, const gchar *key)
+{
+  GError *error = NULL;
+  GKeyFile *key_file;
+  gchar *group;
+  gchar *path;
+  gboolean value = FALSE;
+
+  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
+  group = g_strdup_printf ("Account %s", goa_account_get_id (account));
+
+  key_file = g_key_file_new ();
+  error = NULL;
+  if (!g_key_file_load_from_file (key_file,
+                                  path,
+                                  G_KEY_FILE_NONE,
+                                  &error))
+    {
+      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
+                   path,
+                   error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+  value = g_key_file_get_boolean (key_file, group, key, &error);
+  if (error != NULL)
+    {
+      /* this is not fatal (think upgrade-path) */
+      goa_debug ("Error getting value for key %s in group `%s' from keyfile %s: %s (%s, %d)",
+                 key,
+                 group,
+                 path,
+                 error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+ out:
+  g_key_file_free (key_file);
+  g_free (group);
+  g_free (path);
+  return value;
+}
+
 static gchar *
-get_value_from_keyfile (GoaAccount *account, const gchar *key)
+get_string_from_keyfile (GoaAccount *account, const gchar *key)
 {
   GError *error = NULL;
   GKeyFile *key_file;
@@ -1109,12 +1155,14 @@ goa_util_add_account_info (GtkTable *table, GoaObject *object)
   gtk_table_attach (table, image, 0, 1, num_rows, num_rows + 1, GTK_FILL, GTK_FILL, 0, 0);
 
   name = goa_account_get_provider_name (account);
-  value = get_value_from_keyfile (account, "Identity");
+  value = get_string_from_keyfile (account, "Identity");
   markup = g_strdup_printf ("<b>%s</b>\n%s", name, (value == NULL || value[0] == '\0') ? "\xe2\x80\x94" : value);
   g_free (value);
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), markup);
   gtk_table_attach (table, label, 1, 2, num_rows, num_rows + 1, GTK_FILL, GTK_FILL, 0, 0);
+
+  gtk_table_set_row_spacing (table, num_rows, 12);
 
   return;
 }
@@ -1245,7 +1293,7 @@ goa_util_add_row_editable_label_from_keyfile (GtkTable     *table,
   account = goa_object_peek_account (object);
   elabel = goa_editable_label_new ();
 
-  value = get_value_from_keyfile (account, key);
+  value = get_string_from_keyfile (account, key);
   if (value == NULL)
     goto out;
 
@@ -1364,64 +1412,62 @@ goa_util_add_row_switch_from_keyfile (GtkTable     *table,
   GoaAccount *account;
   GtkWidget *hbox;
   GtkWidget *switch_;
-  GKeyFile *key_file;
-  gchar *path;
-  gchar *group;
-  GError *error;
   gboolean value;
 
-  key_file = NULL;
-
   account = goa_object_peek_account (object);
+  value = get_boolean_from_keyfile (account, key);
   switch_ = gtk_switch_new ();
-  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
-  group = g_strdup_printf ("Account %s", goa_account_get_id (account));
-
-  key_file = g_key_file_new ();
-  error = NULL;
-  if (!g_key_file_load_from_file (key_file,
-                                  path,
-                                  G_KEY_FILE_NONE,
-                                  &error))
-    {
-      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
-                   path,
-                   error->message, g_quark_to_string (error->domain), error->code);
-      g_error_free (error);
-      goto out;
-    }
-  value = g_key_file_get_boolean (key_file,
-                                  group,
-                                  key,
-                                  &error);
-  if (error != NULL)
-    {
-      /* this is not fatal (think upgrade-path) */
-      goa_debug ("Error getting boolean value for key %s in group `%s' from keyfile %s: %s (%s, %d)",
-                 key,
-                 group,
-                 path,
-                 error->message, g_quark_to_string (error->domain), error->code);
-      g_error_free (error);
-      goto out;
-    }
-
   gtk_switch_set_active (GTK_SWITCH (switch_), value);
 
- out:
   g_signal_connect_data (switch_,
                          "notify::active",
                          G_CALLBACK (keyfile_switch_on_notify_active),
                          keyfile_editable_data_new (object, key),
                          (GClosureNotify) keyfile_editable_data_free,
                          0); /* GConnectFlags */
-  if (key_file != NULL)
-    g_key_file_free (key_file);
-  g_free (group);
-  g_free (path);
 
   hbox = gtk_hbox_new (0, FALSE);
   gtk_box_pack_start (GTK_BOX (hbox), switch_, FALSE, TRUE, 0);
+  goa_util_add_row_widget (table, label_text, hbox);
+  return switch_;
+}
+
+GtkWidget *
+goa_util_add_row_switch_from_keyfile_with_blurb (GtkTable     *table,
+                                                 GoaObject    *object,
+                                                 const gchar  *label_text,
+                                                 const gchar  *key,
+                                                 const gchar  *blurb)
+{
+  GoaAccount *account;
+  GtkWidget *hbox;
+  GtkWidget *switch_;
+  gboolean value;
+
+  account = goa_object_peek_account (object);
+  value = get_boolean_from_keyfile (account, key);
+  switch_ = gtk_switch_new ();
+  gtk_switch_set_active (GTK_SWITCH (switch_), value);
+
+  g_signal_connect_data (switch_,
+                         "notify::active",
+                         G_CALLBACK (keyfile_switch_on_notify_active),
+                         keyfile_editable_data_new (object, key),
+                         (GClosureNotify) keyfile_editable_data_free,
+                         0); /* GConnectFlags */
+
+  hbox = gtk_hbox_new (0, FALSE);
+
+  if (blurb != NULL)
+    {
+      GtkWidget *label;
+
+      label = gtk_label_new (blurb);
+      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+    }
+
+  gtk_box_pack_end (GTK_BOX (hbox), switch_, FALSE, FALSE, 0);
   goa_util_add_row_widget (table, label_text, hbox);
   return switch_;
 }

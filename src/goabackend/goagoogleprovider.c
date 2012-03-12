@@ -423,12 +423,31 @@ show_account (GoaProvider         *provider,
   GOA_PROVIDER_CLASS (goa_google_provider_parent_class)->show_account (provider, client, object, vbox, table);
 
   goa_util_add_account_info (table, object);
-  goa_util_add_heading (table, _("Use this account for"));
-  goa_util_add_row_switch_from_keyfile (table, object, _("Mail"), "MailEnabled");
-  goa_util_add_row_switch_from_keyfile (table, object, _("Calendar"), "CalendarEnabled");
-  goa_util_add_row_switch_from_keyfile (table, object, _("Contacts"), "ContactsEnabled");
-  goa_util_add_row_switch_from_keyfile (table, object, _("Chat"), "ChatEnabled");
-  goa_util_add_row_switch_from_keyfile (table, object, _("Documents"), "DocumentsEnabled");
+
+  goa_util_add_row_switch_from_keyfile_with_blurb (GTK_TABLE (table), object,
+                                                   _("Use for"),
+                                                   "MailEnabled",
+                                                   _("Mail"));
+
+  goa_util_add_row_switch_from_keyfile_with_blurb (GTK_TABLE (table), object,
+                                                   NULL,
+                                                   "CalendarEnabled",
+                                                   _("Calendar"));
+
+  goa_util_add_row_switch_from_keyfile_with_blurb (GTK_TABLE (table), object,
+                                                   NULL,
+                                                   "ContactsEnabled",
+                                                   _("Contacts"));
+
+  goa_util_add_row_switch_from_keyfile_with_blurb (GTK_TABLE (table), object,
+                                                   NULL,
+                                                   "ChatEnabled",
+                                                   _("Chat"));
+
+  goa_util_add_row_switch_from_keyfile_with_blurb (GTK_TABLE (table), object,
+                                                   NULL,
+                                                   "DocumentsEnabled",
+                                                   _("Documents"));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
