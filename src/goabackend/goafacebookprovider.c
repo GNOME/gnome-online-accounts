@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011 Red Hat, Inc.
+ * Copyright (C) 2011, 2012 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -307,9 +307,12 @@ show_account (GoaProvider         *provider,
   /* Chain up */
   GOA_PROVIDER_CLASS (goa_facebook_provider_parent_class)->show_account (provider, client, object, vbox, table);
 
-  goa_util_add_row_editable_label_from_keyfile (table, object, _("Email Address"), "PresentationIdentity", FALSE);
-  goa_util_add_heading (table, _("Use this account for"));
-  goa_util_add_row_switch_from_keyfile (table, object, _("Chat"), "ChatEnabled");
+  goa_util_add_account_info (table, object);
+
+  goa_util_add_row_switch_from_keyfile_with_blurb (GTK_TABLE (table), object,
+                                                   _("Use for"),
+                                                   "ChatEnabled",
+                                                   _("Chat"));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
