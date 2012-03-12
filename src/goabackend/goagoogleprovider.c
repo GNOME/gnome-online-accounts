@@ -422,7 +422,7 @@ show_account (GoaProvider         *provider,
   /* Chain up */
   GOA_PROVIDER_CLASS (goa_google_provider_parent_class)->show_account (provider, client, object, vbox, table);
 
-  goa_util_add_row_editable_label_from_keyfile (table, object, _("Email Address"), "Identity", FALSE);
+  goa_util_add_account_info (table, object);
   goa_util_add_heading (table, _("Use this account for"));
   goa_util_add_row_switch_from_keyfile (table, object, _("Mail"), "MailEnabled");
   goa_util_add_row_switch_from_keyfile (table, object, _("Calendar"), "CalendarEnabled");
