@@ -2,15 +2,15 @@
 # Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
 # Jorge González <jorgegonz@svn.gnome.org>, 2011.
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2011.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-12-19 14:59+0000\n"
-"PO-Revision-Date: 2011-12-19 17:12+0100\n"
+"POT-Creation-Date: 2012-03-13 14:30+0000\n"
+"PO-Revision-Date: 2012-03-13 17:09+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -68,7 +68,7 @@ msgid "User Name"
 msgstr "Nombre de usuario"
 
 #: ../src/goabackend/goafacebookprovider.c:283
-#: ../src/goabackend/goagoogleprovider.c:430
+#: ../src/goabackend/goagoogleprovider.c:445
 #: ../src/goabackend/goawindowsliveprovider.c:293
 msgid "Chat"
 msgstr "Chat"
@@ -87,27 +87,23 @@ msgstr "No se encontraron los datos del miembro en los datos JSON"
 msgid "Didn't find email member in JSON data"
 msgstr "No se encontró el correo-e del miembro en los datos JSON"
 
-#: ../src/goabackend/goagoogleprovider.c:425
-msgid "Email Address"
-msgstr "Dirección de correo-e"
+#: ../src/goabackend/goagoogleprovider.c:428
+msgid "Use for"
+msgstr "Usar para"
 
-#: ../src/goabackend/goagoogleprovider.c:426
-msgid "Use this account for"
-msgstr "Usar esta cuenta para"
-
-#: ../src/goabackend/goagoogleprovider.c:427
+#: ../src/goabackend/goagoogleprovider.c:430
 msgid "Mail"
 msgstr "Correo-e"
 
-#: ../src/goabackend/goagoogleprovider.c:428
+#: ../src/goabackend/goagoogleprovider.c:435
 msgid "Calendar"
 msgstr "Calendario"
 
-#: ../src/goabackend/goagoogleprovider.c:429
+#: ../src/goabackend/goagoogleprovider.c:440
 msgid "Contacts"
 msgstr "Contactos"
 
-#: ../src/goabackend/goagoogleprovider.c:431
+#: ../src/goabackend/goagoogleprovider.c:450
 msgid "Documents"
 msgstr "Documentos"
 
@@ -117,13 +113,11 @@ msgstr "Windows Live"
 
 #: ../src/goabackend/goawindowsliveprovider.c:193
 #, c-format
-#| msgid "Didn't find guid member in JSON data"
 msgid "Didn't find id member in JSON data"
 msgstr "No se encontró el miembro «id» en los datos JSON"
 
 #: ../src/goabackend/goawindowsliveprovider.c:204
 #, c-format
-#| msgid "Didn't find email member in JSON data"
 msgid "Didn't find account email member in JSON data"
 msgstr "No se encontró la cuenta de correo-e del miembro en los datos JSON"
 
@@ -252,30 +246,30 @@ msgstr ""
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Las credenciales no contienen «access_token» o «access_token_secret»"
 
-#: ../src/goabackend/goaprovider.c:523
+#: ../src/goabackend/goaprovider.c:524
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "«ensure_credentials_sync» no está implementado en el tipo %s"
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:742
+#: ../src/goabackend/goaprovider.c:743
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Credenciales GOA de %s para la identidad %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:756
+#: ../src/goabackend/goaprovider.c:757
 #, c-format
 msgid "Failed to store credentials in the keyring: %s"
 msgstr "Falló al almacenar las credenciales en el depósito de claves: %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:827
+#: ../src/goabackend/goaprovider.c:828
 #, c-format
 msgid "Failed to retrieve credentials from the keyring: %s"
 msgstr "Falló al obtener las credenciales del depósito de claves: %s"
 
-#: ../src/goabackend/goaprovider.c:839
+#: ../src/goabackend/goaprovider.c:840
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Error analizando el resultado obtenido del depósito de claves:"
 
@@ -332,6 +326,12 @@ msgstr "No se encontró el apodo del miembro en los datos JSON"
 #: ../src/goabackend/goayahooprovider.c:324
 msgid "Name"
 msgstr "Nombre"
+
+#~ msgid "Email Address"
+#~ msgstr "Dirección de correo-e"
+
+#~ msgid "Use this account for"
+#~ msgstr "Usar esta cuenta para"
 
 #~ msgid "Expected 200 for getting a Request Token, got %d (%s)"
 #~ msgstr ""
