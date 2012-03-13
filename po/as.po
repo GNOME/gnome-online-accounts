@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
 "cgi?product=gnome-online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-12-19 14:59+0000\n"
-"PO-Revision-Date: 2012-03-12 12:03+0530\n"
+"POT-Creation-Date: 2012-03-13 14:30+0000\n"
+"PO-Revision-Date: 2012-03-13 21:14+0530\n"
 "Last-Translator: Nilamdyuti Goswami <ngoswami@redhat.com>\n"
 "Language-Team: as_IN <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -67,7 +67,7 @@ msgid "User Name"
 msgstr "ব্যৱহাৰকাৰী নাম"
 
 #: ../src/goabackend/goafacebookprovider.c:283
-#: ../src/goabackend/goagoogleprovider.c:430
+#: ../src/goabackend/goagoogleprovider.c:445
 #: ../src/goabackend/goawindowsliveprovider.c:293
 msgid "Chat"
 msgstr "চেট"
@@ -86,27 +86,23 @@ msgstr "JSON তথ্যত তথ্য সদস্য পোৱা নগল
 msgid "Didn't find email member in JSON data"
 msgstr "JSON তথ্যত ই-মেইল সদস্য পোৱা নগল"
 
-#: ../src/goabackend/goagoogleprovider.c:425
-msgid "Email Address"
-msgstr "ই-মেইল ঠিকনা"
+#: ../src/goabackend/goagoogleprovider.c:428
+msgid "Use for"
+msgstr "বাবে ব্যৱহাৰ কৰক"
 
-#: ../src/goabackend/goagoogleprovider.c:426
-msgid "Use this account for"
-msgstr "-ৰ বাবে এই একাওন্ট ব্যৱহাৰ কৰক"
-
-#: ../src/goabackend/goagoogleprovider.c:427
+#: ../src/goabackend/goagoogleprovider.c:430
 msgid "Mail"
 msgstr "মেইল"
 
-#: ../src/goabackend/goagoogleprovider.c:428
+#: ../src/goabackend/goagoogleprovider.c:435
 msgid "Calendar"
 msgstr "কেলেন্ডাৰ"
 
-#: ../src/goabackend/goagoogleprovider.c:429
+#: ../src/goabackend/goagoogleprovider.c:440
 msgid "Contacts"
 msgstr "পৰিচয়সমূহ"
 
-#: ../src/goabackend/goagoogleprovider.c:431
+#: ../src/goabackend/goagoogleprovider.c:450
 msgid "Documents"
 msgstr "দস্তাবেজসমূহ"
 
@@ -116,13 +112,11 @@ msgstr "Windows Live"
 
 #: ../src/goabackend/goawindowsliveprovider.c:193
 #, c-format
-#| msgid "Didn't find guid member in JSON data"
 msgid "Didn't find id member in JSON data"
 msgstr "JSON তথ্যত আইডি সদস্য পোৱা নগল"
 
 #: ../src/goabackend/goawindowsliveprovider.c:204
 #, c-format
-#| msgid "Didn't find email member in JSON data"
 msgid "Didn't find account email member in JSON data"
 msgstr "JSON তথ্যত একাওন্ট ই-মেইল সদস্য পোৱা নগল"
 
@@ -240,30 +234,30 @@ msgstr "পেইস্ট টকেন <a href=\"%s\">অধিকাৰ পৃ
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "তথ্যসমূহে access_token অথবা access_token_secret অন্তৰ্ভুক্ত নকৰে"
 
-#: ../src/goabackend/goaprovider.c:523
+#: ../src/goabackend/goaprovider.c:524
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync ধৰণ %s -ত প্ৰণয়ন কৰা হোৱা নাই"
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:742
+#: ../src/goabackend/goaprovider.c:743
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "পৰিচয় %s -ৰ বাবে GOA %s তথ্যসমূহ"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:756
+#: ../src/goabackend/goaprovider.c:757
 #, c-format
 msgid "Failed to store credentials in the keyring: %s"
 msgstr "keyring: %s -ত তথ্যসমূহ সংৰক্ষণ কৰিবলে ব্যৰ্থ"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:827
+#: ../src/goabackend/goaprovider.c:828
 #, c-format
 msgid "Failed to retrieve credentials from the keyring: %s"
 msgstr "keyring: %s -ৰ পৰা তথ্যসমূহ উদ্ধাৰ কৰিবলে ব্যৰ্থ"
 
-#: ../src/goabackend/goaprovider.c:839
+#: ../src/goabackend/goaprovider.c:840
 msgid "Error parsing result obtained from the keyring: "
 msgstr "keyring -ৰ পৰা প্ৰাপ্ত ফলাফল বিশ্লেষণ কৰোতে ত্ৰুটি: "
 
@@ -319,3 +313,8 @@ msgstr "JSON তথ্যত উপনাম সদস্য পোৱা নগ
 msgid "Name"
 msgstr "নাম"
 
+#~ msgid "Email Address"
+#~ msgstr "ই-মেইল ঠিকনা"
+
+#~ msgid "Use this account for"
+#~ msgstr "-ৰ বাবে এই একাওন্ট ব্যৱহাৰ কৰক"
