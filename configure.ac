@@ -159,13 +159,9 @@ AC_ARG_WITH(facebook-client-secret,
                             [],
                             [])
 if test "$with_facebook_client_id" = ""; then
-  with_facebook_client_id=not_set
-fi
-if test "$with_facebook_client_secret" = ""; then
-  with_facebook_client_secret=not_set
+  with_facebook_client_id=297654143624603
 fi
 AC_DEFINE_UNQUOTED(GOA_FACEBOOK_CLIENT_ID, ["$with_facebook_client_id"], [Facebook OAuth 2.0 client id])
-AC_DEFINE_UNQUOTED(GOA_FACEBOOK_CLIENT_SECRET, ["$with_facebook_client_secret"], [Facebook OAuth 2.0 client secret])
 if test "$enable_facebook" != "no"; then
   AC_DEFINE(GOA_FACEBOOK_ENABLED, 1, [Enable Facebook data provider])
 fi
@@ -246,7 +242,7 @@ echo "
 	Google provider:            ${enable_google} (OAuth 1.0, key:${with_google_consumer_key} secret:${with_google_consumer_secret})
 	Twitter provider:           ${enable_twitter} (OAuth 1.0, key:${with_twitter_consumer_key} secret:${with_twitter_consumer_secret})
 	Yahoo provider:             ${enable_yahoo} (OAuth 1.0, key:${with_yahoo_consumer_key} secret:${with_yahoo_consumer_secret})
-	Facebook provider:          ${enable_facebook} (OAuth 2.0, id:${with_facebook_client_id} secret:${with_facebook_client_secret})
+	Facebook provider:          ${enable_facebook} (OAuth 2.0, id:${with_facebook_client_id})
 	Windows Live provider:      ${enable_windows_live} (OAuth 2.0, id:${with_windows_live_client_id})
 
         Maintainer mode:            ${USE_MAINTAINER_MODE}
