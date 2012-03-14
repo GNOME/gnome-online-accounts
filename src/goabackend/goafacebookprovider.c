@@ -219,7 +219,7 @@ get_identity_sync (GoaOAuth2Provider  *provider,
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
-                   _("Didn't find username member in JSON data"));
+                   _("Didn't find id member in JSON data"));
       goto out;
     }
   presentation_identity = g_strdup (json_object_get_string_member (json_object, "email"));
