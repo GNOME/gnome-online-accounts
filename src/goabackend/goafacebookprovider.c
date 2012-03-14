@@ -243,6 +243,8 @@ get_identity_sync (GoaOAuth2Provider  *provider,
  out:
   g_free (id);
   g_free (presentation_identity);
+  if (parser != NULL)
+    g_object_unref (parser);
   if (call != NULL)
     g_object_unref (call);
   if (proxy != NULL)
