@@ -133,7 +133,6 @@ get_scope (GoaOAuth2Provider *provider)
   return
     "user_events,"
     "read_mailbox,"
-    "offline_access,"
     "xmpp_login,"
     "email";
 }
