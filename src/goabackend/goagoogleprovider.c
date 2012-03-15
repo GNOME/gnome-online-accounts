@@ -96,6 +96,17 @@ get_request_uri (GoaOAuthProvider *provider)
   return "https://www.google.com/accounts/OAuthGetRequestToken";
 }
 
+static gchar *
+build_authorization_uri (GoaOAuthProvider  *provider,
+                         const gchar       *authorization_uri,
+                         const gchar       *escaped_oauth_token)
+{
+  return g_strdup_printf ("%s"
+                          "?oauth_token=%s&btmpl=mobile",
+                          authorization_uri,
+                          escaped_oauth_token);
+}
+
 static gchar **
 get_request_uri_params (GoaOAuthProvider *provider)
 {
@@ -492,6 +503,7 @@ goa_google_provider_class_init (GoaGoogleProviderClass *klass)
   oauth_class->get_authorization_uri    = get_authorization_uri;
   oauth_class->get_token_uri            = get_token_uri;
   oauth_class->get_callback_uri         = get_callback_uri;
+  oauth_class->build_authorization_uri  = build_authorization_uri;
   oauth_class->get_use_external_browser = get_use_external_browser;
   oauth_class->add_account_key_values   = add_account_key_values;
 }
