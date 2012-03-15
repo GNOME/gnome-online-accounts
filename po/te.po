@@ -1,21 +1,25 @@
 # Telugu translation for gnome-online-accounts.
-# Copyright (C) 2011 Swecha Telugu Localisation Team <localization@swecha.net>.
+# Copyright (C) 2011,2012 Swecha Telugu Localisation Team <localization@swecha.net>.
 # This file is distributed under the same license as the gnome-online-accounts package.
-# Hari Krishna <hari@swecha.net>, 2011.
 #
+# Hari Krishna <hari@swecha.net>, 2011, 2012.
+# Sasi Bhushan Boddepalli <sasi@swecha.net>, 2012.
+# Krishnababu Krothapalli <kkrothap@redhat.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts gnome-3-2\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-10-09 08:19+0000\n"
-"PO-Revision-Date: 2011-10-01 23:50+0000\n"
-"Last-Translator: Hari Krishna <hari@swecha.net>\n"
+"POT-Creation-Date: 2012-03-15 00:04+0000\n"
+"PO-Revision-Date: 2012-03-15 12:41+0530\n"
+"Last-Translator: Krishnababu Krothapalli <kkrothap@redhat.com>\n"
 "Language-Team: Telugu <indlinux-telugu@lists.sourceforge.net>\n"
 "Language: te\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: ../src/daemon/goadaemon.c:871
 msgid "An online account needs attention"
@@ -31,16 +35,20 @@ msgstr "ఫేస్ బుక్"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:162
-#: ../src/goabackend/goagoogleprovider.c:195
+#: ../src/goabackend/goagoogleprovider.c:206
+#: ../src/goabackend/goawindowsliveprovider.c:170
 #: ../src/goabackend/goatwitterprovider.c:160
 #: ../src/goabackend/goayahooprovider.c:163
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
-msgstr "guid కొరకు అడిగినప్పుడు ‌‌200సుస్థితిని ఊహించారు, కానీ దాని బదులు %d(%s) వచింది "
+msgstr ""
+"guid కొరకు అడిగినప్పుడు ‌‌200సుస్థితిని ఊహించారు, కానీ దాని బదులు %d(%s) "
+"వచింది "
 
 #: ../src/goabackend/goafacebookprovider.c:174
-#: ../src/goabackend/goagoogleprovider.c:207
-#: ../src/goabackend/goaoauth2provider.c:475
+#: ../src/goabackend/goagoogleprovider.c:218
+#: ../src/goabackend/goawindowsliveprovider.c:182
+#: ../src/goabackend/goaoauth2provider.c:478
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
@@ -57,12 +65,14 @@ msgid "Didn't find name member in JSON data"
 msgstr "JSON దత్తాంశం లో మెంబరు అను  నామము కనుగొనలేదు"
 
 #: ../src/goabackend/goafacebookprovider.c:282
+#: ../src/goabackend/goawindowsliveprovider.c:292
 #: ../src/goabackend/goatwitterprovider.c:260
 msgid "User Name"
 msgstr "వినియోగదారుని నామము"
 
 #: ../src/goabackend/goafacebookprovider.c:283
-#: ../src/goabackend/goagoogleprovider.c:430
+#: ../src/goabackend/goagoogleprovider.c:456
+#: ../src/goabackend/goawindowsliveprovider.c:293
 msgid "Chat"
 msgstr "మాటామంతి"
 
@@ -70,118 +80,130 @@ msgstr "మాటామంతి"
 msgid "Google"
 msgstr "గూగల్"
 
-#: ../src/goabackend/goagoogleprovider.c:218
+#: ../src/goabackend/goagoogleprovider.c:229
 #, c-format
 msgid "Didn't find data member in JSON data"
 msgstr "JSON దత్తాంశం లో మెంబరు అను  దత్తాంశం  కనుగొనలేదు"
 
-#: ../src/goabackend/goagoogleprovider.c:228
+#: ../src/goabackend/goagoogleprovider.c:239
 #, c-format
 msgid "Didn't find email member in JSON data"
 msgstr "JSON దత్తాంశం లో మెంబరు అను  ఈమేయిల్ కనుగొనలేదు"
 
-#: ../src/goabackend/goagoogleprovider.c:425
-msgid "Email Address"
-msgstr "ఈమేయిల్ చిరునామా"
+#: ../src/goabackend/goagoogleprovider.c:439
+msgid "Use for"
+msgstr ""
 
-#: ../src/goabackend/goagoogleprovider.c:426
-msgid "Use this account for"
-msgstr "ఈ ఖాతాను దీనికి ఉపయోగించండి"
-
-#: ../src/goabackend/goagoogleprovider.c:427
+#: ../src/goabackend/goagoogleprovider.c:441
 msgid "Mail"
 msgstr "మేయిల్"
 
-#: ../src/goabackend/goagoogleprovider.c:428
+#: ../src/goabackend/goagoogleprovider.c:446
 msgid "Calendar"
 msgstr "క్యాలెండర్"
 
-#: ../src/goabackend/goagoogleprovider.c:429
+#: ../src/goabackend/goagoogleprovider.c:451
 msgid "Contacts"
 msgstr "సంపర్కాలు"
 
-#: ../src/goabackend/goagoogleprovider.c:431
+#: ../src/goabackend/goagoogleprovider.c:461
 msgid "Documents"
 msgstr "పత్రాలు"
 
+#: ../src/goabackend/goawindowsliveprovider.c:82
+msgid "Windows Live"
+msgstr "విండోస్ లైవ్ "
+
+#: ../src/goabackend/goawindowsliveprovider.c:193
+#, c-format
+msgid "Didn't find id member in JSON data"
+msgstr "JSON దత్తాంశం లో  id మెంబరు  కనుగొనలేదు"
+
+#: ../src/goabackend/goawindowsliveprovider.c:204
+#, c-format
+msgid "Didn't find account email member in JSON data"
+msgstr "JSON దత్తాంశం లో మెంబరు ఈమేయిల్ అకౌంటును  కనుగొనలేదు"
+
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:432
+#: ../src/goabackend/goaoauth2provider.c:435
 #: ../src/goabackend/goaoauthprovider.c:440
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
-msgstr "ప్రవేశించుటటోకన్ కొరకు అడిగినప్పుడు ‌‌200సుస్థితిని ఊహించారు, కానీ దాని బదులు %d(%s) వచింది "
+msgstr ""
+"ప్రవేశించుటటోకన్ కొరకు అడిగినప్పుడు ‌‌200సుస్థితిని ఊహించారు, కానీ దాని బదులు "
+"%d(%s) వచింది "
 
-#: ../src/goabackend/goaoauth2provider.c:452
+#: ../src/goabackend/goaoauth2provider.c:455
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "JSON దత్తాంశం లో కాని దత్తంశం లో ప్రవేశించుటకు టోకన్  కనుగొనలేదు"
 
-#: ../src/goabackend/goaoauth2provider.c:486
+#: ../src/goabackend/goaoauth2provider.c:489
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "JSON దత్తాంశం   లో ప్రవేశించుటకు టోకన్  కనుగొనలేదు"
 
-#: ../src/goabackend/goaoauth2provider.c:570
+#: ../src/goabackend/goaoauth2provider.c:573
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "అధికారిక జవాబు  \"%s\""
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:651
+#: ../src/goabackend/goaoauth2provider.c:654
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
 "page</a>:"
 msgstr "<a href=\"%s\"> అధికారిక పుటము నుంచి  పొందిన అధికార కోడ్ ను అతికించు"
 
-#: ../src/goabackend/goaoauth2provider.c:725
-#: ../src/goabackend/goaoauthprovider.c:751
+#: ../src/goabackend/goaoauth2provider.c:730
+#: ../src/goabackend/goaoauthprovider.c:753
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "వివరణ పంపివేయడమైనది"
 
-#: ../src/goabackend/goaoauth2provider.c:749
-#: ../src/goabackend/goaoauthprovider.c:782
+#: ../src/goabackend/goaoauth2provider.c:754
+#: ../src/goabackend/goaoauthprovider.c:784
 msgid "Error getting an Access Token: "
 msgstr "ప్రవేశించుటకు టోకన్  పొందుటలో దోషం:"
 
-#: ../src/goabackend/goaoauth2provider.c:761
-#: ../src/goabackend/goaoauthprovider.c:795
+#: ../src/goabackend/goaoauth2provider.c:766
+#: ../src/goabackend/goaoauthprovider.c:797
 msgid "Error getting identity: "
 msgstr "గుర్తింపు పోందుటలో దోషం:"
 
-#: ../src/goabackend/goaoauth2provider.c:926
-#: ../src/goabackend/goaoauthprovider.c:972
+#: ../src/goabackend/goaoauth2provider.c:931
+#: ../src/goabackend/goaoauthprovider.c:974
 #, c-format
 msgid "There is already an account for the identity %s"
 msgstr "%s గుర్తింపునకు ముందుగానే ఒక ఖాతా ఉంది"
 
-#: ../src/goabackend/goaoauth2provider.c:1051
-#: ../src/goabackend/goaoauthprovider.c:1102
+#: ../src/goabackend/goaoauth2provider.c:1056
+#: ../src/goabackend/goaoauthprovider.c:1104
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "%s లా లాగిన్ అవ్వమని అడిగాం , కానీ  %s గా లాగిన్ అయింది"
 
-#: ../src/goabackend/goaoauth2provider.c:1187
-#: ../src/goabackend/goaoauthprovider.c:1250
+#: ../src/goabackend/goaoauth2provider.c:1192
+#: ../src/goabackend/goaoauthprovider.c:1252
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "కీ రింగ్ లో అధికార పత్రాలు దొరుకుటలేదు(%s, %d):"
 
-#: ../src/goabackend/goaoauth2provider.c:1214
+#: ../src/goabackend/goaoauth2provider.c:1219
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "అధికార పత్రాలు  ప్రవేశించుటకు టోకన్  లో లేదు"
 
-#: ../src/goabackend/goaoauth2provider.c:1253
-#: ../src/goabackend/goaoauthprovider.c:1323
+#: ../src/goabackend/goaoauth2provider.c:1258
+#: ../src/goabackend/goaoauthprovider.c:1325
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "ప్రవేశించుటకు టోకన్ పునర్వికాసించుటలలో దోషం (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1288
-#: ../src/goabackend/goaoauthprovider.c:1353
+#: ../src/goabackend/goaoauth2provider.c:1293
+#: ../src/goabackend/goaoauthprovider.c:1355
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "కీరింగ్ లో అధికార పత్రాలను దాచుటలో దోషం(%s, %d):"
@@ -189,7 +211,9 @@ msgstr "కీరింగ్ లో అధికార పత్రాలను
 #: ../src/goabackend/goaoauthprovider.c:463
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
-msgstr "జవాబులో ప్రవేశించుటకు టోకన్  లేదా రహస్య ప్రవేశించుటకు టోకన్ పీఠిక దొరుకుటలేదు  "
+msgstr ""
+"జవాబులో ప్రవేశించుటకు టోకన్  లేదా రహస్య ప్రవేశించుటకు టోకన్ పీఠిక దొరుకుటలేదు "
+" "
 
 #: ../src/goabackend/goaoauthprovider.c:636
 msgid "Error getting a Request Token: "
@@ -200,7 +224,9 @@ msgstr "ప్రవేశించుటకు టోకన్  పొందు
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
-msgstr "నామము కొరకు అడిగినప్పుడు ‌‌200సుస్థితిని ఊహించారు, కానీ దాని బదులు %d(%s) వచింది "
+msgstr ""
+"నామము కొరకు అడిగినప్పుడు ‌‌200సుస్థితిని ఊహించారు, కానీ దాని బదులు %d(%s) "
+"వచింది "
 
 #: ../src/goabackend/goaoauthprovider.c:659
 #, c-format
@@ -213,35 +239,36 @@ msgstr "జవాబులోవినతి టోకన్  లేదా ర�
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "<a href=\"%s\"> అధికారిక పుటము నుంచి  పొందిన టోకన్ ను అతికించు"
 
-#: ../src/goabackend/goaoauthprovider.c:1279
+#: ../src/goabackend/goaoauthprovider.c:1281
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
-msgstr "అధికారపత్రాలలో  ప్రవేశించుటకు టోకన్  లేదా రహస్య ప్రవేశించుటకు టోకన్  కలిగిలేవు"
+msgstr ""
+"అధికారపత్రాలలో  ప్రవేశించుటకు టోకన్  లేదా రహస్య ప్రవేశించుటకు టోకన్  కలిగిలేవు"
 
-#: ../src/goabackend/goaprovider.c:522
+#: ../src/goabackend/goaprovider.c:524
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "%s రకములో _credentials_sync అమలు జరిగిందో లేదో నిర్ధారన చేసుకోండి"
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:737
+#: ../src/goabackend/goaprovider.c:743
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "%s గుర్తింపు కొరకు GOA %s అధికార పత్రాలు "
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:751
+#: ../src/goabackend/goaprovider.c:757
 #, c-format
 msgid "Failed to store credentials in the keyring: %s"
 msgstr "కీరింగ్ లో అధికారపత్రాలు దాచుటలో విఫలం: %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:822
+#: ../src/goabackend/goaprovider.c:828
 #, c-format
 msgid "Failed to retrieve credentials from the keyring: %s"
 msgstr "కీరింగ్ నుంచి  అధికారపత్రాలు పొందుటలో విఫలం:%s "
 
-#: ../src/goabackend/goaprovider.c:834
+#: ../src/goabackend/goaprovider.c:840
 msgid "Error parsing result obtained from the keyring: "
 msgstr "కీరింగ్ నుంచి పొందిన పార్సింగ్ ఫలితములో దోషం:"
 
@@ -276,7 +303,9 @@ msgstr "JSON దత్తాంశం లో  విలువ మెంబరు
 #: ../src/goabackend/goayahooprovider.c:222
 #, c-format
 msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-msgstr "నామము కొరకు అడిగినప్పుడు ‌‌200సుస్థితిని ఊహించారు, కానీ దాని బదులు %d(%s) వచింది "
+msgstr ""
+"నామము కొరకు అడిగినప్పుడు ‌‌200సుస్థితిని ఊహించారు, కానీ దాని బదులు %d(%s) "
+"వచింది "
 
 #: ../src/goabackend/goayahooprovider.c:235
 msgid "Error parsing usercard response as JSON: "
@@ -296,3 +325,9 @@ msgstr "JSON దత్తాంశం లో ముద్దునామము �
 #: ../src/goabackend/goayahooprovider.c:324
 msgid "Name"
 msgstr "నామము"
+
+#~ msgid "Email Address"
+#~ msgstr "ఈమేయిల్ చిరునామా"
+
+#~ msgid "Use this account for"
+#~ msgstr "ఈ ఖాతాను దీనికి ఉపయోగించండి"
