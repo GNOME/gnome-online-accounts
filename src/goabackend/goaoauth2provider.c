@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011 Red Hat, Inc.
+ * Copyright (C) 2011, 2012 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -235,6 +235,14 @@ goa_oauth2_provider_get_authorization_uri (GoaOAuth2Provider *provider)
   return GOA_OAUTH2_PROVIDER_GET_CLASS (provider)->get_authorization_uri (provider);
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+
+static const gchar *
+goa_oauth2_provider_get_token_uri_default (GoaOAuth2Provider  *provider)
+{
+  return NULL;
+}
+
 /**
  * goa_oauth2_provider_get_token_uri:
  * @provider: A #GoaOAuth2Provider.
@@ -243,10 +251,13 @@ goa_oauth2_provider_get_authorization_uri (GoaOAuth2Provider *provider)
  * url="http://tools.ietf.org/html/draft-ietf-oauth-v2-15#section-2.2">token
  * endpoint</ulink> used for obtaining an access token.
  *
- * You should not include any parameters in the returned URI.
+ * A token URI is only needed when the OAuth2 provider does not support
+ * a separate client-side flow. In such cases, override
+ * #GoaOAuth2ProviderClass.get_token_uri. You should not include any
+ * parameters in the returned URI.
  *
- * This is a pure virtual method - a subclass must provide an
- * implementation.
+ * This is a virtual method where the default implementation returns
+ * %NULL.
  *
  * Returns: (transfer none): A string owned by @provider - do not free.
  */
@@ -256,6 +267,8 @@ goa_oauth2_provider_get_token_uri (GoaOAuth2Provider *provider)
   g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (provider), NULL);
   return GOA_OAUTH2_PROVIDER_GET_CLASS (provider)->get_token_uri (provider);
 }
+
+/* ---------------------------------------------------------------------------------------------------- */
 
 /**
  * goa_oauth2_provider_get_redirect_uri:

@@ -109,16 +109,6 @@ get_authorization_uri (GoaOAuth2Provider *provider)
   return "https://www.facebook.com/dialog/oauth";
 }
 
-
-static const gchar *
-get_token_uri (GoaOAuth2Provider *provider)
-{
-  /* Not used in client-side auth flow, since the access token is obtained
-   * directly from the authorization phase (get_authorization_uri()) */
-  return NULL;
-}
-
-
 static const gchar *
 get_redirect_uri (GoaOAuth2Provider *provider)
 {
@@ -352,7 +342,6 @@ goa_facebook_provider_class_init (GoaFacebookProviderClass *klass)
 
   oauth2_class = GOA_OAUTH2_PROVIDER_CLASS (klass);
   oauth2_class->get_authorization_uri    = get_authorization_uri;
-  oauth2_class->get_token_uri            = get_token_uri;
   oauth2_class->build_authorization_uri  = build_authorization_uri;
   oauth2_class->get_redirect_uri         = get_redirect_uri;
   oauth2_class->get_scope                = get_scope;
