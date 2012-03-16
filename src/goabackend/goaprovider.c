@@ -1141,7 +1141,7 @@ goa_util_add_account_info (GtkTable *table, GoaObject *object)
   const gchar *icon_str;
   const gchar *name;
   gchar *markup;
-  gchar *value;
+  gchar *identity;
   guint num_rows;
 
   gtk_table_get_size (table, &num_rows, NULL);
@@ -1155,9 +1155,10 @@ goa_util_add_account_info (GtkTable *table, GoaObject *object)
   gtk_table_attach (table, image, 0, 1, num_rows, num_rows + 1, GTK_FILL, GTK_FILL, 0, 0);
 
   name = goa_account_get_provider_name (account);
-  value = get_string_from_keyfile (account, "Identity");
-  markup = g_strdup_printf ("<b>%s</b>\n%s", name, (value == NULL || value[0] == '\0') ? "\xe2\x80\x94" : value);
-  g_free (value);
+  identity = goa_account_get_presentation_identity (account);
+  markup = g_strdup_printf ("<b>%s</b>\n%s",
+                            name,
+                            (identity == NULL || identity[0] == '\0') ? "\xe2\x80\x94" : identity);
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), markup);
   gtk_table_attach (table, label, 1, 2, num_rows, num_rows + 1, GTK_FILL, GTK_FILL, 0, 0);
