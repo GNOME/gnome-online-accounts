@@ -1161,6 +1161,7 @@ goa_util_add_account_info (GtkTable *table, GoaObject *object)
                             (identity == NULL || identity[0] == '\0') ? "\xe2\x80\x94" : identity);
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), markup);
+  g_free (markup);
   gtk_table_attach (table, label, 1, 2, num_rows, num_rows + 1, GTK_FILL, GTK_FILL, 0, 0);
 
   gtk_table_set_row_spacing (table, num_rows, 12);
