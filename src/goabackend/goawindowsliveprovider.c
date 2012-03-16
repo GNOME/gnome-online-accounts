@@ -114,7 +114,14 @@ get_scope (GoaOAuth2Provider *provider)
 {
   return "wl.messenger,"
          "wl.offline_access,"
+         "wl.skydrive_update,"
          "wl.emails";
+}
+
+static guint
+get_credentials_generation (GoaProvider *provider)
+{
+  return 1;
 }
 
 static const gchar *
@@ -234,7 +241,9 @@ build_object (GoaProvider         *provider,
               GError             **error)
 {
   GoaChat *chat = NULL;
+  GoaDocuments *documents;
   gboolean chat_enabled;
+  gboolean documents_enabled;
   gboolean ret = FALSE;
 
   /* Chain up */
@@ -260,6 +269,24 @@ build_object (GoaProvider         *provider,
     {
       if (chat != NULL)
         goa_object_skeleton_set_chat (object, NULL);
+    }
+
+  /* Documents */
+  documents = goa_object_get_documents (GOA_OBJECT (object));
+  documents_enabled = g_key_file_get_boolean (key_file, group, "DocumentsEnabled", NULL);
+
+  if (documents_enabled)
+    {
+      if (documents == NULL)
+        {
+          documents = goa_documents_skeleton_new ();
+          goa_object_skeleton_set_documents (object, documents);
+        }
+    }
+  else
+    {
+      if (documents != NULL)
+        goa_object_skeleton_set_documents (object, NULL);
     }
 
   ret = TRUE;
@@ -295,6 +322,11 @@ show_account (GoaProvider         *provider,
                                                    _("Use for"),
                                                    "ChatEnabled",
                                                    _("Chat"));
+
+  goa_util_add_row_switch_from_keyfile_with_blurb (GTK_TABLE (table), object,
+                                                   NULL,
+                                                   "DocumentsEnabled",
+                                                   _("Documents"));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -304,6 +336,7 @@ add_account_key_values (GoaOAuth2Provider *provider,
                         GVariantBuilder   *builder)
 {
   g_variant_builder_add (builder, "{ss}", "ChatEnabled", "true");
+  g_variant_builder_add (builder, "{ss}", "DocumentsEnabled", "true");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -325,6 +358,7 @@ goa_windows_live_provider_class_init (GoaWindowsLiveProviderClass *klass)
   provider_class->get_provider_icon          = get_provider_icon;
   provider_class->build_object               = build_object;
   provider_class->show_account               = show_account;
+  provider_class->get_credentials_generation = get_credentials_generation;
 
   oauth2_class = GOA_OAUTH2_PROVIDER_CLASS (klass);
   oauth2_class->get_authorization_uri    = get_authorization_uri;
