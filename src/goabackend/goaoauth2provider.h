@@ -64,6 +64,7 @@ struct _GoaOAuth2Provider
  * @get_scope: Virtual function for goa_oauth2_provider_get_scope().
  * @get_client_id: Virtual function for goa_oauth2_provider_get_client_id().
  * @get_client_secret: Virtual function for goa_oauth2_provider_get_client_secret().
+ * @get_authentication_cookie: Virtual function for goa_oauth2_provider_get_authentication_cookie().
  * @get_identity_sync: Virtual function for goa_oauth2_provider_get_identity_sync().
  * @build_authorization_uri: Virtual function for goa_oauth2_provider_build_authorization_uri().
  * @get_use_external_browser: Virtual function for goa_oauth2_provider_get_use_external_browser().
@@ -81,6 +82,7 @@ struct _GoaOAuth2ProviderClass
   const gchar *(*get_scope)                (GoaOAuth2Provider  *provider);
   const gchar *(*get_client_id)            (GoaOAuth2Provider  *provider);
   const gchar *(*get_client_secret)        (GoaOAuth2Provider  *provider);
+  const gchar *(*get_authentication_cookie) (GoaOAuth2Provider  *provider);
   gchar       *(*get_identity_sync)        (GoaOAuth2Provider  *provider,
                                             const gchar        *access_token,
                                             gchar             **out_presentation_identity,
@@ -110,6 +112,7 @@ const gchar *goa_oauth2_provider_get_redirect_uri         (GoaOAuth2Provider  *p
 const gchar *goa_oauth2_provider_get_scope                (GoaOAuth2Provider  *provider);
 const gchar *goa_oauth2_provider_get_client_id            (GoaOAuth2Provider  *provider);
 const gchar *goa_oauth2_provider_get_client_secret        (GoaOAuth2Provider  *provider);
+const gchar *goa_oauth2_provider_get_authentication_cookie (GoaOAuth2Provider  *provider);
 gchar       *goa_oauth2_provider_get_identity_sync        (GoaOAuth2Provider  *provider,
                                                            const gchar        *access_token,
                                                            gchar             **out_presentation_identity,

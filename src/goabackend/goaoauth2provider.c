@@ -26,6 +26,7 @@
 #include <stdlib.h>
 
 #include <rest/oauth2-proxy.h>
+#include <libsoup/soup.h>
 #include <libsoup/soup-gnome.h>
 #include <webkit/webkit.h>
 #include <json-glib/json-glib.h>
@@ -351,6 +352,26 @@ goa_oauth2_provider_get_client_secret (GoaOAuth2Provider *provider)
 }
 
 /**
+ * goa_oauth2_provider_get_authentication_cookie:
+ * @provider: A #GoaOAuth2Provider.
+ *
+ * Gets the name of a cookie whose presence indicates that the user has been able to
+ * log in during the authorization step. This is used to modify the embedded web
+ * browser UI that is presented to the user.
+ *
+ * This is a pure virtual method - a subclass must provide an
+ * implementation.
+ *
+ * Returns: (transfer none): A string owned by @provider - do not free.
+ */
+const gchar *
+goa_oauth2_provider_get_authentication_cookie (GoaOAuth2Provider *provider)
+{
+  g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (provider), NULL);
+  return GOA_OAUTH2_PROVIDER_GET_CLASS (provider)->get_authentication_cookie (provider);
+}
+
+/**
  * goa_oauth2_provider_get_identity_sync:
  * @provider: A #GoaOAuth2Provider.
  * @access_token: A valid OAuth 2.0 access token.
@@ -548,6 +569,48 @@ typedef struct
   gchar *presentation_identity;
 } IdentifyData;
 
+static void
+check_cookie (SoupCookie *cookie, gpointer user_data)
+{
+  IdentifyData *data = user_data;
+  GList *children;
+  GList *l;
+  GoaOAuth2Provider *provider = data->provider;
+  GtkDialog *dialog = data->dialog;
+  GtkWidget *action_area;
+  const gchar *auth_cookie;
+  const gchar *name;
+
+  auth_cookie = goa_oauth2_provider_get_authentication_cookie (provider);
+  name = soup_cookie_get_name (cookie);
+  if (g_strcmp0 (auth_cookie, name) != 0)
+    return;
+
+  action_area = gtk_dialog_get_action_area (dialog);
+  children = gtk_container_get_children (GTK_CONTAINER (action_area));
+  for (l = children; l != NULL; l = l->next)
+    {
+      GtkWidget *child = l->data;
+      gtk_container_remove (GTK_CONTAINER (action_area), child);
+    }
+  g_list_free (children);
+}
+
+static void
+on_web_view_document_load_finished (WebKitWebView *web_view, WebKitWebFrame *frame, gpointer user_data)
+{
+  IdentifyData *data = user_data;
+  GSList *slist;
+  SoupCookieJar *cookie_jar;
+  SoupSession *session;
+
+  session = webkit_get_default_session ();
+  cookie_jar = SOUP_COOKIE_JAR (soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR));
+  slist = soup_cookie_jar_all_cookies (cookie_jar);
+  g_slist_foreach (slist, (GFunc) check_cookie, data);
+  g_slist_free_full (slist, (GDestroyNotify) soup_cookie_free);
+}
+
 static gboolean
 on_web_view_navigation_policy_decision_requested (WebKitWebView             *webView,
                                                   WebKitWebFrame            *frame,
@@ -704,6 +767,7 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
 
   memset (&data, '\0', sizeof (IdentifyData));
   data.provider = provider;
+  data.dialog = dialog;
   data.loop = g_main_loop_new (NULL, FALSE);
 
   /* TODO: use oauth2_proxy_build_login_url_full() */
@@ -777,6 +841,10 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
       web_view = webkit_web_view_new ();
       webkit_web_view_load_uri (WEBKIT_WEB_VIEW (web_view), url);
       g_signal_connect (web_view,
+                        "document-load-finished",
+                        G_CALLBACK (on_web_view_document_load_finished),
+                        &data);
+      g_signal_connect (web_view,
                         "navigation-policy-decision-requested",
                         G_CALLBACK (on_web_view_navigation_policy_decision_requested),
                         &data);
@@ -792,7 +860,6 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
       gtk_container_add (GTK_CONTAINER (vbox), scrolled_window);
       gtk_widget_show_all (scrolled_window);
     }
-  data.dialog = dialog;
   gtk_dialog_run (GTK_DIALOG (dialog));
 
   /* we can have either the auth code, with which we'll obtain the token, or

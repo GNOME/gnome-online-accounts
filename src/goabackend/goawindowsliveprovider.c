@@ -136,6 +136,12 @@ get_client_secret (GoaOAuth2Provider *provider)
   return NULL;
 }
 
+static const gchar *
+get_authentication_cookie (GoaOAuth2Provider *provider)
+{
+  return "MSNPPAuth";
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
@@ -367,6 +373,7 @@ goa_windows_live_provider_class_init (GoaWindowsLiveProviderClass *klass)
   oauth2_class->get_scope                = get_scope;
   oauth2_class->get_client_id            = get_client_id;
   oauth2_class->get_client_secret        = get_client_secret;
+  oauth2_class->get_authentication_cookie = get_authentication_cookie;
   oauth2_class->get_identity_sync        = get_identity_sync;
   oauth2_class->get_use_external_browser = get_use_external_browser;
   oauth2_class->add_account_key_values   = add_account_key_values;
