@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011 Red Hat, Inc.
+ * Copyright (C) 2011, 2012 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,6 +25,7 @@
 #include <stdlib.h>
 
 #include <rest/oauth-proxy.h>
+#include <libsoup/soup.h>
 #include <libsoup/soup-gnome.h>
 #include <webkit/webkit.h>
 #include <json-glib/json-glib.h>
@@ -341,6 +342,26 @@ goa_oauth_provider_get_callback_uri (GoaOAuthProvider *provider)
 }
 
 /**
+ * goa_oauth_provider_get_authentication_cookie:
+ * @provider: A #GoaOAuthProvider.
+ *
+ * Gets the name of a cookie whose presence indicates that the user has been able to
+ * log in during the authorization step. This is used to modify the embedded web
+ * browser UI that is presented to the user.
+ *
+ * This is a pure virtual method - a subclass must provide an
+ * implementation.
+ *
+ * Returns: (transfer none): A string owned by @provider - do not free.
+ */
+const gchar *
+goa_oauth_provider_get_authentication_cookie (GoaOAuthProvider *provider)
+{
+  g_return_val_if_fail (GOA_IS_OAUTH_PROVIDER (provider), NULL);
+  return GOA_OAUTH_PROVIDER_GET_CLASS (provider)->get_authentication_cookie (provider);
+}
+
+/**
  * goa_oauth_provider_get_identity_sync:
  * @provider: A #GoaOAuthProvider.
  * @access_token: A valid OAuth 1.0 access token.
@@ -514,6 +535,48 @@ typedef struct
   gint session_handle_expires_in;
 } IdentifyData;
 
+static void
+check_cookie (SoupCookie *cookie, gpointer user_data)
+{
+  IdentifyData *data = user_data;
+  GList *children;
+  GList *l;
+  GoaOAuthProvider *provider = data->provider;
+  GtkDialog *dialog = data->dialog;
+  GtkWidget *action_area;
+  const gchar *auth_cookie;
+  const gchar *name;
+
+  auth_cookie = goa_oauth_provider_get_authentication_cookie (provider);
+  name = soup_cookie_get_name (cookie);
+  if (g_strcmp0 (auth_cookie, name) != 0)
+    return;
+
+  action_area = gtk_dialog_get_action_area (dialog);
+  children = gtk_container_get_children (GTK_CONTAINER (action_area));
+  for (l = children; l != NULL; l = l->next)
+    {
+      GtkWidget *child = l->data;
+      gtk_container_remove (GTK_CONTAINER (action_area), child);
+    }
+  g_list_free (children);
+}
+
+static void
+on_web_view_document_load_finished (WebKitWebView *web_view, WebKitWebFrame *frame, gpointer user_data)
+{
+  IdentifyData *data = user_data;
+  GSList *slist;
+  SoupCookieJar *cookie_jar;
+  SoupSession *session;
+
+  session = webkit_get_default_session ();
+  cookie_jar = SOUP_COOKIE_JAR (soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR));
+  slist = soup_cookie_jar_all_cookies (cookie_jar);
+  g_slist_foreach (slist, (GFunc) check_cookie, data);
+  g_slist_free_full (slist, (GDestroyNotify) soup_cookie_free);
+}
+
 static gboolean
 on_web_view_navigation_policy_decision_requested (WebKitWebView             *webView,
                                                   WebKitWebFrame            *frame,
@@ -611,6 +674,7 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
 
   memset (&data, '\0', sizeof (IdentifyData));
   data.provider = provider;
+  data.dialog = dialog;
   data.loop = g_main_loop_new (NULL, FALSE);
 
   /* TODO: run in worker thread */
@@ -725,6 +789,10 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
       web_view = webkit_web_view_new ();
       webkit_web_view_load_uri (WEBKIT_WEB_VIEW (web_view), url);
       g_signal_connect (web_view,
+                        "document-load-finished",
+                        G_CALLBACK (on_web_view_document_load_finished),
+                        &data);
+      g_signal_connect (web_view,
                         "navigation-policy-decision-requested",
                         G_CALLBACK (on_web_view_navigation_policy_decision_requested),
                         &data);
@@ -741,7 +809,6 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
 
       gtk_widget_show_all (scrolled_window);
     }
-  data.dialog = dialog;
   gtk_dialog_run (GTK_DIALOG (dialog));
   if (data.oauth_verifier == NULL)
     {

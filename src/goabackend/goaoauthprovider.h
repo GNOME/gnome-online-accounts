@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011 Red Hat, Inc.
+ * Copyright (C) 2011, 2012 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -65,6 +65,7 @@ struct _GoaOAuthProvider
  * @get_authorization_uri: Virtual function for goa_oauth_provider_get_authorization_uri().
  * @get_token_uri: Virtual function for goa_oauth_provider_get_token_uri().
  * @get_callback_uri: Virtual function for goa_oauth_provider_get_callback_uri().
+ * @get_authentication_cookie: Virtual function for goa_oauth_provider_get_authentication_cookie().
  * @get_identity_sync: Virtual function for goa_oauth_provider_get_identity_sync().
  * @build_authorization_uri: Virtual function for goa_oauth_provider_build_authorization_uri().
  * @get_use_external_browser: Virtual function for goa_oauth_provider_get_use_external_browser().
@@ -84,6 +85,7 @@ struct _GoaOAuthProviderClass
   const gchar *(*get_authorization_uri)    (GoaOAuthProvider  *provider);
   const gchar *(*get_token_uri)            (GoaOAuthProvider  *provider);
   const gchar *(*get_callback_uri)         (GoaOAuthProvider  *provider);
+  const gchar *(*get_authentication_cookie) (GoaOAuthProvider  *provider);
 
   gchar       *(*get_identity_sync)        (GoaOAuthProvider  *provider,
                                             const gchar       *access_token,
@@ -114,6 +116,7 @@ gchar      **goa_oauth_provider_get_request_uri_params   (GoaOAuthProvider  *pro
 const gchar *goa_oauth_provider_get_authorization_uri    (GoaOAuthProvider  *provider);
 const gchar *goa_oauth_provider_get_token_uri            (GoaOAuthProvider  *provider);
 const gchar *goa_oauth_provider_get_callback_uri         (GoaOAuthProvider  *provider);
+const gchar *goa_oauth_provider_get_authentication_cookie (GoaOAuthProvider  *provider);
 gchar       *goa_oauth_provider_get_identity_sync        (GoaOAuthProvider  *provider,
                                                           const gchar       *access_token,
                                                           const gchar       *access_token_secret,
