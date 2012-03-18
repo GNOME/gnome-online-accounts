@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Korostil Daniel <ted.korostiled@gmail.com>, 2011.
+# Korostil Daniel <ted.korostiled@gmail.com>, 2011, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-28 02:44+0300\n"
-"PO-Revision-Date: 2011-09-28 03:09+0300\n"
+"POT-Creation-Date: 2012-03-18 18:05+0200\n"
+"PO-Revision-Date: 2012-03-18 18:20+0300\n"
 "Last-Translator: Korostil Daniel <ted.korostiled@gmail.com>\n"
 "Language-Team: translation@linux.org.ua\n"
 "Language: uk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Virtaal 0.6.1\n"
+"X-Generator: Virtaal 0.7.1\n"
 
 #: ../src/daemon/goadaemon.c:871
 msgid "An online account needs attention"
@@ -31,8 +31,9 @@ msgid "Facebook"
 msgstr "Facebook"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:161
+#: ../src/goabackend/goafacebookprovider.c:162
 #: ../src/goabackend/goagoogleprovider.c:195
+#: ../src/goabackend/goawindowsliveprovider.c:170
 #: ../src/goabackend/goatwitterprovider.c:160
 #: ../src/goabackend/goayahooprovider.c:163
 #, c-format
@@ -40,28 +41,36 @@ msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr ""
 "Очікуваний стан 200, коли потребується guid, натомість одержано стан %d (%s)"
 
-#: ../src/goabackend/goafacebookprovider.c:173
+#: ../src/goabackend/goafacebookprovider.c:174
 #: ../src/goabackend/goagoogleprovider.c:207
-#: ../src/goabackend/goaoauth2provider.c:477
+#: ../src/goabackend/goawindowsliveprovider.c:182
+#: ../src/goabackend/goaoauth2provider.c:478
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
 msgstr "Помилка розбирання відповіді як JSON: "
 
-#: ../src/goabackend/goafacebookprovider.c:184
+#: ../src/goabackend/goafacebookprovider.c:185
 #, c-format
 msgid "Didn't find username member in JSON data"
 msgstr "Не знайдено користувача серед учасників у даних JSON"
 
-#: ../src/goabackend/goafacebookprovider.c:193
+#: ../src/goabackend/goafacebookprovider.c:194
 #, c-format
 msgid "Didn't find name member in JSON data"
 msgstr "Не знайдено імені серед учасників у даних JSON"
 
-#: ../src/goabackend/goafacebookprovider.c:259
+#: ../src/goabackend/goafacebookprovider.c:282
+#: ../src/goabackend/goawindowsliveprovider.c:292
 #: ../src/goabackend/goatwitterprovider.c:260
 msgid "User Name"
 msgstr "Користувач"
+
+#: ../src/goabackend/goafacebookprovider.c:283
+#: ../src/goabackend/goagoogleprovider.c:430
+#: ../src/goabackend/goawindowsliveprovider.c:293
+msgid "Chat"
+msgstr "Балачки"
 
 #: ../src/goabackend/goagoogleprovider.c:78
 msgid "Google"
@@ -97,16 +106,26 @@ msgstr "Календаря"
 msgid "Contacts"
 msgstr "Контактів"
 
-#: ../src/goabackend/goagoogleprovider.c:430
-msgid "Chat"
-msgstr "Балачки"
-
 #: ../src/goabackend/goagoogleprovider.c:431
 msgid "Documents"
 msgstr "Документів"
 
+#: ../src/goabackend/goawindowsliveprovider.c:82
+msgid "Windows Live"
+msgstr "Windows Live"
+
+#: ../src/goabackend/goawindowsliveprovider.c:193
+#, c-format
+msgid "Didn't find id member in JSON data"
+msgstr "Не знайдено id серед учасників у даних JSON"
+
+#: ../src/goabackend/goawindowsliveprovider.c:204
+#, c-format
+msgid "Didn't find account email member in JSON data"
+msgstr "Не знайдено електронної скриньки учасника в даних JSON"
+
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:432
+#: ../src/goabackend/goaoauth2provider.c:435
 #: ../src/goabackend/goaoauthprovider.c:440
 #, c-format
 msgid ""
@@ -115,77 +134,78 @@ msgstr ""
 "Очікуваний стан 200, коли потребується маркер доступу, натомість одержано "
 "стан %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:452
+#: ../src/goabackend/goaoauth2provider.c:455
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "Не знайдено _маркера доступу в даних не від JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:488
+#: ../src/goabackend/goaoauth2provider.c:489
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "Не знайдено _маркер доступу в даних JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:572
+#: ../src/goabackend/goaoauth2provider.c:573
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "Відповідь на авторизацію — «%s»"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:653
+#: ../src/goabackend/goaoauth2provider.c:654
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
 "page</a>:"
 msgstr ""
-"Вставте код авторизації, одержаний зі <a href=\"%s\">сторінки авторизації</a>:"
+"Вставте код авторизації, одержаний зі <a href=\"%s\">сторінки авторизації</"
+"a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:727
-#: ../src/goabackend/goaoauthprovider.c:751
+#: ../src/goabackend/goaoauth2provider.c:730
+#: ../src/goabackend/goaoauthprovider.c:753
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "Вікно розпущено"
 
-#: ../src/goabackend/goaoauth2provider.c:751
-#: ../src/goabackend/goaoauthprovider.c:782
+#: ../src/goabackend/goaoauth2provider.c:754
+#: ../src/goabackend/goaoauthprovider.c:784
 msgid "Error getting an Access Token: "
 msgstr "Помилка одержання маркера доступу:"
 
-#: ../src/goabackend/goaoauth2provider.c:763
-#: ../src/goabackend/goaoauthprovider.c:795
+#: ../src/goabackend/goaoauth2provider.c:766
+#: ../src/goabackend/goaoauthprovider.c:797
 msgid "Error getting identity: "
 msgstr "Помилка одержання тотожності:"
 
-#: ../src/goabackend/goaoauth2provider.c:928
-#: ../src/goabackend/goaoauthprovider.c:972
+#: ../src/goabackend/goaoauth2provider.c:931
+#: ../src/goabackend/goaoauthprovider.c:974
 #, c-format
 msgid "There is already an account for the identity %s"
 msgstr "Уже існує обліковий запис тотожний %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1053
-#: ../src/goabackend/goaoauthprovider.c:1102
+#: ../src/goabackend/goaoauth2provider.c:1056
+#: ../src/goabackend/goaoauthprovider.c:1104
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "Просили увійти як %s, але знайдено як %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1189
-#: ../src/goabackend/goaoauthprovider.c:1250
+#: ../src/goabackend/goaoauth2provider.c:1192
+#: ../src/goabackend/goaoauthprovider.c:1252
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "Дані реєстрації не знайдено у сховищі ключів (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1216
+#: ../src/goabackend/goaoauth2provider.c:1219
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Дані реєстрації не містять _маркера доступу"
 
-#: ../src/goabackend/goaoauth2provider.c:1255
-#: ../src/goabackend/goaoauthprovider.c:1323
+#: ../src/goabackend/goaoauth2provider.c:1258
+#: ../src/goabackend/goaoauthprovider.c:1325
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Не вдалось очистити маркер доступу (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1290
-#: ../src/goabackend/goaoauthprovider.c:1353
+#: ../src/goabackend/goaoauth2provider.c:1293
+#: ../src/goabackend/goaoauthprovider.c:1355
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "Помилка збереження даних реєстрації у сховище ключів (%s, %d): "
@@ -219,35 +239,35 @@ msgstr "Бракує у відповіді заголовку request_token аб
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "Вставте маркер, одержаний зі <a href=\"%s\">сторінки авторизації</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1279
+#: ../src/goabackend/goaoauthprovider.c:1281
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Дані реєстрації не містять access_token або access_token_secret"
 
-#: ../src/goabackend/goaprovider.c:522
+#: ../src/goabackend/goaprovider.c:523
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync не реалізовано на типі %s"
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:737
+#: ../src/goabackend/goaprovider.c:742
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Дані реєстрації GOA %s тотожні %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:751
+#: ../src/goabackend/goaprovider.c:756
 #, c-format
 msgid "Failed to store credentials in the keyring: %s"
 msgstr "Не вдалось зберегти дані реєстрації у сховищі ключів: %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:822
+#: ../src/goabackend/goaprovider.c:827
 #, c-format
 msgid "Failed to retrieve credentials from the keyring: %s"
 msgstr "Не вдалось одержати дані реєстрації зі сховища ключів: %s"
 
-#: ../src/goabackend/goaprovider.c:834
+#: ../src/goabackend/goaprovider.c:839
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Помилка оброблення результатів, одержаних зі сховища ключів: "
 
