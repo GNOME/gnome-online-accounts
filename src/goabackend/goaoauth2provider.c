@@ -1592,6 +1592,7 @@ goa_oauth2_provider_class_init (GoaOAuth2ProviderClass *klass)
   provider_class->ensure_credentials_sync    = goa_oauth2_provider_ensure_credentials_sync;
 
   klass->build_authorization_uri  = goa_oauth2_provider_build_authorization_uri_default;
+  klass->get_token_uri            = goa_oauth2_provider_get_token_uri_default;
   klass->get_use_external_browser = goa_oauth2_provider_get_use_external_browser_default;
   klass->add_account_key_values   = goa_oauth2_provider_add_account_key_values_default;
 }
