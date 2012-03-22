@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011 Red Hat, Inc.
+ * Copyright (C) 2011, 2012 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -939,13 +939,17 @@ on_account_handle_remove (GoaAccount            *account,
                           gpointer               user_data)
 {
   GoaDaemon *daemon = GOA_DAEMON (user_data);
+  GoaProvider *provider;
   GKeyFile *key_file;
+  const gchar *provider_type;
   gchar *path;
   gchar *group;
   gchar *data;
   gsize length;
   GError *error;
 
+  provider = NULL;
+  provider_type = NULL;
   path = NULL;
   group = NULL;
   key_file = NULL;
@@ -1001,11 +1005,45 @@ on_account_handle_remove (GoaAccount            *account,
       goto out;
     }
 
+  provider_type = goa_account_get_provider_type (account);
+  if (provider_type == NULL)
+    {
+      error = NULL;
+      g_set_error_literal (&error,
+                           GOA_ERROR,
+                           GOA_ERROR_FAILED, /* TODO: more specific */
+                           _("ProviderType property is not set for account"));
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      goto out;
+    }
+
+  provider = goa_provider_get_for_provider_type (provider_type);
+  if (provider == NULL)
+    {
+      error = NULL;
+      g_set_error (&error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED, /* TODO: more specific */
+                   _("Failed to find a provider for: %s"),
+                   provider_type);
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      goto out;
+    }
+
+  error = NULL;
+  if (!goa_provider_delete_credentials_sync (provider, account, NULL, &error))
+    {
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      goto out;
+    }
+
   goa_daemon_reload_configuration (daemon);
 
   goa_account_complete_remove (account, invocation);
 
  out:
+  if (provider != NULL)
+    g_object_unref (provider);
   g_free (data);
   if (key_file != NULL)
     g_key_file_free (key_file);
