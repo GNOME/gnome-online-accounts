@@ -1139,9 +1139,9 @@ goa_util_add_account_info (GtkTable *table, GoaObject *object)
   GtkWidget *image;
   GtkWidget *label;
   const gchar *icon_str;
+  const gchar *identity;
   const gchar *name;
   gchar *markup;
-  gchar *identity;
   guint num_rows;
 
   gtk_table_get_size (table, &num_rows, NULL);
