@@ -853,6 +853,73 @@ goa_provider_lookup_credentials_sync (GoaProvider   *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
+ * goa_provider_delete_credentials_sync:
+ * @provider: A #GoaProvider.
+ * @object: The #GoaAccount to delete credentials for.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Deletes the credentials in the keyring for @object previously stored
+ * with goa_provider_store_credentials_sync().
+ *
+ * The calling thread is blocked while waiting for a reply.
+ *
+ * This is a convenience method (not virtual) that subclasses can use.
+ *
+ * Returns: %TRUE if the credentials was successfully deleted, %FALSE
+ * if @error is set.
+ */
+gboolean
+goa_provider_delete_credentials_sync (GoaProvider   *provider,
+                                      GoaAccount    *object,
+                                      GCancellable  *cancellable,
+                                      GError       **error)
+{
+  gboolean ret;
+  gchar *password_key;
+  GnomeKeyringResult result;
+  const gchar *identity;
+
+  g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (GOA_IS_ACCOUNT (object), FALSE);
+  g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  /* TODO: use GCancellable */
+  ret = FALSE;
+
+  password_key = NULL;
+
+  identity = goa_account_get_id (object);
+
+  password_key = g_strdup_printf ("%s:gen%d:%s",
+                                  goa_provider_get_provider_type (GOA_PROVIDER (provider)),
+                                  goa_provider_get_credentials_generation (GOA_PROVIDER (provider)),
+                                  identity);
+
+  result = gnome_keyring_delete_password_sync (&keyring_password_schema,
+                                               "goa-identity", password_key,
+                                               NULL);
+  if (result != GNOME_KEYRING_RESULT_OK)
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED, /* TODO: more specific */
+                   _("Failed to delete credentials from the keyring: %s"),
+                   gnome_keyring_result_to_message (result));
+      goto out;
+    }
+
+  ret = TRUE;
+
+ out:
+  g_free (password_key);
+  return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+/**
  * SECTION:goautil
  * @title: Utilities
  * @short_description: Various utility routines
