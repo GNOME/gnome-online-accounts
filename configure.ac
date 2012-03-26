@@ -1,4 +1,4 @@
-AC_INIT([gnome-online-accounts],[3.3.92.1],[https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts],[gnome-online-accounts])
+AC_INIT([gnome-online-accounts],[3.4.0],[https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts],[gnome-online-accounts])
 
 AM_INIT_AUTOMAKE([1.9 foreign dist-bzip2 no-dist-gzip])
 AC_CONFIG_SRCDIR([src])
