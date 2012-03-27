@@ -244,6 +244,34 @@
   </interface>
 
   <!--
+      org.gnome.OnlineAccounts.PasswordBased:
+
+      An account object implements this interface if one or more
+      passwords are used for accessing it.
+  -->
+  <interface name="org.gnome.OnlineAccounts.PasswordBased">
+    <!--
+      GetPassword:
+      @id: An identifier describing what password to get.
+      @password: The password.
+
+      Use this method to obtain the passwords used to access the
+      account.
+
+      If the account is for a mail account (see
+      #org.gnome.OnlineAccounts.Mail), known values for @id includes
+      <literal>imap-password</literal> and
+      <literal>smtp-password</literal>.
+
+      Note that calls to this method are logged.
+    -->
+    <method name="GetPassword">
+      <arg name="id" type="s" direction="in"/>
+      <arg name="password" type="s" direction="out"/>
+    </method>
+  </interface>
+
+  <!--
       org.gnome.OnlineAccounts.Manager:
 
       An interface used for managing accounts.
