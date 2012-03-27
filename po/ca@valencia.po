@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-26 14:29+0200\n"
-"PO-Revision-Date: 2011-09-15 22:16+0200\n"
+"POT-Creation-Date: 2012-03-27 22:26+0200\n"
+"PO-Revision-Date: 2012-03-10 18:13+0100\n"
 "Last-Translator: Pau Iranzo <pau.iranzo@softcatala.org>\n"
 "Language-Team: Catalan <gnome-dl@llistes.softcatala.org>\n"
 "Language: ca-XV\n"
@@ -24,13 +24,14 @@ msgstr "Un compte en línia demana atenció"
 msgid "Open Online Accounts..."
 msgstr "Obri els comptes en línia..."
 
-#: ../src/goabackend/goafacebookprovider.c:78
+#: ../src/goabackend/goafacebookprovider.c:80
 msgid "Facebook"
 msgstr "Facebook"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:161
+#: ../src/goabackend/goafacebookprovider.c:198
 #: ../src/goabackend/goagoogleprovider.c:195
+#: ../src/goabackend/goawindowsliveprovider.c:170
 #: ../src/goabackend/goatwitterprovider.c:160
 #: ../src/goabackend/goayahooprovider.c:163
 #, c-format
@@ -39,28 +40,40 @@ msgstr ""
 "S'esperava l'estat 200 en sol·licitar el guid, però s'ha rebut l'estat %d "
 "(%s)"
 
-#: ../src/goabackend/goafacebookprovider.c:173
+#: ../src/goabackend/goafacebookprovider.c:210
 #: ../src/goabackend/goagoogleprovider.c:207
-#: ../src/goabackend/goaoauth2provider.c:477
+#: ../src/goabackend/goawindowsliveprovider.c:182
+#: ../src/goabackend/goaoauth2provider.c:479
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
 msgstr "S'ha produït un error en analitzar la resposta com a JSON: "
 
-#: ../src/goabackend/goafacebookprovider.c:184
+#: ../src/goabackend/goafacebookprovider.c:221
 #, c-format
 msgid "Didn't find username member in JSON data"
 msgstr "No s'ha trobat cap nom d'usuari del membre a les dades JSON"
 
-#: ../src/goabackend/goafacebookprovider.c:193
+#: ../src/goabackend/goafacebookprovider.c:230
 #, c-format
 msgid "Didn't find name member in JSON data"
 msgstr "No s'ha trobat cap nom del membre a les dades JSON"
 
-#: ../src/goabackend/goafacebookprovider.c:259
-#: ../src/goabackend/goatwitterprovider.c:260
-msgid "User Name"
-msgstr "Nom d'usuari"
+#: ../src/goabackend/goafacebookprovider.c:320
+#: ../src/goabackend/goagoogleprovider.c:425
+msgid "Email Address"
+msgstr "Adreça electrònica"
+
+#: ../src/goabackend/goafacebookprovider.c:321
+#: ../src/goabackend/goagoogleprovider.c:426
+msgid "Use this account for"
+msgstr "Fes servir este compte per"
+
+#: ../src/goabackend/goafacebookprovider.c:322
+#: ../src/goabackend/goagoogleprovider.c:430
+#: ../src/goabackend/goawindowsliveprovider.c:293
+msgid "Chat"
+msgstr "Xat"
 
 #: ../src/goabackend/goagoogleprovider.c:78
 msgid "Google"
@@ -76,14 +89,6 @@ msgstr "No s'ha trobat cap data del membre a les dades JSON"
 msgid "Didn't find email member in JSON data"
 msgstr "No s'ha trobat cap correu electrònic del membre a les dades JSON"
 
-#: ../src/goabackend/goagoogleprovider.c:425
-msgid "Email Address"
-msgstr "Adreça electrònica"
-
-#: ../src/goabackend/goagoogleprovider.c:426
-msgid "Use this account for"
-msgstr "Fes servir este compte per"
-
 #: ../src/goabackend/goagoogleprovider.c:427
 msgid "Mail"
 msgstr "Adreça electrònica"
@@ -96,16 +101,32 @@ msgstr "Calendari"
 msgid "Contacts"
 msgstr "Contactes"
 
-#: ../src/goabackend/goagoogleprovider.c:430
-msgid "Chat"
-msgstr "Xat"
-
 #: ../src/goabackend/goagoogleprovider.c:431
 msgid "Documents"
 msgstr "Documents"
 
+#: ../src/goabackend/goawindowsliveprovider.c:82
+msgid "Windows Live"
+msgstr "Windows Live"
+
+#: ../src/goabackend/goawindowsliveprovider.c:193
+#, c-format
+msgid "Didn't find id member in JSON data"
+msgstr "No s'ha trobat el membre d'identificador a les dades JSON"
+
+#: ../src/goabackend/goawindowsliveprovider.c:204
+#, c-format
+msgid "Didn't find account email member in JSON data"
+msgstr ""
+"No s'ha trobat el membre de l'adreça electrònica del compte a les dades JSON"
+
+#: ../src/goabackend/goawindowsliveprovider.c:292
+#: ../src/goabackend/goatwitterprovider.c:260
+msgid "User Name"
+msgstr "Nom d'usuari"
+
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:432
+#: ../src/goabackend/goaoauth2provider.c:436
 #: ../src/goabackend/goaoauthprovider.c:440
 #, c-format
 msgid ""
@@ -114,79 +135,80 @@ msgstr ""
 "S'esperava l'estat 200 en sol·licitar el testimoni d'autenticació, però s'ha "
 "rebut l'estat %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:452
+#: ../src/goabackend/goaoauth2provider.c:456
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr ""
 "No s'ha trobat el testimoni d'autenticació a les dades que no eren JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:488
+#: ../src/goabackend/goaoauth2provider.c:490
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "No s'ha trobat el testimoni d'autenticació a les dades JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:572
+#: ../src/goabackend/goaoauth2provider.c:587
+#: ../src/goabackend/goaoauth2provider.c:626
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "La resposta d'autorització ha estat «%s»"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:653
+#: ../src/goabackend/goaoauth2provider.c:715
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
 "page</a>:"
 msgstr ""
-"Enganxa el codi d'autorització que s'ha obtingut des de la <a href=\"%s"
+"Apega el codi d'autorització que s'ha obtingut des de la <a href=\"%s"
 "\">pàgina d'autorització</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:727
-#: ../src/goabackend/goaoauthprovider.c:751
+#: ../src/goabackend/goaoauth2provider.c:795
+#: ../src/goabackend/goaoauthprovider.c:753
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "S'ha descartat el diàleg"
 
-#: ../src/goabackend/goaoauth2provider.c:751
-#: ../src/goabackend/goaoauthprovider.c:782
+#: ../src/goabackend/goaoauth2provider.c:821
+#: ../src/goabackend/goaoauthprovider.c:784
 msgid "Error getting an Access Token: "
 msgstr "S'ha produït un error en obtindre del testimoni d'autenticació: "
 
-#: ../src/goabackend/goaoauth2provider.c:763
-#: ../src/goabackend/goaoauthprovider.c:795
+#: ../src/goabackend/goaoauth2provider.c:836
+#: ../src/goabackend/goaoauthprovider.c:797
 msgid "Error getting identity: "
 msgstr "S'ha produït un error en obtindre la identitat: "
 
-#: ../src/goabackend/goaoauth2provider.c:928
-#: ../src/goabackend/goaoauthprovider.c:972
+#: ../src/goabackend/goaoauth2provider.c:1001
+#: ../src/goabackend/goaoauthprovider.c:974
 #, c-format
 msgid "There is already an account for the identity %s"
 msgstr "Ja existeix un compte per a la identitat %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1053
-#: ../src/goabackend/goaoauthprovider.c:1102
+#: ../src/goabackend/goaoauth2provider.c:1127
+#: ../src/goabackend/goaoauthprovider.c:1104
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "S'ha demanat identificar-se com a %s, però s'ha connectat com a %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1189
-#: ../src/goabackend/goaoauthprovider.c:1250
+#: ../src/goabackend/goaoauth2provider.c:1264
+#: ../src/goabackend/goaoauthprovider.c:1252
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "No s'ha trobat cap credencial a l'anell de claus (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1216
+#: ../src/goabackend/goaoauth2provider.c:1291
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Les credencials no contenen el testimoni d'autenticació"
 
-#: ../src/goabackend/goaoauth2provider.c:1255
-#: ../src/goabackend/goaoauthprovider.c:1323
+#: ../src/goabackend/goaoauth2provider.c:1330
+#: ../src/goabackend/goaoauthprovider.c:1325
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "No s'ha pogut actualitzar el testimoni d'autenticació (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1290
-#: ../src/goabackend/goaoauthprovider.c:1353
+#: ../src/goabackend/goaoauth2provider.c:1365
+#: ../src/goabackend/goaoauthprovider.c:1355
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr ""
@@ -225,40 +247,40 @@ msgstr ""
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr ""
-"Enganxa el testimoni que s'ha obtingut des de la <a href=\"%s\">pàgina "
+"Apega el testimoni que s'ha obtingut des de la <a href=\"%s\">pàgina "
 "d'autorització</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1279
+#: ../src/goabackend/goaoauthprovider.c:1281
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr ""
 "Les credencials no contenen cap testimoni d'autenticació o secret del "
 "testimoni d'autenticació"
 
-#: ../src/goabackend/goaprovider.c:522
+#: ../src/goabackend/goaprovider.c:523
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "No s'han implementat les ensure_credentials_sync al tipus %s"
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:737
+#: ../src/goabackend/goaprovider.c:742
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Credencials de %s del GOA per a la identitat %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:751
+#: ../src/goabackend/goaprovider.c:756
 #, c-format
 msgid "Failed to store credentials in the keyring: %s"
 msgstr "No s'han pogut emmagatzemar les credencials a l'anell de claus: %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:822
+#: ../src/goabackend/goaprovider.c:827
 #, c-format
 msgid "Failed to retrieve credentials from the keyring: %s"
 msgstr "No s'han pogut obtindre les credencials de l'anell de claus: %s"
 
-#: ../src/goabackend/goaprovider.c:834
+#: ../src/goabackend/goaprovider.c:839
 msgid "Error parsing result obtained from the keyring: "
 msgstr ""
 "S'ha produït un error en analitzar el resultat obtingut de l'anell de claus: "
