@@ -1473,6 +1473,7 @@ goa_oauth2_provider_ensure_credentials_sync (GoaProvider   *_provider,
         {
           force_refresh = TRUE;
           g_free (access_token); access_token = NULL;
+          g_clear_error (error);
           goto again;
         }
       else
