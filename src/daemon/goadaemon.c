@@ -1012,7 +1012,7 @@ on_account_handle_remove (GoaAccount            *account,
       g_set_error_literal (&error,
                            GOA_ERROR,
                            GOA_ERROR_FAILED, /* TODO: more specific */
-                           _("ProviderType property is not set for account"));
+                           "ProviderType property is not set for account");
       g_dbus_method_invocation_return_gerror (invocation, error);
       goto out;
     }
@@ -1024,7 +1024,7 @@ on_account_handle_remove (GoaAccount            *account,
       g_set_error (&error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Failed to find a provider for: %s"),
+                   "Failed to find a provider for: %s",
                    provider_type);
       g_dbus_method_invocation_return_gerror (invocation, error);
       goto out;

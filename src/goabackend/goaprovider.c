@@ -904,7 +904,7 @@ goa_provider_delete_credentials_sync (GoaProvider   *provider,
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Failed to delete credentials from the keyring: %s"),
+                   "Failed to delete credentials from the keyring: %s",
                    gnome_keyring_result_to_message (result));
       goto out;
     }
