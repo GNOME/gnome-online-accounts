@@ -69,10 +69,24 @@ PKG_CHECK_MODULES(REST, [rest-0.7])
 AC_SUBST(REST_CFLAGS)
 AC_SUBST(REST_LIBS)
 
+PKG_CHECK_MODULES(LIBXML, [libxml-2.0])
+AC_SUBST(LIBXML_CFLAGS)
+AC_SUBST(LIBXML_LIBS)
+
 GOBJECT_INTROSPECTION_CHECK([0.6.2])
 
 # service providers
 #
+
+# Microsoft Exchange
+AC_ARG_ENABLE([exchange],
+              [AS_HELP_STRING([--enable-exchange],
+              [Enable Microsoft Exchange provider])],
+              [],
+              [enable_exchange=no])
+if test "$enable_exchange" != "no"; then
+  AC_DEFINE(GOA_EXCHANGE_ENABLED, 1, [Enable Microsoft Exchange data provider])
+fi
 
 # Google
 AC_ARG_ENABLE([google], [AS_HELP_STRING([--enable-google], [Enable Google provider])], [], [enable_google=yes])
@@ -240,6 +254,7 @@ echo "
 	introspection:		    ${found_introspection}
 
 	Google provider:            ${enable_google} (OAuth 1.0, key:${with_google_consumer_key} secret:${with_google_consumer_secret})
+	Microsoft Exchange provider:${enable_exchange}
 	Twitter provider:           ${enable_twitter} (OAuth 1.0, key:${with_twitter_consumer_key} secret:${with_twitter_consumer_secret})
 	Yahoo provider:             ${enable_yahoo} (OAuth 1.0, key:${with_yahoo_consumer_key} secret:${with_yahoo_consumer_secret})
 	Facebook provider:          ${enable_facebook} (OAuth 2.0, id:${with_facebook_client_id})

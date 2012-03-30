@@ -28,6 +28,7 @@
 
 #include "goalogging.h"
 #include "goaprovider.h"
+#include "goaexchangeprovider.h"
 #include "goagoogleprovider.h"
 #include "goafacebookprovider.h"
 #include "goayahooprovider.h"
@@ -591,6 +592,9 @@ ensure_ep_and_builtins (void)
       extension_point = g_io_extension_point_register (GOA_PROVIDER_EXTENSION_POINT_NAME);
       g_io_extension_point_set_required_type (extension_point, GOA_TYPE_PROVIDER);
 
+#ifdef GOA_EXCHANGE_ENABLED
+      type = GOA_TYPE_EXCHANGE_PROVIDER;
+#endif
 #ifdef GOA_GOOGLE_ENABLED
       type = GOA_TYPE_GOOGLE_PROVIDER;
 #endif

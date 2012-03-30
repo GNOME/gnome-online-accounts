@@ -49,6 +49,7 @@ libgoa_backend_1_0_la_HEADERS =						\
 	goalogging.h							\
 	goaeditablelabel.h						\
 	goaprovider.h							\
+	goaexchangeprovider.h						\
 	goaoauthprovider.h						\
 	goaoauth2provider.h						\
 	goagoogleprovider.h						\
@@ -64,7 +65,9 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goabackendenums.h						\
 	goabackendenumtypes.h		goabackendenumtypes.c		\
 	goaeditablelabel.h		goaeditablelabel.c		\
+	goaewsclient.h			goaewsclient.c			\
 	goaprovider.h			goaprovider.c			\
+	goaexchangeprovider.h		goaexchangeprovider.c		\
 	goalogging.h			goalogging.c			\
 	goaoauthprovider.h		goaoauthprovider.c		\
 	goaoauth2provider.h		goaoauth2provider.c		\
@@ -89,6 +92,7 @@ libgoa_backend_1_0_la_CFLAGS =					\
 	$(GNOME_KEYRING_CFLAGS)					\
 	$(REST_CFLAGS)						\
 	$(LIBSOUP_CFLAGS)					\
+	$(LIBXML_CFLAGS)					\
 	$(NULL)
 
 libgoa_backend_1_0_la_LIBADD = 					\
@@ -99,6 +103,7 @@ libgoa_backend_1_0_la_LIBADD = 					\
 	$(GNOME_KEYRING_LIBS)					\
 	$(REST_LIBS)						\
 	$(LIBSOUP_LIBS)						\
+	$(LIBXML_LIBS)						\
 	$(NULL)
 
 # ----------------------------------------------------------------------------------------------------
