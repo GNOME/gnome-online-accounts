@@ -268,6 +268,7 @@ build_object (GoaProvider         *provider,
               GoaObjectSkeleton   *object,
               GKeyFile            *key_file,
               const gchar         *group,
+              gboolean             just_added,
               GError             **error)
 {
   GoaAccount *account;
@@ -296,6 +297,7 @@ build_object (GoaProvider         *provider,
                                                                             object,
                                                                             key_file,
                                                                             group,
+                                                                            just_added,
                                                                             error))
     goto out;
 
@@ -400,6 +402,35 @@ build_object (GoaProvider         *provider,
         goa_object_skeleton_set_documents (object, NULL);
     }
 
+  if (just_added)
+    {
+      goa_account_set_mail_disabled (account, !mail_enabled);
+      goa_account_set_calendar_disabled (account, !calendar_enabled);
+      goa_account_set_contacts_disabled (account, !contacts_enabled);
+      goa_account_set_chat_disabled (account, !chat_enabled);
+      goa_account_set_documents_disabled (account, !documents_enabled);
+
+      g_signal_connect (account,
+                        "notify::mail-disabled",
+                        G_CALLBACK (goa_util_account_notify_property_cb),
+                        "MailEnabled");
+      g_signal_connect (account,
+                        "notify::calendar-disabled",
+                        G_CALLBACK (goa_util_account_notify_property_cb),
+                        "CalendarEnabled");
+      g_signal_connect (account,
+                        "notify::contacts-disabled",
+                        G_CALLBACK (goa_util_account_notify_property_cb),
+                        "ContactsEnabled");
+      g_signal_connect (account,
+                        "notify::chat-disabled",
+                        G_CALLBACK (goa_util_account_notify_property_cb),
+                        "ChatEnabled");
+      g_signal_connect (account,
+                        "notify::documents-disabled",
+                        G_CALLBACK (goa_util_account_notify_property_cb),
+                        "DocumentsEnabled");
+    }
 
   ret = TRUE;
 
@@ -443,27 +474,27 @@ show_account (GoaProvider         *provider,
 
   goa_util_add_row_switch_from_keyfile_with_blurb (GTK_TABLE (table), object,
                                                    _("Use for"),
-                                                   "MailEnabled",
+                                                   "mail-disabled",
                                                    _("Mail"));
 
   goa_util_add_row_switch_from_keyfile_with_blurb (GTK_TABLE (table), object,
                                                    NULL,
-                                                   "CalendarEnabled",
+                                                   "calendar-disabled",
                                                    _("Calendar"));
 
   goa_util_add_row_switch_from_keyfile_with_blurb (GTK_TABLE (table), object,
                                                    NULL,
-                                                   "ContactsEnabled",
+                                                   "contacts-disabled",
                                                    _("Contacts"));
 
   goa_util_add_row_switch_from_keyfile_with_blurb (GTK_TABLE (table), object,
                                                    NULL,
-                                                   "ChatEnabled",
+                                                   "chat-disabled",
                                                    _("Chat"));
 
   goa_util_add_row_switch_from_keyfile_with_blurb (GTK_TABLE (table), object,
                                                    NULL,
-                                                   "DocumentsEnabled",
+                                                   "documents-disabled",
                                                    _("Documents"));
 }
 

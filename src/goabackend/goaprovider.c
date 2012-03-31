@@ -17,7 +17,8 @@
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  *
- * Author: David Zeuthen <davidz@redhat.com>
+ * Authors: David Zeuthen <davidz@redhat.com>
+ *          Debarshi Ray <debarshir@gnome.org>
  */
 
 #include "config.h"
@@ -53,6 +54,7 @@ static gboolean goa_provider_build_object_real (GoaProvider         *provider,
                                                 GoaObjectSkeleton   *object,
                                                 GKeyFile            *key_file,
                                                 const gchar         *group,
+                                                gboolean             just_added,
                                                 GError             **error);
 
 static void goa_provider_show_account_real (GoaProvider         *provider,
@@ -318,6 +320,7 @@ goa_provider_show_account_real (GoaProvider         *provider,
  * @object: The #GoaObjectSkeleton that is being built.
  * @key_file: The #GKeyFile with configuation data.
  * @group: The group in @key_file to get data from.
+ * @just_added: Whether the account was newly created or being updated.
  * @error: Return location for error or %NULL.
  *
  * This method is called when construction account #GoaObject<!-- -->
@@ -341,6 +344,7 @@ goa_provider_build_object (GoaProvider         *provider,
                            GoaObjectSkeleton   *object,
                            GKeyFile            *key_file,
                            const gchar         *group,
+                           gboolean             just_added,
                            GError             **error)
 {
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
@@ -348,7 +352,7 @@ goa_provider_build_object (GoaProvider         *provider,
   g_return_val_if_fail (key_file != NULL, FALSE);
   g_return_val_if_fail (group != NULL, FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-  return GOA_PROVIDER_GET_CLASS (provider)->build_object (provider, object, key_file, group, error);
+  return GOA_PROVIDER_GET_CLASS (provider)->build_object (provider, object, key_file, group, just_added, error);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -531,6 +535,7 @@ goa_provider_build_object_real (GoaProvider         *provider,
                                 GoaObjectSkeleton   *object,
                                 GKeyFile            *key_file,
                                 const gchar         *group,
+                                gboolean             just_added,
                                 GError             **error)
 {
   /* does nothing */
@@ -1104,14 +1109,17 @@ goa_util_lookup_keyfile_boolean (GoaObject    *object,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static gboolean
-get_boolean_from_keyfile (GoaAccount *account, const gchar *key)
+static void
+goa_util_set_keyfile_boolean (GoaAccount *account, const gchar *key, gboolean value)
 {
-  GError *error = NULL;
+  GError *error;
   GKeyFile *key_file;
+  gchar *contents;
   gchar *group;
   gchar *path;
-  gboolean value = FALSE;
+  gsize length;
+
+  contents = NULL;
 
   path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
   group = g_strdup_printf ("Account %s", goa_account_get_id (account));
@@ -1120,35 +1128,56 @@ get_boolean_from_keyfile (GoaAccount *account, const gchar *key)
   error = NULL;
   if (!g_key_file_load_from_file (key_file,
                                   path,
-                                  G_KEY_FILE_NONE,
+                                  G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS,
                                   &error))
     {
       goa_warning ("Error loading keyfile %s: %s (%s, %d)",
                    path,
-                   error->message, g_quark_to_string (error->domain), error->code);
+                   error->message,
+                   g_quark_to_string (error->domain),
+                   error->code);
       g_error_free (error);
       goto out;
     }
 
-  value = g_key_file_get_boolean (key_file, group, key, &error);
-  if (error != NULL)
+  g_key_file_set_boolean (key_file, group, key, value);
+  contents = g_key_file_to_data (key_file, &length, NULL);
+
+  error = NULL;
+  if (!g_file_set_contents (path, contents, length, &error))
     {
-      /* this is not fatal (think upgrade-path) */
-      goa_debug ("Error getting value for key %s in group `%s' from keyfile %s: %s (%s, %d)",
-                 key,
-                 group,
-                 path,
-                 error->message, g_quark_to_string (error->domain), error->code);
+      g_prefix_error (&error, "Error writing key-value-file %s: ", path);
+      goa_warning ("%s (%s, %d)", error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }
 
  out:
+  g_free (contents);
   g_key_file_free (key_file);
   g_free (group);
   g_free (path);
-  return value;
 }
+
+void
+goa_util_account_notify_property_cb (GObject *object, GParamSpec *pspec, gpointer user_data)
+{
+  GoaAccount *account;
+  gboolean value;
+  const gchar *key;
+  const gchar *name;
+
+  g_return_if_fail (GOA_IS_ACCOUNT (object));
+
+  account = GOA_ACCOUNT (object);
+  key = user_data;
+  name = g_param_spec_get_name (pspec);
+
+  g_object_get (account, name, &value, NULL);
+  goa_util_set_keyfile_boolean (account, key, !value);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
 get_string_from_keyfile (GoaAccount *account, const gchar *key)
@@ -1386,85 +1415,12 @@ goa_util_add_row_editable_label_from_keyfile (GtkTable     *table,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static void
-keyfile_switch_on_notify_active (GObject      *object,
-                                 GParamSpec   *pspec,
-                                 gpointer      user_data)
-{
-  KeyFileEditableData *data = user_data;
-  GoaAccount *account;
-  GError *error;
-  GKeyFile *key_file;
-  gchar *path;
-  gchar *group;
-  gchar *contents;
-  gsize length;
-
-  account = goa_object_peek_account (data->object);
-  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
-  group = g_strdup_printf ("Account %s", goa_account_get_id (account));
-
-  key_file = g_key_file_new ();
-  error = NULL;
-  if (!g_key_file_load_from_file (key_file,
-                                  path,
-                                  G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS,
-                                  &error))
-    {
-      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
-                   path,
-                   error->message, g_quark_to_string (error->domain), error->code);
-      g_error_free (error);
-      goto out;
-    }
-
-  g_key_file_set_boolean (key_file,
-                          group,
-                          data->key,
-                          gtk_switch_get_active (GTK_SWITCH (object)));
-
-  error = NULL;
-  contents = g_key_file_to_data (key_file,
-                                 &length,
-                                 &error);
-  if (contents == NULL)
-    {
-      g_prefix_error (&error,
-                      "Error generating key-value-file %s: ",
-                      path);
-      goa_warning ("%s (%s, %d)",
-                   error->message, g_quark_to_string (error->domain), error->code);
-      g_error_free (error);
-      goto out;
-    }
-
-  error = NULL;
-  if (!g_file_set_contents (path,
-                            contents,
-                            length,
-                            &error))
-    {
-      g_prefix_error (&error,
-                      "Error writing key-value-file %s: ",
-                      path);
-      goa_warning ("%s (%s, %d)",
-                   error->message, g_quark_to_string (error->domain), error->code);
-      g_error_free (error);
-      goto out;
-    }
-
- out:
-  g_key_file_free (key_file);
-  g_free (group);
-  g_free (path);
-}
-
 /**
  * goa_util_add_row_switch_from_keyfile:
  * @table: A #GtkTable.
  * @object: A #GoaObject for an account.
  * @label_text: (allow-none): The text to insert on the left side or %NULL for no label.
- * @key: The key in the key-value file for @object to look up.
+ * @property: The property of @object to be bound to the new widget.
  *
  * Adds a #GtkSwitch to @table that reads its #GtkSwitch:active value
  * from the key-value file for @object using @key. If it's switched,
@@ -1476,7 +1432,7 @@ GtkWidget *
 goa_util_add_row_switch_from_keyfile (GtkTable     *table,
                                       GoaObject    *object,
                                       const gchar  *label_text,
-                                      const gchar  *key)
+                                      const gchar  *property)
 {
   GoaAccount *account;
   GtkWidget *hbox;
@@ -1484,16 +1440,13 @@ goa_util_add_row_switch_from_keyfile (GtkTable     *table,
   gboolean value;
 
   account = goa_object_peek_account (object);
-  value = get_boolean_from_keyfile (account, key);
+  g_object_get (account, property, &value, NULL);
   switch_ = gtk_switch_new ();
-  gtk_switch_set_active (GTK_SWITCH (switch_), value);
+  gtk_switch_set_active (GTK_SWITCH (switch_), !value);
 
-  g_signal_connect_data (switch_,
-                         "notify::active",
-                         G_CALLBACK (keyfile_switch_on_notify_active),
-                         keyfile_editable_data_new (object, key),
-                         (GClosureNotify) keyfile_editable_data_free,
-                         0); /* GConnectFlags */
+  g_object_bind_property (switch_, "active",
+                          account, property,
+                          G_BINDING_BIDIRECTIONAL | G_BINDING_INVERT_BOOLEAN);
 
   hbox = gtk_hbox_new (0, FALSE);
   gtk_box_pack_start (GTK_BOX (hbox), switch_, FALSE, TRUE, 0);
@@ -1505,7 +1458,7 @@ GtkWidget *
 goa_util_add_row_switch_from_keyfile_with_blurb (GtkTable     *table,
                                                  GoaObject    *object,
                                                  const gchar  *label_text,
-                                                 const gchar  *key,
+                                                 const gchar  *property,
                                                  const gchar  *blurb)
 {
   GoaAccount *account;
@@ -1514,16 +1467,13 @@ goa_util_add_row_switch_from_keyfile_with_blurb (GtkTable     *table,
   gboolean value;
 
   account = goa_object_peek_account (object);
-  value = get_boolean_from_keyfile (account, key);
+  g_object_get (account, property, &value, NULL);
   switch_ = gtk_switch_new ();
-  gtk_switch_set_active (GTK_SWITCH (switch_), value);
+  gtk_switch_set_active (GTK_SWITCH (switch_), !value);
 
-  g_signal_connect_data (switch_,
-                         "notify::active",
-                         G_CALLBACK (keyfile_switch_on_notify_active),
-                         keyfile_editable_data_new (object, key),
-                         (GClosureNotify) keyfile_editable_data_free,
-                         0); /* GConnectFlags */
+  g_object_bind_property (switch_, "active",
+                          account, property,
+                          G_BINDING_BIDIRECTIONAL | G_BINDING_INVERT_BOOLEAN);
 
   hbox = gtk_hbox_new (0, FALSE);
 
@@ -1543,85 +1493,12 @@ goa_util_add_row_switch_from_keyfile_with_blurb (GtkTable     *table,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static void
-keyfile_check_button_on_notify_active (GObject      *object,
-                                       GParamSpec   *pspec,
-                                       gpointer      user_data)
-{
-  KeyFileEditableData *data = user_data;
-  GoaAccount *account;
-  GError *error;
-  GKeyFile *key_file;
-  gchar *path;
-  gchar *group;
-  gchar *contents;
-  gsize length;
-
-  account = goa_object_peek_account (data->object);
-  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
-  group = g_strdup_printf ("Account %s", goa_account_get_id (account));
-
-  key_file = g_key_file_new ();
-  error = NULL;
-  if (!g_key_file_load_from_file (key_file,
-                                  path,
-                                  G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS,
-                                  &error))
-    {
-      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
-                   path,
-                   error->message, g_quark_to_string (error->domain), error->code);
-      g_error_free (error);
-      goto out;
-    }
-
-  g_key_file_set_boolean (key_file,
-                          group,
-                          data->key,
-                          gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (object)));
-
-  error = NULL;
-  contents = g_key_file_to_data (key_file,
-                                 &length,
-                                 &error);
-  if (contents == NULL)
-    {
-      g_prefix_error (&error,
-                      "Error generating key-value-file %s: ",
-                      path);
-      goa_warning ("%s (%s, %d)",
-                   error->message, g_quark_to_string (error->domain), error->code);
-      g_error_free (error);
-      goto out;
-    }
-
-  error = NULL;
-  if (!g_file_set_contents (path,
-                            contents,
-                            length,
-                            &error))
-    {
-      g_prefix_error (&error,
-                      "Error writing key-value-file %s: ",
-                      path);
-      goa_warning ("%s (%s, %d)",
-                   error->message, g_quark_to_string (error->domain), error->code);
-      g_error_free (error);
-      goto out;
-    }
-
- out:
-  g_key_file_free (key_file);
-  g_free (group);
-  g_free (path);
-}
-
 /**
  * goa_util_add_row_check_button_from_keyfile:
  * @table: A #GtkTable.
  * @object: A #GoaObject for an account.
  * @label_text: (allow-none): The text to insert on the left side or %NULL for no label.
- * @key: The key in the key-value file for @object to look up.
+ * @property: The property of @object to be bound to the new widget.
  * @value_mnemonic: The mnemonic text to use for the check button.
  *
  * Adds a #GtkCheckButton to @table that reads its value from the
@@ -1634,66 +1511,21 @@ GtkWidget *
 goa_util_add_row_check_button_from_keyfile (GtkTable     *table,
                                             GoaObject    *object,
                                             const gchar  *label_text,
-                                            const gchar  *key,
+                                            const gchar  *property,
                                             const gchar  *value_mnemonic)
 {
   GoaAccount *account;
   GtkWidget *check_button;
-  GKeyFile *key_file;
-  gchar *path;
-  gchar *group;
-  GError *error;
   gboolean value;
 
-  key_file = NULL;
-
   account = goa_object_peek_account (object);
+  g_object_get (account, property, &value, NULL);
   check_button = gtk_check_button_new_with_mnemonic (value_mnemonic);
-  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
-  group = g_strdup_printf ("Account %s", goa_account_get_id (account));
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), !value);
 
-  key_file = g_key_file_new ();
-  error = NULL;
-  if (!g_key_file_load_from_file (key_file,
-                                  path,
-                                  G_KEY_FILE_NONE,
-                                  &error))
-    {
-      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
-                   path,
-                   error->message, g_quark_to_string (error->domain), error->code);
-      g_error_free (error);
-      goto out;
-    }
-  value = g_key_file_get_boolean (key_file,
-                                  group,
-                                  key,
-                                  &error);
-  if (error != NULL)
-    {
-      /* this is not fatal (think upgrade-path) */
-      goa_debug ("Error getting boolean value for key %s in group `%s' from keyfile %s: %s (%s, %d)",
-                 key,
-                 group,
-                 path,
-                 error->message, g_quark_to_string (error->domain), error->code);
-      g_error_free (error);
-      goto out;
-    }
-
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), value);
-
- out:
-  g_signal_connect_data (check_button,
-                         "notify::active",
-                         G_CALLBACK (keyfile_check_button_on_notify_active),
-                         keyfile_editable_data_new (object, key),
-                         (GClosureNotify) keyfile_editable_data_free,
-                         0); /* GConnectFlags */
-  if (key_file != NULL)
-    g_key_file_free (key_file);
-  g_free (group);
-  g_free (path);
+  g_object_bind_property (check_button, "active",
+                          account, property,
+                          G_BINDING_BIDIRECTIONAL | G_BINDING_INVERT_BOOLEAN);
 
   return goa_util_add_row_widget (table, label_text, check_button);
 }

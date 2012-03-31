@@ -282,6 +282,7 @@ build_object (GoaProvider         *provider,
               GoaObjectSkeleton   *object,
               GKeyFile            *key_file,
               const gchar         *group,
+              gboolean             just_added,
               GError             **error)
 {
   gboolean ret;
@@ -293,6 +294,7 @@ build_object (GoaProvider         *provider,
                                                                            object,
                                                                            key_file,
                                                                            group,
+                                                                           just_added,
                                                                            error))
     goto out;
 

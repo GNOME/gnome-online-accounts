@@ -17,7 +17,8 @@
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  *
- * Author: David Zeuthen <davidz@redhat.com>
+ * Authors: David Zeuthen <davidz@redhat.com>
+ *          Debarshi Ray <debarshir@gnome.org>
  */
 
 #if !defined (__GOA_BACKEND_INSIDE_GOA_BACKEND_H__) && !defined (GOA_BACKEND_COMPILATION)
@@ -92,6 +93,7 @@ struct _GoaProviderClass
                                      GoaObjectSkeleton  *object,
                                      GKeyFile           *key_file,
                                      const gchar        *group,
+                                     gboolean            just_added,
                                      GError            **error);
 
   /* virtual but with default implementation */
@@ -137,6 +139,7 @@ gboolean     goa_provider_build_object              (GoaProvider         *provid
                                                      GoaObjectSkeleton   *object,
                                                      GKeyFile            *key_file,
                                                      const gchar         *group,
+                                                     gboolean             just_added,
                                                      GError             **error);
 gboolean     goa_provider_store_credentials_sync    (GoaProvider         *provider,
                                                      GoaObject           *object,
@@ -197,6 +200,9 @@ goa_util_lookup_keyfile_string (GoaObject    *object,
 gboolean
 goa_util_lookup_keyfile_boolean (GoaObject    *object,
                                  const gchar  *key);
+
+void
+goa_util_account_notify_property_cb (GObject *object, GParamSpec *pspec, gpointer user_data);
 
 void       goa_util_add_account_info (GtkTable *table, GoaObject *object);
 

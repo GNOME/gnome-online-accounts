@@ -98,6 +98,58 @@
     -->
     <property name="PresentationIdentity" type="s" access="read"/>
 
+    <!-- MailDisabled:
+         If %TRUE, the account will not expose any
+         #org.gnome.OnlineAccounts.Mail interface. If the account does not
+         provide email-like messaging capabilities, this property does
+         nothing.
+
+         Note that the #org.gnomeOnlineAccounts.Mail interface is added or
+         removed from the account asynchronously.
+    -->
+    <property name="MailDisabled" type="b" access="readwrite"/>
+
+    <!-- CalendarDisabled:
+         If %TRUE, the account will not expose any
+         #org.gnome.OnlineAccounts.Calendar interface. If the account does not
+         provide calendar-like capabilities, this property does nothing.
+
+         Note that the #org.gnomeOnlineAccounts.Calendar interface is added or
+         removed from the account asynchronously.
+    -->
+    <property name="CalendarDisabled" type="b" access="readwrite"/>
+
+    <!-- ContactsDisabled:
+         If %TRUE, the account will not expose any
+         #org.gnome.OnlineAccounts.Contacts interface. If the account does not
+         provide contacts-like capabilities, this property does nothing.
+
+         Note that the #org.gnomeOnlineAccounts.Contacts interface is added or
+         removed from the account asynchronously.
+    -->
+    <property name="ContactsDisabled" type="b" access="readwrite"/>
+
+    <!-- ChatDisabled:
+         If %TRUE, the account will not expose any
+         #org.gnome.OnlineAccounts.Chat interface. If the account does not
+         provide chat-like messaging capabilities, this property does
+         nothing.
+
+         Note that the #org.gnomeOnlineAccounts.Chat interface is added or
+         removed from the account asynchronously.
+    -->
+    <property name="ChatDisabled" type="b" access="readwrite"/>
+
+    <!-- DocumentsDisabled:
+         If %TRUE, the account will not expose any
+         #org.gnome.OnlineAccounts.Documents interface. If the account does not
+         provide documents-like capabilities, this property does nothing.
+
+         Note that the #org.gnomeOnlineAccounts.Documents interface is added or
+         removed from the account asynchronously.
+    -->
+    <property name="DocumentsDisabled" type="b" access="readwrite"/>
+
     <!--
         Remove:
 

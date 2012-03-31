@@ -448,7 +448,7 @@ update_account_object (GoaDaemon           *daemon,
   goa_account_set_presentation_identity (account, presentation_identity);
 
   error = NULL;
-  if (!goa_provider_build_object (provider, object, key_file, group, &error))
+  if (!goa_provider_build_object (provider, object, key_file, group, just_added, &error))
     {
       goa_warning ("Error parsing account: %s (%s, %d)",
                    error->message, g_quark_to_string (error->domain), error->code);

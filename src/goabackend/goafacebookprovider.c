@@ -255,19 +255,26 @@ build_object (GoaProvider         *provider,
               GoaObjectSkeleton   *object,
               GKeyFile            *key_file,
               const gchar         *group,
+              gboolean             just_added,
               GError             **error)
 {
+  GoaAccount *account;
   GoaChat *chat = NULL;
   gboolean chat_enabled;
   gboolean ret = FALSE;
+
+  account = NULL;
 
   /* Chain up */
   if (!GOA_PROVIDER_CLASS (goa_facebook_provider_parent_class)->build_object (provider,
                                                                               object,
                                                                               key_file,
                                                                               group,
+                                                                              just_added,
                                                                               error))
     goto out;
+
+  account = goa_object_get_account (GOA_OBJECT (object));
 
   /* Chat */
   chat = goa_object_get_chat (GOA_OBJECT (object));
@@ -286,12 +293,22 @@ build_object (GoaProvider         *provider,
         goa_object_skeleton_set_chat (object, NULL);
     }
 
+  if (just_added)
+    {
+      goa_account_set_chat_disabled (account, !chat_enabled);
+      g_signal_connect (account,
+                        "notify::chat-disabled",
+                        G_CALLBACK (goa_util_account_notify_property_cb),
+                        "ChatEnabled");
+    }
+
   ret = TRUE;
 
  out:
   if (chat != NULL)
     g_object_unref (chat);
-
+  if (account != NULL)
+    g_object_unref (account);
   return ret;
 }
 
@@ -317,7 +334,7 @@ show_account (GoaProvider         *provider,
 
   goa_util_add_row_switch_from_keyfile_with_blurb (GTK_TABLE (table), object,
                                                    _("Use for"),
-                                                   "ChatEnabled",
+                                                   "chat-disabled",
                                                    _("Chat"));
 }
 

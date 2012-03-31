@@ -1483,6 +1483,7 @@ goa_oauth2_provider_build_object (GoaProvider         *provider,
                                   GoaObjectSkeleton   *object,
                                   GKeyFile            *key_file,
                                   const gchar         *group,
+                                  gboolean             just_added,
                                   GError             **error)
 {
   GoaOAuth2Based *oauth2_based;
