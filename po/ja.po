@@ -2,15 +2,16 @@
 # Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
 # Takeshi AIHANA <takeshi.aihana@gmail.com>, 2011.
+# Hajime Taira <htaira@redhat.com>, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-10 17:18+0000\n"
-"PO-Revision-Date: 2011-09-11 07:40+0900\n"
-"Last-Translator: Jiro Matsuzawa <jmatsuzawa@src.gnome.org>\n"
+"POT-Creation-Date: 2012-03-30 14:10+0000\n"
+"PO-Revision-Date: 2012-04-02 13:58+0900\n"
+"Last-Translator: Hajime Taira <htaira@redhat.com>\n"
 "Language-Team: Japanese <takeshi.aihana@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,13 +26,14 @@ msgstr "オンライン・アカウントの利用には注意が必要です"
 msgid "Open Online Accounts..."
 msgstr "オンライン・アカウントを開く..."
 
-#: ../src/goabackend/goafacebookprovider.c:78
+#: ../src/goabackend/goafacebookprovider.c:80
 msgid "Facebook"
 msgstr "Facebook"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:161
+#: ../src/goabackend/goafacebookprovider.c:198
 #: ../src/goabackend/goagoogleprovider.c:195
+#: ../src/goabackend/goawindowsliveprovider.c:170
 #: ../src/goabackend/goatwitterprovider.c:160
 #: ../src/goabackend/goayahooprovider.c:163
 #, c-format
@@ -40,28 +42,40 @@ msgstr ""
 "guid を要求した時に返されるステータスは 200 を期待していましたが、代わりに受"
 "け取ったステータスは %d (%s) でした"
 
-#: ../src/goabackend/goafacebookprovider.c:173
+#: ../src/goabackend/goafacebookprovider.c:210
 #: ../src/goabackend/goagoogleprovider.c:207
-#: ../src/goabackend/goaoauth2provider.c:476
+#: ../src/goabackend/goawindowsliveprovider.c:182
+#: ../src/goabackend/goaoauth2provider.c:479
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
 msgstr "JSON からの応答の解析に失敗しました: "
 
-#: ../src/goabackend/goafacebookprovider.c:184
+#: ../src/goabackend/goafacebookprovider.c:221
 #, c-format
 msgid "Didn't find username member in JSON data"
 msgstr "JSON データの中に username メンバーが見つかりませんでした"
 
-#: ../src/goabackend/goafacebookprovider.c:193
+#: ../src/goabackend/goafacebookprovider.c:230
 #, c-format
 msgid "Didn't find name member in JSON data"
 msgstr "JSON データの中に name メンバーが見つかりませんでした"
 
-#: ../src/goabackend/goafacebookprovider.c:259
-#: ../src/goabackend/goatwitterprovider.c:260
-msgid "User Name"
-msgstr "ユーザー名"
+#: ../src/goabackend/goafacebookprovider.c:320
+#: ../src/goabackend/goagoogleprovider.c:425
+msgid "Email Address"
+msgstr "E-メール・アドレス"
+
+#: ../src/goabackend/goafacebookprovider.c:321
+#: ../src/goabackend/goagoogleprovider.c:426
+msgid "Use this account for"
+msgstr "このアカウントの用途:"
+
+#: ../src/goabackend/goafacebookprovider.c:322
+#: ../src/goabackend/goagoogleprovider.c:430
+#: ../src/goabackend/goawindowsliveprovider.c:293
+msgid "Chat"
+msgstr "チャット"
 
 #: ../src/goabackend/goagoogleprovider.c:78
 msgid "Google"
@@ -77,14 +91,6 @@ msgstr "JSON データの中に data メンバーがありませんでした"
 msgid "Didn't find email member in JSON data"
 msgstr "JSON データの中に email メンバーがありませんでした"
 
-#: ../src/goabackend/goagoogleprovider.c:425
-msgid "Email Address"
-msgstr "E-メール・アドレス"
-
-#: ../src/goabackend/goagoogleprovider.c:426
-msgid "Use this account for"
-msgstr "このアカウントの用途:"
-
 #: ../src/goabackend/goagoogleprovider.c:427
 msgid "Mail"
 msgstr "メール"
@@ -97,17 +103,32 @@ msgstr "カレンダー"
 msgid "Contacts"
 msgstr "連絡先"
 
-#: ../src/goabackend/goagoogleprovider.c:430
-msgid "Chat"
-msgstr "チャット"
-
 #: ../src/goabackend/goagoogleprovider.c:431
 msgid "Documents"
 msgstr "ドキュメント"
 
+#: ../src/goabackend/goawindowsliveprovider.c:82
+msgid "Windows Live"
+msgstr "Windows Live"
+
+#: ../src/goabackend/goawindowsliveprovider.c:193
+#, c-format
+msgid "Didn't find id member in JSON data"
+msgstr "JSON データの中に id メンバーがありませんでした"
+
+#: ../src/goabackend/goawindowsliveprovider.c:204
+#, c-format
+msgid "Didn't find account email member in JSON data"
+msgstr "JSON データの中に email メンバーがありませんでした"
+
+#: ../src/goabackend/goawindowsliveprovider.c:292
+#: ../src/goabackend/goatwitterprovider.c:260
+msgid "User Name"
+msgstr "ユーザー名"
+
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:431
-#: ../src/goabackend/goaoauthprovider.c:439
+#: ../src/goabackend/goaoauth2provider.c:436
+#: ../src/goabackend/goaoauthprovider.c:440
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -115,93 +136,94 @@ msgstr ""
 "token を要求した時に返されるステータスは 200 を期待していましたが、代わりに受"
 "け取ったステータスは %d (%s) でした"
 
-#: ../src/goabackend/goaoauth2provider.c:451
+#: ../src/goabackend/goaoauth2provider.c:456
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "JSON 以外のデータの中に access_token がありませんでした"
 
-#: ../src/goabackend/goaoauth2provider.c:487
+#: ../src/goabackend/goaoauth2provider.c:490
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "JSON データの中に access_token がありませんでした"
 
-#: ../src/goabackend/goaoauth2provider.c:571
+#: ../src/goabackend/goaoauth2provider.c:587
+#: ../src/goabackend/goaoauth2provider.c:626
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "認証の応答は \"%s\" でした"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:652
+#: ../src/goabackend/goaoauth2provider.c:715
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
 "page</a>:"
 msgstr "<a href=\"%s\">認証のページ</a>で得られた認証コードを入力して下さい:"
 
-#: ../src/goabackend/goaoauth2provider.c:723
-#: ../src/goabackend/goaoauthprovider.c:747
+#: ../src/goabackend/goaoauth2provider.c:795
+#: ../src/goabackend/goaoauthprovider.c:753
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "ダイアログが消されました"
 
-#: ../src/goabackend/goaoauth2provider.c:747
-#: ../src/goabackend/goaoauthprovider.c:778
+#: ../src/goabackend/goaoauth2provider.c:821
+#: ../src/goabackend/goaoauthprovider.c:784
 msgid "Error getting an Access Token: "
 msgstr "アクセス用トークンの取得エラー: "
 
-#: ../src/goabackend/goaoauth2provider.c:759
-#: ../src/goabackend/goaoauthprovider.c:791
+#: ../src/goabackend/goaoauth2provider.c:836
+#: ../src/goabackend/goaoauthprovider.c:797
 msgid "Error getting identity: "
 msgstr "身元情報の取得エラー: "
 
-#: ../src/goabackend/goaoauth2provider.c:924
-#: ../src/goabackend/goaoauthprovider.c:968
+#: ../src/goabackend/goaoauth2provider.c:1001
+#: ../src/goabackend/goaoauthprovider.c:974
 #, c-format
 msgid "There is already an account for the identity %s"
 msgstr "次の身元情報のアカウントは既に存在しています: %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1049
-#: ../src/goabackend/goaoauthprovider.c:1098
+#: ../src/goabackend/goaoauth2provider.c:1127
+#: ../src/goabackend/goaoauthprovider.c:1104
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "%s でログインしたものの最終的に %s でのログインになりました"
 
-#: ../src/goabackend/goaoauth2provider.c:1185
-#: ../src/goabackend/goaoauthprovider.c:1246
+#: ../src/goabackend/goaoauth2provider.c:1264
+#: ../src/goabackend/goaoauthprovider.c:1252
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "キーリング (%s, %d) の中に証明書が見つかりませんでした: "
 
-#: ../src/goabackend/goaoauth2provider.c:1212
+#: ../src/goabackend/goaoauth2provider.c:1291
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "証明書に access_token が含まれていません"
 
-#: ../src/goabackend/goaoauth2provider.c:1251
-#: ../src/goabackend/goaoauthprovider.c:1319
+#: ../src/goabackend/goaoauth2provider.c:1330
+#: ../src/goabackend/goaoauthprovider.c:1325
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "アクセス用トークン (%s, %d) の更新エラー: "
 
-#: ../src/goabackend/goaoauth2provider.c:1286
-#: ../src/goabackend/goaoauthprovider.c:1349
+#: ../src/goabackend/goaoauth2provider.c:1365
+#: ../src/goabackend/goaoauthprovider.c:1355
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "証明書をキーリングの (%s, %d) に保存できませんでした: "
 
-#: ../src/goabackend/goaoauthprovider.c:462
+#: ../src/goabackend/goaoauthprovider.c:463
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr ""
 "受信した応答の中に access_token または access_token_secret のヘッダーがありま"
 "せん"
 
-#: ../src/goabackend/goaoauthprovider.c:635
+#: ../src/goabackend/goaoauthprovider.c:636
 msgid "Error getting a Request Token: "
 msgstr "リクエスト用トークンの取得エラー: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:644
+#: ../src/goabackend/goaoauthprovider.c:645
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -209,7 +231,7 @@ msgstr ""
 "リクエスト用トークンの取得で 200 のステータスを期待していましたが、代わりに受"
 "け取ったのは %d (%s) でした"
 
-#: ../src/goabackend/goaoauthprovider.c:658
+#: ../src/goabackend/goaoauthprovider.c:659
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr ""
@@ -217,40 +239,40 @@ msgstr ""
 "ません"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:675
+#: ../src/goabackend/goaoauthprovider.c:676
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "<a href=\"%s\">認証のページ</a>で得られたトークンを入力して下さい:"
 
-#: ../src/goabackend/goaoauthprovider.c:1275
+#: ../src/goabackend/goaoauthprovider.c:1281
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "証明書に access_token や access_token_secret が含まれていません"
 
-#: ../src/goabackend/goaprovider.c:522
+#: ../src/goabackend/goaprovider.c:523
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "%s では ensure_credentials_sync は未だ利用できません"
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:737
+#: ../src/goabackend/goaprovider.c:742
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "GOA の %s は %s を正しく認識しました"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:751
+#: ../src/goabackend/goaprovider.c:756
 #, c-format
 msgid "Failed to store credentials in the keyring: %s"
 msgstr "キーリングの中に証明書を保存できませんでした: %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:822
+#: ../src/goabackend/goaprovider.c:827
 #, c-format
 msgid "Failed to retrieve credentials from the keyring: %s"
 msgstr "キーリングから証明書を取得できませんでした: %s"
 
-#: ../src/goabackend/goaprovider.c:834
+#: ../src/goabackend/goaprovider.c:839
 msgid "Error parsing result obtained from the keyring: "
 msgstr "キーリングから取得した結果の解析に失敗しました: "
 
