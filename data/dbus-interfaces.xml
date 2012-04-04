@@ -420,4 +420,28 @@
   <interface name="org.gnome.OnlineAccounts.Documents">
   </interface>
 
+  <!--
+      org.gnome.OnlineAccounts.Exchange:
+      @since: 3.6.0
+
+      An account object implements this interface if it represents
+      a Microsoft Exchange server.
+  -->
+  <interface name="org.gnome.OnlineAccounts.Exchange">
+    <!-- Host:
+         The Exchange server to use. This is always a domain name.
+
+         Use this to determine the <ulink
+         url="http://msdn.microsoft.com/en-us/library/gg591268%28v=exchg.140%29.aspx">
+         Autodiscover</ulink> service endpoints. eg. if
+         #org.gnome.OnlineAccounts.Exchange:Host is
+         <literal>bar.com</literal>, then the possible endpoints are
+         <literal>https://bar.com/autodiscover/autodiscover.xml
+         </literal> and <literal>
+         https://autodiscover.bar.com/autodiscover/autodiscover.xml
+         </literal>.
+      -->
+    <property name="Host" type="s" access="read"/>
+  </interface>
+
 </node>

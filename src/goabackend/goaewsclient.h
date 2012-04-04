@@ -35,14 +35,6 @@ G_BEGIN_DECLS
 #define GOA_EWS_CLIENT(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_EWS_CLIENT, GoaEwsClient))
 #define GOA_IS_EWS_CLIENT(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_EWS_CLIENT))
 
-typedef struct _GoaEwsUrls GoaEwsUrls;
-
-struct _GoaEwsUrls
-{
-  gchar *as_url;
-  gchar *oab_url;
-};
-
 GType           goa_ews_client_get_type            (void) G_GNUC_CONST;
 GoaEwsClient   *goa_ews_client_new                 (void);
 void            goa_ews_client_autodiscover        (GoaEwsClient        *client,
@@ -53,18 +45,16 @@ void            goa_ews_client_autodiscover        (GoaEwsClient        *client,
                                                     GCancellable        *cancellable,
                                                     GAsyncReadyCallback  callback,
                                                     gpointer             gpointer);
-GoaEwsUrls     *goa_ews_client_autodiscover_finish (GoaEwsClient        *client,
+gboolean        goa_ews_client_autodiscover_finish (GoaEwsClient        *client,
                                                     GAsyncResult        *res,
                                                     GError             **error);
-GoaEwsUrls     *goa_ews_client_autodiscover_sync   (GoaEwsClient        *client,
+gboolean        goa_ews_client_autodiscover_sync   (GoaEwsClient        *client,
                                                     const gchar         *email,
                                                     const gchar         *password,
                                                     const gchar         *username,
                                                     const gchar         *server,
                                                     GCancellable        *cancellable,
                                                     GError             **error);
-
-void            goa_ews_urls_free                  (GoaEwsUrls *urls);
 
 G_END_DECLS
 

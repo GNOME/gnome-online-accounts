@@ -93,6 +93,7 @@ build_object (GoaProvider         *provider,
   GoaAccount *account;
   GoaCalendar *calendar;
   GoaContacts *contacts;
+  GoaExchange *exchange;
   GoaMail *mail;
   GoaPasswordBased *password_based;
   gboolean calendar_enabled;
@@ -103,6 +104,7 @@ build_object (GoaProvider         *provider,
   account = NULL;
   calendar = NULL;
   contacts = NULL;
+  exchange = NULL;
   mail = NULL;
   password_based = NULL;
   ret = FALSE;
@@ -186,9 +188,24 @@ build_object (GoaProvider         *provider,
         goa_object_skeleton_set_contacts (object, NULL);
     }
 
+  /* Exchange */
+  exchange = goa_object_get_exchange (GOA_OBJECT (object));
+  if (exchange == NULL)
+    {
+      gchar *host;
+
+      host = g_key_file_get_string (key_file, group, "Host", NULL);
+      exchange = goa_exchange_skeleton_new ();
+      g_object_set (G_OBJECT (exchange), "host", host, NULL);
+      goa_object_skeleton_set_exchange (object, exchange);
+      g_free (host);
+    }
+
   ret = TRUE;
 
  out:
+  if (exchange != NULL)
+    g_object_unref (exchange);
   if (contacts != NULL)
     g_object_unref (contacts);
   if (calendar != NULL)
@@ -347,7 +364,6 @@ add_account (GoaProvider    *provider,
   GError *local_error;
   GVariantBuilder builder;
   GoaEwsClient *ews_client;
-  GoaEwsUrls *urls;
   GoaObject *ret;
   GtkWidget *alignment;
   GtkWidget *label;
@@ -430,14 +446,13 @@ add_account (GoaProvider    *provider,
   server = gtk_entry_get_text (GTK_ENTRY (data.server));
 
   local_error = NULL;
-  urls = goa_ews_client_autodiscover_sync (ews_client,
-                                           email_address,
-                                           password,
-                                           username,
-                                           server,
-                                           NULL,
-                                           &local_error);
-  if (urls == NULL)
+  if (!goa_ews_client_autodiscover_sync (ews_client,
+                                         email_address,
+                                         password,
+                                         username,
+                                         server,
+                                         NULL,
+                                         &local_error))
     {
       markup = g_strdup_printf ("<b>%s:</b> %s",
                                 _("Error connecting to Microsoft Exchange server"),
@@ -463,10 +478,7 @@ add_account (GoaProvider    *provider,
   g_variant_builder_add (&builder, "{ss}", "MailEnabled", "true");
   g_variant_builder_add (&builder, "{ss}", "CalendarEnabled", "true");
   g_variant_builder_add (&builder, "{ss}", "ContactsEnabled", "true");
-  g_variant_builder_add (&builder, "{ss}", "Server", server);
-  g_variant_builder_add (&builder, "{ss}", "AsUrl", urls->as_url);
-  g_variant_builder_add (&builder, "{ss}", "OabUrl", urls->oab_url);
-  goa_ews_urls_free (urls);
+  g_variant_builder_add (&builder, "{ss}", "Host", server);
 
   goa_manager_call_add_account (goa_client_get_manager (client),
                                 goa_provider_get_provider_type (provider),

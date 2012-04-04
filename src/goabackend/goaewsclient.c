@@ -143,37 +143,27 @@ ews_client_autodiscover_cancelled_cb (GCancellable *cancellable, gpointer user_d
   soup_session_abort (data->session);
 }
 
-static GoaEwsUrls *
+static gboolean
 ews_client_autodiscover_parse_protocol (xmlNode *node)
 {
-  GoaEwsUrls *urls;
-  gchar *as_url;
-  gchar *oab_url;
+  gboolean as_url;
+  gboolean oab_url;
 
-  urls = NULL;
-  as_url = NULL;
-  oab_url = NULL;
+  as_url = FALSE;
+  oab_url = FALSE;
 
   for (node = node->children; node; node = node->next)
     {
       if (ews_client_check_node (node, "ASUrl"))
-        as_url = (gchar *) xmlNodeGetContent (node);
+        as_url = TRUE;
       else if (ews_client_check_node (node, "OABUrl"))
-        oab_url = (gchar *) xmlNodeGetContent (node);
+        oab_url = TRUE;
 
-      if (as_url != NULL && oab_url !=NULL)
-        {
-          urls = g_slice_new0 (GoaEwsUrls);
-          urls->as_url = as_url;
-          urls->oab_url = oab_url;
-          goto out;
-        }
+      if (as_url && oab_url)
+        break;
     }
 
-  g_free (oab_url);
-  g_free (as_url);
- out:
-  return urls;
+  return as_url && oab_url;
 }
 
 static void
@@ -181,7 +171,7 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
 {
   GError *error;
   AutodiscoverData *data = user_data;
-  GoaEwsUrls *urls;
+  gboolean op_res;
   guint status;
   gint idx;
   gsize size;
@@ -192,8 +182,8 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
   if (status == SOUP_STATUS_CANCELLED)
     return;
 
-  urls = NULL;
   error = NULL;
+  op_res = FALSE;
   size = sizeof (data->msgs) / sizeof (data->msgs[0]);
 
   for (idx = 0; idx < size; idx++)
@@ -273,11 +263,11 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
     {
       if (ews_client_check_node (node, "Protocol"))
         {
-          urls = ews_client_autodiscover_parse_protocol (node);
+          op_res = ews_client_autodiscover_parse_protocol (node);
           break;
         }
     }
-  if (urls == NULL)
+  if (!op_res)
     {
       g_set_error (&error,
                    GOA_ERROR,
@@ -316,7 +306,7 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
       g_simple_async_result_set_from_error (data->res, error);
     }
   else
-    g_simple_async_result_set_op_res_gpointer (data->res, urls, NULL);
+    g_simple_async_result_set_op_res_gboolean (data->res, op_res);
 
   g_simple_async_result_complete_in_idle (data->res);
   ews_client_autodiscover_data_free (data);
@@ -465,20 +455,21 @@ goa_ews_client_autodiscover (GoaEwsClient        *client,
   xmlFreeDoc (doc);
 }
 
-GoaEwsUrls *
+gboolean
 goa_ews_client_autodiscover_finish (GoaEwsClient *client, GAsyncResult *res, GError **error)
 {
   GSimpleAsyncResult *simple;
 
-  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (client), goa_ews_client_autodiscover), NULL);
-  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (client), goa_ews_client_autodiscover),
+                        FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   simple = G_SIMPLE_ASYNC_RESULT (res);
 
   if (g_simple_async_result_propagate_error (simple, error))
-    return NULL;
+    return FALSE;
 
-  return g_simple_async_result_get_op_res_gpointer (simple);
+  return g_simple_async_result_get_op_res_gboolean (simple);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -487,7 +478,7 @@ typedef struct
 {
   GError **error;
   GMainLoop *loop;
-  GoaEwsUrls *urls;
+  gboolean op_res;
 } AutodiscoverSyncData;
 
 static void
@@ -495,11 +486,11 @@ ews_client_autodiscover_sync_cb (GObject *source_object, GAsyncResult *res, gpoi
 {
   AutodiscoverSyncData *data = user_data;
 
-  data->urls = goa_ews_client_autodiscover_finish (GOA_EWS_CLIENT (source_object), res, data->error);
+  data->op_res = goa_ews_client_autodiscover_finish (GOA_EWS_CLIENT (source_object), res, data->error);
   g_main_loop_quit (data->loop);
 }
 
-GoaEwsUrls *
+gboolean
 goa_ews_client_autodiscover_sync (GoaEwsClient        *client,
                                   const gchar         *email,
                                   const gchar         *password,
@@ -512,7 +503,6 @@ goa_ews_client_autodiscover_sync (GoaEwsClient        *client,
   GMainContext *context = NULL;
 
   data.error = error;
-  data.urls = NULL;
 
   context = g_main_context_new ();
   g_main_context_push_thread_default (context);
@@ -532,15 +522,5 @@ goa_ews_client_autodiscover_sync (GoaEwsClient        *client,
   g_main_context_pop_thread_default (context);
   g_main_context_unref (context);
 
-  return data.urls;
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-void
-goa_ews_urls_free (GoaEwsUrls *urls)
-{
-  g_free (urls->as_url);
-  g_free (urls->oab_url);
-  g_slice_free (GoaEwsUrls, urls);
+  return data.op_res;
 }
