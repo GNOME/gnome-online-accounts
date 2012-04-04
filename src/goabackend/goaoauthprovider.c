@@ -632,6 +632,17 @@ on_entry_changed (GtkEditable *editable,
   gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, sensitive);
 }
 
+static void
+rest_proxy_call_cb (RestProxyCall *call, const GError *error, GObject *weak_object, gpointer user_data)
+{
+  IdentifyData *data = user_data;
+
+  if (error != NULL)
+    data->error = g_error_copy (error);
+
+  g_main_loop_quit (data->loop);
+}
+
 static gboolean
 get_tokens_and_identity (GoaOAuthProvider *provider,
                          GtkDialog        *dialog,
@@ -652,6 +663,7 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
   RestProxy *proxy;
   RestProxyCall *call;
   GHashTable *f;
+  GtkWidget *spinner;
   gboolean use_external_browser;
   gchar **request_params;
   guint n;
@@ -677,7 +689,6 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
   data.dialog = dialog;
   data.loop = g_main_loop_new (NULL, FALSE);
 
-  /* TODO: run in worker thread */
   proxy = oauth_proxy_new (goa_oauth_provider_get_consumer_key (provider),
                            goa_oauth_provider_get_consumer_secret (provider),
                            goa_oauth_provider_get_request_uri (provider), FALSE);
@@ -695,11 +706,20 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
       for (n = 0; request_params[n] != NULL; n += 2)
         rest_proxy_call_add_param (call, request_params[n], request_params[n+1]);
     }
-  if (!rest_proxy_call_sync (call, &data.error))
+  if (!rest_proxy_call_async (call, rest_proxy_call_cb, NULL, &data, &data.error))
     {
       g_prefix_error (&data.error, _("Error getting a Request Token: "));
       goto out;
     }
+
+  spinner = gtk_spinner_new ();
+  gtk_spinner_start (GTK_SPINNER (spinner));
+  gtk_box_pack_start (vbox, spinner, TRUE, TRUE, 0);
+  gtk_widget_show (spinner);
+
+  g_main_loop_run (data.loop);
+  gtk_container_remove (GTK_CONTAINER (vbox), spinner);
+
   if (rest_proxy_call_get_status_code (call) != 200)
     {
       g_set_error (&data.error,
