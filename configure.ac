@@ -1,4 +1,7 @@
-AC_INIT([gnome-online-accounts],[3.5.0],[https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts],[gnome-online-accounts])
+AC_INIT([GNOME Online Accounts],
+        [3.5.0],
+        [https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts],
+        [gnome-online-accounts])
 
 AM_INIT_AUTOMAKE([1.9 foreign dist-bzip2 no-dist-gzip])
 AC_CONFIG_SRCDIR([src])
@@ -239,27 +242,27 @@ echo "
                gnome-online-accounts $VERSION
              ===============================
 
-        prefix:                     ${prefix}
-        libdir:                     ${libdir}
-        libexecdir:                 ${libexecdir}
-        bindir:                     ${bindir}
-        sbindir:                    ${sbindir}
-        datadir:                    ${datadir}
-        sysconfdir:                 ${sysconfdir}
-        localstatedir:              ${localstatedir}
+	prefix:                         ${prefix}
+	libdir:                         ${libdir}
+	libexecdir:                     ${libexecdir}
+	bindir:                         ${bindir}
+	sbindir:                        ${sbindir}
+	datadir:                        ${datadir}
+	sysconfdir:                     ${sysconfdir}
+	localstatedir:                  ${localstatedir}
 
-        compiler:                   ${CC}
-        cflags:                     ${CFLAGS}
-        cppflags:                   ${CPPFLAGS}
-	introspection:		    ${found_introspection}
+	compiler:                       ${CC}
+	cflags:                         ${CFLAGS}
+	cppflags:                       ${CPPFLAGS}
+	introspection:		        ${found_introspection}
 
-	Google provider:            ${enable_google} (OAuth 1.0, key:${with_google_consumer_key} secret:${with_google_consumer_secret})
-	Microsoft Exchange provider:${enable_exchange}
-	Twitter provider:           ${enable_twitter} (OAuth 1.0, key:${with_twitter_consumer_key} secret:${with_twitter_consumer_secret})
-	Yahoo provider:             ${enable_yahoo} (OAuth 1.0, key:${with_yahoo_consumer_key} secret:${with_yahoo_consumer_secret})
-	Facebook provider:          ${enable_facebook} (OAuth 2.0, id:${with_facebook_client_id})
-	Windows Live provider:      ${enable_windows_live} (OAuth 2.0, id:${with_windows_live_client_id})
+	Google provider:                ${enable_google} (OAuth 1.0, key:${with_google_consumer_key} secret:${with_google_consumer_secret})
+	Microsoft Exchange provider:    ${enable_exchange}
+	Twitter provider:               ${enable_twitter} (OAuth 1.0, key:${with_twitter_consumer_key} secret:${with_twitter_consumer_secret})
+	Yahoo provider:                 ${enable_yahoo} (OAuth 1.0, key:${with_yahoo_consumer_key} secret:${with_yahoo_consumer_secret})
+	Facebook provider:              ${enable_facebook} (OAuth 2.0, id:${with_facebook_client_id})
+	Windows Live provider:          ${enable_windows_live} (OAuth 2.0, id:${with_windows_live_client_id})
 
-        Maintainer mode:            ${USE_MAINTAINER_MODE}
-        Building api docs:          ${enable_gtk_doc}
+	Maintainer mode:                ${USE_MAINTAINER_MODE}
+	Building api docs:              ${enable_gtk_doc}
 "
