@@ -936,6 +936,16 @@ goa_provider_delete_credentials_sync (GoaProvider   *provider,
  * Various utility routines.
  */
 
+/* ---------------------------------------------------------------------------------------------------- */
+
+gchar *
+goa_util_get_css (void)
+{
+  return g_strdup (PACKAGE_DATA_DIR "/" PACKAGE "/" PACKAGE ".css");
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 /**
  * goa_util_add_row_widget:
  * @table: A #GtkTable.

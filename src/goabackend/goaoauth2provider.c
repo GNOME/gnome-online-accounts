@@ -27,12 +27,12 @@
 
 #include <rest/oauth2-proxy.h>
 #include <libsoup/soup.h>
-#include <libsoup/soup-gnome.h>
 #include <webkit/webkit.h>
 #include <json-glib/json-glib.h>
 
 #include "goalogging.h"
 #include "goaprovider.h"
+#include "goawebview.h"
 #include "goaoauth2provider.h"
 
 /**
@@ -818,47 +818,24 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
     }
   else
     {
-      GtkWidget *scrolled_window;
       GtkWidget *web_view;
-      SoupSession *webkit_soup_session;
-      SoupCookieJar *cookie_jar;
+      GtkWidget *embed;
 
-      webkit_soup_session = webkit_get_default_session ();
-      /* Get the proxy configuration from the GNOME settings */
-      soup_session_add_feature_by_type (webkit_soup_session, SOUP_TYPE_PROXY_RESOLVER_GNOME);
+      web_view = goa_web_view_new ();
+      embed = goa_web_view_get_view (GOA_WEB_VIEW (web_view));
 
-      /* Ensure we use an empty non-persistent cookie to avoid login
-       * credentials being reused...
-       */
-      soup_session_remove_feature_by_type (webkit_soup_session, SOUP_TYPE_COOKIE_JAR);
-      cookie_jar = soup_cookie_jar_new ();
-      soup_session_add_feature (webkit_soup_session, SOUP_SESSION_FEATURE (cookie_jar));
-      g_object_unref (cookie_jar);
-
-      /* TODO: we might need to add some more web browser UI to make this
-       * work...
-       */
-      web_view = webkit_web_view_new ();
-      webkit_web_view_load_uri (WEBKIT_WEB_VIEW (web_view), url);
-      g_signal_connect (web_view,
+      webkit_web_view_load_uri (WEBKIT_WEB_VIEW (embed), url);
+      g_signal_connect (embed,
                         "document-load-finished",
                         G_CALLBACK (on_web_view_document_load_finished),
                         &data);
-      g_signal_connect (web_view,
+      g_signal_connect (embed,
                         "navigation-policy-decision-requested",
                         G_CALLBACK (on_web_view_navigation_policy_decision_requested),
                         &data);
 
-      scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-      gtk_widget_set_size_request (scrolled_window, 500, 400);
-      gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window),
-                                           GTK_SHADOW_IN);
-      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
-                                      GTK_POLICY_AUTOMATIC,
-                                      GTK_POLICY_AUTOMATIC);
-      gtk_container_add (GTK_CONTAINER (scrolled_window), web_view);
-      gtk_container_add (GTK_CONTAINER (vbox), scrolled_window);
-      gtk_widget_show_all (scrolled_window);
+      gtk_container_add (GTK_CONTAINER (vbox), web_view);
+      gtk_widget_show_all (web_view);
     }
   gtk_dialog_run (GTK_DIALOG (dialog));
 

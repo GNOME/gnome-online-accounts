@@ -193,6 +193,8 @@ GtkWidget *goa_util_add_row_label  (GtkTable     *table,
                                     const gchar  *label_text,
                                     const gchar  *value_markup);
 
+gchar     *goa_util_get_css        (void);
+
 gchar *
 goa_util_lookup_keyfile_string (GoaObject    *object,
                                 const gchar  *key);

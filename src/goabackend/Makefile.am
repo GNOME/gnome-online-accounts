@@ -76,6 +76,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goayahooprovider.h		goayahooprovider.c		\
 	goatwitterprovider.h		goatwitterprovider.c		\
 	goawindowsliveprovider.h	goawindowsliveprovider.c	\
+	goawebview.h			goawebview.c			\
 	$(NULL)
 
 libgoa_backend_1_0_la_CPPFLAGS =				\
