@@ -256,8 +256,8 @@ ensure_credentials_sync (GoaProvider         *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-add_entry (GtkWidget     *table,
-           guint          row,
+add_entry (GtkWidget     *grid1,
+           GtkWidget     *grid2,
            const gchar   *text,
            GtkWidget    **out_entry)
 {
@@ -265,18 +265,17 @@ add_entry (GtkWidget     *table,
   GtkWidget *entry;
 
   label = gtk_label_new_with_mnemonic (text);
+  gtk_widget_set_vexpand (label, TRUE);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), label,
-                    0, 1,
-                    row, row + 1,
-                    GTK_FILL, GTK_FILL, 0, 0);
+  gtk_container_add (GTK_CONTAINER (grid1), label);
+
   entry = gtk_entry_new ();
+  gtk_widget_set_hexpand (entry, TRUE);
+  gtk_widget_set_vexpand (entry, TRUE);
   gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
   gtk_entry_set_max_length (GTK_ENTRY (entry), 132);
-  gtk_table_attach (GTK_TABLE (table), entry,
-                    1, 2,
-                    row, row + 1,
-                    GTK_FILL, GTK_FILL, 0, 0);
+  gtk_container_add (GTK_CONTAINER (grid2), entry);
+
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
   if (out_entry != NULL)
     *out_entry = entry;
@@ -387,9 +386,10 @@ add_account (GoaProvider    *provider,
   GVariantBuilder builder;
   GoaEwsClient *ews_client;
   GoaObject *ret;
-  GtkWidget *alignment;
+  GtkWidget *hbox;
   GtkWidget *label;
-  GtkWidget *table;
+  GtkWidget *grid1;
+  GtkWidget *grid2;
 
   const gchar *email_address;
   const gchar *server;
@@ -397,7 +397,6 @@ add_account (GoaProvider    *provider,
   const gchar *username;
   gchar *markup;
   gint response;
-  guint row;
 
   ews_client = NULL;
   ret = NULL;
@@ -424,19 +423,24 @@ add_account (GoaProvider    *provider,
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_box_pack_start (vbox, label, FALSE, FALSE, 0);
 
-  table = gtk_table_new (4, 2, FALSE);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 12);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+  grid1 = gtk_grid_new ();
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid1), GTK_ORIENTATION_VERTICAL);
+  gtk_grid_set_row_spacing (GTK_GRID (grid1), 12);
 
-  alignment = gtk_alignment_new (0.5, 0.0, 0.0, 0.0);
-  gtk_container_add (GTK_CONTAINER (alignment), table);
-  gtk_box_pack_start (vbox, alignment, FALSE, TRUE, 0);
+  grid2 = gtk_grid_new ();
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid2), GTK_ORIENTATION_VERTICAL);
+  gtk_grid_set_row_spacing (GTK_GRID (grid2), 12);
 
-  row = 0;
-  add_entry (table, row++, _("Email _Address"), &data.email_address);
-  add_entry (table, row++, _("_Password"), &data.password);
-  add_entry (table, row++, _("User_name"), &data.username);
-  add_entry (table, row++, _("_Server"), &data.server);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+  gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox), grid1, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), grid2, TRUE, TRUE, 0);
+  gtk_box_pack_start (vbox, hbox, TRUE, TRUE, 0);
+
+  add_entry (grid1, grid2, _("Email _Address"), &data.email_address);
+  add_entry (grid1, grid2, _("_Password"), &data.password);
+  add_entry (grid1, grid2, _("User_name"), &data.username);
+  add_entry (grid1, grid2, _("_Server"), &data.server);
 
   gtk_entry_set_visibility (GTK_ENTRY (data.password), FALSE);
   gtk_widget_grab_focus (data.email_address);
