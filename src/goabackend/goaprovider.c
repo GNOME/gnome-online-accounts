@@ -1462,7 +1462,8 @@ goa_util_add_row_switch_from_keyfile (GtkTable     *table,
                           account, property,
                           G_BINDING_BIDIRECTIONAL | G_BINDING_INVERT_BOOLEAN);
 
-  hbox = gtk_hbox_new (0, FALSE);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
   gtk_box_pack_start (GTK_BOX (hbox), switch_, FALSE, TRUE, 0);
   goa_util_add_row_widget (table, label_text, hbox);
   return switch_;
@@ -1489,7 +1490,8 @@ goa_util_add_row_switch_from_keyfile_with_blurb (GtkTable     *table,
                           account, property,
                           G_BINDING_BIDIRECTIONAL | G_BINDING_INVERT_BOOLEAN);
 
-  hbox = gtk_hbox_new (0, FALSE);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
 
   if (blurb != NULL)
     {
