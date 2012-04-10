@@ -2,13 +2,14 @@
 # Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
 # Pau Iranzo <paugnu@gmail.com>, 2011.
+# Jordi Serratosa <jordis@softcatala.cat>, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-26 14:29+0200\n"
-"PO-Revision-Date: 2011-09-15 22:16+0200\n"
+"POT-Creation-Date: 2012-04-11 00:17+0200\n"
+"PO-Revision-Date: 2012-03-10 18:13+0100\n"
 "Last-Translator: Pau Iranzo <pau.iranzo@softcatala.org>\n"
 "Language-Team: Catalan <gnome-dl@llistes.softcatala.org>\n"
 "Language: ca-XV\n"
@@ -24,13 +25,127 @@ msgstr "Un compte en línia demana atenció"
 msgid "Open Online Accounts..."
 msgstr "Obri els comptes en línia..."
 
-#: ../src/goabackend/goafacebookprovider.c:78
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:1015
+msgid "ProviderType property is not set for account"
+msgstr ""
+
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:1027
+#, c-format
+msgid "Failed to find a provider for: %s"
+msgstr ""
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:204
+#, c-format
+msgid "Code: %u - Unexpected response from server"
+msgstr ""
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:220
+#, c-format
+msgid "Failed to parse autodiscover response XML"
+msgstr ""
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:230
+#, c-format
+msgid "Failed to find Autodiscover element"
+msgstr ""
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:244
+#, c-format
+msgid "Failed to find Response element"
+msgstr ""
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:258
+#, fuzzy, c-format
+msgid "Failed to find Account element"
+msgstr ""
+"No s'ha trobat el membre de l'adreça electrònica del compte a les dades JSON"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:275
+#, c-format
+msgid "Failed to find ASUrl and OABUrl in autodiscover response"
+msgstr ""
+
+#: ../src/goabackend/goaexchangeprovider.c:76
+msgid "Microsoft Exchange"
+msgstr ""
+
+#: ../src/goabackend/goaexchangeprovider.c:420
+msgid "New Microsoft Exchange Account"
+msgstr ""
+
+#: ../src/goabackend/goaexchangeprovider.c:440
+#, fuzzy
+msgid "Email _Address"
+msgstr "Adreça electrònica"
+
+#: ../src/goabackend/goaexchangeprovider.c:441
+msgid "_Password"
+msgstr ""
+
+#: ../src/goabackend/goaexchangeprovider.c:442
+#, fuzzy
+msgid "User_name"
+msgstr "Nom d'usuari"
+
+#: ../src/goabackend/goaexchangeprovider.c:443
+msgid "_Server"
+msgstr ""
+
+#: ../src/goabackend/goaexchangeprovider.c:465
+#: ../src/goabackend/goaoauth2provider.c:852
+#: ../src/goabackend/goaoauthprovider.c:816
+#, c-format
+msgid "Dialog was dismissed"
+msgstr "S'ha descartat el diàleg"
+
+#: ../src/goabackend/goaexchangeprovider.c:484
+msgid "Error connecting to Microsoft Exchange server"
+msgstr ""
+
+#: ../src/goabackend/goaexchangeprovider.c:573
+#: ../src/goabackend/goafacebookprovider.c:336
+#: ../src/goabackend/goagoogleprovider.c:476
+#: ../src/goabackend/goawindowsliveprovider.c:351
+msgid "Use for"
+msgstr ""
+
+#: ../src/goabackend/goaexchangeprovider.c:575
+#: ../src/goabackend/goagoogleprovider.c:478
+msgid "Mail"
+msgstr "Adreça electrònica"
+
+#: ../src/goabackend/goaexchangeprovider.c:580
+#: ../src/goabackend/goagoogleprovider.c:483
+msgid "Calendar"
+msgstr "Calendari"
+
+#: ../src/goabackend/goaexchangeprovider.c:585
+#: ../src/goabackend/goagoogleprovider.c:488
+msgid "Contacts"
+msgstr "Contactes"
+
+#. TODO: more specific
+#: ../src/goabackend/goaexchangeprovider.c:650
+#, c-format
+msgid "Did not find password with username `%s' in credentials"
+msgstr ""
+
+#: ../src/goabackend/goafacebookprovider.c:80
 msgid "Facebook"
 msgstr "Facebook"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:161
-#: ../src/goabackend/goagoogleprovider.c:195
+#: ../src/goabackend/goafacebookprovider.c:194
+#: ../src/goabackend/goagoogleprovider.c:212
+#: ../src/goabackend/goawindowsliveprovider.c:183
 #: ../src/goabackend/goatwitterprovider.c:160
 #: ../src/goabackend/goayahooprovider.c:163
 #, c-format
@@ -39,74 +154,60 @@ msgstr ""
 "S'esperava l'estat 200 en sol·licitar el guid, però s'ha rebut l'estat %d "
 "(%s)"
 
-#: ../src/goabackend/goafacebookprovider.c:173
-#: ../src/goabackend/goagoogleprovider.c:207
-#: ../src/goabackend/goaoauth2provider.c:477
+#: ../src/goabackend/goafacebookprovider.c:206
+#: ../src/goabackend/goagoogleprovider.c:224
+#: ../src/goabackend/goawindowsliveprovider.c:195
+#: ../src/goabackend/goaoauth2provider.c:513
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
 msgstr "S'ha produït un error en analitzar la resposta com a JSON: "
 
-#: ../src/goabackend/goafacebookprovider.c:184
+#: ../src/goabackend/goafacebookprovider.c:217
+#: ../src/goabackend/goawindowsliveprovider.c:206
 #, c-format
-msgid "Didn't find username member in JSON data"
-msgstr "No s'ha trobat cap nom d'usuari del membre a les dades JSON"
+msgid "Didn't find id member in JSON data"
+msgstr "No s'ha trobat el membre d'identificador a les dades JSON"
 
-#: ../src/goabackend/goafacebookprovider.c:193
+#: ../src/goabackend/goafacebookprovider.c:226
+#: ../src/goabackend/goagoogleprovider.c:245
 #, c-format
-msgid "Didn't find name member in JSON data"
-msgstr "No s'ha trobat cap nom del membre a les dades JSON"
+msgid "Didn't find email member in JSON data"
+msgstr "No s'ha trobat cap correu electrònic del membre a les dades JSON"
 
-#: ../src/goabackend/goafacebookprovider.c:259
-#: ../src/goabackend/goatwitterprovider.c:260
-msgid "User Name"
-msgstr "Nom d'usuari"
+#: ../src/goabackend/goafacebookprovider.c:338
+#: ../src/goabackend/goagoogleprovider.c:493
+#: ../src/goabackend/goawindowsliveprovider.c:353
+msgid "Chat"
+msgstr "Xat"
 
 #: ../src/goabackend/goagoogleprovider.c:78
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:218
+#: ../src/goabackend/goagoogleprovider.c:235
 #, c-format
 msgid "Didn't find data member in JSON data"
 msgstr "No s'ha trobat cap data del membre a les dades JSON"
 
-#: ../src/goabackend/goagoogleprovider.c:228
-#, c-format
-msgid "Didn't find email member in JSON data"
-msgstr "No s'ha trobat cap correu electrònic del membre a les dades JSON"
-
-#: ../src/goabackend/goagoogleprovider.c:425
-msgid "Email Address"
-msgstr "Adreça electrònica"
-
-#: ../src/goabackend/goagoogleprovider.c:426
-msgid "Use this account for"
-msgstr "Fes servir este compte per"
-
-#: ../src/goabackend/goagoogleprovider.c:427
-msgid "Mail"
-msgstr "Adreça electrònica"
-
-#: ../src/goabackend/goagoogleprovider.c:428
-msgid "Calendar"
-msgstr "Calendari"
-
-#: ../src/goabackend/goagoogleprovider.c:429
-msgid "Contacts"
-msgstr "Contactes"
-
-#: ../src/goabackend/goagoogleprovider.c:430
-msgid "Chat"
-msgstr "Xat"
-
-#: ../src/goabackend/goagoogleprovider.c:431
+#: ../src/goabackend/goagoogleprovider.c:498
+#: ../src/goabackend/goawindowsliveprovider.c:358
 msgid "Documents"
 msgstr "Documents"
 
+#: ../src/goabackend/goawindowsliveprovider.c:82
+msgid "Windows Live"
+msgstr "Windows Live"
+
+#: ../src/goabackend/goawindowsliveprovider.c:217
+#, c-format
+msgid "Didn't find account email member in JSON data"
+msgstr ""
+"No s'ha trobat el membre de l'adreça electrònica del compte a les dades JSON"
+
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:432
-#: ../src/goabackend/goaoauthprovider.c:440
+#: ../src/goabackend/goaoauth2provider.c:470
+#: ../src/goabackend/goaoauthprovider.c:461
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -114,154 +215,155 @@ msgstr ""
 "S'esperava l'estat 200 en sol·licitar el testimoni d'autenticació, però s'ha "
 "rebut l'estat %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:452
+#: ../src/goabackend/goaoauth2provider.c:490
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr ""
 "No s'ha trobat el testimoni d'autenticació a les dades que no eren JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:488
+#: ../src/goabackend/goaoauth2provider.c:524
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "No s'ha trobat el testimoni d'autenticació a les dades JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:572
+#: ../src/goabackend/goaoauth2provider.c:663
+#: ../src/goabackend/goaoauth2provider.c:702
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "La resposta d'autorització ha estat «%s»"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:653
+#: ../src/goabackend/goaoauth2provider.c:792
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
 "page</a>:"
 msgstr ""
-"Enganxa el codi d'autorització que s'ha obtingut des de la <a href=\"%s"
+"Apega el codi d'autorització que s'ha obtingut des de la <a href=\"%s"
 "\">pàgina d'autorització</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:727
-#: ../src/goabackend/goaoauthprovider.c:751
-#, c-format
-msgid "Dialog was dismissed"
-msgstr "S'ha descartat el diàleg"
-
-#: ../src/goabackend/goaoauth2provider.c:751
-#: ../src/goabackend/goaoauthprovider.c:782
+#: ../src/goabackend/goaoauth2provider.c:878
+#: ../src/goabackend/goaoauthprovider.c:847
 msgid "Error getting an Access Token: "
 msgstr "S'ha produït un error en obtindre del testimoni d'autenticació: "
 
-#: ../src/goabackend/goaoauth2provider.c:763
-#: ../src/goabackend/goaoauthprovider.c:795
+#: ../src/goabackend/goaoauth2provider.c:893
+#: ../src/goabackend/goaoauthprovider.c:860
 msgid "Error getting identity: "
 msgstr "S'ha produït un error en obtindre la identitat: "
 
-#: ../src/goabackend/goaoauth2provider.c:928
-#: ../src/goabackend/goaoauthprovider.c:972
+#: ../src/goabackend/goaoauth2provider.c:1058
+#: ../src/goabackend/goaoauthprovider.c:1037
 #, c-format
 msgid "There is already an account for the identity %s"
 msgstr "Ja existeix un compte per a la identitat %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1053
-#: ../src/goabackend/goaoauthprovider.c:1102
+#: ../src/goabackend/goaoauth2provider.c:1184
+#: ../src/goabackend/goaoauthprovider.c:1167
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "S'ha demanat identificar-se com a %s, però s'ha connectat com a %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1189
-#: ../src/goabackend/goaoauthprovider.c:1250
+#: ../src/goabackend/goaoauth2provider.c:1321
+#: ../src/goabackend/goaoauthprovider.c:1315
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "No s'ha trobat cap credencial a l'anell de claus (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1216
+#: ../src/goabackend/goaoauth2provider.c:1348
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Les credencials no contenen el testimoni d'autenticació"
 
-#: ../src/goabackend/goaoauth2provider.c:1255
-#: ../src/goabackend/goaoauthprovider.c:1323
+#: ../src/goabackend/goaoauth2provider.c:1387
+#: ../src/goabackend/goaoauthprovider.c:1388
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "No s'ha pogut actualitzar el testimoni d'autenticació (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1290
-#: ../src/goabackend/goaoauthprovider.c:1353
+#: ../src/goabackend/goaoauth2provider.c:1422
+#: ../src/goabackend/goaoauthprovider.c:1418
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr ""
 "S'ha produït un error en emmagatzemar les credencials a l'anell de claus "
 "(%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:463
+#: ../src/goabackend/goaoauthprovider.c:484
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr ""
 "Manquen les capçaleres del testimoni d'autenticació o del secret del "
 "testimoni d'autenticació en la resposta"
 
-#: ../src/goabackend/goaoauthprovider.c:636
+#: ../src/goabackend/goaoauthprovider.c:711
 msgid "Error getting a Request Token: "
-msgstr "S'ha produït un error en obtindre el testimoni de petició: "
+msgstr "S'ha produït un error en obtindre el testimoni de sol·licitud: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:645
+#: ../src/goabackend/goaoauthprovider.c:729
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr ""
-"S'esperava l'estat 200 per obtindre el testimoni de petició demanat, però "
-"s'ha rebut l'estat %d (%s)"
+"S'esperava l'estat 200 per obtindre el testimoni de sol·licitud demanat, "
+"però s'ha rebut l'estat %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:659
+#: ../src/goabackend/goaoauthprovider.c:743
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr ""
-"Manquen les capçaleres del testimoni de petició o del secret del testimoni "
-"de petició en la resposta"
+"Manquen les capçaleres del testimoni de sol·licitud o del secret del "
+"testimoni de sol·licitud en la resposta"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:676
+#: ../src/goabackend/goaoauthprovider.c:760
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr ""
-"Enganxa el testimoni que s'ha obtingut des de la <a href=\"%s\">pàgina "
+"Apega el testimoni que s'ha obtingut des de la <a href=\"%s\">pàgina "
 "d'autorització</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1279
+#: ../src/goabackend/goaoauthprovider.c:1344
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr ""
 "Les credencials no contenen cap testimoni d'autenticació o secret del "
 "testimoni d'autenticació"
 
-#: ../src/goabackend/goaprovider.c:522
+#: ../src/goabackend/goaprovider.c:529
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
-msgstr "No s'han implementat les ensure_credentials_sync al tipus %s"
+msgstr "ensure_credentials_sync no està implementat al tipus %s"
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:737
+#: ../src/goabackend/goaprovider.c:752
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Credencials de %s del GOA per a la identitat %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:751
+#: ../src/goabackend/goaprovider.c:766
 #, c-format
 msgid "Failed to store credentials in the keyring: %s"
 msgstr "No s'han pogut emmagatzemar les credencials a l'anell de claus: %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:822
+#: ../src/goabackend/goaprovider.c:837
 #, c-format
 msgid "Failed to retrieve credentials from the keyring: %s"
 msgstr "No s'han pogut obtindre les credencials de l'anell de claus: %s"
 
-#: ../src/goabackend/goaprovider.c:834
+#: ../src/goabackend/goaprovider.c:849
 msgid "Error parsing result obtained from the keyring: "
 msgstr ""
 "S'ha produït un error en analitzar el resultat obtingut de l'anell de claus: "
+
+#. TODO: more specific
+#: ../src/goabackend/goaprovider.c:917
+#, fuzzy, c-format
+msgid "Failed to delete credentials from the keyring: %s"
+msgstr "No s'han pogut obtindre les credencials de l'anell de claus: %s"
 
 #: ../src/goabackend/goatwitterprovider.c:78
 msgid "Twitter"
@@ -276,6 +378,10 @@ msgstr "No s'ha trobat cap id_str del membre a les dades JSON"
 #, c-format
 msgid "Didn't find screen_name member in JSON data"
 msgstr "No s'ha trobat cap screen_name del membre a les dades JSON"
+
+#: ../src/goabackend/goatwitterprovider.c:262
+msgid "User Name"
+msgstr "Nom d'usuari"
 
 #: ../src/goabackend/goayahooprovider.c:78
 msgid "Yahoo"
@@ -312,6 +418,15 @@ msgid "Didn't find nickname member in JSON data"
 msgstr "No s'ha trobat cap sobrenom del membre a les dades JSON"
 
 #. TODO: look up email address / screenname from GUID
-#: ../src/goabackend/goayahooprovider.c:324
+#: ../src/goabackend/goayahooprovider.c:326
 msgid "Name"
 msgstr "Nom"
+
+#~ msgid "Didn't find username member in JSON data"
+#~ msgstr "No s'ha trobat cap nom d'usuari del membre a les dades JSON"
+
+#~ msgid "Didn't find name member in JSON data"
+#~ msgstr "No s'ha trobat cap nom del membre a les dades JSON"
+
+#~ msgid "Use this account for"
+#~ msgstr "Fes servir aquest compte per"
