@@ -248,9 +248,57 @@ ensure_credentials_sync (GoaProvider         *provider,
                          GCancellable        *cancellable,
                          GError             **error)
 {
+  GVariant *credentials;
+  GoaAccount *account;
+  GoaEwsClient *ews_client;
+  GoaExchange *exchange;
+  gboolean ret;
+  const gchar *email_address;
+  const gchar *server;
+  const gchar *username;
+  gchar *password;
+
+  credentials = NULL;
+  ews_client = NULL;
+  password = NULL;
+
+  ret = FALSE;
+
+  credentials = goa_provider_lookup_credentials_sync (provider,
+                                                      object,
+                                                      cancellable,
+                                                      error);
+  if (credentials == NULL)
+    goto out;
+
+  if (!g_variant_lookup (credentials, "password", "s", &password))
+    goto out;
+
+  account = goa_object_peek_account (object);
+  email_address = goa_account_get_presentation_identity (account);
+  username = goa_account_get_identity (account);
+
+  exchange = goa_object_peek_exchange (object);
+  server = goa_exchange_get_host (exchange);
+
+  ews_client = goa_ews_client_new ();
+  ret = goa_ews_client_autodiscover_sync (ews_client,
+                                          email_address,
+                                          password,
+                                          username,
+                                          server,
+                                          cancellable,
+                                          error);
   if (out_expires_in != NULL)
     *out_expires_in = 0;
-  return TRUE;
+
+ out:
+  if (ews_client != NULL)
+    g_object_unref (ews_client);
+  g_free (password);
+  if (credentials != NULL)
+    g_variant_unref (credentials);
+  return ret;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
