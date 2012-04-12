@@ -452,11 +452,15 @@ create_account_details_ui (GtkBox *vbox, gboolean new_account, AddAccountData *d
 
   add_entry (grid1, grid2, _("Email _Address"), &data->email_address);
   add_entry (grid1, grid2, _("_Password"), &data->password);
-  add_entry (grid1, grid2, _("User_name"), &data->username);
-  add_entry (grid1, grid2, _("_Server"), &data->server);
+  if (new_account)
+    {
+      add_entry (grid1, grid2, _("User_name"), &data->username);
+      add_entry (grid1, grid2, _("_Server"), &data->server);
+    }
 
   gtk_entry_set_visibility (GTK_ENTRY (data->password), FALSE);
-  gtk_widget_grab_focus (data->email_address);
+
+  gtk_widget_grab_focus ((new_account) ? data->email_address : data->password);
 
   g_signal_connect (data->email_address, "changed", G_CALLBACK (on_email_address_or_password_changed), data);
   g_signal_connect (data->password, "changed", G_CALLBACK (on_email_address_or_password_changed), data);
@@ -614,7 +618,9 @@ refresh_account (GoaProvider    *provider,
   AddAccountData data;
   GError *local_error;
   GVariantBuilder builder;
+  GoaAccount *account;
   GoaEwsClient *ews_client;
+  GoaExchange *exchange;
   GtkWidget *dialog;
   GtkWidget *vbox;
   gboolean ret;
@@ -651,6 +657,12 @@ refresh_account (GoaProvider    *provider,
   data.error = NULL;
 
   create_account_details_ui (GTK_BOX (vbox), FALSE, &data);
+
+  account = goa_object_peek_account (object);
+  email_address = goa_account_get_presentation_identity (account);
+  gtk_entry_set_text (GTK_ENTRY (data.email_address), email_address);
+  gtk_editable_set_editable (GTK_EDITABLE (data.email_address), FALSE);
+
   gtk_widget_show_all (dialog);
 
   ews_client = goa_ews_client_new ();
@@ -666,10 +678,11 @@ refresh_account (GoaProvider    *provider,
       goto out;
     }
 
-  email_address = gtk_entry_get_text (GTK_ENTRY (data.email_address));
   password = gtk_entry_get_text (GTK_ENTRY (data.password));
-  username = gtk_entry_get_text (GTK_ENTRY (data.username));
-  server = gtk_entry_get_text (GTK_ENTRY (data.server));
+  username = goa_account_get_identity (account);
+
+  exchange = goa_object_peek_exchange (object);
+  server = goa_exchange_get_host (exchange);
 
   local_error = NULL;
   if (!goa_ews_client_autodiscover_sync (ews_client,
