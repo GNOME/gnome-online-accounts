@@ -263,6 +263,26 @@ get_identity_sync (GoaOAuthProvider  *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static gchar *
+parse_request_token_error (GoaOAuthProvider *provider, RestProxyCall *call)
+{
+  const gchar *payload;
+  gchar *msg;
+  guint status;
+
+  msg = NULL;
+
+  payload = rest_proxy_call_get_payload (call);
+  status = rest_proxy_call_get_status_code (call);
+
+  if (status == 400 && g_str_has_prefix (payload, "Timestamp is too far from current time"))
+    msg = g_strdup (_("Your system time is invalid. Check your date and time settings."));
+
+  return msg;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static gboolean
 build_object (GoaProvider         *provider,
               GoaObjectSkeleton   *object,
@@ -544,6 +564,7 @@ goa_google_provider_class_init (GoaGoogleProviderClass *klass)
   oauth_class->build_authorization_uri  = build_authorization_uri;
   oauth_class->get_use_external_browser = get_use_external_browser;
   oauth_class->add_account_key_values   = add_account_key_values;
+  oauth_class->parse_request_token_error = parse_request_token_error;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

@@ -401,6 +401,29 @@ goa_oauth_provider_get_identity_sync (GoaOAuthProvider *provider,
   return GOA_OAUTH_PROVIDER_GET_CLASS (provider)->get_identity_sync (provider, access_token, access_token_secret, out_presentation_identity, cancellable, error);
 }
 
+/**
+ * goa_oauth_provider_parse_request_token_error:
+ * @provider: A #GoaOAuthProvider.
+ * @call: The #RestProxyCall that was used to fetch the request token.
+ *
+ * Tries to parse the headers and payload within @call to provide a
+ * human readable error message in case the request token could not
+ * be fetched.
+ *
+ * This is a pure virtual method - a subclass must provide an
+ * implementation.
+ *
+ * Returns: A human readable error message or %NULL if the cause of the
+ * error could not be determined. The returned string must be freed with
+ * g_free().
+ */
+gchar *
+goa_oauth_provider_parse_request_token_error (GoaOAuthProvider *provider, RestProxyCall *call)
+{
+  g_return_val_if_fail (GOA_IS_OAUTH_PROVIDER (provider), NULL);
+  return GOA_OAUTH_PROVIDER_GET_CLASS (provider)->parse_request_token_error (provider, call);
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
@@ -718,13 +741,17 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
 
   if (rest_proxy_call_get_status_code (call) != 200)
     {
-      g_set_error (&data.error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   /* Translators: the %d is a HTTP status code and the %s is a textual description of it */
-                   _("Expected status 200 for getting a Request Token, instead got status %d (%s)"),
-                   rest_proxy_call_get_status_code (call),
-                   rest_proxy_call_get_status_message (call));
+      gchar *msg;
+
+      msg = goa_oauth_provider_parse_request_token_error (provider, call);
+      if (msg == NULL)
+        /* Translators: the %d is a HTTP status code and the %s is a textual description of it */
+        msg = g_strdup_printf (_("Expected status 200 for getting a Request Token, instead got status %d (%s)"),
+                               rest_proxy_call_get_status_code (call),
+                               rest_proxy_call_get_status_message (call));
+
+      g_set_error_literal (&data.error, GOA_ERROR, GOA_ERROR_FAILED, msg);
+      g_free (msg);
       goto out;
     }
   f = soup_form_decode (rest_proxy_call_get_payload (call));

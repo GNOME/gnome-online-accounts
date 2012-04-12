@@ -29,6 +29,7 @@
 
 #include <goabackend/goabackendtypes.h>
 #include <goabackend/goaprovider.h>
+#include <rest/rest-proxy-call.h>
 
 G_BEGIN_DECLS
 
@@ -67,6 +68,7 @@ struct _GoaOAuthProvider
  * @get_callback_uri: Virtual function for goa_oauth_provider_get_callback_uri().
  * @get_authentication_cookie: Virtual function for goa_oauth_provider_get_authentication_cookie().
  * @get_identity_sync: Virtual function for goa_oauth_provider_get_identity_sync().
+ * @parse_request_token_error: Virtual function for goa_oauth_provider_parse_request_token_error().
  * @build_authorization_uri: Virtual function for goa_oauth_provider_build_authorization_uri().
  * @get_use_external_browser: Virtual function for goa_oauth_provider_get_use_external_browser().
  * @get_request_uri_params: Virtual function for goa_oauth_provider_get_request_uri_params().
@@ -93,6 +95,9 @@ struct _GoaOAuthProviderClass
                                             gchar            **out_presentation_identity,
                                             GCancellable      *cancellable,
                                             GError           **error);
+
+  gchar       *(*parse_request_token_error) (GoaOAuthProvider *provider,
+                                             RestProxyCall    *call);
 
   /* virtual but with default implementation */
   gchar       *(*build_authorization_uri)  (GoaOAuthProvider  *provider,
@@ -123,6 +128,8 @@ gchar       *goa_oauth_provider_get_identity_sync        (GoaOAuthProvider  *pro
                                                           gchar            **out_presentation_identity,
                                                           GCancellable      *cancellable,
                                                           GError           **error);
+gchar       *goa_oauth_provider_parse_request_token_error (GoaOAuthProvider *provider,
+                                                           RestProxyCall    *call);
 gchar       *goa_oauth_provider_get_access_token_sync    (GoaOAuthProvider  *provider,
                                                           GoaObject         *object,
                                                           gboolean           force_refresh,
