@@ -25,18 +25,23 @@
 
 #include "config.h"
 
+#include <glib.h>
+#include <glib/gi18n-lib.h>
 #include <libsoup/soup.h>
 #include <libsoup/soup-gnome.h>
 #include <webkit/webkit.h>
 
 #include "goawebview.h"
+#include "nautilus-floating-bar.h"
 
 struct _GoaWebViewPrivate
 {
+  GtkWidget *floating_bar;
   GtkWidget *progress_bar;
   GtkWidget *web_view;
   gboolean status;
   gulong clear_notify_progress_id;
+  gulong notify_load_status_id;
   gulong notify_progress_id;
 };
 
@@ -55,6 +60,40 @@ web_view_clear_notify_progress_cb (gpointer user_data)
   return FALSE;
 }
 
+static char *
+web_view_create_loading_title (const gchar *url)
+{
+  SoupURI *uri;
+  const gchar *hostname;
+  gchar *title;
+
+  g_return_val_if_fail (url != NULL && url[0] != '\0', NULL);
+
+  uri = soup_uri_new (url);
+  hostname = soup_uri_get_host (uri);
+  /* translators: %s here is the address of the web page */
+  title = g_strdup_printf (_("Loading “%s”…"), hostname);
+  soup_uri_free (uri);
+
+  return title;
+}
+
+static void
+web_view_floating_bar_update (GoaWebView *self, const gchar *text)
+{
+  GoaWebViewPrivate *priv = self->priv;
+
+  nautilus_floating_bar_set_label (NAUTILUS_FLOATING_BAR (priv->floating_bar), text);
+
+  if (text == NULL || text[0] == '\0')
+    {
+      gtk_widget_hide (priv->floating_bar);
+      gtk_widget_set_halign (priv->floating_bar, GTK_ALIGN_START);
+    }
+  else
+    gtk_widget_show (priv->floating_bar);
+}
+
 static gboolean
 web_view_is_loading (GoaWebView *self)
 {
@@ -69,6 +108,45 @@ web_view_is_loading (GoaWebView *self)
 
   priv->status = status;
   return status != WEBKIT_LOAD_FINISHED && status != WEBKIT_LOAD_FAILED;
+}
+
+static void
+web_view_notify_load_status_cb (GObject *object, GParamSpec *pspec, gpointer user_data)
+{
+  GoaWebView *self = GOA_WEB_VIEW (user_data);
+  WebKitWebView *web_view = WEBKIT_WEB_VIEW (object);
+  WebKitLoadStatus status;
+
+  status = webkit_web_view_get_load_status (web_view);
+  switch (status)
+    {
+    case WEBKIT_LOAD_PROVISIONAL:
+      {
+        WebKitNetworkRequest *request;
+        WebKitWebDataSource *source;
+        WebKitWebFrame *frame;
+        const gchar *uri;
+        gchar *title;
+
+        frame = webkit_web_view_get_main_frame (web_view);
+        source = webkit_web_frame_get_provisional_data_source (frame);
+        request = webkit_web_data_source_get_initial_request (source);
+        uri = webkit_network_request_get_uri (request);
+        title = web_view_create_loading_title (uri);
+
+        web_view_floating_bar_update (self, title);
+        g_free (title);
+        break;
+      }
+
+    case WEBKIT_LOAD_FAILED:
+    case WEBKIT_LOAD_FINISHED:
+      web_view_floating_bar_update (self, NULL);
+      break;
+
+    default:
+      break;
+    }
 }
 
 static void
@@ -115,6 +193,12 @@ goa_web_view_dispose (GObject *object)
       priv->clear_notify_progress_id = 0;
     }
 
+  if (priv->notify_load_status_id != 0)
+    {
+      g_signal_handler_disconnect (priv->web_view, priv->notify_load_status_id);
+      priv->notify_load_status_id = 0;
+    }
+
   if (priv->notify_progress_id != 0)
     {
       g_signal_handler_disconnect (priv->web_view, priv->notify_progress_id);
@@ -158,6 +242,13 @@ goa_web_view_init (GoaWebView *self)
   priv->status = WEBKIT_LOAD_PROVISIONAL;
   gtk_container_add (GTK_CONTAINER (scrolled_window), priv->web_view);
 
+  /* statusbar is hidden by default */
+  priv->floating_bar = nautilus_floating_bar_new (NULL, FALSE);
+  gtk_widget_set_halign (priv->floating_bar, GTK_ALIGN_START);
+  gtk_widget_set_valign (priv->floating_bar, GTK_ALIGN_END);
+  gtk_widget_set_no_show_all (priv->floating_bar, TRUE);
+  gtk_overlay_add_overlay (GTK_OVERLAY (self), priv->floating_bar);
+
   priv->progress_bar = gtk_progress_bar_new ();
   gtk_widget_set_name (priv->progress_bar, "goa-progress-bar");
   gtk_widget_set_halign (priv->progress_bar, GTK_ALIGN_FILL);
@@ -168,6 +259,10 @@ goa_web_view_init (GoaWebView *self)
                                                "notify::progress",
                                                G_CALLBACK (web_view_notify_progress_cb),
                                                self);
+  priv->notify_load_status_id = g_signal_connect (priv->web_view,
+                                                  "notify::load-status",
+                                                  G_CALLBACK (web_view_notify_load_status_cb),
+                                                  self);
 }
 
 static void

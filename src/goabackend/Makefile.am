@@ -77,6 +77,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goatwitterprovider.h		goatwitterprovider.c		\
 	goawindowsliveprovider.h	goawindowsliveprovider.c	\
 	goawebview.h			goawebview.c			\
+	nautilus-floating-bar.h		nautilus-floating-bar.c		\
 	$(NULL)
 
 libgoa_backend_1_0_la_CPPFLAGS =				\
