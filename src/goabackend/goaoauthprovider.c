@@ -636,10 +636,6 @@ static void
 rest_proxy_call_cb (RestProxyCall *call, const GError *error, GObject *weak_object, gpointer user_data)
 {
   IdentifyData *data = user_data;
-
-  if (error != NULL)
-    data->error = g_error_copy (error);
-
   g_main_loop_quit (data->loop);
 }
 
