@@ -407,6 +407,65 @@ on_email_address_or_password_changed (GtkEditable *editable, gpointer user_data)
   g_free (username);
 }
 
+static void
+create_account_details_ui (GtkBox *vbox, gboolean new_account, AddAccountData *data)
+{
+  GtkWidget *grid1;
+  GtkWidget *grid2;
+  GtkWidget *hbox;
+  GtkWidget *label;
+  gchar *markup;
+
+  data->cluebar = gtk_info_bar_new ();
+  gtk_info_bar_set_message_type (GTK_INFO_BAR (data->cluebar), GTK_MESSAGE_ERROR);
+  gtk_widget_set_no_show_all (data->cluebar, TRUE);
+  gtk_box_pack_start (GTK_BOX (vbox), data->cluebar, FALSE, FALSE, 0);
+
+  data->cluebar_label = gtk_label_new ("");
+  gtk_label_set_line_wrap (GTK_LABEL (data->cluebar_label), TRUE);
+  gtk_container_add (GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (data->cluebar))),
+                     data->cluebar_label);
+
+  label = gtk_label_new (NULL);
+  markup = g_strconcat ("<b>",
+                        (new_account) ? _("New Microsoft Exchange Account") : _("Microsoft Exchange Account"),
+                        "</b>",
+                        NULL);
+  gtk_label_set_markup (GTK_LABEL (label), markup);
+  g_free (markup);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_box_pack_start (vbox, label, FALSE, FALSE, 0);
+
+  grid1 = gtk_grid_new ();
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid1), GTK_ORIENTATION_VERTICAL);
+  gtk_grid_set_row_spacing (GTK_GRID (grid1), 12);
+
+  grid2 = gtk_grid_new ();
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid2), GTK_ORIENTATION_VERTICAL);
+  gtk_grid_set_row_spacing (GTK_GRID (grid2), 12);
+
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+  gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox), grid1, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), grid2, TRUE, TRUE, 0);
+  gtk_box_pack_start (vbox, hbox, TRUE, TRUE, 0);
+
+  add_entry (grid1, grid2, _("Email _Address"), &data->email_address);
+  add_entry (grid1, grid2, _("_Password"), &data->password);
+  add_entry (grid1, grid2, _("User_name"), &data->username);
+  add_entry (grid1, grid2, _("_Server"), &data->server);
+
+  gtk_entry_set_visibility (GTK_ENTRY (data->password), FALSE);
+  gtk_widget_grab_focus (data->email_address);
+
+  g_signal_connect (data->email_address, "changed", G_CALLBACK (on_email_address_or_password_changed), data);
+  g_signal_connect (data->password, "changed", G_CALLBACK (on_email_address_or_password_changed), data);
+
+  gtk_dialog_add_button (data->dialog, GTK_STOCK_OK, GTK_RESPONSE_OK);
+  gtk_dialog_set_default_response (data->dialog, GTK_RESPONSE_OK);
+  gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, FALSE);
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
@@ -434,16 +493,10 @@ add_account (GoaProvider    *provider,
   GVariantBuilder builder;
   GoaEwsClient *ews_client;
   GoaObject *ret;
-  GtkWidget *hbox;
-  GtkWidget *label;
-  GtkWidget *grid1;
-  GtkWidget *grid2;
-
   const gchar *email_address;
   const gchar *server;
   const gchar *password;
   const gchar *username;
-  gchar *markup;
   gint response;
 
   ews_client = NULL;
@@ -454,52 +507,8 @@ add_account (GoaProvider    *provider,
   data.dialog = dialog;
   data.error = NULL;
 
-  data.cluebar = gtk_info_bar_new ();
-  gtk_info_bar_set_message_type (GTK_INFO_BAR (data.cluebar), GTK_MESSAGE_ERROR);
-  gtk_widget_set_no_show_all (data.cluebar, TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox), data.cluebar, FALSE, FALSE, 0);
-
-  data.cluebar_label = gtk_label_new ("");
-  gtk_label_set_line_wrap (GTK_LABEL (data.cluebar_label), TRUE);
-  gtk_container_add (GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (data.cluebar))),
-                     data.cluebar_label);
-
-  label = gtk_label_new (NULL);
-  markup = g_strconcat ("<b>", _("New Microsoft Exchange Account"), "</b>", NULL);
-  gtk_label_set_markup (GTK_LABEL (label), markup);
-  g_free (markup);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_box_pack_start (vbox, label, FALSE, FALSE, 0);
-
-  grid1 = gtk_grid_new ();
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid1), GTK_ORIENTATION_VERTICAL);
-  gtk_grid_set_row_spacing (GTK_GRID (grid1), 12);
-
-  grid2 = gtk_grid_new ();
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid2), GTK_ORIENTATION_VERTICAL);
-  gtk_grid_set_row_spacing (GTK_GRID (grid2), 12);
-
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
-  gtk_box_pack_start (GTK_BOX (hbox), grid1, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (hbox), grid2, TRUE, TRUE, 0);
-  gtk_box_pack_start (vbox, hbox, TRUE, TRUE, 0);
-
-  add_entry (grid1, grid2, _("Email _Address"), &data.email_address);
-  add_entry (grid1, grid2, _("_Password"), &data.password);
-  add_entry (grid1, grid2, _("User_name"), &data.username);
-  add_entry (grid1, grid2, _("_Server"), &data.server);
-
-  gtk_entry_set_visibility (GTK_ENTRY (data.password), FALSE);
-  gtk_widget_grab_focus (data.email_address);
-
-  g_signal_connect (data.email_address, "changed", G_CALLBACK (on_email_address_or_password_changed), &data);
-  g_signal_connect (data.password, "changed", G_CALLBACK (on_email_address_or_password_changed), &data);
-
+  create_account_details_ui (vbox, TRUE, &data);
   gtk_widget_show_all (GTK_WIDGET (vbox));
-  gtk_dialog_add_button (dialog, GTK_STOCK_OK, GTK_RESPONSE_OK);
-  gtk_dialog_set_default_response (dialog, GTK_RESPONSE_OK);
-  gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_OK, FALSE);
 
   ews_client = goa_ews_client_new ();
 
@@ -528,6 +537,8 @@ add_account (GoaProvider    *provider,
                                          NULL,
                                          &local_error))
     {
+      gchar *markup;
+
       markup = g_strdup_printf ("<b>%s:</b> %s",
                                 _("Error connecting to Microsoft Exchange server"),
                                 local_error->message);
@@ -600,7 +611,108 @@ refresh_account (GoaProvider    *provider,
                  GtkWindow      *parent,
                  GError        **error)
 {
-  return TRUE;
+  AddAccountData data;
+  GError *local_error;
+  GVariantBuilder builder;
+  GoaEwsClient *ews_client;
+  GtkWidget *dialog;
+  GtkWidget *vbox;
+  gboolean ret;
+  const gchar *email_address;
+  const gchar *server;
+  const gchar *password;
+  const gchar *username;
+  gint response;
+
+  g_return_val_if_fail (GOA_IS_EXCHANGE_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (GOA_IS_CLIENT (client), FALSE);
+  g_return_val_if_fail (GOA_IS_OBJECT (object), FALSE);
+  g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  ews_client = NULL;
+  ret = FALSE;
+
+  dialog = gtk_dialog_new_with_buttons (NULL,
+                                        parent,
+                                        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                        GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
+                                        NULL);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), 12);
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+  gtk_dialog_add_button (GTK_DIALOG (dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+
+  vbox = gtk_dialog_get_content_area (GTK_DIALOG (add_account));
+  gtk_box_set_spacing (GTK_BOX (vbox), 12);
+
+  memset (&data, 0, sizeof (AddAccountData));
+  data.dialog = GTK_DIALOG (dialog);
+  data.error = NULL;
+
+  create_account_details_ui (GTK_BOX (vbox), FALSE, &data);
+  gtk_widget_show_all (dialog);
+
+  ews_client = goa_ews_client_new ();
+
+ ews_again:
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (response != GTK_RESPONSE_OK)
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_DIALOG_DISMISSED,
+                   _("Dialog was dismissed"));
+      goto out;
+    }
+
+  email_address = gtk_entry_get_text (GTK_ENTRY (data.email_address));
+  password = gtk_entry_get_text (GTK_ENTRY (data.password));
+  username = gtk_entry_get_text (GTK_ENTRY (data.username));
+  server = gtk_entry_get_text (GTK_ENTRY (data.server));
+
+  local_error = NULL;
+  if (!goa_ews_client_autodiscover_sync (ews_client,
+                                         email_address,
+                                         password,
+                                         username,
+                                         server,
+                                         NULL,
+                                         &local_error))
+    {
+      gchar *markup;
+
+      markup = g_strdup_printf ("<b>%s:</b> %s",
+                                _("Error connecting to Microsoft Exchange server"),
+                                local_error->message);
+      g_error_free (local_error);
+
+      gtk_label_set_markup (GTK_LABEL (data.cluebar_label), markup);
+      g_free (markup);
+
+      gtk_widget_set_no_show_all (data.cluebar, FALSE);
+      gtk_widget_show_all (data.cluebar);
+      goto ews_again;
+    }
+
+  /* TODO: run in worker thread */
+  g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
+  g_variant_builder_add (&builder, "{sv}", "password", g_variant_new_string (password));
+
+  if (!goa_provider_store_credentials_sync (provider,
+                                            object,
+                                            g_variant_builder_end (&builder),
+                                            NULL, /* GCancellable */
+                                            error))
+    goto out;
+
+  ret = TRUE;
+
+ out:
+  gtk_widget_destroy (dialog);
+  if (ews_client != NULL)
+    g_object_unref (ews_client);
+  return ret;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
