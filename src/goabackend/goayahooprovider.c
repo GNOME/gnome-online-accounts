@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011 Red Hat, Inc.
+ * Copyright (C) 2011, 2012 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -317,13 +317,19 @@ show_account (GoaProvider         *provider,
               GoaClient           *client,
               GoaObject           *object,
               GtkBox              *vbox,
-              GtkTable            *table)
+              GtkGrid             *left,
+              GtkGrid             *right)
 {
   /* Chain up */
-  GOA_PROVIDER_CLASS (goa_yahoo_provider_parent_class)->show_account (provider, client, object, vbox, table);
+  GOA_PROVIDER_CLASS (goa_yahoo_provider_parent_class)->show_account (provider,
+                                                                      client,
+                                                                      object,
+                                                                      vbox,
+                                                                      left,
+                                                                      right);
 
   /* TODO: look up email address / screenname from GUID */
-  goa_util_add_row_editable_label_from_keyfile (table, object, _("Name"), "PresentationIdentity", FALSE);
+  goa_util_add_account_info (left, right, object);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

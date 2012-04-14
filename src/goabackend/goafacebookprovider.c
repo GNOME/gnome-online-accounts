@@ -325,14 +325,20 @@ show_account (GoaProvider         *provider,
               GoaClient           *client,
               GoaObject           *object,
               GtkBox              *vbox,
-              GtkTable            *table)
+              GtkGrid             *left,
+              GtkGrid             *right)
 {
   /* Chain up */
-  GOA_PROVIDER_CLASS (goa_facebook_provider_parent_class)->show_account (provider, client, object, vbox, table);
+  GOA_PROVIDER_CLASS (goa_facebook_provider_parent_class)->show_account (provider,
+                                                                         client,
+                                                                         object,
+                                                                         vbox,
+                                                                         left,
+                                                                         right);
 
-  goa_util_add_account_info (table, object);
+  goa_util_add_account_info (left, right, object);
 
-  goa_util_add_row_switch_from_keyfile_with_blurb (GTK_TABLE (table), object,
+  goa_util_add_row_switch_from_keyfile_with_blurb (left, right, object,
                                                    _("Use for"),
                                                    "chat-disabled",
                                                    _("Chat"));

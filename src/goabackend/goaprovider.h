@@ -106,7 +106,8 @@ struct _GoaProviderClass
                                        GoaClient           *client,
                                        GoaObject           *object,
                                        GtkBox              *vbox,
-                                       GtkTable            *table);
+                                       GtkGrid             *left,
+                                       GtkGrid             *right);
   guint    (*get_credentials_generation) (GoaProvider   *provider);
 
   /*< private >*/
@@ -134,7 +135,8 @@ void         goa_provider_show_account              (GoaProvider         *provid
                                                      GoaClient           *client,
                                                      GoaObject           *object,
                                                      GtkBox              *vbox,
-                                                     GtkTable            *table);
+                                                     GtkGrid             *left,
+                                                     GtkGrid             *right);
 gboolean     goa_provider_build_object              (GoaProvider         *provider,
                                                      GoaObjectSkeleton   *object,
                                                      GKeyFile            *key_file,
@@ -183,15 +185,10 @@ GoaProvider  *goa_provider_get_for_provider_type (const gchar *provider_type);
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-GtkWidget *goa_util_add_heading (GtkTable     *table,
-                                 const gchar  *heading_text);
-
-GtkWidget *goa_util_add_row_widget (GtkTable     *table,
+GtkWidget *goa_util_add_row_widget (GtkGrid      *left,
+                                    GtkGrid      *right,
                                     const gchar  *label_text,
                                     GtkWidget    *widget);
-GtkWidget *goa_util_add_row_label  (GtkTable     *table,
-                                    const gchar  *label_text,
-                                    const gchar  *value_markup);
 
 gchar     *goa_util_get_css        (void);
 
@@ -206,31 +203,14 @@ goa_util_lookup_keyfile_boolean (GoaObject    *object,
 void
 goa_util_account_notify_property_cb (GObject *object, GParamSpec *pspec, gpointer user_data);
 
-void       goa_util_add_account_info (GtkTable *table, GoaObject *object);
+void       goa_util_add_account_info (GtkGrid *left, GtkGrid *right, GoaObject *object);
 
-GtkWidget *goa_util_add_row_editable_label_from_keyfile (GtkTable     *table,
-                                                         GoaObject    *object,
-                                                         const gchar  *label_text,
-                                                         const gchar  *key,
-                                                         gboolean      editable);
-
-GtkWidget *goa_util_add_row_switch_from_keyfile (GtkTable     *table,
-                                                 GoaObject    *object,
-                                                 const gchar  *label_text,
-                                                 const gchar  *key);
-
-GtkWidget *goa_util_add_row_switch_from_keyfile_with_blurb (GtkTable     *table,
+GtkWidget *goa_util_add_row_switch_from_keyfile_with_blurb (GtkGrid      *left,
+                                                            GtkGrid      *right,
                                                             GoaObject    *object,
                                                             const gchar  *label_text,
                                                             const gchar  *key,
                                                             const gchar  *blurb);
-
-GtkWidget *
-goa_util_add_row_check_button_from_keyfile (GtkTable     *table,
-                                            GoaObject    *object,
-                                            const gchar  *label_text,
-                                            const gchar  *key,
-                                            const gchar  *value_mnemonic);
 
 G_END_DECLS
 

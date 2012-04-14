@@ -62,7 +62,8 @@ static void goa_provider_show_account_real (GoaProvider         *provider,
                                             GoaClient           *client,
                                             GoaObject           *object,
                                             GtkBox              *vbox,
-                                            GtkTable            *table);
+                                            GtkGrid             *left,
+                                            GtkGrid             *right);
 
 static guint goa_provider_get_credentials_generation_real (GoaProvider *provider);
 
@@ -290,15 +291,17 @@ goa_provider_show_account (GoaProvider         *provider,
                            GoaClient           *client,
                            GoaObject           *object,
                            GtkBox              *vbox,
-                           GtkTable            *table)
+                           GtkGrid             *left,
+                           GtkGrid             *right)
 {
   g_return_if_fail (GOA_IS_PROVIDER (provider));
   g_return_if_fail (GOA_IS_CLIENT (client));
   g_return_if_fail (GOA_IS_OBJECT (object) && goa_object_peek_account (object) != NULL);
   g_return_if_fail (GTK_IS_BOX (vbox));
-  g_return_if_fail (GTK_IS_TABLE (table));
+  g_return_if_fail (GTK_IS_GRID (left));
+  g_return_if_fail (GTK_IS_GRID (right));
 
-  GOA_PROVIDER_GET_CLASS (provider)->show_account (provider, client, object, vbox, table);
+  GOA_PROVIDER_GET_CLASS (provider)->show_account (provider, client, object, vbox, left, right);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -308,7 +311,8 @@ goa_provider_show_account_real (GoaProvider         *provider,
                                 GoaClient           *client,
                                 GoaObject           *object,
                                 GtkBox              *vbox,
-                                GtkTable            *table)
+                                GtkGrid             *left,
+                                GtkGrid             *right)
 {
   /* For now, don't do anything */
 }
@@ -948,7 +952,8 @@ goa_util_get_css (void)
 
 /**
  * goa_util_add_row_widget:
- * @table: A #GtkTable.
+ * @left: A #GtkGrid for the left side.
+ * @right: A #GtkGrid for the right side.
  * @label_text: (allow-none): The text to insert on the left side or %NULL for no label.
  * @widget: A widget to insert on the right side.
  *
@@ -957,17 +962,16 @@ goa_util_get_css (void)
  * Returns: (transfer none): The #GtkWidget that was inserted (e.g. @widget itself).
  */
 GtkWidget *
-goa_util_add_row_widget (GtkTable     *table,
+goa_util_add_row_widget (GtkGrid      *left,
+                         GtkGrid      *right,
                          const gchar  *label_text,
                          GtkWidget    *widget)
 {
   GtkWidget *label;
-  guint num_rows;
 
-  g_return_val_if_fail (GTK_IS_TABLE (table), NULL);
+  g_return_val_if_fail (GTK_IS_GRID (left), NULL);
+  g_return_val_if_fail (GTK_IS_GRID (right), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  gtk_table_get_size (table, &num_rows, NULL);
 
   if (label_text != NULL)
     {
@@ -976,43 +980,12 @@ goa_util_add_row_widget (GtkTable     *table,
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label), s);
       gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-      gtk_table_attach (table, label,
-                        0, 1,
-                        num_rows, num_rows + 1,
-                        GTK_FILL, GTK_FILL, 0, 0);
+      gtk_container_add (GTK_CONTAINER (left), label);
       g_free (s);
     }
-  gtk_table_attach (table, widget,
-                    1, 2,
-                    num_rows, num_rows + 1,
-                    GTK_FILL, GTK_FILL, 0, 0);
-  return widget;
-}
 
-/**
- * goa_util_add_row_label:
- * @table: A #GtkTable.
- * @label_text: (allow-none): The text to insert on the left side or %NULL for no label.
- * @value_markup: The markup to insert on the right side.
- *
- * Utility function to add @label_text and @value_text to @table.
- *
- * Returns: (transfer none): The #GtkLabel that was inserted.
- */
-GtkWidget *
-goa_util_add_row_label (GtkTable     *table,
-                        const gchar  *label_text,
-                        const gchar  *value_markup)
-{
-  GtkWidget *label;
-  label = gtk_label_new (NULL);
-  gtk_label_set_markup (GTK_LABEL (label), value_markup);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_widget_set_margin_top (label, 6);
-  gtk_widget_set_margin_bottom (label, 6);
-  gtk_widget_set_margin_left (label, 6);
-  gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-  return goa_util_add_row_widget (table, label_text, label);
+  gtk_container_add (GTK_CONTAINER (right), widget);
+  return widget;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -1193,56 +1166,8 @@ goa_util_account_notify_property_cb (GObject *object, GParamSpec *pspec, gpointe
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static gchar *
-get_string_from_keyfile (GoaAccount *account, const gchar *key)
-{
-  GError *error = NULL;
-  GKeyFile *key_file;
-  gchar *group;
-  gchar *path;
-  gchar *value = NULL;
-
-  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
-  group = g_strdup_printf ("Account %s", goa_account_get_id (account));
-
-  key_file = g_key_file_new ();
-  error = NULL;
-  if (!g_key_file_load_from_file (key_file,
-                                  path,
-                                  G_KEY_FILE_NONE,
-                                  &error))
-    {
-      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
-                   path,
-                   error->message, g_quark_to_string (error->domain), error->code);
-      g_error_free (error);
-      goto out;
-    }
-
-  value = g_key_file_get_string (key_file, group, key, &error);
-  if (value == NULL)
-    {
-      /* this is not fatal (think upgrade-path) */
-      goa_debug ("Error getting value for key %s in group `%s' from keyfile %s: %s (%s, %d)",
-                 key,
-                 group,
-                 path,
-                 error->message, g_quark_to_string (error->domain), error->code);
-      g_error_free (error);
-      goto out;
-    }
-
- out:
-  g_key_file_free (key_file);
-  g_free (group);
-  g_free (path);
-  return value;
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
 void
-goa_util_add_account_info (GtkTable *table, GoaObject *object)
+goa_util_add_account_info (GtkGrid *left, GtkGrid *right, GoaObject *object)
 {
   GIcon *icon;
   GoaAccount *account;
@@ -1252,9 +1177,7 @@ goa_util_add_account_info (GtkTable *table, GoaObject *object)
   const gchar *identity;
   const gchar *name;
   gchar *markup;
-  guint num_rows;
 
-  gtk_table_get_size (table, &num_rows, NULL);
   account = goa_object_peek_account (object);
 
   icon_str = goa_account_get_provider_icon (account);
@@ -1262,7 +1185,7 @@ goa_util_add_account_info (GtkTable *table, GoaObject *object)
   image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_DIALOG);
   g_object_unref (icon);
   gtk_misc_set_alignment (GTK_MISC (image), 1.0, 0.5);
-  gtk_table_attach (table, image, 0, 1, num_rows, num_rows + 1, GTK_FILL, GTK_FILL, 0, 0);
+  gtk_container_add (GTK_CONTAINER (left), image);
 
   name = goa_account_get_provider_name (account);
   identity = goa_account_get_presentation_identity (account);
@@ -1272,205 +1195,16 @@ goa_util_add_account_info (GtkTable *table, GoaObject *object)
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), markup);
   g_free (markup);
-  gtk_table_attach (table, label, 1, 2, num_rows, num_rows + 1, GTK_FILL, GTK_FILL, 0, 0);
-
-  gtk_table_set_row_spacing (table, num_rows, 12);
+  gtk_container_add (GTK_CONTAINER (right), label);
 
   return;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-typedef struct {
-  GoaObject *object;
-  gchar *key;
-} KeyFileEditableData;
-
-static KeyFileEditableData *
-keyfile_editable_data_new (GoaObject   *object,
-                           const gchar *key)
-{
-  KeyFileEditableData *data;
-  data = g_slice_new (KeyFileEditableData);
-  data->object = g_object_ref (object);
-  data->key = g_strdup (key);
-  return data;
-}
-
-static void
-keyfile_editable_data_free (KeyFileEditableData *data)
-{
-  g_object_unref (data->object);
-  g_free (data->key);
-  g_slice_free (KeyFileEditableData, data);
-}
-
-static void
-keyfile_editable_on_editing_done (GtkEditable  *editable,
-                                  gpointer      user_data)
-{
-  KeyFileEditableData *data = user_data;
-  GoaAccount *account;
-  GError *error;
-  GKeyFile *key_file;
-  gchar *path;
-  gchar *group;
-  gchar *contents;
-  gsize length;
-
-  account = goa_object_peek_account (data->object);
-  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
-  group = g_strdup_printf ("Account %s", goa_account_get_id (account));
-
-  key_file = g_key_file_new ();
-  error = NULL;
-  if (!g_key_file_load_from_file (key_file,
-                                  path,
-                                  G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS,
-                                  &error))
-    {
-      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
-                   path,
-                   error->message, g_quark_to_string (error->domain), error->code);
-      g_error_free (error);
-      goto out;
-    }
-
-  g_key_file_set_string (key_file,
-                         group,
-                         data->key,
-                         goa_editable_label_get_text (GOA_EDITABLE_LABEL (editable)));
-
-  error = NULL;
-  contents = g_key_file_to_data (key_file,
-                                 &length,
-                                 &error);
-  if (contents == NULL)
-    {
-      g_prefix_error (&error,
-                      "Error generating key-value-file %s: ",
-                      path);
-      goa_warning ("%s (%s, %d)",
-                   error->message, g_quark_to_string (error->domain), error->code);
-      g_error_free (error);
-      goto out;
-    }
-
-  error = NULL;
-  if (!g_file_set_contents (path,
-                            contents,
-                            length,
-                            &error))
-    {
-      g_prefix_error (&error,
-                      "Error writing key-value-file %s: ",
-                      path);
-      goa_warning ("%s (%s, %d)",
-                   error->message, g_quark_to_string (error->domain), error->code);
-      g_error_free (error);
-      goto out;
-    }
-
- out:
-  g_key_file_free (key_file);
-  g_free (group);
-  g_free (path);
-}
-
-/**
- * goa_util_add_row_editable_label_from_keyfile:
- * @table: A #GtkTable.
- * @object: A #GoaObject for an account.
- * @label_text: (allow-none): The text to insert on the left side or %NULL for no label.
- * @key: The key in the key-value file for @object to look up.
- * @editable: Whether the widget should be editable
- *
- * Adds a #GoaEditableLabel to @table that reads its value from the
- * key-value file for @object using @key. If it's edited, the new
- * value is written back to the key-value file.
- *
- * Returns: (transfer none): The #GoaEditableLabel that was inserted.
- */
 GtkWidget *
-goa_util_add_row_editable_label_from_keyfile (GtkTable     *table,
-                                              GoaObject    *object,
-                                              const gchar  *label_text,
-                                              const gchar  *key,
-                                              gboolean      editable)
-{
-  GoaAccount *account;
-  GtkWidget *elabel;
-  gchar *value;
-
-  account = goa_object_peek_account (object);
-  elabel = goa_editable_label_new ();
-
-  value = get_string_from_keyfile (account, key);
-  if (value == NULL)
-    goto out;
-
-  goa_editable_label_set_text (GOA_EDITABLE_LABEL (elabel), value);
-  g_free (value);
-
-  if (editable)
-    {
-      goa_editable_label_set_editable (GOA_EDITABLE_LABEL (elabel), TRUE);
-      g_signal_connect_data (elabel,
-                             "editing-done",
-                             G_CALLBACK (keyfile_editable_on_editing_done),
-                             keyfile_editable_data_new (object, key),
-                             (GClosureNotify) keyfile_editable_data_free,
-                             0); /* GConnectFlags */
-    }
-
- out:
-  return goa_util_add_row_widget (table, label_text, elabel);
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-/**
- * goa_util_add_row_switch_from_keyfile:
- * @table: A #GtkTable.
- * @object: A #GoaObject for an account.
- * @label_text: (allow-none): The text to insert on the left side or %NULL for no label.
- * @property: The property of @object to be bound to the new widget.
- *
- * Adds a #GtkSwitch to @table that reads its #GtkSwitch:active value
- * from the key-value file for @object using @key. If it's switched,
- * the new value is written back to the key-value file.
- *
- * Returns: (transfer none): The #GtkSwitch that was inserted.
- */
-GtkWidget *
-goa_util_add_row_switch_from_keyfile (GtkTable     *table,
-                                      GoaObject    *object,
-                                      const gchar  *label_text,
-                                      const gchar  *property)
-{
-  GoaAccount *account;
-  GtkWidget *hbox;
-  GtkWidget *switch_;
-  gboolean value;
-
-  account = goa_object_peek_account (object);
-  g_object_get (account, property, &value, NULL);
-  switch_ = gtk_switch_new ();
-  gtk_switch_set_active (GTK_SWITCH (switch_), !value);
-
-  g_object_bind_property (switch_, "active",
-                          account, property,
-                          G_BINDING_BIDIRECTIONAL | G_BINDING_INVERT_BOOLEAN);
-
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
-  gtk_box_pack_start (GTK_BOX (hbox), switch_, FALSE, TRUE, 0);
-  goa_util_add_row_widget (table, label_text, hbox);
-  return switch_;
-}
-
-GtkWidget *
-goa_util_add_row_switch_from_keyfile_with_blurb (GtkTable     *table,
+goa_util_add_row_switch_from_keyfile_with_blurb (GtkGrid      *left,
+                                                 GtkGrid      *right,
                                                  GoaObject    *object,
                                                  const gchar  *label_text,
                                                  const gchar  *property,
@@ -1503,80 +1237,6 @@ goa_util_add_row_switch_from_keyfile_with_blurb (GtkTable     *table,
     }
 
   gtk_box_pack_end (GTK_BOX (hbox), switch_, FALSE, FALSE, 0);
-  goa_util_add_row_widget (table, label_text, hbox);
+  goa_util_add_row_widget (left, right, label_text, hbox);
   return switch_;
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-/**
- * goa_util_add_row_check_button_from_keyfile:
- * @table: A #GtkTable.
- * @object: A #GoaObject for an account.
- * @label_text: (allow-none): The text to insert on the left side or %NULL for no label.
- * @property: The property of @object to be bound to the new widget.
- * @value_mnemonic: The mnemonic text to use for the check button.
- *
- * Adds a #GtkCheckButton to @table that reads its value from the
- * key-value file for @object using @key. If it's toggled, the new
- * value is written back to the key-value file.
- *
- * Returns: (transfer none): The #GtkCheckButton that was inserted.
- */
-GtkWidget *
-goa_util_add_row_check_button_from_keyfile (GtkTable     *table,
-                                            GoaObject    *object,
-                                            const gchar  *label_text,
-                                            const gchar  *property,
-                                            const gchar  *value_mnemonic)
-{
-  GoaAccount *account;
-  GtkWidget *check_button;
-  gboolean value;
-
-  account = goa_object_peek_account (object);
-  g_object_get (account, property, &value, NULL);
-  check_button = gtk_check_button_new_with_mnemonic (value_mnemonic);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), !value);
-
-  g_object_bind_property (check_button, "active",
-                          account, property,
-                          G_BINDING_BIDIRECTIONAL | G_BINDING_INVERT_BOOLEAN);
-
-  return goa_util_add_row_widget (table, label_text, check_button);
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-/**
- * goa_util_add_heading:
- * @table: A #GtkTable.
- * @heading_text: The text for the heading.
- *
- * Utility function to add a heading to @table.
- *
- * Returns: (transfer none): The #GtkWidget that was inserted.
- */
-GtkWidget *
-goa_util_add_heading (GtkTable     *table,
-                      const gchar  *heading_text)
-{
-  GtkWidget *label;
-  guint num_rows;
-  gchar *s;
-
-  gtk_table_get_size (table, &num_rows, NULL);
-  s = g_strdup_printf ("<b>%s</b>", heading_text);
-  label = gtk_label_new (NULL);
-  gtk_label_set_markup (GTK_LABEL (label), s);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_widget_set_margin_top (label, 6);
-  gtk_widget_set_margin_bottom (label, 6);
-  gtk_table_attach (table, label,
-                    0, 1,
-                    num_rows, num_rows + 1,
-                    GTK_FILL, GTK_FILL, 0, 0);
-  g_free (s);
-
-  return label;
 }
