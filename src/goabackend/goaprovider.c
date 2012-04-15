@@ -314,7 +314,7 @@ goa_provider_show_account_real (GoaProvider         *provider,
                                 GtkGrid             *left,
                                 GtkGrid             *right)
 {
-  /* For now, don't do anything */
+  goa_util_add_account_info (left, right, object);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

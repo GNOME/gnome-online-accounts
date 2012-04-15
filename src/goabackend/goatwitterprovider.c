@@ -265,7 +265,6 @@ show_account (GoaProvider         *provider,
                                                                         vbox,
                                                                         left,
                                                                         right);
-  goa_util_add_account_info (left, right, object);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

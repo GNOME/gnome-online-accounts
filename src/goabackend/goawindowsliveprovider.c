@@ -351,8 +351,6 @@ show_account (GoaProvider         *provider,
                                                                              left,
                                                                              right);
 
-  goa_util_add_account_info (left, right, object);
-
   goa_util_add_row_switch_from_keyfile_with_blurb (left, right, object,
                                                    _("Use for"),
                                                    "chat-disabled",

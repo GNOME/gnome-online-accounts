@@ -329,7 +329,6 @@ show_account (GoaProvider         *provider,
                                                                       right);
 
   /* TODO: look up email address / screenname from GUID */
-  goa_util_add_account_info (left, right, object);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
