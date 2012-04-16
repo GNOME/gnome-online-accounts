@@ -649,7 +649,7 @@ refresh_account (GoaProvider    *provider,
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
   gtk_dialog_add_button (GTK_DIALOG (dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 
-  vbox = gtk_dialog_get_content_area (GTK_DIALOG (add_account));
+  vbox = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   gtk_box_set_spacing (GTK_BOX (vbox), 12);
 
   memset (&data, 0, sizeof (AddAccountData));
