@@ -739,6 +739,10 @@ refresh_account (GoaProvider    *provider,
                                             error))
     goto out;
 
+  goa_account_call_ensure_credentials (account,
+                                       NULL, /* GCancellable */
+                                       NULL, NULL); /* callback, user_data */
+
   ret = TRUE;
 
  out:
