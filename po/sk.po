@@ -1,0 +1,333 @@
+# Slovak translation for gnome-online-accounts.
+# Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-online-accounts package.
+# Marián Čavojský <cavo+gnomel10n@cavo.sk>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-online-accounts master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"online-accounts&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-12-17 16:18+0000\n"
+"PO-Revision-Date: 2012-04-16 14:58+0200\n"
+"Last-Translator: Marián Čavojský <cavo+gnomel10n@cavo.sk>\n"
+"Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 1 : (n>=2 && n<=4) ? 2 : 0;\n"
+
+#: ../src/daemon/goadaemon.c:871
+msgid "An online account needs attention"
+msgstr "Niektorý online účet vyžaduje pozornosť"
+
+#: ../src/daemon/goadaemon.c:878
+msgid "Open Online Accounts..."
+msgstr "Otvoriť Online účty..."
+
+#: ../src/goabackend/goafacebookprovider.c:78
+msgid "Facebook"
+msgstr "Facebook"
+
+# MČ: Našiel som čo znamená guid (http://developer.yahoo.com/social/rest_api_guide/introspective-guid-resource.html) asi by som to neprekladal.
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goafacebookprovider.c:161
+#: ../src/goabackend/goagoogleprovider.c:195
+#: ../src/goabackend/goatwitterprovider.c:160
+#: ../src/goabackend/goayahooprovider.c:163
+#, c-format
+msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+msgstr ""
+"Bol očakávaný stav 200 pri požadovaní guid, miesto toho prišiel stav %d (%s)"
+
+#: ../src/goabackend/goafacebookprovider.c:173
+#: ../src/goabackend/goagoogleprovider.c:207
+#: ../src/goabackend/goaoauth2provider.c:477
+#: ../src/goabackend/goatwitterprovider.c:172
+#: ../src/goabackend/goayahooprovider.c:175
+msgid "Error parsing response as JSON: "
+msgstr "Chyba pri analýze JSON odpovede: "
+
+#: ../src/goabackend/goafacebookprovider.c:184
+#, c-format
+msgid "Didn't find username member in JSON data"
+msgstr "Nepodarilo sa nájsť časť s použivateľským menom v JSON štruktúre"
+
+#: ../src/goabackend/goafacebookprovider.c:193
+#, c-format
+msgid "Didn't find name member in JSON data"
+msgstr "Nepodarilo sa nájsť časť s menom v JSON štruktúre"
+
+#: ../src/goabackend/goafacebookprovider.c:259
+#: ../src/goabackend/goatwitterprovider.c:260
+#, fuzzy
+msgid "User Name"
+msgstr "Používateľské meno"
+
+#: ../src/goabackend/goagoogleprovider.c:78
+msgid "Google"
+msgstr "Google"
+
+#: ../src/goabackend/goagoogleprovider.c:218
+#, c-format
+msgid "Didn't find data member in JSON data"
+msgstr "Nepodarilo sa nájsť časť s údajmi v JSON štruktúre"
+
+#: ../src/goabackend/goagoogleprovider.c:228
+#, c-format
+msgid "Didn't find email member in JSON data"
+msgstr "Nepodarilo sa nájsť časť s emailom v JSON štruktúre"
+
+#: ../src/goabackend/goagoogleprovider.c:425
+#, fuzzy
+msgid "Email Address"
+msgstr "Emailová adresa"
+
+#: ../src/goabackend/goagoogleprovider.c:426
+msgid "Use this account for"
+msgstr "Použiť tento účet na"
+
+#: ../src/goabackend/goagoogleprovider.c:427
+msgid "Mail"
+msgstr "Email"
+
+#: ../src/goabackend/goagoogleprovider.c:428
+msgid "Calendar"
+msgstr "Kalendár"
+
+#: ../src/goabackend/goagoogleprovider.c:429
+msgid "Contacts"
+msgstr "Kontakty"
+
+# podla empathy
+#: ../src/goabackend/goagoogleprovider.c:430
+msgid "Chat"
+msgstr "Rozhovor"
+
+#: ../src/goabackend/goagoogleprovider.c:431
+msgid "Documents"
+msgstr "Dokumenty"
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goaoauth2provider.c:432
+#: ../src/goabackend/goaoauthprovider.c:440
+#, c-format
+msgid ""
+"Expected status 200 when requesting access token, instead got status %d (%s)"
+msgstr ""
+"Bol očakávaný stav 200 pri požadovaní prístupového reťazca, miesto toho "
+"prišiel stav %d (%s)"
+
+#: ../src/goabackend/goaoauth2provider.c:452
+#, c-format
+msgid "Didn't find access_token in non-JSON data"
+msgstr ""
+"Nepodarilo sa nájsť prístupový reťazec (access_token) mimo JSON štruktúry"
+
+#: ../src/goabackend/goaoauth2provider.c:488
+#, c-format
+msgid "Didn't find access_token in JSON data"
+msgstr "Nepodarilo sa nájsť prístupový reťazec (access_token) v JSON štruktúre"
+
+#: ../src/goabackend/goaoauth2provider.c:572
+#, c-format
+msgid "Authorization response was \"%s\""
+msgstr "Odpoveď na poverenia bola „%s“"
+
+#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
+#: ../src/goabackend/goaoauth2provider.c:653
+#, c-format
+msgid ""
+"Paste authorization code obtained from the <a href=\"%s\">authorization "
+"page</a>:"
+msgstr "Vložte autorizačný kód získaný zo <a href=\"%s\">stránky poverení</a>:"
+
+# MČ: odhadujem na reakciu na nevyplnený autorizačný kód.
+#: ../src/goabackend/goaoauth2provider.c:727
+#: ../src/goabackend/goaoauthprovider.c:751
+#, c-format
+msgid "Dialog was dismissed"
+msgstr "Dialógové okno bolo odmietnuté"
+
+#: ../src/goabackend/goaoauth2provider.c:751
+#: ../src/goabackend/goaoauthprovider.c:782
+msgid "Error getting an Access Token: "
+msgstr "Chyba pri získavaní prístupového reťazca: "
+
+#: ../src/goabackend/goaoauth2provider.c:763
+#: ../src/goabackend/goaoauthprovider.c:795
+msgid "Error getting identity: "
+msgstr "Chyba pri získavaní identity: "
+
+#: ../src/goabackend/goaoauth2provider.c:928
+#: ../src/goabackend/goaoauthprovider.c:972
+#, c-format
+msgid "There is already an account for the identity %s"
+msgstr "Účet pre identitu %s už existuje"
+
+#: ../src/goabackend/goaoauth2provider.c:1053
+#: ../src/goabackend/goaoauthprovider.c:1102
+#, c-format
+msgid "Was asked to login as %s, but logged in as %s"
+msgstr "Bolo požadované prihlásenie ako %s, prihlásený je ale %s"
+
+#: ../src/goabackend/goaoauth2provider.c:1189
+#: ../src/goabackend/goaoauthprovider.c:1250
+#, c-format
+msgid "Credentials not found in keyring (%s, %d): "
+msgstr "Poverenia neboli nájdené vo zväzku kľúčov (%s, %d): "
+
+#: ../src/goabackend/goaoauth2provider.c:1216
+#, c-format
+msgid "Credentials do not contain access_token"
+msgstr "Poverenia neobsahujú access_token"
+
+#: ../src/goabackend/goaoauth2provider.c:1255
+#: ../src/goabackend/goaoauthprovider.c:1323
+#, c-format
+msgid "Failed to refresh access token (%s, %d): "
+msgstr "Chyba pri obnovovaní prístupového reťazca (%s, %d): "
+
+#: ../src/goabackend/goaoauth2provider.c:1290
+#: ../src/goabackend/goaoauthprovider.c:1353
+#, c-format
+msgid "Error storing credentials in keyring (%s, %d): "
+msgstr "Chyba pri ukladaní poverení do zväzku kľúčov (%s, %d): "
+
+#: ../src/goabackend/goaoauthprovider.c:463
+#, c-format
+msgid "Missing access_token or access_token_secret headers in response"
+msgstr "V odpovedi chýba hlavička access_token alebo access_token_secret"
+
+#: ../src/goabackend/goaoauthprovider.c:636
+msgid "Error getting a Request Token: "
+msgstr "Chyba pri získavaní tokenu požiadavky: "
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goaoauthprovider.c:645
+#, c-format
+msgid ""
+"Expected status 200 for getting a Request Token, instead got status %d (%s)"
+msgstr ""
+"Bol očakávaný stav 200 pri získavaní tokenu požiadavky, miesto toho prišiel "
+"stav %d (%s)"
+
+#: ../src/goabackend/goaoauthprovider.c:659
+#, c-format
+msgid "Missing request_token or request_token_secret headers in response"
+msgstr "V odpovedi chýba hlavička request_token alebo request_token_secret"
+
+#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
+#: ../src/goabackend/goaoauthprovider.c:676
+#, c-format
+msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
+msgstr "Vložte reťazec získaný zo <a href=\"%s\">stránky oprávnení</a>:"
+
+#: ../src/goabackend/goaoauthprovider.c:1279
+#, c-format
+msgid "Credentials do not contain access_token or access_token_secret"
+msgstr "Poverenia neobsahujú acess_token alebo access_token_secret"
+
+#: ../src/goabackend/goaprovider.c:522
+#, c-format
+msgid "ensure_credentials_sync is not implemented on type %s"
+msgstr ""
+"ensure_credentials_sync nie je implementovaný u poskytovateľa služby %s"
+
+# MČ: GOA znamená asi gnome-online-account. Tento reťazec sa vyskytuje hodne v neprekladaných reťazcoch identifikujúcich nejaké kľúče, alebo iné hodnoty. Asi by som to neprekladal, ale tento preklad je tým pádom trošku nezrozumiteľný.
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#: ../src/goabackend/goaprovider.c:737
+#, c-format
+msgid "GOA %s credentials for identity %s"
+msgstr "GOA %s poverenia pre identitu %s"
+
+#. TODO: more specific
+#: ../src/goabackend/goaprovider.c:751
+#, c-format
+msgid "Failed to store credentials in the keyring: %s"
+msgstr "Chyba pri ukladaní poverení do zväzku kľúčov: %s"
+
+#. TODO: more specific
+#: ../src/goabackend/goaprovider.c:822
+#, c-format
+msgid "Failed to retrieve credentials from the keyring: %s"
+msgstr "Chyba pri získavaní poverení zo zväzku kľúčov: %s"
+
+#: ../src/goabackend/goaprovider.c:834
+msgid "Error parsing result obtained from the keyring: "
+msgstr "Chyba pri analýze odpovede získanej zo zväzku kľúčov: "
+
+#: ../src/goabackend/goatwitterprovider.c:78
+msgid "Twitter"
+msgstr "Twitter"
+
+#: ../src/goabackend/goatwitterprovider.c:183
+#, c-format
+msgid "Didn't find id_str member in JSON data"
+msgstr "Nepodarilo sa nájsť časť s id_str v JSON štruktúre"
+
+#: ../src/goabackend/goatwitterprovider.c:192
+#, c-format
+msgid "Didn't find screen_name member in JSON data"
+msgstr ""
+"Nepodarilo sa nájsť časť s menom na zobrazenie (screen_name) v JSON štruktúre"
+
+#: ../src/goabackend/goayahooprovider.c:78
+msgid "Yahoo"
+msgstr "Yahoo"
+
+# MČ: Našiel som čo znamená guid (http://developer.yahoo.com/social/rest_api_guide/introspective-guid-resource.html) asi by som to neprekladal.
+#: ../src/goabackend/goayahooprovider.c:186
+#, c-format
+msgid "Didn't find guid member in JSON data"
+msgstr "Nepodarilo sa nájsť časť s guid v JSON štruktúre"
+
+#: ../src/goabackend/goayahooprovider.c:196
+#, c-format
+msgid "Didn't find value member in JSON data"
+msgstr "Nepodarilo sa nájsť časť s hodnotou v JSON štruktúre"
+
+#: ../src/goabackend/goayahooprovider.c:222
+#, c-format
+msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+msgstr ""
+"Bol očakávaný stav 200 pri získavaní mena, miesto toho prišiel stav %d (%s)"
+
+#: ../src/goabackend/goayahooprovider.c:235
+msgid "Error parsing usercard response as JSON: "
+msgstr "Chyba pri analýze odpovede usercard ako štruktúry JSON: "
+
+#: ../src/goabackend/goayahooprovider.c:246
+#, c-format
+msgid "Didn't find profile member in JSON data"
+msgstr "Nepodarilo sa nájsť časť s profilom v JSON štruktúre"
+
+#: ../src/goabackend/goayahooprovider.c:256
+#, c-format
+msgid "Didn't find nickname member in JSON data"
+msgstr "Nepodarilo sa nájsť časť s prezývkou v JSON štruktúre"
+
+#. TODO: look up email address / screenname from GUID
+#: ../src/goabackend/goayahooprovider.c:324
+msgid "Name"
+msgstr "Meno"
+
+#, fuzzy
+#~| msgid "Didn't find account email member in JSON data"
+#~ msgid "Failed to find Account element"
+#~ msgstr "Nepodarila sa nájsť časť s emailom účtu v JSON štruktúre"
+
+#~ msgid "Didn't find id member in JSON data"
+#~ msgstr "Nepodarilo sa nájsť časť s identifikátorom v JSON štruktúre"
+
+#~ msgid "Windows Live"
+#~ msgstr "Windows Live"
+
+#~ msgid "Didn't find account email member in JSON data"
+#~ msgstr "Nepodarilo sa nájsť časť s emailom účtu v JSON štruktúre"
+
+#, fuzzy
+#~| msgid "Failed to retrieve credentials from the keyring: %s"
+#~ msgid "Failed to delete credentials from the keyring: %s"
+#~ msgstr "Chyba pri získavaní poverení zo zväzku kľúčov: %s"
