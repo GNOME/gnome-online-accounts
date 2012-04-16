@@ -269,14 +269,31 @@ ensure_credentials_sync (GoaProvider         *provider,
                                                       cancellable,
                                                       error);
   if (credentials == NULL)
-    goto out;
-
-  if (!g_variant_lookup (credentials, "password", "s", &password))
-    goto out;
+    {
+      if (error != NULL)
+        {
+          g_prefix_error (error, _("Credentials not found in keyring (%s, %d): "),
+                          g_quark_to_string ((*error)->domain), (*error)->code);
+          (*error)->domain = GOA_ERROR;
+          (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
+        }
+      goto out;
+    }
 
   account = goa_object_peek_account (object);
   email_address = goa_account_get_presentation_identity (account);
   username = goa_account_get_identity (account);
+
+  if (!g_variant_lookup (credentials, "password", "s", &password))
+    {
+      if (error != NULL)
+        {
+          g_prefix_error (error, _("Did not find password with username `%s' in credentials"), username);
+          (*error)->domain = GOA_ERROR;
+          (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
+        }
+      goto out;
+    }
 
   exchange = goa_object_peek_exchange (object);
   server = goa_exchange_get_host (exchange);
