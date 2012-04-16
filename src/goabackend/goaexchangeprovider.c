@@ -412,8 +412,11 @@ on_email_address_or_password_changed (GtkEditable *editable, gpointer user_data)
   if (!is_valid_email_address (email, &username, &domain))
     goto out;
 
-  gtk_entry_set_text (GTK_ENTRY (data->username), username);
-  gtk_entry_set_text (GTK_ENTRY (data->server), domain);
+  if (data->username != NULL)
+    gtk_entry_set_text (GTK_ENTRY (data->username), username);
+
+  if (data->server != NULL)
+    gtk_entry_set_text (GTK_ENTRY (data->server), domain);
 
   can_add = gtk_entry_get_text_length (GTK_ENTRY (data->password)) != 0;
 
