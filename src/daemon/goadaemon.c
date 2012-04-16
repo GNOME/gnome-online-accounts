@@ -194,7 +194,7 @@ goa_daemon_init (GoaDaemon *daemon)
   goa_error_domain = GOA_ERROR;
   goa_error_domain; /* shut up -Wunused-but-set-variable */
 
-  notify_init ("goa-daemon");
+  notify_init (_("Online Accounts"));
 
   /* TODO: maybe nicer to pass in a GDBusConnection* construct property */
   daemon->connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
