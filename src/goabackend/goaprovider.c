@@ -187,7 +187,9 @@ goa_provider_get_provider_icon_default (GoaProvider *provider,
  * If an account was successfully created, a #GoaObject for the
  * created account is returned. If @dialog is dismissed, %NULL is
  * returned and @error is set to %GOA_ERROR_DIALOG_DISMISSED. If an
- * account couldn't be created then @error is set.
+ * account couldn't be created then @error is set. In some cases,
+ * for example, when the credentials could not be stored in the
+ * keyring, a #GoaObject can be returned even if @error is set.
  *
  * The caller will always show an error dialog if @error is set unless
  * the error is %GOA_ERROR_DIALOG_DISMISSED.

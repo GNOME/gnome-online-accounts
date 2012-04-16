@@ -1100,15 +1100,13 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
     goto out;
 
  out:
+  /* We might have an object even when data.error is set.
+   * eg., if we failed to store the credentials in the keyring.
+   */
   if (data.error != NULL)
-    {
-      g_propagate_error (error, data.error);
-      g_assert (ret == NULL);
-    }
+    g_propagate_error (error, data.error);
   else
-    {
-      g_assert (ret != NULL);
-    }
+    g_assert (ret != NULL);
 
   g_list_foreach (accounts, (GFunc) g_object_unref, NULL);
   g_list_free (accounts);
