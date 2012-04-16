@@ -1187,6 +1187,7 @@ goa_util_add_account_info (GtkGrid *left, GtkGrid *right, GoaObject *object)
   image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_DIALOG);
   g_object_unref (icon);
   gtk_misc_set_alignment (GTK_MISC (image), 1.0, 0.5);
+  gtk_widget_set_margin_bottom (image, 12);
   gtk_container_add (GTK_CONTAINER (left), image);
 
   name = goa_account_get_provider_name (account);
@@ -1200,6 +1201,7 @@ goa_util_add_account_info (GtkGrid *left, GtkGrid *right, GoaObject *object)
   gtk_label_set_max_width_chars (GTK_LABEL (label), 24);
   gtk_label_set_width_chars (GTK_LABEL (label), 24);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_margin_bottom (label, 12);
   g_free (markup);
   gtk_container_add (GTK_CONTAINER (right), label);
 
