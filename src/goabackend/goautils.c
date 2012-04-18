@@ -60,11 +60,17 @@ goa_utils_check_duplicate (GoaClient              *client,
       identity_from_object = goa_account_get_identity (account);
       if (g_strcmp0 (identity_from_object, identity) == 0)
         {
+          const gchar *presentation_identity;
+          const gchar *provider_name;
+
+          presentation_identity = goa_account_get_presentation_identity (account);
+          provider_name = goa_account_get_provider_name (account);
           g_set_error (error,
                        GOA_ERROR,
                        GOA_ERROR_ACCOUNT_EXISTS,
-                       _("There is already an account for the identity %s"),
-                       identity);
+                       _("There is already a %s account for %s"),
+                       provider_name,
+                       presentation_identity);
           goto out;
         }
     }
