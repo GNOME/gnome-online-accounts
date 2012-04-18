@@ -31,6 +31,7 @@
 
 #include "goalogging.h"
 #include "goaprovider.h"
+#include "goautils.h"
 #include "goawebview.h"
 #include "goaoauthprovider.h"
 
@@ -996,8 +997,6 @@ goa_oauth_provider_add_account (GoaProvider *_provider,
   gint session_handle_expires_in;
   gchar *identity;
   gchar *presentation_identity;
-  GList *accounts;
-  GList *l;
   AddData data;
   GVariantBuilder builder;
 
@@ -1013,7 +1012,6 @@ goa_oauth_provider_add_account (GoaProvider *_provider,
   session_handle = NULL;
   identity = NULL;
   presentation_identity = NULL;
-  accounts = NULL;
 
   memset (&data, '\0', sizeof (AddData));
   data.loop = g_main_loop_new (NULL, FALSE);
@@ -1034,34 +1032,12 @@ goa_oauth_provider_add_account (GoaProvider *_provider,
   /* OK, got the identity... see if there's already an account
    * of this type with the given identity
    */
-  accounts = goa_client_get_accounts (client);
-  for (l = accounts; l != NULL; l = l->next)
-    {
-      GoaObject *object = GOA_OBJECT (l->data);
-      GoaAccount *account;
-      GoaOAuthBased *oauth_based;
-      const gchar *identity_from_object;
-
-      account = goa_object_peek_account (object);
-      oauth_based = goa_object_peek_oauth_based (object);
-      if (oauth_based == NULL)
-        continue;
-
-      if (g_strcmp0 (goa_account_get_provider_type (account),
-                     goa_provider_get_provider_type (GOA_PROVIDER (provider))) != 0)
-        continue;
-
-      identity_from_object = goa_account_get_identity (account);
-      if (g_strcmp0 (identity_from_object, identity) == 0)
-        {
-          g_set_error (&data.error,
-                       GOA_ERROR,
-                       GOA_ERROR_ACCOUNT_EXISTS,
-                       _("There is already an account for the identity %s"),
-                       identity);
-          goto out;
-        }
-    }
+  if (!goa_utils_check_duplicate (client,
+                                  identity,
+                                  goa_provider_get_provider_type (GOA_PROVIDER (provider)),
+                                  (GoaPeekInterfaceFunc) goa_object_peek_oauth_based,
+                                  &data.error))
+    goto out;
 
   /* we want the GoaClient to update before this method returns (so it
    * can create a proxy for the new object) so run the mainloop while
@@ -1112,8 +1088,6 @@ goa_oauth_provider_add_account (GoaProvider *_provider,
   else
     g_assert (ret != NULL);
 
-  g_list_foreach (accounts, (GFunc) g_object_unref, NULL);
-  g_list_free (accounts);
   g_free (identity);
   g_free (presentation_identity);
   g_free (access_token);

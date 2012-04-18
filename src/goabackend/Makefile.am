@@ -76,6 +76,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goayahooprovider.h		goayahooprovider.c		\
 	goatwitterprovider.h		goatwitterprovider.c		\
 	goawindowsliveprovider.h	goawindowsliveprovider.c	\
+	goautils.h			goautils.c			\
 	goawebview.h			goawebview.c			\
 	nautilus-floating-bar.h		nautilus-floating-bar.c		\
 	$(NULL)
