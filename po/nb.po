@@ -5,16 +5,21 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-online-accounts 0.1\n"
+"Project-Id-Version: gnome-online-accounts 3.5.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-25 14:51+0100\n"
-"PO-Revision-Date: 2012-01-23 13:41+0100\n"
+"POT-Creation-Date: 2012-04-18 20:31+0200\n"
+"PO-Revision-Date: 2012-04-18 20:35+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#. shut up -Wunused-but-set-variable
+#: ../src/daemon/goadaemon.c:197
+msgid "Online Accounts"
+msgstr "Kontoer på nettet"
 
 #: ../src/daemon/goadaemon.c:871
 msgid "An online account needs attention"
@@ -24,48 +29,168 @@ msgstr "En nettkonto trenger tilsyn"
 msgid "Open Online Accounts..."
 msgstr "Åpne kontoer på nettet …"
 
-#: ../src/goabackend/goafacebookprovider.c:78
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:1015
+msgid "ProviderType property is not set for account"
+msgstr ""
+
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:1027
+#, c-format
+msgid "Failed to find a provider for: %s"
+msgstr "Klarte ikke å finne en tilbyder for: %s"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:204
+#, c-format
+msgid "Code: %u - Unexpected response from server"
+msgstr "Kode: %u - Uventet svar fra tjener"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:220
+#, c-format
+msgid "Failed to parse autodiscover response XML"
+msgstr "Klarte ikke å lese XML-svar for automatisk gjenkjenning"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:230
+#, c-format
+msgid "Failed to find Autodiscover element"
+msgstr "Klarte ikke å finne element for automatisk gjenkjenning"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:244
+#, c-format
+msgid "Failed to find Response element"
+msgstr "Klarte ikke å finne element i svar"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:258
+#, c-format
+msgid "Failed to find Account element"
+msgstr "Klarte ikke å finne element i konto"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:275
+#, c-format
+msgid "Failed to find ASUrl and OABUrl in autodiscover response"
+msgstr "Klarte ikke å finne ASUrl og OABUrl i svar for automatisk gjenkjenning"
+
+#: ../src/goabackend/goaexchangeprovider.c:76
+msgid "Microsoft Exchange"
+msgstr "Microsoft Exchange"
+
+#: ../src/goabackend/goaexchangeprovider.c:275
+#: ../src/goabackend/goaoauth2provider.c:1319
+#: ../src/goabackend/goaoauthprovider.c:1336
+#, c-format
+msgid "Credentials not found in keyring (%s, %d): "
+msgstr "Påloggingsinformasjon ikke funnet i nøkkelring (%s, %d): "
+
+#. TODO: more specific
+#: ../src/goabackend/goaexchangeprovider.c:291
+#: ../src/goabackend/goaexchangeprovider.c:851
+#, c-format
+msgid "Did not find password with username `%s' in credentials"
+msgstr "Fant ikke passord med brukernavn «%s» i påloggingsinformasjon"
+
+#: ../src/goabackend/goaexchangeprovider.c:451
+msgid "New Microsoft Exchange Account"
+msgstr "Ny Microsoft Exchange konto"
+
+#: ../src/goabackend/goaexchangeprovider.c:451
+msgid "Microsoft Exchange Account"
+msgstr "Microsoft Exchange konto"
+
+#: ../src/goabackend/goaexchangeprovider.c:473
+msgid "Email _Address"
+msgstr "E-post_adresse"
+
+#: ../src/goabackend/goaexchangeprovider.c:474
+msgid "_Password"
+msgstr "_Passord"
+
+#: ../src/goabackend/goaexchangeprovider.c:477
+msgid "User_name"
+msgstr "Br_ukernavn"
+
+#: ../src/goabackend/goaexchangeprovider.c:478
+msgid "_Server"
+msgstr "_Tjener"
+
+#: ../src/goabackend/goaexchangeprovider.c:546
+#: ../src/goabackend/goaexchangeprovider.c:697
+#: ../src/goabackend/goaoauth2provider.c:852
+#: ../src/goabackend/goaoauthprovider.c:839
+#, c-format
+msgid "Dialog was dismissed"
+msgstr "Dialogen ble forkastet"
+
+#: ../src/goabackend/goaexchangeprovider.c:567
+#: ../src/goabackend/goaexchangeprovider.c:719
+msgid "Error connecting to Microsoft Exchange server"
+msgstr "Feil ved tilkobling til Microsoft Exchange tjener"
+
+#: ../src/goabackend/goaexchangeprovider.c:774
+#: ../src/goabackend/goafacebookprovider.c:340
+#: ../src/goabackend/goagoogleprovider.c:500
+#: ../src/goabackend/goawindowsliveprovider.c:355
+msgid "Use for"
+msgstr "Bruk for"
+
+#: ../src/goabackend/goaexchangeprovider.c:776
+#: ../src/goabackend/goagoogleprovider.c:502
+msgid "Mail"
+msgstr "E-post"
+
+#: ../src/goabackend/goaexchangeprovider.c:781
+#: ../src/goabackend/goagoogleprovider.c:507
+msgid "Calendar"
+msgstr "Kalender"
+
+#: ../src/goabackend/goaexchangeprovider.c:786
+#: ../src/goabackend/goagoogleprovider.c:512
+msgid "Contacts"
+msgstr "Kontakter"
+
+#: ../src/goabackend/goafacebookprovider.c:80
 msgid "Facebook"
 msgstr "Facebook"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:162
-#: ../src/goabackend/goagoogleprovider.c:195
-#: ../src/goabackend/goawindowsliveprovider.c:170
+#: ../src/goabackend/goafacebookprovider.c:194
+#: ../src/goabackend/goagoogleprovider.c:212
+#: ../src/goabackend/goawindowsliveprovider.c:183
 #: ../src/goabackend/goatwitterprovider.c:160
 #: ../src/goabackend/goayahooprovider.c:163
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr ""
 
-#: ../src/goabackend/goafacebookprovider.c:174
-#: ../src/goabackend/goagoogleprovider.c:207
-#: ../src/goabackend/goawindowsliveprovider.c:182
-#: ../src/goabackend/goaoauth2provider.c:478
+#: ../src/goabackend/goafacebookprovider.c:206
+#: ../src/goabackend/goagoogleprovider.c:224
+#: ../src/goabackend/goawindowsliveprovider.c:195
+#: ../src/goabackend/goaoauth2provider.c:513
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
 msgstr "Feil ved tolking av svar som JSON: "
 
-#: ../src/goabackend/goafacebookprovider.c:185
+#: ../src/goabackend/goafacebookprovider.c:217
+#: ../src/goabackend/goawindowsliveprovider.c:206
 #, c-format
-msgid "Didn't find username member in JSON data"
-msgstr "Fant ikke brukernavn-del i JSON-data"
+msgid "Didn't find id member in JSON data"
+msgstr "Fant ikke ID-medlem i JSON-data"
 
-#: ../src/goabackend/goafacebookprovider.c:194
+#: ../src/goabackend/goafacebookprovider.c:226
+#: ../src/goabackend/goagoogleprovider.c:245
 #, c-format
-msgid "Didn't find name member in JSON data"
-msgstr "Fant ikke navn i JSON-data"
+msgid "Didn't find email member in JSON data"
+msgstr "Fant ikke e-post i JSON-data"
 
-#: ../src/goabackend/goafacebookprovider.c:282
-#: ../src/goabackend/goawindowsliveprovider.c:292
-#: ../src/goabackend/goatwitterprovider.c:260
-msgid "User Name"
-msgstr "Brukernavn"
-
-#: ../src/goabackend/goafacebookprovider.c:283
-#: ../src/goabackend/goagoogleprovider.c:430
-#: ../src/goabackend/goawindowsliveprovider.c:293
+#: ../src/goabackend/goafacebookprovider.c:342
+#: ../src/goabackend/goagoogleprovider.c:517
+#: ../src/goabackend/goawindowsliveprovider.c:357
 msgid "Chat"
 msgstr "Lynmeldinger"
 
@@ -73,37 +198,17 @@ msgstr "Lynmeldinger"
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:218
+#: ../src/goabackend/goagoogleprovider.c:235
 #, c-format
 msgid "Didn't find data member in JSON data"
 msgstr "Fant ikke data i JSON-data"
 
-#: ../src/goabackend/goagoogleprovider.c:228
-#, c-format
-msgid "Didn't find email member in JSON data"
-msgstr "Fant ikke e-post i JSON-data"
+#: ../src/goabackend/goagoogleprovider.c:279
+msgid "Your system time is invalid. Check your date and time settings."
+msgstr "Systemklokken er ugyldig. Sjekk dine innstillinger for dato og klokkeslett."
 
-#: ../src/goabackend/goagoogleprovider.c:425
-msgid "Email Address"
-msgstr "E-postadresse"
-
-#: ../src/goabackend/goagoogleprovider.c:426
-msgid "Use this account for"
-msgstr "Bruk denne kontoen for"
-
-#: ../src/goabackend/goagoogleprovider.c:427
-msgid "Mail"
-msgstr "E-post"
-
-#: ../src/goabackend/goagoogleprovider.c:428
-msgid "Calendar"
-msgstr "Kalender"
-
-#: ../src/goabackend/goagoogleprovider.c:429
-msgid "Contacts"
-msgstr "Kontakter"
-
-#: ../src/goabackend/goagoogleprovider.c:431
+#: ../src/goabackend/goagoogleprovider.c:522
+#: ../src/goabackend/goawindowsliveprovider.c:362
 msgid "Documents"
 msgstr "Dokumenter"
 
@@ -111,41 +216,37 @@ msgstr "Dokumenter"
 msgid "Windows Live"
 msgstr "Windows Live"
 
-#: ../src/goabackend/goawindowsliveprovider.c:193
-#, c-format
-msgid "Didn't find id member in JSON data"
-msgstr "Fant ikke ID-medlem i JSON-data"
-
-#: ../src/goabackend/goawindowsliveprovider.c:204
+#: ../src/goabackend/goawindowsliveprovider.c:217
 #, c-format
 msgid "Didn't find account email member in JSON data"
 msgstr "Fant ikke e-postmedlem for konto i JSON-data"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:435
-#: ../src/goabackend/goaoauthprovider.c:440
+#: ../src/goabackend/goaoauth2provider.c:470
+#: ../src/goabackend/goaoauthprovider.c:484
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr ""
 
-#: ../src/goabackend/goaoauth2provider.c:455
+#: ../src/goabackend/goaoauth2provider.c:490
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "Fant ikke access_token i ikke-JSON data"
 
-#: ../src/goabackend/goaoauth2provider.c:489
+#: ../src/goabackend/goaoauth2provider.c:524
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "Fant ikke access_token i JSON-data"
 
-#: ../src/goabackend/goaoauth2provider.c:573
+#: ../src/goabackend/goaoauth2provider.c:663
+#: ../src/goabackend/goaoauth2provider.c:702
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "Autoriseringssvar var «%s»"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:654
+#: ../src/goabackend/goaoauth2provider.c:792
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
@@ -153,117 +254,111 @@ msgid ""
 msgstr ""
 "Lim inn autorisasjonskode hentet fra <a href=\"%s\">autorisasjonssiden</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:728
-#: ../src/goabackend/goaoauthprovider.c:751
-#, c-format
-msgid "Dialog was dismissed"
-msgstr "Dialogen ble forkastet"
-
-#: ../src/goabackend/goaoauth2provider.c:752
-#: ../src/goabackend/goaoauthprovider.c:782
+#: ../src/goabackend/goaoauth2provider.c:878
+#: ../src/goabackend/goaoauthprovider.c:870
 msgid "Error getting an Access Token: "
 msgstr "Feil ved henting av tilgangskode: "
 
-#: ../src/goabackend/goaoauth2provider.c:764
-#: ../src/goabackend/goaoauthprovider.c:795
+#: ../src/goabackend/goaoauth2provider.c:893
+#: ../src/goabackend/goaoauthprovider.c:883
 msgid "Error getting identity: "
 msgstr "Feil ved henting av identitet: "
 
-#: ../src/goabackend/goaoauth2provider.c:929
-#: ../src/goabackend/goaoauthprovider.c:972
+#: ../src/goabackend/goaoauth2provider.c:1058
+#: ../src/goabackend/goaoauthprovider.c:1060
 #, c-format
 msgid "There is already an account for the identity %s"
 msgstr "Det finnes allerede en konto for identiteten %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1054
-#: ../src/goabackend/goaoauthprovider.c:1102
+#: ../src/goabackend/goaoauth2provider.c:1182
+#: ../src/goabackend/goaoauthprovider.c:1188
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "Ble spurt om å logge inn som %s, men logget inn som %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1190
-#: ../src/goabackend/goaoauthprovider.c:1250
-#, c-format
-msgid "Credentials not found in keyring (%s, %d): "
-msgstr "Påloggingsinformasjon ikke funnet i nøkkelring (%s, %d): "
-
-#: ../src/goabackend/goaoauth2provider.c:1217
+#: ../src/goabackend/goaoauth2provider.c:1346
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Påloggingsinformasjon inneholder ikke access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1256
-#: ../src/goabackend/goaoauthprovider.c:1323
+#: ../src/goabackend/goaoauth2provider.c:1385
+#: ../src/goabackend/goaoauthprovider.c:1409
 #, fuzzy, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Klarte ikke å oppdatere access_token (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1291
-#: ../src/goabackend/goaoauthprovider.c:1353
+#: ../src/goabackend/goaoauth2provider.c:1420
+#: ../src/goabackend/goaoauthprovider.c:1439
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "Feil ved lagring av påloggingsinformasjon i nøkkelring (%s, %d)"
 
-#: ../src/goabackend/goaoauthprovider.c:463
+#: ../src/goabackend/goaoauthprovider.c:507
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr ""
 
-#: ../src/goabackend/goaoauthprovider.c:636
+#: ../src/goabackend/goaoauthprovider.c:730
 #, fuzzy
 msgid "Error getting a Request Token: "
 msgstr "Feil ved henting av forespørsels: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:645
+#: ../src/goabackend/goaoauthprovider.c:749
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr ""
 
-#: ../src/goabackend/goaoauthprovider.c:659
+#: ../src/goabackend/goaoauthprovider.c:766
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr ""
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:676
+#: ../src/goabackend/goaoauthprovider.c:783
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr ""
 
-#: ../src/goabackend/goaoauthprovider.c:1279
+#: ../src/goabackend/goaoauthprovider.c:1365
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr ""
 "Påloggingsinformasjon inneholder ikke access_token eller access_token_secret"
 
-#: ../src/goabackend/goaprovider.c:523
+#: ../src/goabackend/goaprovider.c:535
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync er ikke implementert på type %s"
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:742
+#: ../src/goabackend/goaprovider.c:758
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "GOA %s påloggingsinformasjon for identitet %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:756
+#: ../src/goabackend/goaprovider.c:772
 #, c-format
 msgid "Failed to store credentials in the keyring: %s"
 msgstr "Klarte ikke å lagre påloggingsinformasjon i nøkkelringen: %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:827
+#: ../src/goabackend/goaprovider.c:843
 #, c-format
 msgid "Failed to retrieve credentials from the keyring: %s"
 msgstr "Klarte ikke å hente påloggingsinformasjon fra nøkkelring: %s"
 
-#: ../src/goabackend/goaprovider.c:839
+#: ../src/goabackend/goaprovider.c:855
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Feil ved lesing av resultat hentet fra nøkkelring: "
+
+#. TODO: more specific
+#: ../src/goabackend/goaprovider.c:923
+#, fuzzy, c-format
+msgid "Failed to delete credentials from the keyring: %s"
+msgstr "Klarte ikke å hente påloggingsinformasjon fra nøkkelring: %s"
 
 #: ../src/goabackend/goatwitterprovider.c:78
 msgid "Twitter"
@@ -278,6 +373,12 @@ msgstr "Fant ikke id_str-medlem i JSON-data"
 #, c-format
 msgid "Didn't find screen_name member in JSON data"
 msgstr "Fant ikke screen_name-medlem i JSON-data"
+
+#. translators: %s here is the address of the web page
+#: ../src/goabackend/goawebview.c:75
+#, c-format
+msgid "Loading “%s”…"
+msgstr "Laster «%s» …"
 
 #: ../src/goabackend/goayahooprovider.c:78
 msgid "Yahoo"
@@ -311,8 +412,3 @@ msgstr "Fant ikke profile-medlem i JSON-data"
 #, c-format
 msgid "Didn't find nickname member in JSON data"
 msgstr "Fant ikke nickname-medlem i JSON-data"
-
-#. TODO: look up email address / screenname from GUID
-#: ../src/goabackend/goayahooprovider.c:324
-msgid "Name"
-msgstr "Navn"
