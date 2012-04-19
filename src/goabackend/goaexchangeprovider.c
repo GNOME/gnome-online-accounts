@@ -680,12 +680,11 @@ refresh_account (GoaProvider    *provider,
   dialog = gtk_dialog_new_with_buttons (NULL,
                                         parent,
                                         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
+                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                         NULL);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 12);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-  gtk_dialog_add_button (GTK_DIALOG (dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 
   vbox = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   gtk_box_set_spacing (GTK_BOX (vbox), 12);
