@@ -28,6 +28,7 @@
 #include "goaprovider.h"
 #include "goaexchangeprovider.h"
 #include "goaeditablelabel.h"
+#include "goautils.h"
 
 /**
  * GoaExchangeProvider:
@@ -521,6 +522,7 @@ add_account (GoaProvider    *provider,
   const gchar *server;
   const gchar *password;
   const gchar *username;
+  const gchar *provider_type;
   gint response;
 
   ews_client = NULL;
@@ -551,6 +553,17 @@ add_account (GoaProvider    *provider,
   password = gtk_entry_get_text (GTK_ENTRY (data.password));
   username = gtk_entry_get_text (GTK_ENTRY (data.username));
   server = gtk_entry_get_text (GTK_ENTRY (data.server));
+
+  /* See if there's already an account of this type with the
+   * given identity
+   */
+  provider_type = goa_provider_get_provider_type (provider);
+  if (!goa_utils_check_duplicate (client,
+                                  username,
+                                  provider_type,
+                                  (GoaPeekInterfaceFunc) goa_object_peek_password_based,
+                                  &data.error))
+    goto out;
 
   local_error = NULL;
   if (!goa_ews_client_autodiscover_sync (ews_client,
