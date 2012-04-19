@@ -540,7 +540,7 @@ add_account (GoaProvider    *provider,
   response = gtk_dialog_run (dialog);
   if (response != GTK_RESPONSE_OK)
     {
-      g_set_error (error,
+      g_set_error (&data.error,
                    GOA_ERROR,
                    GOA_ERROR_DIALOG_DISMISSED,
                    _("Dialog was dismissed"));
@@ -599,10 +599,7 @@ add_account (GoaProvider    *provider,
                                 &data);
   g_main_loop_run (data.loop);
   if (data.error != NULL)
-    {
-      g_propagate_error (error, data.error);
-      goto out;
-    }
+    goto out;
 
   ret = GOA_OBJECT (g_dbus_object_manager_get_object (goa_client_get_object_manager (client),
                                                       data.account_object_path));
@@ -614,10 +611,18 @@ add_account (GoaProvider    *provider,
                                             ret,
                                             g_variant_builder_end (&builder),
                                             NULL, /* GCancellable */
-                                            error))
+                                            &data.error))
     goto out;
 
  out:
+  /* We might have an object even when data.error is set.
+   * eg., if we failed to store the credentials in the keyring.
+   */
+  if (data.error != NULL)
+    g_propagate_error (error, data.error);
+  else
+    g_assert (ret != NULL);
+
   g_free (data.account_object_path);
   if (data.loop != NULL)
     g_main_loop_unref (data.loop);
