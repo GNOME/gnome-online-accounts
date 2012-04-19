@@ -99,6 +99,7 @@ libgoa_backend_1_0_la_CFLAGS =					\
 	$(NULL)
 
 libgoa_backend_1_0_la_LIBADD = 					\
+	$(top_builddir)/src/goa/libgoa-1.0.la			\
 	$(WEBKIT_GTK_LIBS)					\
 	$(JSON_GLIB_LIBS)					\
 	$(GLIB_LIBS) 						\
