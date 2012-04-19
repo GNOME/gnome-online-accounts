@@ -68,7 +68,7 @@ goa_utils_check_duplicate (GoaClient              *client,
           g_set_error (error,
                        GOA_ERROR,
                        GOA_ERROR_ACCOUNT_EXISTS,
-                       _("There is already a %s account for %s"),
+                       _("A %s account already exists for %s"),
                        provider_name,
                        presentation_identity);
           goto out;
