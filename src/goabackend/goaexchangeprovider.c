@@ -486,7 +486,7 @@ create_account_details_ui (GtkBox *vbox, gboolean new_account, AddAccountData *d
   g_signal_connect (data->email_address, "changed", G_CALLBACK (on_email_address_or_password_changed), data);
   g_signal_connect (data->password, "changed", G_CALLBACK (on_email_address_or_password_changed), data);
 
-  gtk_dialog_add_button (data->dialog, GTK_STOCK_OK, GTK_RESPONSE_OK);
+  gtk_dialog_add_button (data->dialog, GTK_STOCK_CONNECT, GTK_RESPONSE_OK);
   gtk_dialog_set_default_response (data->dialog, GTK_RESPONSE_OK);
   gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, FALSE);
 }
