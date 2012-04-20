@@ -471,7 +471,7 @@ create_account_details_ui (GtkBox *vbox, gboolean new_account, AddAccountData *d
   gtk_box_pack_start (GTK_BOX (hbox), grid2, TRUE, TRUE, 0);
   gtk_box_pack_start (vbox, hbox, TRUE, TRUE, 0);
 
-  add_entry (grid1, grid2, _("Email _Address"), &data->email_address);
+  add_entry (grid1, grid2, _("_E-mail"), &data->email_address);
   add_entry (grid1, grid2, _("_Password"), &data->password);
   if (new_account)
     {
