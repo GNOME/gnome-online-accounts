@@ -977,13 +977,13 @@ goa_util_add_row_widget (GtkGrid      *left,
 
   if (label_text != NULL)
     {
-      gchar *s;
-      s = g_strdup_printf ("<span foreground=\"#555555\">%s</span>", label_text);
-      label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label), s);
+      GtkStyleContext *context;
+
+      label = gtk_label_new (label_text);
+      context = gtk_widget_get_style_context (label);
+      gtk_style_context_add_class (context, "dim-label");
       gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
       gtk_container_add (GTK_CONTAINER (left), label);
-      g_free (s);
     }
 
   gtk_container_add (GTK_CONTAINER (right), widget);
