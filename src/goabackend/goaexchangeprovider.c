@@ -359,6 +359,7 @@ typedef struct
 
   GtkWidget *cluebar;
   GtkWidget *cluebar_label;
+  GtkWidget *spinner;
 
   GtkWidget *email_address;
   GtkWidget *password;
@@ -434,6 +435,7 @@ on_email_address_or_password_changed (GtkEditable *editable, gpointer user_data)
 static void
 create_account_details_ui (GtkBox *vbox, gboolean new_account, AddAccountData *data)
 {
+  GtkWidget *header_grid;
   GtkWidget *grid1;
   GtkWidget *grid2;
   GtkWidget *hbox;
@@ -450,7 +452,12 @@ create_account_details_ui (GtkBox *vbox, gboolean new_account, AddAccountData *d
   gtk_container_add (GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (data->cluebar))),
                      data->cluebar_label);
 
+  header_grid = gtk_grid_new ();
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (header_grid), GTK_ORIENTATION_HORIZONTAL);
+  gtk_box_pack_start (vbox, header_grid, FALSE, FALSE, 0);
+
   label = gtk_label_new (NULL);
+  gtk_widget_set_hexpand (label, TRUE);
   markup = g_strconcat ("<b>",
                         (new_account) ? _("New Microsoft Exchange Account") : _("Microsoft Exchange Account"),
                         "</b>",
@@ -458,7 +465,11 @@ create_account_details_ui (GtkBox *vbox, gboolean new_account, AddAccountData *d
   gtk_label_set_markup (GTK_LABEL (label), markup);
   g_free (markup);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_box_pack_start (vbox, label, FALSE, FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (header_grid), label);
+
+  data->spinner = gtk_spinner_new ();
+  gtk_widget_set_no_show_all (data->spinner, TRUE);
+  gtk_container_add (GTK_CONTAINER (header_grid), data->spinner);
 
   grid1 = gtk_grid_new ();
   gtk_orientable_set_orientation (GTK_ORIENTABLE (grid1), GTK_ORIENTATION_VERTICAL);
@@ -507,6 +518,18 @@ add_account_cb (GoaManager *manager, GAsyncResult *res, gpointer user_data)
   g_main_loop_quit (data->loop);
 }
 
+static void
+autodiscover_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
+{
+  GoaEwsClient *client = GOA_EWS_CLIENT (source_object);
+  AddAccountData *data = user_data;
+
+  goa_ews_client_autodiscover_finish (client, res, &data->error);
+  g_main_loop_quit (data->loop);
+  gtk_spinner_stop (GTK_SPINNER (data->spinner));
+  gtk_widget_hide (data->spinner);
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static GoaObject *
@@ -517,7 +540,6 @@ add_account (GoaProvider    *provider,
              GError        **error)
 {
   AddAccountData data;
-  GError *local_error;
   GVariantBuilder builder;
   GoaEwsClient *ews_client;
   GoaObject *ret;
@@ -568,21 +590,26 @@ add_account (GoaProvider    *provider,
                                   &data.error))
     goto out;
 
-  local_error = NULL;
-  if (!goa_ews_client_autodiscover_sync (ews_client,
-                                         email_address,
-                                         password,
-                                         username,
-                                         server,
-                                         NULL,
-                                         &local_error))
+  goa_ews_client_autodiscover (ews_client,
+                               email_address,
+                               password,
+                               username,
+                               server,
+                               NULL,
+                               autodiscover_cb,
+                               &data);
+  gtk_spinner_start (GTK_SPINNER (data.spinner));
+  gtk_widget_show (data.spinner);
+  g_main_loop_run (data.loop);
+
+  if (data.error != NULL)
     {
       gchar *markup;
 
       markup = g_strdup_printf ("<b>%s:</b> %s",
                                 _("Error connecting to Microsoft Exchange server"),
-                                local_error->message);
-      g_error_free (local_error);
+                                data.error->message);
+      g_clear_error (&data.error);
 
       gtk_label_set_markup (GTK_LABEL (data.cluebar_label), markup);
       g_free (markup);
