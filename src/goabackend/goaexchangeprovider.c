@@ -604,6 +604,7 @@ add_account (GoaProvider    *provider,
 
   if (data.error != NULL)
     {
+      GtkWidget *button;
       gchar *markup;
 
       markup = g_strdup_printf ("<b>%s:</b> %s",
@@ -614,6 +615,8 @@ add_account (GoaProvider    *provider,
       gtk_label_set_markup (GTK_LABEL (data.cluebar_label), markup);
       g_free (markup);
 
+      button = gtk_dialog_get_widget_for_response (data.dialog, GTK_RESPONSE_OK);
+      gtk_button_set_label (GTK_BUTTON (button), _("_Try Again"));
       gtk_widget_set_no_show_all (data.cluebar, FALSE);
       gtk_widget_show_all (data.cluebar);
       goto ews_again;
@@ -765,6 +768,7 @@ refresh_account (GoaProvider    *provider,
 
   if (data.error != NULL)
     {
+      GtkWidget *button;
       gchar *markup;
 
       markup = g_strdup_printf ("<b>%s:</b> %s",
@@ -775,6 +779,8 @@ refresh_account (GoaProvider    *provider,
       gtk_label_set_markup (GTK_LABEL (data.cluebar_label), markup);
       g_free (markup);
 
+      button = gtk_dialog_get_widget_for_response (data.dialog, GTK_RESPONSE_OK);
+      gtk_button_set_label (GTK_BUTTON (button), _("_Try Again"));
       gtk_widget_set_no_show_all (data.cluebar, FALSE);
       gtk_widget_show_all (data.cluebar);
       goto ews_again;
