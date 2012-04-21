@@ -684,7 +684,6 @@ refresh_account (GoaProvider    *provider,
                  GError        **error)
 {
   AddAccountData data;
-  GError *local_error;
   GVariantBuilder builder;
   GoaAccount *account;
   GoaEwsClient *ews_client;
@@ -720,6 +719,7 @@ refresh_account (GoaProvider    *provider,
   gtk_box_set_spacing (GTK_BOX (vbox), 12);
 
   memset (&data, 0, sizeof (AddAccountData));
+  data.loop = g_main_loop_new (NULL, FALSE);
   data.dialog = GTK_DIALOG (dialog);
   data.error = NULL;
 
@@ -751,21 +751,26 @@ refresh_account (GoaProvider    *provider,
   exchange = goa_object_peek_exchange (object);
   server = goa_exchange_get_host (exchange);
 
-  local_error = NULL;
-  if (!goa_ews_client_autodiscover_sync (ews_client,
-                                         email_address,
-                                         password,
-                                         username,
-                                         server,
-                                         NULL,
-                                         &local_error))
+  goa_ews_client_autodiscover (ews_client,
+                               email_address,
+                               password,
+                               username,
+                               server,
+                               NULL,
+                               autodiscover_cb,
+                               &data);
+  gtk_spinner_start (GTK_SPINNER (data.spinner));
+  gtk_widget_show (data.spinner);
+  g_main_loop_run (data.loop);
+
+  if (data.error != NULL)
     {
       gchar *markup;
 
       markup = g_strdup_printf ("<b>%s:</b> %s",
                                 _("Error connecting to Microsoft Exchange server"),
-                                local_error->message);
-      g_error_free (local_error);
+                                data.error->message);
+      g_clear_error (&data.error);
 
       gtk_label_set_markup (GTK_LABEL (data.cluebar_label), markup);
       g_free (markup);
@@ -794,6 +799,8 @@ refresh_account (GoaProvider    *provider,
 
  out:
   gtk_widget_destroy (dialog);
+  if (data.loop != NULL)
+    g_main_loop_unref (data.loop);
   if (ews_client != NULL)
     g_object_unref (ews_client);
   return ret;
