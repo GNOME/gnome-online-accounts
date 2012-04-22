@@ -364,6 +364,7 @@ typedef struct
   GtkWidget *email_address;
   GtkWidget *password;
 
+  GtkWidget *expander;
   GtkWidget *username;
   GtkWidget *server;
 
@@ -441,6 +442,7 @@ create_account_details_ui (GtkBox *vbox, gboolean new_account, AddAccountData *d
   GtkWidget *hbox;
   GtkWidget *label;
   gchar *markup;
+  gint width;
 
   data->cluebar = gtk_info_bar_new ();
   gtk_info_bar_set_message_type (GTK_INFO_BAR (data->cluebar), GTK_MESSAGE_ERROR);
@@ -489,6 +491,25 @@ create_account_details_ui (GtkBox *vbox, gboolean new_account, AddAccountData *d
   add_entry (grid1, grid2, _("_Password"), &data->password);
   if (new_account)
     {
+      data->expander = gtk_expander_new_with_mnemonic (_("_Custom"));
+      gtk_expander_set_expanded (GTK_EXPANDER (data->expander), FALSE);
+      gtk_expander_set_resize_toplevel (GTK_EXPANDER (data->expander), TRUE);
+      gtk_box_pack_start (vbox, data->expander, FALSE, FALSE, 0);
+
+      grid1 = gtk_grid_new ();
+      gtk_orientable_set_orientation (GTK_ORIENTABLE (grid1), GTK_ORIENTATION_VERTICAL);
+      gtk_grid_set_row_spacing (GTK_GRID (grid1), 12);
+
+      grid2 = gtk_grid_new ();
+      gtk_orientable_set_orientation (GTK_ORIENTABLE (grid2), GTK_ORIENTATION_VERTICAL);
+      gtk_grid_set_row_spacing (GTK_GRID (grid2), 12);
+
+      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+      gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
+      gtk_box_pack_start (GTK_BOX (hbox), grid1, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), grid2, TRUE, TRUE, 0);
+      gtk_container_add (GTK_CONTAINER (data->expander), hbox);
+
       add_entry (grid1, grid2, _("User_name"), &data->username);
       add_entry (grid1, grid2, _("_Server"), &data->server);
     }
@@ -503,6 +524,9 @@ create_account_details_ui (GtkBox *vbox, gboolean new_account, AddAccountData *d
   gtk_dialog_add_button (data->dialog, GTK_STOCK_CONNECT, GTK_RESPONSE_OK);
   gtk_dialog_set_default_response (data->dialog, GTK_RESPONSE_OK);
   gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, FALSE);
+
+  gtk_window_get_size (GTK_WINDOW (data->dialog), &width, NULL);
+  gtk_widget_set_size_request (GTK_WIDGET (data->dialog), width, -1);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -617,6 +641,7 @@ add_account (GoaProvider    *provider,
 
       button = gtk_dialog_get_widget_for_response (data.dialog, GTK_RESPONSE_OK);
       gtk_button_set_label (GTK_BUTTON (button), _("_Try Again"));
+      gtk_expander_set_expanded (GTK_EXPANDER (data.expander), TRUE);
       gtk_widget_set_no_show_all (data.cluebar, FALSE);
       gtk_widget_show_all (data.cluebar);
       goto ews_again;
