@@ -1196,7 +1196,8 @@ goa_oauth2_provider_refresh_account (GoaProvider  *_provider,
 static void
 free_mutex (GMutex *mutex)
 {
-  g_mutex_free (mutex);
+  g_mutex_clear (mutex);
+  g_slice_free (GMutex, mutex);
 }
 
 /**
@@ -1271,7 +1272,8 @@ goa_oauth2_provider_get_access_token_sync (GoaOAuth2Provider  *provider,
   lock = g_object_get_data (G_OBJECT (object), "-goa-oauth2-provider-get-access-token-lock");
   if (lock == NULL)
     {
-      lock = g_mutex_new ();
+      lock = g_slice_new0 (GMutex);
+      g_mutex_init (lock);
       g_object_set_data_full (G_OBJECT (object),
                               "-goa-oauth2-provider-get-access-token-lock",
                               lock,
