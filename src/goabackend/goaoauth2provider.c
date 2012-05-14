@@ -749,6 +749,8 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
       webkit_soup_session = webkit_get_default_session ();
       /* Get the proxy configuration from the GNOME settings */
       soup_session_add_feature_by_type (webkit_soup_session, SOUP_TYPE_PROXY_RESOLVER_GNOME);
+      /* Set the Accept-Language header automatically */
+      g_object_set (webkit_soup_session, "accept-language-auto", TRUE, NULL);
 
       /* Ensure we use an empty non-persistent cookie to avoid login
        * credentials being reused...
