@@ -106,7 +106,7 @@ build_authorization_uri (GoaOAuth2Provider  *provider,
 static const gchar *
 get_authorization_uri (GoaOAuth2Provider *provider)
 {
-  return "https://www.facebook.com/dialog/oauth";
+  return "https://m.facebook.com/dialog/oauth";
 }
 
 static const gchar *
