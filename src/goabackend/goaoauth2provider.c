@@ -737,6 +737,7 @@ on_entry_changed (GtkEditable *editable,
 
 static gboolean
 get_tokens_and_identity (GoaOAuth2Provider  *provider,
+                         gboolean            add_account,
                          GtkDialog          *dialog,
                          GtkBox             *vbox,
                          gchar             **out_authorization_code,
@@ -750,6 +751,7 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
   gboolean ret;
   gchar *url;
   IdentifyData data;
+  GtkWidget *label;
   gchar *escaped_redirect_uri;
   gchar *escaped_client_id;
   gchar *escaped_scope;
@@ -780,6 +782,11 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
                                                      escaped_redirect_uri,
                                                      escaped_client_id,
                                                      escaped_scope);
+
+  label = goa_utils_create_add_refresh_label (GOA_PROVIDER (provider), add_account);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+  gtk_widget_show (label);
 
   if (goa_oauth2_provider_get_use_external_browser (provider))
     {
@@ -1016,6 +1023,7 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
   data.loop = g_main_loop_new (NULL, FALSE);
 
   if (!get_tokens_and_identity (provider,
+                                TRUE,
                                 dialog,
                                 vbox,
                                 &authorization_code,
@@ -1136,6 +1144,7 @@ goa_oauth2_provider_refresh_account (GoaProvider  *_provider,
   gtk_widget_show_all (dialog);
 
   if (!get_tokens_and_identity (provider,
+                                FALSE,
                                 GTK_DIALOG (dialog),
                                 GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))),
                                 &authorization_code,

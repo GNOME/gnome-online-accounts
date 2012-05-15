@@ -24,6 +24,7 @@
 
 #include <glib/gi18n-lib.h>
 
+#include "goaprovider.h"
 #include "goautils.h"
 
 gboolean
@@ -80,4 +81,26 @@ goa_utils_check_duplicate (GoaClient              *client,
  out:
   g_list_free_full (accounts, g_object_unref);
   return ret;
+}
+
+GtkWidget *
+goa_utils_create_add_refresh_label (GoaProvider *provider, gboolean add_account)
+{
+  GtkWidget *label;
+  gchar *markup;
+  gchar *provider_name;
+  gchar *template;
+
+  label = gtk_label_new (NULL);
+
+  /* Translators: the %s is the name of the provider. eg., Google. */
+  template = g_strconcat ("<b>", (add_account) ? _("Add %s") : _("Refresh %s"), "</b>", NULL);
+  provider_name = goa_provider_get_provider_name (provider, NULL);
+  markup = g_strdup_printf (template, provider_name);
+  gtk_label_set_markup (GTK_LABEL (label), markup);
+  g_free (markup);
+  g_free (provider_name);
+  g_free (template);
+
+  return label;
 }

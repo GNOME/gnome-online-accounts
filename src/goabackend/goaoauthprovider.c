@@ -665,6 +665,7 @@ rest_proxy_call_cb (RestProxyCall *call, const GError *error, GObject *weak_obje
 
 static gboolean
 get_tokens_and_identity (GoaOAuthProvider *provider,
+                         gboolean          add_account,
                          GtkDialog        *dialog,
                          GtkBox           *vbox,
                          gchar           **out_access_token,
@@ -683,6 +684,7 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
   RestProxy *proxy;
   RestProxyCall *call;
   GHashTable *f;
+  GtkWidget *label;
   GtkWidget *spinner;
   gboolean use_external_browser;
   gchar **request_params;
@@ -732,9 +734,15 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
       goto out;
     }
 
+  label = goa_utils_create_add_refresh_label (GOA_PROVIDER (provider), add_account);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+  gtk_widget_show (label);
+
   spinner = gtk_spinner_new ();
+  gtk_widget_set_size_request (GTK_WIDGET (spinner), 24, 24);
   gtk_spinner_start (GTK_SPINNER (spinner));
-  gtk_box_pack_start (vbox, spinner, TRUE, TRUE, 0);
+  gtk_box_pack_start (vbox, spinner, TRUE, FALSE, 0);
   gtk_widget_show (spinner);
 
   g_main_loop_run (data.loop);
@@ -1017,6 +1025,7 @@ goa_oauth_provider_add_account (GoaProvider *_provider,
   data.loop = g_main_loop_new (NULL, FALSE);
 
   if (!get_tokens_and_identity (provider,
+                                TRUE,
                                 dialog,
                                 vbox,
                                 &access_token,
@@ -1141,6 +1150,7 @@ goa_oauth_provider_refresh_account (GoaProvider  *_provider,
   gtk_widget_show_all (dialog);
 
   if (!get_tokens_and_identity (provider,
+                                FALSE,
                                 GTK_DIALOG (dialog),
                                 GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))),
                                 &access_token,

@@ -28,6 +28,7 @@
 #define __GOA_UTILS_H__
 
 #include <glib.h>
+#include <gtk/gtk.h>
 #include <goabackend/goabackendtypes.h>
 
 G_BEGIN_DECLS
@@ -39,6 +40,8 @@ gboolean         goa_utils_check_duplicate (GoaClient              *client,
                                             const gchar            *provider_type,
                                             GoaPeekInterfaceFunc    func,
                                             GError                **error);
+
+GtkWidget       *goa_utils_create_add_refresh_label (GoaProvider *provider, gboolean add_account);
 
 G_END_DECLS
 
