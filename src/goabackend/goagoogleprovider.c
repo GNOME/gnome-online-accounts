@@ -163,7 +163,7 @@ get_callback_uri (GoaOAuthProvider *provider)
 static const gchar *
 get_authentication_cookie (GoaOAuthProvider *provider)
 {
-  return "GoogleAccountsLocale_session";
+  return "LSID";
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
