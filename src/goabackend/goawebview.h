@@ -52,6 +52,7 @@ struct _GoaWebViewClass
 GType                  goa_web_view_get_type               (void) G_GNUC_CONST;
 GtkWidget             *goa_web_view_new                    (void);
 GtkWidget             *goa_web_view_get_view               (GoaWebView *self);
+void                   goa_web_view_fake_mobile            (GoaWebView *self);
 
 G_END_DECLS
 

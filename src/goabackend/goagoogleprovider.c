@@ -478,6 +478,12 @@ get_use_external_browser (GoaOAuthProvider *provider)
   return FALSE;
 }
 
+static gboolean
+get_use_mobile_browser (GoaOAuthProvider *provider)
+{
+  return TRUE;
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
@@ -567,6 +573,7 @@ goa_google_provider_class_init (GoaGoogleProviderClass *klass)
   oauth_class->get_authentication_cookie = get_authentication_cookie;
   oauth_class->build_authorization_uri  = build_authorization_uri;
   oauth_class->get_use_external_browser = get_use_external_browser;
+  oauth_class->get_use_mobile_browser   = get_use_mobile_browser;
   oauth_class->add_account_key_values   = add_account_key_values;
   oauth_class->parse_request_token_error = parse_request_token_error;
 }

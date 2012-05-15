@@ -122,6 +122,35 @@ goa_oauth2_provider_get_use_external_browser (GoaOAuth2Provider *provider)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static gboolean
+goa_oauth2_provider_get_use_mobile_browser_default (GoaOAuth2Provider  *provider)
+{
+  return FALSE;
+}
+
+/**
+ * goa_oauth_provider_get_use_mobile_browser:
+ * @provider: A #GoaOAuth2Provider.
+ *
+ * Returns whether there is a need for the embedded browser to identify
+ * itself as running on a mobile phone in order to get a more compact
+ * version of the approval page.
+ *
+ * This is a virtual method where the default implementation returns
+ * %FALSE.
+ *
+ * Returns: %TRUE if the embedded browser should identify itself as
+ * running on a mobile platform, %FALSE otherwise.
+ */
+gboolean
+goa_oauth2_provider_get_use_mobile_browser (GoaOAuth2Provider *provider)
+{
+  g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (provider), FALSE);
+  return GOA_OAUTH2_PROVIDER_GET_CLASS (provider)->get_use_mobile_browser (provider);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static void
 goa_oauth2_provider_add_account_key_values_default (GoaOAuth2Provider *provider,
                                                     GVariantBuilder   *builder)
@@ -831,6 +860,9 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
 
       web_view = goa_web_view_new ();
       embed = goa_web_view_get_view (GOA_WEB_VIEW (web_view));
+
+      if (goa_oauth2_provider_get_use_mobile_browser (provider))
+        goa_web_view_fake_mobile (GOA_WEB_VIEW (web_view));
 
       webkit_web_view_load_uri (WEBKIT_WEB_VIEW (embed), url);
       g_signal_connect (embed,
@@ -1556,6 +1588,7 @@ goa_oauth2_provider_class_init (GoaOAuth2ProviderClass *klass)
   klass->build_authorization_uri  = goa_oauth2_provider_build_authorization_uri_default;
   klass->get_token_uri            = goa_oauth2_provider_get_token_uri_default;
   klass->get_use_external_browser = goa_oauth2_provider_get_use_external_browser_default;
+  klass->get_use_mobile_browser   = goa_oauth2_provider_get_use_mobile_browser_default;
   klass->add_account_key_values   = goa_oauth2_provider_add_account_key_values_default;
 }
 

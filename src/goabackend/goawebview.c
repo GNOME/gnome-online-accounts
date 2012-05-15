@@ -288,3 +288,24 @@ goa_web_view_get_view (GoaWebView *self)
 {
   return self->priv->web_view;
 }
+
+void
+goa_web_view_fake_mobile (GoaWebView *self)
+{
+  WebKitWebSettings *settings;
+
+  settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (self->priv->web_view));
+
+  /* Fake a HTC Wildfire. Some providers, like Google, refuse
+   * to provide the mobile version of their authentication pages
+   * otherwise. eg., in Google's case, passing btmpl=mobile does
+   * not help.
+   *
+   * Also note that the user agents of some mobile browsers may
+   * not work. eg., Nokia N9.
+   */
+  g_object_set (G_OBJECT (settings),
+                "user-agent", "Mozilla/5.0 (Linux; U; Android 2.2.1; HTC Wildfire Build/FRG83D) "
+                              "AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
+                NULL);
+}

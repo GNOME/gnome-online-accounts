@@ -68,6 +68,7 @@ struct _GoaOAuth2Provider
  * @get_identity_sync: Virtual function for goa_oauth2_provider_get_identity_sync().
  * @build_authorization_uri: Virtual function for goa_oauth2_provider_build_authorization_uri().
  * @get_use_external_browser: Virtual function for goa_oauth2_provider_get_use_external_browser().
+ * @get_use_mobile_browser: Virtual function for goa_oauth2_provider_get_use_mobile_browser().
  * @add_account_key_values: Virtual function for goa_oauth2_provider_add_account_key_values().
  *
  * Class structure for #GoaOAuth2Provider.
@@ -97,6 +98,7 @@ struct _GoaOAuth2ProviderClass
                                             const gchar        *escaped_scope);
   const gchar *(*get_token_uri)            (GoaOAuth2Provider  *provider);
   gboolean     (*get_use_external_browser) (GoaOAuth2Provider  *provider);
+  gboolean     (*get_use_mobile_browser)   (GoaOAuth2Provider  *provider);
   void         (*add_account_key_values)   (GoaOAuth2Provider  *provider,
                                             GVariantBuilder    *builder);
 
@@ -130,6 +132,7 @@ gchar       *goa_oauth2_provider_build_authorization_uri  (GoaOAuth2Provider  *p
                                                            const gchar        *escaped_client_id,
                                                            const gchar        *escaped_scope);
 gboolean     goa_oauth2_provider_get_use_external_browser (GoaOAuth2Provider  *provider);
+gboolean     goa_oauth2_provider_get_use_mobile_browser   (GoaOAuth2Provider  *provider);
 void         goa_oauth2_provider_add_account_key_values   (GoaOAuth2Provider  *provider,
                                                            GVariantBuilder    *builder);
 
