@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-04-22 16:53+0000\n"
-"PO-Revision-Date: 2012-04-23 11:04+0200\n"
+"POT-Creation-Date: 2012-05-15 20:41+0000\n"
+"PO-Revision-Date: 2012-05-16 11:29+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -83,8 +83,8 @@ msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:276
-#: ../src/goabackend/goaoauth2provider.c:1293
-#: ../src/goabackend/goaoauthprovider.c:1310
+#: ../src/goabackend/goaoauth2provider.c:1336
+#: ../src/goabackend/goaoauthprovider.c:1354
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "No se encontraron las credenciales en el depósito de claves (%s, %d): "
@@ -128,8 +128,8 @@ msgstr "_Servidor"
 
 #: ../src/goabackend/goaexchangeprovider.c:597
 #: ../src/goabackend/goaexchangeprovider.c:772
-#: ../src/goabackend/goaoauth2provider.c:853
-#: ../src/goabackend/goaoauthprovider.c:840
+#: ../src/goabackend/goaoauth2provider.c:892
+#: ../src/goabackend/goaoauthprovider.c:880
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "Se descartó el diálogo"
@@ -146,23 +146,23 @@ msgstr "In_tentarlo de nuevo"
 
 #: ../src/goabackend/goaexchangeprovider.c:859
 #: ../src/goabackend/goafacebookprovider.c:340
-#: ../src/goabackend/goagoogleprovider.c:500
+#: ../src/goabackend/goagoogleprovider.c:506
 #: ../src/goabackend/goawindowsliveprovider.c:355
 msgid "Use for"
 msgstr "Usar para"
 
 #: ../src/goabackend/goaexchangeprovider.c:861
-#: ../src/goabackend/goagoogleprovider.c:502
+#: ../src/goabackend/goagoogleprovider.c:508
 msgid "Mail"
 msgstr "Correo-e"
 
 #: ../src/goabackend/goaexchangeprovider.c:866
-#: ../src/goabackend/goagoogleprovider.c:507
+#: ../src/goabackend/goagoogleprovider.c:513
 msgid "Calendar"
 msgstr "Calendario"
 
 #: ../src/goabackend/goaexchangeprovider.c:871
-#: ../src/goabackend/goagoogleprovider.c:512
+#: ../src/goabackend/goagoogleprovider.c:518
 msgid "Contacts"
 msgstr "Contactos"
 
@@ -185,7 +185,7 @@ msgstr ""
 #: ../src/goabackend/goafacebookprovider.c:206
 #: ../src/goabackend/goagoogleprovider.c:224
 #: ../src/goabackend/goawindowsliveprovider.c:195
-#: ../src/goabackend/goaoauth2provider.c:514
+#: ../src/goabackend/goaoauth2provider.c:543
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
@@ -204,7 +204,7 @@ msgid "Didn't find email member in JSON data"
 msgstr "No se encontró el correo-e del miembro en los datos JSON"
 
 #: ../src/goabackend/goafacebookprovider.c:342
-#: ../src/goabackend/goagoogleprovider.c:517
+#: ../src/goabackend/goagoogleprovider.c:523
 #: ../src/goabackend/goawindowsliveprovider.c:357
 msgid "Chat"
 msgstr "Chat"
@@ -224,7 +224,7 @@ msgstr ""
 "La hora de su sistema no es válida. Compruebe su configuración de fecha y "
 "hora."
 
-#: ../src/goabackend/goagoogleprovider.c:522
+#: ../src/goabackend/goagoogleprovider.c:528
 #: ../src/goabackend/goawindowsliveprovider.c:362
 msgid "Documents"
 msgstr "Documentos"
@@ -239,8 +239,8 @@ msgid "Didn't find account email member in JSON data"
 msgstr "No se encontró la cuenta de correo-e del miembro en los datos JSON"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:471
-#: ../src/goabackend/goaoauthprovider.c:485
+#: ../src/goabackend/goaoauth2provider.c:500
+#: ../src/goabackend/goaoauthprovider.c:514
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -248,24 +248,24 @@ msgstr ""
 "Se esperaba un estado 200 cuando se solicitó acceso al «token», en su lugar "
 "se obtuvo el estado %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:491
+#: ../src/goabackend/goaoauth2provider.c:520
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "No se encontró el «access_token» en los datos que no eran JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:525
+#: ../src/goabackend/goaoauth2provider.c:554
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "No se encontró el «access_token» en los datos JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:664
-#: ../src/goabackend/goaoauth2provider.c:703
+#: ../src/goabackend/goaoauth2provider.c:693
+#: ../src/goabackend/goaoauth2provider.c:732
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "«%s» fue la respuesta a la autorización"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:793
+#: ../src/goabackend/goaoauth2provider.c:829
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
@@ -274,53 +274,53 @@ msgstr ""
 "Pegue el código de autorización obtenido en la <a href=\"%s\">página de "
 "autorización</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:879
-#: ../src/goabackend/goaoauthprovider.c:871
+#: ../src/goabackend/goaoauth2provider.c:918
+#: ../src/goabackend/goaoauthprovider.c:911
 msgid "Error getting an Access Token: "
 msgstr "Error al obtener el «token» de acceso: "
 
-#: ../src/goabackend/goaoauth2provider.c:894
-#: ../src/goabackend/goaoauthprovider.c:884
+#: ../src/goabackend/goaoauth2provider.c:933
+#: ../src/goabackend/goaoauthprovider.c:924
 msgid "Error getting identity: "
 msgstr "Error al obtener la identidad: "
 
-#: ../src/goabackend/goaoauth2provider.c:1156
-#: ../src/goabackend/goaoauthprovider.c:1162
+#: ../src/goabackend/goaoauth2provider.c:1197
+#: ../src/goabackend/goaoauthprovider.c:1204
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "Se solicitó iniciar sesión como %s, pero se inició sesión como %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1320
+#: ../src/goabackend/goaoauth2provider.c:1363
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Las credenciales no contienen el «access_token»"
 
-#: ../src/goabackend/goaoauth2provider.c:1359
-#: ../src/goabackend/goaoauthprovider.c:1383
+#: ../src/goabackend/goaoauth2provider.c:1402
+#: ../src/goabackend/goaoauthprovider.c:1427
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Falló al actualizar el acceso al «token» (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1394
-#: ../src/goabackend/goaoauthprovider.c:1413
+#: ../src/goabackend/goaoauth2provider.c:1437
+#: ../src/goabackend/goaoauthprovider.c:1457
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr ""
 "Error al almacenar las credenciales en el depósito de claves (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:508
+#: ../src/goabackend/goaoauthprovider.c:537
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr ""
 "Faltan las cabeceras del «access_token» o del «access_token_secret» en la "
 "respuesta"
 
-#: ../src/goabackend/goaoauthprovider.c:731
+#: ../src/goabackend/goaoauthprovider.c:762
 msgid "Error getting a Request Token: "
 msgstr "Error al obtener el «token» solicitado: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:750
+#: ../src/goabackend/goaoauthprovider.c:787
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -328,20 +328,20 @@ msgstr ""
 "Se esperaba un estado 200 al solicitar el «token», en su lugar se obtuvo el "
 "estado %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:767
+#: ../src/goabackend/goaoauthprovider.c:804
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr ""
 "Faltan las cabeceras «request_token» o «request_token_secret» en la respuesta"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:784
+#: ../src/goabackend/goaoauthprovider.c:821
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr ""
 "Pegue el «token» obtenido en la <a href=\"%s\">página de autorización</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1339
+#: ../src/goabackend/goaoauthprovider.c:1383
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Las credenciales no contienen «access_token» o «access_token_secret»"
@@ -393,10 +393,21 @@ msgstr "No se encontró el miembro «id_str» en los datos JSON"
 msgid "Didn't find screen_name member in JSON data"
 msgstr "No se encontró el miembro «screen_name» en los datos JSON"
 
-#: ../src/goabackend/goautils.c:71
+#: ../src/goabackend/goautils.c:72
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "Ya existe una cuenta %s para %s"
+
+#. Translators: the %s is the name of the provider. eg., Google.
+#: ../src/goabackend/goautils.c:97
+#, c-format
+msgid "Add %s"
+msgstr "Añadir %s"
+
+#: ../src/goabackend/goautils.c:97
+#, c-format
+msgid "Refresh %s"
+msgstr "Actualizar %s"
 
 #. translators: %s here is the address of the web page
 #: ../src/goabackend/goawebview.c:75
