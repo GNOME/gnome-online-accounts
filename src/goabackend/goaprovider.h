@@ -190,8 +190,6 @@ GtkWidget *goa_util_add_row_widget (GtkGrid      *left,
                                     const gchar  *label_text,
                                     GtkWidget    *widget);
 
-gchar     *goa_util_get_css        (void);
-
 gchar *
 goa_util_lookup_keyfile_string (GoaObject    *object,
                                 const gchar  *key);
