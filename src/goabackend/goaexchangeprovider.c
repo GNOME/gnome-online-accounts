@@ -333,7 +333,7 @@ add_entry (GtkWidget     *grid1,
 
   label = gtk_label_new_with_mnemonic (text);
   context = gtk_widget_get_style_context (label);
-  gtk_style_context_add_class (context, "dim-label");
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
   gtk_widget_set_vexpand (label, TRUE);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
   gtk_container_add (GTK_CONTAINER (grid1), label);

@@ -973,7 +973,7 @@ goa_util_add_row_widget (GtkGrid      *left,
 
       label = gtk_label_new (label_text);
       context = gtk_widget_get_style_context (label);
-      gtk_style_context_add_class (context, "dim-label");
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
       gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
       gtk_container_add (GTK_CONTAINER (left), label);
     }
