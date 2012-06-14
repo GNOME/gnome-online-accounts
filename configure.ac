@@ -167,7 +167,7 @@ fi
 AC_ARG_ENABLE([facebook], [AS_HELP_STRING([--enable-facebook],
                                           [Enable Facebook provider])],
                                           [],
-                                          [enable_facebook=no])
+                                          [enable_facebook=yes])
 AC_ARG_WITH(facebook-client-id,
             [AS_HELP_STRING([--with-facebook-client-id],
                             [Facebook OAuth 2.0 client id])],
