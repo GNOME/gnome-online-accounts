@@ -173,11 +173,7 @@ AC_ARG_WITH(facebook-client-id,
                             [Facebook OAuth 2.0 client id])],
                             [],
                             [])
-AC_ARG_WITH(facebook-client-secret,
-            [AS_HELP_STRING([--with-facebook-client-secret],
-                            [Facebook OAuth 2.0 client secret])],
-                            [],
-                            [])
+
 if test "$with_facebook_client_id" = ""; then
   with_facebook_client_id=297654143624603
 fi
