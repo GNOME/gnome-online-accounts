@@ -265,10 +265,10 @@ ensure_credentials_sync (GoaProvider         *provider,
 
   ret = FALSE;
 
-  credentials = goa_provider_lookup_credentials_sync (provider,
-                                                      object,
-                                                      cancellable,
-                                                      error);
+  credentials = goa_utils_lookup_credentials_sync (provider,
+                                                   object,
+                                                   cancellable,
+                                                   error);
   if (credentials == NULL)
     {
       if (error != NULL)
@@ -678,11 +678,11 @@ add_account (GoaProvider    *provider,
   g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&builder, "{sv}", "password", g_variant_new_string (password));
 
-  if (!goa_provider_store_credentials_sync (provider,
-                                            ret,
-                                            g_variant_builder_end (&builder),
-                                            NULL, /* GCancellable */
-                                            &data.error))
+  if (!goa_utils_store_credentials_sync (provider,
+                                         ret,
+                                         g_variant_builder_end (&builder),
+                                         NULL, /* GCancellable */
+                                         &data.error))
     goto out;
 
  out:
@@ -815,11 +815,11 @@ refresh_account (GoaProvider    *provider,
   g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&builder, "{sv}", "password", g_variant_new_string (password));
 
-  if (!goa_provider_store_credentials_sync (provider,
-                                            object,
-                                            g_variant_builder_end (&builder),
-                                            NULL, /* GCancellable */
-                                            error))
+  if (!goa_utils_store_credentials_sync (provider,
+                                         object,
+                                         g_variant_builder_end (&builder),
+                                         NULL, /* GCancellable */
+                                         error))
     goto out;
 
   goa_account_call_ensure_credentials (account,
@@ -918,10 +918,10 @@ on_handle_get_password (GoaPasswordBased      *interface,
   provider = goa_provider_get_for_provider_type (goa_account_get_provider_type (account));
 
   error = NULL;
-  credentials = goa_provider_lookup_credentials_sync (provider,
-                                                      object,
-                                                      NULL, /* GCancellable* */
-                                                      &error);
+  credentials = goa_utils_lookup_credentials_sync (provider,
+                                                   object,
+                                                   NULL, /* GCancellable* */
+                                                   &error);
   if (credentials == NULL)
     {
       g_dbus_method_invocation_take_error (invocation, error);

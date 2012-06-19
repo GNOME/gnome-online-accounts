@@ -27,6 +27,7 @@ goa_daemon_SOURCES = 						\
 
 goa_daemon_CPPFLAGS =						\
 	-DG_LOG_DOMAIN=\"goa-daemon\"				\
+	-DGOA_BACKEND_COMPILATION				\
 	$(NULL)
 
 goa_daemon_CFLAGS =						\

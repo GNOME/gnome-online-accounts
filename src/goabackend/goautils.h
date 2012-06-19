@@ -43,6 +43,22 @@ gboolean         goa_utils_check_duplicate (GoaClient              *client,
 
 GtkWidget       *goa_utils_create_add_refresh_label (GoaProvider *provider, gboolean add_account);
 
+gboolean         goa_utils_delete_credentials_sync (GoaProvider    *provider,
+                                                    GoaAccount     *account,
+                                                    GCancellable   *cancellable,
+                                                    GError        **error);
+
+GVariant        *goa_utils_lookup_credentials_sync (GoaProvider    *provider,
+                                                    GoaObject      *object,
+                                                    GCancellable   *cancellable,
+                                                    GError        **error);
+
+gboolean         goa_utils_store_credentials_sync (GoaProvider    *provider,
+                                                   GoaObject      *object,
+                                                   GVariant       *credentials,
+                                                   GCancellable   *cancellable,
+                                                   GError        **error);
+
 G_END_DECLS
 
 #endif /* __GOA_UTILS_H__ */

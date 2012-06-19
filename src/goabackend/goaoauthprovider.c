@@ -1113,11 +1113,11 @@ goa_oauth_provider_add_account (GoaProvider *_provider,
     g_variant_builder_add (&builder, "{sv}", "session_handle_expires_at",
                            g_variant_new_int64 (duration_to_abs_usec (session_handle_expires_in)));
   /* TODO: run in worker thread */
-  if (!goa_provider_store_credentials_sync (GOA_PROVIDER (provider),
-                                            ret,
-                                            g_variant_builder_end (&builder),
-                                            NULL, /* GCancellable */
-                                            &data.error))
+  if (!goa_utils_store_credentials_sync (GOA_PROVIDER (provider),
+                                         ret,
+                                         g_variant_builder_end (&builder),
+                                         NULL, /* GCancellable */
+                                         &data.error))
     goto out;
 
  out:
@@ -1219,11 +1219,11 @@ goa_oauth_provider_refresh_account (GoaProvider  *_provider,
     g_variant_builder_add (&builder, "{sv}", "session_handle_expires_at",
                            g_variant_new_int64 (duration_to_abs_usec (session_handle_expires_in)));
   /* TODO: run in worker thread */
-  if (!goa_provider_store_credentials_sync (GOA_PROVIDER (provider),
-                                            object,
-                                            g_variant_builder_end (&builder),
-                                            NULL, /* GCancellable */
-                                            error))
+  if (!goa_utils_store_credentials_sync (GOA_PROVIDER (provider),
+                                         object,
+                                         g_variant_builder_end (&builder),
+                                         NULL, /* GCancellable */
+                                         error))
     goto out;
 
   goa_account_call_ensure_credentials (goa_object_peek_account (object),
@@ -1343,10 +1343,10 @@ goa_oauth_provider_get_access_token_sync (GoaOAuthProvider   *provider,
   g_mutex_lock (lock);
 
   /* First, get the credentials from the keyring */
-  credentials = goa_provider_lookup_credentials_sync (GOA_PROVIDER (provider),
-                                                      object,
-                                                      cancellable,
-                                                      error);
+  credentials = goa_utils_lookup_credentials_sync (GOA_PROVIDER (provider),
+                                                   object,
+                                                   cancellable,
+                                                   error);
   if (credentials == NULL)
     {
       if (error != NULL)
@@ -1446,11 +1446,11 @@ goa_oauth_provider_get_access_token_sync (GoaOAuthProvider   *provider,
                            g_variant_new_int64 (duration_to_abs_usec (session_handle_expires_in)));
 
   /* TODO: run in worker thread */
-  if (!goa_provider_store_credentials_sync (GOA_PROVIDER (provider),
-                                            object,
-                                            g_variant_builder_end (&builder),
-                                            cancellable,
-                                            error))
+  if (!goa_utils_store_credentials_sync (GOA_PROVIDER (provider),
+                                         object,
+                                         g_variant_builder_end (&builder),
+                                         cancellable,
+                                         error))
     {
       if (error != NULL)
         {

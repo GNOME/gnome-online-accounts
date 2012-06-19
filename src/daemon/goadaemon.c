@@ -29,6 +29,7 @@
 
 #include "goadaemon.h"
 #include "goabackend/goabackend.h"
+#include "goabackend/goautils.h"
 
 struct _GoaDaemon
 {
@@ -1031,7 +1032,7 @@ on_account_handle_remove (GoaAccount            *account,
     }
 
   error = NULL;
-  if (!goa_provider_delete_credentials_sync (provider, account, NULL, &error))
+  if (!goa_utils_delete_credentials_sync (provider, account, NULL, &error))
     {
       g_dbus_method_invocation_return_gerror (invocation, error);
       goto out;

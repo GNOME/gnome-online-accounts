@@ -143,19 +143,6 @@ gboolean     goa_provider_build_object              (GoaProvider         *provid
                                                      const gchar         *group,
                                                      gboolean             just_added,
                                                      GError             **error);
-gboolean     goa_provider_store_credentials_sync    (GoaProvider         *provider,
-                                                     GoaObject           *object,
-                                                     GVariant            *credentials,
-                                                     GCancellable        *cancellable,
-                                                     GError             **error);
-GVariant    *goa_provider_lookup_credentials_sync   (GoaProvider         *provider,
-                                                     GoaObject           *object,
-                                                     GCancellable        *cancellable,
-                                                     GError             **error);
-gboolean     goa_provider_delete_credentials_sync   (GoaProvider         *provider,
-                                                     GoaAccount          *account,
-                                                     GCancellable        *cancellable,
-                                                     GError             **error);
 void         goa_provider_ensure_credentials        (GoaProvider         *provider,
                                                      GoaObject           *object,
                                                      GCancellable        *cancellable,
