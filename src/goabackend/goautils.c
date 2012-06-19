@@ -226,29 +226,26 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
 }
 
 gboolean
-goa_utils_store_credentials_sync (GoaProvider   *provider,
-                                  GoaObject     *object,
-                                  GVariant      *credentials,
-                                  GCancellable  *cancellable,
-                                  GError       **error)
+goa_utils_store_credentials_for_id_sync (GoaProvider   *provider,
+                                         const gchar   *id,
+                                         GVariant      *credentials,
+                                         GCancellable  *cancellable,
+                                         GError       **error)
 {
   gboolean ret;
   gchar *credentials_str;
   gchar *password_description;
   gchar *password_key;
   GnomeKeyringResult result;
-  const gchar *identity;
 
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
-  g_return_val_if_fail (GOA_IS_OBJECT (object) && goa_object_peek_account (object) != NULL, FALSE);
+  g_return_val_if_fail (id != NULL && id[0] != '\0', FALSE);
   g_return_val_if_fail (credentials != NULL, FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   /* TODO: use GCancellable */
   ret = FALSE;
-
-  identity = goa_account_get_id (goa_object_peek_account (object));
 
   credentials_str = g_variant_print (credentials, TRUE);
   g_variant_ref_sink (credentials);
@@ -257,11 +254,11 @@ goa_utils_store_credentials_sync (GoaProvider   *provider,
   password_key = g_strdup_printf ("%s:gen%d:%s",
                                   goa_provider_get_provider_type (GOA_PROVIDER (provider)),
                                   goa_provider_get_credentials_generation (GOA_PROVIDER (provider)),
-                                  identity);
+                                  id);
   /* Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo' */
   password_description = g_strdup_printf (_("GOA %s credentials for identity %s"),
                                           goa_provider_get_provider_type (GOA_PROVIDER (provider)),
-                                          identity);
+                                          id);
   result = gnome_keyring_store_password_sync (&keyring_password_schema,
                                               NULL, /* default keyring */
                                               password_description,
@@ -285,4 +282,23 @@ goa_utils_store_credentials_sync (GoaProvider   *provider,
   g_free (password_key);
   g_free (password_description);
   return ret;
+}
+
+gboolean
+goa_utils_store_credentials_for_object_sync (GoaProvider   *provider,
+                                             GoaObject     *object,
+                                             GVariant      *credentials,
+                                             GCancellable  *cancellable,
+                                             GError       **error)
+{
+  const gchar *id;
+
+  g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (GOA_IS_OBJECT (object) && goa_object_peek_account (object) != NULL, FALSE);
+  g_return_val_if_fail (credentials != NULL, FALSE);
+  g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  id = goa_account_get_id (goa_object_peek_account (object));
+  return goa_utils_store_credentials_for_id_sync (provider, id, credentials, cancellable, error);
 }

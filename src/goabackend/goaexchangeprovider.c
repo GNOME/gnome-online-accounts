@@ -564,7 +564,8 @@ add_account (GoaProvider    *provider,
              GError        **error)
 {
   AddAccountData data;
-  GVariantBuilder builder;
+  GVariantBuilder credentials;
+  GVariantBuilder details;
   GoaEwsClient *ews_client;
   GoaObject *ret;
   const gchar *email_address;
@@ -649,22 +650,26 @@ add_account (GoaProvider    *provider,
 
   gtk_widget_hide (GTK_WIDGET (dialog));
 
+  g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
+  g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (password));
+
+  g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
+  g_variant_builder_add (&details, "{ss}", "MailEnabled", "true");
+  g_variant_builder_add (&details, "{ss}", "CalendarEnabled", "true");
+  g_variant_builder_add (&details, "{ss}", "ContactsEnabled", "true");
+  g_variant_builder_add (&details, "{ss}", "Host", server);
+
   /* OK, everything is dandy, add the account */
   /* we want the GoaClient to update before this method returns (so it
    * can create a proxy for the new object) so run the mainloop while
    * waiting for this to complete
    */
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{ss}"));
-  g_variant_builder_add (&builder, "{ss}", "MailEnabled", "true");
-  g_variant_builder_add (&builder, "{ss}", "CalendarEnabled", "true");
-  g_variant_builder_add (&builder, "{ss}", "ContactsEnabled", "true");
-  g_variant_builder_add (&builder, "{ss}", "Host", server);
-
   goa_manager_call_add_account (goa_client_get_manager (client),
                                 goa_provider_get_provider_type (provider),
                                 username,
                                 email_address,
-                                g_variant_builder_end (&builder),
+                                g_variant_builder_end (&credentials),
+                                g_variant_builder_end (&details),
                                 NULL, /* GCancellable* */
                                 (GAsyncReadyCallback) add_account_cb,
                                 &data);
@@ -674,16 +679,6 @@ add_account (GoaProvider    *provider,
 
   ret = GOA_OBJECT (g_dbus_object_manager_get_object (goa_client_get_object_manager (client),
                                                       data.account_object_path));
-  /* TODO: run in worker thread */
-  g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
-  g_variant_builder_add (&builder, "{sv}", "password", g_variant_new_string (password));
-
-  if (!goa_utils_store_credentials_sync (provider,
-                                         ret,
-                                         g_variant_builder_end (&builder),
-                                         NULL, /* GCancellable */
-                                         &data.error))
-    goto out;
 
  out:
   /* We might have an object even when data.error is set.
@@ -815,11 +810,11 @@ refresh_account (GoaProvider    *provider,
   g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&builder, "{sv}", "password", g_variant_new_string (password));
 
-  if (!goa_utils_store_credentials_sync (provider,
-                                         object,
-                                         g_variant_builder_end (&builder),
-                                         NULL, /* GCancellable */
-                                         error))
+  if (!goa_utils_store_credentials_for_object_sync (provider,
+                                                    object,
+                                                    g_variant_builder_end (&builder),
+                                                    NULL, /* GCancellable */
+                                                    error))
     goto out;
 
   goa_account_call_ensure_credentials (account,

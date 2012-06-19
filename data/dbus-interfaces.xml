@@ -284,6 +284,7 @@
         @provider: The account provider. See the #org.gnome.OnlineAccounts.Account:ProviderType property for known providers.
         @identity: The identity of the account (cf. the #org.gnome.OnlineAccounts.Account:Identity property).
         @presentation_identity: The identity of the account that is suitable for display in an user interface (cf. the #org.gnome.OnlineAccounts.Account:PresentationIdentity property).
+        @credentials: The credentials to store.
         @details: Extra key/value pairs to set.
         @account_object_path: The object path of the created account.
 
@@ -294,6 +295,7 @@
       <arg name="provider" type="s" direction="in"/>
       <arg name="identity" type="s" direction="in"/>
       <arg name="presentation_identity" type="s" direction="in"/>
+      <arg name="credentials" type="a{sv}" direction="in"/>
       <arg name="details" type="a{ss}" direction="in"/>
       <arg name="account_object_path" type="o" direction="out"/>
     </method>

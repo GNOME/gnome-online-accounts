@@ -63,9 +63,10 @@ static void on_file_monitor_changed (GFileMonitor     *monitor,
 
 static gboolean on_manager_handle_add_account (GoaManager            *object,
                                                GDBusMethodInvocation *invocation,
-                                               const gchar           *provider,
+                                               const gchar           *provider_type,
                                                const gchar           *identity,
                                                const gchar           *presentation_identity,
+                                               GVariant              *credentials,
                                                GVariant              *details,
                                                gpointer               user_data);
 
@@ -684,15 +685,19 @@ generate_new_id (GoaDaemon *daemon)
 static gboolean
 on_manager_handle_add_account (GoaManager             *manager,
                                GDBusMethodInvocation  *invocation,
-                               const gchar            *provider,
+                               const gchar            *provider_type,
                                const gchar            *identity,
                                const gchar            *presentation_identity,
+                               GVariant               *credentials,
                                GVariant               *details,
                                gpointer                user_data)
 {
   GoaDaemon *daemon = GOA_DAEMON (user_data);
+  GoaProvider *provider;
   GKeyFile *key_file;
   GError *error;
+  GList *providers;
+  GList *l;
   gchar *path;
   gchar *id;
   gchar *group;
@@ -705,7 +710,9 @@ on_manager_handle_add_account (GoaManager             *manager,
 
   /* TODO: could check for @type */
 
+  provider = NULL;
   key_file = NULL;
+  providers = NULL;
   path = NULL;
   id = NULL;
   group = NULL;
@@ -747,7 +754,7 @@ on_manager_handle_add_account (GoaManager             *manager,
 
   id = generate_new_id (daemon);
   group = g_strdup_printf ("Account %s", id);
-  g_key_file_set_string (key_file, group, "Provider", provider);
+  g_key_file_set_string (key_file, group, "Provider", provider_type);
   g_key_file_set_string (key_file, group, "Identity", identity);
   g_key_file_set_string (key_file, group, "PresentationIdentity", presentation_identity);
 
@@ -780,6 +787,43 @@ on_manager_handle_add_account (GoaManager             *manager,
       goto out;
     }
 
+  providers = goa_provider_get_all ();
+  for (l = providers; l != NULL; l = l->next)
+    {
+      GoaProvider *p;
+      const gchar *type;
+
+      p = GOA_PROVIDER (l->data);
+      type = goa_provider_get_provider_type (p);
+      if (g_strcmp0 (type, provider_type) == 0)
+        {
+          provider = p;
+          break;
+        }
+    }
+
+  if (provider == NULL)
+    {
+      error= NULL;
+      g_set_error (&error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED, /* TODO: more specific */
+                   _("Failed to find a provider for: %s"),
+                   provider_type);
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      goto out;
+    }
+
+  if (!goa_utils_store_credentials_for_id_sync (provider,
+                                                id,
+                                                credentials,
+                                                NULL, /* GCancellable */
+                                                &error))
+    {
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      goto out;
+    }
+
   goa_daemon_reload_configuration (daemon);
 
   object_path = g_strdup_printf ("/org/gnome/OnlineAccounts/Accounts/%s", id);
@@ -787,6 +831,8 @@ on_manager_handle_add_account (GoaManager             *manager,
 
  out:
   g_free (object_path);
+  if (providers != NULL)
+    g_list_free_full (providers, g_object_unref);
   g_free (data);
   g_free (group);
   g_free (id);

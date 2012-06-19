@@ -53,11 +53,17 @@ GVariant        *goa_utils_lookup_credentials_sync (GoaProvider    *provider,
                                                     GCancellable   *cancellable,
                                                     GError        **error);
 
-gboolean         goa_utils_store_credentials_sync (GoaProvider    *provider,
-                                                   GoaObject      *object,
-                                                   GVariant       *credentials,
-                                                   GCancellable   *cancellable,
-                                                   GError        **error);
+gboolean         goa_utils_store_credentials_for_id_sync (GoaProvider    *provider,
+                                                          const gchar    *id,
+                                                          GVariant       *credentials,
+                                                          GCancellable   *cancellable,
+                                                          GError        **error);
+
+gboolean         goa_utils_store_credentials_for_object_sync (GoaProvider    *provider,
+                                                              GoaObject      *object,
+                                                              GVariant       *credentials,
+                                                              GCancellable   *cancellable,
+                                                              GError        **error);
 
 G_END_DECLS
 
