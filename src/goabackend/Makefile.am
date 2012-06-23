@@ -6,6 +6,7 @@ EXTRA_DIST =
 INCLUDES = 							\
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
+	-I$(top_srcdir)/src/goaidentity				\
 	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\" 		\
 	-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\" 		\
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" 			\
@@ -50,6 +51,7 @@ libgoa_backend_1_0_la_HEADERS =						\
 	goaeditablelabel.h						\
 	goaprovider.h							\
 	goaexchangeprovider.h						\
+	goakerberosprovider.h						\
 	goagoogleprovider.h						\
 	goafacebookprovider.h						\
 	goayahooprovider.h						\
@@ -66,6 +68,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goaewsclient.h			goaewsclient.c			\
 	goaprovider.h			goaprovider.c			\
 	goaexchangeprovider.h		goaexchangeprovider.c		\
+	goakerberosprovider.h		goakerberosprovider.c		\
 	goalogging.h			goalogging.c			\
 	goaoauthprovider.h		goaoauthprovider.c		\
 	goaoauth2provider.h		goaoauth2provider.c		\
@@ -77,6 +80,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goautils.h			goautils.c			\
 	goawebview.h			goawebview.c			\
 	nautilus-floating-bar.h		nautilus-floating-bar.c		\
+	$(top_srcdir)/src/goaidentity/org.gnome.Identity.c		\
 	$(NULL)
 
 libgoa_backend_1_0_la_CPPFLAGS =				\
@@ -88,6 +92,7 @@ libgoa_backend_1_0_la_CFLAGS =					\
 	-DGOA_API_IS_SUBJECT_TO_CHANGE				\
 	$(WEBKIT_GTK_CFLAGS)					\
 	$(JSON_GLIB_CFLAGS)					\
+	$(GCR_CFLAGS) 						\
 	$(GLIB_CFLAGS) 						\
 	$(GTK_CFLAGS) 						\
 	$(REST_CFLAGS)						\
@@ -100,6 +105,7 @@ libgoa_backend_1_0_la_LIBADD = 					\
 	$(top_builddir)/src/goa/libgoa-1.0.la			\
 	$(WEBKIT_GTK_LIBS)					\
 	$(JSON_GLIB_LIBS)					\
+	$(GCR_LIBS) 						\
 	$(GLIB_LIBS) 						\
 	$(GTK_LIBS) 						\
 	$(REST_LIBS)						\

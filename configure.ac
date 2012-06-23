@@ -231,6 +231,7 @@ if test "$enable_kerberos" != "no"; then
 
   PKG_CHECK_MODULES(GCR, gcr-3)
   AC_DEFINE(GCR_API_SUBJECT_TO_CHANGE, 1, [Define to use the GCR API])
+  AC_DEFINE(GOA_KERBEROS_ENABLED, 1, [Enable Enterprise Identity data provider])
 fi
 AM_CONDITIONAL(BUILD_KERBEROS, [test x$enable_kerberos != xno])
 
@@ -341,6 +342,7 @@ echo "
 
 	Google provider:                ${enable_google} (OAuth 1.0, key:${with_google_consumer_key} secret:${with_google_consumer_secret})
 	Microsoft Exchange provider:    ${enable_exchange}
+	Kerberos provider:              ${enable_kerberos}
 	Twitter provider:               ${enable_twitter} (OAuth 1.0, key:${with_twitter_consumer_key} secret:${with_twitter_consumer_secret})
 	Yahoo provider:                 ${enable_yahoo} (OAuth 1.0, key:${with_yahoo_consumer_key} secret:${with_yahoo_consumer_secret})
 	Facebook provider:              ${enable_facebook} (OAuth 2.0, id:${with_facebook_client_id})

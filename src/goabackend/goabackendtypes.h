@@ -42,6 +42,9 @@ typedef struct _GoaProvider GoaProvider;
 struct _GoaExchangeProvider;
 typedef struct _GoaExchangeProvider GoaExchangeProvider;
 
+struct _GoaKerberosProvider;
+typedef struct _GoaKerberosProvider GoaKerberosProvider;
+
 struct _GoaOAuthProvider;
 typedef struct _GoaOAuthProvider GoaOAuthProvider;
 

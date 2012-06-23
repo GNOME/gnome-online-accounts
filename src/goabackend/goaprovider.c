@@ -28,6 +28,7 @@
 #include "goalogging.h"
 #include "goaprovider.h"
 #include "goaexchangeprovider.h"
+#include "goakerberosprovider.h"
 #include "goagoogleprovider.h"
 #include "goafacebookprovider.h"
 #include "goayahooprovider.h"
@@ -625,6 +626,9 @@ ensure_ep_and_builtins (void)
 #endif
 #ifdef GOA_EXCHANGE_ENABLED
       type = GOA_TYPE_EXCHANGE_PROVIDER;
+#endif
+#ifdef GOA_KERBEROS_ENABLED
+      type = GOA_TYPE_KERBEROS_PROVIDER;
 #endif
 #ifdef GOA_YAHOO_ENABLED
       type = GOA_TYPE_YAHOO_PROVIDER;
