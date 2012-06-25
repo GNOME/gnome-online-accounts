@@ -814,15 +814,14 @@ on_manager_handle_add_account (GoaManager             *manager,
       goto out;
     }
 
-  if (!goa_utils_store_credentials_for_id_sync (provider,
-                                                id,
-                                                credentials,
-                                                NULL, /* GCancellable */
-                                                &error))
-    {
-      g_dbus_method_invocation_return_gerror (invocation, error);
-      goto out;
-    }
+  /* We don't want to fail AddAccount if we could not store the
+   * credentials in the keyring.
+   */
+  goa_utils_store_credentials_for_id_sync (provider,
+                                           id,
+                                           credentials,
+                                           NULL, /* GCancellable */
+                                           NULL);
 
   goa_daemon_reload_configuration (daemon);
 
