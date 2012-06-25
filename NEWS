@@ -3,6 +3,20 @@ Overview of changes in 3.5.3
 
 * Facebook is now enabled by default
 
+* Microsoft Exchange is enabled by default
+
+* The AddAccount method exposed by org.gnome.OnlineAccounts.Manager now
+  requires a new argument of type a{sv}. This is an API break, but no one
+  should be calling it apart from the backend code implementing
+  goa_provider_add_account. This was necessary to ensure that the credentials
+  are stored in the keyring within the AddAccount method to avoid a race
+  between the "account-added" signal being emitted and the credentials being
+  actually store.
+
+* Methods to directly interact with the keyring are no longer exported as
+  public API. These were only meant to be used from within the backend and the
+  daemon and were never meant to be used from applications.
+
 * Updated translations:
  Greek
 
