@@ -23,17 +23,17 @@
 #include "config.h"
 
 #include <glib/gi18n-lib.h>
-#include <gnome-keyring.h>
+#include <secret/secret.h>
 
 #include "goaprovider.h"
 #include "goautils.h"
 
-static const GnomeKeyringPasswordSchema keyring_password_schema =
+static const SecretSchema secret_password_schema =
 {
-  GNOME_KEYRING_ITEM_GENERIC_SECRET,
+  "org.gnome.OnlineAccounts", SECRET_SCHEMA_DONT_MATCH_NAME,
   {
-    { "goa-identity", GNOME_KEYRING_ATTRIBUTE_TYPE_STRING },
-    { NULL, 0 }
+    { "goa-identity", SECRET_SCHEMA_ATTRIBUTE_STRING },
+    { "NULL", 0 }
   }
 };
 
@@ -123,7 +123,6 @@ goa_utils_delete_credentials_sync (GoaProvider   *provider,
 {
   gboolean ret;
   gchar *password_key;
-  GnomeKeyringResult result;
   const gchar *identity;
 
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
@@ -131,7 +130,6 @@ goa_utils_delete_credentials_sync (GoaProvider   *provider,
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  /* TODO: use GCancellable */
   ret = FALSE;
 
   password_key = NULL;
@@ -143,16 +141,18 @@ goa_utils_delete_credentials_sync (GoaProvider   *provider,
                                   goa_provider_get_credentials_generation (GOA_PROVIDER (provider)),
                                   identity);
 
-  result = gnome_keyring_delete_password_sync (&keyring_password_schema,
-                                               "goa-identity", password_key,
-                                               NULL);
-  if (result != GNOME_KEYRING_RESULT_OK)
+  if (!secret_password_remove_sync (&secret_password_schema,
+                                    cancellable,
+                                    error,
+                                    "goa-identity", password_key,
+                                    NULL))
     {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Failed to delete credentials from the keyring: %s"),
-                   gnome_keyring_result_to_message (result));
+      if (error != NULL)
+        {
+          g_prefix_error (error, _("Failed to delete credentials from the keyring: "));
+          (*error)->domain = GOA_ERROR;
+          (*error)->code = GOA_ERROR_FAILED; /* TODO: more specific */
+        }
       goto out;
     }
 
@@ -171,8 +171,7 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
 {
   gchar *password_key;
   GVariant *ret;
-  GnomeKeyringResult result;
-  gchar *returned_password;
+  gchar *password;
   const gchar *identity;
 
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), NULL);
@@ -182,7 +181,7 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
 
   ret = NULL;
   password_key = NULL;
-  returned_password = NULL;
+  password = NULL;
 
   identity = goa_account_get_id (goa_object_peek_account (object));
 
@@ -191,22 +190,24 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
                                   goa_provider_get_credentials_generation (GOA_PROVIDER (provider)),
                                   identity);
 
-  result = gnome_keyring_find_password_sync (&keyring_password_schema,
-                                             &returned_password,
-                                             "goa-identity", password_key,
-                                             NULL);
-  if (result != GNOME_KEYRING_RESULT_OK)
+  password = secret_password_lookup_sync (&secret_password_schema,
+                                          cancellable,
+                                          error,
+                                          "goa-identity", password_key,
+                                          NULL);
+  if (password == NULL)
     {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Failed to retrieve credentials from the keyring: %s"),
-                   gnome_keyring_result_to_message (result));
+      if (error != NULL)
+        {
+          g_prefix_error (error, _("Failed to retrieve credentials from the keyring: "));
+          (*error)->domain = GOA_ERROR;
+          (*error)->code = GOA_ERROR_FAILED; /* TODO: more specific */
+        }
       goto out;
     }
 
   ret = g_variant_parse (NULL, /* GVariantType */
-                         returned_password,
+                         password,
                          NULL, /* limit */
                          NULL, /* endptr */
                          error);
@@ -220,7 +221,7 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
     g_variant_ref_sink (ret);
 
  out:
-  gnome_keyring_free_password (returned_password);
+  g_free (password);
   g_free (password_key);
   return ret;
 }
@@ -236,7 +237,6 @@ goa_utils_store_credentials_for_id_sync (GoaProvider   *provider,
   gchar *credentials_str;
   gchar *password_description;
   gchar *password_key;
-  GnomeKeyringResult result;
 
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
   g_return_val_if_fail (id != NULL && id[0] != '\0', FALSE);
@@ -244,7 +244,6 @@ goa_utils_store_credentials_for_id_sync (GoaProvider   *provider,
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  /* TODO: use GCancellable */
   ret = FALSE;
 
   credentials_str = g_variant_print (credentials, TRUE);
@@ -259,19 +258,22 @@ goa_utils_store_credentials_for_id_sync (GoaProvider   *provider,
   password_description = g_strdup_printf (_("GOA %s credentials for identity %s"),
                                           goa_provider_get_provider_type (GOA_PROVIDER (provider)),
                                           id);
-  result = gnome_keyring_store_password_sync (&keyring_password_schema,
-                                              NULL, /* default keyring */
-                                              password_description,
-                                              credentials_str,
-                                              "goa-identity", password_key,
-                                              NULL);
-  if (result != GNOME_KEYRING_RESULT_OK)
+
+  if (!secret_password_store_sync (&secret_password_schema,
+                                   SECRET_COLLECTION_DEFAULT, /* default keyring */
+                                   password_description,
+                                   credentials_str,
+                                   cancellable,
+                                   error,
+                                   "goa-identity", password_key,
+                                   NULL))
     {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Failed to store credentials in the keyring: %s"),
-                   gnome_keyring_result_to_message (result));
+      if (error != NULL)
+        {
+          g_prefix_error (error, _("Failed to store credentials from the keyring: "));
+          (*error)->domain = GOA_ERROR;
+          (*error)->code = GOA_ERROR_FAILED; /* TODO: more specific */
+        }
       goto out;
     }
 

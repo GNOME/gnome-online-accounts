@@ -92,8 +92,8 @@ libgoa_backend_1_0_la_CFLAGS =					\
 	$(JSON_GLIB_CFLAGS)					\
 	$(GLIB_CFLAGS) 						\
 	$(GTK_CFLAGS) 						\
-	$(GNOME_KEYRING_CFLAGS)					\
 	$(REST_CFLAGS)						\
+	$(SECRET_CFLAGS)					\
 	$(LIBSOUP_CFLAGS)					\
 	$(LIBXML_CFLAGS)					\
 	$(NULL)
@@ -104,8 +104,8 @@ libgoa_backend_1_0_la_LIBADD = 					\
 	$(JSON_GLIB_LIBS)					\
 	$(GLIB_LIBS) 						\
 	$(GTK_LIBS) 						\
-	$(GNOME_KEYRING_LIBS)					\
 	$(REST_LIBS)						\
+	$(SECRET_LIBS)						\
 	$(LIBSOUP_LIBS)						\
 	$(LIBXML_LIBS)						\
 	$(NULL)
