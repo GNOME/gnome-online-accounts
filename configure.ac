@@ -86,7 +86,7 @@ AC_ARG_ENABLE([exchange],
               [AS_HELP_STRING([--enable-exchange],
               [Enable Microsoft Exchange provider])],
               [],
-              [enable_exchange=no])
+              [enable_exchange=yes])
 if test "$enable_exchange" != "no"; then
   AC_DEFINE(GOA_EXCHANGE_ENABLED, 1, [Enable Microsoft Exchange data provider])
 fi
