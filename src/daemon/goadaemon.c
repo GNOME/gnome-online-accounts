@@ -719,6 +719,33 @@ on_manager_handle_add_account (GoaManager             *manager,
   data = NULL;
   object_path = NULL;
 
+  providers = goa_provider_get_all ();
+  for (l = providers; l != NULL; l = l->next)
+    {
+      GoaProvider *p;
+      const gchar *type;
+
+      p = GOA_PROVIDER (l->data);
+      type = goa_provider_get_provider_type (p);
+      if (g_strcmp0 (type, provider_type) == 0)
+        {
+          provider = p;
+          break;
+        }
+    }
+
+  if (provider == NULL)
+    {
+      error= NULL;
+      g_set_error (&error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED, /* TODO: more specific */
+                   _("Failed to find a provider for: %s"),
+                   provider_type);
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      goto out;
+    }
+
   key_file = g_key_file_new ();
   path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
   error = NULL;
@@ -783,33 +810,6 @@ on_manager_handle_add_account (GoaManager             *manager,
                             &error))
     {
       g_prefix_error (&error, "Error writing key-value-file %s: ", path);
-      g_dbus_method_invocation_return_gerror (invocation, error);
-      goto out;
-    }
-
-  providers = goa_provider_get_all ();
-  for (l = providers; l != NULL; l = l->next)
-    {
-      GoaProvider *p;
-      const gchar *type;
-
-      p = GOA_PROVIDER (l->data);
-      type = goa_provider_get_provider_type (p);
-      if (g_strcmp0 (type, provider_type) == 0)
-        {
-          provider = p;
-          break;
-        }
-    }
-
-  if (provider == NULL)
-    {
-      error= NULL;
-      g_set_error (&error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Failed to find a provider for: %s"),
-                   provider_type);
       g_dbus_method_invocation_return_gerror (invocation, error);
       goto out;
     }
