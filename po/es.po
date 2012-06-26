@@ -9,38 +9,39 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-05-15 20:41+0000\n"
-"PO-Revision-Date: 2012-05-16 11:29+0200\n"
+"POT-Creation-Date: 2012-06-25 14:59+0000\n"
+"PO-Revision-Date: 2012-06-26 19:10+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Gtranslator 2.91.4\n"
 
 #. shut up -Wunused-but-set-variable
-#: ../src/daemon/goadaemon.c:197
+#: ../src/daemon/goadaemon.c:199
 msgid "Online Accounts"
 msgstr "Cuentas en línea"
 
-#: ../src/daemon/goadaemon.c:871
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:743 ../src/daemon/goadaemon.c:1073
+#, c-format
+msgid "Failed to find a provider for: %s"
+msgstr "Falló al buscar un proveedor para: %s"
+
+#: ../src/daemon/goadaemon.c:917
 msgid "An online account needs attention"
 msgstr "Una cuenta en línea necesita su atención"
 
-#: ../src/daemon/goadaemon.c:878
+#: ../src/daemon/goadaemon.c:924
 msgid "Open Online Accounts..."
 msgstr "Abrir cuentas en línea…"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1015
+#: ../src/daemon/goadaemon.c:1061
 msgid "ProviderType property is not set for account"
 msgstr "Propiedad «ProviderType» no establecida para la cuenta"
-
-#. TODO: more specific
-#: ../src/daemon/goadaemon.c:1027
-#, c-format
-msgid "Failed to find a provider for: %s"
-msgstr "Falló al buscar un proveedor para: %s"
 
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:204
@@ -83,15 +84,15 @@ msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:276
-#: ../src/goabackend/goaoauth2provider.c:1336
-#: ../src/goabackend/goaoauthprovider.c:1354
+#: ../src/goabackend/goaoauth2provider.c:1332
+#: ../src/goabackend/goaoauthprovider.c:1350
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "No se encontraron las credenciales en el depósito de claves (%s, %d): "
 
 #. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:292
-#: ../src/goabackend/goaexchangeprovider.c:936
+#: ../src/goabackend/goaexchangeprovider.c:931
 #, c-format
 msgid "Did not find password with username `%s' in credentials"
 msgstr ""
@@ -126,42 +127,42 @@ msgstr "Nombre de _usuario"
 msgid "_Server"
 msgstr "_Servidor"
 
-#: ../src/goabackend/goaexchangeprovider.c:597
-#: ../src/goabackend/goaexchangeprovider.c:772
+#: ../src/goabackend/goaexchangeprovider.c:598
+#: ../src/goabackend/goaexchangeprovider.c:767
 #: ../src/goabackend/goaoauth2provider.c:892
 #: ../src/goabackend/goaoauthprovider.c:880
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "Se descartó el diálogo"
 
-#: ../src/goabackend/goaexchangeprovider.c:635
-#: ../src/goabackend/goaexchangeprovider.c:800
+#: ../src/goabackend/goaexchangeprovider.c:636
+#: ../src/goabackend/goaexchangeprovider.c:795
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Error al conectar al servidor de Microsoft Exchange"
 
-#: ../src/goabackend/goaexchangeprovider.c:643
-#: ../src/goabackend/goaexchangeprovider.c:808
+#: ../src/goabackend/goaexchangeprovider.c:644
+#: ../src/goabackend/goaexchangeprovider.c:803
 msgid "_Try Again"
 msgstr "In_tentarlo de nuevo"
 
-#: ../src/goabackend/goaexchangeprovider.c:859
+#: ../src/goabackend/goaexchangeprovider.c:854
 #: ../src/goabackend/goafacebookprovider.c:340
 #: ../src/goabackend/goagoogleprovider.c:506
 #: ../src/goabackend/goawindowsliveprovider.c:355
 msgid "Use for"
 msgstr "Usar para"
 
-#: ../src/goabackend/goaexchangeprovider.c:861
+#: ../src/goabackend/goaexchangeprovider.c:856
 #: ../src/goabackend/goagoogleprovider.c:508
 msgid "Mail"
 msgstr "Correo-e"
 
-#: ../src/goabackend/goaexchangeprovider.c:866
+#: ../src/goabackend/goaexchangeprovider.c:861
 #: ../src/goabackend/goagoogleprovider.c:513
 msgid "Calendar"
 msgstr "Calendario"
 
-#: ../src/goabackend/goaexchangeprovider.c:871
+#: ../src/goabackend/goaexchangeprovider.c:866
 #: ../src/goabackend/goagoogleprovider.c:518
 msgid "Contacts"
 msgstr "Contactos"
@@ -179,8 +180,8 @@ msgstr "Facebook"
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr ""
-"Se esperaba un estado 200 cuando se solicitó el «guid», en su lugar se obtuvo "
-"el estado %d (%s)"
+"Se esperaba un estado 200 cuando se solicitó el «guid», en su lugar se "
+"obtuvo el estado %d (%s)"
 
 #: ../src/goabackend/goafacebookprovider.c:206
 #: ../src/goabackend/goagoogleprovider.c:224
@@ -284,25 +285,25 @@ msgstr "Error al obtener el «token» de acceso: "
 msgid "Error getting identity: "
 msgstr "Error al obtener la identidad: "
 
-#: ../src/goabackend/goaoauth2provider.c:1197
-#: ../src/goabackend/goaoauthprovider.c:1204
+#: ../src/goabackend/goaoauth2provider.c:1193
+#: ../src/goabackend/goaoauthprovider.c:1200
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "Se solicitó iniciar sesión como %s, pero se inició sesión como %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1363
+#: ../src/goabackend/goaoauth2provider.c:1359
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Las credenciales no contienen el «access_token»"
 
-#: ../src/goabackend/goaoauth2provider.c:1402
-#: ../src/goabackend/goaoauthprovider.c:1427
+#: ../src/goabackend/goaoauth2provider.c:1398
+#: ../src/goabackend/goaoauthprovider.c:1423
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Falló al actualizar el acceso al «token» (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1437
-#: ../src/goabackend/goaoauthprovider.c:1457
+#: ../src/goabackend/goaoauth2provider.c:1433
+#: ../src/goabackend/goaoauthprovider.c:1453
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr ""
@@ -341,43 +342,15 @@ msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr ""
 "Pegue el «token» obtenido en la <a href=\"%s\">página de autorización</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1383
+#: ../src/goabackend/goaoauthprovider.c:1379
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Las credenciales no contienen «access_token» o «access_token_secret»"
 
-#: ../src/goabackend/goaprovider.c:535
+#: ../src/goabackend/goaprovider.c:534
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "«ensure_credentials_sync» no está implementado en el tipo %s"
-
-#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:758
-#, c-format
-msgid "GOA %s credentials for identity %s"
-msgstr "Credenciales GOA de %s para la identidad %s"
-
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:772
-#, c-format
-msgid "Failed to store credentials in the keyring: %s"
-msgstr "Falló al almacenar las credenciales en el depósito de claves: %s"
-
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:843
-#, c-format
-msgid "Failed to retrieve credentials from the keyring: %s"
-msgstr "Falló al obtener las credenciales del depósito de claves: %s"
-
-#: ../src/goabackend/goaprovider.c:855
-msgid "Error parsing result obtained from the keyring: "
-msgstr "Error analizando el resultado obtenido del depósito de claves:"
-
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:923
-#, c-format
-msgid "Failed to delete credentials from the keyring: %s"
-msgstr "Falló al eliminar las credenciales del depósito de claves: %s"
 
 #: ../src/goabackend/goatwitterprovider.c:78
 msgid "Twitter"
@@ -393,21 +366,46 @@ msgstr "No se encontró el miembro «id_str» en los datos JSON"
 msgid "Didn't find screen_name member in JSON data"
 msgstr "No se encontró el miembro «screen_name» en los datos JSON"
 
-#: ../src/goabackend/goautils.c:72
+#: ../src/goabackend/goautils.c:82
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "Ya existe una cuenta %s para %s"
 
 #. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:97
+#: ../src/goabackend/goautils.c:107
 #, c-format
 msgid "Add %s"
 msgstr "Añadir %s"
 
-#: ../src/goabackend/goautils.c:97
+#: ../src/goabackend/goautils.c:107
 #, c-format
 msgid "Refresh %s"
 msgstr "Actualizar %s"
+
+#: ../src/goabackend/goautils.c:152
+#| msgid "Failed to delete credentials from the keyring: %s"
+msgid "Failed to delete credentials from the keyring: "
+msgstr "Falló al eliminar las credenciales del depósito de claves: "
+
+#: ../src/goabackend/goautils.c:202
+#| msgid "Failed to retrieve credentials from the keyring: %s"
+msgid "Failed to retrieve credentials from the keyring: "
+msgstr "Falló al obtener las credenciales del depósito de claves: "
+
+#: ../src/goabackend/goautils.c:216
+msgid "Error parsing result obtained from the keyring: "
+msgstr "Error analizando el resultado obtenido del depósito de claves:"
+
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#: ../src/goabackend/goautils.c:258
+#, c-format
+msgid "GOA %s credentials for identity %s"
+msgstr "Credenciales GOA de %s para la identidad %s"
+
+#: ../src/goabackend/goautils.c:273
+#| msgid "Failed to store credentials in the keyring: %s"
+msgid "Failed to store credentials from the keyring: "
+msgstr "Falló al almacenar las credenciales en el depósito de claves: "
 
 #. translators: %s here is the address of the web page
 #: ../src/goabackend/goawebview.c:75
