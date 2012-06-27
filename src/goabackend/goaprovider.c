@@ -597,24 +597,27 @@ ensure_ep_and_builtins (void)
       extension_point = g_io_extension_point_register (GOA_PROVIDER_EXTENSION_POINT_NAME);
       g_io_extension_point_set_required_type (extension_point, GOA_TYPE_PROVIDER);
 
-#ifdef GOA_EXCHANGE_ENABLED
-      type = GOA_TYPE_EXCHANGE_PROVIDER;
-#endif
+      /* The order is in which the providers' types are created is
+       * important because it affects the order in which they are
+       * returned by goa_provider_get_all.
+       */
 #ifdef GOA_GOOGLE_ENABLED
       type = GOA_TYPE_GOOGLE_PROVIDER;
+#endif
+#ifdef GOA_FACEBOOK_ENABLED
+      type = GOA_TYPE_FACEBOOK_PROVIDER;
+#endif
+#ifdef GOA_WINDOWS_LIVE_ENABLED
+      type = GOA_TYPE_WINDOWS_LIVE_PROVIDER;
+#endif
+#ifdef GOA_EXCHANGE_ENABLED
+      type = GOA_TYPE_EXCHANGE_PROVIDER;
 #endif
 #ifdef GOA_YAHOO_ENABLED
       type = GOA_TYPE_YAHOO_PROVIDER;
 #endif
 #ifdef GOA_TWITTER_ENABLED
       type = GOA_TYPE_TWITTER_PROVIDER;
-#endif
-#ifdef GOA_FACEBOOK_ENABLED
-      type = GOA_TYPE_FACEBOOK_PROVIDER;
-#endif
-
-#ifdef GOA_WINDOWS_LIVE_ENABLED
-      type = GOA_TYPE_WINDOWS_LIVE_PROVIDER;
 #endif
 
       type = type; /* silence -Wunused-but-set-variable */
@@ -687,7 +690,6 @@ goa_provider_get_all (void)
       GIOExtension *extension = l->data;
       ret = g_list_prepend (ret, g_object_new (g_io_extension_get_type (extension), NULL));
     }
-  ret = g_list_reverse (ret);
   return ret;
 }
 
