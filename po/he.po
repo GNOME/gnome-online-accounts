@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gnome Online Account\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-25 10:49+0300\n"
-"PO-Revision-Date: 2012-05-25 10:49+0200\n"
+"POT-Creation-Date: 2012-07-10 23:54+0300\n"
+"PO-Revision-Date: 2012-07-10 23:55+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <sh.yaron@gmail.com>\n"
 "Language: he\n"
@@ -21,28 +21,29 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 
 #. shut up -Wunused-but-set-variable
-#: ../src/daemon/goadaemon.c:197
+#: ../src/daemon/goadaemon.c:199
 msgid "Online Accounts"
 msgstr "חשבונות מקוונים"
 
-#: ../src/daemon/goadaemon.c:871
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:743
+#: ../src/daemon/goadaemon.c:1073
+#, c-format
+msgid "Failed to find a provider for: %s"
+msgstr "חיפוש הספק נכשל עבור: %s"
+
+#: ../src/daemon/goadaemon.c:917
 msgid "An online account needs attention"
 msgstr "חשבון מקוון זקוק לתשומת לב"
 
-#: ../src/daemon/goadaemon.c:878
+#: ../src/daemon/goadaemon.c:924
 msgid "Open Online Accounts..."
 msgstr "פתיחת חשבונות מקוונים..."
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1015
+#: ../src/daemon/goadaemon.c:1061
 msgid "ProviderType property is not set for account"
 msgstr "המאפיין ProviderType לא הוגדר עבור החשבון"
-
-#. TODO: more specific
-#: ../src/daemon/goadaemon.c:1027
-#, c-format
-msgid "Failed to find a provider for: %s"
-msgstr "חיפוש הספק נכשל עבור: %s"
 
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:204
@@ -85,15 +86,15 @@ msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:276
-#: ../src/goabackend/goaoauth2provider.c:1336
-#: ../src/goabackend/goaoauthprovider.c:1354
+#: ../src/goabackend/goaoauth2provider.c:1332
+#: ../src/goabackend/goaoauthprovider.c:1350
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "פרטי הגישה לא נמצאו בקבוצת המפתחות (%s, %d): "
 
 #. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:292
-#: ../src/goabackend/goaexchangeprovider.c:936
+#: ../src/goabackend/goaexchangeprovider.c:931
 #, c-format
 msgid "Did not find password with username `%s' in credentials"
 msgstr "לא נמצאה ססמה המיועדת לשם המשתמש `%s' בפרטי הזיהוי"
@@ -126,42 +127,42 @@ msgstr "שם מ_שתמש"
 msgid "_Server"
 msgstr "_שרת"
 
-#: ../src/goabackend/goaexchangeprovider.c:597
-#: ../src/goabackend/goaexchangeprovider.c:772
+#: ../src/goabackend/goaexchangeprovider.c:598
+#: ../src/goabackend/goaexchangeprovider.c:767
 #: ../src/goabackend/goaoauth2provider.c:892
 #: ../src/goabackend/goaoauthprovider.c:880
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "הדו־שיח נזנח"
 
-#: ../src/goabackend/goaexchangeprovider.c:635
-#: ../src/goabackend/goaexchangeprovider.c:800
+#: ../src/goabackend/goaexchangeprovider.c:636
+#: ../src/goabackend/goaexchangeprovider.c:795
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "אירעה שגיאה בעת ההתחברות לשרת Microsoft Exchange"
 
-#: ../src/goabackend/goaexchangeprovider.c:643
-#: ../src/goabackend/goaexchangeprovider.c:808
+#: ../src/goabackend/goaexchangeprovider.c:644
+#: ../src/goabackend/goaexchangeprovider.c:803
 msgid "_Try Again"
 msgstr "_ניסיון חוזר"
 
-#: ../src/goabackend/goaexchangeprovider.c:859
+#: ../src/goabackend/goaexchangeprovider.c:854
 #: ../src/goabackend/goafacebookprovider.c:340
 #: ../src/goabackend/goagoogleprovider.c:506
 #: ../src/goabackend/goawindowsliveprovider.c:355
 msgid "Use for"
 msgstr "שימוש לצורך"
 
-#: ../src/goabackend/goaexchangeprovider.c:861
+#: ../src/goabackend/goaexchangeprovider.c:856
 #: ../src/goabackend/goagoogleprovider.c:508
 msgid "Mail"
 msgstr "דוא״ל"
 
-#: ../src/goabackend/goaexchangeprovider.c:866
+#: ../src/goabackend/goaexchangeprovider.c:861
 #: ../src/goabackend/goagoogleprovider.c:513
 msgid "Calendar"
 msgstr "לוח שנה"
 
-#: ../src/goabackend/goaexchangeprovider.c:871
+#: ../src/goabackend/goaexchangeprovider.c:866
 #: ../src/goabackend/goagoogleprovider.c:518
 msgid "Contacts"
 msgstr "אנשי קשר"
@@ -273,25 +274,25 @@ msgstr "שגיאה בקבלת אסימון לגישה:"
 msgid "Error getting identity: "
 msgstr "שגיאה בקבלת הזהות:"
 
-#: ../src/goabackend/goaoauth2provider.c:1197
-#: ../src/goabackend/goaoauthprovider.c:1204
+#: ../src/goabackend/goaoauth2provider.c:1193
+#: ../src/goabackend/goaoauthprovider.c:1200
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "ביקשנו להיכנס בתור %s, אך בוצעה כניסה בתור %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1363
+#: ../src/goabackend/goaoauth2provider.c:1359
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "פרטי הגישה אינם מכילים access_token (אסימון גישה)"
 
-#: ../src/goabackend/goaoauth2provider.c:1402
-#: ../src/goabackend/goaoauthprovider.c:1427
+#: ../src/goabackend/goaoauth2provider.c:1398
+#: ../src/goabackend/goaoauthprovider.c:1423
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "רענון אסימון הגישה נכשל (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1437
-#: ../src/goabackend/goaoauthprovider.c:1457
+#: ../src/goabackend/goaoauth2provider.c:1433
+#: ../src/goabackend/goaoauthprovider.c:1453
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "שגיאה באחסון פרטי הגישה בקבוצת המפתחות (%s, %d): "
@@ -322,43 +323,15 @@ msgstr "הכותרות request_token או request_token_secret חסרות בתג
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "האסימון שהודבק התקבל מ<a href=\"%s\">דף האימות</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1383
+#: ../src/goabackend/goaoauthprovider.c:1379
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "פרטי הגישה אינם מכילים access_token או access_token_secret"
 
-#: ../src/goabackend/goaprovider.c:535
+#: ../src/goabackend/goaprovider.c:534
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "התכונה ensure_credentials_sync אינה מיושמת בסוג %s"
-
-#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:758
-#, c-format
-msgid "GOA %s credentials for identity %s"
-msgstr "פרטי הגישה %s של מנהל החשבונות המקוונים של GNOME עבור הזהות %s"
-
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:772
-#, c-format
-msgid "Failed to store credentials in the keyring: %s"
-msgstr "אירע כשל באחסון פרטי הגישה בקבוצת המפתחות: %s"
-
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:843
-#, c-format
-msgid "Failed to retrieve credentials from the keyring: %s"
-msgstr "אירע כשל בקבלת פרטי הגישה מקבוצת המפתחות: %s"
-
-#: ../src/goabackend/goaprovider.c:855
-msgid "Error parsing result obtained from the keyring: "
-msgstr "אירע כשל בעת ניתוח התוצאה שהתקבלה מקבוצת המפתחות:"
-
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:923
-#, c-format
-msgid "Failed to delete credentials from the keyring: %s"
-msgstr "מחיקת פרטי הזיהוי מקבוצת המפתחות נכשלה: %s"
 
 #: ../src/goabackend/goatwitterprovider.c:78
 msgid "Twitter"
@@ -374,21 +347,43 @@ msgstr "לא נמצא חבר מחרוזת זיהוי (id_str) בנתוני ה־J
 msgid "Didn't find screen_name member in JSON data"
 msgstr "לא נמצא חבר שם מסך (screen_name) בנתוני ה־JSON"
 
-#: ../src/goabackend/goautils.c:72
+#: ../src/goabackend/goautils.c:82
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "חשבון %s כבר קיים עבור %s"
 
 #. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:97
+#: ../src/goabackend/goautils.c:107
 #, c-format
 msgid "Add %s"
 msgstr "הוספת %s"
 
-#: ../src/goabackend/goautils.c:97
+#: ../src/goabackend/goautils.c:107
 #, c-format
 msgid "Refresh %s"
 msgstr "רענון %s"
+
+#: ../src/goabackend/goautils.c:152
+msgid "Failed to delete credentials from the keyring: "
+msgstr "מחיקת פרטי הזיהוי מקבוצת המפתחות נכשלה: "
+
+#: ../src/goabackend/goautils.c:202
+msgid "Failed to retrieve credentials from the keyring: "
+msgstr "אירע כשל בקבלת פרטי הגישה מקבוצת המפתחות: "
+
+#: ../src/goabackend/goautils.c:216
+msgid "Error parsing result obtained from the keyring: "
+msgstr "אירע כשל בעת ניתוח התוצאה שהתקבלה מקבוצת המפתחות:"
+
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#: ../src/goabackend/goautils.c:258
+#, c-format
+msgid "GOA %s credentials for identity %s"
+msgstr "פרטי הגישה %s של מנהל החשבונות המקוונים של GNOME עבור הזהות %s"
+
+#: ../src/goabackend/goautils.c:273
+msgid "Failed to store credentials from the keyring: "
+msgstr "אירע כשל באחסון פרטי הגישה מקבוצת המפתחות: "
 
 #. translators: %s here is the address of the web page
 #: ../src/goabackend/goawebview.c:75
