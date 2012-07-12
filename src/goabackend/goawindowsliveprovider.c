@@ -236,6 +236,32 @@ get_identity_sync (GoaOAuth2Provider  *provider,
   return ret;
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gboolean
+is_deny_node (GoaOAuth2Provider *provider, WebKitDOMNode *node)
+{
+  WebKitDOMHTMLInputElement *input_element;
+  gboolean ret;
+  gchar *name;
+
+  name = NULL;
+  ret = FALSE;
+
+  if (!WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (node))
+    goto out;
+
+  input_element = WEBKIT_DOM_HTML_INPUT_ELEMENT (node);
+  name = webkit_dom_html_input_element_get_name (input_element);
+  if (g_strcmp0 (name, "submitNo") != 0)
+    goto out;
+
+  ret = TRUE;
+
+ out:
+  g_free (name);
+  return ret;
+}
 
 /* ---------------------------------------------------------------------------------------------------- */
 
@@ -402,6 +428,7 @@ goa_windows_live_provider_class_init (GoaWindowsLiveProviderClass *klass)
   oauth2_class->get_client_secret        = get_client_secret;
   oauth2_class->get_authentication_cookie = get_authentication_cookie;
   oauth2_class->get_identity_sync        = get_identity_sync;
+  oauth2_class->is_deny_node             = is_deny_node;
   oauth2_class->get_use_external_browser = get_use_external_browser;
   oauth2_class->add_account_key_values   = add_account_key_values;
 }

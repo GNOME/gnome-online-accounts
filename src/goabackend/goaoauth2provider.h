@@ -28,6 +28,7 @@
 #define __GOA_OAUTH2_PROVIDER_H__
 
 #include <goabackend/goabackendtypes.h>
+#include <webkit/webkit.h>
 
 G_BEGIN_DECLS
 
@@ -70,6 +71,7 @@ struct _GoaOAuth2Provider
  * @get_use_external_browser: Virtual function for goa_oauth2_provider_get_use_external_browser().
  * @get_use_mobile_browser: Virtual function for goa_oauth2_provider_get_use_mobile_browser().
  * @add_account_key_values: Virtual function for goa_oauth2_provider_add_account_key_values().
+ * @is_deny_node: Virtual function for goa_oauth2_provider_is_deny_node().
  *
  * Class structure for #GoaOAuth2Provider.
  */
@@ -102,9 +104,13 @@ struct _GoaOAuth2ProviderClass
   void         (*add_account_key_values)   (GoaOAuth2Provider  *provider,
                                             GVariantBuilder    *builder);
 
+  /* pure virtual */
+  gboolean     (*is_deny_node)             (GoaOAuth2Provider  *provider,
+                                            WebKitDOMNode      *node);
+
   /*< private >*/
   /* Padding for future expansion */
-  gpointer goa_reserved[32];
+  gpointer goa_reserved[31];
 };
 
 GType        goa_oauth2_provider_get_type                 (void) G_GNUC_CONST;
@@ -120,6 +126,8 @@ gchar       *goa_oauth2_provider_get_identity_sync        (GoaOAuth2Provider  *p
                                                            gchar             **out_presentation_identity,
                                                            GCancellable       *cancellable,
                                                            GError            **error);
+gboolean     goa_oauth2_provider_is_deny_node             (GoaOAuth2Provider  *provider,
+                                                           WebKitDOMNode      *node);
 gchar       *goa_oauth2_provider_get_access_token_sync    (GoaOAuth2Provider  *provider,
                                                            GoaObject          *object,
                                                            gboolean            force_refresh,
