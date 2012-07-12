@@ -263,6 +263,33 @@ get_identity_sync (GoaOAuthProvider  *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static gboolean
+is_deny_node (GoaOAuthProvider *provider, WebKitDOMNode *node)
+{
+  WebKitDOMHTMLInputElement *input_element;
+  gboolean ret;
+  gchar *name;
+
+  name = NULL;
+  ret = FALSE;
+
+  if (!WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (node))
+    goto out;
+
+  input_element = WEBKIT_DOM_HTML_INPUT_ELEMENT (node);
+  name = webkit_dom_html_input_element_get_name (input_element);
+  if (g_strcmp0 (name, "deny") != 0)
+    goto out;
+
+  ret = TRUE;
+
+ out:
+  g_free (name);
+  return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static gchar *
 parse_request_token_error (GoaOAuthProvider *provider, RestProxyCall *call)
 {
@@ -563,6 +590,7 @@ goa_google_provider_class_init (GoaGoogleProviderClass *klass)
 
   oauth_class = GOA_OAUTH_PROVIDER_CLASS (klass);
   oauth_class->get_identity_sync        = get_identity_sync;
+  oauth_class->is_deny_node             = is_deny_node;
   oauth_class->get_consumer_key         = get_consumer_key;
   oauth_class->get_consumer_secret      = get_consumer_secret;
   oauth_class->get_request_uri          = get_request_uri;

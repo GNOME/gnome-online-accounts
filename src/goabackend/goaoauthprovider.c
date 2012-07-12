@@ -26,7 +26,6 @@
 
 #include <rest/oauth-proxy.h>
 #include <libsoup/soup.h>
-#include <webkit/webkit.h>
 #include <json-glib/json-glib.h>
 
 #include "goalogging.h"
@@ -432,6 +431,30 @@ goa_oauth_provider_get_identity_sync (GoaOAuthProvider *provider,
 }
 
 /**
+ * goa_oauth_provider_is_deny_node:
+ * @provider: A #GoaOAuthProvider.
+ * @node: A #WebKitDOMNode.
+ *
+ * Checks whether @node is the HTML UI element that the user can use
+ * to deny permission to access his account. Usually they are either a
+ * #WebKitDOMHTMLButtonElement or a #WebKitDOMHTMLInputElement.
+ *
+ * Please note that providers may have multiple such elements in their
+ * UI and this method should catch all of them.
+ *
+ * This is a pure virtual method - a subclass must provide an
+ * implementation.
+ *
+ * Returns: %TRUE if the @node can be used to deny permission.
+ */
+gboolean
+goa_oauth_provider_is_deny_node (GoaOAuthProvider *provider, WebKitDOMNode *node)
+{
+  g_return_val_if_fail (GOA_IS_OAUTH_PROVIDER (provider), FALSE);
+  return GOA_OAUTH_PROVIDER_GET_CLASS (provider)->is_deny_node (provider, node);
+}
+
+/**
  * goa_oauth_provider_parse_request_token_error:
  * @provider: A #GoaOAuthProvider.
  * @call: The #RestProxyCall that was used to fetch the request token.
@@ -616,18 +639,48 @@ check_cookie (SoupCookie *cookie, gpointer user_data)
 }
 
 static void
+on_dom_node_click (WebKitDOMNode *element, WebKitDOMEvent *event, gpointer user_data)
+{
+  IdentifyData *data = user_data;
+  gtk_dialog_response (data->dialog, GTK_RESPONSE_CANCEL);
+}
+
+static void
 on_web_view_document_load_finished (WebKitWebView *web_view, WebKitWebFrame *frame, gpointer user_data)
 {
   IdentifyData *data = user_data;
   GSList *slist;
+  GoaOAuthProvider *provider = data->provider;
   SoupCookieJar *cookie_jar;
   SoupSession *session;
+  WebKitDOMDocument *document;
+  WebKitDOMNodeList *elements;
+  gulong element_count;
+  gulong i;
 
   session = webkit_get_default_session ();
   cookie_jar = SOUP_COOKIE_JAR (soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR));
   slist = soup_cookie_jar_all_cookies (cookie_jar);
   g_slist_foreach (slist, (GFunc) check_cookie, data);
   g_slist_free_full (slist, (GDestroyNotify) soup_cookie_free);
+
+  document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (web_view));
+  elements = webkit_dom_document_get_elements_by_tag_name (document, "*");
+  element_count = webkit_dom_node_list_get_length (elements);
+
+  for (i = 0; i < element_count; i++)
+    {
+      WebKitDOMNode *element = webkit_dom_node_list_item (elements, i);
+
+      if (!goa_oauth_provider_is_deny_node (provider, element))
+        continue;
+
+      webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (element),
+                                                  "click",
+                                                  G_CALLBACK (on_dom_node_click),
+                                                  false,
+                                                  data);
+    }
 }
 
 static gboolean
