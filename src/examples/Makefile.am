@@ -17,7 +17,7 @@ INCLUDES = 							\
 noinst_PROGRAMS = list-providers list-accounts tweet
 
 list_providers_SOURCES = list-providers.c
-list_providers_CFLAGS = $(GLIB_CFLAGS) $(GTK_CFLAGS) $(REST_CFLAGS)
+list_providers_CFLAGS = $(GLIB_CFLAGS) $(GTK_CFLAGS)
 list_providers_LDADD = $(GLIB_LIBS) $(GTK_LIBS) ../goabackend/libgoa-backend-1.0.la ../goa/libgoa-1.0.la
 
 list_accounts_SOURCES = list-accounts.c

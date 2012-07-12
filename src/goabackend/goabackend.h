@@ -32,8 +32,6 @@
 #include <goabackend/goalogging.h>
 #include <goabackend/goaeditablelabel.h>
 #include <goabackend/goaprovider.h>
-#include <goabackend/goaoauthprovider.h>
-#include <goabackend/goaoauth2provider.h>
 #include <goabackend/goagoogleprovider.h>
 #include <goabackend/goafacebookprovider.h>
 #include <goabackend/goayahooprovider.h>

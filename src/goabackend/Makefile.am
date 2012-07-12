@@ -50,8 +50,6 @@ libgoa_backend_1_0_la_HEADERS =						\
 	goaeditablelabel.h						\
 	goaprovider.h							\
 	goaexchangeprovider.h						\
-	goaoauthprovider.h						\
-	goaoauth2provider.h						\
 	goagoogleprovider.h						\
 	goafacebookprovider.h						\
 	goayahooprovider.h						\
