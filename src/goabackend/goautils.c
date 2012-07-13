@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include <glib/gi18n-lib.h>
-#include <secret/secret.h>
+#include <libsecret/secret.h>
 
 #include "goaprovider.h"
 #include "goautils.h"
@@ -141,11 +141,11 @@ goa_utils_delete_credentials_sync (GoaProvider   *provider,
                                   goa_provider_get_credentials_generation (GOA_PROVIDER (provider)),
                                   identity);
 
-  if (!secret_password_remove_sync (&secret_password_schema,
-                                    cancellable,
-                                    error,
-                                    "goa-identity", password_key,
-                                    NULL))
+  if (!secret_password_clear_sync (&secret_password_schema,
+                                   cancellable,
+                                   error,
+                                   "goa-identity", password_key,
+                                   NULL))
     {
       if (error != NULL)
         {
