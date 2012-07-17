@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-27 14:01+0200\n"
-"PO-Revision-Date: 2012-06-27 14:01+0200\n"
+"POT-Creation-Date: 2012-07-17 13:44+0200\n"
+"PO-Revision-Date: 2012-07-17 13:44+0200\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "Language: ar\n"
@@ -86,8 +86,8 @@ msgid "Microsoft Exchange"
 msgstr "ميكروسوفت إكستشينج"
 
 #: ../src/goabackend/goaexchangeprovider.c:276
-#: ../src/goabackend/goaoauth2provider.c:1332
-#: ../src/goabackend/goaoauthprovider.c:1350
+#: ../src/goabackend/goaoauth2provider.c:1385
+#: ../src/goabackend/goaoauthprovider.c:1403
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "لم يُعثر على الشهادات في حلقة المفاتيح (%s, %d): "
@@ -129,8 +129,8 @@ msgstr "ال_خادوم"
 
 #: ../src/goabackend/goaexchangeprovider.c:598
 #: ../src/goabackend/goaexchangeprovider.c:767
-#: ../src/goabackend/goaoauth2provider.c:892
-#: ../src/goabackend/goaoauthprovider.c:880
+#: ../src/goabackend/goaoauth2provider.c:945
+#: ../src/goabackend/goaoauthprovider.c:933
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "أُغلقت نافذة الحوار"
@@ -146,24 +146,24 @@ msgid "_Try Again"
 msgstr "أ_عد المحاولة"
 
 #: ../src/goabackend/goaexchangeprovider.c:854
-#: ../src/goabackend/goafacebookprovider.c:340
-#: ../src/goabackend/goagoogleprovider.c:506
-#: ../src/goabackend/goawindowsliveprovider.c:355
+#: ../src/goabackend/goafacebookprovider.c:366
+#: ../src/goabackend/goagoogleprovider.c:533
+#: ../src/goabackend/goawindowsliveprovider.c:381
 msgid "Use for"
 msgstr "استخدم ل‍"
 
 #: ../src/goabackend/goaexchangeprovider.c:856
-#: ../src/goabackend/goagoogleprovider.c:508
+#: ../src/goabackend/goagoogleprovider.c:535
 msgid "Mail"
 msgstr "البريد"
 
 #: ../src/goabackend/goaexchangeprovider.c:861
-#: ../src/goabackend/goagoogleprovider.c:513
+#: ../src/goabackend/goagoogleprovider.c:540
 msgid "Calendar"
 msgstr "التقويم"
 
 #: ../src/goabackend/goaexchangeprovider.c:866
-#: ../src/goabackend/goagoogleprovider.c:518
+#: ../src/goabackend/goagoogleprovider.c:545
 msgid "Contacts"
 msgstr "المتراسلون"
 
@@ -186,7 +186,7 @@ msgstr ""
 #: ../src/goabackend/goafacebookprovider.c:206
 #: ../src/goabackend/goagoogleprovider.c:224
 #: ../src/goabackend/goawindowsliveprovider.c:195
-#: ../src/goabackend/goaoauth2provider.c:543
+#: ../src/goabackend/goaoauth2provider.c:566
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
@@ -194,9 +194,9 @@ msgstr "خطأ في إعراب الردّ على أنّه JSON: "
 
 #: ../src/goabackend/goafacebookprovider.c:217
 #: ../src/goabackend/goawindowsliveprovider.c:206
-#, fuzzy, c-format
+#, c-format
 msgid "Didn't find id member in JSON data"
-msgstr "لم يتمّ العثور على المعرف العالمي الفريد GUID في بيانات JSON"
+msgstr "لم يُعثر على رقم المعرّف في بيانات JSON"
 
 #: ../src/goabackend/goafacebookprovider.c:226
 #: ../src/goabackend/goagoogleprovider.c:245
@@ -204,9 +204,9 @@ msgstr "لم يتمّ العثور على المعرف العالمي الفري
 msgid "Didn't find email member in JSON data"
 msgstr "لم يُعثر على البريد الإلكتروني في بيانات JSON"
 
-#: ../src/goabackend/goafacebookprovider.c:342
-#: ../src/goabackend/goagoogleprovider.c:523
-#: ../src/goabackend/goawindowsliveprovider.c:357
+#: ../src/goabackend/goafacebookprovider.c:368
+#: ../src/goabackend/goagoogleprovider.c:550
+#: ../src/goabackend/goawindowsliveprovider.c:383
 msgid "Chat"
 msgstr "الدردشة"
 
@@ -219,12 +219,12 @@ msgstr "جوجل"
 msgid "Didn't find data member in JSON data"
 msgstr "لم يُعثر على البيانات في بيانات JSON"
 
-#: ../src/goabackend/goagoogleprovider.c:279
+#: ../src/goabackend/goagoogleprovider.c:306
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "وقت النظام غير صحيح. راجع إعدادات الوقت والتاريخ."
 
-#: ../src/goabackend/goagoogleprovider.c:528
-#: ../src/goabackend/goawindowsliveprovider.c:362
+#: ../src/goabackend/goagoogleprovider.c:555
+#: ../src/goabackend/goawindowsliveprovider.c:388
 msgid "Documents"
 msgstr "المستندات"
 
@@ -233,13 +233,13 @@ msgid "Windows Live"
 msgstr "وندوز لايف"
 
 #: ../src/goabackend/goawindowsliveprovider.c:217
-#, fuzzy, c-format
+#, c-format
 msgid "Didn't find account email member in JSON data"
-msgstr "لم يُعثر على البريد الإلكتروني في بيانات JSON"
+msgstr "لم يُعثر على رقم البريد الإلكتروني في بيانات JSON"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:500
-#: ../src/goabackend/goaoauthprovider.c:514
+#: ../src/goabackend/goaoauth2provider.c:523
+#: ../src/goabackend/goaoauthprovider.c:537
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -247,74 +247,74 @@ msgstr ""
 "النتيجة المتوقعة عند طلب رمز الوصول هي 200؛ عوضاً عن هذا، تم الحصول على "
 "النتيجة %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:520
+#: ../src/goabackend/goaoauth2provider.c:543
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "لم يُعثر على رمز تحقّق access_token في بيانات غير JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:554
+#: ../src/goabackend/goaoauth2provider.c:577
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "لم يُعثر على رمز تحقّق access_token في بيانات JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:693
-#: ../src/goabackend/goaoauth2provider.c:732
+#: ../src/goabackend/goaoauth2provider.c:746
+#: ../src/goabackend/goaoauth2provider.c:785
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "ردّ التخويل \"%s\""
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:829
+#: ../src/goabackend/goaoauth2provider.c:882
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
 "page</a>:"
 msgstr "الصق كود التخويل الذي تحصل عليه من <a href=\"%s\">صفحة التخويل</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:918
-#: ../src/goabackend/goaoauthprovider.c:911
+#: ../src/goabackend/goaoauth2provider.c:971
+#: ../src/goabackend/goaoauthprovider.c:964
 msgid "Error getting an Access Token: "
 msgstr "خطأ في الحصول على رمز الوصول"
 
-#: ../src/goabackend/goaoauth2provider.c:933
-#: ../src/goabackend/goaoauthprovider.c:924
+#: ../src/goabackend/goaoauth2provider.c:986
+#: ../src/goabackend/goaoauthprovider.c:977
 msgid "Error getting identity: "
 msgstr "خطأ في الحصول على هويّة"
 
-#: ../src/goabackend/goaoauth2provider.c:1193
-#: ../src/goabackend/goaoauthprovider.c:1200
+#: ../src/goabackend/goaoauth2provider.c:1246
+#: ../src/goabackend/goaoauthprovider.c:1253
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "طُلب الولوج كـ%s، لكن تم الولوج كـ%s"
 
-#: ../src/goabackend/goaoauth2provider.c:1359
+#: ../src/goabackend/goaoauth2provider.c:1412
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "لا تحوي الشهادات رمز وصول"
 
-#: ../src/goabackend/goaoauth2provider.c:1398
-#: ../src/goabackend/goaoauthprovider.c:1423
+#: ../src/goabackend/goaoauth2provider.c:1451
+#: ../src/goabackend/goaoauthprovider.c:1476
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "فشل تحديث رمز الوصول (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1433
-#: ../src/goabackend/goaoauthprovider.c:1453
+#: ../src/goabackend/goaoauth2provider.c:1486
+#: ../src/goabackend/goaoauthprovider.c:1506
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "خطأ في حفظ الشهادات في حلقة المفاتيح (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:537
+#: ../src/goabackend/goaoauthprovider.c:560
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "رمز الوصول أو ترويسة \"رمز الوصول السرّي\" في الردّ مفقودة"
 
-#: ../src/goabackend/goaoauthprovider.c:762
+#: ../src/goabackend/goaoauthprovider.c:815
 msgid "Error getting a Request Token: "
 msgstr "خطأ في الحصول على رمز الطلب"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:787
+#: ../src/goabackend/goaoauthprovider.c:840
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -322,7 +322,7 @@ msgstr ""
 "النتيجة المتوقعة للحصول على رمز الطلب هي 200؛ عوضاً عن هذا، تم الحصول على "
 "النتيجة %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:804
+#: ../src/goabackend/goaoauthprovider.c:857
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr ""
@@ -330,12 +330,12 @@ msgstr ""
 "الردّ مفقودة"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:821
+#: ../src/goabackend/goaoauthprovider.c:874
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "الصق الرمز الذي تحصل عليه من <a href=\"%s\">صفحة التخويل</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1379
+#: ../src/goabackend/goaoauthprovider.c:1432
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "لا تحوي الشهادات رمز وصول أو رمز وصول سرّيّ"
@@ -376,14 +376,12 @@ msgid "Refresh %s"
 msgstr "حدّث %s"
 
 #: ../src/goabackend/goautils.c:152
-#, fuzzy
 msgid "Failed to delete credentials from the keyring: "
-msgstr "فشل جلب الشهادات من حلقة المفاتيح: %s"
+msgstr "فشل حذف الشهادات من حلقة المفاتيح: "
 
 #: ../src/goabackend/goautils.c:202
-#, fuzzy
 msgid "Failed to retrieve credentials from the keyring: "
-msgstr "فشل جلب الشهادات من حلقة المفاتيح: %s"
+msgstr "فشل جلب الشهادات من حلقة المفاتيح: "
 
 #: ../src/goabackend/goautils.c:216
 msgid "Error parsing result obtained from the keyring: "
@@ -396,9 +394,8 @@ msgid "GOA %s credentials for identity %s"
 msgstr "أوراق اعتماد GOA %s للهوية %s"
 
 #: ../src/goabackend/goautils.c:273
-#, fuzzy
 msgid "Failed to store credentials from the keyring: "
-msgstr "فشل حفظ الشهادات في حلقة المفاتيح: %s"
+msgstr "فشل حفظ الشهادات في حلقة المفاتيح: "
 
 #. translators: %s here is the address of the web page
 #: ../src/goabackend/goawebview.c:75
