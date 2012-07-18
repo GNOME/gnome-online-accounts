@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts 3.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-30 23:09+0800\n"
-"PO-Revision-Date: 2012-06-30 23:09+0800\n"
-"Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
+"POT-Creation-Date: 2012-07-18 09:50+0800\n"
+"PO-Revision-Date: 2012-07-18 09:50+0800\n"
+"Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Hong Kong) <community@linuxhall.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,7 @@ msgstr "網上帳號"
 #: ../src/daemon/goadaemon.c:743 ../src/daemon/goadaemon.c:1073
 #, c-format
 msgid "Failed to find a provider for: %s"
-msgstr ""
+msgstr "無法尋找到此提供者：%s"
 
 #: ../src/daemon/goadaemon.c:917
 msgid "An online account needs attention"
@@ -37,7 +37,6 @@ msgstr "開啟網上帳號..."
 
 #. TODO: more specific
 #: ../src/daemon/goadaemon.c:1061
-#, fuzzy
 msgid "ProviderType property is not set for account"
 msgstr "帳號沒有設定 ProviderType 屬性"
 
@@ -82,8 +81,8 @@ msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:276
-#: ../src/goabackend/goaoauth2provider.c:1332
-#: ../src/goabackend/goaoauthprovider.c:1350
+#: ../src/goabackend/goaoauth2provider.c:1385
+#: ../src/goabackend/goaoauthprovider.c:1403
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "在密碼匙圈內找不到證書 (%s，%d)："
@@ -91,7 +90,7 @@ msgstr "在密碼匙圈內找不到證書 (%s，%d)："
 #. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:292
 #: ../src/goabackend/goaexchangeprovider.c:931
-#, fuzzy, c-format
+#, c-format
 msgid "Did not find password with username `%s' in credentials"
 msgstr "在證書中找不到使用者名稱為「%s」的密碼"
 
@@ -125,8 +124,8 @@ msgstr "伺服器(_S)"
 
 #: ../src/goabackend/goaexchangeprovider.c:598
 #: ../src/goabackend/goaexchangeprovider.c:767
-#: ../src/goabackend/goaoauth2provider.c:892
-#: ../src/goabackend/goaoauthprovider.c:880
+#: ../src/goabackend/goaoauth2provider.c:945
+#: ../src/goabackend/goaoauthprovider.c:933
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "對話盒已放棄"
@@ -142,25 +141,24 @@ msgid "_Try Again"
 msgstr "重試(_T)"
 
 #: ../src/goabackend/goaexchangeprovider.c:854
-#: ../src/goabackend/goafacebookprovider.c:340
-#: ../src/goabackend/goagoogleprovider.c:506
-#: ../src/goabackend/goawindowsliveprovider.c:355
-#, fuzzy
+#: ../src/goabackend/goafacebookprovider.c:366
+#: ../src/goabackend/goagoogleprovider.c:533
+#: ../src/goabackend/goawindowsliveprovider.c:381
 msgid "Use for"
-msgstr "用於"
+msgstr "使用於"
 
 #: ../src/goabackend/goaexchangeprovider.c:856
-#: ../src/goabackend/goagoogleprovider.c:508
+#: ../src/goabackend/goagoogleprovider.c:535
 msgid "Mail"
 msgstr "郵件"
 
 #: ../src/goabackend/goaexchangeprovider.c:861
-#: ../src/goabackend/goagoogleprovider.c:513
+#: ../src/goabackend/goagoogleprovider.c:540
 msgid "Calendar"
 msgstr "行事曆"
 
 #: ../src/goabackend/goaexchangeprovider.c:866
-#: ../src/goabackend/goagoogleprovider.c:518
+#: ../src/goabackend/goagoogleprovider.c:545
 msgid "Contacts"
 msgstr "聯絡人"
 
@@ -181,7 +179,7 @@ msgstr "請求 guid 時預期的狀態為 200，但卻取得狀態 %d (%s)"
 #: ../src/goabackend/goafacebookprovider.c:206
 #: ../src/goabackend/goagoogleprovider.c:224
 #: ../src/goabackend/goawindowsliveprovider.c:195
-#: ../src/goabackend/goaoauth2provider.c:543
+#: ../src/goabackend/goaoauth2provider.c:566
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
@@ -199,9 +197,9 @@ msgstr "JSON 資料中找不到 id 成員"
 msgid "Didn't find email member in JSON data"
 msgstr "JSON 資料中找不到電子郵件成員"
 
-#: ../src/goabackend/goafacebookprovider.c:342
-#: ../src/goabackend/goagoogleprovider.c:523
-#: ../src/goabackend/goawindowsliveprovider.c:357
+#: ../src/goabackend/goafacebookprovider.c:368
+#: ../src/goabackend/goagoogleprovider.c:550
+#: ../src/goabackend/goawindowsliveprovider.c:383
 msgid "Chat"
 msgstr "聊天"
 
@@ -214,12 +212,12 @@ msgstr "Google"
 msgid "Didn't find data member in JSON data"
 msgstr "JSON 資料中找不到資料成員"
 
-#: ../src/goabackend/goagoogleprovider.c:279
+#: ../src/goabackend/goagoogleprovider.c:306
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "你的系統時間無效。請檢查你的日期與時間設定值。"
 
-#: ../src/goabackend/goagoogleprovider.c:528
-#: ../src/goabackend/goawindowsliveprovider.c:362
+#: ../src/goabackend/goagoogleprovider.c:555
+#: ../src/goabackend/goawindowsliveprovider.c:388
 msgid "Documents"
 msgstr "文件"
 
@@ -233,98 +231,98 @@ msgid "Didn't find account email member in JSON data"
 msgstr "JSON 資料中找不到帳號電子郵件成員"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:500
-#: ../src/goabackend/goaoauthprovider.c:514
+#: ../src/goabackend/goaoauth2provider.c:523
+#: ../src/goabackend/goaoauthprovider.c:537
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr "請求存取記號時預期的狀態為 200，但卻取得狀態 %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:520
+#: ../src/goabackend/goaoauth2provider.c:543
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "非 JSON 資料中找不到 access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:554
+#: ../src/goabackend/goaoauth2provider.c:577
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "JSON 資料中找不到 access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:693
-#: ../src/goabackend/goaoauth2provider.c:732
+#: ../src/goabackend/goaoauth2provider.c:746
+#: ../src/goabackend/goaoauth2provider.c:785
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "驗證回應為「%s」"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:829
+#: ../src/goabackend/goaoauth2provider.c:882
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
 "page</a>:"
 msgstr "貼上從<a href=\"%s\">驗證頁面</a>取得的驗證代碼："
 
-#: ../src/goabackend/goaoauth2provider.c:918
-#: ../src/goabackend/goaoauthprovider.c:911
+#: ../src/goabackend/goaoauth2provider.c:971
+#: ../src/goabackend/goaoauthprovider.c:964
 msgid "Error getting an Access Token: "
 msgstr "取得存取記號時發生錯誤："
 
-#: ../src/goabackend/goaoauth2provider.c:933
-#: ../src/goabackend/goaoauthprovider.c:924
+#: ../src/goabackend/goaoauth2provider.c:986
+#: ../src/goabackend/goaoauthprovider.c:977
 msgid "Error getting identity: "
 msgstr "取得身分時發生錯誤："
 
-#: ../src/goabackend/goaoauth2provider.c:1193
-#: ../src/goabackend/goaoauthprovider.c:1200
+#: ../src/goabackend/goaoauth2provider.c:1246
+#: ../src/goabackend/goaoauthprovider.c:1253
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "有被詢問以 %s 登入，但卻以 %s 登入"
 
-#: ../src/goabackend/goaoauth2provider.c:1359
+#: ../src/goabackend/goaoauth2provider.c:1412
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "證書不包含 access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1398
-#: ../src/goabackend/goaoauthprovider.c:1423
+#: ../src/goabackend/goaoauth2provider.c:1451
+#: ../src/goabackend/goaoauthprovider.c:1476
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "無法重新整理存取符令 (%s，%d)："
 
-#: ../src/goabackend/goaoauth2provider.c:1433
-#: ../src/goabackend/goaoauthprovider.c:1453
+#: ../src/goabackend/goaoauth2provider.c:1486
+#: ../src/goabackend/goaoauthprovider.c:1506
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "將證書儲存於密碼匙圈時發生錯誤 (%s，%d)："
 
-#: ../src/goabackend/goaoauthprovider.c:537
+#: ../src/goabackend/goaoauthprovider.c:560
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "回應遺失 access_token 或 access_token_secret 標頭"
 
-#: ../src/goabackend/goaoauthprovider.c:762
+#: ../src/goabackend/goaoauthprovider.c:815
 msgid "Error getting a Request Token: "
 msgstr "取得請求記號時發生錯誤："
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:787
+#: ../src/goabackend/goaoauthprovider.c:840
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr "取得請求記號時預期的狀態為 200，但卻取得狀態 %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:804
+#: ../src/goabackend/goaoauthprovider.c:857
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "回應遺失 request_token 或 request_token_secret 標頭"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:821
+#: ../src/goabackend/goaoauthprovider.c:874
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "從<a href=\"%s\">認證頁面</a>取得貼上記號："
 
-#: ../src/goabackend/goaoauthprovider.c:1379
+#: ../src/goabackend/goaoauthprovider.c:1432
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "證書不包含 access_token 或 access_token_secret"
@@ -351,7 +349,7 @@ msgstr "JSON 資料中找不到 screen_name 成員"
 #: ../src/goabackend/goautils.c:82
 #, c-format
 msgid "A %s account already exists for %s"
-msgstr ""
+msgstr "%s 帳號已經存在用於 %s"
 
 #. Translators: the %s is the name of the provider. eg., Google.
 #: ../src/goabackend/goautils.c:107
@@ -365,16 +363,12 @@ msgid "Refresh %s"
 msgstr "重新整理 %s"
 
 #: ../src/goabackend/goautils.c:152
-#, fuzzy
-#| msgid "Failed to delete credentials from the keyring: %s"
 msgid "Failed to delete credentials from the keyring: "
-msgstr "無法從密碼匙圈刪除證書：%s"
+msgstr "無法從密碼匙圈刪除證書："
 
 #: ../src/goabackend/goautils.c:202
-#, fuzzy
-#| msgid "Failed to retrieve credentials from the keyring: %s"
 msgid "Failed to retrieve credentials from the keyring: "
-msgstr "無法從密碼匙圈擷取證書：%s"
+msgstr "無法從密碼匙圈取回證書："
 
 #: ../src/goabackend/goautils.c:216
 msgid "Error parsing result obtained from the keyring: "
@@ -387,10 +381,8 @@ msgid "GOA %s credentials for identity %s"
 msgstr "%2$s 身分的 GOA %1$s 證書"
 
 #: ../src/goabackend/goautils.c:273
-#, fuzzy
-#| msgid "Failed to store credentials in the keyring: %s"
 msgid "Failed to store credentials from the keyring: "
-msgstr "無法將證書儲存至密碼匙圈：%s"
+msgstr "無法從密碼匙圈儲存證書："
 
 #. translators: %s here is the address of the web page
 #: ../src/goabackend/goawebview.c:75
