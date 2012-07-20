@@ -143,16 +143,14 @@ goa_utils_delete_credentials_sync (GoaProvider   *provider,
 
   if (!secret_password_clear_sync (&secret_password_schema,
                                    cancellable,
-                                   error,
+                                   NULL,
                                    "goa-identity", password_key,
                                    NULL))
     {
-      if (error != NULL)
-        {
-          g_prefix_error (error, _("Failed to delete credentials from the keyring: "));
-          (*error)->domain = GOA_ERROR;
-          (*error)->code = GOA_ERROR_FAILED; /* TODO: more specific */
-        }
+      g_set_error_literal (error,
+                           GOA_ERROR,
+                           GOA_ERROR_FAILED, /* TODO: more specific */
+                           _("Failed to delete credentials from the keyring"));
       goto out;
     }
 
@@ -192,17 +190,15 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
 
   password = secret_password_lookup_sync (&secret_password_schema,
                                           cancellable,
-                                          error,
+                                          NULL,
                                           "goa-identity", password_key,
                                           NULL);
   if (password == NULL)
     {
-      if (error != NULL)
-        {
-          g_prefix_error (error, _("Failed to retrieve credentials from the keyring: "));
-          (*error)->domain = GOA_ERROR;
-          (*error)->code = GOA_ERROR_FAILED; /* TODO: more specific */
-        }
+      g_set_error_literal (error,
+                           GOA_ERROR,
+                           GOA_ERROR_FAILED, /* TODO: more specific */
+                           _("Failed to retrieve credentials from the keyring"));
       goto out;
     }
 
@@ -264,16 +260,14 @@ goa_utils_store_credentials_for_id_sync (GoaProvider   *provider,
                                    password_description,
                                    credentials_str,
                                    cancellable,
-                                   error,
+                                   NULL,
                                    "goa-identity", password_key,
                                    NULL))
     {
-      if (error != NULL)
-        {
-          g_prefix_error (error, _("Failed to store credentials from the keyring: "));
-          (*error)->domain = GOA_ERROR;
-          (*error)->code = GOA_ERROR_FAILED; /* TODO: more specific */
-        }
+      g_set_error_literal (error,
+                           GOA_ERROR,
+                           GOA_ERROR_FAILED, /* TODO: more specific */
+                           _("Failed to store credentials in the keyring"));
       goto out;
     }
 
