@@ -113,6 +113,7 @@ Goa-1.0.gir: $(libgoa_1_0_la_SOURCES)
 		--pkg=glib-2.0 					\
 		--pkg=gobject-2.0 				\
 		--pkg=gio-2.0 					\
+		--pkg-export=goa-1.0				\
 		--libtool=$(top_builddir)/libtool		\
 		--c-include='goa/goa.h'				\
                 -I$(top_srcdir)/src	 			\
