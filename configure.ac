@@ -204,6 +204,87 @@ if test "$enable_windows_live" != "no"; then
   AC_DEFINE(GOA_WINDOWS_LIVE_ENABLED, 1, [Enable Windows Live data provider])
 fi
 
+# Kerberos
+AC_ARG_ENABLE([kerberos],
+              [AS_HELP_STRING([--enable-kerberos],
+              [Enable kerberos support])],
+              [with_kerberos=$enableval],
+              [enable_kerberos=no])
+AC_PATH_PROG([KRB5_CONFIG], krb5-config, none, $PATH:/usr/kerberos/bin)
+
+if test "x$KRB5_CONFIG" != "xnone"; then
+    KRB5_LIBS="`${KRB5_CONFIG} --libs krb5`"
+    KRB5_CFLAGS="`${KRB5_CONFIG} --cflags krb5`"
+    have_kerberos=yes
+else
+    KRB5_LIBS=""
+    KRB5_CFLAGS=""
+    have_kerberos=no
+fi
+AC_SUBST(KRB5_CFLAGS)
+AC_SUBST(KRB5_LIBS)
+
+if test "$enable_kerberos" != "no"; then
+  if test "$have_kerberos" = "no" ; then
+      AC_MSG_ERROR([kerberos support requested, but not available])
+  fi
+
+  PKG_CHECK_MODULES(GCR, gcr-3)
+  AC_DEFINE(GCR_API_SUBJECT_TO_CHANGE, 1, [Define to use the GCR API])
+fi
+AM_CONDITIONAL(BUILD_KERBEROS, [test x$enable_kerberos != xno])
+
+# Optional timerfd support
+AC_MSG_CHECKING([for timerfd support])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
+#include <sys/timerfd.h>
+#include <unistd.h>
+],[
+int
+main (void)
+{
+  struct itimerspec timer_spec = { 0 };
+  timerfd_settime (timerfd_create (CLOCK_MONOTONIC, TFD_CLOEXEC),
+                   TFD_TIMER_ABSTIME,
+                   &timer_spec,
+                   NULL);
+
+  return 0;
+}
+])],
+[have_timerfd=yes],
+[have_timerfd=no])
+AC_MSG_RESULT($have_timerfd)
+if test x"$have_timerfd" = x"yes"; then
+    AC_DEFINE(HAVE_TIMERFD, 1, [have timerfd support])
+
+    dnl libc headers tend to trail kernel support
+    dnl so compensate if necessary
+    AC_MSG_CHECKING([for timerfd cancel-on-set support])
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
+    #include <sys/timerfd.h>
+    #include <unistd.h>
+    ],[
+    int
+    main (void)
+    {
+      struct itimerspec timer_spec = { 0 };
+      timerfd_settime (timerfd_create (CLOCK_MONOTONIC, TFD_CLOEXEC),
+                       TFD_TIMER_ABSTIME | TFD_TIMER_CANCEL_ON_SET,
+                       &timer_spec,
+                       NULL);
+
+      return 0;
+    }
+    ])],
+    [have_tfd_timer_cancel_on_set=yes],
+    [have_tfd_timer_cancel_on_set=no])
+    AC_MSG_RESULT($have_tfd_timer_cancel_on_set)
+    if test x"$have_tfd_timer_cancel_on_set" = x"no"; then
+       AC_DEFINE(TFD_TIMER_CANCEL_ON_SET, [(1 << 1)], [have timerfd support])
+    fi
+fi
+
 # Internationalization
 #
 
@@ -231,6 +312,7 @@ src/goa/Makefile
 src/goa/goa-1.0.pc
 src/goabackend/Makefile
 src/goabackend/goa-backend-1.0.pc
+src/goaidentity/Makefile
 src/daemon/Makefile
 src/examples/Makefile
 po/Makefile.in

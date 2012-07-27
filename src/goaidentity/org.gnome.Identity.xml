@@ -1,0 +1,124 @@
+<!DOCTYPE node PUBLIC
+"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+
+<!--
+ Copyright (C) 2012 Red Hat, Inc.
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General
+ Public License along with this library; if not, write to the
+ Free Software Foundation, Inc., 59 Temple Place, Suite 330,
+ Boston, MA 02111-1307, USA.
+
+ Author: Ray Strode <rstrode@redhat.com>
+-->
+
+<node name="/" xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
+  <!--
+      org.gnome.Identity.Manager:
+
+      An interface used for managing identities.
+  -->
+  <interface name="org.gnome.Identity.Manager">
+
+    <method name="ExchangeSecretKeys">
+      <arg name="input_key" type="s" direction="in"/>
+      <arg name="output_key" type="s" direction="out"/>
+    </method>
+
+    <!--
+        SignIn:
+        @identifier: kerberos principal or partial principal
+        @details: Extra key/value pairs to set.
+        @identity_object_path: The object path of the signed in identity.
+
+        Signs in an identity. Available details are:
+
+        * domain: e.g. example.com
+        * initial-password: D-H encrypted initial password.
+                            Must call ExchangeSecretKeys() first.
+        * disallow-renewal: Don't request renewable ticket
+        * disallow-forwarding: Don't request forwardable ticket
+        * disallow-proxying: Don't request proxiable ticket
+
+    -->
+    <method name="SignIn">
+      <arg name="identifier" type="s" direction="in"/>
+      <arg name="details" type="a{ss}" direction="in"/>
+      <arg name="identity_object_path" type="o" direction="out"/>
+    </method>
+
+    <!--
+        SignOut:
+        @identity: The identifier of the identity (i.e., a kerberos principal name)
+
+        Signs out an identity.
+    -->
+    <method name="SignOut">
+      <arg name="identity" type="s" direction="in"/>
+    </method>
+  </interface>
+
+  <!--
+      org.gnome.Identity:
+
+      The identity interface.
+  -->
+  <interface name="org.gnome.Identity">
+    <!--
+        Identifier:
+        Unique string identifying identity (i.e., a kerberos principal name)
+    -->
+    <property name="Identifier" type="s" access="read"/>
+
+    <!--
+        ExpirationTimestamp:
+        The time the identity's credentials will expire
+    -->
+    <property name="ExpirationTimestamp" type="x" access="read"/>
+
+    <!--
+        IsSignedIn:
+        Whether or not the identity is currently signed in
+    -->
+    <property name="IsSignedIn" type="b" access="read"/>
+
+  </interface>
+
+  <!--
+      org.gnome.Identity.Realm:
+
+      The realm interface.
+  -->
+  <interface name="org.gnome.Identity.Realm">
+    <!--
+        Name:
+        Kerberos realm (e.g., EXAMPLE.COM)
+    -->
+    <property name="Name" type="s" access="read"/>
+
+    <!--
+        Domain:
+        host of domain controller (e.g., example.com)
+    -->
+    <property name="Domain" type="s" access="read"/>
+
+    <!--
+        IsEnrolled:
+        Whether or not the machine is currently enrolled in the realm
+    -->
+    <property name="IsEnrolled" type="b" access="read"/>
+
+  </interface>
+
+</node>

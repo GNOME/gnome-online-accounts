@@ -1,0 +1,136 @@
+NULL =
+BUILT_SOURCES = $(NULL)
+EXTRA_DIST = $(NULL)
+CLEANFILES= $(NULL)
+
+INCLUDES = 							\
+	-I$(top_builddir)/src -I$(top_srcdir)/src		\
+	-I$(top_srcdir)/src/goabackend				\
+	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\" 		\
+	-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\" 		\
+	-DPACKAGE_DATA_DIR=\""$(datadir)"\" 			\
+	-DPACKAGE_BIN_DIR=\""$(bindir)"\" 			\
+	-DPACKAGE_LOCALSTATE_DIR=\""$(localstatedir)"\" 	\
+	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" 		\
+	-DPACKAGE_LIB_DIR=\""$(libdir)"\" 			\
+	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT			\
+	-DGOA_API_IS_SUBJECT_TO_CHANGE				\
+	-DGOA_BACKEND_API_IS_SUBJECT_TO_CHANGE			\
+	$(WARN_CFLAGS)						\
+	$(NULL)
+
+identity_headers =						\
+	goaalarm.h						\
+	goaidentity.h						\
+	goaidentityinquiry.h					\
+	goaidentityinquiryprivate.h				\
+	goaidentityservice.h					\
+	goaidentitymanagerprivate.h				\
+	goaidentitymanager.h					\
+	goaidentityutils.h					\
+	goakerberosidentity.h					\
+	goakerberosidentityinquiry.h				\
+	goakerberosidentitymanager.h				\
+	um-realm-manager.h					\
+	$(NULL)
+
+identity_sources =						\
+	$(identity_headers)					\
+	goaalarm.c						\
+	goaidentity.c						\
+	goaidentityinquiry.c					\
+	goaidentityservice.c					\
+	goaidentitymanager.c					\
+	goaidentityutils.c					\
+	goakerberosidentity.c					\
+	goakerberosidentityinquiry.c				\
+	goakerberosidentitymanager.c				\
+	um-realm-manager.c					\
+	$(NULL)
+
+identity_dbus_built_sources =					\
+	org.gnome.Identity.c		org.gnome.Identity.h	\
+	$(NULL)
+
+$(identity_dbus_built_sources) : Makefile.am org.gnome.Identity.xml
+	gdbus-codegen						\
+		--interface-prefix org.gnome.Identity.		\
+		--c-namespace GoaIdentityService		\
+		--c-generate-object-manager			\
+		--generate-c-code org.gnome.Identity		\
+		org.gnome.Identity.xml				\
+		--annotate "org.gnome.Identity"			\
+		           "org.gtk.GDBus.C.Name" Identity	\
+		$(NULL)
+BUILT_SOURCES += $(identity_dbus_built_sources)
+EXTRA_DIST += org.gnome.Identity.xml
+
+goaidentityenumtypes.h: goaidentityenumtypes.h.in $(identity_headers)
+	$(AM_V_GEN) glib-mkenums --template $^ > $@
+EXTRA_DIST += goaidentityenumtypes.h.in
+BUILT_SOURCES += goaidentityenumtypes.h
+
+goaidentityenumtypes.c: goaidentityenumtypes.c.in $(identity_headers)
+	$(AM_V_GEN) glib-mkenums --template $^ > $@
+EXTRA_DIST += goaidentityenumtypes.c.in
+BUILT_SOURCES += goaidentityenumtypes.c
+
+realmd_dbus_built_sources =					\
+	um-realm-generated.h					\
+	um-realm-generated.c					\
+	$(NULL)
+
+$(realmd_dbus_built_sources) : Makefile.am org.freedesktop.realmd.xml
+	gdbus-codegen						\
+		--interface-prefix org.freedesktop.realmd.	\
+		--generate-c-code um-realm-generated		\
+		--c-generate-object-manager			\
+		--c-namespace UmRealm				\
+		--annotate "org.freedesktop.realmd.Realm"	\
+		            org.gtk.GDBus.C.Name Common		\
+		org.freedesktop.realmd.xml			\
+		$(NULL)
+BUILT_SOURCES += $(realmd_dbus_built_sources)
+EXTRA_DIST += org.freedesktop.realmd.xml
+
+if BUILD_KERBEROS
+noinst_LTLIBRARIES = libgoaidentity.la
+
+libgoaidentity_la_SOURCES = 					\
+	goaidentityenumtypes.h		goaidentityenumtypes.c	\
+	$(identity_dbus_built_sources)				\
+	$(realmd_dbus_built_sources)				\
+	$(identity_sources)					\
+	$(NULL)
+
+libgoaidentity_la_CPPFLAGS =					\
+	-DG_LOG_DOMAIN=\"libgoaidentity\"			\
+	-DGOA_BACKEND_COMPILATION				\
+	$(NULL)
+
+libgoaidentity_la_CFLAGS =					\
+	$(GLIB_CFLAGS) 						\
+	$(GTK_CFLAGS)						\
+	$(LIBNOTIFY_CFLAGS)					\
+	$(KRB5_CFLAGS)						\
+	$(GCR_CFLAGS)						\
+	$(NULL)
+
+libgoaidentity_la_LIBADD = 					\
+	$(GLIB_LIBS) 						\
+	$(GTK_LIBS)						\
+	$(LIBNOTIFY_LIBS)					\
+	$(KRB5_LIBS)						\
+	$(GCR_LIBS)						\
+	$(NULL)
+
+else
+EXTRA_DIST += $(identity_sources)
+endif
+
+CLEANFILES += $(BUILT_SOURCES)
+
+clean-local :
+	rm -f *~
+
+-include $(top_srcdir)/git.mk

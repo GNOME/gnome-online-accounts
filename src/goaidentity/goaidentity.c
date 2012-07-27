@@ -1,0 +1,83 @@
+/* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
+/*
+ * Copyright (C) 2012 Red Hat, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+ * 02111-1307, USA.
+ */
+
+#include "config.h"
+
+#include <glib-object.h>
+#include <glib/gi18n.h>
+
+#include "goaidentity.h"
+#include "goalogging.h"
+
+G_DEFINE_INTERFACE (GoaIdentity, goa_identity, G_TYPE_OBJECT);
+
+static void
+goa_identity_default_init (GoaIdentityInterface *interface)
+{
+  g_object_interface_install_property (interface,
+                                       g_param_spec_string ("identifier",
+                                                            "identifier",
+                                                            "identifier",
+                                                            NULL, G_PARAM_READABLE));
+  g_object_interface_install_property (interface,
+                                       g_param_spec_boolean ("is-signed-in",
+                                                             "Is signed in",
+                                                             "Whether or not identity is currently signed in",
+                                                             FALSE,
+                                                             G_PARAM_READABLE));
+  g_object_interface_install_property (interface,
+                                       g_param_spec_int64 ("expiration-timestamp",
+                                                           "Expiration Timestamp",
+                                                           "A timestamp of when the identities credentials expire",
+                                                           -1,
+                                                           G_MAXINT64,
+                                                           -1, G_PARAM_READABLE));
+}
+
+GQuark
+goa_identity_error_quark (void)
+{
+  static GQuark error_quark = 0;
+
+  if (error_quark == 0)
+    {
+      error_quark = g_quark_from_static_string ("goa-identity-error");
+    }
+
+  return error_quark;
+}
+
+const char *
+goa_identity_get_identifier (GoaIdentity *self)
+{
+  return GOA_IDENTITY_GET_IFACE (self)->get_identifier (self);
+}
+
+gboolean
+goa_identity_is_signed_in (GoaIdentity *self)
+{
+  return GOA_IDENTITY_GET_IFACE (self)->is_signed_in (self);
+}
+
+GBytes *
+goa_identity_get_credentials (GoaIdentity *self)
+{
+  return GOA_IDENTITY_GET_IFACE (self)->get_credentials (self);
+}

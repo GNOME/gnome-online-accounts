@@ -1,6 +1,6 @@
 
 NULL =
 
-SUBDIRS = goa goabackend daemon examples
+SUBDIRS = goa goaidentity goabackend daemon examples
 
 -include $(top_srcdir)/git.mk

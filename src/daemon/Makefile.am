@@ -1,8 +1,9 @@
-
 NULL =
 
 INCLUDES = 							\
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
+	-I$(top_builddir)/goaidentity				\
+	-I$(top_srcdir)/goaidentity				\
 	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\" 		\
 	-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\" 		\
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" 			\
@@ -15,6 +16,9 @@ INCLUDES = 							\
 	-DGOA_BACKEND_API_IS_SUBJECT_TO_CHANGE			\
 	$(WARN_CFLAGS)						\
 	$(NULL)
+
+BUILT_SOURCES = $(NULL)
+EXTRA_DIST = $(NULL)
 
 libexec_PROGRAMS = goa-daemon
 
@@ -45,6 +49,14 @@ goa_daemon_LDADD = 						\
 	$(LIBNOTIFY_LIBS)					\
 	$(REST_LIBS)						\
 	$(NULL)
+
+if BUILD_KERBEROS
+goa_daemon_LDADD += 						\
+	$(top_builddir)/src/goaidentity/libgoaidentity.la	\
+	$(KRB5_LIBS)						\
+	$(GCR_LIBS)						\
+	$(NULL)
+endif
 
 clean-local :
 	rm -f *~
