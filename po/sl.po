@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-06-25 14:59+0000\n"
-"PO-Revision-Date: 2012-06-26 09:13+0100\n"
+"POT-Creation-Date: 2012-07-29 11:03+0000\n"
+"PO-Revision-Date: 2012-07-29 14:15+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: Slovenian\n"
@@ -87,8 +87,8 @@ msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:276
-#: ../src/goabackend/goaoauth2provider.c:1332
-#: ../src/goabackend/goaoauthprovider.c:1350
+#: ../src/goabackend/goaoauth2provider.c:1385
+#: ../src/goabackend/goaoauthprovider.c:1403
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "Poverila v zbirki ključev ni mogoče najti (%s, %d):"
@@ -130,8 +130,8 @@ msgstr "_Strežnik"
 
 #: ../src/goabackend/goaexchangeprovider.c:598
 #: ../src/goabackend/goaexchangeprovider.c:767
-#: ../src/goabackend/goaoauth2provider.c:892
-#: ../src/goabackend/goaoauthprovider.c:880
+#: ../src/goabackend/goaoauth2provider.c:945
+#: ../src/goabackend/goaoauthprovider.c:933
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "Pogovorno okno je bilo opuščeno"
@@ -147,24 +147,24 @@ msgid "_Try Again"
 msgstr "_Poskusi znova"
 
 #: ../src/goabackend/goaexchangeprovider.c:854
-#: ../src/goabackend/goafacebookprovider.c:340
-#: ../src/goabackend/goagoogleprovider.c:506
-#: ../src/goabackend/goawindowsliveprovider.c:355
+#: ../src/goabackend/goafacebookprovider.c:366
+#: ../src/goabackend/goagoogleprovider.c:533
+#: ../src/goabackend/goawindowsliveprovider.c:381
 msgid "Use for"
 msgstr "Uporabi za"
 
 #: ../src/goabackend/goaexchangeprovider.c:856
-#: ../src/goabackend/goagoogleprovider.c:508
+#: ../src/goabackend/goagoogleprovider.c:535
 msgid "Mail"
 msgstr "Elektronska pošta"
 
 #: ../src/goabackend/goaexchangeprovider.c:861
-#: ../src/goabackend/goagoogleprovider.c:513
+#: ../src/goabackend/goagoogleprovider.c:540
 msgid "Calendar"
 msgstr "Koledar"
 
 #: ../src/goabackend/goaexchangeprovider.c:866
-#: ../src/goabackend/goagoogleprovider.c:518
+#: ../src/goabackend/goagoogleprovider.c:545
 msgid "Contacts"
 msgstr "Stiki"
 
@@ -185,7 +185,7 @@ msgstr "Pričakovano je stanje 200 pri zahtevi guid, vrnjeno pa je stanje %d (%s
 #: ../src/goabackend/goafacebookprovider.c:206
 #: ../src/goabackend/goagoogleprovider.c:224
 #: ../src/goabackend/goawindowsliveprovider.c:195
-#: ../src/goabackend/goaoauth2provider.c:543
+#: ../src/goabackend/goaoauth2provider.c:566
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
@@ -203,9 +203,9 @@ msgstr "Ni mogoče najti ID stika med podatki JSON "
 msgid "Didn't find email member in JSON data"
 msgstr "Ni mogoče najti elektronske pošte stika med podatki JSON"
 
-#: ../src/goabackend/goafacebookprovider.c:342
-#: ../src/goabackend/goagoogleprovider.c:523
-#: ../src/goabackend/goawindowsliveprovider.c:357
+#: ../src/goabackend/goafacebookprovider.c:368
+#: ../src/goabackend/goagoogleprovider.c:550
+#: ../src/goabackend/goawindowsliveprovider.c:383
 msgid "Chat"
 msgstr "Klepet"
 
@@ -218,12 +218,12 @@ msgstr "Google"
 msgid "Didn't find data member in JSON data"
 msgstr "Ni mogoče najti podatkov stika med podatki JSON "
 
-#: ../src/goabackend/goagoogleprovider.c:279
+#: ../src/goabackend/goagoogleprovider.c:306
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "Sistemski čas ni veljaven. Preverite nastavitve časa in datuma."
 
-#: ../src/goabackend/goagoogleprovider.c:528
-#: ../src/goabackend/goawindowsliveprovider.c:362
+#: ../src/goabackend/goagoogleprovider.c:555
+#: ../src/goabackend/goawindowsliveprovider.c:388
 msgid "Documents"
 msgstr "Dokumenti"
 
@@ -237,94 +237,94 @@ msgid "Didn't find account email member in JSON data"
 msgstr "Ni mogoče najti elektronskega računa stika med podatki JSON "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:500
-#: ../src/goabackend/goaoauthprovider.c:514
+#: ../src/goabackend/goaoauth2provider.c:523
+#: ../src/goabackend/goaoauthprovider.c:537
 #, c-format
 msgid "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr "Pričakovano je stanje 200 pri zahtevi žetona dostopa, vrnjeno pa je stanje %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:520
+#: ../src/goabackend/goaoauth2provider.c:543
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "Ni mogoče najti žetona dostopa med podatki, ki ne spadajo k JSON "
 
-#: ../src/goabackend/goaoauth2provider.c:554
+#: ../src/goabackend/goaoauth2provider.c:577
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "Ni mogoče najti žetona dostopa med podatki JSON "
 
-#: ../src/goabackend/goaoauth2provider.c:693
-#: ../src/goabackend/goaoauth2provider.c:732
+#: ../src/goabackend/goaoauth2provider.c:746
+#: ../src/goabackend/goaoauth2provider.c:785
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "Odziv overitve je \"%s\""
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:829
+#: ../src/goabackend/goaoauth2provider.c:882
 #, c-format
 msgid "Paste authorization code obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "Prilepi kodo overitve pridobljeno preko <a href=\"%s\">strani overitve</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:918
-#: ../src/goabackend/goaoauthprovider.c:911
+#: ../src/goabackend/goaoauth2provider.c:971
+#: ../src/goabackend/goaoauthprovider.c:964
 msgid "Error getting an Access Token: "
 msgstr "Napaka pridobivanja žetona dostopa:"
 
-#: ../src/goabackend/goaoauth2provider.c:933
-#: ../src/goabackend/goaoauthprovider.c:924
+#: ../src/goabackend/goaoauth2provider.c:986
+#: ../src/goabackend/goaoauthprovider.c:977
 msgid "Error getting identity: "
 msgstr "Napaka med pridobivanjem istovetnosti:"
 
-#: ../src/goabackend/goaoauth2provider.c:1193
-#: ../src/goabackend/goaoauthprovider.c:1200
+#: ../src/goabackend/goaoauth2provider.c:1246
+#: ../src/goabackend/goaoauthprovider.c:1253
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "Zahtevana je prijava %s, prijavljen pa je uporabnik %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1359
+#: ../src/goabackend/goaoauth2provider.c:1412
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Poverila ne vključujejo žetona dostopa"
 
-#: ../src/goabackend/goaoauth2provider.c:1398
-#: ../src/goabackend/goaoauthprovider.c:1423
+#: ../src/goabackend/goaoauth2provider.c:1451
+#: ../src/goabackend/goaoauthprovider.c:1476
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Osveževanje žetona dostopa je spodletelo (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1433
-#: ../src/goabackend/goaoauthprovider.c:1453
+#: ../src/goabackend/goaoauth2provider.c:1486
+#: ../src/goabackend/goaoauthprovider.c:1506
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "Napaka med shranjevanjem poverila v zbirko ključev (%s, %d):"
 
-#: ../src/goabackend/goaoauthprovider.c:537
+#: ../src/goabackend/goaoauthprovider.c:560
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "Manjka glava žetona dostopa oziroma skritega žetona dostopa v odzivu"
 
-#: ../src/goabackend/goaoauthprovider.c:762
+#: ../src/goabackend/goaoauthprovider.c:815
 msgid "Error getting a Request Token: "
 msgstr "Napaka pridobivanja žetona zahteve:"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:787
+#: ../src/goabackend/goaoauthprovider.c:840
 #, c-format
 msgid "Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr "Pričakovano je stanje 200 pri pridobivanju žetona zahteve, vrnjeno pa je stanje %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:804
+#: ../src/goabackend/goaoauthprovider.c:857
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "Manjka glava žetona zahteve oziroma skritega žetona zahteve v odzivu"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:821
+#: ../src/goabackend/goaoauthprovider.c:874
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "Prilepi žeton pridobljen preko <a href=\"%s\">strani overitve</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1379
+#: ../src/goabackend/goaoauthprovider.c:1432
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Poverila ne vsebujejo žetona dostopa oziroma skritega žetona dostopa"
@@ -364,27 +364,30 @@ msgstr "Dodaj %s"
 msgid "Refresh %s"
 msgstr "Osveži %s"
 
-#: ../src/goabackend/goautils.c:152
-msgid "Failed to delete credentials from the keyring: "
-msgstr "Brisanje poveril iz zbirke ključev je spodletelo:"
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:153
+msgid "Failed to delete credentials from the keyring"
+msgstr "Brisanje poveril iz zbirke ključev je spodletelo"
 
-#: ../src/goabackend/goautils.c:202
-msgid "Failed to retrieve credentials from the keyring: "
-msgstr "Pridobivanje poveril iz zbirke ključev je spodletelo:"
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:201
+msgid "Failed to retrieve credentials from the keyring"
+msgstr "Pridobivanje poveril iz zbirke ključev je spodletelo"
 
-#: ../src/goabackend/goautils.c:216
+#: ../src/goabackend/goautils.c:212
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Napaka razčlenjevanja rezultatov pridobljenih preko zbirke ključev:"
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:258
+#: ../src/goabackend/goautils.c:254
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Poverila GOA %s za %s"
 
-#: ../src/goabackend/goautils.c:273
-msgid "Failed to store credentials from the keyring: "
-msgstr "Shranjevanje poveril iz zbirke ključev je spodletelo:"
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:270
+msgid "Failed to store credentials in the keyring"
+msgstr "Shranjevanje poveril v zbirko ključev je spodletelo"
 
 #. translators: %s here is the address of the web page
 #: ../src/goabackend/goawebview.c:75
