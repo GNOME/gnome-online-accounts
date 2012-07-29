@@ -3,71 +3,210 @@
 # This file is distributed under the same license as the gnome-online-accounts package.
 #
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2011, 2012.
+# Lukács Bence <lukacs.bence1 at gmail dot com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-03 15:59+0100\n"
-"PO-Revision-Date: 2012-03-03 16:00+0100\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
+"cgi?product=gnome-online-accounts&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2012-07-20 12:51+0000\n"
+"PO-Revision-Date: 2012-07-29 13:02+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
-"Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
-"Language: \n"
+"Language-Team: Magyar <gnome-hu-list at gnome dot org>\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 1.0\n"
 
-#: ../src/daemon/goadaemon.c:871
+#. shut up -Wunused-but-set-variable
+#: ../src/daemon/goadaemon.c:199
+msgid "Online Accounts"
+msgstr "Online fiókok"
+
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:743 ../src/daemon/goadaemon.c:1073
+#, c-format
+msgid "Failed to find a provider for: %s"
+msgstr "Nem található  szolgáltató a következőhöz: %s"
+
+#: ../src/daemon/goadaemon.c:917
 msgid "An online account needs attention"
 msgstr "Egy online fiók figyelmet kér"
 
-#: ../src/daemon/goadaemon.c:878
+#: ../src/daemon/goadaemon.c:924
 msgid "Open Online Accounts..."
 msgstr "Online fiókok megnyitása…"
 
-#: ../src/goabackend/goafacebookprovider.c:78
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:1061
+msgid "ProviderType property is not set for account"
+msgstr "ProviderType tulajdonság nincs beállítva a fiók számára"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:204
+#, c-format
+msgid "Code: %u - Unexpected response from server"
+msgstr "Kód: %u - Nem várt válasz érkezett a kiszolgálótól"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:220
+#, c-format
+msgid "Failed to parse autodiscover response XML"
+msgstr "Az automatikus felderítésre adott válasz XML feldolgozása sikertelen."
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:230
+#, c-format
+msgid "Failed to find Autodiscover element"
+msgstr "Nem sikerült megtalálni az Autodiscover elemet"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:244
+#, c-format
+msgid "Failed to find Response element"
+msgstr "Nem sikerült megtalálni a Response elemet"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:258
+#, c-format
+msgid "Failed to find Account element"
+msgstr "Nem sikerült megtalálni az Account elemet"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:275
+#, c-format
+msgid "Failed to find ASUrl and OABUrl in autodiscover response"
+msgstr ""
+"Az ASUrl és OABUrl nem található az automatikus felderítésre adott válaszban"
+
+#: ../src/goabackend/goaexchangeprovider.c:77
+msgid "Microsoft Exchange"
+msgstr "Microsoft Exchange"
+
+#: ../src/goabackend/goaexchangeprovider.c:276
+#: ../src/goabackend/goaoauth2provider.c:1385
+#: ../src/goabackend/goaoauthprovider.c:1403
+#, c-format
+msgid "Credentials not found in keyring (%s, %d): "
+msgstr "A hitelesítési adatok nem találhatók a kulcstartón (%s, %d): "
+
+#. TODO: more specific
+#: ../src/goabackend/goaexchangeprovider.c:292
+#: ../src/goabackend/goaexchangeprovider.c:931
+#, c-format
+msgid "Did not find password with username `%s' in credentials"
+msgstr ""
+"Nem található jelszó a(z) „%s” felhasználónévhez a hitelesítési adatok között"
+
+#: ../src/goabackend/goaexchangeprovider.c:464
+msgid "New Microsoft Exchange Account"
+msgstr "Új Microsoft Exchange fiók"
+
+#: ../src/goabackend/goaexchangeprovider.c:464
+msgid "Microsoft Exchange Account"
+msgstr "Microsoft Exchange fiók"
+
+#: ../src/goabackend/goaexchangeprovider.c:490
+msgid "_E-mail"
+msgstr "_E-mail"
+
+#: ../src/goabackend/goaexchangeprovider.c:491
+msgid "_Password"
+msgstr "_Jelszó"
+
+#: ../src/goabackend/goaexchangeprovider.c:494
+msgid "_Custom"
+msgstr "_Egyéni"
+
+#: ../src/goabackend/goaexchangeprovider.c:513
+msgid "User_name"
+msgstr "_Felhasználónév"
+
+#: ../src/goabackend/goaexchangeprovider.c:514
+msgid "_Server"
+msgstr "_Kiszolgáló"
+
+#: ../src/goabackend/goaexchangeprovider.c:598
+#: ../src/goabackend/goaexchangeprovider.c:767
+#: ../src/goabackend/goaoauth2provider.c:945
+#: ../src/goabackend/goaoauthprovider.c:933
+#, c-format
+msgid "Dialog was dismissed"
+msgstr "Az ablakot bezárták"
+
+#: ../src/goabackend/goaexchangeprovider.c:636
+#: ../src/goabackend/goaexchangeprovider.c:795
+msgid "Error connecting to Microsoft Exchange server"
+msgstr "Hiba a Microsoft Exchange kiszolgálóhoz való kapcsolódáskor"
+
+#: ../src/goabackend/goaexchangeprovider.c:644
+#: ../src/goabackend/goaexchangeprovider.c:803
+msgid "_Try Again"
+msgstr "P_róbálja újra"
+
+#: ../src/goabackend/goaexchangeprovider.c:854
+#: ../src/goabackend/goafacebookprovider.c:366
+#: ../src/goabackend/goagoogleprovider.c:533
+#: ../src/goabackend/goawindowsliveprovider.c:381
+msgid "Use for"
+msgstr "Használat ehhez"
+
+#: ../src/goabackend/goaexchangeprovider.c:856
+#: ../src/goabackend/goagoogleprovider.c:535
+msgid "Mail"
+msgstr "Levelezés"
+
+#: ../src/goabackend/goaexchangeprovider.c:861
+#: ../src/goabackend/goagoogleprovider.c:540
+msgid "Calendar"
+msgstr "Naptár"
+
+#: ../src/goabackend/goaexchangeprovider.c:866
+#: ../src/goabackend/goagoogleprovider.c:545
+msgid "Contacts"
+msgstr "Névjegyek"
+
+#: ../src/goabackend/goafacebookprovider.c:80
 msgid "Facebook"
 msgstr "Facebook"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:162
-#: ../src/goabackend/goagoogleprovider.c:195
-#: ../src/goabackend/goawindowsliveprovider.c:170
+#: ../src/goabackend/goafacebookprovider.c:194
+#: ../src/goabackend/goagoogleprovider.c:212
+#: ../src/goabackend/goawindowsliveprovider.c:183
 #: ../src/goabackend/goatwitterprovider.c:160
 #: ../src/goabackend/goayahooprovider.c:163
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
-msgstr "A guid kérésekor a várt 200-as állapot helyett %d állapot érkezett (%s)"
+msgstr ""
+"A guid kérésekor a várt 200-as állapot helyett %d állapot érkezett (%s)"
 
-#: ../src/goabackend/goafacebookprovider.c:174
-#: ../src/goabackend/goagoogleprovider.c:207
-#: ../src/goabackend/goawindowsliveprovider.c:182
-#: ../src/goabackend/goaoauth2provider.c:478
+#: ../src/goabackend/goafacebookprovider.c:206
+#: ../src/goabackend/goagoogleprovider.c:224
+#: ../src/goabackend/goawindowsliveprovider.c:195
+#: ../src/goabackend/goaoauth2provider.c:566
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
 msgstr "Hiba a válasz JSON-ként való feldolgozásakor: "
 
-#: ../src/goabackend/goafacebookprovider.c:185
+#: ../src/goabackend/goafacebookprovider.c:217
+#: ../src/goabackend/goawindowsliveprovider.c:206
 #, c-format
-msgid "Didn't find username member in JSON data"
-msgstr "Nem található felhasználónév tag a JSON-adatokban"
+msgid "Didn't find id member in JSON data"
+msgstr "Nem található id tag a JSON-adatokban"
 
-#: ../src/goabackend/goafacebookprovider.c:194
+#: ../src/goabackend/goafacebookprovider.c:226
+#: ../src/goabackend/goagoogleprovider.c:245
 #, c-format
-msgid "Didn't find name member in JSON data"
-msgstr "Nem található név tag a JSON-adatokban"
+msgid "Didn't find email member in JSON data"
+msgstr "Nem található e-mail tag a JSON-adatokban"
 
-#: ../src/goabackend/goafacebookprovider.c:282
-#: ../src/goabackend/goawindowsliveprovider.c:292
-#: ../src/goabackend/goatwitterprovider.c:260
-msgid "User Name"
-msgstr "Felhasználónév"
-
-#: ../src/goabackend/goafacebookprovider.c:283
-#: ../src/goabackend/goagoogleprovider.c:430
-#: ../src/goabackend/goawindowsliveprovider.c:293
+#: ../src/goabackend/goafacebookprovider.c:368
+#: ../src/goabackend/goagoogleprovider.c:550
+#: ../src/goabackend/goawindowsliveprovider.c:383
 msgid "Chat"
 msgstr "Csevegés"
 
@@ -75,37 +214,17 @@ msgstr "Csevegés"
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:218
+#: ../src/goabackend/goagoogleprovider.c:235
 #, c-format
 msgid "Didn't find data member in JSON data"
 msgstr "Nem található adat tag a JSON-adatokban"
 
-#: ../src/goabackend/goagoogleprovider.c:228
-#, c-format
-msgid "Didn't find email member in JSON data"
-msgstr "Nem található e-mail tag a JSON-adatokban"
+#: ../src/goabackend/goagoogleprovider.c:306
+msgid "Your system time is invalid. Check your date and time settings."
+msgstr "Rendszerideje nem érvényes. Ellenőrizze a dátum- és időbeállításokat."
 
-#: ../src/goabackend/goagoogleprovider.c:425
-msgid "Email Address"
-msgstr "E-mail cím"
-
-#: ../src/goabackend/goagoogleprovider.c:426
-msgid "Use this account for"
-msgstr "Ezen fiók használata: "
-
-#: ../src/goabackend/goagoogleprovider.c:427
-msgid "Mail"
-msgstr "Levelezés"
-
-#: ../src/goabackend/goagoogleprovider.c:428
-msgid "Calendar"
-msgstr "Naptár"
-
-#: ../src/goabackend/goagoogleprovider.c:429
-msgid "Contacts"
-msgstr "Névjegyek"
-
-#: ../src/goabackend/goagoogleprovider.c:431
+#: ../src/goabackend/goagoogleprovider.c:555
+#: ../src/goabackend/goawindowsliveprovider.c:388
 msgid "Documents"
 msgstr "Dokumentumok"
 
@@ -113,42 +232,39 @@ msgstr "Dokumentumok"
 msgid "Windows Live"
 msgstr "Windows Live"
 
-#: ../src/goabackend/goawindowsliveprovider.c:193
-#, c-format
-msgid "Didn't find id member in JSON data"
-msgstr "Nem található id tag a JSON-adatokban"
-
-#: ../src/goabackend/goawindowsliveprovider.c:204
+#: ../src/goabackend/goawindowsliveprovider.c:217
 #, c-format
 msgid "Didn't find account email member in JSON data"
 msgstr "Nem található fiók e-mail tag a JSON-adatokban"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:435
-#: ../src/goabackend/goaoauthprovider.c:440
+#: ../src/goabackend/goaoauth2provider.c:523
+#: ../src/goabackend/goaoauthprovider.c:537
 #, c-format
-msgid "Expected status 200 when requesting access token, instead got status %d (%s)"
+msgid ""
+"Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr ""
 "A hozzáférési jelsor kérésekor a várt 200-as állapot helyett %d állapot "
 "érkezett (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:455
+#: ../src/goabackend/goaoauth2provider.c:543
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "Nem található az access_token a nem JSON-adatokban"
 
-#: ../src/goabackend/goaoauth2provider.c:489
+#: ../src/goabackend/goaoauth2provider.c:577
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "Nem található az access_token a JSON-adatokban"
 
-#: ../src/goabackend/goaoauth2provider.c:573
+#: ../src/goabackend/goaoauth2provider.c:746
+#: ../src/goabackend/goaoauth2provider.c:785
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "A felhatalmazási válasz: „%s”"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:654
+#: ../src/goabackend/goaoauth2provider.c:882
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
@@ -157,118 +273,80 @@ msgstr ""
 "Illessze be a <a href=\"%s\">felhatalmazási oldalról</a> kapott "
 "felhatalmazási kódot:"
 
-#: ../src/goabackend/goaoauth2provider.c:728
-#: ../src/goabackend/goaoauthprovider.c:751
-#, c-format
-msgid "Dialog was dismissed"
-msgstr "Az ablakot bezárták"
-
-#: ../src/goabackend/goaoauth2provider.c:752
-#: ../src/goabackend/goaoauthprovider.c:782
+#: ../src/goabackend/goaoauth2provider.c:971
+#: ../src/goabackend/goaoauthprovider.c:964
 msgid "Error getting an Access Token: "
 msgstr "Hiba a hozzáférési jelsor lekérésekor: "
 
-#: ../src/goabackend/goaoauth2provider.c:764
-#: ../src/goabackend/goaoauthprovider.c:795
+#: ../src/goabackend/goaoauth2provider.c:986
+#: ../src/goabackend/goaoauthprovider.c:977
 msgid "Error getting identity: "
 msgstr "Hiba a személyazonosság lekérésekor: "
 
-#: ../src/goabackend/goaoauth2provider.c:929
-#: ../src/goabackend/goaoauthprovider.c:972
-#, c-format
-msgid "There is already an account for the identity %s"
-msgstr "Már létezik fiók a(z) %s személyazonossághoz"
-
-#: ../src/goabackend/goaoauth2provider.c:1054
-#: ../src/goabackend/goaoauthprovider.c:1102
+#: ../src/goabackend/goaoauth2provider.c:1246
+#: ../src/goabackend/goaoauthprovider.c:1253
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "A(z) %s néven való bejelentkezésre kérés után %s néven jelentkezett be"
 
-#: ../src/goabackend/goaoauth2provider.c:1190
-#: ../src/goabackend/goaoauthprovider.c:1250
-#, c-format
-msgid "Credentials not found in keyring (%s, %d): "
-msgstr "A hitelesítési adatok nem találhatók a kulcstartón (%s, %d): "
-
-#: ../src/goabackend/goaoauth2provider.c:1217
+#: ../src/goabackend/goaoauth2provider.c:1412
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "A hitelesítési adatok nem tartalmaznak access_token tagot"
 
-#: ../src/goabackend/goaoauth2provider.c:1256
-#: ../src/goabackend/goaoauthprovider.c:1323
+#: ../src/goabackend/goaoauth2provider.c:1451
+#: ../src/goabackend/goaoauthprovider.c:1476
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "A hozzáférési jelsor frissítése sikertelen (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1291
-#: ../src/goabackend/goaoauthprovider.c:1353
+#: ../src/goabackend/goaoauth2provider.c:1486
+#: ../src/goabackend/goaoauthprovider.c:1506
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "Hiba a hitelesítési adatok tárolásakor a kulcstartón (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:463
+#: ../src/goabackend/goaoauthprovider.c:560
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
-msgstr "Hiányzó access_token vagy access_token_secret fejlécek a választban"
+msgstr "Hiányzó access_token vagy access_token_secret fejlécek a válaszban"
 
-#: ../src/goabackend/goaoauthprovider.c:636
+#: ../src/goabackend/goaoauthprovider.c:815
 msgid "Error getting a Request Token: "
 msgstr "Hiba a kérés jelsor lekérésekor: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:645
+#: ../src/goabackend/goaoauthprovider.c:840
 #, c-format
-msgid "Expected status 200 for getting a Request Token, instead got status %d (%s)"
+msgid ""
+"Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr ""
 "A kérés jelsor lekérésekor a várt 200-as állapot helyett %d állapot érkezett "
 "(%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:659
+#: ../src/goabackend/goaoauthprovider.c:857
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
-msgstr "Hiányzó request_token vagy request_token_secret fejlécek a választban"
+msgstr "Hiányzó request_token vagy request_token_secret fejlécek a válaszban"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:676
+#: ../src/goabackend/goaoauthprovider.c:874
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr "Illessze be a <a href=\"%s\">felhatalmazási oldalról</a> kapott jelsort:"
+msgstr ""
+"Illessze be a <a href=\"%s\">felhatalmazási oldalról</a> kapott jelsort:"
 
-#: ../src/goabackend/goaoauthprovider.c:1279
+#: ../src/goabackend/goaoauthprovider.c:1432
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr ""
 "A hitelesítési adatok nem tartalmaznak access_token vagy access_token_secret "
 "tagot"
 
-#: ../src/goabackend/goaprovider.c:523
+#: ../src/goabackend/goaprovider.c:534
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "Az ensure_credentials_sync nincs megvalósítva a(z) %s típushoz"
-
-#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:742
-#, c-format
-msgid "GOA %s credentials for identity %s"
-msgstr "GOA %s hitelesítési adatok a(z) %s személyazonossághoz"
-
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:756
-#, c-format
-msgid "Failed to store credentials in the keyring: %s"
-msgstr "A hitelesítési adatok tárolása meghiúsult a kulcstartón: %s"
-
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:827
-#, c-format
-msgid "Failed to retrieve credentials from the keyring: %s"
-msgstr "A hitelesítési adatok lekérése meghiúsult a kulcstartóról: %s"
-
-#: ../src/goabackend/goaprovider.c:839
-msgid "Error parsing result obtained from the keyring: "
-msgstr "Hiba a kulcstartótól kapott eredmény feldolgozásakor: "
 
 #: ../src/goabackend/goatwitterprovider.c:78
 msgid "Twitter"
@@ -283,6 +361,56 @@ msgstr "Nem található id_str tag a JSON-adatokban"
 #, c-format
 msgid "Didn't find screen_name member in JSON data"
 msgstr "Nem található screen_name tag a JSON-adatokban"
+
+#: ../src/goabackend/goautils.c:82
+#, c-format
+msgid "A %s account already exists for %s"
+msgstr "%s fiók már létezik itt: %s"
+
+#. Translators: the %s is the name of the provider. eg., Google.
+#: ../src/goabackend/goautils.c:107
+#, c-format
+msgid "Add %s"
+msgstr "%s hozzáadása"
+
+#: ../src/goabackend/goautils.c:107
+#, c-format
+msgid "Refresh %s"
+msgstr "%s frissítése"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:153
+#| msgid "Failed to delete credentials from the keyring: "
+msgid "Failed to delete credentials from the keyring"
+msgstr "A hitelesítési adatok törlése meghiúsult a kulcstartóról"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:201
+#| msgid "Failed to retrieve credentials from the keyring: "
+msgid "Failed to retrieve credentials from the keyring"
+msgstr "A hitelesítési adatok lekérése meghiúsult a kulcstartóról"
+
+#: ../src/goabackend/goautils.c:212
+msgid "Error parsing result obtained from the keyring: "
+msgstr "Hiba a kulcstartótól kapott eredmény feldolgozásakor: "
+
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#: ../src/goabackend/goautils.c:254
+#, c-format
+msgid "GOA %s credentials for identity %s"
+msgstr "GOA %s hitelesítési adatok a(z) %s személyazonossághoz"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:270
+#| msgid "Failed to store credentials from the keyring: "
+msgid "Failed to store credentials in the keyring"
+msgstr "A hitelesítési adatok tárolása meghiúsult a kulcstartón"
+
+#. translators: %s here is the address of the web page
+#: ../src/goabackend/goawebview.c:75
+#, c-format
+msgid "Loading “%s”…"
+msgstr "„%s” betöltése…"
 
 #: ../src/goabackend/goayahooprovider.c:78
 msgid "Yahoo"
@@ -317,8 +445,20 @@ msgstr "Nem található profil tag a JSON-adatokban"
 msgid "Didn't find nickname member in JSON data"
 msgstr "Nem található becenév tag a JSON-adatokban"
 
-#. TODO: look up email address / screenname from GUID
-#: ../src/goabackend/goayahooprovider.c:324
-msgid "Name"
-msgstr "Név"
+#~ msgid "Didn't find username member in JSON data"
+#~ msgstr "Nem található felhasználónév tag a JSON-adatokban"
 
+#~ msgid "Didn't find name member in JSON data"
+#~ msgstr "Nem található név tag a JSON-adatokban"
+
+#~ msgid "Email Address"
+#~ msgstr "E-mail cím"
+
+#~ msgid "Use this account for"
+#~ msgstr "Ezen fiók használata: "
+
+#~ msgid "There is already an account for the identity %s"
+#~ msgstr "Már létezik fiók a(z) %s személyazonossághoz"
+
+#~ msgid "Name"
+#~ msgstr "Név"
