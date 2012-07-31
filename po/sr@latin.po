@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-12-19 14:59+0000\n"
-"PO-Revision-Date: 2012-02-15 12:10+0200\n"
+"POT-Creation-Date: 2012-07-20 12:51+0000\n"
+"PO-Revision-Date: 2012-07-31 07:45+0200\n"
 "Last-Translator: Miroslav Nikolić <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <gnom@prevod.org>\n"
 "Language: sr\n"
@@ -19,56 +19,190 @@ msgstr ""
 "n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Project-Style: gnome\n"
 
-#: ../src/daemon/goadaemon.c:871
+#. shut up -Wunused-but-set-variable
+#: ../src/daemon/goadaemon.c:199
+msgid "Online Accounts"
+msgstr "Nalozi na mreži"
+
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:743 ../src/daemon/goadaemon.c:1073
+#, c-format
+msgid "Failed to find a provider for: %s"
+msgstr "Nisam uspeo da pronađem dostavljača za: %s"
+
+#: ../src/daemon/goadaemon.c:917
 msgid "An online account needs attention"
 msgstr "Jedan nalog na mreži zahteva pažnju"
 
-#: ../src/daemon/goadaemon.c:878
+#: ../src/daemon/goadaemon.c:924
 msgid "Open Online Accounts..."
 msgstr "Otvori naloge na mreži..."
 
-#: ../src/goabackend/goafacebookprovider.c:78
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:1061
+msgid "ProviderType property is not set for account"
+msgstr "Vrsta dostavljača nije podešena za nalog"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:204
+#, c-format
+msgid "Code: %u - Unexpected response from server"
+msgstr "Kod: %u — Neočekivani odgovor sa servera"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:220
+#, c-format
+msgid "Failed to parse autodiscover response XML"
+msgstr "Nisam uspeo da obradim samootkrivajući odgovor IksML"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:230
+#, c-format
+msgid "Failed to find Autodiscover element"
+msgstr "Nisam uspeo da pronađem element samootkrivanja"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:244
+#, c-format
+msgid "Failed to find Response element"
+msgstr "Nisam uspeo da pronađem element odgovora"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:258
+#, c-format
+msgid "Failed to find Account element"
+msgstr "Nisam uspeo da pronađem element naloga"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:275
+#, c-format
+msgid "Failed to find ASUrl and OABUrl in autodiscover response"
+msgstr "Nisam uspeo da pronađem ASadresu i OABadresu u odgovoru samootkrivanja"
+
+#: ../src/goabackend/goaexchangeprovider.c:77
+msgid "Microsoft Exchange"
+msgstr "Majkrosoft razmena"
+
+#: ../src/goabackend/goaexchangeprovider.c:276
+#: ../src/goabackend/goaoauth2provider.c:1385
+#: ../src/goabackend/goaoauthprovider.c:1403
+#, c-format
+msgid "Credentials not found in keyring (%s, %d): "
+msgstr "Punomoćstva nisu pronađena u privesku ključeva (%s, %d): "
+
+#. TODO: more specific
+#: ../src/goabackend/goaexchangeprovider.c:292
+#: ../src/goabackend/goaexchangeprovider.c:931
+#, c-format
+msgid "Did not find password with username `%s' in credentials"
+msgstr "Nisam našao lozinku sa korisničkim imenom „%s“ u punomoćstvima"
+
+#: ../src/goabackend/goaexchangeprovider.c:464
+msgid "New Microsoft Exchange Account"
+msgstr "Novi nalog Majkrosoft razmene"
+
+#: ../src/goabackend/goaexchangeprovider.c:464
+msgid "Microsoft Exchange Account"
+msgstr "Nalog Majkrosoft razmene"
+
+#: ../src/goabackend/goaexchangeprovider.c:490
+msgid "_E-mail"
+msgstr "_El. pošta"
+
+#: ../src/goabackend/goaexchangeprovider.c:491
+msgid "_Password"
+msgstr "_Lozinka"
+
+#: ../src/goabackend/goaexchangeprovider.c:494
+msgid "_Custom"
+msgstr "_Proizvoljno"
+
+#: ../src/goabackend/goaexchangeprovider.c:513
+msgid "User_name"
+msgstr "Korisničko _ime"
+
+#: ../src/goabackend/goaexchangeprovider.c:514
+msgid "_Server"
+msgstr "_Server"
+
+#: ../src/goabackend/goaexchangeprovider.c:598
+#: ../src/goabackend/goaexchangeprovider.c:767
+#: ../src/goabackend/goaoauth2provider.c:945
+#: ../src/goabackend/goaoauthprovider.c:933
+#, c-format
+msgid "Dialog was dismissed"
+msgstr "Prozorče je smenjeno"
+
+#: ../src/goabackend/goaexchangeprovider.c:636
+#: ../src/goabackend/goaexchangeprovider.c:795
+msgid "Error connecting to Microsoft Exchange server"
+msgstr "Greška povezivanja na server Majkrosoft razmene"
+
+#: ../src/goabackend/goaexchangeprovider.c:644
+#: ../src/goabackend/goaexchangeprovider.c:803
+msgid "_Try Again"
+msgstr "_Pokušaj opet"
+
+#: ../src/goabackend/goaexchangeprovider.c:854
+#: ../src/goabackend/goafacebookprovider.c:366
+#: ../src/goabackend/goagoogleprovider.c:533
+#: ../src/goabackend/goawindowsliveprovider.c:381
+msgid "Use for"
+msgstr "Koristi za"
+
+#: ../src/goabackend/goaexchangeprovider.c:856
+#: ../src/goabackend/goagoogleprovider.c:535
+msgid "Mail"
+msgstr "Poštu"
+
+#: ../src/goabackend/goaexchangeprovider.c:861
+#: ../src/goabackend/goagoogleprovider.c:540
+msgid "Calendar"
+msgstr "Kalendar"
+
+#: ../src/goabackend/goaexchangeprovider.c:866
+#: ../src/goabackend/goagoogleprovider.c:545
+msgid "Contacts"
+msgstr "Kontakte"
+
+#: ../src/goabackend/goafacebookprovider.c:80
 msgid "Facebook"
 msgstr "Fejsbuk"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:162
-#: ../src/goabackend/goagoogleprovider.c:195
-#: ../src/goabackend/goawindowsliveprovider.c:170
+#: ../src/goabackend/goafacebookprovider.c:194
+#: ../src/goabackend/goagoogleprovider.c:212
+#: ../src/goabackend/goawindowsliveprovider.c:183
 #: ../src/goabackend/goatwitterprovider.c:160
 #: ../src/goabackend/goayahooprovider.c:163
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr "Očekivah stanje 200 prilikom potraživanja guib-a, ali dobih stanje %d (%s)"
 
-#: ../src/goabackend/goafacebookprovider.c:174
-#: ../src/goabackend/goagoogleprovider.c:207
-#: ../src/goabackend/goawindowsliveprovider.c:182
-#: ../src/goabackend/goaoauth2provider.c:478
+#: ../src/goabackend/goafacebookprovider.c:206
+#: ../src/goabackend/goagoogleprovider.c:224
+#: ../src/goabackend/goawindowsliveprovider.c:195
+#: ../src/goabackend/goaoauth2provider.c:566
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
-msgstr "Greška u analizi odgovora kao JSON:"
+msgstr "Greška u analizi odgovora kao JSON: "
 
-#: ../src/goabackend/goafacebookprovider.c:185
+#: ../src/goabackend/goafacebookprovider.c:217
+#: ../src/goabackend/goawindowsliveprovider.c:206
 #, c-format
-msgid "Didn't find username member in JSON data"
-msgstr "Nisam našao člana korisničkog imena u JSON podacima"
+msgid "Didn't find id member in JSON data"
+msgstr "Nisam našao člana ib-a u JSON podacima"
 
-#: ../src/goabackend/goafacebookprovider.c:194
+#: ../src/goabackend/goafacebookprovider.c:226
+#: ../src/goabackend/goagoogleprovider.c:245
 #, c-format
-msgid "Didn't find name member in JSON data"
-msgstr "Nisam našao člana imena u JSON podacima"
+msgid "Didn't find email member in JSON data"
+msgstr "Nisam našao člana el. pošte u JSON podacima"
 
-#: ../src/goabackend/goafacebookprovider.c:282
-#: ../src/goabackend/goawindowsliveprovider.c:292
-#: ../src/goabackend/goatwitterprovider.c:260
-msgid "User Name"
-msgstr "Korisničko ime"
-
-#: ../src/goabackend/goafacebookprovider.c:283
-#: ../src/goabackend/goagoogleprovider.c:430
-#: ../src/goabackend/goawindowsliveprovider.c:293
+#: ../src/goabackend/goafacebookprovider.c:368
+#: ../src/goabackend/goagoogleprovider.c:550
+#: ../src/goabackend/goawindowsliveprovider.c:383
 msgid "Chat"
 msgstr "Ćaskanje"
 
@@ -76,37 +210,19 @@ msgstr "Ćaskanje"
 msgid "Google"
 msgstr "Gugl"
 
-#: ../src/goabackend/goagoogleprovider.c:218
+#: ../src/goabackend/goagoogleprovider.c:235
 #, c-format
 msgid "Didn't find data member in JSON data"
 msgstr "Nisam našao člana podataka u JSON podacima"
 
-#: ../src/goabackend/goagoogleprovider.c:228
-#, c-format
-msgid "Didn't find email member in JSON data"
-msgstr "Nisam našao člana el. pošte u JSON podacima"
+#: ../src/goabackend/goagoogleprovider.c:306
+msgid "Your system time is invalid. Check your date and time settings."
+msgstr ""
+"Vaše sistemsko vreme je pogrešno. Proverite vaša podešavanja datuma i "
+"vremena."
 
-#: ../src/goabackend/goagoogleprovider.c:425
-msgid "Email Address"
-msgstr "Adresa el. pošte"
-
-#: ../src/goabackend/goagoogleprovider.c:426
-msgid "Use this account for"
-msgstr "Koristi ovaj nalog za"
-
-#: ../src/goabackend/goagoogleprovider.c:427
-msgid "Mail"
-msgstr "Poštu"
-
-#: ../src/goabackend/goagoogleprovider.c:428
-msgid "Calendar"
-msgstr "Kalendar"
-
-#: ../src/goabackend/goagoogleprovider.c:429
-msgid "Contacts"
-msgstr "Kontakte"
-
-#: ../src/goabackend/goagoogleprovider.c:431
+#: ../src/goabackend/goagoogleprovider.c:555
+#: ../src/goabackend/goawindowsliveprovider.c:388
 msgid "Documents"
 msgstr "Dokumenta"
 
@@ -114,21 +230,14 @@ msgstr "Dokumenta"
 msgid "Windows Live"
 msgstr "Vindouz uživo"
 
-#: ../src/goabackend/goawindowsliveprovider.c:193
+#: ../src/goabackend/goawindowsliveprovider.c:217
 #, c-format
-#| msgid "Didn't find guid member in JSON data"
-msgid "Didn't find id member in JSON data"
-msgstr "Nisam našao člana ib-a u JSON podacima"
-
-#: ../src/goabackend/goawindowsliveprovider.c:204
-#, c-format
-#| msgid "Didn't find email member in JSON data"
 msgid "Didn't find account email member in JSON data"
 msgstr "Nisam našao člana naloga el. pošte u JSON podacima"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:435
-#: ../src/goabackend/goaoauthprovider.c:440
+#: ../src/goabackend/goaoauth2provider.c:523
+#: ../src/goabackend/goaoauthprovider.c:537
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -136,23 +245,24 @@ msgstr ""
 "Očekivah stanje 200 prilikom potraživanja čina pristupa, ali dobih stanje %d (%"
 "s)"
 
-#: ../src/goabackend/goaoauth2provider.c:455
+#: ../src/goabackend/goaoauth2provider.c:543
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "Nisam našao čin_pristupa u ne-JSON podacima"
 
-#: ../src/goabackend/goaoauth2provider.c:489
+#: ../src/goabackend/goaoauth2provider.c:577
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "Nisam našao čin_pristupa u JSON podacima"
 
-#: ../src/goabackend/goaoauth2provider.c:573
+#: ../src/goabackend/goaoauth2provider.c:746
+#: ../src/goabackend/goaoauth2provider.c:785
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "Odgovor ovlašćenja beše „%s“"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:654
+#: ../src/goabackend/goaoauth2provider.c:882
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
@@ -160,115 +270,75 @@ msgid ""
 msgstr ""
 "Kod ubacivanja ovlašćenja je dobijen sa <a href=\"%s\">stranice ovlašćenja</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:728
-#: ../src/goabackend/goaoauthprovider.c:751
-#, c-format
-msgid "Dialog was dismissed"
-msgstr "Prozorče je smenjeno"
-
-#: ../src/goabackend/goaoauth2provider.c:752
-#: ../src/goabackend/goaoauthprovider.c:782
+#: ../src/goabackend/goaoauth2provider.c:971
+#: ../src/goabackend/goaoauthprovider.c:964
 msgid "Error getting an Access Token: "
-msgstr "Greška prilikom dobavljanja Čina pristupa:"
+msgstr "Greška dobavljanja čina pristupa: "
 
-#: ../src/goabackend/goaoauth2provider.c:764
-#: ../src/goabackend/goaoauthprovider.c:795
+#: ../src/goabackend/goaoauth2provider.c:986
+#: ../src/goabackend/goaoauthprovider.c:977
 msgid "Error getting identity: "
-msgstr "Greška prilikom dobavljanja identiteta:"
+msgstr "Greška dobavljanja identiteta: "
 
-#: ../src/goabackend/goaoauth2provider.c:929
-#: ../src/goabackend/goaoauthprovider.c:972
-#, c-format
-msgid "There is already an account for the identity %s"
-msgstr "Već postoji nalog za identitet %s"
-
-#: ../src/goabackend/goaoauth2provider.c:1054
-#: ../src/goabackend/goaoauthprovider.c:1102
+#: ../src/goabackend/goaoauth2provider.c:1246
+#: ../src/goabackend/goaoauthprovider.c:1253
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "Zatraženo je da se prijavite kao %s, ali ste se prijavili kao %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1190
-#: ../src/goabackend/goaoauthprovider.c:1250
-#, c-format
-msgid "Credentials not found in keyring (%s, %d): "
-msgstr "Punomoćstva nisu pronađena u privesku ključeva (%s, %d): "
-
-#: ../src/goabackend/goaoauth2provider.c:1217
+#: ../src/goabackend/goaoauth2provider.c:1412
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Punomoćstva ne sadrže čin_pristupa"
 
-#: ../src/goabackend/goaoauth2provider.c:1256
-#: ../src/goabackend/goaoauthprovider.c:1323
+#: ../src/goabackend/goaoauth2provider.c:1451
+#: ../src/goabackend/goaoauthprovider.c:1476
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
-msgstr "Nisam uspeo da osvežim čin pristupa (%s, %d):"
+msgstr "Nisam uspeo da osvežim čin pristupa (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1291
-#: ../src/goabackend/goaoauthprovider.c:1353
+#: ../src/goabackend/goaoauth2provider.c:1486
+#: ../src/goabackend/goaoauthprovider.c:1506
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
-msgstr "Greška u skladištenju punomoćstva u privezak ključeva (%s, %d):"
+msgstr "Greška skladištenja punomoćstva u privezak ključeva (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:463
+#: ../src/goabackend/goaoauthprovider.c:560
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "Nedostaje zaglavlje čina_pristupa ili tajna_čina_pristupa u odgovoru"
 
-#: ../src/goabackend/goaoauthprovider.c:636
+#: ../src/goabackend/goaoauthprovider.c:815
 msgid "Error getting a Request Token: "
-msgstr "Greške prilikom dobavljanja Čina zahteva: "
+msgstr "Greške dobavljanja čina zahteva: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:645
+#: ../src/goabackend/goaoauthprovider.c:840
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
-msgstr "Očekivah stanje 200 za dobavljanje Čina zahteva, ali dobih stanje %d (%s)"
+msgstr "Očekivah stanje 200 za dobavljanje čina zahteva, ali dobih stanje %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:659
+#: ../src/goabackend/goaoauthprovider.c:857
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "Nedostaje zaglavlje čina_zahteva ili tajna_čina_zahteva u odgovoru"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:676
+#: ../src/goabackend/goaoauthprovider.c:874
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "Čin ubacivanja je dobijen sa <a href=\"%s\">stranice ovlašćenja</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1279
+#: ../src/goabackend/goaoauthprovider.c:1432
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Punomoćstva ne sadrže čin_pristupa ili tajnu_čina_pristupa"
 
-#: ../src/goabackend/goaprovider.c:523
+#: ../src/goabackend/goaprovider.c:534
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
-msgstr "Osiguraj_usaglašavanje_punomoćstva nije primenjeno na vrsti %s"
-
-#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:742
-#, c-format
-msgid "GOA %s credentials for identity %s"
-msgstr "GOA %s punomoćstva za identitet %s"
-
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:756
-#, c-format
-msgid "Failed to store credentials in the keyring: %s"
-msgstr "Nisam uspeo da sačuvam punomoćstva u privesku ključeva: %s"
-
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:827
-#, c-format
-msgid "Failed to retrieve credentials from the keyring: %s"
-msgstr "Nisam uspeo da dovučem punomoćstva iz priveska ključeva: %s"
-
-#: ../src/goabackend/goaprovider.c:839
-msgid "Error parsing result obtained from the keyring: "
-msgstr "Greška u analizi rezultata dobijenih iz priveska ključeva: "
+msgstr "osiguraj_usaglašavanje_punomoćstva nije primenjeno na vrsti %s"
 
 #: ../src/goabackend/goatwitterprovider.c:78
 msgid "Twitter"
@@ -283,6 +353,53 @@ msgstr "Nisam našao člana ib_str-a u JSON podacima"
 #, c-format
 msgid "Didn't find screen_name member in JSON data"
 msgstr "Nisam našao člana naziva_ekrana u JSON podacima"
+
+#: ../src/goabackend/goautils.c:82
+#, c-format
+msgid "A %s account already exists for %s"
+msgstr "Nalog„%s“ već postoji za %s"
+
+#. Translators: the %s is the name of the provider. eg., Google.
+#: ../src/goabackend/goautils.c:107
+#, c-format
+msgid "Add %s"
+msgstr "Dodaj „%s“"
+
+#: ../src/goabackend/goautils.c:107
+#, c-format
+msgid "Refresh %s"
+msgstr "Osveži %s"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:153
+msgid "Failed to delete credentials from the keyring"
+msgstr "Nisam uspeo da obrišem punomoćstva iz priveska ključeva"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:201
+msgid "Failed to retrieve credentials from the keyring"
+msgstr "Nisam uspeo da dovučem punomoćstva iz priveska ključeva"
+
+#: ../src/goabackend/goautils.c:212
+msgid "Error parsing result obtained from the keyring: "
+msgstr "Greška u analizi rezultata dobijenih iz priveska ključeva: "
+
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#: ../src/goabackend/goautils.c:254
+#, c-format
+msgid "GOA %s credentials for identity %s"
+msgstr "GOA %s punomoćstva za identitet %s"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:270
+msgid "Failed to store credentials in the keyring"
+msgstr "Nisam uspeo da sačuvam punomoćstva u privesku ključeva"
+
+#. translators: %s here is the address of the web page
+#: ../src/goabackend/goawebview.c:75
+#, c-format
+msgid "Loading “%s”…"
+msgstr "Učitavam „%s“…"
 
 #: ../src/goabackend/goayahooprovider.c:78
 msgid "Yahoo"
@@ -305,7 +422,7 @@ msgstr "Očekivah stanje 200 prilikom potraživanja imena, ali dobih stanje %d (
 
 #: ../src/goabackend/goayahooprovider.c:235
 msgid "Error parsing usercard response as JSON: "
-msgstr "Greška u analizi odgovora korisničke kartice kao JSON:"
+msgstr "Greška u analizi odgovora korisničke kartice kao JSON: "
 
 #: ../src/goabackend/goayahooprovider.c:246
 #, c-format
@@ -316,8 +433,3 @@ msgstr "Nisam našao člana profila u JSON podacima"
 #, c-format
 msgid "Didn't find nickname member in JSON data"
 msgstr "Nisam našao člana nadimka u JSON podacima"
-
-#. TODO: look up email address / screenname from GUID
-#: ../src/goabackend/goayahooprovider.c:324
-msgid "Name"
-msgstr "Ime"
