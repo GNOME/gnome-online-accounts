@@ -8,67 +8,202 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
 "cgi?product=gnome-online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-03-13 14:30+0000\n"
-"PO-Revision-Date: 2012-03-13 21:14+0530\n"
+"POT-Creation-Date: 2012-08-07 09:54+0000\n"
+"PO-Revision-Date: 2012-08-09 21:19+0530\n"
 "Last-Translator: Nilamdyuti Goswami <ngoswami@redhat.com>\n"
 "Language-Team: as_IN <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: ../src/daemon/goadaemon.c:871
-msgid "An online account needs attention"
-msgstr "এটা অনলাইন একাওন্টৰ মনোযোগৰ প্ৰয়োজন"
+#. shut up -Wunused-but-set-variable
+#: ../src/daemon/goadaemon.c:199
+msgid "Online Accounts"
+msgstr "অনলাইন একাওন্টসমূহ"
 
-#: ../src/daemon/goadaemon.c:878
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:743 ../src/daemon/goadaemon.c:1073
+#, c-format
+msgid "Failed to find a provider for: %s"
+msgstr "এটা প্ৰদানকাৰী পাবলে ব্যৰ্থ: %s"
+
+#: ../src/daemon/goadaemon.c:917
+msgid "An online account needs attention"
+msgstr "এটা অনলাইন একাওন্টত মনোনিবেষ কৰাৰ প্ৰয়োজন হৈছে"
+
+#: ../src/daemon/goadaemon.c:924
 msgid "Open Online Accounts..."
 msgstr "অনলাইন একাওন্টসমূহ খোলক..."
 
-#: ../src/goabackend/goafacebookprovider.c:78
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:1061
+msgid "ProviderType property is not set for account"
+msgstr "একাওন্টৰ বাবে ProviderType বৈশিষ্ট সংহতি কৰা হোৱা নাই"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:204
+#, c-format
+msgid "Code: %u - Unexpected response from server"
+msgstr "ক'ড: %u - চাৰ্ভাৰৰ পৰা অপ্ৰত্যাশিত প্ৰতিক্ৰিয়া"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:220
+#, c-format
+msgid "Failed to parse autodiscover response XML"
+msgstr "স্বখোজ প্ৰতিক্ৰিয়া XML বিশ্লেষণ কৰিবলে ব্যৰ্থ"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:230
+#, c-format
+msgid "Failed to find Autodiscover element"
+msgstr "স্বখোজ উপাদান সন্ধান কৰিবলে ব্যৰ্থ"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:244
+#, c-format
+msgid "Failed to find Response element"
+msgstr "প্ৰতিক্ৰিয়া উপাদান সন্ধান কৰিবলে ব্যৰ্থ"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:258
+#, c-format
+msgid "Failed to find Account element"
+msgstr "একাওন্ট উপাদান সন্ধান কৰিবলে ব্যৰ্থ"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:275
+#, c-format
+msgid "Failed to find ASUrl and OABUrl in autodiscover response"
+msgstr "স্বখোজ প্ৰতিক্ৰিয়াত ASUrl আৰু OABUrl সন্ধান কৰিবলে ব্যৰ্থ"
+
+#: ../src/goabackend/goaexchangeprovider.c:77
+msgid "Microsoft Exchange"
+msgstr "Microsoft এক্সচেইঞ্জ"
+
+#: ../src/goabackend/goaexchangeprovider.c:276
+#: ../src/goabackend/goaoauth2provider.c:1385
+#: ../src/goabackend/goaoauthprovider.c:1403
+#, c-format
+msgid "Credentials not found in keyring (%s, %d): "
+msgstr "তথ্যসমূহ keyring (%s, %d) ত পোৱা নগল: "
+
+#. TODO: more specific
+#: ../src/goabackend/goaexchangeprovider.c:292
+#: ../src/goabackend/goaexchangeprovider.c:931
+#, c-format
+msgid "Did not find password with username `%s' in credentials"
+msgstr "তথ্যসমূহত ব্যৱহাৰকাৰীনাম `%s' ৰ সৈতে পাছৱাৰ্ড পোৱা নগল"
+
+#: ../src/goabackend/goaexchangeprovider.c:464
+msgid "New Microsoft Exchange Account"
+msgstr "নতুন Microsoft এক্সচেইঞ্জ একাওন্ট"
+
+#: ../src/goabackend/goaexchangeprovider.c:464
+msgid "Microsoft Exchange Account"
+msgstr "Microsoft এক্সচেইঞ্জ একাওন্ট"
+
+#: ../src/goabackend/goaexchangeprovider.c:490
+msgid "_E-mail"
+msgstr "ই-মেইল (_E)"
+
+#: ../src/goabackend/goaexchangeprovider.c:491
+msgid "_Password"
+msgstr "পাছৱাৰ্ড (_P)"
+
+#: ../src/goabackend/goaexchangeprovider.c:494
+msgid "_Custom"
+msgstr "স্বনিৰ্বাচিত (_C)"
+
+#: ../src/goabackend/goaexchangeprovider.c:513
+msgid "User_name"
+msgstr "ব্যৱহাৰকাৰী নাম (_n)"
+
+#: ../src/goabackend/goaexchangeprovider.c:514
+msgid "_Server"
+msgstr "চাৰ্ভাৰ (_S)"
+
+#: ../src/goabackend/goaexchangeprovider.c:598
+#: ../src/goabackend/goaexchangeprovider.c:767
+#: ../src/goabackend/goaoauth2provider.c:945
+#: ../src/goabackend/goaoauthprovider.c:933
+#, c-format
+msgid "Dialog was dismissed"
+msgstr "ডাইলগ নাকচ কৰা হৈছিল"
+
+#: ../src/goabackend/goaexchangeprovider.c:636
+#: ../src/goabackend/goaexchangeprovider.c:795
+msgid "Error connecting to Microsoft Exchange server"
+msgstr "Microsoft এক্সচেইঞ্জ চাৰ্ভাৰৰ সৈতে সংযোগ কৰোতে ত্ৰুটি"
+
+#: ../src/goabackend/goaexchangeprovider.c:644
+#: ../src/goabackend/goaexchangeprovider.c:803
+msgid "_Try Again"
+msgstr "পুনৰ চেষ্টা কৰক (_T)"
+
+#: ../src/goabackend/goaexchangeprovider.c:854
+#: ../src/goabackend/goafacebookprovider.c:366
+#: ../src/goabackend/goagoogleprovider.c:533
+#: ../src/goabackend/goawindowsliveprovider.c:381
+msgid "Use for"
+msgstr "বাবে ব্যৱহাৰ কৰক"
+
+#: ../src/goabackend/goaexchangeprovider.c:856
+#: ../src/goabackend/goagoogleprovider.c:535
+msgid "Mail"
+msgstr "মেইল"
+
+#: ../src/goabackend/goaexchangeprovider.c:861
+#: ../src/goabackend/goagoogleprovider.c:540
+msgid "Calendar"
+msgstr "কেলেন্ডাৰ"
+
+#: ../src/goabackend/goaexchangeprovider.c:866
+#: ../src/goabackend/goagoogleprovider.c:545
+msgid "Contacts"
+msgstr "পৰিচয়সমূহ"
+
+#: ../src/goabackend/goafacebookprovider.c:80
 msgid "Facebook"
 msgstr "Facebook"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:162
-#: ../src/goabackend/goagoogleprovider.c:195
-#: ../src/goabackend/goawindowsliveprovider.c:170
+#: ../src/goabackend/goafacebookprovider.c:194
+#: ../src/goabackend/goagoogleprovider.c:212
+#: ../src/goabackend/goawindowsliveprovider.c:183
 #: ../src/goabackend/goatwitterprovider.c:160
 #: ../src/goabackend/goayahooprovider.c:163
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr ""
-"guid -ৰ অনুৰোধ কৰোতে অৱস্থা 200 -ৰ আশা কৰা হৈছিল, কিন্তু %d (%s) অৱস্থা পোৱা গল"
+"guid ৰ অনুৰোধ কৰোতে অৱস্থা 200 ৰ আশা কৰা হৈছিল, কিন্তু %d (%s) অৱস্থা পোৱা গল"
 
-#: ../src/goabackend/goafacebookprovider.c:174
-#: ../src/goabackend/goagoogleprovider.c:207
-#: ../src/goabackend/goawindowsliveprovider.c:182
-#: ../src/goabackend/goaoauth2provider.c:478
+#: ../src/goabackend/goafacebookprovider.c:206
+#: ../src/goabackend/goagoogleprovider.c:224
+#: ../src/goabackend/goawindowsliveprovider.c:195
+#: ../src/goabackend/goaoauth2provider.c:566
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
 msgstr "প্ৰতিক্ৰিয়াক JSON হিচাপে বিশ্লেষণ কৰোতে ত্ৰুটি: "
 
-#: ../src/goabackend/goafacebookprovider.c:185
+#: ../src/goabackend/goafacebookprovider.c:217
+#: ../src/goabackend/goawindowsliveprovider.c:206
 #, c-format
-msgid "Didn't find username member in JSON data"
-msgstr "JSON তথ্যত ব্যৱহাৰকাৰীনাম সদস্য পোৱা নগল"
+msgid "Didn't find id member in JSON data"
+msgstr "JSON তথ্যত আইডি সদস্য পোৱা নগল"
 
-#: ../src/goabackend/goafacebookprovider.c:194
+#: ../src/goabackend/goafacebookprovider.c:226
+#: ../src/goabackend/goagoogleprovider.c:245
 #, c-format
-msgid "Didn't find name member in JSON data"
-msgstr "JSON তথ্যত নাম সদস্য পোৱা নগল"
+msgid "Didn't find email member in JSON data"
+msgstr "JSON তথ্যত ই-মেইল সদস্য পোৱা নগল"
 
-#: ../src/goabackend/goafacebookprovider.c:282
-#: ../src/goabackend/goawindowsliveprovider.c:292
-#: ../src/goabackend/goatwitterprovider.c:260
-msgid "User Name"
-msgstr "ব্যৱহাৰকাৰী নাম"
-
-#: ../src/goabackend/goafacebookprovider.c:283
-#: ../src/goabackend/goagoogleprovider.c:445
-#: ../src/goabackend/goawindowsliveprovider.c:293
+#: ../src/goabackend/goafacebookprovider.c:368
+#: ../src/goabackend/goagoogleprovider.c:550
+#: ../src/goabackend/goawindowsliveprovider.c:383
 msgid "Chat"
 msgstr "চেট"
 
@@ -76,33 +211,17 @@ msgstr "চেট"
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:218
+#: ../src/goabackend/goagoogleprovider.c:235
 #, c-format
 msgid "Didn't find data member in JSON data"
 msgstr "JSON তথ্যত তথ্য সদস্য পোৱা নগল"
 
-#: ../src/goabackend/goagoogleprovider.c:228
-#, c-format
-msgid "Didn't find email member in JSON data"
-msgstr "JSON তথ্যত ই-মেইল সদস্য পোৱা নগল"
+#: ../src/goabackend/goagoogleprovider.c:306
+msgid "Your system time is invalid. Check your date and time settings."
+msgstr "আপোনাৰ চিস্টেম সময় অবৈধ। আপোনাৰ তাৰিখ আৰু সময় সংহতিসমূহ।"
 
-#: ../src/goabackend/goagoogleprovider.c:428
-msgid "Use for"
-msgstr "বাবে ব্যৱহাৰ কৰক"
-
-#: ../src/goabackend/goagoogleprovider.c:430
-msgid "Mail"
-msgstr "মেইল"
-
-#: ../src/goabackend/goagoogleprovider.c:435
-msgid "Calendar"
-msgstr "কেলেন্ডাৰ"
-
-#: ../src/goabackend/goagoogleprovider.c:440
-msgid "Contacts"
-msgstr "পৰিচয়সমূহ"
-
-#: ../src/goabackend/goagoogleprovider.c:450
+#: ../src/goabackend/goagoogleprovider.c:555
+#: ../src/goabackend/goawindowsliveprovider.c:388
 msgid "Documents"
 msgstr "দস্তাবেজসমূহ"
 
@@ -110,156 +229,113 @@ msgstr "দস্তাবেজসমূহ"
 msgid "Windows Live"
 msgstr "Windows Live"
 
-#: ../src/goabackend/goawindowsliveprovider.c:193
-#, c-format
-msgid "Didn't find id member in JSON data"
-msgstr "JSON তথ্যত আইডি সদস্য পোৱা নগল"
-
-#: ../src/goabackend/goawindowsliveprovider.c:204
+#: ../src/goabackend/goawindowsliveprovider.c:217
 #, c-format
 msgid "Didn't find account email member in JSON data"
 msgstr "JSON তথ্যত একাওন্ট ই-মেইল সদস্য পোৱা নগল"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:435
-#: ../src/goabackend/goaoauthprovider.c:440
+#: ../src/goabackend/goaoauth2provider.c:523
+#: ../src/goabackend/goaoauthprovider.c:537
 #, c-format
-msgid "Expected status 200 when requesting access token, instead got status %d (%s)"
+msgid ""
+"Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr ""
 "অভিগম টকেন অনুৰোধ কৰোতে অৱস্থা 200 আশা কৰা হৈছে, কিন্তু পোৱা গল অৱস্থা %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:455
+#: ../src/goabackend/goaoauth2provider.c:543
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "নন-JSON তথ্যত অভিগম টকেন পোৱা নগল (_t)"
 
-#: ../src/goabackend/goaoauth2provider.c:489
+#: ../src/goabackend/goaoauth2provider.c:577
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "JSON তথ্যত অভিগম টকেন পোৱা নগল (_t)"
 
-#: ../src/goabackend/goaoauth2provider.c:573
+#: ../src/goabackend/goaoauth2provider.c:746
+#: ../src/goabackend/goaoauth2provider.c:785
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "প্ৰমাণীকৰণ প্ৰতিক্ৰিয়া আছিল \"%s\""
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:654
+#: ../src/goabackend/goaoauth2provider.c:882
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
 "page</a>:"
-msgstr "পেইস্ট অধিকাৰ ক'ড <a href=\"%s\"> অধিকাৰ পৃষ্ঠা</a> -ৰ পৰা প্ৰাপ্ত হল:"
+msgstr "পেইস্ট অধিকাৰ ক'ড <a href=\"%s\"> অধিকাৰ পৃষ্ঠা</a> ৰ পৰা প্ৰাপ্ত হল:"
 
-#: ../src/goabackend/goaoauth2provider.c:728
-#: ../src/goabackend/goaoauthprovider.c:751
-#, c-format
-msgid "Dialog was dismissed"
-msgstr "ডাইলগ নাকচ কৰা হৈছিল"
-
-#: ../src/goabackend/goaoauth2provider.c:752
-#: ../src/goabackend/goaoauthprovider.c:782
+#: ../src/goabackend/goaoauth2provider.c:971
+#: ../src/goabackend/goaoauthprovider.c:964
 msgid "Error getting an Access Token: "
 msgstr "এটা অভিগম টকেন প্ৰাপ্ত কৰোতে ত্ৰুটি হৈছিল: "
 
-#: ../src/goabackend/goaoauth2provider.c:764
-#: ../src/goabackend/goaoauthprovider.c:795
+#: ../src/goabackend/goaoauth2provider.c:986
+#: ../src/goabackend/goaoauthprovider.c:977
 msgid "Error getting identity: "
 msgstr "পৰিচয় প্ৰাপ্ত কৰোতে ত্ৰুটি হৈছিল: "
 
-#: ../src/goabackend/goaoauth2provider.c:929
-#: ../src/goabackend/goaoauthprovider.c:972
-#, c-format
-msgid "There is already an account for the identity %s"
-msgstr "পৰিচয় %s -ৰ বাবে ইতিমধ্যে এটা একাওন্ট আছে"
-
-#: ../src/goabackend/goaoauth2provider.c:1054
-#: ../src/goabackend/goaoauthprovider.c:1102
+#: ../src/goabackend/goaoauth2provider.c:1246
+#: ../src/goabackend/goaoauthprovider.c:1253
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "%s হিচাপে লগিন কৰিবলে কোৱা হৈছিল, কিন্তু %s হিচাপে লগিন কৰা হল"
 
-#: ../src/goabackend/goaoauth2provider.c:1190
-#: ../src/goabackend/goaoauthprovider.c:1250
-#, c-format
-msgid "Credentials not found in keyring (%s, %d): "
-msgstr "তথ্যসমূহ keyring (%s, %d) -ত পোৱা নগল: "
-
-#: ../src/goabackend/goaoauth2provider.c:1217
+#: ../src/goabackend/goaoauth2provider.c:1412
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "তথ্যসমূহে অভিগম টকেন অন্তৰ্ভুক্ত নকৰে (_t)"
 
-#: ../src/goabackend/goaoauth2provider.c:1256
-#: ../src/goabackend/goaoauthprovider.c:1323
+#: ../src/goabackend/goaoauth2provider.c:1451
+#: ../src/goabackend/goaoauthprovider.c:1476
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "অভিগম টকেন (%s, %d) সতেজ কৰিবলে ব্যৰ্থ: "
 
-#: ../src/goabackend/goaoauth2provider.c:1291
-#: ../src/goabackend/goaoauthprovider.c:1353
+#: ../src/goabackend/goaoauth2provider.c:1486
+#: ../src/goabackend/goaoauthprovider.c:1506
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
-msgstr "keyring (%s, %d) -ত তথ্যসমূহ সংৰক্ষণ কৰোতে ত্ৰুটি: "
+msgstr "keyring (%s, %d) ত তথ্যসমূহ সংৰক্ষণ কৰোতে ত্ৰুটি: "
 
-#: ../src/goabackend/goaoauthprovider.c:463
+#: ../src/goabackend/goaoauthprovider.c:560
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "প্ৰতিক্ৰিয়াত access_token অথবা access_token_secret হেডাৰসমূহ পোৱা নাযায়"
 
-#: ../src/goabackend/goaoauthprovider.c:636
+#: ../src/goabackend/goaoauthprovider.c:815
 msgid "Error getting a Request Token: "
 msgstr "এটা অনুৰোধ টকেন প্ৰাপ্ত কৰোতে ত্ৰুটি: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:645
+#: ../src/goabackend/goaoauthprovider.c:840
 #, c-format
 msgid "Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr ""
 "এটা অনুৰোধ টকেনৰ বাবে অৱস্থা 200 আশা কৰা হৈছিল, কিন্তু অৱস্থা %d (%s) পোৱা গল"
 
-#: ../src/goabackend/goaoauthprovider.c:659
+#: ../src/goabackend/goaoauthprovider.c:857
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "প্ৰতিক্ৰিয়াত request_token অথবা request_token_secret হেডাৰসমূহ পোৱা নাযায়"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:676
+#: ../src/goabackend/goaoauthprovider.c:874
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr "পেইস্ট টকেন <a href=\"%s\">অধিকাৰ পৃষ্ঠাৰ</a> -ৰ পৰা প্ৰাপ্ত কৰা হৈছে:"
+msgstr "পেইস্ট টকেন <a href=\"%s\">অধিকাৰ পৃষ্ঠাৰ</a> ৰ পৰা প্ৰাপ্ত কৰা হৈছে:"
 
-#: ../src/goabackend/goaoauthprovider.c:1279
+#: ../src/goabackend/goaoauthprovider.c:1432
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "তথ্যসমূহে access_token অথবা access_token_secret অন্তৰ্ভুক্ত নকৰে"
 
-#: ../src/goabackend/goaprovider.c:524
+#: ../src/goabackend/goaprovider.c:534
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
-msgstr "ensure_credentials_sync ধৰণ %s -ত প্ৰণয়ন কৰা হোৱা নাই"
-
-#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:743
-#, c-format
-msgid "GOA %s credentials for identity %s"
-msgstr "পৰিচয় %s -ৰ বাবে GOA %s তথ্যসমূহ"
-
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:757
-#, c-format
-msgid "Failed to store credentials in the keyring: %s"
-msgstr "keyring: %s -ত তথ্যসমূহ সংৰক্ষণ কৰিবলে ব্যৰ্থ"
-
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:828
-#, c-format
-msgid "Failed to retrieve credentials from the keyring: %s"
-msgstr "keyring: %s -ৰ পৰা তথ্যসমূহ উদ্ধাৰ কৰিবলে ব্যৰ্থ"
-
-#: ../src/goabackend/goaprovider.c:840
-msgid "Error parsing result obtained from the keyring: "
-msgstr "keyring -ৰ পৰা প্ৰাপ্ত ফলাফল বিশ্লেষণ কৰোতে ত্ৰুটি: "
+msgstr "ensure_credentials_sync ধৰণ %s ত প্ৰণয়ন কৰা হোৱা নাই"
 
 #: ../src/goabackend/goatwitterprovider.c:78
 msgid "Twitter"
@@ -274,6 +350,53 @@ msgstr "JSON তথ্যত id_str সদস্য পোৱা নগল"
 #, c-format
 msgid "Didn't find screen_name member in JSON data"
 msgstr "JSON তথ্যত screen_name সদস্য পোৱা নগল"
+
+#: ../src/goabackend/goautils.c:82
+#, c-format
+msgid "A %s account already exists for %s"
+msgstr "%s ৰ বাবে এটা %s একাওন্ট ইতিমধ্যে অস্তিত্ববান"
+
+#. Translators: the %s is the name of the provider. eg., Google.
+#: ../src/goabackend/goautils.c:107
+#, c-format
+msgid "Add %s"
+msgstr "%s যোগ কৰক"
+
+#: ../src/goabackend/goautils.c:107
+#, c-format
+msgid "Refresh %s"
+msgstr "%s সতেজ কৰক"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:153
+msgid "Failed to delete credentials from the keyring"
+msgstr "keyring ৰ পৰা তথ্যসমূহ মচি পেলাবলে ব্যৰ্থ"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:201
+msgid "Failed to retrieve credentials from the keyring"
+msgstr "keyring ৰ পৰা তথ্যসমূহ উদ্ধাৰ কৰিবলে ব্যৰ্থ"
+
+#: ../src/goabackend/goautils.c:212
+msgid "Error parsing result obtained from the keyring: "
+msgstr "keyring ৰ পৰা প্ৰাপ্ত ফলাফল বিশ্লেষণ কৰোতে ত্ৰুটি: "
+
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#: ../src/goabackend/goautils.c:254
+#, c-format
+msgid "GOA %s credentials for identity %s"
+msgstr "পৰিচয় %s ৰ বাবে GOA %s তথ্যসমূহ"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:270
+msgid "Failed to store credentials in the keyring"
+msgstr "keyring ত তথ্যসমূহ সংৰক্ষণ কৰিবলে ব্যৰ্থ"
+
+#. translators: %s here is the address of the web page
+#: ../src/goabackend/goawebview.c:75
+#, c-format
+msgid "Loading “%s”…"
+msgstr "“%s” ল'ড কৰা হৈছে…"
 
 #: ../src/goabackend/goayahooprovider.c:78
 msgid "Yahoo"
@@ -292,7 +415,7 @@ msgstr "JSON তথ্যত মান সদস্য পোৱা নগল"
 #: ../src/goabackend/goayahooprovider.c:222
 #, c-format
 msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-msgstr "নাম অনুৰোধ কৰোতে অৱস্থা 200 -ৰ আশা কৰা হৈছিল, কিন্তু অৱস্থা %d (%s) পোৱা গল"
+msgstr "নাম অনুৰোধ কৰোতে অৱস্থা 200 ৰ আশা কৰা হৈছিল, কিন্তু অৱস্থা %d (%s) পোৱা গল"
 
 #: ../src/goabackend/goayahooprovider.c:235
 msgid "Error parsing usercard response as JSON: "
@@ -308,13 +431,20 @@ msgstr "JSON তথ্যত আলেখ্য সদস্য পোৱা ন
 msgid "Didn't find nickname member in JSON data"
 msgstr "JSON তথ্যত উপনাম সদস্য পোৱা নগল"
 
-#. TODO: look up email address / screenname from GUID
-#: ../src/goabackend/goayahooprovider.c:324
-msgid "Name"
-msgstr "নাম"
+#~ msgid "Didn't find username member in JSON data"
+#~ msgstr "JSON তথ্যত ব্যৱহাৰকাৰীনাম সদস্য পোৱা নগল"
+
+#~ msgid "Didn't find name member in JSON data"
+#~ msgstr "JSON তথ্যত নাম সদস্য পোৱা নগল"
 
 #~ msgid "Email Address"
 #~ msgstr "ই-মেইল ঠিকনা"
 
 #~ msgid "Use this account for"
-#~ msgstr "-ৰ বাবে এই একাওন্ট ব্যৱহাৰ কৰক"
+#~ msgstr "ৰ বাবে এই একাওন্ট ব্যৱহাৰ কৰক"
+
+#~ msgid "There is already an account for the identity %s"
+#~ msgstr "পৰিচয় %s ৰ বাবে ইতিমধ্যে এটা একাওন্ট আছে"
+
+#~ msgid "Name"
+#~ msgstr "নাম"
