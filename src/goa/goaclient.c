@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011 Red Hat, Inc.
+ * Copyright (C) 2011, 2012 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -478,6 +478,50 @@ goa_client_get_accounts (GoaClient *client)
   g_list_foreach (objects, (GFunc) g_object_unref, NULL);
   g_list_free (objects);
 
+  return ret;
+}
+
+/**
+ * goa_client_lookup_by_id:
+ * @client: A #GoaClient.
+ * @id: The ID to look for.
+ *
+ * Finds and returns the #GoaObject instance whose
+ * <link
+ * linkend="gdbus-property-org-gnome-OnlineAccounts-Account.Id">"Id"</link>
+ * D-Bus property matches @id.
+ *
+ * Returns: (transfer full): A #GoaObject. Free the returned
+ * object with g_object_unref().
+ */
+GoaObject *
+goa_client_lookup_by_id (GoaClient           *client,
+                         const gchar         *id)
+{
+  GList *accounts;
+  GList *l;
+  GoaObject *ret;
+
+  ret = NULL;
+
+  accounts = goa_client_get_accounts (client);
+  for (l = accounts; l != NULL; l = g_list_next (l))
+    {
+      GoaAccount *account;
+      GoaObject *object = GOA_OBJECT (l->data);
+
+      account = goa_object_peek_account (object);
+      if (account == NULL)
+        continue;
+
+      if (g_strcmp0 (goa_account_get_id (account), id) == 0)
+        {
+          ret = g_object_ref (object);
+          break;
+        }
+    }
+
+  g_list_free_full (accounts, g_object_unref);
   return ret;
 }
 
