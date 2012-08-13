@@ -351,8 +351,13 @@ ews_client_post_restarted_cb (SoupMessage *msg, gpointer data)
   soup_message_set_request(msg,
                            "text/xml; charset=utf-8",
                            SOUP_MEMORY_COPY,
+#ifdef LIBXML2_NEW_BUFFER
+                           (gchar *) xmlOutputBufferGetContent(buf),
+                           xmlOutputBufferGetSize(buf));
+#else
                            (gchar *) buf->buffer->content,
                            buf->buffer->use);
+#endif
 }
 
 static SoupMessage *
@@ -368,8 +373,13 @@ ews_client_create_msg_for_url (const gchar *url, xmlOutputBuffer *buf)
       soup_message_set_request (msg,
                                 "text/xml; charset=utf-8",
                                 SOUP_MEMORY_COPY,
+#ifdef LIBXML2_NEW_BUFFER
+                                (gchar *) xmlOutputBufferGetContent(buf),
+                                xmlOutputBufferGetSize(buf));
+#else
                                 (gchar *) buf->buffer->content,
                                 buf->buffer->use);
+#endif
       g_signal_connect (msg, "restarted", G_CALLBACK (ews_client_post_restarted_cb), buf);
     }
 
