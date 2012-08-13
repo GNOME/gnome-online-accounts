@@ -93,9 +93,9 @@ struct _GoaProviderClass
                                      GoaObjectSkeleton  *object,
                                      GKeyFile           *key_file,
                                      const gchar        *group,
+                                     GDBusConnection    *connection,
                                      gboolean            just_added,
                                      GError            **error);
-
   /* virtual but with default implementation */
   gboolean (*ensure_credentials_sync) (GoaProvider         *provider,
                                        GoaObject           *object,
@@ -141,6 +141,7 @@ gboolean     goa_provider_build_object              (GoaProvider         *provid
                                                      GoaObjectSkeleton   *object,
                                                      GKeyFile            *key_file,
                                                      const gchar         *group,
+                                                     GDBusConnection     *connection,
                                                      gboolean             just_added,
                                                      GError             **error);
 void         goa_provider_ensure_credentials        (GoaProvider         *provider,

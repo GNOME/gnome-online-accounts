@@ -330,7 +330,8 @@ key_file_data_new (GKeyFile    *key_file,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-add_config_file (const gchar   *path,
+add_config_file (GoaDaemon     *daemon,
+                 const gchar   *path,
                  GHashTable    *group_name_to_key_file_data,
                  GList        **key_files_to_free)
 {
@@ -357,14 +358,48 @@ add_config_file (const gchar   *path,
   else
     {
       gchar **groups;
+      const char *guid;
       gsize num_groups;
       guint n;
 
+      guid = g_dbus_connection_get_guid (daemon->connection);
       groups = g_key_file_get_groups (key_file, &num_groups);
       for (n = 0; n < num_groups; n++)
         {
           if (g_str_has_prefix (groups[n], "Account "))
             {
+              gboolean is_temporary;
+              char *session_id;
+
+              is_temporary = g_key_file_get_boolean (key_file,
+                                                     groups[n],
+                                                     "IsTemporary",
+                                                     NULL);
+
+              if (is_temporary)
+                {
+                  session_id = g_key_file_get_string (key_file,
+                                                      groups[n],
+                                                      "SessionId",
+                                                      NULL);
+
+                  /* discard temporary accounts from older sessions */
+                  if (session_id != NULL &&
+                      g_strcmp0 (session_id, guid) != 0)
+                    {
+                      goa_debug ("ignoring account \"%s\" in file %s because it's stale",
+                                 groups[n], path);
+                      g_free (groups[n]);
+                      g_free (session_id);
+                      continue;
+                    }
+                  g_free (session_id);
+                }
+              else
+                {
+                  g_key_file_remove_key (key_file, groups[n], "SessionId", NULL);
+                }
+
               g_hash_table_insert (group_name_to_key_file_data,
                                    groups[n], /* steals string */
                                    key_file_data_new (key_file, path));
@@ -450,7 +485,7 @@ update_account_object (GoaDaemon           *daemon,
   goa_account_set_presentation_identity (account, presentation_identity);
 
   error = NULL;
-  if (!goa_provider_build_object (provider, object, key_file, group, just_added, &error))
+  if (!goa_provider_build_object (provider, object, key_file, group, daemon->connection, just_added, &error))
     {
       goa_warning ("Error parsing account: %s (%s, %d)",
                    error->message, g_quark_to_string (error->domain), error->code);
@@ -657,7 +692,7 @@ goa_daemon_reload_configuration (GoaDaemon *daemon)
 
   /* Read the main user config file at $HOME/.config/goa-1.0/accounts.conf */
   path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
-  add_config_file (path, group_name_to_key_file_data, &key_files_to_free);
+  add_config_file (daemon, path, group_name_to_key_file_data, &key_files_to_free);
   g_free (path);
 
   /* now process the group_name_to_key_file_data hash table */
@@ -788,6 +823,21 @@ on_manager_handle_add_account (GoaManager             *manager,
   g_variant_iter_init (&iter, details);
   while (g_variant_iter_next (&iter, "{&s&s}", &key, &value))
     {
+      /* We treat IsTemporary special.  If it's true we add in
+       * the current session guid, so it can be ignored after
+       * the session is over.
+       */
+      if (g_strcmp0 (key, "IsTemporary") == 0)
+        {
+          if (g_strcmp0 (value, "true") == 0)
+            {
+              const char *guid;
+
+              guid = g_dbus_connection_get_guid (daemon->connection);
+              g_key_file_set_string (key_file, group, "SessionId", guid);
+            }
+        }
+
       g_key_file_set_string (key_file, group, key, value);
     }
 
@@ -1105,15 +1155,15 @@ typedef struct
   GoaDaemon *daemon;
   GoaObject *object;
   GDBusMethodInvocation *invocation;
-} EnsureCredentialsData;
+} EnsureData;
 
-static EnsureCredentialsData *
-ensure_credentials_data_new (GoaDaemon             *daemon,
+static EnsureData *
+ensure_data_new (GoaDaemon             *daemon,
                              GoaObject             *object,
                              GDBusMethodInvocation *invocation)
 {
-  EnsureCredentialsData *data;
-  data = g_slice_new0 (EnsureCredentialsData);
+  EnsureData *data;
+  data = g_slice_new0 (EnsureData);
   data->daemon = g_object_ref (daemon);
   data->object = g_object_ref (object);
   data->invocation = invocation;
@@ -1121,11 +1171,11 @@ ensure_credentials_data_new (GoaDaemon             *daemon,
 }
 
 static void
-ensure_credentials_data_unref (EnsureCredentialsData *data)
+ensure_data_unref (EnsureData *data)
 {
   g_object_unref (data->daemon);
   g_object_unref (data->object);
-  g_slice_free (EnsureCredentialsData, data);
+  g_slice_free (EnsureData, data);
 }
 
 static gboolean
@@ -1154,7 +1204,7 @@ ensure_credentials_cb (GoaProvider   *provider,
                        GAsyncResult  *res,
                        gpointer       user_data)
 {
-  EnsureCredentialsData *data = user_data;
+  EnsureData *data = user_data;
   gint expires_in;
   GError *error;
 
@@ -1195,7 +1245,7 @@ ensure_credentials_cb (GoaProvider   *provider,
                                                data->invocation,
                                                expires_in);
     }
-  ensure_credentials_data_unref (data);
+  ensure_data_unref (data);
 }
 
 static gboolean
@@ -1224,9 +1274,8 @@ on_account_handle_ensure_credentials (GoaAccount            *account,
                                    object,
                                    NULL, /* GCancellable */
                                    (GAsyncReadyCallback) ensure_credentials_cb,
-                                   ensure_credentials_data_new (daemon, object, invocation));
+                                   ensure_data_new (daemon, object, invocation));
 
  out:
   return TRUE; /* invocation was handled */
 }
-

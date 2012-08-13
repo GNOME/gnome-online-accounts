@@ -69,6 +69,22 @@
       -->
     <property name="Id" type="s" access="read"/>
 
+    <!-- IsTemporary:
+
+         Whether or not the account is remembered from session to session.
+
+         Temporary accounts are added implicitly when the user is granted
+         credentials from some mechanism other than Online Accounts, but that
+         Online Accounts still knows how to deal with.
+
+         They are specific to the machine/session and are silently disregarded
+         after logout.
+
+         Accounts are permanant by default unless created with "IsTemporary"
+         "true" detail.
+      -->
+    <property name="IsTemporary" type="b" access="readwrite"/>
+
     <!-- AttentionNeeded: Set to %TRUE if the account is in need of attention.
 
          This is used when a human operator is needed to service the
@@ -176,7 +192,6 @@
     <method name="EnsureCredentials">
       <arg name="expires_in" type="i" direction="out"/>
     </method>
-
   </interface>
 
   <!--

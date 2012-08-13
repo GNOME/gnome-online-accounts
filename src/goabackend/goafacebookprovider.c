@@ -281,6 +281,7 @@ build_object (GoaProvider         *provider,
               GoaObjectSkeleton   *object,
               GKeyFile            *key_file,
               const gchar         *group,
+              GDBusConnection     *connection,
               gboolean             just_added,
               GError             **error)
 {
@@ -296,6 +297,7 @@ build_object (GoaProvider         *provider,
                                                                               object,
                                                                               key_file,
                                                                               group,
+                                                                              connection,
                                                                               just_added,
                                                                               error))
     goto out;

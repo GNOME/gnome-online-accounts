@@ -54,6 +54,7 @@ static gboolean goa_provider_build_object_real (GoaProvider         *provider,
                                                 GoaObjectSkeleton   *object,
                                                 GKeyFile            *key_file,
                                                 const gchar         *group,
+                                                GDBusConnection     *connection,
                                                 gboolean             just_added,
                                                 GError             **error);
 
@@ -326,6 +327,7 @@ goa_provider_show_account_real (GoaProvider         *provider,
  * @object: The #GoaObjectSkeleton that is being built.
  * @key_file: The #GKeyFile with configuation data.
  * @group: The group in @key_file to get data from.
+ * @connection: The #GDBusConnection used by the daemon to connect to the message bus.
  * @just_added: Whether the account was newly created or being updated.
  * @error: Return location for error or %NULL.
  *
@@ -350,6 +352,7 @@ goa_provider_build_object (GoaProvider         *provider,
                            GoaObjectSkeleton   *object,
                            GKeyFile            *key_file,
                            const gchar         *group,
+                           GDBusConnection     *connection,
                            gboolean             just_added,
                            GError             **error)
 {
@@ -357,8 +360,15 @@ goa_provider_build_object (GoaProvider         *provider,
   g_return_val_if_fail (GOA_IS_OBJECT_SKELETON (object) && goa_object_peek_account (GOA_OBJECT (object)) != NULL, FALSE);
   g_return_val_if_fail (key_file != NULL, FALSE);
   g_return_val_if_fail (group != NULL, FALSE);
+  g_return_val_if_fail (G_IS_DBUS_CONNECTION (connection), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-  return GOA_PROVIDER_GET_CLASS (provider)->build_object (provider, object, key_file, group, just_added, error);
+  return GOA_PROVIDER_GET_CLASS (provider)->build_object (provider,
+                                                          object,
+                                                          key_file,
+                                                          group,
+                                                          connection,
+                                                          just_added,
+                                                          error);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -521,6 +531,8 @@ goa_provider_ensure_credentials_sync (GoaProvider     *provider,
   return GOA_PROVIDER_GET_CLASS (provider)->ensure_credentials_sync (provider, object, out_expires_in, cancellable, error);
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+
 static gboolean
 goa_provider_ensure_credentials_sync_real (GoaProvider   *provider,
                                            GoaObject     *object,
@@ -541,6 +553,7 @@ goa_provider_build_object_real (GoaProvider         *provider,
                                 GoaObjectSkeleton   *object,
                                 GKeyFile            *key_file,
                                 const gchar         *group,
+                                GDBusConnection     *connection,
                                 gboolean             just_added,
                                 GError             **error)
 {

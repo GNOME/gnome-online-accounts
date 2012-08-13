@@ -65,6 +65,10 @@ gboolean         goa_utils_store_credentials_for_object_sync (GoaProvider    *pr
                                                               GCancellable   *cancellable,
                                                               GError        **error);
 
+void             goa_utils_keyfile_remove_key (GoaAccount *account, const gchar *key);
+
+void             goa_utils_keyfile_set_string (GoaAccount *account, const gchar *key, const gchar *value);
+
 G_END_DECLS
 
 #endif /* __GOA_UTILS_H__ */
