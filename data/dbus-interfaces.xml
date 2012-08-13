@@ -166,6 +166,16 @@
     -->
     <property name="DocumentsDisabled" type="b" access="readwrite"/>
 
+    <!-- TicketingDisabled:
+         If %TRUE, the account will not expose any
+         #org.gnome.OnlineAccounts.Ticketing interface. If the account does not
+         provide ticketing-like capabilities, this property does nothing.
+
+         Note that the #org.gnomeOnlineAccounts.Ticketing interface is added or
+         removed from the account asynchronously.
+    -->
+    <property name="TicketingDisabled" type="b" access="readwrite"/>
+
     <!--
         Remove:
 
@@ -460,6 +470,22 @@
          </literal>.
       -->
     <property name="Host" type="s" access="read"/>
+  </interface>
+
+  <!--
+      org.gnome.OnlineAccounts.Ticketing:
+
+      An account object implements this interface if it provides
+      ticketing capabilities.
+  -->
+  <interface name="org.gnome.OnlineAccounts.Ticketing">
+    <!--
+      GetTicket:
+
+      Use this method to obtain an ticket that can be used to
+      access resources for the account.
+    -->
+    <method name="GetTicket"/>
   </interface>
 
 </node>
