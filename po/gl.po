@@ -1,23 +1,27 @@
 # Galician translation for gnome-online-accounts.
-# Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
+# Copyright (C) 2012 Leandro Regueiro
 # This file is distributed under the same license as the gnome-online-accounts package.
-# Xosé M Lamas <correo.xmgz@gmail.com>, 2011.
-# Fran Dieguez <frandieguez@gnome.org>, 2011, 2012.
 #
+# Proxecto Trasno - Adaptación do software libre á lingua galega:  Se desexas
+# colaborar connosco, podes atopar máis información en http://www.trasno.net
+#
+# Xosé M Lamas <correo.xmgz@gmail.com>, 2011.
+# Fran Diéguez <frandieguez@gnome.org>, 2011, 2012.
+# Leandro Regueiro <leandro.regueiro@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-30 02:43+0200\n"
-"PO-Revision-Date: 2012-07-30 02:44+0200\n"
-"Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
+"POT-Creation-Date: 2012-08-17 23:36+0200\n"
+"PO-Revision-Date: 2012-08-17 13:16+0200\n"
+"Last-Translator: Leandro Regueiro <leandro.regueiro@gmail.com>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Gtranslator 2.91.5\n"
+"X-Generator: Lokalize 1.0\n"
 
 #. shut up -Wunused-but-set-variable
 #: ../src/daemon/goadaemon.c:199
@@ -28,7 +32,7 @@ msgstr "Contas en liña"
 #: ../src/daemon/goadaemon.c:743 ../src/daemon/goadaemon.c:1073
 #, c-format
 msgid "Failed to find a provider for: %s"
-msgstr "Produciuse un fallo ao buscar un fornecedor para: %s"
+msgstr "Produciuse un erro ao buscar un fornecedor para: %s"
 
 #: ../src/daemon/goadaemon.c:917
 msgid "An online account needs attention"
@@ -53,32 +57,32 @@ msgstr "Código: %u: resposta non agardada do servidor"
 #: ../src/goabackend/goaewsclient.c:220
 #, c-format
 msgid "Failed to parse autodiscover response XML"
-msgstr "Produciuse un fallo ao analizar a resposta XML da autodetección"
+msgstr "Produciuse un erro ao analizar a resposta XML da autodetección"
 
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:230
 #, c-format
 msgid "Failed to find Autodiscover element"
-msgstr "Produciuse un fallo ao buscar o elemento «Autodiscover»."
+msgstr "Produciuse un erro ao buscar o elemento «Autodiscover»."
 
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:244
 #, c-format
 msgid "Failed to find Response element"
-msgstr "Produciuse un fallo ao buscar o elemento «Response»"
+msgstr "Produciuse un erro ao buscar o elemento «Response»"
 
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:258
 #, c-format
 msgid "Failed to find Account element"
-msgstr "Produciuse un fallo ao buscar o elemento «Account»"
+msgstr "Produciuse un erro ao buscar o elemento «Account»"
 
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:275
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr ""
-"Produciuse un fallo ao buscar «ASUrl» e «AOBUrl» na resposta da autodetección"
+"Produciuse un erro ao buscar «ASUrl» e «AOBUrl» na resposta da autodetección"
 
 #: ../src/goabackend/goaexchangeprovider.c:77
 msgid "Microsoft Exchange"
@@ -149,7 +153,7 @@ msgstr "_Tentar de novo"
 #: ../src/goabackend/goaexchangeprovider.c:854
 #: ../src/goabackend/goafacebookprovider.c:366
 #: ../src/goabackend/goagoogleprovider.c:533
-#: ../src/goabackend/goawindowsliveprovider.c:381
+#: ../src/goabackend/goawindowsliveprovider.c:374
 msgid "Use for"
 msgstr "Usar para"
 
@@ -175,7 +179,7 @@ msgstr "Facebook"
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:194
 #: ../src/goabackend/goagoogleprovider.c:212
-#: ../src/goabackend/goawindowsliveprovider.c:183
+#: ../src/goabackend/goawindowsliveprovider.c:176
 #: ../src/goabackend/goatwitterprovider.c:160
 #: ../src/goabackend/goayahooprovider.c:163
 #, c-format
@@ -187,15 +191,15 @@ msgstr ""
 # N.T.: JSON stands for JavaScript Object Notation that is a language independent text format. Unha linguaxe de progrmación.
 #: ../src/goabackend/goafacebookprovider.c:206
 #: ../src/goabackend/goagoogleprovider.c:224
-#: ../src/goabackend/goawindowsliveprovider.c:195
+#: ../src/goabackend/goawindowsliveprovider.c:188
 #: ../src/goabackend/goaoauth2provider.c:566
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
-msgstr "Erro ao analizar a resposta en JSON: "
+msgstr "Produciuse un erro ao analizar a resposta como JSON: "
 
 #: ../src/goabackend/goafacebookprovider.c:217
-#: ../src/goabackend/goawindowsliveprovider.c:206
+#: ../src/goabackend/goawindowsliveprovider.c:199
 #, c-format
 msgid "Didn't find id member in JSON data"
 msgstr "Non foi posíbel atopar o membro «id» nos datos JSON"
@@ -208,9 +212,9 @@ msgstr "Non foi posíbel atopar o correo electrónico do membro nos datos JSON"
 
 #: ../src/goabackend/goafacebookprovider.c:368
 #: ../src/goabackend/goagoogleprovider.c:550
-#: ../src/goabackend/goawindowsliveprovider.c:383
+#: ../src/goabackend/goawindowsliveprovider.c:376
 msgid "Chat"
-msgstr "Chat"
+msgstr "Conversa"
 
 #: ../src/goabackend/goagoogleprovider.c:78
 msgid "Google"
@@ -228,7 +232,7 @@ msgstr ""
 "hora."
 
 #: ../src/goabackend/goagoogleprovider.c:555
-#: ../src/goabackend/goawindowsliveprovider.c:388
+#: ../src/goabackend/goawindowsliveprovider.c:381
 msgid "Documents"
 msgstr "Documents"
 
@@ -236,7 +240,7 @@ msgstr "Documents"
 msgid "Windows Live"
 msgstr "Windows Live"
 
-#: ../src/goabackend/goawindowsliveprovider.c:217
+#: ../src/goabackend/goawindowsliveprovider.c:210
 #, c-format
 msgid "Didn't find account email member in JSON data"
 msgstr "Non foi posíbel atopar a conta de correo-e do membro nos datos JSON"
@@ -285,7 +289,7 @@ msgstr "Produciuse un erro ao obter un Token de Acceso: "
 #: ../src/goabackend/goaoauth2provider.c:986
 #: ../src/goabackend/goaoauthprovider.c:977
 msgid "Error getting identity: "
-msgstr "Produciuse un erro ao obte a identidade: "
+msgstr "Produciuse un erro ao obter a identidade: "
 
 #: ../src/goabackend/goaoauth2provider.c:1246
 #: ../src/goabackend/goaoauthprovider.c:1253
@@ -386,12 +390,12 @@ msgstr "Actualizar %s"
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:153
 msgid "Failed to delete credentials from the keyring"
-msgstr "Produciuse un fallo ao eliminar as credenciais do anel de chaves"
+msgstr "Produciuse un erro ao eliminar as credenciais do anel de chaves"
 
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:201
 msgid "Failed to retrieve credentials from the keyring"
-msgstr "Produciuse un fallo ao obter as credenciais desde o anel de chaves"
+msgstr "Produciuse un erro ao obter as credenciais do anel de chaves"
 
 #: ../src/goabackend/goautils.c:212
 msgid "Error parsing result obtained from the keyring: "
@@ -407,7 +411,7 @@ msgstr "Credenciais GOA de %s para a identidade %s"
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:270
 msgid "Failed to store credentials in the keyring"
-msgstr "Produciuse un fallo ao gardar as credenciais no anel de chaves"
+msgstr "Produciuse un erro ao gardar as credenciais no anel de chaves"
 
 #. translators: %s here is the address of the web page
 #: ../src/goabackend/goawebview.c:75
@@ -437,7 +441,8 @@ msgstr ""
 
 #: ../src/goabackend/goayahooprovider.c:235
 msgid "Error parsing usercard response as JSON: "
-msgstr "Produciuse un erro a resposta da tarxeta de usuario como JSON:"
+msgstr ""
+"Produciuse un erro ao analizar a resposta da tarxeta de usuario como JSON:"
 
 #: ../src/goabackend/goayahooprovider.c:246
 #, c-format
