@@ -51,13 +51,16 @@ libgoa_backend_1_0_la_HEADERS =						\
 	goaeditablelabel.h						\
 	goaprovider.h							\
 	goaexchangeprovider.h						\
-	goakerberosprovider.h						\
 	goagoogleprovider.h						\
 	goafacebookprovider.h						\
 	goayahooprovider.h						\
 	goatwitterprovider.h						\
 	goawindowsliveprovider.h					\
 	$(NULL)
+
+if BUILD_KERBEROS
+libgoa_backend_1_0_la_HEADERS +=	goakerberosprovider.h
+endif
 
 libgoa_backend_1_0_la_SOURCES =						\
 	goabackend.h							\
@@ -68,7 +71,6 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goaewsclient.h			goaewsclient.c			\
 	goaprovider.h			goaprovider.c			\
 	goaexchangeprovider.h		goaexchangeprovider.c		\
-	goakerberosprovider.h		goakerberosprovider.c		\
 	goalogging.h			goalogging.c			\
 	goaoauthprovider.h		goaoauthprovider.c		\
 	goaoauth2provider.h		goaoauth2provider.c		\
@@ -82,6 +84,11 @@ libgoa_backend_1_0_la_SOURCES =						\
 	nautilus-floating-bar.h		nautilus-floating-bar.c		\
 	$(top_srcdir)/src/goaidentity/org.gnome.Identity.c		\
 	$(NULL)
+
+if BUILD_KERBEROS
+libgoa_backend_1_0_la_SOURCES +=					\
+	goakerberosprovider.h		goakerberosprovider.c
+endif
 
 libgoa_backend_1_0_la_CPPFLAGS =				\
 	-DG_LOG_DOMAIN=\"GoaBackend\"				\

@@ -28,12 +28,15 @@
 #include "goalogging.h"
 #include "goaprovider.h"
 #include "goaexchangeprovider.h"
-#include "goakerberosprovider.h"
 #include "goagoogleprovider.h"
 #include "goafacebookprovider.h"
 #include "goayahooprovider.h"
 #include "goatwitterprovider.h"
 #include "goawindowsliveprovider.h"
+
+#ifdef GOA_KERBEROS_ENABLED
+#include "goakerberosprovider.h"
+#endif
 
 #include "goaeditablelabel.h"
 
