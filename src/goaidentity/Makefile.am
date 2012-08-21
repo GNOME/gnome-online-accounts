@@ -58,7 +58,7 @@ $(identity_dbus_built_sources) : Makefile.am org.gnome.Identity.xml
 		--c-namespace GoaIdentityService		\
 		--c-generate-object-manager			\
 		--generate-c-code org.gnome.Identity		\
-		org.gnome.Identity.xml				\
+		$(srcdir)/org.gnome.Identity.xml		\
 		--annotate "org.gnome.Identity"			\
 		           "org.gtk.GDBus.C.Name" Identity	\
 		$(NULL)
@@ -88,7 +88,7 @@ $(realmd_dbus_built_sources) : Makefile.am org.freedesktop.realmd.xml
 		--c-namespace UmRealm				\
 		--annotate "org.freedesktop.realmd.Realm"	\
 		            org.gtk.GDBus.C.Name Common		\
-		org.freedesktop.realmd.xml			\
+		$(srcdir)/org.freedesktop.realmd.xml		\
 		$(NULL)
 BUILT_SOURCES += $(realmd_dbus_built_sources)
 EXTRA_DIST += org.freedesktop.realmd.xml
