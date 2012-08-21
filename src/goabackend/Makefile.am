@@ -82,7 +82,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goautils.h			goautils.c			\
 	goawebview.h			goawebview.c			\
 	nautilus-floating-bar.h		nautilus-floating-bar.c		\
-	$(top_srcdir)/src/goaidentity/org.gnome.Identity.c		\
+	$(top_builddir)/src/goaidentity/org.gnome.Identity.c		\
 	$(NULL)
 
 if BUILD_KERBEROS
