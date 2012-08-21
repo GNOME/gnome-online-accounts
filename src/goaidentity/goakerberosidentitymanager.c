@@ -935,7 +935,7 @@ on_job_scheduled (GIOSchedulerJob            *job,
   while (!g_cancellable_is_cancelled (cancellable))
     {
       Operation *operation;
-      gboolean processed_operation;
+      gboolean processed_operation = FALSE;
       GError *error = NULL;
 
       operation = g_async_queue_pop (pending_operations);
