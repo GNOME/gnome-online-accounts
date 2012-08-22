@@ -1,5 +1,5 @@
 AC_INIT([GNOME Online Accounts],
-        [3.5.90],
+        [3.5.91],
         [https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts],
         [gnome-online-accounts])
 
