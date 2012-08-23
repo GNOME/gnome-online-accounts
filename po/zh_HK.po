@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts 3.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-07 15:15+0800\n"
-"PO-Revision-Date: 2012-08-07 15:16+0800\n"
+"POT-Creation-Date: 2012-08-23 15:36+0800\n"
+"PO-Revision-Date: 2012-08-23 15:36+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Hong Kong) <community@linuxhall.org>\n"
 "Language: \n"
@@ -17,26 +17,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #. shut up -Wunused-but-set-variable
-#: ../src/daemon/goadaemon.c:199
+#: ../src/daemon/goadaemon.c:211
 msgid "Online Accounts"
 msgstr "網上帳號"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:743 ../src/daemon/goadaemon.c:1073
+#: ../src/daemon/goadaemon.c:801 ../src/daemon/goadaemon.c:1146
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "無法尋找到此提供者：%s"
 
-#: ../src/daemon/goadaemon.c:917
+#: ../src/daemon/goadaemon.c:990
 msgid "An online account needs attention"
 msgstr "有個網上帳號要求注意"
 
-#: ../src/daemon/goadaemon.c:924
+#: ../src/daemon/goadaemon.c:997
 msgid "Open Online Accounts..."
 msgstr "開啟網上帳號..."
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1061
+#: ../src/daemon/goadaemon.c:1134
 msgid "ProviderType property is not set for account"
 msgstr "帳號沒有設定 ProviderType 屬性"
 
@@ -80,7 +80,7 @@ msgstr "在自動探索回應中找不到 ASUrl 與 OABUrl"
 msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
-#: ../src/goabackend/goaexchangeprovider.c:276
+#: ../src/goabackend/goaexchangeprovider.c:278
 #: ../src/goabackend/goaoauth2provider.c:1385
 #: ../src/goabackend/goaoauthprovider.c:1403
 #, c-format
@@ -88,77 +88,81 @@ msgid "Credentials not found in keyring (%s, %d): "
 msgstr "在密碼匙圈內找不到證書 (%s，%d)："
 
 #. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:292
-#: ../src/goabackend/goaexchangeprovider.c:931
+#: ../src/goabackend/goaexchangeprovider.c:294
+#: ../src/goabackend/goaexchangeprovider.c:933
 #, c-format
 msgid "Did not find password with username `%s' in credentials"
 msgstr "在證書中找不到使用者名稱為「%s」的密碼"
 
-#: ../src/goabackend/goaexchangeprovider.c:464
+#: ../src/goabackend/goaexchangeprovider.c:466
 msgid "New Microsoft Exchange Account"
 msgstr "新增 Microsoft Exchange 帳號"
 
-#: ../src/goabackend/goaexchangeprovider.c:464
+#: ../src/goabackend/goaexchangeprovider.c:466
 msgid "Microsoft Exchange Account"
 msgstr "Microsoft Exchange 帳號"
 
-#: ../src/goabackend/goaexchangeprovider.c:490
+#: ../src/goabackend/goaexchangeprovider.c:492
 msgid "_E-mail"
 msgstr "電子郵件(_E)"
 
-#: ../src/goabackend/goaexchangeprovider.c:491
+#: ../src/goabackend/goaexchangeprovider.c:493
 msgid "_Password"
 msgstr "密碼(_P)"
 
-#: ../src/goabackend/goaexchangeprovider.c:494
+#: ../src/goabackend/goaexchangeprovider.c:496
 msgid "_Custom"
 msgstr "自選(_C)"
 
-#: ../src/goabackend/goaexchangeprovider.c:513
+#: ../src/goabackend/goaexchangeprovider.c:515
+#: ../src/goabackend/goakerberosprovider.c:1036
 msgid "User_name"
 msgstr "使用者名稱(_N)"
 
-#: ../src/goabackend/goaexchangeprovider.c:514
+#: ../src/goabackend/goaexchangeprovider.c:516
 msgid "_Server"
 msgstr "伺服器(_S)"
 
-#: ../src/goabackend/goaexchangeprovider.c:598
-#: ../src/goabackend/goaexchangeprovider.c:767
+#: ../src/goabackend/goaexchangeprovider.c:600
+#: ../src/goabackend/goaexchangeprovider.c:769
+#: ../src/goabackend/goakerberosprovider.c:1346
 #: ../src/goabackend/goaoauth2provider.c:945
 #: ../src/goabackend/goaoauthprovider.c:933
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "對話盒已放棄"
 
-#: ../src/goabackend/goaexchangeprovider.c:636
-#: ../src/goabackend/goaexchangeprovider.c:795
+#: ../src/goabackend/goaexchangeprovider.c:638
+#: ../src/goabackend/goaexchangeprovider.c:797
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "連接至 Microsoft Exchange 伺服器時發生錯誤"
 
-#: ../src/goabackend/goaexchangeprovider.c:644
-#: ../src/goabackend/goaexchangeprovider.c:803
+#: ../src/goabackend/goaexchangeprovider.c:646
+#: ../src/goabackend/goaexchangeprovider.c:805
+#: ../src/goabackend/goakerberosprovider.c:1426
 msgid "_Try Again"
 msgstr "重試(_T)"
 
-#: ../src/goabackend/goaexchangeprovider.c:854
-#: ../src/goabackend/goafacebookprovider.c:366
-#: ../src/goabackend/goagoogleprovider.c:533
-#: ../src/goabackend/goawindowsliveprovider.c:381
+#: ../src/goabackend/goaexchangeprovider.c:856
+#: ../src/goabackend/goafacebookprovider.c:368
+#: ../src/goabackend/goagoogleprovider.c:535
+#: ../src/goabackend/goakerberosprovider.c:1484
+#: ../src/goabackend/goawindowsliveprovider.c:376
 msgid "Use for"
 msgstr "使用於"
 
-#: ../src/goabackend/goaexchangeprovider.c:856
-#: ../src/goabackend/goagoogleprovider.c:535
+#: ../src/goabackend/goaexchangeprovider.c:858
+#: ../src/goabackend/goagoogleprovider.c:537
 msgid "Mail"
 msgstr "郵件"
 
-#: ../src/goabackend/goaexchangeprovider.c:861
-#: ../src/goabackend/goagoogleprovider.c:540
+#: ../src/goabackend/goaexchangeprovider.c:863
+#: ../src/goabackend/goagoogleprovider.c:542
 msgid "Calendar"
 msgstr "行事曆"
 
-#: ../src/goabackend/goaexchangeprovider.c:866
-#: ../src/goabackend/goagoogleprovider.c:545
+#: ../src/goabackend/goaexchangeprovider.c:868
+#: ../src/goabackend/goagoogleprovider.c:547
 msgid "Contacts"
 msgstr "聯絡人"
 
@@ -169,8 +173,8 @@ msgstr "Facebook"
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:194
 #: ../src/goabackend/goagoogleprovider.c:212
-#: ../src/goabackend/goawindowsliveprovider.c:183
 #: ../src/goabackend/goatwitterprovider.c:160
+#: ../src/goabackend/goawindowsliveprovider.c:176
 #: ../src/goabackend/goayahooprovider.c:163
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
@@ -178,15 +182,15 @@ msgstr "請求 guid 時預期的狀態為 200，但卻取得狀態 %d (%s)"
 
 #: ../src/goabackend/goafacebookprovider.c:206
 #: ../src/goabackend/goagoogleprovider.c:224
-#: ../src/goabackend/goawindowsliveprovider.c:195
 #: ../src/goabackend/goaoauth2provider.c:566
 #: ../src/goabackend/goatwitterprovider.c:172
+#: ../src/goabackend/goawindowsliveprovider.c:188
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
 msgstr "以 JSON 解析回應時發生錯誤："
 
 #: ../src/goabackend/goafacebookprovider.c:217
-#: ../src/goabackend/goawindowsliveprovider.c:206
+#: ../src/goabackend/goawindowsliveprovider.c:199
 #, c-format
 msgid "Didn't find id member in JSON data"
 msgstr "JSON 資料中找不到 id 成員"
@@ -197,9 +201,9 @@ msgstr "JSON 資料中找不到 id 成員"
 msgid "Didn't find email member in JSON data"
 msgstr "JSON 資料中找不到電子郵件成員"
 
-#: ../src/goabackend/goafacebookprovider.c:368
-#: ../src/goabackend/goagoogleprovider.c:550
-#: ../src/goabackend/goawindowsliveprovider.c:383
+#: ../src/goabackend/goafacebookprovider.c:370
+#: ../src/goabackend/goagoogleprovider.c:552
+#: ../src/goabackend/goawindowsliveprovider.c:378
 msgid "Chat"
 msgstr "聊天"
 
@@ -216,19 +220,64 @@ msgstr "JSON 資料中找不到資料成員"
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "你的系統時間無效。請檢查你的日期與時間設定值。"
 
-#: ../src/goabackend/goagoogleprovider.c:555
-#: ../src/goabackend/goawindowsliveprovider.c:388
+#: ../src/goabackend/goagoogleprovider.c:557
+#: ../src/goabackend/goawindowsliveprovider.c:383
 msgid "Documents"
 msgstr "文件"
 
-#: ../src/goabackend/goawindowsliveprovider.c:82
-msgid "Windows Live"
-msgstr "Windows Live"
+#: ../src/goabackend/goakerberosprovider.c:83
+#: ../src/goabackend/goakerberosprovider.c:989
+msgid "Enterprise Login (Kerberos)"
+msgstr "企業版登入 (Kerberos)"
 
-#: ../src/goabackend/goawindowsliveprovider.c:217
+#: ../src/goabackend/goakerberosprovider.c:374
+msgid "Identity service returned invalid key"
+msgstr "身分認證服務傳回無效的鍵值"
+
+#: ../src/goabackend/goakerberosprovider.c:640
 #, c-format
-msgid "Didn't find account email member in JSON data"
-msgstr "JSON 資料中找不到帳號電子郵件成員"
+msgid "Could not find saved credentials for principal `%s' in keyring"
+msgstr "找不到密碼匙圈中的主要「%s」儲存的證書"
+
+#: ../src/goabackend/goakerberosprovider.c:650
+#, c-format
+msgid "Did not find password for principal `%s' in credentials"
+msgstr "在證書中找不到主要「%s」的密碼"
+
+#: ../src/goabackend/goakerberosprovider.c:989
+msgid "New Enterprise Login (Kerberos)"
+msgstr "新增企業版登入 (Kerberos)"
+
+#: ../src/goabackend/goakerberosprovider.c:1029
+msgid "_Domain"
+msgstr "網域(_D)"
+
+#: ../src/goabackend/goakerberosprovider.c:1030
+msgid "Enterprise domain or realm name"
+msgstr "企業網域或領域名稱"
+
+#: ../src/goabackend/goakerberosprovider.c:1244
+#: ../src/goaidentity/goaidentityservice.c:1891
+msgid "Log In to Realm"
+msgstr "登入領域"
+
+#: ../src/goabackend/goakerberosprovider.c:1245
+msgid "Please enter your password below."
+msgstr "請在下面輸入你的密碼。"
+
+#: ../src/goabackend/goakerberosprovider.c:1246
+msgid "Remember this password"
+msgstr "記住這個密碼"
+
+#: ../src/goabackend/goakerberosprovider.c:1420
+#, fuzzy
+#| msgid "Error connecting to enterperise identity server"
+msgid "Error connecting to enterprise identity server"
+msgstr "連線至企業身分認證伺服器時發生錯誤"
+
+#: ../src/goabackend/goakerberosprovider.c:1486
+msgid "Network Resources"
+msgstr "網絡資源"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauth2provider.c:523
@@ -327,7 +376,7 @@ msgstr "從<a href=\"%s\">認證頁面</a>取得貼上記號："
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "證書不包含 access_token 或 access_token_secret"
 
-#: ../src/goabackend/goaprovider.c:534
+#: ../src/goabackend/goaprovider.c:550
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync 並非以 %s 類型實作"
@@ -346,44 +395,44 @@ msgstr "JSON 資料中找不到 id_str 成員"
 msgid "Didn't find screen_name member in JSON data"
 msgstr "JSON 資料中找不到 screen_name 成員"
 
-#: ../src/goabackend/goautils.c:82
+#: ../src/goabackend/goautils.c:84
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "%s 帳號已經存在用於 %s"
 
 #. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:107
+#: ../src/goabackend/goautils.c:109
 #, c-format
 msgid "Add %s"
 msgstr "加入 %s"
 
-#: ../src/goabackend/goautils.c:107
+#: ../src/goabackend/goautils.c:109
 #, c-format
 msgid "Refresh %s"
 msgstr "重新整理 %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:153
+#: ../src/goabackend/goautils.c:155
 msgid "Failed to delete credentials from the keyring"
 msgstr "無法從密碼匙圈刪除證書"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:201
+#: ../src/goabackend/goautils.c:203
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "無法從密碼匙圈取回證書"
 
-#: ../src/goabackend/goautils.c:212
+#: ../src/goabackend/goautils.c:214
 msgid "Error parsing result obtained from the keyring: "
 msgstr "從密碼匙圈取得解析結果時發生錯誤："
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:254
+#: ../src/goabackend/goautils.c:256
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "%2$s 身分的 GOA %1$s 證書"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:270
+#: ../src/goabackend/goautils.c:272
 msgid "Failed to store credentials in the keyring"
 msgstr "無法儲存證書到密碼匙圈"
 
@@ -392,6 +441,15 @@ msgstr "無法儲存證書到密碼匙圈"
 #, c-format
 msgid "Loading “%s”…"
 msgstr "正載入「%s」..."
+
+#: ../src/goabackend/goawindowsliveprovider.c:82
+msgid "Windows Live"
+msgstr "Windows Live"
+
+#: ../src/goabackend/goawindowsliveprovider.c:210
+#, c-format
+msgid "Didn't find account email member in JSON data"
+msgstr "JSON 資料中找不到帳號電子郵件成員"
 
 #: ../src/goabackend/goayahooprovider.c:78
 msgid "Yahoo"
@@ -425,6 +483,134 @@ msgstr "JSON 資料中找不到個人檔案成員"
 #, c-format
 msgid "Didn't find nickname member in JSON data"
 msgstr "JSON 資料中找不到網名成員"
+
+#: ../src/goaidentity/goaalarm.c:245
+msgid "Time"
+msgstr "時間"
+
+#: ../src/goaidentity/goaalarm.c:246
+#, fuzzy
+msgid "Time to fire"
+msgstr "充飽的時間"
+
+#: ../src/goaidentity/goaidentityservice.c:317
+msgid "Domain Administrator Login"
+msgstr "網域管理員登入"
+
+#: ../src/goaidentity/goaidentityservice.c:405
+#: ../src/goaidentity/goaidentityservice.c:597
+msgid "Could not find supported credentials"
+msgstr "找不到支援的證書"
+
+#: ../src/goaidentity/goaidentityservice.c:448
+msgid ""
+"In order to use this enterprise identity, the computer needs to be enrolled "
+"in the domain. Please have your network administrator type their domain "
+"password here."
+msgstr "為了使用這個企業版身分認證，這個電腦必須加入網域。請讓你的網絡系統管理員在這裏輸入他們的網域密碼。"
+
+#: ../src/goaidentity/goaidentityservice.c:488
+msgid ""
+"In order to use this enterprise identity, the computer needs to be enrolled "
+"in the domain. Please have your network administrator type their domain "
+"username here."
+msgstr "為了使用這個企業版身分認證，這個電腦必須加入網域。請讓你的網絡系統管理員在這裏輸入他們的網域使用者名稱。"
+
+#: ../src/goaidentity/goaidentityservice.c:1167
+msgid "initial secret passed before secret key exchange"
+msgstr "在私人密碼匙交換前傳送的初始機密"
+
+#: ../src/goaidentity/goaidentityservice.c:1373
+msgid "Initial secret key is invalid"
+msgstr "初始密碼匙無效"
+
+#: ../src/goaidentity/goaidentityservice.c:1896
+#, c-format
+msgid "The network realm %s needs some information to sign you in."
+msgstr "網絡領域 %s 需要一些資訊才能讓你登入。"
+
+#: ../src/goaidentity/goakerberosidentity.c:271
+#: ../src/goaidentity/goakerberosidentity.c:280
+#: ../src/goaidentity/goakerberosidentity.c:607
+msgid "Could not find identity in credential cache: %k"
+msgstr "在證書快取中找不到身分認證：%k"
+
+#: ../src/goaidentity/goakerberosidentity.c:620
+msgid "Could not find identity credentials in cache: %k"
+msgstr "在快取中找不到身分證書：%k"
+
+#: ../src/goaidentity/goakerberosidentity.c:658
+msgid "Could not sift through identity credentials in cache: %k"
+msgstr "無法篩選快取中的身分證書：%k"
+
+#: ../src/goaidentity/goakerberosidentity.c:675
+msgid "Could not finish up sifting through identity credentials in cache: %k"
+msgstr "無法結束篩選快取中的身分證書：%k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1013
+#, c-format
+msgid "No associated identification found"
+msgstr "找不到相關聯的身分認證"
+
+#: ../src/goaidentity/goakerberosidentity.c:1094
+msgid "Could not create credential cache: %k"
+msgstr "無法建立證書快取：%k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1128
+msgid "Could not initialize credentials cache: %k"
+msgstr "無法初始化證書快取：%k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1147
+msgid "Could not store new credentials in credentials cache: %k"
+msgstr "無法在證書快取中儲存新的證書：%k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1424
+#, fuzzy, c-format
+#| msgid "Could not renew identitys: Not signed in"
+msgid "Could not renew identity: Not signed in"
+msgstr "無法更新身分認證：尚未登入"
+
+#: ../src/goaidentity/goakerberosidentity.c:1436
+msgid "Could not renew identity: %k"
+msgstr "無法更新身分認證：%k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1453
+msgid "Could not get new credentials to renew identity %s: %k"
+msgstr "無法取得新的證書以更新身分認證 %s：%k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1493
+msgid "Could not erase identity: %k"
+msgstr "無法消除身分認證：%k"
+
+#: ../src/goaidentity/goakerberosidentitymanager.c:746
+msgid "Could not find identity"
+msgstr "找不到身分認證"
+
+#: ../src/goaidentity/goakerberosidentitymanager.c:803
+msgid "Could not create credential cache for identity"
+msgstr "無法建立身分認證的證書快取"
+
+#: ../src/goaidentity/um-realm-manager.c:368
+#, c-format
+msgid "No such domain or realm found"
+msgstr "找不到這個網域或領域名稱"
+
+#: ../src/goaidentity/um-realm-manager.c:743
+#, c-format
+msgid "Cannot log in as %s at the %s domain"
+msgstr "不能以 %s 身分登入 %s 網域"
+
+#: ../src/goaidentity/um-realm-manager.c:748
+msgid "Invalid password, please try again"
+msgstr "密碼錯誤，請再試一次"
+
+#: ../src/goaidentity/um-realm-manager.c:752
+#, c-format
+msgid "Couldn't connect to the %s domain: %s"
+msgstr "無法連接到 %s 網域：%s"
+
+#~ msgid "Enterpise Login (Kerberos)"
+#~ msgstr "企業版登入 (Kerberos)"
 
 #~ msgid "Email _Address"
 #~ msgstr "電子郵件位址(_A)"
