@@ -60,9 +60,9 @@ struct _GoaKerberosProviderClass
 /**
  * SECTION:goakerberosprovider
  * @title: GoaKerberosProvider
- * @short_description: A provider for enterperise identity servers
+ * @short_description: A provider for enterprise identity servers
  *
- * #GoaKerberosProvider is used to access enterperise identity servers.
+ * #GoaKerberosProvider is used to access enterprise identity servers.
  */
 
 G_DEFINE_TYPE_WITH_CODE (GoaKerberosProvider, goa_kerberos_provider, GOA_TYPE_PROVIDER,
@@ -986,7 +986,7 @@ create_account_details_ui (GoaKerberosProvider *self,
   label = gtk_label_new (NULL);
   gtk_widget_set_hexpand (label, TRUE);
   markup = g_strconcat ("<b>",
-                        (new_account) ? _("New Enterprise Login (Kerberos)") : _("Enterpise Login (Kerberos)"),
+                        (new_account) ? _("New Enterprise Login (Kerberos)") : _("Enterprise Login (Kerberos)"),
                         "</b>",
                         NULL);
   gtk_label_set_markup (GTK_LABEL (label), markup);
@@ -1417,7 +1417,7 @@ start_over:
                             G_IO_ERROR_CANCELLED))
         {
           markup = g_strdup_printf ("<b>%s:</b>\n%s",
-                                    _("Error connecting to enterperise identity server"),
+                                    _("Error connecting to enterprise identity server"),
                                     request.error->message);
           gtk_label_set_markup (GTK_LABEL (request.cluebar_label), markup);
           g_free (markup);

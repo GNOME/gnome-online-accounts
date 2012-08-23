@@ -1421,7 +1421,7 @@ goa_kerberos_identity_renew (GoaKerberosIdentity *self, GError **error)
       g_set_error (error,
                    GOA_IDENTITY_ERROR,
                    GOA_IDENTITY_ERROR_CREDENTIALS_UNAVAILABLE,
-                   _("Could not renew identitys: Not signed in"));
+                   _("Could not renew identity: Not signed in"));
       goto out;
     }
 
