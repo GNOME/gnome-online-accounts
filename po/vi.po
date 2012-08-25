@@ -1,7 +1,7 @@
 # Vietnamese translation for gnome-online-accounts.
 # Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
-# Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2011.
+# Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2011-2012.
 #
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-08-23 04:22+0000\n"
-"PO-Revision-Date: 2012-08-25 17:54+0700\n"
+"PO-Revision-Date: 2012-08-25 17:58+0700\n"
 "Last-Translator: Nguyễn Thái Ngọc Duy <pclouds@gmail.com>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "Language: vi\n"
@@ -20,10 +20,9 @@ msgstr ""
 
 #. shut up -Wunused-but-set-variable
 #: ../src/daemon/goadaemon.c:211
-#, fuzzy
 #| msgid "Open Online Accounts..."
 msgid "Online Accounts"
-msgstr "Mở tài khoản trực tuyến..."
+msgstr "Tài khoản trực tuyến"
 
 #. TODO: more specific
 #: ../src/daemon/goadaemon.c:801 ../src/daemon/goadaemon.c:1146
@@ -70,10 +69,10 @@ msgstr ""
 
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:258
-#, fuzzy, c-format
+#, c-format
 #| msgid "Didn't find account email member in JSON data"
 msgid "Failed to find Account element"
-msgstr "Không tìm thấy email tài khoản trong dữ liệu JSON"
+msgstr "Lỗi tìm phần tử Account"
 
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:275
@@ -83,7 +82,7 @@ msgstr ""
 
 #: ../src/goabackend/goaexchangeprovider.c:77
 msgid "Microsoft Exchange"
-msgstr ""
+msgstr "Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:278
 #: ../src/goabackend/goaoauth2provider.c:1385
@@ -101,34 +100,33 @@ msgstr ""
 
 #: ../src/goabackend/goaexchangeprovider.c:466
 msgid "New Microsoft Exchange Account"
-msgstr ""
+msgstr "Tài khoản Microsoft Exchange mới"
 
 #: ../src/goabackend/goaexchangeprovider.c:466
 msgid "Microsoft Exchange Account"
-msgstr ""
+msgstr "Tài khoản Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:492
 msgid "_E-mail"
-msgstr ""
+msgstr "_E-mail"
 
 #: ../src/goabackend/goaexchangeprovider.c:493
 msgid "_Password"
-msgstr ""
+msgstr "_Mật khẩu"
 
 #: ../src/goabackend/goaexchangeprovider.c:496
 msgid "_Custom"
-msgstr ""
+msgstr "_Tự chọn"
 
 #: ../src/goabackend/goaexchangeprovider.c:515
 #: ../src/goabackend/goakerberosprovider.c:1036
-#, fuzzy
 #| msgid "User Name"
 msgid "User_name"
-msgstr "Tên người dùng"
+msgstr "_Tên người dùng"
 
 #: ../src/goabackend/goaexchangeprovider.c:516
 msgid "_Server"
-msgstr ""
+msgstr "_Máy chủ"
 
 #: ../src/goabackend/goaexchangeprovider.c:600
 #: ../src/goabackend/goaexchangeprovider.c:769
@@ -148,7 +146,7 @@ msgstr ""
 #: ../src/goabackend/goaexchangeprovider.c:805
 #: ../src/goabackend/goakerberosprovider.c:1426
 msgid "_Try Again"
-msgstr ""
+msgstr "_Thử lại"
 
 #: ../src/goabackend/goaexchangeprovider.c:856
 #: ../src/goabackend/goafacebookprovider.c:368
@@ -156,7 +154,7 @@ msgstr ""
 #: ../src/goabackend/goakerberosprovider.c:1484
 #: ../src/goabackend/goawindowsliveprovider.c:376
 msgid "Use for"
-msgstr ""
+msgstr "Dùng cho"
 
 #: ../src/goabackend/goaexchangeprovider.c:858
 #: ../src/goabackend/goagoogleprovider.c:537
@@ -258,7 +256,7 @@ msgstr ""
 
 #: ../src/goabackend/goakerberosprovider.c:1029
 msgid "_Domain"
-msgstr ""
+msgstr "_Miền"
 
 #: ../src/goabackend/goakerberosprovider.c:1030
 msgid "Enterprise domain or realm name"
@@ -275,17 +273,16 @@ msgstr ""
 
 #: ../src/goabackend/goakerberosprovider.c:1246
 msgid "Remember this password"
-msgstr ""
+msgstr "Nhớ mật khẩu này"
 
 #: ../src/goabackend/goakerberosprovider.c:1420
-#, fuzzy
 #| msgid "Error getting identity: "
 msgid "Error connecting to enterprise identity server"
-msgstr "Lỗi lấy định danh: "
+msgstr ""
 
 #: ../src/goabackend/goakerberosprovider.c:1486
 msgid "Network Resources"
-msgstr ""
+msgstr "Tài nguyên mạng"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauth2provider.c:523
@@ -409,32 +406,30 @@ msgstr "Không tìm thấy screen_name trong dữ liệu JSON"
 #: ../src/goabackend/goautils.c:84
 #, c-format
 msgid "A %s account already exists for %s"
-msgstr ""
+msgstr "Đã có tài khoản %s cho %s"
 
 #. Translators: the %s is the name of the provider. eg., Google.
 #: ../src/goabackend/goautils.c:109
 #, c-format
 msgid "Add %s"
-msgstr ""
+msgstr "Thêm %s"
 
 #: ../src/goabackend/goautils.c:109
 #, c-format
 msgid "Refresh %s"
-msgstr ""
+msgstr "Nạp lại %s"
 
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:155
-#, fuzzy
 #| msgid "Failed to retrieve credentials from the keyring: %s"
 msgid "Failed to delete credentials from the keyring"
-msgstr "Lỗi lấy giấy uỷ nhiệm từ vòng khoá: %s"
+msgstr "Lỗi xoá giấy uỷ nhiệm khỏi vòng khoá"
 
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:203
-#, fuzzy
 #| msgid "Failed to retrieve credentials from the keyring: %s"
 msgid "Failed to retrieve credentials from the keyring"
-msgstr "Lỗi lấy giấy uỷ nhiệm từ vòng khoá: %s"
+msgstr "Lỗi lấy giấy uỷ nhiệm từ vòng khoá"
 
 #: ../src/goabackend/goautils.c:214
 msgid "Error parsing result obtained from the keyring: "
@@ -448,16 +443,15 @@ msgstr "Giấy uỷ nhiệm GOA %s cho định danh %s"
 
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:272
-#, fuzzy
 #| msgid "Failed to store credentials in the keyring: %s"
 msgid "Failed to store credentials in the keyring"
-msgstr "Lỗi lưu giấy uỷ nhiệm vào vòng khoá: %s"
+msgstr "Lỗi lưu giấy uỷ nhiệm vào vòng khoá"
 
 #. translators: %s here is the address of the web page
 #: ../src/goabackend/goawebview.c:75
 #, c-format
 msgid "Loading “%s”…"
-msgstr ""
+msgstr "Đang nạp “%s”…"
 
 #: ../src/goabackend/goawindowsliveprovider.c:82
 msgid "Windows Live"
@@ -504,7 +498,7 @@ msgstr "Không tìm thấy tên hiệu trong dữ liệu JSON"
 
 #: ../src/goaidentity/goaalarm.c:245
 msgid "Time"
-msgstr ""
+msgstr "Thời gian"
 
 #: ../src/goaidentity/goaalarm.c:246
 msgid "Time to fire"
@@ -578,10 +572,9 @@ msgid "Could not initialize credentials cache: %k"
 msgstr ""
 
 #: ../src/goaidentity/goakerberosidentity.c:1147
-#, fuzzy
 #| msgid "Failed to store credentials in the keyring: %s"
 msgid "Could not store new credentials in credentials cache: %k"
-msgstr "Lỗi lưu giấy uỷ nhiệm vào vòng khoá: %s"
+msgstr "Không thể lưu giấy uỷ nhiệm vào cache uỷ nhiệm: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1424
 #, c-format
@@ -593,10 +586,9 @@ msgid "Could not renew identity: %k"
 msgstr ""
 
 #: ../src/goaidentity/goakerberosidentity.c:1453
-#, fuzzy
 #| msgid "GOA %s credentials for identity %s"
 msgid "Could not get new credentials to renew identity %s: %k"
-msgstr "Giấy uỷ nhiệm GOA %s cho định danh %s"
+msgstr ""
 
 #: ../src/goaidentity/goakerberosidentity.c:1493
 msgid "Could not erase identity: %k"
@@ -607,10 +599,9 @@ msgid "Could not find identity"
 msgstr ""
 
 #: ../src/goaidentity/goakerberosidentitymanager.c:803
-#, fuzzy
 #| msgid "GOA %s credentials for identity %s"
 msgid "Could not create credential cache for identity"
-msgstr "Giấy uỷ nhiệm GOA %s cho định danh %s"
+msgstr ""
 
 #: ../src/goaidentity/um-realm-manager.c:368
 #, c-format
