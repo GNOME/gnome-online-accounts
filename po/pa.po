@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-08-20 23:28+0000\n"
-"PO-Revision-Date: 2012-08-22 07:26+0530\n"
+"POT-Creation-Date: 2012-08-23 04:22+0000\n"
+"PO-Revision-Date: 2012-08-27 19:55+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
 "Language: pa\n"
@@ -20,26 +20,26 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. shut up -Wunused-but-set-variable
-#: ../src/daemon/goadaemon.c:204
+#: ../src/daemon/goadaemon.c:211
 msgid "Online Accounts"
 msgstr "ਆਨਲਾਈਨ ਅਕਾਊਂਟ"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:792 ../src/daemon/goadaemon.c:1137
+#: ../src/daemon/goadaemon.c:801 ../src/daemon/goadaemon.c:1146
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "%s: ਲਈ ਪ੍ਰੋਵਾਈਡਰ ਲੱਭਣ ਲਈ ਫੇਲ੍ਹ"
 
-#: ../src/daemon/goadaemon.c:981
+#: ../src/daemon/goadaemon.c:990
 msgid "An online account needs attention"
 msgstr "ਇੱਕ ਆਨਲਾਈਨ ਅਕਾਊਂਟ ਲਈ ਧਿਆਨ ਦੇਣ ਲੋੜ ਹੈ"
 
-#: ../src/daemon/goadaemon.c:988
+#: ../src/daemon/goadaemon.c:997
 msgid "Open Online Accounts..."
 msgstr "ਆਨਲਾਈਨ ਅਕਾਊਂਟ ਖੋਲ੍ਹੋ..."
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1125
+#: ../src/daemon/goadaemon.c:1134
 msgid "ProviderType property is not set for account"
 msgstr "ProviderType ਵਿਸ਼ੇਸ਼ਤਾ ਅਕਾਊਂਟ ਲਈ ਸੈੱਟ ਨਹੀਂ ਹੈ"
 
@@ -231,6 +231,7 @@ msgid "Documents"
 msgstr "ਡੌਕੂਮੈਂਟ"
 
 #: ../src/goabackend/goakerberosprovider.c:83
+#: ../src/goabackend/goakerberosprovider.c:989
 msgid "Enterprise Login (Kerberos)"
 msgstr "ਇੰਟਰਪਰਾਈਜ਼ ਲਾਗਇਨ (ਕਰਬਰੋਸ)"
 
@@ -251,10 +252,6 @@ msgstr "ਸਨਦ ਵਿੱਚ `%s' ਪ੍ਰਿਸੀਪਲ ਲਈ ਪਾਸਵ
 #: ../src/goabackend/goakerberosprovider.c:989
 msgid "New Enterprise Login (Kerberos)"
 msgstr "ਨਵਾਂ ਇੰਟਰਪਰਾਈਜ਼ ਲਾਗਇਨ (ਕਰਬਰੋਸ)"
-
-#: ../src/goabackend/goakerberosprovider.c:989
-msgid "Enterpise Login (Kerberos)"
-msgstr "ਇੰਟਰਪਰਾਈਜ਼ ਲਾਗਇਨ (ਕਰਬਰੋਸ)"
 
 #: ../src/goabackend/goakerberosprovider.c:1029
 msgid "_Domain"
@@ -278,7 +275,8 @@ msgid "Remember this password"
 msgstr "ਇਹ ਪਾਸਵਰਡ ਯਾਦ ਰੱਖੋ"
 
 #: ../src/goabackend/goakerberosprovider.c:1420
-msgid "Error connecting to enterperise identity server"
+#| msgid "Error connecting to enterperise identity server"
+msgid "Error connecting to enterprise identity server"
 msgstr "ਇੰਟਰਪ੍ਰਾਈਜ਼ ਪਛਾਣ ਸਰਵਰ ਨਾਲ ਕੁਨੈਕਟ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ"
 
 #: ../src/goabackend/goakerberosprovider.c:1486
@@ -394,7 +392,7 @@ msgstr ""
 "ਸਨਦ ਵਿੱਚ ਅਸੈਸ ਟੋਕਨ (access_token) ਜਾਂ ਅਸੈਸ ਟੋਕਨ ਭੇਦ (access_token_secret) "
 "ਨਹੀਂ ਮਿਲਿਆ"
 
-#: ../src/goabackend/goaprovider.c:547
+#: ../src/goabackend/goaprovider.c:550
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ਕਿਸਮ %s ਲਈ ensure_credentials_sync ਹਾਲੇ ਬਣਾਇਆ ਨਹੀਂ ਹੈ"
@@ -431,13 +429,11 @@ msgstr "%s ਤਾਜ਼ਾ"
 
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:155
-#| msgid "Failed to delete credentials from the keyring: %s"
 msgid "Failed to delete credentials from the keyring"
 msgstr "ਕੀਰਿੰਗ ਤੋਂ ਸਨਦ ਹਟਾਉਣ ਲਈ ਫੇਲ੍ਹ"
 
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:203
-#| msgid "Failed to retrieve credentials from the keyring: %s"
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "ਕੀਰਿੰਗ ਤੋਂ ਸਨਦ ਪ੍ਰਾਪਤ ਕਰਨ ਲਈ ਫੇਲ੍ਹ"
 
@@ -453,7 +449,6 @@ msgstr "%2$s ਪਛਾਣ ਲਈ GOA %1$s ਸਨਦ"
 
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:272
-#| msgid "Failed to store credentials in the keyring: %s"
 msgid "Failed to store credentials in the keyring"
 msgstr "ਕੀਰਿੰਗ ਵਿੱਚ ਸਨਦ ਸਟੋਰ ਕਰਨ ਲਈ ਫੇਲ੍ਹ ਹੈ"
 
@@ -530,8 +525,9 @@ msgid ""
 "in the domain. Please have your network administrator type their domain "
 "password here."
 msgstr ""
-"ਇੰਟਰਪਰਾਈਜ਼ ਪਛਾਣ ਵਰਤਣ ਲਈ, ਉਹ ਕੰਪਿਊਟਰ ਨੂੰ ਡੋਮੇਨ ਵਰਤਣ ਦੀ ਲੋੜ ਹੈ। "
-"ਆਪਣੇ ਨੈੱਟਵਰਕ ਪਰਸ਼ਾਸ਼ਕ ਕਿਸਮ ਲਈ ਉਹਨਾਂ ਦਾ ਡੋਮੇਨ ਪਾਸਵਰਡ ਇੱਥੇ ਦਿਉ।"
+"ਇੰਟਰਪਰਾਈਜ਼ ਪਛਾਣ ਵਰਤਣ ਲਈ, ਉਹ ਕੰਪਿਊਟਰ ਨੂੰ ਡੋਮੇਨ ਵਰਤਣ ਦੀ ਲੋੜ ਹੈ। ਆਪਣੇ ਨੈੱਟਵਰਕ "
+"ਪਰਸ਼ਾਸ਼ਕ ਕਿਸਮ "
+"ਲਈ ਉਹਨਾਂ ਦਾ ਡੋਮੇਨ ਪਾਸਵਰਡ ਇੱਥੇ ਦਿਉ।"
 
 #: ../src/goaidentity/goaidentityservice.c:488
 msgid ""
@@ -539,8 +535,9 @@ msgid ""
 "in the domain. Please have your network administrator type their domain "
 "username here."
 msgstr ""
-"ਇੰਟਰਪਰਾਈਜ਼ ਪਛਾਣ ਵਰਤਣ ਲਈ, ਉਹ ਕੰਪਿਊਟਰ ਨੂੰ ਡੋਮੇਨ ਵਰਤਣ ਦੀ ਲੋੜ ਹੈ। "
-"ਆਪਣੇ ਨੈੱਟਵਰਕ ਪਰਸ਼ਾਸ਼ਕ ਕਿਸਮ ਲਈ ਉਹਨਾਂ ਦਾ ਡੋਮੇਨ ਯੂਜ਼ਰ-ਨਾਂ ਇੱਥੇ ਦਿਉ।"
+"ਇੰਟਰਪਰਾਈਜ਼ ਪਛਾਣ ਵਰਤਣ ਲਈ, ਉਹ ਕੰਪਿਊਟਰ ਨੂੰ ਡੋਮੇਨ ਵਰਤਣ ਦੀ ਲੋੜ ਹੈ। ਆਪਣੇ ਨੈੱਟਵਰਕ "
+"ਪਰਸ਼ਾਸ਼ਕ ਕਿਸਮ "
+"ਲਈ ਉਹਨਾਂ ਦਾ ਡੋਮੇਨ ਯੂਜ਼ਰ-ਨਾਂ ਇੱਥੇ ਦਿਉ।"
 
 #: ../src/goaidentity/goaidentityservice.c:1167
 msgid "initial secret passed before secret key exchange"
@@ -587,13 +584,13 @@ msgid "Could not initialize credentials cache: %k"
 msgstr "ਸਨਦ ਕੈਸ਼ ਸ਼ੁਰੂ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕੀ: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1147
-#| msgid "Failed to store credentials in the keyring: %s"
 msgid "Could not store new credentials in credentials cache: %k"
 msgstr "ਨਵੀਂ ਸਨਦ ਸਨਦ ਕੈਸ਼ ਵਿੱਚ ਸਟੋਰ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕੀ: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1424
 #, c-format
-msgid "Could not renew identitys: Not signed in"
+#| msgid "Could not renew identitys: Not signed in"
+msgid "Could not renew identity: Not signed in"
 msgstr "ਪਛਾਣ ਨਵਿਆਈ ਨਹੀਂ ਜਾ ਸਕੀ: ਸਾਈਨ ਇਨ ਨਹੀਂ"
 
 #: ../src/goaidentity/goakerberosidentity.c:1436
@@ -601,7 +598,6 @@ msgid "Could not renew identity: %k"
 msgstr "ਪਛਾਣ ਨਵਿਆਈ ਨਹੀਂ ਜਾ ਸਕੀ: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1453
-#| msgid "GOA %s credentials for identity %s"
 msgid "Could not get new credentials to renew identity %s: %k"
 msgstr "ਨਵਿਆਈ ਪਛਾਣ %s ਲਈ ਨਵੀਂ ਸਨਦ ਲਈ ਨਹੀਂ ਜਾ ਸਕੀ: %k"
 
@@ -614,7 +610,6 @@ msgid "Could not find identity"
 msgstr "ਪਛਾਣ ਲੱਭੀ ਨਹੀਂ ਜਾ ਸਕੀ"
 
 #: ../src/goaidentity/goakerberosidentitymanager.c:803
-#| msgid "GOA %s credentials for identity %s"
 msgid "Could not create credential cache for identity"
 msgstr "ਪਛਾਣ ਲਈ ਸਨਦ ਕੈਸ਼ ਬਣਾਈ ਨਹੀਂ ਜਾ ਸਕੀ"
 
@@ -636,6 +631,9 @@ msgstr "ਗਲਤ ਪਾਸਵਰਡ, ਫੇਰ ਕੋਸ਼ਿਸ਼ ਕਰੋ ਜੀ
 #, c-format
 msgid "Couldn't connect to the %s domain: %s"
 msgstr "%s ਡੋਮੇਨ ਨਾਲ ਕੁਨੈਕਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ: %s"
+
+#~ msgid "Enterpise Login (Kerberos)"
+#~ msgstr "ਇੰਟਰਪਰਾਈਜ਼ ਲਾਗਇਨ (ਕਰਬਰੋਸ)"
 
 #~ msgid "Didn't find username member in JSON data"
 #~ msgstr "JSON ਡਾਟੇ ਵਿੱਚ ਯੂਜ਼ਰ-ਨਾਂ ਮੈਂਬਰ ਨਹੀਂ ਲਿਆ"
