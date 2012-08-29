@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-08-20 23:28+0000\n"
-"PO-Revision-Date: 2012-08-21 23:34+0300\n"
+"POT-Creation-Date: 2012-08-23 04:22+0000\n"
+"PO-Revision-Date: 2012-08-29 22:57+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -18,27 +18,27 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. shut up -Wunused-but-set-variable
-#: ../src/daemon/goadaemon.c:204
+#: ../src/daemon/goadaemon.c:211
 msgid "Online Accounts"
 msgstr "Internetinės paskyros"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:792
-#: ../src/daemon/goadaemon.c:1137
+#: ../src/daemon/goadaemon.c:801
+#: ../src/daemon/goadaemon.c:1146
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Nepavyko rasti tiekėjo: %s"
 
-#: ../src/daemon/goadaemon.c:981
+#: ../src/daemon/goadaemon.c:990
 msgid "An online account needs attention"
 msgstr "Internetinei paskyrai reikia dėmesio"
 
-#: ../src/daemon/goadaemon.c:988
+#: ../src/daemon/goadaemon.c:997
 msgid "Open Online Accounts..."
 msgstr "Atverti internetines paskyras..."
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1125
+#: ../src/daemon/goadaemon.c:1134
 msgid "ProviderType property is not set for account"
 msgstr "ProviderType savybė nenustatyta paskyrai"
 
@@ -228,6 +228,7 @@ msgid "Documents"
 msgstr "Dokumentai"
 
 #: ../src/goabackend/goakerberosprovider.c:83
+#: ../src/goabackend/goakerberosprovider.c:989
 msgid "Enterprise Login (Kerberos)"
 msgstr "Kompanijos prisijungimas (Kerberos)"
 
@@ -242,17 +243,12 @@ msgstr "Nepavyko rasti įrašytų įgaliojimų pagrindui „%s“ raktinėje"
 
 #: ../src/goabackend/goakerberosprovider.c:650
 #, c-format
-#| msgid "Did not find password with username `%s' in credentials"
 msgid "Did not find password for principal `%s' in credentials"
 msgstr "Įgaliojimuose nerastas pagrindas „%s“"
 
 #: ../src/goabackend/goakerberosprovider.c:989
 msgid "New Enterprise Login (Kerberos)"
 msgstr "Naujas kompanijos prisijungimas (Kerberos)"
-
-#: ../src/goabackend/goakerberosprovider.c:989
-msgid "Enterpise Login (Kerberos)"
-msgstr "Kompanijos prisijungimas (Kerberos)"
 
 #: ../src/goabackend/goakerberosprovider.c:1029
 msgid "_Domain"
@@ -276,8 +272,8 @@ msgid "Remember this password"
 msgstr "Prisiminti šį slaptažodį"
 
 #: ../src/goabackend/goakerberosprovider.c:1420
-#| msgid "Error connecting to Microsoft Exchange server"
-msgid "Error connecting to enterperise identity server"
+#| msgid "Error connecting to enterperise identity server"
+msgid "Error connecting to enterprise identity server"
 msgstr "Klaida jungiantis prie kompanijos identitetų serverio"
 
 #: ../src/goabackend/goakerberosprovider.c:1486
@@ -377,7 +373,7 @@ msgstr "Įdėkite leksemą, gautą iš <a href=\"%s\">autorizacijos puslapio</a>
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Įgaliojimai neturi access_token arba access_token_secret"
 
-#: ../src/goabackend/goaprovider.c:547
+#: ../src/goabackend/goaprovider.c:550
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "%s nerealizuoja ensure_credentials_sync"
@@ -414,13 +410,11 @@ msgstr "Atnaujinti %s"
 
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:155
-#| msgid "Failed to delete credentials from the keyring: "
 msgid "Failed to delete credentials from the keyring"
 msgstr "Nepavyko ištrinti įgaliojimų iš raktinės"
 
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:203
-#| msgid "Failed to retrieve credentials from the keyring: "
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Nepavyko gauti įgaliojimų iš raktinės"
 
@@ -436,7 +430,6 @@ msgstr "GOA %s įgaliojimai identifikatoriui %s"
 
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:272
-#| msgid "Failed to store credentials from the keyring: "
 msgid "Failed to store credentials in the keyring"
 msgstr "Nepavyko įrašyti įgaliojimų į raktinę"
 
@@ -502,7 +495,6 @@ msgstr "Domeno administratoriaus prisijungimas"
 
 #: ../src/goaidentity/goaidentityservice.c:405
 #: ../src/goaidentity/goaidentityservice.c:597
-#| msgid "Did not find password with username `%s' in credentials"
 msgid "Could not find supported credentials"
 msgstr "Nepavyko rasti palaikomų įgaliojimų"
 
@@ -564,7 +556,8 @@ msgstr "Nepavyko įrašyti įgaliojimų į podėlį: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1424
 #, c-format
-msgid "Could not renew identitys: Not signed in"
+#| msgid "Could not renew identitys: Not signed in"
+msgid "Could not renew identity: Not signed in"
 msgstr "Nepavyko atnaujinti identitetų: neprisijungta"
 
 #: ../src/goaidentity/goakerberosidentity.c:1436
@@ -572,7 +565,6 @@ msgid "Could not renew identity: %k"
 msgstr "Nepavyko atnaujinti identiteto: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1453
-#| msgid "GOA %s credentials for identity %s"
 msgid "Could not get new credentials to renew identity %s: %k"
 msgstr "Nepavyko gauti naujų įgaliojimų jūsų identitetui %s atnaujinti : %k"
 
@@ -585,7 +577,6 @@ msgid "Could not find identity"
 msgstr "Nepavyko rasti identiteto"
 
 #: ../src/goaidentity/goakerberosidentitymanager.c:803
-#| msgid "GOA %s credentials for identity %s"
 msgid "Could not create credential cache for identity"
 msgstr "Nepavyko sukurti įgaliojimų podėlio identitetui"
 
