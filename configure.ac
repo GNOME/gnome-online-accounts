@@ -188,30 +188,6 @@ if test "$enable_owncloud" != "no"; then
   AC_DEFINE(GOA_OWNCLOUD_ENABLED, 1, [Enable ownCloud data provider])
 fi
 
-# Twitter
-AC_ARG_ENABLE([twitter], [AS_HELP_STRING([--enable-twitter], [Enable Twitter provider])], [], [enable_twitter=no])
-AC_ARG_WITH(twitter-consumer-key,
-            [AS_HELP_STRING([--with-twitter-consumer-key],
-                            [Twitter OAuth 1.0 consumer key])],
-                            [],
-                            [])
-AC_ARG_WITH(twitter-consumer-secret,
-            [AS_HELP_STRING([--with-twitter-consumer-secret],
-                            [Twitter OAuth 1.0 consumer secret])],
-                            [],
-                            [])
-if test "$with_twitter_consumer_key" = ""; then
-  with_twitter_consumer_key=not_set
-fi
-if test "$with_twitter_consumer_secret" = ""; then
-  with_twitter_consumer_secret=not_set
-fi
-AC_DEFINE_UNQUOTED(GOA_TWITTER_CONSUMER_KEY, ["$with_twitter_consumer_key"], [Twitter OAuth 1.0 consumer key])
-AC_DEFINE_UNQUOTED(GOA_TWITTER_CONSUMER_SECRET, ["$with_twitter_consumer_secret"], [Twitter OAuth 1.0 consumer secret])
-if test "$enable_twitter" != "no"; then
-  AC_DEFINE(GOA_TWITTER_ENABLED, 1, [Enable Twitter data provider])
-fi
-
 # Yahoo
 AC_ARG_ENABLE([yahoo], [AS_HELP_STRING([--enable-yahoo], [Enable Yahoo provider])], [], [enable_yahoo=no])
 AC_ARG_WITH(yahoo-consumer-key,
@@ -460,7 +436,6 @@ echo "
 	Microsoft Exchange provider:    ${enable_exchange}
 	ownCloud provider:              ${enable_owncloud}
 	Kerberos provider:              ${enable_kerberos}
-	Twitter provider:               ${enable_twitter} (OAuth 1.0, key:${with_twitter_consumer_key} secret:${with_twitter_consumer_secret})
 	Yahoo provider:                 ${enable_yahoo} (OAuth 1.0, key:${with_yahoo_consumer_key} secret:${with_yahoo_consumer_secret})
 	Facebook provider:              ${enable_facebook} (OAuth 2.0, id:${with_facebook_client_id})
 	Windows Live provider:          ${enable_windows_live} (OAuth 2.0, id:${with_windows_live_client_id})
