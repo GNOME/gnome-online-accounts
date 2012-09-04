@@ -32,7 +32,6 @@
 #include "goaimapsmtpprovider.h"
 #include "goaowncloudprovider.h"
 #include "goayahooprovider.h"
-#include "goatwitterprovider.h"
 #include "goaflickrprovider.h"
 #include "goawindowsliveprovider.h"
 #include "goatelepathyfactory.h"
@@ -799,9 +798,6 @@ ensure_builtins_loaded (void)
 #endif
 #ifdef GOA_YAHOO_ENABLED
       type = GOA_TYPE_YAHOO_PROVIDER;
-#endif
-#ifdef GOA_TWITTER_ENABLED
-      type = GOA_TYPE_TWITTER_PROVIDER;
 #endif
 #ifdef GOA_TELEPATHY_ENABLED
       type = GOA_TYPE_TELEPATHY_FACTORY;

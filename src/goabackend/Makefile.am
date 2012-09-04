@@ -73,7 +73,6 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goaimapsmtpprovider.h		goaimapsmtpprovider.c		\
 	goaowncloudprovider.h		goaowncloudprovider.c		\
 	goayahooprovider.h		goayahooprovider.c		\
-	goatwitterprovider.h		goatwitterprovider.c		\
 	goaflickrprovider.h		goaflickrprovider.c		\
 	goawindowsliveprovider.h	goawindowsliveprovider.c	\
 	goatelepathyfactory.h		goatelepathyfactory.c		\

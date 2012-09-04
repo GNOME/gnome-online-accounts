@@ -15,7 +15,7 @@ INCLUDES = 							\
 	$(WARN_CFLAGS)						\
 	$(NULL)
 
-noinst_PROGRAMS = list-providers list-accounts tweet add-pocket
+noinst_PROGRAMS = list-providers list-accounts add-pocket
 
 list_providers_SOURCES = list-providers.c
 list_providers_CFLAGS = $(GLIB_CFLAGS) $(GTK_CFLAGS)
@@ -24,10 +24,6 @@ list_providers_LDADD = $(GLIB_LIBS) $(GTK_LIBS) ../goabackend/libgoa-backend-1.0
 list_accounts_SOURCES = list-accounts.c
 list_accounts_CFLAGS = $(GLIB_CFLAGS)
 list_accounts_LDADD = $(GLIB_LIBS) ../goa/libgoa-1.0.la
-
-tweet_SOURCES = tweet.c
-tweet_CFLAGS = $(GLIB_CFLAGS) $(REST_CFLAGS)
-tweet_LDADD = $(GLIB_LIBS) $(REST_LIBS) ../goa/libgoa-1.0.la
 
 add_pocket_SOURCES = add-pocket.c
 add_pocket_CFLAGS = $(GLIB_CFLAGS) $(REST_CFLAGS)
