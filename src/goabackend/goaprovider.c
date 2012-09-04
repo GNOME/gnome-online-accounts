@@ -30,7 +30,6 @@
 #include "goaexchangeprovider.h"
 #include "goagoogleprovider.h"
 #include "goafacebookprovider.h"
-#include "goayahooprovider.h"
 #include "goawindowsliveprovider.h"
 
 #ifdef GOA_KERBEROS_ENABLED
@@ -631,9 +630,6 @@ ensure_ep_and_builtins (void)
 #endif
 #ifdef GOA_KERBEROS_ENABLED
       type = GOA_TYPE_KERBEROS_PROVIDER;
-#endif
-#ifdef GOA_YAHOO_ENABLED
-      type = GOA_TYPE_YAHOO_PROVIDER;
 #endif
 
       type = type; /* silence -Wunused-but-set-variable */

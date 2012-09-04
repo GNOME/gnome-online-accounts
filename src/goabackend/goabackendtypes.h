@@ -57,12 +57,6 @@ typedef struct _GoaGoogleProvider GoaGoogleProvider;
 struct _GoaFacebookProvider;
 typedef struct _GoaFacebookProvider GoaFacebookProvider;
 
-struct _GoaYahooProvider;
-typedef struct _GoaYahooProvider GoaYahooProvider;
-
-struct _GoaTwitterProvider;
-typedef struct _GoaTwitterProvider GoaTwitterProvider;
-
 struct _GoaEditableLabel;
 typedef struct _GoaEditableLabel GoaEditableLabel;
 
