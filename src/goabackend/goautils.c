@@ -264,7 +264,7 @@ goa_utils_store_credentials_for_id_sync (GoaProvider   *provider,
                                   goa_provider_get_provider_type (GOA_PROVIDER (provider)),
                                   goa_provider_get_credentials_generation (GOA_PROVIDER (provider)),
                                   id);
-  /* Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo' */
+  /* Translators: The %s is the type of the provider, e.g. 'google' or 'facebook' */
   password_description = g_strdup_printf (_("GOA %s credentials for identity %s"),
                                           goa_provider_get_provider_type (GOA_PROVIDER (provider)),
                                           id);

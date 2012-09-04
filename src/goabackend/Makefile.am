@@ -72,7 +72,6 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goafacebookprovider.h		goafacebookprovider.c		\
 	goaimapsmtpprovider.h		goaimapsmtpprovider.c		\
 	goaowncloudprovider.h		goaowncloudprovider.c		\
-	goayahooprovider.h		goayahooprovider.c		\
 	goaflickrprovider.h		goaflickrprovider.c		\
 	goawindowsliveprovider.h	goawindowsliveprovider.c	\
 	goautils.h			goautils.c			\
