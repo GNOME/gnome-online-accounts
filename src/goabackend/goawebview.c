@@ -111,6 +111,20 @@ web_view_is_loading (GoaWebView *self)
 }
 
 static void
+web_view_log_printer (SoupLogger         *logger,
+                      SoupLoggerLogLevel  level,
+                      gchar               direction,
+                      const gchar        *data,
+                      gpointer            user_data)
+{
+  gchar *message;
+
+  message = g_strdup_printf ("%c %s", direction, data);
+  g_log_default_handler ("goa", G_LOG_LEVEL_DEBUG, message, NULL);
+  g_free (message);
+}
+
+static void
 web_view_notify_load_status_cb (GObject *object, GParamSpec *pspec, gpointer user_data)
 {
   GoaWebView *self = GOA_WEB_VIEW (user_data);
@@ -214,6 +228,7 @@ goa_web_view_init (GoaWebView *self)
   GoaWebViewPrivate *priv;
   GtkWidget *scrolled_window;
   SoupCookieJar *cookie_jar;
+  SoupLogger *logger;
   SoupSession *session;
 
   self->priv = GOA_WEB_VIEW_GET_PRIVATE (self);
@@ -228,6 +243,11 @@ goa_web_view_init (GoaWebView *self)
   cookie_jar = soup_cookie_jar_new ();
   soup_session_add_feature (session, SOUP_SESSION_FEATURE (cookie_jar));
   g_object_unref (cookie_jar);
+
+  logger = soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
+  soup_logger_set_printer (logger, web_view_log_printer, NULL, NULL);
+  soup_session_add_feature (session, SOUP_SESSION_FEATURE (logger));
+  g_object_unref (logger);
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (self)),
                                GTK_STYLE_CLASS_OSD);
