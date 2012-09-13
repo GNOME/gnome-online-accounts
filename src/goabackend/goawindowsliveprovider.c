@@ -85,21 +85,21 @@ get_provider_name (GoaProvider *_provider,
 static const gchar *
 get_authorization_uri (GoaOAuth2Provider *provider)
 {
-  return "https://oauth.live.com/authorize";
+  return "https://login.live.com/oauth20_authorize.srf";
 }
 
 
 static const gchar *
 get_token_uri (GoaOAuth2Provider *provider)
 {
-  return "https://oauth.live.com/token";
+  return "https://login.live.com/oauth20_token.srf";
 }
 
 
 static const gchar *
 get_redirect_uri (GoaOAuth2Provider *provider)
 {
-  return "https://oauth.live.com/desktop";
+  return "https://login.live.com/oauth20_desktop.srf";
 }
 
 static const gchar *
@@ -132,7 +132,7 @@ get_client_secret (GoaOAuth2Provider *provider)
 static const gchar *
 get_authentication_cookie (GoaOAuth2Provider *provider)
 {
-  return "MSNPPAuth";
+  return "PPAuth";
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -246,7 +246,7 @@ is_deny_node (GoaOAuth2Provider *provider, WebKitDOMNode *node)
 
   input_element = WEBKIT_DOM_HTML_INPUT_ELEMENT (node);
   name = webkit_dom_html_input_element_get_name (input_element);
-  if (g_strcmp0 (name, "submitNo") != 0)
+  if (g_strcmp0 (name, "ucdeny") != 0)
     goto out;
 
   ret = TRUE;
