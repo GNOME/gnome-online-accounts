@@ -444,12 +444,6 @@ build_object (GoaProvider         *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-get_use_external_browser (GoaOAuth2Provider *provider)
-{
-  return FALSE;
-}
-
-static gboolean
 get_use_mobile_browser (GoaOAuth2Provider *provider)
 {
   return TRUE;
@@ -542,7 +536,6 @@ goa_google_provider_class_init (GoaGoogleProviderClass *klass)
   oauth2_class->get_scope                 = get_scope;
   oauth2_class->is_deny_node              = is_deny_node;
   oauth2_class->get_token_uri             = get_token_uri;
-  oauth2_class->get_use_external_browser  = get_use_external_browser;
   oauth2_class->get_use_mobile_browser    = get_use_mobile_browser;
   oauth2_class->add_account_key_values    = add_account_key_values;
 }
