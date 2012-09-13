@@ -489,7 +489,8 @@ get_tokens_sync (GoaOAuth2Provider  *provider,
   proxy = rest_proxy_new (goa_oauth2_provider_get_token_uri (provider), FALSE);
   call = rest_proxy_new_call (proxy);
 
-  rest_proxy_call_set_method (call, "GET");
+  rest_proxy_call_set_method (call, "POST");
+  rest_proxy_call_add_header (call, "Content-Type", "application/x-www-form-urlencoded");
   rest_proxy_call_add_param (call, "client_id", goa_oauth2_provider_get_client_id (provider));
   rest_proxy_call_add_param (call, "redirect_uri", goa_oauth2_provider_get_redirect_uri (provider));
 
