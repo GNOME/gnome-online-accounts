@@ -103,14 +103,18 @@ AC_ARG_WITH(google-consumer-secret,
                             [Google OAuth 1.0 consumer secret])],
                             [],
                             [])
-if test "$with_google_consumer_key" = ""; then
-  with_google_consumer_key=anonymous
+if test "$with_google_client_id" = ""; then
+  with_google_client_id=923794261470.apps.googleusercontent.com
 fi
-if test "$with_google_consumer_secret" = ""; then
-  with_google_consumer_secret=anonymous
+if test "$with_google_client_secret" = ""; then
+  with_google_client_secret=SlVBAcxamM0TBPlvX2c1zbEY
 fi
-AC_DEFINE_UNQUOTED(GOA_GOOGLE_CONSUMER_KEY, ["$with_google_consumer_key"], [Google OAuth 1.0 consumer key])
-AC_DEFINE_UNQUOTED(GOA_GOOGLE_CONSUMER_SECRET, ["$with_google_consumer_secret"], [Google OAuth 1.0 consumer secret])
+AC_DEFINE_UNQUOTED(GOA_GOOGLE_CLIENT_ID,
+                   ["$with_google_client_id"],
+                   [Google OAuth 2.0 client id])
+AC_DEFINE_UNQUOTED(GOA_GOOGLE_CLIENT_SECRET,
+                   ["$with_google_client_secret"],
+                   [Google OAuth 2.0 client secret])
 if test "$enable_google" != "no"; then
   AC_DEFINE(GOA_GOOGLE_ENABLED, 1, [Enable Google data provider])
 fi
@@ -340,7 +344,7 @@ echo "
 	cppflags:                       ${CPPFLAGS}
 	introspection:		        ${found_introspection}
 
-	Google provider:                ${enable_google} (OAuth 1.0, key:${with_google_consumer_key} secret:${with_google_consumer_secret})
+	Google provider:                ${enable_google} (OAuth 2.0, id:${with_google_client_id} secret:${with_google_client_secret})
 	Microsoft Exchange provider:    ${enable_exchange}
 	Kerberos provider:              ${enable_kerberos}
 	Twitter provider:               ${enable_twitter} (OAuth 1.0, key:${with_twitter_consumer_key} secret:${with_twitter_consumer_secret})

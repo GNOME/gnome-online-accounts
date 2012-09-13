@@ -18,6 +18,7 @@
  * Boston, MA 02111-1307, USA.
  *
  * Author: David Zeuthen <davidz@redhat.com>
+ *         Debarshi Ray <debarshir@gnome.org>
  */
 
 #include "config.h"
@@ -27,7 +28,7 @@
 #include <json-glib/json-glib.h>
 
 #include "goaprovider.h"
-#include "goaoauthprovider.h"
+#include "goaoauth2provider.h"
 #include "goagoogleprovider.h"
 
 /**
@@ -39,14 +40,14 @@
 struct _GoaGoogleProvider
 {
   /*< private >*/
-  GoaOAuthProvider parent_instance;
+  GoaOAuth2Provider parent_instance;
 };
 
 typedef struct _GoaGoogleProviderClass GoaGoogleProviderClass;
 
 struct _GoaGoogleProviderClass
 {
-  GoaOAuthProviderClass parent_class;
+  GoaOAuth2ProviderClass parent_class;
 };
 
 /**
@@ -57,7 +58,7 @@ struct _GoaGoogleProviderClass
  * #GoaGoogleProvider is used for handling Google accounts.
  */
 
-G_DEFINE_TYPE_WITH_CODE (GoaGoogleProvider, goa_google_provider, GOA_TYPE_OAUTH_PROVIDER,
+G_DEFINE_TYPE_WITH_CODE (GoaGoogleProvider, goa_google_provider, GOA_TYPE_OAUTH2_PROVIDER,
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
 							 g_define_type_id,
 							 "google",
@@ -79,89 +80,67 @@ get_provider_name (GoaProvider *_provider,
 }
 
 static const gchar *
-get_consumer_key (GoaOAuthProvider *provider)
+get_authorization_uri (GoaOAuth2Provider *provider)
 {
-  return GOA_GOOGLE_CONSUMER_KEY;
+  return "https://accounts.google.com/o/oauth2/auth";
 }
 
 static const gchar *
-get_consumer_secret (GoaOAuthProvider *provider)
+get_token_uri (GoaOAuth2Provider *provider)
 {
-  return GOA_GOOGLE_CONSUMER_SECRET;
+  return "https://accounts.google.com/o/oauth2/token";
 }
 
 static const gchar *
-get_request_uri (GoaOAuthProvider *provider)
+get_redirect_uri (GoaOAuth2Provider *provider)
 {
-  return "https://www.google.com/accounts/OAuthGetRequestToken";
+  return "http://localhost";
 }
 
-static gchar *
-build_authorization_uri (GoaOAuthProvider  *provider,
-                         const gchar       *authorization_uri,
-                         const gchar       *escaped_oauth_token)
+static const gchar *
+get_scope (GoaOAuth2Provider *provider)
 {
-  return g_strdup_printf ("%s"
-                          "?oauth_token=%s&btmpl=mobile",
-                          authorization_uri,
-                          escaped_oauth_token);
-}
+  return /* Read-only access to the user's email address */
+         "https://www.googleapis.com/auth/userinfo.email "
 
-static gchar **
-get_request_uri_params (GoaOAuthProvider *provider)
-{
-  GPtrArray *p;
-  p = g_ptr_array_new ();
-  g_ptr_array_add (p, g_strdup ("xoauth_displayname"));
-  g_ptr_array_add (p, g_strdup ("GNOME"));
+         /* Google Calendar API */
+         "https://www.googleapis.com/auth/calendar "
 
-  g_ptr_array_add (p, g_strdup ("scope"));
-  g_ptr_array_add (p, g_strdup (
-    /* Display email address: cf. https://sites.google.com/site/oauthgoog/Home/emaildisplayscope */
-    "https://www.googleapis.com/auth/userinfo#email "
-    /* IMAP, SMTP access: http://code.google.com/apis/gmail/oauth/protocol.html */
-    "https://mail.google.com/ "
-    /* Calendar data API: http://code.google.com/apis/calendar/data/2.0/developers_guide.html */
-    "https://www.google.com/calendar/feeds "
-    /* Contacts API: http://code.google.com/apis/contacts/docs/3.0/developers_guide.html */
-    "https://www.google.com/m8/feeds/ "
-    /* Documents API: http://code.google.com/apis/documents/docs/3.0/developers_guide_protocol.html */
-    "https://docs.google.com/feeds/ "
-    "https://spreadsheets.google.com/feeds/ "
-    "https://docs.googleusercontent.com/"));
-  g_ptr_array_add (p, NULL);
+         /* Google Contacts API */
+         "https://www.google.com/m8/feeds/ "
 
-  /* NOTE: Increase the number returned in get_crededentials_generation if adding scopes */
+         /* Google Documents List Data API */
+         "https://docs.google.com/feeds/ "
+         "https://docs.googleusercontent.com/ "
+         "https://spreadsheets.google.com/feeds/ "
 
-  return (gchar **) g_ptr_array_free (p, FALSE);
+         /* GMail IMAP and SMTP access */
+         "https://mail.google.com/ "
+
+         /* Google Talk */
+         "https://www.googleapis.com/auth/googletalk";
 }
 
 static guint
 get_credentials_generation (GoaProvider *provider)
 {
-  return 2;
+  return 3;
 }
 
 static const gchar *
-get_authorization_uri (GoaOAuthProvider *provider)
+get_client_id (GoaOAuth2Provider *provider)
 {
-  return "https://www.google.com/accounts/OAuthAuthorizeToken";
+  return GOA_GOOGLE_CLIENT_ID;
 }
 
 static const gchar *
-get_token_uri (GoaOAuthProvider *provider)
+get_client_secret (GoaOAuth2Provider *provider)
 {
-  return "https://www.google.com/accounts/OAuthGetAccessToken";
+  return GOA_GOOGLE_CLIENT_SECRET;
 }
 
 static const gchar *
-get_callback_uri (GoaOAuthProvider *provider)
-{
-  return "https://www.gnome.org/goa-1.0/oauth";
-}
-
-static const gchar *
-get_authentication_cookie (GoaOAuthProvider *provider)
+get_authentication_cookie (GoaOAuth2Provider *provider)
 {
   return "LSID";
 }
@@ -169,18 +148,16 @@ get_authentication_cookie (GoaOAuthProvider *provider)
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
-get_identity_sync (GoaOAuthProvider  *provider,
-                   const gchar       *access_token,
-                   const gchar       *access_token_secret,
-                   gchar            **out_presentation_identity,
-                   GCancellable      *cancellable,
-                   GError           **error)
+get_identity_sync (GoaOAuth2Provider  *provider,
+                   const gchar        *access_token,
+                   gchar             **out_presentation_identity,
+                   GCancellable       *cancellable,
+                   GError            **error)
 {
   RestProxy *proxy;
   RestProxyCall *call;
   JsonParser *parser;
   JsonObject *json_object;
-  JsonObject *json_data_object;
   gchar *ret;
   gchar *email;
 
@@ -192,15 +169,10 @@ get_identity_sync (GoaOAuthProvider  *provider,
 
   /* TODO: cancellable */
 
-  proxy = oauth_proxy_new_with_token (goa_oauth_provider_get_consumer_key (provider),
-                                      goa_oauth_provider_get_consumer_secret (provider),
-                                      access_token,
-                                      access_token_secret,
-                                      "https://www.googleapis.com/userinfo/email",
-                                      FALSE);
+  proxy = rest_proxy_new ("https://www.googleapis.com/oauth2/v2/userinfo", FALSE);
   call = rest_proxy_new_call (proxy);
   rest_proxy_call_set_method (call, "GET");
-  rest_proxy_call_add_param (call, "alt", "json");
+  rest_proxy_call_add_param (call, "access_token", access_token);
 
   if (!rest_proxy_call_sync (call, error))
     goto out;
@@ -226,17 +198,7 @@ get_identity_sync (GoaOAuthProvider  *provider,
     }
 
   json_object = json_node_get_object (json_parser_get_root (parser));
-  json_data_object = json_object_get_object_member (json_object, "data");
-  if (json_data_object == NULL)
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   _("Didn't find data member in JSON data"));
-      goto out;
-    }
-
-  email = g_strdup (json_object_get_string_member (json_data_object, "email"));
+  email = g_strdup (json_object_get_string_member (json_object, "email"));
   if (email == NULL)
     {
       g_set_error (error,
@@ -264,48 +226,28 @@ get_identity_sync (GoaOAuthProvider  *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-is_deny_node (GoaOAuthProvider *provider, WebKitDOMNode *node)
+is_deny_node (GoaOAuth2Provider *provider, WebKitDOMNode *node)
 {
-  WebKitDOMHTMLInputElement *input_element;
+  WebKitDOMHTMLElement *element;
   gboolean ret;
-  gchar *name;
+  gchar *id;
 
-  name = NULL;
+  id = NULL;
   ret = FALSE;
 
-  if (!WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (node))
+  if (!WEBKIT_DOM_IS_HTML_BUTTON_ELEMENT (node))
     goto out;
 
-  input_element = WEBKIT_DOM_HTML_INPUT_ELEMENT (node);
-  name = webkit_dom_html_input_element_get_name (input_element);
-  if (g_strcmp0 (name, "deny") != 0)
+  element = WEBKIT_DOM_HTML_ELEMENT (node);
+  id = webkit_dom_html_element_get_id (element);
+  if (g_strcmp0 (id, "submit_deny_access") != 0)
     goto out;
 
   ret = TRUE;
 
  out:
-  g_free (name);
+  g_free (id);
   return ret;
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-static gchar *
-parse_request_token_error (GoaOAuthProvider *provider, RestProxyCall *call)
-{
-  const gchar *payload;
-  gchar *msg;
-  guint status;
-
-  msg = NULL;
-
-  payload = rest_proxy_call_get_payload (call);
-  status = rest_proxy_call_get_status_code (call);
-
-  if (status == 400 && g_str_has_prefix (payload, "Timestamp is too far from current time"))
-    msg = g_strdup (_("Your system time is invalid. Check your date and time settings."));
-
-  return msg;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -502,13 +444,13 @@ build_object (GoaProvider         *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-get_use_external_browser (GoaOAuthProvider *provider)
+get_use_external_browser (GoaOAuth2Provider *provider)
 {
   return FALSE;
 }
 
 static gboolean
-get_use_mobile_browser (GoaOAuthProvider *provider)
+get_use_mobile_browser (GoaOAuth2Provider *provider)
 {
   return TRUE;
 }
@@ -560,7 +502,7 @@ show_account (GoaProvider         *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-add_account_key_values (GoaOAuthProvider  *provider,
+add_account_key_values (GoaOAuth2Provider  *provider,
                         GVariantBuilder   *builder)
 {
   g_variant_builder_add (builder, "{ss}", "MailEnabled", "true");
@@ -581,7 +523,7 @@ static void
 goa_google_provider_class_init (GoaGoogleProviderClass *klass)
 {
   GoaProviderClass *provider_class;
-  GoaOAuthProviderClass *oauth_class;
+  GoaOAuth2ProviderClass *oauth2_class;
 
   provider_class = GOA_PROVIDER_CLASS (klass);
   provider_class->get_provider_type          = get_provider_type;
@@ -590,22 +532,19 @@ goa_google_provider_class_init (GoaGoogleProviderClass *klass)
   provider_class->show_account               = show_account;
   provider_class->get_credentials_generation = get_credentials_generation;
 
-  oauth_class = GOA_OAUTH_PROVIDER_CLASS (klass);
-  oauth_class->get_identity_sync        = get_identity_sync;
-  oauth_class->is_deny_node             = is_deny_node;
-  oauth_class->get_consumer_key         = get_consumer_key;
-  oauth_class->get_consumer_secret      = get_consumer_secret;
-  oauth_class->get_request_uri          = get_request_uri;
-  oauth_class->get_request_uri_params   = get_request_uri_params;
-  oauth_class->get_authorization_uri    = get_authorization_uri;
-  oauth_class->get_token_uri            = get_token_uri;
-  oauth_class->get_callback_uri         = get_callback_uri;
-  oauth_class->get_authentication_cookie = get_authentication_cookie;
-  oauth_class->build_authorization_uri  = build_authorization_uri;
-  oauth_class->get_use_external_browser = get_use_external_browser;
-  oauth_class->get_use_mobile_browser   = get_use_mobile_browser;
-  oauth_class->add_account_key_values   = add_account_key_values;
-  oauth_class->parse_request_token_error = parse_request_token_error;
+  oauth2_class = GOA_OAUTH2_PROVIDER_CLASS (klass);
+  oauth2_class->get_authentication_cookie = get_authentication_cookie;
+  oauth2_class->get_authorization_uri     = get_authorization_uri;
+  oauth2_class->get_client_id             = get_client_id;
+  oauth2_class->get_client_secret         = get_client_secret;
+  oauth2_class->get_identity_sync         = get_identity_sync;
+  oauth2_class->get_redirect_uri          = get_redirect_uri;
+  oauth2_class->get_scope                 = get_scope;
+  oauth2_class->is_deny_node              = is_deny_node;
+  oauth2_class->get_token_uri             = get_token_uri;
+  oauth2_class->get_use_external_browser  = get_use_external_browser;
+  oauth2_class->get_use_mobile_browser    = get_use_mobile_browser;
+  oauth2_class->add_account_key_values    = add_account_key_values;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
