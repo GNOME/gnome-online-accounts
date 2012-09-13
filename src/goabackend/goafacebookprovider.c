@@ -30,7 +30,6 @@
 #include "goaprovider.h"
 #include "goaoauth2provider.h"
 #include "goafacebookprovider.h"
-#include "goalogging.h"
 
 /**
  * GoaFacebookProvider:
