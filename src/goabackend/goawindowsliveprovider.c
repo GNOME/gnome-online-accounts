@@ -348,12 +348,6 @@ build_object (GoaProvider         *provider,
   return ret;
 }
 
-static gboolean
-get_use_external_browser (GoaOAuth2Provider *provider)
-{
-  return FALSE;
-}
-
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
@@ -423,6 +417,5 @@ goa_windows_live_provider_class_init (GoaWindowsLiveProviderClass *klass)
   oauth2_class->get_authentication_cookie = get_authentication_cookie;
   oauth2_class->get_identity_sync        = get_identity_sync;
   oauth2_class->is_deny_node             = is_deny_node;
-  oauth2_class->get_use_external_browser = get_use_external_browser;
   oauth2_class->add_account_key_values   = add_account_key_values;
 }
