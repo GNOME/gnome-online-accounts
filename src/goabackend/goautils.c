@@ -95,26 +95,18 @@ goa_utils_check_duplicate (GoaClient              *client,
   return ret;
 }
 
-GtkWidget *
-goa_utils_create_add_refresh_label (GoaProvider *provider, gboolean add_account)
+void
+goa_utils_set_dialog_title (GoaProvider *provider, GtkDialog *dialog, gboolean add_account)
 {
-  GtkWidget *label;
-  gchar *markup;
   gchar *provider_name;
-  gchar *template;
+  gchar *title;
 
-  label = gtk_label_new (NULL);
-
+  provider_name = goa_provider_get_provider_name (GOA_PROVIDER (provider), NULL);
   /* Translators: the %s is the name of the provider. eg., Google. */
-  template = g_strconcat ("<b>", (add_account) ? _("Add %s") : _("Refresh %s"), "</b>", NULL);
-  provider_name = goa_provider_get_provider_name (provider, NULL);
-  markup = g_strdup_printf (template, provider_name);
-  gtk_label_set_markup (GTK_LABEL (label), markup);
-  g_free (markup);
+  title = g_strdup_printf (_("%s account"), provider_name);
+  gtk_window_set_title (GTK_WINDOW (dialog), title);
+  g_free (title);
   g_free (provider_name);
-  g_free (template);
-
-  return label;
 }
 
 gboolean

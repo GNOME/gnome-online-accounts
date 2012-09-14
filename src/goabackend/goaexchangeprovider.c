@@ -436,15 +436,19 @@ on_email_address_or_password_changed (GtkEditable *editable, gpointer user_data)
 }
 
 static void
-create_account_details_ui (GtkBox *vbox, gboolean new_account, AddAccountData *data)
+create_account_details_ui (GoaProvider    *provider,
+                           GtkDialog      *dialog,
+                           GtkBox         *vbox,
+                           gboolean        new_account,
+                           AddAccountData *data)
 {
   GtkWidget *header_grid;
   GtkWidget *grid1;
   GtkWidget *grid2;
   GtkWidget *hbox;
-  GtkWidget *label;
-  gchar *markup;
   gint width;
+
+  goa_utils_set_dialog_title (provider, dialog, new_account);
 
   data->cluebar = gtk_info_bar_new ();
   gtk_info_bar_set_message_type (GTK_INFO_BAR (data->cluebar), GTK_MESSAGE_ERROR);
@@ -459,17 +463,6 @@ create_account_details_ui (GtkBox *vbox, gboolean new_account, AddAccountData *d
   header_grid = gtk_grid_new ();
   gtk_orientable_set_orientation (GTK_ORIENTABLE (header_grid), GTK_ORIENTATION_HORIZONTAL);
   gtk_box_pack_start (vbox, header_grid, FALSE, FALSE, 0);
-
-  label = gtk_label_new (NULL);
-  gtk_widget_set_hexpand (label, TRUE);
-  markup = g_strconcat ("<b>",
-                        (new_account) ? _("New Microsoft Exchange Account") : _("Microsoft Exchange Account"),
-                        "</b>",
-                        NULL);
-  gtk_label_set_markup (GTK_LABEL (label), markup);
-  g_free (markup);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_container_add (GTK_CONTAINER (header_grid), label);
 
   data->spinner = gtk_spinner_new ();
   gtk_widget_set_no_show_all (data->spinner, TRUE);
@@ -585,7 +578,7 @@ add_account (GoaProvider    *provider,
   data.dialog = dialog;
   data.error = NULL;
 
-  create_account_details_ui (vbox, TRUE, &data);
+  create_account_details_ui (provider, dialog, vbox, TRUE, &data);
   gtk_widget_show_all (GTK_WIDGET (vbox));
 
   ews_client = goa_ews_client_new ();
@@ -748,7 +741,7 @@ refresh_account (GoaProvider    *provider,
   data.dialog = GTK_DIALOG (dialog);
   data.error = NULL;
 
-  create_account_details_ui (GTK_BOX (vbox), FALSE, &data);
+  create_account_details_ui (provider, GTK_DIALOG (dialog), GTK_BOX (vbox), FALSE, &data);
 
   account = goa_object_peek_account (object);
   email_address = goa_account_get_presentation_identity (account);

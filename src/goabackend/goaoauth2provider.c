@@ -833,7 +833,6 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
   gboolean ret;
   gchar *url;
   IdentifyData data;
-  GtkWidget *label;
   gchar *escaped_redirect_uri;
   gchar *escaped_client_id;
   gchar *escaped_scope;
@@ -865,10 +864,7 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
                                                      escaped_client_id,
                                                      escaped_scope);
 
-  label = goa_utils_create_add_refresh_label (GOA_PROVIDER (provider), add_account);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
-  gtk_widget_show (label);
+  goa_utils_set_dialog_title (GOA_PROVIDER (provider), dialog, add_account);
 
   if (goa_oauth2_provider_get_use_external_browser (provider))
     {
