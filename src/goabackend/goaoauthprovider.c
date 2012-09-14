@@ -766,6 +766,7 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
   RestProxy *proxy;
   RestProxyCall *call;
   GHashTable *f;
+  GtkWidget *grid;
   GtkWidget *spinner;
   gboolean use_external_browser;
   gchar **request_params;
@@ -817,14 +818,25 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
 
   goa_utils_set_dialog_title (GOA_PROVIDER (provider), dialog, add_account);
 
+  grid = gtk_grid_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (grid), 5);
+  gtk_widget_set_margin_bottom (grid, 6);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), GTK_ORIENTATION_VERTICAL);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 12);
+  gtk_container_add (GTK_CONTAINER (vbox), grid);
+
   spinner = gtk_spinner_new ();
+  gtk_widget_set_hexpand (spinner, TRUE);
+  gtk_widget_set_halign (spinner, GTK_ALIGN_CENTER);
+  gtk_widget_set_vexpand (spinner, TRUE);
+  gtk_widget_set_valign (spinner, GTK_ALIGN_CENTER);
   gtk_widget_set_size_request (GTK_WIDGET (spinner), 24, 24);
   gtk_spinner_start (GTK_SPINNER (spinner));
-  gtk_box_pack_start (vbox, spinner, TRUE, FALSE, 0);
-  gtk_widget_show (spinner);
+  gtk_container_add (GTK_CONTAINER (grid), spinner);
+  gtk_widget_show_all (GTK_WIDGET (vbox));
 
   g_main_loop_run (data.loop);
-  gtk_container_remove (GTK_CONTAINER (vbox), spinner);
+  gtk_container_remove (GTK_CONTAINER (grid), spinner);
 
   if (rest_proxy_call_get_status_code (call) != 200)
     {
@@ -874,10 +886,10 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label), markup);
       g_free (markup);
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
+      gtk_container_add (GTK_CONTAINER (grid), label);
       entry = gtk_entry_new ();
       gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-      gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, TRUE, 0);
+      gtk_container_add (GTK_CONTAINER (grid), entry);
       gtk_widget_grab_focus (entry);
       gtk_widget_show_all (GTK_WIDGET (vbox));
 
@@ -900,6 +912,8 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
       GtkWidget *embed;
 
       web_view = goa_web_view_new ();
+      gtk_widget_set_hexpand (web_view, TRUE);
+      gtk_widget_set_vexpand (web_view, TRUE);
       embed = goa_web_view_get_view (GOA_WEB_VIEW (web_view));
 
       if (goa_oauth_provider_get_use_mobile_browser (provider))
@@ -915,10 +929,12 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
                         G_CALLBACK (on_web_view_navigation_policy_decision_requested),
                         &data);
 
-      gtk_container_add (GTK_CONTAINER (vbox), web_view);
-      gtk_widget_show_all (web_view);
+      gtk_container_add (GTK_CONTAINER (grid), web_view);
     }
+
+  gtk_widget_show_all (GTK_WIDGET (vbox));
   gtk_dialog_run (GTK_DIALOG (dialog));
+
   if (data.oauth_verifier == NULL)
     {
       if (data.error == NULL)

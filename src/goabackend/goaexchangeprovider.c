@@ -442,7 +442,7 @@ create_account_details_ui (GoaProvider    *provider,
                            gboolean        new_account,
                            AddAccountData *data)
 {
-  GtkWidget *header_grid;
+  GtkWidget *grid0;
   GtkWidget *grid1;
   GtkWidget *grid2;
   GtkWidget *hbox;
@@ -450,23 +450,27 @@ create_account_details_ui (GoaProvider    *provider,
 
   goa_utils_set_dialog_title (provider, dialog, new_account);
 
+  grid0 = gtk_grid_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (grid0), 5);
+  gtk_widget_set_margin_bottom (grid0, 6);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid0), GTK_ORIENTATION_VERTICAL);
+  gtk_grid_set_row_spacing (GTK_GRID (grid0), 12);
+  gtk_container_add (GTK_CONTAINER (vbox), grid0);
+
   data->cluebar = gtk_info_bar_new ();
   gtk_info_bar_set_message_type (GTK_INFO_BAR (data->cluebar), GTK_MESSAGE_ERROR);
+  gtk_widget_set_hexpand (data->cluebar, TRUE);
   gtk_widget_set_no_show_all (data->cluebar, TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox), data->cluebar, FALSE, FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (grid0), data->cluebar);
 
   data->cluebar_label = gtk_label_new ("");
   gtk_label_set_line_wrap (GTK_LABEL (data->cluebar_label), TRUE);
   gtk_container_add (GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (data->cluebar))),
                      data->cluebar_label);
 
-  header_grid = gtk_grid_new ();
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (header_grid), GTK_ORIENTATION_HORIZONTAL);
-  gtk_box_pack_start (vbox, header_grid, FALSE, FALSE, 0);
-
   data->spinner = gtk_spinner_new ();
   gtk_widget_set_no_show_all (data->spinner, TRUE);
-  gtk_container_add (GTK_CONTAINER (header_grid), data->spinner);
+  gtk_container_add (GTK_CONTAINER (grid0), data->spinner);
 
   grid1 = gtk_grid_new ();
   gtk_orientable_set_orientation (GTK_ORIENTABLE (grid1), GTK_ORIENTATION_VERTICAL);
@@ -480,7 +484,7 @@ create_account_details_ui (GoaProvider    *provider,
   gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
   gtk_box_pack_start (GTK_BOX (hbox), grid1, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (hbox), grid2, TRUE, TRUE, 0);
-  gtk_box_pack_start (vbox, hbox, FALSE, FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (grid0), hbox);
 
   add_entry (grid1, grid2, _("_E-mail"), &data->email_address);
   add_entry (grid1, grid2, _("_Password"), &data->password);
@@ -489,7 +493,7 @@ create_account_details_ui (GoaProvider    *provider,
       data->expander = gtk_expander_new_with_mnemonic (_("_Custom"));
       gtk_expander_set_expanded (GTK_EXPANDER (data->expander), FALSE);
       gtk_expander_set_resize_toplevel (GTK_EXPANDER (data->expander), TRUE);
-      gtk_box_pack_start (vbox, data->expander, FALSE, FALSE, 0);
+      gtk_container_add (GTK_CONTAINER (grid0), data->expander);
 
       grid1 = gtk_grid_new ();
       gtk_orientable_set_orientation (GTK_ORIENTABLE (grid1), GTK_ORIENTATION_VERTICAL);
