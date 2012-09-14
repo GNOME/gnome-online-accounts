@@ -76,6 +76,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goafacebookprovider.h		goafacebookprovider.c		\
 	goawindowsliveprovider.h	goawindowsliveprovider.c	\
 	goautils.h			goautils.c			\
+	goaspinnerbutton.h		goaspinnerbutton.c		\
 	goawebview.h			goawebview.c			\
 	nautilus-floating-bar.h		nautilus-floating-bar.c		\
 	$(top_builddir)/src/goaidentity/org.gnome.Identity.c		\

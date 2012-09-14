@@ -29,6 +29,7 @@
 #include "goaprovider.h"
 #include "goakerberosprovider.h"
 #include "goaeditablelabel.h"
+#include "goaspinnerbutton.h"
 #include "goautils.h"
 #include "goaidentity.h"
 
@@ -90,7 +91,7 @@ typedef struct
 
   GtkWidget *cluebar;
   GtkWidget *cluebar_label;
-  GtkWidget *spinner;
+  GtkWidget *spinner_button;
 
   GtkWidget *username;
   GtkWidget *realm_entry;
@@ -987,10 +988,6 @@ create_account_details_ui (GoaKerberosProvider *self,
   gtk_grid_set_row_spacing (GTK_GRID (grid0), 12);
   gtk_container_add (GTK_CONTAINER (vbox), grid0);
 
-  request->spinner = gtk_spinner_new ();
-  gtk_widget_set_no_show_all (request->spinner, TRUE);
-  gtk_container_add (GTK_CONTAINER (grid0), request->spinner);
-
   request->cluebar = gtk_info_bar_new ();
   gtk_info_bar_set_message_type (GTK_INFO_BAR (request->cluebar), GTK_MESSAGE_ERROR);
   gtk_widget_set_hexpand (request->cluebar, TRUE);
@@ -1036,7 +1033,8 @@ create_account_details_ui (GoaKerberosProvider *self,
 
   gtk_widget_grab_focus (request->realm_combo_box);
 
-  gtk_dialog_add_button (request->dialog, GTK_STOCK_CONNECT, GTK_RESPONSE_OK);
+  request->spinner_button = goa_spinner_button_new_from_stock (GTK_STOCK_CONNECT);
+  gtk_dialog_add_action_widget (request->dialog, request->spinner_button, GTK_RESPONSE_OK);
   gtk_dialog_set_default_response (request->dialog, GTK_RESPONSE_OK);
   gtk_dialog_set_response_sensitive (request->dialog, GTK_RESPONSE_OK, TRUE);
 
@@ -1381,7 +1379,10 @@ start_over:
                                 NULL, /* GCancellable* */
                                 (GAsyncReadyCallback) add_account_cb,
                                 &request);
+
+  goa_spinner_button_start (GOA_SPINNER_BUTTON (request.spinner_button));
   g_main_loop_run (request.loop);
+  goa_spinner_button_stop (GOA_SPINNER_BUTTON (request.spinner_button));
   if (request.error != NULL)
     goto out;
 
@@ -1389,18 +1390,16 @@ start_over:
                                                          request.account_object_path));
   account = goa_object_peek_account (object);
 
-  gtk_spinner_start (GTK_SPINNER (request.spinner));
-  gtk_widget_show (request.spinner);
-
   /* After the account is created, try to sign it in
    */
   perform_initial_sign_in (self, object, principal, &request);
 
+  goa_spinner_button_start (GOA_SPINNER_BUTTON (request.spinner_button));
   g_main_loop_run (request.loop);
+  goa_spinner_button_stop (GOA_SPINNER_BUTTON (request.spinner_button));
 
   if (request.error != NULL)
     {
-      GtkWidget *button;
       gchar *markup;
 
       translate_error (&request.error);
@@ -1415,8 +1414,7 @@ start_over:
           gtk_label_set_markup (GTK_LABEL (request.cluebar_label), markup);
           g_free (markup);
 
-          button = gtk_dialog_get_widget_for_response (request.dialog, GTK_RESPONSE_OK);
-          gtk_button_set_label (GTK_BUTTON (button), _("_Try Again"));
+          goa_spinner_button_set_label (GOA_SPINNER_BUTTON (request.spinner_button), _("_Try Again"));
           gtk_widget_set_no_show_all (request.cluebar, FALSE);
           gtk_widget_show_all (request.cluebar);
         }
