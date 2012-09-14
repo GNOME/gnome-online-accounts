@@ -967,6 +967,7 @@ on_object_manager_ensured_for_getting_realms (GoaKerberosProvider *self,
 
 static void
 create_account_details_ui (GoaKerberosProvider *self,
+                           GtkDialog           *dialog,
                            GtkWidget           *vbox,
                            gboolean             new_account,
                            SignInRequest       *request)
@@ -975,25 +976,13 @@ create_account_details_ui (GoaKerberosProvider *self,
   GtkWidget *grid1;
   GtkWidget *grid2;
   GtkWidget *hbox;
-  GtkWidget *label;
-  gchar *markup;
   gint width;
+
+  goa_utils_set_dialog_title (GOA_PROVIDER (self), dialog, new_account);
 
   header_grid = gtk_grid_new ();
   gtk_orientable_set_orientation (GTK_ORIENTABLE (header_grid), GTK_ORIENTATION_HORIZONTAL);
   gtk_box_pack_start (GTK_BOX (vbox), header_grid, FALSE, FALSE, 0);
-
-  label = gtk_label_new (NULL);
-  gtk_widget_set_hexpand (label, TRUE);
-  markup = g_strconcat ("<b>",
-                        (new_account) ? _("New Enterprise Login (Kerberos)") : _("Enterprise Login (Kerberos)"),
-                        "</b>",
-                        NULL);
-  gtk_label_set_markup (GTK_LABEL (label), markup);
-  g_free (markup);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_misc_set_padding (GTK_MISC (label), 0.0, 12);
-  gtk_container_add (GTK_CONTAINER (header_grid), label);
 
   request->spinner = gtk_spinner_new ();
   gtk_widget_set_no_show_all (request->spinner, TRUE);
@@ -1332,7 +1321,7 @@ add_account (GoaProvider    *provider,
   request.dialog = dialog;
   request.error = NULL;
 
-  create_account_details_ui (self, GTK_WIDGET (vbox), TRUE, &request);
+  create_account_details_ui (self, dialog, GTK_WIDGET (vbox), TRUE, &request);
   gtk_widget_show_all (GTK_WIDGET (vbox));
 
 start_over:

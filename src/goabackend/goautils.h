@@ -41,7 +41,7 @@ gboolean         goa_utils_check_duplicate (GoaClient              *client,
                                             GoaPeekInterfaceFunc    func,
                                             GError                **error);
 
-GtkWidget       *goa_utils_create_add_refresh_label (GoaProvider *provider, gboolean add_account);
+void             goa_utils_set_dialog_title (GoaProvider *provider, GtkDialog *dialog, gboolean add_account);
 
 gboolean         goa_utils_delete_credentials_sync (GoaProvider    *provider,
                                                     GoaAccount     *account,

@@ -766,7 +766,6 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
   RestProxy *proxy;
   RestProxyCall *call;
   GHashTable *f;
-  GtkWidget *label;
   GtkWidget *spinner;
   gboolean use_external_browser;
   gchar **request_params;
@@ -816,10 +815,7 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
       goto out;
     }
 
-  label = goa_utils_create_add_refresh_label (GOA_PROVIDER (provider), add_account);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
-  gtk_widget_show (label);
+  goa_utils_set_dialog_title (GOA_PROVIDER (provider), dialog, add_account);
 
   spinner = gtk_spinner_new ();
   gtk_widget_set_size_request (GTK_WIDGET (spinner), 24, 24);
