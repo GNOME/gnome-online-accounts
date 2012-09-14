@@ -972,7 +972,7 @@ create_account_details_ui (GoaKerberosProvider *self,
                            gboolean             new_account,
                            SignInRequest       *request)
 {
-  GtkWidget *header_grid;
+  GtkWidget *grid0;
   GtkWidget *grid1;
   GtkWidget *grid2;
   GtkWidget *hbox;
@@ -980,18 +980,22 @@ create_account_details_ui (GoaKerberosProvider *self,
 
   goa_utils_set_dialog_title (GOA_PROVIDER (self), dialog, new_account);
 
-  header_grid = gtk_grid_new ();
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (header_grid), GTK_ORIENTATION_HORIZONTAL);
-  gtk_box_pack_start (GTK_BOX (vbox), header_grid, FALSE, FALSE, 0);
+  grid0 = gtk_grid_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (grid0), 5);
+  gtk_widget_set_margin_bottom (grid0, 6);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid0), GTK_ORIENTATION_VERTICAL);
+  gtk_grid_set_row_spacing (GTK_GRID (grid0), 12);
+  gtk_container_add (GTK_CONTAINER (vbox), grid0);
 
   request->spinner = gtk_spinner_new ();
   gtk_widget_set_no_show_all (request->spinner, TRUE);
-  gtk_container_add (GTK_CONTAINER (header_grid), request->spinner);
+  gtk_container_add (GTK_CONTAINER (grid0), request->spinner);
 
   request->cluebar = gtk_info_bar_new ();
   gtk_info_bar_set_message_type (GTK_INFO_BAR (request->cluebar), GTK_MESSAGE_ERROR);
+  gtk_widget_set_hexpand (request->cluebar, TRUE);
   gtk_widget_set_no_show_all (request->cluebar, TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox), request->cluebar, FALSE, FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (grid0), request->cluebar);
 
   request->cluebar_label = gtk_label_new ("");
   gtk_label_set_line_wrap (GTK_LABEL (request->cluebar_label), TRUE);
@@ -1010,7 +1014,7 @@ create_account_details_ui (GoaKerberosProvider *self,
   gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
   gtk_box_pack_start (GTK_BOX (hbox), grid1, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (hbox), grid2, TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (grid0), hbox);
 
   request->realm_store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_OBJECT);
   add_combo_box (grid1,

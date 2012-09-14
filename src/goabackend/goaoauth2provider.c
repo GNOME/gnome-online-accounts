@@ -832,6 +832,7 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
 {
   gboolean ret;
   gchar *url;
+  GtkWidget *grid;
   IdentifyData data;
   gchar *escaped_redirect_uri;
   gchar *escaped_client_id;
@@ -865,6 +866,13 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
                                                      escaped_scope);
 
   goa_utils_set_dialog_title (GOA_PROVIDER (provider), dialog, add_account);
+
+  grid = gtk_grid_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (grid), 5);
+  gtk_widget_set_margin_bottom (grid, 6);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), GTK_ORIENTATION_VERTICAL);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 12);
+  gtk_container_add (GTK_CONTAINER (vbox), grid);
 
   if (goa_oauth2_provider_get_use_external_browser (provider))
     {
@@ -908,6 +916,8 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
       GtkWidget *embed;
 
       web_view = goa_web_view_new ();
+      gtk_widget_set_hexpand (web_view, TRUE);
+      gtk_widget_set_vexpand (web_view, TRUE);
       embed = goa_web_view_get_view (GOA_WEB_VIEW (web_view));
 
       if (goa_oauth2_provider_get_use_mobile_browser (provider))
@@ -923,9 +933,10 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
                         G_CALLBACK (on_web_view_navigation_policy_decision_requested),
                         &data);
 
-      gtk_container_add (GTK_CONTAINER (vbox), web_view);
-      gtk_widget_show_all (web_view);
+      gtk_container_add (GTK_CONTAINER (grid), web_view);
     }
+
+  gtk_widget_show_all (GTK_WIDGET (vbox));
   gtk_dialog_run (GTK_DIALOG (dialog));
 
   /* we can have either the auth code, with which we'll obtain the token, or
