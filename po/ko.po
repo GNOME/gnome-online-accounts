@@ -6,66 +6,194 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-12-19 14:59+0000\n"
-"PO-Revision-Date: 2012-03-07 04:56+0900\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"online-accounts&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2012-09-14 22:13+0000\n"
+"PO-Revision-Date: 2012-09-10 04:35+0900\n"
 "Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>\n"
 "Language-Team: Korean <gnome-kr@googlegroups.com>\n"
+"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../src/daemon/goadaemon.c:871
+#. shut up -Wunused-but-set-variable
+#: ../src/daemon/goadaemon.c:211
+msgid "Online Accounts"
+msgstr "온라인 계정"
+
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:801 ../src/daemon/goadaemon.c:1146
+#, c-format
+msgid "Failed to find a provider for: %s"
+msgstr "제공자 정보를 찾을 수 없습니다: %s"
+
+#: ../src/daemon/goadaemon.c:990
 msgid "An online account needs attention"
 msgstr "온라인 계정"
 
-#: ../src/daemon/goadaemon.c:878
+#: ../src/daemon/goadaemon.c:997
 msgid "Open Online Accounts..."
 msgstr "온라인 계정 열기..."
 
-#: ../src/goabackend/goafacebookprovider.c:78
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:1134
+msgid "ProviderType property is not set for account"
+msgstr "계정에 제공자 유형 속성을 설정하지 않았습니다"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:204
+#, c-format
+msgid "Code: %u - Unexpected response from server"
+msgstr "코드: %u - 서버로부터 예상치 못한 응답이 왔습니다"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:220
+#, c-format
+msgid "Failed to parse autodiscover response XML"
+msgstr "자동 발견 응답 XML을 해석하는데 실패했습니다"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:230
+#, c-format
+msgid "Failed to find Autodiscover element"
+msgstr "자동 발견 요소를 찾는데 실패했습니다"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:244
+#, c-format
+msgid "Failed to find Response element"
+msgstr "응답 요소를 찾는데 실패했습니다"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:258
+#, c-format
+msgid "Failed to find Account element"
+msgstr "계정 요소를 찾을 수 없습니다"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:275
+#, c-format
+msgid "Failed to find ASUrl and OABUrl in autodiscover response"
+msgstr "자동 발견 응답에서 ASUri와 OABUrl을 찾는데 실패했습니다"
+
+#  * NOTE: 그냥 음역할 것.
+#: ../src/goabackend/goaexchangeprovider.c:78
+msgid "Microsoft Exchange"
+msgstr "마이크로소프트 익스체인지"
+
+#: ../src/goabackend/goaexchangeprovider.c:279
+#: ../src/goabackend/goaoauth2provider.c:1392
+#: ../src/goabackend/goaoauthprovider.c:1415
+#, c-format
+msgid "Credentials not found in keyring (%s, %d): "
+msgstr "자격정보가 키 모음 (%s, %d)에 없습니다:"
+
+#. TODO: more specific
+#: ../src/goabackend/goaexchangeprovider.c:295
+#: ../src/goabackend/goaexchangeprovider.c:923
+#, c-format
+msgid "Did not find password with username `%s' in credentials"
+msgstr "자격 정보에서 사용자 이름 `%s'에 대한 암호를 찾지 못했습니다"
+
+#: ../src/goabackend/goaexchangeprovider.c:486
+msgid "_E-mail"
+msgstr "이메일(_E)"
+
+#: ../src/goabackend/goaexchangeprovider.c:487
+msgid "_Password"
+msgstr "암호(_P)"
+
+#: ../src/goabackend/goaexchangeprovider.c:490
+msgid "_Custom"
+msgstr "사용자 정의(_C)"
+
+#: ../src/goabackend/goaexchangeprovider.c:509
+#: ../src/goabackend/goakerberosprovider.c:1026
+msgid "User_name"
+msgstr "사용자 이름(_N)"
+
+#: ../src/goabackend/goaexchangeprovider.c:510
+msgid "_Server"
+msgstr "서버(_S)"
+
+#: ../src/goabackend/goaexchangeprovider.c:594
+#: ../src/goabackend/goaexchangeprovider.c:760
+#: ../src/goabackend/goakerberosprovider.c:1337
+#: ../src/goabackend/goaoauth2provider.c:952
+#: ../src/goabackend/goaoauthprovider.c:945
+#, c-format
+msgid "Dialog was dismissed"
+msgstr "대화 상자가 닫혔습니다"
+
+#: ../src/goabackend/goaexchangeprovider.c:630
+#: ../src/goabackend/goaexchangeprovider.c:787
+msgid "Error connecting to Microsoft Exchange server"
+msgstr "마이크로소프트 익스체인지 서버에 연결하는 도중 오류가 발생했습니다"
+
+#: ../src/goabackend/goaexchangeprovider.c:637
+#: ../src/goabackend/goaexchangeprovider.c:795
+#: ../src/goabackend/goakerberosprovider.c:1417
+msgid "_Try Again"
+msgstr "다시 시도(_T)"
+
+#: ../src/goabackend/goaexchangeprovider.c:846
+#: ../src/goabackend/goafacebookprovider.c:361
+#: ../src/goabackend/goagoogleprovider.c:535
+#: ../src/goabackend/goakerberosprovider.c:1475
+#: ../src/goabackend/goawindowsliveprovider.c:370
+msgid "Use for"
+msgstr "사용 목적"
+
+#: ../src/goabackend/goaexchangeprovider.c:848
+#: ../src/goabackend/goagoogleprovider.c:537
+msgid "Mail"
+msgstr "메일"
+
+#: ../src/goabackend/goaexchangeprovider.c:853
+#: ../src/goabackend/goagoogleprovider.c:542
+msgid "Calendar"
+msgstr "달력"
+
+#: ../src/goabackend/goaexchangeprovider.c:858
+#: ../src/goabackend/goagoogleprovider.c:547
+msgid "Contacts"
+msgstr "연락처"
+
+#: ../src/goabackend/goafacebookprovider.c:79
 msgid "Facebook"
 msgstr "페이스북"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:162
-#: ../src/goabackend/goagoogleprovider.c:195
-#: ../src/goabackend/goawindowsliveprovider.c:170
-#: ../src/goabackend/goatwitterprovider.c:160
-#: ../src/goabackend/goayahooprovider.c:163
+#: ../src/goabackend/goafacebookprovider.c:193
+#: ../src/goabackend/goagoogleprovider.c:212
+#: ../src/goabackend/goawindowsliveprovider.c:176
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr "guid를 요청하는데 상태 200을 기대했지만, %d 상태를 가져왔습니다 (%s) "
 
-#: ../src/goabackend/goafacebookprovider.c:174
-#: ../src/goabackend/goagoogleprovider.c:207
-#: ../src/goabackend/goawindowsliveprovider.c:182
-#: ../src/goabackend/goaoauth2provider.c:478
-#: ../src/goabackend/goatwitterprovider.c:172
-#: ../src/goabackend/goayahooprovider.c:175
+#: ../src/goabackend/goafacebookprovider.c:205
+#: ../src/goabackend/goagoogleprovider.c:224
+#: ../src/goabackend/goaoauth2provider.c:566
+#: ../src/goabackend/goawindowsliveprovider.c:188
 msgid "Error parsing response as JSON: "
 msgstr "JSON 형태의 응답을 해석하는데 오류가 발생했습니다:"
 
-#: ../src/goabackend/goafacebookprovider.c:185
+#: ../src/goabackend/goafacebookprovider.c:216
+#: ../src/goabackend/goawindowsliveprovider.c:199
 #, c-format
-msgid "Didn't find username member in JSON data"
-msgstr "JSON 데이터에서 username 멤버를 찾을 수 없습니다"
+msgid "Didn't find id member in JSON data"
+msgstr "JSON 데이터의 id 멤버를 찾을 수 없습니다"
 
-#: ../src/goabackend/goafacebookprovider.c:194
+#: ../src/goabackend/goafacebookprovider.c:225
+#: ../src/goabackend/goagoogleprovider.c:245
 #, c-format
-msgid "Didn't find name member in JSON data"
-msgstr "JSON 데이터에서 name 멤버를 찾을 수 없습니다"
+msgid "Didn't find email member in JSON data"
+msgstr "JSON 데이터에서 email 멤버를 찾을 수 없습니다"
 
-#: ../src/goabackend/goafacebookprovider.c:282
-#: ../src/goabackend/goawindowsliveprovider.c:292
-#: ../src/goabackend/goatwitterprovider.c:260
-msgid "User Name"
-msgstr "사용자 이름"
-
-#: ../src/goabackend/goafacebookprovider.c:283
-#: ../src/goabackend/goagoogleprovider.c:430
-#: ../src/goabackend/goawindowsliveprovider.c:293
+#: ../src/goabackend/goafacebookprovider.c:363
+#: ../src/goabackend/goagoogleprovider.c:552
+#: ../src/goabackend/goawindowsliveprovider.c:372
 msgid "Chat"
 msgstr "대화"
 
@@ -73,243 +201,409 @@ msgstr "대화"
 msgid "Google"
 msgstr "구글"
 
-#: ../src/goabackend/goagoogleprovider.c:218
+#: ../src/goabackend/goagoogleprovider.c:235
 #, c-format
 msgid "Didn't find data member in JSON data"
 msgstr "JSON 데이터에서 data 멤버를 찾을 수 없습니다"
 
-#: ../src/goabackend/goagoogleprovider.c:228
-#, c-format
-msgid "Didn't find email member in JSON data"
-msgstr "JSON 데이터에서 email 멤버를 찾을 수 없습니다"
+#: ../src/goabackend/goagoogleprovider.c:306
+msgid "Your system time is invalid. Check your date and time settings."
+msgstr "시스템 시간이 잘못되었습니다. 날짜와 시간 설정을 확인해보십시오."
 
-#: ../src/goabackend/goagoogleprovider.c:425
-msgid "Email Address"
-msgstr "이메일 주소"
-
-#: ../src/goabackend/goagoogleprovider.c:426
-msgid "Use this account for"
-msgstr "이 계정을 다음을 위해 사용"
-
-#: ../src/goabackend/goagoogleprovider.c:427
-msgid "Mail"
-msgstr "메일"
-
-#: ../src/goabackend/goagoogleprovider.c:428
-msgid "Calendar"
-msgstr "달력"
-
-#: ../src/goabackend/goagoogleprovider.c:429
-msgid "Contacts"
-msgstr "연락처"
-
-#: ../src/goabackend/goagoogleprovider.c:431
+#: ../src/goabackend/goagoogleprovider.c:557
+#: ../src/goabackend/goawindowsliveprovider.c:377
 msgid "Documents"
 msgstr "문서"
+
+#: ../src/goabackend/goakerberosprovider.c:84
+msgid "Enterprise Login (Kerberos)"
+msgstr "기업 로그인(커베로스)"
+
+#: ../src/goabackend/goakerberosprovider.c:375
+msgid "Identity service returned invalid key"
+msgstr "인증 서비스에서 잘못된 키를 반환했습니다"
+
+#: ../src/goabackend/goakerberosprovider.c:641
+#, c-format
+msgid "Could not find saved credentials for principal `%s' in keyring"
+msgstr "키 모음의 본인 `%s'에 대해 저장한 자격 정보를 찾을 수 없습니다"
+
+#: ../src/goabackend/goakerberosprovider.c:651
+#, c-format
+msgid "Did not find password for principal `%s' in credentials"
+msgstr "자격 정보의 본인 `%s'에 대한 암호를 찾을 수 없습니다"
+
+#: ../src/goabackend/goakerberosprovider.c:1019
+msgid "_Domain"
+msgstr "도메인(_D)"
+
+#: ../src/goabackend/goakerberosprovider.c:1020
+msgid "Enterprise domain or realm name"
+msgstr "기업 도메인 또는 영역 이름"
+
+#: ../src/goabackend/goakerberosprovider.c:1235
+#: ../src/goaidentity/goaidentityservice.c:1891
+msgid "Log In to Realm"
+msgstr "영역 로그인"
+
+#: ../src/goabackend/goakerberosprovider.c:1236
+msgid "Please enter your password below."
+msgstr "아래에 암호를 입력해주시기 바랍니다."
+
+#: ../src/goabackend/goakerberosprovider.c:1237
+msgid "Remember this password"
+msgstr "이 암호 기억"
+
+#: ../src/goabackend/goakerberosprovider.c:1412
+msgid "Error connecting to enterprise identity server"
+msgstr "기업 신원 서버로 연결하는데 오류가 발생했습니다"
+
+#: ../src/goabackend/goakerberosprovider.c:1477
+msgid "Network Resources"
+msgstr "네트워크 자원"
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goaoauth2provider.c:523
+#: ../src/goabackend/goaoauthprovider.c:537
+#, c-format
+msgid ""
+"Expected status 200 when requesting access token, instead got status %d (%s)"
+msgstr ""
+"접근 토큰을 요청하는데 상태 200을 기대했지만, %d 상태를 가져왔습니다 (%s) "
+
+#: ../src/goabackend/goaoauth2provider.c:543
+#, c-format
+msgid "Didn't find access_token in non-JSON data"
+msgstr "JSON구조가 아닌 데이터의 access_token을 찾을 수 없습니다"
+
+#: ../src/goabackend/goaoauth2provider.c:577
+#, c-format
+msgid "Didn't find access_token in JSON data"
+msgstr "JSON 데이터의 access_token을 찾을 수 없습니다"
+
+#: ../src/goabackend/goaoauth2provider.c:746
+#: ../src/goabackend/goaoauth2provider.c:785
+#, c-format
+msgid "Authorization response was \"%s\""
+msgstr "인증 응답으로 \"%s\"이(가) 왔습니다"
+
+#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
+#: ../src/goabackend/goaoauth2provider.c:886
+#, c-format
+msgid ""
+"Paste authorization code obtained from the <a href=\"%s\">authorization "
+"page</a>:"
+msgstr "<a href=\"%s\">인증 페이지</a>로 부터 얻어낸 인증 코드를 붙입니다:"
+
+#: ../src/goabackend/goaoauth2provider.c:978
+#: ../src/goabackend/goaoauthprovider.c:976
+msgid "Error getting an Access Token: "
+msgstr "접근 토큰을 가져오는데 오류가 발생했습니다:"
+
+#: ../src/goabackend/goaoauth2provider.c:993
+#: ../src/goabackend/goaoauthprovider.c:989
+msgid "Error getting identity: "
+msgstr "신원 정보를 가져오는데 오류가 발생했습니다:"
+
+#: ../src/goabackend/goaoauth2provider.c:1253
+#: ../src/goabackend/goaoauthprovider.c:1265
+#, c-format
+msgid "Was asked to login as %s, but logged in as %s"
+msgstr "%s(으)로 로그인하기를 요청받았지만, %s(으)로 로그인 하였습니다."
+
+#: ../src/goabackend/goaoauth2provider.c:1419
+#, c-format
+msgid "Credentials do not contain access_token"
+msgstr "자격 정보에 access_token이 없습니다"
+
+#: ../src/goabackend/goaoauth2provider.c:1458
+#: ../src/goabackend/goaoauthprovider.c:1488
+#, c-format
+msgid "Failed to refresh access token (%s, %d): "
+msgstr "접근 토큰 (%s, %d)을 새로 고치는데 실패했습니다 :"
+
+#: ../src/goabackend/goaoauth2provider.c:1493
+#: ../src/goabackend/goaoauthprovider.c:1518
+#, c-format
+msgid "Error storing credentials in keyring (%s, %d): "
+msgstr "자격정보를 키 모음 (%s, %d)에 저장하는데 오류가 발생했습니다 :"
+
+#: ../src/goabackend/goaoauthprovider.c:560
+#, c-format
+msgid "Missing access_token or access_token_secret headers in response"
+msgstr "응답에 access_token이나 access_token_secret 헤더가 빠졌습니다"
+
+#: ../src/goabackend/goaoauthprovider.c:815
+msgid "Error getting a Request Token: "
+msgstr "요청 토큰을 가져오는데 오류가 발생했습니다:"
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goaoauthprovider.c:848
+#, c-format
+msgid ""
+"Expected status 200 for getting a Request Token, instead got status %d (%s)"
+msgstr ""
+"요청 토큰을 가져오는데 상태 200을 기대했지만, %d 상태를 가져왔습니다 (%s)"
+
+#: ../src/goabackend/goaoauthprovider.c:865
+#, c-format
+msgid "Missing request_token or request_token_secret headers in response"
+msgstr "응답애 request_token이나 request_token_secret 헤더가 빠졌습니다"
+
+#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
+#: ../src/goabackend/goaoauthprovider.c:882
+#, c-format
+msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
+msgstr "<a href=\"%s\">인증 페이지</a>로부터 획득한 토큰을 붙입니다:"
+
+#: ../src/goabackend/goaoauthprovider.c:1444
+#, c-format
+msgid "Credentials do not contain access_token or access_token_secret"
+msgstr "자격정보에 access_token이나 access_token_secret이 없습니다"
+
+#: ../src/goabackend/goaprovider.c:548
+#, c-format
+msgid "ensure_credentials_sync is not implemented on type %s"
+msgstr "유형 %s에 ensure_credentials_sync가 구현되지 않았습니다"
+
+#: ../src/goabackend/goautils.c:84
+#, c-format
+msgid "A %s account already exists for %s"
+msgstr "%2$s에 대한 %1$s계정이 이미 존재합니다"
+
+#. Translators: the %s is the name of the provider. eg., Google.
+#: ../src/goabackend/goautils.c:106
+#, fuzzy, c-format
+#| msgid "Use this account for"
+msgid "%s account"
+msgstr "이 계정을 다음을 위해 사용"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:147
+msgid "Failed to delete credentials from the keyring"
+msgstr "키 모음으로부터 자격 정보를 삭제하는데 실패했습니다"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:195
+msgid "Failed to retrieve credentials from the keyring"
+msgstr "키 모음으로부터 자격 정보를 가져오는데 실패했습니다"
+
+#: ../src/goabackend/goautils.c:206
+msgid "Error parsing result obtained from the keyring: "
+msgstr "키 모음으로부터 가져온 결과를 해석하는데 오류가 발생했습니다:"
+
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'facebook'
+#: ../src/goabackend/goautils.c:248
+#, c-format
+msgid "GOA %s credentials for identity %s"
+msgstr "GOA %s이(가) %s의 동일성을 위해 자격을 부여합니다"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:264
+msgid "Failed to store credentials in the keyring"
+msgstr "키 모음에 자격 정보를 저장하는데 실패했습니다"
+
+#. translators: %s here is the address of the web page
+#: ../src/goabackend/goawebview.c:75
+#, c-format
+msgid "Loading “%s”…"
+msgstr "“%s” 불러오는 중…"
 
 # NOTE: "윈도우즈 라이브 메신저"로 번역
 #: ../src/goabackend/goawindowsliveprovider.c:82
 msgid "Windows Live"
 msgstr "윈도우즈 라이브 메신저"
 
-#: ../src/goabackend/goawindowsliveprovider.c:193
+#: ../src/goabackend/goawindowsliveprovider.c:210
 #, c-format
-#| msgid "Didn't find guid member in JSON data"
-msgid "Didn't find id member in JSON data"
-msgstr "JSON 데이터의 id 멤버를 찾을 수 없습니다"
-
-#: ../src/goabackend/goawindowsliveprovider.c:204
-#, c-format
-#| msgid "Didn't find email member in JSON data"
 msgid "Didn't find account email member in JSON data"
 msgstr "JSON 데이터에서 계정 email 멤버를 찾을 수 없습니다"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:435
-#: ../src/goabackend/goaoauthprovider.c:440
+#: ../src/goaidentity/goaalarm.c:245
+msgid "Time"
+msgstr "시간"
+
+#: ../src/goaidentity/goaalarm.c:246
+msgid "Time to fire"
+msgstr "실행 시간"
+
+#: ../src/goaidentity/goaidentityservice.c:317
+msgid "Domain Administrator Login"
+msgstr "도메인 관리자 로그인"
+
+#: ../src/goaidentity/goaidentityservice.c:405
+#: ../src/goaidentity/goaidentityservice.c:597
+msgid "Could not find supported credentials"
+msgstr "지원하는 자격 정보를 찾을 수 없습니다"
+
+#: ../src/goaidentity/goaidentityservice.c:448
+msgid ""
+"In order to use this enterprise identity, the computer needs to be enrolled "
+"in the domain. Please have your network administrator type their domain "
+"password here."
+msgstr ""
+"기업 인증을 사용하기 위해 컴퓨터가 도메인에 참여할 필요가 있습니다. 네트워크 "
+"관리자에게 도메인 암호를 여기에 입력하도록 요청하십시오."
+
+#: ../src/goaidentity/goaidentityservice.c:488
+msgid ""
+"In order to use this enterprise identity, the computer needs to be enrolled "
+"in the domain. Please have your network administrator type their domain "
+"username here."
+msgstr ""
+"기업 인증을 사용하기 위해 컴퓨터가 도메인에 참여할 필요가 있습니다. 네트워크 "
+"관리자에게 도메인 사용자 이름을 여기에 입력하도록 요청하십시오."
+
+#: ../src/goaidentity/goaidentityservice.c:1167
+msgid "initial secret passed before secret key exchange"
+msgstr "비밀 키를 교환하기 전에 초기 비밀 요소를 넘겼습니다"
+
+#: ../src/goaidentity/goaidentityservice.c:1373
+msgid "Initial secret key is invalid"
+msgstr "초기 비밀 키가 잘못되었습니다"
+
+#: ../src/goaidentity/goaidentityservice.c:1896
 #, c-format
-msgid "Expected status 200 when requesting access token, instead got status %d (%s)"
-msgstr "접근 토큰을 요청하는데 상태 200을 기대했지만, %d 상태를 가져왔습니다 (%s) "
+msgid "The network realm %s needs some information to sign you in."
+msgstr "%s 네트워크 영역에 접속하려면 약간의 정보가 더 필요합니다."
 
-#: ../src/goabackend/goaoauth2provider.c:455
+#: ../src/goaidentity/goakerberosidentity.c:271
+#: ../src/goaidentity/goakerberosidentity.c:280
+#: ../src/goaidentity/goakerberosidentity.c:607
+msgid "Could not find identity in credential cache: %k"
+msgstr "자격 정보 캐시에서 신원 정보를 찾을 수 없습니다: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:620
+msgid "Could not find identity credentials in cache: %k"
+msgstr "캐시에서의 신원 자격 정보를 찾을 수 없습니다: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:658
+msgid "Could not sift through identity credentials in cache: %k"
+msgstr "캐시에서 신원 자격 정보를 통해 조사할 수 없습니다: %s"
+
+#: ../src/goaidentity/goakerberosidentity.c:675
+msgid "Could not finish up sifting through identity credentials in cache: %k"
+msgstr "캐시에서의 신원 자격 정보를 통한 조사를 끝낼 수 없습니다: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1013
 #, c-format
-msgid "Didn't find access_token in non-JSON data"
-msgstr "비 JSON 데이터의 access_token을 찾을 수 없습니다"
+msgid "No associated identification found"
+msgstr "관련된 신분 증명을 찾지 못했습니다"
 
-#: ../src/goabackend/goaoauth2provider.c:489
+#: ../src/goaidentity/goakerberosidentity.c:1094
+msgid "Could not create credential cache: %k"
+msgstr "자격 정보 캐시를 만들 수 없습니다: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1128
+msgid "Could not initialize credentials cache: %k"
+msgstr "자격 정보 캐시를 초기화 할 수 없습니다: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1147
+msgid "Could not store new credentials in credentials cache: %k"
+msgstr "자격 정보 캐시에 새로운 자격 정보를 저장할 수 없습니다: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1424
 #, c-format
-msgid "Didn't find access_token in JSON data"
-msgstr "JSON 데이터의 access_token을 찾을 수 없습니다"
+msgid "Could not renew identity: Not signed in"
+msgstr "신원 정보를 새로 고칠 수 없습니다: 접속하지 않았습니다"
 
-#: ../src/goabackend/goaoauth2provider.c:573
+#: ../src/goaidentity/goakerberosidentity.c:1436
+msgid "Could not renew identity: %k"
+msgstr "신원 정보를 새로 고칠 수 없습니다: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1453
+msgid "Could not get new credentials to renew identity %s: %k"
+msgstr ""
+"%s 신원 정보를 새로 고치기 위한 새로운 자격 정보를 가져올 수 없습니다: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1493
+msgid "Could not erase identity: %k"
+msgstr "신원 정보를 지울 수 없습니다: %k"
+
+#: ../src/goaidentity/goakerberosidentitymanager.c:746
+msgid "Could not find identity"
+msgstr "신원 정보를 찾을 수 없습니다"
+
+#: ../src/goaidentity/goakerberosidentitymanager.c:803
+msgid "Could not create credential cache for identity"
+msgstr "신원에 대한 자격 정보 캐시를 만들 수 없습니다"
+
+#: ../src/goaidentity/um-realm-manager.c:368
 #, c-format
-msgid "Authorization response was \"%s\""
-msgstr "인증 응답으로 \"%s\"이(가) 왔습니다"
+msgid "No such domain or realm found"
+msgstr "찾은 도메인 또는 영역이 없습니다."
 
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:654
+#: ../src/goaidentity/um-realm-manager.c:743
 #, c-format
-msgid "Paste authorization code obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr "<a href=\"%s\">인증 페이지</a>로 부터 얻어낸 인증 코드를 붙입니다:"
+msgid "Cannot log in as %s at the %s domain"
+msgstr "%2$s 도메인에서 %1$s(으)로 로그인 할 수 없습니다"
 
-#: ../src/goabackend/goaoauth2provider.c:728
-#: ../src/goabackend/goaoauthprovider.c:751
+#: ../src/goaidentity/um-realm-manager.c:748
+msgid "Invalid password, please try again"
+msgstr "잘못된 암호입니다. 다시 시도해주십시오."
+
+#: ../src/goaidentity/um-realm-manager.c:752
 #, c-format
-msgid "Dialog was dismissed"
-msgstr "대화 상자가 닫혔습니다"
+msgid "Couldn't connect to the %s domain: %s"
+msgstr "%s 도메인에 연결할 수 없습니다: %s"
 
-#: ../src/goabackend/goaoauth2provider.c:752
-#: ../src/goabackend/goaoauthprovider.c:782
-msgid "Error getting an Access Token: "
-msgstr "접근 토큰을 가져오는데 오류가 발생했습니다:"
+#~ msgid "New Microsoft Exchange Account"
+#~ msgstr "새 마이크로소프트 익스체인지 계정"
 
-#: ../src/goabackend/goaoauth2provider.c:764
-#: ../src/goabackend/goaoauthprovider.c:795
-msgid "Error getting identity: "
-msgstr "신원 정보를 가져오는데 오류가 발생했습니다:"
+#~ msgid "Microsoft Exchange Account"
+#~ msgstr "마이크로소프트 익스체인지 계정"
 
-#: ../src/goabackend/goaoauth2provider.c:929
-#: ../src/goabackend/goaoauthprovider.c:972
-#, c-format
-msgid "There is already an account for the identity %s"
-msgstr "신원 정보 %s을(를) 위한 계정이 이미 존재합니다"
+#~ msgid "New Enterprise Login (Kerberos)"
+#~ msgstr "새 기업 로그인(커베로스)"
 
-#: ../src/goabackend/goaoauth2provider.c:1054
-#: ../src/goabackend/goaoauthprovider.c:1102
-#, c-format
-msgid "Was asked to login as %s, but logged in as %s"
-msgstr "%s(으)로 로그인하기를 요청받았지만, %s(으)로 로그인 하였습니다."
+#~ msgid "Add %s"
+#~ msgstr "%s 추가"
 
-#: ../src/goabackend/goaoauth2provider.c:1190
-#: ../src/goabackend/goaoauthprovider.c:1250
-#, c-format
-msgid "Credentials not found in keyring (%s, %d): "
-msgstr "자격정보가 키링 (%s, %d)에 없습니다:"
+#~ msgid "Refresh %s"
+#~ msgstr "%s 새로 고침"
 
-#: ../src/goabackend/goaoauth2provider.c:1217
-#, c-format
-msgid "Credentials do not contain access_token"
-msgstr "자격 정보에 access_token이 없습니다"
+#~ msgid "Didn't find username member in JSON data"
+#~ msgstr "JSON 데이터에서 username 멤버를 찾을 수 없습니다"
 
-#: ../src/goabackend/goaoauth2provider.c:1256
-#: ../src/goabackend/goaoauthprovider.c:1323
-#, c-format
-msgid "Failed to refresh access token (%s, %d): "
-msgstr "접근 토큰 (%s, %d)을 새로 고치는데 실패했습니다 :"
+#~ msgid "Didn't find name member in JSON data"
+#~ msgstr "JSON 데이터에서 name 멤버를 찾을 수 없습니다"
 
-#: ../src/goabackend/goaoauth2provider.c:1291
-#: ../src/goabackend/goaoauthprovider.c:1353
-#, c-format
-msgid "Error storing credentials in keyring (%s, %d): "
-msgstr "자격정보를 키링 (%s, %d)에 저장하는데 오류가 발생했습니다 :"
+#~ msgid "Email Address"
+#~ msgstr "이메일 주소"
 
-#: ../src/goabackend/goaoauthprovider.c:463
-#, c-format
-msgid "Missing access_token or access_token_secret headers in response"
-msgstr "응답에 access_token이나 access_token_secret 헤더가 빠졌습니다"
+#~ msgid "There is already an account for the identity %s"
+#~ msgstr "신원 정보 %s을(를) 위한 계정이 이미 존재합니다"
 
-#: ../src/goabackend/goaoauthprovider.c:636
-msgid "Error getting a Request Token: "
-msgstr "요청 토큰을 가져오는데 오류가 발생했습니다:"
+#~ msgid "Twitter"
+#~ msgstr "트위터"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:645
-#, c-format
-msgid "Expected status 200 for getting a Request Token, instead got status %d (%s)"
-msgstr "요청 토큰을 가져오는데 상태 200을 기대했지만, %d 상태를 가져왔습니다 (%s)"
+#~ msgid "Didn't find id_str member in JSON data"
+#~ msgstr "JSON 데이터의 id_str 멤버를 찾을 수 없습니다"
 
-#: ../src/goabackend/goaoauthprovider.c:659
-#, c-format
-msgid "Missing request_token or request_token_secret headers in response"
-msgstr "응답애 request_token이나 request_token_secret 헤더가 빠졌습니다"
+#~ msgid "Didn't find screen_name member in JSON data"
+#~ msgstr "JSON 데이터의 screen_name 멤버를 찾을 수 없습니다"
 
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:676
-#, c-format
-msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr "<a href=\"%s\">인증 페이지</a>로부터 획득한 토큰을 붙입니다:"
+#~ msgid "Yahoo"
+#~ msgstr "야후"
 
-#: ../src/goabackend/goaoauthprovider.c:1279
-#, c-format
-msgid "Credentials do not contain access_token or access_token_secret"
-msgstr "자격정보에 access_token이나 access_token_secret이 없습니다"
+#~ msgid "Didn't find guid member in JSON data"
+#~ msgstr "JSON 데이터의 guid 멤버를 찾을 수 없습니다"
 
-#: ../src/goabackend/goaprovider.c:523
-#, c-format
-msgid "ensure_credentials_sync is not implemented on type %s"
-msgstr "유형 %s에 ensure_credentials_sync가 구현되지 않았습니다"
+#~ msgid "Didn't find value member in JSON data"
+#~ msgstr "JSON 데이터의 value 멤버를 찾을 수 없습니다"
 
-#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:742
-#, c-format
-msgid "GOA %s credentials for identity %s"
-msgstr "GOA %s이(가) %s의 동일성을 위해 자격을 부여합니다"
+#~ msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+#~ msgstr ""
+#~ "이름을 요청하는데 상태 200을 기대했지만, %d 상태를 가져왔습니다 (%s) "
 
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:756
-#, c-format
-msgid "Failed to store credentials in the keyring: %s"
-msgstr "키링의 자격정보를 저장하는데 실패했습니다: %s"
+#~ msgid "Error parsing usercard response as JSON: "
+#~ msgstr "JSON 형태의 사용자 카드 응답을 해석하는데 오류가 발생했습니다:"
 
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:827
-#, c-format
-msgid "Failed to retrieve credentials from the keyring: %s"
-msgstr "키링의 자격정보를 가져오는데 실패했습니다: %s"
+#~ msgid "Didn't find profile member in JSON data"
+#~ msgstr "JSON 데이터의 profile 멤버를 찾을 수 없습니다"
 
-#: ../src/goabackend/goaprovider.c:839
-msgid "Error parsing result obtained from the keyring: "
-msgstr "키링으로부터 가져온 결과를 해석하는데 오류가 발생했습니다:"
+#~ msgid "Didn't find nickname member in JSON data"
+#~ msgstr "JSON 데이터의 nickname 멤버를 찾울 수 없습니다"
 
-#: ../src/goabackend/goatwitterprovider.c:78
-msgid "Twitter"
-msgstr "트위터"
-
-#: ../src/goabackend/goatwitterprovider.c:183
-#, c-format
-msgid "Didn't find id_str member in JSON data"
-msgstr "JSON 데이터의 id_str 멤버를 찾을 수 없습니다"
-
-#: ../src/goabackend/goatwitterprovider.c:192
-#, c-format
-msgid "Didn't find screen_name member in JSON data"
-msgstr "JSON 데이터의 screen_name 멤버를 찾을 수 없습니다"
-
-#: ../src/goabackend/goayahooprovider.c:78
-msgid "Yahoo"
-msgstr "야후"
-
-#: ../src/goabackend/goayahooprovider.c:186
-#, c-format
-msgid "Didn't find guid member in JSON data"
-msgstr "JSON 데이터의 guid 멤버를 찾을 수 없습니다"
-
-#: ../src/goabackend/goayahooprovider.c:196
-#, c-format
-msgid "Didn't find value member in JSON data"
-msgstr "JSON 데이터의 value 멤버를 찾을 수 없습니다"
-
-#: ../src/goabackend/goayahooprovider.c:222
-#, c-format
-msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-msgstr "이름을 요청하는데 상태 200을 기대했지만, %d 상태를 가져왔습니다 (%s) "
-
-#: ../src/goabackend/goayahooprovider.c:235
-msgid "Error parsing usercard response as JSON: "
-msgstr "JSON 형태의 사용자 카드 응답을 해석하는데 오류가 발생했습니다:"
-
-#: ../src/goabackend/goayahooprovider.c:246
-#, c-format
-msgid "Didn't find profile member in JSON data"
-msgstr "JSON 데이터의 profile 멤버를 찾을 수 없습니다"
-
-#: ../src/goabackend/goayahooprovider.c:256
-#, c-format
-msgid "Didn't find nickname member in JSON data"
-msgstr "JSON 데이터의 nickname 멤버를 찾울 수 없습니다"
-
-#. TODO: look up email address / screenname from GUID
-#: ../src/goabackend/goayahooprovider.c:324
-msgid "Name"
-msgstr "이름"
-
+#~ msgid "Name"
+#~ msgstr "이름"
