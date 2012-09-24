@@ -1,5 +1,5 @@
 # Italian translation for gnome-online-accounts
-# Copyright (C) 2011 Free Software Foundation, Inc.
+# Copyright (C) 2011, 2012 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-online-accounts package.
 # Luca Ferretti <lferrett@gnome.org>, 2011.
 # Claudio Arseni <claudio.arseni@ubuntu.com>, 2011, 2012.
@@ -7,83 +7,197 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-03-30 13:40+0000\n"
-"PO-Revision-Date: 2012-03-30 23:15+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-09-24 09:40+0200\n"
+"PO-Revision-Date: 2012-09-24 09:40+0200\n"
 "Last-Translator: Claudio Arseni <claudio.arseni@ubuntu.com>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Generator: Poedit 1.5.3\n"
 
-#: ../src/daemon/goadaemon.c:871
-msgid "An online account needs attention"
-msgstr "Un account online richiede attenzione"
-
-#: ../src/daemon/goadaemon.c:878
-msgid "Open Online Accounts..."
-msgstr "Apri account online..."
+#. shut up -Wunused-but-set-variable
+#: ../src/daemon/goadaemon.c:211
+msgid "Online Accounts"
+msgstr "Account online"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1015
-msgid "ProviderType property is not set for account"
-msgstr "Proprietà ProviderType non impostata per l'account"
-
-#. TODO: more specific
-#: ../src/daemon/goadaemon.c:1027
+#: ../src/daemon/goadaemon.c:801 ../src/daemon/goadaemon.c:1146
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Ricerca del provider non riuscita: %s"
 
-#: ../src/goabackend/goafacebookprovider.c:80
+#: ../src/daemon/goadaemon.c:990
+msgid "An online account needs attention"
+msgstr "Un account online richiede attenzione"
+
+#: ../src/daemon/goadaemon.c:997
+msgid "Open Online Accounts..."
+msgstr "Apri account online..."
+
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:1134
+msgid "ProviderType property is not set for account"
+msgstr "Proprietà ProviderType non impostata per l'account"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:204
+#, c-format
+msgid "Code: %u - Unexpected response from server"
+msgstr "Codice: %u - risposta dal server inattesa"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:220
+#, c-format
+msgid "Failed to parse autodiscover response XML"
+msgstr "Analisi del contenuto XML nella risposta autodiscover non riuscita"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:230
+#, c-format
+msgid "Failed to find Autodiscover element"
+msgstr "Ricerca dell'elemento «Autodiscover» non riuscita"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:244
+#, c-format
+msgid "Failed to find Response element"
+msgstr "Ricerca dell'elemento «Response» non riuscita"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:258
+#, c-format
+msgid "Failed to find Account element"
+msgstr "Ricerca dell'elemento «Account» non riuscita"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:275
+#, c-format
+msgid "Failed to find ASUrl and OABUrl in autodiscover response"
+msgstr "Ricerca di ASUrl e OABUrl  nella risposta autodiscover non riuscita"
+
+#: ../src/goabackend/goaexchangeprovider.c:78
+msgid "Microsoft Exchange"
+msgstr "Microsoft Exchange"
+
+#: ../src/goabackend/goaexchangeprovider.c:279
+#: ../src/goabackend/goaoauth2provider.c:1392
+#: ../src/goabackend/goaoauthprovider.c:1415
+#, c-format
+msgid "Credentials not found in keyring (%s, %d): "
+msgstr "Credenziali non trovate nel portachiavi (%s, %d): "
+
+#. TODO: more specific
+#: ../src/goabackend/goaexchangeprovider.c:295
+#: ../src/goabackend/goaexchangeprovider.c:923
+#, c-format
+msgid "Did not find password with username `%s' in credentials"
+msgstr ""
+"Non è stata trovata la password associata al nome utente «%s» nelle "
+"credenziali"
+
+#: ../src/goabackend/goaexchangeprovider.c:486
+msgid "_E-mail"
+msgstr "_Email"
+
+#: ../src/goabackend/goaexchangeprovider.c:487
+msgid "_Password"
+msgstr "_Password"
+
+#: ../src/goabackend/goaexchangeprovider.c:490
+msgid "_Custom"
+msgstr "_Personalizza"
+
+#: ../src/goabackend/goaexchangeprovider.c:509
+#: ../src/goabackend/goakerberosprovider.c:1026
+msgid "User_name"
+msgstr "Nome _utente"
+
+#: ../src/goabackend/goaexchangeprovider.c:510
+msgid "_Server"
+msgstr "_Server"
+
+#: ../src/goabackend/goaexchangeprovider.c:594
+#: ../src/goabackend/goaexchangeprovider.c:760
+#: ../src/goabackend/goakerberosprovider.c:1337
+#: ../src/goabackend/goaoauth2provider.c:952
+#: ../src/goabackend/goaoauthprovider.c:945
+#, c-format
+msgid "Dialog was dismissed"
+msgstr "Il dialogo è stato respinto"
+
+#: ../src/goabackend/goaexchangeprovider.c:630
+#: ../src/goabackend/goaexchangeprovider.c:787
+msgid "Error connecting to Microsoft Exchange server"
+msgstr "Errore durante la connessione al server Microsoft Exchange"
+
+#: ../src/goabackend/goaexchangeprovider.c:637
+#: ../src/goabackend/goaexchangeprovider.c:795
+#: ../src/goabackend/goakerberosprovider.c:1417
+msgid "_Try Again"
+msgstr "_Riprova"
+
+#: ../src/goabackend/goaexchangeprovider.c:846
+#: ../src/goabackend/goafacebookprovider.c:361
+#: ../src/goabackend/goagoogleprovider.c:535
+#: ../src/goabackend/goakerberosprovider.c:1475
+#: ../src/goabackend/goawindowsliveprovider.c:370
+msgid "Use for"
+msgstr "Usa per"
+
+#: ../src/goabackend/goaexchangeprovider.c:848
+#: ../src/goabackend/goagoogleprovider.c:537
+msgid "Mail"
+msgstr "Email"
+
+#: ../src/goabackend/goaexchangeprovider.c:853
+#: ../src/goabackend/goagoogleprovider.c:542
+msgid "Calendar"
+msgstr "Calendario"
+
+#: ../src/goabackend/goaexchangeprovider.c:858
+#: ../src/goabackend/goagoogleprovider.c:547
+msgid "Contacts"
+msgstr "Contatti"
+
+#: ../src/goabackend/goafacebookprovider.c:79
 msgid "Facebook"
 msgstr "Facebook"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:194
+#: ../src/goabackend/goafacebookprovider.c:193
 #: ../src/goabackend/goagoogleprovider.c:212
-#: ../src/goabackend/goawindowsliveprovider.c:183
-#: ../src/goabackend/goatwitterprovider.c:160
-#: ../src/goabackend/goayahooprovider.c:163
+#: ../src/goabackend/goawindowsliveprovider.c:176
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr ""
-"Atteso stato 200 durante la richiesta di guid, ottenuto invece lo stato %d (%"
-"s)"
+"Atteso stato 200 durante la richiesta di guid, ottenuto invece lo stato %d "
+"(%s)"
 
-#: ../src/goabackend/goafacebookprovider.c:206
+#: ../src/goabackend/goafacebookprovider.c:205
 #: ../src/goabackend/goagoogleprovider.c:224
-#: ../src/goabackend/goawindowsliveprovider.c:195
-#: ../src/goabackend/goaoauth2provider.c:513
-#: ../src/goabackend/goatwitterprovider.c:172
-#: ../src/goabackend/goayahooprovider.c:175
+#: ../src/goabackend/goaoauth2provider.c:566
+#: ../src/goabackend/goawindowsliveprovider.c:188
 msgid "Error parsing response as JSON: "
 msgstr "Errore nell'elaborare la risposta come JSON: "
 
-#: ../src/goabackend/goafacebookprovider.c:217
-#: ../src/goabackend/goawindowsliveprovider.c:206
+#: ../src/goabackend/goafacebookprovider.c:216
+#: ../src/goabackend/goawindowsliveprovider.c:199
 #, c-format
 msgid "Didn't find id member in JSON data"
 msgstr "Non è stato trovato il membro id nei dati JSON"
 
-#: ../src/goabackend/goafacebookprovider.c:226
+#: ../src/goabackend/goafacebookprovider.c:225
 #: ../src/goabackend/goagoogleprovider.c:245
 #, c-format
 msgid "Didn't find email member in JSON data"
 msgstr "Non è stato trovato il membro email nei dati JSON"
 
-#: ../src/goabackend/goafacebookprovider.c:319
-#: ../src/goabackend/goagoogleprovider.c:445
-#: ../src/goabackend/goawindowsliveprovider.c:328
-msgid "Use for"
-msgstr "Usa per"
-
-#: ../src/goabackend/goafacebookprovider.c:321
-#: ../src/goabackend/goagoogleprovider.c:462
-#: ../src/goabackend/goawindowsliveprovider.c:330
+#: ../src/goabackend/goafacebookprovider.c:363
+#: ../src/goabackend/goagoogleprovider.c:552
+#: ../src/goabackend/goawindowsliveprovider.c:372
 msgid "Chat"
 msgstr "Chat"
 
@@ -96,35 +210,69 @@ msgstr "Google"
 msgid "Didn't find data member in JSON data"
 msgstr "Non è stato trovato il membro data nei dati JSON"
 
-#: ../src/goabackend/goagoogleprovider.c:447
-msgid "Mail"
-msgstr "Email"
+#: ../src/goabackend/goagoogleprovider.c:306
+msgid "Your system time is invalid. Check your date and time settings."
+msgstr ""
+"Orologio di sistema non valido. Controllare le impostazioni di data e ora."
 
-#: ../src/goabackend/goagoogleprovider.c:452
-msgid "Calendar"
-msgstr "Calendario"
-
-#: ../src/goabackend/goagoogleprovider.c:457
-msgid "Contacts"
-msgstr "Contatti"
-
-#: ../src/goabackend/goagoogleprovider.c:467
-#: ../src/goabackend/goawindowsliveprovider.c:335
+#: ../src/goabackend/goagoogleprovider.c:557
+#: ../src/goabackend/goawindowsliveprovider.c:377
 msgid "Documents"
 msgstr "Documenti"
 
-#: ../src/goabackend/goawindowsliveprovider.c:82
-msgid "Windows Live"
-msgstr "Windows Live"
+#: ../src/goabackend/goakerberosprovider.c:84
+msgid "Enterprise Login (Kerberos)"
+msgstr "Accesso aziendale (Kerberos)"
 
-#: ../src/goabackend/goawindowsliveprovider.c:217
+#: ../src/goabackend/goakerberosprovider.c:375
+msgid "Identity service returned invalid key"
+msgstr "Il servizio di identità ha restituito una chiave non valida"
+
+#: ../src/goabackend/goakerberosprovider.c:641
 #, c-format
-msgid "Didn't find account email member in JSON data"
-msgstr "Non è stato trovato il membro account email nei dati JSON"
+msgid "Could not find saved credentials for principal `%s' in keyring"
+msgstr ""
+"Impossibile trovare nel portachiavi credenziali salvate per il principale "
+"«%s»"
+
+#: ../src/goabackend/goakerberosprovider.c:651
+#, c-format
+msgid "Did not find password for principal `%s' in credentials"
+msgstr ""
+"Non è stata trovata la password per il principale «%s» nelle credenziali"
+
+#: ../src/goabackend/goakerberosprovider.c:1019
+msgid "_Domain"
+msgstr "_Dominio"
+
+#: ../src/goabackend/goakerberosprovider.c:1020
+msgid "Enterprise domain or realm name"
+msgstr "Dominio aziendale o nome realm"
+
+#: ../src/goabackend/goakerberosprovider.c:1235
+#: ../src/goaidentity/goaidentityservice.c:1891
+msgid "Log In to Realm"
+msgstr "Accesso a realm"
+
+#: ../src/goabackend/goakerberosprovider.c:1236
+msgid "Please enter your password below."
+msgstr "Inserire qui sotto la propria password."
+
+#: ../src/goabackend/goakerberosprovider.c:1237
+msgid "Remember this password"
+msgstr "Ricorda questa password"
+
+#: ../src/goabackend/goakerberosprovider.c:1412
+msgid "Error connecting to enterprise identity server"
+msgstr "Errore durante la connessione al server aziendale dell'identità"
+
+#: ../src/goabackend/goakerberosprovider.c:1477
+msgid "Network Resources"
+msgstr "Risorse di rete"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:470
-#: ../src/goabackend/goaoauthprovider.c:461
+#: ../src/goabackend/goaoauth2provider.c:523
+#: ../src/goabackend/goaoauthprovider.c:537
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -132,24 +280,24 @@ msgstr ""
 "Atteso stato 200 durante la richiesta del token di accesso, ottenuto invece "
 "lo stato %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:490
+#: ../src/goabackend/goaoauth2provider.c:543
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "Non è stato trovato access_token nei dati non-JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:524
+#: ../src/goabackend/goaoauth2provider.c:577
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "Non è stato trovato access_token nei dati JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:663
-#: ../src/goabackend/goaoauth2provider.c:702
+#: ../src/goabackend/goaoauth2provider.c:746
+#: ../src/goabackend/goaoauth2provider.c:785
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "La risposta di autorizzazione è stata \"%s\""
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:792
+#: ../src/goabackend/goaoauth2provider.c:886
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
@@ -158,69 +306,50 @@ msgstr ""
 "Incollare il codice di autorizzazione ottenuto dalla <a href=\"%s\">pagina "
 "di autorizzazione</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:875
-#: ../src/goabackend/goaoauthprovider.c:820
-#, c-format
-msgid "Dialog was dismissed"
-msgstr "Il dialogo è stato respinto"
-
-#: ../src/goabackend/goaoauth2provider.c:901
-#: ../src/goabackend/goaoauthprovider.c:851
+#: ../src/goabackend/goaoauth2provider.c:978
+#: ../src/goabackend/goaoauthprovider.c:976
 msgid "Error getting an Access Token: "
 msgstr "Errore nell'ottenere il token di accesso: "
 
-#: ../src/goabackend/goaoauth2provider.c:916
-#: ../src/goabackend/goaoauthprovider.c:864
+#: ../src/goabackend/goaoauth2provider.c:993
+#: ../src/goabackend/goaoauthprovider.c:989
 msgid "Error getting identity: "
 msgstr "Errore nell'ottenere l'identità: "
 
-#: ../src/goabackend/goaoauth2provider.c:1081
-#: ../src/goabackend/goaoauthprovider.c:1041
-#, c-format
-msgid "There is already an account for the identity %s"
-msgstr "C'è già un account per l'identità %s"
-
-#: ../src/goabackend/goaoauth2provider.c:1207
-#: ../src/goabackend/goaoauthprovider.c:1171
+#: ../src/goabackend/goaoauth2provider.c:1253
+#: ../src/goabackend/goaoauthprovider.c:1265
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "È stato richiesto di accedere come %s, ma l'accesso è avvenuto come %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1344
-#: ../src/goabackend/goaoauthprovider.c:1319
-#, c-format
-msgid "Credentials not found in keyring (%s, %d): "
-msgstr "Credenziali non trovate nel portachiavi (%s, %d): "
-
-#: ../src/goabackend/goaoauth2provider.c:1371
+#: ../src/goabackend/goaoauth2provider.c:1419
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Le credenziali non contengono access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1410
-#: ../src/goabackend/goaoauthprovider.c:1392
+#: ../src/goabackend/goaoauth2provider.c:1458
+#: ../src/goabackend/goaoauthprovider.c:1488
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Aggiornamento del token di accesso non riuscito (%s, %d):"
 
-#: ../src/goabackend/goaoauth2provider.c:1445
-#: ../src/goabackend/goaoauthprovider.c:1422
+#: ../src/goabackend/goaoauth2provider.c:1493
+#: ../src/goabackend/goaoauthprovider.c:1518
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "Errore nel memorizzare le credenziali nel portachiavi (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:484
+#: ../src/goabackend/goaoauthprovider.c:560
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
-msgstr ""
-"Nella risposta mancano le intestazione access_token o access_token_secret"
+msgstr "Nella risposta manca l'intestazione access_token o access_token_secret"
 
-#: ../src/goabackend/goaoauthprovider.c:700
+#: ../src/goabackend/goaoauthprovider.c:815
 msgid "Error getting a Request Token: "
 msgstr "Errore nell'ottenere un token di richiesta:"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:709
+#: ../src/goabackend/goaoauthprovider.c:848
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -228,124 +357,210 @@ msgstr ""
 "Atteso stato 200 per l'ottenimento di un token di richiesta, ottenuto invece "
 "lo stato %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:723
+#: ../src/goabackend/goaoauthprovider.c:865
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr ""
-"Nella risposta mancano le intestazione request_token o request_token_secret"
+"Nella risposta manca l'intestazione request_token o request_token_secret"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:740
+#: ../src/goabackend/goaoauthprovider.c:882
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr ""
 "Incollare il token ottenuto dalla <a href=\"%s\">pagina di autorizzazione</"
 "a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1348
+#: ../src/goabackend/goaoauthprovider.c:1444
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Le credenziali non contengono access_token o access_token_secret"
 
-#: ../src/goabackend/goaprovider.c:524
+#: ../src/goabackend/goaprovider.c:548
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync non è implementato sul tipo %s"
 
-#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:743
+#: ../src/goabackend/goautils.c:84
+#, c-format
+msgid "A %s account already exists for %s"
+msgstr "Esiste già un account %s per %s"
+
+#. Translators: the %s is the name of the provider. eg., Google.
+#: ../src/goabackend/goautils.c:106
+#, c-format
+msgid "%s account"
+msgstr "Account %s"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:147
+msgid "Failed to delete credentials from the keyring"
+msgstr "Eliminazione delle credenziali dal portachiavi non riuscita"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:195
+msgid "Failed to retrieve credentials from the keyring"
+msgstr "Recupero delle credenziali dal portachiavi non riuscito"
+
+#: ../src/goabackend/goautils.c:206
+msgid "Error parsing result obtained from the keyring: "
+msgstr "Errore nell'analisi del risultato ottenuto dal portachiavi: "
+
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'facebook'
+#: ../src/goabackend/goautils.c:248
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Credenziali GOA %s per l'identità %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:757
+#: ../src/goabackend/goautils.c:264
+msgid "Failed to store credentials in the keyring"
+msgstr "Archiviazione delle credenziali nel portachiavi non riuscita"
+
+#. translators: %s here is the address of the web page
+#: ../src/goabackend/goawebview.c:75
 #, c-format
-msgid "Failed to store credentials in the keyring: %s"
-msgstr "Archiviazione delle credenziali nel portachiavi non riuscita: %s"
+msgid "Loading “%s”…"
+msgstr "Carcamento di «%s»..."
 
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:828
+#: ../src/goabackend/goawindowsliveprovider.c:82
+msgid "Windows Live"
+msgstr "Windows Live"
+
+#: ../src/goabackend/goawindowsliveprovider.c:210
 #, c-format
-msgid "Failed to retrieve credentials from the keyring: %s"
-msgstr "Recupero delle credenziali dal portachiavi non riuscito: %s"
+msgid "Didn't find account email member in JSON data"
+msgstr "Non è stato trovato il membro account email nei dati JSON"
 
-#: ../src/goabackend/goaprovider.c:840
-msgid "Error parsing result obtained from the keyring: "
-msgstr "Errore nell'analisi del risultato ottenuto dal portachiavi: "
+#: ../src/goaidentity/goaalarm.c:245
+msgid "Time"
+msgstr "Data e ora"
 
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:908
-#, c-format
-msgid "Failed to delete credentials from the keyring: %s"
-msgstr "Eliminazione delle credenziali dal portachiavi non riuscita: %s"
+#: ../src/goaidentity/goaalarm.c:246
+msgid "Time to fire"
+msgstr "Data e ora di avvio"
 
-#: ../src/goabackend/goatwitterprovider.c:78
-msgid "Twitter"
-msgstr "Twitter"
+#: ../src/goaidentity/goaidentityservice.c:317
+msgid "Domain Administrator Login"
+msgstr "Accesso dell'amministratore al dominio"
 
-#: ../src/goabackend/goatwitterprovider.c:183
-#, c-format
-msgid "Didn't find id_str member in JSON data"
-msgstr "Non è stato trovato il membro id_str nei dati JSON"
+#: ../src/goaidentity/goaidentityservice.c:405
+#: ../src/goaidentity/goaidentityservice.c:597
+msgid "Could not find supported credentials"
+msgstr "Impossibile trovare credenziali supportate"
 
-#: ../src/goabackend/goatwitterprovider.c:192
-#, c-format
-msgid "Didn't find screen_name member in JSON data"
-msgstr "Non è stato trovato il membro screen_name nei dati JSON"
-
-#: ../src/goabackend/goatwitterprovider.c:260
-msgid "User Name"
-msgstr "Nome utente"
-
-#: ../src/goabackend/goayahooprovider.c:78
-msgid "Yahoo"
-msgstr "Yahoo"
-
-#: ../src/goabackend/goayahooprovider.c:186
-#, c-format
-msgid "Didn't find guid member in JSON data"
-msgstr "Non è stato trovato il membro guid nei dati JSON"
-
-#: ../src/goabackend/goayahooprovider.c:196
-#, c-format
-msgid "Didn't find value member in JSON data"
-msgstr "Non è stato trovato il membro value nei dati JSON"
-
-#: ../src/goabackend/goayahooprovider.c:222
-#, c-format
-msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+#: ../src/goaidentity/goaidentityservice.c:448
+msgid ""
+"In order to use this enterprise identity, the computer needs to be enrolled "
+"in the domain. Please have your network administrator type their domain "
+"password here."
 msgstr ""
-"Atteso stato 200 durante la richiesta di name, ottenuto invece lo stato %d (%"
-"s)"
+"Per poter usare questa identità aziendale, il computer deve essere "
+"registrato al dominio. Chiedere al proprio amministratore di rete di "
+"digitare qui la password del dominio."
 
-#: ../src/goabackend/goayahooprovider.c:235
-msgid "Error parsing usercard response as JSON: "
-msgstr "Errore nell'elaborare la risposta usercard come JSON: "
+#: ../src/goaidentity/goaidentityservice.c:488
+msgid ""
+"In order to use this enterprise identity, the computer needs to be enrolled "
+"in the domain. Please have your network administrator type their domain "
+"username here."
+msgstr ""
+"Per poter usare questa identità aziendale, il computer deve essere "
+"registrato al dominio. Chiedere al proprio amministratore di rete di "
+"digitare qui il suo nome utente."
 
-#: ../src/goabackend/goayahooprovider.c:246
+#: ../src/goaidentity/goaidentityservice.c:1167
+msgid "initial secret passed before secret key exchange"
+msgstr "segreto iniziale inserito prima dello scambio della chiave segreta"
+
+#: ../src/goaidentity/goaidentityservice.c:1373
+msgid "Initial secret key is invalid"
+msgstr "Chiave segreta iniziale non valida "
+
+#: ../src/goaidentity/goaidentityservice.c:1896
 #, c-format
-msgid "Didn't find profile member in JSON data"
-msgstr "Non è stato trovato il membro profile nei dati JSON"
+msgid "The network realm %s needs some information to sign you in."
+msgstr ""
+"Il realm di rete %s necessita di alcune infromazioni per consentire "
+"l'accesso."
 
-#: ../src/goabackend/goayahooprovider.c:256
+#: ../src/goaidentity/goakerberosidentity.c:271
+#: ../src/goaidentity/goakerberosidentity.c:280
+#: ../src/goaidentity/goakerberosidentity.c:607
+msgid "Could not find identity in credential cache: %k"
+msgstr "Impossibile trovare l'identità nella cache delle credenziali: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:620
+msgid "Could not find identity credentials in cache: %k"
+msgstr "Impossibile trovare le credenziali dell'identità nella cache: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:658
+msgid "Could not sift through identity credentials in cache: %k"
+msgstr "Impossibile esaminare le credenziali dell'identità nella cache: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:675
+msgid "Could not finish up sifting through identity credentials in cache: %k"
+msgstr ""
+"Impossibile completare l'esame delle credenziali dell'identità nella cache: "
+"%k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1013
 #, c-format
-msgid "Didn't find nickname member in JSON data"
-msgstr "Non è stato trovato il membro nickname nei dati JSON"
+msgid "No associated identification found"
+msgstr "Non è stata trovata alcuna identificazione associata"
 
-#. TODO: look up email address / screenname from GUID
-#: ../src/goabackend/goayahooprovider.c:324
-msgid "Name"
-msgstr "Nome"
+#: ../src/goaidentity/goakerberosidentity.c:1094
+msgid "Could not create credential cache: %k"
+msgstr "Impossibile creare la cache delle credenziali: %k"
 
-#~ msgid "Didn't find username member in JSON data"
-#~ msgstr "Non è stato trovato il membro username nei dati JSON"
+#: ../src/goaidentity/goakerberosidentity.c:1128
+msgid "Could not initialize credentials cache: %k"
+msgstr "Impossibile inizializzare la cache delle credenziali: %k"
 
-#~ msgid "Didn't find name member in JSON data"
-#~ msgstr "Non è stato trovato il membro name nei dati JSON"
+#: ../src/goaidentity/goakerberosidentity.c:1147
+msgid "Could not store new credentials in credentials cache: %k"
+msgstr "Impossibile archiviare le nuove credenziali nella cache: %k"
 
-#~ msgid "Email Address"
-#~ msgstr "Indirizzo email"
+#: ../src/goaidentity/goakerberosidentity.c:1424
+#, c-format
+msgid "Could not renew identity: Not signed in"
+msgstr "Impossibile rinnovare l'identità: accesso non eseguito"
 
-#~ msgid "Use this account for"
-#~ msgstr "Usare questo account per"
+#: ../src/goaidentity/goakerberosidentity.c:1436
+msgid "Could not renew identity: %k"
+msgstr "Impossibile rinnovare l'identità: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1453
+msgid "Could not get new credentials to renew identity %s: %k"
+msgstr "Impossibile ottenere nuove credenziali per rinnovare l'identità %s: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1493
+msgid "Could not erase identity: %k"
+msgstr "Impossibile cancellare l'identità: %k"
+
+#: ../src/goaidentity/goakerberosidentitymanager.c:746
+msgid "Could not find identity"
+msgstr "Impossibile trovare l'identità"
+
+#: ../src/goaidentity/goakerberosidentitymanager.c:803
+msgid "Could not create credential cache for identity"
+msgstr "Impossibile creare la cache delle credenziali per l'identità"
+
+#: ../src/goaidentity/um-realm-manager.c:368
+#, c-format
+msgid "No such domain or realm found"
+msgstr "Dominio o realm non trovato"
+
+#: ../src/goaidentity/um-realm-manager.c:743
+#, c-format
+msgid "Cannot log in as %s at the %s domain"
+msgstr "Impossibile accedere come %s al dominio %s"
+
+#: ../src/goaidentity/um-realm-manager.c:748
+msgid "Invalid password, please try again"
+msgstr "Password non valida. Riprovare"
+
+#: ../src/goaidentity/um-realm-manager.c:752
+#, c-format
+msgid "Couldn't connect to the %s domain: %s"
+msgstr "Impossibile connettersi al dominio %s: %s"
