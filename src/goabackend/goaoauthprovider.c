@@ -678,7 +678,7 @@ on_web_view_document_load_finished (WebKitWebView *web_view, WebKitWebFrame *fra
       webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (element),
                                                   "click",
                                                   G_CALLBACK (on_dom_node_click),
-                                                  false,
+                                                  FALSE,
                                                   data);
     }
 }
