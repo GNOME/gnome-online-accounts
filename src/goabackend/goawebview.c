@@ -230,6 +230,7 @@ goa_web_view_init (GoaWebView *self)
   SoupCookieJar *cookie_jar;
   SoupLogger *logger;
   SoupSession *session;
+  WebKitWebSettings *settings;
 
   self->priv = GOA_WEB_VIEW_GET_PRIVATE (self);
   priv = self->priv;
@@ -263,6 +264,9 @@ goa_web_view_init (GoaWebView *self)
   priv->web_view = webkit_web_view_new ();
   priv->status = WEBKIT_LOAD_PROVISIONAL;
   gtk_container_add (GTK_CONTAINER (scrolled_window), priv->web_view);
+
+  settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (priv->web_view));
+  g_object_set (settings, "user-stylesheet-uri", "file://" PACKAGE_DATA_DIR "/goawebview.css", NULL);
 
   /* statusbar is hidden by default */
   priv->floating_bar = nautilus_floating_bar_new (NULL, FALSE);

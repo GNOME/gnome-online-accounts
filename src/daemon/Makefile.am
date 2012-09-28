@@ -6,7 +6,7 @@ INCLUDES = 							\
 	-I$(top_srcdir)/goaidentity				\
 	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\" 		\
 	-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\" 		\
-	-DPACKAGE_DATA_DIR=\""$(datadir)"\" 			\
+	-DPACKAGE_DATA_DIR=\""$(pkgdatadir)"\" 			\
 	-DPACKAGE_BIN_DIR=\""$(bindir)"\" 			\
 	-DPACKAGE_LOCALSTATE_DIR=\""$(localstatedir)"\" 	\
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" 		\
