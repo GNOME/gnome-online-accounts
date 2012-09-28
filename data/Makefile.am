@@ -3,6 +3,9 @@ NULL =
 
 SUBDIRS = icons
 
+cssdir = $(pkgdatadir)
+css_DATA = goawebview.css
+
 servicedir       = $(datadir)/dbus-1/services
 service_in_files = org.gnome.OnlineAccounts.service.in
 service_DATA     = $(service_in_files:.service.in=.service)
