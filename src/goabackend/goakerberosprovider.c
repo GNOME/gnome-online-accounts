@@ -1474,7 +1474,7 @@ show_account (GoaProvider *provider,
   goa_util_add_row_switch_from_keyfile_with_blurb (left, right, object,
                                                    _("Use for"),
                                                    "ticketing-disabled",
-                                                   _("Network Resources"));
+                                                   _("Network _Resources"));
 }
 
 static void
