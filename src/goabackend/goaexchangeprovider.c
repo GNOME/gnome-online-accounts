@@ -845,17 +845,17 @@ show_account (GoaProvider         *provider,
   goa_util_add_row_switch_from_keyfile_with_blurb (left, right, object,
                                                    _("Use for"),
                                                    "mail-disabled",
-                                                   _("Mail"));
+                                                   _("_Mail"));
 
   goa_util_add_row_switch_from_keyfile_with_blurb (left, right, object,
                                                    NULL,
                                                    "calendar-disabled",
-                                                   _("Calendar"));
+                                                   _("Cale_ndar"));
 
   goa_util_add_row_switch_from_keyfile_with_blurb (left, right, object,
                                                    NULL,
                                                    "contacts-disabled",
-                                                   _("Contacts"));
+                                                   _("_Contacts"));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
