@@ -1018,6 +1018,7 @@ goa_util_add_row_switch_from_keyfile_with_blurb (GtkGrid      *left,
 
       label = gtk_label_new (blurb);
       gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_label_set_mnemonic_widget (GTK_LABEL (label), switch_);
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
     }
 
