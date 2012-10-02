@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-23 00:28+0200\n"
-"PO-Revision-Date: 2012-09-23 00:27+0200\n"
+"POT-Creation-Date: 2012-10-03 00:33+0200\n"
+"PO-Revision-Date: 2012-10-03 00:31+0200\n"
 "Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca-XV\n"
@@ -142,26 +142,26 @@ msgstr "_Torna-ho a intentar"
 
 #: ../src/goabackend/goaexchangeprovider.c:846
 #: ../src/goabackend/goafacebookprovider.c:361
-#: ../src/goabackend/goagoogleprovider.c:535
+#: ../src/goabackend/goagoogleprovider.c:471
 #: ../src/goabackend/goakerberosprovider.c:1475
 #: ../src/goabackend/goawindowsliveprovider.c:370
 msgid "Use for"
 msgstr "Utilitza per"
 
 #: ../src/goabackend/goaexchangeprovider.c:848
-#: ../src/goabackend/goagoogleprovider.c:537
-msgid "Mail"
-msgstr "Correu"
+#: ../src/goabackend/goagoogleprovider.c:473
+msgid "_Mail"
+msgstr "_Correu"
 
 #: ../src/goabackend/goaexchangeprovider.c:853
-#: ../src/goabackend/goagoogleprovider.c:542
-msgid "Calendar"
-msgstr "Calendari"
+#: ../src/goabackend/goagoogleprovider.c:478
+msgid "Cale_ndar"
+msgstr "Calen_dari"
 
 #: ../src/goabackend/goaexchangeprovider.c:858
-#: ../src/goabackend/goagoogleprovider.c:547
-msgid "Contacts"
-msgstr "Contactes"
+#: ../src/goabackend/goagoogleprovider.c:483
+msgid "_Contacts"
+msgstr "Co_ntactes"
 
 #: ../src/goabackend/goafacebookprovider.c:79
 msgid "Facebook"
@@ -169,7 +169,7 @@ msgstr "Facebook"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:193
-#: ../src/goabackend/goagoogleprovider.c:212
+#: ../src/goabackend/goagoogleprovider.c:184
 #: ../src/goabackend/goatwitterprovider.c:160
 #: ../src/goabackend/goawindowsliveprovider.c:176
 #: ../src/goabackend/goayahooprovider.c:163
@@ -180,7 +180,8 @@ msgstr ""
 "(%s)"
 
 #: ../src/goabackend/goafacebookprovider.c:205
-#: ../src/goabackend/goagoogleprovider.c:224
+#: ../src/goabackend/goaflickrprovider.c:181
+#: ../src/goabackend/goagoogleprovider.c:196
 #: ../src/goabackend/goaoauth2provider.c:567
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goawindowsliveprovider.c:188
@@ -195,36 +196,62 @@ msgid "Didn't find id member in JSON data"
 msgstr "No s'ha trobat el membre d'identificador a les dades JSON"
 
 #: ../src/goabackend/goafacebookprovider.c:225
-#: ../src/goabackend/goagoogleprovider.c:245
+#: ../src/goabackend/goagoogleprovider.c:207
 #, c-format
 msgid "Didn't find email member in JSON data"
 msgstr "No s'ha trobat cap correu electrònic del membre a les dades JSON"
 
 #: ../src/goabackend/goafacebookprovider.c:363
-#: ../src/goabackend/goagoogleprovider.c:552
+#: ../src/goabackend/goagoogleprovider.c:488
 #: ../src/goabackend/goawindowsliveprovider.c:372
-msgid "Chat"
-msgstr "Xat"
+msgid "C_hat"
+msgstr "_Xat"
 
-#: ../src/goabackend/goagoogleprovider.c:78
-msgid "Google"
-msgstr "Google"
+#: ../src/goabackend/goaflickrprovider.c:78
+msgid "Flickr"
+msgstr ""
 
-#: ../src/goabackend/goagoogleprovider.c:235
-#, c-format
-msgid "Didn't find data member in JSON data"
-msgstr "No s'ha trobat cap data del membre a les dades JSON"
+#: ../src/goabackend/goaflickrprovider.c:169
+#, fuzzy, c-format
+msgid "Expected status 200 when requesting user id, instead got status %d (%s)"
+msgstr ""
+"S'esperava l'estat 200 en sol·licitar el guid, però s'ha rebut l'estat %d "
+"(%s)"
 
-#: ../src/goabackend/goagoogleprovider.c:306
+#: ../src/goabackend/goaflickrprovider.c:192
+#, fuzzy, c-format
+msgid "Didn't find user member in JSON data"
+msgstr "No s'ha trobat cap nom d'usuari del membre a les dades JSON"
+
+#: ../src/goabackend/goaflickrprovider.c:201
+#, fuzzy, c-format
+msgid "Didn't find user.id member in JSON data"
+msgstr "No s'ha trobat cap guid del membre a les dades JSON"
+
+#: ../src/goabackend/goaflickrprovider.c:210
+#, fuzzy, c-format
+msgid "Didn't find user.username member in JSON data"
+msgstr "No s'ha trobat cap nom d'usuari del membre a les dades JSON"
+
+#: ../src/goabackend/goaflickrprovider.c:219
+#, fuzzy, c-format
+msgid "Didn't find user.username._content member in JSON data"
+msgstr "No s'ha trobat cap nom d'usuari del membre a les dades JSON"
+
+#: ../src/goabackend/goaflickrprovider.c:283
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr ""
 "L'hora del sistema no és correcte. Comproveu la configuració de la data i "
 "l'hora."
 
-#: ../src/goabackend/goagoogleprovider.c:557
+#: ../src/goabackend/goagoogleprovider.c:79
+msgid "Google"
+msgstr "Google"
+
+#: ../src/goabackend/goagoogleprovider.c:493
 #: ../src/goabackend/goawindowsliveprovider.c:377
-msgid "Documents"
-msgstr "Documents"
+msgid "_Documents"
+msgstr "_Documents"
 
 #: ../src/goabackend/goakerberosprovider.c:84
 msgid "Enterprise Login (Kerberos)"
@@ -274,8 +301,8 @@ msgstr ""
 "S'ha produït un error en connectar-se al servidor d'identitat corporativa"
 
 #: ../src/goabackend/goakerberosprovider.c:1477
-msgid "Network Resources"
-msgstr "Recursos de xarxa"
+msgid "Network _Resources"
+msgstr "_Recursos de xarxa"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauth2provider.c:524
@@ -391,7 +418,7 @@ msgstr ""
 "Les credencials no contenen cap testimoni d'autenticació o secret del "
 "testimoni d'autenticació"
 
-#: ../src/goabackend/goaprovider.c:550
+#: ../src/goabackend/goaprovider.c:551
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "«ensure_credentials_sync» no està implementat al tipus %s"
@@ -635,8 +662,11 @@ msgstr "La contrasenya no és vàlida, torneu-ho a provar"
 msgid "Couldn't connect to the %s domain: %s"
 msgstr "No s'ha pogut connectar al domini %s: %s"
 
-#~ msgid "Didn't find username member in JSON data"
-#~ msgstr "No s'ha trobat cap nom d'usuari del membre a les dades JSON"
+#~ msgid "Didn't find data member in JSON data"
+#~ msgstr "No s'ha trobat cap data del membre a les dades JSON"
+
+#~ msgid "Chat"
+#~ msgstr "Xat"
 
 #~ msgid "Didn't find name member in JSON data"
 #~ msgstr "No s'ha trobat cap nom del membre a les dades JSON"
