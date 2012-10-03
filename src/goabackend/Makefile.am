@@ -70,6 +70,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goabackendenumtypes.h		goabackendenumtypes.c		\
 	goaeditablelabel.h		goaeditablelabel.c		\
 	goaewsclient.h			goaewsclient.c			\
+	goahttpclient.h			goahttpclient.c			\
 	goaprovider.h			goaprovider.c			\
 	goaexchangeprovider.h		goaexchangeprovider.c		\
 	goalogging.h			goalogging.c			\

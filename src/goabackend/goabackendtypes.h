@@ -36,6 +36,9 @@ G_BEGIN_DECLS
 struct _GoaEwsClient;
 typedef struct _GoaEwsClient GoaEwsClient;
 
+struct _GoaHttpClient;
+typedef struct _GoaHttpClient GoaHttpClient;
+
 struct _GoaProvider;
 typedef struct _GoaProvider GoaProvider;
 
