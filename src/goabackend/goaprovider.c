@@ -30,6 +30,7 @@
 #include "goaexchangeprovider.h"
 #include "goagoogleprovider.h"
 #include "goafacebookprovider.h"
+#include "goaowncloudprovider.h"
 #include "goayahooprovider.h"
 #include "goatwitterprovider.h"
 #include "goaflickrprovider.h"
@@ -621,6 +622,9 @@ ensure_ep_and_builtins (void)
        */
 #ifdef GOA_GOOGLE_ENABLED
       type = GOA_TYPE_GOOGLE_PROVIDER;
+#endif
+#ifdef GOA_OWNCLOUD_ENABLED
+      type = GOA_TYPE_OWNCLOUD_PROVIDER;
 #endif
 #ifdef GOA_FACEBOOK_ENABLED
       type = GOA_TYPE_FACEBOOK_PROVIDER;

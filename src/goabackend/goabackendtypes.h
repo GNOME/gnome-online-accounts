@@ -60,6 +60,9 @@ typedef struct _GoaGoogleProvider GoaGoogleProvider;
 struct _GoaFacebookProvider;
 typedef struct _GoaFacebookProvider GoaFacebookProvider;
 
+struct _GoaOwncloudProvider;
+typedef struct _GoaOwncloudProvider GoaOwncloudProvider;
+
 struct _GoaYahooProvider;
 typedef struct _GoaYahooProvider GoaYahooProvider;
 

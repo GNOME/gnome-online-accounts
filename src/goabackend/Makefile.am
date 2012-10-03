@@ -53,6 +53,7 @@ libgoa_backend_1_0_la_HEADERS =						\
 	goaexchangeprovider.h						\
 	goagoogleprovider.h						\
 	goafacebookprovider.h						\
+	goaowncloudprovider.h						\
 	goayahooprovider.h						\
 	goatwitterprovider.h						\
 	goaflickrprovider.h						\
@@ -78,6 +79,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goaoauth2provider.h		goaoauth2provider.c		\
 	goagoogleprovider.h		goagoogleprovider.c		\
 	goafacebookprovider.h		goafacebookprovider.c		\
+	goaowncloudprovider.h		goaowncloudprovider.c		\
 	goayahooprovider.h		goayahooprovider.c		\
 	goatwitterprovider.h		goatwitterprovider.c		\
 	goaflickrprovider.h		goaflickrprovider.c		\

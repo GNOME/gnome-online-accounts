@@ -143,6 +143,16 @@ if test "$enable_google" != "no"; then
   AC_DEFINE(GOA_GOOGLE_ENABLED, 1, [Enable Google data provider])
 fi
 
+# ownCloud
+AC_ARG_ENABLE([owncloud],
+              [AS_HELP_STRING([--enable-owncloud],
+              [Enable ownCloud provider])],
+              [],
+              [enable_owncloud=no])
+if test "$enable_owncloud" != "no"; then
+  AC_DEFINE(GOA_OWNCLOUD_ENABLED, 1, [Enable ownCloud data provider])
+fi
+
 # Twitter
 AC_ARG_ENABLE([twitter], [AS_HELP_STRING([--enable-twitter], [Enable Twitter provider])], [], [enable_twitter=no])
 AC_ARG_WITH(twitter-consumer-key,
@@ -371,6 +381,7 @@ echo "
 	Flickr provider:                ${enable_flickr} (OAuth 1.0, key:${with_flickr_consumer_key} secret:${with_flickr_consumer_secret})
 	Google provider:                ${enable_google} (OAuth 2.0, id:${with_google_client_id} secret:${with_google_client_secret})
 	Microsoft Exchange provider:    ${enable_exchange}
+	ownCloud provider:              ${enable_owncloud}
 	Kerberos provider:              ${enable_kerberos}
 	Twitter provider:               ${enable_twitter} (OAuth 1.0, key:${with_twitter_consumer_key} secret:${with_twitter_consumer_secret})
 	Yahoo provider:                 ${enable_yahoo} (OAuth 1.0, key:${with_yahoo_consumer_key} secret:${with_yahoo_consumer_secret})
