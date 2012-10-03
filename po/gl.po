@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-15 01:45+0200\n"
-"PO-Revision-Date: 2012-09-15 01:45+0200\n"
+"POT-Creation-Date: 2012-10-03 12:05+0200\n"
+"PO-Revision-Date: 2012-10-03 12:07+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.7.0\n"
+"X-Generator: Virtaal 0.7.1\n"
 "X-Project-Style: gnome\n"
 
 #. shut up -Wunused-but-set-variable
@@ -89,7 +89,7 @@ msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:279
-#: ../src/goabackend/goaoauth2provider.c:1392
+#: ../src/goabackend/goaoauth2provider.c:1393
 #: ../src/goabackend/goaoauthprovider.c:1415
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
@@ -128,7 +128,7 @@ msgstr "_Servidor"
 #: ../src/goabackend/goaexchangeprovider.c:594
 #: ../src/goabackend/goaexchangeprovider.c:760
 #: ../src/goabackend/goakerberosprovider.c:1337
-#: ../src/goabackend/goaoauth2provider.c:952
+#: ../src/goabackend/goaoauth2provider.c:953
 #: ../src/goabackend/goaoauthprovider.c:945
 #, c-format
 msgid "Dialog was dismissed"
@@ -147,26 +147,26 @@ msgstr "_Tentar de novo"
 
 #: ../src/goabackend/goaexchangeprovider.c:846
 #: ../src/goabackend/goafacebookprovider.c:361
-#: ../src/goabackend/goagoogleprovider.c:535
+#: ../src/goabackend/goagoogleprovider.c:471
 #: ../src/goabackend/goakerberosprovider.c:1475
 #: ../src/goabackend/goawindowsliveprovider.c:370
 msgid "Use for"
 msgstr "Usar para"
 
 #: ../src/goabackend/goaexchangeprovider.c:848
-#: ../src/goabackend/goagoogleprovider.c:537
-msgid "Mail"
-msgstr "Mail"
+#: ../src/goabackend/goagoogleprovider.c:473
+msgid "_Mail"
+msgstr "Co_rreo"
 
 #: ../src/goabackend/goaexchangeprovider.c:853
-#: ../src/goabackend/goagoogleprovider.c:542
-msgid "Calendar"
-msgstr "Calendar"
+#: ../src/goabackend/goagoogleprovider.c:478
+msgid "Cale_ndar"
+msgstr "Cale_ndario"
 
 #: ../src/goabackend/goaexchangeprovider.c:858
-#: ../src/goabackend/goagoogleprovider.c:547
-msgid "Contacts"
-msgstr "Contacts"
+#: ../src/goabackend/goagoogleprovider.c:483
+msgid "_Contacts"
+msgstr "_Contactos"
 
 #: ../src/goabackend/goafacebookprovider.c:79
 msgid "Facebook"
@@ -174,7 +174,7 @@ msgstr "Facebook"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:193
-#: ../src/goabackend/goagoogleprovider.c:212
+#: ../src/goabackend/goagoogleprovider.c:184
 #: ../src/goabackend/goatwitterprovider.c:160
 #: ../src/goabackend/goawindowsliveprovider.c:176
 #: ../src/goabackend/goayahooprovider.c:163
@@ -186,8 +186,9 @@ msgstr ""
 
 # N.T.: JSON stands for JavaScript Object Notation that is a language independent text format. Unha linguaxe de progrmación.
 #: ../src/goabackend/goafacebookprovider.c:205
-#: ../src/goabackend/goagoogleprovider.c:224
-#: ../src/goabackend/goaoauth2provider.c:566
+#: ../src/goabackend/goaflickrprovider.c:181
+#: ../src/goabackend/goagoogleprovider.c:196
+#: ../src/goabackend/goaoauth2provider.c:567
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goawindowsliveprovider.c:188
 #: ../src/goabackend/goayahooprovider.c:175
@@ -201,36 +202,65 @@ msgid "Didn't find id member in JSON data"
 msgstr "Non foi posíbel atopar o membro «id» nos datos JSON"
 
 #: ../src/goabackend/goafacebookprovider.c:225
-#: ../src/goabackend/goagoogleprovider.c:245
+#: ../src/goabackend/goagoogleprovider.c:207
 #, c-format
 msgid "Didn't find email member in JSON data"
 msgstr "Non foi posíbel atopar o correo electrónico do membro nos datos JSON"
 
 #: ../src/goabackend/goafacebookprovider.c:363
-#: ../src/goabackend/goagoogleprovider.c:552
+#: ../src/goabackend/goagoogleprovider.c:488
 #: ../src/goabackend/goawindowsliveprovider.c:372
-msgid "Chat"
-msgstr "Conversa"
+msgid "C_hat"
+msgstr "C_hat"
 
-#: ../src/goabackend/goagoogleprovider.c:78
-msgid "Google"
-msgstr "Google"
+#: ../src/goabackend/goaflickrprovider.c:78
+msgid "Flickr"
+msgstr "Flickr"
 
-#: ../src/goabackend/goagoogleprovider.c:235
+#: ../src/goabackend/goaflickrprovider.c:169
 #, c-format
-msgid "Didn't find data member in JSON data"
-msgstr "Non foi posíbel atopar os datos do membro nos datos JSON"
+msgid "Expected status 200 when requesting user id, instead got status %d (%s)"
+msgstr ""
+"Agardábase o estado 200 cando se solicitou o id do usuario, mais obtívose o "
+"estado %d (%s)"
 
-#: ../src/goabackend/goagoogleprovider.c:306
+# poño este en maiúsculas para enfatizar a diferencia deste (usuario único) co member name (nome "real" do usuario)
+#: ../src/goabackend/goaflickrprovider.c:192
+#, c-format
+msgid "Didn't find user member in JSON data"
+msgstr "Non foi posíbel atopar o membro «user» nos datos JSON"
+
+#: ../src/goabackend/goaflickrprovider.c:201
+#, c-format
+msgid "Didn't find user.id member in JSON data"
+msgstr "Non foi posíbel atopar o membro «user.id» nos datos JSON"
+
+# poño este en maiúsculas para enfatizar a diferencia deste (usuario único) co member name (nome "real" do usuario)
+#: ../src/goabackend/goaflickrprovider.c:210
+#, c-format
+msgid "Didn't find user.username member in JSON data"
+msgstr "Non foi posíbel atopar o membro  «user.username» nos datos JSON"
+
+# poño este en maiúsculas para enfatizar a diferencia deste (usuario único) co member name (nome "real" do usuario)
+#: ../src/goabackend/goaflickrprovider.c:219
+#, c-format
+msgid "Didn't find user.username._content member in JSON data"
+msgstr "Non foi posíbel atopar o membro «user.username._content» nos datos JSON"
+
+#: ../src/goabackend/goaflickrprovider.c:283
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr ""
 "A hora do seu sistema non é válida. Comprobe a súa configuración de data e "
 "hora."
 
-#: ../src/goabackend/goagoogleprovider.c:557
+#: ../src/goabackend/goagoogleprovider.c:79
+msgid "Google"
+msgstr "Google"
+
+#: ../src/goabackend/goagoogleprovider.c:493
 #: ../src/goabackend/goawindowsliveprovider.c:377
-msgid "Documents"
-msgstr "Documents"
+msgid "_Documents"
+msgstr "_Documentos"
 
 #: ../src/goabackend/goakerberosprovider.c:84
 msgid "Enterprise Login (Kerberos)"
@@ -279,11 +309,11 @@ msgid "Error connecting to enterprise identity server"
 msgstr "Produciuse un erro ao conectarse ao servidor corporativo de identidade"
 
 #: ../src/goabackend/goakerberosprovider.c:1477
-msgid "Network Resources"
-msgstr "Recursos en rede"
+msgid "Network _Resources"
+msgstr "_Recursos en rede"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:523
+#: ../src/goabackend/goaoauth2provider.c:524
 #: ../src/goabackend/goaoauthprovider.c:537
 #, c-format
 msgid ""
@@ -292,24 +322,24 @@ msgstr ""
 "Esperábase o estado 200 ó pedir o sinal de acceso, pero reciveuse o estado "
 "%d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:543
+#: ../src/goabackend/goaoauth2provider.c:544
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "Non se atopou o sinal de acceso nos datos non-JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:577
+#: ../src/goabackend/goaoauth2provider.c:578
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "Non se atopou o sinal de acceso nos datos JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:746
-#: ../src/goabackend/goaoauth2provider.c:785
+#: ../src/goabackend/goaoauth2provider.c:747
+#: ../src/goabackend/goaoauth2provider.c:786
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "A resposta para o acceso foi \"%s\""
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:886
+#: ../src/goabackend/goaoauth2provider.c:887
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
@@ -318,34 +348,34 @@ msgstr ""
 "Pegue o código de acceso obtido desde a <a href=\"%s\">páxina de "
 "autorización</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:978
+#: ../src/goabackend/goaoauth2provider.c:979
 #: ../src/goabackend/goaoauthprovider.c:976
 msgid "Error getting an Access Token: "
 msgstr "Produciuse un erro ao obter un Token de Acceso: "
 
-#: ../src/goabackend/goaoauth2provider.c:993
+#: ../src/goabackend/goaoauth2provider.c:994
 #: ../src/goabackend/goaoauthprovider.c:989
 msgid "Error getting identity: "
 msgstr "Produciuse un erro ao obter a identidade: "
 
-#: ../src/goabackend/goaoauth2provider.c:1253
+#: ../src/goabackend/goaoauth2provider.c:1254
 #: ../src/goabackend/goaoauthprovider.c:1265
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "Foi solicitado conectarse coma %s, pero estás conectado coma %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1419
+#: ../src/goabackend/goaoauth2provider.c:1420
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "As credenciais non conteñen o access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1458
+#: ../src/goabackend/goaoauth2provider.c:1459
 #: ../src/goabackend/goaoauthprovider.c:1488
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Produciuse un erro ao actualizar o token de acceso (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1493
+#: ../src/goabackend/goaoauth2provider.c:1494
 #: ../src/goabackend/goaoauthprovider.c:1518
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
@@ -389,7 +419,7 @@ msgstr ""
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "As credenciais non conteñen «access_token» ou «access_token_secret»"
 
-#: ../src/goabackend/goaprovider.c:550
+#: ../src/goabackend/goaprovider.c:551
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "«ensure_credentials» non está implementado no tipo %s"
@@ -628,6 +658,12 @@ msgstr "Contrasinal incorrecto, ténteo de novo"
 msgid "Couldn't connect to the %s domain: %s"
 msgstr "Non é posíbel conectarse ao dominio %s: %s"
 
+#~ msgid "Chat"
+#~ msgstr "Conversa"
+
+#~ msgid "Didn't find data member in JSON data"
+#~ msgstr "Non foi posíbel atopar os datos do membro nos datos JSON"
+
 #~ msgid "New Microsoft Exchange Account"
 #~ msgstr "Nova conta de Microsoft Exchange"
 
@@ -651,10 +687,6 @@ msgstr "Non é posíbel conectarse ao dominio %s: %s"
 
 #~ msgid "Name"
 #~ msgstr "Nome"
-
-# poño este en maiúsculas para enfatizar a diferencia deste (usuario único) co member name (nome "real" do usuario)
-#~ msgid "Didn't find username member in JSON data"
-#~ msgstr "Non foi posíbel atopar o nome de usuario do membro nos datos JSON"
 
 #~ msgid "Didn't find name member in JSON data"
 #~ msgstr "Non se atopou o nome de membro nos datos JSON"
