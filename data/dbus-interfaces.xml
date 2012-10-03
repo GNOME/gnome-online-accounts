@@ -166,6 +166,16 @@
     -->
     <property name="DocumentsDisabled" type="b" access="readwrite"/>
 
+    <!-- FilesDisabled:
+         If %TRUE, the account will not expose any
+         #org.gnome.OnlineAccounts.Files interface. If the account does not
+         provide files-like capabilities, this property does nothing.
+
+         Note that the #org.gnomeOnlineAccounts.Files interface is added or
+         removed from the account asynchronously.
+    -->
+    <property name="FilesDisabled" type="b" access="readwrite"/>
+
     <!-- TicketingDisabled:
          If %TRUE, the account will not expose any
          #org.gnome.OnlineAccounts.Ticketing interface. If the account does not
@@ -446,6 +456,28 @@
       documents-like capabilities.
   -->
   <interface name="org.gnome.OnlineAccounts.Documents">
+  </interface>
+
+  <!--
+      org.gnome.OnlineAccounts.Files:
+      @since: 3.8.0
+
+      An account object implements this interface if it provides
+      files-like capabilities. For example, it can represent a
+      <ulink url="http://tools.ietf.org/html/rfc4918">WebDAV</ulink>
+      server.
+  -->
+  <interface name="org.gnome.OnlineAccounts.Files">
+    <!-- Uri:
+         The top-level location of the files.
+
+         This is a
+         <ulink url="http://developer.gnome.org/gio/stable/GVfs.html">
+         Gvfs</ulink>-specific URI meant to be used with
+         <ulink url="http://developer.gnome.org/platform-overview/stable/gio">
+         GIO</ulink>. It may not work with anything else.
+      -->
+    <property name="Uri" type="s" access="read"/>
   </interface>
 
   <!--
