@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-09-15 15:57+0000\n"
-"PO-Revision-Date: 2012-09-16 23:19+0300\n"
+"POT-Creation-Date: 2012-10-05 15:48+0000\n"
+"PO-Revision-Date: 2012-10-05 22:42+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -83,8 +83,8 @@ msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:279
-#: ../src/goabackend/goaoauth2provider.c:1392
-#: ../src/goabackend/goaoauthprovider.c:1415
+#: ../src/goabackend/goaoauth2provider.c:1394
+#: ../src/goabackend/goaoauthprovider.c:1417
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "Įgaliojimai nerasti raktinėje (%s, %d): "
@@ -147,18 +147,21 @@ msgstr "Naudotina"
 
 #: ../src/goabackend/goaexchangeprovider.c:848
 #: ../src/goabackend/goagoogleprovider.c:537
-msgid "Mail"
-msgstr "Paštas"
+#| msgid "Mail"
+msgid "_Mail"
+msgstr "_Paštas"
 
 #: ../src/goabackend/goaexchangeprovider.c:853
 #: ../src/goabackend/goagoogleprovider.c:542
-msgid "Calendar"
-msgstr "Kalendorius"
+#| msgid "Calendar"
+msgid "Cale_ndar"
+msgstr "Kale_ndorius"
 
 #: ../src/goabackend/goaexchangeprovider.c:858
 #: ../src/goabackend/goagoogleprovider.c:547
-msgid "Contacts"
-msgstr "Kontaktai"
+#| msgid "Contacts"
+msgid "_Contacts"
+msgstr "_Kontaktai"
 
 #: ../src/goabackend/goafacebookprovider.c:79
 msgid "Facebook"
@@ -193,8 +196,8 @@ msgstr "JSON duomenyse nerastas narys email"
 #: ../src/goabackend/goafacebookprovider.c:363
 #: ../src/goabackend/goagoogleprovider.c:552
 #: ../src/goabackend/goawindowsliveprovider.c:372
-msgid "Chat"
-msgstr "Pokalbiai"
+msgid "C_hat"
+msgstr "_Pokalbiai"
 
 #: ../src/goabackend/goagoogleprovider.c:78
 msgid "Google"
@@ -211,8 +214,9 @@ msgstr "Jūsų sistemos laikas yra netinkamas. Patikrinkite datos ir laiko nusta
 
 #: ../src/goabackend/goagoogleprovider.c:557
 #: ../src/goabackend/goawindowsliveprovider.c:377
-msgid "Documents"
-msgstr "Dokumentai"
+#| msgid "Documents"
+msgid "_Documents"
+msgstr "_Dokumentai"
 
 #: ../src/goabackend/goakerberosprovider.c:84
 msgid "Enterprise Login (Kerberos)"
@@ -258,8 +262,9 @@ msgid "Error connecting to enterprise identity server"
 msgstr "Klaida jungiantis prie kompanijos identitetų serverio"
 
 #: ../src/goabackend/goakerberosprovider.c:1477
-msgid "Network Resources"
-msgstr "Tinklo resursai"
+#| msgid "Network Resources"
+msgid "Network _Resources"
+msgstr "Tinklo _resursai"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauth2provider.c:523
@@ -300,25 +305,25 @@ msgstr "Klaida gaunant prieigos leksemą: "
 msgid "Error getting identity: "
 msgstr "Klaida gaunant identifikatorių: "
 
-#: ../src/goabackend/goaoauth2provider.c:1253
-#: ../src/goabackend/goaoauthprovider.c:1265
+#: ../src/goabackend/goaoauth2provider.c:1255
+#: ../src/goabackend/goaoauthprovider.c:1267
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "Prašyta prisijungti kaip %s, bet prisijungta kaip %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1419
+#: ../src/goabackend/goaoauth2provider.c:1421
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Įgaliojimai neturi access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1458
-#: ../src/goabackend/goaoauthprovider.c:1488
+#: ../src/goabackend/goaoauth2provider.c:1460
+#: ../src/goabackend/goaoauthprovider.c:1490
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Nepavyko atnaujinti prieigos leksemos (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1493
-#: ../src/goabackend/goaoauthprovider.c:1518
+#: ../src/goabackend/goaoauth2provider.c:1495
+#: ../src/goabackend/goaoauthprovider.c:1520
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "Klaida įrašant įgaliojimus į raktinę (%s, %d): "
@@ -349,7 +354,7 @@ msgstr "Atsakyme trūksta request_token arba request_token_secret antraščių"
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "Įdėkite leksemą, gautą iš <a href=\"%s\">autorizacijos puslapio</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1444
+#: ../src/goabackend/goaoauthprovider.c:1446
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Įgaliojimai neturi access_token arba access_token_secret"
@@ -527,47 +532,3 @@ msgstr "Netinkamas slaptažodis, bandykite dar kartą"
 msgid "Couldn't connect to the %s domain: %s"
 msgstr "Nepavyko prisijungti prie %s domeno: %s"
 
-#~ msgid "New Microsoft Exchange Account"
-#~ msgstr "Nauja Microsoft Exchange paskyra"
-
-#~ msgid "Microsoft Exchange Account"
-#~ msgstr "Microsoft Exchange paskyra"
-
-#~ msgid "New Enterprise Login (Kerberos)"
-#~ msgstr "Naujas kompanijos prisijungimas (Kerberos)"
-
-#~ msgid "Twitter"
-#~ msgstr "Twitter"
-
-#~ msgid "Didn't find id_str member in JSON data"
-#~ msgstr "JSON duomenyse nerastas narys id_str"
-
-#~ msgid "Didn't find screen_name member in JSON data"
-#~ msgstr "JSON duomenyse nerastas narys screen_name"
-
-#~ msgid "Add %s"
-#~ msgstr "Pridėti %s"
-
-#~ msgid "Refresh %s"
-#~ msgstr "Atnaujinti %s"
-
-#~ msgid "Yahoo"
-#~ msgstr "Yahoo"
-
-#~ msgid "Didn't find guid member in JSON data"
-#~ msgstr "JSON duomenyse nerastas narys guid"
-
-#~ msgid "Didn't find value member in JSON data"
-#~ msgstr "JSON duomenyse nerastas narys value"
-
-#~ msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-#~ msgstr "Tikėtasi statuso 200 prašant vardo, tačiau gautas statusas %d (%s)"
-
-#~ msgid "Error parsing usercard response as JSON: "
-#~ msgstr "Klaida skaitant usercard atsakymą kaip JSON: "
-
-#~ msgid "Didn't find profile member in JSON data"
-#~ msgstr "JSON duomenyse nerastas narys profile"
-
-#~ msgid "Didn't find nickname member in JSON data"
-#~ msgstr "JSON duomenyse nerastas narys nickname"
