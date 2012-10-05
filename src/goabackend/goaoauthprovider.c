@@ -1233,6 +1233,8 @@ goa_oauth_provider_refresh_account (GoaProvider  *_provider,
   session_handle = NULL;
   identity = NULL;
 
+  ret = FALSE;
+
   dialog = gtk_dialog_new_with_buttons (NULL,
                                         parent,
                                         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
