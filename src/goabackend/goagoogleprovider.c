@@ -250,6 +250,41 @@ is_deny_node (GoaOAuth2Provider *provider, WebKitDOMNode *node)
   return ret;
 }
 
+static gboolean
+is_identity_node (GoaOAuth2Provider *provider, WebKitDOMHTMLInputElement *element)
+{
+  gboolean ret;
+  gchar *element_type;
+  gchar *id;
+  gchar *name;
+
+  element_type = NULL;
+  id = NULL;
+  name = NULL;
+
+  ret = FALSE;
+
+  g_object_get (element, "type", &element_type, NULL);
+  if (g_strcmp0 (element_type, "email") != 0)
+    goto out;
+
+  id = webkit_dom_html_element_get_id (WEBKIT_DOM_HTML_ELEMENT (element));
+  if (g_strcmp0 (id, "Email") != 0)
+    goto out;
+
+  name = webkit_dom_html_input_element_get_name (element);
+  if (g_strcmp0 (name, "Email") != 0)
+    goto out;
+
+  ret = TRUE;
+
+ out:
+  g_free (element_type);
+  g_free (id);
+  g_free (name);
+  return ret;
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
@@ -535,6 +570,7 @@ goa_google_provider_class_init (GoaGoogleProviderClass *klass)
   oauth2_class->get_redirect_uri          = get_redirect_uri;
   oauth2_class->get_scope                 = get_scope;
   oauth2_class->is_deny_node              = is_deny_node;
+  oauth2_class->is_identity_node          = is_identity_node;
   oauth2_class->get_token_uri             = get_token_uri;
   oauth2_class->get_use_mobile_browser    = get_use_mobile_browser;
   oauth2_class->add_account_key_values    = add_account_key_values;
