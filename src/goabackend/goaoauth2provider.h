@@ -71,7 +71,9 @@ struct _GoaOAuth2Provider
  * @get_use_external_browser: Virtual function for goa_oauth2_provider_get_use_external_browser().
  * @get_use_mobile_browser: Virtual function for goa_oauth2_provider_get_use_mobile_browser().
  * @add_account_key_values: Virtual function for goa_oauth2_provider_add_account_key_values().
- * @is_deny_node: Virtual function for goa_oauth2_provider_is_deny_node().
+ * @is_deny_node: Virtual function for
+ * goa_oauth2_provider_is_deny_node().
+ * @is_identity_node: Virtual function for goa_oauth2_provider_is_identity_node().
  *
  * Class structure for #GoaOAuth2Provider.
  */
@@ -107,10 +109,12 @@ struct _GoaOAuth2ProviderClass
   /* pure virtual */
   gboolean     (*is_deny_node)             (GoaOAuth2Provider  *provider,
                                             WebKitDOMNode      *node);
+  gboolean     (*is_identity_node)         (GoaOAuth2Provider         *provider,
+                                            WebKitDOMHTMLInputElement *element);
 
   /*< private >*/
   /* Padding for future expansion */
-  gpointer goa_reserved[31];
+  gpointer goa_reserved[30];
 };
 
 GType        goa_oauth2_provider_get_type                 (void) G_GNUC_CONST;
@@ -128,6 +132,8 @@ gchar       *goa_oauth2_provider_get_identity_sync        (GoaOAuth2Provider  *p
                                                            GError            **error);
 gboolean     goa_oauth2_provider_is_deny_node             (GoaOAuth2Provider  *provider,
                                                            WebKitDOMNode      *node);
+gboolean     goa_oauth2_provider_is_identity_node         (GoaOAuth2Provider         *provider,
+                                                           WebKitDOMHTMLInputElement *element);
 gchar       *goa_oauth2_provider_get_access_token_sync    (GoaOAuth2Provider  *provider,
                                                            GoaObject          *object,
                                                            gboolean            force_refresh,

@@ -459,6 +459,26 @@ goa_oauth2_provider_is_deny_node (GoaOAuth2Provider *provider, WebKitDOMNode *no
   return GOA_OAUTH2_PROVIDER_GET_CLASS (provider)->is_deny_node (provider, node);
 }
 
+/**
+ * goa_oauth2_provider_is_identity_node:
+ * @provider: A #GoaOAuth2Provider.
+ * @node: A #WebKitDOMHTMLInputElement.
+ *
+ * Checks whether @node is the HTML UI element that the user can use
+ * to indetify herself at the provider.
+ *
+ * This is a pure virtual method - a subclass must provide an
+ * implementation.
+ *
+ * Returns: %TRUE if the @node can be used to deny permission.
+ */
+gboolean
+goa_oauth2_provider_is_identity_node (GoaOAuth2Provider *provider, WebKitDOMHTMLInputElement *element)
+{
+  g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (provider), FALSE);
+  return GOA_OAUTH2_PROVIDER_GET_CLASS (provider)->is_identity_node (provider, element);
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
@@ -618,6 +638,8 @@ typedef struct
   gint access_token_expires_in;
   gchar *refresh_token;
 
+  const gchar *existing_identity;
+
   gchar *identity;
   gchar *presentation_identity;
 } IdentifyData;
@@ -683,14 +705,22 @@ on_web_view_document_load_finished (WebKitWebView *web_view, WebKitWebFrame *fra
     {
       WebKitDOMNode *element = webkit_dom_node_list_item (elements, i);
 
-      if (!goa_oauth2_provider_is_deny_node (provider, element))
-        continue;
-
-      webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (element),
-                                                  "click",
-                                                  G_CALLBACK (on_dom_node_click),
-                                                  FALSE,
-                                                  data);
+      if (goa_oauth2_provider_is_deny_node (provider, element))
+        {
+          webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (element),
+                                                      "click",
+                                                      G_CALLBACK (on_dom_node_click),
+                                                      FALSE,
+                                                      data);
+        }
+      else if (data->existing_identity != NULL
+               && WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element)
+               && goa_oauth2_provider_is_identity_node (provider, WEBKIT_DOM_HTML_INPUT_ELEMENT (element)))
+        {
+          webkit_dom_html_input_element_set_value (WEBKIT_DOM_HTML_INPUT_ELEMENT (element),
+                                                   data->existing_identity);
+          webkit_dom_html_input_element_set_read_only (WEBKIT_DOM_HTML_INPUT_ELEMENT (element), TRUE);
+        }
     }
 }
 
@@ -820,6 +850,7 @@ on_entry_changed (GtkEditable *editable,
 static gboolean
 get_tokens_and_identity (GoaOAuth2Provider  *provider,
                          gboolean            add_account,
+                         const gchar        *existing_identity,
                          GtkDialog          *dialog,
                          GtkBox             *vbox,
                          gchar             **out_authorization_code,
@@ -839,6 +870,8 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
   gchar *escaped_scope;
 
   g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (provider), FALSE);
+  g_return_val_if_fail ((!add_account && existing_identity != NULL && existing_identity[0] != '\0')
+                        || (add_account && existing_identity == NULL), FALSE);
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), FALSE);
   g_return_val_if_fail (GTK_IS_BOX (vbox), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -854,6 +887,7 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
   data.provider = provider;
   data.dialog = dialog;
   data.loop = g_main_loop_new (NULL, FALSE);
+  data.existing_identity = existing_identity;
 
   /* TODO: use oauth2_proxy_build_login_url_full() */
   escaped_redirect_uri = g_uri_escape_string (goa_oauth2_provider_get_redirect_uri (provider), NULL, TRUE);
@@ -1117,6 +1151,7 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
 
   if (!get_tokens_and_identity (provider,
                                 TRUE,
+                                NULL,
                                 dialog,
                                 vbox,
                                 &authorization_code,
@@ -1201,6 +1236,7 @@ goa_oauth2_provider_refresh_account (GoaProvider  *_provider,
                                      GError      **error)
 {
   GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (_provider);
+  GoaAccount *account;
   GtkWidget *dialog;
   gchar *authorization_code;
   gchar *access_token;
@@ -1208,6 +1244,7 @@ goa_oauth2_provider_refresh_account (GoaProvider  *_provider,
   gchar *refresh_token;
   gchar *identity;
   const gchar *existing_identity;
+  const gchar *existing_presentation_identity;
   GVariantBuilder builder;
   gboolean ret;
 
@@ -1233,8 +1270,16 @@ goa_oauth2_provider_refresh_account (GoaProvider  *_provider,
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
   gtk_widget_show_all (dialog);
 
+  account = goa_object_peek_account (object);
+
+  /* We abuse presentation identity here because for some providers
+   * identity can be a machine readable ID, which can not be used to
+   * log in via the provider's web interface.
+   */
+  existing_presentation_identity = goa_account_get_presentation_identity (account);
   if (!get_tokens_and_identity (provider,
                                 FALSE,
+                                existing_presentation_identity,
                                 GTK_DIALOG (dialog),
                                 GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))),
                                 &authorization_code,
@@ -1246,6 +1291,10 @@ goa_oauth2_provider_refresh_account (GoaProvider  *_provider,
                                 error))
     goto out;
 
+  /* Changes made to the web interface by the providers can break our
+   * DOM parsing. So we should still query and check the identity
+   * afterwards.
+   */
   existing_identity = goa_account_get_identity (goa_object_peek_account (object));
   if (g_strcmp0 (identity, existing_identity) != 0)
     {
