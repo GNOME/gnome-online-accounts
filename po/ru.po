@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-09-14 22:13+0000\n"
-"PO-Revision-Date: 2012-09-22 12:52+0400\n"
+"PO-Revision-Date: 2012-10-07 17:03+0400\n"
 "Last-Translator: Yuri Myasoedov <omerta13@yandex.ru>\n"
 "Language-Team: русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -89,14 +89,14 @@ msgstr "Microsoft Exchange"
 #: ../src/goabackend/goaoauthprovider.c:1415
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
-msgstr "Мандат не найден в связке ключей (%s, %d): "
+msgstr "Учётные данные не найдены в связке ключей (%s, %d): "
 
 #. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:295
 #: ../src/goabackend/goaexchangeprovider.c:923
 #, c-format
 msgid "Did not find password with username `%s' in credentials"
-msgstr "Не искать пароль с именем пользователя «%s» в мандатах"
+msgstr "Не искать пароль с именем пользователя «%s» в учётных данных"
 
 #: ../src/goabackend/goaexchangeprovider.c:486
 msgid "_E-mail"
@@ -230,13 +230,14 @@ msgstr "Служба идентификации вернула неверный 
 #, c-format
 msgid "Could not find saved credentials for principal `%s' in keyring"
 msgstr ""
-"Не удалось найти в связке ключей сохранённый мандат для администратора "
-"доступа «%s»"
+"Не удалось найти в связке ключей сохранённые учётные данные для "
+"администратора доступа «%s»"
 
 #: ../src/goabackend/goakerberosprovider.c:651
 #, c-format
 msgid "Did not find password for principal `%s' in credentials"
-msgstr "Не удалось найти в мандатах пароль для администратора доступа «%s»"
+msgstr ""
+"Не удалось найти в учётных данных пароль для администратора доступа «%s»"
 
 #: ../src/goabackend/goakerberosprovider.c:1019
 msgid "_Domain"
@@ -244,12 +245,12 @@ msgstr "_Домен"
 
 #: ../src/goabackend/goakerberosprovider.c:1020
 msgid "Enterprise domain or realm name"
-msgstr "Корпоративный домен или имя realm"
+msgstr "Корпоративный домен или имя области"
 
 #: ../src/goabackend/goakerberosprovider.c:1235
 #: ../src/goaidentity/goaidentityservice.c:1891
 msgid "Log In to Realm"
-msgstr "Войти в Realm"
+msgstr "Войти в область"
 
 #: ../src/goabackend/goakerberosprovider.c:1236
 msgid "Please enter your password below."
@@ -274,7 +275,7 @@ msgstr "Сетевые ресурсы"
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr ""
-"При запросе жетона доступа ожидалось получить код состояния 200, но был "
+"При запросе маркера доступа ожидалось получить код состояния 200, но был "
 "получен код %d (%s)"
 
 #: ../src/goabackend/goaoauth2provider.c:543
@@ -306,7 +307,7 @@ msgstr ""
 #: ../src/goabackend/goaoauth2provider.c:978
 #: ../src/goabackend/goaoauthprovider.c:976
 msgid "Error getting an Access Token: "
-msgstr "Ошибка при получении жетона доступа:"
+msgstr "Ошибка при получении маркера доступа:"
 
 #: ../src/goabackend/goaoauth2provider.c:993
 #: ../src/goabackend/goaoauthprovider.c:989
@@ -322,19 +323,19 @@ msgstr "Вход запрошен от имени %s, но осуществлё�
 #: ../src/goabackend/goaoauth2provider.c:1419
 #, c-format
 msgid "Credentials do not contain access_token"
-msgstr "Мандат не содержит access_token"
+msgstr "Учётные данные не содержат access_token"
 
 #: ../src/goabackend/goaoauth2provider.c:1458
 #: ../src/goabackend/goaoauthprovider.c:1488
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
-msgstr "Сбой при обновлении жетона доступа (%s, %d):"
+msgstr "Сбой при обновлении маркера доступа (%s, %d):"
 
 #: ../src/goabackend/goaoauth2provider.c:1493
 #: ../src/goabackend/goaoauthprovider.c:1518
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
-msgstr "Ошибка сохранения мандата в связке ключей (%s, %d): "
+msgstr "Ошибка сохранения учётных данных в связке ключей (%s, %d): "
 
 #: ../src/goabackend/goaoauthprovider.c:560
 #, c-format
@@ -343,7 +344,7 @@ msgstr "В ответе отсутствует заголовок access_token �
 
 #: ../src/goabackend/goaoauthprovider.c:815
 msgid "Error getting a Request Token: "
-msgstr "Ошибка при получении жетона запроса:"
+msgstr "Ошибка при получении маркера запроса:"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauthprovider.c:848
@@ -351,8 +352,8 @@ msgstr "Ошибка при получении жетона запроса:"
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr ""
-"При запросе жетона доступа ожидалось получить код состояния 200, вместо него "
-"был получен код %d (%s)"
+"При запросе маркера запроса ожидалось получить код состояния 200, вместо "
+"него был получен код %d (%s)"
 
 #: ../src/goabackend/goaoauthprovider.c:865
 #, c-format
@@ -363,12 +364,14 @@ msgstr "В ответе отсутствует заголовок request_token 
 #: ../src/goabackend/goaoauthprovider.c:882
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr "Вставить жетон, полученный со <a href=\"%s\">страницы авторизации</a>:"
+msgstr ""
+"Вставить маркер, полученный на <a href=\"%s\">странице авторизации</a>:"
 
 #: ../src/goabackend/goaoauthprovider.c:1444
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
-msgstr "Мандат не содержит contain access_token или access_token_secret"
+msgstr ""
+"Учётные данные не содержат contain access_token или access_token_secret"
 
 #: ../src/goabackend/goaprovider.c:548
 #, c-format
@@ -389,12 +392,12 @@ msgstr "Учётная запись %s"
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:147
 msgid "Failed to delete credentials from the keyring"
-msgstr "Не удалось удалить мандат из связки ключей"
+msgstr "Не удалось удалить учётные данные из связки ключей"
 
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:195
 msgid "Failed to retrieve credentials from the keyring"
-msgstr "Не удалось получить мандат из связки ключей"
+msgstr "Не удалось получить учётные данные из связки ключей"
 
 #: ../src/goabackend/goautils.c:206
 msgid "Error parsing result obtained from the keyring: "
@@ -404,12 +407,12 @@ msgstr "Ошибка при разборе результатов, получе�
 #: ../src/goabackend/goautils.c:248
 #, c-format
 msgid "GOA %s credentials for identity %s"
-msgstr "Мандат GOA %s для идентификатора %s"
+msgstr "Учётные данные GOA %s для идентификатора %s"
 
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:264
 msgid "Failed to store credentials in the keyring"
-msgstr "Не удалось сохранить мандат в связке ключей"
+msgstr "Не удалось сохранить учётные данные в связке ключей"
 
 #. translators: %s here is the address of the web page
 #: ../src/goabackend/goawebview.c:75
@@ -441,7 +444,7 @@ msgstr "Вход администратора домена"
 #: ../src/goaidentity/goaidentityservice.c:405
 #: ../src/goaidentity/goaidentityservice.c:597
 msgid "Could not find supported credentials"
-msgstr "Не удалось найти поддерживаемые мандаты"
+msgstr "Не удалось найти поддерживаемые учётные данные"
 
 #: ../src/goaidentity/goaidentityservice.c:448
 msgid ""
@@ -474,25 +477,26 @@ msgstr "Неверный исходный секретный ключ"
 #: ../src/goaidentity/goaidentityservice.c:1896
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
-msgstr "Для входа realm %s требуется некоторая информация."
+msgstr "Для входа в сетевую область %s требуется некоторая информация."
 
 #: ../src/goaidentity/goakerberosidentity.c:271
 #: ../src/goaidentity/goakerberosidentity.c:280
 #: ../src/goaidentity/goakerberosidentity.c:607
 msgid "Could not find identity in credential cache: %k"
-msgstr "Не удалось найти идентификатор в мандатном кэше: %k"
+msgstr "Не удалось найти идентификатор в кэше учётных данных: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:620
 msgid "Could not find identity credentials in cache: %k"
-msgstr "Не удалось найти идентификаторы мандатов в кэше: %k"
+msgstr "Не удалось найти идентификаторы учётных данных в кэше: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:658
 msgid "Could not sift through identity credentials in cache: %k"
-msgstr "Не удалось просмотреть идентификационные мандаты в кэше: %k"
+msgstr "Не удалось просмотреть идентификационные учётные данные в кэше: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:675
 msgid "Could not finish up sifting through identity credentials in cache: %k"
-msgstr "Не удалось закончить просмотр идентификационных мандатов в кэше: %k"
+msgstr ""
+"Не удалось завершить просмотр идентификационных учётных данных в кэше: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1013
 #, c-format
@@ -501,15 +505,15 @@ msgstr "Связанных идентификаторов не найдено"
 
 #: ../src/goaidentity/goakerberosidentity.c:1094
 msgid "Could not create credential cache: %k"
-msgstr "Не удалось создать мандатный кэш: %k"
+msgstr "Не удалось создать кэш учётных данных: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1128
 msgid "Could not initialize credentials cache: %k"
-msgstr "Не удалось инициализировать мандатный кэш: %k"
+msgstr "Не удалось инициализировать кэш учётных данных: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1147
 msgid "Could not store new credentials in credentials cache: %k"
-msgstr "Не удалось сохранить мандат в кэше: %k"
+msgstr "Не удалось сохранить учётные данные в кэше: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1424
 #, c-format
@@ -522,7 +526,8 @@ msgstr "Не удалось обновить идентификатор: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1453
 msgid "Could not get new credentials to renew identity %s: %k"
-msgstr "Не удалось получить новый мандат для обновления идентификатора %s: %k"
+msgstr ""
+"Не удалось получить новые учётные данные для обновления идентификатора %s: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1493
 msgid "Could not erase identity: %k"
@@ -534,12 +539,12 @@ msgstr "Не удалось найти идентификатор"
 
 #: ../src/goaidentity/goakerberosidentitymanager.c:803
 msgid "Could not create credential cache for identity"
-msgstr "Не удалось создать кэш мандатов для идентификаторов"
+msgstr "Не удалось создать кэш учётных данных для идентификатора"
 
 #: ../src/goaidentity/um-realm-manager.c:368
 #, c-format
 msgid "No such domain or realm found"
-msgstr "Домент или realm не найден"
+msgstr "Домен или область не найдены"
 
 #: ../src/goaidentity/um-realm-manager.c:743
 #, c-format
