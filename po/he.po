@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gnome Online Account\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-22 15:08+0300\n"
-"PO-Revision-Date: 2012-09-22 15:15+0200\n"
+"POT-Creation-Date: 2012-10-07 10:57+0200\n"
+"PO-Revision-Date: 2012-10-07 10:59+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <sh.yaron@gmail.com>\n"
 "Language: he\n"
@@ -86,8 +86,8 @@ msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:279
-#: ../src/goabackend/goaoauth2provider.c:1392
-#: ../src/goabackend/goaoauthprovider.c:1415
+#: ../src/goabackend/goaoauth2provider.c:1394
+#: ../src/goabackend/goaoauthprovider.c:1417
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "פרטי הגישה לא נמצאו בקבוצת המפתחות (%s, %d): "
@@ -150,18 +150,18 @@ msgstr "שימוש לצורך"
 
 #: ../src/goabackend/goaexchangeprovider.c:848
 #: ../src/goabackend/goagoogleprovider.c:537
-msgid "Mail"
-msgstr "דוא״ל"
+msgid "_Mail"
+msgstr "_דוא״ל"
 
 #: ../src/goabackend/goaexchangeprovider.c:853
 #: ../src/goabackend/goagoogleprovider.c:542
-msgid "Calendar"
-msgstr "לוח שנה"
+msgid "Cale_ndar"
+msgstr "_לוח שנה"
 
 #: ../src/goabackend/goaexchangeprovider.c:858
 #: ../src/goabackend/goagoogleprovider.c:547
-msgid "Contacts"
-msgstr "אנשי קשר"
+msgid "_Contacts"
+msgstr "_אנשי קשר"
 
 #: ../src/goabackend/goafacebookprovider.c:79
 msgid "Facebook"
@@ -196,8 +196,8 @@ msgstr "לא נמצא חבר כתובת דוא״ל בנתוני ה־JSON"
 #: ../src/goabackend/goafacebookprovider.c:363
 #: ../src/goabackend/goagoogleprovider.c:552
 #: ../src/goabackend/goawindowsliveprovider.c:372
-msgid "Chat"
-msgstr "צ׳אט"
+msgid "C_hat"
+msgstr "_שיחה"
 
 #: ../src/goabackend/goagoogleprovider.c:78
 msgid "Google"
@@ -214,8 +214,8 @@ msgstr "שעון המערכת שלך מכוון באופן שגוי. יש לבד
 
 #: ../src/goabackend/goagoogleprovider.c:557
 #: ../src/goabackend/goawindowsliveprovider.c:377
-msgid "Documents"
-msgstr "מסמכים"
+msgid "_Documents"
+msgstr "מ_סמכים"
 
 #: ../src/goabackend/goakerberosprovider.c:84
 msgid "Enterprise Login (Kerberos)"
@@ -228,10 +228,10 @@ msgstr "שירות הזהות החזיר מפתח שגוי"
 #: ../src/goabackend/goakerberosprovider.c:641
 #, c-format
 msgid "Could not find saved credentials for principal `%s' in keyring"
-msgstr ""
+msgstr "לא ניתן למצוא ססמה המיועדת לשם המשתמש `%s' במאגר המפתחות"
 
 #: ../src/goabackend/goakerberosprovider.c:651
-#, fuzzy, c-format
+#, c-format
 msgid "Did not find password for principal `%s' in credentials"
 msgstr "לא נמצאה ססמה המיועדת לשם המשתמש `%s' בפרטי הזיהוי"
 
@@ -261,8 +261,8 @@ msgid "Error connecting to enterprise identity server"
 msgstr "אירעה שגיאה בעת ההתחברות לשרת הזיהוי הארגוני"
 
 #: ../src/goabackend/goakerberosprovider.c:1477
-msgid "Network Resources"
-msgstr "משאבי רשת"
+msgid "Network _Resources"
+msgstr "משאבי _רשת"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauth2provider.c:523
@@ -303,25 +303,25 @@ msgstr "שגיאה בקבלת אסימון לגישה:"
 msgid "Error getting identity: "
 msgstr "שגיאה בקבלת הזהות:"
 
-#: ../src/goabackend/goaoauth2provider.c:1253
-#: ../src/goabackend/goaoauthprovider.c:1265
+#: ../src/goabackend/goaoauth2provider.c:1255
+#: ../src/goabackend/goaoauthprovider.c:1267
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "ביקשנו להיכנס בתור %s, אך בוצעה כניסה בתור %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1419
+#: ../src/goabackend/goaoauth2provider.c:1421
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "פרטי הגישה אינם מכילים access_token (אסימון גישה)"
 
-#: ../src/goabackend/goaoauth2provider.c:1458
-#: ../src/goabackend/goaoauthprovider.c:1488
+#: ../src/goabackend/goaoauth2provider.c:1460
+#: ../src/goabackend/goaoauthprovider.c:1490
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "רענון אסימון הגישה נכשל (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1493
-#: ../src/goabackend/goaoauthprovider.c:1518
+#: ../src/goabackend/goaoauth2provider.c:1495
+#: ../src/goabackend/goaoauthprovider.c:1520
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "שגיאה באחסון פרטי הגישה בקבוצת המפתחות (%s, %d): "
@@ -352,7 +352,7 @@ msgstr "הכותרות request_token או request_token_secret חסרות בתג
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "האסימון שהודבק התקבל מ<a href=\"%s\">דף האימות</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1444
+#: ../src/goabackend/goaoauthprovider.c:1446
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "פרטי הגישה אינם מכילים access_token או access_token_secret"
@@ -529,6 +529,9 @@ msgstr "ססמה שגויה, נא לנסות שוב"
 #, c-format
 msgid "Couldn't connect to the %s domain: %s"
 msgstr "לא ניתן להתחבר למתחם %s:‏ %s"
+
+#~ msgid "Chat"
+#~ msgstr "צ׳אט"
 
 #~ msgid "New Microsoft Exchange Account"
 #~ msgstr "חשבון Microsoft Exchange חדש"
