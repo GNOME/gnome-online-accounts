@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-09-14 22:13+0000\n"
-"PO-Revision-Date: 2012-10-07 17:03+0400\n"
+"POT-Creation-Date: 2012-10-07 13:05+0000\n"
+"PO-Revision-Date: 2012-10-07 17:08+0400\n"
 "Last-Translator: Yuri Myasoedov <omerta13@yandex.ru>\n"
 "Language-Team: русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -85,8 +85,8 @@ msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:279
-#: ../src/goabackend/goaoauth2provider.c:1392
-#: ../src/goabackend/goaoauthprovider.c:1415
+#: ../src/goabackend/goaoauth2provider.c:1394
+#: ../src/goabackend/goaoauthprovider.c:1417
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "Учётные данные не найдены в связке ключей (%s, %d): "
@@ -149,18 +149,21 @@ msgstr "Использовать для"
 
 #: ../src/goabackend/goaexchangeprovider.c:848
 #: ../src/goabackend/goagoogleprovider.c:537
-msgid "Mail"
-msgstr "Почта"
+#| msgid "Mail"
+msgid "_Mail"
+msgstr "_Почта"
 
 #: ../src/goabackend/goaexchangeprovider.c:853
 #: ../src/goabackend/goagoogleprovider.c:542
-msgid "Calendar"
-msgstr "Календарь"
+#| msgid "Calendar"
+msgid "Cale_ndar"
+msgstr "_Календарь"
 
 #: ../src/goabackend/goaexchangeprovider.c:858
 #: ../src/goabackend/goagoogleprovider.c:547
-msgid "Contacts"
-msgstr "Контакты"
+#| msgid "Contacts"
+msgid "_Contacts"
+msgstr "Ко_нтакты"
 
 #: ../src/goabackend/goafacebookprovider.c:79
 msgid "Facebook"
@@ -197,8 +200,8 @@ msgstr "Не удалось найти элемент email в данных JSON
 #: ../src/goabackend/goafacebookprovider.c:363
 #: ../src/goabackend/goagoogleprovider.c:552
 #: ../src/goabackend/goawindowsliveprovider.c:372
-msgid "Chat"
-msgstr "Чат"
+msgid "C_hat"
+msgstr "_Чат"
 
 #: ../src/goabackend/goagoogleprovider.c:78
 msgid "Google"
@@ -215,8 +218,9 @@ msgstr "Неправильное системное время. Проверьт
 
 #: ../src/goabackend/goagoogleprovider.c:557
 #: ../src/goabackend/goawindowsliveprovider.c:377
-msgid "Documents"
-msgstr "Документы"
+#| msgid "Documents"
+msgid "_Documents"
+msgstr "_Документы"
 
 #: ../src/goabackend/goakerberosprovider.c:84
 msgid "Enterprise Login (Kerberos)"
@@ -265,8 +269,9 @@ msgid "Error connecting to enterprise identity server"
 msgstr "Ошибка подключения к корпоративному серверу идентификации"
 
 #: ../src/goabackend/goakerberosprovider.c:1477
-msgid "Network Resources"
-msgstr "Сетевые ресурсы"
+#| msgid "Network Resources"
+msgid "Network _Resources"
+msgstr "_Сетевые ресурсы"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauth2provider.c:523
@@ -314,25 +319,25 @@ msgstr "Ошибка при получении маркера доступа:"
 msgid "Error getting identity: "
 msgstr "Ошибка получения идентификатора: "
 
-#: ../src/goabackend/goaoauth2provider.c:1253
-#: ../src/goabackend/goaoauthprovider.c:1265
+#: ../src/goabackend/goaoauth2provider.c:1255
+#: ../src/goabackend/goaoauthprovider.c:1267
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "Вход запрошен от имени %s, но осуществлён от имени %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1419
+#: ../src/goabackend/goaoauth2provider.c:1421
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Учётные данные не содержат access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1458
-#: ../src/goabackend/goaoauthprovider.c:1488
+#: ../src/goabackend/goaoauth2provider.c:1460
+#: ../src/goabackend/goaoauthprovider.c:1490
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Сбой при обновлении маркера доступа (%s, %d):"
 
-#: ../src/goabackend/goaoauth2provider.c:1493
-#: ../src/goabackend/goaoauthprovider.c:1518
+#: ../src/goabackend/goaoauth2provider.c:1495
+#: ../src/goabackend/goaoauthprovider.c:1520
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "Ошибка сохранения учётных данных в связке ключей (%s, %d): "
@@ -367,7 +372,7 @@ msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr ""
 "Вставить маркер, полученный на <a href=\"%s\">странице авторизации</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1444
+#: ../src/goabackend/goaoauthprovider.c:1446
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr ""
@@ -559,6 +564,9 @@ msgstr "Неверный пароль, попробуйте ещё раз"
 #, c-format
 msgid "Couldn't connect to the %s domain: %s"
 msgstr "Не удалось подключиться к домену %s: %s"
+
+#~ msgid "Chat"
+#~ msgstr "Чат"
 
 #~ msgid "New Microsoft Exchange Account"
 #~ msgstr "Новая учётная запись Microsoft Exchange"
