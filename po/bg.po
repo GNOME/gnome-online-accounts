@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts gnome-3-6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-18 19:54+0300\n"
-"PO-Revision-Date: 2012-09-18 19:54+0300\n"
+"POT-Creation-Date: 2012-10-09 05:33+0300\n"
+"PO-Revision-Date: 2012-10-09 05:33+0300\n"
 "Last-Translator: Ivaylo Valkov <ivaylo@e-valkov.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "Language: bg\n"
@@ -85,8 +85,8 @@ msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:279
-#: ../src/goabackend/goaoauth2provider.c:1392
-#: ../src/goabackend/goaoauthprovider.c:1415
+#: ../src/goabackend/goaoauth2provider.c:1394
+#: ../src/goabackend/goaoauthprovider.c:1417
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "Данните за регистрацията липсват в ключодържателя (%s, %d): "
@@ -149,29 +149,26 @@ msgstr "Да се използва за"
 
 #: ../src/goabackend/goaexchangeprovider.c:848
 #: ../src/goabackend/goagoogleprovider.c:537
-msgid "Mail"
-msgstr "Е-поща"
+msgid "_Mail"
+msgstr "_Е-поща"
 
 #: ../src/goabackend/goaexchangeprovider.c:853
 #: ../src/goabackend/goagoogleprovider.c:542
-msgid "Calendar"
-msgstr "Календар"
+msgid "Cale_ndar"
+msgstr "Ка_лендар"
 
 #: ../src/goabackend/goaexchangeprovider.c:858
 #: ../src/goabackend/goagoogleprovider.c:547
-msgid "Contacts"
-msgstr "Контакти"
+msgid "_Contacts"
+msgstr "_Контакти"
 
 #: ../src/goabackend/goafacebookprovider.c:79
 msgid "Facebook"
 msgstr "Фейсбук"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:193
 #: ../src/goabackend/goagoogleprovider.c:212
-#: ../src/goabackend/goatwitterprovider.c:160
 #: ../src/goabackend/goawindowsliveprovider.c:176
-#: ../src/goabackend/goayahooprovider.c:163
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr ""
@@ -180,9 +177,7 @@ msgstr ""
 #: ../src/goabackend/goafacebookprovider.c:205
 #: ../src/goabackend/goagoogleprovider.c:224
 #: ../src/goabackend/goaoauth2provider.c:566
-#: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goawindowsliveprovider.c:188
-#: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
 msgstr "Неуспешен анализ на отговора във формат JSON: "
 
@@ -201,12 +196,12 @@ msgstr "Ключът „email“ не беше намерен в данните 
 #: ../src/goabackend/goafacebookprovider.c:363
 #: ../src/goabackend/goagoogleprovider.c:552
 #: ../src/goabackend/goawindowsliveprovider.c:372
-msgid "Chat"
-msgstr "Разговори"
+msgid "C_hat"
+msgstr "_Разговори"
 
 #: ../src/goabackend/goagoogleprovider.c:78
 msgid "Google"
-msgstr "Google"
+msgstr "Гугъл"
 
 #: ../src/goabackend/goagoogleprovider.c:235
 #, c-format
@@ -221,56 +216,57 @@ msgstr ""
 
 #: ../src/goabackend/goagoogleprovider.c:557
 #: ../src/goabackend/goawindowsliveprovider.c:377
-msgid "Documents"
-msgstr "Документи"
+msgid "_Documents"
+msgstr "_Документи"
 
 #: ../src/goabackend/goakerberosprovider.c:84
 msgid "Enterprise Login (Kerberos)"
-msgstr ""
+msgstr "Корпоративен вход — Kerberos "
 
 #: ../src/goabackend/goakerberosprovider.c:375
 msgid "Identity service returned invalid key"
-msgstr ""
+msgstr "Услугата за самоличности върна грешен ключ"
 
 #: ../src/goabackend/goakerberosprovider.c:641
 #, c-format
 msgid "Could not find saved credentials for principal `%s' in keyring"
 msgstr ""
+"Не бяха намерени запазени данни за регистрация за потребител „%s“ в "
+"ключодържателя"
 
 #: ../src/goabackend/goakerberosprovider.c:651
-#, fuzzy, c-format
+#, c-format
 msgid "Did not find password for principal `%s' in credentials"
 msgstr "Не беше намерена парола за потребител „%s“ в данните за регистрация"
 
 #: ../src/goabackend/goakerberosprovider.c:1019
 msgid "_Domain"
-msgstr ""
+msgstr "_Домейн"
 
 #: ../src/goabackend/goakerberosprovider.c:1020
 msgid "Enterprise domain or realm name"
-msgstr ""
+msgstr "Корпоративен домейн или област"
 
 #: ../src/goabackend/goakerberosprovider.c:1235
 #: ../src/goaidentity/goaidentityservice.c:1891
 msgid "Log In to Realm"
-msgstr ""
+msgstr "Вход в областта"
 
 #: ../src/goabackend/goakerberosprovider.c:1236
 msgid "Please enter your password below."
-msgstr ""
+msgstr "Въведете паролата си по-долу."
 
 #: ../src/goabackend/goakerberosprovider.c:1237
 msgid "Remember this password"
-msgstr ""
+msgstr "Запомняне на паролата"
 
 #: ../src/goabackend/goakerberosprovider.c:1412
-#, fuzzy
 msgid "Error connecting to enterprise identity server"
-msgstr "Грешка при свързване към сървъра (Microsoft Exchange)"
+msgstr "Грешка при свързване към корпоративния сървър за самоличности"
 
 #: ../src/goabackend/goakerberosprovider.c:1477
-msgid "Network Resources"
-msgstr ""
+msgid "Network _Resources"
+msgstr "_Мрежови ресурси"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauth2provider.c:523
@@ -319,25 +315,25 @@ msgstr "Неуспешно получаване на код за достъп: "
 msgid "Error getting identity: "
 msgstr "Неуспешно получаване на самоличност: "
 
-#: ../src/goabackend/goaoauth2provider.c:1253
-#: ../src/goabackend/goaoauthprovider.c:1265
+#: ../src/goabackend/goaoauth2provider.c:1255
+#: ../src/goabackend/goaoauthprovider.c:1267
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "Трябваше да влезете като „%s“, но вие влязохте като „%s“"
 
-#: ../src/goabackend/goaoauth2provider.c:1419
+#: ../src/goabackend/goaoauth2provider.c:1421
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Данните за регистрацията не съдържат ключа „access_token“"
 
-#: ../src/goabackend/goaoauth2provider.c:1458
-#: ../src/goabackend/goaoauthprovider.c:1488
+#: ../src/goabackend/goaoauth2provider.c:1460
+#: ../src/goabackend/goaoauthprovider.c:1490
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Неуспешно обновяване на кода за достъп (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1493
-#: ../src/goabackend/goaoauthprovider.c:1518
+#: ../src/goabackend/goaoauth2provider.c:1495
+#: ../src/goabackend/goaoauthprovider.c:1520
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr ""
@@ -377,31 +373,17 @@ msgstr ""
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "Въведете кода от <a href=\"%s\">страницата за упълномощаване</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1444
+#: ../src/goabackend/goaoauthprovider.c:1446
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr ""
 "Данните за регистрацията не съдържат ключа „access_token“ или "
 "„access_token_secret“"
 
-#: ../src/goabackend/goaprovider.c:550
+#: ../src/goabackend/goaprovider.c:548
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "Методът „ensure_credentials_sync“ не съществува за обекти от вида „%s“"
-
-#: ../src/goabackend/goatwitterprovider.c:78
-msgid "Twitter"
-msgstr "Туитър"
-
-#: ../src/goabackend/goatwitterprovider.c:183
-#, c-format
-msgid "Didn't find id_str member in JSON data"
-msgstr "Ключът „id_str“ не беше намерен в данните във формат JSON"
-
-#: ../src/goabackend/goatwitterprovider.c:192
-#, c-format
-msgid "Didn't find screen_name member in JSON data"
-msgstr "Ключът „screen_name“ не беше намерен в данните във формат JSON"
 
 #: ../src/goabackend/goautils.c:84
 #, c-format
@@ -412,7 +394,7 @@ msgstr "Вече съществува регистрация от вида „%s
 #: ../src/goabackend/goautils.c:106
 #, c-format
 msgid "%s account"
-msgstr ""
+msgstr "Регистрация в „%s“"
 
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:147
@@ -428,7 +410,7 @@ msgstr "Неуспешно извличане на данните за реги�
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Грешка при анализа на данните извлечени от ключодържателя: "
 
-#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'facebook'
 #: ../src/goabackend/goautils.c:248
 #, c-format
 msgid "GOA %s credentials for identity %s"
@@ -456,57 +438,22 @@ msgstr ""
 "Данните за е-пощата към регистрацията не бяха намерени в данните във формат "
 "JSON"
 
-#: ../src/goabackend/goayahooprovider.c:78
-msgid "Yahoo"
-msgstr "Яху"
-
-#: ../src/goabackend/goayahooprovider.c:186
-#, c-format
-msgid "Didn't find guid member in JSON data"
-msgstr "Ключът „guid“ не беше намерен в данните във формат JSON"
-
-#: ../src/goabackend/goayahooprovider.c:196
-#, c-format
-msgid "Didn't find value member in JSON data"
-msgstr "Ключът „value“ не беше намерен в данните във формат JSON"
-
-#: ../src/goabackend/goayahooprovider.c:222
-#, c-format
-msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-msgstr "Беше върнат отговор „%d (%s)“ при получаване на име. Очакваше се 200."
-
-#: ../src/goabackend/goayahooprovider.c:235
-msgid "Error parsing usercard response as JSON: "
-msgstr ""
-"Грешка при анализа на отговора с данните на потребителя във формат JSON: "
-
-#: ../src/goabackend/goayahooprovider.c:246
-#, c-format
-msgid "Didn't find profile member in JSON data"
-msgstr "Ключът „profile“ не беше намерен в данните във формат JSON"
-
-#: ../src/goabackend/goayahooprovider.c:256
-#, c-format
-msgid "Didn't find nickname member in JSON data"
-msgstr "Ключът „nickname“ не беше намерен в данните във формат JSON"
-
 #: ../src/goaidentity/goaalarm.c:245
 msgid "Time"
-msgstr ""
+msgstr "Час"
 
 #: ../src/goaidentity/goaalarm.c:246
 msgid "Time to fire"
-msgstr ""
+msgstr "Час на задействане"
 
 #: ../src/goaidentity/goaidentityservice.c:317
 msgid "Domain Administrator Login"
-msgstr ""
+msgstr "Вход за администратора на домейна"
 
 #: ../src/goaidentity/goaidentityservice.c:405
 #: ../src/goaidentity/goaidentityservice.c:597
-#, fuzzy
 msgid "Could not find supported credentials"
-msgstr "Не беше намерена парола за потребител „%s“ в данните за регистрация"
+msgstr "Не бяха намерени поддържани данни за регистрация"
 
 #: ../src/goaidentity/goaidentityservice.c:448
 msgid ""
@@ -514,6 +461,9 @@ msgid ""
 "in the domain. Please have your network administrator type their domain "
 "password here."
 msgstr ""
+"За да влезете в корпоративната мрежа, компютърът ви трябва да бъде "
+"регистриран в домейна ѝ. Помолете вашия мрежови администратор да въведе "
+"паролата си тук."
 
 #: ../src/goaidentity/goaidentityservice.c:488
 msgid ""
@@ -521,98 +471,103 @@ msgid ""
 "in the domain. Please have your network administrator type their domain "
 "username here."
 msgstr ""
+"За да влезете в корпоративната мрежа, компютърът ви трябва да бъде "
+"регистриран в домейна ѝ. Помолете вашия мрежови администратор да въведе "
+"паролата си тук."
 
 #: ../src/goaidentity/goaidentityservice.c:1167
 msgid "initial secret passed before secret key exchange"
-msgstr ""
+msgstr "Първичен таен израз, използван преди обмена на тайния ключ"
 
 #: ../src/goaidentity/goaidentityservice.c:1373
 msgid "Initial secret key is invalid"
-msgstr ""
+msgstr "Първичният таен ключ е грешен"
 
 #: ../src/goaidentity/goaidentityservice.c:1896
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
-msgstr ""
+msgstr "Необходима е информация, за да влезете в областта „%s“ от мрежата."
 
 #: ../src/goaidentity/goakerberosidentity.c:271
 #: ../src/goaidentity/goakerberosidentity.c:280
 #: ../src/goaidentity/goakerberosidentity.c:607
 msgid "Could not find identity in credential cache: %k"
-msgstr ""
+msgstr "Неуспешно откриване на данни за самоличността във временната памет: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:620
 msgid "Could not find identity credentials in cache: %k"
-msgstr ""
+msgstr "Неуспешно откриване на данни за самоличността във временната памет: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:658
 msgid "Could not sift through identity credentials in cache: %k"
-msgstr ""
+msgstr "Неуспешно извличане на данни за самоличността от временната памет: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:675
 msgid "Could not finish up sifting through identity credentials in cache: %k"
 msgstr ""
+"Неуспешно завършване на извличането на данни за самоличността от временната "
+"памет: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1013
 #, c-format
 msgid "No associated identification found"
-msgstr ""
+msgstr "Не бяха намерени данни за удостоверяване"
 
 #: ../src/goaidentity/goakerberosidentity.c:1094
 msgid "Could not create credential cache: %k"
-msgstr ""
+msgstr "Неуспешно създаване на временна памет за данните за регистрации: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1128
 msgid "Could not initialize credentials cache: %k"
-msgstr ""
+msgstr "Неуспешно стартиране на временната памет за данните за регистрации: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1147
-#, fuzzy
 msgid "Could not store new credentials in credentials cache: %k"
-msgstr "Неуспешно запазване на данните за регистрацията в ключодържателя"
+msgstr ""
+"Неуспешно запазване на данните за регистрацията във временната памет: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1424
 #, c-format
 msgid "Could not renew identity: Not signed in"
-msgstr ""
+msgstr "Неуспешно обновяване на самоличността — не сте влезли с нея"
 
 #: ../src/goaidentity/goakerberosidentity.c:1436
 msgid "Could not renew identity: %k"
-msgstr ""
+msgstr "Неуспешно обновяване на самоличността: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1453
-#, fuzzy
 msgid "Could not get new credentials to renew identity %s: %k"
-msgstr "Данни за самоличността „%2$s“, предоставени от %1$s"
+msgstr ""
+"Неуспешно обновяване на самоличността „%s“. Не могат да бъдат извлечени нови "
+"данни за регистрацията: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1493
 msgid "Could not erase identity: %k"
-msgstr ""
+msgstr "Неуспешно изтриване на самоличността: %k"
 
 #: ../src/goaidentity/goakerberosidentitymanager.c:746
 msgid "Could not find identity"
-msgstr ""
+msgstr "Неуспешно намиране на самоличността"
 
 #: ../src/goaidentity/goakerberosidentitymanager.c:803
-#, fuzzy
 msgid "Could not create credential cache for identity"
-msgstr "Данни за самоличността „%2$s“, предоставени от %1$s"
+msgstr "Неуспешно създаване на временна памет за данните на самоличността"
 
 #: ../src/goaidentity/um-realm-manager.c:368
 #, c-format
 msgid "No such domain or realm found"
-msgstr ""
+msgstr "Не бяха открити такива домейни или области"
 
 #: ../src/goaidentity/um-realm-manager.c:743
 #, c-format
 msgid "Cannot log in as %s at the %s domain"
-msgstr ""
+msgstr "Неуспешен вход като „%s“ в областта %s"
 
 #: ../src/goaidentity/um-realm-manager.c:748
 msgid "Invalid password, please try again"
-msgstr ""
+msgstr "Грешна парола. Опитайте отново."
 
 #: ../src/goaidentity/um-realm-manager.c:752
 #, c-format
 msgid "Couldn't connect to the %s domain: %s"
-msgstr ""
+msgstr "Неуспешно влизане в домейна „%s“: %s"
