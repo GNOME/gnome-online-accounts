@@ -760,7 +760,16 @@ get_new_credentials_cache (GoaKerberosIdentityManager *self,
 {
   krb5_error_code error_code;
 
-  if (g_strcmp0 (self->priv->credentials_cache_type, "FILE") == 0)
+  /* If we're configured for FILE based credentials, then we only
+   * have one ccache, and we need to use it always.
+   *
+   * If we're configured for DIR based credentials, then we need
+   * to use the default name "tkt" the first time around, and
+   * then need to use unique names for subsequent tickets.
+   */
+  if (g_strcmp0 (self->priv->credentials_cache_type, "FILE") == 0 ||
+      (g_strcmp0 (self->priv->credentials_cache_type, "DIR") == 0 &&
+       g_hash_table_size (self->priv->identities) == 0))
     {
       krb5_ccache default_cache;
 
