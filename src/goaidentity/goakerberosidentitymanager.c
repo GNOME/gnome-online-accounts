@@ -754,6 +754,32 @@ get_identity (GoaKerberosIdentityManager *self,
                                              (GDestroyNotify) g_object_unref);
 }
 
+static krb5_error_code
+get_new_credentials_cache (GoaKerberosIdentityManager *self,
+                           krb5_ccache                *credentials_cache)
+{
+  krb5_error_code error_code;
+
+  if (g_strcmp0 (self->priv->credentials_cache_type, "FILE") == 0)
+    {
+      krb5_ccache default_cache;
+
+      error_code = krb5_cc_default (self->priv->kerberos_context, &default_cache);
+
+      if (error_code == 0)
+        krb5_cc_dup (self->priv->kerberos_context, default_cache, credentials_cache);
+    }
+  else
+    {
+      error_code = krb5_cc_new_unique (self->priv->kerberos_context,
+                                       self->priv->credentials_cache_type,
+                                       NULL,
+                                       credentials_cache);
+    }
+
+  return error_code;
+}
+
 static void
 sign_in_identity (GoaKerberosIdentityManager *self,
                   Operation                  *operation)
@@ -770,22 +796,7 @@ sign_in_identity (GoaKerberosIdentityManager *self,
     {
       krb5_ccache credentials_cache;
 
-      if (g_strcmp0 (self->priv->credentials_cache_type, "FILE") == 0)
-        {
-          krb5_ccache default_cache;
-
-          error_code = krb5_cc_default (self->priv->kerberos_context, &default_cache);
-
-          if (error_code == 0)
-            krb5_cc_dup (self->priv->kerberos_context, default_cache, &credentials_cache);
-        }
-      else
-        {
-          error_code = krb5_cc_new_unique (self->priv->kerberos_context,
-                                           self->priv->credentials_cache_type,
-                                           NULL,
-                                           &credentials_cache);
-        }
+      error_code = get_new_credentials_cache (self, &credentials_cache);
 
       if (error_code != 0)
         {
