@@ -493,6 +493,8 @@ goa_client_get_accounts (GoaClient *client)
  *
  * Returns: (transfer full): A #GoaObject. Free the returned
  * object with g_object_unref().
+ *
+ * Since: 3.6
  */
 GoaObject *
 goa_client_lookup_by_id (GoaClient           *client,
