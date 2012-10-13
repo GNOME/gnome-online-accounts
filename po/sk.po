@@ -1,196 +1,210 @@
 # Slovak translation for gnome-online-accounts.
-# Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
+# Copyright (C) 2011-2012 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-online-accounts package.
 # Marián Čavojský <cavo+gnomel10n@cavo.sk>, 2011.
+# Dušan Kazik <prescott66@gmail.com>, 2012.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-online-accounts master\n"
+"Project-Id-Version: gnome-online-accounts\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-04-15 19:10+0000\n"
-"PO-Revision-Date: 2012-04-16 14:58+0200\n"
-"Last-Translator: Marián Čavojský <cavo+gnomel10n@cavo.sk>\n"
-"Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
+"POT-Creation-Date: 2012-10-08 06:59+0000\n"
+"PO-Revision-Date: 2012-10-08 21:18+0100\n"
+"Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
+"Language-Team: slovenčina <>\n"
+"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sk\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 1 : (n>=2 && n<=4) ? 2 : 0;\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Project-Style: gnome\n"
 
-#: ../src/daemon/goadaemon.c:871
+#. shut up -Wunused-but-set-variable
+#: ../src/daemon/goadaemon.c:211
+msgid "Online Accounts"
+msgstr "Online účty"
+
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:801 ../src/daemon/goadaemon.c:1146
+#, c-format
+msgid "Failed to find a provider for: %s"
+msgstr "Nepodarilo sa nájsť poskytovateľa pre: %s"
+
+#: ../src/daemon/goadaemon.c:990
 msgid "An online account needs attention"
-msgstr "Niektorý online účet vyžaduje pozornosť"
+msgstr "Online účet si vyžaduje pozornosť"
 
-#: ../src/daemon/goadaemon.c:878
+#: ../src/daemon/goadaemon.c:997
 msgid "Open Online Accounts..."
 msgstr "Otvoriť Online účty..."
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1015
+#: ../src/daemon/goadaemon.c:1134
 msgid "ProviderType property is not set for account"
-msgstr ""
-
-#. TODO: more specific
-#: ../src/daemon/goadaemon.c:1027
-#, c-format
-msgid "Failed to find a provider for: %s"
-msgstr ""
+msgstr "Vlastnosť „ProviderType“ nie je pre účet nastavená"
 
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:204
 #, c-format
 msgid "Code: %u - Unexpected response from server"
-msgstr ""
+msgstr "Kód: %u - Neočakávaná odpoveď od serveru"
 
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:220
 #, c-format
 msgid "Failed to parse autodiscover response XML"
-msgstr ""
+msgstr "Nepodarilo sa analyzovať XML odpoveď autopreskúmania"
 
+# xml tag name
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:230
 #, c-format
 msgid "Failed to find Autodiscover element"
-msgstr ""
+msgstr "Nepodarilo sa nájsť prvok „Autodiscover“"
 
+# xml tag name
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:244
 #, c-format
 msgid "Failed to find Response element"
-msgstr ""
+msgstr "Nepodarilo sa nájsť prvok „Response“"
 
+# xml tag name
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:258
-#, fuzzy, c-format
-#| msgid "Didn't find account email member in JSON data"
+#, c-format
 msgid "Failed to find Account element"
-msgstr "Nepodarila sa nájsť časť s emailom účtu v JSON štruktúre"
+msgstr "Nepodarilo sa nájsť prvok „Account“"
 
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:275
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
-msgstr ""
+msgstr "Nepodarilo sa nájsť ASUrl a OABUrl v odpovedi autopri"
 
-#: ../src/goabackend/goaexchangeprovider.c:76
+#: ../src/goabackend/goaexchangeprovider.c:78
 msgid "Microsoft Exchange"
-msgstr ""
+msgstr "Microsoft Exchange"
 
-#: ../src/goabackend/goaexchangeprovider.c:431
-msgid "New Microsoft Exchange Account"
-msgstr ""
+#: ../src/goabackend/goaexchangeprovider.c:279
+#: ../src/goabackend/goaoauth2provider.c:1394
+#: ../src/goabackend/goaoauthprovider.c:1417
+#, c-format
+msgid "Credentials not found in keyring (%s, %d): "
+msgstr "Poverenia neboli nájdené vo zväzku kľúčov (%s, %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:431
-msgid "Microsoft Exchange Account"
-msgstr ""
+#. TODO: more specific
+#: ../src/goabackend/goaexchangeprovider.c:295
+#: ../src/goabackend/goaexchangeprovider.c:923
+#, c-format
+msgid "Did not find password with username `%s' in credentials"
+msgstr "V povereniach sa nenašlo heslo pre používateľské meno „%s“"
 
-#: ../src/goabackend/goaexchangeprovider.c:453
-#, fuzzy
-#| msgid "Email Address"
-msgid "Email _Address"
-msgstr "Emailová adresa"
+#: ../src/goabackend/goaexchangeprovider.c:486
+msgid "_E-mail"
+msgstr "_Email"
 
-#: ../src/goabackend/goaexchangeprovider.c:454
+#: ../src/goabackend/goaexchangeprovider.c:487
 msgid "_Password"
-msgstr ""
+msgstr "_Heslo"
 
-#: ../src/goabackend/goaexchangeprovider.c:457
-#, fuzzy
-#| msgid "User Name"
+#: ../src/goabackend/goaexchangeprovider.c:490
+msgid "_Custom"
+msgstr "_Vlastné"
+
+#: ../src/goabackend/goaexchangeprovider.c:509
+#: ../src/goabackend/goakerberosprovider.c:1026
 msgid "User_name"
-msgstr "Používateľské meno"
+msgstr "Používateľské me_no"
 
-#: ../src/goabackend/goaexchangeprovider.c:458
+#: ../src/goabackend/goaexchangeprovider.c:510
 msgid "_Server"
-msgstr ""
+msgstr "_Server"
 
 # MČ: odhadujem na reakciu na nevyplnený autorizačný kód.
-#: ../src/goabackend/goaexchangeprovider.c:526
-#: ../src/goabackend/goaexchangeprovider.c:677
-#: ../src/goabackend/goaoauth2provider.c:852
-#: ../src/goabackend/goaoauthprovider.c:839
+#: ../src/goabackend/goaexchangeprovider.c:594
+#: ../src/goabackend/goaexchangeprovider.c:760
+#: ../src/goabackend/goakerberosprovider.c:1337
+#: ../src/goabackend/goaoauth2provider.c:952
+#: ../src/goabackend/goaoauthprovider.c:945
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "Dialógové okno bolo odmietnuté"
 
-#: ../src/goabackend/goaexchangeprovider.c:547
-#: ../src/goabackend/goaexchangeprovider.c:699
+#: ../src/goabackend/goaexchangeprovider.c:630
+#: ../src/goabackend/goaexchangeprovider.c:787
 msgid "Error connecting to Microsoft Exchange server"
-msgstr ""
+msgstr "Chyba počas pripájania k serveru Microsoft Exchange"
 
-#: ../src/goabackend/goaexchangeprovider.c:750
-#: ../src/goabackend/goafacebookprovider.c:340
-#: ../src/goabackend/goagoogleprovider.c:500
-#: ../src/goabackend/goawindowsliveprovider.c:355
+#: ../src/goabackend/goaexchangeprovider.c:637
+#: ../src/goabackend/goaexchangeprovider.c:795
+#: ../src/goabackend/goakerberosprovider.c:1417
+msgid "_Try Again"
+msgstr "_Skúsiť znovu"
+
+#: ../src/goabackend/goaexchangeprovider.c:846
+#: ../src/goabackend/goafacebookprovider.c:361
+#: ../src/goabackend/goagoogleprovider.c:535
+#: ../src/goabackend/goakerberosprovider.c:1475
+#: ../src/goabackend/goawindowsliveprovider.c:370
 msgid "Use for"
-msgstr ""
+msgstr "Použiť pre"
 
-#: ../src/goabackend/goaexchangeprovider.c:752
-#: ../src/goabackend/goagoogleprovider.c:502
-msgid "Mail"
-msgstr "Email"
+#: ../src/goabackend/goaexchangeprovider.c:848
+#: ../src/goabackend/goagoogleprovider.c:537
+msgid "_Mail"
+msgstr "_Pošta"
 
-#: ../src/goabackend/goaexchangeprovider.c:757
-#: ../src/goabackend/goagoogleprovider.c:507
-msgid "Calendar"
-msgstr "Kalendár"
+#: ../src/goabackend/goaexchangeprovider.c:853
+#: ../src/goabackend/goagoogleprovider.c:542
+msgid "Cale_ndar"
+msgstr "Kale_ndár"
 
-#: ../src/goabackend/goaexchangeprovider.c:762
-#: ../src/goabackend/goagoogleprovider.c:512
-msgid "Contacts"
-msgstr "Kontakty"
+#: ../src/goabackend/goaexchangeprovider.c:858
+#: ../src/goabackend/goagoogleprovider.c:547
+msgid "_Contacts"
+msgstr "_Kontakty"
 
-#. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:827
-#, c-format
-msgid "Did not find password with username `%s' in credentials"
-msgstr ""
-
-#: ../src/goabackend/goafacebookprovider.c:80
+#: ../src/goabackend/goafacebookprovider.c:79
 msgid "Facebook"
 msgstr "Facebook"
 
 # MČ: Našiel som čo znamená guid (http://developer.yahoo.com/social/rest_api_guide/introspective-guid-resource.html) asi by som to neprekladal.
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:194
+#: ../src/goabackend/goafacebookprovider.c:193
 #: ../src/goabackend/goagoogleprovider.c:212
-#: ../src/goabackend/goawindowsliveprovider.c:183
-#: ../src/goabackend/goatwitterprovider.c:160
-#: ../src/goabackend/goayahooprovider.c:163
+#: ../src/goabackend/goawindowsliveprovider.c:176
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr ""
 "Bol očakávaný stav 200 pri požadovaní guid, miesto toho prišiel stav %d (%s)"
 
-#: ../src/goabackend/goafacebookprovider.c:206
+#: ../src/goabackend/goafacebookprovider.c:205
 #: ../src/goabackend/goagoogleprovider.c:224
-#: ../src/goabackend/goawindowsliveprovider.c:195
-#: ../src/goabackend/goaoauth2provider.c:513
-#: ../src/goabackend/goatwitterprovider.c:172
-#: ../src/goabackend/goayahooprovider.c:175
+#: ../src/goabackend/goaoauth2provider.c:566
+#: ../src/goabackend/goawindowsliveprovider.c:188
 msgid "Error parsing response as JSON: "
-msgstr "Chyba pri analýze JSON odpovede: "
+msgstr "Chyba pri analýze odpovede vo formáte JSON: "
 
-#: ../src/goabackend/goafacebookprovider.c:217
-#: ../src/goabackend/goawindowsliveprovider.c:206
+#: ../src/goabackend/goafacebookprovider.c:216
+#: ../src/goabackend/goawindowsliveprovider.c:199
 #, c-format
 msgid "Didn't find id member in JSON data"
-msgstr "Nepodarilo sa nájsť časť s identifikátorom v JSON štruktúre"
+msgstr "Nepodarilo sa nájsť časť s identifikátorom v údajoch JSON"
 
-#: ../src/goabackend/goafacebookprovider.c:226
+#: ../src/goabackend/goafacebookprovider.c:225
 #: ../src/goabackend/goagoogleprovider.c:245
 #, c-format
 msgid "Didn't find email member in JSON data"
-msgstr "Nepodarilo sa nájsť časť s emailom v JSON štruktúre"
+msgstr "Nepodarilo sa nájsť časť s emailom v údajoch JSON"
 
-# podla empathy
-#: ../src/goabackend/goafacebookprovider.c:342
-#: ../src/goabackend/goagoogleprovider.c:517
-#: ../src/goabackend/goawindowsliveprovider.c:357
-msgid "Chat"
-msgstr "Rozhovor"
+# PK: tu som dal pl. lebo to tam viac sedi
+#: ../src/goabackend/goafacebookprovider.c:363
+#: ../src/goabackend/goagoogleprovider.c:552
+#: ../src/goabackend/goawindowsliveprovider.c:372
+msgid "C_hat"
+msgstr "_Rozhovory"
 
 #: ../src/goabackend/goagoogleprovider.c:78
 msgid "Google"
@@ -199,29 +213,75 @@ msgstr "Google"
 #: ../src/goabackend/goagoogleprovider.c:235
 #, c-format
 msgid "Didn't find data member in JSON data"
-msgstr "Nepodarilo sa nájsť časť s údajmi v JSON štruktúre"
+msgstr "Nepodarilo sa nájsť časť s údajmi v údajoch JSON"
 
-#: ../src/goabackend/goagoogleprovider.c:279
+#: ../src/goabackend/goagoogleprovider.c:306
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr ""
+"Váš systémový čas je neplatný. Skontrolujte vaše nastavenia dátumu a času."
 
-#: ../src/goabackend/goagoogleprovider.c:522
-#: ../src/goabackend/goawindowsliveprovider.c:362
-msgid "Documents"
-msgstr "Dokumenty"
+#: ../src/goabackend/goagoogleprovider.c:557
+#: ../src/goabackend/goawindowsliveprovider.c:377
+msgid "_Documents"
+msgstr "_Dokumenty"
 
-#: ../src/goabackend/goawindowsliveprovider.c:82
-msgid "Windows Live"
-msgstr "Windows Live"
+#: ../src/goabackend/goakerberosprovider.c:84
+msgid "Enterprise Login (Kerberos)"
+msgstr "Podnikové prihlásenie (Kerberos)"
 
-#: ../src/goabackend/goawindowsliveprovider.c:217
+#: ../src/goabackend/goakerberosprovider.c:375
+msgid "Identity service returned invalid key"
+msgstr "Identifikačná služba vrátila neplatný kľúč"
+
+# PM: http://sospreskoly.org/kerberos principal = splnomocniteľ
+# principal, http://web.mit.edu/kerberos/krb5-1.5/krb5-1.5.4/doc/krb5-user/What-is-a-Kerberos-Principal_003f.html
+#: ../src/goabackend/goakerberosprovider.c:641
 #, c-format
-msgid "Didn't find account email member in JSON data"
-msgstr "Nepodarilo sa nájsť časť s emailom účtu v JSON štruktúre"
+msgid "Could not find saved credentials for principal `%s' in keyring"
+msgstr ""
+"Nepodarilo sa nájsť uložené poverenia pre principal „%s“ v zväzku kľúčov"
+
+# PM: http://sospreskoly.org/kerberos principal = splnomocniteľ
+# principal, http://web.mit.edu/kerberos/krb5-1.5/krb5-1.5.4/doc/krb5-user/What-is-a-Kerberos-Principal_003f.html
+#: ../src/goabackend/goakerberosprovider.c:651
+#, c-format
+msgid "Did not find password for principal `%s' in credentials"
+msgstr "Nepodarilo sa nájsť heslo pre principal „%s“ v povereniach"
+
+#: ../src/goabackend/goakerberosprovider.c:1019
+msgid "_Domain"
+msgstr "_Doména"
+
+#: ../src/goabackend/goakerberosprovider.c:1020
+msgid "Enterprise domain or realm name"
+msgstr "Podniková doména alebo názov pôsobiska"
+
+# PM: http://sospreskoly.org/kerberos realm = pôsobisko
+# Realm je termin, http://web.mit.edu/kerberos/krb5-1.5/krb5-1.5.4/doc/krb5-user/What-is-a-Kerberos-Principal_003f.html
+#: ../src/goabackend/goakerberosprovider.c:1235
+#: ../src/goaidentity/goaidentityservice.c:1891
+msgid "Log In to Realm"
+msgstr "Prihlásiť do pôsobiska"
+
+#: ../src/goabackend/goakerberosprovider.c:1236
+msgid "Please enter your password below."
+msgstr "Prosím, nižšie zadajte vaše heslo."
+
+#: ../src/goabackend/goakerberosprovider.c:1237
+msgid "Remember this password"
+msgstr "Zapamätať toto heslo"
+
+#: ../src/goabackend/goakerberosprovider.c:1412
+msgid "Error connecting to enterprise identity server"
+msgstr "Chyba počas pripájania k podnikovému identifikačnému serveru"
+
+#: ../src/goabackend/goakerberosprovider.c:1477
+msgid "Network _Resources"
+msgstr "Sieťové _prostriedky"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:470
-#: ../src/goabackend/goaoauthprovider.c:484
+#: ../src/goabackend/goaoauth2provider.c:523
+#: ../src/goabackend/goaoauthprovider.c:537
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -229,88 +289,76 @@ msgstr ""
 "Bol očakávaný stav 200 pri požadovaní prístupového reťazca, miesto toho "
 "prišiel stav %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:490
+#: ../src/goabackend/goaoauth2provider.c:543
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
-msgstr ""
-"Nepodarilo sa nájsť prístupový reťazec (access_token) mimo JSON štruktúry"
+msgstr "Nepodarilo sa nájsť prístupový reťazec (access_token) mimo údajov JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:524
+#: ../src/goabackend/goaoauth2provider.c:577
 #, c-format
 msgid "Didn't find access_token in JSON data"
-msgstr "Nepodarilo sa nájsť prístupový reťazec (access_token) v JSON štruktúre"
+msgstr "Nepodarilo sa nájsť prístupový reťazec (access_token) v údajoch JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:663
-#: ../src/goabackend/goaoauth2provider.c:702
+# PM: asi Odpoveď pri overení totožnosti bola, pokial viem snažíme sa vyhýbať cudzím slovám ako autorizačný, prejdite aj ostatné reťazce
+#: ../src/goabackend/goaoauth2provider.c:746
+#: ../src/goabackend/goaoauth2provider.c:785
 #, c-format
 msgid "Authorization response was \"%s\""
-msgstr "Odpoveď na poverenia bola „%s“"
+msgstr "Odpoveď na pridelenie prístupu bola „%s“"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:792
+#: ../src/goabackend/goaoauth2provider.c:886
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
 "page</a>:"
 msgstr ""
-"Vložte autorizačný kód získaný zo <a href=\"%s\">stránky poverení</a>:"
+"Vložte kód získaný zo <a href=\"%s\">stránky pre potvrdenie prístupu</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:878
-#: ../src/goabackend/goaoauthprovider.c:870
+#: ../src/goabackend/goaoauth2provider.c:978
+#: ../src/goabackend/goaoauthprovider.c:976
 msgid "Error getting an Access Token: "
 msgstr "Chyba pri získavaní prístupového reťazca: "
 
-#: ../src/goabackend/goaoauth2provider.c:893
-#: ../src/goabackend/goaoauthprovider.c:883
+#: ../src/goabackend/goaoauth2provider.c:993
+#: ../src/goabackend/goaoauthprovider.c:989
 msgid "Error getting identity: "
 msgstr "Chyba pri získavaní identity: "
 
-#: ../src/goabackend/goaoauth2provider.c:1058
-#: ../src/goabackend/goaoauthprovider.c:1060
-#, c-format
-msgid "There is already an account for the identity %s"
-msgstr "Účet pre identitu %s už existuje"
-
-#: ../src/goabackend/goaoauth2provider.c:1184
-#: ../src/goabackend/goaoauthprovider.c:1190
+#: ../src/goabackend/goaoauth2provider.c:1255
+#: ../src/goabackend/goaoauthprovider.c:1267
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
-msgstr "Bolo požadované prihlásenie ako %s, prihlásený je ale %s"
+msgstr "Bolo požadované prihlásenie ako %s, prihlásený ste ale ako %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1321
-#: ../src/goabackend/goaoauthprovider.c:1338
-#, c-format
-msgid "Credentials not found in keyring (%s, %d): "
-msgstr "Poverenia neboli nájdené vo zväzku kľúčov (%s, %d): "
-
-#: ../src/goabackend/goaoauth2provider.c:1348
+#: ../src/goabackend/goaoauth2provider.c:1421
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Poverenia neobsahujú access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1387
-#: ../src/goabackend/goaoauthprovider.c:1411
+#: ../src/goabackend/goaoauth2provider.c:1460
+#: ../src/goabackend/goaoauthprovider.c:1490
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Chyba pri obnovovaní prístupového reťazca (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1422
-#: ../src/goabackend/goaoauthprovider.c:1441
+#: ../src/goabackend/goaoauth2provider.c:1495
+#: ../src/goabackend/goaoauthprovider.c:1520
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "Chyba pri ukladaní poverení do zväzku kľúčov (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:507
+#: ../src/goabackend/goaoauthprovider.c:560
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "V odpovedi chýba hlavička access_token alebo access_token_secret"
 
-#: ../src/goabackend/goaoauthprovider.c:730
+#: ../src/goabackend/goaoauthprovider.c:815
 msgid "Error getting a Request Token: "
-msgstr "Chyba pri získavaní tokenu požiadavky: "
+msgstr "Chyba pri získavaní reťazca požiadavky: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:749
+#: ../src/goabackend/goaoauthprovider.c:848
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -318,122 +366,224 @@ msgstr ""
 "Bol očakávaný stav 200 pri získavaní tokenu požiadavky, miesto toho prišiel "
 "stav %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:766
+#: ../src/goabackend/goaoauthprovider.c:865
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "V odpovedi chýba hlavička request_token alebo request_token_secret"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:783
+#: ../src/goabackend/goaoauthprovider.c:882
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr "Vložte reťazec získaný zo <a href=\"%s\">stránky oprávnení</a>:"
+msgstr ""
+"Vložte reťazec získaný zo <a href=\"%s\">stránky pre potvrdenie prístupu</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1367
+#: ../src/goabackend/goaoauthprovider.c:1446
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
-msgstr "Poverenia neobsahujú acess_token alebo access_token_secret"
+msgstr "Poverenia neobsahujú access_token alebo access_token_secret"
 
-#: ../src/goabackend/goaprovider.c:533
+#: ../src/goabackend/goaprovider.c:548
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr ""
 "ensure_credentials_sync nie je implementovaný u poskytovateľa služby %s"
 
+#: ../src/goabackend/goautils.c:84
+#, c-format
+msgid "A %s account already exists for %s"
+msgstr "Účet %s už existuje pre používateľa %s"
+
+#. Translators: the %s is the name of the provider. eg., Google.
+#: ../src/goabackend/goautils.c:106
+#, c-format
+msgid "%s account"
+msgstr "%s účet"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:147
+msgid "Failed to delete credentials from the keyring"
+msgstr "Nepodarilo sa zmazať poverenia zo zväzku kľúčov"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:195
+msgid "Failed to retrieve credentials from the keyring"
+msgstr "Nepodarilo sa získať poverenia zo zväzku kľúčov"
+
+#: ../src/goabackend/goautils.c:206
+msgid "Error parsing result obtained from the keyring: "
+msgstr "Chyba pri analýze výsledku získaného zo zväzku kľúčov: "
+
 # MČ: GOA znamená asi gnome-online-account. Tento reťazec sa vyskytuje hodne v neprekladaných reťazcoch identifikujúcich nejaké kľúče, alebo iné hodnoty. Asi by som to neprekladal, ale tento preklad je tým pádom trošku nezrozumiteľný.
-#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:756
+# PM: tiež si nie som istý či preklad skratiek je najlepší nápad, pokiaľ skratk nie je zaužívaná, navyše je tu zlý slovosled dal by som Poverenia GOÚ %s pre identitu %s
+# PK: necham GOA, lebo je to backend a vsade v docs je GOA (dev guide napr.)
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'facebook'
+#: ../src/goabackend/goautils.c:248
 #, c-format
 msgid "GOA %s credentials for identity %s"
-msgstr "GOA %s poverenia pre identitu %s"
+msgstr "Poverenia GOA %s pre identitu %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:770
-#, c-format
-msgid "Failed to store credentials in the keyring: %s"
-msgstr "Chyba pri ukladaní poverení do zväzku kľúčov: %s"
-
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:841
-#, c-format
-msgid "Failed to retrieve credentials from the keyring: %s"
-msgstr "Chyba pri získavaní poverení zo zväzku kľúčov: %s"
-
-#: ../src/goabackend/goaprovider.c:853
-msgid "Error parsing result obtained from the keyring: "
-msgstr "Chyba pri analýze odpovede získanej zo zväzku kľúčov: "
-
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:921
-#, fuzzy, c-format
-#| msgid "Failed to retrieve credentials from the keyring: %s"
-msgid "Failed to delete credentials from the keyring: %s"
-msgstr "Chyba pri získavaní poverení zo zväzku kľúčov: %s"
-
-#: ../src/goabackend/goatwitterprovider.c:78
-msgid "Twitter"
-msgstr "Twitter"
-
-#: ../src/goabackend/goatwitterprovider.c:183
-#, c-format
-msgid "Didn't find id_str member in JSON data"
-msgstr "Nepodarilo sa nájsť časť s id_str v JSON štruktúre"
-
-#: ../src/goabackend/goatwitterprovider.c:192
-#, c-format
-msgid "Didn't find screen_name member in JSON data"
-msgstr ""
-"Nepodarilo sa nájsť časť s menom na zobrazenie (screen_name) v JSON štruktúre"
+#: ../src/goabackend/goautils.c:264
+msgid "Failed to store credentials in the keyring"
+msgstr "Nepodarilo sa uložiť poverenia v zväzku kľúčov"
 
 #. translators: %s here is the address of the web page
 #: ../src/goabackend/goawebview.c:75
 #, c-format
 msgid "Loading “%s”…"
+msgstr "Načítava sa „%s“…"
+
+#: ../src/goabackend/goawindowsliveprovider.c:82
+msgid "Windows Live"
+msgstr "Windows Live"
+
+# PM: Ak JSON nie je prídavné meno ako napr TV program tak má byť dátach JSON a snažíme sa používať skôr údaje
+#: ../src/goabackend/goawindowsliveprovider.c:210
+#, c-format
+msgid "Didn't find account email member in JSON data"
+msgstr "Nepodarilo sa nájsť časť s emailom účtu v údajoch JSON"
+
+#: ../src/goaidentity/goaalarm.c:245
+msgid "Time"
+msgstr "Čas"
+
+#: ../src/goaidentity/goaalarm.c:246
+msgid "Time to fire"
+msgstr "Čas do spustenia"
+
+#: ../src/goaidentity/goaidentityservice.c:317
+msgid "Domain Administrator Login"
+msgstr "Prihlásenie administrátora domény"
+
+#: ../src/goaidentity/goaidentityservice.c:405
+#: ../src/goaidentity/goaidentityservice.c:597
+msgid "Could not find supported credentials"
+msgstr "Nepodarilo sa nájsť podporované poverenia"
+
+#: ../src/goaidentity/goaidentityservice.c:448
+msgid ""
+"In order to use this enterprise identity, the computer needs to be enrolled "
+"in the domain. Please have your network administrator type their domain "
+"password here."
 msgstr ""
+"Ak chcete používať túto podnikovú identitu, váš počítač vyžaduje registráciu "
+"v doméne. Prosím, nechajte vášho sieťového administrátora zadať heslo "
+"podnikovej domény."
 
-#: ../src/goabackend/goayahooprovider.c:78
-msgid "Yahoo"
-msgstr "Yahoo"
-
-# MČ: Našiel som čo znamená guid (http://developer.yahoo.com/social/rest_api_guide/introspective-guid-resource.html) asi by som to neprekladal.
-#: ../src/goabackend/goayahooprovider.c:186
-#, c-format
-msgid "Didn't find guid member in JSON data"
-msgstr "Nepodarilo sa nájsť časť s guid v JSON štruktúre"
-
-#: ../src/goabackend/goayahooprovider.c:196
-#, c-format
-msgid "Didn't find value member in JSON data"
-msgstr "Nepodarilo sa nájsť časť s hodnotou v JSON štruktúre"
-
-#: ../src/goabackend/goayahooprovider.c:222
-#, c-format
-msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+#: ../src/goaidentity/goaidentityservice.c:488
+msgid ""
+"In order to use this enterprise identity, the computer needs to be enrolled "
+"in the domain. Please have your network administrator type their domain "
+"username here."
 msgstr ""
-"Bol očakávaný stav 200 pri získavaní mena, miesto toho prišiel stav %d (%s)"
+"Ak chcete používať túto podnikovú identitu, váš počítač vyžaduje registráciu "
+"v doméne. Prosím, nechajte vášho sieťového administrátora zadať "
+"používateľské meno podnikovej domény."
 
-#: ../src/goabackend/goayahooprovider.c:235
-msgid "Error parsing usercard response as JSON: "
-msgstr "Chyba pri analýze odpovede usercard ako štruktúry JSON: "
+# PM: secret key je podľa mňa tajný kľúč a nie poverovací kľúč
+#: ../src/goaidentity/goaidentityservice.c:1167
+msgid "initial secret passed before secret key exchange"
+msgstr "počiatočné poverenie bolo prevzaté pred zámenou poverovacieho kľúča"
 
-#: ../src/goabackend/goayahooprovider.c:246
+# PM: secret key je podľa mňa tajný kľúč a nie poverovací kľúč
+#: ../src/goaidentity/goaidentityservice.c:1373
+msgid "Initial secret key is invalid"
+msgstr "Počiatočný poverovací kľúč je neplatný"
+
+#: ../src/goaidentity/goaidentityservice.c:1896
 #, c-format
-msgid "Didn't find profile member in JSON data"
-msgstr "Nepodarilo sa nájsť časť s profilom v JSON štruktúre"
+msgid "The network realm %s needs some information to sign you in."
+msgstr ""
+"Sieťové pôsobisko %s vyžaduje nejaké informácie kvôli vášmu prihláseniu."
 
-#: ../src/goabackend/goayahooprovider.c:256
+#: ../src/goaidentity/goakerberosidentity.c:271
+#: ../src/goaidentity/goakerberosidentity.c:280
+#: ../src/goaidentity/goakerberosidentity.c:607
+msgid "Could not find identity in credential cache: %k"
+msgstr "Nepodarilo sa nájsť identitu v zásobníku poverení: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:620
+msgid "Could not find identity credentials in cache: %k"
+msgstr "Nepodarilo sa nájsť poverenia identity v zásobníku: %k"
+
+# PM: zmenil by som slovosled Prostredníctvom poverení indentity sa nepodarilo...
+# sift by malo znamenat nieco ako prienik,vniknutie, dostat sa cez nieco
+# PK: fuzzy, nahlasil som bug
+# * https://bugzilla.gnome.org/show_bug.cgi?id=685750
+#: ../src/goaidentity/goakerberosidentity.c:658
+#, fuzzy
+msgid "Could not sift through identity credentials in cache: %k"
+msgstr ""
+"Prostredníctvom poverenia identity sa nepodarilo vniknúť do zásobníka: %k"
+
+# PM: zmenil by som slovosled Prostredníctvom poverení indentity sa nepodarilo...
+#  PK: fuzzy, nahlasil som bug
+# * https://bugzilla.gnome.org/show_bug.cgi?id=685750
+#: ../src/goaidentity/goakerberosidentity.c:675
+#, fuzzy
+msgid "Could not finish up sifting through identity credentials in cache: %k"
+msgstr ""
+"Prostredníctvom poverenia identity sa nepodarilo dokončiť vniknutie do "
+"zásobníka: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1013
 #, c-format
-msgid "Didn't find nickname member in JSON data"
-msgstr "Nepodarilo sa nájsť časť s prezývkou v JSON štruktúre"
+msgid "No associated identification found"
+msgstr "Nenašla sa priradená identifikácia"
 
-#~ msgid "Didn't find username member in JSON data"
-#~ msgstr "Nepodarilo sa nájsť časť s použivateľským menom v JSON štruktúre"
+#: ../src/goaidentity/goakerberosidentity.c:1094
+msgid "Could not create credential cache: %k"
+msgstr "Nepodarilo sa vytvoriť zásobník poverení: %k"
 
-#~ msgid "Didn't find name member in JSON data"
-#~ msgstr "Nepodarilo sa nájsť časť s menom v JSON štruktúre"
+#: ../src/goaidentity/goakerberosidentity.c:1128
+msgid "Could not initialize credentials cache: %k"
+msgstr "Nepodarilo sa zaviesť zásobník poverení: %k"
 
-#~ msgid "Use this account for"
-#~ msgstr "Použiť tento účet na"
+#: ../src/goaidentity/goakerberosidentity.c:1147
+msgid "Could not store new credentials in credentials cache: %k"
+msgstr "Nepodarilo sa uložiť nové poverenia v zásobníku poverení: %k"
 
-#~ msgid "Name"
-#~ msgstr "Meno"
+#: ../src/goaidentity/goakerberosidentity.c:1424
+#, c-format
+msgid "Could not renew identity: Not signed in"
+msgstr "Nepodarilo sa obnoviť identitu: Neprihlásený"
+
+#: ../src/goaidentity/goakerberosidentity.c:1436
+msgid "Could not renew identity: %k"
+msgstr "Nepodarilo sa obnoviť identitu: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1453
+msgid "Could not get new credentials to renew identity %s: %k"
+msgstr "Nepodarilo sa získať nové poverenia na obnovenie identity %s: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1493
+msgid "Could not erase identity: %k"
+msgstr "Nepodarilo sa zmazať identitu: %k"
+
+#: ../src/goaidentity/goakerberosidentitymanager.c:746
+msgid "Could not find identity"
+msgstr "Nepodarilo sa nájsť identitu"
+
+#: ../src/goaidentity/goakerberosidentitymanager.c:803
+msgid "Could not create credential cache for identity"
+msgstr "Nepodarilo sa vytvoriť zásobník poverení pre identitu"
+
+#: ../src/goaidentity/um-realm-manager.c:368
+#, c-format
+msgid "No such domain or realm found"
+msgstr "Nenašla sa žiadna doména alebo pôsobisko"
+
+#: ../src/goaidentity/um-realm-manager.c:743
+#, c-format
+msgid "Cannot log in as %s at the %s domain"
+msgstr "Nepodarilo sa prihlásiť ako %s v doméne %s"
+
+#: ../src/goaidentity/um-realm-manager.c:748
+msgid "Invalid password, please try again"
+msgstr "Neplatné heslo, prosím, skúste to znovu"
+
+#: ../src/goaidentity/um-realm-manager.c:752
+#, c-format
+msgid "Couldn't connect to the %s domain: %s"
+msgstr "Nepodarilo sa pripojiť k doméne %s: %s"
