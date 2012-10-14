@@ -6,9 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-24 11:14+0700\n"
-"PO-Revision-Date: 2012-09-24 11:16+0700\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"online-accounts&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2012-10-13 16:12+0000\n"
+"PO-Revision-Date: 2012-10-14 17:18+0700\n"
 "Last-Translator: Unticha Pramgoed <unticha@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "Language: th\n"
@@ -82,8 +83,8 @@ msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:279
-#: ../src/goabackend/goaoauth2provider.c:1393
-#: ../src/goabackend/goaoauthprovider.c:1415
+#: ../src/goabackend/goaoauth2provider.c:1394
+#: ../src/goabackend/goaoauthprovider.c:1417
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "ไม่พบข้อมูลลับในพวงกุญแจ (%s, %d):"
@@ -119,7 +120,7 @@ msgstr "เซิร์ฟเ_วอร์"
 #: ../src/goabackend/goaexchangeprovider.c:594
 #: ../src/goabackend/goaexchangeprovider.c:760
 #: ../src/goabackend/goakerberosprovider.c:1337
-#: ../src/goabackend/goaoauth2provider.c:953
+#: ../src/goabackend/goaoauth2provider.c:952
 #: ../src/goabackend/goaoauthprovider.c:945
 #, c-format
 msgid "Dialog was dismissed"
@@ -138,47 +139,42 @@ msgstr "_ลองอีกครั้ง"
 
 #: ../src/goabackend/goaexchangeprovider.c:846
 #: ../src/goabackend/goafacebookprovider.c:361
-#: ../src/goabackend/goagoogleprovider.c:471
+#: ../src/goabackend/goagoogleprovider.c:535
 #: ../src/goabackend/goakerberosprovider.c:1475
 #: ../src/goabackend/goawindowsliveprovider.c:370
 msgid "Use for"
 msgstr "ใช้สำหรับ"
 
 #: ../src/goabackend/goaexchangeprovider.c:848
-#: ../src/goabackend/goagoogleprovider.c:473
-msgid "Mail"
-msgstr "อีเมล"
+#: ../src/goabackend/goagoogleprovider.c:537
+msgid "_Mail"
+msgstr "เ_มล"
 
 #: ../src/goabackend/goaexchangeprovider.c:853
-#: ../src/goabackend/goagoogleprovider.c:478
-msgid "Calendar"
-msgstr "ปฏิทิน"
+#: ../src/goabackend/goagoogleprovider.c:542
+msgid "Cale_ndar"
+msgstr "_ปฏิทิน"
 
 #: ../src/goabackend/goaexchangeprovider.c:858
-#: ../src/goabackend/goagoogleprovider.c:483
-msgid "Contacts"
-msgstr "ผู้ติดต่อ"
+#: ../src/goabackend/goagoogleprovider.c:547
+msgid "_Contacts"
+msgstr "ผู้_ติดต่อ"
 
 #: ../src/goabackend/goafacebookprovider.c:79
 msgid "Facebook"
 msgstr "Facebook"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:193
-#: ../src/goabackend/goagoogleprovider.c:184
-#: ../src/goabackend/goatwitterprovider.c:160
+#: ../src/goabackend/goagoogleprovider.c:212
 #: ../src/goabackend/goawindowsliveprovider.c:176
-#: ../src/goabackend/goayahooprovider.c:163
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr "ต้องการสถานะ 200 เมื่อร้องขอ guid แต่กลับได้รับสถานะ %d (%s)"
 
 #: ../src/goabackend/goafacebookprovider.c:205
-#: ../src/goabackend/goagoogleprovider.c:196
-#: ../src/goabackend/goaoauth2provider.c:567
-#: ../src/goabackend/goatwitterprovider.c:172
+#: ../src/goabackend/goagoogleprovider.c:224
+#: ../src/goabackend/goaoauth2provider.c:566
 #: ../src/goabackend/goawindowsliveprovider.c:188
-#: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
 msgstr "เกิดข้อผิดพลาดขณะแจงคำตอบในแบบ JSON: "
 
@@ -189,25 +185,34 @@ msgid "Didn't find id member in JSON data"
 msgstr "ไม่พบช่องข้อมูล id ในข้อมูล JSON"
 
 #: ../src/goabackend/goafacebookprovider.c:225
-#: ../src/goabackend/goagoogleprovider.c:207
+#: ../src/goabackend/goagoogleprovider.c:245
 #, c-format
 msgid "Didn't find email member in JSON data"
 msgstr "ไม่พบช่องข้อมูล email ในข้อมูล JSON"
 
 #: ../src/goabackend/goafacebookprovider.c:363
-#: ../src/goabackend/goagoogleprovider.c:488
+#: ../src/goabackend/goagoogleprovider.c:552
 #: ../src/goabackend/goawindowsliveprovider.c:372
-msgid "Chat"
-msgstr "การสนทนา"
+msgid "C_hat"
+msgstr "การ_สนทนา"
 
-#: ../src/goabackend/goagoogleprovider.c:79
+#: ../src/goabackend/goagoogleprovider.c:78
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:493
+#: ../src/goabackend/goagoogleprovider.c:235
+#, c-format
+msgid "Didn't find data member in JSON data"
+msgstr "ไม่พบช่องข้อมูล data ในข้อมูล JSON"
+
+#: ../src/goabackend/goagoogleprovider.c:306
+msgid "Your system time is invalid. Check your date and time settings."
+msgstr "เวลาของระบบคุณไม่ถูกต้อง กรุณาตรวจสอบการติดตั้งวันและเวลาของคุณ"
+
+#: ../src/goabackend/goagoogleprovider.c:557
 #: ../src/goabackend/goawindowsliveprovider.c:377
-msgid "Documents"
-msgstr "เอกสาร"
+msgid "_Documents"
+msgstr "เ_อกสาร"
 
 #: ../src/goabackend/goakerberosprovider.c:84
 msgid "Enterprise Login (Kerberos)"
@@ -253,70 +258,70 @@ msgid "Error connecting to enterprise identity server"
 msgstr "เกิดข้อผิดพลาดขณะเชื่อมต่อไปยังเซิร์ฟเวอร์ตรวจสอบเอกลักษณ์ขององค์กร"
 
 #: ../src/goabackend/goakerberosprovider.c:1477
-msgid "Network Resources"
-msgstr "ทรัพยากรเครือข่าย"
+msgid "Network _Resources"
+msgstr "_ทรัพยากรเครือข่าย"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:524
+#: ../src/goabackend/goaoauth2provider.c:523
 #: ../src/goabackend/goaoauthprovider.c:537
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr "ต้องการสถานะ 200 เมื่อร้องขอโทเคนสำหรับเข้าถึง แต่กลับได้รับสถานะ %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:544
+#: ../src/goabackend/goaoauth2provider.c:543
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "ไม่พบ access_token ในข้อมูลที่ไม่ใช่ JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:578
+#: ../src/goabackend/goaoauth2provider.c:577
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "ไม่พบ access_token ในข้อมูล JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:747
-#: ../src/goabackend/goaoauth2provider.c:786
+#: ../src/goabackend/goaoauth2provider.c:746
+#: ../src/goabackend/goaoauth2provider.c:785
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "คำตอบการตรวจสอบสิทธิ์เป็น \"%s\""
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:887
+#: ../src/goabackend/goaoauth2provider.c:886
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
 "page</a>:"
 msgstr "แปะรหัสตรวจสอบสิทธิ์ที่ได้รับจาก<a href=\"%s\">หน้าตรวจสอบสิทธิ์</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:979
+#: ../src/goabackend/goaoauth2provider.c:978
 #: ../src/goabackend/goaoauthprovider.c:976
 msgid "Error getting an Access Token: "
 msgstr "เกิดข้อผิดพลาดขณะอ่านโทเคนสำหรับเข้าถึง: "
 
-#: ../src/goabackend/goaoauth2provider.c:994
+#: ../src/goabackend/goaoauth2provider.c:993
 #: ../src/goabackend/goaoauthprovider.c:989
 msgid "Error getting identity: "
 msgstr "เกิดข้อผิดพลาดขณะอ่านเอกลักษณ์บุคคล: "
 
-#: ../src/goabackend/goaoauth2provider.c:1254
-#: ../src/goabackend/goaoauthprovider.c:1265
+#: ../src/goabackend/goaoauth2provider.c:1255
+#: ../src/goabackend/goaoauthprovider.c:1267
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "ถูกขอให้เข้าระบบในนาม %s แต่กลับเข้าระบบในนาม %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1420
+#: ../src/goabackend/goaoauth2provider.c:1421
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "ข้อมูลลับไม่มี access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1459
-#: ../src/goabackend/goaoauthprovider.c:1488
+#: ../src/goabackend/goaoauth2provider.c:1460
+#: ../src/goabackend/goaoauthprovider.c:1490
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "ปรับข้อมูลโทเคนสำหรับเข้าถึง (%s, %d) ไม่สำเร็จ: "
 
-#: ../src/goabackend/goaoauth2provider.c:1494
-#: ../src/goabackend/goaoauthprovider.c:1518
+#: ../src/goabackend/goaoauth2provider.c:1495
+#: ../src/goabackend/goaoauthprovider.c:1520
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "เกิดข้อผิดพลาดขณะบันทึกข้อมูลลับในพวงกุญแจ (%s, %d): "
@@ -348,29 +353,15 @@ msgstr "ขาดข้อมูลส่วนหัว request_token หรื
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "แปะโทเคนที่ได้รับจาก <a href=\"%s\">หน้าตรวจสอบสิทธิ์</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1444
+#: ../src/goabackend/goaoauthprovider.c:1446
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "ข้อมูลลับไม่มี access_token หรือ access_token_secret"
 
-#: ../src/goabackend/goaprovider.c:550
+#: ../src/goabackend/goaprovider.c:548
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ยังไม่รองรับ ensure_credentials_sync ในชนิด %s"
-
-#: ../src/goabackend/goatwitterprovider.c:78
-msgid "Twitter"
-msgstr "Twitter"
-
-#: ../src/goabackend/goatwitterprovider.c:183
-#, c-format
-msgid "Didn't find id_str member in JSON data"
-msgstr "ไม่พบช่องข้อมูล id_str ในข้อมูล JSON"
-
-#: ../src/goabackend/goatwitterprovider.c:192
-#, c-format
-msgid "Didn't find screen_name member in JSON data"
-msgstr "ไม่พบช่องข้อมูล screen_name ในข้อมูล JSON"
 
 #: ../src/goabackend/goautils.c:84
 #, c-format
@@ -397,7 +388,7 @@ msgstr "ไม่สามารถดึงข้อมูลลับจาก
 msgid "Error parsing result obtained from the keyring: "
 msgstr "เกิดข้อผิดพลาดขณะแจงผลที่ได้รับจากพวงกุญแจ: "
 
-#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'facebook'
 #: ../src/goabackend/goautils.c:248
 #, c-format
 msgid "GOA %s credentials for identity %s"
@@ -422,39 +413,6 @@ msgstr "Windows Live"
 #, c-format
 msgid "Didn't find account email member in JSON data"
 msgstr "ไม่พบช่องข้อมูล account ของ email ในข้อมูล JSON"
-
-#: ../src/goabackend/goayahooprovider.c:78
-msgid "Yahoo"
-msgstr "Yahoo"
-
-#: ../src/goabackend/goayahooprovider.c:186
-#, c-format
-msgid "Didn't find guid member in JSON data"
-msgstr "ไม่พบช่องข้อมูล guid ในข้อมูล JSON"
-
-#: ../src/goabackend/goayahooprovider.c:196
-#, c-format
-msgid "Didn't find value member in JSON data"
-msgstr "ไม่พบช่องข้อมูล value ในข้อมูล JSON"
-
-#: ../src/goabackend/goayahooprovider.c:222
-#, c-format
-msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-msgstr "ต้องการสถานะ 200 เมื่อร้องขอชื่อ แต่กลับได้รับสถานะ %d (%s)"
-
-#: ../src/goabackend/goayahooprovider.c:235
-msgid "Error parsing usercard response as JSON: "
-msgstr "เกิดข้อผิดพลาดขณะแจงคำตอบ usercard ในแบบ JSON: "
-
-#: ../src/goabackend/goayahooprovider.c:246
-#, c-format
-msgid "Didn't find profile member in JSON data"
-msgstr "ไม่พบช่องข้อมูล profile ในข้อมูล JSON"
-
-#: ../src/goabackend/goayahooprovider.c:256
-#, c-format
-msgid "Didn't find nickname member in JSON data"
-msgstr "ไม่พบช่องข้อมูล nickname ในข้อมูล JSON"
 
 #: ../src/goaidentity/goaalarm.c:245
 msgid "Time"
@@ -583,11 +541,8 @@ msgstr "รหัสผ่านไม่ถูกต้อง กรุณา�
 msgid "Couldn't connect to the %s domain: %s"
 msgstr "ไม่สามารถเชื่อมต่อไปยังโดเมน %s: %s"
 
-#~ msgid "Didn't find data member in JSON data"
-#~ msgstr "ไม่พบช่องข้อมูล data ในข้อมูล JSON"
-
-#~ msgid "Your system time is invalid. Check your date and time settings."
-#~ msgstr "เวลาของระบบคุณไม่ถูกต้อง กรุณาตรวจสอบการติดตั้งวันและเวลาของคุณ"
+#~ msgid "Chat"
+#~ msgstr "การสนทนา"
 
 #~ msgid "Didn't find username member in JSON data"
 #~ msgstr "ไม่พบช่องข้อมูลชื่อผู้ใช้ในข้อมูล JSON"
@@ -600,6 +555,33 @@ msgstr "ไม่สามารถเชื่อมต่อไปยังโ
 
 #~ msgid "There is already an account for the identity %s"
 #~ msgstr "มีบัญชีสำหรับเอกลักษณ์บุคคล %s อยู่ก่อนแล้ว"
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#~ msgid "Didn't find id_str member in JSON data"
+#~ msgstr "ไม่พบช่องข้อมูล id_str ในข้อมูล JSON"
+
+#~ msgid "Didn't find screen_name member in JSON data"
+#~ msgstr "ไม่พบช่องข้อมูล screen_name ในข้อมูล JSON"
+
+#~ msgid "Yahoo"
+#~ msgstr "Yahoo"
+
+#~ msgid "Didn't find value member in JSON data"
+#~ msgstr "ไม่พบช่องข้อมูล value ในข้อมูล JSON"
+
+#~ msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+#~ msgstr "ต้องการสถานะ 200 เมื่อร้องขอชื่อ แต่กลับได้รับสถานะ %d (%s)"
+
+#~ msgid "Error parsing usercard response as JSON: "
+#~ msgstr "เกิดข้อผิดพลาดขณะแจงคำตอบ usercard ในแบบ JSON: "
+
+#~ msgid "Didn't find profile member in JSON data"
+#~ msgstr "ไม่พบช่องข้อมูล profile ในข้อมูล JSON"
+
+#~ msgid "Didn't find nickname member in JSON data"
+#~ msgstr "ไม่พบช่องข้อมูล nickname ในข้อมูล JSON"
 
 #~ msgid "Name"
 #~ msgstr "ชื่อ"
