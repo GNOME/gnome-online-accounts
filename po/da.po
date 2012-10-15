@@ -2,14 +2,15 @@
 # Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
 # Kris Thomsen <lakristho@gmail.com>, 2011.
+# Kenneth Nielsen <k.nielsen81@gmail.com>, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-20 23:11+0100\n"
-"PO-Revision-Date: 2012-02-19 20:21+0100\n"
-"Last-Translator: Kris Thomsen <lakristho@gmail.com>\n"
+"POT-Creation-Date: 2012-10-15 06:55+0200\n"
+"PO-Revision-Date: 2012-10-15 06:54+0200\n"
+"Last-Translator: Kenneth Nielsen <k.nielsen81@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
@@ -17,115 +18,259 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/daemon/goadaemon.c:871
+#. shut up -Wunused-but-set-variable
+#: ../src/daemon/goadaemon.c:211
+msgid "Online Accounts"
+msgstr "Online-konti"
+
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:801 ../src/daemon/goadaemon.c:1146
+#, c-format
+msgid "Failed to find a provider for: %s"
+msgstr "Kunne ikke finde en udbyder for: %s"
+
+#: ../src/daemon/goadaemon.c:990
 msgid "An online account needs attention"
 msgstr "En online konto kræver opmærksomhed"
 
-#: ../src/daemon/goadaemon.c:878
+#: ../src/daemon/goadaemon.c:997
 msgid "Open Online Accounts..."
 msgstr "Åbn Online-konti..."
 
-#: ../src/goabackend/goafacebookprovider.c:78
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:1134
+msgid "ProviderType property is not set for account"
+msgstr "Egenskaben ProviderType er ikke indstillet for konto"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:204
+#, c-format
+msgid "Code: %u - Unexpected response from server"
+msgstr "Kode: %u - Uventet svar fra server"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:220
+#, c-format
+msgid "Failed to parse autodiscover response XML"
+msgstr "Kunne ikke fortolke svar-XML fra autoopdagelse"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:230
+#, c-format
+msgid "Failed to find Autodiscover element"
+msgstr "Kunne ikke finde Autodiscover-element"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:244
+#, c-format
+msgid "Failed to find Response element"
+msgstr "Kunne ikke finde Response-element"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:258
+#, c-format
+msgid "Failed to find Account element"
+msgstr "Kunne ikke finde Account-element"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:275
+#, c-format
+msgid "Failed to find ASUrl and OABUrl in autodiscover response"
+msgstr "Kunne ikke finde ASUrl og OABUrl i autoopdag-svar"
+
+#: ../src/goabackend/goaexchangeprovider.c:78
+msgid "Microsoft Exchange"
+msgstr "Microsoft Exchange"
+
+#: ../src/goabackend/goaexchangeprovider.c:279
+#: ../src/goabackend/goaoauth2provider.c:1394
+#: ../src/goabackend/goaoauthprovider.c:1417
+#, c-format
+msgid "Credentials not found in keyring (%s, %d): "
+msgstr "Akkreditiver ikke fundet i nøglering /%s, %d): "
+
+#. TODO: more specific
+#: ../src/goabackend/goaexchangeprovider.c:295
+#: ../src/goabackend/goaexchangeprovider.c:923
+#, c-format
+msgid "Did not find password with username `%s' in credentials"
+msgstr "Kunne ikke finde adgangskode med brugernavn \"%s\" i akkreditiver"
+
+#: ../src/goabackend/goaexchangeprovider.c:486
+msgid "_E-mail"
+msgstr "_E-mail"
+
+#: ../src/goabackend/goaexchangeprovider.c:487
+msgid "_Password"
+msgstr "_Adgangskode"
+
+#: ../src/goabackend/goaexchangeprovider.c:490
+msgid "_Custom"
+msgstr "_Tilpasset"
+
+#: ../src/goabackend/goaexchangeprovider.c:509
+#: ../src/goabackend/goakerberosprovider.c:1026
+msgid "User_name"
+msgstr "Bruger_navn"
+
+#: ../src/goabackend/goaexchangeprovider.c:510
+msgid "_Server"
+msgstr "_Server"
+
+#: ../src/goabackend/goaexchangeprovider.c:594
+#: ../src/goabackend/goaexchangeprovider.c:760
+#: ../src/goabackend/goakerberosprovider.c:1337
+#: ../src/goabackend/goaoauth2provider.c:952
+#: ../src/goabackend/goaoauthprovider.c:945
+#, c-format
+msgid "Dialog was dismissed"
+msgstr "Dialog blev afvist"
+
+#: ../src/goabackend/goaexchangeprovider.c:630
+#: ../src/goabackend/goaexchangeprovider.c:787
+msgid "Error connecting to Microsoft Exchange server"
+msgstr "Fejl ved forbindelse til Microsoft Exchange-server"
+
+#: ../src/goabackend/goaexchangeprovider.c:637
+#: ../src/goabackend/goaexchangeprovider.c:795
+#: ../src/goabackend/goakerberosprovider.c:1417
+msgid "_Try Again"
+msgstr "_Prøv igen"
+
+#: ../src/goabackend/goaexchangeprovider.c:846
+#: ../src/goabackend/goafacebookprovider.c:361
+#: ../src/goabackend/goagoogleprovider.c:535
+#: ../src/goabackend/goakerberosprovider.c:1475
+#: ../src/goabackend/goawindowsliveprovider.c:370
+msgid "Use for"
+msgstr "Brug til"
+
+#: ../src/goabackend/goaexchangeprovider.c:848
+#: ../src/goabackend/goagoogleprovider.c:537
+#, fuzzy
+msgid "_Mail"
+msgstr "E-post"
+
+#: ../src/goabackend/goaexchangeprovider.c:853
+#: ../src/goabackend/goagoogleprovider.c:542
+#, fuzzy
+msgid "Cale_ndar"
+msgstr "Kalender"
+
+#: ../src/goabackend/goaexchangeprovider.c:858
+#: ../src/goabackend/goagoogleprovider.c:547
+#, fuzzy
+msgid "_Contacts"
+msgstr "Kontakter"
+
+#: ../src/goabackend/goafacebookprovider.c:79
 msgid "Facebook"
 msgstr "Facebook"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:162
-#: ../src/goabackend/goagoogleprovider.c:195
-#: ../src/goabackend/goawindowsliveprovider.c:170
-#: ../src/goabackend/goatwitterprovider.c:160
-#: ../src/goabackend/goayahooprovider.c:163
+#: ../src/goabackend/goafacebookprovider.c:193
+#: ../src/goabackend/goagoogleprovider.c:212
+#: ../src/goabackend/goawindowsliveprovider.c:176
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr ""
 "Forventede status 200 under forespørgsel af guid, fik i stedet status %d (%s)"
 
-#: ../src/goabackend/goafacebookprovider.c:174
-#: ../src/goabackend/goagoogleprovider.c:207
-#: ../src/goabackend/goawindowsliveprovider.c:182
-#: ../src/goabackend/goaoauth2provider.c:478
-#: ../src/goabackend/goatwitterprovider.c:172
-#: ../src/goabackend/goayahooprovider.c:175
+#: ../src/goabackend/goafacebookprovider.c:205
+#: ../src/goabackend/goagoogleprovider.c:224
+#: ../src/goabackend/goaoauth2provider.c:566
+#: ../src/goabackend/goawindowsliveprovider.c:188
 msgid "Error parsing response as JSON: "
 msgstr "Fejl under tolking af respons som JSON: "
 
-#: ../src/goabackend/goafacebookprovider.c:185
+#: ../src/goabackend/goafacebookprovider.c:216
+#: ../src/goabackend/goawindowsliveprovider.c:199
 #, c-format
-msgid "Didn't find username member in JSON data"
-msgstr "Fandt ikke brugernavnsmedlem i JSON-data"
+msgid "Didn't find id member in JSON data"
+msgstr "Fandt ikke id-medlem i JSON-data"
 
-#: ../src/goabackend/goafacebookprovider.c:194
+#: ../src/goabackend/goafacebookprovider.c:225
+#: ../src/goabackend/goagoogleprovider.c:245
 #, c-format
-msgid "Didn't find name member in JSON data"
-msgstr "Fandt ikke navnemedlem i JSON-data"
+msgid "Didn't find email member in JSON data"
+msgstr "Fandt ikke e-post-medlem i JSON-data"
 
-#: ../src/goabackend/goafacebookprovider.c:282
-#: ../src/goabackend/goawindowsliveprovider.c:292
-#: ../src/goabackend/goatwitterprovider.c:260
-msgid "User Name"
-msgstr "Brugernavn"
-
-#: ../src/goabackend/goafacebookprovider.c:283
-#: ../src/goabackend/goagoogleprovider.c:430
-#: ../src/goabackend/goawindowsliveprovider.c:293
-msgid "Chat"
-msgstr "Chat"
+#: ../src/goabackend/goafacebookprovider.c:363
+#: ../src/goabackend/goagoogleprovider.c:552
+#: ../src/goabackend/goawindowsliveprovider.c:372
+msgid "C_hat"
+msgstr ""
 
 #: ../src/goabackend/goagoogleprovider.c:78
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:218
+#: ../src/goabackend/goagoogleprovider.c:235
 #, c-format
 msgid "Didn't find data member in JSON data"
 msgstr "Fandt ikke datamedlem i JSON-data"
 
-#: ../src/goabackend/goagoogleprovider.c:228
-#, c-format
-msgid "Didn't find email member in JSON data"
-msgstr "Fandt ikke e-post-medlem i JSON-data"
+#: ../src/goabackend/goagoogleprovider.c:306
+msgid "Your system time is invalid. Check your date and time settings."
+msgstr "Din systemtid er ugyldig. Tjek dine dato- og tidsindstillinger."
 
-#: ../src/goabackend/goagoogleprovider.c:425
-msgid "Email Address"
-msgstr "E-post-adresse"
-
-#: ../src/goabackend/goagoogleprovider.c:426
-msgid "Use this account for"
-msgstr "Brug denne konto til"
-
-#: ../src/goabackend/goagoogleprovider.c:427
-msgid "Mail"
-msgstr "E-post"
-
-#: ../src/goabackend/goagoogleprovider.c:428
-msgid "Calendar"
-msgstr "Kalender"
-
-#: ../src/goabackend/goagoogleprovider.c:429
-msgid "Contacts"
-msgstr "Kontakter"
-
-#: ../src/goabackend/goagoogleprovider.c:431
-msgid "Documents"
+#: ../src/goabackend/goagoogleprovider.c:557
+#: ../src/goabackend/goawindowsliveprovider.c:377
+#, fuzzy
+msgid "_Documents"
 msgstr "Dokumenter"
 
-#: ../src/goabackend/goawindowsliveprovider.c:82
-msgid "Windows Live"
-msgstr "Windows Live"
+#: ../src/goabackend/goakerberosprovider.c:84
+msgid "Enterprise Login (Kerberos)"
+msgstr "Enterpriselogind (Kerberos)"
 
-#: ../src/goabackend/goawindowsliveprovider.c:193
-#, c-format
-msgid "Didn't find id member in JSON data"
-msgstr "Fandt ikke id-medlem i JSON-data"
+#: ../src/goabackend/goakerberosprovider.c:375
+msgid "Identity service returned invalid key"
+msgstr "Identitetstjeneste returnerede ugyldig nøgle"
 
-#: ../src/goabackend/goawindowsliveprovider.c:204
+#: ../src/goabackend/goakerberosprovider.c:641
 #, c-format
-msgid "Didn't find account email member in JSON data"
-msgstr "Fandt ikke konto-e-mail-medlem i JSON-data"
+msgid "Could not find saved credentials for principal `%s' in keyring"
+msgstr ""
+"Kunne ikke finde gemte akkreditiver for den primære \"%s\" i nøgleringen"
+
+#: ../src/goabackend/goakerberosprovider.c:651
+#, c-format
+msgid "Did not find password for principal `%s' in credentials"
+msgstr "Kunne ikke finde adgangskode for den primære \"%s\" i nøgleringen"
+
+#: ../src/goabackend/goakerberosprovider.c:1019
+msgid "_Domain"
+msgstr "_Domæne"
+
+#: ../src/goabackend/goakerberosprovider.c:1020
+msgid "Enterprise domain or realm name"
+msgstr "Enterprisedomæne eller verdensnavn (realm)"
+
+#: ../src/goabackend/goakerberosprovider.c:1235
+#: ../src/goaidentity/goaidentityservice.c:1891
+msgid "Log In to Realm"
+msgstr "Log ind i verden (realm)"
+
+#: ../src/goabackend/goakerberosprovider.c:1236
+msgid "Please enter your password below."
+msgstr "Indtast venligst din adgangskode herunder."
+
+#: ../src/goabackend/goakerberosprovider.c:1237
+msgid "Remember this password"
+msgstr "Husk denne adgangskode"
+
+#: ../src/goabackend/goakerberosprovider.c:1412
+msgid "Error connecting to enterprise identity server"
+msgstr "Fejl ved forbindelse til enterprise-identitetsserver"
+
+#: ../src/goabackend/goakerberosprovider.c:1477
+#, fuzzy
+msgid "Network _Resources"
+msgstr "Netværksressourcer"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:435
-#: ../src/goabackend/goaoauthprovider.c:440
+#: ../src/goabackend/goaoauth2provider.c:523
+#: ../src/goabackend/goaoauthprovider.c:537
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -133,23 +278,24 @@ msgstr ""
 "Forventede status 200 under forespørgsel af adgangssymbol, fik i stedet "
 "status %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:455
+#: ../src/goabackend/goaoauth2provider.c:543
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "Fandt ikke access_token i ikke-JSON-data"
 
-#: ../src/goabackend/goaoauth2provider.c:489
+#: ../src/goabackend/goaoauth2provider.c:577
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "Fandt ikke access_token i JSON-data"
 
-#: ../src/goabackend/goaoauth2provider.c:573
+#: ../src/goabackend/goaoauth2provider.c:746
+#: ../src/goabackend/goaoauth2provider.c:785
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "Godkendelsessvar var \"%s\""
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:654
+#: ../src/goabackend/goaoauth2provider.c:886
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
@@ -157,68 +303,50 @@ msgid ""
 msgstr ""
 "Indsæt godkendelseskode indhentet fra <a href=\"%s\">godkendelsesside</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:728
-#: ../src/goabackend/goaoauthprovider.c:751
-#, c-format
-msgid "Dialog was dismissed"
-msgstr "Dialog blev afvist"
-
-#: ../src/goabackend/goaoauth2provider.c:752
-#: ../src/goabackend/goaoauthprovider.c:782
+#: ../src/goabackend/goaoauth2provider.c:978
+#: ../src/goabackend/goaoauthprovider.c:976
 msgid "Error getting an Access Token: "
 msgstr "Fejl under indhentning af adgangssymbol: "
 
-#: ../src/goabackend/goaoauth2provider.c:764
-#: ../src/goabackend/goaoauthprovider.c:795
+#: ../src/goabackend/goaoauth2provider.c:993
+#: ../src/goabackend/goaoauthprovider.c:989
 msgid "Error getting identity: "
 msgstr "Fejl under indhentning af identitet: "
 
-#: ../src/goabackend/goaoauth2provider.c:929
-#: ../src/goabackend/goaoauthprovider.c:972
-#, c-format
-msgid "There is already an account for the identity %s"
-msgstr "Der er allerede en konto for identiteten %s"
-
-#: ../src/goabackend/goaoauth2provider.c:1054
-#: ../src/goabackend/goaoauthprovider.c:1102
+#: ../src/goabackend/goaoauth2provider.c:1255
+#: ../src/goabackend/goaoauthprovider.c:1267
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "Blev anmodet om at logge ind som %s, men loggede ind som %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1190
-#: ../src/goabackend/goaoauthprovider.c:1250
-#, c-format
-msgid "Credentials not found in keyring (%s, %d): "
-msgstr "Akkreditiver ikke fundet i nøglering /%s, %d): "
-
-#: ../src/goabackend/goaoauth2provider.c:1217
+#: ../src/goabackend/goaoauth2provider.c:1421
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Akkreditiver indeholder ikke access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1256
-#: ../src/goabackend/goaoauthprovider.c:1323
+#: ../src/goabackend/goaoauth2provider.c:1460
+#: ../src/goabackend/goaoauthprovider.c:1490
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Kunne ikke genopfriske adgangssymbol (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1291
-#: ../src/goabackend/goaoauthprovider.c:1353
+#: ../src/goabackend/goaoauth2provider.c:1495
+#: ../src/goabackend/goaoauthprovider.c:1520
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "Fejl under gemning af akkreditiver i nøglering (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:463
+#: ../src/goabackend/goaoauthprovider.c:560
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "Mangler access_token- eller access_token_secret-hoveder i svar"
 
-#: ../src/goabackend/goaoauthprovider.c:636
+#: ../src/goabackend/goaoauthprovider.c:815
 msgid "Error getting a Request Token: "
 msgstr "Fejl under indhentning af forespørgselssymbol: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:645
+#: ../src/goabackend/goaoauthprovider.c:848
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -226,98 +354,255 @@ msgstr ""
 "Forventede status 200 under indhentning af forespørgselssymbol, fik i stedet "
 "status %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:659
+#: ../src/goabackend/goaoauthprovider.c:865
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "Mangler request_token- eller request_token_secret-hoveder i svar"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:676
+#: ../src/goabackend/goaoauthprovider.c:882
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "Indsæt symbol indhentet fra <a href=\"%s\">godkendelsessiden</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1279
+#: ../src/goabackend/goaoauthprovider.c:1446
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Akkreditiver indeholder ikke access_token eller access_token_secret"
 
-#: ../src/goabackend/goaprovider.c:523
+#: ../src/goabackend/goaprovider.c:548
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync er ikke implementeret på type %s"
 
-#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:742
+#: ../src/goabackend/goautils.c:84
+#, c-format
+msgid "A %s account already exists for %s"
+msgstr "Der finder allerede en %s-konto for %s"
+
+#. Translators: the %s is the name of the provider. eg., Google.
+#: ../src/goabackend/goautils.c:106
+#, c-format
+msgid "%s account"
+msgstr "%s-konto"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:147
+msgid "Failed to delete credentials from the keyring"
+msgstr "Kunne ikke slette akkreditiver fra nøgleringen"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:195
+msgid "Failed to retrieve credentials from the keyring"
+msgstr "Kunne ikke hente akkreditiver fra nøgleringen"
+
+#: ../src/goabackend/goautils.c:206
+msgid "Error parsing result obtained from the keyring: "
+msgstr "Kunne ikke tolke resultater indhentet fra nøgleringen: "
+
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'facebook'
+#: ../src/goabackend/goautils.c:248
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "GOA %s akkreditiver til identitet %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:756
+#: ../src/goabackend/goautils.c:264
+msgid "Failed to store credentials in the keyring"
+msgstr "Kunne ikke gemme akkreditiver i nøgleringen"
+
+#. translators: %s here is the address of the web page
+#: ../src/goabackend/goawebview.c:75
 #, c-format
-msgid "Failed to store credentials in the keyring: %s"
-msgstr "Kunne ikke gemme akkreditiver i nøgleringen: %s"
+msgid "Loading “%s”…"
+msgstr "Indlæser “%s”…"
 
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:827
+#: ../src/goabackend/goawindowsliveprovider.c:82
+msgid "Windows Live"
+msgstr "Windows Live"
+
+#: ../src/goabackend/goawindowsliveprovider.c:210
 #, c-format
-msgid "Failed to retrieve credentials from the keyring: %s"
-msgstr "Kunne ikke hente akkreditiver fra nøgleringen: %s"
+msgid "Didn't find account email member in JSON data"
+msgstr "Fandt ikke konto-e-mail-medlem i JSON-data"
 
-#: ../src/goabackend/goaprovider.c:839
-msgid "Error parsing result obtained from the keyring: "
-msgstr "Kunne ikke tolke resultater indhentet fra nøgleringen: "
+#: ../src/goaidentity/goaalarm.c:245
+msgid "Time"
+msgstr "Tid"
 
-#: ../src/goabackend/goatwitterprovider.c:78
-msgid "Twitter"
-msgstr "Twitter"
+#: ../src/goaidentity/goaalarm.c:246
+msgid "Time to fire"
+msgstr "Alarmtid"
 
-#: ../src/goabackend/goatwitterprovider.c:183
-#, c-format
-msgid "Didn't find id_str member in JSON data"
-msgstr "Fandt ikke id_str-medlem i JSON-data"
+#: ../src/goaidentity/goaidentityservice.c:317
+msgid "Domain Administrator Login"
+msgstr "Logind for domæneadministrator"
 
-#: ../src/goabackend/goatwitterprovider.c:192
-#, c-format
-msgid "Didn't find screen_name member in JSON data"
-msgstr "Fandt ikke screen_name-medlem i JSON-data"
+#: ../src/goaidentity/goaidentityservice.c:405
+#: ../src/goaidentity/goaidentityservice.c:597
+msgid "Could not find supported credentials"
+msgstr "Kunne ikke finde understøttede akkreditiver"
 
-#: ../src/goabackend/goayahooprovider.c:78
-msgid "Yahoo"
-msgstr "Yahoo"
-
-#: ../src/goabackend/goayahooprovider.c:186
-#, c-format
-msgid "Didn't find guid member in JSON data"
-msgstr "Fandt ikke guid-medlem i JSON-data"
-
-#: ../src/goabackend/goayahooprovider.c:196
-#, c-format
-msgid "Didn't find value member in JSON data"
-msgstr "Fandt ikke værdimedlem i JSON-data"
-
-#: ../src/goabackend/goayahooprovider.c:222
-#, c-format
-msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+#: ../src/goaidentity/goaidentityservice.c:448
+msgid ""
+"In order to use this enterprise identity, the computer needs to be enrolled "
+"in the domain. Please have your network administrator type their domain "
+"password here."
 msgstr ""
-"Forventede status 200 under forespørgsel af navn, fik i stedet status %d (%s)"
+"For at kunne bruge denne enterpriseidentitet skal computeren indskrives i "
+"domænet. Bed venligst din netværksadministrator om at skrive sin "
+"domæneadgangskode her."
 
-#: ../src/goabackend/goayahooprovider.c:235
-msgid "Error parsing usercard response as JSON: "
-msgstr "Fejl under tolkning af brugerkortsrespons som JSON: "
+#: ../src/goaidentity/goaidentityservice.c:488
+msgid ""
+"In order to use this enterprise identity, the computer needs to be enrolled "
+"in the domain. Please have your network administrator type their domain "
+"username here."
+msgstr ""
+"For at kunne bruge denne enterpriseidentitet skal computeren indskrives i "
+"domænet. Bed venligst din netværksadministrator om at skrive sit "
+"domænebrugernavn her."
 
-#: ../src/goabackend/goayahooprovider.c:246
+#: ../src/goaidentity/goaidentityservice.c:1167
+msgid "initial secret passed before secret key exchange"
+msgstr "indledende hemmelighed bestået før udveksling af hemmelig nøgle"
+
+#: ../src/goaidentity/goaidentityservice.c:1373
+msgid "Initial secret key is invalid"
+msgstr "Indledende hemmelige nøgle er ugyldig"
+
+#: ../src/goaidentity/goaidentityservice.c:1896
 #, c-format
-msgid "Didn't find profile member in JSON data"
-msgstr "Fandt ikke profilmedlem i JSON-data"
+msgid "The network realm %s needs some information to sign you in."
+msgstr ""
+"Netværksverdnen (realm) %s skal bruge noget information for at logge dig ind."
 
-#: ../src/goabackend/goayahooprovider.c:256
+#: ../src/goaidentity/goakerberosidentity.c:271
+#: ../src/goaidentity/goakerberosidentity.c:280
+#: ../src/goaidentity/goakerberosidentity.c:607
+msgid "Could not find identity in credential cache: %k"
+msgstr "Kunne ikke finde identitet i akkreditivmellemlager: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:620
+msgid "Could not find identity credentials in cache: %k"
+msgstr "Kunne ikke finde identitetsakkreditiver i mellemlager: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:658
+msgid "Could not sift through identity credentials in cache: %k"
+msgstr "Kunne ikke gennemse identitetsakkreditiver i mellemlager: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:675
+msgid "Could not finish up sifting through identity credentials in cache: %k"
+msgstr ""
+"Kunne ikke færdiggøre gennemsyn af identitetsakkreditiver i mellemlager: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1013
 #, c-format
-msgid "Didn't find nickname member in JSON data"
-msgstr "Fandt ikke kaldenavnsmedlem i JSON-data"
+msgid "No associated identification found"
+msgstr "Ingen associeret identifikation fundet"
 
-#. TODO: look up email address / screenname from GUID
-#: ../src/goabackend/goayahooprovider.c:324
-msgid "Name"
-msgstr "Navn"
+#: ../src/goaidentity/goakerberosidentity.c:1094
+msgid "Could not create credential cache: %k"
+msgstr "Kunne ikke oprette akkreditivmellemlager: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1128
+msgid "Could not initialize credentials cache: %k"
+msgstr "Kunne ikke initialisere akkreditivmellemlager: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1147
+msgid "Could not store new credentials in credentials cache: %k"
+msgstr "Kunne ikke gemme nye akkreditiver i akkreditivmellemlager: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1424
+#, c-format
+msgid "Could not renew identity: Not signed in"
+msgstr "Kunne ikke forny identitet: Ikke logget ind"
+
+#: ../src/goaidentity/goakerberosidentity.c:1436
+msgid "Could not renew identity: %k"
+msgstr "Kunne ikke forny identitet: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1453
+msgid "Could not get new credentials to renew identity %s: %k"
+msgstr "Kunne ikke hente nye akkreditiver for at forny identiteten %s: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1493
+msgid "Could not erase identity: %k"
+msgstr "Kunne ikke slette identitet: %k"
+
+#: ../src/goaidentity/goakerberosidentitymanager.c:746
+msgid "Could not find identity"
+msgstr "Kunne ikke finde identitet"
+
+#: ../src/goaidentity/goakerberosidentitymanager.c:803
+msgid "Could not create credential cache for identity"
+msgstr "Kunne ikke oprette akkreditivmellemlager for identitet"
+
+#: ../src/goaidentity/um-realm-manager.c:368
+#, c-format
+msgid "No such domain or realm found"
+msgstr "Intet sådant domæne eller verden (realm) fundet"
+
+#: ../src/goaidentity/um-realm-manager.c:743
+#, c-format
+msgid "Cannot log in as %s at the %s domain"
+msgstr "Kan ikke logge ind som %s på domænet %s"
+
+#: ../src/goaidentity/um-realm-manager.c:748
+msgid "Invalid password, please try again"
+msgstr "Ugyldig adgangskode, prøv venligst igen"
+
+#: ../src/goaidentity/um-realm-manager.c:752
+#, c-format
+msgid "Couldn't connect to the %s domain: %s"
+msgstr "Kunne ikke forbinde til %s-domænet: %s"
+
+#~ msgid "Chat"
+#~ msgstr "Chat"
+
+#~ msgid "Didn't find username member in JSON data"
+#~ msgstr "Fandt ikke brugernavnsmedlem i JSON-data"
+
+#~ msgid "Didn't find name member in JSON data"
+#~ msgstr "Fandt ikke navnemedlem i JSON-data"
+
+#~ msgid "Email Address"
+#~ msgstr "E-post-adresse"
+
+#~ msgid "There is already an account for the identity %s"
+#~ msgstr "Der er allerede en konto for identiteten %s"
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#~ msgid "Didn't find id_str member in JSON data"
+#~ msgstr "Fandt ikke id_str-medlem i JSON-data"
+
+#~ msgid "Didn't find screen_name member in JSON data"
+#~ msgstr "Fandt ikke screen_name-medlem i JSON-data"
+
+#~ msgid "Yahoo"
+#~ msgstr "Yahoo"
+
+#~ msgid "Didn't find guid member in JSON data"
+#~ msgstr "Fandt ikke guid-medlem i JSON-data"
+
+#~ msgid "Didn't find value member in JSON data"
+#~ msgstr "Fandt ikke værdimedlem i JSON-data"
+
+#~ msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+#~ msgstr ""
+#~ "Forventede status 200 under forespørgsel af navn, fik i stedet status %d "
+#~ "(%s)"
+
+#~ msgid "Error parsing usercard response as JSON: "
+#~ msgstr "Fejl under tolkning af brugerkortsrespons som JSON: "
+
+#~ msgid "Didn't find profile member in JSON data"
+#~ msgstr "Fandt ikke profilmedlem i JSON-data"
+
+#~ msgid "Didn't find nickname member in JSON data"
+#~ msgstr "Fandt ikke kaldenavnsmedlem i JSON-data"
+
+#~ msgid "Name"
+#~ msgstr "Navn"
