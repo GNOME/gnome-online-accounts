@@ -265,6 +265,19 @@ is_deny_node (GoaOAuthProvider *provider, WebKitDOMNode *node)
   return ret;
 }
 
+static gboolean
+is_identity_node (GoaOAuthProvider *provider, WebKitDOMHTMLInputElement *element)
+{
+  /* Flickr does not provide a way to query the string used by the
+   * user to log in via the web interface. The user id and username
+   * returned by flickr.test.login [1] are not what we are looking
+   * for.
+   *
+   * [1] http://www.flickr.com/services/api/flickr.test.login.html
+   */
+  return FALSE;
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
@@ -365,6 +378,7 @@ goa_flickr_provider_class_init (GoaFlickrProviderClass *klass)
   oauth_class = GOA_OAUTH_PROVIDER_CLASS (klass);
   oauth_class->get_identity_sync        = get_identity_sync;
   oauth_class->is_deny_node             = is_deny_node;
+  oauth_class->is_identity_node         = is_identity_node;
   oauth_class->get_consumer_key         = get_consumer_key;
   oauth_class->get_consumer_secret      = get_consumer_secret;
   oauth_class->get_request_uri          = get_request_uri;
