@@ -14,6 +14,7 @@ $(service_DATA): $(service_in_files) Makefile
 	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
 
 EXTRA_DIST =						\
+	$(css_DATA)					\
 	$(service_in_files)				\
 	dbus-interfaces.xml				\
 	$(NULL)
