@@ -465,7 +465,7 @@ goa_oauth2_provider_is_deny_node (GoaOAuth2Provider *provider, WebKitDOMNode *no
  * @node: A #WebKitDOMHTMLInputElement.
  *
  * Checks whether @node is the HTML UI element that the user can use
- * to indetify herself at the provider.
+ * to identify herself at the provider.
  *
  * This is a pure virtual method - a subclass must provide an
  * implementation.
@@ -1295,7 +1295,7 @@ goa_oauth2_provider_refresh_account (GoaProvider  *_provider,
    * DOM parsing. So we should still query and check the identity
    * afterwards.
    */
-  existing_identity = goa_account_get_identity (goa_object_peek_account (object));
+  existing_identity = goa_account_get_identity (account);
   if (g_strcmp0 (identity, existing_identity) != 0)
     {
       g_set_error (error,

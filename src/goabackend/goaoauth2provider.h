@@ -71,8 +71,7 @@ struct _GoaOAuth2Provider
  * @get_use_external_browser: Virtual function for goa_oauth2_provider_get_use_external_browser().
  * @get_use_mobile_browser: Virtual function for goa_oauth2_provider_get_use_mobile_browser().
  * @add_account_key_values: Virtual function for goa_oauth2_provider_add_account_key_values().
- * @is_deny_node: Virtual function for
- * goa_oauth2_provider_is_deny_node().
+ * @is_deny_node: Virtual function for goa_oauth2_provider_is_deny_node().
  * @is_identity_node: Virtual function for goa_oauth2_provider_is_identity_node().
  *
  * Class structure for #GoaOAuth2Provider.
