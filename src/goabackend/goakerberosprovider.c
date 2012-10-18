@@ -37,6 +37,8 @@
 
 #include "org.gnome.Identity.h"
 
+#include "org.freedesktop.realmd.h"
+
 /**
  * GoaKerberosProvider:
  *
@@ -105,6 +107,9 @@ typedef struct
   gchar *account_object_path;
 
   GError *error;
+  GCancellable *cancellable;
+  GoaRealmProvider *realm_provider;
+  GDBusObjectManager *realm_manager;
 } SignInRequest;
 
 static void
@@ -883,87 +888,111 @@ add_combo_box (GtkWidget     *grid1,
 
 static void
 on_realm_added (GDBusObjectManager       *manager,
-                GoaIdentityServiceObject *object,
-                GDBusInterface           *interface,
+                GoaRealmObject           *object,
                 SignInRequest            *request)
 {
-  GoaIdentityServiceRealm *realm;
-  GDBusInterfaceInfo      *info;
-  GtkTreeIter              iter;
+  GoaRealmKerberos *kerberos;
+  GoaRealmCommon *common;
+  GtkTreeIter iter;
+  const gchar *configured;
 
-  info = g_dbus_interface_get_info (interface);
-
-  if (g_strcmp0 (info->name, "org.gnome.Identity.Realm") != 0)
+  kerberos = goa_realm_object_peek_kerberos (object);
+  if (!kerberos)
     return;
 
-  realm = goa_identity_service_object_peek_realm (object);
-
-  if (realm == NULL)
-    return;
 
   gtk_list_store_append (request->realm_store, &iter);
   gtk_list_store_set (request->realm_store,
                       &iter,
-                      0, goa_identity_service_realm_get_domain (realm),
-                      1, realm,
+                      0, goa_realm_kerberos_get_domain_name (kerberos),
                      -1);
 
-  if (!request->realm_chosen && goa_identity_service_realm_get_is_enrolled (realm))
-    gtk_combo_box_set_active_iter (GTK_COMBO_BOX (request->realm_combo_box), &iter);
+  if (!request->realm_chosen)
+    {
+      common = goa_realm_object_peek_common (object);
+      g_return_if_fail (common != NULL);
+
+      configured = goa_realm_common_get_configured (common);
+      if (configured && !g_str_equal (configured, ""))
+        gtk_combo_box_set_active_iter (GTK_COMBO_BOX (request->realm_combo_box), &iter);
+    }
 }
 
 static void
-on_object_manager_ensured_for_getting_realms (GoaKerberosProvider *self,
-                                              GAsyncResult        *result,
-                                              SignInRequest       *request)
+on_populate_provider_new (GObject *source,
+                          GAsyncResult *result,
+                          gpointer user_data)
 {
-  GDBusObjectManager *manager;
-  GList              *objects, *node;
-  GError             *error;
+  GoaRealmProvider *provider;
+  GError *error = NULL;
+  SignInRequest *request;
+  GVariant *options;
 
-  error = NULL;
-
-  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result),
-                                             &error))
-    return;
-
-  manager = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
-
-  if (self->object_manager == NULL)
-    self->object_manager = g_object_ref (manager);
-
-  objects = g_dbus_object_manager_get_objects (G_DBUS_OBJECT_MANAGER (self->object_manager));
-
-  for (node = objects; node != NULL; node = node->next)
+  provider = goa_realm_provider_proxy_new_for_bus_finish (result, &error);
+  if (error != NULL)
     {
-      GoaIdentityServiceRealm *realm;
-      GDBusObject             *object;
-      GtkTreeIter              iter;
-
-      object = node->data;
-
-      realm = GOA_IDENTITY_SERVICE_REALM (g_dbus_object_get_interface (object, "org.gnome.Identity.Realm"));
-
-      if (realm == NULL)
-        continue;
-
-      gtk_list_store_append (request->realm_store, &iter);
-      gtk_list_store_set (request->realm_store,
-                          &iter,
-                          0, goa_identity_service_realm_get_domain (realm),
-                          1, realm,
-                          -1);
-
-      if (!request->realm_chosen && goa_identity_service_realm_get_is_enrolled (realm))
-        gtk_combo_box_set_active_iter (GTK_COMBO_BOX (request->realm_combo_box), &iter);
+      g_warning ("Couldn't get realmd provider: %s", error->message);
+      g_error_free (error);
+      return;
     }
 
-  request->interface_added_id = g_signal_connect (self->object_manager,
-                                                  "interface-added",
-                                                  G_CALLBACK (on_realm_added),
-                                                  request);
+  /* We only know request is valid if no error */
+  request = user_data;
+  request->realm_provider = provider;
 
-  g_list_free_full (objects, (GDestroyNotify) g_object_unref);
+  options = g_variant_new_array (G_VARIANT_TYPE ("{sv}"), NULL, 0);
+  goa_realm_provider_call_discover (provider, "", options, NULL, NULL, NULL);
+}
+
+static void
+on_populate_manager_new (GObject *source,
+                         GAsyncResult *result,
+                         gpointer user_data)
+{
+  SignInRequest *request;
+  GDBusObjectManager *manager;
+  GError *error = NULL;
+  GList *objects, *l;
+
+  manager = goa_realm_object_manager_client_new_for_bus_finish (result, &error);
+  if (error != NULL)
+    {
+      g_warning ("Couldn't get realmd object manager: %s", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  /* We only know request is valid if no error */
+  request = user_data;
+  request->realm_manager = manager;
+
+  objects = g_dbus_object_manager_get_objects (manager);
+  for (l = objects; l != NULL; l = l->next)
+    on_realm_added (manager, l->data, request);
+  g_list_free_full (objects, g_object_unref);
+
+  request->interface_added_id = g_signal_connect (manager, "object-added",
+                                                  G_CALLBACK (on_realm_added), request);
+}
+
+static void
+populate_realms_for_request (SignInRequest *request)
+{
+  goa_realm_provider_proxy_new_for_bus (G_BUS_TYPE_SYSTEM,
+                                        G_DBUS_PROXY_FLAGS_NONE,
+                                        "org.freedesktop.realmd",
+                                        "/org/freedesktop/realmd",
+                                        request->cancellable,
+                                        on_populate_provider_new,
+                                        request);
+
+  goa_realm_object_manager_client_new_for_bus (G_BUS_TYPE_SYSTEM,
+                                               G_DBUS_OBJECT_MANAGER_CLIENT_FLAGS_NONE,
+                                               "org.freedesktop.realmd",
+                                               "/org/freedesktop/realmd",
+                                               request->cancellable,
+                                               on_populate_manager_new,
+                                               request);
 }
 
 static void
@@ -1013,7 +1042,7 @@ create_account_details_ui (GoaKerberosProvider *self,
   gtk_box_pack_start (GTK_BOX (hbox), grid2, TRUE, TRUE, 0);
   gtk_container_add (GTK_CONTAINER (grid0), hbox);
 
-  request->realm_store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_OBJECT);
+  request->realm_store = gtk_list_store_new (1, G_TYPE_STRING);
   add_combo_box (grid1,
                  grid2,
                  _("_Domain"),
@@ -1025,12 +1054,7 @@ create_account_details_ui (GoaKerberosProvider *self,
 
   add_entry (grid1, grid2, _("User_name"), &request->username);
 
-  ensure_object_manager (self,
-                         NULL,
-                         (GAsyncReadyCallback)
-                         on_object_manager_ensured_for_getting_realms,
-                         request);
-
+  populate_realms_for_request (request);
   gtk_widget_grab_focus (request->realm_combo_box);
 
   request->spinner_button = goa_spinner_button_new_from_stock (GTK_STOCK_CONNECT);
@@ -1294,6 +1318,42 @@ get_realm (SignInRequest *request)
   return realm;
 }
 
+static void
+release_realmd (GDBusProxy *proxy)
+{
+  GoaRealmService *service;
+  gchar *unique_name;
+  GError *error = NULL;
+
+  /*
+   * Since we are running from a long running process and don't want
+   * realmd to have to hang around for the entire user session, let
+   * realmd go away, by calling Release().
+   */
+
+  unique_name = g_dbus_proxy_get_name_owner (proxy);
+  if (!unique_name)
+    return;
+
+  /* This won't block because we're not loading properties, and using a unique name */
+  service = goa_realm_service_proxy_new_sync (g_dbus_proxy_get_connection (proxy),
+                                              G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
+                                              unique_name, "/org/freedesktop/realmd",
+                                              NULL, &error);
+  g_free (unique_name);
+
+  if (service == NULL)
+    {
+      g_warning ("Failed to create service proxy: %s", error->message);
+      g_error_free (error);
+    }
+  else
+    {
+      goa_realm_service_call_release (service, NULL, NULL, NULL);
+      g_object_unref (service);
+    }
+}
+
 static GoaObject *
 add_account (GoaProvider    *provider,
              GoaClient      *client,
@@ -1319,6 +1379,7 @@ add_account (GoaProvider    *provider,
   principal_for_display = NULL;
 
   memset (&request, 0, sizeof (SignInRequest));
+  request.cancellable = g_cancellable_new ();
   request.loop = g_main_loop_new (NULL, FALSE);
   request.dialog = dialog;
   request.error = NULL;
@@ -1447,7 +1508,18 @@ start_over:
     g_assert (object != NULL);
 
   if (request.interface_added_id != 0)
-    g_signal_handler_disconnect (G_OBJECT (self->object_manager), request.interface_added_id);
+    g_signal_handler_disconnect (G_OBJECT (request.realm_manager), request.interface_added_id);
+
+  g_cancellable_cancel (request.cancellable);
+  g_object_unref (request.cancellable);
+
+  g_clear_object (&request.realm_manager);
+
+  if (request.realm_provider)
+    {
+      release_realmd (G_DBUS_PROXY (request.realm_provider));
+      g_object_unref (request.realm_provider);
+    }
 
   g_free (request.account_object_path);
   g_free (principal);
