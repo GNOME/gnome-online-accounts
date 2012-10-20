@@ -426,18 +426,30 @@
       org.gnome.OnlineAccounts.Calendar:
 
       An account object implements this interface if it provides
-      calendar-like capabilities.
+      calendar-like capabilities. For example, it can represent a
+      <ulink url="http://tools.ietf.org/html/rfc4791">CalDAV</ulink>
+      server.
   -->
   <interface name="org.gnome.OnlineAccounts.Calendar">
+    <!-- Uri:
+         The top-level location of the calendars.
+      -->
+    <property name="Uri" type="s" access="read"/>
   </interface>
 
   <!--
       org.gnome.OnlineAccounts.Contacts:
 
       An account object implements this interface if it provides
-      contacts-like capabilities.
+      contacts-like capabilities. For example, it can represent a
+      <ulink url="http://tools.ietf.org/html/rfc6352">CardDAV</ulink>
+      server.
   -->
   <interface name="org.gnome.OnlineAccounts.Contacts">
+    <!-- Uri:
+         The top-level location of the contacts.
+      -->
+    <property name="Uri" type="s" access="read"/>
   </interface>
 
   <!--
