@@ -512,7 +512,6 @@ get_tokens_sync (GoaOAuth2Provider  *provider,
   rest_proxy_call_set_method (call, "POST");
   rest_proxy_call_add_header (call, "Content-Type", "application/x-www-form-urlencoded");
   rest_proxy_call_add_param (call, "client_id", goa_oauth2_provider_get_client_id (provider));
-  rest_proxy_call_add_param (call, "redirect_uri", goa_oauth2_provider_get_redirect_uri (provider));
 
   client_secret = goa_oauth2_provider_get_client_secret (provider);
   if (client_secret != NULL)
@@ -528,6 +527,7 @@ get_tokens_sync (GoaOAuth2Provider  *provider,
     {
       /* No refresh code.. request an access token using the authorization code instead */
       rest_proxy_call_add_param (call, "grant_type", "authorization_code");
+      rest_proxy_call_add_param (call, "redirect_uri", goa_oauth2_provider_get_redirect_uri (provider));
       rest_proxy_call_add_param (call, "code", authorization_code);
     }
 
