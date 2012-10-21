@@ -3,6 +3,7 @@ NULL =
 
 INCLUDES = 							\
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
+	-I$(top_builddir)/src/goa				\
 	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\" 		\
 	-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\" 		\
 	-DPACKAGE_DATA_DIR=\""$(pkgdatadir)"\" 			\

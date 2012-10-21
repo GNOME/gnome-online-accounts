@@ -1,5 +1,16 @@
+m4_define([goa_major_version], [3])
+m4_define([goa_minor_version], [7])
+m4_define([goa_micro_version], [1])
+m4_define([goa_nano_version], [0])
+
+m4_define([goa_base_version],
+          [goa_major_version.goa_minor_version.goa_micro_version])
+m4_define([goa_version],
+          [m4_if(goa_nano_version, 0, [goa_base_version],
+                 [goa_base_version].[goa_nano_version])])
+
 AC_INIT([GNOME Online Accounts],
-        [3.7.1],
+        [goa_version],
         [https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts],
         [gnome-online-accounts])
 
@@ -15,6 +26,24 @@ AC_HEADER_STDC
 AC_PROG_LIBTOOL
 
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+
+GOA_MAJOR_VERSION=goa_major_version
+GOA_MINOR_VERSION=goa_minor_version
+GOA_MICRO_VERSION=goa_micro_version
+
+AC_SUBST(GOA_MAJOR_VERSION)
+AC_SUBST(GOA_MINOR_VERSION)
+AC_SUBST(GOA_MICRO_VERSION)
+
+AC_DEFINE(GOA_MAJOR_VERSION,
+          [goa_major_version],
+          [Define to the GOA major version])
+AC_DEFINE(GOA_MINOR_VERSION,
+          [goa_minor_version],
+          [Define to the GOA minor version])
+AC_DEFINE(GOA_MICRO_VERSION,
+          [goa_micro_version],
+          [Define to the GOA micro version])
 
 # Initialization
 #
@@ -332,6 +361,47 @@ GETTEXT_PACKAGE=gnome-online-accounts
 AC_SUBST([GETTEXT_PACKAGE])
 AM_GLIB_GNU_GETTEXT
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[gettext domain])
+
+# goaconfig.h
+#
+
+AC_CONFIG_COMMANDS([src/goa/goaconfig.h],
+[
+	outfile=src/goa/goaconfig.h-tmp
+	cat > $outfile <<\_______EOF
+/* goaconfig.h
+ *
+ * This is a generated file.  Please modify 'configure.ac'
+ */
+
+#ifndef __GOA_CONFIG_H__
+#define __GOA_CONFIG_H__
+
+G_BEGIN_DECLS
+
+_______EOF
+	echo "#define GOA_MAJOR_VERSION $GOA_MAJOR_VERSION" >> $outfile
+	echo "#define GOA_MINOR_VERSION $GOA_MINOR_VERSION" >> $outfile
+	echo "#define GOA_MICRO_VERSION $GOA_MICRO_VERSION" >> $outfile
+	cat >> $outfile <<\_______EOF
+
+G_END_DECLS
+
+#endif /* __GOA_CONFIG_H__ */
+_______EOF
+
+
+	if cmp -s $outfile src/goa/goaconfig.h; then
+	  AC_MSG_NOTICE([src/goa/goaconfig.h is unchanged])
+	  rm -f $outfile
+	else
+	  mv $outfile src/goa/goaconfig.h
+	fi
+],[
+	GOA_MAJOR_VERSION=$GOA_MAJOR_VERSION
+	GOA_MINOR_VERSION=$GOA_MINOR_VERSION
+	GOA_MICRO_VERSION=$GOA_MICRO_VERSION
+])
 
 # Generate
 #

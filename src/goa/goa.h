@@ -31,6 +31,7 @@
 #include <goa/goatypes.h>
 #include <goa/goaclient.h>
 #include <goa/goaerror.h>
+#include <goa/goaversion.h>
 #include <goa/goa-generated.h>
 #undef __GOA_INSIDE_GOA_H__
 

@@ -2,6 +2,7 @@ NULL =
 
 INCLUDES = 							\
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
+	-I$(top_builddir)/src/goa				\
 	-I$(top_builddir)/goaidentity				\
 	-I$(top_srcdir)/goaidentity				\
 	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\" 		\

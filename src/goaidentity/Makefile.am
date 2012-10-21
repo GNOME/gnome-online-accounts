@@ -5,6 +5,7 @@ CLEANFILES= $(NULL)
 
 INCLUDES = 							\
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
+	-I$(top_builddir)/src/goa				\
 	-I$(top_srcdir)/src/goabackend				\
 	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\" 		\
 	-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\" 		\

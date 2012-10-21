@@ -1,10 +1,13 @@
 
 NULL =
+BUILT_SOURCES =
 CLEANFILES =
+DISTCLEANFILES =
 EXTRA_DIST =
 
 INCLUDES = 							\
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
+	-I$(top_builddir)/src/goa				\
 	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\" 		\
 	-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\" 		\
 	-DPACKAGE_DATA_DIR=\""$(pkgdatadir)"\" 			\
@@ -18,8 +21,19 @@ INCLUDES = 							\
 
 # ----------------------------------------------------------------------------------------------------
 
+DISTCLEANFILES += goaconfig-stamp goaconfig.h
+BUILT_SOURCES += goaconfig-stamp
+configexecincludedir = $(libdir)/goa-1.0/include
+nodist_configexecinclude_HEADERS = goaconfig.h
+goaconfig-stamp: ../../config.status
+	$(AM_V_GEN) cd $(top_builddir) && \
+	  $(SHELL) ./config.status src/goa/goaconfig.h
+	@touch goaconfig-stamp
+
+# ----------------------------------------------------------------------------------------------------
+
 dbus_built_sources = goa-generated.c goa-generated.h goa-generated-doc-org.gnome.OnlineAccounts.Account.xml
-BUILT_SOURCES = $(dbus_built_sources)
+BUILT_SOURCES += $(dbus_built_sources)
 
 $(dbus_built_sources) : Makefile.am $(top_srcdir)/data/dbus-interfaces.xml
 	gdbus-codegen							                \
@@ -62,6 +76,7 @@ libgoa_1_0_la_HEADERS =						\
 	goatypes.h						\
 	goaenums.h						\
 	goaenumtypes.h						\
+	goaversion.h						\
 	goa-generated.h						\
 	$(NULL)
 
@@ -73,6 +88,7 @@ libgoa_1_0_la_SOURCES =						\
 	goatypes.h						\
 	goaenums.h						\
 	goaenumtypes.h			goaenumtypes.c		\
+	goaversion.h			goaversion.c		\
 	$(NULL)
 
 libgoa_1_0_la_CPPFLAGS =					\
