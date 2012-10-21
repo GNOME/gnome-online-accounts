@@ -282,16 +282,18 @@ goa_provider_refresh_account (GoaProvider  *provider,
  * @provider: A #GoaProvider.
  * @client: A #GoaClient.
  * @object: A #GoaObject with a #GoaAccount interface.
- * @dialog: A #GtkDialog.
  * @vbox: A vertically oriented #GtkBox to put content in.
- * @table: A table which is the first element of vbox.
+ * @left: A vertically oriented #GtkGrid to put left-aligned content
+ * in.
+ * @right: A vertically oriented #GtkGrid to put right-aligned content
+ * in.
  *
  * Method used to add widgets in the control panel for the account
  * represented by @object.
  *
  * This is a virtual method with an implementation that (currently)
  * does nothing. A subclass should chain up (before adding their own
- * widgets to @vbox and @table) if they want to expose such
+ * widgets to @vbox, @left and @right) if they want to expose such
  * functionality.
  */
 void
@@ -438,7 +440,7 @@ ensure_credentials_in_thread_func (GSimpleAsyncResult *simple,
  * of the operation.
  *
  * This is a virtual method where the default implementation simply
- * returns the %GOA_ERROR_NOT_SUPPORTED error. A subclass may provide
+ * throws the %GOA_ERROR_NOT_SUPPORTED error. A subclass may provide
  * another implementation.
  */
 void

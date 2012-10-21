@@ -67,7 +67,11 @@ man_MANS +=			\
 endif
 
 .xml.8:
-	$(XSLTPROC) --nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
+	$(AM_V_GEN) $(XSLTPROC) \
+	  --nonet \
+	  --stringparam man.output.quietly 1 \
+	  --stringparam funcsynopsis.style ansi \
+	  http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
 
 if ENABLE_GTK_DOC
 include $(top_srcdir)/gtk-doc.make

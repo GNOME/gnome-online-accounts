@@ -65,6 +65,7 @@ struct _GoaProvider
  * @refresh_account: Virtual function for goa_provider_refresh_account().
  * @build_object: Virtual function for goa_provider_build_object().
  * @ensure_credentials_sync: Virtual function for goa_provider_ensure_credentials_sync().
+ * @show_account: Virtual function for goa_provider_show_account().
  * @get_credentials_generation: Virtual function for goa_provider_get_credentials_generation().
  *
  * Class structure for #GoaProvider.

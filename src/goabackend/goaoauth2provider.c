@@ -438,11 +438,11 @@ goa_oauth2_provider_get_identity_sync (GoaOAuth2Provider    *provider,
 /**
  * goa_oauth2_provider_is_deny_node:
  * @provider: A #GoaOAuth2Provider.
- * @node: A #WebKitDOMNode.
+ * @node: A WebKitDOMNode.
  *
  * Checks whether @node is the HTML UI element that the user can use
  * to deny permission to access his account. Usually they are either a
- * #WebKitDOMHTMLButtonElement or a #WebKitDOMHTMLInputElement.
+ * WebKitDOMHTMLButtonElement or a WebKitDOMHTMLInputElement.
  *
  * Please note that providers may have multiple such elements in their
  * UI and this method should catch all of them.
@@ -462,10 +462,10 @@ goa_oauth2_provider_is_deny_node (GoaOAuth2Provider *provider, WebKitDOMNode *no
 /**
  * goa_oauth2_provider_is_identity_node:
  * @provider: A #GoaOAuth2Provider.
- * @node: A #WebKitDOMHTMLInputElement.
+ * @element: A WebKitDOMHTMLInputElement.
  *
- * Checks whether @node is the HTML UI element that the user can use
- * to identify herself at the provider.
+ * Checks whether @element is the HTML UI element that the user can
+ * use to identify herself at the provider.
  *
  * This is a pure virtual method - a subclass must provide an
  * implementation.

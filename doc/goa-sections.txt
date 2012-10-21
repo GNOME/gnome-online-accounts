@@ -57,6 +57,7 @@ goa_object_get_calendar
 goa_object_get_contacts
 goa_object_get_chat
 goa_object_get_documents
+goa_object_get_files
 goa_object_get_exchange
 goa_object_peek_manager
 goa_object_peek_account
@@ -67,6 +68,7 @@ goa_object_peek_calendar
 goa_object_peek_contacts
 goa_object_peek_chat
 goa_object_peek_documents
+goa_object_peek_files
 goa_object_peek_exchange
 GoaObjectProxy
 GoaObjectProxyClass
@@ -83,6 +85,7 @@ goa_object_skeleton_set_calendar
 goa_object_skeleton_set_contacts
 goa_object_skeleton_set_chat
 goa_object_skeleton_set_documents
+goa_object_skeleton_set_files
 goa_object_skeleton_set_exchange
 <SUBSECTION Standard>
 goa_object_get_type
@@ -144,6 +147,8 @@ goa_account_get_chat_disabled
 goa_account_set_chat_disabled
 goa_account_get_documents_disabled
 goa_account_set_documents_disabled
+goa_account_get_files_disabled
+goa_account_set_files_disabled
 goa_account_call_ensure_credentials
 goa_account_call_ensure_credentials_finish
 goa_account_call_ensure_credentials_sync
@@ -431,12 +436,16 @@ goa_provider_get_type
 <FILE>goaoauth2provider</FILE>
 GoaOAuth2Provider
 GoaOAuth2ProviderClass
+goa_oauth2_provider_get_authentication_cookie
 goa_oauth2_provider_get_authorization_uri
 goa_oauth2_provider_get_token_uri
 goa_oauth2_provider_get_redirect_uri
 goa_oauth2_provider_get_scope
 goa_oauth2_provider_get_client_id
 goa_oauth2_provider_get_client_secret
+goa_oauth2_provider_get_use_mobile_browser
+goa_oauth2_provider_is_deny_node
+goa_oauth2_provider_is_identity_node
 goa_oauth2_provider_build_authorization_uri
 goa_oauth2_provider_get_use_external_browser
 goa_oauth2_provider_add_account_key_values
@@ -457,6 +466,7 @@ goa_oauth2_provider_get_type
 <FILE>goaoauthprovider</FILE>
 GoaOAuthProvider
 GoaOAuthProviderClass
+goa_oauth_provider_get_authentication_cookie
 goa_oauth_provider_get_request_uri
 goa_oauth_provider_get_request_uri_params
 goa_oauth_provider_get_authorization_uri
@@ -466,9 +476,13 @@ goa_oauth_provider_get_consumer_key
 goa_oauth_provider_get_consumer_secret
 goa_oauth_provider_build_authorization_uri
 goa_oauth_provider_get_use_external_browser
+goa_oauth_provider_get_use_mobile_browser
+goa_oauth_provider_is_deny_node
+goa_oauth_provider_is_identity_node
 goa_oauth_provider_add_account_key_values
 goa_oauth_provider_get_identity_sync
 goa_oauth_provider_get_access_token_sync
+goa_oauth_provider_parse_request_token_error
 <SUBSECTION Standard>
 GOA_OAUTH_PROVIDER
 GOA_OAUTH_PROVIDER_CLASS
@@ -620,6 +634,9 @@ GoaCalendar
 GoaCalendarIface
 goa_calendar_interface_info
 goa_calendar_override_properties
+goa_calendar_get_uri
+goa_calendar_dup_uri
+goa_calendar_set_uri
 GoaCalendarProxy
 GoaCalendarProxyClass
 goa_calendar_proxy_new
@@ -661,6 +678,9 @@ GoaContacts
 GoaContactsIface
 goa_contacts_interface_info
 goa_contacts_override_properties
+goa_contacts_get_uri
+goa_contacts_dup_uri
+goa_contacts_set_uri
 GoaContactsProxy
 GoaContactsProxyClass
 goa_contacts_proxy_new
@@ -776,6 +796,50 @@ GoaDocumentsSkeletonPrivate
 goa_documents_get_type
 goa_documents_proxy_get_type
 goa_documents_skeleton_get_type
+</SECTION>
+
+<SECTION>
+<FILE>GoaFiles</FILE>
+GoaFiles
+GoaFilesIface
+goa_files_override_properties
+goa_files_interface_info
+goa_files_get_uri
+goa_files_dup_uri
+goa_files_set_uri
+GoaFilesProxy
+GoaFilesProxyClass
+goa_files_proxy_new
+goa_files_proxy_new_finish
+goa_files_proxy_new_sync
+goa_files_proxy_new_for_bus
+goa_files_proxy_new_for_bus_finish
+goa_files_proxy_new_for_bus_sync
+GoaFilesSkeleton
+GoaFilesSkeletonClass
+goa_files_skeleton_new
+<SUBSECTION Standard>
+GOA_TYPE_FILES
+GOA_IS_FILES
+GOA_FILES
+GOA_FILES_GET_IFACE
+GOA_TYPE_FILES_PROXY
+GOA_IS_FILES_PROXY
+GOA_IS_FILES_PROXY_CLASS
+GOA_FILES_PROXY
+GOA_FILES_PROXY_CLASS
+GOA_FILES_PROXY_GET_CLASS
+GOA_TYPE_FILES_SKELETON
+GOA_IS_FILES_SKELETON
+GOA_IS_FILES_SKELETON_CLASS
+GOA_FILES_SKELETON
+GOA_FILES_SKELETON_CLASS
+GOA_FILES_SKELETON_GET_CLASS
+GoaFilesProxyPrivate
+GoaFilesSkeletonPrivate
+goa_files_get_type
+goa_files_proxy_get_type
+goa_files_skeleton_get_type
 </SECTION>
 
 <SECTION>

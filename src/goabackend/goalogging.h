@@ -39,43 +39,43 @@ void goa_log (GoaLogLevel     level,
 
 /**
  * goa_debug:
- * @args: printf()-style format string and arguments
+ * @...: printf()-style format string and arguments
  *
  * Logging macro for %GOA_LOG_LEVEL_DEBUG.
  */
-#define goa_debug(args...)   goa_log(GOA_LOG_LEVEL_DEBUG, G_STRFUNC, G_STRLOC, args);
+#define goa_debug(...)   goa_log(GOA_LOG_LEVEL_DEBUG, G_STRFUNC, G_STRLOC, __VA_ARGS__);
 
 /**
  * goa_info:
- * @args: printf()-style format string and arguments
+ * @...: printf()-style format string and arguments
  *
  * Logging macro for %GOA_LOG_LEVEL_INFO.
  */
-#define goa_info(args...)    goa_log(GOA_LOG_LEVEL_INFO, G_STRFUNC, G_STRLOC, args);
+#define goa_info(...)    goa_log(GOA_LOG_LEVEL_INFO, G_STRFUNC, G_STRLOC, __VA_ARGS__);
 
 /**
  * goa_notice:
- * @args: printf()-style format string and arguments
+ * @...: printf()-style format string and arguments
  *
  * Logging macro for %GOA_LOG_LEVEL_NOTICE.
  */
-#define goa_notice(args...)    goa_log(GOA_LOG_LEVEL_NOTICE, G_STRFUNC, G_STRLOC, args);
+#define goa_notice(...)    goa_log(GOA_LOG_LEVEL_NOTICE, G_STRFUNC, G_STRLOC, __VA_ARGS__);
 
 /**
  * goa_warning:
- * @args: printf()-style format string and arguments
+ * @...: printf()-style format string and arguments
  *
  * Logging macro for %GOA_LOG_LEVEL_WARNING.
  */
-#define goa_warning(args...) goa_log(GOA_LOG_LEVEL_WARNING, G_STRFUNC, G_STRLOC, args);
+#define goa_warning(...) goa_log(GOA_LOG_LEVEL_WARNING, G_STRFUNC, G_STRLOC, __VA_ARGS__);
 
 /**
  * goa_error:
- * @args: printf()-style format string and arguments
+ * @...: printf()-style format string and arguments
  *
  * Logging macro for %GOA_LOG_LEVEL_ERROR.
  */
-#define goa_error(args...)   goa_log(GOA_LOG_LEVEL_ERROR, G_STRFUNC, G_STRLOC, args);
+#define goa_error(...)   goa_log(GOA_LOG_LEVEL_ERROR, G_STRFUNC, G_STRLOC, __VA_ARGS__);
 
 
 G_END_DECLS
