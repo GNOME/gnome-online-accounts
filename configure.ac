@@ -14,7 +14,7 @@ AC_INIT([GNOME Online Accounts],
         [https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts],
         [gnome-online-accounts])
 
-AM_INIT_AUTOMAKE([1.9 foreign dist-bzip2 no-dist-gzip])
+AM_INIT_AUTOMAKE([1.9 foreign dist-xz no-dist-gzip tar-ustar])
 AC_CONFIG_SRCDIR([src])
 AC_CONFIG_HEADERS([config.h])
 
