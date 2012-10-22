@@ -121,6 +121,67 @@ translate_error (GError **error)
   g_dbus_error_strip_remote_error (*error);
 }
 
+static gboolean
+query_tooltip (GtkWidget  *widget,
+               gint        x,
+               gint        y,
+               gboolean    keyboard_mode,
+               GtkTooltip *tooltip,
+               gpointer    user_data)
+{
+  gchar *tip;
+
+  if (GTK_ENTRY_ICON_SECONDARY == gtk_entry_get_icon_at_pos (GTK_ENTRY (widget), x, y))
+    {
+      tip = gtk_entry_get_icon_tooltip_text (GTK_ENTRY (widget),
+                                             GTK_ENTRY_ICON_SECONDARY);
+      gtk_tooltip_set_text (tooltip, tip);
+      g_free (tip);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+icon_released (GtkEntry             *entry,
+               GtkEntryIconPosition  pos,
+               GdkEvent             *event,
+               gpointer              user_data)
+{
+  GtkSettings *settings;
+  gint timeout;
+
+  settings = gtk_widget_get_settings (GTK_WIDGET (entry));
+
+  g_object_get (settings, "gtk-tooltip-timeout", &timeout, NULL);
+  g_object_set (settings, "gtk-tooltip-timeout", 1, NULL);
+  gtk_tooltip_trigger_tooltip_query (gtk_widget_get_display (GTK_WIDGET (entry)));
+  g_object_set (settings, "gtk-tooltip-timeout", timeout, NULL);
+}
+
+static void
+set_entry_validation_error (GtkEntry    *entry,
+                            GError      *error)
+{
+  translate_error (&error);
+  gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY,
+                                     "dialog-error-symbolic");
+  gtk_entry_set_icon_activatable (entry, GTK_ENTRY_ICON_SECONDARY, TRUE);
+  g_signal_connect (entry, "icon-release", G_CALLBACK (icon_released), FALSE);
+  g_signal_connect (entry, "query-tooltip", G_CALLBACK (query_tooltip), NULL);
+  g_object_set (entry, "has-tooltip", TRUE, NULL);
+  gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_SECONDARY,
+                                   error->message);
+}
+
+static void
+clear_entry_validation_error (GtkEntry *entry)
+{
+  g_object_set (entry, "has-tooltip", FALSE, NULL);
+  gtk_entry_set_icon_from_pixbuf (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
+}
+
 static void
 on_identity_signed_in (GoaIdentityServiceManager *manager,
                        GAsyncResult              *result,
@@ -1050,6 +1111,7 @@ create_account_details_ui (GoaKerberosProvider *self,
                  request->realm_store,
                  &request->realm_combo_box,
                  &request->realm_entry);
+  g_signal_connect (request->realm_entry, "changed", G_CALLBACK (clear_entry_validation_error), NULL);
   gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX (request->realm_combo_box), 0);
 
   add_entry (grid1, grid2, _("User_name"), &request->username);
@@ -1354,6 +1416,55 @@ release_realmd (GDBusProxy *proxy)
     }
 }
 
+static void
+on_discover_realm (GObject *source,
+                   GAsyncResult *result,
+                   gpointer user_data)
+{
+  SignInRequest *request = user_data;
+  GError *error = NULL;
+  gchar **realm_paths = NULL;
+  GDBusObject *object = NULL;
+  GoaRealmKerberos *kerberos = NULL;
+  gint unused;
+
+  goa_realm_provider_call_discover_finish (request->realm_provider, &unused,
+                                           &realm_paths, result, &error);
+
+  if (error == NULL && realm_paths)
+    {
+      if (realm_paths[0])
+        object = g_dbus_object_manager_get_object (request->realm_manager,
+                                                   realm_paths[0]);
+      if (object)
+        {
+          kerberos = goa_realm_object_get_kerberos (GOA_REALM_OBJECT (object));
+          g_object_unref (object);
+        }
+      g_strfreev (realm_paths);
+    }
+
+  g_clear_error (&request->error);
+
+  if (kerberos)
+    {
+      gtk_entry_set_text (GTK_ENTRY (request->realm_entry),
+                          goa_realm_kerberos_get_realm_name (kerberos));
+      g_object_unref (kerberos);
+    }
+  else if (error)
+    {
+      request->error = error;
+    }
+  else
+    {
+      g_set_error (&request->error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                   _("The domain is not valid"));
+    }
+
+  g_main_loop_quit (request->loop);
+}
+
 static GoaObject *
 add_account (GoaProvider    *provider,
              GoaClient      *client,
@@ -1373,6 +1484,7 @@ add_account (GoaProvider    *provider,
   gchar      *principal;
   gchar      *principal_for_display;
   gint        response;
+  GVariant   *options;
 
   object = NULL;
   principal = NULL;
@@ -1400,6 +1512,32 @@ start_over:
     }
 
   realm = get_realm (&request);
+
+  /* Would have been set by dialog above, otherwise no realmd */
+  if (request.realm_provider && request.realm_manager)
+    {
+      options = g_variant_new_array (G_VARIANT_TYPE ("{sv}"), NULL, 0);
+      goa_realm_provider_call_discover (request.realm_provider, realm, options,
+                                        request.cancellable, on_discover_realm,
+                                        &request);
+      g_free (realm);
+
+      goa_spinner_button_start (GOA_SPINNER_BUTTON (request.spinner_button));
+      g_main_loop_run (request.loop);
+      goa_spinner_button_stop (GOA_SPINNER_BUTTON (request.spinner_button));
+
+      if (request.error)
+        {
+          set_entry_validation_error (GTK_ENTRY (request.realm_entry), request.error);
+          g_clear_error (&request.error);
+          goto start_over;
+        }
+
+      /* The realm was updated by on_discover_realm */
+      clear_entry_validation_error (GTK_ENTRY (request.realm_entry));
+      realm = get_realm (&request);
+    }
+
   username = gtk_entry_get_text (GTK_ENTRY (request.username));
 
   g_free (principal);
