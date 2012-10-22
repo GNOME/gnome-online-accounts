@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-10-21 17:22+0000\n"
-"PO-Revision-Date: 2012-10-21 20:03+0100\n"
+"POT-Creation-Date: 2012-10-22 04:09+0000\n"
+"PO-Revision-Date: 2012-10-22 18:42+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: Slovenian\n"
@@ -118,7 +118,7 @@ msgid "_Custom"
 msgstr "_Po meri"
 
 #: ../src/goabackend/goaexchangeprovider.c:509
-#: ../src/goabackend/goakerberosprovider.c:1026
+#: ../src/goabackend/goakerberosprovider.c:1117
 msgid "User_name"
 msgstr "_Uporabniško ime"
 
@@ -129,7 +129,7 @@ msgstr "_Strežnik"
 
 #: ../src/goabackend/goaexchangeprovider.c:594
 #: ../src/goabackend/goaexchangeprovider.c:760
-#: ../src/goabackend/goakerberosprovider.c:1337
+#: ../src/goabackend/goakerberosprovider.c:1510
 #: ../src/goabackend/goaoauth2provider.c:987
 #: ../src/goabackend/goaoauthprovider.c:979
 #: ../src/goabackend/goaowncloudprovider.c:657
@@ -145,7 +145,7 @@ msgstr "Prišlo je do napake med povezovanjem s strežnikom Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:637
 #: ../src/goabackend/goaexchangeprovider.c:795
-#: ../src/goabackend/goakerberosprovider.c:1417
+#: ../src/goabackend/goakerberosprovider.c:1616
 #: ../src/goabackend/goaowncloudprovider.c:702
 #: ../src/goabackend/goaowncloudprovider.c:866
 msgid "_Try Again"
@@ -154,7 +154,7 @@ msgstr "_Poskusi znova"
 #: ../src/goabackend/goaexchangeprovider.c:846
 #: ../src/goabackend/goafacebookprovider.c:389
 #: ../src/goabackend/goagoogleprovider.c:506
-#: ../src/goabackend/goakerberosprovider.c:1475
+#: ../src/goabackend/goakerberosprovider.c:1685
 #: ../src/goabackend/goaowncloudprovider.c:918
 #: ../src/goabackend/goawindowsliveprovider.c:403
 msgid "Use for"
@@ -261,50 +261,55 @@ msgstr "Google"
 msgid "_Documents"
 msgstr "_Dokumenti"
 
-#: ../src/goabackend/goakerberosprovider.c:84
+#: ../src/goabackend/goakerberosprovider.c:86
 msgid "Enterprise Login (Kerberos)"
 msgstr "Prijava v poslovno domeno (Kerberos)"
 
-#: ../src/goabackend/goakerberosprovider.c:375
+#: ../src/goabackend/goakerberosprovider.c:441
 msgid "Identity service returned invalid key"
 msgstr "Storitev istovetnosti je vrnila neveljaven ključ"
 
-#: ../src/goabackend/goakerberosprovider.c:641
+#: ../src/goabackend/goakerberosprovider.c:707
 #, c-format
 msgid "Could not find saved credentials for principal `%s' in keyring"
 msgstr "Shranjenih poveril za osnovo `%s' v zbirki ključev ni mogoče najti."
 
-#: ../src/goabackend/goakerberosprovider.c:651
+#: ../src/goabackend/goakerberosprovider.c:717
 #, c-format
 msgid "Did not find password for principal `%s' in credentials"
 msgstr "Gesla za glavno `%s' med poverili ni mogoče najti"
 
-#: ../src/goabackend/goakerberosprovider.c:1019
+#: ../src/goabackend/goakerberosprovider.c:1109
 msgid "_Domain"
 msgstr "_Domena"
 
-#: ../src/goabackend/goakerberosprovider.c:1020
+#: ../src/goabackend/goakerberosprovider.c:1110
 msgid "Enterprise domain or realm name"
 msgstr "Poslovna domena ali ime območja"
 
-#: ../src/goabackend/goakerberosprovider.c:1235
-#: ../src/goaidentity/goaidentityservice.c:1891
+#: ../src/goabackend/goakerberosprovider.c:1321
+#: ../src/goaidentity/goaidentityservice.c:1461
 msgid "Log In to Realm"
 msgstr "Prijava v področje"
 
-#: ../src/goabackend/goakerberosprovider.c:1236
+#: ../src/goabackend/goakerberosprovider.c:1322
 msgid "Please enter your password below."
 msgstr "Spodaj vnesite geslo."
 
-#: ../src/goabackend/goakerberosprovider.c:1237
+#: ../src/goabackend/goakerberosprovider.c:1323
 msgid "Remember this password"
 msgstr "Zapomni si geslo"
 
-#: ../src/goabackend/goakerberosprovider.c:1412
+#: ../src/goabackend/goakerberosprovider.c:1462
+#, c-format
+msgid "The domain is not valid"
+msgstr "Domena ni veljavna"
+
+#: ../src/goabackend/goakerberosprovider.c:1611
 msgid "Error connecting to enterprise identity server"
 msgstr "Prišlo je do napake med povezovanjem s strežnikom Microsoft Exchange"
 
-#: ../src/goabackend/goakerberosprovider.c:1477
+#: ../src/goabackend/goakerberosprovider.c:1687
 msgid "Network _Resources"
 msgstr "Omrežni _viri"
 
@@ -418,7 +423,7 @@ msgstr "Napaka povezave s strežnikom ownCloud..."
 msgid "_Files"
 msgstr "_Datoteke"
 
-#: ../src/goabackend/goaprovider.c:552
+#: ../src/goabackend/goaprovider.c:554
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "zahteva usklajevanja poverila ni podprta za vrsto %s"
@@ -529,32 +534,15 @@ msgstr "Čas"
 msgid "Time to fire"
 msgstr "Čas za izvedbo"
 
-#: ../src/goaidentity/goaidentityservice.c:317
-msgid "Domain Administrator Login"
-msgstr "Skrbniška prijava v domeno"
-
-#: ../src/goaidentity/goaidentityservice.c:405
-#: ../src/goaidentity/goaidentityservice.c:597
-msgid "Could not find supported credentials"
-msgstr "Podprtih poveril ni mogoče najti"
-
-#: ../src/goaidentity/goaidentityservice.c:448
-msgid "In order to use this enterprise identity, the computer needs to be enrolled in the domain. Please have your network administrator type their domain password here."
-msgstr "Za uporabo poslovne istovetnosti, mora biti sistem prijavljen v domeno. Pred nadaljevanjem je treba vpisati domensko geslo."
-
-#: ../src/goaidentity/goaidentityservice.c:488
-msgid "In order to use this enterprise identity, the computer needs to be enrolled in the domain. Please have your network administrator type their domain username here."
-msgstr "Za uporabo poslovne istovetnosti, mora biti sistem prijavljen v domeno. Pred nadaljevanjem je treba vpisati domensko uporabniško ime."
-
-#: ../src/goaidentity/goaidentityservice.c:1167
+#: ../src/goaidentity/goaidentityservice.c:737
 msgid "initial secret passed before secret key exchange"
 msgstr "paket poslan pred izmenjavo skrivnega ključa"
 
-#: ../src/goaidentity/goaidentityservice.c:1373
+#: ../src/goaidentity/goaidentityservice.c:943
 msgid "Initial secret key is invalid"
 msgstr "Začetni skivni ključ ni veljaven!"
 
-#: ../src/goaidentity/goaidentityservice.c:1896
+#: ../src/goaidentity/goaidentityservice.c:1466
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "Omrežno področje %s zahteva dodatne podatke za prijavo."
@@ -637,6 +625,28 @@ msgstr "Napačno geslo, poskusite znova."
 #, c-format
 msgid "Couldn't connect to the %s domain: %s"
 msgstr "Z domeno %s povezava ni mogoča: %s"
+
+#~ msgid "Domain Administrator Login"
+#~ msgstr "Skrbniška prijava v domeno"
+
+#~ msgid "Could not find supported credentials"
+#~ msgstr "Podprtih poveril ni mogoče najti"
+
+#~ msgid ""
+#~ "In order to use this enterprise identity, the computer needs to be "
+#~ "enrolled in the domain. Please have your network administrator type their "
+#~ "domain password here."
+#~ msgstr ""
+#~ "Za uporabo poslovne istovetnosti, mora biti sistem prijavljen v domeno. "
+#~ "Pred nadaljevanjem je treba vpisati domensko geslo."
+
+#~ msgid ""
+#~ "In order to use this enterprise identity, the computer needs to be "
+#~ "enrolled in the domain. Please have your network administrator type their "
+#~ "domain username here."
+#~ msgstr ""
+#~ "Za uporabo poslovne istovetnosti, mora biti sistem prijavljen v domeno. "
+#~ "Pred nadaljevanjem je treba vpisati domensko uporabniško ime."
 
 #~ msgid "Chat"
 #~ msgstr "Klepet"
