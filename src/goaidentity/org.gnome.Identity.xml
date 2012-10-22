@@ -67,6 +67,7 @@
     <method name="SignOut">
       <arg name="identity" type="s" direction="in"/>
     </method>
+
   </interface>
 
   <!--
@@ -92,32 +93,6 @@
         Whether or not the identity is currently signed in
     -->
     <property name="IsSignedIn" type="b" access="read"/>
-
-  </interface>
-
-  <!--
-      org.gnome.Identity.Realm:
-
-      The realm interface.
-  -->
-  <interface name="org.gnome.Identity.Realm">
-    <!--
-        Name:
-        Kerberos realm (e.g., EXAMPLE.COM)
-    -->
-    <property name="Name" type="s" access="read"/>
-
-    <!--
-        Domain:
-        host of domain controller (e.g., example.com)
-    -->
-    <property name="Domain" type="s" access="read"/>
-
-    <!--
-        IsEnrolled:
-        Whether or not the machine is currently enrolled in the realm
-    -->
-    <property name="IsEnrolled" type="b" access="read"/>
 
   </interface>
 

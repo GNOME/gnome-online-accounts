@@ -38,8 +38,6 @@
 #include "goakerberosidentitymanager.h"
 #include "goalogging.h"
 
-#include "um-realm-manager.h"
-
 struct _GoaIdentityServicePrivate
 {
   GDBusConnection          *connection;
@@ -48,7 +46,6 @@ struct _GoaIdentityServicePrivate
 
   GoaIdentityManager       *identity_manager;
 
-  UmRealmManager           *realm_manager;
   guint                     realmd_watch;
   GCancellable             *cancellable;
 
@@ -64,21 +61,9 @@ struct _GoaIdentityServicePrivate
 
 static void identity_service_manager_interface_init (GoaIdentityServiceManagerIface *interface);
 
-static void on_realm_looked_up_for_sign_in (GoaIdentityService *self,
-                                            GAsyncResult       *result,
-                                            GSimpleAsyncResult *operation_result);
-
-static void
-look_up_realm (GoaIdentityService  *self,
-               const char          *identifier,
-               const char          *domain,
-               GCancellable        *cancellable,
-               GAsyncReadyCallback  callback,
-               gpointer             user_data);
 static void
 sign_in (GoaIdentityService     *self,
          const char             *identifier,
-         UmRealmObject          *realm,
          gconstpointer           initial_password,
          GoaIdentitySignInFlags  flags,
          GCancellable           *cancellable,
@@ -159,91 +144,6 @@ unexport_identity (GoaIdentityService *self,
   g_dbus_object_manager_server_unexport (self->priv->object_manager_server,
                                          object_path);
   g_free (object_path);
-}
-
-static char *
-get_object_path_for_realm (GoaIdentityService *self,
-                           UmRealmObject      *realm)
-{
-  const char *domain;
-  char       *escaped_domain;
-  char       *object_path;
-
-  domain = um_realm_kerberos_get_domain_name (um_realm_object_peek_kerberos (realm));
-  escaped_domain = goa_identity_utils_escape_object_path (domain,
-                                                          strlen (domain));
-  object_path = g_strdup_printf ("/org/gnome/Identity/Realms/%s", escaped_domain);
-
-  g_free (escaped_domain);
-  return object_path;
-}
-
-static void
-on_realm_gone (GoaIdentityService *self,
-               GAsyncResult       *result,
-               char               *object_path)
-{
-  g_dbus_object_manager_server_unexport (self->priv->object_manager_server,
-                                         object_path);
-  g_free (object_path);
-  g_object_unref (result);
-}
-
-static char *
-export_realm (GoaIdentityService *self,
-              UmRealmObject      *realm)
-{
-  char *object_path;
-  GDBusObjectSkeleton *object;
-  GDBusInterfaceSkeleton *interface;
-  UmRealmKerberos    *kerberos;
-  GSimpleAsyncResult *operation_result;
-
-  kerberos = um_realm_object_peek_kerberos (realm);
-
-  goa_debug ("GoaIdentityService: exporting realm %s",
-             um_realm_kerberos_get_domain_name (kerberos));
-
-  object_path = get_object_path_for_realm (self, realm);
-
-  object = G_DBUS_OBJECT_SKELETON (goa_identity_service_object_skeleton_new (object_path));
-  interface = G_DBUS_INTERFACE_SKELETON (goa_identity_service_realm_skeleton_new ());
-
-  g_object_bind_property (G_OBJECT (realm),
-                          "configured",
-                          G_OBJECT (interface),
-                          "is-enrolled",
-                          G_BINDING_SYNC_CREATE);
-
-  g_object_bind_property (G_OBJECT (kerberos),
-                          "realm-name",
-                          G_OBJECT (interface),
-                          "realm-name",
-                          G_BINDING_SYNC_CREATE);
-
-  g_object_bind_property (G_OBJECT (kerberos),
-                          "domain-name",
-                          G_OBJECT (interface),
-                          "domain-name",
-                          G_BINDING_SYNC_CREATE);
-  operation_result = g_simple_async_result_new (G_OBJECT (self),
-                                                (GAsyncReadyCallback)
-                                                on_realm_gone,
-                                                g_strdup (object_path),
-                                                export_realm);
-
-  g_object_weak_ref (G_OBJECT (self->priv->realm_manager),
-                     (GWeakNotify)
-                     g_simple_async_result_complete_in_idle,
-                     operation_result);
-
-  g_dbus_object_skeleton_add_interface (object, interface);
-  g_object_unref (interface);
-
-  g_dbus_object_manager_server_export (self->priv->object_manager_server, object);
-  g_object_unref (object);
-
-  return object_path;
 }
 
 static void
@@ -417,7 +317,6 @@ static void
 read_sign_in_details (GoaIdentityServiceManager  *manager,
                       GVariant                   *details,
                       GoaIdentitySignInFlags     *flags,
-                      char                      **domain,
                       char                      **secret_key)
 {
   GVariantIter  iter;
@@ -428,9 +327,7 @@ read_sign_in_details (GoaIdentityServiceManager  *manager,
   g_variant_iter_init (&iter, details);
   while (g_variant_iter_loop (&iter, "{ss}", &key, &value))
     {
-      if (g_strcmp0 (key, "domain") == 0)
-        *domain = g_strdup (value);
-      else if (g_strcmp0 (key, "initial-password") == 0)
+      if (g_strcmp0 (key, "initial-password") == 0)
         *secret_key = g_strdup (value);
       else if (g_strcmp0 (key, "disallow-renewal") == 0
                && g_strcmp0 (value, "true") == 0)
@@ -444,263 +341,6 @@ read_sign_in_details (GoaIdentityServiceManager  *manager,
     }
 }
 
-static void
-on_realm_looked_up_for_sign_in (GoaIdentityService *self,
-                                GAsyncResult       *result,
-                                GSimpleAsyncResult *operation_result)
-{
-  UmRealmObject          *realm;
-  GoaIdentitySignInFlags  flags;
-  GError                 *error;
-  GCancellable           *cancellable;
-  const char             *identifier;
-  gconstpointer           initial_password;
-  char                   *new_identifier;
-
-  identifier = g_simple_async_result_get_source_tag (operation_result);
-  new_identifier = NULL;
-  error = NULL;
-  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result),
-                                             &error))
-    {
-      goa_debug ("GoaIdentityService: Could not discover realm: %s",
-                 error->message);
-      g_error_free (error);
-
-      /* let it slide, we might not need realmd for this deployment
-       */
-      realm = NULL;
-    }
-  else
-    {
-      char *user;
-      UmRealmKerberos *kerberos;
-
-      /* Rebuild the identifier using the updated realm
-       */
-
-      realm = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
-
-      goa_identity_utils_split_identifier (identifier,
-                                           &user,
-                                           NULL);
-
-      kerberos = um_realm_object_peek_kerberos (realm);
-
-      if (user != NULL)
-        new_identifier = g_strdup_printf ("%s@%s",
-                                          user,
-                                          um_realm_kerberos_get_realm_name (kerberos));
-
-      identifier = new_identifier;
-
-      g_free (user);
-    }
-
-  cancellable = g_object_get_data (G_OBJECT (operation_result), "cancellable");
-  initial_password = g_object_get_data (G_OBJECT (operation_result),
-                                        "initial-password");
-  flags = (GoaIdentitySignInFlags) g_object_get_data (G_OBJECT (operation_result),
-                                                      "flags");
-
-  sign_in (self,
-           identifier,
-           realm,
-           initial_password,
-           flags,
-           cancellable,
-           (GAsyncReadyCallback)
-           on_sign_in_done,
-           operation_result);
-
-  g_free (new_identifier);
-}
-
-static void
-on_realm_looked_up (UmRealmManager     *manager,
-                    GAsyncResult       *result,
-                    GSimpleAsyncResult *operation_result)
-{
-  GError *error;
-  GList *realms;
-
-  error = NULL;
-  realms = um_realm_manager_discover_finish (manager, result, &error);
-  if (error != NULL)
-    {
-      g_simple_async_result_take_error (operation_result, error);
-      g_simple_async_result_complete_in_idle (operation_result);
-      g_object_unref (operation_result);
-      return;
-    }
-
-  if (realms->data == NULL)
-    g_simple_async_result_set_op_res_gpointer (operation_result, NULL, NULL);
-  else
-    g_simple_async_result_set_op_res_gpointer (operation_result,
-                                               g_object_ref (realms->data),
-                                               (GDestroyNotify)
-                                               g_free);
-  g_list_free_full (realms,
-                    (GDestroyNotify)
-                    g_object_unref);
-}
-
-static void
-on_manager_realm_added (UmRealmManager     *manager,
-                        UmRealmObject      *realm,
-                        GoaIdentityService *self)
-{
-  export_realm (self, realm);
-}
-
-static void
-on_realm_manager_ensured (GObject            *source,
-                          GAsyncResult       *result,
-                          GSimpleAsyncResult *operation_result)
-{
-  GoaIdentityService *self;
-  GError             *error;
-  GList              *realms, *node;
-
-  self = GOA_IDENTITY_SERVICE (g_async_result_get_source_object (G_ASYNC_RESULT (operation_result)));
-
-  g_clear_object (&self->priv->realm_manager);
-
-  error = NULL;
-  self->priv->realm_manager = um_realm_manager_new_finish (result, &error);
-  if (error != NULL)
-    {
-      g_simple_async_result_take_error (operation_result, error);
-    }
-  else
-    {
-      realms = um_realm_manager_get_realms (self->priv->realm_manager);
-
-      for (node = realms; node != NULL; node = node->next)
-        export_realm (self, node->data);
-
-      g_list_free (realms);
-
-      g_signal_connect (self->priv->realm_manager,
-                        "realm-added",
-                        G_CALLBACK (on_manager_realm_added),
-                        self);
-
-    }
-
-  g_simple_async_result_complete_in_idle (operation_result);
-  g_object_unref (operation_result);
-}
-
-static void
-ensure_realm_manager (GoaIdentityService  *self,
-                      GCancellable        *cancellable,
-                      GAsyncReadyCallback  callback,
-                      gpointer             user_data)
-{
-  GSimpleAsyncResult *operation_result;
-
-  operation_result = g_simple_async_result_new (G_OBJECT (self),
-                                                callback,
-                                                user_data,
-                                                ensure_realm_manager);
-
-  g_simple_async_result_set_check_cancellable (operation_result, cancellable);
-  um_realm_manager_new (self->priv->cancellable,
-                        (GAsyncReadyCallback)
-                        on_realm_manager_ensured,
-                        operation_result);
-}
-
-static gboolean
-foo (GSimpleAsyncResult *operation_result)
-{
-  GCancellable *cancellable;
-  const char   *domain;
-  GoaIdentityService *self;
-
-  self = GOA_IDENTITY_SERVICE (g_async_result_get_source_object (G_ASYNC_RESULT (operation_result)));
-
-
-  domain = g_object_get_data (G_OBJECT (operation_result), "domain");
-  cancellable = g_object_get_data (G_OBJECT (operation_result), "cancellable");
-  um_realm_manager_discover (self->priv->realm_manager,
-                             domain,
-                             cancellable,
-                             (GAsyncReadyCallback)
-                             on_realm_looked_up,
-                             operation_result);
-  return FALSE;
-}
-
-static void
-on_realm_manager_ensured_for_look_up (GoaIdentityService *self,
-                                      GAsyncResult       *result,
-                                      GSimpleAsyncResult *operation_result)
-{
-  GError       *error;
-
-  error = NULL;
-  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), &error))
-    {
-      g_simple_async_result_take_error (operation_result, error);
-      g_simple_async_result_complete_in_idle (operation_result);
-      g_object_unref (operation_result);
-      return;
-    }
-
-  g_timeout_add_seconds (30, (GSourceFunc) foo, operation_result);
-}
-
-static void
-look_up_realm (GoaIdentityService  *self,
-               const char          *identifier,
-               const char          *domain,
-               GCancellable        *cancellable,
-               GAsyncReadyCallback  callback,
-               gpointer             user_data)
-{
-  GSimpleAsyncResult *operation_result;
-  char *domain_to_look_up;
-
-  goa_debug ("GoaIdentityService: looking up realm");
-
-  operation_result = g_simple_async_result_new (G_OBJECT (self),
-                                                callback,
-                                                user_data,
-                                                look_up_realm);
-
-  g_simple_async_result_set_check_cancellable (operation_result, cancellable);
-
-  if (domain != NULL)
-    {
-      domain_to_look_up = g_strdup (domain);
-    }
-  else
-    {
-      goa_identity_utils_split_identifier (identifier,
-                                           NULL,
-                                           &domain_to_look_up);
-    }
-
-  if (domain_to_look_up == NULL)
-    domain_to_look_up = g_strdup ("");
-
-  g_object_set_data_full (G_OBJECT (operation_result),
-                          "domain",
-                          domain_to_look_up,
-                          (GDestroyNotify)
-                          g_free);
-
-  ensure_realm_manager (self,
-                        cancellable,
-                        (GAsyncReadyCallback)
-                        on_realm_manager_ensured_for_look_up,
-                        operation_result);
-
-}
-
 static gboolean
 goa_identity_service_handle_sign_in (GoaIdentityServiceManager *manager,
                                      GDBusMethodInvocation     *invocation,
@@ -710,16 +350,14 @@ goa_identity_service_handle_sign_in (GoaIdentityServiceManager *manager,
   GoaIdentityService     *self = GOA_IDENTITY_SERVICE (manager);
   GSimpleAsyncResult     *operation_result;
   GoaIdentitySignInFlags  flags;
-  char                   *domain;
   char                   *secret_key;
   gconstpointer           initial_password;
   GCancellable           *cancellable;
 
-  domain = NULL;
   secret_key = NULL;
   initial_password = NULL;
 
-  read_sign_in_details (manager, details, &flags, &domain, &secret_key);
+  read_sign_in_details (manager, details, &flags, &secret_key);
 
   if (secret_key != NULL)
     {
@@ -757,32 +395,18 @@ goa_identity_service_handle_sign_in (GoaIdentityServiceManager *manager,
                      "initial-password",
                      (gpointer)
                      initial_password);
-  g_object_set_data_full (G_OBJECT (operation_result),
-                          "domain",
-                          domain,
-                          (GDestroyNotify)
-                          g_free);
   g_object_set_data (G_OBJECT (operation_result),
                      "flags",
                      GINT_TO_POINTER ((int) flags));
-  if (domain == NULL)
-    sign_in (self,
-             identifier,
-             NULL,
-             initial_password,
-             flags,
-             cancellable,
-             (GAsyncReadyCallback)
-             on_sign_in_done,
-             operation_result);
-  else
-    look_up_realm (self,
-                   identifier,
-                   domain,
-                   cancellable,
-                   (GAsyncReadyCallback)
-                   on_realm_looked_up_for_sign_in,
-                   operation_result);
+
+  sign_in (self,
+           identifier,
+           initial_password,
+           flags,
+           cancellable,
+           (GAsyncReadyCallback)
+           on_sign_in_done,
+           operation_result);
 
   g_object_unref (cancellable);
 
@@ -1067,7 +691,6 @@ goa_identity_service_finalize (GObject *object)
 
   g_clear_object (&self->priv->identity_manager);
   g_clear_object (&self->priv->object_manager_server);
-  g_clear_object (&self->priv->realm_manager);
   g_clear_object (&self->priv->watched_client_connections);
   g_clear_object (&self->priv->key_holders);
 
@@ -1292,8 +915,6 @@ on_identity_added (GoaIdentityManager *identity_manager,
   export_identity (self, identity);
 
   identifier = goa_identity_get_identifier (identity);
-
-  look_up_realm (self, identifier, NULL, NULL, NULL, NULL);
 
   object = find_object_with_principal (self, identifier, FALSE);
 
@@ -1615,7 +1236,6 @@ cancel_sign_in (GoaIdentityManager *identity_manager,
 static void
 sign_in (GoaIdentityService     *self,
          const char             *identifier,
-         UmRealmObject          *realm,
          gconstpointer           initial_password,
          GoaIdentitySignInFlags  flags,
          GCancellable           *cancellable,
@@ -1629,7 +1249,7 @@ sign_in (GoaIdentityService     *self,
   operation_result = g_simple_async_result_new (G_OBJECT (self),
                                                 callback,
                                                 user_data,
-                                                realm);
+                                                NULL);
   g_simple_async_result_set_check_cancellable (operation_result, cancellable);
 
   g_object_set_data (G_OBJECT (operation_result),
@@ -1962,8 +1582,6 @@ on_identities_listed (GoaIdentityManager *manager,
 
       principal = goa_identity_get_identifier (identity);
 
-      look_up_realm (self, principal, NULL, NULL, NULL, NULL);
-
       object = find_object_with_principal (self, principal, TRUE);
 
       if (object == NULL)
@@ -2094,57 +1712,6 @@ on_name_lost (GDBusConnection    *connection,
     goa_debug ("GoaIdentityService: Lost name org.gnome.Identity");
 }
 
-static void
-on_realm_manager_ensured_for_auto_discovery (GoaIdentityService *self,
-                                             GAsyncResult       *result)
-{
-  GError *error;
-
-  error = NULL;
-  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), &error))
-    {
-      goa_debug ("GoaIdentityService: could not auto-discover available realms: %s",
-                 error->message);
-      return;
-    }
-
-  goa_debug ("GoaIdentityService: auto-discovering available realms");
-
-  /* Trigger realm-added signal for all discovered realms */
-  um_realm_manager_discover (self->priv->realm_manager,
-                             "",
-                             self->priv->cancellable,
-                             NULL,
-                             NULL);
-}
-
-static void
-on_realmd_appeared (GDBusConnection    *connection,
-                    const gchar        *name,
-                    const gchar        *name_owner,
-                    GoaIdentityService *self)
-{
-  ensure_realm_manager (self,
-                        NULL,
-                        (GAsyncReadyCallback)
-                        on_realm_manager_ensured_for_auto_discovery,
-                        NULL);
-}
-
-static void
-on_realmd_disappeared (GDBusConnection    *connection,
-                       const gchar        *name,
-                       GoaIdentityService *self)
-{
-  if (self->priv->realm_manager)
-    {
-      g_signal_handlers_disconnect_by_func (self->priv->realm_manager,
-                                            on_manager_realm_added,
-                                            self);
-      g_clear_object (&self->priv->realm_manager);
-    }
-}
-
 gboolean
 goa_identity_service_activate (GoaIdentityService   *self,
                                GError              **error)
@@ -2177,16 +1744,6 @@ goa_identity_service_activate (GoaIdentityService   *self,
                                        (GBusNameVanishedCallback) on_name_lost,
                                        self,
                                        NULL);
-
-  self->priv->realmd_watch = g_bus_watch_name (G_BUS_TYPE_SYSTEM,
-                                               "org.freedesktop.realmd",
-                                               G_BUS_NAME_WATCHER_FLAGS_AUTO_START,
-                                               (GBusNameAppearedCallback)
-                                               on_realmd_appeared,
-                                               (GBusNameVanishedCallback)
-                                               on_realmd_disappeared,
-                                               self,
-                                               NULL);
 
   return TRUE;
 }

@@ -31,7 +31,6 @@ identity_headers =						\
 	goakerberosidentity.h					\
 	goakerberosidentityinquiry.h				\
 	goakerberosidentitymanager.h				\
-	um-realm-manager.h					\
 	$(NULL)
 
 identity_sources =						\
@@ -45,7 +44,6 @@ identity_sources =						\
 	goakerberosidentity.c					\
 	goakerberosidentityinquiry.c				\
 	goakerberosidentitymanager.c				\
-	um-realm-manager.c					\
 	$(NULL)
 
 identity_dbus_built_sources =					\
@@ -76,16 +74,16 @@ EXTRA_DIST += goaidentityenumtypes.c.in
 BUILT_SOURCES += goaidentityenumtypes.c
 
 realmd_dbus_built_sources =					\
-	um-realm-generated.h					\
-	um-realm-generated.c					\
+	org.freedesktop.realmd.h				\
+	org.freedesktop.realmd.c				\
 	$(NULL)
 
 $(realmd_dbus_built_sources) : Makefile.am org.freedesktop.realmd.xml
 	gdbus-codegen						\
 		--interface-prefix org.freedesktop.realmd.	\
-		--generate-c-code um-realm-generated		\
+		--generate-c-code org.freedesktop.realmd	\
 		--c-generate-object-manager			\
-		--c-namespace UmRealm				\
+		--c-namespace GoaRealm				\
 		--annotate "org.freedesktop.realmd.Realm"	\
 		            org.gtk.GDBus.C.Name Common		\
 		$(srcdir)/org.freedesktop.realmd.xml		\
