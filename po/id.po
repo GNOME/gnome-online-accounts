@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts gnome-3-6\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-10-02 16:13+0000\n"
-"PO-Revision-Date: 2012-10-03 02:57+0700\n"
+"POT-Creation-Date: 2012-10-29 20:11+0000\n"
+"PO-Revision-Date: 2012-10-30 09:00+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome@i15n.org>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.3\n"
+"X-Generator: Poedit 1.5.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. shut up -Wunused-but-set-variable
@@ -85,8 +85,8 @@ msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:279
-#: ../src/goabackend/goaoauth2provider.c:1392
-#: ../src/goabackend/goaoauthprovider.c:1415
+#: ../src/goabackend/goaoauth2provider.c:1443
+#: ../src/goabackend/goaoauthprovider.c:1466
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "Kredensial tak ditemukan di ring kunci (%s, %d): "
@@ -111,7 +111,7 @@ msgid "_Custom"
 msgstr "_Ubahan"
 
 #: ../src/goabackend/goaexchangeprovider.c:509
-#: ../src/goabackend/goakerberosprovider.c:1026
+#: ../src/goabackend/goakerberosprovider.c:1117
 msgid "User_name"
 msgstr "_Nama Pengguna"
 
@@ -121,9 +121,9 @@ msgstr "_Server"
 
 #: ../src/goabackend/goaexchangeprovider.c:594
 #: ../src/goabackend/goaexchangeprovider.c:760
-#: ../src/goabackend/goakerberosprovider.c:1337
-#: ../src/goabackend/goaoauth2provider.c:952
-#: ../src/goabackend/goaoauthprovider.c:945
+#: ../src/goabackend/goakerberosprovider.c:1510
+#: ../src/goabackend/goaoauth2provider.c:986
+#: ../src/goabackend/goaoauthprovider.c:979
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "Dialog diakhiri"
@@ -135,30 +135,30 @@ msgstr "Galat ketika menghubungi server Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:637
 #: ../src/goabackend/goaexchangeprovider.c:795
-#: ../src/goabackend/goakerberosprovider.c:1417
+#: ../src/goabackend/goakerberosprovider.c:1616
 msgid "_Try Again"
 msgstr "Coba _Lagi"
 
 #: ../src/goabackend/goaexchangeprovider.c:846
-#: ../src/goabackend/goafacebookprovider.c:361
-#: ../src/goabackend/goagoogleprovider.c:535
-#: ../src/goabackend/goakerberosprovider.c:1475
-#: ../src/goabackend/goawindowsliveprovider.c:370
+#: ../src/goabackend/goafacebookprovider.c:389
+#: ../src/goabackend/goagoogleprovider.c:570
+#: ../src/goabackend/goakerberosprovider.c:1685
+#: ../src/goabackend/goawindowsliveprovider.c:403
 msgid "Use for"
 msgstr "Gunakan untuk"
 
 #: ../src/goabackend/goaexchangeprovider.c:848
-#: ../src/goabackend/goagoogleprovider.c:537
+#: ../src/goabackend/goagoogleprovider.c:572
 msgid "_Mail"
 msgstr "_Surel"
 
 #: ../src/goabackend/goaexchangeprovider.c:853
-#: ../src/goabackend/goagoogleprovider.c:542
+#: ../src/goabackend/goagoogleprovider.c:577
 msgid "Cale_ndar"
 msgstr "Kale_nder"
 
 #: ../src/goabackend/goaexchangeprovider.c:858
-#: ../src/goabackend/goagoogleprovider.c:547
+#: ../src/goabackend/goagoogleprovider.c:582
 msgid "_Contacts"
 msgstr "_Kontak"
 
@@ -175,7 +175,7 @@ msgstr "Berharap status 200 ketika meminta guid, tapi mendapat status %d (%s)"
 
 #: ../src/goabackend/goafacebookprovider.c:205
 #: ../src/goabackend/goagoogleprovider.c:224
-#: ../src/goabackend/goaoauth2provider.c:566
+#: ../src/goabackend/goaoauth2provider.c:586
 #: ../src/goabackend/goawindowsliveprovider.c:188
 msgid "Error parsing response as JSON: "
 msgstr "Galat saat mengurai respon sebagai JSON: "
@@ -192,9 +192,9 @@ msgstr "Tak menemukan id anggota pada data JSON"
 msgid "Didn't find email member in JSON data"
 msgstr "Tak menemukan anggota surel di data JSON"
 
-#: ../src/goabackend/goafacebookprovider.c:363
-#: ../src/goabackend/goagoogleprovider.c:552
-#: ../src/goabackend/goawindowsliveprovider.c:372
+#: ../src/goabackend/goafacebookprovider.c:391
+#: ../src/goabackend/goagoogleprovider.c:587
+#: ../src/goabackend/goawindowsliveprovider.c:405
 msgid "C_hat"
 msgstr "_Obrolan"
 
@@ -207,92 +207,97 @@ msgstr "Google"
 msgid "Didn't find data member in JSON data"
 msgstr "Tak menemukan anggota data di data JSON"
 
-#: ../src/goabackend/goagoogleprovider.c:306
+#: ../src/goabackend/goagoogleprovider.c:341
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr ""
 "Waktu pada sistem Anda tidak benar. Periksalah pengaturan tanggal dan waktu "
 "Anda."
 
-#: ../src/goabackend/goagoogleprovider.c:557
-#: ../src/goabackend/goawindowsliveprovider.c:377
+#: ../src/goabackend/goagoogleprovider.c:592
+#: ../src/goabackend/goawindowsliveprovider.c:410
 msgid "_Documents"
 msgstr "_Dokumen"
 
-#: ../src/goabackend/goakerberosprovider.c:84
+#: ../src/goabackend/goakerberosprovider.c:86
 msgid "Enterprise Login (Kerberos)"
 msgstr "Log Masuk Enterprise (Kerberos)"
 
-#: ../src/goabackend/goakerberosprovider.c:375
+#: ../src/goabackend/goakerberosprovider.c:441
 msgid "Identity service returned invalid key"
 msgstr "Layanan identitas mengembalikan kunci yang tak valid"
 
-#: ../src/goabackend/goakerberosprovider.c:641
+#: ../src/goabackend/goakerberosprovider.c:707
 #, c-format
 msgid "Could not find saved credentials for principal `%s' in keyring"
 msgstr ""
 "Tak bisa temukan kredensial tersimpan bagi principal '%s' dalam ring kunci"
 
-#: ../src/goabackend/goakerberosprovider.c:651
+#: ../src/goabackend/goakerberosprovider.c:717
 #, c-format
 msgid "Did not find password for principal `%s' in credentials"
 msgstr "Tak menemukan sandi bagi principal '%s' pada kredensial"
 
-#: ../src/goabackend/goakerberosprovider.c:1019
+#: ../src/goabackend/goakerberosprovider.c:1109
 msgid "_Domain"
 msgstr "_Domain"
 
-#: ../src/goabackend/goakerberosprovider.c:1020
+#: ../src/goabackend/goakerberosprovider.c:1110
 msgid "Enterprise domain or realm name"
 msgstr "Nama realm atau domain enterprise"
 
-#: ../src/goabackend/goakerberosprovider.c:1235
-#: ../src/goaidentity/goaidentityservice.c:1891
+#: ../src/goabackend/goakerberosprovider.c:1321
+#: ../src/goaidentity/goaidentityservice.c:1082
 msgid "Log In to Realm"
 msgstr "Log Masuk ke Realm"
 
-#: ../src/goabackend/goakerberosprovider.c:1236
+#: ../src/goabackend/goakerberosprovider.c:1322
 msgid "Please enter your password below."
 msgstr "Harap masukkan sandi Anda di bawah."
 
-#: ../src/goabackend/goakerberosprovider.c:1237
+#: ../src/goabackend/goakerberosprovider.c:1323
 msgid "Remember this password"
 msgstr "Ingat sandi ini"
 
-#: ../src/goabackend/goakerberosprovider.c:1412
+#: ../src/goabackend/goakerberosprovider.c:1462
+#, c-format
+msgid "The domain is not valid"
+msgstr "Domain tak valid"
+
+#: ../src/goabackend/goakerberosprovider.c:1611
 msgid "Error connecting to enterprise identity server"
 msgstr "Galat ketika menghubungi server identitas enterprise"
 
-#: ../src/goabackend/goakerberosprovider.c:1477
+#: ../src/goabackend/goakerberosprovider.c:1687
 msgid "Network _Resources"
 msgstr "Sumbe_r Daya Jaringan"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:523
-#: ../src/goabackend/goaoauthprovider.c:537
+#: ../src/goabackend/goaoauth2provider.c:543
+#: ../src/goabackend/goaoauthprovider.c:557
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr ""
 "Berharap status 200 ketika meminta token akses, tapi mendapat status %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:543
+#: ../src/goabackend/goaoauth2provider.c:563
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "Tak temukan access_token dalam data non-JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:577
+#: ../src/goabackend/goaoauth2provider.c:597
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "Tak temukan access_token dalam data JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:746
-#: ../src/goabackend/goaoauth2provider.c:785
+#: ../src/goabackend/goaoauth2provider.c:776
+#: ../src/goabackend/goaoauth2provider.c:815
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "Jawaban otorisasi adalah \"%s\""
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:886
+#: ../src/goabackend/goaoauth2provider.c:920
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
@@ -301,50 +306,50 @@ msgstr ""
 "Tempelkan kode otorisasi yang diperoleh dari <a href=\"%s\">halaman "
 "otorisasi</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:978
-#: ../src/goabackend/goaoauthprovider.c:976
+#: ../src/goabackend/goaoauth2provider.c:1012
+#: ../src/goabackend/goaoauthprovider.c:1010
 msgid "Error getting an Access Token: "
 msgstr "Galat saat mengambil Token Akses: "
 
-#: ../src/goabackend/goaoauth2provider.c:993
-#: ../src/goabackend/goaoauthprovider.c:989
+#: ../src/goabackend/goaoauth2provider.c:1027
+#: ../src/goabackend/goaoauthprovider.c:1023
 msgid "Error getting identity: "
 msgstr "Galat saat mendapatkan identitas: "
 
-#: ../src/goabackend/goaoauth2provider.c:1253
-#: ../src/goabackend/goaoauthprovider.c:1265
+#: ../src/goabackend/goaoauth2provider.c:1304
+#: ../src/goabackend/goaoauthprovider.c:1316
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "Meminta log masuk sebagai %s, tapi dimasukkan sebagai %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1419
+#: ../src/goabackend/goaoauth2provider.c:1470
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Kredensial tak memuat access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1458
-#: ../src/goabackend/goaoauthprovider.c:1488
+#: ../src/goabackend/goaoauth2provider.c:1509
+#: ../src/goabackend/goaoauthprovider.c:1539
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Gagal menyegarkan token akses (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1493
-#: ../src/goabackend/goaoauthprovider.c:1518
+#: ../src/goabackend/goaoauth2provider.c:1544
+#: ../src/goabackend/goaoauthprovider.c:1569
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "Galat saat menyimpan kredensial pada ring kunci (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:560
+#: ../src/goabackend/goaoauthprovider.c:580
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "Kehilangan tajuk access_token_secret atau access_token di respon"
 
-#: ../src/goabackend/goaoauthprovider.c:815
+#: ../src/goabackend/goaoauthprovider.c:849
 msgid "Error getting a Request Token: "
 msgstr "Galat saat mengambil Token Request: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:848
+#: ../src/goabackend/goaoauthprovider.c:882
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -352,19 +357,19 @@ msgstr ""
 "Berharap status 200 ketika meminta Token Request, tapi mendapat status %d "
 "(%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:865
+#: ../src/goabackend/goaoauthprovider.c:899
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "Kehilangan tajuk request_token_secret atau request_token di respon"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:882
+#: ../src/goabackend/goaoauthprovider.c:916
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr ""
 "Tempelkan token yang diperoleh dari <a href=\"%s\">halaman otorisasi</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1444
+#: ../src/goabackend/goaoauthprovider.c:1495
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Kredensial tak memuat access_token atau access_token_secret"
@@ -433,44 +438,15 @@ msgstr "Waktu"
 msgid "Time to fire"
 msgstr "Kapan menembak"
 
-#: ../src/goaidentity/goaidentityservice.c:317
-msgid "Domain Administrator Login"
-msgstr "Log Masuk Administrator Domain"
-
-#: ../src/goaidentity/goaidentityservice.c:405
-#: ../src/goaidentity/goaidentityservice.c:597
-msgid "Could not find supported credentials"
-msgstr "Tak menemukan kredensial yang didukung"
-
-#: ../src/goaidentity/goaidentityservice.c:448
-msgid ""
-"In order to use this enterprise identity, the computer needs to be enrolled "
-"in the domain. Please have your network administrator type their domain "
-"password here."
-msgstr ""
-"Untuk memakai indentitas enterprise ini, komputer perlu dimasukkan dalam "
-"domain. Harap minta administrator jaringan Anda mengetikkan sandi domainnya "
-"di sini."
-
-#: ../src/goaidentity/goaidentityservice.c:488
-msgid ""
-"In order to use this enterprise identity, the computer needs to be enrolled "
-"in the domain. Please have your network administrator type their domain "
-"username here."
-msgstr ""
-"Untuk memakai indentitas enterprise ini, komputer perlu dimasukkan dalam "
-"domain. Harap minta administrator jaringan Anda mengetikkan nama pengguna "
-"domainnya di sini."
-
-#: ../src/goaidentity/goaidentityservice.c:1167
+#: ../src/goaidentity/goaidentityservice.c:375
 msgid "initial secret passed before secret key exchange"
 msgstr "rahasia awal disampaikan sebelum pertukaran kunci rahasia"
 
-#: ../src/goaidentity/goaidentityservice.c:1373
+#: ../src/goaidentity/goaidentityservice.c:567
 msgid "Initial secret key is invalid"
 msgstr "Kunci rahasia awal tak valid"
 
-#: ../src/goaidentity/goaidentityservice.c:1896
+#: ../src/goaidentity/goaidentityservice.c:1087
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "Realm jaringan %s perlu beberapa informasi untuk memasukkan Anda."
@@ -532,25 +508,6 @@ msgstr "Tak bisa menghapus identitas: %k"
 msgid "Could not find identity"
 msgstr "Tak bisa menemukan identitas"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:803
+#: ../src/goaidentity/goakerberosidentitymanager.c:823
 msgid "Could not create credential cache for identity"
 msgstr "Tak bisa membuat singgahan kredensial bagi identitas"
-
-#: ../src/goaidentity/um-realm-manager.c:368
-#, c-format
-msgid "No such domain or realm found"
-msgstr "Domain atau realm tersebut tak ditemukan"
-
-#: ../src/goaidentity/um-realm-manager.c:743
-#, c-format
-msgid "Cannot log in as %s at the %s domain"
-msgstr "Tak bisa log masuk sebagai %s pada domain %s"
-
-#: ../src/goaidentity/um-realm-manager.c:748
-msgid "Invalid password, please try again"
-msgstr "Sandi salah, harap coba lagi"
-
-#: ../src/goaidentity/um-realm-manager.c:752
-#, c-format
-msgid "Couldn't connect to the %s domain: %s"
-msgstr "Tak bisa menyambung ke domain %s: %s"
