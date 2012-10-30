@@ -9,21 +9,113 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-01-30 11:26+0000\n"
-"PO-Revision-Date: 2012-02-02 16:43+0200\n"
+"POT-Creation-Date: 2012-10-29 18:26+0000\n"
+"PO-Revision-Date: 2012-10-29 22:57+0300\n"
 "Last-Translator: Mattias Põldaru <mahfiaz@gmail.com>\n"
 "Language-Team: Estonian <>\n"
 "Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bits\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#. shut up -Wunused-but-set-variable
+msgid "Online Accounts"
+msgstr "Veebikontod"
+
+#. TODO: more specific
+#, c-format
+msgid "Failed to find a provider for: %s"
+msgstr "%s jaoks ei leitud pakkujat"
 
 msgid "An online account needs attention"
 msgstr "Veebikonto tahab tähelepanu"
 
 msgid "Open Online Accounts..."
 msgstr "Ava veebikontod..."
+
+#. TODO: more specific
+msgid "ProviderType property is not set for account"
+msgstr "Selle konto jaoks pole ProviderType omadus määratud"
+
+#. TODO: more specific
+#, c-format
+msgid "Code: %u - Unexpected response from server"
+msgstr "Kood %u - server andis ootamatu vastuse"
+
+#. TODO: more specific
+#, c-format
+msgid "Failed to parse autodiscover response XML"
+msgstr "Automaattuvastuse vastuse XML-i parsimine nurjus"
+
+#. TODO: more specific
+#, c-format
+msgid "Failed to find Autodiscover element"
+msgstr "Automaattuvastuse elementi ei leitud"
+
+#. TODO: more specific
+#, c-format
+msgid "Failed to find Response element"
+msgstr "Response elementi ei leitud"
+
+#. TODO: more specific
+#, c-format
+msgid "Failed to find Account element"
+msgstr "Konto elementi ei leitud"
+
+#. TODO: more specific
+#, c-format
+msgid "Failed to find ASUrl and OABUrl in autodiscover response"
+msgstr "ASUrl-i ja OABUrl-i ei leitud automaattuvastuse vastuses"
+
+msgid "Microsoft Exchange"
+msgstr "Microsoft Exchange"
+
+#, c-format
+msgid "Credentials not found in keyring (%s, %d): "
+msgstr "Autentimistõendeid ei leitud võtmerõngast (%s, %d): "
+
+#. TODO: more specific
+#, c-format
+msgid "Did not find password with username `%s' in credentials"
+msgstr "Ei leitud kasutajanimele '%s' vastavat parooli"
+
+msgid "_E-mail"
+msgstr "_E-mail"
+
+msgid "_Password"
+msgstr "_Parool"
+
+msgid "_Custom"
+msgstr "_Kohandatud"
+
+msgid "User_name"
+msgstr "_Kasutajanimi"
+
+msgid "_Server"
+msgstr "_Server"
+
+#, c-format
+msgid "Dialog was dismissed"
+msgstr "Dialoog katkestati"
+
+msgid "Error connecting to Microsoft Exchange server"
+msgstr "Viga ühendumisel Microsoft Exchange serveriga"
+
+msgid "_Try Again"
+msgstr "_Proovi uuesti"
+
+msgid "Use for"
+msgstr "Kasutatakse:"
+
+msgid "_Mail"
+msgstr "_E-post"
+
+msgid "Cale_ndar"
+msgstr "K_alender"
+
+msgid "_Contacts"
+msgstr "_Kontaktid"
 
 msgid "Facebook"
 msgstr "Facebook"
@@ -37,58 +129,91 @@ msgid "Error parsing response as JSON: "
 msgstr "Viga vastuse parsimisel JSON andmetena: "
 
 #, c-format
-msgid "Didn't find username member in JSON data"
-msgstr "JSON andmetes puudub liige 'username'"
-
-#, c-format
-msgid "Didn't find name member in JSON data"
-msgstr "JSON andmetes puudub liige 'name'"
-
-msgid "User Name"
-msgstr "Kasutajanimi"
-
-msgid "Chat"
-msgstr "Vestlus"
-
-msgid "Google"
-msgstr "Google"
-
-#, c-format
-msgid "Didn't find data member in JSON data"
-msgstr "JSON andmetes puudub liige 'data'"
+msgid "Didn't find id member in JSON data"
+msgstr "JSON andmetes puudub liige 'id'"
 
 #, c-format
 msgid "Didn't find email member in JSON data"
 msgstr "JSON andmetes puudub liige 'email'"
 
-msgid "Email Address"
-msgstr "Meiliaadress"
+msgid "C_hat"
+msgstr "_Vestlus"
 
-msgid "Use this account for"
-msgstr "Seda kontot kasutatakse järgnevaks"
-
-msgid "Mail"
-msgstr "E-kirjad"
-
-msgid "Calendar"
-msgstr "Kalender"
-
-msgid "Contacts"
-msgstr "Kontaktid"
-
-msgid "Documents"
-msgstr "Dokumendid"
-
-msgid "Windows Live"
-msgstr "Windows Live"
+msgid "Flickr"
+msgstr "Flickr"
 
 #, c-format
-msgid "Didn't find id member in JSON data"
-msgstr "JSON andmetes puudub liige 'id'"
+msgid "Expected status 200 when requesting user id, instead got status %d (%s)"
+msgstr ""
+"Kasutaja id pärimisel oodati olekut 200, selle asemel saadi olek %d (%s)"
 
 #, c-format
-msgid "Didn't find account email member in JSON data"
-msgstr "JSON andmetes puudub konto e-posti aadress"
+msgid "Didn't find user member in JSON data"
+msgstr "JSON andmetes puudub liige user"
+
+#, c-format
+msgid "Didn't find user.id member in JSON data"
+msgstr "JSON andmetes puudub liige user.id"
+
+#, c-format
+msgid "Didn't find user.username member in JSON data"
+msgstr "JSON andmetes puudub liige user.username"
+
+#, c-format
+msgid "Didn't find user.username._content member in JSON data"
+msgstr "JSON andmetes puudub liige user.username._content"
+
+msgid "Your system time is invalid. Check your date and time settings."
+msgstr "Su arvuti kell on vale. Kontrolli kella ja kuupäeva sätteid."
+
+msgid "Google"
+msgstr "Google"
+
+msgid "_Documents"
+msgstr "_Dokumendid"
+
+msgid "Enterprise Login (Kerberos)"
+msgstr "Ettevõtte kontoga sisselogimine (Kerberos)"
+
+msgid "Identity service returned invalid key"
+msgstr "Identity teenus tagastas sobimatu võtme"
+
+# See principal on üsna kahtlane sõna, aga ehk ei tee kellegile viga.
+#, c-format
+msgid "Could not find saved credentials for principal `%s' in keyring"
+msgstr ""
+"Peavalduse (principal) '%s' jaoks salvestatud parooli polnud võimalik "
+"võtmerõngast leida"
+
+#, c-format
+msgid "Did not find password for principal `%s' in credentials"
+msgstr ""
+"Peavalduse (principal) '%s' jaoks salvestatud parooli ei leitud võtmerõngast"
+
+msgid "_Domain"
+msgstr "_Domeen"
+
+msgid "Enterprise domain or realm name"
+msgstr "Ettevõtte domeeni või valduse (realm) nimi"
+
+msgid "Log In to Realm"
+msgstr "Valdusesse (realm) sisselogimine"
+
+msgid "Please enter your password below."
+msgstr "Palun sisesta oma parool."
+
+msgid "Remember this password"
+msgstr "Parooli meeldejätmine"
+
+#, c-format
+msgid "The domain is not valid"
+msgstr "Domeen pole õige"
+
+msgid "Error connecting to enterprise identity server"
+msgstr "Viga ettevõtte identity serverisse sisselogimisel"
+
+msgid "Network _Resources"
+msgstr "Võrgu_ressursid"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #, c-format
@@ -116,10 +241,6 @@ msgid ""
 "page</a>:"
 msgstr "Aseta siia <a href=\"%s\">autoriseerimise lehelt</a> saadud kood:"
 
-#, c-format
-msgid "Dialog was dismissed"
-msgstr "Dialoog katkestati"
-
 msgid "Error getting an Access Token: "
 msgstr "Viga turvamärgi hankimisel: "
 
@@ -127,17 +248,9 @@ msgid "Error getting identity: "
 msgstr "Viga identiteedi hankimisel: "
 
 #, c-format
-msgid "There is already an account for the identity %s"
-msgstr "%s identiteediga konto on juba olemas"
-
-#, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr ""
 "Paluti sisse logida nimega %s, kuid selle asemel logiti sisse nimega %s"
-
-#, c-format
-msgid "Credentials not found in keyring (%s, %d): "
-msgstr "Autentimistõendeid ei leitud võtmerõngast (%s, %d): "
 
 #, c-format
 msgid "Credentials do not contain access_token"
@@ -179,27 +292,21 @@ msgstr "Aseta siia <a href=\"%s\">autoriseerimise lehelt</a> saadud turvamärk:"
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Autentimistõendis ei sisaldu access_token või access_token_secret"
 
+msgid "ownCloud"
+msgstr "ownCloud"
+
+msgid "_User_name"
+msgstr "_Kasutajanimi"
+
+msgid "Error connecting to ownCloud server"
+msgstr "Viga ühendumisel ownCloud serveriga"
+
+msgid "_Files"
+msgstr "_Failid"
+
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync ei ole liigi %s jaoks teostatud"
-
-#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#, c-format
-msgid "GOA %s credentials for identity %s"
-msgstr "GOA %s autentimistõendid identiteedi %s jaoks"
-
-#. TODO: more specific
-#, c-format
-msgid "Failed to store credentials in the keyring: %s"
-msgstr "Autentimistõendite salvestamine võtmerõngasse nurjus: %s"
-
-#. TODO: more specific
-#, c-format
-msgid "Failed to retrieve credentials from the keyring: %s"
-msgstr "Autentimistõendite hankimine võtmerõngast nurjus: %s"
-
-msgid "Error parsing result obtained from the keyring: "
-msgstr "Viga võtmerõngast saadud vastuse parsimisel: "
 
 msgid "Twitter"
 msgstr "Twitter"
@@ -211,6 +318,47 @@ msgstr "JSON andmetes puudub liige 'id_str'"
 #, c-format
 msgid "Didn't find screen_name member in JSON data"
 msgstr "JSON andmetes puudub liige 'screen_name'"
+
+#, c-format
+msgid "A %s account already exists for %s"
+msgstr "%s konto on juba olemas kasutajale %s"
+
+#. Translators: the %s is the name of the provider. eg., Google.
+#, c-format
+msgid "%s account"
+msgstr "%s konto"
+
+#. TODO: more specific
+msgid "Failed to delete credentials from the keyring"
+msgstr "Autentimistõendite kustutamine võtmerõngast nurjus"
+
+#. TODO: more specific
+msgid "Failed to retrieve credentials from the keyring"
+msgstr "Autentimistõendite hankimine võtmerõngast nurjus"
+
+msgid "Error parsing result obtained from the keyring: "
+msgstr "Viga võtmerõngast saadud vastuse parsimisel: "
+
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#, c-format
+msgid "GOA %s credentials for identity %s"
+msgstr "GOA %s autentimistõendid identiteedi %s jaoks"
+
+#. TODO: more specific
+msgid "Failed to store credentials in the keyring"
+msgstr "Autentimistõendite salvestamine võtmerõngasse nurjus"
+
+#. translators: %s here is the address of the web page
+#, c-format
+msgid "Loading “%s”…"
+msgstr "“%s” laadimine…"
+
+msgid "Windows Live"
+msgstr "Windows Live"
+
+#, c-format
+msgid "Didn't find account email member in JSON data"
+msgstr "JSON andmetes puudub konto e-posti aadress"
 
 msgid "Yahoo"
 msgstr "Yahoo"
@@ -238,6 +386,62 @@ msgstr "JSON andmetes puudub liige 'member'"
 msgid "Didn't find nickname member in JSON data"
 msgstr "JSON andmetes puudub liige 'nickname'"
 
-#. TODO: look up email address / screenname from GUID
-msgid "Name"
-msgstr "Nimi"
+msgid "Time"
+msgstr "Aeg"
+
+msgid "Time to fire"
+msgstr "Millal käivitatakse"
+
+msgid "initial secret passed before secret key exchange"
+msgstr "esialgne saladus, mis antakse enne salavõtme vahetust"
+
+msgid "Initial secret key is invalid"
+msgstr "Esialgne salavõti on vale"
+
+#, c-format
+msgid "The network realm %s needs some information to sign you in."
+msgstr "Võrguvaldus (realm) %s vajab andmeid, et sind sisse logida."
+
+msgid "Could not find identity in credential cache: %k"
+msgstr "Identiteeti ei leitud paroolide puhvrist: %k"
+
+msgid "Could not find identity credentials in cache: %k"
+msgstr "Puhvrist ei leitud identiteedi parooli: %k"
+
+msgid "Could not sift through identity credentials in cache: %k"
+msgstr "Identiteediparoolide puhvrit pole võimalik sõeluda: %k"
+
+msgid "Could not finish up sifting through identity credentials in cache: %k"
+msgstr "Identiteediparoolide puhvri sõelumist pole võimalik lõpetada: %k"
+
+#, c-format
+msgid "No associated identification found"
+msgstr "Seonduvat identifikaatorit ei leitud"
+
+msgid "Could not create credential cache: %k"
+msgstr "Paroolide puhvrit pole võimalik luua: %k"
+
+msgid "Could not initialize credentials cache: %k"
+msgstr "Paroolide puhvrit pole võimalik lähtestada: %k"
+
+msgid "Could not store new credentials in credentials cache: %k"
+msgstr "Uute autentimistõendite salvestamine puhvrisse nurjus: %k"
+
+#, c-format
+msgid "Could not renew identity: Not signed in"
+msgstr "Identiteeti pole võimalik uuendada: pole sisse logitud"
+
+msgid "Could not renew identity: %k"
+msgstr "Identiteeti pole võimalik uuendada: %k"
+
+msgid "Could not get new credentials to renew identity %s: %k"
+msgstr "Pole võimalik hankida parooli identiteedi %s uuendamiseks: %k"
+
+msgid "Could not erase identity: %k"
+msgstr "Identiteeti pole võimalik kustutada: %k"
+
+msgid "Could not find identity"
+msgstr "Identiteeti ei leitud"
+
+msgid "Could not create credential cache for identity"
+msgstr "Pole võimalik luua paroolide puhvrit identiteedi jaoks"
