@@ -29,6 +29,8 @@
 #include "goaprovider.h"
 #include "goaoauthprovider.h"
 #include "goagoogleprovider.h"
+#include "goahttpclient.h"
+#include "goautils.h"
 
 /**
  * GoaGoogleProvider:
@@ -64,6 +66,8 @@ G_DEFINE_TYPE_WITH_CODE (GoaGoogleProvider, goa_google_provider, GOA_TYPE_OAUTH_
 							 0));
 
 /* ---------------------------------------------------------------------------------------------------- */
+
+static const gchar *CALDAV_ENDPOINT = "https://www.google.com/calendar/dav/%s/events/";
 
 static const gchar *
 get_provider_type (GoaProvider *_provider)
@@ -323,6 +327,41 @@ is_identity_node (GoaOAuth2Provider *provider, WebKitDOMHTMLInputElement *elemen
   return ret;
 }
 
+static gboolean
+is_password_node (GoaOAuthProvider *provider, WebKitDOMHTMLInputElement *element)
+{
+  gboolean ret;
+  gchar *element_type;
+  gchar *id;
+  gchar *name;
+
+  element_type = NULL;
+  id = NULL;
+  name = NULL;
+
+  ret = FALSE;
+
+  g_object_get (element, "type", &element_type, NULL);
+  if (g_strcmp0 (element_type, "password") != 0)
+    goto out;
+
+  id = webkit_dom_html_element_get_id (WEBKIT_DOM_HTML_ELEMENT (element));
+  if (g_strcmp0 (id, "Passwd") != 0)
+    goto out;
+
+  name = webkit_dom_html_input_element_get_name (element);
+  if (g_strcmp0 (name, "Passwd") != 0)
+    goto out;
+
+  ret = TRUE;
+
+ out:
+  g_free (element_type);
+  g_free (id);
+  g_free (name);
+  return ret;
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
@@ -345,6 +384,11 @@ parse_request_token_error (GoaOAuthProvider *provider, RestProxyCall *call)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static gboolean on_handle_get_password (GoaPasswordBased      *interface,
+                                        GDBusMethodInvocation *invocation,
+                                        const gchar           *id,
+                                        gpointer               user_data);
+
 static gboolean
 build_object (GoaProvider         *provider,
               GoaObjectSkeleton   *object,
@@ -360,6 +404,7 @@ build_object (GoaProvider         *provider,
   GoaContacts *contacts;
   GoaChat *chat;
   GoaDocuments *documents;
+  GoaPasswordBased *password_based;
   gboolean ret;
   gboolean mail_enabled;
   gboolean calendar_enabled;
@@ -384,6 +429,20 @@ build_object (GoaProvider         *provider,
                                                                             just_added,
                                                                             error))
     goto out;
+
+  password_based = goa_object_get_password_based (GOA_OBJECT (object));
+  if (password_based == NULL)
+    {
+      password_based = goa_password_based_skeleton_new ();
+      /* Ensure D-Bus method invocations run in their own thread */
+      g_dbus_interface_skeleton_set_flags (G_DBUS_INTERFACE_SKELETON (password_based),
+                                           G_DBUS_INTERFACE_SKELETON_FLAGS_HANDLE_METHOD_INVOCATIONS_IN_THREAD);
+      goa_object_skeleton_set_password_based (object, password_based);
+      g_signal_connect (password_based,
+                        "handle-get-password",
+                        G_CALLBACK (on_handle_get_password),
+                        NULL);
+    }
 
   account = goa_object_get_account (GOA_OBJECT (object));
 
@@ -550,6 +609,102 @@ get_use_mobile_browser (GoaOAuthProvider *provider)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static gboolean
+ensure_credentials_sync (GoaProvider   *provider,
+                         GoaObject     *object,
+                         gint          *out_expires_in,
+                         GCancellable  *cancellable,
+                         GError       **error)
+{
+  GVariant *credentials;
+  GoaAccount *account;
+  GoaHttpClient *http_client;
+  gboolean ret;
+  const gchar *username;
+  gchar *password;
+  gchar *uri_caldav;
+
+  credentials = NULL;
+  http_client = NULL;
+  password = NULL;
+  uri_caldav = NULL;
+
+  ret = FALSE;
+
+  /* Chain up */
+  if (!GOA_PROVIDER_CLASS (goa_google_provider_parent_class)->ensure_credentials_sync (provider,
+                                                                                       object,
+                                                                                       out_expires_in,
+                                                                                       cancellable,
+                                                                                       error))
+    goto out;
+
+  credentials = goa_utils_lookup_credentials_sync (provider,
+                                                   object,
+                                                   cancellable,
+                                                   error);
+  if (credentials == NULL)
+    {
+      if (error != NULL)
+        {
+          g_prefix_error (error,
+                          _("Credentials not found in keyring (%s, %d): "),
+                          g_quark_to_string ((*error)->domain),
+                          (*error)->code);
+          (*error)->domain = GOA_ERROR;
+          (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
+        }
+      goto out;
+    }
+
+  account = goa_object_peek_account (object);
+  username = goa_account_get_presentation_identity (account);
+  uri_caldav = g_strdup_printf (CALDAV_ENDPOINT, username);
+
+  if (!g_variant_lookup (credentials, "password", "s", &password))
+    {
+      if (error != NULL)
+        {
+          *error = g_error_new (GOA_ERROR,
+                                GOA_ERROR_NOT_AUTHORIZED,
+                                _("Did not find password with username `%s' in credentials"),
+                                username);
+        }
+      goto out;
+    }
+
+  http_client = goa_http_client_new ();
+  ret = goa_http_client_check_sync (http_client,
+                                    uri_caldav,
+                                    username,
+                                    password,
+                                    cancellable,
+                                    error);
+  if (!ret)
+    {
+      if (error != NULL)
+        {
+          g_prefix_error (error,
+                          _("Invalid password with username `%s' (%s, %d): "),
+                          username,
+                          g_quark_to_string ((*error)->domain),
+                          (*error)->code);
+          (*error)->domain = GOA_ERROR;
+          (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
+        }
+      goto out;
+    }
+
+ out:
+  g_clear_object (&http_client);
+  g_free (password);
+  g_free (uri_caldav);
+  g_clear_pointer (&credentials, (GDestroyNotify) g_variant_unref);
+  return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static void
 show_account (GoaProvider         *provider,
               GoaClient           *client,
@@ -622,6 +777,7 @@ goa_google_provider_class_init (GoaGoogleProviderClass *klass)
   provider_class->get_provider_type          = get_provider_type;
   provider_class->get_provider_name          = get_provider_name;
   provider_class->build_object               = build_object;
+  provider_class->ensure_credentials_sync    = ensure_credentials_sync;
   provider_class->show_account               = show_account;
   provider_class->get_credentials_generation = get_credentials_generation;
 
@@ -629,6 +785,7 @@ goa_google_provider_class_init (GoaGoogleProviderClass *klass)
   oauth_class->get_identity_sync        = get_identity_sync;
   oauth_class->is_deny_node             = is_deny_node;
   oauth_class->is_identity_node         = is_identity_node;
+  oauth_class->is_password_node         = is_password_node;
   oauth_class->get_consumer_key         = get_consumer_key;
   oauth_class->get_consumer_secret      = get_consumer_secret;
   oauth_class->get_request_uri          = get_request_uri;
@@ -645,3 +802,56 @@ goa_google_provider_class_init (GoaGoogleProviderClass *klass)
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
+
+/* runs in a thread dedicated to handling @invocation */
+static gboolean
+on_handle_get_password (GoaPasswordBased      *interface,
+                        GDBusMethodInvocation *invocation,
+                        const gchar           *id,
+                        gpointer               user_data)
+{
+  GoaObject *object;
+  GoaAccount *account;
+  GoaProvider *provider;
+  GError *error;
+  GVariant *credentials;
+  gchar *password;
+
+  /* TODO: maybe log what app is requesting access */
+
+  password = NULL;
+  credentials = NULL;
+
+  object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (interface)));
+  account = goa_object_peek_account (object);
+  provider = goa_provider_get_for_provider_type (goa_account_get_provider_type (account));
+
+  error = NULL;
+  credentials = goa_utils_lookup_credentials_sync (provider,
+                                                   object,
+                                                   NULL, /* GCancellable* */
+                                                   &error);
+  if (credentials == NULL)
+    {
+      g_dbus_method_invocation_take_error (invocation, error);
+      goto out;
+    }
+
+  if (!g_variant_lookup (credentials, "password", "s", &password))
+    {
+      g_dbus_method_invocation_return_error (invocation,
+                                             GOA_ERROR,
+                                             GOA_ERROR_FAILED, /* TODO: more specific */
+                                             _("Did not find password with username `%s' in credentials"),
+                                             id);
+      goto out;
+    }
+
+  goa_password_based_complete_get_password (interface, invocation, password);
+
+ out:
+  g_free (password);
+  g_clear_pointer (&credentials, (GDestroyNotify) g_variant_unref);
+  g_object_unref (provider);
+  return TRUE; /* invocation was handled */
+}
