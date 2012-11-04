@@ -128,7 +128,7 @@ goa_oauth2_provider_get_use_mobile_browser_default (GoaOAuth2Provider  *provider
 }
 
 /**
- * goa_oauth_provider_get_use_mobile_browser:
+ * goa_oauth2_provider_get_use_mobile_browser:
  * @provider: A #GoaOAuth2Provider.
  *
  * Returns whether there is a need for the embedded browser to identify
@@ -499,7 +499,7 @@ goa_oauth2_provider_is_deny_node (GoaOAuth2Provider *provider, WebKitDOMNode *no
  * This is a pure virtual method - a subclass must provide an
  * implementation.
  *
- * Returns: %TRUE if the @node can be used to deny permission.
+ * Returns: %TRUE if the @element can be used to deny permission.
  */
 gboolean
 goa_oauth2_provider_is_identity_node (GoaOAuth2Provider *provider, WebKitDOMHTMLInputElement *element)

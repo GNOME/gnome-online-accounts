@@ -76,7 +76,7 @@ struct _GoaOAuthProvider
  * @get_request_uri_params: Virtual function for goa_oauth_provider_get_request_uri_params().
  * @add_account_key_values: Virtual function for goa_oauth_provider_add_account_key_values().
  * @is_deny_node: Virtual function for goa_oauth_provider_is_deny_node().
- * @is_identity_node: Virtual function for goa_oauth2_provider_is_identity_node().
+ * @is_identity_node: Virtual function for goa_oauth_provider_is_identity_node().
  * @is_password_node: Virtual function for goa_oauth_provider_is_password_node().
  *
  * Class structure for #GoaOAuthProvider.

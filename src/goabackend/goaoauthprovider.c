@@ -494,7 +494,7 @@ goa_oauth_provider_is_deny_node (GoaOAuthProvider *provider, WebKitDOMNode *node
  * This is a pure virtual method - a subclass must provide an
  * implementation.
  *
- * Returns: %TRUE if the @node can be used to deny permission.
+ * Returns: %TRUE if the @element can be used to deny permission.
  */
 gboolean
 goa_oauth_provider_is_identity_node (GoaOAuthProvider *provider, WebKitDOMHTMLInputElement *element)
