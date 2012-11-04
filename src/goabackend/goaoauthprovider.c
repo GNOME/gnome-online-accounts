@@ -153,6 +153,35 @@ goa_oauth_provider_get_use_mobile_browser (GoaOAuthProvider *provider)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static gboolean
+goa_oauth_provider_is_password_node_default (GoaOAuthProvider *provider, WebKitDOMHTMLInputElement *element)
+{
+  return FALSE;
+}
+
+/**
+ * goa_oauth_provider_is_password_node:
+ * @provider: A #GoaOAuthProvider.
+ * @element: A WebKitDOMHTMLInputElement
+ *
+ * Checks whether @element is the HTML UI element that the user can
+ * use to enter her password.
+ *
+ * This is a virtual method where the default implementation returns
+ * %FALSE.
+ *
+ * Returns: %TRUE if @element can be used to enter the password.
+ */
+gboolean
+goa_oauth_provider_is_password_node (GoaOAuthProvider *provider, WebKitDOMHTMLInputElement *element)
+{
+  g_return_val_if_fail (GOA_IS_OAUTH_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element), FALSE);
+  return GOA_OAUTH_PROVIDER_GET_CLASS (provider)->is_password_node (provider, element);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static void
 goa_oauth_provider_add_account_key_values_default (GoaOAuthProvider  *provider,
                                                    GVariantBuilder   *builder)
@@ -617,6 +646,9 @@ typedef struct
   GError *error;
   GMainLoop *loop;
 
+  WebKitDOMHTMLInputElement *password_node;
+  gchar *password;
+
   gchar *oauth_verifier;
 
   const gchar *existing_identity;
@@ -668,6 +700,18 @@ on_dom_node_click (WebKitDOMNode *element, WebKitDOMEvent *event, gpointer user_
 }
 
 static void
+on_form_submit (WebKitDOMNode *element, WebKitDOMEvent *event, gpointer user_data)
+{
+  IdentifyData *data = user_data;
+
+  if (data->password_node == NULL)
+    return;
+
+  data->password = webkit_dom_html_input_element_get_value (data->password_node);
+  data->password_node = NULL;
+}
+
+static void
 on_web_view_document_load_finished (WebKitWebView *web_view, WebKitWebFrame *frame, gpointer user_data)
 {
   IdentifyData *data = user_data;
@@ -709,6 +753,23 @@ on_web_view_document_load_finished (WebKitWebView *web_view, WebKitWebFrame *fra
           webkit_dom_html_input_element_set_value (WEBKIT_DOM_HTML_INPUT_ELEMENT (element),
                                                    data->existing_identity);
           webkit_dom_html_input_element_set_read_only (WEBKIT_DOM_HTML_INPUT_ELEMENT (element), TRUE);
+        }
+      else if (WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element)
+               && goa_oauth_provider_is_password_node (provider, WEBKIT_DOM_HTML_INPUT_ELEMENT (element)))
+        {
+          WebKitDOMHTMLFormElement *form;
+
+          form = webkit_dom_html_input_element_get_form (WEBKIT_DOM_HTML_INPUT_ELEMENT (element));
+          if (form != NULL)
+            {
+              data->password_node = WEBKIT_DOM_HTML_INPUT_ELEMENT (element);
+              g_clear_pointer (&data->password, g_free);
+              webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (form),
+                                                          "submit",
+                                                          G_CALLBACK (on_form_submit),
+                                                          FALSE,
+                                                          data);
+            }
         }
     }
 }
@@ -788,6 +849,7 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
                          gint             *out_session_handle_expires_in,
                          gchar           **out_identity,
                          gchar           **out_presentation_identity,
+                         gchar           **out_password,
                          GError          **error)
 {
   gboolean ret;
@@ -1047,6 +1109,8 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
         *out_identity = g_strdup (data.identity);
       if (out_presentation_identity != NULL)
         *out_presentation_identity = g_strdup (data.presentation_identity);
+      if (out_password != NULL)
+        *out_password = g_strdup (data.password);
     }
   else
     {
@@ -1054,6 +1118,7 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
       g_propagate_error (error, data.error);
     }
 
+  g_free (data.password);
   g_free (data.presentation_identity);
   g_free (data.identity);
   g_free (url);
@@ -1136,6 +1201,7 @@ goa_oauth_provider_add_account (GoaProvider *_provider,
   gint session_handle_expires_in;
   gchar *identity;
   gchar *presentation_identity;
+  gchar *password;
   AddData data;
   GVariantBuilder credentials;
   GVariantBuilder details;
@@ -1152,6 +1218,7 @@ goa_oauth_provider_add_account (GoaProvider *_provider,
   session_handle = NULL;
   identity = NULL;
   presentation_identity = NULL;
+  password = NULL;
 
   memset (&data, '\0', sizeof (AddData));
   data.loop = g_main_loop_new (NULL, FALSE);
@@ -1168,6 +1235,7 @@ goa_oauth_provider_add_account (GoaProvider *_provider,
                                 &session_handle_expires_in,
                                 &identity,
                                 &presentation_identity,
+                                &password,
                                 &data.error))
     goto out;
 
@@ -1192,6 +1260,8 @@ goa_oauth_provider_add_account (GoaProvider *_provider,
   if (session_handle_expires_in > 0)
     g_variant_builder_add (&credentials, "{sv}", "session_handle_expires_at",
                            g_variant_new_int64 (duration_to_abs_usec (session_handle_expires_in)));
+  if (password != NULL)
+    g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (password));
 
   g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
   goa_oauth_provider_add_account_key_values (provider, &details);
@@ -1227,6 +1297,7 @@ goa_oauth_provider_add_account (GoaProvider *_provider,
 
   g_free (identity);
   g_free (presentation_identity);
+  g_free (password);
   g_free (access_token);
   g_free (access_token_secret);
   g_free (session_handle);
@@ -1250,6 +1321,7 @@ goa_oauth_provider_refresh_account (GoaProvider  *_provider,
   GtkWidget *dialog;
   gchar *access_token;
   gchar *access_token_secret;
+  gchar *password;
   gint access_token_expires_in;
   gchar *session_handle;
   gint session_handle_expires_in;
@@ -1267,6 +1339,7 @@ goa_oauth_provider_refresh_account (GoaProvider  *_provider,
 
   access_token = NULL;
   access_token_secret = NULL;
+  password = NULL;
   session_handle = NULL;
   identity = NULL;
 
@@ -1300,6 +1373,7 @@ goa_oauth_provider_refresh_account (GoaProvider  *_provider,
                                 &session_handle_expires_in,
                                 &identity,
                                 NULL, /* out_presentation_identity */
+                                &password,
                                 error))
     goto out;
 
@@ -1330,6 +1404,8 @@ goa_oauth_provider_refresh_account (GoaProvider  *_provider,
   if (session_handle_expires_in > 0)
     g_variant_builder_add (&builder, "{sv}", "session_handle_expires_at",
                            g_variant_new_int64 (duration_to_abs_usec (session_handle_expires_in)));
+  if (password != NULL)
+    g_variant_builder_add (&builder, "{sv}", "password", g_variant_new_string (password));
   /* TODO: run in worker thread */
   if (!goa_utils_store_credentials_for_object_sync (GOA_PROVIDER (provider),
                                                     object,
@@ -1350,6 +1426,7 @@ goa_oauth_provider_refresh_account (GoaProvider  *_provider,
   g_free (identity);
   g_free (access_token);
   g_free (access_token_secret);
+  g_free (password);
   g_free (session_handle);
   return ret;
 }
@@ -1414,6 +1491,7 @@ goa_oauth_provider_get_access_token_sync (GoaOAuthProvider   *provider,
   gchar *access_token_for_refresh;
   gchar *access_token_secret_for_refresh;
   gchar *session_handle_for_refresh;
+  gchar *password;
   gint access_token_expires_in;
   gint session_handle_expires_in;
   gboolean success;
@@ -1436,6 +1514,7 @@ goa_oauth_provider_get_access_token_sync (GoaOAuthProvider   *provider,
   access_token_for_refresh = NULL;
   access_token_secret_for_refresh = NULL;
   session_handle_for_refresh = NULL;
+  password = NULL;
   success = FALSE;
 
   /* provider_lock is too coarse, use a per-object lock instead */
@@ -1484,6 +1563,8 @@ goa_oauth_provider_get_access_token_sync (GoaOAuthProvider   *provider,
         session_handle = g_variant_dup_string (value, NULL);
       else if (g_strcmp0 (key, "session_handle_expires_at") == 0)
         session_handle_expires_in = abs_usec_to_duration (g_variant_get_int64 (value));
+      else if (g_strcmp0 (key, "password") == 0)
+        password = g_variant_dup_string (value, NULL);
       g_variant_unref (value);
     }
 
@@ -1556,6 +1637,8 @@ goa_oauth_provider_get_access_token_sync (GoaOAuthProvider   *provider,
   if (session_handle_expires_in > 0)
     g_variant_builder_add (&builder, "{sv}", "session_handle_expires_at",
                            g_variant_new_int64 (duration_to_abs_usec (session_handle_expires_in)));
+  if (password != NULL)
+    g_variant_builder_add (&builder, "{sv}", "password", g_variant_new_string (password));
 
   /* TODO: run in worker thread */
   if (!goa_utils_store_credentials_for_object_sync (GOA_PROVIDER (provider),
@@ -1594,6 +1677,7 @@ goa_oauth_provider_get_access_token_sync (GoaOAuthProvider   *provider,
   g_free (access_token_for_refresh);
   g_free (access_token_secret_for_refresh);
   g_free (session_handle_for_refresh);
+  g_free (password);
   if (credentials != NULL)
     g_variant_unref (credentials);
 
@@ -1737,6 +1821,7 @@ goa_oauth_provider_class_init (GoaOAuthProviderClass *klass)
   klass->build_authorization_uri  = goa_oauth_provider_build_authorization_uri_default;
   klass->get_use_external_browser = goa_oauth_provider_get_use_external_browser_default;
   klass->get_use_mobile_browser   = goa_oauth_provider_get_use_mobile_browser_default;
+  klass->is_password_node         = goa_oauth_provider_is_password_node_default;
   klass->get_request_uri_params   = goa_oauth_provider_get_request_uri_params_default;
   klass->add_account_key_values   = goa_oauth_provider_add_account_key_values_default;
 }
