@@ -77,6 +77,7 @@ struct _GoaOAuthProvider
  * @add_account_key_values: Virtual function for goa_oauth_provider_add_account_key_values().
  * @is_deny_node: Virtual function for goa_oauth_provider_is_deny_node().
  * @is_identity_node: Virtual function for goa_oauth2_provider_is_identity_node().
+ * @is_password_node: Virtual function for goa_oauth_provider_is_password_node().
  *
  * Class structure for #GoaOAuthProvider.
  */
@@ -119,9 +120,13 @@ struct _GoaOAuthProviderClass
   gboolean     (*is_identity_node)         (GoaOAuthProvider          *provider,
                                             WebKitDOMHTMLInputElement *element);
 
+  /* virtual but with default implementation */
+  gboolean     (*is_password_node)         (GoaOAuthProvider          *provider,
+                                            WebKitDOMHTMLInputElement *element);
+
   /*< private >*/
   /* Padding for future expansion */
-  gpointer goa_reserved[30];
+  gpointer goa_reserved[29];
 };
 
 GType        goa_oauth_provider_get_type                 (void) G_GNUC_CONST;
@@ -142,6 +147,8 @@ gchar       *goa_oauth_provider_get_identity_sync        (GoaOAuthProvider  *pro
 gboolean     goa_oauth_provider_is_deny_node             (GoaOAuthProvider  *provider,
                                                           WebKitDOMNode     *node);
 gboolean     goa_oauth_provider_is_identity_node         (GoaOAuthProvider          *provider,
+                                                          WebKitDOMHTMLInputElement *element);
+gboolean     goa_oauth_provider_is_password_node         (GoaOAuthProvider          *provider,
                                                           WebKitDOMHTMLInputElement *element);
 gchar       *goa_oauth_provider_parse_request_token_error (GoaOAuthProvider *provider,
                                                            RestProxyCall    *call);
