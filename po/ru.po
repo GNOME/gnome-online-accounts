@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-10-07 09:06+0000\n"
-"PO-Revision-Date: 2012-10-07 17:08+0400\n"
+"POT-Creation-Date: 2012-11-02 19:24+0000\n"
+"PO-Revision-Date: 2012-11-04 20:44+0400\n"
 "Last-Translator: Yuri Myasoedov <omerta13@yandex.ru>\n"
 "Language-Team: русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -45,7 +45,7 @@ msgid "ProviderType property is not set for account"
 msgstr "Свойство ProviderType не установлено для учётной записи"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:204
+#: ../src/goabackend/goaewsclient.c:204 ../src/goabackend/goahttpclient.c:147
 #, c-format
 msgid "Code: %u - Unexpected response from server"
 msgstr "Код: %u — неожиданный ответ от сервера"
@@ -86,7 +86,8 @@ msgstr "Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:279
 #: ../src/goabackend/goaoauth2provider.c:1444
-#: ../src/goabackend/goaoauthprovider.c:1417
+#: ../src/goabackend/goaoauthprovider.c:1466
+#: ../src/goabackend/goaowncloudprovider.c:325
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "Учётные данные не найдены в связке ключей (%s, %d): "
@@ -94,6 +95,8 @@ msgstr "Учётные данные не найдены в связке ключ
 #. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:295
 #: ../src/goabackend/goaexchangeprovider.c:923
+#: ../src/goabackend/goaowncloudprovider.c:343
+#: ../src/goabackend/goaowncloudprovider.c:995
 #, c-format
 msgid "Did not find password with username `%s' in credentials"
 msgstr "Не искать пароль с именем пользователя «%s» в учётных данных"
@@ -103,6 +106,7 @@ msgid "_E-mail"
 msgstr "_E-mail"
 
 #: ../src/goabackend/goaexchangeprovider.c:487
+#: ../src/goabackend/goaowncloudprovider.c:567
 msgid "_Password"
 msgstr "_Пароль"
 
@@ -111,19 +115,22 @@ msgid "_Custom"
 msgstr "П_ользовательский"
 
 #: ../src/goabackend/goaexchangeprovider.c:509
-#: ../src/goabackend/goakerberosprovider.c:1026
+#: ../src/goabackend/goakerberosprovider.c:1117
 msgid "User_name"
 msgstr "И_мя пользователя"
 
 #: ../src/goabackend/goaexchangeprovider.c:510
+#: ../src/goabackend/goaowncloudprovider.c:565
 msgid "_Server"
 msgstr "_Сервер"
 
 #: ../src/goabackend/goaexchangeprovider.c:594
 #: ../src/goabackend/goaexchangeprovider.c:760
-#: ../src/goabackend/goakerberosprovider.c:1337
+#: ../src/goabackend/goakerberosprovider.c:1510
 #: ../src/goabackend/goaoauth2provider.c:987
-#: ../src/goabackend/goaoauthprovider.c:945
+#: ../src/goabackend/goaoauthprovider.c:979
+#: ../src/goabackend/goaowncloudprovider.c:657
+#: ../src/goabackend/goaowncloudprovider.c:837
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "Диалог отклонён"
@@ -135,14 +142,17 @@ msgstr "Ошибка подключения к серверу Microsoft Exchange
 
 #: ../src/goabackend/goaexchangeprovider.c:637
 #: ../src/goabackend/goaexchangeprovider.c:795
-#: ../src/goabackend/goakerberosprovider.c:1417
+#: ../src/goabackend/goakerberosprovider.c:1616
+#: ../src/goabackend/goaowncloudprovider.c:702
+#: ../src/goabackend/goaowncloudprovider.c:866
 msgid "_Try Again"
 msgstr "Поп_робовать снова"
 
 #: ../src/goabackend/goaexchangeprovider.c:846
 #: ../src/goabackend/goafacebookprovider.c:389
 #: ../src/goabackend/goagoogleprovider.c:506
-#: ../src/goabackend/goakerberosprovider.c:1475
+#: ../src/goabackend/goakerberosprovider.c:1685
+#: ../src/goabackend/goaowncloudprovider.c:918
 #: ../src/goabackend/goawindowsliveprovider.c:403
 msgid "Use for"
 msgstr "Использовать для"
@@ -154,11 +164,13 @@ msgstr "_Почта"
 
 #: ../src/goabackend/goaexchangeprovider.c:853
 #: ../src/goabackend/goagoogleprovider.c:513
+#: ../src/goabackend/goaowncloudprovider.c:920
 msgid "Cale_ndar"
 msgstr "_Календарь"
 
 #: ../src/goabackend/goaexchangeprovider.c:858
 #: ../src/goabackend/goagoogleprovider.c:518
+#: ../src/goabackend/goaowncloudprovider.c:925
 msgid "_Contacts"
 msgstr "Ко_нтакты"
 
@@ -208,41 +220,41 @@ msgstr "_Чат"
 
 #: ../src/goabackend/goaflickrprovider.c:78
 msgid "Flickr"
-msgstr ""
+msgstr "Flickr"
 
 #: ../src/goabackend/goaflickrprovider.c:169
-#, fuzzy, c-format
+#, c-format
 #| msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgid "Expected status 200 when requesting user id, instead got status %d (%s)"
 msgstr ""
-"При запросе guid ожидалось получить код состояния 200, но был получен код %d "
-"(%s)"
+"При запросе идентификатора пользователя ожидалось получить код состояния "
+"200, но был получен код %d (%s)"
 
 #: ../src/goabackend/goaflickrprovider.c:192
-#, fuzzy, c-format
+#, c-format
 #| msgid "Didn't find value member in JSON data"
 msgid "Didn't find user member in JSON data"
-msgstr "Не удалось найти элемент value в данных JSON"
+msgstr "Не удалось найти элемент «user» в данных JSON"
 
 #: ../src/goabackend/goaflickrprovider.c:201
-#, fuzzy, c-format
+#, c-format
 #| msgid "Didn't find guid member in JSON data"
 msgid "Didn't find user.id member in JSON data"
-msgstr "Не удалось найти элемент guid в данных JSON"
+msgstr "Не удалось найти элемент «user.id» в данных JSON"
 
 #: ../src/goabackend/goaflickrprovider.c:210
-#, fuzzy, c-format
+#, c-format
 #| msgid "Didn't find screen_name member in JSON data"
 msgid "Didn't find user.username member in JSON data"
-msgstr "Не удалось найти элемент screen_name в данных JSON"
+msgstr "Не удалось найти элемент «user.username» в данных JSON"
 
 #: ../src/goabackend/goaflickrprovider.c:219
-#, fuzzy, c-format
+#, c-format
 #| msgid "Didn't find screen_name member in JSON data"
 msgid "Didn't find user.username._content member in JSON data"
-msgstr "Не удалось найти элемент screen_name в данных JSON"
+msgstr "Не удалось найти элемент «user.username._content» в данных JSON"
 
-#: ../src/goabackend/goaflickrprovider.c:283
+#: ../src/goabackend/goaflickrprovider.c:296
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "Неправильное системное время. Проверьте настройки даты и времени."
 
@@ -255,59 +267,64 @@ msgstr "Google"
 msgid "_Documents"
 msgstr "_Документы"
 
-#: ../src/goabackend/goakerberosprovider.c:84
+#: ../src/goabackend/goakerberosprovider.c:86
 msgid "Enterprise Login (Kerberos)"
 msgstr "Вход в систему (Kerberos)"
 
-#: ../src/goabackend/goakerberosprovider.c:375
+#: ../src/goabackend/goakerberosprovider.c:441
 msgid "Identity service returned invalid key"
 msgstr "Служба идентификации вернула неверный ключ"
 
-#: ../src/goabackend/goakerberosprovider.c:641
+#: ../src/goabackend/goakerberosprovider.c:707
 #, c-format
 msgid "Could not find saved credentials for principal `%s' in keyring"
 msgstr ""
 "Не удалось найти в связке ключей сохранённые учётные данные для "
 "администратора доступа «%s»"
 
-#: ../src/goabackend/goakerberosprovider.c:651
+#: ../src/goabackend/goakerberosprovider.c:717
 #, c-format
 msgid "Did not find password for principal `%s' in credentials"
 msgstr ""
 "Не удалось найти в учётных данных пароль для администратора доступа «%s»"
 
-#: ../src/goabackend/goakerberosprovider.c:1019
+#: ../src/goabackend/goakerberosprovider.c:1109
 msgid "_Domain"
 msgstr "_Домен"
 
-#: ../src/goabackend/goakerberosprovider.c:1020
+#: ../src/goabackend/goakerberosprovider.c:1110
 msgid "Enterprise domain or realm name"
 msgstr "Корпоративный домен или имя области"
 
-#: ../src/goabackend/goakerberosprovider.c:1235
-#: ../src/goaidentity/goaidentityservice.c:1891
+#: ../src/goabackend/goakerberosprovider.c:1321
+#: ../src/goaidentity/goaidentityservice.c:1082
 msgid "Log In to Realm"
 msgstr "Войти в область"
 
-#: ../src/goabackend/goakerberosprovider.c:1236
+#: ../src/goabackend/goakerberosprovider.c:1322
 msgid "Please enter your password below."
 msgstr "Введите ниже ваш пароль."
 
-#: ../src/goabackend/goakerberosprovider.c:1237
+#: ../src/goabackend/goakerberosprovider.c:1323
 msgid "Remember this password"
 msgstr "Запомнить пароль"
 
-#: ../src/goabackend/goakerberosprovider.c:1412
+#: ../src/goabackend/goakerberosprovider.c:1462
+#, c-format
+msgid "The domain is not valid"
+msgstr "Недопустмое имя домена"
+
+#: ../src/goabackend/goakerberosprovider.c:1611
 msgid "Error connecting to enterprise identity server"
 msgstr "Ошибка подключения к корпоративному серверу идентификации"
 
-#: ../src/goabackend/goakerberosprovider.c:1477
+#: ../src/goabackend/goakerberosprovider.c:1687
 msgid "Network _Resources"
 msgstr "_Сетевые ресурсы"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauth2provider.c:544
-#: ../src/goabackend/goaoauthprovider.c:537
+#: ../src/goabackend/goaoauthprovider.c:557
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -342,17 +359,17 @@ msgstr ""
 "a>:"
 
 #: ../src/goabackend/goaoauth2provider.c:1013
-#: ../src/goabackend/goaoauthprovider.c:976
+#: ../src/goabackend/goaoauthprovider.c:1010
 msgid "Error getting an Access Token: "
 msgstr "Ошибка при получении маркера доступа:"
 
 #: ../src/goabackend/goaoauth2provider.c:1028
-#: ../src/goabackend/goaoauthprovider.c:989
+#: ../src/goabackend/goaoauthprovider.c:1023
 msgid "Error getting identity: "
 msgstr "Ошибка получения идентификатора: "
 
 #: ../src/goabackend/goaoauth2provider.c:1305
-#: ../src/goabackend/goaoauthprovider.c:1267
+#: ../src/goabackend/goaoauthprovider.c:1316
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "Вход запрошен от имени %s, но осуществлён от имени %s"
@@ -363,28 +380,28 @@ msgid "Credentials do not contain access_token"
 msgstr "Учётные данные не содержат access_token"
 
 #: ../src/goabackend/goaoauth2provider.c:1510
-#: ../src/goabackend/goaoauthprovider.c:1490
+#: ../src/goabackend/goaoauthprovider.c:1539
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Сбой при обновлении маркера доступа (%s, %d):"
 
 #: ../src/goabackend/goaoauth2provider.c:1545
-#: ../src/goabackend/goaoauthprovider.c:1520
+#: ../src/goabackend/goaoauthprovider.c:1569
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "Ошибка сохранения учётных данных в связке ключей (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:560
+#: ../src/goabackend/goaoauthprovider.c:580
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "В ответе отсутствует заголовок access_token или access_token_secret"
 
-#: ../src/goabackend/goaoauthprovider.c:815
+#: ../src/goabackend/goaoauthprovider.c:849
 msgid "Error getting a Request Token: "
 msgstr "Ошибка при получении маркера запроса:"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:848
+#: ../src/goabackend/goaoauthprovider.c:882
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -392,25 +409,45 @@ msgstr ""
 "При запросе маркера запроса ожидалось получить код состояния 200, вместо "
 "него был получен код %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:865
+#: ../src/goabackend/goaoauthprovider.c:899
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "В ответе отсутствует заголовок request_token или request_token_secret"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:882
+#: ../src/goabackend/goaoauthprovider.c:916
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr ""
 "Вставить маркер, полученный на <a href=\"%s\">странице авторизации</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1446
+#: ../src/goabackend/goaoauthprovider.c:1495
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr ""
 "Учётные данные не содержат contain access_token или access_token_secret"
 
-#: ../src/goabackend/goaprovider.c:551
+#: ../src/goabackend/goaowncloudprovider.c:83
+msgid "ownCloud"
+msgstr "ownCloud"
+
+#: ../src/goabackend/goaowncloudprovider.c:566
+#, fuzzy
+#| msgid "User_name"
+msgid "_User_name"
+msgstr "И_мя пользователя"
+
+#: ../src/goabackend/goaowncloudprovider.c:695
+#: ../src/goabackend/goaowncloudprovider.c:858
+#| msgid "Error connecting to Microsoft Exchange server"
+msgid "Error connecting to ownCloud server"
+msgstr "Ошибка подключения к серверу ownCloud"
+
+#: ../src/goabackend/goaowncloudprovider.c:930
+msgid "_Files"
+msgstr "_Файлы"
+
+#: ../src/goabackend/goaprovider.c:554
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync не реализован в типе %s"
@@ -523,44 +560,15 @@ msgstr "Время"
 msgid "Time to fire"
 msgstr "Время сгорания"
 
-#: ../src/goaidentity/goaidentityservice.c:317
-msgid "Domain Administrator Login"
-msgstr "Вход администратора домена"
-
-#: ../src/goaidentity/goaidentityservice.c:405
-#: ../src/goaidentity/goaidentityservice.c:597
-msgid "Could not find supported credentials"
-msgstr "Не удалось найти поддерживаемые учётные данные"
-
-#: ../src/goaidentity/goaidentityservice.c:448
-msgid ""
-"In order to use this enterprise identity, the computer needs to be enrolled "
-"in the domain. Please have your network administrator type their domain "
-"password here."
-msgstr ""
-"Для использования этого корпоративного идентификатора компьютер должен "
-"входить в домен. Попросите вашего системного администратора ввести пароль "
-"домена."
-
-#: ../src/goaidentity/goaidentityservice.c:488
-msgid ""
-"In order to use this enterprise identity, the computer needs to be enrolled "
-"in the domain. Please have your network administrator type their domain "
-"username here."
-msgstr ""
-"Для использования этого корпоративного идентификатора компьютер должен "
-"входить в домен. Попросите вашего системного администратора ввести имя "
-"пользователя домена."
-
-#: ../src/goaidentity/goaidentityservice.c:1167
+#: ../src/goaidentity/goaidentityservice.c:375
 msgid "initial secret passed before secret key exchange"
 msgstr "исходный секрет передан до обмена секретными ключами"
 
-#: ../src/goaidentity/goaidentityservice.c:1373
+#: ../src/goaidentity/goaidentityservice.c:567
 msgid "Initial secret key is invalid"
 msgstr "Неверный исходный секретный ключ"
 
-#: ../src/goaidentity/goaidentityservice.c:1896
+#: ../src/goaidentity/goaidentityservice.c:1087
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "Для входа в сетевую область %s требуется некоторая информация."
@@ -623,28 +631,45 @@ msgstr "Не удалось стереть идентификатор: %k"
 msgid "Could not find identity"
 msgstr "Не удалось найти идентификатор"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:803
+#: ../src/goaidentity/goakerberosidentitymanager.c:823
 msgid "Could not create credential cache for identity"
 msgstr "Не удалось создать кэш учётных данных для идентификатора"
 
-#: ../src/goaidentity/um-realm-manager.c:368
-#, c-format
-msgid "No such domain or realm found"
-msgstr "Домен или область не найдены"
+#~ msgid "Domain Administrator Login"
+#~ msgstr "Вход администратора домена"
 
-#: ../src/goaidentity/um-realm-manager.c:743
-#, c-format
-msgid "Cannot log in as %s at the %s domain"
-msgstr "Не удалось выполнить вход как пользователь %s в домен %s"
+#~ msgid "Could not find supported credentials"
+#~ msgstr "Не удалось найти поддерживаемые учётные данные"
 
-#: ../src/goaidentity/um-realm-manager.c:748
-msgid "Invalid password, please try again"
-msgstr "Неверный пароль, попробуйте ещё раз"
+#~ msgid ""
+#~ "In order to use this enterprise identity, the computer needs to be "
+#~ "enrolled in the domain. Please have your network administrator type their "
+#~ "domain password here."
+#~ msgstr ""
+#~ "Для использования этого корпоративного идентификатора компьютер должен "
+#~ "входить в домен. Попросите вашего системного администратора ввести пароль "
+#~ "домена."
 
-#: ../src/goaidentity/um-realm-manager.c:752
-#, c-format
-msgid "Couldn't connect to the %s domain: %s"
-msgstr "Не удалось подключиться к домену %s: %s"
+#~ msgid ""
+#~ "In order to use this enterprise identity, the computer needs to be "
+#~ "enrolled in the domain. Please have your network administrator type their "
+#~ "domain username here."
+#~ msgstr ""
+#~ "Для использования этого корпоративного идентификатора компьютер должен "
+#~ "входить в домен. Попросите вашего системного администратора ввести имя "
+#~ "пользователя домена."
+
+#~ msgid "No such domain or realm found"
+#~ msgstr "Домен или область не найдены"
+
+#~ msgid "Cannot log in as %s at the %s domain"
+#~ msgstr "Не удалось выполнить вход как пользователь %s в домен %s"
+
+#~ msgid "Invalid password, please try again"
+#~ msgstr "Неверный пароль, попробуйте ещё раз"
+
+#~ msgid "Couldn't connect to the %s domain: %s"
+#~ msgstr "Не удалось подключиться к домену %s: %s"
 
 #~ msgid "Didn't find data member in JSON data"
 #~ msgstr "Не удалось найти элемент data в данных JSON"
