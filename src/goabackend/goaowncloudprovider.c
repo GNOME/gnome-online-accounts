@@ -563,7 +563,7 @@ create_account_details_ui (GoaProvider    *provider,
   gtk_container_add (GTK_CONTAINER (grid0), hbox);
 
   add_entry (grid1, grid2, _("_Server"), &data->uri);
-  add_entry (grid1, grid2, _("_User_name"), &data->username);
+  add_entry (grid1, grid2, _("User_name"), &data->username);
   add_entry (grid1, grid2, _("_Password"), &data->password);
   gtk_entry_set_visibility (GTK_ENTRY (data->password), FALSE);
 
