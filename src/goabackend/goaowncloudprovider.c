@@ -340,9 +340,10 @@ ensure_credentials_sync (GoaProvider         *provider,
     {
       if (error != NULL)
         {
-          g_prefix_error (error, _("Did not find password with username `%s' in credentials"), username);
-          (*error)->domain = GOA_ERROR;
-          (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
+          *error = g_error_new (GOA_ERROR,
+                                GOA_ERROR_NOT_AUTHORIZED,
+                                _("Did not find password with username `%s' in credentials"),
+                                username);
         }
       goto out;
     }
