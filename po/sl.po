@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-10-22 04:09+0000\n"
-"PO-Revision-Date: 2012-10-22 18:42+0100\n"
+"POT-Creation-Date: 2012-11-05 17:10+0000\n"
+"PO-Revision-Date: 2012-11-05 20:34+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: Slovenian\n"
@@ -88,92 +88,103 @@ msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:279
-#: ../src/goabackend/goaoauth2provider.c:1444
-#: ../src/goabackend/goaoauthprovider.c:1466
+#: ../src/goabackend/goagoogleprovider.c:579
+#: ../src/goabackend/goaoauth2provider.c:1523
+#: ../src/goabackend/goaoauthprovider.c:1545
 #: ../src/goabackend/goaowncloudprovider.c:325
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "Poverila v zbirki ključev ni mogoče najti (%s, %d):"
 
 #. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:295
-#: ../src/goabackend/goaexchangeprovider.c:923
-#: ../src/goabackend/goaowncloudprovider.c:343
-#: ../src/goabackend/goaowncloudprovider.c:995
+#: ../src/goabackend/goaexchangeprovider.c:297
+#: ../src/goabackend/goaexchangeprovider.c:939
+#: ../src/goabackend/goagoogleprovider.c:598
+#: ../src/goabackend/goagoogleprovider.c:777
+#: ../src/goabackend/goaowncloudprovider.c:345
+#: ../src/goabackend/goaowncloudprovider.c:1011
 #, c-format
 msgid "Did not find password with username `%s' in credentials"
 msgstr "V poverilih `%s' ni mogoče najti gesla z uporabniškim imenom."
 
-#: ../src/goabackend/goaexchangeprovider.c:486
+#: ../src/goabackend/goaexchangeprovider.c:319
+#: ../src/goabackend/goagoogleprovider.c:616
+#: ../src/goabackend/goaowncloudprovider.c:363
+#, c-format
+msgid "Invalid password with username `%s' (%s, %d): "
+msgstr "Neveljavno geslo za uporabniško ime `%s' (%s, %d): "
+
+#: ../src/goabackend/goaexchangeprovider.c:502
 msgid "_E-mail"
 msgstr "_Elektronski naslov"
 
-#: ../src/goabackend/goaexchangeprovider.c:487
-#: ../src/goabackend/goaowncloudprovider.c:567
+#: ../src/goabackend/goaexchangeprovider.c:503
+#: ../src/goabackend/goaowncloudprovider.c:583
 msgid "_Password"
 msgstr "_Geslo"
 
-#: ../src/goabackend/goaexchangeprovider.c:490
+#: ../src/goabackend/goaexchangeprovider.c:506
 msgid "_Custom"
 msgstr "_Po meri"
 
-#: ../src/goabackend/goaexchangeprovider.c:509
+#: ../src/goabackend/goaexchangeprovider.c:525
 #: ../src/goabackend/goakerberosprovider.c:1117
+#: ../src/goabackend/goaowncloudprovider.c:582
 msgid "User_name"
 msgstr "_Uporabniško ime"
 
-#: ../src/goabackend/goaexchangeprovider.c:510
-#: ../src/goabackend/goaowncloudprovider.c:565
+#: ../src/goabackend/goaexchangeprovider.c:526
+#: ../src/goabackend/goaowncloudprovider.c:581
 msgid "_Server"
 msgstr "_Strežnik"
 
-#: ../src/goabackend/goaexchangeprovider.c:594
-#: ../src/goabackend/goaexchangeprovider.c:760
+#: ../src/goabackend/goaexchangeprovider.c:610
+#: ../src/goabackend/goaexchangeprovider.c:776
 #: ../src/goabackend/goakerberosprovider.c:1510
-#: ../src/goabackend/goaoauth2provider.c:987
-#: ../src/goabackend/goaoauthprovider.c:979
-#: ../src/goabackend/goaowncloudprovider.c:657
-#: ../src/goabackend/goaowncloudprovider.c:837
+#: ../src/goabackend/goaoauth2provider.c:1049
+#: ../src/goabackend/goaoauthprovider.c:1041
+#: ../src/goabackend/goaowncloudprovider.c:673
+#: ../src/goabackend/goaowncloudprovider.c:853
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "Pogovorno okno je bilo opuščeno"
 
-#: ../src/goabackend/goaexchangeprovider.c:630
-#: ../src/goabackend/goaexchangeprovider.c:787
+#: ../src/goabackend/goaexchangeprovider.c:646
+#: ../src/goabackend/goaexchangeprovider.c:803
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Prišlo je do napake med povezovanjem s strežnikom Microsoft Exchange"
 
-#: ../src/goabackend/goaexchangeprovider.c:637
-#: ../src/goabackend/goaexchangeprovider.c:795
+#: ../src/goabackend/goaexchangeprovider.c:653
+#: ../src/goabackend/goaexchangeprovider.c:811
 #: ../src/goabackend/goakerberosprovider.c:1616
-#: ../src/goabackend/goaowncloudprovider.c:702
-#: ../src/goabackend/goaowncloudprovider.c:866
+#: ../src/goabackend/goaowncloudprovider.c:718
+#: ../src/goabackend/goaowncloudprovider.c:882
 msgid "_Try Again"
 msgstr "_Poskusi znova"
 
-#: ../src/goabackend/goaexchangeprovider.c:846
+#: ../src/goabackend/goaexchangeprovider.c:862
 #: ../src/goabackend/goafacebookprovider.c:389
-#: ../src/goabackend/goagoogleprovider.c:506
+#: ../src/goabackend/goagoogleprovider.c:661
 #: ../src/goabackend/goakerberosprovider.c:1685
-#: ../src/goabackend/goaowncloudprovider.c:918
+#: ../src/goabackend/goaowncloudprovider.c:934
 #: ../src/goabackend/goawindowsliveprovider.c:403
 msgid "Use for"
 msgstr "Uporabi za"
 
-#: ../src/goabackend/goaexchangeprovider.c:848
-#: ../src/goabackend/goagoogleprovider.c:508
+#: ../src/goabackend/goaexchangeprovider.c:864
+#: ../src/goabackend/goagoogleprovider.c:663
 msgid "_Mail"
 msgstr "_Pošta"
 
-#: ../src/goabackend/goaexchangeprovider.c:853
-#: ../src/goabackend/goagoogleprovider.c:513
-#: ../src/goabackend/goaowncloudprovider.c:920
+#: ../src/goabackend/goaexchangeprovider.c:869
+#: ../src/goabackend/goagoogleprovider.c:668
+#: ../src/goabackend/goaowncloudprovider.c:936
 msgid "Cale_ndar"
 msgstr "_Koledar"
 
-#: ../src/goabackend/goaexchangeprovider.c:858
-#: ../src/goabackend/goagoogleprovider.c:518
-#: ../src/goabackend/goaowncloudprovider.c:925
+#: ../src/goabackend/goaexchangeprovider.c:874
+#: ../src/goabackend/goagoogleprovider.c:673
+#: ../src/goabackend/goaowncloudprovider.c:941
 msgid "_Contacts"
 msgstr "_Stiki"
 
@@ -183,7 +194,7 @@ msgstr "Facebook"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:193
-#: ../src/goabackend/goagoogleprovider.c:184
+#: ../src/goabackend/goagoogleprovider.c:188
 #: ../src/goabackend/goatwitterprovider.c:160
 #: ../src/goabackend/goawindowsliveprovider.c:176
 #: ../src/goabackend/goayahooprovider.c:163
@@ -193,8 +204,8 @@ msgstr "Pričakovano je stanje 200 pri zahtevi guid, vrnjeno pa je stanje %d (%s
 
 #: ../src/goabackend/goafacebookprovider.c:205
 #: ../src/goabackend/goaflickrprovider.c:181
-#: ../src/goabackend/goagoogleprovider.c:196
-#: ../src/goabackend/goaoauth2provider.c:587
+#: ../src/goabackend/goagoogleprovider.c:200
+#: ../src/goabackend/goaoauth2provider.c:616
 #: ../src/goabackend/goatwitterprovider.c:172
 #: ../src/goabackend/goawindowsliveprovider.c:188
 #: ../src/goabackend/goayahooprovider.c:175
@@ -208,13 +219,13 @@ msgid "Didn't find id member in JSON data"
 msgstr "Ni mogoče najti ID stika med podatki JSON "
 
 #: ../src/goabackend/goafacebookprovider.c:225
-#: ../src/goabackend/goagoogleprovider.c:207
+#: ../src/goabackend/goagoogleprovider.c:211
 #, c-format
 msgid "Didn't find email member in JSON data"
 msgstr "Ni mogoče najti elektronske pošte stika med podatki JSON"
 
 #: ../src/goabackend/goafacebookprovider.c:391
-#: ../src/goabackend/goagoogleprovider.c:523
+#: ../src/goabackend/goagoogleprovider.c:678
 #: ../src/goabackend/goawindowsliveprovider.c:405
 msgid "C_hat"
 msgstr "K_lepet"
@@ -252,11 +263,11 @@ msgstr "Ni mogoče najti vsebine uporabnika med podatki JSON "
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "Sistemski čas ni veljaven. Preverite nastavitve časa in datuma."
 
-#: ../src/goabackend/goagoogleprovider.c:79
+#: ../src/goabackend/goagoogleprovider.c:83
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:528
+#: ../src/goabackend/goagoogleprovider.c:683
 #: ../src/goabackend/goawindowsliveprovider.c:410
 msgid "_Documents"
 msgstr "_Dokumenti"
@@ -288,7 +299,7 @@ msgid "Enterprise domain or realm name"
 msgstr "Poslovna domena ali ime območja"
 
 #: ../src/goabackend/goakerberosprovider.c:1321
-#: ../src/goaidentity/goaidentityservice.c:1461
+#: ../src/goaidentity/goaidentityservice.c:1082
 msgid "Log In to Realm"
 msgstr "Prijava v področje"
 
@@ -314,94 +325,94 @@ msgid "Network _Resources"
 msgstr "Omrežni _viri"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:544
-#: ../src/goabackend/goaoauthprovider.c:557
+#: ../src/goabackend/goaoauth2provider.c:573
+#: ../src/goabackend/goaoauthprovider.c:586
 #, c-format
 msgid "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr "Pričakovano je stanje 200 pri zahtevi žetona dostopa, vrnjeno pa je stanje %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:564
+#: ../src/goabackend/goaoauth2provider.c:593
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "Ni mogoče najti žetona dostopa med podatki, ki ne spadajo k JSON "
 
-#: ../src/goabackend/goaoauth2provider.c:598
+#: ../src/goabackend/goaoauth2provider.c:627
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "Ni mogoče najti žetona dostopa med podatki JSON "
 
-#: ../src/goabackend/goaoauth2provider.c:777
-#: ../src/goabackend/goaoauth2provider.c:816
+#: ../src/goabackend/goaoauth2provider.c:838
+#: ../src/goabackend/goaoauth2provider.c:877
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "Odziv overitve je \"%s\""
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:921
+#: ../src/goabackend/goaoauth2provider.c:983
 #, c-format
 msgid "Paste authorization code obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "Prilepi kodo overitve pridobljeno preko <a href=\"%s\">strani overitve</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:1013
-#: ../src/goabackend/goaoauthprovider.c:1010
+#: ../src/goabackend/goaoauth2provider.c:1075
+#: ../src/goabackend/goaoauthprovider.c:1072
 msgid "Error getting an Access Token: "
 msgstr "Napaka pridobivanja žetona dostopa:"
 
-#: ../src/goabackend/goaoauth2provider.c:1028
-#: ../src/goabackend/goaoauthprovider.c:1023
+#: ../src/goabackend/goaoauth2provider.c:1090
+#: ../src/goabackend/goaoauthprovider.c:1085
 msgid "Error getting identity: "
 msgstr "Napaka med pridobivanjem istovetnosti:"
 
-#: ../src/goabackend/goaoauth2provider.c:1305
-#: ../src/goabackend/goaoauthprovider.c:1316
+#: ../src/goabackend/goaoauth2provider.c:1379
+#: ../src/goabackend/goaoauthprovider.c:1390
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "Zahtevana je prijava %s, prijavljen pa je uporabnik %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1471
+#: ../src/goabackend/goaoauth2provider.c:1552
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Poverila ne vključujejo žetona dostopa"
 
-#: ../src/goabackend/goaoauth2provider.c:1510
-#: ../src/goabackend/goaoauthprovider.c:1539
+#: ../src/goabackend/goaoauth2provider.c:1591
+#: ../src/goabackend/goaoauthprovider.c:1620
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Osveževanje žetona dostopa je spodletelo (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1545
-#: ../src/goabackend/goaoauthprovider.c:1569
+#: ../src/goabackend/goaoauth2provider.c:1628
+#: ../src/goabackend/goaoauthprovider.c:1652
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "Napaka med shranjevanjem poverila v zbirko ključev (%s, %d):"
 
-#: ../src/goabackend/goaoauthprovider.c:580
+#: ../src/goabackend/goaoauthprovider.c:609
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "Manjka glava žetona dostopa oziroma skritega žetona dostopa v odzivu"
 
-#: ../src/goabackend/goaoauthprovider.c:849
+#: ../src/goabackend/goaoauthprovider.c:911
 msgid "Error getting a Request Token: "
 msgstr "Napaka pridobivanja žetona zahteve:"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:882
+#: ../src/goabackend/goaoauthprovider.c:944
 #, c-format
 msgid "Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr "Pričakovano je stanje 200 pri pridobivanju žetona zahteve, vrnjeno pa je stanje %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:899
+#: ../src/goabackend/goaoauthprovider.c:961
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "Manjka glava žetona zahteve oziroma skritega žetona zahteve v odzivu"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:916
+#: ../src/goabackend/goaoauthprovider.c:978
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "Prilepi žeton pridobljen preko <a href=\"%s\">strani overitve</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1495
+#: ../src/goabackend/goaoauthprovider.c:1576
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Poverila ne vsebujejo žetona dostopa oziroma skritega žetona dostopa"
@@ -410,16 +421,12 @@ msgstr "Poverila ne vsebujejo žetona dostopa oziroma skritega žetona dostopa"
 msgid "ownCloud"
 msgstr "ownCloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:566
-msgid "_User_name"
-msgstr "_Uporabniško ime"
-
-#: ../src/goabackend/goaowncloudprovider.c:695
-#: ../src/goabackend/goaowncloudprovider.c:858
+#: ../src/goabackend/goaowncloudprovider.c:711
+#: ../src/goabackend/goaowncloudprovider.c:874
 msgid "Error connecting to ownCloud server"
 msgstr "Napaka povezave s strežnikom ownCloud..."
 
-#: ../src/goabackend/goaowncloudprovider.c:930
+#: ../src/goabackend/goaowncloudprovider.c:946
 msgid "_Files"
 msgstr "_Datoteke"
 
@@ -534,15 +541,15 @@ msgstr "Čas"
 msgid "Time to fire"
 msgstr "Čas za izvedbo"
 
-#: ../src/goaidentity/goaidentityservice.c:737
+#: ../src/goaidentity/goaidentityservice.c:375
 msgid "initial secret passed before secret key exchange"
 msgstr "paket poslan pred izmenjavo skrivnega ključa"
 
-#: ../src/goaidentity/goaidentityservice.c:943
+#: ../src/goaidentity/goaidentityservice.c:567
 msgid "Initial secret key is invalid"
 msgstr "Začetni skivni ključ ni veljaven!"
 
-#: ../src/goaidentity/goaidentityservice.c:1466
+#: ../src/goaidentity/goaidentityservice.c:1087
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "Omrežno področje %s zahteva dodatne podatke za prijavo."
@@ -607,24 +614,20 @@ msgstr "Ni mogoče najti izbrane istovetnosti"
 msgid "Could not create credential cache for identity"
 msgstr "Ni mogoče ustvariti predpomnilnika poverila za izbrano istovetnost"
 
-#: ../src/goaidentity/um-realm-manager.c:368
-#, c-format
-msgid "No such domain or realm found"
-msgstr "Ni mogoče najti take domene ali takega področja"
+#~ msgid "_User_name"
+#~ msgstr "_Uporabniško ime"
 
-#: ../src/goaidentity/um-realm-manager.c:743
-#, c-format
-msgid "Cannot log in as %s at the %s domain"
-msgstr "Ni se mogoče prijaviti kot %s v domeno %s."
+#~ msgid "No such domain or realm found"
+#~ msgstr "Ni mogoče najti take domene ali takega področja"
 
-#: ../src/goaidentity/um-realm-manager.c:748
-msgid "Invalid password, please try again"
-msgstr "Napačno geslo, poskusite znova."
+#~ msgid "Cannot log in as %s at the %s domain"
+#~ msgstr "Ni se mogoče prijaviti kot %s v domeno %s."
 
-#: ../src/goaidentity/um-realm-manager.c:752
-#, c-format
-msgid "Couldn't connect to the %s domain: %s"
-msgstr "Z domeno %s povezava ni mogoča: %s"
+#~ msgid "Invalid password, please try again"
+#~ msgstr "Napačno geslo, poskusite znova."
+
+#~ msgid "Couldn't connect to the %s domain: %s"
+#~ msgstr "Z domeno %s povezava ni mogoča: %s"
 
 #~ msgid "Domain Administrator Login"
 #~ msgstr "Skrbniška prijava v domeno"
