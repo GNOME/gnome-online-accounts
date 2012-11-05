@@ -355,6 +355,21 @@ ensure_credentials_sync (GoaProvider         *provider,
                                     password,
                                     cancellable,
                                     error);
+  if (!ret)
+    {
+      if (error != NULL)
+        {
+          g_prefix_error (error,
+                          _("Invalid password with username `%s' (%s, %d): "),
+                          username,
+                          g_quark_to_string ((*error)->domain),
+                          (*error)->code);
+          (*error)->domain = GOA_ERROR;
+          (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
+        }
+      goto out;
+    }
+
   if (out_expires_in != NULL)
     *out_expires_in = 0;
 
