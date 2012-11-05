@@ -293,7 +293,7 @@ is_deny_node (GoaOAuthProvider *provider, WebKitDOMNode *node)
 }
 
 static gboolean
-is_identity_node (GoaOAuth2Provider *provider, WebKitDOMHTMLInputElement *element)
+is_identity_node (GoaOAuthProvider *provider, WebKitDOMHTMLInputElement *element)
 {
   gboolean ret;
   gchar *element_type;
