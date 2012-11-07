@@ -685,6 +685,10 @@ ensure_credentials_sync (GoaProvider   *provider,
       if (error != NULL)
         {
           g_prefix_error (error,
+                          /* Translators: the first %s is the username
+                           * (eg., debarshi.ray@gmail.com or rishi), and the
+                           * (%s, %d) is the error domain and code.
+                           */
                           _("Invalid password with username `%s' (%s, %d): "),
                           username,
                           g_quark_to_string ((*error)->domain),
