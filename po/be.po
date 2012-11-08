@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-11-01 09:34+0000\n"
-"PO-Revision-Date: 2012-11-02 15:12+0300\n"
+"POT-Creation-Date: 2012-11-08 11:40+0000\n"
+"PO-Revision-Date: 2012-11-08 21:54+0300\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n-bel-gnome@googlegroups.com>\n"
 "Language: be\n"
@@ -39,7 +39,7 @@ msgid "ProviderType property is not set for account"
 msgstr "Для гэтага конта не выстаўлена ўласцівасць ProviderType"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:204
+#: ../src/goabackend/goaewsclient.c:204 ../src/goabackend/goahttpclient.c:147
 #, c-format
 msgid "Code: %u - Unexpected response from server"
 msgstr "Код: %u - Нечаканы адказ ад сервера"
@@ -81,81 +81,94 @@ msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:279
+#: ../src/goabackend/goagoogleprovider.c:651
 #: ../src/goabackend/goaoauth2provider.c:1443
-#: ../src/goabackend/goaoauthprovider.c:1466
+#: ../src/goabackend/goaoauthprovider.c:1545
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "Мандатныя даныя не знойдзены ў вязцы ключоў (%s, %d): "
 
 #. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:295
-#: ../src/goabackend/goaexchangeprovider.c:923
+#: ../src/goabackend/goaexchangeprovider.c:297
+#: ../src/goabackend/goaexchangeprovider.c:943
+#: ../src/goabackend/goagoogleprovider.c:670
+#: ../src/goabackend/goagoogleprovider.c:849
 #, c-format
 msgid "Did not find password with username `%s' in credentials"
 msgstr ""
 "Не ўдалося адшукаць пароль з імем карыстальніка  \"%s\" у мандатных даных"
 
-#: ../src/goabackend/goaexchangeprovider.c:486
+#. Translators: the first %s is the username
+#. * (eg., debarshi.ray@gmail.com or rishi), and the
+#. * (%s, %d) is the error domain and code.
+#.
+#: ../src/goabackend/goaexchangeprovider.c:323
+#: ../src/goabackend/goagoogleprovider.c:692
+#, c-format
+msgid "Invalid password with username `%s' (%s, %d): "
+msgstr "Хібны пароль карыстальніка \"%s\" (%s, %d): "
+
+#: ../src/goabackend/goaexchangeprovider.c:506
 msgid "_E-mail"
 msgstr "_Электронная пошта"
 
-#: ../src/goabackend/goaexchangeprovider.c:487
+#: ../src/goabackend/goaexchangeprovider.c:507
 msgid "_Password"
 msgstr "_Пароль"
 
-#: ../src/goabackend/goaexchangeprovider.c:490
+#: ../src/goabackend/goaexchangeprovider.c:510
 msgid "_Custom"
 msgstr "_Уласны"
 
-#: ../src/goabackend/goaexchangeprovider.c:509
+#: ../src/goabackend/goaexchangeprovider.c:529
 #: ../src/goabackend/goakerberosprovider.c:1117
 msgid "User_name"
 msgstr "І_мя карыстальніка"
 
-#: ../src/goabackend/goaexchangeprovider.c:510
+#: ../src/goabackend/goaexchangeprovider.c:530
 msgid "_Server"
 msgstr "_Сервер"
 
-#: ../src/goabackend/goaexchangeprovider.c:594
-#: ../src/goabackend/goaexchangeprovider.c:760
+#: ../src/goabackend/goaexchangeprovider.c:614
+#: ../src/goabackend/goaexchangeprovider.c:780
 #: ../src/goabackend/goakerberosprovider.c:1510
 #: ../src/goabackend/goaoauth2provider.c:986
-#: ../src/goabackend/goaoauthprovider.c:979
+#: ../src/goabackend/goaoauthprovider.c:1041
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "Дыялогавае акенца было праігнаравана"
 
-#: ../src/goabackend/goaexchangeprovider.c:630
-#: ../src/goabackend/goaexchangeprovider.c:787
+#: ../src/goabackend/goaexchangeprovider.c:650
+#: ../src/goabackend/goaexchangeprovider.c:807
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Памылка злучэння з серверам Microsoft Exchange"
 
-#: ../src/goabackend/goaexchangeprovider.c:637
-#: ../src/goabackend/goaexchangeprovider.c:795
+#: ../src/goabackend/goaexchangeprovider.c:657
+#: ../src/goabackend/goaexchangeprovider.c:815
 #: ../src/goabackend/goakerberosprovider.c:1616
 msgid "_Try Again"
 msgstr "_Паўтарыць спробу"
 
-#: ../src/goabackend/goaexchangeprovider.c:846
+#: ../src/goabackend/goaexchangeprovider.c:866
 #: ../src/goabackend/goafacebookprovider.c:389
-#: ../src/goabackend/goagoogleprovider.c:570
+#: ../src/goabackend/goagoogleprovider.c:729
 #: ../src/goabackend/goakerberosprovider.c:1685
 #: ../src/goabackend/goawindowsliveprovider.c:403
 msgid "Use for"
 msgstr "Прызначэнне"
 
-#: ../src/goabackend/goaexchangeprovider.c:848
-#: ../src/goabackend/goagoogleprovider.c:572
+#: ../src/goabackend/goaexchangeprovider.c:868
+#: ../src/goabackend/goagoogleprovider.c:731
 msgid "_Mail"
 msgstr "_Пошта"
 
-#: ../src/goabackend/goaexchangeprovider.c:853
-#: ../src/goabackend/goagoogleprovider.c:577
+#: ../src/goabackend/goaexchangeprovider.c:873
+#: ../src/goabackend/goagoogleprovider.c:736
 msgid "Cale_ndar"
 msgstr "_Каляндар"
 
-#: ../src/goabackend/goaexchangeprovider.c:858
-#: ../src/goabackend/goagoogleprovider.c:582
+#: ../src/goabackend/goaexchangeprovider.c:878
+#: ../src/goabackend/goagoogleprovider.c:741
 msgid "_Contacts"
 msgstr "К_антакты"
 
@@ -164,7 +177,7 @@ msgid "Facebook"
 msgstr "Facebook"
 
 #: ../src/goabackend/goafacebookprovider.c:193
-#: ../src/goabackend/goagoogleprovider.c:212
+#: ../src/goabackend/goagoogleprovider.c:216
 #: ../src/goabackend/goawindowsliveprovider.c:176
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
@@ -172,7 +185,7 @@ msgstr ""
 "Пры запыце guid чакаўся код стану 200, але замест яго атрыманы код %d (%s)"
 
 #: ../src/goabackend/goafacebookprovider.c:205
-#: ../src/goabackend/goagoogleprovider.c:224
+#: ../src/goabackend/goagoogleprovider.c:228
 #: ../src/goabackend/goaoauth2provider.c:586
 #: ../src/goabackend/goawindowsliveprovider.c:188
 msgid "Error parsing response as JSON: "
@@ -185,31 +198,31 @@ msgid "Didn't find id member in JSON data"
 msgstr "Не ўдалося адшукаць элемент id у JSON-даных"
 
 #: ../src/goabackend/goafacebookprovider.c:225
-#: ../src/goabackend/goagoogleprovider.c:245
+#: ../src/goabackend/goagoogleprovider.c:249
 #, c-format
 msgid "Didn't find email member in JSON data"
 msgstr "Не ўдалося адшукаць элемент з адрасам электроннай пошты ў JSON-даных"
 
 #: ../src/goabackend/goafacebookprovider.c:391
-#: ../src/goabackend/goagoogleprovider.c:587
+#: ../src/goabackend/goagoogleprovider.c:746
 #: ../src/goabackend/goawindowsliveprovider.c:405
 msgid "C_hat"
 msgstr "_Чат"
 
-#: ../src/goabackend/goagoogleprovider.c:78
+#: ../src/goabackend/goagoogleprovider.c:82
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:235
+#: ../src/goabackend/goagoogleprovider.c:239
 #, c-format
 msgid "Didn't find data member in JSON data"
 msgstr "Не ўдалося адшукаць элемент з данымі ў JSON-даных"
 
-#: ../src/goabackend/goagoogleprovider.c:341
+#: ../src/goabackend/goagoogleprovider.c:380
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "Сістэмны час настаўлены няправільна. Праверце настройкі даты і часу."
 
-#: ../src/goabackend/goagoogleprovider.c:592
+#: ../src/goabackend/goagoogleprovider.c:751
 #: ../src/goabackend/goawindowsliveprovider.c:410
 msgid "_Documents"
 msgstr "_Дакументы"
@@ -270,7 +283,7 @@ msgstr "_Сеткавыя рэсурсы"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauth2provider.c:543
-#: ../src/goabackend/goaoauthprovider.c:557
+#: ../src/goabackend/goaoauthprovider.c:586
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -305,17 +318,17 @@ msgstr ""
 "a>:"
 
 #: ../src/goabackend/goaoauth2provider.c:1012
-#: ../src/goabackend/goaoauthprovider.c:1010
+#: ../src/goabackend/goaoauthprovider.c:1072
 msgid "Error getting an Access Token: "
 msgstr "Памылка атрымання жэтона для доступу: "
 
 #: ../src/goabackend/goaoauth2provider.c:1027
-#: ../src/goabackend/goaoauthprovider.c:1023
+#: ../src/goabackend/goaoauthprovider.c:1085
 msgid "Error getting identity: "
 msgstr "Памылка атрымання ідэнтычнасці: "
 
 #: ../src/goabackend/goaoauth2provider.c:1304
-#: ../src/goabackend/goaoauthprovider.c:1316
+#: ../src/goabackend/goaoauthprovider.c:1390
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "Была просьба ўвайсці як %s, але ўваход ажыццёўлены як %s"
@@ -326,29 +339,29 @@ msgid "Credentials do not contain access_token"
 msgstr "Мандатныя даныя не змяшчаюць access_token"
 
 #: ../src/goabackend/goaoauth2provider.c:1509
-#: ../src/goabackend/goaoauthprovider.c:1539
+#: ../src/goabackend/goaoauthprovider.c:1620
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Не ўдалося абнавіць жэтон для доступу (%s, %d): "
 
 #: ../src/goabackend/goaoauth2provider.c:1544
-#: ../src/goabackend/goaoauthprovider.c:1569
+#: ../src/goabackend/goaoauthprovider.c:1652
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "Памылка захавання мандатных даных у вязцы ключоў (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:580
+#: ../src/goabackend/goaoauthprovider.c:609
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr ""
 "У адказе не хапае аднаго з загалоўкаў: access_token ці access_token_secret"
 
-#: ../src/goabackend/goaoauthprovider.c:849
+#: ../src/goabackend/goaoauthprovider.c:911
 msgid "Error getting a Request Token: "
 msgstr "Памылка атрымання жэтона для запыту: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:882
+#: ../src/goabackend/goaoauthprovider.c:944
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -356,21 +369,21 @@ msgstr ""
 "Пры атрыманні жэтона для запыту чакаўся код стану 200, але замест яго "
 "атрыманы код %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:899
+#: ../src/goabackend/goaoauthprovider.c:961
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr ""
 "У адказе не хапае аднаго з загалоўкаў: request_token ці request_token_secret"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:916
+#: ../src/goabackend/goaoauthprovider.c:978
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr ""
 "Устаўце ўпаўнаважвальны код, атрыманы на <a href=\"%s\">адпаведнай старонцы</"
 "a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1495
+#: ../src/goabackend/goaoauthprovider.c:1576
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Мандатныя даныя не змяшчаюць access_token ці access_token_secret"
@@ -518,4 +531,3 @@ msgstr "Не ўдалося адшукаць ідэнтычнасць"
 #: ../src/goaidentity/goakerberosidentitymanager.c:823
 msgid "Could not create credential cache for identity"
 msgstr "Не ўдалося стварыць кэш-памяць мандатных даных для ідэнтычнасці"
-
