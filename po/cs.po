@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts gnome-3.6\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-11-05 11:58+0000\n"
-"PO-Revision-Date: 2012-10-02 22:38+0200\n"
+"POT-Creation-Date: 2012-11-08 11:40+0000\n"
+"PO-Revision-Date: 2012-11-08 19:07+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -44,7 +44,7 @@ msgid "ProviderType property is not set for account"
 msgstr "Pro účet není nastavena vlastnost ProviderType (typ poskytovatele)"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:204
+#: ../src/goabackend/goaewsclient.c:204 ../src/goabackend/goahttpclient.c:147
 #, c-format
 msgid "Code: %u - Unexpected response from server"
 msgstr "Kód: %u – neočekávaná odpověď od serveru"
@@ -84,80 +84,93 @@ msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:279
+#: ../src/goabackend/goagoogleprovider.c:651
 #: ../src/goabackend/goaoauth2provider.c:1443
-#: ../src/goabackend/goaoauthprovider.c:1466
+#: ../src/goabackend/goaoauthprovider.c:1545
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "Pověření nebylo nalezeno v klíčence (%s, %d): "
 
 #. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:297
-#: ../src/goabackend/goaexchangeprovider.c:924
+#: ../src/goabackend/goaexchangeprovider.c:943
+#: ../src/goabackend/goagoogleprovider.c:670
+#: ../src/goabackend/goagoogleprovider.c:849
 #, c-format
 msgid "Did not find password with username `%s' in credentials"
 msgstr "V pověřeních nebylo nalezeno heslo s uživatelským jménem „%s“"
 
-#: ../src/goabackend/goaexchangeprovider.c:487
+#. Translators: the first %s is the username
+#. * (eg., debarshi.ray@gmail.com or rishi), and the
+#. * (%s, %d) is the error domain and code.
+#.
+#: ../src/goabackend/goaexchangeprovider.c:323
+#: ../src/goabackend/goagoogleprovider.c:692
+#, c-format
+msgid "Invalid password with username `%s' (%s, %d): "
+msgstr "Neplatné heslo se jménem uživatele „%s“ (%s, %d): "
+
+#: ../src/goabackend/goaexchangeprovider.c:506
 msgid "_E-mail"
 msgstr "_E-mail"
 
-#: ../src/goabackend/goaexchangeprovider.c:488
+#: ../src/goabackend/goaexchangeprovider.c:507
 msgid "_Password"
 msgstr "_Heslo"
 
-#: ../src/goabackend/goaexchangeprovider.c:491
+#: ../src/goabackend/goaexchangeprovider.c:510
 msgid "_Custom"
 msgstr "_Vlastní"
 
-#: ../src/goabackend/goaexchangeprovider.c:510
+#: ../src/goabackend/goaexchangeprovider.c:529
 #: ../src/goabackend/goakerberosprovider.c:1117
 msgid "User_name"
 msgstr "Uživatelské j_méno"
 
-#: ../src/goabackend/goaexchangeprovider.c:511
+#: ../src/goabackend/goaexchangeprovider.c:530
 msgid "_Server"
 msgstr "_Server"
 
-#: ../src/goabackend/goaexchangeprovider.c:595
-#: ../src/goabackend/goaexchangeprovider.c:761
+#: ../src/goabackend/goaexchangeprovider.c:614
+#: ../src/goabackend/goaexchangeprovider.c:780
 #: ../src/goabackend/goakerberosprovider.c:1510
 #: ../src/goabackend/goaoauth2provider.c:986
-#: ../src/goabackend/goaoauthprovider.c:979
+#: ../src/goabackend/goaoauthprovider.c:1041
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "Dialogové okno bylo zavřeno"
 
-#: ../src/goabackend/goaexchangeprovider.c:631
-#: ../src/goabackend/goaexchangeprovider.c:788
+#: ../src/goabackend/goaexchangeprovider.c:650
+#: ../src/goabackend/goaexchangeprovider.c:807
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Chyba připojování k serveru Macrosoft Exchange"
 
-#: ../src/goabackend/goaexchangeprovider.c:638
-#: ../src/goabackend/goaexchangeprovider.c:796
+#: ../src/goabackend/goaexchangeprovider.c:657
+#: ../src/goabackend/goaexchangeprovider.c:815
 #: ../src/goabackend/goakerberosprovider.c:1616
 msgid "_Try Again"
 msgstr "Zkusi_t znovu"
 
-#: ../src/goabackend/goaexchangeprovider.c:847
+#: ../src/goabackend/goaexchangeprovider.c:866
 #: ../src/goabackend/goafacebookprovider.c:389
-#: ../src/goabackend/goagoogleprovider.c:570
+#: ../src/goabackend/goagoogleprovider.c:729
 #: ../src/goabackend/goakerberosprovider.c:1685
 #: ../src/goabackend/goawindowsliveprovider.c:403
 msgid "Use for"
 msgstr "Použít pro"
 
-#: ../src/goabackend/goaexchangeprovider.c:849
-#: ../src/goabackend/goagoogleprovider.c:572
+#: ../src/goabackend/goaexchangeprovider.c:868
+#: ../src/goabackend/goagoogleprovider.c:731
 msgid "_Mail"
 msgstr "_Pošta"
 
-#: ../src/goabackend/goaexchangeprovider.c:854
-#: ../src/goabackend/goagoogleprovider.c:577
+#: ../src/goabackend/goaexchangeprovider.c:873
+#: ../src/goabackend/goagoogleprovider.c:736
 msgid "Cale_ndar"
 msgstr "Kale_ndář"
 
-#: ../src/goabackend/goaexchangeprovider.c:859
-#: ../src/goabackend/goagoogleprovider.c:582
+#: ../src/goabackend/goaexchangeprovider.c:878
+#: ../src/goabackend/goagoogleprovider.c:741
 msgid "_Contacts"
 msgstr "_Kontakty"
 
@@ -166,7 +179,7 @@ msgid "Facebook"
 msgstr "Facebook"
 
 #: ../src/goabackend/goafacebookprovider.c:193
-#: ../src/goabackend/goagoogleprovider.c:212
+#: ../src/goabackend/goagoogleprovider.c:216
 #: ../src/goabackend/goawindowsliveprovider.c:176
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
@@ -175,7 +188,7 @@ msgstr ""
 "(%s)"
 
 #: ../src/goabackend/goafacebookprovider.c:205
-#: ../src/goabackend/goagoogleprovider.c:224
+#: ../src/goabackend/goagoogleprovider.c:228
 #: ../src/goabackend/goaoauth2provider.c:586
 #: ../src/goabackend/goawindowsliveprovider.c:188
 msgid "Error parsing response as JSON: "
@@ -188,31 +201,31 @@ msgid "Didn't find id member in JSON data"
 msgstr "Nebyla nalezena položka id v datech JSON"
 
 #: ../src/goabackend/goafacebookprovider.c:225
-#: ../src/goabackend/goagoogleprovider.c:245
+#: ../src/goabackend/goagoogleprovider.c:249
 #, c-format
 msgid "Didn't find email member in JSON data"
 msgstr "Nebyla nalezena položka email v datech JSON"
 
 #: ../src/goabackend/goafacebookprovider.c:391
-#: ../src/goabackend/goagoogleprovider.c:587
+#: ../src/goabackend/goagoogleprovider.c:746
 #: ../src/goabackend/goawindowsliveprovider.c:405
 msgid "C_hat"
 msgstr "Disk_uze"
 
-#: ../src/goabackend/goagoogleprovider.c:78
+#: ../src/goabackend/goagoogleprovider.c:82
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:235
+#: ../src/goabackend/goagoogleprovider.c:239
 #, c-format
 msgid "Didn't find data member in JSON data"
 msgstr "Nebyla nalezena položka data v datech JSON"
 
-#: ../src/goabackend/goagoogleprovider.c:341
+#: ../src/goabackend/goagoogleprovider.c:380
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "Vás systémový čas je neplatný. Zkontrolujte své nastavení data a času."
 
-#: ../src/goabackend/goagoogleprovider.c:592
+#: ../src/goabackend/goagoogleprovider.c:751
 #: ../src/goabackend/goawindowsliveprovider.c:410
 msgid "_Documents"
 msgstr "_Dokumenty"
@@ -271,7 +284,7 @@ msgstr "Síťové p_rostředky"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauth2provider.c:543
-#: ../src/goabackend/goaoauthprovider.c:557
+#: ../src/goabackend/goaoauthprovider.c:586
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -305,17 +318,17 @@ msgstr ""
 "Vložte autorizační kód získaný z <a href=\"%s\">autorizační stránky</a>:"
 
 #: ../src/goabackend/goaoauth2provider.c:1012
-#: ../src/goabackend/goaoauthprovider.c:1010
+#: ../src/goabackend/goaoauthprovider.c:1072
 msgid "Error getting an Access Token: "
 msgstr "Chyba při získávání přístupového tiketu: "
 
 #: ../src/goabackend/goaoauth2provider.c:1027
-#: ../src/goabackend/goaoauthprovider.c:1023
+#: ../src/goabackend/goaoauthprovider.c:1085
 msgid "Error getting identity: "
 msgstr "Chyba při získávání identity: "
 
 #: ../src/goabackend/goaoauth2provider.c:1304
-#: ../src/goabackend/goaoauthprovider.c:1316
+#: ../src/goabackend/goaoauthprovider.c:1390
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr ""
@@ -327,28 +340,28 @@ msgid "Credentials do not contain access_token"
 msgstr "Pověření neobsahuje access_token"
 
 #: ../src/goabackend/goaoauth2provider.c:1509
-#: ../src/goabackend/goaoauthprovider.c:1539
+#: ../src/goabackend/goaoauthprovider.c:1620
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Selhalo občerstvení přístupového tiketu (%s, %d): "
 
 #: ../src/goabackend/goaoauth2provider.c:1544
-#: ../src/goabackend/goaoauthprovider.c:1569
+#: ../src/goabackend/goaoauthprovider.c:1652
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "Chyba ukládání pověření do klíčenky (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:580
+#: ../src/goabackend/goaoauthprovider.c:609
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "V odpovědi schází hlavičky access_token nebo access_token_secret"
 
-#: ../src/goabackend/goaoauthprovider.c:849
+#: ../src/goabackend/goaoauthprovider.c:911
 msgid "Error getting a Request Token: "
 msgstr "Chyba při získávání žádacího tiketu: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:882
+#: ../src/goabackend/goaoauthprovider.c:944
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -356,18 +369,18 @@ msgstr ""
 "Při požadavku o žádací tiket očekáván stavový kód 200, místo toho získán %d "
 "(%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:899
+#: ../src/goabackend/goaoauthprovider.c:961
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "V odpovědi schází hlavičky request_token nebo request_token_secre"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:916
+#: ../src/goabackend/goaoauthprovider.c:978
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "Vložte tiket získaný z <a href=\"%s\">autorizační stránky</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1495
+#: ../src/goabackend/goaoauthprovider.c:1576
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Pověření neobsahuje contain access_token nebo access_token_secret"
