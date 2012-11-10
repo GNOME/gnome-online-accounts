@@ -1779,9 +1779,6 @@ on_identity_looked_up_to_ensure_credentials (GoaKerberosProvider *self,
                     (GAsyncReadyCallback)
                     on_identity_looked_up,
                     operation_result);
-
-  g_simple_async_result_complete_in_idle (operation_result);
-  g_object_unref (operation_result);
 }
 
 static void
