@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011 Red Hat, Inc.
+ * Copyright (C) 2011, 2012 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,7 +17,8 @@
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  *
- * Author: David Zeuthen <davidz@redhat.com>
+ * Authors: David Zeuthen <davidz@redhat.com>
+ *          Debarshi Ray <debarshir@gnome.org>
  */
 
 #if !defined (__GOA_BACKEND_INSIDE_GOA_BACKEND_H__) && !defined (GOA_BACKEND_COMPILATION)
@@ -49,6 +50,32 @@ typedef enum
   GOA_LOG_LEVEL_WARNING,
   GOA_LOG_LEVEL_ERROR
 } GoaLogLevel;
+
+/**
+ * GoaProviderGroup:
+ * @GOA_PROVIDER_GROUP_BRANDED: Providers with a well-known brand. For
+ *   example, Google and Facebook.
+ * @GOA_PROVIDER_GROUP_CONTACTS: Providers that offer address book services.
+ *   For example, CardDAV.
+ * @GOA_PROVIDER_GROUP_MAIL: Providers that offer email-like messaging
+ *   services. For example, IMAP and SMTP.
+ * @GOA_PROVIDER_GROUP_TICKETING: Providers with ticketing
+ *   capabilities. For example, Kerberos.
+ * @GOA_PROVIDER_GROUP_INVALID: Used for error handling. No provider
+ *   should belong to this group.
+ *
+ * An enum for specifying which group a provider belongs to. This is
+ * can be used to organize the providers while displaying them in an
+ * user interface.
+ */
+typedef enum
+{
+  GOA_PROVIDER_GROUP_BRANDED,
+  GOA_PROVIDER_GROUP_CONTACTS,
+  GOA_PROVIDER_GROUP_MAIL,
+  GOA_PROVIDER_GROUP_TICKETING,
+  GOA_PROVIDER_GROUP_INVALID
+} GoaProviderGroup;
 
 G_END_DECLS
 

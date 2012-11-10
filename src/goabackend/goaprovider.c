@@ -170,6 +170,28 @@ goa_provider_get_provider_icon_default (GoaProvider *provider,
   return ret;
 }
 
+/**
+ * goa_provider_get_provider_group:
+ * @provider: A #GoaProvider.
+ *
+ * Gets the group to which @provider belongs that is suitable for
+ * organizing the providers while displaying them in an user
+ * interface.
+ *
+ * This is a pure virtual method - a subclass must provide an
+ * implementation.
+ *
+ * Returns: A #GoaProviderGroup.
+ *
+ * Since: 3.8
+ */
+GoaProviderGroup
+goa_provider_get_provider_group (GoaProvider *provider)
+{
+  g_return_val_if_fail (GOA_IS_PROVIDER (provider), GOA_PROVIDER_GROUP_INVALID);
+  return GOA_PROVIDER_GET_CLASS (provider)->get_provider_group (provider);
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**

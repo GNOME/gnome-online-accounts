@@ -61,6 +61,7 @@ struct _GoaProvider
  * @get_provider_type: Virtual function for goa_provider_get_provider_type().
  * @get_provider_name: Virtual function for goa_provider_get_provider_name().
  * @get_provider_icon: Virtual function for goa_provider_get_provider_icon().
+ * @get_provider_group: Virtual function for goa_provider_get_provider_group().
  * @add_account: Virtual function for goa_provider_add_account().
  * @refresh_account: Virtual function for goa_provider_refresh_account().
  * @build_object: Virtual function for goa_provider_build_object().
@@ -111,6 +112,9 @@ struct _GoaProviderClass
                                        GtkGrid             *right);
   guint    (*get_credentials_generation) (GoaProvider   *provider);
 
+  /* pure virtual */
+  GoaProviderGroup (*get_provider_group) (GoaProvider   *provider);
+
   /*< private >*/
   /* Padding for future expansion */
   gpointer goa_reserved[32];
@@ -122,6 +126,7 @@ gchar       *goa_provider_get_provider_name         (GoaProvider         *provid
                                                      GoaObject           *object);
 GIcon       *goa_provider_get_provider_icon         (GoaProvider         *provider,
                                                      GoaObject           *object);
+GoaProviderGroup goa_provider_get_provider_group    (GoaProvider         *provider);
 GoaObject   *goa_provider_add_account               (GoaProvider         *provider,
                                                      GoaClient           *client,
                                                      GtkDialog           *dialog,
