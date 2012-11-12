@@ -1637,6 +1637,8 @@ start_over:
       goto start_over;
     }
 
+  goa_account_set_is_temporary (account, FALSE);
+
   gtk_widget_hide (GTK_WIDGET (dialog));
 
  out:
