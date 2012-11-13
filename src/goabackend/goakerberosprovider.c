@@ -726,7 +726,7 @@ get_ticket_sync (GoaKerberosProvider *self,
     }
 
   memset (&request, 0, sizeof (SignInRequest));
-  request.loop = g_main_loop_new (NULL, FALSE);
+  request.loop = g_main_loop_new (g_main_context_get_thread_default (), FALSE);
   request.error = NULL;
 
   sign_in_identity (self,
