@@ -760,11 +760,11 @@ notify_is_temporary_cb (GObject *object, GParamSpec *pspec, gpointer user_data)
   GoaAccount *account;
   gboolean is_temporary;
 
-  /* Toggle IsTemporary */
-  goa_util_account_notify_property_cb (object, pspec, "IsTemporary");
-
   account = GOA_ACCOUNT (object);
   g_object_get (account, "is-temporary", &is_temporary, NULL);
+
+  /* Toggle IsTemporary */
+  goa_utils_keyfile_set_boolean (account, "IsTemporary", is_temporary);
 
   /* Set/unset SessionId */
   if (is_temporary)
