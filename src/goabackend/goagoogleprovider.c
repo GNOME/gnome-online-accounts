@@ -83,6 +83,12 @@ get_provider_name (GoaProvider *_provider,
   return g_strdup (_("Google"));
 }
 
+static GoaProviderGroup
+get_provider_group (GoaProvider *_provider)
+{
+  return GOA_PROVIDER_GROUP_BRANDED;
+}
+
 static const gchar *
 get_authorization_uri (GoaOAuth2Provider *provider)
 {
@@ -716,6 +722,7 @@ goa_google_provider_class_init (GoaGoogleProviderClass *klass)
   provider_class = GOA_PROVIDER_CLASS (klass);
   provider_class->get_provider_type          = get_provider_type;
   provider_class->get_provider_name          = get_provider_name;
+  provider_class->get_provider_group         = get_provider_group;
   provider_class->build_object               = build_object;
   provider_class->ensure_credentials_sync    = ensure_credentials_sync;
   provider_class->show_account               = show_account;
