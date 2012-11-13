@@ -83,6 +83,12 @@ get_provider_name (GoaProvider *provider, GoaObject *object)
   return g_strdup(_("ownCloud"));
 }
 
+static GoaProviderGroup
+get_provider_group (GoaProvider *_provider)
+{
+  return GOA_PROVIDER_GROUP_BRANDED;
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean on_handle_get_password (GoaPasswordBased      *interface,
@@ -965,6 +971,7 @@ goa_owncloud_provider_class_init (GoaOwncloudProviderClass *klass)
   provider_class = GOA_PROVIDER_CLASS (klass);
   provider_class->get_provider_type          = get_provider_type;
   provider_class->get_provider_name          = get_provider_name;
+  provider_class->get_provider_group         = get_provider_group;
   provider_class->add_account                = add_account;
   provider_class->refresh_account            = refresh_account;
   provider_class->build_object               = build_object;
