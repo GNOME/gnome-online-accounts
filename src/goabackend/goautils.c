@@ -344,6 +344,56 @@ goa_utils_keyfile_remove_key (GoaAccount *account, const gchar *key)
 }
 
 void
+goa_utils_keyfile_set_boolean (GoaAccount *account, const gchar *key, gboolean value)
+{
+  GError *error;
+  GKeyFile *key_file;
+  gchar *contents;
+  gchar *group;
+  gchar *path;
+  gsize length;
+
+  contents = NULL;
+
+  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
+  group = g_strdup_printf ("Account %s", goa_account_get_id (account));
+
+  key_file = g_key_file_new ();
+  error = NULL;
+  if (!g_key_file_load_from_file (key_file,
+                                  path,
+                                  G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS,
+                                  &error))
+    {
+      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
+                   path,
+                   error->message,
+                   g_quark_to_string (error->domain),
+                   error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+  g_key_file_set_boolean (key_file, group, key, value);
+  contents = g_key_file_to_data (key_file, &length, NULL);
+
+  error = NULL;
+  if (!g_file_set_contents (path, contents, length, &error))
+    {
+      g_prefix_error (&error, "Error writing key-value-file %s: ", path);
+      goa_warning ("%s (%s, %d)", error->message, g_quark_to_string (error->domain), error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+ out:
+  g_free (contents);
+  g_key_file_free (key_file);
+  g_free (group);
+  g_free (path);
+}
+
+void
 goa_utils_keyfile_set_string (GoaAccount *account, const gchar *key, const gchar *value)
 {
   GError *error;

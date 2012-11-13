@@ -67,6 +67,8 @@ gboolean         goa_utils_store_credentials_for_object_sync (GoaProvider    *pr
 
 void             goa_utils_keyfile_remove_key (GoaAccount *account, const gchar *key);
 
+void             goa_utils_keyfile_set_boolean (GoaAccount *account, const gchar *key, gboolean value);
+
 void             goa_utils_keyfile_set_string (GoaAccount *account, const gchar *key, const gchar *value);
 
 G_END_DECLS
