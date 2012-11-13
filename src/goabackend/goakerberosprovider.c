@@ -86,6 +86,12 @@ get_provider_name (GoaProvider *provider, GoaObject *object)
   return g_strdup(_("Enterprise Login (Kerberos)"));
 }
 
+static GoaProviderGroup
+get_provider_group (GoaProvider *_provider)
+{
+  return GOA_PROVIDER_GROUP_TICKETING;
+}
+
 typedef struct
 {
   GtkDialog *dialog;
@@ -1881,6 +1887,7 @@ goa_kerberos_provider_class_init (GoaKerberosProviderClass *kerberos_class)
   provider_class = GOA_PROVIDER_CLASS (kerberos_class);
   provider_class->get_provider_type          = get_provider_type;
   provider_class->get_provider_name          = get_provider_name;
+  provider_class->get_provider_group         = get_provider_group;
   provider_class->build_object               = build_object;
   provider_class->add_account                = add_account;
   provider_class->refresh_account            = refresh_account;
