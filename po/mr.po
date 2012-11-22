@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-10-30 15:39+0000\n"
-"PO-Revision-Date: 2012-10-31 10:22+0530\n"
+"POT-Creation-Date: 2012-11-21 05:55+0000\n"
+"PO-Revision-Date: 2012-11-22 13:06+0530\n"
 "Last-Translator: Sandeep Shedmake <sshedmak@redhat.com>\n"
 "Language-Team: Marathi <maajhe-sanganak@freelists.org>\n"
 "Language: mr\n"
@@ -45,7 +45,7 @@ msgid "ProviderType property is not set for account"
 msgstr "ProviderType गुणधर्म खात्याकरीता सेट केले नाही"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:204
+#: ../src/goabackend/goaewsclient.c:204 ../src/goabackend/goahttpclient.c:147
 #, c-format
 msgid "Code: %u - Unexpected response from server"
 msgstr "कोड: %u - सर्व्हरकडून अनपेक्षित प्रतिसाद प्राप्त झाले"
@@ -85,80 +85,94 @@ msgid "Microsoft Exchange"
 msgstr "माइक्रोसॉक्ट एक्सचेंज"
 
 #: ../src/goabackend/goaexchangeprovider.c:279
+#: ../src/goabackend/goagoogleprovider.c:651
 #: ../src/goabackend/goaoauth2provider.c:1443
-#: ../src/goabackend/goaoauthprovider.c:1466
+#: ../src/goabackend/goaoauthprovider.c:1545
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "किरिंग (%s, %d) मध्ये श्रेय आढळले नाही: "
 
 #. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:295
-#: ../src/goabackend/goaexchangeprovider.c:923
+#: ../src/goabackend/goaexchangeprovider.c:297
+#: ../src/goabackend/goaexchangeprovider.c:943
+#: ../src/goabackend/goagoogleprovider.c:670
+#: ../src/goabackend/goagoogleprovider.c:849
 #, c-format
 msgid "Did not find password with username `%s' in credentials"
 msgstr "श्रेयमध्ये वापरकर्तानाव `%s' सह पासवर्ड आढळले नाही"
 
-#: ../src/goabackend/goaexchangeprovider.c:486
+#. Translators: the first %s is the username
+#. * (eg., debarshi.ray@gmail.com or rishi), and the
+#. * (%s, %d) is the error domain and code.
+#.
+#: ../src/goabackend/goaexchangeprovider.c:323
+#: ../src/goabackend/goagoogleprovider.c:692
+#, c-format
+#| msgid "Did not find password with username `%s' in credentials"
+msgid "Invalid password with username `%s' (%s, %d): "
+msgstr "वापरकर्तानाव `%s' (%s, %d) सह अवैध पासवर्ड आढळले: "
+
+#: ../src/goabackend/goaexchangeprovider.c:506
 msgid "_E-mail"
 msgstr "ईमेल (_E)"
 
-#: ../src/goabackend/goaexchangeprovider.c:487
+#: ../src/goabackend/goaexchangeprovider.c:507
 msgid "_Password"
 msgstr "पासवर्ड (_P)"
 
-#: ../src/goabackend/goaexchangeprovider.c:490
+#: ../src/goabackend/goaexchangeprovider.c:510
 msgid "_Custom"
 msgstr "पसंतीचे (_C)"
 
-#: ../src/goabackend/goaexchangeprovider.c:509
+#: ../src/goabackend/goaexchangeprovider.c:529
 #: ../src/goabackend/goakerberosprovider.c:1117
 msgid "User_name"
 msgstr "वापरकर्तानाव (_n)"
 
-#: ../src/goabackend/goaexchangeprovider.c:510
+#: ../src/goabackend/goaexchangeprovider.c:530
 msgid "_Server"
 msgstr "सर्व्हर (_S)"
 
-#: ../src/goabackend/goaexchangeprovider.c:594
-#: ../src/goabackend/goaexchangeprovider.c:760
+#: ../src/goabackend/goaexchangeprovider.c:614
+#: ../src/goabackend/goaexchangeprovider.c:780
 #: ../src/goabackend/goakerberosprovider.c:1510
 #: ../src/goabackend/goaoauth2provider.c:986
-#: ../src/goabackend/goaoauthprovider.c:979
+#: ../src/goabackend/goaoauthprovider.c:1041
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "संवाद खंडीत केले"
 
-#: ../src/goabackend/goaexchangeprovider.c:630
-#: ../src/goabackend/goaexchangeprovider.c:787
+#: ../src/goabackend/goaexchangeprovider.c:650
+#: ../src/goabackend/goaexchangeprovider.c:807
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "माइक्रोसॉक्ट एक्सचेंज सर्व्हरशी जोडणी करतेवेळी त्रुटी"
 
-#: ../src/goabackend/goaexchangeprovider.c:637
-#: ../src/goabackend/goaexchangeprovider.c:795
+#: ../src/goabackend/goaexchangeprovider.c:657
+#: ../src/goabackend/goaexchangeprovider.c:815
 #: ../src/goabackend/goakerberosprovider.c:1616
 msgid "_Try Again"
 msgstr "पुनः प्रयत्न करा (_T)"
 
-#: ../src/goabackend/goaexchangeprovider.c:846
+#: ../src/goabackend/goaexchangeprovider.c:866
 #: ../src/goabackend/goafacebookprovider.c:389
-#: ../src/goabackend/goagoogleprovider.c:570
-#: ../src/goabackend/goakerberosprovider.c:1685
+#: ../src/goabackend/goagoogleprovider.c:729
+#: ../src/goabackend/goakerberosprovider.c:1687
 #: ../src/goabackend/goawindowsliveprovider.c:403
 msgid "Use for"
 msgstr "याकरीता वापर करा"
 
-#: ../src/goabackend/goaexchangeprovider.c:848
-#: ../src/goabackend/goagoogleprovider.c:572
+#: ../src/goabackend/goaexchangeprovider.c:868
+#: ../src/goabackend/goagoogleprovider.c:731
 msgid "_Mail"
 msgstr "मेल (_M)"
 
-#: ../src/goabackend/goaexchangeprovider.c:853
-#: ../src/goabackend/goagoogleprovider.c:577
+#: ../src/goabackend/goaexchangeprovider.c:873
+#: ../src/goabackend/goagoogleprovider.c:736
 msgid "Cale_ndar"
 msgstr "दिनदर्शिका (_n)"
 
-#: ../src/goabackend/goaexchangeprovider.c:858
-#: ../src/goabackend/goagoogleprovider.c:582
+#: ../src/goabackend/goaexchangeprovider.c:878
+#: ../src/goabackend/goagoogleprovider.c:741
 msgid "_Contacts"
 msgstr "संपर्क (_C)"
 
@@ -167,7 +181,7 @@ msgid "Facebook"
 msgstr "फेसबूक"
 
 #: ../src/goabackend/goafacebookprovider.c:193
-#: ../src/goabackend/goagoogleprovider.c:212
+#: ../src/goabackend/goagoogleprovider.c:216
 #: ../src/goabackend/goawindowsliveprovider.c:176
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
@@ -175,7 +189,7 @@ msgstr ""
 "guid करीता विनंती करतेवेळी स्थिती 200 अपेक्षित, त्याऐवजी %d (%s) स्थिती आढळली"
 
 #: ../src/goabackend/goafacebookprovider.c:205
-#: ../src/goabackend/goagoogleprovider.c:224
+#: ../src/goabackend/goagoogleprovider.c:228
 #: ../src/goabackend/goaoauth2provider.c:586
 #: ../src/goabackend/goawindowsliveprovider.c:188
 msgid "Error parsing response as JSON: "
@@ -188,31 +202,31 @@ msgid "Didn't find id member in JSON data"
 msgstr "JSON डाटामध्ये id सदस्य शोधणे अशक्य"
 
 #: ../src/goabackend/goafacebookprovider.c:225
-#: ../src/goabackend/goagoogleprovider.c:245
+#: ../src/goabackend/goagoogleprovider.c:249
 #, c-format
 msgid "Didn't find email member in JSON data"
 msgstr "JSON डाटामध्ये ईमेल सदस्य आढळले नाही"
 
 #: ../src/goabackend/goafacebookprovider.c:391
-#: ../src/goabackend/goagoogleprovider.c:587
+#: ../src/goabackend/goagoogleprovider.c:746
 #: ../src/goabackend/goawindowsliveprovider.c:405
 msgid "C_hat"
 msgstr "गप्पा (_h)"
 
-#: ../src/goabackend/goagoogleprovider.c:78
+#: ../src/goabackend/goagoogleprovider.c:82
 msgid "Google"
 msgstr "गूगल"
 
-#: ../src/goabackend/goagoogleprovider.c:235
+#: ../src/goabackend/goagoogleprovider.c:239
 #, c-format
 msgid "Didn't find data member in JSON data"
 msgstr "JSON डाटामध्ये डाटा सदस्य आढळले नाही"
 
-#: ../src/goabackend/goagoogleprovider.c:341
+#: ../src/goabackend/goagoogleprovider.c:380
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "प्रणालीची वेळ अवैध आहे. दिनांक व वेळ सेटिंग्स् बदला."
 
-#: ../src/goabackend/goagoogleprovider.c:592
+#: ../src/goabackend/goagoogleprovider.c:751
 #: ../src/goabackend/goawindowsliveprovider.c:410
 msgid "_Documents"
 msgstr "दस्तऐवज (_D)"
@@ -265,13 +279,13 @@ msgstr "डोमेन वैध नाही"
 msgid "Error connecting to enterprise identity server"
 msgstr "एंटरप्राइज आइडेंटिटि सर्व्हरशी जोडणी करतेवेळी त्रुटी"
 
-#: ../src/goabackend/goakerberosprovider.c:1687
+#: ../src/goabackend/goakerberosprovider.c:1689
 msgid "Network _Resources"
 msgstr "नेटवर्क स्रोत (_R)"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauth2provider.c:543
-#: ../src/goabackend/goaoauthprovider.c:557
+#: ../src/goabackend/goaoauthprovider.c:586
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -303,17 +317,17 @@ msgid ""
 msgstr "<a href=\"%s\">ऑथराइजेशन पृष्ठ</a>पासून प्राप्त ऑथराइजेशन कोड चिकटवा:"
 
 #: ../src/goabackend/goaoauth2provider.c:1012
-#: ../src/goabackend/goaoauthprovider.c:1010
+#: ../src/goabackend/goaoauthprovider.c:1072
 msgid "Error getting an Access Token: "
 msgstr "ॲक्सेस टोकन प्राप्त करतेवेळी त्रुटी: "
 
 #: ../src/goabackend/goaoauth2provider.c:1027
-#: ../src/goabackend/goaoauthprovider.c:1023
+#: ../src/goabackend/goaoauthprovider.c:1085
 msgid "Error getting identity: "
 msgstr "ओळख प्राप्त करतेवेळी त्रुटी: "
 
 #: ../src/goabackend/goaoauth2provider.c:1304
-#: ../src/goabackend/goaoauthprovider.c:1316
+#: ../src/goabackend/goaoauthprovider.c:1390
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "%s म्हणून प्रवेश करण्यास विनंती केली, परंतु %s म्हणून प्रवेश केला"
@@ -324,28 +338,28 @@ msgid "Credentials do not contain access_token"
 msgstr "श्रेयमध्ये access_token समाविष्टीत नाही"
 
 #: ../src/goabackend/goaoauth2provider.c:1509
-#: ../src/goabackend/goaoauthprovider.c:1539
+#: ../src/goabackend/goaoauthprovider.c:1620
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "ॲक्सेस् टोकन (%s, %d) पुनः ताजे करण्यास अपयशी: "
 
 #: ../src/goabackend/goaoauth2provider.c:1544
-#: ../src/goabackend/goaoauthprovider.c:1569
+#: ../src/goabackend/goaoauthprovider.c:1652
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "किरिंग (%s, %d) मध्ये श्रेय साठवतेवेळी त्रुटी: "
 
-#: ../src/goabackend/goaoauthprovider.c:580
+#: ../src/goabackend/goaoauthprovider.c:609
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "प्रतिसादमध्ये access_token किंवा access_token_secret शीर्षक आढळले नाही"
 
-#: ../src/goabackend/goaoauthprovider.c:849
+#: ../src/goabackend/goaoauthprovider.c:911
 msgid "Error getting a Request Token: "
 msgstr "रिक्वेस्ट टोकन प्राप्त करतेवेळी त्रुटी: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:882
+#: ../src/goabackend/goaoauthprovider.c:944
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -353,24 +367,24 @@ msgstr ""
 "रिक्वेस्ट टोकन प्राप्त करतेवेळी स्थिती 200 अपेक्षित, त्याऐवजी %d (%s) स्थिती "
 "आढळली"
 
-#: ../src/goabackend/goaoauthprovider.c:899
+#: ../src/goabackend/goaoauthprovider.c:961
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr ""
 "रेसपाँसमध्ये request_token किंवा request_token_secret शीर्षके आढळले नाही"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:916
+#: ../src/goabackend/goaoauthprovider.c:978
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "<a href=\"%s\">ऑथराइजेशन पृष्ठ</a> पासून प्राप्त टोकन चिकटवा:"
 
-#: ../src/goabackend/goaoauthprovider.c:1495
+#: ../src/goabackend/goaoauthprovider.c:1576
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "श्रेयमध्ये access_token किंवा access_token_secret समाविष्टीत नाही"
 
-#: ../src/goabackend/goaprovider.c:548
+#: ../src/goabackend/goaprovider.c:549
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync प्रकार %s करीता लागू केले नाही"
