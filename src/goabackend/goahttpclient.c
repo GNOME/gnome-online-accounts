@@ -160,6 +160,20 @@ http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer 
   http_client_check_data_free (data);
 }
 
+static void
+http_client_log_printer (SoupLogger         *logger,
+                         SoupLoggerLogLevel  level,
+                         gchar               direction,
+                         const gchar        *data,
+                         gpointer            user_data)
+{
+  gchar *message;
+
+  message = g_strdup_printf ("%c %s", direction, data);
+  g_log_default_handler ("goa", G_LOG_LEVEL_DEBUG, message, NULL);
+  g_free (message);
+}
+
 void
 goa_http_client_check (GoaHttpClient       *client,
                        const gchar         *uri,
@@ -171,6 +185,7 @@ goa_http_client_check (GoaHttpClient       *client,
 {
   CheckData *data;
   CheckAuthData *auth;
+  SoupLogger *logger;
 
   g_return_if_fail (GOA_IS_HTTP_CLIENT (client));
   g_return_if_fail (uri != NULL || uri[0] != '\0');
@@ -182,6 +197,10 @@ goa_http_client_check (GoaHttpClient       *client,
   data->res = g_simple_async_result_new (G_OBJECT (client), callback, user_data, goa_http_client_check);
   data->session = soup_session_async_new_with_options (SOUP_SESSION_USE_THREAD_CONTEXT, TRUE,
                                                        NULL);
+  logger = soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
+  soup_logger_set_printer (logger, http_client_log_printer, NULL, NULL);
+  soup_session_add_feature (data->session, SOUP_SESSION_FEATURE (logger));
+  g_object_unref (logger);
 
   data->msg = soup_message_new (SOUP_METHOD_GET, uri);
   soup_message_headers_append (data->msg->request_headers, "Connection", "close");
