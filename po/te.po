@@ -12,15 +12,15 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts gnome-3-2\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-09-14 22:13+0000\n"
-"PO-Revision-Date: 2012-09-21 22:09+0530\n"
+"POT-Creation-Date: 2012-11-26 09:41+0000\n"
+"PO-Revision-Date: 2012-11-28 16:30+0530\n"
 "Last-Translator: Krishnababu Krothapalli <kkrothap@redhat.com>\n"
 "Language-Team: Telugu <Fedora-trans-te@redhat.com>\n"
 "Language: te\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.4\n"
+"X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
 #. shut up -Wunused-but-set-variable
@@ -48,7 +48,7 @@ msgid "ProviderType property is not set for account"
 msgstr "సమకూర్పరి రకపు లక్షణం ఖాతా కొరకు అమర్చబడలేదు"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:204
+#: ../src/goabackend/goaewsclient.c:204 ../src/goabackend/goahttpclient.c:147
 #, c-format
 msgid "Code: %u - Unexpected response from server"
 msgstr "సంజ్ఞ: %u - సేవకం నుండి ఊహించని స్పందన"
@@ -88,89 +88,106 @@ msgid "Microsoft Exchange"
 msgstr "మైక్రోసాఫ్ట్ ఎక్సేంజ్"
 
 #: ../src/goabackend/goaexchangeprovider.c:279
-#: ../src/goabackend/goaoauth2provider.c:1392
-#: ../src/goabackend/goaoauthprovider.c:1415
+#: ../src/goabackend/goagoogleprovider.c:651
+#: ../src/goabackend/goaoauth2provider.c:1443
+#: ../src/goabackend/goaoauthprovider.c:1545
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "కీ రింగ్ లో అధికార పత్రాలు దొరుకుటలేదు(%s, %d):"
 
 #. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:295
-#: ../src/goabackend/goaexchangeprovider.c:923
+#: ../src/goabackend/goaexchangeprovider.c:297
+#: ../src/goabackend/goaexchangeprovider.c:943
+#: ../src/goabackend/goagoogleprovider.c:670
+#: ../src/goabackend/goagoogleprovider.c:849
 #, c-format
 msgid "Did not find password with username `%s' in credentials"
 msgstr "`%s' వాడుకరిపేరుకు సంబంధించిన సంకేతపదమేదీ యోగ్యతాపత్రంలో కనపడలేదు"
 
-#: ../src/goabackend/goaexchangeprovider.c:486
+#. Translators: the first %s is the username
+#. * (eg., debarshi.ray@gmail.com or rishi), and the
+#. * (%s, %d) is the error domain and code.
+#.
+#: ../src/goabackend/goaexchangeprovider.c:323
+#: ../src/goabackend/goagoogleprovider.c:692
+#, c-format
+#| msgid "Did not find password with username `%s' in credentials"
+msgid "Invalid password with username `%s' (%s, %d): "
+msgstr "వాడుకరిపేరు `%s' (%s, %d) తో చెల్లని సంకేతపదం: "
+
+#: ../src/goabackend/goaexchangeprovider.c:506
 msgid "_E-mail"
 msgstr "ఈమెయిల్ (_E)"
 
-#: ../src/goabackend/goaexchangeprovider.c:487
+#: ../src/goabackend/goaexchangeprovider.c:507
 msgid "_Password"
 msgstr "సంకేతపదం (_P)"
 
-#: ../src/goabackend/goaexchangeprovider.c:490
+#: ../src/goabackend/goaexchangeprovider.c:510
 msgid "_Custom"
 msgstr "అనురూపితం (_C)"
 
-#: ../src/goabackend/goaexchangeprovider.c:509
-#: ../src/goabackend/goakerberosprovider.c:1026
+#: ../src/goabackend/goaexchangeprovider.c:529
+#: ../src/goabackend/goakerberosprovider.c:1117
 msgid "User_name"
 msgstr "వాడుకరి పేరు (_n)"
 
-#: ../src/goabackend/goaexchangeprovider.c:510
+#: ../src/goabackend/goaexchangeprovider.c:530
 msgid "_Server"
 msgstr "సేవకం (_S)"
 
-#: ../src/goabackend/goaexchangeprovider.c:594
-#: ../src/goabackend/goaexchangeprovider.c:760
-#: ../src/goabackend/goakerberosprovider.c:1337
-#: ../src/goabackend/goaoauth2provider.c:952
-#: ../src/goabackend/goaoauthprovider.c:945
+#: ../src/goabackend/goaexchangeprovider.c:614
+#: ../src/goabackend/goaexchangeprovider.c:780
+#: ../src/goabackend/goakerberosprovider.c:1510
+#: ../src/goabackend/goaoauth2provider.c:986
+#: ../src/goabackend/goaoauthprovider.c:1041
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "సంవాదము తొలగించబడింది"
 
-#: ../src/goabackend/goaexchangeprovider.c:630
-#: ../src/goabackend/goaexchangeprovider.c:787
+#: ../src/goabackend/goaexchangeprovider.c:650
+#: ../src/goabackend/goaexchangeprovider.c:807
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "మైక్రోసాఫ్ట్ ఎక్సేంజ్ సేవకానికి అనుసంధానించుటలో దోషం"
 
-#: ../src/goabackend/goaexchangeprovider.c:637
-#: ../src/goabackend/goaexchangeprovider.c:795
-#: ../src/goabackend/goakerberosprovider.c:1417
+#: ../src/goabackend/goaexchangeprovider.c:657
+#: ../src/goabackend/goaexchangeprovider.c:815
+#: ../src/goabackend/goakerberosprovider.c:1616
 msgid "_Try Again"
 msgstr "మరలా ప్రయత్నించు (_T)"
 
-#: ../src/goabackend/goaexchangeprovider.c:846
-#: ../src/goabackend/goafacebookprovider.c:361
-#: ../src/goabackend/goagoogleprovider.c:535
-#: ../src/goabackend/goakerberosprovider.c:1475
-#: ../src/goabackend/goawindowsliveprovider.c:370
+#: ../src/goabackend/goaexchangeprovider.c:866
+#: ../src/goabackend/goafacebookprovider.c:389
+#: ../src/goabackend/goagoogleprovider.c:729
+#: ../src/goabackend/goakerberosprovider.c:1687
+#: ../src/goabackend/goawindowsliveprovider.c:403
 msgid "Use for"
 msgstr "దీనికి వాడు"
 
-#: ../src/goabackend/goaexchangeprovider.c:848
-#: ../src/goabackend/goagoogleprovider.c:537
-msgid "Mail"
-msgstr "మెయిల్"
+#: ../src/goabackend/goaexchangeprovider.c:868
+#: ../src/goabackend/goagoogleprovider.c:731
+#| msgid "Mail"
+msgid "_Mail"
+msgstr "మెయిల్ (_M)"
 
-#: ../src/goabackend/goaexchangeprovider.c:853
-#: ../src/goabackend/goagoogleprovider.c:542
-msgid "Calendar"
-msgstr "క్యాలెండర్"
+#: ../src/goabackend/goaexchangeprovider.c:873
+#: ../src/goabackend/goagoogleprovider.c:736
+#| msgid "Calendar"
+msgid "Cale_ndar"
+msgstr "క్యాలెండర్ (_n)"
 
-#: ../src/goabackend/goaexchangeprovider.c:858
-#: ../src/goabackend/goagoogleprovider.c:547
-msgid "Contacts"
-msgstr "పరిచయాలు"
+#: ../src/goabackend/goaexchangeprovider.c:878
+#: ../src/goabackend/goagoogleprovider.c:741
+#| msgid "Contacts"
+msgid "_Contacts"
+msgstr "పరిచయాలు (_C)"
 
 #: ../src/goabackend/goafacebookprovider.c:79
 msgid "Facebook"
 msgstr "ఫేస్‌బుక్"
 
 #: ../src/goabackend/goafacebookprovider.c:193
-#: ../src/goabackend/goagoogleprovider.c:212
+#: ../src/goabackend/goagoogleprovider.c:216
 #: ../src/goabackend/goawindowsliveprovider.c:176
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
@@ -179,8 +196,8 @@ msgstr ""
 "వచింది "
 
 #: ../src/goabackend/goafacebookprovider.c:205
-#: ../src/goabackend/goagoogleprovider.c:224
-#: ../src/goabackend/goaoauth2provider.c:566
+#: ../src/goabackend/goagoogleprovider.c:228
+#: ../src/goabackend/goaoauth2provider.c:586
 #: ../src/goabackend/goawindowsliveprovider.c:188
 msgid "Error parsing response as JSON: "
 msgstr "JSON అను జవాబును పార్స్ చేయుటలో దోషం:"
@@ -192,87 +209,92 @@ msgid "Didn't find id member in JSON data"
 msgstr "JSON దత్తాంశంలో id మెంబరు కనుగొనలేదు"
 
 #: ../src/goabackend/goafacebookprovider.c:225
-#: ../src/goabackend/goagoogleprovider.c:245
+#: ../src/goabackend/goagoogleprovider.c:249
 #, c-format
 msgid "Didn't find email member in JSON data"
 msgstr "JSON దత్తాంశంలో ఈమెయిల్ సభ్యున్ని కనుగొనలేదు"
 
-#: ../src/goabackend/goafacebookprovider.c:363
-#: ../src/goabackend/goagoogleprovider.c:552
-#: ../src/goabackend/goawindowsliveprovider.c:372
-msgid "Chat"
-msgstr "మాటామంతి"
+#: ../src/goabackend/goafacebookprovider.c:391
+#: ../src/goabackend/goagoogleprovider.c:746
+#: ../src/goabackend/goawindowsliveprovider.c:405
+msgid "C_hat"
+msgstr "సంభాషణ (_h)"
 
-#: ../src/goabackend/goagoogleprovider.c:78
+#: ../src/goabackend/goagoogleprovider.c:82
 msgid "Google"
 msgstr "గూగుల్"
 
-#: ../src/goabackend/goagoogleprovider.c:235
+#: ../src/goabackend/goagoogleprovider.c:239
 #, c-format
 msgid "Didn't find data member in JSON data"
 msgstr "JSON దత్తాంశం లో మెంబరు అను  దత్తాంశం  కనుగొనలేదు"
 
-#: ../src/goabackend/goagoogleprovider.c:306
+#: ../src/goabackend/goagoogleprovider.c:380
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "మీ వ్యవస్థ సమయం సరికాదు. దయచేసి తేదీ మరియు సమయ అమరికలను సరిచూసుకోండి."
 
-#: ../src/goabackend/goagoogleprovider.c:557
-#: ../src/goabackend/goawindowsliveprovider.c:377
-msgid "Documents"
-msgstr "పత్రాలు"
+#: ../src/goabackend/goagoogleprovider.c:751
+#: ../src/goabackend/goawindowsliveprovider.c:410
+#| msgid "Documents"
+msgid "_Documents"
+msgstr "పత్రాలు (_D)"
 
-#: ../src/goabackend/goakerberosprovider.c:84
+#: ../src/goabackend/goakerberosprovider.c:86
 msgid "Enterprise Login (Kerberos)"
 msgstr "ఎంటర్‌ప్రైజ్ లాగిన్ (కెర్బరోస్)"
 
-#: ../src/goabackend/goakerberosprovider.c:375
+#: ../src/goabackend/goakerberosprovider.c:441
 msgid "Identity service returned invalid key"
 msgstr "గుర్తింపు సేవ చెల్లని కీను తిప్పియిచ్చింది"
 
-#: ../src/goabackend/goakerberosprovider.c:641
+#: ../src/goabackend/goakerberosprovider.c:707
 #, c-format
 msgid "Could not find saved credentials for principal `%s' in keyring"
 msgstr "ప్రిన్సిపల్ `%s' కొరకు కీరింగ్ నందు దాచిన క్రెడెన్షియల్స్ కనుగొనలేదు"
 
-#: ../src/goabackend/goakerberosprovider.c:651
+#: ../src/goabackend/goakerberosprovider.c:717
 #, c-format
-#| msgid "Did not find password with username `%s' in credentials"
 msgid "Did not find password for principal `%s' in credentials"
 msgstr "క్రెడెన్షియల్స్ నందు ప్రిన్సిపల్ `%s' కొరకు సంకేతపదం కనుగొనలేదు"
 
-#: ../src/goabackend/goakerberosprovider.c:1019
+#: ../src/goabackend/goakerberosprovider.c:1109
 msgid "_Domain"
 msgstr "డొమైన్ (_D)"
 
-#: ../src/goabackend/goakerberosprovider.c:1020
+#: ../src/goabackend/goakerberosprovider.c:1110
 msgid "Enterprise domain or realm name"
 msgstr "ఎంటర్‌ప్రైజ్ డొమైన్ లేదా రియాల్మ్ పేరు"
 
-#: ../src/goabackend/goakerberosprovider.c:1235
-#: ../src/goaidentity/goaidentityservice.c:1891
+#: ../src/goabackend/goakerberosprovider.c:1321
+#: ../src/goaidentity/goaidentityservice.c:1082
 msgid "Log In to Realm"
 msgstr "రియాల్మ్ లాగిన్"
 
-#: ../src/goabackend/goakerberosprovider.c:1236
+#: ../src/goabackend/goakerberosprovider.c:1322
 msgid "Please enter your password below."
 msgstr "దయచేసి మీ సంకేతపదంను కిందన ప్రవేశపెట్టుము."
 
-#: ../src/goabackend/goakerberosprovider.c:1237
+#: ../src/goabackend/goakerberosprovider.c:1323
 msgid "Remember this password"
 msgstr "ఈ సంకేతపదంను గుర్తుంచుకొనుము"
 
-#: ../src/goabackend/goakerberosprovider.c:1412
-#| msgid "Error connecting to Microsoft Exchange server"
+#: ../src/goabackend/goakerberosprovider.c:1462
+#, c-format
+msgid "The domain is not valid"
+msgstr "డొమైన్ చెల్లునది కాదు"
+
+#: ../src/goabackend/goakerberosprovider.c:1611
 msgid "Error connecting to enterprise identity server"
 msgstr "ఎంటర్‌ప్రైజ్ గుర్తింపు సేవికకు అనుసంధానించుటలో దోషం"
 
-#: ../src/goabackend/goakerberosprovider.c:1477
-msgid "Network Resources"
-msgstr "నెట్వర్కు వనరులు"
+#: ../src/goabackend/goakerberosprovider.c:1689
+#| msgid "Network Resources"
+msgid "Network _Resources"
+msgstr "నెట్వర్కు వనరులు (_R)"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:523
-#: ../src/goabackend/goaoauthprovider.c:537
+#: ../src/goabackend/goaoauth2provider.c:543
+#: ../src/goabackend/goaoauthprovider.c:586
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -280,76 +302,76 @@ msgstr ""
 "ప్రవేశించుటటోకన్ కొరకు అడిగినప్పుడు ‌‌200సుస్థితిని ఊహించారు, కానీ దాని బదులు "
 "%d(%s) వచింది "
 
-#: ../src/goabackend/goaoauth2provider.c:543
+#: ../src/goabackend/goaoauth2provider.c:563
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "JSON దత్తాంశం లో కాని దత్తంశం లో ప్రవేశించుటకు టోకన్  కనుగొనలేదు"
 
-#: ../src/goabackend/goaoauth2provider.c:577
+#: ../src/goabackend/goaoauth2provider.c:597
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "JSON దత్తాంశం   లో ప్రవేశించుటకు టోకన్  కనుగొనలేదు"
 
-#: ../src/goabackend/goaoauth2provider.c:746
-#: ../src/goabackend/goaoauth2provider.c:785
+#: ../src/goabackend/goaoauth2provider.c:776
+#: ../src/goabackend/goaoauth2provider.c:815
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "అధికారిక జవాబు  \"%s\""
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:886
+#: ../src/goabackend/goaoauth2provider.c:920
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
 "page</a>:"
 msgstr "<a href=\"%s\"> అధికారిక పుట నుంచి పొందిన అధికార కోడ్‌ను అతికించు"
 
-#: ../src/goabackend/goaoauth2provider.c:978
-#: ../src/goabackend/goaoauthprovider.c:976
+#: ../src/goabackend/goaoauth2provider.c:1012
+#: ../src/goabackend/goaoauthprovider.c:1072
 msgid "Error getting an Access Token: "
 msgstr "ప్రవేశించుటకు టోకన్  పొందుటలో దోషం:"
 
-#: ../src/goabackend/goaoauth2provider.c:993
-#: ../src/goabackend/goaoauthprovider.c:989
+#: ../src/goabackend/goaoauth2provider.c:1027
+#: ../src/goabackend/goaoauthprovider.c:1085
 msgid "Error getting identity: "
 msgstr "గుర్తింపు పోందుటలో దోషం:"
 
-#: ../src/goabackend/goaoauth2provider.c:1253
-#: ../src/goabackend/goaoauthprovider.c:1265
+#: ../src/goabackend/goaoauth2provider.c:1304
+#: ../src/goabackend/goaoauthprovider.c:1390
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "%s లా ప్రవేశించమని అడిగాం , కానీ  %s గా లాగిన్ అయింది"
 
-#: ../src/goabackend/goaoauth2provider.c:1419
+#: ../src/goabackend/goaoauth2provider.c:1470
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "అధికార పత్రాలు  ప్రవేశించుటకు టోకన్  లో లేదు"
 
-#: ../src/goabackend/goaoauth2provider.c:1458
-#: ../src/goabackend/goaoauthprovider.c:1488
+#: ../src/goabackend/goaoauth2provider.c:1509
+#: ../src/goabackend/goaoauthprovider.c:1620
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "ప్రవేశించుటకు టోకన్ పునర్వికాసించుటలలో దోషం (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1493
-#: ../src/goabackend/goaoauthprovider.c:1518
+#: ../src/goabackend/goaoauth2provider.c:1544
+#: ../src/goabackend/goaoauthprovider.c:1652
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "కీరింగ్ లో అధికార పత్రాలను దాచుటలో దోషం(%s, %d):"
 
-#: ../src/goabackend/goaoauthprovider.c:560
+#: ../src/goabackend/goaoauthprovider.c:609
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr ""
 "జవాబులో ప్రవేశించుటకు టోకన్  లేదా రహస్య ప్రవేశించుటకు టోకన్ పీఠిక దొరుకుటలేదు "
 " "
 
-#: ../src/goabackend/goaoauthprovider.c:815
+#: ../src/goabackend/goaoauthprovider.c:911
 msgid "Error getting a Request Token: "
 msgstr "ప్రవేశించుటకు టోకన్  పొందుటలో దోషం:"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:848
+#: ../src/goabackend/goaoauthprovider.c:944
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -357,24 +379,24 @@ msgstr ""
 "టోకెన్ కొరకు అడిగినప్పుడు ‌‌200 స్థితిని ఊహించారు, కానీ దాని బదులు %d (%s) "
 "వచ్చింది"
 
-#: ../src/goabackend/goaoauthprovider.c:865
+#: ../src/goabackend/goaoauthprovider.c:961
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "జవాబులోవినతి టోకన్  లేదా రహస్య వినతిటోకన్ పీఠిక దొరుకుటలేదు"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:882
+#: ../src/goabackend/goaoauthprovider.c:978
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "<a href=\"%s\"> అధికారిక పుటము నుంచి  పొందిన టోకన్ ను అతికించు"
 
-#: ../src/goabackend/goaoauthprovider.c:1444
+#: ../src/goabackend/goaoauthprovider.c:1576
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr ""
 "అధికారపత్రాలలో  ప్రవేశించుటకు టోకన్  లేదా రహస్య ప్రవేశించుటకు టోకన్  కలిగిలేవు"
 
-#: ../src/goabackend/goaprovider.c:548
+#: ../src/goabackend/goaprovider.c:549
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "%s రకములో _credentials_sync అమలు జరిగిందో లేదో నిర్ధారన చేసుకోండి"
@@ -387,7 +409,6 @@ msgstr "ఒక %s ఖాతా %s కొరకు ఇదివరకే ఉన�
 #. Translators: the %s is the name of the provider. eg., Google.
 #: ../src/goabackend/goautils.c:106
 #, c-format
-#| msgid "Use this account for"
 msgid "%s account"
 msgstr "%s ఖాతా"
 
@@ -439,45 +460,15 @@ msgstr "సమయం"
 msgid "Time to fire"
 msgstr "సంధించు సమయం"
 
-#: ../src/goaidentity/goaidentityservice.c:317
-msgid "Domain Administrator Login"
-msgstr "డొమైన్ నిర్వాహకుని లాగిన్"
-
-#: ../src/goaidentity/goaidentityservice.c:405
-#: ../src/goaidentity/goaidentityservice.c:597
-#| msgid "Did not find password with username `%s' in credentials"
-msgid "Could not find supported credentials"
-msgstr "తోడ్పాటుగల క్రెడెన్షియల్స్ కనుగొనలేక పోయింది"
-
-#: ../src/goaidentity/goaidentityservice.c:448
-msgid ""
-"In order to use this enterprise identity, the computer needs to be enrolled "
-"in the domain. Please have your network administrator type their domain "
-"password here."
-msgstr ""
-"ఈ యెంటర్‌ప్రైజ్ గుర్తింపు వుపయోగించుటకు, కంప్యూటర్ డొమైన్ నందు నమోదుకావాలి. "
-"దయచేసి మీ నెట్వర్కు నిర్వహణాధికారి "
-"డొమైన్ సంకేతపదం యిక్కడ ప్రవేశపెట్టునట్లు చూడండి."
-
-#: ../src/goaidentity/goaidentityservice.c:488
-msgid ""
-"In order to use this enterprise identity, the computer needs to be enrolled "
-"in the domain. Please have your network administrator type their domain "
-"username here."
-msgstr ""
-"ఈ యెంటర్‌ప్రైజ్ గుర్తింపు వుపయోగించుటకు, కంప్యూటర్ డొమైన్ నందు నమోదుకావాలి. "
-"దయచేసి మీ నెట్వర్కు నిర్వహణాధికారి "
-"డొమైన్ వాడుకరిపేరు యిక్కడ ప్రవేశపెట్టునట్లు చూడండి."
-
-#: ../src/goaidentity/goaidentityservice.c:1167
+#: ../src/goaidentity/goaidentityservice.c:375
 msgid "initial secret passed before secret key exchange"
 msgstr "రహస్య కీ మారకం ముందల ప్రాధమిక రహస్యం పంపబడింది"
 
-#: ../src/goaidentity/goaidentityservice.c:1373
+#: ../src/goaidentity/goaidentityservice.c:567
 msgid "Initial secret key is invalid"
 msgstr "ప్రాధమిక రహస్య కీ చెల్లనిది"
 
-#: ../src/goaidentity/goaidentityservice.c:1896
+#: ../src/goaidentity/goaidentityservice.c:1087
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "మిమ్ములను సైనిన్ చేయుటకు నెట్వర్కు రియాల్మ్ %s కు కొంత సమాచారం కావాలి."
@@ -515,7 +506,6 @@ msgid "Could not initialize credentials cache: %k"
 msgstr "క్రెడెన్షియల్ కాచీను సిద్దీకరించలేక పోయింది: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1147
-#| msgid "Failed to store credentials in the keyring"
 msgid "Could not store new credentials in credentials cache: %k"
 msgstr ""
 "క్రెడెన్షియల్స్ కాచీ నందు కొత్త క్రెడెన్షియల్స్ నిల్వ వుంచలేక పోయింది: %k"
@@ -530,7 +520,6 @@ msgid "Could not renew identity: %k"
 msgstr "గుర్తింపును పొడిగించలేదు: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1453
-#| msgid "GOA %s credentials for identity %s"
 msgid "Could not get new credentials to renew identity %s: %k"
 msgstr "గుర్తింపు %s పొడిగించుటకు కొత్త క్రెడెన్షియల్స్ పొందలేక పోయింది: %k"
 
@@ -542,29 +531,47 @@ msgstr "గుర్తింపును చెరిపివేయలేద�
 msgid "Could not find identity"
 msgstr "గుర్తింపును కనుగొనలేదు"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:803
-#| msgid "GOA %s credentials for identity %s"
+#: ../src/goaidentity/goakerberosidentitymanager.c:823
 msgid "Could not create credential cache for identity"
 msgstr "గుర్తింపు కొరకు క్రెడెన్షియల్ కాచీ సృష్టించలేక పోయింది"
 
-#: ../src/goaidentity/um-realm-manager.c:368
-#, c-format
-msgid "No such domain or realm found"
-msgstr "అటువంటి డొమైన్ లేదా రియాల్మ్ కనుగొనబడలేదు"
+#~ msgid "Chat"
+#~ msgstr "మాటామంతి"
 
-#: ../src/goaidentity/um-realm-manager.c:743
-#, c-format
-msgid "Cannot log in as %s at the %s domain"
-msgstr "%s వలె %s డొమైన్ వద్ద లాగిన్ కాలేకపోయింది"
+#~ msgid "Domain Administrator Login"
+#~ msgstr "డొమైన్ నిర్వాహకుని లాగిన్"
 
-#: ../src/goaidentity/um-realm-manager.c:748
-msgid "Invalid password, please try again"
-msgstr "చెల్లని సంకేతపదం, దయచేసి మరలా ప్రయత్నించు"
+#~| msgid "Did not find password with username `%s' in credentials"
+#~ msgid "Could not find supported credentials"
+#~ msgstr "తోడ్పాటుగల క్రెడెన్షియల్స్ కనుగొనలేక పోయింది"
 
-#: ../src/goaidentity/um-realm-manager.c:752
-#, c-format
-msgid "Couldn't connect to the %s domain: %s"
-msgstr "%s డొమైన్‌కు అనుసంధానం కాలేకపోయింది: %s"
+#~ msgid ""
+#~ "In order to use this enterprise identity, the computer needs to be "
+#~ "enrolled in the domain. Please have your network administrator type their "
+#~ "domain password here."
+#~ msgstr ""
+#~ "ఈ యెంటర్‌ప్రైజ్ గుర్తింపు వుపయోగించుటకు, కంప్యూటర్ డొమైన్ నందు నమోదుకావాలి. దయచేసి మీ నెట్వర్కు "
+#~ "నిర్వహణాధికారి డొమైన్ సంకేతపదం యిక్కడ ప్రవేశపెట్టునట్లు చూడండి."
+
+#~ msgid ""
+#~ "In order to use this enterprise identity, the computer needs to be "
+#~ "enrolled in the domain. Please have your network administrator type their "
+#~ "domain username here."
+#~ msgstr ""
+#~ "ఈ యెంటర్‌ప్రైజ్ గుర్తింపు వుపయోగించుటకు, కంప్యూటర్ డొమైన్ నందు నమోదుకావాలి. దయచేసి మీ నెట్వర్కు "
+#~ "నిర్వహణాధికారి డొమైన్ వాడుకరిపేరు యిక్కడ ప్రవేశపెట్టునట్లు చూడండి."
+
+#~ msgid "No such domain or realm found"
+#~ msgstr "అటువంటి డొమైన్ లేదా రియాల్మ్ కనుగొనబడలేదు"
+
+#~ msgid "Cannot log in as %s at the %s domain"
+#~ msgstr "%s వలె %s డొమైన్ వద్ద లాగిన్ కాలేకపోయింది"
+
+#~ msgid "Invalid password, please try again"
+#~ msgstr "చెల్లని సంకేతపదం, దయచేసి మరలా ప్రయత్నించు"
+
+#~ msgid "Couldn't connect to the %s domain: %s"
+#~ msgstr "%s డొమైన్‌కు అనుసంధానం కాలేకపోయింది: %s"
 
 #~ msgid "New Microsoft Exchange Account"
 #~ msgstr "కొత్త మైక్రోసాఫ్ట్ ఎక్సేంజ్ ఖాతా"
