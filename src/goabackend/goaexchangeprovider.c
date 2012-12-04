@@ -28,7 +28,6 @@
 #include "goaprovider.h"
 #include "goaexchangeprovider.h"
 #include "goaeditablelabel.h"
-#include "goaspinnerbutton.h"
 #include "goautils.h"
 
 /**
@@ -388,7 +387,8 @@ typedef struct
 
   GtkWidget *cluebar;
   GtkWidget *cluebar_label;
-  GtkWidget *spinner_button;
+  GtkWidget *connect_button;
+  GtkWidget *progress_grid;
 
   GtkWidget *email_address;
   GtkWidget *password;
@@ -469,10 +469,13 @@ create_account_details_ui (GoaProvider    *provider,
                            gboolean        new_account,
                            AddAccountData *data)
 {
+  GtkWidget *action_area;
   GtkWidget *grid0;
   GtkWidget *grid1;
   GtkWidget *grid2;
   GtkWidget *hbox;
+  GtkWidget *label;
+  GtkWidget *spinner;
   gint width;
 
   goa_utils_set_dialog_title (provider, dialog, new_account);
@@ -543,10 +546,29 @@ create_account_details_ui (GoaProvider    *provider,
   g_signal_connect (data->email_address, "changed", G_CALLBACK (on_email_address_or_password_changed), data);
   g_signal_connect (data->password, "changed", G_CALLBACK (on_email_address_or_password_changed), data);
 
-  data->spinner_button = goa_spinner_button_new_from_stock (GTK_STOCK_CONNECT);
-  gtk_dialog_add_action_widget (data->dialog, data->spinner_button, GTK_RESPONSE_OK);
+  data->connect_button = gtk_dialog_add_button (data->dialog, GTK_STOCK_CONNECT, GTK_RESPONSE_OK);
   gtk_dialog_set_default_response (data->dialog, GTK_RESPONSE_OK);
   gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, FALSE);
+
+  action_area = gtk_dialog_get_action_area (data->dialog);
+
+  data->progress_grid = gtk_grid_new ();
+  gtk_widget_set_no_show_all (data->progress_grid, TRUE);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (data->progress_grid), GTK_ORIENTATION_HORIZONTAL);
+  gtk_grid_set_column_spacing (GTK_GRID (data->progress_grid), 3);
+  gtk_box_pack_end (GTK_BOX (action_area), data->progress_grid, FALSE, FALSE, 0);
+  gtk_box_reorder_child (GTK_BOX (action_area), data->progress_grid, 0);
+  gtk_button_box_set_child_non_homogeneous (GTK_BUTTON_BOX (action_area), data->progress_grid, TRUE);
+
+  spinner = gtk_spinner_new ();
+  gtk_widget_set_size_request (spinner, 20, 20);
+  gtk_widget_show (spinner);
+  gtk_spinner_start (GTK_SPINNER (spinner));
+  gtk_container_add (GTK_CONTAINER (data->progress_grid), spinner);
+
+  label = gtk_label_new (_("Connecting…"));
+  gtk_widget_show (label);
+  gtk_container_add (GTK_CONTAINER (data->progress_grid), label);
 
   gtk_window_get_size (GTK_WINDOW (data->dialog), &width, NULL);
   gtk_widget_set_size_request (GTK_WIDGET (data->dialog), width, -1);
@@ -573,7 +595,8 @@ autodiscover_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
 
   goa_ews_client_autodiscover_finish (client, res, &data->error);
   g_main_loop_quit (data->loop);
-  goa_spinner_button_stop (GOA_SPINNER_BUTTON (data->spinner_button));
+  gtk_widget_set_sensitive (data->connect_button, TRUE);
+  gtk_widget_hide (data->progress_grid);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -645,7 +668,8 @@ add_account (GoaProvider    *provider,
                                NULL,
                                autodiscover_cb,
                                &data);
-  goa_spinner_button_start (GOA_SPINNER_BUTTON (data.spinner_button));
+  gtk_widget_set_sensitive (data.connect_button, FALSE);
+  gtk_widget_show (data.progress_grid);
   g_main_loop_run (data.loop);
 
   if (data.error != NULL)
@@ -660,7 +684,7 @@ add_account (GoaProvider    *provider,
       gtk_label_set_markup (GTK_LABEL (data.cluebar_label), markup);
       g_free (markup);
 
-      goa_spinner_button_set_label (GOA_SPINNER_BUTTON (data.spinner_button), _("_Try Again"));
+      gtk_button_set_label (GTK_BUTTON (data.connect_button), _("_Try Again"));
       gtk_expander_set_expanded (GTK_EXPANDER (data.expander), TRUE);
       gtk_widget_set_no_show_all (data.cluebar, FALSE);
       gtk_widget_show_all (data.cluebar);
@@ -801,7 +825,8 @@ refresh_account (GoaProvider    *provider,
                                NULL,
                                autodiscover_cb,
                                &data);
-  goa_spinner_button_start (GOA_SPINNER_BUTTON (data.spinner_button));
+  gtk_widget_set_sensitive (data.connect_button, FALSE);
+  gtk_widget_show (data.progress_grid);
   g_main_loop_run (data.loop);
 
   if (data.error != NULL)
