@@ -80,9 +80,11 @@ typedef struct
   gchar *username;
 } CheckAuthData;
 
-static void
-http_client_check_data_free (CheckData *data)
+static gboolean
+http_client_check_data_free (gpointer user_data)
 {
+  CheckData *data = user_data;
+
   if (data->cancellable_id > 0)
     {
       g_cancellable_disconnect (data->cancellable, data->cancellable_id);
@@ -93,6 +95,8 @@ http_client_check_data_free (CheckData *data)
   g_object_unref (data->res);
   g_object_unref (data->session);
   g_slice_free (CheckData, data);
+
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -157,7 +161,7 @@ http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer 
     g_simple_async_result_take_error (data->res, error);
 
   g_simple_async_result_complete_in_idle (data->res);
-  http_client_check_data_free (data);
+  g_idle_add (http_client_check_data_free, data);
 }
 
 static void
