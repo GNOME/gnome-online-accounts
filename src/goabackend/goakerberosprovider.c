@@ -29,7 +29,6 @@
 #include "goaprovider.h"
 #include "goakerberosprovider.h"
 #include "goaeditablelabel.h"
-#include "goaspinnerbutton.h"
 #include "goautils.h"
 #include "goaidentity.h"
 
@@ -99,7 +98,8 @@ typedef struct
 
   GtkWidget *cluebar;
   GtkWidget *cluebar_label;
-  GtkWidget *spinner_button;
+  GtkWidget *connect_button;
+  GtkWidget *progress_grid;
 
   GtkWidget *username;
   GtkWidget *realm_entry;
@@ -1069,10 +1069,13 @@ create_account_details_ui (GoaKerberosProvider *self,
                            gboolean             new_account,
                            SignInRequest       *request)
 {
+  GtkWidget *action_area;
   GtkWidget *grid0;
   GtkWidget *grid1;
   GtkWidget *grid2;
   GtkWidget *hbox;
+  GtkWidget *label;
+  GtkWidget *spinner;
   gint width;
 
   goa_utils_set_dialog_title (GOA_PROVIDER (self), dialog, new_account);
@@ -1125,10 +1128,29 @@ create_account_details_ui (GoaKerberosProvider *self,
   populate_realms_for_request (request);
   gtk_widget_grab_focus (request->realm_combo_box);
 
-  request->spinner_button = goa_spinner_button_new_from_stock (GTK_STOCK_CONNECT);
-  gtk_dialog_add_action_widget (request->dialog, request->spinner_button, GTK_RESPONSE_OK);
+  request->connect_button = gtk_dialog_add_button (request->dialog, GTK_STOCK_CONNECT, GTK_RESPONSE_OK);
   gtk_dialog_set_default_response (request->dialog, GTK_RESPONSE_OK);
   gtk_dialog_set_response_sensitive (request->dialog, GTK_RESPONSE_OK, TRUE);
+
+  action_area = gtk_dialog_get_action_area (request->dialog);
+
+  request->progress_grid = gtk_grid_new ();
+  gtk_widget_set_no_show_all (request->progress_grid, TRUE);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (request->progress_grid), GTK_ORIENTATION_HORIZONTAL);
+  gtk_grid_set_column_spacing (GTK_GRID (request->progress_grid), 3);
+  gtk_box_pack_end (GTK_BOX (action_area), request->progress_grid, FALSE, FALSE, 0);
+  gtk_box_reorder_child (GTK_BOX (action_area), request->progress_grid, 0);
+  gtk_button_box_set_child_non_homogeneous (GTK_BUTTON_BOX (action_area), request->progress_grid, TRUE);
+
+  spinner = gtk_spinner_new ();
+  gtk_widget_set_size_request (spinner, 20, 20);
+  gtk_widget_show (spinner);
+  gtk_spinner_start (GTK_SPINNER (spinner));
+  gtk_container_add (GTK_CONTAINER (request->progress_grid), spinner);
+
+  label = gtk_label_new (_("Connecting…"));
+  gtk_widget_show (label);
+  gtk_container_add (GTK_CONTAINER (request->progress_grid), label);
 
   gtk_window_get_size (GTK_WINDOW (request->dialog), &width, NULL);
   gtk_widget_set_size_request (GTK_WIDGET (request->dialog), width, -1);
@@ -1147,6 +1169,8 @@ add_account_cb (GoaManager   *manager,
   if (request->error != NULL)
     translate_error (&request->error);
   g_main_loop_quit (request->loop);
+  gtk_widget_set_sensitive (request->connect_button, TRUE);
+  gtk_widget_hide (request->progress_grid);
 }
 
 static void
@@ -1469,6 +1493,8 @@ on_discover_realm (GObject *source,
     }
 
   g_main_loop_quit (request->loop);
+  gtk_widget_set_sensitive (request->connect_button, TRUE);
+  gtk_widget_hide (request->progress_grid);
 }
 
 static GoaObject *
@@ -1528,9 +1554,9 @@ start_over:
                                         &request);
       g_free (realm);
 
-      goa_spinner_button_start (GOA_SPINNER_BUTTON (request.spinner_button));
+      gtk_widget_set_sensitive (request.connect_button, FALSE);
+      gtk_widget_show (request.progress_grid);
       g_main_loop_run (request.loop);
-      goa_spinner_button_stop (GOA_SPINNER_BUTTON (request.spinner_button));
 
       if (request.error)
         {
@@ -1584,10 +1610,9 @@ start_over:
                                 NULL, /* GCancellable* */
                                 (GAsyncReadyCallback) add_account_cb,
                                 &request);
-
-  goa_spinner_button_start (GOA_SPINNER_BUTTON (request.spinner_button));
+  gtk_widget_set_sensitive (request.connect_button, FALSE);
+  gtk_widget_show (request.progress_grid);
   g_main_loop_run (request.loop);
-  goa_spinner_button_stop (GOA_SPINNER_BUTTON (request.spinner_button));
   if (request.error != NULL)
     goto out;
 
@@ -1599,9 +1624,13 @@ start_over:
    */
   perform_initial_sign_in (self, object, principal, &request);
 
-  goa_spinner_button_start (GOA_SPINNER_BUTTON (request.spinner_button));
+  gtk_widget_set_sensitive (request.connect_button, FALSE);
+  gtk_widget_show (request.progress_grid);
+
   g_main_loop_run (request.loop);
-  goa_spinner_button_stop (GOA_SPINNER_BUTTON (request.spinner_button));
+
+  gtk_widget_set_sensitive (request.connect_button, TRUE);
+  gtk_widget_hide (request.progress_grid);
 
   if (request.error != NULL)
     {
@@ -1619,7 +1648,7 @@ start_over:
           gtk_label_set_markup (GTK_LABEL (request.cluebar_label), markup);
           g_free (markup);
 
-          goa_spinner_button_set_label (GOA_SPINNER_BUTTON (request.spinner_button), _("_Try Again"));
+          gtk_button_set_label (GTK_BUTTON (request.connect_button), _("_Try Again"));
           gtk_widget_set_no_show_all (request.cluebar, FALSE);
           gtk_widget_show_all (request.cluebar);
         }
