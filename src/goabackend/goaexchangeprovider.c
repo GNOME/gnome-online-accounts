@@ -831,7 +831,7 @@ refresh_account (GoaProvider    *provider,
   response = gtk_dialog_run (GTK_DIALOG (dialog));
   if (response != GTK_RESPONSE_OK)
     {
-      g_set_error (error,
+      g_set_error (&data.error,
                    GOA_ERROR,
                    GOA_ERROR_DIALOG_DISMISSED,
                    _("Dialog was dismissed"));
@@ -893,7 +893,7 @@ refresh_account (GoaProvider    *provider,
                                                     object,
                                                     g_variant_builder_end (&builder),
                                                     NULL, /* GCancellable */
-                                                    error))
+                                                    &data.error))
     goto out;
 
   goa_account_call_ensure_credentials (account,
@@ -903,6 +903,9 @@ refresh_account (GoaProvider    *provider,
   ret = TRUE;
 
  out:
+  if (data.error != NULL)
+    g_propagate_error (error, data.error);
+
   gtk_widget_destroy (dialog);
   if (data.loop != NULL)
     g_main_loop_unref (data.loop);
