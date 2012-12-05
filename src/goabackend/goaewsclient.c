@@ -90,9 +90,11 @@ typedef struct
   gchar *username;
 } AutodiscoverAuthData;
 
-static void
-ews_client_autodiscover_data_free (AutodiscoverData *data)
+static gboolean
+ews_client_autodiscover_data_free (gpointer user_data)
 {
+  AutodiscoverData *data = user_data;
+
   if (data->cancellable_id > 0)
     {
       g_cancellable_disconnect (data->cancellable, data->cancellable_id);
@@ -104,6 +106,8 @@ ews_client_autodiscover_data_free (AutodiscoverData *data)
   g_object_unref (data->res);
   g_object_unref (data->session);
   g_slice_free (AutodiscoverData, data);
+
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -326,7 +330,7 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
 
   g_simple_async_result_set_op_res_gboolean (data->res, op_res);
   g_simple_async_result_complete_in_idle (data->res);
-  ews_client_autodiscover_data_free (data);
+  g_idle_add (ews_client_autodiscover_data_free, data);
 }
 
 static xmlDoc *
