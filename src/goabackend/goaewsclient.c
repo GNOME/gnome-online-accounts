@@ -183,7 +183,7 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
   xmlNode *node;
 
   status = msg->status_code;
-  if (status == SOUP_STATUS_CANCELLED)
+  if (status == SOUP_STATUS_NONE)
     return;
 
   error = NULL;
@@ -200,7 +200,9 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
 
   data->msgs[idx] = NULL;
 
-  if (status != SOUP_STATUS_OK)
+  if (status == SOUP_STATUS_CANCELLED)
+    goto out;
+  else if (status != SOUP_STATUS_OK)
     {
       g_set_error (&error,
                    GOA_ERROR,
@@ -298,13 +300,14 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
            * message, the callback (ie. this function) will be invoked before
            * soup_session_cancel_message returns.
            */
-          soup_session_cancel_message (data->session, data->msgs[idx], SOUP_STATUS_CANCELLED);
+          soup_session_cancel_message (data->session, data->msgs[idx], SOUP_STATUS_NONE);
           data->msgs[idx] = NULL;
         }
     }
 
  out:
-  if (error != NULL)
+  /* error == NULL, if we are being aborted by the GCancellable */
+  if (!op_res)
     {
       for (idx = 0; idx < size; idx++)
         {
@@ -317,7 +320,8 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
               return;
             }
         }
-      g_simple_async_result_set_from_error (data->res, error);
+      if (error != NULL)
+        g_simple_async_result_set_from_error (data->res, error);
     }
   else
     g_simple_async_result_set_op_res_gboolean (data->res, op_res);
