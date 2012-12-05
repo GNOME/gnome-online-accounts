@@ -382,6 +382,8 @@ add_entry (GtkWidget     *grid1,
 
 typedef struct
 {
+  GCancellable *cancellable;
+
   GtkDialog *dialog;
   GMainLoop *loop;
 
@@ -599,6 +601,15 @@ autodiscover_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
   gtk_widget_hide (data->progress_grid);
 }
 
+static void
+dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data)
+{
+  AddAccountData *data = user_data;
+
+  if (response_id == GTK_RESPONSE_CANCEL)
+    g_cancellable_cancel (data->cancellable);
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static GoaObject *
@@ -624,12 +635,14 @@ add_account (GoaProvider    *provider,
   ret = NULL;
 
   memset (&data, 0, sizeof (AddAccountData));
+  data.cancellable = g_cancellable_new ();
   data.loop = g_main_loop_new (NULL, FALSE);
   data.dialog = dialog;
   data.error = NULL;
 
   create_account_details_ui (provider, dialog, vbox, TRUE, &data);
   gtk_widget_show_all (GTK_WIDGET (vbox));
+  g_signal_connect (dialog, "response", G_CALLBACK (dialog_response_cb), &data);
 
   ews_client = goa_ews_client_new ();
 
@@ -660,19 +673,30 @@ add_account (GoaProvider    *provider,
                                   &data.error))
     goto out;
 
+  g_cancellable_reset (data.cancellable);
   goa_ews_client_autodiscover (ews_client,
                                email_address,
                                password,
                                username,
                                server,
-                               NULL,
+                               data.cancellable,
                                autodiscover_cb,
                                &data);
   gtk_widget_set_sensitive (data.connect_button, FALSE);
   gtk_widget_show (data.progress_grid);
   g_main_loop_run (data.loop);
 
-  if (data.error != NULL)
+  if (g_cancellable_is_cancelled (data.cancellable))
+    {
+      g_prefix_error (&data.error,
+                      _("Dialog was dismissed (%s, %d): "),
+                      g_quark_to_string (data.error->domain),
+                      data.error->code);
+      data.error->domain = GOA_ERROR;
+      data.error->code = GOA_ERROR_DIALOG_DISMISSED;
+      goto out;
+    }
+  else if (data.error != NULL)
     {
       gchar *markup;
 
@@ -735,6 +759,7 @@ add_account (GoaProvider    *provider,
   g_free (data.account_object_path);
   if (data.loop != NULL)
     g_main_loop_unref (data.loop);
+  g_clear_object (&data.cancellable);
   if (ews_client != NULL)
     g_object_unref (ews_client);
   return ret;
@@ -785,6 +810,7 @@ refresh_account (GoaProvider    *provider,
   gtk_box_set_spacing (GTK_BOX (vbox), 12);
 
   memset (&data, 0, sizeof (AddAccountData));
+  data.cancellable = g_cancellable_new ();
   data.loop = g_main_loop_new (NULL, FALSE);
   data.dialog = GTK_DIALOG (dialog);
   data.error = NULL;
@@ -797,6 +823,7 @@ refresh_account (GoaProvider    *provider,
   gtk_editable_set_editable (GTK_EDITABLE (data.email_address), FALSE);
 
   gtk_widget_show_all (dialog);
+  g_signal_connect (dialog, "response", G_CALLBACK (dialog_response_cb), &data);
 
   ews_client = goa_ews_client_new ();
 
@@ -817,19 +844,30 @@ refresh_account (GoaProvider    *provider,
   exchange = goa_object_peek_exchange (object);
   server = goa_exchange_get_host (exchange);
 
+  g_cancellable_reset (data.cancellable);
   goa_ews_client_autodiscover (ews_client,
                                email_address,
                                password,
                                username,
                                server,
-                               NULL,
+                               data.cancellable,
                                autodiscover_cb,
                                &data);
   gtk_widget_set_sensitive (data.connect_button, FALSE);
   gtk_widget_show (data.progress_grid);
   g_main_loop_run (data.loop);
 
-  if (data.error != NULL)
+  if (g_cancellable_is_cancelled (data.cancellable))
+    {
+      g_prefix_error (&data.error,
+                      _("Dialog was dismissed (%s, %d): "),
+                      g_quark_to_string (data.error->domain),
+                      data.error->code);
+      data.error->domain = GOA_ERROR;
+      data.error->code = GOA_ERROR_DIALOG_DISMISSED;
+      goto out;
+    }
+  else if (data.error != NULL)
     {
       gchar *markup;
 
@@ -868,6 +906,7 @@ refresh_account (GoaProvider    *provider,
   gtk_widget_destroy (dialog);
   if (data.loop != NULL)
     g_main_loop_unref (data.loop);
+  g_clear_object (&data.cancellable);
   if (ews_client != NULL)
     g_object_unref (ews_client);
   return ret;
