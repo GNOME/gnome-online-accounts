@@ -464,6 +464,7 @@ goa_ews_client_autodiscover (GoaEwsClient        *client,
                                                     G_CALLBACK (ews_client_autodiscover_cancelled_cb),
                                                     data,
                                                     NULL);
+      g_simple_async_result_set_check_cancellable (data->res, data->cancellable);
     }
 
   auth = g_slice_new0 (AutodiscoverAuthData);
