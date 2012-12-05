@@ -325,7 +325,7 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
             }
         }
       if (error != NULL)
-        g_simple_async_result_set_from_error (data->res, error);
+        g_simple_async_result_take_error (data->res, error);
     }
 
   g_simple_async_result_set_op_res_gboolean (data->res, op_res);
