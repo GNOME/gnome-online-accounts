@@ -146,14 +146,14 @@ fi
 
 # Google
 AC_ARG_ENABLE([google], [AS_HELP_STRING([--enable-google], [Enable Google provider])], [], [enable_google=yes])
-AC_ARG_WITH(google-consumer-key,
-            [AS_HELP_STRING([--with-google-consumer-key],
-                            [Google OAuth 1.0 consumer key])],
+AC_ARG_WITH(google-client-id,
+            [AS_HELP_STRING([--with-google-client-id],
+                            [Google OAuth 2.0 client id])],
                             [],
                             [])
-AC_ARG_WITH(google-consumer-secret,
-            [AS_HELP_STRING([--with-google-consumer-secret],
-                            [Google OAuth 1.0 consumer secret])],
+AC_ARG_WITH(google-client-secret,
+            [AS_HELP_STRING([--with-google-client-secret],
+                            [Google OAuth 2.0 client secret])],
                             [],
                             [])
 if test "$with_google_client_id" = ""; then
