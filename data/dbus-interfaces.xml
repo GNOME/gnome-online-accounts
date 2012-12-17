@@ -3,7 +3,7 @@
 "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 
 <!--
- Copyright (C) 2011 Red Hat, Inc.
+ Copyright (C) 2011, 2012 Red Hat, Inc.
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -20,7 +20,8 @@
  Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  Boston, MA 02111-1307, USA.
 
- Author: David Zeuthen <davidz@redhat.com>
+ Authors: David Zeuthen <davidz@redhat.com>
+          Debarshi Ray <debarshir@gnome.org>
 -->
 
 <node name="/" xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
@@ -165,6 +166,18 @@
          removed from the account asynchronously.
     -->
     <property name="DocumentsDisabled" type="b" access="readwrite"/>
+
+    <!-- PhotosDisabled:
+         @since: 3.8.0
+
+         If %TRUE, the account will not expose any
+         #org.gnome.OnlineAccounts.Photos interface. If the account does not
+         provide photos-like capabilities, this property does nothing.
+
+         Note that the #org.gnomeOnlineAccounts.Photos interface is added or
+         removed from the account asynchronously.
+    -->
+    <property name="PhotosDisabled" type="b" access="readwrite"/>
 
     <!-- FilesDisabled:
          If %TRUE, the account will not expose any
@@ -470,6 +483,16 @@
       documents-like capabilities.
   -->
   <interface name="org.gnome.OnlineAccounts.Documents">
+  </interface>
+
+  <!--
+      org.gnome.OnlineAccounts.Photos:
+      @since: 3.8.0
+
+      An account object implements this interface if it provides
+      photos-like capabilities.
+  -->
+  <interface name="org.gnome.OnlineAccounts.Photos">
   </interface>
 
   <!--

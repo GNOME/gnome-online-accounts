@@ -57,6 +57,7 @@ goa_object_get_calendar
 goa_object_get_contacts
 goa_object_get_chat
 goa_object_get_documents
+goa_object_get_photos
 goa_object_get_files
 goa_object_get_exchange
 goa_object_peek_manager
@@ -68,6 +69,7 @@ goa_object_peek_calendar
 goa_object_peek_contacts
 goa_object_peek_chat
 goa_object_peek_documents
+goa_object_peek_photos
 goa_object_peek_files
 goa_object_peek_exchange
 GoaObjectProxy
@@ -85,6 +87,7 @@ goa_object_skeleton_set_calendar
 goa_object_skeleton_set_contacts
 goa_object_skeleton_set_chat
 goa_object_skeleton_set_documents
+goa_object_skeleton_set_photos
 goa_object_skeleton_set_files
 goa_object_skeleton_set_exchange
 <SUBSECTION Standard>
@@ -147,6 +150,8 @@ goa_account_get_chat_disabled
 goa_account_set_chat_disabled
 goa_account_get_documents_disabled
 goa_account_set_documents_disabled
+goa_account_get_photos_disabled
+goa_account_set_photos_disabled
 goa_account_get_files_disabled
 goa_account_set_files_disabled
 goa_account_call_ensure_credentials
@@ -800,6 +805,47 @@ GoaDocumentsSkeletonPrivate
 goa_documents_get_type
 goa_documents_proxy_get_type
 goa_documents_skeleton_get_type
+</SECTION>
+
+<SECTION>
+<FILE>GoaPhotos</FILE>
+GoaPhotos
+GoaPhotosIface
+goa_photos_interface_info
+goa_photos_override_properties
+GoaPhotosProxy
+GoaPhotosProxyClass
+goa_photos_proxy_new
+goa_photos_proxy_new_finish
+goa_photos_proxy_new_sync
+goa_photos_proxy_new_for_bus
+goa_photos_proxy_new_for_bus_finish
+goa_photos_proxy_new_for_bus_sync
+GoaPhotosSkeleton
+GoaPhotosSkeletonClass
+goa_photos_skeleton_new
+<SUBSECTION Standard>
+GOA_TYPE_PHOTOS
+GOA_IS_PHOTOS
+GOA_PHOTOS
+GOA_PHOTOS_GET_IFACE
+GOA_TYPE_PHOTOS_PROXY
+GOA_IS_PHOTOS_PROXY
+GOA_IS_PHOTOS_PROXY_CLASS
+GOA_PHOTOS_PROXY
+GOA_PHOTOS_PROXY_CLASS
+GOA_PHOTOS_PROXY_GET_CLASS
+GOA_TYPE_PHOTOS_SKELETON
+GOA_IS_PHOTOS_SKELETON
+GOA_IS_PHOTOS_SKELETON_CLASS
+GOA_PHOTOS_SKELETON
+GOA_PHOTOS_SKELETON_CLASS
+GOA_PHOTOS_SKELETON_GET_CLASS
+GoaPhotosProxyPrivate
+GoaPhotosSkeletonPrivate
+goa_photos_get_type
+goa_photos_proxy_get_type
+goa_photos_skeleton_get_type
 </SECTION>
 
 <SECTION>
