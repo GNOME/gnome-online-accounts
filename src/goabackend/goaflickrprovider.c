@@ -1,6 +1,7 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
  * Copyright (C) 2011 Willem van Engen <gnome@willem.engen.nl>
+ * Copyright (C) 2012 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,7 +18,8 @@
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  *
- * Author: Willem van Engen <gnome@willem.engen.nl>
+ * Authors: Debarshi Ray <debarshir@gnome.org>
+ *          Willem van Engen <gnome@willem.engen.nl>
  */
 
 #include "config.h"
@@ -315,7 +317,12 @@ build_object (GoaProvider         *provider,
               gboolean             just_added,
               GError             **error)
 {
+  GoaAccount *account;
+  GoaPhotos *photos;
+  gboolean photos_enabled;
   gboolean ret;
+
+  photos = NULL;
   ret = FALSE;
 
   /* Chain up */
@@ -328,9 +335,41 @@ build_object (GoaProvider         *provider,
                                                                             error))
     goto out;
 
+  account = goa_object_get_account (GOA_OBJECT (object));
+
+  /* Photos */
+  photos = goa_object_get_photos (GOA_OBJECT (object));
+  photos_enabled = g_key_file_get_boolean (key_file, group, "PhotosEnabled", NULL);
+
+  if (photos_enabled)
+    {
+      if (photos == NULL)
+        {
+          photos = goa_photos_skeleton_new ();
+          goa_object_skeleton_set_photos (object, photos);
+        }
+    }
+  else
+    {
+      if (photos != NULL)
+        goa_object_skeleton_set_photos (object, NULL);
+    }
+
+  if (just_added)
+    {
+      goa_account_set_photos_disabled (account, !photos_enabled);
+
+      g_signal_connect (account,
+                        "notify::photos-disabled",
+                        G_CALLBACK (goa_util_account_notify_property_cb),
+                        "PhotosEnabled");
+    }
+
   ret = TRUE;
 
  out:
+  g_clear_object (&photos);
+  g_clear_object (&account);
   return ret;
 }
 
@@ -360,6 +399,20 @@ show_account (GoaProvider         *provider,
                                                                        vbox,
                                                                        left,
                                                                        right);
+
+  goa_util_add_row_switch_from_keyfile_with_blurb (left, right, object,
+                                                   NULL,
+                                                   "photos-disabled",
+                                                   _("_Photos"));
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
+add_account_key_values (GoaOAuthProvider  *provider,
+                        GVariantBuilder   *builder)
+{
+  g_variant_builder_add (builder, "{ss}", "PhotosEnabled", "true");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -395,4 +448,5 @@ goa_flickr_provider_class_init (GoaFlickrProviderClass *klass)
   oauth_class->get_authentication_cookie = get_authentication_cookie;
   oauth_class->get_use_external_browser = get_use_external_browser;
   oauth_class->parse_request_token_error = parse_request_token_error;
+  oauth_class->add_account_key_values    = add_account_key_values;
 }
