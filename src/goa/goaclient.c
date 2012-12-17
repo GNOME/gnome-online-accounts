@@ -451,7 +451,7 @@ goa_client_get_manager (GoaClient *client)
  * #GoaObject instances where each object at least has an #GoaAccount
  * interface (that can be obtained via the goa_object_get_account()
  * method) but may also implement other interfaces such as
- * #GoaGoogleAccount.
+ * #GoaMail or #GoaFiles.
  *
  * Returns: (transfer full) (element-type GoaObject): A list of
  * #GoaObject instances that must be freed with g_list_free() after

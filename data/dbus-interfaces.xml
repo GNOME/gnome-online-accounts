@@ -180,6 +180,8 @@
     <property name="PhotosDisabled" type="b" access="readwrite"/>
 
     <!-- FilesDisabled:
+         @since: 3.8.0
+
          If %TRUE, the account will not expose any
          #org.gnome.OnlineAccounts.Files interface. If the account does not
          provide files-like capabilities, this property does nothing.
@@ -190,6 +192,8 @@
     <property name="FilesDisabled" type="b" access="readwrite"/>
 
     <!-- TicketingDisabled:
+         @since: 3.6.0
+
          If %TRUE, the account will not expose any
          #org.gnome.OnlineAccounts.Ticketing interface. If the account does not
          provide ticketing-like capabilities, this property does nothing.
@@ -543,6 +547,7 @@
 
   <!--
       org.gnome.OnlineAccounts.Ticketing:
+      @since: 3.6.0
 
       An account object implements this interface if it provides
       ticketing capabilities.
