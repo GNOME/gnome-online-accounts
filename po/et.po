@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-10-29 18:26+0000\n"
-"PO-Revision-Date: 2012-10-29 22:57+0300\n"
+"POT-Creation-Date: 2012-12-12 07:36+0000\n"
+"PO-Revision-Date: 2012-12-15 14:28+0300\n"
 "Last-Translator: Mattias Põldaru <mahfiaz@gmail.com>\n"
 "Language-Team: Estonian <>\n"
 "Language: et\n"
@@ -80,6 +80,14 @@ msgstr "Autentimistõendeid ei leitud võtmerõngast (%s, %d): "
 msgid "Did not find password with username `%s' in credentials"
 msgstr "Ei leitud kasutajanimele '%s' vastavat parooli"
 
+#. Translators: the first %s is the username
+#. * (eg., debarshi.ray@gmail.com or rishi), and the
+#. * (%s, %d) is the error domain and code.
+#.
+#, c-format
+msgid "Invalid password with username `%s' (%s, %d): "
+msgstr "Parool ei sobi kasutajanimega '%s' (%s, %d): "
+
 msgid "_E-mail"
 msgstr "_E-mail"
 
@@ -95,9 +103,16 @@ msgstr "_Kasutajanimi"
 msgid "_Server"
 msgstr "_Server"
 
+msgid "Connecting…"
+msgstr "Ühendumine…"
+
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "Dialoog katkestati"
+
+#, c-format
+msgid "Dialog was dismissed (%s, %d): "
+msgstr "Dialoog katkestati (%s, %d): "
 
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Viga ühendumisel Microsoft Exchange serveriga"
@@ -295,9 +310,6 @@ msgstr "Autentimistõendis ei sisaldu access_token või access_token_secret"
 msgid "ownCloud"
 msgstr "ownCloud"
 
-msgid "_User_name"
-msgstr "_Kasutajanimi"
-
 msgid "Error connecting to ownCloud server"
 msgstr "Viga ühendumisel ownCloud serveriga"
 
@@ -445,3 +457,6 @@ msgstr "Identiteeti ei leitud"
 
 msgid "Could not create credential cache for identity"
 msgstr "Pole võimalik luua paroolide puhvrit identiteedi jaoks"
+
+#~ msgid "_User_name"
+#~ msgstr "_Kasutajanimi"
