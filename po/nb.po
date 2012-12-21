@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts 3.7.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-05 20:04+0100\n"
-"PO-Revision-Date: 2012-12-05 20:07+0100\n"
+"POT-Creation-Date: 2012-12-21 16:19+0100\n"
+"PO-Revision-Date: 2012-12-21 16:20+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: \n"
@@ -214,7 +214,7 @@ msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr ""
 
 #: ../src/goabackend/goafacebookprovider.c:211
-#: ../src/goabackend/goaflickrprovider.c:187
+#: ../src/goabackend/goaflickrprovider.c:189
 #: ../src/goabackend/goagoogleprovider.c:206
 #: ../src/goabackend/goaoauth2provider.c:616
 #: ../src/goabackend/goatwitterprovider.c:172
@@ -241,39 +241,43 @@ msgstr "Fant ikke e-post i JSON-data"
 msgid "C_hat"
 msgstr "_Prat"
 
-#: ../src/goabackend/goaflickrprovider.c:78
+#: ../src/goabackend/goaflickrprovider.c:80
 msgid "Flickr"
 msgstr "Flickr"
 
-#: ../src/goabackend/goaflickrprovider.c:175
+#: ../src/goabackend/goaflickrprovider.c:177
 #, c-format
 msgid "Expected status 200 when requesting user id, instead got status %d (%s)"
 msgstr ""
 
-#: ../src/goabackend/goaflickrprovider.c:198
+#: ../src/goabackend/goaflickrprovider.c:200
 #, c-format
 msgid "Didn't find user member in JSON data"
 msgstr "Fant ikke user-medlem i JSON-data"
 
-#: ../src/goabackend/goaflickrprovider.c:207
+#: ../src/goabackend/goaflickrprovider.c:209
 #, c-format
 msgid "Didn't find user.id member in JSON data"
 msgstr "Fant ikke user.id-medlem i JSON-data"
 
-#: ../src/goabackend/goaflickrprovider.c:216
+#: ../src/goabackend/goaflickrprovider.c:218
 #, c-format
 msgid "Didn't find user.username member in JSON data"
 msgstr "Fant ikke user.username-medlem i JSON-data"
 
-#: ../src/goabackend/goaflickrprovider.c:225
+#: ../src/goabackend/goaflickrprovider.c:227
 #, c-format
 msgid "Didn't find user.username._content member in JSON data"
 msgstr "Fant ikke user.username._content-medlem i JSON-data"
 
-#: ../src/goabackend/goaflickrprovider.c:302
+#: ../src/goabackend/goaflickrprovider.c:304
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr ""
 "Systemklokken er ugyldig. Sjekk dine innstillinger for dato og klokkeslett."
+
+#: ../src/goabackend/goaflickrprovider.c:406
+msgid "_Photos"
+msgstr ""
 
 #: ../src/goabackend/goagoogleprovider.c:83
 msgid "Google"
@@ -604,14 +608,13 @@ msgid "Could not initialize credentials cache: %k"
 msgstr ""
 
 #: ../src/goaidentity/goakerberosidentity.c:1147
-#, fuzzy
 msgid "Could not store new credentials in credentials cache: %k"
-msgstr "Klarte ikke å lagre påloggingsinformasjon på nøkkelringen"
+msgstr "Klarte ikke å lagre ny påloggingsinformasjon i buffer: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1424
-#, fuzzy, c-format
+#, c-format
 msgid "Could not renew identity: Not signed in"
-msgstr "Kunne ikke slette identitet: %k"
+msgstr "Kunne ikke fornye identitet: Ikke logget inn"
 
 #: ../src/goaidentity/goakerberosidentity.c:1436
 msgid "Could not renew identity: %k"
