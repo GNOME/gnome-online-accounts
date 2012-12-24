@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-17 20:35+0200\n"
-"PO-Revision-Date: 2012-09-17 20:39+0200\n"
+"POT-Creation-Date: 2012-12-24 18:17+0200\n"
+"PO-Revision-Date: 2012-12-24 18:18+0200\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "Language: ar\n"
@@ -46,132 +46,173 @@ msgid "ProviderType property is not set for account"
 msgstr ""
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:204
+#: ../src/goabackend/goaewsclient.c:210 ../src/goabackend/goahttpclient.c:151
 #, c-format
 msgid "Code: %u - Unexpected response from server"
 msgstr ""
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:220
+#: ../src/goabackend/goaewsclient.c:226
 #, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr ""
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:230
+#: ../src/goabackend/goaewsclient.c:236
 #, c-format
 msgid "Failed to find Autodiscover element"
 msgstr ""
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:244
+#: ../src/goabackend/goaewsclient.c:250
 #, c-format
 msgid "Failed to find Response element"
 msgstr ""
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:258
+#: ../src/goabackend/goaewsclient.c:264
 #, c-format
 msgid "Failed to find Account element"
 msgstr ""
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:275
+#: ../src/goabackend/goaewsclient.c:281
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr ""
 
-#: ../src/goabackend/goaexchangeprovider.c:78
+#: ../src/goabackend/goaexchangeprovider.c:77
 msgid "Microsoft Exchange"
 msgstr "ميكروسوفت إكستشينج"
 
-#: ../src/goabackend/goaexchangeprovider.c:279
-#: ../src/goabackend/goaoauth2provider.c:1392
-#: ../src/goabackend/goaoauthprovider.c:1415
+#: ../src/goabackend/goaexchangeprovider.c:284
+#: ../src/goabackend/goagoogleprovider.c:585
+#: ../src/goabackend/goaoauth2provider.c:1523
+#: ../src/goabackend/goaoauthprovider.c:1545
+#: ../src/goabackend/goaowncloudprovider.c:330
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "لم يُعثر على الشهادات في حلقة المفاتيح (%s, %d): "
 
 #. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:295
-#: ../src/goabackend/goaexchangeprovider.c:923
+#: ../src/goabackend/goaexchangeprovider.c:302
+#: ../src/goabackend/goaexchangeprovider.c:1015
+#: ../src/goabackend/goagoogleprovider.c:604
+#: ../src/goabackend/goagoogleprovider.c:788
+#: ../src/goabackend/goaowncloudprovider.c:350
+#: ../src/goabackend/goaowncloudprovider.c:1087
 #, c-format
 msgid "Did not find password with username `%s' in credentials"
 msgstr ""
 
-#: ../src/goabackend/goaexchangeprovider.c:486
+#. Translators: the first %s is the username
+#. * (eg., debarshi.ray@gmail.com or rishi), and the
+#. * (%s, %d) is the error domain and code.
+#.
+#: ../src/goabackend/goaexchangeprovider.c:328
+#: ../src/goabackend/goagoogleprovider.c:626
+#: ../src/goabackend/goaowncloudprovider.c:372
+#, c-format
+msgid "Invalid password with username `%s' (%s, %d): "
+msgstr ""
+
+#: ../src/goabackend/goaexchangeprovider.c:517
 msgid "_E-mail"
 msgstr "بريد إل_كتروني"
 
-#: ../src/goabackend/goaexchangeprovider.c:487
+#: ../src/goabackend/goaexchangeprovider.c:518
+#: ../src/goabackend/goaowncloudprovider.c:598
 msgid "_Password"
 msgstr "كلمة ال_سر"
 
-#: ../src/goabackend/goaexchangeprovider.c:490
+#: ../src/goabackend/goaexchangeprovider.c:521
 msgid "_Custom"
 msgstr "_مُخصَّص"
 
-#: ../src/goabackend/goaexchangeprovider.c:509
-#: ../src/goabackend/goakerberosprovider.c:1026
+#: ../src/goabackend/goaexchangeprovider.c:540
+#: ../src/goabackend/goakerberosprovider.c:1126
+#: ../src/goabackend/goaowncloudprovider.c:597
 msgid "User_name"
 msgstr "اسم ال_مستخدم"
 
-#: ../src/goabackend/goaexchangeprovider.c:510
+#: ../src/goabackend/goaexchangeprovider.c:541
+#: ../src/goabackend/goaowncloudprovider.c:596
 msgid "_Server"
 msgstr "ال_خادوم"
 
-#: ../src/goabackend/goaexchangeprovider.c:594
-#: ../src/goabackend/goaexchangeprovider.c:760
-#: ../src/goabackend/goakerberosprovider.c:1337
-#: ../src/goabackend/goaoauth2provider.c:952
-#: ../src/goabackend/goaoauthprovider.c:945
+#: ../src/goabackend/goaexchangeprovider.c:571
+#: ../src/goabackend/goakerberosprovider.c:1151
+#: ../src/goabackend/goaowncloudprovider.c:627
+msgid "Connecting…"
+msgstr "يتّصل…"
+
+#: ../src/goabackend/goaexchangeprovider.c:656
+#: ../src/goabackend/goaexchangeprovider.c:837
+#: ../src/goabackend/goakerberosprovider.c:1542
+#: ../src/goabackend/goaoauth2provider.c:1049
+#: ../src/goabackend/goaoauthprovider.c:1041
+#: ../src/goabackend/goaowncloudprovider.c:719
+#: ../src/goabackend/goaowncloudprovider.c:914
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "أُغلقت نافذة الحوار"
 
-#: ../src/goabackend/goaexchangeprovider.c:630
-#: ../src/goabackend/goaexchangeprovider.c:787
+#: ../src/goabackend/goaexchangeprovider.c:692
+#: ../src/goabackend/goaexchangeprovider.c:863
+#: ../src/goabackend/goaowncloudprovider.c:757
+#: ../src/goabackend/goaowncloudprovider.c:934
+#, c-format
+msgid "Dialog was dismissed (%s, %d): "
+msgstr "أُغلقت نافذة الحوار (%s،‏ %d):"
+
+#: ../src/goabackend/goaexchangeprovider.c:704
+#: ../src/goabackend/goaexchangeprovider.c:875
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "عطل أثناء الاتصال بخادوم ميكروسوفت إكستشينج"
 
-#: ../src/goabackend/goaexchangeprovider.c:637
-#: ../src/goabackend/goaexchangeprovider.c:795
-#: ../src/goabackend/goakerberosprovider.c:1417
+#: ../src/goabackend/goaexchangeprovider.c:711
+#: ../src/goabackend/goaexchangeprovider.c:882
+#: ../src/goabackend/goakerberosprovider.c:1651
+#: ../src/goabackend/goaowncloudprovider.c:776
+#: ../src/goabackend/goaowncloudprovider.c:953
 msgid "_Try Again"
 msgstr "أ_عد المحاولة"
 
-#: ../src/goabackend/goaexchangeprovider.c:846
-#: ../src/goabackend/goafacebookprovider.c:361
-#: ../src/goabackend/goagoogleprovider.c:535
-#: ../src/goabackend/goakerberosprovider.c:1475
-#: ../src/goabackend/goawindowsliveprovider.c:370
+#: ../src/goabackend/goaexchangeprovider.c:937
+#: ../src/goabackend/goafacebookprovider.c:395
+#: ../src/goabackend/goagoogleprovider.c:671
+#: ../src/goabackend/goakerberosprovider.c:1722
+#: ../src/goabackend/goaowncloudprovider.c:1009
+#: ../src/goabackend/goawindowsliveprovider.c:409
 msgid "Use for"
 msgstr "استخدم ل‍"
 
-#: ../src/goabackend/goaexchangeprovider.c:848
-#: ../src/goabackend/goagoogleprovider.c:537
-msgid "Mail"
-msgstr "البريد"
+#: ../src/goabackend/goaexchangeprovider.c:939
+#: ../src/goabackend/goagoogleprovider.c:673
+msgid "_Mail"
+msgstr "ال_بريد"
 
-#: ../src/goabackend/goaexchangeprovider.c:853
-#: ../src/goabackend/goagoogleprovider.c:542
-msgid "Calendar"
-msgstr "التقويم"
+#: ../src/goabackend/goaexchangeprovider.c:944
+#: ../src/goabackend/goagoogleprovider.c:678
+#: ../src/goabackend/goaowncloudprovider.c:1011
+msgid "Cale_ndar"
+msgstr "الت_قويم"
 
-#: ../src/goabackend/goaexchangeprovider.c:858
-#: ../src/goabackend/goagoogleprovider.c:547
-msgid "Contacts"
-msgstr "المتراسلون"
+#: ../src/goabackend/goaexchangeprovider.c:949
+#: ../src/goabackend/goagoogleprovider.c:683
+#: ../src/goabackend/goaowncloudprovider.c:1016
+msgid "_Contacts"
+msgstr "المترا_سلون"
 
 #: ../src/goabackend/goafacebookprovider.c:79
 msgid "Facebook"
 msgstr "فيسبوك"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:193
-#: ../src/goabackend/goagoogleprovider.c:212
+#: ../src/goabackend/goafacebookprovider.c:199
+#: ../src/goabackend/goagoogleprovider.c:194
 #: ../src/goabackend/goatwitterprovider.c:160
-#: ../src/goabackend/goawindowsliveprovider.c:176
+#: ../src/goabackend/goawindowsliveprovider.c:182
 #: ../src/goabackend/goayahooprovider.c:163
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
@@ -179,101 +220,137 @@ msgstr ""
 "النتيجة المتوقعة عند طلب المعرّف العالمي الفريد GUID هي 200؛ عوضاً عن هذا، تم "
 "الحصول على النتيجة %d (%s)"
 
-#: ../src/goabackend/goafacebookprovider.c:205
-#: ../src/goabackend/goagoogleprovider.c:224
-#: ../src/goabackend/goaoauth2provider.c:566
+#: ../src/goabackend/goafacebookprovider.c:211
+#: ../src/goabackend/goaflickrprovider.c:189
+#: ../src/goabackend/goagoogleprovider.c:206
+#: ../src/goabackend/goaoauth2provider.c:616
 #: ../src/goabackend/goatwitterprovider.c:172
-#: ../src/goabackend/goawindowsliveprovider.c:188
+#: ../src/goabackend/goawindowsliveprovider.c:194
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
 msgstr "خطأ في إعراب الردّ على أنّه JSON: "
 
-#: ../src/goabackend/goafacebookprovider.c:216
-#: ../src/goabackend/goawindowsliveprovider.c:199
+#: ../src/goabackend/goafacebookprovider.c:222
+#: ../src/goabackend/goawindowsliveprovider.c:205
 #, c-format
 msgid "Didn't find id member in JSON data"
 msgstr "لم يُعثر على رقم المعرّف في بيانات JSON"
 
-#: ../src/goabackend/goafacebookprovider.c:225
-#: ../src/goabackend/goagoogleprovider.c:245
+#: ../src/goabackend/goafacebookprovider.c:231
+#: ../src/goabackend/goagoogleprovider.c:217
 #, c-format
 msgid "Didn't find email member in JSON data"
 msgstr "لم يُعثر على البريد الإلكتروني في بيانات JSON"
 
-#: ../src/goabackend/goafacebookprovider.c:363
-#: ../src/goabackend/goagoogleprovider.c:552
-#: ../src/goabackend/goawindowsliveprovider.c:372
-msgid "Chat"
-msgstr "الدردشة"
+#: ../src/goabackend/goafacebookprovider.c:397
+#: ../src/goabackend/goagoogleprovider.c:688
+#: ../src/goabackend/goawindowsliveprovider.c:411
+msgid "C_hat"
+msgstr "الدر_دشة"
 
-#: ../src/goabackend/goagoogleprovider.c:78
-msgid "Google"
-msgstr "جوجل"
+#: ../src/goabackend/goaflickrprovider.c:80
+msgid "Flickr"
+msgstr "فلِكَر"
 
-#: ../src/goabackend/goagoogleprovider.c:235
-#, c-format
-msgid "Didn't find data member in JSON data"
-msgstr "لم يُعثر على البيانات في بيانات JSON"
+#: ../src/goabackend/goaflickrprovider.c:177
+#, fuzzy, c-format
+msgid "Expected status 200 when requesting user id, instead got status %d (%s)"
+msgstr ""
+"النتيجة المتوقعة عند طلب المعرّف العالمي الفريد GUID هي 200؛ عوضاً عن هذا، "
+"تم الحصول على النتيجة %d (%s)"
 
-#: ../src/goabackend/goagoogleprovider.c:306
+#: ../src/goabackend/goaflickrprovider.c:200
+#, fuzzy, c-format
+msgid "Didn't find user member in JSON data"
+msgstr "لم يتمّ العثور على اسم مستخدم في بيانات JSON"
+
+#: ../src/goabackend/goaflickrprovider.c:209
+#, fuzzy, c-format
+msgid "Didn't find user.id member in JSON data"
+msgstr "لم يتمّ العثور على المعرف العالمي الفريد GUID في بيانات JSON"
+
+#: ../src/goabackend/goaflickrprovider.c:218
+#, fuzzy, c-format
+msgid "Didn't find user.username member in JSON data"
+msgstr "لم يتمّ العثور على اسم مستخدم في بيانات JSON"
+
+#: ../src/goabackend/goaflickrprovider.c:227
+#, fuzzy, c-format
+msgid "Didn't find user.username._content member in JSON data"
+msgstr "لم يتمّ العثور على اسم مستخدم في بيانات JSON"
+
+#: ../src/goabackend/goaflickrprovider.c:304
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "وقت النظام غير صحيح. راجع إعدادات الوقت والتاريخ."
 
-#: ../src/goabackend/goagoogleprovider.c:557
-#: ../src/goabackend/goawindowsliveprovider.c:377
-msgid "Documents"
-msgstr "المستندات"
+#: ../src/goabackend/goaflickrprovider.c:406
+msgid "_Photos"
+msgstr "ال_صور"
 
-#: ../src/goabackend/goakerberosprovider.c:84
+#: ../src/goabackend/goagoogleprovider.c:83
+msgid "Google"
+msgstr "جوجل"
+
+#: ../src/goabackend/goagoogleprovider.c:693
+#: ../src/goabackend/goawindowsliveprovider.c:416
+msgid "_Documents"
+msgstr "المست_ندات"
+
+#: ../src/goabackend/goakerberosprovider.c:85
 msgid "Enterprise Login (Kerberos)"
 msgstr "ولوج المؤسسات"
 
-#: ../src/goabackend/goakerberosprovider.c:375
+#: ../src/goabackend/goakerberosprovider.c:447
 msgid "Identity service returned invalid key"
 msgstr ""
 
-#: ../src/goabackend/goakerberosprovider.c:641
+#: ../src/goabackend/goakerberosprovider.c:713
 #, c-format
 msgid "Could not find saved credentials for principal `%s' in keyring"
 msgstr ""
 
-#: ../src/goabackend/goakerberosprovider.c:651
+#: ../src/goabackend/goakerberosprovider.c:723
 #, c-format
 msgid "Did not find password for principal `%s' in credentials"
 msgstr ""
 
-#: ../src/goabackend/goakerberosprovider.c:1019
+#: ../src/goabackend/goakerberosprovider.c:1118
 msgid "_Domain"
 msgstr "الن_طاق"
 
-#: ../src/goabackend/goakerberosprovider.c:1020
+#: ../src/goabackend/goakerberosprovider.c:1119
 msgid "Enterprise domain or realm name"
 msgstr "نطاق مؤسسة أو اسم حقيقي"
 
-#: ../src/goabackend/goakerberosprovider.c:1235
-#: ../src/goaidentity/goaidentityservice.c:1891
+#: ../src/goabackend/goakerberosprovider.c:1351
+#: ../src/goaidentity/goaidentityservice.c:1082
 msgid "Log In to Realm"
 msgstr "لِج إلى النطاق"
 
-#: ../src/goabackend/goakerberosprovider.c:1236
+#: ../src/goabackend/goakerberosprovider.c:1352
 msgid "Please enter your password below."
 msgstr "رجاء أدخل كلمة السرّ."
 
-#: ../src/goabackend/goakerberosprovider.c:1237
+#: ../src/goabackend/goakerberosprovider.c:1353
 msgid "Remember this password"
 msgstr "تذكّر كلمة السرّ هذه"
 
-#: ../src/goabackend/goakerberosprovider.c:1412
+#: ../src/goabackend/goakerberosprovider.c:1492
+#, c-format
+msgid "The domain is not valid"
+msgstr "النطاق غير صحيح"
+
+#: ../src/goabackend/goakerberosprovider.c:1646
 msgid "Error connecting to enterprise identity server"
 msgstr "عطل أثناء الاتصال بخادوم هوية المؤسسات"
 
-#: ../src/goabackend/goakerberosprovider.c:1477
-msgid "Network Resources"
-msgstr "موارد الشبكة"
+#: ../src/goabackend/goakerberosprovider.c:1724
+msgid "Network _Resources"
+msgstr "موارد ال_شبكة"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:523
-#: ../src/goabackend/goaoauthprovider.c:537
+#: ../src/goabackend/goaoauth2provider.c:573
+#: ../src/goabackend/goaoauthprovider.c:586
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -281,74 +358,74 @@ msgstr ""
 "النتيجة المتوقعة عند طلب رمز الوصول هي 200؛ عوضاً عن هذا، تم الحصول على "
 "النتيجة %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:543
+#: ../src/goabackend/goaoauth2provider.c:593
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "لم يُعثر على رمز تحقّق access_token في بيانات غير JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:577
+#: ../src/goabackend/goaoauth2provider.c:627
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "لم يُعثر على رمز تحقّق access_token في بيانات JSON"
 
-#: ../src/goabackend/goaoauth2provider.c:746
-#: ../src/goabackend/goaoauth2provider.c:785
+#: ../src/goabackend/goaoauth2provider.c:838
+#: ../src/goabackend/goaoauth2provider.c:877
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "ردّ التخويل \"%s\""
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:886
+#: ../src/goabackend/goaoauth2provider.c:983
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
 "page</a>:"
 msgstr "الصق كود التخويل الذي تحصل عليه من <a href=\"%s\">صفحة التخويل</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:978
-#: ../src/goabackend/goaoauthprovider.c:976
+#: ../src/goabackend/goaoauth2provider.c:1075
+#: ../src/goabackend/goaoauthprovider.c:1072
 msgid "Error getting an Access Token: "
 msgstr "خطأ في الحصول على رمز الوصول"
 
-#: ../src/goabackend/goaoauth2provider.c:993
-#: ../src/goabackend/goaoauthprovider.c:989
+#: ../src/goabackend/goaoauth2provider.c:1090
+#: ../src/goabackend/goaoauthprovider.c:1085
 msgid "Error getting identity: "
 msgstr "خطأ في الحصول على هويّة"
 
-#: ../src/goabackend/goaoauth2provider.c:1253
-#: ../src/goabackend/goaoauthprovider.c:1265
+#: ../src/goabackend/goaoauth2provider.c:1379
+#: ../src/goabackend/goaoauthprovider.c:1390
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "طُلب الولوج كـ%s، لكن تم الولوج كـ%s"
 
-#: ../src/goabackend/goaoauth2provider.c:1419
+#: ../src/goabackend/goaoauth2provider.c:1552
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "لا تحوي الشهادات رمز وصول"
 
-#: ../src/goabackend/goaoauth2provider.c:1458
-#: ../src/goabackend/goaoauthprovider.c:1488
+#: ../src/goabackend/goaoauth2provider.c:1591
+#: ../src/goabackend/goaoauthprovider.c:1620
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "فشل تحديث رمز الوصول (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1493
-#: ../src/goabackend/goaoauthprovider.c:1518
+#: ../src/goabackend/goaoauth2provider.c:1628
+#: ../src/goabackend/goaoauthprovider.c:1652
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "خطأ في حفظ الشهادات في حلقة المفاتيح (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:560
+#: ../src/goabackend/goaoauthprovider.c:609
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "رمز الوصول أو ترويسة \"رمز الوصول السرّي\" في الردّ مفقودة"
 
-#: ../src/goabackend/goaoauthprovider.c:815
+#: ../src/goabackend/goaoauthprovider.c:911
 msgid "Error getting a Request Token: "
 msgstr "خطأ في الحصول على رمز الطلب"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:848
+#: ../src/goabackend/goaoauthprovider.c:944
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -356,7 +433,7 @@ msgstr ""
 "النتيجة المتوقعة للحصول على رمز الطلب هي 200؛ عوضاً عن هذا، تم الحصول على "
 "النتيجة %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:865
+#: ../src/goabackend/goaoauthprovider.c:961
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr ""
@@ -364,17 +441,30 @@ msgstr ""
 "الردّ مفقودة"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:882
+#: ../src/goabackend/goaoauthprovider.c:978
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "الصق الرمز الذي تحصل عليه من <a href=\"%s\">صفحة التخويل</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1444
+#: ../src/goabackend/goaoauthprovider.c:1576
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "لا تحوي الشهادات رمز وصول أو رمز وصول سرّيّ"
 
-#: ../src/goabackend/goaprovider.c:550
+#: ../src/goabackend/goaowncloudprovider.c:82
+msgid "ownCloud"
+msgstr "ownCloud"
+
+#: ../src/goabackend/goaowncloudprovider.c:769
+#: ../src/goabackend/goaowncloudprovider.c:946
+msgid "Error connecting to ownCloud server"
+msgstr "عطل أثناء الاتصال بخادوم ownCloud"
+
+#: ../src/goabackend/goaowncloudprovider.c:1021
+msgid "_Files"
+msgstr "الم_لفات"
+
+#: ../src/goabackend/goaprovider.c:577
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync غير منطبق على النوع %s"
@@ -439,7 +529,7 @@ msgstr "يُحمل ”%s“…"
 msgid "Windows Live"
 msgstr "وندوز لايف"
 
-#: ../src/goabackend/goawindowsliveprovider.c:210
+#: ../src/goabackend/goawindowsliveprovider.c:216
 #, c-format
 msgid "Didn't find account email member in JSON data"
 msgstr "لم يُعثر على رقم البريد الإلكتروني في بيانات JSON"
@@ -487,38 +577,15 @@ msgstr "الوقت"
 msgid "Time to fire"
 msgstr "وقت الاشتعال"
 
-#: ../src/goaidentity/goaidentityservice.c:317
-msgid "Domain Administrator Login"
-msgstr "ولوج مدير النطاق"
-
-#: ../src/goaidentity/goaidentityservice.c:405
-#: ../src/goaidentity/goaidentityservice.c:597
-msgid "Could not find supported credentials"
-msgstr ""
-
-#: ../src/goaidentity/goaidentityservice.c:448
-msgid ""
-"In order to use this enterprise identity, the computer needs to be enrolled "
-"in the domain. Please have your network administrator type their domain "
-"password here."
-msgstr ""
-
-#: ../src/goaidentity/goaidentityservice.c:488
-msgid ""
-"In order to use this enterprise identity, the computer needs to be enrolled "
-"in the domain. Please have your network administrator type their domain "
-"username here."
-msgstr ""
-
-#: ../src/goaidentity/goaidentityservice.c:1167
+#: ../src/goaidentity/goaidentityservice.c:375
 msgid "initial secret passed before secret key exchange"
 msgstr ""
 
-#: ../src/goaidentity/goaidentityservice.c:1373
+#: ../src/goaidentity/goaidentityservice.c:567
 msgid "Initial secret key is invalid"
 msgstr ""
 
-#: ../src/goaidentity/goaidentityservice.c:1896
+#: ../src/goaidentity/goaidentityservice.c:1087
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr ""
@@ -580,29 +647,31 @@ msgstr ""
 msgid "Could not find identity"
 msgstr ""
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:803
+#: ../src/goaidentity/goakerberosidentitymanager.c:823
 #, fuzzy
 msgid "Could not create credential cache for identity"
 msgstr "أوراق اعتماد GOA %s للهوية %s"
 
-#: ../src/goaidentity/um-realm-manager.c:368
-#, c-format
-msgid "No such domain or realm found"
-msgstr "لم يعثر على هذا النطاق أو المجال"
+#~ msgid "Didn't find data member in JSON data"
+#~ msgstr "لم يُعثر على البيانات في بيانات JSON"
 
-#: ../src/goaidentity/um-realm-manager.c:743
-#, c-format
-msgid "Cannot log in as %s at the %s domain"
-msgstr "تعذّر الولوج باسم %s في النطاق %s"
+#~ msgid "Chat"
+#~ msgstr "الدردشة"
 
-#: ../src/goaidentity/um-realm-manager.c:748
-msgid "Invalid password, please try again"
-msgstr "كلمة سر خطأ؛ من فضلك أعد المحاولة"
+#~ msgid "Domain Administrator Login"
+#~ msgstr "ولوج مدير النطاق"
 
-#: ../src/goaidentity/um-realm-manager.c:752
-#, c-format
-msgid "Couldn't connect to the %s domain: %s"
-msgstr "تعذّر الاتصال بالنطاق %s:‏ %s"
+#~ msgid "No such domain or realm found"
+#~ msgstr "لم يعثر على هذا النطاق أو المجال"
+
+#~ msgid "Cannot log in as %s at the %s domain"
+#~ msgstr "تعذّر الولوج باسم %s في النطاق %s"
+
+#~ msgid "Invalid password, please try again"
+#~ msgstr "كلمة سر خطأ؛ من فضلك أعد المحاولة"
+
+#~ msgid "Couldn't connect to the %s domain: %s"
+#~ msgstr "تعذّر الاتصال بالنطاق %s:‏ %s"
 
 #~ msgid "New Microsoft Exchange Account"
 #~ msgstr "حساب ميكروسوفت إكستشينج جديد"
@@ -615,9 +684,6 @@ msgstr "تعذّر الاتصال بالنطاق %s:‏ %s"
 
 #~ msgid "Refresh %s"
 #~ msgstr "حدّث %s"
-
-#~ msgid "Didn't find username member in JSON data"
-#~ msgstr "لم يتمّ العثور على اسم مستخدم في بيانات JSON"
 
 #~ msgid "Didn't find name member in JSON data"
 #~ msgstr "لم يُعثر على رقم الاسم في بيانات JSON"
