@@ -4,20 +4,22 @@
 #
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2011, 2012.
 # Lukács Bence <lukacs.bence1 at gmail dot com>, 2012.
+# Balázs Úr <urbalazs at gmail dot com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-02 23:47+0200\n"
-"PO-Revision-Date: 2012-10-02 23:56+0200\n"
-"Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"online-accounts&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2012-11-07 14:04+0000\n"
+"PO-Revision-Date: 2012-12-29 16:00+0100\n"
+"Last-Translator: Balázs Úr <urbalazs at gmail dot com>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 1.2\n"
 
 #. shut up -Wunused-but-set-variable
 #: ../src/daemon/goadaemon.c:211
@@ -44,7 +46,7 @@ msgid "ProviderType property is not set for account"
 msgstr "ProviderType tulajdonság nincs beállítva a fiók számára"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:204
+#: ../src/goabackend/goaewsclient.c:204 ../src/goabackend/goahttpclient.c:147
 #, c-format
 msgid "Code: %u - Unexpected response from server"
 msgstr "Kód: %u - Nem várt válasz érkezett a kiszolgálótól"
@@ -77,87 +79,103 @@ msgstr "Nem sikerült megtalálni az Account elemet"
 #: ../src/goabackend/goaewsclient.c:275
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
-msgstr "Az ASUrl és OABUrl nem található az automatikus felderítésre adott válaszban"
+msgstr ""
+"Az ASUrl és OABUrl nem található az automatikus felderítésre adott válaszban"
 
 #: ../src/goabackend/goaexchangeprovider.c:78
 msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:279
-#: ../src/goabackend/goaoauth2provider.c:1392
-#: ../src/goabackend/goaoauthprovider.c:1415
+#: ../src/goabackend/goagoogleprovider.c:651
+#: ../src/goabackend/goaoauth2provider.c:1443
+#: ../src/goabackend/goaoauthprovider.c:1545
 #, c-format
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "A hitelesítési adatok nem találhatók a kulcstartón (%s, %d): "
 
 #. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:295
-#: ../src/goabackend/goaexchangeprovider.c:923
+#: ../src/goabackend/goaexchangeprovider.c:297
+#: ../src/goabackend/goaexchangeprovider.c:943
+#: ../src/goabackend/goagoogleprovider.c:670
+#: ../src/goabackend/goagoogleprovider.c:849
 #, c-format
 msgid "Did not find password with username `%s' in credentials"
-msgstr "Nem található jelszó a(z) „%s” felhasználónévhez a hitelesítési adatok között"
+msgstr ""
+"Nem található jelszó a(z) „%s” felhasználónévhez a hitelesítési adatok között"
 
-#: ../src/goabackend/goaexchangeprovider.c:486
+#. Translators: the first %s is the username
+#. * (eg., debarshi.ray@gmail.com or rishi), and the
+#. * (%s, %d) is the error domain and code.
+#.
+#: ../src/goabackend/goaexchangeprovider.c:323
+#: ../src/goabackend/goagoogleprovider.c:692
+#, c-format
+#| msgid "Did not find password with username `%s' in credentials"
+msgid "Invalid password with username `%s' (%s, %d): "
+msgstr "Érvénytelen jelszó a(z) „%s” felhasználónévhez (%s, %d): "
+
+#: ../src/goabackend/goaexchangeprovider.c:506
 msgid "_E-mail"
 msgstr "_E-mail"
 
-#: ../src/goabackend/goaexchangeprovider.c:487
+#: ../src/goabackend/goaexchangeprovider.c:507
 msgid "_Password"
 msgstr "_Jelszó"
 
-#: ../src/goabackend/goaexchangeprovider.c:490
+#: ../src/goabackend/goaexchangeprovider.c:510
 msgid "_Custom"
 msgstr "_Egyéni"
 
-#: ../src/goabackend/goaexchangeprovider.c:509
-#: ../src/goabackend/goakerberosprovider.c:1026
+#: ../src/goabackend/goaexchangeprovider.c:529
+#: ../src/goabackend/goakerberosprovider.c:1117
 msgid "User_name"
 msgstr "_Felhasználónév"
 
-#: ../src/goabackend/goaexchangeprovider.c:510
+#: ../src/goabackend/goaexchangeprovider.c:530
 msgid "_Server"
 msgstr "_Kiszolgáló"
 
-#: ../src/goabackend/goaexchangeprovider.c:594
-#: ../src/goabackend/goaexchangeprovider.c:760
-#: ../src/goabackend/goakerberosprovider.c:1337
-#: ../src/goabackend/goaoauth2provider.c:952
-#: ../src/goabackend/goaoauthprovider.c:945
+#: ../src/goabackend/goaexchangeprovider.c:614
+#: ../src/goabackend/goaexchangeprovider.c:780
+#: ../src/goabackend/goakerberosprovider.c:1510
+#: ../src/goabackend/goaoauth2provider.c:986
+#: ../src/goabackend/goaoauthprovider.c:1041
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "Az ablakot bezárták"
 
-#: ../src/goabackend/goaexchangeprovider.c:630
-#: ../src/goabackend/goaexchangeprovider.c:787
+#: ../src/goabackend/goaexchangeprovider.c:650
+#: ../src/goabackend/goaexchangeprovider.c:807
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Hiba a Microsoft Exchange kiszolgálóhoz való kapcsolódáskor"
 
-#: ../src/goabackend/goaexchangeprovider.c:637
-#: ../src/goabackend/goaexchangeprovider.c:795
-#: ../src/goabackend/goakerberosprovider.c:1417
+#: ../src/goabackend/goaexchangeprovider.c:657
+#: ../src/goabackend/goaexchangeprovider.c:815
+#: ../src/goabackend/goakerberosprovider.c:1616
 msgid "_Try Again"
 msgstr "P_róbálja újra"
 
-#: ../src/goabackend/goaexchangeprovider.c:846
-#: ../src/goabackend/goafacebookprovider.c:361
-#: ../src/goabackend/goagoogleprovider.c:535
-#: ../src/goabackend/goakerberosprovider.c:1475
-#: ../src/goabackend/goawindowsliveprovider.c:370
+#: ../src/goabackend/goaexchangeprovider.c:866
+#: ../src/goabackend/goafacebookprovider.c:389
+#: ../src/goabackend/goagoogleprovider.c:729
+#: ../src/goabackend/goakerberosprovider.c:1685
+#: ../src/goabackend/goawindowsliveprovider.c:403
 msgid "Use for"
 msgstr "Használat ehhez"
 
-#: ../src/goabackend/goaexchangeprovider.c:848
-#: ../src/goabackend/goagoogleprovider.c:537
+#: ../src/goabackend/goaexchangeprovider.c:868
+#: ../src/goabackend/goagoogleprovider.c:731
 msgid "_Mail"
 msgstr "_Levelezés"
 
-#: ../src/goabackend/goaexchangeprovider.c:853
-#: ../src/goabackend/goagoogleprovider.c:542
+#: ../src/goabackend/goaexchangeprovider.c:873
+#: ../src/goabackend/goagoogleprovider.c:736
 msgid "Cale_ndar"
 msgstr "_Naptár"
 
-#: ../src/goabackend/goaexchangeprovider.c:858
-#: ../src/goabackend/goagoogleprovider.c:547
+#: ../src/goabackend/goaexchangeprovider.c:878
+#: ../src/goabackend/goagoogleprovider.c:741
 msgid "_Contacts"
 msgstr "Né_vjegyek"
 
@@ -166,15 +184,16 @@ msgid "Facebook"
 msgstr "Facebook"
 
 #: ../src/goabackend/goafacebookprovider.c:193
-#: ../src/goabackend/goagoogleprovider.c:212
+#: ../src/goabackend/goagoogleprovider.c:216
 #: ../src/goabackend/goawindowsliveprovider.c:176
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
-msgstr "A guid kérésekor a várt 200-as állapot helyett %d állapot érkezett (%s)"
+msgstr ""
+"A guid kérésekor a várt 200-as állapot helyett %d állapot érkezett (%s)"
 
 #: ../src/goabackend/goafacebookprovider.c:205
-#: ../src/goabackend/goagoogleprovider.c:224
-#: ../src/goabackend/goaoauth2provider.c:566
+#: ../src/goabackend/goagoogleprovider.c:228
+#: ../src/goabackend/goaoauth2provider.c:586
 #: ../src/goabackend/goawindowsliveprovider.c:188
 msgid "Error parsing response as JSON: "
 msgstr "Hiba a válasz JSON-ként való feldolgozásakor: "
@@ -186,111 +205,118 @@ msgid "Didn't find id member in JSON data"
 msgstr "Nem található id tag a JSON-adatokban"
 
 #: ../src/goabackend/goafacebookprovider.c:225
-#: ../src/goabackend/goagoogleprovider.c:245
+#: ../src/goabackend/goagoogleprovider.c:249
 #, c-format
 msgid "Didn't find email member in JSON data"
 msgstr "Nem található e-mail tag a JSON-adatokban"
 
-#: ../src/goabackend/goafacebookprovider.c:363
-#: ../src/goabackend/goagoogleprovider.c:552
-#: ../src/goabackend/goawindowsliveprovider.c:372
+#: ../src/goabackend/goafacebookprovider.c:391
+#: ../src/goabackend/goagoogleprovider.c:746
+#: ../src/goabackend/goawindowsliveprovider.c:405
 msgid "C_hat"
 msgstr "_Csevegés"
 
-#: ../src/goabackend/goagoogleprovider.c:78
+#: ../src/goabackend/goagoogleprovider.c:82
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:235
+#: ../src/goabackend/goagoogleprovider.c:239
 #, c-format
 msgid "Didn't find data member in JSON data"
 msgstr "Nem található adat tag a JSON-adatokban"
 
-#: ../src/goabackend/goagoogleprovider.c:306
+#: ../src/goabackend/goagoogleprovider.c:380
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "Rendszerideje nem érvényes. Ellenőrizze a dátum- és időbeállításokat."
 
-#: ../src/goabackend/goagoogleprovider.c:557
-#: ../src/goabackend/goawindowsliveprovider.c:377
+#: ../src/goabackend/goagoogleprovider.c:751
+#: ../src/goabackend/goawindowsliveprovider.c:410
 msgid "_Documents"
 msgstr "_Dokumentumok"
 
-#: ../src/goabackend/goakerberosprovider.c:84
+#: ../src/goabackend/goakerberosprovider.c:86
 msgid "Enterprise Login (Kerberos)"
 msgstr "Vállalati bejelentkezés (Kerberos)"
 
-#: ../src/goabackend/goakerberosprovider.c:375
+#: ../src/goabackend/goakerberosprovider.c:441
 msgid "Identity service returned invalid key"
 msgstr "A személyazonosság szolgáltatás érvénytelen kulcsot adott vissza"
 
-#: ../src/goabackend/goakerberosprovider.c:641
+#: ../src/goabackend/goakerberosprovider.c:707
 #, c-format
 msgid "Could not find saved credentials for principal `%s' in keyring"
 msgstr ""
 "Nem találhatók mentett hitelesítési adatok a(z) „%s” résztvevőhöz a "
 "kulcstartón"
 
-#: ../src/goabackend/goakerberosprovider.c:651
+#: ../src/goabackend/goakerberosprovider.c:717
 #, c-format
 msgid "Did not find password for principal `%s' in credentials"
-msgstr "Nem található jelszó a(z) „%s” résztvevőhöz a hitelesítési adatok között"
+msgstr ""
+"Nem található jelszó a(z) „%s” résztvevőhöz a hitelesítési adatok között"
 
-#: ../src/goabackend/goakerberosprovider.c:1019
+#: ../src/goabackend/goakerberosprovider.c:1109
 msgid "_Domain"
 msgstr "_Tartomány"
 
-#: ../src/goabackend/goakerberosprovider.c:1020
+#: ../src/goabackend/goakerberosprovider.c:1110
 msgid "Enterprise domain or realm name"
 msgstr "Vállalati tartomány- vagy zónanév"
 
-#: ../src/goabackend/goakerberosprovider.c:1235
-#: ../src/goaidentity/goaidentityservice.c:1891
+#: ../src/goabackend/goakerberosprovider.c:1321
+#: ../src/goaidentity/goaidentityservice.c:1082
 msgid "Log In to Realm"
 msgstr "Bejelentkezés a zónába"
 
-#: ../src/goabackend/goakerberosprovider.c:1236
+#: ../src/goabackend/goakerberosprovider.c:1322
 msgid "Please enter your password below."
 msgstr "Adja meg lentebb a jelszavát."
 
-#: ../src/goabackend/goakerberosprovider.c:1237
+#: ../src/goabackend/goakerberosprovider.c:1323
 msgid "Remember this password"
 msgstr "Jelszó megjegyzése"
 
-#: ../src/goabackend/goakerberosprovider.c:1412
+#: ../src/goabackend/goakerberosprovider.c:1462
+#, c-format
+msgid "The domain is not valid"
+msgstr "A tartomány nem érvényes"
+
+#: ../src/goabackend/goakerberosprovider.c:1611
 msgid "Error connecting to enterprise identity server"
 msgstr "Hiba a vállalati személyazonosság-kiszolgálóhoz való kapcsolódáskor"
 
-#: ../src/goabackend/goakerberosprovider.c:1477
+#: ../src/goabackend/goakerberosprovider.c:1687
 msgid "Network _Resources"
 msgstr "_Hálózati erőforrások"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:523
-#: ../src/goabackend/goaoauthprovider.c:537
+#: ../src/goabackend/goaoauth2provider.c:543
+#: ../src/goabackend/goaoauthprovider.c:586
 #, c-format
-msgid "Expected status 200 when requesting access token, instead got status %d (%s)"
+msgid ""
+"Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr ""
 "A hozzáférési jelsor kérésekor a várt 200-as állapot helyett %d állapot "
 "érkezett (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:543
+#: ../src/goabackend/goaoauth2provider.c:563
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "Nem található az access_token a nem JSON-adatokban"
 
-#: ../src/goabackend/goaoauth2provider.c:577
+#: ../src/goabackend/goaoauth2provider.c:597
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "Nem található az access_token a JSON-adatokban"
 
-#: ../src/goabackend/goaoauth2provider.c:746
-#: ../src/goabackend/goaoauth2provider.c:785
+#: ../src/goabackend/goaoauth2provider.c:776
+#: ../src/goabackend/goaoauth2provider.c:815
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "A felhatalmazási válasz: „%s”"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:886
+#: ../src/goabackend/goaoauth2provider.c:920
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
@@ -299,68 +325,70 @@ msgstr ""
 "Illessze be a <a href=\"%s\">felhatalmazási oldalról</a> kapott "
 "felhatalmazási kódot:"
 
-#: ../src/goabackend/goaoauth2provider.c:978
-#: ../src/goabackend/goaoauthprovider.c:976
+#: ../src/goabackend/goaoauth2provider.c:1012
+#: ../src/goabackend/goaoauthprovider.c:1072
 msgid "Error getting an Access Token: "
 msgstr "Hiba a hozzáférési jelsor lekérésekor: "
 
-#: ../src/goabackend/goaoauth2provider.c:993
-#: ../src/goabackend/goaoauthprovider.c:989
+#: ../src/goabackend/goaoauth2provider.c:1027
+#: ../src/goabackend/goaoauthprovider.c:1085
 msgid "Error getting identity: "
 msgstr "Hiba a személyazonosság lekérésekor: "
 
-#: ../src/goabackend/goaoauth2provider.c:1253
-#: ../src/goabackend/goaoauthprovider.c:1265
+#: ../src/goabackend/goaoauth2provider.c:1304
+#: ../src/goabackend/goaoauthprovider.c:1390
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "A(z) %s néven való bejelentkezésre kérés után %s néven jelentkezett be"
 
-#: ../src/goabackend/goaoauth2provider.c:1419
+#: ../src/goabackend/goaoauth2provider.c:1470
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "A hitelesítési adatok nem tartalmaznak access_token tagot"
 
-#: ../src/goabackend/goaoauth2provider.c:1458
-#: ../src/goabackend/goaoauthprovider.c:1488
+#: ../src/goabackend/goaoauth2provider.c:1509
+#: ../src/goabackend/goaoauthprovider.c:1620
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "A hozzáférési jelsor frissítése sikertelen (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1493
-#: ../src/goabackend/goaoauthprovider.c:1518
+#: ../src/goabackend/goaoauth2provider.c:1544
+#: ../src/goabackend/goaoauthprovider.c:1652
 #, c-format
 msgid "Error storing credentials in keyring (%s, %d): "
 msgstr "Hiba a hitelesítési adatok tárolásakor a kulcstartón (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:560
+#: ../src/goabackend/goaoauthprovider.c:609
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "Hiányzó access_token vagy access_token_secret fejlécek a válaszban"
 
-#: ../src/goabackend/goaoauthprovider.c:815
+#: ../src/goabackend/goaoauthprovider.c:911
 msgid "Error getting a Request Token: "
 msgstr "Hiba a kérés jelsor lekérésekor: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:848
+#: ../src/goabackend/goaoauthprovider.c:944
 #, c-format
-msgid "Expected status 200 for getting a Request Token, instead got status %d (%s)"
+msgid ""
+"Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr ""
 "A kérés jelsor lekérésekor a várt 200-as állapot helyett %d állapot érkezett "
 "(%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:865
+#: ../src/goabackend/goaoauthprovider.c:961
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "Hiányzó request_token vagy request_token_secret fejlécek a válaszban"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:882
+#: ../src/goabackend/goaoauthprovider.c:978
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr "Illessze be a <a href=\"%s\">felhatalmazási oldalról</a> kapott jelsort:"
+msgstr ""
+"Illessze be a <a href=\"%s\">felhatalmazási oldalról</a> kapott jelsort:"
 
-#: ../src/goabackend/goaoauthprovider.c:1444
+#: ../src/goabackend/goaoauthprovider.c:1576
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr ""
@@ -431,44 +459,15 @@ msgstr "Idő"
 msgid "Time to fire"
 msgstr "Idő az indításig"
 
-#: ../src/goaidentity/goaidentityservice.c:317
-msgid "Domain Administrator Login"
-msgstr "Tartományadminisztrátori bejelentkezés"
-
-#: ../src/goaidentity/goaidentityservice.c:405
-#: ../src/goaidentity/goaidentityservice.c:597
-msgid "Could not find supported credentials"
-msgstr "Nem találhatók támogatott hitelesítési adatok"
-
-#: ../src/goaidentity/goaidentityservice.c:448
-msgid ""
-"In order to use this enterprise identity, the computer needs to be enrolled "
-"in the domain. Please have your network administrator type their domain "
-"password here."
-msgstr ""
-"Ezen vállalati személyazonosság használatához a számítógépet be kell "
-"jegyezni a tartományba. Kérje meg a hálózati rendszergazdát, hogy írja be "
-"itt a tartomány jelszavát."
-
-#: ../src/goaidentity/goaidentityservice.c:488
-msgid ""
-"In order to use this enterprise identity, the computer needs to be enrolled "
-"in the domain. Please have your network administrator type their domain "
-"username here."
-msgstr ""
-"Ezen vállalati személyazonosság használatához a számítógépet be kell "
-"jegyezni a tartományba. Kérje meg a hálózati rendszergazdát, hogy írja be "
-"itt a tartományfelhasználó nevét."
-
-#: ../src/goaidentity/goaidentityservice.c:1167
+#: ../src/goaidentity/goaidentityservice.c:375
 msgid "initial secret passed before secret key exchange"
 msgstr "kiinduló titok átadva a titkos kulcsok cseréje előtt"
 
-#: ../src/goaidentity/goaidentityservice.c:1373
+#: ../src/goaidentity/goaidentityservice.c:567
 msgid "Initial secret key is invalid"
 msgstr "A kezdeti titkos kulcs érvénytelen"
 
-#: ../src/goaidentity/goaidentityservice.c:1896
+#: ../src/goaidentity/goaidentityservice.c:1087
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "A(z) %s hálózati zóna információkat igényel a bejelentkeztetéshez."
@@ -477,15 +476,18 @@ msgstr "A(z) %s hálózati zóna információkat igényel a bejelentkeztetéshez
 #: ../src/goaidentity/goakerberosidentity.c:280
 #: ../src/goaidentity/goakerberosidentity.c:607
 msgid "Could not find identity in credential cache: %k"
-msgstr "Nem található személyazonosság a hitelesítési adatok gyorsítótárában: %k"
+msgstr ""
+"Nem található személyazonosság a hitelesítési adatok gyorsítótárában: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:620
 msgid "Could not find identity credentials in cache: %k"
-msgstr "Nem találhatók a személyazonosság hitelesítési adatai a gyorsítótárban: %k"
+msgstr ""
+"Nem találhatók a személyazonosság hitelesítési adatai a gyorsítótárban: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:658
 msgid "Could not sift through identity credentials in cache: %k"
-msgstr "Nem szűrhetők át a személyazonosság hitelesítési adatai a gyorsítótárban: %k"
+msgstr ""
+"Nem szűrhetők át a személyazonosság hitelesítési adatai a gyorsítótárban: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:675
 msgid "Could not finish up sifting through identity credentials in cache: %k"
@@ -535,26 +537,43 @@ msgstr "Nem törölhető a személyazonosság: %k"
 msgid "Could not find identity"
 msgstr "Nem található személyazonosság"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:803
+#: ../src/goaidentity/goakerberosidentitymanager.c:823
 msgid "Could not create credential cache for identity"
-msgstr "Nem hozható létre a hitelesítési adatok gyorsítótára a személyazonossághoz"
+msgstr ""
+"Nem hozható létre a hitelesítési adatok gyorsítótára a személyazonossághoz"
 
-#: ../src/goaidentity/um-realm-manager.c:368
-#, c-format
-msgid "No such domain or realm found"
-msgstr "Nem található ilyen tartomány vagy zóna"
+#~ msgid "Domain Administrator Login"
+#~ msgstr "Tartományadminisztrátori bejelentkezés"
 
-#: ../src/goaidentity/um-realm-manager.c:743
-#, c-format
-msgid "Cannot log in as %s at the %s domain"
-msgstr "Nem lehet bejelentkezni %s néven a(z) %s tartományba"
+#~ msgid "Could not find supported credentials"
+#~ msgstr "Nem találhatók támogatott hitelesítési adatok"
 
-#: ../src/goaidentity/um-realm-manager.c:748
-msgid "Invalid password, please try again"
-msgstr "Érvénytelen jelszó, próbálja újra"
+#~ msgid ""
+#~ "In order to use this enterprise identity, the computer needs to be "
+#~ "enrolled in the domain. Please have your network administrator type their "
+#~ "domain password here."
+#~ msgstr ""
+#~ "Ezen vállalati személyazonosság használatához a számítógépet be kell "
+#~ "jegyezni a tartományba. Kérje meg a hálózati rendszergazdát, hogy írja be "
+#~ "itt a tartomány jelszavát."
 
-#: ../src/goaidentity/um-realm-manager.c:752
-#, c-format
-msgid "Couldn't connect to the %s domain: %s"
-msgstr "Nem lehet csatlakozni a(z) %s tartományhoz: %s"
+#~ msgid ""
+#~ "In order to use this enterprise identity, the computer needs to be "
+#~ "enrolled in the domain. Please have your network administrator type their "
+#~ "domain username here."
+#~ msgstr ""
+#~ "Ezen vállalati személyazonosság használatához a számítógépet be kell "
+#~ "jegyezni a tartományba. Kérje meg a hálózati rendszergazdát, hogy írja be "
+#~ "itt a tartományfelhasználó nevét."
 
+#~ msgid "No such domain or realm found"
+#~ msgstr "Nem található ilyen tartomány vagy zóna"
+
+#~ msgid "Cannot log in as %s at the %s domain"
+#~ msgstr "Nem lehet bejelentkezni %s néven a(z) %s tartományba"
+
+#~ msgid "Invalid password, please try again"
+#~ msgstr "Érvénytelen jelszó, próbálja újra"
+
+#~ msgid "Couldn't connect to the %s domain: %s"
+#~ msgstr "Nem lehet csatlakozni a(z) %s tartományhoz: %s"
