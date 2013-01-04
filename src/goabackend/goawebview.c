@@ -250,9 +250,6 @@ goa_web_view_init (GoaWebView *self)
   soup_session_add_feature (session, SOUP_SESSION_FEATURE (logger));
   g_object_unref (logger);
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (self)),
-                               GTK_STYLE_CLASS_OSD);
-
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_size_request (scrolled_window, 500, 400);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window), GTK_SHADOW_IN);
@@ -276,6 +273,8 @@ goa_web_view_init (GoaWebView *self)
   gtk_overlay_add_overlay (GTK_OVERLAY (self), priv->floating_bar);
 
   priv->progress_bar = gtk_progress_bar_new ();
+  gtk_style_context_add_class (gtk_widget_get_style_context (priv->progress_bar),
+                               GTK_STYLE_CLASS_OSD);
   gtk_widget_set_halign (priv->progress_bar, GTK_ALIGN_FILL);
   gtk_widget_set_valign (priv->progress_bar, GTK_ALIGN_START);
   gtk_overlay_add_overlay (GTK_OVERLAY (self), priv->progress_bar);
