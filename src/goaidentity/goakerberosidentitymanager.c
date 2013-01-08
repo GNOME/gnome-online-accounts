@@ -555,6 +555,7 @@ refresh_identities (GoaKerberosIdentityManager *self,
       if (identity != NULL)
         {
           refresh_identity (self, operation, refreshed_identities, identity);
+          g_object_unref (identity);
         }
 
       krb5_cc_close (self->priv->kerberos_context, cache);
@@ -840,6 +841,10 @@ sign_in_identity (GoaKerberosIdentityManager *self,
             }
         }
     }
+  else
+    {
+      g_object_ref (identity);
+    }
 
   g_hash_table_replace (self->priv->identities,
                         g_strdup (operation->identifier),
@@ -869,6 +874,8 @@ sign_in_identity (GoaKerberosIdentityManager *self,
                                                  (GDestroyNotify)
                                                  g_object_unref);
     }
+
+  g_object_unref (identity);
 }
 
 static void
