@@ -822,7 +822,7 @@ sign_in_identity (GoaKerberosIdentityManager *self,
                                            GOA_IDENTITY_MANAGER_ERROR_CREATING_IDENTITY,
                                            _("Could not create credential cache for identity"));
           g_simple_async_result_set_op_res_gpointer (operation->result, NULL, NULL);
-
+          return;
         }
       else
         {
