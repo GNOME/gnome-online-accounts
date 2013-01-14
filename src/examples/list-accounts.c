@@ -32,8 +32,6 @@ main (int argc, char **argv)
   GList *accounts, *l;
   GoaAccount *account;
 
-  g_type_init ();
-
   client = goa_client_new_sync (NULL, &error);
   if (!client) {
     g_error ("Could not create GoaClient: %s", error->message);

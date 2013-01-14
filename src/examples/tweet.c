@@ -38,8 +38,6 @@ main (int argc, char **argv)
   RestProxy *proxy;
   RestProxyCall *call;
 
-  g_type_init ();
-
   client = goa_client_new_sync (NULL, &error);
   if (!client) {
     g_error ("Could not create GoaClient: %s", error->message);

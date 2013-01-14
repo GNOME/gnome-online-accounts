@@ -31,8 +31,6 @@ main (int argc, char **argv)
   GoaProvider *provider;
   GList *providers, *l;
 
-  g_type_init ();
-
   providers = goa_provider_get_all ();
   for (l = providers; l != NULL; l = l->next) {
     char *provider_name;

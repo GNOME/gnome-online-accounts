@@ -97,8 +97,6 @@ main (int    argc,
   name_owner_id = 0;
   sigint_id = 0;
 
-  g_type_init ();
-
   opt_context = g_option_context_new ("GNOME Online Accounts daemon");
   g_option_context_add_main_entries (opt_context, opt_entries, NULL);
   error = NULL;
