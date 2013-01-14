@@ -28,7 +28,6 @@
 #include <glib.h>
 #include <glib/gi18n-lib.h>
 #include <libsoup/soup.h>
-#include <libsoup/soup-gnome.h>
 #include <webkit/webkit.h>
 
 #include "goawebview.h"
@@ -237,7 +236,7 @@ goa_web_view_init (GoaWebView *self)
 
   session = webkit_get_default_session ();
 
-  soup_session_add_feature_by_type (session, SOUP_TYPE_PROXY_RESOLVER_GNOME);
+  soup_session_add_feature_by_type (session, SOUP_TYPE_PROXY_RESOLVER_DEFAULT);
   g_object_set (session, "accept-language-auto", TRUE, NULL);
 
   soup_session_remove_feature_by_type (session, SOUP_TYPE_COOKIE_JAR);

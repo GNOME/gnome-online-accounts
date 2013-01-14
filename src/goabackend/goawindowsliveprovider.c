@@ -27,7 +27,6 @@
 
 #include <rest/rest-proxy.h>
 #include <json-glib/json-glib.h>
-#include <libsoup/soup-gnome.h>
 #include <webkit/webkit.h>
 
 #include "goaprovider.h"
