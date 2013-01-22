@@ -143,6 +143,7 @@ goa_utils_delete_credentials_sync (GoaProvider   *provider,
                               NULL);
   if (sec_error != NULL)
     {
+      goa_warning ("secret_password_clear_sync() failed: %s", sec_error->message);
       g_set_error_literal (error,
                            GOA_ERROR,
                            GOA_ERROR_FAILED, /* TODO: more specific */
@@ -151,6 +152,7 @@ goa_utils_delete_credentials_sync (GoaProvider   *provider,
       goto out;
     }
 
+  goa_debug ("Cleared keyring credentials for identity: %s", identity);
   ret = TRUE;
 
  out:
@@ -168,6 +170,7 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
   GVariant *ret;
   gchar *password;
   const gchar *identity;
+  GError *sec_error = NULL;
 
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), NULL);
   g_return_val_if_fail (GOA_IS_OBJECT (object) && goa_object_peek_account (object) != NULL, FALSE);
@@ -187,17 +190,30 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
 
   password = secret_password_lookup_sync (&secret_password_schema,
                                           cancellable,
-                                          NULL,
+                                          &sec_error,
                                           "goa-identity", password_key,
                                           NULL);
-  if (password == NULL)
+  if (sec_error != NULL)
     {
+      goa_warning ("secret_password_lookup_sync() failed: %s", sec_error->message);
       g_set_error_literal (error,
                            GOA_ERROR,
                            GOA_ERROR_FAILED, /* TODO: more specific */
                            _("Failed to retrieve credentials from the keyring"));
+      g_error_free (sec_error);
       goto out;
     }
+  else if (password == NULL)
+    {
+      goa_warning ("secret_password_lookup_sync() returned NULL");
+      g_set_error_literal (error,
+                           GOA_ERROR,
+                           GOA_ERROR_FAILED, /* TODO: more specific */
+                           _("No credentials found in the keyring"));
+      goto out;
+    }
+
+  goa_debug ("Retreived keyring credentials for identity: %s", identity);
 
   ret = g_variant_parse (NULL, /* GVariantType */
                          password,
@@ -230,6 +246,7 @@ goa_utils_store_credentials_for_id_sync (GoaProvider   *provider,
   gchar *credentials_str;
   gchar *password_description;
   gchar *password_key;
+  GError *sec_error = NULL;
 
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
   g_return_val_if_fail (id != NULL && id[0] != '\0', FALSE);
@@ -257,17 +274,20 @@ goa_utils_store_credentials_for_id_sync (GoaProvider   *provider,
                                    password_description,
                                    credentials_str,
                                    cancellable,
-                                   NULL,
+                                   &sec_error,
                                    "goa-identity", password_key,
                                    NULL))
     {
+      goa_warning ("secret_password_store_sync() failed: %s", sec_error->message);
       g_set_error_literal (error,
                            GOA_ERROR,
                            GOA_ERROR_FAILED, /* TODO: more specific */
                            _("Failed to store credentials in the keyring"));
+      g_error_free (sec_error);
       goto out;
     }
 
+  goa_debug ("Stored keyring credentials for identity: %s", id);
   ret = TRUE;
 
  out:
