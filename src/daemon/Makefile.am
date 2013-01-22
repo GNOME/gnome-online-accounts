@@ -27,7 +27,6 @@ goa_daemon_SOURCES = 						\
 				main.c				\
 	goadaemontypes.h					\
 	goadaemon.h		goadaemon.c			\
-	gposixsignal.h		gposixsignal.c			\
 	$(NULL)
 
 goa_daemon_CPPFLAGS =						\

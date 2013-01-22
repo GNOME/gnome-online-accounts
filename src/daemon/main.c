@@ -23,13 +23,13 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <glib-unix.h>
 
 #include <signal.h>
 #include <gio/gio.h>
 
 #include <goabackend/goabackend.h>
 
-#include "gposixsignal.h"
 #include "goadaemon.h"
 
 
@@ -117,11 +117,7 @@ main (int    argc,
   sigint_id = 0;
   if (!opt_no_sigint)
     {
-      sigint_id = _g_posix_signal_watch_add (SIGINT,
-                                             G_PRIORITY_DEFAULT,
-                                             on_sigint,
-                                             NULL,
-                                             NULL);
+      sigint_id = g_unix_signal_add (SIGINT, on_sigint, NULL);
     }
 
   name_owner_id = g_bus_own_name (G_BUS_TYPE_SESSION,
