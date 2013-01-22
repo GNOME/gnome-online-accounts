@@ -31,6 +31,8 @@
 
 G_BEGIN_DECLS
 
+void goa_log_init (gboolean no_colors);
+
 void goa_log (GoaLogLevel     level,
               const gchar    *function,
               const gchar    *location,

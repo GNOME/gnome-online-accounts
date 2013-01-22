@@ -38,10 +38,12 @@
 static GMainLoop *loop = NULL;
 static gboolean opt_replace = FALSE;
 static gboolean opt_no_sigint = FALSE;
+static gboolean opt_no_color = FALSE;
 static GOptionEntry opt_entries[] =
 {
   {"replace", 0, 0, G_OPTION_ARG_NONE, &opt_replace, "Replace existing daemon", NULL},
   {"no-sigint", 0, 0, G_OPTION_ARG_NONE, &opt_no_sigint, "Do not handle SIGINT for controlled shutdown", NULL},
+  {"no-color", 0, 0, G_OPTION_ARG_NONE, &opt_no_color, "Do not display colors in output", NULL},
   {NULL }
 };
 static GoaDaemon *the_daemon = NULL;
@@ -107,6 +109,7 @@ main (int    argc,
       goto out;
     }
 
+  goa_log_init (opt_no_color);
   goa_notice ("goa-daemon version %s starting", PACKAGE_VERSION);
 
   loop = g_main_loop_new (NULL, FALSE);

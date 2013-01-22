@@ -69,16 +69,19 @@ typedef enum
   _COLOR_BG_WHITE
 } _Color;
 
-static gboolean _color_stdin_is_tty = FALSE;
+static gboolean _color_output = FALSE;
 static gboolean _color_initialized = FALSE;
 
-static void
-_color_init (void)
+void
+goa_log_init (gboolean no_color)
 {
   if (_color_initialized)
     return;
   _color_initialized = TRUE;
-  _color_stdin_is_tty = (isatty (STDIN_FILENO) != 0 && isatty (STDOUT_FILENO) != 0);
+  if (no_color)
+    _color_output = FALSE;
+  else
+    _color_output = (isatty (STDIN_FILENO) != 0 && isatty (STDOUT_FILENO) != 0);
 }
 
 static const gchar *
@@ -86,9 +89,7 @@ _color_get (_Color color)
 {
   const gchar *str;
 
-  _color_init ();
-
-  if (!_color_stdin_is_tty)
+  if (!_color_output)
     return "";
 
   str = NULL;
