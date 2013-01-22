@@ -118,6 +118,7 @@ goa_utils_delete_credentials_sync (GoaProvider   *provider,
   gboolean ret;
   gchar *password_key;
   const gchar *identity;
+  GError *sec_error = NULL;
 
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
   g_return_val_if_fail (GOA_IS_ACCOUNT (object), FALSE);
@@ -135,16 +136,18 @@ goa_utils_delete_credentials_sync (GoaProvider   *provider,
                                   goa_provider_get_credentials_generation (GOA_PROVIDER (provider)),
                                   identity);
 
-  if (!secret_password_clear_sync (&secret_password_schema,
-                                   cancellable,
-                                   NULL,
-                                   "goa-identity", password_key,
-                                   NULL))
+  secret_password_clear_sync (&secret_password_schema,
+                              cancellable,
+                              &sec_error,
+                              "goa-identity", password_key,
+                              NULL);
+  if (sec_error != NULL)
     {
       g_set_error_literal (error,
                            GOA_ERROR,
                            GOA_ERROR_FAILED, /* TODO: more specific */
                            _("Failed to delete credentials from the keyring"));
+      g_error_free (sec_error);
       goto out;
     }
 
