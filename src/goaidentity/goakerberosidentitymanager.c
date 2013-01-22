@@ -25,7 +25,7 @@
 #include "goakerberosidentitymanager.h"
 #include "goaidentitymanager.h"
 #include "goaidentitymanagerprivate.h"
-#include "goakerberosidentity.h"
+#include "goakerberosidentityinquiry.h"
 #include "goalogging.h"
 
 #include <fcntl.h>

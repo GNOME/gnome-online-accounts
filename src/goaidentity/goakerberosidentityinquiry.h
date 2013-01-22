@@ -38,7 +38,6 @@ G_BEGIN_DECLS
 #define GOA_IS_KERBEROS_IDENTITY_INQUIRY(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GOA_TYPE_KERBEROS_IDENTITY_INQUIRY))
 #define GOA_IS_KERBEROS_IDENTITY_INQUIRY_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GOA_TYPE_KERBEROS_IDENTITY_INQUIRY))
 #define GOA_KERBEROS_IDENTITY_INQUIRY_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS((obj), GOA_TYPE_KERBEROS_IDENTITY_INQUIRY, GoaKerberosIdentityInquiryClass))
-typedef struct _GoaKerberosIdentity GoaKerberosIdentity;
 typedef struct _GoaKerberosIdentityInquiry GoaKerberosIdentityInquiry;
 typedef struct _GoaKerberosIdentityInquiryClass GoaKerberosIdentityInquiryClass;
 typedef struct _GoaKerberosIdentityInquiryPrivate GoaKerberosIdentityInquiryPrivate;

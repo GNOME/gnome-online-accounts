@@ -27,7 +27,7 @@
 #include <glib-object.h>
 
 #include <krb5.h>
-#include "goakerberosidentityinquiry.h"
+#include "goaidentityinquiry.h"
 
 G_BEGIN_DECLS
 #define GOA_TYPE_KERBEROS_IDENTITY             (goa_kerberos_identity_get_type ())
