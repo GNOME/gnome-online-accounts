@@ -982,11 +982,19 @@ goa_util_add_row_switch_from_keyfile_with_blurb (GtkGrid      *left,
   account = goa_object_peek_account (object);
   g_object_get (account, property, &value, NULL);
   switch_ = gtk_switch_new ();
-  gtk_switch_set_active (GTK_SWITCH (switch_), !value);
 
-  g_object_bind_property (switch_, "active",
-                          account, property,
-                          G_BINDING_BIDIRECTIONAL | G_BINDING_INVERT_BOOLEAN);
+  if (goa_account_get_attention_needed (account))
+    {
+      gtk_widget_set_sensitive (switch_, FALSE);
+      gtk_switch_set_active (GTK_SWITCH (switch_), FALSE);
+    }
+  else
+    {
+      gtk_switch_set_active (GTK_SWITCH (switch_), !value);
+      g_object_bind_property (switch_, "active",
+                              account, property,
+                              G_BINDING_BIDIRECTIONAL | G_BINDING_INVERT_BOOLEAN);
+    }
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
