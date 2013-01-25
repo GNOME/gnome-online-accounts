@@ -2,14 +2,14 @@
 # Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
 #
-# Nilamdyuti Goswami <ngoswami@redhat.com>, 2011, 2012.
+# Nilamdyuti Goswami <ngoswami@redhat.com>, 2011, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-12-18 19:03+0000\n"
-"PO-Revision-Date: 2012-12-19 13:09+0530\n"
+"POT-Creation-Date: 2013-01-22 13:16+0000\n"
+"PO-Revision-Date: 2013-01-25 17:37+0530\n"
 "Last-Translator: Nilamdyuti Goswami <ngoswami@redhat.com>\n"
 "Language-Team: Assamese <kde-i18n-doc@kde.org>\n"
 "Language: as_IN\n"
@@ -181,7 +181,7 @@ msgstr "পুনৰ চেষ্টা কৰক (_T)"
 #: ../src/goabackend/goagoogleprovider.c:671
 #: ../src/goabackend/goakerberosprovider.c:1722
 #: ../src/goabackend/goaowncloudprovider.c:1009
-#: ../src/goabackend/goawindowsliveprovider.c:409
+#: ../src/goabackend/goawindowsliveprovider.c:408
 msgid "Use for"
 msgstr "বাবে ব্যৱহাৰ কৰক"
 
@@ -210,7 +210,7 @@ msgstr "Facebook"
 #: ../src/goabackend/goafacebookprovider.c:199
 #: ../src/goabackend/goagoogleprovider.c:194
 #: ../src/goabackend/goatwitterprovider.c:160
-#: ../src/goabackend/goawindowsliveprovider.c:182
+#: ../src/goabackend/goawindowsliveprovider.c:181
 #: ../src/goabackend/goayahooprovider.c:163
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
@@ -222,13 +222,13 @@ msgstr ""
 #: ../src/goabackend/goagoogleprovider.c:206
 #: ../src/goabackend/goaoauth2provider.c:616
 #: ../src/goabackend/goatwitterprovider.c:172
-#: ../src/goabackend/goawindowsliveprovider.c:194
+#: ../src/goabackend/goawindowsliveprovider.c:193
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
 msgstr "প্ৰতিক্ৰিয়াক JSON হিচাপে বিশ্লেষণ কৰোতে ত্ৰুটি: "
 
 #: ../src/goabackend/goafacebookprovider.c:222
-#: ../src/goabackend/goawindowsliveprovider.c:205
+#: ../src/goabackend/goawindowsliveprovider.c:204
 #, c-format
 msgid "Didn't find id member in JSON data"
 msgstr "JSON তথ্যত আইডি সদস্য পোৱা নগল"
@@ -241,7 +241,7 @@ msgstr "JSON তথ্যত ই-মেইল সদস্য পোৱা ন�
 
 #: ../src/goabackend/goafacebookprovider.c:397
 #: ../src/goabackend/goagoogleprovider.c:688
-#: ../src/goabackend/goawindowsliveprovider.c:411
+#: ../src/goabackend/goawindowsliveprovider.c:410
 msgid "C_hat"
 msgstr "চেট (_h)"
 
@@ -290,7 +290,7 @@ msgid "Google"
 msgstr "Google"
 
 #: ../src/goabackend/goagoogleprovider.c:693
-#: ../src/goabackend/goawindowsliveprovider.c:416
+#: ../src/goabackend/goawindowsliveprovider.c:415
 msgid "_Documents"
 msgstr "দস্তাবেজসমূহ (_D)"
 
@@ -491,41 +491,47 @@ msgid "%s account"
 msgstr "%s একাওন্ট"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:147
+#: ../src/goabackend/goautils.c:150
 msgid "Failed to delete credentials from the keyring"
 msgstr "keyring ৰ পৰা তথ্যসমূহ মচি পেলাবলে ব্যৰ্থ"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:195
+#: ../src/goabackend/goautils.c:202
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "keyring ৰ পৰা তথ্যসমূহ উদ্ধাৰ কৰিবলে ব্যৰ্থ"
 
-#: ../src/goabackend/goautils.c:206
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:212
+#| msgid "Failed to store credentials in the keyring"
+msgid "No credentials found in the keyring"
+msgstr "keyring ত কোনো তথ্য পোৱা নগল"
+
+#: ../src/goabackend/goautils.c:225
 msgid "Error parsing result obtained from the keyring: "
 msgstr "keyring ৰ পৰা প্ৰাপ্ত ফলাফল বিশ্লেষণ কৰোতে ত্ৰুটি: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:248
+#: ../src/goabackend/goautils.c:268
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "পৰিচয় %s ৰ বাবে GOA %s তথ্যসমূহ"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:264
+#: ../src/goabackend/goautils.c:285
 msgid "Failed to store credentials in the keyring"
 msgstr "keyring ত তথ্যসমূহ সংৰক্ষণ কৰিবলে ব্যৰ্থ"
 
 #. translators: %s here is the address of the web page
-#: ../src/goabackend/goawebview.c:75
+#: ../src/goabackend/goawebview.c:74
 #, c-format
 msgid "Loading “%s”…"
 msgstr "“%s” ল'ড কৰা হৈছে…"
 
-#: ../src/goabackend/goawindowsliveprovider.c:82
+#: ../src/goabackend/goawindowsliveprovider.c:81
 msgid "Windows Live"
 msgstr "Windows Live"
 
-#: ../src/goabackend/goawindowsliveprovider.c:216
+#: ../src/goabackend/goawindowsliveprovider.c:215
 #, c-format
 msgid "Didn't find account email member in JSON data"
 msgstr "JSON তথ্যত একাওন্ট ই-মেইল সদস্য পোৱা নগল"
@@ -637,11 +643,11 @@ msgstr "পৰিচয় %s পুনৰ সজিৱ কৰিবলে নত�
 msgid "Could not erase identity: %k"
 msgstr "পৰিচয় মচিব পৰা নগল: %k"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:746
+#: ../src/goaidentity/goakerberosidentitymanager.c:747
 msgid "Could not find identity"
 msgstr "পৰিচয় পোৱা নগল"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:823
+#: ../src/goaidentity/goakerberosidentitymanager.c:824
 msgid "Could not create credential cache for identity"
 msgstr "পৰিচয়ৰ বাবে তথ্য ক্যাশ সৃষ্টি কৰিব পৰা নগল"
 
