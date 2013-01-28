@@ -528,18 +528,12 @@ build_object (GoaProvider         *provider,
   ret = TRUE;
 
  out:
-  if (documents != NULL)
-    g_object_unref (documents);
-  if (chat != NULL)
-    g_object_unref (chat);
-  if (contacts != NULL)
-    g_object_unref (contacts);
-  if (calendar != NULL)
-    g_object_unref (calendar);
-  if (mail != NULL)
-    g_object_unref (mail);
-  if (account != NULL)
-    g_object_unref (account);
+  g_clear_object (&documents);
+  g_clear_object (&chat);
+  g_clear_object (&contacts);
+  g_clear_object (&calendar);
+  g_clear_object (&mail);
+  g_clear_object (&account);
   return ret;
 }
 
