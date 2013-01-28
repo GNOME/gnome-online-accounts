@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2012 Red Hat, Inc.
+ * Copyright (C) 2011, 2012, 2013 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,6 +31,7 @@
 #include "goaexchangeprovider.h"
 #include "goagoogleprovider.h"
 #include "goafacebookprovider.h"
+#include "goaimapsmtpprovider.h"
 #include "goaowncloudprovider.h"
 #include "goayahooprovider.h"
 #include "goatwitterprovider.h"
@@ -677,6 +678,9 @@ ensure_builtins_loaded (void)
 #endif
 #ifdef GOA_EXCHANGE_ENABLED
       type = GOA_TYPE_EXCHANGE_PROVIDER;
+#endif
+#ifdef GOA_IMAP_SMTP_ENABLED
+      type = GOA_TYPE_IMAP_SMTP_PROVIDER;
 #endif
 #ifdef GOA_KERBEROS_ENABLED
       type = GOA_TYPE_KERBEROS_PROVIDER;

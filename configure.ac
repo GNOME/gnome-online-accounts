@@ -172,6 +172,16 @@ if test "$enable_google" != "no"; then
   AC_DEFINE(GOA_GOOGLE_ENABLED, 1, [Enable Google data provider])
 fi
 
+# IMAP/SMTP
+AC_ARG_ENABLE([imap-smtp],
+              [AS_HELP_STRING([--enable-imap-smtp],
+              [Enable IMAP/SMTP provider])],
+              [],
+              [enable_imap_smtp=no])
+if test "$enable_imap_smtp" != "no"; then
+  AC_DEFINE(GOA_IMAP_SMTP_ENABLED, 1, [Enable IMAP/SMTP data provider])
+fi
+
 # ownCloud
 AC_ARG_ENABLE([owncloud],
               [AS_HELP_STRING([--enable-owncloud],
@@ -450,6 +460,7 @@ echo "
 
 	Flickr provider:                ${enable_flickr} (OAuth 1.0, key:${with_flickr_consumer_key} secret:${with_flickr_consumer_secret})
 	Google provider:                ${enable_google} (OAuth 2.0, id:${with_google_client_id} secret:${with_google_client_secret})
+	IMAP/SMTP provider:             ${enable_imap_smtp}
 	Microsoft Exchange provider:    ${enable_exchange}
 	ownCloud provider:              ${enable_owncloud}
 	Kerberos provider:              ${enable_kerberos}

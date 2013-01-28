@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2013 Red Hat, Inc.
+ * Copyright (C) 2011, 2013 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,46 +25,21 @@
 #error "Only <goabackend/goabackend.h> can be included directly."
 #endif
 
-#ifndef __GOA_BACKEND_ENUMS_PRIV_H__
-#define __GOA_BACKEND_ENUMS_PRIV_H__
+#ifndef __GOA_IMAP_SMTP_PROVIDER_H__
+#define __GOA_IMAP_SMTP_PROVIDER_H__
+
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-/**
- * GoaLogLevel:
- * @GOA_LOG_LEVEL_DEBUG: Debug messages.
- * @GOA_LOG_LEVEL_INFO: Informational messages.
- * @GOA_LOG_LEVEL_NOTICE: Messages that the administrator should take notice of.
- * @GOA_LOG_LEVEL_WARNING: Warning messages.
- * @GOA_LOG_LEVEL_ERROR: Error messages.
- *
- * Logging levels.
- */
-typedef enum
-{
-  GOA_LOG_LEVEL_DEBUG,
-  GOA_LOG_LEVEL_INFO,
-  GOA_LOG_LEVEL_NOTICE,
-  GOA_LOG_LEVEL_WARNING,
-  GOA_LOG_LEVEL_ERROR
-} GoaLogLevel;
+#define GOA_TYPE_IMAP_SMTP_PROVIDER   (goa_imap_smtp_provider_get_type ())
+#define GOA_IMAP_SMTP_PROVIDER(o)     (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_IMAP_SMTP_PROVIDER, GoaImapSmtpProvider))
+#define GOA_IS_IMAP_SMTP_PROVIDER(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_IMAP_SMTP_PROVIDER))
 
-/**
- * GoaTlsType:
- * @GOA_TLS_TYPE_NONE: No encryption.
- * @GOA_TLS_TYPE_STARTTLS: STARTTLS should be used on a standard port
- * after the connection has been established to obtain a secure channel.
- * @GOA_TLS_TYPE_SSL: SSL should be used on a dedicated port.
- *
- * Type of SSL/TLS used to connect to a server.
- */
-typedef enum
-{
-  GOA_TLS_TYPE_NONE,
-  GOA_TLS_TYPE_STARTTLS,
-  GOA_TLS_TYPE_SSL
-} GoaTlsType;
+typedef struct _GoaImapSmtpProvider GoaImapSmtpProvider;
+
+GType goa_imap_smtp_provider_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GOA_BACKEND_ENUMS_PRIV_H__ */
+#endif /* __GOA_IMAP_SMTP_PROVIDER_H__ */
