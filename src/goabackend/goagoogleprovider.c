@@ -17,8 +17,8 @@
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  *
- * Author: David Zeuthen <davidz@redhat.com>
- *         Debarshi Ray <debarshir@gnome.org>
+ * Authors: David Zeuthen <davidz@redhat.com>
+ *          Debarshi Ray <debarshir@gnome.org>
  */
 
 #include "config.h"
@@ -411,7 +411,7 @@ build_object (GoaProvider         *provider,
                         "imap-supported",  TRUE,
                         "imap-host",       "imap.gmail.com",
                         "imap-user-name",  email_address,
-                        "imap-use-tls",    TRUE,
+                        "imap-use-ssl",    TRUE,
                         "smtp-supported",  TRUE,
                         "smtp-host",       "smtp.gmail.com",
                         "smtp-user-name",  email_address,

@@ -3,7 +3,7 @@
 "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 
 <!--
- Copyright (C) 2011, 2012 Red Hat, Inc.
+ Copyright (C) 2011, 2012, 2013 Red Hat, Inc.
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -388,12 +388,26 @@
 
          If a port override is not given, then applications should try
          to connect to port 993 if
-         #org.gnome.OnlineAccounts.Mail:ImapUseTls is %TRUE and port
+         #org.gnome.OnlineAccounts.Mail:ImapUseSsl is %TRUE and port
          143 if not.
     -->
     <property name="ImapHost" type="s" access="read"/>
 
-    <!-- ImapUseTls: Whether TLS should be used to establish the connection. -->
+    <!-- ImapUseSsl:
+         @since: 3.8.0
+         Whether SSL should be used.
+
+         This indicates that SSL should be used on a dedicated port.
+    -->
+    <property name="ImapUseSsl" type="b" access="read"/>
+
+    <!-- ImapUseTls:
+         Whether TLS should be used.
+
+         This indicates that STARTTLS should be used on a standard port
+         after the connection has been established to obtain a secure
+         channel.
+    -->
     <property name="ImapUseTls" type="b" access="read"/>
 
     <!-- ImapUserName:
@@ -422,12 +436,26 @@
 
          If a port override is not given, then applications should try
          to connect to port 465 if
-         #org.gnome.OnlineAccounts.Mail:SmtpUseTls is %TRUE and port
+         #org.gnome.OnlineAccounts.Mail:SmtpUseSsl is %TRUE and port
          587 (or 25) if not.
     -->
     <property name="SmtpHost" type="s" access="read"/>
 
-    <!-- SmtpUseTls: Whether TLS should be used to establish the connection. -->
+    <!-- SmtpUseSsl:
+         @since: 3.8.0
+         Whether SSL should be used.
+
+         This indicates that SSL should be used on a dedicated port.
+    -->
+    <property name="SmtpUseSsl" type="b" access="read"/>
+
+    <!-- SmtpUseTls:
+         Whether TLS should be used.
+
+         This indicates that STARTTLS should be used on a standard port
+         after the connection has been established to obtain a secure
+         channel.
+    -->
     <property name="SmtpUseTls" type="b" access="read"/>
 
     <!-- SmtpUserName:
