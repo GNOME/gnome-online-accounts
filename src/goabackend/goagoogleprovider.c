@@ -750,7 +750,7 @@ goa_google_provider_class_init (GoaGoogleProviderClass *klass)
 static gboolean
 on_handle_get_password (GoaPasswordBased      *interface,
                         GDBusMethodInvocation *invocation,
-                        const gchar           *id,
+                        const gchar           *id, /* unused */
                         gpointer               user_data)
 {
   GoaObject *object;
@@ -785,8 +785,7 @@ on_handle_get_password (GoaPasswordBased      *interface,
       g_dbus_method_invocation_return_error (invocation,
                                              GOA_ERROR,
                                              GOA_ERROR_FAILED, /* TODO: more specific */
-                                             _("Did not find password with username `%s' in credentials"),
-                                             id);
+                                             _("Did not find password in credentials"));
       goto out;
     }
 
