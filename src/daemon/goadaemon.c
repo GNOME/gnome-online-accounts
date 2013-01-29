@@ -986,10 +986,13 @@ goa_daemon_update_notifications (GoaDaemon *daemon)
       if (daemon->notification == NULL)
         {
           GError *error;
+          GVariant *desktop_entry;
 
           daemon->notification = notify_notification_new (_("An online account needs attention"),
                                                           NULL,
                                                           NULL);
+          desktop_entry = g_variant_new_string ("goa-daemon");
+          notify_notification_set_hint (daemon->notification, "desktop-entry", desktop_entry);
           notify_notification_set_timeout (daemon->notification, NOTIFY_EXPIRES_NEVER);
           g_object_set (daemon->notification, "icon-name", "gtk-dialog-error", NULL);
           notify_notification_add_action (daemon->notification,
