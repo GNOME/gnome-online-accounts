@@ -299,12 +299,33 @@ goa_provider_get_provider_icon_default (GoaProvider *provider,
  * Returns: A #GoaProviderGroup.
  *
  * Since: 3.8
+ *
+ * Deprecated: 3.10: Use goa_provider_get_provider_features() instead.
  */
 GoaProviderGroup
 goa_provider_get_provider_group (GoaProvider *provider)
 {
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), GOA_PROVIDER_GROUP_INVALID);
   return GOA_PROVIDER_GET_CLASS (provider)->get_provider_group (provider);
+}
+
+/**
+ * goa_provider_get_provider_features:
+ * @provider: A #GoaProvider.
+ *
+ * Get the features bitmask (eg. %GOA_PROVIDER_FEATURE_CHAT|%GOA_PROVIDER_FEATURE_CONTACTS)
+ * supported by the provider.
+ *
+ * Returns: The #GoaProviderFeatures bitmask with the provided features.
+ *
+ * Since: 3.10
+ */
+GoaProviderFeatures
+goa_provider_get_provider_features (GoaProvider *provider)
+{
+  g_return_val_if_fail (GOA_IS_PROVIDER (provider), GOA_PROVIDER_FEATURE_INVALID);
+  g_return_val_if_fail (GOA_PROVIDER_GET_CLASS (provider)->get_provider_features != NULL, GOA_PROVIDER_FEATURE_INVALID);
+  return GOA_PROVIDER_GET_CLASS (provider)->get_provider_features (provider);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

@@ -90,6 +90,14 @@ get_provider_group (GoaProvider *_provider)
   return GOA_PROVIDER_GROUP_BRANDED;
 }
 
+static GoaProviderFeatures
+get_provider_features (GoaProvider *_provider)
+{
+  return GOA_PROVIDER_FEATURE_BRANDED |
+         GOA_PROVIDER_FEATURE_CHAT |
+         GOA_PROVIDER_FEATURE_DOCUMENTS;
+}
+
 static const gchar *
 get_authorization_uri (GoaOAuth2Provider *provider)
 {
@@ -458,6 +466,7 @@ goa_windows_live_provider_class_init (GoaWindowsLiveProviderClass *klass)
   provider_class->get_provider_type          = get_provider_type;
   provider_class->get_provider_name          = get_provider_name;
   provider_class->get_provider_group         = get_provider_group;
+  provider_class->get_provider_features      = get_provider_features;
   provider_class->build_object               = build_object;
   provider_class->show_account               = show_account;
   provider_class->get_credentials_generation = get_credentials_generation;

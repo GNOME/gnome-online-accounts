@@ -85,6 +85,15 @@ get_provider_group (GoaProvider *_provider)
   return GOA_PROVIDER_GROUP_BRANDED;
 }
 
+static GoaProviderFeatures
+get_provider_features (GoaProvider *_provider)
+{
+  return GOA_PROVIDER_FEATURE_BRANDED |
+         GOA_PROVIDER_FEATURE_MAIL |
+         GOA_PROVIDER_FEATURE_CALENDAR |
+         GOA_PROVIDER_FEATURE_CONTACTS;
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean on_handle_get_password (GoaPasswordBased      *interface,
@@ -984,6 +993,7 @@ goa_exchange_provider_class_init (GoaExchangeProviderClass *klass)
   provider_class->get_provider_type          = get_provider_type;
   provider_class->get_provider_name          = get_provider_name;
   provider_class->get_provider_group         = get_provider_group;
+  provider_class->get_provider_features      = get_provider_features;
   provider_class->add_account                = add_account;
   provider_class->refresh_account            = refresh_account;
   provider_class->build_object               = build_object;

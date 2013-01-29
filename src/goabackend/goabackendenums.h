@@ -58,6 +58,41 @@ typedef enum
   GOA_PROVIDER_GROUP_INVALID
 } GoaProviderGroup;
 
+/**
+ * GoaProviderFeatures:
+ * @GOA_PROVIDER_FEATURE_BRANDED: Common providers to be highlighted (ie. Google, OwnCloud).
+ * @GOA_PROVIDER_FEATURE_MAIL: Mail services (ie. SMTP, IMAP).
+ * @GOA_PROVIDER_FEATURE_CALENDAR: Calendaring services (ie. CalDAV).
+ * @GOA_PROVIDER_FEATURE_CONTACTS: Addressbook services (ie. CardDAV).
+ * @GOA_PROVIDER_FEATURE_CHAT: Instant messaging services (ie. XMPP, IRC).
+ * @GOA_PROVIDER_FEATURE_DOCUMENTS: Documents storage services (ie. Google Documents).
+ * @GOA_PROVIDER_FEATURE_PHOTOS: Photos storage services (ie. Flickr).
+ * @GOA_PROVIDER_FEATURE_FILES: Files storage services (ie. WebDAV).
+ * @GOA_PROVIDER_FEATURE_TICKETING: Ticketing services (ie. Kerberos).
+ * @GOA_PROVIDER_FEATURE_INVALID: Used for error handling. No provider
+ *   should provide this feature.
+ *
+ * These flags specify the features exported by each provider. They can be
+ * expecially useful to restrict the list of available providers when
+ * requesting the creation of an account for a specific purpose (eg. from a
+ * chat program).
+ *
+ * Since: 3.10
+ */
+typedef enum /*< flags >*/
+{
+  GOA_PROVIDER_FEATURE_BRANDED   = 1 << 1,
+  GOA_PROVIDER_FEATURE_MAIL      = 1 << 2,
+  GOA_PROVIDER_FEATURE_CALENDAR  = 1 << 3,
+  GOA_PROVIDER_FEATURE_CONTACTS  = 1 << 4,
+  GOA_PROVIDER_FEATURE_CHAT      = 1 << 5,
+  GOA_PROVIDER_FEATURE_DOCUMENTS = 1 << 6,
+  GOA_PROVIDER_FEATURE_PHOTOS    = 1 << 7,
+  GOA_PROVIDER_FEATURE_FILES     = 1 << 8,
+  GOA_PROVIDER_FEATURE_TICKETING = 1 << 9,
+  GOA_PROVIDER_FEATURE_INVALID   = 0
+} GoaProviderFeatures;
+
 G_END_DECLS
 
 #endif /* __GOA_BACKEND_ENUMS_H__ */
