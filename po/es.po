@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-01-22 13:16+0000\n"
-"PO-Revision-Date: 2013-01-24 16:32+0100\n"
+"POT-Creation-Date: 2013-01-29 16:29+0000\n"
+"PO-Revision-Date: 2013-01-30 14:56+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -21,26 +21,30 @@ msgstr ""
 "X-Generator: Gtranslator 2.91.5\n"
 
 #. shut up -Wunused-but-set-variable
-#: ../src/daemon/goadaemon.c:211
+#: ../data/goa-daemon.desktop.in.in.h:1 ../src/daemon/goadaemon.c:211
 msgid "Online Accounts"
 msgstr "Cuentas en línea"
 
+#: ../data/goa-daemon.desktop.in.in.h:2
+msgid "Provides the org.gnome.OnlinesAccounts name on the session bus"
+msgstr "Proporciona el nombre org.gnome.OnlinesAccounts en el bus de la sesión"
+
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:801 ../src/daemon/goadaemon.c:1146
+#: ../src/daemon/goadaemon.c:801 ../src/daemon/goadaemon.c:1149
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Falló al buscar un proveedor para: %s"
 
-#: ../src/daemon/goadaemon.c:990
+#: ../src/daemon/goadaemon.c:991
 msgid "An online account needs attention"
 msgstr "Una cuenta en línea necesita su atención"
 
-#: ../src/daemon/goadaemon.c:997
+#: ../src/daemon/goadaemon.c:1000
 msgid "Open Online Accounts..."
 msgstr "Abrir cuentas en línea…"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1134
+#: ../src/daemon/goadaemon.c:1137
 msgid "ProviderType property is not set for account"
 msgstr "Propiedad «ProviderType» no establecida para la cuenta"
 
@@ -93,13 +97,9 @@ msgstr "Microsoft Exchange"
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "No se encontraron las credenciales en el depósito de claves (%s, %d): "
 
-#. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:302
-#: ../src/goabackend/goaexchangeprovider.c:1015
 #: ../src/goabackend/goagoogleprovider.c:604
-#: ../src/goabackend/goagoogleprovider.c:788
 #: ../src/goabackend/goaowncloudprovider.c:350
-#: ../src/goabackend/goaowncloudprovider.c:1087
 #, c-format
 msgid "Did not find password with username `%s' in credentials"
 msgstr ""
@@ -204,6 +204,14 @@ msgstr "Cale_ndario"
 #: ../src/goabackend/goaowncloudprovider.c:1016
 msgid "_Contacts"
 msgstr "_Contactos"
+
+#. TODO: more specific
+#: ../src/goabackend/goaexchangeprovider.c:1015
+#: ../src/goabackend/goagoogleprovider.c:788
+#: ../src/goabackend/goaowncloudprovider.c:1087
+#| msgid "Did not find password with username `%s' in credentials"
+msgid "Did not find password in credentials"
+msgstr "No se encontró la contraseña en las credenciales"
 
 #: ../src/goabackend/goafacebookprovider.c:79
 msgid "Facebook"
@@ -516,7 +524,6 @@ msgstr "Falló al obtener las credenciales del depósito de claves"
 
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:212
-#| msgid "Failed to store credentials in the keyring"
 msgid "No credentials found in the keyring"
 msgstr "No se han encontrado credenciales en el depósito de claves"
 
