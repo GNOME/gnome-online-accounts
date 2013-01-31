@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012 Red Hat, Inc.
+ * Copyright (C) 2012, 2013 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -441,4 +441,44 @@ goa_utils_keyfile_set_string (GoaAccount *account, const gchar *key, const gchar
   g_key_file_free (key_file);
   g_free (group);
   g_free (path);
+}
+
+void
+goa_utils_set_error_ssl (GError **err, GTlsCertificateFlags flags)
+{
+  const gchar *error_msg;
+
+  switch (flags)
+    {
+    case G_TLS_CERTIFICATE_UNKNOWN_CA:
+      error_msg = _("The signing certificate authority is not known.");
+      break;
+
+    case G_TLS_CERTIFICATE_BAD_IDENTITY:
+      error_msg = _("The certificate does not match the expected identity of the site that it was "
+                    "retrieved from.");
+      break;
+
+    case G_TLS_CERTIFICATE_NOT_ACTIVATED:
+      error_msg = _("The certificate's activation time is still in the future.");
+      break;
+
+    case G_TLS_CERTIFICATE_EXPIRED:
+      error_msg = _("The certificate has expired.");
+      break;
+
+    case G_TLS_CERTIFICATE_REVOKED:
+      error_msg = _("The certificate has been revoked.");
+      break;
+
+    case G_TLS_CERTIFICATE_INSECURE:
+      error_msg = _("The certificate's algorithm is considered insecure.");
+      break;
+
+    default:
+      error_msg = _("Invalid certificate.");
+      break;
+    }
+
+  g_set_error (err, GOA_ERROR, GOA_ERROR_SSL, error_msg);
 }

@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012 Red Hat, Inc.
+ * Copyright (C) 2012, 2013 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,6 +28,7 @@
 
 #include "goalogging.h"
 #include "goahttpclient.h"
+#include "goautils.h"
 
 struct _GoaHttpClient
 {
@@ -71,6 +72,7 @@ typedef struct
   GSimpleAsyncResult *res;
   SoupMessage *msg;
   SoupSession *session;
+  gboolean accept_ssl_errors;
   gulong cancellable_id;
 } CheckData;
 
@@ -132,7 +134,9 @@ http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer 
 {
   GError *error;
   CheckData *data = user_data;
+  GTlsCertificateFlags cert_flags;
   gboolean op_res;
+  gboolean using_https;
 
   error = NULL;
   op_res = FALSE;
@@ -147,6 +151,16 @@ http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer 
                    _("Code: %u - Unexpected response from server"),
                    msg->status_code);
       goto out;
+    }
+
+  if (!data->accept_ssl_errors)
+    {
+      using_https = soup_message_get_https_status (msg, NULL, &cert_flags);
+      if (using_https && cert_flags != 0)
+        {
+          goa_utils_set_error_ssl (&error, cert_flags);
+          goto out;
+        }
     }
 
   op_res = TRUE;
@@ -165,6 +179,7 @@ goa_http_client_check (GoaHttpClient       *client,
                        const gchar         *uri,
                        const gchar         *username,
                        const gchar         *password,
+                       gboolean             accept_ssl_errors,
                        GCancellable        *cancellable,
                        GAsyncReadyCallback  callback,
                        gpointer             user_data)
@@ -180,8 +195,12 @@ goa_http_client_check (GoaHttpClient       *client,
 
   data = g_slice_new0 (CheckData);
   data->res = g_simple_async_result_new (G_OBJECT (client), callback, user_data, goa_http_client_check);
-  data->session = soup_session_async_new_with_options (SOUP_SESSION_USE_THREAD_CONTEXT, TRUE,
+  data->session = soup_session_async_new_with_options (SOUP_SESSION_SSL_USE_SYSTEM_CA_FILE, TRUE,
+                                                       SOUP_SESSION_SSL_STRICT, FALSE,
+                                                       SOUP_SESSION_USE_THREAD_CONTEXT, TRUE,
                                                        NULL);
+
+  data->accept_ssl_errors = accept_ssl_errors;
 
   data->msg = soup_message_new (SOUP_METHOD_GET, uri);
   soup_message_headers_append (data->msg->request_headers, "Connection", "close");
@@ -248,6 +267,7 @@ goa_http_client_check_sync (GoaHttpClient       *client,
                             const gchar         *uri,
                             const gchar         *username,
                             const gchar         *password,
+                            gboolean             accept_ssl_errors,
                             GCancellable        *cancellable,
                             GError             **error)
 {
@@ -264,6 +284,7 @@ goa_http_client_check_sync (GoaHttpClient       *client,
                          uri,
                          username,
                          password,
+                         accept_ssl_errors,
                          cancellable,
                          http_client_check_sync_cb,
                          &data);

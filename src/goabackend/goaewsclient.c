@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012 Red Hat, Inc.
+ * Copyright (C) 2012, 2013 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -35,6 +35,7 @@
 
 #include "goalogging.h"
 #include "goaewsclient.h"
+#include "goautils.h"
 
 struct _GoaEwsClient
 {
@@ -78,6 +79,7 @@ typedef struct
   GSimpleAsyncResult *res;
   SoupMessage *msgs[2];
   SoupSession *session;
+  gboolean accept_ssl_errors;
   gulong cancellable_id;
   xmlOutputBuffer *buf;
 } AutodiscoverData;
@@ -171,7 +173,9 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
 {
   GError *error;
   AutodiscoverData *data = user_data;
+  GTlsCertificateFlags cert_flags;
   gboolean op_res;
+  gboolean using_https;
   guint status;
   gint idx;
   gsize size;
@@ -204,6 +208,16 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
                    _("Code: %u - Unexpected response from server"),
                    status);
       goto out;
+    }
+
+  if (!data->accept_ssl_errors)
+    {
+      using_https = soup_message_get_https_status (msg, NULL, &cert_flags);
+      if (using_https && cert_flags != 0)
+        {
+          goa_utils_set_error_ssl (&error, cert_flags);
+          goto out;
+        }
     }
 
   soup_buffer_free (soup_message_body_flatten (SOUP_MESSAGE (msg)->response_body));
@@ -397,6 +411,7 @@ goa_ews_client_autodiscover (GoaEwsClient        *client,
                              const gchar         *password,
                              const gchar         *username,
                              const gchar         *server,
+                             gboolean             accept_ssl_errors,
                              GCancellable        *cancellable,
                              GAsyncReadyCallback  callback,
                              gpointer             user_data)
@@ -435,9 +450,13 @@ goa_ews_client_autodiscover (GoaEwsClient        *client,
   data->res = g_simple_async_result_new (G_OBJECT (client), callback, user_data, goa_ews_client_autodiscover);
   data->msgs[0] = ews_client_create_msg_for_url (url1, buf);
   data->msgs[1] = ews_client_create_msg_for_url (url2, buf);
-  data->session = soup_session_async_new_with_options (SOUP_SESSION_USE_NTLM, TRUE,
+  data->session = soup_session_async_new_with_options (SOUP_SESSION_SSL_USE_SYSTEM_CA_FILE, TRUE,
+                                                       SOUP_SESSION_SSL_STRICT, FALSE,
+                                                       SOUP_SESSION_USE_NTLM, TRUE,
                                                        SOUP_SESSION_USE_THREAD_CONTEXT, TRUE,
                                                        NULL);
+  data->accept_ssl_errors = accept_ssl_errors;
+
   if (cancellable != NULL)
     {
       data->cancellable = g_object_ref (cancellable);
@@ -506,6 +525,7 @@ goa_ews_client_autodiscover_sync (GoaEwsClient        *client,
                                   const gchar         *password,
                                   const gchar         *username,
                                   const gchar         *server,
+                                  gboolean             accept_ssl_errors,
                                   GCancellable        *cancellable,
                                   GError             **error)
 {
@@ -523,6 +543,7 @@ goa_ews_client_autodiscover_sync (GoaEwsClient        *client,
                                password,
                                username,
                                server,
+                               accept_ssl_errors,
                                cancellable,
                                ews_client_autodiscover_sync_cb,
                                &data);

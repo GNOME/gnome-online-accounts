@@ -678,6 +678,7 @@ ensure_credentials_sync (GoaProvider   *provider,
                                     uri_caldav,
                                     username,
                                     password,
+                                    FALSE,
                                     cancellable,
                                     error);
   if (!ret)
