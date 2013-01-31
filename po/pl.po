@@ -4,14 +4,14 @@
 # pomóc w jego rozwijaniu i pielęgnowaniu, napisz do nas:
 # gnomepl@aviary.pl
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-# Piotr Drąg <piotrdrag@gmail.com>, 2011-2012.
-# Aviary.pl <gnomepl@aviary.pl>, 2011-2012.
+# Piotr Drąg <piotrdrag@gmail.com>, 2011-2013.
+# Aviary.pl <gnomepl@aviary.pl>, 2011-2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-26 23:57+0100\n"
-"PO-Revision-Date: 2012-12-26 23:58+0100\n"
+"POT-Creation-Date: 2013-01-31 19:52+0100\n"
+"PO-Revision-Date: 2013-01-31 19:53+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -24,26 +24,30 @@ msgstr ""
 "X-Poedit-Country: Poland\n"
 
 #. shut up -Wunused-but-set-variable
-#: ../src/daemon/goadaemon.c:211
+#: ../data/goa-daemon.desktop.in.in.h:1 ../src/daemon/goadaemon.c:211
 msgid "Online Accounts"
 msgstr "Konta online"
 
+#: ../data/goa-daemon.desktop.in.in.h:2
+msgid "Provides the org.gnome.OnlinesAccounts name on the session bus"
+msgstr "Dostarcza nazwę org.gnome.OnlinesAccounts w magistrali sesji"
+
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:801 ../src/daemon/goadaemon.c:1146
+#: ../src/daemon/goadaemon.c:801 ../src/daemon/goadaemon.c:1149
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Nie można odnaleźć dostawcy dla: %s"
 
-#: ../src/daemon/goadaemon.c:990
+#: ../src/daemon/goadaemon.c:991
 msgid "An online account needs attention"
 msgstr "Konto online wymaga uwagi"
 
-#: ../src/daemon/goadaemon.c:997
+#: ../src/daemon/goadaemon.c:1000
 msgid "Open Online Accounts..."
 msgstr "Otwórz konta online..."
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1134
+#: ../src/daemon/goadaemon.c:1137
 msgid "ProviderType property is not set for account"
 msgstr "Nie ustawiono własności typu dostawcy dla konta"
 
@@ -99,13 +103,9 @@ msgstr "Microsoft Exchange"
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "Nie odnaleziono danych uwierzytelniających w bazie kluczy (%s, %d): "
 
-#. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:302
-#: ../src/goabackend/goaexchangeprovider.c:1015
 #: ../src/goabackend/goagoogleprovider.c:604
-#: ../src/goabackend/goagoogleprovider.c:788
 #: ../src/goabackend/goaowncloudprovider.c:350
-#: ../src/goabackend/goaowncloudprovider.c:1087
 #, c-format
 msgid "Did not find password with username `%s' in credentials"
 msgstr ""
@@ -189,7 +189,7 @@ msgstr "Spró_buj ponownie"
 #: ../src/goabackend/goagoogleprovider.c:671
 #: ../src/goabackend/goakerberosprovider.c:1722
 #: ../src/goabackend/goaowncloudprovider.c:1009
-#: ../src/goabackend/goawindowsliveprovider.c:409
+#: ../src/goabackend/goawindowsliveprovider.c:408
 msgid "Use for"
 msgstr "Użycie dla"
 
@@ -210,6 +210,13 @@ msgstr "Kale_ndarz"
 msgid "_Contacts"
 msgstr "K_ontakty"
 
+#. TODO: more specific
+#: ../src/goabackend/goaexchangeprovider.c:1015
+#: ../src/goabackend/goagoogleprovider.c:788
+#: ../src/goabackend/goaowncloudprovider.c:1087
+msgid "Did not find password in credentials"
+msgstr "Nie odnaleziono hasła w danych uwierzytelniających"
+
 #: ../src/goabackend/goafacebookprovider.c:79
 msgid "Facebook"
 msgstr "Facebook"
@@ -218,7 +225,7 @@ msgstr "Facebook"
 #: ../src/goabackend/goafacebookprovider.c:199
 #: ../src/goabackend/goagoogleprovider.c:194
 #: ../src/goabackend/goatwitterprovider.c:160
-#: ../src/goabackend/goawindowsliveprovider.c:182
+#: ../src/goabackend/goawindowsliveprovider.c:181
 #: ../src/goabackend/goayahooprovider.c:163
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
@@ -231,13 +238,13 @@ msgstr ""
 #: ../src/goabackend/goagoogleprovider.c:206
 #: ../src/goabackend/goaoauth2provider.c:616
 #: ../src/goabackend/goatwitterprovider.c:172
-#: ../src/goabackend/goawindowsliveprovider.c:194
+#: ../src/goabackend/goawindowsliveprovider.c:193
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
 msgstr "Błąd podczas przetwarzania odpowiedzi jako JSON: "
 
 #: ../src/goabackend/goafacebookprovider.c:222
-#: ../src/goabackend/goawindowsliveprovider.c:205
+#: ../src/goabackend/goawindowsliveprovider.c:204
 #, c-format
 msgid "Didn't find id member in JSON data"
 msgstr "Nie odnaleziono elementu \"id\" w danych JSON"
@@ -250,7 +257,7 @@ msgstr "Nie odnaleziono elementu \"email\" w danych JSON"
 
 #: ../src/goabackend/goafacebookprovider.c:397
 #: ../src/goabackend/goagoogleprovider.c:688
-#: ../src/goabackend/goawindowsliveprovider.c:411
+#: ../src/goabackend/goawindowsliveprovider.c:410
 msgid "C_hat"
 msgstr "_Komunikator"
 
@@ -299,7 +306,7 @@ msgid "Google"
 msgstr "Google"
 
 #: ../src/goabackend/goagoogleprovider.c:693
-#: ../src/goabackend/goawindowsliveprovider.c:416
+#: ../src/goabackend/goawindowsliveprovider.c:415
 msgid "_Documents"
 msgstr "_Dokumenty"
 
@@ -509,42 +516,47 @@ msgid "%s account"
 msgstr "Konto %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:147
+#: ../src/goabackend/goautils.c:150
 msgid "Failed to delete credentials from the keyring"
 msgstr "Usunięcie danych uwierzytelniających z bazy kluczy się nie powiodło"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:195
+#: ../src/goabackend/goautils.c:202
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Pobranie danych uwierzytelniających z bazy kluczy się nie powiodło"
 
-#: ../src/goabackend/goautils.c:206
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:212
+msgid "No credentials found in the keyring"
+msgstr "Nie odnaleziono danych uwierzytelniających w bazie kluczy"
+
+#: ../src/goabackend/goautils.c:225
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Błąd podczas przetwarzania wyników uzyskanych z bazy kluczy: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:248
+#: ../src/goabackend/goautils.c:268
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Dane uwierzytelniające GOA %s dla tożsamości %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:264
+#: ../src/goabackend/goautils.c:285
 msgid "Failed to store credentials in the keyring"
 msgstr ""
 "Przechowanie danych uwierzytelniających w bazie kluczy się nie powiodło"
 
 #. translators: %s here is the address of the web page
-#: ../src/goabackend/goawebview.c:75
+#: ../src/goabackend/goawebview.c:74
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Wczytywanie strony \"%s\"…"
 
-#: ../src/goabackend/goawindowsliveprovider.c:82
+#: ../src/goabackend/goawindowsliveprovider.c:81
 msgid "Windows Live"
 msgstr "Windows Live"
 
-#: ../src/goabackend/goawindowsliveprovider.c:216
+#: ../src/goabackend/goawindowsliveprovider.c:215
 #, c-format
 msgid "Didn't find account email member in JSON data"
 msgstr "Nie odnaleziono elementu \"email\" konta w danych JSON"
@@ -670,11 +682,11 @@ msgstr ""
 msgid "Could not erase identity: %k"
 msgstr "Nie można wyczyścić tożsamości: %k"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:746
+#: ../src/goaidentity/goakerberosidentitymanager.c:747
 msgid "Could not find identity"
 msgstr "Nie można odnaleźć tożsamości"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:823
+#: ../src/goaidentity/goakerberosidentitymanager.c:824
 msgid "Could not create credential cache for identity"
 msgstr ""
 "Nie można utworzyć pamięci podręcznej danych uwierzytelniających dla "
