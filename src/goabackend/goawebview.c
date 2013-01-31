@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*-
  *
- * Copyright (C) 2012 Red Hat, Inc.
+ * Copyright (C) 2012, 2013 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -235,6 +235,7 @@ goa_web_view_init (GoaWebView *self)
   priv = self->priv;
 
   session = webkit_get_default_session ();
+  g_object_set (session, SOUP_SESSION_SSL_USE_SYSTEM_CA_FILE, TRUE, SOUP_SESSION_SSL_STRICT, TRUE, NULL);
 
   soup_session_add_feature_by_type (session, SOUP_TYPE_PROXY_RESOLVER_DEFAULT);
   g_object_set (session, "accept-language-auto", TRUE, NULL);

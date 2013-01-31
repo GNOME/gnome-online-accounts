@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012 Red Hat, Inc.
+ * Copyright (C) 2012, 2013 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,6 +27,7 @@
 #ifndef __GOA_UTILS_H__
 #define __GOA_UTILS_H__
 
+#include <gio/gio.h>
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <goabackend/goabackendtypes.h>
@@ -70,6 +71,8 @@ void             goa_utils_keyfile_remove_key (GoaAccount *account, const gchar 
 void             goa_utils_keyfile_set_boolean (GoaAccount *account, const gchar *key, gboolean value);
 
 void             goa_utils_keyfile_set_string (GoaAccount *account, const gchar *key, const gchar *value);
+
+void             goa_utils_set_error_ssl (GError **err, GTlsCertificateFlags flags);
 
 G_END_DECLS
 

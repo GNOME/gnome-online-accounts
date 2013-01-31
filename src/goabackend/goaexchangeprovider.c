@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012 Red Hat, Inc.
+ * Copyright (C) 2012, 2013 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -203,11 +203,16 @@ build_object (GoaProvider         *provider,
   exchange = goa_object_get_exchange (GOA_OBJECT (object));
   if (exchange == NULL)
     {
+      gboolean accept_ssl_errors;
       gchar *host;
 
+      accept_ssl_errors = g_key_file_get_boolean (key_file, group, "AcceptSslErrors", NULL);
       host = g_key_file_get_string (key_file, group, "Host", NULL);
       exchange = goa_exchange_skeleton_new ();
-      g_object_set (G_OBJECT (exchange), "host", host, NULL);
+      g_object_set (G_OBJECT (exchange),
+                    "accept-ssl-errors", accept_ssl_errors,
+                    "host", host,
+                    NULL);
       goa_object_skeleton_set_exchange (object, exchange);
       g_free (host);
     }
@@ -261,6 +266,7 @@ ensure_credentials_sync (GoaProvider         *provider,
   GoaAccount *account;
   GoaEwsClient *ews_client;
   GoaExchange *exchange;
+  gboolean accept_ssl_errors;
   gboolean ret;
   const gchar *email_address;
   const gchar *server;
@@ -306,6 +312,7 @@ ensure_credentials_sync (GoaProvider         *provider,
     }
 
   exchange = goa_object_peek_exchange (object);
+  accept_ssl_errors = goa_exchange_get_accept_ssl_errors (exchange);
   server = goa_exchange_get_host (exchange);
 
   ews_client = goa_ews_client_new ();
@@ -314,6 +321,7 @@ ensure_credentials_sync (GoaProvider         *provider,
                                           password,
                                           username,
                                           server,
+                                          accept_ssl_errors,
                                           cancellable,
                                           error);
   if (!ret)
@@ -624,6 +632,7 @@ add_account (GoaProvider    *provider,
   GVariantBuilder details;
   GoaEwsClient *ews_client;
   GoaObject *ret;
+  gboolean accept_ssl_errors;
   const gchar *email_address;
   const gchar *server;
   const gchar *password;
@@ -632,6 +641,8 @@ add_account (GoaProvider    *provider,
   gint response;
 
   ews_client = NULL;
+  accept_ssl_errors = FALSE;
+
   ret = NULL;
 
   memset (&data, 0, sizeof (AddAccountData));
@@ -679,6 +690,7 @@ add_account (GoaProvider    *provider,
                                password,
                                username,
                                server,
+                               accept_ssl_errors,
                                data.cancellable,
                                autodiscover_cb,
                                &data);
@@ -700,6 +712,17 @@ add_account (GoaProvider    *provider,
     {
       gchar *markup;
 
+      if (data.error->code == GOA_ERROR_SSL)
+        {
+          gtk_button_set_label (GTK_BUTTON (data.connect_button), _("_Ignore"));
+          accept_ssl_errors = TRUE;
+        }
+      else
+        {
+          gtk_button_set_label (GTK_BUTTON (data.connect_button), _("_Try Again"));
+          accept_ssl_errors = FALSE;
+        }
+
       markup = g_strdup_printf ("<b>%s:</b> %s",
                                 _("Error connecting to Microsoft Exchange server"),
                                 data.error->message);
@@ -708,7 +731,6 @@ add_account (GoaProvider    *provider,
       gtk_label_set_markup (GTK_LABEL (data.cluebar_label), markup);
       g_free (markup);
 
-      gtk_button_set_label (GTK_BUTTON (data.connect_button), _("_Try Again"));
       gtk_expander_set_expanded (GTK_EXPANDER (data.expander), TRUE);
       gtk_widget_set_no_show_all (data.cluebar, FALSE);
       gtk_widget_show_all (data.cluebar);
@@ -725,6 +747,7 @@ add_account (GoaProvider    *provider,
   g_variant_builder_add (&details, "{ss}", "CalendarEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "ContactsEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "Host", server);
+  g_variant_builder_add (&details, "{ss}", "AcceptSslErrors", (accept_ssl_errors) ? "true" : "false");
 
   /* OK, everything is dandy, add the account */
   /* we want the GoaClient to update before this method returns (so it
@@ -781,6 +804,7 @@ refresh_account (GoaProvider    *provider,
   GoaExchange *exchange;
   GtkWidget *dialog;
   GtkWidget *vbox;
+  gboolean accept_ssl_errors;
   gboolean ret;
   const gchar *email_address;
   const gchar *server;
@@ -842,6 +866,7 @@ refresh_account (GoaProvider    *provider,
   username = goa_account_get_identity (account);
 
   exchange = goa_object_peek_exchange (object);
+  accept_ssl_errors = goa_exchange_get_accept_ssl_errors (exchange);
   server = goa_exchange_get_host (exchange);
 
   g_cancellable_reset (data.cancellable);
@@ -850,6 +875,7 @@ refresh_account (GoaProvider    *provider,
                                password,
                                username,
                                server,
+                               accept_ssl_errors,
                                data.cancellable,
                                autodiscover_cb,
                                &data);

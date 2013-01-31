@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012 Red Hat, Inc.
+ * Copyright (C) 2012, 2013 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -110,6 +110,7 @@ build_object (GoaProvider         *provider,
   GoaFiles *files;
   GoaPasswordBased *password_based;
   SoupURI *uri;
+  gboolean accept_ssl_errors;
   gboolean calendar_enabled;
   gboolean contacts_enabled;
   gboolean files_enabled;
@@ -158,6 +159,8 @@ build_object (GoaProvider         *provider,
   if (uri != NULL)
     soup_uri_set_user (uri, identity);
 
+  accept_ssl_errors = g_key_file_get_boolean (key_file, group, "AcceptSslErrors", NULL);
+
   /* Calendar */
   calendar = goa_object_get_calendar (GOA_OBJECT (object));
   calendar_enabled = g_key_file_get_boolean (key_file, group, "CalendarEnabled", NULL);
@@ -179,7 +182,10 @@ build_object (GoaProvider         *provider,
             }
 
           calendar = goa_calendar_skeleton_new ();
-          g_object_set (G_OBJECT (calendar), "uri", uri_caldav, NULL);
+          g_object_set (G_OBJECT (calendar),
+                        "accept-ssl-errors", accept_ssl_errors,
+                        "uri", uri_caldav,
+                        NULL);
           goa_object_skeleton_set_calendar (object, calendar);
           g_free (uri_caldav);
         }
@@ -211,7 +217,10 @@ build_object (GoaProvider         *provider,
             }
 
           contacts = goa_contacts_skeleton_new ();
-          g_object_set (G_OBJECT (contacts), "uri", uri_carddav, NULL);
+          g_object_set (G_OBJECT (contacts),
+                        "accept-ssl-errors", accept_ssl_errors,
+                        "uri", uri_carddav,
+                        NULL);
           goa_object_skeleton_set_contacts (object, contacts);
           g_free (uri_carddav);
         }
@@ -250,7 +259,10 @@ build_object (GoaProvider         *provider,
             }
 
           files = goa_files_skeleton_new ();
-          g_object_set (G_OBJECT (files), "uri", uri_webdav, NULL);
+          g_object_set (G_OBJECT (files),
+                        "accept-ssl-errors", accept_ssl_errors,
+                        "uri", uri_webdav,
+                        NULL);
           goa_object_skeleton_set_files (object, files);
           g_free (uri_webdav);
         }
@@ -305,6 +317,7 @@ ensure_credentials_sync (GoaProvider         *provider,
   GVariant *credentials;
   GoaAccount *account;
   GoaHttpClient *http_client;
+  gboolean accept_ssl_errors;
   gboolean ret;
   const gchar *username;
   gchar *password;
@@ -335,6 +348,7 @@ ensure_credentials_sync (GoaProvider         *provider,
       goto out;
     }
 
+  accept_ssl_errors = goa_util_lookup_keyfile_boolean (object, "AcceptSslErrors");
   uri = goa_util_lookup_keyfile_string (object, "Uri");
   uri_webdav = g_strconcat (uri, WEBDAV_ENDPOINT, NULL);
 
@@ -358,6 +372,7 @@ ensure_credentials_sync (GoaProvider         *provider,
                                     uri_webdav,
                                     username,
                                     password,
+                                    accept_ssl_errors,
                                     cancellable,
                                     error);
   if (!ret)
@@ -680,6 +695,7 @@ add_account (GoaProvider    *provider,
   GVariantBuilder details;
   GoaHttpClient *http_client;
   GoaObject *ret;
+  gboolean accept_ssl_errors;
   const gchar *uri_text;
   const gchar *password;
   const gchar *username;
@@ -691,6 +707,7 @@ add_account (GoaProvider    *provider,
   gint response;
 
   http_client = NULL;
+  accept_ssl_errors = FALSE;
   presentation_identity = NULL;
   server = NULL;
   uri = NULL;
@@ -742,6 +759,7 @@ add_account (GoaProvider    *provider,
                          uri_webdav,
                          username,
                          password,
+                         accept_ssl_errors,
                          data.cancellable,
                          check_cb,
                          &data);
@@ -765,6 +783,17 @@ add_account (GoaProvider    *provider,
     {
       gchar *markup;
 
+      if (data.error->code == GOA_ERROR_SSL)
+        {
+          gtk_button_set_label (GTK_BUTTON (data.connect_button), _("_Ignore"));
+          accept_ssl_errors = TRUE;
+        }
+      else
+        {
+          gtk_button_set_label (GTK_BUTTON (data.connect_button), _("_Try Again"));
+          accept_ssl_errors = FALSE;
+        }
+
       markup = g_strdup_printf ("<b>%s:</b> %s",
                                 _("Error connecting to ownCloud server"),
                                 data.error->message);
@@ -773,7 +802,6 @@ add_account (GoaProvider    *provider,
       gtk_label_set_markup (GTK_LABEL (data.cluebar_label), markup);
       g_free (markup);
 
-      gtk_button_set_label (GTK_BUTTON (data.connect_button), _("_Try Again"));
       gtk_widget_set_no_show_all (data.cluebar, FALSE);
       gtk_widget_show_all (data.cluebar);
 
@@ -792,6 +820,7 @@ add_account (GoaProvider    *provider,
   g_variant_builder_add (&details, "{ss}", "ContactsEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "FilesEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "Uri", uri);
+  g_variant_builder_add (&details, "{ss}", "AcceptSslErrors", (accept_ssl_errors) ? "true" : "false");
 
   /* OK, everything is dandy, add the account */
   /* we want the GoaClient to update before this method returns (so it
@@ -850,6 +879,7 @@ refresh_account (GoaProvider    *provider,
   GoaHttpClient *http_client;
   GtkWidget *dialog;
   GtkWidget *vbox;
+  gboolean accept_ssl_errors;
   gboolean ret;
   const gchar *password;
   const gchar *username;
@@ -889,6 +919,7 @@ refresh_account (GoaProvider    *provider,
 
   create_account_details_ui (provider, GTK_DIALOG (dialog), GTK_BOX (vbox), FALSE, &data);
 
+  accept_ssl_errors = goa_util_lookup_keyfile_boolean (object, "AcceptSslErrors");
   uri = goa_util_lookup_keyfile_string (object, "Uri");
   gtk_entry_set_text (GTK_ENTRY (data.uri), uri);
   gtk_editable_set_editable (GTK_EDITABLE (data.uri), FALSE);
@@ -921,6 +952,7 @@ refresh_account (GoaProvider    *provider,
                          uri_webdav,
                          username,
                          password,
+                         accept_ssl_errors,
                          data.cancellable,
                          check_cb,
                          &data);

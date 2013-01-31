@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012 Red Hat, Inc.
+ * Copyright (C) 2012, 2013 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -41,6 +41,7 @@ void            goa_http_client_check              (GoaHttpClient       *client,
                                                     const gchar         *uri,
                                                     const gchar         *username,
                                                     const gchar         *password,
+                                                    gboolean             accept_ssl_errors,
                                                     GCancellable        *cancellable,
                                                     GAsyncReadyCallback  callback,
                                                     gpointer             gpointer);
@@ -51,6 +52,7 @@ gboolean        goa_http_client_check_sync         (GoaHttpClient       *client,
                                                     const gchar         *uri,
                                                     const gchar         *username,
                                                     const gchar         *password,
+                                                    gboolean             accept_ssl_errors,
                                                     GCancellable        *cancellable,
                                                     GError             **error);
 

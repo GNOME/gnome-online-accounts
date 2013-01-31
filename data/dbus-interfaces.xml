@@ -448,6 +448,12 @@
       server.
   -->
   <interface name="org.gnome.OnlineAccounts.Calendar">
+    <!-- AcceptSslErrors:
+         @since: 3.8.0
+         Accept SSL/TLS errors caused by invalid certificates.
+      -->
+    <property name="AcceptSslErrors" type="b" access="read"/>
+
     <!-- Uri:
          @since: 3.8.0
          The top-level location of the calendars.
@@ -464,6 +470,12 @@
       server.
   -->
   <interface name="org.gnome.OnlineAccounts.Contacts">
+    <!-- AcceptSslErrors:
+         @since: 3.8.0
+         Accept SSL/TLS errors caused by invalid certificates.
+      -->
+    <property name="AcceptSslErrors" type="b" access="read"/>
+
     <!-- Uri:
          @since: 3.8.0
          The top-level location of the contacts.
@@ -509,6 +521,11 @@
       server.
   -->
   <interface name="org.gnome.OnlineAccounts.Files">
+    <!-- AcceptSslErrors:
+         Accept SSL/TLS errors caused by invalid certificates.
+      -->
+    <property name="AcceptSslErrors" type="b" access="read"/>
+
     <!-- Uri:
          The top-level location of the files.
 
@@ -529,6 +546,12 @@
       a Microsoft Exchange server.
   -->
   <interface name="org.gnome.OnlineAccounts.Exchange">
+    <!-- AcceptSslErrors:
+         @since: 3.8.0
+         Accept SSL/TLS errors caused by invalid certificates.
+      -->
+    <property name="AcceptSslErrors" type="b" access="read"/>
+
     <!-- Host:
          The Exchange server to use. This is always a domain name.
 
