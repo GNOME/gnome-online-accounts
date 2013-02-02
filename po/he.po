@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gnome Online Account\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-20 16:38+0200\n"
-"PO-Revision-Date: 2012-12-20 16:44+0200\n"
+"POT-Creation-Date: 2013-02-02 12:01+0200\n"
+"PO-Revision-Date: 2013-02-02 12:03+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <sh.yaron@gmail.com>\n"
 "Language: he\n"
@@ -21,27 +21,32 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 
 #. shut up -Wunused-but-set-variable
+#: ../data/goa-daemon.desktop.in.in.h:1
 #: ../src/daemon/goadaemon.c:211
 msgid "Online Accounts"
 msgstr "חשבונות מקוונים"
 
+#: ../data/goa-daemon.desktop.in.in.h:2
+msgid "Provides the org.gnome.OnlinesAccounts name on the session bus"
+msgstr "מספקת את השם org.gnome.OnlinesAccounts לאפיק ההפעלה"
+
 #. TODO: more specific
 #: ../src/daemon/goadaemon.c:801
-#: ../src/daemon/goadaemon.c:1146
+#: ../src/daemon/goadaemon.c:1149
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "חיפוש הספק נכשל עבור: %s"
 
-#: ../src/daemon/goadaemon.c:990
+#: ../src/daemon/goadaemon.c:991
 msgid "An online account needs attention"
 msgstr "חשבון מקוון זקוק לתשומת לב"
 
-#: ../src/daemon/goadaemon.c:997
+#: ../src/daemon/goadaemon.c:1000
 msgid "Open Online Accounts..."
 msgstr "פתיחת חשבונות מקוונים..."
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1134
+#: ../src/daemon/goadaemon.c:1137
 msgid "ProviderType property is not set for account"
 msgstr "המאפיין ProviderType לא הוגדר עבור החשבון"
 
@@ -95,13 +100,9 @@ msgstr "Microsoft Exchange"
 msgid "Credentials not found in keyring (%s, %d): "
 msgstr "פרטי הגישה לא נמצאו בקבוצת המפתחות (%s, %d): "
 
-#. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:302
-#: ../src/goabackend/goaexchangeprovider.c:1015
 #: ../src/goabackend/goagoogleprovider.c:604
-#: ../src/goabackend/goagoogleprovider.c:788
 #: ../src/goabackend/goaowncloudprovider.c:350
-#: ../src/goabackend/goaowncloudprovider.c:1087
 #, c-format
 msgid "Did not find password with username `%s' in credentials"
 msgstr "לא נמצאה ססמה המיועדת לשם המשתמש `%s' בפרטי הזיהוי"
@@ -184,7 +185,7 @@ msgstr "_ניסיון חוזר"
 #: ../src/goabackend/goagoogleprovider.c:671
 #: ../src/goabackend/goakerberosprovider.c:1722
 #: ../src/goabackend/goaowncloudprovider.c:1009
-#: ../src/goabackend/goawindowsliveprovider.c:409
+#: ../src/goabackend/goawindowsliveprovider.c:408
 msgid "Use for"
 msgstr "שימוש לצורך"
 
@@ -205,6 +206,13 @@ msgstr "_לוח שנה"
 msgid "_Contacts"
 msgstr "_אנשי קשר"
 
+#. TODO: more specific
+#: ../src/goabackend/goaexchangeprovider.c:1015
+#: ../src/goabackend/goagoogleprovider.c:788
+#: ../src/goabackend/goaowncloudprovider.c:1087
+msgid "Did not find password in credentials"
+msgstr "לא נמצאה ססמה בנתוני הזהות"
+
 #: ../src/goabackend/goafacebookprovider.c:79
 msgid "Facebook"
 msgstr "Facebook"
@@ -213,7 +221,7 @@ msgstr "Facebook"
 #: ../src/goabackend/goafacebookprovider.c:199
 #: ../src/goabackend/goagoogleprovider.c:194
 #: ../src/goabackend/goatwitterprovider.c:160
-#: ../src/goabackend/goawindowsliveprovider.c:182
+#: ../src/goabackend/goawindowsliveprovider.c:181
 #: ../src/goabackend/goayahooprovider.c:163
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
@@ -224,13 +232,13 @@ msgstr "הציפייה הייתה למצב 200 בעת בקשת מזהה הקבו
 #: ../src/goabackend/goagoogleprovider.c:206
 #: ../src/goabackend/goaoauth2provider.c:616
 #: ../src/goabackend/goatwitterprovider.c:172
-#: ../src/goabackend/goawindowsliveprovider.c:194
+#: ../src/goabackend/goawindowsliveprovider.c:193
 #: ../src/goabackend/goayahooprovider.c:175
 msgid "Error parsing response as JSON: "
 msgstr "שגיאה בפענוח התגובה בתור JSON:"
 
 #: ../src/goabackend/goafacebookprovider.c:222
-#: ../src/goabackend/goawindowsliveprovider.c:205
+#: ../src/goabackend/goawindowsliveprovider.c:204
 #, c-format
 msgid "Didn't find id member in JSON data"
 msgstr "לא נמצא חבר מזהה בנתוני ה־JSON"
@@ -243,7 +251,7 @@ msgstr "לא נמצא חבר כתובת דוא״ל בנתוני ה־JSON"
 
 #: ../src/goabackend/goafacebookprovider.c:397
 #: ../src/goabackend/goagoogleprovider.c:688
-#: ../src/goabackend/goawindowsliveprovider.c:411
+#: ../src/goabackend/goawindowsliveprovider.c:410
 msgid "C_hat"
 msgstr "_שיחה"
 
@@ -289,7 +297,7 @@ msgid "Google"
 msgstr "Google"
 
 #: ../src/goabackend/goagoogleprovider.c:693
-#: ../src/goabackend/goawindowsliveprovider.c:416
+#: ../src/goabackend/goawindowsliveprovider.c:415
 msgid "_Documents"
 msgstr "מ_סמכים"
 
@@ -482,41 +490,46 @@ msgid "%s account"
 msgstr "חשבון %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:147
+#: ../src/goabackend/goautils.c:150
 msgid "Failed to delete credentials from the keyring"
 msgstr "מחיקת פרטי הזיהוי מקבוצת המפתחות נכשלה"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:195
+#: ../src/goabackend/goautils.c:202
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "קבלת פרטי הגישה מקבוצת המפתחות נכשלה"
 
-#: ../src/goabackend/goautils.c:206
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:212
+msgid "No credentials found in the keyring"
+msgstr "לא נמצאו מאפייני זהות בקבוצת המפתחות"
+
+#: ../src/goabackend/goautils.c:225
 msgid "Error parsing result obtained from the keyring: "
 msgstr "אירע כשל בעת ניתוח התוצאה שהתקבלה מקבוצת המפתחות:"
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:248
+#: ../src/goabackend/goautils.c:268
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "פרטי הגישה %s של מנהל החשבונות המקוונים של GNOME עבור הזהות %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:264
+#: ../src/goabackend/goautils.c:285
 msgid "Failed to store credentials in the keyring"
 msgstr "אחסון פרטי הגישה בקבוצת המפתחות נכשל"
 
 #. translators: %s here is the address of the web page
-#: ../src/goabackend/goawebview.c:75
+#: ../src/goabackend/goawebview.c:74
 #, c-format
 msgid "Loading “%s”…"
 msgstr "„%s“ בטעינה…"
 
-#: ../src/goabackend/goawindowsliveprovider.c:82
+#: ../src/goabackend/goawindowsliveprovider.c:81
 msgid "Windows Live"
 msgstr "Windows Live"
 
-#: ../src/goabackend/goawindowsliveprovider.c:216
+#: ../src/goabackend/goawindowsliveprovider.c:215
 #, c-format
 msgid "Didn't find account email member in JSON data"
 msgstr "לא נמצא חבר כתובת דוא״ל החשבון בנתוני ה־JSON"
@@ -627,11 +640,11 @@ msgstr "לא ניתן לקבל פרטי זיהוי חדשים כדי לחדש א
 msgid "Could not erase identity: %k"
 msgstr "לא ניתן למחוק את הזהות: %k"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:746
+#: ../src/goaidentity/goakerberosidentitymanager.c:747
 msgid "Could not find identity"
 msgstr "לא נמצאה הזהות"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:823
+#: ../src/goaidentity/goakerberosidentitymanager.c:824
 msgid "Could not create credential cache for identity"
 msgstr "לא ניתן ליצור מאגר פרטי זיהוי לזהות"
 
