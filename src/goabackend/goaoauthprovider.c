@@ -708,6 +708,12 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
       SoupCookieJar *cookie_jar;
 
       webkit_soup_session = webkit_get_default_session ();
+
+      g_object_set (webkit_soup_session,
+          SOUP_SESSION_SSL_USE_SYSTEM_CA_FILE, TRUE,
+          SOUP_SESSION_SSL_STRICT, TRUE,
+          NULL);
+
       /* Get the proxy configuration from the GNOME settings */
       soup_session_add_feature_by_type (webkit_soup_session, SOUP_TYPE_PROXY_RESOLVER_GNOME);
 
