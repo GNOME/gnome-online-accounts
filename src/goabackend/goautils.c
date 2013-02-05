@@ -503,5 +503,5 @@ goa_utils_set_error_ssl (GError **err, GTlsCertificateFlags flags)
       break;
     }
 
-  g_set_error (err, GOA_ERROR, GOA_ERROR_SSL, error_msg);
+  g_set_error_literal (err, GOA_ERROR, GOA_ERROR_SSL, error_msg);
 }
