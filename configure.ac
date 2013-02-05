@@ -177,7 +177,7 @@ AC_ARG_ENABLE([owncloud],
               [AS_HELP_STRING([--enable-owncloud],
               [Enable ownCloud provider])],
               [],
-              [enable_owncloud=no])
+              [enable_owncloud=yes])
 if test "$enable_owncloud" != "no"; then
   AC_DEFINE(GOA_OWNCLOUD_ENABLED, 1, [Enable ownCloud data provider])
 fi
