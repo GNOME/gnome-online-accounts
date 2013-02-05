@@ -420,12 +420,17 @@ static gboolean
 is_valid_email_address (const gchar *email, gchar **out_username, gchar **out_domain)
 {
   gchar *at;
+  gchar *dot;
 
   if (email == NULL || email[0] == '\0')
     return FALSE;
 
   at = strchr (email, '@');
   if (at == NULL || *(at + 1) == '\0')
+    return FALSE;
+
+  dot = strchr (at + 1, '.');
+  if (dot == NULL || *(dot + 1) == '\0')
     return FALSE;
 
   if (out_username != NULL)
