@@ -167,13 +167,6 @@ gboolean     goa_provider_ensure_credentials_sync   (GoaProvider         *provid
 guint        goa_provider_get_credentials_generation (GoaProvider        *provider);
 
 
-/**
- * GOA_PROVIDER_EXTENSION_POINT_NAME:
- *
- * Extension point for #GoaProvider implementations.
- */
-#define GOA_PROVIDER_EXTENSION_POINT_NAME "goa-backend-provider"
-
 GList        *goa_provider_get_all (void);
 GoaProvider  *goa_provider_get_for_provider_type (const gchar *provider_type);
 

@@ -27,6 +27,7 @@
 
 #include "goalogging.h"
 #include "goaprovider.h"
+#include "goaprovider-priv.h"
 #include "goaexchangeprovider.h"
 #include "goagoogleprovider.h"
 #include "goafacebookprovider.h"
@@ -628,18 +629,32 @@ goa_provider_get_credentials_generation_real (GoaProvider *provider)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static void
-ensure_ep_and_builtins (void)
+void
+goa_provider_ensure_extension_points_registered (void)
 {
   static gsize once_init_value = 0;
 
   if (g_once_init_enter (&once_init_value))
     {
       GIOExtensionPoint *extension_point;
-      static volatile GType type = 0;
 
       extension_point = g_io_extension_point_register (GOA_PROVIDER_EXTENSION_POINT_NAME);
       g_io_extension_point_set_required_type (extension_point, GOA_TYPE_PROVIDER);
+
+      g_once_init_leave (&once_init_value, 1);
+    }
+}
+
+static void
+ensure_builtins_loaded (void)
+{
+  static gsize once_init_value = 0;
+
+  goa_provider_ensure_extension_points_registered ();
+
+  if (g_once_init_enter (&once_init_value))
+    {
+      static volatile GType type = 0;
 
       /* The order is in which the providers' types are created is
        * important because it affects the order in which they are
@@ -679,7 +694,6 @@ ensure_ep_and_builtins (void)
     }
 }
 
-
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
@@ -700,7 +714,7 @@ goa_provider_get_for_provider_type (const gchar *provider_type)
   GIOExtensionPoint *extension_point;
   GoaProvider *ret;
 
-  ensure_ep_and_builtins ();
+  ensure_builtins_loaded ();
 
   ret = NULL;
 
@@ -732,7 +746,7 @@ goa_provider_get_all (void)
   GList *l;
   GIOExtensionPoint *extension_point;
 
-  ensure_ep_and_builtins ();
+  ensure_builtins_loaded ();
 
   ret = NULL;
   extension_point = g_io_extension_point_lookup (GOA_PROVIDER_EXTENSION_POINT_NAME);

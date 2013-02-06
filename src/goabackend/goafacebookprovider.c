@@ -28,6 +28,7 @@
 #include <json-glib/json-glib.h>
 
 #include "goaprovider.h"
+#include "goaprovider-priv.h"
 #include "goaoauth2provider.h"
 #include "goafacebookprovider.h"
 
@@ -59,6 +60,7 @@ struct _GoaFacebookProviderClass
  */
 
 G_DEFINE_TYPE_WITH_CODE (GoaFacebookProvider, goa_facebook_provider, GOA_TYPE_OAUTH2_PROVIDER,
+                         goa_provider_ensure_extension_points_registered ();
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
 							 g_define_type_id,
 							 "facebook",

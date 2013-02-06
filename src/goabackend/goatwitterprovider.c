@@ -27,6 +27,7 @@
 #include <json-glib/json-glib.h>
 
 #include "goaprovider.h"
+#include "goaprovider-priv.h"
 #include "goaoauthprovider.h"
 #include "goatwitterprovider.h"
 
@@ -58,6 +59,7 @@ struct _GoaTwitterProviderClass
  */
 
 G_DEFINE_TYPE_WITH_CODE (GoaTwitterProvider, goa_twitter_provider, GOA_TYPE_OAUTH_PROVIDER,
+                         goa_provider_ensure_extension_points_registered ();
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
 							 g_define_type_id,
 							 "twitter",

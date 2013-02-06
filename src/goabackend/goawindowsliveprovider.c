@@ -30,6 +30,7 @@
 #include <webkit/webkit.h>
 
 #include "goaprovider.h"
+#include "goaprovider-priv.h"
 #include "goaoauth2provider.h"
 #include "goawindowsliveprovider.h"
 
@@ -61,6 +62,7 @@ struct _GoaWindowsLiveProviderClass
  */
 
 G_DEFINE_TYPE_WITH_CODE (GoaWindowsLiveProvider, goa_windows_live_provider, GOA_TYPE_OAUTH2_PROVIDER,
+                         goa_provider_ensure_extension_points_registered ();
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
 							 g_define_type_id,
 							 "windows_live",
