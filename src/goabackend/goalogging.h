@@ -27,7 +27,9 @@
 #ifndef __GOA_LOGGING_H__
 #define __GOA_LOGGING_H__
 
-#include <goabackend/goabackendtypes.h>
+#include <glib.h>
+
+#include "goabackendenums-priv.h"
 
 G_BEGIN_DECLS
 

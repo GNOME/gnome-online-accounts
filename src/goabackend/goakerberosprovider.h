@@ -28,13 +28,15 @@
 #ifndef __GOA_KERBEROS_PROVIDER_H__
 #define __GOA_KERBEROS_PROVIDER_H__
 
-#include <goabackend/goabackendtypes.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
 #define GOA_TYPE_KERBEROS_PROVIDER   (goa_kerberos_provider_get_type ())
 #define GOA_KERBEROS_PROVIDER(o)     (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_KERBEROS_PROVIDER, GoaKerberosProvider))
 #define GOA_IS_KERBEROS_PROVIDER(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_KERBEROS_PROVIDER))
+
+typedef struct _GoaKerberosProvider GoaKerberosProvider;
 
 GType goa_kerberos_provider_get_type (void) G_GNUC_CONST;
 

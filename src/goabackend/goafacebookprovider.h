@@ -27,13 +27,15 @@
 #ifndef __GOA_FACEBOOK_PROVIDER_H__
 #define __GOA_FACEBOOK_PROVIDER_H__
 
-#include <goabackend/goabackendtypes.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
 #define GOA_TYPE_FACEBOOK_PROVIDER   (goa_facebook_provider_get_type ())
 #define GOA_FACEBOOK_PROVIDER(o)     (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_FACEBOOK_PROVIDER, GoaFacebookProvider))
 #define GOA_IS_FACEBOOK_PROVIDER(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_FACEBOOK_PROVIDER))
+
+typedef struct _GoaFacebookProvider GoaFacebookProvider;
 
 GType goa_facebook_provider_get_type (void) G_GNUC_CONST;
 

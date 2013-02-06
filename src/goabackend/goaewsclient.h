@@ -27,13 +27,17 @@
 #ifndef __GOA_EWS_CLIENT_H__
 #define __GOA_EWS_CLIENT_H__
 
-#include <goabackend/goabackendtypes.h>
+#include <gio/gio.h>
+#include <glib.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
 #define GOA_TYPE_EWS_CLIENT         (goa_ews_client_get_type ())
 #define GOA_EWS_CLIENT(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_EWS_CLIENT, GoaEwsClient))
 #define GOA_IS_EWS_CLIENT(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_EWS_CLIENT))
+
+typedef struct _GoaEwsClient GoaEwsClient;
 
 GType           goa_ews_client_get_type            (void) G_GNUC_CONST;
 GoaEwsClient   *goa_ews_client_new                 (void);

@@ -29,54 +29,11 @@
 
 #include <goa/goa.h>
 #include <goabackend/goabackendenums.h>
-#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-struct _GoaEwsClient;
-typedef struct _GoaEwsClient GoaEwsClient;
-
-struct _GoaHttpClient;
-typedef struct _GoaHttpClient GoaHttpClient;
-
 struct _GoaProvider;
 typedef struct _GoaProvider GoaProvider;
-
-struct _GoaExchangeProvider;
-typedef struct _GoaExchangeProvider GoaExchangeProvider;
-
-struct _GoaKerberosProvider;
-typedef struct _GoaKerberosProvider GoaKerberosProvider;
-
-struct _GoaOAuthProvider;
-typedef struct _GoaOAuthProvider GoaOAuthProvider;
-
-struct _GoaOAuth2Provider;
-typedef struct _GoaOAuth2Provider GoaOAuth2Provider;
-
-struct _GoaGoogleProvider;
-typedef struct _GoaGoogleProvider GoaGoogleProvider;
-
-struct _GoaFacebookProvider;
-typedef struct _GoaFacebookProvider GoaFacebookProvider;
-
-struct _GoaOwncloudProvider;
-typedef struct _GoaOwncloudProvider GoaOwncloudProvider;
-
-struct _GoaYahooProvider;
-typedef struct _GoaYahooProvider GoaYahooProvider;
-
-struct _GoaTwitterProvider;
-typedef struct _GoaTwitterProvider GoaTwitterProvider;
-
-struct _GoaFlickrProvider;
-typedef struct _GoaFlickrProvider GoaFlickrProvider;
-
-struct _GoaEditableLabel;
-typedef struct _GoaEditableLabel GoaEditableLabel;
-
-struct _GoaWindowsLiveProvider;
-typedef struct _GoaWindowsLiveProvider GoaWindowsLiveProvider;
 
 G_END_DECLS
 

@@ -48,27 +48,13 @@ libgoa_backend_1_0_la_HEADERS =						\
 	goabackendtypes.h						\
 	goabackendenums.h						\
 	goabackendenumtypes.h						\
-	goalogging.h							\
-	goaeditablelabel.h						\
 	goaprovider.h							\
-	goaexchangeprovider.h						\
-	goagoogleprovider.h						\
-	goafacebookprovider.h						\
-	goaowncloudprovider.h						\
-	goayahooprovider.h						\
-	goatwitterprovider.h						\
-	goaflickrprovider.h						\
-	goawindowsliveprovider.h					\
 	$(NULL)
-
-if BUILD_KERBEROS
-libgoa_backend_1_0_la_HEADERS +=	goakerberosprovider.h
-endif
 
 libgoa_backend_1_0_la_SOURCES =						\
 	goabackend.h							\
 	goabackendtypes.h						\
-	goabackendenums.h						\
+	goabackendenums-priv.h						\
 	goabackendenumtypes.h		goabackendenumtypes.c		\
 	goaeditablelabel.h		goaeditablelabel.c		\
 	goaewsclient.h			goaewsclient.c			\

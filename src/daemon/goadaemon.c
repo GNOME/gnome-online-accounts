@@ -29,6 +29,7 @@
 
 #include "goadaemon.h"
 #include "goabackend/goabackend.h"
+#include "goabackend/goalogging.h"
 #include "goabackend/goautils.h"
 #ifdef GOA_KERBEROS_ENABLED
 #include "goaidentity/goaidentityservice.h"

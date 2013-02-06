@@ -27,7 +27,6 @@
 #ifndef __GOA_OAUTH_PROVIDER_H__
 #define __GOA_OAUTH_PROVIDER_H__
 
-#include <goabackend/goabackendtypes.h>
 #include <goabackend/goaprovider.h>
 #include <rest/rest-proxy-call.h>
 #include <webkit/webkit.h>
@@ -42,6 +41,7 @@ G_BEGIN_DECLS
 
 #define GOA_IS_OAUTH_PROVIDER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GOA_TYPE_OAUTH_PROVIDER))
 
+typedef struct _GoaOAuthProvider GoaOAuthProvider;
 typedef struct _GoaOAuthProviderClass GoaOAuthProviderClass;
 typedef struct _GoaOAuthProviderPrivate GoaOAuthProviderPrivate;
 

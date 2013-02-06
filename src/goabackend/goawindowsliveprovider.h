@@ -29,13 +29,15 @@
 #ifndef __GOA_WINDOWS_LIVE_PROVIDER_H__
 #define __GOA_WINDOWS_LIVE_PROVIDER_H__
 
-#include <goabackend/goabackendtypes.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
 #define GOA_TYPE_WINDOWS_LIVE_PROVIDER   (goa_windows_live_provider_get_type ())
 #define GOA_WINDOWS_LIVE_PROVIDER(o)     (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_WINDOWS_LIVE_PROVIDER, GoaWindowsLiveProvider))
 #define GOA_IS_WINDOWS_LIVE_PROVIDER(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_WINDOWS_LIVE_PROVIDER))
+
+typedef struct _GoaWindowsLiveProvider GoaWindowsLiveProvider;
 
 GType goa_windows_live_provider_get_type (void) G_GNUC_CONST;
 

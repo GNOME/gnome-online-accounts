@@ -27,13 +27,15 @@
 #ifndef __GOA_YAHOO_PROVIDER_H__
 #define __GOA_YAHOO_PROVIDER_H__
 
-#include <goabackend/goabackendtypes.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
 #define GOA_TYPE_YAHOO_PROVIDER   (goa_yahoo_provider_get_type ())
 #define GOA_YAHOO_PROVIDER(o)     (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_YAHOO_PROVIDER, GoaYahooProvider))
 #define GOA_IS_YAHOO_PROVIDER(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_YAHOO_PROVIDER))
+
+typedef struct _GoaYahooProvider GoaYahooProvider;
 
 GType goa_yahoo_provider_get_type (void) G_GNUC_CONST;
 

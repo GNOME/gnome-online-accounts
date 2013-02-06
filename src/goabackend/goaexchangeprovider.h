@@ -27,13 +27,15 @@
 #ifndef __GOA_EXCHANGE_PROVIDER_H__
 #define __GOA_EXCHANGE_PROVIDER_H__
 
-#include <goabackend/goabackendtypes.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
 #define GOA_TYPE_EXCHANGE_PROVIDER   (goa_exchange_provider_get_type ())
 #define GOA_EXCHANGE_PROVIDER(o)     (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_EXCHANGE_PROVIDER, GoaExchangeProvider))
 #define GOA_IS_EXCHANGE_PROVIDER(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_EXCHANGE_PROVIDER))
+
+typedef struct _GoaExchangeProvider GoaExchangeProvider;
 
 GType goa_exchange_provider_get_type (void) G_GNUC_CONST;
 

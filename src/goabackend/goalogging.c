@@ -23,6 +23,7 @@
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/syscall.h>
 

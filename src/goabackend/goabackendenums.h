@@ -33,25 +33,6 @@
 G_BEGIN_DECLS
 
 /**
- * GoaLogLevel:
- * @GOA_LOG_LEVEL_DEBUG: Debug messages.
- * @GOA_LOG_LEVEL_INFO: Informational messages.
- * @GOA_LOG_LEVEL_NOTICE: Messages that the administrator should take notice of.
- * @GOA_LOG_LEVEL_WARNING: Warning messages.
- * @GOA_LOG_LEVEL_ERROR: Error messages.
- *
- * Logging levels.
- */
-typedef enum
-{
-  GOA_LOG_LEVEL_DEBUG,
-  GOA_LOG_LEVEL_INFO,
-  GOA_LOG_LEVEL_NOTICE,
-  GOA_LOG_LEVEL_WARNING,
-  GOA_LOG_LEVEL_ERROR
-} GoaLogLevel;
-
-/**
  * GoaProviderGroup:
  * @GOA_PROVIDER_GROUP_BRANDED: Providers with a well-known brand. For
  *   example, Google and Facebook.

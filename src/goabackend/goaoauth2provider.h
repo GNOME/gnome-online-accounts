@@ -27,7 +27,7 @@
 #ifndef __GOA_OAUTH2_PROVIDER_H__
 #define __GOA_OAUTH2_PROVIDER_H__
 
-#include <goabackend/goabackendtypes.h>
+#include <goabackend/goaprovider.h>
 #include <webkit/webkit.h>
 
 G_BEGIN_DECLS
@@ -40,6 +40,7 @@ G_BEGIN_DECLS
 
 #define GOA_IS_OAUTH2_PROVIDER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GOA_TYPE_OAUTH2_PROVIDER))
 
+typedef struct _GoaOAuth2Provider GoaOAuth2Provider;
 typedef struct _GoaOAuth2ProviderClass GoaOAuth2ProviderClass;
 typedef struct _GoaOAuth2ProviderPrivate GoaOAuth2ProviderPrivate;
 

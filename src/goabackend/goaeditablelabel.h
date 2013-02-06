@@ -30,7 +30,9 @@
 #ifndef __GOA_EDITABLE_LABEL_H__
 #define __GOA_EDITABLE_LABEL_H__
 
-#include <goabackend/goabackendtypes.h>
+#include <glib.h>
+#include <glib-object.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
@@ -41,6 +43,7 @@ G_BEGIN_DECLS
 #define GOA_IS_EDITABLE_LABEL_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GOA_TYPE_EDITABLE_LABEL))
 #define GOA_EDITABLE_LABEL_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GOA_TYPE_EDITABLE_LABEL, GoaEditableLabelClass))
 
+typedef struct _GoaEditableLabel GoaEditableLabel;
 typedef struct _GoaEditableLabelClass GoaEditableLabelClass;
 typedef struct _GoaEditableLabelPrivate GoaEditableLabelPrivate;
 

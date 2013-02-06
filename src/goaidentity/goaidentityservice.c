@@ -32,6 +32,8 @@
 
 #include <gcr/gcr.h>
 
+#include <goa/goa.h>
+
 #include "goaidentityenumtypes.h"
 #include "goaidentityutils.h"
 

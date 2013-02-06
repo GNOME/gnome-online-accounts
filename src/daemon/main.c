@@ -28,7 +28,7 @@
 #include <signal.h>
 #include <gio/gio.h>
 
-#include <goabackend/goabackend.h>
+#include <goabackend/goalogging.h>
 
 #include "goadaemon.h"
 
