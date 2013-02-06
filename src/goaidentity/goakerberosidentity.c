@@ -24,6 +24,7 @@
 
 #include "goaidentity.h"
 #include "goakerberosidentity.h"
+#include "goakerberosidentityinquiry.h"
 #include "goaalarm.h"
 #include "goalogging.h"
 
