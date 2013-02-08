@@ -811,16 +811,13 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
       uri = soup_message_get_uri (message);
 
       /* Two cases:
-       * the data we look for might be in the query part or in the fragment
-       * part of the URI.
-       *
-       * Currently only facebook client-side flow uses the fragment to pass
-       * the access_token and expiration, though, so we are actually looking
-       * for the auth code in the query and the access_token in the fragment.
-       * This might need changes (FIXME) to be more generalized */
+       * 1) we can have either the auth code in the query part of the
+       *    URI, with which we'll obtain the token, or
+       * 2) the access_token and other information directly in the
+       *    fragment part of the URI.
+       */
       if (soup_uri_get_query (uri) != NULL)
         {
-          /* case 1, the data we are expecting is in the query part of the URI */
           GHashTable *key_value_pairs;
 
           key_value_pairs = soup_form_decode (uri->query);
@@ -844,8 +841,6 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
         }
       else if (soup_uri_get_fragment (uri) != NULL)
         {
-          /* case 2, the data we are expecting is in the fragment part of the
-           * URI */
           GHashTable *key_value_pairs;
 
           /* fragment is encoded into a key/value pairs for the token and
@@ -1036,9 +1031,10 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
   gtk_widget_show_all (GTK_WIDGET (vbox));
   gtk_dialog_run (GTK_DIALOG (dialog));
 
-  /* we can have either the auth code, with which we'll obtain the token, or
+  /* We can have either the auth code, with which we'll obtain the token, or
    * the token directly if we are using a client side flow, since we don't
-   * need to pass the code to the remote application */
+   * need to pass the code to the remote application.
+   */
   if (data.authorization_code == NULL && data.access_token == NULL)
     {
       if (data.error == NULL)
