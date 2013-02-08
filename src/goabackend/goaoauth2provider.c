@@ -847,8 +847,9 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
            * expiration values, using the same syntax as a URL query */
           key_value_pairs = soup_form_decode (soup_uri_get_fragment (uri));
 
-          /* we might use oauth2_proxy_extract_access_token() here but we need
-           * also to extract the expire time */
+          /* We might use oauth2_proxy_extract_access_token() here but
+           * we can also extract other information.
+           */
           data->access_token = g_strdup (g_hash_table_lookup (key_value_pairs, "access_token"));
           if (data->access_token != NULL)
             {
@@ -861,6 +862,8 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
 
               if (expires_in_str != NULL)
                  data->access_token_expires_in = atoi (expires_in_str);
+
+              data->refresh_token = g_strdup (g_hash_table_lookup (key_value_pairs, "refresh_token"));
 
               gtk_dialog_response (data->dialog, GTK_RESPONSE_OK);
             }
