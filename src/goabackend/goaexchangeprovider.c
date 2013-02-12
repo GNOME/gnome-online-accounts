@@ -416,35 +416,6 @@ typedef struct
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static gboolean
-is_valid_email_address (const gchar *email, gchar **out_username, gchar **out_domain)
-{
-  gchar *at;
-  gchar *dot;
-
-  if (email == NULL || email[0] == '\0')
-    return FALSE;
-
-  at = strchr (email, '@');
-  if (at == NULL || *(at + 1) == '\0')
-    return FALSE;
-
-  dot = strchr (at + 1, '.');
-  if (dot == NULL || *(dot + 1) == '\0')
-    return FALSE;
-
-  if (out_username != NULL)
-    {
-      *out_username = g_strdup (email);
-      (*out_username)[at - email] = '\0';
-    }
-
-  if (out_domain != NULL)
-    *out_domain = g_strdup (at + 1);
-
-  return TRUE;
-}
-
 static void
 on_email_address_or_password_changed (GtkEditable *editable, gpointer user_data)
 {
@@ -461,7 +432,7 @@ on_email_address_or_password_changed (GtkEditable *editable, gpointer user_data)
   username = NULL;
 
   email = gtk_entry_get_text (GTK_ENTRY (data->email_address));
-  if (!is_valid_email_address (email, &username, &domain))
+  if (!goa_utils_parse_email_address (email, &username, &domain))
     goto out;
 
   if (data->username != NULL)
