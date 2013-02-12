@@ -48,7 +48,7 @@ void            goa_http_client_check              (GoaHttpClient       *client,
                                                     gboolean             accept_ssl_errors,
                                                     GCancellable        *cancellable,
                                                     GAsyncReadyCallback  callback,
-                                                    gpointer             gpointer);
+                                                    gpointer             user_data);
 gboolean        goa_http_client_check_finish       (GoaHttpClient       *client,
                                                     GAsyncResult        *res,
                                                     GError             **error);
