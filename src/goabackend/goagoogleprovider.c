@@ -146,13 +146,16 @@ get_scope (GoaOAuth2Provider *provider)
          "https://www.googleapis.com/auth/cloudprint "
 
          /* Google Talk */
-         "https://www.googleapis.com/auth/googletalk";
+         "https://www.googleapis.com/auth/googletalk "
+
+         /* Google Tasks - undocumented */
+         "https://www.googleapis.com/auth/tasks";
 }
 
 static guint
 get_credentials_generation (GoaProvider *provider)
 {
-  return 8;
+  return 9;
 }
 
 static const gchar *
