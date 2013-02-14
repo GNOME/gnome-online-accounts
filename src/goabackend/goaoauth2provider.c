@@ -1519,8 +1519,6 @@ goa_oauth2_provider_get_access_token_sync (GoaOAuth2Provider  *provider,
     {
       if (error != NULL)
         {
-          g_prefix_error (error, _("Credentials not found in keyring (%s, %d): "),
-                          g_quark_to_string ((*error)->domain), (*error)->code);
           (*error)->domain = GOA_ERROR;
           (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
         }
@@ -1624,8 +1622,6 @@ goa_oauth2_provider_get_access_token_sync (GoaOAuth2Provider  *provider,
     {
       if (error != NULL)
         {
-          g_prefix_error (error, _("Error storing credentials in keyring (%s, %d): "),
-                          g_quark_to_string ((*error)->domain), (*error)->code);
           (*error)->domain = GOA_ERROR;
           (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
         }

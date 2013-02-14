@@ -577,10 +577,6 @@ ensure_credentials_sync (GoaProvider   *provider,
     {
       if (error != NULL)
         {
-          g_prefix_error (error,
-                          _("Credentials not found in keyring (%s, %d): "),
-                          g_quark_to_string ((*error)->domain),
-                          (*error)->code);
           (*error)->domain = GOA_ERROR;
           (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
         }
@@ -597,7 +593,7 @@ ensure_credentials_sync (GoaProvider   *provider,
         {
           *error = g_error_new (GOA_ERROR,
                                 GOA_ERROR_NOT_AUTHORIZED,
-                                _("Did not find password with username `%s' in credentials"),
+                                _("Did not find password with identity `%s' in credentials"),
                                 username);
         }
       goto out;
@@ -755,6 +751,7 @@ on_handle_get_password (GoaPasswordBased      *interface,
   GoaProvider *provider;
   GError *error;
   GVariant *credentials;
+  const gchar *identity;
   gchar *password;
 
   /* TODO: maybe log what app is requesting access */
@@ -764,6 +761,7 @@ on_handle_get_password (GoaPasswordBased      *interface,
 
   object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (interface)));
   account = goa_object_peek_account (object);
+  identity = goa_account_get_identity (account);
   provider = goa_provider_get_for_provider_type (goa_account_get_provider_type (account));
 
   error = NULL;
@@ -782,7 +780,8 @@ on_handle_get_password (GoaPasswordBased      *interface,
       g_dbus_method_invocation_return_error (invocation,
                                              GOA_ERROR,
                                              GOA_ERROR_FAILED, /* TODO: more specific */
-                                             _("Did not find password in credentials"));
+                                             _("Did not find password with identity `%s' in credentials"),
+                                             identity);
       goto out;
     }
 
