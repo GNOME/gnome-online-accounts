@@ -117,7 +117,7 @@ goa_utils_delete_credentials_sync (GoaProvider   *provider,
 {
   gboolean ret;
   gchar *password_key;
-  const gchar *identity;
+  const gchar *id;
   GError *sec_error = NULL;
 
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
@@ -129,12 +129,12 @@ goa_utils_delete_credentials_sync (GoaProvider   *provider,
 
   password_key = NULL;
 
-  identity = goa_account_get_id (object);
+  id = goa_account_get_id (object);
 
   password_key = g_strdup_printf ("%s:gen%d:%s",
                                   goa_provider_get_provider_type (GOA_PROVIDER (provider)),
                                   goa_provider_get_credentials_generation (GOA_PROVIDER (provider)),
-                                  identity);
+                                  id);
 
   secret_password_clear_sync (&secret_password_schema,
                               cancellable,
@@ -152,7 +152,7 @@ goa_utils_delete_credentials_sync (GoaProvider   *provider,
       goto out;
     }
 
-  goa_debug ("Cleared keyring credentials for identity: %s", identity);
+  goa_debug ("Cleared keyring credentials for id: %s", id);
   ret = TRUE;
 
  out:
@@ -169,7 +169,7 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
   gchar *password_key;
   GVariant *ret;
   gchar *password;
-  const gchar *identity;
+  const gchar *id;
   GError *sec_error = NULL;
 
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), NULL);
@@ -181,12 +181,12 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
   password_key = NULL;
   password = NULL;
 
-  identity = goa_account_get_id (goa_object_peek_account (object));
+  id = goa_account_get_id (goa_object_peek_account (object));
 
   password_key = g_strdup_printf ("%s:gen%d:%s",
                                   goa_provider_get_provider_type (GOA_PROVIDER (provider)),
                                   goa_provider_get_credentials_generation (GOA_PROVIDER (provider)),
-                                  identity);
+                                  id);
 
   password = secret_password_lookup_sync (&secret_password_schema,
                                           cancellable,
@@ -213,7 +213,7 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
       goto out;
     }
 
-  goa_debug ("Retreived keyring credentials for identity: %s", identity);
+  goa_debug ("Retreived keyring credentials for id: %s", id);
 
   ret = g_variant_parse (NULL, /* GVariantType */
                          password,
