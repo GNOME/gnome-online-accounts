@@ -384,6 +384,12 @@
       -->
     <property name="ImapSupported" type="b" access="read"/>
 
+    <!-- ImapAcceptSslErrors:
+         @since: 3.8.0
+         Accept SSL/TLS errors caused by invalid certificates.
+      -->
+    <property name="ImapAcceptSslErrors" type="b" access="read"/>
+
     <!-- ImapHost:
          The IMAP server to use.
 
@@ -431,6 +437,12 @@
          protocol can be used to send messages for the account.
       -->
     <property name="SmtpSupported" type="b" access="read"/>
+
+    <!-- SmtpAcceptSslErrors:
+         @since: 3.8.0
+         Accept SSL/TLS errors caused by invalid certificates.
+      -->
+    <property name="SmtpAcceptSslErrors" type="b" access="read"/>
 
     <!-- SmtpHost:
          The SMTP server to use.
