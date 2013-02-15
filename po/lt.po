@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-02-09 01:25+0000\n"
-"PO-Revision-Date: 2013-02-09 22:30+0200\n"
+"POT-Creation-Date: 2013-02-14 19:23+0000\n"
+"PO-Revision-Date: 2013-02-15 21:35+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -88,133 +88,142 @@ msgstr "Nepavyko rasti ASUrl ir OABUrl automatinio aptikimo atsakyme"
 msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
-#: ../src/goabackend/goaexchangeprovider.c:292
-#: ../src/goabackend/goagoogleprovider.c:587
-#: ../src/goabackend/goaoauth2provider.c:1522
-#: ../src/goabackend/goaoauthprovider.c:1545
-#: ../src/goabackend/goaowncloudprovider.c:345
+#. TODO: more specific
+#: ../src/goabackend/goaexchangeprovider.c:308
+#: ../src/goabackend/goaexchangeprovider.c:1019
+#: ../src/goabackend/goagoogleprovider.c:596
+#: ../src/goabackend/goagoogleprovider.c:783
+#: ../src/goabackend/goaowncloudprovider.c:364
+#: ../src/goabackend/goaowncloudprovider.c:1121
 #, c-format
-msgid "Credentials not found in keyring (%s, %d): "
-msgstr "Įgaliojimai nerasti raktinėje (%s, %d): "
-
-#: ../src/goabackend/goaexchangeprovider.c:310
-#: ../src/goabackend/goagoogleprovider.c:606
-#: ../src/goabackend/goaowncloudprovider.c:366
-#, c-format
-msgid "Did not find password with username `%s' in credentials"
-msgstr "Įgaliojimuose nerastas slaptažodis su naudotojo vardu „%s“"
+#| msgid "Did not find password with username `%s' in credentials"
+msgid "Did not find password with identity `%s' in credentials"
+msgstr "Įgaliojimuose nerastas slaptažodis su identitetu „%s“"
 
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
 #.
-#: ../src/goabackend/goaexchangeprovider.c:338
-#: ../src/goabackend/goagoogleprovider.c:629
-#: ../src/goabackend/goaowncloudprovider.c:389
+#: ../src/goabackend/goaexchangeprovider.c:336
+#: ../src/goabackend/goagoogleprovider.c:619
+#: ../src/goabackend/goaowncloudprovider.c:387
 #, c-format
 msgid "Invalid password with username `%s' (%s, %d): "
 msgstr "Netinkamas slaptažodis su naudotojo vardu „%s“ (%s, %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:527
+#: ../src/goabackend/goaexchangeprovider.c:501
+#: ../src/goabackend/goaimapsmtpprovider.c:635
 msgid "_E-mail"
 msgstr "_El. pašas"
 
-#: ../src/goabackend/goaexchangeprovider.c:528
-#: ../src/goabackend/goaowncloudprovider.c:615
+#: ../src/goabackend/goaexchangeprovider.c:502
+#: ../src/goabackend/goaimapsmtpprovider.c:655
+#: ../src/goabackend/goaimapsmtpprovider.c:687
+#: ../src/goabackend/goaowncloudprovider.c:613
 msgid "_Password"
 msgstr "Sla_ptažodis"
 
-#: ../src/goabackend/goaexchangeprovider.c:531
+#: ../src/goabackend/goaexchangeprovider.c:505
 msgid "_Custom"
 msgstr "P_asirinktinis"
 
-#: ../src/goabackend/goaexchangeprovider.c:550
+#: ../src/goabackend/goaexchangeprovider.c:524
+#: ../src/goabackend/goaimapsmtpprovider.c:654
+#: ../src/goabackend/goaimapsmtpprovider.c:686
 #: ../src/goabackend/goakerberosprovider.c:1128
-#: ../src/goabackend/goaowncloudprovider.c:614
+#: ../src/goabackend/goaowncloudprovider.c:612
 msgid "User_name"
 msgstr "_Naudotojo vardas"
 
-#: ../src/goabackend/goaexchangeprovider.c:551
-#: ../src/goabackend/goaowncloudprovider.c:613
+#: ../src/goabackend/goaexchangeprovider.c:525
+#: ../src/goabackend/goaowncloudprovider.c:611
 msgid "_Server"
 msgstr "_Serveris"
 
-#: ../src/goabackend/goaexchangeprovider.c:581
+#: ../src/goabackend/goaexchangeprovider.c:555
+#: ../src/goabackend/goaimapsmtpprovider.c:731
 #: ../src/goabackend/goakerberosprovider.c:1153
-#: ../src/goabackend/goaowncloudprovider.c:644
+#: ../src/goabackend/goaowncloudprovider.c:642
 msgid "Connecting…"
 msgstr "Jungiamasi..."
 
-#: ../src/goabackend/goaexchangeprovider.c:669
-#: ../src/goabackend/goaexchangeprovider.c:863
+#: ../src/goabackend/goaexchangeprovider.c:643
+#: ../src/goabackend/goaexchangeprovider.c:837
+#: ../src/goabackend/goaimapsmtpprovider.c:890
+#: ../src/goabackend/goaimapsmtpprovider.c:924
+#: ../src/goabackend/goaimapsmtpprovider.c:1012
+#: ../src/goabackend/goaimapsmtpprovider.c:1258
+#: ../src/goabackend/goaimapsmtpprovider.c:1328
 #: ../src/goabackend/goakerberosprovider.c:1544
 #: ../src/goabackend/goaoauth2provider.c:1048
 #: ../src/goabackend/goaoauthprovider.c:1041
-#: ../src/goabackend/goaowncloudprovider.c:738
-#: ../src/goabackend/goaowncloudprovider.c:947
+#: ../src/goabackend/goaowncloudprovider.c:736
+#: ../src/goabackend/goaowncloudprovider.c:945
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "Dialogas buvo uždarytas"
 
-#: ../src/goabackend/goaexchangeprovider.c:706
-#: ../src/goabackend/goaexchangeprovider.c:891
-#: ../src/goabackend/goaowncloudprovider.c:777
-#: ../src/goabackend/goaowncloudprovider.c:968
+#: ../src/goabackend/goaexchangeprovider.c:680
+#: ../src/goabackend/goaexchangeprovider.c:865
+#: ../src/goabackend/goaimapsmtpprovider.c:954
+#: ../src/goabackend/goaimapsmtpprovider.c:1043
+#: ../src/goabackend/goaimapsmtpprovider.c:1282
+#: ../src/goabackend/goaimapsmtpprovider.c:1353
+#: ../src/goabackend/goaowncloudprovider.c:775
+#: ../src/goabackend/goaowncloudprovider.c:966
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "Dialogas buvo uždarytas (%s, %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:719
-#: ../src/goabackend/goaowncloudprovider.c:790
+#: ../src/goabackend/goaexchangeprovider.c:693
+#: ../src/goabackend/goaimapsmtpprovider.c:967
+#: ../src/goabackend/goaimapsmtpprovider.c:1056
+#: ../src/goabackend/goaowncloudprovider.c:788
 msgid "_Ignore"
 msgstr "_Nepaisyti"
 
-#: ../src/goabackend/goaexchangeprovider.c:724
-#: ../src/goabackend/goaexchangeprovider.c:910
+#: ../src/goabackend/goaexchangeprovider.c:698
+#: ../src/goabackend/goaexchangeprovider.c:884
+#: ../src/goabackend/goaimapsmtpprovider.c:972
+#: ../src/goabackend/goaimapsmtpprovider.c:1061
+#: ../src/goabackend/goaimapsmtpprovider.c:1301
+#: ../src/goabackend/goaimapsmtpprovider.c:1372
 #: ../src/goabackend/goakerberosprovider.c:1653
-#: ../src/goabackend/goaowncloudprovider.c:795
-#: ../src/goabackend/goaowncloudprovider.c:987
+#: ../src/goabackend/goaowncloudprovider.c:793
+#: ../src/goabackend/goaowncloudprovider.c:985
 msgid "_Try Again"
 msgstr "Bandy_ti dar kartą"
 
-#: ../src/goabackend/goaexchangeprovider.c:729
-#: ../src/goabackend/goaexchangeprovider.c:903
+#: ../src/goabackend/goaexchangeprovider.c:703
+#: ../src/goabackend/goaexchangeprovider.c:877
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Klaida jungiantis prie Microsoft Exchange serverio"
 
-#: ../src/goabackend/goaexchangeprovider.c:965
+#: ../src/goabackend/goaexchangeprovider.c:939
 #: ../src/goabackend/goafacebookprovider.c:397
-#: ../src/goabackend/goagoogleprovider.c:674
+#: ../src/goabackend/goagoogleprovider.c:664
 #: ../src/goabackend/goakerberosprovider.c:1724
-#: ../src/goabackend/goaowncloudprovider.c:1043
+#: ../src/goabackend/goaowncloudprovider.c:1041
 #: ../src/goabackend/goawindowsliveprovider.c:410
 msgid "Use for"
 msgstr "Naudotina"
 
-#: ../src/goabackend/goaexchangeprovider.c:967
-#: ../src/goabackend/goagoogleprovider.c:676
+#: ../src/goabackend/goaexchangeprovider.c:941
+#: ../src/goabackend/goagoogleprovider.c:666
 msgid "_Mail"
 msgstr "_Paštas"
 
-#: ../src/goabackend/goaexchangeprovider.c:972
-#: ../src/goabackend/goagoogleprovider.c:681
-#: ../src/goabackend/goaowncloudprovider.c:1045
+#: ../src/goabackend/goaexchangeprovider.c:946
+#: ../src/goabackend/goagoogleprovider.c:671
+#: ../src/goabackend/goaowncloudprovider.c:1043
 msgid "Cale_ndar"
 msgstr "Kale_ndorius"
 
-#: ../src/goabackend/goaexchangeprovider.c:977
-#: ../src/goabackend/goagoogleprovider.c:686
-#: ../src/goabackend/goaowncloudprovider.c:1050
+#: ../src/goabackend/goaexchangeprovider.c:951
+#: ../src/goabackend/goagoogleprovider.c:676
+#: ../src/goabackend/goaowncloudprovider.c:1048
 msgid "_Contacts"
 msgstr "_Kontaktai"
-
-#. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:1043
-#: ../src/goabackend/goagoogleprovider.c:791
-#: ../src/goabackend/goaowncloudprovider.c:1121
-#| msgid "Did not find password with username `%s' in credentials"
-msgid "Did not find password in credentials"
-msgstr "Įgaliojimuose nerastas slaptažodis"
 
 #: ../src/goabackend/goafacebookprovider.c:81
 msgid "Facebook"
@@ -253,7 +262,7 @@ msgid "Didn't find email member in JSON data"
 msgstr "JSON duomenyse nerastas narys email"
 
 #: ../src/goabackend/goafacebookprovider.c:399
-#: ../src/goabackend/goagoogleprovider.c:691
+#: ../src/goabackend/goagoogleprovider.c:681
 #: ../src/goabackend/goawindowsliveprovider.c:412
 msgid "C_hat"
 msgstr "Po_kalbiai"
@@ -300,10 +309,111 @@ msgstr "_Fotografijos"
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:696
+#: ../src/goabackend/goagoogleprovider.c:686
 #: ../src/goabackend/goawindowsliveprovider.c:417
 msgid "_Documents"
 msgstr "_Dokumentai"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:82
+msgid "IMAP and SMTP"
+msgstr "IMAP ir SMTP"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:350
+#, c-format
+#| msgid "Did not find password with username `%s' in credentials"
+msgid "Did not find imap-password with identity `%s' in credentials"
+msgstr "Įgaliojimuose nerastas imap slaptažodis su identitetu „%s“"
+
+#. Translators: the first %s is the IMAP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#: ../src/goabackend/goaimapsmtpprovider.c:379
+#, c-format
+#| msgid "Invalid password with username `%s' (%s, %d): "
+msgid "Invalid imap-password with username `%s' (%s, %d): "
+msgstr "Netinkamas imap slaptažodis su naudotojo vardu „%s“ (%s, %d): "
+
+#: ../src/goabackend/goaimapsmtpprovider.c:397
+#, c-format
+#| msgid "Did not find password with username `%s' in credentials"
+msgid "Did not find smtp-password with identity `%s' in credentials"
+msgstr "Įgaliojimuose nerastas smtp slaptažodis su identitetu „%s“"
+
+#. Translators: the first %s is the SMTP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#: ../src/goabackend/goaimapsmtpprovider.c:428
+#, c-format
+#| msgid "Invalid password with username `%s' (%s, %d): "
+msgid "Invalid smtp-password with username `%s' (%s, %d): "
+msgstr "Netinkamas smtp slaptažodis su naudotojo vardu „%s“ (%s, %d): "
+
+#: ../src/goabackend/goaimapsmtpprovider.c:636
+msgid "_Name"
+msgstr "_Vardas"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:653
+#| msgid "_Server"
+msgid "IMAP _Server"
+msgstr "IMAP _Serveris"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:660
+#: ../src/goabackend/goaimapsmtpprovider.c:692
+msgid "_Encryption"
+msgstr "Ši_fravimas"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:663
+#: ../src/goabackend/goaimapsmtpprovider.c:695
+msgid "None"
+msgstr "Joks"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:666
+#: ../src/goabackend/goaimapsmtpprovider.c:698
+msgid "STARTTLS after connecting"
+msgstr "STARTTLS po prisijungimo"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:669
+#: ../src/goabackend/goaimapsmtpprovider.c:701
+msgid "SSL on a dedicated port"
+msgstr "SSL dedikuotame prievade"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:685
+#| msgid "_Server"
+msgid "SMTP _Server"
+msgstr "SMTP _Serveris"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:977
+#: ../src/goabackend/goaimapsmtpprovider.c:1294
+#| msgid "Error connecting to ownCloud server"
+msgid "Error connecting to IMAP server"
+msgstr "Klaida jungiantis prie IMAP serverio"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1066
+#: ../src/goabackend/goaimapsmtpprovider.c:1365
+#| msgid "Error connecting to ownCloud server"
+msgid "Error connecting to SMTP server"
+msgstr "Klaida jungiantis prie SMTP serverio"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1470
+#| msgid "_E-mail"
+msgid "E-mail"
+msgstr "El. pašas"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1474
+msgid "Name"
+msgstr "Vardas"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1484
+#: ../src/goabackend/goaimapsmtpprovider.c:1487
+msgid "IMAP"
+msgstr "IMAP"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1498
+#: ../src/goabackend/goaimapsmtpprovider.c:1501
+msgid "SMTP"
+msgstr "SMTP"
 
 #: ../src/goabackend/goakerberosprovider.c:87
 msgid "Enterprise Login (Kerberos)"
@@ -409,22 +519,16 @@ msgstr "Klaida gaunant identifikatorių: "
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "Prašyta prisijungti kaip %s, bet prisijungta kaip %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1551
+#: ../src/goabackend/goaoauth2provider.c:1549
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Įgaliojimai neturi access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1590
-#: ../src/goabackend/goaoauthprovider.c:1620
+#: ../src/goabackend/goaoauth2provider.c:1588
+#: ../src/goabackend/goaoauthprovider.c:1618
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Nepavyko atnaujinti prieigos leksemos (%s, %d): "
-
-#: ../src/goabackend/goaoauth2provider.c:1627
-#: ../src/goabackend/goaoauthprovider.c:1652
-#, c-format
-msgid "Error storing credentials in keyring (%s, %d): "
-msgstr "Klaida įrašant įgaliojimus į raktinę (%s, %d): "
 
 #: ../src/goabackend/goaoauthprovider.c:609
 #, c-format
@@ -455,7 +559,7 @@ msgstr "Atsakyme trūksta request_token arba request_token_secret antraščių"
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "Įdėkite leksemą, gautą iš <a href=\"%s\">autorizacijos puslapio</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1576
+#: ../src/goabackend/goaoauthprovider.c:1574
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Įgaliojimai neturi access_token arba access_token_secret"
@@ -464,19 +568,68 @@ msgstr "Įgaliojimai neturi access_token arba access_token_secret"
 msgid "ownCloud"
 msgstr "ownCloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:800
-#: ../src/goabackend/goaowncloudprovider.c:980
+#: ../src/goabackend/goaowncloudprovider.c:798
+#: ../src/goabackend/goaowncloudprovider.c:978
 msgid "Error connecting to ownCloud server"
 msgstr "Klaida jungiantis prie ownCloud serverio"
 
-#: ../src/goabackend/goaowncloudprovider.c:1055
+#: ../src/goabackend/goaowncloudprovider.c:1053
 msgid "_Files"
 msgstr "_Failai"
 
-#: ../src/goabackend/goaprovider.c:578
+#: ../src/goabackend/goaprovider.c:579
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "%s nerealizuoja ensure_credentials_sync"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:372
+#, c-format
+#| msgid "Did not find password in credentials"
+msgid "Did not find smtp-password in credentials"
+msgstr "Įgaliojimuose nerastas smtp slaptažodis"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:383
+#, c-format
+msgid "Cannot do SMTP PLAIN without a password"
+msgstr "Negalima atlikti SMTP be slaptažodžio"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:402
+#, c-format
+msgid "org.gnome.OnlineAccounts.Mail is not available"
+msgstr "org.gnome.OnlineAccounts.Mail nepasiekiama"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:412
+#, c-format
+#| msgid "Failed to parse autodiscover response XML"
+msgid "Failed to parse email address"
+msgstr "Nepavyko perskaityti el. pašto adreso"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:424
+#, c-format
+msgid "Cannot do SMTP PLAIN without a domain"
+msgstr "Negalima atlikti grynojo SMTP be domeno"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:438
+#, c-format
+msgid "Service not available"
+msgstr "Tarnyba nepasiekiama"
+
+#: ../src/goabackend/goasmtpauthplain.c:475
+#, c-format
+msgid "Server does not support PLAIN"
+msgstr "Serveris nepalaiko GRYNOJO"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:505
+#, c-format
+msgid "Authentication failed"
+msgstr "Nepavyko patvirtinti tapatybės"
 
 #: ../src/goabackend/goatwitterprovider.c:80
 msgid "Twitter"
@@ -515,7 +668,6 @@ msgstr "Nepavyko gauti įgaliojimų iš raktinės"
 
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:212
-#| msgid "Failed to store credentials in the keyring"
 msgid "No credentials found in the keyring"
 msgstr "Nepavyko rasti įgaliojimų raktinėje"
 
@@ -534,34 +686,34 @@ msgstr "GOA %s įgaliojimai identifikatoriui %s"
 msgid "Failed to store credentials in the keyring"
 msgstr "Nepavyko įrašyti įgaliojimų į raktinę"
 
-#: ../src/goabackend/goautils.c:477
+#: ../src/goabackend/goautils.c:506
 msgid "The signing certificate authority is not known."
 msgstr "Nežinoma pasirašanti liudijimų įstaiga."
 
-#: ../src/goabackend/goautils.c:481
+#: ../src/goabackend/goautils.c:510
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr ""
 "Liudijimas neatitinka laukto tinklapio, iš kurio jis gautas, identiteto."
 
-#: ../src/goabackend/goautils.c:486
+#: ../src/goabackend/goautils.c:515
 msgid "The certificate's activation time is still in the future."
 msgstr "Liudijimo aktyvavimo laikas vis dar ateityje."
 
-#: ../src/goabackend/goautils.c:490
+#: ../src/goabackend/goautils.c:519
 msgid "The certificate has expired."
 msgstr "Liudijimo galiojimas baigėsi."
 
-#: ../src/goabackend/goautils.c:494
+#: ../src/goabackend/goautils.c:523
 msgid "The certificate has been revoked."
 msgstr "Liudijimas buvo atšauktas."
 
-#: ../src/goabackend/goautils.c:498
+#: ../src/goabackend/goautils.c:527
 msgid "The certificate's algorithm is considered insecure."
 msgstr "Liudijimo algoritmas laikomas nesaugiu."
 
-#: ../src/goabackend/goautils.c:502
+#: ../src/goabackend/goautils.c:531
 msgid "Invalid certificate."
 msgstr "Netinkamas liudijimas."
 
@@ -694,3 +846,4 @@ msgstr "Nepavyko rasti identiteto"
 #: ../src/goaidentity/goakerberosidentitymanager.c:824
 msgid "Could not create credential cache for identity"
 msgstr "Nepavyko sukurti įgaliojimų podėlio identitetui"
+
