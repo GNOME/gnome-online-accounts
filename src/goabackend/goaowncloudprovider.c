@@ -643,8 +643,25 @@ create_account_details_ui (GoaProvider    *provider,
   gtk_widget_show (label);
   gtk_container_add (GTK_CONTAINER (data->progress_grid), label);
 
-  gtk_window_get_size (GTK_WINDOW (data->dialog), &width, NULL);
-  gtk_widget_set_size_request (GTK_WIDGET (data->dialog), width, -1);
+  if (new_account)
+    {
+      gtk_window_get_size (GTK_WINDOW (data->dialog), &width, NULL);
+      gtk_widget_set_size_request (GTK_WIDGET (data->dialog), width, -1);
+    }
+  else
+    {
+      GtkWindow *parent;
+
+      /* Keep in sync with GoaPanelAddAccountDialog in
+       * gnome-control-center.
+       */
+      parent = gtk_window_get_transient_for (GTK_WINDOW (data->dialog));
+      if (parent != NULL)
+        {
+          gtk_window_get_size (parent, &width, NULL);
+          gtk_widget_set_size_request (GTK_WIDGET (data->dialog), (gint) (0.5 * width), -1);
+        }
+    }
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
