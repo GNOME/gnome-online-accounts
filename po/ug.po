@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-02-06 10:43+0000\n"
-"PO-Revision-Date: 2013-02-09 10:19+0900\n"
+"POT-Creation-Date: 2013-02-14 19:23+0000\n"
+"PO-Revision-Date: 2013-02-16 12:14+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: \n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #. shut up -Wunused-but-set-variable
-#: ../data/goa-daemon.desktop.in.in.h:1 ../src/daemon/goadaemon.c:211
+#: ../data/goa-daemon.desktop.in.in.h:1 ../src/daemon/goadaemon.c:212
 msgid "Online Accounts"
 msgstr "توردىكى ھېساباتلار"
 
@@ -26,21 +26,21 @@ msgid "Provides the org.gnome.OnlinesAccounts name on the session bus"
 msgstr "ئەڭگىمە باش لىنىيىسىدە org.gnome.OnlinesAccounts نى تەمىنلەيدۇ"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:801 ../src/daemon/goadaemon.c:1149
+#: ../src/daemon/goadaemon.c:802 ../src/daemon/goadaemon.c:1150
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "تۆۋەندىكى تەمىنلىگۈچىنى تېپىش مەغلۇپ بولدى: %s"
 
-#: ../src/daemon/goadaemon.c:991
+#: ../src/daemon/goadaemon.c:992
 msgid "An online account needs attention"
 msgstr "تور ھېساباتى ئىشلىتىشتە دىققەت قىلىڭ"
 
-#: ../src/daemon/goadaemon.c:1000
+#: ../src/daemon/goadaemon.c:1001
 msgid "Open Online Accounts..."
 msgstr "تور ھېساباتى ئېچىش…"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1137
+#: ../src/daemon/goadaemon.c:1138
 msgid "ProviderType property is not set for account"
 msgstr "ھېساباتتا ProviderType خاسلىقى بەلگىلەنمىگەن"
 
@@ -80,71 +80,78 @@ msgstr "Account ئېلېمېنتىنى تېپىش مەغلۇپ بولدى"
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "ئاپتوماتىك بايقاش(autodiscover) ئىنكاسىدىن ASUrl ۋە OABUrl نى تېپىش مەغلۇپ بولدى"
 
-#: ../src/goabackend/goaexchangeprovider.c:77
+#: ../src/goabackend/goaexchangeprovider.c:79
 msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
-#: ../src/goabackend/goaexchangeprovider.c:290
-#: ../src/goabackend/goagoogleprovider.c:585
-#: ../src/goabackend/goaoauth2provider.c:1523
-#: ../src/goabackend/goaoauthprovider.c:1545
-#: ../src/goabackend/goaowncloudprovider.c:343
-#, c-format
-msgid "Credentials not found in keyring (%s, %d): "
-msgstr "ئىسپاتنامىنى ئاچقۇچ ھالقىسىدىن تاپالمىدى (%s, %d): "
-
+#. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:308
-#: ../src/goabackend/goagoogleprovider.c:604
+#: ../src/goabackend/goaexchangeprovider.c:1019
+#: ../src/goabackend/goagoogleprovider.c:596
+#: ../src/goabackend/goagoogleprovider.c:783
 #: ../src/goabackend/goaowncloudprovider.c:364
+#: ../src/goabackend/goaowncloudprovider.c:1121
 #, c-format
-msgid "Did not find password with username `%s' in credentials"
-msgstr "ئىسپاتنامىدىن ئىم ۋە ئاتى ‹%s› بولغان ئىشلەتكۈچى ئاتىنى تاپقىلى بولمىدى"
+#| msgid "Did not find password with username `%s' in credentials"
+msgid "Did not find password with identity `%s' in credentials"
+msgstr "ئىسپاتنامىدىن كىملىكى ‹%s› بولغان ئىشلەتكۈچىنىڭ ئىمىنى تاپقىلى بولمىدى"
 
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
 #.
 #: ../src/goabackend/goaexchangeprovider.c:336
-#: ../src/goabackend/goagoogleprovider.c:627
+#: ../src/goabackend/goagoogleprovider.c:619
 #: ../src/goabackend/goaowncloudprovider.c:387
 #, c-format
 msgid "Invalid password with username `%s' (%s, %d): "
 msgstr "ئاتى ‹%s› (%s, %d) بولغان ئىشلەتكۈچىنىڭ ئىمى خاتا: "
 
-#: ../src/goabackend/goaexchangeprovider.c:525
+#: ../src/goabackend/goaexchangeprovider.c:501
+#: ../src/goabackend/goaimapsmtpprovider.c:635
 msgid "_E-mail"
 msgstr "ئېلخەت(_E)"
 
-#: ../src/goabackend/goaexchangeprovider.c:526
+#: ../src/goabackend/goaexchangeprovider.c:502
+#: ../src/goabackend/goaimapsmtpprovider.c:655
+#: ../src/goabackend/goaimapsmtpprovider.c:687
 #: ../src/goabackend/goaowncloudprovider.c:613
 msgid "_Password"
 msgstr "ئىم(_P)"
 
-#: ../src/goabackend/goaexchangeprovider.c:529
+#: ../src/goabackend/goaexchangeprovider.c:505
 msgid "_Custom"
 msgstr "ئىختىيارى(_C)"
 
-#: ../src/goabackend/goaexchangeprovider.c:548
-#: ../src/goabackend/goakerberosprovider.c:1126
+#: ../src/goabackend/goaexchangeprovider.c:524
+#: ../src/goabackend/goaimapsmtpprovider.c:654
+#: ../src/goabackend/goaimapsmtpprovider.c:686
+#: ../src/goabackend/goakerberosprovider.c:1128
 #: ../src/goabackend/goaowncloudprovider.c:612
 msgid "User_name"
 msgstr "ئىشلەتكۈچى ئاتى(_N)"
 
-#: ../src/goabackend/goaexchangeprovider.c:549
+#: ../src/goabackend/goaexchangeprovider.c:525
 #: ../src/goabackend/goaowncloudprovider.c:611
 msgid "_Server"
 msgstr "مۇلازىمېتىر(_S)"
 
-#: ../src/goabackend/goaexchangeprovider.c:579
-#: ../src/goabackend/goakerberosprovider.c:1151
+#: ../src/goabackend/goaexchangeprovider.c:555
+#: ../src/goabackend/goaimapsmtpprovider.c:731
+#: ../src/goabackend/goakerberosprovider.c:1153
 #: ../src/goabackend/goaowncloudprovider.c:642
 msgid "Connecting…"
 msgstr "باغلىنىۋاتىدۇ…"
 
-#: ../src/goabackend/goaexchangeprovider.c:667
-#: ../src/goabackend/goaexchangeprovider.c:861
-#: ../src/goabackend/goakerberosprovider.c:1542
-#: ../src/goabackend/goaoauth2provider.c:1049
+#: ../src/goabackend/goaexchangeprovider.c:643
+#: ../src/goabackend/goaexchangeprovider.c:837
+#: ../src/goabackend/goaimapsmtpprovider.c:890
+#: ../src/goabackend/goaimapsmtpprovider.c:924
+#: ../src/goabackend/goaimapsmtpprovider.c:1012
+#: ../src/goabackend/goaimapsmtpprovider.c:1258
+#: ../src/goabackend/goaimapsmtpprovider.c:1328
+#: ../src/goabackend/goakerberosprovider.c:1544
+#: ../src/goabackend/goaoauth2provider.c:1048
 #: ../src/goabackend/goaoauthprovider.c:1041
 #: ../src/goabackend/goaowncloudprovider.c:736
 #: ../src/goabackend/goaowncloudprovider.c:945
@@ -152,202 +159,307 @@ msgstr "باغلىنىۋاتىدۇ…"
 msgid "Dialog was dismissed"
 msgstr "سۆزلەشكۈ يوق"
 
-#: ../src/goabackend/goaexchangeprovider.c:704
-#: ../src/goabackend/goaexchangeprovider.c:889
+#: ../src/goabackend/goaexchangeprovider.c:680
+#: ../src/goabackend/goaexchangeprovider.c:865
+#: ../src/goabackend/goaimapsmtpprovider.c:954
+#: ../src/goabackend/goaimapsmtpprovider.c:1043
+#: ../src/goabackend/goaimapsmtpprovider.c:1282
+#: ../src/goabackend/goaimapsmtpprovider.c:1353
 #: ../src/goabackend/goaowncloudprovider.c:775
 #: ../src/goabackend/goaowncloudprovider.c:966
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "سۆزلەشكۈ يوق (%s، %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:717
+#: ../src/goabackend/goaexchangeprovider.c:693
+#: ../src/goabackend/goaimapsmtpprovider.c:967
+#: ../src/goabackend/goaimapsmtpprovider.c:1056
 #: ../src/goabackend/goaowncloudprovider.c:788
 msgid "_Ignore"
 msgstr "پەرۋا قىلما(_I)"
 
-#: ../src/goabackend/goaexchangeprovider.c:722
-#: ../src/goabackend/goaexchangeprovider.c:908
-#: ../src/goabackend/goakerberosprovider.c:1651
+#: ../src/goabackend/goaexchangeprovider.c:698
+#: ../src/goabackend/goaexchangeprovider.c:884
+#: ../src/goabackend/goaimapsmtpprovider.c:972
+#: ../src/goabackend/goaimapsmtpprovider.c:1061
+#: ../src/goabackend/goaimapsmtpprovider.c:1301
+#: ../src/goabackend/goaimapsmtpprovider.c:1372
+#: ../src/goabackend/goakerberosprovider.c:1653
 #: ../src/goabackend/goaowncloudprovider.c:793
 #: ../src/goabackend/goaowncloudprovider.c:985
 msgid "_Try Again"
 msgstr "قايتا سىنا(_T)"
 
-#: ../src/goabackend/goaexchangeprovider.c:727
-#: ../src/goabackend/goaexchangeprovider.c:901
+#: ../src/goabackend/goaexchangeprovider.c:703
+#: ../src/goabackend/goaexchangeprovider.c:877
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Microsoft Exchange مۇلازىمېتىرغا باغلىنىۋاتقاندا خاتالىق كۆرۈلدى"
 
-#: ../src/goabackend/goaexchangeprovider.c:963
-#: ../src/goabackend/goafacebookprovider.c:395
-#: ../src/goabackend/goagoogleprovider.c:672
-#: ../src/goabackend/goakerberosprovider.c:1722
+#: ../src/goabackend/goaexchangeprovider.c:939
+#: ../src/goabackend/goafacebookprovider.c:397
+#: ../src/goabackend/goagoogleprovider.c:664
+#: ../src/goabackend/goakerberosprovider.c:1724
 #: ../src/goabackend/goaowncloudprovider.c:1041
-#: ../src/goabackend/goawindowsliveprovider.c:408
+#: ../src/goabackend/goawindowsliveprovider.c:410
 msgid "Use for"
 msgstr "ئىشلىتىلىش ئورنى"
 
-#: ../src/goabackend/goaexchangeprovider.c:965
-#: ../src/goabackend/goagoogleprovider.c:674
+#: ../src/goabackend/goaexchangeprovider.c:941
+#: ../src/goabackend/goagoogleprovider.c:666
 msgid "_Mail"
 msgstr "خەت(_M)"
 
-#: ../src/goabackend/goaexchangeprovider.c:970
-#: ../src/goabackend/goagoogleprovider.c:679
+#: ../src/goabackend/goaexchangeprovider.c:946
+#: ../src/goabackend/goagoogleprovider.c:671
 #: ../src/goabackend/goaowncloudprovider.c:1043
 msgid "Cale_ndar"
 msgstr "يىلنامە(_N):"
 
-#: ../src/goabackend/goaexchangeprovider.c:975
-#: ../src/goabackend/goagoogleprovider.c:684
+#: ../src/goabackend/goaexchangeprovider.c:951
+#: ../src/goabackend/goagoogleprovider.c:676
 #: ../src/goabackend/goaowncloudprovider.c:1048
 msgid "_Contacts"
 msgstr "ئالاقەداشلار(_C)"
 
-#. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:1041
-#: ../src/goabackend/goagoogleprovider.c:789
-#: ../src/goabackend/goaowncloudprovider.c:1119
-msgid "Did not find password in credentials"
-msgstr "ئىسپاتنامە ئىچىدىن ئىمنى تاپقىلى بولمىدى"
-
-#: ../src/goabackend/goafacebookprovider.c:79
+#: ../src/goabackend/goafacebookprovider.c:81
 msgid "Facebook"
 msgstr "فېيىسبۇك(Facebook)"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:199
-#: ../src/goabackend/goagoogleprovider.c:194
-#: ../src/goabackend/goatwitterprovider.c:160
-#: ../src/goabackend/goawindowsliveprovider.c:181
-#: ../src/goabackend/goayahooprovider.c:163
+#: ../src/goabackend/goafacebookprovider.c:201
+#: ../src/goabackend/goagoogleprovider.c:196
+#: ../src/goabackend/goatwitterprovider.c:162
+#: ../src/goabackend/goawindowsliveprovider.c:183
+#: ../src/goabackend/goayahooprovider.c:165
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr "ئەسلى guid نى ئىلتىماس قىلغاندا ھالەت 200 بولۇشى كېرەك ئىدى. بىراق %d (%s) دېگەن ھالەتنى تاپشۇرۇپ ئالدى."
 
-#: ../src/goabackend/goafacebookprovider.c:211
-#: ../src/goabackend/goaflickrprovider.c:189
-#: ../src/goabackend/goagoogleprovider.c:206
+#: ../src/goabackend/goafacebookprovider.c:213
+#: ../src/goabackend/goaflickrprovider.c:191
+#: ../src/goabackend/goagoogleprovider.c:208
 #: ../src/goabackend/goaoauth2provider.c:616
-#: ../src/goabackend/goatwitterprovider.c:172
-#: ../src/goabackend/goawindowsliveprovider.c:193
-#: ../src/goabackend/goayahooprovider.c:175
+#: ../src/goabackend/goatwitterprovider.c:174
+#: ../src/goabackend/goawindowsliveprovider.c:195
+#: ../src/goabackend/goayahooprovider.c:177
 msgid "Error parsing response as JSON: "
 msgstr "JSON دىن كەلگەن جاۋابنى تەھلىل قىلىشتا خاتالىق كۆرۈلدى: "
 
-#: ../src/goabackend/goafacebookprovider.c:222
-#: ../src/goabackend/goawindowsliveprovider.c:204
+#: ../src/goabackend/goafacebookprovider.c:224
+#: ../src/goabackend/goawindowsliveprovider.c:206
 #, c-format
 msgid "Didn't find id member in JSON data"
 msgstr "JSON سانلىق-مەلۇماتىدىن id ئەزانى تاپالمىدى"
 
-#: ../src/goabackend/goafacebookprovider.c:231
-#: ../src/goabackend/goagoogleprovider.c:217
+#: ../src/goabackend/goafacebookprovider.c:233
+#: ../src/goabackend/goagoogleprovider.c:219
 #, c-format
 msgid "Didn't find email member in JSON data"
 msgstr "JSON سانلىق-مەلۇماتىدىن email دېگەن ئەزانى تاپالمىدى"
 
-#: ../src/goabackend/goafacebookprovider.c:397
-#: ../src/goabackend/goagoogleprovider.c:689
-#: ../src/goabackend/goawindowsliveprovider.c:410
+#: ../src/goabackend/goafacebookprovider.c:399
+#: ../src/goabackend/goagoogleprovider.c:681
+#: ../src/goabackend/goawindowsliveprovider.c:412
 msgid "C_hat"
 msgstr "سۆھبەت(_H)"
 
-#: ../src/goabackend/goaflickrprovider.c:80
+#: ../src/goabackend/goaflickrprovider.c:82
 msgid "Flickr"
 msgstr "Flickr"
 
-#: ../src/goabackend/goaflickrprovider.c:177
+#: ../src/goabackend/goaflickrprovider.c:179
 #, c-format
 msgid "Expected status 200 when requesting user id, instead got status %d (%s)"
 msgstr "ئەسلى ئىشلەتكۈچى كىملىكىنى ئىلتىماس قىلغاندا ھالەت 200 بولۇشى كېرەك ئىدى. بىراق %d (%s) دېگەن ھالەتنى تاپشۇرۇپ ئالدى."
 
-#: ../src/goabackend/goaflickrprovider.c:200
+#: ../src/goabackend/goaflickrprovider.c:202
 #, c-format
 msgid "Didn't find user member in JSON data"
 msgstr "ئىشلەتكۈچى دېگەن ئەزانى JSON سانلىق-مەلۇماتىدىن تاپالمىدى"
 
-#: ../src/goabackend/goaflickrprovider.c:209
+#: ../src/goabackend/goaflickrprovider.c:211
 #, c-format
 msgid "Didn't find user.id member in JSON data"
 msgstr "user.id دېگەن ئەزانى JSON سانلىق-مەلۇماتىدىن تاپالمىدى"
 
-#: ../src/goabackend/goaflickrprovider.c:218
+#: ../src/goabackend/goaflickrprovider.c:220
 #, c-format
 msgid "Didn't find user.username member in JSON data"
 msgstr "user.username دېگەن ئەزانى JSON سانلىق-مەلۇماتىدىن تاپالمىدى"
 
-#: ../src/goabackend/goaflickrprovider.c:227
+#: ../src/goabackend/goaflickrprovider.c:229
 #, c-format
 msgid "Didn't find user.username._content member in JSON data"
 msgstr "ser.username._content دېگەن ئەزانى JSON سانلىق-مەلۇماتىدىن تاپالمىدى"
 
-#: ../src/goabackend/goaflickrprovider.c:304
+#: ../src/goabackend/goaflickrprovider.c:306
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "سىستېمىنىڭ ۋاقتى توغرا ئەمەس. سىستېمىنىڭ ۋاقىت ۋە چېسلا تەڭشىكىنى تەكشۈرۈڭ."
 
-#: ../src/goabackend/goaflickrprovider.c:406
+#: ../src/goabackend/goaflickrprovider.c:408
 msgid "_Photos"
 msgstr "سۈرەتلەر(_P)"
 
-#: ../src/goabackend/goagoogleprovider.c:83
+#: ../src/goabackend/goagoogleprovider.c:85
 msgid "Google"
 msgstr "گۇگىل(Google)"
 
-#: ../src/goabackend/goagoogleprovider.c:694
-#: ../src/goabackend/goawindowsliveprovider.c:415
+#: ../src/goabackend/goagoogleprovider.c:686
+#: ../src/goabackend/goawindowsliveprovider.c:417
 msgid "_Documents"
 msgstr "پۈتۈكلەر(_D)"
 
-#: ../src/goabackend/goakerberosprovider.c:85
+#: ../src/goabackend/goaimapsmtpprovider.c:82
+msgid "IMAP and SMTP"
+msgstr "IMAP ۋە SMTP"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:350
+#, c-format
+#| msgid "Did not find password with username `%s' in credentials"
+msgid "Did not find imap-password with identity `%s' in credentials"
+msgstr "ئىسپاتنامىدىن كىملىكى ‹%s› بولغان ئىشلەتكۈچىنىڭ imap-ئىمىنى تاپقىلى بولمىدى"
+
+#. Translators: the first %s is the IMAP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#: ../src/goabackend/goaimapsmtpprovider.c:379
+#, c-format
+#| msgid "Invalid password with username `%s' (%s, %d): "
+msgid "Invalid imap-password with username `%s' (%s, %d): "
+msgstr "ئاتى ‹%s› (%s, %d) بولغان ئىشلەتكۈچىنىڭ imap-ئىمى خاتا: "
+
+#: ../src/goabackend/goaimapsmtpprovider.c:397
+#, c-format
+#| msgid "Did not find password with username `%s' in credentials"
+msgid "Did not find smtp-password with identity `%s' in credentials"
+msgstr "ئىسپاتنامىدىن كىملىكى ‹%s› بولغان ئىشلەتكۈچىنىڭ smtp-ئىمىنى تاپقىلى بولمىدى"
+
+#. Translators: the first %s is the SMTP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#: ../src/goabackend/goaimapsmtpprovider.c:428
+#, c-format
+#| msgid "Invalid password with username `%s' (%s, %d): "
+msgid "Invalid smtp-password with username `%s' (%s, %d): "
+msgstr "ئاتى ‹%s› (%s, %d) بولغان ئىشلەتكۈچىنىڭ smtp-ئىمى خاتا: "
+
+#: ../src/goabackend/goaimapsmtpprovider.c:636
+#| msgid "Name"
+msgid "_Name"
+msgstr "ئاتى(_N)"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:653
+#| msgid "_Server"
+msgid "IMAP _Server"
+msgstr "IMAP مۇلازىمېتىر(_S)"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:660
+#: ../src/goabackend/goaimapsmtpprovider.c:692
+msgid "_Encryption"
+msgstr "شىفىرلاش(_E)"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:663
+#: ../src/goabackend/goaimapsmtpprovider.c:695
+msgid "None"
+msgstr "يوق"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:666
+#: ../src/goabackend/goaimapsmtpprovider.c:698
+msgid "STARTTLS after connecting"
+msgstr "باغلانغاندىن كېيىن STARTTLS"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:669
+#: ../src/goabackend/goaimapsmtpprovider.c:701
+msgid "SSL on a dedicated port"
+msgstr "بېكىتىلگەن ئېغىزدا SSL"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:685
+#| msgid "_Server"
+msgid "SMTP _Server"
+msgstr "SMTP مۇلازىمېتىر(_S)"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:977
+#: ../src/goabackend/goaimapsmtpprovider.c:1294
+#| msgid "Error connecting to ownCloud server"
+msgid "Error connecting to IMAP server"
+msgstr "IMAP مۇلازىمېتىرىغا باغلىنىشتا خاتالىق كۆرۈلدى"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1066
+#: ../src/goabackend/goaimapsmtpprovider.c:1365
+#| msgid "Error connecting to ownCloud server"
+msgid "Error connecting to SMTP server"
+msgstr "SMTP مۇلازىمېتىرىغا باغلىنىشتا خاتالىق كۆرۈلدى"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1470
+#| msgid "_E-mail"
+msgid "E-mail"
+msgstr "ئېلخەت"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1474
+msgid "Name"
+msgstr "ئاتى"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1484
+#: ../src/goabackend/goaimapsmtpprovider.c:1487
+msgid "IMAP"
+msgstr "IMAP"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1498
+#: ../src/goabackend/goaimapsmtpprovider.c:1501
+msgid "SMTP"
+msgstr "SMTP"
+
+#: ../src/goabackend/goakerberosprovider.c:87
 msgid "Enterprise Login (Kerberos)"
 msgstr "شىركەتلەر ئۈچۈن كىرىش"
 
-#: ../src/goabackend/goakerberosprovider.c:447
+#: ../src/goabackend/goakerberosprovider.c:449
 msgid "Identity service returned invalid key"
 msgstr "كىملىك مۇلازىمىتى ئىناۋەتسىز ئاچقۇچ قايتۇردى"
 
-#: ../src/goabackend/goakerberosprovider.c:713
+#: ../src/goabackend/goakerberosprovider.c:715
 #, c-format
 msgid "Could not find saved credentials for principal `%s' in keyring"
 msgstr "ئاچقۇچ ھالقىسىدىكى ئىشلەتكۈچى ‹%s› نىڭ ساقلانغان ئىسپاتنامىلىرىنى تاپقىلى بولمىدى"
 
-#: ../src/goabackend/goakerberosprovider.c:723
+#: ../src/goabackend/goakerberosprovider.c:725
 #, c-format
 msgid "Did not find password for principal `%s' in credentials"
 msgstr "ئىسپاتنامىلەردىن ئىشلەتكۈچى ‹%s› نىڭ ئىمىنى تاپالمىدى"
 
-#: ../src/goabackend/goakerberosprovider.c:1118
+#: ../src/goabackend/goakerberosprovider.c:1120
 msgid "_Domain"
 msgstr "دائىرە(_D)"
 
-#: ../src/goabackend/goakerberosprovider.c:1119
+#: ../src/goabackend/goakerberosprovider.c:1121
 msgid "Enterprise domain or realm name"
 msgstr "شىركەت دائىرە ئاتى ياكى realm ئاتى"
 
-#: ../src/goabackend/goakerberosprovider.c:1351
-#: ../src/goaidentity/goaidentityservice.c:1082
+#: ../src/goabackend/goakerberosprovider.c:1353
+#: ../src/goaidentity/goaidentityservice.c:1084
 msgid "Log In to Realm"
 msgstr "Realm غا كىرىش"
 
-#: ../src/goabackend/goakerberosprovider.c:1352
+#: ../src/goabackend/goakerberosprovider.c:1354
 msgid "Please enter your password below."
 msgstr "تۆۋەندىكى يەرگە ئىمنى كىرگۈزۈڭ."
 
-#: ../src/goabackend/goakerberosprovider.c:1353
+#: ../src/goabackend/goakerberosprovider.c:1355
 msgid "Remember this password"
 msgstr "بۇ ئىمنى ئەستە تۇت"
 
-#: ../src/goabackend/goakerberosprovider.c:1492
+#: ../src/goabackend/goakerberosprovider.c:1494
 #, c-format
 msgid "The domain is not valid"
 msgstr "بۇ دائىرە ئىناۋەتسىز"
 
-#: ../src/goabackend/goakerberosprovider.c:1646
+#: ../src/goabackend/goakerberosprovider.c:1648
 msgid "Error connecting to enterprise identity server"
 msgstr "شىركەت كىملىك مۇلازىمىتىگە باغلىنىشتا خاتالىق كۆرۈلدى"
 
-#: ../src/goabackend/goakerberosprovider.c:1724
+#: ../src/goabackend/goakerberosprovider.c:1726
 msgid "Network _Resources"
 msgstr "توردىكى مەنبەلەر(_R)"
 
@@ -369,52 +481,46 @@ msgstr "JSON دىن باشقا سانلىق-مەلۇمات ئىچىدىن access
 msgid "Didn't find access_token in JSON data"
 msgstr "JSON سانلىق-مەلۇماتى ئىچىدىن access_token نى تاپالمىدى"
 
-#: ../src/goabackend/goaoauth2provider.c:838
-#: ../src/goabackend/goaoauth2provider.c:877
+#: ../src/goabackend/goaoauth2provider.c:835
+#: ../src/goabackend/goaoauth2provider.c:875
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "سالاھىيەت دەلىللەش ئىنكاسى «%s» ئىدى"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:983
+#: ../src/goabackend/goaoauth2provider.c:981
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
 "page</a>:"
 msgstr "<a href=\"%s\"> سالاھىيەت دەلىللەش بېتى</a> دىن ئېرىشكەن سالاھىيەت دەلىللەش كودىنى چاپلاڭ:"
 
-#: ../src/goabackend/goaoauth2provider.c:1075
+#: ../src/goabackend/goaoauth2provider.c:1074
 #: ../src/goabackend/goaoauthprovider.c:1072
 msgid "Error getting an Access Token: "
 msgstr "زىيارەت Token نى ئېلىۋاتقاندا خاتالىق كۆرۈلدى: "
 
-#: ../src/goabackend/goaoauth2provider.c:1090
+#: ../src/goabackend/goaoauth2provider.c:1089
 #: ../src/goabackend/goaoauthprovider.c:1085
 msgid "Error getting identity: "
 msgstr "كىملىكنى ئېلىۋاتقاندا خاتالىق كۆرۈلدى: "
 
-#: ../src/goabackend/goaoauth2provider.c:1379
+#: ../src/goabackend/goaoauth2provider.c:1378
 #: ../src/goabackend/goaoauthprovider.c:1390
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "%s دا كىرگەن ئىدى، بىراق %s بولۇپ قالدى"
 
-#: ../src/goabackend/goaoauth2provider.c:1552
+#: ../src/goabackend/goaoauth2provider.c:1549
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "ئىسپاتنامىدە access_token يوق"
 
-#: ../src/goabackend/goaoauth2provider.c:1591
-#: ../src/goabackend/goaoauthprovider.c:1620
+#: ../src/goabackend/goaoauth2provider.c:1588
+#: ../src/goabackend/goaoauthprovider.c:1618
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "زىيارەت token (%s، %d) نى يېڭىلاش مەغلۇپ بولدى: "
-
-#: ../src/goabackend/goaoauth2provider.c:1628
-#: ../src/goabackend/goaoauthprovider.c:1652
-#, c-format
-msgid "Error storing credentials in keyring (%s, %d): "
-msgstr "ئىسپاتنامىلەرنى ئاچقۇچ ھالقىسى  (%s، %d) غا ساقلاشتا خاتالىق كۆرۈلدى: "
 
 #: ../src/goabackend/goaoauthprovider.c:609
 #, c-format
@@ -443,12 +549,12 @@ msgstr "ئىنكاس قېشى ئىچىدە request_token ياكى request_token_
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "<a href=\"%s\"> سالاھىيەت دەلىللەش بېتى</a> دىن ئېرىشكەن سالاھىيەت دەلىللەش token نى چاپلاڭ:"
 
-#: ../src/goabackend/goaoauthprovider.c:1576
+#: ../src/goabackend/goaoauthprovider.c:1574
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "ئىسپاتنامىلەردە access_token ياكى access_token_secret يوق"
 
-#: ../src/goabackend/goaowncloudprovider.c:82
+#: ../src/goabackend/goaowncloudprovider.c:84
 msgid "ownCloud"
 msgstr "ownCloud"
 
@@ -461,21 +567,70 @@ msgstr "ownCloud مۇلازىمېتىرىغا باغلىنىشتا خاتالى�
 msgid "_Files"
 msgstr "ھۆججەت(_F)"
 
-#: ../src/goabackend/goaprovider.c:577
+#: ../src/goabackend/goaprovider.c:579
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync نى %s تىپتا ئەمەلگە ئاشۇرالمىدى"
 
-#: ../src/goabackend/goatwitterprovider.c:78
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:372
+#, c-format
+#| msgid "Did not find password in credentials"
+msgid "Did not find smtp-password in credentials"
+msgstr "ئىسپاتنامە ئىچىدىن smtp-ئىمنى تاپقىلى بولمىدى"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:383
+#, c-format
+msgid "Cannot do SMTP PLAIN without a password"
+msgstr "ئىمسىز ھالەتتە SMTP PLAIN نى قىلغىلى بولمايدۇ"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:402
+#, c-format
+msgid "org.gnome.OnlineAccounts.Mail is not available"
+msgstr "org.gnome.OnlineAccounts.Mail يوق"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:412
+#, c-format
+#| msgid "Failed to parse autodiscover response XML"
+msgid "Failed to parse email address"
+msgstr "ئېلخەت ئادرېسىنى تەھلىل قىلىش مەغلۇپ بولدى"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:424
+#, c-format
+msgid "Cannot do SMTP PLAIN without a domain"
+msgstr "دائىرە ئاتى يوق ھالەتتە SMTP PLAIN نى قىلغىلى بولمايدۇ"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:438
+#, c-format
+msgid "Service not available"
+msgstr "مۇلازىمەتنى ئىشلەتكىلى بولمايدۇ"
+
+#: ../src/goabackend/goasmtpauthplain.c:475
+#, c-format
+msgid "Server does not support PLAIN"
+msgstr "مۇلازىمېتىر PLAIN نى قوللىمايدۇ"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:505
+#, c-format
+msgid "Authentication failed"
+msgstr "سالاھىيەت دەلىللەش مەغلۇپ بولدى"
+
+#: ../src/goabackend/goatwitterprovider.c:80
 msgid "Twitter"
 msgstr "Twitter"
 
-#: ../src/goabackend/goatwitterprovider.c:183
+#: ../src/goabackend/goatwitterprovider.c:185
 #, c-format
 msgid "Didn't find id_str member in JSON data"
 msgstr "JSON سانلىق-مەلۇماتىدىن id_str دېگەن ئەزانى تاپالمىدى"
 
-#: ../src/goabackend/goatwitterprovider.c:192
+#: ../src/goabackend/goatwitterprovider.c:194
 #, c-format
 msgid "Didn't find screen_name member in JSON data"
 msgstr "JSON سانلىق-مەلۇماتىدىن screen_name دېگەن ئەزانى تاپالمىدى"
@@ -521,33 +676,33 @@ msgstr "%2$s سالاھىيەتنىڭ GOA %1$s ئىسپاتنامىلىرى"
 msgid "Failed to store credentials in the keyring"
 msgstr "ئىسپاتنامىلەرنى ئاچقۇچ ھالقىسىغا ساقلاش مەغلۇپ بولدى"
 
-#: ../src/goabackend/goautils.c:477
+#: ../src/goabackend/goautils.c:506
 msgid "The signing certificate authority is not known."
 msgstr "ئىمزالىق گۇۋاھنامە تارقاتقۇچى ئېنىق ئەمەس."
 
-#: ../src/goabackend/goautils.c:481
+#: ../src/goabackend/goautils.c:510
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr "گۇۋاھنامە، ئۇنى قايتۇرۇپ ئالغان تورتۇرادىن كەلگىنى بىلەن بىردەك ئەمەس."
 
-#: ../src/goabackend/goautils.c:486
+#: ../src/goabackend/goautils.c:515
 msgid "The certificate's activation time is still in the future."
 msgstr "گۇۋاھنامىنىڭ ئاكتىپلاش ۋاقتى يەنىلا كەلگۈسى ھالەتتە."
 
-#: ../src/goabackend/goautils.c:490
+#: ../src/goabackend/goautils.c:519
 msgid "The certificate has expired."
 msgstr "ئىسپاتنامىنىڭ ۋاقتى ئوتكەن."
 
-#: ../src/goabackend/goautils.c:494
+#: ../src/goabackend/goautils.c:523
 msgid "The certificate has been revoked."
 msgstr "بۇ گۇۋاھنامە بىكار قىلىنغان."
 
-#: ../src/goabackend/goautils.c:498
+#: ../src/goabackend/goautils.c:527
 msgid "The certificate's algorithm is considered insecure."
 msgstr "گۇۋاھنامىنىڭ ھېسابلاش ئۇسۇلى(algorithm) بىخەتەر ئەمەستەك قىلىدۇ."
 
-#: ../src/goabackend/goautils.c:502
+#: ../src/goabackend/goautils.c:531
 msgid "Invalid certificate."
 msgstr "ئىناۋەتسىز گۇۋاھنامە."
 
@@ -557,44 +712,44 @@ msgstr "ئىناۋەتسىز گۇۋاھنامە."
 msgid "Loading “%s”…"
 msgstr "ئوقۇۋاتقىنى «%s» …"
 
-#: ../src/goabackend/goawindowsliveprovider.c:81
+#: ../src/goabackend/goawindowsliveprovider.c:83
 msgid "Windows Live"
 msgstr "Windows Live"
 
-#: ../src/goabackend/goawindowsliveprovider.c:215
+#: ../src/goabackend/goawindowsliveprovider.c:217
 #, c-format
 msgid "Didn't find account email member in JSON data"
 msgstr "JSON سانلىق-مەلۇماتىدىن ھېسابات ئېلخەت ئەزاسىنى تاپالمىدى"
 
-#: ../src/goabackend/goayahooprovider.c:78
+#: ../src/goabackend/goayahooprovider.c:80
 msgid "Yahoo"
 msgstr "ياخۇ"
 
-#: ../src/goabackend/goayahooprovider.c:186
+#: ../src/goabackend/goayahooprovider.c:188
 #, c-format
 msgid "Didn't find guid member in JSON data"
 msgstr "JSON سانلىق-مەلۇماتىدىن guid دېگەن ئەزانى تاپالمىدى"
 
-#: ../src/goabackend/goayahooprovider.c:196
+#: ../src/goabackend/goayahooprovider.c:198
 #, c-format
 msgid "Didn't find value member in JSON data"
 msgstr "JSON سانلىق-مەلۇماتىدىن value دېگەن ئەزانى تاپالمىدى"
 
-#: ../src/goabackend/goayahooprovider.c:222
+#: ../src/goabackend/goayahooprovider.c:224
 #, c-format
 msgid "Expected status 200 when requesting name, instead got status %d (%s)"
 msgstr "ئەسلى زىيارەت name نى ئىلتىماس قىلغاندا ھالەت 200 بولۇشى كېرەك ئىدى. بىراق %d (%s) دېگەن ھالەتنى تاپشۇرۇپ ئالدى."
 
-#: ../src/goabackend/goayahooprovider.c:235
+#: ../src/goabackend/goayahooprovider.c:237
 msgid "Error parsing usercard response as JSON: "
 msgstr "JSON دىن كەلگەن usercard جاۋابنى تەھلىل قىلىشتا خاتالىق كۆرۈلدى: "
 
-#: ../src/goabackend/goayahooprovider.c:246
+#: ../src/goabackend/goayahooprovider.c:248
 #, c-format
 msgid "Didn't find profile member in JSON data"
 msgstr "JSON سانلىق-مەلۇماتىدىن profile دېگەن ئەزانى تاپالمىدى"
 
-#: ../src/goabackend/goayahooprovider.c:256
+#: ../src/goabackend/goayahooprovider.c:258
 #, c-format
 msgid "Didn't find nickname member in JSON data"
 msgstr "JSON سانلىق-مەلۇماتىدىن nickname دېگەن ئەزانى تاپالمىدى"
@@ -607,68 +762,68 @@ msgstr "ۋاقىت"
 msgid "Time to fire"
 msgstr "قوزغىتىش ۋاقتى"
 
-#: ../src/goaidentity/goaidentityservice.c:375
+#: ../src/goaidentity/goaidentityservice.c:377
 msgid "initial secret passed before secret key exchange"
 msgstr "مەخپىي ئاچقۇچنى ئالماشتۇرۇشتىن بۇرۇن دەسلەپكى مەخپىيەتلىك يەتكۈزۈپ بېرىلدى"
 
-#: ../src/goaidentity/goaidentityservice.c:567
+#: ../src/goaidentity/goaidentityservice.c:569
 msgid "Initial secret key is invalid"
 msgstr "دەسلەپكى مەخپىيەتلىك ئاچقۇچى ئىناۋەتسىز"
 
-#: ../src/goaidentity/goaidentityservice.c:1087
+#: ../src/goaidentity/goaidentityservice.c:1089
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "تور (realm) %s غا كىرىش ئۈچۈن، بىر قىسىم ئۇچۇرلارنى تەمىنلەش كېرەك."
 
-#: ../src/goaidentity/goakerberosidentity.c:271
-#: ../src/goaidentity/goakerberosidentity.c:280
-#: ../src/goaidentity/goakerberosidentity.c:607
+#: ../src/goaidentity/goakerberosidentity.c:272
+#: ../src/goaidentity/goakerberosidentity.c:281
+#: ../src/goaidentity/goakerberosidentity.c:608
 msgid "Could not find identity in credential cache: %k"
 msgstr "ئىسپاتنامە غەملىكىدىن كىملىكنى تاپقىلى بولمىدى: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:620
+#: ../src/goaidentity/goakerberosidentity.c:621
 msgid "Could not find identity credentials in cache: %k"
 msgstr "ئىسپاتنامىلەر غەملىكىدىن كىملىكنى تاپقىلى بولمىدى: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:658
+#: ../src/goaidentity/goakerberosidentity.c:659
 msgid "Could not sift through identity credentials in cache: %k"
 msgstr "ئىسپاتنامىلەر غەملىكىدىن كىملىكنى تاللاپ چىققىلى بولمىدى: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:675
+#: ../src/goaidentity/goakerberosidentity.c:676
 msgid "Could not finish up sifting through identity credentials in cache: %k"
 msgstr "ئىسپاتنامىلەر غەملىكىدىن كىملىكنى تاللاپ چىقىشنى تاماملىغىلى بولمىدى: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1013
+#: ../src/goaidentity/goakerberosidentity.c:1014
 #, c-format
 msgid "No associated identification found"
 msgstr "مۇناسىۋەتلىك كىملىكنى تاپقىلى بولمىدى"
 
-#: ../src/goaidentity/goakerberosidentity.c:1094
+#: ../src/goaidentity/goakerberosidentity.c:1095
 msgid "Could not create credential cache: %k"
 msgstr "ئىسپاتنامە غەملىكىنى قۇرغىلى بولمىدى: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1128
+#: ../src/goaidentity/goakerberosidentity.c:1129
 msgid "Could not initialize credentials cache: %k"
 msgstr "ئىسپاتنامە غەملىكىنى دەسلەپلەشتۈرگىلى بولمىدى: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1147
+#: ../src/goaidentity/goakerberosidentity.c:1148
 msgid "Could not store new credentials in credentials cache: %k"
 msgstr "يېڭى ئىسپاتنامىلەرنى ئىسپاتنامە غەملىكىگە ساقلىغىلى بولمىدى: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1424
+#: ../src/goaidentity/goakerberosidentity.c:1425
 #, c-format
 msgid "Could not renew identity: Not signed in"
 msgstr "كىملىكنى يېڭىلىغىلى بولمىدى: تېخى كىرمىگەن"
 
-#: ../src/goaidentity/goakerberosidentity.c:1436
+#: ../src/goaidentity/goakerberosidentity.c:1437
 msgid "Could not renew identity: %k"
 msgstr "كىملىكنى يېڭىلىغىلى بولمىدى: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1453
+#: ../src/goaidentity/goakerberosidentity.c:1454
 msgid "Could not get new credentials to renew identity %s: %k"
 msgstr "كىملىك %s نى يېڭىلاش ئۈچۈن يېڭى ئىسپاتنامىلەرنى ئالغىلى بولمىدى: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1493
+#: ../src/goaidentity/goakerberosidentity.c:1494
 msgid "Could not erase identity: %k"
 msgstr "كىملىكنى ئۆچۈرگىلى بولمىدى: %k"
 
@@ -679,6 +834,13 @@ msgstr "كىملىكنى تاپقىلى بولمىدى"
 #: ../src/goaidentity/goakerberosidentitymanager.c:824
 msgid "Could not create credential cache for identity"
 msgstr "كىملىك ئۈچۈن ئىسپاتنامە غەملىكىنى قۇرغىلى بولمىدى"
+
+#~ msgid "Credentials not found in keyring (%s, %d): "
+#~ msgstr "ئىسپاتنامىنى ئاچقۇچ ھالقىسىدىن تاپالمىدى (%s, %d): "
+
+#~ msgid "Error storing credentials in keyring (%s, %d): "
+#~ msgstr ""
+#~ "ئىسپاتنامىلەرنى ئاچقۇچ ھالقىسى  (%s، %d) غا ساقلاشتا خاتالىق كۆرۈلدى: "
 
 #~ msgid "Didn't find name member in JSON data"
 #~ msgstr "JSON سانلىق-مەلۇماتىدىن name دېگەن ئەزانى تاپالمىدى"
@@ -694,6 +856,3 @@ msgstr "كىملىك ئۈچۈن ئىسپاتنامە غەملىكىنى قۇرغ
 
 #~ msgid "There is already an account for the identity %s"
 #~ msgstr "كىملىك %s نىڭ ھېساباتى مەۋجۇت"
-
-#~ msgid "Name"
-#~ msgstr "ئاتى"
