@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Rūdofls Mazurs <rudolfs.mazurs@gmail.com>, 2011, 2012.
-# Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>, 2012.
+# Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>, 2012, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-22 19:34+0300\n"
-"PO-Revision-Date: 2012-09-22 19:34+0300\n"
+"POT-Creation-Date: 2013-02-20 11:34+0200\n"
+"PO-Revision-Date: 2013-02-20 11:47+0200\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latviešu <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -21,258 +21,448 @@ msgstr ""
 "2);\n"
 
 #. shut up -Wunused-but-set-variable
-#: ../src/daemon/goadaemon.c:211
+#: ../data/goa-daemon.desktop.in.in.h:1 ../src/daemon/goadaemon.c:212
 msgid "Online Accounts"
 msgstr "Tiešsaistes konti"
 
+#: ../data/goa-daemon.desktop.in.in.h:2
+msgid "Provides the org.gnome.OnlinesAccounts name on the session bus"
+msgstr "Sistēmas kopnē dod org.gnome.OnlinesAccounts nosaukumu"
+
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:801 ../src/daemon/goadaemon.c:1146
+#: ../src/daemon/goadaemon.c:802 ../src/daemon/goadaemon.c:1150
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Neizdevās atrast %s piegādātāju"
 
-#: ../src/daemon/goadaemon.c:990
+#: ../src/daemon/goadaemon.c:992
 msgid "An online account needs attention"
 msgstr "Tiešsaistes kontam vajadzīga uzmanība"
 
-#: ../src/daemon/goadaemon.c:997
+#: ../src/daemon/goadaemon.c:1001
 msgid "Open Online Accounts..."
 msgstr "Atvērt tiešsaistes kontus..."
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1134
+#: ../src/daemon/goadaemon.c:1138
 msgid "ProviderType property is not set for account"
 msgstr "Kontam nav iestatīta ProviderType īpašība"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:204
+#: ../src/goabackend/goaewsclient.c:214 ../src/goabackend/goahttpclient.c:155
 #, c-format
 msgid "Code: %u - Unexpected response from server"
 msgstr "Kods: %u — negaidīta atbilde no servera"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:220
+#: ../src/goabackend/goaewsclient.c:240
 #, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "Neizdevās saprast automātiskās atklāšanas atbildes XML"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:230
+#: ../src/goabackend/goaewsclient.c:250
 #, c-format
 msgid "Failed to find Autodiscover element"
 msgstr "Neizdevās atrast Autodiscover elementu"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:244
+#: ../src/goabackend/goaewsclient.c:264
 #, c-format
 msgid "Failed to find Response element"
 msgstr "Neizdevās atrast Response elementu"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:258
+#: ../src/goabackend/goaewsclient.c:278
 #, c-format
 msgid "Failed to find Account element"
 msgstr "Neizdevās atrast Account elementu"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:275
+#: ../src/goabackend/goaewsclient.c:295
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "Neizdevās atrast ASUrl un OABUrl automātiskās atklāšanas atbildē"
 
-#: ../src/goabackend/goaexchangeprovider.c:78
+#: ../src/goabackend/goaexchangeprovider.c:79
 msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
-#: ../src/goabackend/goaexchangeprovider.c:279
-#: ../src/goabackend/goaoauth2provider.c:1392
-#: ../src/goabackend/goaoauthprovider.c:1415
-#, c-format
-msgid "Credentials not found in keyring (%s, %d): "
-msgstr "Atslēgu saišķī netika atrasti akreditācijas dati (%s, %d): "
-
 #. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:295
-#: ../src/goabackend/goaexchangeprovider.c:923
+#: ../src/goabackend/goaexchangeprovider.c:308
+#: ../src/goabackend/goaexchangeprovider.c:1036
+#: ../src/goabackend/goagoogleprovider.c:596
+#: ../src/goabackend/goagoogleprovider.c:783
+#: ../src/goabackend/goaowncloudprovider.c:364
+#: ../src/goabackend/goaowncloudprovider.c:1138
 #, c-format
-msgid "Did not find password with username `%s' in credentials"
-msgstr "Akreditācijas datos neizdevās atrast paroli lietotājam “%s”"
+msgid "Did not find password with identity `%s' in credentials"
+msgstr "Akreditācijas datos neizdevās atrast paroli ar identitāti “%s”"
 
-#: ../src/goabackend/goaexchangeprovider.c:486
+#. Translators: the first %s is the username
+#. * (eg., debarshi.ray@gmail.com or rishi), and the
+#. * (%s, %d) is the error domain and code.
+#.
+#: ../src/goabackend/goaexchangeprovider.c:336
+#: ../src/goabackend/goagoogleprovider.c:619
+#: ../src/goabackend/goaowncloudprovider.c:387
+#, c-format
+msgid "Invalid password with username `%s' (%s, %d): "
+msgstr "Nederīga parole lietotājam “%s” (%s, %d): "
+
+#: ../src/goabackend/goaexchangeprovider.c:501
+#: ../src/goabackend/goaimapsmtpprovider.c:635
 msgid "_E-mail"
 msgstr "_E-pasts"
 
-#: ../src/goabackend/goaexchangeprovider.c:487
+#: ../src/goabackend/goaexchangeprovider.c:502
+#: ../src/goabackend/goaimapsmtpprovider.c:655
+#: ../src/goabackend/goaimapsmtpprovider.c:687
+#: ../src/goabackend/goaowncloudprovider.c:613
 msgid "_Password"
 msgstr "_Parole"
 
-#: ../src/goabackend/goaexchangeprovider.c:490
+#: ../src/goabackend/goaexchangeprovider.c:505
 msgid "_Custom"
 msgstr "_Pielāgots"
 
-#: ../src/goabackend/goaexchangeprovider.c:509
-#: ../src/goabackend/goakerberosprovider.c:1026
+#: ../src/goabackend/goaexchangeprovider.c:524
+#: ../src/goabackend/goaimapsmtpprovider.c:654
+#: ../src/goabackend/goaimapsmtpprovider.c:686
+#: ../src/goabackend/goakerberosprovider.c:1128
+#: ../src/goabackend/goaowncloudprovider.c:612
 msgid "User_name"
 msgstr "_Lietotājvārds"
 
-#: ../src/goabackend/goaexchangeprovider.c:510
+#: ../src/goabackend/goaexchangeprovider.c:525
+#: ../src/goabackend/goaowncloudprovider.c:611
 msgid "_Server"
 msgstr "_Serveris"
 
-#: ../src/goabackend/goaexchangeprovider.c:594
-#: ../src/goabackend/goaexchangeprovider.c:760
-#: ../src/goabackend/goakerberosprovider.c:1337
-#: ../src/goabackend/goaoauth2provider.c:952
-#: ../src/goabackend/goaoauthprovider.c:945
+#: ../src/goabackend/goaexchangeprovider.c:555
+#: ../src/goabackend/goaimapsmtpprovider.c:731
+#: ../src/goabackend/goakerberosprovider.c:1153
+#: ../src/goabackend/goaowncloudprovider.c:642
+msgid "Connecting…"
+msgstr "Savienojas…"
+
+#: ../src/goabackend/goaexchangeprovider.c:660
+#: ../src/goabackend/goaexchangeprovider.c:854
+#: ../src/goabackend/goaimapsmtpprovider.c:890
+#: ../src/goabackend/goaimapsmtpprovider.c:924
+#: ../src/goabackend/goaimapsmtpprovider.c:1012
+#: ../src/goabackend/goaimapsmtpprovider.c:1258
+#: ../src/goabackend/goaimapsmtpprovider.c:1328
+#: ../src/goabackend/goakerberosprovider.c:1544
+#: ../src/goabackend/goaoauth2provider.c:1048
+#: ../src/goabackend/goaoauthprovider.c:1041
+#: ../src/goabackend/goaowncloudprovider.c:753
+#: ../src/goabackend/goaowncloudprovider.c:962
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "Dialoglodziņš tika atmests"
 
-#: ../src/goabackend/goaexchangeprovider.c:630
-#: ../src/goabackend/goaexchangeprovider.c:787
-msgid "Error connecting to Microsoft Exchange server"
-msgstr "Kļūda savienojoties ar Microsoft Exchange serveri"
+#: ../src/goabackend/goaexchangeprovider.c:697
+#: ../src/goabackend/goaexchangeprovider.c:882
+#: ../src/goabackend/goaimapsmtpprovider.c:954
+#: ../src/goabackend/goaimapsmtpprovider.c:1043
+#: ../src/goabackend/goaimapsmtpprovider.c:1282
+#: ../src/goabackend/goaimapsmtpprovider.c:1353
+#: ../src/goabackend/goaowncloudprovider.c:792
+#: ../src/goabackend/goaowncloudprovider.c:983
+#, c-format
+msgid "Dialog was dismissed (%s, %d): "
+msgstr "Dialoglodziņš tika atmests (%s, %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:637
-#: ../src/goabackend/goaexchangeprovider.c:795
-#: ../src/goabackend/goakerberosprovider.c:1417
+#: ../src/goabackend/goaexchangeprovider.c:710
+#: ../src/goabackend/goaimapsmtpprovider.c:967
+#: ../src/goabackend/goaimapsmtpprovider.c:1056
+#: ../src/goabackend/goaowncloudprovider.c:805
+msgid "_Ignore"
+msgstr "_Ignorēt"
+
+#: ../src/goabackend/goaexchangeprovider.c:715
+#: ../src/goabackend/goaexchangeprovider.c:901
+#: ../src/goabackend/goaimapsmtpprovider.c:972
+#: ../src/goabackend/goaimapsmtpprovider.c:1061
+#: ../src/goabackend/goaimapsmtpprovider.c:1301
+#: ../src/goabackend/goaimapsmtpprovider.c:1372
+#: ../src/goabackend/goakerberosprovider.c:1653
+#: ../src/goabackend/goaowncloudprovider.c:810
+#: ../src/goabackend/goaowncloudprovider.c:1002
 msgid "_Try Again"
 msgstr "Mēģinā_t vēlreiz"
 
-#: ../src/goabackend/goaexchangeprovider.c:846
-#: ../src/goabackend/goafacebookprovider.c:361
-#: ../src/goabackend/goagoogleprovider.c:535
-#: ../src/goabackend/goakerberosprovider.c:1475
-#: ../src/goabackend/goawindowsliveprovider.c:370
+#: ../src/goabackend/goaexchangeprovider.c:720
+#: ../src/goabackend/goaexchangeprovider.c:894
+msgid "Error connecting to Microsoft Exchange server"
+msgstr "Kļūda savienojoties ar Microsoft Exchange serveri"
+
+#: ../src/goabackend/goaexchangeprovider.c:956
+#: ../src/goabackend/goafacebookprovider.c:397
+#: ../src/goabackend/goagoogleprovider.c:664
+#: ../src/goabackend/goakerberosprovider.c:1724
+#: ../src/goabackend/goaowncloudprovider.c:1058
+#: ../src/goabackend/goawindowsliveprovider.c:410
 msgid "Use for"
 msgstr "Izmantot"
 
-#: ../src/goabackend/goaexchangeprovider.c:848
-#: ../src/goabackend/goagoogleprovider.c:537
-msgid "Mail"
-msgstr "Pastam"
+#: ../src/goabackend/goaexchangeprovider.c:958
+#: ../src/goabackend/goagoogleprovider.c:666
+msgid "_Mail"
+msgstr "Pasta_m"
 
-#: ../src/goabackend/goaexchangeprovider.c:853
-#: ../src/goabackend/goagoogleprovider.c:542
-msgid "Calendar"
-msgstr "Kalendāram"
+#: ../src/goabackend/goaexchangeprovider.c:963
+#: ../src/goabackend/goagoogleprovider.c:671
+#: ../src/goabackend/goaowncloudprovider.c:1060
+msgid "Cale_ndar"
+msgstr "Kale_ndāram"
 
-#: ../src/goabackend/goaexchangeprovider.c:858
-#: ../src/goabackend/goagoogleprovider.c:547
-msgid "Contacts"
-msgstr "Kontaktiem"
+#: ../src/goabackend/goaexchangeprovider.c:968
+#: ../src/goabackend/goagoogleprovider.c:676
+#: ../src/goabackend/goaowncloudprovider.c:1065
+msgid "_Contacts"
+msgstr "_Kontaktiem"
 
-#: ../src/goabackend/goafacebookprovider.c:79
+#: ../src/goabackend/goafacebookprovider.c:81
 msgid "Facebook"
 msgstr "Facebook"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:193
-#: ../src/goabackend/goagoogleprovider.c:212
-#: ../src/goabackend/goatwitterprovider.c:160
-#: ../src/goabackend/goawindowsliveprovider.c:176
-#: ../src/goabackend/goayahooprovider.c:163
+#: ../src/goabackend/goafacebookprovider.c:201
+#: ../src/goabackend/goagoogleprovider.c:196
+#: ../src/goabackend/goatwitterprovider.c:162
+#: ../src/goabackend/goawindowsliveprovider.c:183
+#: ../src/goabackend/goayahooprovider.c:165
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr ""
 "Kad pieprasīja guid, tika gaidīts statuss 200, tā vietā saņēma statusu %d "
 "(%s)"
 
-#: ../src/goabackend/goafacebookprovider.c:205
-#: ../src/goabackend/goagoogleprovider.c:224
-#: ../src/goabackend/goaoauth2provider.c:566
-#: ../src/goabackend/goatwitterprovider.c:172
-#: ../src/goabackend/goawindowsliveprovider.c:188
-#: ../src/goabackend/goayahooprovider.c:175
+#: ../src/goabackend/goafacebookprovider.c:213
+#: ../src/goabackend/goaflickrprovider.c:191
+#: ../src/goabackend/goagoogleprovider.c:208
+#: ../src/goabackend/goaoauth2provider.c:616
+#: ../src/goabackend/goatwitterprovider.c:174
+#: ../src/goabackend/goawindowsliveprovider.c:195
+#: ../src/goabackend/goayahooprovider.c:177
 msgid "Error parsing response as JSON: "
 msgstr "Kļūda, pasējot atbildi kā JSON: "
 
-#: ../src/goabackend/goafacebookprovider.c:216
-#: ../src/goabackend/goawindowsliveprovider.c:199
+#: ../src/goabackend/goafacebookprovider.c:224
+#: ../src/goabackend/goawindowsliveprovider.c:206
 #, c-format
 msgid "Didn't find id member in JSON data"
 msgstr "Neatrada id biedru JSON datos"
 
-#: ../src/goabackend/goafacebookprovider.c:225
-#: ../src/goabackend/goagoogleprovider.c:245
+#: ../src/goabackend/goafacebookprovider.c:233
+#: ../src/goabackend/goagoogleprovider.c:219
 #, c-format
 msgid "Didn't find email member in JSON data"
 msgstr "Neatrada e-pasta biedru JSON datos"
 
-#: ../src/goabackend/goafacebookprovider.c:363
-#: ../src/goabackend/goagoogleprovider.c:552
-#: ../src/goabackend/goawindowsliveprovider.c:372
-msgid "Chat"
-msgstr "Tērzēšanai"
+#: ../src/goabackend/goafacebookprovider.c:399
+#: ../src/goabackend/goagoogleprovider.c:681
+#: ../src/goabackend/goawindowsliveprovider.c:412
+msgid "C_hat"
+msgstr "Tē_rzēšanai"
 
-#: ../src/goabackend/goagoogleprovider.c:78
-msgid "Google"
-msgstr "Google"
+#: ../src/goabackend/goaflickrprovider.c:82
+msgid "Flickr"
+msgstr "Flickr"
 
-#: ../src/goabackend/goagoogleprovider.c:235
+#: ../src/goabackend/goaflickrprovider.c:179
 #, c-format
-msgid "Didn't find data member in JSON data"
-msgstr "Neatrada datu biedru JSON datos"
+msgid "Expected status 200 when requesting user id, instead got status %d (%s)"
+msgstr ""
+"Kad pieprasīja lietotāja id, tika gaidīts statuss 200, tā vietā saņēma "
+"statusu %d (%s)"
 
-#: ../src/goabackend/goagoogleprovider.c:306
+#: ../src/goabackend/goaflickrprovider.c:202
+#, c-format
+msgid "Didn't find user member in JSON data"
+msgstr "Neatrada user biedru JSON datos"
+
+#: ../src/goabackend/goaflickrprovider.c:211
+#, c-format
+msgid "Didn't find user.id member in JSON data"
+msgstr "Neatrada user.id biedru JSON datos"
+
+#: ../src/goabackend/goaflickrprovider.c:220
+#, c-format
+msgid "Didn't find user.username member in JSON data"
+msgstr "Neatrada user.username biedru JSON datos"
+
+#: ../src/goabackend/goaflickrprovider.c:229
+#, c-format
+msgid "Didn't find user.username._content member in JSON data"
+msgstr "Neatrada user.username._content biedru JSON datos"
+
+#: ../src/goabackend/goaflickrprovider.c:306
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "Sistēmas laiks nav derīgs. Pārbaudiet datuma un laika iestatījumus."
 
-#: ../src/goabackend/goagoogleprovider.c:557
-#: ../src/goabackend/goawindowsliveprovider.c:377
-msgid "Documents"
-msgstr "Dokumentiem"
+#: ../src/goabackend/goaflickrprovider.c:408
+msgid "_Photos"
+msgstr "_Fotogrāfijām"
 
-#: ../src/goabackend/goakerberosprovider.c:84
+#: ../src/goabackend/goagoogleprovider.c:85
+msgid "Google"
+msgstr "Google"
+
+#: ../src/goabackend/goagoogleprovider.c:686
+#: ../src/goabackend/goawindowsliveprovider.c:417
+msgid "_Documents"
+msgstr "_Dokumentiem"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:82
+msgid "IMAP and SMTP"
+msgstr "IMAP un SMTP"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:350
+#, c-format
+msgid "Did not find imap-password with identity `%s' in credentials"
+msgstr "Akreditācijas datos neizdevās atrast imap-password ar identitāti “%s”"
+
+#. Translators: the first %s is the IMAP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#: ../src/goabackend/goaimapsmtpprovider.c:379
+#, c-format
+msgid "Invalid imap-password with username `%s' (%s, %d): "
+msgstr "Nederīgs imap-password lietotājam “%s” (%s, %d): "
+
+#: ../src/goabackend/goaimapsmtpprovider.c:397
+#, c-format
+msgid "Did not find smtp-password with identity `%s' in credentials"
+msgstr "Akreditācijas datos neizdevās atrast smtp-password ar identitāti “%s”"
+
+#. Translators: the first %s is the SMTP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#: ../src/goabackend/goaimapsmtpprovider.c:428
+#, c-format
+msgid "Invalid smtp-password with username `%s' (%s, %d): "
+msgstr "Nederīgs smtp-password lietotājam “%s” (%s, %d): "
+
+#: ../src/goabackend/goaimapsmtpprovider.c:636
+msgid "_Name"
+msgstr "_Nosaukums"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:653
+msgid "IMAP _Server"
+msgstr "IMAP _serveris"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:660
+#: ../src/goabackend/goaimapsmtpprovider.c:692
+msgid "_Encryption"
+msgstr "Šif_rēšana"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:663
+#: ../src/goabackend/goaimapsmtpprovider.c:695
+msgid "None"
+msgstr "Nav"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:666
+#: ../src/goabackend/goaimapsmtpprovider.c:698
+msgid "STARTTLS after connecting"
+msgstr "STARTTLS pēc savienošanās"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:669
+#: ../src/goabackend/goaimapsmtpprovider.c:701
+msgid "SSL on a dedicated port"
+msgstr "SSL uz atsevišķa porta"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:685
+msgid "SMTP _Server"
+msgstr "SMTP _serveris"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:977
+#: ../src/goabackend/goaimapsmtpprovider.c:1294
+msgid "Error connecting to IMAP server"
+msgstr "Kļūda savienojoties ar IMAP serveri"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1066
+#: ../src/goabackend/goaimapsmtpprovider.c:1365
+msgid "Error connecting to SMTP server"
+msgstr "Kļūda savienojoties ar SMTP serveri"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1470
+msgid "E-mail"
+msgstr "E-pasts"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1474
+msgid "Name"
+msgstr "Vārds"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1484
+#: ../src/goabackend/goaimapsmtpprovider.c:1487
+msgid "IMAP"
+msgstr "IMAP"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1498
+#: ../src/goabackend/goaimapsmtpprovider.c:1501
+msgid "SMTP"
+msgstr "SMTP"
+
+#: ../src/goabackend/goakerberosprovider.c:87
 msgid "Enterprise Login (Kerberos)"
 msgstr "Uzņēmuma lietotājvārds (Kerberos)"
 
-#: ../src/goabackend/goakerberosprovider.c:375
+#: ../src/goabackend/goakerberosprovider.c:449
 msgid "Identity service returned invalid key"
 msgstr "Identitātes serviss atgrieza nederīgu atslēgu"
 
-#: ../src/goabackend/goakerberosprovider.c:641
+#: ../src/goabackend/goakerberosprovider.c:715
 #, c-format
 msgid "Could not find saved credentials for principal `%s' in keyring"
 msgstr "Atslēgu saišķī netika atrasti akreditācijas dati vadītājam “%s”"
 
-#: ../src/goabackend/goakerberosprovider.c:651
+#: ../src/goabackend/goakerberosprovider.c:725
 #, c-format
 msgid "Did not find password for principal `%s' in credentials"
 msgstr "Akreditācijas datos neatrada paroli vadītājam “%s”"
 
-#: ../src/goabackend/goakerberosprovider.c:1019
+#: ../src/goabackend/goakerberosprovider.c:1120
 msgid "_Domain"
 msgstr "_Domēns"
 
-#: ../src/goabackend/goakerberosprovider.c:1020
+#: ../src/goabackend/goakerberosprovider.c:1121
 msgid "Enterprise domain or realm name"
 msgstr "Uzņēmuma domēs vai nogabala nosaukums"
 
-#: ../src/goabackend/goakerberosprovider.c:1235
-#: ../src/goaidentity/goaidentityservice.c:1891
+#: ../src/goabackend/goakerberosprovider.c:1353
+#: ../src/goaidentity/goaidentityservice.c:1084
 msgid "Log In to Realm"
 msgstr "Ierakstīties nogabalā"
 
-#: ../src/goabackend/goakerberosprovider.c:1236
+#: ../src/goabackend/goakerberosprovider.c:1354
 msgid "Please enter your password below."
 msgstr "Lūdzu, ievadiet savu paroli zemāk."
 
-#: ../src/goabackend/goakerberosprovider.c:1237
+#: ../src/goabackend/goakerberosprovider.c:1355
 msgid "Remember this password"
 msgstr "Atcerēties šo paroli"
 
-#: ../src/goabackend/goakerberosprovider.c:1412
+#: ../src/goabackend/goakerberosprovider.c:1494
+#, c-format
+msgid "The domain is not valid"
+msgstr "Domēns nav derīgs"
+
+#: ../src/goabackend/goakerberosprovider.c:1648
 msgid "Error connecting to enterprise identity server"
 msgstr "Kļūda savienojoties ar uzņēmuma identitātes serveri"
 
-#: ../src/goabackend/goakerberosprovider.c:1477
-msgid "Network Resources"
-msgstr "Tīkla resursi"
+#: ../src/goabackend/goakerberosprovider.c:1726
+msgid "Network _Resources"
+msgstr "Tīkla _resursi"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:523
-#: ../src/goabackend/goaoauthprovider.c:537
+#: ../src/goabackend/goaoauth2provider.c:573
+#: ../src/goabackend/goaoauthprovider.c:586
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -280,24 +470,24 @@ msgstr ""
 "Kad pieprasīja piekļuves marķieri, tika gaidīts statuss 200, tā vietā saņēma "
 "statusu %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:543
+#: ../src/goabackend/goaoauth2provider.c:593
 #, c-format
 msgid "Didn't find access_token in non-JSON data"
 msgstr "Neatrada access_token ne-JSON datos"
 
-#: ../src/goabackend/goaoauth2provider.c:577
+#: ../src/goabackend/goaoauth2provider.c:627
 #, c-format
 msgid "Didn't find access_token in JSON data"
 msgstr "Neatrada access_token JSON datos"
 
-#: ../src/goabackend/goaoauth2provider.c:746
-#: ../src/goabackend/goaoauth2provider.c:785
+#: ../src/goabackend/goaoauth2provider.c:835
+#: ../src/goabackend/goaoauth2provider.c:875
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "Pilnvarošanas atbilde bija “%s”"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:886
+#: ../src/goabackend/goaoauth2provider.c:981
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
@@ -306,50 +496,44 @@ msgstr ""
 "Ielīmēt pilnvarošanas kodu, kas ir saņemts no <a href=\"%s\">pilnvarošanas "
 "lapas</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:978
-#: ../src/goabackend/goaoauthprovider.c:976
+#: ../src/goabackend/goaoauth2provider.c:1074
+#: ../src/goabackend/goaoauthprovider.c:1072
 msgid "Error getting an Access Token: "
 msgstr "Kļūda, saņemto pieejas marķieri: "
 
-#: ../src/goabackend/goaoauth2provider.c:993
-#: ../src/goabackend/goaoauthprovider.c:989
+#: ../src/goabackend/goaoauth2provider.c:1089
+#: ../src/goabackend/goaoauthprovider.c:1085
 msgid "Error getting identity: "
 msgstr "Kļūda, saņemot identitāti: "
 
-#: ../src/goabackend/goaoauth2provider.c:1253
-#: ../src/goabackend/goaoauthprovider.c:1265
+#: ../src/goabackend/goaoauth2provider.c:1378
+#: ../src/goabackend/goaoauthprovider.c:1390
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "Tika prasīts, lai ierakstās kā %s, bet ierakstījās kā %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1419
+#: ../src/goabackend/goaoauth2provider.c:1549
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Akreditācijas dati nesatur access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1458
-#: ../src/goabackend/goaoauthprovider.c:1488
+#: ../src/goabackend/goaoauth2provider.c:1588
+#: ../src/goabackend/goaoauthprovider.c:1618
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Neizdevās atsvaidzināt piekļuves marķieri (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1493
-#: ../src/goabackend/goaoauthprovider.c:1518
-#, c-format
-msgid "Error storing credentials in keyring (%s, %d): "
-msgstr "Kļūda, saglabājot akreditācijas datus atslēgas saišķī (%s, %d): "
-
-#: ../src/goabackend/goaoauthprovider.c:560
+#: ../src/goabackend/goaoauthprovider.c:609
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "Atbildē trūkts access_token vai access_token_secret galveņu"
 
-#: ../src/goabackend/goaoauthprovider.c:815
+#: ../src/goabackend/goaoauthprovider.c:911
 msgid "Error getting a Request Token: "
 msgstr "Kļūda, saņemot pieprasījuma marķieri: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:848
+#: ../src/goabackend/goaoauthprovider.c:944
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -357,38 +541,98 @@ msgstr ""
 "Saņemot pieprasījuma marķieri, gaidīja rezultātu 200, tā vietā saņēma "
 "statusu %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:865
+#: ../src/goabackend/goaoauthprovider.c:961
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "Atbildē trūkts request_token vai request_token_secret galveņu"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:882
+#: ../src/goabackend/goaoauthprovider.c:978
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr ""
 "Ielīmēt marķieri, kas ir saņemts no <a href=\"%s\">pilnvarošanas lapas</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1444
+#: ../src/goabackend/goaoauthprovider.c:1574
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Akreditācijas dati nesatur access_token vai access_token_secret"
 
-#: ../src/goabackend/goaprovider.c:550
+#: ../src/goabackend/goaowncloudprovider.c:84
+msgid "ownCloud"
+msgstr "ownCloud"
+
+#: ../src/goabackend/goaowncloudprovider.c:815
+#: ../src/goabackend/goaowncloudprovider.c:995
+msgid "Error connecting to ownCloud server"
+msgstr "Kļūda savienojoties ar ownCloud serveri"
+
+#: ../src/goabackend/goaowncloudprovider.c:1070
+msgid "_Files"
+msgstr "_Datnēm"
+
+#: ../src/goabackend/goaprovider.c:579
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync nav implementēta tipam %s"
 
-#: ../src/goabackend/goatwitterprovider.c:78
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:372
+#, c-format
+msgid "Did not find smtp-password in credentials"
+msgstr "Nevarēja atrast akreditācijas datos smtp-password"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:383
+#, c-format
+msgid "Cannot do SMTP PLAIN without a password"
+msgstr "Nevar veikt SMTP PLAIN bez paroles"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:402
+#, c-format
+msgid "org.gnome.OnlineAccounts.Mail is not available"
+msgstr "org.gnome.OnlineAccounts.Mail nav pieejams"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:412
+#, c-format
+msgid "Failed to parse email address"
+msgstr "Neizdevās parsēt e-pasta adresi"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:424
+#, c-format
+msgid "Cannot do SMTP PLAIN without a domain"
+msgstr "nevar veikt SMTP PLAIN bez domēna"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:438
+#, c-format
+msgid "Service not available"
+msgstr "Serviss nav pieejams"
+
+#: ../src/goabackend/goasmtpauthplain.c:475
+#, c-format
+msgid "Server does not support PLAIN"
+msgstr "Serveris neatbalsta PLAIN"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:505
+#, c-format
+msgid "Authentication failed"
+msgstr "Neizdevās autentificēties"
+
+#: ../src/goabackend/goatwitterprovider.c:80
 msgid "Twitter"
 msgstr "Twitter"
 
-#: ../src/goabackend/goatwitterprovider.c:183
+#: ../src/goabackend/goatwitterprovider.c:185
 #, c-format
 msgid "Didn't find id_str member in JSON data"
 msgstr "Neatrada id_str biedru JSON datos"
 
-#: ../src/goabackend/goatwitterprovider.c:192
+#: ../src/goabackend/goatwitterprovider.c:194
 #, c-format
 msgid "Didn't find screen_name member in JSON data"
 msgstr "Neatrada screen_name biedru JSON datos"
@@ -405,76 +649,113 @@ msgid "%s account"
 msgstr "%s konts"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:147
+#: ../src/goabackend/goautils.c:150
 msgid "Failed to delete credentials from the keyring"
 msgstr "Neizdevās izdzēst akreditācijas datus no atslēgu saišķa"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:195
+#: ../src/goabackend/goautils.c:202
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Neizdevās saņemt akreditācijas datus no atslēgu saišķa"
 
-#: ../src/goabackend/goautils.c:206
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:212
+msgid "No credentials found in the keyring"
+msgstr "Neizdevās atrast akreditācijas datus atslēgu saišķī"
+
+#: ../src/goabackend/goautils.c:225
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Kļūda, pasējot rezultātu, kas iegūts no atslēgu saišķa: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:248
+#: ../src/goabackend/goautils.c:268
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "GOA %s akreditācijas dati identitātei %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:264
+#: ../src/goabackend/goautils.c:285
 msgid "Failed to store credentials in the keyring"
 msgstr "Neizdevās noglabāt akreditācijas datus atslēgu saišķī"
 
+#: ../src/goabackend/goautils.c:506
+msgid "The signing certificate authority is not known."
+msgstr "Parakstošā sertifikātu institūcija nav zināma."
+
+#: ../src/goabackend/goautils.c:510
+msgid ""
+"The certificate does not match the expected identity of the site that it was "
+"retrieved from."
+msgstr ""
+"Sertifikāts neatbilst gaidītajai vietnes identitātei, no kuras tas tika "
+"saņemts."
+
+#: ../src/goabackend/goautils.c:515
+msgid "The certificate's activation time is still in the future."
+msgstr "Sertifikāta aktivizēšanas laiks vēl aizvien ir nākotnē."
+
+#: ../src/goabackend/goautils.c:519
+msgid "The certificate has expired."
+msgstr "Sertifikāta derīgums ir beidzies."
+
+#: ../src/goabackend/goautils.c:523
+msgid "The certificate has been revoked."
+msgstr "Sertifikāts tika atsaukts."
+
+#: ../src/goabackend/goautils.c:527
+msgid "The certificate's algorithm is considered insecure."
+msgstr "Sertifikāta algoritms tiek uzskatīts par nedrošu."
+
+#: ../src/goabackend/goautils.c:531
+msgid "Invalid certificate."
+msgstr "Nederīgs sertifikāts."
+
 #. translators: %s here is the address of the web page
-#: ../src/goabackend/goawebview.c:75
+#: ../src/goabackend/goawebview.c:74
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Ielādē “%s”…"
 
-#: ../src/goabackend/goawindowsliveprovider.c:82
+#: ../src/goabackend/goawindowsliveprovider.c:83
 msgid "Windows Live"
 msgstr "Windows Live"
 
-#: ../src/goabackend/goawindowsliveprovider.c:210
+#: ../src/goabackend/goawindowsliveprovider.c:217
 #, c-format
 msgid "Didn't find account email member in JSON data"
 msgstr "Neatrada konta e-pasta biedru JSON datos"
 
-#: ../src/goabackend/goayahooprovider.c:78
+#: ../src/goabackend/goayahooprovider.c:80
 msgid "Yahoo"
 msgstr "Yahoo"
 
-#: ../src/goabackend/goayahooprovider.c:186
+#: ../src/goabackend/goayahooprovider.c:188
 #, c-format
 msgid "Didn't find guid member in JSON data"
 msgstr "Neatrada guid biedru JSON datos"
 
-#: ../src/goabackend/goayahooprovider.c:196
+#: ../src/goabackend/goayahooprovider.c:198
 #, c-format
 msgid "Didn't find value member in JSON data"
 msgstr "Neatrada vērtības biedru JSON datos"
 
-#: ../src/goabackend/goayahooprovider.c:222
+#: ../src/goabackend/goayahooprovider.c:224
 #, c-format
 msgid "Expected status 200 when requesting name, instead got status %d (%s)"
 msgstr ""
 "Kad pieprasīja vārdu, tika gaidīts statuss 200, tā vietā saņēma statusu %d "
 "(%s)"
 
-#: ../src/goabackend/goayahooprovider.c:235
+#: ../src/goabackend/goayahooprovider.c:237
 msgid "Error parsing usercard response as JSON: "
 msgstr "Kļūda, pasējot usercard atbildi kā JSON: "
 
-#: ../src/goabackend/goayahooprovider.c:246
+#: ../src/goabackend/goayahooprovider.c:248
 #, c-format
 msgid "Didn't find profile member in JSON data"
 msgstr "Neatrada profila biedru JSON datos"
 
-#: ../src/goabackend/goayahooprovider.c:256
+#: ../src/goabackend/goayahooprovider.c:258
 #, c-format
 msgid "Didn't find nickname member in JSON data"
 msgstr "Neatrada iesaukas biedru JSON datos"
@@ -487,130 +768,125 @@ msgstr "Laiks"
 msgid "Time to fire"
 msgstr "Laiks palaist"
 
-#: ../src/goaidentity/goaidentityservice.c:317
-msgid "Domain Administrator Login"
-msgstr "Domēna administratora lietotājs"
-
-#: ../src/goaidentity/goaidentityservice.c:405
-#: ../src/goaidentity/goaidentityservice.c:597
-msgid "Could not find supported credentials"
-msgstr "Nevarēja atrast atbalstītos akreditācijas datus"
-
-#: ../src/goaidentity/goaidentityservice.c:448
-msgid ""
-"In order to use this enterprise identity, the computer needs to be enrolled "
-"in the domain. Please have your network administrator type their domain "
-"password here."
-msgstr ""
-"Lai izmantotu šo uzņēmuma identitāti, datoram ir jābūt reģistrētam domēnā. "
-"Palūdziet tīkla administratoram šeit ievadīt tā domēna paroli."
-
-#: ../src/goaidentity/goaidentityservice.c:488
-msgid ""
-"In order to use this enterprise identity, the computer needs to be enrolled "
-"in the domain. Please have your network administrator type their domain "
-"username here."
-msgstr ""
-"Lai izmantotu šo uzņēmuma identitāti, datoram ir jābūt reģistrētam domēnā. "
-"Palūdziet tīkla administratoram šeit ievadīt tā domēna lietotājvārdu."
-
-#: ../src/goaidentity/goaidentityservice.c:1167
+#: ../src/goaidentity/goaidentityservice.c:377
 msgid "initial secret passed before secret key exchange"
 msgstr "sākotnējais noslēpums tika padots pirms slepeno atslēgu apmaiņas"
 
-#: ../src/goaidentity/goaidentityservice.c:1373
+#: ../src/goaidentity/goaidentityservice.c:569
 msgid "Initial secret key is invalid"
 msgstr "Sākotnējā slepenā atslēga nav derīga"
 
-#: ../src/goaidentity/goaidentityservice.c:1896
+#: ../src/goaidentity/goaidentityservice.c:1089
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr ""
 "Lai jūs varētu ierakstīties, tīkla nogabalam %s vajag papildu informāciju"
 
-#: ../src/goaidentity/goakerberosidentity.c:271
-#: ../src/goaidentity/goakerberosidentity.c:280
-#: ../src/goaidentity/goakerberosidentity.c:607
+#: ../src/goaidentity/goakerberosidentity.c:272
+#: ../src/goaidentity/goakerberosidentity.c:281
+#: ../src/goaidentity/goakerberosidentity.c:608
 msgid "Could not find identity in credential cache: %k"
 msgstr "Nevarēja atrast identitāti akreditācijas datu kešā — %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:620
+#: ../src/goaidentity/goakerberosidentity.c:621
 msgid "Could not find identity credentials in cache: %k"
 msgstr "Nevarēja atrast identitātes akreditācijas datus kešā — %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:658
+#: ../src/goaidentity/goakerberosidentity.c:659
 msgid "Could not sift through identity credentials in cache: %k"
 msgstr "Nevarēja iziet cauri identitātes akreditācijas datiem kešā — %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:675
+#: ../src/goaidentity/goakerberosidentity.c:676
 msgid "Could not finish up sifting through identity credentials in cache: %k"
 msgstr ""
 "Nevarēja pabeigt iziet cauri identitātes akreditācijas datiem kešā — %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1013
+#: ../src/goaidentity/goakerberosidentity.c:1014
 #, c-format
 msgid "No associated identification found"
 msgstr "Nav atrasta saistīta identitāte"
 
-#: ../src/goaidentity/goakerberosidentity.c:1094
+#: ../src/goaidentity/goakerberosidentity.c:1095
 msgid "Could not create credential cache: %k"
 msgstr "Neizdevās izveidot akreditācijas datu kešu — %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1128
+#: ../src/goaidentity/goakerberosidentity.c:1129
 msgid "Could not initialize credentials cache: %k"
 msgstr "Nevarēja inicializēt akreditācijas datu kešu — %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1147
+#: ../src/goaidentity/goakerberosidentity.c:1148
 msgid "Could not store new credentials in credentials cache: %k"
 msgstr "Neizdevās noglabāt jaunus akreditācijas datus kešā — %s"
 
-#: ../src/goaidentity/goakerberosidentity.c:1424
+#: ../src/goaidentity/goakerberosidentity.c:1425
 #, c-format
 msgid "Could not renew identity: Not signed in"
 msgstr "Nevarēja atjaunot identitāti — nav ierakstījies"
 
-#: ../src/goaidentity/goakerberosidentity.c:1436
+#: ../src/goaidentity/goakerberosidentity.c:1437
 msgid "Could not renew identity: %k"
 msgstr "Nevarēja atjaunot identitāti — %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1453
+#: ../src/goaidentity/goakerberosidentity.c:1454
 msgid "Could not get new credentials to renew identity %s: %k"
 msgstr ""
 "Nevarēja saņemt jaunus akreditācijas datus, lai atjaunotu identitāti %s — %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1493
+#: ../src/goaidentity/goakerberosidentity.c:1494
 msgid "Could not erase identity: %k"
 msgstr "Nevarēja izdzēst identitāti — %k"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:746
+#: ../src/goaidentity/goakerberosidentitymanager.c:747
 msgid "Could not find identity"
 msgstr "Nevarēja atrast identitāti"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:803
+#: ../src/goaidentity/goakerberosidentitymanager.c:824
 msgid "Could not create credential cache for identity"
 msgstr "Neizdevās izveidot akreditācijas datu kešu identitātei"
 
-#: ../src/goaidentity/um-realm-manager.c:368
-#, c-format
-msgid "No such domain or realm found"
-msgstr "Nav tāda domēna vai nogabala"
+#~ msgid "Credentials not found in keyring (%s, %d): "
+#~ msgstr "Atslēgu saišķī netika atrasti akreditācijas dati (%s, %d): "
 
-#: ../src/goaidentity/um-realm-manager.c:743
-#, c-format
-msgid "Cannot log in as %s at the %s domain"
-msgstr "Nevar ierakstīties kā %s domēnā %s"
+#~ msgid "Chat"
+#~ msgstr "Tērzēšanai"
 
-#: ../src/goaidentity/um-realm-manager.c:748
-msgid "Invalid password, please try again"
-msgstr "Nederīga parole, lūdzu, mēģiniet vēlreiz"
+#~ msgid "Didn't find data member in JSON data"
+#~ msgstr "Neatrada datu biedru JSON datos"
 
-#: ../src/goaidentity/um-realm-manager.c:752
-#, c-format
-msgid "Couldn't connect to the %s domain: %s"
-msgstr "Neizdevās savienoties ar domēnu %s — %s"
+#~ msgid "Error storing credentials in keyring (%s, %d): "
+#~ msgstr "Kļūda, saglabājot akreditācijas datus atslēgas saišķī (%s, %d): "
 
-#~ msgid "Didn't find username member in JSON data"
-#~ msgstr "Neatrada lietotājvārda biedru JSON datos"
+#~ msgid "Domain Administrator Login"
+#~ msgstr "Domēna administratora lietotājs"
+
+#~ msgid ""
+#~ "In order to use this enterprise identity, the computer needs to be "
+#~ "enrolled in the domain. Please have your network administrator type their "
+#~ "domain password here."
+#~ msgstr ""
+#~ "Lai izmantotu šo uzņēmuma identitāti, datoram ir jābūt reģistrētam "
+#~ "domēnā. Palūdziet tīkla administratoram šeit ievadīt tā domēna paroli."
+
+#~ msgid ""
+#~ "In order to use this enterprise identity, the computer needs to be "
+#~ "enrolled in the domain. Please have your network administrator type their "
+#~ "domain username here."
+#~ msgstr ""
+#~ "Lai izmantotu šo uzņēmuma identitāti, datoram ir jābūt reģistrētam "
+#~ "domēnā. Palūdziet tīkla administratoram šeit ievadīt tā domēna "
+#~ "lietotājvārdu."
+
+#~ msgid "No such domain or realm found"
+#~ msgstr "Nav tāda domēna vai nogabala"
+
+#~ msgid "Cannot log in as %s at the %s domain"
+#~ msgstr "Nevar ierakstīties kā %s domēnā %s"
+
+#~ msgid "Invalid password, please try again"
+#~ msgstr "Nederīga parole, lūdzu, mēģiniet vēlreiz"
+
+#~ msgid "Couldn't connect to the %s domain: %s"
+#~ msgstr "Neizdevās savienoties ar domēnu %s — %s"
 
 #~ msgid "Didn't find name member in JSON data"
 #~ msgstr "Neatrada vārda biedru JSON datos"
@@ -620,6 +896,3 @@ msgstr "Neizdevās savienoties ar domēnu %s — %s"
 
 #~ msgid "There is already an account for the identity %s"
 #~ msgstr "Identitātei %s jau ir konts"
-
-#~ msgid "Name"
-#~ msgstr "Vārds"
