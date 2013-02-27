@@ -143,6 +143,25 @@ ews_client_authenticate (SoupSession *session,
 }
 
 static void
+ews_client_request_started (SoupSession *session, SoupMessage *msg, SoupSocket *socket, gpointer user_data)
+{
+  AutodiscoverData *data = user_data;
+  GError *error;
+  GTlsCertificateFlags cert_flags;
+
+  error = NULL;
+
+  if (!data->accept_ssl_errors
+      && soup_message_get_https_status (msg, NULL, &cert_flags)
+      && cert_flags != 0)
+    {
+      goa_utils_set_error_ssl (&error, cert_flags);
+      g_simple_async_result_take_error (data->res, error);
+      soup_session_abort (data->session);
+    }
+}
+
+static void
 ews_client_autodiscover_cancelled_cb (GCancellable *cancellable, gpointer user_data)
 {
   AutodiscoverData *data = user_data;
@@ -177,9 +196,7 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
 {
   GError *error;
   AutodiscoverData *data = user_data;
-  GTlsCertificateFlags cert_flags;
   gboolean op_res;
-  gboolean using_https;
   guint status;
   gint idx;
   gsize size;
@@ -204,6 +221,9 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
 
   data->msgs[idx] = NULL;
 
+  /* status == SOUP_STATUS_CANCELLED, if we are being aborted by the
+   * GCancellable or due to an SSL error.
+   */
   if (status == SOUP_STATUS_CANCELLED)
     goto out;
   else if (status != SOUP_STATUS_OK)
@@ -214,16 +234,6 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
                    _("Code: %u - Unexpected response from server"),
                    status);
       goto out;
-    }
-
-  if (!data->accept_ssl_errors)
-    {
-      using_https = soup_message_get_https_status (msg, NULL, &cert_flags);
-      if (using_https && cert_flags != 0)
-        {
-          goa_utils_set_error_ssl (&error, cert_flags);
-          goto out;
-        }
     }
 
   soup_buffer_free (soup_message_body_flatten (SOUP_MESSAGE (msg)->response_body));
@@ -310,7 +320,9 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
     }
 
  out:
-  /* error == NULL, if we are being aborted by the GCancellable */
+  /* error == NULL, if we are being aborted by the GCancellable or
+   * due to an SSL error.
+   */
   if (!op_res)
     {
       for (idx = 0; idx < size; idx++)
@@ -483,6 +495,8 @@ goa_ews_client_autodiscover (GoaEwsClient        *client,
                          auth,
                          ews_client_autodiscover_auth_data_free,
                          0);
+
+  g_signal_connect (data->session, "request-started", G_CALLBACK (ews_client_request_started), data);
 
   soup_session_queue_message (data->session, data->msgs[0], ews_client_autodiscover_response_cb, data);
   soup_session_queue_message (data->session, data->msgs[1], ews_client_autodiscover_response_cb, data);
