@@ -127,6 +127,25 @@ http_client_authenticate (SoupSession *session,
 }
 
 static void
+http_client_request_started (SoupSession *session, SoupMessage *msg, SoupSocket *socket, gpointer user_data)
+{
+  CheckData *data = user_data;
+  GError *error;
+  GTlsCertificateFlags cert_flags;
+
+  error = NULL;
+
+  if (!data->accept_ssl_errors
+      && soup_message_get_https_status (msg, NULL, &cert_flags)
+      && cert_flags != 0)
+    {
+      goa_utils_set_error_ssl (&error, cert_flags);
+      g_simple_async_result_take_error (data->res, error);
+      soup_session_abort (data->session);
+    }
+}
+
+static void
 http_client_check_cancelled_cb (GCancellable *cancellable, gpointer user_data)
 {
   CheckData *data = user_data;
@@ -138,13 +157,14 @@ http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer 
 {
   GError *error;
   CheckData *data = user_data;
-  GTlsCertificateFlags cert_flags;
   gboolean op_res;
-  gboolean using_https;
 
   error = NULL;
   op_res = FALSE;
 
+  /* status == SOUP_STATUS_CANCELLED, if we are being aborted by the
+   * GCancellable or due to an SSL error.
+   */
   if (msg->status_code == SOUP_STATUS_CANCELLED)
     goto out;
   else if (msg->status_code != SOUP_STATUS_OK)
@@ -157,19 +177,12 @@ http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer 
       goto out;
     }
 
-  if (!data->accept_ssl_errors)
-    {
-      using_https = soup_message_get_https_status (msg, NULL, &cert_flags);
-      if (using_https && cert_flags != 0)
-        {
-          goa_utils_set_error_ssl (&error, cert_flags);
-          goto out;
-        }
-    }
-
   op_res = TRUE;
 
  out:
+  /* error == NULL, if we are being aborted by the GCancellable or
+   * due to an SSL error.
+   */
   g_simple_async_result_set_op_res_gboolean (data->res, op_res);
   if (error != NULL)
     g_simple_async_result_take_error (data->res, error);
@@ -229,6 +242,7 @@ goa_http_client_check (GoaHttpClient       *client,
                          http_client_check_auth_data_free,
                          0);
 
+  g_signal_connect (data->session, "request-started", G_CALLBACK (http_client_request_started), data);
   soup_session_queue_message (data->session, data->msg, http_client_check_response_cb, data);
 }
 
