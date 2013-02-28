@@ -434,6 +434,7 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
   response = g_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
+  g_debug ("< %s", response);
   if (g_str_has_prefix (response, "421"))
     {
       g_set_error (error,
@@ -456,6 +457,7 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
   /* Send EHLO */
 
   request = g_strdup_printf ("EHLO %s\r\n", domain);
+  g_debug ("> %s", request);
   if (!g_data_output_stream_put_string (output, request, cancellable, error))
     goto out;
   g_clear_pointer (&request, g_free);
@@ -466,6 +468,7 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
   response = g_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
+  g_debug ("< %s", response);
   if (g_str_has_prefix (response, "421"))
     {
       g_set_error (error,
@@ -518,6 +521,7 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
   auth_arg_base64 = g_base64_encode ((guchar *) auth_arg_plain, auth_arg_plain_len);
 
   request = g_strdup_printf ("AUTH PLAIN %s\r\n", auth_arg_base64);
+  g_debug ("> AUTH PLAN ********************");
   if (!g_data_output_stream_put_string (output, request, cancellable, error))
     goto out;
   g_clear_pointer (&request, g_free);
@@ -525,6 +529,7 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
   response = g_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
+  g_debug ("< %s", response);
   if (!g_str_has_prefix (response, "235"))
     {
       g_set_error (error,
