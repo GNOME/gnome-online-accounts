@@ -330,6 +330,8 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
                               GError             **error)
 {
   GoaSmtpAuthPlain *auth = GOA_SMTP_AUTH_PLAIN (_auth);
+  gboolean auth_supported;
+  gboolean plain_supported;
   gboolean ret;
   gchar *auth_arg_base64;
   gchar *auth_arg_plain;
@@ -339,6 +341,8 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
   gchar *response;
   gsize auth_arg_plain_len;
 
+  auth_supported = FALSE;
+  plain_supported = FALSE;
   auth_arg_base64 = NULL;
   auth_arg_plain = NULL;
   domain = NULL;
@@ -462,12 +466,42 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
   response = g_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
-  if (!g_str_has_prefix (response, "250-AUTH"))
+  if (g_str_has_prefix (response, "421"))
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED, /* TODO: more specific */
+                   _("Service not available"));
+      goto out;
+    }
+  if (!g_str_has_prefix (response, "250") || strlen (response) < 4)
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED, /* TODO: more specific */
+                   "Unexpected response `%s' while doing PLAIN authentication",
+                   response);
+      goto out;
+    }
+
+  if (g_str_has_prefix (response + 4, "AUTH"))
+    {
+      auth_supported = TRUE;
+      if (strstr (response, "PLAIN") != NULL)
+        plain_supported = TRUE;
+    }
+
+  if (response[3] == '-')
     {
       g_free (response);
       goto ehlo_again;
     }
-  if (strstr (response, "PLAIN") == NULL)
+  else if (!auth_supported)
+    {
+      ret = TRUE;
+      goto out;
+    }
+  else if (!plain_supported)
     {
       g_set_error (error,
                    GOA_ERROR,
@@ -488,15 +522,9 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
     goto out;
   g_clear_pointer (&request, g_free);
 
- auth_again:
   response = g_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
-  if (g_str_has_prefix (response, "250"))
-    {
-      g_free (response);
-      goto auth_again;
-    }
   if (!g_str_has_prefix (response, "235"))
     {
       g_set_error (error,
