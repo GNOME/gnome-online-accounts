@@ -119,6 +119,7 @@ build_object (GoaProvider         *provider,
   gboolean imap_use_tls;
   gboolean ret;
   gboolean smtp_accept_ssl_errors;
+  gboolean smtp_use_auth;
   gboolean smtp_use_ssl;
   gboolean smtp_use_tls;
   gchar *email_address;
@@ -185,9 +186,13 @@ build_object (GoaProvider         *provider,
           imap_accept_ssl_errors = g_key_file_get_boolean (key_file, group, "ImapAcceptSslErrors", NULL);
 
           smtp_host = g_key_file_get_string (key_file, group, "SmtpHost", NULL);
-          smtp_username = g_key_file_get_string (key_file, group, "SmtpUserName", NULL);
-          if (smtp_username == NULL)
-            smtp_username = g_strdup (g_get_user_name ());
+          smtp_use_auth = g_key_file_get_boolean (key_file, group, "SmtpUseAuth", NULL);
+          if (smtp_use_auth)
+            {
+              smtp_username = g_key_file_get_string (key_file, group, "SmtpUserName", NULL);
+              if (smtp_username == NULL)
+                smtp_username = g_strdup (g_get_user_name ());
+            }
           smtp_use_ssl = g_key_file_get_boolean (key_file, group, "SmtpUseSsl", NULL);
           smtp_use_tls = g_key_file_get_boolean (key_file, group, "SmtpUseTls", NULL);
           smtp_accept_ssl_errors = g_key_file_get_boolean (key_file, group, "SmtpAcceptSslErrors", NULL);
@@ -205,6 +210,7 @@ build_object (GoaProvider         *provider,
                         "smtp-supported", TRUE,
                         "smtp-host", smtp_host,
                         "smtp-user-name", smtp_username,
+                        "smtp-use-auth", smtp_use_auth,
                         "smtp-use-ssl", smtp_use_ssl,
                         "smtp-use-tls", smtp_use_tls,
                         "smtp-accept-ssl-errors", smtp_accept_ssl_errors,
@@ -388,6 +394,12 @@ ensure_credentials_sync (GoaProvider         *provider,
 
   /* SMTP */
 
+  if (!goa_util_lookup_keyfile_boolean (object, "SmtpUseAuth"))
+    {
+      ret = TRUE;
+      goto smtp_done;
+    }
+
   if (!g_variant_lookup (credentials, "smtp-password", "s", &smtp_password))
     {
       if (error != NULL)
@@ -434,6 +446,8 @@ ensure_credentials_sync (GoaProvider         *provider,
         }
       goto out;
     }
+
+ smtp_done:
 
   if (out_expires_in != NULL)
     *out_expires_in = 0;
@@ -575,9 +589,26 @@ on_smtp_changed (GtkEditable *editable, gpointer user_data)
   AddAccountData *data = user_data;
   gboolean can_add;
 
-  can_add = gtk_entry_get_text_length (GTK_ENTRY (data->smtp_password)) != 0
-            && gtk_entry_get_text_length (GTK_ENTRY (data->smtp_server)) != 0
-            && gtk_entry_get_text_length (GTK_ENTRY (data->smtp_username)) != 0;
+  can_add = FALSE;
+
+  if (gtk_entry_get_text_length (GTK_ENTRY (data->smtp_server)) == 0)
+    goto out;
+
+  /* If you provide a password then you must provide a username, and
+   * vice versa. If the server does not require authentication then
+   * both should be left empty.
+   */
+  if (gtk_entry_get_text_length (GTK_ENTRY (data->smtp_password)) != 0
+      && gtk_entry_get_text_length (GTK_ENTRY (data->smtp_username)) == 0)
+    goto out;
+
+  if (gtk_entry_get_text_length (GTK_ENTRY (data->smtp_password)) == 0
+      && gtk_entry_get_text_length (GTK_ENTRY (data->smtp_username)) != 0)
+    goto out;
+
+  can_add = TRUE;
+
+ out:
   gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, can_add);
 }
 
@@ -844,6 +875,7 @@ add_account (GoaProvider    *provider,
   GoaTlsType smtp_tls_type;
   gboolean imap_accept_ssl_errors;
   gboolean smtp_accept_ssl_errors;
+  gboolean smtp_use_auth;
   const gchar *email_address;
   const gchar *encryption;
   const gchar *imap_password;
@@ -1037,6 +1069,8 @@ add_account (GoaProvider    *provider,
   gtk_widget_show (data.progress_grid);
   g_main_loop_run (data.loop);
 
+  smtp_use_auth = goa_mail_auth_is_needed (smtp_auth);
+
   if (g_cancellable_is_cancelled (data.cancellable))
     {
       g_prefix_error (&data.error,
@@ -1081,7 +1115,8 @@ add_account (GoaProvider    *provider,
 
   g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&credentials, "{sv}", "imap-password", g_variant_new_string (imap_password));
-  g_variant_builder_add (&credentials, "{sv}", "smtp-password", g_variant_new_string (smtp_password));
+  if (smtp_use_auth)
+    g_variant_builder_add (&credentials, "{sv}", "smtp-password", g_variant_new_string (smtp_password));
 
   g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
   g_variant_builder_add (&details, "{ss}", "Enabled", "true");
@@ -1096,7 +1131,9 @@ add_account (GoaProvider    *provider,
   g_variant_builder_add (&details, "{ss}",
                          "ImapAcceptSslErrors", (imap_accept_ssl_errors) ? "true" : "false");
   g_variant_builder_add (&details, "{ss}", "SmtpHost", smtp_server);
-  g_variant_builder_add (&details, "{ss}", "SmtpUserName", smtp_username);
+  g_variant_builder_add (&details, "{ss}", "SmtpUseAuth", (smtp_use_auth) ? "true" : "false");
+  if (smtp_use_auth)
+    g_variant_builder_add (&details, "{ss}", "SmtpUserName", smtp_username);
   g_variant_builder_add (&details, "{ss}",
                          "SmtpUseSsl", (smtp_tls_type == GOA_TLS_TYPE_SSL) ? "true" : "false");
   g_variant_builder_add (&details, "{ss}",
@@ -1166,6 +1203,7 @@ refresh_account (GoaProvider    *provider,
   gboolean imap_accept_ssl_errors;
   gboolean ret;
   gboolean smtp_accept_ssl_errors;
+  gboolean smtp_use_auth;
   const gchar *imap_password;
   const gchar *smtp_password;
   gchar *domain;
@@ -1230,13 +1268,17 @@ refresh_account (GoaProvider    *provider,
   gtk_entry_set_text (GTK_ENTRY (data.imap_username), imap_username);
   gtk_editable_set_editable (GTK_EDITABLE (data.imap_username), FALSE);
 
-  smtp_server = goa_util_lookup_keyfile_string (object, "SmtpHost");
-  gtk_entry_set_text (GTK_ENTRY (data.smtp_server), smtp_server);
-  gtk_editable_set_editable (GTK_EDITABLE (data.smtp_server), FALSE);
+  smtp_use_auth = goa_util_lookup_keyfile_boolean (object, "SmtpUseAuth");
+  if (smtp_use_auth)
+    {
+      smtp_server = goa_util_lookup_keyfile_string (object, "SmtpHost");
+      gtk_entry_set_text (GTK_ENTRY (data.smtp_server), smtp_server);
+      gtk_editable_set_editable (GTK_EDITABLE (data.smtp_server), FALSE);
 
-  smtp_username = goa_util_lookup_keyfile_string (object, "SmtpUserName");
-  gtk_entry_set_text (GTK_ENTRY (data.smtp_username), smtp_username);
-  gtk_editable_set_editable (GTK_EDITABLE (data.smtp_username), FALSE);
+      smtp_username = goa_util_lookup_keyfile_string (object, "SmtpUserName");
+      gtk_entry_set_text (GTK_ENTRY (data.smtp_username), smtp_username);
+      gtk_editable_set_editable (GTK_EDITABLE (data.smtp_username), FALSE);
+    }
 
   gtk_widget_show_all (dialog);
   g_signal_connect (dialog, "response", G_CALLBACK (dialog_response_cb), &data);
@@ -1312,6 +1354,9 @@ refresh_account (GoaProvider    *provider,
 
   /* SMTP */
 
+  if (!smtp_use_auth)
+    goto smtp_done;
+
   /* Re-use the password from the IMAP page */
   gtk_entry_set_text (GTK_ENTRY (data.smtp_password), imap_password);
 
@@ -1377,10 +1422,13 @@ refresh_account (GoaProvider    *provider,
       goto smtp_again;
     }
 
+ smtp_done:
+
   /* TODO: run in worker thread */
   g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&builder, "{sv}", "imap-password", g_variant_new_string (imap_password));
-  g_variant_builder_add (&builder, "{sv}", "smtp-password", g_variant_new_string (smtp_password));
+  if (smtp_use_auth)
+    g_variant_builder_add (&builder, "{sv}", "smtp-password", g_variant_new_string (smtp_password));
 
   if (!goa_utils_store_credentials_for_object_sync (provider,
                                                     object,
@@ -1490,7 +1538,7 @@ show_account (GoaProvider         *provider,
 
   value_str = goa_util_lookup_keyfile_string (object, "SmtpHost");
   value_str_1 = goa_util_lookup_keyfile_string (object, "SmtpUserName");
-  if (g_strcmp0 (username, value_str_1) != 0)
+  if (value_str_1 != NULL && g_strcmp0 (username, value_str_1) != 0)
     {
       gchar *tmp;
 
