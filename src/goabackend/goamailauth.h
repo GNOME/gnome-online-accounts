@@ -55,6 +55,7 @@ struct _GoaMailAuth
 struct _GoaMailAuthClass
 {
   GObjectClass parent_class;
+  gboolean (*is_needed) (GoaMailAuth        *auth);
   gboolean (*run_sync) (GoaMailAuth         *auth,
                         GDataInputStream    *input,
                         GDataOutputStream   *output,
@@ -63,6 +64,7 @@ struct _GoaMailAuthClass
 };
 
 GType     goa_mail_auth_get_type     (void) G_GNUC_CONST;
+gboolean  goa_mail_auth_is_needed    (GoaMailAuth         *auth);
 void      goa_mail_auth_run          (GoaMailAuth         *auth,
                                       GDataInputStream    *input,
                                       GDataOutputStream   *output,
