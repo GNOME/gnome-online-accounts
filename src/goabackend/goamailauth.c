@@ -115,6 +115,15 @@ goa_mail_auth_class_init (GoaMailAuthClass *klass)
 /* ---------------------------------------------------------------------------------------------------- */
 
 gboolean
+goa_mail_auth_is_needed (GoaMailAuth *auth)
+{
+  g_return_val_if_fail (GOA_IS_MAIL_AUTH (auth), FALSE);
+  return GOA_MAIL_AUTH_GET_CLASS (auth)->is_needed (auth);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+gboolean
 goa_mail_auth_run_sync (GoaMailAuth         *auth,
                         GDataInputStream    *input,
                         GDataOutputStream   *output,

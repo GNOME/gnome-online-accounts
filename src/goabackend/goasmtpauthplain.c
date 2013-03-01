@@ -53,6 +53,7 @@ struct _GoaSmtpAuthPlain
 
   GoaProvider *provider;
   GoaObject *object;
+  gboolean auth_supported;
   gchar *domain;
   gchar *username;
   gchar *password;
@@ -74,6 +75,7 @@ enum
   PROP_PASSWORD
 };
 
+static gboolean goa_smtp_auth_plain_is_needed (GoaMailAuth        *_auth);
 static gboolean goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
                                               GDataInputStream    *input,
                                               GDataOutputStream   *output,
@@ -190,6 +192,7 @@ goa_smtp_auth_plain_class_init (GoaSmtpAuthPlainClass *klass)
   gobject_class->set_property = goa_smtp_auth_plain_set_property;
 
   auth_class = GOA_MAIL_AUTH_CLASS (klass);
+  auth_class->is_needed = goa_smtp_auth_plain_is_needed;
   auth_class->run_sync = goa_smtp_auth_plain_run_sync;
 
   /**
@@ -323,6 +326,15 @@ goa_smtp_auth_plain_new (GoaProvider       *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
+goa_smtp_auth_plain_is_needed (GoaMailAuth *_auth)
+{
+  GoaSmtpAuthPlain *auth = GOA_SMTP_AUTH_PLAIN (_auth);
+  return auth->auth_supported;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gboolean
 goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
                               GDataInputStream    *input,
                               GDataOutputStream   *output,
@@ -330,7 +342,6 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
                               GError             **error)
 {
   GoaSmtpAuthPlain *auth = GOA_SMTP_AUTH_PLAIN (_auth);
-  gboolean auth_supported;
   gboolean plain_supported;
   gboolean ret;
   gchar *auth_arg_base64;
@@ -341,7 +352,6 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
   gchar *response;
   gsize auth_arg_plain_len;
 
-  auth_supported = FALSE;
   plain_supported = FALSE;
   auth_arg_base64 = NULL;
   auth_arg_plain = NULL;
@@ -489,7 +499,7 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
 
   if (g_str_has_prefix (response + 4, "AUTH"))
     {
-      auth_supported = TRUE;
+      auth->auth_supported = TRUE;
       if (strstr (response, "PLAIN") != NULL)
         plain_supported = TRUE;
     }
@@ -499,7 +509,7 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
       g_free (response);
       goto ehlo_again;
     }
-  else if (!auth_supported)
+  else if (!auth->auth_supported)
     {
       ret = TRUE;
       goto out;

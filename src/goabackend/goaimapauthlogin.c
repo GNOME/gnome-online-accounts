@@ -70,6 +70,7 @@ enum
   PROP_PASSWORD
 };
 
+static gboolean goa_imap_auth_login_is_needed (GoaMailAuth        *auth);
 static gboolean goa_imap_auth_login_run_sync (GoaMailAuth         *_auth,
                                               GDataInputStream    *input,
                                               GDataOutputStream   *output,
@@ -177,6 +178,7 @@ goa_imap_auth_login_class_init (GoaImapAuthLoginClass *klass)
   gobject_class->set_property = goa_imap_auth_login_set_property;
 
   auth_class = GOA_MAIL_AUTH_CLASS (klass);
+  auth_class->is_needed = goa_imap_auth_login_is_needed;
   auth_class->run_sync = goa_imap_auth_login_run_sync;
 
   /**
@@ -282,6 +284,15 @@ goa_imap_auth_login_new (GoaProvider       *provider,
                                       "user-name", username,
                                       "password", password,
                                       NULL));
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gboolean
+goa_imap_auth_login_is_needed (GoaMailAuth *_auth)
+{
+  /* TODO: support authentication-less IMAP servers */
+  return TRUE;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
