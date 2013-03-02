@@ -1,7 +1,7 @@
 # Vietnamese translation for gnome-online-accounts.
 # Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
-# Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2011-2012.
+# Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2011-2013.
 #
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-02-25 14:21+0000\n"
-"PO-Revision-Date: 2013-03-02 18:11+0700\n"
+"PO-Revision-Date: 2013-03-02 18:22+0700\n"
 "Last-Translator: Nguyễn Thái Ngọc Duy <pclouds@gmail.com>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "Language: vi\n"
@@ -25,7 +25,7 @@ msgstr "Tài khoản trực tuyến"
 
 #: ../data/goa-daemon.desktop.in.in.h:2
 msgid "Provides the org.gnome.OnlinesAccounts name on the session bus"
-msgstr ""
+msgstr "Cung cấp tên org.gnome.Online-Accounts trên tuyến phiên làm việc"
 
 #. TODO: more specific
 #: ../src/daemon/goadaemon.c:802 ../src/daemon/goadaemon.c:1150
@@ -93,10 +93,9 @@ msgstr "Microsoft Exchange"
 #: ../src/goabackend/goagoogleprovider.c:783
 #: ../src/goabackend/goaowncloudprovider.c:364
 #: ../src/goabackend/goaowncloudprovider.c:1138
-#, fuzzy, c-format
-#| msgid "Did not find password with username `%s' in credentials"
+#, c-format
 msgid "Did not find password with identity `%s' in credentials"
-msgstr "Không tìm thấy mật khẩu cho người dùng `%s' trong giấy uỷ nhiệm"
+msgstr "Không tìm thấy mật khẩu cho thực thể `%s' trong giấy uỷ nhiệm"
 
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
@@ -105,10 +104,9 @@ msgstr "Không tìm thấy mật khẩu cho người dùng `%s' trong giấy u�
 #: ../src/goabackend/goaexchangeprovider.c:336
 #: ../src/goabackend/goagoogleprovider.c:619
 #: ../src/goabackend/goaowncloudprovider.c:387
-#, fuzzy, c-format
-#| msgid "Did not find password with username `%s' in credentials"
+#, c-format
 msgid "Invalid password with username `%s' (%s, %d): "
-msgstr "Không tìm thấy mật khẩu cho người dùng `%s' trong giấy uỷ nhiệm"
+msgstr "Mật khẩu không hợp lệ cho người dùng `%s' (%s, %d): "
 
 #: ../src/goabackend/goaexchangeprovider.c:501
 #: ../src/goabackend/goaimapsmtpprovider.c:635
@@ -144,7 +142,7 @@ msgstr "_Máy chủ"
 #: ../src/goabackend/goakerberosprovider.c:1153
 #: ../src/goabackend/goaowncloudprovider.c:642
 msgid "Connecting…"
-msgstr ""
+msgstr "Đang kết nối…"
 
 #: ../src/goabackend/goaexchangeprovider.c:660
 #: ../src/goabackend/goaexchangeprovider.c:854
@@ -170,17 +168,16 @@ msgstr "Hộp thoại bị bỏ qua"
 #: ../src/goabackend/goaimapsmtpprovider.c:1353
 #: ../src/goabackend/goaowncloudprovider.c:792
 #: ../src/goabackend/goaowncloudprovider.c:983
-#, fuzzy, c-format
-#| msgid "Dialog was dismissed"
+#, c-format
 msgid "Dialog was dismissed (%s, %d): "
-msgstr "Hộp thoại bị bỏ qua"
+msgstr "Hộp thoại bị bỏ qua (%s, %d): "
 
 #: ../src/goabackend/goaexchangeprovider.c:710
 #: ../src/goabackend/goaimapsmtpprovider.c:967
 #: ../src/goabackend/goaimapsmtpprovider.c:1056
 #: ../src/goabackend/goaowncloudprovider.c:805
 msgid "_Ignore"
-msgstr ""
+msgstr "_Bỏ qua"
 
 #: ../src/goabackend/goaexchangeprovider.c:715
 #: ../src/goabackend/goaexchangeprovider.c:901
@@ -210,26 +207,20 @@ msgstr "Dùng cho"
 
 #: ../src/goabackend/goaexchangeprovider.c:958
 #: ../src/goabackend/goagoogleprovider.c:666
-#, fuzzy
-#| msgid "Mail"
 msgid "_Mail"
-msgstr "Thư"
+msgstr "_Thư"
 
 #: ../src/goabackend/goaexchangeprovider.c:963
 #: ../src/goabackend/goagoogleprovider.c:671
 #: ../src/goabackend/goaowncloudprovider.c:1060
-#, fuzzy
-#| msgid "Calendar"
 msgid "Cale_ndar"
-msgstr "Lịch"
+msgstr "Lị_ch"
 
 #: ../src/goabackend/goaexchangeprovider.c:968
 #: ../src/goabackend/goagoogleprovider.c:676
 #: ../src/goabackend/goaowncloudprovider.c:1065
-#, fuzzy
-#| msgid "Contacts"
 msgid "_Contacts"
-msgstr "Liên lạc"
+msgstr "_Liên lạc"
 
 #: ../src/goabackend/goafacebookprovider.c:81
 msgid "Facebook"
@@ -272,42 +263,38 @@ msgstr "Không tìm thấy email trong dữ liệu JSON"
 #: ../src/goabackend/goagoogleprovider.c:681
 #: ../src/goabackend/goawindowsliveprovider.c:412
 msgid "C_hat"
-msgstr ""
+msgstr "_Tán gẫu"
 
 #: ../src/goabackend/goaflickrprovider.c:82
 msgid "Flickr"
-msgstr ""
+msgstr "Flickr"
 
 #: ../src/goabackend/goaflickrprovider.c:179
-#, fuzzy, c-format
-#| msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+#, c-format
 msgid "Expected status 200 when requesting user id, instead got status %d (%s)"
 msgstr ""
-"Chờ trạng thái 200 sau khi yêu cầu guid, nhưng nhận được trạng thái %d (%s)"
+"Chờ trạng thái 200 sau khi yêu cầu id người dùng, nhưng nhận được trạng thái "
+"%d (%s)"
 
 #: ../src/goabackend/goaflickrprovider.c:202
-#, fuzzy, c-format
-#| msgid "Didn't find username member in JSON data"
+#, c-format
 msgid "Didn't find user member in JSON data"
-msgstr "Không tìm thấy tên người dùng trong dữ liệu JSON"
+msgstr "Không tìm thấy user trong dữ liệu JSON"
 
 #: ../src/goabackend/goaflickrprovider.c:211
-#, fuzzy, c-format
-#| msgid "Didn't find guid member in JSON data"
+#, c-format
 msgid "Didn't find user.id member in JSON data"
-msgstr "Không tìm thấy guid trong dữ liệu JSON"
+msgstr "Không tìm thấy user.id trong dữ liệu JSON"
 
 #: ../src/goabackend/goaflickrprovider.c:220
-#, fuzzy, c-format
-#| msgid "Didn't find username member in JSON data"
+#, c-format
 msgid "Didn't find user.username member in JSON data"
-msgstr "Không tìm thấy tên người dùng trong dữ liệu JSON"
+msgstr "Không tìm thấy user.username trong dữ liệu JSON"
 
 #: ../src/goabackend/goaflickrprovider.c:229
-#, fuzzy, c-format
-#| msgid "Didn't find username member in JSON data"
+#, c-format
 msgid "Didn't find user.username._content member in JSON data"
-msgstr "Không tìm thấy tên người dùng trong dữ liệu JSON"
+msgstr "Không tìm thấy user.username._content trong dữ liệu JSON"
 
 #: ../src/goabackend/goaflickrprovider.c:306
 msgid "Your system time is invalid. Check your date and time settings."
@@ -315,7 +302,7 @@ msgstr "Giờ hệ thống của bạn không hợp lệ. Kiểm tra lại thi�
 
 #: ../src/goabackend/goaflickrprovider.c:408
 msgid "_Photos"
-msgstr ""
+msgstr "Ả_nh"
 
 #: ../src/goabackend/goagoogleprovider.c:85
 msgid "Google"
@@ -323,104 +310,86 @@ msgstr "Google"
 
 #: ../src/goabackend/goagoogleprovider.c:686
 #: ../src/goabackend/goawindowsliveprovider.c:417
-#, fuzzy
-#| msgid "Documents"
 msgid "_Documents"
-msgstr "Tài liệu"
+msgstr "_Tài liệu"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:82
 msgid "IMAP and SMTP"
-msgstr ""
+msgstr "IMAP và SMTP"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:350
-#, fuzzy, c-format
-#| msgid "Did not find password with username `%s' in credentials"
+#, c-format
 msgid "Did not find imap-password with identity `%s' in credentials"
-msgstr "Không tìm thấy mật khẩu cho người dùng `%s' trong giấy uỷ nhiệm"
+msgstr "Không tìm thấy imap-password với thực thể `%s' trong giấy uỷ nhiệm"
 
 #. Translators: the first %s is the IMAP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
 #: ../src/goabackend/goaimapsmtpprovider.c:379
-#, fuzzy, c-format
-#| msgid "Did not find password with username `%s' in credentials"
+#, c-format
 msgid "Invalid imap-password with username `%s' (%s, %d): "
-msgstr "Không tìm thấy mật khẩu cho người dùng `%s' trong giấy uỷ nhiệm"
+msgstr "imap-password không hợp lệ cho người dùng `%s' (%s, %d): "
 
 #: ../src/goabackend/goaimapsmtpprovider.c:397
-#, fuzzy, c-format
-#| msgid "Did not find password with username `%s' in credentials"
+#, c-format
 msgid "Did not find smtp-password with identity `%s' in credentials"
-msgstr "Không tìm thấy mật khẩu cho người dùng `%s' trong giấy uỷ nhiệm"
+msgstr "Không tìm thấy smtp-password cho thực thể `%s' trong giấy uỷ nhiệm"
 
 #. Translators: the first %s is the SMTP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
 #: ../src/goabackend/goaimapsmtpprovider.c:428
-#, fuzzy, c-format
-#| msgid "Did not find password with username `%s' in credentials"
+#, c-format
 msgid "Invalid smtp-password with username `%s' (%s, %d): "
-msgstr "Không tìm thấy mật khẩu cho người dùng `%s' trong giấy uỷ nhiệm"
+msgstr "smtp-password không hợp lệ cho người dùng `%s' (%s, %d): "
 
 #: ../src/goabackend/goaimapsmtpprovider.c:636
-#, fuzzy
-#| msgid "Name"
 msgid "_Name"
-msgstr "Tên"
+msgstr "_Tên"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:653
-#, fuzzy
-#| msgid "_Server"
 msgid "IMAP _Server"
-msgstr "_Máy chủ"
+msgstr "_Máy chủ IMAP"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:660
 #: ../src/goabackend/goaimapsmtpprovider.c:692
 msgid "_Encryption"
-msgstr ""
+msgstr "_Mã hoá"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:663
 #: ../src/goabackend/goaimapsmtpprovider.c:695
 msgid "None"
-msgstr ""
+msgstr "Không"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:666
 #: ../src/goabackend/goaimapsmtpprovider.c:698
 msgid "STARTTLS after connecting"
-msgstr ""
+msgstr "STARTTLS sau khi kết nối"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:669
 #: ../src/goabackend/goaimapsmtpprovider.c:701
 msgid "SSL on a dedicated port"
-msgstr ""
+msgstr "SSL trên cổng riêng"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:685
-#, fuzzy
-#| msgid "_Server"
 msgid "SMTP _Server"
-msgstr "_Máy chủ"
+msgstr "_Máy chủ SMTP"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:977
 #: ../src/goabackend/goaimapsmtpprovider.c:1294
-#, fuzzy
-#| msgid "Error connecting to Microsoft Exchange server"
 msgid "Error connecting to IMAP server"
-msgstr "Lỗi kết nối máy chủ Microsoft Exchange"
+msgstr "Lỗi kết nối máy chủ IMAP"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:1066
 #: ../src/goabackend/goaimapsmtpprovider.c:1365
-#, fuzzy
-#| msgid "Error connecting to Microsoft Exchange server"
 msgid "Error connecting to SMTP server"
-msgstr "Lỗi kết nối máy chủ Microsoft Exchange"
+msgstr "Lỗi kết nối máy chủ SMTP"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:1470
-#, fuzzy
-#| msgid "_E-mail"
 msgid "E-mail"
-msgstr "_E-mail"
+msgstr "E-mail"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:1474
 msgid "Name"
@@ -429,12 +398,12 @@ msgstr "Tên"
 #: ../src/goabackend/goaimapsmtpprovider.c:1484
 #: ../src/goabackend/goaimapsmtpprovider.c:1487
 msgid "IMAP"
-msgstr ""
+msgstr "IMAP"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:1498
 #: ../src/goabackend/goaimapsmtpprovider.c:1501
 msgid "SMTP"
-msgstr ""
+msgstr "SMTP"
 
 #: ../src/goabackend/goakerberosprovider.c:87
 msgid "Enterprise Login (Kerberos)"
@@ -478,17 +447,15 @@ msgstr "Nhớ mật khẩu này"
 #: ../src/goabackend/goakerberosprovider.c:1494
 #, c-format
 msgid "The domain is not valid"
-msgstr ""
+msgstr "Miền không hợp lệ"
 
 #: ../src/goabackend/goakerberosprovider.c:1648
 msgid "Error connecting to enterprise identity server"
 msgstr "Lỗi kết nối đến máy chủ identity"
 
 #: ../src/goabackend/goakerberosprovider.c:1726
-#, fuzzy
-#| msgid "Network Resources"
 msgid "Network _Resources"
-msgstr "Tài nguyên mạng"
+msgstr "_Tài nguyên mạng"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauth2provider.c:573
@@ -586,18 +553,16 @@ msgstr "Giấy uỷ nhiệm không chứa access_token hoặc access_token_secre
 
 #: ../src/goabackend/goaowncloudprovider.c:84
 msgid "ownCloud"
-msgstr ""
+msgstr "ownCloud"
 
 #: ../src/goabackend/goaowncloudprovider.c:815
 #: ../src/goabackend/goaowncloudprovider.c:995
-#, fuzzy
-#| msgid "Error connecting to Microsoft Exchange server"
 msgid "Error connecting to ownCloud server"
-msgstr "Lỗi kết nối máy chủ Microsoft Exchange"
+msgstr "Lỗi kết nối máy chủ ownCloud"
 
 #: ../src/goabackend/goaowncloudprovider.c:1070
 msgid "_Files"
-msgstr ""
+msgstr "_Tập tin"
 
 #: ../src/goabackend/goaprovider.c:579
 #, c-format
@@ -606,52 +571,50 @@ msgstr "ensure_credentials_sync chưa được hỗ trợ với loại %s"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauthplain.c:372
-#, fuzzy, c-format
-#| msgid "Could not find supported credentials"
+#, c-format
 msgid "Did not find smtp-password in credentials"
-msgstr "Không tìm thấy giấy uỷ nhiệm được hỗ trợ"
+msgstr "Không tìm thấy smtp-password trong giấy uỷ nhiệm"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauthplain.c:383
 #, c-format
 msgid "Cannot do SMTP PLAIN without a password"
-msgstr ""
+msgstr "Không thể thực hiện SMTP PLAIN mà không có mật khẩu"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauthplain.c:402
 #, c-format
 msgid "org.gnome.OnlineAccounts.Mail is not available"
-msgstr ""
+msgstr "org.gnome.OnlineAccounts.Mail không sẵn sàng"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauthplain.c:412
-#, fuzzy, c-format
-#| msgid "Failed to parse autodiscover response XML"
+#, c-format
 msgid "Failed to parse email address"
-msgstr "Lỗi phân tích XML trả lời autodiscover"
+msgstr "Lỗi phân tích địa chỉ email"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauthplain.c:424
 #, c-format
 msgid "Cannot do SMTP PLAIN without a domain"
-msgstr ""
+msgstr "Không thể thực hiện SMTP PLAIN mà không có miền"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauthplain.c:438
 #, c-format
 msgid "Service not available"
-msgstr ""
+msgstr "Dịch vụ không sẵn sàng"
 
 #: ../src/goabackend/goasmtpauthplain.c:475
 #, c-format
 msgid "Server does not support PLAIN"
-msgstr ""
+msgstr "Máy chủ không hỗ trợ PLAIN"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauthplain.c:505
 #, c-format
 msgid "Authentication failed"
-msgstr ""
+msgstr "Lỗi xác thực"
 
 #: ../src/goabackend/goatwitterprovider.c:80
 msgid "Twitter"
@@ -674,10 +637,9 @@ msgstr "Đã có tài khoản %s cho %s"
 
 #. Translators: the %s is the name of the provider. eg., Google.
 #: ../src/goabackend/goautils.c:106
-#, fuzzy, c-format
-#| msgid "Use this account for"
+#, c-format
 msgid "%s account"
-msgstr "Dùng tài khoản này cho"
+msgstr "tài khoản %s"
 
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:150
@@ -691,10 +653,8 @@ msgstr "Lỗi lấy giấy uỷ nhiệm từ vòng khoá"
 
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:212
-#, fuzzy
-#| msgid "Failed to store credentials in the keyring"
 msgid "No credentials found in the keyring"
-msgstr "Lỗi lưu giấy uỷ nhiệm vào vòng khoá"
+msgstr "Không giấy uỷ nhiệm trong vòng khoá"
 
 #: ../src/goabackend/goautils.c:225
 msgid "Error parsing result obtained from the keyring: "
@@ -713,33 +673,33 @@ msgstr "Lỗi lưu giấy uỷ nhiệm vào vòng khoá"
 
 #: ../src/goabackend/goautils.c:506
 msgid "The signing certificate authority is not known."
-msgstr ""
+msgstr "Nhà cầm quyền ký chứng nhận lạ."
 
 #: ../src/goabackend/goautils.c:510
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
-msgstr ""
+msgstr "Chứng nhận không khớp thực thể của trang lấy về."
 
 #: ../src/goabackend/goautils.c:515
 msgid "The certificate's activation time is still in the future."
-msgstr ""
+msgstr "Thời gian kích hoạt chứng nhận trong tương lai."
 
 #: ../src/goabackend/goautils.c:519
 msgid "The certificate has expired."
-msgstr ""
+msgstr "Chứng nhận đã hết hạn."
 
 #: ../src/goabackend/goautils.c:523
 msgid "The certificate has been revoked."
-msgstr ""
+msgstr "Chứng nhận bị thu hồi."
 
 #: ../src/goabackend/goautils.c:527
 msgid "The certificate's algorithm is considered insecure."
-msgstr ""
+msgstr "Thuật toán chứng nhận dùng không an toàn."
 
 #: ../src/goabackend/goautils.c:531
 msgid "Invalid certificate."
-msgstr ""
+msgstr "Chứng nhận không hợp lệ."
 
 #. translators: %s here is the address of the web page
 #: ../src/goabackend/goawebview.c:74
@@ -815,11 +775,11 @@ msgstr "Vùng mạng %s cần thêm thông tin để đăng nhập."
 #: ../src/goaidentity/goakerberosidentity.c:281
 #: ../src/goaidentity/goakerberosidentity.c:608
 msgid "Could not find identity in credential cache: %k"
-msgstr ""
+msgstr "Không thể tìm thực thể trong cache giấy uỷ nhiệm: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:621
 msgid "Could not find identity credentials in cache: %k"
-msgstr ""
+msgstr "Không thể tìm thực thể trong cache giấy uỷ nhiệm: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:659
 msgid "Could not sift through identity credentials in cache: %k"
@@ -849,11 +809,11 @@ msgstr "Không thể lưu giấy uỷ nhiệm vào cache uỷ nhiệm: %k"
 #: ../src/goaidentity/goakerberosidentity.c:1425
 #, c-format
 msgid "Could not renew identity: Not signed in"
-msgstr ""
+msgstr "Không thể làm mới thực thể: chưa đăng nhập"
 
 #: ../src/goaidentity/goakerberosidentity.c:1437
 msgid "Could not renew identity: %k"
-msgstr ""
+msgstr "Không thể làm mới thực thể: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1454
 msgid "Could not get new credentials to renew identity %s: %k"
