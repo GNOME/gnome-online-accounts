@@ -128,6 +128,9 @@ gchar       *goa_provider_get_provider_name         (GoaProvider         *provid
 GIcon       *goa_provider_get_provider_icon         (GoaProvider         *provider,
                                                      GoaObject           *object);
 GoaProviderGroup goa_provider_get_provider_group    (GoaProvider         *provider);
+void         goa_provider_set_preseed_data          (GoaProvider *provider,
+                                                     GVariant    *preseed_data);
+GVariant    *goa_provider_get_preseed_data          (GoaProvider *provider);
 GoaObject   *goa_provider_add_account               (GoaProvider         *provider,
                                                      GoaClient           *client,
                                                      GtkDialog           *dialog,

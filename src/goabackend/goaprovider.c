@@ -53,6 +53,19 @@
  * #GoaProvider is the base type for all providers.
  */
 
+struct _GoaProviderPrivate
+{
+  GVariant *preseed_data;
+};
+
+enum {
+  PROP_0,
+  PROP_PRESEED_DATA,
+  NUM_PROPERTIES
+};
+
+static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
+
 static gboolean goa_provider_ensure_credentials_sync_real (GoaProvider   *provider,
                                                            GoaObject     *object,
                                                            gint          *out_expires_in,
@@ -79,21 +92,120 @@ static guint goa_provider_get_credentials_generation_real (GoaProvider *provider
 static GIcon *goa_provider_get_provider_icon_default (GoaProvider *provider,
                                                       GoaObject   *object);
 
+#define GOA_PROVIDER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GOA_TYPE_PROVIDER, GoaProviderPrivate))
+
 G_DEFINE_ABSTRACT_TYPE (GoaProvider, goa_provider, G_TYPE_OBJECT);
 
 static void
-goa_provider_init (GoaProvider *client)
+goa_provider_get_property (GObject *object,
+                           guint property_id,
+                           GValue *value,
+                           GParamSpec *pspec)
 {
+    GoaProvider *self = GOA_PROVIDER (object);
+
+    switch (property_id) {
+    case PROP_PRESEED_DATA:
+        g_value_set_variant (value, self->priv->preseed_data);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+        break;
+    }
+}
+
+static void
+goa_provider_set_property (GObject *object,
+                           guint property_id,
+                           const GValue *value,
+                           GParamSpec *pspec)
+{
+    GoaProvider *self = GOA_PROVIDER (object);
+
+    switch (property_id) {
+    case PROP_PRESEED_DATA:
+        goa_provider_set_preseed_data (self, g_value_get_variant (value));
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+        break;
+    }
+}
+
+static void
+goa_provider_dispose (GObject *object)
+{
+  GoaProvider *provider = GOA_PROVIDER (object);
+
+  g_clear_pointer (&provider->priv->preseed_data, g_variant_unref);
+
+  G_OBJECT_CLASS (goa_provider_parent_class)->dispose (object);
+}
+
+static void
+goa_provider_init (GoaProvider *provider)
+{
+  provider->priv = GOA_PROVIDER_GET_PRIVATE (provider);
 }
 
 static void
 goa_provider_class_init (GoaProviderClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  g_type_class_add_private (klass, sizeof (GoaProviderPrivate));
+
+  object_class->set_property = goa_provider_set_property;
+  object_class->get_property = goa_provider_get_property;
+  object_class->dispose = goa_provider_dispose;
+
   klass->build_object = goa_provider_build_object_real;
   klass->ensure_credentials_sync = goa_provider_ensure_credentials_sync_real;
   klass->show_account = goa_provider_show_account_real;
   klass->get_credentials_generation = goa_provider_get_credentials_generation_real;
   klass->get_provider_icon = goa_provider_get_provider_icon_default;
+
+/**
+ * GoaProvider:preseed-data
+ *
+ * An #GVariant of type a{sv} storing any information already collected that
+ * can be useful when creating a new account. For instance, this can be useful
+ * to reuse the HTTP cookies from an existing browser session to skip the
+ * prompt for username and password in the OAuth2-based providers by passing
+ * a #GVariant with the following contents:
+ *
+ * <informalexample>
+ * <programlisting>
+ * {
+ *   "cookies": [
+ *     {
+ *       "domain": "example.com",
+ *       "name": "LSID",
+ *       "value": "asdfasdfasdf"
+ *     },
+ *     {
+ *       "domain": "accounts.example.com",
+ *       "name": "SSID",
+ *       "value": "asdfasdfasdf"
+ *     }
+ *   ]
+ * }
+ * </programlisting>
+ * </informalexample>
+ *
+ * Unknown or unsupported keys will be ignored by providers.
+ */
+  properties[PROP_PRESEED_DATA] =
+    g_param_spec_variant ("preseed-data",
+        "Collected data to pre-seed account creation",
+        "A a{sv} #GVariant containing a provider-type specific set of data that"
+        "can be useful during account creation (eg. http cookies from an existing"
+        "browser session or the entrypoint url for self-hosted services).",
+        G_VARIANT_TYPE_VARDICT,
+        NULL,
+        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 }
 
 /**
@@ -762,6 +874,43 @@ goa_provider_get_all (void)
       ret = g_list_prepend (ret, g_object_new (g_io_extension_get_type (extension), NULL));
     }
   return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+/**
+ * goa_provider_set_preseed_data:
+ * @provider: The #GoaProvider
+ * @preseed_data: A #GVariant of type a{sv}
+ *
+ * Sets the #GoaProvider:preseed-data property to feed any information already
+ * collected that can be useful when creating a new account.
+ *
+ * If the @preseed_data #GVariant is floating, it is consumed to allow
+ * 'inline' use of the g_variant_new() family of functions.
+ */
+void
+goa_provider_set_preseed_data (GoaProvider *provider,
+                               GVariant    *preseed_data)
+{
+  g_clear_pointer (&provider->priv->preseed_data, g_variant_unref);
+  provider->priv->preseed_data = g_variant_ref_sink (preseed_data);
+  g_object_notify (G_OBJECT (provider), "preseed-data");
+}
+
+/**
+ * goa_provider_get_preseed_data:
+ * @provider: The #GoaProvider
+ *
+ * Gets the #GVariant set through the #GoaProvider:preseed-data property.
+ *
+ * Returns: (transfer none): A #GVariant that is known to be valid until
+ *   the property is overridden or the provider freed.
+ */
+GVariant *
+goa_provider_get_preseed_data (GoaProvider *provider)
+{
+  return provider->priv->preseed_data;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
