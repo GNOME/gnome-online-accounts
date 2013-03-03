@@ -510,6 +510,66 @@ goa_oauth2_provider_is_identity_node (GoaOAuth2Provider *provider, WebKitDOMHTML
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static SoupCookie*
+create_cookie_from_variant (GVariant *variant)
+{
+  SoupCookie *cookie;
+  gchar *name, *value, *domain, *path;
+  gboolean secure, http_only;
+
+  g_return_val_if_fail (g_variant_is_of_type (variant, G_VARIANT_TYPE_VARDICT), NULL);
+
+  g_variant_lookup (variant, "name", "&s", &name);
+  g_variant_lookup (variant, "value", "&s", &value);
+  g_variant_lookup (variant, "domain", "&s", &domain);
+  g_variant_lookup (variant, "path", "&s", &path);
+  g_variant_lookup (variant, "secure", "b", &secure);
+  g_variant_lookup (variant, "http_only", "b", &http_only);
+
+  cookie = soup_cookie_new (name, value, domain, path, -1);
+  soup_cookie_set_secure (cookie, secure);
+  soup_cookie_set_http_only (cookie, http_only);
+
+  return cookie;
+}
+
+static GSList*
+extract_cookies_from_preseed_data (GVariant *preseed)
+{
+  GVariant *cookies_v, *cookie_v;
+  GSList *cookies = NULL;
+  GVariantIter iter;
+
+  if (preseed == NULL)
+    return NULL;
+
+  cookies_v = g_variant_lookup_value (preseed, "cookies", NULL);
+  if (cookies_v == NULL)
+    return NULL;
+
+  if (!g_variant_is_of_type (cookies_v, G_VARIANT_TYPE ("av")))
+    {
+      g_warning ("Wrong type for the 'cookies' GVariant, expected 'av' but got '%s'",
+                 (gchar *)g_variant_get_type (cookies_v));
+      goto out;
+    }
+
+  g_variant_iter_init (&iter, cookies_v);
+  while ((cookie_v = g_variant_iter_next_value (&iter)) != NULL)
+    {
+      SoupCookie *cookie = create_cookie_from_variant (g_variant_get_variant (cookie_v));
+      if (cookie != NULL)
+          cookies = g_slist_prepend (cookies, cookie);
+      g_variant_unref(cookie_v);
+    }
+out:
+  g_variant_unref(cookies_v);
+  return cookies;
+}
+
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static gchar *
 get_tokens_sync (GoaOAuth2Provider  *provider,
                  const gchar        *authorization_code,
@@ -1009,11 +1069,18 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
     {
       GtkWidget *web_view;
       GtkWidget *embed;
+      GVariant *preseed_data;
+      GSList *cookies;
 
       web_view = goa_web_view_new ();
       gtk_widget_set_hexpand (web_view, TRUE);
       gtk_widget_set_vexpand (web_view, TRUE);
       embed = goa_web_view_get_view (GOA_WEB_VIEW (web_view));
+
+      preseed_data = goa_provider_get_preseed_data (GOA_PROVIDER (provider));
+      cookies = extract_cookies_from_preseed_data (preseed_data);
+      goa_web_view_add_cookies (GOA_WEB_VIEW (web_view), cookies);
+      soup_cookies_free (cookies);
 
       if (goa_oauth2_provider_get_use_mobile_browser (provider))
         goa_web_view_fake_mobile (GOA_WEB_VIEW (web_view));

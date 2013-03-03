@@ -337,3 +337,21 @@ goa_web_view_fake_mobile (GoaWebView *self)
                               "AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile",
                 NULL);
 }
+
+void
+goa_web_view_add_cookies (GoaWebView *self,
+                          GSList     *cookies)
+{
+  SoupCookieJar *cookie_jar;
+  SoupSession *session;
+  GSList *l;
+
+  session = webkit_get_default_session ();
+  cookie_jar = SOUP_COOKIE_JAR (soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR));
+
+  for (l = cookies; l != NULL; l = l->next)
+    {
+      SoupCookie *cookie = l->data;
+      soup_cookie_jar_add_cookie (cookie_jar, soup_cookie_copy (cookie));
+    }
+}
