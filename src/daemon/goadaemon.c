@@ -22,7 +22,6 @@
 
 #include "config.h"
 #include <glib/gi18n.h>
-#include <libnotify/notify.h>
 #include <gio/gdesktopappinfo.h>
 #include <rest/rest-proxy.h>
 #include <libsoup/soup.h>
@@ -52,8 +51,6 @@ struct _GoaDaemon
 #ifdef GOA_KERBEROS_ENABLED
   GoaIdentityService *identity_service;
 #endif
-
-  NotifyNotification *notification;
 
   guint config_timeout_id;
 };
@@ -88,13 +85,6 @@ static gboolean on_account_handle_ensure_credentials (GoaAccount            *acc
 
 static void goa_daemon_reload_configuration (GoaDaemon *daemon);
 
-static void on_notification_closed (NotifyNotification *notification,
-                                    gpointer            user_data);
-
-static void account_on_attention_needed_notify (GObject     *object,
-                                                GParamSpec  *pspec,
-                                                gpointer     user_data);
-
 G_DEFINE_TYPE (GoaDaemon, goa_daemon, G_TYPE_OBJECT);
 
 static void
@@ -107,13 +97,6 @@ goa_daemon_finalize (GObject *object)
       g_source_remove (daemon->config_timeout_id);
     }
 
-  if (daemon->notification != NULL)
-    {
-      g_signal_handlers_disconnect_by_func (daemon->notification,
-                                            G_CALLBACK (on_notification_closed),
-                                            daemon);
-      g_object_unref (daemon->notification);
-    }
   if (daemon->system_conf_dir_monitor != NULL)
     {
       g_signal_handlers_disconnect_by_func (daemon->system_conf_dir_monitor, on_file_monitor_changed, daemon);
@@ -208,8 +191,6 @@ goa_daemon_init (GoaDaemon *daemon)
    */
   goa_error_domain = GOA_ERROR;
   goa_error_domain; /* shut up -Wunused-but-set-variable */
-
-  notify_init (_("Online Accounts"));
 
   /* TODO: maybe nicer to pass in a GDBusConnection* construct property */
   daemon->connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
@@ -603,9 +584,6 @@ process_config_entries (GoaDaemon  *daemon,
       object = GOA_OBJECT (g_dbus_object_manager_get_object (G_DBUS_OBJECT_MANAGER (daemon->object_manager), object_path));
       g_warn_if_fail (object != NULL);
       g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
-                                            G_CALLBACK (account_on_attention_needed_notify),
-                                            daemon);
-      g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
                                             G_CALLBACK (on_account_handle_remove),
                                             daemon);
       goa_debug ("removing %s", object_path);
@@ -632,10 +610,6 @@ process_config_entries (GoaDaemon  *daemon,
                                  TRUE))
         {
           g_dbus_object_manager_server_export (daemon->object_manager, G_DBUS_OBJECT_SKELETON (object));
-          g_signal_connect (goa_object_peek_account (GOA_OBJECT (object)),
-                            "notify::attention-needed",
-                            G_CALLBACK (account_on_attention_needed_notify),
-                            daemon);
           g_signal_connect (goa_object_peek_account (GOA_OBJECT (object)),
                             "handle-remove",
                             G_CALLBACK (on_account_handle_remove),
@@ -669,9 +643,6 @@ process_config_entries (GoaDaemon  *daemon,
                                   key_file_data->key_file,
                                   FALSE))
         {
-          g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
-                                                G_CALLBACK (account_on_attention_needed_notify),
-                                                daemon);
           g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
                                                 G_CALLBACK (on_account_handle_remove),
                                                 daemon);
@@ -914,144 +885,6 @@ on_manager_handle_add_account (GoaManager             *manager,
     g_key_file_free (key_file);
 
   return TRUE; /* invocation was handled */
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-static void
-notification_cb (NotifyNotification *notification,
-                 gchar              *action,
-                 gpointer            user_data)
-{
-  GAppLaunchContext *ctx;
-  GDesktopAppInfo *app;
-  GError *error;
-
-  /* TODO: Hmm, would be nice to set the screen, timestamp etc etc */
-  ctx = g_app_launch_context_new ();
-
-  app = g_desktop_app_info_new ("gnome-online-accounts-panel.desktop");
-
-  error = NULL;
-  if (!g_app_info_launch (G_APP_INFO (app),
-                          NULL, /* files */
-                          ctx,
-                          &error))
-    {
-      goa_warning ("Error launching: %s (%s, %d)",
-                   error->message, g_quark_to_string (error->domain), error->code);
-      g_error_free (error);
-    }
-  g_object_unref (app);
-  g_object_unref (ctx);
-}
-
-static void
-on_notification_closed (NotifyNotification *notification,
-                        gpointer            user_data)
-{
-  GoaDaemon *daemon = GOA_DAEMON (user_data);
-  g_signal_handlers_disconnect_by_func (daemon->notification,
-                                        G_CALLBACK (on_notification_closed),
-                                        daemon);
-  g_object_unref (daemon->notification);
-  daemon->notification = NULL;
-}
-
-static void
-goa_daemon_update_notifications (GoaDaemon *daemon)
-{
-  gboolean show_notification;
-  GList *objects;
-  GList *l;
-
-  show_notification = FALSE;
-  objects = g_dbus_object_manager_get_objects (G_DBUS_OBJECT_MANAGER (daemon->object_manager));
-  for (l = objects; l != NULL; l = l->next)
-    {
-      GoaObject *object = GOA_OBJECT (l->data);
-      GoaAccount *account;
-      account = goa_object_peek_account (object);
-      if (account != NULL)
-        {
-          if (goa_account_get_attention_needed (account))
-            {
-              show_notification = TRUE;
-              break;
-            }
-        }
-    }
-
-  if (show_notification)
-    {
-      if (daemon->notification == NULL)
-        {
-          GError *error;
-          GVariant *desktop_entry;
-
-          daemon->notification = notify_notification_new (_("An online account needs attention"),
-                                                          NULL,
-                                                          NULL);
-          desktop_entry = g_variant_new_string ("goa-daemon");
-          notify_notification_set_hint (daemon->notification, "desktop-entry", desktop_entry);
-          notify_notification_set_timeout (daemon->notification, NOTIFY_EXPIRES_NEVER);
-          g_object_set (daemon->notification, "icon-name", "gtk-dialog-error", NULL);
-          notify_notification_add_action (daemon->notification,
-                                          "open-online-accounts",
-                                          _("Open Online Accounts..."),
-                                          notification_cb,
-                                          daemon,
-                                          NULL); /* GFreeFunc */
-
-          error = NULL;
-          if (!notify_notification_show (daemon->notification, &error))
-            {
-              goa_warning ("Error showing notification: %s (%s, %d)",
-                           error->message, g_quark_to_string (error->domain), error->code);
-              g_error_free (error);
-              g_object_unref (daemon->notification);
-              daemon->notification = NULL;
-            }
-          else
-            {
-              g_signal_connect (daemon->notification,
-                                "closed",
-                                G_CALLBACK (on_notification_closed),
-                                daemon);
-            }
-        }
-    }
-  else
-    {
-      if (daemon->notification != NULL)
-        {
-          GError *error;
-          error = NULL;
-          if (!notify_notification_close (daemon->notification, &error))
-            {
-              goa_warning ("Error closing notification: %s (%s, %d)",
-                           error->message, g_quark_to_string (error->domain), error->code);
-              g_error_free (error);
-            }
-          g_signal_handlers_disconnect_by_func (daemon->notification,
-                                                G_CALLBACK (on_notification_closed),
-                                                daemon);
-          g_object_unref (daemon->notification);
-          daemon->notification = NULL;
-        }
-    }
-
-  g_list_foreach (objects, (GFunc) g_object_unref, NULL);
-  g_list_free (objects);
-}
-
-static void
-account_on_attention_needed_notify (GObject     *object,
-                                    GParamSpec  *pspec,
-                                    gpointer     user_data)
-{
-  GoaDaemon *daemon = GOA_DAEMON (user_data);
-  goa_daemon_update_notifications (daemon);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

@@ -37,7 +37,6 @@ goa_daemon_CPPFLAGS =						\
 goa_daemon_CFLAGS =						\
 	$(GLIB_CFLAGS) 						\
 	$(GTK_CFLAGS)						\
-	$(LIBNOTIFY_CFLAGS)					\
 	$(REST_CFLAGS)						\
 	$(NULL)
 
@@ -46,7 +45,6 @@ goa_daemon_LDADD = 						\
 	$(top_builddir)/src/goa/libgoa-1.0.la			\
 	$(top_builddir)/src/goabackend/libgoa-backend-1.0.la	\
 	$(GTK_LIBS)						\
-	$(LIBNOTIFY_LIBS)					\
 	$(REST_LIBS)						\
 	$(NULL)
 
