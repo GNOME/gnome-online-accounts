@@ -110,7 +110,6 @@ libgoaidentity_la_CPPFLAGS =					\
 libgoaidentity_la_CFLAGS =					\
 	$(GLIB_CFLAGS) 						\
 	$(GTK_CFLAGS)						\
-	$(LIBNOTIFY_CFLAGS)					\
 	$(KRB5_CFLAGS)						\
 	$(GCR_CFLAGS)						\
 	$(NULL)
@@ -118,7 +117,6 @@ libgoaidentity_la_CFLAGS =					\
 libgoaidentity_la_LIBADD = 					\
 	$(GLIB_LIBS) 						\
 	$(GTK_LIBS)						\
-	$(LIBNOTIFY_LIBS)					\
 	$(KRB5_LIBS)						\
 	$(GCR_LIBS)						\
 	$(NULL)
