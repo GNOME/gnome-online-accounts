@@ -152,7 +152,13 @@ endif # HAVE_INTROSPECTION
 
 # ----------------------------------------------------------------------------------------------------
 
+CLEANFILES += \
+	$(dbus_built_sources) \
+	$(enum_built_sources) \
+	goa-generated-doc-*.xml \
+	$(NULL)
+
 clean-local :
-	rm -f *~ goa-generated-doc-*.xml $(dbus_built_sources) $(enum_built_sources)
+	rm -f *~
 
 -include $(top_srcdir)/git.mk

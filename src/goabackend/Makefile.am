@@ -127,7 +127,11 @@ pkgconfig_DATA = goa-backend-1.0.pc
 
 # ----------------------------------------------------------------------------------------------------
 
+CLEANFILES += \
+	$(enum_built_sources) \
+	$(NULL)
+
 clean-local :
-	rm -f *~ $(enum_built_sources)
+	rm -f *~
 
 -include $(top_srcdir)/git.mk
