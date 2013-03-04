@@ -811,7 +811,7 @@ add_account (GoaProvider    *provider,
           accept_ssl_errors = FALSE;
         }
 
-      markup = g_strdup_printf ("<b>%s:</b> %s",
+      markup = g_strdup_printf ("<b>%s:</b>\n%s",
                                 _("Error connecting to ownCloud server"),
                                 data.error->message);
       g_clear_error (&data.error);
@@ -991,7 +991,7 @@ refresh_account (GoaProvider    *provider,
     {
       gchar *markup;
 
-      markup = g_strdup_printf ("<b>%s:</b> %s",
+      markup = g_strdup_printf ("<b>%s:</b>\n%s",
                                 _("Error connecting to ownCloud server"),
                                 data.error->message);
       g_clear_error (&data.error);
