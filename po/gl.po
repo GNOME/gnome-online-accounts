@@ -6,13 +6,13 @@
 # Xosé M Lamas <correo.xmgz@gmail.com>, 2011.
 # Fran Diéguez <frandieguez@gnome.org>, 2011, 2012.
 # Leandro Regueiro <leandro.regueiro@gmail.com>, 2012.
-# Fran Dieguez <frandieguez@gnome.org>, 2012.
+# Fran Dieguez <frandieguez@gnome.org>, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-10 11:08+0100\n"
-"PO-Revision-Date: 2012-11-10 11:08+0200\n"
+"POT-Creation-Date: 2013-03-04 14:43+0100\n"
+"PO-Revision-Date: 2013-03-04 14:43+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -48,37 +48,37 @@ msgid "ProviderType property is not set for account"
 msgstr "Propiedade «ProviderType» non estabelecida para a conta"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:204 ../src/goabackend/goahttpclient.c:147
+#: ../src/goabackend/goaewsclient.c:234 ../src/goabackend/goahttpclient.c:175
 #, c-format
 msgid "Code: %u - Unexpected response from server"
 msgstr "Código: %u: resposta non agardada do servidor"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:220
+#: ../src/goabackend/goaewsclient.c:250
 #, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "Produciuse un erro ao analizar a resposta XML da autodetección"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:230
+#: ../src/goabackend/goaewsclient.c:260
 #, c-format
 msgid "Failed to find Autodiscover element"
 msgstr "Produciuse un erro ao buscar o elemento «Autodiscover»."
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:244
+#: ../src/goabackend/goaewsclient.c:274
 #, c-format
 msgid "Failed to find Response element"
 msgstr "Produciuse un erro ao buscar o elemento «Response»"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:258
+#: ../src/goabackend/goaewsclient.c:288
 #, c-format
 msgid "Failed to find Account element"
 msgstr "Produciuse un erro ao buscar o elemento «Account»"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:275
+#: ../src/goabackend/goaewsclient.c:305
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr ""
@@ -88,7 +88,7 @@ msgstr ""
 msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
-#: ../src/goabackend/goaexchangeprovider.c:279
+#: ../src/goabackend/goaexchangeprovider.c:282
 #: ../src/goabackend/goagoogleprovider.c:651
 #: ../src/goabackend/goaoauth2provider.c:1443
 #: ../src/goabackend/goaoauthprovider.c:1545
@@ -97,10 +97,10 @@ msgid "Credentials not found in keyring (%s, %d): "
 msgstr "Non foi posíbel atopar as credenciais no anel de chaves (%s, %d): "
 
 #. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:297
-#: ../src/goabackend/goaexchangeprovider.c:943
+#: ../src/goabackend/goaexchangeprovider.c:300
+#: ../src/goabackend/goaexchangeprovider.c:966
 #: ../src/goabackend/goagoogleprovider.c:670
-#: ../src/goabackend/goagoogleprovider.c:849
+#: ../src/goabackend/goagoogleprovider.c:850
 #, c-format
 msgid "Did not find password with username `%s' in credentials"
 msgstr ""
@@ -111,35 +111,35 @@ msgstr ""
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
 #.
-#: ../src/goabackend/goaexchangeprovider.c:323
-#: ../src/goabackend/goagoogleprovider.c:692
+#: ../src/goabackend/goaexchangeprovider.c:328
+#: ../src/goabackend/goagoogleprovider.c:693
 #, c-format
 msgid "Invalid password with username `%s' (%s, %d): "
 msgstr "Contrasinal non válido co nome de usuario «%s» (%s, %d):"
 
-#: ../src/goabackend/goaexchangeprovider.c:506
+#: ../src/goabackend/goaexchangeprovider.c:511
 msgid "_E-mail"
 msgstr "Correo _electrónico"
 
-#: ../src/goabackend/goaexchangeprovider.c:507
+#: ../src/goabackend/goaexchangeprovider.c:512
 msgid "_Password"
 msgstr "_Contrasinal"
 
-#: ../src/goabackend/goaexchangeprovider.c:510
+#: ../src/goabackend/goaexchangeprovider.c:515
 msgid "_Custom"
 msgstr "_Personalizado"
 
-#: ../src/goabackend/goaexchangeprovider.c:529
+#: ../src/goabackend/goaexchangeprovider.c:534
 #: ../src/goabackend/goakerberosprovider.c:1117
 msgid "User_name"
 msgstr "Nome de _usuario"
 
-#: ../src/goabackend/goaexchangeprovider.c:530
+#: ../src/goabackend/goaexchangeprovider.c:535
 msgid "_Server"
 msgstr "_Servidor"
 
-#: ../src/goabackend/goaexchangeprovider.c:614
-#: ../src/goabackend/goaexchangeprovider.c:780
+#: ../src/goabackend/goaexchangeprovider.c:622
+#: ../src/goabackend/goaexchangeprovider.c:801
 #: ../src/goabackend/goakerberosprovider.c:1510
 #: ../src/goabackend/goaoauth2provider.c:986
 #: ../src/goabackend/goaoauthprovider.c:1041
@@ -147,37 +147,41 @@ msgstr "_Servidor"
 msgid "Dialog was dismissed"
 msgstr "Descartouse o diálogo"
 
-#: ../src/goabackend/goaexchangeprovider.c:650
-#: ../src/goabackend/goaexchangeprovider.c:807
-msgid "Error connecting to Microsoft Exchange server"
-msgstr "Produciuse un erro ao conectar ao servidor de Microsoft Exchange"
+#: ../src/goabackend/goaexchangeprovider.c:660
+msgid "_Ignore"
+msgstr "_Ignorar"
 
-#: ../src/goabackend/goaexchangeprovider.c:657
-#: ../src/goabackend/goaexchangeprovider.c:815
+#: ../src/goabackend/goaexchangeprovider.c:665
+#: ../src/goabackend/goaexchangeprovider.c:838
 #: ../src/goabackend/goakerberosprovider.c:1616
 msgid "_Try Again"
 msgstr "_Tentar de novo"
 
-#: ../src/goabackend/goaexchangeprovider.c:866
+#: ../src/goabackend/goaexchangeprovider.c:670
+#: ../src/goabackend/goaexchangeprovider.c:830
+msgid "Error connecting to Microsoft Exchange server"
+msgstr "Produciuse un erro ao conectar ao servidor de Microsoft Exchange"
+
+#: ../src/goabackend/goaexchangeprovider.c:889
 #: ../src/goabackend/goafacebookprovider.c:389
-#: ../src/goabackend/goagoogleprovider.c:729
-#: ../src/goabackend/goakerberosprovider.c:1685
+#: ../src/goabackend/goagoogleprovider.c:730
+#: ../src/goabackend/goakerberosprovider.c:1687
 #: ../src/goabackend/goawindowsliveprovider.c:403
 msgid "Use for"
 msgstr "Usar para"
 
-#: ../src/goabackend/goaexchangeprovider.c:868
-#: ../src/goabackend/goagoogleprovider.c:731
+#: ../src/goabackend/goaexchangeprovider.c:891
+#: ../src/goabackend/goagoogleprovider.c:732
 msgid "_Mail"
 msgstr "Co_rreo"
 
-#: ../src/goabackend/goaexchangeprovider.c:873
-#: ../src/goabackend/goagoogleprovider.c:736
+#: ../src/goabackend/goaexchangeprovider.c:896
+#: ../src/goabackend/goagoogleprovider.c:737
 msgid "Cale_ndar"
 msgstr "Cale_ndario"
 
-#: ../src/goabackend/goaexchangeprovider.c:878
-#: ../src/goabackend/goagoogleprovider.c:741
+#: ../src/goabackend/goaexchangeprovider.c:901
+#: ../src/goabackend/goagoogleprovider.c:742
 msgid "_Contacts"
 msgstr "_Contactos"
 
@@ -215,7 +219,7 @@ msgid "Didn't find email member in JSON data"
 msgstr "Non foi posíbel atopar o correo electrónico do membro nos datos JSON"
 
 #: ../src/goabackend/goafacebookprovider.c:391
-#: ../src/goabackend/goagoogleprovider.c:746
+#: ../src/goabackend/goagoogleprovider.c:747
 #: ../src/goabackend/goawindowsliveprovider.c:405
 msgid "C_hat"
 msgstr "C_hat"
@@ -235,7 +239,7 @@ msgstr ""
 "A hora do seu sistema non é válida. Comprobe a súa configuración de data e "
 "hora."
 
-#: ../src/goabackend/goagoogleprovider.c:751
+#: ../src/goabackend/goagoogleprovider.c:752
 #: ../src/goabackend/goawindowsliveprovider.c:410
 msgid "_Documents"
 msgstr "_Documentos"
@@ -291,7 +295,7 @@ msgstr "O dominio non é válido"
 msgid "Error connecting to enterprise identity server"
 msgstr "Produciuse un erro ao conectarse ao servidor corporativo de identidade"
 
-#: ../src/goabackend/goakerberosprovider.c:1687
+#: ../src/goabackend/goakerberosprovider.c:1689
 msgid "Network _Resources"
 msgstr "Recursos en _rede"
 
@@ -402,7 +406,7 @@ msgstr ""
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "As credenciais non conteñen «access_token» ou «access_token_secret»"
 
-#: ../src/goabackend/goaprovider.c:548
+#: ../src/goabackend/goaprovider.c:549
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "«ensure_credentials» non está implementado no tipo %s"
@@ -443,6 +447,38 @@ msgstr "Credenciais GOA de %s para a identidade %s"
 #: ../src/goabackend/goautils.c:264
 msgid "Failed to store credentials in the keyring"
 msgstr "Produciuse un erro ao gardar as credenciais no anel de chaves"
+
+#: ../src/goabackend/goautils.c:454
+msgid "The signing certificate authority is not known."
+msgstr "O asinado da autoridade certificadora non se recoñece."
+
+#: ../src/goabackend/goautils.c:458
+msgid ""
+"The certificate does not match the expected identity of the site that it was "
+"retrieved from."
+msgstr ""
+"O certificado non coincide coa identidade agardada do sitio da que se "
+"obtivo."
+
+#: ../src/goabackend/goautils.c:463
+msgid "The certificate's activation time is still in the future."
+msgstr "A data de activación do certificado está aínda no futuro."
+
+#: ../src/goabackend/goautils.c:467
+msgid "The certificate has expired."
+msgstr "O certificado caducou."
+
+#: ../src/goabackend/goautils.c:471
+msgid "The certificate has been revoked."
+msgstr "O certificado foi revogado."
+
+#: ../src/goabackend/goautils.c:475
+msgid "The certificate's algorithm is considered insecure."
+msgstr "O algoritmo do certificado considérase inseguro."
+
+#: ../src/goabackend/goautils.c:479
+msgid "Invalid certificate."
+msgstr "Certificado non válido."
 
 #. translators: %s here is the address of the web page
 #: ../src/goabackend/goawebview.c:75
