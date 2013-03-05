@@ -173,7 +173,7 @@ AC_ARG_ENABLE([imap-smtp],
               [AS_HELP_STRING([--enable-imap-smtp],
               [Enable IMAP/SMTP provider])],
               [],
-              [enable_imap_smtp=no])
+              [enable_imap_smtp=yes])
 if test "$enable_imap_smtp" != "no"; then
   AC_DEFINE(GOA_IMAP_SMTP_ENABLED, 1, [Enable IMAP/SMTP data provider])
 fi
