@@ -80,6 +80,12 @@ get_provider_name (GoaProvider *_provider,
   return g_strdup (_("Yahoo"));
 }
 
+static GoaProviderGroup
+get_provider_group (GoaProvider *_provider)
+{
+  return GOA_PROVIDER_GROUP_BRANDED;
+}
+
 static const gchar *
 get_consumer_key (GoaOAuthProvider *provider)
 {
@@ -114,6 +120,12 @@ static const gchar *
 get_callback_uri (GoaOAuthProvider *provider)
 {
   return "https://www.gnome.org/goa-1.0/oauth";
+}
+
+static const gchar *
+get_authentication_cookie (GoaOAuthProvider *provider)
+{
+  return "";
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -280,6 +292,40 @@ get_identity_sync (GoaOAuthProvider  *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
+is_deny_node (GoaOAuthProvider *provider, WebKitDOMNode *node)
+{
+  return FALSE;
+}
+
+static gboolean
+is_identity_node (GoaOAuthProvider *provider, WebKitDOMHTMLInputElement *element)
+{
+  return FALSE;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gchar *
+parse_request_token_error (GoaOAuthProvider *provider, RestProxyCall *call)
+{
+  const gchar *payload;
+  gchar *msg;
+  guint status;
+
+  msg = NULL;
+
+  payload = rest_proxy_call_get_payload (call);
+  status = rest_proxy_call_get_status_code (call);
+
+  if (status == 401 && g_strcmp0 (payload, "oauth_problem=timestamp_refused") == 0)
+    msg = g_strdup (_("Your system time is invalid. Check your date and time settings."));
+
+  return msg;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gboolean
 build_object (GoaProvider         *provider,
               GoaObjectSkeleton   *object,
               GKeyFile            *key_file,
@@ -351,16 +397,21 @@ goa_yahoo_provider_class_init (GoaYahooProviderClass *klass)
   provider_class = GOA_PROVIDER_CLASS (klass);
   provider_class->get_provider_type     = get_provider_type;
   provider_class->get_provider_name     = get_provider_name;
+  provider_class->get_provider_group    = get_provider_group;
   provider_class->build_object          = build_object;
   provider_class->show_account          = show_account;
 
   oauth_class = GOA_OAUTH_PROVIDER_CLASS (klass);
   oauth_class->get_identity_sync        = get_identity_sync;
+  oauth_class->is_deny_node             = is_deny_node;
+  oauth_class->is_identity_node         = is_identity_node;
   oauth_class->get_consumer_key         = get_consumer_key;
   oauth_class->get_consumer_secret      = get_consumer_secret;
   oauth_class->get_request_uri          = get_request_uri;
   oauth_class->get_authorization_uri    = get_authorization_uri;
   oauth_class->get_token_uri            = get_token_uri;
   oauth_class->get_callback_uri         = get_callback_uri;
+  oauth_class->get_authentication_cookie = get_authentication_cookie;
   oauth_class->get_use_external_browser = get_use_external_browser;
+  oauth_class->parse_request_token_error = parse_request_token_error;
 }
