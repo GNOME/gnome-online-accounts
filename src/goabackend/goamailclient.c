@@ -144,6 +144,10 @@ mail_client_check_auth_cb (GObject *source_object, GAsyncResult *res, gpointer u
   error = NULL;
   if (!goa_mail_auth_run_finish (data->auth, res, &error))
     {
+      goa_warning ("goa_mail_auth_run() failed: %s (%s, %d)",
+                   error->message,
+                   g_quark_to_string (error->domain),
+                   error->code);
       g_simple_async_result_take_error (data->res, error);
       goto out;
     }
@@ -170,6 +174,10 @@ mail_client_check_connect_cb (GObject *source_object, GAsyncResult *res, gpointe
   data->conn = g_socket_client_connect_to_host_finish (data->sc, res, &error);
   if (data->conn == NULL)
     {
+      goa_warning ("g_socket_client_connect_to_host() failed: %s (%s, %d)",
+                   error->message,
+                   g_quark_to_string (error->domain),
+                   error->code);
       if (error->code == G_TLS_ERROR_BAD_CERTIFICATE)
         {
           GError *tls_error;
