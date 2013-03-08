@@ -84,6 +84,70 @@ G_DEFINE_TYPE (GoaSmtpAuthPlain, goa_smtp_auth_plain, GOA_TYPE_MAIL_AUTH);
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static gboolean
+smtp_auth_plain_check_not_220 (const gchar *response, GError **error)
+{
+  if (!g_str_has_prefix (response, "220"))
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED, /* TODO: more specific */
+                   "Unexpected response `%s' while doing PLAIN authentication",
+                   response);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+smtp_auth_plain_check_not_235 (const gchar *response, GError **error)
+{
+  if (!g_str_has_prefix (response, "235"))
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED, /* TODO: more specific */
+                   _("Authentication failed"));
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+smtp_auth_plain_check_not_250 (const gchar *response, GError **error)
+{
+  if (!g_str_has_prefix (response, "250") || strlen (response) < 4)
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED, /* TODO: more specific */
+                   "Unexpected response `%s' while doing PLAIN authentication",
+                   response);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+smtp_auth_plain_check_421 (const gchar *response, GError **error)
+{
+  if (g_str_has_prefix (response, "421"))
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED, /* TODO: more specific */
+                   _("Service not available"));
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static void
 goa_smtp_auth_plain_finalize (GObject *object)
 {
@@ -446,23 +510,10 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
-  if (g_str_has_prefix (response, "421"))
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Service not available"));
-      goto out;
-    }
-  if (!g_str_has_prefix (response, "220"))
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED, /* TODO: more specific */
-                   "Unexpected response `%s' while doing PLAIN authentication",
-                   response);
-      goto out;
-    }
+  if (smtp_auth_plain_check_421 (response, error))
+    goto out;
+  if (smtp_auth_plain_check_not_220 (response, error))
+    goto out;
   g_clear_pointer (&response, g_free);
 
   /* Send EHLO */
@@ -480,23 +531,10 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
-  if (g_str_has_prefix (response, "421"))
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Service not available"));
-      goto out;
-    }
-  if (!g_str_has_prefix (response, "250") || strlen (response) < 4)
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED, /* TODO: more specific */
-                   "Unexpected response `%s' while doing PLAIN authentication",
-                   response);
-      goto out;
-    }
+  if (smtp_auth_plain_check_421 (response, error))
+    goto out;
+  if (smtp_auth_plain_check_not_250 (response, error))
+    goto out;
 
   if (g_str_has_prefix (response + 4, "AUTH"))
     {
@@ -541,14 +579,8 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
-  if (!g_str_has_prefix (response, "235"))
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Authentication failed"));
-      goto out;
-    }
+  if (smtp_auth_plain_check_not_235 (response, error))
+    goto out;
   g_clear_pointer (&response, g_free);
 
   ret = TRUE;
