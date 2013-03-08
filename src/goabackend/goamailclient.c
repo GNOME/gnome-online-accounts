@@ -165,6 +165,8 @@ static void
 mail_client_check_connect_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
 {
   CheckData *data = user_data;
+  GDataInputStream *input;
+  GDataOutputStream *output;
   GInputStream *base_input;
   GError *error;
   GOutputStream *base_output;
@@ -202,15 +204,19 @@ mail_client_check_connect_cb (GObject *source_object, GAsyncResult *res, gpointe
   g_socket_set_timeout (socket, COMMAND_TIMEOUT_SEC);
 
   base_input = g_io_stream_get_input_stream (G_IO_STREAM (data->conn));
-  data->input = g_data_input_stream_new (base_input);
-  g_filter_input_stream_set_close_base_stream (G_FILTER_INPUT_STREAM (data->input), FALSE);
-  g_data_input_stream_set_newline_type (data->input, G_DATA_STREAM_NEWLINE_TYPE_CR_LF);
+  input = g_data_input_stream_new (base_input);
+  g_filter_input_stream_set_close_base_stream (G_FILTER_INPUT_STREAM (input), FALSE);
+  g_data_input_stream_set_newline_type (input, G_DATA_STREAM_NEWLINE_TYPE_CR_LF);
+  goa_mail_auth_set_input (data->auth, input);
+  g_object_unref (input);
 
   base_output = g_io_stream_get_output_stream (G_IO_STREAM (data->conn));
-  data->output = g_data_output_stream_new (base_output);
-  g_filter_output_stream_set_close_base_stream (G_FILTER_OUTPUT_STREAM (data->output), FALSE);
+  output = g_data_output_stream_new (base_output);
+  g_filter_output_stream_set_close_base_stream (G_FILTER_OUTPUT_STREAM (output), FALSE);
+  goa_mail_auth_set_output (data->auth, output);
+  g_object_unref (output);
 
-  goa_mail_auth_run (data->auth, data->input, data->output, data->cancellable, mail_client_check_auth_cb, data);
+  goa_mail_auth_run (data->auth, data->cancellable, mail_client_check_auth_cb, data);
   return;
 
  error:

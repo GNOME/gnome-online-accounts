@@ -72,8 +72,6 @@ enum
 
 static gboolean goa_imap_auth_login_is_needed (GoaMailAuth        *auth);
 static gboolean goa_imap_auth_login_run_sync (GoaMailAuth         *_auth,
-                                              GDataInputStream    *input,
-                                              GDataOutputStream   *output,
                                               GCancellable        *cancellable,
                                               GError             **error);
 
@@ -299,12 +297,12 @@ goa_imap_auth_login_is_needed (GoaMailAuth *_auth)
 
 static gboolean
 goa_imap_auth_login_run_sync (GoaMailAuth         *_auth,
-                              GDataInputStream    *input,
-                              GDataOutputStream   *output,
                               GCancellable        *cancellable,
                               GError             **error)
 {
   GoaImapAuthLogin *auth = GOA_IMAP_AUTH_LOGIN (_auth);
+  GDataInputStream *input;
+  GDataOutputStream *output;
   gchar *request;
   gchar *response;
   gboolean ret;
@@ -350,6 +348,9 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *_auth,
                    "Cannot do IMAP LOGIN without a password");
       goto out;
     }
+
+  input = goa_mail_auth_get_input (_auth);
+  output = goa_mail_auth_get_output (_auth);
 
   request = g_strdup_printf ("A001 LOGIN \"%s\" \"%s\"\r\n", auth->username, password);
   if (!g_data_output_stream_put_string (output, request, cancellable, error))

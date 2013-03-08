@@ -77,8 +77,6 @@ enum
 
 static gboolean goa_smtp_auth_plain_is_needed (GoaMailAuth        *_auth);
 static gboolean goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
-                                              GDataInputStream    *input,
-                                              GDataOutputStream   *output,
                                               GCancellable        *cancellable,
                                               GError             **error);
 
@@ -336,12 +334,12 @@ goa_smtp_auth_plain_is_needed (GoaMailAuth *_auth)
 
 static gboolean
 goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
-                              GDataInputStream    *input,
-                              GDataOutputStream   *output,
                               GCancellable        *cancellable,
                               GError             **error)
 {
   GoaSmtpAuthPlain *auth = GOA_SMTP_AUTH_PLAIN (_auth);
+  GDataInputStream *input;
+  GDataOutputStream *output;
   gboolean plain_supported;
   gboolean ret;
   gchar *auth_arg_base64;
@@ -438,6 +436,9 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
                    _("Cannot do SMTP PLAIN without a domain"));
       goto out;
     }
+
+  input = goa_mail_auth_get_input (_auth);
+  output = goa_mail_auth_get_output (_auth);
 
   /* Check the greeting */
 
