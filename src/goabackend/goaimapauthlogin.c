@@ -74,6 +74,9 @@ static gboolean goa_imap_auth_login_is_needed (GoaMailAuth        *auth);
 static gboolean goa_imap_auth_login_run_sync (GoaMailAuth         *_auth,
                                               GCancellable        *cancellable,
                                               GError             **error);
+static gboolean goa_imap_auth_login_starttls_sync (GoaMailAuth    *_auth,
+                                                   GCancellable   *cancellable,
+                                                   GError        **error);
 
 G_DEFINE_TYPE (GoaImapAuthLogin, goa_imap_auth_login, GOA_TYPE_MAIL_AUTH);
 
@@ -178,6 +181,7 @@ goa_imap_auth_login_class_init (GoaImapAuthLoginClass *klass)
   auth_class = GOA_MAIL_AUTH_CLASS (klass);
   auth_class->is_needed = goa_imap_auth_login_is_needed;
   auth_class->run_sync = goa_imap_auth_login_run_sync;
+  auth_class->starttls_sync = goa_imap_auth_login_starttls_sync;
 
   /**
    * GoaImapAuthLogin:provider:
@@ -382,5 +386,58 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *_auth,
   g_free (response);
   g_free (request);
   g_free (password);
+  return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gboolean
+goa_imap_auth_login_starttls_sync (GoaMailAuth         *_auth,
+                                   GCancellable        *cancellable,
+                                   GError             **error)
+{
+  GDataInputStream *input;
+  GDataOutputStream *output;
+  gchar *request;
+  gchar *response;
+  gboolean ret;
+
+  request = NULL;
+  response = NULL;
+
+  ret = FALSE;
+
+  input = goa_mail_auth_get_input (_auth);
+  output = goa_mail_auth_get_output (_auth);
+
+  request = g_strdup ("A001 STARTTLS\r\n");
+  if (!g_data_output_stream_put_string (output, request, cancellable, error))
+    goto out;
+
+ again:
+  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  if (response == NULL)
+    goto out;
+  /* ignore untagged responses */
+  if (g_str_has_prefix (response, "*"))
+    {
+      g_free (response);
+      goto again;
+    }
+  if (!g_str_has_prefix (response, "A001 OK"))
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   "Unexpected response `%s' while doing LOGIN authentication",
+                   response);
+      goto out;
+    }
+
+  ret = TRUE;
+
+ out:
+  g_free (response);
+  g_free (request);
   return ret;
 }

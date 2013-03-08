@@ -68,6 +68,29 @@ mail_auth_run_in_thread_func (GSimpleAsyncResult *res, GObject *object, GCancell
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
+mail_auth_starttls_in_thread_func (GSimpleAsyncResult *res, GObject *object, GCancellable *cancellable)
+{
+  GError *error;
+  gboolean op_res;
+
+  op_res = FALSE;
+
+  error = NULL;
+  if (!goa_mail_auth_starttls_sync (GOA_MAIL_AUTH (object), cancellable, &error))
+    {
+      g_simple_async_result_take_error (res, error);
+      goto out;
+    }
+
+  op_res = TRUE;
+
+ out:
+  g_simple_async_result_set_op_res_gboolean (res, op_res);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
 goa_mail_auth_dispose (GObject *object)
 {
   GoaMailAuth *auth = GOA_MAIL_AUTH (object);
@@ -217,6 +240,60 @@ goa_mail_auth_run_finish (GoaMailAuth         *auth,
   GSimpleAsyncResult *simple;
 
   g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (auth), goa_mail_auth_run), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  simple = G_SIMPLE_ASYNC_RESULT (res);
+
+  if (g_simple_async_result_propagate_error (simple, error))
+    return FALSE;
+
+  return g_simple_async_result_get_op_res_gboolean (simple);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+gboolean
+goa_mail_auth_starttls_sync (GoaMailAuth         *auth,
+                             GCancellable        *cancellable,
+                             GError             **error)
+{
+  g_return_val_if_fail (GOA_IS_MAIL_AUTH (auth), FALSE);
+  g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
+  return GOA_MAIL_AUTH_GET_CLASS (auth)->starttls_sync (auth, cancellable, error);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+void
+goa_mail_auth_starttls (GoaMailAuth         *auth,
+                        GCancellable        *cancellable,
+                        GAsyncReadyCallback  callback,
+                        gpointer             user_data)
+{
+  GSimpleAsyncResult *simple;
+
+  g_return_if_fail (GOA_IS_MAIL_AUTH (auth));
+  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+
+  simple = g_simple_async_result_new (G_OBJECT (auth), callback, user_data, goa_mail_auth_starttls);
+  g_simple_async_result_set_handle_cancellation (simple, TRUE);
+
+  g_simple_async_result_run_in_thread (simple,
+                                       mail_auth_starttls_in_thread_func,
+                                       G_PRIORITY_DEFAULT,
+                                       cancellable);
+
+  g_object_unref (simple);
+}
+
+gboolean
+goa_mail_auth_starttls_finish (GoaMailAuth         *auth,
+                               GAsyncResult        *res,
+                               GError             **error)
+{
+  GSimpleAsyncResult *simple;
+
+  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (auth), goa_mail_auth_starttls), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   simple = G_SIMPLE_ASYNC_RESULT (res);

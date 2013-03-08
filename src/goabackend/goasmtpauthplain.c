@@ -54,6 +54,7 @@ struct _GoaSmtpAuthPlain
   GoaProvider *provider;
   GoaObject *object;
   gboolean auth_supported;
+  gboolean greeting_absent;
   gchar *domain;
   gchar *username;
   gchar *password;
@@ -79,6 +80,9 @@ static gboolean goa_smtp_auth_plain_is_needed (GoaMailAuth        *_auth);
 static gboolean goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
                                               GCancellable        *cancellable,
                                               GError             **error);
+static gboolean goa_smtp_auth_plain_starttls_sync (GoaMailAuth    *_auth,
+                                                   GCancellable   *cancellable,
+                                                   GError        **error);
 
 G_DEFINE_TYPE (GoaSmtpAuthPlain, goa_smtp_auth_plain, GOA_TYPE_MAIL_AUTH);
 
@@ -140,6 +144,21 @@ smtp_auth_plain_check_421 (const gchar *response, GError **error)
                    GOA_ERROR,
                    GOA_ERROR_FAILED, /* TODO: more specific */
                    _("Service not available"));
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+smtp_auth_plain_check_454 (const gchar *response, GError **error)
+{
+  if (g_str_has_prefix (response, "454"))
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED, /* TODO: more specific */
+                   _("TLS not available"));
       return TRUE;
     }
 
@@ -360,6 +379,7 @@ goa_smtp_auth_plain_class_init (GoaSmtpAuthPlainClass *klass)
   auth_class = GOA_MAIL_AUTH_CLASS (klass);
   auth_class->is_needed = goa_smtp_auth_plain_is_needed;
   auth_class->run_sync = goa_smtp_auth_plain_run_sync;
+  auth_class->starttls_sync = goa_smtp_auth_plain_starttls_sync;
 
   /**
    * GoaSmtpAuthPlain:provider:
@@ -539,17 +559,20 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
   input = goa_mail_auth_get_input (_auth);
   output = goa_mail_auth_get_output (_auth);
 
-  /* Check the greeting */
+  /* Check the greeting, if there is one */
 
-  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
-  if (response == NULL)
-    goto out;
-  g_debug ("< %s", response);
-  if (smtp_auth_plain_check_421 (response, error))
-    goto out;
-  if (smtp_auth_plain_check_not_220 (response, error))
-    goto out;
-  g_clear_pointer (&response, g_free);
+  if (!auth->greeting_absent)
+    {
+      response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+      if (response == NULL)
+        goto out;
+      g_debug ("< %s", response);
+      if (smtp_auth_plain_check_421 (response, error))
+        goto out;
+      if (smtp_auth_plain_check_not_220 (response, error))
+        goto out;
+      g_clear_pointer (&response, g_free);
+    }
 
   /* Send EHLO */
 
@@ -625,6 +648,116 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
   g_free (auth_arg_plain);
   g_free (domain);
   g_free (password);
+  g_free (response);
+  g_free (request);
+  return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gboolean
+goa_smtp_auth_plain_starttls_sync (GoaMailAuth         *_auth,
+                                   GCancellable        *cancellable,
+                                   GError             **error)
+{
+  GoaSmtpAuthPlain *auth = GOA_SMTP_AUTH_PLAIN (_auth);
+  GDataInputStream *input;
+  GDataOutputStream *output;
+  gboolean ret;
+  gboolean starttls_supported;
+  gchar *domain;
+  gchar *request;
+  gchar *response;
+
+  starttls_supported = FALSE;
+  domain = NULL;
+  request = NULL;
+  response = NULL;
+
+  ret = FALSE;
+
+  domain = smtp_auth_plain_get_domain (auth, error);
+  if (domain == NULL)
+    goto out;
+
+  input = goa_mail_auth_get_input (_auth);
+  output = goa_mail_auth_get_output (_auth);
+
+  /* Check the greeting */
+
+  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  if (response == NULL)
+    goto out;
+  g_debug ("< %s", response);
+  if (smtp_auth_plain_check_421 (response, error))
+    goto out;
+  if (smtp_auth_plain_check_not_220 (response, error))
+    goto out;
+  g_clear_pointer (&response, g_free);
+
+  /* Send EHLO */
+
+  request = g_strdup_printf ("EHLO %s\r\n", domain);
+  g_debug ("> %s", request);
+  if (!g_data_output_stream_put_string (output, request, cancellable, error))
+    goto out;
+  g_clear_pointer (&request, g_free);
+
+  /* Check if STARTTLS is supported or not */
+
+ ehlo_again:
+  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  if (response == NULL)
+    goto out;
+  g_debug ("< %s", response);
+  if (smtp_auth_plain_check_421 (response, error))
+    goto out;
+  if (smtp_auth_plain_check_not_250 (response, error))
+    goto out;
+
+  if (g_str_has_prefix (response + 4, "STARTTLS"))
+    starttls_supported = TRUE;
+
+  if (response[3] == '-')
+    {
+      g_free (response);
+      goto ehlo_again;
+    }
+  else if (!starttls_supported)
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_NOT_SUPPORTED,
+                   _("Server does not support STARTTLS"));
+      goto out;
+    }
+  g_clear_pointer (&response, g_free);
+
+  /* Send STARTTLS */
+
+  request = g_strdup ("STARTTLS\r\n");
+  g_debug ("> %s", request);
+  if (!g_data_output_stream_put_string (output, request, cancellable, error))
+    goto out;
+  g_clear_pointer (&request, g_free);
+
+  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  if (response == NULL)
+    goto out;
+  g_debug ("< %s", response);
+  if (smtp_auth_plain_check_454 (response, error))
+    goto out;
+  if (smtp_auth_plain_check_not_220 (response, error))
+    goto out;
+  g_clear_pointer (&response, g_free);
+
+  /* There won't be a greeting after this */
+  auth->greeting_absent = TRUE;
+
+  ret = TRUE;
+
+ out:
+  g_free (domain);
   g_free (response);
   g_free (request);
   return ret;
