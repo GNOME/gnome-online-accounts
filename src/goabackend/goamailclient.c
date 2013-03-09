@@ -74,13 +74,17 @@ typedef struct
   GCancellable *cancellable;
   GDataInputStream *input;
   GDataOutputStream *output;
+  GIOStream *tls_conn;
   GSimpleAsyncResult *res;
+  GSocket *socket;
   GSocketClient *sc;
   GSocketConnection *conn;
   GTlsCertificateFlags cert_flags;
-  GTlsClientConnection *tls_conn;
   GoaMailAuth *auth;
   GoaTlsType tls_type;
+  gboolean accept_ssl_errors;
+  gchar *host_and_port;
+  guint16 default_port;
 } CheckData;
 
 static void
@@ -92,8 +96,10 @@ mail_client_check_data_free (CheckData *data)
   g_clear_object (&data->cancellable);
   g_clear_object (&data->input);
   g_clear_object (&data->output);
+  g_clear_object (&data->socket);
   g_clear_object (&data->conn);
   g_clear_object (&data->tls_conn);
+  g_free (data->host_and_port);
   g_slice_free (CheckData, data);
 }
 
@@ -122,9 +128,9 @@ mail_client_check_event_cb (GSocketClient *sc,
   if (event != G_SOCKET_CLIENT_TLS_HANDSHAKING)
     return;
 
-  data->tls_conn = G_TLS_CLIENT_CONNECTION (g_object_ref (connection));
-  if (data->tls_type == GOA_TLS_TYPE_SSL)
-    g_tls_client_connection_set_use_ssl3 (data->tls_conn, TRUE);
+  data->tls_conn = g_object_ref (connection);
+  if (data->accept_ssl_errors)
+    g_tls_client_connection_set_validation_flags (G_TLS_CLIENT_CONNECTION (data->tls_conn), 0);
 
   g_signal_connect (data->tls_conn,
                     "accept-certificate",
@@ -133,7 +139,7 @@ mail_client_check_event_cb (GSocketClient *sc,
 }
 
 static void
-mail_client_check_auth_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
+mail_client_check_auth_run_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
 {
   CheckData *data = user_data;
   GError *error;
@@ -162,6 +168,133 @@ mail_client_check_auth_cb (GObject *source_object, GAsyncResult *res, gpointer u
 }
 
 static void
+mail_client_check_tls_conn_handshake_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
+{
+  CheckData *data = user_data;
+  GDataInputStream *input;
+  GDataOutputStream *output;
+  GInputStream *base_input;
+  GError *error;
+  GOutputStream *base_output;
+
+  input = NULL;
+  output = NULL;
+
+  error = NULL;
+  if (!g_tls_connection_handshake_finish (G_TLS_CONNECTION (data->tls_conn), res, &error))
+    {
+      goa_warning ("g_tls_connection_handshake() failed: %s (%s, %d)",
+                   error->message,
+                   g_quark_to_string (error->domain),
+                   error->code);
+      if (error->code == G_TLS_ERROR_BAD_CERTIFICATE)
+        {
+          GError *tls_error;
+
+          tls_error = NULL;
+          goa_utils_set_error_ssl (&tls_error, data->cert_flags);
+          g_simple_async_result_take_error (data->res, tls_error);
+          g_error_free (error);
+        }
+      else
+        {
+          error->domain = GOA_ERROR;
+          error->code = GOA_ERROR_FAILED; /* TODO: more specific */
+          g_simple_async_result_take_error (data->res, error);
+        }
+
+      goto error;
+    }
+
+  g_clear_object (&data->conn);
+  data->conn = g_tcp_wrapper_connection_new (data->tls_conn, data->socket);
+
+  base_input = g_io_stream_get_input_stream (G_IO_STREAM (data->conn));
+  input = g_data_input_stream_new (base_input);
+  g_filter_input_stream_set_close_base_stream (G_FILTER_INPUT_STREAM (input), FALSE);
+  g_data_input_stream_set_newline_type (input, G_DATA_STREAM_NEWLINE_TYPE_CR_LF);
+  goa_mail_auth_set_input (data->auth, input);
+
+  base_output = g_io_stream_get_output_stream (G_IO_STREAM (data->conn));
+  output = g_data_output_stream_new (base_output);
+  g_filter_output_stream_set_close_base_stream (G_FILTER_OUTPUT_STREAM (output), FALSE);
+  goa_mail_auth_set_output (data->auth, output);
+
+  goa_mail_auth_run (data->auth, data->cancellable, mail_client_check_auth_run_cb, data);
+  goto out;
+
+ error:
+  g_simple_async_result_set_op_res_gboolean (data->res, FALSE);
+  g_simple_async_result_complete_in_idle (data->res);
+  mail_client_check_data_free (data);
+
+ out:
+  g_clear_object (&input);
+  g_clear_object (&output);
+}
+
+static void
+mail_client_check_auth_starttls_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
+{
+  CheckData *data = user_data;
+  GSocketConnectable *server_identity;
+  GError *error;
+
+  server_identity = NULL;
+
+  error = NULL;
+  if (!goa_mail_auth_starttls_finish (data->auth, res, &error))
+    {
+      goa_warning ("goa_mail_auth_starttls() failed: %s (%s, %d)",
+                   error->message,
+                   g_quark_to_string (error->domain),
+                   error->code);
+      g_simple_async_result_take_error (data->res, error);
+      goto error;
+    }
+
+  error = NULL;
+  server_identity = g_network_address_parse (data->host_and_port, data->default_port, &error);
+  if (server_identity == NULL)
+    {
+      g_simple_async_result_take_error (data->res, error);
+      goto error;
+    }
+
+  error = NULL;
+  data->tls_conn = g_tls_client_connection_new (G_IO_STREAM (data->conn), server_identity, &error);
+  if (data->tls_conn == NULL)
+    {
+      g_simple_async_result_take_error (data->res, error);
+      goto error;
+    }
+
+  if (data->accept_ssl_errors)
+    g_tls_client_connection_set_validation_flags (G_TLS_CLIENT_CONNECTION (data->tls_conn), 0);
+
+  g_signal_connect (data->tls_conn,
+                    "accept-certificate",
+                    G_CALLBACK (mail_client_check_accept_certificate_cb),
+                    data);
+
+  g_tls_connection_handshake_async (G_TLS_CONNECTION (data->tls_conn),
+                                    G_PRIORITY_DEFAULT,
+                                    data->cancellable,
+                                    mail_client_check_tls_conn_handshake_cb,
+                                    data);
+
+  goto out;
+
+ error:
+  g_simple_async_result_set_op_res_gboolean (data->res, FALSE);
+  g_simple_async_result_complete_in_idle (data->res);
+  mail_client_check_data_free (data);
+
+ out:
+  g_clear_object (&server_identity);
+}
+
+static void
 mail_client_check_connect_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
 {
   CheckData *data = user_data;
@@ -170,7 +303,6 @@ mail_client_check_connect_cb (GObject *source_object, GAsyncResult *res, gpointe
   GInputStream *base_input;
   GError *error;
   GOutputStream *base_output;
-  GSocket *socket;
 
   error = NULL;
   data->conn = g_socket_client_connect_to_host_finish (data->sc, res, &error);
@@ -200,8 +332,8 @@ mail_client_check_connect_cb (GObject *source_object, GAsyncResult *res, gpointe
     }
 
   /* fail quickly */
-  socket = g_socket_connection_get_socket (data->conn);
-  g_socket_set_timeout (socket, COMMAND_TIMEOUT_SEC);
+  data->socket = g_object_ref (g_socket_connection_get_socket (data->conn));
+  g_socket_set_timeout (data->socket, COMMAND_TIMEOUT_SEC);
 
   base_input = g_io_stream_get_input_stream (G_IO_STREAM (data->conn));
   input = g_data_input_stream_new (base_input);
@@ -216,7 +348,11 @@ mail_client_check_connect_cb (GObject *source_object, GAsyncResult *res, gpointe
   goa_mail_auth_set_output (data->auth, output);
   g_object_unref (output);
 
-  goa_mail_auth_run (data->auth, data->cancellable, mail_client_check_auth_cb, data);
+  if (data->tls_type == GOA_TLS_TYPE_STARTTLS)
+    goa_mail_auth_starttls (data->auth, data->cancellable, mail_client_check_auth_starttls_cb, data);
+  else
+    goa_mail_auth_run (data->auth, data->cancellable, mail_client_check_auth_run_cb, data);
+
   return;
 
  error:
@@ -247,15 +383,17 @@ goa_mail_client_check (GoaMailClient       *client,
   data->res = g_simple_async_result_new (G_OBJECT (client), callback, user_data, goa_mail_client_check);
 
   data->sc = g_socket_client_new ();
-  if (tls_type != GOA_TLS_TYPE_NONE)
-    g_socket_client_set_tls (data->sc, TRUE);
-  g_signal_connect (data->sc, "event", G_CALLBACK (mail_client_check_event_cb), data);
+  if (tls_type == GOA_TLS_TYPE_SSL)
+    {
+      g_socket_client_set_tls (data->sc, TRUE);
+      g_signal_connect (data->sc, "event", G_CALLBACK (mail_client_check_event_cb), data);
+    }
 
+  data->host_and_port = g_strdup (host_and_port);
   data->tls_type = tls_type;
+  data->accept_ssl_errors = accept_ssl_errors;
+  data->default_port = default_port;
   data->auth = g_object_ref (auth);
-
-  if (accept_ssl_errors)
-    g_socket_client_set_tls_validation_flags (data->sc, 0);
 
   if (cancellable != NULL)
     {
@@ -264,8 +402,8 @@ goa_mail_client_check (GoaMailClient       *client,
     }
 
   g_socket_client_connect_to_host_async (data->sc,
-                                         host_and_port,
-                                         default_port,
+                                         data->host_and_port,
+                                         data->default_port,
                                          data->cancellable,
                                          mail_client_check_connect_cb,
                                          data);
