@@ -357,6 +357,7 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *_auth,
   output = goa_mail_auth_get_output (_auth);
 
   request = g_strdup_printf ("A001 LOGIN \"%s\" \"%s\"\r\n", auth->username, password);
+  g_debug ("> A001 LOGIN \"********************\" \"********************\"", request);
   if (!g_data_output_stream_put_string (output, request, cancellable, error))
     goto out;
 
@@ -364,6 +365,7 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *_auth,
   response = g_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
+  g_debug ("< %s", response);
   /* ignore untagged responses */
   if (g_str_has_prefix (response, "*"))
     {
@@ -411,6 +413,7 @@ goa_imap_auth_login_starttls_sync (GoaMailAuth         *_auth,
   output = goa_mail_auth_get_output (_auth);
 
   request = g_strdup ("A001 STARTTLS\r\n");
+  g_debug ("> %s", request);
   if (!g_data_output_stream_put_string (output, request, cancellable, error))
     goto out;
 
@@ -418,6 +421,7 @@ goa_imap_auth_login_starttls_sync (GoaMailAuth         *_auth,
   response = g_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
+  g_debug ("< %s", response);
   /* ignore untagged responses */
   if (g_str_has_prefix (response, "*"))
     {
