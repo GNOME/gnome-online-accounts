@@ -148,6 +148,110 @@ smtp_auth_plain_check_421 (const gchar *response, GError **error)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static gchar *
+smtp_auth_plain_get_domain (GoaSmtpAuthPlain  *auth,
+                            GError           **error)
+{
+  gchar *domain;
+
+  domain = NULL;
+
+  if (auth->domain != NULL)
+    {
+      domain = g_strdup (auth->domain);
+    }
+  else if (auth->object != NULL)
+    {
+      GoaMail *mail;
+      gchar *email_address;
+
+      mail = goa_object_get_mail (auth->object);
+      if (mail == NULL)
+        {
+          g_set_error (error,
+                       GOA_ERROR,
+                       GOA_ERROR_FAILED, /* TODO: more specific */
+                       _("org.gnome.OnlineAccounts.Mail is not available"));
+          goto out;
+        }
+
+      email_address = goa_mail_dup_email_address (mail);
+      if (!goa_utils_parse_email_address (email_address, NULL, &domain))
+        {
+          g_set_error (error,
+                       GOA_ERROR,
+                       GOA_ERROR_FAILED, /* TODO: more specific */
+                       _("Failed to parse email address"));
+          goto out;
+        }
+
+      g_free (email_address);
+      g_object_unref (mail);
+    }
+  else
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED, /* TODO: more specific */
+                   _("Cannot do SMTP PLAIN without a domain"));
+      goto out;
+    }
+
+ out:
+  return domain;
+}
+
+static gchar *
+smtp_auth_plain_get_password (GoaSmtpAuthPlain  *auth,
+                              GCancellable      *cancellable,
+                              GError           **error)
+{
+  gchar *password;
+
+  password = NULL;
+
+  if (auth->password != NULL)
+    {
+      password = g_strdup (auth->password);
+    }
+  else if (auth->provider != NULL && auth->object != NULL)
+    {
+      GVariant *credentials;
+      credentials = goa_utils_lookup_credentials_sync (auth->provider,
+                                                       auth->object,
+                                                       cancellable,
+                                                       error);
+      if (credentials == NULL)
+        {
+          g_prefix_error (error, "Error looking up credentials for SMTP PLAIN in keyring: ");
+          goto out;
+        }
+      if (!g_variant_lookup (credentials, "smtp-password", "s", &password))
+        {
+          g_set_error (error,
+                       GOA_ERROR,
+                       GOA_ERROR_FAILED, /* TODO: more specific */
+                       _("Did not find smtp-password in credentials"));
+          g_variant_unref (credentials);
+          goto out;
+        }
+      g_variant_unref (credentials);
+    }
+  else
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED, /* TODO: more specific */
+                   _("Cannot do SMTP PLAIN without a password"));
+      goto out;
+    }
+
+ out:
+  return password;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static void
 goa_smtp_auth_plain_finalize (GObject *object)
 {
@@ -424,82 +528,13 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
 
   ret = FALSE;
 
-  if (auth->password != NULL)
-    {
-      password = g_strdup (auth->password);
-    }
-  else if (auth->provider != NULL && auth->object != NULL)
-    {
-      GVariant *credentials;
-      credentials = goa_utils_lookup_credentials_sync (auth->provider,
-                                                       auth->object,
-                                                       cancellable,
-                                                       error);
-      if (credentials == NULL)
-        {
-          g_prefix_error (error, "Error looking up credentials for SMTP PLAIN in keyring: ");
-          goto out;
-        }
-      if (!g_variant_lookup (credentials, "smtp-password", "s", &password))
-        {
-          g_set_error (error,
-                       GOA_ERROR,
-                       GOA_ERROR_FAILED, /* TODO: more specific */
-                       _("Did not find smtp-password in credentials"));
-          g_variant_unref (credentials);
-          goto out;
-        }
-      g_variant_unref (credentials);
-    }
-  else
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Cannot do SMTP PLAIN without a password"));
-      goto out;
-    }
+  password = smtp_auth_plain_get_password (auth, cancellable, error);
+  if (password == NULL)
+    goto out;
 
-  if (auth->domain != NULL)
-    {
-      domain = g_strdup (auth->domain);
-    }
-  else if (auth->object != NULL)
-    {
-      GoaMail *mail;
-      gchar *email_address;
-
-      mail = goa_object_get_mail (auth->object);
-      if (mail == NULL)
-        {
-          g_set_error (error,
-                       GOA_ERROR,
-                       GOA_ERROR_FAILED, /* TODO: more specific */
-                       _("org.gnome.OnlineAccounts.Mail is not available"));
-          goto out;
-        }
-
-      email_address = goa_mail_dup_email_address (mail);
-      if (!goa_utils_parse_email_address (email_address, NULL, &domain))
-        {
-          g_set_error (error,
-                       GOA_ERROR,
-                       GOA_ERROR_FAILED, /* TODO: more specific */
-                       _("Failed to parse email address"));
-          goto out;
-        }
-
-      g_free (email_address);
-      g_object_unref (mail);
-    }
-  else
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Cannot do SMTP PLAIN without a domain"));
-      goto out;
-    }
+  domain = smtp_auth_plain_get_domain (auth, error);
+  if (domain == NULL)
+    goto out;
 
   input = goa_mail_auth_get_input (_auth);
   output = goa_mail_auth_get_output (_auth);
