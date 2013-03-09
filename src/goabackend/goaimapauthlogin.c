@@ -377,7 +377,7 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *_auth,
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
-                   "Unexpected response `%s' while doing LOGIN authentication",
+                   _("Authentication failed"),
                    response);
       goto out;
     }
