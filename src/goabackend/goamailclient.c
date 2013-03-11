@@ -187,7 +187,11 @@ mail_client_check_tls_conn_handshake_cb (GObject *source_object, GAsyncResult *r
                    error->message,
                    g_quark_to_string (error->domain),
                    error->code);
-      if (error->code == G_TLS_ERROR_BAD_CERTIFICATE)
+      /* GIO sets G_TLS_ERROR_BAD_CERTIFICATE when it should be
+       * setting G_TLS_ERROR_HANDSHAKE. Hence, lets check the
+       * GTlsCertificate flags to accommodate future GIO fixes.
+       */
+      if (data->cert_flags != 0)
         {
           GError *tls_error;
 
@@ -312,7 +316,11 @@ mail_client_check_connect_cb (GObject *source_object, GAsyncResult *res, gpointe
                    error->message,
                    g_quark_to_string (error->domain),
                    error->code);
-      if (error->code == G_TLS_ERROR_BAD_CERTIFICATE)
+      /* GIO sets G_TLS_ERROR_BAD_CERTIFICATE when it should be
+       * setting G_TLS_ERROR_HANDSHAKE. Hence, lets check the
+       * GTlsCertificate flags to accommodate future GIO fixes.
+       */
+      if (data->cert_flags != 0)
         {
           GError *tls_error;
 
