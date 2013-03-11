@@ -28,6 +28,7 @@
 #include <rest/oauth-proxy.h>
 #include <json-glib/json-glib.h>
 
+#include "goalogging.h"
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goaoauthprovider.h"
@@ -140,6 +141,7 @@ get_identity_sync (GoaOAuthProvider  *provider,
                    GCancellable      *cancellable,
                    GError           **error)
 {
+  GError *identity_error;
   RestProxy *proxy;
   RestProxyCall *call;
   JsonParser *parser;
@@ -149,6 +151,8 @@ get_identity_sync (GoaOAuthProvider  *provider,
   gchar *presentation_identity;
 
   ret = NULL;
+
+  identity_error = NULL;
   proxy = NULL;
   call = NULL;
   parser = NULL;
@@ -186,9 +190,16 @@ get_identity_sync (GoaOAuthProvider  *provider,
   if (!json_parser_load_from_data (parser,
                                    rest_proxy_call_get_payload (call),
                                    rest_proxy_call_get_payload_length (call),
-                                   error))
+                                   &identity_error))
     {
-      g_prefix_error (error, _("Error parsing response as JSON: "));
+      goa_warning ("json_parser_load_from_data() failed: %s (%s, %d)",
+                   identity_error->message,
+                   g_quark_to_string (identity_error->domain),
+                   identity_error->code);
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Could not parse response"));
       goto out;
     }
 
@@ -196,37 +207,41 @@ get_identity_sync (GoaOAuthProvider  *provider,
   json_object = json_object_get_object_member (json_object, "user");
   if (json_object == NULL)
     {
+      goa_warning ("Did not find user in JSON data");
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
-                   _("Didn't find user member in JSON data"));
+                   _("Could not parse response"));
       goto out;
     }
   id = g_strdup (json_object_get_string_member (json_object, "id"));
   if (id == NULL)
     {
+      goa_warning ("Did not find user.id in JSON data");
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
-                   _("Didn't find user.id member in JSON data"));
+                   _("Could not parse response"));
       goto out;
     }
   json_object = json_object_get_object_member (json_object, "username");
   if (json_object == NULL)
     {
+      goa_warning ("Did not find user.username in JSON data");
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
-                   _("Didn't find user.username member in JSON data"));
+                   _("Could not parse response"));
       goto out;
     }
   presentation_identity = g_strdup (json_object_get_string_member (json_object, "_content"));
   if (presentation_identity == NULL)
     {
+      goa_warning ("Did not find user.username._content in JSON data");
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
-                   _("Didn't find user.username._content member in JSON data"));
+                   _("Could not parse response"));
       goto out;
     }
 
@@ -239,6 +254,7 @@ get_identity_sync (GoaOAuthProvider  *provider,
     }
 
  out:
+  g_clear_error (&identity_error);
   g_free (id);
   g_free (presentation_identity);
   if (call != NULL)

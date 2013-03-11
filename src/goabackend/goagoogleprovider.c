@@ -27,6 +27,7 @@
 #include <rest/oauth-proxy.h>
 #include <json-glib/json-glib.h>
 
+#include "goalogging.h"
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goaoauth2provider.h"
@@ -166,6 +167,7 @@ get_identity_sync (GoaOAuth2Provider  *provider,
                    GCancellable       *cancellable,
                    GError            **error)
 {
+  GError *identity_error;
   RestProxy *proxy;
   RestProxyCall *call;
   JsonParser *parser;
@@ -174,6 +176,8 @@ get_identity_sync (GoaOAuth2Provider  *provider,
   gchar *email;
 
   ret = NULL;
+
+  identity_error = NULL;
   proxy = NULL;
   call = NULL;
   parser = NULL;
@@ -203,9 +207,16 @@ get_identity_sync (GoaOAuth2Provider  *provider,
   if (!json_parser_load_from_data (parser,
                                    rest_proxy_call_get_payload (call),
                                    rest_proxy_call_get_payload_length (call),
-                                   error))
+                                   &identity_error))
     {
-      g_prefix_error (error, _("Error parsing response as JSON: "));
+      goa_warning ("json_parser_load_from_data() failed: %s (%s, %d)",
+                   identity_error->message,
+                   g_quark_to_string (identity_error->domain),
+                   identity_error->code);
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Could not parse response"));
       goto out;
     }
 
@@ -213,10 +224,11 @@ get_identity_sync (GoaOAuth2Provider  *provider,
   email = g_strdup (json_object_get_string_member (json_object, "email"));
   if (email == NULL)
     {
+      goa_warning ("Did not find email in JSON data");
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
-                   _("Didn't find email member in JSON data"));
+                   _("Could not parse response"));
       goto out;
     }
 
@@ -227,6 +239,7 @@ get_identity_sync (GoaOAuth2Provider  *provider,
     *out_presentation_identity = g_strdup (ret); /* for now: use email as presentation identity */
 
  out:
+  g_clear_error (&identity_error);
   g_free (email);
   if (call != NULL)
     g_object_unref (call);

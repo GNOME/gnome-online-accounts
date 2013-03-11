@@ -519,6 +519,7 @@ get_tokens_sync (GoaOAuth2Provider  *provider,
                  GCancellable       *cancellable,
                  GError            **error)
 {
+  GError *tokens_error;
   RestProxy *proxy;
   RestProxyCall *call;
   gchar *ret;
@@ -534,6 +535,8 @@ get_tokens_sync (GoaOAuth2Provider  *provider,
   ret_access_token = NULL;
   ret_access_token_expires_in = 0;
   ret_refresh_token = NULL;
+
+  tokens_error = NULL;
 
   proxy = rest_proxy_new (goa_oauth2_provider_get_token_uri (provider), FALSE);
   call = rest_proxy_new_call (proxy);
@@ -583,14 +586,18 @@ get_tokens_sync (GoaOAuth2Provider  *provider,
     {
       GHashTable *hash;
       const gchar *expires_in_str;
+
+      goa_debug ("Response is not JSON - possibly old OAuth2 implementation");
+
       hash = soup_form_decode (payload);
       ret_access_token = g_strdup (g_hash_table_lookup (hash, "access_token"));
       if (ret_access_token == NULL)
         {
+          goa_warning ("Did not find access_token in non-JSON data");
           g_set_error (error,
                        GOA_ERROR,
                        GOA_ERROR_FAILED,
-                       _("Didn't find access_token in non-JSON data"));
+                       _("Could not parse response"));
           g_hash_table_unref (hash);
           goto out;
         }
@@ -611,9 +618,16 @@ get_tokens_sync (GoaOAuth2Provider  *provider,
       JsonObject *object;
 
       parser = json_parser_new ();
-      if (!json_parser_load_from_data (parser, payload, payload_length, error))
+      if (!json_parser_load_from_data (parser, payload, payload_length, &tokens_error))
         {
-          g_prefix_error (error, _("Error parsing response as JSON: "));
+          goa_warning ("json_parser_load_from_data() failed: %s (%s, %d)",
+                       tokens_error->message,
+                       g_quark_to_string (tokens_error->domain),
+                       tokens_error->code);
+          g_set_error (error,
+                       GOA_ERROR,
+                       GOA_ERROR_FAILED,
+                       _("Could not parse response"));
           g_object_unref (parser);
           goto out;
         }
@@ -621,10 +635,11 @@ get_tokens_sync (GoaOAuth2Provider  *provider,
       ret_access_token = g_strdup (json_object_get_string_member (object, "access_token"));
       if (ret_access_token == NULL)
         {
+          goa_warning ("Did not find access_token in JSON data");
           g_set_error (error,
                        GOA_ERROR,
                        GOA_ERROR_FAILED,
-                       _("Didn't find access_token in JSON data"));
+                       _("Could not parse response"));
           goto out;
         }
       /* refresh_token is optional... */
@@ -646,6 +661,7 @@ get_tokens_sync (GoaOAuth2Provider  *provider,
     }
 
  out:
+  g_clear_error (&tokens_error);
   g_free (ret_access_token);
   g_free (ret_refresh_token);
   if (call != NULL)
