@@ -1,14 +1,14 @@
 # Serbian translation for gnome-online-accounts.
 # Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
-# Miroslav Nikolić <miroslavnikolic@rocketmail.com>, 2011, 2012.
+# Miroslav Nikolić <miroslavnikolic@rocketmail.com>, 2011, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-11-08 11:40+0000\n"
-"PO-Revision-Date: 2012-11-09 08:26+0200\n"
+"POT-Creation-Date: 2013-03-11 08:27+0000\n"
+"PO-Revision-Date: 2013-03-11 11:54+0200\n"
 "Last-Translator: Miroslav Nikolić <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <gnom@prevod.org>\n"
 "Language: sr\n"
@@ -44,37 +44,37 @@ msgid "ProviderType property is not set for account"
 msgstr "Vrsta dostavljača nije podešena za nalog"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:204 ../src/goabackend/goahttpclient.c:147
+#: ../src/goabackend/goaewsclient.c:234 ../src/goabackend/goahttpclient.c:175
 #, c-format
 msgid "Code: %u - Unexpected response from server"
 msgstr "Kod: %u — Neočekivani odgovor sa servera"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:220
+#: ../src/goabackend/goaewsclient.c:250
 #, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "Nisam uspeo da obradim samootkrivajući odgovor IksML"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:230
+#: ../src/goabackend/goaewsclient.c:260
 #, c-format
 msgid "Failed to find Autodiscover element"
 msgstr "Nisam uspeo da pronađem element samootkrivanja"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:244
+#: ../src/goabackend/goaewsclient.c:274
 #, c-format
 msgid "Failed to find Response element"
 msgstr "Nisam uspeo da pronađem element odgovora"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:258
+#: ../src/goabackend/goaewsclient.c:288
 #, c-format
 msgid "Failed to find Account element"
 msgstr "Nisam uspeo da pronađem element naloga"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:275
+#: ../src/goabackend/goaewsclient.c:305
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "Nisam uspeo da pronađem ASadresu i OABadresu u odgovoru samootkrivanja"
@@ -83,7 +83,7 @@ msgstr "Nisam uspeo da pronađem ASadresu i OABadresu u odgovoru samootkrivanja"
 msgid "Microsoft Exchange"
 msgstr "Majkrosoft razmena"
 
-#: ../src/goabackend/goaexchangeprovider.c:279
+#: ../src/goabackend/goaexchangeprovider.c:282
 #: ../src/goabackend/goagoogleprovider.c:651
 #: ../src/goabackend/goaoauth2provider.c:1443
 #: ../src/goabackend/goaoauthprovider.c:1545
@@ -92,10 +92,10 @@ msgid "Credentials not found in keyring (%s, %d): "
 msgstr "Punomoćstva nisu pronađena u privesku ključeva (%s, %d): "
 
 #. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:297
-#: ../src/goabackend/goaexchangeprovider.c:943
+#: ../src/goabackend/goaexchangeprovider.c:300
+#: ../src/goabackend/goaexchangeprovider.c:966
 #: ../src/goabackend/goagoogleprovider.c:670
-#: ../src/goabackend/goagoogleprovider.c:849
+#: ../src/goabackend/goagoogleprovider.c:850
 #, c-format
 msgid "Did not find password with username `%s' in credentials"
 msgstr "Nisam našao lozinku sa korisničkim imenom „%s“ u punomoćstvima"
@@ -104,36 +104,35 @@ msgstr "Nisam našao lozinku sa korisničkim imenom „%s“ u punomoćstvima"
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
 #.
-#: ../src/goabackend/goaexchangeprovider.c:323
-#: ../src/goabackend/goagoogleprovider.c:692
+#: ../src/goabackend/goaexchangeprovider.c:328
+#: ../src/goabackend/goagoogleprovider.c:693
 #, c-format
-#| msgid "Did not find password with username `%s' in credentials"
 msgid "Invalid password with username `%s' (%s, %d): "
 msgstr "Neispravna lozinka sa korisničkim imenom „%s“ (%s, %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:506
+#: ../src/goabackend/goaexchangeprovider.c:511
 msgid "_E-mail"
 msgstr "_El. pošta"
 
-#: ../src/goabackend/goaexchangeprovider.c:507
+#: ../src/goabackend/goaexchangeprovider.c:512
 msgid "_Password"
 msgstr "_Lozinka"
 
-#: ../src/goabackend/goaexchangeprovider.c:510
+#: ../src/goabackend/goaexchangeprovider.c:515
 msgid "_Custom"
 msgstr "_Proizvoljno"
 
-#: ../src/goabackend/goaexchangeprovider.c:529
+#: ../src/goabackend/goaexchangeprovider.c:534
 #: ../src/goabackend/goakerberosprovider.c:1117
 msgid "User_name"
 msgstr "Korisničko _ime"
 
-#: ../src/goabackend/goaexchangeprovider.c:530
+#: ../src/goabackend/goaexchangeprovider.c:535
 msgid "_Server"
 msgstr "_Server"
 
-#: ../src/goabackend/goaexchangeprovider.c:614
-#: ../src/goabackend/goaexchangeprovider.c:780
+#: ../src/goabackend/goaexchangeprovider.c:622
+#: ../src/goabackend/goaexchangeprovider.c:801
 #: ../src/goabackend/goakerberosprovider.c:1510
 #: ../src/goabackend/goaoauth2provider.c:986
 #: ../src/goabackend/goaoauthprovider.c:1041
@@ -141,37 +140,41 @@ msgstr "_Server"
 msgid "Dialog was dismissed"
 msgstr "Prozorče je smenjeno"
 
-#: ../src/goabackend/goaexchangeprovider.c:650
-#: ../src/goabackend/goaexchangeprovider.c:807
-msgid "Error connecting to Microsoft Exchange server"
-msgstr "Greška povezivanja na server Majkrosoft razmene"
+#: ../src/goabackend/goaexchangeprovider.c:660
+msgid "_Ignore"
+msgstr "_Zanemari"
 
-#: ../src/goabackend/goaexchangeprovider.c:657
-#: ../src/goabackend/goaexchangeprovider.c:815
+#: ../src/goabackend/goaexchangeprovider.c:665
+#: ../src/goabackend/goaexchangeprovider.c:838
 #: ../src/goabackend/goakerberosprovider.c:1616
 msgid "_Try Again"
 msgstr "_Pokušaj opet"
 
-#: ../src/goabackend/goaexchangeprovider.c:866
+#: ../src/goabackend/goaexchangeprovider.c:670
+#: ../src/goabackend/goaexchangeprovider.c:830
+msgid "Error connecting to Microsoft Exchange server"
+msgstr "Greška povezivanja na server Majkrosoft razmene"
+
+#: ../src/goabackend/goaexchangeprovider.c:889
 #: ../src/goabackend/goafacebookprovider.c:389
-#: ../src/goabackend/goagoogleprovider.c:729
-#: ../src/goabackend/goakerberosprovider.c:1685
+#: ../src/goabackend/goagoogleprovider.c:730
+#: ../src/goabackend/goakerberosprovider.c:1687
 #: ../src/goabackend/goawindowsliveprovider.c:403
 msgid "Use for"
 msgstr "Koristi za"
 
-#: ../src/goabackend/goaexchangeprovider.c:868
-#: ../src/goabackend/goagoogleprovider.c:731
+#: ../src/goabackend/goaexchangeprovider.c:891
+#: ../src/goabackend/goagoogleprovider.c:732
 msgid "_Mail"
 msgstr "_Pošta"
 
-#: ../src/goabackend/goaexchangeprovider.c:873
-#: ../src/goabackend/goagoogleprovider.c:736
+#: ../src/goabackend/goaexchangeprovider.c:896
+#: ../src/goabackend/goagoogleprovider.c:737
 msgid "Cale_ndar"
 msgstr "Kale_ndar"
 
-#: ../src/goabackend/goaexchangeprovider.c:878
-#: ../src/goabackend/goagoogleprovider.c:741
+#: ../src/goabackend/goaexchangeprovider.c:901
+#: ../src/goabackend/goagoogleprovider.c:742
 msgid "_Contacts"
 msgstr "_Kontakti"
 
@@ -207,7 +210,7 @@ msgid "Didn't find email member in JSON data"
 msgstr "Nisam našao člana el. pošte u JSON podacima"
 
 #: ../src/goabackend/goafacebookprovider.c:391
-#: ../src/goabackend/goagoogleprovider.c:746
+#: ../src/goabackend/goagoogleprovider.c:747
 #: ../src/goabackend/goawindowsliveprovider.c:405
 msgid "C_hat"
 msgstr "_Ćaskanje"
@@ -226,7 +229,7 @@ msgid "Your system time is invalid. Check your date and time settings."
 msgstr ""
 "Vaše sistemsko vreme je pogrešno. Proverite vaša podešavanja datuma i vremena."
 
-#: ../src/goabackend/goagoogleprovider.c:751
+#: ../src/goabackend/goagoogleprovider.c:752
 #: ../src/goabackend/goawindowsliveprovider.c:410
 msgid "_Documents"
 msgstr "_Dokumenti"
@@ -280,7 +283,7 @@ msgstr "Domen nije ispravan"
 msgid "Error connecting to enterprise identity server"
 msgstr "Greška povezivanja na server poslovnog identiteta"
 
-#: ../src/goabackend/goakerberosprovider.c:1687
+#: ../src/goabackend/goakerberosprovider.c:1689
 msgid "Network _Resources"
 msgstr "Mrežni _resursi"
 
@@ -384,7 +387,7 @@ msgstr "Čin ubacivanja je dobijen sa <a href=\"%s\">stranice ovlašćenja</a>:"
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Punomoćstva ne sadrže čin_pristupa ili tajnu_čina_pristupa"
 
-#: ../src/goabackend/goaprovider.c:548
+#: ../src/goabackend/goaprovider.c:549
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "osiguraj_usaglašavanje_punomoćstva nije primenjeno na vrsti %s"
@@ -424,6 +427,36 @@ msgstr "GOA %s punomoćstva za identitet %s"
 #: ../src/goabackend/goautils.c:264
 msgid "Failed to store credentials in the keyring"
 msgstr "Nisam uspeo da sačuvam punomoćstva u privesku ključeva"
+
+#: ../src/goabackend/goautils.c:454
+msgid "The signing certificate authority is not known."
+msgstr "Izdavač potpisujućeg uverenja nije poznat."
+
+#: ../src/goabackend/goautils.c:458
+msgid ""
+"The certificate does not match the expected identity of the site that it was "
+"retrieved from."
+msgstr "Uverenje ne odgovara očekivanom identitetu sajta sa koga je preuzeto."
+
+#: ../src/goabackend/goautils.c:463
+msgid "The certificate's activation time is still in the future."
+msgstr "Vreme pokretanja uverenja je još uvek u budućnosti."
+
+#: ../src/goabackend/goautils.c:467
+msgid "The certificate has expired."
+msgstr "Uverenje je isteklo."
+
+#: ../src/goabackend/goautils.c:471
+msgid "The certificate has been revoked."
+msgstr "Uverenje je povučeno."
+
+#: ../src/goabackend/goautils.c:475
+msgid "The certificate's algorithm is considered insecure."
+msgstr "Algoritam uverenja se smatra nesigurnim."
+
+#: ../src/goabackend/goautils.c:479
+msgid "Invalid certificate."
+msgstr "Neispravno uverenje."
 
 #. translators: %s here is the address of the web page
 #: ../src/goabackend/goawebview.c:75
@@ -520,88 +553,3 @@ msgstr "Ne mogu da pronađem identitet"
 #: ../src/goaidentity/goakerberosidentitymanager.c:823
 msgid "Could not create credential cache for identity"
 msgstr "Ne mogu da napravim ostavu punomoćstva za identitet"
-
-#~ msgid "Domain Administrator Login"
-#~ msgstr "Prijavljivanje administratora domena"
-
-#~ msgid "Could not find supported credentials"
-#~ msgstr "Ne mogu da pronađem podržana punomoćstva"
-
-#~ msgid ""
-#~ "In order to use this enterprise identity, the computer needs to be "
-#~ "enrolled in the domain. Please have your network administrator type their "
-#~ "domain password here."
-#~ msgstr ""
-#~ "Da biste koristili ovaj poslovni identitet, ovaj računar treba da bude "
-#~ "upisan u domenu. Neka administrator vaše mreže ovde upiše lozinku njihovih "
-#~ "domena."
-
-#~ msgid ""
-#~ "In order to use this enterprise identity, the computer needs to be "
-#~ "enrolled in the domain. Please have your network administrator type their "
-#~ "domain username here."
-#~ msgstr ""
-#~ "Da biste koristili ovaj poslovni identitet, ovaj računar treba da bude "
-#~ "upisan u domenu. Neka administrator vaše mreže ovde upiše korisničko ime "
-#~ "njihovih domena."
-
-#~ msgid "No such domain or realm found"
-#~ msgstr "Nije pronađen takav domen ili područje"
-
-#~ msgid "Cannot log in as %s at the %s domain"
-#~ msgstr "Ne mogu da se prijavim kao „%s“ na domenu %s"
-
-#~ msgid "Invalid password, please try again"
-#~ msgstr "Neispravna lozinka, pokušajte ponovo"
-
-#~ msgid "Couldn't connect to the %s domain: %s"
-#~ msgstr "Ne mogu da se povežem na domen „%s“: %s"
-
-#~ msgid "Chat"
-#~ msgstr "Ćaskanje"
-
-#~ msgid "New Microsoft Exchange Account"
-#~ msgstr "Novi nalog Majkrosoft razmene"
-
-#~ msgid "Microsoft Exchange Account"
-#~ msgstr "Nalog Majkrosoft razmene"
-
-#~ msgid "New Enterprise Login (Kerberos)"
-#~ msgstr "Novo poslovno prijavljivanje (Kerberos)"
-
-#~ msgid "Add %s"
-#~ msgstr "Dodaj „%s“"
-
-#~ msgid "Refresh %s"
-#~ msgstr "Osveži %s"
-
-#~ msgid "Twitter"
-#~ msgstr "Tviter"
-
-#~ msgid "Didn't find id_str member in JSON data"
-#~ msgstr "Nisam našao člana ib_str-a u JSON podacima"
-
-#~ msgid "Didn't find screen_name member in JSON data"
-#~ msgstr "Nisam našao člana naziva_ekrana u JSON podacima"
-
-#~ msgid "Yahoo"
-#~ msgstr "Jahu"
-
-#~ msgid "Didn't find guid member in JSON data"
-#~ msgstr "Nisam našao člana guib-a u JSON podacima"
-
-#~ msgid "Didn't find value member in JSON data"
-#~ msgstr "Nisam našao člana vrednosti u JSON podacima"
-
-#~ msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-#~ msgstr ""
-#~ "Očekivah stanje 200 prilikom potraživanja imena, ali dobih stanje %d (%s)"
-
-#~ msgid "Error parsing usercard response as JSON: "
-#~ msgstr "Greška u analizi odgovora korisničke kartice kao JSON: "
-
-#~ msgid "Didn't find profile member in JSON data"
-#~ msgstr "Nisam našao člana profila u JSON podacima"
-
-#~ msgid "Didn't find nickname member in JSON data"
-#~ msgstr "Nisam našao člana nadimka u JSON podacima"
