@@ -86,86 +86,86 @@ struct _GoaOAuthProviderClass
   GoaProviderClass parent_class;
 
   /* pure virtual */
-  const gchar *(*get_consumer_key)         (GoaOAuthProvider  *provider);
-  const gchar *(*get_consumer_secret)      (GoaOAuthProvider  *provider);
-  const gchar *(*get_request_uri)          (GoaOAuthProvider  *provider);
-  const gchar *(*get_authorization_uri)    (GoaOAuthProvider  *provider);
-  const gchar *(*get_token_uri)            (GoaOAuthProvider  *provider);
-  const gchar *(*get_callback_uri)         (GoaOAuthProvider  *provider);
-  const gchar *(*get_authentication_cookie) (GoaOAuthProvider  *provider);
+  const gchar *(*get_consumer_key)             (GoaOAuthProvider             *provider);
+  const gchar *(*get_consumer_secret)          (GoaOAuthProvider             *provider);
+  const gchar *(*get_request_uri)              (GoaOAuthProvider             *provider);
+  const gchar *(*get_authorization_uri)        (GoaOAuthProvider             *provider);
+  const gchar *(*get_token_uri)                (GoaOAuthProvider             *provider);
+  const gchar *(*get_callback_uri)             (GoaOAuthProvider             *provider);
+  const gchar *(*get_authentication_cookie)    (GoaOAuthProvider             *provider);
 
-  gchar       *(*get_identity_sync)        (GoaOAuthProvider  *provider,
-                                            const gchar       *access_token,
-                                            const gchar       *access_token_secret,
-                                            gchar            **out_presentation_identity,
-                                            GCancellable      *cancellable,
-                                            GError           **error);
+  gchar       *(*get_identity_sync)            (GoaOAuthProvider             *provider,
+                                                const gchar                  *access_token,
+                                                const gchar                  *access_token_secret,
+                                                gchar                       **out_presentation_identity,
+                                                GCancellable                 *cancellable,
+                                                GError                      **error);
 
-  gchar       *(*parse_request_token_error) (GoaOAuthProvider *provider,
-                                             RestProxyCall    *call);
+  gchar       *(*parse_request_token_error)    (GoaOAuthProvider             *provider,
+                                                RestProxyCall                *call);
 
   /* virtual but with default implementation */
-  gchar       *(*build_authorization_uri)  (GoaOAuthProvider  *provider,
-                                            const gchar       *authorization_uri,
-                                            const gchar       *escaped_oauth_token);
-  gboolean     (*get_use_external_browser) (GoaOAuthProvider  *provider);
-  gboolean     (*get_use_mobile_browser)   (GoaOAuthProvider  *provider);
-  gchar      **(*get_request_uri_params)   (GoaOAuthProvider  *provider);
-  void         (*add_account_key_values)   (GoaOAuthProvider  *provider,
-                                            GVariantBuilder   *builder);
+  gchar       *(*build_authorization_uri)      (GoaOAuthProvider             *provider,
+                                                const gchar                  *authorization_uri,
+                                                const gchar                  *escaped_oauth_token);
+  gboolean     (*get_use_external_browser)     (GoaOAuthProvider             *provider);
+  gboolean     (*get_use_mobile_browser)       (GoaOAuthProvider             *provider);
+  gchar      **(*get_request_uri_params)       (GoaOAuthProvider             *provider);
+  void         (*add_account_key_values)       (GoaOAuthProvider             *provider,
+                                                GVariantBuilder              *builder);
 
   /* pure virtual */
-  gboolean     (*is_deny_node)             (GoaOAuthProvider  *provider,
-                                            WebKitDOMNode     *node);
-  gboolean     (*is_identity_node)         (GoaOAuthProvider          *provider,
-                                            WebKitDOMHTMLInputElement *element);
+  gboolean     (*is_deny_node)                 (GoaOAuthProvider             *provider,
+                                                WebKitDOMNode                *node);
+  gboolean     (*is_identity_node)             (GoaOAuthProvider             *provider,
+                                                WebKitDOMHTMLInputElement    *element);
 
   /* virtual but with default implementation */
-  gboolean     (*is_password_node)         (GoaOAuthProvider          *provider,
-                                            WebKitDOMHTMLInputElement *element);
+  gboolean     (*is_password_node)             (GoaOAuthProvider             *provider,
+                                                WebKitDOMHTMLInputElement    *element);
 
   /*< private >*/
   /* Padding for future expansion */
   gpointer goa_reserved[29];
 };
 
-GType        goa_oauth_provider_get_type                 (void) G_GNUC_CONST;
-const gchar *goa_oauth_provider_get_consumer_key         (GoaOAuthProvider  *provider);
-const gchar *goa_oauth_provider_get_consumer_secret      (GoaOAuthProvider  *provider);
-const gchar *goa_oauth_provider_get_request_uri          (GoaOAuthProvider  *provider);
-gchar      **goa_oauth_provider_get_request_uri_params   (GoaOAuthProvider  *provider);
-const gchar *goa_oauth_provider_get_authorization_uri    (GoaOAuthProvider  *provider);
-const gchar *goa_oauth_provider_get_token_uri            (GoaOAuthProvider  *provider);
-const gchar *goa_oauth_provider_get_callback_uri         (GoaOAuthProvider  *provider);
-const gchar *goa_oauth_provider_get_authentication_cookie (GoaOAuthProvider  *provider);
-gchar       *goa_oauth_provider_get_identity_sync        (GoaOAuthProvider  *provider,
-                                                          const gchar       *access_token,
-                                                          const gchar       *access_token_secret,
-                                                          gchar            **out_presentation_identity,
-                                                          GCancellable      *cancellable,
-                                                          GError           **error);
-gboolean     goa_oauth_provider_is_deny_node             (GoaOAuthProvider  *provider,
-                                                          WebKitDOMNode     *node);
-gboolean     goa_oauth_provider_is_identity_node         (GoaOAuthProvider          *provider,
-                                                          WebKitDOMHTMLInputElement *element);
-gboolean     goa_oauth_provider_is_password_node         (GoaOAuthProvider          *provider,
-                                                          WebKitDOMHTMLInputElement *element);
-gchar       *goa_oauth_provider_parse_request_token_error (GoaOAuthProvider *provider,
-                                                           RestProxyCall    *call);
-gchar       *goa_oauth_provider_get_access_token_sync    (GoaOAuthProvider  *provider,
-                                                          GoaObject         *object,
-                                                          gboolean           force_refresh,
-                                                          gchar            **out_access_token_secret,
-                                                          gint              *out_access_token_expires_in,
-                                                          GCancellable      *cancellable,
-                                                          GError           **error);
-gchar       *goa_oauth_provider_build_authorization_uri  (GoaOAuthProvider  *provider,
-                                                          const gchar       *authorization_uri,
-                                                          const gchar       *escaped_oauth_token);
-gboolean     goa_oauth_provider_get_use_external_browser (GoaOAuthProvider  *provider);
-gboolean     goa_oauth_provider_get_use_mobile_browser   (GoaOAuthProvider  *provider);
-void         goa_oauth_provider_add_account_key_values   (GoaOAuthProvider  *provider,
-                                                          GVariantBuilder   *builder);
+GType        goa_oauth_provider_get_type                     (void) G_GNUC_CONST;
+const gchar *goa_oauth_provider_get_consumer_key             (GoaOAuthProvider             *provider);
+const gchar *goa_oauth_provider_get_consumer_secret          (GoaOAuthProvider             *provider);
+const gchar *goa_oauth_provider_get_request_uri              (GoaOAuthProvider             *provider);
+gchar      **goa_oauth_provider_get_request_uri_params       (GoaOAuthProvider             *provider);
+const gchar *goa_oauth_provider_get_authorization_uri        (GoaOAuthProvider             *provider);
+const gchar *goa_oauth_provider_get_token_uri                (GoaOAuthProvider             *provider);
+const gchar *goa_oauth_provider_get_callback_uri             (GoaOAuthProvider             *provider);
+const gchar *goa_oauth_provider_get_authentication_cookie    (GoaOAuthProvider             *provider);
+gchar       *goa_oauth_provider_get_identity_sync            (GoaOAuthProvider          *provider,
+                                                              const gchar               *access_token,
+                                                              const gchar               *access_token_secret,
+                                                              gchar                    **out_presentation_identity,
+                                                              GCancellable              *cancellable,
+                                                              GError                   **error);
+gboolean     goa_oauth_provider_is_deny_node                 (GoaOAuthProvider             *provider,
+                                                              WebKitDOMNode                *node);
+gboolean     goa_oauth_provider_is_identity_node             (GoaOAuthProvider             *provider,
+                                                              WebKitDOMHTMLInputElement    *element);
+gboolean     goa_oauth_provider_is_password_node             (GoaOAuthProvider             *provider,
+                                                              WebKitDOMHTMLInputElement    *element);
+gchar       *goa_oauth_provider_parse_request_token_error    (GoaOAuthProvider             *provider,
+                                                              RestProxyCall                *call);
+gchar       *goa_oauth_provider_get_access_token_sync        (GoaOAuthProvider          *provider,
+                                                              GoaObject                 *object,
+                                                              gboolean                   force_refresh,
+                                                              gchar                    **out_access_token_secret,
+                                                              gint                      *out_access_token_expires_in,
+                                                              GCancellable              *cancellable,
+                                                              GError                   **error);
+gchar       *goa_oauth_provider_build_authorization_uri      (GoaOAuthProvider             *provider,
+                                                              const gchar                  *authorization_uri,
+                                                              const gchar                  *escaped_oauth_token);
+gboolean     goa_oauth_provider_get_use_external_browser     (GoaOAuthProvider             *provider);
+gboolean     goa_oauth_provider_get_use_mobile_browser       (GoaOAuthProvider             *provider);
+void         goa_oauth_provider_add_account_key_values       (GoaOAuthProvider             *provider,
+                                                              GVariantBuilder              *builder);
 
 G_END_DECLS
 
