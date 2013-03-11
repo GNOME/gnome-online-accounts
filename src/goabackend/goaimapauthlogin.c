@@ -357,7 +357,7 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *_auth,
   output = goa_mail_auth_get_output (_auth);
 
   request = g_strdup_printf ("A001 LOGIN \"%s\" \"%s\"\r\n", auth->username, password);
-  g_debug ("> A001 LOGIN \"********************\" \"********************\"", request);
+  g_debug ("> A001 LOGIN \"********************\" \"********************\"");
   if (!g_data_output_stream_put_string (output, request, cancellable, error))
     goto out;
 
@@ -377,8 +377,7 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *_auth,
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
-                   _("Authentication failed"),
-                   response);
+                   _("Authentication failed"));
       goto out;
     }
 
