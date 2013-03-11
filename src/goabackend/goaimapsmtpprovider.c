@@ -613,6 +613,30 @@ on_smtp_changed (GtkEditable *editable, gpointer user_data)
 }
 
 static void
+create_encryption_ui (GtkWidget  *grid,
+                      gint        row,
+                      GtkWidget **out_combo_box)
+{
+  /* Translators: the following four strings are used to show a
+   * combo box similar to the one in the evolution module.
+   * Encryption: None
+   *             STARTTLS after connecting
+   *             SSL on a dedicated port
+   */
+  add_combo_box (grid, row, _("_Encryption"), out_combo_box);
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (*out_combo_box),
+                             "none",
+                             _("None"));
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (*out_combo_box),
+                             "starttls",
+                             _("STARTTLS after connecting"));
+  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (*out_combo_box),
+                             "ssl",
+                             _("SSL on a dedicated port"));
+  gtk_combo_box_set_active_id (GTK_COMBO_BOX (*out_combo_box), "starttls");
+}
+
+static void
 create_account_details_ui (GoaProvider    *provider,
                            GtkDialog      *dialog,
                            GtkBox         *vbox,
@@ -687,19 +711,7 @@ create_account_details_ui (GoaProvider    *provider,
   gtk_entry_set_visibility (GTK_ENTRY (data->imap_password), FALSE);
 
   if (new_account)
-    {
-      add_combo_box (grid1, row++, _("_Encryption"), &data->imap_encryption);
-      gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (data->imap_encryption),
-                                 "none",
-                                 _("None"));
-      gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (data->imap_encryption),
-                                 "starttls",
-                                 _("STARTTLS after connecting"));
-      gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (data->imap_encryption),
-                                 "ssl",
-                                 _("SSL on a dedicated port"));
-      gtk_combo_box_set_active_id (GTK_COMBO_BOX (data->imap_encryption), "starttls");
-    }
+    create_encryption_ui (grid1, row++, &data->imap_encryption);
 
   g_signal_connect (data->imap_server, "changed", G_CALLBACK (on_imap_changed), data);
   g_signal_connect (data->imap_username, "changed", G_CALLBACK (on_imap_changed), data);
@@ -719,19 +731,7 @@ create_account_details_ui (GoaProvider    *provider,
   gtk_entry_set_visibility (GTK_ENTRY (data->smtp_password), FALSE);
 
   if (new_account)
-    {
-      add_combo_box (grid1, row++, _("_Encryption"), &data->smtp_encryption);
-      gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (data->smtp_encryption),
-                                 "none",
-                                 _("None"));
-      gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (data->smtp_encryption),
-                                 "starttls",
-                                 _("STARTTLS after connecting"));
-      gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (data->smtp_encryption),
-                                 "ssl",
-                                 _("SSL on a dedicated port"));
-      gtk_combo_box_set_active_id (GTK_COMBO_BOX (data->smtp_encryption), "starttls");
-    }
+    create_encryption_ui (grid1, row++, &data->smtp_encryption);
 
   g_signal_connect (data->smtp_server, "changed", G_CALLBACK (on_smtp_changed), data);
   g_signal_connect (data->smtp_username, "changed", G_CALLBACK (on_smtp_changed), data);
