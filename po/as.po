@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-03-04 14:26+0000\n"
-"PO-Revision-Date: 2013-03-05 17:59+0530\n"
+"POT-Creation-Date: 2013-03-12 10:49+0000\n"
+"PO-Revision-Date: 2013-03-12 18:41+0530\n"
 "Last-Translator: Nilamdyuti Goswami <ngoswami@redhat.com>\n"
 "Language-Team: Assamese <kde-i18n-doc@kde.org>\n"
 "Language: as_IN\n"
@@ -19,31 +19,14 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#. shut up -Wunused-but-set-variable
-#: ../data/goa-daemon.desktop.in.in.h:1 ../src/daemon/goadaemon.c:212
-msgid "Online Accounts"
-msgstr "অনলাইন একাওন্টসমূহ"
-
-#: ../data/goa-daemon.desktop.in.in.h:2
-msgid "Provides the org.gnome.OnlinesAccounts name on the session bus"
-msgstr "অধিবেশন বাচত org.gnome.OnlinesAccounts নাম প্ৰদান কৰে"
-
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:802 ../src/daemon/goadaemon.c:1150
+#: ../src/daemon/goadaemon.c:773 ../src/daemon/goadaemon.c:983
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "এটা প্ৰদানকাৰী পাবলে ব্যৰ্থ: %s"
 
-#: ../src/daemon/goadaemon.c:992
-msgid "An online account needs attention"
-msgstr "এটা অনলাইন একাওন্টত মনোনিবেষ কৰাৰ প্ৰয়োজন হৈছে"
-
-#: ../src/daemon/goadaemon.c:1001
-msgid "Open Online Accounts..."
-msgstr "অনলাইন একাওন্টসমূহ খোলক..."
-
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1138
+#: ../src/daemon/goadaemon.c:971
 msgid "ProviderType property is not set for account"
 msgstr "একাওন্টৰ বাবে ProviderType বৈশিষ্ট সংহতি কৰা হোৱা নাই"
 
@@ -95,7 +78,6 @@ msgstr "Microsoft এক্সচেইঞ্জ"
 #: ../src/goabackend/goaowncloudprovider.c:364
 #: ../src/goabackend/goaowncloudprovider.c:1138
 #, c-format
-#| msgid "Did not find password with username `%s' in credentials"
 msgid "Did not find password with identity `%s' in credentials"
 msgstr "তথ্যসমূহত পৰিচয় `%s' ৰ সৈতে পাছৱাৰ্ড পোৱা নগল"
 
@@ -228,12 +210,9 @@ msgstr "পৰিচয়সমূহ (_C)"
 msgid "Facebook"
 msgstr "Facebook"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:201
 #: ../src/goabackend/goagoogleprovider.c:196
-#: ../src/goabackend/goatwitterprovider.c:162
 #: ../src/goabackend/goawindowsliveprovider.c:183
-#: ../src/goabackend/goayahooprovider.c:165
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr ""
@@ -243,9 +222,7 @@ msgstr ""
 #: ../src/goabackend/goaflickrprovider.c:191
 #: ../src/goabackend/goagoogleprovider.c:208
 #: ../src/goabackend/goaoauth2provider.c:616
-#: ../src/goabackend/goatwitterprovider.c:174
 #: ../src/goabackend/goawindowsliveprovider.c:195
-#: ../src/goabackend/goayahooprovider.c:177
 msgid "Error parsing response as JSON: "
 msgstr "প্ৰতিক্ৰিয়াক JSON হিচাপে বিশ্লেষণ কৰোতে ত্ৰুটি: "
 
@@ -316,13 +293,19 @@ msgstr "Google"
 msgid "_Documents"
 msgstr "দস্তাবেজসমূহ (_D)"
 
+#. TODO: more specific
+#: ../src/goabackend/goaimapauthlogin.c:380
+#: ../src/goabackend/goasmtpauthplain.c:115
+#, c-format
+msgid "Authentication failed"
+msgstr "প্ৰমাণীকৰণ ব্যৰ্থ হল"
+
 #: ../src/goabackend/goaimapsmtpprovider.c:82
 msgid "IMAP and SMTP"
 msgstr "IMAP আৰু SMTP"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:356
 #, c-format
-#| msgid "Did not find password with username `%s' in credentials"
 msgid "Did not find imap-password with identity `%s' in credentials"
 msgstr "তথ্যসমূহত পৰিচয় `%s' ৰ সৈতে imap-password পোৱা নগল"
 
@@ -332,13 +315,11 @@ msgstr "তথ্যসমূহত পৰিচয় `%s' ৰ সৈতে imap-p
 #.
 #: ../src/goabackend/goaimapsmtpprovider.c:385
 #, c-format
-#| msgid "Invalid password with username `%s' (%s, %d): "
 msgid "Invalid imap-password with username `%s' (%s, %d): "
 msgstr "ব্যৱহাৰকাৰীনাম `%s' (%s, %d) ৰ সৈতে অবৈধ imap-password"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:409
 #, c-format
-#| msgid "Did not find password with username `%s' in credentials"
 msgid "Did not find smtp-password with identity `%s' in credentials"
 msgstr "তথ্যসমূহত পৰিচয় `%s' ৰ সৈতে smtp-password পোৱা নগল"
 
@@ -348,17 +329,14 @@ msgstr "তথ্যসমূহত পৰিচয় `%s' ৰ সৈতে smtp-p
 #.
 #: ../src/goabackend/goaimapsmtpprovider.c:440
 #, c-format
-#| msgid "Invalid password with username `%s' (%s, %d): "
 msgid "Invalid smtp-password with username `%s' (%s, %d): "
 msgstr "ব্যৱহাৰকাৰীনাম `%s' (%s, %d) ৰ সৈতে অবৈধ smtp-password"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:667
-#| msgid "Name"
 msgid "_Name"
 msgstr "নাম (_N)"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:684
-#| msgid "_Server"
 msgid "IMAP _Server"
 msgstr "IMAP চাৰ্ভাৰ (_S)"
 
@@ -383,24 +361,20 @@ msgid "SSL on a dedicated port"
 msgstr "এটা উৎসৰ্গিত পোৰ্টত SSL"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:716
-#| msgid "_Server"
 msgid "SMTP _Server"
 msgstr "SMTP চাৰ্ভাৰ (_S)"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:1009
 #: ../src/goabackend/goaimapsmtpprovider.c:1336
-#| msgid "Error connecting to ownCloud server"
 msgid "Error connecting to IMAP server"
 msgstr "IMAP চাৰ্ভাৰৰ সৈতে সংযোগ কৰোতে ত্ৰুটি"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:1100
 #: ../src/goabackend/goaimapsmtpprovider.c:1410
-#| msgid "Error connecting to ownCloud server"
 msgid "Error connecting to SMTP server"
 msgstr "SMTP চাৰ্ভাৰৰ সৈতে সংযোগ কৰোতে ত্ৰুটি"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:1518
-#| msgid "_E-mail"
 msgid "E-mail"
 msgstr "ই-মেইল"
 
@@ -578,74 +552,64 @@ msgstr "ownCloud চাৰ্ভাৰৰ সৈতে সংযোগ কৰো
 msgid "_Files"
 msgstr "ফাইলসমূহ (_F)"
 
-#: ../src/goabackend/goaprovider.c:579
+#: ../src/goabackend/goaprovider.c:577
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync ধৰণ %s ত প্ৰণয়ন কৰা হোৱা নাই"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:386
+#: ../src/goabackend/goasmtpauthplain.c:146
 #, c-format
-#| msgid "Could not find supported credentials"
-msgid "Did not find smtp-password in credentials"
-msgstr "তথ্যসমূহত smtp-password পোৱা নগল"
+msgid "Service not available"
+msgstr "সেৱা উপলব্ধ নাই"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:397
+#: ../src/goabackend/goasmtpauthplain.c:161
 #, c-format
-msgid "Cannot do SMTP PLAIN without a password"
-msgstr "এটা পাছৱাৰ্ড নহোৱাকৈ SMTP PLAIN কৰিব নোৱাৰি"
+#| msgid "Service not available"
+msgid "TLS not available"
+msgstr "TLS উপলব্ধ নাই"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:416
+#: ../src/goabackend/goasmtpauthplain.c:193
 #, c-format
 msgid "org.gnome.OnlineAccounts.Mail is not available"
 msgstr "org.gnome.OnlineAccounts.Mail উপলব্ধ নাই"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:426
+#: ../src/goabackend/goasmtpauthplain.c:203
 #, c-format
-#| msgid "Failed to parse autodiscover response XML"
 msgid "Failed to parse email address"
 msgstr "ইমেইল ঠিকনা বিশ্লেষণ কৰিবলে ব্যৰ্থ"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:438
+#: ../src/goabackend/goasmtpauthplain.c:215
 #, c-format
 msgid "Cannot do SMTP PLAIN without a domain"
 msgstr "এটা ডমেইন নহোৱাকৈ SMTP PLAIN কৰিব নোৱাৰি"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:453
-#: ../src/goabackend/goasmtpauthplain.c:487
+#: ../src/goabackend/goasmtpauthplain.c:253
 #, c-format
-msgid "Service not available"
-msgstr "সেৱা উপলব্ধ নাই"
+msgid "Did not find smtp-password in credentials"
+msgstr "তথ্যসমূহত smtp-password পোৱা নগল"
 
-#: ../src/goabackend/goasmtpauthplain.c:522
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauthplain.c:264
+#, c-format
+msgid "Cannot do SMTP PLAIN without a password"
+msgstr "এটা পাছৱাৰ্ড নহোৱাকৈ SMTP PLAIN কৰিব নোৱাৰি"
+
+#: ../src/goabackend/goasmtpauthplain.c:619
 #, c-format
 msgid "Server does not support PLAIN"
 msgstr "চাৰ্ভাৰে PLAIN সমৰ্থন নকৰে"
 
-#. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:548
+#: ../src/goabackend/goasmtpauthplain.c:731
 #, c-format
-msgid "Authentication failed"
-msgstr "প্ৰমাণীকৰণ ব্যৰ্থ হল"
-
-#: ../src/goabackend/goatwitterprovider.c:80
-msgid "Twitter"
-msgstr "Twitter"
-
-#: ../src/goabackend/goatwitterprovider.c:185
-#, c-format
-msgid "Didn't find id_str member in JSON data"
-msgstr "JSON তথ্যত id_str সদস্য পোৱা নগল"
-
-#: ../src/goabackend/goatwitterprovider.c:194
-#, c-format
-msgid "Didn't find screen_name member in JSON data"
-msgstr "JSON তথ্যত screen_name সদস্য পোৱা নগল"
+#| msgid "Server does not support PLAIN"
+msgid "Server does not support STARTTLS"
+msgstr "চাৰ্ভাৰে STARTTLS সমৰ্থন নকৰে"
 
 #: ../src/goabackend/goautils.c:84
 #, c-format
@@ -677,7 +641,7 @@ msgstr "keyring ত কোনো তথ্য পোৱা নগল"
 msgid "Error parsing result obtained from the keyring: "
 msgstr "keyring ৰ পৰা প্ৰাপ্ত ফলাফল বিশ্লেষণ কৰোতে ত্ৰুটি: "
 
-#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'facebook'
 #: ../src/goabackend/goautils.c:268
 #, c-format
 msgid "GOA %s credentials for identity %s"
@@ -732,40 +696,6 @@ msgstr "Windows Live"
 #, c-format
 msgid "Didn't find account email member in JSON data"
 msgstr "JSON তথ্যত একাওন্ট ই-মেইল সদস্য পোৱা নগল"
-
-#: ../src/goabackend/goayahooprovider.c:80
-msgid "Yahoo"
-msgstr "Yahoo"
-
-#: ../src/goabackend/goayahooprovider.c:188
-#, c-format
-msgid "Didn't find guid member in JSON data"
-msgstr "JSON তথ্যত guid সদস্য পোৱা নগল"
-
-#: ../src/goabackend/goayahooprovider.c:198
-#, c-format
-msgid "Didn't find value member in JSON data"
-msgstr "JSON তথ্যত মান সদস্য পোৱা নগল"
-
-#: ../src/goabackend/goayahooprovider.c:224
-#, c-format
-msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-msgstr ""
-"নাম অনুৰোধ কৰোতে অৱস্থা 200 ৰ আশা কৰা হৈছিল, কিন্তু অৱস্থা %d (%s) পোৱা গল"
-
-#: ../src/goabackend/goayahooprovider.c:237
-msgid "Error parsing usercard response as JSON: "
-msgstr "ব্যৱহাৰকাৰীকাৰ্ড প্ৰতিক্ৰিয়াক JSON হিচাপে বিশ্লেষণ কৰোতে ত্ৰুটি: "
-
-#: ../src/goabackend/goayahooprovider.c:248
-#, c-format
-msgid "Didn't find profile member in JSON data"
-msgstr "JSON তথ্যত আলেখ্য সদস্য পোৱা নগল"
-
-#: ../src/goabackend/goayahooprovider.c:258
-#, c-format
-msgid "Didn't find nickname member in JSON data"
-msgstr "JSON তথ্যত উপনাম সদস্য পোৱা নগল"
 
 #: ../src/goaidentity/goaalarm.c:245
 msgid "Time"
@@ -847,6 +777,49 @@ msgstr "পৰিচয় পোৱা নগল"
 #: ../src/goaidentity/goakerberosidentitymanager.c:824
 msgid "Could not create credential cache for identity"
 msgstr "পৰিচয়ৰ বাবে তথ্য ক্যাশ সৃষ্টি কৰিব পৰা নগল"
+
+#~ msgid "Online Accounts"
+#~ msgstr "অনলাইন একাওন্টসমূহ"
+
+#~ msgid "Provides the org.gnome.OnlinesAccounts name on the session bus"
+#~ msgstr "অধিবেশন বাচত org.gnome.OnlinesAccounts নাম প্ৰদান কৰে"
+
+#~ msgid "An online account needs attention"
+#~ msgstr "এটা অনলাইন একাওন্টত মনোনিবেষ কৰাৰ প্ৰয়োজন হৈছে"
+
+#~ msgid "Open Online Accounts..."
+#~ msgstr "অনলাইন একাওন্টসমূহ খোলক..."
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#~ msgid "Didn't find id_str member in JSON data"
+#~ msgstr "JSON তথ্যত id_str সদস্য পোৱা নগল"
+
+#~ msgid "Didn't find screen_name member in JSON data"
+#~ msgstr "JSON তথ্যত screen_name সদস্য পোৱা নগল"
+
+#~ msgid "Yahoo"
+#~ msgstr "Yahoo"
+
+#~ msgid "Didn't find guid member in JSON data"
+#~ msgstr "JSON তথ্যত guid সদস্য পোৱা নগল"
+
+#~ msgid "Didn't find value member in JSON data"
+#~ msgstr "JSON তথ্যত মান সদস্য পোৱা নগল"
+
+#~ msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+#~ msgstr ""
+#~ "নাম অনুৰোধ কৰোতে অৱস্থা 200 ৰ আশা কৰা হৈছিল, কিন্তু অৱস্থা %d (%s) পোৱা গল"
+
+#~ msgid "Error parsing usercard response as JSON: "
+#~ msgstr "ব্যৱহাৰকাৰীকাৰ্ড প্ৰতিক্ৰিয়াক JSON হিচাপে বিশ্লেষণ কৰোতে ত্ৰুটি: "
+
+#~ msgid "Didn't find profile member in JSON data"
+#~ msgstr "JSON তথ্যত আলেখ্য সদস্য পোৱা নগল"
+
+#~ msgid "Didn't find nickname member in JSON data"
+#~ msgstr "JSON তথ্যত উপনাম সদস্য পোৱা নগল"
 
 #~ msgid "Credentials not found in keyring (%s, %d): "
 #~ msgstr "তথ্যসমূহ keyring (%s, %d) ত পোৱা নগল: "
