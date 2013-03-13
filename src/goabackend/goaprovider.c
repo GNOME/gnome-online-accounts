@@ -894,7 +894,8 @@ goa_provider_set_preseed_data (GoaProvider *provider,
                                GVariant    *preseed_data)
 {
   g_clear_pointer (&provider->priv->preseed_data, g_variant_unref);
-  provider->priv->preseed_data = g_variant_ref_sink (preseed_data);
+  if (preseed_data != NULL)
+    provider->priv->preseed_data = g_variant_ref_sink (preseed_data);
   g_object_notify (G_OBJECT (provider), "preseed-data");
 }
 
