@@ -2,15 +2,15 @@
 # Copyright (C) 2012 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
 #
-# Mattias Põldaru <mahfiaz@gmail.com>, 2012.
+# Mattias Põldaru <mahfiaz@gmail.com>, 2012, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-12-12 07:36+0000\n"
-"PO-Revision-Date: 2012-12-15 14:28+0300\n"
+"POT-Creation-Date: 2013-03-12 16:55+0000\n"
+"PO-Revision-Date: 2013-03-12 21:16+0300\n"
 "Last-Translator: Mattias Põldaru <mahfiaz@gmail.com>\n"
 "Language-Team: Estonian <>\n"
 "Language: et\n"
@@ -19,20 +19,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
-#. shut up -Wunused-but-set-variable
-msgid "Online Accounts"
-msgstr "Veebikontod"
-
 #. TODO: more specific
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "%s jaoks ei leitud pakkujat"
-
-msgid "An online account needs attention"
-msgstr "Veebikonto tahab tähelepanu"
-
-msgid "Open Online Accounts..."
-msgstr "Ava veebikontod..."
 
 #. TODO: more specific
 msgid "ProviderType property is not set for account"
@@ -71,14 +61,10 @@ msgstr "ASUrl-i ja OABUrl-i ei leitud automaattuvastuse vastuses"
 msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
-#, c-format
-msgid "Credentials not found in keyring (%s, %d): "
-msgstr "Autentimistõendeid ei leitud võtmerõngast (%s, %d): "
-
 #. TODO: more specific
 #, c-format
-msgid "Did not find password with username `%s' in credentials"
-msgstr "Ei leitud kasutajanimele '%s' vastavat parooli"
+msgid "Did not find password with identity `%s' in credentials"
+msgstr "Ei leitud identiteedile '%s' vastavat parooli"
 
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
@@ -114,11 +100,14 @@ msgstr "Dialoog katkestati"
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "Dialoog katkestati (%s, %d): "
 
-msgid "Error connecting to Microsoft Exchange server"
-msgstr "Viga ühendumisel Microsoft Exchange serveriga"
+msgid "_Ignore"
+msgstr "_Eira"
 
 msgid "_Try Again"
 msgstr "_Proovi uuesti"
+
+msgid "Error connecting to Microsoft Exchange server"
+msgstr "Viga ühendumisel Microsoft Exchange serveriga"
 
 msgid "Use for"
 msgstr "Kasutatakse:"
@@ -135,21 +124,13 @@ msgstr "_Kontaktid"
 msgid "Facebook"
 msgstr "Facebook"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr "guid pärimisel oodati olekut 200, selle asemel saadi olek %d (%s)"
 
-msgid "Error parsing response as JSON: "
-msgstr "Viga vastuse parsimisel JSON andmetena: "
-
 #, c-format
-msgid "Didn't find id member in JSON data"
-msgstr "JSON andmetes puudub liige 'id'"
-
-#, c-format
-msgid "Didn't find email member in JSON data"
-msgstr "JSON andmetes puudub liige 'email'"
+msgid "Could not parse response"
+msgstr "Vastust pole võimalik parsida"
 
 msgid "C_hat"
 msgstr "_Vestlus"
@@ -162,30 +143,94 @@ msgid "Expected status 200 when requesting user id, instead got status %d (%s)"
 msgstr ""
 "Kasutaja id pärimisel oodati olekut 200, selle asemel saadi olek %d (%s)"
 
-#, c-format
-msgid "Didn't find user member in JSON data"
-msgstr "JSON andmetes puudub liige user"
-
-#, c-format
-msgid "Didn't find user.id member in JSON data"
-msgstr "JSON andmetes puudub liige user.id"
-
-#, c-format
-msgid "Didn't find user.username member in JSON data"
-msgstr "JSON andmetes puudub liige user.username"
-
-#, c-format
-msgid "Didn't find user.username._content member in JSON data"
-msgstr "JSON andmetes puudub liige user.username._content"
-
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "Su arvuti kell on vale. Kontrolli kella ja kuupäeva sätteid."
+
+msgid "_Photos"
+msgstr "_Fotod"
 
 msgid "Google"
 msgstr "Google"
 
 msgid "_Documents"
 msgstr "_Dokumendid"
+
+#. TODO: more specific
+#, c-format
+msgid "Authentication failed"
+msgstr "Autentimine nurjus"
+
+msgid "IMAP and SMTP"
+msgstr "IMAP ja SMTP"
+
+#, c-format
+msgid "Did not find imap-password with identity `%s' in credentials"
+msgstr "Ei leitud identiteedile '%s' vastavat IMAP parooli"
+
+#. Translators: the first %s is the IMAP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#, c-format
+msgid "Invalid imap-password with username `%s' (%s, %d): "
+msgstr "IMAP parool ei sobi kasutajanimega '%s' (%s, %d): "
+
+#, c-format
+msgid "Did not find smtp-password with identity `%s' in credentials"
+msgstr "Ei leitud kasutajanimele '%s' vastavat SMTP parooli"
+
+#. Translators: the first %s is the SMTP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#, c-format
+msgid "Invalid smtp-password with username `%s' (%s, %d): "
+msgstr "SMTP parool ei sobi kasutajanimega '%s' (%s, %d): "
+
+#. Translators: the following four strings are used to show a
+#. * combo box similar to the one in the evolution module.
+#. * Encryption: None
+#. *             STARTTLS after connecting
+#. *             SSL on a dedicated port
+#.
+msgid "_Encryption"
+msgstr "_Krüpteering"
+
+msgid "None"
+msgstr "Puudub"
+
+msgid "STARTTLS after connecting"
+msgstr "STARTTLS pärast ühendumist"
+
+msgid "SSL on a dedicated port"
+msgstr "SSL eraldi pordi kaudu"
+
+msgid "_Name"
+msgstr "_Nimi"
+
+msgid "IMAP _Server"
+msgstr "IMAP _server"
+
+msgid "SMTP _Server"
+msgstr "SMTP _server"
+
+msgid "Error connecting to IMAP server"
+msgstr "Viga ühendumisel IMAP serveriga"
+
+msgid "Error connecting to SMTP server"
+msgstr "Viga ühendumisel SMTP serveriga"
+
+msgid "E-mail"
+msgstr "E-mail"
+
+msgid "Name"
+msgstr "Nimi"
+
+msgid "IMAP"
+msgstr "IMAP"
+
+msgid "SMTP"
+msgstr "SMTP"
 
 msgid "Enterprise Login (Kerberos)"
 msgstr "Ettevõtte kontoga sisselogimine (Kerberos)"
@@ -238,14 +283,6 @@ msgstr ""
 "Ligipääsu märgi pärimisel oodati olekut 200, selle asemel saadi olek %d (%s)"
 
 #, c-format
-msgid "Didn't find access_token in non-JSON data"
-msgstr "Mitte-JSON andmetes puudub 'access_token'"
-
-#, c-format
-msgid "Didn't find access_token in JSON data"
-msgstr "JSON andmetes puudub 'access_token'"
-
-#, c-format
 msgid "Authorization response was \"%s\""
 msgstr "Vastus autoriseerimisele oli \"%s\""
 
@@ -274,10 +311,6 @@ msgstr "Autentimistõendid ei sisalda access_token'it"
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Turvamärgi värskendamine nurjus (%s, %d): "
-
-#, c-format
-msgid "Error storing credentials in keyring (%s, %d): "
-msgstr "Viga autentimistõendite salvestamisel võtmerõngasse (%s, %d): "
 
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
@@ -320,16 +353,48 @@ msgstr "_Failid"
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync ei ole liigi %s jaoks teostatud"
 
-msgid "Twitter"
-msgstr "Twitter"
+#. TODO: more specific
+#, c-format
+msgid "Service not available"
+msgstr "Teenus pole saadaval"
+
+#. TODO: more specific
+#, c-format
+msgid "TLS not available"
+msgstr "TLS pole saadaval"
+
+#. TODO: more specific
+#, c-format
+msgid "org.gnome.OnlineAccounts.Mail is not available"
+msgstr "org.gnome.OnlineAccounts.Mail pole saadaval"
+
+#. TODO: more specific
+#, c-format
+msgid "Failed to parse email address"
+msgstr "Meiliaadressi parsimine nurjus"
+
+#. TODO: more specific
+#, c-format
+msgid "Cannot do SMTP PLAIN without a domain"
+msgstr "SMTP PLAIN ühendust pole võimalik ilma domeenita luua"
+
+#. TODO: more specific
+#, c-format
+msgid "Did not find smtp-password in credentials"
+msgstr "Autentimistõendite hulgast ei leitud SMTP parooli"
+
+#. TODO: more specific
+#, c-format
+msgid "Cannot do SMTP PLAIN without a password"
+msgstr "SMTP PLAIN ühendust pole võimalik ilma paroolita luua"
 
 #, c-format
-msgid "Didn't find id_str member in JSON data"
-msgstr "JSON andmetes puudub liige 'id_str'"
+msgid "Server does not support PLAIN"
+msgstr "Server ei toeta PLAIN ühendust"
 
 #, c-format
-msgid "Didn't find screen_name member in JSON data"
-msgstr "JSON andmetes puudub liige 'screen_name'"
+msgid "Server does not support STARTTLS"
+msgstr "Server ei toeta STARTTLS ühendust"
 
 #, c-format
 msgid "A %s account already exists for %s"
@@ -348,10 +413,14 @@ msgstr "Autentimistõendite kustutamine võtmerõngast nurjus"
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Autentimistõendite hankimine võtmerõngast nurjus"
 
+#. TODO: more specific
+msgid "No credentials found in the keyring"
+msgstr "Võtmerõngast ei leitud autentimistõendeid"
+
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Viga võtmerõngast saadud vastuse parsimisel: "
 
-#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'facebook'
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "GOA %s autentimistõendid identiteedi %s jaoks"
@@ -360,6 +429,29 @@ msgstr "GOA %s autentimistõendid identiteedi %s jaoks"
 msgid "Failed to store credentials in the keyring"
 msgstr "Autentimistõendite salvestamine võtmerõngasse nurjus"
 
+msgid "The signing certificate authority is not known."
+msgstr "Allkirjastamise sertifikaadi tunnustaja on tundmatu."
+
+msgid ""
+"The certificate does not match the expected identity of the site that it was "
+"retrieved from."
+msgstr "Sertifikaat ei vasta saidi, kust see saadi, eeldatavale identiteedile."
+
+msgid "The certificate's activation time is still in the future."
+msgstr "Sertifikaadi kehtivuse algus on ikka veel tulevikus."
+
+msgid "The certificate has expired."
+msgstr "Sertifikaat on aegunud."
+
+msgid "The certificate has been revoked."
+msgstr "Sertifikaat on tühistatud."
+
+msgid "The certificate's algorithm is considered insecure."
+msgstr "Sertifikaadi algoritm on ebaturvaline."
+
+msgid "Invalid certificate."
+msgstr "Vigane sertifikaat."
+
 #. translators: %s here is the address of the web page
 #, c-format
 msgid "Loading “%s”…"
@@ -367,36 +459,6 @@ msgstr "“%s” laadimine…"
 
 msgid "Windows Live"
 msgstr "Windows Live"
-
-#, c-format
-msgid "Didn't find account email member in JSON data"
-msgstr "JSON andmetes puudub konto e-posti aadress"
-
-msgid "Yahoo"
-msgstr "Yahoo"
-
-#, c-format
-msgid "Didn't find guid member in JSON data"
-msgstr "JSON andmetes puudub liige 'guid'"
-
-#, c-format
-msgid "Didn't find value member in JSON data"
-msgstr "JSON andmetes puudub liige 'value'"
-
-#, c-format
-msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-msgstr "'name' pärimisel oodati olekut 200, selle asemel saadi olek %d (%s)"
-
-msgid "Error parsing usercard response as JSON: "
-msgstr "Viga usercard vastuse parsimisel JSON andmetena: "
-
-#, c-format
-msgid "Didn't find profile member in JSON data"
-msgstr "JSON andmetes puudub liige 'member'"
-
-#, c-format
-msgid "Didn't find nickname member in JSON data"
-msgstr "JSON andmetes puudub liige 'nickname'"
 
 msgid "Time"
 msgstr "Aeg"
@@ -457,6 +519,81 @@ msgstr "Identiteeti ei leitud"
 
 msgid "Could not create credential cache for identity"
 msgstr "Pole võimalik luua paroolide puhvrit identiteedi jaoks"
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#~ msgid "Yahoo"
+#~ msgstr "Yahoo"
+
+#~ msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+#~ msgstr "'name' pärimisel oodati olekut 200, selle asemel saadi olek %d (%s)"
+
+#~ msgid "Error parsing response as JSON: "
+#~ msgstr "Viga vastuse parsimisel JSON andmetena: "
+
+#~ msgid "Didn't find id member in JSON data"
+#~ msgstr "JSON andmetes puudub liige 'id'"
+
+#~ msgid "Didn't find email member in JSON data"
+#~ msgstr "JSON andmetes puudub liige 'email'"
+
+#~ msgid "Didn't find user member in JSON data"
+#~ msgstr "JSON andmetes puudub liige user"
+
+#~ msgid "Didn't find user.id member in JSON data"
+#~ msgstr "JSON andmetes puudub liige user.id"
+
+#~ msgid "Didn't find user.username member in JSON data"
+#~ msgstr "JSON andmetes puudub liige user.username"
+
+#~ msgid "Didn't find user.username._content member in JSON data"
+#~ msgstr "JSON andmetes puudub liige user.username._content"
+
+#~ msgid "Didn't find access_token in non-JSON data"
+#~ msgstr "Mitte-JSON andmetes puudub 'access_token'"
+
+#~ msgid "Didn't find access_token in JSON data"
+#~ msgstr "JSON andmetes puudub 'access_token'"
+
+#~ msgid "Didn't find id_str member in JSON data"
+#~ msgstr "JSON andmetes puudub liige 'id_str'"
+
+#~ msgid "Didn't find screen_name member in JSON data"
+#~ msgstr "JSON andmetes puudub liige 'screen_name'"
+
+#~ msgid "Didn't find account email member in JSON data"
+#~ msgstr "JSON andmetes puudub konto e-posti aadress"
+
+#~ msgid "Didn't find guid member in JSON data"
+#~ msgstr "JSON andmetes puudub liige 'guid'"
+
+#~ msgid "Didn't find value member in JSON data"
+#~ msgstr "JSON andmetes puudub liige 'value'"
+
+#~ msgid "Error parsing usercard response as JSON: "
+#~ msgstr "Viga usercard vastuse parsimisel JSON andmetena: "
+
+#~ msgid "Didn't find profile member in JSON data"
+#~ msgstr "JSON andmetes puudub liige 'member'"
+
+#~ msgid "Didn't find nickname member in JSON data"
+#~ msgstr "JSON andmetes puudub liige 'nickname'"
+
+#~ msgid "Online Accounts"
+#~ msgstr "Veebikontod"
+
+#~ msgid "An online account needs attention"
+#~ msgstr "Veebikonto tahab tähelepanu"
+
+#~ msgid "Open Online Accounts..."
+#~ msgstr "Ava veebikontod..."
+
+#~ msgid "Credentials not found in keyring (%s, %d): "
+#~ msgstr "Autentimistõendeid ei leitud võtmerõngast (%s, %d): "
+
+#~ msgid "Error storing credentials in keyring (%s, %d): "
+#~ msgstr "Viga autentimistõendite salvestamisel võtmerõngasse (%s, %d): "
 
 #~ msgid "_User_name"
 #~ msgstr "_Kasutajanimi"
