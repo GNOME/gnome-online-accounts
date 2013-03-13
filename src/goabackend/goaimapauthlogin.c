@@ -22,6 +22,9 @@
  */
 
 #include "config.h"
+
+#include <string.h>
+
 #include <glib/gi18n-lib.h>
 #include <stdlib.h>
 
@@ -79,6 +82,28 @@ static gboolean goa_imap_auth_login_starttls_sync (GoaMailAuth    *_auth,
                                                    GError        **error);
 
 G_DEFINE_TYPE (GoaImapAuthLogin, goa_imap_auth_login, GOA_TYPE_MAIL_AUTH);
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gchar *
+imap_auth_escape_backslash (const gchar *str)
+{
+  GString *ret;
+  gsize i;
+  gsize len;
+
+  ret = g_string_new ("");
+  len = strlen (str);
+
+  for (i = 0; i < len; i++)
+    {
+      if (str[i] == '\\')
+        g_string_append_c (ret, '\\');
+      g_string_append_c (ret, str[i]);
+    }
+
+  return g_string_free (ret, FALSE);
+}
 
 /* ---------------------------------------------------------------------------------------------------- */
 
@@ -319,11 +344,13 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *_auth,
 
   if (auth->password != NULL)
     {
-      password = g_strdup (auth->password);
+      password = imap_auth_escape_backslash (auth->password);
     }
   else if (auth->provider != NULL && auth->object != NULL)
     {
       GVariant *credentials;
+      gchar *value;
+
       credentials = goa_utils_lookup_credentials_sync (auth->provider,
                                                        auth->object,
                                                        cancellable,
@@ -333,7 +360,7 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *_auth,
           g_prefix_error (error, "Error looking up credentials for IMAP LOGIN in keyring: ");
           goto out;
         }
-      if (!g_variant_lookup (credentials, "imap-password", "s", &password))
+      if (!g_variant_lookup (credentials, "imap-password", "s", &value))
         {
           g_set_error (error,
                        GOA_ERROR,
@@ -342,6 +369,10 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *_auth,
           g_variant_unref (credentials);
           goto out;
         }
+
+      password = imap_auth_escape_backslash (value);
+
+      g_free (value);
       g_variant_unref (credentials);
     }
   else
