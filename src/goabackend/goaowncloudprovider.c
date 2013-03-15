@@ -21,6 +21,9 @@
  */
 
 #include "config.h"
+
+#include <string.h>
+
 #include <glib/gi18n-lib.h>
 
 #include <libsoup/soup.h>
@@ -467,6 +470,7 @@ static gchar *
 normalize_uri (const gchar *address, gchar **server)
 {
   SoupURI *uri;
+  const gchar *path;
   gchar *scheme;
   gchar *ret;
   gchar *uri_string;
@@ -509,20 +513,33 @@ normalize_uri (const gchar *address, gchar **server)
   else if (g_strcmp0 (scheme, "davs") == 0)
     soup_uri_set_scheme (uri, SOUP_URI_SCHEME_HTTPS);
 
+  path = soup_uri_get_path (uri);
+  if (!g_str_has_suffix (path, "/"))
+    {
+      gchar *new_path;
+
+      new_path = g_strconcat (path, "/", NULL);
+      soup_uri_set_path (uri, new_path);
+      path = soup_uri_get_path (uri);
+      g_free (new_path);
+    }
+
   if (server != NULL)
     {
-      const gchar *path;
       gchar *port_string;
+      gchar *pretty_path;
       guint port;
-
-      path = soup_uri_get_path (uri);
-      if (g_strcmp0 (path, "/") == 0)
-        path = "";
 
       port = soup_uri_get_port (uri);
       port_string = g_strdup_printf (":%u", port);
-      *server = g_strconcat (soup_uri_get_host (uri), (port == std_port) ? "" : port_string, path, NULL);
+
+      pretty_path = g_strdup (path);
+      pretty_path[strlen(pretty_path) - 1] = '\0';
+
+      *server = g_strconcat (soup_uri_get_host (uri), (port == std_port) ? "" : port_string, pretty_path, NULL);
+
       g_free (port_string);
+      g_free (pretty_path);
     }
 
   ret = soup_uri_to_string (uri, FALSE);
