@@ -1,7 +1,7 @@
 # French translation for gnome-online-accounts.
 # Copyright (C) 2011-2012 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
-# Alexandre Franke <alexandre.franke@gmail.com>, 2011.
+# Alexandre Franke <alexandre.franke@gmail.com>, 2011, 2013.
 # Bruno Brouard <annoa.b@gmail.com>, 2012.
 # Alain Lojewski <allomervan@gmail.com>, 2012.
 #
@@ -10,9 +10,9 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-03-15 11:55+0000\n"
-"PO-Revision-Date: 2013-03-15 15:03+0100\n"
-"Last-Translator: Alain Lojewski <allomervan@gmail.com>\n"
+"POT-Creation-Date: 2013-03-15 18:57+0000\n"
+"PO-Revision-Date: 2013-03-16 18:36+0100\n"
+"Last-Translator: Alexandre Franke <alexandre.franke@gmail.com>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -78,12 +78,11 @@ msgstr "Microsoft Exchange"
 #: ../src/goabackend/goagoogleprovider.c:796
 #: ../src/goabackend/goaowncloudprovider.c:364
 #: ../src/goabackend/goaowncloudprovider.c:1138
-#, fuzzy, c-format
-#| msgid "Did not find password with username `%s' in credentials"
+#, c-format
 msgid "Did not find password with identity `%s' in credentials"
 msgstr ""
-"Il n'y a aucun mot de passe avec le nom d'utilisateur « %s » dans les "
-"données d'authentification"
+"Il n'y a aucun mot de passe avec l'identité « %s » dans les données "
+"d'authentification"
 
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
@@ -130,7 +129,7 @@ msgstr "_Serveur"
 #: ../src/goabackend/goakerberosprovider.c:1153
 #: ../src/goabackend/goaowncloudprovider.c:642
 msgid "Connecting…"
-msgstr ""
+msgstr "Connexion…"
 
 #: ../src/goabackend/goaexchangeprovider.c:660
 #: ../src/goabackend/goaexchangeprovider.c:854
@@ -156,10 +155,9 @@ msgstr "Le dialogue a été rejeté"
 #: ../src/goabackend/goaimapsmtpprovider.c:1398
 #: ../src/goabackend/goaowncloudprovider.c:792
 #: ../src/goabackend/goaowncloudprovider.c:983
-#, fuzzy, c-format
-#| msgid "Dialog was dismissed"
+#, c-format
 msgid "Dialog was dismissed (%s, %d): "
-msgstr "Le dialogue a été rejeté"
+msgstr "Le dialogue a été rejeté (%s, %d) : "
 
 #: ../src/goabackend/goaexchangeprovider.c:710
 #: ../src/goabackend/goaimapsmtpprovider.c:999
@@ -251,10 +249,9 @@ msgstr ""
 #: ../src/goabackend/goayahooprovider.c:269
 #: ../src/goabackend/goayahooprovider.c:281
 #: ../src/goabackend/goayahooprovider.c:292
-#, fuzzy, c-format
-#| msgid "Could not erase identity: %k"
+#, c-format
 msgid "Could not parse response"
-msgstr "Impossible d'effacer l'identité : %k"
+msgstr "Impossible d'analyser la réponse"
 
 #: ../src/goabackend/goafacebookprovider.c:413
 #: ../src/goabackend/goagoogleprovider.c:694
@@ -264,14 +261,14 @@ msgstr "D_iscussion"
 
 #: ../src/goabackend/goaflickrprovider.c:83
 msgid "Flickr"
-msgstr ""
+msgstr "Flickr"
 
 #: ../src/goabackend/goaflickrprovider.c:183
-#, fuzzy, c-format
-#| msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+#, c-format
 msgid "Expected status 200 when requesting user id, instead got status %d (%s)"
 msgstr ""
-"État 200 attendu lors de la requête du guid, état %d (%s) reçu à la place"
+"État 200 attendu lors de la requête de l'identifiant utilisateur, état %d "
+"(%s) reçu à la place"
 
 #: ../src/goabackend/goaflickrprovider.c:322
 #: ../src/goabackend/goayahooprovider.c:344
@@ -282,7 +279,7 @@ msgstr ""
 
 #: ../src/goabackend/goaflickrprovider.c:424
 msgid "_Photos"
-msgstr ""
+msgstr "_Photos"
 
 #: ../src/goabackend/goagoogleprovider.c:86
 msgid "Google"
@@ -298,47 +295,43 @@ msgstr "_Documents"
 #: ../src/goabackend/goasmtpauthplain.c:115
 #, c-format
 msgid "Authentication failed"
-msgstr ""
+msgstr "Échec d'authentification"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:82
 msgid "IMAP and SMTP"
-msgstr ""
+msgstr "IMAP et SMTP"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:356
-#, fuzzy, c-format
-#| msgid "Did not find password with username `%s' in credentials"
+#, c-format
 msgid "Did not find imap-password with identity `%s' in credentials"
 msgstr ""
-"Il n'y a aucun mot de passe avec le nom d'utilisateur « %s » dans les "
-"données d'authentification"
+"Il n'y a aucun mot de passe IMAP avec l'identité « %s » dans les données "
+"d'authentification"
 
 #. Translators: the first %s is the IMAP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
 #: ../src/goabackend/goaimapsmtpprovider.c:385
-#, fuzzy, c-format
-#| msgid "Invalid password with username `%s' (%s, %d): "
+#, c-format
 msgid "Invalid imap-password with username `%s' (%s, %d): "
-msgstr "Mot de passe invalide pour l'utilisateur « %s » (%s, %d) : "
+msgstr "Mot de passe IMAP non valide pour l'utilisateur « %s » (%s, %d) : "
 
 #: ../src/goabackend/goaimapsmtpprovider.c:409
-#, fuzzy, c-format
-#| msgid "Did not find password with username `%s' in credentials"
+#, c-format
 msgid "Did not find smtp-password with identity `%s' in credentials"
 msgstr ""
-"Il n'y a aucun mot de passe avec le nom d'utilisateur « %s » dans les "
-"données d'authentification"
+"Il n'y a aucun mot de passe SMTP avec l'identité « %s » dans les données "
+"d'authentification"
 
 #. Translators: the first %s is the SMTP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
 #: ../src/goabackend/goaimapsmtpprovider.c:440
-#, fuzzy, c-format
-#| msgid "Invalid password with username `%s' (%s, %d): "
+#, c-format
 msgid "Invalid smtp-password with username `%s' (%s, %d): "
-msgstr "Mot de passe invalide pour l'utilisateur « %s » (%s, %d) : "
+msgstr "Mot de passe SMTP non valide pour l'utilisateur « %s » (%s, %d) : "
 
 #. Translators: the following four strings are used to show a
 #. * combo box similar to the one in the evolution module.
@@ -348,69 +341,59 @@ msgstr "Mot de passe invalide pour l'utilisateur « %s » (%s, %d) : "
 #.
 #: ../src/goabackend/goaimapsmtpprovider.c:626
 msgid "_Encryption"
-msgstr ""
+msgstr "_Chiffrement"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:629
 msgid "None"
-msgstr ""
+msgstr "Aucun"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:632
 msgid "STARTTLS after connecting"
-msgstr ""
+msgstr "STARTTLS après la connexion"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:635
 msgid "SSL on a dedicated port"
-msgstr ""
+msgstr "SSL sur un port dédié"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:691
 msgid "_Name"
-msgstr ""
+msgstr "_Nom"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:708
-#, fuzzy
-#| msgid "_Server"
 msgid "IMAP _Server"
-msgstr "_Serveur"
+msgstr "_Serveur IMAP"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:728
-#, fuzzy
-#| msgid "_Server"
 msgid "SMTP _Server"
-msgstr "_Serveur"
+msgstr "_Serveur SMTP"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:1009
 #: ../src/goabackend/goaimapsmtpprovider.c:1336
-#, fuzzy
-#| msgid "Error connecting to Microsoft Exchange server"
 msgid "Error connecting to IMAP server"
-msgstr "Erreur de connexion au serveur Microsoft Exchange"
+msgstr "Erreur de connexion au serveur IMAP"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:1100
 #: ../src/goabackend/goaimapsmtpprovider.c:1410
-#, fuzzy
-#| msgid "Error connecting to Microsoft Exchange server"
 msgid "Error connecting to SMTP server"
-msgstr "Erreur de connexion au serveur Microsoft Exchange"
+msgstr "Erreur de connexion au serveur SMTP"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:1518
-#, fuzzy
-#| msgid "_E-mail"
 msgid "E-mail"
-msgstr "_Courriel"
+msgstr "Courriel"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:1522
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:1532
 #: ../src/goabackend/goaimapsmtpprovider.c:1535
 msgid "IMAP"
-msgstr ""
+msgstr "IMAP"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:1546
 #: ../src/goabackend/goaimapsmtpprovider.c:1549
 msgid "SMTP"
-msgstr ""
+msgstr "SMTP"
 
 #: ../src/goabackend/goakerberosprovider.c:87
 msgid "Enterprise Login (Kerberos)"
@@ -563,18 +546,16 @@ msgstr ""
 
 #: ../src/goabackend/goaowncloudprovider.c:84
 msgid "ownCloud"
-msgstr ""
+msgstr "ownCloud"
 
 #: ../src/goabackend/goaowncloudprovider.c:815
 #: ../src/goabackend/goaowncloudprovider.c:995
-#, fuzzy
-#| msgid "Error connecting to Microsoft Exchange server"
 msgid "Error connecting to ownCloud server"
-msgstr "Erreur de connexion au serveur Microsoft Exchange"
+msgstr "Erreur de connexion au serveur ownCloud"
 
 #: ../src/goabackend/goaowncloudprovider.c:1070
 msgid "_Files"
-msgstr ""
+msgstr "_Fichiers"
 
 #: ../src/goabackend/goaprovider.c:691
 #, c-format
@@ -585,59 +566,59 @@ msgstr "ensure_credentials_sync n'est pas implémenté pour le type %s"
 #: ../src/goabackend/goasmtpauthplain.c:146
 #, c-format
 msgid "Service not available"
-msgstr ""
+msgstr "Service non disponible"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauthplain.c:161
 #, c-format
 msgid "TLS not available"
-msgstr ""
+msgstr "TLS non disponible"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauthplain.c:193
 #, c-format
 msgid "org.gnome.OnlineAccounts.Mail is not available"
-msgstr ""
+msgstr "org.gnome.OnlineAccounts.Mail n'est pas disponible"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauthplain.c:203
-#, fuzzy, c-format
-#| msgid "Failed to parse autodiscover response XML"
+#, c-format
 msgid "Failed to parse email address"
-msgstr "Échec de l'analyse XML de la réponse autodiscover"
+msgstr "Échec de l'analyse de l'adresse courriel"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauthplain.c:215
 #, c-format
 msgid "Cannot do SMTP PLAIN without a domain"
-msgstr ""
+msgstr "Impossible de faire du SMTP PLAIN sans domaine"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauthplain.c:253
-#, fuzzy, c-format
-#| msgid "Could not find supported credentials"
+#, c-format
 msgid "Did not find smtp-password in credentials"
-msgstr "Impossible de trouver des données d'authentification prises en charge"
+msgstr ""
+"Impossible de trouver un mot de passe SMTP dans les données "
+"d'authentification"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauthplain.c:264
 #, c-format
 msgid "Cannot do SMTP PLAIN without a password"
-msgstr ""
+msgstr "Impossible de faire du SMTP PLAIN sans mot de passe"
 
 #: ../src/goabackend/goasmtpauthplain.c:619
 #, c-format
 msgid "Server does not support PLAIN"
-msgstr ""
+msgstr "Le serveur ne prend pas en charge PLAIN"
 
 #: ../src/goabackend/goasmtpauthplain.c:731
 #, c-format
 msgid "Server does not support STARTTLS"
-msgstr ""
+msgstr "Le serveur ne prend pas en charge STARTTLS"
 
 #: ../src/goabackend/goatwitterprovider.c:81
 msgid "Twitter"
-msgstr ""
+msgstr "Twitter"
 
 #: ../src/goabackend/goautils.c:84
 #, c-format
@@ -665,12 +646,8 @@ msgstr ""
 
 #. TODO: more specific
 #: ../src/goabackend/goautils.c:212
-#, fuzzy
-#| msgid "Failed to store credentials in the keyring"
 msgid "No credentials found in the keyring"
-msgstr ""
-"Échec lors du stockage des données d'authentification dans le trousseau de "
-"clés"
+msgstr "Aucune donnée d'authentification trouvée dans le trousseau de clés"
 
 #: ../src/goabackend/goautils.c:225
 msgid "Error parsing result obtained from the keyring: "
@@ -734,14 +711,13 @@ msgstr "Windows Live"
 
 #: ../src/goabackend/goayahooprovider.c:81
 msgid "Yahoo"
-msgstr ""
+msgstr "Yahoo"
 
 #: ../src/goabackend/goayahooprovider.c:249
-#, fuzzy, c-format
-#| msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+#, c-format
 msgid "Expected status 200 when requesting name, instead got status %d (%s)"
 msgstr ""
-"État 200 attendu lors de la requête du guid, état %d (%s) reçu à la place"
+"État 200 attendu lors de la requête du nom, état %d (%s) reçu à la place"
 
 #: ../src/goaidentity/goaalarm.c:245
 msgid "Time"
