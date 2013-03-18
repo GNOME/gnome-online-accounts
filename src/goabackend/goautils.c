@@ -42,6 +42,7 @@ static const SecretSchema secret_password_schema =
 gboolean
 goa_utils_check_duplicate (GoaClient              *client,
                            const gchar            *identity,
+                           const gchar            *presentation_identity,
                            const gchar            *provider_type,
                            GoaPeekInterfaceFunc    func,
                            GError                **error)
@@ -59,6 +60,7 @@ goa_utils_check_duplicate (GoaClient              *client,
       GoaAccount *account;
       gpointer *interface;
       const gchar *identity_from_object;
+      const gchar *presentation_identity_from_object;
       const gchar *provider_type_from_object;
 
       account = goa_object_peek_account (object);
@@ -71,12 +73,12 @@ goa_utils_check_duplicate (GoaClient              *client,
         continue;
 
       identity_from_object = goa_account_get_identity (account);
-      if (g_strcmp0 (identity_from_object, identity) == 0)
+      presentation_identity_from_object = goa_account_get_presentation_identity (account);
+      if (g_strcmp0 (identity_from_object, identity) == 0
+          && g_strcmp0 (presentation_identity_from_object, presentation_identity) == 0)
         {
-          const gchar *presentation_identity;
           const gchar *provider_name;
 
-          presentation_identity = goa_account_get_presentation_identity (account);
           provider_name = goa_account_get_provider_name (account);
           g_set_error (error,
                        GOA_ERROR,

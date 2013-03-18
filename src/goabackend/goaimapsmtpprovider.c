@@ -938,6 +938,7 @@ add_account (GoaProvider    *provider,
   provider_type = goa_provider_get_provider_type (provider);
   if (!goa_utils_check_duplicate (client,
                                   email_address,
+                                  email_address,
                                   provider_type,
                                   (GoaPeekInterfaceFunc) goa_object_peek_password_based,
                                   &data.error))

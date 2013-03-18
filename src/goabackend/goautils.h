@@ -38,6 +38,7 @@ typedef gpointer (*GoaPeekInterfaceFunc)   (GoaObject *);
 
 gboolean         goa_utils_check_duplicate (GoaClient              *client,
                                             const gchar            *identity,
+                                            const gchar            *presentation_identity,
                                             const gchar            *provider_type,
                                             GoaPeekInterfaceFunc    func,
                                             GError                **error);

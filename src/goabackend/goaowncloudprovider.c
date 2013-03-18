@@ -767,18 +767,21 @@ add_account (GoaProvider    *provider,
   username = gtk_entry_get_text (GTK_ENTRY (data.username));
   password = gtk_entry_get_text (GTK_ENTRY (data.password));
 
+  uri = normalize_uri (uri_text, &server);
+  presentation_identity = g_strconcat (username, "@", server, NULL);
+
   /* See if there's already an account of this type with the
    * given identity
    */
   provider_type = goa_provider_get_provider_type (provider);
   if (!goa_utils_check_duplicate (client,
                                   username,
+                                  presentation_identity,
                                   provider_type,
                                   (GoaPeekInterfaceFunc) goa_object_peek_password_based,
                                   &data.error))
     goto out;
 
-  uri = normalize_uri (uri_text, &server);
   uri_webdav = g_strconcat (uri, WEBDAV_ENDPOINT, NULL);
   g_cancellable_reset (data.cancellable);
   goa_http_client_check (http_client,
@@ -831,6 +834,7 @@ add_account (GoaProvider    *provider,
       gtk_widget_set_no_show_all (data.cluebar, FALSE);
       gtk_widget_show_all (data.cluebar);
 
+      g_clear_pointer (&presentation_identity, g_free);
       g_clear_pointer (&server, g_free);
       g_clear_pointer (&uri, g_free);
       goto http_again;
@@ -853,7 +857,6 @@ add_account (GoaProvider    *provider,
    * can create a proxy for the new object) so run the mainloop while
    * waiting for this to complete
    */
-  presentation_identity = g_strconcat (username, "@", server, NULL);
   goa_manager_call_add_account (goa_client_get_manager (client),
                                 goa_provider_get_provider_type (provider),
                                 username,
