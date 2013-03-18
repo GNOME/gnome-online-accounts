@@ -1577,6 +1577,9 @@ start_over:
   g_free (principal);
   principal = g_strdup_printf ("%s@%s", username, realm);
 
+  g_free (principal_for_display);
+  principal_for_display = g_strdup_printf ("%s@%s", username, realm);
+
   /* See if there's already an account of this type with the
    * given identity
    */
@@ -1584,6 +1587,7 @@ start_over:
 
   if (!goa_utils_check_duplicate (client,
                                   principal,
+                                  principal_for_display,
                                   provider_type,
                                   (GoaPeekInterfaceFunc) goa_object_peek_account,
                                   &request.error))
@@ -1597,9 +1601,6 @@ start_over:
   g_variant_builder_add (&details, "{ss}", "Realm", realm);
   g_variant_builder_add (&details, "{ss}", "IsTemporary", "true");
   g_variant_builder_add (&details, "{ss}", "TicketingEnabled", "true");
-
-  g_free (principal_for_display);
-  principal_for_display = g_strdup_printf ("%s@%s", username, realm);
 
   g_free (realm);
 

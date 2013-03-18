@@ -1252,6 +1252,7 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
    */
   if (!goa_utils_check_duplicate (client,
                                   identity,
+                                  presentation_identity,
                                   goa_provider_get_provider_type (GOA_PROVIDER (provider)),
                                   (GoaPeekInterfaceFunc) goa_object_peek_oauth2_based,
                                   &data.error))
