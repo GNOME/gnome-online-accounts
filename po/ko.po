@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-03-18 12:13+0000\n"
+"POT-Creation-Date: 2013-03-15 18:57+0000\n"
 "PO-Revision-Date: 2013-03-17 23:32+0900\n"
 "Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>\n"
 "Language-Team: Korean <gnome-kr@googlegroups.com>\n"
@@ -138,7 +138,7 @@ msgstr "연결중…"
 #: ../src/goabackend/goaimapsmtpprovider.c:1300
 #: ../src/goabackend/goaimapsmtpprovider.c:1373
 #: ../src/goabackend/goakerberosprovider.c:1544
-#: ../src/goabackend/goaoauth2provider.c:1064
+#: ../src/goabackend/goaoauth2provider.c:1131
 #: ../src/goabackend/goaoauthprovider.c:1041
 #: ../src/goabackend/goaowncloudprovider.c:753
 #: ../src/goabackend/goaowncloudprovider.c:962
@@ -212,9 +212,12 @@ msgstr "연락처(_C)"
 msgid "Facebook"
 msgstr "페이스북"
 
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:205
 #: ../src/goabackend/goagoogleprovider.c:200
+#: ../src/goabackend/goatwitterprovider.c:166
 #: ../src/goabackend/goawindowsliveprovider.c:187
+#: ../src/goabackend/goayahooprovider.c:181
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr "guid를 요청하는데 상태 200을 기대했지만, %d 상태를 가져왔습니다 (%s) "
@@ -229,12 +232,21 @@ msgstr "guid를 요청하는데 상태 200을 기대했지만, %d 상태를 가�
 #: ../src/goabackend/goaflickrprovider.c:244
 #: ../src/goabackend/goagoogleprovider.c:219
 #: ../src/goabackend/goagoogleprovider.c:231
-#: ../src/goabackend/goaoauth2provider.c:600
-#: ../src/goabackend/goaoauth2provider.c:630
-#: ../src/goabackend/goaoauth2provider.c:642
+#: ../src/goabackend/goaoauth2provider.c:660
+#: ../src/goabackend/goaoauth2provider.c:690
+#: ../src/goabackend/goaoauth2provider.c:702
+#: ../src/goabackend/goatwitterprovider.c:185
+#: ../src/goabackend/goatwitterprovider.c:197
+#: ../src/goabackend/goatwitterprovider.c:207
 #: ../src/goabackend/goawindowsliveprovider.c:206
 #: ../src/goabackend/goawindowsliveprovider.c:218
 #: ../src/goabackend/goawindowsliveprovider.c:230
+#: ../src/goabackend/goayahooprovider.c:200
+#: ../src/goabackend/goayahooprovider.c:212
+#: ../src/goabackend/goayahooprovider.c:223
+#: ../src/goabackend/goayahooprovider.c:269
+#: ../src/goabackend/goayahooprovider.c:281
+#: ../src/goabackend/goayahooprovider.c:292
 #, c-format
 msgid "Could not parse response"
 msgstr "응답을 해석할 수 없습니다"
@@ -256,6 +268,7 @@ msgstr ""
 "사용자 ID를 요청하는데 상태 200을 기대했지만, %d 상태를 가져왔습니다 (%s)"
 
 #: ../src/goabackend/goaflickrprovider.c:322
+#: ../src/goabackend/goayahooprovider.c:344
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "시스템 시간이 잘못되었습니다. 날짜와 시간 설정을 확인해보십시오."
 
@@ -426,7 +439,7 @@ msgid "Network _Resources"
 msgstr "네트워크 자원(_R)"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:576
+#: ../src/goabackend/goaoauth2provider.c:636
 #: ../src/goabackend/goaoauthprovider.c:586
 #, c-format
 msgid ""
@@ -434,42 +447,42 @@ msgid ""
 msgstr ""
 "접근 토큰을 요청하는데 상태 200을 기대했지만, %d 상태를 가져왔습니다 (%s) "
 
-#: ../src/goabackend/goaoauth2provider.c:851
-#: ../src/goabackend/goaoauth2provider.c:891
+#: ../src/goabackend/goaoauth2provider.c:911
+#: ../src/goabackend/goaoauth2provider.c:951
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "인증 응답은 \"%s\" 입니다"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:997
+#: ../src/goabackend/goaoauth2provider.c:1057
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
 "page</a>:"
 msgstr "<a href=\"%s\">인증 페이지</a>로 부터 얻어낸 인증 코드를 붙입니다:"
 
-#: ../src/goabackend/goaoauth2provider.c:1090
+#: ../src/goabackend/goaoauth2provider.c:1157
 #: ../src/goabackend/goaoauthprovider.c:1072
 msgid "Error getting an Access Token: "
 msgstr "접근 토큰을 가져오는데 오류가 발생했습니다:"
 
-#: ../src/goabackend/goaoauth2provider.c:1105
+#: ../src/goabackend/goaoauth2provider.c:1172
 #: ../src/goabackend/goaoauthprovider.c:1085
 msgid "Error getting identity: "
 msgstr "신원 정보를 가져오는데 오류가 발생했습니다:"
 
-#: ../src/goabackend/goaoauth2provider.c:1394
+#: ../src/goabackend/goaoauth2provider.c:1461
 #: ../src/goabackend/goaoauthprovider.c:1390
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "%s(으)로 로그인하기를 요청받았지만, %s(으)로 로그인 하였습니다."
 
-#: ../src/goabackend/goaoauth2provider.c:1565
+#: ../src/goabackend/goaoauth2provider.c:1632
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "인증 저장소에 access_token이 없습니다"
 
-#: ../src/goabackend/goaoauth2provider.c:1604
+#: ../src/goabackend/goaoauth2provider.c:1671
 #: ../src/goabackend/goaoauthprovider.c:1618
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
@@ -521,7 +534,7 @@ msgstr "ownCloud 서버에 연결하는 중 오류가 발생했습니다"
 msgid "_Files"
 msgstr "파일(_F)"
 
-#: ../src/goabackend/goaprovider.c:577
+#: ../src/goabackend/goaprovider.c:691
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "유형 %s에 ensure_credentials_sync가 구현되지 않았습니다"
@@ -578,6 +591,10 @@ msgstr "서버에서 PLAIN을 지원하지 않습니다"
 msgid "Server does not support STARTTLS"
 msgstr "서버에서 STARTTLS를 지원하지 않습니다"
 
+#: ../src/goabackend/goatwitterprovider.c:81
+msgid "Twitter"
+msgstr "트위터"
+
 #: ../src/goabackend/goautils.c:84
 #, c-format
 msgid "A %s account already exists for %s"
@@ -608,7 +625,7 @@ msgstr "키 모음에서 인증 저장소를 찾을 수 없습니다"
 msgid "Error parsing result obtained from the keyring: "
 msgstr "키 모음에서 가져온 결과를 해석하는데 오류가 발생했습니다:"
 
-#. Translators: The %s is the type of the provider, e.g. 'google' or 'facebook'
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
 #: ../src/goabackend/goautils.c:268
 #, c-format
 msgid "GOA %s credentials for identity %s"
@@ -659,6 +676,16 @@ msgstr "“%s” 불러오는 중…"
 #: ../src/goabackend/goawindowsliveprovider.c:84
 msgid "Windows Live"
 msgstr "윈도우 라이브 메신저"
+
+#: ../src/goabackend/goayahooprovider.c:81
+msgid "Yahoo"
+msgstr "야후"
+
+#: ../src/goabackend/goayahooprovider.c:249
+#, c-format
+msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+msgstr ""
+"이름 정보를 요청하는데 상태 200을 기대했지만, %d 상태를 가져왔습니다 (%s)"
 
 #: ../src/goaidentity/goaalarm.c:245
 msgid "Time"
@@ -742,12 +769,3 @@ msgstr "신원 정보를 찾을 수 없습니다"
 msgid "Could not create credential cache for identity"
 msgstr "신원에 대한 인증 저장소 캐시를 만들 수 없습니다"
 
-#~ msgid "Twitter"
-#~ msgstr "트위터"
-
-#~ msgid "Yahoo"
-#~ msgstr "야후"
-
-#~ msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-#~ msgstr ""
-#~ "이름 정보를 요청하는데 상태 200을 기대했지만, %d 상태를 가져왔습니다 (%s)"
