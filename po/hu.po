@@ -4,14 +4,14 @@
 #
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2011, 2012.
 # Lukács Bence <lukacs.bence1 at gmail dot com>, 2012.
-# Balázs Úr <urbalazs at gmail dot com>, 2012.
+# Balázs Úr <urbalazs at gmail dot com>, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-11-07 14:04+0000\n"
-"PO-Revision-Date: 2012-12-29 16:00+0100\n"
+"POT-Creation-Date: 2013-03-19 07:40+0000\n"
+"PO-Revision-Date: 2013-03-21 23:06+0100\n"
 "Last-Translator: Balázs Úr <urbalazs at gmail dot com>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -46,37 +46,37 @@ msgid "ProviderType property is not set for account"
 msgstr "ProviderType tulajdonság nincs beállítva a fiók számára"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:204 ../src/goabackend/goahttpclient.c:147
+#: ../src/goabackend/goaewsclient.c:234 ../src/goabackend/goahttpclient.c:175
 #, c-format
 msgid "Code: %u - Unexpected response from server"
 msgstr "Kód: %u - Nem várt válasz érkezett a kiszolgálótól"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:220
+#: ../src/goabackend/goaewsclient.c:250
 #, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "Az automatikus felderítésre adott válasz XML feldolgozása sikertelen."
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:230
+#: ../src/goabackend/goaewsclient.c:260
 #, c-format
 msgid "Failed to find Autodiscover element"
 msgstr "Nem sikerült megtalálni az Autodiscover elemet"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:244
+#: ../src/goabackend/goaewsclient.c:274
 #, c-format
 msgid "Failed to find Response element"
 msgstr "Nem sikerült megtalálni a Response elemet"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:258
+#: ../src/goabackend/goaewsclient.c:288
 #, c-format
 msgid "Failed to find Account element"
 msgstr "Nem sikerült megtalálni az Account elemet"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:275
+#: ../src/goabackend/goaewsclient.c:305
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr ""
@@ -86,7 +86,7 @@ msgstr ""
 msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
-#: ../src/goabackend/goaexchangeprovider.c:279
+#: ../src/goabackend/goaexchangeprovider.c:282
 #: ../src/goabackend/goagoogleprovider.c:651
 #: ../src/goabackend/goaoauth2provider.c:1443
 #: ../src/goabackend/goaoauthprovider.c:1545
@@ -95,10 +95,10 @@ msgid "Credentials not found in keyring (%s, %d): "
 msgstr "A hitelesítési adatok nem találhatók a kulcstartón (%s, %d): "
 
 #. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:297
-#: ../src/goabackend/goaexchangeprovider.c:943
+#: ../src/goabackend/goaexchangeprovider.c:300
+#: ../src/goabackend/goaexchangeprovider.c:966
 #: ../src/goabackend/goagoogleprovider.c:670
-#: ../src/goabackend/goagoogleprovider.c:849
+#: ../src/goabackend/goagoogleprovider.c:850
 #, c-format
 msgid "Did not find password with username `%s' in credentials"
 msgstr ""
@@ -108,36 +108,35 @@ msgstr ""
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
 #.
-#: ../src/goabackend/goaexchangeprovider.c:323
-#: ../src/goabackend/goagoogleprovider.c:692
+#: ../src/goabackend/goaexchangeprovider.c:328
+#: ../src/goabackend/goagoogleprovider.c:693
 #, c-format
-#| msgid "Did not find password with username `%s' in credentials"
 msgid "Invalid password with username `%s' (%s, %d): "
 msgstr "Érvénytelen jelszó a(z) „%s” felhasználónévhez (%s, %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:506
+#: ../src/goabackend/goaexchangeprovider.c:511
 msgid "_E-mail"
 msgstr "_E-mail"
 
-#: ../src/goabackend/goaexchangeprovider.c:507
+#: ../src/goabackend/goaexchangeprovider.c:512
 msgid "_Password"
 msgstr "_Jelszó"
 
-#: ../src/goabackend/goaexchangeprovider.c:510
+#: ../src/goabackend/goaexchangeprovider.c:515
 msgid "_Custom"
 msgstr "_Egyéni"
 
-#: ../src/goabackend/goaexchangeprovider.c:529
+#: ../src/goabackend/goaexchangeprovider.c:534
 #: ../src/goabackend/goakerberosprovider.c:1117
 msgid "User_name"
 msgstr "_Felhasználónév"
 
-#: ../src/goabackend/goaexchangeprovider.c:530
+#: ../src/goabackend/goaexchangeprovider.c:535
 msgid "_Server"
 msgstr "_Kiszolgáló"
 
-#: ../src/goabackend/goaexchangeprovider.c:614
-#: ../src/goabackend/goaexchangeprovider.c:780
+#: ../src/goabackend/goaexchangeprovider.c:622
+#: ../src/goabackend/goaexchangeprovider.c:801
 #: ../src/goabackend/goakerberosprovider.c:1510
 #: ../src/goabackend/goaoauth2provider.c:986
 #: ../src/goabackend/goaoauthprovider.c:1041
@@ -145,37 +144,41 @@ msgstr "_Kiszolgáló"
 msgid "Dialog was dismissed"
 msgstr "Az ablakot bezárták"
 
-#: ../src/goabackend/goaexchangeprovider.c:650
-#: ../src/goabackend/goaexchangeprovider.c:807
-msgid "Error connecting to Microsoft Exchange server"
-msgstr "Hiba a Microsoft Exchange kiszolgálóhoz való kapcsolódáskor"
+#: ../src/goabackend/goaexchangeprovider.c:660
+msgid "_Ignore"
+msgstr "_Kihagyás"
 
-#: ../src/goabackend/goaexchangeprovider.c:657
-#: ../src/goabackend/goaexchangeprovider.c:815
+#: ../src/goabackend/goaexchangeprovider.c:665
+#: ../src/goabackend/goaexchangeprovider.c:838
 #: ../src/goabackend/goakerberosprovider.c:1616
 msgid "_Try Again"
 msgstr "P_róbálja újra"
 
-#: ../src/goabackend/goaexchangeprovider.c:866
+#: ../src/goabackend/goaexchangeprovider.c:670
+#: ../src/goabackend/goaexchangeprovider.c:830
+msgid "Error connecting to Microsoft Exchange server"
+msgstr "Hiba a Microsoft Exchange kiszolgálóhoz való kapcsolódáskor"
+
+#: ../src/goabackend/goaexchangeprovider.c:889
 #: ../src/goabackend/goafacebookprovider.c:389
-#: ../src/goabackend/goagoogleprovider.c:729
-#: ../src/goabackend/goakerberosprovider.c:1685
+#: ../src/goabackend/goagoogleprovider.c:730
+#: ../src/goabackend/goakerberosprovider.c:1687
 #: ../src/goabackend/goawindowsliveprovider.c:403
 msgid "Use for"
 msgstr "Használat ehhez"
 
-#: ../src/goabackend/goaexchangeprovider.c:868
-#: ../src/goabackend/goagoogleprovider.c:731
+#: ../src/goabackend/goaexchangeprovider.c:891
+#: ../src/goabackend/goagoogleprovider.c:732
 msgid "_Mail"
 msgstr "_Levelezés"
 
-#: ../src/goabackend/goaexchangeprovider.c:873
-#: ../src/goabackend/goagoogleprovider.c:736
+#: ../src/goabackend/goaexchangeprovider.c:896
+#: ../src/goabackend/goagoogleprovider.c:737
 msgid "Cale_ndar"
 msgstr "_Naptár"
 
-#: ../src/goabackend/goaexchangeprovider.c:878
-#: ../src/goabackend/goagoogleprovider.c:741
+#: ../src/goabackend/goaexchangeprovider.c:901
+#: ../src/goabackend/goagoogleprovider.c:742
 msgid "_Contacts"
 msgstr "Né_vjegyek"
 
@@ -211,7 +214,7 @@ msgid "Didn't find email member in JSON data"
 msgstr "Nem található e-mail tag a JSON-adatokban"
 
 #: ../src/goabackend/goafacebookprovider.c:391
-#: ../src/goabackend/goagoogleprovider.c:746
+#: ../src/goabackend/goagoogleprovider.c:747
 #: ../src/goabackend/goawindowsliveprovider.c:405
 msgid "C_hat"
 msgstr "_Csevegés"
@@ -229,7 +232,7 @@ msgstr "Nem található adat tag a JSON-adatokban"
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "Rendszerideje nem érvényes. Ellenőrizze a dátum- és időbeállításokat."
 
-#: ../src/goabackend/goagoogleprovider.c:751
+#: ../src/goabackend/goagoogleprovider.c:752
 #: ../src/goabackend/goawindowsliveprovider.c:410
 msgid "_Documents"
 msgstr "_Dokumentumok"
@@ -285,7 +288,7 @@ msgstr "A tartomány nem érvényes"
 msgid "Error connecting to enterprise identity server"
 msgstr "Hiba a vállalati személyazonosság-kiszolgálóhoz való kapcsolódáskor"
 
-#: ../src/goabackend/goakerberosprovider.c:1687
+#: ../src/goabackend/goakerberosprovider.c:1689
 msgid "Network _Resources"
 msgstr "_Hálózati erőforrások"
 
@@ -395,7 +398,7 @@ msgstr ""
 "A hitelesítési adatok nem tartalmaznak access_token vagy access_token_secret "
 "tagot"
 
-#: ../src/goabackend/goaprovider.c:548
+#: ../src/goabackend/goaprovider.c:549
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "Az ensure_credentials_sync nincs megvalósítva a(z) %s típushoz"
@@ -435,6 +438,38 @@ msgstr "GOA %s hitelesítési adatok a(z) %s személyazonossághoz"
 #: ../src/goabackend/goautils.c:264
 msgid "Failed to store credentials in the keyring"
 msgstr "A hitelesítési adatok tárolása meghiúsult a kulcstartón"
+
+#: ../src/goabackend/goautils.c:454
+msgid "The signing certificate authority is not known."
+msgstr "Az aláíró hitelesítésszolgáltató ismeretlen."
+
+#: ../src/goabackend/goautils.c:458
+msgid ""
+"The certificate does not match the expected identity of the site that it was "
+"retrieved from."
+msgstr ""
+"A tanúsítvány nem felel meg azon oldal várt személyazonosságának, ahonnan le "
+"lett töltve."
+
+#: ../src/goabackend/goautils.c:463
+msgid "The certificate's activation time is still in the future."
+msgstr "A tanúsítvány aktiválási ideje a jövőben van."
+
+#: ../src/goabackend/goautils.c:467
+msgid "The certificate has expired."
+msgstr "A tanúsítvány lejárt."
+
+#: ../src/goabackend/goautils.c:471
+msgid "The certificate has been revoked."
+msgstr "A tanúsítvány vissza lett vonva."
+
+#: ../src/goabackend/goautils.c:475
+msgid "The certificate's algorithm is considered insecure."
+msgstr "A tanúsítvány algoritmusa nem tekinthető biztonságosnak."
+
+#: ../src/goabackend/goautils.c:479
+msgid "Invalid certificate."
+msgstr "Érvénytelen tanúsítvány."
 
 #. translators: %s here is the address of the web page
 #: ../src/goabackend/goawebview.c:75
@@ -533,11 +568,11 @@ msgstr ""
 msgid "Could not erase identity: %k"
 msgstr "Nem törölhető a személyazonosság: %k"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:746
+#: ../src/goaidentity/goakerberosidentitymanager.c:747
 msgid "Could not find identity"
 msgstr "Nem található személyazonosság"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:823
+#: ../src/goaidentity/goakerberosidentitymanager.c:824
 msgid "Could not create credential cache for identity"
 msgstr ""
 "Nem hozható létre a hitelesítési adatok gyorsítótára a személyazonossághoz"
