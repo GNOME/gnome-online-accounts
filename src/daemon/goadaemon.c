@@ -184,7 +184,9 @@ goa_daemon_init (GoaDaemon *daemon)
   static volatile GQuark goa_error_domain = 0;
   GoaObjectSkeleton *object;
   gchar *path;
+#ifdef GOA_KERBEROS_ENABLED
   GError *error = NULL;
+#endif
 
   /* this will force associating errors in the GOA_ERROR error domain
    * with org.freedesktop.Goa.Error.* errors via g_dbus_error_register_error_domain().
