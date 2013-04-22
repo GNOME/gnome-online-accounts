@@ -474,6 +474,7 @@ goa_ews_client_autodiscover (GoaEwsClient        *client,
                                                        SOUP_SESSION_USE_NTLM, TRUE,
                                                        SOUP_SESSION_USE_THREAD_CONTEXT, TRUE,
                                                        NULL);
+  soup_session_add_feature_by_type (data->session, SOUP_TYPE_PROXY_RESOLVER_DEFAULT);
   data->accept_ssl_errors = accept_ssl_errors;
 
   if (cancellable != NULL)
