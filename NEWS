@@ -1,6 +1,63 @@
 Overview of changes in 3.9.1
 ============================
 
+* IMAP/SMTP is enabled by default
+
+* Bugs fixed:
+ 657761 Don't use technical jargon in user visible strings
+ 660882 Drop the notification from EnsureCredentials
+ 669040 twitter: When verifying credentials, don't fetch the last status
+ 694313 Add a way to pass custom info to the provider when creating the account
+ 695065 build: Tell git.mk to ignore generated files
+ 695074 build: Fix `make distcheck` by updating the icon cache on uninstall too
+ 695106 Do not send the credentials before notifying the user of an invalid
+        SSL certificate (CVE-2013-1799)
+ 695355 imap-smtp: Can not do STARTTLS connections
+ 695559 Add translator comment to explain what None refers to
+ 695768 provider: Silence warnings when setting :preseed-data to NULL
+ 695802 imap-auth-login: Escape backslashes in passwords
+ 695886 Categorize providers by supported features
+ 695888 owncloud: Make sure Uri always ends in a trailing slash
+ 696085 owncloud: Can't add more than one ownCloud account
+ 698203 Socket times out with gnutls3 and some TLS servers
+
+* Updated translations:
+ Aragonese
+ Assamese
+ Belarussian
+ Catalan
+ Catalan (Valencian)
+ Simplified Chinese
+ Czech
+ Danish
+ Dutch
+ English (British)
+ Esperanto
+ Estonian
+ Finnish
+ French
+ German
+ Greek
+ Gujarati
+ Hebrew
+ Hindi
+ Hungarian
+ Italian
+ Kannada
+ Korean
+ Latvian
+ Norwegian bokmål
+ Persian
+ Polish
+ Portuguese
+ Portuguese (Brazilian)
+ Russian
+ Slovak
+ Slovenian
+ Tamil
+ Ukranian
+ Vietnamese
+
 
 Overview of changes in 3.7.90
 =============================
