@@ -54,6 +54,7 @@ struct _GoaImapAuthLogin
 
   GoaProvider *provider;
   GoaObject *object;
+  gboolean greeting_absent;
   gchar *username;
   gchar *password;
 };
@@ -82,6 +83,86 @@ static gboolean goa_imap_auth_login_starttls_sync (GoaMailAuth    *_auth,
                                                    GError        **error);
 
 G_DEFINE_TYPE (GoaImapAuthLogin, goa_imap_auth_login, GOA_TYPE_MAIL_AUTH);
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static const gchar *IMAP_TAG = "A001";
+
+static gboolean
+imap_auth_login_check_BYE (const gchar *response, GError **error)
+{
+  if (g_str_has_prefix (response, "* BYE"))
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED, /* TODO: more specific */
+                   _("Service not available"));
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+imap_auth_login_check_NO (const gchar *response, GError **error)
+{
+  gboolean ret;
+  gchar *str;
+
+  ret = FALSE;
+  str = g_strdup_printf ("%s NO", IMAP_TAG);
+
+  if (g_str_has_prefix (response, str))
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED, /* TODO: more specific */
+                   _("Authentication failed"));
+      ret = TRUE;
+    }
+
+  g_free (str);
+  return ret;
+}
+
+static gboolean
+imap_auth_login_check_not_OK (const gchar *response, gboolean tagged, GError **error)
+{
+  gboolean ret;
+
+  ret = FALSE;
+
+  if (tagged)
+    {
+      gchar *str;
+
+      str = g_strdup_printf ("%s OK", IMAP_TAG);
+      if (!g_str_has_prefix (response, str))
+        {
+          g_set_error (error,
+                       GOA_ERROR,
+                       GOA_ERROR_FAILED, /* TODO: more specific */
+                       "Unexpected response `%s' while doing LOGIN authentication",
+                       response);
+          ret = TRUE;
+        }
+      g_free (str);
+    }
+  else
+    {
+      if (!g_str_has_prefix (response, "* OK"))
+        {
+          g_set_error (error,
+                       GOA_ERROR,
+                       GOA_ERROR_FAILED, /* TODO: more specific */
+                       "Unexpected response `%s' while doing LOGIN authentication",
+                       response);
+          ret = TRUE;
+        }
+    }
+
+  return ret;
+}
 
 /* ---------------------------------------------------------------------------------------------------- */
 
@@ -387,30 +468,38 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *_auth,
   input = goa_mail_auth_get_input (_auth);
   output = goa_mail_auth_get_output (_auth);
 
-  request = g_strdup_printf ("A001 LOGIN \"%s\" \"%s\"\r\n", auth->username, password);
-  g_debug ("> A001 LOGIN \"********************\" \"********************\"");
+  /* Check the greeting, if there is one */
+
+  if (!auth->greeting_absent)
+    {
+      response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+      if (response == NULL)
+        goto out;
+      g_debug ("< %s", response);
+      if (imap_auth_login_check_BYE (response, error))
+        goto out;
+      if (imap_auth_login_check_not_OK (response, FALSE, error))
+        goto out;
+      g_clear_pointer (&response, g_free);
+    }
+
+  /* Send LOGIN */
+
+  request = g_strdup_printf ("%s LOGIN \"%s\" \"%s\"\r\n", IMAP_TAG, auth->username, password);
+  g_debug ("> %s LOGIN \"********************\" \"********************\"", IMAP_TAG);
   if (!g_data_output_stream_put_string (output, request, cancellable, error))
     goto out;
+  g_clear_pointer (&request, g_free);
 
- again:
   response = g_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
-  /* ignore untagged responses */
-  if (g_str_has_prefix (response, "*"))
-    {
-      g_free (response);
-      goto again;
-    }
-  if (!g_str_has_prefix (response, "A001 OK"))
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   _("Authentication failed"));
-      goto out;
-    }
+  if (imap_auth_login_check_NO (response, error))
+    goto out;
+  if (imap_auth_login_check_not_OK (response, TRUE, error))
+    goto out;
+  g_clear_pointer (&response, g_free);
 
   ret = TRUE;
 
@@ -428,6 +517,7 @@ goa_imap_auth_login_starttls_sync (GoaMailAuth         *_auth,
                                    GCancellable        *cancellable,
                                    GError             **error)
 {
+  GoaImapAuthLogin *auth = GOA_IMAP_AUTH_LOGIN (_auth);
   GDataInputStream *input;
   GDataOutputStream *output;
   gchar *request;
@@ -442,31 +532,36 @@ goa_imap_auth_login_starttls_sync (GoaMailAuth         *_auth,
   input = goa_mail_auth_get_input (_auth);
   output = goa_mail_auth_get_output (_auth);
 
-  request = g_strdup ("A001 STARTTLS\r\n");
-  g_debug ("> %s", request);
-  if (!g_data_output_stream_put_string (output, request, cancellable, error))
-    goto out;
+  /* Check the greeting */
 
- again:
   response = g_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
-  /* ignore untagged responses */
-  if (g_str_has_prefix (response, "*"))
-    {
-      g_free (response);
-      goto again;
-    }
-  if (!g_str_has_prefix (response, "A001 OK"))
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   "Unexpected response `%s' while doing LOGIN authentication",
-                   response);
-      goto out;
-    }
+  if (imap_auth_login_check_BYE (response, error))
+    goto out;
+  if (imap_auth_login_check_not_OK (response, FALSE, error))
+    goto out;
+  g_clear_pointer (&response, g_free);
+
+  /* Send STARTTLS */
+
+  request = g_strdup_printf ("%s STARTTLS\r\n", IMAP_TAG);
+  g_debug ("> %s", request);
+  if (!g_data_output_stream_put_string (output, request, cancellable, error))
+    goto out;
+  g_clear_pointer (&request, g_free);
+
+  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  if (response == NULL)
+    goto out;
+  g_debug ("< %s", response);
+  if (imap_auth_login_check_not_OK (response, TRUE, error))
+    goto out;
+  g_clear_pointer (&response, g_free);
+
+  /* There won't be a greeting after this */
+  auth->greeting_absent = TRUE;
 
   ret = TRUE;
 
