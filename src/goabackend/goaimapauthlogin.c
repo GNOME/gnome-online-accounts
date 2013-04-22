@@ -164,6 +164,21 @@ imap_auth_login_check_not_OK (const gchar *response, gboolean tagged, GError **e
   return ret;
 }
 
+static gboolean
+imap_auth_login_check_not_STARTTLS (const gchar *response, GError **error)
+{
+  if (strstr (response, "STARTTLS") == NULL)
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_NOT_SUPPORTED,
+                   _("Server does not support STARTTLS"));
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
@@ -541,6 +556,32 @@ goa_imap_auth_login_starttls_sync (GoaMailAuth         *_auth,
   if (imap_auth_login_check_BYE (response, error))
     goto out;
   if (imap_auth_login_check_not_OK (response, FALSE, error))
+    goto out;
+  g_clear_pointer (&response, g_free);
+
+  /* Send CAPABILITY */
+
+  request = g_strdup_printf ("%s CAPABILITY\r\n", IMAP_TAG);
+  g_debug ("> %s", request);
+  if (!g_data_output_stream_put_string (output, request, cancellable, error))
+    goto out;
+  g_clear_pointer (&request, g_free);
+
+  /* Check if STARTTLS is supported or not */
+
+  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  if (response == NULL)
+    goto out;
+  g_debug ("< %s", response);
+  if (imap_auth_login_check_not_STARTTLS (response, error))
+    goto out;
+  g_clear_pointer (&response, g_free);
+
+  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  if (response == NULL)
+    goto out;
+  g_debug ("< %s", response);
+  if (imap_auth_login_check_not_OK (response, TRUE, error))
     goto out;
   g_clear_pointer (&response, g_free);
 
