@@ -231,6 +231,9 @@ goa_http_client_check (GoaHttpClient       *client,
                                                        SOUP_SESSION_SSL_STRICT, FALSE,
                                                        SOUP_SESSION_USE_THREAD_CONTEXT, TRUE,
                                                        NULL);
+
+  soup_session_add_feature_by_type (data->session, SOUP_TYPE_PROXY_RESOLVER_DEFAULT);
+
   logger = soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
   soup_logger_set_printer (logger, http_client_log_printer, NULL, NULL);
   soup_session_add_feature (data->session, SOUP_SESSION_FEATURE (logger));
