@@ -126,6 +126,30 @@ imap_auth_login_check_NO (const gchar *response, GError **error)
 }
 
 static gboolean
+imap_auth_login_check_not_CAPABILITY (const gchar *response)
+{
+  if (!g_str_has_prefix (response, "* CAPABILITY"))
+    return TRUE;
+
+  return FALSE;
+}
+
+static gboolean
+imap_auth_login_check_not_LOGIN (const gchar *response, GError **error)
+{
+  if (strstr (response, "AUTH=PLAIN") == NULL)
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_NOT_SUPPORTED,
+                   _("Server does not support PLAIN"));
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 imap_auth_login_check_not_OK (const gchar *response, gboolean tagged, GError **error)
 {
   gboolean ret;
@@ -498,6 +522,32 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *_auth,
       g_clear_pointer (&response, g_free);
     }
 
+  /* Send CAPABILITY */
+
+  request = g_strdup_printf ("%s CAPABILITY\r\n", IMAP_TAG);
+  g_debug ("> %s", request);
+  if (!g_data_output_stream_put_string (output, request, cancellable, error))
+    goto out;
+  g_clear_pointer (&request, g_free);
+
+  /* Check if LOGIN is supported or not */
+
+  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  if (response == NULL)
+    goto out;
+  g_debug ("< %s", response);
+  if (imap_auth_login_check_not_LOGIN (response, error))
+    goto out;
+  g_clear_pointer (&response, g_free);
+
+  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  if (response == NULL)
+    goto out;
+  g_debug ("< %s", response);
+  if (imap_auth_login_check_not_OK (response, TRUE, error))
+    goto out;
+  g_clear_pointer (&response, g_free);
+
   /* Send LOGIN */
 
   request = g_strdup_printf ("%s LOGIN \"%s\" \"%s\"\r\n", IMAP_TAG, auth->username, password);
@@ -506,10 +556,20 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *_auth,
     goto out;
   g_clear_pointer (&request, g_free);
 
+  /* Skip post-login CAPABILITY, if any */
   response = g_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
+  if (imap_auth_login_check_not_CAPABILITY (response))
+    goto check_login_response;
+  g_clear_pointer (&response, g_free);
+
+  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  if (response == NULL)
+    goto out;
+  g_debug ("< %s", response);
+ check_login_response:
   if (imap_auth_login_check_NO (response, error))
     goto out;
   if (imap_auth_login_check_not_OK (response, TRUE, error))
