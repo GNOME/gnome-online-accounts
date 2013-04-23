@@ -65,6 +65,28 @@
  * need to be implemented - this type implements these methods..
  */
 
+struct _GoaOAuth2ProviderPrivate
+{
+  GtkDialog *dialog;
+  GError *error;
+  GMainLoop *loop;
+
+  WebKitDOMHTMLInputElement *password_node;
+  const gchar *existing_identity;
+
+  gchar *account_object_path;
+
+  gchar *authorization_code;
+  gchar *access_token;
+  gint   access_token_expires_in;
+  gchar *refresh_token;
+  gchar *identity;
+  gchar *presentation_identity;
+  gchar *password;
+};
+
+#define GOA_OAUTH2_PROVIDER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GOA_TYPE_OAUTH2_PROVIDER, GoaOAuth2ProviderPrivate))
+
 G_LOCK_DEFINE_STATIC (provider_lock);
 
 G_DEFINE_ABSTRACT_TYPE (GoaOAuth2Provider, goa_oauth2_provider, GOA_TYPE_PROVIDER);
@@ -732,34 +754,15 @@ get_tokens_sync (GoaOAuth2Provider  *provider,
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
-typedef struct
-{
-  GoaOAuth2Provider *provider;
-  GtkDialog *dialog;
-  GError *error;
-
-  WebKitDOMHTMLInputElement *password_node;
-  gchar *password;
-
-  gchar *authorization_code;
-  gchar *access_token;
-  gint access_token_expires_in;
-  gchar *refresh_token;
-
-  const gchar *existing_identity;
-
-  gchar *identity;
-  gchar *presentation_identity;
-} IdentifyData;
 
 static void
 check_cookie (SoupCookie *cookie, gpointer user_data)
 {
-  IdentifyData *data = user_data;
+  GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
+  GoaOAuth2ProviderPrivate *priv = provider->priv;
   GList *children;
   GList *l;
-  GoaOAuth2Provider *provider = data->provider;
-  GtkDialog *dialog = data->dialog;
+  GtkDialog *dialog = priv->dialog;
   GtkWidget *action_area;
   const gchar *auth_cookie;
   const gchar *name;
@@ -782,28 +785,30 @@ check_cookie (SoupCookie *cookie, gpointer user_data)
 static void
 on_dom_node_click (WebKitDOMNode *element, WebKitDOMEvent *event, gpointer user_data)
 {
-  IdentifyData *data = user_data;
-  gtk_dialog_response (data->dialog, GTK_RESPONSE_CANCEL);
+  GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
+  GoaOAuth2ProviderPrivate *priv = provider->priv;
+  gtk_dialog_response (priv->dialog, GTK_RESPONSE_CANCEL);
 }
 
 static void
 on_form_submit (WebKitDOMNode *element, WebKitDOMEvent *event, gpointer user_data)
 {
-  IdentifyData *data = user_data;
+  GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
+  GoaOAuth2ProviderPrivate *priv = provider->priv;
 
-  if (data->password_node == NULL)
+  if (priv->password_node == NULL)
     return;
 
-  data->password = webkit_dom_html_input_element_get_value (data->password_node);
-  data->password_node = NULL;
+  priv->password = webkit_dom_html_input_element_get_value (priv->password_node);
+  priv->password_node = NULL;
 }
 
 static void
 on_web_view_document_load_finished (WebKitWebView *web_view, WebKitWebFrame *frame, gpointer user_data)
 {
-  IdentifyData *data = user_data;
+  GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
+  GoaOAuth2ProviderPrivate *priv = provider->priv;
   GSList *slist;
-  GoaOAuth2Provider *provider = data->provider;
   SoupCookieJar *cookie_jar;
   SoupSession *session;
   WebKitDOMDocument *document;
@@ -814,7 +819,7 @@ on_web_view_document_load_finished (WebKitWebView *web_view, WebKitWebFrame *fra
   session = webkit_get_default_session ();
   cookie_jar = SOUP_COOKIE_JAR (soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR));
   slist = soup_cookie_jar_all_cookies (cookie_jar);
-  g_slist_foreach (slist, (GFunc) check_cookie, data);
+  g_slist_foreach (slist, (GFunc) check_cookie, provider);
   g_slist_free_full (slist, (GDestroyNotify) soup_cookie_free);
 
   document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (web_view));
@@ -831,14 +836,14 @@ on_web_view_document_load_finished (WebKitWebView *web_view, WebKitWebFrame *fra
                                                       "click",
                                                       G_CALLBACK (on_dom_node_click),
                                                       FALSE,
-                                                      data);
+                                                      provider);
         }
-      else if (data->existing_identity != NULL
+      else if (priv->existing_identity != NULL
                && WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element)
                && goa_oauth2_provider_is_identity_node (provider, WEBKIT_DOM_HTML_INPUT_ELEMENT (element)))
         {
           webkit_dom_html_input_element_set_value (WEBKIT_DOM_HTML_INPUT_ELEMENT (element),
-                                                   data->existing_identity);
+                                                   priv->existing_identity);
           webkit_dom_html_input_element_set_read_only (WEBKIT_DOM_HTML_INPUT_ELEMENT (element), TRUE);
         }
       else if (WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element)
@@ -849,13 +854,13 @@ on_web_view_document_load_finished (WebKitWebView *web_view, WebKitWebFrame *fra
           form = webkit_dom_html_input_element_get_form (WEBKIT_DOM_HTML_INPUT_ELEMENT (element));
           if (form != NULL)
             {
-              data->password_node = WEBKIT_DOM_HTML_INPUT_ELEMENT (element);
-              g_clear_pointer (&data->password, g_free);
+              priv->password_node = WEBKIT_DOM_HTML_INPUT_ELEMENT (element);
+              g_clear_pointer (&priv->password, g_free);
               webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (form),
                                                           "submit",
                                                           G_CALLBACK (on_form_submit),
                                                           FALSE,
-                                                          data);
+                                                          provider);
             }
         }
     }
@@ -869,14 +874,15 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
                                                   WebKitWebPolicyDecision   *policy_decision,
                                                   gpointer                   user_data)
 {
-  IdentifyData *data = user_data;
+  GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
+  GoaOAuth2ProviderPrivate *priv = provider->priv;
   const gchar *redirect_uri;
   const gchar *requested_uri;
 
   /* TODO: use oauth2_proxy_extract_access_token() */
 
   requested_uri = webkit_network_request_get_uri (request);
-  redirect_uri = goa_oauth2_provider_get_redirect_uri (data->provider);
+  redirect_uri = goa_oauth2_provider_get_redirect_uri (provider);
   if (g_str_has_prefix (requested_uri, redirect_uri))
     {
       SoupMessage *message;
@@ -897,19 +903,19 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
 
           key_value_pairs = soup_form_decode (uri->query);
 
-          data->authorization_code = g_strdup (g_hash_table_lookup (key_value_pairs, "code"));
-          if (data->authorization_code != NULL)
+          priv->authorization_code = g_strdup (g_hash_table_lookup (key_value_pairs, "code"));
+          if (priv->authorization_code != NULL)
             {
-              gtk_dialog_response (data->dialog, GTK_RESPONSE_OK);
+              gtk_dialog_response (priv->dialog, GTK_RESPONSE_OK);
             }
           else
             {
-              g_set_error (&data->error,
+              g_set_error (&priv->error,
                            GOA_ERROR,
                            GOA_ERROR_NOT_AUTHORIZED,
                            _("Authorization response was \"%s\""),
                            (const gchar *) g_hash_table_lookup (key_value_pairs, "error"));
-              gtk_dialog_response (data->dialog, GTK_RESPONSE_CLOSE);
+              gtk_dialog_response (priv->dialog, GTK_RESPONSE_CLOSE);
             }
           g_hash_table_unref (key_value_pairs);
           webkit_web_policy_decision_ignore (policy_decision);
@@ -925,8 +931,8 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
           /* We might use oauth2_proxy_extract_access_token() here but
            * we can also extract other information.
            */
-          data->access_token = g_strdup (g_hash_table_lookup (key_value_pairs, "access_token"));
-          if (data->access_token != NULL)
+          priv->access_token = g_strdup (g_hash_table_lookup (key_value_pairs, "access_token"));
+          if (priv->access_token != NULL)
             {
               gchar *expires_in_str = NULL;
 
@@ -936,20 +942,20 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
                 expires_in_str = g_hash_table_lookup (key_value_pairs, "expires");
 
               if (expires_in_str != NULL)
-                 data->access_token_expires_in = atoi (expires_in_str);
+                 priv->access_token_expires_in = atoi (expires_in_str);
 
-              data->refresh_token = g_strdup (g_hash_table_lookup (key_value_pairs, "refresh_token"));
+              priv->refresh_token = g_strdup (g_hash_table_lookup (key_value_pairs, "refresh_token"));
 
-              gtk_dialog_response (data->dialog, GTK_RESPONSE_OK);
+              gtk_dialog_response (priv->dialog, GTK_RESPONSE_OK);
             }
           else
             {
-              g_set_error (&data->error,
+              g_set_error (&priv->error,
                            GOA_ERROR,
                            GOA_ERROR_NOT_AUTHORIZED,
                            _("Authorization response was \"%s\""),
                            (const gchar *) g_hash_table_lookup (key_value_pairs, "error"));
-              gtk_dialog_response (data->dialog, GTK_RESPONSE_CLOSE);
+              gtk_dialog_response (priv->dialog, GTK_RESPONSE_CLOSE);
             }
           g_hash_table_unref (key_value_pairs);
           webkit_web_policy_decision_ignore (policy_decision);
@@ -973,13 +979,14 @@ static void
 on_entry_changed (GtkEditable *editable,
                   gpointer     user_data)
 {
-  IdentifyData *data = user_data;
+  GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
+  GoaOAuth2ProviderPrivate *priv = provider->priv;
   gboolean sensitive;
 
-  g_free (data->authorization_code);
-  data->authorization_code = g_strdup (gtk_entry_get_text (GTK_ENTRY (editable)));
-  sensitive = data->authorization_code != NULL && (strlen (data->authorization_code) > 0);
-  gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, sensitive);
+  g_free (priv->authorization_code);
+  priv->authorization_code = g_strdup (gtk_entry_get_text (GTK_ENTRY (editable)));
+  sensitive = priv->authorization_code != NULL && (strlen (priv->authorization_code) > 0);
+  gtk_dialog_set_response_sensitive (priv->dialog, GTK_RESPONSE_OK, sensitive);
 }
 
 static gboolean
@@ -997,10 +1004,10 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
                          gchar             **out_password,
                          GError            **error)
 {
+  GoaOAuth2ProviderPrivate *priv = provider->priv;
   gboolean ret;
   gchar *url;
   GtkWidget *grid;
-  IdentifyData data;
   gchar *escaped_redirect_uri;
   gchar *escaped_client_id;
   gchar *escaped_scope;
@@ -1019,10 +1026,15 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
 
   /* TODO: check with NM whether we're online, if not - return error */
 
-  memset (&data, '\0', sizeof (IdentifyData));
-  data.provider = provider;
-  data.dialog = dialog;
-  data.existing_identity = existing_identity;
+  priv->dialog = dialog;
+  priv->existing_identity = existing_identity;
+
+  g_clear_pointer (&priv->password, g_free);
+  g_clear_pointer (&priv->identity, g_free);
+  g_clear_pointer (&priv->presentation_identity, g_free);
+  g_clear_pointer (&priv->authorization_code, g_free);
+  g_clear_pointer (&priv->access_token, g_free);
+  g_clear_pointer (&priv->refresh_token, g_free);
 
   /* TODO: use oauth2_proxy_build_login_url_full() */
   escaped_redirect_uri = g_uri_escape_string (goa_oauth2_provider_get_redirect_uri (provider), NULL, TRUE);
@@ -1069,12 +1081,12 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
       gtk_dialog_add_button (dialog, GTK_STOCK_OK, GTK_RESPONSE_OK);
       gtk_dialog_set_default_response (dialog, GTK_RESPONSE_OK);
       gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_OK, FALSE);
-      g_signal_connect (entry, "changed", G_CALLBACK (on_entry_changed), &data);
+      g_signal_connect (entry, "changed", G_CALLBACK (on_entry_changed), provider);
 
       if (!gtk_show_uri (NULL,
                          url,
                          GDK_CURRENT_TIME,
-                         &data.error))
+                         &priv->error))
         {
           goto out;
         }
@@ -1103,11 +1115,11 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
       g_signal_connect (embed,
                         "document-load-finished",
                         G_CALLBACK (on_web_view_document_load_finished),
-                        &data);
+                        provider);
       g_signal_connect (embed,
                         "navigation-policy-decision-requested",
                         G_CALLBACK (on_web_view_navigation_policy_decision_requested),
-                        &data);
+                        provider);
 
       gtk_container_add (GTK_CONTAINER (grid), web_view);
     }
@@ -1119,22 +1131,22 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
    * the token directly if we are using a client side flow, since we don't
    * need to pass the code to the remote application.
    */
-  if (data.authorization_code == NULL && data.access_token == NULL)
+  if (priv->authorization_code == NULL && priv->access_token == NULL)
     {
-      if (data.error == NULL)
+      if (priv->error == NULL)
         {
-          g_set_error (&data.error,
+          g_set_error (&priv->error,
                        GOA_ERROR,
                        GOA_ERROR_DIALOG_DISMISSED,
                        _("Dialog was dismissed"));
         }
       goto out;
     }
-  g_assert (data.error == NULL);
+  g_assert (priv->error == NULL);
 
   gtk_widget_hide (GTK_WIDGET (dialog));
 
-  if (data.authorization_code != NULL)
+  if (priv->authorization_code != NULL)
     {
       /* OK, we now have the authorization code... now we need to get the
        * email address (to e.g. check if the account already exists on
@@ -1143,31 +1155,31 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
        */
 
       /* TODO: run in worker thread */
-      data.access_token = get_tokens_sync (provider,
-                                           data.authorization_code,
-                                           NULL, /* refresh_token */
-                                           &data.refresh_token,
-                                           &data.access_token_expires_in,
-                                           NULL, /* GCancellable */
-                                           &data.error);
-      if (data.access_token == NULL)
+      priv->access_token = get_tokens_sync (provider,
+                                            priv->authorization_code,
+                                            NULL, /* refresh_token */
+                                            &priv->refresh_token,
+                                            &priv->access_token_expires_in,
+                                            NULL, /* GCancellable */
+                                            &priv->error);
+      if (priv->access_token == NULL)
         {
-          g_prefix_error (&data.error, _("Error getting an Access Token: "));
+          g_prefix_error (&priv->error, _("Error getting an Access Token: "));
           goto out;
         }
     }
 
-  g_assert (data.access_token != NULL);
+  g_assert (priv->access_token != NULL);
 
   /* TODO: run in worker thread */
-  data.identity = goa_oauth2_provider_get_identity_sync (provider,
-                                                         data.access_token,
-                                                         &data.presentation_identity,
-                                                         NULL, /* TODO: GCancellable */
-                                                         &data.error);
-  if (data.identity == NULL)
+  priv->identity = goa_oauth2_provider_get_identity_sync (provider,
+                                                          priv->access_token,
+                                                          &priv->presentation_identity,
+                                                          NULL, /* TODO: GCancellable */
+                                                          &priv->error);
+  if (priv->identity == NULL)
     {
-      g_prefix_error (&data.error, _("Error getting identity: "));
+      g_prefix_error (&priv->error, _("Error getting identity: "));
       goto out;
     }
 
@@ -1176,36 +1188,29 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
  out:
   if (ret)
     {
-      g_warn_if_fail (data.error == NULL);
+      g_warn_if_fail (priv->error == NULL);
       if (out_authorization_code != NULL)
-        *out_authorization_code = g_strdup (data.authorization_code);
+        *out_authorization_code = g_strdup (priv->authorization_code);
       if (out_access_token != NULL)
-        *out_access_token = g_strdup (data.access_token);
+        *out_access_token = g_strdup (priv->access_token);
       if (out_access_token_expires_in != NULL)
-        *out_access_token_expires_in = data.access_token_expires_in;
+        *out_access_token_expires_in = priv->access_token_expires_in;
       if (out_refresh_token != NULL)
-        *out_refresh_token = g_strdup (data.refresh_token);
+        *out_refresh_token = g_strdup (priv->refresh_token);
       if (out_identity != NULL)
-        *out_identity = g_strdup (data.identity);
+        *out_identity = g_strdup (priv->identity);
       if (out_presentation_identity != NULL)
-        *out_presentation_identity = g_strdup (data.presentation_identity);
+        *out_presentation_identity = g_strdup (priv->presentation_identity);
       if (out_password != NULL)
-        *out_password = g_strdup (data.password);
+        *out_password = g_strdup (priv->password);
     }
   else
     {
-      g_warn_if_fail (data.error != NULL);
-      g_propagate_error (error, data.error);
+      g_warn_if_fail (priv->error != NULL);
+      g_propagate_error (error, priv->error);
     }
 
-  g_free (data.password);
-  g_free (data.identity);
-  g_free (data.presentation_identity);
   g_free (url);
-
-  g_free (data.authorization_code);
-  g_free (data.access_token);
-  g_free (data.refresh_token);
   g_free (escaped_redirect_uri);
   g_free (escaped_client_id);
   g_free (escaped_scope);
@@ -1214,24 +1219,18 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-typedef struct
-{
-  GError *error;
-  GMainLoop *loop;
-  gchar *account_object_path;
-} AddData;
-
 static void
 add_account_cb (GoaManager   *manager,
                 GAsyncResult *res,
                 gpointer      user_data)
 {
-  AddData *data = user_data;
+  GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
+  GoaOAuth2ProviderPrivate *priv = provider->priv;
   goa_manager_call_add_account_finish (manager,
-                                       &data->account_object_path,
+                                       &priv->account_object_path,
                                        res,
-                                       &data->error);
-  g_main_loop_quit (data->loop);
+                                       &priv->error);
+  g_main_loop_quit (priv->loop);
 }
 
 static gint64
@@ -1266,6 +1265,7 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
                                          GError            **error)
 {
   GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (_provider);
+  GoaOAuth2ProviderPrivate *priv = provider->priv;
   GoaObject *ret;
   gchar *authorization_code;
   gchar *access_token;
@@ -1274,7 +1274,6 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
   gchar *refresh_token;
   gchar *identity;
   gchar *presentation_identity;
-  AddData data;
   GVariantBuilder credentials;
   GVariantBuilder details;
 
@@ -1292,8 +1291,6 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
   identity = NULL;
   presentation_identity = NULL;
 
-  memset (&data, '\0', sizeof (AddData));
-
   if (!get_tokens_and_identity (provider,
                                 TRUE,
                                 NULL,
@@ -1306,7 +1303,7 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
                                 &identity,
                                 &presentation_identity,
                                 &password,
-                                &data.error))
+                                &priv->error))
     goto out;
 
   /* OK, got the identity... see if there's already an account
@@ -1317,7 +1314,7 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
                                   presentation_identity,
                                   goa_provider_get_provider_type (GOA_PROVIDER (provider)),
                                   (GoaPeekInterfaceFunc) goa_object_peek_oauth2_based,
-                                  &data.error))
+                                  &priv->error))
     goto out;
 
   g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
@@ -1347,21 +1344,21 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
                                 g_variant_builder_end (&details),
                                 NULL, /* GCancellable* */
                                 (GAsyncReadyCallback) add_account_cb,
-                                &data);
-  data.loop = g_main_loop_new (NULL, FALSE);
-  g_main_loop_run (data.loop);
-  if (data.error != NULL)
+                                provider);
+  priv->loop = g_main_loop_new (NULL, FALSE);
+  g_main_loop_run (priv->loop);
+  if (priv->error != NULL)
     goto out;
 
   ret = GOA_OBJECT (g_dbus_object_manager_get_object (goa_client_get_object_manager (client),
-                                                      data.account_object_path));
+                                                      priv->account_object_path));
 
  out:
-  /* We might have an object even when data.error is set.
+  /* We might have an object even when priv->error is set.
    * eg., if we failed to store the credentials in the keyring.
    */
-  if (data.error != NULL)
-    g_propagate_error (error, data.error);
+  if (priv->error != NULL)
+    g_propagate_error (error, priv->error);
   else
     g_assert (ret != NULL);
 
@@ -1371,9 +1368,8 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
   g_free (refresh_token);
   g_free (access_token);
   g_free (authorization_code);
-  g_free (data.account_object_path);
-  if (data.loop != NULL)
-    g_main_loop_unref (data.loop);
+  g_clear_pointer (&priv->account_object_path, g_free);
+  g_clear_pointer (&priv->loop, g_main_loop_unref);
   return ret;
 }
 
@@ -1838,14 +1834,38 @@ goa_oauth2_provider_ensure_credentials_sync (GoaProvider   *_provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_oauth2_provider_init (GoaOAuth2Provider *client)
+goa_oauth2_provider_finalize (GObject *object)
 {
+  GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (object);
+  GoaOAuth2ProviderPrivate *priv = provider->priv;
+
+  g_clear_pointer (&priv->loop, g_main_loop_unref);
+
+  g_free (priv->account_object_path);
+  g_free (priv->password);
+  g_free (priv->identity);
+  g_free (priv->presentation_identity);
+  g_free (priv->authorization_code);
+  g_free (priv->access_token);
+  g_free (priv->refresh_token);
+
+  G_OBJECT_CLASS (goa_oauth2_provider_parent_class)->finalize (object);
+}
+
+static void
+goa_oauth2_provider_init (GoaOAuth2Provider *provider)
+{
+  provider->priv = GOA_OAUTH2_PROVIDER_GET_PRIVATE (provider);
 }
 
 static void
 goa_oauth2_provider_class_init (GoaOAuth2ProviderClass *klass)
 {
+  GObjectClass *object_class;
   GoaProviderClass *provider_class;
+
+  object_class = G_OBJECT_CLASS (klass);
+  object_class->finalize = goa_oauth2_provider_finalize;
 
   provider_class = GOA_PROVIDER_CLASS (klass);
   provider_class->add_account                = goa_oauth2_provider_add_account;
@@ -1859,6 +1879,8 @@ goa_oauth2_provider_class_init (GoaOAuth2ProviderClass *klass)
   klass->get_use_mobile_browser   = goa_oauth2_provider_get_use_mobile_browser_default;
   klass->is_password_node         = goa_oauth2_provider_is_password_node_default;
   klass->add_account_key_values   = goa_oauth2_provider_add_account_key_values_default;
+
+  g_type_class_add_private (object_class, sizeof (GoaOAuth2ProviderPrivate));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
