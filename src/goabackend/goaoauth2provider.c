@@ -1293,7 +1293,6 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
   presentation_identity = NULL;
 
   memset (&data, '\0', sizeof (AddData));
-  data.loop = g_main_loop_new (NULL, FALSE);
 
   if (!get_tokens_and_identity (provider,
                                 TRUE,
@@ -1349,6 +1348,7 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
                                 NULL, /* GCancellable* */
                                 (GAsyncReadyCallback) add_account_cb,
                                 &data);
+  data.loop = g_main_loop_new (NULL, FALSE);
   g_main_loop_run (data.loop);
   if (data.error != NULL)
     goto out;
