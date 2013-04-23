@@ -1225,6 +1225,25 @@ abs_usec_to_duration (gint64 abs_usec)
   return ret;
 }
 
+static void
+add_credentials_key_values (GoaOAuth2Provider *provider,
+                            GVariantBuilder *credentials)
+{
+  GoaOAuth2ProviderPrivate *priv = provider->priv;
+
+  if (priv->authorization_code != NULL)
+    g_variant_builder_add (credentials, "{sv}", "authorization_code",
+                           g_variant_new_string (priv->authorization_code));
+  g_variant_builder_add (credentials, "{sv}", "access_token", g_variant_new_string (priv->access_token));
+  if (priv->access_token_expires_in > 0)
+    g_variant_builder_add (credentials, "{sv}", "access_token_expires_at",
+                           g_variant_new_int64 (duration_to_abs_usec (priv->access_token_expires_in)));
+  if (priv->refresh_token != NULL)
+    g_variant_builder_add (credentials, "{sv}", "refresh_token", g_variant_new_string (priv->refresh_token));
+  if (priv->password != NULL)
+    g_variant_builder_add (credentials, "{sv}", "password", g_variant_new_string (priv->password));
+}
+
 static GoaObject *
 goa_oauth2_provider_add_account (GoaProvider *_provider,
                                          GoaClient          *client,
@@ -1265,17 +1284,7 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
     goto out;
 
   g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
-  if (priv->authorization_code != NULL)
-    g_variant_builder_add (&credentials, "{sv}", "authorization_code",
-                           g_variant_new_string (priv->authorization_code));
-  g_variant_builder_add (&credentials, "{sv}", "access_token", g_variant_new_string (priv->access_token));
-  if (priv->access_token_expires_in > 0)
-    g_variant_builder_add (&credentials, "{sv}", "access_token_expires_at",
-                           g_variant_new_int64 (duration_to_abs_usec (priv->access_token_expires_in)));
-  if (priv->refresh_token != NULL)
-    g_variant_builder_add (&credentials, "{sv}", "refresh_token", g_variant_new_string (priv->refresh_token));
-  if (priv->password != NULL)
-    g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (priv->password));
+  add_credentials_key_values (provider, &credentials);
 
   g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
   goa_oauth2_provider_add_account_key_values (provider, &details);
@@ -1381,16 +1390,7 @@ goa_oauth2_provider_refresh_account (GoaProvider  *_provider,
     }
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
-  if (priv->authorization_code != NULL)
-    g_variant_builder_add (&builder, "{sv}", "authorization_code", g_variant_new_string (priv->authorization_code));
-  g_variant_builder_add (&builder, "{sv}", "access_token", g_variant_new_string (priv->access_token));
-  if (priv->access_token_expires_in > 0)
-    g_variant_builder_add (&builder, "{sv}", "access_token_expires_at",
-                           g_variant_new_int64 (duration_to_abs_usec (priv->access_token_expires_in)));
-  if (priv->refresh_token != NULL)
-    g_variant_builder_add (&builder, "{sv}", "refresh_token", g_variant_new_string (priv->refresh_token));
-  if (priv->password != NULL)
-    g_variant_builder_add (&builder, "{sv}", "password", g_variant_new_string (priv->password));
+  add_credentials_key_values (provider, &builder);
   if (!goa_utils_store_credentials_for_object_sync (GOA_PROVIDER (provider),
                                                     object,
                                                     g_variant_builder_end (&builder),
