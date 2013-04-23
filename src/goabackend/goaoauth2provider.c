@@ -737,7 +737,6 @@ typedef struct
   GoaOAuth2Provider *provider;
   GtkDialog *dialog;
   GError *error;
-  GMainLoop *loop;
 
   WebKitDOMHTMLInputElement *password_node;
   gchar *password;
@@ -1023,7 +1022,6 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
   memset (&data, '\0', sizeof (IdentifyData));
   data.provider = provider;
   data.dialog = dialog;
-  data.loop = g_main_loop_new (NULL, FALSE);
   data.existing_identity = existing_identity;
 
   /* TODO: use oauth2_proxy_build_login_url_full() */
@@ -1206,8 +1204,6 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
   g_free (url);
 
   g_free (data.authorization_code);
-  if (data.loop != NULL)
-    g_main_loop_unref (data.loop);
   g_free (data.access_token);
   g_free (data.refresh_token);
   g_free (escaped_redirect_uri);
