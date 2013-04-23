@@ -994,15 +994,7 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
                          gboolean            add_account,
                          const gchar        *existing_identity,
                          GtkDialog          *dialog,
-                         GtkBox             *vbox,
-                         gchar             **out_authorization_code,
-                         gchar             **out_access_token,
-                         gint               *out_access_token_expires_in,
-                         gchar             **out_refresh_token,
-                         gchar             **out_identity,
-                         gchar             **out_presentation_identity,
-                         gchar             **out_password,
-                         GError            **error)
+                         GtkBox             *vbox)
 {
   GoaOAuth2ProviderPrivate *priv = provider->priv;
   gboolean ret;
@@ -1017,7 +1009,7 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
                         || (add_account && existing_identity == NULL), FALSE);
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), FALSE);
   g_return_val_if_fail (GTK_IS_BOX (vbox), FALSE);
-  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+  g_return_val_if_fail (priv->error == NULL, FALSE);
 
   ret = FALSE;
   escaped_redirect_uri = NULL;
@@ -1186,30 +1178,6 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
   ret = TRUE;
 
  out:
-  if (ret)
-    {
-      g_warn_if_fail (priv->error == NULL);
-      if (out_authorization_code != NULL)
-        *out_authorization_code = g_strdup (priv->authorization_code);
-      if (out_access_token != NULL)
-        *out_access_token = g_strdup (priv->access_token);
-      if (out_access_token_expires_in != NULL)
-        *out_access_token_expires_in = priv->access_token_expires_in;
-      if (out_refresh_token != NULL)
-        *out_refresh_token = g_strdup (priv->refresh_token);
-      if (out_identity != NULL)
-        *out_identity = g_strdup (priv->identity);
-      if (out_presentation_identity != NULL)
-        *out_presentation_identity = g_strdup (priv->presentation_identity);
-      if (out_password != NULL)
-        *out_password = g_strdup (priv->password);
-    }
-  else
-    {
-      g_warn_if_fail (priv->error != NULL);
-      g_propagate_error (error, priv->error);
-    }
-
   g_free (url);
   g_free (escaped_redirect_uri);
   g_free (escaped_client_id);
@@ -1267,13 +1235,6 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
   GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (_provider);
   GoaOAuth2ProviderPrivate *priv = provider->priv;
   GoaObject *ret;
-  gchar *authorization_code;
-  gchar *access_token;
-  gint access_token_expires_in;
-  gchar *password;
-  gchar *refresh_token;
-  gchar *identity;
-  gchar *presentation_identity;
   GVariantBuilder credentials;
   GVariantBuilder details;
 
@@ -1284,50 +1245,37 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
   ret = NULL;
-  authorization_code = NULL;
-  access_token = NULL;
-  password = NULL;
-  refresh_token = NULL;
-  identity = NULL;
-  presentation_identity = NULL;
 
   if (!get_tokens_and_identity (provider,
                                 TRUE,
                                 NULL,
                                 dialog,
-                                vbox,
-                                &authorization_code,
-                                &access_token,
-                                &access_token_expires_in,
-                                &refresh_token,
-                                &identity,
-                                &presentation_identity,
-                                &password,
-                                &priv->error))
+                                vbox))
     goto out;
 
   /* OK, got the identity... see if there's already an account
    * of this type with the given identity
    */
   if (!goa_utils_check_duplicate (client,
-                                  identity,
-                                  presentation_identity,
+                                  priv->identity,
+                                  priv->presentation_identity,
                                   goa_provider_get_provider_type (GOA_PROVIDER (provider)),
                                   (GoaPeekInterfaceFunc) goa_object_peek_oauth2_based,
                                   &priv->error))
     goto out;
 
   g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
-  if (authorization_code != NULL)
-    g_variant_builder_add (&credentials, "{sv}", "authorization_code", g_variant_new_string (authorization_code));
-  g_variant_builder_add (&credentials, "{sv}", "access_token", g_variant_new_string (access_token));
-  if (access_token_expires_in > 0)
+  if (priv->authorization_code != NULL)
+    g_variant_builder_add (&credentials, "{sv}", "authorization_code",
+                           g_variant_new_string (priv->authorization_code));
+  g_variant_builder_add (&credentials, "{sv}", "access_token", g_variant_new_string (priv->access_token));
+  if (priv->access_token_expires_in > 0)
     g_variant_builder_add (&credentials, "{sv}", "access_token_expires_at",
-                           g_variant_new_int64 (duration_to_abs_usec (access_token_expires_in)));
-  if (refresh_token != NULL)
-    g_variant_builder_add (&credentials, "{sv}", "refresh_token", g_variant_new_string (refresh_token));
-  if (password != NULL)
-    g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (password));
+                           g_variant_new_int64 (duration_to_abs_usec (priv->access_token_expires_in)));
+  if (priv->refresh_token != NULL)
+    g_variant_builder_add (&credentials, "{sv}", "refresh_token", g_variant_new_string (priv->refresh_token));
+  if (priv->password != NULL)
+    g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (priv->password));
 
   g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
   goa_oauth2_provider_add_account_key_values (provider, &details);
@@ -1338,8 +1286,8 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
    */
   goa_manager_call_add_account (goa_client_get_manager (client),
                                 goa_provider_get_provider_type (GOA_PROVIDER (provider)),
-                                identity,
-                                presentation_identity,
+                                priv->identity,
+                                priv->presentation_identity,
                                 g_variant_builder_end (&credentials),
                                 g_variant_builder_end (&details),
                                 NULL, /* GCancellable* */
@@ -1362,12 +1310,6 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
   else
     g_assert (ret != NULL);
 
-  g_free (identity);
-  g_free (presentation_identity);
-  g_free (password);
-  g_free (refresh_token);
-  g_free (access_token);
-  g_free (authorization_code);
   g_clear_pointer (&priv->account_object_path, g_free);
   g_clear_pointer (&priv->loop, g_main_loop_unref);
   return ret;
@@ -1383,14 +1325,9 @@ goa_oauth2_provider_refresh_account (GoaProvider  *_provider,
                                      GError      **error)
 {
   GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (_provider);
+  GoaOAuth2ProviderPrivate *priv = provider->priv;
   GoaAccount *account;
   GtkWidget *dialog;
-  gchar *authorization_code;
-  gchar *access_token;
-  gint access_token_expires_in;
-  gchar *password;
-  gchar *refresh_token;
-  gchar *identity;
   const gchar *existing_identity;
   const gchar *existing_presentation_identity;
   GVariantBuilder builder;
@@ -1401,12 +1338,6 @@ goa_oauth2_provider_refresh_account (GoaProvider  *_provider,
   g_return_val_if_fail (GOA_IS_OBJECT (object), FALSE);
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-
-  authorization_code = NULL;
-  access_token = NULL;
-  password = NULL;
-  refresh_token = NULL;
-  identity = NULL;
 
   ret = FALSE;
 
@@ -1430,15 +1361,7 @@ goa_oauth2_provider_refresh_account (GoaProvider  *_provider,
                                 FALSE,
                                 existing_presentation_identity,
                                 GTK_DIALOG (dialog),
-                                GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))),
-                                &authorization_code,
-                                &access_token,
-                                &access_token_expires_in,
-                                &refresh_token,
-                                &identity,
-                                NULL, /* out_presentation_identity */
-                                &password,
-                                error))
+                                GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog)))))
     goto out;
 
   /* Changes made to the web interface by the providers can break our
@@ -1446,28 +1369,28 @@ goa_oauth2_provider_refresh_account (GoaProvider  *_provider,
    * afterwards.
    */
   existing_identity = goa_account_get_identity (account);
-  if (g_strcmp0 (identity, existing_identity) != 0)
+  if (g_strcmp0 (priv->identity, existing_identity) != 0)
     {
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
                    _("Was asked to login as %s, but logged in as %s"),
                    existing_identity,
-                   identity);
+                   priv->identity);
       goto out;
     }
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
-  if (authorization_code != NULL)
-    g_variant_builder_add (&builder, "{sv}", "authorization_code", g_variant_new_string (authorization_code));
-  g_variant_builder_add (&builder, "{sv}", "access_token", g_variant_new_string (access_token));
-  if (access_token_expires_in > 0)
+  if (priv->authorization_code != NULL)
+    g_variant_builder_add (&builder, "{sv}", "authorization_code", g_variant_new_string (priv->authorization_code));
+  g_variant_builder_add (&builder, "{sv}", "access_token", g_variant_new_string (priv->access_token));
+  if (priv->access_token_expires_in > 0)
     g_variant_builder_add (&builder, "{sv}", "access_token_expires_at",
-                           g_variant_new_int64 (duration_to_abs_usec (access_token_expires_in)));
-  if (refresh_token != NULL)
-    g_variant_builder_add (&builder, "{sv}", "refresh_token", g_variant_new_string (refresh_token));
-  if (password != NULL)
-    g_variant_builder_add (&builder, "{sv}", "password", g_variant_new_string (password));
+                           g_variant_new_int64 (duration_to_abs_usec (priv->access_token_expires_in)));
+  if (priv->refresh_token != NULL)
+    g_variant_builder_add (&builder, "{sv}", "refresh_token", g_variant_new_string (priv->refresh_token));
+  if (priv->password != NULL)
+    g_variant_builder_add (&builder, "{sv}", "password", g_variant_new_string (priv->password));
   if (!goa_utils_store_credentials_for_object_sync (GOA_PROVIDER (provider),
                                                     object,
                                                     g_variant_builder_end (&builder),
@@ -1483,12 +1406,6 @@ goa_oauth2_provider_refresh_account (GoaProvider  *_provider,
 
  out:
   gtk_widget_destroy (dialog);
-
-  g_free (identity);
-  g_free (access_token);
-  g_free (authorization_code);
-  g_free (password);
-  g_free (refresh_token);
   return ret;
 }
 
