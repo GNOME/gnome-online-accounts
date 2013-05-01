@@ -12,6 +12,7 @@ Overview of changes in 3.9.1
  695074 build: Fix `make distcheck` by updating the icon cache on uninstall too
  695106 Do not send the credentials before notifying the user of an invalid
         SSL certificate (CVE-2013-1799)
+ 695118 Avoid gtk_dialog_run() in goa_oauth2_provider_add_account()
  695355 imap-smtp: Can not do STARTTLS connections
  695559 Add translator comment to explain what None refers to
  695768 provider: Silence warnings when setting :preseed-data to NULL
@@ -19,6 +20,7 @@ Overview of changes in 3.9.1
  695886 Categorize providers by supported features
  695888 owncloud: Make sure Uri always ends in a trailing slash
  696085 owncloud: Can't add more than one ownCloud account
+ 698178 Use SoupProxyResolverDefault with GoaEwsClient and GoaHttpClient
  698203 Socket times out with gnutls3 and some TLS servers
 
 * Updated translations:
@@ -46,6 +48,7 @@ Overview of changes in 3.9.1
  Kannada
  Korean
  Latvian
+ Malayalam
  Norwegian bokmål
  Persian
  Polish
