@@ -112,10 +112,10 @@ pkgconfig_DATA = goa-1.0.pc
 # ----------------------------------------------------------------------------------------------------
 
 if HAVE_INTROSPECTION
-girdir = $(INTROSPECTION_GIRDIR)
+girdir = $(datadir)/gir-1.0
 gir_DATA = Goa-1.0.gir
 
-typelibsdir = $(INTROSPECTION_TYPELIBDIR)
+typelibsdir = $(libdir)/girepository-1.0
 typelibs_DATA = Goa-1.0.typelib
 
 Goa-1.0.gir: $(libgoa_1_0_la_SOURCES)
