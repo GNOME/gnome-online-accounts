@@ -148,7 +148,7 @@ get_scope (GoaOAuth2Provider *provider)
 static guint
 get_credentials_generation (GoaProvider *provider)
 {
-  return 3;
+  return 4;
 }
 
 static const gchar *
