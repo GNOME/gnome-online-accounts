@@ -4,6 +4,7 @@ icondir = $(datadir)/icons/hicolor/22x22/apps
 icon_DATA = 				\
 	goa-account.png			\
 	goa-account-facebook.png	\
+	goa-account-flickr.png		\
 	goa-account-google.png		\
 	goa-account-owncloud.png	\
 	goa-account-twitter.png		\
