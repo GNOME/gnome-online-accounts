@@ -675,6 +675,7 @@ create_account_details_ui (GoaProvider    *provider,
 
   data->cluebar_label = gtk_label_new ("");
   gtk_label_set_line_wrap (GTK_LABEL (data->cluebar_label), TRUE);
+  gtk_label_set_max_width_chars (GTK_LABEL (data->cluebar_label), 36);
   gtk_container_add (GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (data->cluebar))),
                      data->cluebar_label);
 
