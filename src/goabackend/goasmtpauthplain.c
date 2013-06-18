@@ -167,6 +167,40 @@ smtp_auth_plain_check_454 (const gchar *response, GError **error)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static gboolean
+smtp_auth_plain_check_greeting (GDataInputStream *input, GCancellable *cancellable, GError **error)
+{
+  gboolean ret;
+  gchar *response;
+
+  response = NULL;
+  ret = FALSE;
+
+ greeting_again:
+  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  if (response == NULL)
+    goto out;
+  g_debug ("< %s", response);
+  if (smtp_auth_plain_check_421 (response, error))
+    goto out;
+  if (smtp_auth_plain_check_not_220 (response, error))
+    goto out;
+
+  if (response[3] == '-')
+    {
+      g_clear_pointer (&response, g_free);
+      goto greeting_again;
+    }
+
+  ret = TRUE;
+
+ out:
+  g_free (response);
+  return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static gchar *
 smtp_auth_plain_get_domain (GoaSmtpAuthPlain  *auth,
                             GError           **error)
@@ -563,15 +597,8 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
 
   if (!auth->greeting_absent)
     {
-      response = g_data_input_stream_read_line (input, NULL, cancellable, error);
-      if (response == NULL)
+      if (!smtp_auth_plain_check_greeting (input, cancellable, error))
         goto out;
-      g_debug ("< %s", response);
-      if (smtp_auth_plain_check_421 (response, error))
-        goto out;
-      if (smtp_auth_plain_check_not_220 (response, error))
-        goto out;
-      g_clear_pointer (&response, g_free);
     }
 
   /* Send EHLO */
@@ -685,15 +712,8 @@ goa_smtp_auth_plain_starttls_sync (GoaMailAuth         *_auth,
 
   /* Check the greeting */
 
-  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
-  if (response == NULL)
+  if (!smtp_auth_plain_check_greeting (input, cancellable, error))
     goto out;
-  g_debug ("< %s", response);
-  if (smtp_auth_plain_check_421 (response, error))
-    goto out;
-  if (smtp_auth_plain_check_not_220 (response, error))
-    goto out;
-  g_clear_pointer (&response, g_free);
 
   /* Send EHLO */
 
