@@ -385,6 +385,7 @@ build_object (GoaProvider         *provider,
   gboolean contacts_enabled;
   gboolean chat_enabled;
   gboolean documents_enabled;
+  const gchar *email_address;
 
   account = NULL;
   mail = NULL;
@@ -419,6 +420,7 @@ build_object (GoaProvider         *provider,
     }
 
   account = goa_object_get_account (GOA_OBJECT (object));
+  email_address = goa_account_get_identity (account);
 
   /* Email */
   mail = goa_object_get_mail (GOA_OBJECT (object));
@@ -427,8 +429,6 @@ build_object (GoaProvider         *provider,
     {
       if (mail == NULL)
         {
-          const gchar *email_address;
-          email_address = goa_account_get_identity (account);
           mail = goa_mail_skeleton_new ();
           g_object_set (G_OBJECT (mail),
                         "email-address",   email_address,
@@ -457,8 +457,19 @@ build_object (GoaProvider         *provider,
     {
       if (calendar == NULL)
         {
+          gchar *uri_caldav;
+
+          uri_caldav = g_strconcat ("https://apidata.googleusercontent.com/caldav/v2/",
+                                    email_address,
+                                    "/user",
+                                    NULL);
+
           calendar = goa_calendar_skeleton_new ();
+          g_object_set (G_OBJECT (calendar),
+                        "uri", uri_caldav,
+                        NULL);
           goa_object_skeleton_set_calendar (object, calendar);
+          g_free (uri_caldav);
         }
     }
   else
@@ -475,6 +486,9 @@ build_object (GoaProvider         *provider,
       if (contacts == NULL)
         {
           contacts = goa_contacts_skeleton_new ();
+          g_object_set (G_OBJECT (contacts),
+                        "uri", "https://www.googleapis.com/.well-known/carddav",
+                        NULL);
           goa_object_skeleton_set_contacts (object, contacts);
         }
     }
