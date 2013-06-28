@@ -78,6 +78,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goatwitterprovider.h		goatwitterprovider.c		\
 	goaflickrprovider.h		goaflickrprovider.c		\
 	goawindowsliveprovider.h	goawindowsliveprovider.c	\
+	goatelepathyprovider.h		goatelepathyprovider.c		\
 	goautils.h			goautils.c			\
 	goaspinnerbutton.h		goaspinnerbutton.c		\
 	goawebview.h			goawebview.c			\

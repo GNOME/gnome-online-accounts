@@ -290,6 +290,16 @@ if test "$enable_windows_live" != "no"; then
   AC_DEFINE(GOA_WINDOWS_LIVE_ENABLED, 1, [Enable Windows Live data provider])
 fi
 
+# Telepathy
+AC_ARG_ENABLE([telepathy],
+              [AS_HELP_STRING([--enable-telepathy],
+              [Enable Telepathy IM provider])],
+              [],
+              [enable_telepathy=yes])
+if test "$enable_exchange" != "no"; then
+  AC_DEFINE(GOA_TELEPATHY_ENABLED, 1, [Enable Telepathy data provider])
+fi
+
 # Kerberos
 AC_ARG_ENABLE([kerberos],
               [AS_HELP_STRING([--enable-kerberos],
@@ -477,6 +487,7 @@ echo "
 	Yahoo provider:                 ${enable_yahoo} (OAuth 1.0, key:${with_yahoo_consumer_key} secret:${with_yahoo_consumer_secret})
 	Facebook provider:              ${enable_facebook} (OAuth 2.0, id:${with_facebook_client_id})
 	Windows Live provider:          ${enable_windows_live} (OAuth 2.0, id:${with_windows_live_client_id})
+        Telepathy provider:             ${enable_telepathy}
 
 	Maintainer mode:                ${USE_MAINTAINER_MODE}
 	Building api docs:              ${enable_gtk_doc}
