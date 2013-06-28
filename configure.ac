@@ -14,6 +14,7 @@ AC_INIT([GNOME Online Accounts],
         [https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts],
         [gnome-online-accounts])
 
+AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([1.9 foreign dist-xz no-dist-gzip tar-ustar])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([src])
