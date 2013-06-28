@@ -117,7 +117,7 @@ if test "$enable_exchange" != "no"; then
 fi
 
 # Flickr
-AC_ARG_ENABLE([flickr], [AS_HELP_STRING([--enable-flickr], [Enable Flickr provider])], [], [enable_flickr=no])
+AC_ARG_ENABLE([flickr], [AS_HELP_STRING([--enable-flickr], [Enable Flickr provider])], [], [enable_flickr=yes])
 AC_ARG_WITH(flickr-consumer-key,
             [AS_HELP_STRING([--with-flickr-consumer-key],
                             [Flickr OAuth 1.0 consumer key])],
