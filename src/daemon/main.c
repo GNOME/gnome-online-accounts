@@ -31,6 +31,7 @@
 #include <goabackend/goalogging.h>
 
 #include "goadaemon.h"
+#include "goatpaccountlinker.h"
 
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -47,6 +48,7 @@ static GOptionEntry opt_entries[] =
   {NULL }
 };
 static GoaDaemon *the_daemon = NULL;
+static GoaTpAccountLinker *tp_linker = NULL;
 
 static void
 on_bus_acquired (GDBusConnection *connection,
@@ -73,6 +75,8 @@ on_name_acquired (GDBusConnection *connection,
                   gpointer         user_data)
 {
   goa_info ("Acquired the name %s on the session message bus", name);
+
+  tp_linker = goa_tp_account_linker_new ();
 }
 
 static gboolean
@@ -139,6 +143,8 @@ main (int    argc,
  out:
   if (the_daemon != NULL)
     g_object_unref (the_daemon);
+  if (tp_linker != NULL)
+    g_object_unref (tp_linker);
   if (sigint_id > 0)
     g_source_remove (sigint_id);
   if (name_owner_id != 0)
