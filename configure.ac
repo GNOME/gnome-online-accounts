@@ -300,6 +300,8 @@ if test "$enable_exchange" != "no"; then
   AC_DEFINE(GOA_TELEPATHY_ENABLED, 1, [Enable Telepathy data provider])
 fi
 
+PKG_CHECK_MODULES(TP, telepathy-glib)
+
 # Kerberos
 AC_ARG_ENABLE([kerberos],
               [AS_HELP_STRING([--enable-kerberos],

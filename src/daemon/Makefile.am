@@ -27,6 +27,7 @@ goa_daemon_SOURCES = 						\
 				main.c				\
 	goadaemontypes.h					\
 	goadaemon.h		goadaemon.c			\
+	goatpaccountlinker.h	goatpaccountlinker.c		\
 	$(NULL)
 
 goa_daemon_CPPFLAGS =						\
@@ -38,6 +39,7 @@ goa_daemon_CFLAGS =						\
 	$(GLIB_CFLAGS) 						\
 	$(GTK_CFLAGS)						\
 	$(REST_CFLAGS)						\
+	$(TP_CFLAGS)						\
 	$(NULL)
 
 goa_daemon_LDADD = 						\
@@ -46,6 +48,7 @@ goa_daemon_LDADD = 						\
 	$(top_builddir)/src/goabackend/libgoa-backend-1.0.la	\
 	$(GTK_LIBS)						\
 	$(REST_LIBS)						\
+	$(TP_LIBS)						\
 	$(NULL)
 
 if BUILD_KERBEROS
