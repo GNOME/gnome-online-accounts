@@ -199,6 +199,23 @@ create_goa_account (GoaTpAccountLinker *self,
   g_free (provider);
 }
 
+static gboolean
+is_account_filtered (TpAccount *tp_account)
+{
+  const gchar *env;
+  const gchar *id;
+
+  env = g_getenv ("GOA_TELEPATHY_DEBUG_ACCOUNT_FILTER");
+  if (env == NULL || env[0] == '\0')
+    return FALSE;
+
+  id = get_id_from_tp_account (tp_account);
+  if (g_strstr_len (id, -1, env) != NULL)
+    return FALSE; /* "env" is contained in "id" */
+  else
+    return TRUE;
+}
+
 static void
 tp_account_added (GoaTpAccountLinker *self,
                   TpAccount          *tp_account)
@@ -211,6 +228,12 @@ tp_account_added (GoaTpAccountLinker *self,
         "org.gnome.OnlineAccounts") == 0)
     {
       goa_debug ("Skipping Telepathy account %s as it's handled directly by GOA", id);
+      return;
+    }
+
+  if (is_account_filtered (tp_account))
+    {
+      goa_debug ("The account %s is ignored for debugging reasons", id);
       return;
     }
 
