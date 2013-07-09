@@ -121,8 +121,13 @@ build_object (GoaProvider        *provider,
               gboolean            just_added,
               GError            **error)
 {
+  GoaAccount *account;
+  GoaChat *chat;
+  gboolean chat_enabled;
   gboolean ret;
 
+  account = NULL;
+  chat = NULL;
   ret = FALSE;
 
   /* Chain up */
@@ -135,9 +140,39 @@ build_object (GoaProvider        *provider,
                                                                                error))
     goto out;
 
-  /* ret = TRUE; */
+  account = goa_object_get_account (GOA_OBJECT (object));
+
+  /* Chat */
+  chat = goa_object_get_chat (GOA_OBJECT (object));
+  chat_enabled = g_key_file_get_boolean (key_file, group, "ChatEnabled", NULL);
+  if (chat_enabled)
+    {
+      if (chat == NULL)
+        {
+          chat = goa_chat_skeleton_new ();
+          goa_object_skeleton_set_chat (object, chat);
+        }
+    }
+  else
+    {
+      if (chat != NULL)
+        goa_object_skeleton_set_chat (object, NULL);
+    }
+
+  if (just_added)
+    {
+      goa_account_set_chat_disabled (account, !chat_enabled);
+      g_signal_connect (account,
+                        "notify::chat-disabled",
+                        G_CALLBACK (goa_util_account_notify_property_cb),
+                        "ChatEnabled");
+    }
+
+  ret = TRUE;
 
 out:
+  g_clear_object (&chat);
+  g_clear_object (&account);
   return ret;
 }
 
