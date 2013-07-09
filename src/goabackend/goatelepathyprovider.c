@@ -193,6 +193,11 @@ show_account (GoaProvider         *provider,
                                                                           vbox,
                                                                           left,
                                                                           right);
+
+  goa_util_add_row_switch_from_keyfile_with_blurb (left, right, object,
+                                                   _("Use for"),
+                                                   "chat-disabled",
+                                                   _("C_hat"));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
