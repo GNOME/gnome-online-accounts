@@ -161,6 +161,28 @@ tp_account_added (GoaTpAccountLinker *self,
 }
 
 static void
+goa_account_removed_by_us_cb (GObject      *object,
+                              GAsyncResult *res,
+                              gpointer      user_data)
+{
+  /* This callback is only used for debugging */
+  GoaAccount *goa_account = GOA_ACCOUNT (object);
+  GError *error = NULL;
+
+  if (!goa_account_call_remove_finish (goa_account, res, &error))
+    {
+      goa_error ("Error removing GOA account %s (Telepathy object path: %s): "
+          "%s (%s, %d)",
+          goa_account_get_id (goa_account),
+          get_id_from_goa_account (goa_account),
+          error->message,
+          g_quark_to_string (error->domain),
+          error->code);
+      g_error_free (error);
+    }
+}
+
+static void
 tp_account_removed_cb (TpAccountManager *manager,
                        TpAccount        *tp_account,
                        gpointer          user_data)
@@ -168,12 +190,35 @@ tp_account_removed_cb (TpAccountManager *manager,
   GoaTpAccountLinker *self = user_data;
   GoaTpAccountLinkerPrivate *priv = self->priv;
   const gchar *id = get_id_from_tp_account (tp_account);
+  GoaObject *goa_object = NULL;
 
-  goa_debug ("Telepathy account removed: %s", id);
+  if (!g_hash_table_remove (priv->tp_accounts, id))
+    {
+      /* 1 - The user removes the GOA account
+       * 2 - We delete the corresponding Telepathy account and remove it
+       *     from priv->tp_accounts
+       * 3 - "account-removed" is emitted by the account manager
+       * 4 - tp_account_removed_cb is called for an unknown account
+       */
+      goa_debug ("Ignoring removal of Telepathy account we asked to "
+          "remove (%s)", id);
+      return;
+    }
 
-  /* FIXME: delete the corresponding GOA account! */
+  goa_info ("Telepathy account %s removed, removing corresponding "
+      "GOA account", id);
 
-  g_hash_table_remove (priv->tp_accounts, id);
+  goa_object = g_hash_table_lookup (priv->goa_accounts, id);
+  if (goa_object == NULL)
+    {
+      goa_error ("There is no GOA account for removed Telepathy "
+          "account %s", id);
+      return;
+    }
+  goa_account_call_remove (goa_object_peek_account (goa_object),
+      NULL, /* cancellable */
+      goa_account_removed_by_us_cb, NULL);
+  g_hash_table_remove (priv->goa_accounts, id);
 }
 
 static void
@@ -212,6 +257,26 @@ goa_account_added_cb (GoaClient *client,
 }
 
 static void
+tp_account_removed_by_us_cb (GObject      *object,
+                             GAsyncResult *res,
+                             gpointer      user_data)
+{
+  /* This callback is only used for debugging */
+  TpAccount *tp_account = TP_ACCOUNT (object);
+  GError *error = NULL;
+
+  if (!tp_account_remove_finish (tp_account, res, &error))
+    {
+      goa_error ("Error removing Telepathy account %s: %s (%s, %d)",
+          get_id_from_tp_account (tp_account),
+          error->message,
+          g_quark_to_string (error->domain),
+          error->code);
+      g_error_free (error);
+    }
+}
+
+static void
 goa_account_removed_cb (GoaClient *client,
                         GoaObject *goa_object,
                         gpointer   user_data)
@@ -220,19 +285,41 @@ goa_account_removed_cb (GoaClient *client,
   GoaTpAccountLinkerPrivate *priv = self->priv;
   GoaAccount *goa_account = goa_object_peek_account (goa_object);
   const gchar *id = NULL;
+  TpAccount *tp_account = NULL;
 
   if (!is_telepathy_account (goa_account))
     return;
 
   id = get_id_from_goa_account (goa_account);
-  goa_debug ("GOA account %s for Telepathy account %s removed",
+  if (!g_hash_table_remove (priv->goa_accounts, id))
+    {
+      /* 1 - The user removes the Telepathy account (but not the GOA one)
+       * 2 - We delete the corresponding GOA account and remove it
+       *     from priv->goa_accounts
+       * 3 - "account-removed" is emitted by the GOA client
+       * 4 - goa_account_removed_cb is called for an unknown account
+       */
+      goa_debug ("Ignoring removal of GOA account we asked to remove "
+          "(%s, Telepathy object path: %s)",
+          goa_account_get_id (goa_account),
+          id);
+      return;
+    }
+
+  goa_info ("GOA account %s for Telepathy account %s removed, "
+      "removing Telepathy account",
       goa_account_get_id (goa_account), id);
 
-  /* FIXME: the GOA account is gone, we need to remove the Telepathy
-   * account too! */
-
-  g_hash_table_remove (priv->goa_accounts,
-      get_id_from_goa_account (goa_account));
+  tp_account = g_hash_table_lookup (priv->tp_accounts, id);
+  if (tp_account == NULL)
+    {
+      goa_error ("There is no Telepathy account for removed GOA "
+          "account %s (Telepathy object path: %s)",
+          goa_account_get_id (goa_account), id);
+      return;
+    }
+  tp_account_remove_async (tp_account, tp_account_removed_by_us_cb, NULL);
+  g_hash_table_remove (priv->tp_accounts, id);
 }
 
 static void
