@@ -72,6 +72,68 @@ is_telepathy_account (GoaAccount *goa_account)
 }
 
 static void
+goa_account_created_cb (GoaManager   *manager,
+                        GAsyncResult *res,
+                        gpointer      user_data)
+{
+  TpAccount *tp_account = user_data;
+  gchar *goa_account_object_path = NULL;
+  GError *error = NULL;
+
+  if (!goa_manager_call_add_account_finish (manager,
+        &goa_account_object_path, res, &error))
+    {
+      goa_error ("Failed to create a GOA account for %s: %s (%s, %d)",
+          get_id_from_tp_account (tp_account),
+          error->message,
+          g_quark_to_string (error->domain),
+          error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+  goa_info ("Created new %s GOA account for Telepathy account %s",
+      goa_account_object_path, get_id_from_tp_account (tp_account));
+
+ out:
+  g_object_unref (tp_account);
+}
+
+static void
+create_goa_account (GoaTpAccountLinker *self,
+                    TpAccount          *tp_account)
+{
+  GoaTpAccountLinkerPrivate *priv = self->priv;
+  GVariantBuilder credentials;
+  GVariantBuilder details;
+  gchar *provider;
+
+  goa_info ("Creating new GOA account for Telepathy account %s",
+      get_id_from_tp_account (tp_account));
+
+  g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
+
+  g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
+  /* FIXME: we need to sync the enable status */
+  g_variant_builder_add (&details, "{ss}", "ChatEnabled", "true");
+
+  provider = g_strdup_printf ("telepathy/%s",
+      tp_account_get_protocol_name (tp_account));
+
+  goa_manager_call_add_account (goa_client_get_manager (priv->goa_client),
+      provider,
+      get_id_from_tp_account (tp_account),
+      tp_account_get_display_name (tp_account),
+      g_variant_builder_end (&credentials),
+      g_variant_builder_end (&details),
+      NULL, /* GCancellable* */
+      (GAsyncReadyCallback) goa_account_created_cb,
+      g_object_ref (tp_account));
+
+  g_free (provider);
+}
+
+static void
 tp_account_added (GoaTpAccountLinker *self,
                   TpAccount          *tp_account)
 {
@@ -89,7 +151,7 @@ tp_account_added (GoaTpAccountLinker *self,
     {
       goa_debug ("Found a Telepathy account with no corresponding "
           "GOA account: %s", id);
-      /* FIXME: create the GOA account */
+      create_goa_account (self, tp_account);
     }
   else
     {
