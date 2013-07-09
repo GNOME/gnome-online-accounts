@@ -45,12 +45,141 @@ struct _GoaTpAccountLinkerPrivate
 {
   TpAccountManager *account_manager;
   GoaClient *goa_client;
+
+  GHashTable *tp_accounts; /* owned gchar *id -> reffed TpAccount * */
+  GHashTable *goa_accounts; /* owned gchar *id -> reffed GoaObject * */
 };
+
+/* The path of the Telepathy account is used as common identifier between
+ * GOA and Telepathy */
+static const gchar *
+get_id_from_tp_account (TpAccount *tp_account)
+{
+  return tp_proxy_get_object_path (tp_account);
+}
+
+static const gchar *
+get_id_from_goa_account (GoaAccount *goa_account)
+{
+  return goa_account_get_identity (goa_account);
+}
+
+static gboolean
+is_telepathy_account (GoaAccount *goa_account)
+{
+  const gchar *type = goa_account_get_provider_type (goa_account);
+  return g_str_has_prefix (type, "telepathy/");
+}
+
+static void
+tp_account_added (GoaTpAccountLinker *self,
+                  TpAccount          *tp_account)
+{
+  GoaTpAccountLinkerPrivate *priv = self->priv;
+  const gchar *id = get_id_from_tp_account (tp_account);
+  GoaObject *goa_object = NULL;
+
+  goa_debug ("Telepathy account found: %s", id);
+
+  g_hash_table_replace (priv->tp_accounts, g_strdup (id),
+      g_object_ref (tp_account));
+
+  goa_object = g_hash_table_lookup (priv->goa_accounts, id);
+  if (goa_object == NULL)
+    {
+      goa_debug ("Found a Telepathy account with no corresponding "
+          "GOA account: %s", id);
+      /* FIXME: create the GOA account */
+    }
+  else
+    {
+      goa_debug ("Found a Telepathy account with a matching "
+          "GOA account: %s", id);
+    }
+}
+
+static void
+tp_account_removed_cb (TpAccountManager *manager,
+                       TpAccount        *tp_account,
+                       gpointer          user_data)
+{
+  GoaTpAccountLinker *self = user_data;
+  GoaTpAccountLinkerPrivate *priv = self->priv;
+  const gchar *id = get_id_from_tp_account (tp_account);
+
+  goa_debug ("Telepathy account removed: %s", id);
+
+  /* FIXME: delete the corresponding GOA account! */
+
+  g_hash_table_remove (priv->tp_accounts, id);
+}
+
+static void
+tp_account_validity_changed_cb (TpAccountManager *manager,
+                                TpAccount        *tp_account,
+                                gboolean          valid,
+                                gpointer          user_data)
+{
+  GoaTpAccountLinker *self = user_data;
+
+  if (valid)
+    tp_account_added (self, tp_account);
+}
+
+static void
+goa_account_added_cb (GoaClient *client,
+                      GoaObject *goa_object,
+                      gpointer   user_data)
+{
+  GoaTpAccountLinker *self = user_data;
+  GoaTpAccountLinkerPrivate *priv = self->priv;
+  GoaAccount *goa_account = goa_object_peek_account (goa_object);
+  const gchar *id = NULL;
+
+  if (!is_telepathy_account (goa_account))
+    return;
+
+  id = get_id_from_goa_account (goa_account);
+  goa_debug ("GOA account %s for Telepathy account %s added",
+      goa_account_get_id (goa_account), id);
+
+  /* FIXME: we need to track when the chat part gets enabled/disabled. */
+
+  g_hash_table_insert (priv->goa_accounts, g_strdup (id),
+      g_object_ref (goa_object));
+}
+
+static void
+goa_account_removed_cb (GoaClient *client,
+                        GoaObject *goa_object,
+                        gpointer   user_data)
+{
+  GoaTpAccountLinker *self = user_data;
+  GoaTpAccountLinkerPrivate *priv = self->priv;
+  GoaAccount *goa_account = goa_object_peek_account (goa_object);
+  const gchar *id = NULL;
+
+  if (!is_telepathy_account (goa_account))
+    return;
+
+  id = get_id_from_goa_account (goa_account);
+  goa_debug ("GOA account %s for Telepathy account %s removed",
+      goa_account_get_id (goa_account), id);
+
+  /* FIXME: the GOA account is gone, we need to remove the Telepathy
+   * account too! */
+
+  g_hash_table_remove (priv->goa_accounts,
+      get_id_from_goa_account (goa_account));
+}
 
 static void
 start_if_ready (GoaTpAccountLinker *self)
 {
   GoaTpAccountLinkerPrivate *priv = self->priv;
+  GList *goa_accounts = NULL;
+  GList *tp_accounts = NULL;
+  GList *l = NULL;
 
   if (priv->goa_client == NULL ||
       priv->account_manager == NULL ||
@@ -62,6 +191,28 @@ start_if_ready (GoaTpAccountLinker *self)
     }
 
   goa_debug ("Both GOA and Tp are ready, starting tracking of accounts");
+
+  /* GOA */
+  goa_accounts = goa_client_get_accounts (priv->goa_client);
+  for (l = goa_accounts; l != NULL; l = l->next)
+    goa_account_added_cb (priv->goa_client, l->data, self);
+  g_list_free_full (goa_accounts, g_object_unref);
+
+  g_signal_connect_object (priv->goa_client, "account-added",
+      G_CALLBACK (goa_account_added_cb), self, 0);
+  g_signal_connect_object (priv->goa_client, "account-removed",
+      G_CALLBACK (goa_account_removed_cb), self, 0);
+
+  /* Telepathy */
+  tp_accounts = tp_account_manager_dup_valid_accounts (priv->account_manager);
+  for (l = tp_accounts; l != NULL; l = l->next)
+    tp_account_added (self, l->data);
+  g_list_free_full (tp_accounts, g_object_unref);
+
+  g_signal_connect_object (priv->account_manager, "account-validity-changed",
+      G_CALLBACK (tp_account_validity_changed_cb), self, 0);
+  g_signal_connect_object (priv->account_manager, "account-removed",
+      G_CALLBACK (tp_account_removed_cb), self, 0);
 }
 
 static void
@@ -113,6 +264,9 @@ goa_tp_account_linker_dispose (GObject *object)
   g_clear_object (&priv->account_manager);
   g_clear_object (&priv->goa_client);
 
+  g_clear_pointer (&priv->goa_accounts, g_hash_table_unref);
+  g_clear_pointer (&priv->tp_accounts, g_hash_table_unref);
+
   G_OBJECT_CLASS (goa_tp_account_linker_parent_class)->dispose (object);
 }
 
@@ -125,6 +279,11 @@ goa_tp_account_linker_init (GoaTpAccountLinker *self)
 
   self->priv = GOA_TP_ACCOUNT_LINKER_GET_PRIVATE (self);
   priv = self->priv;
+
+  priv->goa_accounts = g_hash_table_new_full (g_str_hash, g_str_equal,
+      g_free, g_object_unref);
+  priv->tp_accounts = g_hash_table_new_full (g_str_hash, g_str_equal,
+      g_free, g_object_unref);
 
   priv->account_manager = tp_account_manager_dup ();
   tp_proxy_prepare_async (priv->account_manager, NULL,
