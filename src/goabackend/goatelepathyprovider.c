@@ -505,7 +505,7 @@ edit_connection_parameters (GoaObject  *goa_object,
   settings = tpaw_account_settings_new_for_account (tp_account);
   wait_for_account_settings_ready (settings, loop);
 
-  dialog = gtk_dialog_new_with_buttons (_("Edit Connection Parameters"),
+  dialog = gtk_dialog_new_with_buttons (_("Connection Settings"),
       parent,
       GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
       NULL, NULL);
@@ -632,6 +632,93 @@ out:
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+typedef struct
+{
+  guint ref_count;
+  GoaObject *object;
+  GtkWindow *parent;
+} EditData;
+
+static EditData *
+edit_data_new (GoaObject *object,
+               GtkWindow *parent)
+{
+  EditData *data;
+
+  data = g_slice_new0 (EditData);
+  data->ref_count = 1;
+  data->object = g_object_ref (object);
+  data->parent = parent;
+
+  return data;
+}
+
+static void
+edit_data_unref (EditData *data)
+{
+  data->ref_count--;
+  if (data->ref_count >= 1)
+    return;
+
+  g_object_unref (data->object);
+  g_slice_free (EditData, data);
+}
+
+static void
+edit_button_destroy_cb (GtkWidget *button,
+                        gpointer   user_data)
+{
+  EditData *data = user_data;
+
+  edit_data_unref (data);
+}
+
+static void
+edit_data_handle_button (EditData  *data,
+                         GtkWidget *button,
+                         GCallback  cb)
+{
+  g_return_if_fail (GTK_IS_BUTTON (button));
+
+  g_signal_connect (button, "clicked", cb, data);
+  g_signal_connect (button, "destroy", G_CALLBACK (edit_button_destroy_cb), data);
+
+  data->ref_count++;
+}
+
+static void
+maybe_show_error (GtkWindow   *parent,
+                  GError      *error,
+                  const gchar *msg)
+{
+  GtkWidget *dialog;
+
+  if (error->domain == GOA_ERROR && error->code == GOA_ERROR_DIALOG_DISMISSED)
+    return;
+
+  dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
+      GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+      GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
+      "%s: %s (%s, %d)",
+      msg,
+      error->message,
+      g_quark_to_string (error->domain),
+      error->code);
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+  gtk_dialog_run (GTK_DIALOG (dialog));
+}
+
+static void
+edit_parameters_clicked_cb (GtkButton *button,
+                            gpointer   user_data)
+{
+  EditData *data = user_data;
+  GError *error = NULL;
+
+  if (!edit_connection_parameters (data->object, data->parent, &error))
+    maybe_show_error (data->parent, error, _("Cannot save the connection parameters"));
+}
+
 static void
 show_account (GoaProvider         *provider,
               GoaClient           *client,
@@ -640,6 +727,10 @@ show_account (GoaProvider         *provider,
               GtkGrid             *left,
               GtkGrid             *right)
 {
+  GtkWidget *params_button = NULL;
+  EditData *data = NULL;
+  GtkWidget *button_box = NULL;
+
   /* Chain up */
   GOA_PROVIDER_CLASS (goa_telepathy_provider_parent_class)->show_account (provider,
                                                                           client,
@@ -652,6 +743,21 @@ show_account (GoaProvider         *provider,
                                                    _("Use for"),
                                                    "chat-disabled",
                                                    _("C_hat"));
+
+  data = edit_data_new (object, tpaw_get_toplevel_window (GTK_WIDGET (vbox)));
+
+  /* Connection Settings button */
+  params_button = gtk_button_new_with_mnemonic (_("_Connection Settings"));
+  edit_data_handle_button (data, params_button, G_CALLBACK (edit_parameters_clicked_cb));
+
+  /* Box containing the buttons */
+  button_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_box_pack_start (GTK_BOX (button_box), params_button,
+      FALSE, FALSE, 12);
+
+  goa_util_add_row_widget (left, right, NULL, button_box);
+
+  edit_data_unref (data);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
