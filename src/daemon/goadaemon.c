@@ -480,14 +480,8 @@ update_account_object (GoaDaemon           *daemon,
       goto out;
     }
 
-  name = goa_provider_get_provider_name (provider, GOA_OBJECT (object));
-  icon = goa_provider_get_provider_icon (provider, GOA_OBJECT (object));
-  serialized_icon = g_icon_to_string (icon);
-
   goa_account_set_id (account, g_strrstr (g_dbus_object_get_object_path (G_DBUS_OBJECT (object)), "/") + 1);
   goa_account_set_provider_type (account, type);
-  goa_account_set_provider_name (account, name);
-  goa_account_set_provider_icon (account, serialized_icon);
   goa_account_set_identity (account, identity);
   goa_account_set_presentation_identity (account, presentation_identity);
 
@@ -499,6 +493,13 @@ update_account_object (GoaDaemon           *daemon,
       g_error_free (error);
       goto out;
     }
+
+  name = goa_provider_get_provider_name (provider, GOA_OBJECT (object));
+  goa_account_set_provider_name (account, name);
+
+  icon = goa_provider_get_provider_icon (provider, GOA_OBJECT (object));
+  serialized_icon = g_icon_to_string (icon);
+  goa_account_set_provider_icon (account, serialized_icon);
 
   ret = TRUE;
 
