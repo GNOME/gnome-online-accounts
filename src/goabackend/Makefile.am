@@ -107,6 +107,7 @@ libgoa_backend_1_0_la_CFLAGS =					\
 	$(SECRET_CFLAGS)					\
 	$(LIBSOUP_CFLAGS)					\
 	$(LIBXML_CFLAGS)					\
+	$(TP_CFLAGS)						\
 	$(TPAW_CFLAGS)						\
 	$(NULL)
 
@@ -121,6 +122,7 @@ libgoa_backend_1_0_la_LIBADD = 					\
 	$(SECRET_LIBS)						\
 	$(LIBSOUP_LIBS)						\
 	$(LIBXML_LIBS)						\
+	$(TP_LIBS)						\
 	$(TPAW_LIBS)						\
 	$(NULL)
 
