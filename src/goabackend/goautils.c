@@ -215,7 +215,7 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
       goto out;
     }
 
-  goa_debug ("Retreived keyring credentials for id: %s", id);
+  goa_debug ("Retrieved keyring credentials for id: %s", id);
 
   ret = g_variant_parse (NULL, /* GVariantType */
                          password,
