@@ -23,6 +23,7 @@
 
 #include "config.h"
 #include <glib/gi18n-lib.h>
+#include <tp-account-widgets/tpaw-utils.h>
 
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
@@ -89,8 +90,9 @@ static gchar *
 get_provider_name (GoaProvider *provider,
                    GoaObject   *object)
 {
-  return g_strdup (_("Other chat account"));
+  GoaTelepathyProviderPrivate *priv = GOA_TELEPATHY_PROVIDER (provider)->priv;
 
+  return g_strdup (tpaw_protocol_name_to_display_name (priv->protocol_name));
 }
 
 static GoaProviderGroup
