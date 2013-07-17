@@ -23,6 +23,7 @@
 
 #include "config.h"
 #include <glib/gi18n-lib.h>
+#include <tp-account-widgets/tpaw-account-widget.h>
 #include <tp-account-widgets/tpaw-utils.h>
 
 #include "goaprovider.h"
@@ -79,6 +80,32 @@ G_DEFINE_TYPE (GoaTelepathyProvider, goa_telepathy_provider, GOA_TYPE_PROVIDER);
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+/* Telepathy / telepathy-account widgets utility functions. */
+
+static void
+account_settings_ready_cb (TpawAccountSettings *settings,
+                           GParamSpec          *pspec,
+                           gpointer             user_data)
+{
+  GMainLoop *loop = user_data;
+
+  g_main_loop_quit (loop);
+}
+
+static void
+wait_for_account_settings_ready (TpawAccountSettings *settings,
+                                 GMainLoop           *loop)
+{
+  if (!tpaw_account_settings_is_ready (settings))
+    {
+      g_signal_connect (settings, "notify::ready",
+          G_CALLBACK (account_settings_ready_cb), loop);
+      g_main_loop_run (loop);
+    }
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static const gchar *
 get_provider_type (GoaProvider *provider)
 {
@@ -109,6 +136,137 @@ get_provider_features (GoaProvider *provider)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+typedef struct
+{
+  GMainLoop *loop;
+  GCancellable *cancellable;
+  GoaObject *ret;
+  GError *error;
+
+  GoaTelepathyProvider *provider;
+  GtkDialog *dialog;
+  GtkBox *vbox;
+
+  TpAccount *tp_account;
+
+  GoaClient *goa_client;
+  guint goa_account_added_id;
+} AddAccountData;
+
+static gboolean
+check_goa_object_match (AddAccountData *data,
+                        GoaObject      *goa_object)
+{
+  GoaTelepathyProviderPrivate *priv = data->provider->priv;
+  GoaAccount *goa_account = NULL;
+  const gchar *provider_type = NULL;
+  const gchar *goa_id = NULL;
+  const gchar *tp_id = NULL;
+
+  if (data->tp_account == NULL)
+    {
+      /* Still waiting for the creation of the TpAccount */
+      return FALSE;
+    }
+
+  goa_account = goa_object_peek_account (goa_object);
+  provider_type = goa_account_get_provider_type (goa_account);
+  if (g_strcmp0 (provider_type, priv->provider_type) != 0)
+    return FALSE;
+
+  /* The backend-specific identity is set to the object path of the
+   * corresponding Telepathy account object. */
+  goa_id = goa_account_get_identity (goa_account);
+  tp_id = tp_proxy_get_object_path (TP_PROXY (data->tp_account));
+  if (g_strcmp0 (goa_id, tp_id) == 0)
+    {
+      /* Found it! */
+      data->ret = g_object_ref (goa_object);
+      g_main_loop_quit (data->loop);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+check_existing_goa_accounts (AddAccountData *data)
+{
+  GList *goa_accounts = NULL;
+  GList *l = NULL;
+  gboolean found = FALSE;
+
+  if (data->tp_account == NULL || data->goa_client == NULL)
+    return FALSE;
+
+  goa_accounts = goa_client_get_accounts (data->goa_client);
+  for (l = goa_accounts; l != NULL; l = l->next)
+    {
+      if (check_goa_object_match (data, l->data))
+        {
+          found = TRUE;
+          break;
+        }
+    }
+  g_list_free_full (goa_accounts, g_object_unref);
+
+  return found;
+}
+
+static void
+tp_account_created_cb (TpawAccountWidget *widget,
+                       TpAccount         *tp_account,
+                       AddAccountData    *data)
+{
+  g_assert (data->tp_account == NULL);
+  data->tp_account = g_object_ref (tp_account);
+
+  check_existing_goa_accounts (data);
+}
+
+static void
+goa_account_added_cb (GoaClient *client,
+                      GoaObject *goa_object,
+                      gpointer   user_data)
+{
+  AddAccountData *data = user_data;
+
+  check_goa_object_match (data, goa_object);
+}
+
+static void
+goa_client_new_cb (GObject      *object,
+                   GAsyncResult *result,
+                   gpointer      user_data)
+{
+  AddAccountData *data = user_data;
+
+  data->goa_client = goa_client_new_finish (result, &data->error);
+  if (data->goa_client == NULL)
+    {
+      g_set_error (&data->error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Failed to initialise a GOA client"));
+      g_main_loop_quit (data->loop);
+      return;
+    }
+
+  if (!check_existing_goa_accounts (data))
+    {
+      data->goa_account_added_id = g_signal_connect (data->goa_client,
+          "account-added", G_CALLBACK (goa_account_added_cb), data);
+    }
+}
+
+static void
+account_widget_close_cb (TpawAccountWidget *widget,
+                         GtkResponseType    response,
+                         AddAccountData    *data)
+{
+  gtk_dialog_response (data->dialog, response);
+}
+
 static GoaObject *
 add_account (GoaProvider  *provider,
              GoaClient    *client,
@@ -116,7 +274,107 @@ add_account (GoaProvider  *provider,
              GtkBox       *vbox,
              GError      **error)
 {
-  return NULL;
+  GoaTelepathyProviderPrivate *priv = GOA_TELEPATHY_PROVIDER (provider)->priv;
+  AddAccountData data;
+  TpawAccountSettings *settings = NULL;
+  GtkWidget *action_area = NULL;
+  GList *children = NULL;
+  GList *l = NULL;
+  TpawAccountWidget *account_widget = NULL;
+  GtkRequisition req;
+  gint response;
+
+  settings = tpaw_protocol_create_account_settings (priv->protocol);
+  if (settings == NULL)
+    {
+      g_set_error (&data.error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Failed to create a user interface for %s"),
+                   priv->protocol != NULL ?
+                      tpaw_protocol_get_protocol_name (priv->protocol) :
+                      "(null)");
+      return NULL;
+    }
+
+  memset (&data, 0, sizeof (AddAccountData));
+  data.cancellable = g_cancellable_new ();
+  data.loop = g_main_loop_new (NULL, FALSE);
+  data.error = NULL;
+  data.provider = GOA_TELEPATHY_PROVIDER (provider);
+  data.dialog = dialog;
+  data.vbox = vbox;
+
+  goa_client_new (data.cancellable, goa_client_new_cb, &data);
+  wait_for_account_settings_ready (settings, data.loop);
+
+  action_area = gtk_dialog_get_action_area (dialog);
+  /* Remove the default button. */
+  children = gtk_container_get_children (GTK_CONTAINER (action_area));
+  for (l = children; l != NULL; l = l->next)
+    {
+      GtkWidget *child = l->data;
+      gtk_container_remove (GTK_CONTAINER (action_area), child);
+    }
+  g_list_free (children);
+
+  account_widget = tpaw_account_widget_new_for_protocol (settings,
+      GTK_BOX (action_area), FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET (account_widget), FALSE, FALSE, 0);
+  gtk_widget_show (GTK_WIDGET (account_widget));
+  g_signal_connect (account_widget, "account-created",
+      G_CALLBACK (tp_account_created_cb), &data);
+  g_signal_connect (account_widget, "close",
+      G_CALLBACK (account_widget_close_cb), &data);
+
+  /* The dialog now contains a lot of empty space between the account widget
+   * and the buttons. We force it's vertical size to be just right to fit the
+   * widget. */
+  gtk_widget_get_preferred_size (GTK_WIDGET (dialog), NULL, &req);
+  gtk_widget_set_size_request (GTK_WIDGET (dialog), req.width, 1);
+
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (response != GTK_RESPONSE_OK && response != GTK_RESPONSE_APPLY)
+    {
+      g_set_error (&data.error,
+                   GOA_ERROR,
+                   GOA_ERROR_DIALOG_DISMISSED,
+                   _("Dialog was dismissed"));
+      goto out;
+    }
+
+  if (data.error != NULL)
+    {
+      /* An error could have been set by a callback */
+      goto out;
+    }
+
+  if (data.ret == NULL && !g_cancellable_is_cancelled (data.cancellable))
+    {
+      /* We wait for the account to be created */
+      g_main_loop_run (data.loop);
+    }
+
+out:
+  if (data.error != NULL)
+    g_propagate_error (error, data.error);
+  else
+    g_assert (data.ret != NULL);
+
+  if (data.cancellable != NULL)
+    {
+      g_cancellable_cancel (data.cancellable);
+      g_object_unref (data.cancellable);
+    }
+
+  if (data.goa_account_added_id)
+    g_signal_handler_disconnect (data.goa_client, data.goa_account_added_id);
+
+  g_clear_pointer (&data.loop, g_main_loop_unref);
+  g_clear_object (&data.goa_client);
+  g_clear_object (&data.tp_account);
+
+  return data.ret;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
