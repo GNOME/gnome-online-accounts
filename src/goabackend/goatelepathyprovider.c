@@ -104,6 +104,96 @@ wait_for_account_settings_ready (TpawAccountSettings *settings,
     }
 }
 
+typedef struct
+{
+  GMainLoop *loop;
+  GError *error;
+  gboolean ret;
+} PrepareTpProxyData;
+
+static void
+proxy_prepared_cb (GObject      *object,
+                   GAsyncResult *res,
+                   gpointer      user_data)
+{
+  PrepareTpProxyData *data = user_data;
+
+  data->ret = tp_proxy_prepare_finish (object, res, &data->error);
+  g_main_loop_quit (data->loop);
+}
+
+static gboolean
+prepare_tp_proxy (gpointer       proxy,
+                  const GQuark  *features,
+                  GMainLoop     *loop,
+                  GError       **error)
+{
+  PrepareTpProxyData data = { NULL, };
+
+  data.loop = loop;
+
+  tp_proxy_prepare_async (proxy, features, proxy_prepared_cb, &data);
+  g_main_loop_run (data.loop);
+
+  if (data.error != NULL)
+    {
+      g_propagate_error (error, data.error);
+      g_clear_error (&data.error);
+    }
+
+  return data.ret;
+}
+
+static TpAccount *
+find_tp_account (GoaObject  *goa_object,
+                 GMainLoop  *loop,
+                 GError    **out_error)
+{
+  GoaAccount *goa_account = NULL;
+  const gchar *id = NULL;
+  TpAccountManager *account_manager;
+  GList *tp_accounts = NULL;
+  GList *l = NULL;
+  TpAccount *tp_account = NULL;
+  GError *error = NULL;
+
+  goa_account = goa_object_peek_account (goa_object);
+  id = goa_account_get_identity (goa_account);
+
+  account_manager = tp_account_manager_dup ();
+  if (!prepare_tp_proxy (account_manager, NULL, loop, &error))
+    goto out;
+
+  tp_accounts = tp_account_manager_dup_valid_accounts (account_manager);
+  for (l = tp_accounts; l != NULL; l = l->next)
+    {
+      if (g_strcmp0 (tp_proxy_get_object_path (l->data), id) == 0)
+        {
+          tp_account = g_object_ref (l->data);
+          break;
+        }
+    }
+
+  if (tp_account == NULL)
+    {
+      g_set_error (&error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Telepathy chat account not found"));
+      goto out;
+    }
+
+out:
+  if (error != NULL)
+    g_propagate_error (out_error, error);
+
+  g_clear_error (&error);
+  g_clear_object (&account_manager);
+  g_list_free_full (tp_accounts, g_object_unref);
+
+  return tp_account;
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static const gchar *
@@ -379,6 +469,91 @@ out:
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static void
+account_dialog_widget_cancelled_cb (TpawAccountWidget *account_widget,
+                                    gpointer           user_data)
+{
+  GError **error = user_data;
+
+  g_set_error (error,
+               GOA_ERROR,
+               GOA_ERROR_DIALOG_DISMISSED,
+               _("Dialog was dismissed"));
+}
+
+static gboolean
+edit_connection_parameters (GoaObject  *goa_object,
+                            GtkWindow  *parent,
+                            GError    **out_error)
+{
+  GMainLoop *loop = NULL;
+  TpAccount *tp_account = NULL;
+  TpawAccountSettings *settings = NULL;
+  GtkWidget *dialog = NULL;
+  TpawAccountWidget *account_widget = NULL;
+  GtkWidget *content_area = NULL;
+  GtkWidget *align = NULL;
+  gboolean ret;
+  GError *error = NULL;
+
+  loop = g_main_loop_new (NULL, FALSE);
+
+  tp_account = find_tp_account (goa_object, loop, &error);
+  if (tp_account == NULL)
+    goto out;
+
+  settings = tpaw_account_settings_new_for_account (tp_account);
+  wait_for_account_settings_ready (settings, loop);
+
+  dialog = gtk_dialog_new_with_buttons (_("Edit Connection Parameters"),
+      parent,
+      GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+      NULL, NULL);
+  gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+
+  account_widget = tpaw_account_widget_new_for_protocol (settings,
+      GTK_BOX (gtk_dialog_get_action_area (GTK_DIALOG (dialog))),
+      FALSE);
+  g_signal_connect (account_widget, "cancelled",
+      G_CALLBACK (account_dialog_widget_cancelled_cb), &error);
+  g_signal_connect_swapped (account_widget, "close",
+      G_CALLBACK (g_main_loop_quit), loop);
+
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+
+  align = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (align), 6, 0, 6, 6);
+
+  gtk_container_add (GTK_CONTAINER (align), GTK_WIDGET (account_widget));
+  gtk_box_pack_start (GTK_BOX (content_area), align, TRUE, TRUE, 0);
+
+  gtk_widget_show (GTK_WIDGET (account_widget));
+  gtk_widget_show (align);
+  gtk_widget_show (dialog);
+
+  /* Wait for the dialog to be dismissed */
+  g_main_loop_run (loop);
+
+  gtk_widget_destroy (dialog);
+
+out:
+  if (error != NULL)
+    {
+      g_propagate_error (out_error, error);
+      ret = FALSE;
+    }
+  else
+    {
+      ret = TRUE;
+    }
+
+  g_clear_object (&settings);
+  g_clear_object (&tp_account);
+  g_clear_pointer (&loop, g_main_loop_unref);
+
+  return ret;
+}
+
 static gboolean
 refresh_account (GoaProvider  *provider,
                  GoaClient    *client,
@@ -386,7 +561,7 @@ refresh_account (GoaProvider  *provider,
                  GtkWindow    *parent,
                  GError      **error)
 {
-  return FALSE;
+  return edit_connection_parameters (object, parent, error);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
