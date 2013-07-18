@@ -329,6 +329,8 @@ start_if_ready (GoaTpAccountLinker *self)
   GList *goa_accounts = NULL;
   GList *tp_accounts = NULL;
   GList *l = NULL;
+  GHashTableIter iter;
+  gpointer key, value;
 
   if (priv->goa_client == NULL ||
       priv->account_manager == NULL ||
@@ -362,6 +364,25 @@ start_if_ready (GoaTpAccountLinker *self)
       G_CALLBACK (tp_account_validity_changed_cb), self, 0);
   g_signal_connect_object (priv->account_manager, "account-removed",
       G_CALLBACK (tp_account_removed_cb), self, 0);
+
+  /* Now we check if any Telepathy account was deleted while goa-daemon
+   * was not running. */
+  g_hash_table_iter_init (&iter, priv->goa_accounts);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      const gchar *id = key;
+      GoaObject *goa_object = value;
+
+      if (!g_hash_table_lookup (priv->tp_accounts, id))
+        {
+          goa_warning ("The Telepathy account %s was removed while the daemon "
+              "was not running, removing the corresponding GOA account", id);
+          goa_account_call_remove (goa_object_peek_account (goa_object),
+              NULL, /* cancellable */
+              goa_account_removed_by_us_cb,
+              NULL); /* user data */
+        }
+    }
 }
 
 static void
