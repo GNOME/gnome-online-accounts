@@ -24,6 +24,7 @@
 #include "config.h"
 #include <glib/gi18n-lib.h>
 #include <tp-account-widgets/tpaw-account-widget.h>
+#include <tp-account-widgets/tpaw-user-info.h>
 #include <tp-account-widgets/tpaw-utils.h>
 
 #include "goaprovider.h"
@@ -566,6 +567,99 @@ refresh_account (GoaProvider  *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+typedef struct
+{
+  GMainLoop *loop;
+  GError *error;
+} EditPersonalDetailsData;
+
+static void
+user_info_apply_cb (GObject      *object,
+                    GAsyncResult *res,
+                    gpointer      user_data)
+{
+  EditPersonalDetailsData *data = user_data;
+
+  tpaw_user_info_apply_finish (TPAW_USER_INFO (object), res, &data->error);
+  g_main_loop_quit (data->loop);
+}
+
+static gboolean
+edit_personal_details (GoaObject  *goa_object,
+                       GtkWindow  *parent,
+                       GError    **error)
+{
+  EditPersonalDetailsData data;
+  TpAccount *tp_account = NULL;
+  GtkWidget *dialog = NULL;
+  GtkWidget *user_info = NULL;
+  GtkWidget *align = NULL;
+  GtkWidget *content_area = NULL;
+  gint response;
+  gboolean ret = FALSE;
+
+  memset (&data, 0, sizeof (EditPersonalDetailsData));
+  data.loop = g_main_loop_new (NULL, FALSE);
+
+  tp_account = find_tp_account (goa_object, data.loop, &data.error);
+  if (tp_account == NULL)
+    goto out;
+
+  dialog = gtk_dialog_new_with_buttons (_("Personal Details"),
+      parent,
+      GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+      GTK_STOCK_OK, GTK_RESPONSE_OK,
+      NULL);
+  gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+
+  user_info = tpaw_user_info_new (tp_account);
+  gtk_widget_show (user_info);
+
+  align = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (align), 6, 0, 6, 6);
+  gtk_widget_show (align);
+
+  gtk_container_add (GTK_CONTAINER (align), GTK_WIDGET (user_info));
+
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+  gtk_box_pack_start (GTK_BOX (content_area), align, TRUE, TRUE, 0);
+
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (response == GTK_RESPONSE_OK)
+    {
+      tpaw_user_info_apply_async (TPAW_USER_INFO (user_info),
+          user_info_apply_cb, &data);
+      g_main_loop_run (data.loop);
+      if (data.error != NULL)
+        goto out;
+    }
+  else
+    {
+      g_set_error (&data.error,
+                   GOA_ERROR,
+                   GOA_ERROR_DIALOG_DISMISSED,
+                   _("Dialog was dismissed"));
+      goto out;
+    }
+
+  ret = TRUE;
+
+out:
+  if (data.error != NULL)
+    {
+      g_propagate_error (error, data.error);
+    }
+
+  g_clear_pointer (&dialog, gtk_widget_destroy);
+  g_clear_object (&tp_account);
+  g_clear_pointer (&data.loop, g_main_loop_unref);
+
+  return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static gboolean
 build_object (GoaProvider        *provider,
               GoaObjectSkeleton  *object,
@@ -720,6 +814,18 @@ edit_parameters_clicked_cb (GtkButton *button,
 }
 
 static void
+edit_personal_details_clicked_cb (GtkButton *button,
+                                  gpointer   user_data)
+{
+  EditData *data = user_data;
+  GError *error = NULL;
+
+  if (!edit_personal_details (data->object, data->parent, &error))
+    maybe_show_error (data->parent, error,
+        _("Cannot save your personal information on the server"));
+}
+
+static void
 show_account (GoaProvider         *provider,
               GoaClient           *client,
               GoaObject           *object,
@@ -727,8 +833,9 @@ show_account (GoaProvider         *provider,
               GtkGrid             *left,
               GtkGrid             *right)
 {
-  GtkWidget *params_button = NULL;
   EditData *data = NULL;
+  GtkWidget *params_button = NULL;
+  GtkWidget *details_button = NULL;
   GtkWidget *button_box = NULL;
 
   /* Chain up */
@@ -750,10 +857,16 @@ show_account (GoaProvider         *provider,
   params_button = gtk_button_new_with_mnemonic (_("_Connection Settings"));
   edit_data_handle_button (data, params_button, G_CALLBACK (edit_parameters_clicked_cb));
 
+  /* Edit Personal Information button */
+  details_button = gtk_button_new_with_mnemonic (_("_Personal Details"));
+  edit_data_handle_button (data, details_button, G_CALLBACK (edit_personal_details_clicked_cb));
+
   /* Box containing the buttons */
   button_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_box_pack_start (GTK_BOX (button_box), params_button,
       FALSE, FALSE, 12);
+  gtk_box_pack_start (GTK_BOX (button_box), details_button,
+      FALSE, FALSE, 0);
 
   goa_util_add_row_widget (left, right, NULL, button_box);
 
