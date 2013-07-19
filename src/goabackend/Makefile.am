@@ -80,6 +80,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goawindowsliveprovider.h	goawindowsliveprovider.c	\
 	goatelepathyfactory.h		goatelepathyfactory.c		\
 	goatelepathyprovider.h		goatelepathyprovider.c		\
+	goapocketprovider.h		goapocketprovider.c		\
 	goautils.h			goautils.c			\
 	goaspinnerbutton.h		goaspinnerbutton.c		\
 	goawebview.h			goawebview.c			\

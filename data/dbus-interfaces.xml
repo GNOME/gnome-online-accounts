@@ -203,6 +203,18 @@
     -->
     <property name="TicketingDisabled" type="b" access="readwrite"/>
 
+    <!-- ReadLaterDisabled:
+         @since: 3.10.0
+
+         If %TRUE, the account will not expose any
+         #org.gnome.OnlineAccounts.ReadLater interface. If the account does not
+         provide read-later-like capabilities, this property does nothing.
+
+         Note that the #org.gnomeOnlineAccounts.ReadLater interface is added or
+         removed from the account asynchronously.
+    -->
+    <property name="ReadLaterDisabled" type="b" access="readwrite"/>
+
     <!--
         Remove:
 
@@ -638,6 +650,16 @@
       access resources for the account.
     -->
     <method name="GetTicket"/>
+  </interface>
+
+  <!--
+      org.gnome.OnlineAccounts.ReadLater:
+      @since: 3.10.0
+
+      An account object implements this interface if it provides
+      read-later-like capabilities.
+  -->
+  <interface name="org.gnome.OnlineAccounts.ReadLater">
   </interface>
 
 </node>

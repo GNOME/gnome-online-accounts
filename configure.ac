@@ -333,6 +333,26 @@ fi
 
 PKG_CHECK_MODULES(TP, telepathy-glib)
 
+# Pocket
+AC_ARG_ENABLE([pocket], [AS_HELP_STRING([--enable-pocket],
+                                              [Enable Pocket provider])],
+                                              [],
+                                              [enable_pocket=no])
+AC_ARG_WITH(pocket-client-id,
+            [AS_HELP_STRING([--with-pocket-client-id],
+                            [Pocket OAuth 2.0 client id])],
+                            [],
+                            [])
+if test "$with_pocket_client_id" = ""; then
+  with_pocket_client_id="16630-40b25246b56e8ad5310b2883"
+fi
+AC_DEFINE_UNQUOTED(GOA_POCKET_CLIENT_ID,
+                   ["$with_pocket_client_id"],
+                   [Pocket OAuth 2.0 client id])
+if test "$enable_pocket" != "no"; then
+  AC_DEFINE(GOA_POCKET_ENABLED, 1, [Enable Pocket data provider])
+fi
+
 # Kerberos
 AC_ARG_ENABLE([kerberos],
               [AS_HELP_STRING([--enable-kerberos],
@@ -522,6 +542,7 @@ echo "
 	Facebook provider:              ${enable_facebook} (OAuth 2.0, id:${with_facebook_client_id})
 	Windows Live provider:          ${enable_windows_live} (OAuth 2.0, id:${with_windows_live_client_id})
         Telepathy provider:             ${enable_telepathy}
+        Pocket provider:                ${enable_pocket} (id:${with_pocket_client_id})
 
 	Maintainer mode:                ${USE_MAINTAINER_MODE}
 	Building api docs:              ${enable_gtk_doc}

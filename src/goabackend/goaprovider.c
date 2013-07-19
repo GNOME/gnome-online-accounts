@@ -39,6 +39,7 @@
 #include "goaflickrprovider.h"
 #include "goawindowsliveprovider.h"
 #include "goatelepathyfactory.h"
+#include "goapocketprovider.h"
 
 #ifdef GOA_KERBEROS_ENABLED
 #include "goakerberosprovider.h"
@@ -787,6 +788,9 @@ ensure_builtins_loaded (void)
 #endif
 #ifdef GOA_WINDOWS_LIVE_ENABLED
       type = GOA_TYPE_WINDOWS_LIVE_PROVIDER;
+#endif
+#ifdef GOA_POCKET_ENABLED
+      type = GOA_TYPE_POCKET_PROVIDER;
 #endif
 #ifdef GOA_EXCHANGE_ENABLED
       type = GOA_TYPE_EXCHANGE_PROVIDER;
