@@ -207,6 +207,13 @@ tp_account_added (GoaTpAccountLinker *self,
   const gchar *id = get_id_from_tp_account (tp_account);
   GoaObject *goa_object = NULL;
 
+  if (g_strcmp0 (tp_account_get_storage_provider (tp_account),
+        "org.gnome.OnlineAccounts") == 0)
+    {
+      goa_debug ("Skipping Telepathy account %s as it's handled directly by GOA", id);
+      return;
+    }
+
   goa_debug ("Telepathy account found: %s", id);
 
   g_hash_table_replace (priv->tp_accounts, g_strdup (id),
