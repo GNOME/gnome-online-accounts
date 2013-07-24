@@ -841,9 +841,16 @@ ensure_builtins_loaded (void)
  * goa_provider_get_for_provider_type:
  * @provider_type: A provider type.
  *
- * Looks up the %GOA_PROVIDER_EXTENSION_POINT_NAME extension
- * point and returns a newly created #GoaProvider for
- * @provider_type, if any.
+ * Returns a #GoaProvider for @provider_type (if available).
+ *
+ * If @provider_type doesn't contain any "/", a
+ * %GOA_PROVIDER_EXTENSION_POINT_NAME extension for @provider_type is looked up
+ * and the newly created #GoaProvider, if any, is returned.
+ *
+ * If @provider_type contains a "/", a
+ * %GOA_PROVIDER_FACTORY_EXTENSION_POINT_NAME extension for the first part of
+ * @provider_type is looked up. If found, the #GoaProviderFactory is used
+ * to create a dynamic #GoaProvider matching the second part of @provider_type.
  *
  * Returns: (transfer full): A #GoaProvider (that must be freed
  * with g_object_unref()) or %NULL if not found.
@@ -853,16 +860,38 @@ goa_provider_get_for_provider_type (const gchar *provider_type)
 {
   GIOExtension *extension;
   GIOExtensionPoint *extension_point;
+  gchar **split_provider_type;
   GoaProvider *ret;
 
   ensure_builtins_loaded ();
 
   ret = NULL;
 
-  extension_point = g_io_extension_point_lookup (GOA_PROVIDER_EXTENSION_POINT_NAME);
-  extension = g_io_extension_point_get_extension_by_name (extension_point, provider_type);
-  if (extension != NULL)
-    ret = GOA_PROVIDER (g_object_new (g_io_extension_get_type (extension), NULL));
+  split_provider_type = g_strsplit (provider_type, "/", 2);
+
+  if (g_strv_length (split_provider_type) == 1)
+    {
+      /* Normal provider */
+      extension_point = g_io_extension_point_lookup (GOA_PROVIDER_EXTENSION_POINT_NAME);
+      extension = g_io_extension_point_get_extension_by_name (extension_point, provider_type);
+      if (extension != NULL)
+        ret = GOA_PROVIDER (g_object_new (g_io_extension_get_type (extension), NULL));
+    }
+  else
+    {
+      /* Dynamic provider created through a factory */
+      extension_point = g_io_extension_point_lookup (GOA_PROVIDER_FACTORY_EXTENSION_POINT_NAME);
+      extension = g_io_extension_point_get_extension_by_name (extension_point, split_provider_type[0]);
+      if (extension != NULL)
+        {
+          GoaProviderFactory *factory = g_object_new (g_io_extension_get_type (extension), NULL);
+          ret = goa_provider_factory_get_provider (factory, split_provider_type[1]);
+          g_object_unref (factory);
+        }
+    }
+
+  g_strfreev (split_provider_type);
+
   return ret;
 }
 
