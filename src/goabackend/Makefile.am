@@ -61,6 +61,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goaewsclient.h			goaewsclient.c			\
 	goahttpclient.h			goahttpclient.c			\
 	goaprovider-priv.h		goaprovider.c			\
+	goaproviderfactory.h		goaproviderfactory.c		\
 	goamailauth.h			goamailauth.c			\
 	goaimapauthlogin.h		goaimapauthlogin.c		\
 	goasmtpauthplain.h		goasmtpauthplain.c		\
