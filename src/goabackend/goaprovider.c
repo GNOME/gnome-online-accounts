@@ -38,6 +38,7 @@
 #include "goatwitterprovider.h"
 #include "goaflickrprovider.h"
 #include "goawindowsliveprovider.h"
+#include "goatelepathyfactory.h"
 
 #ifdef GOA_KERBEROS_ENABLED
 #include "goakerberosprovider.h"
@@ -827,6 +828,9 @@ ensure_builtins_loaded (void)
 #endif
 #ifdef GOA_TWITTER_ENABLED
       type = GOA_TYPE_TWITTER_PROVIDER;
+#endif
+#ifdef GOA_TELEPATHY_ENABLED
+      type = GOA_TYPE_TELEPATHY_FACTORY;
 #endif
 
       type = type; /* silence -Wunused-but-set-variable */
