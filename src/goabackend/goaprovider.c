@@ -899,37 +899,193 @@ goa_provider_get_for_provider_type (const gchar *provider_type)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+typedef struct
+{
+  GQueue ret;
+  gint pending_calls;
+  GSimpleAsyncResult *result;
+} GetAllData;
+
+static void
+free_list_and_unref (gpointer data)
+{
+  g_list_free_full (data, g_object_unref);
+}
+
+static gint
+compare_providers (GoaProvider *a,
+                   GoaProvider *b)
+{
+  gboolean a_branded;
+  gboolean b_branded;
+
+  if (goa_provider_get_provider_features (a) & GOA_PROVIDER_FEATURE_BRANDED)
+    a_branded = TRUE;
+  else
+    a_branded = FALSE;
+
+  if (goa_provider_get_provider_features (b) & GOA_PROVIDER_FEATURE_BRANDED)
+    b_branded = TRUE;
+  else
+    b_branded = FALSE;
+
+  /* g_queue_sort() uses a stable sort, so, if we return 0, the order
+   * is not changed. */
+  if (a_branded == b_branded)
+    return 0;
+  else if (a_branded)
+    return -1;
+  else
+    return 1;
+}
+
+static void
+get_all_check_done (GetAllData *data)
+{
+  if (data->pending_calls > 0)
+    return;
+
+  /* Make sure that branded providers come first, but don't change the
+   * order otherwise. */
+  g_queue_sort (&data->ret, (GCompareDataFunc) compare_providers, NULL);
+
+  /* Steal the list out of the GQueue. */
+  g_simple_async_result_set_op_res_gpointer (data->result, data->ret.head,
+      free_list_and_unref);
+  g_simple_async_result_complete_in_idle (data->result);
+
+  g_object_unref (data->result);
+  g_slice_free (GetAllData, data);
+}
+
+static void
+get_providers_cb (GObject      *source,
+                  GAsyncResult *res,
+                  gpointer      user_data)
+{
+  GoaProviderFactory *factory = GOA_PROVIDER_FACTORY (source);
+  GetAllData *data = user_data;
+  GList *providers = NULL;
+  GList *l;
+  GError *error = NULL;
+
+  if (!goa_provider_factory_get_providers_finish (factory, &providers, res, &error))
+    {
+      goa_error ("Error getting providers from a factory: %s (%s, %d)",
+          error->message,
+          g_quark_to_string (error->domain),
+          error->code);
+      g_clear_error (&error);
+      goto out;
+    }
+
+  for (l = providers; l != NULL; l = l->next)
+    {
+      /* Steal the value */
+      g_queue_push_tail (&data->ret, l->data);
+    }
+
+  g_list_free (providers);
+
+out:
+  data->pending_calls--;
+  get_all_check_done (data);
+}
+
 /**
  * goa_provider_get_all:
+ * @callback: The function to call when the request is satisfied.
+ * @user_data: Pointer to pass to @callback.
  *
- * Looks up the %GOA_PROVIDER_EXTENSION_POINT_NAME extension
- * point and returns a newly created #GoaProvider for each
- * provider type encountered.
+ * Creates a list of all the available #GoaProvider instances.
+ *
+ * When the result is ready, @callback will be called in the the <link
+ * linkend="g-main-context-push-thread-default">thread-default main
+ * loop</link> this function was called from. You can then call
+ * goa_provider_get_all_finish() to get the result of the operation.
+ *
+ * See goa_provider_get_for_provider_type() for details on how the providers
+ * are found.
  *
  * Returns: (transfer full) (element-type GoaProvider): A list
  *   of element providers that should be freed with g_list_free()
  *   after each element has been freed with g_object_unref().
  */
-GList *
-goa_provider_get_all (void)
+void
+goa_provider_get_all (GAsyncReadyCallback callback,
+                      gpointer            user_data)
 {
-  GList *ret;
   GList *extensions;
   GList *l;
   GIOExtensionPoint *extension_point;
+  GetAllData *data;
+  gint i;
 
   ensure_builtins_loaded ();
 
-  ret = NULL;
+  data = g_slice_new0 (GetAllData);
+  data->result = g_simple_async_result_new (NULL, callback, user_data,
+      goa_provider_get_all);
+  g_queue_init (&data->ret);
+
+  /* Load the normal providers. */
   extension_point = g_io_extension_point_lookup (GOA_PROVIDER_EXTENSION_POINT_NAME);
   extensions = g_io_extension_point_get_extensions (extension_point);
   /* TODO: what if there are two extensions with the same name? */
-  for (l = extensions; l != NULL; l = l->next)
+  for (l = extensions, i = 0; l != NULL; l = l->next, i++)
     {
       GIOExtension *extension = l->data;
-      ret = g_list_prepend (ret, g_object_new (g_io_extension_get_type (extension), NULL));
+      /* The extensions are loaded in the reverse order we used in
+       * ensure_builtins_loaded, so we need to push extension if front of
+       * the already loaded ones. */
+      g_queue_push_head (&data->ret, g_object_new (g_io_extension_get_type (extension), NULL));
     }
-  return ret;
+
+  /* Load the provider factories and get the dynamic providers out of them. */
+  extension_point = g_io_extension_point_lookup (GOA_PROVIDER_FACTORY_EXTENSION_POINT_NAME);
+  extensions = g_io_extension_point_get_extensions (extension_point);
+  for (l = extensions, i = 0; l != NULL; l = l->next, i++)
+    {
+      GIOExtension *extension = l->data;
+      goa_provider_factory_get_providers (g_object_new (g_io_extension_get_type (extension), NULL),
+          get_providers_cb, data);
+      data->pending_calls++;
+    }
+
+  get_all_check_done (data);
+}
+
+/**
+ * goa_provider_get_all_finish:
+ * @out_providers: (out): Return location for a list of #GoaProvider instances.
+ * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to goa_provider_get_all().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with goa_provider_get_all().
+ *
+ * Returns: %TRUE if the list was successfully retrieved, %FALSE if @error is set.
+ */
+gboolean
+goa_provider_get_all_finish (GList        **out_providers,
+                             GAsyncResult  *result,
+                             GError       **error)
+{
+  GSimpleAsyncResult *simple = (GSimpleAsyncResult *) result;
+  GList *providers;
+
+  g_return_val_if_fail (g_simple_async_result_is_valid (result, NULL,
+        goa_provider_get_all), FALSE);
+
+  if (g_simple_async_result_propagate_error (simple, error))
+    return FALSE;
+
+  if (out_providers != NULL)
+    {
+      providers = g_simple_async_result_get_op_res_gpointer (simple);
+      *out_providers = g_list_copy_deep (providers, (GCopyFunc) g_object_ref, NULL);
+    }
+
+  return TRUE;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

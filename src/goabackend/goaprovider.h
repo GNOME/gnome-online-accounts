@@ -174,7 +174,11 @@ gboolean     goa_provider_ensure_credentials_sync   (GoaProvider         *provid
                                                      GError             **error);
 guint        goa_provider_get_credentials_generation (GoaProvider        *provider);
 
-GList        *goa_provider_get_all (void);
+void          goa_provider_get_all                  (GAsyncReadyCallback  callback,
+                                                     gpointer             user_data);
+gboolean      goa_provider_get_all_finish           (GList              **out_providers,
+                                                     GAsyncResult        *result,
+                                                     GError             **error);
 
 GoaProvider  *goa_provider_get_for_provider_type (const gchar *provider_type);
 

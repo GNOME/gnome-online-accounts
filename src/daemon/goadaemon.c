@@ -717,17 +717,24 @@ generate_new_id (GoaDaemon *daemon)
   return ret;
 }
 
-static gboolean
-on_manager_handle_add_account (GoaManager             *manager,
-                               GDBusMethodInvocation  *invocation,
-                               const gchar            *provider_type,
-                               const gchar            *identity,
-                               const gchar            *presentation_identity,
-                               GVariant               *credentials,
-                               GVariant               *details,
-                               gpointer                user_data)
+typedef struct
 {
-  GoaDaemon *daemon = GOA_DAEMON (user_data);
+  GoaDaemon *daemon;
+  GoaManager *manager;
+  GDBusMethodInvocation *invocation;
+  gchar *provider_type;
+  gchar *identity;
+  gchar *presentation_identity;
+  GVariant *credentials;
+  GVariant *details;
+} AddAccountData;
+
+static void
+get_all_providers_cb (GObject      *source,
+                      GAsyncResult *res,
+                      gpointer      user_data)
+{
+  AddAccountData *data = user_data;
   GoaProvider *provider;
   GKeyFile *key_file;
   GError *error;
@@ -736,7 +743,7 @@ on_manager_handle_add_account (GoaManager             *manager,
   gchar *path;
   gchar *id;
   gchar *group;
-  gchar *data;
+  gchar *key_file_data;
   gsize length;
   gchar *object_path;
   GVariantIter iter;
@@ -751,10 +758,12 @@ on_manager_handle_add_account (GoaManager             *manager,
   path = NULL;
   id = NULL;
   group = NULL;
-  data = NULL;
+  key_file_data = NULL;
   object_path = NULL;
 
-  providers = goa_provider_get_all ();
+  if (!goa_provider_get_all_finish (&providers, res, NULL))
+    goto out;
+
   for (l = providers; l != NULL; l = l->next)
     {
       GoaProvider *p;
@@ -762,7 +771,7 @@ on_manager_handle_add_account (GoaManager             *manager,
 
       p = GOA_PROVIDER (l->data);
       type = goa_provider_get_provider_type (p);
-      if (g_strcmp0 (type, provider_type) == 0)
+      if (g_strcmp0 (type, data->provider_type) == 0)
         {
           provider = p;
           break;
@@ -776,8 +785,8 @@ on_manager_handle_add_account (GoaManager             *manager,
                    GOA_ERROR,
                    GOA_ERROR_FAILED, /* TODO: more specific */
                    _("Failed to find a provider for: %s"),
-                   provider_type);
-      g_dbus_method_invocation_return_gerror (invocation, error);
+                   data->provider_type);
+      g_dbus_method_invocation_return_gerror (data->invocation, error);
       goto out;
     }
 
@@ -785,7 +794,7 @@ on_manager_handle_add_account (GoaManager             *manager,
   path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
   error = NULL;
   if (!g_file_get_contents (path,
-                            &data,
+                            &key_file_data,
                             &length,
                             &error))
     {
@@ -796,7 +805,7 @@ on_manager_handle_add_account (GoaManager             *manager,
       else
         {
           g_prefix_error (&error, "Error loading file %s: ", path);
-          g_dbus_method_invocation_return_gerror (invocation, error);
+          g_dbus_method_invocation_return_gerror (data->invocation, error);
           goto out;
         }
     }
@@ -805,22 +814,22 @@ on_manager_handle_add_account (GoaManager             *manager,
       if (length > 0)
         {
           error = NULL;
-          if (!g_key_file_load_from_data (key_file, data, length, G_KEY_FILE_KEEP_COMMENTS, &error))
+          if (!g_key_file_load_from_data (key_file, key_file_data, length, G_KEY_FILE_KEEP_COMMENTS, &error))
             {
               g_prefix_error (&error, "Error parsing key-value-file %s: ", path);
-              g_dbus_method_invocation_return_gerror (invocation, error);
+              g_dbus_method_invocation_return_gerror (data->invocation, error);
               goto out;
             }
         }
     }
 
-  id = generate_new_id (daemon);
+  id = generate_new_id (data->daemon);
   group = g_strdup_printf ("Account %s", id);
-  g_key_file_set_string (key_file, group, "Provider", provider_type);
-  g_key_file_set_string (key_file, group, "Identity", identity);
-  g_key_file_set_string (key_file, group, "PresentationIdentity", presentation_identity);
+  g_key_file_set_string (key_file, group, "Provider", data->provider_type);
+  g_key_file_set_string (key_file, group, "Identity", data->identity);
+  g_key_file_set_string (key_file, group, "PresentationIdentity", data->presentation_identity);
 
-  g_variant_iter_init (&iter, details);
+  g_variant_iter_init (&iter, data->details);
   while (g_variant_iter_next (&iter, "{&s&s}", &key, &value))
     {
       /* We treat IsTemporary special.  If it's true we add in
@@ -833,7 +842,7 @@ on_manager_handle_add_account (GoaManager             *manager,
             {
               const char *guid;
 
-              guid = g_dbus_connection_get_guid (daemon->connection);
+              guid = g_dbus_connection_get_guid (data->daemon->connection);
               g_key_file_set_string (key_file, group, "SessionId", guid);
             }
         }
@@ -841,26 +850,26 @@ on_manager_handle_add_account (GoaManager             *manager,
       g_key_file_set_string (key_file, group, key, value);
     }
 
-  g_free (data);
+  g_free (key_file_data);
   error = NULL;
-  data = g_key_file_to_data (key_file,
-                             &length,
-                             &error);
-  if (data == NULL)
+  key_file_data = g_key_file_to_data (key_file,
+                                      &length,
+                                      &error);
+  if (key_file_data == NULL)
     {
       g_prefix_error (&error, "Error generating key-value-file: ");
-      g_dbus_method_invocation_return_gerror (invocation, error);
+      g_dbus_method_invocation_return_gerror (data->invocation, error);
       goto out;
     }
 
   error = NULL;
   if (!g_file_set_contents (path,
-                            data,
+                            key_file_data,
                             length,
                             &error))
     {
       g_prefix_error (&error, "Error writing key-value-file %s: ", path);
-      g_dbus_method_invocation_return_gerror (invocation, error);
+      g_dbus_method_invocation_return_gerror (data->invocation, error);
       goto out;
     }
 
@@ -869,25 +878,61 @@ on_manager_handle_add_account (GoaManager             *manager,
    */
   goa_utils_store_credentials_for_id_sync (provider,
                                            id,
-                                           credentials,
+                                           data->credentials,
                                            NULL, /* GCancellable */
                                            NULL);
 
-  goa_daemon_reload_configuration (daemon);
+  goa_daemon_reload_configuration (data->daemon);
 
   object_path = g_strdup_printf ("/org/gnome/OnlineAccounts/Accounts/%s", id);
-  goa_manager_complete_add_account (manager, invocation, object_path);
+  goa_manager_complete_add_account (data->manager, data->invocation, object_path);
 
  out:
   g_free (object_path);
   if (providers != NULL)
     g_list_free_full (providers, g_object_unref);
-  g_free (data);
+  g_free (key_file_data);
   g_free (group);
   g_free (id);
   g_free (path);
   if (key_file != NULL)
     g_key_file_free (key_file);
+
+  g_object_unref (data->daemon);
+  g_object_unref (data->manager);
+  g_object_unref (data->invocation);
+  g_free (data->provider_type);
+  g_free (data->identity);
+  g_free (data->presentation_identity);
+  g_variant_unref (data->credentials);
+  g_variant_unref (data->details);
+  g_slice_free (AddAccountData, data);
+}
+
+static gboolean
+on_manager_handle_add_account (GoaManager             *manager,
+                               GDBusMethodInvocation  *invocation,
+                               const gchar            *provider_type,
+                               const gchar            *identity,
+                               const gchar            *presentation_identity,
+                               GVariant               *credentials,
+                               GVariant               *details,
+                               gpointer                user_data)
+{
+  GoaDaemon *daemon = GOA_DAEMON (user_data);
+  AddAccountData *data;
+
+  data = g_slice_new0 (AddAccountData);
+  data->daemon = g_object_ref (daemon);
+  data->manager = g_object_ref (manager);
+  data->invocation = g_object_ref (invocation);
+  data->provider_type = g_strdup (provider_type);
+  data->identity = g_strdup (identity);
+  data->presentation_identity = g_strdup (presentation_identity);
+  data->credentials = g_variant_ref (credentials);
+  data->details = g_variant_ref (details);
+
+  goa_provider_get_all (get_all_providers_cb, data);
 
   return TRUE; /* invocation was handled */
 }

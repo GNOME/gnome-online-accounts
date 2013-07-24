@@ -25,14 +25,45 @@
 #define GOA_BACKEND_API_IS_SUBJECT_TO_CHANGE
 #include <goabackend/goabackend.h>
 
+typedef struct
+{
+  GMainLoop *loop;
+  GList *providers;
+  GError *error;
+} GetAllData;
+
+static void
+get_all_cb (GObject      *source,
+            GAsyncResult *res,
+            gpointer      user_data)
+{
+  GetAllData *data = user_data;
+
+  goa_provider_get_all_finish (&data->providers, res, &data->error);
+  g_main_loop_quit (data->loop);
+}
+
 int
 main (int argc, char **argv)
 {
+  GetAllData data = {0,};
   GoaProvider *provider;
-  GList *providers, *l;
+  GList *l;
 
-  providers = goa_provider_get_all ();
-  for (l = providers; l != NULL; l = l->next) {
+  data.loop = g_main_loop_new (NULL, FALSE);
+  goa_provider_get_all (get_all_cb, &data);
+  g_main_loop_run (data.loop);
+
+  if (data.error != NULL) {
+    g_printerr ("Failed to list providers: %s (%s, %d)\n",
+        data.error->message,
+        g_quark_to_string (data.error->domain),
+        data.error->code);
+    g_error_free (data.error);
+    goto out;
+  }
+
+  for (l = data.providers; l != NULL; l = l->next) {
     char *provider_name;
 
     provider = GOA_PROVIDER (l->data);
@@ -41,6 +72,10 @@ main (int argc, char **argv)
     g_free (provider_name);
     provider = NULL;
   }
+
+out:
+  g_main_loop_unref (data.loop);
+  g_list_free_full (data.providers, g_object_unref);
 
   return 0;
 }
