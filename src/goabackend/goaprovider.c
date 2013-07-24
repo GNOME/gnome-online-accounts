@@ -28,6 +28,7 @@
 #include "goalogging.h"
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
+#include "goaproviderfactory.h"
 #include "goaexchangeprovider.h"
 #include "goagoogleprovider.h"
 #include "goafacebookprovider.h"
@@ -774,6 +775,9 @@ goa_provider_ensure_extension_points_registered (void)
 
       extension_point = g_io_extension_point_register (GOA_PROVIDER_EXTENSION_POINT_NAME);
       g_io_extension_point_set_required_type (extension_point, GOA_TYPE_PROVIDER);
+
+      extension_point = g_io_extension_point_register (GOA_PROVIDER_FACTORY_EXTENSION_POINT_NAME);
+      g_io_extension_point_set_required_type (extension_point, GOA_TYPE_PROVIDER_FACTORY);
 
       g_once_init_leave (&once_init_value, 1);
     }
