@@ -29,6 +29,7 @@
 #define __GOA_TELEPATHY_PROVIDER_H__
 
 #include <glib-object.h>
+#include <tp-account-widgets/tpaw-protocol.h>
 
 G_BEGIN_DECLS
 
@@ -42,6 +43,9 @@ G_BEGIN_DECLS
 typedef struct _GoaTelepathyProvider GoaTelepathyProvider;
 
 GType                    goa_telepathy_provider_get_type                (void) G_GNUC_CONST;
+
+GoaTelepathyProvider    *goa_telepathy_provider_new_from_protocol_name  (const gchar  *protocol_name);
+GoaTelepathyProvider    *goa_telepathy_provider_new_from_protocol       (TpawProtocol *protocol);
 
 G_END_DECLS
 
