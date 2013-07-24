@@ -81,7 +81,8 @@ G_DEFINE_TYPE (GoaTelepathyProvider, goa_telepathy_provider, GOA_TYPE_PROVIDER);
 static const gchar *
 get_provider_type (GoaProvider *provider)
 {
-  return GOA_TELEPATHY_PROVIDER_BASE_TYPE;
+  GoaTelepathyProviderPrivate *priv = GOA_TELEPATHY_PROVIDER (provider)->priv;
+  return priv->provider_type;
 }
 
 static gchar *
