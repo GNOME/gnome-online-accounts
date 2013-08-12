@@ -213,6 +213,28 @@ get_provider_name (GoaProvider *provider,
   return g_strdup (tpaw_protocol_name_to_display_name (priv->protocol_name));
 }
 
+static GIcon *
+get_provider_icon (GoaProvider *provider,
+                   GoaObject   *object)
+{
+  GoaTelepathyProviderPrivate *priv = GOA_TELEPATHY_PROVIDER (provider)->priv;
+  gchar *icon_name;
+  gchar *icon_names[3];
+  GIcon *icon;
+
+  icon_name = tpaw_protocol_icon_name (priv->protocol_name);
+
+  icon_names[0] = icon_name;
+  /* If the icon doesn't exist, just try with the default icon. */
+  icon_names[1] = "goa-account";
+  icon_names[2] = NULL;
+  icon = g_themed_icon_new_from_names (icon_names, -1);
+
+  g_free (icon_name);
+
+  return icon;
+}
+
 static GoaProviderGroup
 get_provider_group (GoaProvider *provider)
 {
@@ -996,6 +1018,7 @@ goa_telepathy_provider_class_init (GoaTelepathyProviderClass *klass)
 
   provider_class->get_provider_type     = get_provider_type;
   provider_class->get_provider_name     = get_provider_name;
+  provider_class->get_provider_icon     = get_provider_icon;
   provider_class->get_provider_group    = get_provider_group;
   provider_class->get_provider_features = get_provider_features;
   provider_class->add_account           = add_account;
