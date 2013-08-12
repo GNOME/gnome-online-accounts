@@ -15,6 +15,7 @@ AC_INIT([GNOME Online Accounts],
         [gnome-online-accounts])
 
 AM_INIT_AUTOMAKE([1.9 foreign dist-xz no-dist-gzip tar-ustar])
+AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([src])
 AC_CONFIG_HEADERS([config.h])
 

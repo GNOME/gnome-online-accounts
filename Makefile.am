@@ -3,6 +3,8 @@ NULL =
 
 SUBDIRS = data src doc po
 
+ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
+
 # introspection and docs doesn't work with src != build
 DISTCHECK_CONFIGURE_FLAGS=--disable-introspection --disable-gtk-doc
 
