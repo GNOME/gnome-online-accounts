@@ -703,14 +703,17 @@ goa_daemon_reload_configuration (GoaDaemon *daemon)
 static gchar *
 generate_new_id (GoaDaemon *daemon)
 {
+  static guint counter = 0;
   GDateTime *dt;
   gchar *ret;
 
   dt = g_date_time_new_now_local ();
-  ret = g_date_time_format (dt, "account_%s"); /* seconds since Epoch */
-  /* TODO: handle collisions */
+  ret = g_strdup_printf ("account_%" G_GINT64_FORMAT "_%u",
+                         g_date_time_to_unix (dt), /* seconds since Epoch */
+                         counter); /* avoids collisions */
   g_date_time_unref (dt);
 
+  counter++;
   return ret;
 }
 
