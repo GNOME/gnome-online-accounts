@@ -69,6 +69,7 @@ get_protocols_cb (GObject      *source,
                   gpointer      user_data)
 {
   GSimpleAsyncResult *outer_result = user_data;
+  GQuark facebook_quark, google_talk_quark;
   GList *protocols = NULL;
   GList *ret;
   GList *l;
@@ -82,10 +83,29 @@ get_protocols_cb (GObject      *source,
       return;
     }
 
+  facebook_quark = g_quark_from_static_string ("facebook");
+  google_talk_quark = g_quark_from_static_string ("google-talk");
+
   ret = NULL;
   for (l = protocols; l != NULL; l = l->next)
     {
-      GoaTelepathyProvider *provider = goa_telepathy_provider_new_from_protocol (l->data);
+      TpawProtocol *protocol = l->data;
+      const gchar *service_name = tpaw_protocol_get_service_name (protocol);
+      GQuark service_quark = g_quark_try_string (service_name);
+      GoaTelepathyProvider *provider;
+
+      /* If the  service is handled natively by GOA, so we don't allow
+       * the creation of a Telepathy-only account. */
+#if GOA_FACEBOOK_ENABLED
+      if (service_quark == facebook_quark)
+        continue;
+#endif
+#if GOA_GOOGLE_ENABLED
+      if (service_quark == google_talk_quark)
+        continue;
+#endif
+
+      provider = goa_telepathy_provider_new_from_protocol (protocol);
       ret = g_list_prepend (ret, provider);
     }
   ret = g_list_reverse (ret);
