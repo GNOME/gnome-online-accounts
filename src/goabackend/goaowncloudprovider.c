@@ -99,6 +99,7 @@ get_provider_features (GoaProvider *_provider)
   return GOA_PROVIDER_FEATURE_BRANDED |
          GOA_PROVIDER_FEATURE_CALENDAR |
          GOA_PROVIDER_FEATURE_CONTACTS |
+         GOA_PROVIDER_FEATURE_DOCUMENTS |
          GOA_PROVIDER_FEATURE_FILES;
 }
 
@@ -121,12 +122,14 @@ build_object (GoaProvider         *provider,
   GoaAccount *account;
   GoaCalendar *calendar;
   GoaContacts *contacts;
+  GoaDocuments *documents;
   GoaFiles *files;
   GoaPasswordBased *password_based;
   SoupURI *uri;
   gboolean accept_ssl_errors;
   gboolean calendar_enabled;
   gboolean contacts_enabled;
+  gboolean documents_enabled;
   gboolean files_enabled;
   gboolean ret;
   const gchar *identity;
@@ -135,6 +138,7 @@ build_object (GoaProvider         *provider,
   account = NULL;
   calendar = NULL;
   contacts = NULL;
+  documents = NULL;
   files = NULL;
   password_based = NULL;
   uri = NULL;
@@ -245,6 +249,24 @@ build_object (GoaProvider         *provider,
         goa_object_skeleton_set_contacts (object, NULL);
     }
 
+  /* Documents */
+  documents = goa_object_get_documents (GOA_OBJECT (object));
+  documents_enabled = g_key_file_get_boolean (key_file, group, "DocumentsEnabled", NULL);
+
+  if (documents_enabled)
+    {
+      if (documents == NULL)
+        {
+          documents = goa_documents_skeleton_new ();
+          goa_object_skeleton_set_documents (object, documents);
+        }
+    }
+  else
+    {
+      if (documents != NULL)
+        goa_object_skeleton_set_documents (object, NULL);
+    }
+
   /* Files */
   files = goa_object_get_files (GOA_OBJECT (object));
   files_enabled = g_key_file_get_boolean (key_file, group, "FilesEnabled", NULL);
@@ -291,6 +313,7 @@ build_object (GoaProvider         *provider,
     {
       goa_account_set_calendar_disabled (account, !calendar_enabled);
       goa_account_set_contacts_disabled (account, !contacts_enabled);
+      goa_account_set_documents_disabled (account, !documents_enabled);
       goa_account_set_files_disabled (account, !files_enabled);
 
       g_signal_connect (account,
@@ -301,6 +324,10 @@ build_object (GoaProvider         *provider,
                         "notify::contacts-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
                         "ContactsEnabled");
+      g_signal_connect (account,
+                        "notify::documents-disabled",
+                        G_CALLBACK (goa_util_account_notify_property_cb),
+                        "DocumentsEnabled");
       g_signal_connect (account,
                         "notify::files-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
@@ -865,6 +892,7 @@ add_account (GoaProvider    *provider,
   g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
   g_variant_builder_add (&details, "{ss}", "CalendarEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "ContactsEnabled", "true");
+  g_variant_builder_add (&details, "{ss}", "DocumentsEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "FilesEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "Uri", uri);
   g_variant_builder_add (&details, "{ss}", "AcceptSslErrors", (accept_ssl_errors) ? "true" : "false");
@@ -1092,6 +1120,11 @@ show_account (GoaProvider         *provider,
                                                    NULL,
                                                    "contacts-disabled",
                                                    _("_Contacts"));
+
+  goa_util_add_row_switch_from_keyfile_with_blurb (left, right, object,
+                                                   NULL,
+                                                   "documents-disabled",
+                                                   _("_Documents"));
 
   goa_util_add_row_switch_from_keyfile_with_blurb (left, right, object,
                                                    NULL,
