@@ -564,11 +564,18 @@ goa_mail_interface_info
 goa_mail_get_email_address
 goa_mail_dup_email_address
 goa_mail_set_email_address
+goa_mail_get_name
+goa_mail_dup_name
+goa_mail_set_name
 goa_mail_get_imap_host
 goa_mail_dup_imap_host
 goa_mail_set_imap_host
 goa_mail_get_imap_supported
 goa_mail_set_imap_supported
+goa_mail_get_imap_accept_ssl_errors
+goa_mail_set_imap_accept_ssl_errors
+goa_mail_get_imap_use_ssl
+goa_mail_set_imap_use_ssl
 goa_mail_get_imap_use_tls
 goa_mail_set_imap_use_tls
 goa_mail_get_imap_user_name
@@ -579,6 +586,12 @@ goa_mail_dup_smtp_host
 goa_mail_set_smtp_host
 goa_mail_get_smtp_supported
 goa_mail_set_smtp_supported
+goa_mail_get_smtp_accept_ssl_errors
+goa_mail_set_smtp_accept_ssl_errors
+goa_mail_get_smtp_use_auth
+goa_mail_set_smtp_use_auth
+goa_mail_get_smtp_use_ssl
+goa_mail_set_smtp_use_ssl
 goa_mail_get_smtp_use_tls
 goa_mail_set_smtp_use_tls
 goa_mail_get_smtp_user_name
@@ -625,6 +638,8 @@ GoaCalendar
 GoaCalendarIface
 goa_calendar_interface_info
 goa_calendar_override_properties
+goa_calendar_get_accept_ssl_errors
+goa_calendar_set_accept_ssl_errors
 goa_calendar_get_uri
 goa_calendar_dup_uri
 goa_calendar_set_uri
@@ -669,6 +684,8 @@ GoaContacts
 GoaContactsIface
 goa_contacts_interface_info
 goa_contacts_override_properties
+goa_contacts_get_accept_ssl_errors
+goa_contacts_set_accept_ssl_errors
 goa_contacts_get_uri
 goa_contacts_dup_uri
 goa_contacts_set_uri
@@ -836,6 +853,8 @@ GoaFiles
 GoaFilesIface
 goa_files_override_properties
 goa_files_interface_info
+goa_files_get_accept_ssl_errors
+goa_files_set_accept_ssl_errors
 goa_files_get_uri
 goa_files_dup_uri
 goa_files_set_uri
@@ -879,6 +898,8 @@ goa_files_skeleton_get_type
 GoaExchange
 GoaExchangeIface
 goa_exchange_interface_info
+goa_exchange_get_accept_ssl_errors
+goa_exchange_set_accept_ssl_errors
 goa_exchange_get_host
 goa_exchange_dup_host
 goa_exchange_set_host
