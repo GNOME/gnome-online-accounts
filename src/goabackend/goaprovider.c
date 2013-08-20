@@ -863,6 +863,8 @@ goa_provider_get_for_provider_type (const gchar *provider_type)
   gchar **split_provider_type;
   GoaProvider *ret;
 
+  g_return_val_if_fail (provider_type != NULL, NULL);
+
   ensure_builtins_loaded ();
 
   ret = NULL;
