@@ -446,6 +446,24 @@ goa_provider_get_type
 </SECTION>
 
 <SECTION>
+<FILE>goaproviderfactory</FILE>
+GoaProviderFactory
+GoaProviderFactoryClass
+GOA_PROVIDER_FACTORY_EXTENSION_POINT_NAME
+goa_provider_factory_get_provider
+goa_provider_factory_get_providers
+goa_provider_factory_get_providers_finish
+<SUBSECTION Standard>
+GOA_PROVIDER_FACTORY
+GOA_PROVIDER_FACTORY_CLASS
+GOA_PROVIDER_FACTORY_GET_CLASS
+GOA_IS_PROVIDER_FACTORY
+GOA_IS_PROVIDER_FACTORY_CLASS
+GOA_TYPE_PROVIDER_FACTORY
+goa_provider_factory_get_type
+</SECTION>
+
+<SECTION>
 <FILE>goaoauth2provider</FILE>
 GoaOAuth2Provider
 GoaOAuth2ProviderClass
@@ -577,6 +595,33 @@ GOA_FLICKR_PROVIDER
 GOA_IS_FLICKR_PROVIDER
 GOA_TYPE_FLICKR_PROVIDER
 goa_flickr_provider_get_type
+</SECTION>
+
+<SECTION>
+<FILE>goatelepathyfactory</FILE>
+GoaTelepathyFactory
+GoaTelepathyFactoryClass
+<SUBSECTION Standard>
+GOA_TELEPATHY_FACTORY
+GOA_TELEPATHY_FACTORY_CLASS
+GOA_TELEPATHY_FACTORY_GET_CLASS
+GOA_IS_TELEPATHY_FACTORY
+GOA_IS_TELEPATHY_FACTORY_CLASS
+GOA_TYPE_TELEPATHY_FACTORY
+goa_telepathy_factory_get_type
+</SECTION>
+
+<SECTION>
+<FILE>goatelepathyprovider</FILE>
+GoaTelepathyProvider
+GOA_TELEPATHY_PROVIDER_BASE_TYPE
+goa_telepathy_provider_new_from_protocol_name
+goa_telepathy_provider_new_from_protocol
+<SUBSECTION Standard>
+GOA_TELEPATHY_PROVIDER
+GOA_IS_TELEPATHY_PROVIDER
+GOA_TYPE_TELEPATHY_PROVIDER
+goa_telepathy_provider_get_type
 </SECTION>
 
 <SECTION>

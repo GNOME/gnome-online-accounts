@@ -38,25 +38,27 @@ G_DEFINE_ABSTRACT_TYPE (GoaProviderFactory, goa_provider_factory, G_TYPE_OBJECT)
 
 /**
  * goa_provider_factory_get_provider:
+ * @factory: A #GoaProviderFactory.
+ * @provider_name: A provider type identifier (ie. IM protocol names in #GoaTelepathyFactory)
  *
- * Create a dynamic #GoaProvider for @provider_type.
+ * Create a dynamic #GoaProvider for the subclass-specific @provider_name.
  *
  * Returns: (transfer full): A #GoaProvider (that must be freed
  * with g_object_unref()) or %NULL if not found.
  */
 GoaProvider *
 goa_provider_factory_get_provider (GoaProviderFactory  *factory,
-                                   const gchar         *provider_type)
+                                   const gchar         *provider_name)
 {
   GoaProviderFactoryClass *klass;
 
   g_return_val_if_fail (GOA_IS_PROVIDER_FACTORY (factory), NULL);
-  g_return_val_if_fail (provider_type != NULL, NULL);
+  g_return_val_if_fail (provider_name != NULL, NULL);
 
   klass = GOA_PROVIDER_FACTORY_GET_CLASS (factory);
   g_return_val_if_fail (klass->get_provider != NULL, NULL);
 
-  return klass->get_provider (factory, provider_type);
+  return klass->get_provider (factory, provider_name);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -96,7 +98,7 @@ goa_provider_factory_get_providers (GoaProviderFactory  *factory,
  * goa_provider_factory_get_providers_finish:
  * @factory: A #GoaProviderFactory.
  * @out_providers: (out): Return location for a list of #GoaProvider instances handled by @factory.
- * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to goa_provider_factory_get_providers().
+ * @result: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to goa_provider_factory_get_providers().
  * @error: Return location for error or %NULL.
  *
  * Finishes an operation started with goa_provider_factory_get_providers()

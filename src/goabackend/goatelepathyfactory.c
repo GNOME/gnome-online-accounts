@@ -35,6 +35,9 @@
  *
  * #GoaTelepathyFactory dynamically creates instances of #GoaTelepathyProvider
  * based on the protocols available through Telepathy.
+ *
+ * It accepts the protocol names from the Telepathy specification as
+ * @provider_name in goa_provider_factory_get_provider().
  */
 
 G_DEFINE_TYPE_WITH_CODE (GoaTelepathyFactory, goa_telepathy_factory, GOA_TYPE_PROVIDER_FACTORY,
