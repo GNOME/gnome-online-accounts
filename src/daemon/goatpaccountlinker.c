@@ -523,6 +523,25 @@ goa_tp_account_linker_dispose (GObject *object)
 }
 
 static void
+initialize_client_factory (void)
+{
+  TpSimpleClientFactory *factory;
+  TpAccountManager *account_manager;
+  GQuark features[] = { TP_ACCOUNT_FEATURE_STORAGE, 0 };
+
+  factory = tp_simple_client_factory_new (NULL);
+  /* We want to make sure that new TpAccount instances will have all
+   * the features we need. */
+  tp_simple_client_factory_add_account_features (factory, features);
+
+  account_manager = tp_account_manager_new_with_factory (factory);
+  tp_account_manager_set_default (account_manager);
+
+  g_object_unref (account_manager);
+  g_object_unref (factory);
+}
+
+static void
 goa_tp_account_linker_init (GoaTpAccountLinker *self)
 {
   GoaTpAccountLinkerPrivate *priv;
@@ -553,6 +572,8 @@ goa_tp_account_linker_class_init (GoaTpAccountLinkerClass *klass)
       sizeof (GoaTpAccountLinkerPrivate));
 
   gobject_class->dispose = goa_tp_account_linker_dispose;
+
+  initialize_client_factory ();
 }
 
 GoaTpAccountLinker *
