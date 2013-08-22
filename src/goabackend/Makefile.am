@@ -128,6 +128,10 @@ libgoa_backend_1_0_la_LIBADD = 					\
 	$(TPAW_LIBS)						\
 	$(NULL)
 
+libgoa_backend_1_0_la_LDFLAGS = 				\
+	-version-info $(GOA_BACKEND_LT_VERSION)			\
+	$(NULL)
+
 # ----------------------------------------------------------------------------------------------------
 
 pkgconfigdir = $(libdir)/pkgconfig

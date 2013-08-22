@@ -104,6 +104,10 @@ libgoa_1_0_la_LIBADD = 						\
 	$(GLIB_LIBS) 						\
 	$(NULL)
 
+libgoa_1_0_la_LDFLAGS = 					\
+	-version-info $(GOA_LT_VERSION)				\
+	$(NULL)
+
 # ----------------------------------------------------------------------------------------------------
 
 pkgconfigdir = $(libdir)/pkgconfig

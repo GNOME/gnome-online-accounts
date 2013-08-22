@@ -37,6 +37,18 @@ AC_SUBST(GOA_MAJOR_VERSION)
 AC_SUBST(GOA_MINOR_VERSION)
 AC_SUBST(GOA_MICRO_VERSION)
 
+# Before making a release, the LT_VERSION string should be modified.
+# The string is of the form C:R:A.
+# - If interfaces have been changed or added, but binary compatibility has
+#   been preserved, change to C+1:0:A+1
+# - If binary compatibility has been broken (eg removed or changed interfaces)
+#   change to C+1:0:0
+# - If the interface is the same as the previous version, change to C:R+1:A
+GOA_LT_VERSION=0:0:0
+GOA_BACKEND_LT_VERSION=1:0:0
+AC_SUBST(GOA_LT_VERSION)
+AC_SUBST(GOA_BACKEND_LT_VERSION)
+
 AC_DEFINE(GOA_MAJOR_VERSION,
           [goa_major_version],
           [Define to the GOA major version])
