@@ -619,6 +619,15 @@ user_info_apply_cb (GObject      *object,
 }
 
 static gboolean
+personal_details_timeout_cb (gpointer user_data)
+{
+  EditPersonalDetailsData *data = user_data;
+
+  g_main_loop_quit (data->loop);
+  return G_SOURCE_REMOVE;
+}
+
+static gboolean
 edit_personal_details (GoaObject  *goa_object,
                        GtkWindow  *parent,
                        GError    **error)
@@ -659,6 +668,9 @@ edit_personal_details (GoaObject  *goa_object,
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   gtk_box_pack_start (GTK_BOX (content_area), align, TRUE, TRUE, 0);
+
+  g_timeout_add (100, personal_details_timeout_cb, &data);
+  g_main_loop_run (data.loop);
 
   response = gtk_dialog_run (GTK_DIALOG (dialog));
   if (response == GTK_RESPONSE_OK)
