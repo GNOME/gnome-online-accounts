@@ -114,6 +114,8 @@ ac_configure_args="$ac_configure_args --with-pkgdatadir=${datadir}/gnome-online-
 # GOA ships its icons directly in ${datadir}/icons (usually /usr/share/icons/) and not
 # in its own data directory
 ac_configure_args="$ac_configure_args --with-icondir=${datadir}/icons"
+# Change the name of tpaw's .mo files to avoid conflicts with other packages using tp-aw
+ac_configure_args="$ac_configure_args --with-gettext-package=gnome-online-accounts-tpaw"
 AX_CONFIG_DIR([telepathy-account-widgets])
 ac_top_build_prefix=$prev_top_build_prefix
 ac_configure_args=$prev_ac_configure_args
