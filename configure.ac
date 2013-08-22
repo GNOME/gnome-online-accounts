@@ -108,7 +108,9 @@ GOBJECT_INTROSPECTION_CHECK([0.6.2])
 # telepathy-account-widgets
 prev_top_build_prefix=$ac_top_build_prefix
 prev_ac_configure_args=$ac_configure_args
-ac_configure_args="$ac_configure_args --with-pkgdatadir=${datadir}/gnome-online-accounts --with-cheese=no --disable-gudev"
+ac_configure_args="$ac_configure_args --with-cheese=no --disable-gudev"
+# install the data together with the rest of GOA's data
+ac_configure_args="$ac_configure_args --with-pkgdatadir=${datadir}/gnome-online-accounts"
 AX_CONFIG_DIR([telepathy-account-widgets])
 ac_top_build_prefix=$prev_top_build_prefix
 ac_configure_args=$prev_ac_configure_args
