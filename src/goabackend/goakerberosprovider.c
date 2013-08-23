@@ -893,8 +893,8 @@ build_object (GoaProvider         *provider,
 }
 
 static void
-add_entry (GtkWidget     *grid1,
-           GtkWidget     *grid2,
+add_entry (GtkWidget     *grid,
+           gint           row,
            const gchar   *text,
            GtkWidget    **out_entry)
 {
@@ -905,16 +905,14 @@ add_entry (GtkWidget     *grid1,
   label = gtk_label_new_with_mnemonic (text);
   context = gtk_widget_get_style_context (label);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
-  gtk_widget_set_vexpand (label, TRUE);
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-  gtk_container_add (GTK_CONTAINER (grid1), label);
+  gtk_widget_set_halign (label, GTK_ALIGN_END);
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, row, 1, 1);
 
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);
-  gtk_widget_set_vexpand (entry, TRUE);
   gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-  gtk_entry_set_max_length (GTK_ENTRY (entry), 132);
-  gtk_container_add (GTK_CONTAINER (grid2), entry);
+  gtk_grid_attach (GTK_GRID (grid), entry, 1, row, 3, 1);
 
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
   if (out_entry != NULL)
@@ -922,8 +920,8 @@ add_entry (GtkWidget     *grid1,
 }
 
 static void
-add_combo_box (GtkWidget     *grid1,
-               GtkWidget     *grid2,
+add_combo_box (GtkWidget     *grid,
+               gint           row,
                const gchar   *text,
                const gchar   *placeholder,
                GtkListStore  *model,
@@ -938,20 +936,18 @@ add_combo_box (GtkWidget     *grid1,
   label = gtk_label_new_with_mnemonic (text);
   context = gtk_widget_get_style_context (label);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
-  gtk_widget_set_vexpand (label, TRUE);
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-  gtk_container_add (GTK_CONTAINER (grid1), label);
+  gtk_widget_set_halign (label, GTK_ALIGN_END);
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, row, 1, 1);
 
   combo_box = gtk_combo_box_new_with_model_and_entry (GTK_TREE_MODEL (model));
   gtk_widget_set_hexpand (combo_box, TRUE);
-  gtk_widget_set_vexpand (combo_box, TRUE);
   gtk_widget_show (combo_box);
 
   entry = gtk_bin_get_child (GTK_BIN (combo_box));
-  gtk_entry_set_max_length (GTK_ENTRY (entry), 132);
   gtk_entry_set_placeholder_text (GTK_ENTRY (entry), placeholder);
 
-  gtk_container_add (GTK_CONTAINER (grid2), combo_box);
+  gtk_grid_attach (GTK_GRID (grid), combo_box, 1, row, 3, 1);
 
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
   if (out_combo_box != NULL)
@@ -1080,10 +1076,9 @@ create_account_details_ui (GoaKerberosProvider *self,
   GtkWidget *action_area;
   GtkWidget *grid0;
   GtkWidget *grid1;
-  GtkWidget *grid2;
-  GtkWidget *hbox;
   GtkWidget *label;
   GtkWidget *spinner;
+  gint row;
   gint width;
 
   goa_utils_set_dialog_title (GOA_PROVIDER (self), dialog, new_account);
@@ -1107,22 +1102,15 @@ create_account_details_ui (GoaKerberosProvider *self,
                      request->cluebar_label);
 
   grid1 = gtk_grid_new ();
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid1), GTK_ORIENTATION_VERTICAL);
+  gtk_grid_set_column_spacing (GTK_GRID (grid1), 12);
   gtk_grid_set_row_spacing (GTK_GRID (grid1), 12);
+  gtk_container_add (GTK_CONTAINER (grid0), grid1);
 
-  grid2 = gtk_grid_new ();
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid2), GTK_ORIENTATION_VERTICAL);
-  gtk_grid_set_row_spacing (GTK_GRID (grid2), 12);
-
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
-  gtk_box_pack_start (GTK_BOX (hbox), grid1, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (hbox), grid2, TRUE, TRUE, 0);
-  gtk_container_add (GTK_CONTAINER (grid0), hbox);
+  row = 0;
 
   request->realm_store = gtk_list_store_new (1, G_TYPE_STRING);
   add_combo_box (grid1,
-                 grid2,
+                 row++,
                  _("_Domain"),
                  _("Enterprise domain or realm name"),
                  request->realm_store,
@@ -1131,7 +1119,7 @@ create_account_details_ui (GoaKerberosProvider *self,
   g_signal_connect (request->realm_entry, "changed", G_CALLBACK (clear_entry_validation_error), NULL);
   gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX (request->realm_combo_box), 0);
 
-  add_entry (grid1, grid2, _("User_name"), &request->username);
+  add_entry (grid1, row++, _("User_name"), &request->username);
 
   populate_realms_for_request (request);
   gtk_widget_grab_focus (request->realm_combo_box);
