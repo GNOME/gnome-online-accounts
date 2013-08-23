@@ -424,7 +424,7 @@ show_account (GoaProvider         *provider,
                                                                        right);
 
   goa_util_add_row_switch_from_keyfile_with_blurb (left, right, object,
-                                                   NULL,
+                                                   _("Use for"),
                                                    "photos-disabled",
                                                    _("_Photos"));
 }
