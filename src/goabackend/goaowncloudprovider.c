@@ -449,8 +449,8 @@ ensure_credentials_sync (GoaProvider         *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-add_entry (GtkWidget     *grid1,
-           GtkWidget     *grid2,
+add_entry (GtkWidget     *grid,
+           gint           row,
            const gchar   *text,
            GtkWidget    **out_entry)
 {
@@ -461,16 +461,14 @@ add_entry (GtkWidget     *grid1,
   label = gtk_label_new_with_mnemonic (text);
   context = gtk_widget_get_style_context (label);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
-  gtk_widget_set_vexpand (label, TRUE);
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-  gtk_container_add (GTK_CONTAINER (grid1), label);
+  gtk_widget_set_halign (label, GTK_ALIGN_END);
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, row, 1, 1);
 
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);
-  gtk_widget_set_vexpand (entry, TRUE);
   gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-  gtk_entry_set_max_length (GTK_ENTRY (entry), 132);
-  gtk_container_add (GTK_CONTAINER (grid2), entry);
+  gtk_grid_attach (GTK_GRID (grid), entry, 1, row, 3, 1);
 
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
   if (out_entry != NULL)
@@ -621,10 +619,9 @@ create_account_details_ui (GoaProvider    *provider,
   GtkWidget *action_area;
   GtkWidget *grid0;
   GtkWidget *grid1;
-  GtkWidget *grid2;
-  GtkWidget *hbox;
   GtkWidget *label;
   GtkWidget *spinner;
+  gint row;
   gint width;
 
   goa_utils_set_dialog_title (provider, dialog, new_account);
@@ -648,22 +645,14 @@ create_account_details_ui (GoaProvider    *provider,
                      data->cluebar_label);
 
   grid1 = gtk_grid_new ();
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid1), GTK_ORIENTATION_VERTICAL);
+  gtk_grid_set_column_spacing (GTK_GRID (grid1), 12);
   gtk_grid_set_row_spacing (GTK_GRID (grid1), 12);
+  gtk_container_add (GTK_CONTAINER (grid0), grid1);
 
-  grid2 = gtk_grid_new ();
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid2), GTK_ORIENTATION_VERTICAL);
-  gtk_grid_set_row_spacing (GTK_GRID (grid2), 12);
-
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
-  gtk_box_pack_start (GTK_BOX (hbox), grid1, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (hbox), grid2, TRUE, TRUE, 0);
-  gtk_container_add (GTK_CONTAINER (grid0), hbox);
-
-  add_entry (grid1, grid2, _("_Server"), &data->uri);
-  add_entry (grid1, grid2, _("User_name"), &data->username);
-  add_entry (grid1, grid2, _("_Password"), &data->password);
+  row = 0;
+  add_entry (grid1, row++, _("_Server"), &data->uri);
+  add_entry (grid1, row++, _("User_name"), &data->username);
+  add_entry (grid1, row++, _("_Password"), &data->password);
   gtk_entry_set_visibility (GTK_ENTRY (data->password), FALSE);
 
   gtk_widget_grab_focus ((new_account) ? data->uri : data->password);
