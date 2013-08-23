@@ -402,7 +402,6 @@ build_object (GoaProvider         *provider,
 static gboolean
 get_use_external_browser (GoaOAuthProvider *provider)
 {
-  /* For some reason this only works in a browser - bad callback URL? TODO: investigate */
   return FALSE;
 }
 
