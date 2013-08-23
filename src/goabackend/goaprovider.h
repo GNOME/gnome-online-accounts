@@ -93,6 +93,12 @@ struct _GoaProviderClass
                                      GoaObject          *object,
                                      GtkWindow          *parent,
                                      GError            **error);
+  void         (*show_account)      (GoaProvider         *provider,
+                                     GoaClient           *client,
+                                     GoaObject           *object,
+                                     GtkBox              *vbox,
+                                     GtkGrid             *grid,
+                                     GtkGrid             *dummy);
   gboolean     (*build_object)      (GoaProvider        *provider,
                                      GoaObjectSkeleton  *object,
                                      GKeyFile           *key_file,
@@ -106,12 +112,6 @@ struct _GoaProviderClass
                                        gint                *out_expires_in,
                                        GCancellable        *cancellable,
                                        GError             **error);
-  void     (*show_account)            (GoaProvider         *provider,
-                                       GoaClient           *client,
-                                       GoaObject           *object,
-                                       GtkBox              *vbox,
-                                       GtkGrid             *left,
-                                       GtkGrid             *right);
   guint    (*get_credentials_generation) (GoaProvider   *provider);
 
   /* pure virtual */
@@ -149,8 +149,8 @@ void         goa_provider_show_account              (GoaProvider         *provid
                                                      GoaClient           *client,
                                                      GoaObject           *object,
                                                      GtkBox              *vbox,
-                                                     GtkGrid             *left,
-                                                     GtkGrid             *right);
+                                                     GtkGrid             *grid,
+                                                     GtkGrid             *dummy);
 gboolean     goa_provider_build_object              (GoaProvider         *provider,
                                                      GoaObjectSkeleton   *object,
                                                      GKeyFile            *key_file,
@@ -184,8 +184,8 @@ GoaProvider  *goa_provider_get_for_provider_type (const gchar *provider_type);
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-GtkWidget *goa_util_add_row_widget (GtkGrid      *left,
-                                    GtkGrid      *right,
+GtkWidget *goa_util_add_row_widget (GtkGrid      *grid,
+                                    gint          row,
                                     const gchar  *label_text,
                                     GtkWidget    *widget);
 
@@ -200,10 +200,10 @@ goa_util_lookup_keyfile_boolean (GoaObject    *object,
 void
 goa_util_account_notify_property_cb (GObject *object, GParamSpec *pspec, gpointer user_data);
 
-void       goa_util_add_account_info (GtkGrid *left, GtkGrid *right, GoaObject *object);
+void       goa_util_add_account_info (GtkGrid *grid, gint row, GoaObject *object);
 
-GtkWidget *goa_util_add_row_switch_from_keyfile_with_blurb (GtkGrid      *left,
-                                                            GtkGrid      *right,
+GtkWidget *goa_util_add_row_switch_from_keyfile_with_blurb (GtkGrid      *grid,
+                                                            gint          row,
                                                             GoaObject    *object,
                                                             const gchar  *label_text,
                                                             const gchar  *key,

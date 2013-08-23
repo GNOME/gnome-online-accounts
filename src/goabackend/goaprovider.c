@@ -82,13 +82,6 @@ static gboolean goa_provider_build_object_real (GoaProvider         *provider,
                                                 gboolean             just_added,
                                                 GError             **error);
 
-static void goa_provider_show_account_real (GoaProvider         *provider,
-                                            GoaClient           *client,
-                                            GoaObject           *object,
-                                            GtkBox              *vbox,
-                                            GtkGrid             *left,
-                                            GtkGrid             *right);
-
 static guint goa_provider_get_credentials_generation_real (GoaProvider *provider);
 
 static GIcon *goa_provider_get_provider_icon_default (GoaProvider *provider,
@@ -163,7 +156,6 @@ goa_provider_class_init (GoaProviderClass *klass)
 
   klass->build_object = goa_provider_build_object_real;
   klass->ensure_credentials_sync = goa_provider_ensure_credentials_sync_real;
-  klass->show_account = goa_provider_show_account_real;
   klass->get_credentials_generation = goa_provider_get_credentials_generation_real;
   klass->get_provider_icon = goa_provider_get_provider_icon_default;
 
@@ -443,48 +435,30 @@ goa_provider_refresh_account (GoaProvider  *provider,
  * @client: A #GoaClient.
  * @object: A #GoaObject with a #GoaAccount interface.
  * @vbox: A vertically oriented #GtkBox to put content in.
- * @left: A vertically oriented #GtkGrid to put left-aligned content
- * in.
- * @right: A vertically oriented #GtkGrid to put right-aligned content
- * in.
+ * @grid: A #GtkGrid to put content in.
+ * @dummy: Unused.
  *
  * Method used to add widgets in the control panel for the account
  * represented by @object.
  *
- * This is a virtual method with an implementation that (currently)
- * does nothing. A subclass should chain up (before adding their own
- * widgets to @vbox, @left and @right) if they want to expose such
- * functionality.
+ * This is a pure virtual method - a subclass must provide an
+ * implementation.
  */
 void
 goa_provider_show_account (GoaProvider         *provider,
                            GoaClient           *client,
                            GoaObject           *object,
                            GtkBox              *vbox,
-                           GtkGrid             *left,
-                           GtkGrid             *right)
+                           GtkGrid             *grid,
+                           GtkGrid             *dummy)
 {
   g_return_if_fail (GOA_IS_PROVIDER (provider));
   g_return_if_fail (GOA_IS_CLIENT (client));
   g_return_if_fail (GOA_IS_OBJECT (object) && goa_object_peek_account (object) != NULL);
   g_return_if_fail (GTK_IS_BOX (vbox));
-  g_return_if_fail (GTK_IS_GRID (left));
-  g_return_if_fail (GTK_IS_GRID (right));
+  g_return_if_fail (GTK_IS_GRID (grid));
 
-  GOA_PROVIDER_GET_CLASS (provider)->show_account (provider, client, object, vbox, left, right);
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-static void
-goa_provider_show_account_real (GoaProvider         *provider,
-                                GoaClient           *client,
-                                GoaObject           *object,
-                                GtkBox              *vbox,
-                                GtkGrid             *left,
-                                GtkGrid             *right)
-{
-  goa_util_add_account_info (left, right, object);
+  GOA_PROVIDER_GET_CLASS (provider)->show_account (provider, client, object, vbox, grid, dummy);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -1154,15 +1128,14 @@ goa_provider_get_preseed_data (GoaProvider *provider)
  * Returns: (transfer none): The #GtkWidget that was inserted (e.g. @widget itself).
  */
 GtkWidget *
-goa_util_add_row_widget (GtkGrid      *left,
-                         GtkGrid      *right,
+goa_util_add_row_widget (GtkGrid      *grid,
+                         gint          row,
                          const gchar  *label_text,
                          GtkWidget    *widget)
 {
   GtkWidget *label;
 
-  g_return_val_if_fail (GTK_IS_GRID (left), NULL);
-  g_return_val_if_fail (GTK_IS_GRID (right), NULL);
+  g_return_val_if_fail (GTK_IS_GRID (grid), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   if (label_text != NULL)
@@ -1172,11 +1145,12 @@ goa_util_add_row_widget (GtkGrid      *left,
       label = gtk_label_new (label_text);
       context = gtk_widget_get_style_context (label);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
-      gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-      gtk_container_add (GTK_CONTAINER (left), label);
+      gtk_widget_set_halign (label, GTK_ALIGN_END);
+      gtk_widget_set_hexpand (label, TRUE);
+      gtk_grid_attach (grid, label, 0, row, 1, 1);
     }
 
-  gtk_container_add (GTK_CONTAINER (right), widget);
+  gtk_grid_attach (grid, widget, 1, row, 3, 1);
   return widget;
 }
 
@@ -1309,7 +1283,7 @@ goa_util_account_notify_property_cb (GObject *object, GParamSpec *pspec, gpointe
 /* ---------------------------------------------------------------------------------------------------- */
 
 void
-goa_util_add_account_info (GtkGrid *left, GtkGrid *right, GoaObject *object)
+goa_util_add_account_info (GtkGrid *grid, gint row, GoaObject *object)
 {
   GIcon *icon;
   GoaAccount *account;
@@ -1326,9 +1300,10 @@ goa_util_add_account_info (GtkGrid *left, GtkGrid *right, GoaObject *object)
   icon = g_icon_new_for_string (icon_str, NULL);
   image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_DIALOG);
   g_object_unref (icon);
-  gtk_misc_set_alignment (GTK_MISC (image), 1.0, 0.5);
+  gtk_widget_set_halign (image, GTK_ALIGN_END);
+  gtk_widget_set_hexpand (image, TRUE);
   gtk_widget_set_margin_bottom (image, 12);
-  gtk_container_add (GTK_CONTAINER (left), image);
+  gtk_grid_attach (grid, image, 0, row, 1, 1);
 
   name = goa_account_get_provider_name (account);
   identity = goa_account_get_presentation_identity (account);
@@ -1343,7 +1318,7 @@ goa_util_add_account_info (GtkGrid *left, GtkGrid *right, GoaObject *object)
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_set_margin_bottom (label, 12);
   g_free (markup);
-  gtk_container_add (GTK_CONTAINER (right), label);
+  gtk_grid_attach (grid, label, 1, row, 3, 1);
 
   return;
 }
@@ -1351,8 +1326,8 @@ goa_util_add_account_info (GtkGrid *left, GtkGrid *right, GoaObject *object)
 /* ---------------------------------------------------------------------------------------------------- */
 
 GtkWidget *
-goa_util_add_row_switch_from_keyfile_with_blurb (GtkGrid      *left,
-                                                 GtkGrid      *right,
+goa_util_add_row_switch_from_keyfile_with_blurb (GtkGrid      *grid,
+                                                 gint          row,
                                                  GoaObject    *object,
                                                  const gchar  *label_text,
                                                  const gchar  *property,
@@ -1394,6 +1369,6 @@ goa_util_add_row_switch_from_keyfile_with_blurb (GtkGrid      *left,
     }
 
   gtk_box_pack_end (GTK_BOX (hbox), switch_, FALSE, FALSE, 0);
-  goa_util_add_row_widget (left, right, label_text, hbox);
+  goa_util_add_row_widget (grid, row, label_text, hbox);
   return switch_;
 }

@@ -1500,34 +1500,25 @@ show_account (GoaProvider         *provider,
               GoaClient           *client,
               GoaObject           *object,
               GtkBox              *vbox,
-              GtkGrid             *left,
-              GtkGrid             *right)
+              GtkGrid             *grid,
+              G_GNUC_UNUSED GtkGrid *dummy)
 {
-  GtkWidget *grid;
   const gchar *username;
   gchar *value_str;
   gchar *value_str_1;
   gint row;
 
-  goa_util_add_account_info (left, right, object);
-
-  grid = gtk_grid_new ();
-  gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
-  gtk_widget_set_hexpand (grid, TRUE);
-  gtk_widget_set_margin_left (grid, 9);
-  gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
-  gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
-  gtk_box_pack_end (vbox, grid, TRUE, TRUE, 0);
+  row = 0;
+  goa_util_add_account_info (grid, row++, object);
 
   username = g_get_user_name ();
-  row = 0;
 
   value_str = goa_util_lookup_keyfile_string (object, "EmailAddress");
-  show_label (grid, row++, _("E-mail"), value_str);
+  show_label (GTK_WIDGET (grid), row++, _("E-mail"), value_str);
   g_free (value_str);
 
   value_str = goa_util_lookup_keyfile_string (object, "Name");
-  show_label (grid, row++, _("Name"), value_str);
+  show_label (GTK_WIDGET (grid), row++, _("Name"), value_str);
   g_free (value_str);
 
   value_str = goa_util_lookup_keyfile_string (object, "ImapHost");
@@ -1537,10 +1528,10 @@ show_account (GoaProvider         *provider,
       gchar *tmp;
 
       tmp = g_strconcat (value_str_1, "@", value_str, NULL);
-      show_label (grid, row++, _("IMAP"), tmp);
+      show_label (GTK_WIDGET (grid), row++, _("IMAP"), tmp);
     }
   else
-      show_label (grid, row++, _("IMAP"), value_str);
+      show_label (GTK_WIDGET (grid), row++, _("IMAP"), value_str);
   g_free (value_str_1);
   g_free (value_str);
 
@@ -1551,10 +1542,10 @@ show_account (GoaProvider         *provider,
       gchar *tmp;
 
       tmp = g_strconcat (value_str_1, "@", value_str, NULL);
-      show_label (grid, row++, _("SMTP"), tmp);
+      show_label (GTK_WIDGET (grid), row++, _("SMTP"), tmp);
     }
   else
-      show_label (grid, row++, _("SMTP"), value_str);
+      show_label (GTK_WIDGET (grid), row++, _("SMTP"), value_str);
   g_free (value_str_1);
   g_free (value_str);
 }

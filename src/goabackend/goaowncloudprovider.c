@@ -1089,33 +1089,31 @@ show_account (GoaProvider         *provider,
               GoaClient           *client,
               GoaObject           *object,
               GtkBox              *vbox,
-              GtkGrid             *left,
-              GtkGrid             *right)
+              GtkGrid             *grid,
+              G_GNUC_UNUSED GtkGrid *dummy)
 {
-  /* Chain up */
-  GOA_PROVIDER_CLASS (goa_owncloud_provider_parent_class)->show_account (provider,
-                                                                         client,
-                                                                         object,
-                                                                         vbox,
-                                                                         left,
-                                                                         right);
+  gint row;
 
-  goa_util_add_row_switch_from_keyfile_with_blurb (left, right, object,
+  row = 0;
+
+  goa_util_add_account_info (grid, row++, object);
+
+  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
                                                    _("Use for"),
                                                    "calendar-disabled",
                                                    _("Cale_ndar"));
 
-  goa_util_add_row_switch_from_keyfile_with_blurb (left, right, object,
+  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
                                                    NULL,
                                                    "contacts-disabled",
                                                    _("_Contacts"));
 
-  goa_util_add_row_switch_from_keyfile_with_blurb (left, right, object,
+  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
                                                    NULL,
                                                    "documents-disabled",
                                                    _("_Documents"));
 
-  goa_util_add_row_switch_from_keyfile_with_blurb (left, right, object,
+  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
                                                    NULL,
                                                    "files-disabled",
                                                    _("_Files"));

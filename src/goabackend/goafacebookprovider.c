@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2012 Red Hat, Inc.
+ * Copyright (C) 2011, 2012, 2013 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -402,18 +402,16 @@ show_account (GoaProvider         *provider,
               GoaClient           *client,
               GoaObject           *object,
               GtkBox              *vbox,
-              GtkGrid             *left,
-              GtkGrid             *right)
+              GtkGrid             *grid,
+              G_GNUC_UNUSED GtkGrid *dummy)
 {
-  /* Chain up */
-  GOA_PROVIDER_CLASS (goa_facebook_provider_parent_class)->show_account (provider,
-                                                                         client,
-                                                                         object,
-                                                                         vbox,
-                                                                         left,
-                                                                         right);
+  gint row;
 
-  goa_util_add_row_switch_from_keyfile_with_blurb (left, right, object,
+  row = 0;
+
+  goa_util_add_account_info (grid, row++, object);
+
+  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
                                                    _("Use for"),
                                                    "chat-disabled",
                                                    _("C_hat"));
