@@ -1032,11 +1032,13 @@ initialize_client_factory (void)
 {
   TpSimpleClientFactory *factory;
   TpAccountManager *account_manager;
-  GQuark features[] = { TP_ACCOUNT_FEATURE_STORAGE, 0 };
+  GQuark features[] = {
+      TP_ACCOUNT_FEATURE_STORAGE,
+      TP_ACCOUNT_FEATURE_CONNECTION,
+      0};
 
   /* We make sure that new instances of Telepathy objects will have all
    * the features we need. */
-
   factory = tp_simple_client_factory_new (NULL);
   tp_simple_client_factory_add_account_features (factory, features);
 
