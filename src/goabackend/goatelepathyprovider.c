@@ -1028,10 +1028,32 @@ goa_telepathy_provider_finalize (GObject *object)
 }
 
 static void
+initialize_client_factory (void)
+{
+  TpSimpleClientFactory *factory;
+  TpAccountManager *account_manager;
+  GQuark features[] = { TP_ACCOUNT_FEATURE_STORAGE, 0 };
+
+  /* We make sure that new instances of Telepathy objects will have all
+   * the features we need. */
+
+  factory = tp_simple_client_factory_new (NULL);
+  tp_simple_client_factory_add_account_features (factory, features);
+
+  account_manager = tp_account_manager_new_with_factory (factory);
+  tp_account_manager_set_default (account_manager);
+
+  g_object_unref (account_manager);
+  g_object_unref (factory);
+}
+
+static void
 goa_telepathy_provider_class_init (GoaTelepathyProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GoaProviderClass *provider_class = GOA_PROVIDER_CLASS (klass);
+
+  initialize_client_factory ();
 
   object_class->constructed  = goa_telepathy_provider_constructed;
   object_class->finalize     = goa_telepathy_provider_finalize;
