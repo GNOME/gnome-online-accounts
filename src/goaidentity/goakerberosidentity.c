@@ -125,9 +125,6 @@ goa_kerberos_identity_dispose (GObject *object)
   g_clear_object (&self->priv->expiration_alarm);
   G_UNLOCK (identity_lock);
 
-  if (self->priv->expiration_time_idle_id != 0)
-    g_source_remove (self->priv->expiration_time_idle_id);
-
   G_OBJECT_CLASS (goa_kerberos_identity_parent_class)->dispose (object);
 
 }
@@ -509,6 +506,7 @@ static void
 clear_idle_id (NotifyRequest *request)
 {
   *request->idle_id = 0;
+  g_object_unref (request->self);
   g_slice_free (NotifyRequest, request);
 }
 
@@ -533,7 +531,7 @@ queue_notify (GoaKerberosIdentity *self,
     }
 
   request = g_slice_new0 (NotifyRequest);
-  request->self = self;
+  request->self = g_object_ref (self);
   request->idle_id = idle_id;
   request->property_name = property_name;
 
