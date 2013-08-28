@@ -69,7 +69,7 @@ get_protocols_cb (GObject      *source,
                   gpointer      user_data)
 {
   GSimpleAsyncResult *outer_result = user_data;
-  GQuark facebook_quark, google_talk_quark;
+  GQuark facebook_quark, google_talk_quark, msn_quark;
   GList *protocols = NULL;
   GList *ret;
   GList *l;
@@ -85,12 +85,15 @@ get_protocols_cb (GObject      *source,
 
   facebook_quark = g_quark_from_static_string ("facebook");
   google_talk_quark = g_quark_from_static_string ("google-talk");
+  msn_quark = g_quark_from_static_string ("msn");
 
   ret = NULL;
   for (l = protocols; l != NULL; l = l->next)
     {
       TpawProtocol *protocol = l->data;
+      const gchar *protocol_name = tpaw_protocol_get_protocol_name (protocol);
       const gchar *service_name = tpaw_protocol_get_service_name (protocol);
+      GQuark protocol_quark = g_quark_try_string (protocol_name);
       GQuark service_quark = g_quark_try_string (service_name);
       GoaTelepathyProvider *provider;
 
@@ -102,6 +105,10 @@ get_protocols_cb (GObject      *source,
 #endif
 #if GOA_GOOGLE_ENABLED
       if (service_quark == google_talk_quark)
+        continue;
+#endif
+#if GOA_WINDOWS_LIVE_ENABLED
+      if (protocol_quark == msn_quark)
         continue;
 #endif
 
