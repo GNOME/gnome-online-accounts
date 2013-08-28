@@ -578,12 +578,15 @@ on_object_manager_ensured_for_look_up (GoaKerberosProvider *self,
   const char         *identifier;
   GList              *objects, *node;
   GError             *error;
+  gboolean            found;
 
   error = NULL;
+  found = FALSE;
 
   if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result),
                                              &error))
     {
+
       g_simple_async_result_take_error (operation_result, error);
       g_simple_async_result_complete_in_idle (operation_result);
       g_object_unref (operation_result);
@@ -623,11 +626,15 @@ on_object_manager_ensured_for_look_up (GoaKerberosProvider *self,
                                                      candidate_identity,
                                                      (GDestroyNotify)
                                                      g_object_unref);
+          found = TRUE;
           break;
         }
 
       g_object_unref (candidate_identity);
     }
+
+  if (!found)
+    g_simple_async_result_set_error (operation_result, GOA_ERROR, GOA_ERROR_FAILED, "Failed to find an identity");
 
   g_list_free_full (objects, (GDestroyNotify) g_object_unref);
   g_simple_async_result_complete_in_idle (G_SIMPLE_ASYNC_RESULT (operation_result));
