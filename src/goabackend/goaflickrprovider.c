@@ -285,8 +285,8 @@ is_deny_node (GoaOAuthProvider *provider, WebKitDOMNode *node)
   if (!WEBKIT_DOM_IS_HTML_ANCHOR_ELEMENT (node))
     goto out;
 
-  element = WEBKIT_DOM_HTML_ELEMENT (node);
-  id = webkit_dom_html_element_get_id (element);
+  element = WEBKIT_DOM_ELEMENT (node);
+  id = webkit_dom_element_get_id (element);
   if (g_strcmp0 (id, "auth-disallow") != 0)
     goto out;
 

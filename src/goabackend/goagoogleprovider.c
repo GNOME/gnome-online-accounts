@@ -270,8 +270,8 @@ is_deny_node (GoaOAuth2Provider *provider, WebKitDOMNode *node)
   if (!WEBKIT_DOM_IS_HTML_BUTTON_ELEMENT (node))
     goto out;
 
-  element = WEBKIT_DOM_HTML_ELEMENT (node);
-  id = webkit_dom_html_element_get_id (element);
+  element = WEBKIT_DOM_ELEMENT (node);
+  id = webkit_dom_element_get_id (element);
   if (g_strcmp0 (id, "submit_deny_access") != 0)
     goto out;
 
@@ -300,7 +300,7 @@ is_identity_node (GoaOAuth2Provider *provider, WebKitDOMHTMLInputElement *elemen
   if (g_strcmp0 (element_type, "email") != 0)
     goto out;
 
-  id = webkit_dom_html_element_get_id (WEBKIT_DOM_HTML_ELEMENT (element));
+  id = webkit_dom_element_get_id (WEBKIT_DOM_ELEMENT (element));
   if (g_strcmp0 (id, "Email") != 0)
     goto out;
 
