@@ -130,7 +130,7 @@ ac_configure_args="$ac_configure_args --with-icondir=${datadir}/icons"
 ac_configure_args="$ac_configure_args --with-gettext-package=gnome-online-accounts-tpaw"
 # Disable the installation of the GSettings schema to avoid multiple components shipping
 # the same file. See https://bugzilla.gnome.org/show_bug.cgi?id=706803
-ac_configure_args="$ac_configure_args --disable-settings"
+ac_configure_args="$ac_configure_args --disable-schemas-compile --disable-settings"
 AX_CONFIG_DIR([telepathy-account-widgets])
 ac_top_build_prefix=$prev_top_build_prefix
 ac_configure_args=$prev_ac_configure_args
