@@ -369,7 +369,7 @@ goa_client_new_cb (GObject      *object,
       g_set_error (&data->error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
-                   _("Failed to initialise a GOA client"));
+                   _("Failed to initialize a GOA client"));
       g_main_loop_quit (data->loop);
       return;
     }
