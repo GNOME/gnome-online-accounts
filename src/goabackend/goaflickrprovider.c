@@ -275,7 +275,7 @@ get_identity_sync (GoaOAuthProvider  *provider,
 static gboolean
 is_deny_node (GoaOAuthProvider *provider, WebKitDOMNode *node)
 {
-  WebKitDOMHTMLElement *element;
+  WebKitDOMElement *element;
   gboolean ret;
   gchar *id;
 
