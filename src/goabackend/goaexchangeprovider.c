@@ -314,7 +314,7 @@ ensure_credentials_sync (GoaProvider         *provider,
         {
           *error = g_error_new (GOA_ERROR,
                                 GOA_ERROR_NOT_AUTHORIZED,
-                                _("Did not find password with identity `%s' in credentials"),
+                                _("Did not find password with identity ‘%s’ in credentials"),
                                 username);
         }
       goto out;
@@ -342,7 +342,7 @@ ensure_credentials_sync (GoaProvider         *provider,
                            * (eg., debarshi.ray@gmail.com or rishi), and the
                            * (%s, %d) is the error domain and code.
                            */
-                          _("Invalid password with username `%s' (%s, %d): "),
+                          _("Invalid password with username ‘%s’ (%s, %d): "),
                           username,
                           g_quark_to_string ((*error)->domain),
                           (*error)->code);
@@ -1025,7 +1025,7 @@ on_handle_get_password (GoaPasswordBased      *interface,
       g_dbus_method_invocation_return_error (invocation,
                                              GOA_ERROR,
                                              GOA_ERROR_FAILED, /* TODO: more specific */
-                                             _("Did not find password with identity `%s' in credentials"),
+                                             _("Did not find password with identity ‘%s’ in credentials"),
                                              identity);
       goto out;
     }

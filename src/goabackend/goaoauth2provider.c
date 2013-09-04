@@ -913,7 +913,7 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
               g_set_error (&priv->error,
                            GOA_ERROR,
                            GOA_ERROR_NOT_AUTHORIZED,
-                           _("Authorization response was \"%s\""),
+                           _("Authorization response was ‘%s’"),
                            (const gchar *) g_hash_table_lookup (key_value_pairs, "error"));
               gtk_dialog_response (priv->dialog, GTK_RESPONSE_CLOSE);
             }
@@ -953,7 +953,7 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
               g_set_error (&priv->error,
                            GOA_ERROR,
                            GOA_ERROR_NOT_AUTHORIZED,
-                           _("Authorization response was \"%s\""),
+                           _("Authorization response was ‘%s’"),
                            (const gchar *) g_hash_table_lookup (key_value_pairs, "error"));
               gtk_dialog_response (priv->dialog, GTK_RESPONSE_CLOSE);
             }

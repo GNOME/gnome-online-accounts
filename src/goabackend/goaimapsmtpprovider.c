@@ -359,7 +359,10 @@ ensure_credentials_sync (GoaProvider         *provider,
         {
           *error = g_error_new (GOA_ERROR,
                                 GOA_ERROR_NOT_AUTHORIZED,
-                                _("Did not find imap-password with identity `%s' in credentials"),
+                                /* Translators: the first parameter is a field name. The second is
+                                 * a GOA account identifier. */
+                                _("Did not find %s with identity ‘%s’ in credentials"),
+                                "imap-password",
                                 identity);
         }
       goto out;
@@ -384,11 +387,13 @@ ensure_credentials_sync (GoaProvider         *provider,
       if (error != NULL)
         {
           g_prefix_error (error,
-                          /* Translators: the first %s is the IMAP
+                          /* Translators: the first %s is a field name. The
+                           * second %s is the IMAP
                            * username (eg., rishi), and the (%s, %d)
                            * is the error domain and code.
                            */
-                          _("Invalid imap-password with username `%s' (%s, %d): "),
+                          _("Invalid %s with username ‘%s’ (%s, %d): "),
+                          "imap-password",
                           imap_username,
                           g_quark_to_string ((*error)->domain),
                           (*error)->code);
@@ -412,7 +417,10 @@ ensure_credentials_sync (GoaProvider         *provider,
         {
           *error = g_error_new (GOA_ERROR,
                                 GOA_ERROR_NOT_AUTHORIZED,
-                                _("Did not find smtp-password with identity `%s' in credentials"),
+                                /* Translators: the first parameter is a field name. The second is
+                                 * a GOA account identifier. */
+                                _("Did not find %s with identity ‘%s’ in credentials"),
+                                "smtp-password",
                                 identity);
         }
       goto out;
@@ -439,11 +447,13 @@ ensure_credentials_sync (GoaProvider         *provider,
       if (error != NULL)
         {
           g_prefix_error (error,
-                          /* Translators: the first %s is the SMTP
+                          /* Translators: the first %s is a field name. The
+                           * second %s is the SMTP
                            * username (eg., rishi), and the (%s, %d)
                            * is the error domain and code.
                            */
-                          _("Invalid smtp-password with username `%s' (%s, %d): "),
+                          _("Invalid %s with username ‘%s’ (%s, %d): "),
+                          "smtp-password",
                           imap_username,
                           g_quark_to_string ((*error)->domain),
                           (*error)->code);
@@ -1617,7 +1627,9 @@ on_handle_get_password (GoaPasswordBased      *interface,
       g_dbus_method_invocation_return_error (invocation,
                                              GOA_ERROR,
                                              GOA_ERROR_FAILED, /* TODO: more specific */
-                                             "Did not find %s with identity `%s' in credentials",
+                                             /* Translators: the first parameter is a field name.
+                                              * The second is a GOA account identifier. */
+                                             "Did not find %s with identity ‘%s’ in credentials",
                                              id,
                                              identity);
       goto out;

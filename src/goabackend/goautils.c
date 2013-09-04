@@ -514,7 +514,7 @@ goa_utils_set_error_ssl (GError **err, GTlsCertificateFlags flags)
       break;
 
     case G_TLS_CERTIFICATE_NOT_ACTIVATED:
-      error_msg = _("The certificate's activation time is still in the future.");
+      error_msg = _("The certificate’s activation time is still in the future.");
       break;
 
     case G_TLS_CERTIFICATE_EXPIRED:
@@ -526,7 +526,7 @@ goa_utils_set_error_ssl (GError **err, GTlsCertificateFlags flags)
       break;
 
     case G_TLS_CERTIFICATE_INSECURE:
-      error_msg = _("The certificate's algorithm is considered insecure.");
+      error_msg = _("The certificate’s algorithm is considered insecure.");
       break;
 
     default:
