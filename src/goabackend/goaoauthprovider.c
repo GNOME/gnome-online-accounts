@@ -1388,7 +1388,7 @@ goa_oauth_provider_refresh_account (GoaProvider  *_provider,
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
-                   _("Was asked to login as %s, but logged in as %s"),
+                   _("Was asked to log in as %s, but logged in as %s"),
                    existing_identity,
                    identity);
       goto out;
