@@ -257,7 +257,8 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
       g_set_error (&error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Failed to find Autodiscover element"));
+                   /* Translators: the parameter is an XML element name. */
+                   _("Failed to find ‘%s’ element"), "Autodiscover");
       goto out;
     }
 
@@ -271,7 +272,8 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
       g_set_error (&error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Failed to find Response element"));
+                   /* Translators: the parameter is an XML element name. */
+                   _("Failed to find ‘%s’ element"), "Response");
       goto out;
     }
 
@@ -285,7 +287,8 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
       g_set_error (&error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Failed to find Account element"));
+                   /* Translators: the parameter is an XML element name. */
+                   _("Failed to find ‘%s’ element"), "Account");
       goto out;
     }
 
