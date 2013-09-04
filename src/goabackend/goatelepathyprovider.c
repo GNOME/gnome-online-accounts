@@ -891,6 +891,8 @@ show_account (GoaProvider         *provider,
   goa_util_add_account_info (grid, row++, object);
 
   goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
+                                                   /* Translators: This is a label for a series of
+                                                    * options switches. For example: “Use for Mail”. */
                                                    _("Use for"),
                                                    "chat-disabled",
                                                    _("C_hat"));
