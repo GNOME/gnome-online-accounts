@@ -192,7 +192,7 @@ get_identity_sync (GoaOAuth2Provider  *provider,
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
-                   _("Expected status 200 when requesting guid, instead got status %d (%s)"),
+                   _("Expected status 200 when requesting your identity, instead got status %d (%s)"),
                    rest_proxy_call_get_status_code (call),
                    rest_proxy_call_get_status_message (call));
       goto out;
