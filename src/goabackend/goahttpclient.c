@@ -172,7 +172,7 @@ http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer 
       g_set_error (&error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Code: %u - Unexpected response from server"),
+                   _("Code: %u — Unexpected response from server"),
                    msg->status_code);
       goto out;
     }
