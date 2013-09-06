@@ -57,6 +57,8 @@ struct _GoaKerberosIdentityManagerPrivate
   gboolean is_blocking_scheduler_job;
 
   volatile int pending_refresh_count;
+
+  guint polling_timeout_id;
 };
 
 typedef enum
@@ -117,6 +119,7 @@ G_DEFINE_TYPE_WITH_CODE (GoaKerberosIdentityManager,
                                                 identity_manager_interface_init)
                          G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE,
                                                 initable_interface_init));
+#define FALLBACK_POLLING_INTERVAL 5
 
 static Operation *
 operation_new (GoaKerberosIdentityManager *self,
@@ -1326,16 +1329,24 @@ on_credentials_cache_changed (GFileMonitor               *monitor,
 }
 
 static gboolean
+on_polling_timeout (GoaKerberosIdentityManager *self)
+{
+  schedule_refresh (self);
+
+  return G_SOURCE_CONTINUE;
+}
+
+static gboolean
 monitor_credentials_cache (GoaKerberosIdentityManager  *self,
                            GError                     **error)
 {
   krb5_ccache default_cache;
   const char *cache_type;
   const char *cache_path;
-  GFile *file;
-  GFileMonitor *monitor;
+  GFileMonitor *monitor = NULL;
   krb5_error_code error_code;
-  GError *monitoring_error;
+  GError *monitoring_error = NULL;
+  gboolean can_monitor = TRUE;
 
   error_code = krb5_cc_default (self->priv->kerberos_context, &default_cache);
 
@@ -1359,12 +1370,9 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
 
   if (strcmp (cache_type, "FILE") != 0 && strcmp (cache_type, "DIR") != 0)
     {
-      g_set_error (error,
-                   GOA_IDENTITY_MANAGER_ERROR,
-                   GOA_IDENTITY_MANAGER_ERROR_UNSUPPORTED_CREDENTIALS,
-                   "Only 'FILE' and 'DIR' credential cache types are really supported, not '%s'",
+      goa_warning ("GoaKerberosIdentityManager: Using polling for change notification for credential cache type '%s'",
                    cache_type);
-      return FALSE;
+      can_monitor = FALSE;
     }
 
   g_free (self->priv->credentials_cache_type);
@@ -1388,44 +1396,57 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
   if (cache_path[0] == ':')
     cache_path++;
 
-  file = g_file_new_for_path (cache_path);
-
-  monitoring_error = NULL;
-  if (strcmp (cache_type, "FILE") == 0)
+  if (can_monitor)
     {
-      monitor = g_file_monitor_file (file,
-                                     G_FILE_MONITOR_NONE,
-                                     NULL,
-                                     &monitoring_error);
-    }
-  else if (strcmp (cache_type, "DIR") == 0)
-    {
-      GFile *directory;
+      GFile *file;
 
-      directory = g_file_get_parent (file);
-      monitor = g_file_monitor_directory (directory,
-                                          G_FILE_MONITOR_NONE,
-                                          NULL,
-                                          &monitoring_error);
-      g_object_unref (directory);
+      file = g_file_new_for_path (cache_path);
 
+      monitoring_error = NULL;
+      if (strcmp (cache_type, "FILE") == 0)
+        {
+          monitor = g_file_monitor_file (file,
+                                         G_FILE_MONITOR_NONE,
+                                         NULL,
+                                         &monitoring_error);
+        }
+      else if (strcmp (cache_type, "DIR") == 0)
+        {
+          GFile *directory;
+
+          directory = g_file_get_parent (file);
+          monitor = g_file_monitor_directory (directory,
+                                              G_FILE_MONITOR_NONE,
+                                              NULL,
+                                              &monitoring_error);
+          g_object_unref (directory);
+
+        }
+      g_object_unref (file);
     }
-  else
-    {
-      g_assert_not_reached ();
-    }
-  g_object_unref (file);
 
   if (monitor == NULL)
     {
-      g_propagate_error (error, monitoring_error);
-      return FALSE;
+      if (monitoring_error != NULL)
+        {
+          goa_warning ("GoaKerberosIdentityManager: Could not monitor credentials for %s (type %s), reverting to polling: %s",
+                       cache_path,
+                       cache_type,
+                       monitoring_error != NULL? monitoring_error->message : "");
+          g_clear_error (&monitoring_error);
+        }
+      can_monitor = FALSE;
+    }
+  else
+    {
+      self->priv->credentials_cache_changed_signal_id =
+        g_signal_connect (G_OBJECT (monitor), "changed",
+                          G_CALLBACK (on_credentials_cache_changed), self);
+      self->priv->credentials_cache_monitor = monitor;
     }
 
-  self->priv->credentials_cache_changed_signal_id =
-    g_signal_connect (G_OBJECT (monitor), "changed",
-                      G_CALLBACK (on_credentials_cache_changed), self);
-  self->priv->credentials_cache_monitor = monitor;
+  if (!can_monitor)
+    self->priv->polling_timeout_id = g_timeout_add_seconds (FALLBACK_POLLING_INTERVAL, (GSourceFunc) on_polling_timeout, self);
 
   return TRUE;
 }
@@ -1433,11 +1454,19 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
 static void
 stop_watching_credentials_cache (GoaKerberosIdentityManager *self)
 {
-  if (!g_file_monitor_is_cancelled (self->priv->credentials_cache_monitor))
-    g_file_monitor_cancel (self->priv->credentials_cache_monitor);
+  if (self->priv->credentials_cache_monitor != NULL)
+    {
+      if (!g_file_monitor_is_cancelled (self->priv->credentials_cache_monitor))
+        g_file_monitor_cancel (self->priv->credentials_cache_monitor);
 
-  g_object_unref (self->priv->credentials_cache_monitor);
-  self->priv->credentials_cache_monitor = NULL;
+      g_clear_object (&self->priv->credentials_cache_monitor);
+    }
+
+  if (self->priv->polling_timeout_id != 0)
+    {
+      g_source_remove (self->priv->polling_timeout_id);
+      self->priv->polling_timeout_id = 0;
+    }
 }
 
 static gboolean
@@ -1559,8 +1588,7 @@ goa_kerberos_identity_manager_dispose (GObject *object)
       self->priv->identities = NULL;
     }
 
-  if (self->priv->credentials_cache_monitor != NULL)
-    stop_watching_credentials_cache (self);
+  stop_watching_credentials_cache (self);
 
   if (self->priv->pending_operations != NULL)
     cancel_pending_operations (self);
