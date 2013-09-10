@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-02-14 19:23+0000\n"
-"PO-Revision-Date: 2013-02-20 01:49+0000\n"
+"POT-Creation-Date: 2013-08-30 16:09+0000\n"
+"PO-Revision-Date: 2013-09-09 22:13-0500\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
 "Language: pa\n"
@@ -19,66 +19,49 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#. shut up -Wunused-but-set-variable
-#: ../data/goa-daemon.desktop.in.in.h:1 ../src/daemon/goadaemon.c:212
-msgid "Online Accounts"
-msgstr "ਆਨਲਾਈਨ ਅਕਾਊਂਟ"
-
-#: ../data/goa-daemon.desktop.in.in.h:2
-msgid "Provides the org.gnome.OnlinesAccounts name on the session bus"
-msgstr "ਸ਼ੈਸ਼ਨ ਬੱਸ ਉੱਤੇ org.gnome.OnlinesAccounts ਨਾਂ ਦਿੰਦਾ ਹੈ"
-
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:802 ../src/daemon/goadaemon.c:1150
+#: ../src/daemon/goadaemon.c:788 ../src/daemon/goadaemon.c:1034
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "%s: ਲਈ ਪ੍ਰੋਵਾਈਡਰ ਲੱਭਣ ਲਈ ਫੇਲ੍ਹ"
 
-#: ../src/daemon/goadaemon.c:992
-msgid "An online account needs attention"
-msgstr "ਇੱਕ ਆਨਲਾਈਨ ਅਕਾਊਂਟ ਲਈ ਧਿਆਨ ਦੇਣ ਲੋੜ ਹੈ"
-
-#: ../src/daemon/goadaemon.c:1001
-msgid "Open Online Accounts..."
-msgstr "ਆਨਲਾਈਨ ਅਕਾਊਂਟ ਖੋਲ੍ਹੋ..."
-
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1138
+#: ../src/daemon/goadaemon.c:1022
 msgid "ProviderType property is not set for account"
 msgstr "ProviderType ਵਿਸ਼ੇਸ਼ਤਾ ਅਕਾਊਂਟ ਲਈ ਸੈੱਟ ਨਹੀਂ ਹੈ"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:214 ../src/goabackend/goahttpclient.c:155
+#: ../src/goabackend/goaewsclient.c:234 ../src/goabackend/goahttpclient.c:175
 #, c-format
 msgid "Code: %u - Unexpected response from server"
 msgstr "ਕੋਡ: %u - ਸਰਵਰ ਤੋਂ ਅਣਜਾਣ ਜਵਾਬ"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:240
+#: ../src/goabackend/goaewsclient.c:250
 #, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "ਆਟੋਡਿਸਕਵਰ ਜਵਾਬ XML ਪਾਰਸ ਕਰਨ ਲਈ ਫੇਲ੍ਹ"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:250
+#: ../src/goabackend/goaewsclient.c:260
 #, c-format
 msgid "Failed to find Autodiscover element"
 msgstr "ਆਟੋਡਿਸਕਵਰ ਭਾਗ ਲੱਭਣ ਲਈ ਫੇਲ੍ਹ ਹੈ"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:264
+#: ../src/goabackend/goaewsclient.c:274
 #, c-format
 msgid "Failed to find Response element"
 msgstr "ਜਵਾਬ ਭਾਗ ਲੱਭਣ ਲਈ ਅਸਮਰੱਥ"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:278
+#: ../src/goabackend/goaewsclient.c:288
 #, c-format
 msgid "Failed to find Account element"
 msgstr "ਅਕਾਊਂਟ ਐਲੀਮੈਂਟ ਲੱਭਣ ਲਈ ਫੇਲ੍ਹ"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:295
+#: ../src/goabackend/goaewsclient.c:305
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "ਆਟੋਡਿਸਕਵਰ ਜਵਾਬ ਵਿੱਚ ASUrl and OABUrl ਲੱਭਣ ਲਈ ਫੇਲ੍ਹ"
@@ -88,14 +71,11 @@ msgid "Microsoft Exchange"
 msgstr "ਮਾਈਕਰੋਸਾਫਟ ਐਕਸਚੇਜ਼"
 
 #. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:308
-#: ../src/goabackend/goaexchangeprovider.c:1019
-#: ../src/goabackend/goagoogleprovider.c:596
-#: ../src/goabackend/goagoogleprovider.c:783
-#: ../src/goabackend/goaowncloudprovider.c:364
-#: ../src/goabackend/goaowncloudprovider.c:1121
+#: ../src/goabackend/goaexchangeprovider.c:317
+#: ../src/goabackend/goaexchangeprovider.c:1026
+#: ../src/goabackend/goaowncloudprovider.c:403
+#: ../src/goabackend/goaowncloudprovider.c:1188
 #, c-format
-#| msgid "Did not find password with username `%s' in credentials"
 msgid "Did not find password with identity `%s' in credentials"
 msgstr "ਸਨਦ ਵਿੱਚ `%s' ਪਛਾਣ ਲਈ ਪਾਸਵਰਡ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ"
 
@@ -103,226 +83,247 @@ msgstr "ਸਨਦ ਵਿੱਚ `%s' ਪਛਾਣ ਲਈ ਪਾਸਵਰਡ ਨ�
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
 #.
-#: ../src/goabackend/goaexchangeprovider.c:336
-#: ../src/goabackend/goagoogleprovider.c:619
-#: ../src/goabackend/goaowncloudprovider.c:387
+#: ../src/goabackend/goaexchangeprovider.c:345
+#: ../src/goabackend/goaowncloudprovider.c:426
 #, c-format
 msgid "Invalid password with username `%s' (%s, %d): "
 msgstr "ਯੂਜ਼ਰ-ਨਾਂ `%s' ਲਈ ਗਲਤ ਪਾਸਵਰਡ (%s, %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:501
-#: ../src/goabackend/goaimapsmtpprovider.c:635
+#: ../src/goabackend/goaexchangeprovider.c:499
+#: ../src/goabackend/goaimapsmtpprovider.c:697
 msgid "_E-mail"
 msgstr "_ਈਮੇਲ"
 
-#: ../src/goabackend/goaexchangeprovider.c:502
-#: ../src/goabackend/goaimapsmtpprovider.c:655
-#: ../src/goabackend/goaimapsmtpprovider.c:687
-#: ../src/goabackend/goaowncloudprovider.c:613
+#: ../src/goabackend/goaexchangeprovider.c:500
+#: ../src/goabackend/goaimapsmtpprovider.c:717
+#: ../src/goabackend/goaimapsmtpprovider.c:737
+#: ../src/goabackend/goaowncloudprovider.c:655
 msgid "_Password"
 msgstr "_ਪਾਸਵਰਡ"
 
-#: ../src/goabackend/goaexchangeprovider.c:505
+#: ../src/goabackend/goaexchangeprovider.c:503
 msgid "_Custom"
 msgstr "ਕਸਟਮ(_C)"
 
-#: ../src/goabackend/goaexchangeprovider.c:524
-#: ../src/goabackend/goaimapsmtpprovider.c:654
-#: ../src/goabackend/goaimapsmtpprovider.c:686
-#: ../src/goabackend/goakerberosprovider.c:1128
-#: ../src/goabackend/goaowncloudprovider.c:612
+#: ../src/goabackend/goaexchangeprovider.c:514
+#: ../src/goabackend/goaimapsmtpprovider.c:716
+#: ../src/goabackend/goaimapsmtpprovider.c:736
+#: ../src/goabackend/goakerberosprovider.c:1129
+#: ../src/goabackend/goaowncloudprovider.c:654
 msgid "User_name"
 msgstr "ਯੂਜ਼ਰ _ਨਾਂ"
 
-#: ../src/goabackend/goaexchangeprovider.c:525
-#: ../src/goabackend/goaowncloudprovider.c:611
+#: ../src/goabackend/goaexchangeprovider.c:515
+#: ../src/goabackend/goaowncloudprovider.c:653
 msgid "_Server"
 msgstr "ਸਰਵਰ(_S)"
 
-#: ../src/goabackend/goaexchangeprovider.c:555
-#: ../src/goabackend/goaimapsmtpprovider.c:731
-#: ../src/goabackend/goakerberosprovider.c:1153
-#: ../src/goabackend/goaowncloudprovider.c:642
+#: ../src/goabackend/goaexchangeprovider.c:545
+#: ../src/goabackend/goaimapsmtpprovider.c:769
+#: ../src/goabackend/goakerberosprovider.c:1154
+#: ../src/goabackend/goaowncloudprovider.c:684
 msgid "Connecting…"
 msgstr "…ਕੁਨੈਕਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
 
-#: ../src/goabackend/goaexchangeprovider.c:643
-#: ../src/goabackend/goaexchangeprovider.c:837
-#: ../src/goabackend/goaimapsmtpprovider.c:890
-#: ../src/goabackend/goaimapsmtpprovider.c:924
-#: ../src/goabackend/goaimapsmtpprovider.c:1012
-#: ../src/goabackend/goaimapsmtpprovider.c:1258
-#: ../src/goabackend/goaimapsmtpprovider.c:1328
-#: ../src/goabackend/goakerberosprovider.c:1544
-#: ../src/goabackend/goaoauth2provider.c:1048
+#: ../src/goabackend/goaexchangeprovider.c:650
+#: ../src/goabackend/goaexchangeprovider.c:845
+#: ../src/goabackend/goaimapsmtpprovider.c:929
+#: ../src/goabackend/goaimapsmtpprovider.c:964
+#: ../src/goabackend/goaimapsmtpprovider.c:1052
+#: ../src/goabackend/goaimapsmtpprovider.c:1308
+#: ../src/goabackend/goaimapsmtpprovider.c:1381
+#: ../src/goabackend/goakerberosprovider.c:1545
+#: ../src/goabackend/goaoauth2provider.c:1133
 #: ../src/goabackend/goaoauthprovider.c:1041
-#: ../src/goabackend/goaowncloudprovider.c:736
-#: ../src/goabackend/goaowncloudprovider.c:945
+#: ../src/goabackend/goaowncloudprovider.c:795
+#: ../src/goabackend/goaowncloudprovider.c:1008
+#: ../src/goabackend/goatelepathyprovider.c:466
+#: ../src/goabackend/goatelepathyprovider.c:515
+#: ../src/goabackend/goatelepathyprovider.c:689
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "ਡਾਈਲਾਗ ਰੱਦ ਕੀਤਾ ਗਿਆ ਸੀ"
 
-#: ../src/goabackend/goaexchangeprovider.c:680
-#: ../src/goabackend/goaexchangeprovider.c:865
-#: ../src/goabackend/goaimapsmtpprovider.c:954
-#: ../src/goabackend/goaimapsmtpprovider.c:1043
-#: ../src/goabackend/goaimapsmtpprovider.c:1282
-#: ../src/goabackend/goaimapsmtpprovider.c:1353
-#: ../src/goabackend/goaowncloudprovider.c:775
-#: ../src/goabackend/goaowncloudprovider.c:966
+#: ../src/goabackend/goaexchangeprovider.c:688
+#: ../src/goabackend/goaexchangeprovider.c:873
+#: ../src/goabackend/goaimapsmtpprovider.c:994
+#: ../src/goabackend/goaimapsmtpprovider.c:1085
+#: ../src/goabackend/goaimapsmtpprovider.c:1332
+#: ../src/goabackend/goaimapsmtpprovider.c:1406
+#: ../src/goabackend/goaowncloudprovider.c:837
+#: ../src/goabackend/goaowncloudprovider.c:1029
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "ਡਾਈਲਾਗ ਰੱਦ ਕੀਤਾ ਗਿਆ ਸੀ  (%s, %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:693
-#: ../src/goabackend/goaimapsmtpprovider.c:967
-#: ../src/goabackend/goaimapsmtpprovider.c:1056
-#: ../src/goabackend/goaowncloudprovider.c:788
+#: ../src/goabackend/goaexchangeprovider.c:701
+#: ../src/goabackend/goaimapsmtpprovider.c:1007
+#: ../src/goabackend/goaimapsmtpprovider.c:1098
+#: ../src/goabackend/goaowncloudprovider.c:850
 msgid "_Ignore"
 msgstr "ਅਣਡਿੱਠਾ(_I)"
 
-#: ../src/goabackend/goaexchangeprovider.c:698
-#: ../src/goabackend/goaexchangeprovider.c:884
-#: ../src/goabackend/goaimapsmtpprovider.c:972
-#: ../src/goabackend/goaimapsmtpprovider.c:1061
-#: ../src/goabackend/goaimapsmtpprovider.c:1301
-#: ../src/goabackend/goaimapsmtpprovider.c:1372
-#: ../src/goabackend/goakerberosprovider.c:1653
-#: ../src/goabackend/goaowncloudprovider.c:793
-#: ../src/goabackend/goaowncloudprovider.c:985
+#: ../src/goabackend/goaexchangeprovider.c:706
+#: ../src/goabackend/goaexchangeprovider.c:892
+#: ../src/goabackend/goaimapsmtpprovider.c:1012
+#: ../src/goabackend/goaimapsmtpprovider.c:1103
+#: ../src/goabackend/goaimapsmtpprovider.c:1351
+#: ../src/goabackend/goaimapsmtpprovider.c:1425
+#: ../src/goabackend/goakerberosprovider.c:1655
+#: ../src/goabackend/goaowncloudprovider.c:855
+#: ../src/goabackend/goaowncloudprovider.c:1048
 msgid "_Try Again"
 msgstr "_ਮੁੜ ਕੋਸ਼ਿਸ਼"
 
-#: ../src/goabackend/goaexchangeprovider.c:703
-#: ../src/goabackend/goaexchangeprovider.c:877
+#: ../src/goabackend/goaexchangeprovider.c:711
+#: ../src/goabackend/goaexchangeprovider.c:885
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "ਮਾਈਕਰੋਸਾਫਟ ਐਕਸਚੇਜ਼ ਸਰਵਰ ਨਾਲ ਕੁਨੈਕਟ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ"
 
-#: ../src/goabackend/goaexchangeprovider.c:939
-#: ../src/goabackend/goafacebookprovider.c:397
-#: ../src/goabackend/goagoogleprovider.c:664
-#: ../src/goabackend/goakerberosprovider.c:1724
-#: ../src/goabackend/goaowncloudprovider.c:1041
-#: ../src/goabackend/goawindowsliveprovider.c:410
+#: ../src/goabackend/goaexchangeprovider.c:945
+#: ../src/goabackend/goafacebookprovider.c:415
+#: ../src/goabackend/goaflickrprovider.c:425
+#: ../src/goabackend/goagoogleprovider.c:544
+#: ../src/goabackend/goakerberosprovider.c:1726
+#: ../src/goabackend/goaowncloudprovider.c:1102
+#: ../src/goabackend/goatelepathyprovider.c:894
+#: ../src/goabackend/goawindowsliveprovider.c:430
 msgid "Use for"
 msgstr "ਇਸ ਲਈ ਵਰਤੋਂ"
 
-#: ../src/goabackend/goaexchangeprovider.c:941
-#: ../src/goabackend/goagoogleprovider.c:666
+#: ../src/goabackend/goaexchangeprovider.c:947
+#: ../src/goabackend/goagoogleprovider.c:546
 msgid "_Mail"
 msgstr "ਮੇਲ(_M)"
 
-#: ../src/goabackend/goaexchangeprovider.c:946
-#: ../src/goabackend/goagoogleprovider.c:671
-#: ../src/goabackend/goaowncloudprovider.c:1043
+#: ../src/goabackend/goaexchangeprovider.c:952
+#: ../src/goabackend/goagoogleprovider.c:551
+#: ../src/goabackend/goaowncloudprovider.c:1104
 msgid "Cale_ndar"
 msgstr "ਕੈਲੰਡਰ(_n)"
 
-#: ../src/goabackend/goaexchangeprovider.c:951
-#: ../src/goabackend/goagoogleprovider.c:676
-#: ../src/goabackend/goaowncloudprovider.c:1048
+#: ../src/goabackend/goaexchangeprovider.c:957
+#: ../src/goabackend/goagoogleprovider.c:556
+#: ../src/goabackend/goaowncloudprovider.c:1109
 msgid "_Contacts"
 msgstr "ਸੰਪਰਕ(_C)"
 
-#: ../src/goabackend/goafacebookprovider.c:81
+#: ../src/goabackend/goafacebookprovider.c:82
 msgid "Facebook"
 msgstr "ਫੇਸਬੁੱਕ"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:201
-#: ../src/goabackend/goagoogleprovider.c:196
-#: ../src/goabackend/goatwitterprovider.c:162
-#: ../src/goabackend/goawindowsliveprovider.c:183
-#: ../src/goabackend/goayahooprovider.c:165
+#: ../src/goabackend/goafacebookprovider.c:211
+#: ../src/goabackend/goagoogleprovider.c:207
+#: ../src/goabackend/goatwitterprovider.c:166
+#: ../src/goabackend/goawindowsliveprovider.c:195
+#: ../src/goabackend/goayahooprovider.c:187
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr ""
 "ਜਦੋਂ guid ਦੀ ਮੰਗ ਕੀਤੀ ਜਾਂਦੀ ਹੈ ਤਾਂ ਹਾਲਤ 200 ਦੀ ਲੋੜ ਹੁੰਦੀ ਹੈ, ਪਰ ਮਿਲਿਆ ਹੈ %d (%"
 "s)"
 
-#: ../src/goabackend/goafacebookprovider.c:213
-#: ../src/goabackend/goaflickrprovider.c:191
-#: ../src/goabackend/goagoogleprovider.c:208
-#: ../src/goabackend/goaoauth2provider.c:616
-#: ../src/goabackend/goatwitterprovider.c:174
-#: ../src/goabackend/goawindowsliveprovider.c:195
-#: ../src/goabackend/goayahooprovider.c:177
-msgid "Error parsing response as JSON: "
-msgstr "JSON ਵਜੋਂ ਪਾਰਸਿੰਗ ਜਵਾਬ ਗਲਤੀ: "
-
-#: ../src/goabackend/goafacebookprovider.c:224
-#: ../src/goabackend/goawindowsliveprovider.c:206
+#: ../src/goabackend/goafacebookprovider.c:230
+#: ../src/goabackend/goafacebookprovider.c:242
+#: ../src/goabackend/goafacebookprovider.c:252
+#: ../src/goabackend/goaflickrprovider.c:208
+#: ../src/goabackend/goaflickrprovider.c:220
+#: ../src/goabackend/goaflickrprovider.c:230
+#: ../src/goabackend/goaflickrprovider.c:240
+#: ../src/goabackend/goaflickrprovider.c:250
+#: ../src/goabackend/goagoogleprovider.c:226
+#: ../src/goabackend/goagoogleprovider.c:238
+#: ../src/goabackend/goaoauth2provider.c:682
+#: ../src/goabackend/goaoauth2provider.c:712
+#: ../src/goabackend/goaoauth2provider.c:724
+#: ../src/goabackend/goatwitterprovider.c:185
+#: ../src/goabackend/goatwitterprovider.c:197
+#: ../src/goabackend/goatwitterprovider.c:207
+#: ../src/goabackend/goawindowsliveprovider.c:214
+#: ../src/goabackend/goawindowsliveprovider.c:226
+#: ../src/goabackend/goawindowsliveprovider.c:238
+#: ../src/goabackend/goayahooprovider.c:206
+#: ../src/goabackend/goayahooprovider.c:218
+#: ../src/goabackend/goayahooprovider.c:229
+#: ../src/goabackend/goayahooprovider.c:275
+#: ../src/goabackend/goayahooprovider.c:287
+#: ../src/goabackend/goayahooprovider.c:298
 #, c-format
-msgid "Didn't find id member in JSON data"
-msgstr "JSON ਡਾਟੇ ਵਿੱਚ id ਮੈਂਬਰ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ"
+#| msgid "Could not erase identity: %k"
+msgid "Could not parse response"
+msgstr "ਜਵਾਬ ਪਾਰਸ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: ../src/goabackend/goafacebookprovider.c:233
-#: ../src/goabackend/goagoogleprovider.c:219
-#, c-format
-msgid "Didn't find email member in JSON data"
-msgstr "JSON ਡਾਟੇ ਵਿੱਚ ਈਮੇਲ ਮੈਂਬਰ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ"
-
-#: ../src/goabackend/goafacebookprovider.c:399
-#: ../src/goabackend/goagoogleprovider.c:681
-#: ../src/goabackend/goawindowsliveprovider.c:412
+#: ../src/goabackend/goafacebookprovider.c:417
+#: ../src/goabackend/goagoogleprovider.c:561
+#: ../src/goabackend/goatelepathyprovider.c:896
+#: ../src/goabackend/goawindowsliveprovider.c:432
 msgid "C_hat"
 msgstr "ਗੱਲਬਾਤ(_h)"
 
-#: ../src/goabackend/goaflickrprovider.c:82
+#: ../src/goabackend/goaflickrprovider.c:83
 msgid "Flickr"
 msgstr "ਫਲਿੱਕਰ"
 
-#: ../src/goabackend/goaflickrprovider.c:179
+#: ../src/goabackend/goaflickrprovider.c:189
 #, c-format
 msgid "Expected status 200 when requesting user id, instead got status %d (%s)"
 msgstr ""
 "ਜਦੋਂ ਯੂਜ਼ਰ id ਦੀ ਮੰਗ ਕੀਤੀ ਜਾਂਦੀ ਹੈ ਤਾਂ ਹਾਲਤ 200 ਦੀ ਲੋੜ ਹੁੰਦੀ ਹੈ, ਪਰ ਮਿਲਿਆ ਹੈ %"
 "d (%s)"
 
-#: ../src/goabackend/goaflickrprovider.c:202
-#, c-format
-msgid "Didn't find user member in JSON data"
-msgstr "JSON ਡਾਟੇ ਵਿੱਚ ਯੂਜ਼ਰ ਮੈਂਬਰ ਨਹੀਂ ਲੱਭਿਆ"
-
-#: ../src/goabackend/goaflickrprovider.c:211
-#, c-format
-msgid "Didn't find user.id member in JSON data"
-msgstr "JSON ਡਾਟੇ ਵਿੱਚ user.id ਮੈਂਬਰ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ"
-
-#: ../src/goabackend/goaflickrprovider.c:220
-#, c-format
-msgid "Didn't find user.username member in JSON data"
-msgstr "JSON ਡਾਟੇ ਵਿੱਚ user.username ਮੈਂਬਰ ਨਹੀਂ ਲਿਆ"
-
-#: ../src/goabackend/goaflickrprovider.c:229
-#, c-format
-msgid "Didn't find user.username._content member in JSON data"
-msgstr "JSON ਡਾਟੇ ਵਿੱਚ user.username._content ਮੈਂਬਰ ਨਹੀਂ ਲਿਆ"
-
-#: ../src/goabackend/goaflickrprovider.c:306
+#: ../src/goabackend/goaflickrprovider.c:328
+#: ../src/goabackend/goayahooprovider.c:350
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "ਤੁਹਾਡੇ ਸਿਸਟਮ ਦਾ ਸਮਾਂ ਗਲਤ ਹੈ। ਆਪਣੀ ਮਿਤੀ ਅਤੇ ਸਮਾਂ ਸੈਟਿੰਗ ਜਾਂਚੋ।"
 
-#: ../src/goabackend/goaflickrprovider.c:408
+#: ../src/goabackend/goaflickrprovider.c:427
 msgid "_Photos"
 msgstr "ਫੋਟੋ(_P)"
 
-#: ../src/goabackend/goagoogleprovider.c:85
+#: ../src/goabackend/goagoogleprovider.c:82
 msgid "Google"
 msgstr "ਗੂਗਲ"
 
-#: ../src/goabackend/goagoogleprovider.c:686
-#: ../src/goabackend/goawindowsliveprovider.c:417
+#: ../src/goabackend/goagoogleprovider.c:566
+#: ../src/goabackend/goaowncloudprovider.c:1114
+#: ../src/goabackend/goawindowsliveprovider.c:437
 msgid "_Documents"
 msgstr "ਡੌਕੂਮੈਂਟ(_D)"
+
+#. TODO: more specific
+#: ../src/goabackend/goaimapauthlogin.c:99
+#: ../src/goabackend/goasmtpauthplain.c:146
+#, c-format
+msgid "Service not available"
+msgstr "ਸੇਵਾ ਉਪਲੱਬਧ ਨਹੀਂ"
+
+#. TODO: more specific
+#: ../src/goabackend/goaimapauthlogin.c:120
+#: ../src/goabackend/goasmtpauthplain.c:115
+#, c-format
+msgid "Authentication failed"
+msgstr "ਪਰਮਾਣਕਿਤਾ ਫੇਲ੍ਹ ਹੋਈ"
+
+#: ../src/goabackend/goaimapauthlogin.c:145
+#: ../src/goabackend/goasmtpauthplain.c:646
+#, c-format
+msgid "Server does not support PLAIN"
+msgstr "ਸਰਵਰ PLAIN ਲਈ ਸਹਾਇਕ ਨਹੀਂ"
+
+#: ../src/goabackend/goaimapauthlogin.c:199
+#: ../src/goabackend/goasmtpauthplain.c:751
+#, c-format
+#| msgid "Server does not support PLAIN"
+msgid "Server does not support STARTTLS"
+msgstr "ਸਰਵਰ STARTTLS ਲਈ ਸਹਾਇਕ ਨਹੀਂ"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:82
 msgid "IMAP and SMTP"
 msgstr "IMAP ਅਤੇ SMTP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:350
+#: ../src/goabackend/goaimapsmtpprovider.c:362
 #, c-format
-#| msgid "Did not find password with username `%s' in credentials"
 msgid "Did not find imap-password with identity `%s' in credentials"
 msgstr "ਸਨਦ ਵਿੱਚ `%s' ਪਛਾਣ ਲਈ ਪਾਸਵਰਡ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ"
 
@@ -330,15 +331,13 @@ msgstr "ਸਨਦ ਵਿੱਚ `%s' ਪਛਾਣ ਲਈ ਪਾਸਵਰਡ ਨ�
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:379
+#: ../src/goabackend/goaimapsmtpprovider.c:391
 #, c-format
-#| msgid "Invalid password with username `%s' (%s, %d): "
 msgid "Invalid imap-password with username `%s' (%s, %d): "
 msgstr "ਯੂਜ਼ਰ-ਨਾਂ `%s' ਲਈ ਗਲਤ imap-ਪਾਸਵਰਡ (%s, %d): "
 
-#: ../src/goabackend/goaimapsmtpprovider.c:397
+#: ../src/goabackend/goaimapsmtpprovider.c:415
 #, c-format
-#| msgid "Did not find password with username `%s' in credentials"
 msgid "Did not find smtp-password with identity `%s' in credentials"
 msgstr "ਸਨਦ ਵਿੱਚ `%s' ਯੂਜ਼ਰ-ਨਾਂ ਲਈ smtp-ਪਾਸਵਰਡ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ"
 
@@ -346,75 +345,70 @@ msgstr "ਸਨਦ ਵਿੱਚ `%s' ਯੂਜ਼ਰ-ਨਾਂ ਲਈ smtp-ਪਾਸ
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:428
+#: ../src/goabackend/goaimapsmtpprovider.c:446
 #, c-format
-#| msgid "Invalid password with username `%s' (%s, %d): "
 msgid "Invalid smtp-password with username `%s' (%s, %d): "
 msgstr "ਯੂਜ਼ਰ-ਨਾਂ `%s' ਲਈ ਗਲਤ smtp-ਪਾਸਵਰਡ (%s, %d): "
 
-#: ../src/goabackend/goaimapsmtpprovider.c:636
-#| msgid "Name"
-msgid "_Name"
-msgstr "ਨਾਂ(_N)"
-
-#: ../src/goabackend/goaimapsmtpprovider.c:653
-#| msgid "_Server"
-msgid "IMAP _Server"
-msgstr "I_MAP ਸਰਵਰ"
-
-#: ../src/goabackend/goaimapsmtpprovider.c:660
-#: ../src/goabackend/goaimapsmtpprovider.c:692
+#. Translators: the following four strings are used to show a
+#. * combo box similar to the one in the evolution module.
+#. * Encryption: None
+#. *             STARTTLS after connecting
+#. *             SSL on a dedicated port
+#.
+#: ../src/goabackend/goaimapsmtpprovider.c:632
 msgid "_Encryption"
 msgstr "ਇੰਕ੍ਰਿਪਸ਼ਨ(_E)"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:663
-#: ../src/goabackend/goaimapsmtpprovider.c:695
+#: ../src/goabackend/goaimapsmtpprovider.c:635
 msgid "None"
 msgstr "ਕੋਈ ਨਹੀਂ"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:666
-#: ../src/goabackend/goaimapsmtpprovider.c:698
+#: ../src/goabackend/goaimapsmtpprovider.c:638
 msgid "STARTTLS after connecting"
 msgstr "ਕੁਨੈਕਟ ਕਰਨ ਦੇ ਬਾਅਦ STARTTLS"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:669
-#: ../src/goabackend/goaimapsmtpprovider.c:701
+#: ../src/goabackend/goaimapsmtpprovider.c:641
 msgid "SSL on a dedicated port"
 msgstr "ਖਾਸ ਪੋਰਟ ਉੱਤੇ SSL"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:685
-#| msgid "_Server"
+#: ../src/goabackend/goaimapsmtpprovider.c:698
+msgid "_Name"
+msgstr "ਨਾਂ(_N)"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:715
+msgid "IMAP _Server"
+msgstr "I_MAP ਸਰਵਰ"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:735
 msgid "SMTP _Server"
 msgstr "_SMTP ਸਰਵਰ"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:977
-#: ../src/goabackend/goaimapsmtpprovider.c:1294
-#| msgid "Error connecting to ownCloud server"
+#: ../src/goabackend/goaimapsmtpprovider.c:1017
+#: ../src/goabackend/goaimapsmtpprovider.c:1344
 msgid "Error connecting to IMAP server"
 msgstr "IMAP ਸਰਵਰ ਨਾਲ ਕੁਨੈਕਟ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1066
-#: ../src/goabackend/goaimapsmtpprovider.c:1365
-#| msgid "Error connecting to ownCloud server"
+#: ../src/goabackend/goaimapsmtpprovider.c:1108
+#: ../src/goabackend/goaimapsmtpprovider.c:1418
 msgid "Error connecting to SMTP server"
 msgstr "SMTP ਸਰਵਰ ਨਾਲ ਕੁਨੈਕਟ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ।"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1470
-#| msgid "_E-mail"
+#: ../src/goabackend/goaimapsmtpprovider.c:1517
 msgid "E-mail"
 msgstr "ਈ-ਮੇਲ"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1474
+#: ../src/goabackend/goaimapsmtpprovider.c:1521
 msgid "Name"
 msgstr "ਨਾਂ"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1484
-#: ../src/goabackend/goaimapsmtpprovider.c:1487
+#: ../src/goabackend/goaimapsmtpprovider.c:1531
+#: ../src/goabackend/goaimapsmtpprovider.c:1534
 msgid "IMAP"
 msgstr "IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1498
-#: ../src/goabackend/goaimapsmtpprovider.c:1501
+#: ../src/goabackend/goaimapsmtpprovider.c:1545
+#: ../src/goabackend/goaimapsmtpprovider.c:1548
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -422,56 +416,56 @@ msgstr "SMTP"
 msgid "Enterprise Login (Kerberos)"
 msgstr "ਇੰਟਰਪਰਾਈਜ਼ ਲਾਗਇਨ (ਕਰਬਰੋਸ)"
 
-#: ../src/goabackend/goakerberosprovider.c:449
+#: ../src/goabackend/goakerberosprovider.c:455
 msgid "Identity service returned invalid key"
 msgstr "ਪਛਾਣ ਸਰਵਿਸ ਨੇ ਗਲਤੀ ਕੁੰਜੀ ਵਾਪਸ ਕੀਤੀ"
 
-#: ../src/goabackend/goakerberosprovider.c:715
+#: ../src/goabackend/goakerberosprovider.c:728
 #, c-format
 msgid "Could not find saved credentials for principal `%s' in keyring"
 msgstr "ਕੀਰਿੰਗ ਵਿੱਚ `%s' ਪ੍ਰਿਸੀਪਲ ਲਈ ਸੰਭਾਲੀ ਹੋਈ ਸਨਦ ਨਹੀਂ ਲੱਭੀ ਜਾ ਸਕੀ"
 
-#: ../src/goabackend/goakerberosprovider.c:725
+#: ../src/goabackend/goakerberosprovider.c:738
 #, c-format
 msgid "Did not find password for principal `%s' in credentials"
 msgstr "ਸਨਦ ਵਿੱਚ `%s' ਪ੍ਰਿਸੀਪਲ ਲਈ ਪਾਸਵਰਡ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ"
 
-#: ../src/goabackend/goakerberosprovider.c:1120
+#: ../src/goabackend/goakerberosprovider.c:1121
 msgid "_Domain"
 msgstr "ਡੋਮੇਨ(_D)"
 
-#: ../src/goabackend/goakerberosprovider.c:1121
+#: ../src/goabackend/goakerberosprovider.c:1122
 msgid "Enterprise domain or realm name"
 msgstr "ਇੰਟਰਪਰਾਈਜ਼ ਡੋਮੇਨ ਜਾਂ ਰੀਲੇਮ ਨਾਂ"
 
-#: ../src/goabackend/goakerberosprovider.c:1353
-#: ../src/goaidentity/goaidentityservice.c:1084
+#: ../src/goabackend/goakerberosprovider.c:1354
+#: ../src/goaidentity/goaidentityservice.c:1085
 msgid "Log In to Realm"
 msgstr "ਰੀਲੇਮ ਲਈ ਲਾਗਇਨ"
 
-#: ../src/goabackend/goakerberosprovider.c:1354
+#: ../src/goabackend/goakerberosprovider.c:1355
 msgid "Please enter your password below."
 msgstr "ਆਪਣਾ ਪਾਸਵਰਡ ਹੇਠਾਂ ਦਿਓ ਜੀ।"
 
-#: ../src/goabackend/goakerberosprovider.c:1355
+#: ../src/goabackend/goakerberosprovider.c:1356
 msgid "Remember this password"
 msgstr "ਇਹ ਪਾਸਵਰਡ ਯਾਦ ਰੱਖੋ"
 
-#: ../src/goabackend/goakerberosprovider.c:1494
+#: ../src/goabackend/goakerberosprovider.c:1495
 #, c-format
 msgid "The domain is not valid"
 msgstr "ਡੋਮੇਨ ਠੀਕ ਨਹੀਂ ਹੈ"
 
-#: ../src/goabackend/goakerberosprovider.c:1648
+#: ../src/goabackend/goakerberosprovider.c:1650
 msgid "Error connecting to enterprise identity server"
 msgstr "ਇੰਟਰਪ੍ਰਾਈਜ਼ ਪਛਾਣ ਸਰਵਰ ਨਾਲ ਕੁਨੈਕਟ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ"
 
-#: ../src/goabackend/goakerberosprovider.c:1726
+#: ../src/goabackend/goakerberosprovider.c:1728
 msgid "Network _Resources"
 msgstr "ਨੈੱਟਵਰਕ ਸਰੋਤ(_R)"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:573
+#: ../src/goabackend/goaoauth2provider.c:658
 #: ../src/goabackend/goaoauthprovider.c:586
 #, c-format
 msgid ""
@@ -480,24 +474,14 @@ msgstr ""
 "ਜਦੋਂ ਅਸੈਸ ਟੋਕਨ ਦੀ ਮੰਗ ਕੀਤੀ ਜਾਂਦੀ ਹੈ ਤਾਂ ਹਾਲਤ 200 ਦੀ ਲੋੜ ਹੁੰਦੀ ਹੈ, ਪਰ ਮਿਲਿਆ ਹੈ "
 "%d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:593
-#, c-format
-msgid "Didn't find access_token in non-JSON data"
-msgstr "ਗ਼ੈਰ-JSON ਡਾਟੇ ਵਿੱਚ ਅਸੈਸ ਟੋਕਨ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ(_t)"
-
-#: ../src/goabackend/goaoauth2provider.c:627
-#, c-format
-msgid "Didn't find access_token in JSON data"
-msgstr "JSON ਡਾਟੇ ਵਿੱਚ ਅਸੈਸ ਟੋਕਨ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ(_t)"
-
-#: ../src/goabackend/goaoauth2provider.c:835
-#: ../src/goabackend/goaoauth2provider.c:875
+#: ../src/goabackend/goaoauth2provider.c:916
+#: ../src/goabackend/goaoauth2provider.c:956
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "ਪਰਮਾਣਕਿਤਾ ਜਵਾਬ \"%s\" ਸੀ"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:981
+#: ../src/goabackend/goaoauth2provider.c:1059
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
@@ -506,29 +490,29 @@ msgstr ""
 "<a href=\"%s\">ਪਰਮਾਣਕਿਤਾ (authorization) ਸਫ਼ੇ</a> ਤੋਂ ਮਿਲੇ ਪਰਮਾਣਕਿਤਾ ਕੋਡ ਨੂੰ "
 "ਚੇਪੋ:"
 
-#: ../src/goabackend/goaoauth2provider.c:1074
+#: ../src/goabackend/goaoauth2provider.c:1159
 #: ../src/goabackend/goaoauthprovider.c:1072
 msgid "Error getting an Access Token: "
 msgstr "ਅਸੈਸ ਟੋਕਨ ਲੈਣ ਦੌਰਾਨ ਗਲਤੀ: "
 
-#: ../src/goabackend/goaoauth2provider.c:1089
+#: ../src/goabackend/goaoauth2provider.c:1174
 #: ../src/goabackend/goaoauthprovider.c:1085
 msgid "Error getting identity: "
 msgstr "ਪਛਾਣ ਲੈਣ ਦੌਰਾਨ ਗਲਤੀ: "
 
-#: ../src/goabackend/goaoauth2provider.c:1378
-#: ../src/goabackend/goaoauthprovider.c:1390
+#: ../src/goabackend/goaoauth2provider.c:1386
+#: ../src/goabackend/goaoauthprovider.c:1391
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "%s ਵਜੋਂ ਲਾਗਇਨ ਕਰਨ ਲਈ ਕਿਹਾ ਗਿਆ ਸੀ, ਪਰ %s ਵਜੋਂ ਲਾਗਇਨ ਹੈ"
 
-#: ../src/goabackend/goaoauth2provider.c:1549
+#: ../src/goabackend/goaoauth2provider.c:1542
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "ਸਨਦ (credentials) ਅਸੈਸ ਟੋਕਨ ਨਹੀਂ ਲੈ ਸਕਦੀ(_t)"
 
-#: ../src/goabackend/goaoauth2provider.c:1588
-#: ../src/goabackend/goaoauthprovider.c:1618
+#: ../src/goabackend/goaoauth2provider.c:1581
+#: ../src/goabackend/goaoauthprovider.c:1619
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "ਅਸੈਸ ਟੋਕਨ (%s, %d) ਤਾਜ਼ਾ ਕਰਨ ਲਈ ਫੇਲ੍ਹ: "
@@ -566,140 +550,163 @@ msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr ""
 "<a href=\"%s\">ਪਰਮਾਣਕਿਤਾ (authorization) ਸਫ਼ੇ</a> ਤੋਂ ਮਿਲੇ ਟੋਕਨ ਨੂੰ ਚੇਪੋ:"
 
-#: ../src/goabackend/goaoauthprovider.c:1574
+#: ../src/goabackend/goaoauthprovider.c:1575
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr ""
 "ਸਨਦ ਵਿੱਚ ਅਸੈਸ ਟੋਕਨ (access_token) ਜਾਂ ਅਸੈਸ ਟੋਕਨ ਭੇਦ (access_token_secret) "
 "ਨਹੀਂ ਮਿਲਿਆ"
 
-#: ../src/goabackend/goaowncloudprovider.c:84
+#: ../src/goabackend/goaowncloudprovider.c:87
 msgid "ownCloud"
 msgstr "ownCloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:798
-#: ../src/goabackend/goaowncloudprovider.c:978
+#: ../src/goabackend/goaowncloudprovider.c:860
+#: ../src/goabackend/goaowncloudprovider.c:1041
 msgid "Error connecting to ownCloud server"
 msgstr "ownCloud ਸਰਵਰ ਨਾਲ ਕੁਨੈਕਟ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ"
 
-#: ../src/goabackend/goaowncloudprovider.c:1053
+#: ../src/goabackend/goaowncloudprovider.c:1119
 msgid "_Files"
 msgstr "ਫਾਇਲਾਂ(_F)"
 
-#: ../src/goabackend/goaprovider.c:579
+#: ../src/goabackend/goaprovider.c:688
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ਕਿਸਮ %s ਲਈ ensure_credentials_sync ਹਾਲੇ ਬਣਾਇਆ ਨਹੀਂ ਹੈ"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:372
+#: ../src/goabackend/goasmtpauthplain.c:161
 #, c-format
-#| msgid "Did not find password in credentials"
-msgid "Did not find smtp-password in credentials"
-msgstr "ਸਨਦ ਵਿੱਚ smtp-ਪਾਸਵਰਡ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ"
+#| msgid "Service not available"
+msgid "TLS not available"
+msgstr "TLS ਉਪਲੱਬਧ ਨਹੀਂ"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:383
-#, c-format
-msgid "Cannot do SMTP PLAIN without a password"
-msgstr "ਪਾਸਵਰਡ ਬਿਨਾਂ SMTP PLAIN ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ"
-
-#. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:402
+#: ../src/goabackend/goasmtpauthplain.c:227
 #, c-format
 msgid "org.gnome.OnlineAccounts.Mail is not available"
 msgstr "org.gnome.OnlineAccounts.Mail ਉਪਲੱਬਧ ਨਹੀਂ ਹੈ"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:412
+#: ../src/goabackend/goasmtpauthplain.c:237
 #, c-format
-#| msgid "Failed to parse autodiscover response XML"
 msgid "Failed to parse email address"
 msgstr "ਈਮੇਲ ਐਡਰੈਸ ਪਾਰਸ ਕਰਨ ਲਈ ਫੇਲ੍ਹ ਹੈ"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:424
+#: ../src/goabackend/goasmtpauthplain.c:249
 #, c-format
 msgid "Cannot do SMTP PLAIN without a domain"
 msgstr "ਡੋਮੇਨ ਬਿਨਾਂ SMTP PLAIN ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:438
+#: ../src/goabackend/goasmtpauthplain.c:287
 #, c-format
-msgid "Service not available"
-msgstr "ਸੇਵਾ ਉਪਲੱਬਧ ਨਹੀਂ"
-
-#: ../src/goabackend/goasmtpauthplain.c:475
-#, c-format
-msgid "Server does not support PLAIN"
-msgstr "ਸਰਵਰ PLAIN ਲਈ ਸਹਾਇਕ ਨਹੀਂ"
+msgid "Did not find smtp-password in credentials"
+msgstr "ਸਨਦ ਵਿੱਚ smtp-ਪਾਸਵਰਡ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:505
+#: ../src/goabackend/goasmtpauthplain.c:298
 #, c-format
-msgid "Authentication failed"
-msgstr "ਪਰਮਾਣਕਿਤਾ ਫੇਲ੍ਹ ਹੋਈ"
+msgid "Cannot do SMTP PLAIN without a password"
+msgstr "ਪਾਸਵਰਡ ਬਿਨਾਂ SMTP PLAIN ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ"
 
-#: ../src/goabackend/goatwitterprovider.c:80
+#: ../src/goabackend/goatelepathyprovider.c:183
+#, c-format
+msgid "Telepathy chat account not found"
+msgstr "ਟੈਲੀਪੈਥੀ ਗੱਲਬਾਤ ਖਾਤਾ ਨਹੀਂ ਲੱਭਿਆ"
+
+#: ../src/goabackend/goatelepathyprovider.c:372
+#, c-format
+#| msgid "Failed to find Account element"
+msgid "Failed to initialize a GOA client"
+msgstr "GOA ਕਲਾਇਟ ਸ਼ੁਰੂ ਕਰਨ ਵਾਸਤੇ ਫੇਲ੍ਹ"
+
+#: ../src/goabackend/goatelepathyprovider.c:415
+#, c-format
+#| msgid "Failed to find a provider for: %s"
+msgid "Failed to create a user interface for %s"
+msgstr "%s ਲਈ ਯੂਜ਼ਰ ਇੰਟਰਫੇਸ ਬਣਾਉਣ ਲਈ ਫੇਲ੍ਹ ਹੈ"
+
+#: ../src/goabackend/goatelepathyprovider.c:542
+#| msgid "Connecting…"
+msgid "Connection Settings"
+msgstr "ਕੁਨੈਕਸ਼ਨ ਸੈਟਿੰਗ"
+
+#: ../src/goabackend/goatelepathyprovider.c:651
+msgid "Personal Details"
+msgstr "ਨਿੱਜੀ ਵੇਰਵਾ"
+
+#: ../src/goabackend/goatelepathyprovider.c:860
+msgid "Cannot save the connection parameters"
+msgstr "ਕੁਨੈਕਸ਼ਨ ਮੁੱਲ ਸੰਭਾਲੇ ਨਹੀਂ ਜਾ ਸਕਦੇ"
+
+#: ../src/goabackend/goatelepathyprovider.c:872
+msgid "Cannot save your personal information on the server"
+msgstr "ਤੁਹਾਡੀ ਨਿੱਜੀ ਜਾਣਕਾਰੀ ਸਰਵਰ ਉੱਤੇ ਨਹੀਂ ਸੰਭਾਲੀ ਜਾ ਸਕਦੀ"
+
+#. Connection Settings button
+#: ../src/goabackend/goatelepathyprovider.c:901
+#| msgid "Connecting…"
+msgid "_Connection Settings"
+msgstr "ਕੁਨੈਕਸ਼ਨ ਸੈਟਿੰਗ(_C)"
+
+#. Edit Personal Information button
+#: ../src/goabackend/goatelepathyprovider.c:905
+msgid "_Personal Details"
+msgstr "ਨਿੱਜੀ ਵੇਰਵਾ(_P)"
+
+#: ../src/goabackend/goatwitterprovider.c:81
 msgid "Twitter"
 msgstr "ਟਵਿੱਟਰ"
 
-#: ../src/goabackend/goatwitterprovider.c:185
-#, c-format
-msgid "Didn't find id_str member in JSON data"
-msgstr "JSON ਡਾਟੇ ਵਿੱਚ id_str ਮੈਂਬਰ ਨਹੀਂ ਮਿਲਿਆ"
-
-#: ../src/goabackend/goatwitterprovider.c:194
-#, c-format
-msgid "Didn't find screen_name member in JSON data"
-msgstr "JSON ਡਾਟੇ ਵਿੱਚ ਸਕਰੀਨ ਨਾਂ ਮੈਂਬਰ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ(_n)"
-
-#: ../src/goabackend/goautils.c:84
+#: ../src/goabackend/goautils.c:86
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "%s ਅਕਾਊਂਟ ਪਹਿਲਾਂ ਹੀ %s ਲਈ ਮੌਜੂਦ ਹੈ"
 
 #. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:106
+#: ../src/goabackend/goautils.c:108
 #, c-format
 msgid "%s account"
 msgstr "%s ਅਕਾਊਂਟ"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:150
+#: ../src/goabackend/goautils.c:152
 msgid "Failed to delete credentials from the keyring"
 msgstr "ਕੀਰਿੰਗ ਤੋਂ ਸਨਦ ਹਟਾਉਣ ਲਈ ਫੇਲ੍ਹ"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:202
+#: ../src/goabackend/goautils.c:204
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "ਕੀਰਿੰਗ ਤੋਂ ਸਨਦ ਪ੍ਰਾਪਤ ਕਰਨ ਲਈ ਫੇਲ੍ਹ"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:212
+#: ../src/goabackend/goautils.c:214
 msgid "No credentials found in the keyring"
 msgstr "ਕੋਈ ਕੀਰਿੰਗ ਵਿੱਚ ਸਨਦ ਸਟੋਰ ਕਰਨ ਲਈ ਨਹੀਂ ਹੈ"
 
-#: ../src/goabackend/goautils.c:225
+#: ../src/goabackend/goautils.c:227
 msgid "Error parsing result obtained from the keyring: "
 msgstr "ਕੀਰਿੰਗ ਤੋਂ ਮਿਲੇ ਨਤੀਜੇ ਨੂੰ ਪਾਰਸ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:268
+#: ../src/goabackend/goautils.c:270
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "%2$s ਪਛਾਣ ਲਈ GOA %1$s ਸਨਦ"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:285
+#: ../src/goabackend/goautils.c:287
 msgid "Failed to store credentials in the keyring"
 msgstr "ਕੀਰਿੰਗ ਵਿੱਚ ਸਨਦ ਸਟੋਰ ਕਰਨ ਲਈ ਫੇਲ੍ਹ ਹੈ"
 
-#: ../src/goabackend/goautils.c:506
+#: ../src/goabackend/goautils.c:508
 msgid "The signing certificate authority is not known."
 msgstr "ਦਸਤਖਤੀ ਸਰਟੀਫਿਕੇਟ ਅਥਾਰਟੀ ਅਣਜਾਣ ਹੈ।"
 
-#: ../src/goabackend/goautils.c:510
+#: ../src/goabackend/goautils.c:512
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
@@ -707,23 +714,23 @@ msgstr ""
 "ਸਰਟੀਫਿਕੇਟ ਸਾਈਟ ਦੀ ਪਛਾਣ ਦੀ ਚਾਹੀਦੀ ਪਛਾਣ ਨਾਲ ਮਿਲਦਾ ਨਹੀਂ ਹੈ, ਜਿਸ ਤੋਂ ਇਹ ਪ੍ਰਾਪਤ "
 "ਕੀਤਾ ਹੈ।"
 
-#: ../src/goabackend/goautils.c:515
+#: ../src/goabackend/goautils.c:517
 msgid "The certificate's activation time is still in the future."
 msgstr "ਸਰਟੀਫਿਕੇਟ ਦਾ ਸਰਗਰਮੀ ਸਮਾਂ ਭਵਿੱਖ ਦਾ ਹੈ।"
 
-#: ../src/goabackend/goautils.c:519
+#: ../src/goabackend/goautils.c:521
 msgid "The certificate has expired."
 msgstr "ਸਰਟੀਫਿਕੇਟ ਦੀ ਮਿਆਦ ਪੁੱਗੀ ਹੈ।"
 
-#: ../src/goabackend/goautils.c:523
+#: ../src/goabackend/goautils.c:525
 msgid "The certificate has been revoked."
 msgstr "ਸਰਟੀਫਿਕੇਟ ਮਨਸੂਖ ਕਰ ਦਿੱਤਾ ਗਿਆ ਹੈ।"
 
-#: ../src/goabackend/goautils.c:527
+#: ../src/goabackend/goautils.c:529
 msgid "The certificate's algorithm is considered insecure."
 msgstr "ਸਰਟੀਫਿਕੇਟ ਦਾ ਐਲੋਗਰਿਥਮ ਅਸੁਰੱਖਿਅਤ ਮੰਨਿਆ ਹੋਇਆ ਹੈ।"
 
-#: ../src/goabackend/goautils.c:531
+#: ../src/goabackend/goautils.c:533
 msgid "Invalid certificate."
 msgstr "ਗਲਤ ਸਰਟੀਫਿਕੇਟ"
 
@@ -733,49 +740,20 @@ msgstr "ਗਲਤ ਸਰਟੀਫਿਕੇਟ"
 msgid "Loading “%s”…"
 msgstr "\"%s\" ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ..."
 
-#: ../src/goabackend/goawindowsliveprovider.c:83
+#: ../src/goabackend/goawindowsliveprovider.c:84
 msgid "Windows Live"
 msgstr "ਵਿੰਡੋਜ਼ ਲਾਈਵ"
 
-#: ../src/goabackend/goawindowsliveprovider.c:217
-#, c-format
-msgid "Didn't find account email member in JSON data"
-msgstr "JSON ਡਾਟੇ ਵਿੱਚ ਅਕਾਊਂਟ ਈਮੇਲ ਮੈਂਬਰ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ"
-
-#: ../src/goabackend/goayahooprovider.c:80
+#: ../src/goabackend/goayahooprovider.c:81
 msgid "Yahoo"
 msgstr "ਯਾਹੂ"
 
-#: ../src/goabackend/goayahooprovider.c:188
-#, c-format
-msgid "Didn't find guid member in JSON data"
-msgstr "JSON ਡਾਟੇ ਵਿੱਚ guid ਮੈਂਬਰ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ"
-
-#: ../src/goabackend/goayahooprovider.c:198
-#, c-format
-msgid "Didn't find value member in JSON data"
-msgstr "JSON ਡਾਟੇ ਵਿੱਚ ਮੁੱਲ ਮੈਂਬਰ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ"
-
-#: ../src/goabackend/goayahooprovider.c:224
+#: ../src/goabackend/goayahooprovider.c:255
 #, c-format
 msgid "Expected status 200 when requesting name, instead got status %d (%s)"
 msgstr ""
 "ਜਦੋਂ ਨਾਂ ਦੀ ਮੰਗ ਕੀਤੀ ਜਾਂਦੀ ਹੈ ਤਾਂ ਹਾਲਤ 200 ਦੀ ਲੋੜ ਹੁੰਦੀ ਹੈ, ਪਰ ਮਿਲਿਆ ਹੈ %d (%"
 "s)"
-
-#: ../src/goabackend/goayahooprovider.c:237
-msgid "Error parsing usercard response as JSON: "
-msgstr "ਯੂਜ਼ਰ ਕਾਰਡ ਜਵਾਬ ਨੂੰ JSON ਵਜੋਂ ਪਾਰਸ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ: "
-
-#: ../src/goabackend/goayahooprovider.c:248
-#, c-format
-msgid "Didn't find profile member in JSON data"
-msgstr "JSON ਡਾਟੇ ਵਿੱਚ ਕੋਈ ਪ੍ਰੋਫਾਇਲ ਮੈਂਬਰ ਨਹੀਂ ਲੱਭਿਆ ਗਿਆ"
-
-#: ../src/goabackend/goayahooprovider.c:258
-#, c-format
-msgid "Didn't find nickname member in JSON data"
-msgstr "JSON ਡਾਟੇ ਵਿੱਚ ਨਿਕ-ਨੇਮ (nickname) ਮੈਂਬਰ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ"
 
 #: ../src/goaidentity/goaalarm.c:245
 msgid "Time"
@@ -785,68 +763,68 @@ msgstr "ਸਮਾਂ"
 msgid "Time to fire"
 msgstr "ਅੱਗ ਦਾ ਸਮਾਂ"
 
-#: ../src/goaidentity/goaidentityservice.c:377
+#: ../src/goaidentity/goaidentityservice.c:378
 msgid "initial secret passed before secret key exchange"
 msgstr "ਗੁਪਤ ਭੇਦ ਕੁੰਜੀ ਵਟਾਂਦਰੇ ਤੋਂ ਪਹਿਲਾਂ ਸ਼ੁਰੂਆਤੀ ਗੁਪਤ ਭੇਦ ਦਿੱਤਾ ਗਿਆ"
 
-#: ../src/goaidentity/goaidentityservice.c:569
+#: ../src/goaidentity/goaidentityservice.c:570
 msgid "Initial secret key is invalid"
 msgstr "ਸ਼ੁਰੂਆਤੀ ਗੁਪਤ ਕੁੰਜੀ ਗਲਤ ਹੈ"
 
-#: ../src/goaidentity/goaidentityservice.c:1089
+#: ../src/goaidentity/goaidentityservice.c:1090
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "ਨੈੱਟਵਰਕ ਰੀਲੇਮ %s ਨੂੰ ਤੁਹਾਨੂੰ ਸਾਈਨ ਇਨ ਕਰਨ ਲਈ ਕੁਝ ਜਾਣਕਾਰੀ ਦੀ ਲੋੜ ਹੈ।"
 
-#: ../src/goaidentity/goakerberosidentity.c:272
-#: ../src/goaidentity/goakerberosidentity.c:281
-#: ../src/goaidentity/goakerberosidentity.c:608
+#: ../src/goaidentity/goakerberosidentity.c:269
+#: ../src/goaidentity/goakerberosidentity.c:278
+#: ../src/goaidentity/goakerberosidentity.c:606
 msgid "Could not find identity in credential cache: %k"
 msgstr "ਸਨਦ ਕੈਸ਼ ਵਿੱਚ ਪਛਾਣ ਨਹੀਂ ਲੱਭੀ ਜਾ ਸਕੀ: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:621
+#: ../src/goaidentity/goakerberosidentity.c:619
 msgid "Could not find identity credentials in cache: %k"
 msgstr "ਕੈਸ਼ ਵਿੱਚ ਪਛਾਣ ਸਨਦ ਨਹੀਂ ਲੱਭੀ ਜਾ ਸਕੀ: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:659
+#: ../src/goaidentity/goakerberosidentity.c:657
 msgid "Could not sift through identity credentials in cache: %k"
 msgstr "ਕੈਸ਼ ਵਿੱਚ ਪਛਾਣ ਸਨਦ ਬਦਲਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:676
+#: ../src/goaidentity/goakerberosidentity.c:674
 msgid "Could not finish up sifting through identity credentials in cache: %k"
 msgstr "ਕੈਸ਼ ਵਿੱਚ ਪਛਾਣ ਸਨਦ ਬਦਲਣ ਨੂੰ ਪੂਰਾ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1014
+#: ../src/goaidentity/goakerberosidentity.c:1012
 #, c-format
 msgid "No associated identification found"
 msgstr "ਕੋਈ ਸਬੰਧਿਤ ਪਛਾਣ ਨਹੀਂ ਲੱਭੀ"
 
-#: ../src/goaidentity/goakerberosidentity.c:1095
+#: ../src/goaidentity/goakerberosidentity.c:1093
 msgid "Could not create credential cache: %k"
 msgstr "ਸਨਦ ਕੈਸ਼ ਬਣਾਈ ਨਹੀਂ ਜਾ ਸਕੀ: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1129
+#: ../src/goaidentity/goakerberosidentity.c:1127
 msgid "Could not initialize credentials cache: %k"
 msgstr "ਸਨਦ ਕੈਸ਼ ਸ਼ੁਰੂ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕੀ: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1148
+#: ../src/goaidentity/goakerberosidentity.c:1146
 msgid "Could not store new credentials in credentials cache: %k"
 msgstr "ਨਵੀਂ ਸਨਦ ਸਨਦ ਕੈਸ਼ ਵਿੱਚ ਸਟੋਰ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕੀ: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1425
+#: ../src/goaidentity/goakerberosidentity.c:1423
 #, c-format
 msgid "Could not renew identity: Not signed in"
 msgstr "ਪਛਾਣ ਨਵਿਆਈ ਨਹੀਂ ਜਾ ਸਕੀ: ਸਾਈਨ ਇਨ ਨਹੀਂ"
 
-#: ../src/goaidentity/goakerberosidentity.c:1437
+#: ../src/goaidentity/goakerberosidentity.c:1435
 msgid "Could not renew identity: %k"
 msgstr "ਪਛਾਣ ਨਵਿਆਈ ਨਹੀਂ ਜਾ ਸਕੀ: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1454
+#: ../src/goaidentity/goakerberosidentity.c:1452
 msgid "Could not get new credentials to renew identity %s: %k"
 msgstr "ਨਵਿਆਈ ਪਛਾਣ %s ਲਈ ਨਵੀਂ ਸਨਦ ਲਈ ਨਹੀਂ ਜਾ ਸਕੀ: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1494
+#: ../src/goaidentity/goakerberosidentity.c:1492
 msgid "Could not erase identity: %k"
 msgstr "ਪਛਾਣ ਸਾਫ਼ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕੀ: %k"
 
@@ -857,6 +835,69 @@ msgstr "ਪਛਾਣ ਲੱਭੀ ਨਹੀਂ ਜਾ ਸਕੀ"
 #: ../src/goaidentity/goakerberosidentitymanager.c:824
 msgid "Could not create credential cache for identity"
 msgstr "ਪਛਾਣ ਲਈ ਸਨਦ ਕੈਸ਼ ਬਣਾਈ ਨਹੀਂ ਜਾ ਸਕੀ"
+
+#~ msgid "Online Accounts"
+#~ msgstr "ਆਨਲਾਈਨ ਅਕਾਊਂਟ"
+
+#~ msgid "Provides the org.gnome.OnlinesAccounts name on the session bus"
+#~ msgstr "ਸ਼ੈਸ਼ਨ ਬੱਸ ਉੱਤੇ org.gnome.OnlinesAccounts ਨਾਂ ਦਿੰਦਾ ਹੈ"
+
+#~ msgid "An online account needs attention"
+#~ msgstr "ਇੱਕ ਆਨਲਾਈਨ ਅਕਾਊਂਟ ਲਈ ਧਿਆਨ ਦੇਣ ਲੋੜ ਹੈ"
+
+#~ msgid "Open Online Accounts..."
+#~ msgstr "ਆਨਲਾਈਨ ਅਕਾਊਂਟ ਖੋਲ੍ਹੋ..."
+
+#~ msgid "Error parsing response as JSON: "
+#~ msgstr "JSON ਵਜੋਂ ਪਾਰਸਿੰਗ ਜਵਾਬ ਗਲਤੀ: "
+
+#~ msgid "Didn't find id member in JSON data"
+#~ msgstr "JSON ਡਾਟੇ ਵਿੱਚ id ਮੈਂਬਰ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ"
+
+#~ msgid "Didn't find email member in JSON data"
+#~ msgstr "JSON ਡਾਟੇ ਵਿੱਚ ਈਮੇਲ ਮੈਂਬਰ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ"
+
+#~ msgid "Didn't find user member in JSON data"
+#~ msgstr "JSON ਡਾਟੇ ਵਿੱਚ ਯੂਜ਼ਰ ਮੈਂਬਰ ਨਹੀਂ ਲੱਭਿਆ"
+
+#~ msgid "Didn't find user.id member in JSON data"
+#~ msgstr "JSON ਡਾਟੇ ਵਿੱਚ user.id ਮੈਂਬਰ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ"
+
+#~ msgid "Didn't find user.username member in JSON data"
+#~ msgstr "JSON ਡਾਟੇ ਵਿੱਚ user.username ਮੈਂਬਰ ਨਹੀਂ ਲਿਆ"
+
+#~ msgid "Didn't find user.username._content member in JSON data"
+#~ msgstr "JSON ਡਾਟੇ ਵਿੱਚ user.username._content ਮੈਂਬਰ ਨਹੀਂ ਲਿਆ"
+
+#~ msgid "Didn't find access_token in non-JSON data"
+#~ msgstr "ਗ਼ੈਰ-JSON ਡਾਟੇ ਵਿੱਚ ਅਸੈਸ ਟੋਕਨ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ(_t)"
+
+#~ msgid "Didn't find access_token in JSON data"
+#~ msgstr "JSON ਡਾਟੇ ਵਿੱਚ ਅਸੈਸ ਟੋਕਨ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ(_t)"
+
+#~ msgid "Didn't find id_str member in JSON data"
+#~ msgstr "JSON ਡਾਟੇ ਵਿੱਚ id_str ਮੈਂਬਰ ਨਹੀਂ ਮਿਲਿਆ"
+
+#~ msgid "Didn't find screen_name member in JSON data"
+#~ msgstr "JSON ਡਾਟੇ ਵਿੱਚ ਸਕਰੀਨ ਨਾਂ ਮੈਂਬਰ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ(_n)"
+
+#~ msgid "Didn't find account email member in JSON data"
+#~ msgstr "JSON ਡਾਟੇ ਵਿੱਚ ਅਕਾਊਂਟ ਈਮੇਲ ਮੈਂਬਰ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ"
+
+#~ msgid "Didn't find guid member in JSON data"
+#~ msgstr "JSON ਡਾਟੇ ਵਿੱਚ guid ਮੈਂਬਰ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ"
+
+#~ msgid "Didn't find value member in JSON data"
+#~ msgstr "JSON ਡਾਟੇ ਵਿੱਚ ਮੁੱਲ ਮੈਂਬਰ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ"
+
+#~ msgid "Error parsing usercard response as JSON: "
+#~ msgstr "ਯੂਜ਼ਰ ਕਾਰਡ ਜਵਾਬ ਨੂੰ JSON ਵਜੋਂ ਪਾਰਸ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ: "
+
+#~ msgid "Didn't find profile member in JSON data"
+#~ msgstr "JSON ਡਾਟੇ ਵਿੱਚ ਕੋਈ ਪ੍ਰੋਫਾਇਲ ਮੈਂਬਰ ਨਹੀਂ ਲੱਭਿਆ ਗਿਆ"
+
+#~ msgid "Didn't find nickname member in JSON data"
+#~ msgstr "JSON ਡਾਟੇ ਵਿੱਚ ਨਿਕ-ਨੇਮ (nickname) ਮੈਂਬਰ ਨਹੀਂ ਲੱਭਿਆ ਜਾ ਸਕਿਆ"
 
 #~ msgid "Credentials not found in keyring (%s, %d): "
 #~ msgstr "ਕੀਰਿੰਗ (%s, %d) ਵਿੱਚ ਸਨਦ (credentials) ਨਹੀਂ ਲੱਭੀ: "
