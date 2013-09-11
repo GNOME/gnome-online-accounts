@@ -123,11 +123,14 @@ get_scope (GoaOAuth2Provider *provider)
   return /* Read-only access to the user's email address */
          "https://www.googleapis.com/auth/userinfo.email "
 
-         /* Google Calendar API */
+         /* Google Calendar API (CalDAV and GData) */
          "https://www.googleapis.com/auth/calendar "
 
-         /* Google Contacts API */
+         /* Google Contacts API (GData) */
          "https://www.google.com/m8/feeds/ "
+
+         /* Google Contacts API (CardDAV) - undocumented */
+         "https://www.googleapis.com/auth/carddav "
 
          /* Google Documents List Data API */
          "https://docs.google.com/feeds/ "
@@ -144,7 +147,7 @@ get_scope (GoaOAuth2Provider *provider)
 static guint
 get_credentials_generation (GoaProvider *provider)
 {
-  return 4;
+  return 5;
 }
 
 static const gchar *
