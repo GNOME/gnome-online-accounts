@@ -14,16 +14,16 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-09-08 09:21+0000\n"
-"PO-Revision-Date: 2013-09-08 21:59+0100\n"
-"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
+"POT-Creation-Date: 2013-09-13 15:50+0000\n"
+"PO-Revision-Date: 2013-09-13 19:19+0100\n"
+"Last-Translator: Benjamin Steinwender <b@stbe.at>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.5.7\n"
 
 #. TODO: more specific
 #: ../src/daemon/goadaemon.c:788 ../src/daemon/goadaemon.c:1034
@@ -194,7 +194,7 @@ msgstr "Fehler beim Verbinden zum Microsoft Exchange-Server"
 #: ../src/goabackend/goaexchangeprovider.c:945
 #: ../src/goabackend/goafacebookprovider.c:415
 #: ../src/goabackend/goaflickrprovider.c:425
-#: ../src/goabackend/goagoogleprovider.c:544
+#: ../src/goabackend/goagoogleprovider.c:547
 #: ../src/goabackend/goakerberosprovider.c:1726
 #: ../src/goabackend/goaowncloudprovider.c:1102
 #: ../src/goabackend/goatelepathyprovider.c:894
@@ -203,18 +203,18 @@ msgid "Use for"
 msgstr "Verwenden für"
 
 #: ../src/goabackend/goaexchangeprovider.c:947
-#: ../src/goabackend/goagoogleprovider.c:546
+#: ../src/goabackend/goagoogleprovider.c:549
 msgid "_Mail"
 msgstr "_E-Mail"
 
 #: ../src/goabackend/goaexchangeprovider.c:952
-#: ../src/goabackend/goagoogleprovider.c:551
+#: ../src/goabackend/goagoogleprovider.c:554
 #: ../src/goabackend/goaowncloudprovider.c:1104
 msgid "Cale_ndar"
 msgstr "_Kalender"
 
 #: ../src/goabackend/goaexchangeprovider.c:957
-#: ../src/goabackend/goagoogleprovider.c:556
+#: ../src/goabackend/goagoogleprovider.c:559
 #: ../src/goabackend/goaowncloudprovider.c:1109
 msgid "_Contacts"
 msgstr "K_ontakte"
@@ -225,7 +225,7 @@ msgstr "Facebook"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:211
-#: ../src/goabackend/goagoogleprovider.c:207
+#: ../src/goabackend/goagoogleprovider.c:210
 #: ../src/goabackend/goatwitterprovider.c:166
 #: ../src/goabackend/goawindowsliveprovider.c:195
 #: ../src/goabackend/goayahooprovider.c:187
@@ -243,8 +243,8 @@ msgstr ""
 #: ../src/goabackend/goaflickrprovider.c:230
 #: ../src/goabackend/goaflickrprovider.c:240
 #: ../src/goabackend/goaflickrprovider.c:250
-#: ../src/goabackend/goagoogleprovider.c:226
-#: ../src/goabackend/goagoogleprovider.c:238
+#: ../src/goabackend/goagoogleprovider.c:229
+#: ../src/goabackend/goagoogleprovider.c:241
 #: ../src/goabackend/goaoauth2provider.c:682
 #: ../src/goabackend/goaoauth2provider.c:712
 #: ../src/goabackend/goaoauth2provider.c:724
@@ -265,7 +265,7 @@ msgid "Could not parse response"
 msgstr "Antwort konnte nicht analysiert werden"
 
 #: ../src/goabackend/goafacebookprovider.c:417
-#: ../src/goabackend/goagoogleprovider.c:561
+#: ../src/goabackend/goagoogleprovider.c:564
 #: ../src/goabackend/goatelepathyprovider.c:896
 #: ../src/goabackend/goawindowsliveprovider.c:432
 msgid "C_hat"
@@ -298,7 +298,7 @@ msgstr "_Fotos"
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:566
+#: ../src/goabackend/goagoogleprovider.c:569
 #: ../src/goabackend/goaowncloudprovider.c:1114
 #: ../src/goabackend/goawindowsliveprovider.c:437
 msgid "_Documents"
@@ -630,44 +630,47 @@ msgstr "SMTP-PLAIN ohne Passwort ist nicht möglich"
 #: ../src/goabackend/goatelepathyprovider.c:183
 #, c-format
 msgid "Telepathy chat account not found"
-msgstr "Das Chat-Benutzerkonto von Telepathy wurde nicht gefunden"
+msgstr "Das Chat-Benutzerkonto von Telepathy wurde nicht gefunden"
 
 #: ../src/goabackend/goatelepathyprovider.c:372
 #, c-format
+#| msgid "Failed to find Account element"
 msgid "Failed to initialize a GOA client"
-msgstr "Ein GOA-Client konnte nicht initialisiert werden"
+msgstr "Ein GOA-Client konnte nicht initialisiert werden"
 
 #: ../src/goabackend/goatelepathyprovider.c:415
 #, c-format
+#| msgid "Failed to find a provider for: %s"
 msgid "Failed to create a user interface for %s"
-msgstr "Erstellen einer Benutzerschnittstelle für %s ist fehlgeschlagen"
+msgstr "Erstellen einer Benutzerschnittstelle für %s ist fehlgeschlagen"
 
 #: ../src/goabackend/goatelepathyprovider.c:542
+#| msgid "Connecting…"
 msgid "Connection Settings"
 msgstr "Verbindungseinstellungen"
 
 #: ../src/goabackend/goatelepathyprovider.c:651
 msgid "Personal Details"
-msgstr "Persönliche Informationen"
+msgstr "Persönliche Informationen"
 
 #: ../src/goabackend/goatelepathyprovider.c:860
 msgid "Cannot save the connection parameters"
-msgstr "Die Verbindungsparameter konnten nicht gespeichert werden"
+msgstr "Die Verbindungsparameter konnten nicht gespeichert werden"
 
 #: ../src/goabackend/goatelepathyprovider.c:872
 msgid "Cannot save your personal information on the server"
-msgstr ""
-"Die persönlichen Informationen können auf dem Server nicht gespeichert werden"
+msgstr "Die persönlichen Informationen können auf dem Server nicht gespeichert werden"
 
 #. Connection Settings button
 #: ../src/goabackend/goatelepathyprovider.c:901
+#| msgid "Connecting…"
 msgid "_Connection Settings"
-msgstr "_Verbindungseinstellungen"
+msgstr "Verbindungs_einstellungen"
 
 #. Edit Personal Information button
 #: ../src/goabackend/goatelepathyprovider.c:905
 msgid "_Personal Details"
-msgstr "_Persönliche Informationen"
+msgstr "_Persönliche Informationen"
 
 #: ../src/goabackend/goatwitterprovider.c:81
 msgid "Twitter"
