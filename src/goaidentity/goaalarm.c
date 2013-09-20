@@ -256,12 +256,31 @@ goa_alarm_init (GoaAlarm *self)
   g_rec_mutex_init (&self->priv->lock);
 }
 
+static gboolean
+async_alarm_cancel_idle_cb (gpointer user_data)
+{
+  GoaAlarm *self = user_data;
+
+  clear_scheduled_wakeups (self);
+  return G_SOURCE_REMOVE;
+}
+
 static void
 on_cancelled (GCancellable *cancellable, gpointer user_data)
 {
   GoaAlarm *self = GOA_ALARM (user_data);
+  GMainContext *main_context;
+  GSource *idle_source;
 
-  clear_scheduled_wakeups (self);
+  main_context = g_main_context_ref_thread_default ();
+
+  idle_source = g_idle_source_new ();
+  g_source_set_priority (idle_source, G_PRIORITY_HIGH_IDLE);
+  g_source_set_callback (idle_source, async_alarm_cancel_idle_cb, g_object_ref (self), g_object_unref);
+  g_source_attach (idle_source, main_context);
+  g_source_unref (idle_source);
+
+  g_main_context_unref (main_context);
 }
 
 static void
