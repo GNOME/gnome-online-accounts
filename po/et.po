@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-09-10 18:52+0000\n"
-"PO-Revision-Date: 2013-09-11 08:19+0300\n"
+"POT-Creation-Date: 2013-09-18 11:00+0000\n"
+"PO-Revision-Date: 2013-09-20 18:37+0300\n"
 "Last-Translator: Mattias Põldaru <mahfiaz@gmail.com>\n"
 "Language-Team: Estonian <>\n"
 "Language: et\n"
@@ -31,8 +31,8 @@ msgstr "Selle konto jaoks pole ProviderType omadus määratud"
 
 #. TODO: more specific
 #, c-format
-msgid "Code: %u — Unexpected response from server"
-msgstr "Kood %u — server andis ootamatu vastuse"
+msgid "Code: %u - Unexpected response from server"
+msgstr "Kood %u - server andis ootamatu vastuse"
 
 #. TODO: more specific
 #, c-format
@@ -40,10 +40,19 @@ msgid "Failed to parse autodiscover response XML"
 msgstr "Automaattuvastuse vastuse XML-i parsimine nurjus"
 
 #. TODO: more specific
-#. Translators: the parameter is an XML element name.
 #, c-format
-msgid "Failed to find ‘%s’ element"
-msgstr "'%s' elementi ei leitud"
+msgid "Failed to find Autodiscover element"
+msgstr "Automaattuvastuse elementi ei leitud"
+
+#. TODO: more specific
+#, c-format
+msgid "Failed to find Response element"
+msgstr "Vastuse elementi ei leitud"
+
+#. TODO: more specific
+#, c-format
+msgid "Failed to find Account element"
+msgstr "Konto elementi ei leitud"
 
 #. TODO: more specific
 #, c-format
@@ -55,7 +64,7 @@ msgstr "Microsoft Exchange"
 
 #. TODO: more specific
 #, c-format
-msgid "Did not find password with identity ‘%s’ in credentials"
+msgid "Did not find password with identity `%s' in credentials"
 msgstr "Ei leitud identiteedile '%s' vastavat parooli"
 
 #. Translators: the first %s is the username
@@ -63,7 +72,7 @@ msgstr "Ei leitud identiteedile '%s' vastavat parooli"
 #. * (%s, %d) is the error domain and code.
 #.
 #, c-format
-msgid "Invalid password with username ‘%s’ (%s, %d): "
+msgid "Invalid password with username `%s' (%s, %d): "
 msgstr "Parool ei sobi kasutajanimega '%s' (%s, %d): "
 
 msgid "_E-mail"
@@ -101,8 +110,6 @@ msgstr "_Proovi uuesti"
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Viga ühendumisel Microsoft Exchange serveriga"
 
-#. Translators: This is a label for a series of
-#. * options switches. For example: “Use for Mail”.
 msgid "Use for"
 msgstr "Kasutatakse:"
 
@@ -120,10 +127,8 @@ msgstr "Facebooki"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #, c-format
-msgid ""
-"Expected status 200 when requesting your identity, instead got status %d (%s)"
-msgstr ""
-"Sinu identiteedi pärimisel oodati olekut 200, selle asemel saadi olek %d (%s)"
+msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+msgstr "guid pärimisel oodati olekut 200, selle asemel saadi olek %d (%s)"
 
 #, c-format
 msgid "Could not parse response"
@@ -134,6 +139,11 @@ msgstr "_Vestlus"
 
 msgid "Flickr"
 msgstr "Flickr"
+
+#, c-format
+msgid "Expected status 200 when requesting user id, instead got status %d (%s)"
+msgstr ""
+"Kasutaja id pärimisel oodati olekut 200, selle asemel saadi olek %d (%s)"
 
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "Su arvuti kell on vale. Kontrolli kella ja kuupäeva sätteid."
@@ -168,25 +178,29 @@ msgstr "Server ei toeta STARTTLS ühendust"
 msgid "IMAP and SMTP"
 msgstr "IMAP ja SMTP"
 
-#. Translators: the first parameter is a field name. The second is
-#. * a GOA account identifier.
 #, c-format
-msgid "Did not find %s with identity ‘%s’ in credentials"
-msgstr "Ei leitud identiteedile '%s' vastavat välja '%s'"
+msgid "Did not find imap-password with identity `%s' in credentials"
+msgstr "Ei leitud identiteedile '%s' vastavat IMAP parooli"
 
-#. Translators: the first %s is a field name. The
-#. * second %s is the IMAP
-#. * username (eg., rishi), and the (%s, %d)
-#. * is the error domain and code.
-#.
-#. Translators: the first %s is a field name. The
-#. * second %s is the SMTP
+#. Translators: the first %s is the IMAP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
 #, c-format
-msgid "Invalid %s with username ‘%s’ (%s, %d): "
-msgstr "%s ei sobi kasutajanimega '%s' (%s, %d): "
+msgid "Invalid imap-password with username `%s' (%s, %d): "
+msgstr "IMAP parool ei sobi kasutajanimega '%s' (%s, %d): "
+
+#, c-format
+msgid "Did not find smtp-password with identity `%s' in credentials"
+msgstr "Ei leitud kasutajanimele '%s' vastavat SMTP parooli"
+
+#. Translators: the first %s is the SMTP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#, c-format
+msgid "Invalid smtp-password with username `%s' (%s, %d): "
+msgstr "SMTP parool ei sobi kasutajanimega '%s' (%s, %d): "
 
 #. Translators: the following four strings are used to show a
 #. * combo box similar to the one in the evolution module.
@@ -241,13 +255,13 @@ msgstr "Identity teenus tagastas sobimatu võtme"
 
 # See principal on üsna kahtlane sõna, aga ehk ei tee kellegile viga.
 #, c-format
-msgid "Could not find saved credentials for principal ‘%s’ in keyring"
+msgid "Could not find saved credentials for principal `%s' in keyring"
 msgstr ""
 "Peavalduse (principal) '%s' jaoks salvestatud parooli polnud võimalik "
 "võtmerõngast leida"
 
 #, c-format
-msgid "Did not find password for principal ‘%s’ in credentials"
+msgid "Did not find password for principal `%s' in credentials"
 msgstr ""
 "Peavalduse (principal) '%s' jaoks salvestatud parooli ei leitud võtmerõngast"
 
@@ -284,8 +298,8 @@ msgstr ""
 "Ligipääsu märgi pärimisel oodati olekut 200, selle asemel saadi olek %d (%s)"
 
 #, c-format
-msgid "Authorization response was ‘%s’"
-msgstr "Vastus autoriseerimisele oli '%s'"
+msgid "Authorization response was \"%s\""
+msgstr "Vastus autoriseerimisele oli \"%s\""
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
 #, c-format
@@ -301,7 +315,7 @@ msgid "Error getting identity: "
 msgstr "Viga identiteedi hankimisel: "
 
 #, c-format
-msgid "Was asked to log in as %s, but logged in as %s"
+msgid "Was asked to login as %s, but logged in as %s"
 msgstr ""
 "Paluti sisse logida nimega %s, kuid selle asemel logiti sisse nimega %s"
 
@@ -460,7 +474,7 @@ msgid ""
 "retrieved from."
 msgstr "Sertifikaat ei vasta saidi, kust see saadi, eeldatavale identiteedile."
 
-msgid "The certificate’s activation time is still in the future."
+msgid "The certificate's activation time is still in the future."
 msgstr "Sertifikaadi kehtivuse algus on ikka veel tulevikus."
 
 msgid "The certificate has expired."
@@ -469,7 +483,7 @@ msgstr "Sertifikaat on aegunud."
 msgid "The certificate has been revoked."
 msgstr "Sertifikaat on tühistatud."
 
-msgid "The certificate’s algorithm is considered insecure."
+msgid "The certificate's algorithm is considered insecure."
 msgstr "Sertifikaadi algoritm on ebaturvaline."
 
 msgid "Invalid certificate."
@@ -550,23 +564,27 @@ msgstr "Identiteeti ei leitud"
 msgid "Could not create credential cache for identity"
 msgstr "Pole võimalik luua paroolide puhvrit identiteedi jaoks"
 
-#~ msgid "Failed to find Autodiscover element"
-#~ msgstr "Automaattuvastuse elementi ei leitud"
+#~ msgid "Failed to find ‘%s’ element"
+#~ msgstr "'%s' elementi ei leitud"
 
-#~ msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
-#~ msgstr "guid pärimisel oodati olekut 200, selle asemel saadi olek %d (%s)"
+#~ msgid "Did not find password with identity ‘%s’ in credentials"
+#~ msgstr "Ei leitud identiteedile '%s' vastavat parooli"
 
-#~ msgid "Did not find imap-password with identity `%s' in credentials"
-#~ msgstr "Ei leitud identiteedile '%s' vastavat IMAP parooli"
+#~ msgid "Invalid password with username ‘%s’ (%s, %d): "
+#~ msgstr "Parool ei sobi kasutajanimega '%s' (%s, %d): "
 
-#~ msgid "Invalid imap-password with username `%s' (%s, %d): "
-#~ msgstr "IMAP parool ei sobi kasutajanimega '%s' (%s, %d): "
+#~ msgid ""
+#~ "Expected status 200 when requesting your identity, instead got status %d "
+#~ "(%s)"
+#~ msgstr ""
+#~ "Sinu identiteedi pärimisel oodati olekut 200, selle asemel saadi olek %d "
+#~ "(%s)"
 
-#~ msgid "Did not find smtp-password with identity `%s' in credentials"
-#~ msgstr "Ei leitud kasutajanimele '%s' vastavat SMTP parooli"
+#~ msgid "Did not find %s with identity ‘%s’ in credentials"
+#~ msgstr "Ei leitud identiteedile '%s' vastavat välja '%s'"
 
-#~ msgid "Invalid smtp-password with username `%s' (%s, %d): "
-#~ msgstr "SMTP parool ei sobi kasutajanimega '%s' (%s, %d): "
+#~ msgid "Invalid %s with username ‘%s’ (%s, %d): "
+#~ msgstr "%s ei sobi kasutajanimega '%s' (%s, %d): "
 
 #~ msgid "Error parsing response as JSON: "
 #~ msgstr "Viga vastuse parsimisel JSON andmetena: "
