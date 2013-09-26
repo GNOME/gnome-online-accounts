@@ -34,6 +34,7 @@
 #include "goatpaccountlinker.h"
 #include "goa/goa.h"
 #include "goabackend/goalogging.h"
+#include "goabackend/goautils.h"
 
 #define GOA_TP_ACCOUNT_LINKER_GET_PRIVATE(obj) \
   (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GOA_TYPE_TP_ACCOUNT_LINKER, \
@@ -578,6 +579,8 @@ static void
 goa_tp_account_linker_class_init (GoaTpAccountLinkerClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  goa_utils_initialize_client_factory ();
 
   g_type_class_add_private (gobject_class,
       sizeof (GoaTpAccountLinkerPrivate));
