@@ -36,6 +36,8 @@ G_BEGIN_DECLS
 
 typedef gpointer (*GoaPeekInterfaceFunc)   (GoaObject *);
 
+void             goa_utils_initialize_client_factory (void);
+
 gboolean         goa_utils_check_duplicate (GoaClient              *client,
                                             const gchar            *identity,
                                             const gchar            *presentation_identity,
