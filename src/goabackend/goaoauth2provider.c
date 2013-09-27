@@ -1405,6 +1405,9 @@ goa_oauth2_provider_refresh_account (GoaProvider  *_provider,
   ret = TRUE;
 
  out:
+  if (priv->error != NULL)
+    g_propagate_error (error, priv->error);
+
   gtk_widget_destroy (dialog);
   return ret;
 }
