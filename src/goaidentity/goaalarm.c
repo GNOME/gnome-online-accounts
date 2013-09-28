@@ -364,6 +364,7 @@ on_timer_source_ready (GObject *stream, GoaAlarm *self)
   gint64 number_of_fires;
   gssize bytes_read;
   gboolean run_again = FALSE;
+  GError *error = NULL;
 
   g_return_val_if_fail (GOA_IS_ALARM (self), FALSE);
   g_return_val_if_fail (self->priv->type == GOA_ALARM_TYPE_TIMER, FALSE);
@@ -375,7 +376,15 @@ on_timer_source_ready (GObject *stream, GoaAlarm *self)
   bytes_read =
     g_pollable_input_stream_read_nonblocking (G_POLLABLE_INPUT_STREAM (stream),
                                               &number_of_fires, sizeof (gint64),
-                                              NULL, NULL);
+                                              NULL, &error);
+
+  if (bytes_read < 0)
+    {
+      goa_warning ("GoaAlarm: failed to read from timer fd: %s\n",
+                   error->message);
+      g_error_free (error);
+      goto out;
+    }
 
   if (bytes_read == sizeof (gint64))
     {
