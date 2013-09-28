@@ -359,18 +359,23 @@ out:
 
 #ifdef HAVE_TIMERFD
 static gboolean
-on_timer_source_ready (GObject *stream, GoaAlarm *self)
+on_timer_source_ready (GObject *stream, GTask *task)
 {
   gint64 number_of_fires;
   gssize bytes_read;
   gboolean run_again = FALSE;
   GError *error = NULL;
+  GoaAlarm *self;
+  GCancellable *cancellable;
+
+  self = g_task_get_source_object (task);
+  cancellable = g_task_get_cancellable (task);
 
   g_return_val_if_fail (GOA_IS_ALARM (self), FALSE);
   g_return_val_if_fail (self->priv->type == GOA_ALARM_TYPE_TIMER, FALSE);
 
   g_rec_mutex_lock (&self->priv->lock);
-  if (g_cancellable_is_cancelled (self->priv->cancellable))
+  if (g_cancellable_is_cancelled (cancellable))
     goto out;
 
   bytes_read =
@@ -403,9 +408,14 @@ out:
 }
 
 static void
-clear_timer_source_pointer (GoaAlarm *self)
+clear_timer_source (GTask *task)
 {
+  GoaAlarm *self;
+
+  self = g_task_get_source_object (task);
   self->priv->timer.source = NULL;
+
+  g_object_unref (task);
 }
 #endif
 
@@ -417,6 +427,7 @@ schedule_wakeups_with_timerfd (GoaAlarm *self)
   int fd;
   int result;
   GSource *source;
+  GTask *task;
   static gboolean seen_before = FALSE;
 
   if (!seen_before)
@@ -449,14 +460,16 @@ schedule_wakeups_with_timerfd (GoaAlarm *self)
   self->priv->type = GOA_ALARM_TYPE_TIMER;
   self->priv->timer.stream = g_unix_input_stream_new (fd, TRUE);
 
+  task = g_task_new (self, self->priv->cancellable, NULL, NULL);
+
   source =
     g_pollable_input_stream_create_source (G_POLLABLE_INPUT_STREAM
                                            (self->priv->timer.stream),
                                            self->priv->cancellable);
   self->priv->timer.source = source;
   g_source_set_callback (self->priv->timer.source,
-                         (GSourceFunc) on_timer_source_ready, self,
-                         (GDestroyNotify) clear_timer_source_pointer);
+                         (GSourceFunc) on_timer_source_ready, task,
+                         (GDestroyNotify) clear_timer_source);
   g_source_attach (self->priv->timer.source, self->priv->context);
   g_source_unref (source);
 
