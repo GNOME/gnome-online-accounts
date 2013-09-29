@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-09-29 11:17+0000\n"
-"PO-Revision-Date: 2013-09-29 14:23+0300\n"
+"POT-Creation-Date: 2013-09-29 11:25+0000\n"
+"PO-Revision-Date: 2013-09-29 14:35+0300\n"
 "Last-Translator: Muhammet Kara <muhammetk@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -36,8 +36,9 @@ msgstr "Hesap için ProviderType belirtilmemiş"
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:234 ../src/goabackend/goahttpclient.c:175
 #, c-format
-msgid "Code: %u - Unexpected response from server"
-msgstr "Kod: %u - Sunucu beklenmedik bir cevap gönderdi"
+#| msgid "Code: %u - Unexpected response from server"
+msgid "Code: %u — Unexpected response from server"
+msgstr "Kod: %u — Sunucu beklenmeyen bir yanıt verdi"
 
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:250
@@ -46,25 +47,16 @@ msgid "Failed to parse autodiscover response XML"
 msgstr "XML autodiscover cevabı ayrıştırılamadı"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:260
+#. Translators: the parameter is an XML element name.
+#: ../src/goabackend/goaewsclient.c:261 ../src/goabackend/goaewsclient.c:276
+#: ../src/goabackend/goaewsclient.c:291
 #, c-format
-msgid "Failed to find Autodiscover element"
-msgstr "Autodiscover ögesi bulunamadı"
+#| msgid "Failed to find Response element"
+msgid "Failed to find ‘%s’ element"
+msgstr "‘%s’ ögesi bulunamadı"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:274
-#, c-format
-msgid "Failed to find Response element"
-msgstr "Cevap ögesi bulunamadı"
-
-#. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:288
-#, c-format
-msgid "Failed to find Account element"
-msgstr "Hesap ögesi bulunamadı"
-
-#. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:305
+#: ../src/goabackend/goaewsclient.c:308
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "autodiscover cevabında ASUrl ve OABUrl bulunamadı"
@@ -75,12 +67,13 @@ msgstr "Microsoft Exchange"
 
 #. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:317
-#: ../src/goabackend/goaexchangeprovider.c:1026
+#: ../src/goabackend/goaexchangeprovider.c:1028
 #: ../src/goabackend/goaowncloudprovider.c:403
-#: ../src/goabackend/goaowncloudprovider.c:1188
+#: ../src/goabackend/goaowncloudprovider.c:1190
 #, c-format
-msgid "Did not find password with identity `%s' in credentials"
-msgstr "Kimlik bilgilerinde `%s' kimliği için parola bulunamadı"
+#| msgid "Did not find password with identity `%s' in credentials"
+msgid "Did not find password with identity ‘%s’ in credentials"
+msgstr "Kimlik bilgilerinde ‘%s’ kimliği için parola bulunamadı"
 
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
@@ -89,17 +82,18 @@ msgstr "Kimlik bilgilerinde `%s' kimliği için parola bulunamadı"
 #: ../src/goabackend/goaexchangeprovider.c:345
 #: ../src/goabackend/goaowncloudprovider.c:426
 #, c-format
-msgid "Invalid password with username `%s' (%s, %d): "
-msgstr "`%s' kullanıcısı için geçersiz parola (%s, %d): "
+#| msgid "Invalid password with username `%s' (%s, %d): "
+msgid "Invalid password with username ‘%s’ (%s, %d): "
+msgstr "‘%s’ kullanıcısı için geçersiz parola (%s, %d): "
 
 #: ../src/goabackend/goaexchangeprovider.c:499
-#: ../src/goabackend/goaimapsmtpprovider.c:697
+#: ../src/goabackend/goaimapsmtpprovider.c:707
 msgid "_E-mail"
 msgstr "_E-posta"
 
 #: ../src/goabackend/goaexchangeprovider.c:500
-#: ../src/goabackend/goaimapsmtpprovider.c:717
-#: ../src/goabackend/goaimapsmtpprovider.c:737
+#: ../src/goabackend/goaimapsmtpprovider.c:727
+#: ../src/goabackend/goaimapsmtpprovider.c:747
 #: ../src/goabackend/goaowncloudprovider.c:655
 msgid "_Password"
 msgstr "_Parola"
@@ -109,8 +103,8 @@ msgid "_Custom"
 msgstr "_Özel"
 
 #: ../src/goabackend/goaexchangeprovider.c:514
-#: ../src/goabackend/goaimapsmtpprovider.c:716
-#: ../src/goabackend/goaimapsmtpprovider.c:736
+#: ../src/goabackend/goaimapsmtpprovider.c:726
+#: ../src/goabackend/goaimapsmtpprovider.c:746
 #: ../src/goabackend/goakerberosprovider.c:1129
 #: ../src/goabackend/goaowncloudprovider.c:654
 msgid "User_name"
@@ -122,7 +116,7 @@ msgid "_Server"
 msgstr "_Sunucu"
 
 #: ../src/goabackend/goaexchangeprovider.c:545
-#: ../src/goabackend/goaimapsmtpprovider.c:769
+#: ../src/goabackend/goaimapsmtpprovider.c:779
 #: ../src/goabackend/goakerberosprovider.c:1154
 #: ../src/goabackend/goaowncloudprovider.c:684
 msgid "Connecting…"
@@ -130,11 +124,11 @@ msgstr "Bağlanılıyor..."
 
 #: ../src/goabackend/goaexchangeprovider.c:650
 #: ../src/goabackend/goaexchangeprovider.c:845
-#: ../src/goabackend/goaimapsmtpprovider.c:929
-#: ../src/goabackend/goaimapsmtpprovider.c:964
-#: ../src/goabackend/goaimapsmtpprovider.c:1052
-#: ../src/goabackend/goaimapsmtpprovider.c:1308
-#: ../src/goabackend/goaimapsmtpprovider.c:1381
+#: ../src/goabackend/goaimapsmtpprovider.c:939
+#: ../src/goabackend/goaimapsmtpprovider.c:974
+#: ../src/goabackend/goaimapsmtpprovider.c:1062
+#: ../src/goabackend/goaimapsmtpprovider.c:1318
+#: ../src/goabackend/goaimapsmtpprovider.c:1391
 #: ../src/goabackend/goakerberosprovider.c:1545
 #: ../src/goabackend/goaoauth2provider.c:1133
 #: ../src/goabackend/goaoauthprovider.c:1041
@@ -149,10 +143,10 @@ msgstr "İletişim penceresi kapatıldı"
 
 #: ../src/goabackend/goaexchangeprovider.c:688
 #: ../src/goabackend/goaexchangeprovider.c:873
-#: ../src/goabackend/goaimapsmtpprovider.c:994
-#: ../src/goabackend/goaimapsmtpprovider.c:1085
-#: ../src/goabackend/goaimapsmtpprovider.c:1332
-#: ../src/goabackend/goaimapsmtpprovider.c:1406
+#: ../src/goabackend/goaimapsmtpprovider.c:1004
+#: ../src/goabackend/goaimapsmtpprovider.c:1095
+#: ../src/goabackend/goaimapsmtpprovider.c:1342
+#: ../src/goabackend/goaimapsmtpprovider.c:1416
 #: ../src/goabackend/goaowncloudprovider.c:837
 #: ../src/goabackend/goaowncloudprovider.c:1029
 #, c-format
@@ -160,18 +154,18 @@ msgid "Dialog was dismissed (%s, %d): "
 msgstr "Pencere kapatıldı (%s, %d): "
 
 #: ../src/goabackend/goaexchangeprovider.c:701
-#: ../src/goabackend/goaimapsmtpprovider.c:1007
-#: ../src/goabackend/goaimapsmtpprovider.c:1098
+#: ../src/goabackend/goaimapsmtpprovider.c:1017
+#: ../src/goabackend/goaimapsmtpprovider.c:1108
 #: ../src/goabackend/goaowncloudprovider.c:850
 msgid "_Ignore"
 msgstr "_Yok say"
 
 #: ../src/goabackend/goaexchangeprovider.c:706
 #: ../src/goabackend/goaexchangeprovider.c:892
-#: ../src/goabackend/goaimapsmtpprovider.c:1012
-#: ../src/goabackend/goaimapsmtpprovider.c:1103
-#: ../src/goabackend/goaimapsmtpprovider.c:1351
-#: ../src/goabackend/goaimapsmtpprovider.c:1425
+#: ../src/goabackend/goaimapsmtpprovider.c:1022
+#: ../src/goabackend/goaimapsmtpprovider.c:1113
+#: ../src/goabackend/goaimapsmtpprovider.c:1361
+#: ../src/goabackend/goaimapsmtpprovider.c:1435
 #: ../src/goabackend/goakerberosprovider.c:1655
 #: ../src/goabackend/goaowncloudprovider.c:855
 #: ../src/goabackend/goaowncloudprovider.c:1048
@@ -183,31 +177,33 @@ msgstr "_Tekrar Deneyin"
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Microsoft Exchange sunucusuna bağlanılamadı"
 
-#: ../src/goabackend/goaexchangeprovider.c:945
-#: ../src/goabackend/goafacebookprovider.c:415
-#: ../src/goabackend/goaflickrprovider.c:425
-#: ../src/goabackend/goagoogleprovider.c:547
-#: ../src/goabackend/goakerberosprovider.c:1726
-#: ../src/goabackend/goaowncloudprovider.c:1102
-#: ../src/goabackend/goatelepathyprovider.c:895
-#: ../src/goabackend/goawindowsliveprovider.c:430
+#. Translators: This is a label for a series of
+#. * options switches. For example: “Use for Mail”.
+#: ../src/goabackend/goaexchangeprovider.c:947
+#: ../src/goabackend/goafacebookprovider.c:417
+#: ../src/goabackend/goaflickrprovider.c:427
+#: ../src/goabackend/goagoogleprovider.c:549
+#: ../src/goabackend/goakerberosprovider.c:1728
+#: ../src/goabackend/goaowncloudprovider.c:1104
+#: ../src/goabackend/goatelepathyprovider.c:897
+#: ../src/goabackend/goawindowsliveprovider.c:432
 msgid "Use for"
 msgstr "Şunun için kullanılacak"
 
-#: ../src/goabackend/goaexchangeprovider.c:947
-#: ../src/goabackend/goagoogleprovider.c:549
+#: ../src/goabackend/goaexchangeprovider.c:949
+#: ../src/goabackend/goagoogleprovider.c:551
 msgid "_Mail"
 msgstr "_Posta"
 
-#: ../src/goabackend/goaexchangeprovider.c:952
-#: ../src/goabackend/goagoogleprovider.c:554
-#: ../src/goabackend/goaowncloudprovider.c:1104
+#: ../src/goabackend/goaexchangeprovider.c:954
+#: ../src/goabackend/goagoogleprovider.c:556
+#: ../src/goabackend/goaowncloudprovider.c:1106
 msgid "Cale_ndar"
 msgstr "_Takvim"
 
-#: ../src/goabackend/goaexchangeprovider.c:957
-#: ../src/goabackend/goagoogleprovider.c:559
-#: ../src/goabackend/goaowncloudprovider.c:1109
+#: ../src/goabackend/goaexchangeprovider.c:959
+#: ../src/goabackend/goagoogleprovider.c:561
+#: ../src/goabackend/goaowncloudprovider.c:1111
 msgid "_Contacts"
 msgstr "_Kişiler"
 
@@ -217,14 +213,19 @@ msgstr "Facebook"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:211
+#: ../src/goabackend/goaflickrprovider.c:189
 #: ../src/goabackend/goagoogleprovider.c:210
 #: ../src/goabackend/goatwitterprovider.c:166
 #: ../src/goabackend/goawindowsliveprovider.c:195
 #: ../src/goabackend/goayahooprovider.c:187
 #, c-format
-msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+#| msgid ""
+#| "Expected status 200 when requesting user id, instead got status %d (%s)"
+msgid ""
+"Expected status 200 when requesting your identity, instead got status %d (%s)"
 msgstr ""
-"Guid istenirken durum kodu 200 bekleniyordu, ama durum kodu %d (%s) alındı"
+"Kimliğiniz istenirken durum kodu 200 bekleniyordu, fakat %d (%s) durumu "
+"alındı"
 
 #: ../src/goabackend/goafacebookprovider.c:230
 #: ../src/goabackend/goafacebookprovider.c:242
@@ -255,10 +256,10 @@ msgstr ""
 msgid "Could not parse response"
 msgstr "Cevap ayrıştırılamadı"
 
-#: ../src/goabackend/goafacebookprovider.c:417
-#: ../src/goabackend/goagoogleprovider.c:564
-#: ../src/goabackend/goatelepathyprovider.c:897
-#: ../src/goabackend/goawindowsliveprovider.c:432
+#: ../src/goabackend/goafacebookprovider.c:419
+#: ../src/goabackend/goagoogleprovider.c:566
+#: ../src/goabackend/goatelepathyprovider.c:899
+#: ../src/goabackend/goawindowsliveprovider.c:434
 msgid "C_hat"
 msgstr "S_ohbet"
 
@@ -266,18 +267,12 @@ msgstr "S_ohbet"
 msgid "Flickr"
 msgstr "Flickr"
 
-#: ../src/goabackend/goaflickrprovider.c:189
-#, c-format
-msgid "Expected status 200 when requesting user id, instead got status %d (%s)"
-msgstr ""
-"kullanıcı id'si (uid) istenirken durum kodu 200 beklenirken  %d (%s) alındı"
-
 #: ../src/goabackend/goaflickrprovider.c:328
 #: ../src/goabackend/goayahooprovider.c:350
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "Sistem saatiniz yanlış. Tarih ve zaman ayarlarınızı gözden geçirin."
 
-#: ../src/goabackend/goaflickrprovider.c:427
+#: ../src/goabackend/goaflickrprovider.c:429
 msgid "_Photos"
 msgstr "_Fotoğraflar"
 
@@ -285,9 +280,9 @@ msgstr "_Fotoğraflar"
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:569
-#: ../src/goabackend/goaowncloudprovider.c:1114
-#: ../src/goabackend/goawindowsliveprovider.c:437
+#: ../src/goabackend/goagoogleprovider.c:571
+#: ../src/goabackend/goaowncloudprovider.c:1116
+#: ../src/goabackend/goawindowsliveprovider.c:439
 msgid "_Documents"
 msgstr "_Belgeler"
 
@@ -321,33 +316,31 @@ msgstr "Sunucu STARTTLS yöntemini desteklemiyor"
 msgid "IMAP and SMTP"
 msgstr "IMAP ve SMTP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:362
+#. Translators: the first parameter is a field name. The second is
+#. * a GOA account identifier.
+#: ../src/goabackend/goaimapsmtpprovider.c:364
+#: ../src/goabackend/goaimapsmtpprovider.c:422
 #, c-format
-msgid "Did not find imap-password with identity `%s' in credentials"
-msgstr "Kimlik bilgilerinde `%s' kimliğiyle ilişkili imap-parolası bulunamadı"
+#| msgid "Did not find password with identity `%s' in credentials"
+msgid "Did not find %s with identity ‘%s’ in credentials"
+msgstr "Kimlik bilgilerinde ‘%2$s’ kimliği için %1$s bulunamadı"
 
-#. Translators: the first %s is the IMAP
+#. Translators: the first %s is a field name. The
+#. * second %s is the IMAP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:391
-#, c-format
-msgid "Invalid imap-password with username `%s' (%s, %d): "
-msgstr "`%s' kullanıcı adı için geçersiz imap-parolası (%s, %d): "
-
-#: ../src/goabackend/goaimapsmtpprovider.c:415
-#, c-format
-msgid "Did not find smtp-password with identity `%s' in credentials"
-msgstr "Kimlik bilgilerinde `%s' kimliğiyle ilişkili smtp-parolası bulunamadı"
-
-#. Translators: the first %s is the SMTP
+#. Translators: the first %s is a field name. The
+#. * second %s is the SMTP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:446
+#: ../src/goabackend/goaimapsmtpprovider.c:395
+#: ../src/goabackend/goaimapsmtpprovider.c:455
 #, c-format
-msgid "Invalid smtp-password with username `%s' (%s, %d): "
-msgstr "`%s' kullanıcı adı için geçersiz smtp-parolası (%s, %d): "
+#| msgid "Invalid password with username `%s' (%s, %d): "
+msgid "Invalid %s with username ‘%s’ (%s, %d): "
+msgstr "‘%2$s’ kullanıcısı için geçersiz %1$s (%3$s, %4$d): "
 
 #. Translators: the following four strings are used to show a
 #. * combo box similar to the one in the evolution module.
@@ -355,59 +348,59 @@ msgstr "`%s' kullanıcı adı için geçersiz smtp-parolası (%s, %d): "
 #. *             STARTTLS after connecting
 #. *             SSL on a dedicated port
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:632
+#: ../src/goabackend/goaimapsmtpprovider.c:642
 msgid "_Encryption"
 msgstr "_Şifreleme"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:635
+#: ../src/goabackend/goaimapsmtpprovider.c:645
 msgid "None"
 msgstr "Hiçbiri"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:638
+#: ../src/goabackend/goaimapsmtpprovider.c:648
 msgid "STARTTLS after connecting"
 msgstr "Bağlandıktan sonra STARTTLS"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:641
+#: ../src/goabackend/goaimapsmtpprovider.c:651
 msgid "SSL on a dedicated port"
 msgstr "Adanmış bir port üzerinden SSL"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:698
+#: ../src/goabackend/goaimapsmtpprovider.c:708
 msgid "_Name"
 msgstr "_Ad"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:715
+#: ../src/goabackend/goaimapsmtpprovider.c:725
 msgid "IMAP _Server"
 msgstr "IMAP _Sunucusu"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:735
+#: ../src/goabackend/goaimapsmtpprovider.c:745
 msgid "SMTP _Server"
 msgstr "SMTP _Sunucu"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1017
-#: ../src/goabackend/goaimapsmtpprovider.c:1344
+#: ../src/goabackend/goaimapsmtpprovider.c:1027
+#: ../src/goabackend/goaimapsmtpprovider.c:1354
 msgid "Error connecting to IMAP server"
 msgstr "IMAP sunucusuna bağlanırken hata oluştu"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1108
-#: ../src/goabackend/goaimapsmtpprovider.c:1418
+#: ../src/goabackend/goaimapsmtpprovider.c:1118
+#: ../src/goabackend/goaimapsmtpprovider.c:1428
 msgid "Error connecting to SMTP server"
 msgstr "SMTP sunucusuna bağlanırken hata oluştu"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1517
+#: ../src/goabackend/goaimapsmtpprovider.c:1527
 msgid "E-mail"
 msgstr "E-posta"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1521
+#: ../src/goabackend/goaimapsmtpprovider.c:1531
 msgid "Name"
 msgstr "Ad"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1531
-#: ../src/goabackend/goaimapsmtpprovider.c:1534
+#: ../src/goabackend/goaimapsmtpprovider.c:1541
+#: ../src/goabackend/goaimapsmtpprovider.c:1544
 msgid "IMAP"
 msgstr "IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1545
-#: ../src/goabackend/goaimapsmtpprovider.c:1548
+#: ../src/goabackend/goaimapsmtpprovider.c:1555
+#: ../src/goabackend/goaimapsmtpprovider.c:1558
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -421,13 +414,15 @@ msgstr "Kimlik hizmeti geçersiz anahtar gönderdi"
 
 #: ../src/goabackend/goakerberosprovider.c:728
 #, c-format
-msgid "Could not find saved credentials for principal `%s' in keyring"
-msgstr "`%s' için anahtarlıkta kayıtlı kimlik bilgisi bulunamadı"
+#| msgid "Could not find saved credentials for principal `%s' in keyring"
+msgid "Could not find saved credentials for principal ‘%s’ in keyring"
+msgstr "‘%s’ için anahtarlıkta kayıtlı kimlik bilgisi bulunamadı"
 
 #: ../src/goabackend/goakerberosprovider.c:738
 #, c-format
-msgid "Did not find password for principal `%s' in credentials"
-msgstr "`%s' için kimlik bilgilerinde parola bulunamadı"
+#| msgid "Did not find password for principal `%s' in credentials"
+msgid "Did not find password for principal ‘%s’ in credentials"
+msgstr "‘%s’ için kimlik bilgilerinde parola bulunamadı"
 
 #: ../src/goabackend/goakerberosprovider.c:1121
 msgid "_Domain"
@@ -459,7 +454,7 @@ msgstr "Etki alanı geçerli değil"
 msgid "Error connecting to enterprise identity server"
 msgstr "Kurumsal kimlik sunucusuna bağlanırken hata oluştu"
 
-#: ../src/goabackend/goakerberosprovider.c:1728
+#: ../src/goabackend/goakerberosprovider.c:1730
 msgid "Network _Resources"
 msgstr "Ağ Ö_zkaynakları"
 
@@ -476,8 +471,9 @@ msgstr ""
 #: ../src/goabackend/goaoauth2provider.c:916
 #: ../src/goabackend/goaoauth2provider.c:956
 #, c-format
-msgid "Authorization response was \"%s\""
-msgstr "Yetkilendirme yanıtı \"%s\""
+#| msgid "Authorization response was \"%s\""
+msgid "Authorization response was ‘%s’"
+msgstr "Yetkilendirme yanıtı ‘%s’"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
 #: ../src/goabackend/goaoauth2provider.c:1059
@@ -502,7 +498,8 @@ msgstr "Kimlik alınırken hata oluştu: "
 #: ../src/goabackend/goaoauth2provider.c:1386
 #: ../src/goabackend/goaoauthprovider.c:1391
 #, c-format
-msgid "Was asked to login as %s, but logged in as %s"
+#| msgid "Was asked to login as %s, but logged in as %s"
+msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "%s olarak giriş yapılması istendi, fakat %s olarak giriş yapıldı"
 
 #: ../src/goabackend/goaoauth2provider.c:1545
@@ -561,7 +558,7 @@ msgstr "ownCloud"
 msgid "Error connecting to ownCloud server"
 msgstr "ownCloud sunucusuna bağlanırken hata oluştu"
 
-#: ../src/goabackend/goaowncloudprovider.c:1119
+#: ../src/goabackend/goaowncloudprovider.c:1121
 msgid "_Files"
 msgstr "_Dosyalar"
 
@@ -613,18 +610,15 @@ msgstr "Telepathy sohbet hesabı bulunamadı"
 
 #: ../src/goabackend/goatelepathyprovider.c:373
 #, c-format
-#| msgid "Failed to find Account element"
 msgid "Failed to initialize a GOA client"
 msgstr "GOA istemcisi başlatılamadı"
 
 #: ../src/goabackend/goatelepathyprovider.c:416
 #, c-format
-#| msgid "Failed to find a provider for: %s"
 msgid "Failed to create a user interface for %s"
 msgstr "%s için kullanıcı arayüzü oluşturulamadı"
 
 #: ../src/goabackend/goatelepathyprovider.c:543
-#| msgid "Connecting…"
 msgid "Connection Settings"
 msgstr "Bağlantı Ayarları"
 
@@ -641,13 +635,12 @@ msgid "Cannot save your personal information on the server"
 msgstr "Kişisel bilgileriniz sunucuya kaydedilemiyor"
 
 #. Connection Settings button
-#: ../src/goabackend/goatelepathyprovider.c:902
-#| msgid "Connecting…"
+#: ../src/goabackend/goatelepathyprovider.c:904
 msgid "_Connection Settings"
 msgstr "_Bağlantı Ayarları"
 
 #. Edit Personal Information button
-#: ../src/goabackend/goatelepathyprovider.c:906
+#: ../src/goabackend/goatelepathyprovider.c:908
 msgid "_Personal Details"
 msgstr "_Kişisel Ayrıntılar"
 
@@ -707,8 +700,9 @@ msgid ""
 msgstr "Sertifika, alındığı sitenin kimliğiyle eşleşmiyor."
 
 #: ../src/goabackend/goautils.c:551
-msgid "The certificate's activation time is still in the future."
-msgstr "Sertifikanın etkinleştirilme tarihi halen gelecekte."
+#| msgid "The certificate's activation time is still in the future."
+msgid "The certificate’s activation time is still in the future."
+msgstr "Sertifikanın etkinleştirilme tarihi henüz gelmemiş."
 
 #: ../src/goabackend/goautils.c:555
 msgid "The certificate has expired."
@@ -719,8 +713,9 @@ msgid "The certificate has been revoked."
 msgstr "Sertifika geçersiz kılınmış."
 
 #: ../src/goabackend/goautils.c:563
-msgid "The certificate's algorithm is considered insecure."
-msgstr "Sertifikanın algoritması güvensiz sayılıyor."
+#| msgid "The certificate's algorithm is considered insecure."
+msgid "The certificate’s algorithm is considered insecure."
+msgstr "Sertifikanın algoritması güvensiz kabul ediliyor."
 
 #: ../src/goabackend/goautils.c:567
 msgid "Invalid certificate."
@@ -826,6 +821,30 @@ msgstr "Kimlik bulunamadı"
 #: ../src/goaidentity/goakerberosidentitymanager.c:824
 msgid "Could not create credential cache for identity"
 msgstr "Kimlik için kimlik bilgileri önbelleği oluşturulamadı"
+
+#~ msgid "Failed to find Autodiscover element"
+#~ msgstr "Autodiscover ögesi bulunamadı"
+
+#~ msgid "Failed to find Account element"
+#~ msgstr "Hesap ögesi bulunamadı"
+
+#~ msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+#~ msgstr ""
+#~ "Guid istenirken durum kodu 200 bekleniyordu, ama durum kodu %d (%s) alındı"
+
+#~ msgid "Did not find imap-password with identity `%s' in credentials"
+#~ msgstr ""
+#~ "Kimlik bilgilerinde `%s' kimliğiyle ilişkili imap-parolası bulunamadı"
+
+#~ msgid "Invalid imap-password with username `%s' (%s, %d): "
+#~ msgstr "`%s' kullanıcı adı için geçersiz imap-parolası (%s, %d): "
+
+#~ msgid "Did not find smtp-password with identity `%s' in credentials"
+#~ msgstr ""
+#~ "Kimlik bilgilerinde `%s' kimliğiyle ilişkili smtp-parolası bulunamadı"
+
+#~ msgid "Invalid smtp-password with username `%s' (%s, %d): "
+#~ msgstr "`%s' kullanıcı adı için geçersiz smtp-parolası (%s, %d): "
 
 #~ msgid "An online account needs attention"
 #~ msgstr "Bir çevirmiçi hesap, ilgilenmenizi bekliyor"
