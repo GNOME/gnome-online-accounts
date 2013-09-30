@@ -54,6 +54,7 @@ struct _GoaIdentityServicePrivate
 
   GHashTable               *watched_client_connections;
   GHashTable               *key_holders;
+  GHashTable               *pending_temporary_account_results;
 
   /* FIXME: This is a little ucky, since the goa service
    * is in process, we should able to use direct calls.
@@ -676,6 +677,12 @@ goa_identity_service_init (GoaIdentityService *self)
                                                    g_free,
                                                    (GDestroyNotify)
                                                    g_object_unref);
+  self->priv->pending_temporary_account_results = g_hash_table_new_full (g_str_hash,
+                                                                         g_str_equal,
+                                                                         (GDestroyNotify)
+                                                                         g_free,
+                                                                         (GDestroyNotify)
+                                                                         g_object_unref);
 }
 
 static void
@@ -697,6 +704,8 @@ goa_identity_service_finalize (GObject *object)
   g_clear_pointer (&self->priv->watched_client_connections,
                    (GDestroyNotify) g_hash_table_unref);
   g_clear_pointer (&self->priv->key_holders,
+                   (GDestroyNotify) g_hash_table_unref);
+  g_clear_pointer (&self->priv->pending_temporary_account_results,
                    (GDestroyNotify) g_hash_table_unref);
 
   G_OBJECT_CLASS (goa_identity_service_parent_class)->finalize (object);
@@ -788,7 +797,12 @@ on_temporary_account_created_for_identity (GoaIdentityService *self,
                                            GoaIdentity        *identity)
 {
   GoaObject   *object;
+  const char  *principal;
   GError      *error;
+
+  principal = goa_identity_get_identifier (identity);
+  g_hash_table_remove (self->priv->pending_temporary_account_results,
+                       principal);
 
   error = NULL;
   if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), &error))
@@ -868,8 +882,18 @@ add_temporary_account (GoaIdentityService *self,
   GSimpleAsyncResult *operation_result;
   GVariantBuilder     credentials;
   GVariantBuilder     details;
+  GoaObject *object;
 
   principal = goa_identity_get_identifier (identity);
+
+  object = g_hash_table_lookup (self->priv->pending_temporary_account_results,
+                                principal);
+
+  if (object != NULL)
+    {
+      goa_debug ("GoaIdentityService: would add temporary identity %s, but it's already pending", principal);
+      return;
+    }
 
   goa_debug ("GoaIdentityService: adding temporary identity %s", principal);
 
@@ -895,6 +919,9 @@ add_temporary_account (GoaIdentityService *self,
                                                 on_temporary_account_created_for_identity,
                                                 identity,
                                                 add_temporary_account);
+  g_hash_table_insert (self->priv->pending_temporary_account_results,
+                       g_strdup (principal),
+                       g_object_ref (operation_result));
 
   goa_manager_call_add_account (self->priv->accounts_manager,
                                 "kerberos",
