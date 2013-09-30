@@ -372,9 +372,24 @@ on_timer_source_ready (GObject *stream, GTask *task)
   cancellable = g_task_get_cancellable (task);
 
   g_return_val_if_fail (GOA_IS_ALARM (self), FALSE);
-  g_return_val_if_fail (self->priv->type == GOA_ALARM_TYPE_TIMER, FALSE);
 
   g_rec_mutex_lock (&self->priv->lock);
+
+  if (self->priv->type == GOA_ALARM_TYPE_UNSCHEDULED)
+    {
+      goa_debug ("GoaAlarm: timer source was unscheduled after "
+                 "callback was invoked, but before callback got "
+                 "the lock.");
+      goto out;
+    }
+  else if (self->priv->type != GOA_ALARM_TYPE_TIMER)
+    {
+      goa_warning ("GoaAlarm: timer source ready callback called "
+                   "when timer source isn't supposed to be used. "
+                   "Current timer type is %u", self->priv->type);
+      goto out;
+    }
+
   if (g_cancellable_is_cancelled (cancellable))
     goto out;
 
