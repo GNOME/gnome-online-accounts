@@ -52,7 +52,7 @@ identity_dbus_built_sources =					\
 	$(NULL)
 
 $(identity_dbus_built_sources) : Makefile.am org.gnome.Identity.xml
-	gdbus-codegen						\
+	$(AM_V_GEN) gdbus-codegen						\
 		--interface-prefix org.gnome.Identity.		\
 		--c-namespace GoaIdentityService		\
 		--c-generate-object-manager			\
@@ -80,7 +80,7 @@ realmd_dbus_built_sources =					\
 	$(NULL)
 
 $(realmd_dbus_built_sources) : Makefile.am org.freedesktop.realmd.xml
-	gdbus-codegen						\
+	$(AM_V_GEN) gdbus-codegen						\
 		--interface-prefix org.freedesktop.realmd.	\
 		--generate-c-code org.freedesktop.realmd	\
 		--c-generate-object-manager			\

@@ -36,7 +36,7 @@ dbus_built_sources = goa-generated.c goa-generated.h goa-generated-doc-org.gnome
 BUILT_SOURCES += $(dbus_built_sources)
 
 $(dbus_built_sources) : Makefile.am $(top_srcdir)/data/dbus-interfaces.xml
-	gdbus-codegen							                \
+	$(AM_V_GEN) gdbus-codegen							                \
 		--interface-prefix org.gnome.OnlineAccounts.                          	\
 		--c-namespace Goa							\
 		--c-generate-object-manager						\
@@ -48,12 +48,12 @@ $(dbus_built_sources) : Makefile.am $(top_srcdir)/data/dbus-interfaces.xml
 # ----------------------------------------------------------------------------------------------------
 
 goaenumtypes.h: goaenums.h goaenumtypes.h.template
-	( top_builddir=`cd $(top_builddir) && pwd`; 						\
+	$(AM_V_GEN) ( top_builddir=`cd $(top_builddir) && pwd`; 						\
 	 cd $(srcdir) && glib-mkenums --template goaenumtypes.h.template goaenums.h ) > 	\
 	   goaenumtypes.h.tmp && mv goaenumtypes.h.tmp goaenumtypes.h
 
 goaenumtypes.c: goaenums.h goaenumtypes.h goaenumtypes.c.template
-	( top_builddir=`cd $(top_builddir) && pwd`; 						\
+	$(AM_V_GEN) ( top_builddir=`cd $(top_builddir) && pwd`; 						\
 	 cd $(srcdir) && glib-mkenums --template goaenumtypes.c.template goaenums.h ) > 	\
 	   goaenumtypes.c.tmp && mv goaenumtypes.c.tmp goaenumtypes.c
 
@@ -123,7 +123,7 @@ typelibsdir = $(libdir)/girepository-1.0
 typelibs_DATA = Goa-1.0.typelib
 
 Goa-1.0.gir: $(libgoa_1_0_la_SOURCES)
-	$(INTROSPECTION_SCANNER) -v 				\
+	$(AM_V_GEN) $(INTROSPECTION_SCANNER) -v 				\
 		--warn-all					\
 		--namespace Goa 				\
 		--nsversion=1.0 				\
@@ -148,7 +148,7 @@ Goa-1.0.gir: libgoa-1.0.la $(INTROSPECTION_SCANNER) Makefile.am
 
 
 Goa-1.0.typelib: Goa-1.0.gir $(INTROSPECTION_COMPILER)
-	$(INTROSPECTION_COMPILER) $< -o $@
+	$(AM_V_GEN) $(INTROSPECTION_COMPILER) $< -o $@
 
 CLEANFILES += $(gir_DATA) $(typelibs_DATA)
 
