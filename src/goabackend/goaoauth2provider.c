@@ -291,6 +291,23 @@ goa_oauth2_provider_build_authorization_uri (GoaOAuth2Provider  *provider,
                                                                                     escaped_scope);
 }
 
+gboolean
+goa_oauth2_provider_process_redirect_url (GoaOAuth2Provider  *provider,
+                                          const gchar        *redirect_url,
+                                          gchar             **authorization_code,
+                                          GError            **error)
+{
+  g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (provider), NULL);
+  g_return_val_if_fail (redirect_url != NULL, NULL);
+  g_return_val_if_fail (authorization_code != NULL, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  return GOA_OAUTH2_PROVIDER_GET_CLASS (provider)->process_redirect_url (provider,
+                                                                         redirect_url,
+                                                                         authorization_code,
+                                                                         error);
+}
+
 /**
  * goa_oauth2_provider_get_authorization_uri:
  * @provider: A #GoaOAuth2Provider.
@@ -910,12 +927,27 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
   fragment = soup_uri_get_fragment (uri);
   query = soup_uri_get_query (uri);
 
-  /* Two cases:
-   * 1) we can either have the access_token and other information
+  /* Three cases:
+   * 1) we can either have the backend handle the URI for us, or
+   * 2) we can either have the access_token and other information
    *    directly in the fragment part of the URI, or
-   * 2) the auth code can be in the query part of the URI, with which
+   * 3) the auth code can be in the query part of the URI, with which
    *    we'll obtain the token later.
    */
+  if (GOA_OAUTH2_PROVIDER_GET_CLASS (provider)->process_redirect_url)
+    {
+      gchar *url;
+
+      url = soup_uri_to_string (uri, FALSE);
+      if (!goa_oauth2_provider_process_redirect_url (provider, url, &priv->access_token, &priv->error))
+        response_id = GTK_RESPONSE_CLOSE;
+      else
+        response_id = GTK_RESPONSE_OK;
+
+      g_free (url);
+      goto ignore_request;
+    }
+
   if (fragment != NULL)
     {
       /* fragment is encoded into a key/value pairs for the token and

@@ -72,6 +72,7 @@ struct _GoaOAuth2Provider
  * @get_use_external_browser: Virtual function for goa_oauth2_provider_get_use_external_browser().
  * @get_use_mobile_browser: Virtual function for goa_oauth2_provider_get_use_mobile_browser().
  * @add_account_key_values: Virtual function for goa_oauth2_provider_add_account_key_values().
+ * @process_redirect_url: Virtual function for goa_oauth2_provider_process_redirect_url().
  * @is_deny_node: Virtual function for goa_oauth2_provider_is_deny_node().
  * @is_identity_node: Virtual function for goa_oauth2_provider_is_identity_node().
  * @is_password_node: Virtual function for goa_oauth2_provider_is_password_node().
@@ -117,9 +118,15 @@ struct _GoaOAuth2ProviderClass
   gboolean     (*is_password_node)             (GoaOAuth2Provider            *provider,
                                                 WebKitDOMHTMLInputElement    *element);
 
+  gboolean     (*process_redirect_url)         (GoaOAuth2Provider            *provider,
+                                                const gchar                  *redirect_url,
+                                                gchar                       **access_token,
+                                                GError                      **error);
+
+
   /*< private >*/
   /* Padding for future expansion */
-  gpointer goa_reserved[29];
+  gpointer goa_reserved[28];
 };
 
 GType        goa_oauth2_provider_get_type                     (void) G_GNUC_CONST;
@@ -156,6 +163,10 @@ gboolean     goa_oauth2_provider_get_use_external_browser     (GoaOAuth2Provider
 gboolean     goa_oauth2_provider_get_use_mobile_browser       (GoaOAuth2Provider             *provider);
 void         goa_oauth2_provider_add_account_key_values       (GoaOAuth2Provider             *provider,
                                                                GVariantBuilder               *builder);
+gboolean     goa_oauth2_provider_process_redirect_url         (GoaOAuth2Provider             *provider,
+                                                               const gchar                   *redirect_url,
+                                                               gchar                        **authorization_code,
+                                                               GError                       **error);
 
 G_END_DECLS
 
