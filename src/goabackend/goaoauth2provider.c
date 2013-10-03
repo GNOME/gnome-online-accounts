@@ -252,7 +252,7 @@ goa_oauth2_provider_build_authorization_uri_default (GoaOAuth2Provider  *provide
  * @authorization_uri: An authorization URI.
  * @escaped_redirect_uri: An escaped redirect URI
  * @escaped_client_id: An escaped client id
- * @escaped_scope: The escaped scope.
+ * @escaped_scope: (allow-none): The escaped scope or %NULL
  *
  * Builds the URI that can be opened in a web browser (or embedded web
  * browser widget) to start authenticating an user.
@@ -281,7 +281,6 @@ goa_oauth2_provider_build_authorization_uri (GoaOAuth2Provider  *provider,
   g_return_val_if_fail (authorization_uri != NULL, NULL);
   g_return_val_if_fail (escaped_redirect_uri != NULL, NULL);
   g_return_val_if_fail (escaped_client_id != NULL, NULL);
-  g_return_val_if_fail (escaped_scope != NULL, NULL);
   return GOA_OAUTH2_PROVIDER_GET_CLASS (provider)->build_authorization_uri (provider,
                                                                                     authorization_uri,
                                                                                     escaped_redirect_uri,
@@ -371,6 +370,14 @@ goa_oauth2_provider_get_redirect_uri (GoaOAuth2Provider *provider)
   return GOA_OAUTH2_PROVIDER_GET_CLASS (provider)->get_redirect_uri (provider);
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+
+static const gchar *
+goa_oauth2_provider_get_scope_default (GoaOAuth2Provider *provider)
+{
+  return NULL;
+}
+
 /**
  * goa_oauth2_provider_get_scope:
  * @provider: A #GoaOAuth2Provider.
@@ -379,8 +386,8 @@ goa_oauth2_provider_get_redirect_uri (GoaOAuth2Provider *provider)
  * url="http://tools.ietf.org/html/draft-ietf-oauth-v2-15#section-2.1.1">scope</ulink>
  * used when requesting authorization.
  *
- * This is a pure virtual method - a subclass must provide an
- * implementation.
+ * This is a virtual method where the default implementation returns
+ * %NULL.
  *
  * Returns: (transfer none): A string owned by @provider - do not free.
  */
@@ -388,8 +395,12 @@ const gchar *
 goa_oauth2_provider_get_scope (GoaOAuth2Provider *provider)
 {
   g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (provider), NULL);
-  return GOA_OAUTH2_PROVIDER_GET_CLASS (provider)->get_scope (provider);
+  if (GOA_OAUTH2_PROVIDER_GET_CLASS (provider)->get_scope)
+    return GOA_OAUTH2_PROVIDER_GET_CLASS (provider)->get_scope (provider);
+  return NULL;
 }
+
+/* ---------------------------------------------------------------------------------------------------- */
 
 /**
  * goa_oauth2_provider_get_client_id:
@@ -1003,6 +1014,7 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
   gboolean ret;
   gchar *url;
   GtkWidget *grid;
+  const gchar *scope;
   gchar *escaped_redirect_uri;
   gchar *escaped_client_id;
   gchar *escaped_scope;
@@ -1034,7 +1046,11 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
   /* TODO: use oauth2_proxy_build_login_url_full() */
   escaped_redirect_uri = g_uri_escape_string (goa_oauth2_provider_get_redirect_uri (provider), NULL, TRUE);
   escaped_client_id = g_uri_escape_string (goa_oauth2_provider_get_client_id (provider), NULL, TRUE);
-  escaped_scope = g_uri_escape_string (goa_oauth2_provider_get_scope (provider), NULL, TRUE);
+  scope = goa_oauth2_provider_get_scope (provider);
+  if (scope != NULL)
+    escaped_scope = g_uri_escape_string (goa_oauth2_provider_get_scope (provider), NULL, TRUE);
+  else
+    escaped_scope = NULL;
   url = goa_oauth2_provider_build_authorization_uri (provider,
                                                      goa_oauth2_provider_get_authorization_uri (provider),
                                                      escaped_redirect_uri,
@@ -1798,6 +1814,7 @@ goa_oauth2_provider_class_init (GoaOAuth2ProviderClass *klass)
 
   klass->build_authorization_uri  = goa_oauth2_provider_build_authorization_uri_default;
   klass->get_token_uri            = goa_oauth2_provider_get_token_uri_default;
+  klass->get_scope                = goa_oauth2_provider_get_scope_default;
   klass->get_use_external_browser = goa_oauth2_provider_get_use_external_browser_default;
   klass->get_use_mobile_browser   = goa_oauth2_provider_get_use_mobile_browser_default;
   klass->is_password_node         = goa_oauth2_provider_is_password_node_default;

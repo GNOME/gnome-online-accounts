@@ -85,7 +85,6 @@ struct _GoaOAuth2ProviderClass
   /* pure virtual */
   const gchar *(*get_authorization_uri)        (GoaOAuth2Provider            *provider);
   const gchar *(*get_redirect_uri)             (GoaOAuth2Provider            *provider);
-  const gchar *(*get_scope)                    (GoaOAuth2Provider            *provider);
   const gchar *(*get_client_id)                (GoaOAuth2Provider            *provider);
   const gchar *(*get_client_secret)            (GoaOAuth2Provider            *provider);
   const gchar *(*get_authentication_cookie)    (GoaOAuth2Provider            *provider);
@@ -102,6 +101,7 @@ struct _GoaOAuth2ProviderClass
                                                 const gchar                  *escaped_client_id,
                                                 const gchar                  *escaped_scope);
   const gchar *(*get_token_uri)                (GoaOAuth2Provider            *provider);
+  const gchar *(*get_scope)                    (GoaOAuth2Provider            *provider);
   gboolean     (*get_use_external_browser)     (GoaOAuth2Provider            *provider);
   gboolean     (*get_use_mobile_browser)       (GoaOAuth2Provider            *provider);
   void         (*add_account_key_values)       (GoaOAuth2Provider            *provider,
