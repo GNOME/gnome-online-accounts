@@ -221,6 +221,48 @@ goa_web_view_dispose (GObject *object)
   G_OBJECT_CLASS (goa_web_view_parent_class)->dispose (object);
 }
 
+#ifdef GOA_INSPECTOR_ENABLED
+static WebKitWebView *
+web_inspector_inspect_web_view_cb (WebKitWebInspector *inspector,
+                                   WebKitWebView      *web_view,
+                                   gpointer            user_data)
+{
+  GtkWidget *inspector_web_view;
+  GtkWidget *scrolled_window;
+  GtkWidget *window;
+
+  inspector_web_view = webkit_web_view_new ();
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_resize (GTK_WINDOW (window), 800, 600);
+
+  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+                                  GTK_POLICY_AUTOMATIC,
+                                  GTK_POLICY_AUTOMATIC);
+
+  gtk_container_add (GTK_CONTAINER (window), scrolled_window);
+  gtk_container_add (GTK_CONTAINER (scrolled_window), inspector_web_view);
+
+  g_object_set_data (G_OBJECT (inspector), "window", window);
+
+  return WEBKIT_WEB_VIEW (inspector_web_view);
+}
+
+static gboolean
+web_inspector_show_window_cb (WebKitWebInspector *inspector,
+                              gpointer            user_data)
+{
+  GtkWidget *window;
+
+  window = g_object_get_data (G_OBJECT (inspector), "window");
+  gtk_widget_show_all (window);
+  gtk_window_present (GTK_WINDOW (window));
+
+  return GDK_EVENT_STOP;
+}
+#endif /* GOA_INSPECTOR_ENABLED */
+
 static void
 goa_web_view_init (GoaWebView *self)
 {
@@ -264,6 +306,20 @@ goa_web_view_init (GoaWebView *self)
 
   settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (priv->web_view));
   g_object_set (settings, "user-stylesheet-uri", "file://" PACKAGE_DATA_DIR "/goawebview.css", NULL);
+
+#ifdef GOA_INSPECTOR_ENABLED
+  {
+    WebKitWebInspector *inspector;
+
+    /* Setup the inspector */
+    g_object_set (settings, "enable-developer-extras", TRUE, NULL);
+    inspector = webkit_web_view_get_inspector (WEBKIT_WEB_VIEW (priv->web_view));
+    webkit_web_inspector_show (WEBKIT_WEB_INSPECTOR (inspector));
+
+    g_signal_connect (inspector, "inspect-web-view", G_CALLBACK (web_inspector_inspect_web_view_cb), NULL);
+    g_signal_connect (inspector, "show-window", G_CALLBACK (web_inspector_show_window_cb), NULL);
+  }
+#endif /* GOA_INSPECTOR_ENABLED */
 
   /* statusbar is hidden by default */
   priv->floating_bar = nautilus_floating_bar_new (NULL, FALSE);

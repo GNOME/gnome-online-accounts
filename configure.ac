@@ -138,6 +138,15 @@ ac_configure_args=$prev_ac_configure_args
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:"$ac_top_build_prefix"telepathy-account-widgets/
 PKG_CHECK_MODULES(TPAW, telepathy-account-widgets)
 
+AC_ARG_ENABLE([inspector],
+              [AS_HELP_STRING([--enable-inspector],
+              [Enable a WebKitWebInspector for the embedded web view])],
+              [],
+              [enable_inspector=no])
+if test "$enable_inspector" != "no"; then
+  AC_DEFINE(GOA_INSPECTOR_ENABLED, 1, [Enable a WebKitWebInspector for the embedded web view])
+fi
+
 # service providers
 #
 
@@ -499,6 +508,7 @@ echo "
 	compiler:                       ${CC}
 	cflags:                         ${CFLAGS}
 	cppflags:                       ${CPPFLAGS}
+	inspector:		        ${enable_inspector}
 	introspection:		        ${found_introspection}
 
 	Flickr provider:                ${enable_flickr} (OAuth 1.0, key:${with_flickr_consumer_key} secret:${with_flickr_consumer_secret})
