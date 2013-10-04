@@ -36,10 +36,29 @@ main (int argc, char **argv)
 
   accounts = goa_client_get_accounts (client);
   for (l = accounts; l != NULL; l = l->next) {
+    GoaOAuth2Based *oauth2 = NULL;
+
     account = goa_object_get_account (GOA_OBJECT (l->data));
-    g_print ("%s at %s\n",
+    g_print ("%s at %s (%s)\n",
              goa_account_get_presentation_identity (account),
-             goa_account_get_provider_name (account));
+             goa_account_get_provider_name (account),
+             goa_account_get_provider_type (account));
+    oauth2 = goa_object_get_oauth2_based (GOA_OBJECT (l->data));
+    if (oauth2) {
+      gchar *access_token;
+      if (goa_oauth2_based_call_get_access_token_sync (oauth2,
+                                                       &access_token,
+                                                       NULL,
+                                                       NULL,
+                                                       NULL)) {
+        g_print ("\tAccessToken: %s\n", access_token);
+        g_free (access_token);
+      }
+      g_print ("\tClientId: %s\n\tClientSecret: %s\n",
+               goa_oauth2_based_get_client_id (oauth2),
+               goa_oauth2_based_get_client_secret (oauth2));
+    }
+    g_clear_object (&oauth2);
   }
 
   g_list_free_full (accounts, (GDestroyNotify) g_object_unref);
