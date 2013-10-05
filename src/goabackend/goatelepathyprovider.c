@@ -232,7 +232,27 @@ get_provider_icon (GoaProvider *provider,
   gchar *icon_names[3];
   GIcon *icon;
 
-  icon_name = tpaw_protocol_icon_name (priv->protocol_name);
+  /* Use symbolic icons for generic protocols. Use icons for the
+   * branded ones if it matches their visual identity. Otherwise do
+   * not use an icon.
+   */
+  if (g_strcmp0 (priv->protocol_name, "irc") == 0
+      || g_strcmp0 (priv->protocol_name, "jabber") == 0
+      || g_strcmp0 (priv->protocol_name, "local-xmpp") == 0
+      || g_strcmp0 (priv->protocol_name, "sip") == 0)
+    {
+      icon_name = g_strdup ("user-available-symbolic");
+    }
+  else if (g_strcmp0 (priv->protocol_name, "aim") == 0
+           || g_strcmp0 (priv->protocol_name, "gadugadu") == 0
+           || g_strcmp0 (priv->protocol_name, "silc") == 0)
+    {
+      icon_name = tpaw_protocol_icon_name (priv->protocol_name);
+    }
+  else
+    {
+      icon_name = g_strdup ("goa-account");
+    }
 
   icon_names[0] = icon_name;
   /* If the icon doesn't exist, just try with the default icon. */
