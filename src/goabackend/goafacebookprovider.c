@@ -273,26 +273,7 @@ get_identity_sync (GoaOAuth2Provider  *provider,
 static gboolean
 is_deny_node (GoaOAuth2Provider *provider, WebKitDOMNode *node)
 {
-  WebKitDOMHTMLButtonElement *button_element;
-  gboolean ret;
-  gchar *name;
-
-  name = NULL;
-  ret = FALSE;
-
-  if (!WEBKIT_DOM_IS_HTML_BUTTON_ELEMENT (node))
-    goto out;
-
-  button_element = WEBKIT_DOM_HTML_BUTTON_ELEMENT (node);
-  name = webkit_dom_html_button_element_get_name (button_element);
-  if (g_strcmp0 (name, "cancel_clicked") != 0)
-    goto out;
-
-  ret = TRUE;
-
- out:
-  g_free (name);
-  return ret;
+  return FALSE;
 }
 
 static gboolean

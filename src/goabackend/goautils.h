@@ -34,6 +34,8 @@
 
 G_BEGIN_DECLS
 
+#define GOA_OAUTH2_ACCESS_DENIED "access_denied"
+
 typedef gpointer (*GoaPeekInterfaceFunc)   (GoaObject *);
 
 gboolean         goa_utils_check_duplicate (GoaClient              *client,

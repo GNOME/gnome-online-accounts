@@ -255,26 +255,7 @@ get_identity_sync (GoaOAuth2Provider  *provider,
 static gboolean
 is_deny_node (GoaOAuth2Provider *provider, WebKitDOMNode *node)
 {
-  WebKitDOMHTMLInputElement *input_element;
-  gboolean ret;
-  gchar *name;
-
-  name = NULL;
-  ret = FALSE;
-
-  if (!WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (node))
-    goto out;
-
-  input_element = WEBKIT_DOM_HTML_INPUT_ELEMENT (node);
-  name = webkit_dom_html_input_element_get_name (input_element);
-  if (g_strcmp0 (name, "ucdeny") != 0)
-    goto out;
-
-  ret = TRUE;
-
- out:
-  g_free (name);
-  return ret;
+  return FALSE;
 }
 
 static gboolean
