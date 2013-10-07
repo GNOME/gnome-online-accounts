@@ -263,26 +263,7 @@ get_identity_sync (GoaOAuth2Provider  *provider,
 static gboolean
 is_deny_node (GoaOAuth2Provider *provider, WebKitDOMNode *node)
 {
-  WebKitDOMElement *element;
-  gboolean ret;
-  gchar *id;
-
-  id = NULL;
-  ret = FALSE;
-
-  if (!WEBKIT_DOM_IS_HTML_BUTTON_ELEMENT (node))
-    goto out;
-
-  element = WEBKIT_DOM_ELEMENT (node);
-  id = webkit_dom_element_get_id (element);
-  if (g_strcmp0 (id, "submit_deny_access") != 0)
-    goto out;
-
-  ret = TRUE;
-
- out:
-  g_free (id);
-  return ret;
+  return FALSE;
 }
 
 static gboolean

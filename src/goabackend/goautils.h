@@ -34,6 +34,8 @@
 
 G_BEGIN_DECLS
 
+#define GOA_OAUTH2_ACCESS_DENIED "access_denied"
+
 typedef gpointer (*GoaPeekInterfaceFunc)   (GoaObject *);
 
 void             goa_utils_initialize_client_factory (void);
