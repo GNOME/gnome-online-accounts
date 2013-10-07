@@ -876,6 +876,7 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
 {
   GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
   GoaOAuth2ProviderPrivate *priv = provider->priv;
+  const gchar *oauth2_error;
   const gchar *redirect_uri;
   const gchar *requested_uri;
 
@@ -910,12 +911,18 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
             }
           else
             {
-              g_set_error (&priv->error,
-                           GOA_ERROR,
-                           GOA_ERROR_NOT_AUTHORIZED,
-                           _("Authorization response was ‘%s’"),
-                           (const gchar *) g_hash_table_lookup (key_value_pairs, "error"));
-              gtk_dialog_response (priv->dialog, GTK_RESPONSE_CLOSE);
+              oauth2_error = (const gchar *) g_hash_table_lookup (key_value_pairs, "error");
+              if (g_strcmp0 (oauth2_error, GOA_OAUTH2_ACCESS_DENIED) == 0)
+                gtk_dialog_response (priv->dialog, GTK_RESPONSE_CANCEL);
+              else
+                {
+                  g_set_error (&priv->error,
+                               GOA_ERROR,
+                               GOA_ERROR_NOT_AUTHORIZED,
+                               _("Authorization response was ‘%s’"),
+                               oauth2_error);
+                  gtk_dialog_response (priv->dialog, GTK_RESPONSE_CLOSE);
+                }
             }
           g_hash_table_unref (key_value_pairs);
           webkit_web_policy_decision_ignore (policy_decision);
@@ -950,12 +957,18 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
             }
           else
             {
-              g_set_error (&priv->error,
-                           GOA_ERROR,
-                           GOA_ERROR_NOT_AUTHORIZED,
-                           _("Authorization response was ‘%s’"),
-                           (const gchar *) g_hash_table_lookup (key_value_pairs, "error"));
-              gtk_dialog_response (priv->dialog, GTK_RESPONSE_CLOSE);
+              oauth2_error = (const gchar *) g_hash_table_lookup (key_value_pairs, "error");
+              if (g_strcmp0 (oauth2_error, GOA_OAUTH2_ACCESS_DENIED) == 0)
+                gtk_dialog_response (priv->dialog, GTK_RESPONSE_CANCEL);
+              else
+                {
+                  g_set_error (&priv->error,
+                               GOA_ERROR,
+                               GOA_ERROR_NOT_AUTHORIZED,
+                               _("Authorization response was ‘%s’"),
+                               oauth2_error);
+                  gtk_dialog_response (priv->dialog, GTK_RESPONSE_CLOSE);
+                }
             }
           g_hash_table_unref (key_value_pairs);
           webkit_web_policy_decision_ignore (policy_decision);
