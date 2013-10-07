@@ -94,6 +94,7 @@ static GoaProviderFeatures
 get_provider_features (GoaProvider *_provider)
 {
   return GOA_PROVIDER_FEATURE_BRANDED |
+         GOA_PROVIDER_FEATURE_MAIL |
          GOA_PROVIDER_FEATURE_CHAT |
          GOA_PROVIDER_FEATURE_DOCUMENTS;
 }
@@ -122,6 +123,7 @@ static const gchar *
 get_scope (GoaOAuth2Provider *provider)
 {
   return "wl.messenger,"
+         "wl.imap,"
          "wl.offline_access,"
          "wl.skydrive_update,"
          "wl.emails";
@@ -130,7 +132,7 @@ get_scope (GoaOAuth2Provider *provider)
 static guint
 get_credentials_generation (GoaProvider *provider)
 {
-  return 1;
+  return 2;
 }
 
 static const gchar *
@@ -311,13 +313,17 @@ build_object (GoaProvider         *provider,
               GError             **error)
 {
   GoaAccount *account;
+  GoaMail *mail;
   GoaChat *chat = NULL;
   GoaDocuments *documents;
+  gboolean mail_enabled;
   gboolean chat_enabled;
   gboolean documents_enabled;
   gboolean ret = FALSE;
+  const gchar *email_address;
 
   account = NULL;
+  mail = NULL;
 
   /* Chain up */
   if (!GOA_PROVIDER_CLASS (goa_windows_live_provider_parent_class)->build_object (provider,
@@ -330,6 +336,36 @@ build_object (GoaProvider         *provider,
     goto out;
 
   account = goa_object_get_account (GOA_OBJECT (object));
+  email_address = goa_account_get_presentation_identity (account);
+
+  /* Email */
+  mail = goa_object_get_mail (GOA_OBJECT (object));
+  mail_enabled = g_key_file_get_boolean (key_file, group, "MailEnabled", NULL);
+  if (mail_enabled)
+    {
+      if (mail == NULL)
+        {
+          mail = goa_mail_skeleton_new ();
+          g_object_set (G_OBJECT (mail),
+                        "email-address",   email_address,
+                        "imap-supported",  TRUE,
+                        "imap-host",       "imap-mail.outlook.com",
+                        "imap-user-name",  email_address,
+                        "imap-use-ssl",    TRUE,
+                        "smtp-supported",  TRUE,
+                        "smtp-host",       "smtp-mail.outlook.com",
+                        "smtp-user-name",  email_address,
+                        "smtp-use-auth",   TRUE,
+                        "smtp-use-tls",    TRUE,
+                        NULL);
+          goa_object_skeleton_set_mail (object, mail);
+        }
+    }
+  else
+    {
+      if (mail != NULL)
+        goa_object_skeleton_set_mail (object, NULL);
+    }
 
   /* Chat */
   chat = goa_object_get_chat (GOA_OBJECT (object));
@@ -386,6 +422,7 @@ build_object (GoaProvider         *provider,
  out:
   if (chat != NULL)
     g_object_unref (chat);
+  g_clear_object (&mail);
   if (account != NULL)
     g_object_unref (account);
   return ret;
@@ -409,6 +446,11 @@ show_account (GoaProvider         *provider,
 
   goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
                                                    _("Use for"),
+                                                   "mail-disabled",
+                                                   _("_Mail"));
+
+  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
+                                                   NULL,
                                                    "chat-disabled",
                                                    _("C_hat"));
 
@@ -424,6 +466,7 @@ static void
 add_account_key_values (GoaOAuth2Provider *provider,
                         GVariantBuilder   *builder)
 {
+  g_variant_builder_add (builder, "{ss}", "MailEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "ChatEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "DocumentsEnabled", "true");
 }
