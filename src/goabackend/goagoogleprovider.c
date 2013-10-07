@@ -383,6 +383,7 @@ build_object (GoaProvider         *provider,
                         "smtp-supported",  TRUE,
                         "smtp-host",       "smtp.gmail.com",
                         "smtp-user-name",  email_address,
+                        "smtp-use-auth",   TRUE,
                         "smtp-use-tls",    TRUE,
                         NULL);
           goa_object_skeleton_set_mail (object, mail);
