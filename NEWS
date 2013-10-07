@@ -1,13 +1,27 @@
+Overview of changes in 3.8.4
+============================
+
+* Bugs fixed:
+ 705395 Deadlock fix causes Kerberos code to do 100% CPU
+ 708975 Kerberos code still doing 100% CPU
+ 709103 Shows 2 Kerberos entries for one kinit
+ 709570 Don't parse DOM if user denied request for spec-compliant services
+
+* Updated translations:
+ Japanese
+ Turkish
+
+
 Overview of changes in 3.8.3
 ============================
 
 * Bugs fixed:
  692176 build: Fix include paths
  692177 build: Add missing include path
+ 699491 kerberos: Don't crash when an identity could not be looked up
  701500 build: Don't hard code the paths to girdir and typelibdir
  702263 smtp-auth-plain: Handle multiline SMTP greetings
  705395 goaidentity: Fix deadlock in goaalarm on_cancelled
- 699491 kerberos: Don't crash when an identity could not be looked up
 
 
 Overview of changes in 3.8.2
