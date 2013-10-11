@@ -49,8 +49,6 @@ struct _GoaKerberosIdentityPrivate
   krb5_context kerberos_context;
   krb5_ccache  credentials_cache;
 
-  GBytes *raw_credentials;
-
   char *identifier;
   guint identifier_idle_id;
 
@@ -95,7 +93,6 @@ static void initable_interface_init (GInitableIface *interface);
 static void reset_alarms (GoaKerberosIdentity *self);
 static void clear_alarms (GoaKerberosIdentity *self);
 static gboolean goa_kerberos_identity_is_signed_in (GoaIdentity *identity);
-static GBytes *goa_kerberos_identity_get_credentials (GoaIdentity *identity);
 static void set_error_from_krb5_error_code (GoaKerberosIdentity  *self,
                                             GError              **error,
                                             gint                  code,
@@ -138,8 +135,6 @@ goa_kerberos_identity_finalize (GObject *object)
 
   if (self->priv->credentials_cache != NULL)
     krb5_cc_close (self->priv->kerberos_context, self->priv->credentials_cache);
-
-  g_clear_pointer (&self->priv->raw_credentials, (GDestroyNotify) g_bytes_unref);
 
   G_OBJECT_CLASS (goa_kerberos_identity_parent_class)->finalize (object);
 }
@@ -694,30 +689,11 @@ goa_kerberos_identity_is_signed_in (GoaIdentity *identity)
   return is_signed_in;
 }
 
-static GBytes *
-goa_kerberos_identity_get_credentials (GoaIdentity *identity)
-{
-  GoaKerberosIdentity *self = GOA_KERBEROS_IDENTITY (identity);
-  GBytes *credentials;
-
-  credentials = NULL;
-
-  G_LOCK (identity_lock);
-  if (self->priv->raw_credentials != NULL)
-    credentials = g_bytes_new (g_bytes_get_data (self->priv->raw_credentials,
-                                                 NULL),
-                               g_bytes_get_size (self->priv->raw_credentials));
-  G_UNLOCK (identity_lock);
-
-  return credentials;
-}
-
 static void
 identity_interface_init (GoaIdentityInterface *interface)
 {
   interface->get_identifier = goa_kerberos_identity_get_identifier;
   interface->is_signed_in = goa_kerberos_identity_is_signed_in;
-  interface->get_credentials = goa_kerberos_identity_get_credentials;
 }
 
 static void
@@ -929,39 +905,6 @@ clear_alarms (GoaKerberosIdentity *self)
   cancel_and_clear_cancellable (&self->priv->expiration_alarm_cancellable);
 }
 
-static void
-fetch_raw_credentials (GoaKerberosIdentity *self)
-{
-  const char *cache_path;
-  char       *contents;
-  gsize       length;
-  GError     *error;
-
-  cache_path = krb5_cc_get_name (self->priv->kerberos_context,
-                                 self->priv->credentials_cache);
-
-  if (cache_path == NULL)
-    return;
-
-  /* see goakerberosidentitymanager.c (monitor_credentials_cache)
-   * for why we do this
-   */
-  if (cache_path[0] == ':')
-    cache_path++;
-
-  error = NULL;
-  if (!g_file_get_contents (cache_path, &contents, &length, &error))
-    {
-      goa_debug ("GoaKerberosIdentity: could not read credentials file: %s",
-                 error->message);
-      g_error_free (error);
-      return;
-    }
-
-  g_clear_pointer (&self->priv->raw_credentials, (GDestroyNotify) g_bytes_unref);
-  self->priv->raw_credentials = g_bytes_new_take (contents, length);
-}
-
 static gboolean
 goa_kerberos_identity_initable_init (GInitable     *initable,
                                      GCancellable  *cancellable,
@@ -990,8 +933,6 @@ goa_kerberos_identity_initable_init (GInitable     *initable,
     case VERIFICATION_LEVEL_EXISTS:
     case VERIFICATION_LEVEL_SIGNED_IN:
       reset_alarms (self);
-
-      fetch_raw_credentials (self);
 
       queue_notify (self, &self->priv->is_signed_in_idle_id, "is-signed-in");
       return TRUE;
@@ -1131,8 +1072,6 @@ goa_kerberos_identity_update_credentials (GoaKerberosIdentity  *self,
       goto out;
     }
 
-  g_clear_pointer (&self->priv->raw_credentials, (GDestroyNotify) g_bytes_unref);
-
   error_code = krb5_cc_store_cred (self->priv->kerberos_context,
                                    self->priv->credentials_cache,
                                    new_credentials);
@@ -1150,8 +1089,6 @@ goa_kerberos_identity_update_credentials (GoaKerberosIdentity  *self,
       goto out;
     }
   krb5_free_cred_contents (self->priv->kerberos_context, new_credentials);
-
-  fetch_raw_credentials (self);
 
   return TRUE;
 out:

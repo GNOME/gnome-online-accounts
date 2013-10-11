@@ -75,9 +75,3 @@ goa_identity_is_signed_in (GoaIdentity *self)
 {
   return GOA_IDENTITY_GET_IFACE (self)->is_signed_in (self);
 }
-
-GBytes *
-goa_identity_get_credentials (GoaIdentity *self)
-{
-  return GOA_IDENTITY_GET_IFACE (self)->get_credentials (self);
-}
