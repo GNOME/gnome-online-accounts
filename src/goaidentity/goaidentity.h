@@ -41,7 +41,6 @@ struct _GoaIdentityInterface
   GTypeInterface base_interface;
 
   const char * (* get_identifier)            (GoaIdentity *identity);
-  GBytes     * (* get_credentials)           (GoaIdentity *identity);
   gboolean     (* is_signed_in)              (GoaIdentity *identity);
 };
 
@@ -71,7 +70,6 @@ GType  goa_identity_get_type    (void);
 GQuark goa_identity_error_quark (void);
 
 const char  *goa_identity_get_identifier            (GoaIdentity *identity);
-GBytes      *goa_identity_get_credentials           (GoaIdentity *identity);
 gboolean     goa_identity_is_signed_in              (GoaIdentity *identity);
 
 
