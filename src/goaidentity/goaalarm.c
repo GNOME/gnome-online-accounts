@@ -609,6 +609,7 @@ goa_alarm_set_time (GoaAlarm *self, GDateTime *time, GCancellable *cancellable)
   if (g_cancellable_is_cancelled (cancellable))
     return;
 
+  g_rec_mutex_lock (&self->priv->lock);
   if (self->priv->cancellable != NULL && self->priv->cancellable != cancellable)
     g_cancellable_cancel (self->priv->cancellable);
 
@@ -638,12 +639,12 @@ goa_alarm_set_time (GoaAlarm *self, GDateTime *time, GCancellable *cancellable)
 
   self->priv->context = g_main_context_ref (g_main_context_default ());
 
-  g_object_notify (G_OBJECT (self), "time");
-
   schedule_wakeups (self);
 
   /* Wake up right away, in case it's already expired leaving the gate */
   schedule_immediate_wakeup (self);
+  g_rec_mutex_unlock (&self->priv->lock);
+  g_object_notify (G_OBJECT (self), "time");
 }
 
 GDateTime *
