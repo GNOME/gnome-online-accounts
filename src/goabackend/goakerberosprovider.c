@@ -1889,7 +1889,11 @@ ensure_credentials_sync (GoaProvider    *provider,
   if (g_simple_async_result_propagate_error (operation_result, &lookup_error))
     {
       translate_error (&lookup_error);
-      g_propagate_error (error, lookup_error);
+      g_set_error_literal (error,
+                           GOA_ERROR,
+                           GOA_ERROR_NOT_AUTHORIZED,
+                           lookup_error->message);
+      g_error_free (lookup_error);
       g_object_unref (operation_result);
       return FALSE;
     }
