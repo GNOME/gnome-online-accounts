@@ -763,17 +763,36 @@ get_new_credentials_cache (GoaKerberosIdentityManager *self,
                            krb5_ccache                *credentials_cache)
 {
   krb5_error_code error_code;
+  gboolean supports_multiple_identities;
+
+  if (g_strcmp0 (self->priv->credentials_cache_type, "FILE") == 0)
+    {
+      goa_debug ("GoaKerberosIdentityManager: credential cache type %s doesn't supports cache collections", self->priv->credentials_cache_type);
+      supports_multiple_identities = FALSE;
+    }
+  else if (g_strcmp0 (self->priv->credentials_cache_type, "DIR") == 0 ||
+           g_strcmp0 (self->priv->credentials_cache_type, "KEYRING") == 0)
+    {
+      goa_debug ("GoaKerberosIdentityManager: credential cache type %s supports cache collections", self->priv->credentials_cache_type);
+      supports_multiple_identities = TRUE;
+    }
+  else
+    {
+      goa_debug ("GoaKerberosIdentityManager: don't know if credential cache type %s supports cache collections, assuming yes", self->priv->credentials_cache_type);
+      supports_multiple_identities = TRUE;
+    }
 
   /* If we're configured for FILE based credentials, then we only
    * have one ccache, and we need to use it always.
    *
-   * If we're configured for DIR based credentials, then we need
-   * to use the default name "tkt" the first time around, and
-   * then need to use unique names for subsequent tickets.
+   * If we're configured for DIR or KEYRING based credentials, then we
+   * can have multiple ccache's so we should use the default one first
+   * (so it gets selected automatically) and then fallback to unique
+   * ccache names for subsequent tickets.
+   *
    */
-  if (g_strcmp0 (self->priv->credentials_cache_type, "FILE") == 0 ||
-      (g_strcmp0 (self->priv->credentials_cache_type, "DIR") == 0 &&
-       g_hash_table_size (self->priv->identities) == 0))
+  if (!supports_multiple_identities ||
+      g_hash_table_size (self->priv->identities) == 0)
     {
       krb5_ccache default_cache;
 
