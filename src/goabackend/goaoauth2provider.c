@@ -823,9 +823,13 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
     {
       SoupMessage *message;
       SoupURI *uri;
+      const gchar *fragment;
+      const gchar *query;
 
       message = webkit_network_request_get_message (request);
       uri = soup_message_get_uri (message);
+      fragment = soup_uri_get_fragment (uri);
+      query = soup_uri_get_query (uri);
 
       /* Two cases:
        * 1) we can have either the auth code in the query part of the
@@ -833,11 +837,11 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
        * 2) the access_token and other information directly in the
        *    fragment part of the URI.
        */
-      if (soup_uri_get_query (uri) != NULL)
+      if (query != NULL)
         {
           GHashTable *key_value_pairs;
 
-          key_value_pairs = soup_form_decode (uri->query);
+          key_value_pairs = soup_form_decode (query);
 
           data->authorization_code = g_strdup (g_hash_table_lookup (key_value_pairs, "code"));
           if (data->authorization_code != NULL)
@@ -862,13 +866,13 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
           g_hash_table_unref (key_value_pairs);
           webkit_web_policy_decision_ignore (policy_decision);
         }
-      else if (soup_uri_get_fragment (uri) != NULL)
+      else if (fragment != NULL)
         {
           GHashTable *key_value_pairs;
 
           /* fragment is encoded into a key/value pairs for the token and
            * expiration values, using the same syntax as a URL query */
-          key_value_pairs = soup_form_decode (soup_uri_get_fragment (uri));
+          key_value_pairs = soup_form_decode (fragment);
 
           /* We might use oauth2_proxy_extract_access_token() here but
            * we can also extract other information.
