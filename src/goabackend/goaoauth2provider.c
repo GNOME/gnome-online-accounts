@@ -876,6 +876,7 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
 {
   GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
   GoaOAuth2ProviderPrivate *priv = provider->priv;
+  GHashTable *key_value_pairs;
   SoupMessage *message;
   SoupURI *uri;
   const gchar *fragment;
@@ -898,44 +899,13 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
   query = soup_uri_get_query (uri);
 
   /* Two cases:
-   * 1) we can have either the auth code in the query part of the
-   *    URI, with which we'll obtain the token, or
-   * 2) the access_token and other information directly in the
-   *    fragment part of the URI.
+   * 1) we can either have the access_token and other information
+   *    directly in the fragment part of the URI, or
+   * 2) the auth code can be in the query part of the URI, with which
+   *    we'll obtain the token later.
    */
-  if (query != NULL)
+  if (fragment != NULL)
     {
-      GHashTable *key_value_pairs;
-
-      key_value_pairs = soup_form_decode (query);
-
-      priv->authorization_code = g_strdup (g_hash_table_lookup (key_value_pairs, "code"));
-      if (priv->authorization_code != NULL)
-        {
-          response_id = GTK_RESPONSE_OK;
-        }
-      else
-        {
-          oauth2_error = (const gchar *) g_hash_table_lookup (key_value_pairs, "error");
-          if (g_strcmp0 (oauth2_error, GOA_OAUTH2_ACCESS_DENIED) == 0)
-            response_id = GTK_RESPONSE_CANCEL;
-          else
-            {
-              g_set_error (&priv->error,
-                           GOA_ERROR,
-                           GOA_ERROR_NOT_AUTHORIZED,
-                           _("Authorization response was ‘%s’"),
-                           oauth2_error);
-              response_id = GTK_RESPONSE_CLOSE;
-            }
-        }
-      g_hash_table_unref (key_value_pairs);
-      goto ignore_request;
-    }
-  else if (fragment != NULL)
-    {
-      GHashTable *key_value_pairs;
-
       /* fragment is encoded into a key/value pairs for the token and
        * expiration values, using the same syntax as a URL query */
       key_value_pairs = soup_form_decode (fragment);
@@ -960,31 +930,44 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
 
           response_id = GTK_RESPONSE_OK;
         }
-      else
-        {
-          oauth2_error = (const gchar *) g_hash_table_lookup (key_value_pairs, "error");
-          if (g_strcmp0 (oauth2_error, GOA_OAUTH2_ACCESS_DENIED) == 0)
-            response_id = GTK_RESPONSE_CANCEL;
-          else
-            {
-              g_set_error (&priv->error,
-                           GOA_ERROR,
-                           GOA_ERROR_NOT_AUTHORIZED,
-                           _("Authorization response was ‘%s’"),
-                           oauth2_error);
-              response_id = GTK_RESPONSE_CLOSE;
-            }
-        }
       g_hash_table_unref (key_value_pairs);
-      goto ignore_request;
     }
+
+  if (priv->access_token != NULL)
+    goto ignore_request;
+
+  if (query != NULL)
+    {
+      key_value_pairs = soup_form_decode (query);
+
+      priv->authorization_code = g_strdup (g_hash_table_lookup (key_value_pairs, "code"));
+      if (priv->authorization_code != NULL)
+        response_id = GTK_RESPONSE_OK;
+
+      g_hash_table_unref (key_value_pairs);
+    }
+
+  if (priv->authorization_code != NULL)
+    goto ignore_request;
+
+  /* In case we don't find the access_token or auth code, then look
+   * for the error in the query part of the URI.
+   */
+  key_value_pairs = soup_form_decode (query);
+  oauth2_error = (const gchar *) g_hash_table_lookup (key_value_pairs, "error");
+  if (g_strcmp0 (oauth2_error, GOA_OAUTH2_ACCESS_DENIED) == 0)
+    response_id = GTK_RESPONSE_CANCEL;
   else
     {
-      /* this actually means that something unexpected happened, either we
-       * did something wrong or the provider's flow changed */
-      goa_debug ("URI format not recognized, DEFAULT BEHAVIOUR");
-      goto default_behaviour;
+      g_set_error (&priv->error,
+                   GOA_ERROR,
+                   GOA_ERROR_NOT_AUTHORIZED,
+                   _("Authorization response was ‘%s’"),
+                   oauth2_error);
+      response_id = GTK_RESPONSE_CLOSE;
     }
+  g_hash_table_unref (key_value_pairs);
+  goto ignore_request;
 
  ignore_request:
   gtk_dialog_response (priv->dialog, response_id);
