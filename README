@@ -9,8 +9,11 @@ OAuth 2.0: https://developers.facebook.com/docs/authentication/
 Scopes: https://developers.facebook.com/docs/authentication/permissions/
 
 Notes:
-The client-side flow returns the access_token and expires_in in the URI
-fragment, and does not provide a refresh_token.
+The client-side flow returns the access_token and expires_in in the URI's
+fragment, and does not provide a refresh_token. However, if the user denied
+access then the error is returned in the URI's query. The URIs look like this:
+  - <get_redirect_uri>?#access_token=...
+  - <get_redirect_uri>?error=access_denied...#_=_
 
 
 Flickr
