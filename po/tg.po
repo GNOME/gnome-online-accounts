@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-08-22 14:17+0000\n"
-"PO-Revision-Date: 2013-08-22 20:42+0500\n"
+"POT-Creation-Date: 2013-10-14 18:07+0000\n"
+"PO-Revision-Date: 2013-10-27 14:10+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: Tajik <tg@li.org>\n"
 "Language: tg\n"
@@ -33,8 +33,9 @@ msgstr "Хусусияти ProviderType барои ҳисоб танзим на�
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:234 ../src/goabackend/goahttpclient.c:175
 #, c-format
-msgid "Code: %u - Unexpected response from server"
-msgstr "Рамз: %u - Ҷавоби ногаҳон аз сервер"
+#| msgid "Code: %u - Unexpected response from server"
+msgid "Code: %u — Unexpected response from server"
+msgstr "Рамз: %u — Ҷавоби ногаҳон аз сервер"
 
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:250
@@ -43,25 +44,16 @@ msgid "Failed to parse autodiscover response XML"
 msgstr "Таҷзияи ҷавоби кашфи худкори XML иҷро нашудааст"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:260
+#. Translators: the parameter is an XML element name.
+#: ../src/goabackend/goaewsclient.c:261 ../src/goabackend/goaewsclient.c:276
+#: ../src/goabackend/goaewsclient.c:291
 #, c-format
-msgid "Failed to find Autodiscover element"
-msgstr "Унсури кашфи худкор ёфт нашудааст"
+#| msgid "Failed to find Response element"
+msgid "Failed to find ‘%s’ element"
+msgstr "Унсури ‘%s’ ёфт нашудааст"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:274
-#, c-format
-msgid "Failed to find Response element"
-msgstr "Унсури ҷавоб ёфт нашудааст"
-
-#. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:288
-#, c-format
-msgid "Failed to find Account element"
-msgstr "Унсури ҳисоб ёфт нашудааст"
-
-#. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:305
+#: ../src/goabackend/goaewsclient.c:308
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "ASUrl ва OABUrl дар ҷавоби кашфи худкор ёфт нашудааст"
@@ -72,12 +64,13 @@ msgstr "Microsoft Exchange"
 
 #. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:317
-#: ../src/goabackend/goaexchangeprovider.c:1047
+#: ../src/goabackend/goaexchangeprovider.c:1028
 #: ../src/goabackend/goaowncloudprovider.c:403
-#: ../src/goabackend/goaowncloudprovider.c:1201
+#: ../src/goabackend/goaowncloudprovider.c:1190
 #, c-format
-msgid "Did not find password with identity `%s' in credentials"
-msgstr "Парол бо шахсияти `%s' дар маълумоти корбар ёфт нашуд"
+#| msgid "Did not find password with identity `%s' in credentials"
+msgid "Did not find password with identity ‘%s’ in credentials"
+msgstr "Парол бо шахсияти ‘%s’ дар маълумоти корбар ёфт нашуд"
 
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
@@ -86,125 +79,130 @@ msgstr "Парол бо шахсияти `%s' дар маълумоти корб
 #: ../src/goabackend/goaexchangeprovider.c:345
 #: ../src/goabackend/goaowncloudprovider.c:426
 #, c-format
-msgid "Invalid password with username `%s' (%s, %d): "
-msgstr "Пароли нодуруст бо корбари `%s' (%s, %d): "
+#| msgid "Invalid password with username `%s' (%s, %d): "
+msgid "Invalid password with username ‘%s’ (%s, %d): "
+msgstr "Пароли нодуруст барои корбари ‘%s’ (%s, %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:510
-#: ../src/goabackend/goaimapsmtpprovider.c:697
+#: ../src/goabackend/goaexchangeprovider.c:499
+#: ../src/goabackend/goaimapsmtpprovider.c:707
 msgid "_E-mail"
 msgstr "_Почтаи электронӣ"
 
-#: ../src/goabackend/goaexchangeprovider.c:511
-#: ../src/goabackend/goaimapsmtpprovider.c:717
-#: ../src/goabackend/goaimapsmtpprovider.c:737
-#: ../src/goabackend/goaowncloudprovider.c:666
+#: ../src/goabackend/goaexchangeprovider.c:500
+#: ../src/goabackend/goaimapsmtpprovider.c:727
+#: ../src/goabackend/goaimapsmtpprovider.c:747
+#: ../src/goabackend/goaowncloudprovider.c:655
 msgid "_Password"
 msgstr "_Парол"
 
-#: ../src/goabackend/goaexchangeprovider.c:514
+#: ../src/goabackend/goaexchangeprovider.c:503
 msgid "_Custom"
 msgstr "_Иловагӣ"
 
-#: ../src/goabackend/goaexchangeprovider.c:533
-#: ../src/goabackend/goaimapsmtpprovider.c:716
-#: ../src/goabackend/goaimapsmtpprovider.c:736
-#: ../src/goabackend/goakerberosprovider.c:1134
-#: ../src/goabackend/goaowncloudprovider.c:665
+#: ../src/goabackend/goaexchangeprovider.c:514
+#: ../src/goabackend/goaimapsmtpprovider.c:726
+#: ../src/goabackend/goaimapsmtpprovider.c:746
+#: ../src/goabackend/goakerberosprovider.c:1129
+#: ../src/goabackend/goaowncloudprovider.c:654
 msgid "User_name"
 msgstr "Номи _корбар"
 
-#: ../src/goabackend/goaexchangeprovider.c:534
-#: ../src/goabackend/goaowncloudprovider.c:664
+#: ../src/goabackend/goaexchangeprovider.c:515
+#: ../src/goabackend/goaowncloudprovider.c:653
 msgid "_Server"
 msgstr "_Сервер"
 
-#: ../src/goabackend/goaexchangeprovider.c:564
-#: ../src/goabackend/goaimapsmtpprovider.c:769
-#: ../src/goabackend/goakerberosprovider.c:1159
-#: ../src/goabackend/goaowncloudprovider.c:695
+#: ../src/goabackend/goaexchangeprovider.c:545
+#: ../src/goabackend/goaimapsmtpprovider.c:779
+#: ../src/goabackend/goakerberosprovider.c:1154
+#: ../src/goabackend/goaowncloudprovider.c:684
 msgid "Connecting…"
 msgstr "Пайваст шуда истодааст..."
 
-#: ../src/goabackend/goaexchangeprovider.c:669
-#: ../src/goabackend/goaexchangeprovider.c:864
-#: ../src/goabackend/goaimapsmtpprovider.c:929
-#: ../src/goabackend/goaimapsmtpprovider.c:964
-#: ../src/goabackend/goaimapsmtpprovider.c:1052
-#: ../src/goabackend/goaimapsmtpprovider.c:1308
-#: ../src/goabackend/goaimapsmtpprovider.c:1381
-#: ../src/goabackend/goakerberosprovider.c:1550
-#: ../src/goabackend/goaoauth2provider.c:1133
+#: ../src/goabackend/goaexchangeprovider.c:650
+#: ../src/goabackend/goaexchangeprovider.c:845
+#: ../src/goabackend/goaimapsmtpprovider.c:939
+#: ../src/goabackend/goaimapsmtpprovider.c:974
+#: ../src/goabackend/goaimapsmtpprovider.c:1062
+#: ../src/goabackend/goaimapsmtpprovider.c:1318
+#: ../src/goabackend/goaimapsmtpprovider.c:1391
+#: ../src/goabackend/goakerberosprovider.c:1545
+#: ../src/goabackend/goaoauth2provider.c:1146
 #: ../src/goabackend/goaoauthprovider.c:1041
-#: ../src/goabackend/goaowncloudprovider.c:806
-#: ../src/goabackend/goaowncloudprovider.c:1019
-#: ../src/goabackend/goatelepathyprovider.c:466
-#: ../src/goabackend/goatelepathyprovider.c:515
-#: ../src/goabackend/goatelepathyprovider.c:689
+#: ../src/goabackend/goaowncloudprovider.c:795
+#: ../src/goabackend/goaowncloudprovider.c:1008
+#: ../src/goabackend/goatelepathyprovider.c:487
+#: ../src/goabackend/goatelepathyprovider.c:536
+#: ../src/goabackend/goatelepathyprovider.c:710
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "Равзанаи гуфтугӯ қатъ карда шуд"
 
-#: ../src/goabackend/goaexchangeprovider.c:707
-#: ../src/goabackend/goaexchangeprovider.c:892
-#: ../src/goabackend/goaimapsmtpprovider.c:994
-#: ../src/goabackend/goaimapsmtpprovider.c:1085
-#: ../src/goabackend/goaimapsmtpprovider.c:1332
-#: ../src/goabackend/goaimapsmtpprovider.c:1406
-#: ../src/goabackend/goaowncloudprovider.c:848
-#: ../src/goabackend/goaowncloudprovider.c:1040
+#: ../src/goabackend/goaexchangeprovider.c:688
+#: ../src/goabackend/goaexchangeprovider.c:873
+#: ../src/goabackend/goaimapsmtpprovider.c:1004
+#: ../src/goabackend/goaimapsmtpprovider.c:1095
+#: ../src/goabackend/goaimapsmtpprovider.c:1342
+#: ../src/goabackend/goaimapsmtpprovider.c:1416
+#: ../src/goabackend/goaowncloudprovider.c:837
+#: ../src/goabackend/goaowncloudprovider.c:1029
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "Равзанаи гуфтугӯ қатъ карда шуд (%s, %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:720
-#: ../src/goabackend/goaimapsmtpprovider.c:1007
-#: ../src/goabackend/goaimapsmtpprovider.c:1098
-#: ../src/goabackend/goaowncloudprovider.c:861
+#: ../src/goabackend/goaexchangeprovider.c:701
+#: ../src/goabackend/goaimapsmtpprovider.c:1017
+#: ../src/goabackend/goaimapsmtpprovider.c:1108
+#: ../src/goabackend/goaowncloudprovider.c:850
 msgid "_Ignore"
 msgstr "_Рад кардан"
 
-#: ../src/goabackend/goaexchangeprovider.c:725
-#: ../src/goabackend/goaexchangeprovider.c:911
-#: ../src/goabackend/goaimapsmtpprovider.c:1012
-#: ../src/goabackend/goaimapsmtpprovider.c:1103
-#: ../src/goabackend/goaimapsmtpprovider.c:1351
-#: ../src/goabackend/goaimapsmtpprovider.c:1425
-#: ../src/goabackend/goakerberosprovider.c:1660
-#: ../src/goabackend/goaowncloudprovider.c:866
-#: ../src/goabackend/goaowncloudprovider.c:1059
+#: ../src/goabackend/goaexchangeprovider.c:706
+#: ../src/goabackend/goaexchangeprovider.c:892
+#: ../src/goabackend/goaimapsmtpprovider.c:1022
+#: ../src/goabackend/goaimapsmtpprovider.c:1113
+#: ../src/goabackend/goaimapsmtpprovider.c:1361
+#: ../src/goabackend/goaimapsmtpprovider.c:1435
+#: ../src/goabackend/goakerberosprovider.c:1655
+#: ../src/goabackend/goaowncloudprovider.c:855
+#: ../src/goabackend/goaowncloudprovider.c:1048
 msgid "_Try Again"
 msgstr "_Такрор кардан"
 
-#: ../src/goabackend/goaexchangeprovider.c:730
-#: ../src/goabackend/goaexchangeprovider.c:904
+#: ../src/goabackend/goaexchangeprovider.c:711
+#: ../src/goabackend/goaexchangeprovider.c:885
 msgid "Error connecting to Microsoft Exchange server"
 msgstr ""
 "Ҳангоми пайваст шудан ба сервери Microsoft Exchange хатогӣ ба вуҷуд омад"
 
-#: ../src/goabackend/goaexchangeprovider.c:966
-#: ../src/goabackend/goafacebookprovider.c:455
-#: ../src/goabackend/goagoogleprovider.c:546
-#: ../src/goabackend/goakerberosprovider.c:1731
-#: ../src/goabackend/goaowncloudprovider.c:1115
-#: ../src/goabackend/goatelepathyprovider.c:897
-#: ../src/goabackend/goawindowsliveprovider.c:432
+#. Translators: This is a label for a series of
+#. * options switches. For example: “Use for Mail”.
+#: ../src/goabackend/goaexchangeprovider.c:947
+#: ../src/goabackend/goafacebookprovider.c:398
+#: ../src/goabackend/goaflickrprovider.c:427
+#: ../src/goabackend/goagoogleprovider.c:531
+#: ../src/goabackend/goakerberosprovider.c:1728
+#: ../src/goabackend/goaowncloudprovider.c:1104
+#: ../src/goabackend/goatelepathyprovider.c:917
+#: ../src/goabackend/goawindowsliveprovider.c:450
 msgid "Use for"
 msgstr "Истифода бурдан барои"
 
-#: ../src/goabackend/goaexchangeprovider.c:968
-#: ../src/goabackend/goagoogleprovider.c:548
+#: ../src/goabackend/goaexchangeprovider.c:949
+#: ../src/goabackend/goagoogleprovider.c:533
+#: ../src/goabackend/goawindowsliveprovider.c:452
 msgid "_Mail"
 msgstr "_Почта"
 
-#: ../src/goabackend/goaexchangeprovider.c:973
-#: ../src/goabackend/goagoogleprovider.c:553
-#: ../src/goabackend/goaowncloudprovider.c:1117
+#: ../src/goabackend/goaexchangeprovider.c:954
+#: ../src/goabackend/goagoogleprovider.c:538
+#: ../src/goabackend/goaowncloudprovider.c:1106
 msgid "Cale_ndar"
 msgstr "_Тақвим"
 
-#: ../src/goabackend/goaexchangeprovider.c:978
-#: ../src/goabackend/goagoogleprovider.c:558
-#: ../src/goabackend/goaowncloudprovider.c:1122
+#: ../src/goabackend/goaexchangeprovider.c:959
+#: ../src/goabackend/goagoogleprovider.c:543
+#: ../src/goabackend/goaowncloudprovider.c:1111
 msgid "_Contacts"
 msgstr "_Тамосҳо"
 
@@ -213,36 +211,40 @@ msgid "Facebook"
 msgstr "Facebook"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:218
-#: ../src/goabackend/goagoogleprovider.c:207
+#: ../src/goabackend/goafacebookprovider.c:211
+#: ../src/goabackend/goaflickrprovider.c:189
+#: ../src/goabackend/goagoogleprovider.c:210
 #: ../src/goabackend/goatwitterprovider.c:166
-#: ../src/goabackend/goawindowsliveprovider.c:195
+#: ../src/goabackend/goawindowsliveprovider.c:197
 #: ../src/goabackend/goayahooprovider.c:187
 #, c-format
-msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+#| msgid ""
+#| "Expected status 200 when requesting user id, instead got status %d (%s)"
+msgid ""
+"Expected status 200 when requesting your identity, instead got status %d (%s)"
 msgstr ""
-"Вазъияти мунтазири 200 ҳангоми дархосткунии guid, ваъияти %d (%s)-ро қабул "
-"кард"
+"Вазъияти мунтазири 200 ҳангоми дархосткунии шахсияти шумо, ваъияти %d (%s)-"
+"ро қабул кард"
 
-#: ../src/goabackend/goafacebookprovider.c:237
-#: ../src/goabackend/goafacebookprovider.c:249
-#: ../src/goabackend/goafacebookprovider.c:259
+#: ../src/goabackend/goafacebookprovider.c:230
+#: ../src/goabackend/goafacebookprovider.c:242
+#: ../src/goabackend/goafacebookprovider.c:252
 #: ../src/goabackend/goaflickrprovider.c:208
 #: ../src/goabackend/goaflickrprovider.c:220
 #: ../src/goabackend/goaflickrprovider.c:230
 #: ../src/goabackend/goaflickrprovider.c:240
 #: ../src/goabackend/goaflickrprovider.c:250
-#: ../src/goabackend/goagoogleprovider.c:226
-#: ../src/goabackend/goagoogleprovider.c:238
+#: ../src/goabackend/goagoogleprovider.c:229
+#: ../src/goabackend/goagoogleprovider.c:241
 #: ../src/goabackend/goaoauth2provider.c:682
 #: ../src/goabackend/goaoauth2provider.c:712
 #: ../src/goabackend/goaoauth2provider.c:724
 #: ../src/goabackend/goatwitterprovider.c:185
 #: ../src/goabackend/goatwitterprovider.c:197
 #: ../src/goabackend/goatwitterprovider.c:207
-#: ../src/goabackend/goawindowsliveprovider.c:214
-#: ../src/goabackend/goawindowsliveprovider.c:226
-#: ../src/goabackend/goawindowsliveprovider.c:238
+#: ../src/goabackend/goawindowsliveprovider.c:216
+#: ../src/goabackend/goawindowsliveprovider.c:228
+#: ../src/goabackend/goawindowsliveprovider.c:240
 #: ../src/goabackend/goayahooprovider.c:206
 #: ../src/goabackend/goayahooprovider.c:218
 #: ../src/goabackend/goayahooprovider.c:229
@@ -253,28 +255,16 @@ msgstr ""
 msgid "Could not parse response"
 msgstr "Ҷавоб таҷзия карда нашуд"
 
-#: ../src/goabackend/goafacebookprovider.c:457
-#: ../src/goabackend/goagoogleprovider.c:563
-#: ../src/goabackend/goatelepathyprovider.c:899
-#: ../src/goabackend/goawindowsliveprovider.c:434
+#: ../src/goabackend/goafacebookprovider.c:400
+#: ../src/goabackend/goagoogleprovider.c:548
+#: ../src/goabackend/goatelepathyprovider.c:919
+#: ../src/goabackend/goawindowsliveprovider.c:457
 msgid "C_hat"
 msgstr "_Чат"
-
-#: ../src/goabackend/goafacebookprovider.c:462
-#: ../src/goabackend/goaflickrprovider.c:430
-msgid "_Photos"
-msgstr "_Суратҳо"
 
 #: ../src/goabackend/goaflickrprovider.c:83
 msgid "Flickr"
 msgstr "Flickr"
-
-#: ../src/goabackend/goaflickrprovider.c:189
-#, c-format
-msgid "Expected status 200 when requesting user id, instead got status %d (%s)"
-msgstr ""
-"Вазъияти мунтазири 200 ҳангоми дархосткунии рамзи корбар, ваъияти %d (%s)-ро "
-"қабул кард"
 
 #: ../src/goabackend/goaflickrprovider.c:328
 #: ../src/goabackend/goayahooprovider.c:350
@@ -282,13 +272,17 @@ msgid "Your system time is invalid. Check your date and time settings."
 msgstr ""
 "Вақти системаи шумо норуруст аст. Танзимоти вақт ва санаро тафтиш кунед."
 
+#: ../src/goabackend/goaflickrprovider.c:429
+msgid "_Photos"
+msgstr "_Суратҳо"
+
 #: ../src/goabackend/goagoogleprovider.c:82
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:568
-#: ../src/goabackend/goaowncloudprovider.c:1127
-#: ../src/goabackend/goawindowsliveprovider.c:439
+#: ../src/goabackend/goagoogleprovider.c:553
+#: ../src/goabackend/goaowncloudprovider.c:1116
+#: ../src/goabackend/goawindowsliveprovider.c:462
 msgid "_Documents"
 msgstr "_Ҳуҷҷатҳо"
 
@@ -322,33 +316,31 @@ msgstr "Сервер STARTTLS-ро дастгирӣ намекунад"
 msgid "IMAP and SMTP"
 msgstr "IMAP ва SMTP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:362
+#. Translators: the first parameter is a field name. The second is
+#. * a GOA account identifier.
+#: ../src/goabackend/goaimapsmtpprovider.c:364
+#: ../src/goabackend/goaimapsmtpprovider.c:422
 #, c-format
-msgid "Did not find imap-password with identity `%s' in credentials"
-msgstr "Пароли imap бо шахсияти `%s' дар маълумоти корбар ёфт нашуд"
+#| msgid "Did not find password with identity `%s' in credentials"
+msgid "Did not find %s with identity ‘%s’ in credentials"
+msgstr "%s бо шахсияти ‘%s’ дар маълумоти корбар ёфт нашуд"
 
-#. Translators: the first %s is the IMAP
+#. Translators: the first %s is a field name. The
+#. * second %s is the IMAP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:391
-#, c-format
-msgid "Invalid imap-password with username `%s' (%s, %d): "
-msgstr "Пароли imap-и нодуруст бо корбари `%s' (%s, %d): "
-
-#: ../src/goabackend/goaimapsmtpprovider.c:415
-#, c-format
-msgid "Did not find smtp-password with identity `%s' in credentials"
-msgstr "Пароли smtp бо шахсияти `%s' дар маълумоти корбар ёфт нашуд"
-
-#. Translators: the first %s is the SMTP
+#. Translators: the first %s is a field name. The
+#. * second %s is the SMTP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:446
+#: ../src/goabackend/goaimapsmtpprovider.c:395
+#: ../src/goabackend/goaimapsmtpprovider.c:455
 #, c-format
-msgid "Invalid smtp-password with username `%s' (%s, %d): "
-msgstr "Пароли smtp-и нодуруст бо корбари `%s' (%s, %d): "
+#| msgid "Invalid password with username `%s' (%s, %d): "
+msgid "Invalid %s with username ‘%s’ (%s, %d): "
+msgstr "%s-и нодуруст барои корбари ‘%s’ (%s, %d): "
 
 #. Translators: the following four strings are used to show a
 #. * combo box similar to the one in the evolution module.
@@ -356,59 +348,59 @@ msgstr "Пароли smtp-и нодуруст бо корбари `%s' (%s, %d):
 #. *             STARTTLS after connecting
 #. *             SSL on a dedicated port
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:632
+#: ../src/goabackend/goaimapsmtpprovider.c:642
 msgid "_Encryption"
 msgstr "_Рамзгузорӣ"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:635
+#: ../src/goabackend/goaimapsmtpprovider.c:645
 msgid "None"
 msgstr "Ҳеҷ"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:638
+#: ../src/goabackend/goaimapsmtpprovider.c:648
 msgid "STARTTLS after connecting"
 msgstr "Оғоз кардани STARTTLS баъд аз пайваст шудан"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:641
+#: ../src/goabackend/goaimapsmtpprovider.c:651
 msgid "SSL on a dedicated port"
 msgstr "SSL дар порти муайяншуда"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:698
+#: ../src/goabackend/goaimapsmtpprovider.c:708
 msgid "_Name"
 msgstr "_Ном"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:715
+#: ../src/goabackend/goaimapsmtpprovider.c:725
 msgid "IMAP _Server"
 msgstr "_Сервери IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:735
+#: ../src/goabackend/goaimapsmtpprovider.c:745
 msgid "SMTP _Server"
 msgstr "_Сервери SMTP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1017
-#: ../src/goabackend/goaimapsmtpprovider.c:1344
+#: ../src/goabackend/goaimapsmtpprovider.c:1027
+#: ../src/goabackend/goaimapsmtpprovider.c:1354
 msgid "Error connecting to IMAP server"
 msgstr "Ҳангоми пайваст шудан ба сервери IMAP хатогӣ ба вуҷуд омад"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1108
-#: ../src/goabackend/goaimapsmtpprovider.c:1418
+#: ../src/goabackend/goaimapsmtpprovider.c:1118
+#: ../src/goabackend/goaimapsmtpprovider.c:1428
 msgid "Error connecting to SMTP server"
 msgstr "Ҳангоми пайваст шудан ба сервери SMTP хатогӣ ба вуҷуд омад"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1526
+#: ../src/goabackend/goaimapsmtpprovider.c:1527
 msgid "E-mail"
 msgstr "Почтаи электронӣ"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1530
+#: ../src/goabackend/goaimapsmtpprovider.c:1531
 msgid "Name"
 msgstr "Ном"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1540
-#: ../src/goabackend/goaimapsmtpprovider.c:1543
+#: ../src/goabackend/goaimapsmtpprovider.c:1541
+#: ../src/goabackend/goaimapsmtpprovider.c:1544
 msgid "IMAP"
 msgstr "IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1554
-#: ../src/goabackend/goaimapsmtpprovider.c:1557
+#: ../src/goabackend/goaimapsmtpprovider.c:1555
+#: ../src/goabackend/goaimapsmtpprovider.c:1558
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -420,47 +412,51 @@ msgstr "Вуруди тиҷорӣ (Kerberos)"
 msgid "Identity service returned invalid key"
 msgstr "Шахсияти хидмат калиди нодурустро баён кард"
 
-#: ../src/goabackend/goakerberosprovider.c:721
+#: ../src/goabackend/goakerberosprovider.c:728
 #, c-format
-msgid "Could not find saved credentials for principal `%s' in keyring"
-msgstr "Маълумоти корбари захирашуда барои `%s' дар анбори калидҳо ёфт наш"
+#| msgid "Could not find saved credentials for principal `%s' in keyring"
+msgid "Could not find saved credentials for principal ‘%s’ in keyring"
+msgstr ""
+"Маълумоти корбари захирашуда барои корбари асосии ‘%s’ дар анбори калидҳо "
+"ёфт нашуд"
 
-#: ../src/goabackend/goakerberosprovider.c:731
+#: ../src/goabackend/goakerberosprovider.c:738
 #, c-format
-msgid "Did not find password for principal `%s' in credentials"
-msgstr "Пароли `%s' дар маълумоти корбар ёфт нашуд"
+#| msgid "Did not find password for principal `%s' in credentials"
+msgid "Did not find password for principal ‘%s’ in credentials"
+msgstr "Пароли корбари асосии ‘%s’ дар маълумоти корбар ёфт нашуд"
 
-#: ../src/goabackend/goakerberosprovider.c:1126
+#: ../src/goabackend/goakerberosprovider.c:1121
 msgid "_Domain"
 msgstr "_Домен"
 
-#: ../src/goabackend/goakerberosprovider.c:1127
+#: ../src/goabackend/goakerberosprovider.c:1122
 msgid "Enterprise domain or realm name"
 msgstr "Домени тиҷорӣ ё номи идора"
 
-#: ../src/goabackend/goakerberosprovider.c:1359
-#: ../src/goaidentity/goaidentityservice.c:1085
+#: ../src/goabackend/goakerberosprovider.c:1354
+#: ../src/goaidentity/goaidentityservice.c:1114
 msgid "Log In to Realm"
 msgstr "Барои идоракунӣ ворид шавед"
 
-#: ../src/goabackend/goakerberosprovider.c:1360
+#: ../src/goabackend/goakerberosprovider.c:1355
 msgid "Please enter your password below."
 msgstr "Лутфан, пароли худро ворид кунед."
 
-#: ../src/goabackend/goakerberosprovider.c:1361
+#: ../src/goabackend/goakerberosprovider.c:1356
 msgid "Remember this password"
 msgstr "Ба хотир гирифтани ин парол"
 
-#: ../src/goabackend/goakerberosprovider.c:1500
+#: ../src/goabackend/goakerberosprovider.c:1495
 #, c-format
 msgid "The domain is not valid"
 msgstr "Домен беэътибор аст"
 
-#: ../src/goabackend/goakerberosprovider.c:1655
+#: ../src/goabackend/goakerberosprovider.c:1650
 msgid "Error connecting to enterprise identity server"
 msgstr "Ҳангоми пайваст шудан ба сервери шахсияти тиҷорӣ хатогӣ ба вуҷуд омад"
 
-#: ../src/goabackend/goakerberosprovider.c:1733
+#: ../src/goabackend/goakerberosprovider.c:1730
 msgid "Network _Resources"
 msgstr "Сарчашмаҳои _шабака"
 
@@ -474,14 +470,15 @@ msgstr ""
 "Вазъияти мунтазири 200 ҳангоми дархосткунии дастрасии токен, ваъияти %d (%s)-"
 "ро қабул кард"
 
-#: ../src/goabackend/goaoauth2provider.c:916
-#: ../src/goabackend/goaoauth2provider.c:956
+#: ../src/goabackend/goaoauth2provider.c:922
+#: ../src/goabackend/goaoauth2provider.c:968
 #, c-format
-msgid "Authorization response was \"%s\""
-msgstr "Ҷавоби санҷиши ҳаққоният чунин аст: \"%s\""
+#| msgid "Authorization response was \"%s\""
+msgid "Authorization response was ‘%s’"
+msgstr "Ҷавоби санҷиши ҳаққоният чунин аст:  ‘%s’"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:1059
+#: ../src/goabackend/goaoauth2provider.c:1072
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
@@ -490,28 +487,29 @@ msgstr ""
 "Рамзи санҷиши ҳаққониятеро, ки аз <a href=\"%s\">саҳифаи санҷиши ҳаққоният</"
 "a> гирифтед, ворид кунед:"
 
-#: ../src/goabackend/goaoauth2provider.c:1159
+#: ../src/goabackend/goaoauth2provider.c:1172
 #: ../src/goabackend/goaoauthprovider.c:1072
 msgid "Error getting an Access Token: "
 msgstr "Хатои гирифтани токени дастрасӣ:"
 
-#: ../src/goabackend/goaoauth2provider.c:1174
+#: ../src/goabackend/goaoauth2provider.c:1187
 #: ../src/goabackend/goaoauthprovider.c:1085
 msgid "Error getting identity: "
 msgstr "Хатои гирифтани шахсият:"
 
-#: ../src/goabackend/goaoauth2provider.c:1386
+#: ../src/goabackend/goaoauth2provider.c:1399
 #: ../src/goabackend/goaoauthprovider.c:1391
 #, c-format
-msgid "Was asked to login as %s, but logged in as %s"
-msgstr "Бояд ҳамчуд %s ворид шавад, вале ҳамчун %s ворид шудааст"
+#| msgid "Was asked to login as %s, but logged in as %s"
+msgid "Was asked to log in as %s, but logged in as %s"
+msgstr "Дархост кардем, ки ҳамчум %s ворид шавед, вале ҳамчун %s ворид шудед"
 
-#: ../src/goabackend/goaoauth2provider.c:1542
+#: ../src/goabackend/goaoauth2provider.c:1558
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Маълумоти корбар дорои токени дастрасӣ (access_token) намебошад"
 
-#: ../src/goabackend/goaoauth2provider.c:1581
+#: ../src/goabackend/goaoauth2provider.c:1597
 #: ../src/goabackend/goaoauthprovider.c:1619
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
@@ -562,16 +560,16 @@ msgstr ""
 msgid "ownCloud"
 msgstr "ownCloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:871
-#: ../src/goabackend/goaowncloudprovider.c:1052
+#: ../src/goabackend/goaowncloudprovider.c:860
+#: ../src/goabackend/goaowncloudprovider.c:1041
 msgid "Error connecting to ownCloud server"
 msgstr "Ҳангоми пайваст шудан ба сервери ownCloud хатогӣ ба вуҷуд омад"
 
-#: ../src/goabackend/goaowncloudprovider.c:1132
+#: ../src/goabackend/goaowncloudprovider.c:1121
 msgid "_Files"
 msgstr "_Файлҳо"
 
-#: ../src/goabackend/goaprovider.c:714
+#: ../src/goabackend/goaprovider.c:688
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "Имконоти ensure_credentials_sync дар намуди %s иҷро нашуд"
@@ -612,48 +610,44 @@ msgstr "Пароли smtp дар маълумоти корбар ёфт нашу
 msgid "Cannot do SMTP PLAIN without a password"
 msgstr "SMTP PLAIN бе парол иҷро намешавад"
 
-#: ../src/goabackend/goatelepathyprovider.c:183
+#: ../src/goabackend/goatelepathyprovider.c:184
 #, c-format
 msgid "Telepathy chat account not found"
 msgstr "Ҳисоби чати Telepathy ёфт нашудааст"
 
-#: ../src/goabackend/goatelepathyprovider.c:372
+#: ../src/goabackend/goatelepathyprovider.c:393
 #, c-format
-#| msgid "Failed to find Autodiscover element"
 msgid "Failed to initialize a GOA client"
 msgstr "Омодасозии муштарии GOA қатъ шудааст"
 
-#: ../src/goabackend/goatelepathyprovider.c:415
+#: ../src/goabackend/goatelepathyprovider.c:436
 #, c-format
-#| msgid "Failed to find a provider for: %s"
 msgid "Failed to create a user interface for %s"
 msgstr "Омодасозии интерфейси корбарӣ барои %s қатъ шудааст"
 
-#: ../src/goabackend/goatelepathyprovider.c:542
-#| msgid "Connecting…"
+#: ../src/goabackend/goatelepathyprovider.c:563
 msgid "Connection Settings"
 msgstr "Танзимоти пайваст"
 
-#: ../src/goabackend/goatelepathyprovider.c:651
+#: ../src/goabackend/goatelepathyprovider.c:672
 msgid "Personal Details"
 msgstr "Тафсилоти шахсӣ"
 
-#: ../src/goabackend/goatelepathyprovider.c:860
+#: ../src/goabackend/goatelepathyprovider.c:881
 msgid "Cannot save the connection parameters"
 msgstr "Параметрҳои пайваст захира намешаванд"
 
-#: ../src/goabackend/goatelepathyprovider.c:872
+#: ../src/goabackend/goatelepathyprovider.c:893
 msgid "Cannot save your personal information on the server"
 msgstr "Маълумоти шахсии шумо дар сервер захира намешаванд"
 
 #. Connection Settings button
-#: ../src/goabackend/goatelepathyprovider.c:904
-#| msgid "Connecting…"
+#: ../src/goabackend/goatelepathyprovider.c:924
 msgid "_Connection Settings"
 msgstr "_Танзимоти пайваст"
 
 #. Edit Personal Information button
-#: ../src/goabackend/goatelepathyprovider.c:908
+#: ../src/goabackend/goatelepathyprovider.c:928
 msgid "_Personal Details"
 msgstr "_Тафсилоти шахсӣ"
 
@@ -661,52 +655,52 @@ msgstr "_Тафсилоти шахсӣ"
 msgid "Twitter"
 msgstr "Twitter"
 
-#: ../src/goabackend/goautils.c:86
+#: ../src/goabackend/goautils.c:120
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "Ҳисоби %s аллакай барои %s мавҷуд аст"
 
 #. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:108
+#: ../src/goabackend/goautils.c:142
 #, c-format
 msgid "%s account"
 msgstr "Ҳисоби %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:152
+#: ../src/goabackend/goautils.c:186
 msgid "Failed to delete credentials from the keyring"
 msgstr "Нест кардани маълумоти корбар аз анбори калидҳо қатъ шуд"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:204
+#: ../src/goabackend/goautils.c:238
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Бозёбӣ кардани маълумоти корбар аз анбори калидҳо қатъ шуд"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:214
+#: ../src/goabackend/goautils.c:248
 msgid "No credentials found in the keyring"
 msgstr "Ягон маълумоти корбар дар анбори қалидҳо ёфт нашуд"
 
-#: ../src/goabackend/goautils.c:227
+#: ../src/goabackend/goautils.c:261
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Ҳангоми гирифтани натиҷа аз анбори калидҳо хатогӣ ба вуҷуд омад:"
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:270
+#: ../src/goabackend/goautils.c:304
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Маълумоти корбари GOA %s барои шахсияти %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:287
+#: ../src/goabackend/goautils.c:321
 msgid "Failed to store credentials in the keyring"
 msgstr "Нигоҳ доштани маълумоти корбар дар анбори калидҳо қатъ шуд"
 
-#: ../src/goabackend/goautils.c:508
+#: ../src/goabackend/goautils.c:542
 msgid "The signing certificate authority is not known."
 msgstr "Вақолатдори гувоҳиномаи имзошуда номаълум аст."
 
-#: ../src/goabackend/goautils.c:512
+#: ../src/goabackend/goautils.c:546
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
@@ -714,23 +708,25 @@ msgstr ""
 "Гувоҳинома ба шахсияти сайти мунтазире, ки гувоҳиномаро интишор кард, "
 "мувофиқат намекунад."
 
-#: ../src/goabackend/goautils.c:517
-msgid "The certificate's activation time is still in the future."
+#: ../src/goabackend/goautils.c:551
+#| msgid "The certificate's activation time is still in the future."
+msgid "The certificate’s activation time is still in the future."
 msgstr "Вақти фаъолсозии гувоҳинома ҳоло наомад."
 
-#: ../src/goabackend/goautils.c:521
+#: ../src/goabackend/goautils.c:555
 msgid "The certificate has expired."
 msgstr "Гӯфоҳинома аз мӯҳлаташ гузашт."
 
-#: ../src/goabackend/goautils.c:525
+#: ../src/goabackend/goautils.c:559
 msgid "The certificate has been revoked."
 msgstr "Гувоҳинома лағв карда шудааст."
 
-#: ../src/goabackend/goautils.c:529
-msgid "The certificate's algorithm is considered insecure."
+#: ../src/goabackend/goautils.c:563
+#| msgid "The certificate's algorithm is considered insecure."
+msgid "The certificate’s algorithm is considered insecure."
 msgstr "Алгоритми гувоҳинома муҳофизат нашудааст."
 
-#: ../src/goabackend/goautils.c:533
+#: ../src/goabackend/goautils.c:567
 msgid "Invalid certificate."
 msgstr "Гувоҳиномаи нодуруст."
 
@@ -763,82 +759,105 @@ msgstr "Вақт"
 msgid "Time to fire"
 msgstr "Вақти иҷро"
 
-#: ../src/goaidentity/goaidentityservice.c:378
+#: ../src/goaidentity/goaidentityservice.c:379
 msgid "initial secret passed before secret key exchange"
 msgstr "калиди аввалӣ пеш аз тағйир кардани калиди амният қабул шуд"
 
-#: ../src/goaidentity/goaidentityservice.c:570
+#: ../src/goaidentity/goaidentityservice.c:571
 msgid "Initial secret key is invalid"
 msgstr "Калиди амнияти аввалӣ нодуруст аст"
 
-#: ../src/goaidentity/goaidentityservice.c:1090
+#: ../src/goaidentity/goaidentityservice.c:1119
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr ""
 "Идоракунии шабакаи %s барои ворид кардани шумо маълумоти иловагиро талаб "
 "мекунад."
 
-#: ../src/goaidentity/goakerberosidentity.c:272
-#: ../src/goaidentity/goakerberosidentity.c:281
-#: ../src/goaidentity/goakerberosidentity.c:608
+#: ../src/goaidentity/goakerberosidentity.c:264
+#: ../src/goaidentity/goakerberosidentity.c:273
+#: ../src/goaidentity/goakerberosidentity.c:601
 msgid "Could not find identity in credential cache: %k"
 msgstr "Шахсият дар маълумоти корбари зерҳофиза ёфт нашуд: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:621
+#: ../src/goaidentity/goakerberosidentity.c:614
 msgid "Could not find identity credentials in cache: %k"
 msgstr "Шахсияти маълумоти корбар дар зерҳофиза ёфт нашуд: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:659
+#: ../src/goaidentity/goakerberosidentity.c:652
 msgid "Could not sift through identity credentials in cache: %k"
 msgstr ""
 "Интихобкуии шахсияти маълумоти корбар дар зерҳофиза имконнопазир аст: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:676
+#: ../src/goaidentity/goakerberosidentity.c:669
 msgid "Could not finish up sifting through identity credentials in cache: %k"
 msgstr ""
 "Интихобкунии шахсияти маълумоти корбар дар зерҳофиза ба анҷом нарасид: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1014
+#: ../src/goaidentity/goakerberosidentity.c:953
 #, c-format
 msgid "No associated identification found"
 msgstr "Ягон санҷиши ҳаққонияти мувофиқ ёфт нашуд"
 
-#: ../src/goaidentity/goakerberosidentity.c:1095
+#: ../src/goaidentity/goakerberosidentity.c:1034
 msgid "Could not create credential cache: %k"
 msgstr "Маълумоти зерҳофиза эҷод нашуд: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1129
+#: ../src/goaidentity/goakerberosidentity.c:1068
 msgid "Could not initialize credentials cache: %k"
 msgstr "Омодасозии зерҳофизаи маълумоти корбар имконнопазир аст: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1148
+#: ../src/goaidentity/goakerberosidentity.c:1085
 msgid "Could not store new credentials in credentials cache: %k"
 msgstr ""
 "Маълумоти корбари нав дар зерҳофизаи маълумоти корбар захира намешавад: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1425
+#: ../src/goaidentity/goakerberosidentity.c:1360
 #, c-format
 msgid "Could not renew identity: Not signed in"
 msgstr "Шахсият навсозӣ карда нашуд: Ворид нашудааст"
 
-#: ../src/goaidentity/goakerberosidentity.c:1437
+#: ../src/goaidentity/goakerberosidentity.c:1372
 msgid "Could not renew identity: %k"
 msgstr "Шахсият навсозӣ карда нашуд: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1454
+#: ../src/goaidentity/goakerberosidentity.c:1389
 msgid "Could not get new credentials to renew identity %s: %k"
 msgstr ""
 "Гирифтани маълумоти корбари нав барои навсозӣ кардани шахсияти %s "
 "имконнопазир аст: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1494
+#: ../src/goaidentity/goakerberosidentity.c:1429
 msgid "Could not erase identity: %k"
 msgstr "Шахсият тоза нашуд: %k"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:747
+#: ../src/goaidentity/goakerberosidentitymanager.c:750
 msgid "Could not find identity"
 msgstr "Шахсият ёфт нашуд"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:824
+#: ../src/goaidentity/goakerberosidentitymanager.c:827
 msgid "Could not create credential cache for identity"
 msgstr "Маълумоти зерҳофиза  барои шахсият эҷод нашуд"
+
+#~ msgid "Failed to find Autodiscover element"
+#~ msgstr "Унсури кашфи худкор ёфт нашудааст"
+
+#~ msgid "Failed to find Account element"
+#~ msgstr "Унсури ҳисоб ёфт нашудааст"
+
+#~ msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+#~ msgstr ""
+#~ "Вазъияти мунтазири 200 ҳангоми дархосткунии guid, ваъияти %d (%s)-ро "
+#~ "қабул кард"
+
+#~ msgid "Did not find imap-password with identity `%s' in credentials"
+#~ msgstr "Пароли imap бо шахсияти `%s' дар маълумоти корбар ёфт нашуд"
+
+#~ msgid "Invalid imap-password with username `%s' (%s, %d): "
+#~ msgstr "Пароли imap-и нодуруст бо корбари `%s' (%s, %d): "
+
+#~ msgid "Did not find smtp-password with identity `%s' in credentials"
+#~ msgstr "Пароли smtp бо шахсияти `%s' дар маълумоти корбар ёфт нашуд"
+
+#~ msgid "Invalid smtp-password with username `%s' (%s, %d): "
+#~ msgstr "Пароли smtp-и нодуруст бо корбари `%s' (%s, %d): "
