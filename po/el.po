@@ -1,15 +1,15 @@
 # Greek translation for gnome-online-accounts.
 # Copyright (C) 2012 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
-# Efstathios Iosifidis <iosifidis@opensuse.org>, 2012.
 # Dimitris Spingos (Δημήτρης Σπίγγος) <dmtrs32@gmail.com>, 2013.
+# Efstathios Iosifidis <iosifidis@opensuse.org>, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-03-12 13:52+0000\n"
-"PO-Revision-Date: 2013-03-13 15:29+0300\n"
+"POT-Creation-Date: 2013-10-18 12:10+0000\n"
+"PO-Revision-Date: 2013-11-04 10:46+0300\n"
 "Last-Translator: Dimitris Spingos (Δημήτρης Σπίγγος) <dmtrs32@gmail.com>\n"
 "Language-Team: team@gnome.gr\n"
 "Language: el\n"
@@ -21,21 +21,21 @@ msgstr ""
 "X-Project-Style: gnome\n"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:773 ../src/daemon/goadaemon.c:983
+#: ../src/daemon/goadaemon.c:788 ../src/daemon/goadaemon.c:1034
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Αδυναμία εύρεσης παρόχου για: %s"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:971
+#: ../src/daemon/goadaemon.c:1022
 msgid "ProviderType property is not set for account"
 msgstr "Η ιδιότητα ProviderType δεν έχει οριστεί για το λογαριασμό"
 
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:234 ../src/goabackend/goahttpclient.c:175
 #, c-format
-msgid "Code: %u - Unexpected response from server"
-msgstr "Κωδικός: %u - Μη αναμενόμενη απάντηση από τον εξυπηρετητή"
+msgid "Code: %u — Unexpected response from server"
+msgstr "Κωδικός: %u - Μη αναμενόμενη απάντηση από τον διακομιστή"
 
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:250
@@ -44,25 +44,15 @@ msgid "Failed to parse autodiscover response XML"
 msgstr "Αποτυχία ανάλυσης απάντησης αυτόματου εντοπισμού XML"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:260
+#. Translators: the parameter is an XML element name.
+#: ../src/goabackend/goaewsclient.c:261 ../src/goabackend/goaewsclient.c:276
+#: ../src/goabackend/goaewsclient.c:291
 #, c-format
-msgid "Failed to find Autodiscover element"
-msgstr "Αποτυχία εύρεσης στοιχείου αυτόματου εντοπισμού"
+msgid "Failed to find ‘%s’ element"
+msgstr "Αποτυχία εύρεσης στοιχείου ‘%s’"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:274
-#, c-format
-msgid "Failed to find Response element"
-msgstr "Αποτυχία εύρεσης στοιχείου απάντησης"
-
-#. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:288
-#, c-format
-msgid "Failed to find Account element"
-msgstr "Αποτυχία εύρεσης στοιχείου λογαριασμού"
-
-#. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:305
+#: ../src/goabackend/goaewsclient.c:308
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "Αποτυχία εύρεσης ASUrl και OABUrl στην απάντηση αυτόματου εντοπισμού"
@@ -72,139 +62,143 @@ msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
 #. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:308
-#: ../src/goabackend/goaexchangeprovider.c:1036
-#: ../src/goabackend/goagoogleprovider.c:609
-#: ../src/goabackend/goagoogleprovider.c:796
-#: ../src/goabackend/goaowncloudprovider.c:364
-#: ../src/goabackend/goaowncloudprovider.c:1138
+#: ../src/goabackend/goaexchangeprovider.c:317
+#: ../src/goabackend/goaexchangeprovider.c:1028
+#: ../src/goabackend/goaowncloudprovider.c:403
+#: ../src/goabackend/goaowncloudprovider.c:1190
 #, c-format
-msgid "Did not find password with identity `%s' in credentials"
-msgstr ""
-"Δε βρέθηκε ο κωδικός πρόσβασης με αναγνωριστικό `%s' στα διαπιστευτήρια"
+msgid "Did not find password with identity ‘%s’ in credentials"
+msgstr "Δε βρέθηκε ο συνθηματικό με αναγνωριστικό ‘%s’ στα διαπιστευτήρια"
 
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
 #.
-#: ../src/goabackend/goaexchangeprovider.c:336
-#: ../src/goabackend/goagoogleprovider.c:632
-#: ../src/goabackend/goaowncloudprovider.c:387
+#: ../src/goabackend/goaexchangeprovider.c:345
+#: ../src/goabackend/goaowncloudprovider.c:426
 #, c-format
-msgid "Invalid password with username `%s' (%s, %d): "
-msgstr "Άκυρος κωδικός πρόσβασης με όνομα χρήστη `%s' (%s, %d): "
+msgid "Invalid password with username ‘%s’ (%s, %d): "
+msgstr "Μη έγκυρο συνθηματικό με όνομα χρήστη ‘%s’ (%s, %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:501
-#: ../src/goabackend/goaimapsmtpprovider.c:666
+#: ../src/goabackend/goaexchangeprovider.c:499
+#: ../src/goabackend/goaimapsmtpprovider.c:707
 msgid "_E-mail"
 msgstr "_Ηλεκτρονική διεύθυνση"
 
-#: ../src/goabackend/goaexchangeprovider.c:502
-#: ../src/goabackend/goaimapsmtpprovider.c:686
-#: ../src/goabackend/goaimapsmtpprovider.c:718
-#: ../src/goabackend/goaowncloudprovider.c:613
+#: ../src/goabackend/goaexchangeprovider.c:500
+#: ../src/goabackend/goaimapsmtpprovider.c:727
+#: ../src/goabackend/goaimapsmtpprovider.c:747
+#: ../src/goabackend/goaowncloudprovider.c:655
 msgid "_Password"
 msgstr "_Κωδικός πρόσβασης"
 
-#: ../src/goabackend/goaexchangeprovider.c:505
+#: ../src/goabackend/goaexchangeprovider.c:503
 msgid "_Custom"
 msgstr "_Προσαρμοσμένο"
 
-#: ../src/goabackend/goaexchangeprovider.c:524
-#: ../src/goabackend/goaimapsmtpprovider.c:685
-#: ../src/goabackend/goaimapsmtpprovider.c:717
-#: ../src/goabackend/goakerberosprovider.c:1128
-#: ../src/goabackend/goaowncloudprovider.c:612
+#: ../src/goabackend/goaexchangeprovider.c:514
+#: ../src/goabackend/goaimapsmtpprovider.c:726
+#: ../src/goabackend/goaimapsmtpprovider.c:746
+#: ../src/goabackend/goakerberosprovider.c:1129
+#: ../src/goabackend/goaowncloudprovider.c:654
 msgid "User_name"
 msgstr "Όνομα_χρήστη"
 
-#: ../src/goabackend/goaexchangeprovider.c:525
-#: ../src/goabackend/goaowncloudprovider.c:611
+#: ../src/goabackend/goaexchangeprovider.c:515
+#: ../src/goabackend/goaowncloudprovider.c:653
 msgid "_Server"
 msgstr "_Εξυπηρετητής"
 
-#: ../src/goabackend/goaexchangeprovider.c:555
-#: ../src/goabackend/goaimapsmtpprovider.c:762
-#: ../src/goabackend/goakerberosprovider.c:1153
-#: ../src/goabackend/goaowncloudprovider.c:642
+#: ../src/goabackend/goaexchangeprovider.c:545
+#: ../src/goabackend/goaimapsmtpprovider.c:779
+#: ../src/goabackend/goakerberosprovider.c:1154
+#: ../src/goabackend/goaowncloudprovider.c:684
 msgid "Connecting…"
 msgstr "Σύνδεση…"
 
-#: ../src/goabackend/goaexchangeprovider.c:660
-#: ../src/goabackend/goaexchangeprovider.c:854
-#: ../src/goabackend/goaimapsmtpprovider.c:922
-#: ../src/goabackend/goaimapsmtpprovider.c:956
-#: ../src/goabackend/goaimapsmtpprovider.c:1044
-#: ../src/goabackend/goaimapsmtpprovider.c:1300
-#: ../src/goabackend/goaimapsmtpprovider.c:1373
-#: ../src/goabackend/goakerberosprovider.c:1544
-#: ../src/goabackend/goaoauth2provider.c:1064
+#: ../src/goabackend/goaexchangeprovider.c:650
+#: ../src/goabackend/goaexchangeprovider.c:845
+#: ../src/goabackend/goaimapsmtpprovider.c:939
+#: ../src/goabackend/goaimapsmtpprovider.c:974
+#: ../src/goabackend/goaimapsmtpprovider.c:1062
+#: ../src/goabackend/goaimapsmtpprovider.c:1318
+#: ../src/goabackend/goaimapsmtpprovider.c:1391
+#: ../src/goabackend/goakerberosprovider.c:1545
+#: ../src/goabackend/goaoauth2provider.c:1136
 #: ../src/goabackend/goaoauthprovider.c:1041
-#: ../src/goabackend/goaowncloudprovider.c:753
-#: ../src/goabackend/goaowncloudprovider.c:962
+#: ../src/goabackend/goaowncloudprovider.c:795
+#: ../src/goabackend/goaowncloudprovider.c:1008
+#: ../src/goabackend/goatelepathyprovider.c:487
+#: ../src/goabackend/goatelepathyprovider.c:536
+#: ../src/goabackend/goatelepathyprovider.c:710
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "Απορρίφθηκε το παράθυρο διαλόγου"
 
-#: ../src/goabackend/goaexchangeprovider.c:697
-#: ../src/goabackend/goaexchangeprovider.c:882
-#: ../src/goabackend/goaimapsmtpprovider.c:986
-#: ../src/goabackend/goaimapsmtpprovider.c:1077
-#: ../src/goabackend/goaimapsmtpprovider.c:1324
-#: ../src/goabackend/goaimapsmtpprovider.c:1398
-#: ../src/goabackend/goaowncloudprovider.c:792
-#: ../src/goabackend/goaowncloudprovider.c:983
+#: ../src/goabackend/goaexchangeprovider.c:688
+#: ../src/goabackend/goaexchangeprovider.c:873
+#: ../src/goabackend/goaimapsmtpprovider.c:1004
+#: ../src/goabackend/goaimapsmtpprovider.c:1095
+#: ../src/goabackend/goaimapsmtpprovider.c:1342
+#: ../src/goabackend/goaimapsmtpprovider.c:1416
+#: ../src/goabackend/goaowncloudprovider.c:837
+#: ../src/goabackend/goaowncloudprovider.c:1029
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "Απορρίφθηκε ο διάλογος (%s, %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:710
-#: ../src/goabackend/goaimapsmtpprovider.c:999
-#: ../src/goabackend/goaimapsmtpprovider.c:1090
-#: ../src/goabackend/goaowncloudprovider.c:805
+#: ../src/goabackend/goaexchangeprovider.c:701
+#: ../src/goabackend/goaimapsmtpprovider.c:1017
+#: ../src/goabackend/goaimapsmtpprovider.c:1108
+#: ../src/goabackend/goaowncloudprovider.c:850
 msgid "_Ignore"
 msgstr "_Παράβλεψη"
 
-#: ../src/goabackend/goaexchangeprovider.c:715
-#: ../src/goabackend/goaexchangeprovider.c:901
-#: ../src/goabackend/goaimapsmtpprovider.c:1004
-#: ../src/goabackend/goaimapsmtpprovider.c:1095
-#: ../src/goabackend/goaimapsmtpprovider.c:1343
-#: ../src/goabackend/goaimapsmtpprovider.c:1417
-#: ../src/goabackend/goakerberosprovider.c:1653
-#: ../src/goabackend/goaowncloudprovider.c:810
-#: ../src/goabackend/goaowncloudprovider.c:1002
+#: ../src/goabackend/goaexchangeprovider.c:706
+#: ../src/goabackend/goaexchangeprovider.c:892
+#: ../src/goabackend/goaimapsmtpprovider.c:1022
+#: ../src/goabackend/goaimapsmtpprovider.c:1113
+#: ../src/goabackend/goaimapsmtpprovider.c:1361
+#: ../src/goabackend/goaimapsmtpprovider.c:1435
+#: ../src/goabackend/goakerberosprovider.c:1655
+#: ../src/goabackend/goaowncloudprovider.c:855
+#: ../src/goabackend/goaowncloudprovider.c:1048
 msgid "_Try Again"
 msgstr "_Προσπαθήστε ξανά"
 
-#: ../src/goabackend/goaexchangeprovider.c:720
-#: ../src/goabackend/goaexchangeprovider.c:894
+#: ../src/goabackend/goaexchangeprovider.c:711
+#: ../src/goabackend/goaexchangeprovider.c:885
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Σφάλμα σύνδεσης στον εξυπηρετητή Microsoft Exchange"
 
-#: ../src/goabackend/goaexchangeprovider.c:956
-#: ../src/goabackend/goafacebookprovider.c:411
-#: ../src/goabackend/goagoogleprovider.c:677
-#: ../src/goabackend/goakerberosprovider.c:1724
-#: ../src/goabackend/goaowncloudprovider.c:1058
-#: ../src/goabackend/goawindowsliveprovider.c:424
+#. Translators: This is a label for a series of
+#. * options switches. For example: “Use for Mail”.
+#: ../src/goabackend/goaexchangeprovider.c:947
+#: ../src/goabackend/goafacebookprovider.c:398
+#: ../src/goabackend/goaflickrprovider.c:427
+#: ../src/goabackend/goagoogleprovider.c:531
+#: ../src/goabackend/goakerberosprovider.c:1728
+#: ../src/goabackend/goaowncloudprovider.c:1104
+#: ../src/goabackend/goatelepathyprovider.c:917
+#: ../src/goabackend/goawindowsliveprovider.c:450
 msgid "Use for"
 msgstr "Χρήση για"
 
-#: ../src/goabackend/goaexchangeprovider.c:958
-#: ../src/goabackend/goagoogleprovider.c:679
+#: ../src/goabackend/goaexchangeprovider.c:949
+#: ../src/goabackend/goagoogleprovider.c:533
+#: ../src/goabackend/goawindowsliveprovider.c:452
 msgid "_Mail"
 msgstr "Αλλ_ηλογραφία"
 
-#: ../src/goabackend/goaexchangeprovider.c:963
-#: ../src/goabackend/goagoogleprovider.c:684
-#: ../src/goabackend/goaowncloudprovider.c:1060
+#: ../src/goabackend/goaexchangeprovider.c:954
+#: ../src/goabackend/goagoogleprovider.c:538
+#: ../src/goabackend/goaowncloudprovider.c:1106
 msgid "Cale_ndar"
 msgstr "Ημερο_λόγιο"
 
-#: ../src/goabackend/goaexchangeprovider.c:968
-#: ../src/goabackend/goagoogleprovider.c:689
-#: ../src/goabackend/goaowncloudprovider.c:1065
+#: ../src/goabackend/goaexchangeprovider.c:959
+#: ../src/goabackend/goagoogleprovider.c:543
+#: ../src/goabackend/goaowncloudprovider.c:1111
 msgid "_Contacts"
 msgstr "Επα_φές"
 
@@ -212,39 +206,53 @@ msgstr "Επα_φές"
 msgid "Facebook"
 msgstr "Facebook"
 
-#: ../src/goabackend/goafacebookprovider.c:205
-#: ../src/goabackend/goagoogleprovider.c:200
-#: ../src/goabackend/goawindowsliveprovider.c:187
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goafacebookprovider.c:211
+#: ../src/goabackend/goaflickrprovider.c:189
+#: ../src/goabackend/goagoogleprovider.c:210
+#: ../src/goabackend/goatwitterprovider.c:166
+#: ../src/goabackend/goawindowsliveprovider.c:197
+#: ../src/goabackend/goayahooprovider.c:187
 #, c-format
-msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+msgid ""
+"Expected status 200 when requesting your identity, instead got status %d (%s)"
 msgstr ""
-"Αναμενόταν κατάσταση 200 κατά την αίτηση του αναγνωριστικού guid, αντί να "
-"ληφθεί η κατάσταση %d (%s)"
+"Αναμενόταν η κατάσταση 200 κατά την αίτηση του αναγνωριστικού σας, αντ'αυτού "
+"εμφανίστηκε η κατάσταση %d (%s)"
 
-#: ../src/goabackend/goafacebookprovider.c:224
-#: ../src/goabackend/goafacebookprovider.c:236
-#: ../src/goabackend/goafacebookprovider.c:246
-#: ../src/goabackend/goaflickrprovider.c:202
-#: ../src/goabackend/goaflickrprovider.c:214
-#: ../src/goabackend/goaflickrprovider.c:224
-#: ../src/goabackend/goaflickrprovider.c:234
-#: ../src/goabackend/goaflickrprovider.c:244
-#: ../src/goabackend/goagoogleprovider.c:219
-#: ../src/goabackend/goagoogleprovider.c:231
-#: ../src/goabackend/goaoauth2provider.c:600
-#: ../src/goabackend/goaoauth2provider.c:630
-#: ../src/goabackend/goaoauth2provider.c:642
-#: ../src/goabackend/goawindowsliveprovider.c:206
-#: ../src/goabackend/goawindowsliveprovider.c:218
-#: ../src/goabackend/goawindowsliveprovider.c:230
+#: ../src/goabackend/goafacebookprovider.c:230
+#: ../src/goabackend/goafacebookprovider.c:242
+#: ../src/goabackend/goafacebookprovider.c:252
+#: ../src/goabackend/goaflickrprovider.c:208
+#: ../src/goabackend/goaflickrprovider.c:220
+#: ../src/goabackend/goaflickrprovider.c:230
+#: ../src/goabackend/goaflickrprovider.c:240
+#: ../src/goabackend/goaflickrprovider.c:250
+#: ../src/goabackend/goagoogleprovider.c:229
+#: ../src/goabackend/goagoogleprovider.c:241
+#: ../src/goabackend/goaoauth2provider.c:682
+#: ../src/goabackend/goaoauth2provider.c:712
+#: ../src/goabackend/goaoauth2provider.c:724
+#: ../src/goabackend/goatwitterprovider.c:185
+#: ../src/goabackend/goatwitterprovider.c:197
+#: ../src/goabackend/goatwitterprovider.c:207
+#: ../src/goabackend/goawindowsliveprovider.c:216
+#: ../src/goabackend/goawindowsliveprovider.c:228
+#: ../src/goabackend/goawindowsliveprovider.c:240
+#: ../src/goabackend/goayahooprovider.c:206
+#: ../src/goabackend/goayahooprovider.c:218
+#: ../src/goabackend/goayahooprovider.c:229
+#: ../src/goabackend/goayahooprovider.c:275
+#: ../src/goabackend/goayahooprovider.c:287
+#: ../src/goabackend/goayahooprovider.c:298
 #, c-format
-#| msgid "Could not erase identity: %k"
 msgid "Could not parse response"
 msgstr "Αδυναμία ανάλυσης απάντησης"
 
-#: ../src/goabackend/goafacebookprovider.c:413
-#: ../src/goabackend/goagoogleprovider.c:694
-#: ../src/goabackend/goawindowsliveprovider.c:426
+#: ../src/goabackend/goafacebookprovider.c:400
+#: ../src/goabackend/goagoogleprovider.c:548
+#: ../src/goabackend/goatelepathyprovider.c:919
+#: ../src/goabackend/goawindowsliveprovider.c:457
 msgid "C_hat"
 msgstr "_Συνομιλία"
 
@@ -252,130 +260,140 @@ msgstr "_Συνομιλία"
 msgid "Flickr"
 msgstr "Flickr"
 
-#: ../src/goabackend/goaflickrprovider.c:183
-#, c-format
-msgid "Expected status 200 when requesting user id, instead got status %d (%s)"
-msgstr ""
-"Αναμενόταν η κατάσταση 200 κατά την αίτηση του αναγνωριστικού χρήστη, "
-"πάρθηκε η κατάσταση %d (%s)"
-
-#: ../src/goabackend/goaflickrprovider.c:322
+#: ../src/goabackend/goaflickrprovider.c:328
+#: ../src/goabackend/goayahooprovider.c:350
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr ""
 "Η ώρα του συστήματος σας είναι εσφαλμένη. Ελέξτε τις ρυθμίσεις ημερομηνίας "
 "και ώρας."
 
-#: ../src/goabackend/goaflickrprovider.c:424
+#: ../src/goabackend/goaflickrprovider.c:429
 msgid "_Photos"
 msgstr "_Φωτογραφίες"
 
-#: ../src/goabackend/goagoogleprovider.c:86
+#: ../src/goabackend/goagoogleprovider.c:82
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:699
-#: ../src/goabackend/goawindowsliveprovider.c:431
+#: ../src/goabackend/goagoogleprovider.c:553
+#: ../src/goabackend/goaowncloudprovider.c:1116
+#: ../src/goabackend/goawindowsliveprovider.c:462
 msgid "_Documents"
 msgstr "Έ_γγραφα"
 
 #. TODO: more specific
-#: ../src/goabackend/goaimapauthlogin.c:380
+#: ../src/goabackend/goaimapauthlogin.c:99
+#: ../src/goabackend/goasmtpauthplain.c:146
+#, c-format
+msgid "Service not available"
+msgstr "Η υπηρεσία δεν είναι διαθέσιμη"
+
+#. TODO: more specific
+#: ../src/goabackend/goaimapauthlogin.c:120
 #: ../src/goabackend/goasmtpauthplain.c:115
 #, c-format
 msgid "Authentication failed"
 msgstr "Αποτυχία πιστοποίησης"
 
+#: ../src/goabackend/goaimapauthlogin.c:145
+#: ../src/goabackend/goasmtpauthplain.c:646
+#, c-format
+msgid "Server does not support PLAIN"
+msgstr "Ο εξυπηρετητής δεν υποστηρίζει PLAIN"
+
+#: ../src/goabackend/goaimapauthlogin.c:199
+#: ../src/goabackend/goasmtpauthplain.c:751
+#, c-format
+msgid "Server does not support STARTTLS"
+msgstr "Ο εξυπηρετητής δεν υποστηρίζει STARTTLS"
+
 #: ../src/goabackend/goaimapsmtpprovider.c:82
 msgid "IMAP and SMTP"
 msgstr "IMAP και SMTP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:356
+#. Translators: the first parameter is a field name. The second is
+#. * a GOA account identifier.
+#: ../src/goabackend/goaimapsmtpprovider.c:364
+#: ../src/goabackend/goaimapsmtpprovider.c:422
 #, c-format
-msgid "Did not find imap-password with identity `%s' in credentials"
-msgstr ""
-"Δε βρέθηκε ο κωδικός πρόσβασης imap με αναγνωριστικό `%s' στα διαπιστευτήρια"
+msgid "Did not find %s with identity ‘%s’ in credentials"
+msgstr "Δε βρέθηκε %s με αναγνωριστικό ‘%s’ στα διαπιστευτήρια"
 
-#. Translators: the first %s is the IMAP
+#. Translators: the first %s is a field name. The
+#. * second %s is the IMAP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:385
-#, c-format
-msgid "Invalid imap-password with username `%s' (%s, %d): "
-msgstr "Άκυρος κωδικός πρόσβασης imap με όνομα χρήστη `%s' (%s, %d): "
-
-#: ../src/goabackend/goaimapsmtpprovider.c:409
-#, c-format
-msgid "Did not find smtp-password with identity `%s' in credentials"
-msgstr ""
-"Δε βρέθηκε ο κωδικός πρόσβασης smtp με αναγνωριστικό `%s' στα διαπιστευτήρια"
-
-#. Translators: the first %s is the SMTP
+#. Translators: the first %s is a field name. The
+#. * second %s is the SMTP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:440
+#: ../src/goabackend/goaimapsmtpprovider.c:395
+#: ../src/goabackend/goaimapsmtpprovider.c:455
 #, c-format
-msgid "Invalid smtp-password with username `%s' (%s, %d): "
-msgstr "Άκυρος κωδικός πρόσβασης smtp με όνομα χρήστη `%s' (%s, %d): "
+msgid "Invalid %s with username ‘%s’ (%s, %d): "
+msgstr "Μη έγκυρο %s με όνομα χρήστη ‘%s’ (%s, %d): "
 
-#: ../src/goabackend/goaimapsmtpprovider.c:667
-msgid "_Name"
-msgstr "Ό_νομα"
-
-#: ../src/goabackend/goaimapsmtpprovider.c:684
-msgid "IMAP _Server"
-msgstr "_Εξυπηρετητής IMAP"
-
-#: ../src/goabackend/goaimapsmtpprovider.c:691
-#: ../src/goabackend/goaimapsmtpprovider.c:723
+#. Translators: the following four strings are used to show a
+#. * combo box similar to the one in the evolution module.
+#. * Encryption: None
+#. *             STARTTLS after connecting
+#. *             SSL on a dedicated port
+#.
+#: ../src/goabackend/goaimapsmtpprovider.c:642
 msgid "_Encryption"
 msgstr "_Κρυπτογράφηση"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:694
-#: ../src/goabackend/goaimapsmtpprovider.c:726
+#: ../src/goabackend/goaimapsmtpprovider.c:645
 msgid "None"
 msgstr "Κανένα"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:697
-#: ../src/goabackend/goaimapsmtpprovider.c:729
+#: ../src/goabackend/goaimapsmtpprovider.c:648
 msgid "STARTTLS after connecting"
 msgstr "STARTTLS μετά τη σύνδεση"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:700
-#: ../src/goabackend/goaimapsmtpprovider.c:732
+#: ../src/goabackend/goaimapsmtpprovider.c:651
 msgid "SSL on a dedicated port"
 msgstr "SSL σε μια αποκλειστική θύρα"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:716
+#: ../src/goabackend/goaimapsmtpprovider.c:708
+msgid "_Name"
+msgstr "Ό_νομα"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:725
+msgid "IMAP _Server"
+msgstr "_Εξυπηρετητής IMAP"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:745
 msgid "SMTP _Server"
 msgstr "_Εξυπηρετητής SMTP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1009
-#: ../src/goabackend/goaimapsmtpprovider.c:1336
+#: ../src/goabackend/goaimapsmtpprovider.c:1027
+#: ../src/goabackend/goaimapsmtpprovider.c:1354
 msgid "Error connecting to IMAP server"
 msgstr "Σφάλμα σύνδεσης στον εξυπηρετητή IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1100
-#: ../src/goabackend/goaimapsmtpprovider.c:1410
+#: ../src/goabackend/goaimapsmtpprovider.c:1118
+#: ../src/goabackend/goaimapsmtpprovider.c:1428
 msgid "Error connecting to SMTP server"
 msgstr "Σφάλμα σύνδεσης στον εξυπηρετητή SMTP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1518
+#: ../src/goabackend/goaimapsmtpprovider.c:1527
 msgid "E-mail"
 msgstr "Ηλεκτρονική διεύθυνση"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1522
+#: ../src/goabackend/goaimapsmtpprovider.c:1531
 msgid "Name"
 msgstr "Όνομα"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1532
-#: ../src/goabackend/goaimapsmtpprovider.c:1535
+#: ../src/goabackend/goaimapsmtpprovider.c:1541
+#: ../src/goabackend/goaimapsmtpprovider.c:1544
 msgid "IMAP"
 msgstr "IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1546
-#: ../src/goabackend/goaimapsmtpprovider.c:1549
+#: ../src/goabackend/goaimapsmtpprovider.c:1555
+#: ../src/goabackend/goaimapsmtpprovider.c:1558
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -383,58 +401,58 @@ msgstr "SMTP"
 msgid "Enterprise Login (Kerberos)"
 msgstr "Εταιρική σύνδεση (Kerberos)"
 
-#: ../src/goabackend/goakerberosprovider.c:449
+#: ../src/goabackend/goakerberosprovider.c:455
 msgid "Identity service returned invalid key"
-msgstr "Η υπηρεσία ταυτότητας επέστρεψε άκυρο κλειδί"
+msgstr "Η υπηρεσία ταυτότητας επέστρεψε μη έγκυρο κλειδί"
 
-#: ../src/goabackend/goakerberosprovider.c:715
+#: ../src/goabackend/goakerberosprovider.c:728
 #, c-format
-msgid "Could not find saved credentials for principal `%s' in keyring"
+msgid "Could not find saved credentials for principal ‘%s’ in keyring"
 msgstr ""
-"Αδυναμία εύρεσης αποθηκευμένων διαπιστευτηρίων για το κύριο `%s' στην "
+"Αδυναμία εύρεσης αποθηκευμένων διαπιστευτηρίων για το κύριο ‘%s’ στην "
 "κλειδοθήκη"
 
-#: ../src/goabackend/goakerberosprovider.c:725
+#: ../src/goabackend/goakerberosprovider.c:738
 #, c-format
-msgid "Did not find password for principal `%s' in credentials"
-msgstr "Δε βρέθηκε ο κωδικός πρόσβασης για το κύριο `%s' στα διαπιστευτήρια"
+msgid "Did not find password for principal ‘%s’ in credentials"
+msgstr "Δε βρέθηκε συνθηματικό για το κύριο ‘%s’ στα διαπιστευτήρια"
 
-#: ../src/goabackend/goakerberosprovider.c:1120
+#: ../src/goabackend/goakerberosprovider.c:1121
 msgid "_Domain"
 msgstr "_Τομέας"
 
-#: ../src/goabackend/goakerberosprovider.c:1121
+#: ../src/goabackend/goakerberosprovider.c:1122
 msgid "Enterprise domain or realm name"
 msgstr "Εταιρικός τομέας ή όνομα realm"
 
-#: ../src/goabackend/goakerberosprovider.c:1353
-#: ../src/goaidentity/goaidentityservice.c:1084
+#: ../src/goabackend/goakerberosprovider.c:1354
+#: ../src/goaidentity/goaidentityservice.c:1114
 msgid "Log In to Realm"
 msgstr "Σύνδεση σε Realm"
 
-#: ../src/goabackend/goakerberosprovider.c:1354
+#: ../src/goabackend/goakerberosprovider.c:1355
 msgid "Please enter your password below."
 msgstr "Παρακαλώ πληκτρολογήστε τον κωδικός πρόσβασης σας παρακάτω."
 
-#: ../src/goabackend/goakerberosprovider.c:1355
+#: ../src/goabackend/goakerberosprovider.c:1356
 msgid "Remember this password"
 msgstr "Απομνημόνευση του κωδικού πρόσβασης"
 
-#: ../src/goabackend/goakerberosprovider.c:1494
+#: ../src/goabackend/goakerberosprovider.c:1495
 #, c-format
 msgid "The domain is not valid"
 msgstr "Ο τομέας δεν είναι έγκυρος"
 
-#: ../src/goabackend/goakerberosprovider.c:1648
+#: ../src/goabackend/goakerberosprovider.c:1650
 msgid "Error connecting to enterprise identity server"
 msgstr "Σφάλμα σύνδεσης στον εταιρικό εξυπηρετητή ταυτοτήτων"
 
-#: ../src/goabackend/goakerberosprovider.c:1726
+#: ../src/goabackend/goakerberosprovider.c:1730
 msgid "Network _Resources"
 msgstr "Πό_ροι δικτύου"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:576
+#: ../src/goabackend/goaoauth2provider.c:658
 #: ../src/goabackend/goaoauthprovider.c:586
 #, c-format
 msgid ""
@@ -443,14 +461,13 @@ msgstr ""
 "Αναμενόταν η κατάσταση 200 κατά την αίτηση διακριτικού πρόσβασης, αντί να "
 "ληφθεί η κατάσταση %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:851
-#: ../src/goabackend/goaoauth2provider.c:891
+#: ../src/goabackend/goaoauth2provider.c:965
 #, c-format
-msgid "Authorization response was \"%s\""
-msgstr "Η απάντηση της εξουσιοδότησης ήταν \"%s\""
+msgid "Authorization response was ‘%s’"
+msgstr "Η απάντηση της εξουσιοδότησης ήταν '%s'"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:997
+#: ../src/goabackend/goaoauth2provider.c:1062
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
@@ -459,29 +476,29 @@ msgstr ""
 "Επικόλληση κωδικού εξουσιοδότησης που προέρχεται από την <a href=\"%s"
 "\">σελίδα εξουσιοδότησης</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:1090
+#: ../src/goabackend/goaoauth2provider.c:1162
 #: ../src/goabackend/goaoauthprovider.c:1072
 msgid "Error getting an Access Token: "
 msgstr "Σφάλμα λήψης αναγνωριστικού πρόσβασης: "
 
-#: ../src/goabackend/goaoauth2provider.c:1105
+#: ../src/goabackend/goaoauth2provider.c:1177
 #: ../src/goabackend/goaoauthprovider.c:1085
 msgid "Error getting identity: "
 msgstr "Σφάλμα λήψης ταυτότητας: "
 
-#: ../src/goabackend/goaoauth2provider.c:1394
-#: ../src/goabackend/goaoauthprovider.c:1390
+#: ../src/goabackend/goaoauth2provider.c:1389
+#: ../src/goabackend/goaoauthprovider.c:1391
 #, c-format
-msgid "Was asked to login as %s, but logged in as %s"
+msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Ζητήθηκε σύνδεση ως %s, αλλά συνδεθήκατε ως %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1565
+#: ../src/goabackend/goaoauth2provider.c:1548
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Τα διαπηστευτήρια δεν περιέχουν το διακριτικό access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1604
-#: ../src/goabackend/goaoauthprovider.c:1618
+#: ../src/goabackend/goaoauth2provider.c:1587
+#: ../src/goabackend/goaoauthprovider.c:1619
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Αποτυχία ανανέωσης αναγνωριστικού πρόσβασης (%s, %d): "
@@ -518,129 +535,156 @@ msgstr ""
 "Επικόλληση αναγνωριστικού που προέρχεται από την <a href=\"%s\">σελίδα "
 "έγκρισης</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1574
+#: ../src/goabackend/goaoauthprovider.c:1575
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Τα διαπιστευτήρια δεν περιέχουν τα access_token ή access_token_secret"
 
-#: ../src/goabackend/goaowncloudprovider.c:84
+#: ../src/goabackend/goaowncloudprovider.c:87
 msgid "ownCloud"
 msgstr "ownCloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:815
-#: ../src/goabackend/goaowncloudprovider.c:995
+#: ../src/goabackend/goaowncloudprovider.c:860
+#: ../src/goabackend/goaowncloudprovider.c:1041
 msgid "Error connecting to ownCloud server"
 msgstr "Σφάλμα σύνδεσης στον εξυπηρετητή ownCloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:1070
+#: ../src/goabackend/goaowncloudprovider.c:1121
 msgid "_Files"
 msgstr "_Αρχεία"
 
-#: ../src/goabackend/goaprovider.c:577
+#: ../src/goabackend/goaprovider.c:688
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "το ensure_credentials_sync δεν έχει υλοποιηθεί στον τύπο %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:146
-#, c-format
-msgid "Service not available"
-msgstr "Η υπηρεσία δεν είναι διαθέσιμη"
-
-#. TODO: more specific
 #: ../src/goabackend/goasmtpauthplain.c:161
 #, c-format
-#| msgid "Service not available"
 msgid "TLS not available"
 msgstr "Η TLS δεν είναι διαθέσιμη"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:193
+#: ../src/goabackend/goasmtpauthplain.c:227
 #, c-format
 msgid "org.gnome.OnlineAccounts.Mail is not available"
 msgstr "org.gnome.OnlineAccounts.Η αλληλογραφία δεν είναι διαθέσιμη"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:203
+#: ../src/goabackend/goasmtpauthplain.c:237
 #, c-format
 msgid "Failed to parse email address"
 msgstr "Αποτυχία ανάλυσης διεύθυνσης αλληλογραφίας"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:215
+#: ../src/goabackend/goasmtpauthplain.c:249
 #, c-format
 msgid "Cannot do SMTP PLAIN without a domain"
 msgstr "Αδύνατη η εκτέλεση SMTP PLAIN χωρίς τομέα"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:253
+#: ../src/goabackend/goasmtpauthplain.c:287
 #, c-format
 msgid "Did not find smtp-password in credentials"
 msgstr "Αδύνατη η εύρεση κωδικού smtp στα διαπιστευτηρία"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:264
+#: ../src/goabackend/goasmtpauthplain.c:298
 #, c-format
 msgid "Cannot do SMTP PLAIN without a password"
 msgstr "Αδύνατη η εκτέλεση SMTP PLAIN χωρίς κωδικό πρόσβασης"
 
-#: ../src/goabackend/goasmtpauthplain.c:619
+#: ../src/goabackend/goatelepathyprovider.c:184
 #, c-format
-msgid "Server does not support PLAIN"
-msgstr "Ο εξυπηρετητής δεν υποστηρίζει PLAIN"
+msgid "Telepathy chat account not found"
+msgstr "Δεν βρέθηκε λογαριασμός συνομιλίας Telepathy"
 
-#: ../src/goabackend/goasmtpauthplain.c:731
+#: ../src/goabackend/goatelepathyprovider.c:393
 #, c-format
-#| msgid "Server does not support PLAIN"
-msgid "Server does not support STARTTLS"
-msgstr "Ο εξυπηρετητής δεν υποστηρίζει STARTTLS"
+msgid "Failed to initialize a GOA client"
+msgstr "Αποτυχία αρχικοποίησης πελάτη GOA"
 
-#: ../src/goabackend/goautils.c:84
+#: ../src/goabackend/goatelepathyprovider.c:436
+#, c-format
+msgid "Failed to create a user interface for %s"
+msgstr "Αποτυχία δημιουργίας διεπαφής χρήστη για %s"
+
+#: ../src/goabackend/goatelepathyprovider.c:563
+msgid "Connection Settings"
+msgstr "Ρυθμίσεις Σύνδεσης"
+
+#: ../src/goabackend/goatelepathyprovider.c:672
+msgid "Personal Details"
+msgstr "Προσωπικές Λεπτομέρειες"
+
+#: ../src/goabackend/goatelepathyprovider.c:881
+msgid "Cannot save the connection parameters"
+msgstr "Αδυναμία αποθήκευσης παραμέτρων σύνδεσης"
+
+#: ../src/goabackend/goatelepathyprovider.c:893
+msgid "Cannot save your personal information on the server"
+msgstr "Αδυναμία αποθήκευσης προσωπικών σας πληροφοριών στον διακομιστή"
+
+#. Connection Settings button
+#: ../src/goabackend/goatelepathyprovider.c:924
+msgid "_Connection Settings"
+msgstr "_Ρυθμίσεις Σύνδεσης"
+
+#. Edit Personal Information button
+#: ../src/goabackend/goatelepathyprovider.c:928
+msgid "_Personal Details"
+msgstr "_Προσωπικές Λεπτομέρειες"
+
+#: ../src/goabackend/goatwitterprovider.c:81
+msgid "Twitter"
+msgstr "Twitter"
+
+#: ../src/goabackend/goautils.c:120
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "Yπάρχει ήδη o λογαριασμός %s για %s"
 
 #. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:106
+#: ../src/goabackend/goautils.c:142
 #, c-format
 msgid "%s account"
 msgstr "Λογαριασμός %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:150
+#: ../src/goabackend/goautils.c:186
 msgid "Failed to delete credentials from the keyring"
 msgstr "Αποτυχία διαγραφής διαπιστευτηρίων από την κλειδοθήκη"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:202
+#: ../src/goabackend/goautils.c:238
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Αποτυχία ανάκλησης διαπιστευτηρίων από την κλειδοθήκη"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:212
+#: ../src/goabackend/goautils.c:248
 msgid "No credentials found in the keyring"
 msgstr "Δεν βρέθηκαν διαπιστευτήρια στην κλειδοθήκη"
 
-#: ../src/goabackend/goautils.c:225
+#: ../src/goabackend/goautils.c:261
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Σφάλμα ανάλυσης αποτελέσματος που ελήφθη από την κλειδοθήκη: "
 
-#. Translators: The %s is the type of the provider, e.g. 'google' or 'facebook'
-#: ../src/goabackend/goautils.c:268
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#: ../src/goabackend/goautils.c:304
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Διαπιστευτήρια GOA %s για το αναγνωριστικό %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:285
+#: ../src/goabackend/goautils.c:321
 msgid "Failed to store credentials in the keyring"
 msgstr "Αποτυχία αποθήκευσης διαπιστευτηρίων στην κλειδοθήκη"
 
-#: ../src/goabackend/goautils.c:506
+#: ../src/goabackend/goautils.c:542
 msgid "The signing certificate authority is not known."
 msgstr "Η αρχή υπογραφής του πιστοποιητικού δεν είναι γνωστή."
 
-#: ../src/goabackend/goautils.c:510
+#: ../src/goabackend/goautils.c:546
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
@@ -648,23 +692,24 @@ msgstr ""
 "Το πιστοποιητικό δεν ταιριάζει με το αναμενόμενο αναγνωριστικό της "
 "ιστοσελίδας από την οποία έχει ληφθεί."
 
-#: ../src/goabackend/goautils.c:515
-msgid "The certificate's activation time is still in the future."
-msgstr "Ο χρόνος ενεργοποίησης του πιστοποιητικού είναι ακόμα στο μέλλον."
+#: ../src/goabackend/goautils.c:551
+msgid "The certificate’s activation time is still in the future."
+msgstr ""
+"Ο χρόνος ενεργοποίησης του πιστοποιητικού εξακολουθεί να είναι στο μέλλον."
 
-#: ../src/goabackend/goautils.c:519
+#: ../src/goabackend/goautils.c:555
 msgid "The certificate has expired."
 msgstr "Το πιστοποιητικό έχει λήξει."
 
-#: ../src/goabackend/goautils.c:523
+#: ../src/goabackend/goautils.c:559
 msgid "The certificate has been revoked."
 msgstr "Το πιστοποιητικό έχει ανακληθεί."
 
-#: ../src/goabackend/goautils.c:527
-msgid "The certificate's algorithm is considered insecure."
-msgstr "Ο αλγόριθμος του πιστοποιητικού θεωρείται επισφαλής."
+#: ../src/goabackend/goautils.c:563
+msgid "The certificate’s algorithm is considered insecure."
+msgstr "Ο αλγόριθμος του πιστοποιητικού θεωρείται μη ασφαλής."
 
-#: ../src/goabackend/goautils.c:531
+#: ../src/goabackend/goautils.c:567
 msgid "Invalid certificate."
 msgstr "Άκυρο πιστοποιητικό."
 
@@ -678,6 +723,17 @@ msgstr "Φόρτωση του “%s”…"
 msgid "Windows Live"
 msgstr "Windows Live"
 
+#: ../src/goabackend/goayahooprovider.c:81
+msgid "Yahoo"
+msgstr "Yahoo"
+
+#: ../src/goabackend/goayahooprovider.c:255
+#, c-format
+msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+msgstr ""
+"Αναμενόταν κατάταση 200 κατά την αίτηση ονόματος, αντί να ληφθεί η κατάσταση "
+"%d (%s)"
+
 #: ../src/goaidentity/goaalarm.c:245
 msgid "Time"
 msgstr "Ώρα"
@@ -686,82 +742,106 @@ msgstr "Ώρα"
 msgid "Time to fire"
 msgstr "Ώρα έναρξης"
 
-#: ../src/goaidentity/goaidentityservice.c:377
+#: ../src/goaidentity/goaidentityservice.c:379
 msgid "initial secret passed before secret key exchange"
 msgstr "το μυστικό πέρασε πριν την ανταλλαγή του μυστικού κλειδιού"
 
-#: ../src/goaidentity/goaidentityservice.c:569
+#: ../src/goaidentity/goaidentityservice.c:571
 msgid "Initial secret key is invalid"
 msgstr "Το αρχικό μυστικό κλειδί είναι άκυρο"
 
-#: ../src/goaidentity/goaidentityservice.c:1089
+#: ../src/goaidentity/goaidentityservice.c:1119
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "Το δίκτυο realm %s χρειάζεται μερικές πληροφορίες για να σας συνδέσει."
 
-#: ../src/goaidentity/goakerberosidentity.c:272
-#: ../src/goaidentity/goakerberosidentity.c:281
-#: ../src/goaidentity/goakerberosidentity.c:608
+#: ../src/goaidentity/goakerberosidentity.c:264
+#: ../src/goaidentity/goakerberosidentity.c:273
+#: ../src/goaidentity/goakerberosidentity.c:601
 msgid "Could not find identity in credential cache: %k"
 msgstr "Αδυναμία εύρεσης ταυτότητας στη μνήμη διαπιστευτηρίων: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:621
+#: ../src/goaidentity/goakerberosidentity.c:614
 msgid "Could not find identity credentials in cache: %k"
 msgstr "Αδυναμία εύρεσης διαπιστευτηρίων του αναγνωριστικού στη μνήμη: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:659
+#: ../src/goaidentity/goakerberosidentity.c:652
 msgid "Could not sift through identity credentials in cache: %k"
 msgstr ""
 "Αδυναμία λεπτομερούς εξέτασης των διαπιστευτηρίων ταυτότητας στη μνήμη: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:676
+#: ../src/goaidentity/goakerberosidentity.c:669
 msgid "Could not finish up sifting through identity credentials in cache: %k"
 msgstr ""
 "Αδυναμία καθαρισμού της λεπτομερούς εξέτασης των διαπιστευτηρίων ταυτότητας "
 "στη μνήμη: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1014
+#: ../src/goaidentity/goakerberosidentity.c:953
 #, c-format
 msgid "No associated identification found"
 msgstr "Δε βρέθηκε σχετική ταυτότητα"
 
-#: ../src/goaidentity/goakerberosidentity.c:1095
+#: ../src/goaidentity/goakerberosidentity.c:1034
 msgid "Could not create credential cache: %k"
 msgstr "Αδυναμία δημιουργίας μνήμης διαπιστευτηρίων: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1129
+#: ../src/goaidentity/goakerberosidentity.c:1068
 msgid "Could not initialize credentials cache: %k"
 msgstr "Αδυναμία αρχικοποιήσης μνήμης διαπιστευτηρίων: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1148
+#: ../src/goaidentity/goakerberosidentity.c:1085
 msgid "Could not store new credentials in credentials cache: %k"
 msgstr ""
 "Αποτυχία αποθήκευσης νέων διαπιστευτηρίων στη μνήμη διαπιστευτηρίων: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1425
+#: ../src/goaidentity/goakerberosidentity.c:1360
 #, c-format
 msgid "Could not renew identity: Not signed in"
 msgstr "Αδυναμία ανανέωσης της ταυτότητας: Δεν συνδέθηκε"
 
-#: ../src/goaidentity/goakerberosidentity.c:1437
+#: ../src/goaidentity/goakerberosidentity.c:1372
 msgid "Could not renew identity: %k"
 msgstr "Αδυναμία ανανέωσης ταυτότητας: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1454
+#: ../src/goaidentity/goakerberosidentity.c:1389
 msgid "Could not get new credentials to renew identity %s: %k"
 msgstr "Αδυναμία λήψης νέων διαπιστευτηρίων για ανανέωση της ταυτότητας %s: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1494
+#: ../src/goaidentity/goakerberosidentity.c:1429
 msgid "Could not erase identity: %k"
 msgstr "Αδυναμία διαγραφής ταυτότητας: %k"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:747
+#: ../src/goaidentity/goakerberosidentitymanager.c:750
 msgid "Could not find identity"
 msgstr "Αδυναμία εύρεσης ταυτότητας"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:824
+#: ../src/goaidentity/goakerberosidentitymanager.c:846
 msgid "Could not create credential cache for identity"
 msgstr "Αδυναμία δημιουργίας μνήμης διαπιστευτηρίων για την ταυτότητα"
+
+#~ msgid "Failed to find Autodiscover element"
+#~ msgstr "Αποτυχία εύρεσης στοιχείου αυτόματου εντοπισμού"
+
+#~ msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+#~ msgstr ""
+#~ "Αναμενόταν κατάσταση 200 κατά την αίτηση του αναγνωριστικού guid, αντί να "
+#~ "ληφθεί η κατάσταση %d (%s)"
+
+#~ msgid "Did not find imap-password with identity `%s' in credentials"
+#~ msgstr ""
+#~ "Δε βρέθηκε ο κωδικός πρόσβασης imap με αναγνωριστικό `%s' στα "
+#~ "διαπιστευτήρια"
+
+#~ msgid "Invalid imap-password with username `%s' (%s, %d): "
+#~ msgstr "Άκυρος κωδικός πρόσβασης imap με όνομα χρήστη `%s' (%s, %d): "
+
+#~ msgid "Did not find smtp-password with identity `%s' in credentials"
+#~ msgstr ""
+#~ "Δε βρέθηκε ο κωδικός πρόσβασης smtp με αναγνωριστικό `%s' στα "
+#~ "διαπιστευτήρια"
+
+#~ msgid "Invalid smtp-password with username `%s' (%s, %d): "
+#~ msgstr "Άκυρος κωδικός πρόσβασης smtp με όνομα χρήστη `%s' (%s, %d): "
 
 #~ msgid "Online Accounts"
 #~ msgstr "Διαδικτυακοί λογαριασμοί"
@@ -806,9 +886,6 @@ msgstr "Αδυναμία δημιουργίας μνήμης διαπιστευ�
 #~ msgid "Didn't find access_token in JSON data"
 #~ msgstr "Δε βρέθηκε το access_token στα δεδομένα JSON"
 
-#~ msgid "Twitter"
-#~ msgstr "Twitter"
-
 #~ msgid "Didn't find id_str member in JSON data"
 #~ msgstr "Δε βρέθηκε το μέλος id_str στα δεδομένα JSON"
 
@@ -818,19 +895,11 @@ msgstr "Αδυναμία δημιουργίας μνήμης διαπιστευ�
 #~ msgid "Didn't find account email member in JSON data"
 #~ msgstr "Δε βρέθηκε λογαριασμός αλληλογραφίας μέλους στα δεδομένα JSON"
 
-#~ msgid "Yahoo"
-#~ msgstr "Yahoo"
-
 #~ msgid "Didn't find guid member in JSON data"
 #~ msgstr "Δε βρέθηκε το guid μέλους στα δεδομένα JSON"
 
 #~ msgid "Didn't find value member in JSON data"
 #~ msgstr "Δε βρέθηκε η τιμή μέλους στα δεδομένα JSON"
-
-#~ msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-#~ msgstr ""
-#~ "Αναμενόταν κατάταση 200 κατά την αίτηση ονόματος, αντί να ληφθεί η "
-#~ "κατάσταση %d (%s)"
 
 #~ msgid "Error parsing usercard response as JSON: "
 #~ msgstr "Σφάλμα ανάλυσης απάντησης κάρτας χρήστη ως JSON: "
