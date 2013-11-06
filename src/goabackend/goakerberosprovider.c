@@ -701,7 +701,6 @@ get_ticket_sync (GoaKerberosProvider *self,
   GoaAccount          *account;
   const char          *identifier;
   const char          *password;
-  gboolean             has_password;
   SignInRequest        request;
   gboolean             ret;
 
@@ -728,16 +727,20 @@ get_ticket_sync (GoaKerberosProvider *self,
                        _("Could not find saved credentials for principal ‘%s’ in keyring"), identifier);
       goto out;
     }
-
-  has_password = g_variant_lookup (credentials, "password", "&s", &password);
-  if (!has_password && !is_interactive)
+  else if (credentials != NULL)
     {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_NOT_AUTHORIZED,
-                   _("Did not find password for principal ‘%s’ in credentials"),
-                   identifier);
-      goto out;
+      gboolean has_password;
+
+      has_password = g_variant_lookup (credentials, "password", "&s", &password);
+      if (!has_password && !is_interactive)
+        {
+          g_set_error (error,
+                       GOA_ERROR,
+                       GOA_ERROR_NOT_AUTHORIZED,
+                       _("Did not find password for principal ‘%s’ in credentials"),
+                       identifier);
+          goto out;
+        }
     }
 
   memset (&request, 0, sizeof (SignInRequest));
