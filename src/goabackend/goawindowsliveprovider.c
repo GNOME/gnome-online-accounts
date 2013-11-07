@@ -404,9 +404,14 @@ build_object (GoaProvider         *provider,
 
   if (just_added)
     {
+      goa_account_set_mail_disabled (account, !mail_enabled);
       goa_account_set_chat_disabled (account, !chat_enabled);
       goa_account_set_documents_disabled (account, !documents_enabled);
 
+      g_signal_connect (account,
+                        "notify::mail-disabled",
+                        G_CALLBACK (goa_util_account_notify_property_cb),
+                        "MailEnabled");
       g_signal_connect (account,
                         "notify::chat-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
