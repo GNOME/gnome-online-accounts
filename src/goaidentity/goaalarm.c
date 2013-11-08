@@ -151,19 +151,25 @@ clear_scheduled_wakeups (GoaAlarm *self)
       break;
     }
 
-  g_clear_object (&self->priv->cancellable);
-
-  g_clear_pointer (&self->priv->context, (GDestroyNotify) g_main_context_unref);
-
   g_clear_pointer (&self->priv->previous_wakeup_time,
                    (GDestroyNotify) g_date_time_unref);
-
-  g_clear_pointer (&self->priv->time, (GDestroyNotify) g_date_time_unref);
 
   g_assert (self->priv->timeout.source == NULL);
 
   self->priv->type = GOA_ALARM_TYPE_UNSCHEDULED;
   g_rec_mutex_unlock (&self->priv->lock);
+}
+
+static void
+goa_alarm_dispose (GObject *object)
+{
+  GoaAlarm *self = GOA_ALARM (object);
+
+  g_clear_object (&self->priv->cancellable);
+  g_clear_pointer (&self->priv->context, (GDestroyNotify) g_main_context_unref);
+  g_clear_pointer (&self->priv->time, (GDestroyNotify) g_date_time_unref);
+
+  G_OBJECT_CLASS (goa_alarm_parent_class)->dispose (object);
 }
 
 static void
@@ -223,6 +229,7 @@ goa_alarm_class_init (GoaAlarmClass *klass)
 
   object_class = G_OBJECT_CLASS (klass);
 
+  object_class->dispose = goa_alarm_dispose;
   object_class->finalize = goa_alarm_finalize;
   object_class->get_property = goa_alarm_get_property;
   object_class->set_property = goa_alarm_set_property;
@@ -637,6 +644,7 @@ goa_alarm_set_time (GoaAlarm *self, GDateTime *time, GCancellable *cancellable)
 
   self->priv->time = time;
 
+  g_clear_pointer (&self->priv->context, (GDestroyNotify) g_main_context_unref);
   self->priv->context = g_main_context_ref (g_main_context_default ());
 
   schedule_wakeups (self);
