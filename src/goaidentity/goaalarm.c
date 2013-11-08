@@ -644,8 +644,8 @@ goa_alarm_set_time (GoaAlarm *self, GDateTime *time, GCancellable *cancellable)
 
   self->priv->time = time;
 
-  g_clear_pointer (&self->priv->context, (GDestroyNotify) g_main_context_unref);
-  self->priv->context = g_main_context_ref (g_main_context_default ());
+  if (self->priv->context == NULL)
+    self->priv->context = g_main_context_ref (g_main_context_default ());
 
   schedule_wakeups (self);
 
