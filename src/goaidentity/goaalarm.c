@@ -90,16 +90,16 @@ clear_scheduled_immediate_wakeup (GoaAlarm *self)
 }
 
 static void
-clear_scheduled_timer_wakeups (GoaAlarm *self)
+clear_scheduled_timer_wakeups (GoaAlarm *self, GSource *source, GInputStream *stream)
 {
 #ifdef HAVE_TIMERFD
   GError *error;
   gboolean is_closed;
 
-  g_clear_pointer (&self->priv->scheduled_wakeup_source, (GDestroyNotify) g_source_destroy);
+  g_source_destroy (source);
 
   error = NULL;
-  is_closed = g_input_stream_close (self->priv->stream, NULL, &error);
+  is_closed = g_input_stream_close (stream, NULL, &error);
 
   if (!is_closed)
     {
@@ -107,18 +107,18 @@ clear_scheduled_timer_wakeups (GoaAlarm *self)
       g_error_free (error);
     }
 
-  g_clear_object (&self->priv->stream);
+  g_object_unref (stream);
 #endif
 }
 
 static void
-clear_scheduled_timeout_wakeups (GoaAlarm *self)
+clear_scheduled_timeout_wakeups (GoaAlarm *self, GSource *source)
 {
-  g_clear_pointer (&self->priv->scheduled_wakeup_source, (GDestroyNotify) g_source_destroy);
+  g_source_destroy (source);
 }
 
 static void
-clear_scheduled_wakeups (GoaAlarm *self)
+clear_scheduled_wakeups (GoaAlarm *self, GSource *source, GInputStream *stream)
 {
   g_rec_mutex_lock (&self->priv->lock);
   clear_scheduled_immediate_wakeup (self);
@@ -126,11 +126,11 @@ clear_scheduled_wakeups (GoaAlarm *self)
   switch (self->priv->type)
     {
     case GOA_ALARM_TYPE_TIMER:
-      clear_scheduled_timer_wakeups (self);
+      clear_scheduled_timer_wakeups (self, source, stream);
       break;
 
     case GOA_ALARM_TYPE_TIMEOUT:
-      clear_scheduled_timeout_wakeups (self);
+      clear_scheduled_timeout_wakeups (self, source);
       break;
 
     default:
@@ -161,7 +161,7 @@ goa_alarm_finalize (GObject *object)
 {
   GoaAlarm *self = GOA_ALARM (object);
 
-  clear_scheduled_wakeups (self);
+  clear_scheduled_wakeups (self, self->priv->scheduled_wakeup_source, self->priv->stream);
 
   G_OBJECT_CLASS (goa_alarm_parent_class)->finalize (object);
 }
@@ -250,9 +250,18 @@ goa_alarm_init (GoaAlarm *self)
 static gboolean
 async_alarm_cancel_idle_cb (gpointer user_data)
 {
-  GoaAlarm *self = user_data;
+  GoaAlarm *self;
+  GInputStream *stream;
+  GSource *source;
+  GTask *task = G_TASK (user_data);
+  gpointer task_data;
 
-  clear_scheduled_wakeups (self);
+  self = g_task_get_source_object (task);
+  source = (GSource *) g_object_get_data (G_OBJECT (task), "alarm-scheduled-wakeup-source");
+  task_data = g_object_get_data (G_OBJECT (task), "alarm-stream");
+  stream = (task_data == NULL) ? NULL : G_INPUT_STREAM (task_data);
+
+  clear_scheduled_wakeups (self, source, stream);
   return G_SOURCE_REMOVE;
 }
 
@@ -261,13 +270,25 @@ on_cancelled (GCancellable *cancellable, gpointer user_data)
 {
   GoaAlarm *self = GOA_ALARM (user_data);
   GSource *idle_source;
+  GTask *task;
 
+  task = g_task_new (self, NULL, NULL, NULL);
+
+  g_object_set_data_full (G_OBJECT (task),
+                          "alarm-scheduled-wakeup-source",
+                          g_source_ref (self->priv->scheduled_wakeup_source),
+                          (GDestroyNotify) g_source_unref);
+
+  if (self->priv->stream != NULL)
+    g_object_set_data_full (G_OBJECT (task), "alarm-stream", g_object_ref (self->priv->stream), g_object_unref);
 
   idle_source = g_idle_source_new ();
   g_source_set_priority (idle_source, G_PRIORITY_HIGH_IDLE);
-  g_source_set_callback (idle_source, async_alarm_cancel_idle_cb, g_object_ref (self), g_object_unref);
+  g_source_set_callback (idle_source, async_alarm_cancel_idle_cb, g_object_ref (task), g_object_unref);
   g_source_attach (idle_source, self->priv->context);
   g_source_unref (idle_source);
+
+  g_object_unref (task);
 }
 
 static void
@@ -412,17 +433,6 @@ out:
   g_rec_mutex_unlock (&self->priv->lock);
   return run_again;
 }
-
-static void
-clear_timer_source (GTask *task)
-{
-  GoaAlarm *self;
-
-  self = g_task_get_source_object (task);
-  self->priv->scheduled_wakeup_source = NULL;
-
-  g_object_unref (task);
-}
 #endif
 
 static gboolean
@@ -475,7 +485,7 @@ schedule_wakeups_with_timerfd (GoaAlarm *self)
   self->priv->scheduled_wakeup_source = source;
   g_source_set_callback (self->priv->scheduled_wakeup_source,
                          (GSourceFunc) on_timer_source_ready, task,
-                         (GDestroyNotify) clear_timer_source);
+                         (GDestroyNotify) g_object_unref);
   g_source_attach (self->priv->scheduled_wakeup_source, self->priv->context);
   g_source_unref (source);
 
