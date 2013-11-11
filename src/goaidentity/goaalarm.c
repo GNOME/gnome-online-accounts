@@ -92,7 +92,6 @@ clear_scheduled_immediate_wakeup (GoaAlarm *self)
 static void
 clear_scheduled_timer_wakeups (GoaAlarm *self, GSource *source, GInputStream *stream)
 {
-#ifdef HAVE_TIMERFD
   GError *error;
   gboolean is_closed;
 
@@ -108,7 +107,6 @@ clear_scheduled_timer_wakeups (GoaAlarm *self, GSource *source, GInputStream *st
     }
 
   g_object_unref (stream);
-#endif
 }
 
 static void
