@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012 Red Hat, Inc.
+ * Copyright (C) 2012, 2013 Red Hat, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,17 +39,6 @@
 
 #include "goalogging.h"
 
-typedef struct
-{
-  GSource *source;
-  GInputStream *stream;
-} Timer;
-
-typedef struct
-{
-  GSource *source;
-} Timeout;
-
 #define MAX_TIMEOUT_INTERVAL (10 *1000)
 
 typedef enum
@@ -70,11 +59,8 @@ struct _GoaAlarmPrivate
   GRecMutex lock;
 
   GoaAlarmType type;
-  union
-  {
-    Timer timer;
-    Timeout timeout;
-  };
+  GSource *scheduled_wakeup_source;
+  GInputStream *stream; /* NULL, unless using timerfd */
 };
 
 enum
@@ -110,10 +96,10 @@ clear_scheduled_timer_wakeups (GoaAlarm *self)
   GError *error;
   gboolean is_closed;
 
-  g_clear_pointer (&self->priv->timer.source, (GDestroyNotify) g_source_destroy);
+  g_clear_pointer (&self->priv->scheduled_wakeup_source, (GDestroyNotify) g_source_destroy);
 
   error = NULL;
-  is_closed = g_input_stream_close (self->priv->timer.stream, NULL, &error);
+  is_closed = g_input_stream_close (self->priv->stream, NULL, &error);
 
   if (!is_closed)
     {
@@ -121,14 +107,14 @@ clear_scheduled_timer_wakeups (GoaAlarm *self)
       g_error_free (error);
     }
 
-  g_clear_object (&self->priv->timer.stream);
+  g_clear_object (&self->priv->stream);
 #endif
 }
 
 static void
 clear_scheduled_timeout_wakeups (GoaAlarm *self)
 {
-  g_clear_pointer (&self->priv->timeout.source, (GDestroyNotify) g_source_destroy);
+  g_clear_pointer (&self->priv->scheduled_wakeup_source, (GDestroyNotify) g_source_destroy);
 }
 
 static void
@@ -153,8 +139,6 @@ clear_scheduled_wakeups (GoaAlarm *self)
 
   g_clear_pointer (&self->priv->previous_wakeup_time,
                    (GDestroyNotify) g_date_time_unref);
-
-  g_assert (self->priv->timeout.source == NULL);
 
   self->priv->type = GOA_ALARM_TYPE_UNSCHEDULED;
   g_rec_mutex_unlock (&self->priv->lock);
@@ -435,7 +419,7 @@ clear_timer_source (GTask *task)
   GoaAlarm *self;
 
   self = g_task_get_source_object (task);
-  self->priv->timer.source = NULL;
+  self->priv->scheduled_wakeup_source = NULL;
 
   g_object_unref (task);
 }
@@ -480,19 +464,19 @@ schedule_wakeups_with_timerfd (GoaAlarm *self)
     }
 
   self->priv->type = GOA_ALARM_TYPE_TIMER;
-  self->priv->timer.stream = g_unix_input_stream_new (fd, TRUE);
+  self->priv->stream = g_unix_input_stream_new (fd, TRUE);
 
   task = g_task_new (self, self->priv->cancellable, NULL, NULL);
 
   source =
     g_pollable_input_stream_create_source (G_POLLABLE_INPUT_STREAM
-                                           (self->priv->timer.stream),
+                                           (self->priv->stream),
                                            self->priv->cancellable);
-  self->priv->timer.source = source;
-  g_source_set_callback (self->priv->timer.source,
+  self->priv->scheduled_wakeup_source = source;
+  g_source_set_callback (self->priv->scheduled_wakeup_source,
                          (GSourceFunc) on_timer_source_ready, task,
                          (GDestroyNotify) clear_timer_source);
-  g_source_attach (self->priv->timer.source, self->priv->context);
+  g_source_attach (self->priv->scheduled_wakeup_source, self->priv->context);
   g_source_unref (source);
 
   return TRUE;
@@ -528,7 +512,7 @@ out:
 static void
 clear_timeout_source_pointer (GoaAlarm *self)
 {
-  self->priv->timeout.source = NULL;
+  self->priv->scheduled_wakeup_source = NULL;
 }
 
 static void
@@ -556,13 +540,13 @@ schedule_wakeups_with_timeout_source (GoaAlarm *self)
 
   source = g_timeout_source_new (interval);
 
-  self->priv->timeout.source = source;
-  g_source_set_callback (self->priv->timeout.source,
+  self->priv->scheduled_wakeup_source = source;
+  g_source_set_callback (self->priv->scheduled_wakeup_source,
                          (GSourceFunc)
                          on_timeout_source_ready,
                          self, (GDestroyNotify) clear_timeout_source_pointer);
 
-  g_source_attach (self->priv->timeout.source, self->priv->context);
+  g_source_attach (self->priv->scheduled_wakeup_source, self->priv->context);
   g_source_unref (source);
 }
 
