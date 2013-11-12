@@ -90,49 +90,31 @@ clear_scheduled_immediate_wakeup (GoaAlarm *self)
 }
 
 static void
-clear_scheduled_timer_wakeups (GoaAlarm *self, GSource *source, GInputStream *stream)
-{
-  GError *error;
-  gboolean is_closed;
-
-  g_source_destroy (source);
-
-  error = NULL;
-  is_closed = g_input_stream_close (stream, NULL, &error);
-
-  if (!is_closed)
-    {
-      goa_warning ("GoaAlarm: could not close timer stream: %s", error->message);
-      g_error_free (error);
-    }
-
-  g_object_unref (stream);
-}
-
-static void
-clear_scheduled_timeout_wakeups (GoaAlarm *self, GSource *source)
-{
-  g_source_destroy (source);
-}
-
-static void
 clear_scheduled_wakeups (GoaAlarm *self, GSource *source, GInputStream *stream)
 {
   g_rec_mutex_lock (&self->priv->lock);
   clear_scheduled_immediate_wakeup (self);
 
-  switch (self->priv->type)
+  if (self->priv->type != GOA_ALARM_TYPE_UNSCHEDULED)
     {
-    case GOA_ALARM_TYPE_TIMER:
-      clear_scheduled_timer_wakeups (self, source, stream);
-      break;
+      g_source_destroy (source);
 
-    case GOA_ALARM_TYPE_TIMEOUT:
-      clear_scheduled_timeout_wakeups (self, source);
-      break;
+      if (stream != NULL)
+        {
+          GError *error;
+          gboolean is_closed;
 
-    default:
-      break;
+          error = NULL;
+          is_closed = g_input_stream_close (stream, NULL, &error);
+
+          if (!is_closed)
+            {
+              goa_warning ("GoaAlarm: could not close timer stream: %s", error->message);
+              g_error_free (error);
+            }
+
+          g_object_unref (stream);
+        }
     }
 
   g_clear_pointer (&self->priv->previous_wakeup_time,
