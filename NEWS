@@ -1,5 +1,82 @@
-Overview of changes in 3.11.1
+Overview of changes in 3.11.2
 =============================
+
+* Support kernel keyring based Kerberos accounts (707402, 710116)
+
+* Support Windows Live mail (709393)
+
+* Bugs fixed:
+ 699491 kerberos: Don't crash when an identity could not be looked up
+ 704564 webview: Add some debug code to show an inspector
+ 705395 goaidentity: Fix deadlock in goaalarm on_cancelled
+ 706614 build: use enable_telepathy variable
+ 706664 Fix and simplify the use of GtkGrid inside show_account
+ 706803 Disable GSettings in tp-aw
+ 706894 Cannot set the avatar for Telepathy accounts
+ 706987 Ignore MSN Telepathy account type
+ 707005 telepathy: The en_US spelling is "initialize", not "initialise"
+ 707006 Update to new webkitgtk-2.1.90 API
+ 707435 Miscellaneous string fixes
+ 707916 google: Add the OAuth2 scope for CardDAV
+ 708399 telepathy: Choose better icons
+ 708462 Adding Google or Facebook accounts adds a second Jabber account
+ 708832 oauth2: Propagate the error if the dialog is dismissed during refresh
+ 708975 kerberos: still consuming 100% CPU
+ 709103 identity: don't queue two temporary accounts for one identity
+ 709570 oauth2: Don't parse the DOM to detect access_denied
+ 709953 goaalarm: add locks when setting up timers
+ 709955 kerberos: correctly show sign in errors when mistyping password
+ 710363 Adapt to changes in the redirect URI used by Facebook
+ 711472 live: Does not update MailEnabled
+ 711572 kerberos: don't crash if keyring credentials disappear
+ 711696 kerberos: Leaking timerfds when we fall back to polling the ccache
+
+* Updated translations:
+ Afrikaans
+ Arabic
+ Assamese
+ Basque
+ Belarusian
+ Catalan
+ Catalan (Valencian)
+ Simplified Chinese
+ Traditional Chinese (Hong Kong)
+ Traditional Chinese (Taiwan)
+ Czech
+ Danish
+ Dutch
+ English (British)
+ Esperanto
+ Estonian
+ Finnish
+ French
+ Galician
+ German
+ Greek
+ Hebrew
+ Hungarian
+ Indonesian
+ Irish
+ Italian
+ Japanese
+ Kazakh
+ Korean
+ Latvian
+ Lithuanian
+ Norwegian bokmål
+ Persian
+ Polish
+ Portuguese
+ Portuguese (Brazilian)
+ Punjabi
+ Russian
+ Serbian
+ Slovak
+ Slovenian
+ Spanish
+ Tajik
+ Turkish
+ Ukrainian
 
 
 Overview of changes in 3.9.90
