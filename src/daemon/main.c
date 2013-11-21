@@ -57,7 +57,7 @@ on_bus_acquired (GDBusConnection *connection,
 {
   if (connection != NULL)
     the_daemon = goa_daemon_new ();
-  goa_info ("Connected to the session bus");
+  goa_debug ("Connected to the session bus");
 }
 
 static void
@@ -74,7 +74,7 @@ on_name_acquired (GDBusConnection *connection,
                   const gchar     *name,
                   gpointer         user_data)
 {
-  goa_info ("Acquired the name %s on the session message bus", name);
+  goa_debug ("Acquired the name %s on the session message bus", name);
 
   tp_linker = goa_tp_account_linker_new ();
 }
@@ -134,7 +134,7 @@ main (int    argc,
                                   NULL,
                                   NULL);
 
-  goa_info ("Entering main event loop");
+  goa_debug ("Entering main event loop");
 
   g_main_loop_run (loop);
 
