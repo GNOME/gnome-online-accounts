@@ -437,7 +437,7 @@ show_account (GoaProvider         *provider,
                                                    "chat-disabled",
                                                    _("C_hat"));
 
-  goa_util_add_row_switch_from_keyfile_with_blurb (left, right, object,
+  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
                                                    NULL,
                                                    "photos-disabled",
                                                    _("_Photos"));
