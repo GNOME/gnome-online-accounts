@@ -53,7 +53,7 @@ static GoaProvider *
 get_provider (GoaProviderFactory *factory,
               const gchar        *provider_name)
 {
-  g_return_if_fail (GOA_IS_TELEPATHY_FACTORY (factory));
+  g_return_val_if_fail (GOA_IS_TELEPATHY_FACTORY (factory), NULL);
 
   return GOA_PROVIDER (goa_telepathy_provider_new_from_protocol_name (provider_name));
 }
