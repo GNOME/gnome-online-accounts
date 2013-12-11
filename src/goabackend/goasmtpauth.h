@@ -25,8 +25,8 @@
 #error "Only <goabackend/goabackend.h> can be included directly."
 #endif
 
-#ifndef __GOA_SMTP_AUTH_PLAIN_H__
-#define __GOA_SMTP_AUTH_PLAIN_H__
+#ifndef __GOA_SMTP_AUTH_H__
+#define __GOA_SMTP_AUTH_H__
 
 #include <gio/gio.h>
 #include <glib.h>
@@ -38,19 +38,19 @@
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_SMTP_AUTH_PLAIN         (goa_smtp_auth_plain_get_type ())
-#define GOA_SMTP_AUTH_PLAIN(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_SMTP_AUTH_PLAIN, GoaSmtpAuthPlain))
-#define GOA_IS_SMTP_AUTH_PLAIN(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_SMTP_AUTH_PLAIN))
+#define GOA_TYPE_SMTP_AUTH         (goa_smtp_auth_get_type ())
+#define GOA_SMTP_AUTH(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_SMTP_AUTH, GoaSmtpAuth))
+#define GOA_IS_SMTP_AUTH(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_SMTP_AUTH))
 
-typedef struct _GoaSmtpAuthPlain GoaSmtpAuthPlain;
+typedef struct _GoaSmtpAuth GoaSmtpAuth;
 
-GType        goa_smtp_auth_plain_get_type  (void) G_GNUC_CONST;
-GoaMailAuth *goa_smtp_auth_plain_new       (GoaProvider       *provider,
-                                            GoaObject         *object,
-                                            const gchar       *domain,
-                                            const gchar       *user_name,
-                                            const gchar       *password);
+GType        goa_smtp_auth_get_type  (void) G_GNUC_CONST;
+GoaMailAuth *goa_smtp_auth_new       (GoaProvider       *provider,
+                                      GoaObject         *object,
+                                      const gchar       *domain,
+                                      const gchar       *user_name,
+                                      const gchar       *password);
 
 G_END_DECLS
 
-#endif /* __GOA_SMTP_AUTH_PLAIN_H__ */
+#endif /* __GOA_SMTP_AUTH_H__ */

@@ -27,28 +27,28 @@
 
 #include <glib/gi18n-lib.h>
 
-#include "goasmtpauthplain.h"
+#include "goasmtpauth.h"
 #include "goaprovider.h"
 #include "goautils.h"
 
 /**
- * SECTION:goasmtpauthplain
- * @title: GoaSmtpAuthPlain
+ * SECTION:goasmtpauth
+ * @title: GoaSmtpAuth
  * @short_description: Authentication mechanisms for SMTP
  *
- * #GoaSmtpAuthPlain implements the <ulink
+ * #GoaSmtpAuth implements the <ulink
  * url="http://tools.ietf.org/html/rfc4616">PLAIN</ulink> and <ulink
  * url="http://msdn.microsoft.com/en-us/library/cc433484(v=EXCHG.80).aspx">LOGIN</ulink>
  * SASL mechanisms (e.g. using usernames / passwords) for SMTP.
  */
 
 /**
- * GoaSmtpAuthPlain:
+ * GoaSmtpAuth:
  *
- * The #GoaSmtpAuthPlain structure contains only private data
- * and should only be accessed using the provided API.
+ * The #GoaSmtpAuth structure contains only private data and should
+ * only be accessed using the provided API.
  */
-struct _GoaSmtpAuthPlain
+struct _GoaSmtpAuth
 {
   GoaMailAuth parent_instance;
 
@@ -65,7 +65,7 @@ typedef struct
 {
   GoaMailAuthClass parent_class;
 
-} GoaSmtpAuthPlainClass;
+} GoaSmtpAuthClass;
 
 enum
 {
@@ -77,20 +77,20 @@ enum
   PROP_PASSWORD
 };
 
-static gboolean goa_smtp_auth_plain_is_needed (GoaMailAuth        *_auth);
-static gboolean goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
-                                              GCancellable        *cancellable,
-                                              GError             **error);
-static gboolean goa_smtp_auth_plain_starttls_sync (GoaMailAuth    *_auth,
-                                                   GCancellable   *cancellable,
-                                                   GError        **error);
+static gboolean goa_smtp_auth_is_needed (GoaMailAuth        *_auth);
+static gboolean goa_smtp_auth_run_sync (GoaMailAuth         *_auth,
+                                        GCancellable        *cancellable,
+                                        GError             **error);
+static gboolean goa_smtp_auth_starttls_sync (GoaMailAuth    *_auth,
+                                             GCancellable   *cancellable,
+                                             GError        **error);
 
-G_DEFINE_TYPE (GoaSmtpAuthPlain, goa_smtp_auth_plain, GOA_TYPE_MAIL_AUTH);
+G_DEFINE_TYPE (GoaSmtpAuth, goa_smtp_auth, GOA_TYPE_MAIL_AUTH);
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-smtp_auth_plain_check_not_220 (const gchar *response, GError **error)
+smtp_auth_check_not_220 (const gchar *response, GError **error)
 {
   if (!g_str_has_prefix (response, "220"))
     {
@@ -106,7 +106,7 @@ smtp_auth_plain_check_not_220 (const gchar *response, GError **error)
 }
 
 static gboolean
-smtp_auth_plain_check_not_235 (const gchar *response, GError **error)
+smtp_auth_check_not_235 (const gchar *response, GError **error)
 {
   if (!g_str_has_prefix (response, "235"))
     {
@@ -121,7 +121,7 @@ smtp_auth_plain_check_not_235 (const gchar *response, GError **error)
 }
 
 static gboolean
-smtp_auth_plain_check_not_250 (const gchar *response, GError **error)
+smtp_auth_check_not_250 (const gchar *response, GError **error)
 {
   if (!g_str_has_prefix (response, "250") || strlen (response) < 4)
     {
@@ -137,7 +137,7 @@ smtp_auth_plain_check_not_250 (const gchar *response, GError **error)
 }
 
 static gboolean
-smtp_auth_plain_check_not_334_login_password (const gchar *response, GError **error)
+smtp_auth_check_not_334_login_password (const gchar *response, GError **error)
 {
   if (!g_str_has_prefix (response, "334 UGFzc3dvcmQ6"))
     {
@@ -153,7 +153,7 @@ smtp_auth_plain_check_not_334_login_password (const gchar *response, GError **er
 }
 
 static gboolean
-smtp_auth_plain_check_421 (const gchar *response, GError **error)
+smtp_auth_check_421 (const gchar *response, GError **error)
 {
   if (g_str_has_prefix (response, "421"))
     {
@@ -168,7 +168,7 @@ smtp_auth_plain_check_421 (const gchar *response, GError **error)
 }
 
 static gboolean
-smtp_auth_plain_check_454 (const gchar *response, GError **error)
+smtp_auth_check_454 (const gchar *response, GError **error)
 {
   if (g_str_has_prefix (response, "454"))
     {
@@ -185,7 +185,7 @@ smtp_auth_plain_check_454 (const gchar *response, GError **error)
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-smtp_auth_plain_check_greeting (GDataInputStream *input, GCancellable *cancellable, GError **error)
+smtp_auth_check_greeting (GDataInputStream *input, GCancellable *cancellable, GError **error)
 {
   gboolean ret;
   gchar *response;
@@ -198,9 +198,9 @@ smtp_auth_plain_check_greeting (GDataInputStream *input, GCancellable *cancellab
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
-  if (smtp_auth_plain_check_421 (response, error))
+  if (smtp_auth_check_421 (response, error))
     goto out;
-  if (smtp_auth_plain_check_not_220 (response, error))
+  if (smtp_auth_check_not_220 (response, error))
     goto out;
 
   if (response[3] == '-')
@@ -219,8 +219,8 @@ smtp_auth_plain_check_greeting (GDataInputStream *input, GCancellable *cancellab
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
-smtp_auth_plain_get_domain (GoaSmtpAuthPlain  *auth,
-                            GError           **error)
+smtp_auth_get_domain (GoaSmtpAuth   *auth,
+                      GError       **error)
 {
   gchar *domain;
 
@@ -272,9 +272,9 @@ smtp_auth_plain_get_domain (GoaSmtpAuthPlain  *auth,
 }
 
 static gchar *
-smtp_auth_plain_get_password (GoaSmtpAuthPlain  *auth,
-                              GCancellable      *cancellable,
-                              GError           **error)
+smtp_auth_get_password (GoaSmtpAuth       *auth,
+                        GCancellable      *cancellable,
+                        GError           **error)
 {
   gchar *password;
 
@@ -323,9 +323,9 @@ smtp_auth_plain_get_password (GoaSmtpAuthPlain  *auth,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_smtp_auth_plain_finalize (GObject *object)
+goa_smtp_auth_finalize (GObject *object)
 {
-  GoaSmtpAuthPlain *auth = GOA_SMTP_AUTH_PLAIN (object);
+  GoaSmtpAuth *auth = GOA_SMTP_AUTH (object);
 
   g_clear_object (&auth->provider);
   g_clear_object (&auth->object);
@@ -333,16 +333,16 @@ goa_smtp_auth_plain_finalize (GObject *object)
   g_free (auth->username);
   g_free (auth->password);
 
-  G_OBJECT_CLASS (goa_smtp_auth_plain_parent_class)->finalize (object);
+  G_OBJECT_CLASS (goa_smtp_auth_parent_class)->finalize (object);
 }
 
 static void
-goa_smtp_auth_plain_get_property (GObject      *object,
-                                  guint         prop_id,
-                                  GValue       *value,
-                                  GParamSpec   *pspec)
+goa_smtp_auth_get_property (GObject      *object,
+                            guint         prop_id,
+                            GValue       *value,
+                            GParamSpec   *pspec)
 {
-  GoaSmtpAuthPlain *auth = GOA_SMTP_AUTH_PLAIN (object);
+  GoaSmtpAuth *auth = GOA_SMTP_AUTH (object);
 
   switch (prop_id)
     {
@@ -373,12 +373,12 @@ goa_smtp_auth_plain_get_property (GObject      *object,
 }
 
 static void
-goa_smtp_auth_plain_set_property (GObject      *object,
-                                  guint         prop_id,
-                                  const GValue *value,
-                                  GParamSpec   *pspec)
+goa_smtp_auth_set_property (GObject      *object,
+                            guint         prop_id,
+                            const GValue *value,
+                            GParamSpec   *pspec)
 {
-  GoaSmtpAuthPlain *auth = GOA_SMTP_AUTH_PLAIN (object);
+  GoaSmtpAuth *auth = GOA_SMTP_AUTH (object);
 
   switch (prop_id)
     {
@@ -412,28 +412,28 @@ goa_smtp_auth_plain_set_property (GObject      *object,
 
 
 static void
-goa_smtp_auth_plain_init (GoaSmtpAuthPlain *client)
+goa_smtp_auth_init (GoaSmtpAuth *client)
 {
 }
 
 static void
-goa_smtp_auth_plain_class_init (GoaSmtpAuthPlainClass *klass)
+goa_smtp_auth_class_init (GoaSmtpAuthClass *klass)
 {
   GObjectClass *gobject_class;
   GoaMailAuthClass *auth_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
-  gobject_class->finalize     = goa_smtp_auth_plain_finalize;
-  gobject_class->get_property = goa_smtp_auth_plain_get_property;
-  gobject_class->set_property = goa_smtp_auth_plain_set_property;
+  gobject_class->finalize = goa_smtp_auth_finalize;
+  gobject_class->get_property = goa_smtp_auth_get_property;
+  gobject_class->set_property = goa_smtp_auth_set_property;
 
   auth_class = GOA_MAIL_AUTH_CLASS (klass);
-  auth_class->is_needed = goa_smtp_auth_plain_is_needed;
-  auth_class->run_sync = goa_smtp_auth_plain_run_sync;
-  auth_class->starttls_sync = goa_smtp_auth_plain_starttls_sync;
+  auth_class->is_needed = goa_smtp_auth_is_needed;
+  auth_class->run_sync = goa_smtp_auth_run_sync;
+  auth_class->starttls_sync = goa_smtp_auth_starttls_sync;
 
   /**
-   * GoaSmtpAuthPlain:provider:
+   * GoaSmtpAuth:provider:
    *
    * The #GoaProvider object for the account or %NULL.
    */
@@ -449,7 +449,7 @@ goa_smtp_auth_plain_class_init (GoaSmtpAuthPlainClass *klass)
                                                         G_PARAM_STATIC_STRINGS));
 
   /**
-   * GoaSmtpAuthPlain:object:
+   * GoaSmtpAuth:object:
    *
    * The #GoaObject object for the account.
    */
@@ -465,7 +465,7 @@ goa_smtp_auth_plain_class_init (GoaSmtpAuthPlainClass *klass)
                                                         G_PARAM_STATIC_STRINGS));
 
   /**
-   * GoaSmtpAuthPlain:domain:
+   * GoaSmtpAuth:domain:
    *
    * The domail or %NULL.
    *
@@ -484,7 +484,7 @@ goa_smtp_auth_plain_class_init (GoaSmtpAuthPlainClass *klass)
                                                         G_PARAM_STATIC_STRINGS));
 
   /**
-   * GoaSmtpAuthPlain:user-name:
+   * GoaSmtpAuth:user-name:
    *
    * The user name.
    */
@@ -500,16 +500,16 @@ goa_smtp_auth_plain_class_init (GoaSmtpAuthPlainClass *klass)
                                                         G_PARAM_STATIC_STRINGS));
 
   /**
-   * GoaSmtpAuthPlain:password:
+   * GoaSmtpAuth:password:
    *
    * The password or %NULL.
    *
    * If this is %NULL, the credentials are looked up using
    * goa_utils_lookup_credentials_sync() using the
-   * #GoaSmtpAuthPlain:provider and #GoaSmtpAuthPlain:object for
-   * @provider and @object. The credentials are expected to be a
-   * %G_VARIANT_VARDICT and the key <literal>smtp-password</literal>
-   * is used to look up the password.
+   * #GoaSmtpAuth:provider and #GoaSmtpAuth:object for @provider and
+   * @object. The credentials are expected to be a %G_VARIANT_VARDICT
+   * and the key <literal>smtp-password</literal> is used to look up
+   * the password.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_PASSWORD,
@@ -526,32 +526,32 @@ goa_smtp_auth_plain_class_init (GoaSmtpAuthPlainClass *klass)
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
- * goa_smtp_auth_plain_new:
+ * goa_smtp_auth_new:
  * @provider: (allow-none): A #GoaPlainProvider or %NULL.
  * @object: (allow-none): An account object or %NULL.
  * @domain: (allow-none): The domain to use or %NULL to look it up
- * (see the #GoaSmtpAuthPlain:domain property).
+ * (see the #GoaSmtpAuth:domain property).
  * @username: The user name to use.
  * @password: (allow-none): The password to use or %NULL to look it up
- * (see the #GoaSmtpAuthPlain:password property).
+ * (see the #GoaSmtpAuth:password property).
  *
  * Creates a new #GoaMailAuth to be used for username/password
  * authentication using LOGIN or PLAIN over SMTP.
  *
- * Returns: (type GoaSmtpAuthPlain): A #GoaSmtpAuthPlain. Free with
+ * Returns: (type GoaSmtpAuth): A #GoaSmtpAuth. Free with
  * g_object_unref().
  */
 GoaMailAuth *
-goa_smtp_auth_plain_new (GoaProvider       *provider,
-                         GoaObject         *object,
-                         const gchar       *domain,
-                         const gchar       *username,
-                         const gchar       *password)
+goa_smtp_auth_new (GoaProvider       *provider,
+                   GoaObject         *object,
+                   const gchar       *domain,
+                   const gchar       *username,
+                   const gchar       *password)
 {
   g_return_val_if_fail (provider == NULL || GOA_IS_PROVIDER (provider), NULL);
   g_return_val_if_fail (object == NULL || GOA_IS_OBJECT (object), NULL);
   g_return_val_if_fail (username != NULL, NULL);
-  return GOA_MAIL_AUTH (g_object_new (GOA_TYPE_SMTP_AUTH_PLAIN,
+  return GOA_MAIL_AUTH (g_object_new (GOA_TYPE_SMTP_AUTH,
                                       "provider", provider,
                                       "object", object,
                                       "domain", domain,
@@ -563,20 +563,20 @@ goa_smtp_auth_plain_new (GoaProvider       *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-goa_smtp_auth_plain_is_needed (GoaMailAuth *_auth)
+goa_smtp_auth_is_needed (GoaMailAuth *_auth)
 {
-  GoaSmtpAuthPlain *auth = GOA_SMTP_AUTH_PLAIN (_auth);
+  GoaSmtpAuth *auth = GOA_SMTP_AUTH (_auth);
   return auth->auth_supported;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
-                              GCancellable        *cancellable,
-                              GError             **error)
+goa_smtp_auth_run_sync (GoaMailAuth         *_auth,
+                        GCancellable        *cancellable,
+                        GError             **error)
 {
-  GoaSmtpAuthPlain *auth = GOA_SMTP_AUTH_PLAIN (_auth);
+  GoaSmtpAuth *auth = GOA_SMTP_AUTH (_auth);
   GDataInputStream *input;
   GDataOutputStream *output;
   gboolean login_supported;
@@ -601,11 +601,11 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
 
   ret = FALSE;
 
-  password = smtp_auth_plain_get_password (auth, cancellable, error);
+  password = smtp_auth_get_password (auth, cancellable, error);
   if (password == NULL)
     goto out;
 
-  domain = smtp_auth_plain_get_domain (auth, error);
+  domain = smtp_auth_get_domain (auth, error);
   if (domain == NULL)
     goto out;
 
@@ -616,7 +616,7 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
 
   if (!auth->greeting_absent)
     {
-      if (!smtp_auth_plain_check_greeting (input, cancellable, error))
+      if (!smtp_auth_check_greeting (input, cancellable, error))
         goto out;
     }
 
@@ -635,9 +635,9 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
-  if (smtp_auth_plain_check_421 (response, error))
+  if (smtp_auth_check_421 (response, error))
     goto out;
-  if (smtp_auth_plain_check_not_250 (response, error))
+  if (smtp_auth_check_not_250 (response, error))
     goto out;
 
   if (g_str_has_prefix (response + 4, "AUTH"))
@@ -703,7 +703,7 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
       if (response == NULL)
         goto out;
       g_debug ("< %s", response);
-      if (smtp_auth_plain_check_not_334_login_password (response, error))
+      if (smtp_auth_check_not_334_login_password (response, error))
         goto out;
 
       g_free (auth_arg_plain);
@@ -724,7 +724,7 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
-  if (smtp_auth_plain_check_not_235 (response, error))
+  if (smtp_auth_check_not_235 (response, error))
     goto out;
   g_clear_pointer (&response, g_free);
 
@@ -743,11 +743,11 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-goa_smtp_auth_plain_starttls_sync (GoaMailAuth         *_auth,
-                                   GCancellable        *cancellable,
-                                   GError             **error)
+goa_smtp_auth_starttls_sync (GoaMailAuth         *_auth,
+                             GCancellable        *cancellable,
+                             GError             **error)
 {
-  GoaSmtpAuthPlain *auth = GOA_SMTP_AUTH_PLAIN (_auth);
+  GoaSmtpAuth *auth = GOA_SMTP_AUTH (_auth);
   GDataInputStream *input;
   GDataOutputStream *output;
   gboolean ret;
@@ -763,7 +763,7 @@ goa_smtp_auth_plain_starttls_sync (GoaMailAuth         *_auth,
 
   ret = FALSE;
 
-  domain = smtp_auth_plain_get_domain (auth, error);
+  domain = smtp_auth_get_domain (auth, error);
   if (domain == NULL)
     goto out;
 
@@ -772,7 +772,7 @@ goa_smtp_auth_plain_starttls_sync (GoaMailAuth         *_auth,
 
   /* Check the greeting */
 
-  if (!smtp_auth_plain_check_greeting (input, cancellable, error))
+  if (!smtp_auth_check_greeting (input, cancellable, error))
     goto out;
 
   /* Send EHLO */
@@ -790,9 +790,9 @@ goa_smtp_auth_plain_starttls_sync (GoaMailAuth         *_auth,
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
-  if (smtp_auth_plain_check_421 (response, error))
+  if (smtp_auth_check_421 (response, error))
     goto out;
-  if (smtp_auth_plain_check_not_250 (response, error))
+  if (smtp_auth_check_not_250 (response, error))
     goto out;
 
   if (g_str_has_prefix (response + 4, "STARTTLS"))
@@ -825,9 +825,9 @@ goa_smtp_auth_plain_starttls_sync (GoaMailAuth         *_auth,
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
-  if (smtp_auth_plain_check_454 (response, error))
+  if (smtp_auth_check_454 (response, error))
     goto out;
-  if (smtp_auth_plain_check_not_220 (response, error))
+  if (smtp_auth_check_not_220 (response, error))
     goto out;
   g_clear_pointer (&response, g_free);
 
