@@ -34,11 +34,12 @@
 /**
  * SECTION:goasmtpauthplain
  * @title: GoaSmtpAuthPlain
- * @short_description: PLAIN authentication method for SMTP
+ * @short_description: Authentication mechanisms for SMTP
  *
  * #GoaSmtpAuthPlain implements the <ulink
- * url="http://tools.ietf.org/html/rfc4616">PLAIN</ulink>
- * SASL mechanism (e.g. using usernames / passwords) for SMTP.
+ * url="http://tools.ietf.org/html/rfc4616">PLAIN</ulink> and <ulink
+ * url="http://msdn.microsoft.com/en-us/library/cc433484(v=EXCHG.80).aspx">LOGIN</ulink>
+ * SASL mechanisms (e.g. using usernames / passwords) for SMTP.
  */
 
 /**
@@ -96,7 +97,7 @@ smtp_auth_plain_check_not_220 (const gchar *response, GError **error)
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED, /* TODO: more specific */
-                   "Unexpected response `%s' while doing PLAIN authentication",
+                   "Unexpected response `%s'",
                    response);
       return TRUE;
     }
@@ -127,7 +128,23 @@ smtp_auth_plain_check_not_250 (const gchar *response, GError **error)
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED, /* TODO: more specific */
-                   "Unexpected response `%s' while doing PLAIN authentication",
+                   "Unexpected response `%s'",
+                   response);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+smtp_auth_plain_check_not_334_login_password (const gchar *response, GError **error)
+{
+  if (!g_str_has_prefix (response, "334 UGFzc3dvcmQ6"))
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED, /* TODO: more specific */
+                   "Unexpected response `%s'",
                    response);
       return TRUE;
     }
@@ -246,7 +263,7 @@ smtp_auth_plain_get_domain (GoaSmtpAuthPlain  *auth,
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Cannot do SMTP PLAIN without a domain"));
+                   _("Cannot do SMTP authentication without a domain"));
       goto out;
     }
 
@@ -276,7 +293,7 @@ smtp_auth_plain_get_password (GoaSmtpAuthPlain  *auth,
                                                        error);
       if (credentials == NULL)
         {
-          g_prefix_error (error, "Error looking up credentials for SMTP PLAIN in keyring: ");
+          g_prefix_error (error, "Error looking up credentials for SMTP in keyring: ");
           goto out;
         }
       if (!g_variant_lookup (credentials, "smtp-password", "s", &password))
@@ -295,7 +312,7 @@ smtp_auth_plain_get_password (GoaSmtpAuthPlain  *auth,
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Cannot do SMTP PLAIN without a password"));
+                   _("Cannot do SMTP authentication without a password"));
       goto out;
     }
 
@@ -519,7 +536,7 @@ goa_smtp_auth_plain_class_init (GoaSmtpAuthPlainClass *klass)
  * (see the #GoaSmtpAuthPlain:password property).
  *
  * Creates a new #GoaMailAuth to be used for username/password
- * authentication using PLAIN over SMTP.
+ * authentication using LOGIN or PLAIN over SMTP.
  *
  * Returns: (type GoaSmtpAuthPlain): A #GoaSmtpAuthPlain. Free with
  * g_object_unref().
@@ -562,6 +579,7 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
   GoaSmtpAuthPlain *auth = GOA_SMTP_AUTH_PLAIN (_auth);
   GDataInputStream *input;
   GDataOutputStream *output;
+  gboolean login_supported;
   gboolean plain_supported;
   gboolean ret;
   gchar *auth_arg_base64;
@@ -572,6 +590,7 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
   gchar *response;
   gsize auth_arg_plain_len;
 
+  login_supported = FALSE;
   plain_supported = FALSE;
   auth_arg_base64 = NULL;
   auth_arg_plain = NULL;
@@ -609,7 +628,7 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
     goto out;
   g_clear_pointer (&request, g_free);
 
-  /* Check if PLAIN is supported or not */
+  /* Check which SASL mechanisms are supported */
 
  ehlo_again:
   response = g_data_input_stream_read_line (input, NULL, cancellable, error);
@@ -626,6 +645,8 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
       auth->auth_supported = TRUE;
       if (strstr (response, "PLAIN") != NULL)
         plain_supported = TRUE;
+      else if (strstr (response, "LOGIN") != NULL)
+        login_supported = TRUE;
     }
 
   if (response[3] == '-')
@@ -638,27 +659,66 @@ goa_smtp_auth_plain_run_sync (GoaMailAuth         *_auth,
       ret = TRUE;
       goto out;
     }
-  else if (!plain_supported)
+  else if (!login_supported && !plain_supported)
     {
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_NOT_SUPPORTED,
-                   _("Server does not support PLAIN"));
+                   _("Unknown authentication mechanism"));
       goto out;
     }
   g_clear_pointer (&response, g_free);
 
-  /* Send AUTH PLAIN */
+  /* Try different SASL mechanisms */
 
-  auth_arg_plain = g_strdup_printf ("%s%c%s%c%s", auth->username, '\0', auth->username, '\0', password);
-  auth_arg_plain_len = 2 * strlen (auth->username) + 2 + strlen (password);
-  auth_arg_base64 = g_base64_encode ((guchar *) auth_arg_plain, auth_arg_plain_len);
+  if (plain_supported)
+    {
+      /* AUTH PLAIN */
 
-  request = g_strdup_printf ("AUTH PLAIN %s\r\n", auth_arg_base64);
-  g_debug ("> AUTH PLAIN ********************");
-  if (!g_data_output_stream_put_string (output, request, cancellable, error))
-    goto out;
-  g_clear_pointer (&request, g_free);
+      auth_arg_plain = g_strdup_printf ("%s%c%s%c%s", auth->username, '\0', auth->username, '\0', password);
+      auth_arg_plain_len = 2 * strlen (auth->username) + 2 + strlen (password);
+      auth_arg_base64 = g_base64_encode ((guchar *) auth_arg_plain, auth_arg_plain_len);
+
+      request = g_strdup_printf ("AUTH PLAIN %s\r\n", auth_arg_base64);
+      g_debug ("> AUTH PLAIN ********************");
+      if (!g_data_output_stream_put_string (output, request, cancellable, error))
+        goto out;
+      g_clear_pointer (&request, g_free);
+    }
+  else
+    {
+      /* AUTH LOGIN */
+
+      auth_arg_plain = g_strdup (auth->username);
+      auth_arg_plain_len = strlen (auth->username);
+      auth_arg_base64 = g_base64_encode ((guchar *) auth_arg_plain, auth_arg_plain_len);
+
+      request = g_strdup_printf ("AUTH LOGIN %s\r\n", auth_arg_base64);
+      g_debug ("> AUTH LOGIN ********************");
+      if (!g_data_output_stream_put_string (output, request, cancellable, error))
+        goto out;
+      g_clear_pointer (&request, g_free);
+
+      response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+      if (response == NULL)
+        goto out;
+      g_debug ("< %s", response);
+      if (smtp_auth_plain_check_not_334_login_password (response, error))
+        goto out;
+
+      g_free (auth_arg_plain);
+      g_free (auth_arg_base64);
+
+      auth_arg_plain = g_strdup (password);
+      auth_arg_plain_len = strlen (password);
+      auth_arg_base64 = g_base64_encode ((guchar *) auth_arg_plain, auth_arg_plain_len);
+
+      request = g_strdup_printf ("%s\r\n", auth_arg_base64);
+      g_debug ("> ********************");
+      if (!g_data_output_stream_put_string (output, request, cancellable, error))
+        goto out;
+      g_clear_pointer (&request, g_free);
+    }
 
   response = g_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
