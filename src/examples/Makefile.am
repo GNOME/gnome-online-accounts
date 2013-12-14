@@ -15,7 +15,7 @@ INCLUDES = 							\
 	$(WARN_CFLAGS)						\
 	$(NULL)
 
-noinst_PROGRAMS = list-providers list-accounts tweet
+noinst_PROGRAMS = list-providers list-accounts tweet add-pocket
 
 list_providers_SOURCES = list-providers.c
 list_providers_CFLAGS = $(GLIB_CFLAGS) $(GTK_CFLAGS)
@@ -28,6 +28,10 @@ list_accounts_LDADD = $(GLIB_LIBS) ../goa/libgoa-1.0.la
 tweet_SOURCES = tweet.c
 tweet_CFLAGS = $(GLIB_CFLAGS) $(REST_CFLAGS)
 tweet_LDADD = $(GLIB_LIBS) $(REST_LIBS) ../goa/libgoa-1.0.la
+
+add_pocket_SOURCES = add-pocket.c
+add_pocket_CFLAGS = $(GLIB_CFLAGS) $(REST_CFLAGS)
+add_pocket_LDADD = $(GLIB_LIBS) $(REST_LIBS) ../goa/libgoa-1.0.la
 
 clean-local :
 	rm -f *~
