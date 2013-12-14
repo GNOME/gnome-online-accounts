@@ -123,6 +123,9 @@ get_scope (GoaOAuth2Provider *provider)
   return /* Read-only access to the user's email address */
          "https://www.googleapis.com/auth/userinfo.email "
 
+         /* Name and picture */
+         "https://www.googleapis.com/auth/userinfo.profile "
+
          /* Google Calendar API (CalDAV and GData) */
          "https://www.googleapis.com/auth/calendar "
 
@@ -147,7 +150,7 @@ get_scope (GoaOAuth2Provider *provider)
 static guint
 get_credentials_generation (GoaProvider *provider)
 {
-  return 5;
+  return 6;
 }
 
 static const gchar *
