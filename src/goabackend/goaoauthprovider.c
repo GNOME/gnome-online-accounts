@@ -989,7 +989,7 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
       gtk_widget_grab_focus (entry);
       gtk_widget_show_all (GTK_WIDGET (vbox));
 
-      gtk_dialog_add_button (dialog, GTK_STOCK_OK, GTK_RESPONSE_OK);
+      gtk_dialog_add_button (dialog, _("_OK"), GTK_RESPONSE_OK);
       gtk_dialog_set_default_response (dialog, GTK_RESPONSE_OK);
       gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_OK, FALSE);
       g_signal_connect (entry, "changed", G_CALLBACK (on_entry_changed), &data);
@@ -1349,7 +1349,7 @@ goa_oauth_provider_refresh_account (GoaProvider  *_provider,
   dialog = gtk_dialog_new_with_buttons (NULL,
                                         parent,
                                         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
+                                        _("_Cancel"), GTK_RESPONSE_REJECT,
                                         NULL);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 12);
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);

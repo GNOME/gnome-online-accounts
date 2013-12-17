@@ -1134,7 +1134,7 @@ create_account_details_ui (GoaKerberosProvider *self,
   populate_realms_for_request (request);
   gtk_widget_grab_focus (request->realm_combo_box);
 
-  request->connect_button = gtk_dialog_add_button (request->dialog, GTK_STOCK_CONNECT, GTK_RESPONSE_OK);
+  request->connect_button = gtk_dialog_add_button (request->dialog, _("C_onnect"), GTK_RESPONSE_OK);
   gtk_dialog_set_default_response (request->dialog, GTK_RESPONSE_OK);
   gtk_dialog_set_response_sensitive (request->dialog, GTK_RESPONSE_OK, TRUE);
 

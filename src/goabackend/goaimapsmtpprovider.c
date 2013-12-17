@@ -756,7 +756,7 @@ create_account_details_ui (GoaProvider    *provider,
 
   /* -- */
 
-  data->forward_button = gtk_dialog_add_button (data->dialog, GTK_STOCK_GO_FORWARD, GTK_RESPONSE_OK);
+  data->forward_button = gtk_dialog_add_button (data->dialog, _("_Forward"), GTK_RESPONSE_OK);
   gtk_dialog_set_default_response (data->dialog, GTK_RESPONSE_OK);
   gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, FALSE);
 
@@ -1040,7 +1040,7 @@ add_account (GoaProvider    *provider,
 
   gtk_widget_set_no_show_all (data.cluebar, TRUE);
   gtk_widget_hide (data.cluebar);
-  gtk_button_set_label (GTK_BUTTON (data.forward_button), GTK_STOCK_GO_FORWARD);
+  gtk_button_set_label (GTK_BUTTON (data.forward_button), _("_Forward"));
 
   /* SMTP */
 
@@ -1253,7 +1253,7 @@ refresh_account (GoaProvider    *provider,
   dialog = gtk_dialog_new_with_buttons (NULL,
                                         parent,
                                         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                        _("_Cancel"), GTK_RESPONSE_CANCEL,
                                         NULL);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 12);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
@@ -1368,7 +1368,7 @@ refresh_account (GoaProvider    *provider,
 
   gtk_widget_set_no_show_all (data.cluebar, TRUE);
   gtk_widget_hide (data.cluebar);
-  gtk_button_set_label (GTK_BUTTON (data.forward_button), GTK_STOCK_GO_FORWARD);
+  gtk_button_set_label (GTK_BUTTON (data.forward_button), _("_Forward"));
 
   /* SMTP */
 

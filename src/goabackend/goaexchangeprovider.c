@@ -522,7 +522,7 @@ create_account_details_ui (GoaProvider    *provider,
   g_signal_connect (data->email_address, "changed", G_CALLBACK (on_email_address_or_password_changed), data);
   g_signal_connect (data->password, "changed", G_CALLBACK (on_email_address_or_password_changed), data);
 
-  data->connect_button = gtk_dialog_add_button (data->dialog, GTK_STOCK_CONNECT, GTK_RESPONSE_OK);
+  data->connect_button = gtk_dialog_add_button (data->dialog, _("C_onnect"), GTK_RESPONSE_OK);
   gtk_dialog_set_default_response (data->dialog, GTK_RESPONSE_OK);
   gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, FALSE);
 
@@ -808,7 +808,7 @@ refresh_account (GoaProvider    *provider,
   dialog = gtk_dialog_new_with_buttons (NULL,
                                         parent,
                                         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                        _("_Cancel"), GTK_RESPONSE_CANCEL,
                                         NULL);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 12);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
