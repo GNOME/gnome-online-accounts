@@ -1,13 +1,23 @@
 Overview of changes in 3.11.3
 =============================
 
+* Bugs fixed:
+ 701500 facebook: Add support for photos
+ 712535 telepathy: Documentation fixes
+ 712843 main: Be quieter during normal bootup
+ 720446 google: Request profile scope
+
+* Updated translations:
+ Simplified Chinese
+ Dutch
+ Norwegian bokmål
+ Tamil
+
 
 Overview of changes in 3.11.2
 =============================
 
 * Support kernel keyring based Kerberos accounts (707402, 710116)
-
-* Support Windows Live mail (709393)
 
 * Bugs fixed:
  699491 kerberos: Don't crash when an identity could not be looked up
@@ -27,6 +37,7 @@ Overview of changes in 3.11.2
  708832 oauth2: Propagate the error if the dialog is dismissed during refresh
  708975 kerberos: still consuming 100% CPU
  709103 identity: don't queue two temporary accounts for one identity
+ 709393 live: Add support for mail
  709570 oauth2: Don't parse the DOM to detect access_denied
  709953 goaalarm: add locks when setting up timers
  709955 kerberos: correctly show sign in errors when mistyping password
