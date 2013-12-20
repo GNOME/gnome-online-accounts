@@ -395,9 +395,7 @@ const gchar *
 goa_oauth2_provider_get_scope (GoaOAuth2Provider *provider)
 {
   g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (provider), NULL);
-  if (GOA_OAUTH2_PROVIDER_GET_CLASS (provider)->get_scope)
-    return GOA_OAUTH2_PROVIDER_GET_CLASS (provider)->get_scope (provider);
-  return NULL;
+  return GOA_OAUTH2_PROVIDER_GET_CLASS (provider)->get_scope (provider);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
