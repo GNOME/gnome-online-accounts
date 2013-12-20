@@ -165,7 +165,10 @@ goa_oauth_provider_is_password_node_default (GoaOAuthProvider *provider, WebKitD
  * @element: A WebKitDOMHTMLInputElement
  *
  * Checks whether @element is the HTML UI element that the user can
- * use to enter her password.
+ * use to enter her password. This can be used to offer a
+ * #GoaPasswordBased interface by saving the user's
+ * password. Providers usually frown upon doing this, so this is not
+ * recommended.
  *
  * This is a virtual method where the default implementation returns
  * %FALSE.
