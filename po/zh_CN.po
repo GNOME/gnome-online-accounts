@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-11-28 15:19+0000\n"
-"PO-Revision-Date: 2013-12-01 09:27+0800\n"
+"POT-Creation-Date: 2013-12-19 19:40+0000\n"
+"PO-Revision-Date: 2013-12-22 22:59+0800\n"
 "Last-Translator: Tong Hui <tonghuix@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -112,6 +112,12 @@ msgstr "用户名(_N)"
 msgid "_Server"
 msgstr "服务器(_S)"
 
+#: ../src/goabackend/goaexchangeprovider.c:525
+#: ../src/goabackend/goakerberosprovider.c:1137
+#: ../src/goabackend/goaowncloudprovider.c:664
+msgid "C_onnect"
+msgstr "连接(_C)"
+
 #: ../src/goabackend/goaexchangeprovider.c:545
 #: ../src/goabackend/goaimapsmtpprovider.c:779
 #: ../src/goabackend/goakerberosprovider.c:1157
@@ -174,12 +180,21 @@ msgstr "再试一次(_T)"
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "连接 Microsoft Exchange 服务器出错"
 
+#: ../src/goabackend/goaexchangeprovider.c:811
+#: ../src/goabackend/goaimapsmtpprovider.c:1256
+#: ../src/goabackend/goaoauth2provider.c:1359
+#: ../src/goabackend/goaoauthprovider.c:1352
+#: ../src/goabackend/goaowncloudprovider.c:968
+#: ../src/goabackend/goatelepathyprovider.c:675
+msgid "_Cancel"
+msgstr "取消(_C)"
+
 #. Translators: This is a label for a series of
 #. * options switches. For example: “Use for Mail”.
 #: ../src/goabackend/goaexchangeprovider.c:947
 #: ../src/goabackend/goafacebookprovider.c:436
 #: ../src/goabackend/goaflickrprovider.c:427
-#: ../src/goabackend/goagoogleprovider.c:531
+#: ../src/goabackend/goagoogleprovider.c:534
 #: ../src/goabackend/goakerberosprovider.c:1731
 #: ../src/goabackend/goaowncloudprovider.c:1104
 #: ../src/goabackend/goatelepathyprovider.c:917
@@ -188,19 +203,19 @@ msgid "Use for"
 msgstr "用于"
 
 #: ../src/goabackend/goaexchangeprovider.c:949
-#: ../src/goabackend/goagoogleprovider.c:533
+#: ../src/goabackend/goagoogleprovider.c:536
 #: ../src/goabackend/goawindowsliveprovider.c:457
 msgid "_Mail"
 msgstr "邮件(_M)"
 
 #: ../src/goabackend/goaexchangeprovider.c:954
-#: ../src/goabackend/goagoogleprovider.c:538
+#: ../src/goabackend/goagoogleprovider.c:541
 #: ../src/goabackend/goaowncloudprovider.c:1106
 msgid "Cale_ndar"
 msgstr "日历(_N)"
 
 #: ../src/goabackend/goaexchangeprovider.c:959
-#: ../src/goabackend/goagoogleprovider.c:543
+#: ../src/goabackend/goagoogleprovider.c:546
 #: ../src/goabackend/goaowncloudprovider.c:1111
 msgid "_Contacts"
 msgstr "联系人(_C)"
@@ -212,7 +227,7 @@ msgstr "Facebook"
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:218
 #: ../src/goabackend/goaflickrprovider.c:189
-#: ../src/goabackend/goagoogleprovider.c:210
+#: ../src/goabackend/goagoogleprovider.c:213
 #: ../src/goabackend/goatwitterprovider.c:166
 #: ../src/goabackend/goawindowsliveprovider.c:197
 #: ../src/goabackend/goayahooprovider.c:187
@@ -229,8 +244,8 @@ msgstr "在请求您的身份时应得到的状态 200，但却得到了状态 %
 #: ../src/goabackend/goaflickrprovider.c:230
 #: ../src/goabackend/goaflickrprovider.c:240
 #: ../src/goabackend/goaflickrprovider.c:250
-#: ../src/goabackend/goagoogleprovider.c:229
-#: ../src/goabackend/goagoogleprovider.c:241
+#: ../src/goabackend/goagoogleprovider.c:232
+#: ../src/goabackend/goagoogleprovider.c:244
 #: ../src/goabackend/goaoauth2provider.c:682
 #: ../src/goabackend/goaoauth2provider.c:712
 #: ../src/goabackend/goaoauth2provider.c:724
@@ -251,7 +266,7 @@ msgid "Could not parse response"
 msgstr "无法解析响应"
 
 #: ../src/goabackend/goafacebookprovider.c:438
-#: ../src/goabackend/goagoogleprovider.c:548
+#: ../src/goabackend/goagoogleprovider.c:551
 #: ../src/goabackend/goatelepathyprovider.c:919
 #: ../src/goabackend/goawindowsliveprovider.c:462
 msgid "C_hat"
@@ -275,7 +290,7 @@ msgstr "您的系统时间无效。请检查日期和时间设置。"
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:553
+#: ../src/goabackend/goagoogleprovider.c:556
 #: ../src/goabackend/goaowncloudprovider.c:1116
 #: ../src/goabackend/goawindowsliveprovider.c:467
 msgid "_Documents"
@@ -368,6 +383,13 @@ msgstr "IMAP 服务器(_S)"
 #: ../src/goabackend/goaimapsmtpprovider.c:745
 msgid "SMTP _Server"
 msgstr "SMTP 服务器(_S)"
+
+#. --
+#: ../src/goabackend/goaimapsmtpprovider.c:759
+#: ../src/goabackend/goaimapsmtpprovider.c:1043
+#: ../src/goabackend/goaimapsmtpprovider.c:1371
+msgid "_Forward"
+msgstr "转发(_F)"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:1027
 #: ../src/goabackend/goaimapsmtpprovider.c:1354
@@ -469,6 +491,12 @@ msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
 "page</a>:"
 msgstr "请粘贴从<a href=\"%s\">认证页面</a>获得的认证代码："
+
+#: ../src/goabackend/goaoauth2provider.c:1076
+#: ../src/goabackend/goaoauthprovider.c:992
+#: ../src/goabackend/goatelepathyprovider.c:676
+msgid "_OK"
+msgstr "确定(_O)"
 
 #: ../src/goabackend/goaoauth2provider.c:1162
 #: ../src/goabackend/goaoauthprovider.c:1072
