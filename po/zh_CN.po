@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-12-19 19:40+0000\n"
-"PO-Revision-Date: 2013-12-22 22:59+0800\n"
+"POT-Creation-Date: 2013-12-23 11:56+0000\n"
+"PO-Revision-Date: 2013-12-28 17:31+0800\n"
 "Last-Translator: Tong Hui <tonghuix@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -133,8 +133,8 @@ msgstr "正在连接……"
 #: ../src/goabackend/goaimapsmtpprovider.c:1318
 #: ../src/goabackend/goaimapsmtpprovider.c:1391
 #: ../src/goabackend/goakerberosprovider.c:1548
-#: ../src/goabackend/goaoauth2provider.c:1136
-#: ../src/goabackend/goaoauthprovider.c:1041
+#: ../src/goabackend/goaoauth2provider.c:1153
+#: ../src/goabackend/goaoauthprovider.c:1044
 #: ../src/goabackend/goaowncloudprovider.c:795
 #: ../src/goabackend/goaowncloudprovider.c:1008
 #: ../src/goabackend/goatelepathyprovider.c:487
@@ -182,8 +182,8 @@ msgstr "连接 Microsoft Exchange 服务器出错"
 
 #: ../src/goabackend/goaexchangeprovider.c:811
 #: ../src/goabackend/goaimapsmtpprovider.c:1256
-#: ../src/goabackend/goaoauth2provider.c:1359
-#: ../src/goabackend/goaoauthprovider.c:1352
+#: ../src/goabackend/goaoauth2provider.c:1376
+#: ../src/goabackend/goaoauthprovider.c:1355
 #: ../src/goabackend/goaowncloudprovider.c:968
 #: ../src/goabackend/goatelepathyprovider.c:675
 msgid "_Cancel"
@@ -246,9 +246,9 @@ msgstr "在请求您的身份时应得到的状态 200，但却得到了状态 %
 #: ../src/goabackend/goaflickrprovider.c:250
 #: ../src/goabackend/goagoogleprovider.c:232
 #: ../src/goabackend/goagoogleprovider.c:244
-#: ../src/goabackend/goaoauth2provider.c:682
-#: ../src/goabackend/goaoauth2provider.c:712
+#: ../src/goabackend/goaoauth2provider.c:694
 #: ../src/goabackend/goaoauth2provider.c:724
+#: ../src/goabackend/goaoauth2provider.c:736
 #: ../src/goabackend/goatwitterprovider.c:185
 #: ../src/goabackend/goatwitterprovider.c:197
 #: ../src/goabackend/goatwitterprovider.c:207
@@ -297,27 +297,25 @@ msgid "_Documents"
 msgstr "文档(_D)"
 
 #. TODO: more specific
-#: ../src/goabackend/goaimapauthlogin.c:99
-#: ../src/goabackend/goasmtpauthplain.c:146
+#: ../src/goabackend/goaimapauthlogin.c:99 ../src/goabackend/goasmtpauth.c:163
 #, c-format
 msgid "Service not available"
 msgstr "服务不可用"
 
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:120
-#: ../src/goabackend/goasmtpauthplain.c:115
+#: ../src/goabackend/goasmtpauth.c:116
 #, c-format
 msgid "Authentication failed"
 msgstr "认证失败"
 
 #: ../src/goabackend/goaimapauthlogin.c:145
-#: ../src/goabackend/goasmtpauthplain.c:646
 #, c-format
 msgid "Server does not support PLAIN"
 msgstr "服务器不支持 PLAIN"
 
 #: ../src/goabackend/goaimapauthlogin.c:199
-#: ../src/goabackend/goasmtpauthplain.c:751
+#: ../src/goabackend/goasmtpauth.c:811
 #, c-format
 msgid "Server does not support STARTTLS"
 msgstr "服务器不支持 STARTTLS"
@@ -472,87 +470,87 @@ msgid "Network _Resources"
 msgstr "网络资源(_R)"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:658
-#: ../src/goabackend/goaoauthprovider.c:586
+#: ../src/goabackend/goaoauth2provider.c:670
+#: ../src/goabackend/goaoauthprovider.c:589
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr "在请求访问令牌时应得到状态 200，但却得到了状态 %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:965
+#: ../src/goabackend/goaoauth2provider.c:977
 #, c-format
 msgid "Authorization response was ‘%s’"
 msgstr "认证响应为“%s”"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:1062
+#: ../src/goabackend/goaoauth2provider.c:1079
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
 "page</a>:"
 msgstr "请粘贴从<a href=\"%s\">认证页面</a>获得的认证代码："
 
-#: ../src/goabackend/goaoauth2provider.c:1076
-#: ../src/goabackend/goaoauthprovider.c:992
+#: ../src/goabackend/goaoauth2provider.c:1093
+#: ../src/goabackend/goaoauthprovider.c:995
 #: ../src/goabackend/goatelepathyprovider.c:676
 msgid "_OK"
 msgstr "确定(_O)"
 
-#: ../src/goabackend/goaoauth2provider.c:1162
-#: ../src/goabackend/goaoauthprovider.c:1072
+#: ../src/goabackend/goaoauth2provider.c:1179
+#: ../src/goabackend/goaoauthprovider.c:1075
 msgid "Error getting an Access Token: "
 msgstr "获取访问令牌出错："
 
-#: ../src/goabackend/goaoauth2provider.c:1177
-#: ../src/goabackend/goaoauthprovider.c:1085
+#: ../src/goabackend/goaoauth2provider.c:1194
+#: ../src/goabackend/goaoauthprovider.c:1088
 msgid "Error getting identity: "
 msgstr "获身份信息出错："
 
-#: ../src/goabackend/goaoauth2provider.c:1389
-#: ../src/goabackend/goaoauthprovider.c:1391
+#: ../src/goabackend/goaoauth2provider.c:1406
+#: ../src/goabackend/goaoauthprovider.c:1394
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "要求以 %s 身份登录，但却登录为 %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1548
+#: ../src/goabackend/goaoauth2provider.c:1565
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "证书中不包含 access_token(访问令牌)"
 
-#: ../src/goabackend/goaoauth2provider.c:1587
-#: ../src/goabackend/goaoauthprovider.c:1619
+#: ../src/goabackend/goaoauth2provider.c:1604
+#: ../src/goabackend/goaoauthprovider.c:1622
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "刷新访问令牌(%s，%d)失败："
 
-#: ../src/goabackend/goaoauthprovider.c:609
+#: ../src/goabackend/goaoauthprovider.c:612
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "响应中缺少 access_token 或 access_token_secret 头"
 
-#: ../src/goabackend/goaoauthprovider.c:911
+#: ../src/goabackend/goaoauthprovider.c:914
 msgid "Error getting a Request Token: "
 msgstr "获取响应令牌出错："
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:944
+#: ../src/goabackend/goaoauthprovider.c:947
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr "获取响应令牌时应得到状态 200，但却得到了状态 %d(%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:961
+#: ../src/goabackend/goaoauthprovider.c:964
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "响应中缺少 request_token 或 request_token_secret 头"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:978
+#: ../src/goabackend/goaoauthprovider.c:981
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "请粘贴从 <a href=\"%s\">认证页面</a> 获得的令牌："
 
-#: ../src/goabackend/goaoauthprovider.c:1575
+#: ../src/goabackend/goaoauthprovider.c:1578
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "证书中不含 access_token 或 access_token_secret"
@@ -576,40 +574,45 @@ msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync 未在 %s 类型上实现"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:161
+#: ../src/goabackend/goasmtpauth.c:178
 #, c-format
 msgid "TLS not available"
 msgstr "TLS 不可用"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:227
+#: ../src/goabackend/goasmtpauth.c:244
 #, c-format
 msgid "org.gnome.OnlineAccounts.Mail is not available"
 msgstr "org.gnome.OnlineAccounts.Mail 不可用"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:237
+#: ../src/goabackend/goasmtpauth.c:254
 #, c-format
 msgid "Failed to parse email address"
 msgstr "无法解析电子邮箱地址"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:249
+#: ../src/goabackend/goasmtpauth.c:266
 #, c-format
-msgid "Cannot do SMTP PLAIN without a domain"
-msgstr "没有域，无法进行 SMTP PLAIN"
+msgid "Cannot do SMTP authentication without a domain"
+msgstr "没有域，无法进行 SMTP 身份认证"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:287
+#: ../src/goabackend/goasmtpauth.c:304
 #, c-format
 msgid "Did not find smtp-password in credentials"
 msgstr "未能在证书中找到 smtp 密码"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:298
+#: ../src/goabackend/goasmtpauth.c:315
 #, c-format
-msgid "Cannot do SMTP PLAIN without a password"
-msgstr "没有密码，无法进行 SMTP PLAIN"
+msgid "Cannot do SMTP authentication without a password"
+msgstr "没有密码，无法进行 SMTP 身份认证"
+
+#: ../src/goabackend/goasmtpauth.c:667
+#, c-format
+msgid "Unknown authentication mechanism"
+msgstr "未知的身份认证机制"
 
 #: ../src/goabackend/goatelepathyprovider.c:184
 #, c-format
