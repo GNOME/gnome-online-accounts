@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-12-18 14:16+0000\n"
-"PO-Revision-Date: 2013-12-18 16:31+0100\n"
+"POT-Creation-Date: 2013-12-29 18:55+0000\n"
+"PO-Revision-Date: 2013-12-30 11:33+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -112,7 +112,6 @@ msgstr "_Servidor"
 #: ../src/goabackend/goaexchangeprovider.c:525
 #: ../src/goabackend/goakerberosprovider.c:1137
 #: ../src/goabackend/goaowncloudprovider.c:664
-#| msgid "Connecting…"
 msgid "C_onnect"
 msgstr "C_onectar"
 
@@ -131,8 +130,8 @@ msgstr "Conectando…"
 #: ../src/goabackend/goaimapsmtpprovider.c:1318
 #: ../src/goabackend/goaimapsmtpprovider.c:1391
 #: ../src/goabackend/goakerberosprovider.c:1548
-#: ../src/goabackend/goaoauth2provider.c:1136
-#: ../src/goabackend/goaoauthprovider.c:1041
+#: ../src/goabackend/goaoauth2provider.c:1153
+#: ../src/goabackend/goaoauthprovider.c:1044
 #: ../src/goabackend/goaowncloudprovider.c:795
 #: ../src/goabackend/goaowncloudprovider.c:1008
 #: ../src/goabackend/goatelepathyprovider.c:487
@@ -180,8 +179,8 @@ msgstr "Error al conectar al servidor de Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:811
 #: ../src/goabackend/goaimapsmtpprovider.c:1256
-#: ../src/goabackend/goaoauth2provider.c:1359
-#: ../src/goabackend/goaoauthprovider.c:1352
+#: ../src/goabackend/goaoauth2provider.c:1376
+#: ../src/goabackend/goaoauthprovider.c:1355
 #: ../src/goabackend/goaowncloudprovider.c:968
 #: ../src/goabackend/goatelepathyprovider.c:675
 msgid "_Cancel"
@@ -246,9 +245,9 @@ msgstr ""
 #: ../src/goabackend/goaflickrprovider.c:250
 #: ../src/goabackend/goagoogleprovider.c:232
 #: ../src/goabackend/goagoogleprovider.c:244
-#: ../src/goabackend/goaoauth2provider.c:682
-#: ../src/goabackend/goaoauth2provider.c:712
+#: ../src/goabackend/goaoauth2provider.c:694
 #: ../src/goabackend/goaoauth2provider.c:724
+#: ../src/goabackend/goaoauth2provider.c:736
 #: ../src/goabackend/goatwitterprovider.c:185
 #: ../src/goabackend/goatwitterprovider.c:197
 #: ../src/goabackend/goatwitterprovider.c:207
@@ -299,27 +298,25 @@ msgid "_Documents"
 msgstr "_Documentos"
 
 #. TODO: more specific
-#: ../src/goabackend/goaimapauthlogin.c:99
-#: ../src/goabackend/goasmtpauthplain.c:146
+#: ../src/goabackend/goaimapauthlogin.c:99 ../src/goabackend/goasmtpauth.c:163
 #, c-format
 msgid "Service not available"
 msgstr "Servicio no disponible"
 
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:120
-#: ../src/goabackend/goasmtpauthplain.c:115
+#: ../src/goabackend/goasmtpauth.c:116
 #, c-format
 msgid "Authentication failed"
 msgstr "Falló la autenticación"
 
 #: ../src/goabackend/goaimapauthlogin.c:145
-#: ../src/goabackend/goasmtpauthplain.c:646
 #, c-format
 msgid "Server does not support PLAIN"
 msgstr "El servidor no soporta PLAIN"
 
 #: ../src/goabackend/goaimapauthlogin.c:199
-#: ../src/goabackend/goasmtpauthplain.c:751
+#: ../src/goabackend/goasmtpauth.c:811
 #, c-format
 msgid "Server does not support STARTTLS"
 msgstr "El servidor no soporta STARTTLS"
@@ -476,8 +473,8 @@ msgid "Network _Resources"
 msgstr "_Recursos de red"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:658
-#: ../src/goabackend/goaoauthprovider.c:586
+#: ../src/goabackend/goaoauth2provider.c:670
+#: ../src/goabackend/goaoauthprovider.c:589
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -485,13 +482,13 @@ msgstr ""
 "Se esperaba un estado 200 cuando se solicitó acceso al «token», en su lugar "
 "se obtuvo el estado %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:965
+#: ../src/goabackend/goaoauth2provider.c:977
 #, c-format
 msgid "Authorization response was ‘%s’"
 msgstr "«%s» fue la respuesta a la autorización"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:1062
+#: ../src/goabackend/goaoauth2provider.c:1079
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
@@ -500,52 +497,52 @@ msgstr ""
 "Pegue el código de autorización obtenido en la <a href=\"%s\">página de "
 "autorización</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:1076
-#: ../src/goabackend/goaoauthprovider.c:992
+#: ../src/goabackend/goaoauth2provider.c:1093
+#: ../src/goabackend/goaoauthprovider.c:995
 #: ../src/goabackend/goatelepathyprovider.c:676
 msgid "_OK"
 msgstr "_Aceptar"
 
-#: ../src/goabackend/goaoauth2provider.c:1162
-#: ../src/goabackend/goaoauthprovider.c:1072
+#: ../src/goabackend/goaoauth2provider.c:1179
+#: ../src/goabackend/goaoauthprovider.c:1075
 msgid "Error getting an Access Token: "
 msgstr "Error al obtener el «token» de acceso: "
 
-#: ../src/goabackend/goaoauth2provider.c:1177
-#: ../src/goabackend/goaoauthprovider.c:1085
+#: ../src/goabackend/goaoauth2provider.c:1194
+#: ../src/goabackend/goaoauthprovider.c:1088
 msgid "Error getting identity: "
 msgstr "Error al obtener la identidad: "
 
-#: ../src/goabackend/goaoauth2provider.c:1389
-#: ../src/goabackend/goaoauthprovider.c:1391
+#: ../src/goabackend/goaoauth2provider.c:1406
+#: ../src/goabackend/goaoauthprovider.c:1394
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Se solicitó iniciar sesión como %s, pero se inició sesión como %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1548
+#: ../src/goabackend/goaoauth2provider.c:1565
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Las credenciales no contienen el «access_token»"
 
-#: ../src/goabackend/goaoauth2provider.c:1587
-#: ../src/goabackend/goaoauthprovider.c:1619
+#: ../src/goabackend/goaoauth2provider.c:1604
+#: ../src/goabackend/goaoauthprovider.c:1622
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Falló al actualizar el acceso al «token» (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:609
+#: ../src/goabackend/goaoauthprovider.c:612
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr ""
 "Faltan las cabeceras del «access_token» o del «access_token_secret» en la "
 "respuesta"
 
-#: ../src/goabackend/goaoauthprovider.c:911
+#: ../src/goabackend/goaoauthprovider.c:914
 msgid "Error getting a Request Token: "
 msgstr "Error al obtener el «token» solicitado: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:944
+#: ../src/goabackend/goaoauthprovider.c:947
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -553,20 +550,20 @@ msgstr ""
 "Se esperaba un estado 200 al solicitar el «token», en su lugar se obtuvo el "
 "estado %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:961
+#: ../src/goabackend/goaoauthprovider.c:964
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr ""
 "Faltan las cabeceras «request_token» o «request_token_secret» en la respuesta"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:978
+#: ../src/goabackend/goaoauthprovider.c:981
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr ""
 "Pegue el «token» obtenido en la <a href=\"%s\">página de autorización</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1575
+#: ../src/goabackend/goaoauthprovider.c:1578
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Las credenciales no contienen «access_token» o «access_token_secret»"
@@ -590,40 +587,48 @@ msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "«ensure_credentials_sync» no está implementado en el tipo %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:161
+#: ../src/goabackend/goasmtpauth.c:178
 #, c-format
 msgid "TLS not available"
 msgstr "TLS no disponible"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:227
+#: ../src/goabackend/goasmtpauth.c:244
 #, c-format
 msgid "org.gnome.OnlineAccounts.Mail is not available"
 msgstr "org.gnome.OnlineAccounts.Mail no está disponible"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:237
+#: ../src/goabackend/goasmtpauth.c:254
 #, c-format
 msgid "Failed to parse email address"
 msgstr "Falló al analizar la dirección de correo-e"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:249
+#: ../src/goabackend/goasmtpauth.c:266
 #, c-format
-msgid "Cannot do SMTP PLAIN without a domain"
-msgstr "No se puede hacer SMTP PLAIN sin un dominio"
+#| msgid "Cannot do SMTP PLAIN without a domain"
+msgid "Cannot do SMTP authentication without a domain"
+msgstr "No se puede hacer una autenticación SMTP sin un dominio"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:287
+#: ../src/goabackend/goasmtpauth.c:304
 #, c-format
 msgid "Did not find smtp-password in credentials"
 msgstr "No se encontró la contraseña de SMTP en las credenciales"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:298
+#: ../src/goabackend/goasmtpauth.c:315
 #, c-format
-msgid "Cannot do SMTP PLAIN without a password"
-msgstr "No se puede hacer SMTP PLAIN sin una contraseña"
+#| msgid "Cannot do SMTP PLAIN without a password"
+msgid "Cannot do SMTP authentication without a password"
+msgstr "No se puede hacer una autenticación SMTP sin una contraseña"
+
+#: ../src/goabackend/goasmtpauth.c:667
+#, c-format
+#| msgid "Authentication failed"
+msgid "Unknown authentication mechanism"
+msgstr "Mecanismo de autenticación desconocido"
 
 #: ../src/goabackend/goatelepathyprovider.c:184
 #, c-format
