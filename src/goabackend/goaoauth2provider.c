@@ -961,7 +961,7 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
       url = soup_uri_to_string (uri, FALSE);
       if (!goa_oauth2_provider_process_redirect_url (provider, url, &priv->access_token, &priv->error))
         {
-          g_prefix_error (priv->error, _("Authorization response: "));
+          g_prefix_error (&priv->error, _("Authorization response: "));
           priv->error->domain = GOA_ERROR;
           priv->error->code = GOA_ERROR_NOT_AUTHORIZED;
           response_id = GTK_RESPONSE_CLOSE;
