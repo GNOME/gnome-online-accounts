@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2012, 2013 Red Hat, Inc.
+ * Copyright (C) 2011, 2012, 2013, 2014 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -291,6 +291,26 @@ goa_oauth2_provider_build_authorization_uri (GoaOAuth2Provider  *provider,
                                                                                     escaped_scope);
 }
 
+/**
+ * goa_oauth2_provider_process_redirect_url:
+ * @provider: A #GoaOAuth2Provider.
+ * @redirect_url: A redirect URI from the web browser
+ * @authorization_code: (out): Return location for access token
+ * @error: Return location for error or %NULL
+ *
+ * Certain OAuth2-like, but not exactly <ulink
+ * url="http://tools.ietf.org/html/draft-ietf-oauth-v2-15">OAuth2</ulink>,
+ * providers do not follow the standard mechanisms for extracting the
+ * access token or auth code from the redirect URI. They use some
+ * non-standard technique to do so. This is a provider specific hook
+ * to accommodate them and will only be used if implemented.
+ *
+ * This is a pure virtual method - a subclass must provide an
+ * implementation if needed.
+ *
+ * Returns: %TRUE if @provider could process @redirect_url, %FALSE
+ * otherwise.
+ */
 gboolean
 goa_oauth2_provider_process_redirect_url (GoaOAuth2Provider  *provider,
                                           const gchar        *redirect_url,
