@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2012 Red Hat, Inc.
+ * Copyright (C) 2011, 2012, 2014 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,6 +28,7 @@
 #define __GOA_OAUTH_PROVIDER_H__
 
 #include <goabackend/goaprovider.h>
+#include <goabackend/goaprovider-priv.h>
 #include <rest/rest-proxy-call.h>
 #include <webkit/webkit.h>
 

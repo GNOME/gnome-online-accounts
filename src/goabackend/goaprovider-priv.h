@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2013 Red Hat, Inc.
+ * Copyright (C) 2013, 2014 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,6 +28,86 @@
 #define __GOA_PROVIDER_PRIV_H__
 
 G_BEGIN_DECLS
+
+/**
+ * GoaProvider:
+ *
+ * The #GoaProvider structure contains only private data and should
+ * only be accessed using the provided API.
+ */
+struct _GoaProvider
+{
+  /*< private >*/
+  GObject parent_instance;
+  GoaProviderPrivate *priv;
+};
+
+/**
+ * GoaProviderClass:
+ * @parent_class: The parent class.
+ * @get_provider_type: Virtual function for goa_provider_get_provider_type().
+ * @get_provider_name: Virtual function for goa_provider_get_provider_name().
+ * @get_provider_icon: Virtual function for goa_provider_get_provider_icon().
+ * @get_provider_group: Virtual function for goa_provider_get_provider_group().
+ * @get_provider_features: Virtual function for goa_provider_get_provider_features().
+ * @add_account: Virtual function for goa_provider_add_account().
+ * @refresh_account: Virtual function for goa_provider_refresh_account().
+ * @build_object: Virtual function for goa_provider_build_object().
+ * @ensure_credentials_sync: Virtual function for goa_provider_ensure_credentials_sync().
+ * @show_account: Virtual function for goa_provider_show_account().
+ * @get_credentials_generation: Virtual function for goa_provider_get_credentials_generation().
+ *
+ * Class structure for #GoaProvider.
+ */
+struct _GoaProviderClass
+{
+  GObjectClass parent_class;
+
+  /* pure virtual */
+  const gchar *(*get_provider_type) (GoaProvider        *provider);
+  gchar       *(*get_provider_name) (GoaProvider        *provider,
+                                     GoaObject          *object);
+  GIcon       *(*get_provider_icon) (GoaProvider        *provider,
+                                     GoaObject          *object);
+  GoaObject   *(*add_account)       (GoaProvider        *provider,
+                                     GoaClient          *client,
+                                     GtkDialog          *dialog,
+                                     GtkBox             *vbox,
+                                     GError            **error);
+  gboolean     (*refresh_account)   (GoaProvider        *provider,
+                                     GoaClient          *client,
+                                     GoaObject          *object,
+                                     GtkWindow          *parent,
+                                     GError            **error);
+  void         (*show_account)      (GoaProvider         *provider,
+                                     GoaClient           *client,
+                                     GoaObject           *object,
+                                     GtkBox              *vbox,
+                                     GtkGrid             *grid,
+                                     GtkGrid             *dummy);
+  gboolean     (*build_object)      (GoaProvider        *provider,
+                                     GoaObjectSkeleton  *object,
+                                     GKeyFile           *key_file,
+                                     const gchar        *group,
+                                     GDBusConnection    *connection,
+                                     gboolean            just_added,
+                                     GError            **error);
+  /* virtual but with default implementation */
+  gboolean (*ensure_credentials_sync) (GoaProvider         *provider,
+                                       GoaObject           *object,
+                                       gint                *out_expires_in,
+                                       GCancellable        *cancellable,
+                                       GError             **error);
+  guint    (*get_credentials_generation) (GoaProvider   *provider);
+
+  /* pure virtual */
+  GoaProviderGroup (*get_provider_group) (GoaProvider   *provider);
+  GoaProviderFeatures  (*get_provider_features)     (GoaProvider   *provider);
+
+  /*< private >*/
+  /* Padding for future expansion */
+  gpointer goa_reserved[31];
+};
 
 /**
  * GOA_PROVIDER_EXTENSION_POINT_NAME:
