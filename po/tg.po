@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-12-22 19:22+0000\n"
-"PO-Revision-Date: 2013-12-23 16:55+0500\n"
+"POT-Creation-Date: 2014-01-13 15:12+0000\n"
+"PO-Revision-Date: 2014-01-14 15:47+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: Tajik <tg@li.org>\n"
 "Language: tg\n"
@@ -129,7 +129,7 @@ msgstr "Пайваст шуда истодааст..."
 #: ../src/goabackend/goaimapsmtpprovider.c:1318
 #: ../src/goabackend/goaimapsmtpprovider.c:1391
 #: ../src/goabackend/goakerberosprovider.c:1548
-#: ../src/goabackend/goaoauth2provider.c:1153
+#: ../src/goabackend/goaoauth2provider.c:1210
 #: ../src/goabackend/goaoauthprovider.c:1044
 #: ../src/goabackend/goaowncloudprovider.c:795
 #: ../src/goabackend/goaowncloudprovider.c:1008
@@ -179,7 +179,7 @@ msgstr ""
 
 #: ../src/goabackend/goaexchangeprovider.c:811
 #: ../src/goabackend/goaimapsmtpprovider.c:1256
-#: ../src/goabackend/goaoauth2provider.c:1376
+#: ../src/goabackend/goaoauth2provider.c:1433
 #: ../src/goabackend/goaoauthprovider.c:1355
 #: ../src/goabackend/goaowncloudprovider.c:968
 #: ../src/goabackend/goatelepathyprovider.c:675
@@ -194,6 +194,7 @@ msgstr "_Бекор кардан"
 #: ../src/goabackend/goagoogleprovider.c:534
 #: ../src/goabackend/goakerberosprovider.c:1731
 #: ../src/goabackend/goaowncloudprovider.c:1104
+#: ../src/goabackend/goapocketprovider.c:428
 #: ../src/goabackend/goatelepathyprovider.c:917
 #: ../src/goabackend/goawindowsliveprovider.c:455
 msgid "Use for"
@@ -245,9 +246,9 @@ msgstr ""
 #: ../src/goabackend/goaflickrprovider.c:250
 #: ../src/goabackend/goagoogleprovider.c:232
 #: ../src/goabackend/goagoogleprovider.c:244
-#: ../src/goabackend/goaoauth2provider.c:694
-#: ../src/goabackend/goaoauth2provider.c:724
-#: ../src/goabackend/goaoauth2provider.c:736
+#: ../src/goabackend/goaoauth2provider.c:731
+#: ../src/goabackend/goaoauth2provider.c:761
+#: ../src/goabackend/goaoauth2provider.c:773
 #: ../src/goabackend/goatwitterprovider.c:185
 #: ../src/goabackend/goatwitterprovider.c:197
 #: ../src/goabackend/goatwitterprovider.c:207
@@ -472,7 +473,7 @@ msgid "Network _Resources"
 msgstr "Сарчашмаҳои _шабака"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:670
+#: ../src/goabackend/goaoauth2provider.c:707
 #: ../src/goabackend/goaoauthprovider.c:589
 #, c-format
 msgid ""
@@ -481,13 +482,19 @@ msgstr ""
 "Вазъияти мунтазири 200 ҳангоми дархосткунии дастрасии токен, ваъияти %d (%s)-"
 "ро қабул кард"
 
-#: ../src/goabackend/goaoauth2provider.c:977
+#: ../src/goabackend/goaoauth2provider.c:964
+#| msgid "Authorization response was ‘%s’"
+msgid "Authorization response: "
+msgstr "Ҷавоби санҷиши ҳаққоният:"
+
+#: ../src/goabackend/goaoauth2provider.c:1034
 #, c-format
-msgid "Authorization response was ‘%s’"
-msgstr "Ҷавоби санҷиши ҳаққоният чунин аст:  ‘%s’"
+#| msgid "Authorization response was ‘%s’"
+msgid "Authorization response: %s"
+msgstr "Ҷавоби санҷиши ҳаққоният: %s"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:1079
+#: ../src/goabackend/goaoauth2provider.c:1136
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
@@ -496,34 +503,34 @@ msgstr ""
 "Рамзи санҷиши ҳаққониятеро, ки аз <a href=\"%s\">саҳифаи санҷиши ҳаққоният</"
 "a> гирифтед, ворид кунед:"
 
-#: ../src/goabackend/goaoauth2provider.c:1093
+#: ../src/goabackend/goaoauth2provider.c:1150
 #: ../src/goabackend/goaoauthprovider.c:995
 #: ../src/goabackend/goatelepathyprovider.c:676
 msgid "_OK"
 msgstr "_OK"
 
-#: ../src/goabackend/goaoauth2provider.c:1179
+#: ../src/goabackend/goaoauth2provider.c:1236
 #: ../src/goabackend/goaoauthprovider.c:1075
 msgid "Error getting an Access Token: "
 msgstr "Хатои гирифтани токени дастрасӣ:"
 
-#: ../src/goabackend/goaoauth2provider.c:1194
+#: ../src/goabackend/goaoauth2provider.c:1251
 #: ../src/goabackend/goaoauthprovider.c:1088
 msgid "Error getting identity: "
 msgstr "Хатои гирифтани шахсият:"
 
-#: ../src/goabackend/goaoauth2provider.c:1406
+#: ../src/goabackend/goaoauth2provider.c:1463
 #: ../src/goabackend/goaoauthprovider.c:1394
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Дархост кардем, ки ҳамчум %s ворид шавед, вале ҳамчун %s ворид шудед"
 
-#: ../src/goabackend/goaoauth2provider.c:1565
+#: ../src/goabackend/goaoauth2provider.c:1622
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Маълумоти корбар дорои токени дастрасӣ (access_token) намебошад"
 
-#: ../src/goabackend/goaoauth2provider.c:1604
+#: ../src/goabackend/goaoauth2provider.c:1661
 #: ../src/goabackend/goaoauthprovider.c:1622
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
@@ -583,7 +590,21 @@ msgstr "Ҳангоми пайваст шудан ба сервери ownCloud х
 msgid "_Files"
 msgstr "_Файлҳо"
 
-#: ../src/goabackend/goaprovider.c:688
+#: ../src/goabackend/goapocketprovider.c:89
+msgid "Pocket"
+msgstr "Баста"
+
+#. TODO: more specific
+#: ../src/goabackend/goapocketprovider.c:238
+#, c-format
+msgid "No username or access_token"
+msgstr "Ягон номи корбар ё дстрасӣ нест"
+
+#: ../src/goabackend/goapocketprovider.c:430
+msgid "_Read Later"
+msgstr "_Баъдтар мехонам"
+
+#: ../src/goabackend/goaprovider.c:689
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "Имконоти ensure_credentials_sync дар намуди %s иҷро нашуд"
@@ -609,7 +630,6 @@ msgstr "Таҷзият суроғаи почтаи электронӣ иҷро �
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauth.c:266
 #, c-format
-#| msgid "Cannot do SMTP PLAIN without a domain"
 msgid "Cannot do SMTP authentication without a domain"
 msgstr "Санҷиши ҳаққонияти SMTP бе домен иҷро намешавад"
 
@@ -622,13 +642,11 @@ msgstr "Пароли smtp дар маълумоти корбар ёфт нашу
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauth.c:315
 #, c-format
-#| msgid "Cannot do SMTP PLAIN without a password"
 msgid "Cannot do SMTP authentication without a password"
 msgstr "Санҷиши ҳаққонияти SMTP бе парол иҷро намешавад"
 
 #: ../src/goabackend/goasmtpauth.c:667
 #, c-format
-#| msgid "Authentication failed"
 msgid "Unknown authentication mechanism"
 msgstr "Механизми санҷиши ҳаққонияти номаълум"
 
