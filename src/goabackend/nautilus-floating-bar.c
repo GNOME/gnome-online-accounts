@@ -228,7 +228,7 @@ nautilus_floating_bar_constructed (GObject *obj)
 	self->priv->spinner = w;
 
 	gtk_widget_set_size_request (w, 16, 16);
-	gtk_widget_set_margin_left (w, 8);
+	gtk_widget_set_margin_start (w, 8);
 
 	w = gtk_label_new (NULL);
 	gtk_label_set_ellipsize (GTK_LABEL (w), PANGO_ELLIPSIZE_MIDDLE);
@@ -339,12 +339,12 @@ nautilus_floating_bar_new (const gchar *label,
 
 void
 nautilus_floating_bar_add_action (NautilusFloatingBar *self,
-				  const gchar *stock_id,
+				  const gchar *icon_name,
 				  gint action_id)
 {
 	GtkWidget *w, *button;
 
-	w = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_MENU);
+	w = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
 	gtk_widget_show (w);
 
 	button = gtk_button_new ();
