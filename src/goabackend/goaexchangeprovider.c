@@ -26,7 +26,6 @@
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goaexchangeprovider.h"
-#include "goaeditablelabel.h"
 #include "goautils.h"
 
 /**

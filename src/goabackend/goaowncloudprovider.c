@@ -30,7 +30,6 @@
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goaowncloudprovider.h"
-#include "goaeditablelabel.h"
 #include "goautils.h"
 
 /**

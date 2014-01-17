@@ -57,7 +57,6 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goabackendtypes.h						\
 	goabackendenums-priv.h						\
 	goabackendenumtypes.h		goabackendenumtypes.c		\
-	goaeditablelabel.h		goaeditablelabel.c		\
 	goaewsclient.h			goaewsclient.c			\
 	goahttpclient.h			goahttpclient.c			\
 	goaprovider-priv.h		goaprovider.c			\

@@ -43,7 +43,6 @@
 #include "goakerberosprovider.h"
 #endif
 
-#include "goaeditablelabel.h"
 #include "goautils.h"
 
 /**

@@ -27,7 +27,6 @@
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goakerberosprovider.h"
-#include "goaeditablelabel.h"
 #include "goautils.h"
 #include "goaidentity.h"
 
