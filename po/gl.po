@@ -6,13 +6,13 @@
 # Xosé M Lamas <correo.xmgz@gmail.com>, 2011.
 # Fran Diéguez <frandieguez@gnome.org>, 2011, 2012.
 # Leandro Regueiro <leandro.regueiro@gmail.com>, 2012.
-# Fran Dieguez <frandieguez@gnome.org>, 2012, 2013.
+# Fran Dieguez <frandieguez@gnome.org>, 2012, 2013, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-30 00:12+0100\n"
-"PO-Revision-Date: 2013-12-30 00:12+0200\n"
+"POT-Creation-Date: 2014-01-20 23:19+0100\n"
+"PO-Revision-Date: 2014-01-20 23:21+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -135,7 +135,7 @@ msgstr "Connecting…"
 #: ../src/goabackend/goaimapsmtpprovider.c:1318
 #: ../src/goabackend/goaimapsmtpprovider.c:1391
 #: ../src/goabackend/goakerberosprovider.c:1548
-#: ../src/goabackend/goaoauth2provider.c:1153
+#: ../src/goabackend/goaoauth2provider.c:1210
 #: ../src/goabackend/goaoauthprovider.c:1044
 #: ../src/goabackend/goaowncloudprovider.c:795
 #: ../src/goabackend/goaowncloudprovider.c:1008
@@ -184,7 +184,7 @@ msgstr "Produciuse un erro ao conectar ao servidor de Microsoft Exchange"
 
 #: ../src/goabackend/goaexchangeprovider.c:811
 #: ../src/goabackend/goaimapsmtpprovider.c:1256
-#: ../src/goabackend/goaoauth2provider.c:1376
+#: ../src/goabackend/goaoauth2provider.c:1433
 #: ../src/goabackend/goaoauthprovider.c:1355
 #: ../src/goabackend/goaowncloudprovider.c:968
 #: ../src/goabackend/goatelepathyprovider.c:675
@@ -199,6 +199,7 @@ msgstr "_Cancelar"
 #: ../src/goabackend/goagoogleprovider.c:534
 #: ../src/goabackend/goakerberosprovider.c:1731
 #: ../src/goabackend/goaowncloudprovider.c:1104
+#: ../src/goabackend/goapocketprovider.c:428
 #: ../src/goabackend/goatelepathyprovider.c:917
 #: ../src/goabackend/goawindowsliveprovider.c:455
 msgid "Use for"
@@ -250,9 +251,9 @@ msgstr ""
 #: ../src/goabackend/goaflickrprovider.c:250
 #: ../src/goabackend/goagoogleprovider.c:232
 #: ../src/goabackend/goagoogleprovider.c:244
-#: ../src/goabackend/goaoauth2provider.c:694
-#: ../src/goabackend/goaoauth2provider.c:724
-#: ../src/goabackend/goaoauth2provider.c:736
+#: ../src/goabackend/goaoauth2provider.c:731
+#: ../src/goabackend/goaoauth2provider.c:761
+#: ../src/goabackend/goaoauth2provider.c:773
 #: ../src/goabackend/goatwitterprovider.c:185
 #: ../src/goabackend/goatwitterprovider.c:197
 #: ../src/goabackend/goatwitterprovider.c:207
@@ -479,7 +480,7 @@ msgid "Network _Resources"
 msgstr "_Recursos en rede"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:670
+#: ../src/goabackend/goaoauth2provider.c:707
 #: ../src/goabackend/goaoauthprovider.c:589
 #, c-format
 msgid ""
@@ -488,13 +489,17 @@ msgstr ""
 "Esperábase o estado 200 ó pedir o sinal de acceso, pero reciveuse o estado "
 "%d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:977
+#: ../src/goabackend/goaoauth2provider.c:964
+msgid "Authorization response: "
+msgstr "Resposta da autorización:"
+
+#: ../src/goabackend/goaoauth2provider.c:1034
 #, c-format
-msgid "Authorization response was ‘%s’"
-msgstr "A resposta para o acceso foi «%s»"
+msgid "Authorization response: %s"
+msgstr "Resposta da autorización: %s"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:1079
+#: ../src/goabackend/goaoauth2provider.c:1136
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
@@ -503,34 +508,34 @@ msgstr ""
 "Pegue o código de acceso obtido desde a <a href=\"%s\">páxina de "
 "autorización</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:1093
+#: ../src/goabackend/goaoauth2provider.c:1150
 #: ../src/goabackend/goaoauthprovider.c:995
 #: ../src/goabackend/goatelepathyprovider.c:676
 msgid "_OK"
 msgstr "_Aceptar"
 
-#: ../src/goabackend/goaoauth2provider.c:1179
+#: ../src/goabackend/goaoauth2provider.c:1236
 #: ../src/goabackend/goaoauthprovider.c:1075
 msgid "Error getting an Access Token: "
 msgstr "Produciuse un erro ao obter un Token de Acceso: "
 
-#: ../src/goabackend/goaoauth2provider.c:1194
+#: ../src/goabackend/goaoauth2provider.c:1251
 #: ../src/goabackend/goaoauthprovider.c:1088
 msgid "Error getting identity: "
 msgstr "Produciuse un erro ao obter a identidade: "
 
-#: ../src/goabackend/goaoauth2provider.c:1406
+#: ../src/goabackend/goaoauth2provider.c:1463
 #: ../src/goabackend/goaoauthprovider.c:1394
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Solicitóuselle iniciar sesión como %s, pero estás conectado coma %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1565
+#: ../src/goabackend/goaoauth2provider.c:1622
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "As credenciais non conteñen o access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1604
+#: ../src/goabackend/goaoauth2provider.c:1661
 #: ../src/goabackend/goaoauthprovider.c:1622
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
@@ -586,7 +591,21 @@ msgstr "Produciuse un erro ao conectar ao servidor de ownCloud"
 msgid "_Files"
 msgstr "_Ficheiros"
 
-#: ../src/goabackend/goaprovider.c:688
+#: ../src/goabackend/goapocketprovider.c:89
+msgid "Pocket"
+msgstr "Pocket"
+
+#. TODO: more specific
+#: ../src/goabackend/goapocketprovider.c:238
+#, c-format
+msgid "No username or access_token"
+msgstr "Non hai ningún nome de usuario ou access_token"
+
+#: ../src/goabackend/goapocketprovider.c:430
+msgid "_Read Later"
+msgstr "_Ler máis tarde"
+
+#: ../src/goabackend/goaprovider.c:689
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "«ensure_credentials» non está implementado no tipo %s"
