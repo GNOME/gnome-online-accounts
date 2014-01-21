@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts 3.11.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-23 10:20+0100\n"
-"PO-Revision-Date: 2013-12-23 10:24+0100\n"
+"POT-Creation-Date: 2014-01-21 19:57+0100\n"
+"PO-Revision-Date: 2014-01-21 19:58+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: \n"
@@ -126,7 +126,7 @@ msgstr "Kobler til …"
 #: ../src/goabackend/goaimapsmtpprovider.c:1318
 #: ../src/goabackend/goaimapsmtpprovider.c:1391
 #: ../src/goabackend/goakerberosprovider.c:1548
-#: ../src/goabackend/goaoauth2provider.c:1153
+#: ../src/goabackend/goaoauth2provider.c:1210
 #: ../src/goabackend/goaoauthprovider.c:1044
 #: ../src/goabackend/goaowncloudprovider.c:795
 #: ../src/goabackend/goaowncloudprovider.c:1008
@@ -175,7 +175,7 @@ msgstr "Feil ved tilkobling til Microsoft Exchange tjener"
 
 #: ../src/goabackend/goaexchangeprovider.c:811
 #: ../src/goabackend/goaimapsmtpprovider.c:1256
-#: ../src/goabackend/goaoauth2provider.c:1376
+#: ../src/goabackend/goaoauth2provider.c:1433
 #: ../src/goabackend/goaoauthprovider.c:1355
 #: ../src/goabackend/goaowncloudprovider.c:968
 #: ../src/goabackend/goatelepathyprovider.c:675
@@ -190,6 +190,7 @@ msgstr "A_vbryt"
 #: ../src/goabackend/goagoogleprovider.c:534
 #: ../src/goabackend/goakerberosprovider.c:1731
 #: ../src/goabackend/goaowncloudprovider.c:1104
+#: ../src/goabackend/goapocketprovider.c:428
 #: ../src/goabackend/goatelepathyprovider.c:917
 #: ../src/goabackend/goawindowsliveprovider.c:455
 msgid "Use for"
@@ -239,9 +240,9 @@ msgstr ""
 #: ../src/goabackend/goaflickrprovider.c:250
 #: ../src/goabackend/goagoogleprovider.c:232
 #: ../src/goabackend/goagoogleprovider.c:244
-#: ../src/goabackend/goaoauth2provider.c:694
-#: ../src/goabackend/goaoauth2provider.c:724
-#: ../src/goabackend/goaoauth2provider.c:736
+#: ../src/goabackend/goaoauth2provider.c:731
+#: ../src/goabackend/goaoauth2provider.c:761
+#: ../src/goabackend/goaoauth2provider.c:773
 #: ../src/goabackend/goatwitterprovider.c:185
 #: ../src/goabackend/goatwitterprovider.c:197
 #: ../src/goabackend/goatwitterprovider.c:207
@@ -465,20 +466,24 @@ msgid "Network _Resources"
 msgstr "Nettverks_ressurser"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:670
+#: ../src/goabackend/goaoauth2provider.c:707
 #: ../src/goabackend/goaoauthprovider.c:589
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr ""
 
-#: ../src/goabackend/goaoauth2provider.c:977
+#: ../src/goabackend/goaoauth2provider.c:964
+msgid "Authorization response: "
+msgstr "Autoriseringssvar: "
+
+#: ../src/goabackend/goaoauth2provider.c:1034
 #, c-format
-msgid "Authorization response was ‘%s’"
-msgstr "Autoriseringssvar var «%s»"
+msgid "Authorization response: %s"
+msgstr "Autoriseringssvar: %s"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:1079
+#: ../src/goabackend/goaoauth2provider.c:1136
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
@@ -486,34 +491,34 @@ msgid ""
 msgstr ""
 "Lim inn autorisasjonskode hentet fra <a href=\"%s\">autorisasjonssiden</a>:"
 
-#: ../src/goabackend/goaoauth2provider.c:1093
+#: ../src/goabackend/goaoauth2provider.c:1150
 #: ../src/goabackend/goaoauthprovider.c:995
 #: ../src/goabackend/goatelepathyprovider.c:676
 msgid "_OK"
 msgstr "_OK"
 
-#: ../src/goabackend/goaoauth2provider.c:1179
+#: ../src/goabackend/goaoauth2provider.c:1236
 #: ../src/goabackend/goaoauthprovider.c:1075
 msgid "Error getting an Access Token: "
 msgstr "Feil ved henting av tilgangskode: "
 
-#: ../src/goabackend/goaoauth2provider.c:1194
+#: ../src/goabackend/goaoauth2provider.c:1251
 #: ../src/goabackend/goaoauthprovider.c:1088
 msgid "Error getting identity: "
 msgstr "Feil ved henting av identitet: "
 
-#: ../src/goabackend/goaoauth2provider.c:1406
+#: ../src/goabackend/goaoauth2provider.c:1463
 #: ../src/goabackend/goaoauthprovider.c:1394
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Ble spurt om å logge inn som %s, men logget inn som %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1565
+#: ../src/goabackend/goaoauth2provider.c:1622
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Påloggingsinformasjon inneholder ikke access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1604
+#: ../src/goabackend/goaoauth2provider.c:1661
 #: ../src/goabackend/goaoauthprovider.c:1622
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
@@ -565,7 +570,21 @@ msgstr "Feil ved tilkobling til ownCloud-tjener"
 msgid "_Files"
 msgstr "_Filer"
 
-#: ../src/goabackend/goaprovider.c:688
+#: ../src/goabackend/goapocketprovider.c:89
+msgid "Pocket"
+msgstr "Lomme"
+
+#. TODO: more specific
+#: ../src/goabackend/goapocketprovider.c:238
+#, c-format
+msgid "No username or access_token"
+msgstr "Ingen brukernavn eller tilgangstegn"
+
+#: ../src/goabackend/goapocketprovider.c:430
+msgid "_Read Later"
+msgstr "Les sene_re"
+
+#: ../src/goabackend/goaprovider.c:689
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync er ikke implementert på type %s"
