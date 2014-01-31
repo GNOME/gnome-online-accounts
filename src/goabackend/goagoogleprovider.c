@@ -94,7 +94,8 @@ get_provider_features (GoaProvider *_provider)
          GOA_PROVIDER_FEATURE_CALENDAR |
          GOA_PROVIDER_FEATURE_CONTACTS |
          GOA_PROVIDER_FEATURE_CHAT |
-         GOA_PROVIDER_FEATURE_DOCUMENTS;
+         GOA_PROVIDER_FEATURE_DOCUMENTS |
+         GOA_PROVIDER_FEATURE_PRINTERS;
 }
 
 static const gchar *
@@ -141,6 +142,9 @@ get_scope (GoaOAuth2Provider *provider)
          /* GMail IMAP and SMTP access */
          "https://mail.google.com/ "
 
+	 /* Google Cloud Print */
+	 "https://www.googleapis.com/auth/cloudprint "
+
          /* Google Talk */
          "https://www.googleapis.com/auth/googletalk";
 }
@@ -148,7 +152,7 @@ get_scope (GoaOAuth2Provider *provider)
 static guint
 get_credentials_generation (GoaProvider *provider)
 {
-  return 6;
+  return 7;
 }
 
 static const gchar *
@@ -319,12 +323,14 @@ build_object (GoaProvider         *provider,
   GoaContacts *contacts;
   GoaChat *chat;
   GoaDocuments *documents;
+  GoaPrinters *printers;
   gboolean ret;
   gboolean mail_enabled;
   gboolean calendar_enabled;
   gboolean contacts_enabled;
   gboolean chat_enabled;
   gboolean documents_enabled;
+  gboolean printers_enabled;
   const gchar *email_address;
 
   account = NULL;
@@ -333,6 +339,7 @@ build_object (GoaProvider         *provider,
   contacts = NULL;
   chat = NULL;
   documents = NULL;
+  printers = NULL;
   ret = FALSE;
 
   /* Chain up */
@@ -461,6 +468,24 @@ build_object (GoaProvider         *provider,
         goa_object_skeleton_set_documents (object, NULL);
     }
 
+  /* Printers */
+  printers = goa_object_get_printers (GOA_OBJECT (object));
+  printers_enabled = g_key_file_get_boolean (key_file, group, "PrintersEnabled", NULL);
+
+  if (printers_enabled)
+    {
+      if (printers == NULL)
+        {
+          printers = goa_printers_skeleton_new ();
+          goa_object_skeleton_set_printers (object, printers);
+        }
+    }
+  else
+    {
+      if (printers != NULL)
+        goa_object_skeleton_set_printers (object, NULL);
+    }
+
   if (just_added)
     {
       goa_account_set_mail_disabled (account, !mail_enabled);
@@ -468,6 +493,7 @@ build_object (GoaProvider         *provider,
       goa_account_set_contacts_disabled (account, !contacts_enabled);
       goa_account_set_chat_disabled (account, !chat_enabled);
       goa_account_set_documents_disabled (account, !documents_enabled);
+      goa_account_set_printers_disabled (account, !printers_enabled);
 
       g_signal_connect (account,
                         "notify::mail-disabled",
@@ -489,11 +515,16 @@ build_object (GoaProvider         *provider,
                         "notify::documents-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
                         "DocumentsEnabled");
+      g_signal_connect (account,
+                        "notify::printers-disabled",
+                        G_CALLBACK (goa_util_account_notify_property_cb),
+                        "PrintersEnabled");
     }
 
   ret = TRUE;
 
  out:
+  g_clear_object (&printers);
   g_clear_object (&documents);
   g_clear_object (&chat);
   g_clear_object (&contacts);
@@ -553,6 +584,11 @@ show_account (GoaProvider         *provider,
                                                    NULL,
                                                    "documents-disabled",
                                                    _("_Documents"));
+
+  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
+                                                   NULL,
+                                                   "printers-disabled",
+                                                   _("_Printers"));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -566,6 +602,7 @@ add_account_key_values (GoaOAuth2Provider  *provider,
   g_variant_builder_add (builder, "{ss}", "ContactsEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "ChatEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "DocumentsEnabled", "true");
+  g_variant_builder_add (builder, "{ss}", "PrintersEnabled", "true");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2012 Red Hat, Inc.
+ * Copyright (C) 2011, 2012, 2014 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -68,6 +68,7 @@ typedef enum
  * @GOA_PROVIDER_FEATURE_PHOTOS: Photos storage services (ie. Flickr).
  * @GOA_PROVIDER_FEATURE_FILES: Files storage services (ie. WebDAV).
  * @GOA_PROVIDER_FEATURE_TICKETING: Ticketing services (ie. Kerberos).
+ * @GOA_PROVIDER_FEATURE_PRINTERS: Network printing services (e.g. Google Cloud Print).
  * @GOA_PROVIDER_FEATURE_INVALID: Used for error handling. No provider
  *   should provide this feature.
  *
@@ -90,6 +91,7 @@ typedef enum /*< flags >*/
   GOA_PROVIDER_FEATURE_FILES     = 1 << 8,
   GOA_PROVIDER_FEATURE_TICKETING = 1 << 9,
   GOA_PROVIDER_FEATURE_READ_LATER= 1 << 10,
+  GOA_PROVIDER_FEATURE_PRINTERS  = 1 << 11,
   GOA_PROVIDER_FEATURE_INVALID   = 0
 } GoaProviderFeatures;
 
