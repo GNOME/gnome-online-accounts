@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2013 Red Hat, Inc.
+ * Copyright (C) 2011, 2013, 2014 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -123,6 +123,8 @@ build_object (GoaProvider         *provider,
   gboolean imap_use_tls;
   gboolean ret;
   gboolean smtp_accept_ssl_errors;
+  gboolean smtp_auth_login;
+  gboolean smtp_auth_plain;
   gboolean smtp_use_auth;
   gboolean smtp_use_ssl;
   gboolean smtp_use_tls;
@@ -140,6 +142,8 @@ build_object (GoaProvider         *provider,
   imap_host = NULL;
   imap_username = NULL;
   name = NULL;
+  smtp_auth_login = FALSE;
+  smtp_auth_plain = FALSE;
   smtp_host = NULL;
   smtp_username = NULL;
 
@@ -196,6 +200,15 @@ build_object (GoaProvider         *provider,
               smtp_username = g_key_file_get_string (key_file, group, "SmtpUserName", NULL);
               if (smtp_username == NULL)
                 smtp_username = g_strdup (g_get_user_name ());
+
+              smtp_auth_login = g_key_file_get_boolean (key_file, group, "SmtpAuthLogin", NULL);
+              smtp_auth_plain = g_key_file_get_boolean (key_file, group, "SmtpAuthPlain", NULL);
+              /* For backwards compatibility: if authentication is
+               * used, assume PLAIN as the SASL scheme if nothing is
+               * specified.
+               */
+              if (!smtp_auth_login && !smtp_auth_plain)
+                smtp_auth_plain = TRUE;
             }
           smtp_use_ssl = g_key_file_get_boolean (key_file, group, "SmtpUseSsl", NULL);
           smtp_use_tls = g_key_file_get_boolean (key_file, group, "SmtpUseTls", NULL);
@@ -215,6 +228,8 @@ build_object (GoaProvider         *provider,
                         "smtp-host", smtp_host,
                         "smtp-user-name", smtp_username,
                         "smtp-use-auth", smtp_use_auth,
+                        "smtp-auth-login", smtp_auth_login,
+                        "smtp-auth-plain", smtp_auth_plain,
                         "smtp-use-ssl", smtp_use_ssl,
                         "smtp-use-tls", smtp_use_tls,
                         "smtp-accept-ssl-errors", smtp_accept_ssl_errors,
@@ -890,6 +905,8 @@ add_account (GoaProvider    *provider,
   GoaTlsType smtp_tls_type;
   gboolean imap_accept_ssl_errors;
   gboolean smtp_accept_ssl_errors;
+  gboolean smtp_auth_login;
+  gboolean smtp_auth_plain;
   gboolean smtp_use_auth;
   const gchar *email_address;
   const gchar *encryption;
@@ -1086,6 +1103,8 @@ add_account (GoaProvider    *provider,
   g_main_loop_run (data.loop);
 
   smtp_use_auth = goa_mail_auth_is_needed (smtp_auth);
+  smtp_auth_login = goa_smtp_auth_is_login (GOA_SMTP_AUTH (smtp_auth));
+  smtp_auth_plain = goa_smtp_auth_is_plain (GOA_SMTP_AUTH (smtp_auth));
 
   if (g_cancellable_is_cancelled (data.cancellable))
     {
@@ -1149,7 +1168,11 @@ add_account (GoaProvider    *provider,
   g_variant_builder_add (&details, "{ss}", "SmtpHost", smtp_server);
   g_variant_builder_add (&details, "{ss}", "SmtpUseAuth", (smtp_use_auth) ? "true" : "false");
   if (smtp_use_auth)
-    g_variant_builder_add (&details, "{ss}", "SmtpUserName", smtp_username);
+    {
+      g_variant_builder_add (&details, "{ss}", "SmtpUserName", smtp_username);
+      g_variant_builder_add (&details, "{ss}", "SmtpAuthLogin", (smtp_auth_login) ? "true" : "false");
+      g_variant_builder_add (&details, "{ss}", "SmtpAuthPlain", (smtp_auth_plain) ? "true" : "false");
+    }
   g_variant_builder_add (&details, "{ss}",
                          "SmtpUseSsl", (smtp_tls_type == GOA_TLS_TYPE_SSL) ? "true" : "false");
   g_variant_builder_add (&details, "{ss}",

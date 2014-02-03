@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2013 Red Hat, Inc.
+ * Copyright (C) 2011, 2013, 2014 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -54,6 +54,8 @@ struct _GoaSmtpAuth
   GoaObject *object;
   gboolean auth_supported;
   gboolean greeting_absent;
+  gboolean login_supported;
+  gboolean plain_supported;
   gchar *domain;
   gchar *username;
   gchar *password;
@@ -560,6 +562,20 @@ goa_smtp_auth_new (GoaProvider       *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+gboolean
+goa_smtp_auth_is_login (GoaSmtpAuth *auth)
+{
+  return auth->login_supported;
+}
+
+gboolean
+goa_smtp_auth_is_plain (GoaSmtpAuth *auth)
+{
+  return auth->plain_supported;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static gboolean
 goa_smtp_auth_is_needed (GoaMailAuth *_auth)
 {
@@ -577,8 +593,6 @@ goa_smtp_auth_run_sync (GoaMailAuth         *_auth,
   GoaSmtpAuth *auth = GOA_SMTP_AUTH (_auth);
   GDataInputStream *input;
   GDataOutputStream *output;
-  gboolean login_supported;
-  gboolean plain_supported;
   gboolean ret;
   gchar *auth_arg_base64;
   gchar *auth_arg_plain;
@@ -588,8 +602,6 @@ goa_smtp_auth_run_sync (GoaMailAuth         *_auth,
   gchar *response;
   gsize auth_arg_plain_len;
 
-  login_supported = FALSE;
-  plain_supported = FALSE;
   auth_arg_base64 = NULL;
   auth_arg_plain = NULL;
   domain = NULL;
@@ -642,9 +654,9 @@ goa_smtp_auth_run_sync (GoaMailAuth         *_auth,
     {
       auth->auth_supported = TRUE;
       if (strstr (response, "PLAIN") != NULL)
-        plain_supported = TRUE;
+        auth->plain_supported = TRUE;
       else if (strstr (response, "LOGIN") != NULL)
-        login_supported = TRUE;
+        auth->login_supported = TRUE;
     }
 
   if (response[3] == '-')
@@ -657,7 +669,7 @@ goa_smtp_auth_run_sync (GoaMailAuth         *_auth,
       ret = TRUE;
       goto out;
     }
-  else if (!login_supported && !plain_supported)
+  else if (!auth->login_supported && !auth->plain_supported)
     {
       g_set_error (error,
                    GOA_ERROR,
@@ -669,7 +681,7 @@ goa_smtp_auth_run_sync (GoaMailAuth         *_auth,
 
   /* Try different SASL mechanisms */
 
-  if (plain_supported)
+  if (auth->plain_supported)
     {
       /* AUTH PLAIN */
 
