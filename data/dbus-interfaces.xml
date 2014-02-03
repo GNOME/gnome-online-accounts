@@ -3,7 +3,7 @@
 "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 
 <!--
- Copyright (C) 2011, 2012, 2013 Red Hat, Inc.
+ Copyright (C) 2011, 2012, 2013, 2014 Red Hat, Inc.
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -477,6 +477,39 @@
          This indicates whether the server uses authentication.
     -->
     <property name="SmtpUseAuth" type="b" access="read"/>
+
+    <!-- SmtpAuthLogin:
+         @since: 3.12.0
+         Whether LOGIN authentication should be used.
+
+         This indicates whether the server uses the
+         <ulink url="http://msdn.microsoft.com/en-us/library/cc433484(v=EXCHG.80).aspx">
+         LOGIN</ulink> SASL mechanism for SMTP.
+    -->
+    <property name="SmtpAuthLogin" type="b" access="read"/>
+
+    <!-- SmtpAuthPlain:
+         @since: 3.12.0
+         Whether PLAIN authentication should be used.
+
+         This indicates whether the server uses the
+         <ulink url="http://tools.ietf.org/html/rfc4616">PLAIN</ulink>
+         SASL mechanism for SMTP.
+    -->
+    <property name="SmtpAuthPlain" type="b" access="read"/>
+
+    <!-- SmtpAuthXoauth2:
+         @since: 3.12.0
+         Whether XOAUTH2 authentication should be used.
+
+         This indicates whether the server uses the non-standard XOAUTH2
+         SASL mechanism for SMTP. This is implemented by
+         <ulink url="https://developers.google.com/gmail/xoauth2_protocol#the_sasl_xoauth2_mechanism">
+         GMail</ulink> and
+         <ulink url="http://blogs.office.com/2013/09/12/outlook-com-now-has-imap/">
+         Outlook.com</ulink>.
+    -->
+    <property name="SmtpAuthXoauth2" type="b" access="read"/>
 
     <!-- SmtpUseSsl:
          @since: 3.8.0
