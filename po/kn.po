@@ -1,6 +1,6 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Shankar Prasad <svenkate@redhat.com>, 2012, 2013.
 msgid ""
 msgstr ""
@@ -8,29 +8,31 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-03-15 14:09+0000\n"
-"PO-Revision-Date: 2013-03-22 17:55+0530\n"
+"PO-Revision-Date: 2013-03-22 08:25-0400\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <kde-i18n-doc@kde.org>\n"
-"Language: kn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"Language: kn\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Zanata 3.2.3\n"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:773 ../src/daemon/goadaemon.c:983
+#: ../src/daemon/goadaemon.c:775
+#: ../src/daemon/goadaemon.c:985
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "ಇದನ್ನು ಒದಗಿಸುವವರು ಕಂಡುಬಂದಿಲ್ಲ: %s"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:971
+#: ../src/daemon/goadaemon.c:973
 msgid "ProviderType property is not set for account"
 msgstr "ಖಾತೆಗಾಗಿ ProviderType ಗುಣವನ್ನು ಹೊಂದಿಸಲಾಗಿಲ್ಲ"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:234 ../src/goabackend/goahttpclient.c:175
+#: ../src/goabackend/goaewsclient.c:234
+#: ../src/goabackend/goahttpclient.c:175
 #, c-format
 msgid "Code: %u - Unexpected response from server"
 msgstr "ಸಂಕೇತ: %u - ಪೂರೈಕೆಗಣಕದಿಂದ ಅನಿರೀಕ್ಷಿತವಾದ ಪ್ರತಿಕ್ರಿಯೆ ಬಂದಿದೆ"
@@ -72,23 +74,21 @@ msgstr "Microsoft Exchange"
 
 #. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:308
-#: ../src/goabackend/goaexchangeprovider.c:1036
+#: ../src/goabackend/goaexchangeprovider.c:1037
 #: ../src/goabackend/goagoogleprovider.c:609
 #: ../src/goabackend/goagoogleprovider.c:796
-#: ../src/goabackend/goaowncloudprovider.c:364
-#: ../src/goabackend/goaowncloudprovider.c:1138
+#: ../src/goabackend/goaowncloudprovider.c:367
+#: ../src/goabackend/goaowncloudprovider.c:1158
 #, c-format
-#| msgid "Did not find password with username `%s' in credentials"
 msgid "Did not find password with identity `%s' in credentials"
 msgstr "ರುಜುವಾತುಗಳಲ್ಲಿ `%s' ಗುರುತಿಗೆ ಸಂಬಂಧಿಸಿದ ಗುಪ್ತಪದವು ಕಂಡುಬಂದಿಲ್ಲ"
 
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
-#.
 #: ../src/goabackend/goaexchangeprovider.c:336
 #: ../src/goabackend/goagoogleprovider.c:632
-#: ../src/goabackend/goaowncloudprovider.c:387
+#: ../src/goabackend/goaowncloudprovider.c:390
 #, c-format
 msgid "Invalid password with username `%s' (%s, %d): "
 msgstr "`%s' ಬಳಕೆದಾರ ಹೆಸರಿಗೆ ಸಂಬಂಧಿಸಿದ ಗುಪ್ತಪದವನ್ನು ಸರಿಯಾಗಿಲ್ಲ (%s, %d): "
@@ -101,7 +101,7 @@ msgstr "ವಿ-ಅಂಚೆ (_E)"
 #: ../src/goabackend/goaexchangeprovider.c:502
 #: ../src/goabackend/goaimapsmtpprovider.c:710
 #: ../src/goabackend/goaimapsmtpprovider.c:730
-#: ../src/goabackend/goaowncloudprovider.c:613
+#: ../src/goabackend/goaowncloudprovider.c:630
 msgid "_Password"
 msgstr "ಗುಪ್ತಪದ (_P)"
 
@@ -113,98 +113,97 @@ msgstr "ಅಗತ್ಯಾನುಗುಣ (_C)"
 #: ../src/goabackend/goaimapsmtpprovider.c:709
 #: ../src/goabackend/goaimapsmtpprovider.c:729
 #: ../src/goabackend/goakerberosprovider.c:1128
-#: ../src/goabackend/goaowncloudprovider.c:612
+#: ../src/goabackend/goaowncloudprovider.c:629
 msgid "User_name"
 msgstr "ಬಳಕೆದಾರ ಹೆಸರು (_n)"
 
 #: ../src/goabackend/goaexchangeprovider.c:525
-#: ../src/goabackend/goaowncloudprovider.c:611
+#: ../src/goabackend/goaowncloudprovider.c:628
 msgid "_Server"
 msgstr "ಪೂರೈಕೆಗಣಕ (_S)"
 
 #: ../src/goabackend/goaexchangeprovider.c:555
 #: ../src/goabackend/goaimapsmtpprovider.c:762
 #: ../src/goabackend/goakerberosprovider.c:1153
-#: ../src/goabackend/goaowncloudprovider.c:642
+#: ../src/goabackend/goaowncloudprovider.c:659
 msgid "Connecting…"
 msgstr "ಸಂಪರ್ಕ ಹೊಂದಲಾಗುತ್ತಿದೆ..."
 
 #: ../src/goabackend/goaexchangeprovider.c:660
-#: ../src/goabackend/goaexchangeprovider.c:854
+#: ../src/goabackend/goaexchangeprovider.c:855
 #: ../src/goabackend/goaimapsmtpprovider.c:922
-#: ../src/goabackend/goaimapsmtpprovider.c:956
-#: ../src/goabackend/goaimapsmtpprovider.c:1044
-#: ../src/goabackend/goaimapsmtpprovider.c:1300
-#: ../src/goabackend/goaimapsmtpprovider.c:1373
+#: ../src/goabackend/goaimapsmtpprovider.c:957
+#: ../src/goabackend/goaimapsmtpprovider.c:1045
+#: ../src/goabackend/goaimapsmtpprovider.c:1301
+#: ../src/goabackend/goaimapsmtpprovider.c:1374
 #: ../src/goabackend/goakerberosprovider.c:1544
-#: ../src/goabackend/goaoauth2provider.c:1131
+#: ../src/goabackend/goaoauth2provider.c:1064
 #: ../src/goabackend/goaoauthprovider.c:1041
-#: ../src/goabackend/goaowncloudprovider.c:753
-#: ../src/goabackend/goaowncloudprovider.c:962
+#: ../src/goabackend/goaowncloudprovider.c:770
+#: ../src/goabackend/goaowncloudprovider.c:982
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "ಸಂವಾದವನ್ನು ವಜಾಗೊಳಿಸಲಾಗಿದೆ"
 
-#: ../src/goabackend/goaexchangeprovider.c:697
-#: ../src/goabackend/goaexchangeprovider.c:882
-#: ../src/goabackend/goaimapsmtpprovider.c:986
-#: ../src/goabackend/goaimapsmtpprovider.c:1077
-#: ../src/goabackend/goaimapsmtpprovider.c:1324
-#: ../src/goabackend/goaimapsmtpprovider.c:1398
-#: ../src/goabackend/goaowncloudprovider.c:792
-#: ../src/goabackend/goaowncloudprovider.c:983
+#: ../src/goabackend/goaexchangeprovider.c:698
+#: ../src/goabackend/goaexchangeprovider.c:883
+#: ../src/goabackend/goaimapsmtpprovider.c:987
+#: ../src/goabackend/goaimapsmtpprovider.c:1078
+#: ../src/goabackend/goaimapsmtpprovider.c:1325
+#: ../src/goabackend/goaimapsmtpprovider.c:1399
+#: ../src/goabackend/goaowncloudprovider.c:812
+#: ../src/goabackend/goaowncloudprovider.c:1003
 #, c-format
-#| msgid "Dialog was dismissed"
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "ಸಂವಾದವನ್ನು ವಜಾಗೊಳಿಸಲಾಗಿದೆ (%s, %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:710
-#: ../src/goabackend/goaimapsmtpprovider.c:999
-#: ../src/goabackend/goaimapsmtpprovider.c:1090
-#: ../src/goabackend/goaowncloudprovider.c:805
+#: ../src/goabackend/goaexchangeprovider.c:711
+#: ../src/goabackend/goaimapsmtpprovider.c:1000
+#: ../src/goabackend/goaimapsmtpprovider.c:1091
+#: ../src/goabackend/goaowncloudprovider.c:825
 msgid "_Ignore"
 msgstr "ಕಡೆಗಣಿಸು (_I)"
 
-#: ../src/goabackend/goaexchangeprovider.c:715
-#: ../src/goabackend/goaexchangeprovider.c:901
-#: ../src/goabackend/goaimapsmtpprovider.c:1004
-#: ../src/goabackend/goaimapsmtpprovider.c:1095
-#: ../src/goabackend/goaimapsmtpprovider.c:1343
-#: ../src/goabackend/goaimapsmtpprovider.c:1417
-#: ../src/goabackend/goakerberosprovider.c:1653
-#: ../src/goabackend/goaowncloudprovider.c:810
-#: ../src/goabackend/goaowncloudprovider.c:1002
+#: ../src/goabackend/goaexchangeprovider.c:716
+#: ../src/goabackend/goaexchangeprovider.c:902
+#: ../src/goabackend/goaimapsmtpprovider.c:1005
+#: ../src/goabackend/goaimapsmtpprovider.c:1096
+#: ../src/goabackend/goaimapsmtpprovider.c:1344
+#: ../src/goabackend/goaimapsmtpprovider.c:1418
+#: ../src/goabackend/goakerberosprovider.c:1654
+#: ../src/goabackend/goaowncloudprovider.c:830
+#: ../src/goabackend/goaowncloudprovider.c:1022
 msgid "_Try Again"
 msgstr "ಇನ್ನೊಮ್ಮೆ  ಪ್ರಯತ್ನಿಸಿ (_T)"
 
-#: ../src/goabackend/goaexchangeprovider.c:720
-#: ../src/goabackend/goaexchangeprovider.c:894
+#: ../src/goabackend/goaexchangeprovider.c:721
+#: ../src/goabackend/goaexchangeprovider.c:895
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Microsoft Exchange ಪೂರೈಕೆಗಣಕದೊಂದಿಗೆ ಸಂಪರ್ಕ ಹೊಂದುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ"
 
-#: ../src/goabackend/goaexchangeprovider.c:956
+#: ../src/goabackend/goaexchangeprovider.c:957
 #: ../src/goabackend/goafacebookprovider.c:411
 #: ../src/goabackend/goagoogleprovider.c:677
-#: ../src/goabackend/goakerberosprovider.c:1724
-#: ../src/goabackend/goaowncloudprovider.c:1058
+#: ../src/goabackend/goakerberosprovider.c:1725
+#: ../src/goabackend/goaowncloudprovider.c:1078
 #: ../src/goabackend/goawindowsliveprovider.c:424
 msgid "Use for"
 msgstr "ಇದಕ್ಕಾಗಿ ಬಳಸು"
 
-#: ../src/goabackend/goaexchangeprovider.c:958
+#: ../src/goabackend/goaexchangeprovider.c:959
 #: ../src/goabackend/goagoogleprovider.c:679
 msgid "_Mail"
 msgstr "ಅಂಚೆ (_M)"
 
-#: ../src/goabackend/goaexchangeprovider.c:963
+#: ../src/goabackend/goaexchangeprovider.c:964
 #: ../src/goabackend/goagoogleprovider.c:684
-#: ../src/goabackend/goaowncloudprovider.c:1060
+#: ../src/goabackend/goaowncloudprovider.c:1080
 msgid "Cale_ndar"
 msgstr "ಕ್ಯಾಲೆಂಡರ್ (_n)"
 
-#: ../src/goabackend/goaexchangeprovider.c:968
+#: ../src/goabackend/goaexchangeprovider.c:969
 #: ../src/goabackend/goagoogleprovider.c:689
-#: ../src/goabackend/goaowncloudprovider.c:1065
+#: ../src/goabackend/goaowncloudprovider.c:1085
 msgid "_Contacts"
 msgstr "ಸಂಪರ್ಕಗಳು (_C)"
 
@@ -212,17 +211,14 @@ msgstr "ಸಂಪರ್ಕಗಳು (_C)"
 msgid "Facebook"
 msgstr "ಫೇಸ್‌ಬುಕ್‌"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:205
 #: ../src/goabackend/goagoogleprovider.c:200
-#: ../src/goabackend/goatwitterprovider.c:166
 #: ../src/goabackend/goawindowsliveprovider.c:187
-#: ../src/goabackend/goayahooprovider.c:181
 #, c-format
 msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 msgstr ""
-"guid ಅನ್ನು ಮನವಿ ಮಾಡುವಾಗ 200 ಸ್ಥಿತಿಯನ್ನು ನಿರೀಕ್ಷಿಸಲಾಗಿತ್ತು, ಬದಲಿಗೆ %d ಸ್ಥಿತಿಯು "
-"ದೊರೆತಿದೆ (%s)"
+"guid ಅನ್ನು ಮನವಿ ಮಾಡುವಾಗ 200 ಸ್ಥಿತಿಯನ್ನು ನಿರೀಕ್ಷಿಸಲಾಗಿತ್ತು, ಬದಲಿಗೆ %d "
+"ಸ್ಥಿತಿಯು ದೊರೆತಿದೆ (%s)"
 
 #: ../src/goabackend/goafacebookprovider.c:224
 #: ../src/goabackend/goafacebookprovider.c:236
@@ -234,23 +230,13 @@ msgstr ""
 #: ../src/goabackend/goaflickrprovider.c:244
 #: ../src/goabackend/goagoogleprovider.c:219
 #: ../src/goabackend/goagoogleprovider.c:231
-#: ../src/goabackend/goaoauth2provider.c:660
-#: ../src/goabackend/goaoauth2provider.c:690
-#: ../src/goabackend/goaoauth2provider.c:702
-#: ../src/goabackend/goatwitterprovider.c:185
-#: ../src/goabackend/goatwitterprovider.c:197
-#: ../src/goabackend/goatwitterprovider.c:207
+#: ../src/goabackend/goaoauth2provider.c:600
+#: ../src/goabackend/goaoauth2provider.c:630
+#: ../src/goabackend/goaoauth2provider.c:642
 #: ../src/goabackend/goawindowsliveprovider.c:206
 #: ../src/goabackend/goawindowsliveprovider.c:218
 #: ../src/goabackend/goawindowsliveprovider.c:230
-#: ../src/goabackend/goayahooprovider.c:200
-#: ../src/goabackend/goayahooprovider.c:212
-#: ../src/goabackend/goayahooprovider.c:223
-#: ../src/goabackend/goayahooprovider.c:269
-#: ../src/goabackend/goayahooprovider.c:281
-#: ../src/goabackend/goayahooprovider.c:292
 #, c-format
-#| msgid "Could not erase identity: %k"
 msgid "Could not parse response"
 msgstr "ಪ್ರತ್ಯುತ್ತರವನ್ನು ಪಾರ್ಸ್ ಮಾಡಲಾಗಿಲ್ಲ"
 
@@ -266,15 +252,13 @@ msgstr "Flickr"
 
 #: ../src/goabackend/goaflickrprovider.c:183
 #, c-format
-#| msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
-msgid "Expected status 200 when requesting user id, instead got status %d (%s)"
+msgid ""
+"Expected status 200 when requesting user id, instead got status %d (%s)"
 msgstr ""
 "ಬಳಕೆದಾರ id ಯನ್ನು ಮನವಿ ಮಾಡುವಾಗ 200 ಸ್ಥಿತಿಯನ್ನು ನಿರೀಕ್ಷಿಸಲಾಗಿತ್ತು, ಬದಲಿಗೆ %d "
-"ಸ್ಥಿತಿಯು "
-"ದೊರೆತಿದೆ (%s)"
+"ಸ್ಥಿತಿಯು ದೊರೆತಿದೆ (%s)"
 
 #: ../src/goabackend/goaflickrprovider.c:322
-#: ../src/goabackend/goayahooprovider.c:344
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr ""
 "ನಿಮ್ಮ ವ್ಯವಸ್ಥೆಯ ಸಮಯವು ಅಮಾನ್ಯವಾಗಿದೆ. ನಿಮ್ಮ ದಿನಾಂಕ ಮತ್ತು ಸಮಯದ ಸಿದ್ಧತೆಗಳನ್ನು "
@@ -294,7 +278,14 @@ msgid "_Documents"
 msgstr "ದಸ್ತಾವೇಜುಗಳು (_D)"
 
 #. TODO: more specific
-#: ../src/goabackend/goaimapauthlogin.c:411
+#: ../src/goabackend/goaimapauthlogin.c:99
+#: ../src/goabackend/goasmtpauthplain.c:146
+#, c-format
+msgid "Service not available"
+msgstr "ಸೇವೆಯು ಲಭ್ಯವಿಲ್ಲ"
+
+#. TODO: more specific
+#: ../src/goabackend/goaimapauthlogin.c:120
 #: ../src/goabackend/goasmtpauthplain.c:115
 #, c-format
 msgid "Authentication failed"
@@ -306,33 +297,28 @@ msgstr "IMAP ಮತ್ತು SMTP"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:356
 #, c-format
-#| msgid "Did not find password with username `%s' in credentials"
 msgid "Did not find imap-password with identity `%s' in credentials"
 msgstr "ರುಜುವಾತುಗಳಲ್ಲಿ `%s' ಗುರುತಿಗೆ ಸಂಬಂಧಿಸಿದ imap-ಗುಪ್ತಪದವು ಕಂಡುಬಂದಿಲ್ಲ"
 
 #. Translators: the first %s is the IMAP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
-#.
 #: ../src/goabackend/goaimapsmtpprovider.c:385
 #, c-format
-#| msgid "Invalid password with username `%s' (%s, %d): "
 msgid "Invalid imap-password with username `%s' (%s, %d): "
-msgstr "`%s' ಬಳಕೆದಾರ ಹೆಸರಿಗೆ ಸಂಬಂಧಿಸಿದ imap-ಗುಪ್ತಪದವನ್ನು ಸರಿಯಾಗಿಲ್ಲ (%s, %d): "
+msgstr ""
+"`%s' ಬಳಕೆದಾರ ಹೆಸರಿಗೆ ಸಂಬಂಧಿಸಿದ imap-ಗುಪ್ತಪದವನ್ನು ಸರಿಯಾಗಿಲ್ಲ (%s, %d): "
 
 #: ../src/goabackend/goaimapsmtpprovider.c:409
 #, c-format
-#| msgid "Did not find password with username `%s' in credentials"
 msgid "Did not find smtp-password with identity `%s' in credentials"
 msgstr "ರುಜುವಾತುಗಳಲ್ಲಿ `%s' ಗುರುತಿಗೆ ಸಂಬಂಧಿಸಿದ smtp-ಗುಪ್ತಪದವು ಕಂಡುಬಂದಿಲ್ಲ"
 
 #. Translators: the first %s is the SMTP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
-#.
 #: ../src/goabackend/goaimapsmtpprovider.c:440
 #, c-format
-#| msgid "Invalid password with username `%s' (%s, %d): "
 msgid "Invalid smtp-password with username `%s' (%s, %d): "
 msgstr "`%s' ಬಳಕೆದಾರ ಹೆಸರಿಗೆ ಸಂಬಂಧಿಸಿದ smtp-ಗುಪ್ತಪದವು ಸರಿಯಾಗಿಲ್ಲ (%s, %d): "
 
@@ -341,7 +327,6 @@ msgstr "`%s' ಬಳಕೆದಾರ ಹೆಸರಿಗೆ ಸಂಬಂಧಿಸ�
 #. * Encryption: None
 #. *             STARTTLS after connecting
 #. *             SSL on a dedicated port
-#.
 #: ../src/goabackend/goaimapsmtpprovider.c:626
 msgid "_Encryption"
 msgstr "ಗೂಢಲಿಪೀಕರಣ (_E)"
@@ -363,43 +348,38 @@ msgid "_Name"
 msgstr "ಹೆಸರು (_N)"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:708
-#| msgid "_Server"
 msgid "IMAP _Server"
 msgstr "IMAP ಪೂರೈಕೆಗಣಕ (_S)"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:728
-#| msgid "_Server"
 msgid "SMTP _Server"
 msgstr "_SMTP ಪೂರೈಕೆಗಣಕ"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1009
-#: ../src/goabackend/goaimapsmtpprovider.c:1336
-#| msgid "Error connecting to Microsoft Exchange server"
+#: ../src/goabackend/goaimapsmtpprovider.c:1010
+#: ../src/goabackend/goaimapsmtpprovider.c:1337
 msgid "Error connecting to IMAP server"
 msgstr "IMAP ಪೂರೈಕೆಗಣಕದೊಂದಿಗೆ ಸಂಪರ್ಕಸಾಧಿಸುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1100
-#: ../src/goabackend/goaimapsmtpprovider.c:1410
-#| msgid "Error connecting to Microsoft Exchange server"
+#: ../src/goabackend/goaimapsmtpprovider.c:1101
+#: ../src/goabackend/goaimapsmtpprovider.c:1411
 msgid "Error connecting to SMTP server"
 msgstr "SMTP ಪೂರೈಕೆಗಣಕದೊಂದಿಗೆ ಸಂಪರ್ಕಸಾಧಿಸುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1518
-#| msgid "_E-mail"
+#: ../src/goabackend/goaimapsmtpprovider.c:1519
 msgid "E-mail"
 msgstr "ವಿ-ಅಂಚೆ"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1522
+#: ../src/goabackend/goaimapsmtpprovider.c:1523
 msgid "Name"
 msgstr "ಹೆಸರು"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1532
-#: ../src/goabackend/goaimapsmtpprovider.c:1535
+#: ../src/goabackend/goaimapsmtpprovider.c:1533
+#: ../src/goabackend/goaimapsmtpprovider.c:1536
 msgid "IMAP"
 msgstr "IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1546
-#: ../src/goabackend/goaimapsmtpprovider.c:1549
+#: ../src/goabackend/goaimapsmtpprovider.c:1547
+#: ../src/goabackend/goaimapsmtpprovider.c:1550
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -447,16 +427,16 @@ msgstr "ಈ ಗುಪ್ತಪದವನ್ನು ನೆನಪಿನಲ್ಲಿ�
 msgid "The domain is not valid"
 msgstr "ಡೊಮೈನ್ ಮಾನ್ಯವಾದುದಲ್ಲ"
 
-#: ../src/goabackend/goakerberosprovider.c:1648
+#: ../src/goabackend/goakerberosprovider.c:1649
 msgid "Error connecting to enterprise identity server"
 msgstr "ಎಂಟರ್ಪ್ರೈಸ್ ಗುರುತಿನ ಪೂರೈಕೆಗಣಕಕ್ಕೆ ಸಂಪರ್ಕಸಾಧಿಸುವಲ್ಲಿ ದೋಷ"
 
-#: ../src/goabackend/goakerberosprovider.c:1726
+#: ../src/goabackend/goakerberosprovider.c:1727
 msgid "Network _Resources"
 msgstr "ಜಾಲಬಂಧ ಸಂಪನ್ಮೂಲಗಳು (_R)"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:636
+#: ../src/goabackend/goaoauth2provider.c:576
 #: ../src/goabackend/goaoauthprovider.c:586
 #, c-format
 msgid ""
@@ -465,43 +445,43 @@ msgstr ""
 "ನಿಲುಕು ಟೋಕನ್‌ಗಾಗಿ ಮನವಿ ಮಾಡುವಾಗ 200 ಸ್ಥಿತಿಯನ್ನು ನಿರೀಕ್ಷಿಸಲಾಗಿತ್ತು, ಬದಲಿಗೆ %d "
 "ಸ್ಥಿತಿಯು ದೊರೆತಿದೆ (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:911
-#: ../src/goabackend/goaoauth2provider.c:951
+#: ../src/goabackend/goaoauth2provider.c:851
+#: ../src/goabackend/goaoauth2provider.c:891
 #, c-format
 msgid "Authorization response was \"%s\""
 msgstr "\"%s\" ಎಂಬುದು ದೃಢೀಕರಣ ಪ್ರತಿಕ್ರಿಯೆ ಆಗಿತ್ತು"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:1057
+#: ../src/goabackend/goaoauth2provider.c:997
 #, c-format
 msgid ""
 "Paste authorization code obtained from the <a href=\"%s\">authorization "
 "page</a>:"
 msgstr "<a href=\"%s\">ದೃಢೀಕರಣ ಪುಟ</a>ದಿಂದ ಪಡೆಯಲಾದ ದೃಢೀಕರಣ ಸಂಕೇತವನ್ನು ಅಂಟಿಸು:"
 
-#: ../src/goabackend/goaoauth2provider.c:1157
+#: ../src/goabackend/goaoauth2provider.c:1090
 #: ../src/goabackend/goaoauthprovider.c:1072
 msgid "Error getting an Access Token: "
 msgstr "ನಿಲುಕು ಟೋಕನ್ ಅನ್ನು ಪಡೆಯುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ: "
 
-#: ../src/goabackend/goaoauth2provider.c:1172
+#: ../src/goabackend/goaoauth2provider.c:1105
 #: ../src/goabackend/goaoauthprovider.c:1085
 msgid "Error getting identity: "
 msgstr "ಗುರುತನ್ನು ಪಡೆಯುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ: "
 
-#: ../src/goabackend/goaoauth2provider.c:1461
-#: ../src/goabackend/goaoauthprovider.c:1390
+#: ../src/goabackend/goaoauth2provider.c:1395
+#: ../src/goabackend/goaoauthprovider.c:1391
 #, c-format
 msgid "Was asked to login as %s, but logged in as %s"
 msgstr "%s ಆಗಿ ಪ್ರವೇಶಿಸುವಂತೆ ಕೋರಲಾಗಿತ್ತು, ಆದರೆ %s ಆಗಿ ಪ್ರವೇಶಿಸಲಾಗಿದೆ"
 
-#: ../src/goabackend/goaoauth2provider.c:1632
+#: ../src/goabackend/goaoauth2provider.c:1566
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "ರುಜುವಾತುಗಳು access_token ಅನ್ನು ಹೊಂದಿಲ್ಲ"
 
-#: ../src/goabackend/goaoauth2provider.c:1671
-#: ../src/goabackend/goaoauthprovider.c:1618
+#: ../src/goabackend/goaoauth2provider.c:1605
+#: ../src/goabackend/goaoauthprovider.c:1619
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "ನಿಲುಕು ಟೋಕನ್ ಅನ್ನು ಪುನಶ್ಚೇತನಗೊಳಿಸುವಲ್ಲಿ ವಿಫಲಗೊಂಡಿದೆ (%s, %d): "
@@ -523,8 +503,7 @@ msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr ""
 "ಮನವಿ ಟೋಕನ್‌ ಅನ್ನು ಪಡೆಯುವಾಗ 200 ಸ್ಥಿತಿಯನ್ನು ನಿರೀಕ್ಷಿಸಲಾಗಿತ್ತು, ಬದಲಿಗೆ %d "
-"ಸ್ಥಿತಿಯು "
-"ದೊರೆತಿದೆ (%s)"
+"ಸ್ಥಿತಿಯು ದೊರೆತಿದೆ (%s)"
 
 #: ../src/goabackend/goaoauthprovider.c:961
 #, c-format
@@ -538,35 +517,28 @@ msgstr ""
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 msgstr "<a href=\"%s\">ದೃಢೀಕರಣ ಪುಟ</a>ದಿಂದ ಪಡೆಯಲಾದ ಟೋಕನ್ ಅನ್ನು ಅಂಟಿಸು:"
 
-#: ../src/goabackend/goaoauthprovider.c:1574
+#: ../src/goabackend/goaoauthprovider.c:1575
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "ರುಜುವಾತುಗಳು access_token ಅಥವ access_token_secret ಅನ್ನು ಹೊಂದಿಲ್ಲ"
 
-#: ../src/goabackend/goaowncloudprovider.c:84
+#: ../src/goabackend/goaowncloudprovider.c:87
 msgid "ownCloud"
 msgstr "ownCloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:815
-#: ../src/goabackend/goaowncloudprovider.c:995
-#| msgid "Error connecting to Microsoft Exchange server"
+#: ../src/goabackend/goaowncloudprovider.c:835
+#: ../src/goabackend/goaowncloudprovider.c:1015
 msgid "Error connecting to ownCloud server"
 msgstr "ownCloud ಪೂರೈಕೆಗಣಕದೊಂದಿಗೆ ಸಂಪರ್ಕಸಾಧಿಸುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ"
 
-#: ../src/goabackend/goaowncloudprovider.c:1070
+#: ../src/goabackend/goaowncloudprovider.c:1090
 msgid "_Files"
 msgstr "ಕಡತಗಳು (_F)"
 
-#: ../src/goabackend/goaprovider.c:691
+#: ../src/goabackend/goaprovider.c:577
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync ಎನ್ನುವುದು %s ಬಗೆಯಲ್ಲಿ ಇನ್ನೂ ಸಹ ಅಳವಡಿಸಲಾಗಿಲ್ಲ"
-
-#. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:146
-#, c-format
-msgid "Service not available"
-msgstr "ಸೇವೆಯು ಲಭ್ಯವಿಲ್ಲ"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauthplain.c:161
@@ -583,7 +555,6 @@ msgstr "org.gnome.OnlineAccounts.Mail ಲಭ್ಯವಿಲ್ಲ"
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauthplain.c:203
 #, c-format
-#| msgid "Failed to parse autodiscover response XML"
 msgid "Failed to parse email address"
 msgstr "ವಿಅಂಚೆ ವಿಳಾಸವನ್ನು ಪಾರ್ಸ್ ಮಾಡುವಲ್ಲಿ ವಿಫಲಗೊಂಡಿದೆ"
 
@@ -596,7 +567,6 @@ msgstr "ಒಂದು ಡೊಮೈನ್ ಇಲ್ಲದೆ SMTP PLAIN ಅನ್�
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauthplain.c:253
 #, c-format
-#| msgid "Did not find password with username `%s' in credentials"
 msgid "Did not find smtp-password in credentials"
 msgstr "ರುಜುವಾತುಗಳಲ್ಲಿ smtp-ಗುಪ್ತಪದವು ಕಂಡುಬಂದಿಲ್ಲ"
 
@@ -616,80 +586,75 @@ msgstr "ಪೂರೈಕೆಗಣಕವು PLAIN ಅನ್ನು ಬೆಂಬಲ�
 msgid "Server does not support STARTTLS"
 msgstr "ಪೂರೈಕೆಗಣಕವು STARTTLS ಅನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ"
 
-#: ../src/goabackend/goatwitterprovider.c:81
-msgid "Twitter"
-msgstr "ಟ್ವಿಟ್ಟರ್"
-
-#: ../src/goabackend/goautils.c:84
+#: ../src/goabackend/goautils.c:86
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "%s ಖಾತೆಯು %s ಗಾಗಿ ಈಗಾಗಲೆ ಪೂರೈಕೆಗಣಕದಲ್ಲಿ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ"
 
 #. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:106
+#: ../src/goabackend/goautils.c:108
 #, c-format
 msgid "%s account"
 msgstr "%s ಖಾತೆ"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:150
+#: ../src/goabackend/goautils.c:152
 msgid "Failed to delete credentials from the keyring"
 msgstr "ರುಜುವಾತುಗಳನ್ನು ಕೀಲಿಗೊಂಚಲಿನಿಂದ ಅಳಿಸುವಲ್ಲಿ ವಿಫಲಗೊಂಡಿದೆ"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:202
+#: ../src/goabackend/goautils.c:204
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "ರುಜುವಾತುಗಳನ್ನು ಕೀಲಿಗೊಂಚಲಿನಿಂದ ಪಡೆಯುವಲ್ಲಿ ವಿಫಲಗೊಂಡಿದೆ"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:212
-#| msgid "Failed to store credentials in the keyring"
+#: ../src/goabackend/goautils.c:214
 msgid "No credentials found in the keyring"
 msgstr "ಕೀಲಿಗೊಂಚಲಿನಲ್ಲಿ ಯಾವುದೆ ರುಜುವಾತುಗಳು ಕಂಡುಬಂದಿಲ್ಲ"
 
-#: ../src/goabackend/goautils.c:225
+#: ../src/goabackend/goautils.c:227
 msgid "Error parsing result obtained from the keyring: "
 msgstr "ಈ ಕೀಲಿಗೊಂಚಲಿನಿಂದ ಪಡೆಯಲಾದ ಫಲಿತಾಂಶವನ್ನು ಪಾರ್ಸ್ ಮಾಡುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ: "
 
-#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:268
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'facebook'
+#: ../src/goabackend/goautils.c:270
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "GOA %s ರುಜುವಾತುಗಳು, %s ಗುರುತಿಗಾಗಿ"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:285
+#: ../src/goabackend/goautils.c:287
 msgid "Failed to store credentials in the keyring"
 msgstr "ರುಜುವಾತುಗಳನ್ನು ಕೀಲಿಗೊಂಚಲಿನಲ್ಲಿ ಶೇಖರಿಸುವಲ್ಲಿ ವಿಫಲಗೊಂಡಿದೆ"
 
-#: ../src/goabackend/goautils.c:506
+#: ../src/goabackend/goautils.c:508
 msgid "The signing certificate authority is not known."
 msgstr "ಸಹಿ ಮಾಡುವ ಪ್ರಮಾಣಿಪತ್ರ ಅಥಾರಿಟಿಯು ಅಜ್ಞಾತವಾಗಿದೆ."
 
-#: ../src/goabackend/goautils.c:510
+#: ../src/goabackend/goautils.c:512
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr ""
 "ಪ್ರಮಾಣಪತ್ರವನ್ನು ಪಡೆದುಕೊಳ್ಳಲಾದ ತಾಣದ ನಿರೀಕ್ಷಿತವಾದ ಗುರುತಿಗೆ ಹೊಂದಿಕೆಯಾಗುವುದಿಲ್ಲ."
 
-#: ../src/goabackend/goautils.c:515
+#: ../src/goabackend/goautils.c:517
 msgid "The certificate's activation time is still in the future."
 msgstr "ಪ್ರಮಾಣಪತ್ರದ ಸಕ್ರಿಯಗೊಳಿಕೆಯ ಸಮಯವು ಇನ್ನೂ ಸಹ ಭವಿಷ್ಯದಲ್ಲಿದೆ."
 
-#: ../src/goabackend/goautils.c:519
+#: ../src/goabackend/goautils.c:521
 msgid "The certificate has expired."
 msgstr "ಪ್ರಮಾಣಪತ್ರದ ಕಾಲಾವಧಿ ತೀರಿದೆ."
 
-#: ../src/goabackend/goautils.c:523
+#: ../src/goabackend/goautils.c:525
 msgid "The certificate has been revoked."
 msgstr "ಪ್ರಮಾಣಪತ್ರವನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ."
 
-#: ../src/goabackend/goautils.c:527
+#: ../src/goabackend/goautils.c:529
 msgid "The certificate's algorithm is considered insecure."
 msgstr "ಪ್ರಮಾಣಪತ್ರದ ಅಲ್ಗಾರಿದಮ್ ಅಸುರಕ್ಷಿತ ಎಂದು ಪರಿಗಣಿಸಲಾಗಿದೆ."
 
-#: ../src/goabackend/goautils.c:531
+#: ../src/goabackend/goautils.c:533
 msgid "Invalid certificate."
 msgstr "ಅಮಾನ್ಯವಾದ ಪ್ರಮಾಣಪತ್ರ."
 
@@ -703,18 +668,6 @@ msgstr "“%s” ಅನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿ�
 msgid "Windows Live"
 msgstr "ವಿಂಡೋಸ್ ಲೈವ್"
 
-#: ../src/goabackend/goayahooprovider.c:81
-msgid "Yahoo"
-msgstr "ಯಾಹೂ"
-
-#: ../src/goabackend/goayahooprovider.c:249
-#, c-format
-#| msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
-msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-msgstr ""
-"ಹೆಸರನ್ನು ಮನವಿ ಮಾಡುವಾಗ 200 ಸ್ಥಿತಿಯನ್ನು ನಿರೀಕ್ಷಿಸಲಾಗಿತ್ತು, ಬದಲಿಗೆ %d ಸ್ಥಿತಿಯು "
-"ದೊರೆತಿದೆ (%s)"
-
 #: ../src/goaidentity/goaalarm.c:245
 msgid "Time"
 msgstr "ಸಮಯ"
@@ -726,7 +679,8 @@ msgstr "ಫೈರ್ ಮಾಡುವ ಸಮಯ"
 #: ../src/goaidentity/goaidentityservice.c:377
 msgid "initial secret passed before secret key exchange"
 msgstr ""
-"ಸಿಕ್ರೆಟ್ ಕೀಲಿಯನ್ನು ವಿನಿಮಯ ಮಾಡಿಕೊಳ್ಳುವ ಮೊದಲು ಆರಂಭಿಕ ಸಿಕ್ರೆಟ್ ಅನ್ನು ರವಾನಿಸಲಾಗಿದೆ"
+"ಸಿಕ್ರೆಟ್ ಕೀಲಿಯನ್ನು ವಿನಿಮಯ ಮಾಡಿಕೊಳ್ಳುವ ಮೊದಲು ಆರಂಭಿಕ ಸಿಕ್ರೆಟ್ ಅನ್ನು "
+"ರವಾನಿಸಲಾಗಿದೆ"
 
 #: ../src/goaidentity/goaidentityservice.c:569
 msgid "Initial secret key is invalid"
@@ -751,7 +705,8 @@ msgstr "ರುಜುವಾತುಗಳ ಕ್ಯಾಶೆಯಲ್ಲಿ ಗು�
 
 #: ../src/goaidentity/goakerberosidentity.c:659
 msgid "Could not sift through identity credentials in cache: %k"
-msgstr "ಕ್ಯಾಶೆಯಲ್ಲಿನ ಗುರುತಿನ ರುಜುವಾತುಗಳ ಮುಖಾಂತರ ಸೂಕ್ಷ್ಮವಾಗಿ ಪರಿಶೀಲಸಲಾಗಿಲ್ಲ: %k"
+msgstr ""
+"ಕ್ಯಾಶೆಯಲ್ಲಿನ ಗುರುತಿನ ರುಜುವಾತುಗಳ ಮುಖಾಂತರ ಸೂಕ್ಷ್ಮವಾಗಿ ಪರಿಶೀಲಸಲಾಗಿಲ್ಲ: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:676
 msgid "Could not finish up sifting through identity credentials in cache: %k"
@@ -800,43 +755,3 @@ msgstr "ಗುರುತು ಕಂಡುಬಂದಿಲ್ಲ"
 #: ../src/goaidentity/goakerberosidentitymanager.c:824
 msgid "Could not create credential cache for identity"
 msgstr "ಗುರುತಿಗಾಗಿ ರುಜುವಾತಿನ ಕ್ಯಾಶೆಯನ್ನು ರಚಿಸಲಾಗಿಲ್ಲ"
-
-#~ msgid "Online Accounts"
-#~ msgstr "ಆನ್‌ಲೈನ್‌ ಖಾತೆಗಳು"
-
-#~ msgid "An online account needs attention"
-#~ msgstr "ಒಂದು ಆನ್‌ಲೈನ್ ಖಾತೆಗೆ ಗಮನದ ಅಗತ್ಯವಿದೆ"
-
-#~ msgid "Open Online Accounts..."
-#~ msgstr "ಆನ್‌ಲೈನ್‌ ಖಾತೆಗಳನ್ನು ತೆರೆ..."
-
-#~ msgid "Credentials not found in keyring (%s, %d): "
-#~ msgstr "ಕೀಲಿಗೊಂಚಲಿನಲ್ಲಿ ರುಜುವಾತುಗಳು ಕಂಡುಬಂದಿಲ್ಲ (%s, %d): "
-
-#~ msgid "Error parsing response as JSON: "
-#~ msgstr "ಪ್ರತಿಕ್ರಿಯೆಯನ್ನು JSON ಆಗಿ ಪಾರ್ಸ್ ಮಾಡುವಲ್ಲಿ ದೋಷ: "
-
-#~ msgid "Didn't find id member in JSON data"
-#~ msgstr "JSON ದತ್ತಾಂಶದಲ್ಲಿ id ಸದಸ್ಯ ಕಂಡುಬಂದಿಲ್ಲ"
-
-#~ msgid "Didn't find email member in JSON data"
-#~ msgstr "JSON ದತ್ತಾಂಶದಲ್ಲಿ ವಿಅಂಚೆ ಸದಸ್ಯ ಕಂಡುಬಂದಿಲ್ಲ"
-
-#~ msgid "Didn't find data member in JSON data"
-#~ msgstr "JSON ದತ್ತಾಂಶದಲ್ಲಿ ದತ್ತಾಂಶ ಸದಸ್ಯ ಕಂಡುಬಂದಿಲ್ಲ"
-
-#~ msgid "Didn't find access_token in non-JSON data"
-#~ msgstr "JSON ಅಲ್ಲದ ದತ್ತಾಂಶದಲ್ಲಿ access_token ಕಂಡುಬಂದಿಲ್ಲ"
-
-#~ msgid "Didn't find access_token in JSON data"
-#~ msgstr "JSON ದತ್ತಾಂಶದಲ್ಲಿ access_token ಕಂಡುಬಂದಿಲ್ಲ"
-
-#~ msgid "Error storing credentials in keyring (%s, %d): "
-#~ msgstr ""
-#~ "ಈ ಕೀಲಿಗೊಂಚಲಿನಲ್ಲಿ ರುಜುವಾತುಗಳನ್ನು ಶೇಖರಿಸಿಡುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ (%s, %d): "
-
-#~ msgid "Didn't find account email member in JSON data"
-#~ msgstr "JSON ದತ್ತಾಂಶದಲ್ಲಿ ಖಾತೆ ವಿಅಂಚೆ ಮಾಹಿತಿಯು ಕಂಡುಬಂದಿಲ್ಲ"
-
-#~ msgid "Chat"
-#~ msgstr "ಸಂಭಾಷಣೆ"
