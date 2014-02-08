@@ -26,7 +26,6 @@
 
 #include "goadaemon.h"
 #include "goabackend/goabackend.h"
-#include "goabackend/goalogging.h"
 #include "goabackend/goautils.h"
 #ifdef GOA_KERBEROS_ENABLED
 #include "goaidentity/goaidentityservice.h"
@@ -138,10 +137,10 @@ create_monitor (const gchar *path, gboolean is_dir)
 
   if (monitor == NULL)
     {
-      goa_warning ("Error monitoring %s at %s: %s (%s, %d)",
-                   is_dir ? "directory" : "file",
-                   path,
-                   error->message, g_quark_to_string (error->domain), error->code);
+      g_warning ("Error monitoring %s at %s: %s (%s, %d)",
+                 is_dir ? "directory" : "file",
+                 path,
+                 error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
     }
   g_object_unref (file);
@@ -155,7 +154,7 @@ on_config_file_monitor_timeout (gpointer user_data)
   GoaDaemon *daemon = GOA_DAEMON (user_data);
 
   daemon->config_timeout_id = 0;
-  goa_info ("Reloading configuration files\n");
+  g_info ("Reloading configuration files\n");
   goa_daemon_reload_configuration (daemon);
 
   return FALSE;
@@ -213,7 +212,7 @@ goa_daemon_init (GoaDaemon *daemon)
   path = g_strdup_printf ("%s/goa-1.0", g_get_user_config_dir ());
   if (g_mkdir_with_parents (path, 0755) != 0)
     {
-      goa_warning ("Error creating directory %s: %m", path);
+      g_warning ("Error creating directory %s: %m", path);
     }
   g_free (path);
 
@@ -235,7 +234,7 @@ goa_daemon_init (GoaDaemon *daemon)
   if (!goa_identity_service_activate (daemon->identity_service,
                                       &error))
     {
-      goa_warning ("Error activating identity service: %s", error->message);
+      g_warning ("Error activating identity service: %s", error->message);
       g_error_free (error);
       g_clear_object (&daemon->identity_service);
     }
@@ -353,9 +352,9 @@ add_config_file (GoaDaemon     *daemon,
     {
       if (!(error->domain == G_FILE_ERROR && error->code == G_FILE_ERROR_NOENT))
         {
-          goa_warning ("Error loading %s: %s (%s, %d)",
-                       path,
-                       error->message, g_quark_to_string (error->domain), error->code);
+          g_warning ("Error loading %s: %s (%s, %d)",
+                     path,
+                     error->message, g_quark_to_string (error->domain), error->code);
         }
       g_error_free (error);
       g_key_file_free (key_file);
@@ -392,8 +391,8 @@ add_config_file (GoaDaemon     *daemon,
                   if (session_id != NULL &&
                       g_strcmp0 (session_id, guid) != 0)
                     {
-                      goa_debug ("ignoring account \"%s\" in file %s because it's stale",
-                                 groups[n], path);
+                      g_debug ("ignoring account \"%s\" in file %s because it's stale",
+                               groups[n], path);
                       g_free (groups[n]);
                       g_free (session_id);
                       continue;
@@ -411,7 +410,7 @@ add_config_file (GoaDaemon     *daemon,
             }
           else
             {
-              goa_warning ("Unexpected group \"%s\" in file %s", groups[n], path);
+              g_warning ("Unexpected group \"%s\" in file %s", groups[n], path);
               g_free (groups[n]);
             }
         }
@@ -456,7 +455,7 @@ update_account_object (GoaDaemon           *daemon,
   icon = NULL;
   serialized_icon = NULL;
 
-  goa_debug ("updating %s %d", g_dbus_object_get_object_path (G_DBUS_OBJECT (object)), just_added);
+  g_debug ("updating %s %d", g_dbus_object_get_object_path (G_DBUS_OBJECT (object)), just_added);
 
   type = g_key_file_get_string (key_file, group, "Provider", NULL);
   identity = g_key_file_get_string (key_file, group, "Identity", NULL);
@@ -474,7 +473,7 @@ update_account_object (GoaDaemon           *daemon,
   provider = goa_provider_get_for_provider_type (type);
   if (provider == NULL)
     {
-      goa_warning ("Unsupported account type %s for identity %s (no provider)", type, identity);
+      g_warning ("Unsupported account type %s for identity %s (no provider)", type, identity);
       goto out;
     }
 
@@ -486,8 +485,8 @@ update_account_object (GoaDaemon           *daemon,
   error = NULL;
   if (!goa_provider_build_object (provider, object, key_file, group, daemon->connection, just_added, &error))
     {
-      goa_warning ("Error parsing account: %s (%s, %d)",
-                   error->message, g_quark_to_string (error->domain), error->code);
+      g_warning ("Error parsing account: %s (%s, %d)",
+                 error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }
@@ -561,7 +560,7 @@ process_config_entries (GoaDaemon  *daemon,
       object_path = g_strdup_printf ("/org/gnome/OnlineAccounts/Accounts/%s", id + sizeof "Account " - 1);
       if (strstr (id + sizeof "Account " - 1, "/") != NULL || !g_variant_is_object_path (object_path))
         {
-          goa_warning ("`%s' is not a valid account identifier", id);
+          g_warning ("`%s' is not a valid account identifier", id);
           g_free (object_path);
           continue;
         }
@@ -587,7 +586,7 @@ process_config_entries (GoaDaemon  *daemon,
       g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
                                             G_CALLBACK (on_account_handle_remove),
                                             daemon);
-      goa_debug ("removing %s", object_path);
+      g_debug ("removing %s", object_path);
       g_warn_if_fail (g_dbus_object_manager_server_unexport (daemon->object_manager, object_path));
     }
   for (l = added; l != NULL; l = l->next)
@@ -596,7 +595,7 @@ process_config_entries (GoaDaemon  *daemon,
       GoaObjectSkeleton *object;
       gchar *group;
 
-      goa_debug ("adding %s", object_path);
+      g_debug ("adding %s", object_path);
 
       group = object_path_to_group (object_path);
       key_file_data = g_hash_table_lookup (group_name_to_key_file_data, group);
@@ -629,7 +628,7 @@ process_config_entries (GoaDaemon  *daemon,
       GoaObject *object;
       gchar *group;
 
-      goa_debug ("unchanged %s", object_path);
+      g_debug ("unchanged %s", object_path);
 
       group = object_path_to_group (object_path);
       key_file_data = g_hash_table_lookup (group_name_to_key_file_data, group);
@@ -1129,9 +1128,9 @@ ensure_credentials_cb (GoaProvider   *provider,
             {
               goa_account_set_attention_needed (account, TRUE);
               g_dbus_interface_skeleton_flush (G_DBUS_INTERFACE_SKELETON (account));
-              goa_notice ("%s: Setting AttentionNeeded to TRUE because EnsureCredentials() failed with: %s (%s, %d)",
-                          g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)),
-                          error->message, g_quark_to_string (error->domain), error->code);
+              g_message ("%s: Setting AttentionNeeded to TRUE because EnsureCredentials() failed with: %s (%s, %d)",
+                         g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)),
+                         error->message, g_quark_to_string (error->domain), error->code);
             }
         }
       g_dbus_method_invocation_return_gerror (data->invocation, error);
@@ -1147,8 +1146,8 @@ ensure_credentials_cb (GoaProvider   *provider,
         {
           goa_account_set_attention_needed (account, FALSE);
           g_dbus_interface_skeleton_flush (G_DBUS_INTERFACE_SKELETON (account));
-          goa_notice ("%s: Setting AttentionNeeded to FALSE because EnsureCredentials() succeded\n",
-                      g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)));
+          g_message ("%s: Setting AttentionNeeded to FALSE because EnsureCredentials() succeded\n",
+                     g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)));
         }
       goa_account_complete_ensure_credentials (goa_object_peek_account (data->object),
                                                data->invocation,

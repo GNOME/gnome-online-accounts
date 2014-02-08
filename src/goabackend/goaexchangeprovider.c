@@ -22,7 +22,6 @@
 #include <glib/gi18n-lib.h>
 
 #include "goaewsclient.h"
-#include "goalogging.h"
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goaexchangeprovider.h"

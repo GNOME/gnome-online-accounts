@@ -23,7 +23,6 @@
 
 #include <glib/gi18n-lib.h>
 
-#include "goalogging.h"
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goaproviderfactory.h"
@@ -950,7 +949,7 @@ get_providers_cb (GObject      *source,
 
   if (!goa_provider_factory_get_providers_finish (factory, &providers, res, &error))
     {
-      goa_error ("Error getting providers from a factory: %s (%s, %d)",
+      g_critical ("Error getting providers from a factory: %s (%s, %d)",
           error->message,
           g_quark_to_string (error->domain),
           error->code);
@@ -1181,9 +1180,9 @@ goa_util_lookup_keyfile_string (GoaObject    *object,
                                   G_KEY_FILE_NONE,
                                   &error))
     {
-      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
-                   path,
-                   error->message, g_quark_to_string (error->domain), error->code);
+      g_warning ("Error loading keyfile %s: %s (%s, %d)",
+                 path,
+                 error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }
@@ -1194,11 +1193,11 @@ goa_util_lookup_keyfile_string (GoaObject    *object,
   if (ret == NULL)
     {
       /* this is not fatal (think upgrade-path) */
-      goa_debug ("Error getting value for key %s in group `%s' from keyfile %s: %s (%s, %d)",
-                 key,
-                 group,
-                 path,
-                 error->message, g_quark_to_string (error->domain), error->code);
+      g_debug ("Error getting value for key %s in group `%s' from keyfile %s: %s (%s, %d)",
+               key,
+               group,
+               path,
+               error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }
@@ -1233,9 +1232,9 @@ goa_util_lookup_keyfile_boolean (GoaObject    *object,
                                   G_KEY_FILE_NONE,
                                   &error))
     {
-      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
-                   path,
-                   error->message, g_quark_to_string (error->domain), error->code);
+      g_warning ("Error loading keyfile %s: %s (%s, %d)",
+                 path,
+                 error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }
@@ -1246,11 +1245,11 @@ goa_util_lookup_keyfile_boolean (GoaObject    *object,
   if (error != NULL)
     {
       /* this is not fatal (think upgrade-path) */
-      goa_debug ("Error getting boolean value for key %s in group `%s' from keyfile %s: %s (%s, %d)",
-                 key,
-                 group,
-                 path,
-                 error->message, g_quark_to_string (error->domain), error->code);
+      g_debug ("Error getting boolean value for key %s in group `%s' from keyfile %s: %s (%s, %d)",
+               key,
+               group,
+               path,
+               error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }

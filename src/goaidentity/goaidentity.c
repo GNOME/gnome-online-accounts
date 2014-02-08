@@ -22,7 +22,6 @@
 #include <glib/gi18n.h>
 
 #include "goaidentity.h"
-#include "goalogging.h"
 
 G_DEFINE_INTERFACE (GoaIdentity, goa_identity, G_TYPE_OBJECT);
 

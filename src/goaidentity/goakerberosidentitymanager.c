@@ -24,7 +24,6 @@
 #include "goaidentitymanager.h"
 #include "goaidentitymanagerprivate.h"
 #include "goakerberosidentityinquiry.h"
-#include "goalogging.h"
 
 #include <fcntl.h>
 #include <string.h>
@@ -206,7 +205,7 @@ static void
 on_identity_unexpired (GoaIdentity                *identity,
                        GoaKerberosIdentityManager *self)
 {
-  goa_debug ("GoaKerberosIdentityManager: identity unexpired");
+  g_debug ("GoaKerberosIdentityManager: identity unexpired");
   /* If an identity is now unexpired, that means some sort of weird
    * clock skew happened and we should just do a full refresh, since it's
    * probably affected more than one identity
@@ -218,7 +217,7 @@ static void
 on_identity_expiring (GoaIdentity                *identity,
                       GoaKerberosIdentityManager *self)
 {
-  goa_debug ("GoaKerberosIdentityManager: identity about to expire");
+  g_debug ("GoaKerberosIdentityManager: identity about to expire");
   _goa_identity_manager_emit_identity_expiring (GOA_IDENTITY_MANAGER (self),
                                                 identity);
 }
@@ -227,7 +226,7 @@ static void
 on_identity_needs_renewal (GoaIdentity                *identity,
                            GoaKerberosIdentityManager *self)
 {
-  goa_debug ("GoaKerberosIdentityManager: identity needs renewal");
+  g_debug ("GoaKerberosIdentityManager: identity needs renewal");
   _goa_identity_manager_emit_identity_needs_renewal (GOA_IDENTITY_MANAGER (self),
                                                      identity);
 }
@@ -236,7 +235,7 @@ static void
 on_identity_needs_refresh (GoaIdentity                *identity,
                            GoaKerberosIdentityManager *self)
 {
-  goa_debug ("GoaKerberosIdentityManager: needs refresh");
+  g_debug ("GoaKerberosIdentityManager: needs refresh");
   schedule_refresh (self);
 }
 
@@ -429,7 +428,7 @@ update_identity (GoaKerberosIdentityManager *self,
       IdentitySignalWork *work;
 
       /* if it's not expired, send out a refresh signal */
-      goa_debug ("GoaKerberosIdentityManager: identity '%s' refreshed",
+      g_debug ("GoaKerberosIdentityManager: identity '%s' refreshed",
                goa_identity_get_identifier (identity));
 
       work = identity_signal_work_new (self, identity);
@@ -486,7 +485,7 @@ refresh_identity (GoaKerberosIdentityManager *self,
 
   if (old_identity != NULL)
     {
-      goa_debug ("GoaKerberosIdentityManager: refreshing identity '%s'", identifier);
+      g_debug ("GoaKerberosIdentityManager: refreshing identity '%s'", identifier);
       update_identity (self, operation, old_identity, identity);
 
       /* Reuse the old identity, so any object data set up on it doesn't
@@ -497,7 +496,7 @@ refresh_identity (GoaKerberosIdentityManager *self,
     }
   else
     {
-      goa_debug ("GoaKerberosIdentityManager: adding new identity '%s'", identifier);
+      g_debug ("GoaKerberosIdentityManager: adding new identity '%s'", identifier);
       add_identity (self, operation, identity, identifier);
     }
 
@@ -526,7 +525,7 @@ refresh_identities (GoaKerberosIdentityManager *self,
       return FALSE;
     }
 
-  goa_debug ("GoaKerberosIdentityManager: Refreshing identities");
+  g_debug ("GoaKerberosIdentityManager: Refreshing identities");
   refreshed_identities = g_hash_table_new_full (g_str_hash,
                                                 g_str_equal,
                                                 (GDestroyNotify)
@@ -538,8 +537,8 @@ refresh_identities (GoaKerberosIdentityManager *self,
     {
       error_message =
         krb5_get_error_message (self->priv->kerberos_context, error_code);
-      goa_debug ("GoaKerberosIdentityManager:         Error looking up available credential caches: %s",
-                 error_message);
+      g_debug ("GoaKerberosIdentityManager:         Error looking up available credential caches: %s",
+               error_message);
       krb5_free_error_message (self->priv->kerberos_context, error_message);
       goto done;
     }
@@ -568,8 +567,8 @@ refresh_identities (GoaKerberosIdentityManager *self,
     {
       error_message =
         krb5_get_error_message (self->priv->kerberos_context, error_code);
-      goa_debug ("GoaKerberosIdentityManager:         Error iterating over available credential caches: %s",
-                 error_message);
+      g_debug ("GoaKerberosIdentityManager:         Error iterating over available credential caches: %s",
+               error_message);
       krb5_free_error_message (self->priv->kerberos_context, error_message);
     }
 
@@ -602,7 +601,7 @@ list_identities (GoaKerberosIdentityManager *self,
 {
   GList *identities;
 
-  goa_debug ("GoaKerberosIdentityManager: Listing identities");
+  g_debug ("GoaKerberosIdentityManager: Listing identities");
   identities = g_hash_table_get_values (self->priv->identities);
 
   identities = g_list_sort (identities, (GCompareFunc) identity_sort_func);
@@ -624,7 +623,7 @@ renew_identity (GoaKerberosIdentityManager *self,
   identity_name =
     goa_kerberos_identity_get_principal_name (GOA_KERBEROS_IDENTITY
                                               (operation->identity));
-  goa_debug ("GoaKerberosIdentityManager: renewing identity %s", identity_name);
+  g_debug ("GoaKerberosIdentityManager: renewing identity %s", identity_name);
   g_free (identity_name);
 
   error = NULL;
@@ -634,7 +633,7 @@ renew_identity (GoaKerberosIdentityManager *self,
 
   if (!was_renewed)
     {
-      goa_debug ("GoaKerberosIdentityManager: could not renew identity: %s",
+      g_debug ("GoaKerberosIdentityManager: could not renew identity: %s",
                error->message);
 
       g_simple_async_result_set_from_error (operation->result, error);
@@ -737,7 +736,7 @@ get_identity (GoaKerberosIdentityManager *self,
 {
   GoaIdentity *identity;
 
-  goa_debug ("GoaKerberosIdentityManager: get identity %s", operation->identifier);
+  g_debug ("GoaKerberosIdentityManager: get identity %s", operation->identifier);
   identity = g_hash_table_lookup (self->priv->identities, operation->identifier);
 
   if (identity == NULL)
@@ -765,18 +764,18 @@ get_new_credentials_cache (GoaKerberosIdentityManager *self,
 
   if (g_strcmp0 (self->priv->credentials_cache_type, "FILE") == 0)
     {
-      goa_debug ("GoaKerberosIdentityManager: credential cache type %s doesn't supports cache collections", self->priv->credentials_cache_type);
+      g_debug ("GoaKerberosIdentityManager: credential cache type %s doesn't supports cache collections", self->priv->credentials_cache_type);
       supports_multiple_identities = FALSE;
     }
   else if (g_strcmp0 (self->priv->credentials_cache_type, "DIR") == 0 ||
            g_strcmp0 (self->priv->credentials_cache_type, "KEYRING") == 0)
     {
-      goa_debug ("GoaKerberosIdentityManager: credential cache type %s supports cache collections", self->priv->credentials_cache_type);
+      g_debug ("GoaKerberosIdentityManager: credential cache type %s supports cache collections", self->priv->credentials_cache_type);
       supports_multiple_identities = TRUE;
     }
   else
     {
-      goa_debug ("GoaKerberosIdentityManager: don't know if credential cache type %s supports cache collections, assuming yes", self->priv->credentials_cache_type);
+      g_debug ("GoaKerberosIdentityManager: don't know if credential cache type %s supports cache collections, assuming yes", self->priv->credentials_cache_type);
       supports_multiple_identities = TRUE;
     }
 
@@ -818,8 +817,8 @@ sign_in_identity (GoaKerberosIdentityManager *self,
   GError *error;
   krb5_error_code error_code;
 
-  goa_debug ("GoaKerberosIdentityManager: signing in identity %s",
-             operation->identifier);
+  g_debug ("GoaKerberosIdentityManager: signing in identity %s",
+           operation->identifier);
   error = NULL;
   identity = g_hash_table_lookup (self->priv->identities, operation->identifier);
   if (identity == NULL)
@@ -834,8 +833,8 @@ sign_in_identity (GoaKerberosIdentityManager *self,
 
           error_message =
             krb5_get_error_message (self->priv->kerberos_context, error_code);
-          goa_debug ("GoaKerberosIdentityManager:         Error creating new cache for identity credentials: %s",
-                     error_message);
+          g_debug ("GoaKerberosIdentityManager:         Error creating new cache for identity credentials: %s",
+                   error_message);
           krb5_free_error_message (self->priv->kerberos_context, error_message);
 
           g_simple_async_result_set_error (operation->result,
@@ -909,7 +908,7 @@ sign_out_identity (GoaKerberosIdentityManager *self,
   identity_name =
     goa_kerberos_identity_get_principal_name (GOA_KERBEROS_IDENTITY
                                               (operation->identity));
-  goa_debug ("GoaKerberosIdentityManager: signing out identity %s", identity_name);
+  g_debug ("GoaKerberosIdentityManager: signing out identity %s", identity_name);
   g_free (identity_name);
 
   error = NULL;
@@ -919,7 +918,7 @@ sign_out_identity (GoaKerberosIdentityManager *self,
 
   if (!was_signed_out)
     {
-      goa_debug ("GoaKerberosIdentityManager: could not sign out identity: %s",
+      g_debug ("GoaKerberosIdentityManager: could not sign out identity: %s",
                error->message);
       g_error_free (error);
     }
@@ -1027,12 +1026,12 @@ on_job_scheduled (GIOSchedulerJob            *job,
            */
           g_assert (operation->result != NULL);
 
-          goa_debug
+          g_debug
             ("GoaKerberosIdentityManager:         Blocking until identities list processed");
           block_scheduler_job (self);
           g_object_weak_ref (G_OBJECT (operation->result),
                              (GWeakNotify) stop_blocking_scheduler_job, self);
-          goa_debug ("GoaKerberosIdentityManager:         Continuing");
+          g_debug ("GoaKerberosIdentityManager:         Continuing");
           break;
         case OPERATION_TYPE_SIGN_IN:
           sign_in_identity (operation->manager, operation);
@@ -1064,7 +1063,7 @@ on_job_scheduled (GIOSchedulerJob            *job,
        * was a no-op, since the debug spew probably already says the message
        */
       if (processed_operation)
-        goa_debug ("GoaKerberosIdentityManager: Waiting for next operation");
+        g_debug ("GoaKerberosIdentityManager: Waiting for next operation");
     }
 
   g_async_queue_unref (pending_operations);
@@ -1387,8 +1386,8 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
 
   if (strcmp (cache_type, "FILE") != 0 && strcmp (cache_type, "DIR") != 0)
     {
-      goa_warning ("GoaKerberosIdentityManager: Using polling for change notification for credential cache type '%s'",
-                   cache_type);
+      g_warning ("GoaKerberosIdentityManager: Using polling for change notification for credential cache type '%s'",
+                 cache_type);
       can_monitor = FALSE;
     }
 
@@ -1446,10 +1445,10 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
     {
       if (monitoring_error != NULL)
         {
-          goa_warning ("GoaKerberosIdentityManager: Could not monitor credentials for %s (type %s), reverting to polling: %s",
-                       cache_path,
-                       cache_type,
-                       monitoring_error != NULL? monitoring_error->message : "");
+          g_warning ("GoaKerberosIdentityManager: Could not monitor credentials for %s (type %s), reverting to polling: %s",
+                     cache_path,
+                     cache_type,
+                     monitoring_error != NULL? monitoring_error->message : "");
           g_clear_error (&monitoring_error);
         }
       can_monitor = FALSE;
@@ -1517,8 +1516,8 @@ goa_kerberos_identity_manager_initable_init (GInitable     *initable,
   monitoring_error = NULL;
   if (!monitor_credentials_cache (self, &monitoring_error))
     {
-      goa_warning ("GoaKerberosIdentityManager: Could not monitor credentials: %s",
-                   monitoring_error->message);
+      g_warning ("GoaKerberosIdentityManager: Could not monitor credentials: %s",
+                 monitoring_error->message);
       g_error_free (monitoring_error);
     }
 

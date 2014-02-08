@@ -24,7 +24,6 @@
 #include <glib/gi18n-lib.h>
 
 #include "goamailclient.h"
-#include "goalogging.h"
 #include "goautils.h"
 
 /* The timeout used for non-IDLE commands */
@@ -148,10 +147,10 @@ mail_client_check_auth_run_cb (GObject *source_object, GAsyncResult *res, gpoint
   error = NULL;
   if (!goa_mail_auth_run_finish (data->auth, res, &error))
     {
-      goa_warning ("goa_mail_auth_run() failed: %s (%s, %d)",
-                   error->message,
-                   g_quark_to_string (error->domain),
-                   error->code);
+      g_warning ("goa_mail_auth_run() failed: %s (%s, %d)",
+                 error->message,
+                 g_quark_to_string (error->domain),
+                 error->code);
       g_simple_async_result_take_error (data->res, error);
       goto out;
     }
@@ -181,10 +180,10 @@ mail_client_check_tls_conn_handshake_cb (GObject *source_object, GAsyncResult *r
   error = NULL;
   if (!g_tls_connection_handshake_finish (G_TLS_CONNECTION (data->tls_conn), res, &error))
     {
-      goa_warning ("g_tls_connection_handshake() failed: %s (%s, %d)",
-                   error->message,
-                   g_quark_to_string (error->domain),
-                   error->code);
+      g_warning ("g_tls_connection_handshake() failed: %s (%s, %d)",
+                 error->message,
+                 g_quark_to_string (error->domain),
+                 error->code);
       /* GIO sets G_TLS_ERROR_BAD_CERTIFICATE when it should be
        * setting G_TLS_ERROR_HANDSHAKE. Hence, lets check the
        * GTlsCertificate flags to accommodate future GIO fixes.
@@ -247,10 +246,10 @@ mail_client_check_auth_starttls_cb (GObject *source_object, GAsyncResult *res, g
   error = NULL;
   if (!goa_mail_auth_starttls_finish (data->auth, res, &error))
     {
-      goa_warning ("goa_mail_auth_starttls() failed: %s (%s, %d)",
-                   error->message,
-                   g_quark_to_string (error->domain),
-                   error->code);
+      g_warning ("goa_mail_auth_starttls() failed: %s (%s, %d)",
+                 error->message,
+                 g_quark_to_string (error->domain),
+                 error->code);
       g_simple_async_result_take_error (data->res, error);
       goto error;
     }
@@ -310,10 +309,10 @@ mail_client_check_connect_cb (GObject *source_object, GAsyncResult *res, gpointe
   data->conn = g_socket_client_connect_to_host_finish (data->sc, res, &error);
   if (data->conn == NULL)
     {
-      goa_warning ("g_socket_client_connect_to_host() failed: %s (%s, %d)",
-                   error->message,
-                   g_quark_to_string (error->domain),
-                   error->code);
+      g_warning ("g_socket_client_connect_to_host() failed: %s (%s, %d)",
+                 error->message,
+                 g_quark_to_string (error->domain),
+                 error->code);
       /* GIO sets G_TLS_ERROR_BAD_CERTIFICATE when it should be
        * setting G_TLS_ERROR_HANDSHAKE. Hence, lets check the
        * GTlsCertificate flags to accommodate future GIO fixes.

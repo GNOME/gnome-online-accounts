@@ -24,7 +24,6 @@
 #include <rest/oauth-proxy.h>
 #include <json-glib/json-glib.h>
 
-#include "goalogging.h"
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goaoauthprovider.h"
@@ -194,10 +193,10 @@ get_identity_sync (GoaOAuthProvider  *provider,
                                    rest_proxy_call_get_payload_length (call),
                                    &identity_error))
     {
-      goa_warning ("json_parser_load_from_data() failed: %s (%s, %d)",
-                   identity_error->message,
-                   g_quark_to_string (identity_error->domain),
-                   identity_error->code);
+      g_warning ("json_parser_load_from_data() failed: %s (%s, %d)",
+                 identity_error->message,
+                 g_quark_to_string (identity_error->domain),
+                 identity_error->code);
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
@@ -209,7 +208,7 @@ get_identity_sync (GoaOAuthProvider  *provider,
   json_data_object = json_object_get_object_member (json_object, "guid");
   if (json_data_object == NULL)
     {
-      goa_warning ("Did not find guid in JSON data");
+      g_warning ("Did not find guid in JSON data");
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
@@ -220,7 +219,7 @@ get_identity_sync (GoaOAuthProvider  *provider,
   guid = g_strdup (json_object_get_string_member (json_data_object, "value"));
   if (guid == NULL)
     {
-      goa_warning ("Did not find value in JSON data");
+      g_warning ("Did not find value in JSON data");
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
@@ -263,10 +262,10 @@ get_identity_sync (GoaOAuthProvider  *provider,
                                    rest_proxy_call_get_payload_length (call),
                                    &identity_error))
     {
-      goa_warning ("json_parser_load_from_data() failed: %s (%s, %d)",
-                   identity_error->message,
-                   g_quark_to_string (identity_error->domain),
-                   identity_error->code);
+      g_warning ("json_parser_load_from_data() failed: %s (%s, %d)",
+                 identity_error->message,
+                 g_quark_to_string (identity_error->domain),
+                 identity_error->code);
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
@@ -278,7 +277,7 @@ get_identity_sync (GoaOAuthProvider  *provider,
   json_data_object = json_object_get_object_member (json_object, "profile");
   if (json_data_object == NULL)
     {
-      goa_warning ("Did not find profile in JSON data");
+      g_warning ("Did not find profile in JSON data");
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
@@ -289,7 +288,7 @@ get_identity_sync (GoaOAuthProvider  *provider,
   presentation_identity = g_strdup (json_object_get_string_member (json_data_object, "nickname"));
   if (presentation_identity == NULL)
     {
-      goa_warning ("Did not find nickname in JSON data");
+      g_warning ("Did not find nickname in JSON data");
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,

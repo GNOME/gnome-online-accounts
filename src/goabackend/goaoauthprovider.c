@@ -26,7 +26,6 @@
 #include <libsoup/soup.h>
 #include <json-glib/json-glib.h>
 
-#include "goalogging.h"
 #include "goaprovider.h"
 #include "goautils.h"
 #include "goawebview.h"
@@ -1580,7 +1579,7 @@ goa_oauth_provider_get_access_token_sync (GoaOAuthProvider   *provider,
   /* if we can't refresh the token, just return it no matter what */
   if (session_handle == NULL)
     {
-      goa_debug ("Returning locally cached credentials that cannot be refreshed");
+      g_debug ("Returning locally cached credentials that cannot be refreshed");
       success = TRUE;
       goto out;
     }
@@ -1591,12 +1590,12 @@ goa_oauth_provider_get_access_token_sync (GoaOAuthProvider   *provider,
    */
   if (!force_refresh && access_token_expires_in > 10*60)
     {
-      goa_debug ("Returning locally cached credentials (expires in %d seconds)", access_token_expires_in);
+      g_debug ("Returning locally cached credentials (expires in %d seconds)", access_token_expires_in);
       success = TRUE;
       goto out;
     }
 
-  goa_debug ("Refreshing locally cached credentials (expires in %d seconds, force_refresh=%d)", access_token_expires_in, force_refresh);
+  g_debug ("Refreshing locally cached credentials (expires in %d seconds, force_refresh=%d)", access_token_expires_in, force_refresh);
 
   /* Otherwise, refresh it */
   access_token_for_refresh        = access_token; access_token = NULL;

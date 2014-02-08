@@ -24,7 +24,6 @@
 
 #include "goaidentitymanager.h"
 #include "goaidentitymanagerprivate.h"
-#include "goalogging.h"
 
 enum
 {

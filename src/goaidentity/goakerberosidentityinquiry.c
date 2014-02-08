@@ -22,7 +22,6 @@
 
 #include "goakerberosidentityinquiry.h"
 #include "goaidentityinquiryprivate.h"
-#include "goalogging.h"
 
 #include <string.h>
 #include <glib/gi18n.h>
@@ -179,7 +178,7 @@ goa_kerberos_identity_inquiry_new (GoaKerberosIdentity * identity,
   error = NULL;
   if (!g_initable_init (G_INITABLE (self), NULL, &error))
     {
-      goa_debug ("%s", error->message);
+      g_debug ("%s", error->message);
       g_error_free (error);
       g_object_unref (self);
       return NULL;

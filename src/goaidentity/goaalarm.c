@@ -35,8 +35,6 @@
 #include <gio/gio.h>
 #include <gio/gunixinputstream.h>
 
-#include "goalogging.h"
-
 #define MAX_TIMEOUT_INTERVAL (10 *1000)
 
 typedef enum
@@ -107,7 +105,7 @@ clear_scheduled_wakeups (GoaAlarm *self, GSource *source, GInputStream *stream)
 
           if (!is_closed)
             {
-              goa_warning ("GoaAlarm: could not close timer stream: %s", error->message);
+              g_warning ("GoaAlarm: could not close timer stream: %s", error->message);
               g_error_free (error);
             }
 
@@ -367,16 +365,16 @@ on_timer_source_ready (GObject *stream, GTask *task)
 
   if (self->priv->type == GOA_ALARM_TYPE_UNSCHEDULED)
     {
-      goa_debug ("GoaAlarm: timer source was unscheduled after "
-                 "callback was invoked, but before callback got "
-                 "the lock.");
+      g_debug ("GoaAlarm: timer source was unscheduled after "
+               "callback was invoked, but before callback got "
+               "the lock.");
       goto out;
     }
   else if (self->priv->type != GOA_ALARM_TYPE_TIMER)
     {
-      goa_warning ("GoaAlarm: timer source ready callback called "
-                   "when timer source isn't supposed to be used. "
-                   "Current timer type is %u", self->priv->type);
+      g_warning ("GoaAlarm: timer source ready callback called "
+                 "when timer source isn't supposed to be used. "
+                 "Current timer type is %u", self->priv->type);
       goto out;
     }
 
@@ -390,8 +388,8 @@ on_timer_source_ready (GObject *stream, GTask *task)
 
   if (bytes_read < 0)
     {
-      goa_warning ("GoaAlarm: failed to read from timer fd: %s\n",
-                   error->message);
+      g_warning ("GoaAlarm: failed to read from timer fd: %s\n",
+                 error->message);
       g_error_free (error);
       goto out;
     }
@@ -400,8 +398,8 @@ on_timer_source_ready (GObject *stream, GTask *task)
     {
       if (number_of_fires < 0 || number_of_fires > 1)
         {
-          goa_warning ("GoaAlarm: expected timerfd to report firing once,"
-                       "but it reported firing %ld times\n", (long) number_of_fires);
+          g_warning ("GoaAlarm: expected timerfd to report firing once,"
+                     "but it reported firing %ld times\n", (long) number_of_fires);
         }
     }
 
@@ -426,7 +424,7 @@ schedule_wakeups_with_timerfd (GoaAlarm *self)
 
   if (!seen_before)
     {
-      goa_debug ("GoaAlarm: trying to use kernel timer");
+      g_debug ("GoaAlarm: trying to use kernel timer");
       seen_before = TRUE;
     }
 
@@ -434,7 +432,7 @@ schedule_wakeups_with_timerfd (GoaAlarm *self)
 
   if (fd < 0)
     {
-      goa_debug ("GoaAlarm: could not create timer fd: %m");
+      g_debug ("GoaAlarm: could not create timer fd: %m");
       return FALSE;
     }
 
@@ -447,7 +445,7 @@ schedule_wakeups_with_timerfd (GoaAlarm *self)
 
   if (result < 0)
     {
-      goa_debug ("GoaAlarm: could not set timer: %m");
+      g_debug ("GoaAlarm: could not set timer: %m");
       return FALSE;
     }
 
@@ -551,7 +549,7 @@ schedule_wakeups (GoaAlarm *self)
 
       if (!seen_before)
         {
-          goa_debug ("GoaAlarm: falling back to polling timeout");
+          g_debug ("GoaAlarm: falling back to polling timeout");
           seen_before = TRUE;
         }
       schedule_wakeups_with_timeout_source (self);

@@ -21,7 +21,6 @@
 #include "config.h"
 
 #include "goaidentityutils.h"
-#include "goalogging.h"
 
 #include <string.h>
 
@@ -190,7 +189,7 @@ goa_identity_utils_register_error_domain (GQuark error_domain,
 
   if (type_class == NULL)
     {
-      goa_warning ("GoaIdentityUtils: Could not identity type %s", type_name);
+      g_warning ("GoaIdentityUtils: Could not identity type %s", type_name);
       return;
     }
 
@@ -206,7 +205,7 @@ goa_identity_utils_register_error_domain (GQuark error_domain,
                                                               enum_class->values[i].
                                                               value_nick);
 
-      goa_debug ("GoaIdentityUtils: Registering dbus error %s", dbus_error_string);
+      g_debug ("GoaIdentityUtils: Registering dbus error %s", dbus_error_string);
       g_dbus_error_register_error (error_domain,
                                    enum_class->values[i].value, dbus_error_string);
       g_free (dbus_error_string);

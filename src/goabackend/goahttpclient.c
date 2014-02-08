@@ -24,7 +24,6 @@
 
 #include <libsoup/soup.h>
 
-#include "goalogging.h"
 #include "goahttpclient.h"
 #include "goautils.h"
 

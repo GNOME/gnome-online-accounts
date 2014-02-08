@@ -26,7 +26,6 @@
 #include <telepathy-glib/telepathy-glib.h>
 
 #include "goaprovider.h"
-#include "goalogging.h"
 #include "goautils.h"
 
 static const SecretSchema secret_password_schema =
@@ -177,7 +176,7 @@ goa_utils_delete_credentials_sync (GoaProvider   *provider,
                               NULL);
   if (sec_error != NULL)
     {
-      goa_warning ("secret_password_clear_sync() failed: %s", sec_error->message);
+      g_warning ("secret_password_clear_sync() failed: %s", sec_error->message);
       g_set_error_literal (error,
                            GOA_ERROR,
                            GOA_ERROR_FAILED, /* TODO: more specific */
@@ -186,7 +185,7 @@ goa_utils_delete_credentials_sync (GoaProvider   *provider,
       goto out;
     }
 
-  goa_debug ("Cleared keyring credentials for id: %s", id);
+  g_debug ("Cleared keyring credentials for id: %s", id);
   ret = TRUE;
 
  out:
@@ -229,7 +228,7 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
                                           NULL);
   if (sec_error != NULL)
     {
-      goa_warning ("secret_password_lookup_sync() failed: %s", sec_error->message);
+      g_warning ("secret_password_lookup_sync() failed: %s", sec_error->message);
       g_set_error_literal (error,
                            GOA_ERROR,
                            GOA_ERROR_FAILED, /* TODO: more specific */
@@ -239,7 +238,7 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
     }
   else if (password == NULL)
     {
-      goa_warning ("secret_password_lookup_sync() returned NULL");
+      g_warning ("secret_password_lookup_sync() returned NULL");
       g_set_error_literal (error,
                            GOA_ERROR,
                            GOA_ERROR_FAILED, /* TODO: more specific */
@@ -247,7 +246,7 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
       goto out;
     }
 
-  goa_debug ("Retrieved keyring credentials for id: %s", id);
+  g_debug ("Retrieved keyring credentials for id: %s", id);
 
   ret = g_variant_parse (NULL, /* GVariantType */
                          password,
@@ -312,7 +311,7 @@ goa_utils_store_credentials_for_id_sync (GoaProvider   *provider,
                                    "goa-identity", password_key,
                                    NULL))
     {
-      goa_warning ("secret_password_store_sync() failed: %s", sec_error->message);
+      g_warning ("secret_password_store_sync() failed: %s", sec_error->message);
       g_set_error_literal (error,
                            GOA_ERROR,
                            GOA_ERROR_FAILED, /* TODO: more specific */
@@ -321,7 +320,7 @@ goa_utils_store_credentials_for_id_sync (GoaProvider   *provider,
       goto out;
     }
 
-  goa_debug ("Stored keyring credentials for identity: %s", id);
+  g_debug ("Stored keyring credentials for identity: %s", id);
   ret = TRUE;
 
  out:
@@ -372,11 +371,11 @@ goa_utils_keyfile_remove_key (GoaAccount *account, const gchar *key)
                                   G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS,
                                   &error))
     {
-      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
-                   path,
-                   error->message,
-                   g_quark_to_string (error->domain),
-                   error->code);
+      g_warning ("Error loading keyfile %s: %s (%s, %d)",
+                 path,
+                 error->message,
+                 g_quark_to_string (error->domain),
+                 error->code);
       g_error_free (error);
       goto out;
     }
@@ -388,7 +387,7 @@ goa_utils_keyfile_remove_key (GoaAccount *account, const gchar *key)
   if (!g_file_set_contents (path, contents, length, &error))
     {
       g_prefix_error (&error, "Error writing key-value-file %s: ", path);
-      goa_warning ("%s (%s, %d)", error->message, g_quark_to_string (error->domain), error->code);
+      g_warning ("%s (%s, %d)", error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }
@@ -422,11 +421,11 @@ goa_utils_keyfile_set_boolean (GoaAccount *account, const gchar *key, gboolean v
                                   G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS,
                                   &error))
     {
-      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
-                   path,
-                   error->message,
-                   g_quark_to_string (error->domain),
-                   error->code);
+      g_warning ("Error loading keyfile %s: %s (%s, %d)",
+                 path,
+                 error->message,
+                 g_quark_to_string (error->domain),
+                 error->code);
       g_error_free (error);
       goto out;
     }
@@ -438,7 +437,7 @@ goa_utils_keyfile_set_boolean (GoaAccount *account, const gchar *key, gboolean v
   if (!g_file_set_contents (path, contents, length, &error))
     {
       g_prefix_error (&error, "Error writing key-value-file %s: ", path);
-      goa_warning ("%s (%s, %d)", error->message, g_quark_to_string (error->domain), error->code);
+      g_warning ("%s (%s, %d)", error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }
@@ -472,11 +471,11 @@ goa_utils_keyfile_set_string (GoaAccount *account, const gchar *key, const gchar
                                   G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS,
                                   &error))
     {
-      goa_warning ("Error loading keyfile %s: %s (%s, %d)",
-                   path,
-                   error->message,
-                   g_quark_to_string (error->domain),
-                   error->code);
+      g_warning ("Error loading keyfile %s: %s (%s, %d)",
+                 path,
+                 error->message,
+                 g_quark_to_string (error->domain),
+                 error->code);
       g_error_free (error);
       goto out;
     }
@@ -488,7 +487,7 @@ goa_utils_keyfile_set_string (GoaAccount *account, const gchar *key, const gchar
   if (!g_file_set_contents (path, contents, length, &error))
     {
       g_prefix_error (&error, "Error writing key-value-file %s: ", path);
-      goa_warning ("%s (%s, %d)", error->message, g_quark_to_string (error->domain), error->code);
+      g_warning ("%s (%s, %d)", error->message, g_quark_to_string (error->domain), error->code);
       g_error_free (error);
       goto out;
     }

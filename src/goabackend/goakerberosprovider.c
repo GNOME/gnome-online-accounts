@@ -23,7 +23,6 @@
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
-#include "goalogging.h"
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goakerberosprovider.h"

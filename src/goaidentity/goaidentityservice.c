@@ -37,7 +37,6 @@
 #include "goaidentityutils.h"
 
 #include "goakerberosidentitymanager.h"
-#include "goalogging.h"
 
 struct _GoaIdentityServicePrivate
 {
@@ -249,16 +248,16 @@ on_credentials_ensured (GoaAccount         *account,
                                                    result,
                                                    &error))
     {
-      goa_debug ("GoaIdentityService: could not ensure credentials for account %s: %s",
-                 account_identity,
-                 error->message);
+      g_debug ("GoaIdentityService: could not ensure credentials for account %s: %s",
+               account_identity,
+               error->message);
       g_error_free (error);
       return;
     }
 
-  goa_debug ("GoaIdentityService: credentials for account %s ensured for %d seconds",
-             account_identity,
-             expires_in);
+  g_debug ("GoaIdentityService: credentials for account %s ensured for %d seconds",
+           account_identity,
+           expires_in);
 }
 
 static gboolean
@@ -446,8 +445,8 @@ on_identity_signed_out (GoaIdentityManager *manager,
 
   if (error != NULL)
     {
-      goa_debug ("GoaIdentityService: Identity could not be signed out: %s",
-                 error->message);
+      g_debug ("GoaIdentityService: Identity could not be signed out: %s",
+               error->message);
       g_simple_async_result_take_error (operation_result, error);
     }
 
@@ -477,8 +476,8 @@ on_got_identity_for_sign_out (GoaIdentityManager *manager,
 
   if (error != NULL)
     {
-      goa_debug ("GoaIdentityService: Identity could not be signed out: %s",
-                 error->message);
+      g_debug ("GoaIdentityService: Identity could not be signed out: %s",
+               error->message);
       return;
     }
 
@@ -661,7 +660,7 @@ goa_identity_service_init (GoaIdentityService *self)
                                             GOA_TYPE_IDENTITY_SERVICE,
                                             GoaIdentityServicePrivate);
 
-  goa_debug ("GoaIdentityService: initializing");
+  g_debug ("GoaIdentityService: initializing");
   self->priv->watched_client_connections = g_hash_table_new_full (g_str_hash,
                                                                   g_str_equal,
                                                                   (GDestroyNotify)
@@ -691,7 +690,7 @@ goa_identity_service_finalize (GObject *object)
   g_return_if_fail (object != NULL);
   g_return_if_fail (GOA_IS_IDENTITY_SERVICE (object));
 
-  goa_debug ("GoaIdentityService: finalizing");
+  g_debug ("GoaIdentityService: finalizing");
 
   self = GOA_IDENTITY_SERVICE (object);
 
@@ -721,13 +720,13 @@ on_identity_renewed (GoaIdentityManager *manager,
 
   if (error != NULL)
     {
-      goa_debug ("GoaIdentityService: could not renew identity: %s",
+      g_debug ("GoaIdentityService: could not renew identity: %s",
                error->message);
       g_error_free (error);
       return;
     }
 
-  goa_debug ("GoaIdentityService: identity renewed");
+  g_debug ("GoaIdentityService: identity renewed");
 }
 
 static void
@@ -740,7 +739,7 @@ on_identity_needs_renewal (GoaIdentityManager *identity_manager,
 
   principal = goa_identity_get_identifier (identity);
 
-  goa_debug ("GoaIdentityService: identity %s needs renewal", principal);
+  g_debug ("GoaIdentityService: identity %s needs renewal", principal);
 
   object = find_object_with_principal (self, principal, TRUE);
 
@@ -772,8 +771,8 @@ on_identity_signed_in (GoaIdentityManager *manager,
 
   if (error != NULL)
     {
-      goa_debug ("GoaIdentityService: could not sign in identity: %s",
-                 error->message);
+      g_debug ("GoaIdentityService: could not sign in identity: %s",
+               error->message);
       g_simple_async_result_take_error (operation_result, error);
     }
   else
@@ -786,7 +785,7 @@ on_identity_signed_in (GoaIdentityManager *manager,
   g_simple_async_result_complete_in_idle (operation_result);
   g_object_unref (operation_result);
 
-  goa_debug ("GoaIdentityService: identity signed in");
+  g_debug ("GoaIdentityService: identity signed in");
 }
 
 static void
@@ -808,9 +807,9 @@ on_temporary_account_created_for_identity (GoaIdentityService *self,
       const char *identifier;
 
       identifier = goa_identity_get_identifier (identity);
-      goa_debug ("Could not add temporary account for identity %s: %s",
-                 identifier,
-                 error->message);
+      g_debug ("Could not add temporary account for identity %s: %s",
+               identifier,
+               error->message);
       g_error_free (error);
       return;
     }
@@ -850,7 +849,7 @@ on_account_added (GoaManager         *manager,
 
   if (object_path != NULL && object_path[0] != '\0')
     {
-      goa_debug ("Created account for identity with object path %s", object_path);
+      g_debug ("Created account for identity with object path %s", object_path);
 
       object_manager = goa_client_get_object_manager (self->priv->client);
       object = GOA_OBJECT (g_dbus_object_manager_get_object (object_manager,
@@ -889,11 +888,11 @@ add_temporary_account (GoaIdentityService *self,
 
   if (object != NULL)
     {
-      goa_debug ("GoaIdentityService: would add temporary identity %s, but it's already pending", principal);
+      g_debug ("GoaIdentityService: would add temporary identity %s, but it's already pending", principal);
       return;
     }
 
-  goa_debug ("GoaIdentityService: adding temporary identity %s", principal);
+  g_debug ("GoaIdentityService: adding temporary identity %s", principal);
 
   /* If there's no account for this identity then create a temporary one.
    */
@@ -910,7 +909,7 @@ add_temporary_account (GoaIdentityService *self,
   g_variant_builder_add (&details, "{ss}", "TicketingEnabled", "true");
 
 
-  goa_debug ("GoaIdentityService: asking to sign back in");
+  g_debug ("GoaIdentityService: asking to sign back in");
 
   operation_result = g_simple_async_result_new (G_OBJECT (self),
                                                 (GAsyncReadyCallback)
@@ -1048,7 +1047,7 @@ close_system_prompt (GoaIdentityManager  *manager,
     {
       if (error != NULL)
         {
-          goa_debug ("GoaIdentityService: could not close system prompt: %s",
+          g_debug ("GoaIdentityService: could not close system prompt: %s",
                    error->message);
           g_error_free (error);
         }
@@ -1075,7 +1074,7 @@ on_password_system_prompt_answered (GcrPrompt           *prompt,
     {
       if (error != NULL)
         {
-          goa_debug ("GoaIdentityService: could not get password from user: %s",
+          g_debug ("GoaIdentityService: could not get password from user: %s",
                    error->message);
           g_error_free (error);
         }
@@ -1215,7 +1214,7 @@ on_system_prompt_open (GcrSystemPrompt         *system_prompt,
     {
       if (error != NULL)
         {
-          goa_debug ("GoaIdentityService: could not open system prompt: %s",
+          g_debug ("GoaIdentityService: could not open system prompt: %s",
                    error->message);
           g_error_free (error);
         }
@@ -1274,7 +1273,7 @@ sign_in (GoaIdentityService     *self,
 {
   GSimpleAsyncResult *operation_result;
 
-  goa_debug ("GoaIdentityService: asking to sign in");
+  g_debug ("GoaIdentityService: asking to sign in");
 
   operation_result = g_simple_async_result_new (G_OBJECT (self),
                                                 callback,
@@ -1314,7 +1313,7 @@ on_identity_expiring (GoaIdentityManager *identity_manager,
 
   principal = goa_identity_get_identifier (identity);
 
-  goa_debug ("GoaIdentityService: identity %s expiring", principal);
+  g_debug ("GoaIdentityService: identity %s expiring", principal);
 
   object = find_object_with_principal (self, principal, TRUE);
 
@@ -1334,7 +1333,7 @@ on_identity_expired (GoaIdentityManager *identity_manager,
 
   principal = goa_identity_get_identifier (identity);
 
-  goa_debug ("GoaIdentityService: identity %s expired", principal);
+  g_debug ("GoaIdentityService: identity %s expired", principal);
 
   object = find_object_with_principal (self, principal, TRUE);
 
@@ -1352,12 +1351,12 @@ on_sign_out_for_account_change_done (GoaIdentityService *self,
 
   if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), &error))
     {
-      goa_debug ("Log out failed: %s", error->message);
+      g_debug ("Log out failed: %s", error->message);
       g_error_free (error);
     }
   else
     {
-      goa_debug ("Log out complete");
+      g_debug ("Log out complete");
     }
 }
 
@@ -1391,9 +1390,9 @@ on_got_ticket (GoaTicketing       *ticketing,
                                              result,
                                              &error))
     {
-      goa_debug ("GoaIdentityService: could not get ticket for account %s: %s",
-                 account_identity,
-                 error->message);
+      g_debug ("GoaIdentityService: could not get ticket for account %s: %s",
+               account_identity,
+               error->message);
       g_error_free (error);
 
       g_simple_async_result_complete_in_idle (operation_result);
@@ -1401,8 +1400,8 @@ on_got_ticket (GoaTicketing       *ticketing,
       return;
     }
 
-  goa_debug ("GoaIdentityService: got ticket for account %s",
-             account_identity);
+  g_debug ("GoaIdentityService: got ticket for account %s",
+           account_identity);
   g_simple_async_result_complete_in_idle (operation_result);
   g_object_unref (operation_result);
 }
@@ -1498,7 +1497,7 @@ on_account_interface_removed (GDBusObjectManager *manager,
 
   account_identity = goa_account_get_identity (account);
 
-  goa_debug ("Kerberos account %s was disabled and should now be signed out", account_identity);
+  g_debug ("Kerberos account %s was disabled and should now be signed out", account_identity);
 
   result = g_simple_async_result_new (G_OBJECT (self),
                                       (GAsyncReadyCallback)
@@ -1536,7 +1535,7 @@ on_account_removed (GoaClient          *client,
 
   account_identity = goa_account_get_identity (account);
 
-  goa_debug ("Kerberos account %s removed and should now be signed out", account_identity);
+  g_debug ("Kerberos account %s removed and should now be signed out", account_identity);
 
   result = g_simple_async_result_new (G_OBJECT (self),
                                       (GAsyncReadyCallback)
@@ -1596,7 +1595,7 @@ on_identities_listed (GoaIdentityManager *manager,
     {
       if (error != NULL)
         {
-          goa_warning ("Could not list identities: %s", error->message);
+          g_warning ("Could not list identities: %s", error->message);
           g_error_free (error);
         }
       return;
@@ -1680,7 +1679,7 @@ on_got_client (GoaClient          *client,
 
   if (self->priv->client == NULL)
     {
-      goa_warning ("Could not create client: %s", error->message);
+      g_warning ("Could not create client: %s", error->message);
       return;
     }
 
@@ -1690,7 +1689,7 @@ on_got_client (GoaClient          *client,
 
   if (self->priv->identity_manager == NULL)
     {
-      goa_warning ("Could not create identity manager: %s", error->message);
+      g_warning ("Could not create identity manager: %s", error->message);
       return;
     }
 
@@ -1708,7 +1707,7 @@ on_session_bus_acquired (GDBusConnection    *connection,
                          const char         *unique_name,
                          GoaIdentityService *self)
 {
-  goa_debug ("GoaIdentityService: Connected to session bus");
+  g_debug ("GoaIdentityService: Connected to session bus");
 
   if (self->priv->connection == NULL)
   {
@@ -1730,7 +1729,7 @@ on_name_acquired (GDBusConnection    *connection,
                   GoaIdentityService *self)
 {
   if (g_strcmp0 (name, "org.gnome.Identity") == 0)
-    goa_debug ("GoaIdentityService: Acquired name org.gnome.Identity");
+    g_debug ("GoaIdentityService: Acquired name org.gnome.Identity");
 }
 
 static void
@@ -1739,7 +1738,7 @@ on_name_lost (GDBusConnection    *connection,
               GoaIdentityService *self)
 {
   if (g_strcmp0 (name, "org.gnome.Identity") == 0)
-    goa_debug ("GoaIdentityService: Lost name org.gnome.Identity");
+    g_debug ("GoaIdentityService: Lost name org.gnome.Identity");
 }
 
 gboolean
@@ -1750,7 +1749,7 @@ goa_identity_service_activate (GoaIdentityService   *self,
 
   g_return_val_if_fail (GOA_IS_IDENTITY_SERVICE (self), FALSE);
 
-  goa_debug ("GoaIdentityService: Activating identity service");
+  g_debug ("GoaIdentityService: Activating identity service");
 
   self->priv->cancellable = g_cancellable_new ();
 
@@ -1781,7 +1780,7 @@ goa_identity_service_activate (GoaIdentityService   *self,
 void
 goa_identity_service_deactivate (GoaIdentityService *self)
 {
-  goa_debug ("GoaIdentityService: Deactivating identity service");
+  g_debug ("GoaIdentityService: Deactivating identity service");
 
   if (self->priv->realmd_watch == 0)
     g_bus_unwatch_name (self->priv->realmd_watch);

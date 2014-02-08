@@ -24,7 +24,6 @@
 #include "goakerberosidentity.h"
 #include "goakerberosidentityinquiry.h"
 #include "goaalarm.h"
-#include "goalogging.h"
 
 #include <netinet/in.h>
 #include <arpa/nameser.h>
@@ -284,7 +283,7 @@ get_identifier (GoaKerberosIdentity  *self,
 
       error_message =
         krb5_get_error_message (self->priv->kerberos_context, error_code);
-      goa_debug ("GoaKerberosIdentity: Error parsing principal identity name: %s",
+      g_debug ("GoaKerberosIdentity: Error parsing principal identity name: %s",
                error_message);
       krb5_free_error_message (self->priv->kerberos_context, error_message);
       return NULL;
@@ -356,7 +355,7 @@ goa_kerberos_identity_get_principal_name (GoaKerberosIdentity *self)
       const char *error_message;
       error_message =
         krb5_get_error_message (self->priv->kerberos_context, error_code);
-      goa_debug
+      g_debug
         ("GoaKerberosIdentity: Error parsing identity %s into kerberos principal: %s",
          self->priv->identifier, error_message);
       krb5_free_error_message (self->priv->kerberos_context, error_message);
@@ -373,7 +372,7 @@ goa_kerberos_identity_get_principal_name (GoaKerberosIdentity *self)
 
       error_message =
         krb5_get_error_message (self->priv->kerberos_context, error_code);
-      goa_debug ("GoaKerberosIdentity: Error parsing principal identity name: %s",
+      g_debug ("GoaKerberosIdentity: Error parsing principal identity name: %s",
                error_message);
       krb5_free_error_message (self->priv->kerberos_context, error_message);
       return NULL;
@@ -404,7 +403,7 @@ goa_kerberos_identity_get_realm_name (GoaKerberosIdentity *self)
       const char *error_message;
       error_message =
         krb5_get_error_message (self->priv->kerberos_context, error_code);
-      goa_debug
+      g_debug
         ("GoaKerberosIdentity: Error parsing identity %s into kerberos principal: %s",
          self->priv->identifier, error_message);
       krb5_free_error_message (self->priv->kerberos_context, error_message);
@@ -480,7 +479,7 @@ get_current_time (GoaKerberosIdentity *self)
 
       error_message =
         krb5_get_error_message (self->priv->kerberos_context, error_code);
-      goa_debug ("GoaKerberosIdentity: Error getting current time: %s", error_message);
+      g_debug ("GoaKerberosIdentity: Error getting current time: %s", error_message);
       krb5_free_error_message (self->priv->kerberos_context, error_message);
       return 0;
     }
@@ -701,8 +700,8 @@ on_expiration_alarm_fired (GoaAlarm            *alarm,
   g_return_if_fail (GOA_IS_ALARM (alarm));
   g_return_if_fail (GOA_IS_KERBEROS_IDENTITY (self));
 
-  goa_debug ("GoaKerberosIdentity: expiration alarm fired for identity %s",
-             goa_identity_get_identifier (GOA_IDENTITY (self)));
+  g_debug ("GoaKerberosIdentity: expiration alarm fired for identity %s",
+           goa_identity_get_identifier (GOA_IDENTITY (self)));
   g_signal_emit (G_OBJECT (self), signals[NEEDS_REFRESH], 0);
 }
 
@@ -713,7 +712,7 @@ on_expiration_alarm_rearmed (GoaAlarm            *alarm,
   g_return_if_fail (GOA_IS_ALARM (alarm));
   g_return_if_fail (GOA_IS_KERBEROS_IDENTITY (self));
 
-  goa_debug ("GoaKerberosIdentity: expiration alarm rearmed");
+  g_debug ("GoaKerberosIdentity: expiration alarm rearmed");
   g_signal_emit (G_OBJECT (self), signals[NEEDS_REFRESH], 0);
 }
 
@@ -724,7 +723,7 @@ on_renewal_alarm_rearmed (GoaAlarm            *alarm,
   g_return_if_fail (GOA_IS_ALARM (alarm));
   g_return_if_fail (GOA_IS_KERBEROS_IDENTITY (self));
 
-  goa_debug ("GoaKerberosIdentity: renewal alarm rearmed");
+  g_debug ("GoaKerberosIdentity: renewal alarm rearmed");
 }
 
 static void
@@ -738,7 +737,7 @@ on_renewal_alarm_fired (GoaAlarm            *alarm,
 
   if (self->priv->cached_verification_level == VERIFICATION_LEVEL_SIGNED_IN)
     {
-      goa_debug ("GoaKerberosIdentity: renewal alarm fired for signed-in identity");
+      g_debug ("GoaKerberosIdentity: renewal alarm fired for signed-in identity");
       g_signal_emit (G_OBJECT (self), signals[NEEDS_RENEWAL], 0);
     }
 }
@@ -750,7 +749,7 @@ on_expiring_alarm_rearmed (GoaAlarm            *alarm,
   g_return_if_fail (GOA_IS_ALARM (alarm));
   g_return_if_fail (GOA_IS_KERBEROS_IDENTITY (self));
 
-  goa_debug ("GoaKerberosIdentity: expiring alarm rearmed");
+  g_debug ("GoaKerberosIdentity: expiring alarm rearmed");
 }
 
 static void
@@ -764,7 +763,7 @@ on_expiring_alarm_fired (GoaAlarm            *alarm,
 
   if (self->priv->cached_verification_level == VERIFICATION_LEVEL_SIGNED_IN)
     {
-      goa_debug ("GoaKerberosIdentity: expiring alarm fired for signed-in identity");
+      g_debug ("GoaKerberosIdentity: expiring alarm fired for signed-in identity");
       g_signal_emit (G_OBJECT (self), signals[EXPIRING], 0);
     }
 }
@@ -1260,7 +1259,7 @@ goa_kerberos_identity_sign_in (GoaKerberosIdentity     *self,
     }
   krb5_free_principal (self->priv->kerberos_context, principal);
 
-  goa_debug ("GoaKerberosIdentity: identity signed in");
+  g_debug ("GoaKerberosIdentity: identity signed in");
   signed_in = TRUE;
 done:
 
@@ -1399,7 +1398,7 @@ goa_kerberos_identity_renew (GoaKerberosIdentity *self, GError **error)
       goto out;
     }
 
-  goa_debug ("GoaKerberosIdentity: identity %s renewed", name);
+  g_debug ("GoaKerberosIdentity: identity %s renewed", name);
   renewed = TRUE;
 out:
   g_free (name);

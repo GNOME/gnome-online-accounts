@@ -25,7 +25,6 @@
 #include <json-glib/json-glib.h>
 #include <webkit/webkit.h>
 
-#include "goalogging.h"
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goaoauth2provider.h"

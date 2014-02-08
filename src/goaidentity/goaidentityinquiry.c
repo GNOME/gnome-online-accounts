@@ -22,7 +22,6 @@
 
 #include "goaidentityinquiry.h"
 #include "goaidentityinquiryprivate.h"
-#include "goalogging.h"
 
 #include <string.h>
 #include <glib/gi18n.h>

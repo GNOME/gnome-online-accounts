@@ -26,8 +26,6 @@
 #include <signal.h>
 #include <gio/gio.h>
 
-#include <goabackend/goalogging.h>
-
 #include "goadaemon.h"
 #include "goatpaccountlinker.h"
 
@@ -37,12 +35,10 @@
 static GMainLoop *loop = NULL;
 static gboolean opt_replace = FALSE;
 static gboolean opt_no_sigint = FALSE;
-static gboolean opt_no_color = FALSE;
 static GOptionEntry opt_entries[] =
 {
   {"replace", 0, 0, G_OPTION_ARG_NONE, &opt_replace, "Replace existing daemon", NULL},
   {"no-sigint", 0, 0, G_OPTION_ARG_NONE, &opt_no_sigint, "Do not handle SIGINT for controlled shutdown", NULL},
-  {"no-color", 0, 0, G_OPTION_ARG_NONE, &opt_no_color, "Do not display colors in output", NULL},
   {NULL }
 };
 static GoaDaemon *the_daemon = NULL;
@@ -55,7 +51,7 @@ on_bus_acquired (GDBusConnection *connection,
 {
   if (connection != NULL)
     the_daemon = goa_daemon_new ();
-  goa_debug ("Connected to the session bus");
+  g_debug ("Connected to the session bus");
 }
 
 static void
@@ -63,7 +59,7 @@ on_name_lost (GDBusConnection *connection,
               const gchar     *name,
               gpointer         user_data)
 {
-  goa_info ("Lost (or failed to acquire) the name %s on the session message bus", name);
+  g_info ("Lost (or failed to acquire) the name %s on the session message bus", name);
   g_main_loop_quit (loop);
 }
 
@@ -72,7 +68,7 @@ on_name_acquired (GDBusConnection *connection,
                   const gchar     *name,
                   gpointer         user_data)
 {
-  goa_debug ("Acquired the name %s on the session message bus", name);
+  g_debug ("Acquired the name %s on the session message bus", name);
 
   tp_linker = goa_tp_account_linker_new ();
 }
@@ -80,7 +76,7 @@ on_name_acquired (GDBusConnection *connection,
 static gboolean
 on_sigint (gpointer user_data)
 {
-  goa_info ("Caught SIGINT. Initiating shutdown.");
+  g_info ("Caught SIGINT. Initiating shutdown.");
   g_main_loop_quit (loop);
   return FALSE;
 }
@@ -106,13 +102,12 @@ main (int    argc,
   error = NULL;
   if (!g_option_context_parse (opt_context, &argc, &argv, &error))
     {
-      goa_error ("Error parsing options: %s", error->message);
+      g_critical ("Error parsing options: %s", error->message);
       g_error_free (error);
       goto out;
     }
 
-  goa_log_init (opt_no_color);
-  goa_notice ("goa-daemon version %s starting", PACKAGE_VERSION);
+  g_message ("goa-daemon version %s starting", PACKAGE_VERSION);
 
   loop = g_main_loop_new (NULL, FALSE);
 
@@ -132,7 +127,7 @@ main (int    argc,
                                   NULL,
                                   NULL);
 
-  goa_debug ("Entering main event loop");
+  g_debug ("Entering main event loop");
 
   g_main_loop_run (loop);
 
@@ -152,7 +147,7 @@ main (int    argc,
   if (opt_context != NULL)
     g_option_context_free (opt_context);
 
-  goa_notice ("goa-daemon version %s exiting", PACKAGE_VERSION);
+  g_message ("goa-daemon version %s exiting", PACKAGE_VERSION);
 
   return ret;
 }

@@ -27,7 +27,6 @@
 #include <libsoup/soup.h>
 #include <json-glib/json-glib.h>
 
-#include "goalogging.h"
 #include "goaprovider.h"
 #include "goautils.h"
 #include "goawebview.h"
@@ -716,13 +715,13 @@ get_tokens_sync (GoaOAuth2Provider  *provider,
       GHashTable *hash;
       const gchar *expires_in_str;
 
-      goa_debug ("Response is not JSON - possibly old OAuth2 implementation");
+      g_debug ("Response is not JSON - possibly old OAuth2 implementation");
 
       hash = soup_form_decode (payload);
       ret_access_token = g_strdup (g_hash_table_lookup (hash, "access_token"));
       if (ret_access_token == NULL)
         {
-          goa_warning ("Did not find access_token in non-JSON data");
+          g_warning ("Did not find access_token in non-JSON data");
           g_set_error (error,
                        GOA_ERROR,
                        GOA_ERROR_FAILED,
@@ -749,10 +748,10 @@ get_tokens_sync (GoaOAuth2Provider  *provider,
       parser = json_parser_new ();
       if (!json_parser_load_from_data (parser, payload, payload_length, &tokens_error))
         {
-          goa_warning ("json_parser_load_from_data() failed: %s (%s, %d)",
-                       tokens_error->message,
-                       g_quark_to_string (tokens_error->domain),
-                       tokens_error->code);
+          g_warning ("json_parser_load_from_data() failed: %s (%s, %d)",
+                     tokens_error->message,
+                     g_quark_to_string (tokens_error->domain),
+                     tokens_error->code);
           g_set_error (error,
                        GOA_ERROR,
                        GOA_ERROR_FAILED,
@@ -764,7 +763,7 @@ get_tokens_sync (GoaOAuth2Provider  *provider,
       ret_access_token = g_strdup (json_object_get_string_member (object, "access_token"));
       if (ret_access_token == NULL)
         {
-          goa_warning ("Did not find access_token in JSON data");
+          g_warning ("Did not find access_token in JSON data");
           g_set_error (error,
                        GOA_ERROR,
                        GOA_ERROR_FAILED,
@@ -1624,7 +1623,7 @@ goa_oauth2_provider_get_access_token_sync (GoaOAuth2Provider  *provider,
   /* if we can't refresh the token, just return it no matter what */
   if (refresh_token == NULL)
     {
-      goa_debug ("Returning locally cached credentials that cannot be refreshed");
+      g_debug ("Returning locally cached credentials that cannot be refreshed");
       success = TRUE;
       goto out;
     }
@@ -1635,12 +1634,12 @@ goa_oauth2_provider_get_access_token_sync (GoaOAuth2Provider  *provider,
    */
   if (!force_refresh && access_token_expires_in > 10*60)
     {
-      goa_debug ("Returning locally cached credentials (expires in %d seconds)", access_token_expires_in);
+      g_debug ("Returning locally cached credentials (expires in %d seconds)", access_token_expires_in);
       success = TRUE;
       goto out;
     }
 
-  goa_debug ("Refreshing locally cached credentials (expires in %d seconds, force_refresh=%d)", access_token_expires_in, force_refresh);
+  g_debug ("Refreshing locally cached credentials (expires in %d seconds, force_refresh=%d)", access_token_expires_in, force_refresh);
 
   /* Otherwise, refresh it */
   old_refresh_token = refresh_token; refresh_token = NULL;

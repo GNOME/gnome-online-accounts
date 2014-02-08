@@ -25,7 +25,6 @@
 #include <rest/rest-proxy.h>
 #include <json-glib/json-glib.h>
 
-#include "goalogging.h"
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goaoauth2provider.h"
@@ -225,10 +224,10 @@ get_identity_sync (GoaOAuth2Provider  *provider,
                                    rest_proxy_call_get_payload_length (call),
                                    &identity_error))
     {
-      goa_warning ("json_parser_load_from_data() failed: %s (%s, %d)",
-                   identity_error->message,
-                   g_quark_to_string (identity_error->domain),
-                   identity_error->code);
+      g_warning ("json_parser_load_from_data() failed: %s (%s, %d)",
+                 identity_error->message,
+                 g_quark_to_string (identity_error->domain),
+                 identity_error->code);
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
@@ -240,7 +239,7 @@ get_identity_sync (GoaOAuth2Provider  *provider,
   id = g_strdup (json_object_get_string_member (json_object, "id"));
   if (id == NULL)
     {
-      goa_warning ("Did not find id in JSON data");
+      g_warning ("Did not find id in JSON data");
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
@@ -250,7 +249,7 @@ get_identity_sync (GoaOAuth2Provider  *provider,
   presentation_identity = g_strdup (json_object_get_string_member (json_object, "email"));
   if (presentation_identity == NULL)
     {
-      goa_warning ("Did not find email in JSON data");
+      g_warning ("Did not find email in JSON data");
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,

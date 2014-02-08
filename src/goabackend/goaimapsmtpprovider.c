@@ -26,7 +26,6 @@
 #include "goaimapauthlogin.h"
 #include "goamailclient.h"
 #include "goaimapsmtpprovider.h"
-#include "goalogging.h"
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goasmtpauth.h"

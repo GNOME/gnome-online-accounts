@@ -31,7 +31,6 @@
 #include <libsoup/soup.h>
 #include <libxml/xmlIO.h>
 
-#include "goalogging.h"
 #include "goaewsclient.h"
 #include "goautils.h"
 
