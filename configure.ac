@@ -337,7 +337,7 @@ PKG_CHECK_MODULES(TP, telepathy-glib)
 AC_ARG_ENABLE([pocket], [AS_HELP_STRING([--enable-pocket],
                                               [Enable Pocket provider])],
                                               [],
-                                              [enable_pocket=no])
+                                              [enable_pocket=yes])
 AC_ARG_WITH(pocket-client-id,
             [AS_HELP_STRING([--with-pocket-client-id],
                             [Pocket OAuth 2.0 client id])],
