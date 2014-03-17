@@ -653,9 +653,10 @@ verify_identity (GoaKerberosIdentity  *self,
                                       error_code,
                                       _("Could not sift through identity "
                                         "credentials in cache: %k"));
-      goto out;
+      goto end_sequence;
     }
 
+ end_sequence:
   error_code = krb5_cc_end_seq_get (self->priv->kerberos_context,
                                     self->priv->credentials_cache,
                                     &cursor);
