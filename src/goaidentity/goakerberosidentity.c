@@ -635,6 +635,8 @@ verify_identity (GoaKerberosIdentity  *self,
             verification_level = VERIFICATION_LEVEL_EXISTS;
         }
 
+      krb5_free_cred_contents (self->priv->kerberos_context, &credentials);
+
       error_code = krb5_cc_next_cred (self->priv->kerberos_context,
                                       self->priv->credentials_cache,
                                       &cursor,
