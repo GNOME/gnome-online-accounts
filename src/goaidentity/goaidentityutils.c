@@ -176,7 +176,7 @@ goa_identity_utils_register_error_domain (GQuark error_domain,
                                           GType  error_enum)
 {
   const char *error_domain_string;
-  char *type_name;
+  char *type_name = NULL;
   GType type;
   GTypeClass *type_class;
   GEnumClass *enum_class;
@@ -190,7 +190,7 @@ goa_identity_utils_register_error_domain (GQuark error_domain,
   if (type_class == NULL)
     {
       g_warning ("GoaIdentityUtils: Could not identity type %s", type_name);
-      return;
+      goto out;
     }
 
   enum_class = G_ENUM_CLASS (type_class);
@@ -212,4 +212,7 @@ goa_identity_utils_register_error_domain (GQuark error_domain,
     }
 
   g_type_class_unref (type_class);
+
+ out:
+  g_free (type_name);
 }
