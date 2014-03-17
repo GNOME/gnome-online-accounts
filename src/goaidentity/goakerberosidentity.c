@@ -1406,6 +1406,9 @@ goa_kerberos_identity_renew (GoaKerberosIdentity *self, GError **error)
 
   goa_debug ("GoaKerberosIdentity: identity %s renewed", name);
   renewed = TRUE;
+
+  krb5_free_principal (self->priv->kerberos_context, principal);
+
 out:
   g_free (name);
 
