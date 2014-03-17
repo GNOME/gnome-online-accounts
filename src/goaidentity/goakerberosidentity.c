@@ -859,6 +859,7 @@ reset_alarms (GoaKerberosIdentity *self)
   now = g_date_time_new_now_local ();
   expiration_time = g_date_time_new_from_unix_local (self->priv->expiration_time);
   time_span_until_expiration = g_date_time_difference (expiration_time, now);
+  g_date_time_unref (now);
 
   /* Let the user reauthenticate 10 min before expiration */
   expiring_time = g_date_time_add_minutes (expiration_time, -10);
