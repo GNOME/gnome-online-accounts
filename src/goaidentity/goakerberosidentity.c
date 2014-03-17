@@ -1391,8 +1391,7 @@ goa_kerberos_identity_renew (GoaKerberosIdentity *self, GError **error)
                                       _
                                       ("Could not get new credentials to renew identity %s: %k"),
                                       name);
-      krb5_free_principal (self->priv->kerberos_context, principal);
-      goto out;
+      goto free_principal;
     }
 
   if (!goa_kerberos_identity_update_credentials (self,
@@ -1400,13 +1399,13 @@ goa_kerberos_identity_renew (GoaKerberosIdentity *self, GError **error)
                                                  &new_credentials,
                                                  error))
     {
-      krb5_free_principal (self->priv->kerberos_context, principal);
-      goto out;
+      goto free_principal;
     }
 
   goa_debug ("GoaKerberosIdentity: identity %s renewed", name);
   renewed = TRUE;
 
+free_principal:
   krb5_free_principal (self->priv->kerberos_context, principal);
 
 out:
