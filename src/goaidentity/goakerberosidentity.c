@@ -787,7 +787,6 @@ set_alarm (GoaKerberosIdentity  *self,
 
       new_cancellable = g_cancellable_new ();
       goa_alarm_set_time (alarm, alarm_time, new_cancellable);
-      g_date_time_unref (alarm_time);
 
       g_clear_object (cancellable);
       *cancellable = new_cancellable;
@@ -882,6 +881,9 @@ reset_alarms (GoaKerberosIdentity *self)
              self->priv->expiration_alarm,
              expiration_time, &self->priv->expiration_alarm_cancellable);
 
+  g_date_time_unref (renewal_time);
+  g_date_time_unref (expiring_time);
+  g_date_time_unref (expiration_time);
   connect_alarm_signals (self);
 }
 
