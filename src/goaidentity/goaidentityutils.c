@@ -182,7 +182,7 @@ goa_identity_utils_register_error_domain (GQuark error_domain,
   char *type_name = NULL;
   GType type;
   GTypeClass *type_class = NULL;
-  GEnumClass *enum_class;
+  const GEnumClass *enum_class;
   guint i;
 
   error_domain_string = g_quark_to_string (error_domain);
