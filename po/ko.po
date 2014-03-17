@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-03-11 20:01+0000\n"
-"PO-Revision-Date: 2014-03-12 13:55+0900\n"
+"POT-Creation-Date: 2014-03-17 15:03+0000\n"
+"PO-Revision-Date: 2014-03-16 22:44+0900\n"
 "Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>\n"
 "Language-Team: Korean <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -29,19 +29,19 @@ msgstr "제공자 정보를 찾을 수 없습니다: %s"
 #. TODO: more specific
 #: ../src/daemon/goadaemon.c:1019
 msgid "ProviderType property is not set for account"
-msgstr "계정에 ProviderType 속성을 설정하지 않았습니다"
+msgstr "계정에 ProviderType 속성에 값이 없습니다"
 
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:231 ../src/goabackend/goahttpclient.c:172
 #, c-format
 msgid "Code: %u — Unexpected response from server"
-msgstr "코드: %u — 서버에서 예상치 못한 응답이 왔습니다"
+msgstr "코드: %u — 서버에서 예상치 못한 응답"
 
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:247
 #, c-format
 msgid "Failed to parse autodiscover response XML"
-msgstr "자동 발견 응답 XML을 해석하는데 실패했습니다"
+msgstr "자동 발견 응답 XML 해석에 실패했습니다"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
@@ -49,7 +49,7 @@ msgstr "자동 발견 응답 XML을 해석하는데 실패했습니다"
 #: ../src/goabackend/goaewsclient.c:288
 #, c-format
 msgid "Failed to find ‘%s’ element"
-msgstr "'%s' 요소를 찾는데 실패했습니다"
+msgstr "‘%s’ 요소 찾기에 실패했습니다"
 
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:305
@@ -69,7 +69,7 @@ msgstr "마이크로소프트 익스체인지"
 #: ../src/goabackend/goaowncloudprovider.c:1187
 #, c-format
 msgid "Did not find password with identity ‘%s’ in credentials"
-msgstr "자격 정보에서 `%s' 신원 정보의 암호를 찾지 못했습니다"
+msgstr "자격 정보에 ‘%s’ 신원 정보의 암호가 없습니다"
 
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
@@ -79,7 +79,7 @@ msgstr "자격 정보에서 `%s' 신원 정보의 암호를 찾지 못했습니�
 #: ../src/goabackend/goaowncloudprovider.c:423
 #, c-format
 msgid "Invalid password with username ‘%s’ (%s, %d): "
-msgstr "`%s' 사용자 이름의 잘못된 암호입니다(%s, %d):"
+msgstr "‘%s’ 사용자 이름의 잘못된 암호입니다(%s, %d):"
 
 #: ../src/goabackend/goaexchangeprovider.c:495
 #: ../src/goabackend/goaimapsmtpprovider.c:719
@@ -330,7 +330,7 @@ msgstr "IMAP과 SMTP"
 #: ../src/goabackend/goaimapsmtpprovider.c:434
 #, c-format
 msgid "Did not find %s with identity ‘%s’ in credentials"
-msgstr "인증에서 `%2$s' 신원 정보의 %1$s을(를) 찾지 못했습니다"
+msgstr "인증에서 ‘%2$s’ 신원 정보의 %1$s을(를) 찾지 못했습니다"
 
 #. Translators: the first %s is a field name. The
 #. * second %s is the IMAP
@@ -346,7 +346,7 @@ msgstr "인증에서 `%2$s' 신원 정보의 %1$s을(를) 찾지 못했습니다
 #: ../src/goabackend/goaimapsmtpprovider.c:467
 #, c-format
 msgid "Invalid %s with username ‘%s’ (%s, %d): "
-msgstr "`%2$s' 사용자 이름에 대한 잘못된 %1$s입니다(%3$s, %4$d):"
+msgstr "‘%2$s’ 사용자 이름의 잘못된 %1$s입니다(%3$s, %4$d):"
 
 #. Translators: the following four strings are used to show a
 #. * combo box similar to the one in the evolution module.
@@ -392,12 +392,12 @@ msgstr "전달(_F)"
 #: ../src/goabackend/goaimapsmtpprovider.c:1041
 #: ../src/goabackend/goaimapsmtpprovider.c:1374
 msgid "Error connecting to IMAP server"
-msgstr "IMAP 서버에 연결하는 중 오류가 발생했습니다"
+msgstr "IMAP 서버에 연결 중 오류가 발생했습니다"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:1134
 #: ../src/goabackend/goaimapsmtpprovider.c:1448
 msgid "Error connecting to SMTP server"
-msgstr "SMTP 서버에 연결하는 중 오류가 발생했습니다"
+msgstr "SMTP 서버에 연결 중 오류가 발생했습니다"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:1547
 msgid "E-mail"
@@ -428,12 +428,12 @@ msgstr "인증 서비스에서 잘못된 키를 반환했습니다"
 #: ../src/goabackend/goakerberosprovider.c:723
 #, c-format
 msgid "Could not find saved credentials for principal ‘%s’ in keyring"
-msgstr "키 모음에서 '%s' 본인에 대해 저장한 인증을 찾을 수 없습니다"
+msgstr "키 모음에 저장한 ‘%s’ 본인의 자격 정보를 찾을 수 없습니다"
 
 #: ../src/goabackend/goakerberosprovider.c:736
 #, c-format
 msgid "Did not find password for principal ‘%s’ in credentials"
-msgstr "인증에서 '%s' 본인의 암호를 찾을 수 없습니다"
+msgstr "자격 정보에 '%s' 본인의 암호를 찾을 수 없습니다"
 
 #: ../src/goabackend/goakerberosprovider.c:1120
 msgid "_Domain"
@@ -444,7 +444,7 @@ msgid "Enterprise domain or realm name"
 msgstr "기업 도메인 또는 영역 이름"
 
 #: ../src/goabackend/goakerberosprovider.c:1353
-#: ../src/goaidentity/goaidentityservice.c:1111
+#: ../src/goaidentity/goaidentityservice.c:1112
 msgid "Log In to Realm"
 msgstr "영역 로그인"
 
@@ -591,7 +591,7 @@ msgstr "다음에 읽음(_R)"
 #: ../src/goabackend/goaprovider.c:684
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
-msgstr "유형 %s에 ensure_credentials_sync가 구현되지 않았습니다"
+msgstr "%s 형식에 ensure_credentials_sync를 구현하지 않았습니다"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauth.c:178
@@ -783,7 +783,7 @@ msgstr "비밀 키를 교환하기 전에 초기 비밀 키를 넘겼습니다"
 msgid "Initial secret key is invalid"
 msgstr "초기 비밀 키가 잘못되었습니다"
 
-#: ../src/goaidentity/goaidentityservice.c:1116
+#: ../src/goaidentity/goaidentityservice.c:1117
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "%s 네트워크 영역에 접속하려면 약간의 정보가 더 필요합니다."
@@ -798,46 +798,46 @@ msgstr "자격 정보 캐시에서 신원 정보를 찾을 수 없습니다: %k"
 msgid "Could not find identity credentials in cache: %k"
 msgstr "캐시에서 신원 자격 정보를 찾을 수 없습니다: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:649
+#: ../src/goaidentity/goakerberosidentity.c:651
 msgid "Could not sift through identity credentials in cache: %k"
 msgstr "캐시에서 신원 자격 정보로 검토할 수 없습니다: %s"
 
-#: ../src/goaidentity/goakerberosidentity.c:666
+#: ../src/goaidentity/goakerberosidentity.c:669
 msgid "Could not finish up sifting through identity credentials in cache: %k"
 msgstr "캐시에서의 신원 자격 정보로 검토를 끝낼 수 없습니다: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:950
+#: ../src/goaidentity/goakerberosidentity.c:956
 #, c-format
 msgid "No associated identification found"
 msgstr "관련된 신분 증명을 찾지 못했습니다"
 
-#: ../src/goaidentity/goakerberosidentity.c:1031
+#: ../src/goaidentity/goakerberosidentity.c:1037
 msgid "Could not create credential cache: %k"
 msgstr "자격 정보 캐시를 만들 수 없습니다: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1065
+#: ../src/goaidentity/goakerberosidentity.c:1071
 msgid "Could not initialize credentials cache: %k"
 msgstr "자격 정보 캐시를 초기화 할 수 없습니다: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1082
+#: ../src/goaidentity/goakerberosidentity.c:1088
 msgid "Could not store new credentials in credentials cache: %k"
 msgstr "자격 정보 캐시에 새로운 자격 정보를 저장할 수 없습니다: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1357
+#: ../src/goaidentity/goakerberosidentity.c:1363
 #, c-format
 msgid "Could not renew identity: Not signed in"
 msgstr "신원 정보를 새로 고칠 수 없습니다: 접속하지 않았습니다"
 
-#: ../src/goaidentity/goakerberosidentity.c:1369
+#: ../src/goaidentity/goakerberosidentity.c:1375
 msgid "Could not renew identity: %k"
 msgstr "신원 정보를 새로 고칠 수 없습니다: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1386
+#: ../src/goaidentity/goakerberosidentity.c:1392
 msgid "Could not get new credentials to renew identity %s: %k"
 msgstr ""
 "%s 신원 정보를 새로 고칠 때 활용할 새 자격 정보를 가져올 수 없습니다: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1426
+#: ../src/goaidentity/goakerberosidentity.c:1434
 msgid "Could not erase identity: %k"
 msgstr "신원 정보를 지울 수 없습니다: %k"
 
