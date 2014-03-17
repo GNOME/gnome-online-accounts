@@ -878,7 +878,7 @@ add_temporary_account (GoaIdentityService *self,
 {
   char               *realm;
   const char         *principal;
-  const char         *principal_for_display;
+  char               *principal_for_display;
   GSimpleAsyncResult *operation_result;
   GVariantBuilder     credentials;
   GVariantBuilder     details;
@@ -934,6 +934,7 @@ add_temporary_account (GoaIdentityService *self,
                                 on_account_added,
                                 operation_result);
   g_free (realm);
+  g_free (principal_for_display);
 }
 
 static void
