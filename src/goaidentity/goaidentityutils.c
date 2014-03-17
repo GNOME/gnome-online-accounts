@@ -178,7 +178,7 @@ goa_identity_utils_register_error_domain (GQuark error_domain,
   const char *error_domain_string;
   char *type_name = NULL;
   GType type;
-  GTypeClass *type_class;
+  GTypeClass *type_class = NULL;
   GEnumClass *enum_class;
   guint i;
 
@@ -211,8 +211,7 @@ goa_identity_utils_register_error_domain (GQuark error_domain,
       g_free (dbus_error_string);
     }
 
-  g_type_class_unref (type_class);
-
  out:
+  g_clear_pointer (&type_class, g_type_class_unref);
   g_free (type_name);
 }
