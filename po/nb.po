@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts 3.11.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-05 06:43+0100\n"
-"PO-Revision-Date: 2014-03-05 06:44+0100\n"
+"POT-Creation-Date: 2014-03-18 18:27+0100\n"
+"PO-Revision-Date: 2014-03-18 18:28+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: \n"
@@ -222,13 +222,12 @@ msgstr "Facebook"
 #: ../src/goabackend/goafacebookprovider.c:215
 #: ../src/goabackend/goaflickrprovider.c:186
 #: ../src/goabackend/goagoogleprovider.c:214
-#: ../src/goabackend/goatwitterprovider.c:163
 #: ../src/goabackend/goawindowsliveprovider.c:194
 #: ../src/goabackend/goayahooprovider.c:184
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
-msgstr ""
+msgstr "Forventet status 200 ved forespørsel om din identitet, men fikk status %d (%s)"
 
 #: ../src/goabackend/goafacebookprovider.c:234
 #: ../src/goabackend/goafacebookprovider.c:246
@@ -243,9 +242,6 @@ msgstr ""
 #: ../src/goabackend/goaoauth2provider.c:728
 #: ../src/goabackend/goaoauth2provider.c:758
 #: ../src/goabackend/goaoauth2provider.c:770
-#: ../src/goabackend/goatwitterprovider.c:182
-#: ../src/goabackend/goatwitterprovider.c:194
-#: ../src/goabackend/goatwitterprovider.c:204
 #: ../src/goabackend/goawindowsliveprovider.c:213
 #: ../src/goabackend/goawindowsliveprovider.c:225
 #: ../src/goabackend/goawindowsliveprovider.c:237
@@ -444,7 +440,7 @@ msgid "Enterprise domain or realm name"
 msgstr "Bedriftsdomene eller områdenavn"
 
 #: ../src/goabackend/goakerberosprovider.c:1353
-#: ../src/goaidentity/goaidentityservice.c:1111
+#: ../src/goaidentity/goaidentityservice.c:1112
 msgid "Log In to Realm"
 msgstr "Logg inn i område"
 
@@ -588,7 +584,7 @@ msgstr "Ingen brukernavn eller tilgangstegn"
 msgid "_Read Later"
 msgstr "Les sene_re"
 
-#: ../src/goabackend/goaprovider.c:685
+#: ../src/goabackend/goaprovider.c:684
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync er ikke implementert på type %s"
@@ -674,10 +670,6 @@ msgstr "Innstillinger for tilkobling …"
 #: ../src/goabackend/goatelepathyprovider.c:926
 msgid "_Personal Details"
 msgstr "_Personlige detaljer"
-
-#: ../src/goabackend/goatwitterprovider.c:78
-msgid "Twitter"
-msgstr "Twitter"
 
 #: ../src/goabackend/goautils.c:117
 #, c-format
@@ -769,7 +761,7 @@ msgstr "Yahoo"
 #: ../src/goabackend/goayahooprovider.c:252
 #, c-format
 msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-msgstr ""
+msgstr "Forventet status 200 ved forespørsel om navn, men fikk status %d (%s)"
 
 #: ../src/goaidentity/goaalarm.c:212
 msgid "Time"
@@ -787,7 +779,7 @@ msgstr "Opprinnelig hemmelighet videresendt før utveksling av hemmelig nøkkel"
 msgid "Initial secret key is invalid"
 msgstr "Opprinnelig hemmelig nøkkel er ugyldig"
 
-#: ../src/goaidentity/goaidentityservice.c:1116
+#: ../src/goaidentity/goaidentityservice.c:1117
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "Nettverksområde %s trenger informasjon for å logge deg inn."
@@ -802,49 +794,49 @@ msgstr "Fant ikke identiteten i buffer for påloggingsinformasjon: %k"
 msgid "Could not find identity credentials in cache: %k"
 msgstr "Fant ikke påloggingsinformasjon for identiteten i buffer: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:649
+#: ../src/goaidentity/goakerberosidentity.c:651
 msgid "Could not sift through identity credentials in cache: %k"
 msgstr ""
 "Kunne ikke se se gjennom påloggingsinformasjon for identitet i buffer: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:666
+#: ../src/goaidentity/goakerberosidentity.c:669
 msgid "Could not finish up sifting through identity credentials in cache: %k"
 msgstr ""
 "Kunne ikke sluttføre gjennomgang av påloggingsinformasjon for identitet i "
 "buffer: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:950
+#: ../src/goaidentity/goakerberosidentity.c:956
 #, c-format
 msgid "No associated identification found"
 msgstr "Ingen assosiert identifikasjon funnet"
 
-#: ../src/goaidentity/goakerberosidentity.c:1031
+#: ../src/goaidentity/goakerberosidentity.c:1037
 msgid "Could not create credential cache: %k"
 msgstr "Kunne ikke lage buffer for påloggingsinformasjon: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1065
+#: ../src/goaidentity/goakerberosidentity.c:1071
 msgid "Could not initialize credentials cache: %k"
 msgstr "Kunne ikke initiere buffer for påloggingsinformasjon: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1082
+#: ../src/goaidentity/goakerberosidentity.c:1088
 msgid "Could not store new credentials in credentials cache: %k"
 msgstr "Klarte ikke å lagre ny påloggingsinformasjon i buffer: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1357
+#: ../src/goaidentity/goakerberosidentity.c:1363
 #, c-format
 msgid "Could not renew identity: Not signed in"
 msgstr "Kunne ikke fornye identitet: Ikke logget inn"
 
-#: ../src/goaidentity/goakerberosidentity.c:1369
+#: ../src/goaidentity/goakerberosidentity.c:1375
 msgid "Could not renew identity: %k"
 msgstr "Kunne ikke fornye identitet: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1386
+#: ../src/goaidentity/goakerberosidentity.c:1392
 msgid "Could not get new credentials to renew identity %s: %k"
 msgstr ""
 "Kunne ikke hente ny påloggingsinformasjon for å fornye identitet %s: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1426
+#: ../src/goaidentity/goakerberosidentity.c:1434
 msgid "Could not erase identity: %k"
 msgstr "Kunne ikke slette identitet: %k"
 
