@@ -14,10 +14,6 @@
  *
  * You should have received a copy of the GNU Lesser General
  * Public License along with this library; if not, see <http://www.gnu.org/licenses/>.
- *
- * Author: Ray Strode <rstrode@redhat.com>
- * Based on code from Debarshi Ray <debarshir@gnome.org>
- *                    Stef Walter <stefw@gnome.org>
  */
 
 #include "config.h"

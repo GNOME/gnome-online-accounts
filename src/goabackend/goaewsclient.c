@@ -14,8 +14,6 @@
  *
  * You should have received a copy of the GNU Lesser General
  * Public License along with this library; if not, see <http://www.gnu.org/licenses/>.
- *
- * Author: Debarshi Ray <debarshir@gnome.org>
  */
 
 /* Based on code by the Evolution team.
