@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2012, 2013 Red Hat, Inc.
+ * Copyright (C) 2011, 2012, 2013, 2014 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -107,6 +107,7 @@ build_authorization_uri (GoaOAuth2Provider  *provider,
 
   uri = g_strdup_printf ("%s"
                           "?response_type=token"
+                          "&display=popup"
                           "&redirect_uri=%s"
                           "&client_id=%s"
                           "&scope=%s",
@@ -120,7 +121,7 @@ build_authorization_uri (GoaOAuth2Provider  *provider,
 static const gchar *
 get_authorization_uri (GoaOAuth2Provider *provider)
 {
-  return "https://m.facebook.com/dialog/oauth";
+  return "https://www.facebook.com/dialog/oauth";
 }
 
 static const gchar *
