@@ -7,14 +7,15 @@
 # Noriko Mizumoto <noriko@fedoraproject.org>, 2012.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2012.
 # Jiro Matsuzawa <jmatsuzawa@gnome.org>, 2013.
+# Ikuya Awashiro <ikuya@fruitsbasket.info>, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-03-17 14:05+0000\n"
-"PO-Revision-Date: 2013-10-15 03:07+0900\n"
-"Last-Translator: Jiro Matsuzawa <jmatsuzawa@gnome.org>\n"
+"POT-Creation-Date: 2014-04-01 09:01+0000\n"
+"PO-Revision-Date: 2014-03-30 16:25+0900\n"
+"Last-Translator: Ikuya Awashiro <ikuya@fruitsbasket.info>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -114,10 +115,8 @@ msgstr "サーバー(_S)"
 #: ../src/goabackend/goaexchangeprovider.c:521
 #: ../src/goabackend/goakerberosprovider.c:1133
 #: ../src/goabackend/goaowncloudprovider.c:661
-#, fuzzy
-#| msgid "Connecting…"
 msgid "C_onnect"
-msgstr "接続中…"
+msgstr "接続(_O)"
 
 #: ../src/goabackend/goaexchangeprovider.c:541
 #: ../src/goabackend/goaimapsmtpprovider.c:791
@@ -188,12 +187,12 @@ msgstr "Microsoft Exchange サーバーへの接続に失敗しました"
 #: ../src/goabackend/goaowncloudprovider.c:965
 #: ../src/goabackend/goatelepathyprovider.c:673
 msgid "_Cancel"
-msgstr ""
+msgstr "キャンセル(_C)"
 
 #. Translators: This is a label for a series of
 #. * options switches. For example: “Use for Mail”.
 #: ../src/goabackend/goaexchangeprovider.c:943
-#: ../src/goabackend/goafacebookprovider.c:433
+#: ../src/goabackend/goafacebookprovider.c:434
 #: ../src/goabackend/goaflickrprovider.c:424
 #: ../src/goabackend/goagoogleprovider.c:563
 #: ../src/goabackend/goakerberosprovider.c:1727
@@ -227,7 +226,7 @@ msgid "Facebook"
 msgstr "Facebook"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:215
+#: ../src/goabackend/goafacebookprovider.c:216
 #: ../src/goabackend/goaflickrprovider.c:186
 #: ../src/goabackend/goagoogleprovider.c:214
 #: ../src/goabackend/goawindowsliveprovider.c:194
@@ -236,9 +235,9 @@ msgstr "Facebook"
 msgid "Expected status 200 when requesting your identity, instead got status %d (%s)"
 msgstr "識別子を要求した時に返されるステータスは 200 を期待していましたが、代わりに受け取ったステータスは %d (%s) でした"
 
-#: ../src/goabackend/goafacebookprovider.c:234
-#: ../src/goabackend/goafacebookprovider.c:246
-#: ../src/goabackend/goafacebookprovider.c:256
+#: ../src/goabackend/goafacebookprovider.c:235
+#: ../src/goabackend/goafacebookprovider.c:247
+#: ../src/goabackend/goafacebookprovider.c:257
 #: ../src/goabackend/goaflickrprovider.c:205
 #: ../src/goabackend/goaflickrprovider.c:217
 #: ../src/goabackend/goaflickrprovider.c:227
@@ -262,14 +261,14 @@ msgstr "識別子を要求した時に返されるステータスは 200 を期�
 msgid "Could not parse response"
 msgstr "応答を解析できませんでした"
 
-#: ../src/goabackend/goafacebookprovider.c:435
+#: ../src/goabackend/goafacebookprovider.c:436
 #: ../src/goabackend/goagoogleprovider.c:580
 #: ../src/goabackend/goatelepathyprovider.c:917
 #: ../src/goabackend/goawindowsliveprovider.c:460
 msgid "C_hat"
 msgstr "チャット(_H)"
 
-#: ../src/goabackend/goafacebookprovider.c:440
+#: ../src/goabackend/goafacebookprovider.c:441
 #: ../src/goabackend/goaflickrprovider.c:426
 msgid "_Photos"
 msgstr "写真(_P)"
@@ -295,7 +294,7 @@ msgstr "ドキュメント(_D)"
 
 #: ../src/goabackend/goagoogleprovider.c:590
 msgid "_Printers"
-msgstr ""
+msgstr "プリンター(_P)"
 
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:97 ../src/goabackend/goasmtpauth.c:163
@@ -388,7 +387,7 @@ msgstr "SMTP サーバー(_S)"
 #: ../src/goabackend/goaimapsmtpprovider.c:1057
 #: ../src/goabackend/goaimapsmtpprovider.c:1391
 msgid "_Forward"
-msgstr ""
+msgstr "次へ(_F)"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:1041
 #: ../src/goabackend/goaimapsmtpprovider.c:1374
@@ -478,16 +477,13 @@ msgid "Expected status 200 when requesting access token, instead got status %d (
 msgstr "token を要求した時に返されるステータスは 200 を期待していましたが、代わりに受け取ったステータスは %d (%s) でした"
 
 #: ../src/goabackend/goaoauth2provider.c:961
-#, fuzzy
-#| msgid "Authorization response was ‘%s’"
 msgid "Authorization response: "
-msgstr "認証の応答は‘%s’でした"
+msgstr "認証の応答:"
 
 #: ../src/goabackend/goaoauth2provider.c:1031
-#, fuzzy, c-format
-#| msgid "Authorization response was ‘%s’"
+#, c-format
 msgid "Authorization response: %s"
-msgstr "認証の応答は‘%s’でした"
+msgstr "認証の応答: %s"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
 #: ../src/goabackend/goaoauth2provider.c:1133
@@ -499,7 +495,7 @@ msgstr "<a href=\"%s\">認証のページ</a>で得られた認証コードを�
 #: ../src/goabackend/goaoauthprovider.c:992
 #: ../src/goabackend/goatelepathyprovider.c:674
 msgid "_OK"
-msgstr ""
+msgstr "_OK"
 
 #: ../src/goabackend/goaoauth2provider.c:1233
 #: ../src/goabackend/goaoauthprovider.c:1072
@@ -574,17 +570,17 @@ msgstr "ファイル(_F)"
 
 #: ../src/goabackend/goapocketprovider.c:86
 msgid "Pocket"
-msgstr ""
+msgstr "Pocket"
 
 #. TODO: more specific
 #: ../src/goabackend/goapocketprovider.c:235
 #, c-format
 msgid "No username or access_token"
-msgstr ""
+msgstr "ユーザー名かアクセストークンがありません(_T)"
 
 #: ../src/goabackend/goapocketprovider.c:427
 msgid "_Read Later"
-msgstr ""
+msgstr "あとで読む(_R)"
 
 #: ../src/goabackend/goaprovider.c:684
 #, c-format
@@ -611,10 +607,9 @@ msgstr "メールアドレスの解析に失敗しました"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauth.c:266
-#, fuzzy, c-format
-#| msgid "Cannot do SMTP PLAIN without a domain"
+#, c-format
 msgid "Cannot do SMTP authentication without a domain"
-msgstr "ドメインなしで SMTP PLAIN 認証はできません"
+msgstr "ドメインなしで SMTP 認証はできません"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauth.c:304
@@ -624,16 +619,14 @@ msgstr "資格情報に SMTP パスワードが見つかりませんでした"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauth.c:315
-#, fuzzy, c-format
-#| msgid "Cannot do SMTP PLAIN without a password"
+#, c-format
 msgid "Cannot do SMTP authentication without a password"
-msgstr "パスワードなしで SMTP PLAIN 認証はできません"
+msgstr "パスワードなしで SMTP 認証はできません"
 
 #: ../src/goabackend/goasmtpauth.c:677
-#, fuzzy, c-format
-#| msgid "Authentication failed"
+#, c-format
 msgid "Unknown authentication mechanism"
-msgstr "認証失敗"
+msgstr "不明な認証メカニズム"
 
 #: ../src/goabackend/goatelepathyprovider.c:182
 #, c-format
