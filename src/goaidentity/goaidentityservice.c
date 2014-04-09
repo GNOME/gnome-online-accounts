@@ -1593,7 +1593,7 @@ on_identities_listed (GoaIdentityManager *manager,
           g_warning ("Could not list identities: %s", error->message);
           g_error_free (error);
         }
-      return;
+      goto out;
     }
 
   for (node = identities; node != NULL; node = node->next)
@@ -1613,6 +1613,9 @@ on_identities_listed (GoaIdentityManager *manager,
       else
         g_object_unref (object);
     }
+
+ out:
+  g_object_unref (self);
 }
 
 static void
@@ -1675,7 +1678,7 @@ on_got_client (GoaClient          *client,
   if (self->priv->client == NULL)
     {
       g_warning ("Could not create client: %s", error->message);
-      return;
+      goto out;
     }
 
   self->priv->accounts_manager = goa_client_get_manager (client);
@@ -1685,16 +1688,19 @@ on_got_client (GoaClient          *client,
   if (self->priv->identity_manager == NULL)
     {
       g_warning ("Could not create identity manager: %s", error->message);
-      return;
+      goto out;
     }
 
   goa_identity_manager_list_identities (self->priv->identity_manager,
                                         NULL,
                                         (GAsyncReadyCallback)
                                         on_identities_listed,
-                                        self);
+                                        g_object_ref (self));
 
   ensure_credentials_for_accounts (self);
+
+ out:
+  g_object_unref (self);
 }
 
 static void
@@ -1714,7 +1720,7 @@ on_session_bus_acquired (GDBusConnection    *connection,
     goa_client_new (NULL,
                     (GAsyncReadyCallback)
                     on_got_client,
-                    self);
+                    g_object_ref (self));
   }
 }
 
