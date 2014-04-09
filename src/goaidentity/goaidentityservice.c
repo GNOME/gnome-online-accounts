@@ -49,9 +49,6 @@ struct _GoaIdentityServicePrivate
 
   GoaIdentityManager       *identity_manager;
 
-  guint                     realmd_watch;
-  GCancellable             *cancellable;
-
   GHashTable               *watched_client_connections;
   GHashTable               *key_holders;
   GHashTable               *pending_temporary_account_results;
@@ -1755,8 +1752,6 @@ goa_identity_service_activate (GoaIdentityService   *self,
 
   goa_debug ("GoaIdentityService: Activating identity service");
 
-  self->priv->cancellable = g_cancellable_new ();
-
   self->priv->object_manager_server =
     g_dbus_object_manager_server_new ("/org/gnome/Identity");
 
@@ -1786,9 +1781,6 @@ goa_identity_service_deactivate (GoaIdentityService *self)
 {
   goa_debug ("GoaIdentityService: Deactivating identity service");
 
-  if (self->priv->realmd_watch == 0)
-    g_bus_unwatch_name (self->priv->realmd_watch);
-
   if (self->priv->identity_manager != NULL)
     {
       g_signal_handlers_disconnect_by_func (self, on_identity_needs_renewal, self);
@@ -1800,7 +1792,6 @@ goa_identity_service_deactivate (GoaIdentityService *self)
   g_clear_object (&self->priv->object_manager_server);
   g_clear_object (&self->priv->connection);
   g_clear_object (&self->priv->client);
-  g_clear_object (&self->priv->cancellable);
 }
 
 static void
