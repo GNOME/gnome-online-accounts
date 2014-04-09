@@ -1672,7 +1672,6 @@ goa_kerberos_identity_manager_new (GCancellable * cancellable, GError ** error)
                                  (gpointer *) &
                                  goa_kerberos_identity_manager_singleton);
 
-      error = NULL;
       if (!g_initable_init (G_INITABLE (object), cancellable, error))
         {
           g_object_unref (object);
