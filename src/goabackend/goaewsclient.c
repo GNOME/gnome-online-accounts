@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012, 2013 Red Hat, Inc.
+ * Copyright (C) 2012, 2013, 2014 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -441,10 +441,10 @@ goa_ews_client_autodiscover (GoaEwsClient        *client,
   xmlOutputBuffer *buf;
 
   g_return_if_fail (GOA_IS_EWS_CLIENT (client));
-  g_return_if_fail (email != NULL || email[0] != '\0');
-  g_return_if_fail (password != NULL || password[0] != '\0');
-  g_return_if_fail (username != NULL || username[0] != '\0');
-  g_return_if_fail (server != NULL || server[0] != '\0');
+  g_return_if_fail (email != NULL && email[0] != '\0');
+  g_return_if_fail (password != NULL && password[0] != '\0');
+  g_return_if_fail (username != NULL && username[0] != '\0');
+  g_return_if_fail (server != NULL && server[0] != '\0');
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   doc = ews_client_create_autodiscover_xml (email);

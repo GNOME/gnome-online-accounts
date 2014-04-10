@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012, 2013 Red Hat, Inc.
+ * Copyright (C) 2012, 2013, 2014 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -215,9 +215,9 @@ goa_http_client_check (GoaHttpClient       *client,
   SoupLogger *logger;
 
   g_return_if_fail (GOA_IS_HTTP_CLIENT (client));
-  g_return_if_fail (uri != NULL || uri[0] != '\0');
-  g_return_if_fail (username != NULL || username[0] != '\0');
-  g_return_if_fail (password != NULL || password[0] != '\0');
+  g_return_if_fail (uri != NULL && uri[0] != '\0');
+  g_return_if_fail (username != NULL && username[0] != '\0');
+  g_return_if_fail (password != NULL && password[0] != '\0');
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   data = g_slice_new0 (CheckData);
