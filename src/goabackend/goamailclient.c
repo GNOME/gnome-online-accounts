@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2013 Red Hat, Inc.
+ * Copyright (C) 2011, 2013, 2014 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -380,7 +380,7 @@ goa_mail_client_check (GoaMailClient       *client,
   CheckData *data;
 
   g_return_if_fail (GOA_IS_MAIL_CLIENT (client));
-  g_return_if_fail (host_and_port != NULL || host_and_port[0] != '\0');
+  g_return_if_fail (host_and_port != NULL && host_and_port[0] != '\0');
   g_return_if_fail (GOA_IS_MAIL_AUTH (auth));
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
