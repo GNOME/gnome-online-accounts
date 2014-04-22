@@ -1,9 +1,11 @@
+-include $(INTROSPECTION_MAKEFILE)
 
 NULL =
 BUILT_SOURCES =
 CLEANFILES =
 DISTCLEANFILES =
 EXTRA_DIST =
+INTROSPECTION_GIRS =
 
 AM_CPPFLAGS = 							\
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
@@ -113,39 +115,21 @@ pkgconfig_DATA = goa-1.0.pc
 # ----------------------------------------------------------------------------------------------------
 
 if HAVE_INTROSPECTION
+Goa-1.0.gir: libgoa-1.0.la
+Goa_1_0_gir_INCLUDES = Gio-2.0
+Goa_1_0_gir_PACKAGES = glib-2.0 gobject-2.0 gio-2.0
+Goa_1_0_gir_EXPORT_PACKAGES = goa-1.0
+Goa_1_0_gir_LIBS = goa-1.0
+Goa_1_0_gir_FILES = $(libgoa_1_0_la_HEADERS) $(libgoa_1_0_la_SOURCES)
+Goa_1_0_gir_CFLAGS = $(AM_CPPFLAGS) $(libgoa_1_0_la_CFLAGS)
+Goa_1_0_gir_SCANNERFLAGS = --c-include='goa/goa.h'
+INTROSPECTION_GIRS += Goa-1.0.gir
+
 girdir = $(datadir)/gir-1.0
 gir_DATA = Goa-1.0.gir
 
 typelibsdir = $(libdir)/girepository-1.0
 typelibs_DATA = Goa-1.0.typelib
-
-Goa-1.0.gir: $(libgoa_1_0_la_SOURCES)
-	$(AM_V_GEN) $(INTROSPECTION_SCANNER) -v 				\
-		--warn-all					\
-		--namespace Goa 				\
-		--nsversion=1.0 				\
-		--include=Gio-2.0 				\
-		--library=goa-1.0	 			\
-		--output $@ 					\
-		--pkg=glib-2.0 					\
-		--pkg=gobject-2.0 				\
-		--pkg=gio-2.0 					\
-		--pkg-export=goa-1.0				\
-		--libtool="$(LIBTOOL)"				\
-		--c-include='goa/goa.h'				\
-                -I$(top_srcdir)/src	 			\
-                -I$(top_srcdir)/src/goa	 			\
-                -I$(top_builddir)/src	 			\
-                -I$(top_builddir)/src/goa 			\
-	        -DGOA_COMPILATION                   		\
-		$^						\
-		$(NULL)
-
-Goa-1.0.gir: libgoa-1.0.la $(INTROSPECTION_SCANNER) Makefile.am
-
-
-Goa-1.0.typelib: Goa-1.0.gir $(INTROSPECTION_COMPILER)
-	$(AM_V_GEN) $(INTROSPECTION_COMPILER) $< -o $@
 
 CLEANFILES += $(gir_DATA) $(typelibs_DATA)
 
