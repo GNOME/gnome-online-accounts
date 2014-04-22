@@ -3,12 +3,13 @@ NULL =
 CLEANFILES =
 EXTRA_DIST =
 
-INCLUDES = 							\
+AM_CPPFLAGS = 							\
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
 	-I$(top_builddir)/src/goa				\
 	-I$(top_srcdir)/src/goaidentity				\
 	-I$(top_builddir)/src/goaidentity			\
+	-DG_LOG_DOMAIN=\"GoaBackend\"				\
 	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\" 		\
 	-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\" 		\
 	-DPACKAGE_DATA_DIR=\""$(pkgdatadir)"\" 			\
@@ -89,10 +90,6 @@ if BUILD_KERBEROS
 libgoa_backend_1_0_la_SOURCES +=					\
 	goakerberosprovider.h		goakerberosprovider.c
 endif
-
-libgoa_backend_1_0_la_CPPFLAGS =				\
-	-DG_LOG_DOMAIN=\"GoaBackend\"				\
-	$(NULL)
 
 libgoa_backend_1_0_la_CFLAGS =					\
 	-DGOA_BACKEND_COMPILATION				\

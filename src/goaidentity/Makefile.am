@@ -3,10 +3,12 @@ BUILT_SOURCES = $(NULL)
 EXTRA_DIST = $(NULL)
 CLEANFILES= $(NULL)
 
-INCLUDES = 							\
+AM_CPPFLAGS = 							\
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
 	-I$(top_builddir)/src/goa				\
 	-I$(top_srcdir)/src/goabackend				\
+	-DG_LOG_DOMAIN=\"libgoaidentity\"			\
+	-DGOA_BACKEND_COMPILATION				\
 	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\" 		\
 	-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\" 		\
 	-DPACKAGE_DATA_DIR=\""$(pkgdatadir)"\" 			\
@@ -100,11 +102,6 @@ libgoaidentity_la_SOURCES = 					\
 	$(identity_dbus_built_sources)				\
 	$(realmd_dbus_built_sources)				\
 	$(identity_sources)					\
-	$(NULL)
-
-libgoaidentity_la_CPPFLAGS =					\
-	-DG_LOG_DOMAIN=\"libgoaidentity\"			\
-	-DGOA_BACKEND_COMPILATION				\
 	$(NULL)
 
 libgoaidentity_la_CFLAGS =					\

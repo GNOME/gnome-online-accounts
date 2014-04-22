@@ -1,10 +1,12 @@
 NULL =
 
-INCLUDES = 							\
+AM_CPPFLAGS = 							\
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
 	-I$(top_builddir)/src/goa				\
 	-I$(top_builddir)/src/goaidentity			\
 	-I$(top_srcdir)/src/goaidentity				\
+	-DG_LOG_DOMAIN=\"goa-daemon\"				\
+	-DGOA_BACKEND_COMPILATION				\
 	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\" 		\
 	-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\" 		\
 	-DPACKAGE_DATA_DIR=\""$(pkgdatadir)"\" 			\
@@ -28,11 +30,6 @@ goa_daemon_SOURCES = 						\
 	goadaemontypes.h					\
 	goadaemon.h		goadaemon.c			\
 	goatpaccountlinker.h	goatpaccountlinker.c		\
-	$(NULL)
-
-goa_daemon_CPPFLAGS =						\
-	-DG_LOG_DOMAIN=\"goa-daemon\"				\
-	-DGOA_BACKEND_COMPILATION				\
 	$(NULL)
 
 goa_daemon_CFLAGS =						\
