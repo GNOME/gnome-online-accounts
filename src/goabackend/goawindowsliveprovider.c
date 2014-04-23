@@ -320,6 +320,7 @@ build_object (GoaProvider         *provider,
 
   account = NULL;
   mail = NULL;
+  documents = NULL;
 
   /* Chain up */
   if (!GOA_PROVIDER_CLASS (goa_windows_live_provider_parent_class)->build_object (provider,
@@ -399,6 +400,7 @@ build_object (GoaProvider         *provider,
   ret = TRUE;
 
  out:
+  g_clear_object (&documents);
   g_clear_object (&mail);
   if (account != NULL)
     g_object_unref (account);
