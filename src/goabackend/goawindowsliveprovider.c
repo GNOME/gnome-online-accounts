@@ -89,7 +89,6 @@ get_provider_features (GoaProvider *_provider)
 {
   return GOA_PROVIDER_FEATURE_BRANDED |
          GOA_PROVIDER_FEATURE_MAIL |
-         GOA_PROVIDER_FEATURE_CHAT |
          GOA_PROVIDER_FEATURE_DOCUMENTS;
 }
 
@@ -116,8 +115,7 @@ get_redirect_uri (GoaOAuth2Provider *provider)
 static const gchar *
 get_scope (GoaOAuth2Provider *provider)
 {
-  return "wl.messenger,"
-         "wl.imap,"
+  return "wl.imap,"
          "wl.offline_access,"
          "wl.skydrive_update,"
          "wl.emails";
@@ -126,7 +124,7 @@ get_scope (GoaOAuth2Provider *provider)
 static guint
 get_credentials_generation (GoaProvider *provider)
 {
-  return 2;
+  return 3;
 }
 
 static const gchar *
@@ -308,10 +306,8 @@ build_object (GoaProvider         *provider,
 {
   GoaAccount *account;
   GoaMail *mail;
-  GoaChat *chat = NULL;
   GoaDocuments *documents;
   gboolean mail_enabled;
-  gboolean chat_enabled;
   gboolean documents_enabled;
   gboolean ret = FALSE;
   const gchar *email_address;
@@ -362,23 +358,6 @@ build_object (GoaProvider         *provider,
         goa_object_skeleton_set_mail (object, NULL);
     }
 
-  /* Chat */
-  chat = goa_object_get_chat (GOA_OBJECT (object));
-  chat_enabled = g_key_file_get_boolean (key_file, group, "ChatEnabled", NULL);
-  if (chat_enabled)
-    {
-      if (chat == NULL)
-        {
-          chat = goa_chat_skeleton_new ();
-          goa_object_skeleton_set_chat (object, chat);
-        }
-    }
-  else
-    {
-      if (chat != NULL)
-        goa_object_skeleton_set_chat (object, NULL);
-    }
-
   /* Documents */
   documents = goa_object_get_documents (GOA_OBJECT (object));
   documents_enabled = g_key_file_get_boolean (key_file, group, "DocumentsEnabled", NULL);
@@ -400,17 +379,12 @@ build_object (GoaProvider         *provider,
   if (just_added)
     {
       goa_account_set_mail_disabled (account, !mail_enabled);
-      goa_account_set_chat_disabled (account, !chat_enabled);
       goa_account_set_documents_disabled (account, !documents_enabled);
 
       g_signal_connect (account,
                         "notify::mail-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
                         "MailEnabled");
-      g_signal_connect (account,
-                        "notify::chat-disabled",
-                        G_CALLBACK (goa_util_account_notify_property_cb),
-                        "ChatEnabled");
       g_signal_connect (account,
                         "notify::documents-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
@@ -420,8 +394,6 @@ build_object (GoaProvider         *provider,
   ret = TRUE;
 
  out:
-  if (chat != NULL)
-    g_object_unref (chat);
   g_clear_object (&mail);
   if (account != NULL)
     g_object_unref (account);
@@ -453,11 +425,6 @@ show_account (GoaProvider         *provider,
 
   goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
                                                    NULL,
-                                                   "chat-disabled",
-                                                   _("C_hat"));
-
-  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
-                                                   NULL,
                                                    "documents-disabled",
                                                    _("_Documents"));
 }
@@ -469,7 +436,6 @@ add_account_key_values (GoaOAuth2Provider *provider,
                         GVariantBuilder   *builder)
 {
   g_variant_builder_add (builder, "{ss}", "MailEnabled", "true");
-  g_variant_builder_add (builder, "{ss}", "ChatEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "DocumentsEnabled", "true");
 }
 
