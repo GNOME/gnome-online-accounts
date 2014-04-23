@@ -70,7 +70,7 @@ get_protocols_cb (GObject      *source,
                   gpointer      user_data)
 {
   GSimpleAsyncResult *outer_result = user_data;
-  GQuark facebook_quark, google_talk_quark, msn_quark;
+  GQuark facebook_quark, google_talk_quark;
   GList *protocols = NULL;
   GList *ret;
   GList *l;
@@ -86,7 +86,6 @@ get_protocols_cb (GObject      *source,
 
   facebook_quark = g_quark_from_static_string ("facebook");
   google_talk_quark = g_quark_from_static_string ("google-talk");
-  msn_quark = g_quark_from_static_string ("msn");
 
   ret = NULL;
   for (l = protocols; l != NULL; l = l->next)
@@ -106,10 +105,6 @@ get_protocols_cb (GObject      *source,
 #endif
 #if GOA_GOOGLE_ENABLED
       if (service_quark == google_talk_quark)
-        continue;
-#endif
-#if GOA_WINDOWS_LIVE_ENABLED
-      if (protocol_quark == msn_quark)
         continue;
 #endif
 
