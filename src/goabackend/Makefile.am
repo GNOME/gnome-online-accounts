@@ -10,6 +10,8 @@ AM_CPPFLAGS = 							\
 	-I$(top_srcdir)/src/goaidentity				\
 	-I$(top_builddir)/src/goaidentity			\
 	-DG_LOG_DOMAIN=\"GoaBackend\"				\
+	-DGOA_BACKEND_COMPILATION				\
+	-DGOA_API_IS_SUBJECT_TO_CHANGE				\
 	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\" 		\
 	-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\" 		\
 	-DPACKAGE_DATA_DIR=\""$(pkgdatadir)"\" 			\
@@ -92,8 +94,6 @@ libgoa_backend_1_0_la_SOURCES +=					\
 endif
 
 libgoa_backend_1_0_la_CFLAGS =					\
-	-DGOA_BACKEND_COMPILATION				\
-	-DGOA_API_IS_SUBJECT_TO_CHANGE				\
 	$(WEBKIT_GTK_CFLAGS)					\
 	$(JSON_GLIB_CFLAGS)					\
 	$(GCR_CFLAGS) 						\

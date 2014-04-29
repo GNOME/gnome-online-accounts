@@ -11,6 +11,7 @@ AM_CPPFLAGS = 							\
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
 	-I$(top_builddir)/src/goa				\
 	-DG_LOG_DOMAIN=\"Goa\"					\
+	-DGOA_COMPILATION					\
 	-DPACKAGE_LIBEXEC_DIR=\""$(libexecdir)"\" 		\
 	-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\" 		\
 	-DPACKAGE_DATA_DIR=\""$(pkgdatadir)"\" 			\
@@ -95,7 +96,6 @@ libgoa_1_0_la_SOURCES =						\
 	$(NULL)
 
 libgoa_1_0_la_CFLAGS =						\
-	-DGOA_COMPILATION					\
 	$(GLIB_CFLAGS) 						\
 	$(NULL)
 
