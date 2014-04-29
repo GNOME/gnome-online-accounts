@@ -89,9 +89,7 @@ get_protocols_cb (GObject      *source,
   for (l = protocols; l != NULL; l = l->next)
     {
       TpawProtocol *protocol = l->data;
-      const gchar *protocol_name = tpaw_protocol_get_protocol_name (protocol);
       const gchar *service_name = tpaw_protocol_get_service_name (protocol);
-      GQuark protocol_quark = g_quark_try_string (protocol_name);
       GQuark service_quark = g_quark_try_string (service_name);
       GoaTelepathyProvider *provider;
 
