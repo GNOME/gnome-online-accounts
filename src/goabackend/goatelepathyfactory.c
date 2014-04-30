@@ -68,11 +68,17 @@ get_protocols_cb (GObject      *source,
                   gpointer      user_data)
 {
   GSimpleAsyncResult *outer_result = user_data;
-  GQuark facebook_quark, google_talk_quark;
   GList *protocols = NULL;
   GList *ret;
   GList *l;
   GError *error = NULL;
+
+#if GOA_FACEBOOK_ENABLED
+  GQuark facebook_quark;
+#endif
+#if GOA_GOOGLE_ENABLED
+  GQuark google_talk_quark;
+#endif
 
   if (!tpaw_protocol_get_all_finish (&protocols, res, &error))
     {
@@ -82,8 +88,12 @@ get_protocols_cb (GObject      *source,
       return;
     }
 
+#if GOA_FACEBOOK_ENABLED
   facebook_quark = g_quark_from_static_string ("facebook");
+#endif
+#if GOA_GOOGLE_ENABLED
   google_talk_quark = g_quark_from_static_string ("google-talk");
+#endif
 
   ret = NULL;
   for (l = protocols; l != NULL; l = l->next)
