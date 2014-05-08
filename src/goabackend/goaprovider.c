@@ -30,6 +30,7 @@
 #include "goaowncloudprovider.h"
 #include "goayahooprovider.h"
 #include "goaflickrprovider.h"
+#include "goafoursquareprovider.h"
 #include "goawindowsliveprovider.h"
 #include "goatelepathyfactory.h"
 #include "goapocketprovider.h"
@@ -780,6 +781,9 @@ static struct
 #endif
 #ifdef GOA_POCKET_ENABLED
   { GOA_POCKET_NAME, goa_pocket_provider_get_type },
+#endif
+#ifdef GOA_FOURSQUARE_ENABLED
+  { GOA_FOURSQUARE_NAME, goa_foursquare_provider_get_type },
 #endif
 #ifdef GOA_EXCHANGE_ENABLED
   { GOA_EXCHANGE_NAME, goa_exchange_provider_get_type },
