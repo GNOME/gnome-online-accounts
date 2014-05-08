@@ -51,10 +51,7 @@ struct _GoaAlarmClass
 
 GType goa_alarm_get_type (void);
 
-GoaAlarm *goa_alarm_new (void);
-void goa_alarm_set_time (GoaAlarm     *alarm,
-                         GDateTime    *time,
-                         GCancellable *cancellable);
+GoaAlarm *goa_alarm_new (GDateTime *time);
 GDateTime *goa_alarm_get_time (GoaAlarm *alarm);
 G_END_DECLS
 #endif /* __GOA_ALARM_H__ */

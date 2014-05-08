@@ -51,13 +51,8 @@ struct _GoaKerberosIdentityPrivate
   guint          expiration_time_idle_id;
 
   GoaAlarm     *expiration_alarm;
-  GCancellable *expiration_alarm_cancellable;
-
   GoaAlarm     *expiring_alarm;
-  GCancellable *expiring_alarm_cancellable;
-
   GoaAlarm     *renewal_alarm;
-  GCancellable *renewal_alarm_cancellable;
 
   VerificationLevel cached_verification_level;
   guint             is_signed_in_idle_id;
@@ -110,8 +105,6 @@ goa_kerberos_identity_dispose (GObject *object)
   GoaKerberosIdentity *self = GOA_KERBEROS_IDENTITY (object);
 
   G_LOCK (identity_lock);
-  clear_alarms (self);
-
   g_clear_object (&self->priv->renewal_alarm);
   g_clear_object (&self->priv->expiring_alarm);
   g_clear_object (&self->priv->expiration_alarm);
@@ -301,9 +294,6 @@ goa_kerberos_identity_init (GoaKerberosIdentity *self)
   self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
                                             GOA_TYPE_KERBEROS_IDENTITY,
                                             GoaKerberosIdentityPrivate);
-  self->priv->expiration_alarm = goa_alarm_new ();
-  self->priv->expiring_alarm = goa_alarm_new ();
-  self->priv->renewal_alarm = goa_alarm_new ();
 }
 
 static void
@@ -736,8 +726,6 @@ on_renewal_alarm_fired (GoaAlarm            *alarm,
   g_return_if_fail (GOA_IS_ALARM (alarm));
   g_return_if_fail (GOA_IS_KERBEROS_IDENTITY (self));
 
-  g_clear_object (&self->priv->renewal_alarm_cancellable);
-
   if (self->priv->cached_verification_level == VERIFICATION_LEVEL_SIGNED_IN)
     {
       g_debug ("GoaKerberosIdentity: renewal alarm fired for signed-in identity");
@@ -762,8 +750,6 @@ on_expiring_alarm_fired (GoaAlarm            *alarm,
   g_return_if_fail (GOA_IS_ALARM (alarm));
   g_return_if_fail (GOA_IS_KERBEROS_IDENTITY (self));
 
-  g_clear_object (&self->priv->expiring_alarm_cancellable);
-
   if (self->priv->cached_verification_level == VERIFICATION_LEVEL_SIGNED_IN)
     {
       g_debug ("GoaKerberosIdentity: expiring alarm fired for signed-in identity");
@@ -771,25 +757,38 @@ on_expiring_alarm_fired (GoaAlarm            *alarm,
     }
 }
 
-static void
-set_alarm (GoaKerberosIdentity  *self,
-           GoaAlarm             *alarm,
-           GDateTime            *alarm_time,
-           GCancellable        **cancellable)
+static gboolean
+unref_alarm (GoaAlarm *alarm)
 {
-  GDateTime *old_alarm_time;
+  g_object_unref (G_OBJECT (alarm));
+  return G_SOURCE_REMOVE;
+}
+
+static void
+clear_alarm_and_unref_on_idle (GoaKerberosIdentity  *self,
+                     GoaAlarm            **alarm)
+{
+  if (!*alarm)
+    return;
+
+  g_idle_add ((GSourceFunc) unref_alarm, *alarm);
+  *alarm = NULL;
+}
+
+static void
+reset_alarm (GoaKerberosIdentity  *self,
+             GoaAlarm            **alarm,
+             GDateTime            *alarm_time)
+{
+  GDateTime *old_alarm_time = NULL;
 
   G_LOCK (identity_lock);
-  old_alarm_time = goa_alarm_get_time (alarm);
+  if (*alarm)
+    old_alarm_time = goa_alarm_get_time (*alarm);
   if (old_alarm_time == NULL || !g_date_time_equal (alarm_time, old_alarm_time))
     {
-      GCancellable *new_cancellable;
-
-      new_cancellable = g_cancellable_new ();
-      goa_alarm_set_time (alarm, alarm_time, new_cancellable);
-
-      g_clear_object (cancellable);
-      *cancellable = new_cancellable;
+      clear_alarm_and_unref_on_idle (self, alarm);
+      *alarm = goa_alarm_new (alarm_time);
     }
   G_UNLOCK (identity_lock);
 
@@ -798,24 +797,35 @@ set_alarm (GoaKerberosIdentity  *self,
 static void
 disconnect_alarm_signals (GoaKerberosIdentity *self)
 {
-  g_signal_handlers_disconnect_by_func (G_OBJECT (self->priv->renewal_alarm),
-                                        G_CALLBACK (on_renewal_alarm_fired),
-                                        self);
-  g_signal_handlers_disconnect_by_func (G_OBJECT (self->priv->renewal_alarm),
-                                        G_CALLBACK (on_renewal_alarm_rearmed),
-                                        self);
-  g_signal_handlers_disconnect_by_func (G_OBJECT (self->priv->expiring_alarm),
-                                        G_CALLBACK (on_expiring_alarm_fired),
-                                        self);
-  g_signal_handlers_disconnect_by_func (G_OBJECT (self->priv->expiration_alarm),
-                                        G_CALLBACK (on_expiration_alarm_rearmed),
-                                        self);
-  g_signal_handlers_disconnect_by_func (G_OBJECT (self->priv->expiration_alarm),
-                                        G_CALLBACK (on_expiration_alarm_fired),
-                                        self);
-  g_signal_handlers_disconnect_by_func (G_OBJECT (self->priv->expiring_alarm),
-                                        G_CALLBACK (on_expiring_alarm_rearmed),
-                                        self);
+  if (self->priv->renewal_alarm)
+    {
+      g_signal_handlers_disconnect_by_func (G_OBJECT (self->priv->renewal_alarm),
+                                            G_CALLBACK (on_renewal_alarm_fired),
+                                            self);
+      g_signal_handlers_disconnect_by_func (G_OBJECT (self->priv->renewal_alarm),
+                                            G_CALLBACK (on_renewal_alarm_rearmed),
+                                            self);
+    }
+
+  if (self->priv->expiring_alarm)
+    {
+      g_signal_handlers_disconnect_by_func (G_OBJECT (self->priv->expiring_alarm),
+                                            G_CALLBACK (on_expiring_alarm_fired),
+                                            self);
+      g_signal_handlers_disconnect_by_func (G_OBJECT (self->priv->expiring_alarm),
+                                            G_CALLBACK (on_expiring_alarm_rearmed),
+                                            self);
+    }
+
+  if (self->priv->expiration_alarm)
+    {
+      g_signal_handlers_disconnect_by_func (G_OBJECT (self->priv->expiration_alarm),
+                                            G_CALLBACK (on_expiration_alarm_rearmed),
+                                            self);
+      g_signal_handlers_disconnect_by_func (G_OBJECT (self->priv->expiration_alarm),
+                                            G_CALLBACK (on_expiration_alarm_fired),
+                                            self);
+    }
 }
 
 static void
@@ -872,15 +882,9 @@ reset_alarms (GoaKerberosIdentity *self)
 
   disconnect_alarm_signals (self);
 
-  set_alarm (self,
-             self->priv->renewal_alarm,
-             renewal_time, &self->priv->renewal_alarm_cancellable);
-  set_alarm (self,
-             self->priv->expiring_alarm,
-             expiring_time, &self->priv->expiring_alarm_cancellable);
-  set_alarm (self,
-             self->priv->expiration_alarm,
-             expiration_time, &self->priv->expiration_alarm_cancellable);
+  reset_alarm (self, &self->priv->renewal_alarm, renewal_time);
+  reset_alarm (self, &self->priv->expiring_alarm, expiring_time);
+  reset_alarm (self, &self->priv->expiration_alarm, expiration_time);
 
   g_date_time_unref (renewal_time);
   g_date_time_unref (expiring_time);
@@ -889,23 +893,12 @@ reset_alarms (GoaKerberosIdentity *self)
 }
 
 static void
-cancel_and_clear_cancellable (GCancellable **cancellable)
-{
-  if (cancellable == NULL)
-    return;
-
-  if (!g_cancellable_is_cancelled (*cancellable))
-    g_cancellable_cancel (*cancellable);
-
-  g_clear_object (cancellable);
-}
-
-static void
 clear_alarms (GoaKerberosIdentity *self)
 {
-  cancel_and_clear_cancellable (&self->priv->renewal_alarm_cancellable);
-  cancel_and_clear_cancellable (&self->priv->expiring_alarm_cancellable);
-  cancel_and_clear_cancellable (&self->priv->expiration_alarm_cancellable);
+  disconnect_alarm_signals (self);
+  clear_alarm_and_unref_on_idle (self, &self->priv->renewal_alarm);
+  clear_alarm_and_unref_on_idle (self, &self->priv->expiring_alarm);
+  clear_alarm_and_unref_on_idle (self, &self->priv->expiration_alarm);
 }
 
 static gboolean
