@@ -46,8 +46,6 @@ typedef enum
 
 struct _GoaAlarmPrivate
 {
-  GCancellable *cancellable;
-  gulong cancelled_id;
   GDateTime *time;
   GDateTime *previous_wakeup_time;
   GMainContext *context;
@@ -74,60 +72,23 @@ enum
 
 static void schedule_wakeups (GoaAlarm *self);
 static void schedule_wakeups_with_timeout_source (GoaAlarm *self);
+static void goa_alarm_set_time (GoaAlarm *self, GDateTime *time);
+static void clear_wakeup_source_pointer (GoaAlarm *self);
 static guint signals[NUMBER_OF_SIGNALS] = { 0 };
 
 G_DEFINE_TYPE (GoaAlarm, goa_alarm, G_TYPE_OBJECT);
-
-static void
-clear_scheduled_immediate_wakeup (GoaAlarm *self)
-{
-  g_clear_pointer (&self->priv->immediate_wakeup_source,
-                   (GDestroyNotify) g_source_destroy);
-}
-
-static void
-clear_scheduled_wakeups (GoaAlarm *self, GSource *source, GInputStream *stream)
-{
-  g_rec_mutex_lock (&self->priv->lock);
-  clear_scheduled_immediate_wakeup (self);
-
-  if (self->priv->type != GOA_ALARM_TYPE_UNSCHEDULED)
-    {
-      g_source_destroy (source);
-
-      if (stream != NULL)
-        {
-          GError *error;
-          gboolean is_closed;
-
-          error = NULL;
-          is_closed = g_input_stream_close (stream, NULL, &error);
-
-          if (!is_closed)
-            {
-              g_warning ("GoaAlarm: could not close timer stream: %s", error->message);
-              g_error_free (error);
-            }
-
-          g_object_unref (stream);
-        }
-    }
-
-  g_clear_pointer (&self->priv->previous_wakeup_time,
-                   (GDestroyNotify) g_date_time_unref);
-
-  self->priv->type = GOA_ALARM_TYPE_UNSCHEDULED;
-  g_rec_mutex_unlock (&self->priv->lock);
-}
 
 static void
 goa_alarm_dispose (GObject *object)
 {
   GoaAlarm *self = GOA_ALARM (object);
 
-  g_clear_object (&self->priv->cancellable);
+  g_clear_object (&self->priv->stream);
+  g_clear_pointer (&self->priv->immediate_wakeup_source, (GDestroyNotify) g_source_destroy);
+  g_clear_pointer (&self->priv->scheduled_wakeup_source, (GDestroyNotify) g_source_destroy);
   g_clear_pointer (&self->priv->context, (GDestroyNotify) g_main_context_unref);
   g_clear_pointer (&self->priv->time, (GDestroyNotify) g_date_time_unref);
+  g_clear_pointer (&self->priv->previous_wakeup_time, (GDestroyNotify) g_date_time_unref);
 
   G_OBJECT_CLASS (goa_alarm_parent_class)->dispose (object);
 }
@@ -136,8 +97,6 @@ static void
 goa_alarm_finalize (GObject *object)
 {
   GoaAlarm *self = GOA_ALARM (object);
-
-  clear_scheduled_wakeups (self, self->priv->scheduled_wakeup_source, self->priv->stream);
 
   g_rec_mutex_clear (&self->priv->lock);
 
@@ -157,7 +116,7 @@ goa_alarm_set_property (GObject      *object,
     {
     case PROP_TIME:
       time = (GDateTime *) g_value_get_boxed (value);
-      goa_alarm_set_time (self, time, self->priv->cancellable);
+      goa_alarm_set_time (self, time);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, param_spec);
@@ -221,52 +180,7 @@ static void
 goa_alarm_init (GoaAlarm *self)
 {
   self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GOA_TYPE_ALARM, GoaAlarmPrivate);
-  self->priv->type = GOA_ALARM_TYPE_UNSCHEDULED;
   g_rec_mutex_init (&self->priv->lock);
-}
-
-static gboolean
-async_alarm_cancel_idle_cb (gpointer user_data)
-{
-  GoaAlarm *self;
-  GInputStream *stream;
-  GSource *source;
-  GTask *task = G_TASK (user_data);
-  gpointer task_data;
-
-  self = g_task_get_source_object (task);
-  source = (GSource *) g_object_get_data (G_OBJECT (task), "alarm-scheduled-wakeup-source");
-  task_data = g_object_get_data (G_OBJECT (task), "alarm-stream");
-  stream = (task_data == NULL) ? NULL : G_INPUT_STREAM (task_data);
-
-  clear_scheduled_wakeups (self, source, stream);
-  return G_SOURCE_REMOVE;
-}
-
-static void
-on_cancelled (GCancellable *cancellable, gpointer user_data)
-{
-  GoaAlarm *self = GOA_ALARM (user_data);
-  GSource *idle_source;
-  GTask *task;
-
-  task = g_task_new (self, NULL, NULL, NULL);
-
-  g_object_set_data_full (G_OBJECT (task),
-                          "alarm-scheduled-wakeup-source",
-                          g_source_ref (self->priv->scheduled_wakeup_source),
-                          (GDestroyNotify) g_source_unref);
-
-  if (self->priv->stream != NULL)
-    g_object_set_data_full (G_OBJECT (task), "alarm-stream", g_object_ref (self->priv->stream), g_object_unref);
-
-  idle_source = g_idle_source_new ();
-  g_source_set_priority (idle_source, G_PRIORITY_HIGH_IDLE);
-  g_source_set_callback (idle_source, async_alarm_cancel_idle_cb, g_object_ref (task), g_object_unref);
-  g_source_attach (idle_source, self->priv->context);
-  g_source_unref (idle_source);
-
-  g_object_unref (task);
 }
 
 static void
@@ -337,51 +251,31 @@ on_immediate_wakeup_source_ready (GoaAlarm *self)
   g_return_val_if_fail (self->priv->type != GOA_ALARM_TYPE_UNSCHEDULED, FALSE);
 
   g_rec_mutex_lock (&self->priv->lock);
-  if (g_cancellable_is_cancelled (self->priv->cancellable))
-    goto out;
-
   fire_or_rearm_alarm (self);
-
-out:
   g_rec_mutex_unlock (&self->priv->lock);
   return FALSE;
 }
 
 #ifdef HAVE_TIMERFD
 static gboolean
-on_timer_source_ready (GObject *stream, GTask *task)
+on_timer_source_ready (GObject *stream, GoaAlarm *self)
 {
   gint64 number_of_fires;
   gssize bytes_read;
   gboolean run_again = FALSE;
   GError *error = NULL;
-  GoaAlarm *self;
-  GCancellable *cancellable;
-
-  self = g_task_get_source_object (task);
-  cancellable = g_task_get_cancellable (task);
 
   g_return_val_if_fail (GOA_IS_ALARM (self), FALSE);
 
   g_rec_mutex_lock (&self->priv->lock);
 
-  if (self->priv->type == GOA_ALARM_TYPE_UNSCHEDULED)
-    {
-      g_debug ("GoaAlarm: timer source was unscheduled after "
-               "callback was invoked, but before callback got "
-               "the lock.");
-      goto out;
-    }
-  else if (self->priv->type != GOA_ALARM_TYPE_TIMER)
+  if (self->priv->type != GOA_ALARM_TYPE_TIMER)
     {
       g_warning ("GoaAlarm: timer source ready callback called "
                  "when timer source isn't supposed to be used. "
                  "Current timer type is %u", self->priv->type);
       goto out;
     }
-
-  if (g_cancellable_is_cancelled (cancellable))
-    goto out;
 
   bytes_read =
     g_pollable_input_stream_read_nonblocking (G_POLLABLE_INPUT_STREAM (stream),
@@ -421,7 +315,6 @@ schedule_wakeups_with_timerfd (GoaAlarm *self)
   int fd;
   int result;
   GSource *source;
-  GTask *task;
   static gboolean seen_before = FALSE;
 
   if (!seen_before)
@@ -454,16 +347,14 @@ schedule_wakeups_with_timerfd (GoaAlarm *self)
   self->priv->type = GOA_ALARM_TYPE_TIMER;
   self->priv->stream = g_unix_input_stream_new (fd, TRUE);
 
-  task = g_task_new (self, self->priv->cancellable, NULL, NULL);
-
   source =
     g_pollable_input_stream_create_source (G_POLLABLE_INPUT_STREAM
                                            (self->priv->stream),
-                                           self->priv->cancellable);
+                                           NULL);
   self->priv->scheduled_wakeup_source = source;
   g_source_set_callback (self->priv->scheduled_wakeup_source,
-                         (GSourceFunc) on_timer_source_ready, task,
-                         (GDestroyNotify) g_object_unref);
+                         (GSourceFunc) on_timer_source_ready, self,
+                         (GDestroyNotify) clear_wakeup_source_pointer);
   g_source_attach (self->priv->scheduled_wakeup_source, self->priv->context);
   g_source_unref (source);
 
@@ -481,14 +372,10 @@ on_timeout_source_ready (GoaAlarm *self)
 
   g_rec_mutex_lock (&self->priv->lock);
 
-  if (g_cancellable_is_cancelled (self->priv->cancellable) ||
-      self->priv->type == GOA_ALARM_TYPE_UNSCHEDULED)
+  if (self->priv->type == GOA_ALARM_TYPE_UNSCHEDULED)
     goto out;
 
   fire_or_rearm_alarm (self);
-
-  if (g_cancellable_is_cancelled (self->priv->cancellable))
-    goto out;
 
   schedule_wakeups_with_timeout_source (self);
 
@@ -498,7 +385,7 @@ out:
 }
 
 static void
-clear_timeout_source_pointer (GoaAlarm *self)
+clear_wakeup_source_pointer (GoaAlarm *self)
 {
   self->priv->scheduled_wakeup_source = NULL;
 }
@@ -532,7 +419,7 @@ schedule_wakeups_with_timeout_source (GoaAlarm *self)
   g_source_set_callback (self->priv->scheduled_wakeup_source,
                          (GSourceFunc)
                          on_timeout_source_ready,
-                         self, (GDestroyNotify) clear_timeout_source_pointer);
+                         self, (GDestroyNotify) clear_wakeup_source_pointer);
 
   g_source_attach (self->priv->scheduled_wakeup_source, self->priv->context);
   g_source_unref (source);
@@ -582,38 +469,12 @@ schedule_immediate_wakeup (GoaAlarm *self)
   g_source_unref (source);
 }
 
-void
-goa_alarm_set_time (GoaAlarm *self, GDateTime *time, GCancellable *cancellable)
+static void
+goa_alarm_set_time (GoaAlarm *self, GDateTime *time)
 {
-  if (g_cancellable_is_cancelled (cancellable))
-    return;
-
   g_rec_mutex_lock (&self->priv->lock);
-  if (self->priv->cancellable != NULL && self->priv->cancellable != cancellable)
-    g_cancellable_cancel (self->priv->cancellable);
-
-  if (cancellable != NULL)
-    g_object_ref (cancellable);
-
-  if (self->priv->cancelled_id != 0)
-    g_cancellable_disconnect (self->priv->cancellable, self->priv->cancelled_id);
-
-  g_clear_object (&self->priv->cancellable);
-
-  if (cancellable != NULL)
-    self->priv->cancellable = cancellable;
-  else
-    self->priv->cancellable = g_cancellable_new ();
-
-  self->priv->cancelled_id = g_cancellable_connect (self->priv->cancellable,
-                                                    G_CALLBACK (on_cancelled),
-                                                    self, NULL);
 
   g_date_time_ref (time);
-
-  if (self->priv->time != NULL)
-    g_date_time_unref (self->priv->time);
-
   self->priv->time = time;
 
   if (self->priv->context == NULL)
@@ -634,11 +495,11 @@ goa_alarm_get_time (GoaAlarm *self)
 }
 
 GoaAlarm *
-goa_alarm_new (void)
+goa_alarm_new (GDateTime *alarm_time)
 {
   GoaAlarm *self;
 
-  self = GOA_ALARM (g_object_new (GOA_TYPE_ALARM, NULL));
+  self = GOA_ALARM (g_object_new (GOA_TYPE_ALARM, "time", alarm_time, NULL));
 
   return GOA_ALARM (self);
 }
