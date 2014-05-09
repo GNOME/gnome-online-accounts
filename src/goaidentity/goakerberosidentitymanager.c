@@ -794,12 +794,7 @@ get_new_credentials_cache (GoaKerberosIdentityManager *self,
   if (!supports_multiple_identities ||
       g_hash_table_size (self->priv->identities) == 0)
     {
-      krb5_ccache default_cache;
-
-      error_code = krb5_cc_default (self->priv->kerberos_context, &default_cache);
-
-      if (error_code == 0)
-        krb5_cc_dup (self->priv->kerberos_context, default_cache, credentials_cache);
+      error_code = krb5_cc_default (self->priv->kerberos_context, credentials_cache);
     }
   else
     {
@@ -847,20 +842,18 @@ sign_in_identity (GoaKerberosIdentityManager *self,
           g_simple_async_result_set_op_res_gpointer (operation->result, NULL, NULL);
           return;
         }
-      else
+
+      identity = goa_kerberos_identity_new (self->priv->kerberos_context,
+                                            credentials_cache,
+                                            &error);
+      krb5_cc_close (self->priv->kerberos_context, credentials_cache);
+      if (identity == NULL)
         {
-          identity = goa_kerberos_identity_new (self->priv->kerberos_context,
-                                                credentials_cache,
-                                                &error);
-          if (identity == NULL)
-            {
-              krb5_cc_close (self->priv->kerberos_context, credentials_cache);
-              g_simple_async_result_take_error (operation->result, error);
-              g_simple_async_result_set_op_res_gpointer (operation->result,
-                                                         NULL,
-                                                         NULL);
-              return;
-            }
+          g_simple_async_result_take_error (operation->result, error);
+          g_simple_async_result_set_op_res_gpointer (operation->result,
+                                                     NULL,
+                                                     NULL);
+          return;
         }
     }
   else
@@ -1466,6 +1459,8 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
 
   if (!can_monitor)
     self->priv->polling_timeout_id = g_timeout_add_seconds (FALLBACK_POLLING_INTERVAL, (GSourceFunc) on_polling_timeout, self);
+
+  krb5_cc_close (self->priv->kerberos_context, default_cache);
 
   return TRUE;
 }
