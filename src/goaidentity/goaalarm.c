@@ -143,6 +143,8 @@ goa_alarm_finalize (GObject *object)
 
   clear_scheduled_wakeups (self, self->priv->scheduled_wakeup_source, self->priv->stream);
 
+  g_rec_mutex_clear (&self->priv->lock);
+
   G_OBJECT_CLASS (goa_alarm_parent_class)->finalize (object);
 }
 
