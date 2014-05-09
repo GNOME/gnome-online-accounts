@@ -240,7 +240,7 @@ get_identifier (GoaKerberosIdentity  *self,
   krb5_principal principal;
   krb5_error_code error_code;
   char *unparsed_name;
-  char *identifier;
+  char *identifier = NULL;
 
   if (self->priv->credentials_cache == NULL)
     return NULL;
@@ -286,12 +286,14 @@ get_identifier (GoaKerberosIdentity  *self,
       g_debug ("GoaKerberosIdentity: Error parsing principal identity name: %s",
                error_message);
       krb5_free_error_message (self->priv->kerberos_context, error_message);
-      return NULL;
+      goto out;
     }
 
   identifier = g_strdup (unparsed_name);
   krb5_free_unparsed_name (self->priv->kerberos_context, unparsed_name);
 
+out:
+  krb5_free_principal (self->priv->kerberos_context, principal);
   return identifier;
 }
 
