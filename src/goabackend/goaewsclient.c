@@ -292,7 +292,11 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
       if (ews_client_check_node (node, "Protocol"))
         {
           op_res = ews_client_autodiscover_parse_protocol (node);
-          break;
+          /* Since the server may send back multiple <Protocol> nodes
+           * don't break unless we found the one we want.
+           */
+          if (op_res)
+            break;
         }
     }
   if (!op_res)
