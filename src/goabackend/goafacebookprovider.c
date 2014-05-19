@@ -85,7 +85,10 @@ get_provider_group (GoaProvider *_provider)
 static GoaProviderFeatures
 get_provider_features (GoaProvider *_provider)
 {
-  return GOA_PROVIDER_FEATURE_BRANDED | GOA_PROVIDER_FEATURE_CHAT | GOA_PROVIDER_FEATURE_PHOTOS;
+  return GOA_PROVIDER_FEATURE_BRANDED |
+         GOA_PROVIDER_FEATURE_CHAT |
+         GOA_PROVIDER_FEATURE_PHOTOS |
+         GOA_PROVIDER_FEATURE_MAPS;
 }
 
 /* facebook client flow sends a different auth query then the base
@@ -134,13 +137,15 @@ get_scope (GoaOAuth2Provider *provider)
     "read_mailbox,"
     "xmpp_login,"
     "email,"
-    "user_photos";
+    "user_photos,"
+    "user_status,"
+    "publish_actions";
 }
 
 static guint
 get_credentials_generation (GoaProvider *provider)
 {
-  return 1;
+  return 2;
 }
 
 static const gchar *
@@ -326,8 +331,10 @@ build_object (GoaProvider         *provider,
   GoaAccount *account;
   GoaChat *chat = NULL;
   GoaPhotos *photos = NULL;
+  GoaMaps *maps = NULL;
   gboolean chat_enabled;
   gboolean photos_enabled;
+  gboolean maps_enabled;
   gboolean ret = FALSE;
 
   account = NULL;
@@ -398,6 +405,33 @@ build_object (GoaProvider         *provider,
                         "PhotosEnabled");
     }
 
+  /* Maps */
+  maps = goa_object_get_maps (GOA_OBJECT (object));
+  maps_enabled = g_key_file_get_boolean (key_file, group, "MapsEnabled", NULL);
+
+  if (maps_enabled)
+    {
+      if (maps == NULL)
+        {
+          maps = goa_maps_skeleton_new ();
+          goa_object_skeleton_set_maps (object, maps);
+        }
+    }
+  else
+    {
+      if (maps != NULL)
+        goa_object_skeleton_set_maps (object, NULL);
+    }
+
+  if (just_added)
+    {
+      goa_account_set_maps_disabled (account, !maps_enabled);
+      g_signal_connect (account,
+                        "notify::maps-disabled",
+                        G_CALLBACK (goa_util_account_notify_property_cb),
+                        "MapsEnabled");
+    }
+
   ret = TRUE;
 
  out:
@@ -406,6 +440,7 @@ build_object (GoaProvider         *provider,
   if (account != NULL)
     g_object_unref (account);
   g_clear_object (&photos);
+  g_clear_object (&maps);
   return ret;
 }
 
@@ -436,6 +471,11 @@ show_account (GoaProvider         *provider,
                                                    NULL,
                                                    "photos-disabled",
                                                    _("_Photos"));
+
+  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
+                                                   NULL,
+                                                   "maps-disabled",
+                                                   _("_Maps"));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -446,6 +486,7 @@ add_account_key_values (GoaOAuth2Provider *provider,
 {
   g_variant_builder_add (builder, "{ss}", "ChatEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "PhotosEnabled", "true");
+  g_variant_builder_add (builder, "{ss}", "MapsEnabled", "true");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

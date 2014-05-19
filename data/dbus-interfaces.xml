@@ -162,6 +162,18 @@
     -->
     <property name="DocumentsDisabled" type="b" access="readwrite"/>
 
+    <!-- MapsDisabled:
+         @since: 3.14.0
+
+         If %TRUE, the account will not expose any
+         #org.gnome.OnlineAccounts.Maps interface. If the account does not
+         provide maps-like capabilities, this property does nothing.
+
+         Note that the #org.gnomeOnlineAccounts.Maps interface is added or
+         removed from the account asynchronously.
+    -->
+    <property name="MapsDisabled" type="b" access="readwrite"/>
+
     <!-- PrintersDisabled:
          @since: 3.12.0
 
@@ -606,6 +618,16 @@
       documents-like capabilities.
   -->
   <interface name="org.gnome.OnlineAccounts.Documents">
+  </interface>
+
+  <!--
+      org.gnome.OnlineAccounts.Maps:
+      @since: 3.14.0
+
+      An account object implements this interface if it provides
+      maps-like capabilities.
+  -->
+  <interface name="org.gnome.OnlineAccounts.Maps">
   </interface>
 
   <!--
