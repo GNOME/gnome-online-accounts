@@ -91,6 +91,7 @@ get_provider_features (GoaProvider *_provider)
          GOA_PROVIDER_FEATURE_CONTACTS |
          GOA_PROVIDER_FEATURE_CHAT |
          GOA_PROVIDER_FEATURE_DOCUMENTS |
+         GOA_PROVIDER_FEATURE_PHOTOS |
          GOA_PROVIDER_FEATURE_PRINTERS;
 }
 
@@ -135,6 +136,9 @@ get_scope (GoaOAuth2Provider *provider)
          "https://docs.googleusercontent.com/ "
          "https://spreadsheets.google.com/feeds/ "
 
+         /* Google PicasaWeb API (GData) */
+         "https://picasaweb.google.com/data/ "
+
          /* GMail IMAP and SMTP access */
          "https://mail.google.com/ "
 
@@ -148,7 +152,7 @@ get_scope (GoaOAuth2Provider *provider)
 static guint
 get_credentials_generation (GoaProvider *provider)
 {
-  return 7;
+  return 8;
 }
 
 static const gchar *
@@ -319,6 +323,7 @@ build_object (GoaProvider         *provider,
   GoaContacts *contacts;
   GoaChat *chat;
   GoaDocuments *documents;
+  GoaPhotos *photos;
   GoaPrinters *printers;
   gboolean ret;
   gboolean mail_enabled;
@@ -326,6 +331,7 @@ build_object (GoaProvider         *provider,
   gboolean contacts_enabled;
   gboolean chat_enabled;
   gboolean documents_enabled;
+  gboolean photos_enabled;
   gboolean printers_enabled;
   const gchar *email_address;
 
@@ -335,6 +341,7 @@ build_object (GoaProvider         *provider,
   contacts = NULL;
   chat = NULL;
   documents = NULL;
+  photos = NULL;
   printers = NULL;
   ret = FALSE;
 
@@ -464,6 +471,24 @@ build_object (GoaProvider         *provider,
         goa_object_skeleton_set_documents (object, NULL);
     }
 
+  /* Photos */
+  photos = goa_object_get_photos (GOA_OBJECT (object));
+  photos_enabled = g_key_file_get_boolean (key_file, group, "PhotosEnabled", NULL);
+
+  if (photos_enabled)
+    {
+      if (photos == NULL)
+        {
+          photos = goa_photos_skeleton_new ();
+          goa_object_skeleton_set_photos (object, photos);
+        }
+    }
+  else
+    {
+      if (photos != NULL)
+        goa_object_skeleton_set_photos (object, NULL);
+    }
+
   /* Printers */
   printers = goa_object_get_printers (GOA_OBJECT (object));
   printers_enabled = g_key_file_get_boolean (key_file, group, "PrintersEnabled", NULL);
@@ -489,6 +514,7 @@ build_object (GoaProvider         *provider,
       goa_account_set_contacts_disabled (account, !contacts_enabled);
       goa_account_set_chat_disabled (account, !chat_enabled);
       goa_account_set_documents_disabled (account, !documents_enabled);
+      goa_account_set_photos_disabled (account, !photos_enabled);
       goa_account_set_printers_disabled (account, !printers_enabled);
 
       g_signal_connect (account,
@@ -512,6 +538,10 @@ build_object (GoaProvider         *provider,
                         G_CALLBACK (goa_util_account_notify_property_cb),
                         "DocumentsEnabled");
       g_signal_connect (account,
+                        "notify::photos-disabled",
+                        G_CALLBACK (goa_util_account_notify_property_cb),
+                        "PhotosEnabled");
+      g_signal_connect (account,
                         "notify::printers-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
                         "PrintersEnabled");
@@ -521,6 +551,7 @@ build_object (GoaProvider         *provider,
 
  out:
   g_clear_object (&printers);
+  g_clear_object (&photos);
   g_clear_object (&documents);
   g_clear_object (&chat);
   g_clear_object (&contacts);
@@ -583,8 +614,13 @@ show_account (GoaProvider         *provider,
 
   goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
                                                    NULL,
+                                                   "photos-disabled",
+                                                   _("_Photos"));
+
+  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
+                                                   NULL,
                                                    "printers-disabled",
-                                                   _("_Printers"));
+                                                   _("Prin_ters"));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -598,6 +634,7 @@ add_account_key_values (GoaOAuth2Provider  *provider,
   g_variant_builder_add (builder, "{ss}", "ContactsEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "ChatEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "DocumentsEnabled", "true");
+  g_variant_builder_add (builder, "{ss}", "PhotosEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "PrintersEnabled", "true");
 }
 
