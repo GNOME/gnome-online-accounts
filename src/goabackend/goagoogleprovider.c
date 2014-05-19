@@ -142,8 +142,8 @@ get_scope (GoaOAuth2Provider *provider)
          /* GMail IMAP and SMTP access */
          "https://mail.google.com/ "
 
-	 /* Google Cloud Print */
-	 "https://www.googleapis.com/auth/cloudprint "
+         /* Google Cloud Print */
+         "https://www.googleapis.com/auth/cloudprint "
 
          /* Google Talk */
          "https://www.googleapis.com/auth/googletalk";
