@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2012, 2013 Red Hat, Inc.
+ * Copyright (C) 2011, 2012, 2013, 2014 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -760,47 +760,43 @@ ensure_builtins_loaded (void)
 
   if (g_once_init_enter (&once_init_value))
     {
-      static volatile GType type = 0;
-
       /* The order is in which the providers' types are created is
        * important because it affects the order in which they are
        * returned by goa_provider_get_all.
        */
 #ifdef GOA_GOOGLE_ENABLED
-      type = GOA_TYPE_GOOGLE_PROVIDER;
+      g_type_ensure (GOA_TYPE_GOOGLE_PROVIDER);
 #endif
 #ifdef GOA_OWNCLOUD_ENABLED
-      type = GOA_TYPE_OWNCLOUD_PROVIDER;
+      g_type_ensure (GOA_TYPE_OWNCLOUD_PROVIDER);
 #endif
 #ifdef GOA_FACEBOOK_ENABLED
-      type = GOA_TYPE_FACEBOOK_PROVIDER;
+      g_type_ensure (GOA_TYPE_FACEBOOK_PROVIDER);
 #endif
 #ifdef GOA_FLICKR_ENABLED
-      type = GOA_TYPE_FLICKR_PROVIDER;
+      g_type_ensure (GOA_TYPE_FLICKR_PROVIDER);
 #endif
 #ifdef GOA_WINDOWS_LIVE_ENABLED
-      type = GOA_TYPE_WINDOWS_LIVE_PROVIDER;
+      g_type_ensure (GOA_TYPE_WINDOWS_LIVE_PROVIDER);
 #endif
 #ifdef GOA_POCKET_ENABLED
-      type = GOA_TYPE_POCKET_PROVIDER;
+      g_type_ensure (GOA_TYPE_POCKET_PROVIDER);
 #endif
 #ifdef GOA_EXCHANGE_ENABLED
-      type = GOA_TYPE_EXCHANGE_PROVIDER;
+      g_type_ensure (GOA_TYPE_EXCHANGE_PROVIDER);
 #endif
 #ifdef GOA_IMAP_SMTP_ENABLED
-      type = GOA_TYPE_IMAP_SMTP_PROVIDER;
+      g_type_ensure (GOA_TYPE_IMAP_SMTP_PROVIDER);
 #endif
 #ifdef GOA_KERBEROS_ENABLED
-      type = GOA_TYPE_KERBEROS_PROVIDER;
+      g_type_ensure (GOA_TYPE_KERBEROS_PROVIDER);
 #endif
 #ifdef GOA_YAHOO_ENABLED
-      type = GOA_TYPE_YAHOO_PROVIDER;
+      g_type_ensure (GOA_TYPE_YAHOO_PROVIDER);
 #endif
 #ifdef GOA_TELEPATHY_ENABLED
-      type = GOA_TYPE_TELEPATHY_FACTORY;
+      g_type_ensure (GOA_TYPE_TELEPATHY_FACTORY);
 #endif
-
-      type = type; /* silence -Wunused-but-set-variable */
 
       g_once_init_leave (&once_init_value, 1);
     }
