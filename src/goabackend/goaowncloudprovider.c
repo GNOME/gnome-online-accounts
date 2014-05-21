@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012, 2013 Red Hat, Inc.
+ * Copyright (C) 2012, 2013, 2014 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -611,7 +611,6 @@ create_account_details_ui (GoaProvider    *provider,
                            gboolean        new_account,
                            AddAccountData *data)
 {
-  GtkWidget *action_area;
   GtkWidget *grid0;
   GtkWidget *grid1;
   GtkWidget *label;
@@ -656,19 +655,16 @@ create_account_details_ui (GoaProvider    *provider,
   g_signal_connect (data->username, "changed", G_CALLBACK (on_uri_username_or_password_changed), data);
   g_signal_connect (data->password, "changed", G_CALLBACK (on_uri_username_or_password_changed), data);
 
+  gtk_dialog_add_button (data->dialog, _("_Cancel"), GTK_RESPONSE_CANCEL);
   data->connect_button = gtk_dialog_add_button (data->dialog, _("C_onnect"), GTK_RESPONSE_OK);
   gtk_dialog_set_default_response (data->dialog, GTK_RESPONSE_OK);
   gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, FALSE);
-
-  action_area = gtk_dialog_get_action_area (data->dialog);
 
   data->progress_grid = gtk_grid_new ();
   gtk_widget_set_no_show_all (data->progress_grid, TRUE);
   gtk_orientable_set_orientation (GTK_ORIENTABLE (data->progress_grid), GTK_ORIENTATION_HORIZONTAL);
   gtk_grid_set_column_spacing (GTK_GRID (data->progress_grid), 3);
-  gtk_box_pack_end (GTK_BOX (action_area), data->progress_grid, FALSE, FALSE, 0);
-  gtk_box_reorder_child (GTK_BOX (action_area), data->progress_grid, 0);
-  gtk_button_box_set_child_non_homogeneous (GTK_BUTTON_BOX (action_area), data->progress_grid, TRUE);
+  gtk_container_add (GTK_CONTAINER (grid0), data->progress_grid);
 
   spinner = gtk_spinner_new ();
   gtk_widget_set_size_request (spinner, 20, 20);
@@ -731,7 +727,7 @@ dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data)
 {
   AddAccountData *data = user_data;
 
-  if (response_id == GTK_RESPONSE_CANCEL)
+  if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_DELETE_EVENT)
     g_cancellable_cancel (data->cancellable);
 }
 
@@ -959,8 +955,10 @@ refresh_account (GoaProvider    *provider,
 
   dialog = gtk_dialog_new_with_buttons (NULL,
                                         parent,
-                                        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        _("_Cancel"), GTK_RESPONSE_CANCEL,
+                                        GTK_DIALOG_MODAL
+                                        | GTK_DIALOG_DESTROY_WITH_PARENT
+                                        | GTK_DIALOG_USE_HEADER_BAR,
+                                        NULL,
                                         NULL);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 12);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
