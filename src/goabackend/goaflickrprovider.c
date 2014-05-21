@@ -393,14 +393,6 @@ build_object (GoaProvider         *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static gboolean
-get_use_external_browser (GoaOAuthProvider *provider)
-{
-  return FALSE;
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
 static void
 show_account (GoaProvider         *provider,
               GoaClient           *client,
@@ -464,7 +456,6 @@ goa_flickr_provider_class_init (GoaFlickrProviderClass *klass)
   oauth_class->get_token_uri            = get_token_uri;
   oauth_class->get_callback_uri         = get_callback_uri;
   oauth_class->get_authentication_cookie = get_authentication_cookie;
-  oauth_class->get_use_external_browser = get_use_external_browser;
   oauth_class->parse_request_token_error = parse_request_token_error;
   oauth_class->add_account_key_values    = add_account_key_values;
 }

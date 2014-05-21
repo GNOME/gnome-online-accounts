@@ -68,7 +68,6 @@ struct _GoaOAuthProvider
  * @get_identity_sync: Virtual function for goa_oauth_provider_get_identity_sync().
  * @parse_request_token_error: Virtual function for goa_oauth_provider_parse_request_token_error().
  * @build_authorization_uri: Virtual function for goa_oauth_provider_build_authorization_uri().
- * @get_use_external_browser: Virtual function for goa_oauth_provider_get_use_external_browser().
  * @get_use_mobile_browser: Virtual function for goa_oauth_provider_get_use_mobile_browser().
  * @get_request_uri_params: Virtual function for goa_oauth_provider_get_request_uri_params().
  * @add_account_key_values: Virtual function for goa_oauth_provider_add_account_key_values().
@@ -105,7 +104,6 @@ struct _GoaOAuthProviderClass
   gchar       *(*build_authorization_uri)      (GoaOAuthProvider             *provider,
                                                 const gchar                  *authorization_uri,
                                                 const gchar                  *escaped_oauth_token);
-  gboolean     (*get_use_external_browser)     (GoaOAuthProvider             *provider);
   gboolean     (*get_use_mobile_browser)       (GoaOAuthProvider             *provider);
   gchar      **(*get_request_uri_params)       (GoaOAuthProvider             *provider);
   void         (*add_account_key_values)       (GoaOAuthProvider             *provider,
@@ -159,7 +157,6 @@ gchar       *goa_oauth_provider_get_access_token_sync        (GoaOAuthProvider  
 gchar       *goa_oauth_provider_build_authorization_uri      (GoaOAuthProvider             *provider,
                                                               const gchar                  *authorization_uri,
                                                               const gchar                  *escaped_oauth_token);
-gboolean     goa_oauth_provider_get_use_external_browser     (GoaOAuthProvider             *provider);
 gboolean     goa_oauth_provider_get_use_mobile_browser       (GoaOAuthProvider             *provider);
 void         goa_oauth_provider_add_account_key_values       (GoaOAuthProvider             *provider,
                                                               GVariantBuilder              *builder);

@@ -378,12 +378,6 @@ build_object (GoaProvider         *provider,
   return ret;
 }
 
-static gboolean
-get_use_external_browser (GoaOAuthProvider *provider)
-{
-  return FALSE;
-}
-
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
@@ -435,6 +429,5 @@ goa_yahoo_provider_class_init (GoaYahooProviderClass *klass)
   oauth_class->get_token_uri            = get_token_uri;
   oauth_class->get_callback_uri         = get_callback_uri;
   oauth_class->get_authentication_cookie = get_authentication_cookie;
-  oauth_class->get_use_external_browser = get_use_external_browser;
   oauth_class->parse_request_token_error = parse_request_token_error;
 }
