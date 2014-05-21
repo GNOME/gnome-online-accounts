@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012, 2013 Red Hat, Inc.
+ * Copyright (C) 2012, 2013, 2014 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -1075,7 +1075,6 @@ create_account_details_ui (GoaKerberosProvider *self,
                            gboolean             new_account,
                            SignInRequest       *request)
 {
-  GtkWidget *action_area;
   GtkWidget *grid0;
   GtkWidget *grid1;
   GtkWidget *label;
@@ -1126,19 +1125,16 @@ create_account_details_ui (GoaKerberosProvider *self,
   populate_realms_for_request (request);
   gtk_widget_grab_focus (request->realm_combo_box);
 
+  gtk_dialog_add_button (request->dialog, _("_Cancel"), GTK_RESPONSE_CANCEL);
   request->connect_button = gtk_dialog_add_button (request->dialog, _("C_onnect"), GTK_RESPONSE_OK);
   gtk_dialog_set_default_response (request->dialog, GTK_RESPONSE_OK);
   gtk_dialog_set_response_sensitive (request->dialog, GTK_RESPONSE_OK, TRUE);
-
-  action_area = gtk_dialog_get_action_area (request->dialog);
 
   request->progress_grid = gtk_grid_new ();
   gtk_widget_set_no_show_all (request->progress_grid, TRUE);
   gtk_orientable_set_orientation (GTK_ORIENTABLE (request->progress_grid), GTK_ORIENTATION_HORIZONTAL);
   gtk_grid_set_column_spacing (GTK_GRID (request->progress_grid), 3);
-  gtk_box_pack_end (GTK_BOX (action_area), request->progress_grid, FALSE, FALSE, 0);
-  gtk_box_reorder_child (GTK_BOX (action_area), request->progress_grid, 0);
-  gtk_button_box_set_child_non_homogeneous (GTK_BUTTON_BOX (action_area), request->progress_grid, TRUE);
+  gtk_container_add (GTK_CONTAINER (grid0), request->progress_grid);
 
   spinner = gtk_spinner_new ();
   gtk_widget_set_size_request (spinner, 20, 20);
