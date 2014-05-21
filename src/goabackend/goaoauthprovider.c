@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2012 Red Hat, Inc.
+ * Copyright (C) 2011, 2012, 2014 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -630,33 +630,6 @@ typedef struct
 } IdentifyData;
 
 static void
-check_cookie (SoupCookie *cookie, gpointer user_data)
-{
-  IdentifyData *data = user_data;
-  GList *children;
-  GList *l;
-  GoaOAuthProvider *provider = data->provider;
-  GtkDialog *dialog = data->dialog;
-  GtkWidget *action_area;
-  const gchar *auth_cookie;
-  const gchar *name;
-
-  auth_cookie = goa_oauth_provider_get_authentication_cookie (provider);
-  name = soup_cookie_get_name (cookie);
-  if (g_strcmp0 (auth_cookie, name) != 0)
-    return;
-
-  action_area = gtk_dialog_get_action_area (dialog);
-  children = gtk_container_get_children (GTK_CONTAINER (action_area));
-  for (l = children; l != NULL; l = l->next)
-    {
-      GtkWidget *child = l->data;
-      gtk_container_remove (GTK_CONTAINER (action_area), child);
-    }
-  g_list_free (children);
-}
-
-static void
 on_dom_node_click (WebKitDOMNode *element, WebKitDOMEvent *event, gpointer user_data)
 {
   IdentifyData *data = user_data;
@@ -679,20 +652,11 @@ static void
 on_web_view_document_load_finished (WebKitWebView *web_view, WebKitWebFrame *frame, gpointer user_data)
 {
   IdentifyData *data = user_data;
-  GSList *slist;
   GoaOAuthProvider *provider = data->provider;
-  SoupCookieJar *cookie_jar;
-  SoupSession *session;
   WebKitDOMDocument *document;
   WebKitDOMNodeList *elements;
   gulong element_count;
   gulong i;
-
-  session = webkit_get_default_session ();
-  cookie_jar = SOUP_COOKIE_JAR (soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR));
-  slist = soup_cookie_jar_all_cookies (cookie_jar);
-  g_slist_foreach (slist, (GFunc) check_cookie, data);
-  g_slist_free_full (slist, (GDestroyNotify) soup_cookie_free);
 
   document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (web_view));
   elements = webkit_dom_document_get_elements_by_tag_name (document, "*");
@@ -1251,8 +1215,10 @@ goa_oauth_provider_refresh_account (GoaProvider  *_provider,
 
   dialog = gtk_dialog_new_with_buttons (NULL,
                                         parent,
-                                        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        _("_Cancel"), GTK_RESPONSE_REJECT,
+                                        GTK_DIALOG_MODAL
+                                        | GTK_DIALOG_DESTROY_WITH_PARENT
+                                        | GTK_DIALOG_USE_HEADER_BAR,
+                                        NULL,
                                         NULL);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 12);
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
