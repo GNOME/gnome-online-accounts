@@ -104,40 +104,6 @@ is_authorization_error (GError *error)
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-goa_oauth2_provider_get_use_external_browser_default (GoaOAuth2Provider  *provider)
-{
-  return FALSE;
-}
-
-/**
- * goa_oauth2_provider_get_use_external_browser:
- * @provider: A #GoaOAuth2Provider.
- *
- * Returns whether an external browser (the users default browser)
- * should be used for user interaction.
- *
- * If an external browser is used, then the dialogs presented in
- * goa_provider_add_account() and
- * goa_provider_refresh_account() will show a simple "Paste
- * authorization code here" instructions along with an entry and
- * button.
- *
- * This is a virtual method where the default implementation returns
- * %FALSE.
- *
- * Returns: %TRUE if the user interaction should happen in an external
- * browser, %FALSE to use an embedded browser widget.
- */
-gboolean
-goa_oauth2_provider_get_use_external_browser (GoaOAuth2Provider *provider)
-{
-  g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (provider), FALSE);
-  return GOA_OAUTH2_PROVIDER_GET_CLASS (provider)->get_use_external_browser (provider);
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-static gboolean
 goa_oauth2_provider_get_use_mobile_browser_default (GoaOAuth2Provider  *provider)
 {
   return FALSE;
@@ -1041,20 +1007,6 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
   return FALSE;
 }
 
-static void
-on_entry_changed (GtkEditable *editable,
-                  gpointer     user_data)
-{
-  GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
-  GoaOAuth2ProviderPrivate *priv = provider->priv;
-  gboolean sensitive;
-
-  g_free (priv->authorization_code);
-  priv->authorization_code = g_strdup (gtk_entry_get_text (GTK_ENTRY (editable)));
-  sensitive = priv->authorization_code != NULL && (strlen (priv->authorization_code) > 0);
-  gtk_dialog_set_response_sensitive (priv->dialog, GTK_RESPONSE_OK, sensitive);
-}
-
 static gboolean
 get_tokens_and_identity (GoaOAuth2Provider  *provider,
                          gboolean            add_account,
@@ -1065,7 +1017,11 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
   GoaOAuth2ProviderPrivate *priv = provider->priv;
   gboolean ret;
   gchar *url;
+  GSList *cookies;
+  GtkWidget *embed;
   GtkWidget *grid;
+  GVariant *preseed_data;
+  GtkWidget *web_view;
   const gchar *scope;
   gchar *escaped_redirect_uri;
   gchar *escaped_client_id;
@@ -1118,74 +1074,27 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
   gtk_grid_set_row_spacing (GTK_GRID (grid), 12);
   gtk_container_add (GTK_CONTAINER (vbox), grid);
 
-  if (goa_oauth2_provider_get_use_external_browser (provider))
-    {
-      GtkWidget *label;
-      GtkWidget *entry;
-      gchar *escaped_url;
-      gchar *markup;
+  web_view = goa_web_view_new ();
+  gtk_widget_set_hexpand (web_view, TRUE);
+  gtk_widget_set_vexpand (web_view, TRUE);
+  embed = goa_web_view_get_view (GOA_WEB_VIEW (web_view));
 
-      escaped_url = g_markup_escape_text (url, -1);
-      /* Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window */
-      markup = g_strdup_printf (_("Paste authorization code obtained from the <a href=\"%s\">authorization page</a>:"),
-                                escaped_url);
-      g_free (escaped_url);
+  preseed_data = goa_provider_get_preseed_data (GOA_PROVIDER (provider));
+  cookies = extract_cookies_from_preseed_data (preseed_data);
+  goa_web_view_add_cookies (GOA_WEB_VIEW (web_view), cookies);
+  soup_cookies_free (cookies);
 
-      label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label), markup);
-      g_free (markup);
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
-      entry = gtk_entry_new ();
-      gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-      gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, TRUE, 0);
-      gtk_widget_grab_focus (entry);
-      gtk_widget_show_all (GTK_WIDGET (vbox));
+  if (goa_oauth2_provider_get_use_mobile_browser (provider))
+    goa_web_view_fake_mobile (GOA_WEB_VIEW (web_view));
 
-      gtk_dialog_add_button (dialog, _("_OK"), GTK_RESPONSE_OK);
-      gtk_dialog_set_default_response (dialog, GTK_RESPONSE_OK);
-      gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_OK, FALSE);
-      g_signal_connect (entry, "changed", G_CALLBACK (on_entry_changed), provider);
+  webkit_web_view_load_uri (WEBKIT_WEB_VIEW (embed), url);
+  g_signal_connect (embed, "document-load-finished", G_CALLBACK (on_web_view_document_load_finished), provider);
+  g_signal_connect (embed,
+                    "navigation-policy-decision-requested",
+                    G_CALLBACK (on_web_view_navigation_policy_decision_requested),
+                    provider);
 
-      if (!gtk_show_uri (NULL,
-                         url,
-                         GDK_CURRENT_TIME,
-                         &priv->error))
-        {
-          goto out;
-        }
-    }
-  else
-    {
-      GtkWidget *web_view;
-      GtkWidget *embed;
-      GVariant *preseed_data;
-      GSList *cookies;
-
-      web_view = goa_web_view_new ();
-      gtk_widget_set_hexpand (web_view, TRUE);
-      gtk_widget_set_vexpand (web_view, TRUE);
-      embed = goa_web_view_get_view (GOA_WEB_VIEW (web_view));
-
-      preseed_data = goa_provider_get_preseed_data (GOA_PROVIDER (provider));
-      cookies = extract_cookies_from_preseed_data (preseed_data);
-      goa_web_view_add_cookies (GOA_WEB_VIEW (web_view), cookies);
-      soup_cookies_free (cookies);
-
-      if (goa_oauth2_provider_get_use_mobile_browser (provider))
-        goa_web_view_fake_mobile (GOA_WEB_VIEW (web_view));
-
-      webkit_web_view_load_uri (WEBKIT_WEB_VIEW (embed), url);
-      g_signal_connect (embed,
-                        "document-load-finished",
-                        G_CALLBACK (on_web_view_document_load_finished),
-                        provider);
-      g_signal_connect (embed,
-                        "navigation-policy-decision-requested",
-                        G_CALLBACK (on_web_view_navigation_policy_decision_requested),
-                        provider);
-
-      gtk_container_add (GTK_CONTAINER (grid), web_view);
-    }
+  gtk_container_add (GTK_CONTAINER (grid), web_view);
 
   gtk_widget_show_all (GTK_WIDGET (vbox));
   gtk_dialog_run (GTK_DIALOG (dialog));
@@ -1867,7 +1776,6 @@ goa_oauth2_provider_class_init (GoaOAuth2ProviderClass *klass)
   klass->build_authorization_uri  = goa_oauth2_provider_build_authorization_uri_default;
   klass->get_token_uri            = goa_oauth2_provider_get_token_uri_default;
   klass->get_scope                = goa_oauth2_provider_get_scope_default;
-  klass->get_use_external_browser = goa_oauth2_provider_get_use_external_browser_default;
   klass->get_use_mobile_browser   = goa_oauth2_provider_get_use_mobile_browser_default;
   klass->is_password_node         = goa_oauth2_provider_is_password_node_default;
   klass->add_account_key_values   = goa_oauth2_provider_add_account_key_values_default;
