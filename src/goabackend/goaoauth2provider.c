@@ -765,33 +765,6 @@ get_tokens_sync (GoaOAuth2Provider  *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-check_cookie (SoupCookie *cookie, gpointer user_data)
-{
-  GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
-  GoaOAuth2ProviderPrivate *priv = provider->priv;
-  GList *children;
-  GList *l;
-  GtkDialog *dialog = priv->dialog;
-  GtkWidget *action_area;
-  const gchar *auth_cookie;
-  const gchar *name;
-
-  auth_cookie = goa_oauth2_provider_get_authentication_cookie (provider);
-  name = soup_cookie_get_name (cookie);
-  if (g_strcmp0 (auth_cookie, name) != 0)
-    return;
-
-  action_area = gtk_dialog_get_action_area (dialog);
-  children = gtk_container_get_children (GTK_CONTAINER (action_area));
-  for (l = children; l != NULL; l = l->next)
-    {
-      GtkWidget *child = l->data;
-      gtk_container_remove (GTK_CONTAINER (action_area), child);
-    }
-  g_list_free (children);
-}
-
-static void
 on_dom_node_click (WebKitDOMNode *element, WebKitDOMEvent *event, gpointer user_data)
 {
   GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
@@ -817,19 +790,10 @@ on_web_view_document_load_finished (WebKitWebView *web_view, WebKitWebFrame *fra
 {
   GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
   GoaOAuth2ProviderPrivate *priv = provider->priv;
-  GSList *slist;
-  SoupCookieJar *cookie_jar;
-  SoupSession *session;
   WebKitDOMDocument *document;
   WebKitDOMNodeList *elements;
   gulong element_count;
   gulong i;
-
-  session = webkit_get_default_session ();
-  cookie_jar = SOUP_COOKIE_JAR (soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR));
-  slist = soup_cookie_jar_all_cookies (cookie_jar);
-  g_slist_foreach (slist, (GFunc) check_cookie, provider);
-  g_slist_free_full (slist, (GDestroyNotify) soup_cookie_free);
 
   document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (web_view));
   elements = webkit_dom_document_get_elements_by_tag_name (document, "*");
@@ -1332,8 +1296,10 @@ goa_oauth2_provider_refresh_account (GoaProvider  *_provider,
 
   dialog = gtk_dialog_new_with_buttons (NULL,
                                         parent,
-                                        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        _("_Cancel"), GTK_RESPONSE_REJECT,
+                                        GTK_DIALOG_MODAL
+                                        | GTK_DIALOG_DESTROY_WITH_PARENT
+                                        | GTK_DIALOG_USE_HEADER_BAR,
+                                        NULL,
                                         NULL);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 12);
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
