@@ -104,19 +104,19 @@ get_consumer_secret (GoaOAuthProvider *provider)
 static const gchar *
 get_request_uri (GoaOAuthProvider *provider)
 {
-  return "http://m.flickr.com/services/oauth/request_token";
+  return "https://m.flickr.com/services/oauth/request_token";
 }
 
 static const gchar *
 get_authorization_uri (GoaOAuthProvider *provider)
 {
-  return "http://m.flickr.com/services/oauth/authorize";
+  return "https://m.flickr.com/services/oauth/authorize";
 }
 
 static const gchar *
 get_token_uri (GoaOAuthProvider *provider)
 {
-  return "http://m.flickr.com/services/oauth/access_token";
+  return "https://m.flickr.com/services/oauth/access_token";
 }
 
 static const gchar *
@@ -165,7 +165,7 @@ get_identity_sync (GoaOAuthProvider  *provider,
                                       goa_oauth_provider_get_consumer_secret (provider),
                                       access_token,
                                       access_token_secret,
-                                      "http://api.flickr.com/services/rest",
+                                      "https://api.flickr.com/services/rest",
                                       FALSE);
   call = rest_proxy_new_call (proxy);
   rest_proxy_call_add_param (call, "method", "flickr.test.login");
