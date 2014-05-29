@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012, 2013 Red Hat, Inc.
+ * Copyright (C) 2012, 2013, 2014 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,6 +31,9 @@
 G_BEGIN_DECLS
 
 #define GOA_OAUTH2_ACCESS_DENIED "access_denied"
+
+#define GOA_SETTINGS_SCHEMA "org.gnome.online-accounts"
+#define GOA_SETTINGS_WHITELISTED_PROVIDERS "whitelisted-providers"
 
 typedef gpointer (*GoaPeekInterfaceFunc)   (GoaObject *);
 

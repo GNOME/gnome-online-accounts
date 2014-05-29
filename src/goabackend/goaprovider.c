@@ -751,6 +751,53 @@ goa_provider_ensure_extension_points_registered (void)
     }
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+
+static struct
+{
+  const gchar *name;
+  GType (*get_type) (void);
+} ordered_builtins_map[] = {
+  /* The order is in which the providers' types are created is
+   * important because it affects the order in which they are
+   * returned by goa_provider_get_all.
+   */
+#ifdef GOA_GOOGLE_ENABLED
+  { GOA_GOOGLE_NAME, goa_google_provider_get_type },
+#endif
+#ifdef GOA_OWNCLOUD_ENABLED
+  { GOA_OWNCLOUD_NAME, goa_owncloud_provider_get_type },
+#endif
+#ifdef GOA_FACEBOOK_ENABLED
+  { GOA_FACEBOOK_NAME, goa_facebook_provider_get_type },
+#endif
+#ifdef GOA_FLICKR_ENABLED
+  { GOA_FLICKR_NAME, goa_flickr_provider_get_type },
+#endif
+#ifdef GOA_WINDOWS_LIVE_ENABLED
+  { GOA_WINDOWS_LIVE_NAME, goa_windows_live_provider_get_type },
+#endif
+#ifdef GOA_POCKET_ENABLED
+  { GOA_POCKET_NAME, goa_pocket_provider_get_type },
+#endif
+#ifdef GOA_EXCHANGE_ENABLED
+  { GOA_EXCHANGE_NAME, goa_exchange_provider_get_type },
+#endif
+#ifdef GOA_IMAP_SMTP_ENABLED
+  { GOA_IMAP_SMTP_NAME, goa_imap_smtp_provider_get_type },
+#endif
+#ifdef GOA_KERBEROS_ENABLED
+  { GOA_KERBEROS_NAME, goa_kerberos_provider_get_type },
+#endif
+#ifdef GOA_YAHOO_ENABLED
+  { GOA_YAHOO_NAME, goa_yahoo_provider_get_type },
+#endif
+#ifdef GOA_TELEPATHY_ENABLED
+  { GOA_TELEPATHY_NAME, goa_telepathy_factory_get_type },
+#endif
+  { NULL, NULL }
+};
+
 static void
 ensure_builtins_loaded (void)
 {
@@ -760,44 +807,53 @@ ensure_builtins_loaded (void)
 
   if (g_once_init_enter (&once_init_value))
     {
-      /* The order is in which the providers' types are created is
-       * important because it affects the order in which they are
-       * returned by goa_provider_get_all.
-       */
-#ifdef GOA_GOOGLE_ENABLED
-      g_type_ensure (GOA_TYPE_GOOGLE_PROVIDER);
-#endif
-#ifdef GOA_OWNCLOUD_ENABLED
-      g_type_ensure (GOA_TYPE_OWNCLOUD_PROVIDER);
-#endif
-#ifdef GOA_FACEBOOK_ENABLED
-      g_type_ensure (GOA_TYPE_FACEBOOK_PROVIDER);
-#endif
-#ifdef GOA_FLICKR_ENABLED
-      g_type_ensure (GOA_TYPE_FLICKR_PROVIDER);
-#endif
-#ifdef GOA_WINDOWS_LIVE_ENABLED
-      g_type_ensure (GOA_TYPE_WINDOWS_LIVE_PROVIDER);
-#endif
-#ifdef GOA_POCKET_ENABLED
-      g_type_ensure (GOA_TYPE_POCKET_PROVIDER);
-#endif
-#ifdef GOA_EXCHANGE_ENABLED
-      g_type_ensure (GOA_TYPE_EXCHANGE_PROVIDER);
-#endif
-#ifdef GOA_IMAP_SMTP_ENABLED
-      g_type_ensure (GOA_TYPE_IMAP_SMTP_PROVIDER);
-#endif
-#ifdef GOA_KERBEROS_ENABLED
-      g_type_ensure (GOA_TYPE_KERBEROS_PROVIDER);
-#endif
-#ifdef GOA_YAHOO_ENABLED
-      g_type_ensure (GOA_TYPE_YAHOO_PROVIDER);
-#endif
-#ifdef GOA_TELEPATHY_ENABLED
-      g_type_ensure (GOA_TYPE_TELEPATHY_FACTORY);
-#endif
+      GSettings *settings;
+      gchar **whitelisted_providers;
+      guint i;
+      guint j;
+      gboolean all = FALSE;
 
+      settings = g_settings_new (GOA_SETTINGS_SCHEMA);
+      whitelisted_providers = g_settings_get_strv (settings, GOA_SETTINGS_WHITELISTED_PROVIDERS);
+
+      /* Enable everything if there is 'all'. */
+      for (i = 0; whitelisted_providers[i] != NULL; i++)
+        {
+          if (g_strcmp0 (whitelisted_providers[i], "all") == 0)
+            {
+              g_debug ("Loading all providers: ");
+              for (j = 0; ordered_builtins_map[j].name != NULL; j++)
+                {
+                  g_debug (" - %s", ordered_builtins_map[j].name);
+                  g_type_ensure ((*ordered_builtins_map[j].get_type) ());
+                }
+
+              all = TRUE;
+              break;
+            }
+        }
+
+      if (all)
+        goto cleanup;
+
+      /* Otherwise try them one by one. */
+      g_debug ("Loading whitelisted providers: ");
+      for (i = 0; ordered_builtins_map[i].name != NULL; i++)
+        {
+          for (j = 0; whitelisted_providers[j] != NULL; j++)
+            {
+              if (g_strcmp0 (whitelisted_providers[j], ordered_builtins_map[i].name) == 0)
+                {
+                  g_debug (" - %s", ordered_builtins_map[j].name);
+                  g_type_ensure ((*ordered_builtins_map[i].get_type) ());
+                  break;
+                }
+            }
+        }
+
+    cleanup:
+      g_strfreev (whitelisted_providers);
+      g_object_unref (settings);
       g_once_init_leave (&once_init_value, 1);
     }
 }
