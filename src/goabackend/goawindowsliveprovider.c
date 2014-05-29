@@ -60,7 +60,7 @@ G_DEFINE_TYPE_WITH_CODE (GoaWindowsLiveProvider, goa_windows_live_provider, GOA_
                          goa_provider_ensure_extension_points_registered ();
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
 							 g_define_type_id,
-							 "windows_live",
+							 GOA_WINDOWS_LIVE_NAME,
 							 0));
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -68,7 +68,7 @@ G_DEFINE_TYPE_WITH_CODE (GoaWindowsLiveProvider, goa_windows_live_provider, GOA_
 static const gchar *
 get_provider_type (GoaProvider *_provider)
 {
-  return "windows_live";
+  return GOA_WINDOWS_LIVE_NAME;
 }
 
 static gchar *

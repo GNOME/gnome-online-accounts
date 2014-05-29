@@ -58,7 +58,7 @@ G_DEFINE_TYPE_WITH_CODE (GoaFacebookProvider, goa_facebook_provider, GOA_TYPE_OA
                          goa_provider_ensure_extension_points_registered ();
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
 							 g_define_type_id,
-							 "facebook",
+							 GOA_FACEBOOK_NAME,
 							 0));
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -66,7 +66,7 @@ G_DEFINE_TYPE_WITH_CODE (GoaFacebookProvider, goa_facebook_provider, GOA_TYPE_OA
 static const gchar *
 get_provider_type (GoaProvider *_provider)
 {
-  return "facebook";
+  return GOA_FACEBOOK_NAME;
 }
 
 static gchar *

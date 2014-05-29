@@ -58,7 +58,7 @@ G_DEFINE_TYPE_WITH_CODE (GoaYahooProvider, goa_yahoo_provider, GOA_TYPE_OAUTH_PR
                          goa_provider_ensure_extension_points_registered ();
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
 							 g_define_type_id,
-							 "yahoo",
+							 GOA_YAHOO_NAME,
 							 0));
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -66,7 +66,7 @@ G_DEFINE_TYPE_WITH_CODE (GoaYahooProvider, goa_yahoo_provider, GOA_TYPE_OAUTH_PR
 static const gchar *
 get_provider_type (GoaProvider *_provider)
 {
-  return "yahoo";
+  return GOA_YAHOO_NAME;
 }
 
 static gchar *

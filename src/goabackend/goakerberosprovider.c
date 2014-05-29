@@ -64,13 +64,13 @@ G_DEFINE_TYPE_WITH_CODE (GoaKerberosProvider, goa_kerberos_provider, GOA_TYPE_PR
                          goa_provider_ensure_extension_points_registered ();
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
-                                                         "kerberos",
+                                                         GOA_KERBEROS_NAME,
                                                          0));
 
 static const gchar *
 get_provider_type (GoaProvider *provider)
 {
-  return "kerberos";
+  return GOA_KERBEROS_NAME;
 }
 
 static gchar *

@@ -56,7 +56,7 @@ G_DEFINE_TYPE_WITH_CODE (GoaExchangeProvider, goa_exchange_provider, GOA_TYPE_PR
                          goa_provider_ensure_extension_points_registered ();
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
 							 g_define_type_id,
-							 "exchange",
+							 GOA_EXCHANGE_NAME,
 							 0));
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -64,7 +64,7 @@ G_DEFINE_TYPE_WITH_CODE (GoaExchangeProvider, goa_exchange_provider, GOA_TYPE_PR
 static const gchar *
 get_provider_type (GoaProvider *provider)
 {
-  return "exchange";
+  return GOA_EXCHANGE_NAME;
 }
 
 static gchar *

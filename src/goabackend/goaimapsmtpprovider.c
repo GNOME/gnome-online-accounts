@@ -59,7 +59,7 @@ G_DEFINE_TYPE_WITH_CODE (GoaImapSmtpProvider, goa_imap_smtp_provider, GOA_TYPE_P
                          goa_provider_ensure_extension_points_registered ();
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
 							 g_define_type_id,
-							 "imap_smtp",
+							 GOA_IMAP_SMTP_NAME,
 							 0));
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -67,7 +67,7 @@ G_DEFINE_TYPE_WITH_CODE (GoaImapSmtpProvider, goa_imap_smtp_provider, GOA_TYPE_P
 static const gchar *
 get_provider_type (GoaProvider *provider)
 {
-  return "imap_smtp";
+  return GOA_IMAP_SMTP_NAME;
 }
 
 static gchar *

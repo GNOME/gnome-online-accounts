@@ -149,6 +149,7 @@ fi
 #
 
 # Microsoft Exchange
+AC_DEFINE(GOA_EXCHANGE_NAME, ["exchange"], [ProviderType and extension point name])
 AC_ARG_ENABLE([exchange],
               [AS_HELP_STRING([--enable-exchange],
               [Enable Microsoft Exchange provider])],
@@ -159,6 +160,7 @@ if test "$enable_exchange" != "no"; then
 fi
 
 # Flickr
+AC_DEFINE(GOA_FLICKR_NAME, ["flickr"], [ProviderType and extension point name])
 AC_ARG_ENABLE([flickr], [AS_HELP_STRING([--enable-flickr], [Enable Flickr provider])], [], [enable_flickr=yes])
 AC_ARG_WITH(flickr-consumer-key,
             [AS_HELP_STRING([--with-flickr-consumer-key],
@@ -183,6 +185,7 @@ if test "$enable_flickr" != "no"; then
 fi
 
 # Google
+AC_DEFINE(GOA_GOOGLE_NAME, ["google"], [ProviderType and extension point name])
 AC_ARG_ENABLE([google], [AS_HELP_STRING([--enable-google], [Enable Google provider])], [], [enable_google=yes])
 AC_ARG_WITH(google-client-id,
             [AS_HELP_STRING([--with-google-client-id],
@@ -211,6 +214,7 @@ if test "$enable_google" != "no"; then
 fi
 
 # IMAP/SMTP
+AC_DEFINE(GOA_IMAP_SMTP_NAME, ["imap_smtp"], [ProviderType and extension point name])
 AC_ARG_ENABLE([imap-smtp],
               [AS_HELP_STRING([--enable-imap-smtp],
               [Enable IMAP/SMTP provider])],
@@ -221,6 +225,7 @@ if test "$enable_imap_smtp" != "no"; then
 fi
 
 # ownCloud
+AC_DEFINE(GOA_OWNCLOUD_NAME, ["owncloud"], [ProviderType and extension point name])
 AC_ARG_ENABLE([owncloud],
               [AS_HELP_STRING([--enable-owncloud],
               [Enable ownCloud provider])],
@@ -231,6 +236,7 @@ if test "$enable_owncloud" != "no"; then
 fi
 
 # Yahoo
+AC_DEFINE(GOA_YAHOO_NAME, ["yahoo"], [ProviderType and extension point name])
 AC_ARG_ENABLE([yahoo], [AS_HELP_STRING([--enable-yahoo], [Enable Yahoo provider])], [], [enable_yahoo=no])
 AC_ARG_WITH(yahoo-consumer-key,
             [AS_HELP_STRING([--with-yahoo-consumer-key],
@@ -255,6 +261,7 @@ if test "$enable_yahoo" != "no"; then
 fi
 
 # Facebook
+AC_DEFINE(GOA_FACEBOOK_NAME, ["facebook"], [ProviderType and extension point name])
 AC_ARG_ENABLE([facebook], [AS_HELP_STRING([--enable-facebook],
                                           [Enable Facebook provider])],
                                           [],
@@ -276,6 +283,7 @@ if test "$enable_facebook" != "no"; then
 fi
 
 # Windows Live
+AC_DEFINE(GOA_WINDOWS_LIVE_NAME, ["windows_live"], [ProviderType and extension point name])
 AC_ARG_ENABLE([windows-live], [AS_HELP_STRING([--enable-windows-live],
                                               [Enable Windows Live provider])],
                                               [],
@@ -296,6 +304,7 @@ if test "$enable_windows_live" != "no"; then
 fi
 
 # Telepathy
+AC_DEFINE(GOA_TELEPATHY_NAME, ["telepathy"], [ProviderType and extension point name])
 AC_ARG_ENABLE([telepathy],
               [AS_HELP_STRING([--enable-telepathy],
               [Enable Telepathy IM provider])],
@@ -308,6 +317,7 @@ fi
 PKG_CHECK_MODULES(TP, telepathy-glib)
 
 # Pocket
+AC_DEFINE(GOA_POCKET_NAME, ["pocket"], [ProviderType and extension point name])
 AC_ARG_ENABLE([pocket], [AS_HELP_STRING([--enable-pocket],
                                               [Enable Pocket provider])],
                                               [],
@@ -328,6 +338,7 @@ if test "$enable_pocket" != "no"; then
 fi
 
 # Kerberos
+AC_DEFINE(GOA_KERBEROS_NAME, ["kerberos"], [ProviderType and extension point name])
 AC_ARG_ENABLE([kerberos],
               [AS_HELP_STRING([--enable-kerberos],
               [Enable kerberos support])],

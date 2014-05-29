@@ -59,7 +59,7 @@ G_DEFINE_TYPE_WITH_CODE (GoaFlickrProvider, goa_flickr_provider, GOA_TYPE_OAUTH_
                          goa_provider_ensure_extension_points_registered ();
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
 							 g_define_type_id,
-							 "flickr",
+							 GOA_FLICKR_NAME,
 							 0));
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -67,7 +67,7 @@ G_DEFINE_TYPE_WITH_CODE (GoaFlickrProvider, goa_flickr_provider, GOA_TYPE_OAUTH_
 static const gchar *
 get_provider_type (GoaProvider *_provider)
 {
-  return "flickr";
+  return GOA_FLICKR_NAME;
 }
 
 static gchar *

@@ -1031,7 +1031,7 @@ goa_telepathy_provider_constructed (GObject *object)
     }
 
   priv->provider_type = g_strdup_printf ("%s/%s",
-      GOA_TELEPATHY_PROVIDER_BASE_TYPE, priv->protocol_name);
+      GOA_TELEPATHY_NAME, priv->protocol_name);
 }
 
 static void

@@ -40,7 +40,7 @@ G_DEFINE_TYPE_WITH_CODE (GoaTelepathyFactory, goa_telepathy_factory, GOA_TYPE_PR
                          goa_provider_ensure_extension_points_registered ();
                          g_io_extension_point_implement (GOA_PROVIDER_FACTORY_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
-                                                         GOA_TELEPATHY_PROVIDER_BASE_TYPE,
+                                                         GOA_TELEPATHY_NAME,
                                                          0));
 
 /* ---------------------------------------------------------------------------------------------------- */

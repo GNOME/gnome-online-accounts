@@ -29,9 +29,6 @@
 
 G_BEGIN_DECLS
 
-/* All instances of this provider are in the form "telepathy/SERVICE-NAME". */
-#define GOA_TELEPATHY_PROVIDER_BASE_TYPE "telepathy"
-
 #define GOA_TYPE_TELEPATHY_PROVIDER   (goa_telepathy_provider_get_type ())
 #define GOA_TELEPATHY_PROVIDER(o)     (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_TELEPATHY_PROVIDER, GoaTelepathyProvider))
 #define GOA_IS_TELEPATHY_PROVIDER(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_TELEPATHY_PROVIDER))
