@@ -77,6 +77,7 @@ typedef struct
   SoupMessage *msgs[2];
   SoupSession *session;
   gboolean accept_ssl_errors;
+  guint pending;
   gulong cancellable_id;
   xmlOutputBuffer *buf;
 } AutodiscoverData;
@@ -200,10 +201,6 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
   xmlDoc *doc;
   xmlNode *node;
 
-  status = msg->status_code;
-  if (status == SOUP_STATUS_NONE)
-    return;
-
   error = NULL;
   op_res = FALSE;
   size = sizeof (data->msgs) / sizeof (data->msgs[0]);
@@ -213,13 +210,15 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
       if (data->msgs[idx] == msg)
         break;
     }
-  if (idx == size)
+  if (idx == size || data->pending == 0)
     return;
 
   data->msgs[idx] = NULL;
+  status = msg->status_code;
 
   /* status == SOUP_STATUS_CANCELLED, if we are being aborted by the
-   * GCancellable or due to an SSL error.
+   * GCancellable, an SSL error or another message that was
+   * successful.
    */
   if (status == SOUP_STATUS_CANCELLED)
     goto out;
@@ -318,35 +317,33 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
            * message, the callback (ie. this function) will be invoked before
            * soup_session_cancel_message returns.
            */
-          soup_session_cancel_message (data->session, data->msgs[idx], SOUP_STATUS_NONE);
-          data->msgs[idx] = NULL;
+          soup_session_cancel_message (data->session, data->msgs[idx], SOUP_STATUS_CANCELLED);
         }
     }
 
  out:
-  /* error == NULL, if we are being aborted by the GCancellable or
-   * due to an SSL error.
+  /* error == NULL, if we are being aborted by the GCancellable, an
+   * SSL error or another message that was successful.
    */
   if (!op_res)
     {
-      for (idx = 0; idx < size; idx++)
-        {
-          if (data->msgs[idx] != NULL)
-            {
-              /* There's another request outstanding.
-               * Hope that it has better luck.
-               */
-              g_clear_error (&error);
-              return;
-            }
-        }
+      /* There's another request outstanding.
+       * Hope that it has better luck.
+       */
+      if (data->pending > 1)
+        g_clear_error (&error);
+
       if (error != NULL)
         g_simple_async_result_take_error (data->res, error);
     }
 
-  g_simple_async_result_set_op_res_gboolean (data->res, op_res);
-  g_simple_async_result_complete_in_idle (data->res);
-  g_idle_add (ews_client_autodiscover_data_free, data);
+  data->pending--;
+  if (data->pending == 0)
+    {
+      g_simple_async_result_set_op_res_gboolean (data->res, op_res);
+      g_simple_async_result_complete_in_idle (data->res);
+      g_idle_add (ews_client_autodiscover_data_free, data);
+    }
 }
 
 static xmlDoc *
@@ -473,6 +470,7 @@ goa_ews_client_autodiscover (GoaEwsClient        *client,
   data->res = g_simple_async_result_new (G_OBJECT (client), callback, user_data, goa_ews_client_autodiscover);
   data->msgs[0] = ews_client_create_msg_for_url (url1, buf);
   data->msgs[1] = ews_client_create_msg_for_url (url2, buf);
+  data->pending = sizeof (data->msgs) / sizeof (data->msgs[0]);
   data->session = soup_session_async_new_with_options (SOUP_SESSION_SSL_USE_SYSTEM_CA_FILE, TRUE,
                                                        SOUP_SESSION_SSL_STRICT, FALSE,
                                                        SOUP_SESSION_USE_NTLM, TRUE,
