@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-online-accounts 3.11.x\n"
+"Project-Id-Version: gnome-online-accounts 3.12.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-18 18:27+0100\n"
-"PO-Revision-Date: 2014-03-18 18:28+0100\n"
+"POT-Creation-Date: 2014-06-03 18:54+0200\n"
+"PO-Revision-Date: 2014-06-03 18:56+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: \n"
@@ -28,27 +28,27 @@ msgid "ProviderType property is not set for account"
 msgstr "Egenskap ProviderType er ikke satt for kontoen"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:231 ../src/goabackend/goahttpclient.c:172
+#: ../src/goabackend/goaewsclient.c:230 ../src/goabackend/goahttpclient.c:172
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Kode: %u - Uventet svar fra tjener"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:247
+#: ../src/goabackend/goaewsclient.c:246
 #, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "Klarte ikke å lese XML-svar for automatisk gjenkjenning"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: ../src/goabackend/goaewsclient.c:258 ../src/goabackend/goaewsclient.c:273
-#: ../src/goabackend/goaewsclient.c:288
+#: ../src/goabackend/goaewsclient.c:257 ../src/goabackend/goaewsclient.c:272
+#: ../src/goabackend/goaewsclient.c:287
 #, c-format
 msgid "Failed to find ‘%s’ element"
 msgstr "Klarte ikke å finne element «%s»"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:305
+#: ../src/goabackend/goaewsclient.c:308
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "Klarte ikke å finne ASUrl og OABUrl i svar for automatisk gjenkjenning"
@@ -185,20 +185,20 @@ msgstr "A_vbryt"
 #. Translators: This is a label for a series of
 #. * options switches. For example: “Use for Mail”.
 #: ../src/goabackend/goaexchangeprovider.c:943
-#: ../src/goabackend/goafacebookprovider.c:433
+#: ../src/goabackend/goafacebookprovider.c:434
 #: ../src/goabackend/goaflickrprovider.c:424
 #: ../src/goabackend/goagoogleprovider.c:563
 #: ../src/goabackend/goakerberosprovider.c:1727
 #: ../src/goabackend/goaowncloudprovider.c:1101
 #: ../src/goabackend/goapocketprovider.c:425
 #: ../src/goabackend/goatelepathyprovider.c:915
-#: ../src/goabackend/goawindowsliveprovider.c:453
+#: ../src/goabackend/goawindowsliveprovider.c:427
 msgid "Use for"
 msgstr "Bruk for"
 
 #: ../src/goabackend/goaexchangeprovider.c:945
 #: ../src/goabackend/goagoogleprovider.c:565
-#: ../src/goabackend/goawindowsliveprovider.c:455
+#: ../src/goabackend/goawindowsliveprovider.c:429
 msgid "_Mail"
 msgstr "E-_post"
 
@@ -219,19 +219,21 @@ msgid "Facebook"
 msgstr "Facebook"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:215
+#: ../src/goabackend/goafacebookprovider.c:216
 #: ../src/goabackend/goaflickrprovider.c:186
 #: ../src/goabackend/goagoogleprovider.c:214
-#: ../src/goabackend/goawindowsliveprovider.c:194
+#: ../src/goabackend/goawindowsliveprovider.c:192
 #: ../src/goabackend/goayahooprovider.c:184
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
-msgstr "Forventet status 200 ved forespørsel om din identitet, men fikk status %d (%s)"
+msgstr ""
+"Forventet status 200 ved forespørsel om din identitet, men fikk status %d "
+"(%s)"
 
-#: ../src/goabackend/goafacebookprovider.c:234
-#: ../src/goabackend/goafacebookprovider.c:246
-#: ../src/goabackend/goafacebookprovider.c:256
+#: ../src/goabackend/goafacebookprovider.c:235
+#: ../src/goabackend/goafacebookprovider.c:247
+#: ../src/goabackend/goafacebookprovider.c:257
 #: ../src/goabackend/goaflickrprovider.c:205
 #: ../src/goabackend/goaflickrprovider.c:217
 #: ../src/goabackend/goaflickrprovider.c:227
@@ -242,9 +244,9 @@ msgstr "Forventet status 200 ved forespørsel om din identitet, men fikk status 
 #: ../src/goabackend/goaoauth2provider.c:728
 #: ../src/goabackend/goaoauth2provider.c:758
 #: ../src/goabackend/goaoauth2provider.c:770
-#: ../src/goabackend/goawindowsliveprovider.c:213
-#: ../src/goabackend/goawindowsliveprovider.c:225
-#: ../src/goabackend/goawindowsliveprovider.c:237
+#: ../src/goabackend/goawindowsliveprovider.c:211
+#: ../src/goabackend/goawindowsliveprovider.c:223
+#: ../src/goabackend/goawindowsliveprovider.c:235
 #: ../src/goabackend/goayahooprovider.c:203
 #: ../src/goabackend/goayahooprovider.c:215
 #: ../src/goabackend/goayahooprovider.c:226
@@ -255,14 +257,13 @@ msgstr "Forventet status 200 ved forespørsel om din identitet, men fikk status 
 msgid "Could not parse response"
 msgstr "Kunne ikke å lese svar"
 
-#: ../src/goabackend/goafacebookprovider.c:435
+#: ../src/goabackend/goafacebookprovider.c:436
 #: ../src/goabackend/goagoogleprovider.c:580
 #: ../src/goabackend/goatelepathyprovider.c:917
-#: ../src/goabackend/goawindowsliveprovider.c:460
 msgid "C_hat"
 msgstr "_Prat"
 
-#: ../src/goabackend/goafacebookprovider.c:440
+#: ../src/goabackend/goafacebookprovider.c:441
 #: ../src/goabackend/goaflickrprovider.c:426
 msgid "_Photos"
 msgstr "_Bilder"
@@ -283,7 +284,7 @@ msgstr "Google"
 
 #: ../src/goabackend/goagoogleprovider.c:585
 #: ../src/goabackend/goaowncloudprovider.c:1113
-#: ../src/goabackend/goawindowsliveprovider.c:465
+#: ../src/goabackend/goawindowsliveprovider.c:434
 msgid "_Documents"
 msgstr "_Dokumenter"
 
@@ -440,7 +441,7 @@ msgid "Enterprise domain or realm name"
 msgstr "Bedriftsdomene eller områdenavn"
 
 #: ../src/goabackend/goakerberosprovider.c:1353
-#: ../src/goaidentity/goaidentityservice.c:1112
+#: ../src/goaidentity/goaidentityservice.c:1109
 msgid "Log In to Realm"
 msgstr "Logg inn i område"
 
@@ -471,7 +472,7 @@ msgstr "Nettverks_ressurser"
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
-msgstr ""
+msgstr "Forventet status 200 ved forespørsel om aksesstegn. Fikk i stedet status %d (%s)"
 
 #: ../src/goabackend/goaoauth2provider.c:961
 msgid "Authorization response: "
@@ -538,7 +539,7 @@ msgstr "Feil ved henting av forespørselstoken: "
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
-msgstr ""
+msgstr "Forventet status 200 for å få et forespørselstegn. Fikk i stedet status %d (%s)"
 
 #: ../src/goabackend/goaoauthprovider.c:961
 #, c-format
@@ -549,7 +550,7 @@ msgstr "Mangler request_token eller request_token_secret hoder i svar"
 #: ../src/goabackend/goaoauthprovider.c:978
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr ""
+msgstr "Lim inn tegn kode hentet fra <a href=\"%s\">autorisasjonssiden</a>:"
 
 #: ../src/goabackend/goaoauthprovider.c:1575
 #, c-format
@@ -763,80 +764,80 @@ msgstr "Yahoo"
 msgid "Expected status 200 when requesting name, instead got status %d (%s)"
 msgstr "Forventet status 200 ved forespørsel om navn, men fikk status %d (%s)"
 
-#: ../src/goaidentity/goaalarm.c:212
+#: ../src/goaidentity/goaalarm.c:173
 msgid "Time"
 msgstr "Tid"
 
-#: ../src/goaidentity/goaalarm.c:213
+#: ../src/goaidentity/goaalarm.c:174
 msgid "Time to fire"
 msgstr "Tid før start"
 
-#: ../src/goaidentity/goaidentityservice.c:376
+#: ../src/goaidentity/goaidentityservice.c:373
 msgid "initial secret passed before secret key exchange"
 msgstr "Opprinnelig hemmelighet videresendt før utveksling av hemmelig nøkkel"
 
-#: ../src/goaidentity/goaidentityservice.c:568
+#: ../src/goaidentity/goaidentityservice.c:565
 msgid "Initial secret key is invalid"
 msgstr "Opprinnelig hemmelig nøkkel er ugyldig"
 
-#: ../src/goaidentity/goaidentityservice.c:1117
+#: ../src/goaidentity/goaidentityservice.c:1114
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "Nettverksområde %s trenger informasjon for å logge deg inn."
 
-#: ../src/goaidentity/goakerberosidentity.c:261
-#: ../src/goaidentity/goakerberosidentity.c:270
-#: ../src/goaidentity/goakerberosidentity.c:598
+#: ../src/goaidentity/goakerberosidentity.c:254
+#: ../src/goaidentity/goakerberosidentity.c:263
+#: ../src/goaidentity/goakerberosidentity.c:590
 msgid "Could not find identity in credential cache: %k"
 msgstr "Fant ikke identiteten i buffer for påloggingsinformasjon: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:611
+#: ../src/goaidentity/goakerberosidentity.c:603
 msgid "Could not find identity credentials in cache: %k"
 msgstr "Fant ikke påloggingsinformasjon for identiteten i buffer: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:651
+#: ../src/goaidentity/goakerberosidentity.c:643
 msgid "Could not sift through identity credentials in cache: %k"
 msgstr ""
 "Kunne ikke se se gjennom påloggingsinformasjon for identitet i buffer: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:669
+#: ../src/goaidentity/goakerberosidentity.c:661
 msgid "Could not finish up sifting through identity credentials in cache: %k"
 msgstr ""
 "Kunne ikke sluttføre gjennomgang av påloggingsinformasjon for identitet i "
 "buffer: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:956
+#: ../src/goaidentity/goakerberosidentity.c:951
 #, c-format
 msgid "No associated identification found"
 msgstr "Ingen assosiert identifikasjon funnet"
 
-#: ../src/goaidentity/goakerberosidentity.c:1037
+#: ../src/goaidentity/goakerberosidentity.c:1032
 msgid "Could not create credential cache: %k"
 msgstr "Kunne ikke lage buffer for påloggingsinformasjon: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1071
+#: ../src/goaidentity/goakerberosidentity.c:1066
 msgid "Could not initialize credentials cache: %k"
 msgstr "Kunne ikke initiere buffer for påloggingsinformasjon: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1088
+#: ../src/goaidentity/goakerberosidentity.c:1083
 msgid "Could not store new credentials in credentials cache: %k"
 msgstr "Klarte ikke å lagre ny påloggingsinformasjon i buffer: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1363
+#: ../src/goaidentity/goakerberosidentity.c:1358
 #, c-format
 msgid "Could not renew identity: Not signed in"
 msgstr "Kunne ikke fornye identitet: Ikke logget inn"
 
-#: ../src/goaidentity/goakerberosidentity.c:1375
+#: ../src/goaidentity/goakerberosidentity.c:1370
 msgid "Could not renew identity: %k"
 msgstr "Kunne ikke fornye identitet: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1392
+#: ../src/goaidentity/goakerberosidentity.c:1387
 msgid "Could not get new credentials to renew identity %s: %k"
 msgstr ""
 "Kunne ikke hente ny påloggingsinformasjon for å fornye identitet %s: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1434
+#: ../src/goaidentity/goakerberosidentity.c:1429
 msgid "Could not erase identity: %k"
 msgstr "Kunne ikke slette identitet: %k"
 
@@ -844,6 +845,6 @@ msgstr "Kunne ikke slette identitet: %k"
 msgid "Could not find identity"
 msgstr "Fant ikke identitet"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:843
+#: ../src/goaidentity/goakerberosidentitymanager.c:838
 msgid "Could not create credential cache for identity"
 msgstr "Kunne ikke lage buffer for påloggingsinformasjon for identitet"
