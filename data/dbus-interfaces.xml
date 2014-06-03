@@ -3,6 +3,7 @@
 "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 
 <!--
+ Copyright (C) 2014 Pranav Kant
  Copyright (C) 2011, 2012, 2013, 2014 Red Hat, Inc.
 
  This library is free software; you can redistribute it and/or
@@ -695,6 +696,26 @@
          </literal>.
       -->
     <property name="Host" type="s" access="read"/>
+  </interface>
+
+  <!--
+      org.gnome.OnlineAccounts.MediaServer:
+      @since: 3.14
+
+      An account object implements this interface if it provides
+      media server like capabilities.
+  -->
+  <interface name="org.gnome.OnlineAccounts.MediaServer">
+    <!-- DlnaSupported:
+
+         True if media server device is DLNA supported.
+      -->
+    <property name="DlnaSupported" type="b" access="read"/>
+    <!-- Udn:
+
+         Unique Device Name. Used to uniquely identify the device.
+      -->
+    <property name="Udn" type="s" access="read"/>
   </interface>
 
   <!--
