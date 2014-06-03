@@ -55,6 +55,15 @@ libgoa_backend_1_0_la_HEADERS =						\
 	goaprovider.h							\
 	$(NULL)
 
+libgoa_backend_1_0_la_built_sources =						\
+	goadleynaservermanager.h		goadleynaservermanager.c	\
+	goadleynaservermediadevice.h		goadleynaservermediadevice.c	\
+	$(NULL)
+
+nodist_libgoa_backend_1_0_la_SOURCES =					\
+	$(libgoa_backend_1_0_la_built_sources)				\
+	$(NULL)
+
 libgoa_backend_1_0_la_SOURCES =						\
 	goabackend.h							\
 	goabackendtypes.h						\
@@ -87,6 +96,29 @@ libgoa_backend_1_0_la_SOURCES =						\
 	$(top_builddir)/src/goaidentity/org.gnome.Identity.c		\
 	$(top_builddir)/src/goaidentity/org.freedesktop.realmd.c	\
 	$(NULL)
+
+BUILT_SOURCES =								\
+	$(libgoa_backend_1_0_la_built_sources)				\
+	$(NULL)
+
+EXTRA_DIST +=								\
+	goadleynaservermanager.xml					\
+	goadleynaservermediadevice.xml					\
+	$(NULL)
+
+goadleynaservermanager.h goadleynaservermanager.c: goadleynaservermanager.xml
+	$(AM_V_GEN)gdbus-codegen						\
+		--c-namespace DleynaServer					\
+		--generate-c-code goadleynaservermanager			\
+		--interface-prefix com.intel.dLeynaServer.			\
+		$<
+
+goadleynaservermediadevice.h goadleynaservermediadevice.c: goadleynaservermediadevice.xml
+	$(AM_V_GEN)gdbus-codegen								\
+		--c-namespace DleynaServer							\
+		--generate-c-code goadleynaservermediadevice					\
+		--interface-prefix com.intel.dLeynaServer.					\
+		$<
 
 if BUILD_KERBEROS
 libgoa_backend_1_0_la_SOURCES +=					\
@@ -134,6 +166,7 @@ pkgconfig_DATA = goa-backend-1.0.pc
 # ----------------------------------------------------------------------------------------------------
 
 CLEANFILES += \
+	$(BUILT_SOURCES) \
 	$(enum_built_sources) \
 	$(NULL)
 
