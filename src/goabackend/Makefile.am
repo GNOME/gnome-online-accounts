@@ -69,6 +69,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goabackendtypes.h						\
 	goabackendenums-priv.h						\
 	goabackendenumtypes.h		goabackendenumtypes.c		\
+	goadlnaservermanager.h		goadlnaservermanager.c		\
 	goaewsclient.h			goaewsclient.c			\
 	goahttpclient.h			goahttpclient.c			\
 	goaprovider-priv.h		goaprovider.c			\
@@ -83,6 +84,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goagoogleprovider.h		goagoogleprovider.c		\
 	goafacebookprovider.h		goafacebookprovider.c		\
 	goaimapsmtpprovider.h		goaimapsmtpprovider.c		\
+	goamediaserverprovider.h	goamediaserverprovider.c	\
 	goaowncloudprovider.h		goaowncloudprovider.c		\
 	goayahooprovider.h		goayahooprovider.c		\
 	goaflickrprovider.h		goaflickrprovider.c		\

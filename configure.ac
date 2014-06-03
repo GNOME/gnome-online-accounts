@@ -225,6 +225,17 @@ if test "$enable_imap_smtp" != "no"; then
   AC_DEFINE(GOA_IMAP_SMTP_ENABLED, 1, [Enable IMAP/SMTP data provider])
 fi
 
+# Media Server
+AC_DEFINE(GOA_MEDIA_SERVER_NAME, ["media_server"], [ProviderType and extension point name])
+AC_ARG_ENABLE([media-server],
+              [AS_HELP_STRING([--enable-media-server],
+              [Enable Media Server provider])],
+              [],
+              [enable_media_server=no])
+if test "$enable_media_server" != "no"; then
+  AC_DEFINE(GOA_MEDIA_SERVER_ENABLED, 1, [Enable Media Server provider])
+fi
+
 # ownCloud
 AC_DEFINE(GOA_OWNCLOUD_NAME, ["owncloud"], [ProviderType and extension point name])
 AC_ARG_ENABLE([owncloud],
@@ -521,6 +532,7 @@ echo "
 	Flickr provider:                ${enable_flickr} (OAuth 1.0, key:${with_flickr_consumer_key} secret:${with_flickr_consumer_secret})
 	Google provider:                ${enable_google} (OAuth 2.0, id:${with_google_client_id} secret:${with_google_client_secret})
 	IMAP/SMTP provider:             ${enable_imap_smtp}
+	Media Server provider:          ${enable_media_server}
 	Microsoft Exchange provider:    ${enable_exchange}
 	ownCloud provider:              ${enable_owncloud}
 	Kerberos provider:              ${enable_kerberos}

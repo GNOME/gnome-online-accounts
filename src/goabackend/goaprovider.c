@@ -33,6 +33,7 @@
 #include "goawindowsliveprovider.h"
 #include "goatelepathyfactory.h"
 #include "goapocketprovider.h"
+#include "goamediaserverprovider.h"
 
 #ifdef GOA_KERBEROS_ENABLED
 #include "goakerberosprovider.h"
@@ -788,6 +789,9 @@ static struct
 #endif
 #ifdef GOA_KERBEROS_ENABLED
   { GOA_KERBEROS_NAME, goa_kerberos_provider_get_type },
+#endif
+#ifdef GOA_MEDIA_SERVER_ENABLED
+  { GOA_MEDIA_SERVER_NAME, goa_media_server_provider_get_type },
 #endif
 #ifdef GOA_YAHOO_ENABLED
   { GOA_YAHOO_NAME, goa_yahoo_provider_get_type },
