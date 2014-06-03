@@ -2,15 +2,15 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Kjartan Maraas <kmaraas@gnome.org>, 2011-2014.
+# Åka Sikrom <a4@hush.com>, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts 3.11.x\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-05-01 06:57+0000\n"
-"PO-Revision-Date: 2014-05-01 14:41+0100\n"
-"Last-Translator: Samm Rokki <a4@hush.com>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-06-03 19:51+0200\n"
+"PO-Revision-Date: 2014-05-26 21:33+0100\n"
+"Last-Translator: Åka Sikrom <a4@hush.com>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: ../src/daemon/goadaemon.c:783 ../src/daemon/goadaemon.c:1029
 #, c-format
 msgid "Failed to find a provider for: %s"
-msgstr "Klarte ikke å finne en tilbyder for: %s"
+msgstr "Klarte ikke å finne en tilbyder for %s"
 
 #. TODO: more specific
 #: ../src/daemon/goadaemon.c:1017
@@ -30,27 +30,27 @@ msgid "ProviderType property is not set for account"
 msgstr "Egenskap ProviderType er ikke satt for kontoen"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:229 ../src/goabackend/goahttpclient.c:170
+#: ../src/goabackend/goaewsclient.c:228 ../src/goabackend/goahttpclient.c:170
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Kode: %u - Uventet svar fra tjener"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:245
+#: ../src/goabackend/goaewsclient.c:244
 #, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "Klarte ikke å lese XML-svar for automatisk gjenkjenning"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: ../src/goabackend/goaewsclient.c:256 ../src/goabackend/goaewsclient.c:271
-#: ../src/goabackend/goaewsclient.c:286
+#: ../src/goabackend/goaewsclient.c:255 ../src/goabackend/goaewsclient.c:270
+#: ../src/goabackend/goaewsclient.c:285
 #, c-format
 msgid "Failed to find ‘%s’ element"
 msgstr "Klarte ikke å finne element «%s»"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:303
+#: ../src/goabackend/goaewsclient.c:306
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "Klarte ikke å finne ASUrl og OABUrl i svar for automatisk gjenkjenning"
@@ -61,9 +61,9 @@ msgstr "Microsoft Exchange"
 
 #. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:311
-#: ../src/goabackend/goaexchangeprovider.c:1022
+#: ../src/goabackend/goaexchangeprovider.c:1020
 #: ../src/goabackend/goaowncloudprovider.c:398
-#: ../src/goabackend/goaowncloudprovider.c:1185
+#: ../src/goabackend/goaowncloudprovider.c:1183
 #, c-format
 msgid "Did not find password with identity ‘%s’ in credentials"
 msgstr "Fant ikke passord med identitet «%s» i påloggingsinformasjonen"
@@ -78,34 +78,43 @@ msgstr "Fant ikke passord med identitet «%s» i påloggingsinformasjonen"
 msgid "Invalid password with username ‘%s’ (%s, %d): "
 msgstr "Ugyldig passord med brukernavn «%s» (%s, %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:493
-#: ../src/goabackend/goaimapsmtpprovider.c:716
+#: ../src/goabackend/goaexchangeprovider.c:492
+#: ../src/goabackend/goaimapsmtpprovider.c:715
 msgid "_E-mail"
 msgstr "_E-post"
 
-#: ../src/goabackend/goaexchangeprovider.c:494
-#: ../src/goabackend/goaimapsmtpprovider.c:736
-#: ../src/goabackend/goaimapsmtpprovider.c:756
-#: ../src/goabackend/goaowncloudprovider.c:650
+#: ../src/goabackend/goaexchangeprovider.c:493
+#: ../src/goabackend/goaimapsmtpprovider.c:735
+#: ../src/goabackend/goaimapsmtpprovider.c:755
+#: ../src/goabackend/goaowncloudprovider.c:649
 msgid "_Password"
 msgstr "_Passord"
 
-#: ../src/goabackend/goaexchangeprovider.c:497
+#: ../src/goabackend/goaexchangeprovider.c:496
 msgid "_Custom"
 msgstr "E_gendefinert"
 
-#: ../src/goabackend/goaexchangeprovider.c:508
-#: ../src/goabackend/goaimapsmtpprovider.c:735
-#: ../src/goabackend/goaimapsmtpprovider.c:755
-#: ../src/goabackend/goakerberosprovider.c:1124
-#: ../src/goabackend/goaowncloudprovider.c:649
+#: ../src/goabackend/goaexchangeprovider.c:507
+#: ../src/goabackend/goaimapsmtpprovider.c:734
+#: ../src/goabackend/goaimapsmtpprovider.c:754
+#: ../src/goabackend/goakerberosprovider.c:1123
+#: ../src/goabackend/goaowncloudprovider.c:648
 msgid "User_name"
 msgstr "Br_ukernavn"
 
-#: ../src/goabackend/goaexchangeprovider.c:509
-#: ../src/goabackend/goaowncloudprovider.c:648
+#: ../src/goabackend/goaexchangeprovider.c:508
+#: ../src/goabackend/goaowncloudprovider.c:647
 msgid "_Server"
 msgstr "_Tjener"
+
+#. --
+#: ../src/goabackend/goaexchangeprovider.c:518
+#: ../src/goabackend/goaimapsmtpprovider.c:767
+#: ../src/goabackend/goakerberosprovider.c:1128
+#: ../src/goabackend/goaowncloudprovider.c:658
+#: ../src/goabackend/goatelepathyprovider.c:671
+msgid "_Cancel"
+msgstr "A_vbryt"
 
 #: ../src/goabackend/goaexchangeprovider.c:519
 #: ../src/goabackend/goakerberosprovider.c:1129
@@ -113,25 +122,25 @@ msgstr "_Tjener"
 msgid "C_onnect"
 msgstr "K_oble til"
 
-#: ../src/goabackend/goaexchangeprovider.c:539
-#: ../src/goabackend/goaimapsmtpprovider.c:788
-#: ../src/goabackend/goakerberosprovider.c:1149
-#: ../src/goabackend/goaowncloudprovider.c:679
+#: ../src/goabackend/goaexchangeprovider.c:535
+#: ../src/goabackend/goaimapsmtpprovider.c:784
+#: ../src/goabackend/goakerberosprovider.c:1145
+#: ../src/goabackend/goaowncloudprovider.c:675
 msgid "Connecting…"
 msgstr "Kobler til …"
 
-#: ../src/goabackend/goaexchangeprovider.c:644
-#: ../src/goabackend/goaexchangeprovider.c:839
-#: ../src/goabackend/goaimapsmtpprovider.c:950
-#: ../src/goabackend/goaimapsmtpprovider.c:985
-#: ../src/goabackend/goaimapsmtpprovider.c:1073
-#: ../src/goabackend/goaimapsmtpprovider.c:1335
-#: ../src/goabackend/goaimapsmtpprovider.c:1408
-#: ../src/goabackend/goakerberosprovider.c:1540
-#: ../src/goabackend/goaoauth2provider.c:1204
-#: ../src/goabackend/goaoauthprovider.c:1039
-#: ../src/goabackend/goaowncloudprovider.c:790
-#: ../src/goabackend/goaowncloudprovider.c:1003
+#: ../src/goabackend/goaexchangeprovider.c:640
+#: ../src/goabackend/goaexchangeprovider.c:837
+#: ../src/goabackend/goaimapsmtpprovider.c:946
+#: ../src/goabackend/goaimapsmtpprovider.c:981
+#: ../src/goabackend/goaimapsmtpprovider.c:1069
+#: ../src/goabackend/goaimapsmtpprovider.c:1333
+#: ../src/goabackend/goaimapsmtpprovider.c:1406
+#: ../src/goabackend/goakerberosprovider.c:1536
+#: ../src/goabackend/goaoauth2provider.c:1077
+#: ../src/goabackend/goaoauthprovider.c:908
+#: ../src/goabackend/goaowncloudprovider.c:786
+#: ../src/goabackend/goaowncloudprovider.c:1001
 #: ../src/goabackend/goatelepathyprovider.c:483
 #: ../src/goabackend/goatelepathyprovider.c:532
 #: ../src/goabackend/goatelepathyprovider.c:706
@@ -139,80 +148,71 @@ msgstr "Kobler til …"
 msgid "Dialog was dismissed"
 msgstr "Dialogen ble forkastet"
 
-#: ../src/goabackend/goaexchangeprovider.c:682
-#: ../src/goabackend/goaexchangeprovider.c:867
-#: ../src/goabackend/goaimapsmtpprovider.c:1015
-#: ../src/goabackend/goaimapsmtpprovider.c:1108
-#: ../src/goabackend/goaimapsmtpprovider.c:1359
-#: ../src/goabackend/goaimapsmtpprovider.c:1433
-#: ../src/goabackend/goaowncloudprovider.c:832
-#: ../src/goabackend/goaowncloudprovider.c:1024
+#: ../src/goabackend/goaexchangeprovider.c:678
+#: ../src/goabackend/goaexchangeprovider.c:865
+#: ../src/goabackend/goaimapsmtpprovider.c:1011
+#: ../src/goabackend/goaimapsmtpprovider.c:1104
+#: ../src/goabackend/goaimapsmtpprovider.c:1357
+#: ../src/goabackend/goaimapsmtpprovider.c:1431
+#: ../src/goabackend/goaowncloudprovider.c:828
+#: ../src/goabackend/goaowncloudprovider.c:1022
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "Dialogen ble forkastet (%s, %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:695
-#: ../src/goabackend/goaimapsmtpprovider.c:1028
-#: ../src/goabackend/goaimapsmtpprovider.c:1121
-#: ../src/goabackend/goaowncloudprovider.c:845
+#: ../src/goabackend/goaexchangeprovider.c:691
+#: ../src/goabackend/goaimapsmtpprovider.c:1024
+#: ../src/goabackend/goaimapsmtpprovider.c:1117
+#: ../src/goabackend/goaowncloudprovider.c:841
 msgid "_Ignore"
 msgstr "_Ignorer"
 
-#: ../src/goabackend/goaexchangeprovider.c:700
-#: ../src/goabackend/goaexchangeprovider.c:886
-#: ../src/goabackend/goaimapsmtpprovider.c:1033
-#: ../src/goabackend/goaimapsmtpprovider.c:1126
-#: ../src/goabackend/goaimapsmtpprovider.c:1378
-#: ../src/goabackend/goaimapsmtpprovider.c:1452
-#: ../src/goabackend/goakerberosprovider.c:1650
-#: ../src/goabackend/goaowncloudprovider.c:850
-#: ../src/goabackend/goaowncloudprovider.c:1043
+#: ../src/goabackend/goaexchangeprovider.c:696
+#: ../src/goabackend/goaexchangeprovider.c:884
+#: ../src/goabackend/goaimapsmtpprovider.c:1029
+#: ../src/goabackend/goaimapsmtpprovider.c:1122
+#: ../src/goabackend/goaimapsmtpprovider.c:1376
+#: ../src/goabackend/goaimapsmtpprovider.c:1450
+#: ../src/goabackend/goakerberosprovider.c:1646
+#: ../src/goabackend/goaowncloudprovider.c:846
+#: ../src/goabackend/goaowncloudprovider.c:1041
 msgid "_Try Again"
 msgstr "_Prøv igjen"
 
-#: ../src/goabackend/goaexchangeprovider.c:705
-#: ../src/goabackend/goaexchangeprovider.c:879
+#: ../src/goabackend/goaexchangeprovider.c:701
+#: ../src/goabackend/goaexchangeprovider.c:877
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Feil ved tilkobling til Microsoft Exchange tjener"
 
-#: ../src/goabackend/goaexchangeprovider.c:805
-#: ../src/goabackend/goaimapsmtpprovider.c:1273
-#: ../src/goabackend/goaoauth2provider.c:1427
-#: ../src/goabackend/goaoauthprovider.c:1350
-#: ../src/goabackend/goaowncloudprovider.c:963
-#: ../src/goabackend/goatelepathyprovider.c:671
-msgid "_Cancel"
-msgstr "A_vbryt"
-
 #. Translators: This is a label for a series of
 #. * options switches. For example: “Use for Mail”.
-#: ../src/goabackend/goaexchangeprovider.c:941
-#: ../src/goabackend/goafacebookprovider.c:431
-#: ../src/goabackend/goaflickrprovider.c:421
-#: ../src/goabackend/goagoogleprovider.c:560
-#: ../src/goabackend/goakerberosprovider.c:1723
-#: ../src/goabackend/goaowncloudprovider.c:1099
+#: ../src/goabackend/goaexchangeprovider.c:939
+#: ../src/goabackend/goafacebookprovider.c:466
+#: ../src/goabackend/goaflickrprovider.c:413
+#: ../src/goabackend/goagoogleprovider.c:591
+#: ../src/goabackend/goakerberosprovider.c:1719
+#: ../src/goabackend/goaowncloudprovider.c:1097
 #: ../src/goabackend/goapocketprovider.c:423
 #: ../src/goabackend/goatelepathyprovider.c:913
 #: ../src/goabackend/goawindowsliveprovider.c:424
 msgid "Use for"
 msgstr "Bruk for"
 
-#: ../src/goabackend/goaexchangeprovider.c:943
-#: ../src/goabackend/goagoogleprovider.c:562
+#: ../src/goabackend/goaexchangeprovider.c:941
+#: ../src/goabackend/goagoogleprovider.c:593
 #: ../src/goabackend/goawindowsliveprovider.c:426
 msgid "_Mail"
 msgstr "E-_post"
 
-#: ../src/goabackend/goaexchangeprovider.c:948
-#: ../src/goabackend/goagoogleprovider.c:567
-#: ../src/goabackend/goaowncloudprovider.c:1101
+#: ../src/goabackend/goaexchangeprovider.c:946
+#: ../src/goabackend/goagoogleprovider.c:598
+#: ../src/goabackend/goaowncloudprovider.c:1099
 msgid "Cale_ndar"
 msgstr "Kale_nder"
 
-#: ../src/goabackend/goaexchangeprovider.c:953
-#: ../src/goabackend/goagoogleprovider.c:572
-#: ../src/goabackend/goaowncloudprovider.c:1106
+#: ../src/goabackend/goaexchangeprovider.c:951
+#: ../src/goabackend/goagoogleprovider.c:603
+#: ../src/goabackend/goaowncloudprovider.c:1104
 msgid "_Contacts"
 msgstr "_Kontakter"
 
@@ -221,9 +221,9 @@ msgid "Facebook"
 msgstr "Facebook"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:213
+#: ../src/goabackend/goafacebookprovider.c:218
 #: ../src/goabackend/goaflickrprovider.c:183
-#: ../src/goabackend/goagoogleprovider.c:211
+#: ../src/goabackend/goagoogleprovider.c:215
 #: ../src/goabackend/goawindowsliveprovider.c:189
 #: ../src/goabackend/goayahooprovider.c:182
 #, c-format
@@ -233,19 +233,19 @@ msgstr ""
 "Forventet statuskode 200 ved forespørsel om identiteten din. Mottok status "
 "%d (%s) i stedet"
 
-#: ../src/goabackend/goafacebookprovider.c:232
-#: ../src/goabackend/goafacebookprovider.c:244
-#: ../src/goabackend/goafacebookprovider.c:254
+#: ../src/goabackend/goafacebookprovider.c:237
+#: ../src/goabackend/goafacebookprovider.c:249
+#: ../src/goabackend/goafacebookprovider.c:259
 #: ../src/goabackend/goaflickrprovider.c:202
 #: ../src/goabackend/goaflickrprovider.c:214
 #: ../src/goabackend/goaflickrprovider.c:224
 #: ../src/goabackend/goaflickrprovider.c:234
 #: ../src/goabackend/goaflickrprovider.c:244
-#: ../src/goabackend/goagoogleprovider.c:230
-#: ../src/goabackend/goagoogleprovider.c:242
-#: ../src/goabackend/goaoauth2provider.c:725
-#: ../src/goabackend/goaoauth2provider.c:755
-#: ../src/goabackend/goaoauth2provider.c:767
+#: ../src/goabackend/goagoogleprovider.c:234
+#: ../src/goabackend/goagoogleprovider.c:246
+#: ../src/goabackend/goaoauth2provider.c:691
+#: ../src/goabackend/goaoauth2provider.c:721
+#: ../src/goabackend/goaoauth2provider.c:733
 #: ../src/goabackend/goawindowsliveprovider.c:208
 #: ../src/goabackend/goawindowsliveprovider.c:220
 #: ../src/goabackend/goawindowsliveprovider.c:232
@@ -259,16 +259,21 @@ msgstr ""
 msgid "Could not parse response"
 msgstr "Klarte ikke å lese svar"
 
-#: ../src/goabackend/goafacebookprovider.c:433
-#: ../src/goabackend/goagoogleprovider.c:577
+#: ../src/goabackend/goafacebookprovider.c:468
+#: ../src/goabackend/goagoogleprovider.c:608
 #: ../src/goabackend/goatelepathyprovider.c:915
 msgid "C_hat"
 msgstr "_Prat"
 
-#: ../src/goabackend/goafacebookprovider.c:438
-#: ../src/goabackend/goaflickrprovider.c:423
+#: ../src/goabackend/goafacebookprovider.c:473
+#: ../src/goabackend/goaflickrprovider.c:415
+#: ../src/goabackend/goagoogleprovider.c:618
 msgid "_Photos"
 msgstr "_Bilder"
+
+#: ../src/goabackend/goafacebookprovider.c:478
+msgid "_Maps"
+msgstr "_Kart"
 
 #: ../src/goabackend/goaflickrprovider.c:77
 msgid "Flickr"
@@ -284,14 +289,14 @@ msgstr ""
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:582
-#: ../src/goabackend/goaowncloudprovider.c:1111
+#: ../src/goabackend/goagoogleprovider.c:613
+#: ../src/goabackend/goaowncloudprovider.c:1109
 #: ../src/goabackend/goawindowsliveprovider.c:431
 msgid "_Documents"
 msgstr "_Dokumenter"
 
-#: ../src/goabackend/goagoogleprovider.c:587
-msgid "_Printers"
+#: ../src/goabackend/goagoogleprovider.c:623
+msgid "Prin_ters"
 msgstr "_Skrivere"
 
 #. TODO: more specific
@@ -368,50 +373,49 @@ msgstr "STARTTLES etter tilkobling"
 msgid "SSL on a dedicated port"
 msgstr "SSL på en dedikert port"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:717
+#: ../src/goabackend/goaimapsmtpprovider.c:716
 msgid "_Name"
 msgstr "_Navn"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:734
+#: ../src/goabackend/goaimapsmtpprovider.c:733
 msgid "IMAP _Server"
 msgstr "IMAP-_tjener"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:754
+#: ../src/goabackend/goaimapsmtpprovider.c:753
 msgid "SMTP _Server"
 msgstr "SMTP-_tjener"
 
-#. --
 #: ../src/goabackend/goaimapsmtpprovider.c:768
-#: ../src/goabackend/goaimapsmtpprovider.c:1054
-#: ../src/goabackend/goaimapsmtpprovider.c:1388
+#: ../src/goabackend/goaimapsmtpprovider.c:1050
+#: ../src/goabackend/goaimapsmtpprovider.c:1386
 msgid "_Forward"
 msgstr "_Fremover"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1038
-#: ../src/goabackend/goaimapsmtpprovider.c:1371
+#: ../src/goabackend/goaimapsmtpprovider.c:1034
+#: ../src/goabackend/goaimapsmtpprovider.c:1369
 msgid "Error connecting to IMAP server"
 msgstr "Feil ved tilkobling til IMAP-tjener"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1131
-#: ../src/goabackend/goaimapsmtpprovider.c:1445
+#: ../src/goabackend/goaimapsmtpprovider.c:1127
+#: ../src/goabackend/goaimapsmtpprovider.c:1443
 msgid "Error connecting to SMTP server"
 msgstr "Feil ved tilkobling til SMTP-tjener"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1544
+#: ../src/goabackend/goaimapsmtpprovider.c:1542
 msgid "E-mail"
 msgstr "E-post"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1548
+#: ../src/goabackend/goaimapsmtpprovider.c:1546
 msgid "Name"
 msgstr "Navn"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1558
-#: ../src/goabackend/goaimapsmtpprovider.c:1561
+#: ../src/goabackend/goaimapsmtpprovider.c:1556
+#: ../src/goabackend/goaimapsmtpprovider.c:1559
 msgid "IMAP"
 msgstr "IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1572
-#: ../src/goabackend/goaimapsmtpprovider.c:1575
+#: ../src/goabackend/goaimapsmtpprovider.c:1570
+#: ../src/goabackend/goaimapsmtpprovider.c:1573
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -434,43 +438,43 @@ msgstr ""
 msgid "Did not find password for principal ‘%s’ in credentials"
 msgstr "Fant ikke passord for hovedidentitet «%s» i påloggingsinformasjon"
 
-#: ../src/goabackend/goakerberosprovider.c:1116
+#: ../src/goabackend/goakerberosprovider.c:1115
 msgid "_Domain"
 msgstr "_Domene"
 
-#: ../src/goabackend/goakerberosprovider.c:1117
+#: ../src/goabackend/goakerberosprovider.c:1116
 msgid "Enterprise domain or realm name"
 msgstr "Bedriftsdomene eller områdenavn"
 
-#: ../src/goabackend/goakerberosprovider.c:1349
+#: ../src/goabackend/goakerberosprovider.c:1345
 #: ../src/goaidentity/goaidentityservice.c:1106
 msgid "Log In to Realm"
 msgstr "Logg inn i område"
 
-#: ../src/goabackend/goakerberosprovider.c:1350
+#: ../src/goabackend/goakerberosprovider.c:1346
 msgid "Please enter your password below."
 msgstr "Vennligst oppgi ditt passord under."
 
-#: ../src/goabackend/goakerberosprovider.c:1351
+#: ../src/goabackend/goakerberosprovider.c:1347
 msgid "Remember this password"
 msgstr "Husk dette passordet"
 
-#: ../src/goabackend/goakerberosprovider.c:1490
+#: ../src/goabackend/goakerberosprovider.c:1486
 #, c-format
 msgid "The domain is not valid"
 msgstr "Domenet er ikke gyldig"
 
-#: ../src/goabackend/goakerberosprovider.c:1645
+#: ../src/goabackend/goakerberosprovider.c:1641
 msgid "Error connecting to enterprise identity server"
 msgstr "Feil ved tilkobling til bedriftens identitetstjener"
 
-#: ../src/goabackend/goakerberosprovider.c:1725
+#: ../src/goabackend/goakerberosprovider.c:1721
 msgid "Network _Resources"
 msgstr "Nettverks_ressurser"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:701
-#: ../src/goabackend/goaoauthprovider.c:584
+#: ../src/goabackend/goaoauth2provider.c:667
+#: ../src/goabackend/goaoauthprovider.c:550
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -478,68 +482,53 @@ msgstr ""
 "Forventet statuskode 200 ved forespørsel om tilgangsnøkkel. Mottok status %d "
 "(%s) i stedet"
 
-#: ../src/goabackend/goaoauth2provider.c:958
+#: ../src/goabackend/goaoauth2provider.c:888
 msgid "Authorization response: "
 msgstr "Autoriseringssvar: "
 
-#: ../src/goabackend/goaoauth2provider.c:1028
+#: ../src/goabackend/goaoauth2provider.c:958
 #, c-format
 msgid "Authorization response: %s"
 msgstr "Autoriseringssvar: %s"
 
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:1130
-#, c-format
-msgid ""
-"Paste authorization code obtained from the <a href=\"%s\">authorization "
-"page</a>:"
-msgstr ""
-"Lim inn autorisasjonskode hentet fra <a href=\"%s\">autorisasjonssiden</a>:"
-
-#: ../src/goabackend/goaoauth2provider.c:1144
-#: ../src/goabackend/goaoauthprovider.c:990
-#: ../src/goabackend/goatelepathyprovider.c:672
-msgid "_OK"
-msgstr "_OK"
-
-#: ../src/goabackend/goaoauth2provider.c:1230
-#: ../src/goabackend/goaoauthprovider.c:1070
+#: ../src/goabackend/goaoauth2provider.c:1103
+#: ../src/goabackend/goaoauthprovider.c:939
 msgid "Error getting an Access Token: "
 msgstr "Feil ved henting av tilgangskode: "
 
-#: ../src/goabackend/goaoauth2provider.c:1245
-#: ../src/goabackend/goaoauthprovider.c:1083
+#: ../src/goabackend/goaoauth2provider.c:1118
+#: ../src/goabackend/goaoauthprovider.c:952
 msgid "Error getting identity: "
 msgstr "Feil ved henting av identitet: "
 
-#: ../src/goabackend/goaoauth2provider.c:1457
-#: ../src/goabackend/goaoauthprovider.c:1389
+#: ../src/goabackend/goaoauth2provider.c:1332
+#: ../src/goabackend/goaoauthprovider.c:1260
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Ble spurt om å logge inn som %s, men logget inn som %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1616
+#: ../src/goabackend/goaoauth2provider.c:1491
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Påloggingsinformasjon inneholder ikke access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1655
-#: ../src/goabackend/goaoauthprovider.c:1617
+#: ../src/goabackend/goaoauth2provider.c:1530
+#: ../src/goabackend/goaoauthprovider.c:1488
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Klarte ikke å oppdatere tilgangstoken (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:607
+#: ../src/goabackend/goaoauthprovider.c:573
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "Mangler access_token eller access_token_secret hoder i svar"
 
-#: ../src/goabackend/goaoauthprovider.c:909
+#: ../src/goabackend/goaoauthprovider.c:822
 msgid "Error getting a Request Token: "
 msgstr "Feil ved henting av forespørselstoken: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:942
+#: ../src/goabackend/goaoauthprovider.c:855
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -547,18 +536,12 @@ msgstr ""
 "Forventet statuskode 200 ved mottak av forespørselsnøkkel. Mottok status %d "
 "(%s) i stedet"
 
-#: ../src/goabackend/goaoauthprovider.c:959
+#: ../src/goabackend/goaoauthprovider.c:872
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "Mangler request_token eller request_token_secret hoder i svar"
 
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:976
-#, c-format
-msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr "Lim inn nøkkel fra <a href=\"%s\">autoriseringssiden</a>:"
-
-#: ../src/goabackend/goaoauthprovider.c:1573
+#: ../src/goabackend/goaoauthprovider.c:1444
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr ""
@@ -568,12 +551,12 @@ msgstr ""
 msgid "ownCloud"
 msgstr "ownCloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:855
-#: ../src/goabackend/goaowncloudprovider.c:1036
+#: ../src/goabackend/goaowncloudprovider.c:851
+#: ../src/goabackend/goaowncloudprovider.c:1034
 msgid "Error connecting to ownCloud server"
 msgstr "Feil ved tilkobling til ownCloud-tjener"
 
-#: ../src/goabackend/goaowncloudprovider.c:1116
+#: ../src/goabackend/goaowncloudprovider.c:1114
 msgid "_Files"
 msgstr "_Filer"
 
@@ -618,7 +601,7 @@ msgstr "Klarte ikke å lese e-postadresse"
 #: ../src/goabackend/goasmtpauth.c:263
 #, c-format
 msgid "Cannot do SMTP authentication without a domain"
-msgstr "Kan ikke utføre SMTP-autentisering uten et domene"
+msgstr "Du kan ikke utføre SMTP-autentisering uten å angi et domene"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauth.c:301
@@ -630,7 +613,7 @@ msgstr "Fant ikke SMTP-passord i påloggingsinformasjonen"
 #: ../src/goabackend/goasmtpauth.c:312
 #, c-format
 msgid "Cannot do SMTP authentication without a password"
-msgstr "Kan ikke utføre SMTP-autentisering uten et passord"
+msgstr "Du kan ikke utføre SMTP-autentisering uten et passord"
 
 #: ../src/goabackend/goasmtpauth.c:674
 #, c-format
@@ -660,13 +643,17 @@ msgstr "Innstillinger for tilkobling"
 msgid "Personal Details"
 msgstr "Personlige detaljer"
 
+#: ../src/goabackend/goatelepathyprovider.c:672
+msgid "_OK"
+msgstr "_OK"
+
 #: ../src/goabackend/goatelepathyprovider.c:877
 msgid "Cannot save the connection parameters"
-msgstr "Kan ikke lagre parametere for tilkobling"
+msgstr "Klarte ikke å lagre tilkoblingsparametere"
 
 #: ../src/goabackend/goatelepathyprovider.c:889
 msgid "Cannot save your personal information on the server"
-msgstr "Kan ikke lagre din personlige informasjon på tjeneren"
+msgstr "Klarte ikke å lagre din personlige informasjon på tjeneren"
 
 #. Connection Settings button
 #: ../src/goabackend/goatelepathyprovider.c:920
@@ -681,7 +668,7 @@ msgstr "_Personlige detaljer"
 #: ../src/goabackend/goautils.c:114
 #, c-format
 msgid "A %s account already exists for %s"
-msgstr "En %s-konto eksisterer allerede for %s"
+msgstr "Det finnes allerede en %s-konto for %s"
 
 #. Translators: the %s is the name of the provider. eg., Google.
 #: ../src/goabackend/goautils.c:136
@@ -706,7 +693,7 @@ msgstr "Fant ingen påloggingsinformasjon på nøkkelringen"
 
 #: ../src/goabackend/goautils.c:255
 msgid "Error parsing result obtained from the keyring: "
-msgstr "Feil ved lesing av resultat hentet fra nøkkelring: "
+msgstr "Feil ved lesing av resultat fra nøkkelring: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
 #: ../src/goabackend/goautils.c:298
@@ -771,11 +758,11 @@ msgid "Expected status 200 when requesting name, instead got status %d (%s)"
 msgstr ""
 "Forventet statuskode 200 ved forespørsel navn. Mottok status %d (%s) i stedet"
 
-#: ../src/goaidentity/goaalarm.c:209
+#: ../src/goaidentity/goaalarm.c:170
 msgid "Time"
 msgstr "Tid"
 
-#: ../src/goaidentity/goaalarm.c:210
+#: ../src/goaidentity/goaalarm.c:171
 msgid "Time to fire"
 msgstr "Tid før start"
 
@@ -792,69 +779,75 @@ msgstr "Opprinnelig hemmelig nøkkel er ugyldig"
 msgid "The network realm %s needs some information to sign you in."
 msgstr "Nettverksområde %s trenger informasjon for å logge deg inn."
 
-#: ../src/goaidentity/goakerberosidentity.c:259
-#: ../src/goaidentity/goakerberosidentity.c:268
-#: ../src/goaidentity/goakerberosidentity.c:596
+#: ../src/goaidentity/goakerberosidentity.c:252
+#: ../src/goaidentity/goakerberosidentity.c:261
+#: ../src/goaidentity/goakerberosidentity.c:588
 msgid "Could not find identity in credential cache: %k"
 msgstr "Fant ikke identiteten i buffer for påloggingsinformasjon: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:609
+#: ../src/goaidentity/goakerberosidentity.c:601
 msgid "Could not find identity credentials in cache: %k"
 msgstr "Fant ikke påloggingsinformasjon for identiteten i buffer: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:649
+#: ../src/goaidentity/goakerberosidentity.c:641
 msgid "Could not sift through identity credentials in cache: %k"
-msgstr ""
-"Kunne ikke se se gjennom påloggingsinformasjon for identitet i buffer: %k"
+msgstr "Klarte ikke å se se gjennom akkreditiver i mellomlager: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:667
+#: ../src/goaidentity/goakerberosidentity.c:659
 msgid "Could not finish up sifting through identity credentials in cache: %k"
-msgstr ""
-"Kunne ikke sluttføre gjennomgang av påloggingsinformasjon for identitet i "
-"buffer: %k"
+msgstr "Klarte ikke å gå gjennom akkreditiver i mellomlager: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:954
+#: ../src/goaidentity/goakerberosidentity.c:949
 #, c-format
 msgid "No associated identification found"
 msgstr "Ingen assosiert identifikasjon funnet"
 
-#: ../src/goaidentity/goakerberosidentity.c:1035
+#: ../src/goaidentity/goakerberosidentity.c:1030
 msgid "Could not create credential cache: %k"
-msgstr "Kunne ikke lage buffer for påloggingsinformasjon: %k"
+msgstr "Klarte ikke å lage akkreditiv-mellomlager: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1069
+#: ../src/goaidentity/goakerberosidentity.c:1064
 msgid "Could not initialize credentials cache: %k"
-msgstr "Kunne ikke initiere buffer for påloggingsinformasjon: %k"
+msgstr "Klarte ikke å laste inn akkreditiv-mellomlager: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1086
+#: ../src/goaidentity/goakerberosidentity.c:1081
 msgid "Could not store new credentials in credentials cache: %k"
 msgstr "Klarte ikke å lagre ny påloggingsinformasjon i buffer: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1361
+#: ../src/goaidentity/goakerberosidentity.c:1356
 #, c-format
 msgid "Could not renew identity: Not signed in"
-msgstr "Kunne ikke fornye identitet: Ikke logget inn"
+msgstr "Klarte ikke å fornye identitet: Du er ikke logget inn"
 
-#: ../src/goaidentity/goakerberosidentity.c:1373
+#: ../src/goaidentity/goakerberosidentity.c:1368
 msgid "Could not renew identity: %k"
-msgstr "Kunne ikke fornye identitet: %k"
+msgstr "Klarte ikke å fornye identitet: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1390
+#: ../src/goaidentity/goakerberosidentity.c:1385
 msgid "Could not get new credentials to renew identity %s: %k"
-msgstr ""
-"Kunne ikke hente ny påloggingsinformasjon for å fornye identitet %s: %k"
+msgstr "Klarte ikke å hente nye akkreditiver for å fornye identiteten %s: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1432
+#: ../src/goaidentity/goakerberosidentity.c:1427
 msgid "Could not erase identity: %k"
-msgstr "Kunne ikke slette identitet: %k"
+msgstr "Klarte ikke å slette identitet: %k"
 
 #: ../src/goaidentity/goakerberosidentitymanager.c:745
 msgid "Could not find identity"
 msgstr "Fant ikke identitet"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:841
+#: ../src/goaidentity/goakerberosidentitymanager.c:836
 msgid "Could not create credential cache for identity"
-msgstr "Kunne ikke lage buffer for påloggingsinformasjon for identitet"
+msgstr "Klarte ikke å lage akkreditiv-mellomlager"
+
+#~ msgid ""
+#~ "Paste authorization code obtained from the <a href=\"%s\">authorization "
+#~ "page</a>:"
+#~ msgstr ""
+#~ "Lim inn autorisasjonskode hentet fra <a href=\"%s\">autorisasjonssiden</"
+#~ "a>:"
+
+#~ msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
+#~ msgstr "Lim inn nøkkel fra <a href=\"%s\">autoriseringssiden</a>:"
 
 #~ msgid "Twitter"
 #~ msgstr "Twitter"
