@@ -192,15 +192,6 @@ out:
   return tp_account;
 }
 
-static void
-set_action_area_spacing (GtkDialog *dialog)
-{
-  GtkWidget *action_area;
-
-  action_area = gtk_dialog_get_action_area (dialog);
-  g_object_set (action_area, "margin-top", 12, NULL);
-}
-
 /* ---------------------------------------------------------------------------------------------------- */
 
 static const gchar *
@@ -416,9 +407,6 @@ add_account (GoaProvider  *provider,
   GoaTelepathyProviderPrivate *priv = GOA_TELEPATHY_PROVIDER (provider)->priv;
   AddAccountData data;
   TpawAccountSettings *settings = NULL;
-  GtkWidget *action_area = NULL;
-  GList *children = NULL;
-  GList *l = NULL;
   TpawAccountWidget *account_widget = NULL;
   GtkRequisition req;
   gint response;
@@ -447,26 +435,14 @@ add_account (GoaProvider  *provider,
   goa_client_new (data.cancellable, goa_client_new_cb, &data);
   wait_for_account_settings_ready (settings, data.loop);
 
-  action_area = gtk_dialog_get_action_area (dialog);
-  /* Remove the default button. */
-  children = gtk_container_get_children (GTK_CONTAINER (action_area));
-  for (l = children; l != NULL; l = l->next)
-    {
-      GtkWidget *child = l->data;
-      gtk_container_remove (GTK_CONTAINER (action_area), child);
-    }
-  g_list_free (children);
-
   account_widget = tpaw_account_widget_new_for_protocol (settings,
-      GTK_BOX (action_area), FALSE);
+      dialog, FALSE);
   gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET (account_widget), FALSE, FALSE, 0);
   gtk_widget_show (GTK_WIDGET (account_widget));
   g_signal_connect (account_widget, "account-created",
       G_CALLBACK (tp_account_created_cb), &data);
   g_signal_connect (account_widget, "close",
       G_CALLBACK (account_widget_close_cb), &data);
-
-  set_action_area_spacing (dialog);
 
   /* The dialog now contains a lot of empty space between the account widget
    * and the buttons. We force it's vertical size to be just right to fit the
@@ -558,14 +534,14 @@ edit_connection_parameters (GoaObject  *goa_object,
 
   dialog = gtk_dialog_new_with_buttons (_("Connection Settings"),
       parent,
-      GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+      GTK_DIALOG_MODAL
+      | GTK_DIALOG_DESTROY_WITH_PARENT
+      | GTK_DIALOG_USE_HEADER_BAR,
       NULL, NULL);
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-  set_action_area_spacing (GTK_DIALOG (dialog));
 
   account_widget = tpaw_account_widget_new_for_protocol (settings,
-      GTK_BOX (gtk_dialog_get_action_area (GTK_DIALOG (dialog))),
-      FALSE);
+      GTK_DIALOG (dialog), FALSE);
   g_signal_connect (account_widget, "cancelled",
       G_CALLBACK (account_dialog_widget_cancelled_cb), &error);
   g_signal_connect_swapped (account_widget, "close",
@@ -667,12 +643,13 @@ edit_personal_details (GoaObject  *goa_object,
 
   dialog = gtk_dialog_new_with_buttons (_("Personal Details"),
       parent,
-      GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+      GTK_DIALOG_MODAL
+      | GTK_DIALOG_DESTROY_WITH_PARENT
+      | GTK_DIALOG_USE_HEADER_BAR,
       _("_Cancel"), GTK_RESPONSE_CANCEL,
       _("_OK"), GTK_RESPONSE_OK,
       NULL);
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-  set_action_area_spacing (GTK_DIALOG (dialog));
 
   user_info = tpaw_user_info_new (tp_account);
   gtk_widget_show (user_info);
