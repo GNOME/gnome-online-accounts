@@ -1,312 +1,922 @@
 # Swedish translation for gnome-online-accounts.
 # Copyright (C) 2011-2012 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-online-accounts package.
-# Daniel Nylander <po@danielnylander.se>, 2011, 2012.
 #
+# Daniel Nylander <po@danielnylander.se>, 2011, 2012.
+# Mattias Eriksson <snaggen@gmail.com>, 2014
+
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-18 12:26+0100\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"online-accounts&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2014-05-04 06:59+0000\n"
 "PO-Revision-Date: 2012-01-18 12:27+0100\n"
-"Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
+"Last-Translator: Mattias Eriksson <snaggen@gmail.com>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
-"Language: \n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/daemon/goadaemon.c:871
-msgid "An online account needs attention"
-msgstr "Ett nätkonto behöver din uppmärksamhet"
-
-#: ../src/daemon/goadaemon.c:878
-msgid "Open Online Accounts..."
-msgstr "Öppna nätkonton..."
-
-#: ../src/goabackend/goafacebookprovider.c:78
-msgid "Facebook"
-msgstr "Facebook"
-
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:162
-#: ../src/goabackend/goagoogleprovider.c:195
-#: ../src/goabackend/goawindowsliveprovider.c:170
-#: ../src/goabackend/goatwitterprovider.c:160
-#: ../src/goabackend/goayahooprovider.c:163
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:783 ../src/daemon/goadaemon.c:1029
 #, c-format
-msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
-msgstr "Förväntade status 200 vid begäran av guid, fick istället status %d (%s)"
+msgid "Failed to find a provider for: %s"
+msgstr "Kunde inte hitta en modul för: %s"
 
-#: ../src/goabackend/goafacebookprovider.c:174
-#: ../src/goabackend/goagoogleprovider.c:207
-#: ../src/goabackend/goawindowsliveprovider.c:182
-#: ../src/goabackend/goaoauth2provider.c:478
-#: ../src/goabackend/goatwitterprovider.c:172
-#: ../src/goabackend/goayahooprovider.c:175
-msgid "Error parsing response as JSON: "
-msgstr "Fel vid tolkning av svar som JSON: "
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:1017
+msgid "ProviderType property is not set for account"
+msgstr "Egenskapen ProviderType är inte satt för konto"
 
-#: ../src/goabackend/goafacebookprovider.c:185
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:229 ../src/goabackend/goahttpclient.c:170
 #, c-format
-msgid "Didn't find username member in JSON data"
-msgstr "Hittade inte användarnamn-medlem i JSON-data"
+msgid "Code: %u — Unexpected response from server"
+msgstr "Kod: %u — Oväntat svar från server"
 
-#: ../src/goabackend/goafacebookprovider.c:194
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:245
 #, c-format
-msgid "Didn't find name member in JSON data"
-msgstr "Hittade inte namn-medlem i JSON-data"
+msgid "Failed to parse autodiscover response XML"
+msgstr "Misslyckades med att tolka XML-svar för autodetektering"
 
-#: ../src/goabackend/goafacebookprovider.c:282
-#: ../src/goabackend/goawindowsliveprovider.c:292
-#: ../src/goabackend/goatwitterprovider.c:260
-msgid "User Name"
-msgstr "Användarnamn"
-
-#: ../src/goabackend/goafacebookprovider.c:283
-#: ../src/goabackend/goagoogleprovider.c:430
-#: ../src/goabackend/goawindowsliveprovider.c:293
-msgid "Chat"
-msgstr "Chatt"
-
-#: ../src/goabackend/goagoogleprovider.c:78
-msgid "Google"
-msgstr "Google"
-
-#: ../src/goabackend/goagoogleprovider.c:218
+#. TODO: more specific
+#. Translators: the parameter is an XML element name.
+#: ../src/goabackend/goaewsclient.c:256 ../src/goabackend/goaewsclient.c:271
+#: ../src/goabackend/goaewsclient.c:286
 #, c-format
-msgid "Didn't find data member in JSON data"
-msgstr "Hittade inte data-medlem i JSON-data"
+msgid "Failed to find ‘%s’ element"
+msgstr "Misslyckades med att hitta elementet ‘%s’"
 
-#: ../src/goabackend/goagoogleprovider.c:228
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:303
 #, c-format
-msgid "Didn't find email member in JSON data"
-msgstr "Hittade inte e-post-medlem i JSON-data"
+msgid "Failed to find ASUrl and OABUrl in autodiscover response"
+msgstr "Misslyckades med att hitta ASUrl och OABUrl i autodetekteringssvar"
 
-#: ../src/goabackend/goagoogleprovider.c:425
-msgid "Email Address"
-msgstr "E-postadress"
+#: ../src/goabackend/goaexchangeprovider.c:73
+msgid "Microsoft Exchange"
+msgstr "Microsoft Exchange"
 
-#: ../src/goabackend/goagoogleprovider.c:426
-msgid "Use this account for"
-msgstr "Använd detta konto för"
-
-#: ../src/goabackend/goagoogleprovider.c:427
-msgid "Mail"
-msgstr "E-post"
-
-#: ../src/goabackend/goagoogleprovider.c:428
-msgid "Calendar"
-msgstr "Kalender"
-
-#: ../src/goabackend/goagoogleprovider.c:429
-msgid "Contacts"
-msgstr "Kontakter"
-
-#: ../src/goabackend/goagoogleprovider.c:431
-msgid "Documents"
-msgstr "Dokument"
-
-#: ../src/goabackend/goawindowsliveprovider.c:82
-msgid "Windows Live"
-msgstr "Windows Live"
-
-#: ../src/goabackend/goawindowsliveprovider.c:193
+#. TODO: more specific
+#: ../src/goabackend/goaexchangeprovider.c:311
+#: ../src/goabackend/goaexchangeprovider.c:1022
+#: ../src/goabackend/goaowncloudprovider.c:398
+#: ../src/goabackend/goaowncloudprovider.c:1185
 #, c-format
-msgid "Didn't find id member in JSON data"
-msgstr "Hittade inte id-medlem i JSON-data"
+msgid "Did not find password with identity ‘%s’ in credentials"
+msgstr ""
+"Hittade inte lösenord med identiteten ‘%s’ bland inloggningsuppgifterna"
 
-#: ../src/goabackend/goawindowsliveprovider.c:204
+#. Translators: the first %s is the username
+#. * (eg., debarshi.ray@gmail.com or rishi), and the
+#. * (%s, %d) is the error domain and code.
+#.
+#: ../src/goabackend/goaexchangeprovider.c:339
+#: ../src/goabackend/goaowncloudprovider.c:421
 #, c-format
-msgid "Didn't find account email member in JSON data"
-msgstr "Hittade inte kontoepost-medlem i JSON-data"
+msgid "Invalid password with username ‘%s’ (%s, %d): "
+msgstr "Ogiltigt lösenord med användarnamn ‘%s’ (%s, %d): "
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:435
-#: ../src/goabackend/goaoauthprovider.c:440
-#, c-format
-msgid "Expected status 200 when requesting access token, instead got status %d (%s)"
-msgstr "Förväntade status 200 vid begäran av access token, fick istället status %d (%s)"
+#: ../src/goabackend/goaexchangeprovider.c:493
+#: ../src/goabackend/goaimapsmtpprovider.c:716
+msgid "_E-mail"
+msgstr "_E-post"
 
-#: ../src/goabackend/goaoauth2provider.c:455
-#, c-format
-msgid "Didn't find access_token in non-JSON data"
-msgstr "Hittade inte access_token i icke-JSON-data"
+#: ../src/goabackend/goaexchangeprovider.c:494
+#: ../src/goabackend/goaimapsmtpprovider.c:736
+#: ../src/goabackend/goaimapsmtpprovider.c:756
+#: ../src/goabackend/goaowncloudprovider.c:650
+msgid "_Password"
+msgstr "_Lösenord"
 
-#: ../src/goabackend/goaoauth2provider.c:489
-#, c-format
-msgid "Didn't find access_token in JSON data"
-msgstr "Hittade inte access_token i JSON-data"
+#: ../src/goabackend/goaexchangeprovider.c:497
+msgid "_Custom"
+msgstr "An_passat"
 
-#: ../src/goabackend/goaoauth2provider.c:573
-#, c-format
-msgid "Authorization response was \"%s\""
-msgstr "Auktoriseringssvaret var \"%s\""
+#: ../src/goabackend/goaexchangeprovider.c:508
+#: ../src/goabackend/goaimapsmtpprovider.c:735
+#: ../src/goabackend/goaimapsmtpprovider.c:755
+#: ../src/goabackend/goakerberosprovider.c:1124
+#: ../src/goabackend/goaowncloudprovider.c:649
+msgid "User_name"
+msgstr "Användar_namn"
 
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:654
-#, c-format
-msgid "Paste authorization code obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr "Klistra in auktoriseringskoden som hämtas från <a href=\"%s\">auktoriseringssidan</a>:"
+#: ../src/goabackend/goaexchangeprovider.c:509
+#: ../src/goabackend/goaowncloudprovider.c:648
+msgid "_Server"
+msgstr "_Server"
 
-#: ../src/goabackend/goaoauth2provider.c:728
-#: ../src/goabackend/goaoauthprovider.c:751
+#: ../src/goabackend/goaexchangeprovider.c:519
+#: ../src/goabackend/goakerberosprovider.c:1129
+#: ../src/goabackend/goaowncloudprovider.c:659
+msgid "C_onnect"
+msgstr "Ansl_ut"
+
+#: ../src/goabackend/goaexchangeprovider.c:539
+#: ../src/goabackend/goaimapsmtpprovider.c:788
+#: ../src/goabackend/goakerberosprovider.c:1149
+#: ../src/goabackend/goaowncloudprovider.c:679
+msgid "Connecting…"
+msgstr "Ansluter…"
+
+#: ../src/goabackend/goaexchangeprovider.c:644
+#: ../src/goabackend/goaexchangeprovider.c:839
+#: ../src/goabackend/goaimapsmtpprovider.c:950
+#: ../src/goabackend/goaimapsmtpprovider.c:985
+#: ../src/goabackend/goaimapsmtpprovider.c:1073
+#: ../src/goabackend/goaimapsmtpprovider.c:1335
+#: ../src/goabackend/goaimapsmtpprovider.c:1408
+#: ../src/goabackend/goakerberosprovider.c:1540
+#: ../src/goabackend/goaoauth2provider.c:1204
+#: ../src/goabackend/goaoauthprovider.c:1039
+#: ../src/goabackend/goaowncloudprovider.c:790
+#: ../src/goabackend/goaowncloudprovider.c:1003
+#: ../src/goabackend/goatelepathyprovider.c:483
+#: ../src/goabackend/goatelepathyprovider.c:532
+#: ../src/goabackend/goatelepathyprovider.c:706
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "Dialogrutan stängdes"
 
-#: ../src/goabackend/goaoauth2provider.c:752
-#: ../src/goabackend/goaoauthprovider.c:782
-msgid "Error getting an Access Token: "
-msgstr "Fel vid hämtning av en Access Token: "
+#: ../src/goabackend/goaexchangeprovider.c:682
+#: ../src/goabackend/goaexchangeprovider.c:867
+#: ../src/goabackend/goaimapsmtpprovider.c:1015
+#: ../src/goabackend/goaimapsmtpprovider.c:1108
+#: ../src/goabackend/goaimapsmtpprovider.c:1359
+#: ../src/goabackend/goaimapsmtpprovider.c:1433
+#: ../src/goabackend/goaowncloudprovider.c:832
+#: ../src/goabackend/goaowncloudprovider.c:1024
+#, c-format
+msgid "Dialog was dismissed (%s, %d): "
+msgstr "Dialogrutan stängdes (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:764
-#: ../src/goabackend/goaoauthprovider.c:795
+#: ../src/goabackend/goaexchangeprovider.c:695
+#: ../src/goabackend/goaimapsmtpprovider.c:1028
+#: ../src/goabackend/goaimapsmtpprovider.c:1121
+#: ../src/goabackend/goaowncloudprovider.c:845
+msgid "_Ignore"
+msgstr "_Ignorera"
+
+#: ../src/goabackend/goaexchangeprovider.c:700
+#: ../src/goabackend/goaexchangeprovider.c:886
+#: ../src/goabackend/goaimapsmtpprovider.c:1033
+#: ../src/goabackend/goaimapsmtpprovider.c:1126
+#: ../src/goabackend/goaimapsmtpprovider.c:1378
+#: ../src/goabackend/goaimapsmtpprovider.c:1452
+#: ../src/goabackend/goakerberosprovider.c:1650
+#: ../src/goabackend/goaowncloudprovider.c:850
+#: ../src/goabackend/goaowncloudprovider.c:1043
+msgid "_Try Again"
+msgstr "_Försök igen"
+
+#: ../src/goabackend/goaexchangeprovider.c:705
+#: ../src/goabackend/goaexchangeprovider.c:879
+msgid "Error connecting to Microsoft Exchange server"
+msgstr "Fel vid anslutning till Microsoft Exchange-server"
+
+#: ../src/goabackend/goaexchangeprovider.c:805
+#: ../src/goabackend/goaimapsmtpprovider.c:1273
+#: ../src/goabackend/goaoauth2provider.c:1427
+#: ../src/goabackend/goaoauthprovider.c:1350
+#: ../src/goabackend/goaowncloudprovider.c:963
+#: ../src/goabackend/goatelepathyprovider.c:671
+msgid "_Cancel"
+msgstr "_Avbryt"
+
+#. Translators: This is a label for a series of
+#. * options switches. For example: “Use for Mail”.
+#: ../src/goabackend/goaexchangeprovider.c:941
+#: ../src/goabackend/goafacebookprovider.c:431
+#: ../src/goabackend/goaflickrprovider.c:421
+#: ../src/goabackend/goagoogleprovider.c:560
+#: ../src/goabackend/goakerberosprovider.c:1723
+#: ../src/goabackend/goaowncloudprovider.c:1099
+#: ../src/goabackend/goapocketprovider.c:423
+#: ../src/goabackend/goatelepathyprovider.c:913
+#: ../src/goabackend/goawindowsliveprovider.c:424
+msgid "Use for"
+msgstr "Använd för"
+
+#: ../src/goabackend/goaexchangeprovider.c:943
+#: ../src/goabackend/goagoogleprovider.c:562
+#: ../src/goabackend/goawindowsliveprovider.c:426
+msgid "_Mail"
+msgstr "_E-post"
+
+#: ../src/goabackend/goaexchangeprovider.c:948
+#: ../src/goabackend/goagoogleprovider.c:567
+#: ../src/goabackend/goaowncloudprovider.c:1101
+msgid "Cale_ndar"
+msgstr "Kale_nder"
+
+#: ../src/goabackend/goaexchangeprovider.c:953
+#: ../src/goabackend/goagoogleprovider.c:572
+#: ../src/goabackend/goaowncloudprovider.c:1106
+msgid "_Contacts"
+msgstr "_Kontakter"
+
+#: ../src/goabackend/goafacebookprovider.c:76
+msgid "Facebook"
+msgstr "Facebook"
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goafacebookprovider.c:213
+#: ../src/goabackend/goaflickrprovider.c:183
+#: ../src/goabackend/goagoogleprovider.c:211
+#: ../src/goabackend/goawindowsliveprovider.c:189
+#: ../src/goabackend/goayahooprovider.c:182
+msgid ""
+"Expected status 200 when requesting your identity, instead got status %d (%s)"
+msgstr ""
+"Förväntade status 200 vid begäran av din identitet, fick istället status %d (%s)"
+
+#: ../src/goabackend/goafacebookprovider.c:232
+#: ../src/goabackend/goafacebookprovider.c:244
+#: ../src/goabackend/goafacebookprovider.c:254
+#: ../src/goabackend/goaflickrprovider.c:202
+#: ../src/goabackend/goaflickrprovider.c:214
+#: ../src/goabackend/goaflickrprovider.c:224
+#: ../src/goabackend/goaflickrprovider.c:234
+#: ../src/goabackend/goaflickrprovider.c:244
+#: ../src/goabackend/goagoogleprovider.c:230
+#: ../src/goabackend/goagoogleprovider.c:242
+#: ../src/goabackend/goaoauth2provider.c:725
+#: ../src/goabackend/goaoauth2provider.c:755
+#: ../src/goabackend/goaoauth2provider.c:767
+#: ../src/goabackend/goawindowsliveprovider.c:208
+#: ../src/goabackend/goawindowsliveprovider.c:220
+#: ../src/goabackend/goawindowsliveprovider.c:232
+#: ../src/goabackend/goayahooprovider.c:201
+#: ../src/goabackend/goayahooprovider.c:213
+#: ../src/goabackend/goayahooprovider.c:224
+#: ../src/goabackend/goayahooprovider.c:270
+#: ../src/goabackend/goayahooprovider.c:282
+#: ../src/goabackend/goayahooprovider.c:293
+#, c-format
+msgid "Could not parse response"
+msgstr "Kunde inte tolka svar"
+
+#: ../src/goabackend/goafacebookprovider.c:433
+#: ../src/goabackend/goagoogleprovider.c:577
+#: ../src/goabackend/goatelepathyprovider.c:915
+msgid "C_hat"
+msgstr "Direkt_meddelanden"
+
+#: ../src/goabackend/goafacebookprovider.c:438
+#: ../src/goabackend/goaflickrprovider.c:423
+msgid "_Photos"
+msgstr "_Foton"
+
+#: ../src/goabackend/goaflickrprovider.c:77
+msgid "Flickr"
+msgstr "Flickr"
+
+#: ../src/goabackend/goaflickrprovider.c:322
+#: ../src/goabackend/goayahooprovider.c:345
+msgid "Your system time is invalid. Check your date and time settings."
+msgstr ""
+"Din systemtid är ogiltig. Kontrollera dina datum- och tidsinställningar."
+
+#: ../src/goabackend/goagoogleprovider.c:76
+msgid "Google"
+msgstr "Google"
+
+#: ../src/goabackend/goagoogleprovider.c:582
+#: ../src/goabackend/goaowncloudprovider.c:1111
+#: ../src/goabackend/goawindowsliveprovider.c:431
+msgid "_Documents"
+msgstr "_Dokument"
+
+#: ../src/goabackend/goagoogleprovider.c:587
+msgid "_Printers"
+msgstr "_Skrivare"
+
+#. TODO: more specific
+#: ../src/goabackend/goaimapauthlogin.c:94 ../src/goabackend/goasmtpauth.c:160
+#, c-format
+msgid "Service not available"
+msgstr "Tjänsten är inte tillgänglig"
+
+#. TODO: more specific
+#: ../src/goabackend/goaimapauthlogin.c:115
+#: ../src/goabackend/goasmtpauth.c:113
+#, c-format
+msgid "Authentication failed"
+msgstr "Autentisering misslyckades"
+
+#: ../src/goabackend/goaimapauthlogin.c:140
+#, c-format
+msgid "Server does not support PLAIN"
+msgstr "Servern stöder inte PLAIN"
+
+#: ../src/goabackend/goaimapauthlogin.c:194
+#: ../src/goabackend/goasmtpauth.c:818
+#, c-format
+msgid "Server does not support STARTTLS"
+msgstr "Servern stöder inte STARTTLS"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:76
+msgid "IMAP and SMTP"
+msgstr "IMAP och SMTP"
+
+#. Translators: the first parameter is a field name. The second is
+#. * a GOA account identifier.
+#: ../src/goabackend/goaimapsmtpprovider.c:373
+#: ../src/goabackend/goaimapsmtpprovider.c:431
+#, c-format
+msgid "Did not find %s with identity ‘%s’ in credentials"
+msgstr "Hittade inte %s med identiteten ‘%s’ bland inloggningsuppgifterna"
+
+#. Translators: the first %s is a field name. The
+#. * second %s is the IMAP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#. Translators: the first %s is a field name. The
+#. * second %s is the SMTP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#: ../src/goabackend/goaimapsmtpprovider.c:404
+#: ../src/goabackend/goaimapsmtpprovider.c:464
+#, c-format
+msgid "Invalid %s with username ‘%s’ (%s, %d): "
+msgstr "Ogiltigt %s med användarnamn ‘%s’ (%s, %d): "
+
+#. Translators: the following four strings are used to show a
+#. * combo box similar to the one in the evolution module.
+#. * Encryption: None
+#. *             STARTTLS after connecting
+#. *             SSL on a dedicated port
+#.
+#: ../src/goabackend/goaimapsmtpprovider.c:651
+msgid "_Encryption"
+msgstr "_Kryptering"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:654
+msgid "None"
+msgstr "Ingen"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:657
+msgid "STARTTLS after connecting"
+msgstr "STARTTLS efter anslutning"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:660
+msgid "SSL on a dedicated port"
+msgstr "SSL på en egen port"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:717
+msgid "_Name"
+msgstr "_Namn"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:734
+msgid "IMAP _Server"
+msgstr "_IMAP-Server"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:754
+msgid "SMTP _Server"
+msgstr "_SMTP-Server"
+
+#. --
+#: ../src/goabackend/goaimapsmtpprovider.c:768
+#: ../src/goabackend/goaimapsmtpprovider.c:1054
+#: ../src/goabackend/goaimapsmtpprovider.c:1388
+msgid "_Forward"
+msgstr "_Vidarebefordra"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1038
+#: ../src/goabackend/goaimapsmtpprovider.c:1371
+msgid "Error connecting to IMAP server"
+msgstr "Fel vid anslutning till IMAP-server"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1131
+#: ../src/goabackend/goaimapsmtpprovider.c:1445
+msgid "Error connecting to SMTP server"
+msgstr "Fel vid anslutning till SMTP-server"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1544
+msgid "E-mail"
+msgstr "E-post"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1548
+msgid "Name"
+msgstr "Namn"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1558
+#: ../src/goabackend/goaimapsmtpprovider.c:1561
+msgid "IMAP"
+msgstr "IMAP"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1572
+#: ../src/goabackend/goaimapsmtpprovider.c:1575
+msgid "SMTP"
+msgstr "SMTP"
+
+#: ../src/goabackend/goakerberosprovider.c:79
+msgid "Enterprise Login (Kerberos)"
+msgstr "Företagslogin (Kerberos)"
+
+#: ../src/goabackend/goakerberosprovider.c:447
+msgid "Identity service returned invalid key"
+msgstr "Identitetstjänsten returnerade en ogiltig nyckel"
+
+#: ../src/goabackend/goakerberosprovider.c:719
+#, c-format
+msgid "Could not find saved credentials for principal ‘%s’ in keyring"
+msgstr "Kunde inte hitta sparade inloggningsuppgifter för huvudman ‘%s’ i nyckelringen"
+
+#: ../src/goabackend/goakerberosprovider.c:732
+#, c-format
+msgid "Did not find password for principal ‘%s’ in credentials"
+msgstr "Hittade inte lösenord för huvudman ‘%s’ i inloggningsuppgifterna"
+
+#: ../src/goabackend/goakerberosprovider.c:1116
+msgid "_Domain"
+msgstr "_Domän"
+
+#: ../src/goabackend/goakerberosprovider.c:1117
+msgid "Enterprise domain or realm name"
+msgstr "Namn på företagsdomän eller rike"
+
+#: ../src/goabackend/goakerberosprovider.c:1349
+#: ../src/goaidentity/goaidentityservice.c:1106
+msgid "Log In to Realm"
+msgstr "Logga in i rike"
+
+#: ../src/goabackend/goakerberosprovider.c:1350
+msgid "Please enter your password below."
+msgstr "Vänligen ange ditt lösenord nedan."
+
+#: ../src/goabackend/goakerberosprovider.c:1351
+msgid "Remember this password"
+msgstr "Kom ihåg detta lösenord"
+
+#: ../src/goabackend/goakerberosprovider.c:1490
+#, c-format
+msgid "The domain is not valid"
+msgstr "Domänen är ogiltig"
+
+#: ../src/goabackend/goakerberosprovider.c:1645
+msgid "Error connecting to enterprise identity server"
+msgstr "Fel vid anslutning till företagsidentitetsserver"
+
+#: ../src/goabackend/goakerberosprovider.c:1725
+msgid "Network _Resources"
+msgstr "Nätverks_resurser"
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goaoauth2provider.c:701
+#: ../src/goabackend/goaoauthprovider.c:584
+#, c-format
+msgid ""
+"Expected status 200 when requesting access token, instead got status %d (%s)"
+msgstr ""
+"Förväntade status 200 vid begäran av åtkomstelement, fick istället status %d "
+"(%s)"
+
+#: ../src/goabackend/goaoauth2provider.c:958
+msgid "Authorization response: "
+msgstr "Auktoriseringssvar: "
+
+#: ../src/goabackend/goaoauth2provider.c:1028
+msgid "Authorization response: %s"
+msgstr "Auktoriseringssvar: %s"
+
+#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
+#: ../src/goabackend/goaoauth2provider.c:1130
+#, c-format
+msgid ""
+"Paste authorization code obtained from the <a href=\"%s\">authorization "
+"page</a>:"
+msgstr ""
+"Klistra in auktoriseringskoden som hämtas från <a href=\"%s"
+"\">auktoriseringssidan</a>:"
+
+#: ../src/goabackend/goaoauth2provider.c:1144
+#: ../src/goabackend/goaoauthprovider.c:990
+#: ../src/goabackend/goatelepathyprovider.c:672
+msgid "_OK"
+msgstr "_OK"
+
+#: ../src/goabackend/goaoauth2provider.c:1230
+#: ../src/goabackend/goaoauthprovider.c:1070
+msgid "Error getting an Access Token: "
+msgstr "Fel vid hämtning av ett åtkomstelement: "
+
+#: ../src/goabackend/goaoauth2provider.c:1245
+#: ../src/goabackend/goaoauthprovider.c:1083
 msgid "Error getting identity: "
 msgstr "Fel vid hämtning av identitet: "
 
-#: ../src/goabackend/goaoauth2provider.c:929
-#: ../src/goabackend/goaoauthprovider.c:972
+#: ../src/goabackend/goaoauth2provider.c:1457
+#: ../src/goabackend/goaoauthprovider.c:1389
 #, c-format
-msgid "There is already an account for the identity %s"
-msgstr "Det finns redan ett konto för identiteten %s"
-
-#: ../src/goabackend/goaoauth2provider.c:1054
-#: ../src/goabackend/goaoauthprovider.c:1102
-#, c-format
-msgid "Was asked to login as %s, but logged in as %s"
+msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Frågades om att logga in som %s, men loggade in som %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1190
-#: ../src/goabackend/goaoauthprovider.c:1250
-#, c-format
-msgid "Credentials not found in keyring (%s, %d): "
-msgstr "Inloggningsuppgifter hittades inte i nyckelring (%s, %d): "
-
-#: ../src/goabackend/goaoauth2provider.c:1217
+#: ../src/goabackend/goaoauth2provider.c:1616
 #, c-format
 msgid "Credentials do not contain access_token"
-msgstr "Inloggningsuppgifter innehåller ingen access_token"
+msgstr "Inloggningsuppgifter innehåller inget åtkomstelement (access_token)"
 
-#: ../src/goabackend/goaoauth2provider.c:1256
-#: ../src/goabackend/goaoauthprovider.c:1323
+#: ../src/goabackend/goaoauth2provider.c:1655
+#: ../src/goabackend/goaoauthprovider.c:1617
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
-msgstr "Misslyckades med att uppdatera access token (%s, %d): "
+msgstr "Misslyckades med att uppdatera åtkomstelement (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1291
-#: ../src/goabackend/goaoauthprovider.c:1353
-#, c-format
-msgid "Error storing credentials in keyring (%s, %d): "
-msgstr "Fel vid lagring av inloggningsuppgifter i nyckelring (%s, %d): "
-
-#: ../src/goabackend/goaoauthprovider.c:463
+#: ../src/goabackend/goaoauthprovider.c:607
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
-msgstr "Saknar rubrikerna access_token eller access_token_secret i svaret"
+msgstr "Saknar rubriker för åtkomstelement (access_token) eller åtkomstelementhemlighet (access_token_secret) i svaret"
 
-#: ../src/goabackend/goaoauthprovider.c:636
+#: ../src/goabackend/goaoauthprovider.c:909
 msgid "Error getting a Request Token: "
-msgstr "Fel vid hämtning av en Request Token: "
+msgstr "Fel vid hämtning av ett begäranselement: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:645
+#: ../src/goabackend/goaoauthprovider.c:942
 #, c-format
-msgid "Expected status 200 for getting a Request Token, instead got status %d (%s)"
-msgstr "Förväntade status 200 för hämtning av en Request Token, fick istället status %d (%s)"
+msgid ""
+"Expected status 200 for getting a Request Token, instead got status %d (%s)"
+msgstr ""
+"Förväntade status 200 för hämtning av ett begäranselement, fick istället status "
+"%d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:659
+#: ../src/goabackend/goaoauthprovider.c:959
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
-msgstr "Saknar rubrikerna request_token eller request_token_secret i svaret"
+msgstr "Saknar rubriker för begäranselement (request_token) eller begäranselementhemlighet i svaret"
 
 #. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:676
+#: ../src/goabackend/goaoauthprovider.c:976
 #, c-format
 msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr "Klistra in token som hämtats från <a href=\"%s\">auktoriseringssidan</a>:"
+msgstr ""
+"Klistra in element som hämtats från <a href=\"%s\">auktoriseringssidan</a>:"
 
-#: ../src/goabackend/goaoauthprovider.c:1279
+#: ../src/goabackend/goaoauthprovider.c:1573
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
-msgstr "Inloggningsuppgifter innehåller inte access_token eller access_token_secret"
+msgstr ""
+"Inloggningsuppgifter innehåller inte access_token eller access_token_secret"
 
-#: ../src/goabackend/goaprovider.c:523
+#: ../src/goabackend/goaowncloudprovider.c:82
+msgid "ownCloud"
+msgstr "ownCloud"
+
+#: ../src/goabackend/goaowncloudprovider.c:855
+#: ../src/goabackend/goaowncloudprovider.c:1036
+msgid "Error connecting to ownCloud server"
+msgstr "Fel vid anslutning till ownCloud-server"
+
+#: ../src/goabackend/goaowncloudprovider.c:1116
+msgid "_Files"
+msgstr "_Filer"
+
+#: ../src/goabackend/goapocketprovider.c:84
+msgid "Pocket"
+msgstr "Pocket"
+
+#. TODO: more specific
+#: ../src/goabackend/goapocketprovider.c:233
+#, c-format
+msgid "No username or access_token"
+msgstr "Inget användarnamn eller åtkomstelement"
+
+#: ../src/goabackend/goapocketprovider.c:425
+msgid "_Read Later"
+msgstr "_Läs senare"
+
+#: ../src/goabackend/goaprovider.c:681
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync har inte implementerats för typen %s"
 
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauth.c:175
+#, c-format
+msgid "TLS not available"
+msgstr "TLS är inte tillgängligt"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauth.c:241
+#, c-format
+msgid "org.gnome.OnlineAccounts.Mail is not available"
+msgstr "org.gnome.OnlineAccounts.Mail är inte tillgänglig"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauth.c:251
+#, c-format
+msgid "Failed to parse email address"
+msgstr "Misslyckades med att tolka e-postadress"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauth.c:263
+#, c-format
+msgid "Cannot do SMTP authentication without a domain"
+msgstr "Kan inte genomföra SMTP-autentisering utan en domän"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauth.c:301
+#, c-format
+msgid "Did not find smtp-password in credentials"
+msgstr "Hittade inte smtp-lösenord bland inloggningsuppgifterna"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauth.c:312
+#, c-format
+msgid "Cannot do SMTP authentication without a password"
+msgstr "Kan inte genomföra SMTP-autentisering utan ett lösenord"
+
+#: ../src/goabackend/goasmtpauth.c:674
+#, c-format
+msgid "Unknown authentication mechanism"
+msgstr "Okänd autentiseringsmekanism"
+
+#: ../src/goabackend/goatelepathyprovider.c:180
+#, c-format
+msgid "Telepathy chat account not found"
+msgstr "Telepathy-kontot för direktmeddelanden hittades inte"
+
+#: ../src/goabackend/goatelepathyprovider.c:389
+#, c-format
+msgid "Failed to initialize a GOA client"
+msgstr "Misslyckades med att initiera en GOA-klient"
+
+#: ../src/goabackend/goatelepathyprovider.c:432
+msgid "Failed to create a user interface for %s"
+msgstr "Misslyckades med att skapa ett användargränssnitt för %s"
+
+#: ../src/goabackend/goatelepathyprovider.c:559
+msgid "Connection Settings"
+msgstr "Anslutningsinställningar"
+
+#: ../src/goabackend/goatelepathyprovider.c:668
+msgid "Personal Details"
+msgstr "Personliga detaljer"
+
+#: ../src/goabackend/goatelepathyprovider.c:877
+msgid "Cannot save the connection parameters"
+msgstr "Kan inte spara anslutningsparametrarna"
+
+#: ../src/goabackend/goatelepathyprovider.c:889
+msgid "Cannot save your personal information on the server"
+msgstr "Kan inte spara din personliga information på servern"
+
+#. Connection Settings button
+#: ../src/goabackend/goatelepathyprovider.c:920
+msgid "_Connection Settings"
+msgstr "_Anslutningsinställningar"
+
+#. Edit Personal Information button
+#: ../src/goabackend/goatelepathyprovider.c:924
+msgid "_Personal Details"
+msgstr "_Personliga detaljer"
+
+#: ../src/goabackend/goautils.c:114
+#, c-format
+msgid "A %s account already exists for %s"
+msgstr "Ett %s-konto finns redan för %s"
+
+#. Translators: the %s is the name of the provider. eg., Google.
+#: ../src/goabackend/goautils.c:136
+#, c-format
+msgid "%s account"
+msgstr "%s-konto"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:180
+msgid "Failed to delete credentials from the keyring"
+msgstr "Misslyckades med att ta bort inloggningsuppgifter från nyckelringen"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:232
+msgid "Failed to retrieve credentials from the keyring"
+msgstr "Misslyckades med att hämta inloggningsuppgifter från nyckelringen"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:242
+msgid "No credentials found in the keyring"
+msgstr "Inloggningsuppgifter hittades inte i nyckelringen"
+
+#: ../src/goabackend/goautils.c:255
+msgid "Error parsing result obtained from the keyring: "
+msgstr "Fel vid tolkning av resultatet som hämtades från nyckelringen: "
+
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:742
+#: ../src/goabackend/goautils.c:298
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "GOA %s-inloggningsuppgifter för identiteten %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:756
+#: ../src/goabackend/goautils.c:315
+msgid "Failed to store credentials in the keyring"
+msgstr "Misslyckades med att lagra inloggningsuppgifter i nyckelringen"
+
+#: ../src/goabackend/goautils.c:536
+msgid "The signing certificate authority is not known."
+msgstr "Signeringscertifikatets utfärdare är okänd."
+
+#: ../src/goabackend/goautils.c:540
+msgid ""
+"The certificate does not match the expected identity of the site that it was "
+"retrieved from."
+msgstr ""
+"Certifikatet stämmer inte överens med den förväntade identiteten för platsen som det "
+"hämtades från."
+
+#: ../src/goabackend/goautils.c:545
+msgid "The certificate’s activation time is still in the future."
+msgstr "Certifikatets aktiveringstid ligger i framtiden."
+
+#: ../src/goabackend/goautils.c:549
+msgid "The certificate has expired."
+msgstr "Certifikatet har gått ut."
+
+#: ../src/goabackend/goautils.c:553
+msgid "The certificate has been revoked."
+msgstr "Certifikatet har återkallats."
+
+#: ../src/goabackend/goautils.c:557
+msgid "The certificate’s algorithm is considered insecure."
+msgstr "Certifikatets algoritm är att betrakta som osäker."
+
+#: ../src/goabackend/goautils.c:561
+msgid "Invalid certificate."
+msgstr "Ogiltigt certifikat."
+
+#. translators: %s here is the address of the web page
+#: ../src/goabackend/goawebview.c:70
 #, c-format
-msgid "Failed to store credentials in the keyring: %s"
-msgstr "Misslyckades med att lagra inloggningsuppgifter i nyckelringen: %s"
+msgid "Loading “%s”…"
+msgstr "Laddar ”%s”…"
 
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:827
-#, c-format
-msgid "Failed to retrieve credentials from the keyring: %s"
-msgstr "Misslyckades med att hämta inloggningsuppgifter från nyckelringen: %s"
+#: ../src/goabackend/goawindowsliveprovider.c:78
+msgid "Windows Live"
+msgstr "Windows Live"
 
-#: ../src/goabackend/goaprovider.c:839
-msgid "Error parsing result obtained from the keyring: "
-msgstr "Fel vid tolkning av resultatet som hämtades från nyckelringen: "
-
-#: ../src/goabackend/goatwitterprovider.c:78
-msgid "Twitter"
-msgstr "Twitter"
-
-#: ../src/goabackend/goatwitterprovider.c:183
-#, c-format
-msgid "Didn't find id_str member in JSON data"
-msgstr "Hittade inte id_str-medlem i JSON-data"
-
-#: ../src/goabackend/goatwitterprovider.c:192
-#, c-format
-msgid "Didn't find screen_name member in JSON data"
-msgstr "Hittade inte screen_name-medlem i JSON-data"
-
-#: ../src/goabackend/goayahooprovider.c:78
+#: ../src/goabackend/goayahooprovider.c:76
 msgid "Yahoo"
 msgstr "Yahoo"
 
-#: ../src/goabackend/goayahooprovider.c:186
-#, c-format
-msgid "Didn't find guid member in JSON data"
-msgstr "Hittade inte guid-medlem i JSON-data"
-
-#: ../src/goabackend/goayahooprovider.c:196
-#, c-format
-msgid "Didn't find value member in JSON data"
-msgstr "Hittade inte värde-medlem i JSON-data"
-
-#: ../src/goabackend/goayahooprovider.c:222
+#: ../src/goabackend/goayahooprovider.c:250
 #, c-format
 msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-msgstr "Förväntade status 200 vid begäran av namn, fick istället status %d (%s)"
+msgstr ""
+"Förväntade status 200 vid begäran av namn, fick istället status %d (%s)"
 
-#: ../src/goabackend/goayahooprovider.c:235
-msgid "Error parsing usercard response as JSON: "
-msgstr "Fel vid tolkning av usercard-svar som JSON: "
+#: ../src/goaidentity/goaalarm.c:209
+msgid "Time"
+msgstr "Tid"
 
-#: ../src/goabackend/goayahooprovider.c:246
+#: ../src/goaidentity/goaalarm.c:210
+msgid "Time to fire"
+msgstr "Tid till larm"
+
+#: ../src/goaidentity/goaidentityservice.c:370
+msgid "initial secret passed before secret key exchange"
+msgstr "initial hemlighet skickad före utbytet av hemliga nycklar"
+
+#: ../src/goaidentity/goaidentityservice.c:562
+msgid "Initial secret key is invalid"
+msgstr "Initial hemlig nyckel är ogiltig"
+
+#: ../src/goaidentity/goaidentityservice.c:1111
 #, c-format
-msgid "Didn't find profile member in JSON data"
-msgstr "Hittade inte profil-medlem i JSON-data"
+msgid "The network realm %s needs some information to sign you in."
+msgstr "Nätverksriket %s behöver en del information för att logga in dig."
 
-#: ../src/goabackend/goayahooprovider.c:256
+#: ../src/goaidentity/goakerberosidentity.c:259
+#: ../src/goaidentity/goakerberosidentity.c:268
+#: ../src/goaidentity/goakerberosidentity.c:596
+msgid "Could not find identity in credential cache: %k"
+msgstr "Kunde inte hitta identitet i inloggningsuppgiftscache: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:609
+msgid "Could not find identity credentials in cache: %k"
+msgstr "Kunde inte hitta inloggningsuppgifter i cachen: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:649
+msgid "Could not sift through identity credentials in cache: %k"
+msgstr "Kunde inte gå igenom inloggningsuppgifterna i cachen: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:667
+msgid "Could not finish up sifting through identity credentials in cache: %k"
+msgstr "Kunde inte slutföra genomgång av inloggningsuppgifter i cachen: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:954
 #, c-format
-msgid "Didn't find nickname member in JSON data"
-msgstr "Hittade inte smeknamn-medlem i JSON-data"
+msgid "No associated identification found"
+msgstr "Ingen associerad identifikationsuppgift kunde hittas"
 
-#. TODO: look up email address / screenname from GUID
-#: ../src/goabackend/goayahooprovider.c:324
-msgid "Name"
-msgstr "Namn"
+#: ../src/goaidentity/goakerberosidentity.c:1035
+msgid "Could not create credential cache: %k"
+msgstr "Kunde inte skapa inloggningsuppgiftscache: %k"
 
+#: ../src/goaidentity/goakerberosidentity.c:1069
+msgid "Could not initialize credentials cache: %k"
+msgstr "Kunde inte initiera inloggningsuppgiftscache: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1086
+msgid "Could not store new credentials in credentials cache: %k"
+msgstr "Misslyckades med att lagra nya inloggningsuppgifter i cachen: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1361
+#, c-format
+msgid "Could not renew identity: Not signed in"
+msgstr "Kunde inte förnya identitet: Inte inloggad"
+
+#: ../src/goaidentity/goakerberosidentity.c:1373
+msgid "Could not renew identity: %k"
+msgstr "Kunde inte förnya identitet: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1390
+msgid "Could not get new credentials to renew identity %s: %k"
+msgstr ""
+"Kunde inte skaffa nya inloggningsuppgifter för att förnya identitet %s: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1432
+msgid "Could not erase identity: %k"
+msgstr "Kunde inte radera identitet: %k"
+
+#: ../src/goaidentity/goakerberosidentitymanager.c:745
+msgid "Could not find identity"
+msgstr "Kunde inte hitta identitet"
+
+#: ../src/goaidentity/goakerberosidentitymanager.c:841
+msgid "Could not create credential cache for identity"
+msgstr "Kunde inte skapa inloggningsuppgiftscache för identitet"
+
+#~ msgid "An online account needs attention"
+#~ msgstr "Ett nätkonto behöver din uppmärksamhet"
+
+#~ msgid "Open Online Accounts..."
+#~ msgstr "Öppna nätkonton..."
+
+#~ msgid "Error parsing response as JSON: "
+#~ msgstr "Fel vid tolkning av svar som JSON: "
+
+#~ msgid "Didn't find username member in JSON data"
+#~ msgstr "Hittade inte användarnamn-medlem i JSON-data"
+
+#~ msgid "Didn't find name member in JSON data"
+#~ msgstr "Hittade inte namn-medlem i JSON-data"
+
+#~ msgid "Chat"
+#~ msgstr "Chatt"
+
+#~ msgid "Didn't find data member in JSON data"
+#~ msgstr "Hittade inte data-medlem i JSON-data"
+
+#~ msgid "Didn't find email member in JSON data"
+#~ msgstr "Hittade inte e-post-medlem i JSON-data"
+
+#~ msgid "Email Address"
+#~ msgstr "E-postadress"
+
+#~ msgid "Didn't find id member in JSON data"
+#~ msgstr "Hittade inte id-medlem i JSON-data"
+
+#~ msgid "Didn't find account email member in JSON data"
+#~ msgstr "Hittade inte kontoepost-medlem i JSON-data"
+
+#~ msgid "Didn't find access_token in non-JSON data"
+#~ msgstr "Hittade inte access_token i icke-JSON-data"
+
+#~ msgid "Didn't find access_token in JSON data"
+#~ msgstr "Hittade inte access_token i JSON-data"
+
+#~ msgid "There is already an account for the identity %s"
+#~ msgstr "Det finns redan ett konto för identiteten %s"
+
+#~ msgid "Error storing credentials in keyring (%s, %d): "
+#~ msgstr "Fel vid lagring av inloggningsuppgifter i nyckelring (%s, %d): "
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#~ msgid "Didn't find id_str member in JSON data"
+#~ msgstr "Hittade inte id_str-medlem i JSON-data"
+
+#~ msgid "Didn't find screen_name member in JSON data"
+#~ msgstr "Hittade inte screen_name-medlem i JSON-data"
+
+#~ msgid "Didn't find guid member in JSON data"
+#~ msgstr "Hittade inte guid-medlem i JSON-data"
+
+#~ msgid "Didn't find value member in JSON data"
+#~ msgstr "Hittade inte värde-medlem i JSON-data"
+
+#~ msgid "Error parsing usercard response as JSON: "
+#~ msgstr "Fel vid tolkning av usercard-svar som JSON: "
+
+#~ msgid "Didn't find profile member in JSON data"
+#~ msgstr "Hittade inte profil-medlem i JSON-data"
+
+#~ msgid "Didn't find nickname member in JSON data"
+#~ msgstr "Hittade inte smeknamn-medlem i JSON-data"
