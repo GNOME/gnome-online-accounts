@@ -87,13 +87,11 @@ main (int    argc,
   GOptionContext *opt_context;
   gint ret;
   guint name_owner_id;
-  guint sigint_id;
 
   ret = 1;
   loop = NULL;
   opt_context = NULL;
   name_owner_id = 0;
-  sigint_id = 0;
 
   opt_context = g_option_context_new ("GNOME Online Accounts daemon");
   g_option_context_add_main_entries (opt_context, opt_entries, NULL);
@@ -109,10 +107,9 @@ main (int    argc,
 
   loop = g_main_loop_new (NULL, FALSE);
 
-  sigint_id = 0;
   if (!opt_no_sigint)
     {
-      sigint_id = g_unix_signal_add (SIGINT, on_sigint, NULL);
+      g_unix_signal_add (SIGINT, on_sigint, NULL);
     }
 
   name_owner_id = g_bus_own_name (G_BUS_TYPE_SESSION,
@@ -136,8 +133,6 @@ main (int    argc,
     g_object_unref (the_daemon);
   if (tp_linker != NULL)
     g_object_unref (tp_linker);
-  if (sigint_id > 0)
-    g_source_remove (sigint_id);
   if (name_owner_id != 0)
     g_bus_unown_name (name_owner_id);
   if (loop != NULL)
