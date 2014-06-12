@@ -167,8 +167,8 @@ goa_alarm_class_init (GoaAlarmClass *klass)
   g_object_class_install_property (object_class,
                                    PROP_TIME,
                                    g_param_spec_boxed ("time",
-                                                       _("Time"),
-                                                       _("Time to fire"),
+                                                       "Time",
+                                                       "Time to fire",
                                                        G_TYPE_DATE_TIME,
                                                        G_PARAM_READWRITE));
 }
