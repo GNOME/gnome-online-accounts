@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*-
  *
- * Copyright (C) 2012, 2013 Red Hat, Inc.
+ * Copyright (C) 2012, 2013, 2014 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -250,11 +250,16 @@ web_inspector_show_window_cb (WebKitWebInspector *inspector,
                               gpointer            user_data)
 {
   GtkWidget *window;
+  GtkWindowGroup *group;
+
+  group = gtk_window_group_new ();
 
   window = g_object_get_data (G_OBJECT (inspector), "window");
+  gtk_window_group_add_window (group, GTK_WINDOW (window));
   gtk_widget_show_all (window);
   gtk_window_present (GTK_WINDOW (window));
 
+  g_object_unref (group);
   return GDK_EVENT_STOP;
 }
 #endif /* GOA_INSPECTOR_ENABLED */
