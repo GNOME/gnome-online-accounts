@@ -304,12 +304,10 @@ get_identity_sync (GoaOAuthProvider  *provider,
 
  out:
   g_clear_error (&identity_error);
+  g_clear_object (&call);
+  g_clear_object (&proxy);
   g_free (presentation_identity);
   g_free (guid);
-  if (call != NULL)
-    g_object_unref (call);
-  if (proxy != NULL)
-    g_object_unref (proxy);
   return ret;
 }
 

@@ -394,10 +394,8 @@ build_object (GoaProvider         *provider,
   ret = TRUE;
 
  out:
-  if (readlater != NULL)
-    g_object_unref (readlater);
-  if (account != NULL)
-    g_object_unref (account);
+  g_clear_object (&readlater);
+  g_clear_object (&account);
   return ret;
 }
 

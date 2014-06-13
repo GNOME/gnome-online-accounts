@@ -255,11 +255,9 @@ get_identity_sync (GoaOAuth2Provider  *provider,
 
  out:
   g_clear_error (&identity_error);
+  g_clear_object (&call);
+  g_clear_object (&proxy);
   g_free (email);
-  if (call != NULL)
-    g_object_unref (call);
-  if (proxy != NULL)
-    g_object_unref (proxy);
   return ret;
 }
 

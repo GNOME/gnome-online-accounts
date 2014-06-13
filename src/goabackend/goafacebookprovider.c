@@ -270,14 +270,11 @@ get_identity_sync (GoaOAuth2Provider  *provider,
 
  out:
   g_clear_error (&identity_error);
+  g_clear_object (&call);
+  g_clear_object (&parser);
+  g_clear_object (&proxy);
   g_free (id);
   g_free (presentation_identity);
-  if (parser != NULL)
-    g_object_unref (parser);
-  if (call != NULL)
-    g_object_unref (call);
-  if (proxy != NULL)
-    g_object_unref (proxy);
   return ret;
 }
 
@@ -435,10 +432,8 @@ build_object (GoaProvider         *provider,
   ret = TRUE;
 
  out:
-  if (chat != NULL)
-    g_object_unref (chat);
-  if (account != NULL)
-    g_object_unref (account);
+  g_clear_object (&chat);
+  g_clear_object (&account);
   g_clear_object (&photos);
   g_clear_object (&maps);
   return ret;
