@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-05-25 06:57+0000\n"
-"PO-Revision-Date: 2014-05-25 21:49+0300\n"
+"POT-Creation-Date: 2014-07-25 19:04+0000\n"
+"PO-Revision-Date: 2014-07-25 22:50+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -32,27 +32,27 @@ msgid "ProviderType property is not set for account"
 msgstr "ProviderType savybė nenustatyta paskyrai"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:229 ../src/goabackend/goahttpclient.c:170
+#: ../src/goabackend/goaewsclient.c:228 ../src/goabackend/goahttpclient.c:170
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Kodas: %u - nelaukas atsakymas iš serverio"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:245
+#: ../src/goabackend/goaewsclient.c:244
 #, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "Nepavyko perskaityti automatinio aptikimo atsakymo XML"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: ../src/goabackend/goaewsclient.c:256 ../src/goabackend/goaewsclient.c:271
-#: ../src/goabackend/goaewsclient.c:286
+#: ../src/goabackend/goaewsclient.c:255 ../src/goabackend/goaewsclient.c:270
+#: ../src/goabackend/goaewsclient.c:285
 #, c-format
 msgid "Failed to find ‘%s’ element"
 msgstr "Nepavyko rasti „%s“ elemento"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:303
+#: ../src/goabackend/goaewsclient.c:306
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "Nepavyko rasti ASUrl ir OABUrl automatinio aptikimo atsakyme"
@@ -114,7 +114,7 @@ msgstr "_Serveris"
 #: ../src/goabackend/goaimapsmtpprovider.c:767
 #: ../src/goabackend/goakerberosprovider.c:1128
 #: ../src/goabackend/goaowncloudprovider.c:658
-#: ../src/goabackend/goatelepathyprovider.c:671
+#: ../src/goabackend/goatelepathyprovider.c:649
 msgid "_Cancel"
 msgstr "_Atsisakyti"
 
@@ -139,13 +139,14 @@ msgstr "Jungiamasi..."
 #: ../src/goabackend/goaimapsmtpprovider.c:1333
 #: ../src/goabackend/goaimapsmtpprovider.c:1406
 #: ../src/goabackend/goakerberosprovider.c:1536
+#: ../src/goabackend/goamediaserverprovider.c:473
 #: ../src/goabackend/goaoauth2provider.c:1077
 #: ../src/goabackend/goaoauthprovider.c:908
 #: ../src/goabackend/goaowncloudprovider.c:786
 #: ../src/goabackend/goaowncloudprovider.c:1001
-#: ../src/goabackend/goatelepathyprovider.c:483
-#: ../src/goabackend/goatelepathyprovider.c:532
-#: ../src/goabackend/goatelepathyprovider.c:706
+#: ../src/goabackend/goatelepathyprovider.c:459
+#: ../src/goabackend/goatelepathyprovider.c:508
+#: ../src/goabackend/goatelepathyprovider.c:683
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "Dialogas buvo uždarytas"
@@ -189,31 +190,32 @@ msgstr "Klaida jungiantis prie Microsoft Exchange serverio"
 #. Translators: This is a label for a series of
 #. * options switches. For example: “Use for Mail”.
 #: ../src/goabackend/goaexchangeprovider.c:939
-#: ../src/goabackend/goafacebookprovider.c:466
-#: ../src/goabackend/goaflickrprovider.c:413
-#: ../src/goabackend/goagoogleprovider.c:591
+#: ../src/goabackend/goafacebookprovider.c:461
+#: ../src/goabackend/goaflickrprovider.c:411
+#: ../src/goabackend/goagoogleprovider.c:592
 #: ../src/goabackend/goakerberosprovider.c:1719
+#: ../src/goabackend/goamediaserverprovider.c:584
 #: ../src/goabackend/goaowncloudprovider.c:1097
-#: ../src/goabackend/goapocketprovider.c:423
-#: ../src/goabackend/goatelepathyprovider.c:913
-#: ../src/goabackend/goawindowsliveprovider.c:424
+#: ../src/goabackend/goapocketprovider.c:421
+#: ../src/goabackend/goatelepathyprovider.c:890
+#: ../src/goabackend/goawindowsliveprovider.c:421
 msgid "Use for"
 msgstr "Naudotina"
 
 #: ../src/goabackend/goaexchangeprovider.c:941
-#: ../src/goabackend/goagoogleprovider.c:593
-#: ../src/goabackend/goawindowsliveprovider.c:426
+#: ../src/goabackend/goagoogleprovider.c:594
+#: ../src/goabackend/goawindowsliveprovider.c:423
 msgid "_Mail"
 msgstr "_Paštas"
 
 #: ../src/goabackend/goaexchangeprovider.c:946
-#: ../src/goabackend/goagoogleprovider.c:598
+#: ../src/goabackend/goagoogleprovider.c:599
 #: ../src/goabackend/goaowncloudprovider.c:1099
 msgid "Cale_ndar"
 msgstr "Kale_ndorius"
 
 #: ../src/goabackend/goaexchangeprovider.c:951
-#: ../src/goabackend/goagoogleprovider.c:603
+#: ../src/goabackend/goagoogleprovider.c:604
 #: ../src/goabackend/goaowncloudprovider.c:1104
 msgid "_Contacts"
 msgstr "_Kontaktai"
@@ -225,7 +227,7 @@ msgstr "Facebook"
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:218
 #: ../src/goabackend/goaflickrprovider.c:183
-#: ../src/goabackend/goagoogleprovider.c:215
+#: ../src/goabackend/goagoogleprovider.c:218
 #: ../src/goabackend/goawindowsliveprovider.c:189
 #: ../src/goabackend/goayahooprovider.c:182
 #, c-format
@@ -241,8 +243,8 @@ msgstr "Tikėtasi būsenos 200 prašant jūsų identiteto, bet gauta būsena %d 
 #: ../src/goabackend/goaflickrprovider.c:224
 #: ../src/goabackend/goaflickrprovider.c:234
 #: ../src/goabackend/goaflickrprovider.c:244
-#: ../src/goabackend/goagoogleprovider.c:234
-#: ../src/goabackend/goagoogleprovider.c:246
+#: ../src/goabackend/goagoogleprovider.c:237
+#: ../src/goabackend/goagoogleprovider.c:249
 #: ../src/goabackend/goaoauth2provider.c:691
 #: ../src/goabackend/goaoauth2provider.c:721
 #: ../src/goabackend/goaoauth2provider.c:733
@@ -259,19 +261,20 @@ msgstr "Tikėtasi būsenos 200 prašant jūsų identiteto, bet gauta būsena %d 
 msgid "Could not parse response"
 msgstr "Nepavyko perskaityti atsakymo"
 
-#: ../src/goabackend/goafacebookprovider.c:468
-#: ../src/goabackend/goagoogleprovider.c:608
-#: ../src/goabackend/goatelepathyprovider.c:915
+#: ../src/goabackend/goafacebookprovider.c:463
+#: ../src/goabackend/goagoogleprovider.c:609
+#: ../src/goabackend/goatelepathyprovider.c:892
 msgid "C_hat"
 msgstr "Po_kalbiai"
 
-#: ../src/goabackend/goafacebookprovider.c:473
-#: ../src/goabackend/goaflickrprovider.c:415
-#: ../src/goabackend/goagoogleprovider.c:618
+#: ../src/goabackend/goafacebookprovider.c:468
+#: ../src/goabackend/goaflickrprovider.c:413
+#: ../src/goabackend/goagoogleprovider.c:619
+#: ../src/goabackend/goamediaserverprovider.c:586
 msgid "_Photos"
 msgstr "_Fotografijos"
 
-#: ../src/goabackend/goafacebookprovider.c:478
+#: ../src/goabackend/goafacebookprovider.c:473
 msgid "_Maps"
 msgstr "_Žemėlapiai"
 
@@ -279,8 +282,8 @@ msgstr "_Žemėlapiai"
 msgid "Flickr"
 msgstr "Flickr"
 
-#: ../src/goabackend/goaflickrprovider.c:322
-#: ../src/goabackend/goayahooprovider.c:345
+#: ../src/goabackend/goaflickrprovider.c:320
+#: ../src/goabackend/goayahooprovider.c:343
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr ""
 "Jūsų sistemos laikas yra netinkamas. Patikrinkite datos ir laiko nustatymus."
@@ -289,14 +292,13 @@ msgstr ""
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:613
+#: ../src/goabackend/goagoogleprovider.c:614
 #: ../src/goabackend/goaowncloudprovider.c:1109
-#: ../src/goabackend/goawindowsliveprovider.c:431
+#: ../src/goabackend/goawindowsliveprovider.c:428
 msgid "_Documents"
 msgstr "_Dokumentai"
 
-#: ../src/goabackend/goagoogleprovider.c:623
-#| msgid "_Printers"
+#: ../src/goabackend/goagoogleprovider.c:624
 msgid "Prin_ters"
 msgstr "S_pausdintuvai"
 
@@ -472,6 +474,27 @@ msgstr "Klaida jungiantis prie kompanijos identitetų serverio"
 msgid "Network _Resources"
 msgstr "Tinklo _resursai"
 
+#: ../src/goabackend/goamediaserverprovider.c:76
+#| msgid "IMAP _Server"
+msgid "Media Server"
+msgstr "Daugialypės terpės serveris"
+
+#: ../src/goabackend/goamediaserverprovider.c:369
+msgid ""
+"Personal content can be added to your applications through a media server "
+"account."
+msgstr ""
+"Asmeninį turinį galima pridėti į programas per daugialypės terpės serverio "
+"paskyrą."
+
+#: ../src/goabackend/goamediaserverprovider.c:383
+msgid "Available Media Servers"
+msgstr "Galimi daugialypės terpės serveriai"
+
+#: ../src/goabackend/goamediaserverprovider.c:413
+msgid "No media servers found"
+msgstr "Nerasta daugialypės terpės serverių"
+
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauth2provider.c:667
 #: ../src/goabackend/goaoauthprovider.c:550
@@ -569,11 +592,11 @@ msgstr "Kišenė"
 msgid "No username or access_token"
 msgstr "Nėra naudotojo vardo ar prieigos _leksemos"
 
-#: ../src/goabackend/goapocketprovider.c:425
+#: ../src/goabackend/goapocketprovider.c:423
 msgid "_Read Later"
 msgstr "Skaityti _vėliau"
 
-#: ../src/goabackend/goaprovider.c:681
+#: ../src/goabackend/goaprovider.c:682
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "%s nerealizuoja ensure_credentials_sync"
@@ -624,43 +647,43 @@ msgstr "Nežinomas tapatybės patvirtinimo mechanizmas"
 msgid "Telepathy chat account not found"
 msgstr "Telepathy pokalbių paskyra nerasta"
 
-#: ../src/goabackend/goatelepathyprovider.c:389
+#: ../src/goabackend/goatelepathyprovider.c:380
 #, c-format
 msgid "Failed to initialize a GOA client"
 msgstr "Nepavyko inicijuoti GOA kliento"
 
-#: ../src/goabackend/goatelepathyprovider.c:432
+#: ../src/goabackend/goatelepathyprovider.c:420
 #, c-format
 msgid "Failed to create a user interface for %s"
 msgstr "Nepavyko sukurti %s naudotojo sąsajos"
 
-#: ../src/goabackend/goatelepathyprovider.c:559
+#: ../src/goabackend/goatelepathyprovider.c:535
 msgid "Connection Settings"
 msgstr "Ryšio nustatymai"
 
-#: ../src/goabackend/goatelepathyprovider.c:668
+#: ../src/goabackend/goatelepathyprovider.c:644
 msgid "Personal Details"
 msgstr "Asmeninė informacija"
 
-#: ../src/goabackend/goatelepathyprovider.c:672
+#: ../src/goabackend/goatelepathyprovider.c:650
 msgid "_OK"
 msgstr "_Gerai"
 
-#: ../src/goabackend/goatelepathyprovider.c:877
+#: ../src/goabackend/goatelepathyprovider.c:854
 msgid "Cannot save the connection parameters"
 msgstr "Nepavyko įrašyti ryšio parametrų"
 
-#: ../src/goabackend/goatelepathyprovider.c:889
+#: ../src/goabackend/goatelepathyprovider.c:866
 msgid "Cannot save your personal information on the server"
 msgstr "Nepavyko įrašyti asmeninės informacijos serveryje"
 
 #. Connection Settings button
-#: ../src/goabackend/goatelepathyprovider.c:920
+#: ../src/goabackend/goatelepathyprovider.c:897
 msgid "_Connection Settings"
 msgstr "_Ryšio nustatymai"
 
 #. Edit Personal Information button
-#: ../src/goabackend/goatelepathyprovider.c:924
+#: ../src/goabackend/goatelepathyprovider.c:901
 msgid "_Personal Details"
 msgstr "_Asmeninė informacija"
 
@@ -754,14 +777,6 @@ msgstr "Yahoo"
 #, c-format
 msgid "Expected status 200 when requesting name, instead got status %d (%s)"
 msgstr "Tikėtasi statuso 200 prašant vardo, tačiau gautas statusas %d (%s)"
-
-#: ../src/goaidentity/goaalarm.c:170
-msgid "Time"
-msgstr "Laikas"
-
-#: ../src/goaidentity/goaalarm.c:171
-msgid "Time to fire"
-msgstr "Laikas iššauti"
 
 #: ../src/goaidentity/goaidentityservice.c:370
 msgid "initial secret passed before secret key exchange"
