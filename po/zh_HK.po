@@ -6,317 +6,334 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts 3.3.1\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-24 19:08+0800\n"
-"PO-Revision-Date: 2013-09-24 19:09+0800\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"online-accounts&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2014-08-18 19:06+0000\n"
+"PO-Revision-Date: 2014-08-19 20:20+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Hong Kong) <community@linuxhall.org>\n"
-"Language: \n"
+"Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Poedit 1.6.5\n"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:788 ../src/daemon/goadaemon.c:1034
+#: ../src/daemon/goadaemon.c:783 ../src/daemon/goadaemon.c:1029
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "無法尋找到此提供者：%s"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1022
+#: ../src/daemon/goadaemon.c:1017
 msgid "ProviderType property is not set for account"
 msgstr "帳號沒有設定 ProviderType 屬性"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:234 ../src/goabackend/goahttpclient.c:175
-#, fuzzy, c-format
-#| msgid "Code: %u - Unexpected response from server"
+#: ../src/goabackend/goaewsclient.c:228 ../src/goabackend/goahttpclient.c:170
+#, c-format
 msgid "Code: %u — Unexpected response from server"
-msgstr "代碼：%u - 伺服器有未預期的回應"
+msgstr "代碼：%u — 從伺服器傳回未預期的回應"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:250
+#: ../src/goabackend/goaewsclient.c:244
 #, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "無法解析自動探索回應 XML"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: ../src/goabackend/goaewsclient.c:261 ../src/goabackend/goaewsclient.c:276
-#: ../src/goabackend/goaewsclient.c:291
-#, fuzzy, c-format
-#| msgid "Failed to find Response element"
+#: ../src/goabackend/goaewsclient.c:255 ../src/goabackend/goaewsclient.c:270
+#: ../src/goabackend/goaewsclient.c:285
+#, c-format
 msgid "Failed to find ‘%s’ element"
-msgstr "找不到 Response  元素"
+msgstr "找不到‘%s’元素"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:308
+#: ../src/goabackend/goaewsclient.c:306
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "在自動探索回應中找不到 ASUrl 與 OABUrl"
 
-#: ../src/goabackend/goaexchangeprovider.c:79
+#: ../src/goabackend/goaexchangeprovider.c:73
 msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
 #. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:317
-#: ../src/goabackend/goaexchangeprovider.c:1028
-#: ../src/goabackend/goaowncloudprovider.c:403
-#: ../src/goabackend/goaowncloudprovider.c:1190
-#, fuzzy, c-format
-#| msgid "Did not find password with identity `%s' in credentials"
+#: ../src/goabackend/goaexchangeprovider.c:311
+#: ../src/goabackend/goaexchangeprovider.c:1020
+#: ../src/goabackend/goaowncloudprovider.c:398
+#: ../src/goabackend/goaowncloudprovider.c:1183
+#, c-format
 msgid "Did not find password with identity ‘%s’ in credentials"
-msgstr "在證書中找不到身分為「%s」的密碼"
+msgstr "在證書中找不到身分‘%s’的密碼"
 
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
 #.
-#: ../src/goabackend/goaexchangeprovider.c:345
-#: ../src/goabackend/goaowncloudprovider.c:426
-#, fuzzy, c-format
-#| msgid "Invalid password with username `%s' (%s, %d): "
+#: ../src/goabackend/goaexchangeprovider.c:339
+#: ../src/goabackend/goaowncloudprovider.c:421
+#, c-format
 msgid "Invalid password with username ‘%s’ (%s, %d): "
-msgstr "使用者名稱「%s」(%s, %d)的密碼無效："
+msgstr "使用者‘%s’的密碼無效(%s, %d):"
 
-#: ../src/goabackend/goaexchangeprovider.c:499
-#: ../src/goabackend/goaimapsmtpprovider.c:707
+#: ../src/goabackend/goaexchangeprovider.c:492
+#: ../src/goabackend/goaimapsmtpprovider.c:715
 msgid "_E-mail"
 msgstr "電子郵件(_E)"
 
-#: ../src/goabackend/goaexchangeprovider.c:500
-#: ../src/goabackend/goaimapsmtpprovider.c:727
-#: ../src/goabackend/goaimapsmtpprovider.c:747
-#: ../src/goabackend/goaowncloudprovider.c:655
+#: ../src/goabackend/goaexchangeprovider.c:493
+#: ../src/goabackend/goaimapsmtpprovider.c:735
+#: ../src/goabackend/goaimapsmtpprovider.c:755
+#: ../src/goabackend/goaowncloudprovider.c:649
 msgid "_Password"
 msgstr "密碼(_P)"
 
-#: ../src/goabackend/goaexchangeprovider.c:503
+#: ../src/goabackend/goaexchangeprovider.c:496
 msgid "_Custom"
 msgstr "自選(_C)"
 
-#: ../src/goabackend/goaexchangeprovider.c:514
-#: ../src/goabackend/goaimapsmtpprovider.c:726
-#: ../src/goabackend/goaimapsmtpprovider.c:746
-#: ../src/goabackend/goakerberosprovider.c:1129
-#: ../src/goabackend/goaowncloudprovider.c:654
+#: ../src/goabackend/goaexchangeprovider.c:507
+#: ../src/goabackend/goaimapsmtpprovider.c:734
+#: ../src/goabackend/goaimapsmtpprovider.c:754
+#: ../src/goabackend/goakerberosprovider.c:1123
+#: ../src/goabackend/goaowncloudprovider.c:648
 msgid "User_name"
 msgstr "使用者名稱(_N)"
 
-#: ../src/goabackend/goaexchangeprovider.c:515
-#: ../src/goabackend/goaowncloudprovider.c:653
+#: ../src/goabackend/goaexchangeprovider.c:508
+#: ../src/goabackend/goaowncloudprovider.c:647
 msgid "_Server"
 msgstr "伺服器(_S)"
 
-#: ../src/goabackend/goaexchangeprovider.c:545
-#: ../src/goabackend/goaimapsmtpprovider.c:779
-#: ../src/goabackend/goakerberosprovider.c:1154
-#: ../src/goabackend/goaowncloudprovider.c:684
+#. --
+#: ../src/goabackend/goaexchangeprovider.c:518
+#: ../src/goabackend/goaimapsmtpprovider.c:767
+#: ../src/goabackend/goakerberosprovider.c:1128
+#: ../src/goabackend/goaowncloudprovider.c:658
+#: ../src/goabackend/goatelepathyprovider.c:649
+msgid "_Cancel"
+msgstr "取消(_C)"
+
+#: ../src/goabackend/goaexchangeprovider.c:519
+#: ../src/goabackend/goakerberosprovider.c:1129
+#: ../src/goabackend/goaowncloudprovider.c:659
+msgid "C_onnect"
+msgstr "連線(_O)"
+
+#: ../src/goabackend/goaexchangeprovider.c:535
+#: ../src/goabackend/goaimapsmtpprovider.c:784
+#: ../src/goabackend/goakerberosprovider.c:1145
+#: ../src/goabackend/goaowncloudprovider.c:675
 msgid "Connecting…"
 msgstr "連線中…"
 
-#: ../src/goabackend/goaexchangeprovider.c:650
-#: ../src/goabackend/goaexchangeprovider.c:845
-#: ../src/goabackend/goaimapsmtpprovider.c:939
-#: ../src/goabackend/goaimapsmtpprovider.c:974
-#: ../src/goabackend/goaimapsmtpprovider.c:1062
-#: ../src/goabackend/goaimapsmtpprovider.c:1318
-#: ../src/goabackend/goaimapsmtpprovider.c:1391
-#: ../src/goabackend/goakerberosprovider.c:1545
-#: ../src/goabackend/goaoauth2provider.c:1133
-#: ../src/goabackend/goaoauthprovider.c:1041
-#: ../src/goabackend/goaowncloudprovider.c:795
-#: ../src/goabackend/goaowncloudprovider.c:1008
-#: ../src/goabackend/goatelepathyprovider.c:466
-#: ../src/goabackend/goatelepathyprovider.c:515
-#: ../src/goabackend/goatelepathyprovider.c:689
+#: ../src/goabackend/goaexchangeprovider.c:640
+#: ../src/goabackend/goaexchangeprovider.c:837
+#: ../src/goabackend/goaimapsmtpprovider.c:946
+#: ../src/goabackend/goaimapsmtpprovider.c:981
+#: ../src/goabackend/goaimapsmtpprovider.c:1069
+#: ../src/goabackend/goaimapsmtpprovider.c:1333
+#: ../src/goabackend/goaimapsmtpprovider.c:1406
+#: ../src/goabackend/goakerberosprovider.c:1536
+#: ../src/goabackend/goamediaserverprovider.c:473
+#: ../src/goabackend/goaoauth2provider.c:1077
+#: ../src/goabackend/goaoauthprovider.c:908
+#: ../src/goabackend/goaowncloudprovider.c:786
+#: ../src/goabackend/goaowncloudprovider.c:1001
+#: ../src/goabackend/goatelepathyprovider.c:459
+#: ../src/goabackend/goatelepathyprovider.c:508
+#: ../src/goabackend/goatelepathyprovider.c:683
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "對話盒已放棄"
 
-#: ../src/goabackend/goaexchangeprovider.c:688
-#: ../src/goabackend/goaexchangeprovider.c:873
-#: ../src/goabackend/goaimapsmtpprovider.c:1004
-#: ../src/goabackend/goaimapsmtpprovider.c:1095
-#: ../src/goabackend/goaimapsmtpprovider.c:1342
-#: ../src/goabackend/goaimapsmtpprovider.c:1416
-#: ../src/goabackend/goaowncloudprovider.c:837
-#: ../src/goabackend/goaowncloudprovider.c:1029
+#: ../src/goabackend/goaexchangeprovider.c:678
+#: ../src/goabackend/goaexchangeprovider.c:865
+#: ../src/goabackend/goaimapsmtpprovider.c:1011
+#: ../src/goabackend/goaimapsmtpprovider.c:1104
+#: ../src/goabackend/goaimapsmtpprovider.c:1357
+#: ../src/goabackend/goaimapsmtpprovider.c:1431
+#: ../src/goabackend/goaowncloudprovider.c:828
+#: ../src/goabackend/goaowncloudprovider.c:1022
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "對話盒已放棄 (%s, %d)："
 
-#: ../src/goabackend/goaexchangeprovider.c:701
-#: ../src/goabackend/goaimapsmtpprovider.c:1017
-#: ../src/goabackend/goaimapsmtpprovider.c:1108
-#: ../src/goabackend/goaowncloudprovider.c:850
+#: ../src/goabackend/goaexchangeprovider.c:691
+#: ../src/goabackend/goaimapsmtpprovider.c:1024
+#: ../src/goabackend/goaimapsmtpprovider.c:1117
+#: ../src/goabackend/goaowncloudprovider.c:841
 msgid "_Ignore"
 msgstr "忽略(_I)"
 
-#: ../src/goabackend/goaexchangeprovider.c:706
-#: ../src/goabackend/goaexchangeprovider.c:892
-#: ../src/goabackend/goaimapsmtpprovider.c:1022
-#: ../src/goabackend/goaimapsmtpprovider.c:1113
-#: ../src/goabackend/goaimapsmtpprovider.c:1361
-#: ../src/goabackend/goaimapsmtpprovider.c:1435
-#: ../src/goabackend/goakerberosprovider.c:1655
-#: ../src/goabackend/goaowncloudprovider.c:855
-#: ../src/goabackend/goaowncloudprovider.c:1048
+#: ../src/goabackend/goaexchangeprovider.c:696
+#: ../src/goabackend/goaexchangeprovider.c:884
+#: ../src/goabackend/goaimapsmtpprovider.c:1029
+#: ../src/goabackend/goaimapsmtpprovider.c:1122
+#: ../src/goabackend/goaimapsmtpprovider.c:1376
+#: ../src/goabackend/goaimapsmtpprovider.c:1450
+#: ../src/goabackend/goakerberosprovider.c:1646
+#: ../src/goabackend/goaowncloudprovider.c:846
+#: ../src/goabackend/goaowncloudprovider.c:1041
 msgid "_Try Again"
 msgstr "重試(_T)"
 
-#: ../src/goabackend/goaexchangeprovider.c:711
-#: ../src/goabackend/goaexchangeprovider.c:885
+#: ../src/goabackend/goaexchangeprovider.c:701
+#: ../src/goabackend/goaexchangeprovider.c:877
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "連接至 Microsoft Exchange 伺服器時發生錯誤"
 
 #. Translators: This is a label for a series of
 #. * options switches. For example: “Use for Mail”.
-#: ../src/goabackend/goaexchangeprovider.c:947
-#: ../src/goabackend/goafacebookprovider.c:417
-#: ../src/goabackend/goaflickrprovider.c:427
-#: ../src/goabackend/goagoogleprovider.c:549
-#: ../src/goabackend/goakerberosprovider.c:1728
-#: ../src/goabackend/goaowncloudprovider.c:1104
-#: ../src/goabackend/goatelepathyprovider.c:896
-#: ../src/goabackend/goawindowsliveprovider.c:432
+#: ../src/goabackend/goaexchangeprovider.c:939
+#: ../src/goabackend/goafacebookprovider.c:461
+#: ../src/goabackend/goaflickrprovider.c:411
+#: ../src/goabackend/goagoogleprovider.c:592
+#: ../src/goabackend/goakerberosprovider.c:1719
+#: ../src/goabackend/goamediaserverprovider.c:584
+#: ../src/goabackend/goaowncloudprovider.c:1097
+#: ../src/goabackend/goapocketprovider.c:421
+#: ../src/goabackend/goatelepathyprovider.c:890
+#: ../src/goabackend/goawindowsliveprovider.c:421
 msgid "Use for"
 msgstr "使用於"
 
-#: ../src/goabackend/goaexchangeprovider.c:949
-#: ../src/goabackend/goagoogleprovider.c:551
+#: ../src/goabackend/goaexchangeprovider.c:941
+#: ../src/goabackend/goagoogleprovider.c:594
+#: ../src/goabackend/goawindowsliveprovider.c:423
 msgid "_Mail"
 msgstr "郵件(_M)"
 
-#: ../src/goabackend/goaexchangeprovider.c:954
-#: ../src/goabackend/goagoogleprovider.c:556
-#: ../src/goabackend/goaowncloudprovider.c:1106
+#: ../src/goabackend/goaexchangeprovider.c:946
+#: ../src/goabackend/goagoogleprovider.c:599
+#: ../src/goabackend/goaowncloudprovider.c:1099
 msgid "Cale_ndar"
 msgstr "行事曆(_N)"
 
-#: ../src/goabackend/goaexchangeprovider.c:959
-#: ../src/goabackend/goagoogleprovider.c:561
-#: ../src/goabackend/goaowncloudprovider.c:1111
+#: ../src/goabackend/goaexchangeprovider.c:951
+#: ../src/goabackend/goagoogleprovider.c:604
+#: ../src/goabackend/goaowncloudprovider.c:1104
 msgid "_Contacts"
 msgstr "聯絡人(_C)"
 
-#: ../src/goabackend/goafacebookprovider.c:82
+#: ../src/goabackend/goafacebookprovider.c:76
 msgid "Facebook"
 msgstr "Facebook"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:211
-#: ../src/goabackend/goaflickrprovider.c:189
-#: ../src/goabackend/goagoogleprovider.c:210
-#: ../src/goabackend/goatwitterprovider.c:166
-#: ../src/goabackend/goawindowsliveprovider.c:195
-#: ../src/goabackend/goayahooprovider.c:187
-#, fuzzy, c-format
-#| msgid ""
-#| "Expected status 200 when requesting user id, instead got status %d (%s)"
+#: ../src/goabackend/goafacebookprovider.c:218
+#: ../src/goabackend/goaflickrprovider.c:183
+#: ../src/goabackend/goagoogleprovider.c:218
+#: ../src/goabackend/goawindowsliveprovider.c:189
+#: ../src/goabackend/goayahooprovider.c:182
+#, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
-msgstr "請求使用者 id 時預期的狀態為 200，但卻取得狀態 %d (%s)"
+msgstr "請求你的身分識別時預期的狀態為 200，但卻取得狀態 %d (%s)"
 
-#: ../src/goabackend/goafacebookprovider.c:230
-#: ../src/goabackend/goafacebookprovider.c:242
-#: ../src/goabackend/goafacebookprovider.c:252
-#: ../src/goabackend/goaflickrprovider.c:208
-#: ../src/goabackend/goaflickrprovider.c:220
-#: ../src/goabackend/goaflickrprovider.c:230
-#: ../src/goabackend/goaflickrprovider.c:240
-#: ../src/goabackend/goaflickrprovider.c:250
-#: ../src/goabackend/goagoogleprovider.c:229
-#: ../src/goabackend/goagoogleprovider.c:241
-#: ../src/goabackend/goaoauth2provider.c:682
-#: ../src/goabackend/goaoauth2provider.c:712
-#: ../src/goabackend/goaoauth2provider.c:724
-#: ../src/goabackend/goatwitterprovider.c:185
-#: ../src/goabackend/goatwitterprovider.c:197
-#: ../src/goabackend/goatwitterprovider.c:207
-#: ../src/goabackend/goawindowsliveprovider.c:214
-#: ../src/goabackend/goawindowsliveprovider.c:226
-#: ../src/goabackend/goawindowsliveprovider.c:238
-#: ../src/goabackend/goayahooprovider.c:206
-#: ../src/goabackend/goayahooprovider.c:218
-#: ../src/goabackend/goayahooprovider.c:229
-#: ../src/goabackend/goayahooprovider.c:275
-#: ../src/goabackend/goayahooprovider.c:287
-#: ../src/goabackend/goayahooprovider.c:298
+#: ../src/goabackend/goafacebookprovider.c:237
+#: ../src/goabackend/goafacebookprovider.c:249
+#: ../src/goabackend/goafacebookprovider.c:259
+#: ../src/goabackend/goaflickrprovider.c:202
+#: ../src/goabackend/goaflickrprovider.c:214
+#: ../src/goabackend/goaflickrprovider.c:224
+#: ../src/goabackend/goaflickrprovider.c:234
+#: ../src/goabackend/goaflickrprovider.c:244
+#: ../src/goabackend/goagoogleprovider.c:237
+#: ../src/goabackend/goagoogleprovider.c:249
+#: ../src/goabackend/goaoauth2provider.c:691
+#: ../src/goabackend/goaoauth2provider.c:721
+#: ../src/goabackend/goaoauth2provider.c:733
+#: ../src/goabackend/goawindowsliveprovider.c:208
+#: ../src/goabackend/goawindowsliveprovider.c:220
+#: ../src/goabackend/goawindowsliveprovider.c:232
+#: ../src/goabackend/goayahooprovider.c:201
+#: ../src/goabackend/goayahooprovider.c:213
+#: ../src/goabackend/goayahooprovider.c:224
+#: ../src/goabackend/goayahooprovider.c:270
+#: ../src/goabackend/goayahooprovider.c:282
+#: ../src/goabackend/goayahooprovider.c:293
 #, c-format
 msgid "Could not parse response"
 msgstr "無法解析回應"
 
-#: ../src/goabackend/goafacebookprovider.c:419
-#: ../src/goabackend/goagoogleprovider.c:566
-#: ../src/goabackend/goatelepathyprovider.c:898
-#: ../src/goabackend/goawindowsliveprovider.c:434
+#: ../src/goabackend/goafacebookprovider.c:463
+#: ../src/goabackend/goagoogleprovider.c:609
+#: ../src/goabackend/goatelepathyprovider.c:892
 msgid "C_hat"
 msgstr "聊天(_H)"
 
-#: ../src/goabackend/goaflickrprovider.c:83
-msgid "Flickr"
-msgstr "Flickr"
-
-#: ../src/goabackend/goaflickrprovider.c:328
-#: ../src/goabackend/goayahooprovider.c:350
-msgid "Your system time is invalid. Check your date and time settings."
-msgstr "你的系統時間無效。請檢查你的日期與時間設定值。"
-
-#: ../src/goabackend/goaflickrprovider.c:429
+#: ../src/goabackend/goafacebookprovider.c:468
+#: ../src/goabackend/goaflickrprovider.c:413
+#: ../src/goabackend/goagoogleprovider.c:619
+#: ../src/goabackend/goamediaserverprovider.c:586
 msgid "_Photos"
 msgstr "相片(_P)"
 
-#: ../src/goabackend/goagoogleprovider.c:82
+#: ../src/goabackend/goafacebookprovider.c:473
+msgid "_Maps"
+msgstr "地圖(_M)"
+
+#: ../src/goabackend/goaflickrprovider.c:77
+msgid "Flickr"
+msgstr "Flickr"
+
+#: ../src/goabackend/goaflickrprovider.c:320
+#: ../src/goabackend/goayahooprovider.c:343
+msgid "Your system time is invalid. Check your date and time settings."
+msgstr "你的系統時間無效。請檢查你的日期與時間設定值。"
+
+#: ../src/goabackend/goagoogleprovider.c:76
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:571
-#: ../src/goabackend/goaowncloudprovider.c:1116
-#: ../src/goabackend/goawindowsliveprovider.c:439
+#: ../src/goabackend/goagoogleprovider.c:614
+#: ../src/goabackend/goaowncloudprovider.c:1109
+#: ../src/goabackend/goawindowsliveprovider.c:428
 msgid "_Documents"
 msgstr "文件(_D)"
 
+#: ../src/goabackend/goagoogleprovider.c:624
+msgid "Prin_ters"
+msgstr "打印機(_T)"
+
 #. TODO: more specific
-#: ../src/goabackend/goaimapauthlogin.c:99
-#: ../src/goabackend/goasmtpauthplain.c:146
+#: ../src/goabackend/goaimapauthlogin.c:94 ../src/goabackend/goasmtpauth.c:160
 #, c-format
 msgid "Service not available"
 msgstr "服務無法使用"
 
 #. TODO: more specific
-#: ../src/goabackend/goaimapauthlogin.c:120
-#: ../src/goabackend/goasmtpauthplain.c:115
+#: ../src/goabackend/goaimapauthlogin.c:115
+#: ../src/goabackend/goasmtpauth.c:113
 #, c-format
 msgid "Authentication failed"
 msgstr "核對失敗"
 
-#: ../src/goabackend/goaimapauthlogin.c:145
-#: ../src/goabackend/goasmtpauthplain.c:646
+#: ../src/goabackend/goaimapauthlogin.c:140
 #, c-format
 msgid "Server does not support PLAIN"
 msgstr "伺服器不支援 PLAIN"
 
-#: ../src/goabackend/goaimapauthlogin.c:199
-#: ../src/goabackend/goasmtpauthplain.c:751
+#: ../src/goabackend/goaimapauthlogin.c:194
+#: ../src/goabackend/goasmtpauth.c:818
 #, c-format
 msgid "Server does not support STARTTLS"
 msgstr "伺服器不支援 STARTTLS"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:82
+#: ../src/goabackend/goaimapsmtpprovider.c:76
 msgid "IMAP and SMTP"
 msgstr "IMAP 與 SMTP"
 
 #. Translators: the first parameter is a field name. The second is
 #. * a GOA account identifier.
-#: ../src/goabackend/goaimapsmtpprovider.c:364
-#: ../src/goabackend/goaimapsmtpprovider.c:422
-#, fuzzy, c-format
-#| msgid "Did not find password with identity `%s' in credentials"
+#: ../src/goabackend/goaimapsmtpprovider.c:373
+#: ../src/goabackend/goaimapsmtpprovider.c:431
+#, c-format
 msgid "Did not find %s with identity ‘%s’ in credentials"
-msgstr "在證書中找不到身分為「%s」的密碼"
+msgstr "在證書中找不到 %s 身分‘%s’的密碼"
 
 #. Translators: the first %s is a field name. The
 #. * second %s is the IMAP
@@ -328,12 +345,11 @@ msgstr "在證書中找不到身分為「%s」的密碼"
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:395
-#: ../src/goabackend/goaimapsmtpprovider.c:455
-#, fuzzy, c-format
-#| msgid "Invalid password with username `%s' (%s, %d): "
+#: ../src/goabackend/goaimapsmtpprovider.c:404
+#: ../src/goabackend/goaimapsmtpprovider.c:464
+#, c-format
 msgid "Invalid %s with username ‘%s’ (%s, %d): "
-msgstr "使用者名稱「%s」(%s, %d)的密碼無效："
+msgstr "無效的 %s，使用者名稱‘%s’ (%s, %d): "
 
 #. Translators: the following four strings are used to show a
 #. * combo box similar to the one in the evolution module.
@@ -341,472 +357,506 @@ msgstr "使用者名稱「%s」(%s, %d)的密碼無效："
 #. *             STARTTLS after connecting
 #. *             SSL on a dedicated port
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:642
+#: ../src/goabackend/goaimapsmtpprovider.c:651
 msgid "_Encryption"
 msgstr "加密(_E)"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:645
+#: ../src/goabackend/goaimapsmtpprovider.c:654
 msgid "None"
 msgstr "沒有"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:648
+#: ../src/goabackend/goaimapsmtpprovider.c:657
 msgid "STARTTLS after connecting"
 msgstr "連線後使用 STARTTLS"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:651
+#: ../src/goabackend/goaimapsmtpprovider.c:660
 msgid "SSL on a dedicated port"
 msgstr "SSL 於專用的連接埠"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:708
+#: ../src/goabackend/goaimapsmtpprovider.c:716
 msgid "_Name"
 msgstr "名稱(_N)"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:725
+#: ../src/goabackend/goaimapsmtpprovider.c:733
 msgid "IMAP _Server"
 msgstr "IMAP 伺服器(_S)"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:745
+#: ../src/goabackend/goaimapsmtpprovider.c:753
 msgid "SMTP _Server"
 msgstr "SMTP 伺服器(_S)"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1027
-#: ../src/goabackend/goaimapsmtpprovider.c:1354
+#: ../src/goabackend/goaimapsmtpprovider.c:768
+#: ../src/goabackend/goaimapsmtpprovider.c:1050
+#: ../src/goabackend/goaimapsmtpprovider.c:1386
+msgid "_Forward"
+msgstr "轉遞(_F)"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1034
+#: ../src/goabackend/goaimapsmtpprovider.c:1369
 msgid "Error connecting to IMAP server"
 msgstr "連接至 IMAP 伺服器時發生錯誤"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1118
-#: ../src/goabackend/goaimapsmtpprovider.c:1428
+#: ../src/goabackend/goaimapsmtpprovider.c:1127
+#: ../src/goabackend/goaimapsmtpprovider.c:1443
 msgid "Error connecting to SMTP server"
 msgstr "連接至 SMTP 伺服器時發生錯誤"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1527
+#: ../src/goabackend/goaimapsmtpprovider.c:1542
 msgid "E-mail"
 msgstr "電子郵件"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1531
+#: ../src/goabackend/goaimapsmtpprovider.c:1546
 msgid "Name"
 msgstr "名稱"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1541
-#: ../src/goabackend/goaimapsmtpprovider.c:1544
+#: ../src/goabackend/goaimapsmtpprovider.c:1556
+#: ../src/goabackend/goaimapsmtpprovider.c:1559
 msgid "IMAP"
 msgstr "IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1555
-#: ../src/goabackend/goaimapsmtpprovider.c:1558
+#: ../src/goabackend/goaimapsmtpprovider.c:1570
+#: ../src/goabackend/goaimapsmtpprovider.c:1573
 msgid "SMTP"
 msgstr "SMTP"
 
-#: ../src/goabackend/goakerberosprovider.c:87
+#: ../src/goabackend/goakerberosprovider.c:79
 msgid "Enterprise Login (Kerberos)"
 msgstr "企業版登入 (Kerberos)"
 
-#: ../src/goabackend/goakerberosprovider.c:455
+#: ../src/goabackend/goakerberosprovider.c:447
 msgid "Identity service returned invalid key"
 msgstr "身分認證服務傳回無效的鍵值"
 
-#: ../src/goabackend/goakerberosprovider.c:728
-#, fuzzy, c-format
-#| msgid "Could not find saved credentials for principal `%s' in keyring"
+#: ../src/goabackend/goakerberosprovider.c:719
+#, c-format
 msgid "Could not find saved credentials for principal ‘%s’ in keyring"
-msgstr "找不到密碼匙圈中的主要「%s」儲存的證書"
+msgstr "在密碼匙圈中找不到主要‘%s’儲存的身分證書"
 
-#: ../src/goabackend/goakerberosprovider.c:738
-#, fuzzy, c-format
-#| msgid "Did not find password for principal `%s' in credentials"
+#: ../src/goabackend/goakerberosprovider.c:732
+#, c-format
 msgid "Did not find password for principal ‘%s’ in credentials"
-msgstr "在證書中找不到主要「%s」的密碼"
+msgstr "在證書中找不到主要‘%s’密碼"
 
-#: ../src/goabackend/goakerberosprovider.c:1121
+#: ../src/goabackend/goakerberosprovider.c:1115
 msgid "_Domain"
 msgstr "網域(_D)"
 
-#: ../src/goabackend/goakerberosprovider.c:1122
+#: ../src/goabackend/goakerberosprovider.c:1116
 msgid "Enterprise domain or realm name"
 msgstr "企業網域或領域名稱"
 
-#: ../src/goabackend/goakerberosprovider.c:1354
-#: ../src/goaidentity/goaidentityservice.c:1085
+#: ../src/goabackend/goakerberosprovider.c:1345
+#: ../src/goaidentity/goaidentityservice.c:1106
 msgid "Log In to Realm"
 msgstr "登入領域"
 
-#: ../src/goabackend/goakerberosprovider.c:1355
+#: ../src/goabackend/goakerberosprovider.c:1346
 msgid "Please enter your password below."
 msgstr "請在下面輸入你的密碼。"
 
-#: ../src/goabackend/goakerberosprovider.c:1356
+#: ../src/goabackend/goakerberosprovider.c:1347
 msgid "Remember this password"
 msgstr "記住這個密碼"
 
-#: ../src/goabackend/goakerberosprovider.c:1495
+#: ../src/goabackend/goakerberosprovider.c:1486
 #, c-format
 msgid "The domain is not valid"
 msgstr "網域是無效的"
 
-#: ../src/goabackend/goakerberosprovider.c:1650
+#: ../src/goabackend/goakerberosprovider.c:1641
 msgid "Error connecting to enterprise identity server"
 msgstr "連線至企業身分認證伺服器時發生錯誤"
 
-#: ../src/goabackend/goakerberosprovider.c:1730
+#: ../src/goabackend/goakerberosprovider.c:1721
 msgid "Network _Resources"
 msgstr "網絡資源(_R)"
 
+#: ../src/goabackend/goamediaserverprovider.c:76
+#| msgid "IMAP _Server"
+msgid "Media Server"
+msgstr "媒體伺服器"
+
+#: ../src/goabackend/goamediaserverprovider.c:369
+msgid ""
+"Personal content can be added to your applications through a media server "
+"account."
+msgstr "個人內容可以透過媒體伺服器帳號加入你的應用程式。"
+
+#: ../src/goabackend/goamediaserverprovider.c:383
+msgid "Available Media Servers"
+msgstr "可用的伺服器"
+
+#: ../src/goabackend/goamediaserverprovider.c:413
+msgid "No media servers found"
+msgstr "找不到媒體伺服器"
+
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:658
-#: ../src/goabackend/goaoauthprovider.c:586
+#: ../src/goabackend/goaoauth2provider.c:667
+#: ../src/goabackend/goaoauthprovider.c:550
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr "請求存取記號時預期的狀態為 200，但卻取得狀態 %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:916
-#: ../src/goabackend/goaoauth2provider.c:956
-#, fuzzy, c-format
-#| msgid "Authorization response was \"%s\""
-msgid "Authorization response was ‘%s’"
-msgstr "核對回應為「%s」"
+#: ../src/goabackend/goaoauth2provider.c:888
+msgid "Authorization response: "
+msgstr "授權回應："
 
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:1059
+#: ../src/goabackend/goaoauth2provider.c:958
 #, c-format
-msgid ""
-"Paste authorization code obtained from the <a href=\"%s\">authorization "
-"page</a>:"
-msgstr "貼上從<a href=\"%s\">核對頁面</a>取得的核對代碼："
+msgid "Authorization response: %s"
+msgstr "授權回應：%s"
 
-#: ../src/goabackend/goaoauth2provider.c:1159
-#: ../src/goabackend/goaoauthprovider.c:1072
+#: ../src/goabackend/goaoauth2provider.c:1103
+#: ../src/goabackend/goaoauthprovider.c:939
 msgid "Error getting an Access Token: "
 msgstr "取得存取記號時發生錯誤："
 
-#: ../src/goabackend/goaoauth2provider.c:1174
-#: ../src/goabackend/goaoauthprovider.c:1085
+#: ../src/goabackend/goaoauth2provider.c:1118
+#: ../src/goabackend/goaoauthprovider.c:952
 msgid "Error getting identity: "
 msgstr "取得身分時發生錯誤："
 
-#: ../src/goabackend/goaoauth2provider.c:1386
-#: ../src/goabackend/goaoauthprovider.c:1391
-#, fuzzy, c-format
-#| msgid "Was asked to login as %s, but logged in as %s"
+#: ../src/goabackend/goaoauth2provider.c:1332
+#: ../src/goabackend/goaoauthprovider.c:1260
+#, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
-msgstr "有被詢問以 %s 登入，但卻以 %s 登入"
+msgstr "要求以 %s 登入，卻以 %s 登入"
 
-#: ../src/goabackend/goaoauth2provider.c:1542
+#: ../src/goabackend/goaoauth2provider.c:1491
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "證書不包含 access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1581
-#: ../src/goabackend/goaoauthprovider.c:1619
+#: ../src/goabackend/goaoauth2provider.c:1530
+#: ../src/goabackend/goaoauthprovider.c:1488
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "無法重新整理存取符令 (%s，%d)："
 
-#: ../src/goabackend/goaoauthprovider.c:609
+#: ../src/goabackend/goaoauthprovider.c:573
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "回應遺失 access_token 或 access_token_secret 標頭"
 
-#: ../src/goabackend/goaoauthprovider.c:911
+#: ../src/goabackend/goaoauthprovider.c:822
 msgid "Error getting a Request Token: "
 msgstr "取得請求記號時發生錯誤："
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:944
+#: ../src/goabackend/goaoauthprovider.c:855
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr "取得請求記號時預期的狀態為 200，但卻取得狀態 %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:961
+#: ../src/goabackend/goaoauthprovider.c:872
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "回應遺失 request_token 或 request_token_secret 標頭"
 
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:978
-#, c-format
-msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr "從<a href=\"%s\">認證頁面</a>取得貼上記號："
-
-#: ../src/goabackend/goaoauthprovider.c:1575
+#: ../src/goabackend/goaoauthprovider.c:1444
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "證書不包含 access_token 或 access_token_secret"
 
-#: ../src/goabackend/goaowncloudprovider.c:87
+#: ../src/goabackend/goaowncloudprovider.c:82
 msgid "ownCloud"
 msgstr "ownCloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:860
-#: ../src/goabackend/goaowncloudprovider.c:1041
+#: ../src/goabackend/goaowncloudprovider.c:851
+#: ../src/goabackend/goaowncloudprovider.c:1034
 msgid "Error connecting to ownCloud server"
 msgstr "連接至 ownCloud 伺服器時發生錯誤"
 
-#: ../src/goabackend/goaowncloudprovider.c:1121
+#: ../src/goabackend/goaowncloudprovider.c:1114
 msgid "_Files"
 msgstr "檔案(_F)"
 
-#: ../src/goabackend/goaprovider.c:688
+#: ../src/goabackend/goapocketprovider.c:84
+msgid "Pocket"
+msgstr "封包"
+
+#. TODO: more specific
+#: ../src/goabackend/goapocketprovider.c:233
+#, c-format
+msgid "No username or access_token"
+msgstr "沒有使用者名稱或存取記號(_T)"
+
+#: ../src/goabackend/goapocketprovider.c:423
+msgid "_Read Later"
+msgstr "稍後再閱讀(_R)"
+
+#: ../src/goabackend/goaprovider.c:682
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync 並非以 %s 類型實作"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:161
+#: ../src/goabackend/goasmtpauth.c:175
 #, c-format
 msgid "TLS not available"
 msgstr "TLS 無法使用"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:227
+#: ../src/goabackend/goasmtpauth.c:241
 #, c-format
 msgid "org.gnome.OnlineAccounts.Mail is not available"
 msgstr "org.gnome.OnlineAccounts.Mail 無法使用"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:237
+#: ../src/goabackend/goasmtpauth.c:251
 #, c-format
 msgid "Failed to parse email address"
 msgstr "無法分析電子郵件位址"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:249
+#: ../src/goabackend/goasmtpauth.c:263
 #, c-format
-msgid "Cannot do SMTP PLAIN without a domain"
-msgstr "沒有網域不能進行 SMTP PLAIN"
+msgid "Cannot do SMTP authentication without a domain"
+msgstr "沒有網域無法進行 SMTP 核對"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:287
+#: ../src/goabackend/goasmtpauth.c:301
 #, c-format
 msgid "Did not find smtp-password in credentials"
 msgstr "在證書中找不到 smtp 密碼"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:298
+#: ../src/goabackend/goasmtpauth.c:312
 #, c-format
-msgid "Cannot do SMTP PLAIN without a password"
-msgstr "沒有密碼不能進行 SMTP PLAIN"
+msgid "Cannot do SMTP authentication without a password"
+msgstr "沒有密碼無法進行 SMTP 核對"
 
-#: ../src/goabackend/goatelepathyprovider.c:183
+#: ../src/goabackend/goasmtpauth.c:674
+#, c-format
+msgid "Unknown authentication mechanism"
+msgstr "不明的核對機制"
+
+#: ../src/goabackend/goatelepathyprovider.c:180
 #, c-format
 msgid "Telepathy chat account not found"
 msgstr "找不到 Telepathy 聊天帳號"
 
-#: ../src/goabackend/goatelepathyprovider.c:372
+#: ../src/goabackend/goatelepathyprovider.c:380
 #, c-format
 msgid "Failed to initialize a GOA client"
 msgstr "GOA 客戶端初始化失敗"
 
-#: ../src/goabackend/goatelepathyprovider.c:415
+#: ../src/goabackend/goatelepathyprovider.c:420
 #, c-format
 msgid "Failed to create a user interface for %s"
 msgstr "無法建立 %s 的使用者介面"
 
-#: ../src/goabackend/goatelepathyprovider.c:542
+#: ../src/goabackend/goatelepathyprovider.c:535
 msgid "Connection Settings"
 msgstr "連線設定值"
 
-#: ../src/goabackend/goatelepathyprovider.c:651
+#: ../src/goabackend/goatelepathyprovider.c:644
 msgid "Personal Details"
 msgstr "個人詳細資料"
 
-#: ../src/goabackend/goatelepathyprovider.c:860
+#: ../src/goabackend/goatelepathyprovider.c:650
+msgid "_OK"
+msgstr "確定(_O)"
+
+#: ../src/goabackend/goatelepathyprovider.c:854
 msgid "Cannot save the connection parameters"
 msgstr "不能儲存連線參數"
 
-#: ../src/goabackend/goatelepathyprovider.c:872
+#: ../src/goabackend/goatelepathyprovider.c:866
 msgid "Cannot save your personal information on the server"
 msgstr "不能在伺服器上儲存你的個人資料"
 
 #. Connection Settings button
-#: ../src/goabackend/goatelepathyprovider.c:903
+#: ../src/goabackend/goatelepathyprovider.c:897
 msgid "_Connection Settings"
 msgstr "連線設定值(_C)"
 
 #. Edit Personal Information button
-#: ../src/goabackend/goatelepathyprovider.c:907
+#: ../src/goabackend/goatelepathyprovider.c:901
 msgid "_Personal Details"
 msgstr "個人詳細資料(_P)"
 
-#: ../src/goabackend/goatwitterprovider.c:81
-msgid "Twitter"
-msgstr "Twitter"
-
-#: ../src/goabackend/goautils.c:86
+#: ../src/goabackend/goautils.c:114
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "%s 帳號已經存在用於 %s"
 
 #. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:108
+#: ../src/goabackend/goautils.c:136
 #, c-format
 msgid "%s account"
 msgstr "%s 帳號"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:152
+#: ../src/goabackend/goautils.c:180
 msgid "Failed to delete credentials from the keyring"
 msgstr "無法從密碼匙圈刪除證書"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:204
+#: ../src/goabackend/goautils.c:232
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "無法從密碼匙圈取回證書"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:214
+#: ../src/goabackend/goautils.c:242
 msgid "No credentials found in the keyring"
 msgstr "密碼匙圈找不到證書"
 
-#: ../src/goabackend/goautils.c:227
+#: ../src/goabackend/goautils.c:255
 msgid "Error parsing result obtained from the keyring: "
 msgstr "從密碼匙圈取得解析結果時發生錯誤："
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:270
+#: ../src/goabackend/goautils.c:298
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "%2$s 身分的 GOA %1$s 證書"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:287
+#: ../src/goabackend/goautils.c:315
 msgid "Failed to store credentials in the keyring"
 msgstr "無法儲存證書到密碼匙圈"
 
-#: ../src/goabackend/goautils.c:508
+#: ../src/goabackend/goautils.c:536
 msgid "The signing certificate authority is not known."
 msgstr "簽署的證書授權中心不明。"
 
-#: ../src/goabackend/goautils.c:512
+#: ../src/goabackend/goautils.c:540
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr "證書與取回證書的網站身分比對不符。"
 
-#: ../src/goabackend/goautils.c:517
-#, fuzzy
-#| msgid "The certificate's activation time is still in the future."
+#: ../src/goabackend/goautils.c:545
 msgid "The certificate’s activation time is still in the future."
 msgstr "證書的啟用時刻在未來。"
 
-#: ../src/goabackend/goautils.c:521
+#: ../src/goabackend/goautils.c:549
 msgid "The certificate has expired."
 msgstr "證書已逾期。"
 
-#: ../src/goabackend/goautils.c:525
+#: ../src/goabackend/goautils.c:553
 msgid "The certificate has been revoked."
 msgstr "證書已撤銷。"
 
-#: ../src/goabackend/goautils.c:529
-#, fuzzy
-#| msgid "The certificate's algorithm is considered insecure."
+#: ../src/goabackend/goautils.c:557
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "證書的演算法被認為是不安全的。"
 
-#: ../src/goabackend/goautils.c:533
+#: ../src/goabackend/goautils.c:561
 msgid "Invalid certificate."
 msgstr "證書無效。"
 
 #. translators: %s here is the address of the web page
-#: ../src/goabackend/goawebview.c:74
+#: ../src/goabackend/goawebview.c:70
 #, c-format
 msgid "Loading “%s”…"
 msgstr "正載入「%s」..."
 
-#: ../src/goabackend/goawindowsliveprovider.c:84
+#: ../src/goabackend/goawindowsliveprovider.c:78
 msgid "Windows Live"
 msgstr "Windows Live"
 
-#: ../src/goabackend/goayahooprovider.c:81
+#: ../src/goabackend/goayahooprovider.c:76
 msgid "Yahoo"
 msgstr "Yahoo"
 
-#: ../src/goabackend/goayahooprovider.c:255
+#: ../src/goabackend/goayahooprovider.c:250
 #, c-format
 msgid "Expected status 200 when requesting name, instead got status %d (%s)"
 msgstr "請求名稱時預期的狀態為 200，但卻取得狀態 %d (%s)"
 
-#: ../src/goaidentity/goaalarm.c:245
-msgid "Time"
-msgstr "時間"
-
-#: ../src/goaidentity/goaalarm.c:246
-msgid "Time to fire"
-msgstr "啟動時間"
-
-#: ../src/goaidentity/goaidentityservice.c:378
+#: ../src/goaidentity/goaidentityservice.c:370
 msgid "initial secret passed before secret key exchange"
 msgstr "在私人密碼匙交換前傳送的初始機密"
 
-#: ../src/goaidentity/goaidentityservice.c:570
+#: ../src/goaidentity/goaidentityservice.c:562
 msgid "Initial secret key is invalid"
 msgstr "初始密碼匙無效"
 
-#: ../src/goaidentity/goaidentityservice.c:1090
+#: ../src/goaidentity/goaidentityservice.c:1111
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "網絡領域 %s 需要一些資訊才能讓你登入。"
 
-#: ../src/goaidentity/goakerberosidentity.c:269
-#: ../src/goaidentity/goakerberosidentity.c:278
-#: ../src/goaidentity/goakerberosidentity.c:606
+#: ../src/goaidentity/goakerberosidentity.c:252
+#: ../src/goaidentity/goakerberosidentity.c:261
+#: ../src/goaidentity/goakerberosidentity.c:588
 msgid "Could not find identity in credential cache: %k"
 msgstr "在證書快取中找不到身分認證：%k"
 
-#: ../src/goaidentity/goakerberosidentity.c:619
+#: ../src/goaidentity/goakerberosidentity.c:601
 msgid "Could not find identity credentials in cache: %k"
 msgstr "在快取中找不到身分證書：%k"
 
-#: ../src/goaidentity/goakerberosidentity.c:657
+#: ../src/goaidentity/goakerberosidentity.c:641
 msgid "Could not sift through identity credentials in cache: %k"
 msgstr "無法篩選快取中的身分證書：%k"
 
-#: ../src/goaidentity/goakerberosidentity.c:674
+#: ../src/goaidentity/goakerberosidentity.c:659
 msgid "Could not finish up sifting through identity credentials in cache: %k"
 msgstr "無法結束篩選快取中的身分證書：%k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1012
+#: ../src/goaidentity/goakerberosidentity.c:949
 #, c-format
 msgid "No associated identification found"
 msgstr "找不到相關聯的身分認證"
 
-#: ../src/goaidentity/goakerberosidentity.c:1093
+#: ../src/goaidentity/goakerberosidentity.c:1030
 msgid "Could not create credential cache: %k"
 msgstr "無法建立證書快取：%k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1127
+#: ../src/goaidentity/goakerberosidentity.c:1064
 msgid "Could not initialize credentials cache: %k"
 msgstr "無法初始化證書快取：%k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1146
+#: ../src/goaidentity/goakerberosidentity.c:1081
 msgid "Could not store new credentials in credentials cache: %k"
 msgstr "無法在證書快取中儲存新的證書：%k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1423
+#: ../src/goaidentity/goakerberosidentity.c:1356
 #, c-format
 msgid "Could not renew identity: Not signed in"
 msgstr "無法更新身分認證：尚未登入"
 
-#: ../src/goaidentity/goakerberosidentity.c:1435
+#: ../src/goaidentity/goakerberosidentity.c:1368
 msgid "Could not renew identity: %k"
 msgstr "無法更新身分認證：%k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1452
+#: ../src/goaidentity/goakerberosidentity.c:1385
 msgid "Could not get new credentials to renew identity %s: %k"
 msgstr "無法取得新的證書以更新身分認證 %s：%k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1492
+#: ../src/goaidentity/goakerberosidentity.c:1427
 msgid "Could not erase identity: %k"
 msgstr "無法消除身分認證：%k"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:747
+#: ../src/goaidentity/goakerberosidentitymanager.c:745
 msgid "Could not find identity"
 msgstr "找不到身分認證"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:824
+#: ../src/goaidentity/goakerberosidentitymanager.c:836
 msgid "Could not create credential cache for identity"
 msgstr "無法建立身分認證的證書快取"
+
+#~ msgid ""
+#~ "Paste authorization code obtained from the <a href=\"%s\">authorization "
+#~ "page</a>:"
+#~ msgstr "貼上從<a href=\"%s\">核對頁面</a>取得的核對代碼："
+
+#~ msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
+#~ msgstr "從<a href=\"%s\">認證頁面</a>取得貼上記號："
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#~ msgid "Time"
+#~ msgstr "時間"
+
+#~ msgid "Time to fire"
+#~ msgstr "啟動時間"
 
 #~ msgid "Failed to find Autodiscover element"
 #~ msgstr "找不到 Autodiscover 元素"
