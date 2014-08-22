@@ -2,14 +2,14 @@
 # Copyright (C) 2013 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
 #
-# Manoj Kumar Giri <mgiri@redhat.com>, 2013.
+# Manoj Kumar Giri <mgiri@redhat.com>, 2013, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts gnome-3-8\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-03-20 09:49+0000\n"
-"PO-Revision-Date: 2013-03-21 19:57+0530\n"
+"POT-Creation-Date: 2014-08-22 12:55+0000\n"
+"PO-Revision-Date: 2014-08-22 18:37+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
 "Language: or\n"
@@ -20,298 +20,349 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:773 ../src/daemon/goadaemon.c:983
+#: ../src/daemon/goadaemon.c:783 ../src/daemon/goadaemon.c:1029
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "ଏହା ପାଇଁ ପ୍ରଦାତା ପାଇବାରେ ବିଫଳ: %s"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:971
+#: ../src/daemon/goadaemon.c:1017
 msgid "ProviderType property is not set for account"
 msgstr "ପ୍ରଦାତା ପ୍ରକାର ଗୁଣଧର୍ମକୁ ଖାତା ପାଇଁ ସେଟ ହୋଇ ନାହିଁ"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:234 ../src/goabackend/goahttpclient.c:175
+#: ../src/goabackend/goaewsclient.c:228 ../src/goabackend/goahttpclient.c:170
 #, c-format
-msgid "Code: %u - Unexpected response from server"
-msgstr "ସଂକେତ: %u - ସର୍ଭରରୁ ଅପ୍ରତ୍ୟାଶିତ ଉତ୍ତର"
+#| msgid "Code: %u - Unexpected response from server"
+msgid "Code: %u — Unexpected response from server"
+msgstr "ସଂକେତ: %u — ସର୍ଭରରୁ ଅପ୍ରତ୍ୟାଶିତ ଉତ୍ତର"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:250
+#: ../src/goabackend/goaewsclient.c:244
 #, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "ସ୍ୱୟଂ ଆବିଷ୍କାର ଉତ୍ତର XML ବିଶ୍ଳେଷଣ କରିବାରେ ବିଫଳ"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:260
+#. Translators: the parameter is an XML element name.
+#: ../src/goabackend/goaewsclient.c:255 ../src/goabackend/goaewsclient.c:270
+#: ../src/goabackend/goaewsclient.c:285
 #, c-format
-msgid "Failed to find Autodiscover element"
-msgstr "ସ୍ୱୟଂଆବିଷ୍କାର ଉପାଦାନ ଖୋଜିବାରେ ବିଫଳ"
+#| msgid "Failed to find Response element"
+msgid "Failed to find ‘%s’ element"
+msgstr "‘%s’  ଉପାଦାନ ଖୋଜିବାରେ ବିଫଳ"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:274
-#, c-format
-msgid "Failed to find Response element"
-msgstr "ଉତ୍ତର  ଉପାଦାନ ଖୋଜିବାରେ ବିଫଳ"
-
-#. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:288
-#, c-format
-msgid "Failed to find Account element"
-msgstr "ଖାତା  ଉପାଦାନ ଖୋଜିବାରେ ବିଫଳ"
-
-#. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:305
+#: ../src/goabackend/goaewsclient.c:306
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "ASUrl ଏବଂ OABUrl କୁ ସ୍ୱୟଂଆବିଷ୍କାର ଉତ୍ତରରେ ଖୋଜିବାରେ ବିଫଳ"
 
-#: ../src/goabackend/goaexchangeprovider.c:79
+#: ../src/goabackend/goaexchangeprovider.c:73
 msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
 #. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:308
-#: ../src/goabackend/goaexchangeprovider.c:1037
-#: ../src/goabackend/goagoogleprovider.c:609
-#: ../src/goabackend/goagoogleprovider.c:796
-#: ../src/goabackend/goaowncloudprovider.c:367
-#: ../src/goabackend/goaowncloudprovider.c:1158
+#: ../src/goabackend/goaexchangeprovider.c:311
+#: ../src/goabackend/goaexchangeprovider.c:1020
+#: ../src/goabackend/goaowncloudprovider.c:398
+#: ../src/goabackend/goaowncloudprovider.c:1183
 #, c-format
-msgid "Did not find password with identity `%s' in credentials"
-msgstr "`%s' ପରିଚୟ ସହିତ ପ୍ରବେଶ ସଂକେତକୁ ପରଚୟ ପତ୍ରରେ ଖାଜି ପାଇଲା ନାହିଁ"
+#| msgid "Did not find password with identity `%s' in credentials"
+msgid "Did not find password with identity ‘%s’ in credentials"
+msgstr "‘%s’  ପରିଚୟ ସହିତ ପ୍ରବେଶ ସଂକେତକୁ ପରଚୟ ପତ୍ରରେ ଖାଜି ପାଇଲା ନାହିଁ"
 
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
 #.
-#: ../src/goabackend/goaexchangeprovider.c:336
-#: ../src/goabackend/goagoogleprovider.c:632
-#: ../src/goabackend/goaowncloudprovider.c:390
+#: ../src/goabackend/goaexchangeprovider.c:339
+#: ../src/goabackend/goaowncloudprovider.c:421
 #, c-format
-msgid "Invalid password with username `%s' (%s, %d): "
-msgstr "ବ୍ୟବହାରକାରୀ ନାମ `%s' ପାଇଁ ଅବୈଧ ପ୍ରବେଶ ସଂକେତ (%s, %d): "
+#| msgid "Invalid password with username `%s' (%s, %d): "
+msgid "Invalid password with username ‘%s’ (%s, %d): "
+msgstr "ବ୍ୟବହାରକାରୀ ନାମ ‘%s’ ପାଇଁ ଅବୈଧ ପ୍ରବେଶ ସଂକେତ (%s, %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:501
-#: ../src/goabackend/goaimapsmtpprovider.c:690
+#: ../src/goabackend/goaexchangeprovider.c:492
+#: ../src/goabackend/goaimapsmtpprovider.c:715
 msgid "_E-mail"
 msgstr "ଇ-ମେଲ (_E)"
 
-#: ../src/goabackend/goaexchangeprovider.c:502
-#: ../src/goabackend/goaimapsmtpprovider.c:710
-#: ../src/goabackend/goaimapsmtpprovider.c:730
-#: ../src/goabackend/goaowncloudprovider.c:630
+#: ../src/goabackend/goaexchangeprovider.c:493
+#: ../src/goabackend/goaimapsmtpprovider.c:735
+#: ../src/goabackend/goaimapsmtpprovider.c:755
+#: ../src/goabackend/goaowncloudprovider.c:649
 msgid "_Password"
 msgstr "ପ୍ରବେଶ ସଂଙ୍କେତ (_P)"
 
-#: ../src/goabackend/goaexchangeprovider.c:505
+#: ../src/goabackend/goaexchangeprovider.c:496
 msgid "_Custom"
 msgstr "ଇଚ୍ଛାରୂପଣ (_C)"
 
-#: ../src/goabackend/goaexchangeprovider.c:524
-#: ../src/goabackend/goaimapsmtpprovider.c:709
-#: ../src/goabackend/goaimapsmtpprovider.c:729
-#: ../src/goabackend/goakerberosprovider.c:1128
-#: ../src/goabackend/goaowncloudprovider.c:629
+#: ../src/goabackend/goaexchangeprovider.c:507
+#: ../src/goabackend/goaimapsmtpprovider.c:734
+#: ../src/goabackend/goaimapsmtpprovider.c:754
+#: ../src/goabackend/goakerberosprovider.c:1123
+#: ../src/goabackend/goaowncloudprovider.c:648
 msgid "User_name"
 msgstr "ବ୍ୟବହାରକାରୀ ନାମ (_n)"
 
-#: ../src/goabackend/goaexchangeprovider.c:525
-#: ../src/goabackend/goaowncloudprovider.c:628
+#: ../src/goabackend/goaexchangeprovider.c:508
+#: ../src/goabackend/goaowncloudprovider.c:647
 msgid "_Server"
 msgstr "ସର୍ଭର (_S)"
 
-#: ../src/goabackend/goaexchangeprovider.c:555
-#: ../src/goabackend/goaimapsmtpprovider.c:762
-#: ../src/goabackend/goakerberosprovider.c:1153
+#. --
+#: ../src/goabackend/goaexchangeprovider.c:518
+#: ../src/goabackend/goaimapsmtpprovider.c:767
+#: ../src/goabackend/goakerberosprovider.c:1128
+#: ../src/goabackend/goaowncloudprovider.c:658
+#: ../src/goabackend/goatelepathyprovider.c:649
+msgid "_Cancel"
+msgstr "ବାତିଲ କରନ୍ତୁ (_C)"
+
+#: ../src/goabackend/goaexchangeprovider.c:519
+#: ../src/goabackend/goakerberosprovider.c:1129
 #: ../src/goabackend/goaowncloudprovider.c:659
+#| msgid "Connecting…"
+msgid "C_onnect"
+msgstr "ସଂଯୋଗ କରନ୍ତୁ (_o)"
+
+#: ../src/goabackend/goaexchangeprovider.c:535
+#: ../src/goabackend/goaimapsmtpprovider.c:784
+#: ../src/goabackend/goakerberosprovider.c:1145
+#: ../src/goabackend/goaowncloudprovider.c:675
 msgid "Connecting…"
 msgstr "ସଂଯୋଗ କରୁଅଛି…"
 
-#: ../src/goabackend/goaexchangeprovider.c:660
-#: ../src/goabackend/goaexchangeprovider.c:855
-#: ../src/goabackend/goaimapsmtpprovider.c:922
-#: ../src/goabackend/goaimapsmtpprovider.c:957
-#: ../src/goabackend/goaimapsmtpprovider.c:1045
-#: ../src/goabackend/goaimapsmtpprovider.c:1301
-#: ../src/goabackend/goaimapsmtpprovider.c:1374
-#: ../src/goabackend/goakerberosprovider.c:1544
-#: ../src/goabackend/goaoauth2provider.c:1064
-#: ../src/goabackend/goaoauthprovider.c:1041
-#: ../src/goabackend/goaowncloudprovider.c:770
-#: ../src/goabackend/goaowncloudprovider.c:982
+#: ../src/goabackend/goaexchangeprovider.c:640
+#: ../src/goabackend/goaexchangeprovider.c:837
+#: ../src/goabackend/goaimapsmtpprovider.c:946
+#: ../src/goabackend/goaimapsmtpprovider.c:981
+#: ../src/goabackend/goaimapsmtpprovider.c:1069
+#: ../src/goabackend/goaimapsmtpprovider.c:1333
+#: ../src/goabackend/goaimapsmtpprovider.c:1406
+#: ../src/goabackend/goakerberosprovider.c:1536
+#: ../src/goabackend/goamediaserverprovider.c:473
+#: ../src/goabackend/goaoauth2provider.c:1077
+#: ../src/goabackend/goaoauthprovider.c:908
+#: ../src/goabackend/goaowncloudprovider.c:786
+#: ../src/goabackend/goaowncloudprovider.c:1001
+#: ../src/goabackend/goatelepathyprovider.c:459
+#: ../src/goabackend/goatelepathyprovider.c:508
+#: ../src/goabackend/goatelepathyprovider.c:683
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "ସଂଳାପକୁ ଖାରଜ କରାଯାଇଛି"
 
-#: ../src/goabackend/goaexchangeprovider.c:698
-#: ../src/goabackend/goaexchangeprovider.c:883
-#: ../src/goabackend/goaimapsmtpprovider.c:987
-#: ../src/goabackend/goaimapsmtpprovider.c:1078
-#: ../src/goabackend/goaimapsmtpprovider.c:1325
-#: ../src/goabackend/goaimapsmtpprovider.c:1399
-#: ../src/goabackend/goaowncloudprovider.c:812
-#: ../src/goabackend/goaowncloudprovider.c:1003
+#: ../src/goabackend/goaexchangeprovider.c:678
+#: ../src/goabackend/goaexchangeprovider.c:865
+#: ../src/goabackend/goaimapsmtpprovider.c:1011
+#: ../src/goabackend/goaimapsmtpprovider.c:1104
+#: ../src/goabackend/goaimapsmtpprovider.c:1357
+#: ../src/goabackend/goaimapsmtpprovider.c:1431
+#: ../src/goabackend/goaowncloudprovider.c:828
+#: ../src/goabackend/goaowncloudprovider.c:1022
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "ସଂଳାପକୁ ଖାରଜ କରାଯାଇଛି (%s, %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:711
-#: ../src/goabackend/goaimapsmtpprovider.c:1000
-#: ../src/goabackend/goaimapsmtpprovider.c:1091
-#: ../src/goabackend/goaowncloudprovider.c:825
+#: ../src/goabackend/goaexchangeprovider.c:691
+#: ../src/goabackend/goaimapsmtpprovider.c:1024
+#: ../src/goabackend/goaimapsmtpprovider.c:1117
+#: ../src/goabackend/goaowncloudprovider.c:841
 msgid "_Ignore"
 msgstr "ଅଗ୍ରାହ୍ଯ କରନ୍ତୁ (_I)"
 
-#: ../src/goabackend/goaexchangeprovider.c:716
-#: ../src/goabackend/goaexchangeprovider.c:902
-#: ../src/goabackend/goaimapsmtpprovider.c:1005
-#: ../src/goabackend/goaimapsmtpprovider.c:1096
-#: ../src/goabackend/goaimapsmtpprovider.c:1344
-#: ../src/goabackend/goaimapsmtpprovider.c:1418
-#: ../src/goabackend/goakerberosprovider.c:1654
-#: ../src/goabackend/goaowncloudprovider.c:830
-#: ../src/goabackend/goaowncloudprovider.c:1022
+#: ../src/goabackend/goaexchangeprovider.c:696
+#: ../src/goabackend/goaexchangeprovider.c:884
+#: ../src/goabackend/goaimapsmtpprovider.c:1029
+#: ../src/goabackend/goaimapsmtpprovider.c:1122
+#: ../src/goabackend/goaimapsmtpprovider.c:1376
+#: ../src/goabackend/goaimapsmtpprovider.c:1450
+#: ../src/goabackend/goakerberosprovider.c:1646
+#: ../src/goabackend/goaowncloudprovider.c:846
+#: ../src/goabackend/goaowncloudprovider.c:1041
 msgid "_Try Again"
 msgstr "ପୁଣିଥରେ ଚେଷ୍ଟାକରନ୍ତୁ (_T)"
 
-#: ../src/goabackend/goaexchangeprovider.c:721
-#: ../src/goabackend/goaexchangeprovider.c:895
+#: ../src/goabackend/goaexchangeprovider.c:701
+#: ../src/goabackend/goaexchangeprovider.c:877
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Microsoft Exchange ସର୍ଭର ସହିତ ସଂଯୋଗ କରିବା ସମୟରେ ତ୍ରୁଟି"
 
-#: ../src/goabackend/goaexchangeprovider.c:957
-#: ../src/goabackend/goafacebookprovider.c:411
-#: ../src/goabackend/goagoogleprovider.c:677
-#: ../src/goabackend/goakerberosprovider.c:1725
-#: ../src/goabackend/goaowncloudprovider.c:1078
-#: ../src/goabackend/goawindowsliveprovider.c:424
+#. Translators: This is a label for a series of
+#. * options switches. For example: “Use for Mail”.
+#: ../src/goabackend/goaexchangeprovider.c:939
+#: ../src/goabackend/goafacebookprovider.c:461
+#: ../src/goabackend/goaflickrprovider.c:411
+#: ../src/goabackend/goagoogleprovider.c:592
+#: ../src/goabackend/goakerberosprovider.c:1719
+#: ../src/goabackend/goamediaserverprovider.c:584
+#: ../src/goabackend/goaowncloudprovider.c:1097
+#: ../src/goabackend/goapocketprovider.c:421
+#: ../src/goabackend/goatelepathyprovider.c:890
+#: ../src/goabackend/goawindowsliveprovider.c:421
 msgid "Use for"
 msgstr "ଏହା ପାଇଁ ବ୍ୟବହାର କରନ୍ତୁ"
 
-#: ../src/goabackend/goaexchangeprovider.c:959
-#: ../src/goabackend/goagoogleprovider.c:679
+#: ../src/goabackend/goaexchangeprovider.c:941
+#: ../src/goabackend/goagoogleprovider.c:594
+#: ../src/goabackend/goawindowsliveprovider.c:423
 msgid "_Mail"
 msgstr "ମେଲ (_M)"
 
-#: ../src/goabackend/goaexchangeprovider.c:964
-#: ../src/goabackend/goagoogleprovider.c:684
-#: ../src/goabackend/goaowncloudprovider.c:1080
+#: ../src/goabackend/goaexchangeprovider.c:946
+#: ../src/goabackend/goagoogleprovider.c:599
+#: ../src/goabackend/goaowncloudprovider.c:1099
 msgid "Cale_ndar"
 msgstr "କ୍ଯାଲେଣ୍ଡର (_n)"
 
-#: ../src/goabackend/goaexchangeprovider.c:969
-#: ../src/goabackend/goagoogleprovider.c:689
-#: ../src/goabackend/goaowncloudprovider.c:1085
+#: ../src/goabackend/goaexchangeprovider.c:951
+#: ../src/goabackend/goagoogleprovider.c:604
+#: ../src/goabackend/goaowncloudprovider.c:1104
 msgid "_Contacts"
 msgstr "ସମ୍ପର୍କଗୁଡ଼ିକ (_C)"
 
-#: ../src/goabackend/goafacebookprovider.c:82
+#: ../src/goabackend/goafacebookprovider.c:76
 msgid "Facebook"
 msgstr "Facebook"
 
-#: ../src/goabackend/goafacebookprovider.c:205
-#: ../src/goabackend/goagoogleprovider.c:200
-#: ../src/goabackend/goawindowsliveprovider.c:187
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goafacebookprovider.c:218
+#: ../src/goabackend/goaflickrprovider.c:183
+#: ../src/goabackend/goagoogleprovider.c:218
+#: ../src/goabackend/goawindowsliveprovider.c:189
+#: ../src/goabackend/goayahooprovider.c:182
 #, c-format
-msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+#| msgid ""
+#| "Expected status 200 when requesting user id, instead got status %d (%s)"
+msgid ""
+"Expected status 200 when requesting your identity, instead got status %d (%s)"
 msgstr ""
-"guid ଅନୁରୋଧ କରିବା ସମୟରେ ଆଶାକରାଯାଇଥିବା ସ୍ଥିତି 200, ଏହା ପରିବର୍ତ୍ତେ ସ୍ଥିତି %d (%"
-"s) ପାଇଛି"
+"ଆପଣଙ୍କର ପରଚୟ ଅନୁରୋଧ କରିବା ସମୟରେ ଆଶାକରାଯାଇଥିବା ସ୍ଥିତି 200, ଏହା ପରିବର୍ତ୍ତେ "
+"ସ୍ଥିତି %d (%s) ପାଇଛି"
 
-#: ../src/goabackend/goafacebookprovider.c:224
-#: ../src/goabackend/goafacebookprovider.c:236
-#: ../src/goabackend/goafacebookprovider.c:246
+#: ../src/goabackend/goafacebookprovider.c:237
+#: ../src/goabackend/goafacebookprovider.c:249
+#: ../src/goabackend/goafacebookprovider.c:259
 #: ../src/goabackend/goaflickrprovider.c:202
 #: ../src/goabackend/goaflickrprovider.c:214
 #: ../src/goabackend/goaflickrprovider.c:224
 #: ../src/goabackend/goaflickrprovider.c:234
 #: ../src/goabackend/goaflickrprovider.c:244
-#: ../src/goabackend/goagoogleprovider.c:219
-#: ../src/goabackend/goagoogleprovider.c:231
-#: ../src/goabackend/goaoauth2provider.c:600
-#: ../src/goabackend/goaoauth2provider.c:630
-#: ../src/goabackend/goaoauth2provider.c:642
-#: ../src/goabackend/goawindowsliveprovider.c:206
-#: ../src/goabackend/goawindowsliveprovider.c:218
-#: ../src/goabackend/goawindowsliveprovider.c:230
+#: ../src/goabackend/goagoogleprovider.c:237
+#: ../src/goabackend/goagoogleprovider.c:249
+#: ../src/goabackend/goaoauth2provider.c:691
+#: ../src/goabackend/goaoauth2provider.c:721
+#: ../src/goabackend/goaoauth2provider.c:733
+#: ../src/goabackend/goawindowsliveprovider.c:208
+#: ../src/goabackend/goawindowsliveprovider.c:220
+#: ../src/goabackend/goawindowsliveprovider.c:232
+#: ../src/goabackend/goayahooprovider.c:201
+#: ../src/goabackend/goayahooprovider.c:213
+#: ../src/goabackend/goayahooprovider.c:224
+#: ../src/goabackend/goayahooprovider.c:270
+#: ../src/goabackend/goayahooprovider.c:282
+#: ../src/goabackend/goayahooprovider.c:293
 #, c-format
 msgid "Could not parse response"
 msgstr "ଉତ୍ତର ବିଶ୍ଳେଷଣ କରିପାରିବେ ନାହିଁ"
 
-#: ../src/goabackend/goafacebookprovider.c:413
-#: ../src/goabackend/goagoogleprovider.c:694
-#: ../src/goabackend/goawindowsliveprovider.c:426
+#: ../src/goabackend/goafacebookprovider.c:463
+#: ../src/goabackend/goagoogleprovider.c:609
+#: ../src/goabackend/goatelepathyprovider.c:892
 msgid "C_hat"
 msgstr "ଆଳାପ (_h)"
 
-#: ../src/goabackend/goaflickrprovider.c:83
+#: ../src/goabackend/goafacebookprovider.c:468
+#: ../src/goabackend/goaflickrprovider.c:413
+#: ../src/goabackend/goagoogleprovider.c:619
+#: ../src/goabackend/goamediaserverprovider.c:586
+msgid "_Photos"
+msgstr "ଫୋଟୋଗୁଡ଼ିକ (_P)"
+
+#: ../src/goabackend/goafacebookprovider.c:473
+msgid "_Maps"
+msgstr "ମେଳକଗୁଡ଼ିକ (_M)"
+
+#: ../src/goabackend/goaflickrprovider.c:77
 msgid "Flickr"
 msgstr "Flickr"
 
-#: ../src/goabackend/goaflickrprovider.c:183
-#, c-format
-msgid "Expected status 200 when requesting user id, instead got status %d (%s)"
-msgstr ""
-"id ଅନୁରୋଧ କରିବା ସମୟରେ ଆଶାକରାଯାଇଥିବା ସ୍ଥିତି 200, ଏହା ପରିବର୍ତ୍ତେ ସ୍ଥିତି %d (%s) "
-"ପାଇଛି"
-
-#: ../src/goabackend/goaflickrprovider.c:322
+#: ../src/goabackend/goaflickrprovider.c:320
+#: ../src/goabackend/goayahooprovider.c:343
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr ""
 "ଆପଣଙ୍କର ତନ୍ତ୍ର ସମୟ ଅବୈଧ ଅଟେ। ଆପଣଙ୍କର ତାରିଖ ଏବଂ ସମୟ ବିନ୍ୟାସ ଯାଞ୍ଚ କରନ୍ତୁ।"
 
-#: ../src/goabackend/goaflickrprovider.c:424
-msgid "_Photos"
-msgstr "ଫୋଟୋଗୁଡ଼ିକ (_P)"
-
-#: ../src/goabackend/goagoogleprovider.c:86
+#: ../src/goabackend/goagoogleprovider.c:76
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:699
-#: ../src/goabackend/goawindowsliveprovider.c:431
+#: ../src/goabackend/goagoogleprovider.c:614
+#: ../src/goabackend/goaowncloudprovider.c:1109
+#: ../src/goabackend/goawindowsliveprovider.c:428
 msgid "_Documents"
 msgstr "ଦଲିଲଗୁଡ଼ିକ (_D)"
 
+#: ../src/goabackend/goagoogleprovider.c:624
+msgid "Prin_ters"
+msgstr "ମୁଦ୍ରଣୀଗୁଡ଼ିକ (_t)"
+
 #. TODO: more specific
-#: ../src/goabackend/goaimapauthlogin.c:411
-#: ../src/goabackend/goasmtpauthplain.c:115
+#: ../src/goabackend/goaimapauthlogin.c:94 ../src/goabackend/goasmtpauth.c:160
+#, c-format
+msgid "Service not available"
+msgstr "ସର୍ଭିସ ଉପଲବ୍ଧ ନାହିଁ"
+
+#. TODO: more specific
+#: ../src/goabackend/goaimapauthlogin.c:115
+#: ../src/goabackend/goasmtpauth.c:113
 #, c-format
 msgid "Authentication failed"
 msgstr "ବୈଧିକରଣ ବିଫଳ"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:82
+#: ../src/goabackend/goaimapauthlogin.c:140
+#, c-format
+msgid "Server does not support PLAIN"
+msgstr "ସର୍ଭର PLAIN କୁ ସହାୟତା କରିନଥାଏ"
+
+#: ../src/goabackend/goaimapauthlogin.c:194
+#: ../src/goabackend/goasmtpauth.c:818
+#, c-format
+msgid "Server does not support STARTTLS"
+msgstr "ସର୍ଭର STARTTLS କୁ ସହାୟତା କରିନଥାଏ"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:76
 msgid "IMAP and SMTP"
 msgstr "IMAP ଏବଂ SMTP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:356
+#. Translators: the first parameter is a field name. The second is
+#. * a GOA account identifier.
+#: ../src/goabackend/goaimapsmtpprovider.c:373
+#: ../src/goabackend/goaimapsmtpprovider.c:431
 #, c-format
-msgid "Did not find imap-password with identity `%s' in credentials"
-msgstr "ପରିଚୟ `%s' ସହିତ imap-ପ୍ରବେଶ ସଂକେତକୁ ପରିଚୟ ପତ୍ରରେ ପାଇଲା ନାହିଁ"
+#| msgid "Did not find password with identity `%s' in credentials"
+msgid "Did not find %s with identity ‘%s’ in credentials"
+msgstr "‘%s’ ପରିଚୟ ସହିତ %s କୁ ପରଚୟ ପତ୍ରରେ ଖାଜି ପାଇଲା ନାହିଁ"
 
-#. Translators: the first %s is the IMAP
+#. Translators: the first %s is a field name. The
+#. * second %s is the IMAP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:385
-#, c-format
-msgid "Invalid imap-password with username `%s' (%s, %d): "
-msgstr "ବ୍ୟବହାରକାରୀ ନାମ `%s' (%s, %d) ସହିତ ଅବୈଧ imap-ପ୍ରବେଶ ସଂକେତ: "
-
-#: ../src/goabackend/goaimapsmtpprovider.c:409
-#, c-format
-msgid "Did not find smtp-password with identity `%s' in credentials"
-msgstr "ପରିଚୟ ପତ୍ରରେ ପରିଚୟ `%s' ସହିତ smtp-ପ୍ରବେଶ ସଂକେତ ପାଇଲା ନାହିଁ"
-
-#. Translators: the first %s is the SMTP
+#. Translators: the first %s is a field name. The
+#. * second %s is the SMTP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:440
+#: ../src/goabackend/goaimapsmtpprovider.c:404
+#: ../src/goabackend/goaimapsmtpprovider.c:464
 #, c-format
-msgid "Invalid smtp-password with username `%s' (%s, %d): "
-msgstr "ବ୍ୟବହାରକାରୀ ନାମ  `%s' (%s, %d) ସହିତ ଅବୈଧ smtp-ପ୍ରବେଶ ସଂକେତ: "
+#| msgid "Invalid password with username `%s' (%s, %d): "
+msgid "Invalid %s with username ‘%s’ (%s, %d): "
+msgstr "ବ୍ୟବହାରକାରୀ ନାମ ‘%s’ ପାଇଁ ଅବୈଧ %s (%s, %d): "
 
 #. Translators: the following four strings are used to show a
 #. * combo box similar to the one in the evolution module.
@@ -319,117 +370,146 @@ msgstr "ବ୍ୟବହାରକାରୀ ନାମ  `%s' (%s, %d) ସହିତ 
 #. *             STARTTLS after connecting
 #. *             SSL on a dedicated port
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:626
+#: ../src/goabackend/goaimapsmtpprovider.c:651
 msgid "_Encryption"
 msgstr "ସଂଗୁପ୍ତକରଣ (_E)"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:629
+#: ../src/goabackend/goaimapsmtpprovider.c:654
 msgid "None"
 msgstr "କିଛି ନାହିଁ"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:632
+#: ../src/goabackend/goaimapsmtpprovider.c:657
 msgid "STARTTLS after connecting"
 msgstr "ସଂଯୋଗ ପରେ STARTTLS"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:635
+#: ../src/goabackend/goaimapsmtpprovider.c:660
 msgid "SSL on a dedicated port"
 msgstr "ନିର୍ଦ୍ଦିଷ୍ଟ ପୋର୍ଟ ଉପରେ SSL"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:691
+#: ../src/goabackend/goaimapsmtpprovider.c:716
 msgid "_Name"
 msgstr "ନାମ (_N)"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:708
+#: ../src/goabackend/goaimapsmtpprovider.c:733
 msgid "IMAP _Server"
 msgstr "IMAP ସର୍ଭର (_S)"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:728
+#: ../src/goabackend/goaimapsmtpprovider.c:753
 msgid "SMTP _Server"
 msgstr "SMTP ସର୍ଭର (_S)"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1010
-#: ../src/goabackend/goaimapsmtpprovider.c:1337
+#: ../src/goabackend/goaimapsmtpprovider.c:768
+#: ../src/goabackend/goaimapsmtpprovider.c:1050
+#: ../src/goabackend/goaimapsmtpprovider.c:1386
+msgid "_Forward"
+msgstr "ଆଗକୁ (_F)"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1034
+#: ../src/goabackend/goaimapsmtpprovider.c:1369
 msgid "Error connecting to IMAP server"
 msgstr "IMAP ସର୍ଭର ସହିତ ସଂଯୋଗ କରିବା ସମୟରେ ତ୍ରୁଟି"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1101
-#: ../src/goabackend/goaimapsmtpprovider.c:1411
+#: ../src/goabackend/goaimapsmtpprovider.c:1127
+#: ../src/goabackend/goaimapsmtpprovider.c:1443
 msgid "Error connecting to SMTP server"
 msgstr "SMTP ସର୍ଭର ସହିତ ସଂଯୋଗ କରିବା ସମୟରେ ତ୍ରୁଟି"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1519
+#: ../src/goabackend/goaimapsmtpprovider.c:1542
 msgid "E-mail"
 msgstr "ଇ-ମେଲ୍"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1523
+#: ../src/goabackend/goaimapsmtpprovider.c:1546
 msgid "Name"
 msgstr "ନାମ"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1533
-#: ../src/goabackend/goaimapsmtpprovider.c:1536
+#: ../src/goabackend/goaimapsmtpprovider.c:1556
+#: ../src/goabackend/goaimapsmtpprovider.c:1559
 msgid "IMAP"
 msgstr "IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1547
-#: ../src/goabackend/goaimapsmtpprovider.c:1550
+#: ../src/goabackend/goaimapsmtpprovider.c:1570
+#: ../src/goabackend/goaimapsmtpprovider.c:1573
 msgid "SMTP"
 msgstr "SMTP"
 
-#: ../src/goabackend/goakerberosprovider.c:87
+#: ../src/goabackend/goakerberosprovider.c:79
 msgid "Enterprise Login (Kerberos)"
 msgstr "ଆନୁଷ୍ଠାନିକ ଲଗଇନ୍‌ (କର୍ବୋରୋସ୍‌)"
 
-#: ../src/goabackend/goakerberosprovider.c:449
+#: ../src/goabackend/goakerberosprovider.c:447
 msgid "Identity service returned invalid key"
 msgstr "ପରିଚୟ ସର୍ଭିସ ଅବୈଧ ଚାବି ଦେଇଥାଏ"
 
-#: ../src/goabackend/goakerberosprovider.c:715
+#: ../src/goabackend/goakerberosprovider.c:719
 #, c-format
-msgid "Could not find saved credentials for principal `%s' in keyring"
-msgstr "ମୂଖ୍ୟ `%s' ପାଇଁ କିରିଙ୍ଗ୍‌ ରେ ସଂରକ୍ଷିତ ପରିଚୟପତ୍ର ପାଇଲା ନାହିଁ"
+#| msgid "Could not find saved credentials for principal `%s' in keyring"
+msgid "Could not find saved credentials for principal ‘%s’ in keyring"
+msgstr "ମୂଖ୍ୟ ‘%s’ ପାଇଁ କିରିଙ୍ଗ୍‌ ରେ ସଂରକ୍ଷିତ ପରିଚୟପତ୍ର ପାଇଲା ନାହିଁ"
 
-#: ../src/goabackend/goakerberosprovider.c:725
+#: ../src/goabackend/goakerberosprovider.c:732
 #, c-format
-msgid "Did not find password for principal `%s' in credentials"
-msgstr "ମୂଖ୍ୟ `%s' ପାଇଁ ପରିଚୟପତ୍ରରେ ପ୍ରବେଶ ସଂକେତ ପାଇଲା ନାହିଁ"
+#| msgid "Did not find password for principal `%s' in credentials"
+msgid "Did not find password for principal ‘%s’ in credentials"
+msgstr "ମୂଖ୍ୟ ‘%s’ ପାଇଁ ପରିଚୟପତ୍ରରେ ପ୍ରବେଶ ସଂକେତ ପାଇଲା ନାହିଁ"
 
-#: ../src/goabackend/goakerberosprovider.c:1120
+#: ../src/goabackend/goakerberosprovider.c:1115
 msgid "_Domain"
 msgstr "ଡମେନ (_D)"
 
-#: ../src/goabackend/goakerberosprovider.c:1121
+#: ../src/goabackend/goakerberosprovider.c:1116
 msgid "Enterprise domain or realm name"
 msgstr "ଆନୁଷ୍ଠାନିକ ଡମେନ ଅଥବା realm ନାମ"
 
-#: ../src/goabackend/goakerberosprovider.c:1353
-#: ../src/goaidentity/goaidentityservice.c:1084
+#: ../src/goabackend/goakerberosprovider.c:1345
+#: ../src/goaidentity/goaidentityservice.c:1106
 msgid "Log In to Realm"
 msgstr "Realm ରେ ଲଗଇନ୍‌ କରନ୍ତୁ"
 
-#: ../src/goabackend/goakerberosprovider.c:1354
+#: ../src/goabackend/goakerberosprovider.c:1346
 msgid "Please enter your password below."
 msgstr "ଦୟାକରି ତଳେ ଆପଣଙ୍କର ପ୍ରବେଶ ସଂକେତ ଭରଣ କରନ୍ତୁ।"
 
-#: ../src/goabackend/goakerberosprovider.c:1355
+#: ../src/goabackend/goakerberosprovider.c:1347
 msgid "Remember this password"
 msgstr "ପ୍ରବେଶ ସଂକେତ ମନେରଖନ୍ତୁ"
 
-#: ../src/goabackend/goakerberosprovider.c:1494
+#: ../src/goabackend/goakerberosprovider.c:1486
 #, c-format
 msgid "The domain is not valid"
 msgstr "ଡମେନ୍‌ଟି ବୈଧ ନୁହଁ"
 
-#: ../src/goabackend/goakerberosprovider.c:1649
+#: ../src/goabackend/goakerberosprovider.c:1641
 msgid "Error connecting to enterprise identity server"
 msgstr "ଆନୁଷ୍ଠାନିକ ପରିଚୟ ସର୍ଭର ସହିତ ସଂଯୋଗ କରିବା ସମୟରେ ତ୍ରୁଟି"
 
-#: ../src/goabackend/goakerberosprovider.c:1727
+#: ../src/goabackend/goakerberosprovider.c:1721
 msgid "Network _Resources"
 msgstr "ନେଟୱର୍କ୍‌ ଉତ୍ସ (_R)"
 
+#: ../src/goabackend/goamediaserverprovider.c:76
+#| msgid "IMAP _Server"
+msgid "Media Server"
+msgstr "ମେଡିଆ ସର୍ଭର"
+
+#: ../src/goabackend/goamediaserverprovider.c:369
+msgid ""
+"Personal content can be added to your applications through a media server "
+"account."
+msgstr ""
+"ମେଡିଆ ସର୍ଭର ଖାତା ମାଧ୍ଯମରେ ବ୍ୟକ୍ତିଗତ ବିଷୟବସ୍ତୁକୁ ଆପଣଙ୍କର ପ୍ରୟୋଗଗୁଡ଼ିକରେ "
+"ଯୋଡ଼ାଯାଇପାରିବ।"
+
+#: ../src/goabackend/goamediaserverprovider.c:383
+msgid "Available Media Servers"
+msgstr "ଉପଲବ୍ଧ ମେଡିଆ ସର୍ଭରଗୁଡ଼ିକ"
+
+#: ../src/goabackend/goamediaserverprovider.c:413
+msgid "No media servers found"
+msgstr "କୌଣସି ମେଡିଆ ସରଭର ମିଳିଲା ନାହିଁ"
+
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:576
-#: ../src/goabackend/goaoauthprovider.c:586
+#: ../src/goabackend/goaoauth2provider.c:667
+#: ../src/goabackend/goaoauthprovider.c:550
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -437,58 +517,56 @@ msgstr ""
 "ଅଭିଗମ୍ୟ ଟକେନ ଅନୁରୋଧ ସମୟରେ ଆଶାତିତ ସ୍ଥିତି 200, ଏହା ପରିବର୍ତ୍ତେ ସ୍ଥିତି %d (%s) "
 "ମିଳିଛି"
 
-#: ../src/goabackend/goaoauth2provider.c:851
-#: ../src/goabackend/goaoauth2provider.c:891
-#, c-format
-msgid "Authorization response was \"%s\""
-msgstr "ବୈଧିକରଣ ଉତ୍ତର ହେଉଛି \"%s\""
+#: ../src/goabackend/goaoauth2provider.c:888
+#| msgid "Authorization response was \"%s\""
+msgid "Authorization response: "
+msgstr "ବୈଧିକରଣ ଉତ୍ତର:"
 
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:997
+#: ../src/goabackend/goaoauth2provider.c:958
 #, c-format
-msgid ""
-"Paste authorization code obtained from the <a href=\"%s\">authorization "
-"page</a>:"
-msgstr "<a href=\"%s\">ବୈଧିକରଣ ପୃଷ୍ଠା</a> ରୁ ମିଳିଥିବା ବୈଧିକରଣ ସଂକେତକୁ ଲଗାନ୍ତୁ:"
+#| msgid "Authorization response was \"%s\""
+msgid "Authorization response: %s"
+msgstr "ବୈଧିକରଣ ଉତ୍ତର: %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1090
-#: ../src/goabackend/goaoauthprovider.c:1072
+#: ../src/goabackend/goaoauth2provider.c:1103
+#: ../src/goabackend/goaoauthprovider.c:939
 msgid "Error getting an Access Token: "
 msgstr "ଅଭିଗମ୍ୟ ଟକେନ ପାଇବାରେ ତ୍ରୁଟି: "
 
-#: ../src/goabackend/goaoauth2provider.c:1105
-#: ../src/goabackend/goaoauthprovider.c:1085
+#: ../src/goabackend/goaoauth2provider.c:1118
+#: ../src/goabackend/goaoauthprovider.c:952
 msgid "Error getting identity: "
 msgstr "ପରିଚୟ ପାଇବାରେ ତ୍ରୁଟି: "
 
-#: ../src/goabackend/goaoauth2provider.c:1395
-#: ../src/goabackend/goaoauthprovider.c:1391
+#: ../src/goabackend/goaoauth2provider.c:1332
+#: ../src/goabackend/goaoauthprovider.c:1260
 #, c-format
-msgid "Was asked to login as %s, but logged in as %s"
+#| msgid "Was asked to login as %s, but logged in as %s"
+msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "%s ଭାବରେ ଲଗଇନ ହେବା ପାଇଁ ପଚରାଯାଇଛି, କିନ୍ତୁ  %s ଭାବରେ ଲଗଇନ ହୋଇଛି"
 
-#: ../src/goabackend/goaoauth2provider.c:1566
+#: ../src/goabackend/goaoauth2provider.c:1491
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "ପରିଚୟପତ୍ରରେ access_token ନଥାଏ"
 
-#: ../src/goabackend/goaoauth2provider.c:1605
-#: ../src/goabackend/goaoauthprovider.c:1619
+#: ../src/goabackend/goaoauth2provider.c:1530
+#: ../src/goabackend/goaoauthprovider.c:1488
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "ଅଭିଗମ୍ୟ ଟକେନକୁ ସତେଜ କରିବାରେ ବିଫଳ (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:609
+#: ../src/goabackend/goaoauthprovider.c:573
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "ଉତ୍ତରରେ access_token କିମ୍ବା access_token_secret ଶୀର୍ଷକ ଅନୁପସ୍ଥିତ"
 
-#: ../src/goabackend/goaoauthprovider.c:911
+#: ../src/goabackend/goaoauthprovider.c:822
 msgid "Error getting a Request Token: "
 msgstr "ଅନୁରୋଧ ଟକେନ ପାଇବାରେ ତ୍ରୁଟି: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:944
+#: ../src/goabackend/goaoauthprovider.c:855
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -496,254 +574,337 @@ msgstr ""
 "ଅନୁରୋଧ ଟକେନ ପାଇବା ପାଇଁ ଆଶାକରାଯାଇଥିବା ସ୍ଥିତି ହେଉଛି 200, ଏହା ପରିବର୍ତ୍ତେ ସ୍ଥିତି %"
 "d (%s) ମିଳିଛି"
 
-#: ../src/goabackend/goaoauthprovider.c:961
+#: ../src/goabackend/goaoauthprovider.c:872
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "ଉତ୍ତରରେ request_token କିମ୍ବା request_token_secret ଶୀର୍ଷକ ଅନୁପସ୍ଥିତ"
 
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:978
-#, c-format
-msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr "<a href=\"%s\">ବୈଧିକରଣ ପୃଷ୍ଠା</a> ରୁ ମିଳିଥିବା ଟକେନକୁ ଲଗାନ୍ତୁ:"
-
-#: ../src/goabackend/goaoauthprovider.c:1575
+#: ../src/goabackend/goaoauthprovider.c:1444
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "ପରିଚୟ ପତ୍ରରେ access_token କିମ୍ବା access_token_secret ନାହିଁ"
 
-#: ../src/goabackend/goaowncloudprovider.c:87
+#: ../src/goabackend/goaowncloudprovider.c:82
 msgid "ownCloud"
 msgstr "ownCloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:835
-#: ../src/goabackend/goaowncloudprovider.c:1015
+#: ../src/goabackend/goaowncloudprovider.c:851
+#: ../src/goabackend/goaowncloudprovider.c:1034
 msgid "Error connecting to ownCloud server"
 msgstr "ownCloud ସର୍ଭର ସହିତ ସଂଯୋଗ କରିବା ସମୟରେ ତ୍ରୁଟି"
 
-#: ../src/goabackend/goaowncloudprovider.c:1090
+#: ../src/goabackend/goaowncloudprovider.c:1114
 msgid "_Files"
 msgstr "ଫାଇଲ (_F)"
 
-#: ../src/goabackend/goaprovider.c:577
+#: ../src/goabackend/goapocketprovider.c:84
+msgid "Pocket"
+msgstr "ପକେଟ"
+
+#. TODO: more specific
+#: ../src/goabackend/goapocketprovider.c:233
+#, c-format
+msgid "No username or access_token"
+msgstr "କୌଣସି ବ୍ୟବହାରକାରୀ ନାମ କିମ୍ବା access_token ନାହିଁ"
+
+#: ../src/goabackend/goapocketprovider.c:423
+msgid "_Read Later"
+msgstr "ପରେ ପଢନ୍ତୁ (_R)"
+
+#: ../src/goabackend/goaprovider.c:682
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync କୁ ପ୍ରକାର %s ରେ ନିୟୋଜନ କରାଯାଇ ନାହିଁ"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:146
-#, c-format
-msgid "Service not available"
-msgstr "ସର୍ଭିସ ଉପଲବ୍ଧ ନାହିଁ"
-
-#. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:161
+#: ../src/goabackend/goasmtpauth.c:175
 #, c-format
 msgid "TLS not available"
 msgstr "TLS ଉପଲବ୍ଧ ନାହିଁ"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:193
+#: ../src/goabackend/goasmtpauth.c:241
 #, c-format
 msgid "org.gnome.OnlineAccounts.Mail is not available"
 msgstr "org.gnome.OnlineAccounts.Mail ଉପଲବ୍ଧ ନାହିଁ"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:203
+#: ../src/goabackend/goasmtpauth.c:251
 #, c-format
 msgid "Failed to parse email address"
 msgstr "ଇମେଲ ଠିକଣା ବିଶ୍ଳେଷଣ କରିବାରେ ବିଫଳ"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:215
+#: ../src/goabackend/goasmtpauth.c:263
 #, c-format
-msgid "Cannot do SMTP PLAIN without a domain"
-msgstr "ଡମେନ ବିନା SMTP PLAIN କରିପାରିବେ ନାହିଁ"
+#| msgid "Cannot do SMTP PLAIN without a domain"
+msgid "Cannot do SMTP authentication without a domain"
+msgstr "ଡମେନ ବିନା SMTP ବୈଧିକରଣ କରିପାରିବେ ନାହିଁ"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:253
+#: ../src/goabackend/goasmtpauth.c:301
 #, c-format
 msgid "Did not find smtp-password in credentials"
 msgstr "ପରିଚୟ ପତ୍ରରେ smtp-ପ୍ରବେଶ ସଂକେତ ପାଇଲା ନାହିଁ"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:264
+#: ../src/goabackend/goasmtpauth.c:312
 #, c-format
-msgid "Cannot do SMTP PLAIN without a password"
-msgstr "ବିନା ପ୍ରବେଶ ସଂକେତରେ SMTP PLAIN କରିପାରିବେ ନାହିଁ"
+#| msgid "Cannot do SMTP PLAIN without a password"
+msgid "Cannot do SMTP authentication without a password"
+msgstr "ବିନା ପ୍ରବେଶ ସଂକେତରେ SMTP ବୈଧିକରଣ କରିପାରିବେ ନାହିଁ"
 
-#: ../src/goabackend/goasmtpauthplain.c:619
+#: ../src/goabackend/goasmtpauth.c:674
 #, c-format
-msgid "Server does not support PLAIN"
-msgstr "ସର୍ଭର PLAIN କୁ ସହାୟତା କରିନଥାଏ"
+#| msgid "Authentication failed"
+msgid "Unknown authentication mechanism"
+msgstr "ଅଜଣା ବୈଧିକରଣ କୌଶଳ"
 
-#: ../src/goabackend/goasmtpauthplain.c:731
+#: ../src/goabackend/goatelepathyprovider.c:180
 #, c-format
-msgid "Server does not support STARTTLS"
-msgstr "ସର୍ଭର STARTTLS କୁ ସହାୟତା କରିନଥାଏ"
+msgid "Telepathy chat account not found"
+msgstr "ଟେଲିପାଥି ଚାର୍ଟ ଖାତା ମିଳୁ ନାହିଁ"
 
-#: ../src/goabackend/goautils.c:86
+#: ../src/goabackend/goatelepathyprovider.c:380
+#, c-format
+#| msgid "Failed to find Account element"
+msgid "Failed to initialize a GOA client"
+msgstr "GOA କ୍ଲାଏଣ୍ଟକୁ ସକ୍ରିୟ କରିବାରେ ବିଫଳ"
+
+#: ../src/goabackend/goatelepathyprovider.c:420
+#, c-format
+#| msgid "Failed to find a provider for: %s"
+msgid "Failed to create a user interface for %s"
+msgstr "%s ପାଇଁ ବ୍ୟବହାରକାରୀ ଅନ୍ତରାପୃଷ୍ଠ ନିର୍ମାଣ କରିବାରେ ବିଫଳ"
+
+#: ../src/goabackend/goatelepathyprovider.c:535
+#| msgid "Connecting…"
+msgid "Connection Settings"
+msgstr "ସଂଯୋଗ ସଂରଚନା"
+
+#: ../src/goabackend/goatelepathyprovider.c:644
+msgid "Personal Details"
+msgstr "ବ୍ଯକ୍ତିଗତ ବିବରଣୀ"
+
+#: ../src/goabackend/goatelepathyprovider.c:650
+msgid "_OK"
+msgstr "ଠିକ ଅଛି (_O)"
+
+#: ../src/goabackend/goatelepathyprovider.c:854
+msgid "Cannot save the connection parameters"
+msgstr "ସଂଯୋଗ ପ୍ରାଚଳଗୁଡ଼ିକୁ ସଂରକ୍ଷଣ କରିପାରିବେ ନାହିଁ"
+
+#: ../src/goabackend/goatelepathyprovider.c:866
+msgid "Cannot save your personal information on the server"
+msgstr "ସର୍ଭର ଉପରେ ଆପଣଙ୍କର ବ୍ୟକ୍ତିଗତ ସୂଚନାକୁ ସଂରକ୍ଷଣ କରିପାରିବେ ନାହିଁ"
+
+#. Connection Settings button
+#: ../src/goabackend/goatelepathyprovider.c:897
+#| msgid "Connecting…"
+msgid "_Connection Settings"
+msgstr "ସଂଯୋଗ ସଂରଚନା (_C)"
+
+#. Edit Personal Information button
+#: ../src/goabackend/goatelepathyprovider.c:901
+msgid "_Personal Details"
+msgstr "ବ୍ୟକ୍ତିଗତ ବିବରଣୀ (_P)"
+
+#: ../src/goabackend/goautils.c:114
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "ଏକ %s ଖାତା ପୂର୍ବରୁ %s ପାଇଁ ଅଛି"
 
 #. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:108
+#: ../src/goabackend/goautils.c:136
 #, c-format
 msgid "%s account"
 msgstr "%s ଖାତା"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:152
+#: ../src/goabackend/goautils.c:180
 msgid "Failed to delete credentials from the keyring"
 msgstr "କିରିଙ୍ଗରୁ ପରିଚୟ ପତ୍ର ଅପସାରଣ କରିବାରେ ବିଫଳ"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:204
+#: ../src/goabackend/goautils.c:232
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "କିରିଙ୍ଗରୁ ପରିଚୟ ପତ୍ର ବାହାର କରିବାରେ ବିଫଳ"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:214
+#: ../src/goabackend/goautils.c:242
 msgid "No credentials found in the keyring"
 msgstr "କିରିଙ୍ଗରେ କୌଣସି ପରିଚୟପତ୍ର ମିଳିଲା ନାହିଁ"
 
-#: ../src/goabackend/goautils.c:227
+#: ../src/goabackend/goautils.c:255
 msgid "Error parsing result obtained from the keyring: "
 msgstr "କିରିଙ୍ଗରୁ ମିଳିଥିବା ଫଳାଫଳକୁ ବିଶ୍ଳେଷଣ କରିବାରେ ତ୍ରୁଟି: "
 
-#. Translators: The %s is the type of the provider, e.g. 'google' or 'facebook'
-#: ../src/goabackend/goautils.c:270
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#: ../src/goabackend/goautils.c:298
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "ପରିଚୟ %s ପାଇଁ GOA %s ପରିଚୟ ପତ୍ର"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:287
+#: ../src/goabackend/goautils.c:315
 msgid "Failed to store credentials in the keyring"
 msgstr "କିରିଙ୍ଗରେ ପରିଚୟପତ୍ର ଯୋଗ କରିବାରେ ବିଫଳ"
 
-#: ../src/goabackend/goautils.c:508
+#: ../src/goabackend/goautils.c:536
 msgid "The signing certificate authority is not known."
 msgstr "ପ୍ରମାଣପତ୍ର ହସ୍ତାକ୍ଷର ଅଧିକାରୀଟି ଜଣା ନାହିଁ।"
 
-#: ../src/goabackend/goautils.c:512
+#: ../src/goabackend/goautils.c:540
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr ""
-"ପ୍ରମାଣପତ୍ରଟି ଆଶାକରାଯାଇଥିବା ସାଇଟ ପରିଚୟ ସହିତ ମେଳ ଖାଉ ନାହିଁ ଯେଉଁଥିରୁ "
-"ଏହାକୁ ବାହାର କରାଯାଇଥିଲା।"
+"ପ୍ରମାଣପତ୍ରଟି ଆଶାକରାଯାଇଥିବା ସାଇଟ ପରିଚୟ ସହିତ ମେଳ ଖାଉ ନାହିଁ ଯେଉଁଥିରୁ ଏହାକୁ ବାହାର "
+"କରାଯାଇଥିଲା।"
 
-#: ../src/goabackend/goautils.c:517
-msgid "The certificate's activation time is still in the future."
+#: ../src/goabackend/goautils.c:545
+#| msgid "The certificate's activation time is still in the future."
+msgid "The certificate’s activation time is still in the future."
 msgstr "ପ୍ରମାଣପତ୍ର ସକ୍ରିୟଣ ସମୟ ଏପର୍ଯ୍ୟନ୍ତ ଭବିଷ୍ୟତରେ ଅଛି।"
 
-#: ../src/goabackend/goautils.c:521
+#: ../src/goabackend/goautils.c:549
 msgid "The certificate has expired."
 msgstr "ପ୍ରମାଣପତ୍ରର ସମୟ ସମାପ୍ତ"
 
-#: ../src/goabackend/goautils.c:525
+#: ../src/goabackend/goautils.c:553
 msgid "The certificate has been revoked."
 msgstr "ପ୍ରମାଣପତ୍ରଟିର ସମୟ ସମାପ୍ତ ହୋଇଛି"
 
-#: ../src/goabackend/goautils.c:529
-msgid "The certificate's algorithm is considered insecure."
+#: ../src/goabackend/goautils.c:557
+#| msgid "The certificate's algorithm is considered insecure."
+msgid "The certificate’s algorithm is considered insecure."
 msgstr "ପ୍ରମାଣପତ୍ର ଆଲଗୋରିଦମ୍‌କୁ ଅସୁରକ୍ଷିତ ଭାବରେ ଗ୍ରହଣ କରାଯାଇଛି।"
 
-#: ../src/goabackend/goautils.c:533
+#: ../src/goabackend/goautils.c:561
 msgid "Invalid certificate."
 msgstr "ଅବୈଧ ପ୍ରମାଣପତ୍ର।"
 
 #. translators: %s here is the address of the web page
-#: ../src/goabackend/goawebview.c:74
+#: ../src/goabackend/goawebview.c:70
 #, c-format
 msgid "Loading “%s”…"
 msgstr "“%s” କୁ ଧାରଣ କରୁଅଛି…"
 
-#: ../src/goabackend/goawindowsliveprovider.c:84
+#: ../src/goabackend/goawindowsliveprovider.c:78
 msgid "Windows Live"
 msgstr "Windows Live"
 
-#: ../src/goaidentity/goaalarm.c:245
-msgid "Time"
-msgstr "ସମୟ"
+#: ../src/goabackend/goayahooprovider.c:76
+msgid "Yahoo"
+msgstr "Yahoo"
 
-#: ../src/goaidentity/goaalarm.c:246
-msgid "Time to fire"
-msgstr "ବାହାର କରିବା ସମୟ"
+#: ../src/goabackend/goayahooprovider.c:250
+#, c-format
+#| msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+msgstr ""
+"ନାମ ଅନୁରୋଧ କରିବା ସମୟରେ ଆଶାକରାଯାଇଥିବା ସ୍ଥିତି 200, ଏହା ପରିବର୍ତ୍ତେ ସ୍ଥିତି %d (%"
+"s) ପାଇଛି"
 
-#: ../src/goaidentity/goaidentityservice.c:377
+#: ../src/goaidentity/goaidentityservice.c:370
 msgid "initial secret passed before secret key exchange"
 msgstr "ପ୍ରାରମ୍ଭିକ ଗୋପନିୟତାଟି ଗୁପ୍ତ ଚାବି ଆଦାନ ପ୍ରଦାନ ପୂର୍ବରୁ ପାସ ହୋଇଛି"
 
-#: ../src/goaidentity/goaidentityservice.c:569
+#: ../src/goaidentity/goaidentityservice.c:562
 msgid "Initial secret key is invalid"
 msgstr "ପ୍ରାରମ୍ଭିକ ଗୁପ୍ତ ଚାବିଟି ଅବୈଧ ଅଟେ"
 
-#: ../src/goaidentity/goaidentityservice.c:1089
+#: ../src/goaidentity/goaidentityservice.c:1111
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr ""
 "ନେଟୱର୍କ୍‌ realm %s ଆପଣଙ୍କୁ ସାଇନ୍‌ ଇନ୍‌ କରିବା ପୂର୍ବରୁ କିଛି ସୂଚନା ଆବଶ୍ୟକ କରିଥାଏ।"
 
-#: ../src/goaidentity/goakerberosidentity.c:272
-#: ../src/goaidentity/goakerberosidentity.c:281
-#: ../src/goaidentity/goakerberosidentity.c:608
+#: ../src/goaidentity/goakerberosidentity.c:252
+#: ../src/goaidentity/goakerberosidentity.c:261
+#: ../src/goaidentity/goakerberosidentity.c:588
 msgid "Could not find identity in credential cache: %k"
 msgstr "ପରିଚୟ ପତ୍ର କ୍ୟାଶେରେ ପରିଚୟ ପାଇଲା ନାହିଁ: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:621
+#: ../src/goaidentity/goakerberosidentity.c:601
 msgid "Could not find identity credentials in cache: %k"
 msgstr "କ୍ୟାଶେରେ ପରିଚୟ ପତ୍ର ପାଇଲା ନାହିଁ: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:659
+#: ../src/goaidentity/goakerberosidentity.c:641
 msgid "Could not sift through identity credentials in cache: %k"
 msgstr "କ୍ୟାଶେରେ ପରିଚୟ ପତ୍ର ମାଧ୍ଯମରେ ଯାଇ ପାରିବେ ନାହିଁ: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:676
+#: ../src/goaidentity/goakerberosidentity.c:659
 msgid "Could not finish up sifting through identity credentials in cache: %k"
 msgstr "କ୍ୟାଶେରେ ପରିଚୟ ପତ୍ର ମାଧ୍ଯମରେ ସ୍ଥାନାନ୍ତରିତ ହୋଇପାରିବେ ନାହିଁ: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1014
+#: ../src/goaidentity/goakerberosidentity.c:949
 #, c-format
 msgid "No associated identification found"
 msgstr "କୌଣସି ସମ୍ପୃକ୍ତ ପରିଚୟ ମିଳିଲା ନାହିଁ"
 
-#: ../src/goaidentity/goakerberosidentity.c:1095
+#: ../src/goaidentity/goakerberosidentity.c:1030
 msgid "Could not create credential cache: %k"
 msgstr "ପରିଚୟ କ୍ୟାଶେ ସୃଷ୍ଟି କରିପାରିବେ ନାହିଁ: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1129
+#: ../src/goaidentity/goakerberosidentity.c:1064
 msgid "Could not initialize credentials cache: %k"
 msgstr "ପରିଚୟ ପତ୍ର କ୍ୟାଶେକୁ ଆରମ୍ଭ କରିପାରିଲା ନାହିଁ: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1148
+#: ../src/goaidentity/goakerberosidentity.c:1081
 msgid "Could not store new credentials in credentials cache: %k"
 msgstr "କ୍ୟାଶେରେ ନୂତନ ପରିଚୟପତ୍ର ରଖିପାରିଲା ନାହିଁ: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1425
+#: ../src/goaidentity/goakerberosidentity.c:1356
 #, c-format
 msgid "Could not renew identity: Not signed in"
 msgstr "ନୂତନ ପରିଚୟ ସୃଷ୍ଟି କରିପାରିଲା ନାହିଁ: ସାଇନ୍‌ ଇନ୍‌ ହୋଇନାହିଁ"
 
-#: ../src/goaidentity/goakerberosidentity.c:1437
+#: ../src/goaidentity/goakerberosidentity.c:1368
 msgid "Could not renew identity: %k"
 msgstr "ନୂତନ ପରିଚୟ ସୃଷ୍ଟି କରିପାରିଲା ନାହିଁ: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1454
+#: ../src/goaidentity/goakerberosidentity.c:1385
 msgid "Could not get new credentials to renew identity %s: %k"
 msgstr "%s ପାଇଁ ନୂତନ ପରିଚୟ ସୃଷ୍ଟି କରିବାକୁ ନୂତନ ପରିଚୟ ପତ୍ର ପାଇଲା ନାହିଁ: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1494
+#: ../src/goaidentity/goakerberosidentity.c:1427
 msgid "Could not erase identity: %k"
 msgstr "ପରିଚୟକୁ ଲିଭାଇ ପାରିଲା ନାହିଁ: %k"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:747
+#: ../src/goaidentity/goakerberosidentitymanager.c:745
 msgid "Could not find identity"
 msgstr "ପରିଚୟକୁ ଖୋଜି ପାଇଲା ନାହିଁ"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:824
+#: ../src/goaidentity/goakerberosidentitymanager.c:836
 msgid "Could not create credential cache for identity"
 msgstr "ପରିଚୟ ପାଇଁ ପରିଚୟ ପତ୍ର କ୍ୟାଶେ ସୃଷ୍ଟି କରିପାରିଲା ନାହିଁ"
 
+#~ msgid "Failed to find Autodiscover element"
+#~ msgstr "ସ୍ୱୟଂଆବିଷ୍କାର ଉପାଦାନ ଖୋଜିବାରେ ବିଫଳ"
+
+#~ msgid "Did not find imap-password with identity `%s' in credentials"
+#~ msgstr "ପରିଚୟ `%s' ସହିତ imap-ପ୍ରବେଶ ସଂକେତକୁ ପରିଚୟ ପତ୍ରରେ ପାଇଲା ନାହିଁ"
+
+#~ msgid "Invalid imap-password with username `%s' (%s, %d): "
+#~ msgstr "ବ୍ୟବହାରକାରୀ ନାମ `%s' (%s, %d) ସହିତ ଅବୈଧ imap-ପ୍ରବେଶ ସଂକେତ: "
+
+#~ msgid "Did not find smtp-password with identity `%s' in credentials"
+#~ msgstr "ପରିଚୟ ପତ୍ରରେ ପରିଚୟ `%s' ସହିତ smtp-ପ୍ରବେଶ ସଂକେତ ପାଇଲା ନାହିଁ"
+
+#~ msgid "Invalid smtp-password with username `%s' (%s, %d): "
+#~ msgstr "ବ୍ୟବହାରକାରୀ ନାମ  `%s' (%s, %d) ସହିତ ଅବୈଧ smtp-ପ୍ରବେଶ ସଂକେତ: "
+
+#~ msgid ""
+#~ "Paste authorization code obtained from the <a href=\"%s\">authorization "
+#~ "page</a>:"
+#~ msgstr "<a href=\"%s\">ବୈଧିକରଣ ପୃଷ୍ଠା</a> ରୁ ମିଳିଥିବା ବୈଧିକରଣ ସଂକେତକୁ ଲଗାନ୍ତୁ:"
+
+#~ msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
+#~ msgstr "<a href=\"%s\">ବୈଧିକରଣ ପୃଷ୍ଠା</a> ରୁ ମିଳିଥିବା ଟକେନକୁ ଲଗାନ୍ତୁ:"
+
+#~ msgid "Time"
+#~ msgstr "ସମୟ"
+
+#~ msgid "Time to fire"
+#~ msgstr "ବାହାର କରିବା ସମୟ"
