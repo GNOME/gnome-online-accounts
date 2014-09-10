@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the gnome-online-accounts package.
 #
 # Mario Blättermann <mario.blaettermann@gmail.com>, 2011-2013.
-# Wolfgang Stöggl <c72578@yahoo.de>, 2011, 2012.
+# Wolfgang Stöggl <c72578@yahoo.de>, 2011, 2012, 2014.
 # Tobias Endrigkeit <tobiasendrigkeit@googlemail.com>, 2012.
 # Hedda Peters <hpeters@redhat.com>, 2012.
 # Christian Kirbach <Christian.Kirbach@gmail.com>, 2012.
@@ -14,16 +14,16 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-06-20 06:59+0000\n"
-"PO-Revision-Date: 2014-06-20 17:56+0100\n"
-"Last-Translator: Benjamin Steinwender <b@stbe.at>\n"
+"POT-Creation-Date: 2014-09-05 19:02+0000\n"
+"PO-Revision-Date: 2014-09-08 16:52+0100\n"
+"Last-Translator: Wolfgang Stoeggl <c72578@yahoo.de>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.5\n"
+"X-Generator: Poedit 1.6.9\n"
 
 #. TODO: more specific
 #: ../src/daemon/goadaemon.c:783 ../src/daemon/goadaemon.c:1029
@@ -93,7 +93,7 @@ msgstr "Ungültiges Passwort für Benutzer »%s« (%s, %d): "
 #: ../src/goabackend/goaexchangeprovider.c:492
 #: ../src/goabackend/goaimapsmtpprovider.c:715
 msgid "_E-mail"
-msgstr "_E-mail"
+msgstr "_E-Mail"
 
 #: ../src/goabackend/goaexchangeprovider.c:493
 #: ../src/goabackend/goaimapsmtpprovider.c:735
@@ -149,6 +149,7 @@ msgstr "Verbindung wird hergestellt …"
 #: ../src/goabackend/goaimapsmtpprovider.c:1333
 #: ../src/goabackend/goaimapsmtpprovider.c:1406
 #: ../src/goabackend/goakerberosprovider.c:1536
+#: ../src/goabackend/goamediaserverprovider.c:473
 #: ../src/goabackend/goaoauth2provider.c:1077
 #: ../src/goabackend/goaoauthprovider.c:908
 #: ../src/goabackend/goaowncloudprovider.c:786
@@ -203,6 +204,7 @@ msgstr "Fehler beim Verbinden zum Microsoft Exchange-Server"
 #: ../src/goabackend/goaflickrprovider.c:411
 #: ../src/goabackend/goagoogleprovider.c:592
 #: ../src/goabackend/goakerberosprovider.c:1719
+#: ../src/goabackend/goamediaserverprovider.c:584
 #: ../src/goabackend/goaowncloudprovider.c:1097
 #: ../src/goabackend/goapocketprovider.c:421
 #: ../src/goabackend/goatelepathyprovider.c:890
@@ -281,6 +283,7 @@ msgstr "C_hat"
 #: ../src/goabackend/goafacebookprovider.c:468
 #: ../src/goabackend/goaflickrprovider.c:413
 #: ../src/goabackend/goagoogleprovider.c:619
+#: ../src/goabackend/goamediaserverprovider.c:586
 msgid "_Photos"
 msgstr "_Fotos"
 
@@ -310,7 +313,6 @@ msgid "_Documents"
 msgstr "_Dokumente"
 
 #: ../src/goabackend/goagoogleprovider.c:624
-#| msgid "_Printers"
 msgid "Prin_ters"
 msgstr "_Drucker"
 
@@ -488,6 +490,26 @@ msgstr "Fehler beim Verbinden mit Unternehmensidentitätsserver"
 msgid "Network _Resources"
 msgstr "_Netzwerkressourcen"
 
+#: ../src/goabackend/goamediaserverprovider.c:76
+msgid "Media Server"
+msgstr "Medien-Server"
+
+#: ../src/goabackend/goamediaserverprovider.c:369
+msgid ""
+"Personal content can be added to your applications through a media server "
+"account."
+msgstr ""
+"Persönlicher Inhalt kann über ein Konto eines Medien-Servers zu Ihren "
+"Anwendungen hinzugefügt werden."
+
+#: ../src/goabackend/goamediaserverprovider.c:383
+msgid "Available Media Servers"
+msgstr "Verfügbare Medien-Server"
+
+#: ../src/goabackend/goamediaserverprovider.c:413
+msgid "No media servers found"
+msgstr "Keine Medien-Server gefunden"
+
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauth2provider.c:667
 #: ../src/goabackend/goaoauthprovider.c:550
@@ -592,7 +614,7 @@ msgstr "Kein Benutzername oder Zutritt-_Token"
 msgid "_Read Later"
 msgstr "_Später lesen"
 
-#: ../src/goabackend/goaprovider.c:681
+#: ../src/goabackend/goaprovider.c:682
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "»ensure_credentials_sync« ist nicht im Typ %s implementiert"
