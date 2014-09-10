@@ -226,7 +226,7 @@ if test "$enable_imap_smtp" != "no"; then
 fi
 
 # Media Server
-AC_DEFINE(GOA_MEDIA_SERVER_NAME, ["media_server"], [ProviderType and extension point name])
+AC_DEFINE(GOA_MEDIA_SERVER_NAME, ["media-server"], [ProviderType and extension point name])
 AC_ARG_ENABLE([media-server],
               [AS_HELP_STRING([--enable-media-server],
               [Enable Media Server provider])],
