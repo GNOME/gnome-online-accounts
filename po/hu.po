@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-06-22 07:00+0000\n"
-"PO-Revision-Date: 2014-06-22 12:08+0200\n"
+"POT-Creation-Date: 2014-09-11 07:03+0000\n"
+"PO-Revision-Date: 2014-09-11 20:18+0200\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -144,6 +144,7 @@ msgstr "Kapcsolódás…"
 #: ../src/goabackend/goaimapsmtpprovider.c:1333
 #: ../src/goabackend/goaimapsmtpprovider.c:1406
 #: ../src/goabackend/goakerberosprovider.c:1536
+#: ../src/goabackend/goamediaserverprovider.c:473
 #: ../src/goabackend/goaoauth2provider.c:1077
 #: ../src/goabackend/goaoauthprovider.c:908
 #: ../src/goabackend/goaowncloudprovider.c:786
@@ -198,6 +199,7 @@ msgstr "Hiba a Microsoft Exchange kiszolgálóhoz való kapcsolódáskor"
 #: ../src/goabackend/goaflickrprovider.c:411
 #: ../src/goabackend/goagoogleprovider.c:592
 #: ../src/goabackend/goakerberosprovider.c:1719
+#: ../src/goabackend/goamediaserverprovider.c:584
 #: ../src/goabackend/goaowncloudprovider.c:1097
 #: ../src/goabackend/goapocketprovider.c:421
 #: ../src/goabackend/goatelepathyprovider.c:890
@@ -275,6 +277,7 @@ msgstr "_Csevegés"
 #: ../src/goabackend/goafacebookprovider.c:468
 #: ../src/goabackend/goaflickrprovider.c:413
 #: ../src/goabackend/goagoogleprovider.c:619
+#: ../src/goabackend/goamediaserverprovider.c:586
 msgid "_Photos"
 msgstr "_Fényképek"
 
@@ -302,7 +305,6 @@ msgid "_Documents"
 msgstr "_Dokumentumok"
 
 #: ../src/goabackend/goagoogleprovider.c:624
-#| msgid "_Printers"
 msgid "Prin_ters"
 msgstr "_Nyomtatók"
 
@@ -482,6 +484,27 @@ msgstr "Hiba a vállalati személyazonosság-kiszolgálóhoz való kapcsolódás
 msgid "Network _Resources"
 msgstr "_Hálózati erőforrások"
 
+#: ../src/goabackend/goamediaserverprovider.c:76
+#| msgid "IMAP _Server"
+msgid "Media Server"
+msgstr "Médiakiszolgáló"
+
+#: ../src/goabackend/goamediaserverprovider.c:369
+msgid ""
+"Personal content can be added to your applications through a media server "
+"account."
+msgstr ""
+"Személyes információk adhatók hozzá az alkalmazásokhoz egy médiakiszolgáló "
+"fiókon keresztül."
+
+#: ../src/goabackend/goamediaserverprovider.c:383
+msgid "Available Media Servers"
+msgstr "Elérhető médiakiszolgálók"
+
+#: ../src/goabackend/goamediaserverprovider.c:413
+msgid "No media servers found"
+msgstr "Nem találhatók médiakiszolgálók"
+
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauth2provider.c:667
 #: ../src/goabackend/goaoauthprovider.c:550
@@ -585,7 +608,7 @@ msgstr "Nincs felhasználónév vagy hozzáférési token"
 msgid "_Read Later"
 msgstr "_Olvasás később"
 
-#: ../src/goabackend/goaprovider.c:681
+#: ../src/goabackend/goaprovider.c:682
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "Az ensure_credentials_sync nincs megvalósítva a(z) %s típushoz"
