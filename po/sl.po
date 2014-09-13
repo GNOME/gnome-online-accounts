@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-06-16 19:00+0000\n"
-"PO-Revision-Date: 2014-06-16 22:03+0100\n"
+"POT-Creation-Date: 2014-09-13 18:49+0000\n"
+"PO-Revision-Date: 2014-09-13 21:01+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: Slovenian\n"
@@ -142,6 +142,7 @@ msgstr "Vzpostavljanje povezave ..."
 #: ../src/goabackend/goaimapsmtpprovider.c:1333
 #: ../src/goabackend/goaimapsmtpprovider.c:1406
 #: ../src/goabackend/goakerberosprovider.c:1536
+#: ../src/goabackend/goamediaserverprovider.c:473
 #: ../src/goabackend/goaoauth2provider.c:1077
 #: ../src/goabackend/goaoauthprovider.c:908
 #: ../src/goabackend/goaowncloudprovider.c:786
@@ -194,8 +195,9 @@ msgstr "Prišlo je do napake med povezovanjem s strežnikom Microsoft Exchange"
 #: ../src/goabackend/goaexchangeprovider.c:939
 #: ../src/goabackend/goafacebookprovider.c:461
 #: ../src/goabackend/goaflickrprovider.c:411
-#: ../src/goabackend/goagoogleprovider.c:589
+#: ../src/goabackend/goagoogleprovider.c:592
 #: ../src/goabackend/goakerberosprovider.c:1719
+#: ../src/goabackend/goamediaserverprovider.c:584
 #: ../src/goabackend/goaowncloudprovider.c:1097
 #: ../src/goabackend/goapocketprovider.c:421
 #: ../src/goabackend/goatelepathyprovider.c:890
@@ -204,19 +206,19 @@ msgid "Use for"
 msgstr "Uporabi za"
 
 #: ../src/goabackend/goaexchangeprovider.c:941
-#: ../src/goabackend/goagoogleprovider.c:591
+#: ../src/goabackend/goagoogleprovider.c:594
 #: ../src/goabackend/goawindowsliveprovider.c:423
 msgid "_Mail"
 msgstr "_Pošta"
 
 #: ../src/goabackend/goaexchangeprovider.c:946
-#: ../src/goabackend/goagoogleprovider.c:596
+#: ../src/goabackend/goagoogleprovider.c:599
 #: ../src/goabackend/goaowncloudprovider.c:1099
 msgid "Cale_ndar"
 msgstr "_Koledar"
 
 #: ../src/goabackend/goaexchangeprovider.c:951
-#: ../src/goabackend/goagoogleprovider.c:601
+#: ../src/goabackend/goagoogleprovider.c:604
 #: ../src/goabackend/goaowncloudprovider.c:1104
 msgid "_Contacts"
 msgstr "_Stiki"
@@ -228,7 +230,7 @@ msgstr "Facebook"
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:218
 #: ../src/goabackend/goaflickrprovider.c:183
-#: ../src/goabackend/goagoogleprovider.c:215
+#: ../src/goabackend/goagoogleprovider.c:218
 #: ../src/goabackend/goawindowsliveprovider.c:189
 #: ../src/goabackend/goayahooprovider.c:182
 #, c-format
@@ -246,8 +248,8 @@ msgstr ""
 #: ../src/goabackend/goaflickrprovider.c:224
 #: ../src/goabackend/goaflickrprovider.c:234
 #: ../src/goabackend/goaflickrprovider.c:244
-#: ../src/goabackend/goagoogleprovider.c:234
-#: ../src/goabackend/goagoogleprovider.c:246
+#: ../src/goabackend/goagoogleprovider.c:237
+#: ../src/goabackend/goagoogleprovider.c:249
 #: ../src/goabackend/goaoauth2provider.c:691
 #: ../src/goabackend/goaoauth2provider.c:721
 #: ../src/goabackend/goaoauth2provider.c:733
@@ -265,14 +267,15 @@ msgid "Could not parse response"
 msgstr "Odgovora ni mogoče razčleniti"
 
 #: ../src/goabackend/goafacebookprovider.c:463
-#: ../src/goabackend/goagoogleprovider.c:606
+#: ../src/goabackend/goagoogleprovider.c:609
 #: ../src/goabackend/goatelepathyprovider.c:892
 msgid "C_hat"
 msgstr "K_lepet"
 
 #: ../src/goabackend/goafacebookprovider.c:468
 #: ../src/goabackend/goaflickrprovider.c:413
-#: ../src/goabackend/goagoogleprovider.c:616
+#: ../src/goabackend/goagoogleprovider.c:619
+#: ../src/goabackend/goamediaserverprovider.c:586
 msgid "_Photos"
 msgstr "_Fotografije"
 
@@ -293,13 +296,13 @@ msgstr "Sistemski čas ni veljaven. Preverite nastavitve časa in datuma."
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:611
+#: ../src/goabackend/goagoogleprovider.c:614
 #: ../src/goabackend/goaowncloudprovider.c:1109
 #: ../src/goabackend/goawindowsliveprovider.c:428
 msgid "_Documents"
 msgstr "_Dokumenti"
 
-#: ../src/goabackend/goagoogleprovider.c:621
+#: ../src/goabackend/goagoogleprovider.c:624
 msgid "Prin_ters"
 msgstr "_Tiskalniki"
 
@@ -475,6 +478,26 @@ msgstr "Prišlo je do napake med povezovanjem s strežnikom Microsoft Exchange"
 msgid "Network _Resources"
 msgstr "Omrežni _viri"
 
+#: ../src/goabackend/goamediaserverprovider.c:76
+msgid "Media Server"
+msgstr "Predstavni strežnik"
+
+#: ../src/goabackend/goamediaserverprovider.c:369
+msgid ""
+"Personal content can be added to your applications through a media server "
+"account."
+msgstr ""
+"Osebna vsebina je lahko dodana na namizje preko računa predstavnega "
+"strežnika."
+
+#: ../src/goabackend/goamediaserverprovider.c:383
+msgid "Available Media Servers"
+msgstr "Razpoložljivi predstavni strežniki"
+
+#: ../src/goabackend/goamediaserverprovider.c:413
+msgid "No media servers found"
+msgstr "Ni najdenih predstavnih strežnikov"
+
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauth2provider.c:667
 #: ../src/goabackend/goaoauthprovider.c:550
@@ -576,7 +599,7 @@ msgstr "Ni uporabniškega imena ali žetona za dostop"
 msgid "_Read Later"
 msgstr "_Preberi kasneje"
 
-#: ../src/goabackend/goaprovider.c:681
+#: ../src/goabackend/goaprovider.c:682
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "zahteva usklajevanja poverila ni podprta za vrsto %s"
