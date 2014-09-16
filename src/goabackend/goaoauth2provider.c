@@ -857,7 +857,7 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
   const gchar *query;
   const gchar *redirect_uri;
   const gchar *requested_uri;
-  gint response_id;
+  gint response_id = GTK_RESPONSE_NONE;
 
   /* TODO: use oauth2_proxy_extract_access_token() */
 
@@ -963,6 +963,7 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
   goto ignore_request;
 
  ignore_request:
+  g_assert (response_id != GTK_RESPONSE_NONE);
   gtk_dialog_response (priv->dialog, response_id);
   webkit_web_policy_decision_ignore (policy_decision);
   return TRUE;
