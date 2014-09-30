@@ -984,8 +984,7 @@ on_account_handle_remove (GoaAccount            *account,
                                   G_KEY_FILE_KEEP_COMMENTS,
                                   &error))
     {
-      g_dbus_method_invocation_return_gerror (invocation, error);
-      g_error_free (error);
+      g_dbus_method_invocation_take_error (invocation, error);
       goto out;
     }
 
@@ -994,8 +993,7 @@ on_account_handle_remove (GoaAccount            *account,
   error = NULL;
   if (!g_key_file_remove_group (key_file, group, &error))
     {
-      g_dbus_method_invocation_return_gerror (invocation, error);
-      g_error_free (error);
+      g_dbus_method_invocation_take_error (invocation, error);
       goto out;
     }
 
@@ -1145,8 +1143,7 @@ ensure_credentials_cb (GoaProvider   *provider,
                          error->message, g_quark_to_string (error->domain), error->code);
             }
         }
-      g_dbus_method_invocation_return_gerror (data->invocation, error);
-      g_error_free (error);
+      g_dbus_method_invocation_take_error (data->invocation, error);
     }
   else
     {
