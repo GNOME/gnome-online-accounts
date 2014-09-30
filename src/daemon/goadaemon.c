@@ -431,6 +431,7 @@ update_account_object (GoaDaemon           *daemon,
 {
   GoaAccount *account;
   GoaProvider *provider;
+  gboolean is_locked;
   gboolean ret;
   gchar *identity;
   gchar *presentation_identity;
@@ -458,6 +459,7 @@ update_account_object (GoaDaemon           *daemon,
   type = g_key_file_get_string (key_file, group, "Provider", NULL);
   identity = g_key_file_get_string (key_file, group, "Identity", NULL);
   presentation_identity = g_key_file_get_string (key_file, group, "PresentationIdentity", NULL);
+  is_locked = g_key_file_get_boolean (key_file, group, "IsLocked", NULL);
   if (just_added)
     {
       account = goa_account_skeleton_new ();
@@ -479,6 +481,7 @@ update_account_object (GoaDaemon           *daemon,
   goa_account_set_provider_type (account, type);
   goa_account_set_identity (account, identity);
   goa_account_set_presentation_identity (account, presentation_identity);
+  goa_account_set_is_locked (account, is_locked);
 
   error = NULL;
   if (!goa_provider_build_object (provider, object, key_file, group, daemon->connection, just_added, &error))
@@ -956,6 +959,17 @@ on_account_handle_remove (GoaAccount            *account,
   group = NULL;
   key_file = NULL;
   data = NULL;
+
+  if (goa_account_get_is_locked (account))
+    {
+      error = NULL;
+      g_set_error_literal (&error,
+                           GOA_ERROR,
+                           GOA_ERROR_NOT_SUPPORTED,
+                           _("IsLocked property is set for account"));
+      g_dbus_method_invocation_take_error (invocation, error);
+      goto out;
+    }
 
   /* update key-file - right now we only support removing the account
    * if the entry is in ~/.config/goa-1.0/accounts.conf

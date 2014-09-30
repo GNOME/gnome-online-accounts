@@ -66,6 +66,17 @@
       -->
     <property name="Id" type="s" access="read"/>
 
+    <!-- IsLocked:
+         @since: 3.16.0
+
+         Whether or not the user is discouraged from removing this account.
+
+         Locked accounts can be those that there added by the administrator to
+         pre-configure systems in an enterprise deployment. If %TRUE, the UI
+         should prevent, or atleast discourage, removal of these accounts.
+    -->
+    <property name="IsLocked" type="b" access="read"/>
+
     <!-- IsTemporary:
 
          Whether or not the account is remembered from session to session.
