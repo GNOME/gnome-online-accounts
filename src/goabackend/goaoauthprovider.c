@@ -1726,8 +1726,7 @@ on_handle_get_access_token (GoaOAuthBased         *interface,
                                                                    &error);
   if (access_token == NULL)
     {
-      g_dbus_method_invocation_return_gerror (invocation, error);
-      g_error_free (error);
+      g_dbus_method_invocation_take_error (invocation, error);
     }
   else
     {
