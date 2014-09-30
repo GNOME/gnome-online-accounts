@@ -782,7 +782,7 @@ get_all_providers_cb (GObject      *source,
                    GOA_ERROR_FAILED, /* TODO: more specific */
                    _("Failed to find a provider for: %s"),
                    data->provider_type);
-      g_dbus_method_invocation_return_gerror (data->invocation, error);
+      g_dbus_method_invocation_take_error (data->invocation, error);
       goto out;
     }
 
@@ -801,7 +801,7 @@ get_all_providers_cb (GObject      *source,
       else
         {
           g_prefix_error (&error, "Error loading file %s: ", path);
-          g_dbus_method_invocation_return_gerror (data->invocation, error);
+          g_dbus_method_invocation_take_error (data->invocation, error);
           goto out;
         }
     }
@@ -813,7 +813,7 @@ get_all_providers_cb (GObject      *source,
           if (!g_key_file_load_from_data (key_file, key_file_data, length, G_KEY_FILE_KEEP_COMMENTS, &error))
             {
               g_prefix_error (&error, "Error parsing key-value-file %s: ", path);
-              g_dbus_method_invocation_return_gerror (data->invocation, error);
+              g_dbus_method_invocation_take_error (data->invocation, error);
               goto out;
             }
         }
@@ -854,7 +854,7 @@ get_all_providers_cb (GObject      *source,
   if (key_file_data == NULL)
     {
       g_prefix_error (&error, "Error generating key-value-file: ");
-      g_dbus_method_invocation_return_gerror (data->invocation, error);
+      g_dbus_method_invocation_take_error (data->invocation, error);
       goto out;
     }
 
@@ -865,7 +865,7 @@ get_all_providers_cb (GObject      *source,
                             &error))
     {
       g_prefix_error (&error, "Error writing key-value-file %s: ", path);
-      g_dbus_method_invocation_return_gerror (data->invocation, error);
+      g_dbus_method_invocation_take_error (data->invocation, error);
       goto out;
     }
 
@@ -992,7 +992,7 @@ on_account_handle_remove (GoaAccount            *account,
   if (data == NULL)
     {
       g_prefix_error (&error, "Error generating key-value-file: ");
-      g_dbus_method_invocation_return_gerror (invocation, error);
+      g_dbus_method_invocation_take_error (invocation, error);
       goto out;
     }
 
@@ -1003,7 +1003,7 @@ on_account_handle_remove (GoaAccount            *account,
                             &error))
     {
       g_prefix_error (&error, "Error writing key-value-file %s: ", path);
-      g_dbus_method_invocation_return_gerror (invocation, error);
+      g_dbus_method_invocation_take_error (invocation, error);
       goto out;
     }
 
@@ -1015,7 +1015,7 @@ on_account_handle_remove (GoaAccount            *account,
                            GOA_ERROR,
                            GOA_ERROR_FAILED, /* TODO: more specific */
                            _("ProviderType property is not set for account"));
-      g_dbus_method_invocation_return_gerror (invocation, error);
+      g_dbus_method_invocation_take_error (invocation, error);
       goto out;
     }
 
@@ -1028,14 +1028,14 @@ on_account_handle_remove (GoaAccount            *account,
                    GOA_ERROR_FAILED, /* TODO: more specific */
                    _("Failed to find a provider for: %s"),
                    provider_type);
-      g_dbus_method_invocation_return_gerror (invocation, error);
+      g_dbus_method_invocation_take_error (invocation, error);
       goto out;
     }
 
   error = NULL;
   if (!goa_utils_delete_credentials_sync (provider, account, NULL, &error))
     {
-      g_dbus_method_invocation_return_gerror (invocation, error);
+      g_dbus_method_invocation_take_error (invocation, error);
       goto out;
     }
 
