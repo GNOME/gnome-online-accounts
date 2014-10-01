@@ -822,7 +822,9 @@ get_all_providers_cb (GObject      *source,
         }
     }
 
-  id = generate_new_id (data->daemon);
+  if (!g_variant_lookup (data->details, "Id", "s", &id))
+    id = generate_new_id (data->daemon);
+
   group = g_strdup_printf ("Account %s", id);
   g_key_file_set_string (key_file, group, "Provider", data->provider_type);
   g_key_file_set_string (key_file, group, "Identity", data->identity);
@@ -845,6 +847,10 @@ get_all_providers_cb (GObject      *source,
               g_key_file_set_string (key_file, group, "SessionId", guid);
             }
         }
+
+      /* Skip Id since we already handled it above. */
+      if (g_strcmp0 (key, "Id") == 0)
+        continue;
 
       g_key_file_set_string (key_file, group, key, value);
     }
