@@ -1259,7 +1259,10 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
    * eg., if we failed to store the credentials in the keyring.
    */
   if (priv->error != NULL)
-    g_propagate_error (error, priv->error);
+    {
+      g_propagate_error (error, priv->error);
+      priv->error = NULL;
+    }
   else
     g_assert (ret != NULL);
 
@@ -1352,7 +1355,10 @@ goa_oauth2_provider_refresh_account (GoaProvider  *_provider,
 
  out:
   if (priv->error != NULL)
-    g_propagate_error (error, priv->error);
+    {
+      g_propagate_error (error, priv->error);
+      priv->error = NULL;
+    }
 
   gtk_widget_destroy (dialog);
   return ret;
