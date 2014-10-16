@@ -343,6 +343,7 @@ build_object (GoaProvider         *provider,
   gboolean photos_enabled;
   gboolean ret;
 
+  account = NULL;
   photos = NULL;
   ret = FALSE;
 
