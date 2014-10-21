@@ -738,6 +738,17 @@
   -->
   <interface name="org.gnome.OnlineAccounts.Ticketing">
     <!--
+      Details:
+      @since: 3.18
+
+      Metadata about the tickets getting fetched.
+      For kerberos tickets, this may contain a
+      preauthentication source used by pkinit
+      (such as PKCS11:libcoolkeypk11.so)
+      -->
+    <property name="Details" type="a{ss}" access="read"/>
+
+    <!--
       GetTicket:
 
       Use this method to obtain an ticket that can be used to
