@@ -66,6 +66,7 @@ GoaIdentity *goa_kerberos_identity_new (krb5_context   kerberos_context,
 gboolean goa_kerberos_identity_sign_in (GoaKerberosIdentity     *self,
                                         const char              *principal_name,
                                         gconstpointer            initial_password,
+                                        const char              *preauth_source,
                                         GoaIdentitySignInFlags   flags,
                                         GoaIdentityInquiryFunc   inquiry_func,
                                         gpointer                 inquiry_data,
@@ -81,5 +82,6 @@ gboolean goa_kerberos_identity_erase (GoaKerberosIdentity *self,
 
 char *goa_kerberos_identity_get_principal_name (GoaKerberosIdentity *self);
 char *goa_kerberos_identity_get_realm_name     (GoaKerberosIdentity *self);
+char *goa_kerberos_identity_get_preauthentication_source     (GoaKerberosIdentity *self);
 G_END_DECLS
 #endif /* __GOA_KERBEROS_IDENTITY_H__ */

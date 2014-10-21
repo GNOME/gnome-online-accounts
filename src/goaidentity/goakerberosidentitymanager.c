@@ -81,6 +81,7 @@ typedef struct
     {
       const char *identifier;
       gconstpointer initial_password;
+      char *preauth_source;
       GoaIdentitySignInFlags sign_in_flags;
       GoaIdentityInquiry *inquiry;
       GoaIdentityInquiryFunc inquiry_func;
@@ -151,10 +152,14 @@ operation_free (Operation *operation)
 
   if (operation->type != OPERATION_TYPE_SIGN_IN &&
       operation->type != OPERATION_TYPE_GET_IDENTITY)
-    g_clear_object (&operation->identity);
+    {
+      g_clear_object (&operation->identity);
+    }
   else
-    g_clear_pointer (&operation->identifier, g_free);
-
+    {
+      g_clear_pointer (&operation->identifier, g_free);
+      g_clear_pointer (&operation->preauth_source, g_free);
+    }
   g_clear_object (&operation->result);
 
   g_slice_free (Operation, operation);
@@ -863,6 +868,7 @@ sign_in_identity (GoaKerberosIdentityManager *self,
   if (!goa_kerberos_identity_sign_in (GOA_KERBEROS_IDENTITY (identity),
                                       operation->identifier,
                                       operation->initial_password,
+                                      operation->preauth_source,
                                       operation->sign_in_flags,
                                       (GoaIdentityInquiryFunc)
                                       on_kerberos_identity_inquiry,
@@ -1178,6 +1184,7 @@ static void
 goa_kerberos_identity_manager_sign_identity_in (GoaIdentityManager     *manager,
                                                 const char             *identifier,
                                                 gconstpointer           initial_password,
+                                                const char             *preauth_source,
                                                 GoaIdentitySignInFlags  flags,
                                                 GoaIdentityInquiryFunc  inquiry_func,
                                                 gpointer                inquiry_data,
@@ -1201,6 +1208,7 @@ goa_kerberos_identity_manager_sign_identity_in (GoaIdentityManager     *manager,
    * for duration of operation
    */
   operation->initial_password = initial_password;
+  operation->preauth_source = g_strdup (preauth_source);
   operation->sign_in_flags = flags;
   operation->inquiry_func = inquiry_func;
   operation->inquiry_data = inquiry_data;

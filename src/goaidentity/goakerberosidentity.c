@@ -47,6 +47,8 @@ struct _GoaKerberosIdentityPrivate
   char *identifier;
   guint identifier_idle_id;
 
+  char *preauth_identity_source;
+
   krb5_timestamp expiration_time;
   guint          expiration_time_idle_id;
 
@@ -106,6 +108,8 @@ goa_kerberos_identity_dispose (GObject *object)
 
   G_LOCK (identity_lock);
   clear_alarms (self);
+  g_clear_pointer (&self->priv->preauth_identity_source,
+                   g_free);
   G_UNLOCK (identity_lock);
 
   G_OBJECT_CLASS (goa_kerberos_identity_parent_class)->dispose (object);
@@ -406,6 +410,12 @@ goa_kerberos_identity_get_realm_name (GoaKerberosIdentity *self)
   return realm_name;
 }
 
+char *
+goa_kerberos_identity_get_preauthentication_source (GoaKerberosIdentity *self)
+{
+  return g_strdup (self->priv->preauth_identity_source);
+}
+
 static const char *
 goa_kerberos_identity_get_identifier (GoaIdentity *identity)
 {
@@ -452,6 +462,44 @@ credentials_validate_existence (GoaKerberosIdentity *self,
     }
 
   return TRUE;
+}
+
+static gboolean
+snoop_preauth_identity_from_credentials (GoaKerberosIdentity  *self,
+                                         krb5_creds           *credentials,
+                                         char                **identity_source)
+{
+  GRegex *regex;
+  GMatchInfo *match_info = NULL;
+  gboolean identity_source_exposed = FALSE;
+
+  if (!krb5_is_config_principal (self->priv->kerberos_context, credentials->server))
+    return FALSE;
+
+  regex = g_regex_new ("\"X509_user_identity\":\"(?P<identity_source>[^\"]*)\"",
+                        G_REGEX_MULTILINE | G_REGEX_CASELESS | G_REGEX_RAW,
+                        0,
+                        NULL);
+
+  if (regex == NULL)
+    return FALSE;
+
+  g_regex_match_full (regex, credentials->ticket.data, credentials->ticket.length, 0, 0, &match_info, NULL);
+
+  if (match_info != NULL && g_match_info_matches (match_info))
+    {
+      if (identity_source)
+        {
+          g_free (*identity_source);
+          *identity_source = g_match_info_fetch_named (match_info, "identity_source");
+        }
+      identity_source_exposed = TRUE;
+    }
+
+  g_match_info_free (match_info);
+  g_regex_unref (regex);
+
+  return identity_source_exposed;
 }
 
 static krb5_timestamp
@@ -565,6 +613,7 @@ credentials_are_expired (GoaKerberosIdentity *self,
 
 static VerificationLevel
 verify_identity (GoaKerberosIdentity  *self,
+                 char                **preauth_identity_source,
                  GError              **error)
 {
   krb5_principal principal = NULL;
@@ -626,6 +675,10 @@ verify_identity (GoaKerberosIdentity  *self,
             verification_level = VERIFICATION_LEVEL_SIGNED_IN;
           else
             verification_level = VERIFICATION_LEVEL_EXISTS;
+        }
+      else
+        {
+          snoop_preauth_identity_from_credentials (self, &credentials, preauth_identity_source);
         }
 
       krb5_free_cred_contents (self->priv->kerberos_context, &credentials);
@@ -933,7 +986,7 @@ goa_kerberos_identity_initable_init (GInitable     *initable,
 
   verification_error = NULL;
   self->priv->cached_verification_level =
-    verify_identity (self, &verification_error);
+    verify_identity (self, &self->priv->preauth_identity_source, &verification_error);
 
   switch (self->priv->cached_verification_level)
     {
@@ -1140,6 +1193,7 @@ gboolean
 goa_kerberos_identity_sign_in (GoaKerberosIdentity     *self,
                                const char              *principal_name,
                                gconstpointer            initial_password,
+                               const char              *preauth_source,
                                GoaIdentitySignInFlags   flags,
                                GoaIdentityInquiryFunc   inquiry_func,
                                gpointer                 inquiry_data,
@@ -1210,6 +1264,13 @@ goa_kerberos_identity_sign_in (GoaKerberosIdentity     *self,
 
   if ((flags & GOA_IDENTITY_SIGN_IN_FLAGS_DISALLOW_RENEWAL) == 0)
     krb5_get_init_creds_opt_set_renew_life (options, G_MAXINT);
+
+  if (preauth_source != NULL)
+    {
+      krb5_get_init_creds_opt_set_pa (self->priv->kerberos_context,
+                                      options,
+                                      "X509_user_identity", preauth_source);
+    }
 
   /* Poke glibc in case the network changed
    */
@@ -1301,6 +1362,7 @@ goa_kerberos_identity_update (GoaKerberosIdentity *self,
                               GoaKerberosIdentity *new_identity)
 {
   VerificationLevel verification_level;
+  char *preauth_identity_source = NULL;
 
   if (self->priv->credentials_cache != NULL)
     krb5_cc_close (self->priv->kerberos_context, self->priv->credentials_cache);
@@ -1313,12 +1375,17 @@ goa_kerberos_identity_update (GoaKerberosIdentity *self,
   update_identifier (self, new_identity);
   G_UNLOCK (identity_lock);
 
-  verification_level = verify_identity (self, NULL);
+  verification_level = verify_identity (self, &preauth_identity_source, NULL);
 
   if (verification_level == VERIFICATION_LEVEL_SIGNED_IN)
     reset_alarms (self);
   else
     clear_alarms (self);
+
+  G_LOCK (identity_lock);
+  g_free (self->priv->preauth_identity_source);
+  self->priv->preauth_identity_source = preauth_identity_source;
+  G_UNLOCK (identity_lock);
 
   if (verification_level != self->priv->cached_verification_level)
     {

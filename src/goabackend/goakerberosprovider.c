@@ -355,6 +355,7 @@ on_secret_keys_exchanged_for_sign_in (GoaKerberosProvider *self,
 {
   const char       *identifier;
   const char       *password;
+  const char       *preauth_source;
   GCancellable     *cancellable;
   GError           *error;
   GVariantBuilder   details;
@@ -372,6 +373,7 @@ on_secret_keys_exchanged_for_sign_in (GoaKerberosProvider *self,
 
   cancellable = g_object_get_data (G_OBJECT (operation_result), "cancellable");
   password = g_object_get_data (G_OBJECT (operation_result), "password");
+  preauth_source = g_object_get_data (G_OBJECT (operation_result), "preauthentication-source");
   identifier = g_simple_async_result_get_source_tag (operation_result);
 
   g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
@@ -386,6 +388,11 @@ on_secret_keys_exchanged_for_sign_in (GoaKerberosProvider *self,
       secret = gcr_secret_exchange_send (secret_exchange, password, -1);
       g_variant_builder_add (&details, "{ss}", "initial-password", secret);
       g_free (secret);
+    }
+
+  if (preauth_source != NULL)
+    {
+      g_variant_builder_add (&details, "{ss}", "preauthentication-source", preauth_source);
     }
 
   goa_identity_service_manager_call_sign_in (self->identity_manager,
@@ -523,6 +530,7 @@ static void
 sign_in_identity (GoaKerberosProvider  *self,
                   const char           *identifier,
                   const char           *password,
+                  const char           *preauth_source,
                   GCancellable         *cancellable,
                   GAsyncReadyCallback   callback,
                   gpointer              user_data)
@@ -544,6 +552,11 @@ sign_in_identity (GoaKerberosProvider  *self,
                      "password",
                      (gpointer)
                      password);
+
+  g_object_set_data_full (G_OBJECT (operation_result),
+                          "preauthentication-source",
+                          g_strdup (preauth_source),
+                          g_free);
 
   ensure_identity_manager (self,
                            cancellable,
@@ -676,8 +689,11 @@ get_ticket_sync (GoaKerberosProvider *self,
   GVariant            *credentials;
   GError              *lookup_error;
   GoaAccount          *account;
+  GoaTicketing        *ticketing;
+  GVariant            *details;
   const char          *identifier;
   const char          *password;
+  const char          *preauth_source;
   SignInRequest        request;
   gboolean             ret;
 
@@ -685,6 +701,13 @@ get_ticket_sync (GoaKerberosProvider *self,
 
   account = goa_object_peek_account (object);
   identifier = goa_account_get_identity (account);
+
+  ticketing = goa_object_get_ticketing (GOA_OBJECT (object));
+  details = goa_ticketing_get_details (ticketing);
+
+  preauth_source = NULL;
+  g_variant_lookup (details, "preauthentication-source", "&s", &preauth_source);
+
   password = NULL;
 
   lookup_error = NULL;
@@ -727,6 +750,7 @@ get_ticket_sync (GoaKerberosProvider *self,
   sign_in_identity (self,
                     identifier,
                     password,
+                    preauth_source,
                     cancellable,
                     (GAsyncReadyCallback)
                     on_account_signed_in,
@@ -743,6 +767,8 @@ get_ticket_sync (GoaKerberosProvider *self,
 
   ret = TRUE;
 out:
+  g_clear_object (&ticketing);
+
   if (credentials != NULL)
     g_variant_unref (credentials);
 
@@ -840,6 +866,9 @@ build_object (GoaProvider         *provider,
     {
       if (ticketing == NULL)
         {
+          char            *preauthentication_source;
+          GVariantBuilder  details;
+
           ticketing = goa_ticketing_skeleton_new ();
 
           g_signal_connect (ticketing,
@@ -849,6 +878,13 @@ build_object (GoaProvider         *provider,
 
           goa_object_skeleton_set_ticketing (object, ticketing);
 
+          g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
+
+	  preauthentication_source = g_key_file_get_string (key_file, group, "PreauthenticationSource", NULL);
+          if (preauthentication_source)
+            g_variant_builder_add (&details, "{ss}", "preauthentication-source", preauthentication_source);
+
+	  g_object_set (G_OBJECT (ticketing), "details", g_variant_builder_end (&details), NULL);
         }
     }
   else if (ticketing != NULL)
@@ -1259,11 +1295,17 @@ on_system_prompt_answered_for_initial_sign_in (GcrPrompt          *prompt,
   GError              *error;
   const char          *principal;
   const char          *password;
+  const char          *preauth_source;
   GcrSecretExchange   *secret_exchange;
 
   self = GOA_KERBEROS_PROVIDER (g_async_result_get_source_object (G_ASYNC_RESULT (operation_result)));
   principal = g_object_get_data (G_OBJECT (operation_result), "principal");
   cancellable = g_object_get_data (G_OBJECT (operation_result), "cancellable");
+
+  /* We currently don't prompt the user to choose a preauthentication source during initial sign in
+   * so we assume there's no preauthentication source
+   */
+  preauth_source = NULL;
 
   error = NULL;
   password = gcr_prompt_password_finish (prompt, result, &error);
@@ -1298,6 +1340,7 @@ on_system_prompt_answered_for_initial_sign_in (GcrPrompt          *prompt,
   sign_in_identity (self,
                     principal,
                     password,
+                    preauth_source,
                     cancellable,
                     (GAsyncReadyCallback)
                     on_initial_sign_in_done,
