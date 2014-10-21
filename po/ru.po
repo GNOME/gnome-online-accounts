@@ -3,15 +3,16 @@
 # This file is distributed under the same license as the gnome-online-accounts package.
 # Stas Solovey <whats_up@tut.by>, 2011, 2012, 2013.
 # Yuri Myasoedov <ymyasoedov@yandex.ru>, 2011, 2012, 2013, 2014.
+# Andrew Razumnov <razandale@gmail.com>, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-06-25 07:01+0000\n"
-"PO-Revision-Date: 2014-06-25 22:26+0400\n"
-"Last-Translator: Yuri Myasoedov <ymyasoedov@yandex.ru>\n"
+"POT-Creation-Date: 2014-10-06 19:09+0000\n"
+"PO-Revision-Date: 2014-10-20 23:45+0400\n"
+"Last-Translator: Andrew Razumnov <razandale@gmail.com>\n"
 "Language-Team: русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -22,13 +23,18 @@ msgstr ""
 "X-Generator: Gtranslator 2.91.6\n"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:783 ../src/daemon/goadaemon.c:1029
+#: ../src/daemon/goadaemon.c:786 ../src/daemon/goadaemon.c:1041
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Не удалось найти провайдер для: %s"
 
+#: ../src/daemon/goadaemon.c:969
+#| msgid "ProviderType property is not set for account"
+msgid "IsLocked property is set for account"
+msgstr "Для учетной записи установлено свойство IsLocked"
+
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1017
+#: ../src/daemon/goadaemon.c:1029
 msgid "ProviderType property is not set for account"
 msgstr "Свойство ProviderType не установлено для учётной записи"
 
@@ -301,7 +307,6 @@ msgid "_Documents"
 msgstr "_Документы"
 
 #: ../src/goabackend/goagoogleprovider.c:624
-#| msgid "_Printers"
 msgid "Prin_ters"
 msgstr "_Принтеры"
 
@@ -481,7 +486,6 @@ msgid "Network _Resources"
 msgstr "_Сетевые ресурсы"
 
 #: ../src/goabackend/goamediaserverprovider.c:76
-#| msgid "IMAP _Server"
 msgid "Media Server"
 msgstr "Медиасервер"
 
@@ -722,7 +726,7 @@ msgstr "Не удалось найти учётные данные в связк
 
 #: ../src/goabackend/goautils.c:255
 msgid "Error parsing result obtained from the keyring: "
-msgstr "Ошибка при разборе результатов, полученных из связки ключей"
+msgstr "Ошибка при разборе результатов, полученных из связки ключей: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
 #: ../src/goabackend/goautils.c:298
