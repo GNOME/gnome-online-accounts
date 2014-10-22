@@ -129,7 +129,7 @@ operation_new (GoaKerberosIdentityManager *self,
 {
   Operation *operation;
 
-  operation = g_slice_new (Operation);
+  operation = g_slice_new0 (Operation);
 
   operation->manager = self;
   operation->type = type;
