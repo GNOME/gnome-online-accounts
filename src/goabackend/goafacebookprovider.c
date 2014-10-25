@@ -252,12 +252,16 @@ get_identity_sync (GoaOAuth2Provider  *provider,
   presentation_identity = g_strdup (json_object_get_string_member (json_object, "email"));
   if (presentation_identity == NULL)
     {
-      g_warning ("Did not find email in JSON data");
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   _("Could not parse response"));
-      goto out;
+      presentation_identity = g_strdup (json_object_get_string_member (json_object, "username"));
+      if (presentation_identity == NULL)
+        {
+          g_warning ("Did not find email or username in JSON data");
+          g_set_error (error,
+                       GOA_ERROR,
+                       GOA_ERROR_FAILED,
+                       _("Could not parse response"));
+          goto out;
+        }
     }
 
   ret = id;
