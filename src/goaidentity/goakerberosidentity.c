@@ -560,16 +560,16 @@ static VerificationLevel
 verify_identity (GoaKerberosIdentity  *self,
                  GError              **error)
 {
-  krb5_principal principal;
+  krb5_principal principal = NULL;
   krb5_cc_cursor cursor;
   krb5_creds credentials;
   krb5_error_code error_code;
-  VerificationLevel verification_level;
+  VerificationLevel verification_level = VERIFICATION_LEVEL_UNVERIFIED;
 
   set_expiration_time (self, 0);
 
   if (self->priv->credentials_cache == NULL)
-    return VERIFICATION_LEVEL_UNVERIFIED;
+    goto out;
 
   error_code = krb5_cc_get_principal (self->priv->kerberos_context,
                                       self->priv->credentials_cache,
@@ -578,7 +578,7 @@ verify_identity (GoaKerberosIdentity  *self,
   if (error_code != 0)
     {
       if (error_code == KRB5_CC_END || error_code == KRB5_FCC_NOFILE)
-        return VERIFICATION_LEVEL_UNVERIFIED;
+        goto out;
 
       set_error_from_krb5_error_code (self,
                                       error,
@@ -586,7 +586,8 @@ verify_identity (GoaKerberosIdentity  *self,
                                       error_code,
                                       _("Could not find identity in "
                                         "credential cache: %k"));
-      return VERIFICATION_LEVEL_ERROR;
+      verification_level = VERIFICATION_LEVEL_ERROR;
+      goto out;
     }
 
   error_code = krb5_cc_start_seq_get (self->priv->kerberos_context,
@@ -660,7 +661,8 @@ verify_identity (GoaKerberosIdentity  *self,
       goto out;
     }
 out:
-  krb5_free_principal (self->priv->kerberos_context, principal);
+  if (principal != NULL)
+    krb5_free_principal (self->priv->kerberos_context, principal);
   return verification_level;
 }
 
