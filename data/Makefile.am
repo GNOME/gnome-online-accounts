@@ -11,9 +11,14 @@ gsettings_SCHEMAS = $(gsettings_in_files:.xml.in=.xml)
 
 servicedir       = $(datadir)/dbus-1/services
 service_in_files = org.gnome.OnlineAccounts.service.in
+
+if BUILD_KERBEROS
+service_in_files += org.gnome.Identity.service.in
+endif
+
 service_DATA     = $(service_in_files:.service.in=.service)
 
-$(service_DATA): $(service_in_files) Makefile
+%.service: %.service.in Makefile
 	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
 
 EXTRA_DIST =						\
@@ -25,6 +30,7 @@ EXTRA_DIST =						\
 DISTCLEANFILES =					\
 	$(gsettings_SCHEMAS)				\
 	org.gnome.OnlineAccounts.service		\
+	org.gnome.Identity.service			\
 	$(NULL)
 
 clean-local :

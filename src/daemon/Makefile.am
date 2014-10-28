@@ -48,14 +48,6 @@ goa_daemon_LDADD = 						\
 	$(TP_LIBS)						\
 	$(NULL)
 
-if BUILD_KERBEROS
-goa_daemon_LDADD += 						\
-	$(top_builddir)/src/goaidentity/libgoaidentity.la	\
-	$(KRB5_LIBS)						\
-	$(GCR_LIBS)						\
-	$(NULL)
-endif
-
 clean-local :
 	rm -f *~
 

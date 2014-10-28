@@ -1757,7 +1757,7 @@ on_name_lost (GDBusConnection    *connection,
               GoaIdentityService *self)
 {
   if (g_strcmp0 (name, "org.gnome.Identity") == 0)
-    g_debug ("GoaIdentityService: Lost name org.gnome.Identity");
+    raise (SIGTERM);
 }
 
 gboolean
