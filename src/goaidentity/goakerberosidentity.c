@@ -543,19 +543,17 @@ set_expiration_time (GoaKerberosIdentity *self,
 
 static gboolean
 credentials_are_expired (GoaKerberosIdentity *self,
-                         krb5_creds          *credentials)
+                         krb5_creds          *credentials,
+                         krb5_timestamp      *expiration_time)
 {
   krb5_timestamp current_time;
-  krb5_timestamp expiration_time;
 
   current_time = get_current_time (self);
 
   G_LOCK (identity_lock);
-  expiration_time = MAX (credentials->times.endtime,
-                         self->priv->expiration_time);
+  *expiration_time = MAX (credentials->times.endtime,
+                          self->priv->expiration_time);
   G_UNLOCK (identity_lock);
-
-  set_expiration_time (self, expiration_time);
 
   if (credentials->times.endtime <= current_time)
     {
@@ -573,9 +571,8 @@ verify_identity (GoaKerberosIdentity  *self,
   krb5_cc_cursor cursor;
   krb5_creds credentials;
   krb5_error_code error_code;
+  krb5_timestamp expiration_time = 0;
   VerificationLevel verification_level = VERIFICATION_LEVEL_UNVERIFIED;
-
-  set_expiration_time (self, 0);
 
   if (self->priv->credentials_cache == NULL)
     goto out;
@@ -625,7 +622,7 @@ verify_identity (GoaKerberosIdentity  *self,
     {
       if (credentials_validate_existence (self, principal, &credentials))
         {
-          if (!credentials_are_expired (self, &credentials))
+          if (!credentials_are_expired (self, &credentials, &expiration_time))
             verification_level = VERIFICATION_LEVEL_SIGNED_IN;
           else
             verification_level = VERIFICATION_LEVEL_EXISTS;
@@ -670,6 +667,8 @@ verify_identity (GoaKerberosIdentity  *self,
       goto out;
     }
 out:
+  set_expiration_time (self, expiration_time);
+
   if (principal != NULL)
     krb5_free_principal (self->priv->kerberos_context, principal);
   return verification_level;
