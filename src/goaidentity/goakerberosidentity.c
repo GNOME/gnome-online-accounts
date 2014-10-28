@@ -530,13 +530,17 @@ static void
 set_expiration_time (GoaKerberosIdentity *self,
                      krb5_timestamp       expiration_time)
 {
+  G_LOCK (identity_lock);
   if (self->priv->expiration_time != expiration_time)
     {
       self->priv->expiration_time = expiration_time;
+      G_UNLOCK (identity_lock);
       queue_notify (self,
                     &self->priv->expiration_time_idle_id,
                     "expiration-timestamp");
+      G_LOCK (identity_lock);
     }
+  G_UNLOCK (identity_lock);
 }
 
 static gboolean
@@ -544,11 +548,16 @@ credentials_are_expired (GoaKerberosIdentity *self,
                          krb5_creds          *credentials)
 {
   krb5_timestamp current_time;
+  krb5_timestamp expiration_time;
 
   current_time = get_current_time (self);
 
-  set_expiration_time (self, MAX (credentials->times.endtime,
-                                  self->priv->expiration_time));
+  G_LOCK (identity_lock);
+  expiration_time = MAX (credentials->times.endtime,
+                         self->priv->expiration_time);
+  G_UNLOCK (identity_lock);
+
+  set_expiration_time (self, expiration_time);
 
   if (credentials->times.endtime <= current_time)
     {
@@ -868,7 +877,9 @@ reset_alarms (GoaKerberosIdentity *self)
   GTimeSpan time_span_until_expiration;
 
   now = g_date_time_new_now_local ();
+  G_LOCK (identity_lock);
   expiration_time = g_date_time_new_from_unix_local (self->priv->expiration_time);
+  G_UNLOCK (identity_lock);
   time_span_until_expiration = g_date_time_difference (expiration_time, now);
   g_date_time_unref (now);
 
