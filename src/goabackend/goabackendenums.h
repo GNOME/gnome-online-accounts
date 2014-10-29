@@ -37,6 +37,8 @@ G_BEGIN_DECLS
  *   services. For example, IMAP and SMTP.
  * @GOA_PROVIDER_GROUP_TICKETING: Providers with ticketing
  *   capabilities. For example, Kerberos.
+ * @GOA_PROVIDER_GROUP_CHAT: Providers that offer chat-like messaging
+ *   capabilities. For example, XMPP, IRC.
  * @GOA_PROVIDER_GROUP_INVALID: Used for error handling. No provider
  *   should belong to this group.
  *
@@ -65,6 +67,7 @@ typedef enum
  * @GOA_PROVIDER_FEATURE_PHOTOS: Photos storage services (ie. Flickr).
  * @GOA_PROVIDER_FEATURE_FILES: Files storage services (ie. WebDAV).
  * @GOA_PROVIDER_FEATURE_TICKETING: Ticketing services (ie. Kerberos).
+ * @GOA_PROVIDER_FEATURE_READ_LATER: Read later services (eg. Pocket).
  * @GOA_PROVIDER_FEATURE_PRINTERS: Network printing services (e.g. Google Cloud Print).
  * @GOA_PROVIDER_FEATURE_MAPS: Maps related services (e.g. Foursquare, Facebook).
  * @GOA_PROVIDER_FEATURE_INVALID: Used for error handling. No provider
