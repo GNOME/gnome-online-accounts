@@ -319,6 +319,7 @@ set_error_from_krb5_error_code (GoaKerberosIdentity  *self,
   va_start (args, format);
   literal_message = g_strdup_vprintf (expanded_format, args);
   va_end (args);
+  g_free (expanded_format);
 
   g_set_error_literal (error, GOA_IDENTITY_ERROR, code, literal_message);
   g_free (literal_message);
