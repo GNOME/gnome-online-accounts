@@ -511,6 +511,7 @@ update_account_object (GoaDaemon           *daemon,
   g_object_unref (account);
   g_free (type);
   g_free (identity);
+  g_free (presentation_identity);
   return ret;
 }
 
