@@ -30,15 +30,8 @@
 
 #define V3_OAUTH_AUTHORIZE_URL "https://getpocket.com/v3/oauth/authorize"
 
-/**
- * GoaPocketProvider:
- *
- * The #GoaPocketProvider structure contains only private data and should
- * only be accessed using the provided API.
- */
 struct _GoaPocketProvider
 {
-  /*< private >*/
   GoaOAuth2Provider parent_instance;
 
   /* request token as gathered from Step 2:
@@ -53,14 +46,6 @@ struct _GoaPocketProviderClass
 {
   GoaOAuth2ProviderClass parent_class;
 };
-
-/**
- * SECTION:goapocketprovider
- * @title: GoaPocketProvider
- * @short_description: A provider for Pocket accounts
- *
- * #GoaPocketProvider is used for handling Pocket accounts.
- */
 
 G_DEFINE_TYPE_WITH_CODE (GoaPocketProvider, goa_pocket_provider, GOA_TYPE_OAUTH2_PROVIDER,
                          goa_provider_ensure_extension_points_registered ();

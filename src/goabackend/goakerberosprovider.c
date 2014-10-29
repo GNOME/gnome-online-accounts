@@ -31,15 +31,8 @@
 
 #include "org.freedesktop.realmd.h"
 
-/**
- * GoaKerberosProvider:
- *
- * The #GoaKerberosProvider structure contains only private request and should
- * only be accessed using the provided API.
- */
 struct _GoaKerberosProvider
 {
-  /*< private >*/
   GoaProvider parent_instance;
   GoaIdentityServiceManager *identity_manager;
   GDBusObjectManager *object_manager;
@@ -51,14 +44,6 @@ struct _GoaKerberosProviderClass
 {
   GoaProviderClass parent_class;
 };
-
-/**
- * SECTION:goakerberosprovider
- * @title: GoaKerberosProvider
- * @short_description: A provider for enterprise identity servers
- *
- * #GoaKerberosProvider is used to access enterprise identity servers.
- */
 
 G_DEFINE_TYPE_WITH_CODE (GoaKerberosProvider, goa_kerberos_provider, GOA_TYPE_PROVIDER,
                          goa_provider_ensure_extension_points_registered ();

@@ -30,15 +30,8 @@
 #include "goaowncloudprovider.h"
 #include "goautils.h"
 
-/**
- * GoaOwncloudProvider:
- *
- * The #GoaOwncloudProvider structure contains only private data and should
- * only be accessed using the provided API.
- */
 struct _GoaOwncloudProvider
 {
-  /*< private >*/
   GoaProvider parent_instance;
 };
 
@@ -48,14 +41,6 @@ struct _GoaOwncloudProviderClass
 {
   GoaProviderClass parent_class;
 };
-
-/**
- * SECTION:goaowncloudprovider
- * @title: GoaOwncloudProvider
- * @short_description: A provider for ownCloud servers
- *
- * #GoaOwncloudProvider is used to access ownCloud servers.
- */
 
 G_DEFINE_TYPE_WITH_CODE (GoaOwncloudProvider, goa_owncloud_provider, GOA_TYPE_PROVIDER,
                          goa_provider_ensure_extension_points_registered ();

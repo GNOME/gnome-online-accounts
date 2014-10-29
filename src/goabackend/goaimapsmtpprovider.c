@@ -28,15 +28,8 @@
 #include "goasmtpauth.h"
 #include "goautils.h"
 
-/**
- * GoaImapSmtpProvider:
- *
- * The #GoaImapSmtpProvider structure contains only private data and should
- * only be accessed using the provided API.
- */
 struct _GoaImapSmtpProvider
 {
-  /*< private >*/
   GoaProvider parent_instance;
 };
 
@@ -46,14 +39,6 @@ struct _GoaImapSmtpProviderClass
 {
   GoaProviderClass parent_class;
 };
-
-/**
- * SECTION:goaimapsmtpprovider
- * @title: GoaImapSmtpProvider
- * @short_description: A provider for IMAP and SMTP servers
- *
- * #GoaImapSmtpProvider is used to access IMAP and SMTP mail servers.
- */
 
 G_DEFINE_TYPE_WITH_CODE (GoaImapSmtpProvider, goa_imap_smtp_provider, GOA_TYPE_PROVIDER,
                          goa_provider_ensure_extension_points_registered ();
