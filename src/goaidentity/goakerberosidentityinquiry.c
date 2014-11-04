@@ -270,8 +270,6 @@ goa_kerberos_identity_inquiry_answer_query (GoaIdentityInquiry * inquiry,
 
   self = GOA_KERBEROS_IDENTITY_INQUIRY (inquiry);
 
-  inquiry = kerberos_query->inquiry;
-
   strncpy (kerberos_query->kerberos_prompt->reply->data,
            answer, kerberos_query->kerberos_prompt->reply->length);
   kerberos_query->kerberos_prompt->reply->length =
