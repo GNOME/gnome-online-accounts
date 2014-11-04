@@ -33,7 +33,7 @@ struct _GoaKerberosIdentityInquiryPrivate
   GList *queries;
   int number_of_queries;
   int number_of_unanswered_queries;
-  guint is_failed : 1;
+  gboolean is_failed;
 };
 
 typedef struct
