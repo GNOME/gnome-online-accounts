@@ -35,6 +35,7 @@ struct _GoaKerberosIdentityInquiryPrivate
   GList *queries;
   int number_of_queries;
   int number_of_unanswered_queries;
+  guint is_failed : 1;
 };
 
 typedef struct
@@ -232,7 +233,19 @@ goa_kerberos_identity_inquiry_is_complete (GoaIdentityInquiry *inquiry)
 
   self = GOA_KERBEROS_IDENTITY_INQUIRY (inquiry);
 
-  return self->priv->number_of_unanswered_queries == 0;
+  return self->priv->number_of_unanswered_queries == 0 || self->priv->is_failed;
+}
+
+static gboolean
+goa_kerberos_identity_inquiry_is_failed (GoaIdentityInquiry *inquiry)
+{
+  GoaKerberosIdentityInquiry *self;
+
+  g_return_val_if_fail (GOA_IS_KERBEROS_IDENTITY_INQUIRY (inquiry), FALSE);
+
+  self = GOA_KERBEROS_IDENTITY_INQUIRY (inquiry);
+
+  return self->priv->is_failed;
 }
 
 static void
@@ -254,12 +267,20 @@ goa_kerberos_identity_inquiry_mark_query_answered (GoaKerberosIdentityInquiry * 
 }
 
 static void
+goa_kerberos_identity_inquiry_fail (GoaKerberosIdentityInquiry *self)
+{
+  self->priv->is_failed = TRUE;
+  _goa_identity_inquiry_emit_complete (GOA_IDENTITY_INQUIRY (self));
+}
+
+static void
 goa_kerberos_identity_inquiry_answer_query (GoaIdentityInquiry * inquiry,
                                             GoaIdentityQuery *query,
                                             const char *answer)
 {
   GoaKerberosIdentityInquiry *self;
   GoaKerberosIdentityQuery *kerberos_query = (GoaKerberosIdentityQuery *) query;
+  size_t answer_length;
 
   g_return_if_fail (GOA_IS_KERBEROS_IDENTITY_INQUIRY (inquiry));
   g_return_if_fail (inquiry == kerberos_query->inquiry);
@@ -267,12 +288,21 @@ goa_kerberos_identity_inquiry_answer_query (GoaIdentityInquiry * inquiry,
 
   self = GOA_KERBEROS_IDENTITY_INQUIRY (inquiry);
 
-  strncpy (kerberos_query->kerberos_prompt->reply->data,
-           answer, kerberos_query->kerberos_prompt->reply->length);
-  kerberos_query->kerberos_prompt->reply->length =
-    (unsigned int) strlen (kerberos_query->kerberos_prompt->reply->data);
+  answer_length = strlen (answer);
 
-  goa_kerberos_identity_inquiry_mark_query_answered (self, kerberos_query);
+  if (kerberos_query->kerberos_prompt->reply->length < answer_length)
+    {
+      goa_kerberos_identity_inquiry_fail (self);
+    }
+  else
+    {
+      strncpy (kerberos_query->kerberos_prompt->reply->data,
+               answer, kerberos_query->kerberos_prompt->reply->length);
+      kerberos_query->kerberos_prompt->reply->length =
+        (unsigned int) strlen (kerberos_query->kerberos_prompt->reply->data);
+
+      goa_kerberos_identity_inquiry_mark_query_answered (self, kerberos_query);
+    }
 }
 
 static void
@@ -361,6 +391,7 @@ identity_inquiry_interface_init (GoaIdentityInquiryInterface *interface)
   interface->get_name = goa_kerberos_identity_inquiry_get_name;
   interface->get_banner = goa_kerberos_identity_inquiry_get_banner;
   interface->is_complete = goa_kerberos_identity_inquiry_is_complete;
+  interface->is_failed = goa_kerberos_identity_inquiry_is_failed;
   interface->answer_query = goa_kerberos_identity_inquiry_answer_query;
   interface->iter_init = goa_kerberos_identity_inquiry_iter_init;
   interface->iter_next = goa_kerberos_identity_inquiry_iter_next;

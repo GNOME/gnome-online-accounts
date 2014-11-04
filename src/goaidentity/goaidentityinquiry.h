@@ -81,6 +81,7 @@ struct _GoaIdentityInquiryInterface
                                        GoaIdentityQuery   *query);
   gboolean             (* is_answered) (GoaIdentityInquiry *inquiry,
                                         GoaIdentityQuery   *query);
+  gboolean             (* is_failed)  (GoaIdentityInquiry *inquiry);
 };
 
 GType goa_identity_inquiry_get_type (void);
@@ -89,6 +90,7 @@ GoaIdentity *goa_identity_inquiry_get_identity (GoaIdentityInquiry *inquiry);
 char        *goa_identity_inquiry_get_name     (GoaIdentityInquiry *inquiry);
 char        *goa_identity_inquiry_get_banner   (GoaIdentityInquiry *inquiry);
 gboolean     goa_identity_inquiry_is_complete  (GoaIdentityInquiry *inquiry);
+gboolean     goa_identity_inquiry_is_failed    (GoaIdentityInquiry *inquiry);
 void         goa_identity_inquiry_answer_query (GoaIdentityInquiry *inquiry,
                                                 GoaIdentityQuery   *query,
                                                 const char         *answer);

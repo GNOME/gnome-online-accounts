@@ -1001,7 +1001,9 @@ on_kerberos_inquiry (krb5_context      kerberos_context,
                            operation->cancellable,
                            operation->inquiry_data);
 
-  if (!goa_identity_inquiry_is_complete (inquiry))
+  if (goa_identity_inquiry_is_failed (inquiry))
+    error_code = KRB5_LIBOS_CANTREADPWD;
+  else if (!goa_identity_inquiry_is_complete (inquiry))
     g_cancellable_cancel (operation->cancellable);
 
   if (g_cancellable_is_cancelled (operation->cancellable))

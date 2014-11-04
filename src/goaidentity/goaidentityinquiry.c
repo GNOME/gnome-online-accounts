@@ -76,6 +76,14 @@ goa_identity_inquiry_is_complete (GoaIdentityInquiry *self)
   return GOA_IDENTITY_INQUIRY_GET_IFACE (self)->is_complete (self);
 }
 
+gboolean
+goa_identity_inquiry_is_failed (GoaIdentityInquiry *self)
+{
+  g_return_val_if_fail (GOA_IS_IDENTITY_INQUIRY (self), TRUE);
+
+  return GOA_IDENTITY_INQUIRY_GET_IFACE (self)->is_failed (self);
+}
+
 void
 goa_identity_inquiry_iter_init (GoaIdentityInquiryIter *iter,
                                 GoaIdentityInquiry     *inquiry)
