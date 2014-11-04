@@ -296,8 +296,7 @@ goa_kerberos_identity_inquiry_answer_query (GoaIdentityInquiry * inquiry,
     {
       strncpy (kerberos_query->kerberos_prompt->reply->data,
                answer, kerberos_query->kerberos_prompt->reply->length);
-      kerberos_query->kerberos_prompt->reply->length =
-        (unsigned int) strlen (kerberos_query->kerberos_prompt->reply->data);
+      kerberos_query->kerberos_prompt->reply->length = (unsigned int) answer_length;
 
       goa_kerberos_identity_inquiry_mark_query_answered (self, kerberos_query);
     }
