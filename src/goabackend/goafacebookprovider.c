@@ -470,11 +470,6 @@ show_account (GoaProvider         *provider,
                                                    NULL,
                                                    "photos-disabled",
                                                    _("_Photos"));
-
-  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
-                                                   NULL,
-                                                   "maps-disabled",
-                                                   _("_Maps"));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
