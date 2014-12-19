@@ -26,12 +26,12 @@ AM_CPPFLAGS = 							\
 # ----------------------------------------------------------------------------------------------------
 
 goabackendenumtypes.h: goabackendenums.h goabackendenumtypes.h.template
-	( top_builddir=`cd $(top_builddir) && pwd`; 							\
+	$(AM_V_GEN) ( top_builddir=`cd $(top_builddir) && pwd`; 					\
 	 cd $(srcdir) && glib-mkenums --template goabackendenumtypes.h.template goabackendenums.h ) > 	\
 	   goabackendenumtypes.h.tmp && mv goabackendenumtypes.h.tmp goabackendenumtypes.h
 
 goabackendenumtypes.c: goabackendenums.h goabackendenumtypes.c.template goabackendenumtypes.h
-	( top_builddir=`cd $(top_builddir) && pwd`; 							\
+	$(AM_V_GEN) ( top_builddir=`cd $(top_builddir) && pwd`; 					\
 	 cd $(srcdir) && glib-mkenums --template goabackendenumtypes.c.template goabackendenums.h ) > 	\
 	   goabackendenumtypes.c.tmp && mv goabackendenumtypes.c.tmp goabackendenumtypes.c
 
