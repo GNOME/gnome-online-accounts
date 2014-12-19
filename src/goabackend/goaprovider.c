@@ -1037,10 +1037,6 @@ out:
  *
  * See goa_provider_get_for_provider_type() for details on how the providers
  * are found.
- *
- * Returns: (transfer full) (element-type GoaProvider): A list
- *   of element providers that should be freed with g_list_free()
- *   after each element has been freed with g_object_unref().
  */
 void
 goa_provider_get_all (GAsyncReadyCallback callback,
@@ -1088,7 +1084,8 @@ goa_provider_get_all (GAsyncReadyCallback callback,
 
 /**
  * goa_provider_get_all_finish:
- * @out_providers: (out): Return location for a list of #GoaProvider instances.
+ * @out_providers: (out) (transfer full) (element-type GoaProvider):
+ * Return location for a list of #GoaProvider instances.
  * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to goa_provider_get_all().
  * @error: Return location for error or %NULL.
  *
@@ -1159,27 +1156,6 @@ goa_provider_get_preseed_data (GoaProvider *provider)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-/**
- * SECTION:goautil
- * @title: Utilities
- * @short_description: Various utility routines
- *
- * Various utility routines.
- */
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-/**
- * goa_util_add_row_widget:
- * @left: A #GtkGrid for the left side.
- * @right: A #GtkGrid for the right side.
- * @label_text: (allow-none): The text to insert on the left side or %NULL for no label.
- * @widget: A widget to insert on the right side.
- *
- * Utility function to add @label_text and @widget to @table.
- *
- * Returns: (transfer none): The #GtkWidget that was inserted (e.g. @widget itself).
- */
 GtkWidget *
 goa_util_add_row_widget (GtkGrid      *grid,
                          gint          row,

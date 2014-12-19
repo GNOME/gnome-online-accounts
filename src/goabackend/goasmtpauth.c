@@ -26,7 +26,7 @@
 #include "goaprovider.h"
 #include "goautils.h"
 
-/**
+/*
  * SECTION:goasmtpauth
  * @title: GoaSmtpAuth
  * @short_description: Authentication mechanisms for SMTP
@@ -37,7 +37,7 @@
  * SASL mechanisms (e.g. using usernames / passwords) for SMTP.
  */
 
-/**
+/*
  * GoaSmtpAuth:
  *
  * The #GoaSmtpAuth structure contains only private data and should

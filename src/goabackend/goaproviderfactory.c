@@ -20,7 +20,7 @@
 
 #include "goaproviderfactory.h"
 
-/**
+/*
  * SECTION:goaproviderfactory
  * @title: GoaProviderFactory
  * @short_description: Abstract base class for provider factories
@@ -32,7 +32,7 @@ G_DEFINE_ABSTRACT_TYPE (GoaProviderFactory, goa_provider_factory, G_TYPE_OBJECT)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-/**
+/*
  * goa_provider_factory_get_provider:
  * @factory: A #GoaProviderFactory.
  * @provider_name: A provider type identifier (ie. IM protocol names in #GoaTelepathyFactory)
@@ -59,7 +59,7 @@ goa_provider_factory_get_provider (GoaProviderFactory  *factory,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-/**
+/*
  * goa_provider_factory_get_providers:
  * @factory: A #GoaProviderFactory.
  * @callback: The function to call when the request is satisfied.
@@ -90,7 +90,7 @@ goa_provider_factory_get_providers (GoaProviderFactory  *factory,
   return klass->get_providers (factory, callback, user_data);
 }
 
-/**
+/*
  * goa_provider_factory_get_providers_finish:
  * @factory: A #GoaProviderFactory.
  * @out_providers: (out): Return location for a list of #GoaProvider instances handled by @factory.

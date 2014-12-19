@@ -24,7 +24,7 @@
 #include "goaprovider-priv.h"
 #include "goatelepathyprovider.h"
 
-/**
+/*
  * SECTION:goatelepathyfactory
  * @title: GoaTelepathyFactory
  * @short_description: Factory for #GoaTelepathyProvider instances

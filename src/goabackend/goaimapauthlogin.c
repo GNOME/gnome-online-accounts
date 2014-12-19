@@ -27,7 +27,7 @@
 #include "goaprovider.h"
 #include "goautils.h"
 
-/**
+/*
  * SECTION:goaimapauthlogin
  * @title: GoaImapAuthLogin
  * @short_description: LOGIN authentication method for IMAP
@@ -37,7 +37,7 @@
  * authentication method (e.g. using usernames / passwords) for IMAP.
  */
 
-/**
+/*
  * GoaImapAuthLogin:
  *
  * The #GoaImapAuthLogin structure contains only private data

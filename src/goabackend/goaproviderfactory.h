@@ -39,7 +39,7 @@ G_BEGIN_DECLS
 typedef struct _GoaProviderFactory GoaProviderFactory;
 typedef struct _GoaProviderFactoryClass GoaProviderFactoryClass;
 
-/**
+/*
  * GoaProviderFactory:
  *
  * The #GoaProviderFactory structure contains only private data and should
@@ -51,7 +51,7 @@ struct _GoaProviderFactory
   GObject parent_instance;
 };
 
-/**
+/*
  * GoaProviderFactoryClass:
  * @parent_class: The parent class.
  * @get_provider: Virtual function for goa_provider_factory_get_provider().
