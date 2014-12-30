@@ -1,20 +1,20 @@
 # Russian translation for gnome-online-accounts.
 # Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
-# Stas Solovey <whats_up@tut.by>, 2011, 2012, 2013.
 # Yuri Myasoedov <ymyasoedov@yandex.ru>, 2011, 2012, 2013, 2014.
 # Andrew Razumnov <razandale@gmail.com>, 2014.
 # Mihail Gurin <mikegurin@yandex.ru>, 2014.
+# Stas Solovey <whats_up@tut.by>, 2011, 2012, 2013, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-11-05 19:59+0000\n"
-"PO-Revision-Date: 2014-11-06 10:42+0400\n"
-"Last-Translator: Mihail Gurin <mikegurin@yandex.ru>\n"
-"Language-Team: русский <gnome-cyr@gnome.org>\n"
+"POT-Creation-Date: 2014-12-30 20:02+0000\n"
+"PO-Revision-Date: 2014-12-31 02:28+0300\n"
+"Last-Translator: Stas Solovey <whats_up@tut.by>\n"
+"Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -199,7 +199,8 @@ msgstr "Ошибка подключения к серверу Microsoft Exchange
 #: ../src/goabackend/goaexchangeprovider.c:939
 #: ../src/goabackend/goafacebookprovider.c:465
 #: ../src/goabackend/goaflickrprovider.c:412
-#: ../src/goabackend/goagoogleprovider.c:592
+#: ../src/goabackend/goafoursquareprovider.c:412
+#: ../src/goabackend/goagoogleprovider.c:626
 #: ../src/goabackend/goakerberosprovider.c:1704
 #: ../src/goabackend/goamediaserverprovider.c:584
 #: ../src/goabackend/goaowncloudprovider.c:1082
@@ -210,19 +211,19 @@ msgid "Use for"
 msgstr "Использовать для"
 
 #: ../src/goabackend/goaexchangeprovider.c:941
-#: ../src/goabackend/goagoogleprovider.c:594
+#: ../src/goabackend/goagoogleprovider.c:628
 #: ../src/goabackend/goawindowsliveprovider.c:423
 msgid "_Mail"
 msgstr "_Почта"
 
 #: ../src/goabackend/goaexchangeprovider.c:946
-#: ../src/goabackend/goagoogleprovider.c:599
+#: ../src/goabackend/goagoogleprovider.c:633
 #: ../src/goabackend/goaowncloudprovider.c:1084
 msgid "Cale_ndar"
 msgstr "_Календарь"
 
 #: ../src/goabackend/goaexchangeprovider.c:951
-#: ../src/goabackend/goagoogleprovider.c:604
+#: ../src/goabackend/goagoogleprovider.c:638
 #: ../src/goabackend/goaowncloudprovider.c:1089
 msgid "_Contacts"
 msgstr "Ко_нтакты"
@@ -234,7 +235,8 @@ msgstr "Facebook"
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:218
 #: ../src/goabackend/goaflickrprovider.c:183
-#: ../src/goabackend/goagoogleprovider.c:218
+#: ../src/goabackend/goafoursquareprovider.c:188
+#: ../src/goabackend/goagoogleprovider.c:219
 #: ../src/goabackend/goawindowsliveprovider.c:189
 #: ../src/goabackend/goayahooprovider.c:182
 #, c-format
@@ -252,8 +254,14 @@ msgstr ""
 #: ../src/goabackend/goaflickrprovider.c:224
 #: ../src/goabackend/goaflickrprovider.c:234
 #: ../src/goabackend/goaflickrprovider.c:244
-#: ../src/goabackend/goagoogleprovider.c:237
-#: ../src/goabackend/goagoogleprovider.c:249
+#: ../src/goabackend/goafoursquareprovider.c:207
+#: ../src/goabackend/goafoursquareprovider.c:219
+#: ../src/goabackend/goafoursquareprovider.c:230
+#: ../src/goabackend/goafoursquareprovider.c:241
+#: ../src/goabackend/goafoursquareprovider.c:252
+#: ../src/goabackend/goafoursquareprovider.c:263
+#: ../src/goabackend/goagoogleprovider.c:238
+#: ../src/goabackend/goagoogleprovider.c:250
 #: ../src/goabackend/goaoauth2provider.c:691
 #: ../src/goabackend/goaoauth2provider.c:721
 #: ../src/goabackend/goaoauth2provider.c:733
@@ -271,19 +279,20 @@ msgid "Could not parse response"
 msgstr "Не удалось разобрать ответ"
 
 #: ../src/goabackend/goafacebookprovider.c:467
-#: ../src/goabackend/goagoogleprovider.c:609
+#: ../src/goabackend/goagoogleprovider.c:643
 #: ../src/goabackend/goatelepathyprovider.c:892
 msgid "C_hat"
 msgstr "_Чат"
 
 #: ../src/goabackend/goafacebookprovider.c:472
 #: ../src/goabackend/goaflickrprovider.c:414
-#: ../src/goabackend/goagoogleprovider.c:619
+#: ../src/goabackend/goagoogleprovider.c:653
 #: ../src/goabackend/goamediaserverprovider.c:586
 msgid "_Photos"
 msgstr "_Фотоснимки"
 
 #: ../src/goabackend/goafacebookprovider.c:477
+#: ../src/goabackend/goafoursquareprovider.c:414
 msgid "_Maps"
 msgstr "_Карты"
 
@@ -296,17 +305,26 @@ msgstr "Flickr"
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "Неправильное системное время. Проверьте параметры даты и времени."
 
+#: ../src/goabackend/goafoursquareprovider.c:76
+msgid "Foursquare"
+msgstr "Foursquare"
+
 #: ../src/goabackend/goagoogleprovider.c:76
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:614
+#: ../src/goabackend/goagoogleprovider.c:648
 #: ../src/goabackend/goaowncloudprovider.c:1094
 #: ../src/goabackend/goawindowsliveprovider.c:428
 msgid "_Documents"
 msgstr "_Документы"
 
-#: ../src/goabackend/goagoogleprovider.c:624
+#: ../src/goabackend/goagoogleprovider.c:658
+#: ../src/goabackend/goaowncloudprovider.c:1099
+msgid "_Files"
+msgstr "_Файлы"
+
+#: ../src/goabackend/goagoogleprovider.c:663
 msgid "Prin_ters"
 msgstr "_Принтеры"
 
@@ -589,10 +607,6 @@ msgstr "ownCloud"
 msgid "Error connecting to ownCloud server"
 msgstr "Ошибка подключения к серверу ownCloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:1099
-msgid "_Files"
-msgstr "_Файлы"
-
 #: ../src/goabackend/goapocketprovider.c:69
 msgid "Pocket"
 msgstr "Pocket"
@@ -607,7 +621,7 @@ msgstr "Не указано имя пользователя или access_token"
 msgid "_Read Later"
 msgstr "_Прочитать позже"
 
-#: ../src/goabackend/goaprovider.c:682
+#: ../src/goabackend/goaprovider.c:683
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync не реализован в типе %s"
