@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-17 16:28+0100\n"
-"PO-Revision-Date: 2014-12-05 23:40+0100\n"
+"POT-Creation-Date: 2014-12-30 15:17+0100\n"
+"PO-Revision-Date: 2014-12-30 15:18+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@zundan.com>\n"
 "Language-Team: Basque <librezale@librezale.org>\n"
 "Language: eu\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 1.4\n"
 "X-Project-Style: gnome\n"
 
 #. TODO: more specific
@@ -202,6 +202,7 @@ msgstr "Errorea Microsoft Exchange zerbitzariarekin konektatzean"
 #: ../src/goabackend/goaexchangeprovider.c:939
 #: ../src/goabackend/goafacebookprovider.c:465
 #: ../src/goabackend/goaflickrprovider.c:412
+#: ../src/goabackend/goafoursquareprovider.c:412
 #: ../src/goabackend/goagoogleprovider.c:626
 #: ../src/goabackend/goakerberosprovider.c:1704
 #: ../src/goabackend/goamediaserverprovider.c:584
@@ -237,6 +238,7 @@ msgstr "Facebook"
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:218
 #: ../src/goabackend/goaflickrprovider.c:183
+#: ../src/goabackend/goafoursquareprovider.c:188
 #: ../src/goabackend/goagoogleprovider.c:219
 #: ../src/goabackend/goawindowsliveprovider.c:189
 #: ../src/goabackend/goayahooprovider.c:182
@@ -255,6 +257,12 @@ msgstr ""
 #: ../src/goabackend/goaflickrprovider.c:224
 #: ../src/goabackend/goaflickrprovider.c:234
 #: ../src/goabackend/goaflickrprovider.c:244
+#: ../src/goabackend/goafoursquareprovider.c:207
+#: ../src/goabackend/goafoursquareprovider.c:219
+#: ../src/goabackend/goafoursquareprovider.c:230
+#: ../src/goabackend/goafoursquareprovider.c:241
+#: ../src/goabackend/goafoursquareprovider.c:252
+#: ../src/goabackend/goafoursquareprovider.c:263
 #: ../src/goabackend/goagoogleprovider.c:238
 #: ../src/goabackend/goagoogleprovider.c:250
 #: ../src/goabackend/goaoauth2provider.c:691
@@ -287,6 +295,7 @@ msgid "_Photos"
 msgstr "_Argazkiak"
 
 #: ../src/goabackend/goafacebookprovider.c:477
+#: ../src/goabackend/goafoursquareprovider.c:414
 msgid "_Maps"
 msgstr "_Mapak"
 
@@ -298,6 +307,10 @@ msgstr "Flickr"
 #: ../src/goabackend/goayahooprovider.c:343
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "Sistemaren ordua baliogabea da. Egiaztatu data eta orduaren ezarpenak."
+
+#: ../src/goabackend/goafoursquareprovider.c:76
+msgid "Foursquare"
+msgstr "Foursquare"
 
 #: ../src/goabackend/goagoogleprovider.c:76
 msgid "Google"
@@ -610,7 +623,7 @@ msgstr "Ez dago erabiltzaile-izenaren edo sarbidetzaren tokenik"
 msgid "_Read Later"
 msgstr "_Irakurri geroago"
 
-#: ../src/goabackend/goaprovider.c:682
+#: ../src/goabackend/goaprovider.c:683
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "'ensure_credentials_sync' ez dago inplementatuta %s motan"
