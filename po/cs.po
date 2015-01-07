@@ -1,15 +1,15 @@
 # Czech translation for gnome-online-accounts.
 # Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
-# Marek Černocký <marek@manet.cz>, 2011, 2012, 2013, 2014.
+# Marek Černocký <marek@manet.cz>, 2011, 2012, 2013, 2014, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-11-01 19:55+0000\n"
-"PO-Revision-Date: 2014-11-02 02:28+0100\n"
+"POT-Creation-Date: 2015-01-06 19:57+0000\n"
+"PO-Revision-Date: 2015-01-07 08:55+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -20,17 +20,17 @@ msgstr ""
 "X-Generator: Gtranslator 2.91.6\n"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:786 ../src/daemon/goadaemon.c:1047
+#: ../src/daemon/goadaemon.c:787 ../src/daemon/goadaemon.c:1048
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Selhalo vyhledání poskytovatele pro: %s"
 
-#: ../src/daemon/goadaemon.c:975
+#: ../src/daemon/goadaemon.c:976
 msgid "IsLocked property is set for account"
 msgstr "Pro účet je nastavena vlastnost IsLocked (je uzamčeno)"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1035
+#: ../src/daemon/goadaemon.c:1036
 msgid "ProviderType property is not set for account"
 msgstr "Pro účet není nastavena vlastnost ProviderType (typ poskytovatele)"
 
@@ -195,7 +195,8 @@ msgstr "Chyba připojování k serveru Macrosoft Exchange"
 #: ../src/goabackend/goaexchangeprovider.c:939
 #: ../src/goabackend/goafacebookprovider.c:465
 #: ../src/goabackend/goaflickrprovider.c:412
-#: ../src/goabackend/goagoogleprovider.c:592
+#: ../src/goabackend/goafoursquareprovider.c:412
+#: ../src/goabackend/goagoogleprovider.c:626
 #: ../src/goabackend/goakerberosprovider.c:1704
 #: ../src/goabackend/goamediaserverprovider.c:584
 #: ../src/goabackend/goaowncloudprovider.c:1082
@@ -206,19 +207,19 @@ msgid "Use for"
 msgstr "Použít pro"
 
 #: ../src/goabackend/goaexchangeprovider.c:941
-#: ../src/goabackend/goagoogleprovider.c:594
+#: ../src/goabackend/goagoogleprovider.c:628
 #: ../src/goabackend/goawindowsliveprovider.c:423
 msgid "_Mail"
 msgstr "_Pošta"
 
 #: ../src/goabackend/goaexchangeprovider.c:946
-#: ../src/goabackend/goagoogleprovider.c:599
+#: ../src/goabackend/goagoogleprovider.c:633
 #: ../src/goabackend/goaowncloudprovider.c:1084
 msgid "Cale_ndar"
 msgstr "Kale_ndář"
 
 #: ../src/goabackend/goaexchangeprovider.c:951
-#: ../src/goabackend/goagoogleprovider.c:604
+#: ../src/goabackend/goagoogleprovider.c:638
 #: ../src/goabackend/goaowncloudprovider.c:1089
 msgid "_Contacts"
 msgstr "_Kontakty"
@@ -230,7 +231,8 @@ msgstr "Facebook"
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:218
 #: ../src/goabackend/goaflickrprovider.c:183
-#: ../src/goabackend/goagoogleprovider.c:218
+#: ../src/goabackend/goafoursquareprovider.c:188
+#: ../src/goabackend/goagoogleprovider.c:219
 #: ../src/goabackend/goawindowsliveprovider.c:189
 #: ../src/goabackend/goayahooprovider.c:182
 #, c-format
@@ -248,8 +250,14 @@ msgstr ""
 #: ../src/goabackend/goaflickrprovider.c:224
 #: ../src/goabackend/goaflickrprovider.c:234
 #: ../src/goabackend/goaflickrprovider.c:244
-#: ../src/goabackend/goagoogleprovider.c:237
-#: ../src/goabackend/goagoogleprovider.c:249
+#: ../src/goabackend/goafoursquareprovider.c:207
+#: ../src/goabackend/goafoursquareprovider.c:219
+#: ../src/goabackend/goafoursquareprovider.c:230
+#: ../src/goabackend/goafoursquareprovider.c:241
+#: ../src/goabackend/goafoursquareprovider.c:252
+#: ../src/goabackend/goafoursquareprovider.c:263
+#: ../src/goabackend/goagoogleprovider.c:238
+#: ../src/goabackend/goagoogleprovider.c:250
 #: ../src/goabackend/goaoauth2provider.c:691
 #: ../src/goabackend/goaoauth2provider.c:721
 #: ../src/goabackend/goaoauth2provider.c:733
@@ -267,19 +275,20 @@ msgid "Could not parse response"
 msgstr "Nelze zpracovat odpověď"
 
 #: ../src/goabackend/goafacebookprovider.c:467
-#: ../src/goabackend/goagoogleprovider.c:609
+#: ../src/goabackend/goagoogleprovider.c:643
 #: ../src/goabackend/goatelepathyprovider.c:892
 msgid "C_hat"
 msgstr "Disk_uze"
 
 #: ../src/goabackend/goafacebookprovider.c:472
 #: ../src/goabackend/goaflickrprovider.c:414
-#: ../src/goabackend/goagoogleprovider.c:619
+#: ../src/goabackend/goagoogleprovider.c:653
 #: ../src/goabackend/goamediaserverprovider.c:586
 msgid "_Photos"
 msgstr "_Fotografie"
 
 #: ../src/goabackend/goafacebookprovider.c:477
+#: ../src/goabackend/goafoursquareprovider.c:414
 msgid "_Maps"
 msgstr "_Mapy"
 
@@ -292,17 +301,26 @@ msgstr "Flickr"
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "Vás systémový čas je neplatný. Zkontrolujte své nastavení data a času."
 
+#: ../src/goabackend/goafoursquareprovider.c:76
+msgid "Foursquare"
+msgstr "Foursquare"
+
 #: ../src/goabackend/goagoogleprovider.c:76
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:614
+#: ../src/goabackend/goagoogleprovider.c:648
 #: ../src/goabackend/goaowncloudprovider.c:1094
 #: ../src/goabackend/goawindowsliveprovider.c:428
 msgid "_Documents"
 msgstr "_Dokumenty"
 
-#: ../src/goabackend/goagoogleprovider.c:624
+#: ../src/goabackend/goagoogleprovider.c:658
+#: ../src/goabackend/goaowncloudprovider.c:1099
+msgid "_Files"
+msgstr "_Soubory"
+
+#: ../src/goabackend/goagoogleprovider.c:663
 msgid "Prin_ters"
 msgstr "_Tiskárny"
 
@@ -581,10 +599,6 @@ msgstr "ownCloud"
 msgid "Error connecting to ownCloud server"
 msgstr "Chyba připojování k serveru ownCloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:1099
-msgid "_Files"
-msgstr "_Soubory"
-
 #: ../src/goabackend/goapocketprovider.c:69
 msgid "Pocket"
 msgstr "Pocket"
@@ -599,7 +613,7 @@ msgstr "Žádné uživatelské jméno nebo přístupový tiket"
 msgid "_Read Later"
 msgstr "_Přečíst později"
 
-#: ../src/goabackend/goaprovider.c:682
+#: ../src/goabackend/goaprovider.c:683
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync není implementováno na typu %s"
@@ -797,55 +811,55 @@ msgid "The network realm %s needs some information to sign you in."
 msgstr ""
 "Síťová sféra %s potřebuje některé informace, abyste mohli být přihlášeni."
 
-#: ../src/goaidentity/goakerberosidentity.c:252
-#: ../src/goaidentity/goakerberosidentity.c:261
-#: ../src/goaidentity/goakerberosidentity.c:588
+#: ../src/goaidentity/goakerberosidentity.c:250
+#: ../src/goaidentity/goakerberosidentity.c:259
+#: ../src/goaidentity/goakerberosidentity.c:593
 msgid "Could not find identity in credential cache: %k"
 msgstr "Nelze najít identitu v mezipaměti pověření: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:601
+#: ../src/goaidentity/goakerberosidentity.c:607
 msgid "Could not find identity credentials in cache: %k"
 msgstr "Nelze najít pověření identity v mezipaměti: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:641
+#: ../src/goaidentity/goakerberosidentity.c:647
 msgid "Could not sift through identity credentials in cache: %k"
 msgstr "Nelze prohledat pověření identit v mezipaměti: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:659
+#: ../src/goaidentity/goakerberosidentity.c:665
 msgid "Could not finish up sifting through identity credentials in cache: %k"
 msgstr "Nelze dokončit prohledání pověření identit v mezipaměti: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:949
+#: ../src/goaidentity/goakerberosidentity.c:960
 #, c-format
 msgid "No associated identification found"
 msgstr "Nebyla nalezena žádná přidružená identifikace"
 
-#: ../src/goaidentity/goakerberosidentity.c:1030
+#: ../src/goaidentity/goakerberosidentity.c:1043
 msgid "Could not create credential cache: %k"
 msgstr "Nelze vytvořit mezipaměť pověření: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1064
+#: ../src/goaidentity/goakerberosidentity.c:1077
 msgid "Could not initialize credentials cache: %k"
 msgstr "Nelze inicializovat mezipaměť pověření: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1081
+#: ../src/goaidentity/goakerberosidentity.c:1094
 msgid "Could not store new credentials in credentials cache: %k"
 msgstr "Nelze uložit nová pověření do mezipaměti pověření: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1356
+#: ../src/goaidentity/goakerberosidentity.c:1369
 #, c-format
 msgid "Could not renew identity: Not signed in"
 msgstr "Nelze obnovit identitu: Nepřihlášeno"
 
-#: ../src/goaidentity/goakerberosidentity.c:1368
+#: ../src/goaidentity/goakerberosidentity.c:1381
 msgid "Could not renew identity: %k"
 msgstr "Nelze obnovit identitu: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1385
+#: ../src/goaidentity/goakerberosidentity.c:1398
 msgid "Could not get new credentials to renew identity %s: %k"
 msgstr "Nelze získat nové pověření pro obnovenou identitu %s: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1427
+#: ../src/goaidentity/goakerberosidentity.c:1440
 msgid "Could not erase identity: %k"
 msgstr "Nelze smazat identitu: %k"
 
