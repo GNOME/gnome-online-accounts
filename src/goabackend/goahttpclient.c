@@ -232,12 +232,8 @@ goa_http_client_check (GoaHttpClient       *client,
 
   data = g_slice_new0 (CheckData);
   data->res = g_simple_async_result_new (G_OBJECT (client), callback, user_data, goa_http_client_check);
-  data->session = soup_session_async_new_with_options (SOUP_SESSION_SSL_USE_SYSTEM_CA_FILE, TRUE,
-                                                       SOUP_SESSION_SSL_STRICT, FALSE,
-                                                       SOUP_SESSION_USE_THREAD_CONTEXT, TRUE,
-                                                       NULL);
-
-  soup_session_add_feature_by_type (data->session, SOUP_TYPE_PROXY_RESOLVER_DEFAULT);
+  data->session = soup_session_new_with_options (SOUP_SESSION_SSL_STRICT, FALSE,
+                                                 NULL);
 
   logger = soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
   soup_logger_set_printer (logger, http_client_log_printer, NULL, NULL);

@@ -313,9 +313,8 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
     {
       if (data->msgs[idx] != NULL)
         {
-          /* Since we are cancelling from the same thread that we queued the
-           * message, the callback (ie. this function) will be invoked before
-           * soup_session_cancel_message returns.
+          /* The callback (ie. this function) will be invoked after we
+           * have returned to the main loop.
            */
           soup_session_cancel_message (data->session, data->msgs[idx], SOUP_STATUS_CANCELLED);
         }
@@ -481,12 +480,9 @@ goa_ews_client_autodiscover (GoaEwsClient        *client,
   data->msgs[0] = ews_client_create_msg_for_url (url1, buf);
   data->msgs[1] = ews_client_create_msg_for_url (url2, buf);
   data->pending = sizeof (data->msgs) / sizeof (data->msgs[0]);
-  data->session = soup_session_async_new_with_options (SOUP_SESSION_SSL_USE_SYSTEM_CA_FILE, TRUE,
-                                                       SOUP_SESSION_SSL_STRICT, FALSE,
-                                                       SOUP_SESSION_USE_NTLM, TRUE,
-                                                       SOUP_SESSION_USE_THREAD_CONTEXT, TRUE,
-                                                       NULL);
-  soup_session_add_feature_by_type (data->session, SOUP_TYPE_PROXY_RESOLVER_DEFAULT);
+  data->session = soup_session_new_with_options (SOUP_SESSION_SSL_STRICT, FALSE,
+                                                 NULL);
+  soup_session_add_feature_by_type (data->session, SOUP_TYPE_AUTH_NTLM);
   data->accept_ssl_errors = accept_ssl_errors;
 
   if (cancellable != NULL)
