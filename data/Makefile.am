@@ -3,9 +3,6 @@ NULL =
 
 SUBDIRS = icons
 
-cssdir = $(pkgdatadir)
-css_DATA = goawebview.css
-
 gsettings_in_files = org.gnome.online-accounts.gschema.xml.in
 gsettings_SCHEMAS = $(gsettings_in_files:.xml.in=.xml)
 
@@ -20,7 +17,6 @@ $(service_DATA): $(service_in_files) Makefile
 	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
 
 EXTRA_DIST =						\
-	$(css_DATA)					\
 	$(gsettings_in_files)				\
 	$(service_in_files)				\
 	dbus-interfaces.xml				\
