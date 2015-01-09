@@ -23,7 +23,7 @@
 #include <rest/oauth2-proxy.h>
 #include <libsoup/soup.h>
 #include <json-glib/json-glib.h>
-#include <webkit/webkit.h>
+#include <webkit2/webkit2.h>
 
 #include "goaprovider.h"
 #include "goautils.h"
@@ -66,7 +66,6 @@ struct _GoaOAuth2ProviderPrivate
   GError *error;
   GMainLoop *loop;
 
-  WebKitDOMHTMLInputElement *password_node;
   const gchar *existing_identity;
 
   gchar *account_object_path;
@@ -774,7 +773,7 @@ get_tokens_sync (GoaOAuth2Provider  *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-on_dom_node_click (WebKitDOMNode *element, WebKitDOMEvent *event, gpointer user_data)
+on_web_view_deny_click (GoaWebView *web_view, gpointer user_data)
 {
   GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
   GoaOAuth2ProviderPrivate *priv = provider->priv;
@@ -782,84 +781,26 @@ on_dom_node_click (WebKitDOMNode *element, WebKitDOMEvent *event, gpointer user_
 }
 
 static void
-on_form_submit (WebKitDOMNode *element, WebKitDOMEvent *event, gpointer user_data)
+on_web_view_password_submit (GoaWebView *web_view, const gchar *password, gpointer user_data)
 {
   GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
   GoaOAuth2ProviderPrivate *priv = provider->priv;
 
-  if (priv->password_node == NULL)
-    return;
-
-  priv->password = webkit_dom_html_input_element_get_value (priv->password_node);
-  priv->password_node = NULL;
-}
-
-static void
-on_web_view_document_load_finished (WebKitWebView *web_view, WebKitWebFrame *frame, gpointer user_data)
-{
-  GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
-  GoaOAuth2ProviderPrivate *priv = provider->priv;
-  WebKitDOMDocument *document;
-  WebKitDOMNodeList *elements;
-  gulong element_count;
-  gulong i;
-
-  document = webkit_web_view_get_dom_document (WEBKIT_WEB_VIEW (web_view));
-  elements = webkit_dom_document_get_elements_by_tag_name (document, "*");
-  element_count = webkit_dom_node_list_get_length (elements);
-
-  for (i = 0; i < element_count; i++)
-    {
-      WebKitDOMNode *element = webkit_dom_node_list_item (elements, i);
-
-      if (goa_oauth2_provider_is_deny_node (provider, element))
-        {
-          webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (element),
-                                                      "click",
-                                                      G_CALLBACK (on_dom_node_click),
-                                                      FALSE,
-                                                      provider);
-        }
-      else if (priv->existing_identity != NULL
-               && WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element)
-               && goa_oauth2_provider_is_identity_node (provider, WEBKIT_DOM_HTML_INPUT_ELEMENT (element)))
-        {
-          webkit_dom_html_input_element_set_value (WEBKIT_DOM_HTML_INPUT_ELEMENT (element),
-                                                   priv->existing_identity);
-          webkit_dom_html_input_element_set_read_only (WEBKIT_DOM_HTML_INPUT_ELEMENT (element), TRUE);
-        }
-      else if (WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element)
-               && goa_oauth2_provider_is_password_node (provider, WEBKIT_DOM_HTML_INPUT_ELEMENT (element)))
-        {
-          WebKitDOMHTMLFormElement *form;
-
-          form = webkit_dom_html_input_element_get_form (WEBKIT_DOM_HTML_INPUT_ELEMENT (element));
-          if (form != NULL)
-            {
-              priv->password_node = WEBKIT_DOM_HTML_INPUT_ELEMENT (element);
-              g_clear_pointer (&priv->password, g_free);
-              webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (form),
-                                                          "submit",
-                                                          G_CALLBACK (on_form_submit),
-                                                          FALSE,
-                                                          provider);
-            }
-        }
-    }
+  g_free (priv->password);
+  priv->password = g_strdup (password);
 }
 
 static gboolean
-on_web_view_navigation_policy_decision_requested (WebKitWebView             *webView,
-                                                  WebKitWebFrame            *frame,
-                                                  WebKitNetworkRequest      *request,
-                                                  WebKitWebNavigationAction *navigation_action,
-                                                  WebKitWebPolicyDecision   *policy_decision,
-                                                  gpointer                   user_data)
+on_web_view_decide_policy (WebKitWebView            *web_view,
+                           WebKitPolicyDecision     *decision,
+                           WebKitPolicyDecisionType  decision_type,
+                           gpointer                  user_data)
 {
   GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
   GoaOAuth2ProviderPrivate *priv = provider->priv;
   GHashTable *key_value_pairs;
-  SoupMessage *message;
+  WebKitNavigationAction *action;
+  WebKitURIRequest *request;
   SoupURI *uri;
   const gchar *fragment;
   const gchar *oauth2_error;
@@ -868,15 +809,19 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
   const gchar *requested_uri;
   gint response_id = GTK_RESPONSE_NONE;
 
+  if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION)
+    goto default_behaviour;
+
   /* TODO: use oauth2_proxy_extract_access_token() */
 
-  requested_uri = webkit_network_request_get_uri (request);
+  action = webkit_navigation_policy_decision_get_navigation_action (WEBKIT_NAVIGATION_POLICY_DECISION (decision));
+  request = webkit_navigation_action_get_request (action);
+  requested_uri = webkit_uri_request_get_uri (request);
   redirect_uri = goa_oauth2_provider_get_redirect_uri (provider);
   if (!g_str_has_prefix (requested_uri, redirect_uri))
     goto default_behaviour;
 
-  message = webkit_network_request_get_message (request);
-  uri = soup_message_get_uri (message);
+  uri = soup_uri_new (requested_uri);
   fragment = soup_uri_get_fragment (uri);
   query = soup_uri_get_query (uri);
 
@@ -974,7 +919,7 @@ on_web_view_navigation_policy_decision_requested (WebKitWebView             *web
  ignore_request:
   g_assert (response_id != GTK_RESPONSE_NONE);
   gtk_dialog_response (priv->dialog, response_id);
-  webkit_web_policy_decision_ignore (policy_decision);
+  webkit_policy_decision_ignore (decision);
   return TRUE;
 
  default_behaviour:
@@ -1048,7 +993,7 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
   gtk_grid_set_row_spacing (GTK_GRID (grid), 12);
   gtk_container_add (GTK_CONTAINER (vbox), grid);
 
-  web_view = goa_web_view_new ();
+  web_view = goa_web_view_new (GOA_PROVIDER (provider), existing_identity);
   gtk_widget_set_hexpand (web_view, TRUE);
   gtk_widget_set_vexpand (web_view, TRUE);
   embed = goa_web_view_get_view (GOA_WEB_VIEW (web_view));
@@ -1062,11 +1007,12 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
     goa_web_view_fake_mobile (GOA_WEB_VIEW (web_view));
 
   webkit_web_view_load_uri (WEBKIT_WEB_VIEW (embed), url);
-  g_signal_connect (embed, "document-load-finished", G_CALLBACK (on_web_view_document_load_finished), provider);
   g_signal_connect (embed,
-                    "navigation-policy-decision-requested",
-                    G_CALLBACK (on_web_view_navigation_policy_decision_requested),
+                    "decide-policy",
+                    G_CALLBACK (on_web_view_decide_policy),
                     provider);
+  g_signal_connect (web_view, "deny-click", G_CALLBACK (on_web_view_deny_click), provider);
+  g_signal_connect (web_view, "password-submit", G_CALLBACK (on_web_view_password_submit), provider);
 
   gtk_container_add (GTK_CONTAINER (grid), web_view);
 

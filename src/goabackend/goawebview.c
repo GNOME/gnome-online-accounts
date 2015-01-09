@@ -1,6 +1,7 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*-
  *
- * Copyright (C) 2012, 2013, 2014 Red Hat, Inc.
+ * Copyright (C) 2015 Damián Nohales
+ * Copyright (C) 2012, 2013, 2014, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,22 +24,43 @@
 
 #include <glib.h>
 #include <glib/gi18n-lib.h>
+#include <JavaScriptCore/JavaScript.h>
 #include <libsoup/soup.h>
-#include <webkit/webkit.h>
+#include <webkit2/webkit2.h>
 
 #include "goawebview.h"
 #include "nautilus-floating-bar.h"
 
 struct _GoaWebViewPrivate
 {
+  GoaProvider *provider;
   GtkWidget *floating_bar;
   GtkWidget *progress_bar;
   GtkWidget *web_view;
-  gboolean status;
+  SoupCookieJar *cookie_jar;
+  WebKitUserContentManager *user_content_manager;
+  WebKitWebContext *context;
+  gchar *existing_identity;
   gulong clear_notify_progress_id;
   gulong notify_load_status_id;
   gulong notify_progress_id;
 };
+
+enum
+{
+  PROP_0,
+  PROP_EXISTING_IDENTITY,
+  PROP_PROVIDER
+};
+
+enum
+{
+  DENY_CLICK,
+  PASSWORD_SUBMIT,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
 
 #define GOA_WEB_VIEW_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GOA_TYPE_WEB_VIEW, GoaWebViewPrivate))
 
@@ -89,58 +111,78 @@ web_view_floating_bar_update (GoaWebView *self, const gchar *text)
     gtk_widget_show (priv->floating_bar);
 }
 
-static gboolean
-web_view_is_loading (GoaWebView *self)
+static void
+web_view_initialize_web_extensions_cb (GoaWebView *self)
 {
   GoaWebViewPrivate *priv = self->priv;
-  WebKitLoadStatus status;
+  GVariant *data;
+  const gchar *existing_identity;
+  const gchar *provider_type;
 
-  status = webkit_web_view_get_load_status (WEBKIT_WEB_VIEW (priv->web_view));
+  webkit_web_context_set_web_extensions_directory (priv->context, PACKAGE_WEB_EXTENSIONS_DIR);
 
-  if ((priv->status == WEBKIT_LOAD_FINISHED || priv->status == WEBKIT_LOAD_FAILED)
-      && status != WEBKIT_LOAD_PROVISIONAL)
-    return FALSE;
+  if (priv->provider == NULL)
+    return;
 
-  priv->status = status;
-  return status != WEBKIT_LOAD_FINISHED && status != WEBKIT_LOAD_FAILED;
+  provider_type = goa_provider_get_provider_type (priv->provider);
+  existing_identity = (priv->existing_identity == NULL) ? "" : priv->existing_identity;
+  data = g_variant_new ("(ss)", provider_type, existing_identity);
+  webkit_web_context_set_web_extensions_initialization_user_data (priv->context, data);
 }
 
+#ifdef GOA_INSPECTOR_ENABLED
 static void
-web_view_log_printer (SoupLogger         *logger,
-                      SoupLoggerLogLevel  level,
-                      gchar               direction,
-                      const gchar        *data,
-                      gpointer            user_data)
+web_view_inspector_closed_cb (WebKitWebInspector *inspector)
 {
-  gchar *message;
+  GtkWidget *window;
+  WebKitWebViewBase *inspector_web_view;
 
-  message = g_strdup_printf ("%c %s", direction, data);
-  g_log_default_handler ("goa", G_LOG_LEVEL_DEBUG, message, NULL);
-  g_free (message);
+  inspector_web_view = webkit_web_inspector_get_web_view (inspector);
+  window = gtk_widget_get_toplevel (GTK_WIDGET (inspector_web_view));
+  if (gtk_widget_is_toplevel (window))
+    gtk_widget_destroy (window);
 }
 
+static gboolean
+web_view_inspector_open_window_cb (WebKitWebInspector *inspector)
+{
+  GtkWidget *window;
+  GtkWindowGroup *group;
+  WebKitWebViewBase *inspector_web_view;
+
+  group = gtk_window_group_new ();
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_resize (GTK_WINDOW (window), 800, 600);
+  gtk_window_group_add_window (group, GTK_WINDOW (window));
+  g_object_unref (group);
+
+  inspector_web_view = webkit_web_inspector_get_web_view (inspector);
+  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (inspector_web_view));
+
+  gtk_widget_show_all (window);
+  gtk_window_present (GTK_WINDOW (window));
+
+  return GDK_EVENT_STOP;
+}
+#endif /* GOA_INSPECTOR_ENABLED */
+
 static void
-web_view_notify_load_status_cb (GObject *object, GParamSpec *pspec, gpointer user_data)
+web_view_load_changed_cb (WebKitWebView  *web_view,
+                          WebKitLoadEvent load_event,
+                          gpointer        user_data)
 {
   GoaWebView *self = GOA_WEB_VIEW (user_data);
-  WebKitWebView *web_view = WEBKIT_WEB_VIEW (object);
-  WebKitLoadStatus status;
 
-  status = webkit_web_view_get_load_status (web_view);
-  switch (status)
+  switch (load_event)
     {
-    case WEBKIT_LOAD_PROVISIONAL:
+    case WEBKIT_LOAD_STARTED:
+    case WEBKIT_LOAD_COMMITTED:
       {
-        WebKitNetworkRequest *request;
-        WebKitWebDataSource *source;
-        WebKitWebFrame *frame;
         const gchar *uri;
         gchar *title;
 
-        frame = webkit_web_view_get_main_frame (web_view);
-        source = webkit_web_frame_get_provisional_data_source (frame);
-        request = webkit_web_data_source_get_initial_request (source);
-        uri = webkit_network_request_get_uri (request);
+        uri = webkit_web_view_get_uri (web_view);
         title = web_view_create_loading_title (uri);
 
         web_view_floating_bar_update (self, title);
@@ -148,7 +190,10 @@ web_view_notify_load_status_cb (GObject *object, GParamSpec *pspec, gpointer use
         break;
       }
 
-    case WEBKIT_LOAD_FAILED:
+    case WEBKIT_LOAD_REDIRECTED:
+      /* TODO: Update the loading uri */
+      break;
+
     case WEBKIT_LOAD_FINISHED:
       web_view_floating_bar_update (self, NULL);
       break;
@@ -159,7 +204,9 @@ web_view_notify_load_status_cb (GObject *object, GParamSpec *pspec, gpointer use
 }
 
 static void
-web_view_notify_progress_cb (GObject *object, GParamSpec *pspec, gpointer user_data)
+web_view_notify_estimated_load_progress_cb (GObject    *object,
+                                            GParamSpec *pspec,
+                                            gpointer    user_data)
 {
   GoaWebView *self = GOA_WEB_VIEW (user_data);
   GoaWebViewPrivate *priv = self->priv;
@@ -178,8 +225,8 @@ web_view_notify_progress_cb (GObject *object, GParamSpec *pspec, gpointer user_d
   if (!uri || g_str_equal (uri, "about:blank"))
     return;
 
-  progress = webkit_web_view_get_progress (WEBKIT_WEB_VIEW (priv->web_view));
-  loading = web_view_is_loading (self);
+  progress = webkit_web_view_get_estimated_load_progress (web_view);
+  loading = webkit_web_view_is_loading (web_view);
 
   if (progress == 1.0 || !loading)
     priv->clear_notify_progress_id = g_timeout_add (500, web_view_clear_notify_progress_cb, self);
@@ -191,10 +238,130 @@ web_view_notify_progress_cb (GObject *object, GParamSpec *pspec, gpointer user_d
 }
 
 static void
+web_view_script_message_received_deny_click_cb (GoaWebView *self)
+{
+  g_signal_emit (self, signals[DENY_CLICK], 0);
+}
+
+static void
+web_view_script_message_received_password_submit_cb (GoaWebView *self, WebKitJavascriptResult *js_result)
+{
+  JSGlobalContextRef js_context;
+  JSStringRef js_string;
+  JSValueRef js_value;
+  gsize max_size;
+
+  js_value = webkit_javascript_result_get_value (js_result);
+  js_context = webkit_javascript_result_get_global_context (js_result);
+  js_string = JSValueToStringCopy (js_context, js_value, NULL);
+  max_size = JSStringGetMaximumUTF8CStringSize (js_string);
+  if (max_size > 0)
+    {
+      gchar *password;
+
+      password = g_malloc0 (max_size);
+      JSStringGetUTF8CString (js_string, password, max_size);
+      g_signal_emit (self, signals[PASSWORD_SUBMIT], 0, password);
+      g_free (password);
+    }
+
+  JSStringRelease (js_string);
+}
+
+static void
+goa_web_view_constructed (GObject *object)
+{
+  GoaWebView *self = GOA_WEB_VIEW (object);
+  GoaWebViewPrivate *priv = self->priv;
+  WebKitCookieManager *cookie_manager;
+  gchar *jar_dir;
+  gchar *jar_file;
+
+  G_OBJECT_CLASS (goa_web_view_parent_class)->constructed (object);
+
+  priv->context = webkit_web_context_new ();
+  g_signal_connect_swapped (priv->context,
+                            "initialize-web-extensions",
+                            G_CALLBACK (web_view_initialize_web_extensions_cb),
+                            self);
+
+  cookie_manager = webkit_web_context_get_cookie_manager (priv->context);
+  jar_file = g_build_filename (g_get_user_cache_dir (), "goa-1.0", "cookies.sqlite", NULL);
+  jar_dir = g_path_get_dirname (jar_file);
+  g_mkdir_with_parents (jar_dir, 0700);
+  priv->cookie_jar = soup_cookie_jar_db_new (jar_file, FALSE);
+  webkit_cookie_manager_set_persistent_storage (cookie_manager, jar_file, WEBKIT_COOKIE_PERSISTENT_STORAGE_SQLITE);
+  webkit_cookie_manager_delete_all_cookies (cookie_manager);
+  g_free (jar_dir);
+  g_free (jar_file);
+
+  priv->user_content_manager = webkit_user_content_manager_new ();
+  g_signal_connect_swapped (priv->user_content_manager,
+                            "script-message-received::deny-click",
+                            G_CALLBACK (web_view_script_message_received_deny_click_cb),
+                            self);
+  g_signal_connect_swapped (priv->user_content_manager,
+                            "script-message-received::password-submit",
+                            G_CALLBACK (web_view_script_message_received_password_submit_cb),
+                            self);
+  webkit_user_content_manager_register_script_message_handler (priv->user_content_manager, "deny-click");
+  webkit_user_content_manager_register_script_message_handler (priv->user_content_manager, "password-submit");
+
+  priv->web_view = GTK_WIDGET (g_object_new (WEBKIT_TYPE_WEB_VIEW,
+                                             "user-content-manager", priv->user_content_manager,
+                                             "web-context", priv->context,
+                                             NULL));
+  gtk_widget_set_size_request (priv->web_view, 500, 400);
+  gtk_container_add (GTK_CONTAINER (self), priv->web_view);
+
+#ifdef GOA_INSPECTOR_ENABLED
+  {
+    WebKitSettings *settings;
+    WebKitWebInspector *inspector;
+
+    /* Setup the inspector */
+    settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (priv->web_view));
+    g_object_set (settings, "enable-developer-extras", TRUE, NULL);
+
+    inspector = webkit_web_view_get_inspector (WEBKIT_WEB_VIEW (priv->web_view));
+    g_signal_connect (inspector, "closed", G_CALLBACK (web_view_inspector_closed_cb), NULL);
+    g_signal_connect (inspector, "open-window", G_CALLBACK (web_view_inspector_open_window_cb), NULL);
+  }
+#endif /* GOA_INSPECTOR_ENABLED */
+
+  /* statusbar is hidden by default */
+  priv->floating_bar = nautilus_floating_bar_new (NULL, FALSE);
+  gtk_widget_set_halign (priv->floating_bar, GTK_ALIGN_START);
+  gtk_widget_set_valign (priv->floating_bar, GTK_ALIGN_END);
+  gtk_widget_set_no_show_all (priv->floating_bar, TRUE);
+  gtk_overlay_add_overlay (GTK_OVERLAY (self), priv->floating_bar);
+
+  priv->progress_bar = gtk_progress_bar_new ();
+  gtk_style_context_add_class (gtk_widget_get_style_context (priv->progress_bar),
+                               GTK_STYLE_CLASS_OSD);
+  gtk_widget_set_halign (priv->progress_bar, GTK_ALIGN_FILL);
+  gtk_widget_set_valign (priv->progress_bar, GTK_ALIGN_START);
+  gtk_overlay_add_overlay (GTK_OVERLAY (self), priv->progress_bar);
+
+  priv->notify_progress_id = g_signal_connect (priv->web_view,
+                                               "notify::estimated-load-progress",
+                                               G_CALLBACK (web_view_notify_estimated_load_progress_cb),
+                                               self);
+  priv->notify_load_status_id = g_signal_connect (priv->web_view,
+                                                  "load_changed",
+                                                  G_CALLBACK (web_view_load_changed_cb),
+                                                  self);
+}
+
+static void
 goa_web_view_dispose (GObject *object)
 {
   GoaWebView *self = GOA_WEB_VIEW (object);
   GoaWebViewPrivate *priv = self->priv;
+
+  g_clear_object (&priv->cookie_jar);
+  g_clear_object (&priv->user_content_manager);
+  g_clear_object (&priv->context);
 
   if (priv->clear_notify_progress_id != 0)
     {
@@ -217,133 +384,45 @@ goa_web_view_dispose (GObject *object)
   G_OBJECT_CLASS (goa_web_view_parent_class)->dispose (object);
 }
 
-#ifdef GOA_INSPECTOR_ENABLED
-static WebKitWebView *
-web_inspector_inspect_web_view_cb (WebKitWebInspector *inspector,
-                                   WebKitWebView      *web_view,
-                                   gpointer            user_data)
+static void
+goa_web_view_finalize (GObject *object)
 {
-  GtkWidget *inspector_web_view;
-  GtkWidget *scrolled_window;
-  GtkWidget *window;
+  GoaWebView *self = GOA_WEB_VIEW (object);
+  GoaWebViewPrivate *priv = self->priv;
 
-  inspector_web_view = webkit_web_view_new ();
+  g_free (priv->existing_identity);
+  g_object_remove_weak_pointer (G_OBJECT (priv->provider), (gpointer *) &priv->provider);
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_resize (GTK_WINDOW (window), 800, 600);
-
-  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
-                                  GTK_POLICY_AUTOMATIC,
-                                  GTK_POLICY_AUTOMATIC);
-
-  gtk_container_add (GTK_CONTAINER (window), scrolled_window);
-  gtk_container_add (GTK_CONTAINER (scrolled_window), inspector_web_view);
-
-  g_object_set_data (G_OBJECT (inspector), "window", window);
-
-  return WEBKIT_WEB_VIEW (inspector_web_view);
+  G_OBJECT_CLASS (goa_web_view_parent_class)->finalize (object);
 }
 
-static gboolean
-web_inspector_show_window_cb (WebKitWebInspector *inspector,
-                              gpointer            user_data)
+static void
+goa_web_view_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec)
 {
-  GtkWidget *window;
-  GtkWindowGroup *group;
+  GoaWebView *self = GOA_WEB_VIEW (object);
+  GoaWebViewPrivate *priv = self->priv;
 
-  group = gtk_window_group_new ();
+  switch (prop_id)
+    {
+    case PROP_EXISTING_IDENTITY:
+      priv->existing_identity = g_value_dup_string (value);
+      break;
 
-  window = g_object_get_data (G_OBJECT (inspector), "window");
-  gtk_window_group_add_window (group, GTK_WINDOW (window));
-  gtk_widget_show_all (window);
-  gtk_window_present (GTK_WINDOW (window));
+    case PROP_PROVIDER:
+      priv->provider = GOA_PROVIDER (g_value_get_object (value));
+      g_object_add_weak_pointer (G_OBJECT (priv->provider), (gpointer *) &priv->provider);
+      break;
 
-  g_object_unref (group);
-  return GDK_EVENT_STOP;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
-#endif /* GOA_INSPECTOR_ENABLED */
 
 static void
 goa_web_view_init (GoaWebView *self)
 {
-  GoaWebViewPrivate *priv;
-  GtkWidget *scrolled_window;
-  SoupCookieJar *cookie_jar;
-  SoupLogger *logger;
-  SoupSession *session;
-  WebKitWebSettings *settings;
-
   self->priv = GOA_WEB_VIEW_GET_PRIVATE (self);
-  priv = self->priv;
-
-  session = webkit_get_default_session ();
-  g_object_set (session, SOUP_SESSION_SSL_USE_SYSTEM_CA_FILE, TRUE, SOUP_SESSION_SSL_STRICT, TRUE, NULL);
-
-  soup_session_add_feature_by_type (session, SOUP_TYPE_PROXY_RESOLVER_DEFAULT);
-  g_object_set (session, "accept-language-auto", TRUE, NULL);
-
-  soup_session_remove_feature_by_type (session, SOUP_TYPE_COOKIE_JAR);
-  cookie_jar = soup_cookie_jar_new ();
-  soup_session_add_feature (session, SOUP_SESSION_FEATURE (cookie_jar));
-  g_object_unref (cookie_jar);
-
-  logger = soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
-  soup_logger_set_printer (logger, web_view_log_printer, NULL, NULL);
-  soup_session_add_feature (session, SOUP_SESSION_FEATURE (logger));
-  g_object_unref (logger);
-
-  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_set_size_request (scrolled_window, 500, 400);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window), GTK_SHADOW_IN);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
-                                  GTK_POLICY_AUTOMATIC,
-                                  GTK_POLICY_AUTOMATIC);
-  gtk_container_add (GTK_CONTAINER (self), scrolled_window);
-
-  priv->web_view = webkit_web_view_new ();
-  priv->status = WEBKIT_LOAD_PROVISIONAL;
-  gtk_container_add (GTK_CONTAINER (scrolled_window), priv->web_view);
-
-  settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (priv->web_view));
-  g_object_set (settings, "user-stylesheet-uri", "file://" PACKAGE_DATA_DIR "/goawebview.css", NULL);
-
-#ifdef GOA_INSPECTOR_ENABLED
-  {
-    WebKitWebInspector *inspector;
-
-    /* Setup the inspector */
-    g_object_set (settings, "enable-developer-extras", TRUE, NULL);
-    inspector = webkit_web_view_get_inspector (WEBKIT_WEB_VIEW (priv->web_view));
-    webkit_web_inspector_show (WEBKIT_WEB_INSPECTOR (inspector));
-
-    g_signal_connect (inspector, "inspect-web-view", G_CALLBACK (web_inspector_inspect_web_view_cb), NULL);
-    g_signal_connect (inspector, "show-window", G_CALLBACK (web_inspector_show_window_cb), NULL);
-  }
-#endif /* GOA_INSPECTOR_ENABLED */
-
-  /* statusbar is hidden by default */
-  priv->floating_bar = nautilus_floating_bar_new (NULL, FALSE);
-  gtk_widget_set_halign (priv->floating_bar, GTK_ALIGN_START);
-  gtk_widget_set_valign (priv->floating_bar, GTK_ALIGN_END);
-  gtk_widget_set_no_show_all (priv->floating_bar, TRUE);
-  gtk_overlay_add_overlay (GTK_OVERLAY (self), priv->floating_bar);
-
-  priv->progress_bar = gtk_progress_bar_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (priv->progress_bar),
-                               GTK_STYLE_CLASS_OSD);
-  gtk_widget_set_halign (priv->progress_bar, GTK_ALIGN_FILL);
-  gtk_widget_set_valign (priv->progress_bar, GTK_ALIGN_START);
-  gtk_overlay_add_overlay (GTK_OVERLAY (self), priv->progress_bar);
-
-  priv->notify_progress_id = g_signal_connect (priv->web_view,
-                                               "notify::progress",
-                                               G_CALLBACK (web_view_notify_progress_cb),
-                                               self);
-  priv->notify_load_status_id = g_signal_connect (priv->web_view,
-                                                  "notify::load-status",
-                                                  G_CALLBACK (web_view_notify_load_status_cb),
-                                                  self);
 }
 
 static void
@@ -352,15 +431,59 @@ goa_web_view_class_init (GoaWebViewClass *klass)
   GObjectClass *object_class;
 
   object_class = G_OBJECT_CLASS (klass);
+  object_class->constructed = goa_web_view_constructed;
   object_class->dispose = goa_web_view_dispose;
+  object_class->finalize = goa_web_view_finalize;
+  object_class->set_property = goa_web_view_set_property;
+
+  g_object_class_install_property (object_class,
+                                   PROP_EXISTING_IDENTITY,
+                                   g_param_spec_string ("existing-identity",
+                                                        "A GoaAccount identity",
+                                                        "The user name with which we want to prefill the form",
+                                                        NULL,
+                                                        G_PARAM_WRITABLE |
+                                                        G_PARAM_CONSTRUCT_ONLY |
+                                                        G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_property (object_class,
+                                   PROP_PROVIDER,
+                                   g_param_spec_object ("provider",
+                                                        "A GoaProvider",
+                                                        "The provider that is represented by this view",
+                                                        GOA_TYPE_PROVIDER,
+                                                        G_PARAM_WRITABLE |
+                                                        G_PARAM_CONSTRUCT_ONLY |
+                                                        G_PARAM_STATIC_STRINGS));
+
+  signals[DENY_CLICK] = g_signal_new ("deny-click",
+                                      G_TYPE_FROM_CLASS (klass),
+                                      G_SIGNAL_RUN_LAST,
+                                      0,
+                                      NULL,
+                                      NULL,
+                                      g_cclosure_marshal_VOID__VOID,
+                                      G_TYPE_NONE,
+                                      0);
+
+  signals[PASSWORD_SUBMIT] = g_signal_new ("password-submit",
+                                           G_TYPE_FROM_CLASS (klass),
+                                           G_SIGNAL_RUN_LAST,
+                                           0,
+                                           NULL,
+                                           NULL,
+                                           g_cclosure_marshal_VOID__STRING,
+                                           G_TYPE_NONE,
+                                           1,
+                                           G_TYPE_STRING);
 
   g_type_class_add_private (object_class, sizeof (GoaWebViewPrivate));
 }
 
 GtkWidget *
-goa_web_view_new (void)
+goa_web_view_new (GoaProvider *provider, const gchar *existing_identity)
 {
-  return g_object_new (GOA_TYPE_WEB_VIEW, NULL);
+  return g_object_new (GOA_TYPE_WEB_VIEW, "provider", provider, "existing-identity", existing_identity, NULL);
 }
 
 GtkWidget *
@@ -372,7 +495,7 @@ goa_web_view_get_view (GoaWebView *self)
 void
 goa_web_view_fake_mobile (GoaWebView *self)
 {
-  WebKitWebSettings *settings;
+  WebKitSettings *settings;
 
   settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (self->priv->web_view));
 
@@ -389,26 +512,20 @@ goa_web_view_fake_mobile (GoaWebView *self)
    * Also note that the user agents of some mobile browsers may
    * not work. eg., Nokia N9.
    */
-  g_object_set (G_OBJECT (settings),
-                "user-agent", "Mozilla/5.0 (GNOME; not Android) "
-                              "AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile",
-                NULL);
+  webkit_settings_set_user_agent (settings,
+                                  "Mozilla/5.0 (GNOME; not Android) "
+                                  "AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile");
 }
 
 void
 goa_web_view_add_cookies (GoaWebView *self,
                           GSList     *cookies)
 {
-  SoupCookieJar *cookie_jar;
-  SoupSession *session;
   GSList *l;
-
-  session = webkit_get_default_session ();
-  cookie_jar = SOUP_COOKIE_JAR (soup_session_get_feature (session, SOUP_TYPE_COOKIE_JAR));
 
   for (l = cookies; l != NULL; l = l->next)
     {
       SoupCookie *cookie = l->data;
-      soup_cookie_jar_add_cookie (cookie_jar, soup_cookie_copy (cookie));
+      soup_cookie_jar_add_cookie (self->priv->cookie_jar, soup_cookie_copy (cookie));
     }
 }

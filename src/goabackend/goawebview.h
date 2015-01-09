@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*-
  *
- * Copyright (C) 2012 Red Hat, Inc.
+ * Copyright (C) 2012, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,6 +20,8 @@
 #define __GOA_WEB_VIEW_H__
 
 #include <gtk/gtk.h>
+
+#include "goaprovider.h"
 
 G_BEGIN_DECLS
 
@@ -46,7 +48,8 @@ struct _GoaWebViewClass
 };
 
 GType                  goa_web_view_get_type               (void) G_GNUC_CONST;
-GtkWidget             *goa_web_view_new                    (void);
+GtkWidget             *goa_web_view_new                    (GoaProvider *provider,
+                                                            const gchar *existing_identity);
 GtkWidget             *goa_web_view_get_view               (GoaWebView *self);
 void                   goa_web_view_fake_mobile            (GoaWebView *self);
 void                   goa_web_view_add_cookies            (GoaWebView *self,

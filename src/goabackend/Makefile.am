@@ -19,6 +19,7 @@ AM_CPPFLAGS = 							\
 	-DPACKAGE_LOCALSTATE_DIR=\""$(localstatedir)"\" 	\
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" 		\
 	-DPACKAGE_LIB_DIR=\""$(libdir)"\" 			\
+	-DPACKAGE_WEB_EXTENSIONS_DIR=\""$(libdir)/goa-1.0/web-extensions"\" \
 	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT			\
 	$(WARN_CFLAGS)						\
 	$(NULL)
@@ -135,6 +136,34 @@ libgoa_backend_1_0_la_LIBADD = 					\
 
 libgoa_backend_1_0_la_LDFLAGS = 				\
 	-version-info $(GOA_BACKEND_LT_VERSION)			\
+	$(NULL)
+
+# ----------------------------------------------------------------------------------------------------
+
+webextension_LTLIBRARIES = libgoawebextension.la
+
+webextensiondir = $(libdir)/goa-1.0/web-extensions
+
+libgoawebextension_la_SOURCES =						\
+	goawebextension.h		goawebextension.c		\
+	goawebextensionmain.c						\
+	$(NULL)
+
+libgoawebextension_la_CFLAGS =						\
+	$(REST_CFLAGS)							\
+	$(WEBKIT_GTK_CFLAGS)						\
+	$(NULL)
+
+libgoawebextension_la_LIBADD =						\
+	libgoa-backend-1.0.la						\
+	$(REST_LIBS)							\
+	$(WEBKIT_GTK_LIBS)						\
+	$(NULL)
+
+libgoawebextension_la_LDFLAGS =						\
+	-avoid-version							\
+	-module								\
+	-no-undefined							\
 	$(NULL)
 
 # ----------------------------------------------------------------------------------------------------

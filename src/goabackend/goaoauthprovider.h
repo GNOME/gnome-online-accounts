@@ -120,8 +120,10 @@ struct _GoaOAuthProviderClass
                                                 WebKitDOMHTMLInputElement    *element);
 
   /*< private >*/
+  GoaOAuthProviderPrivate *priv;
+
   /* Padding for future expansion */
-  gpointer goa_reserved[29];
+  gpointer goa_reserved[28];
 };
 
 GType        goa_oauth_provider_get_type                     (void) G_GNUC_CONST;
