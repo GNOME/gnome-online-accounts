@@ -87,6 +87,8 @@ http_client_check_data_free (gpointer user_data)
 {
   CheckData *data = user_data;
 
+  g_simple_async_result_complete_in_idle (data->res);
+
   if (data->cancellable_id > 0)
     {
       g_cancellable_disconnect (data->cancellable, data->cancellable_id);
@@ -157,6 +159,8 @@ http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer 
 {
   GError *error;
   CheckData *data = user_data;
+  GMainContext *context;
+  GSource *source;
   gboolean op_res;
 
   error = NULL;
@@ -187,8 +191,14 @@ http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer 
   if (error != NULL)
     g_simple_async_result_take_error (data->res, error);
 
-  g_simple_async_result_complete_in_idle (data->res);
-  g_idle_add (http_client_check_data_free, data);
+  source = g_idle_source_new ();
+  g_source_set_priority (source, G_PRIORITY_DEFAULT_IDLE);
+  g_source_set_callback (source, http_client_check_data_free, data, NULL);
+  g_source_set_name (source, "[goa] http_client_check_data_free");
+
+  context = g_main_context_get_thread_default ();
+  g_source_attach (source, context);
+  g_source_unref (source);
 }
 
 static void
