@@ -93,6 +93,8 @@ ews_client_autodiscover_data_free (gpointer user_data)
 {
   AutodiscoverData *data = user_data;
 
+  g_simple_async_result_complete_in_idle (data->res);
+
   if (data->cancellable_id > 0)
     {
       g_cancellable_disconnect (data->cancellable, data->cancellable_id);
@@ -340,9 +342,19 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
   data->pending--;
   if (data->pending == 0)
     {
+      GMainContext *context;
+      GSource *source;
+
       g_simple_async_result_set_op_res_gboolean (data->res, op_res);
-      g_simple_async_result_complete_in_idle (data->res);
-      g_idle_add (ews_client_autodiscover_data_free, data);
+
+      source = g_idle_source_new ();
+      g_source_set_priority (source, G_PRIORITY_DEFAULT_IDLE);
+      g_source_set_callback (source, ews_client_autodiscover_data_free, data, NULL);
+      g_source_set_name (source, "[goa] ews_client_autodiscover_data_free");
+
+      context = g_main_context_get_thread_default ();
+      g_source_attach (source, context);
+      g_source_unref (source);
     }
 }
 
