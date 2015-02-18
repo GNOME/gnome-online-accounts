@@ -1,23 +1,25 @@
 # Swedish translation for gnome-online-accounts.
-# Copyright (C) 2011-2012 Free Software Foundation, Inc.
+# Copyright © 2011-2015 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-online-accounts package.
 #
 # Daniel Nylander <po@danielnylander.se>, 2011, 2012.
-# Mattias Eriksson <snaggen@gmail.com>, 2014
+# Mattias Eriksson <snaggen@gmail.com>, 2014.
+# Anders Jonsson <anders.jonsson@norsjovallen.se>, 2015.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-12-04 07:59+0000\n"
-"PO-Revision-Date: 2014-09-06 14:44+0100\n"
-"Last-Translator: Mattias Eriksson <snaggen@gmail.com>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-"
+"accounts&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2015-01-24 07:59+0000\n"
+"PO-Revision-Date: 2015-01-24 17:03+0100\n"
+"Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.7.3\n"
 
 #. TODO: more specific
 #: ../src/daemon/goadaemon.c:787 ../src/daemon/goadaemon.c:1048
@@ -26,10 +28,8 @@ msgid "Failed to find a provider for: %s"
 msgstr "Kunde inte hitta en modul för: %s"
 
 #: ../src/daemon/goadaemon.c:976
-#, fuzzy
-#| msgid "ProviderType property is not set for account"
 msgid "IsLocked property is set for account"
-msgstr "Egenskapen ProviderType är inte satt för konto"
+msgstr "Egenskapen IsLocked är satt för konto"
 
 #. TODO: more specific
 #: ../src/daemon/goadaemon.c:1036
@@ -37,27 +37,27 @@ msgid "ProviderType property is not set for account"
 msgstr "Egenskapen ProviderType är inte satt för konto"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:228 ../src/goabackend/goahttpclient.c:170
+#: ../src/goabackend/goaewsclient.c:230 ../src/goabackend/goahttpclient.c:174
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Kod: %u — Oväntat svar från server"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:244
+#: ../src/goabackend/goaewsclient.c:246
 #, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "Misslyckades med att tolka XML-svar för autodetektering"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: ../src/goabackend/goaewsclient.c:255 ../src/goabackend/goaewsclient.c:270
-#: ../src/goabackend/goaewsclient.c:285
+#: ../src/goabackend/goaewsclient.c:257 ../src/goabackend/goaewsclient.c:272
+#: ../src/goabackend/goaewsclient.c:287
 #, c-format
 msgid "Failed to find ‘%s’ element"
 msgstr "Misslyckades med att hitta elementet ‘%s’"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:306
+#: ../src/goabackend/goaewsclient.c:308
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "Misslyckades med att hitta ASUrl och OABUrl i autodetekteringssvar"
@@ -73,8 +73,7 @@ msgstr "Microsoft Exchange"
 #: ../src/goabackend/goaowncloudprovider.c:1168
 #, c-format
 msgid "Did not find password with identity ‘%s’ in credentials"
-msgstr ""
-"Hittade inte lösenord med identiteten ‘%s’ bland inloggningsuppgifterna"
+msgstr "Hittade inte lösenord med identiteten ‘%s’ bland inloggningsuppgifterna"
 
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
@@ -146,8 +145,7 @@ msgstr "Ansluter…"
 #: ../src/goabackend/goaimapsmtpprovider.c:1391
 #: ../src/goabackend/goakerberosprovider.c:1521
 #: ../src/goabackend/goamediaserverprovider.c:473
-#: ../src/goabackend/goaoauth2provider.c:1078
-#: ../src/goabackend/goaoauthprovider.c:908
+#: ../src/goabackend/goaoauth2provider.c:1078 ../src/goabackend/goaoauthprovider.c:908
 #: ../src/goabackend/goaowncloudprovider.c:771
 #: ../src/goabackend/goaowncloudprovider.c:986
 #: ../src/goabackend/goatelepathyprovider.c:459
@@ -198,6 +196,7 @@ msgstr "Fel vid anslutning till Microsoft Exchange-server"
 #: ../src/goabackend/goaexchangeprovider.c:939
 #: ../src/goabackend/goafacebookprovider.c:465
 #: ../src/goabackend/goaflickrprovider.c:412
+#: ../src/goabackend/goafoursquareprovider.c:412
 #: ../src/goabackend/goagoogleprovider.c:626
 #: ../src/goabackend/goakerberosprovider.c:1704
 #: ../src/goabackend/goamediaserverprovider.c:584
@@ -233,38 +232,36 @@ msgstr "Facebook"
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goafacebookprovider.c:218
 #: ../src/goabackend/goaflickrprovider.c:183
+#: ../src/goabackend/goafoursquareprovider.c:188
 #: ../src/goabackend/goagoogleprovider.c:219
 #: ../src/goabackend/goawindowsliveprovider.c:189
 #: ../src/goabackend/goayahooprovider.c:182
 #, c-format
-msgid ""
-"Expected status 200 when requesting your identity, instead got status %d (%s)"
+msgid "Expected status 200 when requesting your identity, instead got status %d (%s)"
 msgstr ""
-"Förväntade status 200 vid begäran av din identitet, fick istället status %d "
-"(%s)"
+"Förväntade status 200 vid begäran av din identitet, fick istället status %d (%s)"
 
 #: ../src/goabackend/goafacebookprovider.c:237
 #: ../src/goabackend/goafacebookprovider.c:249
 #: ../src/goabackend/goafacebookprovider.c:262
-#: ../src/goabackend/goaflickrprovider.c:202
-#: ../src/goabackend/goaflickrprovider.c:214
-#: ../src/goabackend/goaflickrprovider.c:224
-#: ../src/goabackend/goaflickrprovider.c:234
+#: ../src/goabackend/goaflickrprovider.c:202 ../src/goabackend/goaflickrprovider.c:214
+#: ../src/goabackend/goaflickrprovider.c:224 ../src/goabackend/goaflickrprovider.c:234
 #: ../src/goabackend/goaflickrprovider.c:244
-#: ../src/goabackend/goagoogleprovider.c:238
-#: ../src/goabackend/goagoogleprovider.c:250
-#: ../src/goabackend/goaoauth2provider.c:691
-#: ../src/goabackend/goaoauth2provider.c:721
+#: ../src/goabackend/goafoursquareprovider.c:207
+#: ../src/goabackend/goafoursquareprovider.c:219
+#: ../src/goabackend/goafoursquareprovider.c:230
+#: ../src/goabackend/goafoursquareprovider.c:241
+#: ../src/goabackend/goafoursquareprovider.c:252
+#: ../src/goabackend/goafoursquareprovider.c:263
+#: ../src/goabackend/goagoogleprovider.c:238 ../src/goabackend/goagoogleprovider.c:250
+#: ../src/goabackend/goaoauth2provider.c:691 ../src/goabackend/goaoauth2provider.c:721
 #: ../src/goabackend/goaoauth2provider.c:733
 #: ../src/goabackend/goawindowsliveprovider.c:208
 #: ../src/goabackend/goawindowsliveprovider.c:220
 #: ../src/goabackend/goawindowsliveprovider.c:232
-#: ../src/goabackend/goayahooprovider.c:201
-#: ../src/goabackend/goayahooprovider.c:213
-#: ../src/goabackend/goayahooprovider.c:224
-#: ../src/goabackend/goayahooprovider.c:270
-#: ../src/goabackend/goayahooprovider.c:282
-#: ../src/goabackend/goayahooprovider.c:293
+#: ../src/goabackend/goayahooprovider.c:201 ../src/goabackend/goayahooprovider.c:213
+#: ../src/goabackend/goayahooprovider.c:224 ../src/goabackend/goayahooprovider.c:270
+#: ../src/goabackend/goayahooprovider.c:282 ../src/goabackend/goayahooprovider.c:293
 #, c-format
 msgid "Could not parse response"
 msgstr "Kunde inte tolka svar"
@@ -276,13 +273,13 @@ msgid "C_hat"
 msgstr "Direkt_meddelanden"
 
 #: ../src/goabackend/goafacebookprovider.c:472
-#: ../src/goabackend/goaflickrprovider.c:414
-#: ../src/goabackend/goagoogleprovider.c:653
+#: ../src/goabackend/goaflickrprovider.c:414 ../src/goabackend/goagoogleprovider.c:653
 #: ../src/goabackend/goamediaserverprovider.c:586
 msgid "_Photos"
 msgstr "_Foton"
 
 #: ../src/goabackend/goafacebookprovider.c:477
+#: ../src/goabackend/goafoursquareprovider.c:414
 msgid "_Maps"
 msgstr "Kar_tor"
 
@@ -290,11 +287,13 @@ msgstr "Kar_tor"
 msgid "Flickr"
 msgstr "Flickr"
 
-#: ../src/goabackend/goaflickrprovider.c:320
-#: ../src/goabackend/goayahooprovider.c:343
+#: ../src/goabackend/goaflickrprovider.c:320 ../src/goabackend/goayahooprovider.c:343
 msgid "Your system time is invalid. Check your date and time settings."
-msgstr ""
-"Din systemtid är ogiltig. Kontrollera dina datum- och tidsinställningar."
+msgstr "Din systemtid är ogiltig. Kontrollera dina datum- och tidsinställningar."
+
+#: ../src/goabackend/goafoursquareprovider.c:76
+msgid "Foursquare"
+msgstr "Foursquare"
 
 #: ../src/goabackend/goagoogleprovider.c:76
 msgid "Google"
@@ -322,8 +321,7 @@ msgid "Service not available"
 msgstr "Tjänsten är inte tillgänglig"
 
 #. TODO: more specific
-#: ../src/goabackend/goaimapauthlogin.c:115
-#: ../src/goabackend/goasmtpauth.c:113
+#: ../src/goabackend/goaimapauthlogin.c:115 ../src/goabackend/goasmtpauth.c:113
 #, c-format
 msgid "Authentication failed"
 msgstr "Autentisering misslyckades"
@@ -333,8 +331,7 @@ msgstr "Autentisering misslyckades"
 msgid "Server does not support PLAIN"
 msgstr "Servern stöder inte PLAIN"
 
-#: ../src/goabackend/goaimapauthlogin.c:194
-#: ../src/goabackend/goasmtpauth.c:818
+#: ../src/goabackend/goaimapauthlogin.c:194 ../src/goabackend/goasmtpauth.c:818
 #, c-format
 msgid "Server does not support STARTTLS"
 msgstr "Servern stöder inte STARTTLS"
@@ -446,9 +443,7 @@ msgstr "Identitetstjänsten returnerade en ogiltig nyckel"
 #: ../src/goabackend/goakerberosprovider.c:704
 #, c-format
 msgid "Could not find saved credentials for principal ‘%s’ in keyring"
-msgstr ""
-"Kunde inte hitta sparade inloggningsuppgifter för huvudman ‘%s’ i "
-"nyckelringen"
+msgstr "Kunde inte hitta sparade inloggningsuppgifter för huvudman ‘%s’ i nyckelringen"
 
 #: ../src/goabackend/goakerberosprovider.c:717
 #, c-format
@@ -495,11 +490,8 @@ msgstr "Mediaserver"
 
 #: ../src/goabackend/goamediaserverprovider.c:369
 msgid ""
-"Personal content can be added to your applications through a media server "
-"account."
-msgstr ""
-"Personligt innehåll kan läggas till i dina program genom ett "
-"mediaserverkonto."
+"Personal content can be added to your applications through a media server account."
+msgstr "Personligt innehåll kan läggas till i dina program genom ett mediaserverkonto."
 
 #: ../src/goabackend/goamediaserverprovider.c:383
 msgid "Available Media Servers"
@@ -510,14 +502,11 @@ msgid "No media servers found"
 msgstr "Inga mediaservrar hittades"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:667
-#: ../src/goabackend/goaoauthprovider.c:550
+#: ../src/goabackend/goaoauth2provider.c:667 ../src/goabackend/goaoauthprovider.c:550
 #, c-format
-msgid ""
-"Expected status 200 when requesting access token, instead got status %d (%s)"
+msgid "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr ""
-"Förväntade status 200 vid begäran av åtkomstelement, fick istället status %d "
-"(%s)"
+"Förväntade status 200 vid begäran av åtkomstelement, fick istället status %d (%s)"
 
 #: ../src/goabackend/goaoauth2provider.c:888
 msgid "Authorization response: "
@@ -528,13 +517,11 @@ msgstr "Auktoriseringssvar: "
 msgid "Authorization response: %s"
 msgstr "Auktoriseringssvar: %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1104
-#: ../src/goabackend/goaoauthprovider.c:939
+#: ../src/goabackend/goaoauth2provider.c:1104 ../src/goabackend/goaoauthprovider.c:939
 msgid "Error getting an Access Token: "
 msgstr "Fel vid hämtning av ett åtkomstelement: "
 
-#: ../src/goabackend/goaoauth2provider.c:1119
-#: ../src/goabackend/goaoauthprovider.c:952
+#: ../src/goabackend/goaoauth2provider.c:1119 ../src/goabackend/goaoauthprovider.c:952
 msgid "Error getting identity: "
 msgstr "Fel vid hämtning av identitet: "
 
@@ -559,8 +546,8 @@ msgstr "Misslyckades med att uppdatera åtkomstelement (%s, %d): "
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr ""
-"Saknar rubriker för åtkomstelement (access_token) eller "
-"åtkomstelementhemlighet (access_token_secret) i svaret"
+"Saknar rubriker för åtkomstelement (access_token) eller åtkomstelementhemlighet "
+"(access_token_secret) i svaret"
 
 #: ../src/goabackend/goaoauthprovider.c:822
 msgid "Error getting a Request Token: "
@@ -569,18 +556,17 @@ msgstr "Fel vid hämtning av ett begäranselement: "
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauthprovider.c:855
 #, c-format
-msgid ""
-"Expected status 200 for getting a Request Token, instead got status %d (%s)"
+msgid "Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr ""
-"Förväntade status 200 för hämtning av ett begäranselement, fick istället "
-"status %d (%s)"
+"Förväntade status 200 för hämtning av ett begäranselement, fick istället status %d "
+"(%s)"
 
 #: ../src/goabackend/goaoauthprovider.c:872
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr ""
-"Saknar rubriker för begäranselement (request_token) eller "
-"begäranselementhemlighet i svaret"
+"Saknar rubriker för begäranselement (request_token) eller begäranselementhemlighet i "
+"svaret"
 
 #: ../src/goabackend/goaoauthprovider.c:1444
 #, c-format
@@ -612,7 +598,7 @@ msgstr "Inget användarnamn eller åtkomstelement"
 msgid "_Read Later"
 msgstr "_Läs senare"
 
-#: ../src/goabackend/goaprovider.c:682
+#: ../src/goabackend/goaprovider.c:683
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync har inte implementerats för typen %s"
@@ -753,8 +739,8 @@ msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr ""
-"Certifikatet stämmer inte överens med den förväntade identiteten för platsen "
-"som det hämtades från."
+"Certifikatet stämmer inte överens med den förväntade identiteten för platsen som det "
+"hämtades från."
 
 #: ../src/goabackend/goautils.c:545
 msgid "The certificate’s activation time is still in the future."
@@ -793,8 +779,7 @@ msgstr "Yahoo"
 #: ../src/goabackend/goayahooprovider.c:250
 #, c-format
 msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-msgstr ""
-"Förväntade status 200 vid begäran av namn, fick istället status %d (%s)"
+msgstr "Förväntade status 200 vid begäran av namn, fick istället status %d (%s)"
 
 #: ../src/goaidentity/goaidentityservice.c:370
 msgid "initial secret passed before secret key exchange"
@@ -855,8 +840,7 @@ msgstr "Kunde inte förnya identitet: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1398
 msgid "Could not get new credentials to renew identity %s: %k"
-msgstr ""
-"Kunde inte skaffa nya inloggningsuppgifter för att förnya identitet %s: %k"
+msgstr "Kunde inte skaffa nya inloggningsuppgifter för att förnya identitet %s: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1440
 msgid "Could not erase identity: %k"
@@ -869,90 +853,3 @@ msgstr "Kunde inte hitta identitet"
 #: ../src/goaidentity/goakerberosidentitymanager.c:836
 msgid "Could not create credential cache for identity"
 msgstr "Kunde inte skapa inloggningsuppgiftscache för identitet"
-
-#~ msgid ""
-#~ "Paste authorization code obtained from the <a href=\"%s\">authorization "
-#~ "page</a>:"
-#~ msgstr ""
-#~ "Klistra in auktoriseringskoden som hämtas från <a href=\"%s"
-#~ "\">auktoriseringssidan</a>:"
-
-#~ msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-#~ msgstr ""
-#~ "Klistra in element som hämtats från <a href=\"%s\">auktoriseringssidan</"
-#~ "a>:"
-
-#~ msgid "Time"
-#~ msgstr "Tid"
-
-#~ msgid "Time to fire"
-#~ msgstr "Tid till larm"
-
-#~ msgid "An online account needs attention"
-#~ msgstr "Ett nätkonto behöver din uppmärksamhet"
-
-#~ msgid "Open Online Accounts..."
-#~ msgstr "Öppna nätkonton..."
-
-#~ msgid "Error parsing response as JSON: "
-#~ msgstr "Fel vid tolkning av svar som JSON: "
-
-#~ msgid "Didn't find username member in JSON data"
-#~ msgstr "Hittade inte användarnamn-medlem i JSON-data"
-
-#~ msgid "Didn't find name member in JSON data"
-#~ msgstr "Hittade inte namn-medlem i JSON-data"
-
-#~ msgid "Chat"
-#~ msgstr "Chatt"
-
-#~ msgid "Didn't find data member in JSON data"
-#~ msgstr "Hittade inte data-medlem i JSON-data"
-
-#~ msgid "Didn't find email member in JSON data"
-#~ msgstr "Hittade inte e-post-medlem i JSON-data"
-
-#~ msgid "Email Address"
-#~ msgstr "E-postadress"
-
-#~ msgid "Didn't find id member in JSON data"
-#~ msgstr "Hittade inte id-medlem i JSON-data"
-
-#~ msgid "Didn't find account email member in JSON data"
-#~ msgstr "Hittade inte kontoepost-medlem i JSON-data"
-
-#~ msgid "Didn't find access_token in non-JSON data"
-#~ msgstr "Hittade inte access_token i icke-JSON-data"
-
-#~ msgid "Didn't find access_token in JSON data"
-#~ msgstr "Hittade inte access_token i JSON-data"
-
-#~ msgid "There is already an account for the identity %s"
-#~ msgstr "Det finns redan ett konto för identiteten %s"
-
-#~ msgid "Error storing credentials in keyring (%s, %d): "
-#~ msgstr "Fel vid lagring av inloggningsuppgifter i nyckelring (%s, %d): "
-
-#~ msgid "Twitter"
-#~ msgstr "Twitter"
-
-#~ msgid "Didn't find id_str member in JSON data"
-#~ msgstr "Hittade inte id_str-medlem i JSON-data"
-
-#~ msgid "Didn't find screen_name member in JSON data"
-#~ msgstr "Hittade inte screen_name-medlem i JSON-data"
-
-#~ msgid "Didn't find guid member in JSON data"
-#~ msgstr "Hittade inte guid-medlem i JSON-data"
-
-#~ msgid "Didn't find value member in JSON data"
-#~ msgstr "Hittade inte värde-medlem i JSON-data"
-
-#~ msgid "Error parsing usercard response as JSON: "
-#~ msgstr "Fel vid tolkning av usercard-svar som JSON: "
-
-#~ msgid "Didn't find profile member in JSON data"
-#~ msgstr "Hittade inte profil-medlem i JSON-data"
-
-#~ msgid "Didn't find nickname member in JSON data"
-#~ msgstr "Hittade inte smeknamn-medlem i JSON-data"
