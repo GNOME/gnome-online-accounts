@@ -95,12 +95,12 @@ get_protocols_cb (GObject      *source,
       GQuark service_quark = g_quark_try_string (service_name);
       GoaTelepathyProvider *provider;
 
-      /* If the  service is handled natively by GOA, so we don't allow
-       * the creation of a Telepathy-only account. */
-#if GOA_FACEBOOK_ENABLED
+      /* This service does not exist anymore, so skip it. */
       if (service_quark == facebook_quark)
         continue;
-#endif
+
+      /* If the  service is handled natively by GOA, so we don't allow
+       * the creation of a Telepathy-only account. */
 #if GOA_GOOGLE_ENABLED
       if (service_quark == google_talk_quark)
         continue;

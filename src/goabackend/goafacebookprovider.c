@@ -88,7 +88,7 @@ get_provider_group (GoaProvider *_provider)
 static GoaProviderFeatures
 get_provider_features (GoaProvider *_provider)
 {
-  return GOA_PROVIDER_FEATURE_BRANDED | GOA_PROVIDER_FEATURE_CHAT | GOA_PROVIDER_FEATURE_PHOTOS;
+  return GOA_PROVIDER_FEATURE_BRANDED | GOA_PROVIDER_FEATURE_PHOTOS;
 }
 
 /* facebook client flow sends a different auth query then the base
@@ -135,7 +135,6 @@ get_scope (GoaOAuth2Provider *provider)
   return
     "user_events,"
     "read_mailbox,"
-    "xmpp_login,"
     "email,"
     "user_photos";
 }
@@ -143,7 +142,7 @@ get_scope (GoaOAuth2Provider *provider)
 static guint
 get_credentials_generation (GoaProvider *provider)
 {
-  return 1;
+  return 2;
 }
 
 static const gchar *
@@ -331,9 +330,7 @@ build_object (GoaProvider         *provider,
               GError             **error)
 {
   GoaAccount *account;
-  GoaChat *chat = NULL;
   GoaPhotos *photos = NULL;
-  gboolean chat_enabled;
   gboolean photos_enabled;
   gboolean ret = FALSE;
 
@@ -350,32 +347,6 @@ build_object (GoaProvider         *provider,
     goto out;
 
   account = goa_object_get_account (GOA_OBJECT (object));
-
-  /* Chat */
-  chat = goa_object_get_chat (GOA_OBJECT (object));
-  chat_enabled = g_key_file_get_boolean (key_file, group, "ChatEnabled", NULL);
-  if (chat_enabled)
-    {
-      if (chat == NULL)
-        {
-          chat = goa_chat_skeleton_new ();
-          goa_object_skeleton_set_chat (object, chat);
-        }
-    }
-  else
-    {
-      if (chat != NULL)
-        goa_object_skeleton_set_chat (object, NULL);
-    }
-
-  if (just_added)
-    {
-      goa_account_set_chat_disabled (account, !chat_enabled);
-      g_signal_connect (account,
-                        "notify::chat-disabled",
-                        G_CALLBACK (goa_util_account_notify_property_cb),
-                        "ChatEnabled");
-    }
 
   /* Photos */
   photos = goa_object_get_photos (GOA_OBJECT (object));
@@ -408,8 +379,6 @@ build_object (GoaProvider         *provider,
   ret = TRUE;
 
  out:
-  if (chat != NULL)
-    g_object_unref (chat);
   if (account != NULL)
     g_object_unref (account);
   g_clear_object (&photos);
@@ -433,13 +402,6 @@ show_account (GoaProvider         *provider,
   goa_util_add_account_info (grid, row++, object);
 
   goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
-                                                   /* Translators: This is a label for a series of
-                                                    * options switches. For example: “Use for Mail”. */
-                                                   _("Use for"),
-                                                   "chat-disabled",
-                                                   _("C_hat"));
-
-  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
                                                    NULL,
                                                    "photos-disabled",
                                                    _("_Photos"));
@@ -451,7 +413,6 @@ static void
 add_account_key_values (GoaOAuth2Provider *provider,
                         GVariantBuilder   *builder)
 {
-  g_variant_builder_add (builder, "{ss}", "ChatEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "PhotosEnabled", "true");
 }
 
