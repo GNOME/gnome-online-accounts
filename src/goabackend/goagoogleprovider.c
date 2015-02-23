@@ -92,7 +92,6 @@ get_provider_features (GoaProvider *_provider)
          GOA_PROVIDER_FEATURE_CHAT |
          GOA_PROVIDER_FEATURE_DOCUMENTS |
          GOA_PROVIDER_FEATURE_PHOTOS |
-         GOA_PROVIDER_FEATURE_FILES |
          GOA_PROVIDER_FEATURE_PRINTERS;
 }
 
@@ -325,7 +324,6 @@ build_object (GoaProvider         *provider,
   GoaContacts *contacts;
   GoaChat *chat;
   GoaDocuments *documents;
-  GoaFiles *files;
   GoaPhotos *photos;
   GoaPrinters *printers;
   gboolean ret;
@@ -334,7 +332,6 @@ build_object (GoaProvider         *provider,
   gboolean contacts_enabled;
   gboolean chat_enabled;
   gboolean documents_enabled;
-  gboolean files_enabled;
   gboolean photos_enabled;
   gboolean printers_enabled;
   const gchar *email_address;
@@ -345,7 +342,6 @@ build_object (GoaProvider         *provider,
   contacts = NULL;
   chat = NULL;
   documents = NULL;
-  files = NULL;
   photos = NULL;
   printers = NULL;
   ret = FALSE;
@@ -494,30 +490,6 @@ build_object (GoaProvider         *provider,
         goa_object_skeleton_set_photos (object, NULL);
     }
 
-  /* Files */
-  files = goa_object_get_files (GOA_OBJECT (object));
-  files_enabled = g_key_file_get_boolean (key_file, group, "FilesEnabled", NULL);
-  if (files_enabled)
-    {
-      if (files == NULL)
-        {
-          gchar *uri_drive;
-
-          uri_drive = g_strconcat ("google-drive://", email_address, "/", NULL);
-          files = goa_files_skeleton_new ();
-          g_object_set (G_OBJECT (files),
-                        "uri", uri_drive,
-                        NULL);
-          goa_object_skeleton_set_files (object, files);
-          g_free (uri_drive);
-        }
-    }
-  else
-    {
-      if (files != NULL)
-        goa_object_skeleton_set_files (object, NULL);
-    }
-
   /* Printers */
   printers = goa_object_get_printers (GOA_OBJECT (object));
   printers_enabled = g_key_file_get_boolean (key_file, group, "PrintersEnabled", NULL);
@@ -544,7 +516,6 @@ build_object (GoaProvider         *provider,
       goa_account_set_chat_disabled (account, !chat_enabled);
       goa_account_set_documents_disabled (account, !documents_enabled);
       goa_account_set_photos_disabled (account, !photos_enabled);
-      goa_account_set_files_disabled (account, !files_enabled);
       goa_account_set_printers_disabled (account, !printers_enabled);
 
       g_signal_connect (account,
@@ -572,10 +543,6 @@ build_object (GoaProvider         *provider,
                         G_CALLBACK (goa_util_account_notify_property_cb),
                         "PhotosEnabled");
       g_signal_connect (account,
-                        "notify::files-disabled",
-                        G_CALLBACK (goa_util_account_notify_property_cb),
-                        "FilesEnabled");
-      g_signal_connect (account,
                         "notify::printers-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
                         "PrintersEnabled");
@@ -585,7 +552,6 @@ build_object (GoaProvider         *provider,
 
  out:
   g_clear_object (&printers);
-  g_clear_object (&files);
   g_clear_object (&photos);
   g_clear_object (&documents);
   g_clear_object (&chat);
@@ -654,11 +620,6 @@ show_account (GoaProvider         *provider,
 
   goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
                                                    NULL,
-                                                   "files-disabled",
-                                                   _("_Files"));
-
-  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
-                                                   NULL,
                                                    "printers-disabled",
                                                    _("Prin_ters"));
 }
@@ -675,7 +636,6 @@ add_account_key_values (GoaOAuth2Provider  *provider,
   g_variant_builder_add (builder, "{ss}", "ChatEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "DocumentsEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "PhotosEnabled", "true");
-  g_variant_builder_add (builder, "{ss}", "FilesEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "PrintersEnabled", "true");
 }
 
