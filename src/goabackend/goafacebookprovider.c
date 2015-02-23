@@ -134,7 +134,6 @@ get_scope (GoaOAuth2Provider *provider)
   /* Note: Email is requested to obtain a human understandable unique Id  */
   return
     "user_events,"
-    "read_mailbox,"
     "email,"
     "user_photos";
 }
