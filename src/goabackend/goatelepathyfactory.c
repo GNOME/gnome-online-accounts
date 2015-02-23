@@ -72,10 +72,8 @@ get_protocols_cb (GObject      *source,
   GList *ret;
   GList *l;
   GError *error = NULL;
-
-#if GOA_FACEBOOK_ENABLED
   GQuark facebook_quark;
-#endif
+
 #if GOA_GOOGLE_ENABLED
   GQuark google_talk_quark;
 #endif
@@ -88,9 +86,8 @@ get_protocols_cb (GObject      *source,
       return;
     }
 
-#if GOA_FACEBOOK_ENABLED
   facebook_quark = g_quark_from_static_string ("facebook");
-#endif
+
 #if GOA_GOOGLE_ENABLED
   google_talk_quark = g_quark_from_static_string ("google-talk");
 #endif
@@ -103,12 +100,12 @@ get_protocols_cb (GObject      *source,
       GQuark service_quark = g_quark_try_string (service_name);
       GoaTelepathyProvider *provider;
 
-      /* If the  service is handled natively by GOA, so we don't allow
-       * the creation of a Telepathy-only account. */
-#if GOA_FACEBOOK_ENABLED
+      /* This service does not exist anymore, so skip it. */
       if (service_quark == facebook_quark)
         continue;
-#endif
+
+      /* If the  service is handled natively by GOA, so we don't allow
+       * the creation of a Telepathy-only account. */
 #if GOA_GOOGLE_ENABLED
       if (service_quark == google_talk_quark)
         continue;
