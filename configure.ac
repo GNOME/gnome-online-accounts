@@ -269,31 +269,6 @@ if test "$enable_owncloud" != "no"; then
   AC_DEFINE(GOA_OWNCLOUD_ENABLED, 1, [Enable ownCloud data provider])
 fi
 
-# Yahoo
-AC_DEFINE(GOA_YAHOO_NAME, ["yahoo"], [ProviderType and extension point name])
-AC_ARG_ENABLE([yahoo], [AS_HELP_STRING([--enable-yahoo], [Enable Yahoo provider])], [], [enable_yahoo=no])
-AC_ARG_WITH(yahoo-consumer-key,
-            [AS_HELP_STRING([--with-yahoo-consumer-key],
-                            [Yahoo OAuth 1.0 consumer key])],
-                            [],
-                            [])
-AC_ARG_WITH(yahoo-consumer-secret,
-            [AS_HELP_STRING([--with-yahoo-consumer-secret],
-                            [Yahoo OAuth 1.0 consumer secret])],
-                            [],
-                            [])
-if test "$with_yahoo_consumer_key" = ""; then
-  with_yahoo_consumer_key=not_set
-fi
-if test "$with_yahoo_consumer_secret" = ""; then
-  with_yahoo_consumer_secret=not_set
-fi
-AC_DEFINE_UNQUOTED(GOA_YAHOO_CONSUMER_KEY, ["$with_yahoo_consumer_key"], [Yahoo OAuth 1.0 consumer key])
-AC_DEFINE_UNQUOTED(GOA_YAHOO_CONSUMER_SECRET, ["$with_yahoo_consumer_secret"], [Yahoo OAuth 1.0 consumer secret])
-if test "$enable_yahoo" != "no"; then
-  AC_DEFINE(GOA_YAHOO_ENABLED, 1, [Enable Yahoo data provider])
-fi
-
 # Facebook
 AC_DEFINE(GOA_FACEBOOK_NAME, ["facebook"], [ProviderType and extension point name])
 AC_ARG_ENABLE([facebook], [AS_HELP_STRING([--enable-facebook],
@@ -559,7 +534,6 @@ echo "
 	Microsoft Exchange provider:    ${enable_exchange}
 	ownCloud provider:              ${enable_owncloud}
 	Kerberos provider:              ${enable_kerberos}
-	Yahoo provider:                 ${enable_yahoo} (OAuth 1.0, key:${with_yahoo_consumer_key} secret:${with_yahoo_consumer_secret})
 	Facebook provider:              ${enable_facebook} (OAuth 2.0, id:${with_facebook_client_id})
 	Windows Live provider:          ${enable_windows_live} (OAuth 2.0, id:${with_windows_live_client_id})
         Telepathy provider:             ${enable_telepathy}
