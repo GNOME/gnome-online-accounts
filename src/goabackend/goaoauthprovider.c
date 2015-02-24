@@ -115,6 +115,38 @@ goa_oauth_provider_get_use_mobile_browser (GoaOAuthProvider *provider)
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
+goa_oauth_provider_is_deny_node_default (GoaOAuthProvider *provider, WebKitDOMNode *node)
+{
+  return FALSE;
+}
+
+/**
+ * goa_oauth_provider_is_deny_node:
+ * @provider: A #GoaOAuthProvider.
+ * @node: A WebKitDOMNode.
+ *
+ * Checks whether @node is the HTML UI element that the user can use
+ * to deny permission to access his account. Usually they are either a
+ * WebKitDOMHTMLButtonElement or a WebKitDOMHTMLInputElement.
+ *
+ * Please note that providers may have multiple such elements in their
+ * UI and this method should catch all of them.
+ *
+ * This is a virtual method where the default implementation returns
+ * %FALSE.
+ *
+ * Returns: %TRUE if the @node can be used to deny permission.
+ */
+gboolean
+goa_oauth_provider_is_deny_node (GoaOAuthProvider *provider, WebKitDOMNode *node)
+{
+  g_return_val_if_fail (GOA_IS_OAUTH_PROVIDER (provider), FALSE);
+  return GOA_OAUTH_PROVIDER_GET_CLASS (provider)->is_deny_node (provider, node);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gboolean
 goa_oauth_provider_is_password_node_default (GoaOAuthProvider *provider, WebKitDOMHTMLInputElement *element)
 {
   return FALSE;
@@ -421,30 +453,6 @@ goa_oauth_provider_get_identity_sync (GoaOAuthProvider *provider,
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
   return GOA_OAUTH_PROVIDER_GET_CLASS (provider)->get_identity_sync (provider, access_token, access_token_secret, out_presentation_identity, cancellable, error);
-}
-
-/**
- * goa_oauth_provider_is_deny_node:
- * @provider: A #GoaOAuthProvider.
- * @node: A WebKitDOMNode.
- *
- * Checks whether @node is the HTML UI element that the user can use
- * to deny permission to access his account. Usually they are either a
- * WebKitDOMHTMLButtonElement or a WebKitDOMHTMLInputElement.
- *
- * Please note that providers may have multiple such elements in their
- * UI and this method should catch all of them.
- *
- * This is a pure virtual method - a subclass must provide an
- * implementation.
- *
- * Returns: %TRUE if the @node can be used to deny permission.
- */
-gboolean
-goa_oauth_provider_is_deny_node (GoaOAuthProvider *provider, WebKitDOMNode *node)
-{
-  g_return_val_if_fail (GOA_IS_OAUTH_PROVIDER (provider), FALSE);
-  return GOA_OAUTH_PROVIDER_GET_CLASS (provider)->is_deny_node (provider, node);
 }
 
 /**
@@ -1686,6 +1694,7 @@ goa_oauth_provider_class_init (GoaOAuthProviderClass *klass)
 
   klass->build_authorization_uri  = goa_oauth_provider_build_authorization_uri_default;
   klass->get_use_mobile_browser   = goa_oauth_provider_get_use_mobile_browser_default;
+  klass->is_deny_node             = goa_oauth_provider_is_deny_node_default;
   klass->is_password_node         = goa_oauth_provider_is_password_node_default;
   klass->get_request_uri_params   = goa_oauth_provider_get_request_uri_params_default;
   klass->add_account_key_values   = goa_oauth_provider_add_account_key_values_default;

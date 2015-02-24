@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2012, 2014 Red Hat, Inc.
+ * Copyright (C) 2011, 2012, 2014, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -104,12 +104,12 @@ struct _GoaOAuth2ProviderClass
                                                 GVariantBuilder              *builder);
 
   /* pure virtual */
-  gboolean     (*is_deny_node)                 (GoaOAuth2Provider            *provider,
-                                                WebKitDOMNode                *node);
   gboolean     (*is_identity_node)             (GoaOAuth2Provider            *provider,
                                                 WebKitDOMHTMLInputElement    *element);
 
   /* virtual but with default implementation */
+  gboolean     (*is_deny_node)                 (GoaOAuth2Provider            *provider,
+                                                WebKitDOMNode                *node);
   gboolean     (*is_password_node)             (GoaOAuth2Provider            *provider,
                                                 WebKitDOMHTMLInputElement    *element);
 

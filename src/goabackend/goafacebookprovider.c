@@ -282,12 +282,6 @@ get_identity_sync (GoaOAuth2Provider  *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-is_deny_node (GoaOAuth2Provider *provider, WebKitDOMNode *node)
-{
-  return FALSE;
-}
-
-static gboolean
 is_identity_node (GoaOAuth2Provider *provider, WebKitDOMHTMLInputElement *element)
 {
   gboolean ret;
@@ -479,7 +473,6 @@ goa_facebook_provider_class_init (GoaFacebookProviderClass *klass)
   oauth2_class->get_client_secret        = get_client_secret;
   oauth2_class->get_authentication_cookie = get_authentication_cookie;
   oauth2_class->get_identity_sync        = get_identity_sync;
-  oauth2_class->is_deny_node             = is_deny_node;
   oauth2_class->is_identity_node         = is_identity_node;
   oauth2_class->add_account_key_values   = add_account_key_values;
 }

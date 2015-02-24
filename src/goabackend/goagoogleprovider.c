@@ -267,12 +267,6 @@ get_identity_sync (GoaOAuth2Provider  *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-is_deny_node (GoaOAuth2Provider *provider, WebKitDOMNode *node)
-{
-  return FALSE;
-}
-
-static gboolean
 is_identity_node (GoaOAuth2Provider *provider, WebKitDOMHTMLInputElement *element)
 {
   gboolean ret;
@@ -669,7 +663,6 @@ goa_google_provider_class_init (GoaGoogleProviderClass *klass)
   oauth2_class->get_identity_sync         = get_identity_sync;
   oauth2_class->get_redirect_uri          = get_redirect_uri;
   oauth2_class->get_scope                 = get_scope;
-  oauth2_class->is_deny_node              = is_deny_node;
   oauth2_class->is_identity_node          = is_identity_node;
   oauth2_class->get_token_uri             = get_token_uri;
   oauth2_class->get_use_mobile_browser    = get_use_mobile_browser;
