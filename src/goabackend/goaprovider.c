@@ -28,7 +28,6 @@
 #include "goafacebookprovider.h"
 #include "goaimapsmtpprovider.h"
 #include "goaowncloudprovider.h"
-#include "goayahooprovider.h"
 #include "goaflickrprovider.h"
 #include "goafoursquareprovider.h"
 #include "goawindowsliveprovider.h"
@@ -796,9 +795,6 @@ static struct
 #endif
 #ifdef GOA_MEDIA_SERVER_ENABLED
   { GOA_MEDIA_SERVER_NAME, goa_media_server_provider_get_type },
-#endif
-#ifdef GOA_YAHOO_ENABLED
-  { GOA_YAHOO_NAME, goa_yahoo_provider_get_type },
 #endif
 #ifdef GOA_TELEPATHY_ENABLED
   { GOA_TELEPATHY_NAME, goa_telepathy_factory_get_type },
