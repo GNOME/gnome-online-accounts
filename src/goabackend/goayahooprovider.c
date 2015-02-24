@@ -314,12 +314,6 @@ get_identity_sync (GoaOAuthProvider  *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-is_deny_node (GoaOAuthProvider *provider, WebKitDOMNode *node)
-{
-  return FALSE;
-}
-
-static gboolean
 is_identity_node (GoaOAuthProvider *provider, WebKitDOMHTMLInputElement *element)
 {
   return FALSE;
@@ -418,7 +412,6 @@ goa_yahoo_provider_class_init (GoaYahooProviderClass *klass)
 
   oauth_class = GOA_OAUTH_PROVIDER_CLASS (klass);
   oauth_class->get_identity_sync        = get_identity_sync;
-  oauth_class->is_deny_node             = is_deny_node;
   oauth_class->is_identity_node         = is_identity_node;
   oauth_class->get_consumer_key         = get_consumer_key;
   oauth_class->get_consumer_secret      = get_consumer_secret;
