@@ -23,6 +23,7 @@
 #include <rest/oauth2-proxy.h>
 #include <libsoup/soup.h>
 #include <json-glib/json-glib.h>
+#include <webkit/webkit.h>
 
 #include "goaprovider.h"
 #include "goautils.h"
