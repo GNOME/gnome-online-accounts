@@ -22,7 +22,6 @@
 
 #include <rest/rest-proxy.h>
 #include <json-glib/json-glib.h>
-#include <webkit/webkit.h>
 
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
