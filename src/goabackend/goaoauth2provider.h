@@ -25,7 +25,7 @@
 
 #include <goabackend/goaprovider.h>
 #include <goabackend/goaprovider-priv.h>
-#include <webkit/webkit.h>
+#include <webkitdom/webkitdom.h>
 
 G_BEGIN_DECLS
 
