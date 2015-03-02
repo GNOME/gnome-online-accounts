@@ -99,29 +99,6 @@ libgoa_backend_1_0_la_SOURCES =						\
 	$(top_builddir)/src/goaidentity/org.freedesktop.realmd.c	\
 	$(NULL)
 
-BUILT_SOURCES =								\
-	$(libgoa_backend_1_0_la_built_sources)				\
-	$(NULL)
-
-EXTRA_DIST +=								\
-	goadleynaservermanager.xml					\
-	goadleynaservermediadevice.xml					\
-	$(NULL)
-
-goadleynaservermanager.h goadleynaservermanager.c: goadleynaservermanager.xml
-	$(AM_V_GEN)gdbus-codegen						\
-		--c-namespace DleynaServer					\
-		--generate-c-code goadleynaservermanager			\
-		--interface-prefix com.intel.dLeynaServer.			\
-		$<
-
-goadleynaservermediadevice.h goadleynaservermediadevice.c: goadleynaservermediadevice.xml
-	$(AM_V_GEN)gdbus-codegen								\
-		--c-namespace DleynaServer							\
-		--generate-c-code goadleynaservermediadevice					\
-		--interface-prefix com.intel.dLeynaServer.					\
-		$<
-
 if BUILD_KERBEROS
 libgoa_backend_1_0_la_SOURCES +=					\
 	goakerberosprovider.h		goakerberosprovider.c
@@ -159,6 +136,31 @@ libgoa_backend_1_0_la_LIBADD = 					\
 libgoa_backend_1_0_la_LDFLAGS = 				\
 	-version-info $(GOA_BACKEND_LT_VERSION)			\
 	$(NULL)
+
+# ----------------------------------------------------------------------------------------------------
+
+BUILT_SOURCES =								\
+	$(libgoa_backend_1_0_la_built_sources)				\
+	$(NULL)
+
+EXTRA_DIST +=								\
+	goadleynaservermanager.xml					\
+	goadleynaservermediadevice.xml					\
+	$(NULL)
+
+goadleynaservermanager.h goadleynaservermanager.c: goadleynaservermanager.xml
+	$(AM_V_GEN)gdbus-codegen						\
+		--c-namespace DleynaServer					\
+		--generate-c-code goadleynaservermanager			\
+		--interface-prefix com.intel.dLeynaServer.			\
+		$<
+
+goadleynaservermediadevice.h goadleynaservermediadevice.c: goadleynaservermediadevice.xml
+	$(AM_V_GEN)gdbus-codegen								\
+		--c-namespace DleynaServer							\
+		--generate-c-code goadleynaservermediadevice					\
+		--interface-prefix com.intel.dLeynaServer.					\
+		$<
 
 # ----------------------------------------------------------------------------------------------------
 
