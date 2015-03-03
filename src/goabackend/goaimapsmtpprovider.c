@@ -1539,6 +1539,7 @@ show_account (GoaProvider         *provider,
 
       tmp = g_strconcat (value_str_1, "@", value_str, NULL);
       show_label (GTK_WIDGET (grid), row++, _("IMAP"), tmp);
+      g_free (tmp);
     }
   else
       show_label (GTK_WIDGET (grid), row++, _("IMAP"), value_str);
@@ -1553,6 +1554,7 @@ show_account (GoaProvider         *provider,
 
       tmp = g_strconcat (value_str_1, "@", value_str, NULL);
       show_label (GTK_WIDGET (grid), row++, _("SMTP"), tmp);
+      g_free (tmp);
     }
   else
       show_label (GTK_WIDGET (grid), row++, _("SMTP"), value_str);
