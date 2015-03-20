@@ -1351,7 +1351,7 @@ goa_util_add_row_switch_from_keyfile_with_blurb (GtkGrid      *grid,
                               G_BINDING_BIDIRECTIONAL | G_BINDING_INVERT_BOOLEAN);
     }
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
 
   if (blurb != NULL)
