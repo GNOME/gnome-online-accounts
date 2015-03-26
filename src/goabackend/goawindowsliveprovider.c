@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2012, 2013, 2014 Red Hat, Inc.
+ * Copyright (C) 2011, 2012, 2013, 2014, 2015 Red Hat, Inc.
  * Copyright (C) 2011 Collabora Ltd.
  *
  * This library is free software; you can redistribute it and/or
@@ -74,7 +74,7 @@ static gchar *
 get_provider_name (GoaProvider *_provider,
                    GoaObject   *object)
 {
-  return g_strdup (_("Windows Live"));
+  return g_strdup (_("Microsoft Account"));
 }
 
 static GoaProviderGroup
