@@ -77,6 +77,13 @@ get_provider_name (GoaProvider *_provider,
   return g_strdup (_("Microsoft Account"));
 }
 
+static GIcon *
+get_provider_icon (GoaProvider *provider,
+                   GoaObject   *object)
+{
+  return g_themed_icon_new_with_default_fallbacks ("goa-account-msn");
+}
+
 static GoaProviderGroup
 get_provider_group (GoaProvider *_provider)
 {
@@ -447,6 +454,7 @@ goa_windows_live_provider_class_init (GoaWindowsLiveProviderClass *klass)
   provider_class = GOA_PROVIDER_CLASS (klass);
   provider_class->get_provider_type          = get_provider_type;
   provider_class->get_provider_name          = get_provider_name;
+  provider_class->get_provider_icon          = get_provider_icon;
   provider_class->get_provider_group         = get_provider_group;
   provider_class->get_provider_features      = get_provider_features;
   provider_class->build_object               = build_object;
