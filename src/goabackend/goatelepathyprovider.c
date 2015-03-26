@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012, 2013 Red Hat, Inc.
+ * Copyright (C) 2012, 2013, 2015 Red Hat, Inc.
  * Copyright (C) 2013 Intel Corporation
  *
  * This library is free software; you can redistribute it and/or
@@ -460,7 +460,7 @@ add_account (GoaProvider  *provider,
   g_list_free (children);
 
   account_widget = tpaw_account_widget_new_for_protocol (settings,
-      GTK_BOX (action_area), FALSE);
+      GTK_BOX (action_area), TRUE);
   gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET (account_widget), FALSE, FALSE, 0);
   gtk_widget_show (GTK_WIDGET (account_widget));
   g_signal_connect (account_widget, "account-created",
