@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012, 2013 Red Hat, Inc.
+ * Copyright (C) 2012, 2013, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -46,7 +46,8 @@ goa_utils_initialize_client_factory (void)
     {
       TpSimpleClientFactory *factory;
       TpAccountManager *account_manager;
-      GQuark account_features[] = {TP_ACCOUNT_FEATURE_STORAGE,
+      GQuark account_features[] = {TP_ACCOUNT_FEATURE_ADDRESSING,
+                                   TP_ACCOUNT_FEATURE_STORAGE,
                                    TP_ACCOUNT_FEATURE_CONNECTION,
                                    0};
       GQuark connection_features[] = {TP_CONNECTION_FEATURE_AVATAR_REQUIREMENTS,
