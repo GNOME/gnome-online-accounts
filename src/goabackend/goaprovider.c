@@ -78,8 +78,8 @@ static gboolean goa_provider_build_object_real (GoaProvider         *self,
 
 static guint goa_provider_get_credentials_generation_real (GoaProvider *self);
 
-static GIcon *goa_provider_get_provider_icon_default (GoaProvider *self,
-                                                      GoaObject   *object);
+static GIcon *goa_provider_get_provider_icon_real (GoaProvider *self,
+                                                   GoaObject   *object);
 
 #define GOA_PROVIDER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GOA_TYPE_PROVIDER, GoaProviderPrivate))
 
@@ -151,7 +151,7 @@ goa_provider_class_init (GoaProviderClass *klass)
   klass->build_object = goa_provider_build_object_real;
   klass->ensure_credentials_sync = goa_provider_ensure_credentials_sync_real;
   klass->get_credentials_generation = goa_provider_get_credentials_generation_real;
-  klass->get_provider_icon = goa_provider_get_provider_icon_default;
+  klass->get_provider_icon = goa_provider_get_provider_icon_real;
 
 /**
  * GoaProvider:preseed-data
@@ -262,8 +262,8 @@ goa_provider_get_provider_icon (GoaProvider *self,
 }
 
 static GIcon *
-goa_provider_get_provider_icon_default (GoaProvider *self,
-                                        GoaObject   *object)
+goa_provider_get_provider_icon_real (GoaProvider *self,
+                                     GoaObject   *object)
 {
   GIcon *ret;
   gchar *s;
