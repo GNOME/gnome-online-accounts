@@ -75,12 +75,6 @@ struct _GoaProviderClass
                                      GoaObject          *object,
                                      GtkWindow          *parent,
                                      GError            **error);
-  void         (*show_account)      (GoaProvider         *self,
-                                     GoaClient           *client,
-                                     GoaObject           *object,
-                                     GtkBox              *vbox,
-                                     GtkGrid             *grid,
-                                     GtkGrid             *dummy);
   gboolean     (*build_object)      (GoaProvider        *self,
                                      GoaObjectSkeleton  *object,
                                      GKeyFile           *key_file,
@@ -89,6 +83,12 @@ struct _GoaProviderClass
                                      gboolean            just_added,
                                      GError            **error);
   /* virtual but with default implementation */
+  void         (*show_account)      (GoaProvider         *self,
+                                     GoaClient           *client,
+                                     GoaObject           *object,
+                                     GtkBox              *vbox,
+                                     GtkGrid             *grid,
+                                     GtkGrid             *dummy);
   gboolean (*ensure_credentials_sync) (GoaProvider         *self,
                                        GoaObject           *object,
                                        gint                *out_expires_in,

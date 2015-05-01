@@ -80,6 +80,12 @@ static guint goa_provider_get_credentials_generation_real (GoaProvider *self);
 
 static GIcon *goa_provider_get_provider_icon_real (GoaProvider *self,
                                                    GoaObject   *object);
+static void goa_provider_show_account_real (GoaProvider         *provider,
+                                            GoaClient           *client,
+                                            GoaObject           *object,
+                                            GtkBox              *vbox,
+                                            GtkGrid             *grid,
+                                            GtkGrid             *dummy);
 
 #define GOA_PROVIDER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GOA_TYPE_PROVIDER, GoaProviderPrivate))
 
@@ -152,6 +158,7 @@ goa_provider_class_init (GoaProviderClass *klass)
   klass->ensure_credentials_sync = goa_provider_ensure_credentials_sync_real;
   klass->get_credentials_generation = goa_provider_get_credentials_generation_real;
   klass->get_provider_icon = goa_provider_get_provider_icon_real;
+  klass->show_account = goa_provider_show_account_real;
 
 /**
  * GoaProvider:preseed-data
@@ -435,8 +442,9 @@ goa_provider_refresh_account (GoaProvider  *self,
  * Method used to add widgets in the control panel for the account
  * represented by @object.
  *
- * This is a pure virtual method - a subclass must provide an
- * implementation.
+ * This is a virtual method where the default implementation adds
+ * one GtkSwitch per service supported by the provider (as reported
+ * by goa_provider_get_provider_features()).
  */
 void
 goa_provider_show_account (GoaProvider         *self,
@@ -453,6 +461,112 @@ goa_provider_show_account (GoaProvider         *self,
   g_return_if_fail (GTK_IS_GRID (grid));
 
   GOA_PROVIDER_GET_CLASS (self)->show_account (self, client, object, vbox, grid, dummy);
+}
+
+static struct {
+  GoaProviderFeatures feature;
+  const gchar *property;
+  const gchar *blurb;
+} show_account_items[] = {
+  /* The order in which the features are listed is
+   * important because it affects the order in which they are
+   * displayed in the show_account() UI
+   */
+  {
+    .feature = GOA_PROVIDER_FEATURE_MAIL,
+    .property = "mail-disabled",
+    .blurb = N_("_Mail"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_CALENDAR,
+    .property = "calendar-disabled",
+    .blurb = N_("Cale_ndar"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_CONTACTS,
+    .property = "contacts-disabled",
+    .blurb = N_("_Contacts"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_CHAT,
+    .property = "chat-disabled",
+    .blurb = N_("C_hat"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_DOCUMENTS,
+    .property = "documents-disabled",
+    .blurb = N_("_Documents"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_PHOTOS,
+    .property = "photos-disabled",
+    .blurb = N_("_Photos"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_FILES,
+    .property = "files-disabled",
+    .blurb = N_("_Files"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_TICKETING,
+    .property = "ticketing-disabled",
+    .blurb = N_("Network _Resources"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_READ_LATER,
+    .property = "read-later-disabled",
+    .blurb = N_("_Read Later"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_PRINTERS,
+    .property = "printers-disabled",
+    .blurb = N_("Prin_ters"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_MAPS,
+    .property = "maps-disabled",
+    .blurb = N_("_Maps"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_INVALID,
+    .property = NULL,
+    .blurb = NULL,
+  }
+};
+
+static void
+goa_provider_show_account_real (GoaProvider         *provider,
+                                GoaClient           *client,
+                                GoaObject           *object,
+                                GtkBox              *vbox,
+                                GtkGrid             *grid,
+                                GtkGrid             *dummy)
+{
+  GoaProviderFeatures features;
+  gint row;
+  guint i;
+  const char *label;
+
+  row = 0;
+
+  goa_util_add_account_info (grid, row++, object);
+
+  features = goa_provider_get_provider_features (provider);
+  /* Translators: This is a label for a series of
+   * options switches. For example: “Use for Mail”. */
+  label = _("Use for");
+
+  for (i = 0; show_account_items[i].property != NULL; i++)
+    {
+      if ((features & show_account_items[i].feature) != 0)
+        {
+          goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
+                                                           label,
+                                                           show_account_items[i].property,
+                                                           _(show_account_items[i].blurb));
+          label = NULL;
+        }
+    }
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
