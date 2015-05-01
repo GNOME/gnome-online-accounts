@@ -386,30 +386,6 @@ get_use_mobile_browser (GoaOAuth2Provider *oauth2_provider)
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-show_account (GoaProvider         *provider,
-              GoaClient           *client,
-              GoaObject           *object,
-              GtkBox              *vbox,
-              GtkGrid             *grid,
-              G_GNUC_UNUSED GtkGrid *dummy)
-{
-  gint row;
-
-  row = 0;
-
-  goa_util_add_account_info (grid, row++, object);
-
-  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
-                                                   /* Translators: This is a label for a series of
-                                                    * options switches. For example: “Use for Mail”. */
-                                                   _("Use for"),
-                                                   "maps-disabled",
-                                                   _("_Maps"));
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-static void
 add_account_key_values (GoaOAuth2Provider *oauth2_provider,
                         GVariantBuilder   *builder)
 {
@@ -435,7 +411,6 @@ goa_foursquare_provider_class_init (GoaFoursquareProviderClass *klass)
   provider_class->get_provider_group         = get_provider_group;
   provider_class->get_provider_features      = get_provider_features;
   provider_class->build_object               = build_object;
-  provider_class->show_account               = show_account;
 
   oauth2_class = GOA_OAUTH2_PROVIDER_CLASS (klass);
   oauth2_class->get_authorization_uri    = get_authorization_uri;

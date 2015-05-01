@@ -571,26 +571,6 @@ refresh_account (GoaProvider  *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-show_account (GoaProvider         *provider,
-              GoaClient           *client,
-              GoaObject           *object,
-              GtkBox              *vbox,
-              GtkGrid             *grid,
-              GtkGrid             *right)
-{
-  gint row = 0;
-
-  goa_util_add_account_info (grid, row++, object);
-
-  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
-                                                   _("Use for"),
-                                                   "photos-disabled",
-                                                   _("_Photos"));
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-static void
 goa_media_server_provider_dispose (GObject *object)
 {
   GoaMediaServerProvider *self = GOA_MEDIA_SERVER_PROVIDER (object);
@@ -621,6 +601,5 @@ goa_media_server_provider_class_init (GoaMediaServerProviderClass *klass)
   provider_class->add_account             = add_account;
   provider_class->refresh_account         = refresh_account;
   provider_class->build_object            = build_object;
-  provider_class->show_account            = show_account;
   provider_class->ensure_credentials_sync = ensure_credentials_sync;
 }

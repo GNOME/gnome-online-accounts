@@ -920,40 +920,6 @@ refresh_account (GoaProvider    *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-show_account (GoaProvider         *provider,
-              GoaClient           *client,
-              GoaObject           *object,
-              GtkBox              *vbox,
-              GtkGrid             *grid,
-              G_GNUC_UNUSED GtkGrid *dummy)
-{
-  gint row;
-
-  row = 0;
-
-  goa_util_add_account_info (grid, row++, object);
-
-  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
-                                                   /* Translators: This is a label for a series of
-                                                    * options switches. For example: “Use for Mail”. */
-                                                   _("Use for"),
-                                                   "mail-disabled",
-                                                   _("_Mail"));
-
-  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
-                                                   NULL,
-                                                   "calendar-disabled",
-                                                   _("Cale_ndar"));
-
-  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
-                                                   NULL,
-                                                   "contacts-disabled",
-                                                   _("_Contacts"));
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-static void
 goa_exchange_provider_init (GoaExchangeProvider *self)
 {
 }
@@ -971,7 +937,6 @@ goa_exchange_provider_class_init (GoaExchangeProviderClass *klass)
   provider_class->add_account                = add_account;
   provider_class->refresh_account            = refresh_account;
   provider_class->build_object               = build_object;
-  provider_class->show_account               = show_account;
   provider_class->ensure_credentials_sync    = ensure_credentials_sync;
 }
 

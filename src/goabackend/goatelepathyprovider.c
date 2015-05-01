@@ -878,19 +878,13 @@ show_account (GoaProvider         *provider,
   GtkWidget *params_button = NULL;
   GtkWidget *details_button = NULL;
   GtkWidget *button_box = NULL;
-  gint row;
 
-  row = 0;
-
-  goa_util_add_account_info (grid, row++, object);
-
-  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
-                                                   /* Translators: This is a label for a series of
-                                                    * options switches. For example: “Use for Mail”. */
-                                                   _("Use for"),
-                                                   "chat-disabled",
-                                                   _("C_hat"));
-
+  GOA_PROVIDER_CLASS (goa_telepathy_provider_parent_class)->show_account (provider,
+                                                                          client,
+                                                                          object,
+                                                                          vbox,
+                                                                          grid,
+                                                                          dummy);
   data = edit_data_new (object, tpaw_get_toplevel_window (GTK_WIDGET (vbox)));
 
   /* Connection Settings button */
@@ -908,7 +902,7 @@ show_account (GoaProvider         *provider,
   gtk_box_pack_start (GTK_BOX (button_box), details_button,
       FALSE, FALSE, 0);
 
-  goa_util_add_row_widget (grid, row++, NULL, button_box);
+  goa_util_add_row_widget (grid, 2, NULL, button_box);
 
   edit_data_unref (data);
 }

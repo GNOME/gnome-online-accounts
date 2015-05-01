@@ -1305,28 +1305,6 @@ start_over:
   return object;
 }
 
-static void
-show_account (GoaProvider *provider,
-              GoaClient   *client,
-              GoaObject   *object,
-              GtkBox      *vbox,
-              GtkGrid     *grid,
-              G_GNUC_UNUSED GtkGrid *dummy)
-{
-  gint row;
-
-  row = 0;
-
-  goa_util_add_account_info (grid, row++, object);
-
-  goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
-                                                   /* Translators: This is a label for a series of
-                                                    * options switches. For example: “Use for Mail”. */
-                                                   _("Use for"),
-                                                   "ticketing-disabled",
-                                                   _("Network _Resources"));
-}
-
 static gboolean
 dbus_proxy_reload_properties_sync (GDBusProxy    *proxy,
                                    GCancellable  *cancellable)
@@ -1693,6 +1671,5 @@ goa_kerberos_provider_class_init (GoaKerberosProviderClass *kerberos_class)
   provider_class->build_object               = build_object;
   provider_class->add_account                = add_account;
   provider_class->refresh_account            = refresh_account;
-  provider_class->show_account               = show_account;
   provider_class->ensure_credentials_sync    = ensure_credentials_sync;
 }
