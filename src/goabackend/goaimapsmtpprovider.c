@@ -463,7 +463,7 @@ ensure_credentials_sync (GoaProvider         *provider,
                            */
                           _("Invalid %s with username ‘%s’ (%s, %d): "),
                           "smtp-password",
-                          imap_username,
+                          smtp_username,
                           g_quark_to_string ((*error)->domain),
                           (*error)->code);
           (*error)->domain = GOA_ERROR;
