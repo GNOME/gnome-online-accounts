@@ -88,6 +88,14 @@ void             goa_utils_set_error_soup (GError **err, SoupMessage *msg);
 
 void             goa_utils_set_error_ssl (GError **err, GTlsCertificateFlags flags);
 
+gboolean         goa_utils_get_credentials (GoaProvider    *provider,
+                                            GoaObject      *object,
+                                            const gchar    *id,
+                                            gchar         **username,
+                                            gchar         **password,
+                                            GCancellable   *cancellable,
+                                            GError        **error);
+
 G_END_DECLS
 
 #endif /* __GOA_UTILS_H__ */

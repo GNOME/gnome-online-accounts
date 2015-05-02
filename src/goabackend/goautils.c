@@ -633,3 +633,58 @@ goa_utils_set_error_ssl (GError **err, GTlsCertificateFlags flags)
 
   g_set_error_literal (err, GOA_ERROR, GOA_ERROR_SSL, error_msg);
 }
+
+gboolean
+goa_utils_get_credentials (GoaProvider    *provider,
+                           GoaObject      *object,
+                           const gchar    *id,
+                           gchar         **out_username,
+                           gchar         **out_password,
+                           GCancellable   *cancellable,
+                           GError        **error)
+{
+  GVariant *credentials = NULL;
+  GoaAccount *account = NULL;
+  gboolean ret = FALSE;
+  gchar *username = NULL;
+  gchar *password = NULL;
+
+  credentials = goa_utils_lookup_credentials_sync (provider,
+                                                   object,
+                                                   cancellable,
+                                                   error);
+  if (credentials == NULL)
+    goto out;
+
+  account = goa_object_get_account (object);
+  username = goa_account_dup_identity (account);
+
+  if (!g_variant_lookup (credentials, id, "s", &password))
+    {
+      g_set_error (error, GOA_ERROR, GOA_ERROR_FAILED, /* TODO: more specific */
+                   _("Did not find %s with identity ‘%s’ in credentials"),
+                   id, username);
+      goto out;
+    }
+
+  if (out_username)
+    {
+      *out_username = username;
+      username = NULL;
+    }
+
+  if (out_password)
+    {
+      *out_password = password;
+      password = NULL;
+    }
+
+  ret = TRUE;
+
+out:
+  g_clear_object (&account);
+  g_clear_pointer (&credentials, (GDestroyNotify) g_variant_unref);
+  g_free (username);
+  g_free (password);
+  return ret;
+}
