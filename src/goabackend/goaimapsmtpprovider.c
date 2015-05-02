@@ -292,7 +292,6 @@ ensure_credentials_sync (GoaProvider         *provider,
                          GError             **error)
 {
   GVariant *credentials;
-  GoaAccount *account;
   GoaMailAuth *imap_auth;
   GoaMailAuth *smtp_auth;
   GoaMailClient *mail_client;
@@ -301,7 +300,6 @@ ensure_credentials_sync (GoaProvider         *provider,
   gboolean imap_accept_ssl_errors;
   gboolean ret;
   gboolean smtp_accept_ssl_errors;
-  const gchar *identity;
   gchar *domain;
   gchar *email_address;
   gchar *imap_password;
@@ -326,11 +324,7 @@ ensure_credentials_sync (GoaProvider         *provider,
 
   ret = FALSE;
 
-  credentials = goa_utils_lookup_credentials_sync (provider,
-                                                   object,
-                                                   cancellable,
-                                                   error);
-  if (credentials == NULL)
+  if (!goa_utils_get_credentials (provider, object, "imap-password", NULL, &imap_password, cancellable, error))
     {
       if (error != NULL)
         {
@@ -340,27 +334,9 @@ ensure_credentials_sync (GoaProvider         *provider,
       goto out;
     }
 
-  account = goa_object_peek_account (object);
-  identity = goa_account_get_identity (account);
-
   mail_client = goa_mail_client_new ();
 
   /* IMAP */
-
-  if (!g_variant_lookup (credentials, "imap-password", "s", &imap_password))
-    {
-      if (error != NULL)
-        {
-          *error = g_error_new (GOA_ERROR,
-                                GOA_ERROR_NOT_AUTHORIZED,
-                                /* Translators: the first parameter is a field name. The second is
-                                 * a GOA account identifier. */
-                                _("Did not find %s with identity ‘%s’ in credentials"),
-                                "imap-password",
-                                identity);
-        }
-      goto out;
-    }
 
   imap_accept_ssl_errors = goa_util_lookup_keyfile_boolean (object, "ImapAcceptSslErrors");
   imap_server = goa_util_lookup_keyfile_string (object, "ImapHost");
@@ -405,17 +381,12 @@ ensure_credentials_sync (GoaProvider         *provider,
       goto smtp_done;
     }
 
-  if (!g_variant_lookup (credentials, "smtp-password", "s", &smtp_password))
+  if (!goa_utils_get_credentials (provider, object, "smtp-password", NULL, &smtp_password, cancellable, error))
     {
       if (error != NULL)
         {
-          *error = g_error_new (GOA_ERROR,
-                                GOA_ERROR_NOT_AUTHORIZED,
-                                /* Translators: the first parameter is a field name. The second is
-                                 * a GOA account identifier. */
-                                _("Did not find %s with identity ‘%s’ in credentials"),
-                                "smtp-password",
-                                identity);
+          (*error)->domain = GOA_ERROR;
+          (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
         }
       goto out;
     }
@@ -1599,9 +1570,7 @@ on_handle_get_password (GoaPasswordBased      *interface,
   GoaAccount *account;
   GoaProvider *provider;
   GError *error;
-  GVariant *credentials;
   const gchar *account_id;
-  const gchar *identity;
   const gchar *method_name;
   const gchar *provider_type;
   gchar *password;
@@ -1609,12 +1578,9 @@ on_handle_get_password (GoaPasswordBased      *interface,
   /* TODO: maybe log what app is requesting access */
 
   password = NULL;
-  credentials = NULL;
 
   object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (interface)));
   account = goa_object_peek_account (object);
-  identity = goa_account_get_identity (account);
-
   account_id = goa_account_get_id (account);
   provider_type = goa_account_get_provider_type (account);
   method_name = g_dbus_method_invocation_get_method_name (invocation);
@@ -1623,26 +1589,9 @@ on_handle_get_password (GoaPasswordBased      *interface,
   provider = goa_provider_get_for_provider_type (provider_type);
 
   error = NULL;
-  credentials = goa_utils_lookup_credentials_sync (provider,
-                                                   object,
-                                                   NULL, /* GCancellable* */
-                                                   &error);
-  if (credentials == NULL)
+  if (!goa_utils_get_credentials (provider, object, id, NULL, &password, NULL, &error))
     {
       g_dbus_method_invocation_take_error (invocation, error);
-      goto out;
-    }
-
-  if (!g_variant_lookup (credentials, id, "s", &password))
-    {
-      g_dbus_method_invocation_return_error (invocation,
-                                             GOA_ERROR,
-                                             GOA_ERROR_FAILED, /* TODO: more specific */
-                                             /* Translators: the first parameter is a field name.
-                                              * The second is a GOA account identifier. */
-                                             "Did not find %s with identity ‘%s’ in credentials",
-                                             id,
-                                             identity);
       goto out;
     }
 
@@ -1650,8 +1599,6 @@ on_handle_get_password (GoaPasswordBased      *interface,
 
  out:
   g_free (password);
-  if (credentials != NULL)
-    g_variant_unref (credentials);
   g_object_unref (provider);
   return TRUE; /* invocation was handled */
 }
