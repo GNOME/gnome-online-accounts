@@ -183,3 +183,27 @@ goa_object_skeleton_attach_photos (GoaObjectSkeleton *object,
     }
   g_clear_object (&photos);
 }
+
+void
+goa_object_skeleton_attach_printers (GoaObjectSkeleton *object,
+                                     gboolean           printers_enabled)
+{
+  GoaPrinters *printers;
+
+  printers = goa_object_get_printers (GOA_OBJECT (object));
+
+  if (printers_enabled)
+    {
+      if (printers == NULL)
+        {
+          printers = goa_printers_skeleton_new ();
+          goa_object_skeleton_set_printers (object, printers);
+        }
+    }
+  else
+    {
+      if (printers != NULL)
+        goa_object_skeleton_set_printers (object, NULL);
+    }
+  g_clear_object (&printers);
+}
