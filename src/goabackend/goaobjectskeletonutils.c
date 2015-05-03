@@ -159,3 +159,27 @@ goa_object_skeleton_attach_chat (GoaObjectSkeleton *object,
   goa_object_skeleton_set_chat (object, NULL);
 #endif
 }
+
+void
+goa_object_skeleton_attach_photos (GoaObjectSkeleton *object,
+                                   gboolean           photos_enabled)
+{
+  GoaPhotos *photos;
+
+  photos = goa_object_get_photos (GOA_OBJECT (object));
+
+  if (photos_enabled)
+    {
+      if (photos == NULL)
+        {
+          photos = goa_photos_skeleton_new ();
+          goa_object_skeleton_set_photos (object, photos);
+        }
+    }
+  else
+    {
+      if (photos != NULL)
+        goa_object_skeleton_set_photos (object, NULL);
+    }
+  g_clear_object (&photos);
+}

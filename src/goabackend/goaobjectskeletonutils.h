@@ -49,6 +49,9 @@ void             goa_object_skeleton_attach_files          (GoaObjectSkeleton *o
                                                             gboolean           files_enabled,
                                                             gboolean           accept_ssl_errors);
 
+void             goa_object_skeleton_attach_photos         (GoaObjectSkeleton *object,
+                                                            gboolean           photos_enabled);
+
 G_END_DECLS
 
 #endif /* __GOA_OBJECT_SKELETON_UTILS_H__ */
