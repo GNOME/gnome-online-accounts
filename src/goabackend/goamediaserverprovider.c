@@ -20,6 +20,7 @@
 #include <glib/gi18n-lib.h>
 
 #include "goaprovider.h"
+#include "goaobjectskeletonutils.h"
 #include "goautils.h"
 #include "goaprovider-priv.h"
 #include "goamediaserverprovider.h"
@@ -109,12 +110,10 @@ build_object (GoaProvider        *provider,
   gboolean ret;
   GoaAccount *account;
   GoaMediaServer *mediaserver;
-  GoaPhotos *photos;
   const gchar *udn;
   gboolean photos_enabled;
 
   mediaserver = NULL;
-  photos = NULL;
 
   account = NULL;
   ret = FALSE;
@@ -133,21 +132,8 @@ build_object (GoaProvider        *provider,
   udn = goa_account_get_identity (account);
 
   /* Photos */
-  photos = goa_object_get_photos (GOA_OBJECT (object));
   photos_enabled = g_key_file_get_boolean (key_file, group, "PhotosEnabled", NULL);
-  if (photos_enabled)
-    {
-      if (photos == NULL)
-        {
-          photos = goa_photos_skeleton_new ();
-          goa_object_skeleton_set_photos (object, photos);
-        }
-    }
-  else
-    {
-      if (photos == NULL)
-        goa_object_skeleton_set_photos (object, NULL);
-    }
+  goa_object_skeleton_attach_photos (object, photos_enabled);
 
   /* Media Server */
   mediaserver = goa_object_get_media_server (GOA_OBJECT (object));
@@ -176,7 +162,6 @@ build_object (GoaProvider        *provider,
 out:
   g_clear_object (&account);
   g_clear_object (&mediaserver);
-  g_clear_object (&photos);
   return ret;
 }
 

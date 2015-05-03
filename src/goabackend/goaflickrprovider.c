@@ -27,6 +27,7 @@
 #include "goaprovider-priv.h"
 #include "goaoauthprovider.h"
 #include "goaflickrprovider.h"
+#include "goaobjectskeletonutils.h"
 
 /**
  * GoaFlickrProvider:
@@ -335,12 +336,10 @@ build_object (GoaProvider         *provider,
               GError             **error)
 {
   GoaAccount *account;
-  GoaPhotos *photos;
   gboolean photos_enabled;
   gboolean ret;
 
   account = NULL;
-  photos = NULL;
   ret = FALSE;
 
   /* Chain up */
@@ -356,22 +355,8 @@ build_object (GoaProvider         *provider,
   account = goa_object_get_account (GOA_OBJECT (object));
 
   /* Photos */
-  photos = goa_object_get_photos (GOA_OBJECT (object));
   photos_enabled = g_key_file_get_boolean (key_file, group, "PhotosEnabled", NULL);
-
-  if (photos_enabled)
-    {
-      if (photos == NULL)
-        {
-          photos = goa_photos_skeleton_new ();
-          goa_object_skeleton_set_photos (object, photos);
-        }
-    }
-  else
-    {
-      if (photos != NULL)
-        goa_object_skeleton_set_photos (object, NULL);
-    }
+  goa_object_skeleton_attach_photos (object, photos_enabled);
 
   if (just_added)
     {
@@ -386,7 +371,6 @@ build_object (GoaProvider         *provider,
   ret = TRUE;
 
  out:
-  g_clear_object (&photos);
   g_clear_object (&account);
   return ret;
 }

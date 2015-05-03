@@ -324,7 +324,6 @@ build_object (GoaProvider         *provider,
   GoaAccount *account;
   GoaMail *mail;
   gchar *uri_caldav;
-  GoaPhotos *photos;
   GoaPrinters *printers;
   gchar *uri_drive;
   gboolean ret;
@@ -340,7 +339,6 @@ build_object (GoaProvider         *provider,
 
   account = NULL;
   mail = NULL;
-  photos = NULL;
   printers = NULL;
   ret = FALSE;
 
@@ -409,22 +407,8 @@ build_object (GoaProvider         *provider,
   goa_object_skeleton_attach_documents (object, documents_enabled);
 
   /* Photos */
-  photos = goa_object_get_photos (GOA_OBJECT (object));
   photos_enabled = g_key_file_get_boolean (key_file, group, "PhotosEnabled", NULL);
-
-  if (photos_enabled)
-    {
-      if (photos == NULL)
-        {
-          photos = goa_photos_skeleton_new ();
-          goa_object_skeleton_set_photos (object, photos);
-        }
-    }
-  else
-    {
-      if (photos != NULL)
-        goa_object_skeleton_set_photos (object, NULL);
-    }
+  goa_object_skeleton_attach_photos (object, photos_enabled);
 
   /* Files */
   files_enabled = g_key_file_get_boolean (key_file, group, "FilesEnabled", NULL);
@@ -499,7 +483,6 @@ build_object (GoaProvider         *provider,
 
  out:
   g_clear_object (&printers);
-  g_clear_object (&photos);
   g_clear_object (&mail);
   g_clear_object (&account);
   return ret;
