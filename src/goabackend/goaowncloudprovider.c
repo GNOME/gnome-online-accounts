@@ -148,7 +148,6 @@ build_object (GoaProvider         *provider,
   gchar *uri_caldav;
   gchar *uri_carddav;
   gchar *uri_webdav;
-  GoaDocuments *documents;
   GoaPasswordBased *password_based;
   SoupURI *uri;
   gboolean accept_ssl_errors;
@@ -161,7 +160,6 @@ build_object (GoaProvider         *provider,
   gchar *uri_string;
 
   account = NULL;
-  documents = NULL;
   password_based = NULL;
   uri = NULL;
   uri_string = NULL;
@@ -214,22 +212,8 @@ build_object (GoaProvider         *provider,
   g_free (uri_carddav);
 
   /* Documents */
-  documents = goa_object_get_documents (GOA_OBJECT (object));
   documents_enabled = g_key_file_get_boolean (key_file, group, "DocumentsEnabled", NULL);
-
-  if (documents_enabled)
-    {
-      if (documents == NULL)
-        {
-          documents = goa_documents_skeleton_new ();
-          goa_object_skeleton_set_documents (object, documents);
-        }
-    }
-  else
-    {
-      if (documents != NULL)
-        goa_object_skeleton_set_documents (object, NULL);
-    }
+  goa_object_skeleton_attach_documents (object, documents_enabled);
 
   /* Files */
   files_enabled = g_key_file_get_boolean (key_file, group, "FilesEnabled", NULL);
@@ -265,7 +249,6 @@ build_object (GoaProvider         *provider,
   ret = TRUE;
 
  out:
-  g_clear_object (&documents);
   g_clear_object (&password_based);
   g_clear_pointer (&uri, (GDestroyNotify *) soup_uri_free);
   g_free (uri_string);

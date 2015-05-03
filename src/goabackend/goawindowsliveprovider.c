@@ -27,6 +27,7 @@
 #include "goaprovider-priv.h"
 #include "goaoauth2provider.h"
 #include "goawindowsliveprovider.h"
+#include "goaobjectskeletonutils.h"
 
 /**
  * GoaWindowsLiveProvider:
@@ -305,7 +306,6 @@ build_object (GoaProvider         *provider,
 {
   GoaAccount *account;
   GoaMail *mail;
-  GoaDocuments *documents;
   gboolean mail_enabled;
   gboolean documents_enabled;
   gboolean ret = FALSE;
@@ -313,7 +313,6 @@ build_object (GoaProvider         *provider,
 
   account = NULL;
   mail = NULL;
-  documents = NULL;
 
   /* Chain up */
   if (!GOA_PROVIDER_CLASS (goa_windows_live_provider_parent_class)->build_object (provider,
@@ -359,22 +358,8 @@ build_object (GoaProvider         *provider,
     }
 
   /* Documents */
-  documents = goa_object_get_documents (GOA_OBJECT (object));
   documents_enabled = g_key_file_get_boolean (key_file, group, "DocumentsEnabled", NULL);
-
-  if (documents_enabled)
-    {
-      if (documents == NULL)
-        {
-          documents = goa_documents_skeleton_new ();
-          goa_object_skeleton_set_documents (object, documents);
-        }
-    }
-  else
-    {
-      if (documents != NULL)
-        goa_object_skeleton_set_documents (object, NULL);
-    }
+  goa_object_skeleton_attach_documents (object, documents_enabled);
 
   if (just_added)
     {
@@ -394,7 +379,6 @@ build_object (GoaProvider         *provider,
   ret = TRUE;
 
  out:
-  g_clear_object (&documents);
   g_clear_object (&mail);
   g_clear_object (&account);
   return ret;
