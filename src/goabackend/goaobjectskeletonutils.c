@@ -79,3 +79,32 @@ goa_object_skeleton_attach_files (GoaObjectSkeleton *object,
     }
   g_clear_object (&files);
 }
+
+void
+goa_object_skeleton_attach_contacts (GoaObjectSkeleton *object,
+                                     const gchar       *uri,
+                                     gboolean           contacts_enabled,
+                                     gboolean           accept_ssl_errors)
+{
+  GoaContacts *contacts;
+
+  contacts = goa_object_get_contacts (GOA_OBJECT (object));
+  if (contacts_enabled)
+    {
+      if (contacts == NULL)
+        {
+          contacts = goa_contacts_skeleton_new ();
+          g_object_set (G_OBJECT (contacts),
+                        "accept-ssl-errors", accept_ssl_errors,
+                        "uri", uri,
+                        NULL);
+          goa_object_skeleton_set_contacts (object, contacts);
+        }
+    }
+  else
+    {
+      if (contacts != NULL)
+        goa_object_skeleton_set_contacts (object, NULL);
+    }
+  g_clear_object (&contacts);
+}
