@@ -50,3 +50,32 @@ goa_object_skeleton_attach_calendar (GoaObjectSkeleton *object,
     }
   g_clear_object (&calendar);
 }
+
+void
+goa_object_skeleton_attach_files (GoaObjectSkeleton *object,
+                                  const gchar       *uri,
+                                  gboolean           files_enabled,
+                                  gboolean           accept_ssl_errors)
+{
+  GoaFiles *files;
+
+  files = goa_object_get_files (GOA_OBJECT (object));
+  if (files_enabled)
+    {
+      if (files == NULL)
+        {
+          files = goa_files_skeleton_new ();
+          g_object_set (G_OBJECT (files),
+                        "accept-ssl-errors", accept_ssl_errors,
+                        "uri", uri,
+                        NULL);
+          goa_object_skeleton_set_files (object, files);
+        }
+    }
+  else
+    {
+      if (files != NULL)
+        goa_object_skeleton_set_files (object, NULL);
+    }
+  g_clear_object (&files);
+}

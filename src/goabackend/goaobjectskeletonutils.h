@@ -33,6 +33,11 @@ void             goa_object_skeleton_attach_calendar       (GoaObjectSkeleton *o
                                                             gboolean           calendar_enabled,
                                                             gboolean           accept_ssl_errors);
 
+void             goa_object_skeleton_attach_files          (GoaObjectSkeleton *object,
+                                                            const gchar       *uri,
+                                                            gboolean           files_enabled,
+                                                            gboolean           accept_ssl_errors);
+
 G_END_DECLS
 
 #endif /* __GOA_OBJECT_SKELETON_UTILS_H__ */
