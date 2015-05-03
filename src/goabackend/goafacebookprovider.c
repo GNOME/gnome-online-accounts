@@ -322,7 +322,6 @@ build_object (GoaProvider         *provider,
               GError             **error)
 {
   GoaAccount *account;
-  GoaMaps *maps = NULL;
   gboolean photos_enabled;
   gboolean maps_enabled;
   gboolean ret = FALSE;
@@ -356,22 +355,8 @@ build_object (GoaProvider         *provider,
     }
 
   /* Maps */
-  maps = goa_object_get_maps (GOA_OBJECT (object));
   maps_enabled = g_key_file_get_boolean (key_file, group, "MapsEnabled", NULL);
-
-  if (maps_enabled)
-    {
-      if (maps == NULL)
-        {
-          maps = goa_maps_skeleton_new ();
-          goa_object_skeleton_set_maps (object, maps);
-        }
-    }
-  else
-    {
-      if (maps != NULL)
-        goa_object_skeleton_set_maps (object, NULL);
-    }
+  goa_object_skeleton_attach_maps (object, maps_enabled);
 
   if (just_added)
     {
@@ -386,7 +371,6 @@ build_object (GoaProvider         *provider,
 
  out:
   g_clear_object (&account);
-  g_clear_object (&maps);
   return ret;
 }
 
