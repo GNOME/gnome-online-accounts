@@ -26,6 +26,7 @@
 #include "goaprovider-priv.h"
 #include "goaoauth2provider.h"
 #include "goagoogleprovider.h"
+#include "goaobjectskeletonutils.h"
 
 /**
  * GoaGoogleProvider:
@@ -322,7 +323,7 @@ build_object (GoaProvider         *provider,
 {
   GoaAccount *account;
   GoaMail *mail;
-  GoaCalendar *calendar;
+  gchar *uri_caldav;
   GoaContacts *contacts;
   GoaChat *chat;
   GoaDocuments *documents;
@@ -342,7 +343,6 @@ build_object (GoaProvider         *provider,
 
   account = NULL;
   mail = NULL;
-  calendar = NULL;
   contacts = NULL;
   chat = NULL;
   documents = NULL;
@@ -395,32 +395,10 @@ build_object (GoaProvider         *provider,
     }
 
   /* Calendar */
-  calendar = goa_object_get_calendar (GOA_OBJECT (object));
   calendar_enabled = g_key_file_get_boolean (key_file, group, "CalendarEnabled", NULL);
-  if (calendar_enabled)
-    {
-      if (calendar == NULL)
-        {
-          gchar *uri_caldav;
-
-          uri_caldav = g_strconcat ("https://apidata.googleusercontent.com/caldav/v2/",
-                                    email_address,
-                                    "/user",
-                                    NULL);
-
-          calendar = goa_calendar_skeleton_new ();
-          g_object_set (G_OBJECT (calendar),
-                        "uri", uri_caldav,
-                        NULL);
-          goa_object_skeleton_set_calendar (object, calendar);
-          g_free (uri_caldav);
-        }
-    }
-  else
-    {
-      if (calendar != NULL)
-        goa_object_skeleton_set_calendar (object, NULL);
-    }
+  uri_caldav = g_strconcat ("https://apidata.googleusercontent.com/caldav/v2/", email_address, "/user", NULL);
+  goa_object_skeleton_attach_calendar (object, uri_caldav, calendar_enabled, FALSE);
+  g_free (uri_caldav);
 
   /* Contacts */
   contacts = goa_object_get_contacts (GOA_OBJECT (object));
@@ -595,7 +573,6 @@ build_object (GoaProvider         *provider,
   g_clear_object (&documents);
   g_clear_object (&chat);
   g_clear_object (&contacts);
-  g_clear_object (&calendar);
   g_clear_object (&mail);
   g_clear_object (&account);
   return ret;

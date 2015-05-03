@@ -28,6 +28,7 @@
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goaowncloudprovider.h"
+#include "goaobjectskeletonutils.h"
 #include "goautils.h"
 
 struct _GoaOwncloudProvider
@@ -144,7 +145,7 @@ build_object (GoaProvider         *provider,
               GError             **error)
 {
   GoaAccount *account;
-  GoaCalendar *calendar;
+  gchar *uri_caldav;
   GoaContacts *contacts;
   GoaDocuments *documents;
   GoaFiles *files;
@@ -160,7 +161,6 @@ build_object (GoaProvider         *provider,
   gchar *uri_string;
 
   account = NULL;
-  calendar = NULL;
   contacts = NULL;
   documents = NULL;
   files = NULL;
@@ -204,29 +204,10 @@ build_object (GoaProvider         *provider,
   accept_ssl_errors = g_key_file_get_boolean (key_file, group, "AcceptSslErrors", NULL);
 
   /* Calendar */
-  calendar = goa_object_get_calendar (GOA_OBJECT (object));
   calendar_enabled = g_key_file_get_boolean (key_file, group, "CalendarEnabled", NULL);
-  if (calendar_enabled)
-    {
-      if (calendar == NULL)
-        {
-          gchar *uri_caldav;
-
-          uri_caldav = uri_to_string_with_path (uri, CALDAV_ENDPOINT);
-          calendar = goa_calendar_skeleton_new ();
-          g_object_set (G_OBJECT (calendar),
-                        "accept-ssl-errors", accept_ssl_errors,
-                        "uri", uri_caldav,
-                        NULL);
-          goa_object_skeleton_set_calendar (object, calendar);
-          g_free (uri_caldav);
-        }
-    }
-  else
-    {
-      if (calendar != NULL)
-        goa_object_skeleton_set_calendar (object, NULL);
-    }
+  uri_caldav = uri_to_string_with_path (uri, CALDAV_ENDPOINT);
+  goa_object_skeleton_attach_calendar (object, uri_caldav, calendar_enabled, accept_ssl_errors);
+  g_free (uri_caldav);
 
   /* Contacts */
   contacts = goa_object_get_contacts (GOA_OBJECT (object));
@@ -324,7 +305,6 @@ build_object (GoaProvider         *provider,
   ret = TRUE;
 
  out:
-  g_clear_object (&calendar);
   g_clear_object (&contacts);
   g_clear_object (&documents);
   g_clear_object (&files);

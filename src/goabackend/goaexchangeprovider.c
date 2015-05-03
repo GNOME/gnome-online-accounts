@@ -23,6 +23,7 @@
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goaexchangeprovider.h"
+#include "goaobjectskeletonutils.h"
 #include "goautils.h"
 
 /**
@@ -105,7 +106,6 @@ build_object (GoaProvider         *provider,
               GError             **error)
 {
   GoaAccount *account;
-  GoaCalendar *calendar;
   GoaContacts *contacts;
   GoaExchange *exchange;
   GoaMail *mail;
@@ -116,7 +116,6 @@ build_object (GoaProvider         *provider,
   gboolean ret;
 
   account = NULL;
-  calendar = NULL;
   contacts = NULL;
   exchange = NULL;
   mail = NULL;
@@ -171,21 +170,8 @@ build_object (GoaProvider         *provider,
     }
 
   /* Calendar */
-  calendar = goa_object_get_calendar (GOA_OBJECT (object));
   calendar_enabled = g_key_file_get_boolean (key_file, group, "CalendarEnabled", NULL);
-  if (calendar_enabled)
-    {
-      if (calendar == NULL)
-        {
-          calendar = goa_calendar_skeleton_new ();
-          goa_object_skeleton_set_calendar (object, calendar);
-        }
-    }
-  else
-    {
-      if (calendar != NULL)
-        goa_object_skeleton_set_calendar (object, NULL);
-    }
+  goa_object_skeleton_attach_calendar (object, NULL, calendar_enabled, FALSE);
 
   /* Contacts */
   contacts = goa_object_get_contacts (GOA_OBJECT (object));
@@ -247,7 +233,6 @@ build_object (GoaProvider         *provider,
  out:
   g_clear_object (&exchange);
   g_clear_object (&contacts);
-  g_clear_object (&calendar);
   g_clear_object (&mail);
   g_clear_object (&password_based);
   return ret;
