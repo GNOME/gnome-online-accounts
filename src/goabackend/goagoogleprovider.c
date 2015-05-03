@@ -324,7 +324,6 @@ build_object (GoaProvider         *provider,
   GoaAccount *account;
   GoaMail *mail;
   gchar *uri_caldav;
-  GoaPrinters *printers;
   gchar *uri_drive;
   gboolean ret;
   gboolean mail_enabled;
@@ -339,7 +338,6 @@ build_object (GoaProvider         *provider,
 
   account = NULL;
   mail = NULL;
-  printers = NULL;
   ret = FALSE;
 
   /* Chain up */
@@ -417,22 +415,8 @@ build_object (GoaProvider         *provider,
   g_free (uri_drive);
 
   /* Printers */
-  printers = goa_object_get_printers (GOA_OBJECT (object));
   printers_enabled = g_key_file_get_boolean (key_file, group, "PrintersEnabled", NULL);
-
-  if (printers_enabled)
-    {
-      if (printers == NULL)
-        {
-          printers = goa_printers_skeleton_new ();
-          goa_object_skeleton_set_printers (object, printers);
-        }
-    }
-  else
-    {
-      if (printers != NULL)
-        goa_object_skeleton_set_printers (object, NULL);
-    }
+  goa_object_skeleton_attach_printers (object, printers_enabled);
 
   if (just_added)
     {
@@ -482,7 +466,6 @@ build_object (GoaProvider         *provider,
   ret = TRUE;
 
  out:
-  g_clear_object (&printers);
   g_clear_object (&mail);
   g_clear_object (&account);
   return ret;
