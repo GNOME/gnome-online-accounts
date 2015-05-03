@@ -92,6 +92,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goawindowsliveprovider.h	goawindowsliveprovider.c	\
 	goapocketprovider.h		goapocketprovider.c		\
 	goalastfmprovider.h		goalastfmprovider.c		\
+	goaobjectskeletonutils.h	goaobjectskeletonutils.c	\
 	goautils.h			goautils.c			\
 	goawebview.h			goawebview.c			\
 	nautilus-floating-bar.h		nautilus-floating-bar.c		\
