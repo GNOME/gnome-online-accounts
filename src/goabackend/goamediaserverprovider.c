@@ -116,6 +116,7 @@ build_object (GoaProvider        *provider,
   mediaserver = NULL;
   photos = NULL;
 
+  account = NULL;
   ret = FALSE;
 
   /* Chain up */
@@ -173,6 +174,7 @@ build_object (GoaProvider        *provider,
   ret = TRUE;
 
 out:
+  g_clear_object (&account);
   g_clear_object (&mediaserver);
   g_clear_object (&photos);
   return ret;
