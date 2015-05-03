@@ -319,6 +319,7 @@ build_object (GoaProvider         *provider,
  out:
   g_clear_object (&calendar);
   g_clear_object (&contacts);
+  g_clear_object (&documents);
   g_clear_object (&files);
   g_clear_object (&password_based);
   g_clear_pointer (&uri, (GDestroyNotify *) soup_uri_free);
