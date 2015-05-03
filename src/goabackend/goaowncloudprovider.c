@@ -101,6 +101,26 @@ uri_to_string_with_path (SoupURI *soup_uri, const gchar *path)
   return uri_string;
 }
 
+static char *get_webdav_uri (SoupURI *soup_uri)
+{
+  gchar *uri_webdav;
+  const gchar *scheme;
+
+  if (soup_uri == NULL)
+    return NULL;
+
+  scheme = soup_uri_get_scheme (soup_uri);
+  if (g_strcmp0 (scheme, SOUP_URI_SCHEME_HTTPS) == 0)
+    soup_uri_set_scheme (soup_uri, "davs");
+  else
+    soup_uri_set_scheme (soup_uri, "dav");
+  uri_webdav = uri_to_string_with_path (soup_uri, WEBDAV_ENDPOINT);
+  /* restore initial scheme */
+  soup_uri_set_scheme (soup_uri, scheme);
+
+  return uri_webdav;
+}
+
 static gboolean on_handle_get_password (GoaPasswordBased      *interface,
                                         GDBusMethodInvocation *invocation,
                                         const gchar           *id,
@@ -252,20 +272,7 @@ build_object (GoaProvider         *provider,
         {
           gchar *uri_webdav;
 
-          uri_webdav = NULL;
-
-          if (uri != NULL)
-            {
-              const gchar *scheme;
-
-              scheme = soup_uri_get_scheme (uri);
-              if (g_strcmp0 (scheme, SOUP_URI_SCHEME_HTTPS) == 0)
-                soup_uri_set_scheme (uri, "davs");
-              else
-                soup_uri_set_scheme (uri, "dav");
-              uri_webdav = uri_to_string_with_path (uri, WEBDAV_ENDPOINT);
-            }
-
+          uri_webdav = get_webdav_uri (uri);
           files = goa_files_skeleton_new ();
           g_object_set (G_OBJECT (files),
                         "accept-ssl-errors", accept_ssl_errors,
