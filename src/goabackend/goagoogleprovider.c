@@ -327,9 +327,9 @@ build_object (GoaProvider         *provider,
   GoaContacts *contacts;
   GoaChat *chat;
   GoaDocuments *documents;
-  GoaFiles *files;
   GoaPhotos *photos;
   GoaPrinters *printers;
+  gchar *uri_drive;
   gboolean ret;
   gboolean mail_enabled;
   gboolean calendar_enabled;
@@ -346,7 +346,6 @@ build_object (GoaProvider         *provider,
   contacts = NULL;
   chat = NULL;
   documents = NULL;
-  files = NULL;
   photos = NULL;
   printers = NULL;
   ret = FALSE;
@@ -478,28 +477,10 @@ build_object (GoaProvider         *provider,
     }
 
   /* Files */
-  files = goa_object_get_files (GOA_OBJECT (object));
   files_enabled = g_key_file_get_boolean (key_file, group, "FilesEnabled", NULL);
-  if (files_enabled)
-    {
-      if (files == NULL)
-        {
-          gchar *uri_drive;
-
-          uri_drive = g_strconcat ("google-drive://", email_address, "/", NULL);
-          files = goa_files_skeleton_new ();
-          g_object_set (G_OBJECT (files),
-                        "uri", uri_drive,
-                        NULL);
-          goa_object_skeleton_set_files (object, files);
-          g_free (uri_drive);
-        }
-    }
-  else
-    {
-      if (files != NULL)
-        goa_object_skeleton_set_files (object, NULL);
-    }
+  uri_drive = g_strconcat ("google-drive://", email_address, "/", NULL);
+  goa_object_skeleton_attach_files (object, uri_drive, files_enabled, FALSE);
+  g_free (uri_drive);
 
   /* Printers */
   printers = goa_object_get_printers (GOA_OBJECT (object));
@@ -568,7 +549,6 @@ build_object (GoaProvider         *provider,
 
  out:
   g_clear_object (&printers);
-  g_clear_object (&files);
   g_clear_object (&photos);
   g_clear_object (&documents);
   g_clear_object (&chat);
