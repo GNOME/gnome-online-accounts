@@ -324,7 +324,6 @@ build_object (GoaProvider         *provider,
   GoaAccount *account;
   GoaMail *mail;
   gchar *uri_caldav;
-  GoaChat *chat;
   GoaPhotos *photos;
   GoaPrinters *printers;
   gchar *uri_drive;
@@ -341,7 +340,6 @@ build_object (GoaProvider         *provider,
 
   account = NULL;
   mail = NULL;
-  chat = NULL;
   photos = NULL;
   printers = NULL;
   ret = FALSE;
@@ -402,26 +400,9 @@ build_object (GoaProvider         *provider,
                                        contacts_enabled,
                                        FALSE);
 
-#ifdef GOA_TELEPATHY_ENABLED
   /* Chat */
-  chat = goa_object_get_chat (GOA_OBJECT (object));
   chat_enabled = g_key_file_get_boolean (key_file, group, "ChatEnabled", NULL);
-  if (chat_enabled)
-    {
-      if (chat == NULL)
-        {
-          chat = goa_chat_skeleton_new ();
-          goa_object_skeleton_set_chat (object, chat);
-        }
-    }
-  else
-    {
-      if (chat != NULL)
-        goa_object_skeleton_set_chat (object, NULL);
-    }
-#else
-  goa_object_skeleton_set_chat (object, NULL);
-#endif
+  goa_object_skeleton_attach_chat (object, chat_enabled);
 
   /* Documents */
   documents_enabled = g_key_file_get_boolean (key_file, group, "DocumentsEnabled", NULL);
@@ -519,7 +500,6 @@ build_object (GoaProvider         *provider,
  out:
   g_clear_object (&printers);
   g_clear_object (&photos);
-  g_clear_object (&chat);
   g_clear_object (&mail);
   g_clear_object (&account);
   return ret;

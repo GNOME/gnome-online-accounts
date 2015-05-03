@@ -26,6 +26,7 @@
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goatelepathyprovider.h"
+#include "goaobjectskeletonutils.h"
 #include "goautils.h"
 
 typedef struct _GoaTelepathyProviderPrivate GoaTelepathyProviderPrivate;
@@ -711,12 +712,10 @@ build_object (GoaProvider        *provider,
               GError            **error)
 {
   GoaAccount *account;
-  GoaChat *chat;
   gboolean chat_enabled;
   gboolean ret;
 
   account = NULL;
-  chat = NULL;
   ret = FALSE;
 
   /* Chain up */
@@ -732,21 +731,8 @@ build_object (GoaProvider        *provider,
   account = goa_object_get_account (GOA_OBJECT (object));
 
   /* Chat */
-  chat = goa_object_get_chat (GOA_OBJECT (object));
   chat_enabled = g_key_file_get_boolean (key_file, group, "ChatEnabled", NULL);
-  if (chat_enabled)
-    {
-      if (chat == NULL)
-        {
-          chat = goa_chat_skeleton_new ();
-          goa_object_skeleton_set_chat (object, chat);
-        }
-    }
-  else
-    {
-      if (chat != NULL)
-        goa_object_skeleton_set_chat (object, NULL);
-    }
+  goa_object_skeleton_attach_chat (object, chat_enabled);
 
   if (just_added)
     {
@@ -760,7 +746,6 @@ build_object (GoaProvider        *provider,
   ret = TRUE;
 
 out:
-  g_clear_object (&chat);
   g_clear_object (&account);
   return ret;
 }
