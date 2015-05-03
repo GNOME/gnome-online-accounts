@@ -27,6 +27,7 @@
 #include "goaprovider-priv.h"
 #include "goaoauth2provider.h"
 #include "goapocketprovider.h"
+#include "goaobjectskeletonutils.h"
 
 #define V3_OAUTH_AUTHORIZE_URL "https://getpocket.com/v3/oauth/authorize"
 
@@ -331,7 +332,6 @@ build_object (GoaProvider         *provider,
               GError             **error)
 {
   GoaAccount *account;
-  GoaReadLater *readlater = NULL;
   gboolean read_later_enabled;
   gboolean ret = FALSE;
 
@@ -350,21 +350,8 @@ build_object (GoaProvider         *provider,
   account = goa_object_get_account (GOA_OBJECT (object));
 
   /* Read Later */
-  readlater = goa_object_get_read_later (GOA_OBJECT (object));
   read_later_enabled = g_key_file_get_boolean (key_file, group, "ReadLaterEnabled", NULL);
-  if (read_later_enabled)
-    {
-      if (readlater == NULL)
-        {
-          readlater = goa_read_later_skeleton_new ();
-          goa_object_skeleton_set_read_later (object, readlater);
-        }
-    }
-  else
-    {
-      if (readlater != NULL)
-        goa_object_skeleton_set_read_later (object, NULL);
-    }
+  goa_object_skeleton_attach_read_later (object, read_later_enabled);
 
   if (just_added)
     {
@@ -379,7 +366,6 @@ build_object (GoaProvider         *provider,
   ret = TRUE;
 
  out:
-  g_clear_object (&readlater);
   g_clear_object (&account);
   return ret;
 }
