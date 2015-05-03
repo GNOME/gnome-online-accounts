@@ -207,3 +207,27 @@ goa_object_skeleton_attach_printers (GoaObjectSkeleton *object,
     }
   g_clear_object (&printers);
 }
+
+void
+goa_object_skeleton_attach_maps (GoaObjectSkeleton *object,
+                                 gboolean           maps_enabled)
+{
+  GoaMaps *maps;
+
+  maps = goa_object_get_maps (GOA_OBJECT (object));
+
+  if (maps_enabled)
+    {
+      if (maps == NULL)
+        {
+          maps = goa_maps_skeleton_new ();
+          goa_object_skeleton_set_maps (object, maps);
+        }
+    }
+  else
+    {
+      if (maps != NULL)
+        goa_object_skeleton_set_maps (object, NULL);
+    }
+  g_clear_object (&maps);
+}
