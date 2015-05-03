@@ -14,15 +14,16 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-01-16 15:20+0000\n"
-"PO-Revision-Date: 2015-02-17 04:28+0800\n"
-"Last-Translator: Aron Xu <happyaron.xu@gmail.com>\n"
+"POT-Creation-Date: 2015-05-02 19:23+0000\n"
+"PO-Revision-Date: 2015-05-03 10:02+0800\n"
+"Last-Translator: YunQiang Su <wzssyqa@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #. TODO: more specific
 #: ../src/daemon/goadaemon.c:787 ../src/daemon/goadaemon.c:1048
@@ -32,12 +33,12 @@ msgstr "找不到 %s 的供应商"
 
 #: ../src/daemon/goadaemon.c:976
 msgid "IsLocked property is set for account"
-msgstr "帐号属性被设置为锁定(IsLocked)"
+msgstr "账号属性被设置为锁定(IsLocked)"
 
 #. TODO: more specific
 #: ../src/daemon/goadaemon.c:1036
 msgid "ProviderType property is not set for account"
-msgstr "帐号的供应商类型(ProviderType)属性未设置"
+msgstr "账号的供应商类型(ProviderType)属性未设置"
 
 #. TODO: more specific
 #: ../src/goabackend/goaewsclient.c:230 ../src/goabackend/goahttpclient.c:174
@@ -148,8 +149,8 @@ msgstr "正在连接..."
 #: ../src/goabackend/goaimapsmtpprovider.c:1391
 #: ../src/goabackend/goakerberosprovider.c:1521
 #: ../src/goabackend/goamediaserverprovider.c:473
-#: ../src/goabackend/goaoauth2provider.c:1078
-#: ../src/goabackend/goaoauthprovider.c:908
+#: ../src/goabackend/goaoauth2provider.c:1033
+#: ../src/goabackend/goaoauthprovider.c:863
 #: ../src/goabackend/goaowncloudprovider.c:771
 #: ../src/goabackend/goaowncloudprovider.c:986
 #: ../src/goabackend/goatelepathyprovider.c:459
@@ -198,33 +199,33 @@ msgstr "连接 Microsoft Exchange 服务器出错"
 #. Translators: This is a label for a series of
 #. * options switches. For example: “Use for Mail”.
 #: ../src/goabackend/goaexchangeprovider.c:939
-#: ../src/goabackend/goafacebookprovider.c:465
+#: ../src/goabackend/goafacebookprovider.c:427
 #: ../src/goabackend/goaflickrprovider.c:412
-#: ../src/goabackend/goafoursquareprovider.c:412
-#: ../src/goabackend/goagoogleprovider.c:626
+#: ../src/goabackend/goafoursquareprovider.c:404
+#: ../src/goabackend/goagoogleprovider.c:586
 #: ../src/goabackend/goakerberosprovider.c:1704
 #: ../src/goabackend/goamediaserverprovider.c:584
 #: ../src/goabackend/goaowncloudprovider.c:1082
 #: ../src/goabackend/goapocketprovider.c:406
 #: ../src/goabackend/goatelepathyprovider.c:890
-#: ../src/goabackend/goawindowsliveprovider.c:421
+#: ../src/goabackend/goawindowsliveprovider.c:414
 msgid "Use for"
 msgstr "用于"
 
 #: ../src/goabackend/goaexchangeprovider.c:941
-#: ../src/goabackend/goagoogleprovider.c:628
-#: ../src/goabackend/goawindowsliveprovider.c:423
+#: ../src/goabackend/goagoogleprovider.c:588
+#: ../src/goabackend/goawindowsliveprovider.c:416
 msgid "_Mail"
 msgstr "邮件(_M)"
 
 #: ../src/goabackend/goaexchangeprovider.c:946
-#: ../src/goabackend/goagoogleprovider.c:633
+#: ../src/goabackend/goagoogleprovider.c:593
 #: ../src/goabackend/goaowncloudprovider.c:1084
 msgid "Cale_ndar"
 msgstr "日历(_N)"
 
 #: ../src/goabackend/goaexchangeprovider.c:951
-#: ../src/goabackend/goagoogleprovider.c:638
+#: ../src/goabackend/goagoogleprovider.c:598
 #: ../src/goabackend/goaowncloudprovider.c:1089
 msgid "_Contacts"
 msgstr "联系人(_C)"
@@ -233,21 +234,19 @@ msgstr "联系人(_C)"
 msgid "Facebook"
 msgstr "Facebook"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:218
+#: ../src/goabackend/goafacebookprovider.c:215
 #: ../src/goabackend/goaflickrprovider.c:183
 #: ../src/goabackend/goafoursquareprovider.c:188
-#: ../src/goabackend/goagoogleprovider.c:219
-#: ../src/goabackend/goawindowsliveprovider.c:189
-#: ../src/goabackend/goayahooprovider.c:182
+#: ../src/goabackend/goagoogleprovider.c:218
+#: ../src/goabackend/goawindowsliveprovider.c:188
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
 msgstr "在请求您的身份时应得到的状态 200，但却得到了状态 %d (%s)"
 
-#: ../src/goabackend/goafacebookprovider.c:237
-#: ../src/goabackend/goafacebookprovider.c:249
-#: ../src/goabackend/goafacebookprovider.c:262
+#: ../src/goabackend/goafacebookprovider.c:234
+#: ../src/goabackend/goafacebookprovider.c:246
+#: ../src/goabackend/goafacebookprovider.c:259
 #: ../src/goabackend/goaflickrprovider.c:202
 #: ../src/goabackend/goaflickrprovider.c:214
 #: ../src/goabackend/goaflickrprovider.c:224
@@ -259,39 +258,27 @@ msgstr "在请求您的身份时应得到的状态 200，但却得到了状态 %
 #: ../src/goabackend/goafoursquareprovider.c:241
 #: ../src/goabackend/goafoursquareprovider.c:252
 #: ../src/goabackend/goafoursquareprovider.c:263
-#: ../src/goabackend/goagoogleprovider.c:238
-#: ../src/goabackend/goagoogleprovider.c:250
-#: ../src/goabackend/goaoauth2provider.c:691
-#: ../src/goabackend/goaoauth2provider.c:721
-#: ../src/goabackend/goaoauth2provider.c:733
-#: ../src/goabackend/goawindowsliveprovider.c:208
-#: ../src/goabackend/goawindowsliveprovider.c:220
-#: ../src/goabackend/goawindowsliveprovider.c:232
-#: ../src/goabackend/goayahooprovider.c:201
-#: ../src/goabackend/goayahooprovider.c:213
-#: ../src/goabackend/goayahooprovider.c:224
-#: ../src/goabackend/goayahooprovider.c:270
-#: ../src/goabackend/goayahooprovider.c:282
-#: ../src/goabackend/goayahooprovider.c:293
+#: ../src/goabackend/goagoogleprovider.c:237
+#: ../src/goabackend/goagoogleprovider.c:249
+#: ../src/goabackend/goaoauth2provider.c:699
+#: ../src/goabackend/goaoauth2provider.c:729
+#: ../src/goabackend/goaoauth2provider.c:741
+#: ../src/goabackend/goawindowsliveprovider.c:207
+#: ../src/goabackend/goawindowsliveprovider.c:219
+#: ../src/goabackend/goawindowsliveprovider.c:231
 #, c-format
 msgid "Could not parse response"
 msgstr "无法解析响应信息"
 
-#: ../src/goabackend/goafacebookprovider.c:467
-#: ../src/goabackend/goagoogleprovider.c:643
-#: ../src/goabackend/goatelepathyprovider.c:892
-msgid "C_hat"
-msgstr "聊天(_H)"
-
-#: ../src/goabackend/goafacebookprovider.c:472
+#: ../src/goabackend/goafacebookprovider.c:429
 #: ../src/goabackend/goaflickrprovider.c:414
-#: ../src/goabackend/goagoogleprovider.c:653
+#: ../src/goabackend/goagoogleprovider.c:613
 #: ../src/goabackend/goamediaserverprovider.c:586
 msgid "_Photos"
 msgstr "图片(_P)"
 
-#: ../src/goabackend/goafacebookprovider.c:477
-#: ../src/goabackend/goafoursquareprovider.c:414
+#: ../src/goabackend/goafacebookprovider.c:434
+#: ../src/goabackend/goafoursquareprovider.c:406
 msgid "_Maps"
 msgstr "地图(_M)"
 
@@ -300,7 +287,6 @@ msgid "Flickr"
 msgstr "Flickr"
 
 #: ../src/goabackend/goaflickrprovider.c:320
-#: ../src/goabackend/goayahooprovider.c:343
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "您的系统时间无效。请检查日期和时间设置。"
 
@@ -312,18 +298,18 @@ msgstr "Foursquare"
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:648
+#: ../src/goabackend/goagoogleprovider.c:603
+#: ../src/goabackend/goatelepathyprovider.c:892
+msgid "C_hat"
+msgstr "聊天(_H)"
+
+#: ../src/goabackend/goagoogleprovider.c:608
 #: ../src/goabackend/goaowncloudprovider.c:1094
-#: ../src/goabackend/goawindowsliveprovider.c:428
+#: ../src/goabackend/goawindowsliveprovider.c:421
 msgid "_Documents"
 msgstr "文档(_D)"
 
-#: ../src/goabackend/goagoogleprovider.c:658
-#: ../src/goabackend/goaowncloudprovider.c:1099
-msgid "_Files"
-msgstr "文件(_F)"
-
-#: ../src/goabackend/goagoogleprovider.c:663
+#: ../src/goabackend/goagoogleprovider.c:618
 msgid "Prin_ters"
 msgstr "打印机(_T)"
 
@@ -438,12 +424,12 @@ msgid "Name"
 msgstr "姓名"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:1541
-#: ../src/goabackend/goaimapsmtpprovider.c:1544
+#: ../src/goabackend/goaimapsmtpprovider.c:1545
 msgid "IMAP"
 msgstr "IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1555
-#: ../src/goabackend/goaimapsmtpprovider.c:1558
+#: ../src/goabackend/goaimapsmtpprovider.c:1556
+#: ../src/goabackend/goaimapsmtpprovider.c:1560
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -507,7 +493,7 @@ msgstr "媒体服务器"
 msgid ""
 "Personal content can be added to your applications through a media server "
 "account."
-msgstr "可通过媒体服务器帐号将个人内容添加到应用。"
+msgstr "可通过媒体服务器账号将个人内容添加到应用。"
 
 #: ../src/goabackend/goamediaserverprovider.c:383
 msgid "Available Media Servers"
@@ -518,71 +504,71 @@ msgid "No media servers found"
 msgstr "没有找到媒体服务器"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:667
-#: ../src/goabackend/goaoauthprovider.c:550
+#: ../src/goabackend/goaoauth2provider.c:675
+#: ../src/goabackend/goaoauthprovider.c:559
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr "在请求访问令牌时应得到状态 200，但却得到了状态 %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:888
+#: ../src/goabackend/goaoauth2provider.c:842
 msgid "Authorization response: "
 msgstr "认证响应为："
 
-#: ../src/goabackend/goaoauth2provider.c:958
+#: ../src/goabackend/goaoauth2provider.c:912
 #, c-format
 msgid "Authorization response: %s"
 msgstr "认证响应为：%s"
 
-#: ../src/goabackend/goaoauth2provider.c:1104
-#: ../src/goabackend/goaoauthprovider.c:939
+#: ../src/goabackend/goaoauth2provider.c:1059
+#: ../src/goabackend/goaoauthprovider.c:894
 msgid "Error getting an Access Token: "
 msgstr "获取访问令牌出错："
 
-#: ../src/goabackend/goaoauth2provider.c:1119
-#: ../src/goabackend/goaoauthprovider.c:952
+#: ../src/goabackend/goaoauth2provider.c:1074
+#: ../src/goabackend/goaoauthprovider.c:907
 msgid "Error getting identity: "
 msgstr "获取身份信息出错："
 
-#: ../src/goabackend/goaoauth2provider.c:1336
-#: ../src/goabackend/goaoauthprovider.c:1260
+#: ../src/goabackend/goaoauth2provider.c:1291
+#: ../src/goabackend/goaoauthprovider.c:1215
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "要求以 %s 身份登录，但却登录为 %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1498
+#: ../src/goabackend/goaoauth2provider.c:1453
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "凭据中不包含访问令牌(access_token)"
 
-#: ../src/goabackend/goaoauth2provider.c:1537
-#: ../src/goabackend/goaoauthprovider.c:1488
+#: ../src/goabackend/goaoauth2provider.c:1492
+#: ../src/goabackend/goaoauthprovider.c:1443
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "刷新访问令牌(%s，%d)失败："
 
-#: ../src/goabackend/goaoauthprovider.c:573
+#: ../src/goabackend/goaoauthprovider.c:582
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "响应中缺少 access_token 或 access_token_secret 头"
 
-#: ../src/goabackend/goaoauthprovider.c:822
+#: ../src/goabackend/goaoauthprovider.c:776
 msgid "Error getting a Request Token: "
 msgstr "获取响应令牌出错："
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:855
+#: ../src/goabackend/goaoauthprovider.c:809
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr "获取响应令牌时应得到状态 200，但却得到了状态 %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:872
+#: ../src/goabackend/goaoauthprovider.c:826
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "响应中缺少 request_token 或 request_token_secret 头"
 
-#: ../src/goabackend/goaoauthprovider.c:1444
+#: ../src/goabackend/goaoauthprovider.c:1399
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "凭据中不含 access_token 或 access_token_secret"
@@ -595,6 +581,10 @@ msgstr "ownCloud"
 #: ../src/goabackend/goaowncloudprovider.c:1019
 msgid "Error connecting to ownCloud server"
 msgstr "连接 ownCloud 服务器出错"
+
+#: ../src/goabackend/goaowncloudprovider.c:1099
+msgid "_Files"
+msgstr "文件(_F)"
 
 #: ../src/goabackend/goapocketprovider.c:69
 msgid "Pocket"
@@ -610,7 +600,7 @@ msgstr "没有用户名或访问令牌"
 msgid "_Read Later"
 msgstr "稍后阅读(_R)"
 
-#: ../src/goabackend/goaprovider.c:683
+#: ../src/goabackend/goaprovider.c:682
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "未在 %s 类型上实现 ensure_credentials_sync"
@@ -659,7 +649,7 @@ msgstr "未知认证机制"
 #: ../src/goabackend/goatelepathyprovider.c:180
 #, c-format
 msgid "Telepathy chat account not found"
-msgstr "未找到 Telepathy 聊天帐号"
+msgstr "未找到 Telepathy 聊天账号"
 
 #: ../src/goabackend/goatelepathyprovider.c:380
 #, c-format
@@ -701,95 +691,86 @@ msgstr "连接设置(_C)"
 msgid "_Personal Details"
 msgstr "个人详情(_P)"
 
-#: ../src/goabackend/goautils.c:114
+#: ../src/goabackend/goautils.c:115
 #, c-format
 msgid "A %s account already exists for %s"
-msgstr "已存在一个对应 %2$s 的 %1$s 帐号"
+msgstr "已存在一个对应 %2$s 的 %1$s 账号"
 
 #. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:136
+#: ../src/goabackend/goautils.c:137
 #, c-format
 msgid "%s account"
-msgstr "%s 帐号"
+msgstr "%s 账号"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:180
+#: ../src/goabackend/goautils.c:181
 msgid "Failed to delete credentials from the keyring"
 msgstr "从密钥环中删除凭据失败："
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:232
+#: ../src/goabackend/goautils.c:233
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "从密钥环中取出凭据失败："
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:242
+#: ../src/goabackend/goautils.c:243
 msgid "No credentials found in the keyring"
 msgstr "在密钥环中未找到凭据"
 
-#: ../src/goabackend/goautils.c:255
+#: ../src/goabackend/goautils.c:256
 msgid "Error parsing result obtained from the keyring: "
 msgstr "解析从密钥环获取的结果出错："
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:298
+#: ../src/goabackend/goautils.c:299
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "实体 %2$s 的 GOA %1$s 凭据"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:315
+#: ../src/goabackend/goautils.c:316
 msgid "Failed to store credentials in the keyring"
 msgstr "保存凭据至秘钥环失败"
 
-#: ../src/goabackend/goautils.c:536
+#: ../src/goabackend/goautils.c:537
 msgid "The signing certificate authority is not known."
 msgstr "证书颁发机构未知。"
 
-#: ../src/goabackend/goautils.c:540
+#: ../src/goabackend/goautils.c:541
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr "证书与所取自站点的预期身份不符。"
 
-#: ../src/goabackend/goautils.c:545
+#: ../src/goabackend/goautils.c:546
 msgid "The certificate’s activation time is still in the future."
-msgstr "证书尚未激活。"
+msgstr "证书激活时间尚未到达。"
 
-#: ../src/goabackend/goautils.c:549
+#: ../src/goabackend/goautils.c:550
 msgid "The certificate has expired."
 msgstr "证书已过期。"
 
-#: ../src/goabackend/goautils.c:553
+#: ../src/goabackend/goautils.c:554
 msgid "The certificate has been revoked."
 msgstr "证书已被吊销。"
 
-#: ../src/goabackend/goautils.c:557
+#: ../src/goabackend/goautils.c:558
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "证书算法不安全。"
 
-#: ../src/goabackend/goautils.c:561
+#: ../src/goabackend/goautils.c:562
 msgid "Invalid certificate."
 msgstr "无效证书。"
 
 #. translators: %s here is the address of the web page
-#: ../src/goabackend/goawebview.c:70
+#: ../src/goabackend/goawebview.c:92
 #, c-format
-msgid "Loading  %s …"
-msgstr "正在载入 %s …"
+msgid "Loading “%s”…"
+msgstr "正在载入“%s” …"
 
-#: ../src/goabackend/goawindowsliveprovider.c:78
+#: ../src/goabackend/goawindowsliveprovider.c:77
 msgid "Windows Live"
 msgstr "Windows Live"
-
-#: ../src/goabackend/goayahooprovider.c:76
-msgid "Yahoo"
-msgstr "Yahoo"
-
-#: ../src/goabackend/goayahooprovider.c:250
-#, c-format
-msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-msgstr "在获取姓名时应得到状态 200，但却得到了状态 %d (%s)"
 
 #: ../src/goaidentity/goaidentityservice.c:370
 msgid "initial secret passed before secret key exchange"
@@ -863,3 +844,9 @@ msgstr "无法找到身份"
 #: ../src/goaidentity/goakerberosidentitymanager.c:836
 msgid "Could not create credential cache for identity"
 msgstr "无法为身份创建凭据缓存"
+
+#~ msgid "Yahoo"
+#~ msgstr "Yahoo"
+
+#~ msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+#~ msgstr "在获取姓名时应得到状态 200，但却得到了状态 %d (%s)"
