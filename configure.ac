@@ -191,7 +191,7 @@ AC_ARG_ENABLE([foursquare],
               [AS_HELP_STRING([--enable-foursquare],
                               [Enable Foursquare provider])],
                               [],
-                              [enable_foursquare=no])
+                              [enable_foursquare=yes])
 AC_ARG_WITH(foursquare-client-id,
             [AS_HELP_STRING([--with-foursquare-client-id],
                             [Foursquare OAuth 2.0 client id])],
