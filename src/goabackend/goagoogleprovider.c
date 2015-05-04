@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2012, 2013, 2014 Red Hat, Inc.
+ * Copyright (C) 2011, 2012, 2013, 2014, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -132,8 +132,10 @@ get_scope (GoaOAuth2Provider *provider)
          /* Google Contacts API (CardDAV) - undocumented */
          "https://www.googleapis.com/auth/carddav "
 
+         /* Google Drive API */
+         "https://www.googleapis.com/auth/drive "
+
          /* Google Documents List Data API */
-         "https://docs.google.com/feeds/ "
          "https://docs.googleusercontent.com/ "
          "https://spreadsheets.google.com/feeds/ "
 
@@ -156,7 +158,7 @@ get_scope (GoaOAuth2Provider *provider)
 static guint
 get_credentials_generation (GoaProvider *provider)
 {
-  return 9;
+  return 10;
 }
 
 static const gchar *
