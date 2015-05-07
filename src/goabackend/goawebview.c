@@ -391,7 +391,9 @@ goa_web_view_finalize (GObject *object)
   GoaWebViewPrivate *priv = self->priv;
 
   g_free (priv->existing_identity);
-  g_object_remove_weak_pointer (G_OBJECT (priv->provider), (gpointer *) &priv->provider);
+
+  if (priv->provider != NULL)
+    g_object_remove_weak_pointer (G_OBJECT (priv->provider), (gpointer *) &priv->provider);
 
   G_OBJECT_CLASS (goa_web_view_parent_class)->finalize (object);
 }
@@ -410,7 +412,8 @@ goa_web_view_set_property (GObject *object, guint prop_id, const GValue *value, 
 
     case PROP_PROVIDER:
       priv->provider = GOA_PROVIDER (g_value_get_object (value));
-      g_object_add_weak_pointer (G_OBJECT (priv->provider), (gpointer *) &priv->provider);
+      if (priv->provider != NULL)
+        g_object_add_weak_pointer (G_OBJECT (priv->provider), (gpointer *) &priv->provider);
       break;
 
     default:
