@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012, 2013 Red Hat, Inc.
+ * Copyright (C) 2012, 2013, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -37,7 +37,7 @@ typedef struct _GoaHttpClient GoaHttpClient;
 
 GType           goa_http_client_get_type           (void) G_GNUC_CONST;
 GoaHttpClient  *goa_http_client_new                (void);
-void            goa_http_client_check              (GoaHttpClient       *client,
+void            goa_http_client_check              (GoaHttpClient       *self,
                                                     const gchar         *uri,
                                                     const gchar         *username,
                                                     const gchar         *password,
@@ -45,10 +45,10 @@ void            goa_http_client_check              (GoaHttpClient       *client,
                                                     GCancellable        *cancellable,
                                                     GAsyncReadyCallback  callback,
                                                     gpointer             user_data);
-gboolean        goa_http_client_check_finish       (GoaHttpClient       *client,
+gboolean        goa_http_client_check_finish       (GoaHttpClient       *self,
                                                     GAsyncResult        *res,
                                                     GError             **error);
-gboolean        goa_http_client_check_sync         (GoaHttpClient       *client,
+gboolean        goa_http_client_check_sync         (GoaHttpClient       *self,
                                                     const gchar         *uri,
                                                     const gchar         *username,
                                                     const gchar         *password,
