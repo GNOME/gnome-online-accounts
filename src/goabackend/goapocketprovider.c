@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2013 Red Hat, Inc.
+ * Copyright (C) 2013, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -57,75 +57,75 @@ G_DEFINE_TYPE_WITH_CODE (GoaPocketProvider, goa_pocket_provider, GOA_TYPE_OAUTH2
 /* ---------------------------------------------------------------------------------------------------- */
 
 static const gchar *
-get_provider_type (GoaProvider *_provider)
+get_provider_type (GoaProvider *provider)
 {
   return GOA_POCKET_NAME;
 }
 
 static gchar *
-get_provider_name (GoaProvider *_provider,
+get_provider_name (GoaProvider *provider,
                    GoaObject   *object)
 {
   return g_strdup (_("Pocket"));
 }
 
 static GoaProviderGroup
-get_provider_group (GoaProvider *_provider)
+get_provider_group (GoaProvider *provider)
 {
   return GOA_PROVIDER_GROUP_BRANDED;
 }
 
 static GoaProviderFeatures
-get_provider_features (GoaProvider *_provider)
+get_provider_features (GoaProvider *provider)
 {
   return GOA_PROVIDER_FEATURE_BRANDED |
          GOA_PROVIDER_FEATURE_READ_LATER;
 }
 
 static const gchar *
-get_request_uri (GoaOAuth2Provider *provider)
+get_request_uri (GoaOAuth2Provider *oauth2_provider)
 {
   return "https://getpocket.com/v3/oauth/request";
 }
 
 static const gchar *
-get_authorization_uri (GoaOAuth2Provider *provider)
+get_authorization_uri (GoaOAuth2Provider *oauth2_provider)
 {
   return "https://getpocket.com/auth/authorize";
 }
 
 static const gchar *
-get_token_uri (GoaOAuth2Provider *provider)
+get_token_uri (GoaOAuth2Provider *oauth2_provider)
 {
   return NULL;
 }
 
 static const gchar *
-get_redirect_uri (GoaOAuth2Provider *provider)
+get_redirect_uri (GoaOAuth2Provider *oauth2_provider)
 {
   return "https://localhost";
 }
 
 static const gchar *
-get_client_id (GoaOAuth2Provider *provider)
+get_client_id (GoaOAuth2Provider *oauth2_provider)
 {
   return GOA_POCKET_CLIENT_ID;
 }
 
 static const gchar *
-get_client_secret (GoaOAuth2Provider *provider)
+get_client_secret (GoaOAuth2Provider *oauth2_provider)
 {
   return NULL;
 }
 
 static gchar *
-build_authorization_uri (GoaOAuth2Provider  *provider,
+build_authorization_uri (GoaOAuth2Provider  *oauth2_provider,
                          const gchar        *authorization_uri,
                          const gchar        *escaped_redirect_uri,
                          const gchar        *escaped_client_id,
                          const gchar        *escaped_scope)
 {
-  GoaPocketProvider *pocket = GOA_POCKET_PROVIDER (provider);
+  GoaPocketProvider *self = GOA_POCKET_PROVIDER (oauth2_provider);
   RestProxy *proxy;
   RestProxyCall *call;
   const gchar *payload;
@@ -133,21 +133,21 @@ build_authorization_uri (GoaOAuth2Provider  *provider,
   GError *error = NULL;
   GHashTable *hash;
 
-  g_clear_pointer (&pocket->code, g_free);
+  g_clear_pointer (&self->code, g_free);
 
   url = NULL;
 
-  proxy = rest_proxy_new (get_request_uri (provider), FALSE);
+  proxy = rest_proxy_new (get_request_uri (oauth2_provider), FALSE);
   call = rest_proxy_new_call (proxy);
 
   rest_proxy_call_set_method (call, "POST");
   rest_proxy_call_add_header (call, "Content-Type", "application/x-www-form-urlencoded");
   rest_proxy_call_add_param (call, "consumer_key", GOA_POCKET_CLIENT_ID);
-  rest_proxy_call_add_param (call, "redirect_uri", get_redirect_uri (provider));
+  rest_proxy_call_add_param (call, "redirect_uri", get_redirect_uri (oauth2_provider));
 
   if (!rest_proxy_call_sync (call, &error))
     {
-      g_debug ("Call to %s failed: %s", get_redirect_uri (provider), error->message);
+      g_debug ("Call to %s failed: %s", get_redirect_uri (oauth2_provider), error->message);
       g_error_free (error);
       goto out;
     }
@@ -159,7 +159,7 @@ build_authorization_uri (GoaOAuth2Provider  *provider,
 
   if (!code)
     {
-      g_debug ("Failed to get code from answer to %s", get_redirect_uri (provider));
+      g_debug ("Failed to get code from answer to %s", get_redirect_uri (oauth2_provider));
       goto out;
     }
 
@@ -170,7 +170,7 @@ build_authorization_uri (GoaOAuth2Provider  *provider,
                          code,
                          escaped_redirect_uri);
 
-  pocket->code = code;
+  self->code = code;
 
 out:
   g_clear_object (&call);
@@ -179,12 +179,12 @@ out:
 }
 
 static gboolean
-process_redirect_url (GoaOAuth2Provider            *provider,
+process_redirect_url (GoaOAuth2Provider            *oauth2_provider,
                       const gchar                  *redirect_url,
                       gchar                       **access_token,
                       GError                      **error)
 {
-  GoaPocketProvider *pocket = GOA_POCKET_PROVIDER (provider);
+  GoaPocketProvider *self = GOA_POCKET_PROVIDER (oauth2_provider);
   RestProxy *proxy;
   RestProxyCall *call;
   GHashTable *hash;
@@ -199,24 +199,24 @@ process_redirect_url (GoaOAuth2Provider            *provider,
   rest_proxy_call_set_method (call, "POST");
   rest_proxy_call_add_header (call, "Content-Type", "application/x-www-form-urlencoded");
   rest_proxy_call_add_param (call, "consumer_key", GOA_POCKET_CLIENT_ID);
-  rest_proxy_call_add_param (call, "code", pocket->code);
+  rest_proxy_call_add_param (call, "code", self->code);
 
   if (!rest_proxy_call_sync (call, error))
     goto out;
 
   payload = rest_proxy_call_get_payload (call);
   hash = soup_form_decode (payload);
-  pocket->identity = g_strdup (g_hash_table_lookup (hash, "username"));
+  self->identity = g_strdup (g_hash_table_lookup (hash, "username"));
   *access_token = g_strdup (g_hash_table_lookup (hash, "access_token"));
   g_hash_table_unref (hash);
 
-  if (pocket->identity == NULL|| *access_token == NULL)
+  if (self->identity == NULL|| *access_token == NULL)
     {
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED, /* TODO: more specific */
                    _("No username or access_token"));
-      g_clear_pointer (&pocket->identity, g_free);
+      g_clear_pointer (&self->identity, g_free);
       g_clear_pointer (access_token, g_free);
       goto out;
     }
@@ -230,7 +230,7 @@ out:
 }
 
 static const gchar *
-get_authentication_cookie (GoaOAuth2Provider *provider)
+get_authentication_cookie (GoaOAuth2Provider *oauth2_provider)
 {
   return NULL;
 }
@@ -238,22 +238,22 @@ get_authentication_cookie (GoaOAuth2Provider *provider)
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
-get_identity_sync (GoaOAuth2Provider  *provider,
+get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
                    const gchar        *access_token,
                    gchar             **out_presentation_identity,
                    GCancellable       *cancellable,
                    GError            **error)
 {
-  GoaPocketProvider *pocket = GOA_POCKET_PROVIDER (provider);
+  GoaPocketProvider *self = GOA_POCKET_PROVIDER (oauth2_provider);
   if (out_presentation_identity != NULL)
-    *out_presentation_identity = g_strdup (pocket->identity);
-  return g_strdup (pocket->identity);
+    *out_presentation_identity = g_strdup (self->identity);
+  return g_strdup (self->identity);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-is_deny_node (GoaOAuth2Provider *provider, WebKitDOMNode *node)
+is_deny_node (GoaOAuth2Provider *oauth2_provider, WebKitDOMNode *node)
 {
   WebKitDOMElement *element;
   gboolean ret;
@@ -300,7 +300,7 @@ is_deny_node (GoaOAuth2Provider *provider, WebKitDOMNode *node)
 }
 
 static gboolean
-is_identity_node (GoaOAuth2Provider *provider, WebKitDOMHTMLInputElement *element)
+is_identity_node (GoaOAuth2Provider *oauth2_provider, WebKitDOMHTMLInputElement *element)
 {
   gboolean ret;
   gchar *name;
@@ -411,7 +411,7 @@ show_account (GoaProvider         *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-add_account_key_values (GoaOAuth2Provider *provider,
+add_account_key_values (GoaOAuth2Provider *oauth2_provider,
                         GVariantBuilder   *builder)
 {
   g_variant_builder_add (builder, "{ss}", "ReadLaterEnabled", "true");
@@ -420,17 +420,17 @@ add_account_key_values (GoaOAuth2Provider *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_pocket_provider_init (GoaPocketProvider *client)
+goa_pocket_provider_init (GoaPocketProvider *self)
 {
 }
 
 static void
 goa_pocket_provider_finalize (GObject *object)
 {
-  GoaPocketProvider *provider = GOA_POCKET_PROVIDER (object);
+  GoaPocketProvider *self = GOA_POCKET_PROVIDER (object);
 
-  g_clear_pointer (&provider->code, g_free);
-  g_clear_pointer (&provider->identity, g_free);
+  g_clear_pointer (&self->code, g_free);
+  g_clear_pointer (&self->identity, g_free);
 
   G_OBJECT_CLASS (goa_pocket_provider_parent_class)->finalize (object);
 }

@@ -65,13 +65,13 @@ G_DEFINE_TYPE_WITH_CODE (GoaWindowsLiveProvider, goa_windows_live_provider, GOA_
 /* ---------------------------------------------------------------------------------------------------- */
 
 static const gchar *
-get_provider_type (GoaProvider *_provider)
+get_provider_type (GoaProvider *provider)
 {
   return GOA_WINDOWS_LIVE_NAME;
 }
 
 static gchar *
-get_provider_name (GoaProvider *_provider,
+get_provider_name (GoaProvider *provider,
                    GoaObject   *object)
 {
   return g_strdup (_("Microsoft Account"));
@@ -85,13 +85,13 @@ get_provider_icon (GoaProvider *provider,
 }
 
 static GoaProviderGroup
-get_provider_group (GoaProvider *_provider)
+get_provider_group (GoaProvider *provider)
 {
   return GOA_PROVIDER_GROUP_BRANDED;
 }
 
 static GoaProviderFeatures
-get_provider_features (GoaProvider *_provider)
+get_provider_features (GoaProvider *provider)
 {
   return GOA_PROVIDER_FEATURE_BRANDED |
          GOA_PROVIDER_FEATURE_MAIL |
@@ -99,27 +99,27 @@ get_provider_features (GoaProvider *_provider)
 }
 
 static const gchar *
-get_authorization_uri (GoaOAuth2Provider *provider)
+get_authorization_uri (GoaOAuth2Provider *oauth2_provider)
 {
   return "https://login.live.com/oauth20_authorize.srf";
 }
 
 
 static const gchar *
-get_token_uri (GoaOAuth2Provider *provider)
+get_token_uri (GoaOAuth2Provider *oauth2_provider)
 {
   return "https://login.live.com/oauth20_token.srf";
 }
 
 
 static const gchar *
-get_redirect_uri (GoaOAuth2Provider *provider)
+get_redirect_uri (GoaOAuth2Provider *oauth2_provider)
 {
   return "https://login.live.com/oauth20_desktop.srf";
 }
 
 static const gchar *
-get_scope (GoaOAuth2Provider *provider)
+get_scope (GoaOAuth2Provider *oauth2_provider)
 {
   return "wl.imap,"
          "wl.offline_access,"
@@ -134,19 +134,19 @@ get_credentials_generation (GoaProvider *provider)
 }
 
 static const gchar *
-get_client_id (GoaOAuth2Provider *provider)
+get_client_id (GoaOAuth2Provider *oauth2_provider)
 {
   return GOA_WINDOWS_LIVE_CLIENT_ID;
 }
 
 static const gchar *
-get_client_secret (GoaOAuth2Provider *provider)
+get_client_secret (GoaOAuth2Provider *oauth2_provider)
 {
   return NULL;
 }
 
 static const gchar *
-get_authentication_cookie (GoaOAuth2Provider *provider)
+get_authentication_cookie (GoaOAuth2Provider *oauth2_provider)
 {
   return "PPAuth";
 }
@@ -154,7 +154,7 @@ get_authentication_cookie (GoaOAuth2Provider *provider)
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
-get_identity_sync (GoaOAuth2Provider  *provider,
+get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
                    const gchar        *access_token,
                    gchar             **out_presentation_identity,
                    GCancellable       *cancellable,
@@ -259,7 +259,7 @@ get_identity_sync (GoaOAuth2Provider  *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-is_identity_node (GoaOAuth2Provider *provider, WebKitDOMHTMLInputElement *element)
+is_identity_node (GoaOAuth2Provider *oauth2_provider, WebKitDOMHTMLInputElement *element)
 {
   gboolean ret;
   gchar *element_type;
@@ -431,7 +431,7 @@ show_account (GoaProvider         *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-add_account_key_values (GoaOAuth2Provider *provider,
+add_account_key_values (GoaOAuth2Provider *oauth2_provider,
                         GVariantBuilder   *builder)
 {
   g_variant_builder_add (builder, "{ss}", "MailEnabled", "true");
@@ -441,7 +441,7 @@ add_account_key_values (GoaOAuth2Provider *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_windows_live_provider_init (GoaWindowsLiveProvider *client)
+goa_windows_live_provider_init (GoaWindowsLiveProvider *self)
 {
 }
 
