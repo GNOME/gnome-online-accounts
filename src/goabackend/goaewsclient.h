@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012, 2013 Red Hat, Inc.
+ * Copyright (C) 2012, 2013, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -37,7 +37,7 @@ typedef struct _GoaEwsClient GoaEwsClient;
 
 GType           goa_ews_client_get_type            (void) G_GNUC_CONST;
 GoaEwsClient   *goa_ews_client_new                 (void);
-void            goa_ews_client_autodiscover        (GoaEwsClient        *client,
+void            goa_ews_client_autodiscover        (GoaEwsClient        *self,
                                                     const gchar         *email,
                                                     const gchar         *password,
                                                     const gchar         *username,
@@ -46,10 +46,10 @@ void            goa_ews_client_autodiscover        (GoaEwsClient        *client,
                                                     GCancellable        *cancellable,
                                                     GAsyncReadyCallback  callback,
                                                     gpointer             gpointer);
-gboolean        goa_ews_client_autodiscover_finish (GoaEwsClient        *client,
+gboolean        goa_ews_client_autodiscover_finish (GoaEwsClient        *self,
                                                     GAsyncResult        *res,
                                                     GError             **error);
-gboolean        goa_ews_client_autodiscover_sync   (GoaEwsClient        *client,
+gboolean        goa_ews_client_autodiscover_sync   (GoaEwsClient        *self,
                                                     const gchar         *email,
                                                     const gchar         *password,
                                                     const gchar         *username,

@@ -49,12 +49,12 @@ G_DEFINE_TYPE (GoaEwsClient, goa_ews_client, G_TYPE_OBJECT);
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_ews_client_init (GoaEwsClient *client)
+goa_ews_client_init (GoaEwsClient *self)
 {
 }
 
 static void
-goa_ews_client_class_init (GoaEwsClientClass *klass)
+goa_ews_client_class_init (GoaEwsClientClass *self)
 {
 }
 
@@ -435,7 +435,7 @@ ews_client_create_msg_for_url (const gchar *url, xmlOutputBuffer *buf)
 }
 
 void
-goa_ews_client_autodiscover (GoaEwsClient        *client,
+goa_ews_client_autodiscover (GoaEwsClient        *self,
                              const gchar         *email,
                              const gchar         *password,
                              const gchar         *username,
@@ -452,7 +452,7 @@ goa_ews_client_autodiscover (GoaEwsClient        *client,
   xmlDoc *doc;
   xmlOutputBuffer *buf;
 
-  g_return_if_fail (GOA_IS_EWS_CLIENT (client));
+  g_return_if_fail (GOA_IS_EWS_CLIENT (self));
   g_return_if_fail (email != NULL && email[0] != '\0');
   g_return_if_fail (password != NULL && password[0] != '\0');
   g_return_if_fail (username != NULL && username[0] != '\0');
@@ -476,7 +476,7 @@ goa_ews_client_autodiscover (GoaEwsClient        *client,
    */
   data = g_slice_new0 (AutodiscoverData);
   data->buf = buf;
-  data->res = g_simple_async_result_new (G_OBJECT (client), callback, user_data, goa_ews_client_autodiscover);
+  data->res = g_simple_async_result_new (G_OBJECT (self), callback, user_data, goa_ews_client_autodiscover);
   data->msgs[0] = ews_client_create_msg_for_url (url1, buf);
   data->msgs[1] = ews_client_create_msg_for_url (url2, buf);
   data->pending = sizeof (data->msgs) / sizeof (data->msgs[0]);
@@ -516,11 +516,11 @@ goa_ews_client_autodiscover (GoaEwsClient        *client,
 }
 
 gboolean
-goa_ews_client_autodiscover_finish (GoaEwsClient *client, GAsyncResult *res, GError **error)
+goa_ews_client_autodiscover_finish (GoaEwsClient *self, GAsyncResult *res, GError **error)
 {
   GSimpleAsyncResult *simple;
 
-  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (client), goa_ews_client_autodiscover),
+  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (self), goa_ews_client_autodiscover),
                         FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
@@ -551,7 +551,7 @@ ews_client_autodiscover_sync_cb (GObject *source_object, GAsyncResult *res, gpoi
 }
 
 gboolean
-goa_ews_client_autodiscover_sync (GoaEwsClient        *client,
+goa_ews_client_autodiscover_sync (GoaEwsClient        *self,
                                   const gchar         *email,
                                   const gchar         *password,
                                   const gchar         *username,
@@ -569,7 +569,7 @@ goa_ews_client_autodiscover_sync (GoaEwsClient        *client,
   g_main_context_push_thread_default (context);
   data.loop = g_main_loop_new (context, FALSE);
 
-  goa_ews_client_autodiscover (client,
+  goa_ews_client_autodiscover (self,
                                email,
                                password,
                                username,
