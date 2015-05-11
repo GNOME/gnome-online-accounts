@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012, 2013, 2014 Red Hat, Inc.
+ * Copyright (C) 2012, 2013, 2014, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -68,13 +68,13 @@ get_provider_name (GoaProvider *provider, GoaObject *object)
 }
 
 static GoaProviderGroup
-get_provider_group (GoaProvider *_provider)
+get_provider_group (GoaProvider *provider)
 {
   return GOA_PROVIDER_GROUP_BRANDED;
 }
 
 static GoaProviderFeatures
-get_provider_features (GoaProvider *_provider)
+get_provider_features (GoaProvider *provider)
 {
   return GOA_PROVIDER_FEATURE_BRANDED |
          GOA_PROVIDER_FEATURE_CALENDAR |
@@ -1102,7 +1102,7 @@ show_account (GoaProvider         *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_owncloud_provider_init (GoaOwncloudProvider *provider)
+goa_owncloud_provider_init (GoaOwncloudProvider *self)
 {
 }
 

@@ -982,9 +982,9 @@ goa_telepathy_provider_set_property (GObject *object,
 }
 
 static void
-goa_telepathy_provider_init (GoaTelepathyProvider *provider)
+goa_telepathy_provider_init (GoaTelepathyProvider *self)
 {
-  provider->priv = G_TYPE_INSTANCE_GET_PRIVATE (provider,
+  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
         GOA_TYPE_TELEPATHY_PROVIDER, GoaTelepathyProviderPrivate);
 }
 
