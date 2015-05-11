@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2012, 2013, 2014 Red Hat, Inc.
+ * Copyright (C) 2011, 2012, 2013, 2014, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -62,13 +62,13 @@ enum {
 
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
-static gboolean goa_provider_ensure_credentials_sync_real (GoaProvider   *provider,
+static gboolean goa_provider_ensure_credentials_sync_real (GoaProvider   *self,
                                                            GoaObject     *object,
                                                            gint          *out_expires_in,
                                                            GCancellable  *cancellable,
                                                            GError       **error);
 
-static gboolean goa_provider_build_object_real (GoaProvider         *provider,
+static gboolean goa_provider_build_object_real (GoaProvider         *self,
                                                 GoaObjectSkeleton   *object,
                                                 GKeyFile            *key_file,
                                                 const gchar         *group,
@@ -76,9 +76,9 @@ static gboolean goa_provider_build_object_real (GoaProvider         *provider,
                                                 gboolean             just_added,
                                                 GError             **error);
 
-static guint goa_provider_get_credentials_generation_real (GoaProvider *provider);
+static guint goa_provider_get_credentials_generation_real (GoaProvider *self);
 
-static GIcon *goa_provider_get_provider_icon_default (GoaProvider *provider,
+static GIcon *goa_provider_get_provider_icon_default (GoaProvider *self,
                                                       GoaObject   *object);
 
 #define GOA_PROVIDER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GOA_TYPE_PROVIDER, GoaProviderPrivate))
@@ -124,17 +124,17 @@ goa_provider_set_property (GObject *object,
 static void
 goa_provider_dispose (GObject *object)
 {
-  GoaProvider *provider = GOA_PROVIDER (object);
+  GoaProvider *self = GOA_PROVIDER (object);
 
-  g_clear_pointer (&provider->priv->preseed_data, g_variant_unref);
+  g_clear_pointer (&self->priv->preseed_data, g_variant_unref);
 
   G_OBJECT_CLASS (goa_provider_parent_class)->dispose (object);
 }
 
 static void
-goa_provider_init (GoaProvider *provider)
+goa_provider_init (GoaProvider *self)
 {
-  provider->priv = GOA_PROVIDER_GET_PRIVATE (provider);
+  self->priv = GOA_PROVIDER_GET_PRIVATE (self);
 }
 
 static void
@@ -198,28 +198,28 @@ goa_provider_class_init (GoaProviderClass *klass)
 
 /**
  * goa_provider_get_provider_type:
- * @provider: A #GoaProvider.
+ * @self: A #GoaProvider.
  *
- * Gets the type of @provider.
+ * Gets the type of @self.
  *
  * This is a pure virtual method - a subclass must provide an
  * implementation.
  *
- * Returns: (transfer none): A string owned by @provider, do not free.
+ * Returns: (transfer none): A string owned by @self, do not free.
  */
 const gchar *
-goa_provider_get_provider_type (GoaProvider *provider)
+goa_provider_get_provider_type (GoaProvider *self)
 {
-  g_return_val_if_fail (GOA_IS_PROVIDER (provider), NULL);
-  return GOA_PROVIDER_GET_CLASS (provider)->get_provider_type (provider);
+  g_return_val_if_fail (GOA_IS_PROVIDER (self), NULL);
+  return GOA_PROVIDER_GET_CLASS (self)->get_provider_type (self);
 }
 
 /**
  * goa_provider_get_provider_name:
- * @provider: A #GoaProvider.
+ * @self: A #GoaProvider.
  * @object: (allow-none): A #GoaObject for an account.
  *
- * Gets a name for @provider and @object that is suitable for display
+ * Gets a name for @self and @object that is suitable for display
  * in an user interface. The returned value may depend on @object (if
  * it's not %NULL) - for example, hosted accounts might return a
  * different name.
@@ -230,19 +230,19 @@ goa_provider_get_provider_type (GoaProvider *provider)
  * Returns: (transfer full): A string that should be freed with g_free().
  */
 gchar *
-goa_provider_get_provider_name (GoaProvider *provider,
+goa_provider_get_provider_name (GoaProvider *self,
                                 GoaObject   *object)
 {
-  g_return_val_if_fail (GOA_IS_PROVIDER (provider), NULL);
-  return GOA_PROVIDER_GET_CLASS (provider)->get_provider_name (provider, object);
+  g_return_val_if_fail (GOA_IS_PROVIDER (self), NULL);
+  return GOA_PROVIDER_GET_CLASS (self)->get_provider_name (self, object);
 }
 
 /**
  * goa_provider_get_provider_icon:
- * @provider: A #GoaProvider.
+ * @self: A #GoaProvider.
  * @object: A #GoaObject for an account.
  *
- * Gets an icon for @provider and @object that is suitable for display
+ * Gets an icon for @self and @object that is suitable for display
  * in an user interface. The returned value may depend on @object -
  * for example, hosted accounts might return a different icon.
  *
@@ -254,20 +254,20 @@ goa_provider_get_provider_name (GoaProvider *provider,
  * Returns: (transfer full): An icon that should be freed with g_object_unref().
  */
 GIcon *
-goa_provider_get_provider_icon (GoaProvider *provider,
+goa_provider_get_provider_icon (GoaProvider *self,
                                 GoaObject   *object)
 {
-  g_return_val_if_fail (GOA_IS_PROVIDER (provider), NULL);
-  return GOA_PROVIDER_GET_CLASS (provider)->get_provider_icon (provider, object);
+  g_return_val_if_fail (GOA_IS_PROVIDER (self), NULL);
+  return GOA_PROVIDER_GET_CLASS (self)->get_provider_icon (self, object);
 }
 
 static GIcon *
-goa_provider_get_provider_icon_default (GoaProvider *provider,
+goa_provider_get_provider_icon_default (GoaProvider *self,
                                         GoaObject   *object)
 {
   GIcon *ret;
   gchar *s;
-  s = g_strdup_printf ("goa-account-%s", goa_provider_get_provider_type (provider));
+  s = g_strdup_printf ("goa-account-%s", goa_provider_get_provider_type (self));
   ret = g_themed_icon_new_with_default_fallbacks (s);
   g_free (s);
   return ret;
@@ -275,9 +275,9 @@ goa_provider_get_provider_icon_default (GoaProvider *provider,
 
 /**
  * goa_provider_get_provider_group:
- * @provider: A #GoaProvider.
+ * @self: A #GoaProvider.
  *
- * Gets the group to which @provider belongs that is suitable for
+ * Gets the group to which @self belongs that is suitable for
  * organizing the providers while displaying them in an user
  * interface.
  *
@@ -291,15 +291,15 @@ goa_provider_get_provider_icon_default (GoaProvider *provider,
  * Deprecated: 3.10: Use goa_provider_get_provider_features() instead.
  */
 GoaProviderGroup
-goa_provider_get_provider_group (GoaProvider *provider)
+goa_provider_get_provider_group (GoaProvider *self)
 {
-  g_return_val_if_fail (GOA_IS_PROVIDER (provider), GOA_PROVIDER_GROUP_INVALID);
-  return GOA_PROVIDER_GET_CLASS (provider)->get_provider_group (provider);
+  g_return_val_if_fail (GOA_IS_PROVIDER (self), GOA_PROVIDER_GROUP_INVALID);
+  return GOA_PROVIDER_GET_CLASS (self)->get_provider_group (self);
 }
 
 /**
  * goa_provider_get_provider_features:
- * @provider: A #GoaProvider.
+ * @self: A #GoaProvider.
  *
  * Get the features bitmask (eg. %GOA_PROVIDER_FEATURE_CHAT|%GOA_PROVIDER_FEATURE_CONTACTS)
  * supported by the provider.
@@ -309,25 +309,25 @@ goa_provider_get_provider_group (GoaProvider *provider)
  * Since: 3.10
  */
 GoaProviderFeatures
-goa_provider_get_provider_features (GoaProvider *provider)
+goa_provider_get_provider_features (GoaProvider *self)
 {
-  g_return_val_if_fail (GOA_IS_PROVIDER (provider), GOA_PROVIDER_FEATURE_INVALID);
-  g_return_val_if_fail (GOA_PROVIDER_GET_CLASS (provider)->get_provider_features != NULL, GOA_PROVIDER_FEATURE_INVALID);
-  return GOA_PROVIDER_GET_CLASS (provider)->get_provider_features (provider);
+  g_return_val_if_fail (GOA_IS_PROVIDER (self), GOA_PROVIDER_FEATURE_INVALID);
+  g_return_val_if_fail (GOA_PROVIDER_GET_CLASS (self)->get_provider_features != NULL, GOA_PROVIDER_FEATURE_INVALID);
+  return GOA_PROVIDER_GET_CLASS (self)->get_provider_features (self);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
  * goa_provider_add_account:
- * @provider: A #GoaProvider.
+ * @self: A #GoaProvider.
  * @client: A #GoaClient.
  * @dialog: A #GtkDialog.
  * @vbox: A vertically oriented #GtkBox to put content in.
  * @error: Return location for error or %NULL.
  *
  * This method brings up the user interface necessary to create a new
- * account on @client of the type for @provider, interacts with the
+ * account on @client of the type for @self, interacts with the
  * user to get all information needed and creates the account.
  *
  * The passed in @dialog widget is guaranteed to be visible with @vbox
@@ -358,7 +358,7 @@ goa_provider_get_provider_features (GoaProvider *provider)
  *   with g_object_unref()) or %NULL if @error is set.
  */
 GoaObject *
-goa_provider_add_account (GoaProvider  *provider,
+goa_provider_add_account (GoaProvider  *self,
                           GoaClient    *client,
                           GtkDialog    *dialog,
                           GtkBox       *vbox,
@@ -366,12 +366,12 @@ goa_provider_add_account (GoaProvider  *provider,
 {
   GoaObject *ret;
 
-  g_return_val_if_fail (GOA_IS_PROVIDER (provider), NULL);
+  g_return_val_if_fail (GOA_IS_PROVIDER (self), NULL);
   g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  ret = GOA_PROVIDER_GET_CLASS (provider)->add_account (provider, client, dialog, vbox, error);
+  ret = GOA_PROVIDER_GET_CLASS (self)->add_account (self, client, dialog, vbox, error);
 
   g_warn_if_fail ((ret == NULL && (error == NULL || *error != NULL)) || GOA_IS_OBJECT (ret));
 
@@ -382,7 +382,7 @@ goa_provider_add_account (GoaProvider  *provider,
 
 /**
  * goa_provider_refresh_account:
- * @provider: A #GoaProvider.
+ * @self: A #GoaProvider.
  * @client: A #GoaClient.
  * @object: A #GoaObject with a #GoaAccount interface.
  * @parent: (allow-none): Transient parent of dialogs or %NULL.
@@ -406,26 +406,26 @@ goa_provider_add_account (GoaProvider  *provider,
  * is set.
  */
 gboolean
-goa_provider_refresh_account (GoaProvider  *provider,
+goa_provider_refresh_account (GoaProvider  *self,
                               GoaClient    *client,
                               GoaObject    *object,
                               GtkWindow    *parent,
                               GError      **error)
 {
-  g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (GOA_IS_PROVIDER (self), FALSE);
   g_return_val_if_fail (GOA_IS_CLIENT (client), FALSE);
   g_return_val_if_fail (GOA_IS_OBJECT (object) && goa_object_peek_account (object) != NULL, FALSE);
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  return GOA_PROVIDER_GET_CLASS (provider)->refresh_account (provider, client, object, parent, error);
+  return GOA_PROVIDER_GET_CLASS (self)->refresh_account (self, client, object, parent, error);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
  * goa_provider_show_account:
- * @provider: A #GoaProvider.
+ * @self: A #GoaProvider.
  * @client: A #GoaClient.
  * @object: A #GoaObject with a #GoaAccount interface.
  * @vbox: A vertically oriented #GtkBox to put content in.
@@ -439,27 +439,27 @@ goa_provider_refresh_account (GoaProvider  *provider,
  * implementation.
  */
 void
-goa_provider_show_account (GoaProvider         *provider,
+goa_provider_show_account (GoaProvider         *self,
                            GoaClient           *client,
                            GoaObject           *object,
                            GtkBox              *vbox,
                            GtkGrid             *grid,
                            GtkGrid             *dummy)
 {
-  g_return_if_fail (GOA_IS_PROVIDER (provider));
+  g_return_if_fail (GOA_IS_PROVIDER (self));
   g_return_if_fail (GOA_IS_CLIENT (client));
   g_return_if_fail (GOA_IS_OBJECT (object) && goa_object_peek_account (object) != NULL);
   g_return_if_fail (GTK_IS_BOX (vbox));
   g_return_if_fail (GTK_IS_GRID (grid));
 
-  GOA_PROVIDER_GET_CLASS (provider)->show_account (provider, client, object, vbox, grid, dummy);
+  GOA_PROVIDER_GET_CLASS (self)->show_account (self, client, object, vbox, grid, dummy);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 /**
  * goa_provider_build_object:
- * @provider: A #GoaProvider.
+ * @self: A #GoaProvider.
  * @object: The #GoaObjectSkeleton that is being built.
  * @key_file: The #GKeyFile with configuation data.
  * @group: The group in @key_file to get data from.
@@ -484,7 +484,7 @@ goa_provider_show_account (GoaProvider         *provider,
  * Returns: %TRUE if data was valid, %FALSE if @error is set.
  */
 gboolean
-goa_provider_build_object (GoaProvider         *provider,
+goa_provider_build_object (GoaProvider         *self,
                            GoaObjectSkeleton   *object,
                            GKeyFile            *key_file,
                            const gchar         *group,
@@ -492,19 +492,19 @@ goa_provider_build_object (GoaProvider         *provider,
                            gboolean             just_added,
                            GError             **error)
 {
-  g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (GOA_IS_PROVIDER (self), FALSE);
   g_return_val_if_fail (GOA_IS_OBJECT_SKELETON (object) && goa_object_peek_account (GOA_OBJECT (object)) != NULL, FALSE);
   g_return_val_if_fail (key_file != NULL, FALSE);
   g_return_val_if_fail (group != NULL, FALSE);
   g_return_val_if_fail (G_IS_DBUS_CONNECTION (connection), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-  return GOA_PROVIDER_GET_CLASS (provider)->build_object (provider,
-                                                          object,
-                                                          key_file,
-                                                          group,
-                                                          connection,
-                                                          just_added,
-                                                          error);
+  return GOA_PROVIDER_GET_CLASS (self)->build_object (self,
+                                                      object,
+                                                      key_file,
+                                                      group,
+                                                      connection,
+                                                      just_added,
+                                                      error);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -553,7 +553,7 @@ ensure_credentials_in_thread_func (GSimpleAsyncResult *simple,
 
 /**
  * goa_provider_ensure_credentials:
- * @provider: A #GoaProvider.
+ * @self: A #GoaProvider.
  * @object: A #GoaObject with a #GoaAccount interface.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @callback: The function to call when the request is satisfied.
@@ -572,7 +572,7 @@ ensure_credentials_in_thread_func (GSimpleAsyncResult *simple,
  * another implementation.
  */
 void
-goa_provider_ensure_credentials (GoaProvider          *provider,
+goa_provider_ensure_credentials (GoaProvider          *self,
                                  GoaObject            *object,
                                  GCancellable         *cancellable,
                                  GAsyncReadyCallback   callback,
@@ -580,11 +580,11 @@ goa_provider_ensure_credentials (GoaProvider          *provider,
 {
   GSimpleAsyncResult *simple;
 
-  g_return_if_fail (GOA_IS_PROVIDER (provider));
+  g_return_if_fail (GOA_IS_PROVIDER (self));
   g_return_if_fail (GOA_IS_OBJECT (object));
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
-  simple = g_simple_async_result_new (G_OBJECT (provider),
+  simple = g_simple_async_result_new (G_OBJECT (self),
                                       callback,
                                       user_data,
                                       goa_provider_ensure_credentials);
@@ -600,7 +600,7 @@ goa_provider_ensure_credentials (GoaProvider          *provider,
 
 /**
  * goa_provider_ensure_credentials_finish:
- * @provider: A #GoaProvider.
+ * @self: A #GoaProvider.
  * @out_expires_in: (out): Return location for how long the expired credentials are good for (0 if unknown) or %NULL.
  * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to goa_provider_ensure_credentials().
  * @error: Return location for error or %NULL.
@@ -610,7 +610,7 @@ goa_provider_ensure_credentials (GoaProvider          *provider,
  * Returns: %TRUE if the credentials for the passed #GoaObject are valid, %FALSE if @error is set.
  */
 gboolean
-goa_provider_ensure_credentials_finish (GoaProvider  *provider,
+goa_provider_ensure_credentials_finish (GoaProvider  *self,
                                                 gint                *out_expires_in,
                                                 GAsyncResult        *res,
                                                 GError             **error)
@@ -621,7 +621,7 @@ goa_provider_ensure_credentials_finish (GoaProvider  *provider,
 
   ret = FALSE;
 
-  g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (GOA_IS_PROVIDER (self), FALSE);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (res), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
@@ -643,7 +643,7 @@ goa_provider_ensure_credentials_finish (GoaProvider  *provider,
 
 /**
  * goa_provider_ensure_credentials_sync:
- * @provider: A #GoaProvider.
+ * @self: A #GoaProvider.
  * @object: A #GoaObject with a #GoaAccount interface.
  * @out_expires_in: (out): Return location for how long the expired credentials are good for (0 if unknown) or %NULL.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
@@ -655,22 +655,22 @@ goa_provider_ensure_credentials_finish (GoaProvider  *provider,
  * Returns: %TRUE if the credentials for the passed #GoaObject are valid, %FALSE if @error is set.
  */
 gboolean
-goa_provider_ensure_credentials_sync (GoaProvider     *provider,
+goa_provider_ensure_credentials_sync (GoaProvider     *self,
                                       GoaObject       *object,
                                       gint            *out_expires_in,
                                       GCancellable    *cancellable,
                                       GError         **error)
 {
-  g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (GOA_IS_PROVIDER (self), FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-  return GOA_PROVIDER_GET_CLASS (provider)->ensure_credentials_sync (provider, object, out_expires_in, cancellable, error);
+  return GOA_PROVIDER_GET_CLASS (self)->ensure_credentials_sync (self, object, out_expires_in, cancellable, error);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-goa_provider_ensure_credentials_sync_real (GoaProvider   *provider,
+goa_provider_ensure_credentials_sync_real (GoaProvider   *self,
                                            GoaObject     *object,
                                            gint          *out_expires_in,
                                            GCancellable  *cancellable,
@@ -680,12 +680,12 @@ goa_provider_ensure_credentials_sync_real (GoaProvider   *provider,
                GOA_ERROR,
                GOA_ERROR_NOT_SUPPORTED,
                _("ensure_credentials_sync is not implemented on type %s"),
-               g_type_name (G_TYPE_FROM_INSTANCE (provider)));
+               g_type_name (G_TYPE_FROM_INSTANCE (self)));
   return FALSE;
 }
 
 static gboolean
-goa_provider_build_object_real (GoaProvider         *provider,
+goa_provider_build_object_real (GoaProvider         *self,
                                 GoaObjectSkeleton   *object,
                                 GKeyFile            *key_file,
                                 const gchar         *group,
@@ -701,7 +701,7 @@ goa_provider_build_object_real (GoaProvider         *provider,
 
 /**
  * goa_provider_get_credentials_generation:
- * @provider: A #GoaProvider.
+ * @self: A #GoaProvider.
  *
  * Gets the generation of credentials being used for the provider.
  *
@@ -719,14 +719,14 @@ goa_provider_build_object_real (GoaProvider         *provider,
  * Returns: The current generation of credentials.
  */
 guint
-goa_provider_get_credentials_generation (GoaProvider *provider)
+goa_provider_get_credentials_generation (GoaProvider *self)
 {
-  g_return_val_if_fail (GOA_IS_PROVIDER (provider), 0);
-  return GOA_PROVIDER_GET_CLASS (provider)->get_credentials_generation (provider);
+  g_return_val_if_fail (GOA_IS_PROVIDER (self), 0);
+  return GOA_PROVIDER_GET_CLASS (self)->get_credentials_generation (self);
 }
 
 static guint
-goa_provider_get_credentials_generation_real (GoaProvider *provider)
+goa_provider_get_credentials_generation_real (GoaProvider *self)
 {
   return 0;
 }
@@ -1116,7 +1116,7 @@ goa_provider_get_all_finish (GList        **out_providers,
 
 /**
  * goa_provider_set_preseed_data:
- * @provider: The #GoaProvider
+ * @self: The #GoaProvider
  * @preseed_data: A #GVariant of type a{sv}
  *
  * Sets the #GoaProvider:preseed-data property to feed any information already
@@ -1126,18 +1126,18 @@ goa_provider_get_all_finish (GList        **out_providers,
  * 'inline' use of the g_variant_new() family of functions.
  */
 void
-goa_provider_set_preseed_data (GoaProvider *provider,
+goa_provider_set_preseed_data (GoaProvider *self,
                                GVariant    *preseed_data)
 {
-  g_clear_pointer (&provider->priv->preseed_data, g_variant_unref);
+  g_clear_pointer (&self->priv->preseed_data, g_variant_unref);
   if (preseed_data != NULL)
-    provider->priv->preseed_data = g_variant_ref_sink (preseed_data);
-  g_object_notify (G_OBJECT (provider), "preseed-data");
+    self->priv->preseed_data = g_variant_ref_sink (preseed_data);
+  g_object_notify (G_OBJECT (self), "preseed-data");
 }
 
 /**
  * goa_provider_get_preseed_data:
- * @provider: The #GoaProvider
+ * @self: The #GoaProvider
  *
  * Gets the #GVariant set through the #GoaProvider:preseed-data property.
  *
@@ -1145,9 +1145,9 @@ goa_provider_set_preseed_data (GoaProvider *provider,
  *   the property is overridden or the provider freed.
  */
 GVariant *
-goa_provider_get_preseed_data (GoaProvider *provider)
+goa_provider_get_preseed_data (GoaProvider *self)
 {
-  return provider->priv->preseed_data;
+  return self->priv->preseed_data;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2013, 2014 Red Hat, Inc.
+ * Copyright (C) 2013, 2014, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -60,28 +60,28 @@ struct _GoaProviderClass
   GObjectClass parent_class;
 
   /* pure virtual */
-  const gchar *(*get_provider_type) (GoaProvider        *provider);
-  gchar       *(*get_provider_name) (GoaProvider        *provider,
+  const gchar *(*get_provider_type) (GoaProvider        *self);
+  gchar       *(*get_provider_name) (GoaProvider        *self,
                                      GoaObject          *object);
-  GIcon       *(*get_provider_icon) (GoaProvider        *provider,
+  GIcon       *(*get_provider_icon) (GoaProvider        *self,
                                      GoaObject          *object);
-  GoaObject   *(*add_account)       (GoaProvider        *provider,
+  GoaObject   *(*add_account)       (GoaProvider        *self,
                                      GoaClient          *client,
                                      GtkDialog          *dialog,
                                      GtkBox             *vbox,
                                      GError            **error);
-  gboolean     (*refresh_account)   (GoaProvider        *provider,
+  gboolean     (*refresh_account)   (GoaProvider        *self,
                                      GoaClient          *client,
                                      GoaObject          *object,
                                      GtkWindow          *parent,
                                      GError            **error);
-  void         (*show_account)      (GoaProvider         *provider,
+  void         (*show_account)      (GoaProvider         *self,
                                      GoaClient           *client,
                                      GoaObject           *object,
                                      GtkBox              *vbox,
                                      GtkGrid             *grid,
                                      GtkGrid             *dummy);
-  gboolean     (*build_object)      (GoaProvider        *provider,
+  gboolean     (*build_object)      (GoaProvider        *self,
                                      GoaObjectSkeleton  *object,
                                      GKeyFile           *key_file,
                                      const gchar        *group,
@@ -89,16 +89,16 @@ struct _GoaProviderClass
                                      gboolean            just_added,
                                      GError            **error);
   /* virtual but with default implementation */
-  gboolean (*ensure_credentials_sync) (GoaProvider         *provider,
+  gboolean (*ensure_credentials_sync) (GoaProvider         *self,
                                        GoaObject           *object,
                                        gint                *out_expires_in,
                                        GCancellable        *cancellable,
                                        GError             **error);
-  guint    (*get_credentials_generation) (GoaProvider   *provider);
+  guint    (*get_credentials_generation) (GoaProvider   *self);
 
   /* pure virtual */
-  GoaProviderGroup (*get_provider_group) (GoaProvider   *provider);
-  GoaProviderFeatures  (*get_provider_features)     (GoaProvider   *provider);
+  GoaProviderGroup (*get_provider_group) (GoaProvider   *self);
+  GoaProviderFeatures  (*get_provider_features)     (GoaProvider   *self);
 
   /*< private >*/
   /* Padding for future expansion */
