@@ -27,10 +27,7 @@ G_BEGIN_DECLS
 
 #define GOA_TYPE_WEB_EXTENSION            (goa_web_extension_get_type())
 #define GOA_WEB_EXTENSION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GOA_TYPE_WEB_EXTENSION, GoaWebExtension))
-#define GOA_WEB_EXTENSION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass),  GOA_TYPE_WEB_EXTENSION, GoaWebExtensionClass))
 #define GOA_IS_WEB_EXTENSION(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GOA_TYPE_WEB_EXTENSION))
-#define GOA_IS_WEB_EXTENSION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass),  GOA_TYPE_WEB_EXTENSION))
-#define GOA_WEB_EXTENSION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj),  GOA_TYPE_WEB_EXTENSION, GoaWebExtensionClass))
 
 typedef struct _GoaWebExtension      GoaWebExtension;
 typedef struct _GoaWebExtensionClass GoaWebExtensionClass;
