@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2013 Red Hat, Inc.
+ * Copyright (C) 2011, 2013, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -50,42 +50,42 @@ struct _GoaMailAuth
 struct _GoaMailAuthClass
 {
   GObjectClass parent_class;
-  gboolean    (*is_needed)        (GoaMailAuth      *auth);
-  gboolean    (*run_sync)         (GoaMailAuth      *auth,
+  gboolean    (*is_needed)        (GoaMailAuth      *self);
+  gboolean    (*run_sync)         (GoaMailAuth      *self,
                                    GCancellable     *cancellable,
                                    GError          **error);
-  gboolean    (*starttls_sync)    (GoaMailAuth      *auth,
+  gboolean    (*starttls_sync)    (GoaMailAuth      *self,
                                    GCancellable     *cancellable,
                                    GError          **error);
 };
 
 GType                 goa_mail_auth_get_type           (void) G_GNUC_CONST;
-gboolean              goa_mail_auth_is_needed          (GoaMailAuth         *auth);
-void                  goa_mail_auth_run                (GoaMailAuth         *auth,
+gboolean              goa_mail_auth_is_needed          (GoaMailAuth         *self);
+void                  goa_mail_auth_run                (GoaMailAuth         *self,
                                                         GCancellable        *cancellable,
                                                         GAsyncReadyCallback  callback,
                                                         gpointer             user_data);
-gboolean              goa_mail_auth_run_finish         (GoaMailAuth         *auth,
+gboolean              goa_mail_auth_run_finish         (GoaMailAuth         *self,
                                                         GAsyncResult        *res,
                                                         GError             **error);
-gboolean              goa_mail_auth_run_sync           (GoaMailAuth         *auth,
+gboolean              goa_mail_auth_run_sync           (GoaMailAuth         *self,
                                                         GCancellable        *cancellable,
                                                         GError             **error);
-void                  goa_mail_auth_starttls           (GoaMailAuth         *auth,
+void                  goa_mail_auth_starttls           (GoaMailAuth         *self,
                                                         GCancellable        *cancellable,
                                                         GAsyncReadyCallback  callback,
                                                         gpointer             user_data);
-gboolean              goa_mail_auth_starttls_finish    (GoaMailAuth         *auth,
+gboolean              goa_mail_auth_starttls_finish    (GoaMailAuth         *self,
                                                         GAsyncResult        *res,
                                                         GError             **error);
-gboolean              goa_mail_auth_starttls_sync      (GoaMailAuth         *auth,
+gboolean              goa_mail_auth_starttls_sync      (GoaMailAuth         *self,
                                                         GCancellable        *cancellable,
                                                         GError             **error);
-GDataInputStream     *goa_mail_auth_get_input          (GoaMailAuth         *auth);
-void                  goa_mail_auth_set_input          (GoaMailAuth         *auth,
+GDataInputStream     *goa_mail_auth_get_input          (GoaMailAuth         *self);
+void                  goa_mail_auth_set_input          (GoaMailAuth         *self,
                                                         GDataInputStream    *input);
-GDataOutputStream    *goa_mail_auth_get_output         (GoaMailAuth         *auth);
-void                  goa_mail_auth_set_output         (GoaMailAuth         *auth,
+GDataOutputStream    *goa_mail_auth_get_output         (GoaMailAuth         *self);
+void                  goa_mail_auth_set_output         (GoaMailAuth         *self,
                                                         GDataOutputStream   *input);
 
 G_END_DECLS

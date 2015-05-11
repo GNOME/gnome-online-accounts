@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2013 Red Hat, Inc.
+ * Copyright (C) 2011, 2013, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -88,8 +88,8 @@ mail_auth_starttls_in_thread_func (GSimpleAsyncResult *res, GObject *object, GCa
 static void
 goa_mail_auth_dispose (GObject *object)
 {
-  GoaMailAuth *auth = GOA_MAIL_AUTH (object);
-  GoaMailAuthPrivate *priv = auth->priv;
+  GoaMailAuth *self = GOA_MAIL_AUTH (object);
+  GoaMailAuthPrivate *priv = self->priv;
 
   g_clear_object (&priv->input);
   g_clear_object (&priv->output);
@@ -103,8 +103,8 @@ goa_mail_auth_get_property (GObject      *object,
                             GValue       *value,
                             GParamSpec   *pspec)
 {
-  GoaMailAuth *auth = GOA_MAIL_AUTH (object);
-  GoaMailAuthPrivate *priv = auth->priv;
+  GoaMailAuth *self = GOA_MAIL_AUTH (object);
+  GoaMailAuthPrivate *priv = self->priv;
 
   switch (prop_id)
     {
@@ -128,8 +128,8 @@ goa_mail_auth_set_property (GObject      *object,
                             const GValue *value,
                             GParamSpec   *pspec)
 {
-  GoaMailAuth *auth = GOA_MAIL_AUTH (object);
-  GoaMailAuthPrivate *priv = auth->priv;
+  GoaMailAuth *self = GOA_MAIL_AUTH (object);
+  GoaMailAuthPrivate *priv = self->priv;
 
   switch (prop_id)
     {
@@ -150,9 +150,9 @@ goa_mail_auth_set_property (GObject      *object,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_mail_auth_init (GoaMailAuth *client)
+goa_mail_auth_init (GoaMailAuth *self)
 {
-  client->priv = G_TYPE_INSTANCE_GET_PRIVATE (client, GOA_TYPE_MAIL_AUTH, GoaMailAuthPrivate);
+  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GOA_TYPE_MAIL_AUTH, GoaMailAuthPrivate);
 }
 
 static void
@@ -188,38 +188,38 @@ goa_mail_auth_class_init (GoaMailAuthClass *klass)
 /* ---------------------------------------------------------------------------------------------------- */
 
 gboolean
-goa_mail_auth_is_needed (GoaMailAuth *auth)
+goa_mail_auth_is_needed (GoaMailAuth *self)
 {
-  g_return_val_if_fail (GOA_IS_MAIL_AUTH (auth), FALSE);
-  return GOA_MAIL_AUTH_GET_CLASS (auth)->is_needed (auth);
+  g_return_val_if_fail (GOA_IS_MAIL_AUTH (self), FALSE);
+  return GOA_MAIL_AUTH_GET_CLASS (self)->is_needed (self);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 gboolean
-goa_mail_auth_run_sync (GoaMailAuth         *auth,
+goa_mail_auth_run_sync (GoaMailAuth         *self,
                         GCancellable        *cancellable,
                         GError             **error)
 {
-  g_return_val_if_fail (GOA_IS_MAIL_AUTH (auth), FALSE);
+  g_return_val_if_fail (GOA_IS_MAIL_AUTH (self), FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
-  return GOA_MAIL_AUTH_GET_CLASS (auth)->run_sync (auth, cancellable, error);
+  return GOA_MAIL_AUTH_GET_CLASS (self)->run_sync (self, cancellable, error);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 void
-goa_mail_auth_run (GoaMailAuth         *auth,
+goa_mail_auth_run (GoaMailAuth         *self,
                    GCancellable        *cancellable,
                    GAsyncReadyCallback  callback,
                    gpointer             user_data)
 {
   GSimpleAsyncResult *simple;
 
-  g_return_if_fail (GOA_IS_MAIL_AUTH (auth));
+  g_return_if_fail (GOA_IS_MAIL_AUTH (self));
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
-  simple = g_simple_async_result_new (G_OBJECT (auth), callback, user_data, goa_mail_auth_run);
+  simple = g_simple_async_result_new (G_OBJECT (self), callback, user_data, goa_mail_auth_run);
   g_simple_async_result_set_handle_cancellation (simple, TRUE);
 
   g_simple_async_result_run_in_thread (simple, mail_auth_run_in_thread_func, G_PRIORITY_DEFAULT, cancellable);
@@ -228,13 +228,13 @@ goa_mail_auth_run (GoaMailAuth         *auth,
 }
 
 gboolean
-goa_mail_auth_run_finish (GoaMailAuth         *auth,
+goa_mail_auth_run_finish (GoaMailAuth         *self,
                           GAsyncResult        *res,
                           GError             **error)
 {
   GSimpleAsyncResult *simple;
 
-  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (auth), goa_mail_auth_run), FALSE);
+  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (self), goa_mail_auth_run), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   simple = G_SIMPLE_ASYNC_RESULT (res);
@@ -248,29 +248,29 @@ goa_mail_auth_run_finish (GoaMailAuth         *auth,
 /* ---------------------------------------------------------------------------------------------------- */
 
 gboolean
-goa_mail_auth_starttls_sync (GoaMailAuth         *auth,
+goa_mail_auth_starttls_sync (GoaMailAuth         *self,
                              GCancellable        *cancellable,
                              GError             **error)
 {
-  g_return_val_if_fail (GOA_IS_MAIL_AUTH (auth), FALSE);
+  g_return_val_if_fail (GOA_IS_MAIL_AUTH (self), FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
-  return GOA_MAIL_AUTH_GET_CLASS (auth)->starttls_sync (auth, cancellable, error);
+  return GOA_MAIL_AUTH_GET_CLASS (self)->starttls_sync (self, cancellable, error);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 void
-goa_mail_auth_starttls (GoaMailAuth         *auth,
+goa_mail_auth_starttls (GoaMailAuth         *self,
                         GCancellable        *cancellable,
                         GAsyncReadyCallback  callback,
                         gpointer             user_data)
 {
   GSimpleAsyncResult *simple;
 
-  g_return_if_fail (GOA_IS_MAIL_AUTH (auth));
+  g_return_if_fail (GOA_IS_MAIL_AUTH (self));
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
-  simple = g_simple_async_result_new (G_OBJECT (auth), callback, user_data, goa_mail_auth_starttls);
+  simple = g_simple_async_result_new (G_OBJECT (self), callback, user_data, goa_mail_auth_starttls);
   g_simple_async_result_set_handle_cancellation (simple, TRUE);
 
   g_simple_async_result_run_in_thread (simple,
@@ -282,13 +282,13 @@ goa_mail_auth_starttls (GoaMailAuth         *auth,
 }
 
 gboolean
-goa_mail_auth_starttls_finish (GoaMailAuth         *auth,
+goa_mail_auth_starttls_finish (GoaMailAuth         *self,
                                GAsyncResult        *res,
                                GError             **error)
 {
   GSimpleAsyncResult *simple;
 
-  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (auth), goa_mail_auth_starttls), FALSE);
+  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (self), goa_mail_auth_starttls), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   simple = G_SIMPLE_ASYNC_RESULT (res);
@@ -302,41 +302,41 @@ goa_mail_auth_starttls_finish (GoaMailAuth         *auth,
 /* ---------------------------------------------------------------------------------------------------- */
 
 GDataInputStream *
-goa_mail_auth_get_input (GoaMailAuth *auth)
+goa_mail_auth_get_input (GoaMailAuth *self)
 {
-  return auth->priv->input;
+  return self->priv->input;
 }
 
 void
-goa_mail_auth_set_input (GoaMailAuth      *auth,
+goa_mail_auth_set_input (GoaMailAuth      *self,
                          GDataInputStream *input)
 {
-  GoaMailAuthPrivate *priv = auth->priv;
+  GoaMailAuthPrivate *priv = self->priv;
 
   if (priv->input == input)
     return;
 
   g_clear_object (&priv->input);
   priv->input = g_object_ref (input);
-  g_object_notify (G_OBJECT (auth), "input");
+  g_object_notify (G_OBJECT (self), "input");
 }
 
 GDataOutputStream *
-goa_mail_auth_get_output (GoaMailAuth  *auth)
+goa_mail_auth_get_output (GoaMailAuth  *self)
 {
-  return auth->priv->output;
+  return self->priv->output;
 }
 
 void
-goa_mail_auth_set_output (GoaMailAuth       *auth,
+goa_mail_auth_set_output (GoaMailAuth       *self,
                           GDataOutputStream *output)
 {
-  GoaMailAuthPrivate *priv = auth->priv;
+  GoaMailAuthPrivate *priv = self->priv;
 
   if (priv->output == output)
     return;
 
   g_clear_object (&priv->output);
   priv->output = g_object_ref (output);
-  g_object_notify (G_OBJECT (auth), "output");
+  g_object_notify (G_OBJECT (self), "output");
 }
