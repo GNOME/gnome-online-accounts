@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2013, 2014 Red Hat, Inc.
+ * Copyright (C) 2011, 2013, 2014, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -44,7 +44,7 @@ G_DEFINE_TYPE (GoaMailClient, goa_mail_client, G_TYPE_OBJECT);
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_mail_client_init (GoaMailClient *client)
+goa_mail_client_init (GoaMailClient *self)
 {
 }
 
@@ -364,7 +364,7 @@ mail_client_check_connect_cb (GObject *source_object, GAsyncResult *res, gpointe
 }
 
 void
-goa_mail_client_check (GoaMailClient       *client,
+goa_mail_client_check (GoaMailClient       *self,
                        const gchar         *host_and_port,
                        GoaTlsType           tls_type,
                        gboolean             accept_ssl_errors,
@@ -376,13 +376,13 @@ goa_mail_client_check (GoaMailClient       *client,
 {
   CheckData *data;
 
-  g_return_if_fail (GOA_IS_MAIL_CLIENT (client));
+  g_return_if_fail (GOA_IS_MAIL_CLIENT (self));
   g_return_if_fail (host_and_port != NULL && host_and_port[0] != '\0');
   g_return_if_fail (GOA_IS_MAIL_AUTH (auth));
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   data = g_slice_new0 (CheckData);
-  data->res = g_simple_async_result_new (G_OBJECT (client), callback, user_data, goa_mail_client_check);
+  data->res = g_simple_async_result_new (G_OBJECT (self), callback, user_data, goa_mail_client_check);
 
   data->sc = g_socket_client_new ();
   if (tls_type == GOA_TLS_TYPE_SSL)
@@ -412,11 +412,11 @@ goa_mail_client_check (GoaMailClient       *client,
 }
 
 gboolean
-goa_mail_client_check_finish (GoaMailClient *client, GAsyncResult *res, GError **error)
+goa_mail_client_check_finish (GoaMailClient *self, GAsyncResult *res, GError **error)
 {
   GSimpleAsyncResult *simple;
 
-  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (client), goa_mail_client_check), FALSE);
+  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (self), goa_mail_client_check), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   simple = G_SIMPLE_ASYNC_RESULT (res);
@@ -446,7 +446,7 @@ mail_client_check_sync_cb (GObject *source_object, GAsyncResult *res, gpointer u
 }
 
 gboolean
-goa_mail_client_check_sync (GoaMailClient  *client,
+goa_mail_client_check_sync (GoaMailClient  *self,
                             const gchar    *host_and_port,
                             GoaTlsType      tls_type,
                             gboolean        accept_ssl_errors,
@@ -464,7 +464,7 @@ goa_mail_client_check_sync (GoaMailClient  *client,
   g_main_context_push_thread_default (context);
   data.loop = g_main_loop_new (context, FALSE);
 
-  goa_mail_client_check (client,
+  goa_mail_client_check (self,
                          host_and_port,
                          tls_type,
                          accept_ssl_errors,
