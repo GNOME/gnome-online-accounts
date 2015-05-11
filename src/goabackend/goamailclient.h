@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2013 Red Hat, Inc.
+ * Copyright (C) 2011, 2013, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -40,7 +40,7 @@ typedef struct _GoaMailClient GoaMailClient;
 
 GType           goa_mail_client_get_type          (void) G_GNUC_CONST;
 GoaMailClient  *goa_mail_client_new               (void);
-void            goa_mail_client_check             (GoaMailClient        *client,
+void            goa_mail_client_check             (GoaMailClient        *self,
                                                    const gchar          *host_and_port,
                                                    GoaTlsType            tls_type,
                                                    gboolean              accept_ssl_errors,
@@ -49,10 +49,10 @@ void            goa_mail_client_check             (GoaMailClient        *client,
                                                    GCancellable         *cancellable,
                                                    GAsyncReadyCallback   callback,
                                                    gpointer              user_data);
-gboolean        goa_mail_client_check_finish      (GoaMailClient        *client,
+gboolean        goa_mail_client_check_finish      (GoaMailClient        *self,
                                                    GAsyncResult         *res,
                                                    GError              **error);
-gboolean        goa_mail_client_check_sync        (GoaMailClient        *client,
+gboolean        goa_mail_client_check_sync        (GoaMailClient        *self,
                                                    const gchar          *host_and_port,
                                                    GoaTlsType            tls_type,
                                                    gboolean              accept_ssl_errors,
