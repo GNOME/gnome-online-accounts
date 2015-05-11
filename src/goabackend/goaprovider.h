@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2012 Red Hat, Inc.
+ * Copyright (C) 2011, 2012, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -39,55 +39,55 @@ typedef struct _GoaProviderClass GoaProviderClass;
 typedef struct _GoaProviderPrivate GoaProviderPrivate;
 
 GType        goa_provider_get_type                  (void) G_GNUC_CONST;
-const gchar *goa_provider_get_provider_type         (GoaProvider         *provider);
-gchar       *goa_provider_get_provider_name         (GoaProvider         *provider,
+const gchar *goa_provider_get_provider_type         (GoaProvider         *self);
+gchar       *goa_provider_get_provider_name         (GoaProvider         *self,
                                                      GoaObject           *object);
-GIcon       *goa_provider_get_provider_icon         (GoaProvider         *provider,
+GIcon       *goa_provider_get_provider_icon         (GoaProvider         *self,
                                                      GoaObject           *object);
 G_DEPRECATED_FOR(goa_provider_get_provider_features)
-GoaProviderGroup goa_provider_get_provider_group    (GoaProvider         *provider);
-GoaProviderFeatures goa_provider_get_provider_features (GoaProvider      *provider);
-void         goa_provider_set_preseed_data          (GoaProvider *provider,
+GoaProviderGroup goa_provider_get_provider_group    (GoaProvider         *self);
+GoaProviderFeatures goa_provider_get_provider_features (GoaProvider      *self);
+void         goa_provider_set_preseed_data          (GoaProvider *self,
                                                      GVariant    *preseed_data);
-GVariant    *goa_provider_get_preseed_data          (GoaProvider *provider);
-GoaObject   *goa_provider_add_account               (GoaProvider         *provider,
+GVariant    *goa_provider_get_preseed_data          (GoaProvider *self);
+GoaObject   *goa_provider_add_account               (GoaProvider         *self,
                                                      GoaClient           *client,
                                                      GtkDialog           *dialog,
                                                      GtkBox              *vbox,
                                                      GError             **error);
-gboolean     goa_provider_refresh_account           (GoaProvider         *provider,
+gboolean     goa_provider_refresh_account           (GoaProvider         *self,
                                                      GoaClient           *client,
                                                      GoaObject           *object,
                                                      GtkWindow           *parent,
                                                      GError             **error);
-void         goa_provider_show_account              (GoaProvider         *provider,
+void         goa_provider_show_account              (GoaProvider         *self,
                                                      GoaClient           *client,
                                                      GoaObject           *object,
                                                      GtkBox              *vbox,
                                                      GtkGrid             *grid,
                                                      GtkGrid             *dummy);
-gboolean     goa_provider_build_object              (GoaProvider         *provider,
+gboolean     goa_provider_build_object              (GoaProvider         *self,
                                                      GoaObjectSkeleton   *object,
                                                      GKeyFile            *key_file,
                                                      const gchar         *group,
                                                      GDBusConnection     *connection,
                                                      gboolean             just_added,
                                                      GError             **error);
-void         goa_provider_ensure_credentials        (GoaProvider         *provider,
+void         goa_provider_ensure_credentials        (GoaProvider         *self,
                                                      GoaObject           *object,
                                                      GCancellable        *cancellable,
                                                      GAsyncReadyCallback  callback,
                                                      gpointer             user_data);
-gboolean     goa_provider_ensure_credentials_finish (GoaProvider         *provider,
+gboolean     goa_provider_ensure_credentials_finish (GoaProvider         *self,
                                                      gint                *out_expires_in,
                                                      GAsyncResult        *res,
                                                      GError             **error);
-gboolean     goa_provider_ensure_credentials_sync   (GoaProvider         *provider,
+gboolean     goa_provider_ensure_credentials_sync   (GoaProvider         *self,
                                                      GoaObject           *object,
                                                      gint                *out_expires_in,
                                                      GCancellable        *cancellable,
                                                      GError             **error);
-guint        goa_provider_get_credentials_generation (GoaProvider        *provider);
+guint        goa_provider_get_credentials_generation (GoaProvider        *self);
 
 void          goa_provider_get_all                  (GAsyncReadyCallback  callback,
                                                      gpointer             user_data);
