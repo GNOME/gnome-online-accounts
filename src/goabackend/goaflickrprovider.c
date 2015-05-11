@@ -1,7 +1,7 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
  * Copyright (C) 2011 Willem van Engen <gnome@willem.engen.nl>
- * Copyright (C) 2012 Red Hat, Inc.
+ * Copyright (C) 2012, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -65,68 +65,68 @@ G_DEFINE_TYPE_WITH_CODE (GoaFlickrProvider, goa_flickr_provider, GOA_TYPE_OAUTH_
 /* ---------------------------------------------------------------------------------------------------- */
 
 static const gchar *
-get_provider_type (GoaProvider *_provider)
+get_provider_type (GoaProvider *provider)
 {
   return GOA_FLICKR_NAME;
 }
 
 static gchar *
-get_provider_name (GoaProvider *_provider,
+get_provider_name (GoaProvider *provider,
                    GoaObject   *object)
 {
   return g_strdup (_("Flickr"));
 }
 
 static GoaProviderGroup
-get_provider_group (GoaProvider *_provider)
+get_provider_group (GoaProvider *provider)
 {
   return GOA_PROVIDER_GROUP_BRANDED;
 }
 
 static GoaProviderFeatures
-get_provider_features (GoaProvider *_provider)
+get_provider_features (GoaProvider *provider)
 {
   return GOA_PROVIDER_FEATURE_BRANDED | GOA_PROVIDER_FEATURE_PHOTOS;
 }
 
 static const gchar *
-get_consumer_key (GoaOAuthProvider *provider)
+get_consumer_key (GoaOAuthProvider *oauth_provider)
 {
   return GOA_FLICKR_CONSUMER_KEY;
 }
 
 static const gchar *
-get_consumer_secret (GoaOAuthProvider *provider)
+get_consumer_secret (GoaOAuthProvider *oauth_provider)
 {
   return GOA_FLICKR_CONSUMER_SECRET;
 }
 
 static const gchar *
-get_request_uri (GoaOAuthProvider *provider)
+get_request_uri (GoaOAuthProvider *oauth_provider)
 {
   return "https://m.flickr.com/services/oauth/request_token";
 }
 
 static const gchar *
-get_authorization_uri (GoaOAuthProvider *provider)
+get_authorization_uri (GoaOAuthProvider *oauth_provider)
 {
   return "https://m.flickr.com/services/oauth/authorize";
 }
 
 static const gchar *
-get_token_uri (GoaOAuthProvider *provider)
+get_token_uri (GoaOAuthProvider *oauth_provider)
 {
   return "https://m.flickr.com/services/oauth/access_token";
 }
 
 static const gchar *
-get_callback_uri (GoaOAuthProvider *provider)
+get_callback_uri (GoaOAuthProvider *oauth_provider)
 {
   return "https://www.gnome.org/goa-1.0/oauth";
 }
 
 static const gchar *
-get_authentication_cookie (GoaOAuthProvider *provider)
+get_authentication_cookie (GoaOAuthProvider *oauth_provider)
 {
   return "cookie_session";
 }
@@ -134,7 +134,7 @@ get_authentication_cookie (GoaOAuthProvider *provider)
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
-get_identity_sync (GoaOAuthProvider  *provider,
+get_identity_sync (GoaOAuthProvider  *oauth_provider,
                    const gchar       *access_token,
                    const gchar       *access_token_secret,
                    gchar            **out_presentation_identity,
@@ -161,8 +161,8 @@ get_identity_sync (GoaOAuthProvider  *provider,
 
   /* TODO: cancellable */
 
-  proxy = oauth_proxy_new_with_token (goa_oauth_provider_get_consumer_key (provider),
-                                      goa_oauth_provider_get_consumer_secret (provider),
+  proxy = oauth_proxy_new_with_token (goa_oauth_provider_get_consumer_key (oauth_provider),
+                                      goa_oauth_provider_get_consumer_secret (oauth_provider),
                                       access_token,
                                       access_token_secret,
                                       "https://api.flickr.com/services/rest",
@@ -265,7 +265,7 @@ get_identity_sync (GoaOAuthProvider  *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-is_deny_node (GoaOAuthProvider *provider, WebKitDOMNode *node)
+is_deny_node (GoaOAuthProvider *oauth_provider, WebKitDOMNode *node)
 {
   WebKitDOMElement *element;
   gboolean ret;
@@ -290,7 +290,7 @@ is_deny_node (GoaOAuthProvider *provider, WebKitDOMNode *node)
 }
 
 static gboolean
-is_identity_node (GoaOAuthProvider *provider, WebKitDOMHTMLInputElement *element)
+is_identity_node (GoaOAuthProvider *oauth_provider, WebKitDOMHTMLInputElement *element)
 {
   /* Flickr does not provide a way to query the string used by the
    * user to log in via the web interface. The user id and username
@@ -305,7 +305,7 @@ is_identity_node (GoaOAuthProvider *provider, WebKitDOMHTMLInputElement *element
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
-parse_request_token_error (GoaOAuthProvider *provider, RestProxyCall *call)
+parse_request_token_error (GoaOAuthProvider *oauth_provider, RestProxyCall *call)
 {
   const gchar *payload;
   gchar *msg;
@@ -417,7 +417,7 @@ show_account (GoaProvider         *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-add_account_key_values (GoaOAuthProvider  *provider,
+add_account_key_values (GoaOAuthProvider  *oauth_provider,
                         GVariantBuilder   *builder)
 {
   g_variant_builder_add (builder, "{ss}", "PhotosEnabled", "true");
@@ -426,7 +426,7 @@ add_account_key_values (GoaOAuthProvider  *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_flickr_provider_init (GoaFlickrProvider *client)
+goa_flickr_provider_init (GoaFlickrProvider *self)
 {
 }
 
