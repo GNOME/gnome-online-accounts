@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2013, 2014 Red Hat, Inc.
+ * Copyright (C) 2011, 2013, 2014, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -45,8 +45,8 @@ GoaMailAuth *goa_smtp_auth_new       (GoaProvider       *provider,
                                       const gchar       *domain,
                                       const gchar       *user_name,
                                       const gchar       *password);
-gboolean     goa_smtp_auth_is_login  (GoaSmtpAuth       *auth);
-gboolean     goa_smtp_auth_is_plain  (GoaSmtpAuth       *auth);
+gboolean     goa_smtp_auth_is_login  (GoaSmtpAuth       *self);
+gboolean     goa_smtp_auth_is_plain  (GoaSmtpAuth       *self);
 
 G_END_DECLS
 
