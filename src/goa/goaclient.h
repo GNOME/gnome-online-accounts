@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2012 Red Hat, Inc.
+ * Copyright (C) 2011, 2012, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -40,10 +40,10 @@ GoaClient          *goa_client_new_finish         (GAsyncResult        *res,
                                                    GError             **error);
 GoaClient          *goa_client_new_sync           (GCancellable        *cancellable,
                                                    GError             **error);
-GDBusObjectManager *goa_client_get_object_manager (GoaClient           *client);
-GoaManager         *goa_client_get_manager        (GoaClient           *client);
-GList              *goa_client_get_accounts       (GoaClient           *client);
-GoaObject          *goa_client_lookup_by_id       (GoaClient           *client,
+GDBusObjectManager *goa_client_get_object_manager (GoaClient           *self);
+GoaManager         *goa_client_get_manager        (GoaClient           *self);
+GList              *goa_client_get_accounts       (GoaClient           *self);
+GoaObject          *goa_client_lookup_by_id       (GoaClient           *self,
                                                    const gchar         *id);
 
 

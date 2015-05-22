@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2012 Red Hat, Inc.
+ * Copyright (C) 2011, 2012, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -54,9 +54,9 @@ typedef struct
 {
   GObjectClass parent_class;
 
-  void (*account_added) (GoaClient *client, GDBusObject *object);
-  void (*account_removed) (GoaClient *client, GDBusObject *object);
-  void (*account_changed) (GoaClient *client, GDBusObject *object);
+  void (*account_added) (GoaClient *self, GDBusObject *object);
+  void (*account_removed) (GoaClient *self, GDBusObject *object);
+  void (*account_changed) (GoaClient *self, GDBusObject *object);
 } GoaClientClass;
 
 enum
@@ -107,26 +107,26 @@ G_DEFINE_TYPE_WITH_CODE (GoaClient, goa_client, G_TYPE_OBJECT,
 static void
 goa_client_finalize (GObject *object)
 {
-  GoaClient *client = GOA_CLIENT (object);
+  GoaClient *self = GOA_CLIENT (object);
 
-  if (client->initialization_error != NULL)
-    g_error_free (client->initialization_error);
+  if (self->initialization_error != NULL)
+    g_error_free (self->initialization_error);
 
-  if (client->object_manager != NULL)
+  if (self->object_manager != NULL)
     {
-      g_signal_handlers_disconnect_by_func (client->object_manager, G_CALLBACK (on_object_added), client);
-      g_signal_handlers_disconnect_by_func (client->object_manager, G_CALLBACK (on_object_removed), client);
-      g_signal_handlers_disconnect_by_func (client->object_manager, G_CALLBACK (on_interface_proxy_properties_changed), client);
-      g_signal_handlers_disconnect_by_func (client->object_manager, G_CALLBACK (on_interface_added), client);
-      g_signal_handlers_disconnect_by_func (client->object_manager, G_CALLBACK (on_interface_removed), client);
-      g_object_unref (client->object_manager);
+      g_signal_handlers_disconnect_by_func (self->object_manager, G_CALLBACK (on_object_added), self);
+      g_signal_handlers_disconnect_by_func (self->object_manager, G_CALLBACK (on_object_removed), self);
+      g_signal_handlers_disconnect_by_func (self->object_manager, G_CALLBACK (on_interface_proxy_properties_changed), self);
+      g_signal_handlers_disconnect_by_func (self->object_manager, G_CALLBACK (on_interface_added), self);
+      g_signal_handlers_disconnect_by_func (self->object_manager, G_CALLBACK (on_interface_removed), self);
+      g_object_unref (self->object_manager);
     }
 
   G_OBJECT_CLASS (goa_client_parent_class)->finalize (object);
 }
 
 static void
-goa_client_init (GoaClient *client)
+goa_client_init (GoaClient *self)
 {
   static volatile GQuark goa_error_domain = 0;
   /* this will force associating errors in the GOA_ERROR error domain
@@ -142,12 +142,12 @@ goa_client_get_property (GObject    *object,
                             GValue     *value,
                             GParamSpec *pspec)
 {
-  GoaClient *client = GOA_CLIENT (object);
+  GoaClient *self = GOA_CLIENT (object);
 
   switch (prop_id)
     {
     case PROP_OBJECT_MANAGER:
-      g_value_set_object (value, goa_client_get_object_manager (client));
+      g_value_set_object (value, goa_client_get_object_manager (self));
       break;
 
     default:
@@ -321,7 +321,7 @@ initable_init (GInitable     *initable,
                GCancellable  *cancellable,
                GError       **error)
 {
-  GoaClient *client = GOA_CLIENT (initable);
+  GoaClient *self = GOA_CLIENT (initable);
   gboolean ret;
 
   ret = FALSE;
@@ -331,53 +331,53 @@ initable_init (GInitable     *initable,
    * locking.
    */
   G_LOCK (init_lock);
-  if (client->is_initialized)
+  if (self->is_initialized)
     {
-      if (client->object_manager != NULL)
+      if (self->object_manager != NULL)
         ret = TRUE;
       else
-        g_assert (client->initialization_error != NULL);
+        g_assert (self->initialization_error != NULL);
       goto out;
     }
-  g_assert (client->initialization_error == NULL);
+  g_assert (self->initialization_error == NULL);
 
-  client->object_manager = goa_object_manager_client_new_for_bus_sync (G_BUS_TYPE_SESSION,
-                                                                       G_DBUS_OBJECT_MANAGER_CLIENT_FLAGS_NONE,
-                                                                       "org.gnome.OnlineAccounts",
-                                                                       "/org/gnome/OnlineAccounts",
-                                                                       cancellable,
-                                                                       &client->initialization_error);
-  if (client->object_manager == NULL)
+  self->object_manager = goa_object_manager_client_new_for_bus_sync (G_BUS_TYPE_SESSION,
+                                                                     G_DBUS_OBJECT_MANAGER_CLIENT_FLAGS_NONE,
+                                                                     "org.gnome.OnlineAccounts",
+                                                                     "/org/gnome/OnlineAccounts",
+                                                                     cancellable,
+                                                                     &self->initialization_error);
+  if (self->object_manager == NULL)
     goto out;
-  g_signal_connect (client->object_manager,
+  g_signal_connect (self->object_manager,
                     "object-added",
                     G_CALLBACK (on_object_added),
-                    client);
-  g_signal_connect (client->object_manager,
+                    self);
+  g_signal_connect (self->object_manager,
                     "object-removed",
                     G_CALLBACK (on_object_removed),
-                    client);
-  g_signal_connect (client->object_manager,
+                    self);
+  g_signal_connect (self->object_manager,
                     "interface-proxy-properties-changed",
                     G_CALLBACK (on_interface_proxy_properties_changed),
-                    client);
-  g_signal_connect (client->object_manager,
+                    self);
+  g_signal_connect (self->object_manager,
                     "interface-added",
                     G_CALLBACK (on_interface_added),
-                    client);
-  g_signal_connect (client->object_manager,
+                    self);
+  g_signal_connect (self->object_manager,
                     "interface-removed",
                     G_CALLBACK (on_interface_removed),
-                    client);
+                    self);
 
   ret = TRUE;
 
 out:
-  client->is_initialized = TRUE;
+  self->is_initialized = TRUE;
   if (!ret)
     {
-      g_assert (client->initialization_error != NULL);
-      g_propagate_error (error, g_error_copy (client->initialization_error));
+      g_assert (self->initialization_error != NULL);
+      g_propagate_error (error, g_error_copy (self->initialization_error));
     }
   G_UNLOCK (init_lock);
   return ret;
@@ -397,37 +397,37 @@ async_initable_iface_init (GAsyncInitableIface *async_initable_iface)
 
 /**
  * goa_client_get_object_manager:
- * @client: A #GoaClient.
+ * @self: A #GoaClient.
  *
- * Gets the #GDBusObjectManager used by @client.
+ * Gets the #GDBusObjectManager used by @self.
  *
  * Returns: (transfer none): A #GDBusObjectManager. Do not free, the
- * instance is owned by @client.
+ * instance is owned by @self.
  */
 GDBusObjectManager *
-goa_client_get_object_manager (GoaClient        *client)
+goa_client_get_object_manager (GoaClient        *self)
 {
-  g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
-  return client->object_manager;
+  g_return_val_if_fail (GOA_IS_CLIENT (self), NULL);
+  return self->object_manager;
 }
 
 /**
  * goa_client_get_manager:
- * @client: A #GoaClient.
+ * @self: A #GoaClient.
  *
- * Gets the #GoaManager for @client.
+ * Gets the #GoaManager for @self.
  *
  * Returns: (transfer none): A #GoaManager. Do not free, the returned
- * object belongs to @client.
+ * object belongs to @self.
  */
 GoaManager *
-goa_client_get_manager (GoaClient *client)
+goa_client_get_manager (GoaClient *self)
 {
   GDBusObject *object;
   GoaManager *manager;
 
   manager = NULL;
-  object = g_dbus_object_manager_get_object (client->object_manager, "/org/gnome/OnlineAccounts/Manager");
+  object = g_dbus_object_manager_get_object (self->object_manager, "/org/gnome/OnlineAccounts/Manager");
   if (object == NULL)
     goto out;
 
@@ -441,9 +441,9 @@ goa_client_get_manager (GoaClient *client)
 
 /**
  * goa_client_get_accounts:
- * @client: A #GoaClient.
+ * @self: A #GoaClient.
  *
- * Gets all accounts that @client knows about. The result is a list of
+ * Gets all accounts that @self knows about. The result is a list of
  * #GoaObject instances where each object at least has an #GoaAccount
  * interface (that can be obtained via the goa_object_get_account()
  * method) but may also implement other interfaces such as
@@ -454,16 +454,16 @@ goa_client_get_manager (GoaClient *client)
  * each element has been freed with g_object_unref().
  */
 GList *
-goa_client_get_accounts (GoaClient *client)
+goa_client_get_accounts (GoaClient *self)
 {
   GList *ret;
   GList *objects;
   GList *l;
 
-  g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
+  g_return_val_if_fail (GOA_IS_CLIENT (self), NULL);
 
   ret = NULL;
-  objects = g_dbus_object_manager_get_objects (client->object_manager);
+  objects = g_dbus_object_manager_get_objects (self->object_manager);
   for (l = objects; l != NULL; l = l->next)
     {
       GoaObject *object = GOA_OBJECT (l->data);
@@ -479,7 +479,7 @@ goa_client_get_accounts (GoaClient *client)
 
 /**
  * goa_client_lookup_by_id:
- * @client: A #GoaClient.
+ * @self: A #GoaClient.
  * @id: The ID to look for.
  *
  * Finds and returns the #GoaObject instance whose
@@ -493,7 +493,7 @@ goa_client_get_accounts (GoaClient *client)
  * Since: 3.6
  */
 GoaObject *
-goa_client_lookup_by_id (GoaClient           *client,
+goa_client_lookup_by_id (GoaClient           *self,
                          const gchar         *id)
 {
   GList *accounts;
@@ -502,7 +502,7 @@ goa_client_lookup_by_id (GoaClient           *client,
 
   ret = NULL;
 
-  accounts = goa_client_get_accounts (client);
+  accounts = goa_client_get_accounts (self);
   for (l = accounts; l != NULL; l = g_list_next (l))
     {
       GoaAccount *account;
@@ -530,9 +530,9 @@ on_object_added (GDBusObjectManager   *manager,
                  GDBusObject          *object,
                  gpointer              user_data)
 {
-  GoaClient *client = GOA_CLIENT (user_data);
+  GoaClient *self = GOA_CLIENT (user_data);
   if (goa_object_peek_account (GOA_OBJECT (object)) != NULL)
-    g_signal_emit (client, signals[ACCOUNT_ADDED_SIGNAL], 0, object);
+    g_signal_emit (self, signals[ACCOUNT_ADDED_SIGNAL], 0, object);
 }
 
 static void
@@ -540,9 +540,9 @@ on_object_removed (GDBusObjectManager   *manager,
                    GDBusObject          *object,
                    gpointer              user_data)
 {
-  GoaClient *client = GOA_CLIENT (user_data);
+  GoaClient *self = GOA_CLIENT (user_data);
   if (goa_object_peek_account (GOA_OBJECT (object)) != NULL)
-    g_signal_emit (client, signals[ACCOUNT_REMOVED_SIGNAL], 0, object);
+    g_signal_emit (self, signals[ACCOUNT_REMOVED_SIGNAL], 0, object);
 }
 
 static void
@@ -553,9 +553,9 @@ on_interface_proxy_properties_changed (GDBusObjectManagerClient   *manager,
                                        const gchar* const         *invalidated_properties,
                                        gpointer                    user_data)
 {
-  GoaClient *client = GOA_CLIENT (user_data);
+  GoaClient *self = GOA_CLIENT (user_data);
   if (goa_object_peek_account (GOA_OBJECT (object_proxy)) != NULL)
-    g_signal_emit (client, signals[ACCOUNT_CHANGED_SIGNAL], 0, object_proxy);
+    g_signal_emit (self, signals[ACCOUNT_CHANGED_SIGNAL], 0, object_proxy);
 }
 
 static void
@@ -564,9 +564,9 @@ on_interface_added (GDBusObjectManager   *manager,
                     GDBusInterface       *interface,
                     gpointer              user_data)
 {
-  GoaClient *client = GOA_CLIENT (user_data);
+  GoaClient *self = GOA_CLIENT (user_data);
   if (goa_object_peek_account (GOA_OBJECT (object)) != NULL)
-    g_signal_emit (client, signals[ACCOUNT_CHANGED_SIGNAL], 0, object);
+    g_signal_emit (self, signals[ACCOUNT_CHANGED_SIGNAL], 0, object);
 }
 
 static void
@@ -575,7 +575,7 @@ on_interface_removed (GDBusObjectManager   *manager,
                       GDBusInterface       *interface,
                       gpointer              user_data)
 {
-  GoaClient *client = GOA_CLIENT (user_data);
+  GoaClient *self = GOA_CLIENT (user_data);
   if (goa_object_peek_account (GOA_OBJECT (object)) != NULL)
-    g_signal_emit (client, signals[ACCOUNT_CHANGED_SIGNAL], 0, object);
+    g_signal_emit (self, signals[ACCOUNT_CHANGED_SIGNAL], 0, object);
 }
