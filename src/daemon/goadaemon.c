@@ -1158,7 +1158,7 @@ on_account_handle_ensure_credentials (GoaAccount            *account,
                                       gpointer               user_data)
 {
   GoaDaemon *daemon = GOA_DAEMON (user_data);
-  GoaProvider *provider;
+  GoaProvider *provider = NULL;
   GoaObject *object;
 
   object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (account)));
@@ -1181,5 +1181,6 @@ on_account_handle_ensure_credentials (GoaAccount            *account,
                                    ensure_data_new (daemon, object, invocation));
 
  out:
+  g_clear_object (&provider);
   return TRUE; /* invocation was handled */
 }
