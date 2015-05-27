@@ -144,7 +144,7 @@ on_config_file_monitor_timeout (gpointer user_data)
   g_info ("Reloading configuration files\n");
   goa_daemon_reload_configuration (self);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void
