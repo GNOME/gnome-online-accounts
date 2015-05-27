@@ -447,6 +447,8 @@ update_account_object (GoaDaemon           *self,
   g_return_val_if_fail (key_file != NULL, FALSE);
 
   ret = FALSE;
+  account = NULL;
+  provider = NULL;
   identity = NULL;
   type = NULL;
   account = NULL;
@@ -503,12 +505,10 @@ update_account_object (GoaDaemon           *self,
 
  out:
   g_free (serialized_icon);
-  if (icon != NULL)
-    g_object_unref (icon);
+  g_clear_object (&icon);
   g_free (name);
-  if (provider != NULL)
-    g_object_unref (provider);
-  g_object_unref (account);
+  g_clear_object (&provider);
+  g_clear_object (&account);
   g_free (type);
   g_free (identity);
   g_free (presentation_identity);
@@ -1063,8 +1063,7 @@ on_account_handle_remove (GoaAccount            *account,
   goa_account_complete_remove (account, invocation);
 
  out:
-  if (provider != NULL)
-    g_object_unref (provider);
+  g_clear_object (&provider);
   g_free (data);
   if (key_file != NULL)
     g_key_file_free (key_file);
