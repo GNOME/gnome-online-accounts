@@ -890,8 +890,7 @@ get_all_providers_cb (GObject      *source,
 
  out:
   g_free (object_path);
-  if (providers != NULL)
-    g_list_free_full (providers, g_object_unref);
+  g_list_free_full (providers, g_object_unref);
   g_free (key_file_data);
   g_free (group);
   g_free (id);
