@@ -547,8 +547,7 @@ process_config_entries (GoaDaemon  *self,
         if (g_str_has_prefix (object_path, "/org/gnome/OnlineAccounts/Accounts/"))
           existing_object_paths = g_list_prepend (existing_object_paths, g_strdup (object_path));
       }
-    g_list_foreach (existing_objects, (GFunc) g_object_unref, NULL);
-    g_list_free (existing_objects);
+    g_list_free_full (existing_objects, g_object_unref);
   }
 
   config_object_paths = NULL;
@@ -659,10 +658,8 @@ process_config_entries (GoaDaemon  *self,
   g_list_free (removed);
   g_list_free (added);
   g_list_free (unchanged);
-  g_list_foreach (existing_object_paths, (GFunc) g_free, NULL);
-  g_list_free (existing_object_paths);
-  g_list_foreach (config_object_paths, (GFunc) g_free, NULL);
-  g_list_free (config_object_paths);
+  g_list_free_full (existing_object_paths, g_free);
+  g_list_free_full (config_object_paths, g_free);
 }
 
 /* <internal>
@@ -695,8 +692,7 @@ goa_daemon_reload_configuration (GoaDaemon *self)
   process_config_entries (self, group_name_to_key_file_data);
 
   g_hash_table_unref (group_name_to_key_file_data);
-  g_list_foreach (key_files_to_free, (GFunc) g_key_file_free, NULL);
-  g_list_free (key_files_to_free);
+  g_list_free_full (key_files_to_free, (GDestroyNotify) g_key_file_free);
 }
 
 static gchar *
