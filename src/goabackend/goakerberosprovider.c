@@ -1391,18 +1391,29 @@ ensure_credentials_sync (GoaProvider    *provider,
 
   if (identity == NULL || !goa_identity_service_identity_get_is_signed_in (identity))
     {
+      GError *lookup_error;
       gboolean ticket_synced;
+
+      lookup_error = NULL;
 
       g_mutex_unlock (&identity_manager_mutex);
       ticket_synced = get_ticket_sync (GOA_KERBEROS_PROVIDER (provider),
                                        object,
                                        FALSE /* Don't allow interaction */,
                                        cancellable,
-                                       error);
+                                       &lookup_error);
       g_mutex_lock (&identity_manager_mutex);
 
       if (!ticket_synced)
-        goto out;
+        {
+          translate_error (&lookup_error);
+          g_set_error_literal (error,
+                               GOA_ERROR,
+                               GOA_ERROR_NOT_AUTHORIZED,
+                               lookup_error->message);
+          g_error_free (lookup_error);
+          goto out;
+        }
 
       if (identity == NULL)
         identity = get_identity_from_object_manager (GOA_KERBEROS_PROVIDER (provider),
