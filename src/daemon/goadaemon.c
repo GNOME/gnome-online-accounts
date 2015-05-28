@@ -39,6 +39,8 @@ struct _GoaDaemon
   GFileMonitor *home_conf_file_monitor;
   GFileMonitor *home_conf_dir_monitor;
 
+  GNetworkMonitor *network_monitor;
+
   GDBusObjectManagerServer *object_manager;
 
   GoaManager *manager;
@@ -48,6 +50,7 @@ struct _GoaDaemon
 #endif
 
   guint config_timeout_id;
+  guint credentials_timeout_id;
 };
 
 typedef struct
@@ -78,6 +81,7 @@ static gboolean on_account_handle_ensure_credentials (GoaAccount            *acc
                                                       GDBusMethodInvocation *invocation,
                                                       gpointer               user_data);
 
+static void goa_daemon_check_credentials (GoaDaemon *self);
 static void goa_daemon_reload_configuration (GoaDaemon *self);
 
 G_DEFINE_TYPE (GoaDaemon, goa_daemon, G_TYPE_OBJECT);
@@ -90,6 +94,11 @@ goa_daemon_finalize (GObject *object)
   if (self->config_timeout_id != 0)
     {
       g_source_remove (self->config_timeout_id);
+    }
+
+  if (self->credentials_timeout_id != 0)
+    {
+      g_source_remove (self->credentials_timeout_id);
     }
 
   if (self->system_conf_dir_monitor != NULL)
@@ -173,6 +182,35 @@ on_file_monitor_changed (GFileMonitor      *monitor,
     }
 }
 
+static gboolean
+on_check_credentials_timeout (gpointer user_data)
+{
+  GoaDaemon *self = GOA_DAEMON (user_data);
+
+  self->credentials_timeout_id = 0;
+  g_info ("Checking credentials\n");
+  goa_daemon_check_credentials (self);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+queue_check_credentials (GoaDaemon *self)
+{
+  if (self->credentials_timeout_id != 0)
+    {
+      g_source_remove (self->credentials_timeout_id);
+    }
+
+  self->credentials_timeout_id = g_timeout_add_seconds (1, on_check_credentials_timeout, self);
+}
+
+static void
+on_network_monitor_network_changed (GoaDaemon *self, gboolean available)
+{
+  queue_check_credentials (self);
+}
+
 static void
 goa_daemon_init (GoaDaemon *self)
 {
@@ -224,8 +262,17 @@ goa_daemon_init (GoaDaemon *self)
   /* prime the list of accounts */
   goa_daemon_reload_configuration (self);
 
+  self->network_monitor = g_network_monitor_get_default ();
+  g_signal_connect_object (self->network_monitor,
+                           "network-changed",
+                           G_CALLBACK (on_network_monitor_network_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   /* Export objects */
   g_dbus_object_manager_server_set_connection (self->object_manager, self->connection);
+
+  queue_check_credentials (self);
 
 #ifdef GOA_KERBEROS_ENABLED
   self->identity_service = goa_identity_service_new ();
@@ -1144,7 +1191,14 @@ ensure_credentials_cb (GoaProvider   *provider,
                          error->message, g_quark_to_string (error->domain), error->code);
             }
         }
-      g_dbus_method_invocation_take_error (data->invocation, error);
+
+      if (data->invocation != NULL)
+        {
+          g_dbus_method_invocation_take_error (data->invocation, error);
+          error = NULL;
+        }
+
+      g_clear_error (&error);
     }
   else
     {
@@ -1159,7 +1213,9 @@ ensure_credentials_cb (GoaProvider   *provider,
           g_message ("%s: Setting AttentionNeeded to FALSE because EnsureCredentials() succeded\n",
                      g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)));
         }
-      goa_account_complete_ensure_credentials (account, data->invocation, expires_in);
+
+      if (data->invocation != NULL)
+        goa_account_complete_ensure_credentials (account, data->invocation, expires_in);
     }
   ensure_data_unref (data);
 }
@@ -1195,4 +1251,47 @@ on_account_handle_ensure_credentials (GoaAccount            *account,
  out:
   g_clear_object (&provider);
   return TRUE; /* invocation was handled */
+}
+
+/* <internal>
+ * goa_daemon_check_credentials:
+ * @self: A #GoaDaemon
+ *
+ * Checks whether credentials are valid and tries to refresh them if
+ * not. It also reports whether accounts are usable with the current
+ * network.
+ */
+static void
+goa_daemon_check_credentials (GoaDaemon *self)
+{
+  GList *l;
+  GList *objects;
+
+  objects = g_dbus_object_manager_get_objects (G_DBUS_OBJECT_MANAGER (self->object_manager));
+  for (l = objects; l != NULL; l = l->next)
+    {
+      GoaAccount *account;
+      GoaObject *object = GOA_OBJECT (l->data);
+      GoaProvider *provider = NULL;
+      const gchar *provider_type;
+
+      account = goa_object_peek_account (object);
+      if (account == NULL)
+        continue;
+
+      provider_type = goa_account_get_provider_type (account);
+      provider = goa_provider_get_for_provider_type (provider_type);
+      if (provider == NULL)
+        continue;
+
+      goa_provider_ensure_credentials (provider,
+                                       object,
+                                       NULL, /* GCancellable */
+                                       (GAsyncReadyCallback) ensure_credentials_cb,
+                                       ensure_data_new (self, object, NULL));
+
+      g_clear_object (&provider);
+    }
+
+  g_list_free_full (objects, g_object_unref);
 }
