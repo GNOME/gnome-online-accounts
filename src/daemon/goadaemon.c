@@ -1159,9 +1159,7 @@ ensure_credentials_cb (GoaProvider   *provider,
           g_message ("%s: Setting AttentionNeeded to FALSE because EnsureCredentials() succeded\n",
                      g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)));
         }
-      goa_account_complete_ensure_credentials (goa_object_peek_account (data->object),
-                                               data->invocation,
-                                               expires_in);
+      goa_account_complete_ensure_credentials (account, data->invocation, expires_in);
     }
   ensure_data_unref (data);
 }
