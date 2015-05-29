@@ -1749,20 +1749,11 @@ on_identity_looked_up_to_ensure_credentials (GoaKerberosProvider *self,
 {
 
   GoaIdentityServiceIdentity *identity;
-  GError                     *error;
+  GError                     *error = NULL;
   GoaObject                  *object;
   GoaAccount                 *account;
   const char                 *identifier;
   GCancellable               *cancellable;
-
-  error = NULL;
-  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), &error))
-    {
-      g_simple_async_result_take_error (operation_result, error);
-      g_simple_async_result_complete_in_idle (operation_result);
-      g_object_unref (operation_result);
-      return;
-    }
 
   identity = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
 
