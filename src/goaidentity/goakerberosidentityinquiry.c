@@ -102,15 +102,15 @@ goa_kerberos_identity_inquiry_dispose (GObject *object)
   g_clear_object (&self->priv->identity);
   g_clear_pointer (&self->priv->name, (GDestroyNotify) g_free);
   g_clear_pointer (&self->priv->banner, (GDestroyNotify) g_free);
-
-  g_list_foreach (self->priv->queries,
-                  (GFunc) goa_kerberos_identity_query_free, NULL);
-  g_clear_pointer (&self->priv->queries, (GDestroyNotify) g_list_free);
 }
 
 static void
 goa_kerberos_identity_inquiry_finalize (GObject *object)
 {
+  GoaKerberosIdentityInquiry *self = GOA_KERBEROS_IDENTITY_INQUIRY (object);
+
+  g_list_free_full (self->priv->queries, (GDestroyNotify) goa_kerberos_identity_query_free);
+
   G_OBJECT_CLASS (goa_kerberos_identity_inquiry_parent_class)->finalize (object);
 }
 
