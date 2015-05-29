@@ -594,8 +594,7 @@ identity_sort_func (GoaIdentity *a,
 static void
 free_identity_list (GList *list)
 {
-  g_list_foreach (list, (GFunc) g_object_unref, NULL);
-  g_list_free (list);
+  g_list_free_full (list, g_object_unref);
 }
 
 static void

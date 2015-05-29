@@ -471,8 +471,7 @@ goa_client_get_accounts (GoaClient *self)
       if (goa_object_peek_account (object) != NULL)
         ret = g_list_prepend (ret, g_object_ref (object));
     }
-  g_list_foreach (objects, (GFunc) g_object_unref, NULL);
-  g_list_free (objects);
+  g_list_free_full (objects, g_object_unref);
 
   return ret;
 }
