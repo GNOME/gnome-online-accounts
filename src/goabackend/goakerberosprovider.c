@@ -975,9 +975,10 @@ perform_initial_sign_in (GoaKerberosProvider *self,
                                                 object);
   g_simple_async_result_set_check_cancellable (operation_result, cancellable);
 
-  g_object_set_data (G_OBJECT (operation_result),
-                     "cancellable",
-                     cancellable);
+  g_object_set_data_full (G_OBJECT (operation_result),
+                          "cancellable",
+                          g_object_ref (cancellable),
+                          g_object_unref);
   g_object_set_data (G_OBJECT (operation_result),
                      "principal",
                      (gpointer)
@@ -988,6 +989,8 @@ perform_initial_sign_in (GoaKerberosProvider *self,
                                 (GAsyncReadyCallback)
                                 on_system_prompt_open_for_initial_sign_in,
                                 operation_result);
+
+  g_object_unref (cancellable);
 }
 
 static char *
