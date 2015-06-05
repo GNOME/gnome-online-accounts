@@ -221,7 +221,14 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
    * successful.
    */
   if (status == SOUP_STATUS_CANCELLED)
-    goto out;
+    {
+      /* If a previous autodiscover attempt for the same GAsyncResult
+       * was successful then no additional attempts are required and
+       * we should use the result from the earlier attempt.
+       */
+      op_res = g_simple_async_result_get_op_res_gboolean (data->res);
+      goto out;
+    }
   else if (status != SOUP_STATUS_OK)
     {
       g_set_error (&error,
@@ -309,6 +316,12 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
       goto out;
     }
 
+  /* This autodiscover attempt was successful. Save the result now so
+   * that it won't get lost when we hear from another autodiscover
+   * attempt for the same GAsyncResult.
+   */
+  g_simple_async_result_set_op_res_gboolean (data->res, op_res);
+
   for (idx = 0; idx < size; idx++)
     {
       if (data->msgs[idx] != NULL)
@@ -342,7 +355,12 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
       GMainContext *context;
       GSource *source;
 
-      g_simple_async_result_set_op_res_gboolean (data->res, op_res);
+      /* The result of the GAsyncResult should already be set when we
+       * get here. If it wasn't explicitly set to TRUE then
+       * autodiscovery has failed and the default value of the
+       * GAsyncResult (which is FALSE) should be returned to the
+       * original caller.
+       */
 
       source = g_idle_source_new ();
       g_source_set_priority (source, G_PRIORITY_DEFAULT_IDLE);
