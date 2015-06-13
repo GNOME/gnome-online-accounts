@@ -498,6 +498,11 @@ static struct {
     .blurb = N_("_Documents"),
   },
   {
+    .feature = GOA_PROVIDER_FEATURE_MUSIC,
+    .property = "music-disabled",
+    .blurb = N_("M_usic"),
+  },
+  {
     .feature = GOA_PROVIDER_FEATURE_PHOTOS,
     .property = "photos-disabled",
     .blurb = N_("_Photos"),

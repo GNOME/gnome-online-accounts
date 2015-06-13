@@ -70,6 +70,7 @@ typedef enum
  * @GOA_PROVIDER_FEATURE_READ_LATER: Read later services (eg. Pocket).
  * @GOA_PROVIDER_FEATURE_PRINTERS: Network printing services (e.g. Google Cloud Print).
  * @GOA_PROVIDER_FEATURE_MAPS: Maps related services (e.g. Foursquare, Facebook).
+ * @GOA_PROVIDER_FEATURE_MUSIC: Music related services (e.g. Vkontakte).
  * @GOA_PROVIDER_FEATURE_INVALID: Used for error handling. No provider
  *   should provide this feature.
  *
@@ -94,6 +95,7 @@ typedef enum /*< flags >*/
   GOA_PROVIDER_FEATURE_READ_LATER= 1 << 10,
   GOA_PROVIDER_FEATURE_PRINTERS  = 1 << 11,
   GOA_PROVIDER_FEATURE_MAPS      = 1 << 12,
+  GOA_PROVIDER_FEATURE_MUSIC     = 1 << 13,
   GOA_PROVIDER_FEATURE_INVALID   = 0
 } GoaProviderFeatures;
 
