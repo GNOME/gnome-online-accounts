@@ -166,6 +166,13 @@ libgoawebextension_la_LDFLAGS =						\
 	-no-undefined							\
 	$(NULL)
 
+# Force installation order: libgoa-backend-1.0 must be installed first, othwerwise
+# libtool will incorrectly relink libgoawebextension.la under parallel make install.
+# Requires ugly automake syntax - see http://debbugs.gnu.org/cgi/bugreport.cgi?bug=7328
+
+installwebextensionLTLIBRARIES = install-webextensionLTLIBRARIES
+$(installwebextensionLTLIBRARIES): install-libLTLIBRARIES
+
 # ----------------------------------------------------------------------------------------------------
 
 BUILT_SOURCES =								\
