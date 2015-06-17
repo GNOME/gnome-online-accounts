@@ -89,56 +89,71 @@ PKG_CHECK_MODULES(GLIB, [glib-2.0 gio-2.0 gio-unix-2.0 >= 2.35])
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
 
-PKG_CHECK_MODULES(GTK, [gtk+-3.0 >= 3.11.1])
-AC_SUBST(GTK_CFLAGS)
-AC_SUBST(GTK_LIBS)
-
-PKG_CHECK_MODULES(WEBKIT_GTK, [webkit2gtk-4.0 >= 2.7.2])
-AC_SUBST(WEBKIT_GTK_CFLAGS)
-AC_SUBST(WEBKIT_GTK_LIBS)
-
-PKG_CHECK_MODULES(LIBSOUP, [libsoup-2.4 >= 2.42])
-AC_SUBST(LIBSOUP_CFLAGS)
-AC_SUBST(LIBSOUP_LIBS)
-
-PKG_CHECK_MODULES(JSON_GLIB, [json-glib-1.0])
-AC_SUBST(JSON_GLIB_CFLAGS)
-AC_SUBST(JSON_GLIB_LIBS)
-
-PKG_CHECK_MODULES(REST, [rest-0.7])
-AC_SUBST(REST_CFLAGS)
-AC_SUBST(REST_LIBS)
-
-PKG_CHECK_MODULES(SECRET, [libsecret-1])
-AC_SUBST(SECRET_CFLAGS)
-AC_SUBST(SECRET_LIBS)
-
-PKG_CHECK_MODULES(LIBXML, [libxml-2.0])
-AC_SUBST(LIBXML_CFLAGS)
-AC_SUBST(LIBXML_LIBS)
-
 GOBJECT_INTROSPECTION_CHECK([0.6.2])
 
-# telepathy-account-widgets
-prev_top_build_prefix=$ac_top_build_prefix
-prev_ac_configure_args=$ac_configure_args
-ac_configure_args="$ac_configure_args --with-cheese=no --disable-gudev"
-# install the data together with the rest of GOA's data
-ac_configure_args="$ac_configure_args --with-pkgdatadir=${datadir}/gnome-online-accounts"
-# GOA ships its icons directly in ${datadir}/icons (usually /usr/share/icons/) and not
-# in its own data directory
-ac_configure_args="$ac_configure_args --with-icondir=${datadir}/icons"
-# Change the name of tpaw's .mo files to avoid conflicts with other packages using tp-aw
-ac_configure_args="$ac_configure_args --with-gettext-package=gnome-online-accounts-tpaw"
-# Disable the installation of the GSettings schema to avoid multiple components shipping
-# the same file. See https://bugzilla.gnome.org/show_bug.cgi?id=706803
-ac_configure_args="$ac_configure_args --disable-schemas-compile --disable-settings"
-AX_CONFIG_DIR([telepathy-account-widgets])
-ac_top_build_prefix=$prev_top_build_prefix
-ac_configure_args=$prev_ac_configure_args
+AC_ARG_ENABLE([backend],
+              [AS_HELP_STRING([--enable-backend],
+              [Enable goabackend library])],
+	      [],
+	      [enable_backend=yes])
+AM_CONDITIONAL(BUILD_BACKEND, [test x$enable_backend != xno])
 
-export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:"$ac_top_build_prefix"telepathy-account-widgets/
-PKG_CHECK_MODULES(TPAW, telepathy-account-widgets)
+if test "$enable_backend" != "no"; then
+  AC_DEFINE(GOA_BACKEND_ENABLED, 1, [Enable goabackend library])
+
+  PKG_CHECK_MODULES(GTK, [gtk+-3.0 >= 3.11.1])
+  AC_SUBST(GTK_CFLAGS)
+  AC_SUBST(GTK_LIBS)
+
+  PKG_CHECK_MODULES(WEBKIT_GTK, [webkit2gtk-4.0 >= 2.7.2])
+  AC_SUBST(WEBKIT_GTK_CFLAGS)
+  AC_SUBST(WEBKIT_GTK_LIBS)
+
+  PKG_CHECK_MODULES(LIBSOUP, [libsoup-2.4 >= 2.42])
+  AC_SUBST(LIBSOUP_CFLAGS)
+  AC_SUBST(LIBSOUP_LIBS)
+
+  PKG_CHECK_MODULES(JSON_GLIB, [json-glib-1.0])
+  AC_SUBST(JSON_GLIB_CFLAGS)
+  AC_SUBST(JSON_GLIB_LIBS)
+
+  PKG_CHECK_MODULES(REST, [rest-0.7])
+  AC_SUBST(REST_CFLAGS)
+  AC_SUBST(REST_LIBS)
+
+  PKG_CHECK_MODULES(SECRET, [libsecret-1])
+  AC_SUBST(SECRET_CFLAGS)
+  AC_SUBST(SECRET_LIBS)
+
+  PKG_CHECK_MODULES(LIBXML, [libxml-2.0])
+  AC_SUBST(LIBXML_CFLAGS)
+  AC_SUBST(LIBXML_LIBS)
+
+  PKG_CHECK_MODULES(TP, [telepathy-glib])
+  AC_SUBST(TP_CFLAGS)
+  AC_SUBST(TP_LIBS)
+
+  # telepathy-account-widgets
+  prev_top_build_prefix=$ac_top_build_prefix
+  prev_ac_configure_args=$ac_configure_args
+  ac_configure_args="$ac_configure_args --with-cheese=no --disable-gudev"
+  # install the data together with the rest of GOA's data
+  ac_configure_args="$ac_configure_args --with-pkgdatadir=${datadir}/gnome-online-accounts"
+  # GOA ships its icons directly in ${datadir}/icons (usually /usr/share/icons/) and not
+  # in its own data directory
+  ac_configure_args="$ac_configure_args --with-icondir=${datadir}/icons"
+  # Change the name of tpaw's .mo files to avoid conflicts with other packages using tp-aw
+  ac_configure_args="$ac_configure_args --with-gettext-package=gnome-online-accounts-tpaw"
+  # Disable the installation of the GSettings schema to avoid multiple components shipping
+  # the same file. See https://bugzilla.gnome.org/show_bug.cgi?id=706803
+  ac_configure_args="$ac_configure_args --disable-schemas-compile --disable-settings"
+  AX_CONFIG_DIR([telepathy-account-widgets])
+  ac_top_build_prefix=$prev_top_build_prefix
+  ac_configure_args=$prev_ac_configure_args
+
+  export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:"$ac_top_build_prefix"telepathy-account-widgets/
+  PKG_CHECK_MODULES(TPAW, telepathy-account-widgets)
+fi
 
 AC_ARG_ENABLE([inspector],
               [AS_HELP_STRING([--enable-inspector],
@@ -325,8 +340,6 @@ AC_ARG_ENABLE([telepathy],
 if test "$enable_telepathy" != "no"; then
   AC_DEFINE(GOA_TELEPATHY_ENABLED, 1, [Enable Telepathy data provider])
 fi
-
-PKG_CHECK_MODULES(TP, telepathy-glib)
 
 # Pocket
 AC_DEFINE(GOA_POCKET_NAME, ["pocket"], [ProviderType and extension point name])
@@ -526,6 +539,8 @@ echo "
 	compiler:                       ${CC}
 	cflags:                         ${CFLAGS}
 	cppflags:                       ${CPPFLAGS}
+
+	backend:                        ${enable_backend}
 	inspector:		        ${enable_inspector}
 	introspection:		        ${found_introspection}
 

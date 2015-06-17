@@ -1,7 +1,19 @@
 
 NULL =
 
-SUBDIRS = data telepathy-account-widgets src doc po
+SUBDIRS = data
+
+if BUILD_BACKEND
+SUBDIRS += telepathy-account-widgets
+endif
+
+SUBDIRS += src
+
+if BUILD_BACKEND
+SUBDIRS += doc
+endif
+
+SUBDIRS += po
 
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 

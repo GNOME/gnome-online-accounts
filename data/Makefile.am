@@ -4,10 +4,12 @@ NULL =
 SUBDIRS = icons
 
 gsettings_in_files = org.gnome.online-accounts.gschema.xml.in
-gsettings_SCHEMAS = $(gsettings_in_files:.xml.in=.xml)
 
+if BUILD_BACKEND
+gsettings_SCHEMAS = $(gsettings_in_files:.xml.in=.xml)
 @INTLTOOL_XML_RULE@
 @GSETTINGS_RULES@
+endif
 
 servicedir       = $(datadir)/dbus-1/services
 service_in_files = org.gnome.OnlineAccounts.service.in
