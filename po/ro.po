@@ -3,116 +3,527 @@
 # laurion &lt;me_lawr@yahoo.com&gt;, 2011.
 # Ion Laurențiu Cristian <me_lawr@yahoo.com>, 2011.
 # Lucian Adrian Grijincu <lucian.grijincu@gmail.com>, 2011.
+# Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-11-15 21:26+0000\n"
-"PO-Revision-Date: 2011-11-20 21:48+0300\n"
-"Last-Translator: Lucian Adrian Grijincu <lucian.grijincu@gmail.com>\n"
-"Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
+"POT-Creation-Date: 2015-06-15 07:24+0000\n"
+"PO-Revision-Date: 2015-06-26 17:28+0200\n"
+"Last-Translator: Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>\n"
+"Language-Team: Gnome Romanian Translation Team\n"
+"Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ro\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2);;\n"
-"X-Generator: Virtaal 0.7.0\n"
+"X-Generator: Virtaal 0.7.1\n"
 "X-Project-Style: gnome\n"
 
-#: ../src/daemon/goadaemon.c:871
-msgid "An online account needs attention"
-msgstr "Un cont online necesită atenție"
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:829 ../src/daemon/goadaemon.c:1089
+#, c-format
+msgid "Failed to find a provider for: %s"
+msgstr "Nu s-a putut găsi un furnizor pentru: %s"
 
-#: ../src/daemon/goadaemon.c:878
-msgid "Open Online Accounts..."
-msgstr "Deschide conturile online..."
+#: ../src/daemon/goadaemon.c:1017
+msgid "IsLocked property is set for account"
+msgstr "Proprietatea IsLocked a fost stabilită pentru cont"
 
-#: ../src/goabackend/goafacebookprovider.c:78
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:1077
+msgid "ProviderType property is not set for account"
+msgstr "Proprietatea ProviderType nu este stabilită pentru cont"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:237 ../src/goabackend/goahttpclient.c:174
+#, c-format
+msgid "Code: %u — Unexpected response from server"
+msgstr "Cod: %u — Răspuns neașteptat de la server"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:253
+#, c-format
+msgid "Failed to parse autodiscover response XML"
+msgstr "Parsare răspunsului de autodescoperire XML a eșuat"
+
+#. TODO: more specific
+#. Translators: the parameter is an XML element name.
+#: ../src/goabackend/goaewsclient.c:264 ../src/goabackend/goaewsclient.c:279
+#: ../src/goabackend/goaewsclient.c:294
+#, c-format
+msgid "Failed to find ‘%s’ element"
+msgstr "Eșec la găsirea elementului „%s”"
+
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:315
+#, c-format
+msgid "Failed to find ASUrl and OABUrl in autodiscover response"
+msgstr "Eșec la găsirea ASUrl și OABUrl în răspunsul de autodescoperire"
+
+#: ../src/goabackend/goaexchangeprovider.c:73
+msgid "Microsoft Exchange"
+msgstr "Microsoft Exchange"
+
+#. TODO: more specific
+#: ../src/goabackend/goaexchangeprovider.c:311
+#: ../src/goabackend/goaexchangeprovider.c:1020
+#: ../src/goabackend/goaowncloudprovider.c:383
+#: ../src/goabackend/goaowncloudprovider.c:1168
+#, c-format
+msgid "Did not find password with identity ‘%s’ in credentials"
+msgstr "Nu s-a găsit parola cu identitatea „%s” în credențiale"
+
+#. Translators: the first %s is the username
+#. * (eg., debarshi.ray@gmail.com or rishi), and the
+#. * (%s, %d) is the error domain and code.
+#.
+#: ../src/goabackend/goaexchangeprovider.c:339
+#: ../src/goabackend/goaowncloudprovider.c:406
+#, c-format
+msgid "Invalid password with username ‘%s’ (%s, %d): "
+msgstr "Parolă nevalidă cu utilizatorul „%s” (%s, %d): "
+
+#: ../src/goabackend/goaexchangeprovider.c:492
+#: ../src/goabackend/goaimapsmtpprovider.c:700
+msgid "_E-mail"
+msgstr "_Email"
+
+#: ../src/goabackend/goaexchangeprovider.c:493
+#: ../src/goabackend/goaimapsmtpprovider.c:720
+#: ../src/goabackend/goaimapsmtpprovider.c:740
+#: ../src/goabackend/goaowncloudprovider.c:634
+msgid "_Password"
+msgstr "_Parolă"
+
+#: ../src/goabackend/goaexchangeprovider.c:496
+msgid "_Custom"
+msgstr "_Personalizat"
+
+#: ../src/goabackend/goaexchangeprovider.c:507
+#: ../src/goabackend/goaimapsmtpprovider.c:719
+#: ../src/goabackend/goaimapsmtpprovider.c:739
+#: ../src/goabackend/goakerberosprovider.c:719
+#: ../src/goabackend/goaowncloudprovider.c:633
+#| msgid "User Name"
+msgid "User_name"
+msgstr "_Nume de utilizator"
+
+#: ../src/goabackend/goaexchangeprovider.c:508
+#: ../src/goabackend/goaowncloudprovider.c:632
+msgid "_Server"
+msgstr "_Server"
+
+#. --
+#: ../src/goabackend/goaexchangeprovider.c:518
+#: ../src/goabackend/goaimapsmtpprovider.c:752
+#: ../src/goabackend/goakerberosprovider.c:724
+#: ../src/goabackend/goaowncloudprovider.c:643
+#: ../src/goabackend/goatelepathyprovider.c:649
+msgid "_Cancel"
+msgstr "_Anulează"
+
+#: ../src/goabackend/goaexchangeprovider.c:519
+#: ../src/goabackend/goakerberosprovider.c:725
+#: ../src/goabackend/goaowncloudprovider.c:644
+msgid "C_onnect"
+msgstr "C_onectează"
+
+#: ../src/goabackend/goaexchangeprovider.c:535
+#: ../src/goabackend/goaimapsmtpprovider.c:769
+#: ../src/goabackend/goakerberosprovider.c:741
+#: ../src/goabackend/goaowncloudprovider.c:660
+msgid "Connecting…"
+msgstr "Se conectează…"
+
+#: ../src/goabackend/goaexchangeprovider.c:640
+#: ../src/goabackend/goaexchangeprovider.c:837
+#: ../src/goabackend/goaimapsmtpprovider.c:931
+#: ../src/goabackend/goaimapsmtpprovider.c:966
+#: ../src/goabackend/goaimapsmtpprovider.c:1054
+#: ../src/goabackend/goaimapsmtpprovider.c:1318
+#: ../src/goabackend/goaimapsmtpprovider.c:1391
+#: ../src/goabackend/goakerberosprovider.c:1142
+#: ../src/goabackend/goamediaserverprovider.c:473
+#: ../src/goabackend/goaoauth2provider.c:1033
+#: ../src/goabackend/goaoauthprovider.c:863
+#: ../src/goabackend/goaowncloudprovider.c:771
+#: ../src/goabackend/goaowncloudprovider.c:986
+#: ../src/goabackend/goatelepathyprovider.c:459
+#: ../src/goabackend/goatelepathyprovider.c:508
+#: ../src/goabackend/goatelepathyprovider.c:683
+#, c-format
+msgid "Dialog was dismissed"
+msgstr "Fereastra de dialog a fost închisă"
+
+#: ../src/goabackend/goaexchangeprovider.c:678
+#: ../src/goabackend/goaexchangeprovider.c:865
+#: ../src/goabackend/goaimapsmtpprovider.c:996
+#: ../src/goabackend/goaimapsmtpprovider.c:1089
+#: ../src/goabackend/goaimapsmtpprovider.c:1342
+#: ../src/goabackend/goaimapsmtpprovider.c:1416
+#: ../src/goabackend/goaowncloudprovider.c:813
+#: ../src/goabackend/goaowncloudprovider.c:1007
+#, c-format
+#| msgid "Dialog was dismissed"
+msgid "Dialog was dismissed (%s, %d): "
+msgstr "Fereastra de dialog a fost închisă (%s, %d): "
+
+#: ../src/goabackend/goaexchangeprovider.c:691
+#: ../src/goabackend/goaimapsmtpprovider.c:1009
+#: ../src/goabackend/goaimapsmtpprovider.c:1102
+#: ../src/goabackend/goaowncloudprovider.c:826
+msgid "_Ignore"
+msgstr "_Ignoră"
+
+#: ../src/goabackend/goaexchangeprovider.c:696
+#: ../src/goabackend/goaexchangeprovider.c:884
+#: ../src/goabackend/goaimapsmtpprovider.c:1014
+#: ../src/goabackend/goaimapsmtpprovider.c:1107
+#: ../src/goabackend/goaimapsmtpprovider.c:1361
+#: ../src/goabackend/goaimapsmtpprovider.c:1435
+#: ../src/goabackend/goakerberosprovider.c:1252
+#: ../src/goabackend/goaowncloudprovider.c:831
+#: ../src/goabackend/goaowncloudprovider.c:1026
+msgid "_Try Again"
+msgstr "Î_ncearcă din nou"
+
+#: ../src/goabackend/goaexchangeprovider.c:701
+#: ../src/goabackend/goaexchangeprovider.c:877
+msgid "Error connecting to Microsoft Exchange server"
+msgstr "Eroare la conectarea la serverul Microsoft Exchange"
+
+#. Translators: This is a label for a series of
+#. * options switches. For example: “Use for Mail”.
+#: ../src/goabackend/goaexchangeprovider.c:939
+#: ../src/goabackend/goafacebookprovider.c:427
+#: ../src/goabackend/goaflickrprovider.c:412
+#: ../src/goabackend/goafoursquareprovider.c:405
+#: ../src/goabackend/goagoogleprovider.c:622
+#: ../src/goabackend/goakerberosprovider.c:1325
+#: ../src/goabackend/goamediaserverprovider.c:584
+#: ../src/goabackend/goaowncloudprovider.c:1082
+#: ../src/goabackend/goapocketprovider.c:406
+#: ../src/goabackend/goatelepathyprovider.c:890
+#: ../src/goabackend/goawindowsliveprovider.c:421
+msgid "Use for"
+msgstr "Utilizează pentru"
+
+#: ../src/goabackend/goaexchangeprovider.c:941
+#: ../src/goabackend/goagoogleprovider.c:624
+#: ../src/goabackend/goawindowsliveprovider.c:423
+#| msgid "Mail"
+msgid "_Mail"
+msgstr "E_mail"
+
+#: ../src/goabackend/goaexchangeprovider.c:946
+#: ../src/goabackend/goagoogleprovider.c:629
+#: ../src/goabackend/goaowncloudprovider.c:1084
+#| msgid "Calendar"
+msgid "Cale_ndar"
+msgstr "Cale_ndar"
+
+#: ../src/goabackend/goaexchangeprovider.c:951
+#: ../src/goabackend/goagoogleprovider.c:634
+#: ../src/goabackend/goaowncloudprovider.c:1089
+#| msgid "Contacts"
+msgid "_Contacts"
+msgstr "_Contacte"
+
+#: ../src/goabackend/goafacebookprovider.c:76
 msgid "Facebook"
 msgstr "Facebook"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:162
-#: ../src/goabackend/goagoogleprovider.c:195
-#: ../src/goabackend/goatwitterprovider.c:160
-#: ../src/goabackend/goayahooprovider.c:163
+#: ../src/goabackend/goafacebookprovider.c:215
+#: ../src/goabackend/goaflickrprovider.c:183
+#: ../src/goabackend/goafoursquareprovider.c:189
+#: ../src/goabackend/goagoogleprovider.c:221
+#: ../src/goabackend/goawindowsliveprovider.c:195
 #, c-format
-msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+#| msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+msgid ""
+"Expected status 200 when requesting your identity, instead got status %d (%s)"
 msgstr ""
-"Status 200 așteptat la cererea unui guid, dar în loc s-a primit statusul %d "
-"(%s)"
+"Status 200 așteptat la cererea identității dumneavoastră, dar în loc s-a "
+"primit statusul %d (%s)"
 
-#: ../src/goabackend/goafacebookprovider.c:174
-#: ../src/goabackend/goagoogleprovider.c:207
-#: ../src/goabackend/goaoauth2provider.c:475
-#: ../src/goabackend/goatwitterprovider.c:172
-#: ../src/goabackend/goayahooprovider.c:175
-msgid "Error parsing response as JSON: "
-msgstr "Eroare la parsarea răspunsului ca JSON: "
-
-#: ../src/goabackend/goafacebookprovider.c:185
+#: ../src/goabackend/goafacebookprovider.c:234
+#: ../src/goabackend/goafacebookprovider.c:246
+#: ../src/goabackend/goafacebookprovider.c:259
+#: ../src/goabackend/goaflickrprovider.c:202
+#: ../src/goabackend/goaflickrprovider.c:214
+#: ../src/goabackend/goaflickrprovider.c:224
+#: ../src/goabackend/goaflickrprovider.c:234
+#: ../src/goabackend/goaflickrprovider.c:244
+#: ../src/goabackend/goafoursquareprovider.c:208
+#: ../src/goabackend/goafoursquareprovider.c:220
+#: ../src/goabackend/goafoursquareprovider.c:231
+#: ../src/goabackend/goafoursquareprovider.c:242
+#: ../src/goabackend/goafoursquareprovider.c:253
+#: ../src/goabackend/goafoursquareprovider.c:264
+#: ../src/goabackend/goagoogleprovider.c:240
+#: ../src/goabackend/goagoogleprovider.c:252
+#: ../src/goabackend/goaoauth2provider.c:699
+#: ../src/goabackend/goaoauth2provider.c:729
+#: ../src/goabackend/goaoauth2provider.c:741
+#: ../src/goabackend/goawindowsliveprovider.c:214
+#: ../src/goabackend/goawindowsliveprovider.c:226
+#: ../src/goabackend/goawindowsliveprovider.c:238
 #, c-format
-msgid "Didn't find username member in JSON data"
-msgstr "Nu s-a găsit membrul nume de utilizator în datele JSON"
+msgid "Could not parse response"
+msgstr "Nu s-a putut parsa răspunsul"
 
-#: ../src/goabackend/goafacebookprovider.c:194
-#, c-format
-msgid "Didn't find name member in JSON data"
-msgstr "Nu s-a găsit membrul nume în datele JSON"
+#: ../src/goabackend/goafacebookprovider.c:429
+#: ../src/goabackend/goaflickrprovider.c:414
+#: ../src/goabackend/goagoogleprovider.c:649
+#: ../src/goabackend/goamediaserverprovider.c:586
+msgid "_Photos"
+msgstr "_Fotografii"
 
-#: ../src/goabackend/goafacebookprovider.c:282
-#: ../src/goabackend/goatwitterprovider.c:260
-msgid "User Name"
-msgstr "Nume de utilizator"
+#: ../src/goabackend/goafacebookprovider.c:434
+#: ../src/goabackend/goafoursquareprovider.c:407
+msgid "_Maps"
+msgstr "_Hărți"
 
-#: ../src/goabackend/goafacebookprovider.c:283
-#: ../src/goabackend/goagoogleprovider.c:430
-msgid "Chat"
-msgstr "Chat"
+#: ../src/goabackend/goaflickrprovider.c:77
+msgid "Flickr"
+msgstr "Flickr"
 
-#: ../src/goabackend/goagoogleprovider.c:78
+#: ../src/goabackend/goaflickrprovider.c:320
+msgid "Your system time is invalid. Check your date and time settings."
+msgstr ""
+"Timpul sistemului este nevalid. Verificați configurările timpului și datei."
+
+#: ../src/goabackend/goafoursquareprovider.c:77
+msgid "Foursquare"
+msgstr "Foursquare"
+
+#: ../src/goabackend/goagoogleprovider.c:76
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:218
+#: ../src/goabackend/goagoogleprovider.c:639
+#: ../src/goabackend/goatelepathyprovider.c:892
+msgid "C_hat"
+msgstr "C_hat"
+
+#: ../src/goabackend/goagoogleprovider.c:644
+#: ../src/goabackend/goaowncloudprovider.c:1094
+#: ../src/goabackend/goawindowsliveprovider.c:428
+#| msgid "Documents"
+msgid "_Documents"
+msgstr "_Documente"
+
+#: ../src/goabackend/goagoogleprovider.c:654
+#: ../src/goabackend/goaowncloudprovider.c:1099
+msgid "_Files"
+msgstr "_Fișiere"
+
+#: ../src/goabackend/goagoogleprovider.c:659
+msgid "Prin_ters"
+msgstr "Impriman_te"
+
+#. TODO: more specific
+#: ../src/goabackend/goaimapauthlogin.c:94 ../src/goabackend/goasmtpauth.c:160
 #, c-format
-msgid "Didn't find data member in JSON data"
-msgstr "Nu s-a găsit membrul de date în datele JSON"
+msgid "Service not available"
+msgstr "Serviciul nu ete disponibil"
 
-#: ../src/goabackend/goagoogleprovider.c:228
+#. TODO: more specific
+#: ../src/goabackend/goaimapauthlogin.c:115
+#: ../src/goabackend/goasmtpauth.c:113
 #, c-format
-msgid "Didn't find email member in JSON data"
-msgstr "Nu s-a găsit membrul email în datele JSON"
+msgid "Authentication failed"
+msgstr "Autentificare eșuată"
 
-#: ../src/goabackend/goagoogleprovider.c:425
-msgid "Email Address"
-msgstr "Adresă de email"
+#: ../src/goabackend/goaimapauthlogin.c:140
+#, c-format
+msgid "Server does not support PLAIN"
+msgstr "Serverul nu suportă PLAIN"
 
-#: ../src/goabackend/goagoogleprovider.c:426
-msgid "Use this account for"
-msgstr "Folosește acest cont pentru"
+#: ../src/goabackend/goaimapauthlogin.c:194
+#: ../src/goabackend/goasmtpauth.c:818
+#, c-format
+msgid "Server does not support STARTTLS"
+msgstr "Serverul nu suportă STARTTLS"
 
-#: ../src/goabackend/goagoogleprovider.c:427
-msgid "Mail"
+#: ../src/goabackend/goaimapsmtpprovider.c:61
+msgid "IMAP and SMTP"
+msgstr "IMAP și SMTP"
+
+#. Translators: the first parameter is a field name. The second is
+#. * a GOA account identifier.
+#: ../src/goabackend/goaimapsmtpprovider.c:358
+#: ../src/goabackend/goaimapsmtpprovider.c:416
+#, c-format
+msgid "Did not find %s with identity ‘%s’ in credentials"
+msgstr "Nu s-a găsit %s cu identitatea „%s” în credențiale"
+
+#. Translators: the first %s is a field name. The
+#. * second %s is the IMAP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#. Translators: the first %s is a field name. The
+#. * second %s is the SMTP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#: ../src/goabackend/goaimapsmtpprovider.c:389
+#: ../src/goabackend/goaimapsmtpprovider.c:449
+#, c-format
+msgid "Invalid %s with username ‘%s’ (%s, %d): "
+msgstr "%s nevalid cu numele de utilizator „%s” (%s, %d): "
+
+#. Translators: the following four strings are used to show a
+#. * combo box similar to the one in the evolution module.
+#. * Encryption: None
+#. *             STARTTLS after connecting
+#. *             SSL on a dedicated port
+#.
+#: ../src/goabackend/goaimapsmtpprovider.c:636
+msgid "_Encryption"
+msgstr "Criptar_e"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:639
+msgid "None"
+msgstr "Nespecificat"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:642
+msgid "STARTTLS after connecting"
+msgstr "STARTTLS după conectare"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:645
+msgid "SSL on a dedicated port"
+msgstr "SSL pe un port dedicat"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:701
+#| msgid "Name"
+msgid "_Name"
+msgstr "_Nume"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:718
+msgid "IMAP _Server"
+msgstr "_Server IMAP"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:738
+msgid "SMTP _Server"
+msgstr "_Server SMTP"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:753
+#: ../src/goabackend/goaimapsmtpprovider.c:1035
+#: ../src/goabackend/goaimapsmtpprovider.c:1371
+msgid "_Forward"
+msgstr "Î_naintează"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1019
+#: ../src/goabackend/goaimapsmtpprovider.c:1354
+msgid "Error connecting to IMAP server"
+msgstr "Eroare de conectare la serverul IMAP"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1112
+#: ../src/goabackend/goaimapsmtpprovider.c:1428
+msgid "Error connecting to SMTP server"
+msgstr "Eroare de conectare la serverul SMTP"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1527
+msgid "E-mail"
 msgstr "Email"
 
-#: ../src/goabackend/goagoogleprovider.c:428
-msgid "Calendar"
-msgstr "Calendar"
+#: ../src/goabackend/goaimapsmtpprovider.c:1531
+msgid "Name"
+msgstr "Nume"
 
-#: ../src/goabackend/goagoogleprovider.c:429
-msgid "Contacts"
-msgstr "Contacte"
+#: ../src/goabackend/goaimapsmtpprovider.c:1541
+#: ../src/goabackend/goaimapsmtpprovider.c:1545
+msgid "IMAP"
+msgstr "IMAP"
 
-#: ../src/goabackend/goagoogleprovider.c:431
-msgid "Documents"
-msgstr "Documente"
+#: ../src/goabackend/goaimapsmtpprovider.c:1556
+#: ../src/goabackend/goaimapsmtpprovider.c:1560
+msgid "SMTP"
+msgstr "SMTP"
+
+#: ../src/goabackend/goakerberosprovider.c:99
+msgid "Enterprise Login (Kerberos)"
+msgstr "Autentificare de întreprindere (Kerberos)"
+
+#: ../src/goabackend/goakerberosprovider.c:309
+#, c-format
+msgid "Could not find saved credentials for principal ‘%s’ in keyring"
+msgstr ""
+"Nu s-au găsit credențiale salvate pentru principalul „%s” în inelul de chei"
+
+#: ../src/goabackend/goakerberosprovider.c:322
+#, c-format
+msgid "Did not find password for principal ‘%s’ in credentials"
+msgstr "Nu s-a găsit parola pentru principalul „%s” în credențiale"
+
+#: ../src/goabackend/goakerberosprovider.c:711
+msgid "_Domain"
+msgstr "_Domeniu"
+
+#: ../src/goabackend/goakerberosprovider.c:712
+msgid "Enterprise domain or realm name"
+msgstr "Domaniu de întreprindere sau un nume de domeniu"
+
+#: ../src/goabackend/goakerberosprovider.c:948
+#: ../src/goaidentity/goaidentityservice.c:1119
+msgid "Log In to Realm"
+msgstr "Autentificare la domeniu"
+
+#: ../src/goabackend/goakerberosprovider.c:949
+msgid "Please enter your password below."
+msgstr "Introduceți parola dedesubt."
+
+#: ../src/goabackend/goakerberosprovider.c:950
+msgid "Remember this password"
+msgstr "Memorează parola"
+
+#: ../src/goabackend/goakerberosprovider.c:1092
+#, c-format
+msgid "The domain is not valid"
+msgstr "Domeniul nu este valid"
+
+#: ../src/goabackend/goakerberosprovider.c:1247
+#| msgid "Error getting identity: "
+msgid "Error connecting to enterprise identity server"
+msgstr "Eroare la conectarea la serverul de identități al întreprinderii"
+
+#: ../src/goabackend/goakerberosprovider.c:1327
+msgid "Network _Resources"
+msgstr "_Resursele rețelei"
+
+#: ../src/goabackend/goakerberosprovider.c:1534
+#, c-format
+msgid "Identity service returned invalid key"
+msgstr "Serviciul de identități a returnat o cheie invalidă"
+
+#: ../src/goabackend/goamediaserverprovider.c:76
+msgid "Media Server"
+msgstr "Server media"
+
+#: ../src/goabackend/goamediaserverprovider.c:369
+msgid ""
+"Personal content can be added to your applications through a media server "
+"account."
+msgstr ""
+"Conținutul personal poate fi adăugat aplicațiilor dumneavoastră printr-un "
+"cont la server media."
+
+#: ../src/goabackend/goamediaserverprovider.c:383
+msgid "Available Media Servers"
+msgstr "Servere media disponibile"
+
+#: ../src/goabackend/goamediaserverprovider.c:413
+msgid "No media servers found"
+msgstr "Nu s-au găsit servere media"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:432
-#: ../src/goabackend/goaoauthprovider.c:440
+#: ../src/goabackend/goaoauth2provider.c:675
+#: ../src/goabackend/goaoauthprovider.c:559
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -120,95 +531,57 @@ msgstr ""
 "Status 200 așteptat la cererea identificatorului de acces, dar în loc s-a "
 "primit statusul %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:452
-#, c-format
-msgid "Didn't find access_token in non-JSON data"
-msgstr "Nu s-a găsit „access_token” în datele non-JSON"
+#: ../src/goabackend/goaoauth2provider.c:842
+#| msgid "Authorization response was \"%s\""
+msgid "Authorization response: "
+msgstr "Răspuns de autorizare:"
 
-#: ../src/goabackend/goaoauth2provider.c:486
+#: ../src/goabackend/goaoauth2provider.c:912
 #, c-format
-msgid "Didn't find access_token in JSON data"
-msgstr "Nu s-a găsit „access_token” de acces în datele JSON"
+#| msgid "Authorization response was \"%s\""
+msgid "Authorization response: %s"
+msgstr "Răspuns de autorizare: %s"
 
-#: ../src/goabackend/goaoauth2provider.c:570
-#, c-format
-msgid "Authorization response was \"%s\""
-msgstr "Răspunsul de autorizare a fost „%s”"
-
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:651
-#, c-format
-msgid ""
-"Paste authorization code obtained from the <a href=\"%s\">authorization "
-"page</a>:"
-msgstr ""
-"Lipiți codul de autorizare obținut de pe <a href=\"%s\">pagina de "
-"autorizare</a>:"
-
-#: ../src/goabackend/goaoauth2provider.c:725
-#: ../src/goabackend/goaoauthprovider.c:751
-#, c-format
-msgid "Dialog was dismissed"
-msgstr "Fereastra de dialog a fost închisă"
-
-#: ../src/goabackend/goaoauth2provider.c:749
-#: ../src/goabackend/goaoauthprovider.c:782
+#: ../src/goabackend/goaoauth2provider.c:1059
+#: ../src/goabackend/goaoauthprovider.c:894
 msgid "Error getting an Access Token: "
 msgstr "Eroare la primirea identificatorului de acces: "
 
-#: ../src/goabackend/goaoauth2provider.c:761
-#: ../src/goabackend/goaoauthprovider.c:795
+#: ../src/goabackend/goaoauth2provider.c:1074
+#: ../src/goabackend/goaoauthprovider.c:907
 msgid "Error getting identity: "
 msgstr "Eroare la primirea identității: "
 
-#: ../src/goabackend/goaoauth2provider.c:926
-#: ../src/goabackend/goaoauthprovider.c:972
+#: ../src/goabackend/goaoauth2provider.c:1291
+#: ../src/goabackend/goaoauthprovider.c:1215
 #, c-format
-msgid "There is already an account for the identity %s"
-msgstr "Deja există un cont pentru identitatea %s"
-
-#: ../src/goabackend/goaoauth2provider.c:1051
-#: ../src/goabackend/goaoauthprovider.c:1102
-#, c-format
-msgid "Was asked to login as %s, but logged in as %s"
+#| msgid "Was asked to login as %s, but logged in as %s"
+msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "S-a cerut autentificarea ca %s, dar s-a autentificat ca %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1187
-#: ../src/goabackend/goaoauthprovider.c:1250
-#, c-format
-msgid "Credentials not found in keyring (%s, %d): "
-msgstr "Nu s-au găsit credențialele în inelul de chei (%s, %d): "
-
-#: ../src/goabackend/goaoauth2provider.c:1214
+#: ../src/goabackend/goaoauth2provider.c:1453
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Credențialele nu conțin „access_token”"
 
-#: ../src/goabackend/goaoauth2provider.c:1253
-#: ../src/goabackend/goaoauthprovider.c:1323
+#: ../src/goabackend/goaoauth2provider.c:1492
+#: ../src/goabackend/goaoauthprovider.c:1443
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Reîmprospătarea identificatorului de acces a eșuat (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1288
-#: ../src/goabackend/goaoauthprovider.c:1353
-#, c-format
-msgid "Error storing credentials in keyring (%s, %d): "
-msgstr ""
-"A apărut o eroare la stocarea credențialelor în inelul de chei (%s, %d): "
-
-#: ../src/goabackend/goaoauthprovider.c:463
+#: ../src/goabackend/goaoauthprovider.c:582
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr ""
 "Lipsesc din răspuns antetele pentru „access_token” sau „access_token_secret”"
 
-#: ../src/goabackend/goaoauthprovider.c:636
+#: ../src/goabackend/goaoauthprovider.c:776
 msgid "Error getting a Request Token: "
 msgstr "Eroare la primirea identificatorului de cerere:"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:645
+#: ../src/goabackend/goaoauthprovider.c:809
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -216,102 +589,385 @@ msgstr ""
 "Status 200 așteptat la cererea identificatorului de cerere, dar în loc s-a "
 "primit statusul %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:659
+#: ../src/goabackend/goaoauthprovider.c:826
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr ""
 "Lipsesc din răspuns antetele pentru „request_token” sau "
 "„request_token_secret”"
 
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:676
-#, c-format
-msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr ""
-"Lipiți identificatorul obținut de la <a href=\"%s\">pagina de autorizare</a>:"
-
-#: ../src/goabackend/goaoauthprovider.c:1279
+#: ../src/goabackend/goaoauthprovider.c:1399
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Credențialele nu conțin „access_token” sau „access_token_secret”"
 
-#: ../src/goabackend/goaprovider.c:522
+#: ../src/goabackend/goaowncloudprovider.c:67
+msgid "ownCloud"
+msgstr "ownCloud"
+
+#: ../src/goabackend/goaowncloudprovider.c:836
+#: ../src/goabackend/goaowncloudprovider.c:1019
+msgid "Error connecting to ownCloud server"
+msgstr "Eroare de conectare la serverul ownCloud"
+
+#: ../src/goabackend/goapocketprovider.c:69
+msgid "Pocket"
+msgstr "Pocket"
+
+#. TODO: more specific
+#: ../src/goabackend/goapocketprovider.c:218
+#, c-format
+msgid "No username or access_token"
+msgstr "Niciun nume de utilizator sau access_token"
+
+#: ../src/goabackend/goapocketprovider.c:408
+msgid "_Read Later"
+msgstr "Citește mai tâ_rziu"
+
+#: ../src/goabackend/goaprovider.c:682
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "„ensure_credentials_sync” nu este implementată pe tipul %s"
 
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauth.c:175
+#, c-format
+msgid "TLS not available"
+msgstr "TLS nu este disponibil"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauth.c:241
+#, c-format
+msgid "org.gnome.OnlineAccounts.Mail is not available"
+msgstr "org.gnome.OnlineAccounts.Mail nu este disponibil"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauth.c:251
+#, c-format
+msgid "Failed to parse email address"
+msgstr "Eșec la parsarea adresei de email"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauth.c:263
+#, c-format
+msgid "Cannot do SMTP authentication without a domain"
+msgstr "Nu se poate autentifica la SMTP fără un domeniu"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauth.c:301
+#, c-format
+msgid "Did not find smtp-password in credentials"
+msgstr "Nu s-a găsit parola SMTP în credențiale"
+
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauth.c:312
+#, c-format
+msgid "Cannot do SMTP authentication without a password"
+msgstr "Nu se poate autentifica la SMTP fără o parolă"
+
+#: ../src/goabackend/goasmtpauth.c:674
+#, c-format
+msgid "Unknown authentication mechanism"
+msgstr "Mecanism de autentificare necunoscut"
+
+#: ../src/goabackend/goatelepathyprovider.c:180
+#, c-format
+msgid "Telepathy chat account not found"
+msgstr "Contul de chat Telepathy nu a fost găsit"
+
+#: ../src/goabackend/goatelepathyprovider.c:380
+#, c-format
+msgid "Failed to initialize a GOA client"
+msgstr "Eșec la inițializarea unui client GOA"
+
+#: ../src/goabackend/goatelepathyprovider.c:420
+#, c-format
+#| msgid "Failed to store credentials in the keyring: %s"
+msgid "Failed to create a user interface for %s"
+msgstr "Eșec la crearea unei interfețe pentru %s"
+
+#: ../src/goabackend/goatelepathyprovider.c:535
+msgid "Connection Settings"
+msgstr "Configurări de conexiune"
+
+#: ../src/goabackend/goatelepathyprovider.c:644
+msgid "Personal Details"
+msgstr "Detalii personale"
+
+#: ../src/goabackend/goatelepathyprovider.c:650
+msgid "_OK"
+msgstr "_OK"
+
+#: ../src/goabackend/goatelepathyprovider.c:854
+msgid "Cannot save the connection parameters"
+msgstr "Nu se pot salva parametrii de conexiune"
+
+#: ../src/goabackend/goatelepathyprovider.c:866
+msgid "Cannot save your personal information on the server"
+msgstr "Nu se pot salva datele personale pe server"
+
+#. Connection Settings button
+#: ../src/goabackend/goatelepathyprovider.c:897
+msgid "_Connection Settings"
+msgstr "_Configurări de conexiune"
+
+#. Edit Personal Information button
+#: ../src/goabackend/goatelepathyprovider.c:901
+msgid "_Personal Details"
+msgstr "Detalii _Personale"
+
+#: ../src/goabackend/goautils.c:115
+#, c-format
+msgid "A %s account already exists for %s"
+msgstr "Un cont %s există deja pentru %s"
+
+#. Translators: the %s is the name of the provider. eg., Google.
+#: ../src/goabackend/goautils.c:137
+#, c-format
+#| msgid "Use this account for"
+msgid "%s account"
+msgstr "cont %s"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:181
+#| msgid "Failed to retrieve credentials from the keyring: %s"
+msgid "Failed to delete credentials from the keyring"
+msgstr "Ștergerea credențialelor din inelul de chei a eșuat"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:233
+#| msgid "Failed to retrieve credentials from the keyring: %s"
+msgid "Failed to retrieve credentials from the keyring"
+msgstr "Preluarea credențialelor din inelul de chei a eșuat"
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:243
+#| msgid "Credentials not found in keyring (%s, %d): "
+msgid "No credentials found in the keyring"
+msgstr "Nu s-au găsit credențialele în inelul de chei"
+
+#: ../src/goabackend/goautils.c:256
+msgid "Error parsing result obtained from the keyring: "
+msgstr "Eroare la parsarea rezultatului obținut de la inelul de chei: "
+
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:737
+#: ../src/goabackend/goautils.c:299
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Credențialele GOA %s pentru identitatea %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:751
-#, c-format
-msgid "Failed to store credentials in the keyring: %s"
-msgstr "Stocarea credențialelor în inelul de chei a eșuat: %s"
+#: ../src/goabackend/goautils.c:316
+#| msgid "Failed to store credentials in the keyring: %s"
+msgid "Failed to store credentials in the keyring"
+msgstr "Stocarea credențialelor în inelul de chei a eșuat"
 
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:822
-#, c-format
-msgid "Failed to retrieve credentials from the keyring: %s"
-msgstr "Preluarea credențialelor din inelul de chei a eșuat: %s"
+#: ../src/goabackend/goautils.c:537
+msgid "The signing certificate authority is not known."
+msgstr "Autoritatea de certificare semnatară nu este cunoscută."
 
-#: ../src/goabackend/goaprovider.c:834
-msgid "Error parsing result obtained from the keyring: "
-msgstr "Eroare la parsarea rezultatului obținut de la inelul de chei: "
-
-#: ../src/goabackend/goatwitterprovider.c:78
-msgid "Twitter"
-msgstr "Twitter"
-
-#: ../src/goabackend/goatwitterprovider.c:183
-#, c-format
-msgid "Didn't find id_str member in JSON data"
-msgstr "Nu s-a găsit „id_str” în datele JSON"
-
-#: ../src/goabackend/goatwitterprovider.c:192
-#, c-format
-msgid "Didn't find screen_name member in JSON data"
-msgstr "Nu s-a găsit „screen_name” în datele JSON"
-
-#: ../src/goabackend/goayahooprovider.c:78
-msgid "Yahoo"
-msgstr "Yahoo"
-
-#: ../src/goabackend/goayahooprovider.c:186
-#, c-format
-msgid "Didn't find guid member in JSON data"
-msgstr "Nu s-a găsit membrul guid în datele JSON"
-
-#: ../src/goabackend/goayahooprovider.c:196
-#, c-format
-msgid "Didn't find value member in JSON data"
-msgstr "Nu s-a găsit membrul valoare în datele JSON"
-
-#: ../src/goabackend/goayahooprovider.c:222
-#, c-format
-msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+#: ../src/goabackend/goautils.c:541
+msgid ""
+"The certificate does not match the expected identity of the site that it was "
+"retrieved from."
 msgstr ""
-"Status 200 așteptat la cererea numelui, dar în loc s-a primit statusul %d (%"
-"s)"
+"Certificatul nu se potrivește identității așteptate a sitului de unde a fost "
+"preluată."
 
-#: ../src/goabackend/goayahooprovider.c:235
-msgid "Error parsing usercard response as JSON: "
-msgstr "Eroare la parsarea răspunsului cardului de utilizator ca JSON: "
+#: ../src/goabackend/goautils.c:546
+msgid "The certificate’s activation time is still in the future."
+msgstr "Timpul de activare al certificatului este încă în viitor."
 
-#: ../src/goabackend/goayahooprovider.c:246
+#: ../src/goabackend/goautils.c:550
+msgid "The certificate has expired."
+msgstr "Certificatul a expirat."
+
+#: ../src/goabackend/goautils.c:554
+msgid "The certificate has been revoked."
+msgstr "Certificatul a fost anulat."
+
+#: ../src/goabackend/goautils.c:558
+msgid "The certificate’s algorithm is considered insecure."
+msgstr "Algoritmul certificatului este considerat nesigur."
+
+#: ../src/goabackend/goautils.c:562
+msgid "Invalid certificate."
+msgstr "Certificat nevalid."
+
+#. translators: %s here is the address of the web page
+#: ../src/goabackend/goawebview.c:95
 #, c-format
-msgid "Didn't find profile member in JSON data"
-msgstr "Nu s-a găsit membrul profil în datele JSON"
+msgid "Loading “%s”…"
+msgstr "Se încarcă „%s”…"
 
-#: ../src/goabackend/goayahooprovider.c:256
+#: ../src/goabackend/goawindowsliveprovider.c:77
+msgid "Microsoft Account"
+msgstr "Cont Microsoft"
+
+#: ../src/goaidentity/goaidentityservice.c:376
+msgid "initial secret passed before secret key exchange"
+msgstr "secretul inițial a fost pasat înaintea schimbului secret de chei"
+
+#: ../src/goaidentity/goaidentityservice.c:570
+msgid "Initial secret key is invalid"
+msgstr "Cheia secretă inițială este nevalidă"
+
+#: ../src/goaidentity/goaidentityservice.c:1124
 #, c-format
-msgid "Didn't find nickname member in JSON data"
-msgstr "Nu s-a găsit membrul pseudonim în datele JSON"
+msgid "The network realm %s needs some information to sign you in."
+msgstr "Domeniul rețelei %s necesită niște informații pentru a vă autentifica."
 
-#. TODO: look up email address / screenname from GUID
-#: ../src/goabackend/goayahooprovider.c:324
-msgid "Name"
-msgstr "Nume"
+#: ../src/goaidentity/goakerberosidentity.c:254
+#: ../src/goaidentity/goakerberosidentity.c:263
+#: ../src/goaidentity/goakerberosidentity.c:642
+msgid "Could not find identity in credential cache: %k"
+msgstr ""
+"Nu s-a putut găsi identitatea în spațiul de prestocare al credențialelor: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:656
+msgid "Could not find identity credentials in cache: %k"
+msgstr ""
+"Nu s-a putut găsi credențiale de identitate în spațiul de prestocare: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:700
+msgid "Could not sift through identity credentials in cache: %k"
+msgstr ""
+"Nu s-a putut examina printre credențialele de identitate în spațiul de "
+"prestocare: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:718
+msgid "Could not finish up sifting through identity credentials in cache: %k"
+msgstr ""
+"Nu s-a putut finaliza examinarea printre credențialele de identitate în "
+"spațiul de prestocare: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1013
+#, c-format
+msgid "No associated identification found"
+msgstr "Nicio identificare asociată găsită"
+
+#: ../src/goaidentity/goakerberosidentity.c:1096
+msgid "Could not create credential cache: %k"
+msgstr "Nu s-a putut creea spațiul de prestocare pentru credențiale: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1130
+msgid "Could not initialize credentials cache: %k"
+msgstr "Nu s-a putut inițializa spațiul de prestocare al credențialelor: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1147
+#| msgid "Failed to store credentials in the keyring: %s"
+msgid "Could not store new credentials in credentials cache: %k"
+msgstr ""
+"Nu s-a putut stoca noile credențiale în spațiul de prestocare al "
+"credențialelor: %s"
+
+#: ../src/goaidentity/goakerberosidentity.c:1436
+#, c-format
+msgid "Could not renew identity: Not signed in"
+msgstr "Nu s-a putut reînnoi identitatea: Neautentificat"
+
+#: ../src/goaidentity/goakerberosidentity.c:1448
+msgid "Could not renew identity: %k"
+msgstr "Nu s-a putut reînnoi identitatea: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1465
+#| msgid "GOA %s credentials for identity %s"
+msgid "Could not get new credentials to renew identity %s: %k"
+msgstr "Nu s-a putut obține credențiale noi pentru a reînnoi identitatea %s: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1507
+msgid "Could not erase identity: %k"
+msgstr "Nu s-a putut șterge identitatea: %k"
+
+#: ../src/goaidentity/goakerberosidentitymanager.c:749
+msgid "Could not find identity"
+msgstr "Nu s-a putut găsi identitatea"
+
+#: ../src/goaidentity/goakerberosidentitymanager.c:840
+#| msgid "GOA %s credentials for identity %s"
+msgid "Could not create credential cache for identity"
+msgstr "Nu s-a putut creea spațiul de prestocare pentru identitate"
+
+#~ msgid "An online account needs attention"
+#~ msgstr "Un cont online necesită atenție"
+
+#~ msgid "Open Online Accounts..."
+#~ msgstr "Deschide conturile online..."
+
+#~ msgid "Error parsing response as JSON: "
+#~ msgstr "Eroare la parsarea răspunsului ca JSON: "
+
+#~ msgid "Didn't find username member in JSON data"
+#~ msgstr "Nu s-a găsit membrul nume de utilizator în datele JSON"
+
+#~ msgid "Didn't find name member in JSON data"
+#~ msgstr "Nu s-a găsit membrul nume în datele JSON"
+
+#~ msgid "Chat"
+#~ msgstr "Chat"
+
+#~ msgid "Didn't find data member in JSON data"
+#~ msgstr "Nu s-a găsit membrul de date în datele JSON"
+
+#~ msgid "Didn't find email member in JSON data"
+#~ msgstr "Nu s-a găsit membrul email în datele JSON"
+
+#~ msgid "Email Address"
+#~ msgstr "Adresă de email"
+
+#~ msgid "Didn't find access_token in non-JSON data"
+#~ msgstr "Nu s-a găsit „access_token” în datele non-JSON"
+
+#~ msgid "Didn't find access_token in JSON data"
+#~ msgstr "Nu s-a găsit „access_token” de acces în datele JSON"
+
+#~ msgid ""
+#~ "Paste authorization code obtained from the <a href=\"%s\">authorization "
+#~ "page</a>:"
+#~ msgstr ""
+#~ "Lipiți codul de autorizare obținut de pe <a href=\"%s\">pagina de "
+#~ "autorizare</a>:"
+
+#~ msgid "There is already an account for the identity %s"
+#~ msgstr "Deja există un cont pentru identitatea %s"
+
+#~ msgid "Error storing credentials in keyring (%s, %d): "
+#~ msgstr ""
+#~ "A apărut o eroare la stocarea credențialelor în inelul de chei (%s, %d): "
+
+#~ msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
+#~ msgstr ""
+#~ "Lipiți identificatorul obținut de la <a href=\"%s\">pagina de autorizare</"
+#~ "a>:"
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#~ msgid "Didn't find id_str member in JSON data"
+#~ msgstr "Nu s-a găsit „id_str” în datele JSON"
+
+#~ msgid "Didn't find screen_name member in JSON data"
+#~ msgstr "Nu s-a găsit „screen_name” în datele JSON"
+
+#~ msgid "Yahoo"
+#~ msgstr "Yahoo"
+
+#~ msgid "Didn't find guid member in JSON data"
+#~ msgstr "Nu s-a găsit membrul guid în datele JSON"
+
+#~ msgid "Didn't find value member in JSON data"
+#~ msgstr "Nu s-a găsit membrul valoare în datele JSON"
+
+#~ msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+#~ msgstr ""
+#~ "Status 200 așteptat la cererea numelui, dar în loc s-a primit statusul %d "
+#~ "(%s)"
+
+#~ msgid "Error parsing usercard response as JSON: "
+#~ msgstr "Eroare la parsarea răspunsului cardului de utilizator ca JSON: "
+
+#~ msgid "Didn't find profile member in JSON data"
+#~ msgstr "Nu s-a găsit membrul profil în datele JSON"
+
+#~ msgid "Didn't find nickname member in JSON data"
+#~ msgstr "Nu s-a găsit membrul pseudonim în datele JSON"
