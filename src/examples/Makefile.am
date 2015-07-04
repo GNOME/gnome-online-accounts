@@ -15,11 +15,15 @@ AM_CPPFLAGS = 							\
 	$(WARN_CFLAGS)						\
 	$(NULL)
 
-noinst_PROGRAMS = list-accounts
+noinst_PROGRAMS = list-accounts lastfm-shout
 
 list_accounts_SOURCES = list-accounts.c
 list_accounts_CFLAGS = $(GLIB_CFLAGS)
 list_accounts_LDADD = $(GLIB_LIBS) ../goa/libgoa-1.0.la
+
+lastfm_shout_SOURCES = lastfm-shout.c
+lastfm_shout_CFLAGS = $(GLIB_CFLAGS) $(REST_CFLAGS)
+lastfm_shout_LDADD = $(GLIB_LIBS) $(REST_LIBS) ../goa/libgoa-1.0.la
 
 if BUILD_BACKEND
 noinst_PROGRAMS += list-providers add-pocket

@@ -93,6 +93,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goatelepathyfactory.h		goatelepathyfactory.c		\
 	goatelepathyprovider.h		goatelepathyprovider.c		\
 	goapocketprovider.h		goapocketprovider.c		\
+	goalastfmprovider.h		goalastfmprovider.c		\
 	goautils.h			goautils.c			\
 	goawebview.h			goawebview.c			\
 	nautilus-floating-bar.h		nautilus-floating-bar.c		\
