@@ -257,6 +257,7 @@ get_identity_sync (GoaOAuth2Provider  *provider,
     *out_presentation_identity = g_strdup (ret); /* for now: use email as presentation identity */
 
  out:
+  g_clear_object (&parser);
   g_clear_error (&identity_error);
   g_clear_object (&call);
   g_clear_object (&proxy);
