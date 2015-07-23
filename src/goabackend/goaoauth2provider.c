@@ -739,6 +739,7 @@ get_tokens_sync (GoaOAuth2Provider  *provider,
                        GOA_ERROR,
                        GOA_ERROR_FAILED,
                        _("Could not parse response"));
+          g_object_unref (parser);
           goto out;
         }
       /* refresh_token is optional... */
