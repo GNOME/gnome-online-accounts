@@ -634,6 +634,7 @@ process_config_entries (GoaDaemon  *self,
       g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
                                             G_CALLBACK (on_account_handle_remove),
                                             self);
+      g_object_unref (object);
       g_debug ("removing %s", object_path);
       g_warn_if_fail (g_dbus_object_manager_server_unexport (self->object_manager, object_path));
     }
