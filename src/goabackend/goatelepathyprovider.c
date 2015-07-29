@@ -852,6 +852,7 @@ edit_parameters_clicked_cb (GtkButton *button,
 
   if (!edit_connection_parameters (data->object, data->parent, &error))
     maybe_show_error (data->parent, error, _("Cannot save the connection parameters"));
+  g_clear_error (&error);
 }
 
 static void
@@ -864,6 +865,7 @@ edit_personal_details_clicked_cb (GtkButton *button,
   if (!edit_personal_details (data->object, data->parent, &error))
     maybe_show_error (data->parent, error,
         _("Cannot save your personal information on the server"));
+  g_clear_error (&error);
 }
 
 static void
