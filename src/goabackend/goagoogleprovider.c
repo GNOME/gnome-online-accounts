@@ -595,14 +595,6 @@ build_object (GoaProvider         *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static gboolean
-get_use_mobile_browser (GoaOAuth2Provider *oauth2_provider)
-{
-  return TRUE;
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
 static void
 show_account (GoaProvider         *provider,
               GoaClient           *client,
@@ -708,6 +700,5 @@ goa_google_provider_class_init (GoaGoogleProviderClass *klass)
   oauth2_class->get_scope                 = get_scope;
   oauth2_class->is_identity_node          = is_identity_node;
   oauth2_class->get_token_uri             = get_token_uri;
-  oauth2_class->get_use_mobile_browser    = get_use_mobile_browser;
   oauth2_class->add_account_key_values    = add_account_key_values;
 }
