@@ -1074,8 +1074,11 @@ goa_provider_get_all (GAsyncReadyCallback callback,
   for (l = extensions, i = 0; l != NULL; l = l->next, i++)
     {
       GIOExtension *extension = l->data;
-      goa_provider_factory_get_providers (g_object_new (g_io_extension_get_type (extension), NULL),
-          get_providers_cb, data);
+      GoaProviderFactory *factory;
+
+      factory = GOA_PROVIDER_FACTORY (g_object_new (g_io_extension_get_type (extension), NULL));
+      goa_provider_factory_get_providers (factory, get_providers_cb, data);
+      g_object_unref (factory);
       data->pending_calls++;
     }
 
