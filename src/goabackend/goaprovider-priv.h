@@ -82,6 +82,9 @@ struct _GoaProviderClass
                                      GDBusConnection    *connection,
                                      gboolean            just_added,
                                      GError            **error);
+  GoaProviderGroup     (*get_provider_group)        (GoaProvider   *self);
+  GoaProviderFeatures  (*get_provider_features)     (GoaProvider   *self);
+
   /* virtual but with default implementation */
   void         (*show_account)      (GoaProvider         *self,
                                      GoaClient           *client,
@@ -95,14 +98,6 @@ struct _GoaProviderClass
                                        GCancellable        *cancellable,
                                        GError             **error);
   guint    (*get_credentials_generation) (GoaProvider   *self);
-
-  /* pure virtual */
-  GoaProviderGroup (*get_provider_group) (GoaProvider   *self);
-  GoaProviderFeatures  (*get_provider_features)     (GoaProvider   *self);
-
-  /*< private >*/
-  /* Padding for future expansion */
-  gpointer goa_reserved[31];
 };
 
 /**
