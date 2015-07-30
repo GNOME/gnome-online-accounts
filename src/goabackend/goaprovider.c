@@ -759,7 +759,7 @@ static struct
   const gchar *name;
   GType (*get_type) (void);
 } ordered_builtins_map[] = {
-  /* The order is in which the providers' types are created is
+  /* The order in which the providers' types are created is
    * important because it affects the order in which they are
    * returned by goa_provider_get_all.
    */
