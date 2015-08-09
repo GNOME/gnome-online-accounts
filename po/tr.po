@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-06-09 07:27+0000\n"
-"PO-Revision-Date: 2015-06-09 20:08+0300\n"
+"POT-Creation-Date: 2015-08-09 07:31+0000\n"
+"PO-Revision-Date: 2015-08-09 19:19+0300\n"
 "Last-Translator: Muhammet Kara <muhammetk@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr_TR\n"
@@ -24,17 +24,17 @@ msgstr ""
 "X-Generator: Gtranslator 2.91.7\n"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:829 ../src/daemon/goadaemon.c:1089
+#: ../src/daemon/goadaemon.c:830 ../src/daemon/goadaemon.c:1090
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "%s için sağlayıcı bulunamadı"
 
-#: ../src/daemon/goadaemon.c:1017
+#: ../src/daemon/goadaemon.c:1018
 msgid "IsLocked property is set for account"
 msgstr "Hesap için IsLocked özelliği ayarlanmış"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1077
+#: ../src/daemon/goadaemon.c:1078
 msgid "ProviderType property is not set for account"
 msgstr "Hesap için ProviderType belirtilmemiş"
 
@@ -70,9 +70,9 @@ msgstr "Microsoft Exchange"
 
 #. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:311
-#: ../src/goabackend/goaexchangeprovider.c:1020
+#: ../src/goabackend/goaexchangeprovider.c:985
 #: ../src/goabackend/goaowncloudprovider.c:383
-#: ../src/goabackend/goaowncloudprovider.c:1168
+#: ../src/goabackend/goaowncloudprovider.c:1128
 #, c-format
 msgid "Did not find password with identity ‘%s’ in credentials"
 msgstr "Kimlik bilgilerinde ‘%s’ kimliği için parola bulunamadı"
@@ -146,8 +146,8 @@ msgstr "Bağlanılıyor..."
 #: ../src/goabackend/goaimapsmtpprovider.c:1318
 #: ../src/goabackend/goaimapsmtpprovider.c:1391
 #: ../src/goabackend/goakerberosprovider.c:1142
-#: ../src/goabackend/goamediaserverprovider.c:473
-#: ../src/goabackend/goaoauth2provider.c:1033
+#: ../src/goabackend/goamediaserverprovider.c:475
+#: ../src/goabackend/goaoauth2provider.c:1034
 #: ../src/goabackend/goaoauthprovider.c:863
 #: ../src/goabackend/goaowncloudprovider.c:771
 #: ../src/goabackend/goaowncloudprovider.c:986
@@ -194,40 +194,6 @@ msgstr "_Tekrar Deneyin"
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Microsoft Exchange sunucusuna bağlanılamadı"
 
-#. Translators: This is a label for a series of
-#. * options switches. For example: “Use for Mail”.
-#: ../src/goabackend/goaexchangeprovider.c:939
-#: ../src/goabackend/goafacebookprovider.c:427
-#: ../src/goabackend/goaflickrprovider.c:412
-#: ../src/goabackend/goafoursquareprovider.c:405
-#: ../src/goabackend/goagoogleprovider.c:622
-#: ../src/goabackend/goakerberosprovider.c:1325
-#: ../src/goabackend/goamediaserverprovider.c:584
-#: ../src/goabackend/goaowncloudprovider.c:1082
-#: ../src/goabackend/goapocketprovider.c:406
-#: ../src/goabackend/goatelepathyprovider.c:890
-#: ../src/goabackend/goawindowsliveprovider.c:421
-msgid "Use for"
-msgstr "Şunun için kullanılacak"
-
-#: ../src/goabackend/goaexchangeprovider.c:941
-#: ../src/goabackend/goagoogleprovider.c:624
-#: ../src/goabackend/goawindowsliveprovider.c:423
-msgid "_Mail"
-msgstr "_Posta"
-
-#: ../src/goabackend/goaexchangeprovider.c:946
-#: ../src/goabackend/goagoogleprovider.c:629
-#: ../src/goabackend/goaowncloudprovider.c:1084
-msgid "Cale_ndar"
-msgstr "_Takvim"
-
-#: ../src/goabackend/goaexchangeprovider.c:951
-#: ../src/goabackend/goagoogleprovider.c:634
-#: ../src/goabackend/goaowncloudprovider.c:1089
-msgid "_Contacts"
-msgstr "_Kişiler"
-
 #: ../src/goabackend/goafacebookprovider.c:76
 msgid "Facebook"
 msgstr "Facebook"
@@ -270,23 +236,11 @@ msgstr ""
 msgid "Could not parse response"
 msgstr "Cevap ayrıştırılamadı"
 
-#: ../src/goabackend/goafacebookprovider.c:429
-#: ../src/goabackend/goaflickrprovider.c:414
-#: ../src/goabackend/goagoogleprovider.c:649
-#: ../src/goabackend/goamediaserverprovider.c:586
-msgid "_Photos"
-msgstr "_Fotoğraflar"
-
-#: ../src/goabackend/goafacebookprovider.c:434
-#: ../src/goabackend/goafoursquareprovider.c:407
-msgid "_Maps"
-msgstr "_Haritalar"
-
 #: ../src/goabackend/goaflickrprovider.c:77
 msgid "Flickr"
 msgstr "Flickr"
 
-#: ../src/goabackend/goaflickrprovider.c:320
+#: ../src/goabackend/goaflickrprovider.c:321
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "Sistem saatiniz yanlış. Tarih ve zaman ayarlarınızı gözden geçirin."
 
@@ -297,26 +251,6 @@ msgstr "Foursquare"
 #: ../src/goabackend/goagoogleprovider.c:76
 msgid "Google"
 msgstr "Google"
-
-#: ../src/goabackend/goagoogleprovider.c:639
-#: ../src/goabackend/goatelepathyprovider.c:892
-msgid "C_hat"
-msgstr "S_ohbet"
-
-#: ../src/goabackend/goagoogleprovider.c:644
-#: ../src/goabackend/goaowncloudprovider.c:1094
-#: ../src/goabackend/goawindowsliveprovider.c:428
-msgid "_Documents"
-msgstr "_Belgeler"
-
-#: ../src/goabackend/goagoogleprovider.c:654
-#: ../src/goabackend/goaowncloudprovider.c:1099
-msgid "_Files"
-msgstr "_Dosyalar"
-
-#: ../src/goabackend/goagoogleprovider.c:659
-msgid "Prin_ters"
-msgstr "Ya_zıcılar"
 
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:94 ../src/goabackend/goasmtpauth.c:160
@@ -482,11 +416,7 @@ msgstr "Etki alanı geçerli değil"
 msgid "Error connecting to enterprise identity server"
 msgstr "Kurumsal kimlik sunucusuna bağlanırken hata oluştu"
 
-#: ../src/goabackend/goakerberosprovider.c:1327
-msgid "Network _Resources"
-msgstr "Ağ Ö_zkaynakları"
-
-#: ../src/goabackend/goakerberosprovider.c:1534
+#: ../src/goabackend/goakerberosprovider.c:1512
 #, c-format
 msgid "Identity service returned invalid key"
 msgstr "Kimlik hizmeti geçersiz anahtar gönderdi"
@@ -495,7 +425,7 @@ msgstr "Kimlik hizmeti geçersiz anahtar gönderdi"
 msgid "Media Server"
 msgstr "Ortam Sunucusu"
 
-#: ../src/goabackend/goamediaserverprovider.c:369
+#: ../src/goabackend/goamediaserverprovider.c:371
 msgid ""
 "Personal content can be added to your applications through a media server "
 "account."
@@ -503,11 +433,11 @@ msgstr ""
 "Uygulamalarınıza, bir ortam sunucusu hesabı aracılığıyla kişisel içerik "
 "ekleyebilirsiniz."
 
-#: ../src/goabackend/goamediaserverprovider.c:383
+#: ../src/goabackend/goamediaserverprovider.c:385
 msgid "Available Media Servers"
 msgstr "Kullanılabilir Ortam Sunucuları"
 
-#: ../src/goabackend/goamediaserverprovider.c:413
+#: ../src/goabackend/goamediaserverprovider.c:415
 msgid "No media servers found"
 msgstr "Hiçbir ortam sunucusu bulunamadı"
 
@@ -521,37 +451,37 @@ msgstr ""
 "Erişim simgesi istenirken durum kodu 200 bekleniyordu, ama durum kodu %d "
 "(%s) alındı"
 
-#: ../src/goabackend/goaoauth2provider.c:842
+#: ../src/goabackend/goaoauth2provider.c:843
 msgid "Authorization response: "
 msgstr "Yetkilendirme yanıtı:"
 
-#: ../src/goabackend/goaoauth2provider.c:912
+#: ../src/goabackend/goaoauth2provider.c:913
 #, c-format
 msgid "Authorization response: %s"
 msgstr "Yetkilendirme yanıtı: %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1059
+#: ../src/goabackend/goaoauth2provider.c:1060
 #: ../src/goabackend/goaoauthprovider.c:894
 msgid "Error getting an Access Token: "
 msgstr "Erişim Simgesi alırken hata oluştu: "
 
-#: ../src/goabackend/goaoauth2provider.c:1074
+#: ../src/goabackend/goaoauth2provider.c:1075
 #: ../src/goabackend/goaoauthprovider.c:907
 msgid "Error getting identity: "
 msgstr "Kimlik alınırken hata oluştu: "
 
-#: ../src/goabackend/goaoauth2provider.c:1291
+#: ../src/goabackend/goaoauth2provider.c:1292
 #: ../src/goabackend/goaoauthprovider.c:1215
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "%s olarak giriş yapılması istendi, fakat %s olarak giriş yapıldı"
 
-#: ../src/goabackend/goaoauth2provider.c:1453
+#: ../src/goabackend/goaoauth2provider.c:1454
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Kimlik bilgileri içinde access_token bulunmuyor"
 
-#: ../src/goabackend/goaoauth2provider.c:1492
+#: ../src/goabackend/goaoauth2provider.c:1493
 #: ../src/goabackend/goaoauthprovider.c:1443
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
@@ -605,11 +535,61 @@ msgstr "Pocket"
 msgid "No username or access_token"
 msgstr "Kullanıcı adı ya da access_token yok"
 
-#: ../src/goabackend/goapocketprovider.c:408
+#: ../src/goabackend/goaprovider.c:478
+msgid "_Mail"
+msgstr "_Posta"
+
+#: ../src/goabackend/goaprovider.c:483
+msgid "Cale_ndar"
+msgstr "_Takvim"
+
+#: ../src/goabackend/goaprovider.c:488
+msgid "_Contacts"
+msgstr "_Kişiler"
+
+#: ../src/goabackend/goaprovider.c:493
+msgid "C_hat"
+msgstr "S_ohbet"
+
+#: ../src/goabackend/goaprovider.c:498
+msgid "_Documents"
+msgstr "_Belgeler"
+
+#: ../src/goabackend/goaprovider.c:503
+msgid "M_usic"
+msgstr "M_üzik"
+
+#: ../src/goabackend/goaprovider.c:508
+msgid "_Photos"
+msgstr "_Fotoğraflar"
+
+#: ../src/goabackend/goaprovider.c:513
+msgid "_Files"
+msgstr "_Dosyalar"
+
+#: ../src/goabackend/goaprovider.c:518
+msgid "Network _Resources"
+msgstr "Ağ Ö_zkaynakları"
+
+#: ../src/goabackend/goaprovider.c:523
 msgid "_Read Later"
 msgstr "Daha Sonra _Oku"
 
-#: ../src/goabackend/goaprovider.c:682
+#: ../src/goabackend/goaprovider.c:528
+msgid "Prin_ters"
+msgstr "Ya_zıcılar"
+
+#: ../src/goabackend/goaprovider.c:533
+msgid "_Maps"
+msgstr "_Haritalar"
+
+#. Translators: This is a label for a series of
+#. * options switches. For example: “Use for Mail”.
+#: ../src/goabackend/goaprovider.c:562
+msgid "Use for"
+msgstr "Şunun için kullanılacak"
+
+#: ../src/goabackend/goaprovider.c:801
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync, %s türüne uygulanmamıştır"
@@ -691,12 +671,12 @@ msgid "Cannot save your personal information on the server"
 msgstr "Kişisel bilgileriniz sunucuya kaydedilemiyor"
 
 #. Connection Settings button
-#: ../src/goabackend/goatelepathyprovider.c:897
+#: ../src/goabackend/goatelepathyprovider.c:891
 msgid "_Connection Settings"
 msgstr "_Bağlantı Ayarları"
 
 #. Edit Personal Information button
-#: ../src/goabackend/goatelepathyprovider.c:901
+#: ../src/goabackend/goatelepathyprovider.c:895
 msgid "_Personal Details"
 msgstr "_Kişisel Ayrıntılar"
 
@@ -778,7 +758,6 @@ msgid "Loading “%s”…"
 msgstr "“%s” yükleniyor…"
 
 #: ../src/goabackend/goawindowsliveprovider.c:77
-#| msgid "Microsoft Exchange"
 msgid "Microsoft Account"
 msgstr "Microsoft Hesabı"
 
