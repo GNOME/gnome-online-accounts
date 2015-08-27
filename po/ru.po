@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-06-23 19:22+0000\n"
-"PO-Revision-Date: 2015-06-24 00:26+0300\n"
+"POT-Creation-Date: 2015-08-27 19:33+0000\n"
+"PO-Revision-Date: 2015-08-28 01:15+0300\n"
 "Last-Translator: Stas Solovey <whats_up@tut.by>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -24,17 +24,17 @@ msgstr ""
 "X-Generator: Gtranslator 2.91.7\n"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:829 ../src/daemon/goadaemon.c:1089
+#: ../src/daemon/goadaemon.c:830 ../src/daemon/goadaemon.c:1090
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Не удалось найти провайдер для: %s"
 
-#: ../src/daemon/goadaemon.c:1017
+#: ../src/daemon/goadaemon.c:1018
 msgid "IsLocked property is set for account"
 msgstr "Для учётной записи установлено свойство IsLocked"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1077
+#: ../src/daemon/goadaemon.c:1078
 msgid "ProviderType property is not set for account"
 msgstr "Свойство ProviderType не установлено для учётной записи"
 
@@ -70,9 +70,9 @@ msgstr "Microsoft Exchange"
 
 #. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:311
-#: ../src/goabackend/goaexchangeprovider.c:1020
+#: ../src/goabackend/goaexchangeprovider.c:985
 #: ../src/goabackend/goaowncloudprovider.c:383
-#: ../src/goabackend/goaowncloudprovider.c:1168
+#: ../src/goabackend/goaowncloudprovider.c:1128
 #, c-format
 msgid "Did not find password with identity ‘%s’ in credentials"
 msgstr "Не удалось найти пароль с именем пользователя «%s» в учётных данных"
@@ -146,8 +146,8 @@ msgstr "Подключение…"
 #: ../src/goabackend/goaimapsmtpprovider.c:1318
 #: ../src/goabackend/goaimapsmtpprovider.c:1391
 #: ../src/goabackend/goakerberosprovider.c:1142
-#: ../src/goabackend/goamediaserverprovider.c:473
-#: ../src/goabackend/goaoauth2provider.c:1033
+#: ../src/goabackend/goamediaserverprovider.c:475
+#: ../src/goabackend/goaoauth2provider.c:1034
 #: ../src/goabackend/goaoauthprovider.c:863
 #: ../src/goabackend/goaowncloudprovider.c:771
 #: ../src/goabackend/goaowncloudprovider.c:986
@@ -194,40 +194,6 @@ msgstr "Поп_робовать снова"
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Ошибка подключения к серверу Microsoft Exchange"
 
-#. Translators: This is a label for a series of
-#. * options switches. For example: “Use for Mail”.
-#: ../src/goabackend/goaexchangeprovider.c:939
-#: ../src/goabackend/goafacebookprovider.c:427
-#: ../src/goabackend/goaflickrprovider.c:412
-#: ../src/goabackend/goafoursquareprovider.c:405
-#: ../src/goabackend/goagoogleprovider.c:622
-#: ../src/goabackend/goakerberosprovider.c:1325
-#: ../src/goabackend/goamediaserverprovider.c:584
-#: ../src/goabackend/goaowncloudprovider.c:1082
-#: ../src/goabackend/goapocketprovider.c:406
-#: ../src/goabackend/goatelepathyprovider.c:890
-#: ../src/goabackend/goawindowsliveprovider.c:421
-msgid "Use for"
-msgstr "Использовать для"
-
-#: ../src/goabackend/goaexchangeprovider.c:941
-#: ../src/goabackend/goagoogleprovider.c:624
-#: ../src/goabackend/goawindowsliveprovider.c:423
-msgid "_Mail"
-msgstr "_Почта"
-
-#: ../src/goabackend/goaexchangeprovider.c:946
-#: ../src/goabackend/goagoogleprovider.c:629
-#: ../src/goabackend/goaowncloudprovider.c:1084
-msgid "Cale_ndar"
-msgstr "_Календарь"
-
-#: ../src/goabackend/goaexchangeprovider.c:951
-#: ../src/goabackend/goagoogleprovider.c:634
-#: ../src/goabackend/goaowncloudprovider.c:1089
-msgid "_Contacts"
-msgstr "Ко_нтакты"
-
 #: ../src/goabackend/goafacebookprovider.c:76
 msgid "Facebook"
 msgstr "Facebook"
@@ -270,23 +236,11 @@ msgstr ""
 msgid "Could not parse response"
 msgstr "Не удалось разобрать ответ"
 
-#: ../src/goabackend/goafacebookprovider.c:429
-#: ../src/goabackend/goaflickrprovider.c:414
-#: ../src/goabackend/goagoogleprovider.c:649
-#: ../src/goabackend/goamediaserverprovider.c:586
-msgid "_Photos"
-msgstr "_Фотоснимки"
-
-#: ../src/goabackend/goafacebookprovider.c:434
-#: ../src/goabackend/goafoursquareprovider.c:407
-msgid "_Maps"
-msgstr "_Карты"
-
 #: ../src/goabackend/goaflickrprovider.c:77
 msgid "Flickr"
 msgstr "Flickr"
 
-#: ../src/goabackend/goaflickrprovider.c:320
+#: ../src/goabackend/goaflickrprovider.c:321
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "Неправильное системное время. Проверьте параметры даты и времени."
 
@@ -298,26 +252,6 @@ msgstr "Foursquare"
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:639
-#: ../src/goabackend/goatelepathyprovider.c:892
-msgid "C_hat"
-msgstr "_Чат"
-
-#: ../src/goabackend/goagoogleprovider.c:644
-#: ../src/goabackend/goaowncloudprovider.c:1094
-#: ../src/goabackend/goawindowsliveprovider.c:428
-msgid "_Documents"
-msgstr "_Документы"
-
-#: ../src/goabackend/goagoogleprovider.c:654
-#: ../src/goabackend/goaowncloudprovider.c:1099
-msgid "_Files"
-msgstr "_Файлы"
-
-#: ../src/goabackend/goagoogleprovider.c:659
-msgid "Prin_ters"
-msgstr "_Принтеры"
-
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:94 ../src/goabackend/goasmtpauth.c:160
 #, c-format
@@ -325,8 +259,7 @@ msgid "Service not available"
 msgstr "Служба недоступна"
 
 #. TODO: more specific
-#: ../src/goabackend/goaimapauthlogin.c:115
-#: ../src/goabackend/goasmtpauth.c:113
+#: ../src/goabackend/goaimapauthlogin.c:115 ../src/goabackend/goasmtpauth.c:113
 #, c-format
 msgid "Authentication failed"
 msgstr "Сбой аутентификации"
@@ -336,8 +269,7 @@ msgstr "Сбой аутентификации"
 msgid "Server does not support PLAIN"
 msgstr "Сервер не поддерживает аутентификацию PLAIN"
 
-#: ../src/goabackend/goaimapauthlogin.c:194
-#: ../src/goabackend/goasmtpauth.c:818
+#: ../src/goabackend/goaimapauthlogin.c:194 ../src/goabackend/goasmtpauth.c:818
 #, c-format
 msgid "Server does not support STARTTLS"
 msgstr "Сервер не поддерживает STARTTLS"
@@ -485,11 +417,7 @@ msgstr "Недопустимое имя домена"
 msgid "Error connecting to enterprise identity server"
 msgstr "Ошибка подключения к корпоративному серверу идентификации"
 
-#: ../src/goabackend/goakerberosprovider.c:1327
-msgid "Network _Resources"
-msgstr "_Сетевые ресурсы"
-
-#: ../src/goabackend/goakerberosprovider.c:1534
+#: ../src/goabackend/goakerberosprovider.c:1512
 #, c-format
 msgid "Identity service returned invalid key"
 msgstr "Служба идентификации вернула неверный ключ"
@@ -498,7 +426,7 @@ msgstr "Служба идентификации вернула неверный 
 msgid "Media Server"
 msgstr "Медиасервер"
 
-#: ../src/goabackend/goamediaserverprovider.c:369
+#: ../src/goabackend/goamediaserverprovider.c:371
 msgid ""
 "Personal content can be added to your applications through a media server "
 "account."
@@ -506,11 +434,11 @@ msgstr ""
 "Личный контент можно добавить в ваши приложения через учётную запись на "
 "медиасервере."
 
-#: ../src/goabackend/goamediaserverprovider.c:383
+#: ../src/goabackend/goamediaserverprovider.c:385
 msgid "Available Media Servers"
 msgstr "Доступные медиасерверы"
 
-#: ../src/goabackend/goamediaserverprovider.c:413
+#: ../src/goabackend/goamediaserverprovider.c:415
 msgid "No media servers found"
 msgstr "Медиасерверы не найдены"
 
@@ -524,37 +452,37 @@ msgstr ""
 "При запросе маркера доступа ожидалось получить код состояния 200, но был "
 "получен код %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:842
+#: ../src/goabackend/goaoauth2provider.c:843
 msgid "Authorization response: "
 msgstr "Ответ на авторизацию: "
 
-#: ../src/goabackend/goaoauth2provider.c:912
+#: ../src/goabackend/goaoauth2provider.c:913
 #, c-format
 msgid "Authorization response: %s"
 msgstr "Ответ на авторизацию: %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1059
+#: ../src/goabackend/goaoauth2provider.c:1060
 #: ../src/goabackend/goaoauthprovider.c:894
 msgid "Error getting an Access Token: "
 msgstr "Ошибка при получении маркера доступа: "
 
-#: ../src/goabackend/goaoauth2provider.c:1074
+#: ../src/goabackend/goaoauth2provider.c:1075
 #: ../src/goabackend/goaoauthprovider.c:907
 msgid "Error getting identity: "
 msgstr "Ошибка получения идентификатора: "
 
-#: ../src/goabackend/goaoauth2provider.c:1291
+#: ../src/goabackend/goaoauth2provider.c:1292
 #: ../src/goabackend/goaoauthprovider.c:1215
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Вход запрошен от имени %s, но осуществлён от имени %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1453
+#: ../src/goabackend/goaoauth2provider.c:1454
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Учётные данные не содержат access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1492
+#: ../src/goabackend/goaoauth2provider.c:1493
 #: ../src/goabackend/goaoauthprovider.c:1443
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
@@ -608,11 +536,61 @@ msgstr "Pocket"
 msgid "No username or access_token"
 msgstr "Не указано имя пользователя или access_token"
 
-#: ../src/goabackend/goapocketprovider.c:408
+#: ../src/goabackend/goaprovider.c:478
+msgid "_Mail"
+msgstr "_Почта"
+
+#: ../src/goabackend/goaprovider.c:483
+msgid "Cale_ndar"
+msgstr "_Календарь"
+
+#: ../src/goabackend/goaprovider.c:488
+msgid "_Contacts"
+msgstr "Ко_нтакты"
+
+#: ../src/goabackend/goaprovider.c:493
+msgid "C_hat"
+msgstr "_Чат"
+
+#: ../src/goabackend/goaprovider.c:498
+msgid "_Documents"
+msgstr "_Документы"
+
+#: ../src/goabackend/goaprovider.c:503
+msgid "M_usic"
+msgstr "_Музыка"
+
+#: ../src/goabackend/goaprovider.c:508
+msgid "_Photos"
+msgstr "_Фотоснимки"
+
+#: ../src/goabackend/goaprovider.c:513
+msgid "_Files"
+msgstr "_Файлы"
+
+#: ../src/goabackend/goaprovider.c:518
+msgid "Network _Resources"
+msgstr "_Сетевые ресурсы"
+
+#: ../src/goabackend/goaprovider.c:523
 msgid "_Read Later"
 msgstr "_Прочитать позже"
 
-#: ../src/goabackend/goaprovider.c:682
+#: ../src/goabackend/goaprovider.c:528
+msgid "Prin_ters"
+msgstr "_Принтеры"
+
+#: ../src/goabackend/goaprovider.c:533
+msgid "_Maps"
+msgstr "_Карты"
+
+#. Translators: This is a label for a series of
+#. * options switches. For example: “Use for Mail”.
+#: ../src/goabackend/goaprovider.c:562
+msgid "Use for"
+msgstr "Использовать для"
+
+#: ../src/goabackend/goaprovider.c:801
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync не реализован в типе %s"
@@ -694,12 +672,12 @@ msgid "Cannot save your personal information on the server"
 msgstr "Невозможно сохранить вашу личную информацию на сервере"
 
 #. Connection Settings button
-#: ../src/goabackend/goatelepathyprovider.c:897
+#: ../src/goabackend/goatelepathyprovider.c:891
 msgid "_Connection Settings"
 msgstr "_Параметры соединения"
 
 #. Edit Personal Information button
-#: ../src/goabackend/goatelepathyprovider.c:901
+#: ../src/goabackend/goatelepathyprovider.c:895
 msgid "_Personal Details"
 msgstr "П_ерсональные данные"
 
@@ -781,7 +759,6 @@ msgid "Loading “%s”…"
 msgstr "Загрузка «%s»…"
 
 #: ../src/goabackend/goawindowsliveprovider.c:77
-#| msgid "Microsoft Exchange"
 msgid "Microsoft Account"
 msgstr "Учётная запись Microsoft"
 
