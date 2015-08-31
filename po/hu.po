@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-06-22 19:25+0000\n"
-"PO-Revision-Date: 2015-06-22 22:50+0200\n"
+"POT-Creation-Date: 2015-08-31 07:31+0000\n"
+"PO-Revision-Date: 2015-08-31 18:39+0200\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -22,17 +22,17 @@ msgstr ""
 "X-Generator: Lokalize 1.2\n"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:829 ../src/daemon/goadaemon.c:1089
+#: ../src/daemon/goadaemon.c:830 ../src/daemon/goadaemon.c:1090
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Nem található szolgáltató a következőhöz: %s"
 
-#: ../src/daemon/goadaemon.c:1017
+#: ../src/daemon/goadaemon.c:1018
 msgid "IsLocked property is set for account"
 msgstr "Az IsLocked tulajdonság nincs beállítva a fiók számára"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1077
+#: ../src/daemon/goadaemon.c:1078
 msgid "ProviderType property is not set for account"
 msgstr "A ProviderType tulajdonság nincs beállítva a fiók számára"
 
@@ -69,9 +69,9 @@ msgstr "Microsoft Exchange"
 
 #. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:311
-#: ../src/goabackend/goaexchangeprovider.c:1020
+#: ../src/goabackend/goaexchangeprovider.c:985
 #: ../src/goabackend/goaowncloudprovider.c:383
-#: ../src/goabackend/goaowncloudprovider.c:1168
+#: ../src/goabackend/goaowncloudprovider.c:1128
 #, c-format
 msgid "Did not find password with identity ‘%s’ in credentials"
 msgstr ""
@@ -147,8 +147,8 @@ msgstr "Kapcsolódás…"
 #: ../src/goabackend/goaimapsmtpprovider.c:1318
 #: ../src/goabackend/goaimapsmtpprovider.c:1391
 #: ../src/goabackend/goakerberosprovider.c:1142
-#: ../src/goabackend/goamediaserverprovider.c:473
-#: ../src/goabackend/goaoauth2provider.c:1033
+#: ../src/goabackend/goamediaserverprovider.c:475
+#: ../src/goabackend/goaoauth2provider.c:1034
 #: ../src/goabackend/goaoauthprovider.c:863
 #: ../src/goabackend/goaowncloudprovider.c:771
 #: ../src/goabackend/goaowncloudprovider.c:986
@@ -195,40 +195,6 @@ msgstr "P_róbálja újra"
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Hiba a Microsoft Exchange kiszolgálóhoz való kapcsolódáskor"
 
-#. Translators: This is a label for a series of
-#. * options switches. For example: “Use for Mail”.
-#: ../src/goabackend/goaexchangeprovider.c:939
-#: ../src/goabackend/goafacebookprovider.c:427
-#: ../src/goabackend/goaflickrprovider.c:412
-#: ../src/goabackend/goafoursquareprovider.c:405
-#: ../src/goabackend/goagoogleprovider.c:622
-#: ../src/goabackend/goakerberosprovider.c:1325
-#: ../src/goabackend/goamediaserverprovider.c:584
-#: ../src/goabackend/goaowncloudprovider.c:1082
-#: ../src/goabackend/goapocketprovider.c:406
-#: ../src/goabackend/goatelepathyprovider.c:890
-#: ../src/goabackend/goawindowsliveprovider.c:421
-msgid "Use for"
-msgstr "Használat ehhez"
-
-#: ../src/goabackend/goaexchangeprovider.c:941
-#: ../src/goabackend/goagoogleprovider.c:624
-#: ../src/goabackend/goawindowsliveprovider.c:423
-msgid "_Mail"
-msgstr "_Levelezés"
-
-#: ../src/goabackend/goaexchangeprovider.c:946
-#: ../src/goabackend/goagoogleprovider.c:629
-#: ../src/goabackend/goaowncloudprovider.c:1084
-msgid "Cale_ndar"
-msgstr "_Naptár"
-
-#: ../src/goabackend/goaexchangeprovider.c:951
-#: ../src/goabackend/goagoogleprovider.c:634
-#: ../src/goabackend/goaowncloudprovider.c:1089
-msgid "_Contacts"
-msgstr "Né_vjegyek"
-
 #: ../src/goabackend/goafacebookprovider.c:76
 msgid "Facebook"
 msgstr "Facebook"
@@ -271,23 +237,11 @@ msgstr ""
 msgid "Could not parse response"
 msgstr "A válasz nem elemezhető"
 
-#: ../src/goabackend/goafacebookprovider.c:429
-#: ../src/goabackend/goaflickrprovider.c:414
-#: ../src/goabackend/goagoogleprovider.c:649
-#: ../src/goabackend/goamediaserverprovider.c:586
-msgid "_Photos"
-msgstr "_Fényképek"
-
-#: ../src/goabackend/goafacebookprovider.c:434
-#: ../src/goabackend/goafoursquareprovider.c:407
-msgid "_Maps"
-msgstr "_Térképek"
-
 #: ../src/goabackend/goaflickrprovider.c:77
 msgid "Flickr"
 msgstr "Flickr"
 
-#: ../src/goabackend/goaflickrprovider.c:320
+#: ../src/goabackend/goaflickrprovider.c:321
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "Rendszerideje nem érvényes. Ellenőrizze a dátum- és időbeállításokat."
 
@@ -298,26 +252,6 @@ msgstr "Foursquare"
 #: ../src/goabackend/goagoogleprovider.c:76
 msgid "Google"
 msgstr "Google"
-
-#: ../src/goabackend/goagoogleprovider.c:639
-#: ../src/goabackend/goatelepathyprovider.c:892
-msgid "C_hat"
-msgstr "_Csevegés"
-
-#: ../src/goabackend/goagoogleprovider.c:644
-#: ../src/goabackend/goaowncloudprovider.c:1094
-#: ../src/goabackend/goawindowsliveprovider.c:428
-msgid "_Documents"
-msgstr "_Dokumentumok"
-
-#: ../src/goabackend/goagoogleprovider.c:654
-#: ../src/goabackend/goaowncloudprovider.c:1099
-msgid "_Files"
-msgstr "_Fájlok"
-
-#: ../src/goabackend/goagoogleprovider.c:659
-msgid "Prin_ters"
-msgstr "_Nyomtatók"
 
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:94 ../src/goabackend/goasmtpauth.c:160
@@ -487,11 +421,7 @@ msgstr "A tartomány nem érvényes"
 msgid "Error connecting to enterprise identity server"
 msgstr "Hiba a vállalati személyazonosság-kiszolgálóhoz való kapcsolódáskor"
 
-#: ../src/goabackend/goakerberosprovider.c:1327
-msgid "Network _Resources"
-msgstr "_Hálózati erőforrások"
-
-#: ../src/goabackend/goakerberosprovider.c:1534
+#: ../src/goabackend/goakerberosprovider.c:1512
 #, c-format
 msgid "Identity service returned invalid key"
 msgstr "A személyazonosság szolgáltatás érvénytelen kulcsot adott vissza"
@@ -500,7 +430,7 @@ msgstr "A személyazonosság szolgáltatás érvénytelen kulcsot adott vissza"
 msgid "Media Server"
 msgstr "Médiakiszolgáló"
 
-#: ../src/goabackend/goamediaserverprovider.c:369
+#: ../src/goabackend/goamediaserverprovider.c:371
 msgid ""
 "Personal content can be added to your applications through a media server "
 "account."
@@ -508,11 +438,11 @@ msgstr ""
 "Személyes információk adhatók hozzá az alkalmazásokhoz egy médiakiszolgáló "
 "fiókon keresztül."
 
-#: ../src/goabackend/goamediaserverprovider.c:383
+#: ../src/goabackend/goamediaserverprovider.c:385
 msgid "Available Media Servers"
 msgstr "Elérhető médiakiszolgálók"
 
-#: ../src/goabackend/goamediaserverprovider.c:413
+#: ../src/goabackend/goamediaserverprovider.c:415
 msgid "No media servers found"
 msgstr "Nem találhatók médiakiszolgálók"
 
@@ -526,37 +456,37 @@ msgstr ""
 "A hozzáférési jelsor kérésekor a várt 200-as állapot helyett %d állapot "
 "érkezett (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:842
+#: ../src/goabackend/goaoauth2provider.c:843
 msgid "Authorization response: "
 msgstr "A felhatalmazási válasz: "
 
-#: ../src/goabackend/goaoauth2provider.c:912
+#: ../src/goabackend/goaoauth2provider.c:913
 #, c-format
 msgid "Authorization response: %s"
 msgstr "A felhatalmazási válasz: %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1059
+#: ../src/goabackend/goaoauth2provider.c:1060
 #: ../src/goabackend/goaoauthprovider.c:894
 msgid "Error getting an Access Token: "
 msgstr "Hiba a hozzáférési jelsor lekérésekor: "
 
-#: ../src/goabackend/goaoauth2provider.c:1074
+#: ../src/goabackend/goaoauth2provider.c:1075
 #: ../src/goabackend/goaoauthprovider.c:907
 msgid "Error getting identity: "
 msgstr "Hiba a személyazonosság lekérésekor: "
 
-#: ../src/goabackend/goaoauth2provider.c:1291
+#: ../src/goabackend/goaoauth2provider.c:1292
 #: ../src/goabackend/goaoauthprovider.c:1215
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "A(z) %s néven való bejelentkezésre kérés után %s néven jelentkezett be"
 
-#: ../src/goabackend/goaoauth2provider.c:1453
+#: ../src/goabackend/goaoauth2provider.c:1454
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "A hitelesítési adatok nem tartalmaznak access_token tagot"
 
-#: ../src/goabackend/goaoauth2provider.c:1492
+#: ../src/goabackend/goaoauth2provider.c:1493
 #: ../src/goabackend/goaoauthprovider.c:1443
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
@@ -611,11 +541,61 @@ msgstr "Zseb"
 msgid "No username or access_token"
 msgstr "Nincs felhasználónév vagy hozzáférési token"
 
-#: ../src/goabackend/goapocketprovider.c:408
+#: ../src/goabackend/goaprovider.c:478
+msgid "_Mail"
+msgstr "_Levelezés"
+
+#: ../src/goabackend/goaprovider.c:483
+msgid "Cale_ndar"
+msgstr "_Naptár"
+
+#: ../src/goabackend/goaprovider.c:488
+msgid "_Contacts"
+msgstr "Né_vjegyek"
+
+#: ../src/goabackend/goaprovider.c:493
+msgid "C_hat"
+msgstr "_Csevegés"
+
+#: ../src/goabackend/goaprovider.c:498
+msgid "_Documents"
+msgstr "_Dokumentumok"
+
+#: ../src/goabackend/goaprovider.c:503
+msgid "M_usic"
+msgstr "_Zene"
+
+#: ../src/goabackend/goaprovider.c:508
+msgid "_Photos"
+msgstr "_Fényképek"
+
+#: ../src/goabackend/goaprovider.c:513
+msgid "_Files"
+msgstr "_Fájlok"
+
+#: ../src/goabackend/goaprovider.c:518
+msgid "Network _Resources"
+msgstr "_Hálózati erőforrások"
+
+#: ../src/goabackend/goaprovider.c:523
 msgid "_Read Later"
 msgstr "_Olvasás később"
 
-#: ../src/goabackend/goaprovider.c:682
+#: ../src/goabackend/goaprovider.c:528
+msgid "Prin_ters"
+msgstr "_Nyomtatók"
+
+#: ../src/goabackend/goaprovider.c:533
+msgid "_Maps"
+msgstr "_Térképek"
+
+#. Translators: This is a label for a series of
+#. * options switches. For example: “Use for Mail”.
+#: ../src/goabackend/goaprovider.c:562
+msgid "Use for"
+msgstr "Használat ehhez"
+
+#: ../src/goabackend/goaprovider.c:801
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "Az ensure_credentials_sync nincs megvalósítva a(z) %s típushoz"
@@ -697,12 +677,12 @@ msgid "Cannot save your personal information on the server"
 msgstr "Nem lehet elmenteni a személyes információkat a kiszolgálón"
 
 #. Connection Settings button
-#: ../src/goabackend/goatelepathyprovider.c:897
+#: ../src/goabackend/goatelepathyprovider.c:891
 msgid "_Connection Settings"
 msgstr "_Kapcsolat beállításai"
 
 #. Edit Personal Information button
-#: ../src/goabackend/goatelepathyprovider.c:901
+#: ../src/goabackend/goatelepathyprovider.c:895
 msgid "_Personal Details"
 msgstr "_Személyes adatok"
 
@@ -786,7 +766,6 @@ msgid "Loading “%s”…"
 msgstr "„%s” betöltése…"
 
 #: ../src/goabackend/goawindowsliveprovider.c:77
-#| msgid "Microsoft Exchange"
 msgid "Microsoft Account"
 msgstr "Microsoft-fiók"
 
