@@ -118,20 +118,28 @@ uri_to_string_with_path (SoupURI *soup_uri, const gchar *path)
 
 static char *get_webdav_uri (SoupURI *soup_uri)
 {
+  SoupURI *uri_tmp;
   gchar *uri_webdav;
   const gchar *scheme;
+  guint port;
 
   if (soup_uri == NULL)
     return NULL;
 
   scheme = soup_uri_get_scheme (soup_uri);
+  port = soup_uri_get_port (soup_uri);
+  uri_tmp = soup_uri_copy (soup_uri);
+
   if (g_strcmp0 (scheme, SOUP_URI_SCHEME_HTTPS) == 0)
-    soup_uri_set_scheme (soup_uri, "davs");
+    soup_uri_set_scheme (uri_tmp, "davs");
   else
-    soup_uri_set_scheme (soup_uri, "dav");
-  uri_webdav = uri_to_string_with_path (soup_uri, WEBDAV_ENDPOINT);
-  /* restore initial scheme */
-  soup_uri_set_scheme (soup_uri, scheme);
+    soup_uri_set_scheme (uri_tmp, "dav");
+
+  if (!soup_uri_uses_default_port (soup_uri))
+    soup_uri_set_port (uri_tmp, port);
+
+  uri_webdav = uri_to_string_with_path (uri_tmp, WEBDAV_ENDPOINT);
+  soup_uri_free (uri_tmp);
 
   return uri_webdav;
 }
