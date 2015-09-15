@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-24 16:10+0200\n"
-"PO-Revision-Date: 2015-08-24 16:11+0200\n"
+"POT-Creation-Date: 2015-09-15 06:28+0200\n"
+"PO-Revision-Date: 2015-09-15 06:30+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -74,6 +74,7 @@ msgstr "Microsoft Exchange"
 #. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:311
 #: ../src/goabackend/goaexchangeprovider.c:985
+#: ../src/goabackend/goalastfmprovider.c:286
 #: ../src/goabackend/goaowncloudprovider.c:383
 #: ../src/goabackend/goaowncloudprovider.c:1128
 #, c-format
@@ -85,6 +86,7 @@ msgstr "Nie odnaleziono hasła z tożsamością „%s” w danych uwierzytelniaj
 #. * (%s, %d) is the error domain and code.
 #.
 #: ../src/goabackend/goaexchangeprovider.c:339
+#: ../src/goabackend/goalastfmprovider.c:302
 #: ../src/goabackend/goaowncloudprovider.c:406
 #, c-format
 msgid "Invalid password with username ‘%s’ (%s, %d): "
@@ -98,6 +100,7 @@ msgstr "_E-mail"
 #: ../src/goabackend/goaexchangeprovider.c:493
 #: ../src/goabackend/goaimapsmtpprovider.c:720
 #: ../src/goabackend/goaimapsmtpprovider.c:740
+#: ../src/goabackend/goalastfmprovider.c:443
 #: ../src/goabackend/goaowncloudprovider.c:634
 msgid "_Password"
 msgstr "_Hasło"
@@ -110,6 +113,7 @@ msgstr "_Własne"
 #: ../src/goabackend/goaimapsmtpprovider.c:719
 #: ../src/goabackend/goaimapsmtpprovider.c:739
 #: ../src/goabackend/goakerberosprovider.c:719
+#: ../src/goabackend/goalastfmprovider.c:442
 #: ../src/goabackend/goaowncloudprovider.c:633
 msgid "User_name"
 msgstr "_Nazwa użytkownika"
@@ -123,6 +127,7 @@ msgstr "_Serwer"
 #: ../src/goabackend/goaexchangeprovider.c:518
 #: ../src/goabackend/goaimapsmtpprovider.c:752
 #: ../src/goabackend/goakerberosprovider.c:724
+#: ../src/goabackend/goalastfmprovider.c:451
 #: ../src/goabackend/goaowncloudprovider.c:643
 #: ../src/goabackend/goatelepathyprovider.c:649
 msgid "_Cancel"
@@ -130,6 +135,7 @@ msgstr "_Anuluj"
 
 #: ../src/goabackend/goaexchangeprovider.c:519
 #: ../src/goabackend/goakerberosprovider.c:725
+#: ../src/goabackend/goalastfmprovider.c:452
 #: ../src/goabackend/goaowncloudprovider.c:644
 msgid "C_onnect"
 msgstr "P_ołącz"
@@ -137,6 +143,7 @@ msgstr "P_ołącz"
 #: ../src/goabackend/goaexchangeprovider.c:535
 #: ../src/goabackend/goaimapsmtpprovider.c:769
 #: ../src/goabackend/goakerberosprovider.c:741
+#: ../src/goabackend/goalastfmprovider.c:468
 #: ../src/goabackend/goaowncloudprovider.c:660
 msgid "Connecting…"
 msgstr "Łączenie…"
@@ -149,6 +156,8 @@ msgstr "Łączenie…"
 #: ../src/goabackend/goaimapsmtpprovider.c:1318
 #: ../src/goabackend/goaimapsmtpprovider.c:1391
 #: ../src/goabackend/goakerberosprovider.c:1142
+#: ../src/goabackend/goalastfmprovider.c:659
+#: ../src/goabackend/goalastfmprovider.c:825
 #: ../src/goabackend/goamediaserverprovider.c:475
 #: ../src/goabackend/goaoauth2provider.c:1034
 #: ../src/goabackend/goaoauthprovider.c:863
@@ -167,6 +176,8 @@ msgstr "Odrzucono okno dialogowe"
 #: ../src/goabackend/goaimapsmtpprovider.c:1089
 #: ../src/goabackend/goaimapsmtpprovider.c:1342
 #: ../src/goabackend/goaimapsmtpprovider.c:1416
+#: ../src/goabackend/goalastfmprovider.c:693
+#: ../src/goabackend/goalastfmprovider.c:844
 #: ../src/goabackend/goaowncloudprovider.c:813
 #: ../src/goabackend/goaowncloudprovider.c:1007
 #, c-format
@@ -187,6 +198,8 @@ msgstr "Z_ignoruj"
 #: ../src/goabackend/goaimapsmtpprovider.c:1361
 #: ../src/goabackend/goaimapsmtpprovider.c:1435
 #: ../src/goabackend/goakerberosprovider.c:1252
+#: ../src/goabackend/goalastfmprovider.c:705
+#: ../src/goabackend/goalastfmprovider.c:861
 #: ../src/goabackend/goaowncloudprovider.c:831
 #: ../src/goabackend/goaowncloudprovider.c:1026
 msgid "_Try Again"
@@ -229,6 +242,14 @@ msgstr ""
 #: ../src/goabackend/goafoursquareprovider.c:264
 #: ../src/goabackend/goagoogleprovider.c:240
 #: ../src/goabackend/goagoogleprovider.c:252
+#: ../src/goabackend/goalastfmprovider.c:211
+#: ../src/goabackend/goalastfmprovider.c:220
+#: ../src/goabackend/goalastfmprovider.c:230
+#: ../src/goabackend/goalastfmprovider.c:237
+#: ../src/goabackend/goalastfmprovider.c:526
+#: ../src/goabackend/goalastfmprovider.c:535
+#: ../src/goabackend/goalastfmprovider.c:550
+#: ../src/goabackend/goalastfmprovider.c:557
 #: ../src/goabackend/goaoauth2provider.c:699
 #: ../src/goabackend/goaoauth2provider.c:729
 #: ../src/goabackend/goaoauth2provider.c:741
@@ -264,6 +285,7 @@ msgstr "Usługa jest niedostępna"
 
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:115
+#: ../src/goabackend/goalastfmprovider.c:543
 #: ../src/goabackend/goasmtpauth.c:113
 #, c-format
 msgid "Authentication failed"
@@ -274,8 +296,7 @@ msgstr "Uwierzytelnienie się nie powiodło"
 msgid "Server does not support PLAIN"
 msgstr "Serwer nie obsługuje PLAIN"
 
-#: ../src/goabackend/goaimapauthlogin.c:194
-#: ../src/goabackend/goasmtpauth.c:818
+#: ../src/goabackend/goaimapauthlogin.c:194 ../src/goabackend/goasmtpauth.c:818
 #, c-format
 msgid "Server does not support STARTTLS"
 msgstr "Serwer nie obsługuje StartTLS"
@@ -427,6 +448,15 @@ msgstr "Błąd podczas łączenia z serwerem tożsamości firmowej"
 msgid "Identity service returned invalid key"
 msgstr "Usługa tożsamości zwróciła nieprawidłowy klucz"
 
+#: ../src/goabackend/goalastfmprovider.c:64
+msgid "Last.fm"
+msgstr "Last.fm"
+
+#: ../src/goabackend/goalastfmprovider.c:707
+#: ../src/goabackend/goalastfmprovider.c:855
+msgid "Error connecting to Last.fm"
+msgstr "Błąd podczas łączenia z serwisem Last.fm"
+
 #: ../src/goabackend/goamediaserverprovider.c:76
 msgid "Media Server"
 msgstr "Serwer multimediów"
@@ -540,61 +570,61 @@ msgstr "Pocket"
 msgid "No username or access_token"
 msgstr "Brak nazwy użytkownika lub access_token"
 
-#: ../src/goabackend/goaprovider.c:478
+#: ../src/goabackend/goaprovider.c:479
 msgid "_Mail"
 msgstr "_Poczta"
 
-#: ../src/goabackend/goaprovider.c:483
+#: ../src/goabackend/goaprovider.c:484
 msgid "Cale_ndar"
 msgstr "Kale_ndarz"
 
-#: ../src/goabackend/goaprovider.c:488
+#: ../src/goabackend/goaprovider.c:489
 msgid "_Contacts"
 msgstr "K_ontakty"
 
-#: ../src/goabackend/goaprovider.c:493
+#: ../src/goabackend/goaprovider.c:494
 msgid "C_hat"
 msgstr "_Komunikator"
 
-#: ../src/goabackend/goaprovider.c:498
+#: ../src/goabackend/goaprovider.c:499
 msgid "_Documents"
 msgstr "_Dokumenty"
 
-#: ../src/goabackend/goaprovider.c:503
+#: ../src/goabackend/goaprovider.c:504
 msgid "M_usic"
 msgstr "M_uzyka"
 
-#: ../src/goabackend/goaprovider.c:508
+#: ../src/goabackend/goaprovider.c:509
 msgid "_Photos"
 msgstr "_Zdjęcia"
 
-#: ../src/goabackend/goaprovider.c:513
+#: ../src/goabackend/goaprovider.c:514
 msgid "_Files"
 msgstr "_Pliki"
 
-#: ../src/goabackend/goaprovider.c:518
+#: ../src/goabackend/goaprovider.c:519
 msgid "Network _Resources"
 msgstr "_Zasoby sieciowe"
 
-#: ../src/goabackend/goaprovider.c:523
+#: ../src/goabackend/goaprovider.c:524
 msgid "_Read Later"
 msgstr "Prze_czytaj później"
 
-#: ../src/goabackend/goaprovider.c:528
+#: ../src/goabackend/goaprovider.c:529
 msgid "Prin_ters"
 msgstr "D_rukarki"
 
-#: ../src/goabackend/goaprovider.c:533
+#: ../src/goabackend/goaprovider.c:534
 msgid "_Maps"
 msgstr "_Mapy"
 
 #. Translators: This is a label for a series of
 #. * options switches. For example: “Use for Mail”.
-#: ../src/goabackend/goaprovider.c:562
+#: ../src/goabackend/goaprovider.c:563
 msgid "Use for"
 msgstr "Użycie dla"
 
-#: ../src/goabackend/goaprovider.c:801
+#: ../src/goabackend/goaprovider.c:802
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync nie zostało zaimplementowanie na typie %s"
