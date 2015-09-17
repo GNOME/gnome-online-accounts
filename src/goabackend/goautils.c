@@ -527,6 +527,28 @@ goa_utils_parse_email_address (const gchar *email, gchar **out_username, gchar *
 }
 
 void
+goa_utils_set_error_soup (GError **err, SoupMessage *msg)
+{
+  gchar *error_msg = NULL;
+  gint error_code = GOA_ERROR_FAILED; /* TODO: more specific */
+
+  switch (msg->status_code)
+    {
+    case SOUP_STATUS_UNAUTHORIZED:
+      error_msg = g_strdup (_("Authentication failed"));
+      error_code = GOA_ERROR_NOT_AUTHORIZED;
+      break;
+
+    default:
+      error_msg = g_strdup_printf (_("Code: %u — Unexpected response from server"), msg->status_code);
+      break;
+    }
+
+  g_set_error_literal (err, GOA_ERROR, error_code, error_msg);
+  g_free (error_msg);
+}
+
+void
 goa_utils_set_error_ssl (GError **err, GTlsCertificateFlags flags)
 {
   const gchar *error_msg;
