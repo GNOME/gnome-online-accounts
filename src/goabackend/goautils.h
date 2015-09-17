@@ -26,6 +26,7 @@
 #include <gio/gio.h>
 #include <glib.h>
 #include <gtk/gtk.h>
+#include <libsoup/soup.h>
 #include <goabackend/goabackendtypes.h>
 
 G_BEGIN_DECLS
@@ -77,6 +78,8 @@ void             goa_utils_keyfile_set_boolean (GoaAccount *account, const gchar
 void             goa_utils_keyfile_set_string (GoaAccount *account, const gchar *key, const gchar *value);
 
 gboolean         goa_utils_parse_email_address (const gchar *email, gchar **out_username, gchar **out_domain);
+
+void             goa_utils_set_error_soup (GError **err, SoupMessage *msg);
 
 void             goa_utils_set_error_ssl (GError **err, GTlsCertificateFlags flags);
 

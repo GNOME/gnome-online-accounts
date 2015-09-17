@@ -224,11 +224,8 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
     goto out;
   else if (status != SOUP_STATUS_OK)
     {
-      g_set_error (&error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Code: %u — Unexpected response from server"),
-                   status);
+      g_warning ("goa_ews_client_autodiscover() failed: %u — %s", msg->status_code, msg->reason_phrase);
+      goa_utils_set_error_soup (&error, msg);
       goto out;
     }
 
