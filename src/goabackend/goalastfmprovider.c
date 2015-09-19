@@ -225,14 +225,14 @@ lastfm_login_sync (GoaProvider                  *provider,
   json_obj = json_node_get_object (root);
   session_obj = json_node_get_object (json_object_get_member (json_obj, "session"));
 
-  if (g_strdup (json_object_get_string_member (session_obj, "name")) == NULL)
+  if (json_object_get_string_member (session_obj, "name") == NULL)
     {
       g_set_error (error, GOA_ERROR, GOA_ERROR_FAILED, _("Could not parse response"));
       goto out;
     }
 
 
-  if (g_strdup (json_object_get_string_member (session_obj, "key")) == NULL)
+  if (json_object_get_string_member (session_obj, "key") == NULL)
     {
       g_set_error (error, GOA_ERROR, GOA_ERROR_FAILED, _("Could not parse response"));
       goto out;
@@ -545,7 +545,7 @@ check_cb (RestProxyCall *call,
     }
   session_obj = json_node_get_object (session);
 
-  if (g_strdup (json_object_get_string_member (session_obj, "name")) == NULL)
+  if (json_object_get_string_member (session_obj, "name") == NULL)
     {
       g_set_error (&data->error, GOA_ERROR, GOA_ERROR_FAILED, _("Could not parse response"));
       goto out;
