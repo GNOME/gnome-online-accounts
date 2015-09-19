@@ -620,6 +620,10 @@ lastfm_login (GoaProvider                  *provider,
   rest_proxy_call_async (call, callback, NULL, data, &data->error);
 
   g_signal_connect (cancellable, "cancelled", G_CALLBACK (on_rest_proxy_call_cancelled_cb), call);
+
+  g_free (sig_md5);
+  g_free (sig);
+  g_object_unref (call);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
