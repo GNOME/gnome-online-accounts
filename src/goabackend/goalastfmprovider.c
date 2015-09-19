@@ -758,6 +758,7 @@ add_account (GoaProvider    *provider,
   else
     g_assert (ret != NULL);
 
+  g_free (data.access_token);
   g_free (data.account_object_path);
   if (data.loop != NULL)
     g_main_loop_unref (data.loop);
@@ -892,6 +893,7 @@ refresh_account (GoaProvider    *provider,
   gtk_widget_destroy (dialog);
   if (data.loop != NULL)
     g_main_loop_unref (data.loop);
+  g_free (data.access_token);
   g_clear_object (&data.cancellable);
   return ret;
 }
