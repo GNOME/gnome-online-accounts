@@ -1284,7 +1284,7 @@ update_identifier (GoaKerberosIdentity *self, GoaKerberosIdentity *new_identity)
   char *new_identifier;
 
   new_identifier = get_identifier (self, NULL);
-  if (g_strcmp0 (self->priv->identifier, new_identifier) != 0)
+  if (g_strcmp0 (self->priv->identifier, new_identifier) != 0 && new_identifier != NULL)
     {
       g_free (self->priv->identifier);
       self->priv->identifier = new_identifier;
