@@ -49,6 +49,10 @@ struct _GoaKerberosIdentityPrivate
 
   char *preauth_identity_source;
 
+  krb5_timestamp start_time;
+  guint          start_time_idle_id;
+  krb5_timestamp renewal_time;
+  guint          renewal_time_idle_id;
   krb5_timestamp expiration_time;
   guint          expiration_time_idle_id;
 
@@ -75,6 +79,8 @@ enum
   PROP_0,
   PROP_IDENTIFIER,
   PROP_IS_SIGNED_IN,
+  PROP_START_TIMESTAMP,
+  PROP_RENEWAL_TIMESTAMP,
   PROP_EXPIRATION_TIMESTAMP
 };
 
@@ -148,6 +154,16 @@ goa_kerberos_identity_get_property (GObject    *object,
       g_value_set_boolean (value,
                            goa_kerberos_identity_is_signed_in (GOA_IDENTITY (self)));
       break;
+    case PROP_START_TIMESTAMP:
+      G_LOCK (identity_lock);
+      g_value_set_int64 (value, (gint64) self->priv->start_time);
+      G_UNLOCK (identity_lock);
+      break;
+    case PROP_RENEWAL_TIMESTAMP:
+      G_LOCK (identity_lock);
+      g_value_set_int64 (value, (gint64) self->priv->renewal_time);
+      G_UNLOCK (identity_lock);
+      break;
     case PROP_EXPIRATION_TIMESTAMP:
       G_LOCK (identity_lock);
       g_value_set_int64 (value, (gint64) self->priv->expiration_time);
@@ -220,6 +236,12 @@ goa_kerberos_identity_class_init (GoaKerberosIdentityClass *klass)
 
   g_object_class_override_property (object_class, PROP_IDENTIFIER, "identifier");
   g_object_class_override_property (object_class, PROP_IS_SIGNED_IN, "is-signed-in");
+  g_object_class_override_property (object_class,
+                                    PROP_START_TIMESTAMP,
+                                    "start-timestamp");
+  g_object_class_override_property (object_class,
+                                    PROP_RENEWAL_TIMESTAMP,
+                                    "renewal-timestamp");
   g_object_class_override_property (object_class,
                                     PROP_EXPIRATION_TIMESTAMP,
                                     "expiration-timestamp");
@@ -573,6 +595,36 @@ queue_notify (GoaKerberosIdentity *self,
 }
 
 static gboolean
+set_start_time (GoaKerberosIdentity *self,
+                krb5_timestamp       start_time)
+{
+  if (self->priv->start_time != start_time)
+    {
+      self->priv->start_time = start_time;
+      queue_notify (self,
+                    &self->priv->start_time_idle_id,
+                    "start-timestamp");
+      return TRUE;
+    }
+  return FALSE;
+}
+
+static gboolean
+set_renewal_time (GoaKerberosIdentity *self,
+                  krb5_timestamp       renewal_time)
+{
+  if (self->priv->renewal_time != renewal_time)
+    {
+      self->priv->renewal_time = renewal_time;
+      queue_notify (self,
+                    &self->priv->renewal_time_idle_id,
+                    "renewal-timestamp");
+      return TRUE;
+    }
+  return FALSE;
+}
+
+static gboolean
 set_expiration_time (GoaKerberosIdentity *self,
                      krb5_timestamp       expiration_time)
 {
@@ -587,26 +639,45 @@ set_expiration_time (GoaKerberosIdentity *self,
   return FALSE;
 }
 
-static gboolean
-credentials_are_expired (GoaKerberosIdentity *self,
-                         krb5_creds          *credentials,
-                         krb5_timestamp      *expiration_time)
+static void
+examine_credentials (GoaKerberosIdentity *self,
+                     krb5_creds          *credentials,
+                     krb5_timestamp      *start_time,
+                     krb5_timestamp      *renewal_time,
+                     krb5_timestamp      *expiration_time,
+                     gboolean            *are_expired)
 {
+  krb5_timestamp credentials_start_time;
+  krb5_timestamp credentials_end_time;
   krb5_timestamp current_time;
 
-  current_time = get_current_time (self);
-
   G_LOCK (identity_lock);
+
+  if (credentials->times.starttime != 0)
+    credentials_start_time = credentials->times.starttime;
+  else
+    credentials_start_time = credentials->times.authtime;
+
+  *renewal_time = credentials->times.renew_till;
+
+  credentials_end_time = credentials->times.endtime;
+
+  if (self->priv->start_time == 0)
+    *start_time = credentials_start_time;
+  else
+    *start_time = MIN (self->priv->start_time,
+                       credentials_start_time);
   *expiration_time = MAX (credentials->times.endtime,
                           self->priv->expiration_time);
   G_UNLOCK (identity_lock);
 
-  if (credentials->times.endtime <= current_time)
-    {
-      return TRUE;
-    }
+  current_time = get_current_time (self);
 
-  return FALSE;
+  if (current_time < credentials_start_time ||
+      credentials_end_time <= current_time)
+    *are_expired = TRUE;
+  else
+    *are_expired = FALSE;
 }
 
 static VerificationLevel
@@ -618,6 +689,8 @@ verify_identity (GoaKerberosIdentity  *self,
   krb5_cc_cursor cursor;
   krb5_creds credentials;
   krb5_error_code error_code;
+  krb5_timestamp start_time = 0;
+  krb5_timestamp renewal_time = 0;
   krb5_timestamp expiration_time = 0;
   VerificationLevel verification_level = VERIFICATION_LEVEL_UNVERIFIED;
 
@@ -669,7 +742,15 @@ verify_identity (GoaKerberosIdentity  *self,
     {
       if (credentials_validate_existence (self, principal, &credentials))
         {
-          if (!credentials_are_expired (self, &credentials, &expiration_time))
+          gboolean credentials_are_expired = TRUE;
+
+          examine_credentials (self, &credentials,
+                               &start_time,
+                               &renewal_time,
+                               &expiration_time,
+                               &credentials_are_expired);
+
+          if (!credentials_are_expired)
             verification_level = VERIFICATION_LEVEL_SIGNED_IN;
           else
             verification_level = VERIFICATION_LEVEL_EXISTS;
@@ -720,6 +801,8 @@ verify_identity (GoaKerberosIdentity  *self,
 out:
 
   G_LOCK (identity_lock);
+  set_start_time (self, start_time);
+  set_renewal_time (self, renewal_time);
   set_expiration_time (self, expiration_time);
   G_UNLOCK (identity_lock);
 
@@ -894,14 +977,17 @@ disconnect_alarm_signals (GoaKerberosIdentity *self)
 static void
 connect_alarm_signals (GoaKerberosIdentity *self)
 {
-  g_signal_connect (G_OBJECT (self->priv->renewal_alarm),
-                    "fired",
-                    G_CALLBACK (on_renewal_alarm_fired),
-                    self);
-  g_signal_connect (G_OBJECT (self->priv->renewal_alarm),
-                    "rearmed",
-                    G_CALLBACK (on_renewal_alarm_rearmed),
-                    self);
+  if (self->priv->renewal_alarm)
+    {
+      g_signal_connect (G_OBJECT (self->priv->renewal_alarm),
+                        "fired",
+                        G_CALLBACK (on_renewal_alarm_fired),
+                        self);
+      g_signal_connect (G_OBJECT (self->priv->renewal_alarm),
+                        "rearmed",
+                        G_CALLBACK (on_renewal_alarm_rearmed),
+                        self);
+    }
   g_signal_connect (G_OBJECT (self->priv->expiring_alarm),
                     "fired",
                     G_CALLBACK (on_expiring_alarm_fired),
@@ -923,37 +1009,48 @@ connect_alarm_signals (GoaKerberosIdentity *self)
 static void
 reset_alarms (GoaKerberosIdentity *self)
 {
-  GDateTime *now;
-  GDateTime *expiration_time;
-  GDateTime *expiring_time;
-  GDateTime *renewal_time;
-  GTimeSpan time_span_until_expiration;
+  GDateTime *start_time = NULL;
+  GDateTime *expiration_time = NULL;
+  GDateTime *expiring_time = NULL;
+  GDateTime *latest_possible_renewal_time = NULL;
+  GDateTime *renewal_time = NULL;
 
-  now = g_date_time_new_now_local ();
   G_LOCK (identity_lock);
+  start_time = g_date_time_new_from_unix_local (self->priv->start_time);
+  if (self->priv->renewal_time != 0)
+    latest_possible_renewal_time = g_date_time_new_from_unix_local (self->priv->renewal_time);
   expiration_time = g_date_time_new_from_unix_local (self->priv->expiration_time);
   G_UNLOCK (identity_lock);
-  time_span_until_expiration = g_date_time_difference (expiration_time, now);
-  g_date_time_unref (now);
 
   /* Let the user reauthenticate 10 min before expiration */
   expiring_time = g_date_time_add_minutes (expiration_time, -10);
 
-  /* Try to quietly auto-renew halfway through so in ideal configurations
-   * the ticket is never more than halfway to expired
-   */
-  renewal_time = g_date_time_add (expiration_time,
-                                  -(time_span_until_expiration / 2));
+  if (latest_possible_renewal_time != NULL)
+    {
+      GTimeSpan lifespan;
+
+      lifespan = g_date_time_difference (expiration_time, start_time);
+
+      /* Try to quietly auto-renew halfway through so in ideal configurations
+       * the ticket is never more than halfway to unrenewable
+       */
+      renewal_time = g_date_time_add (start_time, lifespan / 2);
+    }
 
   disconnect_alarm_signals (self);
 
-  reset_alarm (self, &self->priv->renewal_alarm, renewal_time);
+  if (renewal_time != NULL)
+    reset_alarm (self, &self->priv->renewal_alarm, renewal_time);
+
   reset_alarm (self, &self->priv->expiring_alarm, expiring_time);
   reset_alarm (self, &self->priv->expiration_alarm, expiration_time);
 
-  g_date_time_unref (renewal_time);
-  g_date_time_unref (expiring_time);
-  g_date_time_unref (expiration_time);
+  g_clear_pointer (&expiring_time, g_date_time_unref);
+  g_clear_pointer (&renewal_time, g_date_time_unref);
+  g_clear_pointer (&expiration_time, g_date_time_unref);
+  g_clear_pointer (&latest_possible_renewal_time, g_date_time_unref);
+  g_clear_pointer (&start_time, g_date_time_unref);
+
   connect_alarm_signals (self);
 }
 
@@ -1376,6 +1473,8 @@ goa_kerberos_identity_update (GoaKerberosIdentity *self,
   G_LOCK (identity_lock);
   update_identifier (self, new_identity);
 
+  time_changed |= set_start_time (self, new_identity->priv->start_time);
+  time_changed |= set_renewal_time (self, new_identity->priv->renewal_time);
   time_changed |= set_expiration_time (self, new_identity->priv->expiration_time);
   old_verification_level = self->priv->cached_verification_level;
   new_verification_level = new_identity->priv->cached_verification_level;

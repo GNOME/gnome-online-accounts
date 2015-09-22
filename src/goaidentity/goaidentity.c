@@ -40,6 +40,20 @@ goa_identity_default_init (GoaIdentityInterface *interface)
                                                              FALSE,
                                                              G_PARAM_READABLE));
   g_object_interface_install_property (interface,
+                                       g_param_spec_int64 ("start-timestamp",
+                                                           "Start Timestamp",
+                                                           "A timestamp of when the identities credentials first became valid",
+                                                           -1,
+                                                           G_MAXINT64,
+                                                           -1, G_PARAM_READABLE));
+  g_object_interface_install_property (interface,
+                                       g_param_spec_int64 ("renewal-timestamp",
+                                                           "Renewal Timestamp",
+                                                           "A timestamp of when the identities credentials can no longer be renewed",
+                                                           -1,
+                                                           G_MAXINT64,
+                                                           -1, G_PARAM_READABLE));
+  g_object_interface_install_property (interface,
                                        g_param_spec_int64 ("expiration-timestamp",
                                                            "Expiration Timestamp",
                                                            "A timestamp of when the identities credentials expire",
