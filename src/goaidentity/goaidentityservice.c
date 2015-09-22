@@ -751,15 +751,16 @@ on_identity_needs_renewal (GoaIdentityManager *identity_manager,
 
   principal = goa_identity_get_identifier (identity);
 
-  g_debug ("GoaIdentityService: identity %s needs renewal", principal);
-
   object = find_object_with_principal (self, principal, TRUE);
 
-  if (object != NULL)
+  if (object != NULL && should_ignore_object (self, object))
     {
-      should_ignore_object (self, object);
+      g_debug ("GoaIdentityService: ignoring identity %s that says it needs renewal", principal);
+
       return;
     }
+
+  g_debug ("GoaIdentityService: identity %s needs renewal", principal);
 
   goa_identity_manager_renew_identity (GOA_IDENTITY_MANAGER
                                        (self->priv->identity_manager),
