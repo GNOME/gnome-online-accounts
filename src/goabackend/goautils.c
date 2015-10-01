@@ -534,6 +534,19 @@ goa_utils_set_error_soup (GError **err, SoupMessage *msg)
 
   switch (msg->status_code)
     {
+    case SOUP_STATUS_CANT_RESOLVE:
+      error_msg = g_strdup (_("Cannot resolve hostname"));
+      break;
+
+    case SOUP_STATUS_CANT_RESOLVE_PROXY:
+      error_msg = g_strdup (_("Cannot resolve proxy hostname"));
+      break;
+
+    case SOUP_STATUS_INTERNAL_SERVER_ERROR:
+    case SOUP_STATUS_NOT_FOUND:
+      error_msg = g_strdup (_("Cannot find WebDAV endpoint"));
+      break;
+
     case SOUP_STATUS_UNAUTHORIZED:
       error_msg = g_strdup (_("Authentication failed"));
       error_code = GOA_ERROR_NOT_AUTHORIZED;
