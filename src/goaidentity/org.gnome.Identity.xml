@@ -28,6 +28,7 @@
   <interface name="org.gnome.Identity.Manager">
 
     <method name="ExchangeSecretKeys">
+      <arg name="identifier" type="s" direction="in"/>
       <arg name="input_key" type="s" direction="in"/>
       <arg name="output_key" type="s" direction="out"/>
     </method>

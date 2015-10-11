@@ -1494,6 +1494,7 @@ sign_in_identity_sync (GoaKerberosProvider  *self,
 
   g_mutex_lock (&identity_manager_mutex);
   keys_exchanged = goa_identity_service_manager_call_exchange_secret_keys_sync (identity_manager,
+                                                                                identifier,
                                                                                 secret_key,
                                                                                 &return_key,
                                                                                 cancellable,
