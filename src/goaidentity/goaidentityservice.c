@@ -363,9 +363,14 @@ goa_identity_service_handle_sign_in (GoaIdentityServiceManager *manager,
   if (secret_key != NULL)
     {
       GcrSecretExchange *secret_exchange;
+      gchar *key;
 
-      secret_exchange = g_hash_table_lookup (self->priv->key_holders,
-                                             g_dbus_method_invocation_get_sender (invocation));
+      key = g_strdup_printf ("%s %s",
+                             g_dbus_method_invocation_get_sender (invocation),
+                             identifier);
+
+      secret_exchange = g_hash_table_lookup (self->priv->key_holders, key);
+      g_free (key);
 
       if (secret_exchange == NULL)
         {
@@ -553,10 +558,12 @@ on_caller_watched (GDBusConnection    *connection,
 {
   GoaIdentityService    *self;
   GcrSecretExchange     *secret_exchange;
+  const char            *identifier;
   const char            *input_key;
   char                  *output_key;
 
   self = GOA_IDENTITY_SERVICE (g_async_result_get_source_object (G_ASYNC_RESULT (operation_result)));
+  identifier = g_object_get_data (G_OBJECT (operation_result), "identifier");
   input_key = g_object_get_data (G_OBJECT (operation_result), "input-key");
 
   secret_exchange = gcr_secret_exchange_new (NULL);
@@ -574,7 +581,7 @@ on_caller_watched (GDBusConnection    *connection,
     }
 
   g_hash_table_insert (self->priv->key_holders,
-                       g_strdup (name_owner),
+                       g_strdup_printf ("%s %s", name_owner, identifier),
                        secret_exchange);
 
   output_key = gcr_secret_exchange_send (secret_exchange, NULL, 0);
@@ -607,6 +614,7 @@ on_caller_vanished (GDBusConnection    *connection,
 static gboolean
 goa_identity_service_handle_exchange_secret_keys (GoaIdentityServiceManager *manager,
                                                   GDBusMethodInvocation     *invocation,
+                                                  const char                *identifier,
                                                   const char                *input_key)
 {
   GoaIdentityService     *self = GOA_IDENTITY_SERVICE (manager);
@@ -624,6 +632,11 @@ goa_identity_service_handle_exchange_secret_keys (GoaIdentityServiceManager *man
   g_simple_async_result_set_check_cancellable (operation_result, cancellable);
   g_object_set_data (G_OBJECT (operation_result), "cancellable", cancellable);
 
+  g_object_set_data_full (G_OBJECT (operation_result),
+                          "identifier",
+                          g_strdup (identifier),
+                          (GDestroyNotify)
+                          g_free);
   g_object_set_data_full (G_OBJECT (operation_result),
                           "input-key",
                           g_strdup (input_key),
