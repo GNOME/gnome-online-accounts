@@ -284,7 +284,16 @@ get_ticket_sync (GoaKerberosProvider *self,
   account = goa_object_peek_account (object);
   identifier = goa_account_get_identity (account);
 
-  ticketing = goa_object_get_ticketing (GOA_OBJECT (object));
+  ticketing = goa_object_get_ticketing (object);
+  if (ticketing == NULL)
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_NOT_SUPPORTED,
+                   _("Ticketing is disabled for account"));
+      return FALSE;
+    }
+
   details = goa_ticketing_get_details (ticketing);
 
   preauth_source = NULL;
