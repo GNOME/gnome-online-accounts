@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-online-accounts 3.17.x\n"
+"Project-Id-Version: gnome-online-accounts 3.18.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-21 23:57+0200\n"
-"PO-Revision-Date: 2015-09-21 23:58+0200\n"
+"POT-Creation-Date: 2015-10-18 19:26+0200\n"
+"PO-Revision-Date: 2015-10-18 19:27+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
@@ -142,8 +142,8 @@ msgstr "Kobler til …"
 #: ../src/goabackend/goaimapsmtpprovider.c:1318
 #: ../src/goabackend/goaimapsmtpprovider.c:1391
 #: ../src/goabackend/goakerberosprovider.c:1142
-#: ../src/goabackend/goalastfmprovider.c:659
-#: ../src/goabackend/goalastfmprovider.c:825
+#: ../src/goabackend/goalastfmprovider.c:663
+#: ../src/goabackend/goalastfmprovider.c:830
 #: ../src/goabackend/goamediaserverprovider.c:475
 #: ../src/goabackend/goaoauth2provider.c:1034
 #: ../src/goabackend/goaoauthprovider.c:863
@@ -162,8 +162,8 @@ msgstr "Dialogen ble forkastet"
 #: ../src/goabackend/goaimapsmtpprovider.c:1089
 #: ../src/goabackend/goaimapsmtpprovider.c:1342
 #: ../src/goabackend/goaimapsmtpprovider.c:1416
-#: ../src/goabackend/goalastfmprovider.c:693
-#: ../src/goabackend/goalastfmprovider.c:844
+#: ../src/goabackend/goalastfmprovider.c:697
+#: ../src/goabackend/goalastfmprovider.c:849
 #: ../src/goabackend/goaowncloudprovider.c:821
 #: ../src/goabackend/goaowncloudprovider.c:1015
 #, c-format
@@ -184,8 +184,8 @@ msgstr "_Ignorer"
 #: ../src/goabackend/goaimapsmtpprovider.c:1361
 #: ../src/goabackend/goaimapsmtpprovider.c:1435
 #: ../src/goabackend/goakerberosprovider.c:1252
-#: ../src/goabackend/goalastfmprovider.c:705
-#: ../src/goabackend/goalastfmprovider.c:861
+#: ../src/goabackend/goalastfmprovider.c:709
+#: ../src/goabackend/goalastfmprovider.c:866
 #: ../src/goabackend/goaowncloudprovider.c:839
 #: ../src/goabackend/goaowncloudprovider.c:1034
 msgid "_Try Again"
@@ -272,7 +272,7 @@ msgstr "Tjenesten er ikke tilgjengelig"
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:115
 #: ../src/goabackend/goalastfmprovider.c:543
-#: ../src/goabackend/goasmtpauth.c:113 ../src/goabackend/goautils.c:538
+#: ../src/goabackend/goasmtpauth.c:113 ../src/goabackend/goautils.c:551
 #, c-format
 msgid "Authentication failed"
 msgstr "Autentisering feilet"
@@ -407,7 +407,7 @@ msgid "Enterprise domain or realm name"
 msgstr "Bedriftsdomene eller områdenavn"
 
 #: ../src/goabackend/goakerberosprovider.c:948
-#: ../src/goaidentity/goaidentityservice.c:1119
+#: ../src/goaidentity/goaidentityservice.c:1132
 msgid "Log In to Realm"
 msgstr "Logg inn i område"
 
@@ -428,7 +428,7 @@ msgstr "Domenet er ikke gyldig"
 msgid "Error connecting to enterprise identity server"
 msgstr "Feil ved tilkobling til bedriftens identitetstjener"
 
-#: ../src/goabackend/goakerberosprovider.c:1512
+#: ../src/goabackend/goakerberosprovider.c:1513
 #, c-format
 msgid "Identity service returned invalid key"
 msgstr "Identitetstjenesten returnerte en ugyldig nøkkel"
@@ -437,8 +437,8 @@ msgstr "Identitetstjenesten returnerte en ugyldig nøkkel"
 msgid "Last.fm"
 msgstr "Last.fm"
 
-#: ../src/goabackend/goalastfmprovider.c:707
-#: ../src/goabackend/goalastfmprovider.c:855
+#: ../src/goabackend/goalastfmprovider.c:711
+#: ../src/goabackend/goalastfmprovider.c:860
 msgid "Error connecting to Last.fm"
 msgstr "Feil ved tilkobling til Last.fm"
 
@@ -742,16 +742,28 @@ msgstr "GOA %s påloggingsinformasjon for identitet %s"
 msgid "Failed to store credentials in the keyring"
 msgstr "Klarte ikke å lagre påloggingsinformasjon på nøkkelringen"
 
-#: ../src/goabackend/goautils.c:543
+#: ../src/goabackend/goautils.c:538
+msgid "Cannot resolve hostname"
+msgstr "Klarte ikke å slå opp vertsnavn"
+
+#: ../src/goabackend/goautils.c:542
+msgid "Cannot resolve proxy hostname"
+msgstr "Kan ikke slå opp vertsnavn for proxy"
+
+#: ../src/goabackend/goautils.c:547
+msgid "Cannot find WebDAV endpoint"
+msgstr "Fant ikke endepunkt for WebDAV"
+
+#: ../src/goabackend/goautils.c:556
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Kode: %u - Uventet svar fra tjener"
 
-#: ../src/goabackend/goautils.c:559
+#: ../src/goabackend/goautils.c:572
 msgid "The signing certificate authority is not known."
 msgstr "Signerende sertifikatautoritet er ikke kjent."
 
-#: ../src/goabackend/goautils.c:563
+#: ../src/goabackend/goautils.c:576
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
@@ -759,23 +771,23 @@ msgstr ""
 "Sertifikatet stemmer ikke overens med forventet identitet for nettstedet det "
 "ble hentet fra."
 
-#: ../src/goabackend/goautils.c:568
+#: ../src/goabackend/goautils.c:581
 msgid "The certificate’s activation time is still in the future."
 msgstr "Sertifikatets aktiviseringstidspunkt er fortsatt i fremtiden."
 
-#: ../src/goabackend/goautils.c:572
+#: ../src/goabackend/goautils.c:585
 msgid "The certificate has expired."
 msgstr "Sertifikatet har utløpt."
 
-#: ../src/goabackend/goautils.c:576
+#: ../src/goabackend/goautils.c:589
 msgid "The certificate has been revoked."
 msgstr "Sertifikatet har blitt tilbaketrukket."
 
-#: ../src/goabackend/goautils.c:580
+#: ../src/goabackend/goautils.c:593
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Sertifikatets algoritme blir sett på som usikker."
 
-#: ../src/goabackend/goautils.c:584
+#: ../src/goabackend/goautils.c:597
 msgid "Invalid certificate."
 msgstr "Ugyldig sertifikat."
 
@@ -789,15 +801,15 @@ msgstr "Laster «%s» …"
 msgid "Microsoft Account"
 msgstr "Microsoft-konto"
 
-#: ../src/goaidentity/goaidentityservice.c:376
+#: ../src/goaidentity/goaidentityservice.c:381
 msgid "initial secret passed before secret key exchange"
 msgstr "Opprinnelig hemmelighet videresendt før utveksling av hemmelig nøkkel"
 
-#: ../src/goaidentity/goaidentityservice.c:570
+#: ../src/goaidentity/goaidentityservice.c:577
 msgid "Initial secret key is invalid"
 msgstr "Opprinnelig hemmelig nøkkel er ugyldig"
 
-#: ../src/goaidentity/goaidentityservice.c:1124
+#: ../src/goaidentity/goaidentityservice.c:1137
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "Nettverksområde %s trenger informasjon for å logge deg inn."
