@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-19 07:40+0000\n"
-"PO-Revision-Date: 2015-09-19 11:55+0200\n"
+"POT-Creation-Date: 2015-10-24 20:23+0000\n"
+"PO-Revision-Date: 2015-10-24 23:46+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Gtranslator 2.91.6\n"
+"X-Generator: Gtranslator 2.91.7\n"
 
 #. TODO: more specific
 #: ../src/daemon/goadaemon.c:830 ../src/daemon/goadaemon.c:1090
@@ -143,8 +143,8 @@ msgstr "Připojuje se…"
 #: ../src/goabackend/goaimapsmtpprovider.c:1318
 #: ../src/goabackend/goaimapsmtpprovider.c:1391
 #: ../src/goabackend/goakerberosprovider.c:1142
-#: ../src/goabackend/goalastfmprovider.c:659
-#: ../src/goabackend/goalastfmprovider.c:825
+#: ../src/goabackend/goalastfmprovider.c:663
+#: ../src/goabackend/goalastfmprovider.c:830
 #: ../src/goabackend/goamediaserverprovider.c:475
 #: ../src/goabackend/goaoauth2provider.c:1034
 #: ../src/goabackend/goaoauthprovider.c:863
@@ -163,8 +163,8 @@ msgstr "Dialogové okno bylo zavřeno"
 #: ../src/goabackend/goaimapsmtpprovider.c:1089
 #: ../src/goabackend/goaimapsmtpprovider.c:1342
 #: ../src/goabackend/goaimapsmtpprovider.c:1416
-#: ../src/goabackend/goalastfmprovider.c:693
-#: ../src/goabackend/goalastfmprovider.c:844
+#: ../src/goabackend/goalastfmprovider.c:697
+#: ../src/goabackend/goalastfmprovider.c:849
 #: ../src/goabackend/goaowncloudprovider.c:821
 #: ../src/goabackend/goaowncloudprovider.c:1015
 #, c-format
@@ -185,8 +185,8 @@ msgstr "_Ignorovat"
 #: ../src/goabackend/goaimapsmtpprovider.c:1361
 #: ../src/goabackend/goaimapsmtpprovider.c:1435
 #: ../src/goabackend/goakerberosprovider.c:1252
-#: ../src/goabackend/goalastfmprovider.c:705
-#: ../src/goabackend/goalastfmprovider.c:861
+#: ../src/goabackend/goalastfmprovider.c:709
+#: ../src/goabackend/goalastfmprovider.c:866
 #: ../src/goabackend/goaowncloudprovider.c:839
 #: ../src/goabackend/goaowncloudprovider.c:1034
 msgid "_Try Again"
@@ -272,7 +272,7 @@ msgstr "Služba není dostupná"
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:115
 #: ../src/goabackend/goalastfmprovider.c:543
-#: ../src/goabackend/goasmtpauth.c:113 ../src/goabackend/goautils.c:538
+#: ../src/goabackend/goasmtpauth.c:113 ../src/goabackend/goautils.c:551
 #, c-format
 msgid "Authentication failed"
 msgstr "Autentizace selhala"
@@ -407,7 +407,7 @@ msgid "Enterprise domain or realm name"
 msgstr "Název podnikové domény nebo sféry"
 
 #: ../src/goabackend/goakerberosprovider.c:948
-#: ../src/goaidentity/goaidentityservice.c:1119
+#: ../src/goaidentity/goaidentityservice.c:1132
 msgid "Log In to Realm"
 msgstr "Přihlášení do sféry"
 
@@ -428,7 +428,7 @@ msgstr "Doména není platná"
 msgid "Error connecting to enterprise identity server"
 msgstr "Chyba připojování k serveru s podnikovými identitami"
 
-#: ../src/goabackend/goakerberosprovider.c:1512
+#: ../src/goabackend/goakerberosprovider.c:1513
 #, c-format
 msgid "Identity service returned invalid key"
 msgstr "Služba identit vrátila neplatný klíč"
@@ -437,8 +437,8 @@ msgstr "Služba identit vrátila neplatný klíč"
 msgid "Last.fm"
 msgstr "Last.fm"
 
-#: ../src/goabackend/goalastfmprovider.c:707
-#: ../src/goabackend/goalastfmprovider.c:855
+#: ../src/goabackend/goalastfmprovider.c:711
+#: ../src/goabackend/goalastfmprovider.c:860
 msgid "Error connecting to Last.fm"
 msgstr "Chyba připojování k Last.fm"
 
@@ -741,39 +741,51 @@ msgstr "Pověření %s od GOA pro identitu %s"
 msgid "Failed to store credentials in the keyring"
 msgstr "Selhalo uložení pověření do klíčenky"
 
-#: ../src/goabackend/goautils.c:543
+#: ../src/goabackend/goautils.c:538
+msgid "Cannot resolve hostname"
+msgstr "Nelze přeložit na adresu název počítače"
+
+#: ../src/goabackend/goautils.c:542
+msgid "Cannot resolve proxy hostname"
+msgstr "Nelze přeložit na adresu název počítače s proxy"
+
+#: ../src/goabackend/goautils.c:547
+msgid "Cannot find WebDAV endpoint"
+msgstr "Nelze najít koncový bod WebDAV"
+
+#: ../src/goabackend/goautils.c:556
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Kód: %u – neočekávaná odpověď od serveru"
 
-#: ../src/goabackend/goautils.c:559
+#: ../src/goabackend/goautils.c:572
 msgid "The signing certificate authority is not known."
 msgstr "Podepisující certifikační autorita není známa."
 
-#: ../src/goabackend/goautils.c:563
+#: ../src/goabackend/goautils.c:576
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr ""
 "Certifikát neodpovídá očekávané identitě serveru, ze kterého byl získán."
 
-#: ../src/goabackend/goautils.c:568
+#: ../src/goabackend/goautils.c:581
 msgid "The certificate’s activation time is still in the future."
 msgstr "Čas aktivace certifikátu se zatím nachází v budoucnosti."
 
-#: ../src/goabackend/goautils.c:572
+#: ../src/goabackend/goautils.c:585
 msgid "The certificate has expired."
 msgstr "Certifikátu vypršela platnost."
 
-#: ../src/goabackend/goautils.c:576
+#: ../src/goabackend/goautils.c:589
 msgid "The certificate has been revoked."
 msgstr "Certifikát byl odvolán."
 
-#: ../src/goabackend/goautils.c:580
+#: ../src/goabackend/goautils.c:593
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Algoritmus certifikátu není považován za bezpečný."
 
-#: ../src/goabackend/goautils.c:584
+#: ../src/goabackend/goautils.c:597
 msgid "Invalid certificate."
 msgstr "Neplatný certifikát."
 
@@ -787,15 +799,15 @@ msgstr "Načítá se „%s“…"
 msgid "Microsoft Account"
 msgstr "Účet Microsoft"
 
-#: ../src/goaidentity/goaidentityservice.c:376
+#: ../src/goaidentity/goaidentityservice.c:381
 msgid "initial secret passed before secret key exchange"
 msgstr "počáteční tajné heslo předané před výměnou tajných klíčů"
 
-#: ../src/goaidentity/goaidentityservice.c:570
+#: ../src/goaidentity/goaidentityservice.c:577
 msgid "Initial secret key is invalid"
 msgstr "Počáteční tajný klíč je neplatný"
 
-#: ../src/goaidentity/goaidentityservice.c:1124
+#: ../src/goaidentity/goaidentityservice.c:1137
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr ""
