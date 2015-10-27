@@ -161,7 +161,7 @@ on_config_file_monitor_timeout (gpointer user_data)
   GoaDaemon *self = GOA_DAEMON (user_data);
 
   self->config_timeout_id = 0;
-  g_info ("Reloading configuration files\n");
+  g_debug ("Reloading configuration files");
   goa_daemon_reload_configuration (self);
 
   return G_SOURCE_REMOVE;
@@ -188,7 +188,7 @@ on_check_credentials_timeout (gpointer user_data)
   GoaDaemon *self = GOA_DAEMON (user_data);
 
   self->credentials_timeout_id = 0;
-  g_info ("Checking credentials\n");
+  g_debug ("Checking credentials");
   goa_daemon_check_credentials (self);
 
   return G_SOURCE_REMOVE;
