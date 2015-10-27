@@ -1725,6 +1725,9 @@ on_handle_get_access_token (GoaOAuth2Based        *interface,
   GoaAccount *account;
   GoaProvider *provider;
   GError *error;
+  const gchar *id;
+  const gchar *method_name;
+  const gchar *provider_type;
   gchar *access_token;
   gint access_token_expires_in;
 
@@ -1734,7 +1737,13 @@ on_handle_get_access_token (GoaOAuth2Based        *interface,
 
   object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (interface)));
   account = goa_object_peek_account (object);
-  provider = goa_provider_get_for_provider_type (goa_account_get_provider_type (account));
+
+  id = goa_account_get_id (account);
+  provider_type = goa_account_get_provider_type (account);
+  method_name = g_dbus_method_invocation_get_method_name (invocation);
+  g_debug ("Handling %s for account (%s, %s)", method_name, provider_type, id);
+
+  provider = goa_provider_get_for_provider_type (provider_type);
 
   error = NULL;
   access_token = goa_oauth2_provider_get_access_token_sync (GOA_OAUTH2_PROVIDER (provider),

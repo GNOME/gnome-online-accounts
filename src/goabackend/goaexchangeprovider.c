@@ -988,7 +988,10 @@ on_handle_get_password (GoaPasswordBased      *interface,
   GoaProvider *provider;
   GError *error;
   GVariant *credentials;
+  const gchar *account_id;
   const gchar *identity;
+  const gchar *method_name;
+  const gchar *provider_type;
   gchar *password;
 
   /* TODO: maybe log what app is requesting access */
@@ -999,7 +1002,13 @@ on_handle_get_password (GoaPasswordBased      *interface,
   object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (interface)));
   account = goa_object_peek_account (object);
   identity = goa_account_get_identity (account);
-  provider = goa_provider_get_for_provider_type (goa_account_get_provider_type (account));
+
+  account_id = goa_account_get_id (account);
+  provider_type = goa_account_get_provider_type (account);
+  method_name = g_dbus_method_invocation_get_method_name (invocation);
+  g_debug ("Handling %s for account (%s, %s)", method_name, provider_type, account_id);
+
+  provider = goa_provider_get_for_provider_type (provider_type);
 
   error = NULL;
   credentials = goa_utils_lookup_credentials_sync (provider,
