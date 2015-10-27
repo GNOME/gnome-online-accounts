@@ -1228,17 +1228,26 @@ on_account_handle_ensure_credentials (GoaAccount            *account,
   GoaDaemon *self = GOA_DAEMON (user_data);
   GoaProvider *provider = NULL;
   GoaObject *object;
+  const gchar *id;
+  const gchar *method_name;
+  const gchar *provider_type;
+
+  id = goa_account_get_id (account);
+  provider_type = goa_account_get_provider_type (account);
+  method_name = g_dbus_method_invocation_get_method_name (invocation);
+  g_debug ("Handling %s for account (%s, %s)", method_name, provider_type, id);
 
   object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (account)));
-  provider = goa_provider_get_for_provider_type (goa_account_get_provider_type (account));
+  provider = goa_provider_get_for_provider_type (provider_type);
+
   if (provider == NULL)
     {
       g_dbus_method_invocation_return_error (invocation,
                                              GOA_ERROR,
                                              GOA_ERROR_FAILED,
                                              "Unsupported account type %s for id %s (no provider)",
-                                             goa_account_get_provider_type (account),
-                                             goa_account_get_id (account));
+                                             provider_type,
+                                             id);
       goto out;
     }
 
