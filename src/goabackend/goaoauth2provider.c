@@ -277,9 +277,9 @@ goa_oauth2_provider_process_redirect_url (GoaOAuth2Provider  *provider,
                                           gchar             **authorization_code,
                                           GError            **error)
 {
-  g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (provider), NULL);
-  g_return_val_if_fail (redirect_url != NULL, NULL);
-  g_return_val_if_fail (authorization_code != NULL, NULL);
+  g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (redirect_url != NULL, FALSE);
+  g_return_val_if_fail (authorization_code != NULL, FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   return GOA_OAUTH2_PROVIDER_GET_CLASS (provider)->process_redirect_url (provider,
