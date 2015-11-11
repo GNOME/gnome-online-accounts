@@ -25,8 +25,9 @@ service_DATA     = $(service_in_files:.service.in=.service)
 
 EXTRA_DIST =						\
 	$(gsettings_in_files)				\
-	$(service_in_files)				\
 	dbus-interfaces.xml				\
+	org.gnome.Identity.service.in			\
+	org.gnome.OnlineAccounts.service.in		\
 	$(NULL)
 
 DISTCLEANFILES =					\
