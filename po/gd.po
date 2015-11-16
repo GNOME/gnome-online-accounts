@@ -3,16 +3,16 @@
 # This file is distributed under the same license as the gnome-online-accounts package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
 # alasdair caimbeul <alexd@garrit.freeserve.co.uk>, 2013.
-# GunChleoc <fios@foramnagaidhlig.net>, 2013, 2014.
+# GunChleoc <fios@foramnagaidhlig.net>, 2013, 2014, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-07-11 06:55+0000\n"
-"PO-Revision-Date: 2014-07-11 11:24+0100\n"
+"POT-Creation-Date: 2015-11-16 09:30+0000\n"
+"PO-Revision-Date: 2015-11-16 15:27+0100\n"
 "Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
-"Language-Team: Fòram na Gàidhlig http://www.foramnagaidhlig.net\n"
+"Language-Team: Fòram na Gàidhlig\n"
 "Language: gd\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,38 +24,37 @@ msgstr ""
 "X-Project-Style: gnome\n"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:783 ../src/daemon/goadaemon.c:1029
+#: ../src/daemon/goadaemon.c:830 ../src/daemon/goadaemon.c:1090
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Cha b' urrainn dhuinn solaraiche a lorg airson: %s"
 
+#: ../src/daemon/goadaemon.c:1018
+#| msgid "ProviderType property is not set for account"
+msgid "IsLocked property is set for account"
+msgstr "Chaidh an roghainn IsLocked a shuidheachadh airson a' chunntais"
+
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1017
+#: ../src/daemon/goadaemon.c:1078
 msgid "ProviderType property is not set for account"
 msgstr "Cha deach an roghainn ProviderType a shuidheachadh airson a' chunntais"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:228 ../src/goabackend/goahttpclient.c:170
-#, c-format
-msgid "Code: %u — Unexpected response from server"
-msgstr "Còd: %u — Freagairt ris nach robh dùil on fhrithealaiche"
-
-#. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:244
+#: ../src/goabackend/goaewsclient.c:250
 #, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "Cha b' urrainn dhuinn XML freagairt an Autodiscover a pharsadh"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: ../src/goabackend/goaewsclient.c:255 ../src/goabackend/goaewsclient.c:270
-#: ../src/goabackend/goaewsclient.c:285
+#: ../src/goabackend/goaewsclient.c:261 ../src/goabackend/goaewsclient.c:276
+#: ../src/goabackend/goaewsclient.c:291
 #, c-format
 msgid "Failed to find ‘%s’ element"
 msgstr "Cha b' urrainn dhuinn an eileamaid \"%s\" a lorg"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:306
+#: ../src/goabackend/goaewsclient.c:312
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr ""
@@ -67,9 +66,10 @@ msgstr "Microsoft Exchange"
 
 #. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:311
-#: ../src/goabackend/goaexchangeprovider.c:1020
-#: ../src/goabackend/goaowncloudprovider.c:398
-#: ../src/goabackend/goaowncloudprovider.c:1183
+#: ../src/goabackend/goaexchangeprovider.c:994
+#: ../src/goabackend/goalastfmprovider.c:286
+#: ../src/goabackend/goaowncloudprovider.c:391
+#: ../src/goabackend/goaowncloudprovider.c:1145
 #, c-format
 msgid "Did not find password with identity ‘%s’ in credentials"
 msgstr "Cha do lorg sinn facal-faire leis an aithne \"%s\" sna teisteasan"
@@ -79,21 +79,23 @@ msgstr "Cha do lorg sinn facal-faire leis an aithne \"%s\" sna teisteasan"
 #. * (%s, %d) is the error domain and code.
 #.
 #: ../src/goabackend/goaexchangeprovider.c:339
-#: ../src/goabackend/goaowncloudprovider.c:421
+#: ../src/goabackend/goalastfmprovider.c:302
+#: ../src/goabackend/goaowncloudprovider.c:414
 #, c-format
 msgid "Invalid password with username ‘%s’ (%s, %d): "
 msgstr ""
 "Facal-faire mì-dhligheach airson an ainm-chleachdaiche \"%s\" (%s, %d): "
 
 #: ../src/goabackend/goaexchangeprovider.c:492
-#: ../src/goabackend/goaimapsmtpprovider.c:715
+#: ../src/goabackend/goaimapsmtpprovider.c:700
 msgid "_E-mail"
 msgstr "Post-_d"
 
 #: ../src/goabackend/goaexchangeprovider.c:493
-#: ../src/goabackend/goaimapsmtpprovider.c:735
-#: ../src/goabackend/goaimapsmtpprovider.c:755
-#: ../src/goabackend/goaowncloudprovider.c:649
+#: ../src/goabackend/goaimapsmtpprovider.c:720
+#: ../src/goabackend/goaimapsmtpprovider.c:740
+#: ../src/goabackend/goalastfmprovider.c:443
+#: ../src/goabackend/goaowncloudprovider.c:642
 msgid "_Password"
 msgstr "_Facal-faire"
 
@@ -102,53 +104,59 @@ msgid "_Custom"
 msgstr "_Gnàthaichte"
 
 #: ../src/goabackend/goaexchangeprovider.c:507
-#: ../src/goabackend/goaimapsmtpprovider.c:734
-#: ../src/goabackend/goaimapsmtpprovider.c:754
-#: ../src/goabackend/goakerberosprovider.c:1123
-#: ../src/goabackend/goaowncloudprovider.c:648
+#: ../src/goabackend/goaimapsmtpprovider.c:719
+#: ../src/goabackend/goaimapsmtpprovider.c:739
+#: ../src/goabackend/goakerberosprovider.c:727
+#: ../src/goabackend/goalastfmprovider.c:442
+#: ../src/goabackend/goaowncloudprovider.c:641
 msgid "User_name"
 msgstr "Ai_nm-chleachdaiche"
 
 #: ../src/goabackend/goaexchangeprovider.c:508
-#: ../src/goabackend/goaowncloudprovider.c:647
+#: ../src/goabackend/goaowncloudprovider.c:640
 msgid "_Server"
 msgstr "F_rithealaiche"
 
 #. --
 #: ../src/goabackend/goaexchangeprovider.c:518
-#: ../src/goabackend/goaimapsmtpprovider.c:767
-#: ../src/goabackend/goakerberosprovider.c:1128
-#: ../src/goabackend/goaowncloudprovider.c:658
+#: ../src/goabackend/goaimapsmtpprovider.c:752
+#: ../src/goabackend/goakerberosprovider.c:732
+#: ../src/goabackend/goalastfmprovider.c:451
+#: ../src/goabackend/goaowncloudprovider.c:651
 #: ../src/goabackend/goatelepathyprovider.c:649
 msgid "_Cancel"
 msgstr "_Sguir dheth"
 
 #: ../src/goabackend/goaexchangeprovider.c:519
-#: ../src/goabackend/goakerberosprovider.c:1129
-#: ../src/goabackend/goaowncloudprovider.c:659
+#: ../src/goabackend/goakerberosprovider.c:733
+#: ../src/goabackend/goalastfmprovider.c:452
+#: ../src/goabackend/goaowncloudprovider.c:652
 msgid "C_onnect"
 msgstr "_Ceangail"
 
 #: ../src/goabackend/goaexchangeprovider.c:535
-#: ../src/goabackend/goaimapsmtpprovider.c:784
-#: ../src/goabackend/goakerberosprovider.c:1145
-#: ../src/goabackend/goaowncloudprovider.c:675
+#: ../src/goabackend/goaimapsmtpprovider.c:769
+#: ../src/goabackend/goakerberosprovider.c:749
+#: ../src/goabackend/goalastfmprovider.c:468
+#: ../src/goabackend/goaowncloudprovider.c:668
 msgid "Connecting…"
 msgstr "'Ga cheangal..."
 
 #: ../src/goabackend/goaexchangeprovider.c:640
 #: ../src/goabackend/goaexchangeprovider.c:837
-#: ../src/goabackend/goaimapsmtpprovider.c:946
-#: ../src/goabackend/goaimapsmtpprovider.c:981
-#: ../src/goabackend/goaimapsmtpprovider.c:1069
-#: ../src/goabackend/goaimapsmtpprovider.c:1333
-#: ../src/goabackend/goaimapsmtpprovider.c:1406
-#: ../src/goabackend/goakerberosprovider.c:1536
-#: ../src/goabackend/goamediaserverprovider.c:473
-#: ../src/goabackend/goaoauth2provider.c:1077
-#: ../src/goabackend/goaoauthprovider.c:908
-#: ../src/goabackend/goaowncloudprovider.c:786
-#: ../src/goabackend/goaowncloudprovider.c:1001
+#: ../src/goabackend/goaimapsmtpprovider.c:931
+#: ../src/goabackend/goaimapsmtpprovider.c:966
+#: ../src/goabackend/goaimapsmtpprovider.c:1054
+#: ../src/goabackend/goaimapsmtpprovider.c:1318
+#: ../src/goabackend/goaimapsmtpprovider.c:1391
+#: ../src/goabackend/goakerberosprovider.c:1150
+#: ../src/goabackend/goalastfmprovider.c:663
+#: ../src/goabackend/goalastfmprovider.c:830
+#: ../src/goabackend/goamediaserverprovider.c:475
+#: ../src/goabackend/goaoauth2provider.c:1034
+#: ../src/goabackend/goaoauthprovider.c:863
+#: ../src/goabackend/goaowncloudprovider.c:779
+#: ../src/goabackend/goaowncloudprovider.c:994
 #: ../src/goabackend/goatelepathyprovider.c:459
 #: ../src/goabackend/goatelepathyprovider.c:508
 #: ../src/goabackend/goatelepathyprovider.c:683
@@ -158,32 +166,36 @@ msgstr "Chaidh an còmhradh a leigeil seachad"
 
 #: ../src/goabackend/goaexchangeprovider.c:678
 #: ../src/goabackend/goaexchangeprovider.c:865
-#: ../src/goabackend/goaimapsmtpprovider.c:1011
-#: ../src/goabackend/goaimapsmtpprovider.c:1104
-#: ../src/goabackend/goaimapsmtpprovider.c:1357
-#: ../src/goabackend/goaimapsmtpprovider.c:1431
-#: ../src/goabackend/goaowncloudprovider.c:828
-#: ../src/goabackend/goaowncloudprovider.c:1022
+#: ../src/goabackend/goaimapsmtpprovider.c:996
+#: ../src/goabackend/goaimapsmtpprovider.c:1089
+#: ../src/goabackend/goaimapsmtpprovider.c:1342
+#: ../src/goabackend/goaimapsmtpprovider.c:1416
+#: ../src/goabackend/goalastfmprovider.c:697
+#: ../src/goabackend/goalastfmprovider.c:849
+#: ../src/goabackend/goaowncloudprovider.c:821
+#: ../src/goabackend/goaowncloudprovider.c:1015
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "Chaidh an còmhradh a leigeil seachad (%s, %d): "
 
 #: ../src/goabackend/goaexchangeprovider.c:691
-#: ../src/goabackend/goaimapsmtpprovider.c:1024
-#: ../src/goabackend/goaimapsmtpprovider.c:1117
-#: ../src/goabackend/goaowncloudprovider.c:841
+#: ../src/goabackend/goaimapsmtpprovider.c:1009
+#: ../src/goabackend/goaimapsmtpprovider.c:1102
+#: ../src/goabackend/goaowncloudprovider.c:834
 msgid "_Ignore"
 msgstr "Le_ig seachad"
 
 #: ../src/goabackend/goaexchangeprovider.c:696
 #: ../src/goabackend/goaexchangeprovider.c:884
-#: ../src/goabackend/goaimapsmtpprovider.c:1029
-#: ../src/goabackend/goaimapsmtpprovider.c:1122
-#: ../src/goabackend/goaimapsmtpprovider.c:1376
-#: ../src/goabackend/goaimapsmtpprovider.c:1450
-#: ../src/goabackend/goakerberosprovider.c:1646
-#: ../src/goabackend/goaowncloudprovider.c:846
-#: ../src/goabackend/goaowncloudprovider.c:1041
+#: ../src/goabackend/goaimapsmtpprovider.c:1014
+#: ../src/goabackend/goaimapsmtpprovider.c:1107
+#: ../src/goabackend/goaimapsmtpprovider.c:1361
+#: ../src/goabackend/goaimapsmtpprovider.c:1435
+#: ../src/goabackend/goakerberosprovider.c:1260
+#: ../src/goabackend/goalastfmprovider.c:709
+#: ../src/goabackend/goalastfmprovider.c:866
+#: ../src/goabackend/goaowncloudprovider.c:839
+#: ../src/goabackend/goaowncloudprovider.c:1034
 msgid "_Try Again"
 msgstr "Feuch ris a-rithis_t"
 
@@ -192,49 +204,15 @@ msgstr "Feuch ris a-rithis_t"
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Mearachd a' ceangal ri frithealaiche Microsoft Exchange"
 
-#. Translators: This is a label for a series of
-#. * options switches. For example: “Use for Mail”.
-#: ../src/goabackend/goaexchangeprovider.c:939
-#: ../src/goabackend/goafacebookprovider.c:461
-#: ../src/goabackend/goaflickrprovider.c:411
-#: ../src/goabackend/goagoogleprovider.c:592
-#: ../src/goabackend/goakerberosprovider.c:1719
-#: ../src/goabackend/goamediaserverprovider.c:584
-#: ../src/goabackend/goaowncloudprovider.c:1097
-#: ../src/goabackend/goapocketprovider.c:421
-#: ../src/goabackend/goatelepathyprovider.c:890
-#: ../src/goabackend/goawindowsliveprovider.c:421
-msgid "Use for"
-msgstr "Cleachd airson"
-
-#: ../src/goabackend/goaexchangeprovider.c:941
-#: ../src/goabackend/goagoogleprovider.c:594
-#: ../src/goabackend/goawindowsliveprovider.c:423
-msgid "_Mail"
-msgstr "_Post"
-
-#: ../src/goabackend/goaexchangeprovider.c:946
-#: ../src/goabackend/goagoogleprovider.c:599
-#: ../src/goabackend/goaowncloudprovider.c:1099
-msgid "Cale_ndar"
-msgstr "Mìosacha_n"
-
-#: ../src/goabackend/goaexchangeprovider.c:951
-#: ../src/goabackend/goagoogleprovider.c:604
-#: ../src/goabackend/goaowncloudprovider.c:1104
-msgid "_Contacts"
-msgstr "_Luchd-aithne"
-
 #: ../src/goabackend/goafacebookprovider.c:76
 msgid "Facebook"
 msgstr "Facebook"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:218
+#: ../src/goabackend/goafacebookprovider.c:215
 #: ../src/goabackend/goaflickrprovider.c:183
-#: ../src/goabackend/goagoogleprovider.c:218
-#: ../src/goabackend/goawindowsliveprovider.c:189
-#: ../src/goabackend/goayahooprovider.c:182
+#: ../src/goabackend/goafoursquareprovider.c:189
+#: ../src/goabackend/goagoogleprovider.c:221
+#: ../src/goabackend/goawindowsliveprovider.c:195
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
@@ -242,74 +220,57 @@ msgstr ""
 "Bha dùil ri staid 200 nuair a dh'iarr sinn aithne a' chleachdaiche ach "
 "fhuair sinn staid %d (%s)"
 
-#: ../src/goabackend/goafacebookprovider.c:237
-#: ../src/goabackend/goafacebookprovider.c:249
+#: ../src/goabackend/goafacebookprovider.c:234
+#: ../src/goabackend/goafacebookprovider.c:246
 #: ../src/goabackend/goafacebookprovider.c:259
 #: ../src/goabackend/goaflickrprovider.c:202
 #: ../src/goabackend/goaflickrprovider.c:214
 #: ../src/goabackend/goaflickrprovider.c:224
 #: ../src/goabackend/goaflickrprovider.c:234
 #: ../src/goabackend/goaflickrprovider.c:244
-#: ../src/goabackend/goagoogleprovider.c:237
-#: ../src/goabackend/goagoogleprovider.c:249
-#: ../src/goabackend/goaoauth2provider.c:691
-#: ../src/goabackend/goaoauth2provider.c:721
-#: ../src/goabackend/goaoauth2provider.c:733
-#: ../src/goabackend/goawindowsliveprovider.c:208
-#: ../src/goabackend/goawindowsliveprovider.c:220
-#: ../src/goabackend/goawindowsliveprovider.c:232
-#: ../src/goabackend/goayahooprovider.c:201
-#: ../src/goabackend/goayahooprovider.c:213
-#: ../src/goabackend/goayahooprovider.c:224
-#: ../src/goabackend/goayahooprovider.c:270
-#: ../src/goabackend/goayahooprovider.c:282
-#: ../src/goabackend/goayahooprovider.c:293
+#: ../src/goabackend/goafoursquareprovider.c:208
+#: ../src/goabackend/goafoursquareprovider.c:220
+#: ../src/goabackend/goafoursquareprovider.c:231
+#: ../src/goabackend/goafoursquareprovider.c:242
+#: ../src/goabackend/goafoursquareprovider.c:253
+#: ../src/goabackend/goafoursquareprovider.c:264
+#: ../src/goabackend/goagoogleprovider.c:240
+#: ../src/goabackend/goagoogleprovider.c:252
+#: ../src/goabackend/goalastfmprovider.c:211
+#: ../src/goabackend/goalastfmprovider.c:220
+#: ../src/goabackend/goalastfmprovider.c:230
+#: ../src/goabackend/goalastfmprovider.c:237
+#: ../src/goabackend/goalastfmprovider.c:526
+#: ../src/goabackend/goalastfmprovider.c:535
+#: ../src/goabackend/goalastfmprovider.c:550
+#: ../src/goabackend/goalastfmprovider.c:557
+#: ../src/goabackend/goaoauth2provider.c:699
+#: ../src/goabackend/goaoauth2provider.c:729
+#: ../src/goabackend/goaoauth2provider.c:741
+#: ../src/goabackend/goawindowsliveprovider.c:214
+#: ../src/goabackend/goawindowsliveprovider.c:226
+#: ../src/goabackend/goawindowsliveprovider.c:238
 #, c-format
 msgid "Could not parse response"
 msgstr "Cha b' urrainn dhuinn an fhreagairt a pharsadh"
-
-#: ../src/goabackend/goafacebookprovider.c:463
-#: ../src/goabackend/goagoogleprovider.c:609
-#: ../src/goabackend/goatelepathyprovider.c:892
-msgid "C_hat"
-msgstr "Cabadaic_h"
-
-#: ../src/goabackend/goafacebookprovider.c:468
-#: ../src/goabackend/goaflickrprovider.c:413
-#: ../src/goabackend/goagoogleprovider.c:619
-#: ../src/goabackend/goamediaserverprovider.c:586
-msgid "_Photos"
-msgstr "_Dealbhan"
-
-#: ../src/goabackend/goafacebookprovider.c:473
-msgid "_Maps"
-msgstr "_Mapaichean"
 
 #: ../src/goabackend/goaflickrprovider.c:77
 msgid "Flickr"
 msgstr "Flickr"
 
-#: ../src/goabackend/goaflickrprovider.c:320
-#: ../src/goabackend/goayahooprovider.c:343
+#: ../src/goabackend/goaflickrprovider.c:321
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr ""
 "Chan eil àm an t-siostaim agad dligheach. Thoir sùil air roghainnean a' "
 "chinn-là agus an ama agad."
 
+#: ../src/goabackend/goafoursquareprovider.c:77
+msgid "Foursquare"
+msgstr "Foursquare"
+
 #: ../src/goabackend/goagoogleprovider.c:76
 msgid "Google"
 msgstr "Google"
-
-#: ../src/goabackend/goagoogleprovider.c:614
-#: ../src/goabackend/goaowncloudprovider.c:1109
-#: ../src/goabackend/goawindowsliveprovider.c:428
-msgid "_Documents"
-msgstr "_Sgrìobhainnean"
-
-#: ../src/goabackend/goagoogleprovider.c:624
-#| msgid "_Printers"
-msgid "Prin_ters"
-msgstr "Clò-bhuala_dairean"
 
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:94 ../src/goabackend/goasmtpauth.c:160
@@ -319,7 +280,8 @@ msgstr "Chan eil an t-seirbheis seo ri làimh"
 
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:115
-#: ../src/goabackend/goasmtpauth.c:113
+#: ../src/goabackend/goalastfmprovider.c:543
+#: ../src/goabackend/goasmtpauth.c:113 ../src/goabackend/goautils.c:551
 #, c-format
 msgid "Authentication failed"
 msgstr "Dh'fhàillig an dearbhadh"
@@ -329,20 +291,19 @@ msgstr "Dh'fhàillig an dearbhadh"
 msgid "Server does not support PLAIN"
 msgstr "Chan eil am frithealaiche a' cur taic ri PLAIN"
 
-#: ../src/goabackend/goaimapauthlogin.c:194
-#: ../src/goabackend/goasmtpauth.c:818
+#: ../src/goabackend/goaimapauthlogin.c:194 ../src/goabackend/goasmtpauth.c:818
 #, c-format
 msgid "Server does not support STARTTLS"
 msgstr "Chan eil am frithealaiche a' cur taic ri STARTTLS"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:76
+#: ../src/goabackend/goaimapsmtpprovider.c:61
 msgid "IMAP and SMTP"
 msgstr "IMAP agus SMTP"
 
 #. Translators: the first parameter is a field name. The second is
 #. * a GOA account identifier.
-#: ../src/goabackend/goaimapsmtpprovider.c:373
-#: ../src/goabackend/goaimapsmtpprovider.c:431
+#: ../src/goabackend/goaimapsmtpprovider.c:358
+#: ../src/goabackend/goaimapsmtpprovider.c:416
 #, c-format
 msgid "Did not find %s with identity ‘%s’ in credentials"
 msgstr "Cha do lorg sinn %s leis an aithne \"%s\" sna teisteasan"
@@ -357,8 +318,8 @@ msgstr "Cha do lorg sinn %s leis an aithne \"%s\" sna teisteasan"
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:404
-#: ../src/goabackend/goaimapsmtpprovider.c:464
+#: ../src/goabackend/goaimapsmtpprovider.c:389
+#: ../src/goabackend/goaimapsmtpprovider.c:449
 #, c-format
 msgid "Invalid %s with username ‘%s’ (%s, %d): "
 msgstr "%s mì-dhligheach airson an ainm-chleachdaiche \"%s\" (%s, %d): "
@@ -369,128 +330,134 @@ msgstr "%s mì-dhligheach airson an ainm-chleachdaiche \"%s\" (%s, %d): "
 #. *             STARTTLS after connecting
 #. *             SSL on a dedicated port
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:651
+#: ../src/goabackend/goaimapsmtpprovider.c:636
 msgid "_Encryption"
 msgstr "Cri_optachadh"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:654
+#: ../src/goabackend/goaimapsmtpprovider.c:639
 msgid "None"
 msgstr "Chan eil gin"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:657
+#: ../src/goabackend/goaimapsmtpprovider.c:642
 msgid "STARTTLS after connecting"
 msgstr "STARTTLS an dèidh stèidheachadh a' cheangail"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:660
+#: ../src/goabackend/goaimapsmtpprovider.c:645
 msgid "SSL on a dedicated port"
 msgstr "SSL air port dìleas"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:716
+#: ../src/goabackend/goaimapsmtpprovider.c:701
 msgid "_Name"
 msgstr "Ai_nm"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:733
+#: ../src/goabackend/goaimapsmtpprovider.c:718
 msgid "IMAP _Server"
 msgstr "Frithealaiche IMA_P"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:753
+#: ../src/goabackend/goaimapsmtpprovider.c:738
 msgid "SMTP _Server"
 msgstr "Frithealaiche _SMTP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:768
-#: ../src/goabackend/goaimapsmtpprovider.c:1050
-#: ../src/goabackend/goaimapsmtpprovider.c:1386
+#: ../src/goabackend/goaimapsmtpprovider.c:753
+#: ../src/goabackend/goaimapsmtpprovider.c:1035
+#: ../src/goabackend/goaimapsmtpprovider.c:1371
 msgid "_Forward"
 msgstr "_Sìn Air adhart"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1034
-#: ../src/goabackend/goaimapsmtpprovider.c:1369
+#: ../src/goabackend/goaimapsmtpprovider.c:1019
+#: ../src/goabackend/goaimapsmtpprovider.c:1354
 msgid "Error connecting to IMAP server"
 msgstr "Mearachd a' ceangal ris an fhrithealaiche IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1127
-#: ../src/goabackend/goaimapsmtpprovider.c:1443
+#: ../src/goabackend/goaimapsmtpprovider.c:1112
+#: ../src/goabackend/goaimapsmtpprovider.c:1428
 msgid "Error connecting to SMTP server"
 msgstr "Mearachd a' ceangal ris an fhrithealaiche SMTP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1542
+#: ../src/goabackend/goaimapsmtpprovider.c:1527
 msgid "E-mail"
 msgstr "Post-d"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1546
+#: ../src/goabackend/goaimapsmtpprovider.c:1531
 msgid "Name"
 msgstr "Ainm"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1556
-#: ../src/goabackend/goaimapsmtpprovider.c:1559
+#: ../src/goabackend/goaimapsmtpprovider.c:1541
+#: ../src/goabackend/goaimapsmtpprovider.c:1545
 msgid "IMAP"
 msgstr "IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1570
-#: ../src/goabackend/goaimapsmtpprovider.c:1573
+#: ../src/goabackend/goaimapsmtpprovider.c:1556
+#: ../src/goabackend/goaimapsmtpprovider.c:1560
 msgid "SMTP"
 msgstr "SMTP"
 
-#: ../src/goabackend/goakerberosprovider.c:79
+#: ../src/goabackend/goakerberosprovider.c:99
 msgid "Enterprise Login (Kerberos)"
 msgstr "Clàradh a-steach Enterprise (Kerberos)"
 
-#: ../src/goabackend/goakerberosprovider.c:447
-msgid "Identity service returned invalid key"
-msgstr "Thill seirbheis nan ID iuchair mhì-dhligheach"
-
-#: ../src/goabackend/goakerberosprovider.c:719
+#: ../src/goabackend/goakerberosprovider.c:309
 #, c-format
 msgid "Could not find saved credentials for principal ‘%s’ in keyring"
 msgstr ""
 "Cha b' urrainn dhuinn teisteasan a chaidh a shàbhaladh a lorg airson a' "
 "phrìomh-%s san dul-iuchrach"
 
-#: ../src/goabackend/goakerberosprovider.c:732
+#: ../src/goabackend/goakerberosprovider.c:322
 #, c-format
 msgid "Did not find password for principal ‘%s’ in credentials"
 msgstr "Cha do lorg sinn facal-faire airson a' phrìomh-%s sna teisteasan"
 
-#: ../src/goabackend/goakerberosprovider.c:1115
+#: ../src/goabackend/goakerberosprovider.c:719
 msgid "_Domain"
 msgstr "Àrainn-lì_n"
 
-#: ../src/goabackend/goakerberosprovider.c:1116
+#: ../src/goabackend/goakerberosprovider.c:720
 msgid "Enterprise domain or realm name"
 msgstr "Ainm na h-àrainne-lìn no na rìoghachd Enterprise"
 
-#: ../src/goabackend/goakerberosprovider.c:1345
-#: ../src/goaidentity/goaidentityservice.c:1106
+#: ../src/goabackend/goakerberosprovider.c:956
+#: ../src/goaidentity/goaidentityservice.c:1132
 msgid "Log In to Realm"
 msgstr "Clàraich a-steach dhan rìoghachd"
 
-#: ../src/goabackend/goakerberosprovider.c:1346
+#: ../src/goabackend/goakerberosprovider.c:957
 msgid "Please enter your password below."
 msgstr "Cuir a-steach am facal-faire agad gu h-ìosal."
 
-#: ../src/goabackend/goakerberosprovider.c:1347
+#: ../src/goabackend/goakerberosprovider.c:958
 msgid "Remember this password"
 msgstr "Cuimhnich am facal-faire seo"
 
-#: ../src/goabackend/goakerberosprovider.c:1486
+#: ../src/goabackend/goakerberosprovider.c:1100
 #, c-format
 msgid "The domain is not valid"
 msgstr "Chan eil an àrainn-lìn dligheach"
 
-#: ../src/goabackend/goakerberosprovider.c:1641
+#: ../src/goabackend/goakerberosprovider.c:1255
 msgid "Error connecting to enterprise identity server"
 msgstr "Mearachd a' ceangal ri frithealaiche Enterprise nan ID"
 
-#: ../src/goabackend/goakerberosprovider.c:1721
-msgid "Network _Resources"
-msgstr "_Goireasan an lìonraidh"
+#: ../src/goabackend/goakerberosprovider.c:1521
+#, c-format
+msgid "Identity service returned invalid key"
+msgstr "Thill seirbheis nan ID iuchair mhì-dhligheach"
+
+#: ../src/goabackend/goalastfmprovider.c:64
+msgid "Last.fm"
+msgstr "Last.fm"
+
+#: ../src/goabackend/goalastfmprovider.c:711
+#: ../src/goabackend/goalastfmprovider.c:860
+#| msgid "Error connecting to IMAP server"
+msgid "Error connecting to Last.fm"
+msgstr "Mearachd a' ceangal ri Last.fm"
 
 #: ../src/goabackend/goamediaserverprovider.c:76
-#| msgid "IMAP _Server"
 msgid "Media Server"
 msgstr "Frithealaiche mheadhanan"
 
-#: ../src/goabackend/goamediaserverprovider.c:369
+#: ../src/goabackend/goamediaserverprovider.c:371
 msgid ""
 "Personal content can be added to your applications through a media server "
 "account."
@@ -498,17 +465,17 @@ msgstr ""
 "Gabhaidh susbaint phearsanta a chur ris na prògraman agad le cunntas "
 "frithealaiche mheadhanan."
 
-#: ../src/goabackend/goamediaserverprovider.c:383
+#: ../src/goabackend/goamediaserverprovider.c:385
 msgid "Available Media Servers"
 msgstr "Frithealaichean mheadhanan ri làimh"
 
-#: ../src/goabackend/goamediaserverprovider.c:413
+#: ../src/goabackend/goamediaserverprovider.c:415
 msgid "No media servers found"
 msgstr "Cha deach frithealaiche mheadhanan a lorg"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:667
-#: ../src/goabackend/goaoauthprovider.c:550
+#: ../src/goabackend/goaoauth2provider.c:675
+#: ../src/goabackend/goaoauthprovider.c:559
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -516,54 +483,54 @@ msgstr ""
 "Bha dùil ri staid 200 nuair a dh'iarr sinn an tòcan inntrigidh ach fhuair "
 "sinn staid %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:888
+#: ../src/goabackend/goaoauth2provider.c:843
 msgid "Authorization response: "
 msgstr "Freagairt an ùghdarrachaidh: "
 
-#: ../src/goabackend/goaoauth2provider.c:958
+#: ../src/goabackend/goaoauth2provider.c:913
 #, c-format
 msgid "Authorization response: %s"
 msgstr "Freagairt an ùghdarrachaidh: %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1103
-#: ../src/goabackend/goaoauthprovider.c:939
+#: ../src/goabackend/goaoauth2provider.c:1060
+#: ../src/goabackend/goaoauthprovider.c:894
 msgid "Error getting an Access Token: "
 msgstr "Mearachd a' faighinn an tòcain inntrigidh: "
 
-#: ../src/goabackend/goaoauth2provider.c:1118
-#: ../src/goabackend/goaoauthprovider.c:952
+#: ../src/goabackend/goaoauth2provider.c:1075
+#: ../src/goabackend/goaoauthprovider.c:907
 msgid "Error getting identity: "
 msgstr "Mearachd a' faighinn na ID: "
 
-#: ../src/goabackend/goaoauth2provider.c:1332
-#: ../src/goabackend/goaoauthprovider.c:1260
+#: ../src/goabackend/goaoauth2provider.c:1292
+#: ../src/goabackend/goaoauthprovider.c:1215
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Dh'iarr sinn clàradh a-steach mar %s ach chlàradh a-steach mar %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1491
+#: ../src/goabackend/goaoauth2provider.c:1454
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Chan eil teisteasan san _tòcan inntrigidh"
 
-#: ../src/goabackend/goaoauth2provider.c:1530
-#: ../src/goabackend/goaoauthprovider.c:1488
+#: ../src/goabackend/goaoauth2provider.c:1493
+#: ../src/goabackend/goaoauthprovider.c:1443
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Cha b' urrainn dhuinn an tòcan inntrigidh ath-nuadhachadh (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:573
+#: ../src/goabackend/goaoauthprovider.c:582
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr ""
 "Tha bannan-cinn access_token no access_token_secret a dhìth air an fhreagairt"
 
-#: ../src/goabackend/goaoauthprovider.c:822
+#: ../src/goabackend/goaoauthprovider.c:776
 msgid "Error getting a Request Token: "
 msgstr "Mearachd a' faighinn tòcan iarrtais: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:855
+#: ../src/goabackend/goaoauthprovider.c:809
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -571,46 +538,92 @@ msgstr ""
 "Bha dùil ri staid 200 nuair a dh'iarr sinn tòcan iarrtais ach fhuair sinn "
 "staid %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:872
+#: ../src/goabackend/goaoauthprovider.c:826
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr ""
 "Tha bannan-cinn request_token no request_token_secret a dhìth air an "
 "fhreagairt"
 
-#: ../src/goabackend/goaoauthprovider.c:1444
+#: ../src/goabackend/goaoauthprovider.c:1399
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Chan eil access_token no access_token_secret sna teisteasan"
 
-#: ../src/goabackend/goaowncloudprovider.c:82
+#: ../src/goabackend/goaowncloudprovider.c:67
 msgid "ownCloud"
 msgstr "ownCloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:851
-#: ../src/goabackend/goaowncloudprovider.c:1034
+#: ../src/goabackend/goaowncloudprovider.c:844
+#: ../src/goabackend/goaowncloudprovider.c:1027
 msgid "Error connecting to ownCloud server"
 msgstr "Mearachd a' ceangal ri frithealaiche ownCloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:1114
-msgid "_Files"
-msgstr "_Faidhlichean"
-
-#: ../src/goabackend/goapocketprovider.c:84
+#: ../src/goabackend/goapocketprovider.c:69
 msgid "Pocket"
 msgstr "Pòcaid"
 
 #. TODO: more specific
-#: ../src/goabackend/goapocketprovider.c:233
+#: ../src/goabackend/goapocketprovider.c:218
 #, c-format
 msgid "No username or access_token"
 msgstr "Tha username no access_token a dhìth"
 
-#: ../src/goabackend/goapocketprovider.c:423
+#: ../src/goabackend/goaprovider.c:479
+msgid "_Mail"
+msgstr "_Post"
+
+#: ../src/goabackend/goaprovider.c:484
+msgid "Cale_ndar"
+msgstr "Mìosacha_n"
+
+#: ../src/goabackend/goaprovider.c:489
+msgid "_Contacts"
+msgstr "_Luchd-aithne"
+
+#: ../src/goabackend/goaprovider.c:494
+msgid "C_hat"
+msgstr "Cabadaic_h"
+
+#: ../src/goabackend/goaprovider.c:499
+msgid "_Documents"
+msgstr "_Sgrìobhainnean"
+
+#: ../src/goabackend/goaprovider.c:504
+msgid "M_usic"
+msgstr "C_eòl"
+
+#: ../src/goabackend/goaprovider.c:509
+msgid "_Photos"
+msgstr "_Dealbhan"
+
+#: ../src/goabackend/goaprovider.c:514
+msgid "_Files"
+msgstr "_Faidhlichean"
+
+#: ../src/goabackend/goaprovider.c:519
+msgid "Network _Resources"
+msgstr "_Goireasan an lìonraidh"
+
+#: ../src/goabackend/goaprovider.c:524
 msgid "_Read Later"
 msgstr "_Leugh uaireigin eile"
 
-#: ../src/goabackend/goaprovider.c:682
+#: ../src/goabackend/goaprovider.c:529
+msgid "Prin_ters"
+msgstr "Clò-bhuala_dairean"
+
+#: ../src/goabackend/goaprovider.c:534
+msgid "_Maps"
+msgstr "_Mapaichean"
+
+#. Translators: This is a label for a series of
+#. * options switches. For example: “Use for Mail”.
+#: ../src/goabackend/goaprovider.c:563
+msgid "Use for"
+msgstr "Cleachd airson"
+
+#: ../src/goabackend/goaprovider.c:802
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "Cha deach ensure_credentials_sync a chur an sàs san t-seòrsa %s"
@@ -687,68 +700,86 @@ msgstr "_Ceart ma-thà"
 msgid "Cannot save the connection parameters"
 msgstr "Chan urrainn dhuinn roghainnean a' cheangail a shàbhaladh"
 
-#: ../src/goabackend/goatelepathyprovider.c:866
+#: ../src/goabackend/goatelepathyprovider.c:867
 msgid "Cannot save your personal information on the server"
 msgstr ""
 "Chan urrainn dhuinn am fiosrachadh pearsanta agad a shàbhaladh air an "
 "fhrithealaiche"
 
 #. Connection Settings button
-#: ../src/goabackend/goatelepathyprovider.c:897
+#: ../src/goabackend/goatelepathyprovider.c:893
 msgid "_Connection Settings"
 msgstr "Roghainnean _ceangail"
 
 #. Edit Personal Information button
-#: ../src/goabackend/goatelepathyprovider.c:901
+#: ../src/goabackend/goatelepathyprovider.c:897
 msgid "_Personal Details"
 msgstr "Fiosrachadh _pearsanta"
 
-#: ../src/goabackend/goautils.c:114
+#: ../src/goabackend/goautils.c:115
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "Tha cunntas %s ann airson %s mu thràth"
 
 #. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:136
+#: ../src/goabackend/goautils.c:137
 #, c-format
 msgid "%s account"
 msgstr "Cunntas %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:180
+#: ../src/goabackend/goautils.c:181
 msgid "Failed to delete credentials from the keyring"
 msgstr "Cha b' urrainn dhuinn na teisteasan a sguabadh às an dul-iuchrach"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:232
+#: ../src/goabackend/goautils.c:233
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Cha b' urrainn dhuinn na teisteasan fhaighinn on dul-iuchrach"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:242
+#: ../src/goabackend/goautils.c:243
 msgid "No credentials found in the keyring"
 msgstr "Cha deach teisteasan a lorg san dul-iuchrach"
 
-#: ../src/goabackend/goautils.c:255
+#: ../src/goabackend/goautils.c:256
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Mearachd a' parsadh an toraidh a fhuair sinn on dul-iuchrach: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:298
+#: ../src/goabackend/goautils.c:299
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Teisteasan %s GOA airson na ID %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:315
+#: ../src/goabackend/goautils.c:316
 msgid "Failed to store credentials in the keyring"
 msgstr "Cha b' urrainn dhuinn na teisteasan a stòradh san dul-iuchrach"
 
-#: ../src/goabackend/goautils.c:536
+#: ../src/goabackend/goautils.c:538
+#| msgid "Cannot save the connection parameters"
+msgid "Cannot resolve hostname"
+msgstr "Chan urrainn dhuinn ainm an òstair fhuasgladh"
+
+#: ../src/goabackend/goautils.c:542
+msgid "Cannot resolve proxy hostname"
+msgstr "Chan urrainn dhuinn ainm an òstair progsaidh fhuasgladh"
+
+#: ../src/goabackend/goautils.c:547
+msgid "Cannot find WebDAV endpoint"
+msgstr "Chan urrainn dhuinn puing-dheiridh WebDAV a lorg"
+
+#: ../src/goabackend/goautils.c:556
+#, c-format
+msgid "Code: %u — Unexpected response from server"
+msgstr "Còd: %u — Freagairt ris nach robh dùil on fhrithealaiche"
+
+#: ../src/goabackend/goautils.c:572
 msgid "The signing certificate authority is not known."
 msgstr "Chan aithne dhuinn ùghdarras soidhneadh nan teisteanasan"
 
-#: ../src/goabackend/goautils.c:540
+#: ../src/goabackend/goautils.c:576
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
@@ -756,129 +787,130 @@ msgstr ""
 "Chan eil an teisteanas seo a' freagairt ri ID na làraich-lìn (on a fhuaradh "
 "e) ris an robh dùil"
 
-#: ../src/goabackend/goautils.c:545
+#: ../src/goabackend/goautils.c:581
 msgid "The certificate’s activation time is still in the future."
 msgstr "Tha àm gnìomhachadh an teisteanais seo san àm ri teachd fhathast."
 
-#: ../src/goabackend/goautils.c:549
+#: ../src/goabackend/goautils.c:585
 msgid "The certificate has expired."
 msgstr "Dh'fhalbh an ùine air an teisteanas."
 
-#: ../src/goabackend/goautils.c:553
+#: ../src/goabackend/goautils.c:589
 msgid "The certificate has been revoked."
 msgstr "Chaidh an teisteanas a chùl-ghairm."
 
-#: ../src/goabackend/goautils.c:557
+#: ../src/goabackend/goautils.c:593
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Thathar dhen bheachd nach eil algairim an teisteanais tèarainte."
 
-#: ../src/goabackend/goautils.c:561
+#: ../src/goabackend/goautils.c:597
 msgid "Invalid certificate."
 msgstr "Teisteanas mì-dhligheach."
 
 #. translators: %s here is the address of the web page
-#: ../src/goabackend/goawebview.c:70
+#: ../src/goabackend/goawebview.c:95
 #, c-format
 msgid "Loading “%s”…"
 msgstr "A' luchdadh \"%s\"…"
 
-#: ../src/goabackend/goawindowsliveprovider.c:78
-msgid "Windows Live"
-msgstr "Windows Live"
+#: ../src/goabackend/goawindowsliveprovider.c:77
+#| msgid "Microsoft Exchange"
+msgid "Microsoft Account"
+msgstr "Cunntas Microsoft"
 
-#: ../src/goabackend/goayahooprovider.c:76
-msgid "Yahoo"
-msgstr "Yahoo"
-
-#: ../src/goabackend/goayahooprovider.c:250
-#, c-format
-msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-msgstr ""
-"Bha dùil ri staid 200 nuair a dh'iarr sinn an t-ainm ach fhuair sinn staid "
-"%d (%s)"
-
-#: ../src/goaidentity/goaidentityservice.c:370
+#: ../src/goaidentity/goaidentityservice.c:381
 msgid "initial secret passed before secret key exchange"
 msgstr ""
 "Chaidh an rùn tùsail a thoirt seachad mus deach an iuchair rùin a mhalairt"
 
-#: ../src/goaidentity/goaidentityservice.c:562
+#: ../src/goaidentity/goaidentityservice.c:577
 msgid "Initial secret key is invalid"
 msgstr "Tha an rùn tùsail mì-dhligheach"
 
-#: ../src/goaidentity/goaidentityservice.c:1111
+#: ../src/goaidentity/goaidentityservice.c:1137
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr ""
 "Feumaidh rìoghachd an lìonraidh %s fiosrachadh mus urrainn dhut clàradh a-"
 "steach."
 
-#: ../src/goaidentity/goakerberosidentity.c:252
-#: ../src/goaidentity/goakerberosidentity.c:261
-#: ../src/goaidentity/goakerberosidentity.c:588
+#: ../src/goaidentity/goakerberosidentity.c:254
+#: ../src/goaidentity/goakerberosidentity.c:263
+#: ../src/goaidentity/goakerberosidentity.c:642
 msgid "Could not find identity in credential cache: %k"
 msgstr "Cha b' urrainn dhuinn an ID a lorg ann an tasgadan nan teisteasan: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:601
+#: ../src/goaidentity/goakerberosidentity.c:656
 msgid "Could not find identity credentials in cache: %k"
 msgstr "Cha b' urrainn dhuinn teisteanan ID a lorg san tasgadan: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:641
+#: ../src/goaidentity/goakerberosidentity.c:700
 msgid "Could not sift through identity credentials in cache: %k"
 msgstr ""
 "Cha b' urrainn sìolachadh tro na IDs ann an tasgadan nan teisteasan: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:659
+#: ../src/goaidentity/goakerberosidentity.c:718
 msgid "Could not finish up sifting through identity credentials in cache: %k"
 msgstr ""
 "Cha b' urrainn sìolachadh tro na IDs ann an tasgadan nan teisteasan a "
 "choileanadh: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:949
+#: ../src/goaidentity/goakerberosidentity.c:1013
 #, c-format
 msgid "No associated identification found"
 msgstr "Cha deach ID co-cheangailte a lorg"
 
-#: ../src/goaidentity/goakerberosidentity.c:1030
+#: ../src/goaidentity/goakerberosidentity.c:1096
 msgid "Could not create credential cache: %k"
 msgstr "Cha b' urrainn tasgadan theisteasan a chruthachadh: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1064
+#: ../src/goaidentity/goakerberosidentity.c:1130
 msgid "Could not initialize credentials cache: %k"
 msgstr "Cha b' urrainn dhuinn tasgadan nan teisteasan ath-shuidheachadh: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1081
+#: ../src/goaidentity/goakerberosidentity.c:1147
 msgid "Could not store new credentials in credentials cache: %k"
 msgstr ""
 "Cha b' urrainn na teisteasan ùra a stòradh ann an tasgadan nan teisteasan: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1356
+#: ../src/goaidentity/goakerberosidentity.c:1436
 #, c-format
 msgid "Could not renew identity: Not signed in"
 msgstr ""
 "Cha b' urrainn dhuinn an ID ath-nuadhachadh: Cha do rinn thu clàradh a-steach"
 
-#: ../src/goaidentity/goakerberosidentity.c:1368
+#: ../src/goaidentity/goakerberosidentity.c:1448
 msgid "Could not renew identity: %k"
 msgstr "Cha b' urrainn dhuinn an ID ath-nuadhachadh: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1385
+#: ../src/goaidentity/goakerberosidentity.c:1465
 msgid "Could not get new credentials to renew identity %s: %k"
 msgstr ""
 "Cha b' urrainn dhuinn teisteasan ùra fhaighinn gus an ID %s ath-nuadhachadh: "
 "%k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1427
+#: ../src/goaidentity/goakerberosidentity.c:1507
 msgid "Could not erase identity: %k"
 msgstr "Cha b' urrainn dhuinn an ID a dhubhadh às: %k"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:745
+#: ../src/goaidentity/goakerberosidentitymanager.c:749
 msgid "Could not find identity"
 msgstr "Cha b' urrainn dhuinn an ID a lorg"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:836
+#: ../src/goaidentity/goakerberosidentitymanager.c:840
 msgid "Could not create credential cache for identity"
 msgstr "Cha b' urrainn dhuinn tasgadan theisteasan airson na ID a chruthachadh"
+
+#~ msgid "Windows Live"
+#~ msgstr "Windows Live"
+
+#~ msgid "Yahoo"
+#~ msgstr "Yahoo"
+
+#~ msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+#~ msgstr ""
+#~ "Bha dùil ri staid 200 nuair a dh'iarr sinn an t-ainm ach fhuair sinn "
+#~ "staid %d (%s)"
 
 #~ msgid ""
 #~ "Paste authorization code obtained from the <a href=\"%s\">authorization "
