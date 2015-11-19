@@ -220,7 +220,7 @@ goa_mail_auth_run (GoaMailAuth         *self,
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   simple = g_simple_async_result_new (G_OBJECT (self), callback, user_data, goa_mail_auth_run);
-  g_simple_async_result_set_handle_cancellation (simple, TRUE);
+  g_simple_async_result_set_check_cancellable (simple, cancellable);
 
   g_simple_async_result_run_in_thread (simple, mail_auth_run_in_thread_func, G_PRIORITY_DEFAULT, cancellable);
 
@@ -271,7 +271,7 @@ goa_mail_auth_starttls (GoaMailAuth         *self,
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   simple = g_simple_async_result_new (G_OBJECT (self), callback, user_data, goa_mail_auth_starttls);
-  g_simple_async_result_set_handle_cancellation (simple, TRUE);
+  g_simple_async_result_set_check_cancellable (simple, cancellable);
 
   g_simple_async_result_run_in_thread (simple,
                                        mail_auth_starttls_in_thread_func,
