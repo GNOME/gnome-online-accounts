@@ -219,9 +219,13 @@ static gchar *
 smtp_auth_get_domain (GoaSmtpAuth   *self,
                       GError       **error)
 {
+  GoaMail *mail;
   gchar *domain;
+  gchar *email_address;
 
+  mail = NULL;
   domain = NULL;
+  email_address = NULL;
 
   if (self->domain != NULL)
     {
@@ -229,9 +233,6 @@ smtp_auth_get_domain (GoaSmtpAuth   *self,
     }
   else if (self->object != NULL)
     {
-      GoaMail *mail;
-      gchar *email_address;
-
       mail = goa_object_get_mail (self->object);
       if (mail == NULL)
         {
@@ -251,9 +252,6 @@ smtp_auth_get_domain (GoaSmtpAuth   *self,
                        _("Failed to parse email address"));
           goto out;
         }
-
-      g_free (email_address);
-      g_object_unref (mail);
     }
   else
     {
@@ -265,6 +263,8 @@ smtp_auth_get_domain (GoaSmtpAuth   *self,
     }
 
  out:
+  g_clear_object (&mail);
+  g_free (email_address);
   return domain;
 }
 
