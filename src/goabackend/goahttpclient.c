@@ -56,7 +56,6 @@ goa_http_client_new (void)
 typedef struct
 {
   GCancellable *cancellable;
-  GSimpleAsyncResult *res;
   SoupMessage *msg;
   SoupSession *session;
   gboolean accept_ssl_errors;
@@ -81,7 +80,6 @@ http_client_check_data_free (gpointer user_data)
     }
 
   /* soup_session_queue_message stole the references to data->msg */
-  g_object_unref (data->res);
   g_object_unref (data->session);
   g_slice_free (CheckData, data);
 }
@@ -114,10 +112,12 @@ http_client_authenticate (SoupSession *session,
 static void
 http_client_request_started (SoupSession *session, SoupMessage *msg, SoupSocket *socket, gpointer user_data)
 {
-  CheckData *data = user_data;
+  CheckData *data;
+  GTask *task = G_TASK (user_data);
   GError *error;
   GTlsCertificateFlags cert_flags;
 
+  data = g_task_get_task_data (task);
   error = NULL;
 
   if (!data->accept_ssl_errors
@@ -125,7 +125,7 @@ http_client_request_started (SoupSession *session, SoupMessage *msg, SoupSocket 
       && cert_flags != 0)
     {
       goa_utils_set_error_ssl (&error, cert_flags);
-      g_simple_async_result_take_error (data->res, error);
+      g_task_return_error (task, error);
       soup_session_abort (data->session);
     }
 }
@@ -133,18 +133,24 @@ http_client_request_started (SoupSession *session, SoupMessage *msg, SoupSocket 
 static void
 http_client_check_cancelled_cb (GCancellable *cancellable, gpointer user_data)
 {
-  CheckData *data = user_data;
+  CheckData *data;
+  GTask *task = G_TASK (user_data);
+  gboolean cancelled;
+
+  data = g_task_get_task_data (task);
+
+  cancelled = g_task_return_error_if_cancelled (task);
   soup_session_abort (data->session);
+
+  g_return_if_fail (cancelled);
 }
 
 static gboolean
-http_client_check_complete_and_free_in_idle (gpointer user_data)
+http_client_check_free_in_idle (gpointer user_data)
 {
-  CheckData *data = user_data;
+  GTask *task = G_TASK (user_data);
 
-  g_simple_async_result_complete_in_idle (data->res);
-  http_client_check_data_free (data);
-
+  g_object_unref (task);
   return G_SOURCE_REMOVE;
 }
 
@@ -152,16 +158,15 @@ static void
 http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer user_data)
 {
   GError *error;
-  CheckData *data = user_data;
   GMainContext *context;
   GSource *source;
-  gboolean op_res;
+  GTask *task = G_TASK (user_data);
 
   error = NULL;
-  op_res = FALSE;
 
   /* status == SOUP_STATUS_CANCELLED, if we are being aborted by the
-   * GCancellable or due to an SSL error.
+   * GCancellable or due to an SSL error. The GTask was already
+   * 'returned' by the respective callbacks.
    */
   if (msg->status_code == SOUP_STATUS_CANCELLED)
     goto out;
@@ -169,31 +174,25 @@ http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer 
     {
       g_warning ("goa_http_client_check() failed: %u — %s", msg->status_code, msg->reason_phrase);
       goa_utils_set_error_soup (&error, msg);
+      g_task_return_error (task, error);
       goto out;
     }
 
-  op_res = TRUE;
+  g_task_return_boolean (task, TRUE);
 
  out:
-  /* error == NULL, if we are being aborted by the GCancellable or
-   * due to an SSL error.
-   */
-  g_simple_async_result_set_op_res_gboolean (data->res, op_res);
-  if (error != NULL)
-    g_simple_async_result_take_error (data->res, error);
-
   /* We might be invoked from a GCancellable::cancelled
-   * handler, and freeing CheckData will disconnect the handler. Since
-   * disconnecting from inside the handler will cause a deadlock [1],
-   * we use an idle handler to break them up.
+   * handler, and unreffing the GTask will disconnect the
+   * handler. Since disconnecting from inside the handler will cause a
+   * deadlock [1], we use an idle handler to break them up.
    *
    * [1] https://bugzilla.gnome.org/show_bug.cgi?id=705395
    */
 
   source = g_idle_source_new ();
   g_source_set_priority (source, G_PRIORITY_DEFAULT_IDLE);
-  g_source_set_callback (source, http_client_check_complete_and_free_in_idle, data, NULL);
-  g_source_set_name (source, "[goa] http_client_check_complete_and_free_in_idle");
+  g_source_set_callback (source, http_client_check_free_in_idle, task, NULL);
+  g_source_set_name (source, "[goa] http_client_check_free_in_idle");
 
   context = g_main_context_get_thread_default ();
   g_source_attach (source, context);
@@ -212,6 +211,7 @@ goa_http_client_check (GoaHttpClient       *self,
 {
   CheckData *data;
   CheckAuthData *auth;
+  GTask *task;
   SoupLogger *logger;
 
   g_return_if_fail (GOA_IS_HTTP_CLIENT (self));
@@ -220,8 +220,12 @@ goa_http_client_check (GoaHttpClient       *self,
   g_return_if_fail (password != NULL && password[0] != '\0');
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, goa_http_client_check);
+
   data = g_slice_new0 (CheckData);
-  data->res = g_simple_async_result_new (G_OBJECT (self), callback, user_data, goa_http_client_check);
+  g_task_set_task_data (task, data, http_client_check_data_free);
+
   data->session = soup_session_new_with_options (SOUP_SESSION_SSL_STRICT, FALSE,
                                                  NULL);
 
@@ -235,11 +239,10 @@ goa_http_client_check (GoaHttpClient       *self,
   if (cancellable != NULL)
     {
       data->cancellable = g_object_ref (cancellable);
-      data->cancellable_id = g_cancellable_connect (data->cancellable,
+      data->cancellable_id = g_cancellable_connect (cancellable,
                                                     G_CALLBACK (http_client_check_cancelled_cb),
-                                                    data,
+                                                    task,
                                                     NULL);
-      g_simple_async_result_set_check_cancellable (data->res, data->cancellable);
     }
 
   auth = g_slice_new0 (CheckAuthData);
@@ -252,25 +255,26 @@ goa_http_client_check (GoaHttpClient       *self,
                          http_client_check_auth_data_free,
                          0);
 
-  g_signal_connect (data->session, "request-started", G_CALLBACK (http_client_request_started), data);
-  soup_session_queue_message (data->session, data->msg, http_client_check_response_cb, data);
+  g_signal_connect (data->session, "request-started", G_CALLBACK (http_client_request_started), task);
+  soup_session_queue_message (data->session, data->msg, http_client_check_response_cb, g_object_ref (task));
+
+  g_object_unref (task);
 }
 
 gboolean
 goa_http_client_check_finish (GoaHttpClient *self, GAsyncResult *res, GError **error)
 {
-  GSimpleAsyncResult *simple;
+  GTask *task;
 
   g_return_val_if_fail (GOA_IS_HTTP_CLIENT (self), FALSE);
-  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (self), goa_http_client_check), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  simple = G_SIMPLE_ASYNC_RESULT (res);
+  g_return_val_if_fail (g_task_is_valid (res, self), FALSE);
+  task = G_TASK (res);
 
-  if (g_simple_async_result_propagate_error (simple, error))
-    return FALSE;
+  g_return_val_if_fail (g_task_get_source_tag (task) == goa_http_client_check, FALSE);
 
-  return g_simple_async_result_get_op_res_gboolean (simple);
+  return g_task_propagate_boolean (task, error);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
