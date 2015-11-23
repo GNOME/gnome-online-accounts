@@ -141,7 +141,7 @@ unexport_identity (GoaIdentityService *self,
 static void
 on_sign_in_done (GoaIdentityService *self,
                  GAsyncResult       *result,
-                 GSimpleAsyncResult *operation_result)
+                 GTask              *operation_result)
 {
   GoaIdentity      *identity;
   char             *object_path;
@@ -150,8 +150,7 @@ on_sign_in_done (GoaIdentityService *self,
   error = NULL;
   if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), &error))
     {
-      g_simple_async_result_take_error (operation_result, error);
-      g_simple_async_result_complete_in_idle (operation_result);
+      g_task_return_error (operation_result, error);
       g_object_unref (operation_result);
       return;
     }
@@ -159,14 +158,10 @@ on_sign_in_done (GoaIdentityService *self,
   identity = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
   object_path = export_identity (self, identity);
 
-  g_simple_async_result_set_op_res_gpointer (operation_result,
-                                             object_path,
-                                             (GDestroyNotify)
-                                             g_free);
+  g_task_return_pointer (operation_result, object_path, (GDestroyNotify) g_free);
 
   /* User is signed in, so we're mostly done
    */
-  g_simple_async_result_complete_in_idle (operation_result);
   g_object_unref (operation_result);
 }
 
@@ -289,21 +284,17 @@ on_sign_in_handled (GoaIdentityService    *self,
                     GDBusMethodInvocation *invocation)
 {
   GError *error = NULL;
+  char *object_path;
 
-  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), &error))
-    {
-      g_dbus_method_invocation_take_error (invocation, error);
-    }
+  object_path = g_task_propagate_pointer (G_TASK (result), &error);
+  if (error != NULL)
+    g_dbus_method_invocation_take_error (invocation, error);
   else
-    {
-      const char *object_path;
+    goa_identity_service_manager_complete_sign_in (GOA_IDENTITY_SERVICE_MANAGER (self),
+                                                   invocation,
+                                                   object_path);
 
-      object_path = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
-      goa_identity_service_manager_complete_sign_in (GOA_IDENTITY_SERVICE_MANAGER (self),
-                                                     invocation,
-                                                     object_path);
-    }
-
+  g_free (object_path);
   g_object_unref (invocation);
 }
 
@@ -345,7 +336,7 @@ goa_identity_service_handle_sign_in (GoaIdentityServiceManager *manager,
                                      GVariant                  *details)
 {
   GoaIdentityService     *self = GOA_IDENTITY_SERVICE (manager);
-  GSimpleAsyncResult     *operation_result;
+  GTask                  *operation_result;
   GoaIdentitySignInFlags  flags;
   char                   *secret_key;
   char                   *preauth_source;
@@ -386,15 +377,11 @@ goa_identity_service_handle_sign_in (GoaIdentityServiceManager *manager,
       initial_password = gcr_secret_exchange_get_secret (secret_exchange, NULL);
     }
 
-  operation_result = g_simple_async_result_new (G_OBJECT (self),
-                                                (GAsyncReadyCallback)
-                                                on_sign_in_handled,
-                                                g_object_ref (invocation),
-                                                g_strdup (identifier));
   cancellable = g_cancellable_new ();
-  g_object_set_data (G_OBJECT (operation_result),
-                     "cancellable",
-                     cancellable);
+  operation_result = g_task_new (G_OBJECT (self),
+                                 cancellable,
+                                 (GAsyncReadyCallback) on_sign_in_handled,
+                                 g_object_ref (invocation));
   g_object_set_data (G_OBJECT (operation_result),
                      "initial-password",
                      (gpointer)
