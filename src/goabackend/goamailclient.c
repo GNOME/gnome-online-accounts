@@ -65,11 +65,9 @@ goa_mail_client_new (void)
 
 typedef struct
 {
-  GCancellable *cancellable;
   GDataInputStream *input;
   GDataOutputStream *output;
   GIOStream *tls_conn;
-  GSimpleAsyncResult *res;
   GSocket *socket;
   GSocketClient *sc;
   GSocketConnection *conn;
@@ -84,10 +82,8 @@ typedef struct
 static void
 mail_client_check_data_free (CheckData *data)
 {
-  g_object_unref (data->res);
   g_object_unref (data->sc);
   g_object_unref (data->auth);
-  g_clear_object (&data->cancellable);
   g_clear_object (&data->input);
   g_clear_object (&data->output);
   g_clear_object (&data->socket);
@@ -135,11 +131,11 @@ mail_client_check_event_cb (GSocketClient *sc,
 static void
 mail_client_check_auth_run_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
 {
-  CheckData *data = user_data;
+  GTask *task = G_TASK (user_data);
+  CheckData *data;
   GError *error;
-  gboolean op_res;
 
-  op_res = FALSE;
+  data = g_task_get_task_data (task);
 
   error = NULL;
   if (!goa_mail_auth_run_finish (data->auth, res, &error))
@@ -148,23 +144,23 @@ mail_client_check_auth_run_cb (GObject *source_object, GAsyncResult *res, gpoint
                  error->message,
                  g_quark_to_string (error->domain),
                  error->code);
-      g_simple_async_result_take_error (data->res, error);
+      g_task_return_error (task, error);
       goto out;
     }
 
-  op_res = TRUE;
   g_io_stream_close (G_IO_STREAM (data->conn), NULL, NULL);
+  g_task_return_boolean (task, TRUE);
 
  out:
-  g_simple_async_result_set_op_res_gboolean (data->res, op_res);
-  g_simple_async_result_complete_in_idle (data->res);
-  mail_client_check_data_free (data);
+  g_object_unref (G_OBJECT (task));
 }
 
 static void
 mail_client_check_tls_conn_handshake_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
 {
-  CheckData *data = user_data;
+  GTask *task = G_TASK (user_data);
+  CheckData *data;
+  GCancellable *cancellable;
   GDataInputStream *input;
   GDataOutputStream *output;
   GInputStream *base_input;
@@ -173,6 +169,9 @@ mail_client_check_tls_conn_handshake_cb (GObject *source_object, GAsyncResult *r
 
   input = NULL;
   output = NULL;
+
+  cancellable = g_task_get_cancellable (task);
+  data = g_task_get_task_data (task);
 
   error = NULL;
   if (!g_tls_connection_handshake_finish (G_TLS_CONNECTION (data->tls_conn), res, &error))
@@ -191,14 +190,14 @@ mail_client_check_tls_conn_handshake_cb (GObject *source_object, GAsyncResult *r
 
           tls_error = NULL;
           goa_utils_set_error_ssl (&tls_error, data->cert_flags);
-          g_simple_async_result_take_error (data->res, tls_error);
+          g_task_return_error (task, tls_error);
           g_error_free (error);
         }
       else
         {
           error->domain = GOA_ERROR;
           error->code = GOA_ERROR_FAILED; /* TODO: more specific */
-          g_simple_async_result_take_error (data->res, error);
+          g_task_return_error (task, error);
         }
 
       goto error;
@@ -218,13 +217,11 @@ mail_client_check_tls_conn_handshake_cb (GObject *source_object, GAsyncResult *r
   g_filter_output_stream_set_close_base_stream (G_FILTER_OUTPUT_STREAM (output), FALSE);
   goa_mail_auth_set_output (data->auth, output);
 
-  goa_mail_auth_run (data->auth, data->cancellable, mail_client_check_auth_run_cb, data);
+  goa_mail_auth_run (data->auth, cancellable, mail_client_check_auth_run_cb, task);
   goto out;
 
  error:
-  g_simple_async_result_set_op_res_gboolean (data->res, FALSE);
-  g_simple_async_result_complete_in_idle (data->res);
-  mail_client_check_data_free (data);
+  g_object_unref (G_OBJECT (task));
 
  out:
   g_clear_object (&input);
@@ -234,11 +231,16 @@ mail_client_check_tls_conn_handshake_cb (GObject *source_object, GAsyncResult *r
 static void
 mail_client_check_auth_starttls_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
 {
-  CheckData *data = user_data;
+  GTask *task = G_TASK (user_data);
+  CheckData *data;
+  GCancellable *cancellable;
   GSocketConnectable *server_identity;
   GError *error;
 
   server_identity = NULL;
+
+  cancellable = g_task_get_cancellable (task);
+  data = g_task_get_task_data (task);
 
   error = NULL;
   if (!goa_mail_auth_starttls_finish (data->auth, res, &error))
@@ -247,7 +249,7 @@ mail_client_check_auth_starttls_cb (GObject *source_object, GAsyncResult *res, g
                  error->message,
                  g_quark_to_string (error->domain),
                  error->code);
-      g_simple_async_result_take_error (data->res, error);
+      g_task_return_error (task, error);
       goto error;
     }
 
@@ -255,7 +257,7 @@ mail_client_check_auth_starttls_cb (GObject *source_object, GAsyncResult *res, g
   server_identity = g_network_address_parse (data->host_and_port, data->default_port, &error);
   if (server_identity == NULL)
     {
-      g_simple_async_result_take_error (data->res, error);
+      g_task_return_error (task, error);
       goto error;
     }
 
@@ -263,7 +265,7 @@ mail_client_check_auth_starttls_cb (GObject *source_object, GAsyncResult *res, g
   data->tls_conn = g_tls_client_connection_new (G_IO_STREAM (data->conn), server_identity, &error);
   if (data->tls_conn == NULL)
     {
-      g_simple_async_result_take_error (data->res, error);
+      g_task_return_error (task, error);
       goto error;
     }
 
@@ -277,16 +279,14 @@ mail_client_check_auth_starttls_cb (GObject *source_object, GAsyncResult *res, g
 
   g_tls_connection_handshake_async (G_TLS_CONNECTION (data->tls_conn),
                                     G_PRIORITY_DEFAULT,
-                                    data->cancellable,
+                                    cancellable,
                                     mail_client_check_tls_conn_handshake_cb,
-                                    data);
+                                    task);
 
   goto out;
 
  error:
-  g_simple_async_result_set_op_res_gboolean (data->res, FALSE);
-  g_simple_async_result_complete_in_idle (data->res);
-  mail_client_check_data_free (data);
+  g_object_unref (G_OBJECT (task));
 
  out:
   g_clear_object (&server_identity);
@@ -295,12 +295,17 @@ mail_client_check_auth_starttls_cb (GObject *source_object, GAsyncResult *res, g
 static void
 mail_client_check_connect_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
 {
-  CheckData *data = user_data;
+  GTask *task = G_TASK (user_data);
+  CheckData *data;
+  GCancellable *cancellable;
   GDataInputStream *input;
   GDataOutputStream *output;
   GInputStream *base_input;
   GError *error;
   GOutputStream *base_output;
+
+  cancellable = g_task_get_cancellable (task);
+  data = g_task_get_task_data (task);
 
   error = NULL;
   data->conn = g_socket_client_connect_to_host_finish (data->sc, res, &error);
@@ -320,14 +325,14 @@ mail_client_check_connect_cb (GObject *source_object, GAsyncResult *res, gpointe
 
           tls_error = NULL;
           goa_utils_set_error_ssl (&tls_error, data->cert_flags);
-          g_simple_async_result_take_error (data->res, tls_error);
+          g_task_return_error (task, tls_error);
           g_error_free (error);
         }
       else
         {
           error->domain = GOA_ERROR;
           error->code = GOA_ERROR_FAILED; /* TODO: more specific */
-          g_simple_async_result_take_error (data->res, error);
+          g_task_return_error (task, error);
         }
 
       goto error;
@@ -351,16 +356,14 @@ mail_client_check_connect_cb (GObject *source_object, GAsyncResult *res, gpointe
   g_object_unref (output);
 
   if (data->tls_type == GOA_TLS_TYPE_STARTTLS)
-    goa_mail_auth_starttls (data->auth, data->cancellable, mail_client_check_auth_starttls_cb, data);
+    goa_mail_auth_starttls (data->auth, cancellable, mail_client_check_auth_starttls_cb, task);
   else
-    goa_mail_auth_run (data->auth, data->cancellable, mail_client_check_auth_run_cb, data);
+    goa_mail_auth_run (data->auth, cancellable, mail_client_check_auth_run_cb, task);
 
   return;
 
  error:
-  g_simple_async_result_set_op_res_gboolean (data->res, FALSE);
-  g_simple_async_result_complete_in_idle (data->res);
-  mail_client_check_data_free (data);
+  g_object_unref (G_OBJECT (task));
 }
 
 void
@@ -375,14 +378,18 @@ goa_mail_client_check (GoaMailClient       *self,
                        gpointer             user_data)
 {
   CheckData *data;
+  GTask *task;
 
   g_return_if_fail (GOA_IS_MAIL_CLIENT (self));
   g_return_if_fail (host_and_port != NULL && host_and_port[0] != '\0');
   g_return_if_fail (GOA_IS_MAIL_AUTH (auth));
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, goa_mail_client_check);
+
   data = g_slice_new0 (CheckData);
-  data->res = g_simple_async_result_new (G_OBJECT (self), callback, user_data, goa_mail_client_check);
+  g_task_set_task_data (task, data, (GDestroyNotify) mail_client_check_data_free);
 
   data->sc = g_socket_client_new ();
   if (tls_type == GOA_TLS_TYPE_SSL)
@@ -397,34 +404,27 @@ goa_mail_client_check (GoaMailClient       *self,
   data->default_port = default_port;
   data->auth = g_object_ref (auth);
 
-  if (cancellable != NULL)
-    {
-      data->cancellable = g_object_ref (cancellable);
-      g_simple_async_result_set_check_cancellable (data->res, data->cancellable);
-    }
-
   g_socket_client_connect_to_host_async (data->sc,
                                          data->host_and_port,
                                          data->default_port,
-                                         data->cancellable,
+                                         cancellable,
                                          mail_client_check_connect_cb,
-                                         data);
+                                         task);
 }
 
 gboolean
 goa_mail_client_check_finish (GoaMailClient *self, GAsyncResult *res, GError **error)
 {
-  GSimpleAsyncResult *simple;
+  GTask *task;
 
-  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (self), goa_mail_client_check), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  simple = G_SIMPLE_ASYNC_RESULT (res);
+  g_return_val_if_fail (g_task_is_valid (res, self), FALSE);
+  task = G_TASK (res);
 
-  if (g_simple_async_result_propagate_error (simple, error))
-    return FALSE;
+  g_return_val_if_fail (g_task_get_source_tag (task) == goa_mail_client_check, FALSE);
 
-  return g_simple_async_result_get_op_res_gboolean (simple);
+  return g_task_propagate_boolean (task, error);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
