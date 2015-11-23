@@ -67,7 +67,7 @@ get_protocols_cb (GObject      *source,
                   GAsyncResult *res,
                   gpointer      user_data)
 {
-  GSimpleAsyncResult *outer_result = user_data;
+  GTask *outer_task = user_data;
   GList *protocols = NULL;
   GList *ret;
   GList *l;
@@ -80,9 +80,8 @@ get_protocols_cb (GObject      *source,
 
   if (!tpaw_protocol_get_all_finish (&protocols, res, &error))
     {
-      g_simple_async_result_take_error (outer_result, error);
-      g_simple_async_result_complete_in_idle (outer_result);
-      g_object_unref (outer_result);
+      g_task_return_error (outer_task, error);
+      g_object_unref (outer_task);
       return;
     }
 
@@ -117,10 +116,8 @@ get_protocols_cb (GObject      *source,
   ret = g_list_reverse (ret);
   g_list_free_full (protocols, g_object_unref);
 
-  g_simple_async_result_set_op_res_gpointer (outer_result, ret, free_list_and_unref);
-  g_simple_async_result_complete_in_idle (outer_result);
-
-  g_object_unref (outer_result);
+  g_task_return_pointer (outer_task, ret, free_list_and_unref);
+  g_object_unref (outer_task);
 }
 
 static void
@@ -128,13 +125,12 @@ get_providers (GoaProviderFactory  *factory,
                GAsyncReadyCallback  callback,
                gpointer             user_data)
 {
-  GSimpleAsyncResult *result;
+  GTask *task;
 
   g_return_if_fail (GOA_IS_TELEPATHY_FACTORY (factory));
 
-  result = g_simple_async_result_new (G_OBJECT (factory), callback, user_data,
-      get_providers);
-  tpaw_protocol_get_all_async (get_protocols_cb, result);
+  task = g_task_new (factory, NULL, callback, user_data);
+  tpaw_protocol_get_all_async (get_protocols_cb, task);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

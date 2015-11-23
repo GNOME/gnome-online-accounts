@@ -69,7 +69,7 @@ struct _GoaProviderFactoryClass
                                              const gchar           *provider_name);
 
   /* The async method is mandatory to implement, but _finish has a default
-   * implementation suitable for a GSimpleAsyncResult. */
+   * implementation suitable for a GTask. */
   void         (*get_providers)             (GoaProviderFactory    *factory,
                                              GAsyncReadyCallback    callback,
                                              gpointer               user_data);

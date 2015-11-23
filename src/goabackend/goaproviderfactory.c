@@ -100,7 +100,7 @@ goa_provider_factory_get_providers (GoaProviderFactory  *factory,
  * Finishes an operation started with goa_provider_factory_get_providers()
  *
  * This is a virtual method that subclasses may implement. The default implementation is suitable for
- * #GSimpleAsyncResult an implementation of goa_provider_factory_get_providers() using #GSimpleAsyncResult.
+ * an implementation of goa_provider_factory_get_providers() using #GTask.
  *
  * Returns: %TRUE if the list was successfully retrieved, %FALSE if @error is set.
  */
@@ -124,22 +124,27 @@ get_providers_finish_default (GoaProviderFactory  *factory,
                               GAsyncResult        *result,
                               GError             **error)
 {
-
-  GSimpleAsyncResult *simple = (GSimpleAsyncResult *) result;
+  GTask *task;
   GList *providers;
+  gboolean had_error;
 
-  g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (factory), NULL),
-      FALSE);
+  g_return_val_if_fail (g_task_is_valid (result, factory), FALSE);
 
-  if (g_simple_async_result_propagate_error (simple, error))
+  task = G_TASK (result);
+
+  /* Workaround for bgo#764163 */
+  had_error = g_task_had_error (task);
+  providers = g_task_propagate_pointer (task, error);
+  if (had_error)
     return FALSE;
 
   if (out_providers != NULL)
     {
-      providers = g_simple_async_result_get_op_res_gpointer (simple);
-      *out_providers = g_list_copy_deep (providers, (GCopyFunc) g_object_ref, NULL);
+      *out_providers = providers;
+      providers = NULL;
     }
 
+  g_list_free_full (providers, g_object_unref);
   return TRUE;
 }
 
