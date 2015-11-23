@@ -805,16 +805,20 @@ on_temporary_account_created_for_identity (GoaIdentityService *self,
                                            GAsyncResult       *result,
                                            GoaIdentity        *identity)
 {
-  GoaObject   *object;
+  GoaObject   *object = NULL;
   const char  *principal;
   GError      *error;
+  gboolean     had_error;
 
   principal = goa_identity_get_identifier (identity);
   g_hash_table_remove (self->priv->pending_temporary_account_results,
                        principal);
 
   error = NULL;
-  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), &error))
+  /* Workaround for bgo#764163 */
+  had_error = g_task_had_error (G_TASK (result));
+  object = g_task_propagate_pointer (G_TASK (result), &error);
+  if (had_error)
     {
       const char *identifier;
 
@@ -823,19 +827,20 @@ on_temporary_account_created_for_identity (GoaIdentityService *self,
                identifier,
                error->message);
       g_error_free (error);
-      return;
+      goto out;
     }
-
-  object = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
 
   if (object != NULL)
     ensure_account_credentials (self, object);
+
+ out:
+  g_clear_object (&object);
 }
 
 static void
-on_account_added (GoaManager         *manager,
-                  GAsyncResult       *result,
-                  GSimpleAsyncResult *operation_result)
+on_account_added (GoaManager   *manager,
+                  GAsyncResult *result,
+                  GTask        *operation_result)
 {
   GoaIdentityService *self;
   GDBusObjectManager *object_manager;
@@ -843,7 +848,7 @@ on_account_added (GoaManager         *manager,
   GoaObject *object;
   GError *error;
 
-  self = GOA_IDENTITY_SERVICE (g_async_result_get_source_object (G_ASYNC_RESULT (operation_result)));
+  self = GOA_IDENTITY_SERVICE (g_task_get_source_object (operation_result));
   object_path = NULL;
   object = NULL;
   error = NULL;
@@ -853,8 +858,7 @@ on_account_added (GoaManager         *manager,
                                             result,
                                             &error))
     {
-      g_simple_async_result_take_error (operation_result, error);
-      g_simple_async_result_complete_in_idle (operation_result);
+      g_task_return_error (operation_result, error);
       g_object_unref (operation_result);
       return;
     }
@@ -870,14 +874,10 @@ on_account_added (GoaManager         *manager,
     }
 
   if (object == NULL)
-    g_simple_async_result_set_op_res_gpointer (operation_result, NULL, NULL);
+    g_task_return_pointer (operation_result, NULL, NULL);
   else
-    g_simple_async_result_set_op_res_gpointer (operation_result,
-                                               object,
-                                               (GDestroyNotify)
-                                               g_object_unref);
+    g_task_return_pointer (operation_result, object, g_object_unref);
 
-  g_simple_async_result_complete_in_idle (operation_result);
   g_object_unref (operation_result);
 }
 
@@ -888,7 +888,7 @@ add_temporary_account (GoaIdentityService *self,
   char               *realm;
   char               *preauth_source;
   const char         *principal;
-  GSimpleAsyncResult *operation_result;
+  GTask              *operation_result;
   GVariantBuilder     credentials;
   GVariantBuilder     details;
   GoaManager         *manager;
@@ -925,11 +925,10 @@ add_temporary_account (GoaIdentityService *self,
 
   g_debug ("GoaIdentityService: asking to sign back in");
 
-  operation_result = g_simple_async_result_new (G_OBJECT (self),
-                                                (GAsyncReadyCallback)
-                                                on_temporary_account_created_for_identity,
-                                                identity,
-                                                add_temporary_account);
+  operation_result = g_task_new (self,
+                                 NULL,
+                                 (GAsyncReadyCallback) on_temporary_account_created_for_identity,
+                                 identity);
   g_hash_table_insert (self->priv->pending_temporary_account_results,
                        g_strdup (principal),
                        g_object_ref (operation_result));
