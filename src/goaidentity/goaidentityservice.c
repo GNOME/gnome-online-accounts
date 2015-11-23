@@ -146,22 +146,26 @@ on_sign_in_done (GoaIdentityService *self,
   GoaIdentity      *identity;
   char             *object_path;
   GError           *error;
+  gboolean          had_error;
 
   error = NULL;
-  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), &error))
+  /* Workaround for bgo#764163 */
+  had_error = g_task_had_error (G_TASK (result));
+  identity = g_task_propagate_pointer (G_TASK (result), &error);
+  if (had_error)
     {
       g_task_return_error (operation_result, error);
       g_object_unref (operation_result);
       return;
     }
 
-  identity = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
   object_path = export_identity (self, identity);
 
   g_task_return_pointer (operation_result, object_path, (GDestroyNotify) g_free);
 
   /* User is signed in, so we're mostly done
    */
+  g_object_unref (identity);
   g_object_unref (operation_result);
 }
 
@@ -771,7 +775,7 @@ on_identity_needs_renewal (GoaIdentityManager *identity_manager,
 static void
 on_identity_signed_in (GoaIdentityManager *manager,
                        GAsyncResult       *result,
-                       GSimpleAsyncResult *operation_result)
+                       GTask              *operation_result)
 {
   GError *error;
   GoaIdentity *identity;
@@ -783,17 +787,14 @@ on_identity_signed_in (GoaIdentityManager *manager,
     {
       g_debug ("GoaIdentityService: could not sign in identity: %s",
                error->message);
-      g_simple_async_result_take_error (operation_result, error);
+      g_task_return_error (operation_result, error);
     }
   else
     {
       g_debug ("GoaIdentityService: identity signed in");
-      g_simple_async_result_set_op_res_gpointer (operation_result,
-                                                 g_object_ref (identity),
-                                                 (GDestroyNotify)
-                                                 g_object_unref);
+      g_task_return_pointer (operation_result, g_object_ref (identity), g_object_unref);
     }
-  g_simple_async_result_complete_in_idle (operation_result);
+
   g_object_unref (operation_result);
 }
 
@@ -1265,17 +1266,16 @@ on_identity_inquiry (GoaIdentityInquiry *inquiry,
 static void
 cancel_sign_in (GoaIdentityManager *identity_manager,
                 GoaIdentity        *identity,
-                GSimpleAsyncResult *operation_result)
+                GTask              *operation_result)
 {
   GoaIdentity *operation_identity;
 
-  operation_identity = g_simple_async_result_get_source_tag (operation_result);
+  operation_identity = g_task_get_task_data (operation_result);
   if (operation_identity == identity)
     {
       GCancellable *cancellable;
 
-      cancellable = g_object_get_data (G_OBJECT (operation_result),
-                                       "cancellable");
+      cancellable = g_task_get_cancellable (operation_result);
       g_cancellable_cancel (cancellable);
     }
 }
@@ -1290,19 +1290,13 @@ sign_in (GoaIdentityService     *self,
          GAsyncReadyCallback     callback,
          gpointer                user_data)
 {
-  GSimpleAsyncResult *operation_result;
+  GTask *operation_result;
 
   g_debug ("GoaIdentityService: asking to sign in");
 
-  operation_result = g_simple_async_result_new (G_OBJECT (self),
-                                                callback,
-                                                user_data,
-                                                NULL);
-  g_simple_async_result_set_check_cancellable (operation_result, cancellable);
+  operation_result = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_task_data (operation_result, user_data, NULL);
 
-  g_object_set_data (G_OBJECT (operation_result),
-                     "cancellable",
-                     cancellable);
   g_signal_connect_object (G_OBJECT (self->priv->identity_manager),
                            "identity-refreshed",
                            G_CALLBACK (cancel_sign_in),
