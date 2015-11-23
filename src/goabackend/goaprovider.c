@@ -1059,7 +1059,7 @@ typedef struct
 {
   GQueue ret;
   gint pending_calls;
-  GSimpleAsyncResult *result;
+  GTask *task;
 } GetAllData;
 
 static void
@@ -1106,11 +1106,9 @@ get_all_check_done (GetAllData *data)
   g_queue_sort (&data->ret, (GCompareDataFunc) compare_providers, NULL);
 
   /* Steal the list out of the GQueue. */
-  g_simple_async_result_set_op_res_gpointer (data->result, data->ret.head,
-      free_list_and_unref);
-  g_simple_async_result_complete_in_idle (data->result);
+  g_task_return_pointer (data->task, data->ret.head, free_list_and_unref);
 
-  g_object_unref (data->result);
+  g_object_unref (data->task);
   g_slice_free (GetAllData, data);
 }
 
@@ -1176,8 +1174,8 @@ goa_provider_get_all (GAsyncReadyCallback callback,
   ensure_builtins_loaded ();
 
   data = g_slice_new0 (GetAllData);
-  data->result = g_simple_async_result_new (NULL, callback, user_data,
-      goa_provider_get_all);
+  data->task = g_task_new (NULL, NULL, callback, user_data);
+  g_task_set_source_tag (data->task, goa_provider_get_all);
   g_queue_init (&data->ret);
 
   /* Load the normal providers. */
@@ -1226,22 +1224,27 @@ goa_provider_get_all_finish (GList        **out_providers,
                              GAsyncResult  *result,
                              GError       **error)
 {
-  GSimpleAsyncResult *simple = (GSimpleAsyncResult *) result;
+  GTask *task = G_TASK (result);
   GList *providers;
+  gboolean had_error;
 
-  g_return_val_if_fail (g_simple_async_result_is_valid (result, NULL,
-        goa_provider_get_all), FALSE);
+  g_return_val_if_fail (g_task_is_valid (result, NULL), FALSE);
+  g_return_val_if_fail (g_task_get_source_tag (task) == goa_provider_get_all, FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  if (g_simple_async_result_propagate_error (simple, error))
+  /* Workaround for bgo#764163 */
+  had_error = g_task_had_error (task);
+  providers = g_task_propagate_pointer (task, error);
+  if (had_error)
     return FALSE;
 
   if (out_providers != NULL)
     {
-      providers = g_simple_async_result_get_op_res_gpointer (simple);
-      *out_providers = g_list_copy_deep (providers, (GCopyFunc) g_object_ref, NULL);
+      *out_providers = providers;
+      providers = NULL;
     }
 
+  g_list_free_full (providers, g_object_unref);
   return TRUE;
 }
 
