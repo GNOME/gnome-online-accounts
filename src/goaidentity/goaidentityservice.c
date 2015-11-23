@@ -521,32 +521,31 @@ on_secret_keys_exchanged (GoaIdentityService *self,
 {
   GDBusMethodInvocation *invocation;
   GError                *error;
+  char                  *output_key = NULL;
 
-  invocation = g_simple_async_result_get_source_tag (G_SIMPLE_ASYNC_RESULT (result));
+  invocation = g_task_get_task_data (G_TASK (result));
 
   error = NULL;
-  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), &error))
+  output_key = g_task_propagate_pointer (G_TASK (result), &error);
+  if (error != NULL)
     {
       g_dbus_method_invocation_take_error (invocation, error);
     }
   else
     {
-      const char *output_key;
-
-      output_key = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
       goa_identity_service_manager_complete_exchange_secret_keys (GOA_IDENTITY_SERVICE_MANAGER (self),
                                                                   invocation,
                                                                   output_key);
     }
 
-  g_object_unref (invocation);
+  g_free (output_key);
 }
 
 static void
 on_caller_watched (GDBusConnection    *connection,
                    const char         *name,
                    const char         *name_owner,
-                   GSimpleAsyncResult *operation_result)
+                   GTask              *operation_result)
 {
   GoaIdentityService    *self;
   GcrSecretExchange     *secret_exchange;
@@ -554,7 +553,7 @@ on_caller_watched (GDBusConnection    *connection,
   const char            *input_key;
   char                  *output_key;
 
-  self = GOA_IDENTITY_SERVICE (g_async_result_get_source_object (G_ASYNC_RESULT (operation_result)));
+  self = GOA_IDENTITY_SERVICE (g_task_get_source_object (operation_result));
   identifier = g_object_get_data (G_OBJECT (operation_result), "identifier");
   input_key = g_object_get_data (G_OBJECT (operation_result), "input-key");
 
@@ -563,11 +562,10 @@ on_caller_watched (GDBusConnection    *connection,
   if (!gcr_secret_exchange_receive (secret_exchange,
                                     input_key))
     {
-      g_simple_async_result_set_error (operation_result,
-                                       GCR_ERROR,
-                                       GCR_ERROR_UNRECOGNIZED,
-                                       _("Initial secret key is invalid"));
-      g_simple_async_result_complete_in_idle (operation_result);
+      g_task_return_new_error (operation_result,
+                               GCR_ERROR,
+                               GCR_ERROR_UNRECOGNIZED,
+                               _("Initial secret key is invalid"));
       return;
     }
 
@@ -576,25 +574,20 @@ on_caller_watched (GDBusConnection    *connection,
                        secret_exchange);
 
   output_key = gcr_secret_exchange_send (secret_exchange, NULL, 0);
-
-  g_simple_async_result_set_op_res_gpointer (operation_result,
-                                             output_key,
-                                             (GDestroyNotify)
-                                             g_free);
-  g_simple_async_result_complete_in_idle (operation_result);
+  g_task_return_pointer (operation_result, output_key, g_free);
 }
 
 static void
 on_caller_vanished (GDBusConnection    *connection,
                     const char         *name,
-                    GSimpleAsyncResult *operation_result)
+                    GTask              *operation_result)
 {
   GoaIdentityService *self;
   GCancellable       *cancellable;
 
-  self = GOA_IDENTITY_SERVICE (g_async_result_get_source_object (G_ASYNC_RESULT (operation_result)));
+  self = GOA_IDENTITY_SERVICE (g_task_get_source_object (operation_result));
 
-  cancellable = g_object_get_data (G_OBJECT (operation_result), "cancellable");
+  cancellable = g_task_get_cancellable (operation_result);
   g_cancellable_cancel (cancellable);
 
   g_hash_table_remove (self->priv->watched_client_connections, name);
@@ -609,19 +602,14 @@ goa_identity_service_handle_exchange_secret_keys (GoaIdentityServiceManager *man
                                                   const char                *input_key)
 {
   GoaIdentityService     *self = GOA_IDENTITY_SERVICE (manager);
-  GSimpleAsyncResult     *operation_result;
+  GTask                  *operation_result;
   GCancellable           *cancellable;
   guint                   watch_id;
   const char             *sender;
 
   cancellable = g_cancellable_new ();
-  operation_result = g_simple_async_result_new (G_OBJECT (self),
-                                                (GAsyncReadyCallback)
-                                                on_secret_keys_exchanged,
-                                                NULL,
-                                                g_object_ref (invocation));
-  g_simple_async_result_set_check_cancellable (operation_result, cancellable);
-  g_object_set_data (G_OBJECT (operation_result), "cancellable", cancellable);
+  operation_result = g_task_new (self, cancellable, (GAsyncReadyCallback) on_secret_keys_exchanged, NULL);
+  g_task_set_task_data (operation_result, g_object_ref (invocation), g_object_unref);
 
   g_object_set_data_full (G_OBJECT (operation_result),
                           "identifier",
