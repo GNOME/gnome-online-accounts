@@ -60,8 +60,9 @@ static char *sign_in_identity_sync (GoaKerberosProvider  *self,
                                     const char           *preauth_source,
                                     GCancellable         *cancellable,
                                     GError              **error);
-static void sign_in_thread (GSimpleAsyncResult  *result,
+static void sign_in_thread (GTask               *result,
                             GoaKerberosProvider *self,
+                            gpointer             task_data,
                             GCancellable        *cancellable);
 static GoaIdentityServiceIdentity *get_identity_from_object_manager (GoaKerberosProvider *self,
                                                                      const char          *identifier);
@@ -218,19 +219,11 @@ sign_in_identity (GoaKerberosProvider  *self,
                   GAsyncReadyCallback   callback,
                   gpointer              user_data)
 {
-  GSimpleAsyncResult *operation_result;
+  GTask *operation_result;
 
-  operation_result = g_simple_async_result_new (G_OBJECT (self),
-                                                callback,
-                                                user_data,
-                                                (gpointer)
-                                                identifier);
+  operation_result = g_task_new (G_OBJECT (self), cancellable, callback, user_data);
+  g_task_set_source_tag (operation_result, (gpointer) identifier);
 
-  g_simple_async_result_set_check_cancellable (operation_result, cancellable);
-
-  g_object_set_data (G_OBJECT (operation_result),
-                     "cancellable",
-                     cancellable);
   g_object_set_data (G_OBJECT (operation_result),
                      "password",
                      (gpointer)
@@ -239,11 +232,7 @@ sign_in_identity (GoaKerberosProvider  *self,
                           "preauthentication-source",
                           g_strdup (preauth_source),
                           g_free);
-  g_simple_async_result_run_in_thread (operation_result,
-                                       (GSimpleAsyncThreadFunc)
-                                       sign_in_thread,
-                                       G_PRIORITY_DEFAULT,
-                                       cancellable);
+  g_task_run_in_thread (operation_result, (GTaskThreadFunc) sign_in_thread);
 
   g_object_unref (operation_result);
 }
@@ -827,9 +816,10 @@ on_initial_sign_in_done (GoaKerberosProvider *self,
                          GAsyncResult        *result,
                          GSimpleAsyncResult  *operation_result)
 {
-  GError    *error;
-  gboolean   remember_password;
-  GoaObject *object;
+  GError     *error;
+  gboolean    remember_password;
+  GoaObject  *object;
+  char       *object_path;
 
   object = g_simple_async_result_get_source_tag (operation_result);
 
@@ -837,16 +827,10 @@ on_initial_sign_in_done (GoaKerberosProvider *self,
                                                           "remember-password"));
 
   error = NULL;
-  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), &error))
-    {
-      g_simple_async_result_take_error (operation_result, error);
-    }
-  else if (remember_password)
+  object_path = g_task_propagate_pointer (G_TASK (result), &error);
+  if (!g_task_had_error (G_TASK (result)) && remember_password)
     {
       GVariantBuilder  builder;
-      char            *object_path;
-
-      object_path = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
 
       if (object_path != NULL && object != NULL)
         {
@@ -872,11 +856,11 @@ on_initial_sign_in_done (GoaKerberosProvider *self,
                                                        NULL,
                                                        NULL);
         }
-
-      g_free (object_path);
     }
 
   g_simple_async_result_complete_in_idle (operation_result);
+
+  g_free (object_path);
   g_object_unref (operation_result);
 }
 
@@ -1626,8 +1610,9 @@ out:
 }
 
 static void
-sign_in_thread (GSimpleAsyncResult  *result,
+sign_in_thread (GTask               *task,
                 GoaKerberosProvider *self,
+                gpointer             task_data G_GNUC_UNUSED,
                 GCancellable        *cancellable)
 {
   const char *identifier;
@@ -1636,17 +1621,17 @@ sign_in_thread (GSimpleAsyncResult  *result,
   char *object_path;
   GError *error;
 
-  identifier = g_simple_async_result_get_source_tag (result);
-  password = g_object_get_data (G_OBJECT (result), "password");
-  preauth_source = g_object_get_data (G_OBJECT (result), "preauth-source");
+  identifier = g_task_get_source_tag (task);
+  password = g_object_get_data (G_OBJECT (task), "password");
+  preauth_source = g_object_get_data (G_OBJECT (task), "preauth-source");
 
   error = NULL;
   object_path = sign_in_identity_sync (self, identifier, password, preauth_source, cancellable, &error);
 
   if (object_path == NULL)
-    g_simple_async_result_take_error (result, error);
+    g_task_return_error (task, error);
   else
-    g_simple_async_result_set_op_res_gpointer (result, object_path, NULL);
+    g_task_return_pointer (task, object_path, NULL);
 }
 
 
