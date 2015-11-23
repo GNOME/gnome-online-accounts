@@ -652,14 +652,15 @@ ensure_credentials_data_free (EnsureCredentialsData *data)
 }
 
 static void
-ensure_credentials_in_thread_func (GSimpleAsyncResult *simple,
-                                   GObject            *object,
+ensure_credentials_in_thread_func (GTask              *task,
+                                   gpointer            object,
+                                   gpointer            task_data,
                                    GCancellable       *cancellable)
 {
   EnsureCredentialsData *data;
   GError *error;
 
-  data = g_simple_async_result_get_op_res_gpointer (simple);
+  data = task_data;
 
   error = NULL;
   if (!goa_provider_ensure_credentials_sync (GOA_PROVIDER (object),
@@ -667,7 +668,9 @@ ensure_credentials_in_thread_func (GSimpleAsyncResult *simple,
                                              &data->expires_in,
                                              cancellable,
                                              &error))
-    g_simple_async_result_take_error (simple, error);
+    g_task_return_error (task, error);
+  else
+    g_task_return_boolean (task, TRUE);
 }
 
 
@@ -698,24 +701,23 @@ goa_provider_ensure_credentials (GoaProvider          *self,
                                  GAsyncReadyCallback   callback,
                                  gpointer              user_data)
 {
-  GSimpleAsyncResult *simple;
+  GTask *task;
 
   g_return_if_fail (GOA_IS_PROVIDER (self));
   g_return_if_fail (GOA_IS_OBJECT (object));
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
-  simple = g_simple_async_result_new (G_OBJECT (self),
-                                      callback,
-                                      user_data,
-                                      goa_provider_ensure_credentials);
-  g_simple_async_result_set_op_res_gpointer (simple,
-                                             ensure_credentials_data_new (object),
-                                             (GDestroyNotify) ensure_credentials_data_free);
-  g_simple_async_result_run_in_thread (simple,
-                                       ensure_credentials_in_thread_func,
-                                       G_PRIORITY_DEFAULT,
-                                       cancellable);
-  g_object_unref (simple);
+  task = g_task_new (G_OBJECT (self),
+                     cancellable,
+                     callback,
+                     user_data);
+  g_task_set_task_data (task,
+                        ensure_credentials_data_new (object),
+                        (GDestroyNotify) ensure_credentials_data_free);
+  g_task_set_source_tag(task, goa_provider_ensure_credentials);
+  g_task_run_in_thread (task, ensure_credentials_in_thread_func);
+
+  g_object_unref (task);
 }
 
 /**
@@ -735,23 +737,27 @@ goa_provider_ensure_credentials_finish (GoaProvider         *self,
                                         GAsyncResult        *res,
                                         GError             **error)
 {
-  GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
+  GTask *task = G_TASK (res);
+  gboolean had_error;
+
   gboolean ret;
   EnsureCredentialsData *data;
 
   ret = FALSE;
 
   g_return_val_if_fail (GOA_IS_PROVIDER (self), FALSE);
-  g_return_val_if_fail (G_IS_ASYNC_RESULT (res), FALSE);
+  g_return_val_if_fail (g_task_is_valid (res, self), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  g_warn_if_fail (g_simple_async_result_get_source_tag (simple) == goa_provider_ensure_credentials);
+  g_warn_if_fail (g_task_get_source_tag (task) == goa_provider_ensure_credentials);
 
-  if (g_simple_async_result_propagate_error (simple, error))
+  /* Workaround for bgo#764163 */
+  had_error = g_task_had_error (task);
+  ret = g_task_propagate_boolean (task, error);
+  if (had_error)
     goto out;
 
-  ret = TRUE;
-  data = g_simple_async_result_get_op_res_gpointer (simple);
+  data = g_task_get_task_data (task);
   if (out_expires_in != NULL)
     *out_expires_in = data->expires_in;
 
