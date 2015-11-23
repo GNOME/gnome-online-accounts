@@ -1626,7 +1626,7 @@ sign_in_thread (GTask               *task,
 static void
 on_object_manager_created (gpointer             object,
                            GAsyncResult        *result,
-                           GSimpleAsyncResult  *operation_result)
+                           gpointer             unused G_GNUC_UNUSED)
 {
   GDBusObjectManager *manager;
   GError *error;
@@ -1671,7 +1671,7 @@ ensure_object_manager (void)
 static void
 on_identity_manager_created (gpointer             identity,
                              GAsyncResult        *result,
-                             GSimpleAsyncResult  *operation_result)
+                             gpointer             unused G_GNUC_UNUSED)
 {
   GoaIdentityServiceManager *manager;
   GError *error;
