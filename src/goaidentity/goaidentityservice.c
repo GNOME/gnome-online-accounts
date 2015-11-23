@@ -412,9 +412,13 @@ on_sign_out_handled (GoaIdentityService    *self,
                      GDBusMethodInvocation *invocation)
 {
   GError *error;
+  gboolean had_error;
 
   error = NULL;
-  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), &error))
+  /* Workaround for bgo#764163 */
+  had_error = g_task_had_error (G_TASK (result));
+  g_task_propagate_boolean (G_TASK (result), &error);
+  if (had_error)
     g_dbus_method_invocation_take_error (invocation, error);
   else
     goa_identity_service_manager_complete_sign_out (GOA_IDENTITY_SERVICE_MANAGER (self),
@@ -424,7 +428,7 @@ on_sign_out_handled (GoaIdentityService    *self,
 static void
 on_identity_signed_out (GoaIdentityManager *manager,
                         GAsyncResult       *result,
-                        GSimpleAsyncResult *operation_result)
+                        GTask              *operation_result)
 {
   GoaIdentityService *self;
   GError             *error;
@@ -432,17 +436,7 @@ on_identity_signed_out (GoaIdentityManager *manager,
   const char         *identifier;
   GoaObject          *object = NULL;
 
-  error = NULL;
-  goa_identity_manager_sign_identity_out_finish (manager, result, &error);
-
-  if (error != NULL)
-    {
-      g_debug ("GoaIdentityService: Identity could not be signed out: %s",
-               error->message);
-      g_simple_async_result_take_error (operation_result, error);
-    }
-
-  self = GOA_IDENTITY_SERVICE (g_async_result_get_source_object (G_ASYNC_RESULT (operation_result)));
+  self = GOA_IDENTITY_SERVICE (g_task_get_source_object (operation_result));
   identity = g_object_get_data (G_OBJECT (operation_result), "identity");
 
   identifier = goa_identity_get_identifier (identity);
@@ -451,8 +445,19 @@ on_identity_signed_out (GoaIdentityManager *manager,
   if (object != NULL)
     ensure_account_credentials (self, object);
 
-  g_simple_async_result_complete_in_idle (operation_result);
+  error = NULL;
+  goa_identity_manager_sign_identity_out_finish (manager, result, &error);
+  if (error != NULL)
+    {
+      g_debug ("GoaIdentityService: Identity could not be signed out: %s",
+               error->message);
+      g_task_return_error (operation_result, error);
+      goto out;
+    }
 
+  g_task_return_boolean (operation_result, TRUE);
+
+ out:
   g_clear_object (&object);
   g_object_unref (operation_result);
 }
@@ -460,7 +465,7 @@ on_identity_signed_out (GoaIdentityManager *manager,
 static void
 on_got_identity_for_sign_out (GoaIdentityManager *manager,
                               GAsyncResult       *result,
-                              GSimpleAsyncResult *operation_result)
+                              GTask              *operation_result)
 {
   GError *error;
   GoaIdentity *identity = NULL;
@@ -472,8 +477,7 @@ on_got_identity_for_sign_out (GoaIdentityManager *manager,
     {
       g_debug ("GoaIdentityService: Identity could not be signed out: %s",
                error->message);
-      g_simple_async_result_take_error (operation_result, error);
-      g_simple_async_result_complete_in_idle (operation_result);
+      g_task_return_error (operation_result, error);
       goto out;
     }
 
@@ -501,20 +505,15 @@ goa_identity_service_handle_sign_out (GoaIdentityServiceManager *manager,
                                       const char                *identifier)
 {
   GoaIdentityService *self = GOA_IDENTITY_SERVICE (manager);
-  GSimpleAsyncResult *result;
+  GTask *task;
 
-  result = g_simple_async_result_new (G_OBJECT (self),
-                                      (GAsyncReadyCallback)
-                                      on_sign_out_handled,
-                                      g_object_ref (invocation),
-                                      goa_identity_service_handle_sign_out);
-
+  task = g_task_new (self, NULL, (GAsyncReadyCallback) on_sign_out_handled, g_object_ref (invocation));
   goa_identity_manager_get_identity (self->priv->identity_manager,
                                      identifier,
                                      NULL,
                                      (GAsyncReadyCallback)
                                      on_got_identity_for_sign_out,
-                                     result);
+                                     task);
   return TRUE;
 }
 
@@ -1371,8 +1370,12 @@ on_sign_out_for_account_change_done (GoaIdentityService *self,
                                      GAsyncResult       *result)
 {
   GError *error = NULL;
+  gboolean had_error;
 
-  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), &error))
+  /* Workaround for bgo#764163 */
+  had_error = g_task_had_error (G_TASK (result));
+  g_task_propagate_boolean (G_TASK (result), &error);
+  if (had_error)
     {
       g_debug ("Log out failed: %s", error->message);
       g_error_free (error);
@@ -1490,7 +1493,7 @@ on_account_interface_removed (GDBusObjectManager *manager,
   GDBusInterfaceInfo *info;
   const char         *provider_type;
   const char         *account_identity;
-  GSimpleAsyncResult *result;
+  GTask              *task;
 
   account = goa_object_peek_account (object);
 
@@ -1522,18 +1525,13 @@ on_account_interface_removed (GDBusObjectManager *manager,
 
   g_debug ("Kerberos account %s was disabled and should now be signed out", account_identity);
 
-  result = g_simple_async_result_new (G_OBJECT (self),
-                                      (GAsyncReadyCallback)
-                                      on_sign_out_for_account_change_done,
-                                      NULL,
-                                      on_account_interface_removed);
-
+  task = g_task_new (self, NULL, (GAsyncReadyCallback) on_sign_out_for_account_change_done, NULL);
   goa_identity_manager_get_identity (self->priv->identity_manager,
                                      account_identity,
                                      NULL,
                                      (GAsyncReadyCallback)
                                      on_got_identity_for_sign_out,
-                                     result);
+                                     task);
 }
 
 static void
