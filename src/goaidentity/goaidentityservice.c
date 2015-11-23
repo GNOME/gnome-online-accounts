@@ -1392,22 +1392,21 @@ on_ticketing_done (GoaIdentityService *self,
 {
   GoaObject *object;
 
-  object = g_simple_async_result_get_source_tag (G_SIMPLE_ASYNC_RESULT (result));
-
+  object = g_task_get_task_data (G_TASK (result));
   ensure_account_credentials (self, object);
 }
 
 static void
-on_got_ticket (GoaTicketing       *ticketing,
-               GAsyncResult       *result,
-               GSimpleAsyncResult *operation_result)
+on_got_ticket (GoaTicketing *ticketing,
+               GAsyncResult *result,
+               GTask        *operation_result)
 {
   GoaObject          *object;
   GoaAccount         *account;
   GError             *error;
   const char         *account_identity;
 
-  object = g_simple_async_result_get_source_tag (operation_result);
+  object = g_task_get_task_data (operation_result);
   account = goa_object_peek_account (object);
   account_identity = goa_account_get_identity (account);
 
@@ -1419,16 +1418,15 @@ on_got_ticket (GoaTicketing       *ticketing,
       g_debug ("GoaIdentityService: could not get ticket for account %s: %s",
                account_identity,
                error->message);
-      g_error_free (error);
 
-      g_simple_async_result_complete_in_idle (operation_result);
+      g_task_return_error (operation_result, error);
       g_object_unref (operation_result);
       return;
     }
 
   g_debug ("GoaIdentityService: got ticket for account %s",
            account_identity);
-  g_simple_async_result_complete_in_idle (operation_result);
+  g_task_return_boolean (operation_result, TRUE);
   g_object_unref (operation_result);
 }
 
@@ -1462,14 +1460,11 @@ on_account_interface_added (GDBusObjectManager *manager,
 
   if (ticketing != NULL)
     {
+      GTask *operation_result;
 
-      GSimpleAsyncResult *operation_result;
+      operation_result = g_task_new (self, NULL, (GAsyncReadyCallback) on_ticketing_done, NULL);
+      g_task_set_task_data (operation_result, object, NULL);
 
-      operation_result = g_simple_async_result_new (G_OBJECT (self),
-                                                    (GAsyncReadyCallback)
-                                                    on_ticketing_done,
-                                                    NULL,
-                                                    object);
       /* Ticketing interface is present, sign in if not already
        * signed in.
        */
