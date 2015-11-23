@@ -5,56 +5,52 @@
 # António Lima <amrlima@gmail.com>, 2013.
 # Tiago S. <almosthumane@portugalmail.pt>, 2014.
 # Bruno Ramalhete <bram.512@gmail.com>, 2014.
-# Pedro Albuquerque <palbuquerque73@gmail.com>, 2014.
+# Pedro Albuquerque <palbuquerque73@gmail.com>, 2014, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 3.14\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-10-02 14:46+0000\n"
-"PO-Revision-Date: 2014-10-02 10:50+0100\n"
+"POT-Creation-Date: 2015-10-18 20:01+0000\n"
+"PO-Revision-Date: 2015-11-23 07:00+0000\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
-"Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
+"Language-Team: Português <palbuquerque73@gmail.com>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\\n\n"
+"X-Generator: Gtranslator 2.91.6\n"
+"X-Project-Style: gnome\n"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:783 ../src/daemon/goadaemon.c:1027
+#: ../src/daemon/goadaemon.c:785 ../src/daemon/goadaemon.c:1029
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Falha ao procurar um fornecedor para: %s"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1015
+#: ../src/daemon/goadaemon.c:1017
 msgid "ProviderType property is not set for account"
 msgstr "A propriedade ProviderType não está definida para a conta"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:228 ../src/goabackend/goahttpclient.c:170
-#, c-format
-msgid "Code: %u — Unexpected response from server"
-msgstr "Código: %u - Resposta inesperada do servidor"
-
-#. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:244
+#: ../src/goabackend/goaewsclient.c:243
 #, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "Falha ao processar a resposta XML de autodescoberta"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: ../src/goabackend/goaewsclient.c:255 ../src/goabackend/goaewsclient.c:270
-#: ../src/goabackend/goaewsclient.c:285
+#: ../src/goabackend/goaewsclient.c:254 ../src/goabackend/goaewsclient.c:269
+#: ../src/goabackend/goaewsclient.c:284
 #, c-format
 msgid "Failed to find ‘%s’ element"
-msgstr "Falha ao procurar elemento ‘%s’"
+msgstr "Falha ao localizar elemento \"%s\""
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:306
+#: ../src/goabackend/goaewsclient.c:305
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "Falha ao procurar ASUrl e OABUrl na resposta de autodescoberta"
@@ -66,21 +62,21 @@ msgstr "Microsoft Exchange"
 #. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:311
 #: ../src/goabackend/goaexchangeprovider.c:1020
-#: ../src/goabackend/goaowncloudprovider.c:398
-#: ../src/goabackend/goaowncloudprovider.c:1183
+#: ../src/goabackend/goaowncloudprovider.c:406
+#: ../src/goabackend/goaowncloudprovider.c:1191
 #, c-format
 msgid "Did not find password with identity ‘%s’ in credentials"
-msgstr "Impossível encontrar a senha com a identidade `%s' nas credenciais"
+msgstr "Impossível encontrar a senha com a identidade \"%s\" nas credenciais"
 
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
 #.
 #: ../src/goabackend/goaexchangeprovider.c:339
-#: ../src/goabackend/goaowncloudprovider.c:421
+#: ../src/goabackend/goaowncloudprovider.c:429
 #, c-format
 msgid "Invalid password with username ‘%s’ (%s, %d): "
-msgstr "Senha inválida para o utilizador `%s' (%s, %d): "
+msgstr "Senha inválida para o utilizador \"%s\" (%s, %d): "
 
 #: ../src/goabackend/goaexchangeprovider.c:492
 #: ../src/goabackend/goaimapsmtpprovider.c:715
@@ -90,7 +86,7 @@ msgstr "_Email"
 #: ../src/goabackend/goaexchangeprovider.c:493
 #: ../src/goabackend/goaimapsmtpprovider.c:735
 #: ../src/goabackend/goaimapsmtpprovider.c:755
-#: ../src/goabackend/goaowncloudprovider.c:649
+#: ../src/goabackend/goaowncloudprovider.c:657
 msgid "_Password"
 msgstr "_Senha"
 
@@ -102,36 +98,36 @@ msgstr "_Personalizado"
 #: ../src/goabackend/goaimapsmtpprovider.c:734
 #: ../src/goabackend/goaimapsmtpprovider.c:754
 #: ../src/goabackend/goakerberosprovider.c:1123
-#: ../src/goabackend/goaowncloudprovider.c:648
+#: ../src/goabackend/goaowncloudprovider.c:656
 msgid "User_name"
 msgstr "_Utilizador"
 
 #: ../src/goabackend/goaexchangeprovider.c:508
-#: ../src/goabackend/goaowncloudprovider.c:647
+#: ../src/goabackend/goaowncloudprovider.c:655
 msgid "_Server"
-msgstr "S_ervidor"
+msgstr "S_Ervidor"
 
 #. --
 #: ../src/goabackend/goaexchangeprovider.c:518
 #: ../src/goabackend/goaimapsmtpprovider.c:767
 #: ../src/goabackend/goakerberosprovider.c:1128
-#: ../src/goabackend/goaowncloudprovider.c:658
+#: ../src/goabackend/goaowncloudprovider.c:666
 #: ../src/goabackend/goatelepathyprovider.c:649
 msgid "_Cancel"
 msgstr "_Cancelar"
 
 #: ../src/goabackend/goaexchangeprovider.c:519
 #: ../src/goabackend/goakerberosprovider.c:1129
-#: ../src/goabackend/goaowncloudprovider.c:659
+#: ../src/goabackend/goaowncloudprovider.c:667
 msgid "C_onnect"
-msgstr "A li_gar"
+msgstr "A li_Gar"
 
 #: ../src/goabackend/goaexchangeprovider.c:535
 #: ../src/goabackend/goaimapsmtpprovider.c:784
 #: ../src/goabackend/goakerberosprovider.c:1145
-#: ../src/goabackend/goaowncloudprovider.c:675
+#: ../src/goabackend/goaowncloudprovider.c:683
 msgid "Connecting…"
-msgstr "A Ligar…"
+msgstr "A ligar…"
 
 #: ../src/goabackend/goaexchangeprovider.c:640
 #: ../src/goabackend/goaexchangeprovider.c:837
@@ -141,11 +137,11 @@ msgstr "A Ligar…"
 #: ../src/goabackend/goaimapsmtpprovider.c:1333
 #: ../src/goabackend/goaimapsmtpprovider.c:1406
 #: ../src/goabackend/goakerberosprovider.c:1536
-#: ../src/goabackend/goamediaserverprovider.c:473
-#: ../src/goabackend/goaoauth2provider.c:1077
+#: ../src/goabackend/goamediaserverprovider.c:475
+#: ../src/goabackend/goaoauth2provider.c:1078
 #: ../src/goabackend/goaoauthprovider.c:908
-#: ../src/goabackend/goaowncloudprovider.c:786
-#: ../src/goabackend/goaowncloudprovider.c:1001
+#: ../src/goabackend/goaowncloudprovider.c:794
+#: ../src/goabackend/goaowncloudprovider.c:1009
 #: ../src/goabackend/goatelepathyprovider.c:459
 #: ../src/goabackend/goatelepathyprovider.c:508
 #: ../src/goabackend/goatelepathyprovider.c:683
@@ -159,8 +155,8 @@ msgstr "O diálogo foi fechado"
 #: ../src/goabackend/goaimapsmtpprovider.c:1104
 #: ../src/goabackend/goaimapsmtpprovider.c:1357
 #: ../src/goabackend/goaimapsmtpprovider.c:1431
-#: ../src/goabackend/goaowncloudprovider.c:828
-#: ../src/goabackend/goaowncloudprovider.c:1022
+#: ../src/goabackend/goaowncloudprovider.c:836
+#: ../src/goabackend/goaowncloudprovider.c:1030
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "O diálogo foi fechado (%s, %d): "
@@ -168,7 +164,7 @@ msgstr "O diálogo foi fechado (%s, %d): "
 #: ../src/goabackend/goaexchangeprovider.c:691
 #: ../src/goabackend/goaimapsmtpprovider.c:1024
 #: ../src/goabackend/goaimapsmtpprovider.c:1117
-#: ../src/goabackend/goaowncloudprovider.c:841
+#: ../src/goabackend/goaowncloudprovider.c:849
 msgid "_Ignore"
 msgstr "_Ignorar"
 
@@ -179,55 +175,55 @@ msgstr "_Ignorar"
 #: ../src/goabackend/goaimapsmtpprovider.c:1376
 #: ../src/goabackend/goaimapsmtpprovider.c:1450
 #: ../src/goabackend/goakerberosprovider.c:1646
-#: ../src/goabackend/goaowncloudprovider.c:846
-#: ../src/goabackend/goaowncloudprovider.c:1041
+#: ../src/goabackend/goaowncloudprovider.c:854
+#: ../src/goabackend/goaowncloudprovider.c:1049
 msgid "_Try Again"
-msgstr "_Tentar Novamente"
+msgstr "_Tentar novamente"
 
 #: ../src/goabackend/goaexchangeprovider.c:701
 #: ../src/goabackend/goaexchangeprovider.c:877
 msgid "Error connecting to Microsoft Exchange server"
-msgstr "Erro ao se ligar ao servidor Microsoft Exchange"
+msgstr "Erro ao ligar ao servidor Microsoft Exchange"
 
 #. Translators: This is a label for a series of
 #. * options switches. For example: “Use for Mail”.
 #: ../src/goabackend/goaexchangeprovider.c:939
-#: ../src/goabackend/goafacebookprovider.c:461
-#: ../src/goabackend/goaflickrprovider.c:411
-#: ../src/goabackend/goagoogleprovider.c:592
+#: ../src/goabackend/goafacebookprovider.c:433
+#: ../src/goabackend/goaflickrprovider.c:413
+#: ../src/goabackend/goagoogleprovider.c:593
 #: ../src/goabackend/goakerberosprovider.c:1719
-#: ../src/goabackend/goamediaserverprovider.c:584
-#: ../src/goabackend/goaowncloudprovider.c:1097
+#: ../src/goabackend/goamediaserverprovider.c:586
+#: ../src/goabackend/goaowncloudprovider.c:1105
 #: ../src/goabackend/goapocketprovider.c:421
 #: ../src/goabackend/goatelepathyprovider.c:890
-#: ../src/goabackend/goawindowsliveprovider.c:421
+#: ../src/goabackend/goawindowsliveprovider.c:422
 msgid "Use for"
-msgstr "Utilizar para"
+msgstr "Usar para"
 
 #: ../src/goabackend/goaexchangeprovider.c:941
-#: ../src/goabackend/goagoogleprovider.c:594
-#: ../src/goabackend/goawindowsliveprovider.c:423
+#: ../src/goabackend/goagoogleprovider.c:595
+#: ../src/goabackend/goawindowsliveprovider.c:424
 msgid "_Mail"
 msgstr "_Correio"
 
 #: ../src/goabackend/goaexchangeprovider.c:946
-#: ../src/goabackend/goagoogleprovider.c:599
-#: ../src/goabackend/goaowncloudprovider.c:1099
+#: ../src/goabackend/goagoogleprovider.c:600
+#: ../src/goabackend/goaowncloudprovider.c:1107
 msgid "Cale_ndar"
-msgstr "Cale_ndário"
+msgstr "Cale_Ndário"
 
 #: ../src/goabackend/goaexchangeprovider.c:951
-#: ../src/goabackend/goagoogleprovider.c:604
-#: ../src/goabackend/goaowncloudprovider.c:1104
+#: ../src/goabackend/goagoogleprovider.c:605
+#: ../src/goabackend/goaowncloudprovider.c:1112
 msgid "_Contacts"
-msgstr "C_ontactos"
+msgstr "C_Ontactos"
 
 #: ../src/goabackend/goafacebookprovider.c:76
 msgid "Facebook"
 msgstr "Facebook"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:218
+#: ../src/goabackend/goafacebookprovider.c:215
 #: ../src/goabackend/goaflickrprovider.c:183
 #: ../src/goabackend/goagoogleprovider.c:218
 #: ../src/goabackend/goawindowsliveprovider.c:189
@@ -235,11 +231,10 @@ msgstr "Facebook"
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
-msgstr ""
-"Esperado estado 200 ao pedir a sua identidade, foi recebido o estado %d (%s)"
+msgstr "Esperado estado 200 ao pedir a sua identidade, obtido o estado %d (%s)"
 
-#: ../src/goabackend/goafacebookprovider.c:237
-#: ../src/goabackend/goafacebookprovider.c:249
+#: ../src/goabackend/goafacebookprovider.c:234
+#: ../src/goabackend/goafacebookprovider.c:246
 #: ../src/goabackend/goafacebookprovider.c:259
 #: ../src/goabackend/goaflickrprovider.c:202
 #: ../src/goabackend/goaflickrprovider.c:214
@@ -262,30 +257,20 @@ msgstr ""
 #: ../src/goabackend/goayahooprovider.c:293
 #, c-format
 msgid "Could not parse response"
-msgstr "Incapaz de analisar resposta"
+msgstr "Impossível processar resposta"
 
-#: ../src/goabackend/goafacebookprovider.c:463
-#: ../src/goabackend/goagoogleprovider.c:609
-#: ../src/goabackend/goatelepathyprovider.c:892
-msgid "C_hat"
-msgstr "_Diálogo"
-
-#: ../src/goabackend/goafacebookprovider.c:468
-#: ../src/goabackend/goaflickrprovider.c:413
-#: ../src/goabackend/goagoogleprovider.c:619
-#: ../src/goabackend/goamediaserverprovider.c:586
+#: ../src/goabackend/goafacebookprovider.c:435
+#: ../src/goabackend/goaflickrprovider.c:415
+#: ../src/goabackend/goagoogleprovider.c:620
+#: ../src/goabackend/goamediaserverprovider.c:588
 msgid "_Photos"
-msgstr "_Fotos"
-
-#: ../src/goabackend/goafacebookprovider.c:473
-msgid "_Maps"
-msgstr "_Mapas"
+msgstr "_Fotografias"
 
 #: ../src/goabackend/goaflickrprovider.c:77
 msgid "Flickr"
 msgstr "Flickr"
 
-#: ../src/goabackend/goaflickrprovider.c:320
+#: ../src/goabackend/goaflickrprovider.c:321
 #: ../src/goabackend/goayahooprovider.c:343
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "A sua data de sistema é inválida. Verifique a sua data e hora."
@@ -294,15 +279,20 @@ msgstr "A sua data de sistema é inválida. Verifique a sua data e hora."
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:614
-#: ../src/goabackend/goaowncloudprovider.c:1109
-#: ../src/goabackend/goawindowsliveprovider.c:428
+#: ../src/goabackend/goagoogleprovider.c:610
+#: ../src/goabackend/goatelepathyprovider.c:892
+msgid "C_hat"
+msgstr "_Diálogo"
+
+#: ../src/goabackend/goagoogleprovider.c:615
+#: ../src/goabackend/goaowncloudprovider.c:1117
+#: ../src/goabackend/goawindowsliveprovider.c:429
 msgid "_Documents"
 msgstr "_Documentos"
 
-#: ../src/goabackend/goagoogleprovider.c:624
+#: ../src/goabackend/goagoogleprovider.c:625
 msgid "Prin_ters"
-msgstr "I_mpressoras"
+msgstr "I_Mpressoras"
 
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:94 ../src/goabackend/goasmtpauth.c:160
@@ -312,7 +302,7 @@ msgstr "Serviço indisponível"
 
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:115
-#: ../src/goabackend/goasmtpauth.c:113
+#: ../src/goabackend/goasmtpauth.c:113 ../src/goabackend/goautils.c:538
 #, c-format
 msgid "Authentication failed"
 msgstr "Falha na autenticação"
@@ -372,11 +362,11 @@ msgstr "Nenhuma"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:657
 msgid "STARTTLS after connecting"
-msgstr "STARTTLS após se ligar"
+msgstr "STARTTLS após ligação"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:660
 msgid "SSL on a dedicated port"
-msgstr "SSL num porto dedicado"
+msgstr "SSL numa porta dedicada"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:716
 msgid "_Name"
@@ -399,12 +389,12 @@ msgstr "_Seguinte"
 #: ../src/goabackend/goaimapsmtpprovider.c:1034
 #: ../src/goabackend/goaimapsmtpprovider.c:1369
 msgid "Error connecting to IMAP server"
-msgstr "Erro ao se ligar ao servidor IMAP"
+msgstr "Erro ao ligar ao servidor IMAP"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:1127
 #: ../src/goabackend/goaimapsmtpprovider.c:1443
 msgid "Error connecting to SMTP server"
-msgstr "Erro ao se ligar ao servidor SMTP"
+msgstr "Erro ao ligar ao servidor SMTP"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:1542
 msgid "E-mail"
@@ -426,7 +416,7 @@ msgstr "SMTP"
 
 #: ../src/goabackend/goakerberosprovider.c:79
 msgid "Enterprise Login (Kerberos)"
-msgstr "Autenticação Empresarial (Kerberos)"
+msgstr "Autenticação empresarial (Kerberos)"
 
 #: ../src/goabackend/goakerberosprovider.c:447
 msgid "Identity service returned invalid key"
@@ -436,7 +426,7 @@ msgstr "Serviço de identificação devolveu chave inválida"
 #, c-format
 msgid "Could not find saved credentials for principal ‘%s’ in keyring"
 msgstr ""
-"Impossível encontrar as credenciais gravadas do ‘%s’ principal no chaveiro"
+"Impossível encontrar as credenciais gravadas do \"%s\" principal no chaveiro"
 
 #: ../src/goabackend/goakerberosprovider.c:732
 #, c-format
@@ -449,12 +439,12 @@ msgstr "_Domínio"
 
 #: ../src/goabackend/goakerberosprovider.c:1116
 msgid "Enterprise domain or realm name"
-msgstr "Domínio empresarial ou nome da rede"
+msgstr "Domínio empresarial ou nome do reino"
 
 #: ../src/goabackend/goakerberosprovider.c:1345
 #: ../src/goaidentity/goaidentityservice.c:1106
 msgid "Log In to Realm"
-msgstr "Iniciar Sessão no Domínio"
+msgstr "Iniciar sessão no reino"
 
 #: ../src/goabackend/goakerberosprovider.c:1346
 msgid "Please enter your password below."
@@ -471,17 +461,17 @@ msgstr "O domínio é inválido"
 
 #: ../src/goabackend/goakerberosprovider.c:1641
 msgid "Error connecting to enterprise identity server"
-msgstr "Erro ao se ligar ao servidor de identificação empresarial"
+msgstr "Erro ao ligar ao servidor de identificação empresarial"
 
 #: ../src/goabackend/goakerberosprovider.c:1721
 msgid "Network _Resources"
-msgstr "_Recursos de Rede"
+msgstr "_Recursos de rede"
 
 #: ../src/goabackend/goamediaserverprovider.c:76
 msgid "Media Server"
-msgstr "Servidor Multimédia"
+msgstr "Servidor multimédia"
 
-#: ../src/goabackend/goamediaserverprovider.c:369
+#: ../src/goabackend/goamediaserverprovider.c:371
 msgid ""
 "Personal content can be added to your applications through a media server "
 "account."
@@ -489,11 +479,11 @@ msgstr ""
 "Pode adicionar conteúdo pessoal às suas aplicações através de uma conta num "
 "servidor de multimédia."
 
-#: ../src/goabackend/goamediaserverprovider.c:383
+#: ../src/goabackend/goamediaserverprovider.c:385
 msgid "Available Media Servers"
-msgstr "Servidores Multimédia Disponíveis"
+msgstr "Servidores multimédia disponíveis"
 
-#: ../src/goabackend/goamediaserverprovider.c:413
+#: ../src/goabackend/goamediaserverprovider.c:415
 msgid "No media servers found"
 msgstr "Não foram encontrados servidores"
 
@@ -506,41 +496,41 @@ msgid ""
 msgstr ""
 "Esperado estado 200 ao pedir o bloco de acesso, obtido o estado %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:888
+#: ../src/goabackend/goaoauth2provider.c:889
 msgid "Authorization response: "
 msgstr "A resposta de autorização foi: "
 
-#: ../src/goabackend/goaoauth2provider.c:958
+#: ../src/goabackend/goaoauth2provider.c:959
 #, c-format
 msgid "Authorization response: %s"
-msgstr "A resposta de autorização foi: %s"
+msgstr "Resposta de autorização: %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1103
+#: ../src/goabackend/goaoauth2provider.c:1104
 #: ../src/goabackend/goaoauthprovider.c:939
 msgid "Error getting an Access Token: "
-msgstr "Erro ao obter um Bloco de Acesso: "
+msgstr "Erro ao obter um símbolo de acesso: "
 
-#: ../src/goabackend/goaoauth2provider.c:1118
+#: ../src/goabackend/goaoauth2provider.c:1119
 #: ../src/goabackend/goaoauthprovider.c:952
 msgid "Error getting identity: "
 msgstr "Erro ao obter identidade: "
 
-#: ../src/goabackend/goaoauth2provider.c:1332
+#: ../src/goabackend/goaoauth2provider.c:1336
 #: ../src/goabackend/goaoauthprovider.c:1260
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Foi pedido para iniciar sessão como %s mas iniciou sessão como %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1491
+#: ../src/goabackend/goaoauth2provider.c:1498
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Credenciais não contêm \"access_token\""
 
-#: ../src/goabackend/goaoauth2provider.c:1530
+#: ../src/goabackend/goaoauth2provider.c:1537
 #: ../src/goabackend/goaoauthprovider.c:1488
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
-msgstr "Falha ao atualizar o bloco de acesso (%s, %d): "
+msgstr "Falha ao atualizar o símbolo de acesso (%s, %d): "
 
 #: ../src/goabackend/goaoauthprovider.c:573
 #, c-format
@@ -551,7 +541,7 @@ msgstr ""
 
 #: ../src/goabackend/goaoauthprovider.c:822
 msgid "Error getting a Request Token: "
-msgstr "Erro ao obter um Bloco de Pedido: "
+msgstr "Erro ao obter um símbolo de pedido: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauthprovider.c:855
@@ -559,7 +549,7 @@ msgstr "Erro ao obter um Bloco de Pedido: "
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr ""
-"Esperado estado 200 ao obter um Bloco de Pedido, recebido o estado %d (%s)"
+"Esperado estado 200 ao obter um símbolo de pedido, obtido o estado %d (%s)"
 
 #: ../src/goabackend/goaoauthprovider.c:872
 #, c-format
@@ -577,12 +567,12 @@ msgstr "Credenciais não contêm \"access_token\" ou \"access_token_secret\""
 msgid "ownCloud"
 msgstr "ownCloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:851
-#: ../src/goabackend/goaowncloudprovider.c:1034
+#: ../src/goabackend/goaowncloudprovider.c:859
+#: ../src/goabackend/goaowncloudprovider.c:1042
 msgid "Error connecting to ownCloud server"
-msgstr "Erro ao se ligar ao servidor ownCloud"
+msgstr "Erro ao ligar ao servidor ownCloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:1114
+#: ../src/goabackend/goaowncloudprovider.c:1122
 msgid "_Files"
 msgstr "_Ficheiros"
 
@@ -594,11 +584,11 @@ msgstr "Pocket"
 #: ../src/goabackend/goapocketprovider.c:233
 #, c-format
 msgid "No username or access_token"
-msgstr "Sem nome de u_tilizador ou símbolo de acesso"
+msgstr "Sem nome de u_Tilizador ou símbolo de acesso"
 
 #: ../src/goabackend/goapocketprovider.c:423
 msgid "_Read Later"
-msgstr "Le_r Mais Tarde"
+msgstr "_Ler mais tarde"
 
 #: ../src/goabackend/goaprovider.c:682
 #, c-format
@@ -621,7 +611,7 @@ msgstr "org.gnome.OnlineAccounts.Mail indisponível"
 #: ../src/goabackend/goasmtpauth.c:251
 #, c-format
 msgid "Failed to parse email address"
-msgstr "Falha ao processar o endereço de email"
+msgstr "Falha ao processar o endereço eletrónico"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauth.c:263
@@ -633,7 +623,7 @@ msgstr "Autenticação SMTP impossível sem um domínio"
 #: ../src/goabackend/goasmtpauth.c:301
 #, c-format
 msgid "Did not find smtp-password in credentials"
-msgstr "Incapaz de encontrar a senha-smtp nas credenciais"
+msgstr "Impossível encontrar a senha smtp nas credenciais"
 
 #. TODO: more specific
 #: ../src/goabackend/goasmtpauth.c:312
@@ -659,27 +649,27 @@ msgstr "Falha ao iniciar o cliente GOA"
 #: ../src/goabackend/goatelepathyprovider.c:420
 #, c-format
 msgid "Failed to create a user interface for %s"
-msgstr "Falha ao criar uma interface de utilizador para %s"
+msgstr "Falha ao criar um ambiente de utilizador para %s"
 
 #: ../src/goabackend/goatelepathyprovider.c:535
 msgid "Connection Settings"
-msgstr "Definições de Ligação"
+msgstr "Definições de ligação"
 
 #: ../src/goabackend/goatelepathyprovider.c:644
 msgid "Personal Details"
-msgstr "Detalhes Pessoais"
+msgstr "Detalhes pessoais"
 
 #: ../src/goabackend/goatelepathyprovider.c:650
 msgid "_OK"
-msgstr "_OK"
+msgstr "_Aceitar"
 
 #: ../src/goabackend/goatelepathyprovider.c:854
 msgid "Cannot save the connection parameters"
-msgstr "Incapaz de gravar os parâmetros de ligação"
+msgstr "Impossível gravar os parâmetros de ligação"
 
 #: ../src/goabackend/goatelepathyprovider.c:866
 msgid "Cannot save your personal information on the server"
-msgstr "Incapaz de gravar a sua informação pessoal no servidor"
+msgstr "Impossível gravar a sua informação pessoal no servidor"
 
 #. Connection Settings button
 #: ../src/goabackend/goatelepathyprovider.c:897
@@ -691,76 +681,81 @@ msgstr "Definições de _Ligação"
 msgid "_Personal Details"
 msgstr "Detalhes _Pessoais"
 
-#: ../src/goabackend/goautils.c:114
+#: ../src/goabackend/goautils.c:115
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "Já existe uma conta %s para %s"
 
 #. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:136
+#: ../src/goabackend/goautils.c:137
 #, c-format
 msgid "%s account"
 msgstr "Conta %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:180
+#: ../src/goabackend/goautils.c:181
 msgid "Failed to delete credentials from the keyring"
 msgstr "Falha ao apagar as credenciais do chaveiro"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:232
+#: ../src/goabackend/goautils.c:233
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Falha ao obter as credenciais do chaveiro"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:242
+#: ../src/goabackend/goautils.c:243
 msgid "No credentials found in the keyring"
 msgstr "Nenhumas credenciais encontradas no chaveiro"
 
-#: ../src/goabackend/goautils.c:255
+#: ../src/goabackend/goautils.c:256
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Erro ao processar o resultado obtido do chaveiro: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:298
+#: ../src/goabackend/goautils.c:299
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Credenciais GOA %s para a identidade %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:315
+#: ../src/goabackend/goautils.c:316
 msgid "Failed to store credentials in the keyring"
-msgstr "Falha ao ler as credenciais no chaveiro"
+msgstr "Falha ao armazenar as credenciais no chaveiro"
 
-#: ../src/goabackend/goautils.c:536
+#: ../src/goabackend/goautils.c:543
+#, c-format
+msgid "Code: %u — Unexpected response from server"
+msgstr "Código: %u - resposta inesperada do servidor"
+
+#: ../src/goabackend/goautils.c:559
 msgid "The signing certificate authority is not known."
 msgstr "A autoridade de certificação que assina é desconhecida."
 
-#: ../src/goabackend/goautils.c:540
+#: ../src/goabackend/goautils.c:563
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr ""
-"O certificado não coincide com a identidade esperada do servidor do qual foi "
+"O certificado não coincide com a identidade esperada do site do qual foi "
 "obtido."
 
-#: ../src/goabackend/goautils.c:545
+#: ../src/goabackend/goautils.c:568
 msgid "The certificate’s activation time is still in the future."
 msgstr "A data de ativação do certificado é no futuro."
 
-#: ../src/goabackend/goautils.c:549
+#: ../src/goabackend/goautils.c:572
 msgid "The certificate has expired."
 msgstr "O certificado expirou."
 
-#: ../src/goabackend/goautils.c:553
+#: ../src/goabackend/goautils.c:576
 msgid "The certificate has been revoked."
 msgstr "O certificado foi revogado."
 
-#: ../src/goabackend/goautils.c:557
+#: ../src/goabackend/goautils.c:580
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "O algoritmo do certificado é considerado inseguro."
 
-#: ../src/goabackend/goautils.c:561
+#: ../src/goabackend/goautils.c:584
 msgid "Invalid certificate."
 msgstr "Certificado inválido."
 
@@ -768,7 +763,7 @@ msgstr "Certificado inválido."
 #: ../src/goabackend/goawebview.c:70
 #, c-format
 msgid "Loading “%s”…"
-msgstr "A ler “%s”…"
+msgstr "A carregar “%s”…"
 
 #: ../src/goabackend/goawindowsliveprovider.c:78
 msgid "Windows Live"
@@ -794,69 +789,71 @@ msgstr "Chave secreta inicial é inválida"
 #: ../src/goaidentity/goaidentityservice.c:1111
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
-msgstr ""
-"O domínio de rede %s requer alguma informação para iniciar a sua sessão."
+msgstr "O reino de rede %s requer alguma informação para iniciar a sua sessão."
 
-#: ../src/goaidentity/goakerberosidentity.c:252
-#: ../src/goaidentity/goakerberosidentity.c:261
-#: ../src/goaidentity/goakerberosidentity.c:588
+#: ../src/goaidentity/goakerberosidentity.c:250
+#: ../src/goaidentity/goakerberosidentity.c:259
+#: ../src/goaidentity/goakerberosidentity.c:593
 msgid "Could not find identity in credential cache: %k"
-msgstr "Incapaz de encontrar a identidade na cache de credenciais: %k"
+msgstr "Impossível encontrar a identidade na cache de credenciais: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:601
+#: ../src/goaidentity/goakerberosidentity.c:607
 msgid "Could not find identity credentials in cache: %k"
-msgstr "Incapaz de encontrar credenciais de identidade na cache: %k"
+msgstr "Impossível encontrar credenciais de identidade na cache: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:641
+#: ../src/goaidentity/goakerberosidentity.c:647
 msgid "Could not sift through identity credentials in cache: %k"
-msgstr "Incapaz de percorrer as credenciais de identidade na cache: %k"
+msgstr "Impossível percorrer as credenciais de identidade na cache: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:659
+#: ../src/goaidentity/goakerberosidentity.c:665
 msgid "Could not finish up sifting through identity credentials in cache: %k"
 msgstr ""
-"Incapaz de terminar de percorrer as credenciais de identidade na cache: %k"
+"Impossível terminar de percorrer as credenciais de identidade na cache: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:949
+#: ../src/goaidentity/goakerberosidentity.c:960
 #, c-format
 msgid "No associated identification found"
 msgstr "Não foi encontrada nenhuma identificação associada"
 
-#: ../src/goaidentity/goakerberosidentity.c:1030
+#: ../src/goaidentity/goakerberosidentity.c:1043
 msgid "Could not create credential cache: %k"
-msgstr "Incapaz de criar cache de credenciais: %k"
+msgstr "Impossível criar cache de credenciais: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1064
+#: ../src/goaidentity/goakerberosidentity.c:1077
 msgid "Could not initialize credentials cache: %k"
-msgstr "Incapaz de inicializar a cache de credenciais: %k"
+msgstr "Impossível inicializar a cache de credenciais: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1081
+#: ../src/goaidentity/goakerberosidentity.c:1094
 msgid "Could not store new credentials in credentials cache: %k"
-msgstr "Incapaz de armazenar as novas credenciais na cache de credenciais: %k"
+msgstr "Impossível armazenar as novas credenciais na cache de credenciais: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1356
+#: ../src/goaidentity/goakerberosidentity.c:1369
 #, c-format
 msgid "Could not renew identity: Not signed in"
-msgstr "Incapaz de renovar a identidade: Não tem uma sessão iniciada"
+msgstr "Impossível renovar a identidade: não tem uma sessão iniciada"
 
-#: ../src/goaidentity/goakerberosidentity.c:1368
+#: ../src/goaidentity/goakerberosidentity.c:1381
 msgid "Could not renew identity: %k"
-msgstr "Incapaz de renovar a identidade: %k"
+msgstr "Impossível renovar a identidade: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1385
+#: ../src/goaidentity/goakerberosidentity.c:1398
 msgid "Could not get new credentials to renew identity %s: %k"
-msgstr "Incapaz de obter novas credenciais para renovar a identidade %s: %k"
+msgstr "Impossível obter novas credenciais para renovar a identidade %s: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1427
+#: ../src/goaidentity/goakerberosidentity.c:1440
 msgid "Could not erase identity: %k"
-msgstr "Incapaz de apagar a identidade: %k"
+msgstr "Impossível apagar a identidade: %k"
 
 #: ../src/goaidentity/goakerberosidentitymanager.c:745
 msgid "Could not find identity"
-msgstr "Incapaz de encontrar a identidade"
+msgstr "Impossível encontrar a identidade"
 
 #: ../src/goaidentity/goakerberosidentitymanager.c:836
 msgid "Could not create credential cache for identity"
-msgstr "Incapaz de criar a cache de credenciais para a identidade"
+msgstr "Impossível criar a cache de credenciais para a identidade"
+
+#~ msgid "_Maps"
+#~ msgstr "_Mapas"
 
 #~ msgid ""
 #~ "Paste authorization code obtained from the <a href=\"%s\">authorization "
