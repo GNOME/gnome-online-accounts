@@ -1,1165 +1,1027 @@
-# gnome-session's Portuguese translation
-# Copyright © 1999, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 gnome-session
-# Distributed under the same licence as the gnome-session package
-# Nuno Ferreira <nmrf@rnl.ist.utl.pt>, 1999
-# Duarte Loreto <happyguy_pt@hotmail.com>, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013.
+# gnome-online-accounts' Portuguese translation.
+# Copyright © 2011, 2012, 2013 gnome-online-accounts
+# This file is distributed under the same license as the gnome-online-accounts package.
+# Duarte Loreto <happyguy_pt@hotmail.com>, 2011, 2012, 2013.
 # António Lima <amrlima@gmail.com>, 2013.
-# Pedro Albuquerque <palbuquerque73@gmail.com>, 2015.
+# Tiago S. <almosthumane@portugalmail.pt>, 2014.
+# Bruno Ramalhete <bram.512@gmail.com>, 2014.
+# Pedro Albuquerque <palbuquerque73@gmail.com>, 2014, 2015.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 3.8\n"
+"Project-Id-Version: 3.14\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"session&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-10-18 20:33+0000\n"
-"PO-Revision-Date: 2013-09-21 23:26-0100\n"
-"Last-Translator: António Lima <amrlima@gmail.com>\n"
-"Language-Team: Português <gnome_pt@yahoogroups.com>\n"
-"Language: \n"
+"online-accounts&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2015-10-18 20:01+0000\n"
+"PO-Revision-Date: 2015-11-23 07:00+0000\n"
+"Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
+"Language-Team: Português <palbuquerque73@gmail.com>\n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\\n\n"
+"X-Generator: Gtranslator 2.91.6\n"
+"X-Project-Style: gnome\n"
 
-#: ../data/gnome-custom-session.desktop.in.h:1
-msgid "Custom"
-msgstr "Personalizado"
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:785 ../src/daemon/goadaemon.c:1029
+#, c-format
+msgid "Failed to find a provider for: %s"
+msgstr "Falha ao procurar um fornecedor para: %s"
 
-#: ../data/gnome-custom-session.desktop.in.h:2
-msgid "This entry lets you select a saved session"
-msgstr "Esta entrada permite-lhe selecionar uma sessão gravada"
+#. TODO: more specific
+#: ../src/daemon/goadaemon.c:1017
+msgid "ProviderType property is not set for account"
+msgstr "A propriedade ProviderType não está definida para a conta"
 
-#: ../data/gnome.desktop.in.h:1 ../data/gnome.session.desktop.in.in.h:1
-msgid "GNOME"
-msgstr "GNOME"
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:243
+#, c-format
+msgid "Failed to parse autodiscover response XML"
+msgstr "Falha ao processar a resposta XML de autodescoberta"
 
-#: ../data/gnome.desktop.in.h:2
-msgid "This session logs you into GNOME"
-msgstr "Esta é uma sessão no GNOME"
+#. TODO: more specific
+#. Translators: the parameter is an XML element name.
+#: ../src/goabackend/goaewsclient.c:254 ../src/goabackend/goaewsclient.c:269
+#: ../src/goabackend/goaewsclient.c:284
+#, c-format
+msgid "Failed to find ‘%s’ element"
+msgstr "Falha ao localizar elemento \"%s\""
 
-#: ../data/gnome-dummy.session.desktop.in.in.h:1
-msgid "GNOME dummy"
-msgstr "GNOME de teste"
+#. TODO: more specific
+#: ../src/goabackend/goaewsclient.c:305
+#, c-format
+msgid "Failed to find ASUrl and OABUrl in autodiscover response"
+msgstr "Falha ao procurar ASUrl e OABUrl na resposta de autodescoberta"
 
-#: ../data/gnome-wayland.desktop.in.h:1
-#: ../data/gnome-wayland.session.desktop.in.in.h:1
-msgid "GNOME on Wayland"
-msgstr "GNOME em Wayland"
+#: ../src/goabackend/goaexchangeprovider.c:73
+msgid "Microsoft Exchange"
+msgstr "Microsoft Exchange"
 
-#: ../data/gnome-wayland.desktop.in.h:2
-msgid "This session logs you into GNOME, using Wayland"
-msgstr "Esta sessão faz com que entre no GNOME, utilizando o Wayland"
+#. TODO: more specific
+#: ../src/goabackend/goaexchangeprovider.c:311
+#: ../src/goabackend/goaexchangeprovider.c:1020
+#: ../src/goabackend/goaowncloudprovider.c:406
+#: ../src/goabackend/goaowncloudprovider.c:1191
+#, c-format
+msgid "Did not find password with identity ‘%s’ in credentials"
+msgstr "Impossível encontrar a senha com a identidade \"%s\" nas credenciais"
 
-#: ../data/session-selector.ui.h:1
-msgid "Custom Session"
-msgstr "Sessão personalizada"
-
-#: ../data/session-selector.ui.h:2 ../tools/gnome-session-selector.c:102
-msgid "Please select a custom session to run"
-msgstr "Selecione uma sessão personalizada a executar"
-
-#: ../data/session-selector.ui.h:3
-msgid "_New Session"
-msgstr "_Nova sessão"
-
-#: ../data/session-selector.ui.h:4
-msgid "_Remove Session"
-msgstr "_Remover sessão"
-
-#: ../data/session-selector.ui.h:5
-msgid "Rena_me Session"
-msgstr "Renomear _Sessão"
-
-#: ../data/session-selector.ui.h:6
-msgid "_Continue"
-msgstr "_Continuar"
-
-#: ../data/session-properties.ui.h:1
-msgid "Additional startup _programs:"
-msgstr "A_Plicações de arranque adicionais:"
-
-#: ../data/session-properties.ui.h:2
-msgid "Startup Programs"
-msgstr "Aplicações de arranque"
-
-#: ../data/session-properties.ui.h:3
-msgid "_Automatically remember running applications when logging out"
-msgstr ""
-"Recordar _Automaticamente as aplicações em execução ao terminar a sessão"
-
-#: ../data/session-properties.ui.h:4
-msgid "_Remember Currently Running Applications"
-msgstr "_Recordar as aplicações atualmente em execução"
-
-#: ../data/session-properties.ui.h:5
-msgid "Options"
-msgstr "Opções"
-
-#: ../data/session-properties.ui.h:6
-msgid "Browse…"
-msgstr "Navegar…"
-
-#: ../data/session-properties.ui.h:7
-msgid "Comm_ent:"
-msgstr "Com_Entário:"
-
-#: ../data/session-properties.ui.h:8
-msgid "Co_mmand:"
-msgstr "Co_Mando:"
-
-#: ../data/session-properties.ui.h:9
-msgid "_Name:"
-msgstr "_Nome:"
-
-#: ../gnome-session/gsm-fail-whale-dialog.c:321
-msgid "Oh no!  Something has gone wrong."
-msgstr "Ocorreu um erro inesperado."
-
-#: ../gnome-session/gsm-fail-whale-dialog.c:328
-msgid ""
-"A problem has occurred and the system can't recover. Please contact a system "
-"administrator"
-msgstr ""
-"Ocorreu um problema e o sistema é incapaz de recuperar. Contacte um "
-"administrador do sistema"
-
-#: ../gnome-session/gsm-fail-whale-dialog.c:330
-msgid ""
-"A problem has occurred and the system can't recover. All extensions have "
-"been disabled as a precaution."
-msgstr ""
-"Ocorreu um problema e o sistema é incapaz de recuperar. Por precaução, foram "
-"desativadas todas as extensões."
-
-#: ../gnome-session/gsm-fail-whale-dialog.c:332
-msgid ""
-"A problem has occurred and the system can't recover.\n"
-"Please log out and try again."
-msgstr ""
-"Ocorreu um problema e o sistema é incapaz de recuperar.\n"
-"Por favor, termine a sessão e tente novamente."
-
-#: ../gnome-session/gsm-fail-whale-dialog.c:347
-msgid "_Log Out"
-msgstr "_Terminar a sessão"
-
-#: ../gnome-session/gsm-fail-whale-dialog.c:369 ../gnome-session/main.c:305
-msgid "Enable debugging code"
-msgstr "Ativar o código de depuração"
-
-#: ../gnome-session/gsm-fail-whale-dialog.c:370
-msgid "Allow logout"
-msgstr "Permitir terminar sessão"
-
-#: ../gnome-session/gsm-fail-whale-dialog.c:371
-msgid "Show extension warning"
-msgstr "Mostrar aviso de extensão"
-
-#: ../gnome-session/gsm-manager.c:1271 ../gnome-session/gsm-manager.c:2043
-msgid "Not responding"
-msgstr "Não está a responder"
-
-#: ../gnome-session/gsm-util.c:382
-msgid "_Log out"
-msgstr "_Terminar a sessão"
-
-#. It'd be really surprising to reach this code: if we're here,
-#. * then the XSMP client already has set several XSMP
-#. * properties. But it could still be that SmProgram is not set.
+#. Translators: the first %s is the username
+#. * (eg., debarshi.ray@gmail.com or rishi), and the
+#. * (%s, %d) is the error domain and code.
 #.
-#: ../gnome-session/gsm-xsmp-client.c:557
-msgid "Remembered Application"
-msgstr "Aplicação recordada"
+#: ../src/goabackend/goaexchangeprovider.c:339
+#: ../src/goabackend/goaowncloudprovider.c:429
+#, c-format
+msgid "Invalid password with username ‘%s’ (%s, %d): "
+msgstr "Senha inválida para o utilizador \"%s\" (%s, %d): "
 
-#: ../gnome-session/gsm-xsmp-client.c:1207
-msgid "This program is blocking logout."
-msgstr "Esta aplicação está a impedir o encerramento da sessão."
+#: ../src/goabackend/goaexchangeprovider.c:492
+#: ../src/goabackend/goaimapsmtpprovider.c:715
+msgid "_E-mail"
+msgstr "_Email"
 
-#: ../gnome-session/gsm-xsmp-server.c:340
+#: ../src/goabackend/goaexchangeprovider.c:493
+#: ../src/goabackend/goaimapsmtpprovider.c:735
+#: ../src/goabackend/goaimapsmtpprovider.c:755
+#: ../src/goabackend/goaowncloudprovider.c:657
+msgid "_Password"
+msgstr "_Senha"
+
+#: ../src/goabackend/goaexchangeprovider.c:496
+msgid "_Custom"
+msgstr "_Personalizado"
+
+#: ../src/goabackend/goaexchangeprovider.c:507
+#: ../src/goabackend/goaimapsmtpprovider.c:734
+#: ../src/goabackend/goaimapsmtpprovider.c:754
+#: ../src/goabackend/goakerberosprovider.c:1123
+#: ../src/goabackend/goaowncloudprovider.c:656
+msgid "User_name"
+msgstr "_Utilizador"
+
+#: ../src/goabackend/goaexchangeprovider.c:508
+#: ../src/goabackend/goaowncloudprovider.c:655
+msgid "_Server"
+msgstr "S_Ervidor"
+
+#. --
+#: ../src/goabackend/goaexchangeprovider.c:518
+#: ../src/goabackend/goaimapsmtpprovider.c:767
+#: ../src/goabackend/goakerberosprovider.c:1128
+#: ../src/goabackend/goaowncloudprovider.c:666
+#: ../src/goabackend/goatelepathyprovider.c:649
+msgid "_Cancel"
+msgstr "_Cancelar"
+
+#: ../src/goabackend/goaexchangeprovider.c:519
+#: ../src/goabackend/goakerberosprovider.c:1129
+#: ../src/goabackend/goaowncloudprovider.c:667
+msgid "C_onnect"
+msgstr "A li_Gar"
+
+#: ../src/goabackend/goaexchangeprovider.c:535
+#: ../src/goabackend/goaimapsmtpprovider.c:784
+#: ../src/goabackend/goakerberosprovider.c:1145
+#: ../src/goabackend/goaowncloudprovider.c:683
+msgid "Connecting…"
+msgstr "A ligar…"
+
+#: ../src/goabackend/goaexchangeprovider.c:640
+#: ../src/goabackend/goaexchangeprovider.c:837
+#: ../src/goabackend/goaimapsmtpprovider.c:946
+#: ../src/goabackend/goaimapsmtpprovider.c:981
+#: ../src/goabackend/goaimapsmtpprovider.c:1069
+#: ../src/goabackend/goaimapsmtpprovider.c:1333
+#: ../src/goabackend/goaimapsmtpprovider.c:1406
+#: ../src/goabackend/goakerberosprovider.c:1536
+#: ../src/goabackend/goamediaserverprovider.c:475
+#: ../src/goabackend/goaoauth2provider.c:1078
+#: ../src/goabackend/goaoauthprovider.c:908
+#: ../src/goabackend/goaowncloudprovider.c:794
+#: ../src/goabackend/goaowncloudprovider.c:1009
+#: ../src/goabackend/goatelepathyprovider.c:459
+#: ../src/goabackend/goatelepathyprovider.c:508
+#: ../src/goabackend/goatelepathyprovider.c:683
+#, c-format
+msgid "Dialog was dismissed"
+msgstr "O diálogo foi fechado"
+
+#: ../src/goabackend/goaexchangeprovider.c:678
+#: ../src/goabackend/goaexchangeprovider.c:865
+#: ../src/goabackend/goaimapsmtpprovider.c:1011
+#: ../src/goabackend/goaimapsmtpprovider.c:1104
+#: ../src/goabackend/goaimapsmtpprovider.c:1357
+#: ../src/goabackend/goaimapsmtpprovider.c:1431
+#: ../src/goabackend/goaowncloudprovider.c:836
+#: ../src/goabackend/goaowncloudprovider.c:1030
+#, c-format
+msgid "Dialog was dismissed (%s, %d): "
+msgstr "O diálogo foi fechado (%s, %d): "
+
+#: ../src/goabackend/goaexchangeprovider.c:691
+#: ../src/goabackend/goaimapsmtpprovider.c:1024
+#: ../src/goabackend/goaimapsmtpprovider.c:1117
+#: ../src/goabackend/goaowncloudprovider.c:849
+msgid "_Ignore"
+msgstr "_Ignorar"
+
+#: ../src/goabackend/goaexchangeprovider.c:696
+#: ../src/goabackend/goaexchangeprovider.c:884
+#: ../src/goabackend/goaimapsmtpprovider.c:1029
+#: ../src/goabackend/goaimapsmtpprovider.c:1122
+#: ../src/goabackend/goaimapsmtpprovider.c:1376
+#: ../src/goabackend/goaimapsmtpprovider.c:1450
+#: ../src/goabackend/goakerberosprovider.c:1646
+#: ../src/goabackend/goaowncloudprovider.c:854
+#: ../src/goabackend/goaowncloudprovider.c:1049
+msgid "_Try Again"
+msgstr "_Tentar novamente"
+
+#: ../src/goabackend/goaexchangeprovider.c:701
+#: ../src/goabackend/goaexchangeprovider.c:877
+msgid "Error connecting to Microsoft Exchange server"
+msgstr "Erro ao ligar ao servidor Microsoft Exchange"
+
+#. Translators: This is a label for a series of
+#. * options switches. For example: “Use for Mail”.
+#: ../src/goabackend/goaexchangeprovider.c:939
+#: ../src/goabackend/goafacebookprovider.c:433
+#: ../src/goabackend/goaflickrprovider.c:413
+#: ../src/goabackend/goagoogleprovider.c:593
+#: ../src/goabackend/goakerberosprovider.c:1719
+#: ../src/goabackend/goamediaserverprovider.c:586
+#: ../src/goabackend/goaowncloudprovider.c:1105
+#: ../src/goabackend/goapocketprovider.c:421
+#: ../src/goabackend/goatelepathyprovider.c:890
+#: ../src/goabackend/goawindowsliveprovider.c:422
+msgid "Use for"
+msgstr "Usar para"
+
+#: ../src/goabackend/goaexchangeprovider.c:941
+#: ../src/goabackend/goagoogleprovider.c:595
+#: ../src/goabackend/goawindowsliveprovider.c:424
+msgid "_Mail"
+msgstr "_Correio"
+
+#: ../src/goabackend/goaexchangeprovider.c:946
+#: ../src/goabackend/goagoogleprovider.c:600
+#: ../src/goabackend/goaowncloudprovider.c:1107
+msgid "Cale_ndar"
+msgstr "Cale_Ndário"
+
+#: ../src/goabackend/goaexchangeprovider.c:951
+#: ../src/goabackend/goagoogleprovider.c:605
+#: ../src/goabackend/goaowncloudprovider.c:1112
+msgid "_Contacts"
+msgstr "C_Ontactos"
+
+#: ../src/goabackend/goafacebookprovider.c:76
+msgid "Facebook"
+msgstr "Facebook"
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goafacebookprovider.c:215
+#: ../src/goabackend/goaflickrprovider.c:183
+#: ../src/goabackend/goagoogleprovider.c:218
+#: ../src/goabackend/goawindowsliveprovider.c:189
+#: ../src/goabackend/goayahooprovider.c:182
+#, c-format
 msgid ""
-"Refusing new client connection because the session is currently being shut "
-"down\n"
-msgstr ""
-"A recusar uma nova ligação cliente pois a sessão está atualmente a ser "
-"terminada\n"
+"Expected status 200 when requesting your identity, instead got status %d (%s)"
+msgstr "Esperado estado 200 ao pedir a sua identidade, obtido o estado %d (%s)"
 
-#: ../gnome-session/gsm-xsmp-server.c:609
+#: ../src/goabackend/goafacebookprovider.c:234
+#: ../src/goabackend/goafacebookprovider.c:246
+#: ../src/goabackend/goafacebookprovider.c:259
+#: ../src/goabackend/goaflickrprovider.c:202
+#: ../src/goabackend/goaflickrprovider.c:214
+#: ../src/goabackend/goaflickrprovider.c:224
+#: ../src/goabackend/goaflickrprovider.c:234
+#: ../src/goabackend/goaflickrprovider.c:244
+#: ../src/goabackend/goagoogleprovider.c:237
+#: ../src/goabackend/goagoogleprovider.c:249
+#: ../src/goabackend/goaoauth2provider.c:691
+#: ../src/goabackend/goaoauth2provider.c:721
+#: ../src/goabackend/goaoauth2provider.c:733
+#: ../src/goabackend/goawindowsliveprovider.c:208
+#: ../src/goabackend/goawindowsliveprovider.c:220
+#: ../src/goabackend/goawindowsliveprovider.c:232
+#: ../src/goabackend/goayahooprovider.c:201
+#: ../src/goabackend/goayahooprovider.c:213
+#: ../src/goabackend/goayahooprovider.c:224
+#: ../src/goabackend/goayahooprovider.c:270
+#: ../src/goabackend/goayahooprovider.c:282
+#: ../src/goabackend/goayahooprovider.c:293
 #, c-format
-msgid "Could not create ICE listening socket: %s"
-msgstr "Impossível criar socket de escuta ICE: %s"
+msgid "Could not parse response"
+msgstr "Impossível processar resposta"
 
-#: ../gnome-session/main.c:303
-msgid "Override standard autostart directories"
-msgstr "Especificar novas pastas base de arranque automático"
+#: ../src/goabackend/goafacebookprovider.c:435
+#: ../src/goabackend/goaflickrprovider.c:415
+#: ../src/goabackend/goagoogleprovider.c:620
+#: ../src/goabackend/goamediaserverprovider.c:588
+msgid "_Photos"
+msgstr "_Fotografias"
 
-#: ../gnome-session/main.c:303
-msgid "AUTOSTART_DIR"
-msgstr "PASTA_INICIOAUTO"
+#: ../src/goabackend/goaflickrprovider.c:77
+msgid "Flickr"
+msgstr "Flickr"
 
-#: ../gnome-session/main.c:304
-msgid "Session to use"
-msgstr "Sessão a utilizar"
+#: ../src/goabackend/goaflickrprovider.c:321
+#: ../src/goabackend/goayahooprovider.c:343
+msgid "Your system time is invalid. Check your date and time settings."
+msgstr "A sua data de sistema é inválida. Verifique a sua data e hora."
 
-#: ../gnome-session/main.c:304
-msgid "SESSION_NAME"
-msgstr "NOME_SESSAO"
+#: ../src/goabackend/goagoogleprovider.c:76
+msgid "Google"
+msgstr "Google"
 
-#: ../gnome-session/main.c:306
-msgid "Do not load user-specified applications"
-msgstr "Não carregar as aplicações especificadas pelo utilizador"
+#: ../src/goabackend/goagoogleprovider.c:610
+#: ../src/goabackend/goatelepathyprovider.c:892
+msgid "C_hat"
+msgstr "_Diálogo"
 
-#: ../gnome-session/main.c:307
-msgid "Version of this application"
-msgstr "Versão desta aplicação"
+#: ../src/goabackend/goagoogleprovider.c:615
+#: ../src/goabackend/goaowncloudprovider.c:1117
+#: ../src/goabackend/goawindowsliveprovider.c:429
+msgid "_Documents"
+msgstr "_Documentos"
 
-#. Translators: the 'fail whale' is the black dialog we show when something goes seriously wrong
-#: ../gnome-session/main.c:309
-msgid "Show the fail whale dialog for testing"
-msgstr "Mostrar o diálogo de falha total para teste"
+#: ../src/goabackend/goagoogleprovider.c:625
+msgid "Prin_ters"
+msgstr "I_Mpressoras"
 
-#: ../gnome-session/main.c:342
-msgid " - the GNOME session manager"
-msgstr " - o gestor de sessões do GNOME"
+#. TODO: more specific
+#: ../src/goabackend/goaimapauthlogin.c:94 ../src/goabackend/goasmtpauth.c:160
+#, c-format
+msgid "Service not available"
+msgstr "Serviço indisponível"
 
-#: ../tools/gnome-session-inhibit.c:108
+#. TODO: more specific
+#: ../src/goabackend/goaimapauthlogin.c:115
+#: ../src/goabackend/goasmtpauth.c:113 ../src/goabackend/goautils.c:538
+#, c-format
+msgid "Authentication failed"
+msgstr "Falha na autenticação"
+
+#: ../src/goabackend/goaimapauthlogin.c:140
+#, c-format
+msgid "Server does not support PLAIN"
+msgstr "O servidor não suporta PLAIN"
+
+#: ../src/goabackend/goaimapauthlogin.c:194
+#: ../src/goabackend/goasmtpauth.c:818
+#, c-format
+msgid "Server does not support STARTTLS"
+msgstr "O servidor não suporta STARTTLS"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:76
+msgid "IMAP and SMTP"
+msgstr "IMAP e SMTP"
+
+#. Translators: the first parameter is a field name. The second is
+#. * a GOA account identifier.
+#: ../src/goabackend/goaimapsmtpprovider.c:373
+#: ../src/goabackend/goaimapsmtpprovider.c:431
+#, c-format
+msgid "Did not find %s with identity ‘%s’ in credentials"
+msgstr "Impossível encontrar %s com a identidade ‘%s’ nas credenciais"
+
+#. Translators: the first %s is a field name. The
+#. * second %s is the IMAP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#. Translators: the first %s is a field name. The
+#. * second %s is the SMTP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#: ../src/goabackend/goaimapsmtpprovider.c:404
+#: ../src/goabackend/goaimapsmtpprovider.c:464
+#, c-format
+msgid "Invalid %s with username ‘%s’ (%s, %d): "
+msgstr "%s inválida para o utilizador ‘%s’ (%s, %d): "
+
+#. Translators: the following four strings are used to show a
+#. * combo box similar to the one in the evolution module.
+#. * Encryption: None
+#. *             STARTTLS after connecting
+#. *             SSL on a dedicated port
+#.
+#: ../src/goabackend/goaimapsmtpprovider.c:651
+msgid "_Encryption"
+msgstr "_Encriptação"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:654
+msgid "None"
+msgstr "Nenhuma"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:657
+msgid "STARTTLS after connecting"
+msgstr "STARTTLS após ligação"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:660
+msgid "SSL on a dedicated port"
+msgstr "SSL numa porta dedicada"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:716
+msgid "_Name"
+msgstr "_Nome"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:733
+msgid "IMAP _Server"
+msgstr "_Servidor IMAP"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:753
+msgid "SMTP _Server"
+msgstr "_Servidor SMTP"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:768
+#: ../src/goabackend/goaimapsmtpprovider.c:1050
+#: ../src/goabackend/goaimapsmtpprovider.c:1386
+msgid "_Forward"
+msgstr "_Seguinte"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1034
+#: ../src/goabackend/goaimapsmtpprovider.c:1369
+msgid "Error connecting to IMAP server"
+msgstr "Erro ao ligar ao servidor IMAP"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1127
+#: ../src/goabackend/goaimapsmtpprovider.c:1443
+msgid "Error connecting to SMTP server"
+msgstr "Erro ao ligar ao servidor SMTP"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1542
+msgid "E-mail"
+msgstr "Email"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1546
+msgid "Name"
+msgstr "Nome"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1556
+#: ../src/goabackend/goaimapsmtpprovider.c:1559
+msgid "IMAP"
+msgstr "IMAP"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1570
+#: ../src/goabackend/goaimapsmtpprovider.c:1573
+msgid "SMTP"
+msgstr "SMTP"
+
+#: ../src/goabackend/goakerberosprovider.c:79
+msgid "Enterprise Login (Kerberos)"
+msgstr "Autenticação empresarial (Kerberos)"
+
+#: ../src/goabackend/goakerberosprovider.c:447
+msgid "Identity service returned invalid key"
+msgstr "Serviço de identificação devolveu chave inválida"
+
+#: ../src/goabackend/goakerberosprovider.c:719
+#, c-format
+msgid "Could not find saved credentials for principal ‘%s’ in keyring"
+msgstr ""
+"Impossível encontrar as credenciais gravadas do \"%s\" principal no chaveiro"
+
+#: ../src/goabackend/goakerberosprovider.c:732
+#, c-format
+msgid "Did not find password for principal ‘%s’ in credentials"
+msgstr "Impossível encontrar a senha do principal ‘%s’ nas credenciais"
+
+#: ../src/goabackend/goakerberosprovider.c:1115
+msgid "_Domain"
+msgstr "_Domínio"
+
+#: ../src/goabackend/goakerberosprovider.c:1116
+msgid "Enterprise domain or realm name"
+msgstr "Domínio empresarial ou nome do reino"
+
+#: ../src/goabackend/goakerberosprovider.c:1345
+#: ../src/goaidentity/goaidentityservice.c:1106
+msgid "Log In to Realm"
+msgstr "Iniciar sessão no reino"
+
+#: ../src/goabackend/goakerberosprovider.c:1346
+msgid "Please enter your password below."
+msgstr "Introduza a sua senha abaixo."
+
+#: ../src/goabackend/goakerberosprovider.c:1347
+msgid "Remember this password"
+msgstr "Recordar esta senha"
+
+#: ../src/goabackend/goakerberosprovider.c:1486
+#, c-format
+msgid "The domain is not valid"
+msgstr "O domínio é inválido"
+
+#: ../src/goabackend/goakerberosprovider.c:1641
+msgid "Error connecting to enterprise identity server"
+msgstr "Erro ao ligar ao servidor de identificação empresarial"
+
+#: ../src/goabackend/goakerberosprovider.c:1721
+msgid "Network _Resources"
+msgstr "_Recursos de rede"
+
+#: ../src/goabackend/goamediaserverprovider.c:76
+msgid "Media Server"
+msgstr "Servidor multimédia"
+
+#: ../src/goabackend/goamediaserverprovider.c:371
+msgid ""
+"Personal content can be added to your applications through a media server "
+"account."
+msgstr ""
+"Pode adicionar conteúdo pessoal às suas aplicações através de uma conta num "
+"servidor de multimédia."
+
+#: ../src/goabackend/goamediaserverprovider.c:385
+msgid "Available Media Servers"
+msgstr "Servidores multimédia disponíveis"
+
+#: ../src/goabackend/goamediaserverprovider.c:415
+msgid "No media servers found"
+msgstr "Não foram encontrados servidores"
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goaoauth2provider.c:667
+#: ../src/goabackend/goaoauthprovider.c:550
 #, c-format
 msgid ""
-"%s [OPTION...] COMMAND\n"
-"\n"
-"Execute COMMAND while inhibiting some session functionality.\n"
-"\n"
-"  -h, --help        Show this help\n"
-"  --version         Show program version\n"
-"  --app-id ID       The application id to use\n"
-"                    when inhibiting (optional)\n"
-"  --reason REASON   The reason for inhibiting (optional)\n"
-"  --inhibit ARG     Things to inhibit, colon-separated list of:\n"
-"                    logout, switch-user, suspend, idle, automount\n"
-"  --inhibit-only    Do not launch COMMAND and wait forever instead\n"
-"\n"
-"If no --inhibit option is specified, idle is assumed.\n"
+"Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr ""
-"%s [OPÇÃO...] COMANDO\n"
-"\n"
-"Executar COMANDO ao mesmo tempo que inibe alguma funcionalidade de sessão.\n"
-"\n"
-"  -h, --help        Mostrar esta ajuda\n"
-"  --version         Mostrar a versão da aplicação\n"
-"  --app-id ID       A id de aplicação a usar\n"
-"                    ao inibir (opcional)\n"
-"  --reason REASON   O motivo para inibir (opcional)\n"
-"  --inhibit ARG     Funcionalidades a inibir, lista separada por vírgulas "
-"de:\n"
-"                    logout, switch-user, suspend, idle, automount\n"
-"  --inhibit-only    Não iniciar COMANDO e esperar indefinidamente\n"
-"\n"
-"Se não for especificada nenhuma opção --inhibit, é assumida idle.\n"
+"Esperado estado 200 ao pedir o bloco de acesso, obtido o estado %d (%s)"
 
-#: ../tools/gnome-session-inhibit.c:146
+#: ../src/goabackend/goaoauth2provider.c:889
+msgid "Authorization response: "
+msgstr "A resposta de autorização foi: "
+
+#: ../src/goabackend/goaoauth2provider.c:959
 #, c-format
-msgid "Failed to execute %s\n"
-msgstr "Falha ao executar %s\n"
+msgid "Authorization response: %s"
+msgstr "Resposta de autorização: %s"
 
-#: ../tools/gnome-session-inhibit.c:206 ../tools/gnome-session-inhibit.c:216
-#: ../tools/gnome-session-inhibit.c:226
+#: ../src/goabackend/goaoauth2provider.c:1104
+#: ../src/goabackend/goaoauthprovider.c:939
+msgid "Error getting an Access Token: "
+msgstr "Erro ao obter um símbolo de acesso: "
+
+#: ../src/goabackend/goaoauth2provider.c:1119
+#: ../src/goabackend/goaoauthprovider.c:952
+msgid "Error getting identity: "
+msgstr "Erro ao obter identidade: "
+
+#: ../src/goabackend/goaoauth2provider.c:1336
+#: ../src/goabackend/goaoauthprovider.c:1260
 #, c-format
-msgid "%s requires an argument\n"
-msgstr "%s requer um argumento\n"
+msgid "Was asked to log in as %s, but logged in as %s"
+msgstr "Foi pedido para iniciar sessão como %s mas iniciou sessão como %s"
 
-#: ../tools/gnome-session-selector.c:61
+#: ../src/goabackend/goaoauth2provider.c:1498
 #, c-format
-msgid "Session %d"
-msgstr "Sessão %d"
+msgid "Credentials do not contain access_token"
+msgstr "Credenciais não contêm \"access_token\""
 
-#: ../tools/gnome-session-selector.c:107
+#: ../src/goabackend/goaoauth2provider.c:1537
+#: ../src/goabackend/goaoauthprovider.c:1488
+#, c-format
+msgid "Failed to refresh access token (%s, %d): "
+msgstr "Falha ao atualizar o símbolo de acesso (%s, %d): "
+
+#: ../src/goabackend/goaoauthprovider.c:573
+#, c-format
+msgid "Missing access_token or access_token_secret headers in response"
+msgstr ""
+"Não foram recebidos os cabeçalhos \"access_token\" ou \"access_token_secret"
+"\" na resposta"
+
+#: ../src/goabackend/goaoauthprovider.c:822
+msgid "Error getting a Request Token: "
+msgstr "Erro ao obter um símbolo de pedido: "
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: ../src/goabackend/goaoauthprovider.c:855
+#, c-format
 msgid ""
-"Session names are not allowed to start with ‘.’ or contain ‘/’ characters"
+"Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr ""
-"Não é permitido que o nome de uma sessão comece por \".\" ou contenha o "
-"carácter \"/\""
+"Esperado estado 200 ao obter um símbolo de pedido, obtido o estado %d (%s)"
 
-#: ../tools/gnome-session-selector.c:111
-msgid "Session names are not allowed to start with ‘.’"
-msgstr "Não é permitido que o nome de uma sessão comece por \".\""
-
-#: ../tools/gnome-session-selector.c:115
-msgid "Session names are not allowed to contain ‘/’ characters"
-msgstr "Não é permitido que o nome de uma sessão contenha o carácter \"/\""
-
-#: ../tools/gnome-session-selector.c:123
+#: ../src/goabackend/goaoauthprovider.c:872
 #, c-format
-msgid "A session named ‘%s’ already exists"
-msgstr "Já existe uma sessão designada \"%s\""
+msgid "Missing request_token or request_token_secret headers in response"
+msgstr ""
+"Não foram recebidos os cabeçalhos \"request_token\" ou \"request_token_secret"
+"\" na resposta"
 
-#: ../tools/gnome-session-quit.c:51
-msgid "Log out"
-msgstr "Terminar a sessão"
+#: ../src/goabackend/goaoauthprovider.c:1444
+#, c-format
+msgid "Credentials do not contain access_token or access_token_secret"
+msgstr "Credenciais não contêm \"access_token\" ou \"access_token_secret\""
 
-#: ../tools/gnome-session-quit.c:52
-msgid "Power off"
-msgstr "Desligar"
+#: ../src/goabackend/goaowncloudprovider.c:82
+msgid "ownCloud"
+msgstr "ownCloud"
 
-#: ../tools/gnome-session-quit.c:53
-msgid "Reboot"
-msgstr "Reiniciar"
+#: ../src/goabackend/goaowncloudprovider.c:859
+#: ../src/goabackend/goaowncloudprovider.c:1042
+msgid "Error connecting to ownCloud server"
+msgstr "Erro ao ligar ao servidor ownCloud"
 
-#: ../tools/gnome-session-quit.c:54
-msgid "Ignoring any existing inhibitors"
-msgstr "A ignorar quaisquer inibidores existentes"
+#: ../src/goabackend/goaowncloudprovider.c:1122
+msgid "_Files"
+msgstr "_Ficheiros"
 
-#: ../tools/gnome-session-quit.c:55
-msgid "Don't prompt for user confirmation"
-msgstr "Não pedir confirmação ao utilizador"
+#: ../src/goabackend/goapocketprovider.c:84
+msgid "Pocket"
+msgstr "Pocket"
 
-#: ../tools/gnome-session-quit.c:89 ../tools/gnome-session-quit.c:99
-msgid "Could not connect to the session manager"
-msgstr "Impossível ligar ao gestor de sessões"
+#. TODO: more specific
+#: ../src/goabackend/goapocketprovider.c:233
+#, c-format
+msgid "No username or access_token"
+msgstr "Sem nome de u_Tilizador ou símbolo de acesso"
 
-#: ../tools/gnome-session-quit.c:201
-msgid "Program called with conflicting options"
-msgstr "Aplicação invocada com conflito de opções"
+#: ../src/goabackend/goapocketprovider.c:423
+msgid "_Read Later"
+msgstr "_Ler mais tarde"
 
-#~ msgid "Select Command"
-#~ msgstr "Selecionar o Comando"
+#: ../src/goabackend/goaprovider.c:682
+#, c-format
+msgid "ensure_credentials_sync is not implemented on type %s"
+msgstr "ensure_credentials_sync não está implementado no tipo %s"
 
-#~ msgid "Add Startup Program"
-#~ msgstr "Adicionar Aplicação de Arranque"
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauth.c:175
+#, c-format
+msgid "TLS not available"
+msgstr "TLS indisponível"
 
-#~ msgid "Edit Startup Program"
-#~ msgstr "Editar Aplicação de Arranque"
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauth.c:241
+#, c-format
+msgid "org.gnome.OnlineAccounts.Mail is not available"
+msgstr "org.gnome.OnlineAccounts.Mail indisponível"
 
-#~ msgid "The startup command cannot be empty"
-#~ msgstr "O comando de arranque não pode ser vazio"
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauth.c:251
+#, c-format
+msgid "Failed to parse email address"
+msgstr "Falha ao processar o endereço eletrónico"
 
-#~ msgid "The startup command is not valid"
-#~ msgstr "O comando de arranque não é válido"
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauth.c:263
+#, c-format
+msgid "Cannot do SMTP authentication without a domain"
+msgstr "Autenticação SMTP impossível sem um domínio"
 
-#~ msgid "Enabled"
-#~ msgstr "Ativo"
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauth.c:301
+#, c-format
+msgid "Did not find smtp-password in credentials"
+msgstr "Impossível encontrar a senha smtp nas credenciais"
 
-#~ msgid "Icon"
-#~ msgstr "Ícone"
+#. TODO: more specific
+#: ../src/goabackend/goasmtpauth.c:312
+#, c-format
+msgid "Cannot do SMTP authentication without a password"
+msgstr "Autenticação SMTP impossível sem uma senha"
 
-#~ msgid "Program"
-#~ msgstr "Aplicação"
+#: ../src/goabackend/goasmtpauth.c:674
+#, c-format
+msgid "Unknown authentication mechanism"
+msgstr "Mecanismo de autenticação desconhecido"
 
-#~ msgid "Startup Applications Preferences"
-#~ msgstr "Preferências das Aplicações de Arranque"
+#: ../src/goabackend/goatelepathyprovider.c:180
+#, c-format
+msgid "Telepathy chat account not found"
+msgstr "Conta de diálogo do Telepathy não encontrada"
 
-#~ msgid "No name"
-#~ msgstr "Sem nome"
+#: ../src/goabackend/goatelepathyprovider.c:380
+#, c-format
+msgid "Failed to initialize a GOA client"
+msgstr "Falha ao iniciar o cliente GOA"
 
-#~ msgid "No description"
-#~ msgstr "Sem descrição"
+#: ../src/goabackend/goatelepathyprovider.c:420
+#, c-format
+msgid "Failed to create a user interface for %s"
+msgstr "Falha ao criar um ambiente de utilizador para %s"
 
-#~ msgid "Could not display help document"
-#~ msgstr "Incapaz de apresentar o documento de ajuda"
+#: ../src/goabackend/goatelepathyprovider.c:535
+msgid "Connection Settings"
+msgstr "Definições de ligação"
 
-#~ msgid "Startup Applications"
-#~ msgstr "Aplicações de Arranque"
+#: ../src/goabackend/goatelepathyprovider.c:644
+msgid "Personal Details"
+msgstr "Detalhes pessoais"
 
-#~ msgid "Choose what applications to start when you log in"
-#~ msgstr "Selecione que aplicações arrancar ao iniciar uma sessão"
+#: ../src/goabackend/goatelepathyprovider.c:650
+msgid "_OK"
+msgstr "_Aceitar"
 
-#~ msgid "File is not a valid .desktop file"
-#~ msgstr "Ficheiro não é um ficheiro .desktop válido"
+#: ../src/goabackend/goatelepathyprovider.c:854
+msgid "Cannot save the connection parameters"
+msgstr "Impossível gravar os parâmetros de ligação"
 
-#~ msgid "Unrecognized desktop file Version '%s'"
-#~ msgstr "Versão de ficheiro de ambiente de trabalho '%s' desconhecida"
+#: ../src/goabackend/goatelepathyprovider.c:866
+msgid "Cannot save your personal information on the server"
+msgstr "Impossível gravar a sua informação pessoal no servidor"
 
-#~ msgid "Starting %s"
-#~ msgstr "A iniciar %s"
+#. Connection Settings button
+#: ../src/goabackend/goatelepathyprovider.c:897
+msgid "_Connection Settings"
+msgstr "Definições de _Ligação"
 
-#~ msgid "Application does not accept documents on command line"
-#~ msgstr "Aplicação não aceita documentos na linha de comando"
+#. Edit Personal Information button
+#: ../src/goabackend/goatelepathyprovider.c:901
+msgid "_Personal Details"
+msgstr "Detalhes _Pessoais"
 
-#~ msgid "Unrecognized launch option: %d"
-#~ msgstr "Opção de iniciação desconhecida. %d"
+#: ../src/goabackend/goautils.c:115
+#, c-format
+msgid "A %s account already exists for %s"
+msgstr "Já existe uma conta %s para %s"
 
-#~ msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
-#~ msgstr ""
-#~ "Incapaz de indicar URIs de documentos a uma entrada de ficheiro de "
-#~ "ambiente de trabalho 'Type=Link'"
+#. Translators: the %s is the name of the provider. eg., Google.
+#: ../src/goabackend/goautils.c:137
+#, c-format
+msgid "%s account"
+msgstr "Conta %s"
 
-#~ msgid "Not a launchable item"
-#~ msgstr "Não é um item iniciável"
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:181
+msgid "Failed to delete credentials from the keyring"
+msgstr "Falha ao apagar as credenciais do chaveiro"
 
-#~ msgid "Disable connection to session manager"
-#~ msgstr "Desativar a ligação ao gestor de sessões"
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:233
+msgid "Failed to retrieve credentials from the keyring"
+msgstr "Falha ao obter as credenciais do chaveiro"
 
-#~ msgid "Specify file containing saved configuration"
-#~ msgstr "Especificar o ficheiro que contém a configuração gravada"
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:243
+msgid "No credentials found in the keyring"
+msgstr "Nenhumas credenciais encontradas no chaveiro"
 
-#~ msgid "FILE"
-#~ msgstr "FICHEIRO"
+#: ../src/goabackend/goautils.c:256
+msgid "Error parsing result obtained from the keyring: "
+msgstr "Erro ao processar o resultado obtido do chaveiro: "
 
-#~ msgid "Specify session management ID"
-#~ msgstr "Especificar o ID de gestão de sessões"
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#: ../src/goabackend/goautils.c:299
+#, c-format
+msgid "GOA %s credentials for identity %s"
+msgstr "Credenciais GOA %s para a identidade %s"
 
-#~ msgid "ID"
-#~ msgstr "ID"
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:316
+msgid "Failed to store credentials in the keyring"
+msgstr "Falha ao armazenar as credenciais no chaveiro"
 
-#~ msgid "Session management options:"
-#~ msgstr "Opções de gestão de sessões:"
+#: ../src/goabackend/goautils.c:543
+#, c-format
+msgid "Code: %u — Unexpected response from server"
+msgstr "Código: %u - resposta inesperada do servidor"
 
-#~ msgid "Show session management options"
-#~ msgstr "Apresentar as opções de gestão de sessões"
+#: ../src/goabackend/goautils.c:559
+msgid "The signing certificate authority is not known."
+msgstr "A autoridade de certificação que assina é desconhecida."
 
-#~ msgid "Some programs are still running:"
-#~ msgstr "Algumas aplicações ainda se encontram em execução:"
+#: ../src/goabackend/goautils.c:563
+msgid ""
+"The certificate does not match the expected identity of the site that it was "
+"retrieved from."
+msgstr ""
+"O certificado não coincide com a identidade esperada do site do qual foi "
+"obtido."
 
-#~ msgid "Unknown"
-#~ msgstr "Desconhecido"
+#: ../src/goabackend/goautils.c:568
+msgid "The certificate’s activation time is still in the future."
+msgstr "A data de ativação do certificado é no futuro."
 
-#~ msgid "A program is still running:"
-#~ msgstr "Uma aplicação ainda se encontra em execução:"
+#: ../src/goabackend/goautils.c:572
+msgid "The certificate has expired."
+msgstr "O certificado expirou."
+
+#: ../src/goabackend/goautils.c:576
+msgid "The certificate has been revoked."
+msgstr "O certificado foi revogado."
+
+#: ../src/goabackend/goautils.c:580
+msgid "The certificate’s algorithm is considered insecure."
+msgstr "O algoritmo do certificado é considerado inseguro."
+
+#: ../src/goabackend/goautils.c:584
+msgid "Invalid certificate."
+msgstr "Certificado inválido."
+
+#. translators: %s here is the address of the web page
+#: ../src/goabackend/goawebview.c:70
+#, c-format
+msgid "Loading “%s”…"
+msgstr "A carregar “%s”…"
+
+#: ../src/goabackend/goawindowsliveprovider.c:78
+msgid "Windows Live"
+msgstr "Windows Live"
+
+#: ../src/goabackend/goayahooprovider.c:76
+msgid "Yahoo"
+msgstr "Yahoo"
+
+#: ../src/goabackend/goayahooprovider.c:250
+#, c-format
+msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+msgstr "Esperado o estado 200 ao pedir o nome, obtido o estado %d (%s)"
+
+#: ../src/goaidentity/goaidentityservice.c:370
+msgid "initial secret passed before secret key exchange"
+msgstr "segredo inicial transmitido antes da troca de chaves de segredo"
+
+#: ../src/goaidentity/goaidentityservice.c:562
+msgid "Initial secret key is invalid"
+msgstr "Chave secreta inicial é inválida"
+
+#: ../src/goaidentity/goaidentityservice.c:1111
+#, c-format
+msgid "The network realm %s needs some information to sign you in."
+msgstr "O reino de rede %s requer alguma informação para iniciar a sua sessão."
+
+#: ../src/goaidentity/goakerberosidentity.c:250
+#: ../src/goaidentity/goakerberosidentity.c:259
+#: ../src/goaidentity/goakerberosidentity.c:593
+msgid "Could not find identity in credential cache: %k"
+msgstr "Impossível encontrar a identidade na cache de credenciais: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:607
+msgid "Could not find identity credentials in cache: %k"
+msgstr "Impossível encontrar credenciais de identidade na cache: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:647
+msgid "Could not sift through identity credentials in cache: %k"
+msgstr "Impossível percorrer as credenciais de identidade na cache: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:665
+msgid "Could not finish up sifting through identity credentials in cache: %k"
+msgstr ""
+"Impossível terminar de percorrer as credenciais de identidade na cache: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:960
+#, c-format
+msgid "No associated identification found"
+msgstr "Não foi encontrada nenhuma identificação associada"
+
+#: ../src/goaidentity/goakerberosidentity.c:1043
+msgid "Could not create credential cache: %k"
+msgstr "Impossível criar cache de credenciais: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1077
+msgid "Could not initialize credentials cache: %k"
+msgstr "Impossível inicializar a cache de credenciais: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1094
+msgid "Could not store new credentials in credentials cache: %k"
+msgstr "Impossível armazenar as novas credenciais na cache de credenciais: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1369
+#, c-format
+msgid "Could not renew identity: Not signed in"
+msgstr "Impossível renovar a identidade: não tem uma sessão iniciada"
+
+#: ../src/goaidentity/goakerberosidentity.c:1381
+msgid "Could not renew identity: %k"
+msgstr "Impossível renovar a identidade: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1398
+msgid "Could not get new credentials to renew identity %s: %k"
+msgstr "Impossível obter novas credenciais para renovar a identidade %s: %k"
+
+#: ../src/goaidentity/goakerberosidentity.c:1440
+msgid "Could not erase identity: %k"
+msgstr "Impossível apagar a identidade: %k"
+
+#: ../src/goaidentity/goakerberosidentitymanager.c:745
+msgid "Could not find identity"
+msgstr "Impossível encontrar a identidade"
+
+#: ../src/goaidentity/goakerberosidentitymanager.c:836
+msgid "Could not create credential cache for identity"
+msgstr "Impossível criar a cache de credenciais para a identidade"
+
+#~ msgid "_Maps"
+#~ msgstr "_Mapas"
 
 #~ msgid ""
-#~ "Waiting for the program to finish. Interrupting the program may cause you "
-#~ "to lose work."
+#~ "Paste authorization code obtained from the <a href=\"%s\">authorization "
+#~ "page</a>:"
 #~ msgstr ""
-#~ "A aguardar que a aplicação termine. Interromper a aplicação pode causar a "
-#~ "perca de trabalho."
+#~ "Cole o código de autorização obtido na <a href=\"%s\">página de "
+#~ "autorização</a>:"
+
+#~ msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
+#~ msgstr "Cole o bloco obtido na <a href=\"%s\">página de autorização</a>:"
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#~ msgid "Time"
+#~ msgstr "Tempo"
+
+#~ msgid "Time to fire"
+#~ msgstr "Tempo para despoletar"
+
+#~ msgid "Failed to find Autodiscover element"
+#~ msgstr "Falha ao procurar elemento Autodiscover"
+
+#~ msgid "Failed to find Account element"
+#~ msgstr "Falha ao procurar elemento Account"
+
+#~ msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+#~ msgstr "Esperado estado 200 ao pedir o guid, foi recebido o estado %d (%s)"
+
+#~ msgid "Did not find imap-password with identity `%s' in credentials"
+#~ msgstr ""
+#~ "Incapaz de encontrar a senha-imap com a identidade `%s' nas credenciais"
+
+#~ msgid "Invalid imap-password with username `%s' (%s, %d): "
+#~ msgstr "Senha-imap inválida com o utilizador `%s' (%s, %d): "
+
+#~ msgid "Did not find smtp-password with identity `%s' in credentials"
+#~ msgstr ""
+#~ "Incapaz de encontrar a senha-smtp com a identidade `%s' nas credenciais"
+
+#~ msgid "Invalid smtp-password with username `%s' (%s, %d): "
+#~ msgstr "Senha-smtp inválida com o utilizador `%s' (%s, %d): "
+
+#~ msgid "Error parsing response as JSON: "
+#~ msgstr "Erro ao processar a resposta como JSON: "
+
+#~ msgid "Didn't find id member in JSON data"
+#~ msgstr "Não foi encontrado o membro \"id\" nos dados JSON"
+
+#~ msgid "Didn't find email member in JSON data"
+#~ msgstr "Não foi encontrado o elemento \"email\" nos dados JSON"
+
+#~ msgid "Didn't find user member in JSON data"
+#~ msgstr "Não foi encontrado o membro user nos dados JSON"
+
+#~ msgid "Didn't find user.id member in JSON data"
+#~ msgstr "Não foi encontrado o membro user.id nos dados JSON"
+
+#~ msgid "Didn't find user.username member in JSON data"
+#~ msgstr "Não foi encontrado o membro user.username nos dados JSON"
+
+#~ msgid "Didn't find user.username._content member in JSON data"
+#~ msgstr "Não foi encontrado o membro user.username._content nos dados JSON"
+
+#~ msgid "Didn't find access_token in non-JSON data"
+#~ msgstr "Não foi encontrado o elemento \"access_token\" nos dados não-JSON"
+
+#~ msgid "Didn't find access_token in JSON data"
+#~ msgstr "Não foi encontrado o elemento \"access_token\" nos dados JSON"
+
+#~ msgid "Didn't find id_str member in JSON data"
+#~ msgstr "Não foi encontrado o elemento \"id_str\" nos dados JSON"
+
+#~ msgid "Didn't find screen_name member in JSON data"
+#~ msgstr "Não foi encontrado o elemento \"screen_name\" nos dados JSON"
+
+#~ msgid "Didn't find account email member in JSON data"
+#~ msgstr "Não foi encontrado o membro \"email\" nos dados JSON"
+
+#~ msgid "Didn't find guid member in JSON data"
+#~ msgstr "Não foi encontrado o elemento \"guid\" nos dados JSON"
+
+#~ msgid "Didn't find value member in JSON data"
+#~ msgstr "Não foi encontrado o elemento \"value\" nos dados JSON"
+
+#~ msgid "Error parsing usercard response as JSON: "
+#~ msgstr "Erro ao processar a resposta \"usercard\" como JSON: "
+
+#~ msgid "Didn't find profile member in JSON data"
+#~ msgstr "Não foi encontrado o elemento \"profile\" nos dados JSON"
+
+#~ msgid "Didn't find nickname member in JSON data"
+#~ msgstr "Não foi encontrado o elemento \"nickname\" nos dados JSON"
+
+#~ msgid "Online Accounts"
+#~ msgstr "Contas Online"
+
+#~ msgid "An online account needs attention"
+#~ msgstr "Uma conta online requer atenção"
+
+#~ msgid "Open Online Accounts..."
+#~ msgstr "Abrir Contas Online..."
+
+#~ msgid "Credentials not found in keyring (%s, %d): "
+#~ msgstr "Credenciais não foram encontradas no chaveiro (%s, %d): "
+
+#~ msgid "Error storing credentials in keyring (%s, %d): "
+#~ msgstr "Erro ao armazenar as credenciais no chaveiro (%s, %d): "
+
+#~ msgid "New Microsoft Exchange Account"
+#~ msgstr "Nova Conta Microsoft Exchange"
+
+#~ msgid "Microsoft Exchange Account"
+#~ msgstr "Conta Microsoft Exchange"
+
+#~ msgid "Chat"
+#~ msgstr "Diálogo"
+
+#~ msgid "Didn't find data member in JSON data"
+#~ msgstr "Não foi encontrado o elemento \"dados\" nos dados JSON"
+
+#~ msgid "New Enterprise Login (Kerberos)"
+#~ msgstr "Nova Autenticação Empresarial (Kerberos)"
+
+#~ msgid "Add %s"
+#~ msgstr "Adicionar %s"
+
+#~ msgid "Refresh %s"
+#~ msgstr "Atualizar %s"
+
+#~ msgid "Domain Administrator Login"
+#~ msgstr "Iniciar Sessão de Administrador do Domínio"
 
 #~ msgid ""
-#~ "Waiting for programs to finish. Interrupting these programs may cause you "
-#~ "to lose work."
+#~ "In order to use this enterprise identity, the computer needs to be "
+#~ "enrolled in the domain. Please have your network administrator type their "
+#~ "domain password here."
 #~ msgstr ""
-#~ "A aguardar que as aplicações terminem. Interromper estas aplicações pode "
-#~ "causar a perca de trabalho."
-
-#~ msgid "Switch User Anyway"
-#~ msgstr "Ainda Assim Alternar Utilizador"
-
-#~ msgid "Log Out Anyway"
-#~ msgstr "Ainda Assim Terminar a Sessão"
-
-#~ msgid "Suspend Anyway"
-#~ msgstr "Ainda Assim Suspender"
-
-#~ msgid "Hibernate Anyway"
-#~ msgstr "Ainda Assim Hibernar"
-
-#~ msgid "Shut Down Anyway"
-#~ msgstr "Ainda Assim Desligar"
-
-#~ msgid "Restart Anyway"
-#~ msgstr "Ainda Assim Reiniciar"
-
-#~ msgid "Lock Screen"
-#~ msgstr "Trancar o Ecrã"
-
-#~ msgid "Cancel"
-#~ msgstr "Cancelar"
-
-#~ msgid "You will be automatically logged out in %d second."
-#~ msgid_plural "You will be automatically logged out in %d seconds."
-#~ msgstr[0] "A sua sessão terminará automaticamente dentro de %d segundo."
-#~ msgstr[1] "A sua sessão terminará automaticamente dentro de %d segundos."
-
-#~ msgid "This system will be automatically shut down in %d second."
-#~ msgid_plural "This system will be automatically shut down in %d seconds."
-#~ msgstr[0] "O sistema será automaticamente desligado dentro de %d segundo."
-#~ msgstr[1] "O sistema será automaticamente desligado dentro de %d segundos."
-
-#~ msgid "This system will be automatically restarted in %d second."
-#~ msgid_plural "This system will be automatically restarted in %d seconds."
-#~ msgstr[0] ""
-#~ "Este sistema será reiniciado automaticamente dentro de %d segundo."
-#~ msgstr[1] ""
-#~ "Este sistema será reiniciado automaticamente dentro de %d segundos."
-
-#~ msgid "You are currently logged in as \"%s\"."
-#~ msgstr "A sessão atual está iniciada com o utilizador \"%s\"."
-
-#~ msgid "Log out of this system now?"
-#~ msgstr "Terminar a sessão neste sistema agora?"
-
-#~ msgid "_Switch User"
-#~ msgstr "_Alternar Utilizador"
-
-#~ msgid "Shut down this system now?"
-#~ msgstr "Desligar este sistema agora?"
-
-#~ msgid "S_uspend"
-#~ msgstr "S_uspender"
-
-#~ msgid "_Hibernate"
-#~ msgstr "_Hibernar"
-
-#~ msgid "_Restart"
-#~ msgstr "_Reiniciar"
-
-#~ msgid "_Shut Down"
-#~ msgstr "_Desligar"
-
-#~ msgid "Restart this system now?"
-#~ msgstr "Reiniciar este sistema agora?"
-
-#~ msgid "%d hour"
-#~ msgid_plural "%d hours"
-#~ msgstr[0] "%d hora"
-#~ msgstr[1] "%d horas"
-
-#~ msgid "%d minute"
-#~ msgid_plural "%d minutes"
-#~ msgstr[0] "%d minuto"
-#~ msgstr[1] "%d minutos"
-
-#~ msgid "%d second"
-#~ msgid_plural "%d seconds"
-#~ msgstr[0] "%d segundo"
-#~ msgstr[1] "%d segundos"
-
-#~ msgid "0 seconds"
-#~ msgstr "0 segundos"
-
-#~ msgid "Automatic logout in %s"
-#~ msgstr "Terminar sessão automaticamente em %s"
+#~ "De forma a utilizar identificação empresarial, o computador tem de estar "
+#~ "registado no domínio. Peça ao administrador da sua rede para introduzir "
+#~ "aqui a sua senha de domínio."
 
 #~ msgid ""
-#~ "This session is configured to automatically log out after a period of "
-#~ "inactivity."
+#~ "In order to use this enterprise identity, the computer needs to be "
+#~ "enrolled in the domain. Please have your network administrator type their "
+#~ "domain username here."
 #~ msgstr ""
-#~ "Esta sessão está configurada para terminar automaticamente após um "
-#~ "período de inatividade."
+#~ "De forma a utilizar identificação empresarial, o computador tem de estar "
+#~ "registado no domínio. Peça ao administrador da sua rede para introduzir "
+#~ "aqui o seu utilizador de domínio."
 
-#~ msgid "Icon '%s' not found"
-#~ msgstr "Incapaz de encontrar o ícone '%s'"
+#~ msgid "No such domain or realm found"
+#~ msgstr "Não foi encontrado o domínio ou rede"
 
-#~ msgid "GNOME 3 Failed to Load"
-#~ msgstr "Falha ao Iniciar o GNOME 3"
+#~ msgid "Cannot log in as %s at the %s domain"
+#~ msgstr "Incapaz de iniciar sessão como %s no domínio %s"
 
-#~ msgid ""
-#~ "Unfortunately GNOME 3 failed to start properly and started in the "
-#~ "<i>fallback mode</i>.\n"
-#~ "\n"
-#~ "This most likely means your system (graphics hardware or driver) is not "
-#~ "capable of delivering the full GNOME 3 experience."
-#~ msgstr ""
-#~ "Infelizmente o GNOME 3 foi incapaz de iniciar corretamente e arrancou em "
-#~ "<i>modo de recurso</i>.\n"
-#~ "\n"
-#~ "Provavelmente isso significa que o seu sistema (placa gráfica ou "
-#~ "controladores) não é capaz de processar toda a experiência GNOME 3."
+#~ msgid "Invalid password, please try again"
+#~ msgstr "Senha inválida, tente novamente"
 
-#~ msgid "Learn more about GNOME 3"
-#~ msgstr "Descubra mais sobre o GNOME 3"
+#~ msgid "Couldn't connect to the %s domain: %s"
+#~ msgstr "Incapaz de se ligar ao domínio %s: %s"
 
-#~ msgid ""
-#~ "Unable to start login session (and unable to connect to the X server)"
-#~ msgstr ""
-#~ "Incapaz de iniciar sessão de arranque (e incapaz de se ligar ao servidor "
-#~ "X)"
+#~ msgid "Email Address"
+#~ msgstr "Endereço de Email"
 
-#~ msgid "<b>Some programs are still running:</b>"
-#~ msgstr "<b>Algumas aplicações ainda se encontram em execução:</b>"
+#~ msgid "There is already an account for the identity %s"
+#~ msgstr "Já existe uma conta para a identidade %s"
 
-#~ msgid "Exited with code %d"
-#~ msgstr "Terminado com o código %d"
-
-#~ msgid "Killed by signal %d"
-#~ msgstr "Terminado com o sinal %d"
-
-#~ msgid "Stopped by signal %d"
-#~ msgstr "Parado com o sinal %d"
-
-#~ msgid ""
-#~ "A problem has occurred and the system can't recover. Some of the "
-#~ "extensions below may have caused this.\n"
-#~ "Please try disabling some of these, and then log out and try again."
-#~ msgstr ""
-#~ "Ocorreu um problema e o sistema é incapaz de recuperar. Algumas das "
-#~ "extensões abaixo poderão ter causado o problema.\n"
-#~ "Tente desativar algumas e depois termine a sessão e tente novamente."
-
-#~ msgid ""
-#~ "There is a problem with the configuration server.\n"
-#~ "(%s exited with status %d)"
-#~ msgstr ""
-#~ "Ocorreu um problema com o servidor de configuração.\n"
-#~ "(%s terminou com o estado %d)"
-
-#~ msgid "Try _Recovery"
-#~ msgstr "Tentar _Recuperar"
-
-#~ msgid "A system error has occurred: %s"
-#~ msgstr "Ocorreu um erro de sistema: %s"
-
-#~ msgid "A fatal system error has occurred: %s"
-#~ msgstr "Ocorreu um erro fatal no sistema: %s"
-
-#~ msgid "Component '%s': %s"
-#~ msgstr "Componente '%s': %s"
-
-#~ msgid "Killed by signal"
-#~ msgstr "Morto pelo sinal"
-
-#~ msgid "Timed out"
-#~ msgstr "Não responde"
-
-#~ msgid "Default session"
-#~ msgstr "Sessão por omissão"
-
-#~ msgid "File Manager"
-#~ msgstr "Gestor de Ficheiros"
-
-#~ msgid ""
-#~ "If enabled, gnome-session will prompt the user before ending a session."
-#~ msgstr ""
-#~ "Se ativo, o gnome-session questionará o utilizador antes de terminar uma "
-#~ "sessão."
-
-#~ msgid "If enabled, gnome-session will save the session automatically."
-#~ msgstr "Se ativo, o gnome-session irá gravar a sessão automaticamente."
-
-#~ msgid "List of applications that are part of the default session."
-#~ msgstr "Lista de aplicações que fazem parte da sessão por omissão."
-
-#~ msgid ""
-#~ "List of components that are required as part of the session. (Each "
-#~ "element names a key under \"/desktop/gnome/session/required_components"
-#~ "\"). The Startup Applications preferences tool will not normally allow "
-#~ "users to remove a required component from the session, and the session "
-#~ "manager will automatically add the required components back to the "
-#~ "session at login time if they do get removed."
-#~ msgstr ""
-#~ "Lista de componentes que são necessários como parte da sessão. (Cada "
-#~ "elemento designa uma chave sob \"/desktop/gnome/session/"
-#~ "required_components\"). As Preferências de Aplicações de Arranque "
-#~ "normalmente não permitirão aos utilizadores remover um componente "
-#~ "necessário da sessão, e o gestor de sessões irá automaticamente adicionar "
-#~ "novamente, ao iniciar uma sessão, os componentes necessários, caso tenham "
-#~ "sido removidos."
-
-#~ msgid "Logout prompt"
-#~ msgstr "Perguntar ao terminar sessão"
-
-#~ msgid "Panel"
-#~ msgstr "Painel"
-
-#~ msgid "Required session components"
-#~ msgstr "Componentes necessários de sessão"
-
-#~ msgid ""
-#~ "The file manager provides the desktop icons and allows you to interact "
-#~ "with your saved files."
-#~ msgstr ""
-#~ "O gestor de ficheiros disponibiliza os ícones de ambiente de trabalho e "
-#~ "permite-lhe interagir com os seus ficheiros gravados."
-
-#~ msgid ""
-#~ "The number of minutes of inactivity before the session is considered idle."
-#~ msgstr ""
-#~ "O número de minutos de inatividade até que a sessão seja considerada "
-#~ "inativa."
-
-#~ msgid ""
-#~ "The panel provides the bar at the top or bottom of the screen containing "
-#~ "menus, the window list, status icons, the clock, etc."
-#~ msgstr ""
-#~ "O painel disponibiliza a barra no topo e no fundo do ecrã que contêm "
-#~ "menus, a lista de janelas, ícones de estado, o relógio, etc."
-
-#~ msgid ""
-#~ "The window manager is the program that draws the title bar and borders "
-#~ "around windows, and allows you to move and resize windows."
-#~ msgstr ""
-#~ "O gestor de janelas é a aplicação que desenha a barra de título e margens "
-#~ "em torno das janelas, e que lhe permite mover e redimensionar as janelas."
-
-#~ msgid "Time before session is considered idle"
-#~ msgstr "Tempo até que a sessão seja considerada inativa"
-
-#~ msgid "Window Manager"
-#~ msgstr "Gestor de Janelas"
-
-#~ msgid "GConf key used to look up default session"
-#~ msgstr "Chave GConf utilizada para procurar a sessão por omissão"
-
-#~ msgid "Show logout dialog"
-#~ msgstr "Apresentar diálogo de término de sessão"
-
-#~ msgid "Show shutdown dialog"
-#~ msgstr "Apresentar diálogo de desligar"
-
-#~ msgid "Use dialog boxes for errors"
-#~ msgstr "Utilizar caixas de diálogo para os erros"
-
-#~ msgid "Set the current session name"
-#~ msgstr "Definir o nome da sessão atual"
-
-#~ msgid "NAME"
-#~ msgstr "NOME"
-
-#~ msgid "Kill session"
-#~ msgstr "Matar sessão"
-
-#~ msgid ""
-#~ "Assistive technology support has been requested for this session, but the "
-#~ "accessibility registry was not found. Please ensure that the AT-SPI "
-#~ "package is installed. Your session has been started without assistive "
-#~ "technology support."
-#~ msgstr ""
-#~ "Foi pedido para esta sessão suporte para tecnologia assistiva, mas o "
-#~ "registo de acessibilidade não foi encontrado. Certifique-se de que o "
-#~ "pacote AT-SPI se encontra instalado. A sua sessão foi iniciada sem "
-#~ "suporte para tecnologia assistiva."
-
-#~ msgid "AT SPI Registry Wrapper"
-#~ msgstr "Invólucro de Registo AT SPI"
-
-#~ msgid "GNOME Settings Daemon Helper"
-#~ msgstr "Assistente do Daemon das Definições GNOME"
-
-#~ msgid ""
-#~ "If enabled, gnome-session will save the session automatically. Otherwise, "
-#~ "the logout dialog will have an option to save the session."
-#~ msgstr ""
-#~ "Se ativo, o gnome-session gravará a sessão automaticamente. Caso "
-#~ "contrário, o diálogo de terminar sessão terá uma opção para gravar a "
-#~ "sessão."
-
-#~ msgid "Preferred Image to use for login splash screen"
-#~ msgstr ""
-#~ "Imagem Preferida a utilizar para o ecrã de logotipo ao iniciar sessão"
-
-#~ msgid "Show the splash screen"
-#~ msgstr "Apresentar ecrã de logotipo"
-
-#~ msgid "Show the splash screen when the session starts up"
-#~ msgstr "Apresentar ecrã de logotipo ao iniciar sessão"
-
-#~ msgid ""
-#~ "This is a relative path value based off the $datadir/pixmaps/ directory. "
-#~ "Sub-directories and image names are valid values. Changing this value "
-#~ "will effect the next session login."
-#~ msgstr ""
-#~ "Este é um caminho relativo baseado no diretório $datadir/pixmaps/. "
-#~ "Subdiretórios e nomes de imagens são valores válidos. Alterar este valor "
-#~ "irá ter efeito na próxima vez que iniciar uma sessão."
-
-#~ msgid ""
-#~ "Waiting for program to finish.  Interrupting program may cause you to "
-#~ "lose work."
-#~ msgstr ""
-#~ "A aguardar que as aplicações terminem. Interromper as aplicações poderá "
-#~ "causar a perca de trabalho."
-
-#~ msgid "- GNOME Splash Screen"
-#~ msgstr "- Ecrã de Logotipo do GNOME"
-
-#~ msgid "GNOME Splash Screen"
-#~ msgstr "Ecrã de Logotipo do GNOME"
-
-#~ msgid "The name of the startup program cannot be empty"
-#~ msgstr "O nome da aplicação de arranque não pode ser vazio"
-
-#~ msgid "Sessions Preferences"
-#~ msgstr "Preferências de Sessão"
-
-#~ msgid "GNOME Keyring Daemon Wrapper"
-#~ msgstr "Invólucro do Daemon do GNOME Keyring"
-
-#~ msgid "Selected option in the log out dialog"
-#~ msgstr "Opção selecionada no diálogo de terminar sessão"
-
-#~ msgid ""
-#~ "This is the option that will be selected in the logout dialog, valid "
-#~ "values are \"logout\" for logging out, \"shutdown\" for halting the "
-#~ "system and \"restart\" for restarting the system."
-#~ msgstr ""
-#~ "Esta é a opção que estará selecionada no diálogo de terminar sessão, "
-#~ "valores válidos são \"logout\" para terminar a sessão, \"shutdown\" para "
-#~ "desligar o sistema e \"restart\" para reiniciar o sistema."
-
-#~ msgid "Configure your sessions"
-#~ msgstr "Configurar as suas sessões"
-
-#~ msgid "Session management"
-#~ msgstr "Gestão de sessões"
-
-#~ msgid "GNOME GUI Library + EggSMClient"
-#~ msgstr "Biblioteca de Interface Gráfico GNOME + EggSMClient"
-
-#~ msgid ""
-#~ "The Window manager that gnome-session will start. Valid values are "
-#~ "\"metacity\" and \"compiz\"."
-#~ msgstr ""
-#~ "O gestor de janelas que o gnome-session irá iniciar. Valores válidos são "
-#~ "\"metacity\" e \"compiz\"."
-
-#~ msgid "Window Manager to start"
-#~ msgstr "Gestor de Janelas a iniciar"
-
-#~ msgid "gtk-cancel"
-#~ msgstr "gtk-cancelar"
-
-#~ msgid "Play logout sound instead of login"
-#~ msgstr "Reproduzir som de terminar sessão em vez do de iniciar"
-
-#~ msgid "- GNOME login/logout sound"
-#~ msgstr "- som de início/terminar de sessão GNOME"
-
-#~ msgid "Allow TCP connections"
-#~ msgstr "Autorizar ligações TCP"
-
-#~ msgid ""
-#~ "For security reasons, on platforms which have _IceTcpTransNoListen() "
-#~ "(XFree86 systems), gnome-session does not listen for connections on TCP "
-#~ "ports. This option will allow connections from (authorized) remote hosts. "
-#~ "gnome-session must be restarted for this to take effect."
-#~ msgstr ""
-#~ "Por motivos de segurança, em plataformas que tenham "
-#~ "_IceTcpTransNoListen() (sistemas XFree86), o gnome-session não escuta por "
-#~ "ligações em portos TCP. Esta opção autorizará ligações de máquinas "
-#~ "remotas (autorizadas). O gnome-session tem de ser reiniciado para que "
-#~ "esta opção tenha efeito."
-
-#~ msgid "_Order:"
-#~ msgstr "_Ordem:"
-
-#~ msgid "What happens to the application when it exits."
-#~ msgstr "O que acontece à aplicação quando termina."
-
-#~ msgid "_Style:"
-#~ msgstr "E_stilo:"
-
-#~ msgid "Inative"
-#~ msgstr "Inativa"
-
-#~ msgid "Waiting to start or already finished."
-#~ msgstr "A aguardar início ou já terminada."
-
-#~ msgid "Started but has not yet reported state."
-#~ msgstr "Já iniciada mas ainda não reportou estado."
-
-#~ msgid "Running"
-#~ msgstr "Em execução"
-
-#~ msgid "A normal member of the session."
-#~ msgstr "Um membro normal da sessão."
-
-#~ msgid "Saving"
-#~ msgstr "A gravar"
-
-#~ msgid "Saving session details."
-#~ msgstr "A gravar detalhes de sessão."
-
-#~ msgid "State not reported within timeout."
-#~ msgstr "Estado não reportado dentro do prazo."
-
-#~ msgid "Normal"
-#~ msgstr "Normal"
-
-#~ msgid "Unaffected by logouts but can die."
-#~ msgstr "Não afetado por fim de sessão mas pode morrer."
-
-#~ msgid "Never allowed to die."
-#~ msgstr "Nunca é permitido morrer."
-
-#~ msgid "Trash"
-#~ msgstr "Lixo"
-
-#~ msgid "Discarded on logout and can die."
-#~ msgstr "Descartada no final da sessão e pode morrer."
-
-#~ msgid "Settings"
-#~ msgstr "Propriedades"
-
-#~ msgid "Always started on every login."
-#~ msgstr "Iniciada em todos os inícios de sessão."
-
-#~ msgid "Order"
-#~ msgstr "Ordem"
-
-#~ msgid "Style"
-#~ msgstr "Estilo"
-
-#~ msgid "State"
-#~ msgstr "Estado"
-
-#~ msgid ""
-#~ "There was an error starting the GNOME Settings Daemon.\n"
-#~ "\n"
-#~ "Some things, such as themes, sounds, or background settings may not work "
-#~ "correctly."
-#~ msgstr ""
-#~ "Ocorreu um erro ao iniciar o Daemon de Definições GNOME.\n"
-#~ "\n"
-#~ "Algumas coisas, tais como temas, sons ou configurações do fundo do "
-#~ "ambiente poderão não funcionar corretamente."
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "The last error message was:\n"
-#~ "\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "A última mensagem de erro foi:\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "GNOME will still try to restart the Settings Daemon next time you log in."
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "O GNOME tentará ainda assim reiniciar o Daemon de Definições da próxima "
-#~ "vez que iniciar sessão."
-
-#~ msgid "The Settings Daemon restarted too many times."
-#~ msgstr "O Daemon de Definições reiniciou-se demasiadas vezes."
-
-#~ msgid "List registered clients, then exit"
-#~ msgstr "Listar os clientes registados, depois sair"
-
-#~ msgid "PROGRAM..."
-#~ msgstr "APLICAÇÃO..."
-
-#~ msgid ""
-#~ "You must specify at least one program to remove. You can list the "
-#~ "programs with --list.\n"
-#~ msgstr ""
-#~ "Tem de especificar pelo menos uma aplicação a remover. Pode listar as "
-#~ "aplicações com --list.\n"
-
-#~ msgid "Error: could not connect to the session manager\n"
-#~ msgstr "Erro: Incapaz de se ligar ao gestor de sessões\n"
-
-#~ msgid "Currently registered clients:\n"
-#~ msgstr "Clientes atualmente registados:\n"
-
-#~ msgid "Couldn't find program %s in session\n"
-#~ msgstr "Incapaz de encontrar a aplicação %s na sessão\n"
-
-#~ msgid ""
-#~ "The GNOME session manager cannot start properly.  Please report this as a "
-#~ "GNOME bug. Please include this ICE failure message in the bug report:  "
-#~ "'%s'.  Meanwhile you could try logging in using the failsafe session."
-#~ msgstr ""
-#~ "O gestor de sessões GNOME foi incapaz de se iniciar corretamente.  "
-#~ "Reporte este problema como sendo um erro do GNOME. Inclua esta mensagem "
-#~ "de falha ICE no relatório de erro:  '%s'.  Entretanto poderá tentar "
-#~ "iniciar uma sessão utilizando a sessão de recurso."
-
-#~ msgid ""
-#~ "The GNOME session manager was unable to lock the file '%s'.  Please "
-#~ "report this as a GNOME bug.  Sometimes this error may occur if the file's "
-#~ "directory is unwritable, you could try logging in via the failsafe "
-#~ "session and ensuring that it is."
-#~ msgstr ""
-#~ "O gestor de sessões GNOME foi incapaz de trancar o ficheiro '%s'.  Relate "
-#~ "este problema como sendo um erro do GNOME.  Por vezes este erro poderá "
-#~ "ocorrer se o diretório do ficheiro não permitir escrita, pelo que poderá "
-#~ "iniciar uma sessão utilizando a sessão de recurso e certificar-se de que "
-#~ "o diretório possui permissões de escrita."
-
-#~ msgid ""
-#~ "The GNOME session manager was unable to read the file: '%s'.  If this "
-#~ "file exists it must be readable by you for GNOME to work properly.  Try "
-#~ "logging in with the failsafe session and removing this file."
-#~ msgstr ""
-#~ "O gestor de sessões GNOME foi incapaz de ler o ficheiro: '%s'.  Se este "
-#~ "ficheiro existir terá de ser legível pelo seu utilizador para que o GNOME "
-#~ "funcione corretamente.  Tente iniciar uma sessão utilizando a sessão de "
-#~ "recurso e remover este ficheiro."
-
-#~ msgid ""
-#~ "Could not write to file '%s'.  This file must be writable in order for "
-#~ "GNOME to function properly.  Try logging in with the failsafe session and "
-#~ "removing this file.  Also make sure that the file's directory is writable."
-#~ msgstr ""
-#~ "Incapz de escrever no ficheiro '%s'.  Este ficheiro tem de permitir "
-#~ "escrita para que o GNOME funcione corretamente.  Tente iniciar uma sessão "
-#~ "utilizando a sessão de recurso e remover este ficheiro.  Certifique-se "
-#~ "também de que o diretório onde se encontra o ficheiro permite escrita."
-
-#~ msgid "Are you sure you want to log out?"
-#~ msgstr "Tem a certeza de que deseja terminar a sessão?"
-
-#~ msgid "_Restart the computer"
-#~ msgstr "_Reiniciar o computador"
-
-#~ msgid "Only read saved sessions from the default.session file"
-#~ msgstr "Apenas ler sessões gravadas do ficheiro default.session"
-
-#~ msgid "Millisecond period spent waiting for clients to register (0=forever)"
-#~ msgstr ""
-#~ "Milisegundos gastos à espera que os clientes se registem (0=infinito)"
-
-#~ msgid "DELAY"
-#~ msgstr "ESPERA"
-
-#~ msgid "Millisecond period spent waiting for clients to respond (0=forever)"
-#~ msgstr "Milisegundos gastos à espera que os clientes respondam (0=infinito)"
-
-#~ msgid "Millisecond period spent waiting for clients to die (0=forever)"
-#~ msgstr "Milisegundos gastos à espera que os clientes morram (0=infinito)"
-
-#~ msgid "This session is running as a privileged user"
-#~ msgstr "Esta sessão está a correr como utilizador privilegiado"
-
-#~ msgid ""
-#~ "Running a session as a privileged user should be avoided for security "
-#~ "reasons. If possible, you should log in as a normal user."
-#~ msgstr ""
-#~ "Executar uma sessão como utilizador privilegiado deverá ser evitado por "
-#~ "motivos de segurança. Se possível, deverá iniciar uma sessão como "
-#~ "utilizador normal."
-
-#~ msgid ""
-#~ "The session might encounter issues if the computer clock is not properly "
-#~ "configured. Please consider adjusting it.\n"
-#~ "\n"
-#~ "Current date is <b>%s</b>."
-#~ msgstr ""
-#~ "A sessão poderá encontrar problemas se o relógio do computador não "
-#~ "estiver devidamente configurado. Considere ajustá-lo.\n"
-#~ "\n"
-#~ "A data atual é <b>%s</b>."
-
-#~ msgid "Failed to launch time configuration tool: %s"
-#~ msgstr "Falha ao iniciar a ferramenta de configuração de hora: %s"
-
-#~ msgid "The computer clock appears to be wrong"
-#~ msgstr "Parece que o relógio do computador está incorreto"
-
-#~ msgid "_Ignore"
-#~ msgstr "_Ignorar"
-
-#~ msgid "_Adjust the Clock"
-#~ msgstr "_Ajustar o Relógio"
-
-#~ msgid ""
-#~ "Could not look up internet address for %s.\n"
-#~ "This will prevent GNOME from operating correctly.\n"
-#~ "It may be possible to correct the problem by adding\n"
-#~ "%s to the file /etc/hosts."
-#~ msgstr ""
-#~ "Incapaz de encontrar endereço de internet para %s.\n"
-#~ "Isto impedirá o GNOME de funcionar corretamente.\n"
-#~ "Poderá ser possível corrigir o problema adicionando\n"
-#~ "%s ao ficheiro /etc/hosts."
-
-#~ msgid "Try Again"
-#~ msgstr "Tentar Novamente"
-
-#~ msgid "Wait abandoned due to conflict."
-#~ msgstr "Espera abandonada devido a conflitos."
-
-#~ msgid "No response to the %s command."
-#~ msgstr "Nenhuma resposta ao comando %s."
-
-#~ msgid "The program may be slow, stopped or broken."
-#~ msgstr "A aplicação pode estar lenta, parada ou zombie."
-
-#~ msgid "You may wait for it to respond or remove it."
-#~ msgstr "Pode aguardar que ela responda ou removê-la."
-
-#~ msgid "Restart abandoned due to failures."
-#~ msgstr "Reiníco abandonado devido a falhas."
-
-#~ msgid "A session shutdown is in progress."
-#~ msgstr "Encerramento de sessão em curso."
-
-#~ msgid "- Save the current session"
-#~ msgstr "- Gravar a sessão atual"
-
-#~ msgid "Save changes to the current session before closing?"
-#~ msgstr "Gravar as alterações à sessão atual antes de fechar?"
-
-#~ msgid "If you don't save, changes will be discarded."
-#~ msgstr "Se não gravar, as alterações serão descartadas."
-
-#~ msgid "_Close without Saving"
-#~ msgstr "_Fechar sem Gravar"
-
-#~ msgid "Your session has been saved."
-#~ msgstr "A sua sessão foi gravada."
-
-#~ msgid "could not connect to the session manager\n"
-#~ msgstr "Incapaz de se ligar ao gestor de sessões\n"
-
-#~ msgid "session manager does not support GNOME extensions\n"
-#~ msgstr "o gestor de sessões não suporta extensões GNOME\n"
-
-#~ msgid "Remove the currently selected client from the session."
-#~ msgstr "Remover o cliente atualmente selecionado da sessão."
-
-#~ msgid "Apply changes to the current session"
-#~ msgstr "Aplicar alterações à sessão atual"
-
-#~ msgid "The list of programs in the session."
-#~ msgstr "A lista de aplicações na sessão."
-
-#~ msgid "Currently running _programs:"
-#~ msgstr "Aplicações atualmente em e_xecução:"
-
-#~ msgid "Sawfish Window Manager"
-#~ msgstr "Gestor de Janelas Sawfish"
-
-#~ msgid "Metacity Window Manager"
-#~ msgstr "Gestor de Janelas Metacity"
-
-#~ msgid "Nautilus"
-#~ msgstr "Nautilus"
-
-#~ msgid "Desktop Settings"
-#~ msgstr "Definições do Ambiente"
-
-#~ msgid "New Startup Program"
-#~ msgstr "Nova Aplicação de Arranque"
-
-#~ msgid "_Save current setup"
-#~ msgstr "_Gravar a configuração atual"
-
-#~ msgid "Automatically save chan_ges to session"
-#~ msgstr "_Gravar automaticamente alterações à sessão"
-
-#~ msgid "Save the current session"
-#~ msgstr "Gravar a sessão atual"
-
-#~ msgid "The session name cannot be empty"
-#~ msgstr "O nome de sessão não pode ser vazio"
-
-#~ msgid "Add a new session"
-#~ msgstr "Adicionar nova sessão"
-
-#~ msgid "Edit session name"
-#~ msgstr "Editar nome de sessão"
-
-#~ msgid "Disable"
-#~ msgstr "Desativar"
-
-#~ msgid "_Edit"
-#~ msgstr "_Editar"
-
-#~ msgid ""
-#~ "Some changes are not saved.\n"
-#~ "Is it still OK to exit?"
-#~ msgstr ""
-#~ "Algumas alterações não foram gravadas\n"
-#~ "Ainda assim sair?"
-
-#~ msgid "Show splash screen on _login"
-#~ msgstr "Apresentar ecrã de _logotipo ao iniciar sessão"
-
-#~ msgid "_Startup Command:"
-#~ msgstr "Comando de _Arranque:"
-
-#~ msgid "There was an unknown activation error."
-#~ msgstr "Ocorreu um erro de ativação desconhecido."
-
-#~ msgid "Initialize session settings"
-#~ msgstr "Inicializar definições de sessão"
-
-#~ msgid "Save Current Session"
-#~ msgstr "Gravar Sessão Atual"
-
-#~ msgid "Save current state of desktop"
-#~ msgstr "Gravar estado atual do ambiente"
+#~ msgid "Didn't find name member in JSON data"
+#~ msgstr "Não foi encontrado o elemento \"nome\" nos dados JSON"
