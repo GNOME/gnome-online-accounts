@@ -191,7 +191,7 @@ smtp_auth_check_greeting (GDataInputStream *input, GCancellable *cancellable, GE
   ret = FALSE;
 
  greeting_again:
-  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  response = goa_utils_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
@@ -638,7 +638,7 @@ goa_smtp_auth_run_sync (GoaMailAuth         *auth,
   /* Check which SASL mechanisms are supported */
 
  ehlo_again:
-  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  response = goa_utils_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
@@ -706,7 +706,7 @@ goa_smtp_auth_run_sync (GoaMailAuth         *auth,
         goto out;
       g_clear_pointer (&request, g_free);
 
-      response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+      response = goa_utils_data_input_stream_read_line (input, NULL, cancellable, error);
       if (response == NULL)
         goto out;
       g_debug ("< %s", response);
@@ -727,7 +727,7 @@ goa_smtp_auth_run_sync (GoaMailAuth         *auth,
       g_clear_pointer (&request, g_free);
     }
 
-  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  response = goa_utils_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
@@ -793,7 +793,7 @@ goa_smtp_auth_starttls_sync (GoaMailAuth         *auth,
   /* Check if STARTTLS is supported or not */
 
  ehlo_again:
-  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  response = goa_utils_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
@@ -828,7 +828,7 @@ goa_smtp_auth_starttls_sync (GoaMailAuth         *auth,
     goto out;
   g_clear_pointer (&request, g_free);
 
-  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  response = goa_utils_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
