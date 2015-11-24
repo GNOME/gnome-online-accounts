@@ -126,6 +126,34 @@ goa_utils_check_duplicate (GoaClient              *client,
   return ret;
 }
 
+gchar *
+goa_utils_data_input_stream_read_line (GDataInputStream  *stream,
+                                       gsize             *length,
+                                       GCancellable      *cancellable,
+                                       GError           **error)
+{
+  GError *local_error = NULL;
+  gchar *ret = NULL;
+
+  ret = g_data_input_stream_read_line (stream, length, cancellable, &local_error);
+
+  /* Handle g_data_input_stream_read_line returning NULL without
+   * setting an error when there was no content to read.
+   */
+  if (ret == NULL && local_error == NULL)
+    {
+      g_set_error (&local_error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED, /* TODO: more specific */
+                   _("Could not parse response"));
+    }
+
+  if (local_error != NULL)
+    g_propagate_error (error, local_error);
+
+  return ret;
+}
+
 void
 goa_utils_set_dialog_title (GoaProvider *provider, GtkDialog *dialog, gboolean add_account)
 {

@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012, 2013, 2014 Red Hat, Inc.
+ * Copyright (C) 2012, 2013, 2014, 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -46,6 +46,11 @@ gboolean         goa_utils_check_duplicate (GoaClient              *client,
                                             const gchar            *provider_type,
                                             GoaPeekInterfaceFunc    func,
                                             GError                **error);
+
+gchar           *goa_utils_data_input_stream_read_line (GDataInputStream  *stream,
+                                                        gsize             *length,
+                                                        GCancellable      *cancellable,
+                                                        GError           **error);
 
 void             goa_utils_set_dialog_title (GoaProvider *provider, GtkDialog *dialog, gboolean add_account);
 
