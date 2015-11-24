@@ -506,7 +506,7 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *auth,
 
   if (!self->greeting_absent)
     {
-      response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+      response = goa_utils_data_input_stream_read_line (input, NULL, cancellable, error);
       if (response == NULL)
         goto out;
       g_debug ("< %s", response);
@@ -527,7 +527,7 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *auth,
 
   /* Check if LOGIN is supported or not */
 
-  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  response = goa_utils_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
@@ -535,7 +535,7 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *auth,
     goto out;
   g_clear_pointer (&response, g_free);
 
-  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  response = goa_utils_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
@@ -552,7 +552,7 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *auth,
   g_clear_pointer (&request, g_free);
 
   /* Skip post-login CAPABILITY, if any */
-  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  response = goa_utils_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
@@ -560,7 +560,7 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *auth,
     goto check_login_response;
   g_clear_pointer (&response, g_free);
 
-  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  response = goa_utils_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
@@ -604,7 +604,7 @@ goa_imap_auth_login_starttls_sync (GoaMailAuth         *auth,
 
   /* Check the greeting */
 
-  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  response = goa_utils_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
@@ -624,7 +624,7 @@ goa_imap_auth_login_starttls_sync (GoaMailAuth         *auth,
 
   /* Check if STARTTLS is supported or not */
 
-  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  response = goa_utils_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
@@ -632,7 +632,7 @@ goa_imap_auth_login_starttls_sync (GoaMailAuth         *auth,
     goto out;
   g_clear_pointer (&response, g_free);
 
-  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  response = goa_utils_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
@@ -648,7 +648,7 @@ goa_imap_auth_login_starttls_sync (GoaMailAuth         *auth,
     goto out;
   g_clear_pointer (&request, g_free);
 
-  response = g_data_input_stream_read_line (input, NULL, cancellable, error);
+  response = goa_utils_data_input_stream_read_line (input, NULL, cancellable, error);
   if (response == NULL)
     goto out;
   g_debug ("< %s", response);
