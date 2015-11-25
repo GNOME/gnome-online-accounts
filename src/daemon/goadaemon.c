@@ -1126,19 +1126,16 @@ on_account_handle_remove (GoaAccount            *account,
 
 typedef struct
 {
-  GoaDaemon *daemon;
   GoaObject *object;
   GDBusMethodInvocation *invocation;
 } EnsureData;
 
 static EnsureData *
-ensure_data_new (GoaDaemon             *self,
-                 GoaObject             *object,
+ensure_data_new (GoaObject             *object,
                  GDBusMethodInvocation *invocation)
 {
   EnsureData *data;
   data = g_slice_new0 (EnsureData);
-  data->daemon = g_object_ref (self);
   data->object = g_object_ref (object);
   data->invocation = invocation;
   return data;
@@ -1147,7 +1144,6 @@ ensure_data_new (GoaDaemon             *self,
 static void
 ensure_data_unref (EnsureData *data)
 {
-  g_object_unref (data->daemon);
   g_object_unref (data->object);
   g_slice_free (EnsureData, data);
 }
@@ -1308,7 +1304,7 @@ on_account_handle_ensure_credentials (GoaAccount            *account,
     }
 
   object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (account)));
-  data = ensure_data_new (self, object, invocation);
+  data = ensure_data_new (object, invocation);
 
   task = g_task_new (self, NULL, NULL, NULL);
   g_task_set_task_data (task, data, (GDestroyNotify) ensure_data_unref);
@@ -1360,7 +1356,7 @@ goa_daemon_check_credentials (GoaDaemon *self)
       provider_type = goa_account_get_provider_type (account);
       g_debug ("Calling EnsureCredentials for account (%s, %s)", provider_type, id);
 
-      data = ensure_data_new (self, object, NULL);
+      data = ensure_data_new (object, NULL);
 
       task = g_task_new (self, NULL, NULL, NULL);
       g_task_set_task_data (task, data, (GDestroyNotify) ensure_data_unref);
