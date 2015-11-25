@@ -1233,6 +1233,20 @@ ensure_credentials_queue_collector (GObject *source_object, GAsyncResult *res, g
   g_object_unref (task);
 }
 
+static gint
+ensure_credentials_queue_sort (gconstpointer a, gconstpointer b, gpointer user_data)
+{
+  GTask *task_a = G_TASK (a);
+  GTask *task_b = G_TASK (b);
+  gint priority_a;
+  gint priority_b;
+
+  priority_a = g_task_get_priority (task_a);
+  priority_b = g_task_get_priority (task_b);
+
+  return priority_a - priority_b;
+}
+
 static void
 ensure_credentials_queue_check (GoaDaemon *self)
 {
@@ -1248,6 +1262,8 @@ ensure_credentials_queue_check (GoaDaemon *self)
 
   if (self->ensure_credentials_queue->length == 0)
     goto out;
+
+  g_queue_sort (self->ensure_credentials_queue, ensure_credentials_queue_sort, NULL);
 
   task = G_TASK (g_queue_peek_head (self->ensure_credentials_queue));
   self->ensure_credentials_running = TRUE;
@@ -1307,6 +1323,7 @@ on_account_handle_ensure_credentials (GoaAccount            *account,
   data = ensure_data_new (object, invocation);
 
   task = g_task_new (self, NULL, NULL, NULL);
+  g_task_set_priority (task, G_PRIORITY_HIGH);
   g_task_set_task_data (task, data, (GDestroyNotify) ensure_data_unref);
   g_queue_push_tail (self->ensure_credentials_queue, g_object_ref (task));
 
@@ -1359,6 +1376,7 @@ goa_daemon_check_credentials (GoaDaemon *self)
       data = ensure_data_new (object, NULL);
 
       task = g_task_new (self, NULL, NULL, NULL);
+      g_task_set_priority (task, G_PRIORITY_LOW);
       g_task_set_task_data (task, data, (GDestroyNotify) ensure_data_unref);
       g_queue_push_tail (self->ensure_credentials_queue, g_object_ref (task));
 
