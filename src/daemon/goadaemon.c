@@ -42,6 +42,9 @@ struct _GoaDaemon
 
   GoaManager *manager;
 
+  GQueue *ensure_credentials_queue;
+  gboolean ensure_credentials_running;
+
   guint config_timeout_id;
   guint credentials_timeout_id;
 };
@@ -73,6 +76,8 @@ static gboolean on_account_handle_remove (GoaAccount            *account,
 static gboolean on_account_handle_ensure_credentials (GoaAccount            *account,
                                                       GDBusMethodInvocation *invocation,
                                                       gpointer               user_data);
+
+static void ensure_credentials_queue_check (GoaDaemon *self);
 
 static void goa_daemon_check_credentials (GoaDaemon *self);
 static void goa_daemon_reload_configuration (GoaDaemon *self);
@@ -113,6 +118,7 @@ goa_daemon_finalize (GObject *object)
   g_object_unref (self->manager);
   g_object_unref (self->object_manager);
   g_object_unref (self->connection);
+  g_queue_free_full (self->ensure_credentials_queue, g_object_unref);
 
   G_OBJECT_CLASS (goa_daemon_parent_class)->finalize (object);
 }
@@ -274,6 +280,8 @@ goa_daemon_init (GoaDaemon *self)
                            G_CALLBACK (on_network_monitor_network_changed),
                            self,
                            G_CONNECT_SWAPPED);
+
+  self->ensure_credentials_queue = g_queue_new ();
 
   /* Export objects */
   g_dbus_object_manager_server_set_connection (self->object_manager, self->connection);
@@ -1166,13 +1174,19 @@ is_authorization_error (GError *error)
 }
 
 static void
-ensure_credentials_cb (GoaProvider   *provider,
-                       GAsyncResult  *res,
-                       gpointer       user_data)
+ensure_credentials_queue_collector (GObject *source_object, GAsyncResult *res, gpointer user_data)
 {
-  EnsureData *data = user_data;
-  gint expires_in;
+  GTask *task = G_TASK (user_data);
+  GoaDaemon *self;
+  EnsureData *data;
+  GoaProvider *provider = GOA_PROVIDER (source_object);
   GError *error;
+  gint expires_in;
+
+  self = GOA_DAEMON (g_task_get_source_object (task));
+  g_assert (task == G_TASK (g_queue_pop_head (self->ensure_credentials_queue)));
+
+  data = g_task_get_task_data (task);
 
   error= NULL;
   if (!goa_provider_ensure_credentials_finish (provider, &expires_in, res, &error))
@@ -1217,7 +1231,49 @@ ensure_credentials_cb (GoaProvider   *provider,
       if (data->invocation != NULL)
         goa_account_complete_ensure_credentials (account, data->invocation, expires_in);
     }
-  ensure_data_unref (data);
+
+  self->ensure_credentials_running = FALSE;
+  ensure_credentials_queue_check (self);
+  g_object_unref (task);
+}
+
+static void
+ensure_credentials_queue_check (GoaDaemon *self)
+{
+  EnsureData *data;
+  GoaAccount *account;
+  GoaProvider *provider = NULL;
+  GTask *task;
+  const gchar *id;
+  const gchar *provider_type;
+
+  if (self->ensure_credentials_running)
+    goto out;
+
+  if (self->ensure_credentials_queue->length == 0)
+    goto out;
+
+  task = G_TASK (g_queue_peek_head (self->ensure_credentials_queue));
+  self->ensure_credentials_running = TRUE;
+
+  data = (EnsureData *) g_task_get_task_data (task);
+  account = goa_object_peek_account (data->object);
+
+  id = goa_account_get_id (account);
+  provider_type = goa_account_get_provider_type (account);
+  g_debug ("Handling EnsureCredentials for account (%s, %s)", provider_type, id);
+
+  provider = goa_provider_get_for_provider_type (provider_type);
+  g_assert_nonnull (provider);
+
+  goa_provider_ensure_credentials (provider,
+                                   data->object,
+                                   NULL, /* GCancellable */
+                                   ensure_credentials_queue_collector,
+                                   task);
+
+ out:
+  g_clear_object (&provider);
 }
 
 static gboolean
@@ -1226,8 +1282,10 @@ on_account_handle_ensure_credentials (GoaAccount            *account,
                                       gpointer               user_data)
 {
   GoaDaemon *self = GOA_DAEMON (user_data);
-  GoaProvider *provider = NULL;
+  EnsureData *data;
   GoaObject *object;
+  GoaProvider *provider = NULL;
+  GTask *task = NULL;
   const gchar *id;
   const gchar *method_name;
   const gchar *provider_type;
@@ -1235,11 +1293,9 @@ on_account_handle_ensure_credentials (GoaAccount            *account,
   id = goa_account_get_id (account);
   provider_type = goa_account_get_provider_type (account);
   method_name = g_dbus_method_invocation_get_method_name (invocation);
-  g_debug ("Handling %s for account (%s, %s)", method_name, provider_type, id);
+  g_debug ("Received %s for account (%s, %s)", method_name, provider_type, id);
 
-  object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (account)));
   provider = goa_provider_get_for_provider_type (provider_type);
-
   if (provider == NULL)
     {
       g_dbus_method_invocation_return_error (invocation,
@@ -1251,14 +1307,18 @@ on_account_handle_ensure_credentials (GoaAccount            *account,
       goto out;
     }
 
-  goa_provider_ensure_credentials (provider,
-                                   object,
-                                   NULL, /* GCancellable */
-                                   (GAsyncReadyCallback) ensure_credentials_cb,
-                                   ensure_data_new (self, object, invocation));
+  object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (account)));
+  data = ensure_data_new (self, object, invocation);
+
+  task = g_task_new (self, NULL, NULL, NULL);
+  g_task_set_task_data (task, data, (GDestroyNotify) ensure_data_unref);
+  g_queue_push_tail (self->ensure_credentials_queue, g_object_ref (task));
+
+  ensure_credentials_queue_check (self);
 
  out:
   g_clear_object (&provider);
+  g_clear_object (&task);
   return TRUE; /* invocation was handled */
 }
 
@@ -1279,9 +1339,12 @@ goa_daemon_check_credentials (GoaDaemon *self)
   objects = g_dbus_object_manager_get_objects (G_DBUS_OBJECT_MANAGER (self->object_manager));
   for (l = objects; l != NULL; l = l->next)
     {
+      EnsureData *data;
       GoaAccount *account;
       GoaObject *object = GOA_OBJECT (l->data);
       GoaProvider *provider = NULL;
+      GTask *task = NULL;
+      const gchar *id;
       const gchar *provider_type;
 
       account = goa_object_peek_account (object);
@@ -1293,14 +1356,20 @@ goa_daemon_check_credentials (GoaDaemon *self)
       if (provider == NULL)
         continue;
 
-      goa_provider_ensure_credentials (provider,
-                                       object,
-                                       NULL, /* GCancellable */
-                                       (GAsyncReadyCallback) ensure_credentials_cb,
-                                       ensure_data_new (self, object, NULL));
+      id = goa_account_get_id (account);
+      provider_type = goa_account_get_provider_type (account);
+      g_debug ("Calling EnsureCredentials for account (%s, %s)", provider_type, id);
+
+      data = ensure_data_new (self, object, NULL);
+
+      task = g_task_new (self, NULL, NULL, NULL);
+      g_task_set_task_data (task, data, (GDestroyNotify) ensure_data_unref);
+      g_queue_push_tail (self->ensure_credentials_queue, g_object_ref (task));
 
       g_clear_object (&provider);
+      g_clear_object (&task);
     }
 
+  ensure_credentials_queue_check (self);
   g_list_free_full (objects, g_object_unref);
 }
