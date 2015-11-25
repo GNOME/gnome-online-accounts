@@ -1133,8 +1133,8 @@ typedef struct
 
 static EnsureData *
 ensure_data_new (GoaDaemon             *self,
-                             GoaObject             *object,
-                             GDBusMethodInvocation *invocation)
+                 GoaObject             *object,
+                 GDBusMethodInvocation *invocation)
 {
   EnsureData *data;
   data = g_slice_new0 (EnsureData);
