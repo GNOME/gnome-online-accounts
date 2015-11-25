@@ -177,7 +177,7 @@ on_check_credentials_timeout (gpointer user_data)
   GoaDaemon *self = GOA_DAEMON (user_data);
 
   self->credentials_timeout_id = 0;
-  g_debug ("Checking credentials");
+  g_debug ("Calling EnsureCredentials due to network changes");
   goa_daemon_check_credentials (self);
 
   return G_SOURCE_REMOVE;
