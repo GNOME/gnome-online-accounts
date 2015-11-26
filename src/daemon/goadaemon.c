@@ -1127,7 +1127,7 @@ on_account_handle_remove (GoaAccount            *account,
 typedef struct
 {
   GoaObject *object;
-  GDBusMethodInvocation *invocation;
+  GList *invocations;
 } EnsureData;
 
 static EnsureData *
@@ -1137,13 +1137,14 @@ ensure_data_new (GoaObject             *object,
   EnsureData *data;
   data = g_slice_new0 (EnsureData);
   data->object = g_object_ref (object);
-  data->invocation = invocation;
+  data->invocations = g_list_prepend (data->invocations, invocation);
   return data;
 }
 
 static void
 ensure_data_unref (EnsureData *data)
 {
+  g_list_free (data->invocations);
   g_object_unref (data->object);
   g_slice_free (EnsureData, data);
 }
@@ -1167,6 +1168,25 @@ is_authorization_error (GError *error)
         ret = TRUE;
     }
   return ret;
+}
+
+static void
+ensure_credentials_queue_complete (GList *invocations, GoaAccount *account, gint expires_in, GError *error)
+{
+  GList *l;
+
+  for (l = invocations; l != NULL; l = l->next)
+    {
+      GDBusMethodInvocation *invocation = G_DBUS_METHOD_INVOCATION (l->data);
+
+      if (invocation == NULL)
+        continue;
+
+      if (error == NULL)
+        goa_account_complete_ensure_credentials (account, invocation, expires_in);
+      else
+        g_dbus_method_invocation_return_gerror (invocation, error);
+    }
 }
 
 static void
@@ -1202,13 +1222,8 @@ ensure_credentials_queue_collector (GObject *source_object, GAsyncResult *res, g
             }
         }
 
-      if (data->invocation != NULL)
-        {
-          g_dbus_method_invocation_take_error (data->invocation, error);
-          error = NULL;
-        }
-
-      g_clear_error (&error);
+      ensure_credentials_queue_complete (data->invocations, NULL, 0, error);
+      g_error_free (error);
     }
   else
     {
@@ -1224,8 +1239,7 @@ ensure_credentials_queue_collector (GObject *source_object, GAsyncResult *res, g
                      g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)));
         }
 
-      if (data->invocation != NULL)
-        goa_account_complete_ensure_credentials (account, data->invocation, expires_in);
+      ensure_credentials_queue_complete (data->invocations, account, expires_in, NULL);
     }
 
   self->ensure_credentials_running = FALSE;
@@ -1289,6 +1303,48 @@ ensure_credentials_queue_check (GoaDaemon *self)
 }
 
 static gboolean
+ensure_credentials_queue_coalesce (GoaDaemon *self, GoaObject *object, GDBusMethodInvocation *invocation)
+{
+  GList *l;
+  GoaAccount *account;
+  const gchar *id;
+  gboolean ret = FALSE;
+  gint priority;
+
+  account = goa_object_peek_account (object);
+  id = goa_account_get_id (account);
+
+  priority = (invocation == NULL) ? G_PRIORITY_LOW : G_PRIORITY_HIGH;
+
+  for (l = self->ensure_credentials_queue->head; l != NULL; l = l->next)
+    {
+      GoaAccount *account_queued;
+      GTask *task = G_TASK (l->data);
+      EnsureData *data;
+      const gchar *id_queued;
+
+      data = g_task_get_task_data (task);
+      account_queued = goa_object_peek_account (data->object);
+      id_queued = goa_account_get_id (account_queued);
+      if (g_strcmp0 (id, id_queued) == 0)
+        {
+          gint priority_queued;
+
+          priority_queued = g_task_get_priority (task);
+          if (priority < priority_queued)
+            g_task_set_priority (task, priority);
+
+          data->invocations = g_list_prepend (data->invocations, invocation);
+
+          ret = TRUE;
+          break;
+        }
+    }
+
+  return ret;
+}
+
+static gboolean
 on_account_handle_ensure_credentials (GoaAccount            *account,
                                       GDBusMethodInvocation *invocation,
                                       gpointer               user_data)
@@ -1320,6 +1376,12 @@ on_account_handle_ensure_credentials (GoaAccount            *account,
     }
 
   object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (account)));
+  if (ensure_credentials_queue_coalesce (self, object, invocation))
+    {
+      g_debug ("Coalesced %s for account (%s, %s)", method_name, provider_type, id);
+      goto out;
+    }
+
   data = ensure_data_new (object, invocation);
 
   task = g_task_new (self, NULL, NULL, NULL);
@@ -1372,6 +1434,12 @@ goa_daemon_check_credentials (GoaDaemon *self)
       id = goa_account_get_id (account);
       provider_type = goa_account_get_provider_type (account);
       g_debug ("Calling EnsureCredentials for account (%s, %s)", provider_type, id);
+
+      if (ensure_credentials_queue_coalesce (self, object, NULL))
+        {
+          g_debug ("Coalesced EnsureCredentials for account (%s, %s)", provider_type, id);
+          continue;
+        }
 
       data = ensure_data_new (object, NULL);
 
