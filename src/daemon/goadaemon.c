@@ -1176,6 +1176,7 @@ ensure_credentials_queue_complete (GList *invocations, GoaAccount *account, gint
   GList *l;
   const gchar *id;
   const gchar *provider_type;
+  gint64 timestamp;
 
   for (l = invocations; l != NULL; l = l->next)
     {
@@ -1192,7 +1193,8 @@ ensure_credentials_queue_complete (GList *invocations, GoaAccount *account, gint
 
   id = goa_account_get_id (account);
   provider_type = goa_account_get_provider_type (account);
-  g_debug ("Handled EnsureCredentials for account (%s, %s)", provider_type, id);
+  timestamp = g_get_monotonic_time ();
+  g_debug ("%" G_GINT64_FORMAT ": Handled EnsureCredentials (%s, %s)", timestamp, provider_type, id);
 }
 
 static void
@@ -1273,6 +1275,7 @@ ensure_credentials_queue_check (GoaDaemon *self)
   GTask *task;
   const gchar *id;
   const gchar *provider_type;
+  gint64 timestamp;
 
   if (self->ensure_credentials_running)
     goto out;
@@ -1290,7 +1293,8 @@ ensure_credentials_queue_check (GoaDaemon *self)
 
   id = goa_account_get_id (account);
   provider_type = goa_account_get_provider_type (account);
-  g_debug ("Handling EnsureCredentials for account (%s, %s)", provider_type, id);
+  timestamp = g_get_monotonic_time ();
+  g_debug ("%" G_GINT64_FORMAT ": Handling EnsureCredentials (%s, %s)", timestamp, provider_type, id);
 
   provider = goa_provider_get_for_provider_type (provider_type);
   g_assert_nonnull (provider);
@@ -1360,11 +1364,13 @@ on_account_handle_ensure_credentials (GoaAccount            *account,
   const gchar *id;
   const gchar *method_name;
   const gchar *provider_type;
+  gint64 timestamp;
 
   id = goa_account_get_id (account);
   provider_type = goa_account_get_provider_type (account);
   method_name = g_dbus_method_invocation_get_method_name (invocation);
-  g_debug ("Received %s for account (%s, %s)", method_name, provider_type, id);
+  timestamp = g_get_monotonic_time ();
+  g_debug ("%" G_GINT64_FORMAT ": Received %s (%s, %s)", timestamp, method_name, provider_type, id);
 
   provider = goa_provider_get_for_provider_type (provider_type);
   if (provider == NULL)
@@ -1381,7 +1387,12 @@ on_account_handle_ensure_credentials (GoaAccount            *account,
   object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (account)));
   if (ensure_credentials_queue_coalesce (self, object, invocation))
     {
-      g_debug ("Coalesced %s for account (%s, %s)", method_name, provider_type, id);
+      timestamp = g_get_monotonic_time ();
+      g_debug ("%" G_GINT64_FORMAT ": Coalesced %s (%s, %s)",
+               timestamp,
+               method_name,
+               provider_type,
+               id);
       goto out;
     }
 
@@ -1424,6 +1435,7 @@ goa_daemon_check_credentials (GoaDaemon *self)
       GTask *task = NULL;
       const gchar *id;
       const gchar *provider_type;
+      gint64 timestamp;
 
       account = goa_object_peek_account (object);
       if (account == NULL)
@@ -1436,11 +1448,19 @@ goa_daemon_check_credentials (GoaDaemon *self)
 
       id = goa_account_get_id (account);
       provider_type = goa_account_get_provider_type (account);
-      g_debug ("Calling EnsureCredentials for account (%s, %s)", provider_type, id);
+      timestamp = g_get_monotonic_time ();
+      g_debug ("%" G_GINT64_FORMAT ": Calling EnsureCredentials (%s, %s)",
+               timestamp,
+               provider_type,
+               id);
 
       if (ensure_credentials_queue_coalesce (self, object, NULL))
         {
-          g_debug ("Coalesced EnsureCredentials for account (%s, %s)", provider_type, id);
+          timestamp = g_get_monotonic_time ();
+          g_debug ("%" G_GINT64_FORMAT ": Coalesced EnsureCredentials (%s, %s)",
+                   timestamp,
+                   provider_type,
+                   id);
           continue;
         }
 
