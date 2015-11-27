@@ -1175,6 +1175,8 @@ static void
 ensure_credentials_queue_complete (GList *invocations, GoaAccount *account, gint expires_in, GError *error)
 {
   GList *l;
+  const gchar *id;
+  const gchar *provider_type;
 
   for (l = invocations; l != NULL; l = l->next)
     {
@@ -1188,6 +1190,10 @@ ensure_credentials_queue_complete (GList *invocations, GoaAccount *account, gint
       else
         g_dbus_method_invocation_return_gerror (invocation, error);
     }
+
+  id = goa_account_get_id (account);
+  provider_type = goa_account_get_provider_type (account);
+  g_debug ("Handled EnsureCredentials for account (%s, %s)", provider_type, id);
 }
 
 static void
@@ -1196,6 +1202,7 @@ ensure_credentials_queue_collector (GObject *source_object, GAsyncResult *res, g
   GTask *task = G_TASK (user_data);
   GoaDaemon *self;
   EnsureData *data;
+  GoaAccount *account;
   GoaProvider *provider = GOA_PROVIDER (source_object);
   GError *error;
   gint expires_in;
@@ -1204,6 +1211,7 @@ ensure_credentials_queue_collector (GObject *source_object, GAsyncResult *res, g
   g_assert (task == G_TASK (g_queue_pop_head (self->ensure_credentials_queue)));
 
   data = g_task_get_task_data (task);
+  account = goa_object_peek_account (data->object);
 
   error= NULL;
   if (!goa_provider_ensure_credentials_finish (provider, &expires_in, res, &error))
@@ -1211,8 +1219,6 @@ ensure_credentials_queue_collector (GObject *source_object, GAsyncResult *res, g
       /* Set AttentionNeeded only if the error is an authorization error */
       if (is_authorization_error (error))
         {
-          GoaAccount *account;
-          account = goa_object_peek_account (data->object);
           if (!goa_account_get_attention_needed (account))
             {
               goa_account_set_attention_needed (account, TRUE);
@@ -1223,14 +1229,11 @@ ensure_credentials_queue_collector (GObject *source_object, GAsyncResult *res, g
             }
         }
 
-      ensure_credentials_queue_complete (data->invocations, NULL, 0, error);
+      ensure_credentials_queue_complete (data->invocations, account, 0, error);
       g_error_free (error);
     }
   else
     {
-      GoaAccount *account;
-      account = goa_object_peek_account (data->object);
-
       /* Clear AttentionNeeded flag if set */
       if (goa_account_get_attention_needed (account))
         {
