@@ -89,7 +89,9 @@ get_provider_features (GoaProvider *provider)
          GOA_PROVIDER_FEATURE_MAIL |
          GOA_PROVIDER_FEATURE_CALENDAR |
          GOA_PROVIDER_FEATURE_CONTACTS |
+#ifdef GOA_TELEPATHY_ENABLED
          GOA_PROVIDER_FEATURE_CHAT |
+#endif
          GOA_PROVIDER_FEATURE_DOCUMENTS |
          GOA_PROVIDER_FEATURE_PHOTOS |
          GOA_PROVIDER_FEATURE_FILES |
@@ -148,8 +150,10 @@ get_scope (GoaOAuth2Provider *oauth2_provider)
          /* Google Cloud Print */
          "https://www.googleapis.com/auth/cloudprint "
 
+#ifdef GOA_TELEPATHY_ENABLED
          /* Google Talk */
          "https://www.googleapis.com/auth/googletalk "
+#endif
 
          /* Google Tasks - undocumented */
          "https://www.googleapis.com/auth/tasks";
@@ -438,6 +442,7 @@ build_object (GoaProvider         *provider,
         goa_object_skeleton_set_contacts (object, NULL);
     }
 
+#ifdef GOA_TELEPATHY_ENABLED
   /* Chat */
   chat = goa_object_get_chat (GOA_OBJECT (object));
   chat_enabled = g_key_file_get_boolean (key_file, group, "ChatEnabled", NULL);
@@ -454,6 +459,9 @@ build_object (GoaProvider         *provider,
       if (chat != NULL)
         goa_object_skeleton_set_chat (object, NULL);
     }
+#else
+  goa_object_skeleton_set_chat (object, NULL);
+#endif
 
   /* Documents */
   documents = goa_object_get_documents (GOA_OBJECT (object));
