@@ -90,8 +90,6 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goaflickrprovider.h		goaflickrprovider.c		\
 	goafoursquareprovider.h		goafoursquareprovider.c		\
 	goawindowsliveprovider.h	goawindowsliveprovider.c	\
-	goatelepathyfactory.h		goatelepathyfactory.c		\
-	goatelepathyprovider.h		goatelepathyprovider.c		\
 	goapocketprovider.h		goapocketprovider.c		\
 	goalastfmprovider.h		goalastfmprovider.c		\
 	goautils.h			goautils.c			\
@@ -104,6 +102,13 @@ libgoa_backend_1_0_la_SOURCES =						\
 if BUILD_KERBEROS
 libgoa_backend_1_0_la_SOURCES +=					\
 	goakerberosprovider.h		goakerberosprovider.c
+endif
+
+if BUILD_TELEPATHY
+libgoa_backend_1_0_la_SOURCES +=					\
+	goatelepathyfactory.h		goatelepathyfactory.c		\
+	goatelepathyprovider.h		goatelepathyprovider.c		\
+	$(NULL)
 endif
 
 libgoa_backend_1_0_la_CFLAGS =					\

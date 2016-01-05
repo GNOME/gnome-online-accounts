@@ -92,6 +92,18 @@ AC_SUBST(GLIB_LIBS)
 GOBJECT_INTROSPECTION_CHECK([0.6.2])
 VAPIGEN_CHECK()
 
+# Telepathy
+AC_DEFINE(GOA_TELEPATHY_NAME, ["telepathy"], [ProviderType and extension point name])
+AC_ARG_ENABLE([telepathy],
+              [AS_HELP_STRING([--enable-telepathy],
+              [Enable Telepathy IM provider])],
+              [],
+              [enable_telepathy=yes])
+if test "$enable_telepathy" != "no"; then
+  AC_DEFINE(GOA_TELEPATHY_ENABLED, 1, [Enable Telepathy data provider])
+fi
+AM_CONDITIONAL(BUILD_TELEPATHY, [test x$enable_telepathy != xno])
+
 AC_ARG_ENABLE([backend],
               [AS_HELP_STRING([--enable-backend],
               [Enable goabackend library])],
@@ -130,30 +142,32 @@ if test "$enable_backend" != "no"; then
   AC_SUBST(LIBXML_CFLAGS)
   AC_SUBST(LIBXML_LIBS)
 
-  PKG_CHECK_MODULES(TP, [telepathy-glib])
-  AC_SUBST(TP_CFLAGS)
-  AC_SUBST(TP_LIBS)
+  if test "$enable_telepathy" != "no"; then
+    PKG_CHECK_MODULES(TP, [telepathy-glib])
+    AC_SUBST(TP_CFLAGS)
+    AC_SUBST(TP_LIBS)
 
-  # telepathy-account-widgets
-  prev_top_build_prefix=$ac_top_build_prefix
-  prev_ac_configure_args=$ac_configure_args
-  ac_configure_args="$ac_configure_args --with-cheese=no --disable-gudev"
-  # install the data together with the rest of GOA's data
-  ac_configure_args="$ac_configure_args --with-pkgdatadir=${datadir}/gnome-online-accounts"
-  # GOA ships its icons directly in ${datadir}/icons (usually /usr/share/icons/) and not
-  # in its own data directory
-  ac_configure_args="$ac_configure_args --with-icondir=${datadir}/icons"
-  # Change the name of tpaw's .mo files to avoid conflicts with other packages using tp-aw
-  ac_configure_args="$ac_configure_args --with-gettext-package=gnome-online-accounts-tpaw"
-  # Disable the installation of the GSettings schema to avoid multiple components shipping
-  # the same file. See https://bugzilla.gnome.org/show_bug.cgi?id=706803
-  ac_configure_args="$ac_configure_args --disable-schemas-compile --disable-settings"
-  AX_CONFIG_DIR([telepathy-account-widgets])
-  ac_top_build_prefix=$prev_top_build_prefix
-  ac_configure_args=$prev_ac_configure_args
+    # telepathy-account-widgets
+    prev_top_build_prefix=$ac_top_build_prefix
+    prev_ac_configure_args=$ac_configure_args
+    ac_configure_args="$ac_configure_args --with-cheese=no --disable-gudev"
+    # install the data together with the rest of GOA's data
+    ac_configure_args="$ac_configure_args --with-pkgdatadir=${datadir}/gnome-online-accounts"
+    # GOA ships its icons directly in ${datadir}/icons (usually /usr/share/icons/) and not
+    # in its own data directory
+    ac_configure_args="$ac_configure_args --with-icondir=${datadir}/icons"
+    # Change the name of tpaw's .mo files to avoid conflicts with other packages using tp-aw
+    ac_configure_args="$ac_configure_args --with-gettext-package=gnome-online-accounts-tpaw"
+    # Disable the installation of the GSettings schema to avoid multiple components shipping
+    # the same file. See https://bugzilla.gnome.org/show_bug.cgi?id=706803
+    ac_configure_args="$ac_configure_args --disable-schemas-compile --disable-settings"
+    AX_CONFIG_DIR([telepathy-account-widgets])
+    ac_top_build_prefix=$prev_top_build_prefix
+    ac_configure_args=$prev_ac_configure_args
 
-  export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:"$ac_top_build_prefix"telepathy-account-widgets/
-  PKG_CHECK_MODULES(TPAW, telepathy-account-widgets)
+    export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:"$ac_top_build_prefix"telepathy-account-widgets/
+    PKG_CHECK_MODULES(TPAW, telepathy-account-widgets)
+  fi
 fi
 
 AC_ARG_ENABLE([inspector],
@@ -329,17 +343,6 @@ AC_DEFINE_UNQUOTED(GOA_WINDOWS_LIVE_CLIENT_ID,
                    [Windows Live OAuth 2.0 client id])
 if test "$enable_windows_live" != "no"; then
   AC_DEFINE(GOA_WINDOWS_LIVE_ENABLED, 1, [Enable Windows Live data provider])
-fi
-
-# Telepathy
-AC_DEFINE(GOA_TELEPATHY_NAME, ["telepathy"], [ProviderType and extension point name])
-AC_ARG_ENABLE([telepathy],
-              [AS_HELP_STRING([--enable-telepathy],
-              [Enable Telepathy IM provider])],
-              [],
-              [enable_telepathy=yes])
-if test "$enable_telepathy" != "no"; then
-  AC_DEFINE(GOA_TELEPATHY_ENABLED, 1, [Enable Telepathy data provider])
 fi
 
 # Pocket

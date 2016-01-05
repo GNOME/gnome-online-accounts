@@ -25,7 +25,10 @@
 #include <gio/gio.h>
 
 #include "goadaemon.h"
+
+#ifdef GOA_TELEPATHY_ENABLED
 #include "goatpaccountlinker.h"
+#endif
 
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -40,7 +43,10 @@ static GOptionEntry opt_entries[] =
   {NULL }
 };
 static GoaDaemon *the_daemon = NULL;
+
+#ifdef GOA_TELEPATHY_ENABLED
 static GoaTpAccountLinker *tp_linker = NULL;
+#endif
 
 static void
 on_bus_acquired (GDBusConnection *connection,
@@ -68,7 +74,9 @@ on_name_acquired (GDBusConnection *connection,
 {
   g_debug ("Acquired the name %s on the session message bus", name);
 
+#ifdef GOA_TELEPATHY_ENABLED
   tp_linker = goa_tp_account_linker_new ();
+#endif
 }
 
 static gboolean
@@ -131,8 +139,10 @@ main (int    argc,
  out:
   if (the_daemon != NULL)
     g_object_unref (the_daemon);
+#ifdef GOA_TELEPATHY_ENABLED
   if (tp_linker != NULL)
     g_object_unref (tp_linker);
+#endif
   if (name_owner_id != 0)
     g_bus_unown_name (name_owner_id);
   if (loop != NULL)

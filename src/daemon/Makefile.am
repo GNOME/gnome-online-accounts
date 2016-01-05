@@ -29,8 +29,13 @@ goa_daemon_SOURCES = 						\
 				main.c				\
 	goadaemontypes.h					\
 	goadaemon.h		goadaemon.c			\
+	$(NULL)
+
+if BUILD_TELEPATHY
+goa_daemon_SOURCES +=						\
 	goatpaccountlinker.h	goatpaccountlinker.c		\
 	$(NULL)
+endif
 
 goa_daemon_CFLAGS =						\
 	$(GLIB_CFLAGS) 						\

@@ -4,7 +4,9 @@ NULL =
 SUBDIRS = data
 
 if BUILD_BACKEND
+if BUILD_TELEPATHY
 SUBDIRS += telepathy-account-widgets
+endif
 endif
 
 SUBDIRS += src

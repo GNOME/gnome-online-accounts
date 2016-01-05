@@ -20,7 +20,10 @@
 
 #include <glib/gi18n-lib.h>
 #include <libsecret/secret.h>
+
+#ifdef GOA_TELEPATHY_ENABLED
 #include <telepathy-glib/telepathy-glib.h>
+#endif
 
 #include "goaprovider.h"
 #include "goautils.h"
@@ -41,6 +44,7 @@ goa_utils_initialize_client_factory (void)
 
   if (g_once_init_enter (&once_init_value))
     {
+#ifdef GOA_TELEPATHY_ENABLED
       TpSimpleClientFactory *factory;
       TpAccountManager *account_manager;
       GQuark account_features[] = {TP_ACCOUNT_FEATURE_ADDRESSING,
@@ -63,6 +67,7 @@ goa_utils_initialize_client_factory (void)
 
       g_object_unref (account_manager);
       g_object_unref (factory);
+#endif
 
       g_once_init_leave (&once_init_value, 1);
     }
