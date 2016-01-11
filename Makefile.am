@@ -17,8 +17,8 @@ SUBDIRS += po
 
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
-# introspection and docs doesn't work with src != build
-DISTCHECK_CONFIGURE_FLAGS=--disable-introspection --disable-gtk-doc
+# docs doesn't work with src != build
+DISTCHECK_CONFIGURE_FLAGS=--enable-introspection --disable-gtk-doc
 
 MAINTAINERCLEANFILES = \
 	$(srcdir)/INSTALL \
