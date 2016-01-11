@@ -133,6 +133,31 @@ typelibs_DATA = Goa-1.0.typelib
 
 CLEANFILES += $(gir_DATA) $(typelibs_DATA)
 
+if ENABLE_VAPIGEN
+-include $(VAPIGEN_MAKEFILE)
+
+goa-1.0.vapi: Goa-1.0.gir Goa-1.0.metadata Goa-1.0-custom.vala goa-1.0.deps
+
+VAPIGEN_VAPIS = goa-1.0.vapi
+
+goa_1_0_vapi_DEPS = gio-2.0
+goa_1_0_vapi_METADATADIRS = $(srcdir)
+goa_1_0_vapi_FILES = Goa-1.0.gir Goa-1.0-custom.vala
+
+goa-1.0.deps:
+	$(AM_V_GEN) for pkg in $(goa_1_0_vapi_DEPS); do \
+		echo $$pkg >> $@; \
+	done
+
+vapidir = $(datadir)/vala/vapi
+vapi_DATA = $(VAPIGEN_VAPIS) $(VAPIGEN_VAPIS:.vapi=.deps)
+
+CLEANFILES += $(vapi_DATA)
+
+EXTRA_DIST += Goa-1.0.metadata Goa-1.0-custom.vala
+
+endif # ENABLE_VAPIGEN
+
 endif # HAVE_INTROSPECTION
 
 # ----------------------------------------------------------------------------------------------------
