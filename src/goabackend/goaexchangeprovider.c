@@ -267,7 +267,6 @@ ensure_credentials_sync (GoaProvider         *provider,
                          GCancellable        *cancellable,
                          GError             **error)
 {
-  GVariant *credentials;
   GoaAccount *account;
   GoaEwsClient *ews_client;
   GoaExchange *exchange;
@@ -275,20 +274,16 @@ ensure_credentials_sync (GoaProvider         *provider,
   gboolean ret;
   const gchar *email_address;
   const gchar *server;
-  const gchar *username;
+  gchar *username;
   gchar *password;
 
-  credentials = NULL;
   ews_client = NULL;
   password = NULL;
+  username = NULL;
 
   ret = FALSE;
 
-  credentials = goa_utils_lookup_credentials_sync (provider,
-                                                   object,
-                                                   cancellable,
-                                                   error);
-  if (credentials == NULL)
+  if (!goa_utils_get_credentials (provider, object, "password", &username, &password, cancellable, error))
     {
       if (error != NULL)
         {
@@ -300,20 +295,6 @@ ensure_credentials_sync (GoaProvider         *provider,
 
   account = goa_object_peek_account (object);
   email_address = goa_account_get_presentation_identity (account);
-  username = goa_account_get_identity (account);
-
-  if (!g_variant_lookup (credentials, "password", "s", &password))
-    {
-      if (error != NULL)
-        {
-          *error = g_error_new (GOA_ERROR,
-                                GOA_ERROR_NOT_AUTHORIZED,
-                                _("Did not find password with identity ‘%s’ in credentials"),
-                                username);
-        }
-      goto out;
-    }
-
   exchange = goa_object_peek_exchange (object);
   accept_ssl_errors = goa_exchange_get_accept_ssl_errors (exchange);
   server = goa_exchange_get_host (exchange);
@@ -352,9 +333,8 @@ ensure_credentials_sync (GoaProvider         *provider,
  out:
   if (ews_client != NULL)
     g_object_unref (ews_client);
+  g_free (username);
   g_free (password);
-  if (credentials != NULL)
-    g_variant_unref (credentials);
   return ret;
 }
 
@@ -952,9 +932,7 @@ on_handle_get_password (GoaPasswordBased      *interface,
   GoaAccount *account;
   GoaProvider *provider;
   GError *error;
-  GVariant *credentials;
   const gchar *account_id;
-  const gchar *identity;
   const gchar *method_name;
   const gchar *provider_type;
   gchar *password;
@@ -962,12 +940,9 @@ on_handle_get_password (GoaPasswordBased      *interface,
   /* TODO: maybe log what app is requesting access */
 
   password = NULL;
-  credentials = NULL;
 
   object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (interface)));
   account = goa_object_peek_account (object);
-  identity = goa_account_get_identity (account);
-
   account_id = goa_account_get_id (account);
   provider_type = goa_account_get_provider_type (account);
   method_name = g_dbus_method_invocation_get_method_name (invocation);
@@ -976,23 +951,9 @@ on_handle_get_password (GoaPasswordBased      *interface,
   provider = goa_provider_get_for_provider_type (provider_type);
 
   error = NULL;
-  credentials = goa_utils_lookup_credentials_sync (provider,
-                                                   object,
-                                                   NULL, /* GCancellable* */
-                                                   &error);
-  if (credentials == NULL)
+  if (!goa_utils_get_credentials (provider, object, "password", NULL, &password, NULL, &error))
     {
       g_dbus_method_invocation_take_error (invocation, error);
-      goto out;
-    }
-
-  if (!g_variant_lookup (credentials, "password", "s", &password))
-    {
-      g_dbus_method_invocation_return_error (invocation,
-                                             GOA_ERROR,
-                                             GOA_ERROR_FAILED, /* TODO: more specific */
-                                             _("Did not find password with identity ‘%s’ in credentials"),
-                                             identity);
       goto out;
     }
 
@@ -1000,8 +961,6 @@ on_handle_get_password (GoaPasswordBased      *interface,
 
  out:
   g_free (password);
-  if (credentials != NULL)
-    g_variant_unref (credentials);
   g_object_unref (provider);
   return TRUE; /* invocation was handled */
 }

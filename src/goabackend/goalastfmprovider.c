@@ -254,37 +254,16 @@ ensure_credentials_sync (GoaProvider         *provider,
                          GCancellable        *cancellable,
                          GError             **error)
 {
-  GVariant *credentials;
-  GoaAccount *account;
-  const gchar *username;
+  gchar *username = NULL;
   gchar *password = NULL;
   gboolean ret = FALSE;
 
-  credentials = goa_utils_lookup_credentials_sync (provider,
-                                                   object,
-                                                   cancellable,
-                                                   error);
-  if (credentials == NULL)
+  if (!goa_utils_get_credentials (provider, object, "password", &username, &password, cancellable, error))
     {
       if (error != NULL)
         {
           (*error)->domain = GOA_ERROR;
           (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
-        }
-      goto out;
-    }
-
-  account = goa_object_peek_account (object);
-  username = goa_account_get_identity (account);
-
-  if (!g_variant_lookup (credentials, "password", "s", &password))
-    {
-      if (error != NULL)
-        {
-          *error = g_error_new (GOA_ERROR,
-                                GOA_ERROR_NOT_AUTHORIZED,
-                                _("Did not find password with identity ‘%s’ in credentials"),
-                                username);
         }
       goto out;
     }
@@ -313,9 +292,8 @@ ensure_credentials_sync (GoaProvider         *provider,
     *out_expires_in = 0;
 
  out:
+  g_free (username);
   g_free (password);
-  if (credentials != NULL)
-    g_variant_unref (credentials);
   return ret;
 }
 
