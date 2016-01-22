@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2013, 2014 Red Hat, Inc.
+ * Copyright (C) 2011, 2013, 2014, 2015, 2016 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -344,15 +344,14 @@ ensure_credentials_sync (GoaProvider         *provider,
   imap_tls_type = get_tls_type_from_object (object, "ImapUseSsl", "ImapUseTls");
 
   imap_auth = goa_imap_auth_login_new (NULL, NULL, imap_username, imap_password);
-  ret = goa_mail_client_check_sync (mail_client,
-                                    imap_server,
-                                    imap_tls_type,
-                                    imap_accept_ssl_errors,
-                                    (imap_tls_type == GOA_TLS_TYPE_SSL) ? 993 : 143,
-                                    imap_auth,
-                                    cancellable,
-                                    error);
-  if (!ret)
+  if (!goa_mail_client_check_sync (mail_client,
+                                   imap_server,
+                                   imap_tls_type,
+                                   imap_accept_ssl_errors,
+                                   (imap_tls_type == GOA_TLS_TYPE_SSL) ? 993 : 143,
+                                   imap_auth,
+                                   cancellable,
+                                   error))
     {
       if (error != NULL)
         {
@@ -376,10 +375,7 @@ ensure_credentials_sync (GoaProvider         *provider,
   /* SMTP */
 
   if (!goa_util_lookup_keyfile_boolean (object, "SmtpUseAuth"))
-    {
-      ret = TRUE;
-      goto smtp_done;
-    }
+    goto smtp_done;
 
   if (!goa_utils_get_credentials (provider, object, "smtp-password", NULL, &smtp_password, cancellable, error))
     {
@@ -399,15 +395,14 @@ ensure_credentials_sync (GoaProvider         *provider,
   email_address = goa_util_lookup_keyfile_string (object, "EmailAddress");
   goa_utils_parse_email_address (email_address, NULL, &domain);
   smtp_auth = goa_smtp_auth_new (NULL, NULL, domain, smtp_username, smtp_password);
-  ret = goa_mail_client_check_sync (mail_client,
-                                    smtp_server,
-                                    smtp_tls_type,
-                                    smtp_accept_ssl_errors,
-                                    (smtp_tls_type == GOA_TLS_TYPE_SSL) ? 465 : 587,
-                                    smtp_auth,
-                                    cancellable,
-                                    error);
-  if (!ret)
+  if (!goa_mail_client_check_sync (mail_client,
+                                   smtp_server,
+                                   smtp_tls_type,
+                                   smtp_accept_ssl_errors,
+                                   (smtp_tls_type == GOA_TLS_TYPE_SSL) ? 465 : 587,
+                                   smtp_auth,
+                                   cancellable,
+                                   error))
     {
       if (error != NULL)
         {
@@ -432,6 +427,8 @@ ensure_credentials_sync (GoaProvider         *provider,
 
   if (out_expires_in != NULL)
     *out_expires_in = 0;
+
+  ret = TRUE;
 
  out:
   g_clear_object (&imap_auth);
