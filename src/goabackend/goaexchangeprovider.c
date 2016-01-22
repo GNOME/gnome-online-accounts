@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012, 2013, 2014, 2015 Red Hat, Inc.
+ * Copyright (C) 2012, 2013, 2014, 2015, 2016 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -300,15 +300,14 @@ ensure_credentials_sync (GoaProvider         *provider,
   server = goa_exchange_get_host (exchange);
 
   ews_client = goa_ews_client_new ();
-  ret = goa_ews_client_autodiscover_sync (ews_client,
-                                          email_address,
-                                          password,
-                                          username,
-                                          server,
-                                          accept_ssl_errors,
-                                          cancellable,
-                                          error);
-  if (!ret)
+  if (!goa_ews_client_autodiscover_sync (ews_client,
+                                         email_address,
+                                         password,
+                                         username,
+                                         server,
+                                         accept_ssl_errors,
+                                         cancellable,
+                                         error))
     {
       if (error != NULL)
         {
@@ -329,6 +328,8 @@ ensure_credentials_sync (GoaProvider         *provider,
 
   if (out_expires_in != NULL)
     *out_expires_in = 0;
+
+  ret = TRUE;
 
  out:
   if (ews_client != NULL)

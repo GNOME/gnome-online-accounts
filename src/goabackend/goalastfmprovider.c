@@ -268,8 +268,7 @@ ensure_credentials_sync (GoaProvider         *provider,
       goto out;
     }
 
-  ret = lastfm_login_sync (provider, username, password, error);
-  if (!ret)
+  if (!lastfm_login_sync (provider, username, password, error))
     {
       if (error != NULL)
         {
