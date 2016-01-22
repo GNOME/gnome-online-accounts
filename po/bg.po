@@ -1,15 +1,16 @@
 # Bulgarian translation of gnome-online-accounts po-file.
 # Copyright (C) 2011, 2012, 2013, 2014, 2015 Free Software Foundation, Inc.
+# Copyright (C) 2016 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-online-accounts package.
 # Ivaylo Valkov <ivaylo@e-valkov.org>, 2011, 2012.
-# Alexander Shopov <ash@kambanaria.org>, 2012, 2013, 2014, 2015.
+# Alexander Shopov <ash@kambanaria.org>, 2012, 2013, 2014, 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-10 09:38+0200\n"
-"PO-Revision-Date: 2015-03-10 09:38+0200\n"
+"POT-Creation-Date: 2016-01-22 07:38+0200\n"
+"PO-Revision-Date: 2016-01-19 21:00+0200\n"
 "Last-Translator: Alexander Shopov <ash@kambanaria.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "Language: bg\n"
@@ -19,135 +20,129 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:787 ../src/daemon/goadaemon.c:1048
+#: ../src/daemon/goadaemon.c:838 ../src/daemon/goadaemon.c:1098
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Не е открит на доставчик за „%s“"
 
-#: ../src/daemon/goadaemon.c:976
+#: ../src/daemon/goadaemon.c:1026
 msgid "IsLocked property is set for account"
 msgstr "Зададено е заключване регистрацията (атрибут „IsLocked“)"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1036
+#: ../src/daemon/goadaemon.c:1086
 msgid "ProviderType property is not set for account"
 msgstr "Не е зададен вид на регистрацията (атрибут „ProviderType“)"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:230 ../src/goabackend/goahttpclient.c:174
-#, c-format
-msgid "Code: %u — Unexpected response from server"
-msgstr "Код: %u — Неочакван отговор от сървъра"
-
-#. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:246
+#: ../src/goabackend/goaewsclient.c:250
 #, c-format
 msgid "Failed to parse autodiscover response XML"
-msgstr "Неуспешен анализ XML от отговора за автоматичното откриване на сървър"
+msgstr ""
+"Неуспешен анализ на XML от отговора за автоматичното откриване на сървър"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: ../src/goabackend/goaewsclient.c:257 ../src/goabackend/goaewsclient.c:272
-#: ../src/goabackend/goaewsclient.c:287
+#: ../src/goabackend/goaewsclient.c:261 ../src/goabackend/goaewsclient.c:276
+#: ../src/goabackend/goaewsclient.c:291
 #, c-format
 msgid "Failed to find ‘%s’ element"
 msgstr "Елементът „%s“ липсва"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:308
+#: ../src/goabackend/goaewsclient.c:312
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr ""
-"Елементите ASUrl и OABUrl липсват в отговора за автоматичното откриване на "
-"сървър"
+"Елементите „ASUrl“ и „OABUrl“ липсват в отговора за автоматичното откриване "
+"на сървър"
 
 #: ../src/goabackend/goaexchangeprovider.c:73
 msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
-#. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:311
-#: ../src/goabackend/goaexchangeprovider.c:1020
-#: ../src/goabackend/goaowncloudprovider.c:383
-#: ../src/goabackend/goaowncloudprovider.c:1168
-#, c-format
-msgid "Did not find password with identity ‘%s’ in credentials"
-msgstr "Не беше намерена парола за самоличността „%s“ в данните за регистрация"
-
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
 #.
-#: ../src/goabackend/goaexchangeprovider.c:339
-#: ../src/goabackend/goaowncloudprovider.c:406
+#: ../src/goabackend/goaexchangeprovider.c:320
+#: ../src/goabackend/goalastfmprovider.c:281
+#: ../src/goabackend/goaowncloudprovider.c:393
 #, c-format
 msgid "Invalid password with username ‘%s’ (%s, %d): "
 msgstr "Неправилна парола за потребителя „%s“ (%s, %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:492
-#: ../src/goabackend/goaimapsmtpprovider.c:700
+#: ../src/goabackend/goaexchangeprovider.c:472
+#: ../src/goabackend/goaimapsmtpprovider.c:671
 msgid "_E-mail"
 msgstr "_Е-поща"
 
-#: ../src/goabackend/goaexchangeprovider.c:493
-#: ../src/goabackend/goaimapsmtpprovider.c:720
-#: ../src/goabackend/goaimapsmtpprovider.c:740
-#: ../src/goabackend/goaowncloudprovider.c:634
+#: ../src/goabackend/goaexchangeprovider.c:473
+#: ../src/goabackend/goaimapsmtpprovider.c:691
+#: ../src/goabackend/goaimapsmtpprovider.c:711
+#: ../src/goabackend/goalastfmprovider.c:421
+#: ../src/goabackend/goaowncloudprovider.c:620
 msgid "_Password"
 msgstr "_Парола"
 
-#: ../src/goabackend/goaexchangeprovider.c:496
+#: ../src/goabackend/goaexchangeprovider.c:476
 msgid "_Custom"
 msgstr "_Лични настройки"
 
-#: ../src/goabackend/goaexchangeprovider.c:507
-#: ../src/goabackend/goaimapsmtpprovider.c:719
-#: ../src/goabackend/goaimapsmtpprovider.c:739
-#: ../src/goabackend/goakerberosprovider.c:1108
-#: ../src/goabackend/goaowncloudprovider.c:633
+#: ../src/goabackend/goaexchangeprovider.c:487
+#: ../src/goabackend/goaimapsmtpprovider.c:690
+#: ../src/goabackend/goaimapsmtpprovider.c:710
+#: ../src/goabackend/goakerberosprovider.c:727
+#: ../src/goabackend/goalastfmprovider.c:420
+#: ../src/goabackend/goaowncloudprovider.c:619
 msgid "User_name"
 msgstr "Потребителско _име"
 
-#: ../src/goabackend/goaexchangeprovider.c:508
-#: ../src/goabackend/goaowncloudprovider.c:632
+#: ../src/goabackend/goaexchangeprovider.c:488
+#: ../src/goabackend/goaowncloudprovider.c:618
 msgid "_Server"
 msgstr "_Сървър"
 
 #. --
-#: ../src/goabackend/goaexchangeprovider.c:518
-#: ../src/goabackend/goaimapsmtpprovider.c:752
-#: ../src/goabackend/goakerberosprovider.c:1113
-#: ../src/goabackend/goaowncloudprovider.c:643
+#: ../src/goabackend/goaexchangeprovider.c:498
+#: ../src/goabackend/goaimapsmtpprovider.c:723
+#: ../src/goabackend/goakerberosprovider.c:732
+#: ../src/goabackend/goalastfmprovider.c:429
+#: ../src/goabackend/goaowncloudprovider.c:629
 #: ../src/goabackend/goatelepathyprovider.c:649
 msgid "_Cancel"
 msgstr "_Отказ"
 
-#: ../src/goabackend/goaexchangeprovider.c:519
-#: ../src/goabackend/goakerberosprovider.c:1114
-#: ../src/goabackend/goaowncloudprovider.c:644
+#: ../src/goabackend/goaexchangeprovider.c:499
+#: ../src/goabackend/goakerberosprovider.c:733
+#: ../src/goabackend/goalastfmprovider.c:430
+#: ../src/goabackend/goaowncloudprovider.c:630
 msgid "C_onnect"
 msgstr "_Свързване"
 
-#: ../src/goabackend/goaexchangeprovider.c:535
-#: ../src/goabackend/goaimapsmtpprovider.c:769
-#: ../src/goabackend/goakerberosprovider.c:1130
-#: ../src/goabackend/goaowncloudprovider.c:660
+#: ../src/goabackend/goaexchangeprovider.c:515
+#: ../src/goabackend/goaimapsmtpprovider.c:740
+#: ../src/goabackend/goakerberosprovider.c:749
+#: ../src/goabackend/goalastfmprovider.c:446
+#: ../src/goabackend/goaowncloudprovider.c:646
 msgid "Connecting…"
 msgstr "Свързване…"
 
-#: ../src/goabackend/goaexchangeprovider.c:640
-#: ../src/goabackend/goaexchangeprovider.c:837
-#: ../src/goabackend/goaimapsmtpprovider.c:931
-#: ../src/goabackend/goaimapsmtpprovider.c:966
-#: ../src/goabackend/goaimapsmtpprovider.c:1054
-#: ../src/goabackend/goaimapsmtpprovider.c:1318
-#: ../src/goabackend/goaimapsmtpprovider.c:1391
-#: ../src/goabackend/goakerberosprovider.c:1521
-#: ../src/goabackend/goamediaserverprovider.c:473
-#: ../src/goabackend/goaoauth2provider.c:1033
+#: ../src/goabackend/goaexchangeprovider.c:620
+#: ../src/goabackend/goaexchangeprovider.c:817
+#: ../src/goabackend/goaimapsmtpprovider.c:902
+#: ../src/goabackend/goaimapsmtpprovider.c:937
+#: ../src/goabackend/goaimapsmtpprovider.c:1025
+#: ../src/goabackend/goaimapsmtpprovider.c:1289
+#: ../src/goabackend/goaimapsmtpprovider.c:1362
+#: ../src/goabackend/goakerberosprovider.c:1150
+#: ../src/goabackend/goalastfmprovider.c:641
+#: ../src/goabackend/goalastfmprovider.c:808
+#: ../src/goabackend/goamediaserverprovider.c:475
+#: ../src/goabackend/goaoauth2provider.c:1034
 #: ../src/goabackend/goaoauthprovider.c:863
-#: ../src/goabackend/goaowncloudprovider.c:771
-#: ../src/goabackend/goaowncloudprovider.c:986
+#: ../src/goabackend/goaowncloudprovider.c:757
+#: ../src/goabackend/goaowncloudprovider.c:972
 #: ../src/goabackend/goatelepathyprovider.c:459
 #: ../src/goabackend/goatelepathyprovider.c:508
 #: ../src/goabackend/goatelepathyprovider.c:683
@@ -155,90 +150,62 @@ msgstr "Свързване…"
 msgid "Dialog was dismissed"
 msgstr "Прозорецът беше затворен"
 
-#: ../src/goabackend/goaexchangeprovider.c:678
-#: ../src/goabackend/goaexchangeprovider.c:865
-#: ../src/goabackend/goaimapsmtpprovider.c:996
-#: ../src/goabackend/goaimapsmtpprovider.c:1089
-#: ../src/goabackend/goaimapsmtpprovider.c:1342
-#: ../src/goabackend/goaimapsmtpprovider.c:1416
-#: ../src/goabackend/goaowncloudprovider.c:813
-#: ../src/goabackend/goaowncloudprovider.c:1007
+#: ../src/goabackend/goaexchangeprovider.c:658
+#: ../src/goabackend/goaexchangeprovider.c:845
+#: ../src/goabackend/goaimapsmtpprovider.c:967
+#: ../src/goabackend/goaimapsmtpprovider.c:1060
+#: ../src/goabackend/goaimapsmtpprovider.c:1313
+#: ../src/goabackend/goaimapsmtpprovider.c:1387
+#: ../src/goabackend/goalastfmprovider.c:675
+#: ../src/goabackend/goalastfmprovider.c:827
+#: ../src/goabackend/goaowncloudprovider.c:799
+#: ../src/goabackend/goaowncloudprovider.c:993
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "Прозорецът беше затворен (%s, %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:691
-#: ../src/goabackend/goaimapsmtpprovider.c:1009
-#: ../src/goabackend/goaimapsmtpprovider.c:1102
-#: ../src/goabackend/goaowncloudprovider.c:826
+#: ../src/goabackend/goaexchangeprovider.c:671
+#: ../src/goabackend/goaimapsmtpprovider.c:980
+#: ../src/goabackend/goaimapsmtpprovider.c:1073
+#: ../src/goabackend/goaowncloudprovider.c:812
 msgid "_Ignore"
 msgstr "_Пренебрегване"
 
-#: ../src/goabackend/goaexchangeprovider.c:696
-#: ../src/goabackend/goaexchangeprovider.c:884
-#: ../src/goabackend/goaimapsmtpprovider.c:1014
-#: ../src/goabackend/goaimapsmtpprovider.c:1107
-#: ../src/goabackend/goaimapsmtpprovider.c:1361
-#: ../src/goabackend/goaimapsmtpprovider.c:1435
-#: ../src/goabackend/goakerberosprovider.c:1631
-#: ../src/goabackend/goaowncloudprovider.c:831
-#: ../src/goabackend/goaowncloudprovider.c:1026
+#: ../src/goabackend/goaexchangeprovider.c:676
+#: ../src/goabackend/goaexchangeprovider.c:864
+#: ../src/goabackend/goaimapsmtpprovider.c:985
+#: ../src/goabackend/goaimapsmtpprovider.c:1078
+#: ../src/goabackend/goaimapsmtpprovider.c:1332
+#: ../src/goabackend/goaimapsmtpprovider.c:1406
+#: ../src/goabackend/goakerberosprovider.c:1260
+#: ../src/goabackend/goalastfmprovider.c:687
+#: ../src/goabackend/goalastfmprovider.c:844
+#: ../src/goabackend/goaowncloudprovider.c:817
+#: ../src/goabackend/goaowncloudprovider.c:1012
 msgid "_Try Again"
 msgstr "_Повторен опит"
 
-#: ../src/goabackend/goaexchangeprovider.c:701
-#: ../src/goabackend/goaexchangeprovider.c:877
+#: ../src/goabackend/goaexchangeprovider.c:681
+#: ../src/goabackend/goaexchangeprovider.c:857
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Грешка при свързване към сървъра (Microsoft Exchange)"
 
-#. Translators: This is a label for a series of
-#. * options switches. For example: “Use for Mail”.
-#: ../src/goabackend/goaexchangeprovider.c:939
-#: ../src/goabackend/goaflickrprovider.c:412
-#: ../src/goabackend/goafoursquareprovider.c:404
-#: ../src/goabackend/goagoogleprovider.c:620
-#: ../src/goabackend/goakerberosprovider.c:1704
-#: ../src/goabackend/goamediaserverprovider.c:584
-#: ../src/goabackend/goaowncloudprovider.c:1082
-#: ../src/goabackend/goapocketprovider.c:406
-#: ../src/goabackend/goatelepathyprovider.c:890
-#: ../src/goabackend/goawindowsliveprovider.c:414
-msgid "Use for"
-msgstr "Да се използва за"
-
-#: ../src/goabackend/goaexchangeprovider.c:941
-#: ../src/goabackend/goagoogleprovider.c:622
-#: ../src/goabackend/goawindowsliveprovider.c:416
-msgid "_Mail"
-msgstr "_Е-поща"
-
-#: ../src/goabackend/goaexchangeprovider.c:946
-#: ../src/goabackend/goagoogleprovider.c:627
-#: ../src/goabackend/goaowncloudprovider.c:1084
-msgid "Cale_ndar"
-msgstr "Ка_лендар"
-
-#: ../src/goabackend/goaexchangeprovider.c:951
-#: ../src/goabackend/goagoogleprovider.c:632
-#: ../src/goabackend/goaowncloudprovider.c:1089
-msgid "_Contacts"
-msgstr "_Контакти"
-
 #: ../src/goabackend/goafacebookprovider.c:76
 msgid "Facebook"
-msgstr "Фейсбук"
+msgstr "Facebook"
 
 #: ../src/goabackend/goafacebookprovider.c:215
 #: ../src/goabackend/goaflickrprovider.c:183
-#: ../src/goabackend/goafoursquareprovider.c:188
-#: ../src/goabackend/goagoogleprovider.c:219
-#: ../src/goabackend/goawindowsliveprovider.c:188
+#: ../src/goabackend/goafoursquareprovider.c:189
+#: ../src/goabackend/goagoogleprovider.c:225
+#: ../src/goabackend/goawindowsliveprovider.c:195
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
 msgstr ""
 "Получен е отговор „%d (%s)“ при получаване на самоличността. Очакваше се 200."
 
+#. TODO: more specific
 #: ../src/goabackend/goafacebookprovider.c:234
 #: ../src/goabackend/goafacebookprovider.c:246
 #: ../src/goabackend/goafacebookprovider.c:259
@@ -247,73 +214,49 @@ msgstr ""
 #: ../src/goabackend/goaflickrprovider.c:224
 #: ../src/goabackend/goaflickrprovider.c:234
 #: ../src/goabackend/goaflickrprovider.c:244
-#: ../src/goabackend/goafoursquareprovider.c:207
-#: ../src/goabackend/goafoursquareprovider.c:219
-#: ../src/goabackend/goafoursquareprovider.c:230
-#: ../src/goabackend/goafoursquareprovider.c:241
-#: ../src/goabackend/goafoursquareprovider.c:252
-#: ../src/goabackend/goafoursquareprovider.c:263
-#: ../src/goabackend/goagoogleprovider.c:238
-#: ../src/goabackend/goagoogleprovider.c:250
+#: ../src/goabackend/goafoursquareprovider.c:208
+#: ../src/goabackend/goafoursquareprovider.c:220
+#: ../src/goabackend/goafoursquareprovider.c:231
+#: ../src/goabackend/goafoursquareprovider.c:242
+#: ../src/goabackend/goafoursquareprovider.c:253
+#: ../src/goabackend/goafoursquareprovider.c:264
+#: ../src/goabackend/goagoogleprovider.c:244
+#: ../src/goabackend/goagoogleprovider.c:256
+#: ../src/goabackend/goalastfmprovider.c:211
+#: ../src/goabackend/goalastfmprovider.c:220
+#: ../src/goabackend/goalastfmprovider.c:230
+#: ../src/goabackend/goalastfmprovider.c:237
+#: ../src/goabackend/goalastfmprovider.c:504
+#: ../src/goabackend/goalastfmprovider.c:513
+#: ../src/goabackend/goalastfmprovider.c:528
+#: ../src/goabackend/goalastfmprovider.c:535
 #: ../src/goabackend/goaoauth2provider.c:699
 #: ../src/goabackend/goaoauth2provider.c:729
-#: ../src/goabackend/goaoauth2provider.c:741
-#: ../src/goabackend/goawindowsliveprovider.c:207
-#: ../src/goabackend/goawindowsliveprovider.c:219
-#: ../src/goabackend/goawindowsliveprovider.c:231
+#: ../src/goabackend/goaoauth2provider.c:741 ../src/goabackend/goautils.c:153
+#: ../src/goabackend/goawindowsliveprovider.c:214
+#: ../src/goabackend/goawindowsliveprovider.c:226
+#: ../src/goabackend/goawindowsliveprovider.c:238
 #, c-format
 msgid "Could not parse response"
 msgstr "Неуспешен анализ на отговора"
 
-#: ../src/goabackend/goafacebookprovider.c:427
-#: ../src/goabackend/goaflickrprovider.c:414
-#: ../src/goabackend/goagoogleprovider.c:647
-#: ../src/goabackend/goamediaserverprovider.c:586
-msgid "_Photos"
-msgstr "_Снимки"
-
-#: ../src/goabackend/goafacebookprovider.c:432
-#: ../src/goabackend/goafoursquareprovider.c:406
-msgid "_Maps"
-msgstr "_Карти"
-
 #: ../src/goabackend/goaflickrprovider.c:77
 msgid "Flickr"
-msgstr "Фликър"
+msgstr "Flickr"
 
-#: ../src/goabackend/goaflickrprovider.c:320
+#: ../src/goabackend/goaflickrprovider.c:321
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr ""
 "Времето на системния часовник е грешно. Проверете настройките си за дата и "
 "час."
 
-#: ../src/goabackend/goafoursquareprovider.c:76
+#: ../src/goabackend/goafoursquareprovider.c:77
 msgid "Foursquare"
-msgstr "Форскуеър"
+msgstr "Foursquare"
 
 #: ../src/goabackend/goagoogleprovider.c:76
 msgid "Google"
-msgstr "Гугъл"
-
-#: ../src/goabackend/goagoogleprovider.c:637
-#: ../src/goabackend/goatelepathyprovider.c:892
-msgid "C_hat"
-msgstr "_Разговори"
-
-#: ../src/goabackend/goagoogleprovider.c:642
-#: ../src/goabackend/goaowncloudprovider.c:1094
-#: ../src/goabackend/goawindowsliveprovider.c:421
-msgid "_Documents"
-msgstr "_Документи"
-
-#: ../src/goabackend/goagoogleprovider.c:652
-#: ../src/goabackend/goaowncloudprovider.c:1099
-msgid "_Files"
-msgstr "_Файлове"
-
-#: ../src/goabackend/goagoogleprovider.c:657
-msgid "Prin_ters"
-msgstr "П_ринтери"
+msgstr "Google"
 
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:94 ../src/goabackend/goasmtpauth.c:160
@@ -323,7 +266,8 @@ msgstr "Услугата не е налична"
 
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:115
-#: ../src/goabackend/goasmtpauth.c:113
+#: ../src/goabackend/goalastfmprovider.c:521
+#: ../src/goabackend/goasmtpauth.c:113 ../src/goabackend/goautils.c:584
 #, c-format
 msgid "Authentication failed"
 msgstr "Неуспешна идентификация"
@@ -333,8 +277,7 @@ msgstr "Неуспешна идентификация"
 msgid "Server does not support PLAIN"
 msgstr "Сървърът не поддържа идентификация „PLAIN“"
 
-#: ../src/goabackend/goaimapauthlogin.c:194
-#: ../src/goabackend/goasmtpauth.c:818
+#: ../src/goabackend/goaimapauthlogin.c:194 ../src/goabackend/goasmtpauth.c:818
 #, c-format
 msgid "Server does not support STARTTLS"
 msgstr "Сървърът не поддържа командата за шифриране на връзката „STARTTLS“"
@@ -342,14 +285,6 @@ msgstr "Сървърът не поддържа командата за шифр�
 #: ../src/goabackend/goaimapsmtpprovider.c:61
 msgid "IMAP and SMTP"
 msgstr "IMAP и SMTP"
-
-#. Translators: the first parameter is a field name. The second is
-#. * a GOA account identifier.
-#: ../src/goabackend/goaimapsmtpprovider.c:358
-#: ../src/goabackend/goaimapsmtpprovider.c:416
-#, c-format
-msgid "Did not find %s with identity ‘%s’ in credentials"
-msgstr "В данните за регистрация липсва поле „%s“ със самоличност „%s“"
 
 #. Translators: the first %s is a field name. The
 #. * second %s is the IMAP
@@ -361,8 +296,8 @@ msgstr "В данните за регистрация липсва поле „%
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:389
-#: ../src/goabackend/goaimapsmtpprovider.c:449
+#: ../src/goabackend/goaimapsmtpprovider.c:365
+#: ../src/goabackend/goaimapsmtpprovider.c:420
 #, c-format
 msgid "Invalid %s with username ‘%s’ (%s, %d): "
 msgstr "Неправилно поле за парола „%s“ за потребителя „%s“ (%s, %d): "
@@ -373,127 +308,131 @@ msgstr "Неправилно поле за парола „%s“ за потре
 #. *             STARTTLS after connecting
 #. *             SSL on a dedicated port
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:636
+#: ../src/goabackend/goaimapsmtpprovider.c:607
 msgid "_Encryption"
 msgstr "_Шифриране"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:639
+#: ../src/goabackend/goaimapsmtpprovider.c:610
 msgid "None"
 msgstr "Никакво"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:642
+#: ../src/goabackend/goaimapsmtpprovider.c:613
 msgid "STARTTLS after connecting"
 msgstr "STARTTLS след свързване"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:645
+#: ../src/goabackend/goaimapsmtpprovider.c:616
 msgid "SSL on a dedicated port"
 msgstr "SSL по определен порт"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:701
+#: ../src/goabackend/goaimapsmtpprovider.c:672
 msgid "_Name"
 msgstr "_Име"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:718
+#: ../src/goabackend/goaimapsmtpprovider.c:689
 msgid "IMAP _Server"
 msgstr "Сървър с _IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:738
+#: ../src/goabackend/goaimapsmtpprovider.c:709
 msgid "SMTP _Server"
 msgstr "Сървър със _SMTP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:753
-#: ../src/goabackend/goaimapsmtpprovider.c:1035
-#: ../src/goabackend/goaimapsmtpprovider.c:1371
+#: ../src/goabackend/goaimapsmtpprovider.c:724
+#: ../src/goabackend/goaimapsmtpprovider.c:1006
+#: ../src/goabackend/goaimapsmtpprovider.c:1342
 msgid "_Forward"
 msgstr "_Напред"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1019
-#: ../src/goabackend/goaimapsmtpprovider.c:1354
+#: ../src/goabackend/goaimapsmtpprovider.c:990
+#: ../src/goabackend/goaimapsmtpprovider.c:1325
 msgid "Error connecting to IMAP server"
 msgstr "Грешка при свързване към сървъра с IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1112
-#: ../src/goabackend/goaimapsmtpprovider.c:1428
+#: ../src/goabackend/goaimapsmtpprovider.c:1083
+#: ../src/goabackend/goaimapsmtpprovider.c:1399
 msgid "Error connecting to SMTP server"
 msgstr "Грешка при свързване към сървъра със SMTP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1527
+#: ../src/goabackend/goaimapsmtpprovider.c:1498
 msgid "E-mail"
 msgstr "Е-поща"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1531
+#: ../src/goabackend/goaimapsmtpprovider.c:1502
 msgid "Name"
 msgstr "Име"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1541
-#: ../src/goabackend/goaimapsmtpprovider.c:1545
+#: ../src/goabackend/goaimapsmtpprovider.c:1512
+#: ../src/goabackend/goaimapsmtpprovider.c:1516
 msgid "IMAP"
 msgstr "IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1556
-#: ../src/goabackend/goaimapsmtpprovider.c:1560
+#: ../src/goabackend/goaimapsmtpprovider.c:1527
+#: ../src/goabackend/goaimapsmtpprovider.c:1531
 msgid "SMTP"
 msgstr "SMTP"
 
-#: ../src/goabackend/goakerberosprovider.c:64
+#: ../src/goabackend/goakerberosprovider.c:99
 msgid "Enterprise Login (Kerberos)"
 msgstr "Корпоративен вход — Kerberos "
 
-#: ../src/goabackend/goakerberosprovider.c:432
-msgid "Identity service returned invalid key"
-msgstr "Услугата за самоличности върна грешен ключ"
-
-#: ../src/goabackend/goakerberosprovider.c:704
+#: ../src/goabackend/goakerberosprovider.c:309
 #, c-format
 msgid "Could not find saved credentials for principal ‘%s’ in keyring"
-msgstr ""
-"Не бяха намерени запазени данни за регистрация за потребител „%s“ в "
-"ключодържателя"
+msgstr "Липсват данни за регистрация за потребител „%s“ в ключодържателя"
 
-#: ../src/goabackend/goakerberosprovider.c:717
+#: ../src/goabackend/goakerberosprovider.c:322
 #, c-format
 msgid "Did not find password for principal ‘%s’ in credentials"
-msgstr "Не беше намерена парола за потребител „%s“ в данните за регистрация"
+msgstr "Липсва парола за потребител „%s“ в данните за регистрация"
 
-#: ../src/goabackend/goakerberosprovider.c:1100
+#: ../src/goabackend/goakerberosprovider.c:719
 msgid "_Domain"
 msgstr "_Домейн"
 
-#: ../src/goabackend/goakerberosprovider.c:1101
+#: ../src/goabackend/goakerberosprovider.c:720
 msgid "Enterprise domain or realm name"
 msgstr "Корпоративен домейн или област"
 
-#: ../src/goabackend/goakerberosprovider.c:1330
-#: ../src/goaidentity/goaidentityservice.c:1106
+#: ../src/goabackend/goakerberosprovider.c:956
+#: ../src/goaidentity/goaidentityservice.c:1132
 msgid "Log In to Realm"
 msgstr "Вход в областта"
 
-#: ../src/goabackend/goakerberosprovider.c:1331
+#: ../src/goabackend/goakerberosprovider.c:957
 msgid "Please enter your password below."
 msgstr "Въведете паролата си по-долу."
 
-#: ../src/goabackend/goakerberosprovider.c:1332
+#: ../src/goabackend/goakerberosprovider.c:958
 msgid "Remember this password"
 msgstr "Запомняне на паролата"
 
-#: ../src/goabackend/goakerberosprovider.c:1471
+#: ../src/goabackend/goakerberosprovider.c:1100
 #, c-format
 msgid "The domain is not valid"
 msgstr "Домейнът е неправилен"
 
-#: ../src/goabackend/goakerberosprovider.c:1626
+#: ../src/goabackend/goakerberosprovider.c:1255
 msgid "Error connecting to enterprise identity server"
 msgstr "Грешка при свързване към корпоративния сървър за самоличности"
 
-#: ../src/goabackend/goakerberosprovider.c:1706
-msgid "Network _Resources"
-msgstr "_Мрежови ресурси"
+#: ../src/goabackend/goakerberosprovider.c:1521
+#, c-format
+msgid "Identity service returned invalid key"
+msgstr "Услугата за самоличности върна грешен ключ"
+
+#: ../src/goabackend/goalastfmprovider.c:64
+msgid "Last.fm"
+msgstr "Last.fm"
+
+#: ../src/goabackend/goalastfmprovider.c:689
+#: ../src/goabackend/goalastfmprovider.c:838
+msgid "Error connecting to Last.fm"
+msgstr "Грешка при свързване към Last.fm"
 
 #: ../src/goabackend/goamediaserverprovider.c:76
 msgid "Media Server"
 msgstr "Сървър за мултимедия"
 
-#: ../src/goabackend/goamediaserverprovider.c:369
+#: ../src/goabackend/goamediaserverprovider.c:371
 msgid ""
 "Personal content can be added to your applications through a media server "
 "account."
@@ -501,11 +440,11 @@ msgstr ""
 "Можете да добавите лично съдържание към програмите като използвате "
 "регистрация към сървър за мултимедия."
 
-#: ../src/goabackend/goamediaserverprovider.c:383
+#: ../src/goabackend/goamediaserverprovider.c:385
 msgid "Available Media Servers"
 msgstr "Налични сървъри за мултимедия"
 
-#: ../src/goabackend/goamediaserverprovider.c:413
+#: ../src/goabackend/goamediaserverprovider.c:415
 msgid "No media servers found"
 msgstr "Липсват сървъри за мултимедия"
 
@@ -519,37 +458,37 @@ msgstr ""
 "Беше върнат отговор „%d (%s)“ при получаване на код за достъп. Очакваше се "
 "200."
 
-#: ../src/goabackend/goaoauth2provider.c:842
+#: ../src/goabackend/goaoauth2provider.c:843
 msgid "Authorization response: "
 msgstr "Отговор при упълномощаване: "
 
-#: ../src/goabackend/goaoauth2provider.c:912
+#: ../src/goabackend/goaoauth2provider.c:913
 #, c-format
 msgid "Authorization response: %s"
 msgstr "Отговор при упълномощаване: %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1059
+#: ../src/goabackend/goaoauth2provider.c:1060
 #: ../src/goabackend/goaoauthprovider.c:894
 msgid "Error getting an Access Token: "
 msgstr "Неуспешно получаване на код за достъп: "
 
-#: ../src/goabackend/goaoauth2provider.c:1074
+#: ../src/goabackend/goaoauth2provider.c:1075
 #: ../src/goabackend/goaoauthprovider.c:907
 msgid "Error getting identity: "
 msgstr "Неуспешно получаване на самоличност: "
 
-#: ../src/goabackend/goaoauth2provider.c:1291
+#: ../src/goabackend/goaoauth2provider.c:1292
 #: ../src/goabackend/goaoauthprovider.c:1215
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Трябваше да влезете като „%s“, но вие влязохте като „%s“"
 
-#: ../src/goabackend/goaoauth2provider.c:1453
+#: ../src/goabackend/goaoauth2provider.c:1454
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Данните за регистрацията не съдържат ключа „access_token“"
 
-#: ../src/goabackend/goaoauth2provider.c:1492
+#: ../src/goabackend/goaoauth2provider.c:1493
 #: ../src/goabackend/goaoauthprovider.c:1443
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
@@ -591,12 +530,12 @@ msgstr ""
 
 #: ../src/goabackend/goaowncloudprovider.c:67
 msgid "ownCloud"
-msgstr "оунКлауд"
+msgstr "ownCloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:836
-#: ../src/goabackend/goaowncloudprovider.c:1019
+#: ../src/goabackend/goaowncloudprovider.c:822
+#: ../src/goabackend/goaowncloudprovider.c:1005
 msgid "Error connecting to ownCloud server"
-msgstr "Грешка при свързване към сървъра на оунКлауд"
+msgstr "Грешка при свързване към сървъра на ownClowd"
 
 #: ../src/goabackend/goapocketprovider.c:69
 msgid "Pocket"
@@ -608,11 +547,61 @@ msgstr "Pocket"
 msgid "No username or access_token"
 msgstr "Липсва потребителско име или код за достъп (acess_token)"
 
-#: ../src/goabackend/goapocketprovider.c:408
+#: ../src/goabackend/goaprovider.c:479
+msgid "_Mail"
+msgstr "_Е-поща"
+
+#: ../src/goabackend/goaprovider.c:484
+msgid "Cale_ndar"
+msgstr "Ка_лендар"
+
+#: ../src/goabackend/goaprovider.c:489
+msgid "_Contacts"
+msgstr "_Контакти"
+
+#: ../src/goabackend/goaprovider.c:494
+msgid "C_hat"
+msgstr "_Разговори"
+
+#: ../src/goabackend/goaprovider.c:499
+msgid "_Documents"
+msgstr "_Документи"
+
+#: ../src/goabackend/goaprovider.c:504
+msgid "M_usic"
+msgstr "_Музика"
+
+#: ../src/goabackend/goaprovider.c:509
+msgid "_Photos"
+msgstr "_Снимки"
+
+#: ../src/goabackend/goaprovider.c:514
+msgid "_Files"
+msgstr "_Файлове"
+
+#: ../src/goabackend/goaprovider.c:519
+msgid "Network _Resources"
+msgstr "_Мрежови ресурси"
+
+#: ../src/goabackend/goaprovider.c:524
 msgid "_Read Later"
 msgstr "За _четене по-късно"
 
-#: ../src/goabackend/goaprovider.c:682
+#: ../src/goabackend/goaprovider.c:529
+msgid "Prin_ters"
+msgstr "П_ринтери"
+
+#: ../src/goabackend/goaprovider.c:534
+msgid "_Maps"
+msgstr "_Карти"
+
+#. Translators: This is a label for a series of
+#. * options switches. For example: “Use for Mail”.
+#: ../src/goabackend/goaprovider.c:563
+msgid "Use for"
+msgstr "Да се използва за"
+
+#: ../src/goabackend/goaprovider.c:802
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "Методът „ensure_credentials_sync“ не съществува за обекти от вида „%s“"
@@ -624,19 +613,19 @@ msgid "TLS not available"
 msgstr "TLS липсва"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauth.c:241
+#: ../src/goabackend/goasmtpauth.c:242
 #, c-format
 msgid "org.gnome.OnlineAccounts.Mail is not available"
 msgstr "Обектът „org.gnome.OnlineAccounts.Mail“ липсва"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauth.c:251
+#: ../src/goabackend/goasmtpauth.c:252
 #, c-format
 msgid "Failed to parse email address"
 msgstr "Неуспешен анализ на адреса за е-поща"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauth.c:263
+#: ../src/goabackend/goasmtpauth.c:261
 #, c-format
 msgid "Cannot do SMTP authentication without a domain"
 msgstr "За идентификацията към сървъра със SMTP е необходима област/домейн"
@@ -690,66 +679,83 @@ msgstr "_Добре"
 msgid "Cannot save the connection parameters"
 msgstr "Настройките на връзката не могат да бъдат запазени"
 
-#: ../src/goabackend/goatelepathyprovider.c:866
+#: ../src/goabackend/goatelepathyprovider.c:867
 msgid "Cannot save your personal information on the server"
 msgstr "Личните ви данни не могат да бъдат запазени на сървъра"
 
 #. Connection Settings button
-#: ../src/goabackend/goatelepathyprovider.c:897
+#: ../src/goabackend/goatelepathyprovider.c:893
 msgid "_Connection Settings"
 msgstr "_Настройки на свързването"
 
 #. Edit Personal Information button
-#: ../src/goabackend/goatelepathyprovider.c:901
+#: ../src/goabackend/goatelepathyprovider.c:897
 msgid "_Personal Details"
 msgstr "_Лични данни"
 
-#: ../src/goabackend/goautils.c:114
+#: ../src/goabackend/goautils.c:120
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "Вече съществува регистрация от вида „%s“ за самоличността „%s“."
 
 #. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:136
+#: ../src/goabackend/goautils.c:170
 #, c-format
 msgid "%s account"
 msgstr "Регистрация в „%s“"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:180
+#: ../src/goabackend/goautils.c:214
 msgid "Failed to delete credentials from the keyring"
 msgstr "Неуспешно изтриване на данните за регистрацията от ключодържателя"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:232
+#: ../src/goabackend/goautils.c:266
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Неуспешно извличане на данните за регистрацията от ключодържателя"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:242
+#: ../src/goabackend/goautils.c:276
 msgid "No credentials found in the keyring"
 msgstr "В ключодържателя липсват данни за регистрация"
 
-#: ../src/goabackend/goautils.c:255
+#: ../src/goabackend/goautils.c:289
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Грешка при анализа на данните извлечени от ключодържателя: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:298
+#: ../src/goabackend/goautils.c:332
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Данни за самоличността „%2$s“, предоставени от %1$s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:315
+#: ../src/goabackend/goautils.c:349
 msgid "Failed to store credentials in the keyring"
 msgstr "Неуспешно запазване на данните за регистрацията в ключодържателя"
 
-#: ../src/goabackend/goautils.c:536
+#: ../src/goabackend/goautils.c:571
+msgid "Cannot resolve hostname"
+msgstr "Адресът на машината име не може да се открие по име"
+
+#: ../src/goabackend/goautils.c:575
+msgid "Cannot resolve proxy hostname"
+msgstr "Адресът на сървъра-посредник не може да се открие по име"
+
+#: ../src/goabackend/goautils.c:580
+msgid "Cannot find WebDAV endpoint"
+msgstr "Услугата за WebDAV не може да бъде открита"
+
+#: ../src/goabackend/goautils.c:589
+#, c-format
+msgid "Code: %u — Unexpected response from server"
+msgstr "Код: %u — Неочакван отговор от сървъра"
+
+#: ../src/goabackend/goautils.c:605
 msgid "The signing certificate authority is not known."
 msgstr "Непознат удостоверител на сертификати="
 
-#: ../src/goabackend/goautils.c:540
+#: ../src/goabackend/goautils.c:609
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
@@ -757,110 +763,120 @@ msgstr ""
 "Сертификатът не съвпада с очакваната идентичност на сайта, от който е "
 "получен."
 
-#: ../src/goabackend/goautils.c:545
+#: ../src/goabackend/goautils.c:614
 msgid "The certificate’s activation time is still in the future."
 msgstr "Времето на валидност на сертификата започва в бъдеще."
 
-#: ../src/goabackend/goautils.c:549
+#: ../src/goabackend/goautils.c:618
 msgid "The certificate has expired."
 msgstr "Сертификатът е с изтекъл период на валидност."
 
-#: ../src/goabackend/goautils.c:553
+#: ../src/goabackend/goautils.c:622
 msgid "The certificate has been revoked."
 msgstr "Сертификатът е изрично отхвърлен."
 
-#: ../src/goabackend/goautils.c:557
+#: ../src/goabackend/goautils.c:626
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Алгоритъмът на сертификата е ненадежден."
 
-#: ../src/goabackend/goautils.c:561
+#: ../src/goabackend/goautils.c:630
 msgid "Invalid certificate."
 msgstr "Невалиден сертификат."
 
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:665
+#, c-format
+msgid "Did not find %s with identity ‘%s’ in credentials"
+msgstr "В данните за регистрация липсва поле „%s“ със самоличност „%s“"
+
 #. translators: %s here is the address of the web page
-#: ../src/goabackend/goawebview.c:92
+#: ../src/goabackend/goawebview.c:95
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Зареждане на „%s“…"
 
 #: ../src/goabackend/goawindowsliveprovider.c:77
-msgid "Windows Live"
-msgstr "Уиндоус Лайв"
+msgid "Microsoft Account"
+msgstr "Регистрация на Microsoft"
 
-#: ../src/goaidentity/goaidentityservice.c:370
+#: ../src/goaidentity/goaidentityservice.c:381
 msgid "initial secret passed before secret key exchange"
 msgstr "Първичен таен израз, използван преди обмена на тайния ключ"
 
-#: ../src/goaidentity/goaidentityservice.c:562
+#: ../src/goaidentity/goaidentityservice.c:577
 msgid "Initial secret key is invalid"
 msgstr "Първичният таен ключ е грешен"
 
-#: ../src/goaidentity/goaidentityservice.c:1111
+#: ../src/goaidentity/goaidentityservice.c:1137
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "Необходима е информация, за да влезете в областта „%s“ от мрежата."
 
-#: ../src/goaidentity/goakerberosidentity.c:250
-#: ../src/goaidentity/goakerberosidentity.c:259
-#: ../src/goaidentity/goakerberosidentity.c:593
+#: ../src/goaidentity/goakerberosidentity.c:254
+#: ../src/goaidentity/goakerberosidentity.c:263
+#: ../src/goaidentity/goakerberosidentity.c:642
 msgid "Could not find identity in credential cache: %k"
 msgstr "Неуспешно откриване на данни за самоличността във временната памет: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:607
+#: ../src/goaidentity/goakerberosidentity.c:656
 msgid "Could not find identity credentials in cache: %k"
 msgstr "Неуспешно откриване на данни за самоличността във временната памет: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:647
+#: ../src/goaidentity/goakerberosidentity.c:700
 msgid "Could not sift through identity credentials in cache: %k"
 msgstr "Неуспешно извличане на данни за самоличността от временната памет: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:665
+#: ../src/goaidentity/goakerberosidentity.c:718
 msgid "Could not finish up sifting through identity credentials in cache: %k"
 msgstr ""
 "Неуспешно завършване на извличането на данни за самоличността от временната "
 "памет: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:960
+#: ../src/goaidentity/goakerberosidentity.c:1013
 #, c-format
 msgid "No associated identification found"
 msgstr "Не бяха намерени данни за удостоверяване"
 
-#: ../src/goaidentity/goakerberosidentity.c:1043
+#: ../src/goaidentity/goakerberosidentity.c:1096
 msgid "Could not create credential cache: %k"
 msgstr "Неуспешно създаване на временна памет за данните за регистрации: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1077
+#: ../src/goaidentity/goakerberosidentity.c:1130
 msgid "Could not initialize credentials cache: %k"
 msgstr "Неуспешно стартиране на временната памет за данните за регистрации: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1094
+#: ../src/goaidentity/goakerberosidentity.c:1147
 msgid "Could not store new credentials in credentials cache: %k"
 msgstr ""
 "Неуспешно запазване на данните за регистрацията във временната памет: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1369
+#: ../src/goaidentity/goakerberosidentity.c:1436
 #, c-format
 msgid "Could not renew identity: Not signed in"
 msgstr "Неуспешно обновяване на самоличността — не сте влезли с нея"
 
-#: ../src/goaidentity/goakerberosidentity.c:1381
+#: ../src/goaidentity/goakerberosidentity.c:1448
 msgid "Could not renew identity: %k"
 msgstr "Неуспешно обновяване на самоличността: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1398
+#: ../src/goaidentity/goakerberosidentity.c:1465
 msgid "Could not get new credentials to renew identity %s: %k"
 msgstr ""
 "Неуспешно обновяване на самоличността „%s“. Не могат да бъдат извлечени нови "
 "данни за регистрацията: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1440
+#: ../src/goaidentity/goakerberosidentity.c:1507
 msgid "Could not erase identity: %k"
 msgstr "Неуспешно изтриване на самоличността: %k"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:745
+#: ../src/goaidentity/goakerberosidentitymanager.c:749
 msgid "Could not find identity"
 msgstr "Неуспешно намиране на самоличността"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:836
+#: ../src/goaidentity/goakerberosidentitymanager.c:840
 msgid "Could not create credential cache for identity"
 msgstr "Неуспешно създаване на временна памет за данните на самоличността"
+
+#~ msgid "Did not find password with identity ‘%s’ in credentials"
+#~ msgstr ""
+#~ "Не беше намерена парола за самоличността „%s“ в данните за регистрация"
