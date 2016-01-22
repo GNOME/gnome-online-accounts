@@ -143,10 +143,8 @@ main (int    argc,
 #endif
   if (name_owner_id != 0)
     g_bus_unown_name (name_owner_id);
-  if (loop != NULL)
-    g_main_loop_unref (loop);
-  if (opt_context != NULL)
-    g_option_context_free (opt_context);
+  g_clear_pointer (&loop, (GDestroyNotify) g_main_loop_unref);
+  g_clear_pointer (&opt_context, (GDestroyNotify) g_option_context_free);
 
   g_message ("goa-daemon version %s exiting", PACKAGE_VERSION);
 

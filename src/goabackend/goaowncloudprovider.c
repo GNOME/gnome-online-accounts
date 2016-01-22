@@ -882,8 +882,7 @@ add_account (GoaProvider    *provider,
   g_free (server);
   g_free (uri);
   g_free (data.account_object_path);
-  if (data.loop != NULL)
-    g_main_loop_unref (data.loop);
+  g_clear_pointer (&data.loop, (GDestroyNotify) g_main_loop_unref);
   g_clear_object (&data.cancellable);
   g_clear_object (&http_client);
   return ret;
@@ -1039,8 +1038,7 @@ refresh_account (GoaProvider    *provider,
   gtk_widget_destroy (dialog);
   g_free (uri);
   g_free (uri_webdav);
-  if (data.loop != NULL)
-    g_main_loop_unref (data.loop);
+  g_clear_pointer (&data.loop, (GDestroyNotify) g_main_loop_unref);
   g_clear_object (&data.cancellable);
   g_clear_object (&http_client);
   return ret;
