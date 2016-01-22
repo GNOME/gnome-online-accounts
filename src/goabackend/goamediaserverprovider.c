@@ -216,8 +216,7 @@ ensure_credentials_sync (GoaProvider         *provider,
   ret = TRUE;
 
  out:
-  if (credentials != NULL)
-    g_variant_unref (credentials);
+  g_clear_pointer (&credentials, (GDestroyNotify) g_variant_unref);
   return ret;
 }
 
@@ -529,8 +528,7 @@ add_account (GoaProvider  *provider,
   g_free (data.account_object_path);
   g_free (data.friendly_name);
   g_free (data.udn);
-  if (data.loop != NULL)
-    g_main_loop_unref (data.loop);
+  g_clear_pointer (&data.loop, (GDestroyNotify) g_main_loop_unref);
   return ret;
 }
 

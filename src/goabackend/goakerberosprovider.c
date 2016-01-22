@@ -352,10 +352,7 @@ get_ticket_sync (GoaKerberosProvider *self,
 out:
   g_clear_object (&ticketing);
   g_free (object_path);
-
-  if (credentials != NULL)
-    g_variant_unref (credentials);
-
+  g_clear_pointer (&credentials, (GDestroyNotify) g_variant_unref);
   return ret;
 }
 
@@ -1317,8 +1314,7 @@ start_over:
   g_free (request.account_object_path);
   g_free (principal);
   g_free (principal_for_display);
-  if (request.loop != NULL)
-    g_main_loop_unref (request.loop);
+  g_clear_pointer (&request.loop, (GDestroyNotify) g_main_loop_unref);
   return object;
 }
 
