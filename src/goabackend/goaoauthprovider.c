@@ -603,10 +603,8 @@ get_tokens_sync (GoaOAuthProvider  *provider,
   g_free (ret_access_token);
   g_free (ret_access_token_secret);
   g_free (ret_session_handle);
-  if (call != NULL)
-    g_object_unref (call);
-  if (proxy != NULL)
-    g_object_unref (proxy);
+  g_clear_object (&call);
+  g_clear_object (&proxy);
   return ret;
 }
 
@@ -911,8 +909,7 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
   ret = TRUE;
 
  out:
-  if (call != NULL)
-    g_object_unref (call);
+  g_clear_object (&call);
 
   if (ret)
     {
@@ -956,8 +953,7 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
   g_free (data.request_token_secret);
 
   g_strfreev (request_params);
-  if (proxy != NULL)
-    g_object_unref (proxy);
+  g_clear_object (&proxy);
   return ret;
 }
 

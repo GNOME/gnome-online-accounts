@@ -434,8 +434,7 @@ goa_client_get_manager (GoaClient *self)
   manager = goa_object_peek_manager (GOA_OBJECT (object));
 
  out:
-  if (object != NULL)
-    g_object_unref (object);
+  g_clear_object (&object);
   return manager;
 }
 

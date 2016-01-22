@@ -988,8 +988,7 @@ on_job_scheduled (GIOSchedulerJob            *job,
         {
           g_simple_async_result_take_error (operation->result, error);
           g_simple_async_result_complete_in_idle (operation->result);
-          g_object_unref (operation->result);
-          operation->result = NULL;
+          g_clear_object (&operation->result);
           continue;
         }
 
@@ -1048,8 +1047,7 @@ on_job_scheduled (GIOSchedulerJob            *job,
       if (operation->result != NULL)
         {
           g_simple_async_result_complete_in_idle (operation->result);
-          g_object_unref (operation->result);
-          operation->result = NULL;
+          g_clear_object (&operation->result);
         }
       operation_free (operation);
 

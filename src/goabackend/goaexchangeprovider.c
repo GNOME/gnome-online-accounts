@@ -245,16 +245,11 @@ build_object (GoaProvider         *provider,
   ret = TRUE;
 
  out:
-  if (exchange != NULL)
-    g_object_unref (exchange);
-  if (contacts != NULL)
-    g_object_unref (contacts);
-  if (calendar != NULL)
-    g_object_unref (calendar);
-  if (mail != NULL)
-    g_object_unref (mail);
-  if (password_based != NULL)
-    g_object_unref (password_based);
+  g_clear_object (&exchange);
+  g_clear_object (&contacts);
+  g_clear_object (&calendar);
+  g_clear_object (&mail);
+  g_clear_object (&password_based);
   return ret;
 }
 
@@ -332,8 +327,7 @@ ensure_credentials_sync (GoaProvider         *provider,
   ret = TRUE;
 
  out:
-  if (ews_client != NULL)
-    g_object_unref (ews_client);
+  g_clear_object (&ews_client);
   g_free (username);
   g_free (password);
   return ret;
@@ -738,8 +732,7 @@ add_account (GoaProvider    *provider,
   if (data.loop != NULL)
     g_main_loop_unref (data.loop);
   g_clear_object (&data.cancellable);
-  if (ews_client != NULL)
-    g_object_unref (ews_client);
+  g_clear_object (&ews_client);
   return ret;
 }
 
@@ -893,8 +886,7 @@ refresh_account (GoaProvider    *provider,
   if (data.loop != NULL)
     g_main_loop_unref (data.loop);
   g_clear_object (&data.cancellable);
-  if (ews_client != NULL)
-    g_object_unref (ews_client);
+  g_clear_object (&ews_client);
   return ret;
 }
 

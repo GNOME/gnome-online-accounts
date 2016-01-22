@@ -764,10 +764,8 @@ get_tokens_sync (GoaOAuth2Provider  *provider,
   g_clear_error (&tokens_error);
   g_free (ret_access_token);
   g_free (ret_refresh_token);
-  if (call != NULL)
-    g_object_unref (call);
-  if (proxy != NULL)
-    g_object_unref (proxy);
+  g_clear_object (&call);
+  g_clear_object (&proxy);
   return ret;
 }
 

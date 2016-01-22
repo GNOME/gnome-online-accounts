@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011 Red Hat, Inc.
+ * Copyright (C) 2011, 2016 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -137,11 +137,9 @@ main (int    argc,
   ret = 0;
 
  out:
-  if (the_daemon != NULL)
-    g_object_unref (the_daemon);
+  g_clear_object (&the_daemon);
 #ifdef GOA_TELEPATHY_ENABLED
-  if (tp_linker != NULL)
-    g_object_unref (tp_linker);
+  g_clear_object (&tp_linker);
 #endif
   if (name_owner_id != 0)
     g_bus_unown_name (name_owner_id);
