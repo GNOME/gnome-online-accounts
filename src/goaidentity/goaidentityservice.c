@@ -891,7 +891,6 @@ add_temporary_account (GoaIdentityService *self,
   char               *realm;
   char               *preauth_source;
   const char         *principal;
-  char               *principal_for_display;
   GSimpleAsyncResult *operation_result;
   GVariantBuilder     credentials;
   GVariantBuilder     details;
@@ -912,8 +911,6 @@ add_temporary_account (GoaIdentityService *self,
 
   /* If there's no account for this identity then create a temporary one.
    */
-  principal_for_display = goa_identity_manager_name_identity (self->priv->identity_manager,
-                                                              identity);
 
   realm = goa_kerberos_identity_get_realm_name (GOA_KERBEROS_IDENTITY (identity));
   preauth_source = goa_kerberos_identity_get_preauthentication_source (GOA_KERBEROS_IDENTITY (identity));
@@ -942,7 +939,7 @@ add_temporary_account (GoaIdentityService *self,
   goa_manager_call_add_account (self->priv->accounts_manager,
                                 "kerberos",
                                 principal,
-                                principal_for_display,
+                                principal,
                                 g_variant_builder_end (&credentials),
                                 g_variant_builder_end (&details),
                                 NULL,
@@ -951,7 +948,6 @@ add_temporary_account (GoaIdentityService *self,
                                 operation_result);
   g_free (realm);
   g_free (preauth_source);
-  g_free (principal_for_display);
 }
 
 static void
