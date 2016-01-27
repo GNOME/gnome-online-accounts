@@ -47,9 +47,6 @@ struct _GoaIdentityServicePrivate
   GHashTable               *key_holders;
   GHashTable               *pending_temporary_account_results;
 
-  /* FIXME: This is a little ucky, since the goa service
-   * is in process, we should able to use direct calls.
-   */
   GoaClient                *client;
   GoaManager               *accounts_manager;
 };
