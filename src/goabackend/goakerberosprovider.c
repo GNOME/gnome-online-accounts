@@ -1128,13 +1128,11 @@ add_account (GoaProvider    *provider,
   const char  *username;
   const char *provider_type;
   gchar      *principal;
-  gchar      *principal_for_display;
   gint        response;
   GVariant   *options;
 
   object = NULL;
   principal = NULL;
-  principal_for_display = NULL;
 
   memset (&request, 0, sizeof (SignInRequest));
   request.cancellable = g_cancellable_new ();
@@ -1189,9 +1187,6 @@ start_over:
   g_free (principal);
   principal = g_strdup_printf ("%s@%s", username, realm);
 
-  g_free (principal_for_display);
-  principal_for_display = g_strdup_printf ("%s@%s", username, realm);
-
   /* See if there's already an account of this type with the
    * given identity
    */
@@ -1199,7 +1194,7 @@ start_over:
 
   if (!goa_utils_check_duplicate (client,
                                   principal,
-                                  principal_for_display,
+                                  principal,
                                   provider_type,
                                   (GoaPeekInterfaceFunc) goa_object_peek_account,
                                   &request.error))
@@ -1219,7 +1214,7 @@ start_over:
   goa_manager_call_add_account (goa_client_get_manager (client),
                                 goa_provider_get_provider_type (provider),
                                 principal,
-                                principal_for_display,
+                                principal,
                                 g_variant_builder_end (&credentials),
                                 g_variant_builder_end (&details),
                                 NULL, /* GCancellable* */
@@ -1313,7 +1308,6 @@ start_over:
 
   g_free (request.account_object_path);
   g_free (principal);
-  g_free (principal_for_display);
   g_clear_pointer (&request.loop, (GDestroyNotify) g_main_loop_unref);
   return object;
 }
