@@ -1,17 +1,17 @@
 # Vietnamese translation for gnome-online-accounts.
 # Bản dịch tiếng Việt dành cho gnome-online-accounts.
-# Copyright © 2015 GNOME i18n Project for Vietnamese.
+# Copyright © 2016 GNOME i18n Project for Vietnamese.
 # This file is distributed under the same license as the gnome-online-accounts package.
 # Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2011-2013.
-# Trần Ngọc Quân <vnwildman@gmail.com>, 2013-2014, 2015.
+# Trần Ngọc Quân <vnwildman@gmail.com>, 2013-2014, 2015, 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts GNOME-3.18\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-24 19:56+0000\n"
-"PO-Revision-Date: 2015-09-25 09:09+0700\n"
+"POT-Creation-Date: 2016-01-29 21:33+0000\n"
+"PO-Revision-Date: 2016-01-30 08:23+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <gnome-vi-list@gnome.org>\n"
 "Language: vi\n"
@@ -22,42 +22,36 @@ msgstr ""
 "X-Generator: Gtranslator 2.91.7\n"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:830 ../src/daemon/goadaemon.c:1090
+#: ../src/daemon/goadaemon.c:838 ../src/daemon/goadaemon.c:1098
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Gặp lỗi khi tìm một nhà cung cấp cho: %s"
 
-#: ../src/daemon/goadaemon.c:1018
+#: ../src/daemon/goadaemon.c:1026
 msgid "IsLocked property is set for account"
 msgstr "Đặt thuộc tính IsLocked (bị khóa) cho tài khoản"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1078
+#: ../src/daemon/goadaemon.c:1086
 msgid "ProviderType property is not set for account"
 msgstr "Chưa đặt thuộc tính ProviderType cho tài khoản"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:237 ../src/goabackend/goahttpclient.c:174
-#, c-format
-msgid "Code: %u — Unexpected response from server"
-msgstr "Mã: %u - Gặp trả lời không cần từ máy phục vụ"
-
-#. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:253
+#: ../src/goabackend/goaewsclient.c:250
 #, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "Gặp lỗi khi phân tích XML đáp ứng tự động khám phá"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: ../src/goabackend/goaewsclient.c:264 ../src/goabackend/goaewsclient.c:279
-#: ../src/goabackend/goaewsclient.c:294
+#: ../src/goabackend/goaewsclient.c:261 ../src/goabackend/goaewsclient.c:276
+#: ../src/goabackend/goaewsclient.c:291
 #, c-format
 msgid "Failed to find ‘%s’ element"
 msgstr "Gặp lỗi khi tìm phần tử “%s”"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:315
+#: ../src/goabackend/goaewsclient.c:312
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr ""
@@ -69,10 +63,10 @@ msgstr "Microsoft Exchange"
 
 #. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:311
-#: ../src/goabackend/goaexchangeprovider.c:985
+#: ../src/goabackend/goaexchangeprovider.c:994
 #: ../src/goabackend/goalastfmprovider.c:286
-#: ../src/goabackend/goaowncloudprovider.c:383
-#: ../src/goabackend/goaowncloudprovider.c:1128
+#: ../src/goabackend/goaowncloudprovider.c:391
+#: ../src/goabackend/goaowncloudprovider.c:1145
 #, c-format
 msgid "Did not find password with identity ‘%s’ in credentials"
 msgstr "Không tìm thấy mật khẩu cho định danh “%s” trong giấy ủy nhiệm"
@@ -83,7 +77,7 @@ msgstr "Không tìm thấy mật khẩu cho định danh “%s” trong giấy �
 #.
 #: ../src/goabackend/goaexchangeprovider.c:339
 #: ../src/goabackend/goalastfmprovider.c:302
-#: ../src/goabackend/goaowncloudprovider.c:406
+#: ../src/goabackend/goaowncloudprovider.c:414
 #, c-format
 msgid "Invalid password with username ‘%s’ (%s, %d): "
 msgstr "Mật khẩu không hợp lệ với tài khoản “%s” (%s, %d): "
@@ -97,7 +91,7 @@ msgstr "_Thư điện tử"
 #: ../src/goabackend/goaimapsmtpprovider.c:720
 #: ../src/goabackend/goaimapsmtpprovider.c:740
 #: ../src/goabackend/goalastfmprovider.c:443
-#: ../src/goabackend/goaowncloudprovider.c:634
+#: ../src/goabackend/goaowncloudprovider.c:642
 msgid "_Password"
 msgstr "_Mật khẩu"
 
@@ -108,39 +102,39 @@ msgstr "Tự _chọn"
 #: ../src/goabackend/goaexchangeprovider.c:507
 #: ../src/goabackend/goaimapsmtpprovider.c:719
 #: ../src/goabackend/goaimapsmtpprovider.c:739
-#: ../src/goabackend/goakerberosprovider.c:719
+#: ../src/goabackend/goakerberosprovider.c:736
 #: ../src/goabackend/goalastfmprovider.c:442
-#: ../src/goabackend/goaowncloudprovider.c:633
+#: ../src/goabackend/goaowncloudprovider.c:641
 msgid "User_name"
 msgstr "Tài khoả_n"
 
 #: ../src/goabackend/goaexchangeprovider.c:508
-#: ../src/goabackend/goaowncloudprovider.c:632
+#: ../src/goabackend/goaowncloudprovider.c:640
 msgid "_Server"
 msgstr "_Máy chủ"
 
 #. --
 #: ../src/goabackend/goaexchangeprovider.c:518
 #: ../src/goabackend/goaimapsmtpprovider.c:752
-#: ../src/goabackend/goakerberosprovider.c:724
+#: ../src/goabackend/goakerberosprovider.c:741
 #: ../src/goabackend/goalastfmprovider.c:451
-#: ../src/goabackend/goaowncloudprovider.c:643
+#: ../src/goabackend/goaowncloudprovider.c:651
 #: ../src/goabackend/goatelepathyprovider.c:649
 msgid "_Cancel"
 msgstr "T_hôi"
 
 #: ../src/goabackend/goaexchangeprovider.c:519
-#: ../src/goabackend/goakerberosprovider.c:725
+#: ../src/goabackend/goakerberosprovider.c:742
 #: ../src/goabackend/goalastfmprovider.c:452
-#: ../src/goabackend/goaowncloudprovider.c:644
+#: ../src/goabackend/goaowncloudprovider.c:652
 msgid "C_onnect"
 msgstr "_Kết nối"
 
 #: ../src/goabackend/goaexchangeprovider.c:535
 #: ../src/goabackend/goaimapsmtpprovider.c:769
-#: ../src/goabackend/goakerberosprovider.c:741
+#: ../src/goabackend/goakerberosprovider.c:758
 #: ../src/goabackend/goalastfmprovider.c:468
-#: ../src/goabackend/goaowncloudprovider.c:660
+#: ../src/goabackend/goaowncloudprovider.c:668
 msgid "Connecting…"
 msgstr "Đang kết nối…"
 
@@ -151,14 +145,14 @@ msgstr "Đang kết nối…"
 #: ../src/goabackend/goaimapsmtpprovider.c:1054
 #: ../src/goabackend/goaimapsmtpprovider.c:1318
 #: ../src/goabackend/goaimapsmtpprovider.c:1391
-#: ../src/goabackend/goakerberosprovider.c:1142
-#: ../src/goabackend/goalastfmprovider.c:659
-#: ../src/goabackend/goalastfmprovider.c:825
+#: ../src/goabackend/goakerberosprovider.c:1159
+#: ../src/goabackend/goalastfmprovider.c:663
+#: ../src/goabackend/goalastfmprovider.c:830
 #: ../src/goabackend/goamediaserverprovider.c:475
 #: ../src/goabackend/goaoauth2provider.c:1034
 #: ../src/goabackend/goaoauthprovider.c:863
-#: ../src/goabackend/goaowncloudprovider.c:771
-#: ../src/goabackend/goaowncloudprovider.c:986
+#: ../src/goabackend/goaowncloudprovider.c:779
+#: ../src/goabackend/goaowncloudprovider.c:994
 #: ../src/goabackend/goatelepathyprovider.c:459
 #: ../src/goabackend/goatelepathyprovider.c:508
 #: ../src/goabackend/goatelepathyprovider.c:683
@@ -172,10 +166,10 @@ msgstr "Hộp thoại bị bỏ qua"
 #: ../src/goabackend/goaimapsmtpprovider.c:1089
 #: ../src/goabackend/goaimapsmtpprovider.c:1342
 #: ../src/goabackend/goaimapsmtpprovider.c:1416
-#: ../src/goabackend/goalastfmprovider.c:693
-#: ../src/goabackend/goalastfmprovider.c:844
-#: ../src/goabackend/goaowncloudprovider.c:813
-#: ../src/goabackend/goaowncloudprovider.c:1007
+#: ../src/goabackend/goalastfmprovider.c:697
+#: ../src/goabackend/goalastfmprovider.c:849
+#: ../src/goabackend/goaowncloudprovider.c:821
+#: ../src/goabackend/goaowncloudprovider.c:1015
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "Hộp thoại bị bỏ qua (%s, %d): "
@@ -183,7 +177,7 @@ msgstr "Hộp thoại bị bỏ qua (%s, %d): "
 #: ../src/goabackend/goaexchangeprovider.c:691
 #: ../src/goabackend/goaimapsmtpprovider.c:1009
 #: ../src/goabackend/goaimapsmtpprovider.c:1102
-#: ../src/goabackend/goaowncloudprovider.c:826
+#: ../src/goabackend/goaowncloudprovider.c:834
 msgid "_Ignore"
 msgstr "_Bỏ qua"
 
@@ -193,11 +187,11 @@ msgstr "_Bỏ qua"
 #: ../src/goabackend/goaimapsmtpprovider.c:1107
 #: ../src/goabackend/goaimapsmtpprovider.c:1361
 #: ../src/goabackend/goaimapsmtpprovider.c:1435
-#: ../src/goabackend/goakerberosprovider.c:1252
-#: ../src/goabackend/goalastfmprovider.c:705
-#: ../src/goabackend/goalastfmprovider.c:861
-#: ../src/goabackend/goaowncloudprovider.c:831
-#: ../src/goabackend/goaowncloudprovider.c:1026
+#: ../src/goabackend/goakerberosprovider.c:1269
+#: ../src/goabackend/goalastfmprovider.c:709
+#: ../src/goabackend/goalastfmprovider.c:866
+#: ../src/goabackend/goaowncloudprovider.c:839
+#: ../src/goabackend/goaowncloudprovider.c:1034
 msgid "_Try Again"
 msgstr "_Thử lại"
 
@@ -222,6 +216,7 @@ msgstr ""
 "Cần trạng thái 200 sau khi yêu cầu định danh người dùng, nhưng nhận được "
 "trạng thái %d (%s)"
 
+#. TODO: more specific
 #: ../src/goabackend/goafacebookprovider.c:234
 #: ../src/goabackend/goafacebookprovider.c:246
 #: ../src/goabackend/goafacebookprovider.c:259
@@ -248,7 +243,7 @@ msgstr ""
 #: ../src/goabackend/goalastfmprovider.c:557
 #: ../src/goabackend/goaoauth2provider.c:699
 #: ../src/goabackend/goaoauth2provider.c:729
-#: ../src/goabackend/goaoauth2provider.c:741
+#: ../src/goabackend/goaoauth2provider.c:741 ../src/goabackend/goautils.c:148
 #: ../src/goabackend/goawindowsliveprovider.c:214
 #: ../src/goabackend/goawindowsliveprovider.c:226
 #: ../src/goabackend/goawindowsliveprovider.c:238
@@ -281,7 +276,7 @@ msgstr "Dịch vụ không sẵn sàng"
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:115
 #: ../src/goabackend/goalastfmprovider.c:543
-#: ../src/goabackend/goasmtpauth.c:113
+#: ../src/goabackend/goasmtpauth.c:113 ../src/goabackend/goautils.c:566
 #, c-format
 msgid "Authentication failed"
 msgstr "Xác thực gặp lỗi"
@@ -396,49 +391,54 @@ msgstr "SMTP"
 msgid "Enterprise Login (Kerberos)"
 msgstr "Kiểu doanh nghiệp (Kerberos)"
 
-#: ../src/goabackend/goakerberosprovider.c:309
+#: ../src/goabackend/goakerberosprovider.c:293
+#, c-format
+msgid "Ticketing is disabled for account"
+msgstr "Ghi nhãn bị tắt cho tài khoản này"
+
+#: ../src/goabackend/goakerberosprovider.c:318
 #, c-format
 msgid "Could not find saved credentials for principal ‘%s’ in keyring"
 msgstr ""
 "Không tìm thấy giấy ủy nhiệm được lưu cho người ủy nhiệm “%s” trong chùm "
 "chìa khóa"
 
-#: ../src/goabackend/goakerberosprovider.c:322
+#: ../src/goabackend/goakerberosprovider.c:331
 #, c-format
 msgid "Did not find password for principal ‘%s’ in credentials"
 msgstr "Không tìm thấy mật khẩu cho người ủy nhiệm “%s” trong giấy ủy nhiệm"
 
-#: ../src/goabackend/goakerberosprovider.c:711
+#: ../src/goabackend/goakerberosprovider.c:728
 msgid "_Domain"
 msgstr "Tên _miền"
 
-#: ../src/goabackend/goakerberosprovider.c:712
+#: ../src/goabackend/goakerberosprovider.c:729
 msgid "Enterprise domain or realm name"
 msgstr "Tên miền hay tên địa hạt"
 
-#: ../src/goabackend/goakerberosprovider.c:948
-#: ../src/goaidentity/goaidentityservice.c:1119
+#: ../src/goabackend/goakerberosprovider.c:965
+#: ../src/goaidentity/goaidentityservice.c:1125
 msgid "Log In to Realm"
 msgstr "Đăng nhập vào vùng"
 
-#: ../src/goabackend/goakerberosprovider.c:949
+#: ../src/goabackend/goakerberosprovider.c:966
 msgid "Please enter your password below."
 msgstr "Vui lòng nhập mật khẩu bên dưới."
 
-#: ../src/goabackend/goakerberosprovider.c:950
+#: ../src/goabackend/goakerberosprovider.c:967
 msgid "Remember this password"
 msgstr "Nhớ mật khẩu này"
 
-#: ../src/goabackend/goakerberosprovider.c:1092
+#: ../src/goabackend/goakerberosprovider.c:1109
 #, c-format
 msgid "The domain is not valid"
 msgstr "Miền không hợp lệ"
 
-#: ../src/goabackend/goakerberosprovider.c:1247
+#: ../src/goabackend/goakerberosprovider.c:1264
 msgid "Error connecting to enterprise identity server"
 msgstr "Lỗi kết nối đến máy chủ định danh doanh nghiệp"
 
-#: ../src/goabackend/goakerberosprovider.c:1512
+#: ../src/goabackend/goakerberosprovider.c:1530
 #, c-format
 msgid "Identity service returned invalid key"
 msgstr "Dịch vụ định danh trả về khóa không hợp lệ"
@@ -447,8 +447,8 @@ msgstr "Dịch vụ định danh trả về khóa không hợp lệ"
 msgid "Last.fm"
 msgstr "Last.fm"
 
-#: ../src/goabackend/goalastfmprovider.c:707
-#: ../src/goabackend/goalastfmprovider.c:855
+#: ../src/goabackend/goalastfmprovider.c:711
+#: ../src/goabackend/goalastfmprovider.c:860
 msgid "Error connecting to Last.fm"
 msgstr "Gặp lỗi khi kết nối đến Last.fm"
 
@@ -549,8 +549,8 @@ msgstr "Giấy ủy nhiệm không chứa access_token hoặc access_token_secre
 msgid "ownCloud"
 msgstr "ownCloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:836
-#: ../src/goabackend/goaowncloudprovider.c:1019
+#: ../src/goabackend/goaowncloudprovider.c:844
+#: ../src/goabackend/goaowncloudprovider.c:1027
 msgid "Error connecting to ownCloud server"
 msgstr "Lỗi kết nối máy chủ ownCloud"
 
@@ -578,7 +578,7 @@ msgstr "_Danh bạ"
 
 #: ../src/goabackend/goaprovider.c:494
 msgid "C_hat"
-msgstr "_Tán gẫu"
+msgstr "Tán _gẫu"
 
 #: ../src/goabackend/goaprovider.c:499
 msgid "_Documents"
@@ -590,7 +590,7 @@ msgstr "_Nhạc"
 
 #: ../src/goabackend/goaprovider.c:509
 msgid "_Photos"
-msgstr "Ả_nh"
+msgstr "Ản_h"
 
 #: ../src/goabackend/goaprovider.c:514
 msgid "_Files"
@@ -598,7 +598,7 @@ msgstr "Tậ_p tin"
 
 #: ../src/goabackend/goaprovider.c:519
 msgid "Network _Resources"
-msgstr "_Tài nguyên mạng"
+msgstr "Tài ngu_yên mạng"
 
 #: ../src/goabackend/goaprovider.c:524
 msgid "_Read Later"
@@ -606,7 +606,7 @@ msgstr "Đọ_c sau"
 
 #: ../src/goabackend/goaprovider.c:529
 msgid "Prin_ters"
-msgstr "Má_y in"
+msgstr "Máy _in"
 
 #: ../src/goabackend/goaprovider.c:534
 msgid "_Maps"
@@ -630,19 +630,19 @@ msgid "TLS not available"
 msgstr "TLS không sẵn sàng"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauth.c:241
+#: ../src/goabackend/goasmtpauth.c:242
 #, c-format
 msgid "org.gnome.OnlineAccounts.Mail is not available"
 msgstr "org.gnome.OnlineAccounts.Mail không sẵn sàng"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauth.c:251
+#: ../src/goabackend/goasmtpauth.c:252
 #, c-format
 msgid "Failed to parse email address"
 msgstr "Gặp lỗi khi phân tích địa chỉ thư điện tử"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauth.c:263
+#: ../src/goabackend/goasmtpauth.c:261
 #, c-format
 msgid "Cannot do SMTP authentication without a domain"
 msgstr "Không thể thực hiện xác thực SMTP mà không có tên miền"
@@ -695,17 +695,17 @@ msgstr "Đồn_g ý"
 msgid "Cannot save the connection parameters"
 msgstr "Không thể lưu lại các tham số kết nối"
 
-#: ../src/goabackend/goatelepathyprovider.c:866
+#: ../src/goabackend/goatelepathyprovider.c:867
 msgid "Cannot save your personal information on the server"
 msgstr "Không thể lưu thông tin cá nhân của bạn trên máy phục vụ"
 
 #. Connection Settings button
-#: ../src/goabackend/goatelepathyprovider.c:891
+#: ../src/goabackend/goatelepathyprovider.c:893
 msgid "_Connection Settings"
 msgstr "Cài đặt _kết nối"
 
 #. Edit Personal Information button
-#: ../src/goabackend/goatelepathyprovider.c:895
+#: ../src/goabackend/goatelepathyprovider.c:897
 msgid "_Personal Details"
 msgstr "_Chi tiết cá nhân"
 
@@ -715,68 +715,73 @@ msgid "A %s account already exists for %s"
 msgstr "Đã có tài khoản %s cho %s"
 
 #. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:137
+#: ../src/goabackend/goautils.c:165
 #, c-format
 msgid "%s account"
 msgstr "Tài khoản %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:181
+#: ../src/goabackend/goautils.c:209
 msgid "Failed to delete credentials from the keyring"
 msgstr "Gặp lỗi khi xóa giấy ủy nhiệm khỏi chùm chìa khóa (keyring)"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:233
+#: ../src/goabackend/goautils.c:261
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Gặp lỗi khi lấy giấy ủy nhiệm từ chùm chìa khóa (keyring)"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:243
+#: ../src/goabackend/goautils.c:271
 msgid "No credentials found in the keyring"
 msgstr "Không có giấy ủy nhiệm nào trong chùm chìa khóa"
 
-#: ../src/goabackend/goautils.c:256
+#: ../src/goabackend/goautils.c:284
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Gặp lỗi khi phân tích kết quả lấy ra từ chùm chìa khóa khóa: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:299
+#: ../src/goabackend/goautils.c:327
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Giấy ủy nhiệm GOA %s cho định danh %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:316
+#: ../src/goabackend/goautils.c:344
 msgid "Failed to store credentials in the keyring"
 msgstr "Gặp lỗi khi lưu giấy ủy nhiệm vào chùm chìa khóa"
 
-#: ../src/goabackend/goautils.c:537
+#: ../src/goabackend/goautils.c:571
+#, c-format
+msgid "Code: %u — Unexpected response from server"
+msgstr "Mã: %u - Gặp trả lời không cần từ máy phục vụ"
+
+#: ../src/goabackend/goautils.c:587
 msgid "The signing certificate authority is not known."
 msgstr "Không hiểu chữ ký của nơi có thẩm quyền ký chứng nhận."
 
-#: ../src/goabackend/goautils.c:541
+#: ../src/goabackend/goautils.c:591
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr "Chứng nhận không khớp định danh của trang lấy mà nó lấy về từ đó."
 
-#: ../src/goabackend/goautils.c:546
+#: ../src/goabackend/goautils.c:596
 msgid "The certificate’s activation time is still in the future."
 msgstr "Thời gian chứng nhận có hiệu lực lại nằm trong thời tương lai."
 
-#: ../src/goabackend/goautils.c:550
+#: ../src/goabackend/goautils.c:600
 msgid "The certificate has expired."
 msgstr "Chứng nhận đã hết hạn."
 
-#: ../src/goabackend/goautils.c:554
+#: ../src/goabackend/goautils.c:604
 msgid "The certificate has been revoked."
 msgstr "Chứng nhận đã bị thu hồi."
 
-#: ../src/goabackend/goautils.c:558
+#: ../src/goabackend/goautils.c:608
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Thuật toán của chứng nhận chưa đủ mức an toàn."
 
-#: ../src/goabackend/goautils.c:562
+#: ../src/goabackend/goautils.c:612
 msgid "Invalid certificate."
 msgstr "Chứng nhận không hợp lệ."
 
@@ -790,15 +795,15 @@ msgstr "Đang tải “%s”…"
 msgid "Microsoft Account"
 msgstr "Tài khoản Microsoft"
 
-#: ../src/goaidentity/goaidentityservice.c:376
+#: ../src/goaidentity/goaidentityservice.c:378
 msgid "initial secret passed before secret key exchange"
 msgstr "khóa bí mật ban đầu được chuyển đi trước khi trao đổi khóa bí mật"
 
-#: ../src/goaidentity/goaidentityservice.c:570
+#: ../src/goaidentity/goaidentityservice.c:574
 msgid "Initial secret key is invalid"
 msgstr "Khóa bí mật dùng để khởi tạo không hợp lệ"
 
-#: ../src/goaidentity/goaidentityservice.c:1124
+#: ../src/goaidentity/goaidentityservice.c:1130
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "Vùng mạng %s cần thêm thông tin để đăng nhập."
@@ -865,6 +870,15 @@ msgstr "Không thể tìm thấy định danh"
 #: ../src/goaidentity/goakerberosidentitymanager.c:840
 msgid "Could not create credential cache for identity"
 msgstr "Không thể tạo bộ nhớ tạm giấy chứng nhận dành cho định danh"
+
+#~ msgid "Cannot resolve hostname"
+#~ msgstr "Không thể phân giải tên máy"
+
+#~ msgid "Cannot resolve proxy hostname"
+#~ msgstr "Không thể phân giải tên máy ủy nhiệm"
+
+#~ msgid "Cannot find WebDAV endpoint"
+#~ msgstr "Không thể tìm thấy điểm cuối WebDAV"
 
 #~ msgid "Windows Live"
 #~ msgstr "Windows Live"
