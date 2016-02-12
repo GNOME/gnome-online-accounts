@@ -324,7 +324,6 @@ build_object (GoaProvider         *provider,
   GoaAccount *account;
   GoaMail *mail;
   gchar *uri_caldav;
-  GoaContacts *contacts;
   GoaChat *chat;
   GoaDocuments *documents;
   GoaPhotos *photos;
@@ -343,7 +342,6 @@ build_object (GoaProvider         *provider,
 
   account = NULL;
   mail = NULL;
-  contacts = NULL;
   chat = NULL;
   documents = NULL;
   photos = NULL;
@@ -400,24 +398,11 @@ build_object (GoaProvider         *provider,
   g_free (uri_caldav);
 
   /* Contacts */
-  contacts = goa_object_get_contacts (GOA_OBJECT (object));
   contacts_enabled = g_key_file_get_boolean (key_file, group, "ContactsEnabled", NULL);
-  if (contacts_enabled)
-    {
-      if (contacts == NULL)
-        {
-          contacts = goa_contacts_skeleton_new ();
-          g_object_set (G_OBJECT (contacts),
-                        "uri", "https://www.googleapis.com/.well-known/carddav",
-                        NULL);
-          goa_object_skeleton_set_contacts (object, contacts);
-        }
-    }
-  else
-    {
-      if (contacts != NULL)
-        goa_object_skeleton_set_contacts (object, NULL);
-    }
+  goa_object_skeleton_attach_contacts (object,
+                                       "https://www.googleapis.com/.well-known/carddav",
+                                       contacts_enabled,
+                                       FALSE);
 
 #ifdef GOA_TELEPATHY_ENABLED
   /* Chat */
@@ -552,7 +537,6 @@ build_object (GoaProvider         *provider,
   g_clear_object (&photos);
   g_clear_object (&documents);
   g_clear_object (&chat);
-  g_clear_object (&contacts);
   g_clear_object (&mail);
   g_clear_object (&account);
   return ret;

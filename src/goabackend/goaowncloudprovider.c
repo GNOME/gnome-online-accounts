@@ -146,8 +146,8 @@ build_object (GoaProvider         *provider,
 {
   GoaAccount *account;
   gchar *uri_caldav;
+  gchar *uri_carddav;
   gchar *uri_webdav;
-  GoaContacts *contacts;
   GoaDocuments *documents;
   GoaPasswordBased *password_based;
   SoupURI *uri;
@@ -161,7 +161,6 @@ build_object (GoaProvider         *provider,
   gchar *uri_string;
 
   account = NULL;
-  contacts = NULL;
   documents = NULL;
   password_based = NULL;
   uri = NULL;
@@ -209,29 +208,10 @@ build_object (GoaProvider         *provider,
   g_free (uri_caldav);
 
   /* Contacts */
-  contacts = goa_object_get_contacts (GOA_OBJECT (object));
   contacts_enabled = g_key_file_get_boolean (key_file, group, "ContactsEnabled", NULL);
-  if (contacts_enabled)
-    {
-      if (contacts == NULL)
-        {
-          gchar *uri_carddav;
-
-          uri_carddav = uri_to_string_with_path (uri, CARDDAV_ENDPOINT);
-          contacts = goa_contacts_skeleton_new ();
-          g_object_set (G_OBJECT (contacts),
-                        "accept-ssl-errors", accept_ssl_errors,
-                        "uri", uri_carddav,
-                        NULL);
-          goa_object_skeleton_set_contacts (object, contacts);
-          g_free (uri_carddav);
-        }
-    }
-  else
-    {
-      if (contacts != NULL)
-        goa_object_skeleton_set_contacts (object, NULL);
-    }
+  uri_carddav = uri_to_string_with_path (uri, CARDDAV_ENDPOINT);
+  goa_object_skeleton_attach_contacts (object, uri_carddav, contacts_enabled, accept_ssl_errors);
+  g_free (uri_carddav);
 
   /* Documents */
   documents = goa_object_get_documents (GOA_OBJECT (object));
@@ -285,7 +265,6 @@ build_object (GoaProvider         *provider,
   ret = TRUE;
 
  out:
-  g_clear_object (&contacts);
   g_clear_object (&documents);
   g_clear_object (&password_based);
   g_clear_pointer (&uri, (GDestroyNotify *) soup_uri_free);

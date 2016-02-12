@@ -106,7 +106,6 @@ build_object (GoaProvider         *provider,
               GError             **error)
 {
   GoaAccount *account;
-  GoaContacts *contacts;
   GoaExchange *exchange;
   GoaMail *mail;
   GoaPasswordBased *password_based;
@@ -116,7 +115,6 @@ build_object (GoaProvider         *provider,
   gboolean ret;
 
   account = NULL;
-  contacts = NULL;
   exchange = NULL;
   mail = NULL;
   password_based = NULL;
@@ -174,21 +172,8 @@ build_object (GoaProvider         *provider,
   goa_object_skeleton_attach_calendar (object, NULL, calendar_enabled, FALSE);
 
   /* Contacts */
-  contacts = goa_object_get_contacts (GOA_OBJECT (object));
   contacts_enabled = g_key_file_get_boolean (key_file, group, "ContactsEnabled", NULL);
-  if (contacts_enabled)
-    {
-      if (contacts == NULL)
-        {
-          contacts = goa_contacts_skeleton_new ();
-          goa_object_skeleton_set_contacts (object, contacts);
-        }
-    }
-  else
-    {
-      if (contacts != NULL)
-        goa_object_skeleton_set_contacts (object, NULL);
-    }
+  goa_object_skeleton_attach_contacts (object, NULL, contacts_enabled, FALSE);
 
   /* Exchange */
   exchange = goa_object_get_exchange (GOA_OBJECT (object));
@@ -232,7 +217,6 @@ build_object (GoaProvider         *provider,
 
  out:
   g_clear_object (&exchange);
-  g_clear_object (&contacts);
   g_clear_object (&mail);
   g_clear_object (&password_based);
   return ret;
