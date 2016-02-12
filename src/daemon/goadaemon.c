@@ -17,6 +17,10 @@
  */
 
 #include "config.h"
+
+#include <errno.h>
+#include <string.h>
+
 #include <glib/gi18n.h>
 #include <gio/gdesktopappinfo.h>
 #include <rest/rest-proxy.h>
@@ -260,7 +264,7 @@ goa_daemon_init (GoaDaemon *self)
   path = g_strdup_printf ("%s/goa-1.0", g_get_user_config_dir ());
   if (g_mkdir_with_parents (path, 0755) != 0)
     {
-      g_warning ("Error creating directory %s: %m", path);
+      g_warning ("Error creating directory %s: %s", path, strerror (errno));
     }
   g_free (path);
 
