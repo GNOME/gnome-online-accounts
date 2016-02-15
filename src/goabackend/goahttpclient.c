@@ -218,19 +218,39 @@ goa_http_client_check (GoaHttpClient       *self,
                        gpointer             user_data)
 {
   CheckData *data;
-  CheckAuthData *auth;
   SoupLogger *logger;
 
   g_return_if_fail (GOA_IS_HTTP_CLIENT (self));
   g_return_if_fail (uri != NULL && uri[0] != '\0');
-  g_return_if_fail (username != NULL && username[0] != '\0');
-  g_return_if_fail (password != NULL && password[0] != '\0');
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   data = g_slice_new0 (CheckData);
   data->res = g_simple_async_result_new (G_OBJECT (self), callback, user_data, goa_http_client_check);
   data->session = soup_session_new_with_options (SOUP_SESSION_SSL_STRICT, FALSE,
                                                  NULL);
+
+  if (password == NULL || password[0] == '\0')
+    {
+      if (soup_auth_negotiate_supported)
+        {
+          soup_session_add_feature_by_type (data->session, SOUP_TYPE_AUTH_NEGOTIATE);
+          soup_session_add_feature_by_type (data->session, SOUP_TYPE_COOKIE_JAR);
+        }
+    }
+  else
+    {
+      CheckAuthData *auth;
+
+      auth = g_slice_new0 (CheckAuthData);
+      auth->username = g_strdup (username);
+      auth->password = g_strdup (password);
+      g_signal_connect_data (data->session,
+                             "authenticate",
+                             G_CALLBACK (http_client_authenticate),
+                             auth,
+                             http_client_check_auth_data_free,
+                             0);
+    }
 
   logger = soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
   soup_logger_set_printer (logger, http_client_log_printer, NULL, NULL);
@@ -249,16 +269,6 @@ goa_http_client_check (GoaHttpClient       *self,
                                                     NULL);
       g_simple_async_result_set_check_cancellable (data->res, data->cancellable);
     }
-
-  auth = g_slice_new0 (CheckAuthData);
-  auth->username = g_strdup (username);
-  auth->password = g_strdup (password);
-  g_signal_connect_data (data->session,
-                         "authenticate",
-                         G_CALLBACK (http_client_authenticate),
-                         auth,
-                         http_client_check_auth_data_free,
-                         0);
 
   g_signal_connect (data->session, "request-started", G_CALLBACK (http_client_request_started), data);
   soup_session_queue_message (data->session, data->msg, http_client_check_response_cb, data);
