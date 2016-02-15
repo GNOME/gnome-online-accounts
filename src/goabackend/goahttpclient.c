@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012, 2013, 2014, 2015 Red Hat, Inc.
+ * Copyright (C) 2012, 2013, 2014, 2015, 2016 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -236,9 +236,7 @@ goa_http_client_check (GoaHttpClient       *self,
   g_object_unref (logger);
 
   data->accept_ssl_errors = accept_ssl_errors;
-
   data->msg = soup_message_new (SOUP_METHOD_GET, uri);
-  soup_message_headers_append (data->msg->request_headers, "Connection", "close");
 
   if (cancellable != NULL)
     {
