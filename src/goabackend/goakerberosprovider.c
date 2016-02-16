@@ -267,7 +267,7 @@ get_ticket_sync (GoaKerberosProvider *self,
                  GCancellable        *cancellable,
                  GError             **error)
 {
-  GVariant            *credentials;
+  GVariant            *credentials = NULL;
   GError              *lookup_error;
   GError              *sign_in_error;
   GoaAccount          *account;
@@ -281,7 +281,7 @@ get_ticket_sync (GoaKerberosProvider *self,
 
   ret = FALSE;
 
-  account = goa_object_peek_account (object);
+  account = goa_object_get_account (object);
   identifier = goa_account_get_identity (account);
 
   ticketing = goa_object_get_ticketing (object);
@@ -291,7 +291,7 @@ get_ticket_sync (GoaKerberosProvider *self,
                    GOA_ERROR,
                    GOA_ERROR_NOT_SUPPORTED,
                    _("Ticketing is disabled for account"));
-      return FALSE;
+      goto out;
     }
 
   details = goa_ticketing_get_details (ticketing);
@@ -350,6 +350,7 @@ get_ticket_sync (GoaKerberosProvider *self,
 
   ret = TRUE;
 out:
+  g_clear_object (&account);
   g_clear_object (&ticketing);
   g_free (object_path);
   g_clear_pointer (&credentials, (GDestroyNotify) g_variant_unref);
@@ -1355,14 +1356,14 @@ ensure_credentials_sync (GoaProvider    *provider,
                          GError        **error)
 {
   GoaIdentityServiceIdentity *identity = NULL;
-  GoaAccount                 *account;
+  GoaAccount                 *account = NULL;
   const char                 *identifier;
   gint64                      timestamp;
   GDateTime                  *now, *expiration_time;
   GTimeSpan                   time_span;
   gboolean                    credentials_ensured = FALSE;
 
-  account = goa_object_peek_account (object);
+  account = goa_object_get_account (object);
   identifier = goa_account_get_identity (account);
 
   ensure_identity_manager ();
@@ -1431,6 +1432,7 @@ ensure_credentials_sync (GoaProvider    *provider,
   g_date_time_unref (expiration_time);
 
 out:
+  g_clear_object (&account);
   g_clear_object (&identity);
   g_mutex_unlock (&identity_manager_mutex);
   return credentials_ensured;
