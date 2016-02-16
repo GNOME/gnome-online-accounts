@@ -1357,11 +1357,22 @@ ensure_credentials_sync (GoaProvider    *provider,
 {
   GoaIdentityServiceIdentity *identity = NULL;
   GoaAccount                 *account = NULL;
+  GoaTicketing               *ticketing = NULL;
   const char                 *identifier;
   gint64                      timestamp;
   GDateTime                  *now, *expiration_time;
   GTimeSpan                   time_span;
   gboolean                    credentials_ensured = FALSE;
+
+  ticketing = goa_object_get_ticketing (object);
+  if (ticketing == NULL)
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_NOT_SUPPORTED,
+                   _("Ticketing is disabled for account"));
+      return FALSE;
+    }
 
   account = goa_object_get_account (object);
   identifier = goa_account_get_identity (account);
@@ -1436,6 +1447,7 @@ ensure_credentials_sync (GoaProvider    *provider,
 out:
   g_clear_object (&account);
   g_clear_object (&identity);
+  g_clear_object (&ticketing);
   g_mutex_unlock (&identity_manager_mutex);
   return credentials_ensured;
 }
