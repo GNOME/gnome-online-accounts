@@ -614,6 +614,25 @@ create_encryption_ui (GtkWidget  *grid,
 }
 
 static void
+show_progress_ui (GtkContainer *container, gboolean progress)
+{
+  GList *children;
+  GList *l;
+
+  children = gtk_container_get_children (container);
+  for (l = children; l != NULL; l = l->next)
+    {
+      GtkWidget *widget = GTK_WIDGET (l->data);
+      gdouble opacity;
+
+      opacity = progress ? 1.0 : 0.0;
+      gtk_widget_set_opacity (widget, opacity);
+    }
+
+  g_list_free (children);
+}
+
+static void
 create_account_details_ui (GoaProvider    *provider,
                            GtkDialog      *dialog,
                            GtkBox         *vbox,
@@ -722,19 +741,18 @@ create_account_details_ui (GoaProvider    *provider,
   gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, FALSE);
 
   data->progress_grid = gtk_grid_new ();
-  gtk_widget_set_no_show_all (data->progress_grid, TRUE);
   gtk_orientable_set_orientation (GTK_ORIENTABLE (data->progress_grid), GTK_ORIENTATION_HORIZONTAL);
   gtk_grid_set_column_spacing (GTK_GRID (data->progress_grid), 3);
   gtk_container_add (GTK_CONTAINER (grid0), data->progress_grid);
 
   spinner = gtk_spinner_new ();
+  gtk_widget_set_opacity (spinner, 0.0);
   gtk_widget_set_size_request (spinner, 20, 20);
-  gtk_widget_show (spinner);
   gtk_spinner_start (GTK_SPINNER (spinner));
   gtk_container_add (GTK_CONTAINER (data->progress_grid), spinner);
 
   label = gtk_label_new (_("Connecting…"));
-  gtk_widget_show (label);
+  gtk_widget_set_opacity (label, 0.0);
   gtk_container_add (GTK_CONTAINER (data->progress_grid), label);
 
   if (new_account)
@@ -826,7 +844,7 @@ imap_check_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
   goa_mail_client_check_finish (client, res, &data->error);
   g_main_loop_quit (data->loop);
   gtk_widget_set_sensitive (data->forward_button, TRUE);
-  gtk_widget_hide (data->progress_grid);
+  show_progress_ui (GTK_CONTAINER (data->progress_grid), FALSE);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -954,7 +972,7 @@ add_account (GoaProvider    *provider,
                          &data);
 
   gtk_widget_set_sensitive (data.forward_button, FALSE);
-  gtk_widget_show (data.progress_grid);
+  show_progress_ui (GTK_CONTAINER (data.progress_grid), TRUE);
   g_main_loop_run (data.loop);
 
   if (g_cancellable_is_cancelled (data.cancellable))
@@ -1043,7 +1061,7 @@ add_account (GoaProvider    *provider,
                          &data);
 
   gtk_widget_set_sensitive (data.forward_button, FALSE);
-  gtk_widget_show (data.progress_grid);
+  show_progress_ui (GTK_CONTAINER (data.progress_grid), TRUE);
   g_main_loop_run (data.loop);
 
   smtp_use_auth = goa_mail_auth_is_needed (smtp_auth);
@@ -1299,7 +1317,7 @@ refresh_account (GoaProvider    *provider,
                          &data);
 
   gtk_widget_set_sensitive (data.forward_button, FALSE);
-  gtk_widget_show (data.progress_grid);
+  show_progress_ui (GTK_CONTAINER (data.progress_grid), TRUE);
   g_main_loop_run (data.loop);
 
   if (g_cancellable_is_cancelled (data.cancellable))
@@ -1373,7 +1391,7 @@ refresh_account (GoaProvider    *provider,
                          &data);
 
   gtk_widget_set_sensitive (data.forward_button, FALSE);
-  gtk_widget_show (data.progress_grid);
+  show_progress_ui (GTK_CONTAINER (data.progress_grid), TRUE);
   g_main_loop_run (data.loop);
 
   if (g_cancellable_is_cancelled (data.cancellable))
