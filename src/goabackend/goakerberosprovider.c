@@ -1425,7 +1425,9 @@ ensure_credentials_sync (GoaProvider    *provider,
   if (time_span < 0 || time_span > G_MAXINT)
     time_span = 0;
 
-  *out_expires_in = (int) time_span;
+  if (out_expires_in != NULL)
+    *out_expires_in = (int) time_span;
+
   credentials_ensured = TRUE;
 
   g_date_time_unref (now);
