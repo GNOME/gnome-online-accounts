@@ -836,7 +836,7 @@ dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data)
 }
 
 static void
-imap_check_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
+mail_check_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
 {
   GoaMailClient *client = GOA_MAIL_CLIENT (source_object);
   AddAccountData *data = user_data;
@@ -968,7 +968,7 @@ add_account (GoaProvider    *provider,
                          (imap_tls_type == GOA_TLS_TYPE_SSL) ? 993 : 143,
                          imap_auth,
                          data.cancellable,
-                         imap_check_cb,
+                         mail_check_cb,
                          &data);
 
   gtk_widget_set_sensitive (data.forward_button, FALSE);
@@ -1057,7 +1057,7 @@ add_account (GoaProvider    *provider,
                          (smtp_tls_type == GOA_TLS_TYPE_SSL) ? 465 : 587,
                          smtp_auth,
                          data.cancellable,
-                         imap_check_cb,
+                         mail_check_cb,
                          &data);
 
   gtk_widget_set_sensitive (data.forward_button, FALSE);
@@ -1313,7 +1313,7 @@ refresh_account (GoaProvider    *provider,
                          (imap_tls_type == GOA_TLS_TYPE_SSL) ? 993 : 143,
                          imap_auth,
                          data.cancellable,
-                         imap_check_cb,
+                         mail_check_cb,
                          &data);
 
   gtk_widget_set_sensitive (data.forward_button, FALSE);
@@ -1387,7 +1387,7 @@ refresh_account (GoaProvider    *provider,
                          (smtp_tls_type == GOA_TLS_TYPE_SSL) ? 465 : 587,
                          smtp_auth,
                          data.cancellable,
-                         imap_check_cb,
+                         mail_check_cb,
                          &data);
 
   gtk_widget_set_sensitive (data.forward_button, FALSE);
