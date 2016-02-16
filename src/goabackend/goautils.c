@@ -646,7 +646,7 @@ goa_utils_get_credentials (GoaProvider    *provider,
   GVariant *credentials = NULL;
   GoaAccount *account = NULL;
   gboolean ret = FALSE;
-  gchar *username = NULL;
+  const gchar *username;
   gchar *password = NULL;
 
   credentials = goa_utils_lookup_credentials_sync (provider,
@@ -657,7 +657,7 @@ goa_utils_get_credentials (GoaProvider    *provider,
     goto out;
 
   account = goa_object_get_account (object);
-  username = goa_account_dup_identity (account);
+  username = goa_account_get_identity (account);
 
   if (!g_variant_lookup (credentials, id, "s", &password))
     {
@@ -668,10 +668,7 @@ goa_utils_get_credentials (GoaProvider    *provider,
     }
 
   if (out_username)
-    {
-      *out_username = username;
-      username = NULL;
-    }
+    *out_username = g_strdup (username);
 
   if (out_password)
     {
@@ -684,7 +681,6 @@ goa_utils_get_credentials (GoaProvider    *provider,
 out:
   g_clear_object (&account);
   g_clear_pointer (&credentials, (GDestroyNotify) g_variant_unref);
-  g_free (username);
   g_free (password);
   return ret;
 }
