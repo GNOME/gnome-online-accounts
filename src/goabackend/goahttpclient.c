@@ -59,6 +59,22 @@ goa_http_client_new (void)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static void
+http_client_log_printer (SoupLogger         *logger,
+                         SoupLoggerLogLevel  level,
+                         gchar               direction,
+                         const gchar        *data,
+                         gpointer            user_data)
+{
+  gchar *message;
+
+  message = g_strdup_printf ("%c %s", direction, data);
+  g_log_default_handler ("goa", G_LOG_LEVEL_DEBUG, message, NULL);
+  g_free (message);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 typedef struct
 {
   GCancellable *cancellable;
@@ -189,20 +205,6 @@ http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer 
   context = g_main_context_get_thread_default ();
   g_source_attach (source, context);
   g_source_unref (source);
-}
-
-static void
-http_client_log_printer (SoupLogger         *logger,
-                         SoupLoggerLogLevel  level,
-                         gchar               direction,
-                         const gchar        *data,
-                         gpointer            user_data)
-{
-  gchar *message;
-
-  message = g_strdup_printf ("%c %s", direction, data);
-  g_log_default_handler ("goa", G_LOG_LEVEL_DEBUG, message, NULL);
-  g_free (message);
 }
 
 void
