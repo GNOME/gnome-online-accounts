@@ -366,7 +366,7 @@ add_entry (GtkWidget     *grid,
 
 typedef struct
 {
-  GCancellable *cancellable;
+  GCancellable *check_cancellable;
 
   GtkDialog *dialog;
   GMainLoop *loop;
@@ -638,7 +638,7 @@ dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data)
   AddAccountData *data = user_data;
 
   if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_DELETE_EVENT)
-    g_cancellable_cancel (data->cancellable);
+    g_cancellable_cancel (data->check_cancellable);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -675,7 +675,7 @@ add_account (GoaProvider    *provider,
   ret = NULL;
 
   memset (&data, 0, sizeof (AddAccountData));
-  data.cancellable = g_cancellable_new ();
+  data.check_cancellable = g_cancellable_new ();
   data.loop = g_main_loop_new (NULL, FALSE);
   data.dialog = dialog;
   data.error = NULL;
@@ -717,13 +717,13 @@ add_account (GoaProvider    *provider,
     goto out;
 
   uri_webdav = g_strconcat (uri, WEBDAV_ENDPOINT, NULL);
-  g_cancellable_reset (data.cancellable);
+  g_cancellable_reset (data.check_cancellable);
   goa_http_client_check (http_client,
                          uri_webdav,
                          username,
                          password,
                          accept_ssl_errors,
-                         data.cancellable,
+                         data.check_cancellable,
                          check_cb,
                          &data);
   g_free (uri_webdav);
@@ -732,7 +732,7 @@ add_account (GoaProvider    *provider,
   show_progress_ui (GTK_CONTAINER (data.progress_grid), TRUE);
   g_main_loop_run (data.loop);
 
-  if (g_cancellable_is_cancelled (data.cancellable))
+  if (g_cancellable_is_cancelled (data.check_cancellable))
     {
       g_prefix_error (&data.error,
                       _("Dialog was dismissed (%s, %d): "),
@@ -822,7 +822,7 @@ add_account (GoaProvider    *provider,
   g_free (uri);
   g_free (data.account_object_path);
   g_clear_pointer (&data.loop, (GDestroyNotify) g_main_loop_unref);
-  g_clear_object (&data.cancellable);
+  g_clear_object (&data.check_cancellable);
   g_clear_object (&http_client);
   return ret;
 }
@@ -877,7 +877,7 @@ refresh_account (GoaProvider    *provider,
   gtk_box_set_spacing (GTK_BOX (vbox), 12);
 
   memset (&data, 0, sizeof (AddAccountData));
-  data.cancellable = g_cancellable_new ();
+  data.check_cancellable = g_cancellable_new ();
   data.loop = g_main_loop_new (NULL, FALSE);
   data.dialog = GTK_DIALOG (dialog);
   data.error = NULL;
@@ -912,20 +912,20 @@ refresh_account (GoaProvider    *provider,
     }
 
   password = gtk_entry_get_text (GTK_ENTRY (data.password));
-  g_cancellable_reset (data.cancellable);
+  g_cancellable_reset (data.check_cancellable);
   goa_http_client_check (http_client,
                          uri_webdav,
                          username,
                          password,
                          accept_ssl_errors,
-                         data.cancellable,
+                         data.check_cancellable,
                          check_cb,
                          &data);
   gtk_widget_set_sensitive (data.connect_button, FALSE);
   show_progress_ui (GTK_CONTAINER (data.progress_grid), TRUE);
   g_main_loop_run (data.loop);
 
-  if (g_cancellable_is_cancelled (data.cancellable))
+  if (g_cancellable_is_cancelled (data.check_cancellable))
     {
       g_prefix_error (&data.error,
                       _("Dialog was dismissed (%s, %d): "),
@@ -978,7 +978,7 @@ refresh_account (GoaProvider    *provider,
   g_free (uri);
   g_free (uri_webdav);
   g_clear_pointer (&data.loop, (GDestroyNotify) g_main_loop_unref);
-  g_clear_object (&data.cancellable);
+  g_clear_object (&data.check_cancellable);
   g_clear_object (&http_client);
   return ret;
 }
