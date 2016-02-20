@@ -18,6 +18,7 @@
 
 #include "config.h"
 
+#include <glib/gi18n-lib.h>
 #include <libsoup/soup.h>
 
 #include "goahttpclient.h"
@@ -341,4 +342,153 @@ goa_http_client_check_sync (GoaHttpClient       *self,
   g_main_context_unref (context);
 
   return data.op_res;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct
+{
+  GCancellable *cancellable;
+  GSimpleAsyncResult *res;
+  SoupMessage *msg;
+  SoupSession *session;
+  gulong cancellable_id;
+} DetectData;
+
+static gboolean
+http_client_detect_data_free (gpointer user_data)
+{
+  DetectData *data = user_data;
+
+  g_simple_async_result_complete_in_idle (data->res);
+
+  g_cancellable_disconnect (data->cancellable, data->cancellable_id);
+  g_clear_object (&data->cancellable);
+
+  /* soup_session_queue_message stole the references to data->msg */
+  g_object_unref (data->res);
+  g_object_unref (data->session);
+  g_slice_free (DetectData, data);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+http_client_detect_cancelled_cb (GCancellable *cancellable, gpointer user_data)
+{
+  DetectData *data = user_data;
+  soup_session_abort (data->session);
+}
+
+static void
+http_client_detect_response_cb (SoupSession *session, SoupMessage *msg, gpointer user_data)
+{
+  GError *error = NULL;
+  DetectData *data = user_data;
+  GMainContext *context;
+  GSource *source;
+
+  /* status == SOUP_STATUS_CANCELLED, if we are being aborted by the
+   * GCancellable.
+   */
+  if (msg->status_code == SOUP_STATUS_CANCELLED)
+    goto out;
+  else if (msg->status_code == SOUP_STATUS_SSL_FAILED)
+    {
+      g_set_error_literal (&error, GOA_ERROR, GOA_ERROR_SSL, _("Invalid certificate."));
+      goto out;
+    }
+  else if (msg->status_code != SOUP_STATUS_OK && msg->status_code != SOUP_STATUS_UNAUTHORIZED)
+    {
+      g_warning ("goa_http_client_detect() failed: %u — %s", msg->status_code, msg->reason_phrase);
+      goa_utils_set_error_soup (&error, msg);
+      goto out;
+    }
+
+  if (msg->status_code == SOUP_STATUS_UNAUTHORIZED)
+    {
+      const gchar *value;
+
+      value = soup_message_headers_get_list (msg->response_headers, "WWW-Authenticate");
+      g_simple_async_result_set_op_res_gpointer (data->res, g_strdup (value), g_free);
+    }
+
+ out:
+  /* error == NULL, if we are being aborted by the GCancellable.
+   */
+  if (error != NULL)
+    g_simple_async_result_take_error (data->res, error);
+
+  source = g_idle_source_new ();
+  g_source_set_priority (source, G_PRIORITY_DEFAULT_IDLE);
+  g_source_set_callback (source, http_client_detect_data_free, data, NULL);
+  g_source_set_name (source, "[goa] http_client_detect_data_free");
+
+  context = g_main_context_get_thread_default ();
+  g_source_attach (source, context);
+  g_source_unref (source);
+}
+
+void
+goa_http_client_detect (GoaHttpClient       *self,
+                        const gchar         *uri,
+                        GCancellable        *cancellable,
+                        GAsyncReadyCallback  callback,
+                        gpointer             user_data)
+{
+  DetectData *data;
+  SoupLogger *logger;
+
+  g_return_if_fail (GOA_IS_HTTP_CLIENT (self));
+  g_return_if_fail (uri != NULL && uri[0] != '\0');
+  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+
+  data = g_slice_new0 (DetectData);
+  data->res = g_simple_async_result_new (G_OBJECT (self), callback, user_data, goa_http_client_detect);
+  data->session = soup_session_new ();
+
+  if (soup_auth_negotiate_supported)
+    {
+      soup_session_add_feature_by_type (data->session, SOUP_TYPE_AUTH_NEGOTIATE);
+      soup_session_add_feature_by_type (data->session, SOUP_TYPE_COOKIE_JAR);
+    }
+
+  logger = soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
+  soup_logger_set_printer (logger, http_client_log_printer, NULL, NULL);
+  soup_session_add_feature (data->session, SOUP_SESSION_FEATURE (logger));
+  g_object_unref (logger);
+
+  data->msg = soup_message_new (SOUP_METHOD_GET, uri);
+
+  if (cancellable != NULL)
+    {
+      data->cancellable = g_object_ref (cancellable);
+      data->cancellable_id = g_cancellable_connect (data->cancellable,
+                                                    G_CALLBACK (http_client_detect_cancelled_cb),
+                                                    data,
+                                                    NULL);
+      g_simple_async_result_set_check_cancellable (data->res, data->cancellable);
+    }
+
+  soup_session_queue_message (data->session, data->msg, http_client_detect_response_cb, data);
+}
+
+gchar *
+goa_http_client_detect_finish (GoaHttpClient *self, GAsyncResult *res, GError **error)
+{
+  GSimpleAsyncResult *simple;
+  gchar *ret = NULL;
+
+  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (self), goa_http_client_detect), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  simple = G_SIMPLE_ASYNC_RESULT (res);
+
+  if (g_simple_async_result_propagate_error (simple, error))
+    goto out;
+
+  ret = g_strdup (g_simple_async_result_get_op_res_gpointer (simple));
+
+ out:
+  return ret;
 }
