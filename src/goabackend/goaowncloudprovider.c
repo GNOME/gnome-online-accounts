@@ -625,11 +625,23 @@ check_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
 {
   GoaHttpClient *client = GOA_HTTP_CLIENT (source_object);
   AddAccountData *data = user_data;
+  GError *error;
 
-  goa_http_client_check_finish (client, res, &data->error);
-  g_main_loop_quit (data->loop);
+  error = NULL;
+  if (!goa_http_client_check_finish (client, res, &error))
+    {
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        {
+          g_error_free (error);
+          return;
+        }
+
+      g_propagate_error (&data->error, error);
+    }
+
   gtk_widget_set_sensitive (data->connect_button, TRUE);
   show_progress_ui (GTK_CONTAINER (data->progress_grid), FALSE);
+  gtk_dialog_response (data->dialog, GTK_RESPONSE_OK);
 }
 
 static void
@@ -729,16 +741,14 @@ add_account (GoaProvider    *provider,
 
   gtk_widget_set_sensitive (data.connect_button, FALSE);
   show_progress_ui (GTK_CONTAINER (data.progress_grid), TRUE);
-  g_main_loop_run (data.loop);
 
-  if (g_cancellable_is_cancelled (data.check_cancellable))
+  response = gtk_dialog_run (dialog);
+  if (response != GTK_RESPONSE_OK)
     {
-      g_prefix_error (&data.error,
-                      _("Dialog was dismissed (%s, %d): "),
-                      g_quark_to_string (data.error->domain),
-                      data.error->code);
-      data.error->domain = GOA_ERROR;
-      data.error->code = GOA_ERROR_DIALOG_DISMISSED;
+      g_set_error (&data.error,
+                   GOA_ERROR,
+                   GOA_ERROR_DIALOG_DISMISSED,
+                   _("Dialog was dismissed"));
       goto out;
     }
   else if (data.error != NULL)
@@ -921,16 +931,14 @@ refresh_account (GoaProvider    *provider,
                          &data);
   gtk_widget_set_sensitive (data.connect_button, FALSE);
   show_progress_ui (GTK_CONTAINER (data.progress_grid), TRUE);
-  g_main_loop_run (data.loop);
 
-  if (g_cancellable_is_cancelled (data.check_cancellable))
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (response != GTK_RESPONSE_OK)
     {
-      g_prefix_error (&data.error,
-                      _("Dialog was dismissed (%s, %d): "),
-                      g_quark_to_string (data.error->domain),
-                      data.error->code);
-      data.error->domain = GOA_ERROR;
-      data.error->code = GOA_ERROR_DIALOG_DISMISSED;
+      g_set_error (&data.error,
+                   GOA_ERROR,
+                   GOA_ERROR_DIALOG_DISMISSED,
+                   _("Dialog was dismissed"));
       goto out;
     }
   else if (data.error != NULL)
