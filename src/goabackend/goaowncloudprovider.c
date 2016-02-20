@@ -155,6 +155,7 @@ build_object (GoaProvider         *provider,
   gboolean contacts_enabled;
   gboolean documents_enabled;
   gboolean files_enabled;
+  gboolean gssapi_enabled;
   gboolean ret;
   const gchar *identity;
   gchar *uri_string;
@@ -176,18 +177,27 @@ build_object (GoaProvider         *provider,
                                                                               error))
     goto out;
 
+  gssapi_enabled = g_key_file_get_boolean (key_file, group, "XXX-GssApiEnabled", NULL);
   password_based = goa_object_get_password_based (GOA_OBJECT (object));
-  if (password_based == NULL)
+  if (gssapi_enabled)
     {
-      password_based = goa_password_based_skeleton_new ();
-      /* Ensure D-Bus method invocations run in their own thread */
-      g_dbus_interface_skeleton_set_flags (G_DBUS_INTERFACE_SKELETON (password_based),
-                                           G_DBUS_INTERFACE_SKELETON_FLAGS_HANDLE_METHOD_INVOCATIONS_IN_THREAD);
-      goa_object_skeleton_set_password_based (object, password_based);
-      g_signal_connect (password_based,
-                        "handle-get-password",
-                        G_CALLBACK (on_handle_get_password),
-                        NULL);
+      if (password_based != NULL)
+        goa_object_skeleton_set_password_based (object, NULL);
+    }
+  else
+    {
+      if (password_based == NULL)
+        {
+          password_based = goa_password_based_skeleton_new ();
+          /* Ensure D-Bus method invocations run in their own thread */
+          g_dbus_interface_skeleton_set_flags (G_DBUS_INTERFACE_SKELETON (password_based),
+                                               G_DBUS_INTERFACE_SKELETON_FLAGS_HANDLE_METHOD_INVOCATIONS_IN_THREAD);
+          goa_object_skeleton_set_password_based (object, password_based);
+          g_signal_connect (password_based,
+                            "handle-get-password",
+                            G_CALLBACK (on_handle_get_password),
+                            NULL);
+        }
     }
 
   account = goa_object_get_account (GOA_OBJECT (object));
@@ -265,6 +275,7 @@ ensure_credentials_sync (GoaProvider         *provider,
                          GError             **error)
 {
   GoaHttpClient *http_client;
+  GoaPasswordBased *password_based;
   gboolean accept_ssl_errors;
   gboolean ret;
   gchar *username;
@@ -273,6 +284,7 @@ ensure_credentials_sync (GoaProvider         *provider,
   gchar *uri_webdav;
 
   http_client = NULL;
+  password_based = NULL;
   password = NULL;
   uri = NULL;
   uri_webdav = NULL;
@@ -280,14 +292,18 @@ ensure_credentials_sync (GoaProvider         *provider,
 
   ret = FALSE;
 
-  if (!goa_utils_get_credentials (provider, object, "password", &username, &password, cancellable, error))
+  password_based = goa_object_get_password_based (GOA_OBJECT (object));
+  if (password_based != NULL)
     {
-      if (error != NULL)
+      if (!goa_utils_get_credentials (provider, object, "password", &username, &password, cancellable, error))
         {
-          (*error)->domain = GOA_ERROR;
-          (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
+          if (error != NULL)
+            {
+              (*error)->domain = GOA_ERROR;
+              (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
+            }
+          goto out;
         }
-      goto out;
     }
 
   accept_ssl_errors = goa_util_lookup_keyfile_boolean (object, "AcceptSslErrors");
@@ -326,6 +342,7 @@ ensure_credentials_sync (GoaProvider         *provider,
 
  out:
   g_clear_object (&http_client);
+  g_clear_object (&password_based);
   g_free (username);
   g_free (password);
   g_free (uri);
@@ -339,6 +356,8 @@ static void
 add_entry (GtkWidget     *grid,
            gint           row,
            const gchar   *text,
+           gboolean       show,
+           GtkWidget    **out_label,
            GtkWidget    **out_entry)
 {
   GtkStyleContext *context;
@@ -350,16 +369,21 @@ add_entry (GtkWidget     *grid,
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   gtk_widget_set_hexpand (label, TRUE);
+  gtk_widget_set_sensitive (label, show);
   gtk_grid_attach (GTK_GRID (grid), label, 0, row, 1, 1);
 
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);
+  gtk_widget_set_sensitive (entry, show);
   gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
   gtk_grid_attach (GTK_GRID (grid), entry, 1, row, 3, 1);
 
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+
   if (out_entry != NULL)
     *out_entry = entry;
+  if (out_label != NULL)
+    *out_label = label;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -367,6 +391,7 @@ add_entry (GtkWidget     *grid,
 typedef struct
 {
   GCancellable *check_cancellable;
+  GCancellable *detect_cancellable;
 
   GtkDialog *dialog;
   GMainLoop *loop;
@@ -378,9 +403,12 @@ typedef struct
 
   GtkWidget *uri;
   GtkWidget *username;
+  GtkWidget *username_label;
   GtkWidget *password;
+  GtkWidget *password_label;
 
   gchar *account_object_path;
+  gint changed_id;
 
   GError *error;
 } AddAccountData;
@@ -473,27 +501,14 @@ normalize_uri (const gchar *address, gchar **server)
 }
 
 static void
-on_uri_username_or_password_changed (GtkEditable *editable, gpointer user_data)
+update_row_ui (GtkWidget *label, gboolean show)
 {
-  AddAccountData *data = user_data;
-  gboolean can_add;
-  const gchar *address;
-  gchar *uri;
+  GtkWidget *entry;
 
-  can_add = FALSE;
-  uri = NULL;
+  gtk_widget_set_sensitive (label, show);
 
-  address = gtk_entry_get_text (GTK_ENTRY (data->uri));
-  uri = normalize_uri (address, NULL);
-  if (uri == NULL)
-    goto out;
-
-  can_add = gtk_entry_get_text_length (GTK_ENTRY (data->username)) != 0
-            && gtk_entry_get_text_length (GTK_ENTRY (data->password)) != 0;
-
- out:
-  gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, can_add);
-  g_free (uri);
+  entry = gtk_label_get_mnemonic_widget (GTK_LABEL (label));
+  gtk_widget_set_sensitive (entry, show);
 }
 
 static void
@@ -513,6 +528,158 @@ show_progress_ui (GtkContainer *container, gboolean progress)
     }
 
   g_list_free (children);
+}
+
+static void
+detect_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
+{
+  AddAccountData *data = user_data;
+  GoaHttpClient *client = GOA_HTTP_CLIENT (source_object);
+  GError *error;
+  gboolean enable_ok = FALSE;
+  gboolean enable_username_password = FALSE;
+  gboolean has_username_password = FALSE;
+  const gchar *error_msg = NULL;
+  gchar *auth = NULL;
+
+  error = NULL;
+  auth = goa_http_client_detect_finish (client, res, &error);
+  if (error != NULL)
+    {
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        {
+          g_error_free (error);
+          return;
+        }
+
+      if (g_error_matches (error, GOA_ERROR, GOA_ERROR_SSL))
+        {
+          enable_ok = TRUE;
+          enable_username_password = TRUE;
+        }
+
+      g_warning ("goa_http_client_detect() failed: %s (%s, %d)",
+                 error->message,
+                 g_quark_to_string (error->domain),
+                 error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+  has_username_password = gtk_entry_get_text_length (GTK_ENTRY (data->username)) != 0
+                          && gtk_entry_get_text_length (GTK_ENTRY (data->password)) != 0;
+
+  if (auth == NULL)
+    {
+      enable_ok = TRUE;
+      enable_username_password = FALSE;
+    }
+  else
+    {
+      if (strstr (auth, "Negotiate") != NULL)
+        {
+          enable_ok = FALSE;
+          enable_username_password = FALSE;
+          error_msg = _("Authentication failed");
+        }
+      else if (strstr (auth, "Basic") != NULL)
+        {
+          enable_ok = has_username_password;
+          enable_username_password = TRUE;
+        }
+      else
+        {
+          enable_ok = FALSE;
+          enable_username_password = FALSE;
+          error_msg = _("Unknown authentication mechanism");
+        }
+    }
+
+  if (error_msg != NULL)
+    {
+      gchar *markup;
+
+      markup = g_strdup_printf ("<b>%s:</b>\n%s",
+                                _("Error connecting to ownCloud server"),
+                                error_msg);
+      gtk_label_set_markup (GTK_LABEL (data->cluebar_label), markup);
+      g_free (markup);
+
+      gtk_widget_set_no_show_all (data->cluebar, FALSE);
+      gtk_widget_show_all (data->cluebar);
+    }
+
+ out:
+  gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, enable_ok);
+  update_row_ui (data->password_label, enable_username_password);
+  update_row_ui (data->username_label, enable_username_password);
+  show_progress_ui (GTK_CONTAINER (data->progress_grid), FALSE);
+  g_free (auth);
+}
+
+static gboolean
+on_uri_changed_timeout (gpointer user_data)
+{
+  AddAccountData *data = user_data;
+  GoaHttpClient *http_client = NULL;
+  const gchar *address;
+  gchar *uri = NULL;
+  gchar *uri_webdav = NULL;
+
+  data->changed_id = 0;
+
+  address = gtk_entry_get_text (GTK_ENTRY (data->uri));
+  uri = normalize_uri (address, NULL);
+  if (uri == NULL)
+    goto out;
+
+  g_clear_object (&data->detect_cancellable);
+  data->detect_cancellable = g_cancellable_new ();
+
+  http_client = goa_http_client_new ();
+  uri_webdav = g_strconcat (uri, WEBDAV_ENDPOINT, NULL);
+  goa_http_client_detect (http_client, uri_webdav, data->detect_cancellable, detect_cb, data);
+
+  gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, FALSE);
+  update_row_ui (data->password_label, FALSE);
+  update_row_ui (data->username_label, FALSE);
+  show_progress_ui (GTK_CONTAINER (data->progress_grid), TRUE);
+
+ out:
+  g_clear_object (&http_client);
+  g_free (uri);
+  g_free (uri_webdav);
+  return G_SOURCE_REMOVE;
+}
+
+static void
+on_uri_changed (GtkEditable *editable, gpointer user_data)
+{
+  AddAccountData *data = user_data;
+
+  if (data->changed_id != 0)
+    g_source_remove (data->changed_id);
+
+  if (data->detect_cancellable != NULL)
+    g_cancellable_cancel (data->detect_cancellable);
+
+  data->changed_id = g_timeout_add (150, on_uri_changed_timeout, data);
+
+  gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, FALSE);
+  update_row_ui (data->password_label, FALSE);
+  update_row_ui (data->username_label, FALSE);
+}
+
+static void
+on_username_or_password_changed (GtkEditable *editable, gpointer user_data)
+{
+  AddAccountData *data = user_data;
+  gboolean can_add;
+
+  can_add = gtk_entry_get_text_length (GTK_ENTRY (data->username)) != 0
+            && gtk_entry_get_text_length (GTK_ENTRY (data->password)) != 0;
+
+  gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, can_add);
 }
 
 static void
@@ -555,16 +722,17 @@ create_account_details_ui (GoaProvider    *provider,
   gtk_container_add (GTK_CONTAINER (grid0), grid1);
 
   row = 0;
-  add_entry (grid1, row++, _("_Server"), &data->uri);
-  add_entry (grid1, row++, _("User_name"), &data->username);
-  add_entry (grid1, row++, _("_Password"), &data->password);
+
+  add_entry (grid1, row++, _("_Server"), TRUE, NULL, &data->uri);
+  add_entry (grid1, row++, _("User_name"), FALSE, &data->username_label, &data->username);
+  add_entry (grid1, row++, _("_Password"), FALSE, &data->password_label, &data->password);
   gtk_entry_set_visibility (GTK_ENTRY (data->password), FALSE);
 
   gtk_widget_grab_focus ((new_account) ? data->uri : data->password);
 
-  g_signal_connect (data->uri, "changed", G_CALLBACK (on_uri_username_or_password_changed), data);
-  g_signal_connect (data->username, "changed", G_CALLBACK (on_uri_username_or_password_changed), data);
-  g_signal_connect (data->password, "changed", G_CALLBACK (on_uri_username_or_password_changed), data);
+  g_signal_connect (data->uri, "changed", G_CALLBACK (on_uri_changed), data);
+  g_signal_connect (data->username, "changed", G_CALLBACK (on_username_or_password_changed), data);
+  g_signal_connect (data->password, "changed", G_CALLBACK (on_username_or_password_changed), data);
 
   gtk_dialog_add_button (data->dialog, _("_Cancel"), GTK_RESPONSE_CANCEL);
   data->connect_button = gtk_dialog_add_button (data->dialog, _("C_onnect"), GTK_RESPONSE_OK);
@@ -650,7 +818,10 @@ dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data)
   AddAccountData *data = user_data;
 
   if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_DELETE_EVENT)
-    g_cancellable_cancel (data->check_cancellable);
+    {
+      g_cancellable_cancel (data->check_cancellable);
+      g_cancellable_cancel (data->detect_cancellable);
+    }
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -668,9 +839,10 @@ add_account (GoaProvider    *provider,
   GoaHttpClient *http_client;
   GoaObject *ret;
   gboolean accept_ssl_errors;
+  gboolean gssapi_enabled = FALSE;
   const gchar *uri_text;
-  const gchar *password;
-  const gchar *username;
+  const gchar *password = "";
+  const gchar *username = "";
   const gchar *provider_type;
   gchar *presentation_identity;
   gchar *server;
@@ -710,8 +882,16 @@ add_account (GoaProvider    *provider,
     }
 
   uri_text = gtk_entry_get_text (GTK_ENTRY (data.uri));
-  username = gtk_entry_get_text (GTK_ENTRY (data.username));
-  password = gtk_entry_get_text (GTK_ENTRY (data.password));
+
+  if (gtk_widget_get_sensitive (data.username))
+    username = gtk_entry_get_text (GTK_ENTRY (data.username));
+  else
+    username = g_get_user_name ();
+
+  if (gtk_widget_get_sensitive (data.password))
+    password = gtk_entry_get_text (GTK_ENTRY (data.password));
+  else
+    gssapi_enabled = TRUE;
 
   uri = normalize_uri (uri_text, &server);
   presentation_identity = g_strconcat (username, "@", server, NULL);
@@ -795,6 +975,7 @@ add_account (GoaProvider    *provider,
   g_variant_builder_add (&details, "{ss}", "FilesEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "Uri", uri);
   g_variant_builder_add (&details, "{ss}", "AcceptSslErrors", (accept_ssl_errors) ? "true" : "false");
+  g_variant_builder_add (&details, "{ss}", "XXX-GssApiEnabled", (gssapi_enabled) ? "true" : "false");
 
   /* OK, everything is dandy, add the account */
   /* we want the GoaClient to update before this method returns (so it
@@ -826,12 +1007,16 @@ add_account (GoaProvider    *provider,
   else
     g_assert (ret != NULL);
 
+  if (data.changed_id != 0)
+    g_source_remove (data.changed_id);
+
   g_free (presentation_identity);
   g_free (server);
   g_free (uri);
   g_free (data.account_object_path);
   g_clear_pointer (&data.loop, (GDestroyNotify) g_main_loop_unref);
   g_clear_object (&data.check_cancellable);
+  g_clear_object (&data.detect_cancellable);
   g_clear_object (&http_client);
   return ret;
 }
