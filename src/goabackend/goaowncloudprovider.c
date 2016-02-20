@@ -717,7 +717,6 @@ add_account (GoaProvider    *provider,
     goto out;
 
   uri_webdav = g_strconcat (uri, WEBDAV_ENDPOINT, NULL);
-  g_cancellable_reset (data.check_cancellable);
   goa_http_client_check (http_client,
                          uri_webdav,
                          username,
@@ -912,7 +911,6 @@ refresh_account (GoaProvider    *provider,
     }
 
   password = gtk_entry_get_text (GTK_ENTRY (data.password));
-  g_cancellable_reset (data.check_cancellable);
   goa_http_client_check (http_client,
                          uri_webdav,
                          username,
