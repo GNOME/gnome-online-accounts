@@ -1,164 +1,148 @@
 # Korean translation for gnome-online-accounts.
 # Copyright (C) 2011-2013 Seong-ho Cho et al.
 # This file is distributed under the same license as the gnome-online-accounts package.
-# Seong-ho Cho <darkcircle.0426@gmail.com>, 2011, 2012, 2013, 2014, 2015.
+# Seong-ho Cho <shcho@gnome.org>, 2011, 2012, 2013, 2014, 2015, 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-17 19:37+0000\n"
-"PO-Revision-Date: 2015-09-18 11:19+0900\n"
+"POT-Creation-Date: 2016-03-01 09:36+0000\n"
+"PO-Revision-Date: 2016-03-02 03:05+0900\n"
 "Last-Translator: Seong-ho Cho <shcho@gnome.org>\n"
-"Language-Team: Korean <gnome-kr@googlegroups.com>\n"
+"Language-Team: 한국어 <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Gtranslator 2.91.7\n"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:830 ../src/daemon/goadaemon.c:1090
+#: ../src/daemon/goadaemon.c:838 ../src/daemon/goadaemon.c:1096
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "제공자 정보를 찾을 수 없습니다: %s"
 
 # ProviderType은 고유한 속성 변수이름입니다.
-#: ../src/daemon/goadaemon.c:1018
+#: ../src/daemon/goadaemon.c:1024
 msgid "IsLocked property is set for account"
 msgstr "계정에 IsLocked 속성을 설정했습니다"
 
 # ProviderType은 고유한 속성 변수이름입니다.
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1078
+#: ../src/daemon/goadaemon.c:1084
 msgid "ProviderType property is not set for account"
 msgstr "계정에 ProviderType 속성에 값이 없습니다"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:237 ../src/goabackend/goahttpclient.c:174
-#, c-format
-msgid "Code: %u — Unexpected response from server"
-msgstr "코드: %u — 서버에서 예상치 못한 응답"
-
-#. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:253
+#: ../src/goabackend/goaewsclient.c:250
 #, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "자동 발견 응답 XML 해석에 실패했습니다"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: ../src/goabackend/goaewsclient.c:264 ../src/goabackend/goaewsclient.c:279
-#: ../src/goabackend/goaewsclient.c:294
+#: ../src/goabackend/goaewsclient.c:261 ../src/goabackend/goaewsclient.c:276
+#: ../src/goabackend/goaewsclient.c:291
 #, c-format
 msgid "Failed to find ‘%s’ element"
 msgstr "‘%s’ 요소 찾기에 실패했습니다"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:315
+#: ../src/goabackend/goaewsclient.c:312
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "자동 발견 응답에서 ASUrl과 OABUrl을 찾는데 실패했습니다"
 
 #  * NOTE: 그냥 음역할 것.
-#: ../src/goabackend/goaexchangeprovider.c:73
+#: ../src/goabackend/goaexchangeprovider.c:74
 msgid "Microsoft Exchange"
 msgstr "마이크로소프트 익스체인지"
-
-#. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:311
-#: ../src/goabackend/goaexchangeprovider.c:985
-#: ../src/goabackend/goalastfmprovider.c:286
-#: ../src/goabackend/goaowncloudprovider.c:383
-#: ../src/goabackend/goaowncloudprovider.c:1128
-#, c-format
-msgid "Did not find password with identity ‘%s’ in credentials"
-msgstr "자격 정보에 ‘%s’ 신원 정보의 암호가 없습니다"
 
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
 #.
-#: ../src/goabackend/goaexchangeprovider.c:339
-#: ../src/goabackend/goalastfmprovider.c:302
-#: ../src/goabackend/goaowncloudprovider.c:406
+#: ../src/goabackend/goaexchangeprovider.c:283
+#: ../src/goabackend/goalastfmprovider.c:280
+#: ../src/goabackend/goaowncloudprovider.c:314
 #, c-format
 msgid "Invalid password with username ‘%s’ (%s, %d): "
 msgstr "‘%s’ 사용자 이름의 암호가 잘못되었습니다(%s, %d):"
 
-#: ../src/goabackend/goaexchangeprovider.c:492
-#: ../src/goabackend/goaimapsmtpprovider.c:700
+#: ../src/goabackend/goaexchangeprovider.c:436
+#: ../src/goabackend/goaimapsmtpprovider.c:686
 msgid "_E-mail"
 msgstr "전자메일(_E)"
 
-#: ../src/goabackend/goaexchangeprovider.c:493
-#: ../src/goabackend/goaimapsmtpprovider.c:720
-#: ../src/goabackend/goaimapsmtpprovider.c:740
-#: ../src/goabackend/goalastfmprovider.c:443
-#: ../src/goabackend/goaowncloudprovider.c:634
+#: ../src/goabackend/goaexchangeprovider.c:437
+#: ../src/goabackend/goaimapsmtpprovider.c:706
+#: ../src/goabackend/goaimapsmtpprovider.c:726
+#: ../src/goabackend/goalastfmprovider.c:420
+#: ../src/goabackend/goaowncloudprovider.c:560
 msgid "_Password"
 msgstr "암호(_P)"
 
-#: ../src/goabackend/goaexchangeprovider.c:496
+#: ../src/goabackend/goaexchangeprovider.c:440
 msgid "_Custom"
 msgstr "사용자 정의(_C)"
 
-#: ../src/goabackend/goaexchangeprovider.c:507
-#: ../src/goabackend/goaimapsmtpprovider.c:719
-#: ../src/goabackend/goaimapsmtpprovider.c:739
-#: ../src/goabackend/goakerberosprovider.c:719
-#: ../src/goabackend/goalastfmprovider.c:442
-#: ../src/goabackend/goaowncloudprovider.c:633
+#: ../src/goabackend/goaexchangeprovider.c:451
+#: ../src/goabackend/goaimapsmtpprovider.c:705
+#: ../src/goabackend/goaimapsmtpprovider.c:725
+#: ../src/goabackend/goakerberosprovider.c:734
+#: ../src/goabackend/goalastfmprovider.c:419
+#: ../src/goabackend/goaowncloudprovider.c:559
 msgid "User_name"
 msgstr "사용자 이름(_N)"
 
-#: ../src/goabackend/goaexchangeprovider.c:508
-#: ../src/goabackend/goaowncloudprovider.c:632
+#: ../src/goabackend/goaexchangeprovider.c:452
+#: ../src/goabackend/goaowncloudprovider.c:558
 msgid "_Server"
 msgstr "서버(_S)"
 
 #. --
-#: ../src/goabackend/goaexchangeprovider.c:518
-#: ../src/goabackend/goaimapsmtpprovider.c:752
-#: ../src/goabackend/goakerberosprovider.c:724
-#: ../src/goabackend/goalastfmprovider.c:451
-#: ../src/goabackend/goaowncloudprovider.c:643
+#: ../src/goabackend/goaexchangeprovider.c:462
+#: ../src/goabackend/goaimapsmtpprovider.c:738
+#: ../src/goabackend/goakerberosprovider.c:739
+#: ../src/goabackend/goalastfmprovider.c:428
+#: ../src/goabackend/goaowncloudprovider.c:569
 #: ../src/goabackend/goatelepathyprovider.c:649
 msgid "_Cancel"
 msgstr "취소(_C)"
 
-#: ../src/goabackend/goaexchangeprovider.c:519
-#: ../src/goabackend/goakerberosprovider.c:725
-#: ../src/goabackend/goalastfmprovider.c:452
-#: ../src/goabackend/goaowncloudprovider.c:644
+#: ../src/goabackend/goaexchangeprovider.c:463
+#: ../src/goabackend/goakerberosprovider.c:740
+#: ../src/goabackend/goalastfmprovider.c:429
+#: ../src/goabackend/goaowncloudprovider.c:570
 msgid "C_onnect"
 msgstr "연결(_O)"
 
-#: ../src/goabackend/goaexchangeprovider.c:535
-#: ../src/goabackend/goaimapsmtpprovider.c:769
-#: ../src/goabackend/goakerberosprovider.c:741
-#: ../src/goabackend/goalastfmprovider.c:468
-#: ../src/goabackend/goaowncloudprovider.c:660
+#: ../src/goabackend/goaexchangeprovider.c:479
+#: ../src/goabackend/goaimapsmtpprovider.c:754
+#: ../src/goabackend/goakerberosprovider.c:756
+#: ../src/goabackend/goalastfmprovider.c:445
+#: ../src/goabackend/goaowncloudprovider.c:585
 msgid "Connecting…"
 msgstr "연결중…"
 
-#: ../src/goabackend/goaexchangeprovider.c:640
-#: ../src/goabackend/goaexchangeprovider.c:837
-#: ../src/goabackend/goaimapsmtpprovider.c:931
-#: ../src/goabackend/goaimapsmtpprovider.c:966
-#: ../src/goabackend/goaimapsmtpprovider.c:1054
-#: ../src/goabackend/goaimapsmtpprovider.c:1318
-#: ../src/goabackend/goaimapsmtpprovider.c:1391
-#: ../src/goabackend/goakerberosprovider.c:1142
-#: ../src/goabackend/goalastfmprovider.c:659
-#: ../src/goabackend/goalastfmprovider.c:825
-#: ../src/goabackend/goamediaserverprovider.c:475
-#: ../src/goabackend/goaoauth2provider.c:1034
-#: ../src/goabackend/goaoauthprovider.c:863
-#: ../src/goabackend/goaowncloudprovider.c:771
-#: ../src/goabackend/goaowncloudprovider.c:986
+#: ../src/goabackend/goaexchangeprovider.c:584
+#: ../src/goabackend/goaexchangeprovider.c:779
+#: ../src/goabackend/goaimapsmtpprovider.c:916
+#: ../src/goabackend/goaimapsmtpprovider.c:951
+#: ../src/goabackend/goaimapsmtpprovider.c:1039
+#: ../src/goabackend/goaimapsmtpprovider.c:1302
+#: ../src/goabackend/goaimapsmtpprovider.c:1375
+#: ../src/goabackend/goakerberosprovider.c:1155
+#: ../src/goabackend/goalastfmprovider.c:640
+#: ../src/goabackend/goalastfmprovider.c:806
+#: ../src/goabackend/goamediaserverprovider.c:474
+#: ../src/goabackend/goaoauth2provider.c:1032
+#: ../src/goabackend/goaoauthprovider.c:861
+#: ../src/goabackend/goaowncloudprovider.c:696
+#: ../src/goabackend/goaowncloudprovider.c:910
 #: ../src/goabackend/goatelepathyprovider.c:459
 #: ../src/goabackend/goatelepathyprovider.c:508
 #: ../src/goabackend/goatelepathyprovider.c:683
@@ -166,43 +150,43 @@ msgstr "연결중…"
 msgid "Dialog was dismissed"
 msgstr "대화 상자가 닫혔습니다"
 
-#: ../src/goabackend/goaexchangeprovider.c:678
-#: ../src/goabackend/goaexchangeprovider.c:865
-#: ../src/goabackend/goaimapsmtpprovider.c:996
-#: ../src/goabackend/goaimapsmtpprovider.c:1089
-#: ../src/goabackend/goaimapsmtpprovider.c:1342
-#: ../src/goabackend/goaimapsmtpprovider.c:1416
-#: ../src/goabackend/goalastfmprovider.c:693
-#: ../src/goabackend/goalastfmprovider.c:844
-#: ../src/goabackend/goaowncloudprovider.c:813
-#: ../src/goabackend/goaowncloudprovider.c:1007
+#: ../src/goabackend/goaexchangeprovider.c:622
+#: ../src/goabackend/goaexchangeprovider.c:807
+#: ../src/goabackend/goaimapsmtpprovider.c:981
+#: ../src/goabackend/goaimapsmtpprovider.c:1074
+#: ../src/goabackend/goaimapsmtpprovider.c:1326
+#: ../src/goabackend/goaimapsmtpprovider.c:1400
+#: ../src/goabackend/goalastfmprovider.c:674
+#: ../src/goabackend/goalastfmprovider.c:825
+#: ../src/goabackend/goaowncloudprovider.c:738
+#: ../src/goabackend/goaowncloudprovider.c:931
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "대화 상자가 닫혔습니다(%s, %d):"
 
-#: ../src/goabackend/goaexchangeprovider.c:691
-#: ../src/goabackend/goaimapsmtpprovider.c:1009
-#: ../src/goabackend/goaimapsmtpprovider.c:1102
-#: ../src/goabackend/goaowncloudprovider.c:826
+#: ../src/goabackend/goaexchangeprovider.c:635
+#: ../src/goabackend/goaimapsmtpprovider.c:994
+#: ../src/goabackend/goaimapsmtpprovider.c:1087
+#: ../src/goabackend/goaowncloudprovider.c:751
 msgid "_Ignore"
 msgstr "무시(_I)"
 
-#: ../src/goabackend/goaexchangeprovider.c:696
-#: ../src/goabackend/goaexchangeprovider.c:884
-#: ../src/goabackend/goaimapsmtpprovider.c:1014
-#: ../src/goabackend/goaimapsmtpprovider.c:1107
-#: ../src/goabackend/goaimapsmtpprovider.c:1361
-#: ../src/goabackend/goaimapsmtpprovider.c:1435
-#: ../src/goabackend/goakerberosprovider.c:1252
-#: ../src/goabackend/goalastfmprovider.c:705
-#: ../src/goabackend/goalastfmprovider.c:861
-#: ../src/goabackend/goaowncloudprovider.c:831
-#: ../src/goabackend/goaowncloudprovider.c:1026
+#: ../src/goabackend/goaexchangeprovider.c:640
+#: ../src/goabackend/goaexchangeprovider.c:826
+#: ../src/goabackend/goaimapsmtpprovider.c:999
+#: ../src/goabackend/goaimapsmtpprovider.c:1092
+#: ../src/goabackend/goaimapsmtpprovider.c:1345
+#: ../src/goabackend/goaimapsmtpprovider.c:1419
+#: ../src/goabackend/goakerberosprovider.c:1262
+#: ../src/goabackend/goalastfmprovider.c:686
+#: ../src/goabackend/goalastfmprovider.c:842
+#: ../src/goabackend/goaowncloudprovider.c:756
+#: ../src/goabackend/goaowncloudprovider.c:950
 msgid "_Try Again"
 msgstr "다시 시도(_T)"
 
-#: ../src/goabackend/goaexchangeprovider.c:701
-#: ../src/goabackend/goaexchangeprovider.c:877
+#: ../src/goabackend/goaexchangeprovider.c:645
+#: ../src/goabackend/goaexchangeprovider.c:819
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "마이크로소프트 익스체인지 서버에 연결하는 도중 오류가 발생했습니다"
 
@@ -213,14 +197,15 @@ msgstr "페이스북"
 #: ../src/goabackend/goafacebookprovider.c:215
 #: ../src/goabackend/goaflickrprovider.c:183
 #: ../src/goabackend/goafoursquareprovider.c:189
-#: ../src/goabackend/goagoogleprovider.c:221
-#: ../src/goabackend/goawindowsliveprovider.c:195
+#: ../src/goabackend/goagoogleprovider.c:226
+#: ../src/goabackend/goawindowsliveprovider.c:196
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
 msgstr ""
 "신원 인증을 요청할 때 상태 200을 기대했지만, %d 상태를 가져왔습니다(%s)"
 
+#. TODO: more specific
 #: ../src/goabackend/goafacebookprovider.c:234
 #: ../src/goabackend/goafacebookprovider.c:246
 #: ../src/goabackend/goafacebookprovider.c:259
@@ -235,22 +220,22 @@ msgstr ""
 #: ../src/goabackend/goafoursquareprovider.c:242
 #: ../src/goabackend/goafoursquareprovider.c:253
 #: ../src/goabackend/goafoursquareprovider.c:264
-#: ../src/goabackend/goagoogleprovider.c:240
-#: ../src/goabackend/goagoogleprovider.c:252
+#: ../src/goabackend/goagoogleprovider.c:245
+#: ../src/goabackend/goagoogleprovider.c:257
 #: ../src/goabackend/goalastfmprovider.c:211
 #: ../src/goabackend/goalastfmprovider.c:220
 #: ../src/goabackend/goalastfmprovider.c:230
 #: ../src/goabackend/goalastfmprovider.c:237
-#: ../src/goabackend/goalastfmprovider.c:526
-#: ../src/goabackend/goalastfmprovider.c:535
-#: ../src/goabackend/goalastfmprovider.c:550
-#: ../src/goabackend/goalastfmprovider.c:557
+#: ../src/goabackend/goalastfmprovider.c:503
+#: ../src/goabackend/goalastfmprovider.c:512
+#: ../src/goabackend/goalastfmprovider.c:527
+#: ../src/goabackend/goalastfmprovider.c:534
 #: ../src/goabackend/goaoauth2provider.c:699
 #: ../src/goabackend/goaoauth2provider.c:729
-#: ../src/goabackend/goaoauth2provider.c:741
-#: ../src/goabackend/goawindowsliveprovider.c:214
-#: ../src/goabackend/goawindowsliveprovider.c:226
-#: ../src/goabackend/goawindowsliveprovider.c:238
+#: ../src/goabackend/goaoauth2provider.c:741 ../src/goabackend/goautils.c:153
+#: ../src/goabackend/goawindowsliveprovider.c:215
+#: ../src/goabackend/goawindowsliveprovider.c:227
+#: ../src/goabackend/goawindowsliveprovider.c:239
 #, c-format
 msgid "Could not parse response"
 msgstr "응답을 해석할 수 없습니다"
@@ -267,7 +252,7 @@ msgstr "시스템 시간이 잘못되었습니다. 날짜와 시간 설정을 �
 msgid "Foursquare"
 msgstr "포스퀘어"
 
-#: ../src/goabackend/goagoogleprovider.c:76
+#: ../src/goabackend/goagoogleprovider.c:77
 msgid "Google"
 msgstr "구글"
 
@@ -279,8 +264,8 @@ msgstr "서비스를 사용할 수 없습니다"
 
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:115
-#: ../src/goabackend/goalastfmprovider.c:543
-#: ../src/goabackend/goasmtpauth.c:113
+#: ../src/goabackend/goalastfmprovider.c:520
+#: ../src/goabackend/goasmtpauth.c:113 ../src/goabackend/goautils.c:584
 #, c-format
 msgid "Authentication failed"
 msgstr "인증에 실패했습니다"
@@ -290,8 +275,7 @@ msgstr "인증에 실패했습니다"
 msgid "Server does not support PLAIN"
 msgstr "서버에서 PLAIN을 지원하지 않습니다"
 
-#: ../src/goabackend/goaimapauthlogin.c:194
-#: ../src/goabackend/goasmtpauth.c:818
+#: ../src/goabackend/goaimapauthlogin.c:194 ../src/goabackend/goasmtpauth.c:818
 #, c-format
 msgid "Server does not support STARTTLS"
 msgstr "서버에서 STARTTLS를 지원하지 않습니다"
@@ -299,14 +283,6 @@ msgstr "서버에서 STARTTLS를 지원하지 않습니다"
 #: ../src/goabackend/goaimapsmtpprovider.c:61
 msgid "IMAP and SMTP"
 msgstr "IMAP과 SMTP"
-
-#. Translators: the first parameter is a field name. The second is
-#. * a GOA account identifier.
-#: ../src/goabackend/goaimapsmtpprovider.c:358
-#: ../src/goabackend/goaimapsmtpprovider.c:416
-#, c-format
-msgid "Did not find %s with identity ‘%s’ in credentials"
-msgstr "인증에서 ‘%2$s’ 신원 정보의 %1$s을(를) 찾지 못했습니다"
 
 #. Translators: the first %s is a field name. The
 #. * second %s is the IMAP
@@ -318,8 +294,8 @@ msgstr "인증에서 ‘%2$s’ 신원 정보의 %1$s을(를) 찾지 못했습�
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:389
-#: ../src/goabackend/goaimapsmtpprovider.c:449
+#: ../src/goabackend/goaimapsmtpprovider.c:364
+#: ../src/goabackend/goaimapsmtpprovider.c:415
 #, c-format
 msgid "Invalid %s with username ‘%s’ (%s, %d): "
 msgstr "‘%2$s’ 사용자 이름의 잘못된 %1$s입니다(%3$s, %4$d):"
@@ -330,65 +306,65 @@ msgstr "‘%2$s’ 사용자 이름의 잘못된 %1$s입니다(%3$s, %4$d):"
 #. *             STARTTLS after connecting
 #. *             SSL on a dedicated port
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:636
+#: ../src/goabackend/goaimapsmtpprovider.c:603
 msgid "_Encryption"
 msgstr "암호화(_E)"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:639
+#: ../src/goabackend/goaimapsmtpprovider.c:606
 msgid "None"
 msgstr "없음"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:642
+#: ../src/goabackend/goaimapsmtpprovider.c:609
 msgid "STARTTLS after connecting"
 msgstr "연결 후 STARTTLS 처리"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:645
+#: ../src/goabackend/goaimapsmtpprovider.c:612
 msgid "SSL on a dedicated port"
 msgstr "제공 포트를 통해 SSL 연결"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:701
+#: ../src/goabackend/goaimapsmtpprovider.c:687
 msgid "_Name"
 msgstr "이름(_N)"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:718
+#: ../src/goabackend/goaimapsmtpprovider.c:704
 msgid "IMAP _Server"
 msgstr "IMAP 서버(_S)"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:738
+#: ../src/goabackend/goaimapsmtpprovider.c:724
 msgid "SMTP _Server"
 msgstr "SMTP 서버(_S)"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:753
-#: ../src/goabackend/goaimapsmtpprovider.c:1035
-#: ../src/goabackend/goaimapsmtpprovider.c:1371
+#: ../src/goabackend/goaimapsmtpprovider.c:739
+#: ../src/goabackend/goaimapsmtpprovider.c:1020
+#: ../src/goabackend/goaimapsmtpprovider.c:1355
 msgid "_Forward"
 msgstr "전달(_F)"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1019
-#: ../src/goabackend/goaimapsmtpprovider.c:1354
+#: ../src/goabackend/goaimapsmtpprovider.c:1004
+#: ../src/goabackend/goaimapsmtpprovider.c:1338
 msgid "Error connecting to IMAP server"
 msgstr "IMAP 서버에 연결 중 오류가 발생했습니다"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1112
-#: ../src/goabackend/goaimapsmtpprovider.c:1428
+#: ../src/goabackend/goaimapsmtpprovider.c:1097
+#: ../src/goabackend/goaimapsmtpprovider.c:1412
 msgid "Error connecting to SMTP server"
 msgstr "SMTP 서버에 연결 중 오류가 발생했습니다"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1527
+#: ../src/goabackend/goaimapsmtpprovider.c:1510
 msgid "E-mail"
 msgstr "전자메일"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1531
+#: ../src/goabackend/goaimapsmtpprovider.c:1514
 msgid "Name"
 msgstr "이름"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1541
-#: ../src/goabackend/goaimapsmtpprovider.c:1545
+#: ../src/goabackend/goaimapsmtpprovider.c:1524
+#: ../src/goabackend/goaimapsmtpprovider.c:1528
 msgid "IMAP"
 msgstr "IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1556
-#: ../src/goabackend/goaimapsmtpprovider.c:1560
+#: ../src/goabackend/goaimapsmtpprovider.c:1539
+#: ../src/goabackend/goaimapsmtpprovider.c:1543
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -396,47 +372,54 @@ msgstr "SMTP"
 msgid "Enterprise Login (Kerberos)"
 msgstr "기업 로그인(커베로스)"
 
-#: ../src/goabackend/goakerberosprovider.c:309
+# ProviderType은 고유한 속성 변수이름입니다.
+#: ../src/goabackend/goakerberosprovider.c:293
+#, c-format
+#| msgid "IsLocked property is set for account"
+msgid "Ticketing is disabled for account"
+msgstr "계정 티케팅을 비활성화했습니다"
+
+#: ../src/goabackend/goakerberosprovider.c:318
 #, c-format
 msgid "Could not find saved credentials for principal ‘%s’ in keyring"
 msgstr "키 모음에 저장한 ‘%s’ 본인의 자격 정보를 찾을 수 없습니다"
 
-#: ../src/goabackend/goakerberosprovider.c:322
+#: ../src/goabackend/goakerberosprovider.c:331
 #, c-format
 msgid "Did not find password for principal ‘%s’ in credentials"
 msgstr "자격 정보에 '%s' 본인의 암호를 찾을 수 없습니다"
 
-#: ../src/goabackend/goakerberosprovider.c:711
+#: ../src/goabackend/goakerberosprovider.c:726
 msgid "_Domain"
 msgstr "도메인(_D)"
 
-#: ../src/goabackend/goakerberosprovider.c:712
+#: ../src/goabackend/goakerberosprovider.c:727
 msgid "Enterprise domain or realm name"
 msgstr "기업 도메인 또는 영역 이름"
 
-#: ../src/goabackend/goakerberosprovider.c:948
-#: ../src/goaidentity/goaidentityservice.c:1119
+#: ../src/goabackend/goakerberosprovider.c:963
+#: ../src/goaidentity/goaidentityservice.c:1125
 msgid "Log In to Realm"
 msgstr "영역 로그인"
 
-#: ../src/goabackend/goakerberosprovider.c:949
+#: ../src/goabackend/goakerberosprovider.c:964
 msgid "Please enter your password below."
 msgstr "아래에 암호를 입력하십시오."
 
-#: ../src/goabackend/goakerberosprovider.c:950
+#: ../src/goabackend/goakerberosprovider.c:965
 msgid "Remember this password"
 msgstr "이 암호 저장"
 
-#: ../src/goabackend/goakerberosprovider.c:1092
+#: ../src/goabackend/goakerberosprovider.c:1107
 #, c-format
 msgid "The domain is not valid"
 msgstr "도메인이 유효하지 않습니다"
 
-#: ../src/goabackend/goakerberosprovider.c:1247
+#: ../src/goabackend/goakerberosprovider.c:1257
 msgid "Error connecting to enterprise identity server"
 msgstr "기업 신원 서버로 연결하는데 오류가 발생했습니다"
 
-#: ../src/goabackend/goakerberosprovider.c:1512
+#: ../src/goabackend/goakerberosprovider.c:1522
 #, c-format
 msgid "Identity service returned invalid key"
 msgstr "인증 서비스에서 잘못된 키를 반환했습니다"
@@ -445,8 +428,8 @@ msgstr "인증 서비스에서 잘못된 키를 반환했습니다"
 msgid "Last.fm"
 msgstr "Last.fm"
 
-#: ../src/goabackend/goalastfmprovider.c:707
-#: ../src/goabackend/goalastfmprovider.c:855
+#: ../src/goabackend/goalastfmprovider.c:688
+#: ../src/goabackend/goalastfmprovider.c:836
 msgid "Error connecting to Last.fm"
 msgstr "Last.fm에 연결 중 오류가 발생했습니다"
 
@@ -454,17 +437,17 @@ msgstr "Last.fm에 연결 중 오류가 발생했습니다"
 msgid "Media Server"
 msgstr "미디어 서버"
 
-#: ../src/goabackend/goamediaserverprovider.c:371
+#: ../src/goabackend/goamediaserverprovider.c:370
 msgid ""
 "Personal content can be added to your applications through a media server "
 "account."
 msgstr "미디어 서버 계정을 통해 개인 컨텐트를 프로그램으로 추가할 수 있습니다."
 
-#: ../src/goabackend/goamediaserverprovider.c:385
+#: ../src/goabackend/goamediaserverprovider.c:384
 msgid "Available Media Servers"
 msgstr "존재하는 미디어 서버"
 
-#: ../src/goabackend/goamediaserverprovider.c:415
+#: ../src/goabackend/goamediaserverprovider.c:414
 msgid "No media servers found"
 msgstr "미디어 서버가 없습니다"
 
@@ -477,38 +460,38 @@ msgid ""
 msgstr ""
 "접근 토큰을 요청하는데 상태 200을 기대했지만, %d 상태를 가져왔습니다(%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:843
+#: ../src/goabackend/goaoauth2provider.c:841
 msgid "Authorization response: "
 msgstr "인증 응답: "
 
-#: ../src/goabackend/goaoauth2provider.c:913
+#: ../src/goabackend/goaoauth2provider.c:911
 #, c-format
 msgid "Authorization response: %s"
 msgstr "인증 응답: %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1060
-#: ../src/goabackend/goaoauthprovider.c:894
+#: ../src/goabackend/goaoauth2provider.c:1058
+#: ../src/goabackend/goaoauthprovider.c:892
 msgid "Error getting an Access Token: "
 msgstr "접근 토큰을 가져오는데 오류가 발생했습니다:"
 
-#: ../src/goabackend/goaoauth2provider.c:1075
-#: ../src/goabackend/goaoauthprovider.c:907
+#: ../src/goabackend/goaoauth2provider.c:1073
+#: ../src/goabackend/goaoauthprovider.c:905
 msgid "Error getting identity: "
 msgstr "신원 정보를 가져오는데 오류가 발생했습니다:"
 
-#: ../src/goabackend/goaoauth2provider.c:1292
-#: ../src/goabackend/goaoauthprovider.c:1215
+#: ../src/goabackend/goaoauth2provider.c:1290
+#: ../src/goabackend/goaoauthprovider.c:1209
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "%s 계정 로그인을 요청받았지만, %s 계정으로 로그인했습니다."
 
-#: ../src/goabackend/goaoauth2provider.c:1454
+#: ../src/goabackend/goaoauth2provider.c:1452
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "자격 정보에 access_token이 없습니다"
 
-#: ../src/goabackend/goaoauth2provider.c:1493
-#: ../src/goabackend/goaoauthprovider.c:1443
+#: ../src/goabackend/goaoauth2provider.c:1491
+#: ../src/goabackend/goaoauthprovider.c:1437
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "접근 토큰을 새로 고치는데 실패했습니다(%s, %d):"
@@ -518,34 +501,34 @@ msgstr "접근 토큰을 새로 고치는데 실패했습니다(%s, %d):"
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "응답에 access_token이나 access_token_secret 헤더가 빠졌습니다"
 
-#: ../src/goabackend/goaoauthprovider.c:776
+#: ../src/goabackend/goaoauthprovider.c:774
 msgid "Error getting a Request Token: "
 msgstr "요청 토큰을 가져오는데 오류가 발생했습니다:"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:809
+#: ../src/goabackend/goaoauthprovider.c:807
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr ""
 "요청 토큰을 가져오는데 상태 200을 기대했지만, %d 상태를 가져왔습니다(%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:826
+#: ../src/goabackend/goaoauthprovider.c:824
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "응답애 request_token이나 request_token_secret 헤더가 빠졌습니다"
 
-#: ../src/goabackend/goaoauthprovider.c:1399
+#: ../src/goabackend/goaoauthprovider.c:1393
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "자격 정보에 access_token이나 access_token_secret이 없습니다"
 
-#: ../src/goabackend/goaowncloudprovider.c:67
+#: ../src/goabackend/goaowncloudprovider.c:68
 msgid "ownCloud"
 msgstr "ownCloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:836
-#: ../src/goabackend/goaowncloudprovider.c:1019
+#: ../src/goabackend/goaowncloudprovider.c:761
+#: ../src/goabackend/goaowncloudprovider.c:943
 msgid "Error connecting to ownCloud server"
 msgstr "ownCloud 서버에 연결하는 중 오류가 발생했습니다"
 
@@ -625,19 +608,19 @@ msgid "TLS not available"
 msgstr "TLS를 사용할 수 없습니다"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauth.c:241
+#: ../src/goabackend/goasmtpauth.c:242
 #, c-format
 msgid "org.gnome.OnlineAccounts.Mail is not available"
 msgstr "org.gnome.OnlineAccounts.Mail 설정이 없습니다"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauth.c:251
+#: ../src/goabackend/goasmtpauth.c:252
 #, c-format
 msgid "Failed to parse email address"
 msgstr "전자메일 주소를 해석하는데 실패했습니다"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauth.c:263
+#: ../src/goabackend/goasmtpauth.c:261
 #, c-format
 msgid "Cannot do SMTP authentication without a domain"
 msgstr "도메인 정보 없이 SMTP 인증을 처리할 수 없습니다"
@@ -690,90 +673,114 @@ msgstr "확인(_O)"
 msgid "Cannot save the connection parameters"
 msgstr "연결 인자를 저장할 수 없습니다"
 
-#: ../src/goabackend/goatelepathyprovider.c:866
+#: ../src/goabackend/goatelepathyprovider.c:867
 msgid "Cannot save your personal information on the server"
 msgstr "서버에 개인 정보를 저장할 수 없습니다"
 
 #. Connection Settings button
-#: ../src/goabackend/goatelepathyprovider.c:891
+#: ../src/goabackend/goatelepathyprovider.c:893
 msgid "_Connection Settings"
 msgstr "연결 설정(_C)"
 
 #. Edit Personal Information button
-#: ../src/goabackend/goatelepathyprovider.c:895
+#: ../src/goabackend/goatelepathyprovider.c:897
 msgid "_Personal Details"
 msgstr "자세한 개인 정보(_P)"
 
-#: ../src/goabackend/goautils.c:115
+#: ../src/goabackend/goautils.c:120
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "%2$s에 대한 %1$s계정이 이미 있습니다"
 
 #. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:137
+#: ../src/goabackend/goautils.c:170
 #, c-format
 msgid "%s account"
 msgstr "%s 계정"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:181
+#: ../src/goabackend/goautils.c:214
 msgid "Failed to delete credentials from the keyring"
 msgstr "키 모음에서 자격 정보 삭제에 실패했습니다"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:233
+#: ../src/goabackend/goautils.c:266
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "키 모음에서 자격 정보 가져오기에 실패했습니다"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:243
+#: ../src/goabackend/goautils.c:276
 msgid "No credentials found in the keyring"
 msgstr "키 모음에서 자격 정보를 찾을 수 없습니다"
 
-#: ../src/goabackend/goautils.c:256
+#: ../src/goabackend/goautils.c:289
 msgid "Error parsing result obtained from the keyring: "
 msgstr "키 모음에서 가져온 결과를 해석하는데 오류가 있습니다:"
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:299
+#: ../src/goabackend/goautils.c:332
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "%s 그놈 온라인 계정이 %s 신원 정보에 대한 자격을 부여합니다"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:316
+#: ../src/goabackend/goautils.c:349
 msgid "Failed to store credentials in the keyring"
 msgstr "키 모음에 자격 정보를 저장하는데 실패했습니다"
 
-#: ../src/goabackend/goautils.c:537
+#: ../src/goabackend/goautils.c:571
+#| msgid "Cannot save the connection parameters"
+msgid "Cannot resolve hostname"
+msgstr "호스트 이름을 해석할 수 없습니다"
+
+#: ../src/goabackend/goautils.c:575
+msgid "Cannot resolve proxy hostname"
+msgstr "프록시 호스트 이름을 해석할 수 없습니다"
+
+#: ../src/goabackend/goautils.c:580
+msgid "Cannot find WebDAV endpoint"
+msgstr "WebDAV 종단점을 찾을 수 없습니다"
+
+#: ../src/goabackend/goautils.c:589
+#, c-format
+msgid "Code: %u — Unexpected response from server"
+msgstr "코드: %u — 서버에서 예상치 못한 응답"
+
+#: ../src/goabackend/goautils.c:605
 msgid "The signing certificate authority is not known."
 msgstr "알 수 없는 서명 인증 기관 입니다."
 
-#: ../src/goabackend/goautils.c:541
+#: ../src/goabackend/goautils.c:609
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr "인증서가 가져온 사이트에서 기대한 신원 정보와 일치하지 않습니다."
 
-#: ../src/goabackend/goautils.c:546
+#: ../src/goabackend/goautils.c:614
 msgid "The certificate’s activation time is still in the future."
 msgstr "아직 인증서 활성 시기가 아닙니다."
 
-#: ../src/goabackend/goautils.c:550
+#: ../src/goabackend/goautils.c:618
 msgid "The certificate has expired."
 msgstr "인증서의 기한이 끝났습니다."
 
-#: ../src/goabackend/goautils.c:554
+#: ../src/goabackend/goautils.c:622
 msgid "The certificate has been revoked."
 msgstr "파기된 인증서입니다."
 
-#: ../src/goabackend/goautils.c:558
+#: ../src/goabackend/goautils.c:626
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "인증서 알고리즘이 안전하지 않습니다."
 
-#: ../src/goabackend/goautils.c:562
+#: ../src/goabackend/goautils.c:630
 msgid "Invalid certificate."
 msgstr "인증서가 잘못되었습니다."
+
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:665
+#, c-format
+msgid "Did not find %s with identity ‘%s’ in credentials"
+msgstr "인증에서 ‘%2$s’ 신원 정보의 %1$s을(를) 찾지 못했습니다"
 
 #. translators: %s here is the address of the web page
 #: ../src/goabackend/goawebview.c:95
@@ -782,19 +789,19 @@ msgid "Loading “%s”…"
 msgstr "“%s” 불러오는 중…"
 
 #  * NOTE: 그냥 음역할 것.
-#: ../src/goabackend/goawindowsliveprovider.c:77
+#: ../src/goabackend/goawindowsliveprovider.c:78
 msgid "Microsoft Account"
 msgstr "마이크로소프트 계정"
 
-#: ../src/goaidentity/goaidentityservice.c:376
+#: ../src/goaidentity/goaidentityservice.c:378
 msgid "initial secret passed before secret key exchange"
 msgstr "비밀 키를 교환하기 전에 초기 비밀 키를 넘겼습니다"
 
-#: ../src/goaidentity/goaidentityservice.c:570
+#: ../src/goaidentity/goaidentityservice.c:574
 msgid "Initial secret key is invalid"
 msgstr "초기 비밀 키가 잘못되었습니다"
 
-#: ../src/goaidentity/goaidentityservice.c:1124
+#: ../src/goaidentity/goaidentityservice.c:1130
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "%s 네트워크 영역에 접속하려면 약간의 정보가 더 필요합니다."
@@ -859,3 +866,6 @@ msgstr "신원 정보를 찾을 수 없습니다"
 #: ../src/goaidentity/goakerberosidentitymanager.c:840
 msgid "Could not create credential cache for identity"
 msgstr "신원에 대한 자격 정보 캐시를 만들 수 없습니다"
+
+#~ msgid "Did not find password with identity ‘%s’ in credentials"
+#~ msgstr "자격 정보에 ‘%s’ 신원 정보의 암호가 없습니다"
