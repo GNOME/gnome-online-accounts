@@ -418,7 +418,7 @@ create_account_details_ui (GoaProvider    *provider,
   gtk_widget_show (label);
 
   gtk_window_get_size (GTK_WINDOW (data->dialog), NULL, &height);
-  gtk_widget_set_size_request (GTK_WIDGET (data->dialog), -1, height);
+  gtk_window_set_default_size (GTK_WINDOW (data->dialog), -1, height);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

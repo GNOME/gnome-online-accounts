@@ -483,7 +483,7 @@ create_account_details_ui (GoaProvider    *provider,
   if (new_account)
     {
       gtk_window_get_size (GTK_WINDOW (data->dialog), &width, NULL);
-      gtk_widget_set_size_request (GTK_WIDGET (data->dialog), width, -1);
+      gtk_window_set_default_size (GTK_WINDOW (data->dialog), width, -1);
     }
   else
     {
@@ -496,7 +496,7 @@ create_account_details_ui (GoaProvider    *provider,
       if (parent != NULL)
         {
           gtk_window_get_size (parent, &width, NULL);
-          gtk_widget_set_size_request (GTK_WIDGET (data->dialog), (gint) (0.5 * width), -1);
+          gtk_window_set_default_size (GTK_WINDOW (data->dialog), (gint) (0.5 * width), -1);
         }
     }
 }

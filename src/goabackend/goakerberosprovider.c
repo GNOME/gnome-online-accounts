@@ -758,7 +758,7 @@ create_account_details_ui (GoaKerberosProvider *self,
   gtk_container_add (GTK_CONTAINER (request->progress_grid), label);
 
   gtk_window_get_size (GTK_WINDOW (request->dialog), &width, NULL);
-  gtk_widget_set_size_request (GTK_WIDGET (request->dialog), width, -1);
+  gtk_window_set_default_size (GTK_WINDOW (request->dialog), width, -1);
 }
 
 static void

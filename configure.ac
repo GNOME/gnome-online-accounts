@@ -114,7 +114,7 @@ AM_CONDITIONAL(BUILD_BACKEND, [test x$enable_backend != xno])
 if test "$enable_backend" != "no"; then
   AC_DEFINE(GOA_BACKEND_ENABLED, 1, [Enable goabackend library])
 
-  PKG_CHECK_MODULES(GTK, [gtk+-3.0 >= 3.11.1])
+  PKG_CHECK_MODULES(GTK, [gtk+-3.0 >= 3.19.12])
   AC_SUBST(GTK_CFLAGS)
   AC_SUBST(GTK_LIBS)
 
