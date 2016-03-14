@@ -408,8 +408,8 @@ add_account (GoaProvider  *provider,
   AddAccountData data;
   TpawAccountSettings *settings = NULL;
   TpawAccountWidget *account_widget = NULL;
-  GtkRequisition req;
   gint response;
+  gint width;
 
   settings = tpaw_protocol_create_account_settings (priv->protocol);
   if (settings == NULL)
@@ -447,8 +447,8 @@ add_account (GoaProvider  *provider,
   /* The dialog now contains a lot of empty space between the account widget
    * and the buttons. We force it's vertical size to be just right to fit the
    * widget. */
-  gtk_widget_get_preferred_size (GTK_WIDGET (dialog), NULL, &req);
-  gtk_widget_set_size_request (GTK_WIDGET (dialog), req.width, 1);
+  gtk_window_get_size (GTK_WINDOW (dialog), &width, NULL);
+  gtk_window_set_default_size (GTK_WINDOW (dialog), width, -1);
 
   response = gtk_dialog_run (GTK_DIALOG (dialog));
   if (response != GTK_RESPONSE_OK && response != GTK_RESPONSE_APPLY)
