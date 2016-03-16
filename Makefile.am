@@ -19,8 +19,7 @@ SUBDIRS += po
 
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
-# docs doesn't work with src != build
-DISTCHECK_CONFIGURE_FLAGS=--enable-introspection --disable-gtk-doc
+DISTCHECK_CONFIGURE_FLAGS=--enable-introspection --enable-gtk-doc
 
 MAINTAINERCLEANFILES = \
 	$(srcdir)/INSTALL \
