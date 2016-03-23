@@ -1468,7 +1468,7 @@ goa_util_add_account_info (GtkGrid *grid, gint row, GoaObject *object)
   gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
   gtk_label_set_max_width_chars (GTK_LABEL (label), 24);
   gtk_label_set_width_chars (GTK_LABEL (label), 24);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_widget_set_margin_bottom (label, 12);
   g_free (markup);
   gtk_grid_attach (grid, label, 1, row, 3, 1);
@@ -1516,8 +1516,8 @@ goa_util_add_row_switch_from_keyfile_with_blurb (GtkGrid      *grid,
       GtkWidget *label;
 
       label = gtk_label_new_with_mnemonic (blurb);
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), switch_);
+      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
     }
 

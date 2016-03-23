@@ -225,7 +225,7 @@ add_list_box_row (GtkWidget *list_box,
   gtk_widget_set_margin_end (label, 20);
   gtk_widget_set_margin_top (label, 12);
   gtk_widget_set_margin_bottom (label, 12);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_container_add (GTK_CONTAINER (row), label);
 }
 
@@ -353,10 +353,10 @@ create_account_details_ui (GoaProvider    *provider,
   gtk_container_add (GTK_CONTAINER (vbox), grid0);
 
   label = gtk_label_new (_("Personal content can be added to your applications through a media server account."));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
   gtk_label_set_max_width_chars (GTK_LABEL (label), 40);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_container_add (GTK_CONTAINER (grid0), label);
 
   grid1 = gtk_grid_new ();
@@ -365,9 +365,9 @@ create_account_details_ui (GoaProvider    *provider,
   gtk_container_add (GTK_CONTAINER (grid0), grid1);
 
   label = gtk_label_new ("");
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   markup = g_strdup_printf ("<b>%s</b>", _("Available Media Servers"));
   gtk_label_set_markup (GTK_LABEL (label), markup);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   g_free (markup);
   gtk_container_add (GTK_CONTAINER (grid1), label);
 

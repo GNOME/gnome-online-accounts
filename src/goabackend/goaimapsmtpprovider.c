@@ -1481,10 +1481,10 @@ show_label (GtkWidget *grid, gint row, const gchar *left, const gchar *right)
   gtk_grid_attach (GTK_GRID (grid), label, 0, row, 1, 1);
 
   label = gtk_label_new (right);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
   gtk_label_set_max_width_chars (GTK_LABEL (label), 24);
   gtk_label_set_width_chars (GTK_LABEL (label), 24);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_grid_attach (GTK_GRID (grid), label, 1, row, 3, 1);
 }
 
