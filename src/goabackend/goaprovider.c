@@ -1231,6 +1231,7 @@ goa_provider_get_all_finish (GList        **out_providers,
 
   g_return_val_if_fail (g_simple_async_result_is_valid (result, NULL,
         goa_provider_get_all), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   if (g_simple_async_result_propagate_error (simple, error))
     return FALSE;
