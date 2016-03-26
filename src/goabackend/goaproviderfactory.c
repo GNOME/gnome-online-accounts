@@ -129,6 +129,7 @@ get_providers_finish_default (GoaProviderFactory  *factory,
   gboolean had_error;
 
   g_return_val_if_fail (g_task_is_valid (result, factory), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   task = G_TASK (result);
 
