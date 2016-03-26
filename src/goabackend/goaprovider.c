@@ -730,10 +730,10 @@ goa_provider_ensure_credentials (GoaProvider          *self,
  * Returns: %TRUE if the credentials for the passed #GoaObject are valid, %FALSE if @error is set.
  */
 gboolean
-goa_provider_ensure_credentials_finish (GoaProvider  *self,
-                                                gint                *out_expires_in,
-                                                GAsyncResult        *res,
-                                                GError             **error)
+goa_provider_ensure_credentials_finish (GoaProvider         *self,
+                                        gint                *out_expires_in,
+                                        GAsyncResult        *res,
+                                        GError             **error)
 {
   GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
   gboolean ret;
