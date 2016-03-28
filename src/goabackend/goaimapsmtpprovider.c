@@ -1021,7 +1021,8 @@ add_account (GoaProvider    *provider,
 
   /* SMTP */
 
-  /* Re-use the password from the IMAP page */
+  /* Re-use the username and password from the IMAP page */
+  gtk_entry_set_text (GTK_ENTRY (data.smtp_username), imap_username);
   gtk_entry_set_text (GTK_ENTRY (data.smtp_password), imap_password);
 
   gtk_notebook_next_page (GTK_NOTEBOOK (data.notebook));
