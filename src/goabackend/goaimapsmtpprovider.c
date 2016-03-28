@@ -1120,6 +1120,7 @@ add_account (GoaProvider    *provider,
       gtk_widget_show_all (data.cluebar);
 
       g_clear_object (&smtp_auth);
+      g_clear_pointer (&domain, g_free);
       goto smtp_again;
     }
 
@@ -1437,6 +1438,7 @@ refresh_account (GoaProvider    *provider,
       gtk_widget_show_all (data.cluebar);
 
       g_clear_object (&smtp_auth);
+      g_clear_pointer (&domain, g_free);
       goto smtp_again;
     }
 
