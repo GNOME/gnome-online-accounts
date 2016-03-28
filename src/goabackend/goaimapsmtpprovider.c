@@ -952,6 +952,9 @@ add_account (GoaProvider    *provider,
       goto out;
     }
 
+  gtk_widget_set_no_show_all (data.cluebar, TRUE);
+  gtk_widget_hide (data.cluebar);
+
   encryption = gtk_combo_box_get_active_id (GTK_COMBO_BOX (data.imap_encryption));
   imap_tls_type = get_tls_type_from_string_id (encryption);
 
@@ -1040,6 +1043,9 @@ add_account (GoaProvider    *provider,
                    _("Dialog was dismissed"));
       goto out;
     }
+
+  gtk_widget_set_no_show_all (data.cluebar, TRUE);
+  gtk_widget_hide (data.cluebar);
 
   encryption = gtk_combo_box_get_active_id (GTK_COMBO_BOX (data.smtp_encryption));
   smtp_tls_type = get_tls_type_from_string_id (encryption);
@@ -1305,6 +1311,9 @@ refresh_account (GoaProvider    *provider,
       goto out;
     }
 
+  gtk_widget_set_no_show_all (data.cluebar, TRUE);
+  gtk_widget_hide (data.cluebar);
+
   imap_password = gtk_entry_get_text (GTK_ENTRY (data.imap_password));
   g_cancellable_reset (data.cancellable);
   imap_auth = goa_imap_auth_login_new (NULL, NULL, imap_username, imap_password);
@@ -1377,6 +1386,9 @@ refresh_account (GoaProvider    *provider,
                    _("Dialog was dismissed"));
       goto out;
     }
+
+  gtk_widget_set_no_show_all (data.cluebar, TRUE);
+  gtk_widget_hide (data.cluebar);
 
   smtp_password = gtk_entry_get_text (GTK_ENTRY (data.smtp_password));
   g_cancellable_reset (data.cancellable);
