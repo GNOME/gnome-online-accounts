@@ -576,17 +576,13 @@ static void
 set_expiration_time (GoaKerberosIdentity *self,
                      krb5_timestamp       expiration_time)
 {
-  G_LOCK (identity_lock);
   if (self->priv->expiration_time != expiration_time)
     {
       self->priv->expiration_time = expiration_time;
-      G_UNLOCK (identity_lock);
       queue_notify (self,
                     &self->priv->expiration_time_idle_id,
                     "expiration-timestamp");
-      G_LOCK (identity_lock);
     }
-  G_UNLOCK (identity_lock);
 }
 
 static gboolean
@@ -720,7 +716,10 @@ verify_identity (GoaKerberosIdentity  *self,
       goto out;
     }
 out:
+
+  G_LOCK (identity_lock);
   set_expiration_time (self, expiration_time);
+  G_UNLOCK (identity_lock);
 
   if (principal != NULL)
     krb5_free_principal (self->priv->kerberos_context, principal);
@@ -1361,7 +1360,7 @@ void
 goa_kerberos_identity_update (GoaKerberosIdentity *self,
                               GoaKerberosIdentity *new_identity)
 {
-  VerificationLevel verification_level;
+  VerificationLevel old_verification_level, new_verification_level;
   char *preauth_identity_source = NULL;
 
   if (self->priv->credentials_cache != NULL)
@@ -1373,11 +1372,13 @@ goa_kerberos_identity_update (GoaKerberosIdentity *self,
 
   G_LOCK (identity_lock);
   update_identifier (self, new_identity);
+
+  set_expiration_time (self, new_identity->priv->expiration_time);
+  old_verification_level = self->priv->cached_verification_level;
+  new_verification_level = new_identity->priv->cached_verification_level;
   G_UNLOCK (identity_lock);
 
-  verification_level = verify_identity (self, &preauth_identity_source, NULL);
-
-  if (verification_level == VERIFICATION_LEVEL_SIGNED_IN)
+  if (new_verification_level == VERIFICATION_LEVEL_SIGNED_IN)
     reset_alarms (self);
   else
     clear_alarms (self);
@@ -1387,24 +1388,22 @@ goa_kerberos_identity_update (GoaKerberosIdentity *self,
   self->priv->preauth_identity_source = preauth_identity_source;
   G_UNLOCK (identity_lock);
 
-  if (verification_level != self->priv->cached_verification_level)
+  if (new_verification_level != old_verification_level)
     {
-      if (self->priv->cached_verification_level == VERIFICATION_LEVEL_SIGNED_IN &&
-          verification_level == VERIFICATION_LEVEL_EXISTS)
+      if (old_verification_level == VERIFICATION_LEVEL_SIGNED_IN &&
+          new_verification_level == VERIFICATION_LEVEL_EXISTS)
         {
-
           G_LOCK (identity_lock);
-          self->priv->cached_verification_level = verification_level;
+          self->priv->cached_verification_level = new_verification_level;
           G_UNLOCK (identity_lock);
 
           g_signal_emit (G_OBJECT (self), signals[EXPIRED], 0);
         }
-      else if (self->priv->cached_verification_level == VERIFICATION_LEVEL_EXISTS &&
-               verification_level == VERIFICATION_LEVEL_SIGNED_IN)
+      else if (old_verification_level == VERIFICATION_LEVEL_EXISTS &&
+               new_verification_level == VERIFICATION_LEVEL_SIGNED_IN)
         {
-
           G_LOCK (identity_lock);
-          self->priv->cached_verification_level = verification_level;
+          self->priv->cached_verification_level = new_verification_level;
           G_UNLOCK (identity_lock);
 
           g_signal_emit (G_OBJECT (self), signals[UNEXPIRED], 0);
@@ -1412,9 +1411,10 @@ goa_kerberos_identity_update (GoaKerberosIdentity *self,
       else
         {
           G_LOCK (identity_lock);
-          self->priv->cached_verification_level = verification_level;
+          self->priv->cached_verification_level = new_verification_level;
           G_UNLOCK (identity_lock);
         }
+
       queue_notify (self, &self->priv->is_signed_in_idle_id, "is-signed-in");
     }
 }
