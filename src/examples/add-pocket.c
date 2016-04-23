@@ -20,6 +20,7 @@
 #define GOA_API_IS_SUBJECT_TO_CHANGE
 #include <goa/goa.h>
 
+#include <locale.h>
 #include <rest/rest-proxy.h>
 #include <rest/rest-proxy-call.h>
 
@@ -36,6 +37,8 @@ main (int argc, char **argv)
   RestProxyCall *call;
   const char *url;
   const char *tweet_id = NULL;
+
+  setlocale (LC_ALL, "");
 
   if (argc != 2 && argc != 3) {
     g_print ("Usage: %s URL [TWEET ID]\n", argv[0]);

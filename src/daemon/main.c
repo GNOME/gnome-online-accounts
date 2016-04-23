@@ -20,8 +20,10 @@
 
 #include <glib-unix.h>
 
+#include <locale.h>
 #include <signal.h>
 #include <gio/gio.h>
+#include <libintl.h>
 
 #include "goadaemon.h"
 
@@ -99,6 +101,11 @@ main (int    argc,
   loop = NULL;
   opt_context = NULL;
   name_owner_id = 0;
+
+  setlocale (LC_ALL, "");
+  bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+  textdomain (GETTEXT_PACKAGE);
 
   opt_context = g_option_context_new ("GNOME Online Accounts daemon");
   g_option_context_add_main_entries (opt_context, opt_entries, NULL);

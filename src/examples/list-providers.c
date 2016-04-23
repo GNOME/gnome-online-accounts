@@ -21,6 +21,8 @@
 #define GOA_BACKEND_API_IS_SUBJECT_TO_CHANGE
 #include <goabackend/goabackend.h>
 
+#include <locale.h>
+
 typedef struct
 {
   GMainLoop *loop;
@@ -45,6 +47,8 @@ main (int argc, char **argv)
   GetAllData data = {0,};
   GoaProvider *provider;
   GList *l;
+
+  setlocale (LC_ALL, "");
 
   data.loop = g_main_loop_new (NULL, FALSE);
   goa_provider_get_all (get_all_cb, &data);

@@ -21,6 +21,7 @@
 #define GOA_API_IS_SUBJECT_TO_CHANGE
 #include <goa/goa.h>
 
+#include <locale.h>
 #include <rest/rest-proxy.h>
 #include <rest/rest-proxy-call.h>
 
@@ -38,6 +39,8 @@ main (int argc, char **argv)
   gchar *sig, *api_signature;
   const char *user;
   const char *message = NULL;
+
+  setlocale (LC_ALL, "");
 
   if (argc != 2 && argc != 3) {
     g_print ("Usage: %s USER [MESSAGE]\n", argv[0]);

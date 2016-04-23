@@ -20,7 +20,9 @@
 
 #include <glib-unix.h>
 
+#include <locale.h>
 #include <gio/gio.h>
+#include <libintl.h>
 
 #include "goaidentityservice.h"
 
@@ -32,6 +34,11 @@ main (int    argc,
   GoaIdentityService *service;
   GError *error;
   int ret = 1;
+
+  setlocale (LC_ALL, "");
+  bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+  textdomain (GETTEXT_PACKAGE);
 
   loop = g_main_loop_new (NULL, FALSE);
   service = goa_identity_service_new ();

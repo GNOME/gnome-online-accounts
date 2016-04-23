@@ -20,6 +20,8 @@
 #define GOA_API_IS_SUBJECT_TO_CHANGE
 #include <goa/goa.h>
 
+#include <locale.h>
+
 int
 main (int argc, char **argv)
 {
@@ -27,6 +29,8 @@ main (int argc, char **argv)
   GoaClient *client;
   GList *accounts, *l;
   GoaAccount *account;
+
+  setlocale (LC_ALL, "");
 
   client = goa_client_new_sync (NULL, &error);
   if (!client) {
