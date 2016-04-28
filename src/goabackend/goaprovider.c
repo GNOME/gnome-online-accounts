@@ -714,7 +714,7 @@ goa_provider_ensure_credentials (GoaProvider          *self,
   g_task_set_task_data (task,
                         ensure_credentials_data_new (object),
                         (GDestroyNotify) ensure_credentials_data_free);
-  g_task_set_source_tag(task, goa_provider_ensure_credentials);
+  g_task_set_source_tag (task, goa_provider_ensure_credentials);
   g_task_run_in_thread (task, ensure_credentials_in_thread_func);
 
   g_object_unref (task);
