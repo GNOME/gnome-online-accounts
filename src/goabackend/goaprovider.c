@@ -707,7 +707,7 @@ goa_provider_ensure_credentials (GoaProvider          *self,
   g_return_if_fail (GOA_IS_OBJECT (object));
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (G_OBJECT (self),
+  task = g_task_new (self,
                      cancellable,
                      callback,
                      user_data);
