@@ -200,7 +200,7 @@ mail_client_check_tls_conn_handshake_cb (GObject *source_object, GAsyncResult *r
           g_task_return_error (task, error);
         }
 
-      goto error;
+      goto out;
     }
 
   g_clear_object (&data->conn);
@@ -217,15 +217,12 @@ mail_client_check_tls_conn_handshake_cb (GObject *source_object, GAsyncResult *r
   g_filter_output_stream_set_close_base_stream (G_FILTER_OUTPUT_STREAM (output), FALSE);
   goa_mail_auth_set_output (data->auth, output);
 
-  goa_mail_auth_run (data->auth, cancellable, mail_client_check_auth_run_cb, task);
-  goto out;
-
- error:
-  g_object_unref (G_OBJECT (task));
+  goa_mail_auth_run (data->auth, cancellable, mail_client_check_auth_run_cb, g_object_ref (task));
 
  out:
   g_clear_object (&input);
   g_clear_object (&output);
+  g_object_unref (G_OBJECT (task));
 }
 
 static void
@@ -250,7 +247,7 @@ mail_client_check_auth_starttls_cb (GObject *source_object, GAsyncResult *res, g
                  g_quark_to_string (error->domain),
                  error->code);
       g_task_return_error (task, error);
-      goto error;
+      goto out;
     }
 
   error = NULL;
@@ -258,7 +255,7 @@ mail_client_check_auth_starttls_cb (GObject *source_object, GAsyncResult *res, g
   if (server_identity == NULL)
     {
       g_task_return_error (task, error);
-      goto error;
+      goto out;
     }
 
   error = NULL;
@@ -266,7 +263,7 @@ mail_client_check_auth_starttls_cb (GObject *source_object, GAsyncResult *res, g
   if (data->tls_conn == NULL)
     {
       g_task_return_error (task, error);
-      goto error;
+      goto out;
     }
 
   if (data->accept_ssl_errors)
@@ -281,15 +278,11 @@ mail_client_check_auth_starttls_cb (GObject *source_object, GAsyncResult *res, g
                                     G_PRIORITY_DEFAULT,
                                     cancellable,
                                     mail_client_check_tls_conn_handshake_cb,
-                                    task);
-
-  goto out;
-
- error:
-  g_object_unref (G_OBJECT (task));
+                                    g_object_ref (task));
 
  out:
   g_clear_object (&server_identity);
+  g_object_unref (G_OBJECT (task));
 }
 
 static void
@@ -335,7 +328,7 @@ mail_client_check_connect_cb (GObject *source_object, GAsyncResult *res, gpointe
           g_task_return_error (task, error);
         }
 
-      goto error;
+      goto out;
     }
 
   /* fail quickly */
@@ -356,13 +349,11 @@ mail_client_check_connect_cb (GObject *source_object, GAsyncResult *res, gpointe
   g_object_unref (output);
 
   if (data->tls_type == GOA_TLS_TYPE_STARTTLS)
-    goa_mail_auth_starttls (data->auth, cancellable, mail_client_check_auth_starttls_cb, task);
+    goa_mail_auth_starttls (data->auth, cancellable, mail_client_check_auth_starttls_cb, g_object_ref (task));
   else
-    goa_mail_auth_run (data->auth, cancellable, mail_client_check_auth_run_cb, task);
+    goa_mail_auth_run (data->auth, cancellable, mail_client_check_auth_run_cb, g_object_ref (task));
 
-  return;
-
- error:
+ out:
   g_object_unref (G_OBJECT (task));
 }
 
@@ -409,7 +400,9 @@ goa_mail_client_check (GoaMailClient       *self,
                                          data->default_port,
                                          cancellable,
                                          mail_client_check_connect_cb,
-                                         task);
+                                         g_object_ref (task));
+
+  g_object_unref (task);
 }
 
 gboolean
