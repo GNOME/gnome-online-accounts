@@ -520,7 +520,6 @@ edit_connection_parameters (GoaObject  *goa_object,
   GtkWidget *dialog = NULL;
   TpawAccountWidget *account_widget = NULL;
   GtkWidget *content_area = NULL;
-  GtkWidget *align = NULL;
   gboolean ret;
   GError *error = NULL;
 
@@ -543,21 +542,19 @@ edit_connection_parameters (GoaObject  *goa_object,
 
   account_widget = tpaw_account_widget_new_for_protocol (settings,
       GTK_DIALOG (dialog), FALSE);
+  gtk_widget_set_margin_end (GTK_WIDGET (account_widget), 6);
+  gtk_widget_set_margin_start (GTK_WIDGET (account_widget), 6);
+  gtk_widget_set_margin_top (GTK_WIDGET (account_widget), 6);
   g_signal_connect (account_widget, "cancelled",
       G_CALLBACK (account_dialog_widget_cancelled_cb), &error);
   g_signal_connect_swapped (account_widget, "close",
       G_CALLBACK (g_main_loop_quit), loop);
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-
-  align = gtk_alignment_new (0.5, 0.5, 1, 1);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (align), 6, 0, 6, 6);
-
-  gtk_container_add (GTK_CONTAINER (align), GTK_WIDGET (account_widget));
-  gtk_box_pack_start (GTK_BOX (content_area), align, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), GTK_WIDGET (account_widget),
+      TRUE, TRUE, 0);
 
   gtk_widget_show (GTK_WIDGET (account_widget));
-  gtk_widget_show (align);
   gtk_widget_show (dialog);
 
   /* Wait for the dialog to be dismissed */
@@ -630,7 +627,6 @@ edit_personal_details (GoaObject  *goa_object,
   TpAccount *tp_account = NULL;
   GtkWidget *dialog = NULL;
   GtkWidget *user_info = NULL;
-  GtkWidget *align = NULL;
   GtkWidget *content_area = NULL;
   gint response;
   gboolean ret = FALSE;
@@ -653,16 +649,13 @@ edit_personal_details (GoaObject  *goa_object,
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 
   user_info = tpaw_user_info_new (tp_account);
+  gtk_widget_set_margin_end (user_info, 6);
+  gtk_widget_set_margin_start (user_info, 6);
+  gtk_widget_set_margin_top (user_info, 6);
   gtk_widget_show (user_info);
 
-  align = gtk_alignment_new (0.5, 0.5, 1, 1);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (align), 6, 0, 6, 6);
-  gtk_widget_show (align);
-
-  gtk_container_add (GTK_CONTAINER (align), GTK_WIDGET (user_info));
-
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-  gtk_box_pack_start (GTK_BOX (content_area), align, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), user_info, TRUE, TRUE, 0);
 
   g_timeout_add (100, personal_details_timeout_cb, &data);
   g_main_loop_run (data.loop);
