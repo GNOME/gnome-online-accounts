@@ -737,7 +737,7 @@ goa_provider_ensure_credentials_finish (GoaProvider         *self,
                                         GAsyncResult        *res,
                                         GError             **error)
 {
-  GTask *task = G_TASK (res);
+  GTask *task;
   gboolean had_error;
 
   gboolean ret;
@@ -746,8 +746,10 @@ goa_provider_ensure_credentials_finish (GoaProvider         *self,
   ret = FALSE;
 
   g_return_val_if_fail (GOA_IS_PROVIDER (self), FALSE);
-  g_return_val_if_fail (g_task_is_valid (res, self), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  g_return_val_if_fail (g_task_is_valid (res, self), FALSE);
+  task = G_TASK (res);
 
   g_warn_if_fail (g_task_get_source_tag (task) == goa_provider_ensure_credentials);
 
@@ -1224,13 +1226,16 @@ goa_provider_get_all_finish (GList        **out_providers,
                              GAsyncResult  *result,
                              GError       **error)
 {
-  GTask *task = G_TASK (result);
+  GTask *task;
   GList *providers;
   gboolean had_error;
 
-  g_return_val_if_fail (g_task_is_valid (result, NULL), FALSE);
-  g_return_val_if_fail (g_task_get_source_tag (task) == goa_provider_get_all, FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  g_return_val_if_fail (g_task_is_valid (result, NULL), FALSE);
+  task = G_TASK (result);
+
+  g_return_val_if_fail (g_task_get_source_tag (task) == goa_provider_get_all, FALSE);
 
   /* Workaround for bgo#764163 */
   had_error = g_task_had_error (task);
