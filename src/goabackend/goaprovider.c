@@ -781,12 +781,46 @@ goa_provider_ensure_credentials_sync (GoaProvider     *self,
                                       GCancellable    *cancellable,
                                       GError         **error)
 {
+  GoaAccount *account = NULL;
+  GoaProviderFeatures features;
+  gboolean disabled = TRUE;
+  gboolean ret = FALSE;
+  guint i;
+
   g_return_val_if_fail (GOA_IS_PROVIDER (self), FALSE);
   g_return_val_if_fail (GOA_IS_OBJECT (object), FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  return GOA_PROVIDER_GET_CLASS (self)->ensure_credentials_sync (self, object, out_expires_in, cancellable, error);
+  account = goa_object_get_account (object);
+  g_return_val_if_fail (GOA_IS_ACCOUNT (account), FALSE);
+
+  features = goa_provider_get_provider_features (self);
+
+  for (i = 0; provider_features_info[i].property != NULL; i++)
+    {
+      if ((features & provider_features_info[i].feature) != 0)
+        {
+          gboolean feature_disabled;
+
+          g_object_get (account, provider_features_info[i].property, &feature_disabled, NULL);
+          disabled = disabled && feature_disabled;
+          if (!disabled)
+            break;
+        }
+    }
+
+  if (disabled)
+    {
+      g_set_error_literal (error, GOA_ERROR, GOA_ERROR_NOT_SUPPORTED, _("Account is disabled"));
+      goto out;
+    }
+
+  ret = GOA_PROVIDER_GET_CLASS (self)->ensure_credentials_sync (self, object, out_expires_in, cancellable, error);
+
+ out:
+  g_clear_object (&account);
+  return ret;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
