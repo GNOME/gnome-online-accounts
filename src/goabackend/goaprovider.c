@@ -782,8 +782,10 @@ goa_provider_ensure_credentials_sync (GoaProvider     *self,
                                       GError         **error)
 {
   g_return_val_if_fail (GOA_IS_PROVIDER (self), FALSE);
+  g_return_val_if_fail (GOA_IS_OBJECT (object), FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
   return GOA_PROVIDER_GET_CLASS (self)->ensure_credentials_sync (self, object, out_expires_in, cancellable, error);
 }
 
