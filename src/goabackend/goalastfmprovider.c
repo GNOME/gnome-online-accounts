@@ -290,6 +290,8 @@ ensure_credentials_sync (GoaProvider         *provider,
   if (out_expires_in != NULL)
     *out_expires_in = 0;
 
+  ret = TRUE;
+
  out:
   g_free (username);
   g_free (password);
