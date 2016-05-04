@@ -174,35 +174,10 @@ ensure_credentials_sync (GoaProvider         *provider,
                          GCancellable        *cancellable,
                          GError             **error)
 {
-  GVariant *credentials;
-  gboolean ret;
-
-  credentials = NULL;
-  ret = FALSE;
-
-  credentials = goa_utils_lookup_credentials_sync (provider,
-                                                   object,
-                                                   cancellable,
-                                                   error);
-
-  if (credentials == NULL)
-    {
-      if (error != NULL)
-        {
-          (*error)->domain = GOA_ERROR;
-          (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
-          goto out;
-        }
-    }
-
   if (out_expires_in != NULL)
     *out_expires_in = 0;
 
-  ret = TRUE;
-
- out:
-  g_clear_pointer (&credentials, (GDestroyNotify) g_variant_unref);
-  return ret;
+  return TRUE;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -527,28 +502,13 @@ refresh_account (GoaProvider  *provider,
                  GError      **error)
 {
   GoaAccount *account;
-  GVariantBuilder credentials;
-  gboolean ret;
-
-  ret = FALSE;
-
-  g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
-
-  if (!goa_utils_store_credentials_for_object_sync (provider,
-                                                    object,
-                                                    g_variant_builder_end (&credentials),
-                                                    NULL, /* GCancellable */
-                                                    error))
-    goto out;
 
   account = goa_object_peek_account (object);
   goa_account_call_ensure_credentials (account,
                                        NULL, /* GCancellable */
                                        NULL, NULL); /* callback, user_data */
-  ret = TRUE;
 
- out:
-  return ret;
+  return TRUE;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
