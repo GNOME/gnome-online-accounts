@@ -914,23 +914,8 @@ get_all_providers_cb (GObject      *source,
       g_key_file_set_string (key_file, group, key, value);
     }
 
-  g_free (key_file_data);
   error = NULL;
-  key_file_data = g_key_file_to_data (key_file,
-                                      &length,
-                                      &error);
-  if (key_file_data == NULL)
-    {
-      g_prefix_error (&error, "Error generating key-value-file: ");
-      g_dbus_method_invocation_take_error (data->invocation, error);
-      goto out;
-    }
-
-  error = NULL;
-  if (!g_file_set_contents (path,
-                            key_file_data,
-                            length,
-                            &error))
+  if (!g_key_file_save_to_file (key_file, path, &error))
     {
       g_prefix_error (&error, "Error writing key-value-file %s: ", path);
       g_dbus_method_invocation_take_error (data->invocation, error);
@@ -1011,8 +996,6 @@ on_account_handle_remove (GoaAccount            *account,
   const gchar *provider_type;
   gchar *path;
   gchar *group;
-  gchar *data;
-  gsize length;
   GError *error;
 
   provider = NULL;
@@ -1020,7 +1003,6 @@ on_account_handle_remove (GoaAccount            *account,
   path = NULL;
   group = NULL;
   key_file = NULL;
-  data = NULL;
 
   if (goa_account_get_is_locked (account))
     {
@@ -1060,21 +1042,7 @@ on_account_handle_remove (GoaAccount            *account,
     }
 
   error = NULL;
-  data = g_key_file_to_data (key_file,
-                             &length,
-                             &error);
-  if (data == NULL)
-    {
-      g_prefix_error (&error, "Error generating key-value-file: ");
-      g_dbus_method_invocation_take_error (invocation, error);
-      goto out;
-    }
-
-  error = NULL;
-  if (!g_file_set_contents (path,
-                            data,
-                            length,
-                            &error))
+  if (!g_key_file_save_to_file (key_file, path, &error))
     {
       g_prefix_error (&error, "Error writing key-value-file %s: ", path);
       g_dbus_method_invocation_take_error (invocation, error);
@@ -1119,7 +1087,6 @@ on_account_handle_remove (GoaAccount            *account,
 
  out:
   g_clear_object (&provider);
-  g_free (data);
   g_clear_pointer (&key_file, (GDestroyNotify) g_key_file_free);
   g_free (group);
   g_free (path);
