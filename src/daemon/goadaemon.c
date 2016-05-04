@@ -486,6 +486,7 @@ update_account_object (GoaDaemon           *self,
   GoaAccount *account;
   GoaProvider *provider;
   gboolean is_locked;
+  gboolean is_temporary;
   gboolean ret;
   gchar *identity;
   gchar *presentation_identity;
@@ -516,6 +517,7 @@ update_account_object (GoaDaemon           *self,
   identity = g_key_file_get_string (key_file, group, "Identity", NULL);
   presentation_identity = g_key_file_get_string (key_file, group, "PresentationIdentity", NULL);
   is_locked = g_key_file_get_boolean (key_file, group, "IsLocked", NULL);
+  is_temporary = g_key_file_get_boolean (key_file, group, "IsTemporary", NULL);
   if (just_added)
     {
       account = goa_account_skeleton_new ();
@@ -538,6 +540,7 @@ update_account_object (GoaDaemon           *self,
   goa_account_set_identity (account, identity);
   goa_account_set_presentation_identity (account, presentation_identity);
   goa_account_set_is_locked (account, is_locked);
+  goa_account_set_is_temporary (account, is_temporary);
 
   error = NULL;
   if (!goa_provider_build_object (provider, object, key_file, group, self->connection, just_added, &error))
