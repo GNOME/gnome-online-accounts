@@ -433,6 +433,7 @@ add_config_file (GoaDaemon     *self,
     }
   else
     {
+      gboolean needs_update = FALSE;
       gchar **groups;
       const char *guid;
       gsize num_groups;
@@ -463,9 +464,44 @@ add_config_file (GoaDaemon     *self,
                   if (session_id != NULL &&
                       g_strcmp0 (session_id, guid) != 0)
                     {
+                      GoaProvider *provider = NULL;
+                      const gchar *id;
+                      gchar *provider_type = NULL;
+
                       g_debug ("ignoring account \"%s\" in file %s because it's stale",
                                groups[n], path);
+
+                      needs_update = g_key_file_remove_group (key_file, groups[n], NULL);
+
+                      id = group_to_id (groups[n]);
+                      if (id == NULL)
+                        {
+                          g_warning ("Unable to get account ID from group: %s", groups[n]);
+                          goto cleanup_and_continue;
+                        }
+
+                      provider_type = g_key_file_get_string (key_file, groups[n], "Provider", NULL);
+                      if (provider_type != NULL)
+                        provider = goa_provider_get_for_provider_type (provider_type);
+
+                      if (provider == NULL)
+                        {
+                          g_warning ("Unsupported account type %s for ID %s (no provider)", provider_type, id);
+                          goto cleanup_and_continue;
+                        }
+
+                      error = NULL;
+                      if (!goa_utils_delete_credentials_for_id_sync (provider, id, NULL, &error))
+                        {
+                          g_warning ("Unable to clean-up stale keyring entries: %s", error->message);
+                          g_error_free (error);
+                          goto cleanup_and_continue;
+                        }
+
+                    cleanup_and_continue:
+                      g_clear_object (&provider);
                       g_free (groups[n]);
+                      g_free (provider_type);
                       g_free (session_id);
                       continue;
                     }
@@ -473,7 +509,7 @@ add_config_file (GoaDaemon     *self,
                 }
               else
                 {
-                  g_key_file_remove_key (key_file, groups[n], "SessionId", NULL);
+                  needs_update = g_key_file_remove_key (key_file, groups[n], "SessionId", NULL);
                 }
 
               g_hash_table_insert (group_name_to_key_file_data,
@@ -487,6 +523,17 @@ add_config_file (GoaDaemon     *self,
             }
         }
       g_free (groups);
+
+      if (needs_update)
+        {
+          error = NULL;
+          if (!g_key_file_save_to_file (key_file, path, &error))
+            {
+              g_prefix_error (&error, "Error writing key-value-file %s: ", path);
+              g_warning ("%s (%s, %d)", error->message, g_quark_to_string (error->domain), error->code);
+              g_error_free (error);
+            }
+        }
 
       *key_files_to_free = g_list_prepend (*key_files_to_free, key_file);
     }
