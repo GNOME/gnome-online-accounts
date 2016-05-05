@@ -862,6 +862,7 @@ get_all_providers_cb (GObject      *source,
   gchar *group;
   gchar *key_file_data;
   gsize length;
+  gsize n_credentials;
   gchar *object_path;
   GVariantIter iter;
   const gchar *key;
@@ -981,14 +982,18 @@ get_all_providers_cb (GObject      *source,
       goto out;
     }
 
-  /* We don't want to fail AddAccount if we could not store the
-   * credentials in the keyring.
-   */
-  goa_utils_store_credentials_for_id_sync (provider,
-                                           id,
-                                           data->credentials,
-                                           NULL, /* GCancellable */
-                                           NULL);
+  n_credentials = g_variant_n_children (data->credentials);
+  if (n_credentials > 0)
+    {
+      /* We don't want to fail AddAccount if we could not store the
+       * credentials in the keyring.
+       */
+      goa_utils_store_credentials_for_id_sync (provider,
+                                               id,
+                                               data->credentials,
+                                               NULL, /* GCancellable */
+                                               NULL);
+    }
 
   goa_daemon_reload_configuration (data->daemon);
 
