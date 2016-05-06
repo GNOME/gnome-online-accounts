@@ -92,6 +92,82 @@ static void goa_provider_show_account_real (GoaProvider         *provider,
 
 G_DEFINE_ABSTRACT_TYPE (GoaProvider, goa_provider, G_TYPE_OBJECT);
 
+static struct {
+  GoaProviderFeatures feature;
+  const gchar *property;
+  const gchar *blurb;
+} provider_features_info[] = {
+  /* The order in which the features are listed is
+   * important because it affects the order in which they are
+   * displayed in the show_account() UI
+   */
+  {
+    .feature = GOA_PROVIDER_FEATURE_MAIL,
+    .property = "mail-disabled",
+    .blurb = N_("_Mail"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_CALENDAR,
+    .property = "calendar-disabled",
+    .blurb = N_("Cale_ndar"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_CONTACTS,
+    .property = "contacts-disabled",
+    .blurb = N_("_Contacts"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_CHAT,
+    .property = "chat-disabled",
+    .blurb = N_("C_hat"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_DOCUMENTS,
+    .property = "documents-disabled",
+    .blurb = N_("_Documents"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_MUSIC,
+    .property = "music-disabled",
+    .blurb = N_("M_usic"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_PHOTOS,
+    .property = "photos-disabled",
+    .blurb = N_("_Photos"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_FILES,
+    .property = "files-disabled",
+    .blurb = N_("_Files"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_TICKETING,
+    .property = "ticketing-disabled",
+    .blurb = N_("Network _Resources"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_READ_LATER,
+    .property = "read-later-disabled",
+    .blurb = N_("_Read Later"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_PRINTERS,
+    .property = "printers-disabled",
+    .blurb = N_("Prin_ters"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_MAPS,
+    .property = "maps-disabled",
+    .blurb = N_("_Maps"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_INVALID,
+    .property = NULL,
+    .blurb = NULL,
+  }
+};
+
 static void
 goa_provider_get_property (GObject *object,
                            guint property_id,
@@ -464,82 +540,6 @@ goa_provider_show_account (GoaProvider         *self,
   GOA_PROVIDER_GET_CLASS (self)->show_account (self, client, object, vbox, grid, dummy);
 }
 
-static struct {
-  GoaProviderFeatures feature;
-  const gchar *property;
-  const gchar *blurb;
-} show_account_items[] = {
-  /* The order in which the features are listed is
-   * important because it affects the order in which they are
-   * displayed in the show_account() UI
-   */
-  {
-    .feature = GOA_PROVIDER_FEATURE_MAIL,
-    .property = "mail-disabled",
-    .blurb = N_("_Mail"),
-  },
-  {
-    .feature = GOA_PROVIDER_FEATURE_CALENDAR,
-    .property = "calendar-disabled",
-    .blurb = N_("Cale_ndar"),
-  },
-  {
-    .feature = GOA_PROVIDER_FEATURE_CONTACTS,
-    .property = "contacts-disabled",
-    .blurb = N_("_Contacts"),
-  },
-  {
-    .feature = GOA_PROVIDER_FEATURE_CHAT,
-    .property = "chat-disabled",
-    .blurb = N_("C_hat"),
-  },
-  {
-    .feature = GOA_PROVIDER_FEATURE_DOCUMENTS,
-    .property = "documents-disabled",
-    .blurb = N_("_Documents"),
-  },
-  {
-    .feature = GOA_PROVIDER_FEATURE_MUSIC,
-    .property = "music-disabled",
-    .blurb = N_("M_usic"),
-  },
-  {
-    .feature = GOA_PROVIDER_FEATURE_PHOTOS,
-    .property = "photos-disabled",
-    .blurb = N_("_Photos"),
-  },
-  {
-    .feature = GOA_PROVIDER_FEATURE_FILES,
-    .property = "files-disabled",
-    .blurb = N_("_Files"),
-  },
-  {
-    .feature = GOA_PROVIDER_FEATURE_TICKETING,
-    .property = "ticketing-disabled",
-    .blurb = N_("Network _Resources"),
-  },
-  {
-    .feature = GOA_PROVIDER_FEATURE_READ_LATER,
-    .property = "read-later-disabled",
-    .blurb = N_("_Read Later"),
-  },
-  {
-    .feature = GOA_PROVIDER_FEATURE_PRINTERS,
-    .property = "printers-disabled",
-    .blurb = N_("Prin_ters"),
-  },
-  {
-    .feature = GOA_PROVIDER_FEATURE_MAPS,
-    .property = "maps-disabled",
-    .blurb = N_("_Maps"),
-  },
-  {
-    .feature = GOA_PROVIDER_FEATURE_INVALID,
-    .property = NULL,
-    .blurb = NULL,
-  }
-};
-
 static void
 goa_provider_show_account_real (GoaProvider         *provider,
                                 GoaClient           *client,
@@ -562,14 +562,14 @@ goa_provider_show_account_real (GoaProvider         *provider,
    * options switches. For example: “Use for Mail”. */
   label = _("Use for");
 
-  for (i = 0; show_account_items[i].property != NULL; i++)
+  for (i = 0; provider_features_info[i].property != NULL; i++)
     {
-      if ((features & show_account_items[i].feature) != 0)
+      if ((features & provider_features_info[i].feature) != 0)
         {
           goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
                                                            label,
-                                                           show_account_items[i].property,
-                                                           _(show_account_items[i].blurb));
+                                                           provider_features_info[i].property,
+                                                           _(provider_features_info[i].blurb));
           label = NULL;
         }
     }
