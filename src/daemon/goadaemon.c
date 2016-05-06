@@ -362,6 +362,13 @@ diff_sorted_lists (GList *list1,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static const gchar *
+group_to_id (const gchar *group)
+{
+  g_return_val_if_fail (g_str_has_prefix (group, "Account "), NULL);
+  return group + sizeof "Account " - 1;
+}
+
 static gchar *
 object_path_to_group (const gchar *object_path)
 {
@@ -618,11 +625,14 @@ process_config_entries (GoaDaemon  *self,
   g_hash_table_iter_init (&iter, group_name_to_key_file_data);
   while (g_hash_table_iter_next (&iter, (gpointer*) &group, (gpointer*) &key_file_data))
     {
+      const gchar *id;
       gchar *object_path;
 
+      id = group_to_id (group);
+
       /* create and validate object path */
-      object_path = g_strdup_printf ("/org/gnome/OnlineAccounts/Accounts/%s", group + sizeof "Account " - 1);
-      if (strstr (group + sizeof "Account " - 1, "/") != NULL || !g_variant_is_object_path (object_path))
+      object_path = g_strdup_printf ("/org/gnome/OnlineAccounts/Accounts/%s", id);
+      if (strstr (id, "/") != NULL || !g_variant_is_object_path (object_path))
         {
           g_warning ("`%s' is not a valid account identifier", group);
           g_free (object_path);
