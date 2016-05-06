@@ -362,6 +362,15 @@ diff_sorted_lists (GList *list1,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static gchar *
+object_path_to_group (const gchar *object_path)
+{
+  g_return_val_if_fail (g_str_has_prefix (object_path, "/org/gnome/OnlineAccounts/Accounts/"), NULL);
+  return g_strdup_printf ("Account %s", object_path + sizeof "/org/gnome/OnlineAccounts/Accounts/" - 1);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 typedef struct
 {
   GKeyFile *key_file;
@@ -574,13 +583,6 @@ update_account_object (GoaDaemon           *self,
   g_free (identity);
   g_free (presentation_identity);
   return ret;
-}
-
-static gchar *
-object_path_to_group (const gchar *object_path)
-{
-  g_return_val_if_fail (g_str_has_prefix (object_path, "/org/gnome/OnlineAccounts/Accounts/"), NULL);
-  return g_strdup_printf ("Account %s", object_path + sizeof "/org/gnome/OnlineAccounts/Accounts/" - 1);
 }
 
 static void
