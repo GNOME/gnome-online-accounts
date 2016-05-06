@@ -59,6 +59,11 @@ gboolean         goa_utils_delete_credentials_for_account_sync (GoaProvider    *
                                                                 GCancellable   *cancellable,
                                                                 GError        **error);
 
+gboolean         goa_utils_delete_credentials_for_id_sync (GoaProvider    *provider,
+                                                           const gchar    *id,
+                                                           GCancellable   *cancellable,
+                                                           GError        **error);
+
 GVariant        *goa_utils_lookup_credentials_sync (GoaProvider    *provider,
                                                     GoaObject      *object,
                                                     GCancellable   *cancellable,

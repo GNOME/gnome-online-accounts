@@ -179,21 +179,35 @@ goa_utils_delete_credentials_for_account_sync (GoaProvider   *provider,
                                                GCancellable  *cancellable,
                                                GError       **error)
 {
-  gboolean ret;
-  gchar *password_key;
   const gchar *id;
-  GError *sec_error = NULL;
 
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
   g_return_val_if_fail (GOA_IS_ACCOUNT (object), FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
+  id = goa_account_get_id (object);
+  return goa_utils_delete_credentials_for_id_sync (provider, id, cancellable, error);
+}
+
+gboolean
+goa_utils_delete_credentials_for_id_sync (GoaProvider   *provider,
+                                          const gchar   *id,
+                                          GCancellable  *cancellable,
+                                          GError       **error)
+{
+  gboolean ret;
+  gchar *password_key;
+  GError *sec_error = NULL;
+
+  g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (id != NULL && id[0] != '\0', FALSE);
+  g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
   ret = FALSE;
 
   password_key = NULL;
-
-  id = goa_account_get_id (object);
 
   password_key = g_strdup_printf ("%s:gen%d:%s",
                                   goa_provider_get_provider_type (GOA_PROVIDER (provider)),
