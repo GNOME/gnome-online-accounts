@@ -590,7 +590,7 @@ process_config_entries (GoaDaemon  *self,
                         GHashTable *group_name_to_key_file_data)
 {
   GHashTableIter iter;
-  const gchar *id;
+  const gchar *group;
   KeyFileData *key_file_data;
   GList *existing_object_paths;
   GList *config_object_paths;
@@ -616,15 +616,15 @@ process_config_entries (GoaDaemon  *self,
 
   config_object_paths = NULL;
   g_hash_table_iter_init (&iter, group_name_to_key_file_data);
-  while (g_hash_table_iter_next (&iter, (gpointer*) &id, (gpointer*) &key_file_data))
+  while (g_hash_table_iter_next (&iter, (gpointer*) &group, (gpointer*) &key_file_data))
     {
       gchar *object_path;
 
       /* create and validate object path */
-      object_path = g_strdup_printf ("/org/gnome/OnlineAccounts/Accounts/%s", id + sizeof "Account " - 1);
-      if (strstr (id + sizeof "Account " - 1, "/") != NULL || !g_variant_is_object_path (object_path))
+      object_path = g_strdup_printf ("/org/gnome/OnlineAccounts/Accounts/%s", group + sizeof "Account " - 1);
+      if (strstr (group + sizeof "Account " - 1, "/") != NULL || !g_variant_is_object_path (object_path))
         {
-          g_warning ("`%s' is not a valid account identifier", id);
+          g_warning ("`%s' is not a valid account identifier", group);
           g_free (object_path);
           continue;
         }
