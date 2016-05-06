@@ -54,10 +54,10 @@ gchar           *goa_utils_data_input_stream_read_line (GDataInputStream  *strea
 
 void             goa_utils_set_dialog_title (GoaProvider *provider, GtkDialog *dialog, gboolean add_account);
 
-gboolean         goa_utils_delete_credentials_sync (GoaProvider    *provider,
-                                                    GoaAccount     *account,
-                                                    GCancellable   *cancellable,
-                                                    GError        **error);
+gboolean         goa_utils_delete_credentials_for_account_sync (GoaProvider    *provider,
+                                                                GoaAccount     *account,
+                                                                GCancellable   *cancellable,
+                                                                GError        **error);
 
 GVariant        *goa_utils_lookup_credentials_sync (GoaProvider    *provider,
                                                     GoaObject      *object,

@@ -174,10 +174,10 @@ goa_utils_set_dialog_title (GoaProvider *provider, GtkDialog *dialog, gboolean a
 }
 
 gboolean
-goa_utils_delete_credentials_sync (GoaProvider   *provider,
-                                   GoaAccount    *object,
-                                   GCancellable  *cancellable,
-                                   GError       **error)
+goa_utils_delete_credentials_for_account_sync (GoaProvider   *provider,
+                                               GoaAccount    *object,
+                                               GCancellable  *cancellable,
+                                               GError       **error)
 {
   gboolean ret;
   gchar *password_key;
