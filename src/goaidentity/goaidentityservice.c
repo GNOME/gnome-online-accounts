@@ -48,7 +48,6 @@ struct _GoaIdentityServicePrivate
   GHashTable               *pending_temporary_account_results;
 
   GoaClient                *client;
-  GoaManager               *accounts_manager;
 };
 
 static void identity_service_manager_interface_init (GoaIdentityServiceManagerIface *interface);
@@ -892,6 +891,7 @@ add_temporary_account (GoaIdentityService *self,
   GSimpleAsyncResult *operation_result;
   GVariantBuilder     credentials;
   GVariantBuilder     details;
+  GoaManager         *manager;
   GoaObject *object;
 
   principal = goa_identity_get_identifier (identity);
@@ -934,7 +934,8 @@ add_temporary_account (GoaIdentityService *self,
                        g_strdup (principal),
                        g_object_ref (operation_result));
 
-  goa_manager_call_add_account (self->priv->accounts_manager,
+  manager = goa_client_get_manager (self->priv->client);
+  goa_manager_call_add_account (manager,
                                 "kerberos",
                                 principal,
                                 principal,
@@ -1705,8 +1706,6 @@ on_got_client (GoaClient          *client,
       g_warning ("Could not create client: %s", error->message);
       goto out;
     }
-
-  self->priv->accounts_manager = goa_client_get_manager (client);
 
   self->priv->identity_manager = goa_kerberos_identity_manager_new (NULL, &error);
 
