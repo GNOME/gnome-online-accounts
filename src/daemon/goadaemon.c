@@ -28,6 +28,7 @@
 
 #include "goadaemon.h"
 #include "goabackend/goabackend.h"
+#include "goabackend/goaprovider-priv.h"
 #include "goabackend/goautils.h"
 
 struct _GoaDaemon
@@ -210,26 +211,6 @@ on_network_monitor_network_changed (GoaDaemon *self, gboolean available)
   queue_check_credentials (self);
 }
 
-#ifdef GOA_KERBEROS_ENABLED
-static void
-activate_identity_service (GoaDaemon *self)
-{
-  GoaProvider *provider;
-
-  /* We activate the identity service implicitly by using the kerberos
-   * backend.  This way if the kerberos backend isn't enabled, we don't
-   * end up starting the identity service needlessly
-   */
-  provider = goa_provider_get_for_provider_type (GOA_KERBEROS_NAME);
-
-  if (provider != NULL)
-    {
-      g_debug ("activated kerberos provider");
-      g_object_unref (provider);
-    }
-}
-#endif
-
 static void
 goa_daemon_init (GoaDaemon *self)
 {
@@ -242,6 +223,8 @@ goa_daemon_init (GoaDaemon *self)
    */
   goa_error_domain = GOA_ERROR;
   goa_error_domain; /* shut up -Wunused-but-set-variable */
+
+  goa_provider_ensure_builtins_loaded ();
 
   /* TODO: maybe nicer to pass in a GDBusConnection* construct property */
   self->connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
@@ -291,10 +274,6 @@ goa_daemon_init (GoaDaemon *self)
   g_dbus_object_manager_server_set_connection (self->object_manager, self->connection);
 
   queue_check_credentials (self);
-
-#ifdef GOA_KERBEROS_ENABLED
-  activate_identity_service (self);
-#endif
 }
 
 static void
