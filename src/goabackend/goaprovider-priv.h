@@ -114,6 +114,8 @@ struct _GoaProviderClass
  */
 #define GOA_PROVIDER_FACTORY_EXTENSION_POINT_NAME "goa-backend-provider-factory"
 
+void goa_provider_ensure_builtins_loaded             (void);
+
 void goa_provider_ensure_extension_points_registered (void);
 
 G_END_DECLS
