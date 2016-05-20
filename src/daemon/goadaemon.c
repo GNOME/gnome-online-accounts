@@ -991,14 +991,50 @@ object_invocation_data_unref (ObjectInvocationData *data)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static void
+remove_account_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
+{
+  GTask *task = G_TASK (user_data);
+  GoaDaemon *self;
+  GDBusMethodInvocation *invocation;
+  GError *error;
+  GoaAccount *account;
+  GoaProvider *provider = GOA_PROVIDER (source_object);
+  ObjectInvocationData *data;
+
+  self = GOA_DAEMON (g_task_get_source_object (task));
+  data = g_task_get_task_data (task);
+
+  error= NULL;
+  if (!goa_provider_remove_account_finish (provider, res, &error))
+    {
+      g_warning ("goa_provider_remove_account() failed: %s (%s, %d)",
+                 error->message,
+                 g_quark_to_string (error->domain),
+                 error->code);
+      g_error_free (error);
+    }
+
+  goa_daemon_reload_configuration (self);
+
+  account = goa_object_peek_account (data->object);
+  invocation = G_DBUS_METHOD_INVOCATION (data->invocations->data);
+  goa_account_complete_remove (account, invocation);
+
+  g_object_unref (task);
+}
+
 static gboolean
 on_account_handle_remove (GoaAccount            *account,
                           GDBusMethodInvocation *invocation,
                           gpointer               user_data)
 {
   GoaDaemon *self = GOA_DAEMON (user_data);
+  GoaObject *object;
   GoaProvider *provider;
   GKeyFile *key_file;
+  GTask *task;
+  ObjectInvocationData *data;
   const gchar *provider_type;
   gchar *path;
   gchar *group;
@@ -1009,6 +1045,7 @@ on_account_handle_remove (GoaAccount            *account,
   path = NULL;
   group = NULL;
   key_file = NULL;
+  task = NULL;
 
   if (goa_account_get_is_locked (account))
     {
@@ -1087,12 +1124,17 @@ on_account_handle_remove (GoaAccount            *account,
       goto out;
     }
 
-  goa_daemon_reload_configuration (self);
+  object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (account)));
+  data = object_invocation_data_new (object, invocation);
 
-  goa_account_complete_remove (account, invocation);
+  task = g_task_new (self, NULL, NULL, NULL);
+  g_task_set_task_data (task, data, (GDestroyNotify) object_invocation_data_unref);
+
+  goa_provider_remove_account (provider, object, NULL, remove_account_cb, g_object_ref (task));
 
  out:
   g_clear_object (&provider);
+  g_clear_object (&task);
   g_clear_pointer (&key_file, (GDestroyNotify) g_key_file_free);
   g_free (group);
   g_free (path);
