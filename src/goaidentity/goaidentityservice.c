@@ -1532,44 +1532,6 @@ on_account_interface_removed (GDBusObjectManager *manager,
 }
 
 static void
-on_account_removed (GoaClient          *client,
-                    GoaObject          *object,
-                    GoaIdentityService *self)
-{
-  GSimpleAsyncResult *result;
-  GoaAccount         *account;
-  const char         *provider_type;
-  const char         *account_identity;
-
-  account = goa_object_peek_account (object);
-
-  if (account == NULL)
-    return;
-
-  provider_type = goa_account_get_provider_type (account);
-
-  if (g_strcmp0 (provider_type, "kerberos") != 0)
-    return;
-
-  account_identity = goa_account_get_identity (account);
-
-  g_debug ("Kerberos account %s removed and should now be signed out", account_identity);
-
-  result = g_simple_async_result_new (G_OBJECT (self),
-                                      (GAsyncReadyCallback)
-                                      on_sign_out_for_account_change_done,
-                                      NULL,
-                                      on_account_removed);
-
-  goa_identity_manager_get_identity (self->priv->identity_manager,
-                                     account_identity,
-                                     NULL,
-                                     (GAsyncReadyCallback)
-                                     on_got_identity_for_sign_out,
-                                     result);
-}
-
-static void
 on_identities_listed (GoaIdentityManager *manager,
                       GAsyncResult       *result,
                       GoaIdentityService *self)
@@ -1600,11 +1562,6 @@ on_identities_listed (GoaIdentityManager *manager,
   g_signal_connect (G_OBJECT (self->priv->identity_manager),
                     "identity-expired",
                     G_CALLBACK (on_identity_expired),
-                    self);
-
-  g_signal_connect (G_OBJECT (self->priv->client),
-                    "account-removed",
-                    G_CALLBACK (on_account_removed),
                     self);
 
   identities = goa_identity_manager_list_identities_finish (manager, result, &error);
