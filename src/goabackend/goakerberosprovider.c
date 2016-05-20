@@ -1441,6 +1441,76 @@ out:
   return credentials_ensured;
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
+remove_account_in_thread_func (GTask         *task,
+                               gpointer       source_object,
+                               gpointer       task_data,
+                               GCancellable  *cancellable)
+{
+  GError *error;
+  GoaAccount *account = NULL;
+  GoaObject *object = GOA_OBJECT (task_data);
+  const gchar *identifier;
+
+  ensure_identity_manager ();
+
+  account = goa_object_get_account (object);
+  identifier = goa_account_get_identity (account);
+
+  g_debug ("Kerberos account %s removed and should now be signed out", identifier);
+
+  error = NULL;
+  if (!goa_identity_service_manager_call_sign_out_sync (identity_manager, identifier, cancellable, &error))
+    {
+      g_task_return_error (task, error);
+      goto out;
+    }
+
+  g_task_return_boolean (task, TRUE);
+
+ out:
+  g_clear_object (&account);
+}
+
+static void
+remove_account (GoaProvider          *provider,
+                GoaObject            *object,
+                GCancellable         *cancellable,
+                GAsyncReadyCallback   callback,
+                gpointer              user_data)
+{
+  GoaKerberosProvider *self = GOA_KERBEROS_PROVIDER (provider);
+  GTask *task;
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, remove_account);
+
+  g_task_set_task_data (task, g_object_ref (object), g_object_unref);
+  g_task_run_in_thread (task, remove_account_in_thread_func);
+
+  g_object_unref (task);
+}
+
+static gboolean
+remove_account_finish (GoaProvider   *provider,
+                       GAsyncResult  *res,
+                       GError       **error)
+{
+  GoaKerberosProvider *self = GOA_KERBEROS_PROVIDER (provider);
+  GTask *task;
+
+  g_return_val_if_fail (g_task_is_valid (res, self), FALSE);
+  task = G_TASK (res);
+
+  g_warn_if_fail (g_task_get_source_tag (task) == remove_account);
+
+  return g_task_propagate_boolean (task, error);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static GoaIdentityServiceIdentity *
 get_identity_from_object_manager (GoaKerberosProvider *self,
                                   const char          *identifier)
@@ -1685,4 +1755,6 @@ goa_kerberos_provider_class_init (GoaKerberosProviderClass *kerberos_class)
   provider_class->add_account                = add_account;
   provider_class->refresh_account            = refresh_account;
   provider_class->ensure_credentials_sync    = ensure_credentials_sync;
+  provider_class->remove_account             = remove_account;
+  provider_class->remove_account_finish      = remove_account_finish;
 }
