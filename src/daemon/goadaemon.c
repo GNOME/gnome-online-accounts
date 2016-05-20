@@ -796,6 +796,8 @@ goa_daemon_reload_configuration (GoaDaemon *self)
   g_list_free_full (key_files_to_free, (GDestroyNotify) g_key_file_free);
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+
 static gchar *
 generate_new_id (GoaDaemon *self)
 {
