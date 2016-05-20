@@ -85,6 +85,7 @@ goa_kerberos_provider_module_init (void)
 {
   create_object_manager ();
   create_identity_manager ();
+  g_debug ("activated kerberos provider");
 }
 
 static const gchar *
