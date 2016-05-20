@@ -60,44 +60,44 @@ struct _GoaProviderClass
   GObjectClass parent_class;
 
   /* pure virtual */
-  const gchar *(*get_provider_type) (GoaProvider        *self);
-  gchar       *(*get_provider_name) (GoaProvider        *self,
-                                     GoaObject          *object);
-  GIcon       *(*get_provider_icon) (GoaProvider        *self,
-                                     GoaObject          *object);
-  GoaObject   *(*add_account)       (GoaProvider        *self,
-                                     GoaClient          *client,
-                                     GtkDialog          *dialog,
-                                     GtkBox             *vbox,
-                                     GError            **error);
-  gboolean     (*refresh_account)   (GoaProvider        *self,
-                                     GoaClient          *client,
-                                     GoaObject          *object,
-                                     GtkWindow          *parent,
-                                     GError            **error);
-  gboolean     (*build_object)      (GoaProvider        *self,
-                                     GoaObjectSkeleton  *object,
-                                     GKeyFile           *key_file,
-                                     const gchar        *group,
-                                     GDBusConnection    *connection,
-                                     gboolean            just_added,
-                                     GError            **error);
-  GoaProviderGroup     (*get_provider_group)        (GoaProvider   *self);
-  GoaProviderFeatures  (*get_provider_features)     (GoaProvider   *self);
+  GoaObject              *(*add_account)                  (GoaProvider            *self,
+                                                           GoaClient              *client,
+                                                           GtkDialog              *dialog,
+                                                           GtkBox                 *vbox,
+                                                           GError                **error);
+  GoaProviderFeatures     (*get_provider_features)        (GoaProvider            *self);
+  GoaProviderGroup        (*get_provider_group)           (GoaProvider            *self);
+  gchar                  *(*get_provider_name)            (GoaProvider            *self,
+                                                           GoaObject              *object);
+  const gchar            *(*get_provider_type)            (GoaProvider            *self);
+  gboolean                (*refresh_account)              (GoaProvider            *self,
+                                                           GoaClient              *client,
+                                                           GoaObject              *object,
+                                                           GtkWindow              *parent,
+                                                           GError                **error);
 
   /* virtual but with default implementation */
-  void         (*show_account)      (GoaProvider         *self,
-                                     GoaClient           *client,
-                                     GoaObject           *object,
-                                     GtkBox              *vbox,
-                                     GtkGrid             *grid,
-                                     GtkGrid             *dummy);
-  gboolean (*ensure_credentials_sync) (GoaProvider         *self,
-                                       GoaObject           *object,
-                                       gint                *out_expires_in,
-                                       GCancellable        *cancellable,
-                                       GError             **error);
-  guint    (*get_credentials_generation) (GoaProvider   *self);
+  gboolean                (*build_object)                 (GoaProvider            *self,
+                                                           GoaObjectSkeleton      *object,
+                                                           GKeyFile               *key_file,
+                                                           const gchar            *group,
+                                                           GDBusConnection        *connection,
+                                                           gboolean                just_added,
+                                                           GError                **error);
+  gboolean                (*ensure_credentials_sync)      (GoaProvider            *self,
+                                                           GoaObject              *object,
+                                                           gint                   *out_expires_in,
+                                                           GCancellable           *cancellable,
+                                                           GError                **error);
+  guint                   (*get_credentials_generation)   (GoaProvider            *self);
+  GIcon                  *(*get_provider_icon)            (GoaProvider            *self,
+                                                           GoaObject              *object);
+  void                    (*show_account)                 (GoaProvider            *self,
+                                                           GoaClient              *client,
+                                                           GoaObject              *object,
+                                                           GtkBox                 *vbox,
+                                                           GtkGrid                *grid,
+                                                           GtkGrid                *dummy);
 };
 
 /**
