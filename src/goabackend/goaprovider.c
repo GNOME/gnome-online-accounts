@@ -961,8 +961,8 @@ static struct
   { NULL, NULL }
 };
 
-static void
-ensure_builtins_loaded (void)
+void
+goa_provider_ensure_builtins_loaded (void)
 {
   static gsize once_init_value = 0;
 
@@ -1051,7 +1051,7 @@ goa_provider_get_for_provider_type (const gchar *provider_type)
 
   g_return_val_if_fail (provider_type != NULL, NULL);
 
-  ensure_builtins_loaded ();
+  goa_provider_ensure_builtins_loaded ();
 
   ret = NULL;
 
@@ -1203,7 +1203,7 @@ goa_provider_get_all (GAsyncReadyCallback callback,
   GetAllData *data;
   gint i;
 
-  ensure_builtins_loaded ();
+  goa_provider_ensure_builtins_loaded ();
 
   data = g_slice_new0 (GetAllData);
   data->result = g_simple_async_result_new (NULL, callback, user_data,
@@ -1218,8 +1218,8 @@ goa_provider_get_all (GAsyncReadyCallback callback,
     {
       GIOExtension *extension = l->data;
       /* The extensions are loaded in the reverse order we used in
-       * ensure_builtins_loaded, so we need to push extension if front of
-       * the already loaded ones. */
+       * goa_provider_ensure_builtins_loaded, so we need to push
+       * extension if front of the already loaded ones. */
       g_queue_push_head (&data->ret, g_object_new (g_io_extension_get_type (extension), NULL));
     }
 
