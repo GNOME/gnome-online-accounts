@@ -92,6 +92,14 @@ struct _GoaProviderClass
   guint                   (*get_credentials_generation)   (GoaProvider            *self);
   GIcon                  *(*get_provider_icon)            (GoaProvider            *self,
                                                            GoaObject              *object);
+  void                    (*remove_account)               (GoaProvider            *self,
+                                                           GoaObject              *object,
+                                                           GCancellable           *cancellable,
+                                                           GAsyncReadyCallback     callback,
+                                                           gpointer                user_data);
+  gboolean                (*remove_account_finish)        (GoaProvider            *self,
+                                                           GAsyncResult           *res,
+                                                           GError                **error);
   void                    (*show_account)                 (GoaProvider            *self,
                                                            GoaClient              *client,
                                                            GoaObject              *object,
@@ -117,6 +125,16 @@ struct _GoaProviderClass
 void        goa_provider_ensure_builtins_loaded                (void);
 
 void        goa_provider_ensure_extension_points_registered    (void);
+
+void        goa_provider_remove_account                        (GoaProvider             *self,
+                                                                GoaObject               *object,
+                                                                GCancellable            *cancellable,
+                                                                GAsyncReadyCallback      callback,
+                                                                gpointer                 user_data);
+
+gboolean    goa_provider_remove_account_finish                 (GoaProvider             *self,
+                                                                GAsyncResult            *res,
+                                                                GError                 **error);
 
 G_END_DECLS
 

@@ -81,6 +81,17 @@ static guint goa_provider_get_credentials_generation_real (GoaProvider *self);
 
 static GIcon *goa_provider_get_provider_icon_real (GoaProvider *self,
                                                    GoaObject   *object);
+
+static void goa_provider_remove_account_real (GoaProvider          *self,
+                                              GoaObject            *object,
+                                              GCancellable         *cancellable,
+                                              GAsyncReadyCallback   callback,
+                                              gpointer              user_data);
+
+static gboolean goa_provider_remove_account_finish_real (GoaProvider   *self,
+                                                         GAsyncResult  *res,
+                                                         GError       **error);
+
 static void goa_provider_show_account_real (GoaProvider         *provider,
                                             GoaClient           *client,
                                             GoaObject           *object,
@@ -235,6 +246,8 @@ goa_provider_class_init (GoaProviderClass *klass)
   klass->ensure_credentials_sync = goa_provider_ensure_credentials_sync_real;
   klass->get_credentials_generation = goa_provider_get_credentials_generation_real;
   klass->get_provider_icon = goa_provider_get_provider_icon_real;
+  klass->remove_account = goa_provider_remove_account_real;
+  klass->remove_account_finish = goa_provider_remove_account_finish_real;
   klass->show_account = goa_provider_show_account_real;
 
 /**
@@ -1287,6 +1300,66 @@ goa_provider_get_all_finish (GList        **out_providers,
 
   g_list_free_full (providers, g_object_unref);
   return TRUE;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+void
+goa_provider_remove_account (GoaProvider          *self,
+                             GoaObject            *object,
+                             GCancellable         *cancellable,
+                             GAsyncReadyCallback   callback,
+                             gpointer              user_data)
+{
+  g_return_if_fail (GOA_IS_PROVIDER (self));
+  g_return_if_fail (GOA_IS_OBJECT (object));
+  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+
+  GOA_PROVIDER_GET_CLASS (self)->remove_account (self, object, cancellable, callback, user_data);
+}
+
+gboolean
+goa_provider_remove_account_finish (GoaProvider   *self,
+                                    GAsyncResult  *res,
+                                    GError       **error)
+{
+  g_return_val_if_fail (GOA_IS_PROVIDER (self), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (res), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  return GOA_PROVIDER_GET_CLASS (self)->remove_account_finish (self, res, error);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
+goa_provider_remove_account_real (GoaProvider          *self,
+                                  GoaObject            *object,
+                                  GCancellable         *cancellable,
+                                  GAsyncReadyCallback   callback,
+                                  gpointer              user_data)
+{
+  GTask *task;
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, goa_provider_remove_account_real);
+  g_task_return_boolean (task, TRUE);
+  g_object_unref (task);
+}
+
+static gboolean
+goa_provider_remove_account_finish_real (GoaProvider   *self,
+                                         GAsyncResult  *res,
+                                         GError       **error)
+{
+  GTask *task;
+
+  g_return_val_if_fail (g_task_is_valid (res, self), FALSE);
+  task = G_TASK (res);
+
+  g_warn_if_fail (g_task_get_source_tag (task) == goa_provider_remove_account_real);
+
+  return g_task_propagate_boolean (task, error);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
