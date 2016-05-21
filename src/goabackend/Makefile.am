@@ -68,6 +68,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goabackend.h							\
 	goabackendenums-priv.h						\
 	goabackendenumtypes.h		goabackendenumtypes.c		\
+	gconstructor.h			goabackendinit.c		\
 	goadlnaservermanager.h		goadlnaservermanager.c		\
 	goaewsclient.h			goaewsclient.c			\
 	goahttpclient.h			goahttpclient.c			\
