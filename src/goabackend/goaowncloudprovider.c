@@ -73,7 +73,8 @@ get_provider_features (GoaProvider *provider)
          GOA_PROVIDER_FEATURE_CALENDAR |
          GOA_PROVIDER_FEATURE_CONTACTS |
          GOA_PROVIDER_FEATURE_DOCUMENTS |
-         GOA_PROVIDER_FEATURE_FILES;
+         GOA_PROVIDER_FEATURE_FILES |
+         GOA_PROVIDER_FEATURE_MUSIC;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -147,6 +148,7 @@ build_object (GoaProvider         *provider,
   gboolean contacts_enabled;
   gboolean documents_enabled;
   gboolean files_enabled;
+  gboolean music_enabled;
   gboolean ret = FALSE;
   const gchar *identity;
   gchar *uri_string = NULL;
@@ -206,12 +208,17 @@ build_object (GoaProvider         *provider,
   goa_object_skeleton_attach_files (object, uri_webdav, files_enabled, accept_ssl_errors);
   g_free (uri_webdav);
 
+  /* Music */
+  music_enabled = g_key_file_get_boolean (key_file, group, "MusicEnabled", NULL);
+  goa_object_skeleton_attach_music (object, music_enabled);
+
   if (just_added)
     {
       goa_account_set_calendar_disabled (account, !calendar_enabled);
       goa_account_set_contacts_disabled (account, !contacts_enabled);
       goa_account_set_documents_disabled (account, !documents_enabled);
       goa_account_set_files_disabled (account, !files_enabled);
+      goa_account_set_music_disabled (account, !music_enabled);
 
       g_signal_connect (account,
                         "notify::calendar-disabled",
@@ -229,6 +236,10 @@ build_object (GoaProvider         *provider,
                         "notify::files-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
                         (gpointer) "FilesEnabled");
+      g_signal_connect (account,
+                        "notify::music-disabled",
+                        G_CALLBACK (goa_util_account_notify_property_cb),
+                        (gpointer) "MusicEnabled");
     }
 
   ret = TRUE;
@@ -752,6 +763,7 @@ add_account (GoaProvider    *provider,
   g_variant_builder_add (&details, "{ss}", "ContactsEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "DocumentsEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "FilesEnabled", "true");
+  g_variant_builder_add (&details, "{ss}", "MusicEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "Uri", uri);
   g_variant_builder_add (&details, "{ss}", "AcceptSslErrors", (accept_ssl_errors) ? "true" : "false");
 
