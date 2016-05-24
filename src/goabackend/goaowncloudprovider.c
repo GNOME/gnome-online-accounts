@@ -969,6 +969,8 @@ refresh_account (GoaProvider    *provider,
 {
   AddAccountData data;
   GVariantBuilder credentials;
+  MusicData music_data;
+  GVariantBuilder builder;
   GoaAccount *account;
   GoaHttpClient *http_client = NULL;
   GtkWidget *dialog;
@@ -980,6 +982,7 @@ refresh_account (GoaProvider    *provider,
   const gchar *username;
   gchar *uri = NULL;
   gchar *uri_webdav = NULL;
+  gchar *uri_music_password = NULL;
   gint response;
 
   g_return_val_if_fail (GOA_IS_OWNCLOUD_PROVIDER (provider), FALSE);
@@ -1008,6 +1011,13 @@ refresh_account (GoaProvider    *provider,
   data.dialog = GTK_DIALOG (dialog);
   data.error = NULL;
 
+  memset (&music_data, 0, sizeof (MusicData));
+  music_data.cancellable = g_cancellable_new ();
+  music_data.loop = g_main_loop_new (NULL, FALSE);
+  music_data.error = NULL;
+  music_data.username = NULL;
+  music_data.password = NULL;
+
   account = goa_object_peek_account (object);
   username = goa_account_get_identity (account);
   if (username == NULL || username[0] == '\0')
@@ -1017,6 +1027,7 @@ refresh_account (GoaProvider    *provider,
 
   accept_ssl_errors = goa_util_lookup_keyfile_boolean (object, "AcceptSslErrors");
   uri = goa_util_lookup_keyfile_string (object, "Uri");
+  uri_music_password = g_strconcat (uri, MUSIC_PASSWORD_GENERATE_ENDPOINT, NULL);
   gtk_entry_set_text (GTK_ENTRY (data.uri), uri);
   gtk_editable_set_editable (GTK_EDITABLE (data.uri), FALSE);
 
@@ -1091,6 +1102,19 @@ refresh_account (GoaProvider    *provider,
       goto http_again;
     }
 
+  music_data.username = username;
+  music_data.password = password;
+
+  music_generate_password (provider,
+                           uri_music_password,
+                           music_data.cancellable,
+                           (RestProxyCallAsyncCallback) generate_password_cb,
+                           &music_data);
+
+  g_main_loop_run (music_data.loop);
+
+  g_free (uri_music_password);
+
   /* TODO: run in worker thread */
   g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (password));
@@ -1142,6 +1166,24 @@ refresh_account (GoaProvider    *provider,
         goto out;
     }
 
+  if (music_data.music_password)
+    g_variant_builder_add (&builder,
+                           "{sv}",
+                           "music_password",
+                           g_variant_new_string (music_data.music_password));
+
+  if (music_data.error != NULL)
+    goa_utils_keyfile_set_string (account,
+                                  "MusicError",
+                                  music_data.error->message);
+
+  if (!goa_utils_store_credentials_for_object_sync (provider,
+                                                    object,
+                                                    g_variant_builder_end (&builder),
+                                                    NULL, /* GCancellable */
+                                                    &data.error))
+    goto out;
+
   goa_account_call_ensure_credentials (account,
                                        NULL, /* GCancellable */
                                        NULL, NULL); /* callback, user_data */
@@ -1158,6 +1200,9 @@ refresh_account (GoaProvider    *provider,
   g_free (data.account_object_path);
   g_clear_pointer (&data.loop, g_main_loop_unref);
   g_clear_object (&data.cancellable);
+  g_clear_pointer (&music_data.loop, (GDestroyNotify) g_main_loop_unref);
+  g_clear_object (&music_data.cancellable);
+  g_clear_error (&music_data.error);
   g_clear_object (&http_client);
   return ret;
 }
