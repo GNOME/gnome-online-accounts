@@ -22,7 +22,9 @@
 
 #include <glib/gi18n-lib.h>
 
+#include <json-glib/json-glib.h>
 #include <libsoup/soup.h>
+#include <rest/rest-proxy.h>
 
 #include "goahttpclient.h"
 #include "goaprovider.h"
@@ -46,6 +48,7 @@ G_DEFINE_TYPE_WITH_CODE (GoaOwncloudProvider, goa_owncloud_provider, GOA_TYPE_PR
 
 static const gchar *CALDAV_ENDPOINT = "remote.php/caldav/";
 static const gchar *CARDDAV_ENDPOINT = "remote.php/carddav/";
+static const gchar *MUSIC_PASSWORD_GENERATE_ENDPOINT = "index.php/apps/music/api/settings/userkey/generate";
 static const gchar *WEBDAV_ENDPOINT = "remote.php/webdav/";
 
 static const gchar *
@@ -344,6 +347,19 @@ typedef struct
   GError *error;
 } AddAccountData;
 
+typedef struct
+{
+  GCancellable *cancellable;
+
+  GMainLoop *loop;
+
+  const gchar *username;
+  const gchar *password;
+  gchar *music_password;
+
+  GError *error;
+} MusicData;
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
@@ -617,12 +633,112 @@ check_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
 }
 
 static void
+generate_password_cb    (RestProxyCall              *call,
+                         const GError               *error,
+                         GObject                    *weak_object,
+                         gpointer                    user_data)
+{
+  MusicData *data = user_data;
+  GError *error_;
+  JsonParser *parser;
+  JsonObject *json_obj;
+  const gchar *payload;
+
+  parser = NULL;
+
+  if (error != NULL)
+    {
+      error_ = g_error_copy (error);
+      g_propagate_error (&data->error, error_);
+      goto out;
+    }
+
+  parser = json_parser_new ();
+  payload = rest_proxy_call_get_payload (call);
+
+  if (payload == NULL)
+    {
+      g_set_error (&data->error, GOA_ERROR, GOA_ERROR_FAILED, _("Could not parse response"));
+      goto out;
+    }
+
+  if (!json_parser_load_from_data (parser,
+                                   payload,
+                                   rest_proxy_call_get_payload_length (call),
+                                   &data->error))
+    {
+      g_clear_error (&data->error);
+      data->error = NULL;
+      g_set_error (&data->error,
+                   GOA_ERROR, GOA_ERROR_FAILED,
+                   _("Nextcloud Music application is not installed or enabled"));
+      goto out;
+    }
+
+  json_obj = json_node_get_object (json_parser_get_root (parser));
+  data->music_password = g_strdup (json_object_get_string_member (json_obj, "password"));
+  if (data->music_password == NULL)
+    {
+      g_set_error (&data->error, GOA_ERROR, GOA_ERROR_FAILED, _("Could not parse response"));
+      goto out;
+    }
+
+ out:
+  g_main_loop_quit (data->loop);
+  g_clear_object (&parser);
+}
+
+static void
 dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data)
 {
   AddAccountData *data = user_data;
 
   if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_DELETE_EVENT)
     g_cancellable_cancel (data->cancellable);
+}
+
+static void
+on_rest_proxy_call_cancelled_cb (GCancellable *cancellable, RestProxyCall *call)
+{
+  rest_proxy_call_cancel (call);
+}
+
+static void
+music_generate_password (GoaProvider                *provider,
+                         gchar                      *uri,
+                         GCancellable               *cancellable,
+                         RestProxyCallAsyncCallback  callback,
+                         gpointer                    user_data)
+{
+  MusicData *data = user_data;
+  RestProxyCall *call;
+  RestProxy *proxy;
+
+  /* Add the authorization header manually to save a request */
+  gchar *credentials = g_strconcat (data->username, ":", data->password, NULL);
+  gchar *base64 = g_base64_encode ((guchar *)credentials, strlen (credentials));
+  gchar *auth_header = g_strconcat ("Basic ", base64, NULL);
+
+  proxy = rest_proxy_new (uri, FALSE);
+
+  call = rest_proxy_new_call (proxy);
+
+  rest_proxy_call_set_method (call, "POST");
+  rest_proxy_call_add_header (call,
+                              "Content-Type",
+                              "application/x-www-form-urlencoded");
+  rest_proxy_call_add_header (call, "Authorization", auth_header);
+  rest_proxy_call_add_param (call, "description", "GNOME Online Accounts");
+
+  rest_proxy_call_async (call, callback, NULL, data, &data->error);
+
+  g_signal_connect (cancellable, "cancelled", G_CALLBACK (on_rest_proxy_call_cancelled_cb), call);
+
+  g_object_unref (proxy);
+  g_object_unref (call);
+  g_free (credentials);
+  g_free (base64);
+  g_free (auth_header);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -635,6 +751,7 @@ add_account (GoaProvider    *provider,
              GError        **error)
 {
   AddAccountData data;
+  MusicData music_data;
   GVariantBuilder credentials;
   GVariantBuilder details;
   GoaHttpClient *http_client = NULL;
@@ -647,6 +764,7 @@ add_account (GoaProvider    *provider,
   gchar *presentation_identity = NULL;
   gchar *server = NULL;
   gchar *uri = NULL;
+  gchar *uri_music_password = NULL;
   gchar *uri_webdav;
   gint response;
 
@@ -655,6 +773,13 @@ add_account (GoaProvider    *provider,
   data.loop = g_main_loop_new (NULL, FALSE);
   data.dialog = dialog;
   data.error = NULL;
+
+  memset (&music_data, 0, sizeof (MusicData));
+  music_data.cancellable = g_cancellable_new ();
+  music_data.loop = g_main_loop_new (NULL, FALSE);
+  music_data.error = NULL;
+  music_data.username = NULL;
+  music_data.password = NULL;
 
   create_account_details_ui (provider, dialog, vbox, TRUE, FALSE, &data);
   gtk_widget_show_all (GTK_WIDGET (vbox));
@@ -678,6 +803,7 @@ add_account (GoaProvider    *provider,
   password = gtk_entry_get_text (GTK_ENTRY (data.password));
 
   uri = normalize_uri (uri_text, &server);
+  uri_music_password = g_strconcat (uri, MUSIC_PASSWORD_GENERATE_ENDPOINT, NULL);
   presentation_identity = g_strconcat (username, "@", server, NULL);
 
   /* See if there's already an account of this type with the
@@ -753,10 +879,27 @@ add_account (GoaProvider    *provider,
       goto http_again;
     }
 
+  music_data.username = username;
+  music_data.password = password;
+
+  music_generate_password (provider,
+                           uri_music_password,
+                           music_data.cancellable,
+                           (RestProxyCallAsyncCallback) generate_password_cb,
+                           &music_data);
+
+  g_main_loop_run (music_data.loop);
+
+  g_free (uri_music_password);
   gtk_widget_hide (GTK_WIDGET (dialog));
 
   g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (password));
+  if (music_data.music_password)
+    g_variant_builder_add (&credentials,
+                           "{sv}",
+                           "music_password",
+                           g_variant_new_string (music_data.music_password));
 
   g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
   g_variant_builder_add (&details, "{ss}", "CalendarEnabled", "true");
@@ -767,6 +910,9 @@ add_account (GoaProvider    *provider,
   g_variant_builder_add (&details, "{ss}", "Uri", uri);
   g_variant_builder_add (&details, "{ss}", "AcceptSslErrors", (accept_ssl_errors) ? "true" : "false");
 
+  if (music_data.error != NULL)
+    g_variant_builder_add (&details, "{ss}", "MusicError",
+                           music_data.error->message);
   /* OK, everything is dandy, add the account */
   /* we want the GoaClient to update before this method returns (so it
    * can create a proxy for the new object) so run the mainloop while
@@ -805,6 +951,9 @@ add_account (GoaProvider    *provider,
   g_free (data.account_object_path);
   g_clear_pointer (&data.loop, g_main_loop_unref);
   g_clear_object (&data.cancellable);
+  g_clear_pointer (&music_data.loop, (GDestroyNotify) g_main_loop_unref);
+  g_clear_object (&music_data.cancellable);
+  g_clear_error (&music_data.error);
   g_clear_object (&http_client);
   return ret;
 }
@@ -1015,6 +1164,114 @@ refresh_account (GoaProvider    *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static struct {
+  GoaProviderFeatures feature;
+  const gchar *property;
+  const gchar *blurb;
+} provider_features_info[] = {
+  /* The order in which the features are listed is
+   * important because it affects the order in which they are
+   * displayed in the show_account() UI
+   */
+  {
+    .feature = GOA_PROVIDER_FEATURE_CALENDAR,
+    .property = "calendar-disabled",
+    .blurb = N_("Cale_ndar"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_CONTACTS,
+    .property = "contacts-disabled",
+    .blurb = N_("_Contacts"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_DOCUMENTS,
+    .property = "documents-disabled",
+    .blurb = N_("_Documents"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_MUSIC,
+    .property = "music-disabled",
+    .blurb = N_("M_usic"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_FILES,
+    .property = "files-disabled",
+    .blurb = N_("_Files"),
+  },
+  {
+    .feature = GOA_PROVIDER_FEATURE_INVALID,
+    .property = NULL,
+    .blurb = NULL,
+  }
+};
+
+static void
+show_account (GoaProvider    *provider,
+              GoaClient      *client,
+              GoaObject      *object,
+              GtkBox         *vbox,
+              G_GNUC_UNUSED GtkGrid *dummy1,
+              G_GNUC_UNUSED GtkGrid *dummy2)
+{
+  GtkWidget *grid;
+  GoaProviderFeatures features;
+  GoaAccount *account;
+  gint row;
+  guint i;
+  gchar *error_message;
+  const char *label;
+
+  row = 0;
+  error_message = NULL;
+  account = NULL;
+
+  error_message = goa_util_lookup_keyfile_string (object, "MusicError");
+  if (error_message)
+    {
+      account = goa_object_get_account (object);
+      goa_account_set_music_disabled (account, TRUE);
+    }
+
+  grid = gtk_grid_new ();
+  gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
+  gtk_widget_set_hexpand (grid, TRUE);
+  gtk_widget_set_margin_end (grid, 72);
+  gtk_widget_set_margin_start (grid, 72);
+  gtk_widget_set_margin_top (grid, 24);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
+  gtk_container_add (GTK_CONTAINER (vbox), grid);
+
+  goa_utils_account_add_header (object, GTK_GRID (grid), row++);
+
+  features = goa_provider_get_provider_features (provider);
+  /* Translators: This is a label for a series of
+   * options switches. For example: “Use for Mail”. */
+  label = _("Use for");
+
+  for (i = 0; provider_features_info[i].property != NULL; i++)
+    {
+      if ((features & provider_features_info[i].feature) != 0)
+        {
+          GtkWidget *switch_;
+          switch_ = goa_util_add_row_switch_from_keyfile_with_blurb (GTK_GRID (grid), row++, object,
+                                                                     label,
+                                                                     provider_features_info[i].property,
+                                                                     _(provider_features_info[i].blurb));
+          if (provider_features_info[i].feature == GOA_PROVIDER_FEATURE_MUSIC && error_message)
+            {
+              gtk_widget_set_sensitive (switch_, FALSE);
+            }
+          label = NULL;
+        }
+    }
+
+  g_free (error_message);
+}
+
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static void
 goa_owncloud_provider_init (GoaOwncloudProvider *self)
 {
@@ -1033,6 +1290,7 @@ goa_owncloud_provider_class_init (GoaOwncloudProviderClass *klass)
   provider_class->add_account                = add_account;
   provider_class->refresh_account            = refresh_account;
   provider_class->build_object               = build_object;
+  provider_class->show_account               = show_account;
   provider_class->ensure_credentials_sync    = ensure_credentials_sync;
 }
 
