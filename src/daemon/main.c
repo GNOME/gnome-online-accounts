@@ -26,11 +26,6 @@
 
 #include "goadaemon.h"
 
-#ifdef GOA_TELEPATHY_ENABLED
-#include "goatpaccountlinker.h"
-#endif
-
-
 /* ---------------------------------------------------------------------------------------------------- */
 
 static GMainLoop *loop = NULL;
@@ -43,10 +38,6 @@ static GOptionEntry opt_entries[] =
   {NULL }
 };
 static GoaDaemon *the_daemon = NULL;
-
-#ifdef GOA_TELEPATHY_ENABLED
-static GoaTpAccountLinker *tp_linker = NULL;
-#endif
 
 static void
 on_bus_acquired (GDBusConnection *connection,
@@ -73,10 +64,6 @@ on_name_acquired (GDBusConnection *connection,
                   gpointer         user_data)
 {
   g_debug ("Acquired the name %s on the session message bus", name);
-
-#ifdef GOA_TELEPATHY_ENABLED
-  tp_linker = goa_tp_account_linker_new ();
-#endif
 }
 
 static gboolean
@@ -138,9 +125,6 @@ main (int    argc,
 
  out:
   g_clear_object (&the_daemon);
-#ifdef GOA_TELEPATHY_ENABLED
-  g_clear_object (&tp_linker);
-#endif
   if (name_owner_id != 0)
     g_bus_unown_name (name_owner_id);
   g_clear_pointer (&loop, (GDestroyNotify) g_main_loop_unref);

@@ -109,6 +109,7 @@ if BUILD_TELEPATHY
 libgoa_backend_1_0_la_SOURCES +=					\
 	goatelepathyfactory.h		goatelepathyfactory.c		\
 	goatelepathyprovider.h		goatelepathyprovider.c		\
+	goatpaccountlinker.h		goatpaccountlinker.c		\
 	$(NULL)
 endif
 

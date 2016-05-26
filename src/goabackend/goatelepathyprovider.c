@@ -26,6 +26,7 @@
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goatelepathyprovider.h"
+#include "goatpaccountlinker.h"
 #include "goaobjectskeletonutils.h"
 #include "goautils.h"
 
@@ -76,6 +77,11 @@ struct _GoaTelepathyProviderClass
  */
 
 G_DEFINE_TYPE (GoaTelepathyProvider, goa_telepathy_provider, GOA_TYPE_PROVIDER);
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static GoaTpAccountLinker *tp_linker = NULL;
+static guint name_watcher_id = 0;
 
 /* ---------------------------------------------------------------------------------------------------- */
 
@@ -263,6 +269,38 @@ static GoaProviderFeatures
 get_provider_features (GoaProvider *provider)
 {
   return GOA_PROVIDER_FEATURE_CHAT;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
+on_name_acquired (GDBusConnection *connection,
+                  const gchar     *name,
+                  const gchar     *name_owner,
+                  gpointer         user_data)
+{
+  tp_linker = goa_tp_account_linker_new ();
+  g_bus_unwatch_name (name_watcher_id);
+  name_watcher_id = 0;
+}
+
+static void
+initialize (GoaProvider *provider)
+{
+  static gsize once_init_value = 0;
+
+  if (g_once_init_enter (&once_init_value))
+    {
+      name_watcher_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
+                                          "org.gnome.OnlineAccounts",
+                                          G_BUS_NAME_WATCHER_FLAGS_NONE,
+                                          on_name_acquired,
+                                          NULL,
+                                          NULL,
+                                          NULL);
+
+      g_once_init_leave (&once_init_value, 1);
+    }
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -1022,6 +1060,7 @@ goa_telepathy_provider_class_init (GoaTelepathyProviderClass *klass)
   provider_class->get_provider_icon     = get_provider_icon;
   provider_class->get_provider_group    = get_provider_group;
   provider_class->get_provider_features = get_provider_features;
+  provider_class->initialize            = initialize;
   provider_class->add_account           = add_account;
   provider_class->refresh_account       = refresh_account;
   provider_class->build_object          = build_object;
