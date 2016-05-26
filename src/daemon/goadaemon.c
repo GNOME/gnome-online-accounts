@@ -89,6 +89,52 @@ static void goa_daemon_reload_configuration (GoaDaemon *self);
 
 G_DEFINE_TYPE (GoaDaemon, goa_daemon, G_TYPE_OBJECT);
 
+/* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct
+{
+  GError **error;
+  GList **out_providers;
+  GMainLoop *loop;
+  gboolean op_res;
+} GetAllSyncData;
+
+static void
+get_all_providers_sync_cb (GObject       *source_object,
+                           GAsyncResult  *res,
+                           gpointer       user_data)
+{
+  GetAllSyncData *data = (GetAllSyncData *) user_data;
+
+  data->op_res = goa_provider_get_all_finish (data->out_providers, res, data->error);
+  g_main_loop_quit (data->loop);
+}
+
+static gboolean
+get_all_providers_sync (GCancellable  *cancellable,
+                        GList        **out_providers,
+                        GError       **error)
+{
+  GetAllSyncData data;
+
+  data.error = error;
+  data.out_providers = out_providers;
+
+  /* HACK: Since telepathy-glib doesn't use the thread-default
+   * GMainContext for invoking the asynchronous callbacks, we can't
+   * push a new GMainContext here.
+   */
+  data.loop = g_main_loop_new (NULL, FALSE);
+
+  goa_provider_get_all (get_all_providers_sync_cb, &data);
+  g_main_loop_run (data.loop);
+  g_main_loop_unref (data.loop);
+
+  return data.op_res;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static void
 goa_daemon_finalize (GObject *object)
 {
