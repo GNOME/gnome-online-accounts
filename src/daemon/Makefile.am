@@ -31,17 +31,10 @@ goa_daemon_SOURCES = 						\
 	goadaemon.h		goadaemon.c			\
 	$(NULL)
 
-if BUILD_TELEPATHY
-goa_daemon_SOURCES +=						\
-	goatpaccountlinker.h	goatpaccountlinker.c		\
-	$(NULL)
-endif
-
 goa_daemon_CFLAGS =						\
 	$(GLIB_CFLAGS) 						\
 	$(GTK_CFLAGS)						\
 	$(REST_CFLAGS)						\
-	$(TP_CFLAGS)						\
 	$(NULL)
 
 goa_daemon_LDADD = 						\
@@ -50,7 +43,6 @@ goa_daemon_LDADD = 						\
 	$(top_builddir)/src/goabackend/libgoa-backend-1.0.la	\
 	$(GTK_LIBS)						\
 	$(REST_LIBS)						\
-	$(TP_LIBS)						\
 	$(NULL)
 
 clean-local :
