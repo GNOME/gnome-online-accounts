@@ -261,6 +261,9 @@ static void
 goa_daemon_init (GoaDaemon *self)
 {
   static volatile GQuark goa_error_domain = 0;
+  GError *error;
+  GList *l;
+  GList *providers = NULL;
   GoaObjectSkeleton *object;
   gchar *path;
 
@@ -270,7 +273,21 @@ goa_daemon_init (GoaDaemon *self)
   goa_error_domain = GOA_ERROR;
   goa_error_domain; /* shut up -Wunused-but-set-variable */
 
-  goa_provider_ensure_builtins_loaded ();
+  error = NULL;
+  if (!get_all_providers_sync (NULL, &providers, &error))
+    {
+      g_warning ("Unable to get the list of providers: %s (%s, %d)",
+                 error->message,
+                 g_quark_to_string (error->domain),
+                 error->code);
+      g_error_free (error);
+    }
+
+  for (l = providers; l != NULL; l = l->next)
+    {
+      GoaProvider *provider = GOA_PROVIDER (l->data);
+      goa_provider_initialize (provider);
+    }
 
   /* TODO: maybe nicer to pass in a GDBusConnection* construct property */
   self->connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
