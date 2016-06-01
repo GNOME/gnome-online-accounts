@@ -68,6 +68,26 @@ is_telepathy_account (GoaAccount *goa_account)
 }
 
 static void
+tp_account_removed_by_us_cb (GObject      *object,
+                             GAsyncResult *res,
+                             gpointer      user_data)
+{
+  /* This callback is only used for debugging */
+  TpAccount *tp_account = TP_ACCOUNT (object);
+  GError *error = NULL;
+
+  if (!tp_account_remove_finish (tp_account, res, &error))
+    {
+      g_critical ("Error removing Telepathy account %s: %s (%s, %d)",
+          get_id_from_tp_account (tp_account),
+          error->message,
+          g_quark_to_string (error->domain),
+          error->code);
+      g_error_free (error);
+    }
+}
+
+static void
 goa_account_chat_disabled_changed_cb (GoaAccount         *goa_account,
                                       GParamSpec         *spec,
                                       GoaTpAccountLinker *self)
@@ -361,26 +381,6 @@ goa_account_added_cb (GoaClient *client,
       /* The chat enabled status may have changed during the creation of the
        * GOA account, so we need to make sure it's synced. */
       tp_account_chat_enabled_changed_cb (tp_account, NULL, self);
-    }
-}
-
-static void
-tp_account_removed_by_us_cb (GObject      *object,
-                             GAsyncResult *res,
-                             gpointer      user_data)
-{
-  /* This callback is only used for debugging */
-  TpAccount *tp_account = TP_ACCOUNT (object);
-  GError *error = NULL;
-
-  if (!tp_account_remove_finish (tp_account, res, &error))
-    {
-      g_critical ("Error removing Telepathy account %s: %s (%s, %d)",
-          get_id_from_tp_account (tp_account),
-          error->message,
-          g_quark_to_string (error->domain),
-          error->code);
-      g_error_free (error);
     }
 }
 
