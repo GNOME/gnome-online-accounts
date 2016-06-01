@@ -28,7 +28,6 @@
 #include <telepathy-glib/telepathy-glib.h>
 
 #include "goatpaccountlinker.h"
-#include "goa/goa.h"
 #include "goabackend/goautils.h"
 
 #define GOA_TP_ACCOUNT_LINKER_GET_PRIVATE(obj) \
@@ -44,6 +43,8 @@ struct _GoaTpAccountLinkerPrivate
 
   GHashTable *tp_accounts; /* owned gchar *id -> reffed TpAccount * */
   GHashTable *goa_accounts; /* owned gchar *id -> reffed GoaObject * */
+
+  GQueue *remove_tp_account_queue;
 };
 
 /* The path of the Telepathy account is used as common identifier between
@@ -72,9 +73,9 @@ tp_account_removed_by_us_cb (GObject      *object,
                              GAsyncResult *res,
                              gpointer      user_data)
 {
-  /* This callback is only used for debugging */
   TpAccount *tp_account = TP_ACCOUNT (object);
   GError *error = NULL;
+  GTask *task = G_TASK (user_data);
 
   if (!tp_account_remove_finish (tp_account, res, &error))
     {
@@ -83,8 +84,80 @@ tp_account_removed_by_us_cb (GObject      *object,
           error->message,
           g_quark_to_string (error->domain),
           error->code);
-      g_error_free (error);
+      g_task_return_error (task, error);
+      goto out;
     }
+
+  g_task_return_boolean (task, TRUE);
+
+ out:
+  g_object_unref (task);
+}
+
+static void
+remove_tp_account_queue_check (GoaTpAccountLinker *self)
+{
+  GoaTpAccountLinkerPrivate *priv = self->priv;
+  GList *l;
+
+  if (priv->goa_client == NULL ||
+      priv->account_manager == NULL ||
+      !tp_proxy_is_prepared (priv->account_manager, TP_ACCOUNT_MANAGER_FEATURE_CORE))
+    {
+      /* Not everything is ready yet */
+      return;
+    }
+
+  if (priv->remove_tp_account_queue->length == 0)
+    return;
+
+  for (l = priv->remove_tp_account_queue->head; l != NULL; l = l->next)
+    {
+      GTask *task = G_TASK (l->data);
+      GoaAccount *goa_account;
+      GoaObject *goa_object;
+      TpAccount *tp_account;
+      const gchar *id;
+
+      goa_object = GOA_OBJECT (g_task_get_task_data (task));
+      goa_account = goa_object_peek_account (goa_object);
+
+      id = get_id_from_goa_account (goa_account);
+      if (!g_hash_table_remove (priv->goa_accounts, id))
+        {
+          /* 1 - The user removes the Telepathy account (but not the GOA one)
+           * 2 - We delete the corresponding GOA account and remove it
+           *     from priv->goa_accounts
+           * 3 - The Telepathy provider again tries to remove the
+           *     corresponding Telepathy account
+           */
+          g_debug ("Ignoring removal of GOA account we asked to remove "
+                   "(%s, Telepathy object path: %s)",
+                   goa_account_get_id (goa_account),
+                   id);
+          g_task_return_boolean (task, TRUE);
+          continue;
+        }
+
+      g_info ("GOA account %s for Telepathy account %s removed, "
+              "removing Telepathy account",
+              goa_account_get_id (goa_account), id);
+
+      tp_account = g_hash_table_lookup (priv->tp_accounts, id);
+      if (tp_account == NULL)
+        {
+          g_critical ("There is no Telepathy account for removed GOA "
+                      "account %s (Telepathy object path: %s)",
+                      goa_account_get_id (goa_account), id);
+          g_task_return_boolean (task, TRUE);
+          continue;
+        }
+      tp_account_remove_async (tp_account, tp_account_removed_by_us_cb, g_object_ref (task));
+      g_hash_table_remove (priv->tp_accounts, id);
+    }
+
+  g_queue_foreach (priv->remove_tp_account_queue, (GFunc) g_object_unref, NULL);
+  g_queue_clear (priv->remove_tp_account_queue);
 }
 
 static void
@@ -385,52 +458,6 @@ goa_account_added_cb (GoaClient *client,
 }
 
 static void
-goa_account_removed_cb (GoaClient *client,
-                        GoaObject *goa_object,
-                        gpointer   user_data)
-{
-  GoaTpAccountLinker *self = user_data;
-  GoaTpAccountLinkerPrivate *priv = self->priv;
-  GoaAccount *goa_account = goa_object_peek_account (goa_object);
-  const gchar *id = NULL;
-  TpAccount *tp_account = NULL;
-
-  if (!is_telepathy_account (goa_account))
-    return;
-
-  id = get_id_from_goa_account (goa_account);
-  if (!g_hash_table_remove (priv->goa_accounts, id))
-    {
-      /* 1 - The user removes the Telepathy account (but not the GOA one)
-       * 2 - We delete the corresponding GOA account and remove it
-       *     from priv->goa_accounts
-       * 3 - "account-removed" is emitted by the GOA client
-       * 4 - goa_account_removed_cb is called for an unknown account
-       */
-      g_debug ("Ignoring removal of GOA account we asked to remove "
-          "(%s, Telepathy object path: %s)",
-          goa_account_get_id (goa_account),
-          id);
-      return;
-    }
-
-  g_info ("GOA account %s for Telepathy account %s removed, "
-      "removing Telepathy account",
-      goa_account_get_id (goa_account), id);
-
-  tp_account = g_hash_table_lookup (priv->tp_accounts, id);
-  if (tp_account == NULL)
-    {
-      g_critical ("There is no Telepathy account for removed GOA "
-          "account %s (Telepathy object path: %s)",
-          goa_account_get_id (goa_account), id);
-      return;
-    }
-  tp_account_remove_async (tp_account, tp_account_removed_by_us_cb, NULL);
-  g_hash_table_remove (priv->tp_accounts, id);
-}
-
-static void
 start_if_ready (GoaTpAccountLinker *self)
 {
   GoaTpAccountLinkerPrivate *priv = self->priv;
@@ -459,8 +486,6 @@ start_if_ready (GoaTpAccountLinker *self)
 
   g_signal_connect_object (priv->goa_client, "account-added",
       G_CALLBACK (goa_account_added_cb), self, 0);
-  g_signal_connect_object (priv->goa_client, "account-removed",
-      G_CALLBACK (goa_account_removed_cb), self, 0);
 
   /* Telepathy */
   tp_accounts = tp_account_manager_dup_valid_accounts (priv->account_manager);
@@ -491,6 +516,8 @@ start_if_ready (GoaTpAccountLinker *self)
               NULL); /* user data */
         }
     }
+
+  remove_tp_account_queue_check (self);
 }
 
 static void
@@ -539,6 +566,12 @@ goa_tp_account_linker_dispose (GObject *object)
   GoaTpAccountLinker *self = GOA_TP_ACCOUNT_LINKER (object);
   GoaTpAccountLinkerPrivate *priv = self->priv;
 
+  if (priv->remove_tp_account_queue != NULL)
+    {
+      g_queue_free_full (priv->remove_tp_account_queue, g_object_unref);
+      priv->remove_tp_account_queue = NULL;
+    }
+
   g_clear_object (&priv->account_manager);
   g_clear_object (&priv->goa_client);
 
@@ -562,6 +595,8 @@ goa_tp_account_linker_init (GoaTpAccountLinker *self)
       g_free, g_object_unref);
   priv->tp_accounts = g_hash_table_new_full (g_str_hash, g_str_equal,
       g_free, g_object_unref);
+
+  priv->remove_tp_account_queue = g_queue_new ();
 
   priv->account_manager = tp_account_manager_dup ();
   tp_proxy_prepare_async (priv->account_manager, NULL,
@@ -587,4 +622,45 @@ GoaTpAccountLinker *
 goa_tp_account_linker_new (void)
 {
   return g_object_new (GOA_TYPE_TP_ACCOUNT_LINKER, NULL);
+}
+
+void
+goa_tp_account_linker_remove_tp_account (GoaTpAccountLinker   *self,
+                                         GoaObject            *object,
+                                         GCancellable         *cancellable,
+                                         GAsyncReadyCallback   callback,
+                                         gpointer              user_data)
+{
+  GoaTpAccountLinkerPrivate *priv;
+  GTask *task;
+
+  g_return_if_fail (GOA_IS_TP_ACCOUNT_LINKER (self));
+  priv = self->priv;
+
+  g_return_if_fail (GOA_IS_OBJECT (object));
+  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, goa_tp_account_linker_remove_tp_account);
+  g_task_set_task_data (task, g_object_ref (object), g_object_unref);
+  g_queue_push_tail (priv->remove_tp_account_queue, g_object_ref (task));
+
+  remove_tp_account_queue_check (self);
+
+  g_object_unref (task);
+}
+
+gboolean
+goa_tp_account_linker_remove_tp_account_finish (GoaTpAccountLinker  *self,
+                                                GAsyncResult        *res,
+                                                GError             **error)
+{
+  GTask *task;
+
+  g_return_val_if_fail (g_task_is_valid (res, self), FALSE);
+  task = G_TASK (res);
+
+  g_warn_if_fail (g_task_get_source_tag (task) == goa_tp_account_linker_remove_tp_account);
+
+  return g_task_propagate_boolean (task, error);
 }
