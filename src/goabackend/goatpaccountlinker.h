@@ -22,6 +22,8 @@
 
 #include <glib-object.h>
 
+#include "goa/goa.h"
+
 G_BEGIN_DECLS
 
 #define GOA_TYPE_TP_ACCOUNT_LINKER           (goa_tp_account_linker_get_type ())
@@ -48,6 +50,14 @@ struct _GoaTpAccountLinkerClass
 
 GType               goa_tp_account_linker_get_type      (void) G_GNUC_CONST;
 GoaTpAccountLinker *goa_tp_account_linker_new           (void);
+void                goa_tp_account_linker_remove_tp_account        (GoaTpAccountLinker   *self,
+                                                                    GoaObject            *object,
+                                                                    GCancellable         *cancellable,
+                                                                    GAsyncReadyCallback   callback,
+                                                                    gpointer              user_data);
+gboolean            goa_tp_account_linker_remove_tp_account_finish (GoaTpAccountLinker   *self,
+                                                                    GAsyncResult         *res,
+                                                                    GError              **error);
 
 G_END_DECLS
 

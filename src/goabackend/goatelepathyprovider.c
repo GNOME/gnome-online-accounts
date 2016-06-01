@@ -790,6 +790,67 @@ out:
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static void
+remove_account_remove_tp_account_cb (GObject       *source_object,
+                                     GAsyncResult  *res,
+                                     gpointer       user_data)
+{
+  GError *error;
+  GTask *task = G_TASK (user_data);
+
+  error = NULL;
+  if (!goa_tp_account_linker_remove_tp_account_finish (tp_linker, res, &error))
+    {
+      g_task_return_error (task, error);
+      goto out;
+    }
+
+  g_task_return_boolean (task, TRUE);
+
+ out:
+  g_object_unref (task);
+}
+
+static void
+remove_account (GoaProvider          *provider,
+                GoaObject            *object,
+                GCancellable         *cancellable,
+                GAsyncReadyCallback   callback,
+                gpointer              user_data)
+{
+  GoaTelepathyProvider *self = GOA_TELEPATHY_PROVIDER (provider);
+  GTask *task;
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, remove_account);
+
+  goa_tp_account_linker_remove_tp_account (tp_linker,
+                                           object,
+                                           cancellable,
+                                           remove_account_remove_tp_account_cb,
+                                           g_object_ref (task));
+
+  g_object_unref (task);
+}
+
+static gboolean
+remove_account_finish (GoaProvider   *provider,
+                       GAsyncResult  *res,
+                       GError       **error)
+{
+  GoaTelepathyProvider *self = GOA_TELEPATHY_PROVIDER (provider);
+  GTask *task;
+
+  g_return_val_if_fail (g_task_is_valid (res, self), FALSE);
+  task = G_TASK (res);
+
+  g_warn_if_fail (g_task_get_source_tag (task) == remove_account);
+
+  return g_task_propagate_boolean (task, error);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 typedef struct
 {
   guint ref_count;
@@ -1064,6 +1125,8 @@ goa_telepathy_provider_class_init (GoaTelepathyProviderClass *klass)
   provider_class->add_account           = add_account;
   provider_class->refresh_account       = refresh_account;
   provider_class->build_object          = build_object;
+  provider_class->remove_account        = remove_account;
+  provider_class->remove_account_finish = remove_account_finish;
   provider_class->show_account          = show_account;
 
   g_type_class_add_private (object_class, sizeof (GoaTelepathyProviderPrivate));
