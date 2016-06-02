@@ -407,7 +407,8 @@ goa_utils_keyfile_remove_key (GoaAccount *account, const gchar *key)
       goto out;
     }
 
-  g_key_file_remove_key (key_file, group, key, NULL);
+  if (!g_key_file_remove_key (key_file, group, key, NULL))
+    goto out;
 
   error = NULL;
   if (!g_key_file_save_to_file (key_file, path, &error))
@@ -429,6 +430,8 @@ goa_utils_keyfile_set_boolean (GoaAccount *account, const gchar *key, gboolean v
 {
   GError *error;
   GKeyFile *key_file;
+  gboolean needs_update = FALSE;
+  gboolean old_value;
   gchar *group;
   gchar *path;
 
@@ -450,6 +453,27 @@ goa_utils_keyfile_set_boolean (GoaAccount *account, const gchar *key, gboolean v
       g_error_free (error);
       goto out;
     }
+
+  error = NULL;
+  old_value = g_key_file_get_boolean (key_file, group, key, &error);
+  if (error != NULL)
+    {
+      g_warning ("Error reading key %s from keyfile %s: %s (%s, %d)",
+                 key,
+                 path,
+                 error->message,
+                 g_quark_to_string (error->domain),
+                 error->code);
+      needs_update = TRUE;
+      g_error_free (error);
+    }
+  else if (old_value != value)
+    {
+      needs_update = TRUE;
+    }
+
+  if (!needs_update)
+    goto out;
 
   g_key_file_set_boolean (key_file, group, key, value);
 
@@ -473,7 +497,9 @@ goa_utils_keyfile_set_string (GoaAccount *account, const gchar *key, const gchar
 {
   GError *error;
   GKeyFile *key_file;
+  gboolean needs_update = FALSE;
   gchar *group;
+  gchar *old_value = NULL;
   gchar *path;
 
   path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
@@ -495,6 +521,27 @@ goa_utils_keyfile_set_string (GoaAccount *account, const gchar *key, const gchar
       goto out;
     }
 
+  error = NULL;
+  old_value = g_key_file_get_string (key_file, group, key, &error);
+  if (error != NULL)
+    {
+      g_warning ("Error reading key %s from keyfile %s: %s (%s, %d)",
+                 key,
+                 path,
+                 error->message,
+                 g_quark_to_string (error->domain),
+                 error->code);
+      needs_update = TRUE;
+      g_error_free (error);
+    }
+  else if (g_strcmp0 (old_value, value) != 0)
+    {
+      needs_update = TRUE;
+    }
+
+  if (!needs_update)
+    goto out;
+
   g_key_file_set_string (key_file, group, key, value);
 
   error = NULL;
@@ -509,6 +556,7 @@ goa_utils_keyfile_set_string (GoaAccount *account, const gchar *key, const gchar
  out:
   g_key_file_free (key_file);
   g_free (group);
+  g_free (old_value);
   g_free (path);
 }
 
