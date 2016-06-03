@@ -270,7 +270,6 @@ get_provider_features (GoaProvider *provider)
 typedef struct
 {
   GMainLoop *loop;
-  GCancellable *cancellable;
   GoaObject *ret;
   GError *error;
 
@@ -401,7 +400,6 @@ add_account (GoaProvider  *provider,
     }
 
   memset (&data, 0, sizeof (AddAccountData));
-  data.cancellable = g_cancellable_new ();
   data.loop = g_main_loop_new (NULL, FALSE);
   data.error = NULL;
   data.provider = GOA_TELEPATHY_PROVIDER (provider);
@@ -445,7 +443,7 @@ add_account (GoaProvider  *provider,
       goto out;
     }
 
-  if (data.ret == NULL && !g_cancellable_is_cancelled (data.cancellable))
+  if (data.ret == NULL)
     {
       /* We wait for the account to be created */
       g_main_loop_run (data.loop);
@@ -456,12 +454,6 @@ out:
     g_propagate_error (error, data.error);
   else
     g_assert (data.ret != NULL);
-
-  if (data.cancellable != NULL)
-    {
-      g_cancellable_cancel (data.cancellable);
-      g_object_unref (data.cancellable);
-    }
 
   if (data.goa_account_added_id)
     g_signal_handler_disconnect (data.goa_client, data.goa_account_added_id);
