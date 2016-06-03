@@ -327,7 +327,7 @@ check_existing_goa_accounts (AddAccountData *data)
   GList *l = NULL;
   gboolean found = FALSE;
 
-  if (data->tp_account == NULL || data->goa_client == NULL)
+  if (data->tp_account == NULL)
     return FALSE;
 
   goa_accounts = goa_client_get_accounts (data->goa_client);
@@ -363,31 +363,6 @@ goa_account_added_cb (GoaClient *client,
   AddAccountData *data = user_data;
 
   check_goa_object_match (data, goa_object);
-}
-
-static void
-goa_client_new_cb (GObject      *object,
-                   GAsyncResult *result,
-                   gpointer      user_data)
-{
-  AddAccountData *data = user_data;
-
-  data->goa_client = goa_client_new_finish (result, &data->error);
-  if (data->goa_client == NULL)
-    {
-      g_set_error (&data->error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   _("Failed to initialize a GOA client"));
-      g_main_loop_quit (data->loop);
-      return;
-    }
-
-  if (!check_existing_goa_accounts (data))
-    {
-      data->goa_account_added_id = g_signal_connect (data->goa_client,
-          "account-added", G_CALLBACK (goa_account_added_cb), data);
-    }
 }
 
 static void
@@ -433,7 +408,10 @@ add_account (GoaProvider  *provider,
   data.dialog = dialog;
   data.vbox = vbox;
 
-  goa_client_new (data.cancellable, goa_client_new_cb, &data);
+  data.goa_client = client;
+  data.goa_account_added_id = g_signal_connect (data.goa_client,
+      "account-added", G_CALLBACK (goa_account_added_cb), &data);
+
   wait_for_account_settings_ready (settings, data.loop);
 
   account_widget = tpaw_account_widget_new_for_protocol (settings,
@@ -489,7 +467,6 @@ out:
     g_signal_handler_disconnect (data.goa_client, data.goa_account_added_id);
 
   g_clear_pointer (&data.loop, g_main_loop_unref);
-  g_clear_object (&data.goa_client);
   g_clear_object (&data.tp_account);
 
   return data.ret;
