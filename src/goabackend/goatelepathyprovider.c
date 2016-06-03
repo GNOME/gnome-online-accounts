@@ -276,12 +276,27 @@ typedef struct
   GoaTelepathyProvider *provider;
   GtkDialog *dialog;
   GtkBox *vbox;
+  gboolean close_received;
 
   TpAccount *tp_account;
 
   GoaClient *goa_client;
   guint goa_account_added_id;
 } AddAccountData;
+
+static void
+quit_main_loop_if_finished (AddAccountData *data)
+{
+  if (data->ret != NULL && data->close_received)
+    g_main_loop_quit (data->loop);
+}
+
+static void
+run_main_loop_if_needed (AddAccountData *data)
+{
+  if (data->ret == NULL || !data->close_received)
+    g_main_loop_run (data->loop);
+}
 
 static gboolean
 check_goa_object_match (AddAccountData *data,
@@ -312,7 +327,7 @@ check_goa_object_match (AddAccountData *data,
     {
       /* Found it! */
       data->ret = g_object_ref (goa_object);
-      g_main_loop_quit (data->loop);
+      quit_main_loop_if_finished (data);
       return TRUE;
     }
 
@@ -369,7 +384,8 @@ account_widget_close_cb (TpawAccountWidget *widget,
                          GtkResponseType    response,
                          AddAccountData    *data)
 {
-  gtk_dialog_response (data->dialog, response);
+  data->close_received = TRUE;
+  quit_main_loop_if_finished (data);
 }
 
 static GoaObject *
@@ -443,11 +459,8 @@ add_account (GoaProvider  *provider,
       goto out;
     }
 
-  if (data.ret == NULL)
-    {
-      /* We wait for the account to be created */
-      g_main_loop_run (data.loop);
-    }
+  /* We wait for the account to be created */
+  run_main_loop_if_needed (&data);
 
 out:
   if (data.error != NULL)
