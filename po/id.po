@@ -7,56 +7,50 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts gnome-3-18\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-"
-"accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-16 19:38+0000\n"
-"PO-Revision-Date: 2015-09-17 08:16+0700\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"online-accounts&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2016-05-06 10:28+0000\n"
+"PO-Revision-Date: 2016-06-08 10:28+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome@i15n.org>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 1.6.10\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:830 ../src/daemon/goadaemon.c:1090
+#: ../src/daemon/goadaemon.c:841 ../src/daemon/goadaemon.c:1101
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Gagal menemukan penyedia layanan untuk: %s"
 
-#: ../src/daemon/goadaemon.c:1018
+#: ../src/daemon/goadaemon.c:1029
 msgid "IsLocked property is set for account"
 msgstr "Properti IsLocked disetel untuk akun"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1078
+#: ../src/daemon/goadaemon.c:1089
 msgid "ProviderType property is not set for account"
 msgstr "Properti ProviderType tidak disetel untuk akun"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:237 ../src/goabackend/goahttpclient.c:174
-#, c-format
-msgid "Code: %u — Unexpected response from server"
-msgstr "Kode: %u — Respon tidak terduga dari server"
-
-#. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:253
+#: ../src/goabackend/goaewsclient.c:250
 #, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "Gagal mengurai XML respon autodiscover"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: ../src/goabackend/goaewsclient.c:264 ../src/goabackend/goaewsclient.c:279
-#: ../src/goabackend/goaewsclient.c:294
+#: ../src/goabackend/goaewsclient.c:261 ../src/goabackend/goaewsclient.c:276
+#: ../src/goabackend/goaewsclient.c:291
 #, c-format
 msgid "Failed to find ‘%s’ element"
 msgstr "Gagal menemukan elemen '%s'"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:315
+#: ../src/goabackend/goaewsclient.c:312
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "Gagal menemukan ASUrl dan OABUrl dalam respon autodiscover"
@@ -67,10 +61,10 @@ msgstr "Microsoft Exchange"
 
 #. TODO: more specific
 #: ../src/goabackend/goaexchangeprovider.c:311
-#: ../src/goabackend/goaexchangeprovider.c:985
+#: ../src/goabackend/goaexchangeprovider.c:994
 #: ../src/goabackend/goalastfmprovider.c:286
-#: ../src/goabackend/goaowncloudprovider.c:383
-#: ../src/goabackend/goaowncloudprovider.c:1128
+#: ../src/goabackend/goaowncloudprovider.c:391
+#: ../src/goabackend/goaowncloudprovider.c:1145
 #, c-format
 msgid "Did not find password with identity ‘%s’ in credentials"
 msgstr "Tidak menemukan sandi dengan identitas '%s' dalam kredensial"
@@ -81,21 +75,21 @@ msgstr "Tidak menemukan sandi dengan identitas '%s' dalam kredensial"
 #.
 #: ../src/goabackend/goaexchangeprovider.c:339
 #: ../src/goabackend/goalastfmprovider.c:302
-#: ../src/goabackend/goaowncloudprovider.c:406
+#: ../src/goabackend/goaowncloudprovider.c:414
 #, c-format
 msgid "Invalid password with username ‘%s’ (%s, %d): "
 msgstr "Sandi tidak valid dengan nama pengguna '%s' (%s, %d): "
 
 #: ../src/goabackend/goaexchangeprovider.c:492
-#: ../src/goabackend/goaimapsmtpprovider.c:700
+#: ../src/goabackend/goaimapsmtpprovider.c:697
 msgid "_E-mail"
 msgstr "Sur_el"
 
 #: ../src/goabackend/goaexchangeprovider.c:493
-#: ../src/goabackend/goaimapsmtpprovider.c:720
-#: ../src/goabackend/goaimapsmtpprovider.c:740
+#: ../src/goabackend/goaimapsmtpprovider.c:717
+#: ../src/goabackend/goaimapsmtpprovider.c:737
 #: ../src/goabackend/goalastfmprovider.c:443
-#: ../src/goabackend/goaowncloudprovider.c:634
+#: ../src/goabackend/goaowncloudprovider.c:642
 msgid "_Password"
 msgstr "San_di"
 
@@ -104,57 +98,59 @@ msgid "_Custom"
 msgstr "_Ubahan"
 
 #: ../src/goabackend/goaexchangeprovider.c:507
-#: ../src/goabackend/goaimapsmtpprovider.c:719
-#: ../src/goabackend/goaimapsmtpprovider.c:739
-#: ../src/goabackend/goakerberosprovider.c:719
+#: ../src/goabackend/goaimapsmtpprovider.c:716
+#: ../src/goabackend/goaimapsmtpprovider.c:736
+#: ../src/goabackend/goakerberosprovider.c:736
 #: ../src/goabackend/goalastfmprovider.c:442
-#: ../src/goabackend/goaowncloudprovider.c:633
+#: ../src/goabackend/goaowncloudprovider.c:641
 msgid "User_name"
 msgstr "_Nama Pengguna"
 
 #: ../src/goabackend/goaexchangeprovider.c:508
-#: ../src/goabackend/goaowncloudprovider.c:632
+#: ../src/goabackend/goaowncloudprovider.c:640
 msgid "_Server"
 msgstr "_Server"
 
 #. --
 #: ../src/goabackend/goaexchangeprovider.c:518
-#: ../src/goabackend/goaimapsmtpprovider.c:752
-#: ../src/goabackend/goakerberosprovider.c:724
+#: ../src/goabackend/goaimapsmtpprovider.c:749
+#: ../src/goabackend/goakerberosprovider.c:741
 #: ../src/goabackend/goalastfmprovider.c:451
-#: ../src/goabackend/goaowncloudprovider.c:643
+#: ../src/goabackend/goaowncloudprovider.c:651
 #: ../src/goabackend/goatelepathyprovider.c:649
 msgid "_Cancel"
 msgstr "_Batal"
 
 #: ../src/goabackend/goaexchangeprovider.c:519
-#: ../src/goabackend/goakerberosprovider.c:725
+#: ../src/goabackend/goakerberosprovider.c:742
 #: ../src/goabackend/goalastfmprovider.c:452
-#: ../src/goabackend/goaowncloudprovider.c:644
+#: ../src/goabackend/goaowncloudprovider.c:652
 msgid "C_onnect"
 msgstr "S_ambung"
 
 #: ../src/goabackend/goaexchangeprovider.c:535
-#: ../src/goabackend/goaimapsmtpprovider.c:769
-#: ../src/goabackend/goakerberosprovider.c:741
+#: ../src/goabackend/goaimapsmtpprovider.c:766
+#: ../src/goabackend/goakerberosprovider.c:758
 #: ../src/goabackend/goalastfmprovider.c:468
-#: ../src/goabackend/goaowncloudprovider.c:660
+#: ../src/goabackend/goaowncloudprovider.c:668
 msgid "Connecting…"
 msgstr "Menyambung..."
 
 #: ../src/goabackend/goaexchangeprovider.c:640
 #: ../src/goabackend/goaexchangeprovider.c:837
-#: ../src/goabackend/goaimapsmtpprovider.c:931
-#: ../src/goabackend/goaimapsmtpprovider.c:966
-#: ../src/goabackend/goaimapsmtpprovider.c:1054
-#: ../src/goabackend/goaimapsmtpprovider.c:1318
-#: ../src/goabackend/goaimapsmtpprovider.c:1391
-#: ../src/goabackend/goakerberosprovider.c:1142
-#: ../src/goabackend/goalastfmprovider.c:659 ../src/goabackend/goalastfmprovider.c:825
+#: ../src/goabackend/goaimapsmtpprovider.c:928
+#: ../src/goabackend/goaimapsmtpprovider.c:963
+#: ../src/goabackend/goaimapsmtpprovider.c:1051
+#: ../src/goabackend/goaimapsmtpprovider.c:1316
+#: ../src/goabackend/goaimapsmtpprovider.c:1389
+#: ../src/goabackend/goakerberosprovider.c:1159
+#: ../src/goabackend/goalastfmprovider.c:663
+#: ../src/goabackend/goalastfmprovider.c:830
 #: ../src/goabackend/goamediaserverprovider.c:475
-#: ../src/goabackend/goaoauth2provider.c:1034 ../src/goabackend/goaoauthprovider.c:863
-#: ../src/goabackend/goaowncloudprovider.c:771
-#: ../src/goabackend/goaowncloudprovider.c:986
+#: ../src/goabackend/goaoauth2provider.c:1034
+#: ../src/goabackend/goaoauthprovider.c:863
+#: ../src/goabackend/goaowncloudprovider.c:779
+#: ../src/goabackend/goaowncloudprovider.c:994
 #: ../src/goabackend/goatelepathyprovider.c:459
 #: ../src/goabackend/goatelepathyprovider.c:508
 #: ../src/goabackend/goatelepathyprovider.c:683
@@ -164,34 +160,36 @@ msgstr "Dialog telah diakhiri"
 
 #: ../src/goabackend/goaexchangeprovider.c:678
 #: ../src/goabackend/goaexchangeprovider.c:865
-#: ../src/goabackend/goaimapsmtpprovider.c:996
-#: ../src/goabackend/goaimapsmtpprovider.c:1089
-#: ../src/goabackend/goaimapsmtpprovider.c:1342
-#: ../src/goabackend/goaimapsmtpprovider.c:1416
-#: ../src/goabackend/goalastfmprovider.c:693 ../src/goabackend/goalastfmprovider.c:844
-#: ../src/goabackend/goaowncloudprovider.c:813
-#: ../src/goabackend/goaowncloudprovider.c:1007
+#: ../src/goabackend/goaimapsmtpprovider.c:993
+#: ../src/goabackend/goaimapsmtpprovider.c:1086
+#: ../src/goabackend/goaimapsmtpprovider.c:1340
+#: ../src/goabackend/goaimapsmtpprovider.c:1414
+#: ../src/goabackend/goalastfmprovider.c:697
+#: ../src/goabackend/goalastfmprovider.c:849
+#: ../src/goabackend/goaowncloudprovider.c:821
+#: ../src/goabackend/goaowncloudprovider.c:1015
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "Dialog telah diakhiri (%s, %d): "
 
 #: ../src/goabackend/goaexchangeprovider.c:691
-#: ../src/goabackend/goaimapsmtpprovider.c:1009
-#: ../src/goabackend/goaimapsmtpprovider.c:1102
-#: ../src/goabackend/goaowncloudprovider.c:826
+#: ../src/goabackend/goaimapsmtpprovider.c:1006
+#: ../src/goabackend/goaimapsmtpprovider.c:1099
+#: ../src/goabackend/goaowncloudprovider.c:834
 msgid "_Ignore"
 msgstr "Aba_ikan"
 
 #: ../src/goabackend/goaexchangeprovider.c:696
 #: ../src/goabackend/goaexchangeprovider.c:884
-#: ../src/goabackend/goaimapsmtpprovider.c:1014
-#: ../src/goabackend/goaimapsmtpprovider.c:1107
-#: ../src/goabackend/goaimapsmtpprovider.c:1361
-#: ../src/goabackend/goaimapsmtpprovider.c:1435
-#: ../src/goabackend/goakerberosprovider.c:1252
-#: ../src/goabackend/goalastfmprovider.c:705 ../src/goabackend/goalastfmprovider.c:861
-#: ../src/goabackend/goaowncloudprovider.c:831
-#: ../src/goabackend/goaowncloudprovider.c:1026
+#: ../src/goabackend/goaimapsmtpprovider.c:1011
+#: ../src/goabackend/goaimapsmtpprovider.c:1104
+#: ../src/goabackend/goaimapsmtpprovider.c:1359
+#: ../src/goabackend/goaimapsmtpprovider.c:1433
+#: ../src/goabackend/goakerberosprovider.c:1269
+#: ../src/goabackend/goalastfmprovider.c:709
+#: ../src/goabackend/goalastfmprovider.c:866
+#: ../src/goabackend/goaowncloudprovider.c:839
+#: ../src/goabackend/goaowncloudprovider.c:1034
 msgid "_Try Again"
 msgstr "Coba _Lagi"
 
@@ -210,15 +208,20 @@ msgstr "Facebook"
 #: ../src/goabackend/goagoogleprovider.c:221
 #: ../src/goabackend/goawindowsliveprovider.c:195
 #, c-format
-msgid "Expected status 200 when requesting your identity, instead got status %d (%s)"
+msgid ""
+"Expected status 200 when requesting your identity, instead got status %d (%s)"
 msgstr ""
-"Mengharapkan status 200 ketika meminta identitas Anda, tetapi mendapat status %d (%s)"
+"Mengharapkan status 200 ketika meminta identitas Anda, tetapi mendapat "
+"status %d (%s)"
 
+#. TODO: more specific
 #: ../src/goabackend/goafacebookprovider.c:234
 #: ../src/goabackend/goafacebookprovider.c:246
 #: ../src/goabackend/goafacebookprovider.c:259
-#: ../src/goabackend/goaflickrprovider.c:202 ../src/goabackend/goaflickrprovider.c:214
-#: ../src/goabackend/goaflickrprovider.c:224 ../src/goabackend/goaflickrprovider.c:234
+#: ../src/goabackend/goaflickrprovider.c:202
+#: ../src/goabackend/goaflickrprovider.c:214
+#: ../src/goabackend/goaflickrprovider.c:224
+#: ../src/goabackend/goaflickrprovider.c:234
 #: ../src/goabackend/goaflickrprovider.c:244
 #: ../src/goabackend/goafoursquareprovider.c:208
 #: ../src/goabackend/goafoursquareprovider.c:220
@@ -226,13 +229,19 @@ msgstr ""
 #: ../src/goabackend/goafoursquareprovider.c:242
 #: ../src/goabackend/goafoursquareprovider.c:253
 #: ../src/goabackend/goafoursquareprovider.c:264
-#: ../src/goabackend/goagoogleprovider.c:240 ../src/goabackend/goagoogleprovider.c:252
-#: ../src/goabackend/goalastfmprovider.c:211 ../src/goabackend/goalastfmprovider.c:220
-#: ../src/goabackend/goalastfmprovider.c:230 ../src/goabackend/goalastfmprovider.c:237
-#: ../src/goabackend/goalastfmprovider.c:526 ../src/goabackend/goalastfmprovider.c:535
-#: ../src/goabackend/goalastfmprovider.c:550 ../src/goabackend/goalastfmprovider.c:557
-#: ../src/goabackend/goaoauth2provider.c:699 ../src/goabackend/goaoauth2provider.c:729
-#: ../src/goabackend/goaoauth2provider.c:741
+#: ../src/goabackend/goagoogleprovider.c:240
+#: ../src/goabackend/goagoogleprovider.c:252
+#: ../src/goabackend/goalastfmprovider.c:211
+#: ../src/goabackend/goalastfmprovider.c:220
+#: ../src/goabackend/goalastfmprovider.c:230
+#: ../src/goabackend/goalastfmprovider.c:237
+#: ../src/goabackend/goalastfmprovider.c:526
+#: ../src/goabackend/goalastfmprovider.c:535
+#: ../src/goabackend/goalastfmprovider.c:550
+#: ../src/goabackend/goalastfmprovider.c:557
+#: ../src/goabackend/goaoauth2provider.c:699
+#: ../src/goabackend/goaoauth2provider.c:729
+#: ../src/goabackend/goaoauth2provider.c:741 ../src/goabackend/goautils.c:148
 #: ../src/goabackend/goawindowsliveprovider.c:214
 #: ../src/goabackend/goawindowsliveprovider.c:226
 #: ../src/goabackend/goawindowsliveprovider.c:238
@@ -246,7 +255,8 @@ msgstr "Flickr"
 
 #: ../src/goabackend/goaflickrprovider.c:321
 msgid "Your system time is invalid. Check your date and time settings."
-msgstr "Waktu sistem Anda tidak valid. Periksa pengaturan tanggal dan waktu Anda."
+msgstr ""
+"Waktu sistem Anda tidak valid. Periksa pengaturan tanggal dan waktu Anda."
 
 #: ../src/goabackend/goafoursquareprovider.c:77
 msgid "Foursquare"
@@ -263,8 +273,9 @@ msgid "Service not available"
 msgstr "Layanan tidak tersedia"
 
 #. TODO: more specific
-#: ../src/goabackend/goaimapauthlogin.c:115 ../src/goabackend/goalastfmprovider.c:543
-#: ../src/goabackend/goasmtpauth.c:113
+#: ../src/goabackend/goaimapauthlogin.c:115
+#: ../src/goabackend/goalastfmprovider.c:543
+#: ../src/goabackend/goasmtpauth.c:113 ../src/goabackend/goautils.c:566
 #, c-format
 msgid "Authentication failed"
 msgstr "Otentikasi gagal"
@@ -274,7 +285,8 @@ msgstr "Otentikasi gagal"
 msgid "Server does not support PLAIN"
 msgstr "Server tidak mendukung PLAIN"
 
-#: ../src/goabackend/goaimapauthlogin.c:194 ../src/goabackend/goasmtpauth.c:818
+#: ../src/goabackend/goaimapauthlogin.c:194
+#: ../src/goabackend/goasmtpauth.c:818
 #, c-format
 msgid "Server does not support STARTTLS"
 msgstr "Server tidak mendukung STARTTLS"
@@ -286,7 +298,7 @@ msgstr "IMAP dan SMTP"
 #. Translators: the first parameter is a field name. The second is
 #. * a GOA account identifier.
 #: ../src/goabackend/goaimapsmtpprovider.c:358
-#: ../src/goabackend/goaimapsmtpprovider.c:416
+#: ../src/goabackend/goaimapsmtpprovider.c:412
 #, c-format
 msgid "Did not find %s with identity ‘%s’ in credentials"
 msgstr "Tidak menemukan %s dengan identitas '%s' dalam kredensial"
@@ -301,8 +313,8 @@ msgstr "Tidak menemukan %s dengan identitas '%s' dalam kredensial"
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:389
-#: ../src/goabackend/goaimapsmtpprovider.c:449
+#: ../src/goabackend/goaimapsmtpprovider.c:388
+#: ../src/goabackend/goaimapsmtpprovider.c:444
 #, c-format
 msgid "Invalid %s with username ‘%s’ (%s, %d): "
 msgstr "%s tidak valid dengan nama pengguna '%s' (%s, %d): "
@@ -313,65 +325,65 @@ msgstr "%s tidak valid dengan nama pengguna '%s' (%s, %d): "
 #. *             STARTTLS after connecting
 #. *             SSL on a dedicated port
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:636
+#: ../src/goabackend/goaimapsmtpprovider.c:633
 msgid "_Encryption"
 msgstr "_Enkripsi"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:639
+#: ../src/goabackend/goaimapsmtpprovider.c:636
 msgid "None"
 msgstr "Nihil"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:642
+#: ../src/goabackend/goaimapsmtpprovider.c:639
 msgid "STARTTLS after connecting"
 msgstr "STARTTLS setelah menyambung"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:645
+#: ../src/goabackend/goaimapsmtpprovider.c:642
 msgid "SSL on a dedicated port"
 msgstr "SSL pada port tersendiri"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:701
+#: ../src/goabackend/goaimapsmtpprovider.c:698
 msgid "_Name"
 msgstr "_Nama"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:718
+#: ../src/goabackend/goaimapsmtpprovider.c:715
 msgid "IMAP _Server"
 msgstr "_Server IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:738
+#: ../src/goabackend/goaimapsmtpprovider.c:735
 msgid "SMTP _Server"
 msgstr "_Server SMTP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:753
-#: ../src/goabackend/goaimapsmtpprovider.c:1035
-#: ../src/goabackend/goaimapsmtpprovider.c:1371
+#: ../src/goabackend/goaimapsmtpprovider.c:750
+#: ../src/goabackend/goaimapsmtpprovider.c:1032
+#: ../src/goabackend/goaimapsmtpprovider.c:1369
 msgid "_Forward"
 msgstr "_Lanjut"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1019
-#: ../src/goabackend/goaimapsmtpprovider.c:1354
+#: ../src/goabackend/goaimapsmtpprovider.c:1016
+#: ../src/goabackend/goaimapsmtpprovider.c:1352
 msgid "Error connecting to IMAP server"
 msgstr "Galat ketika menyambung ke server IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1112
-#: ../src/goabackend/goaimapsmtpprovider.c:1428
+#: ../src/goabackend/goaimapsmtpprovider.c:1109
+#: ../src/goabackend/goaimapsmtpprovider.c:1426
 msgid "Error connecting to SMTP server"
 msgstr "Galat ketika menyambung ke server SMTP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1527
+#: ../src/goabackend/goaimapsmtpprovider.c:1526
 msgid "E-mail"
 msgstr "Surel"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1531
+#: ../src/goabackend/goaimapsmtpprovider.c:1530
 msgid "Name"
 msgstr "Nama"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1541
-#: ../src/goabackend/goaimapsmtpprovider.c:1545
+#: ../src/goabackend/goaimapsmtpprovider.c:1540
+#: ../src/goabackend/goaimapsmtpprovider.c:1544
 msgid "IMAP"
 msgstr "IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1556
-#: ../src/goabackend/goaimapsmtpprovider.c:1560
+#: ../src/goabackend/goaimapsmtpprovider.c:1555
+#: ../src/goabackend/goaimapsmtpprovider.c:1559
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -379,48 +391,54 @@ msgstr "SMTP"
 msgid "Enterprise Login (Kerberos)"
 msgstr "Log Masuk Enterprise (Kerberos)"
 
-#: ../src/goabackend/goakerberosprovider.c:309
+#: ../src/goabackend/goakerberosprovider.c:293
+#, c-format
+msgid "Ticketing is disabled for account"
+msgstr "Pertiketan dimatikan untuk akun"
+
+#: ../src/goabackend/goakerberosprovider.c:318
 #, c-format
 msgid "Could not find saved credentials for principal ‘%s’ in keyring"
 msgstr ""
-"Tidak bisa menemukan kredensial yang tersimpan bagi principal '%s' dalam ring kunci"
+"Tidak bisa menemukan kredensial yang tersimpan bagi principal '%s' dalam "
+"ring kunci"
 
-#: ../src/goabackend/goakerberosprovider.c:322
+#: ../src/goabackend/goakerberosprovider.c:331
 #, c-format
 msgid "Did not find password for principal ‘%s’ in credentials"
 msgstr "Tidak menemukan sandi bagi principal '%s' dalam kredensial"
 
-#: ../src/goabackend/goakerberosprovider.c:711
+#: ../src/goabackend/goakerberosprovider.c:728
 msgid "_Domain"
 msgstr "_Domain"
 
-#: ../src/goabackend/goakerberosprovider.c:712
+#: ../src/goabackend/goakerberosprovider.c:729
 msgid "Enterprise domain or realm name"
 msgstr "Domain enterprise atau nama realm"
 
-#: ../src/goabackend/goakerberosprovider.c:948
-#: ../src/goaidentity/goaidentityservice.c:1119
+#: ../src/goabackend/goakerberosprovider.c:965
+#: ../src/goaidentity/goaidentityservice.c:1125
 msgid "Log In to Realm"
 msgstr "Log Masuk ke Realm"
 
-#: ../src/goabackend/goakerberosprovider.c:949
+#: ../src/goabackend/goakerberosprovider.c:966
 msgid "Please enter your password below."
 msgstr "Harap masukkan sandi Anda di bawah."
 
-#: ../src/goabackend/goakerberosprovider.c:950
+#: ../src/goabackend/goakerberosprovider.c:967
 msgid "Remember this password"
 msgstr "Ingat sandi ini"
 
-#: ../src/goabackend/goakerberosprovider.c:1092
+#: ../src/goabackend/goakerberosprovider.c:1109
 #, c-format
 msgid "The domain is not valid"
 msgstr "Domain tidak valid"
 
-#: ../src/goabackend/goakerberosprovider.c:1247
+#: ../src/goabackend/goakerberosprovider.c:1264
 msgid "Error connecting to enterprise identity server"
 msgstr "Galat ketika menyambung ke server identitas enterprise"
 
-#: ../src/goabackend/goakerberosprovider.c:1512
+#: ../src/goabackend/goakerberosprovider.c:1530
 #, c-format
 msgid "Identity service returned invalid key"
 msgstr "Layanan identitas mengembalikan kunci yang tidak valid"
@@ -429,7 +447,8 @@ msgstr "Layanan identitas mengembalikan kunci yang tidak valid"
 msgid "Last.fm"
 msgstr "Last.fm"
 
-#: ../src/goabackend/goalastfmprovider.c:707 ../src/goabackend/goalastfmprovider.c:855
+#: ../src/goabackend/goalastfmprovider.c:711
+#: ../src/goabackend/goalastfmprovider.c:860
 msgid "Error connecting to Last.fm"
 msgstr "Galat ketika menyambung ke Last.fm"
 
@@ -439,9 +458,11 @@ msgstr "Server Media"
 
 #: ../src/goabackend/goamediaserverprovider.c:371
 msgid ""
-"Personal content can be added to your applications through a media server account."
+"Personal content can be added to your applications through a media server "
+"account."
 msgstr ""
-"Muatan personal dapat ditambahkan ke aplikasi Anda melalui sebuah akun server media."
+"Muatan personal dapat ditambahkan ke aplikasi Anda melalui sebuah akun "
+"server media."
 
 #: ../src/goabackend/goamediaserverprovider.c:385
 msgid "Available Media Servers"
@@ -452,11 +473,14 @@ msgid "No media servers found"
 msgstr "Tidak ada server media yang ditemukan"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:675 ../src/goabackend/goaoauthprovider.c:559
+#: ../src/goabackend/goaoauth2provider.c:675
+#: ../src/goabackend/goaoauthprovider.c:559
 #, c-format
-msgid "Expected status 200 when requesting access token, instead got status %d (%s)"
+msgid ""
+"Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr ""
-"Mengharapkan status 200 ketika meminta token akses, tetapi mendapat status %d (%s)"
+"Mengharapkan status 200 ketika meminta token akses, tetapi mendapat status "
+"%d (%s)"
 
 #: ../src/goabackend/goaoauth2provider.c:843
 msgid "Authorization response: "
@@ -467,15 +491,18 @@ msgstr "Respon otorisasi: "
 msgid "Authorization response: %s"
 msgstr "Respon otorisasi: %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1060 ../src/goabackend/goaoauthprovider.c:894
+#: ../src/goabackend/goaoauth2provider.c:1060
+#: ../src/goabackend/goaoauthprovider.c:894
 msgid "Error getting an Access Token: "
 msgstr "Galat saat mengambil Token Akses: "
 
-#: ../src/goabackend/goaoauth2provider.c:1075 ../src/goabackend/goaoauthprovider.c:907
+#: ../src/goabackend/goaoauth2provider.c:1075
+#: ../src/goabackend/goaoauthprovider.c:907
 msgid "Error getting identity: "
 msgstr "Galat saat mengambil identitas: "
 
-#: ../src/goabackend/goaoauth2provider.c:1292 ../src/goabackend/goaoauthprovider.c:1215
+#: ../src/goabackend/goaoauth2provider.c:1292
+#: ../src/goabackend/goaoauthprovider.c:1215
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Diminta untuk masuk sebagai %s, tetapi masuk sebagai %s"
@@ -485,7 +512,8 @@ msgstr "Diminta untuk masuk sebagai %s, tetapi masuk sebagai %s"
 msgid "Credentials do not contain access_token"
 msgstr "Kredensial tidak berisi access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1493 ../src/goabackend/goaoauthprovider.c:1443
+#: ../src/goabackend/goaoauth2provider.c:1493
+#: ../src/goabackend/goaoauthprovider.c:1443
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Gagal menyegarkan token akses (%s, %d): "
@@ -502,10 +530,11 @@ msgstr "Galat saat mengambil Token Request: "
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: ../src/goabackend/goaoauthprovider.c:809
 #, c-format
-msgid "Expected status 200 for getting a Request Token, instead got status %d (%s)"
+msgid ""
+"Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr ""
-"Mengharapkan status 200 ketika mengambil Token Request, tetapi mendapat status %d "
-"(%s)"
+"Mengharapkan status 200 ketika mengambil Token Request, tetapi mendapat "
+"status %d (%s)"
 
 #: ../src/goabackend/goaoauthprovider.c:826
 #, c-format
@@ -521,8 +550,8 @@ msgstr "Kredensial tidak berisi access_token atau access_token_secret"
 msgid "ownCloud"
 msgstr "ownCloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:836
-#: ../src/goabackend/goaowncloudprovider.c:1019
+#: ../src/goabackend/goaowncloudprovider.c:844
+#: ../src/goabackend/goaowncloudprovider.c:1027
 msgid "Error connecting to ownCloud server"
 msgstr "Galat ketika menyambung ke server ownCloud"
 
@@ -602,19 +631,19 @@ msgid "TLS not available"
 msgstr "TLS tidak tersedia"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauth.c:241
+#: ../src/goabackend/goasmtpauth.c:242
 #, c-format
 msgid "org.gnome.OnlineAccounts.Mail is not available"
 msgstr "org.gnome.OnlineAccounts.Mail tidak tersedia"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauth.c:251
+#: ../src/goabackend/goasmtpauth.c:252
 #, c-format
 msgid "Failed to parse email address"
 msgstr "Gagal mengurai alamat surel"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauth.c:263
+#: ../src/goabackend/goasmtpauth.c:261
 #, c-format
 msgid "Cannot do SMTP authentication without a domain"
 msgstr "Tidak bisa melaksanakan otentikasi SMTP tanpa sebuah domain"
@@ -667,17 +696,17 @@ msgstr "_OK"
 msgid "Cannot save the connection parameters"
 msgstr "Tidak bisa menyimpan parameter koneksi"
 
-#: ../src/goabackend/goatelepathyprovider.c:866
+#: ../src/goabackend/goatelepathyprovider.c:867
 msgid "Cannot save your personal information on the server"
 msgstr "Tidak bisa menyimpan informasi pribadi Anda pada server"
 
 #. Connection Settings button
-#: ../src/goabackend/goatelepathyprovider.c:891
+#: ../src/goabackend/goatelepathyprovider.c:893
 msgid "_Connection Settings"
 msgstr "_Pengaturan Koneksi"
 
 #. Edit Personal Information button
-#: ../src/goabackend/goatelepathyprovider.c:895
+#: ../src/goabackend/goatelepathyprovider.c:897
 msgid "_Personal Details"
 msgstr "Rincian _Pribadi"
 
@@ -687,70 +716,75 @@ msgid "A %s account already exists for %s"
 msgstr "Sudah ada akun %s untuk %s"
 
 #. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:137
+#: ../src/goabackend/goautils.c:165
 #, c-format
 msgid "%s account"
 msgstr "Akun %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:181
+#: ../src/goabackend/goautils.c:209
 msgid "Failed to delete credentials from the keyring"
 msgstr "Gagal menghapus kredensial dari ring kunci"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:233
+#: ../src/goabackend/goautils.c:261
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Gagal mengambil kredensial dari ring kunci"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:243
+#: ../src/goabackend/goautils.c:271
 msgid "No credentials found in the keyring"
 msgstr "Tidak ada kredensial yang ditemukan dalam ring kunci"
 
-#: ../src/goabackend/goautils.c:256
+#: ../src/goabackend/goautils.c:284
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Galat saat mengurai hasil yang diperoleh dari ring kunci: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:299
+#: ../src/goabackend/goautils.c:327
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "GOA kredensial %s untuk identitas %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:316
+#: ../src/goabackend/goautils.c:344
 msgid "Failed to store credentials in the keyring"
 msgstr "Gagal menyimpan kredensial dalam ring kunci"
 
-#: ../src/goabackend/goautils.c:537
+#: ../src/goabackend/goautils.c:571
+#, c-format
+msgid "Code: %u — Unexpected response from server"
+msgstr "Kode: %u — Respon tidak terduga dari server"
+
+#: ../src/goabackend/goautils.c:587
 msgid "The signing certificate authority is not known."
 msgstr "Otoritas penandatangan sertifikat tidak dikenal."
 
-#: ../src/goabackend/goautils.c:541
+#: ../src/goabackend/goautils.c:591
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr ""
-"Sertifikat tidak cocok dengan identitas yang diharapkan dari situs asal sertifikasi "
-"tersebut diambil."
+"Sertifikat tidak cocok dengan identitas yang diharapkan dari situs asal "
+"sertifikasi tersebut diambil."
 
-#: ../src/goabackend/goautils.c:546
+#: ../src/goabackend/goautils.c:596
 msgid "The certificate’s activation time is still in the future."
 msgstr "Waktu aktifasi sertifikat masih di masa mendatang."
 
-#: ../src/goabackend/goautils.c:550
+#: ../src/goabackend/goautils.c:600
 msgid "The certificate has expired."
 msgstr "Sertifikat kedaluwarsa."
 
-#: ../src/goabackend/goautils.c:554
+#: ../src/goabackend/goautils.c:604
 msgid "The certificate has been revoked."
 msgstr "Sertifikat telah dicabut."
 
-#: ../src/goabackend/goautils.c:558
+#: ../src/goabackend/goautils.c:608
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Algoritma sertifikat dianggap tidak aman."
 
-#: ../src/goabackend/goautils.c:562
+#: ../src/goabackend/goautils.c:612
 msgid "Invalid certificate."
 msgstr "Sertifikat tidak valid."
 
@@ -764,18 +798,19 @@ msgstr "Memuat “%s”…"
 msgid "Microsoft Account"
 msgstr "Akun Microsoft"
 
-#: ../src/goaidentity/goaidentityservice.c:376
+#: ../src/goaidentity/goaidentityservice.c:378
 msgid "initial secret passed before secret key exchange"
 msgstr "rahasia awal disampaikan sebelum pertukaran kunci rahasia"
 
-#: ../src/goaidentity/goaidentityservice.c:570
+#: ../src/goaidentity/goaidentityservice.c:574
 msgid "Initial secret key is invalid"
 msgstr "Kunci rahasia awal tidak valid"
 
-#: ../src/goaidentity/goaidentityservice.c:1124
+#: ../src/goaidentity/goaidentityservice.c:1130
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
-msgstr "Jaringan realm %s membutuhkan beberapa informasi untuk memasukkan Anda."
+msgstr ""
+"Jaringan realm %s membutuhkan beberapa informasi untuk memasukkan Anda."
 
 #: ../src/goaidentity/goakerberosidentity.c:254
 #: ../src/goaidentity/goakerberosidentity.c:263
@@ -794,7 +829,8 @@ msgstr "Tidak bisa memilah seluruh kredensial identitas dalam tembolok: %k"
 #: ../src/goaidentity/goakerberosidentity.c:718
 msgid "Could not finish up sifting through identity credentials in cache: %k"
 msgstr ""
-"Tidak bisa menyelesaikan memilah seluruh kredensial identitas dalam tembolok: %k"
+"Tidak bisa menyelesaikan memilah seluruh kredensial identitas dalam "
+"tembolok: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1013
 #, c-format
@@ -824,7 +860,8 @@ msgstr "Tidak bisa memperbarui identitas: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1465
 msgid "Could not get new credentials to renew identity %s: %k"
-msgstr "Tidak bisa mendapat kredensial baru untuk memperbarui indentitas %s: %k"
+msgstr ""
+"Tidak bisa mendapat kredensial baru untuk memperbarui indentitas %s: %k"
 
 #: ../src/goaidentity/goakerberosidentity.c:1507
 msgid "Could not erase identity: %k"
