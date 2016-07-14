@@ -176,23 +176,14 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
                    GCancellable       *cancellable,
                    GError            **error)
 {
-  GError *identity_error;
-  RestProxy *proxy;
-  RestProxyCall *call;
-  JsonParser *parser;
+  GError *identity_error = NULL;
+  RestProxy *proxy = NULL;
+  RestProxyCall *call = NULL;
+  JsonParser *parser = NULL;
   JsonObject *json_object;
-  gchar *ret;
-  gchar *id;
-  gchar *presentation_identity;
-
-  ret = NULL;
-
-  identity_error = NULL;
-  proxy = NULL;
-  call = NULL;
-  parser = NULL;
-  id = NULL;
-  presentation_identity = NULL;
+  gchar *ret = NULL;
+  gchar *id = NULL;
+  gchar *presentation_identity = NULL;
 
   /* TODO: cancellable */
 
@@ -285,14 +276,9 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
 static gboolean
 is_identity_node (GoaOAuth2Provider *oauth2_provider, WebKitDOMHTMLInputElement *element)
 {
-  gboolean ret;
-  gchar *element_type;
-  gchar *name;
-
-  element_type = NULL;
-  name = NULL;
-
-  ret = FALSE;
+  gboolean ret = FALSE;
+  gchar *element_type = NULL;
+  gchar *name = NULL;
 
   g_object_get (element, "type", &element_type, NULL);
   if (g_strcmp0 (element_type, "text") != 0)
@@ -321,12 +307,10 @@ build_object (GoaProvider         *provider,
               gboolean             just_added,
               GError             **error)
 {
-  GoaAccount *account;
+  GoaAccount *account = NULL;
   gboolean photos_enabled;
   gboolean maps_enabled;
   gboolean ret = FALSE;
-
-  account = NULL;
 
   /* Chain up */
   if (!GOA_PROVIDER_CLASS (goa_facebook_provider_parent_class)->build_object (provider,
