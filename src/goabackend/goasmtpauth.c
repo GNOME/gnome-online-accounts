@@ -220,11 +220,12 @@ smtp_auth_get_domain (GoaSmtpAuth   *self,
                       GError       **error)
 {
   GoaMail *mail;
-  const gchar *email_address;
   gchar *domain;
+  gchar *email_address;
 
   mail = NULL;
   domain = NULL;
+  email_address = NULL;
 
   if (self->domain != NULL)
     {
@@ -242,7 +243,7 @@ smtp_auth_get_domain (GoaSmtpAuth   *self,
           goto out;
         }
 
-      email_address = goa_mail_get_email_address (mail);
+      email_address = goa_mail_dup_email_address (mail);
       if (!goa_utils_parse_email_address (email_address, NULL, &domain))
         {
           g_set_error (error,
@@ -263,6 +264,7 @@ smtp_auth_get_domain (GoaSmtpAuth   *self,
 
  out:
   g_clear_object (&mail);
+  g_free (email_address);
   return domain;
 }
 
