@@ -813,6 +813,7 @@ sign_in_identity (GoaKerberosIdentityManager *self,
   GoaIdentity *identity;
   GError *error;
   krb5_error_code error_code;
+  gboolean is_new_identity = FALSE;
 
   g_debug ("GoaKerberosIdentityManager: signing in identity %s",
            operation->identifier);
@@ -845,15 +846,17 @@ sign_in_identity (GoaKerberosIdentityManager *self,
       identity = goa_kerberos_identity_new (self->priv->kerberos_context,
                                             credentials_cache,
                                             &error);
-      krb5_cc_close (self->priv->kerberos_context, credentials_cache);
       if (identity == NULL)
         {
+          krb5_cc_destroy (self->priv->kerberos_context, credentials_cache);
           g_simple_async_result_take_error (operation->result, error);
           g_simple_async_result_set_op_res_gpointer (operation->result,
                                                      NULL,
                                                      NULL);
           return;
         }
+      krb5_cc_close (self->priv->kerberos_context, credentials_cache);
+      is_new_identity = TRUE;
     }
   else
     {
@@ -872,6 +875,9 @@ sign_in_identity (GoaKerberosIdentityManager *self,
                                       operation->cancellable,
                                       &error))
     {
+      if (is_new_identity)
+        goa_kerberos_identity_erase (identity, NULL);
+
       g_simple_async_result_set_from_error (operation->result, error);
       g_simple_async_result_set_op_res_gpointer (operation->result,
                                                  NULL,
