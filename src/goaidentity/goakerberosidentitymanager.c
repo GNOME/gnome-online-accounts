@@ -860,10 +860,6 @@ sign_in_identity (GoaKerberosIdentityManager *self,
       g_object_ref (identity);
     }
 
-  g_hash_table_replace (self->priv->identities,
-                        g_strdup (operation->identifier),
-                        g_object_ref (identity));
-
   if (!goa_kerberos_identity_sign_in (GOA_KERBEROS_IDENTITY (identity),
                                       operation->identifier,
                                       operation->initial_password,
@@ -888,6 +884,10 @@ sign_in_identity (GoaKerberosIdentityManager *self,
                                                  g_object_ref (identity),
                                                  (GDestroyNotify)
                                                  g_object_unref);
+
+      g_hash_table_replace (self->priv->identities,
+                            g_strdup (operation->identifier),
+                            g_object_ref (identity));
     }
 
   g_object_unref (identity);
