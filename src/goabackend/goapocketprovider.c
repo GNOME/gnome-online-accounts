@@ -130,13 +130,11 @@ build_authorization_uri (GoaOAuth2Provider  *oauth2_provider,
   RestProxy *proxy;
   RestProxyCall *call;
   const gchar *payload;
-  gchar *code, *url;
+  gchar *code, *url = NULL;
   GError *error = NULL;
   GHashTable *hash;
 
   g_clear_pointer (&self->code, g_free);
-
-  url = NULL;
 
   proxy = rest_proxy_new (get_request_uri (oauth2_provider), FALSE);
   call = rest_proxy_new_call (proxy);
@@ -190,9 +188,7 @@ process_redirect_url (GoaOAuth2Provider            *oauth2_provider,
   RestProxyCall *call;
   GHashTable *hash;
   const gchar *payload;
-  gboolean ret;
-
-  ret = FALSE;
+  gboolean ret = FALSE;
 
   proxy = rest_proxy_new (V3_OAUTH_AUTHORIZE_URL, FALSE);
   call = rest_proxy_new_call (proxy);
@@ -257,15 +253,10 @@ static gboolean
 is_deny_node (GoaOAuth2Provider *oauth2_provider, WebKitDOMNode *node)
 {
   WebKitDOMElement *element;
-  gboolean ret;
-  gchar *id;
-  gchar *class;
-  gchar *text;
-
-  id = NULL;
-  class = NULL;
-  text = NULL;
-  ret = FALSE;
+  gboolean ret = FALSE;
+  gchar *id = NULL;
+  gchar *class = NULL;
+  gchar *text = NULL;
 
   if (!WEBKIT_DOM_IS_ELEMENT (node))
     goto out;
@@ -303,10 +294,8 @@ is_deny_node (GoaOAuth2Provider *oauth2_provider, WebKitDOMNode *node)
 static gboolean
 is_identity_node (GoaOAuth2Provider *oauth2_provider, WebKitDOMHTMLInputElement *element)
 {
-  gboolean ret;
+  gboolean ret = FALSE;
   gchar *name;
-
-  ret = FALSE;
 
   name = webkit_dom_html_input_element_get_name (element);
   if (g_strcmp0 (name, "feed_id") != 0)
@@ -331,11 +320,9 @@ build_object (GoaProvider         *provider,
               gboolean             just_added,
               GError             **error)
 {
-  GoaAccount *account;
+  GoaAccount *account = NULL;
   gboolean read_later_enabled;
   gboolean ret = FALSE;
-
-  account = NULL;
 
   /* Chain up */
   if (!GOA_PROVIDER_CLASS (goa_pocket_provider_parent_class)->build_object (provider,
