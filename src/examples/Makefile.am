@@ -26,7 +26,11 @@ lastfm_shout_CFLAGS = $(GLIB_CFLAGS) $(REST_CFLAGS)
 lastfm_shout_LDADD = $(GLIB_LIBS) $(REST_LIBS) ../goa/libgoa-1.0.la
 
 if BUILD_BACKEND
-noinst_PROGRAMS += list-providers add-pocket
+noinst_PROGRAMS += introspect-providers list-providers add-pocket
+
+introspect_providers_SOURCES = introspect-providers.c
+introspect_providers_CFLAGS = $(GLIB_CFLAGS) $(GTK_CFLAGS)
+introspect_providers_LDADD = $(GLIB_LIBS) $(GTK_LIBS) ../goabackend/libgoa-backend-1.0.la ../goa/libgoa-1.0.la
 
 list_providers_SOURCES = list-providers.c
 list_providers_CFLAGS = $(GLIB_CFLAGS) $(GTK_CFLAGS)
