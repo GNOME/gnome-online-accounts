@@ -789,6 +789,7 @@ on_identity_signed_in (GoaIdentityManager *manager,
     }
   else
     {
+      g_debug ("GoaIdentityService: identity signed in");
       g_simple_async_result_set_op_res_gpointer (operation_result,
                                                  g_object_ref (identity),
                                                  (GDestroyNotify)
@@ -796,8 +797,6 @@ on_identity_signed_in (GoaIdentityManager *manager,
     }
   g_simple_async_result_complete_in_idle (operation_result);
   g_object_unref (operation_result);
-
-  g_debug ("GoaIdentityService: identity signed in");
 }
 
 static void
