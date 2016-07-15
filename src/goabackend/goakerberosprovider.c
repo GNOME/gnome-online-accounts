@@ -243,6 +243,8 @@ sign_in_identity (GoaKerberosProvider  *self,
                                        sign_in_thread,
                                        G_PRIORITY_DEFAULT,
                                        cancellable);
+
+  g_object_unref (operation_result);
 }
 
 static void
