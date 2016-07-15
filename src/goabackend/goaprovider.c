@@ -738,13 +738,8 @@ goa_provider_ensure_credentials (GoaProvider          *self,
   g_return_if_fail (GOA_IS_OBJECT (object));
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self,
-                     cancellable,
-                     callback,
-                     user_data);
-  g_task_set_task_data (task,
-                        ensure_credentials_data_new (object),
-                        (GDestroyNotify) ensure_credentials_data_free);
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_task_data (task, ensure_credentials_data_new (object), (GDestroyNotify) ensure_credentials_data_free);
   g_task_set_source_tag (task, goa_provider_ensure_credentials);
   g_task_run_in_thread (task, ensure_credentials_in_thread_func);
 
