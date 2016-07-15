@@ -841,7 +841,7 @@ on_initial_sign_in_done (GoaKerberosProvider *self,
   else if (remember_password)
     {
       GVariantBuilder  builder;
-      const char      *object_path;
+      char            *object_path;
 
       object_path = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
 
@@ -869,6 +869,8 @@ on_initial_sign_in_done (GoaKerberosProvider *self,
                                                        NULL,
                                                        NULL);
         }
+
+      g_free (object_path);
     }
 
   g_simple_async_result_complete_in_idle (operation_result);
