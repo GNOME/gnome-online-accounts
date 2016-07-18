@@ -513,8 +513,6 @@ add_config_file (GoaDaemon     *self,
                       g_debug ("ignoring account \"%s\" in file %s because it's stale",
                                groups[n], path);
 
-                      needs_update = g_key_file_remove_group (key_file, groups[n], NULL);
-
                       id = group_to_id (groups[n]);
                       if (id == NULL)
                         {
@@ -531,6 +529,8 @@ add_config_file (GoaDaemon     *self,
                           g_warning ("Unsupported account type %s for ID %s (no provider)", provider_type, id);
                           goto cleanup_and_continue;
                         }
+
+                      needs_update = g_key_file_remove_group (key_file, groups[n], NULL);
 
                       error = NULL;
                       if (!goa_utils_delete_credentials_for_id_sync (provider, id, NULL, &error))
