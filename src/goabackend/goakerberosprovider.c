@@ -822,7 +822,13 @@ on_initial_sign_in_done (GoaKerberosProvider *self,
 
   error = NULL;
   object_path = g_task_propagate_pointer (G_TASK (result), &error);
-  if (!g_task_had_error (G_TASK (result)) && remember_password)
+  if (error != NULL)
+    {
+      g_task_return_error (operation_result, error);
+      goto out;
+    }
+
+  if (remember_password)
     {
       GVariantBuilder  builder;
 
@@ -854,6 +860,7 @@ on_initial_sign_in_done (GoaKerberosProvider *self,
 
   g_task_return_boolean (operation_result, TRUE);
 
+ out:
   g_free (object_path);
   g_object_unref (operation_result);
 }
