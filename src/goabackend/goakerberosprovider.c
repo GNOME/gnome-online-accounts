@@ -242,13 +242,8 @@ on_account_signed_in (GoaProvider   *provider,
                       GAsyncResult  *result,
                       SignInRequest *request)
 {
-  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result),
-                                             &request->error))
-    {
-      g_main_loop_quit (request->loop);
-      return;
-    }
-
+  g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result),
+                                         &request->error))
   g_main_loop_quit (request->loop);
 }
 
