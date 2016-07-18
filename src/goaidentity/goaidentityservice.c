@@ -303,6 +303,8 @@ on_sign_in_handled (GoaIdentityService    *self,
                                                      invocation,
                                                      object_path);
     }
+
+  g_object_unref (invocation);
 }
 
 static void
