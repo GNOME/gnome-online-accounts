@@ -855,6 +855,14 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
   if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION)
     goto default_behaviour;
 
+  if (goa_oauth2_provider_decide_navigation_policy (provider,
+                                                    web_view,
+                                                    WEBKIT_NAVIGATION_POLICY_DECISION (decision)))
+    {
+      response_id = 0;
+      goto ignore_request;
+    }
+
   /* TODO: use oauth2_proxy_extract_access_token() */
 
   action = webkit_navigation_policy_decision_get_navigation_action (WEBKIT_NAVIGATION_POLICY_DECISION (decision));
@@ -961,7 +969,8 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
 
  ignore_request:
   g_assert (response_id != GTK_RESPONSE_NONE);
-  gtk_dialog_response (priv->dialog, response_id);
+  if (response_id < 0)
+    gtk_dialog_response (priv->dialog, response_id);
   webkit_policy_decision_ignore (decision);
   return TRUE;
 
