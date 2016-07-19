@@ -185,6 +185,32 @@ build_authorization_uri (GoaOAuth2Provider  *oauth2_provider,
 }
 
 static gboolean
+decide_navigation_policy (GoaOAuth2Provider               *oauth2_provider,
+                          WebKitWebView                   *web_view,
+                          WebKitNavigationPolicyDecision  *decision)
+{
+  GoaPocketProvider *self = GOA_POCKET_PROVIDER (oauth2_provider);
+  WebKitNavigationAction *action;
+  WebKitURIRequest *request;
+  gboolean ret = FALSE;
+  const gchar *uri;
+
+  action = webkit_navigation_policy_decision_get_navigation_action (decision);
+  request = webkit_navigation_action_get_request (action);
+  uri = webkit_uri_request_get_uri (request);
+  if (!g_str_has_prefix (uri, "https://getpocket.com/a/"))
+    goto out;
+
+  webkit_uri_request_set_uri (request, self->authorization_uri);
+  webkit_web_view_load_request (web_view, request);
+
+  ret = TRUE;
+
+ out:
+  return ret;
+}
+
+static gboolean
 process_redirect_url (GoaOAuth2Provider            *oauth2_provider,
                       const gchar                  *redirect_url,
                       gchar                       **access_token,
@@ -408,6 +434,7 @@ goa_pocket_provider_class_init (GoaPocketProviderClass *klass)
   provider_class->build_object               = build_object;
 
   oauth2_class->build_authorization_uri   = build_authorization_uri;
+  oauth2_class->decide_navigation_policy  = decide_navigation_policy;
   oauth2_class->get_authorization_uri     = get_authorization_uri;
   oauth2_class->get_token_uri             = get_token_uri;
   oauth2_class->get_redirect_uri          = get_redirect_uri;
