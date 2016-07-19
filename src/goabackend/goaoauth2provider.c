@@ -31,6 +31,7 @@
 #include "goaoauth2provider.h"
 #include "goaoauth2provider-priv.h"
 #include "goaoauth2provider-web-extension.h"
+#include "goaoauth2provider-web-view.h"
 
 /**
  * SECTION:goaoauth2provider
@@ -284,6 +285,47 @@ goa_oauth2_provider_build_authorization_uri (GoaOAuth2Provider  *provider,
                                                                                     escaped_client_id,
                                                                                     escaped_scope);
 }
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gboolean
+goa_oauth2_provider_decide_navigation_policy_default (GoaOAuth2Provider               *provider,
+                                                      WebKitWebView                   *web_view,
+                                                      WebKitNavigationPolicyDecision  *decision)
+{
+  return FALSE;
+}
+
+/*
+ * goa_oauth2_provider_decide_navigation_policy_default:
+ * @provider: A #GoaOAuth2Provider.
+ * @decision: A #WebKitNavigationPolicyDecision
+ *
+ * Certain OAuth2-like, but not exactly <ulink
+ * url="http://tools.ietf.org/html/draft-ietf-oauth-v2-15">OAuth2</ulink>,
+ * providers may not send us to the redirect URI, as expected. They
+ * might need some special handling for that. This is a provider
+ * specific hook to accommodate them.
+ *
+ * This is a virtual method where the default implementation returns
+ * %FALSE.
+ *
+ * Returns: %TRUE if @provider decided what to do with @decision,
+ * %FALSE otherwise.
+ */
+gboolean
+goa_oauth2_provider_decide_navigation_policy (GoaOAuth2Provider               *provider,
+                                              WebKitWebView                   *web_view,
+                                              WebKitNavigationPolicyDecision  *decision)
+{
+  g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (WEBKIT_IS_WEB_VIEW (web_view), FALSE);
+  g_return_val_if_fail (WEBKIT_IS_NAVIGATION_POLICY_DECISION (decision), FALSE);
+
+  return GOA_OAUTH2_PROVIDER_GET_CLASS (provider)->decide_navigation_policy (provider, web_view, decision);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
 
 /**
  * goa_oauth2_provider_process_redirect_url:
@@ -1703,6 +1745,7 @@ goa_oauth2_provider_class_init (GoaOAuth2ProviderClass *klass)
   provider_class->ensure_credentials_sync    = goa_oauth2_provider_ensure_credentials_sync;
 
   klass->build_authorization_uri  = goa_oauth2_provider_build_authorization_uri_default;
+  klass->decide_navigation_policy = goa_oauth2_provider_decide_navigation_policy_default;
   klass->get_token_uri            = goa_oauth2_provider_get_token_uri_default;
   klass->get_scope                = goa_oauth2_provider_get_scope_default;
   klass->get_use_mobile_browser   = goa_oauth2_provider_get_use_mobile_browser_default;

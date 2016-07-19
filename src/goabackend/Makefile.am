@@ -83,6 +83,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goaoauthprovider.h		goaoauthprovider.c		\
 	goaoauth2provider.h		goaoauth2provider-priv.h	\
 	goaoauth2provider-web-extension.h				\
+	goaoauth2provider-web-view.h					\
 	goaoauth2provider.c						\
 	goagoogleprovider.h		goagoogleprovider.c		\
 	goafacebookprovider.h		goafacebookprovider.c		\
