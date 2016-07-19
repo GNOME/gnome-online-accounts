@@ -1664,6 +1664,8 @@ ensure_credentials_for_accounts (GoaIdentityService *self)
 
       ensure_account_credentials (self, object);
     }
+
+  g_list_free_full (accounts, g_object_unref);
 }
 
 static void
