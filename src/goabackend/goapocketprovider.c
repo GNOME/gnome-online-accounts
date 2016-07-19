@@ -36,6 +36,8 @@ struct _GoaPocketProvider
 {
   GoaOAuth2Provider parent_instance;
 
+  gchar *authorization_uri;
+
   /* request token as gathered from Step 2:
    * http://getpocket.com/developer/docs/authentication */
   gchar *code;
@@ -128,14 +130,15 @@ build_authorization_uri (GoaOAuth2Provider  *oauth2_provider,
                          const gchar        *escaped_scope)
 {
   GoaPocketProvider *self = GOA_POCKET_PROVIDER (oauth2_provider);
-  RestProxy *proxy;
-  RestProxyCall *call;
+  RestProxy *proxy = NULL;
+  RestProxyCall *call = NULL;
   const gchar *payload;
   gchar *code, *url = NULL;
   GError *error = NULL;
   GHashTable *hash;
 
-  g_clear_pointer (&self->code, g_free);
+  if (self->authorization_uri != NULL)
+    goto end;
 
   proxy = rest_proxy_new (get_request_uri (oauth2_provider), FALSE);
   call = rest_proxy_new_call (proxy);
@@ -163,16 +166,19 @@ build_authorization_uri (GoaOAuth2Provider  *oauth2_provider,
       goto out;
     }
 
-  url = g_strdup_printf ("%s"
-                         "?request_token=%s"
-                         "&redirect_uri=%s",
-                         authorization_uri,
-                         code,
-                         escaped_redirect_uri);
+  self->authorization_uri = g_strdup_printf ("%s"
+                                             "?request_token=%s"
+                                             "&redirect_uri=%s",
+                                             authorization_uri,
+                                             code,
+                                             escaped_redirect_uri);
 
   self->code = code;
 
-out:
+ end:
+  url = g_strdup (self->authorization_uri);
+
+ out:
   g_clear_object (&call);
   g_clear_object (&proxy);
   return url;
@@ -379,6 +385,7 @@ goa_pocket_provider_finalize (GObject *object)
 {
   GoaPocketProvider *self = GOA_POCKET_PROVIDER (object);
 
+  g_free (self->authorization_uri);
   g_clear_pointer (&self->code, g_free);
   g_clear_pointer (&self->identity, g_free);
 
