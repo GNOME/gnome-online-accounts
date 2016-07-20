@@ -25,6 +25,7 @@
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goaoauth2provider.h"
+#include "goaoauth2provider-priv.h"
 #include "goafacebookprovider.h"
 #include "goaobjectskeletonutils.h"
 

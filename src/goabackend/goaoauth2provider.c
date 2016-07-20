@@ -29,6 +29,8 @@
 #include "goautils.h"
 #include "goawebview.h"
 #include "goaoauth2provider.h"
+#include "goaoauth2provider-priv.h"
+#include "goaoauth2provider-web-extension.h"
 
 /**
  * SECTION:goaoauth2provider

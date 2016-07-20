@@ -23,6 +23,7 @@
 
 #include "goaoauthprovider.h"
 #include "goaoauth2provider.h"
+#include "goaoauth2provider-web-extension.h"
 #include "goaprovider.h"
 #include "goawebextension.h"
 

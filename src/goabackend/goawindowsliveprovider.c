@@ -26,6 +26,7 @@
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goaoauth2provider.h"
+#include "goaoauth2provider-priv.h"
 #include "goawindowsliveprovider.h"
 #include "goaobjectskeletonutils.h"
 
