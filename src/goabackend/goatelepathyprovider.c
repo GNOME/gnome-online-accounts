@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012, 2013, 2015 Red Hat, Inc.
+ * Copyright (C) 2012, 2013, 2015, 2016 Red Hat, Inc.
  * Copyright (C) 2013 Intel Corporation
  *
  * This library is free software; you can redistribute it and/or
@@ -932,20 +932,34 @@ show_account (GoaProvider         *provider,
               GoaClient           *client,
               GoaObject           *object,
               GtkBox              *vbox,
-              GtkGrid             *grid,
-              G_GNUC_UNUSED GtkGrid *dummy)
+              G_GNUC_UNUSED GtkGrid *dummy1,
+              G_GNUC_UNUSED GtkGrid *dummy2)
 {
   EditData *data = NULL;
+  GtkWidget *grid;
   GtkWidget *params_button = NULL;
   GtkWidget *details_button = NULL;
   GtkWidget *button_box = NULL;
+  gint row = 0;
 
-  GOA_PROVIDER_CLASS (goa_telepathy_provider_parent_class)->show_account (provider,
-                                                                          client,
-                                                                          object,
-                                                                          vbox,
-                                                                          grid,
-                                                                          dummy);
+  grid = gtk_grid_new ();
+  gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
+  gtk_widget_set_hexpand (grid, TRUE);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
+  gtk_box_pack_start (vbox, grid, FALSE, TRUE, 0);
+
+  goa_utils_account_add_header (object, GTK_GRID (grid), row++);
+
+  /* Translators: This is a label for a series of
+   * options switches. For example: “Use for Mail”. */
+  goa_util_add_row_switch_from_keyfile_with_blurb (GTK_GRID (grid),
+                                                   row++,
+                                                   object,
+                                                   _("Use for"),
+                                                   "chat-disabled",
+                                                   _("C_hat"));
+
   data = edit_data_new (object, tpaw_get_toplevel_window (GTK_WIDGET (vbox)));
 
   /* Connection Settings button */
@@ -963,7 +977,9 @@ show_account (GoaProvider         *provider,
   gtk_box_pack_start (GTK_BOX (button_box), details_button,
       FALSE, FALSE, 0);
 
-  goa_util_add_row_widget (grid, 2, NULL, button_box);
+  goa_util_add_row_widget (GTK_GRID (grid), row++, NULL, button_box);
+
+  goa_utils_account_add_attention_needed (client, object, provider, vbox);
 
   edit_data_unref (data);
 }

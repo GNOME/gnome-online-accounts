@@ -98,8 +98,8 @@ static void goa_provider_show_account_real (GoaProvider         *provider,
                                             GoaClient           *client,
                                             GoaObject           *object,
                                             GtkBox              *vbox,
-                                            GtkGrid             *grid,
-                                            GtkGrid             *dummy);
+                                            GtkGrid             *dummy1,
+                                            GtkGrid             *dummy2);
 
 #define GOA_PROVIDER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GOA_TYPE_PROVIDER, GoaProviderPrivate))
 
@@ -559,16 +559,15 @@ goa_provider_show_account (GoaProvider         *self,
                            GoaClient           *client,
                            GoaObject           *object,
                            GtkBox              *vbox,
-                           GtkGrid             *grid,
-                           GtkGrid             *dummy)
+                           GtkGrid             *dummy1,
+                           GtkGrid             *dummy2)
 {
   g_return_if_fail (GOA_IS_PROVIDER (self));
   g_return_if_fail (GOA_IS_CLIENT (client));
   g_return_if_fail (GOA_IS_OBJECT (object) && goa_object_peek_account (object) != NULL);
   g_return_if_fail (GTK_IS_BOX (vbox));
-  g_return_if_fail (GTK_IS_GRID (grid));
 
-  GOA_PROVIDER_GET_CLASS (self)->show_account (self, client, object, vbox, grid, dummy);
+  GOA_PROVIDER_GET_CLASS (self)->show_account (self, client, object, vbox, dummy1, dummy2);
 }
 
 static void
@@ -576,17 +575,25 @@ goa_provider_show_account_real (GoaProvider         *provider,
                                 GoaClient           *client,
                                 GoaObject           *object,
                                 GtkBox              *vbox,
-                                GtkGrid             *grid,
-                                GtkGrid             *dummy)
+                                GtkGrid             *dummy1,
+                                GtkGrid             *dummy2)
 {
   GoaProviderFeatures features;
+  GtkWidget *grid;
   gint row;
   guint i;
   const char *label;
 
   row = 0;
 
-  goa_utils_account_add_header (object, grid, row++);
+  grid = gtk_grid_new ();
+  gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
+  gtk_widget_set_hexpand (grid, TRUE);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
+  gtk_box_pack_start (vbox, grid, FALSE, TRUE, 0);
+
+  goa_utils_account_add_header (object, GTK_GRID (grid), row++);
 
   features = goa_provider_get_provider_features (provider);
   /* Translators: This is a label for a series of
@@ -597,13 +604,15 @@ goa_provider_show_account_real (GoaProvider         *provider,
     {
       if ((features & provider_features_info[i].feature) != 0)
         {
-          goa_util_add_row_switch_from_keyfile_with_blurb (grid, row++, object,
+          goa_util_add_row_switch_from_keyfile_with_blurb (GTK_GRID (grid), row++, object,
                                                            label,
                                                            provider_features_info[i].property,
                                                            _(provider_features_info[i].blurb));
           label = NULL;
         }
     }
+
+  goa_utils_account_add_attention_needed (client, object, provider, vbox);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
