@@ -37,6 +37,125 @@ static const SecretSchema secret_password_schema =
   }
 };
 
+typedef struct
+{
+  GoaClient *client;
+  GoaObject *object;
+  GoaProvider *provider;
+} AttentionNeededData;
+
+static AttentionNeededData *
+attention_needed_data_new (GoaClient *client, GoaObject *object, GoaProvider *provider)
+{
+  AttentionNeededData *data;
+
+  data = g_slice_new0 (AttentionNeededData);
+  data->client = g_object_ref (client);
+  data->object = g_object_ref (object);
+  data->provider = g_object_ref (provider);
+
+  return data;
+}
+
+static void
+attention_needed_data_free (AttentionNeededData *data)
+{
+  g_object_unref (data->client);
+  g_object_unref (data->object);
+  g_object_unref (data->provider);
+  g_slice_free (AttentionNeededData, data);
+}
+
+static void
+goa_utils_account_add_attention_needed_button_clicked (GtkButton *button, gpointer user_data)
+{
+  AttentionNeededData *data = (AttentionNeededData *) user_data;
+  GtkWidget *parent;
+  GError *error;
+
+  parent = gtk_widget_get_toplevel (GTK_WIDGET (button));
+  if (!gtk_widget_is_toplevel (parent))
+    {
+      g_warning ("Unable to find a toplevel GtkWindow");
+      return;
+    }
+
+  error = NULL;
+  if (!goa_provider_refresh_account (data->provider, data->client, data->object, GTK_WINDOW (parent), &error))
+    {
+      if (!(error->domain == GOA_ERROR && error->code == GOA_ERROR_DIALOG_DISMISSED))
+        {
+          GtkWidget *dialog;
+          dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
+                                           GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                           GTK_MESSAGE_ERROR,
+                                           GTK_BUTTONS_CLOSE,
+                                           _("Error logging into the account"));
+          gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                                    "%s",
+                                                    error->message);
+          gtk_widget_show_all (dialog);
+          gtk_dialog_run (GTK_DIALOG (dialog));
+          gtk_widget_destroy (dialog);
+        }
+      g_error_free (error);
+    }
+}
+
+void
+goa_utils_account_add_attention_needed (GoaClient *client, GoaObject *object, GoaProvider *provider, GtkBox *vbox)
+{
+  AttentionNeededData *data;
+  GoaAccount *account;
+  GtkWidget *button;
+  GtkWidget *grid;
+  GtkWidget *image;
+  GtkWidget *label;
+  GtkWidget *labels_grid;
+
+  account = goa_object_peek_account (object);
+  if (!goa_account_get_attention_needed (account))
+    return;
+
+  grid = gtk_grid_new ();
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), GTK_ORIENTATION_HORIZONTAL);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
+  gtk_box_pack_end (vbox, grid, FALSE, TRUE, 0);
+
+  image = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
+  gtk_widget_set_valign (image, GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (grid), image);
+
+  labels_grid = gtk_grid_new ();
+  gtk_widget_set_halign (labels_grid, GTK_ALIGN_FILL);
+  gtk_widget_set_hexpand (labels_grid, TRUE);
+  gtk_widget_set_valign (labels_grid, GTK_ALIGN_CENTER);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (labels_grid), GTK_ORIENTATION_VERTICAL);
+  gtk_grid_set_column_spacing (GTK_GRID (labels_grid), 0);
+  gtk_container_add (GTK_CONTAINER (grid), labels_grid);
+
+  label = gtk_label_new (_("Credentials have expired."));
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_container_add (GTK_CONTAINER (labels_grid), label);
+
+  label = gtk_label_new (_("Sign in to enable this account."));
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_style_context_add_class (gtk_widget_get_style_context (label), "dim-label");
+  gtk_container_add (GTK_CONTAINER (labels_grid), label);
+
+  button = gtk_button_new_with_mnemonic (_("_Sign In"));
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (grid), button);
+
+  data = attention_needed_data_new (client, object, provider);
+  g_signal_connect_data (button,
+                         "clicked",
+                         G_CALLBACK (goa_utils_account_add_attention_needed_button_clicked),
+                         data,
+                         (GClosureNotify) attention_needed_data_free,
+                         0);
+}
+
 void
 goa_utils_account_add_header (GoaObject *object, GtkGrid *grid, gint row)
 {

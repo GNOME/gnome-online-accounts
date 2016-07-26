@@ -38,6 +38,11 @@ G_BEGIN_DECLS
 
 typedef gpointer (*GoaPeekInterfaceFunc)   (GoaObject *);
 
+void             goa_utils_account_add_attention_needed (GoaClient    *client,
+                                                         GoaObject    *object,
+                                                         GoaProvider  *provider,
+                                                         GtkBox       *vbox);
+
 void             goa_utils_account_add_header (GoaObject *object, GtkGrid *grid, gint row);
 
 void             goa_utils_initialize_client_factory (void);
