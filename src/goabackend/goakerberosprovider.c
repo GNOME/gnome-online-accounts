@@ -113,6 +113,12 @@ get_provider_features (GoaProvider *_provider)
   return GOA_PROVIDER_FEATURE_TICKETING;
 }
 
+static GIcon *
+get_provider_icon (GoaProvider *provider, GoaObject *object)
+{
+  return g_themed_icon_new_with_default_fallbacks ("dialog-password-symbolic");
+}
+
 typedef struct
 {
   GtkDialog *dialog;
@@ -1752,6 +1758,7 @@ goa_kerberos_provider_class_init (GoaKerberosProviderClass *kerberos_class)
   provider_class->get_provider_name          = get_provider_name;
   provider_class->get_provider_group         = get_provider_group;
   provider_class->get_provider_features      = get_provider_features;
+  provider_class->get_provider_icon          = get_provider_icon;
   provider_class->build_object               = build_object;
   provider_class->add_account                = add_account;
   provider_class->refresh_account            = refresh_account;
