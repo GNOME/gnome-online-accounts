@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2012, 2013, 2014, 2015 Red Hat, Inc.
+ * Copyright (C) 2012, 2013, 2014, 2015, 2016 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -37,6 +37,8 @@ G_BEGIN_DECLS
 #define GOA_SETTINGS_WHITELISTED_PROVIDERS "whitelisted-providers"
 
 typedef gpointer (*GoaPeekInterfaceFunc)   (GoaObject *);
+
+void             goa_utils_account_add_header (GoaObject *object, GtkGrid *grid, gint row);
 
 void             goa_utils_initialize_client_factory (void);
 

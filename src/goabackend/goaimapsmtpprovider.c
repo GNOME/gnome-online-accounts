@@ -1517,7 +1517,7 @@ show_account (GoaProvider         *provider,
   gint row;
 
   row = 0;
-  goa_util_add_account_info (grid, row++, object);
+  goa_utils_account_add_header (object, grid, row++);
 
   username = g_get_user_name ();
 

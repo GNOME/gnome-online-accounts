@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2012, 2013, 2014, 2015 Red Hat, Inc.
+ * Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -586,7 +586,7 @@ goa_provider_show_account_real (GoaProvider         *provider,
 
   row = 0;
 
-  goa_util_add_account_info (grid, row++, object);
+  goa_utils_account_add_header (object, grid, row++);
 
   features = goa_provider_get_provider_features (provider);
   /* Translators: This is a label for a series of
@@ -1568,49 +1568,6 @@ goa_util_account_notify_property_cb (GObject *object, GParamSpec *pspec, gpointe
 
   g_object_get (account, name, &value, NULL);
   goa_utils_keyfile_set_boolean (account, key, !value);
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-void
-goa_util_add_account_info (GtkGrid *grid, gint row, GoaObject *object)
-{
-  GIcon *icon;
-  GoaAccount *account;
-  GtkWidget *image;
-  GtkWidget *label;
-  const gchar *icon_str;
-  const gchar *identity;
-  const gchar *name;
-  gchar *markup;
-
-  account = goa_object_peek_account (object);
-
-  icon_str = goa_account_get_provider_icon (account);
-  icon = g_icon_new_for_string (icon_str, NULL);
-  image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_DIALOG);
-  g_object_unref (icon);
-  gtk_widget_set_halign (image, GTK_ALIGN_END);
-  gtk_widget_set_hexpand (image, TRUE);
-  gtk_widget_set_margin_bottom (image, 12);
-  gtk_grid_attach (grid, image, 0, row, 1, 1);
-
-  name = goa_account_get_provider_name (account);
-  identity = goa_account_get_presentation_identity (account);
-  markup = g_strdup_printf ("<b>%s</b>\n%s",
-                            name,
-                            (identity == NULL || identity[0] == '\0') ? "\xe2\x80\x94" : identity);
-  label = gtk_label_new (NULL);
-  gtk_label_set_markup (GTK_LABEL (label), markup);
-  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-  gtk_label_set_max_width_chars (GTK_LABEL (label), 24);
-  gtk_label_set_width_chars (GTK_LABEL (label), 24);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_widget_set_margin_bottom (label, 12);
-  g_free (markup);
-  gtk_grid_attach (grid, label, 1, row, 3, 1);
-
-  return;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

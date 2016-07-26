@@ -131,8 +131,6 @@ goa_util_lookup_keyfile_boolean (GoaObject    *object,
 void
 goa_util_account_notify_property_cb (GObject *object, GParamSpec *pspec, gpointer user_data);
 
-void       goa_util_add_account_info (GtkGrid *grid, gint row, GoaObject *object);
-
 GtkWidget *goa_util_add_row_switch_from_keyfile_with_blurb (GtkGrid      *grid,
                                                             gint          row,
                                                             GoaObject    *object,
