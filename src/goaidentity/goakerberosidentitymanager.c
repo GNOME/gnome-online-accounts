@@ -876,7 +876,7 @@ sign_in_identity (GoaKerberosIdentityManager *self,
                                       &error))
     {
       if (is_new_identity)
-        goa_kerberos_identity_erase (identity, NULL);
+        goa_kerberos_identity_erase (GOA_KERBEROS_IDENTITY (identity), NULL);
 
       g_simple_async_result_set_from_error (operation->result, error);
       g_simple_async_result_set_op_res_gpointer (operation->result,
