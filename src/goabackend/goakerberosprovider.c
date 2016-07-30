@@ -1205,6 +1205,341 @@ remove_account_finish (GoaProvider   *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+/* Based on code by the Empathy team.
+ *
+ * This was originally written as a part of telepathy-account-widgets:
+ * telepathy-account-widgets/tp-account-widgets/tpaw-time.c
+ */
+
+static gchar *
+duration_to_string (guint seconds)
+{
+  if (seconds < 60)
+    {
+      return g_strdup_printf (ngettext ("%d second", "%d seconds", seconds), seconds);
+    }
+  else if (seconds < (60 * 60))
+    {
+      seconds /= 60;
+      return g_strdup_printf (ngettext ("%d minute", "%d minutes", seconds), seconds);
+    }
+  else if (seconds < (60 * 60 * 24))
+    {
+      seconds /= 60 * 60;
+      return g_strdup_printf (ngettext ("%d hour", "%d hours", seconds), seconds);
+    }
+  else if (seconds < (60 * 60 * 24 * 7))
+    {
+      seconds /= 60 * 60 * 24;
+      return g_strdup_printf (ngettext ("%d day", "%d days", seconds), seconds);
+    }
+  else if (seconds < (60 * 60 * 24 * 30))
+    {
+      seconds /= 60 * 60 * 24 * 7;
+      return g_strdup_printf (ngettext ("%d week", "%d weeks", seconds), seconds);
+    }
+  else
+    {
+      seconds /= 60 * 60 * 24 * 30;
+      return g_strdup_printf (ngettext ("%d month", "%d months", seconds), seconds);
+    }
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+/* Based on code by the GNOME Shell team.
+ *
+ * This was originally written as a part of gnome-shell:
+ * gnome-shell/js/misc/util.js
+ */
+
+static gchar *
+expiration_time_to_string (GDateTime *expiration_time, GDateTime *now, GTimeSpan time_span_seconds)
+{
+  GSettings *settings = NULL;
+  GTimeSpan time_span_days;
+  gboolean has_am_pm = FALSE;
+  gboolean use_24h = FALSE;
+  const gchar *clock_format;
+  const gchar *format = "";
+  gchar *am_pm = NULL;
+  gchar *ret = NULL;
+  gint expiration_time_day;
+  gint now_day;
+
+  if (time_span_seconds < 60)
+    goto out;
+
+  settings = g_settings_new ("org.gnome.desktop.interface");
+  clock_format = g_settings_get_string (settings, "clock-format");
+
+  am_pm = g_date_time_format (expiration_time, "%p");
+  if (am_pm != NULL && am_pm[0] != '\0')
+    has_am_pm = TRUE;
+
+  if (g_strcmp0 (clock_format, "24h") == 0 || !has_am_pm)
+    use_24h = TRUE;
+
+  expiration_time_day = g_date_time_get_day_of_year (expiration_time);
+  now_day = g_date_time_get_day_of_year (now);
+  if (expiration_time_day == now_day)
+    {
+      format = use_24h
+               /* Translators: the time in 24h format. eg., 22∶43. */
+               ? _("(%H∶%M)")
+               /* Translators: the time in 12h format. eg., 10∶43 pm. */
+               : _("(%l∶%M %p)");
+      goto out;
+    }
+
+  time_span_days = time_span_seconds * G_TIME_SPAN_SECOND / G_TIME_SPAN_DAY;
+
+  if (time_span_days < 2 && expiration_time_day == now_day + 1)
+    {
+      format = use_24h
+               /* Translators: the word "Tomorrow" followed by the
+                * time in 24h format. eg., 22∶43.
+                */
+               ? _("(Tomorrow, %H∶%M)")
+               /* Translators: the word "Tomorrow" followed by the
+                * time in 12h format. eg., 10∶43 pm.
+                */
+               : _("(Tomorrow, %l∶%M %p)");
+      goto out;
+    }
+
+  if (time_span_days < 7)
+    {
+      format = use_24h ? _("(%a, %H∶%M)") : _("(%a, %l∶%M %p)");
+      goto out;
+    }
+
+  if (time_span_days < 365)
+    {
+      format = use_24h ? _("(%b %d, %H∶%M)") : _("(%b %d, %l∶%M %p)");
+      goto out;
+    }
+
+  format = use_24h ? _("(%b %d %y, %H∶%M)") : _("(%b %d %y, %l∶%M %p)");
+
+ out:
+  ret = g_date_time_format (expiration_time, format);
+  g_free (am_pm);
+  g_clear_object (&settings);
+  return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static GtkWidget *
+create_row_sign_in_renew (GoaObject *object)
+{
+  GoaAccount *account;
+  GtkStyleContext *context;
+  GtkWidget *button;
+  GtkWidget *label;
+  const gchar *label_text;
+
+  button = gtk_button_new ();
+  context = gtk_widget_get_style_context (button);
+  gtk_style_context_add_class (context, "text-button");
+  gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
+  gtk_widget_set_margin_top (button, 6);
+  gtk_widget_set_margin_bottom (button, 6);
+
+  account = goa_object_peek_account (object);
+  if (goa_account_get_attention_needed (account))
+    {
+      label_text = _("_Sign In");
+      gtk_style_context_add_class (context, "suggested-action");
+    }
+  else
+    {
+      label_text = _("_Renew");
+    }
+
+  label = gtk_label_new_with_mnemonic (label_text);
+  gtk_container_add (GTK_CONTAINER (button), label);
+
+  return button;
+}
+
+static GtkWidget *
+create_row_status (GoaKerberosProvider *self, GoaObject *object)
+{
+  GoaAccount *account;
+  GoaIdentityServiceIdentity *identity;
+  GtkWidget *label;
+  const gchar *identifier;
+  gchar *label_text;
+
+  account = goa_object_peek_account (object);
+  identifier = goa_account_get_identity (account);
+  identity = get_identity_from_object_manager (self, identifier);
+
+  if (goa_account_get_attention_needed (account) || identity == NULL)
+    {
+      label_text = g_strdup (_("Logged Out"));
+    }
+  else
+    {
+      GDateTime *expiration_time;
+      GDateTime *now;
+      GTimeSpan time_span;
+      gint64 timestamp;
+
+      now = g_date_time_new_now_local ();
+
+      timestamp = goa_identity_service_identity_get_expiration_timestamp (identity);
+      expiration_time = g_date_time_new_from_unix_local (timestamp);
+      time_span = g_date_time_difference (expiration_time, now);
+      time_span /= G_TIME_SPAN_SECOND;
+
+      if (time_span < 0)
+        label_text = g_strdup (_("Logged in"));
+      else
+        {
+          gchar *expiration_time_str;
+          gchar *time_span_str;
+
+          expiration_time_str = expiration_time_to_string (expiration_time, now, time_span);
+          time_span_str = duration_to_string ((guint) time_span);
+          label_text = g_strdup_printf (_("Logged in — expires in %s %s"), time_span_str, expiration_time_str);
+          g_free (expiration_time_str);
+          g_free (time_span_str);
+        }
+
+      g_object_unref (identity);
+    }
+
+  label = gtk_label_new (label_text);
+  gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
+  if (identity == NULL)
+    gtk_widget_set_opacity (label, 0.0);
+
+  g_free (label_text);
+  return label;
+}
+
+static GtkWidget *
+create_row_switch_from_property (GoaObject    *object,
+                                 const gchar  *label_text,
+                                 const gchar  *property)
+{
+  GoaAccount *account;
+  GtkWidget *grid;
+  GtkWidget *label;
+  GtkWidget *switch_;
+  gboolean value;
+
+  grid = gtk_grid_new ();
+  gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
+  gtk_widget_set_margin_top (grid, 18);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), GTK_ORIENTATION_HORIZONTAL);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 30);
+
+  label = gtk_label_new_with_mnemonic (label_text);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_container_add (GTK_CONTAINER (grid), label);
+
+  switch_ = gtk_switch_new ();
+  gtk_widget_set_halign (label, GTK_ALIGN_END);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), switch_);
+  gtk_container_add (GTK_CONTAINER (grid), switch_);
+
+  account = goa_object_peek_account (object);
+  g_object_get (account, property, &value, NULL);
+  if (goa_account_get_attention_needed (account))
+    {
+      gtk_widget_set_sensitive (switch_, FALSE);
+      gtk_switch_set_active (GTK_SWITCH (switch_), FALSE);
+    }
+  else
+    {
+      gtk_switch_set_active (GTK_SWITCH (switch_), !value);
+      g_object_bind_property (switch_, "active",
+                              account, property,
+                              G_BINDING_BIDIRECTIONAL | G_BINDING_INVERT_BOOLEAN);
+    }
+
+  return grid;
+}
+
+static void
+show_account (GoaProvider         *provider,
+              GoaClient           *client,
+              GoaObject           *object,
+              GtkBox              *vbox,
+              G_GNUC_UNUSED GtkGrid *dummy1,
+              G_GNUC_UNUSED GtkGrid *dummy2)
+{
+  GoaKerberosProvider *self = GOA_KERBEROS_PROVIDER (provider);
+  GIcon *icon;
+  GoaAccount *account;
+  GtkStyleContext *context;
+  GtkWidget *grid;
+  GtkWidget *image;
+  GtkWidget *label;
+  GtkWidget *row_sign_in_renew;
+  GtkWidget *row_status;
+  GtkWidget *row_switch;
+  const gchar *icon_str;
+  const gchar *identity;
+  gchar *markup;
+
+  grid = gtk_grid_new ();
+  gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
+  gtk_container_set_border_width (GTK_CONTAINER (grid), 12);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), GTK_ORIENTATION_VERTICAL);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
+  gtk_box_pack_start (vbox, grid, FALSE, TRUE, 0);
+
+  label = gtk_label_new (_("Enterprise login provides single sign-on for online resources. When automatic login is "
+                           "on, your account will be advertised to websites and online resources."));
+  context = gtk_widget_get_style_context (label);
+  gtk_style_context_add_class (context, "dim-label");
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_max_width_chars (GTK_LABEL (label), 40);
+  gtk_label_set_width_chars (GTK_LABEL (label), 40);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_container_add (GTK_CONTAINER (grid), label);
+
+  account = goa_object_peek_account (object);
+  icon_str = goa_account_get_provider_icon (account);
+  icon = g_icon_new_for_string (icon_str, NULL);
+  image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_INVALID);
+  gtk_widget_set_halign (image, GTK_ALIGN_CENTER);
+  gtk_widget_set_margin_top (image, 12);
+  gtk_widget_set_margin_bottom (image, 6);
+  gtk_image_set_pixel_size (GTK_IMAGE (image), 64);
+  gtk_container_add (GTK_CONTAINER (grid), image);
+
+  identity = goa_account_get_presentation_identity (account);
+  markup = g_strdup_printf ("<b>%s</b>", (identity == NULL || identity[0] == '\0') ? "\xe2\x80\x94" : identity);
+  label = gtk_label_new (NULL);
+  gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
+  gtk_label_set_markup (GTK_LABEL (label), markup);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+  gtk_label_set_max_width_chars (GTK_LABEL (label), 24);
+  gtk_label_set_width_chars (GTK_LABEL (label), 24);
+  gtk_container_add (GTK_CONTAINER (grid), label);
+
+  row_status = create_row_status (self, object);
+  gtk_container_add (GTK_CONTAINER (grid), row_status);
+
+  row_sign_in_renew = create_row_sign_in_renew (object);
+  gtk_container_add (GTK_CONTAINER (grid), row_sign_in_renew);
+
+  row_switch = create_row_switch_from_property (object, _("_Automatic Login"), "ticketing-disabled");
+  gtk_container_add (GTK_CONTAINER (grid), row_switch);
+
+  g_free (markup);
+  g_object_unref (icon);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static GoaIdentityServiceIdentity *
 get_identity_from_object_manager (GoaKerberosProvider *self,
                                   const char          *identifier)
@@ -1470,6 +1805,7 @@ goa_kerberos_provider_class_init (GoaKerberosProviderClass *kerberos_class)
   provider_class->ensure_credentials_sync    = ensure_credentials_sync;
   provider_class->remove_account             = remove_account;
   provider_class->remove_account_finish      = remove_account_finish;
+  provider_class->show_account               = show_account;
 
   /* this will force associating errors in the
    * GOA_IDENTITY_MANAGER_ERROR error domain with
