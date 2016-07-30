@@ -443,7 +443,7 @@ on_identity_signed_out (GoaIdentityManager *manager,
   GError             *error;
   GoaIdentity        *identity;
   const char         *identifier;
-  GoaObject          *object;
+  GoaObject          *object = NULL;
 
   error = NULL;
   goa_identity_manager_sign_identity_out_finish (manager, result, &error);
@@ -465,6 +465,8 @@ on_identity_signed_out (GoaIdentityManager *manager,
     ensure_account_credentials (self, object);
 
   g_simple_async_result_complete_in_idle (operation_result);
+
+  g_clear_object (&object);
   g_object_unref (operation_result);
 }
 
@@ -748,7 +750,7 @@ on_identity_needs_renewal (GoaIdentityManager *identity_manager,
                            GoaIdentityService *self)
 {
   const char *principal;
-  GoaObject  *object;
+  GoaObject  *object = NULL;
 
   principal = goa_identity_get_identifier (identity);
 
@@ -757,8 +759,7 @@ on_identity_needs_renewal (GoaIdentityManager *identity_manager,
   if (object != NULL && should_ignore_object (self, object))
     {
       g_debug ("GoaIdentityService: ignoring identity %s that says it needs renewal", principal);
-
-      return;
+      goto out;
     }
 
   g_debug ("GoaIdentityService: identity %s needs renewal", principal);
@@ -770,6 +771,9 @@ on_identity_needs_renewal (GoaIdentityManager *identity_manager,
                                        (GAsyncReadyCallback)
                                        on_identity_renewed,
                                        self);
+
+ out:
+  g_clear_object (&object);
 }
 
 static void
@@ -967,6 +971,8 @@ on_identity_added (GoaIdentityManager *identity_manager,
 
   if (object == NULL)
     add_temporary_account (self, identity);
+
+  g_clear_object (&object);
 }
 
 static void
@@ -984,6 +990,7 @@ on_identity_removed (GoaIdentityManager *identity_manager,
     ensure_account_credentials (self, object);
 
   unexport_identity (self, identity);
+  g_clear_object (&object);
 }
 
 static void
@@ -1001,6 +1008,8 @@ on_identity_refreshed (GoaIdentityManager *identity_manager,
     add_temporary_account (self, identity);
   else
     ensure_account_credentials (self, object);
+
+  g_clear_object (&object);
 }
 
 typedef struct
@@ -1341,6 +1350,7 @@ on_identity_expiring (GoaIdentityManager *identity_manager,
     return;
 
   ensure_account_credentials (self, object);
+  g_clear_object (&object);
 }
 
 static void
@@ -1361,6 +1371,7 @@ on_identity_expired (GoaIdentityManager *identity_manager,
     return;
 
   ensure_account_credentials (self, object);
+  g_clear_object (&object);
 }
 
 static void
