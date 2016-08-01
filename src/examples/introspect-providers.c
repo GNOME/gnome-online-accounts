@@ -108,6 +108,7 @@ get_all (GObject *source_object, GAsyncResult *res, gpointer user_data)
       GoaProviderFeatures features;
       const gchar *type;
       gchar *group;
+      gchar *name;
       guint i;
 
       features = goa_provider_get_provider_features (provider);
@@ -116,6 +117,9 @@ get_all (GObject *source_object, GAsyncResult *res, gpointer user_data)
 
       type = goa_provider_get_provider_type (provider);
       group = g_strconcat ("Provider ", type, NULL);
+
+      name = goa_provider_get_provider_name (provider, NULL);
+      g_key_file_set_string (key_file, group, "ProviderName", name);
 
       for (i = 0; provider_features_info[i].key != NULL; i++)
         {
@@ -134,6 +138,7 @@ get_all (GObject *source_object, GAsyncResult *res, gpointer user_data)
         }
 
       g_free (group);
+      g_free (name);
     }
 
   error = NULL;
