@@ -34,6 +34,16 @@
     </method>
 
     <!--
+        Renew:
+        @identifier: The identifier of the identity (i.e., a kerberos principal name)
+
+        Renews an identity.
+    -->
+    <method name="Renew">
+      <arg name="identifier" type="s" direction="in"/>
+    </method>
+
+    <!--
         SignIn:
         @identifier: kerberos principal or partial principal
         @details: Extra key/value pairs to set.

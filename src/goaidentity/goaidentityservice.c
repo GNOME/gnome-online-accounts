@@ -275,6 +275,34 @@ ensure_account_credentials (GoaIdentityService *self,
                                        self);
 }
 
+static gboolean
+goa_identity_service_handle_renew (GoaIdentityServiceManager *manager,
+                                   GDBusMethodInvocation     *invocation,
+                                   const char                *identifier,
+                                   GVariant                  *details)
+{
+  GoaIdentityService *self = GOA_IDENTITY_SERVICE (manager);
+  GTask *task;
+
+  task = g_task_new (self, NULL, NULL, NULL);
+  g_task_set_task_data (self, g_object_ref (invocation), g_object_ref);
+
+  goa_identity_manager_get_identity (GOA_IDENTITY_MANAGER (self->priv->identity_manager),
+                                     identifier,
+                                     NULL,
+                                     (GAsyncReadyCallback) on_got_identity_for_renew,
+                                     self);
+
+  goa_identity_manager_renew_identity (GOA_IDENTITY_MANAGER (self->priv->identity_manager),
+                                       identity,
+                                       NULL,
+                                       (GAsyncReadyCallback)
+                                       on_identity_renewed,
+                                       self);
+
+  return TRUE;
+}
+
 static void
 on_sign_in_handled (GoaIdentityService    *self,
                     GAsyncResult          *result,
@@ -640,6 +668,7 @@ goa_identity_service_handle_exchange_secret_keys (GoaIdentityServiceManager *man
 static void
 identity_service_manager_interface_init (GoaIdentityServiceManagerIface *interface)
 {
+  interface->handle_renew = goa_identity_service_handle_renew;
   interface->handle_sign_in = goa_identity_service_handle_sign_in;
   interface->handle_sign_out = goa_identity_service_handle_sign_out;
   interface->handle_exchange_secret_keys = goa_identity_service_handle_exchange_secret_keys;
