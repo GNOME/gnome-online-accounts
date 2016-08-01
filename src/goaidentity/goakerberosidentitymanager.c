@@ -1108,7 +1108,7 @@ goa_kerberos_identity_manager_get_identity_finish (GoaIdentityManager  *self,
   identity =
     g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
 
-  return identity;
+  return g_object_ref (identity);
 }
 
 static void
