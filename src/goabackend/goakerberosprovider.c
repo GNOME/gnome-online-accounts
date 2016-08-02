@@ -335,7 +335,8 @@ get_ticket_sync (GoaKerberosProvider *self,
     }
 
   ret = TRUE;
-out:
+
+ out:
   g_clear_object (&account);
   g_clear_object (&ticketing);
   g_free (object_path);
@@ -1417,7 +1418,7 @@ ensure_credentials_sync (GoaProvider    *provider,
   g_date_time_unref (now);
   g_date_time_unref (expiration_time);
 
-out:
+ out:
   g_clear_object (&account);
   g_clear_object (&identity);
   g_mutex_unlock (&identity_manager_mutex);
@@ -1599,7 +1600,7 @@ sign_in_identity_sync (GoaKerberosProvider  *self,
                                                   error);
   g_mutex_unlock (&identity_manager_mutex);
 
-out:
+ out:
   g_object_unref (secret_exchange);
   return identity_object_path;
 }
@@ -1622,7 +1623,6 @@ sign_in_thread (GTask               *task,
 
   error = NULL;
   object_path = sign_in_identity_sync (self, identifier, password, preauth_source, cancellable, &error);
-
   if (object_path == NULL)
     g_task_return_error (task, error);
   else
