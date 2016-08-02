@@ -390,7 +390,7 @@ goa_identity_service_handle_sign_in (GoaIdentityServiceManager *manager,
                                                 (GAsyncReadyCallback)
                                                 on_sign_in_handled,
                                                 g_object_ref (invocation),
-                                                g_strdup (identifier));
+                                                NULL);
   cancellable = g_cancellable_new ();
   g_object_set_data (G_OBJECT (operation_result),
                      "cancellable",
