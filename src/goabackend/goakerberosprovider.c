@@ -237,6 +237,23 @@ sign_in_identity (GoaKerberosProvider  *self,
   g_object_unref (operation_result);
 }
 
+static gchar *
+sign_in_identity_finish (GoaKerberosProvider  *self,
+                         GAsyncResult         *result,
+                         GError              **error)
+{
+  GTask *task;
+
+  g_return_val_if_fail (GOA_IS_KERBEROS_PROVIDER (self), NULL);
+
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
+  task = G_TASK (result);
+
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  return g_task_propagate_pointer (task, error);
+}
+
 static void
 on_account_signed_in (GoaProvider   *provider,
                       GAsyncResult  *result,
@@ -822,7 +839,7 @@ on_initial_sign_in_done (GoaKerberosProvider *self,
                                                           "remember-password"));
 
   error = NULL;
-  object_path = g_task_propagate_pointer (G_TASK (result), &error);
+  object_path = sign_in_identity_finish (self, result, &error);
   if (error != NULL)
     {
       g_task_return_error (operation_result, error);
