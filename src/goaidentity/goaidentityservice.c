@@ -378,7 +378,7 @@ goa_identity_service_handle_sign_in (GoaIdentityServiceManager *manager,
     }
 
   cancellable = g_cancellable_new ();
-  operation_result = g_task_new (G_OBJECT (self),
+  operation_result = g_task_new (self,
                                  cancellable,
                                  (GAsyncReadyCallback) on_sign_in_handled,
                                  g_object_ref (invocation));

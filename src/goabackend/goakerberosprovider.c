@@ -221,7 +221,7 @@ sign_in_identity (GoaKerberosProvider  *self,
 {
   GTask *operation_result;
 
-  operation_result = g_task_new (G_OBJECT (self), cancellable, callback, user_data);
+  operation_result = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (operation_result, (gpointer) identifier);
 
   g_object_set_data (G_OBJECT (operation_result),
@@ -975,7 +975,7 @@ perform_initial_sign_in (GoaKerberosProvider *self,
 
   cancellable = g_cancellable_new ();
 
-  operation_result = g_task_new (G_OBJECT (self), cancellable, (GAsyncReadyCallback) on_account_signed_in, request);
+  operation_result = g_task_new (self, cancellable, (GAsyncReadyCallback) on_account_signed_in, request);
   g_task_set_source_tag (operation_result, object);
 
   g_object_set_data (G_OBJECT (operation_result),
