@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-08-02 00:13+0000\n"
+"POT-Creation-Date: 2016-08-15 06:07+0000\n"
 "PO-Revision-Date: 2016-08-09 11:32+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
@@ -230,7 +230,7 @@ msgstr ""
 #: ../src/goabackend/goalastfmprovider.c:537
 #: ../src/goabackend/goaoauth2provider.c:743
 #: ../src/goabackend/goaoauth2provider.c:773
-#: ../src/goabackend/goaoauth2provider.c:785 ../src/goabackend/goautils.c:153
+#: ../src/goabackend/goaoauth2provider.c:785 ../src/goabackend/goautils.c:311
 #: ../src/goabackend/goawindowsliveprovider.c:207
 #: ../src/goabackend/goawindowsliveprovider.c:219
 #: ../src/goabackend/goawindowsliveprovider.c:231
@@ -263,7 +263,7 @@ msgstr "Služba není dostupná"
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:115
 #: ../src/goabackend/goalastfmprovider.c:523
-#: ../src/goabackend/goasmtpauth.c:113 ../src/goabackend/goautils.c:628
+#: ../src/goabackend/goasmtpauth.c:113 ../src/goabackend/goautils.c:786
 #, c-format
 msgid "Authentication failed"
 msgstr "Autentizace selhala"
@@ -348,21 +348,21 @@ msgstr "Chyba připojování k serveru IMAP"
 msgid "Error connecting to SMTP server"
 msgstr "Chyba připojování k serveru SMTP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1525
+#: ../src/goabackend/goaimapsmtpprovider.c:1534
 msgid "E-mail"
 msgstr "E-mail"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1529
+#: ../src/goabackend/goaimapsmtpprovider.c:1538
 msgid "Name"
 msgstr "Název"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1539
-#: ../src/goabackend/goaimapsmtpprovider.c:1543
+#: ../src/goabackend/goaimapsmtpprovider.c:1548
+#: ../src/goabackend/goaimapsmtpprovider.c:1552
 msgid "IMAP"
 msgstr "IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1554
-#: ../src/goabackend/goaimapsmtpprovider.c:1558
+#: ../src/goabackend/goaimapsmtpprovider.c:1563
+#: ../src/goabackend/goaimapsmtpprovider.c:1567
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -394,7 +394,7 @@ msgid "Enterprise domain or realm name"
 msgstr "Název podnikové domény nebo sféry"
 
 #: ../src/goabackend/goakerberosprovider.c:955
-#: ../src/goaidentity/goaidentityservice.c:1124
+#: ../src/goaidentity/goaidentityservice.c:1127
 msgid "Log In to Realm"
 msgstr "Přihlášení do sféry"
 
@@ -555,6 +555,7 @@ msgid "_Contacts"
 msgstr "_Kontakty"
 
 #: ../src/goabackend/goaprovider.c:135
+#: ../src/goabackend/goatelepathyprovider.c:961
 msgid "C_hat"
 msgstr "Disk_uze"
 
@@ -592,15 +593,16 @@ msgstr "_Mapy"
 
 #. Translators: This is a label for a series of
 #. * options switches. For example: “Use for Mail”.
-#: ../src/goabackend/goaprovider.c:594
+#: ../src/goabackend/goaprovider.c:601
+#: ../src/goabackend/goatelepathyprovider.c:959
 msgid "Use for"
 msgstr "Použít pro"
 
-#: ../src/goabackend/goaprovider.c:849
+#: ../src/goabackend/goaprovider.c:858
 msgid "Account is disabled"
 msgstr "Účet je zakázaný"
 
-#: ../src/goabackend/goaprovider.c:872
+#: ../src/goabackend/goaprovider.c:881
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync není implementováno na typu %s"
@@ -677,106 +679,122 @@ msgid "Cannot save your personal information on the server"
 msgstr "Nelze uložit vaše osobní údaje na serveru"
 
 #. Connection Settings button
-#: ../src/goabackend/goatelepathyprovider.c:952
+#: ../src/goabackend/goatelepathyprovider.c:966
 msgid "_Connection Settings"
 msgstr "Nastavení _připojení"
 
 #. Edit Personal Information button
-#: ../src/goabackend/goatelepathyprovider.c:956
+#: ../src/goabackend/goatelepathyprovider.c:970
 msgid "_Personal Details"
 msgstr "_Osobní údaje"
 
-#: ../src/goabackend/goautils.c:120
+#: ../src/goabackend/goautils.c:93
+msgid "Error logging into the account"
+msgstr "Chyba při přihlašování k účtu"
+
+#: ../src/goabackend/goautils.c:137
+msgid "Credentials have expired."
+msgstr "Pověření vypršela platnost."
+
+#: ../src/goabackend/goautils.c:141
+msgid "Sign in to enable this account."
+msgstr "Přihlášením tento účet povolíte."
+
+#: ../src/goabackend/goautils.c:146
+msgid "_Sign In"
+msgstr "Přihlá_sit"
+
+#: ../src/goabackend/goautils.c:278
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "Účet %s již existuje pro %s"
 
 #. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:170
+#: ../src/goabackend/goautils.c:328
 #, c-format
 msgid "%s account"
 msgstr "Účet %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:228
+#: ../src/goabackend/goautils.c:386
 msgid "Failed to delete credentials from the keyring"
 msgstr "Selhalo smazání pověření z klíčenky"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:280
+#: ../src/goabackend/goautils.c:438
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Selhalo získání pověření z klíčenky"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:290
+#: ../src/goabackend/goautils.c:448
 msgid "No credentials found in the keyring"
 msgstr "V klíčence se nenachází žádná pověření"
 
-#: ../src/goabackend/goautils.c:303
+#: ../src/goabackend/goautils.c:461
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Chyba analýzy výsledku získaného z klíčenky: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:346
+#: ../src/goabackend/goautils.c:504
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Pověření %s od GOA pro identitu %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:363
+#: ../src/goabackend/goautils.c:521
 msgid "Failed to store credentials in the keyring"
 msgstr "Selhalo uložení pověření do klíčenky"
 
-#: ../src/goabackend/goautils.c:615
+#: ../src/goabackend/goautils.c:773
 msgid "Cannot resolve hostname"
 msgstr "Nelze přeložit na adresu název počítače"
 
-#: ../src/goabackend/goautils.c:619
+#: ../src/goabackend/goautils.c:777
 msgid "Cannot resolve proxy hostname"
 msgstr "Nelze přeložit na adresu název počítače s proxy"
 
-#: ../src/goabackend/goautils.c:624
+#: ../src/goabackend/goautils.c:782
 msgid "Cannot find WebDAV endpoint"
 msgstr "Nelze najít koncový bod WebDAV"
 
-#: ../src/goabackend/goautils.c:633
+#: ../src/goabackend/goautils.c:791
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Kód: %u – neočekávaná odpověď od serveru"
 
-#: ../src/goabackend/goautils.c:649
+#: ../src/goabackend/goautils.c:807
 msgid "The signing certificate authority is not known."
 msgstr "Podepisující certifikační autorita není známa."
 
-#: ../src/goabackend/goautils.c:653
+#: ../src/goabackend/goautils.c:811
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr ""
 "Certifikát neodpovídá očekávané identitě serveru, ze kterého byl získán."
 
-#: ../src/goabackend/goautils.c:658
+#: ../src/goabackend/goautils.c:816
 msgid "The certificate’s activation time is still in the future."
 msgstr "Čas aktivace certifikátu se zatím nachází v budoucnosti."
 
-#: ../src/goabackend/goautils.c:662
+#: ../src/goabackend/goautils.c:820
 msgid "The certificate has expired."
 msgstr "Certifikátu vypršela platnost."
 
-#: ../src/goabackend/goautils.c:666
+#: ../src/goabackend/goautils.c:824
 msgid "The certificate has been revoked."
 msgstr "Certifikát byl odvolán."
 
-#: ../src/goabackend/goautils.c:670
+#: ../src/goabackend/goautils.c:828
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Algoritmus certifikátu není považován za bezpečný."
 
-#: ../src/goabackend/goautils.c:674
+#: ../src/goabackend/goautils.c:832
 msgid "Invalid certificate."
 msgstr "Neplatný certifikát."
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:709
+#: ../src/goabackend/goautils.c:867
 #, c-format
 msgid "Did not find %s with identity ‘%s’ in credentials"
 msgstr "V pověřeních nebyla nalezena položka %s s identitou „%s“"
@@ -795,11 +813,11 @@ msgstr "Účet Microsoft"
 msgid "initial secret passed before secret key exchange"
 msgstr "počáteční tajné heslo předané před výměnou tajných klíčů"
 
-#: ../src/goaidentity/goaidentityservice.c:564
+#: ../src/goaidentity/goaidentityservice.c:567
 msgid "Initial secret key is invalid"
 msgstr "Počáteční tajný klíč je neplatný"
 
-#: ../src/goaidentity/goaidentityservice.c:1129
+#: ../src/goaidentity/goaidentityservice.c:1132
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr ""
@@ -864,6 +882,3 @@ msgstr "Nelze najít identitu"
 #: ../src/goaidentity/goakerberosidentitymanager.c:841
 msgid "Could not create credential cache for identity"
 msgstr "Nelze vytvořit mezipaměť pověření pro identitu"
-
-#~ msgid "Failed to initialize a GOA client"
-#~ msgstr "Selhala inicializace klienta GOA"
