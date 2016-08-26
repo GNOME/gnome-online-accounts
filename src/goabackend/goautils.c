@@ -552,6 +552,82 @@ goa_utils_store_credentials_for_object_sync (GoaProvider   *provider,
   return goa_utils_store_credentials_for_id_sync (provider, id, credentials, cancellable, error);
 }
 
+gboolean
+goa_utils_keyfile_copy_group (GKeyFile     *src_key_file,
+                              const gchar  *src_group_name,
+                              GKeyFile     *dest_key_file,
+                              const gchar  *dest_group_name)
+{
+  GError *error;
+  gboolean ret_val = FALSE;
+  gchar **keys = NULL;
+  gsize i;
+
+  error = NULL;
+  keys = g_key_file_get_keys (src_key_file, src_group_name, NULL, &error);
+  if (error != NULL)
+    {
+      g_warning ("Error getting keys from group %s: %s (%s, %d)",
+                 src_group_name,
+                 error->message,
+                 g_quark_to_string (error->domain),
+                 error->code);
+      g_error_free (error);
+      goto out;
+    }
+
+  for (i = 0; keys[i] != NULL; i++)
+    {
+      gchar *dest_value;
+      gchar *src_value;
+
+      error = NULL;
+      src_value = g_key_file_get_value (src_key_file, src_group_name, keys[i], &error);
+      if (error != NULL)
+        {
+          g_warning ("Error reading key %s from group %s: %s (%s, %d)",
+                     keys[i],
+                     src_group_name,
+                     error->message,
+                     g_quark_to_string (error->domain),
+                     error->code);
+          g_error_free (error);
+          continue;
+        }
+
+      error = NULL;
+      dest_value = g_key_file_get_value (dest_key_file, dest_group_name, keys[i], &error);
+      if (error != NULL)
+        {
+          if (!g_error_matches (error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_GROUP_NOT_FOUND)
+              && !g_error_matches (error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+            {
+              g_warning ("Error reading key %s from group %s: %s (%s, %d)",
+                         keys[i],
+                         src_group_name,
+                         error->message,
+                         g_quark_to_string (error->domain),
+                         error->code);
+            }
+
+          g_error_free (error);
+        }
+
+      if (g_strcmp0 (dest_value, src_value) != 0)
+        {
+          g_key_file_set_value (dest_key_file, dest_group_name, keys[i], src_value);
+          ret_val = TRUE;
+        }
+
+      g_free (dest_value);
+      g_free (src_value);
+    }
+
+ out:
+  g_strfreev (keys);
+  return ret_val;
+}
+
 void
 goa_utils_keyfile_remove_key (GoaAccount *account, const gchar *key)
 {
