@@ -88,6 +88,11 @@ gboolean         goa_utils_store_credentials_for_object_sync (GoaProvider    *pr
                                                               GCancellable   *cancellable,
                                                               GError        **error);
 
+gboolean         goa_utils_keyfile_copy_group (GKeyFile     *src_key_file,
+                                               const gchar  *src_group_name,
+                                               GKeyFile     *dest_key_file,
+                                               const gchar  *dest_group_name);
+
 void             goa_utils_keyfile_remove_key (GoaAccount *account, const gchar *key);
 
 void             goa_utils_keyfile_set_boolean (GoaAccount *account, const gchar *key, gboolean value);
