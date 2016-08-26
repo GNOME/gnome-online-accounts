@@ -476,8 +476,7 @@ add_config_file (GoaDaemon     *self,
                      error->message, g_quark_to_string (error->domain), error->code);
         }
       g_error_free (error);
-      g_key_file_unref (key_file);
-      return;
+      goto out;
     }
 
   guid = g_dbus_connection_get_guid (self->connection);
@@ -576,7 +575,10 @@ add_config_file (GoaDaemon     *self,
         }
     }
 
-  *key_files_to_free = g_list_prepend (*key_files_to_free, key_file);
+  *key_files_to_free = g_list_prepend (*key_files_to_free, g_key_file_ref (key_file));
+
+ out:
+  g_key_file_unref (key_file);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
