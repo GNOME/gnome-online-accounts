@@ -408,6 +408,13 @@ account_object_path_to_group (const gchar *object_path)
   return g_strdup_printf ("Account %s", object_path + sizeof "/org/gnome/OnlineAccounts/Accounts/" - 1);
 }
 
+static const gchar *
+template_group_to_id (const gchar *group)
+{
+  g_return_val_if_fail (g_str_has_prefix (group, "Template "), NULL);
+  return group + sizeof "Template " - 1;
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 typedef struct
@@ -541,6 +548,12 @@ add_config_file (GoaDaemon     *self,
               needs_update = g_key_file_remove_key (key_file, groups[n], "SessionId", NULL);
             }
 
+          g_hash_table_insert (group_name_to_key_file_data,
+                               groups[n], /* steals string */
+                               key_file_data_new (key_file, path));
+        }
+      else if (g_str_has_prefix (groups[n], "Template "))
+        {
           g_hash_table_insert (group_name_to_key_file_data,
                                groups[n], /* steals string */
                                key_file_data_new (key_file, path));
@@ -692,6 +705,9 @@ process_config_entries (GoaDaemon  *self,
       const gchar *id;
       gchar *object_path;
 
+      if (!g_str_has_prefix (group, "Account "))
+        continue;
+
       id = account_group_to_id (group);
 
       /* create and validate object path */
@@ -801,6 +817,197 @@ process_config_entries (GoaDaemon  *self,
   g_list_free_full (config_object_paths, g_free);
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gint
+compare_account_and_template_groups (const gchar *account_group, const gchar *template_group)
+{
+  const gchar *account_id;
+  const gchar *template_id;
+
+  g_return_val_if_fail (g_str_has_prefix (account_group, "Account "), 0);
+  g_return_val_if_fail (g_str_has_prefix (template_group, "Template "), 0);
+
+  account_id = account_group + sizeof "Account " - 1;
+  template_id = template_group + sizeof "Template " - 1;
+
+  return g_strcmp0 (account_id, template_id);
+}
+
+static void
+process_template_entries (GoaDaemon  *self,
+                          GHashTable *group_name_to_key_file_data)
+{
+  GError *error;
+  GHashTable *key_files_to_update = NULL;
+  GHashTableIter iter;
+  GKeyFile *home_conf_key_file = NULL;
+  GKeyFile *key_file;
+  KeyFileData *key_file_data;
+  const gchar *group;
+  const gchar *key_file_path;
+  GList *config_object_groups = NULL;
+  GList *config_template_groups = NULL;
+  GList *added;
+  GList *removed;
+  GList *unchanged;
+  GList *l;
+
+  key_files_to_update = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify) g_key_file_unref);
+
+  g_hash_table_iter_init (&iter, group_name_to_key_file_data);
+  while (g_hash_table_iter_next (&iter, (gpointer *) &group, (gpointer *) &key_file_data))
+    {
+      if (home_conf_key_file == NULL && g_strcmp0 (key_file_data->path, self->home_conf_file_path) == 0)
+        home_conf_key_file = g_key_file_ref (key_file_data->key_file);
+
+      if (g_str_has_prefix (group, "Account "))
+        config_object_groups = g_list_prepend (config_object_groups, g_strdup (group));
+      else if (g_str_has_prefix (group, "Template "))
+        config_template_groups = g_list_prepend (config_template_groups, g_strdup (group));
+    }
+
+  if (home_conf_key_file == NULL)
+    home_conf_key_file = g_key_file_new ();
+
+  config_object_groups = g_list_sort (config_object_groups, (GCompareFunc) g_strcmp0);
+  config_template_groups = g_list_sort (config_template_groups, (GCompareFunc) g_strcmp0);
+  diff_sorted_lists (config_object_groups,
+                     config_template_groups,
+                     (GCompareFunc) compare_account_and_template_groups,
+                     &added,
+                     &removed,
+                     &unchanged);
+
+  for (l = added; l != NULL; l = l->next)
+    {
+      gboolean needs_update;
+      const gchar *id;
+      const gchar *template_group = l->data;
+      gchar *object_group = NULL;
+
+      key_file_data = g_hash_table_lookup (group_name_to_key_file_data, template_group);
+      g_assert_nonnull (key_file_data);
+
+      if (goa_utils_keyfile_get_boolean (key_file_data->key_file, template_group, "ForceRemove"))
+        continue;
+
+      g_debug ("Adding from template %s", template_group);
+
+      id = template_group_to_id (template_group);
+      object_group = g_strdup_printf ("Account %s", id);
+      g_warn_if_fail (!g_key_file_has_group (home_conf_key_file, object_group));
+
+      needs_update = goa_utils_keyfile_copy_group (key_file_data->key_file,
+                                                   template_group,
+                                                   home_conf_key_file,
+                                                   object_group);
+
+      if (needs_update)
+        {
+          g_key_file_set_boolean (home_conf_key_file, object_group, "IsLocked", TRUE);
+          g_hash_table_insert (key_files_to_update,
+                               g_strdup (self->home_conf_file_path),
+                               g_key_file_ref (home_conf_key_file));
+        }
+
+      g_free (object_group);
+    }
+
+  for (l = unchanged; l != NULL; l = l->next)
+    {
+      KeyFileData *object_key_file_data;
+      KeyFileData *template_key_file_data;
+      gboolean needs_update;
+      const gchar *id;
+      const gchar *object_group = l->data;
+      gchar *template_group = NULL;
+
+      object_key_file_data = g_hash_table_lookup (group_name_to_key_file_data, object_group);
+      g_assert_nonnull (object_key_file_data);
+
+      g_warn_if_fail (g_key_file_has_group (object_key_file_data->key_file, object_group));
+
+      id = account_group_to_id (object_group);
+      template_group = g_strdup_printf ("Template %s", id);
+
+      template_key_file_data = g_hash_table_lookup (group_name_to_key_file_data, template_group);
+      g_assert_nonnull (template_key_file_data);
+      g_assert_true (g_key_file_has_group (template_key_file_data->key_file, template_group));
+
+      if (goa_utils_keyfile_get_boolean (template_key_file_data->key_file, template_group, "ForceRemove"))
+        {
+          gboolean removed;
+
+          g_debug ("Template %s specifies ForceRemove, removing %s", template_group, object_group);
+
+          error = NULL;
+          needs_update = g_key_file_remove_group (object_key_file_data->key_file, object_group, &error);
+          if (error != NULL)
+            {
+              g_warning ("Error removing group %s from %s: %s (%s, %d)",
+                         object_group,
+                         key_file_data->path,
+                         error->message,
+                         g_quark_to_string (error->domain),
+                         error->code);
+              g_error_free (error);
+            }
+
+          if (needs_update)
+            {
+              g_hash_table_insert (key_files_to_update,
+                                   g_strdup (object_key_file_data->path),
+                                   g_key_file_ref (object_key_file_data->key_file));
+            }
+
+          removed = g_hash_table_remove (group_name_to_key_file_data, object_group);
+          g_warn_if_fail (removed);
+        }
+      else
+        {
+          g_debug ("Updating %s from template %s", object_group, template_group);
+
+          needs_update = goa_utils_keyfile_copy_group (template_key_file_data->key_file,
+                                                       template_group,
+                                                       object_key_file_data->key_file,
+                                                       object_group);
+
+          if (needs_update)
+            {
+              g_key_file_set_boolean (home_conf_key_file, object_group, "IsLocked", TRUE);
+              g_hash_table_insert (key_files_to_update,
+                                   g_strdup (object_key_file_data->path),
+                                   g_key_file_ref (object_key_file_data->key_file));
+            }
+        }
+
+      g_free (template_group);
+    }
+
+  g_hash_table_iter_init (&iter, key_files_to_update);
+  while (g_hash_table_iter_next (&iter, (gpointer *) &key_file_path, (gpointer *) &key_file))
+    {
+      error = NULL;
+      if (!g_key_file_save_to_file (key_file, key_file_path, &error))
+        {
+          g_prefix_error (&error, "Error writing key-value-file %s: ", key_file_path);
+          g_warning ("%s (%s, %d)", error->message, g_quark_to_string (error->domain), error->code);
+          g_error_free (error);
+        }
+    }
+
+  g_hash_table_unref (key_files_to_update);
+  g_key_file_unref (home_conf_key_file);
+  g_list_free (removed);
+  g_list_free (added);
+  g_list_free (unchanged);
+  g_list_free_full (config_object_groups, g_free);
+  g_list_free_full (config_template_groups, g_free);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 /* <internal>
  * goa_daemon_reload_configuration:
  * @self: A #GoaDaemon
@@ -821,6 +1028,11 @@ goa_daemon_reload_configuration (GoaDaemon *self)
 
   /* Read the main user config file at $HOME/.config/goa-1.0/accounts.conf */
   add_config_file (self, self->home_conf_file_path, group_name_to_key_file_data);
+
+  if (GOA_TEMPLATE_FILE != NULL && GOA_TEMPLATE_FILE[0] != '\0')
+    add_config_file (self, GOA_TEMPLATE_FILE, group_name_to_key_file_data);
+
+  process_template_entries (self, group_name_to_key_file_data);
 
   /* now process the group_name_to_key_file_data hash table */
   process_config_entries (self, group_name_to_key_file_data);
