@@ -592,7 +592,7 @@ goa_utils_keyfile_remove_key (GoaAccount *account, const gchar *key)
     }
 
  out:
-  g_key_file_free (key_file);
+  g_key_file_unref (key_file);
   g_free (group);
   g_free (path);
 }
@@ -659,7 +659,7 @@ goa_utils_keyfile_set_boolean (GoaAccount *account, const gchar *key, gboolean v
     }
 
  out:
-  g_key_file_free (key_file);
+  g_key_file_unref (key_file);
   g_free (group);
   g_free (path);
 }
@@ -726,7 +726,7 @@ goa_utils_keyfile_set_string (GoaAccount *account, const gchar *key, const gchar
     }
 
  out:
-  g_key_file_free (key_file);
+  g_key_file_unref (key_file);
   g_free (group);
   g_free (old_value);
   g_free (path);

@@ -471,7 +471,7 @@ add_config_file (GoaDaemon     *self,
                      error->message, g_quark_to_string (error->domain), error->code);
         }
       g_error_free (error);
-      g_key_file_free (key_file);
+      g_key_file_unref (key_file);
     }
   else
     {
@@ -856,7 +856,7 @@ goa_daemon_reload_configuration (GoaDaemon *self)
   process_config_entries (self, group_name_to_key_file_data);
 
   g_hash_table_unref (group_name_to_key_file_data);
-  g_list_free_full (key_files_to_free, (GDestroyNotify) g_key_file_free);
+  g_list_free_full (key_files_to_free, (GDestroyNotify) g_key_file_unref);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -1051,7 +1051,7 @@ get_all_providers_cb (GObject      *source,
   g_free (group);
   g_free (id);
   g_free (path);
-  g_clear_pointer (&key_file, (GDestroyNotify) g_key_file_free);
+  g_clear_pointer (&key_file, (GDestroyNotify) g_key_file_unref);
   g_object_unref (data->daemon);
   g_object_unref (data->manager);
   g_object_unref (data->invocation);
@@ -1264,7 +1264,7 @@ on_account_handle_remove (GoaAccount            *account,
  out:
   g_clear_object (&provider);
   g_clear_object (&task);
-  g_clear_pointer (&key_file, (GDestroyNotify) g_key_file_free);
+  g_clear_pointer (&key_file, (GDestroyNotify) g_key_file_unref);
   g_free (group);
   g_free (path);
   return TRUE; /* invocation was handled */

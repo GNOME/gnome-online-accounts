@@ -1500,7 +1500,7 @@ goa_util_lookup_keyfile_string (GoaObject    *object,
     }
 
  out:
-  g_key_file_free (key_file);
+  g_key_file_unref (key_file);
   g_free (group);
   g_free (path);
   return ret;
@@ -1553,7 +1553,7 @@ goa_util_lookup_keyfile_boolean (GoaObject    *object,
     }
 
  out:
-  g_key_file_free (key_file);
+  g_key_file_unref (key_file);
   g_free (group);
   g_free (path);
   return ret;
