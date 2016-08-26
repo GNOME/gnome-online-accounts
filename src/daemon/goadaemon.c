@@ -429,7 +429,7 @@ typedef struct
 static void
 key_file_data_free (KeyFileData *data)
 {
-  /* the key_file member is freed elsewhere */
+  g_key_file_unref (data->key_file);
   g_free (data->path);
   g_slice_free (KeyFileData, data);
 }
@@ -440,7 +440,7 @@ key_file_data_new (GKeyFile    *key_file,
 {
   KeyFileData *data;
   data = g_slice_new (KeyFileData);
-  data->key_file = key_file;
+  data->key_file = g_key_file_ref (key_file);
   data->path = g_strdup (path);
   return data;
 }
