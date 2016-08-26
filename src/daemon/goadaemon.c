@@ -589,33 +589,23 @@ update_account_object (GoaDaemon           *self,
                        GKeyFile            *key_file,
                        gboolean             just_added)
 {
-  GoaAccount *account;
-  GoaProvider *provider;
+  GoaAccount *account = NULL;
+  GoaProvider *provider = NULL;
   gboolean is_locked;
   gboolean is_temporary;
-  gboolean ret;
-  gchar *identity;
+  gboolean ret = FALSE;
+  gchar *identity = NULL;
   gchar *presentation_identity;
-  gchar *type;
-  gchar *name;
-  GIcon *icon;
-  gchar *serialized_icon;
+  gchar *type = NULL;
+  gchar *name = NULL;
+  GIcon *icon = NULL;
+  gchar *serialized_icon = NULL;
   GError *error;
 
   g_return_val_if_fail (GOA_IS_DAEMON (self), FALSE);
   g_return_val_if_fail (G_IS_DBUS_OBJECT_SKELETON (object), FALSE);
   g_return_val_if_fail (group != NULL, FALSE);
   g_return_val_if_fail (key_file != NULL, FALSE);
-
-  ret = FALSE;
-  account = NULL;
-  provider = NULL;
-  identity = NULL;
-  type = NULL;
-  account = NULL;
-  name = NULL;
-  icon = NULL;
-  serialized_icon = NULL;
 
   g_debug ("updating %s %d", g_dbus_object_get_object_path (G_DBUS_OBJECT (object)), just_added);
 
@@ -685,14 +675,13 @@ process_config_entries (GoaDaemon  *self,
   GHashTableIter iter;
   const gchar *group;
   KeyFileData *key_file_data;
-  GList *existing_object_paths;
-  GList *config_object_paths;
+  GList *existing_object_paths = NULL;
+  GList *config_object_paths = NULL;
   GList *added;
   GList *removed;
   GList *unchanged;
   GList *l;
 
-  existing_object_paths = NULL;
   {
     GList *existing_objects;
     existing_objects = g_dbus_object_manager_get_objects (G_DBUS_OBJECT_MANAGER (self->object_manager));
@@ -707,7 +696,6 @@ process_config_entries (GoaDaemon  *self,
     g_list_free_full (existing_objects, g_object_unref);
   }
 
-  config_object_paths = NULL;
   g_hash_table_iter_init (&iter, group_name_to_key_file_data);
   while (g_hash_table_iter_next (&iter, (gpointer*) &group, (gpointer*) &key_file_data))
     {
@@ -890,32 +878,23 @@ get_all_providers_cb (GObject      *source,
                       gpointer      user_data)
 {
   AddAccountData *data = user_data;
-  GoaProvider *provider;
-  GKeyFile *key_file;
+  GoaProvider *provider = NULL;
+  GKeyFile *key_file = NULL;
   GError *error;
-  GList *providers;
+  GList *providers = NULL;
   GList *l;
-  gchar *path;
-  gchar *id;
-  gchar *group;
-  gchar *key_file_data;
+  gchar *path = NULL;
+  gchar *id = NULL;
+  gchar *group = NULL;
+  gchar *key_file_data = NULL;
   gsize length;
   gsize n_credentials;
-  gchar *object_path;
+  gchar *object_path = NULL;
   GVariantIter iter;
   const gchar *key;
   const gchar *value;
 
   /* TODO: could check for @type */
-
-  provider = NULL;
-  key_file = NULL;
-  providers = NULL;
-  path = NULL;
-  id = NULL;
-  group = NULL;
-  key_file_data = NULL;
-  object_path = NULL;
 
   if (!goa_provider_get_all_finish (&providers, res, NULL))
     goto out;
@@ -1154,21 +1133,14 @@ on_account_handle_remove (GoaAccount            *account,
 {
   GoaDaemon *self = GOA_DAEMON (user_data);
   GoaObject *object;
-  GoaProvider *provider;
-  GKeyFile *key_file;
-  GTask *task;
+  GoaProvider *provider = NULL;
+  GKeyFile *key_file = NULL;
+  GTask *task = NULL;
   ObjectInvocationData *data;
-  const gchar *provider_type;
-  gchar *path;
-  gchar *group;
+  const gchar *provider_type = NULL;
+  gchar *path = NULL;
+  gchar *group = NULL;
   GError *error;
-
-  provider = NULL;
-  provider_type = NULL;
-  path = NULL;
-  group = NULL;
-  key_file = NULL;
-  task = NULL;
 
   if (goa_account_get_is_locked (account))
     {
