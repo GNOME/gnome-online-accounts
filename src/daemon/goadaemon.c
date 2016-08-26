@@ -395,14 +395,14 @@ diff_sorted_lists (GList *list1,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static const gchar *
-group_to_id (const gchar *group)
+account_group_to_id (const gchar *group)
 {
   g_return_val_if_fail (g_str_has_prefix (group, "Account "), NULL);
   return group + sizeof "Account " - 1;
 }
 
 static gchar *
-object_path_to_group (const gchar *object_path)
+account_object_path_to_group (const gchar *object_path)
 {
   g_return_val_if_fail (g_str_has_prefix (object_path, "/org/gnome/OnlineAccounts/Accounts/"), NULL);
   return g_strdup_printf ("Account %s", object_path + sizeof "/org/gnome/OnlineAccounts/Accounts/" - 1);
@@ -500,7 +500,7 @@ add_config_file (GoaDaemon     *self,
                   g_debug ("ignoring account \"%s\" in file %s because it's stale",
                            groups[n], path);
 
-                  id = group_to_id (groups[n]);
+                  id = account_group_to_id (groups[n]);
                   if (id == NULL)
                     {
                       g_warning ("Unable to get account ID from group: %s", groups[n]);
@@ -692,7 +692,7 @@ process_config_entries (GoaDaemon  *self,
       const gchar *id;
       gchar *object_path;
 
-      id = group_to_id (group);
+      id = account_group_to_id (group);
 
       /* create and validate object path */
       object_path = g_strdup_printf ("/org/gnome/OnlineAccounts/Accounts/%s", id);
@@ -736,7 +736,7 @@ process_config_entries (GoaDaemon  *self,
 
       g_debug ("adding %s", object_path);
 
-      group = object_path_to_group (object_path);
+      group = account_object_path_to_group (object_path);
       key_file_data = g_hash_table_lookup (group_name_to_key_file_data, group);
       g_warn_if_fail (key_file_data != NULL);
 
@@ -769,7 +769,7 @@ process_config_entries (GoaDaemon  *self,
 
       g_debug ("unchanged %s", object_path);
 
-      group = object_path_to_group (object_path);
+      group = account_object_path_to_group (object_path);
       key_file_data = g_hash_table_lookup (group_name_to_key_file_data, group);
       g_warn_if_fail (key_file_data != NULL);
 
