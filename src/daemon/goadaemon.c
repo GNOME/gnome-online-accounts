@@ -40,6 +40,7 @@ struct _GoaDaemon
   GFileMonitor *system_conf_dir_monitor;
   GFileMonitor *home_conf_file_monitor;
   GFileMonitor *home_conf_dir_monitor;
+  gchar *home_conf_file_path;
 
   GNetworkMonitor *network_monitor;
 
@@ -166,6 +167,7 @@ goa_daemon_finalize (GObject *object)
       g_object_unref (self->home_conf_file_monitor);
     }
 
+  g_free (self->home_conf_file_path);
   g_object_unref (self->manager);
   g_object_unref (self->object_manager);
   g_object_unref (self->connection);
@@ -315,11 +317,10 @@ goa_daemon_init (GoaDaemon *self)
   g_free (path);
 
   /* set up file monitoring */
-  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
-  self->home_conf_file_monitor = create_monitor (path, FALSE);
+  self->home_conf_file_path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
+  self->home_conf_file_monitor = create_monitor (self->home_conf_file_path, FALSE);
   if (self->home_conf_file_monitor != NULL)
     g_signal_connect (self->home_conf_file_monitor, "changed", G_CALLBACK (on_file_monitor_changed), self);
-  g_free (path);
 
   /* prime the list of accounts */
   goa_daemon_reload_configuration (self);
@@ -823,7 +824,6 @@ static void
 goa_daemon_reload_configuration (GoaDaemon *self)
 {
   GHashTable *group_name_to_key_file_data;
-  gchar *path;
 
   group_name_to_key_file_data = g_hash_table_new_full (g_str_hash,
                                                        g_str_equal,
@@ -831,9 +831,7 @@ goa_daemon_reload_configuration (GoaDaemon *self)
                                                        (GDestroyNotify) key_file_data_free);
 
   /* Read the main user config file at $HOME/.config/goa-1.0/accounts.conf */
-  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
-  add_config_file (self, path, group_name_to_key_file_data);
-  g_free (path);
+  add_config_file (self, self->home_conf_file_path, group_name_to_key_file_data);
 
   /* now process the group_name_to_key_file_data hash table */
   process_config_entries (self, group_name_to_key_file_data);
@@ -883,7 +881,6 @@ get_all_providers_cb (GObject      *source,
   GError *error;
   GList *providers = NULL;
   GList *l;
-  gchar *path = NULL;
   gchar *id = NULL;
   gchar *group = NULL;
   gchar *key_file_data = NULL;
@@ -926,9 +923,9 @@ get_all_providers_cb (GObject      *source,
     }
 
   key_file = g_key_file_new ();
-  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
+
   error = NULL;
-  if (!g_file_get_contents (path,
+  if (!g_file_get_contents (data->daemon->home_conf_file_path,
                             &key_file_data,
                             &length,
                             &error))
@@ -939,7 +936,7 @@ get_all_providers_cb (GObject      *source,
         }
       else
         {
-          g_prefix_error (&error, "Error loading file %s: ", path);
+          g_prefix_error (&error, "Error loading file %s: ", data->daemon->home_conf_file_path);
           g_dbus_method_invocation_take_error (data->invocation, error);
           goto out;
         }
@@ -951,7 +948,7 @@ get_all_providers_cb (GObject      *source,
           error = NULL;
           if (!g_key_file_load_from_data (key_file, key_file_data, length, G_KEY_FILE_KEEP_COMMENTS, &error))
             {
-              g_prefix_error (&error, "Error parsing key-value-file %s: ", path);
+              g_prefix_error (&error, "Error parsing key-value-file %s: ", data->daemon->home_conf_file_path);
               g_dbus_method_invocation_take_error (data->invocation, error);
               goto out;
             }
@@ -992,9 +989,9 @@ get_all_providers_cb (GObject      *source,
     }
 
   error = NULL;
-  if (!g_key_file_save_to_file (key_file, path, &error))
+  if (!g_key_file_save_to_file (key_file, data->daemon->home_conf_file_path, &error))
     {
-      g_prefix_error (&error, "Error writing key-value-file %s: ", path);
+      g_prefix_error (&error, "Error writing key-value-file %s: ", data->daemon->home_conf_file_path);
       g_dbus_method_invocation_take_error (data->invocation, error);
       goto out;
     }
@@ -1023,7 +1020,6 @@ get_all_providers_cb (GObject      *source,
   g_free (key_file_data);
   g_free (group);
   g_free (id);
-  g_free (path);
   g_clear_pointer (&key_file, (GDestroyNotify) g_key_file_unref);
   g_object_unref (data->daemon);
   g_object_unref (data->manager);
@@ -1138,7 +1134,6 @@ on_account_handle_remove (GoaAccount            *account,
   GTask *task = NULL;
   ObjectInvocationData *data;
   const gchar *provider_type = NULL;
-  gchar *path = NULL;
   gchar *group = NULL;
   GError *error;
 
@@ -1158,11 +1153,10 @@ on_account_handle_remove (GoaAccount            *account,
    */
 
   key_file = g_key_file_new ();
-  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
 
   error = NULL;
   if (!g_key_file_load_from_file (key_file,
-                                  path,
+                                  self->home_conf_file_path,
                                   G_KEY_FILE_KEEP_COMMENTS,
                                   &error))
     {
@@ -1180,9 +1174,9 @@ on_account_handle_remove (GoaAccount            *account,
     }
 
   error = NULL;
-  if (!g_key_file_save_to_file (key_file, path, &error))
+  if (!g_key_file_save_to_file (key_file, self->home_conf_file_path, &error))
     {
-      g_prefix_error (&error, "Error writing key-value-file %s: ", path);
+      g_prefix_error (&error, "Error writing key-value-file %s: ", self->home_conf_file_path);
       g_dbus_method_invocation_take_error (invocation, error);
       goto out;
     }
@@ -1232,7 +1226,6 @@ on_account_handle_remove (GoaAccount            *account,
   g_clear_object (&task);
   g_clear_pointer (&key_file, (GDestroyNotify) g_key_file_unref);
   g_free (group);
-  g_free (path);
   return TRUE; /* invocation was handled */
 }
 
