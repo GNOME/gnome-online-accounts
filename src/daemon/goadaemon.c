@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2011, 2012, 2015 Red Hat, Inc.
+ * Copyright (C) 2011, 2012, 2015, 2016 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -450,8 +450,7 @@ key_file_data_new (GKeyFile    *key_file,
 static void
 add_config_file (GoaDaemon     *self,
                  const gchar   *path,
-                 GHashTable    *group_name_to_key_file_data,
-                 GList        **key_files_to_free)
+                 GHashTable    *group_name_to_key_file_data)
 {
   GKeyFile *key_file;
   GError *error;
@@ -574,8 +573,6 @@ add_config_file (GoaDaemon     *self,
           g_error_free (error);
         }
     }
-
-  *key_files_to_free = g_list_prepend (*key_files_to_free, g_key_file_ref (key_file));
 
  out:
   g_key_file_unref (key_file);
@@ -837,11 +834,9 @@ process_config_entries (GoaDaemon  *self,
 static void
 goa_daemon_reload_configuration (GoaDaemon *self)
 {
-  GList *key_files_to_free;
   GHashTable *group_name_to_key_file_data;
   gchar *path;
 
-  key_files_to_free = NULL;
   group_name_to_key_file_data = g_hash_table_new_full (g_str_hash,
                                                        g_str_equal,
                                                        g_free,
@@ -849,14 +844,13 @@ goa_daemon_reload_configuration (GoaDaemon *self)
 
   /* Read the main user config file at $HOME/.config/goa-1.0/accounts.conf */
   path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
-  add_config_file (self, path, group_name_to_key_file_data, &key_files_to_free);
+  add_config_file (self, path, group_name_to_key_file_data);
   g_free (path);
 
   /* now process the group_name_to_key_file_data hash table */
   process_config_entries (self, group_name_to_key_file_data);
 
   g_hash_table_unref (group_name_to_key_file_data);
-  g_list_free_full (key_files_to_free, (GDestroyNotify) g_key_file_unref);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
