@@ -24,7 +24,7 @@ fi
 
 git submodule update --init --recursive
 
-cd telepathy-account-widgets
+cd $srcdir/telepathy-account-widgets
 NOCONFIGURE=1 sh autogen.sh
 cd ..
 
