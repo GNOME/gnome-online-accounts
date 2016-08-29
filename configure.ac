@@ -150,7 +150,7 @@ if test "$enable_backend" != "no"; then
     # telepathy-account-widgets
     prev_top_build_prefix=$ac_top_build_prefix
     prev_ac_configure_args=$ac_configure_args
-    ac_configure_args="$ac_configure_args --with-cheese=no --disable-gudev"
+    ac_configure_args="$ac_configure_args --with-cheese=no --disable-gudev --enable-ubuntu-online-accounts=no"
     # install the data together with the rest of GOA's data
     ac_configure_args="$ac_configure_args --with-pkgdatadir=${datadir}/gnome-online-accounts"
     # GOA ships its icons directly in ${datadir}/icons (usually /usr/share/icons/) and not
