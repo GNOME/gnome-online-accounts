@@ -93,6 +93,8 @@ gboolean         goa_utils_keyfile_copy_group (GKeyFile     *src_key_file,
                                                GKeyFile     *dest_key_file,
                                                const gchar  *dest_group_name);
 
+gboolean         goa_utils_keyfile_get_boolean (GKeyFile *key_file, const gchar *group_name, const gchar *key);
+
 void             goa_utils_keyfile_remove_key (GoaAccount *account, const gchar *key);
 
 void             goa_utils_keyfile_set_boolean (GoaAccount *account, const gchar *key, gboolean value);

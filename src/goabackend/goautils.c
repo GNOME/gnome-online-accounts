@@ -628,6 +628,32 @@ goa_utils_keyfile_copy_group (GKeyFile     *src_key_file,
   return ret_val;
 }
 
+gboolean
+goa_utils_keyfile_get_boolean (GKeyFile *key_file, const gchar *group_name, const gchar *key)
+{
+  GError *error;
+  gboolean ret;
+
+  error = NULL;
+  ret = g_key_file_get_boolean (key_file, group_name, key, &error);
+  if (error != NULL)
+    {
+      if (!g_error_matches (error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+        {
+          g_warning ("Error reading key %s from group %s in keyfile: %s (%s, %d)",
+                     key,
+                     group_name,
+                     error->message,
+                     g_quark_to_string (error->domain),
+                     error->code);
+        }
+
+      g_error_free (error);
+    }
+
+  return ret;
+}
+
 void
 goa_utils_keyfile_remove_key (GoaAccount *account, const gchar *key)
 {
