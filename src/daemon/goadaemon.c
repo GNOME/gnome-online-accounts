@@ -308,8 +308,10 @@ goa_daemon_init (GoaDaemon *self)
   g_dbus_object_manager_server_export (self->object_manager, G_DBUS_OBJECT_SKELETON (object));
   g_object_unref (object);
 
+  self->home_conf_file_path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
+
   /* create ~/.config/goa-1.0 directory */
-  path = g_strdup_printf ("%s/goa-1.0", g_get_user_config_dir ());
+  path = g_path_get_dirname (self->home_conf_file_path);
   if (g_mkdir_with_parents (path, 0755) != 0)
     {
       g_warning ("Error creating directory %s: %s", path, strerror (errno));
@@ -317,7 +319,6 @@ goa_daemon_init (GoaDaemon *self)
   g_free (path);
 
   /* set up file monitoring */
-  self->home_conf_file_path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
   self->home_conf_file_monitor = create_monitor (self->home_conf_file_path, FALSE);
   if (self->home_conf_file_monitor != NULL)
     g_signal_connect (self->home_conf_file_monitor, "changed", G_CALLBACK (on_file_monitor_changed), self);
