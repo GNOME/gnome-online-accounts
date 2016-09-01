@@ -468,7 +468,7 @@ add_config_file (GoaDaemon     *self,
                                   G_KEY_FILE_NONE,
                                   &error))
     {
-      if (!(error->domain == G_FILE_ERROR && error->code == G_FILE_ERROR_NOENT))
+      if (!g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
         {
           g_warning ("Error loading %s: %s (%s, %d)",
                      path,
