@@ -37,9 +37,7 @@ struct _GoaDaemon
 
   GDBusConnection *connection;
 
-  GFileMonitor *system_conf_dir_monitor;
   GFileMonitor *home_conf_file_monitor;
-  GFileMonitor *home_conf_dir_monitor;
   gchar *home_conf_file_path;
 
   GNetworkMonitor *network_monitor;
@@ -151,16 +149,6 @@ goa_daemon_finalize (GObject *object)
       g_source_remove (self->credentials_timeout_id);
     }
 
-  if (self->system_conf_dir_monitor != NULL)
-    {
-      g_signal_handlers_disconnect_by_func (self->system_conf_dir_monitor, on_file_monitor_changed, self);
-      g_object_unref (self->system_conf_dir_monitor);
-    }
-  if (self->home_conf_dir_monitor != NULL)
-    {
-      g_signal_handlers_disconnect_by_func (self->home_conf_dir_monitor, on_file_monitor_changed, self);
-      g_object_unref (self->home_conf_dir_monitor);
-    }
   if (self->home_conf_file_monitor != NULL)
     {
       g_signal_handlers_disconnect_by_func (self->home_conf_file_monitor, on_file_monitor_changed, self);
