@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-on"
 "line-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-03-03 09:31+0000\n"
-"PO-Revision-Date: 2016-03-03 21:54+0200\n"
+"POT-Creation-Date: 2016-08-25 19:15+0000\n"
+"PO-Revision-Date: 2016-09-08 18:53+0200\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -18,21 +18,21 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 2.0\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
-"2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 :"
+" 2);\n"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:838 ../src/daemon/goadaemon.c:1096
+#: ../src/daemon/goadaemon.c:949 ../src/daemon/goadaemon.c:1243
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Neizdevās atrast %s piegādātāju"
 
-#: ../src/daemon/goadaemon.c:1024
+#: ../src/daemon/goadaemon.c:1185
 msgid "IsLocked property is set for account"
 msgstr "Kontam ir iestatīta IsLocked īpašība"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1084
+#: ../src/daemon/goadaemon.c:1231
 msgid "ProviderType property is not set for account"
 msgstr "Kontam nav iestatīta ProviderType īpašība"
 
@@ -65,7 +65,7 @@ msgstr "Microsoft Exchange"
 #. * (%s, %d) is the error domain and code.
 #.
 #: ../src/goabackend/goaexchangeprovider.c:283
-#: ../src/goabackend/goalastfmprovider.c:280
+#: ../src/goabackend/goalastfmprovider.c:281
 #: ../src/goabackend/goaowncloudprovider.c:314
 #, c-format
 msgid "Invalid password with username ‘%s’ (%s, %d): "
@@ -79,7 +79,7 @@ msgstr "_E-pasts"
 #: ../src/goabackend/goaexchangeprovider.c:437
 #: ../src/goabackend/goaimapsmtpprovider.c:706
 #: ../src/goabackend/goaimapsmtpprovider.c:726
-#: ../src/goabackend/goalastfmprovider.c:420
+#: ../src/goabackend/goalastfmprovider.c:423
 #: ../src/goabackend/goaowncloudprovider.c:560
 msgid "_Password"
 msgstr "_Parole"
@@ -91,8 +91,8 @@ msgstr "_Pielāgots"
 #: ../src/goabackend/goaexchangeprovider.c:451
 #: ../src/goabackend/goaimapsmtpprovider.c:705
 #: ../src/goabackend/goaimapsmtpprovider.c:725
-#: ../src/goabackend/goakerberosprovider.c:734
-#: ../src/goabackend/goalastfmprovider.c:419
+#: ../src/goabackend/goakerberosprovider.c:738
+#: ../src/goabackend/goalastfmprovider.c:422
 #: ../src/goabackend/goaowncloudprovider.c:559
 msgid "User_name"
 msgstr "_Lietotājvārds"
@@ -105,24 +105,24 @@ msgstr "_Serveris"
 #. --
 #: ../src/goabackend/goaexchangeprovider.c:462
 #: ../src/goabackend/goaimapsmtpprovider.c:738
-#: ../src/goabackend/goakerberosprovider.c:739
-#: ../src/goabackend/goalastfmprovider.c:428
+#: ../src/goabackend/goakerberosprovider.c:743
+#: ../src/goabackend/goalastfmprovider.c:431
 #: ../src/goabackend/goaowncloudprovider.c:569
-#: ../src/goabackend/goatelepathyprovider.c:649
+#: ../src/goabackend/goatelepathyprovider.c:666
 msgid "_Cancel"
 msgstr "At_celt"
 
 #: ../src/goabackend/goaexchangeprovider.c:463
-#: ../src/goabackend/goakerberosprovider.c:740
-#: ../src/goabackend/goalastfmprovider.c:429
+#: ../src/goabackend/goakerberosprovider.c:744
+#: ../src/goabackend/goalastfmprovider.c:432
 #: ../src/goabackend/goaowncloudprovider.c:570
 msgid "C_onnect"
 msgstr "Savien_oties"
 
 #: ../src/goabackend/goaexchangeprovider.c:479
 #: ../src/goabackend/goaimapsmtpprovider.c:754
-#: ../src/goabackend/goakerberosprovider.c:756
-#: ../src/goabackend/goalastfmprovider.c:445
+#: ../src/goabackend/goakerberosprovider.c:760
+#: ../src/goabackend/goalastfmprovider.c:448
 #: ../src/goabackend/goaowncloudprovider.c:585
 msgid "Connecting…"
 msgstr "Savienojas…"
@@ -131,32 +131,32 @@ msgstr "Savienojas…"
 #: ../src/goabackend/goaexchangeprovider.c:779
 #: ../src/goabackend/goaimapsmtpprovider.c:916
 #: ../src/goabackend/goaimapsmtpprovider.c:951
-#: ../src/goabackend/goaimapsmtpprovider.c:1039
-#: ../src/goabackend/goaimapsmtpprovider.c:1302
-#: ../src/goabackend/goaimapsmtpprovider.c:1375
-#: ../src/goabackend/goakerberosprovider.c:1155
-#: ../src/goabackend/goalastfmprovider.c:640
-#: ../src/goabackend/goalastfmprovider.c:806
-#: ../src/goabackend/goamediaserverprovider.c:474
-#: ../src/goabackend/goaoauth2provider.c:1032
-#: ../src/goabackend/goaoauthprovider.c:861
+#: ../src/goabackend/goaimapsmtpprovider.c:1043
+#: ../src/goabackend/goaimapsmtpprovider.c:1310
+#: ../src/goabackend/goaimapsmtpprovider.c:1386
+#: ../src/goabackend/goakerberosprovider.c:1157
+#: ../src/goabackend/goalastfmprovider.c:643
+#: ../src/goabackend/goalastfmprovider.c:809
+#: ../src/goabackend/goamediaserverprovider.c:434
+#: ../src/goabackend/goaoauth2provider.c:1086
+#: ../src/goabackend/goaoauthprovider.c:862
 #: ../src/goabackend/goaowncloudprovider.c:696
 #: ../src/goabackend/goaowncloudprovider.c:910
-#: ../src/goabackend/goatelepathyprovider.c:459
-#: ../src/goabackend/goatelepathyprovider.c:508
-#: ../src/goabackend/goatelepathyprovider.c:683
+#: ../src/goabackend/goatelepathyprovider.c:490
+#: ../src/goabackend/goatelepathyprovider.c:529
+#: ../src/goabackend/goatelepathyprovider.c:697
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "Dialoglodziņš tika atmests"
 
 #: ../src/goabackend/goaexchangeprovider.c:622
 #: ../src/goabackend/goaexchangeprovider.c:807
-#: ../src/goabackend/goaimapsmtpprovider.c:981
-#: ../src/goabackend/goaimapsmtpprovider.c:1074
-#: ../src/goabackend/goaimapsmtpprovider.c:1326
-#: ../src/goabackend/goaimapsmtpprovider.c:1400
-#: ../src/goabackend/goalastfmprovider.c:674
-#: ../src/goabackend/goalastfmprovider.c:825
+#: ../src/goabackend/goaimapsmtpprovider.c:984
+#: ../src/goabackend/goaimapsmtpprovider.c:1081
+#: ../src/goabackend/goaimapsmtpprovider.c:1337
+#: ../src/goabackend/goaimapsmtpprovider.c:1414
+#: ../src/goabackend/goalastfmprovider.c:677
+#: ../src/goabackend/goalastfmprovider.c:828
 #: ../src/goabackend/goaowncloudprovider.c:738
 #: ../src/goabackend/goaowncloudprovider.c:931
 #, c-format
@@ -164,21 +164,21 @@ msgid "Dialog was dismissed (%s, %d): "
 msgstr "Dialoglodziņš tika atmests (%s, %d): "
 
 #: ../src/goabackend/goaexchangeprovider.c:635
-#: ../src/goabackend/goaimapsmtpprovider.c:994
-#: ../src/goabackend/goaimapsmtpprovider.c:1087
+#: ../src/goabackend/goaimapsmtpprovider.c:997
+#: ../src/goabackend/goaimapsmtpprovider.c:1094
 #: ../src/goabackend/goaowncloudprovider.c:751
 msgid "_Ignore"
 msgstr "_Ignorēt"
 
 #: ../src/goabackend/goaexchangeprovider.c:640
 #: ../src/goabackend/goaexchangeprovider.c:826
-#: ../src/goabackend/goaimapsmtpprovider.c:999
-#: ../src/goabackend/goaimapsmtpprovider.c:1092
-#: ../src/goabackend/goaimapsmtpprovider.c:1345
-#: ../src/goabackend/goaimapsmtpprovider.c:1419
-#: ../src/goabackend/goakerberosprovider.c:1262
-#: ../src/goabackend/goalastfmprovider.c:686
-#: ../src/goabackend/goalastfmprovider.c:842
+#: ../src/goabackend/goaimapsmtpprovider.c:1002
+#: ../src/goabackend/goaimapsmtpprovider.c:1099
+#: ../src/goabackend/goaimapsmtpprovider.c:1356
+#: ../src/goabackend/goaimapsmtpprovider.c:1433
+#: ../src/goabackend/goakerberosprovider.c:1264
+#: ../src/goabackend/goalastfmprovider.c:689
+#: ../src/goabackend/goalastfmprovider.c:845
 #: ../src/goabackend/goaowncloudprovider.c:756
 #: ../src/goabackend/goaowncloudprovider.c:950
 msgid "_Try Again"
@@ -189,15 +189,15 @@ msgstr "Mēģinā_t vēlreiz"
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Kļūda savienojoties ar Microsoft Exchange serveri"
 
-#: ../src/goabackend/goafacebookprovider.c:76
+#: ../src/goabackend/goafacebookprovider.c:78
 msgid "Facebook"
 msgstr "Facebook"
 
-#: ../src/goabackend/goafacebookprovider.c:215
-#: ../src/goabackend/goaflickrprovider.c:183
-#: ../src/goabackend/goafoursquareprovider.c:189
-#: ../src/goabackend/goagoogleprovider.c:226
-#: ../src/goabackend/goawindowsliveprovider.c:196
+#: ../src/goabackend/goafacebookprovider.c:208
+#: ../src/goabackend/goaflickrprovider.c:184
+#: ../src/goabackend/goafoursquareprovider.c:191
+#: ../src/goabackend/goagoogleprovider.c:219
+#: ../src/goabackend/goawindowsliveprovider.c:188
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
@@ -206,53 +206,53 @@ msgstr ""
 "(%s)"
 
 #. TODO: more specific
-#: ../src/goabackend/goafacebookprovider.c:234
-#: ../src/goabackend/goafacebookprovider.c:246
-#: ../src/goabackend/goafacebookprovider.c:259
-#: ../src/goabackend/goaflickrprovider.c:202
-#: ../src/goabackend/goaflickrprovider.c:214
-#: ../src/goabackend/goaflickrprovider.c:224
-#: ../src/goabackend/goaflickrprovider.c:234
-#: ../src/goabackend/goaflickrprovider.c:244
-#: ../src/goabackend/goafoursquareprovider.c:208
-#: ../src/goabackend/goafoursquareprovider.c:220
-#: ../src/goabackend/goafoursquareprovider.c:231
-#: ../src/goabackend/goafoursquareprovider.c:242
-#: ../src/goabackend/goafoursquareprovider.c:253
-#: ../src/goabackend/goafoursquareprovider.c:264
-#: ../src/goabackend/goagoogleprovider.c:245
-#: ../src/goabackend/goagoogleprovider.c:257
-#: ../src/goabackend/goalastfmprovider.c:211
-#: ../src/goabackend/goalastfmprovider.c:220
-#: ../src/goabackend/goalastfmprovider.c:230
-#: ../src/goabackend/goalastfmprovider.c:237
-#: ../src/goabackend/goalastfmprovider.c:503
-#: ../src/goabackend/goalastfmprovider.c:512
-#: ../src/goabackend/goalastfmprovider.c:527
-#: ../src/goabackend/goalastfmprovider.c:534
-#: ../src/goabackend/goaoauth2provider.c:699
-#: ../src/goabackend/goaoauth2provider.c:729
-#: ../src/goabackend/goaoauth2provider.c:741 ../src/goabackend/goautils.c:153
-#: ../src/goabackend/goawindowsliveprovider.c:215
-#: ../src/goabackend/goawindowsliveprovider.c:227
-#: ../src/goabackend/goawindowsliveprovider.c:239
+#: ../src/goabackend/goafacebookprovider.c:227
+#: ../src/goabackend/goafacebookprovider.c:239
+#: ../src/goabackend/goafacebookprovider.c:252
+#: ../src/goabackend/goaflickrprovider.c:203
+#: ../src/goabackend/goaflickrprovider.c:215
+#: ../src/goabackend/goaflickrprovider.c:225
+#: ../src/goabackend/goaflickrprovider.c:235
+#: ../src/goabackend/goaflickrprovider.c:245
+#: ../src/goabackend/goafoursquareprovider.c:210
+#: ../src/goabackend/goafoursquareprovider.c:222
+#: ../src/goabackend/goafoursquareprovider.c:233
+#: ../src/goabackend/goafoursquareprovider.c:244
+#: ../src/goabackend/goafoursquareprovider.c:255
+#: ../src/goabackend/goafoursquareprovider.c:266
+#: ../src/goabackend/goagoogleprovider.c:238
+#: ../src/goabackend/goagoogleprovider.c:250
+#: ../src/goabackend/goalastfmprovider.c:212
+#: ../src/goabackend/goalastfmprovider.c:221
+#: ../src/goabackend/goalastfmprovider.c:231
+#: ../src/goabackend/goalastfmprovider.c:238
+#: ../src/goabackend/goalastfmprovider.c:506
+#: ../src/goabackend/goalastfmprovider.c:515
+#: ../src/goabackend/goalastfmprovider.c:530
+#: ../src/goabackend/goalastfmprovider.c:537
+#: ../src/goabackend/goaoauth2provider.c:743
+#: ../src/goabackend/goaoauth2provider.c:773
+#: ../src/goabackend/goaoauth2provider.c:785 ../src/goabackend/goautils.c:311
+#: ../src/goabackend/goawindowsliveprovider.c:207
+#: ../src/goabackend/goawindowsliveprovider.c:219
+#: ../src/goabackend/goawindowsliveprovider.c:231
 #, c-format
 msgid "Could not parse response"
 msgstr "Neizdevās parsēt atbildi"
 
-#: ../src/goabackend/goaflickrprovider.c:77
+#: ../src/goabackend/goaflickrprovider.c:78
 msgid "Flickr"
 msgstr "Flickr"
 
-#: ../src/goabackend/goaflickrprovider.c:321
+#: ../src/goabackend/goaflickrprovider.c:322
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "Sistēmas laiks nav derīgs. Pārbaudiet datuma un laika iestatījumus."
 
-#: ../src/goabackend/goafoursquareprovider.c:77
+#: ../src/goabackend/goafoursquareprovider.c:79
 msgid "Foursquare"
 msgstr "Foursquare"
 
-#: ../src/goabackend/goagoogleprovider.c:77
+#: ../src/goabackend/goagoogleprovider.c:78
 msgid "Google"
 msgstr "Google"
 
@@ -264,8 +264,8 @@ msgstr "Serviss nav pieejams"
 
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:115
-#: ../src/goabackend/goalastfmprovider.c:520
-#: ../src/goabackend/goasmtpauth.c:113 ../src/goabackend/goautils.c:584
+#: ../src/goabackend/goalastfmprovider.c:523
+#: ../src/goabackend/goasmtpauth.c:113 ../src/goabackend/goautils.c:786
 #, c-format
 msgid "Authentication failed"
 msgstr "Neizdevās autentificēties"
@@ -335,125 +335,123 @@ msgid "SMTP _Server"
 msgstr "SMTP _serveris"
 
 #: ../src/goabackend/goaimapsmtpprovider.c:739
-#: ../src/goabackend/goaimapsmtpprovider.c:1020
-#: ../src/goabackend/goaimapsmtpprovider.c:1355
+#: ../src/goabackend/goaimapsmtpprovider.c:1023
+#: ../src/goabackend/goaimapsmtpprovider.c:1366
 msgid "_Forward"
 msgstr "Uz _priekšu"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1004
-#: ../src/goabackend/goaimapsmtpprovider.c:1338
+#: ../src/goabackend/goaimapsmtpprovider.c:1007
+#: ../src/goabackend/goaimapsmtpprovider.c:1349
 msgid "Error connecting to IMAP server"
 msgstr "Kļūda savienojoties ar IMAP serveri"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1097
-#: ../src/goabackend/goaimapsmtpprovider.c:1412
+#: ../src/goabackend/goaimapsmtpprovider.c:1104
+#: ../src/goabackend/goaimapsmtpprovider.c:1426
 msgid "Error connecting to SMTP server"
 msgstr "Kļūda savienojoties ar SMTP serveri"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1510
+#: ../src/goabackend/goaimapsmtpprovider.c:1534
 msgid "E-mail"
 msgstr "E-pasts"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1514
+#: ../src/goabackend/goaimapsmtpprovider.c:1538
 msgid "Name"
 msgstr "Vārds"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1524
-#: ../src/goabackend/goaimapsmtpprovider.c:1528
+#: ../src/goabackend/goaimapsmtpprovider.c:1548
+#: ../src/goabackend/goaimapsmtpprovider.c:1552
 msgid "IMAP"
 msgstr "IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1539
-#: ../src/goabackend/goaimapsmtpprovider.c:1543
+#: ../src/goabackend/goaimapsmtpprovider.c:1563
+#: ../src/goabackend/goaimapsmtpprovider.c:1567
 msgid "SMTP"
 msgstr "SMTP"
 
-#: ../src/goabackend/goakerberosprovider.c:99
+#: ../src/goabackend/goakerberosprovider.c:101
 msgid "Enterprise Login (Kerberos)"
 msgstr "Uzņēmuma lietotājvārds (Kerberos)"
 
-#: ../src/goabackend/goakerberosprovider.c:293
+#: ../src/goabackend/goakerberosprovider.c:296
 #, c-format
-#| msgid "IsLocked property is set for account"
 msgid "Ticketing is disabled for account"
 msgstr "Kontam ir izslēgta biļetēšana"
 
-#: ../src/goabackend/goakerberosprovider.c:318
+#: ../src/goabackend/goakerberosprovider.c:321
 #, c-format
 msgid "Could not find saved credentials for principal ‘%s’ in keyring"
 msgstr "Atslēgu saišķī netika atrasti akreditācijas dati vadītājam “%s”"
 
-#: ../src/goabackend/goakerberosprovider.c:331
+#: ../src/goabackend/goakerberosprovider.c:334
 #, c-format
 msgid "Did not find password for principal ‘%s’ in credentials"
 msgstr "Akreditācijas datos neatrada paroli vadītājam “%s”"
 
-#: ../src/goabackend/goakerberosprovider.c:726
+#: ../src/goabackend/goakerberosprovider.c:730
 msgid "_Domain"
 msgstr "_Domēns"
 
-#: ../src/goabackend/goakerberosprovider.c:727
+#: ../src/goabackend/goakerberosprovider.c:731
 msgid "Enterprise domain or realm name"
 msgstr "Uzņēmuma domēs vai nogabala nosaukums"
 
-#: ../src/goabackend/goakerberosprovider.c:963
-#: ../src/goaidentity/goaidentityservice.c:1125
+#: ../src/goabackend/goakerberosprovider.c:973
+#: ../src/goaidentity/goaidentityservice.c:1127
 msgid "Log In to Realm"
 msgstr "Ierakstīties nogabalā"
 
-#: ../src/goabackend/goakerberosprovider.c:964
+#: ../src/goabackend/goakerberosprovider.c:974
 msgid "Please enter your password below."
 msgstr "Lūdzu, ievadiet savu paroli zemāk."
 
-#: ../src/goabackend/goakerberosprovider.c:965
+#: ../src/goabackend/goakerberosprovider.c:975
 msgid "Remember this password"
 msgstr "Atcerēties šo paroli"
 
-#: ../src/goabackend/goakerberosprovider.c:1107
+#: ../src/goabackend/goakerberosprovider.c:1109
 #, c-format
 msgid "The domain is not valid"
 msgstr "Domēns nav derīgs"
 
-#: ../src/goabackend/goakerberosprovider.c:1257
+#: ../src/goabackend/goakerberosprovider.c:1259
 msgid "Error connecting to enterprise identity server"
 msgstr "Kļūda savienojoties ar uzņēmuma identitātes serveri"
 
-#: ../src/goabackend/goakerberosprovider.c:1522
+#: ../src/goabackend/goakerberosprovider.c:1596
 #, c-format
 msgid "Identity service returned invalid key"
 msgstr "Identitātes serviss atgrieza nederīgu atslēgu"
 
-#: ../src/goabackend/goalastfmprovider.c:64
+#: ../src/goabackend/goalastfmprovider.c:65
 msgid "Last.fm"
 msgstr "Last.fm"
 
-#: ../src/goabackend/goalastfmprovider.c:688
-#: ../src/goabackend/goalastfmprovider.c:836
-#| msgid "Error connecting to IMAP server"
+#: ../src/goabackend/goalastfmprovider.c:691
+#: ../src/goabackend/goalastfmprovider.c:839
 msgid "Error connecting to Last.fm"
 msgstr "Kļūda savienojoties ar Last.fm"
 
-#: ../src/goabackend/goamediaserverprovider.c:76
+#: ../src/goabackend/goamediaserverprovider.c:77
 msgid "Media Server"
 msgstr "Mediju serveris"
 
-#: ../src/goabackend/goamediaserverprovider.c:370
+#: ../src/goabackend/goamediaserverprovider.c:330
 msgid ""
 "Personal content can be added to your applications through a media server "
 "account."
 msgstr ""
 "Personālo saturu var pievienot pie savas lietotnes caur mediju servera kontu."
 
-#: ../src/goabackend/goamediaserverprovider.c:384
+#: ../src/goabackend/goamediaserverprovider.c:343
 msgid "Available Media Servers"
 msgstr "Pieejamie mediju serveri"
 
-#: ../src/goabackend/goamediaserverprovider.c:414
+#: ../src/goabackend/goamediaserverprovider.c:374
 msgid "No media servers found"
 msgstr "Nav atrastu mediju serveru"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:675
+#: ../src/goabackend/goaoauth2provider.c:719
 #: ../src/goabackend/goaoauthprovider.c:559
 #, c-format
 msgid ""
@@ -462,38 +460,38 @@ msgstr ""
 "Kad pieprasīja piekļuves marķieri, tika gaidīts statuss 200, tā vietā saņēma "
 "statusu %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:841
+#: ../src/goabackend/goaoauth2provider.c:893
 msgid "Authorization response: "
 msgstr "Pilnvarošanas atbilde:"
 
-#: ../src/goabackend/goaoauth2provider.c:911
+#: ../src/goabackend/goaoauth2provider.c:963
 #, c-format
 msgid "Authorization response: %s"
 msgstr "Pilnvarošanas atbilde: %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1058
-#: ../src/goabackend/goaoauthprovider.c:892
+#: ../src/goabackend/goaoauth2provider.c:1112
+#: ../src/goabackend/goaoauthprovider.c:893
 msgid "Error getting an Access Token: "
 msgstr "Kļūda, saņemto pieejas marķieri: "
 
-#: ../src/goabackend/goaoauth2provider.c:1073
-#: ../src/goabackend/goaoauthprovider.c:905
+#: ../src/goabackend/goaoauth2provider.c:1127
+#: ../src/goabackend/goaoauthprovider.c:906
 msgid "Error getting identity: "
 msgstr "Kļūda, saņemot identitāti: "
 
-#: ../src/goabackend/goaoauth2provider.c:1290
-#: ../src/goabackend/goaoauthprovider.c:1209
+#: ../src/goabackend/goaoauth2provider.c:1344
+#: ../src/goabackend/goaoauthprovider.c:1210
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Tika prasīts, lai ierakstās kā %s, bet ierakstījās kā %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1452
+#: ../src/goabackend/goaoauth2provider.c:1506
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Akreditācijas dati nesatur access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1491
-#: ../src/goabackend/goaoauthprovider.c:1437
+#: ../src/goabackend/goaoauth2provider.c:1545
+#: ../src/goabackend/goaoauthprovider.c:1438
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Neizdevās atsvaidzināt piekļuves marķieri (%s, %d): "
@@ -521,7 +519,7 @@ msgstr ""
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "Atbildē trūkts request_token vai request_token_secret galveņu"
 
-#: ../src/goabackend/goaoauthprovider.c:1393
+#: ../src/goabackend/goaoauthprovider.c:1394
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Akreditācijas dati nesatur access_token vai access_token_secret"
@@ -535,71 +533,77 @@ msgstr "ownCloud"
 msgid "Error connecting to ownCloud server"
 msgstr "Kļūda savienojoties ar ownCloud serveri"
 
-#: ../src/goabackend/goapocketprovider.c:69
+#: ../src/goabackend/goapocketprovider.c:73
 msgid "Pocket"
 msgstr "Pocket"
 
 #. TODO: more specific
-#: ../src/goabackend/goapocketprovider.c:218
+#: ../src/goabackend/goapocketprovider.c:248
 #, c-format
 msgid "No username or access_token"
 msgstr "Nav lietotājvārda vai piekļuves marķiera"
 
-#: ../src/goabackend/goaprovider.c:479
+#: ../src/goabackend/goaprovider.c:120
 msgid "_Mail"
 msgstr "Pasta_m"
 
-#: ../src/goabackend/goaprovider.c:484
+#: ../src/goabackend/goaprovider.c:125
 msgid "Cale_ndar"
 msgstr "Kale_ndāram"
 
-#: ../src/goabackend/goaprovider.c:489
+#: ../src/goabackend/goaprovider.c:130
 msgid "_Contacts"
 msgstr "_Kontaktiem"
 
-#: ../src/goabackend/goaprovider.c:494
+#: ../src/goabackend/goaprovider.c:135
+#: ../src/goabackend/goatelepathyprovider.c:961
 msgid "C_hat"
 msgstr "Tē_rzēšanai"
 
-#: ../src/goabackend/goaprovider.c:499
+#: ../src/goabackend/goaprovider.c:140
 msgid "_Documents"
 msgstr "_Dokumentiem"
 
-#: ../src/goabackend/goaprovider.c:504
+#: ../src/goabackend/goaprovider.c:145
 msgid "M_usic"
 msgstr "Mū_zika"
 
-#: ../src/goabackend/goaprovider.c:509
+#: ../src/goabackend/goaprovider.c:150
 msgid "_Photos"
 msgstr "_Fotogrāfijām"
 
-#: ../src/goabackend/goaprovider.c:514
+#: ../src/goabackend/goaprovider.c:155
 msgid "_Files"
 msgstr "_Datnēm"
 
-#: ../src/goabackend/goaprovider.c:519
+#: ../src/goabackend/goaprovider.c:160
 msgid "Network _Resources"
 msgstr "Tīkla _resursi"
 
-#: ../src/goabackend/goaprovider.c:524
+#: ../src/goabackend/goaprovider.c:165
 msgid "_Read Later"
 msgstr "_Lasīt vēlāk"
 
-#: ../src/goabackend/goaprovider.c:529
+#: ../src/goabackend/goaprovider.c:170
 msgid "Prin_ters"
 msgstr "Prin_teri"
 
-#: ../src/goabackend/goaprovider.c:534
+#: ../src/goabackend/goaprovider.c:175
 msgid "_Maps"
 msgstr "_Kartes"
 
 #. Translators: This is a label for a series of
 #. * options switches. For example: “Use for Mail”.
-#: ../src/goabackend/goaprovider.c:563
+#: ../src/goabackend/goaprovider.c:601
+#: ../src/goabackend/goatelepathyprovider.c:959
 msgid "Use for"
 msgstr "Izmantot"
 
-#: ../src/goabackend/goaprovider.c:802
+#: ../src/goabackend/goaprovider.c:858
+msgid "Account is disabled"
+msgstr "Konts ir izslēgts"
+
+#: ../src/goabackend/goaprovider.c:881
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync nav implementēta tipam %s"
@@ -645,115 +649,126 @@ msgstr "Nevar veikt SMTP autentificēšanu bez paroles"
 msgid "Unknown authentication mechanism"
 msgstr "Nezināms autentifikācijas mehānisms"
 
-#: ../src/goabackend/goatelepathyprovider.c:180
+#: ../src/goabackend/goatelepathyprovider.c:187
 #, c-format
 msgid "Telepathy chat account not found"
 msgstr "Nav atrasts Telepathy tērzēšanas konts"
 
-#: ../src/goabackend/goatelepathyprovider.c:380
-#, c-format
-msgid "Failed to initialize a GOA client"
-msgstr "Neizdevās inicializēt GOA klientu"
-
-#: ../src/goabackend/goatelepathyprovider.c:420
+#: ../src/goabackend/goatelepathyprovider.c:449
 #, c-format
 msgid "Failed to create a user interface for %s"
 msgstr "Neizdevās izveidot %s lietotāja saskarni"
 
-#: ../src/goabackend/goatelepathyprovider.c:535
+#: ../src/goabackend/goatelepathyprovider.c:555
 msgid "Connection Settings"
 msgstr "Savienojuma iestatījumi"
 
-#: ../src/goabackend/goatelepathyprovider.c:644
+#: ../src/goabackend/goatelepathyprovider.c:661
 msgid "Personal Details"
 msgstr "Personīgā informācija"
 
-#: ../src/goabackend/goatelepathyprovider.c:650
+#: ../src/goabackend/goatelepathyprovider.c:667
 msgid "_OK"
 msgstr "_Labi"
 
-#: ../src/goabackend/goatelepathyprovider.c:854
+#: ../src/goabackend/goatelepathyprovider.c:913
 msgid "Cannot save the connection parameters"
 msgstr "Nevar saglabāt savienojuma parametrus"
 
-#: ../src/goabackend/goatelepathyprovider.c:867
+#: ../src/goabackend/goatelepathyprovider.c:926
 msgid "Cannot save your personal information on the server"
 msgstr "Uz servera nevar saglabāt jūsu personīgo informāciju"
 
 #. Connection Settings button
-#: ../src/goabackend/goatelepathyprovider.c:893
+#: ../src/goabackend/goatelepathyprovider.c:966
 msgid "_Connection Settings"
 msgstr "_Savienojuma iestatījumi"
 
 #. Edit Personal Information button
-#: ../src/goabackend/goatelepathyprovider.c:897
+#: ../src/goabackend/goatelepathyprovider.c:970
 msgid "_Personal Details"
 msgstr "_Personīgā informācija"
 
-#: ../src/goabackend/goautils.c:120
+#: ../src/goabackend/goautils.c:93
+msgid "Error logging into the account"
+msgstr "Kļūda, ierakstoties kontā"
+
+#: ../src/goabackend/goautils.c:137
+#| msgid "The certificate has expired."
+msgid "Credentials have expired."
+msgstr "Pilnvaras termiņš ir beidzies."
+
+#: ../src/goabackend/goautils.c:141
+msgid "Sign in to enable this account."
+msgstr "Ierakstieties, lai aktivētu šo kontu."
+
+#: ../src/goabackend/goautils.c:146
+msgid "_Sign In"
+msgstr "Ierak_stīties"
+
+#: ../src/goabackend/goautils.c:278
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "%s konts jau eksistē priekš %s"
 
 #. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:170
+#: ../src/goabackend/goautils.c:328
 #, c-format
 msgid "%s account"
 msgstr "%s konts"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:214
+#: ../src/goabackend/goautils.c:386
 msgid "Failed to delete credentials from the keyring"
 msgstr "Neizdevās izdzēst akreditācijas datus no atslēgu saišķa"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:266
+#: ../src/goabackend/goautils.c:438
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Neizdevās saņemt akreditācijas datus no atslēgu saišķa"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:276
+#: ../src/goabackend/goautils.c:448
 msgid "No credentials found in the keyring"
 msgstr "Neizdevās atrast akreditācijas datus atslēgu saišķī"
 
-#: ../src/goabackend/goautils.c:289
+#: ../src/goabackend/goautils.c:461
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Kļūda, pasējot rezultātu, kas iegūts no atslēgu saišķa: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:332
+#: ../src/goabackend/goautils.c:504
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "GOA %s akreditācijas dati identitātei %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:349
+#: ../src/goabackend/goautils.c:521
 msgid "Failed to store credentials in the keyring"
 msgstr "Neizdevās noglabāt akreditācijas datus atslēgu saišķī"
 
-#: ../src/goabackend/goautils.c:571
-#| msgid "Cannot save the connection parameters"
+#: ../src/goabackend/goautils.c:773
 msgid "Cannot resolve hostname"
 msgstr "Nevar atšķetināt resursdatora nosaukumu"
 
-#: ../src/goabackend/goautils.c:575
+#: ../src/goabackend/goautils.c:777
 msgid "Cannot resolve proxy hostname"
 msgstr "Nevar atšķetināt starpnieka servera nosaukumu"
 
-#: ../src/goabackend/goautils.c:580
+#: ../src/goabackend/goautils.c:782
 msgid "Cannot find WebDAV endpoint"
 msgstr "Nevar atrast WebDAV beigu punktu"
 
-#: ../src/goabackend/goautils.c:589
+#: ../src/goabackend/goautils.c:791
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Kods: %u — negaidīta atbilde no servera"
 
-#: ../src/goabackend/goautils.c:605
+#: ../src/goabackend/goautils.c:807
 msgid "The signing certificate authority is not known."
 msgstr "Parakstošā sertifikātu institūcija nav zināma."
 
-#: ../src/goabackend/goautils.c:609
+#: ../src/goabackend/goautils.c:811
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
@@ -761,28 +776,28 @@ msgstr ""
 "Sertifikāts neatbilst gaidītajai vietnes identitātei, no kuras tas tika "
 "saņemts."
 
-#: ../src/goabackend/goautils.c:614
+#: ../src/goabackend/goautils.c:816
 msgid "The certificate’s activation time is still in the future."
 msgstr "Sertifikāta aktivizēšanas laiks vēl aizvien ir nākotnē."
 
-#: ../src/goabackend/goautils.c:618
+#: ../src/goabackend/goautils.c:820
 msgid "The certificate has expired."
 msgstr "Sertifikāta derīgums ir beidzies."
 
-#: ../src/goabackend/goautils.c:622
+#: ../src/goabackend/goautils.c:824
 msgid "The certificate has been revoked."
 msgstr "Sertifikāts tika atsaukts."
 
-#: ../src/goabackend/goautils.c:626
+#: ../src/goabackend/goautils.c:828
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Sertifikāta algoritms tiek uzskatīts par nedrošu."
 
-#: ../src/goabackend/goautils.c:630
+#: ../src/goabackend/goautils.c:832
 msgid "Invalid certificate."
 msgstr "Nederīgs sertifikāts."
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:665
+#: ../src/goabackend/goautils.c:867
 #, c-format
 msgid "Did not find %s with identity ‘%s’ in credentials"
 msgstr "Akreditācijas datos neizdevās atrast %s ar identitāti “%s”"
@@ -793,76 +808,75 @@ msgstr "Akreditācijas datos neizdevās atrast %s ar identitāti “%s”"
 msgid "Loading “%s”…"
 msgstr "Ielādē “%s”…"
 
-#: ../src/goabackend/goawindowsliveprovider.c:78
-#| msgid "Microsoft Exchange"
+#: ../src/goabackend/goawindowsliveprovider.c:79
 msgid "Microsoft Account"
 msgstr "Microsoft konts"
 
-#: ../src/goaidentity/goaidentityservice.c:378
+#: ../src/goaidentity/goaidentityservice.c:370
 msgid "initial secret passed before secret key exchange"
 msgstr "sākotnējais noslēpums tika padots pirms slepeno atslēgu apmaiņas"
 
-#: ../src/goaidentity/goaidentityservice.c:574
+#: ../src/goaidentity/goaidentityservice.c:567
 msgid "Initial secret key is invalid"
 msgstr "Sākotnējā slepenā atslēga nav derīga"
 
-#: ../src/goaidentity/goaidentityservice.c:1130
+#: ../src/goaidentity/goaidentityservice.c:1132
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr ""
 "Lai jūs varētu ierakstīties, tīkla nogabalam %s vajag papildu informāciju"
 
-#: ../src/goaidentity/goakerberosidentity.c:254
-#: ../src/goaidentity/goakerberosidentity.c:263
-#: ../src/goaidentity/goakerberosidentity.c:642
+#: ../src/goaidentity/goakerberosidentity.c:276
+#: ../src/goaidentity/goakerberosidentity.c:285
+#: ../src/goaidentity/goakerberosidentity.c:713
 msgid "Could not find identity in credential cache: %k"
 msgstr "Nevarēja atrast identitāti akreditācijas datu kešā — %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:656
+#: ../src/goaidentity/goakerberosidentity.c:727
 msgid "Could not find identity credentials in cache: %k"
 msgstr "Nevarēja atrast identitātes akreditācijas datus kešā — %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:700
+#: ../src/goaidentity/goakerberosidentity.c:779
 msgid "Could not sift through identity credentials in cache: %k"
 msgstr "Nevarēja iziet cauri identitātes akreditācijas datiem kešā — %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:718
+#: ../src/goaidentity/goakerberosidentity.c:797
 msgid "Could not finish up sifting through identity credentials in cache: %k"
 msgstr ""
 "Nevarēja pabeigt iziet cauri identitātes akreditācijas datiem kešā — %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1013
+#: ../src/goaidentity/goakerberosidentity.c:1111
 #, c-format
 msgid "No associated identification found"
 msgstr "Nav atrasta saistīta identitāte"
 
-#: ../src/goaidentity/goakerberosidentity.c:1096
+#: ../src/goaidentity/goakerberosidentity.c:1194
 msgid "Could not create credential cache: %k"
 msgstr "Neizdevās izveidot akreditācijas datu kešu — %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1130
+#: ../src/goaidentity/goakerberosidentity.c:1228
 msgid "Could not initialize credentials cache: %k"
 msgstr "Nevarēja inicializēt akreditācijas datu kešu — %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1147
+#: ../src/goaidentity/goakerberosidentity.c:1245
 msgid "Could not store new credentials in credentials cache: %k"
 msgstr "Neizdevās noglabāt jaunus akreditācijas datus kešā — %s"
 
-#: ../src/goaidentity/goakerberosidentity.c:1436
+#: ../src/goaidentity/goakerberosidentity.c:1540
 #, c-format
 msgid "Could not renew identity: Not signed in"
 msgstr "Nevarēja atjaunot identitāti — nav ierakstījies"
 
-#: ../src/goaidentity/goakerberosidentity.c:1448
+#: ../src/goaidentity/goakerberosidentity.c:1552
 msgid "Could not renew identity: %k"
 msgstr "Nevarēja atjaunot identitāti — %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1465
+#: ../src/goaidentity/goakerberosidentity.c:1569
 msgid "Could not get new credentials to renew identity %s: %k"
 msgstr ""
 "Nevarēja saņemt jaunus akreditācijas datus, lai atjaunotu identitāti %s — %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1507
+#: ../src/goaidentity/goakerberosidentity.c:1611
 msgid "Could not erase identity: %k"
 msgstr "Nevarēja izdzēst identitāti — %k"
 
@@ -870,6 +884,9 @@ msgstr "Nevarēja izdzēst identitāti — %k"
 msgid "Could not find identity"
 msgstr "Nevarēja atrast identitāti"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:840
+#: ../src/goaidentity/goakerberosidentitymanager.c:841
 msgid "Could not create credential cache for identity"
 msgstr "Neizdevās izveidot akreditācijas datu kešu identitātei"
+
+#~ msgid "Failed to initialize a GOA client"
+#~ msgstr "Neizdevās inicializēt GOA klientu"
