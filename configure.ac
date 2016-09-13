@@ -179,6 +179,13 @@ if test "$enable_inspector" != "no"; then
   AC_DEFINE(GOA_INSPECTOR_ENABLED, 1, [Enable a WebKitWebInspector for the embedded web view])
 fi
 
+AC_ARG_WITH(template-file,
+            [AS_HELP_STRING([--with-template-file],
+                            [Path to the template file])],
+                            [],
+                            [])
+AC_DEFINE_UNQUOTED(GOA_TEMPLATE_FILE, ["$with_template_file"], [Path to the template file])
+
 # service providers
 #
 
@@ -580,6 +587,7 @@ echo "
 	backend:                        ${enable_backend}
 	inspector:		        ${enable_inspector}
 	introspection:		        ${found_introspection}
+	template file:		        ${with_template_file}
 
 	Flickr provider:                ${enable_flickr} (OAuth 1.0, key:${with_flickr_consumer_key} secret:${with_flickr_consumer_secret})
 	Foursquare provider:            ${enable_foursquare} (id:${with_foursquare_client_id})
