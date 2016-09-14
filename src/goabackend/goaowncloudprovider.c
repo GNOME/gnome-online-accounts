@@ -849,6 +849,7 @@ refresh_account (GoaProvider    *provider,
   GtkWidget *dialog;
   GtkWidget *vbox;
   gboolean accept_ssl_errors;
+  gboolean is_template;
   gboolean ret;
   const gchar *password;
   const gchar *username;
@@ -863,6 +864,7 @@ refresh_account (GoaProvider    *provider,
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   http_client = NULL;
+  is_template = FALSE;
   uri = NULL;
   uri_webdav = NULL;
 
@@ -888,17 +890,23 @@ refresh_account (GoaProvider    *provider,
   data.dialog = GTK_DIALOG (dialog);
   data.error = NULL;
 
-  create_account_details_ui (provider, GTK_DIALOG (dialog), GTK_BOX (vbox), FALSE, FALSE, &data);
+  account = goa_object_peek_account (object);
+  username = goa_account_get_identity (account);
+  if (username == NULL || username[0] == '\0')
+    is_template = TRUE;
+
+  create_account_details_ui (provider, GTK_DIALOG (dialog), GTK_BOX (vbox), FALSE, is_template, &data);
 
   accept_ssl_errors = goa_util_lookup_keyfile_boolean (object, "AcceptSslErrors");
   uri = goa_util_lookup_keyfile_string (object, "Uri");
   gtk_entry_set_text (GTK_ENTRY (data.uri), uri);
   gtk_editable_set_editable (GTK_EDITABLE (data.uri), FALSE);
 
-  account = goa_object_peek_account (object);
-  username = goa_account_get_identity (account);
-  gtk_entry_set_text (GTK_ENTRY (data.username), username);
-  gtk_editable_set_editable (GTK_EDITABLE (data.username), FALSE);
+  if (!is_template)
+    {
+      gtk_entry_set_text (GTK_ENTRY (data.username), username);
+      gtk_editable_set_editable (GTK_EDITABLE (data.username), FALSE);
+    }
 
   gtk_widget_show_all (dialog);
   g_signal_connect (dialog, "response", G_CALLBACK (dialog_response_cb), &data);
@@ -916,6 +924,9 @@ refresh_account (GoaProvider    *provider,
                    _("Dialog was dismissed"));
       goto out;
     }
+
+  if (is_template)
+    username = gtk_entry_get_text (GTK_ENTRY (data.username));
 
   password = gtk_entry_get_text (GTK_ENTRY (data.password));
   g_cancellable_reset (data.cancellable);
@@ -963,12 +974,52 @@ refresh_account (GoaProvider    *provider,
   g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (password));
 
-  if (!goa_utils_store_credentials_for_object_sync (provider,
-                                                    object,
-                                                    g_variant_builder_end (&credentials),
-                                                    NULL, /* GCancellable */
-                                                    &data.error))
-    goto out;
+  if (is_template)
+    {
+      GVariantBuilder details;
+      GoaManager *manager;
+      const gchar *id;
+      const gchar *provider_type;
+      gchar *dummy = NULL;
+      gchar *presentation_identity = NULL;
+      gchar *server = NULL;
+
+      manager = goa_client_get_manager (client);
+      id = goa_account_get_id (account);
+      provider_type = goa_provider_get_provider_type (provider);
+
+      dummy = normalize_uri (uri, &server);
+      presentation_identity = g_strconcat (username, "@", server, NULL);
+      g_free (dummy);
+      g_free (server);
+
+      g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
+      g_variant_builder_add (&details, "{ss}", "Id", id);
+
+      goa_manager_call_add_account (manager,
+                                    provider_type,
+                                    username,
+                                    presentation_identity,
+                                    g_variant_builder_end (&credentials),
+                                    g_variant_builder_end (&details),
+                                    NULL, /* GCancellable* */
+                                    (GAsyncReadyCallback) add_account_cb,
+                                    &data);
+      g_free (presentation_identity);
+
+      g_main_loop_run (data.loop);
+      if (data.error != NULL)
+        goto out;
+    }
+  else
+    {
+      if (!goa_utils_store_credentials_for_object_sync (provider,
+                                                        object,
+                                                        g_variant_builder_end (&credentials),
+                                                        NULL, /* GCancellable */
+                                                        &data.error))
+        goto out;
+    }
 
   goa_account_call_ensure_credentials (account,
                                        NULL, /* GCancellable */
@@ -983,6 +1034,7 @@ refresh_account (GoaProvider    *provider,
   gtk_widget_destroy (dialog);
   g_free (uri);
   g_free (uri_webdav);
+  g_free (data.account_object_path);
   g_clear_pointer (&data.loop, (GDestroyNotify) g_main_loop_unref);
   g_clear_object (&data.cancellable);
   g_clear_object (&http_client);
