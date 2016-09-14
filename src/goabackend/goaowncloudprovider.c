@@ -837,7 +837,7 @@ refresh_account (GoaProvider    *provider,
                  GError        **error)
 {
   AddAccountData data;
-  GVariantBuilder builder;
+  GVariantBuilder credentials;
   GoaAccount *account;
   GoaHttpClient *http_client;
   GtkWidget *dialog;
@@ -954,12 +954,12 @@ refresh_account (GoaProvider    *provider,
     }
 
   /* TODO: run in worker thread */
-  g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
-  g_variant_builder_add (&builder, "{sv}", "password", g_variant_new_string (password));
+  g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
+  g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (password));
 
   if (!goa_utils_store_credentials_for_object_sync (provider,
                                                     object,
-                                                    g_variant_builder_end (&builder),
+                                                    g_variant_builder_end (&credentials),
                                                     NULL, /* GCancellable */
                                                     &data.error))
     goto out;
