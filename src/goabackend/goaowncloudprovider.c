@@ -520,6 +520,7 @@ create_account_details_ui (GoaProvider    *provider,
                            GtkDialog      *dialog,
                            GtkBox         *vbox,
                            gboolean        new_account,
+                           gboolean        is_template,
                            AddAccountData *data)
 {
   GtkWidget *grid0;
@@ -560,7 +561,12 @@ create_account_details_ui (GoaProvider    *provider,
   add_entry (grid1, row++, _("_Password"), &data->password);
   gtk_entry_set_visibility (GTK_ENTRY (data->password), FALSE);
 
-  gtk_widget_grab_focus ((new_account) ? data->uri : data->password);
+  if (new_account)
+    gtk_widget_grab_focus (data->uri);
+  else if (is_template)
+    gtk_widget_grab_focus (data->username);
+  else
+    gtk_widget_grab_focus (data->password);
 
   g_signal_connect (data->uri, "changed", G_CALLBACK (on_uri_username_or_password_changed), data);
   g_signal_connect (data->username, "changed", G_CALLBACK (on_uri_username_or_password_changed), data);
@@ -680,7 +686,7 @@ add_account (GoaProvider    *provider,
   data.dialog = dialog;
   data.error = NULL;
 
-  create_account_details_ui (provider, dialog, vbox, TRUE, &data);
+  create_account_details_ui (provider, dialog, vbox, TRUE, FALSE, &data);
   gtk_widget_show_all (GTK_WIDGET (vbox));
   g_signal_connect (dialog, "response", G_CALLBACK (dialog_response_cb), &data);
 
@@ -882,7 +888,7 @@ refresh_account (GoaProvider    *provider,
   data.dialog = GTK_DIALOG (dialog);
   data.error = NULL;
 
-  create_account_details_ui (provider, GTK_DIALOG (dialog), GTK_BOX (vbox), FALSE, &data);
+  create_account_details_ui (provider, GTK_DIALOG (dialog), GTK_BOX (vbox), FALSE, FALSE, &data);
 
   accept_ssl_errors = goa_util_lookup_keyfile_boolean (object, "AcceptSslErrors");
   uri = goa_util_lookup_keyfile_string (object, "Uri");
