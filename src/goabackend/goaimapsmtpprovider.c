@@ -361,7 +361,7 @@ ensure_credentials_sync (GoaProvider         *provider,
                            * username (eg., rishi), and the (%s, %d)
                            * is the error domain and code.
                            */
-                          _("Invalid %s with username ‘%s’ (%s, %d): "),
+                          _("Invalid %s with username “%s” (%s, %d): "),
                           "imap-password",
                           imap_username,
                           g_quark_to_string ((*error)->domain),
@@ -412,7 +412,7 @@ ensure_credentials_sync (GoaProvider         *provider,
                            * username (eg., rishi), and the (%s, %d)
                            * is the error domain and code.
                            */
-                          _("Invalid %s with username ‘%s’ (%s, %d): "),
+                          _("Invalid %s with username “%s” (%s, %d): "),
                           "smtp-password",
                           smtp_username,
                           g_quark_to_string ((*error)->domain),

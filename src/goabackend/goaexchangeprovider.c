@@ -268,7 +268,7 @@ ensure_credentials_sync (GoaProvider         *provider,
                            * (eg., debarshi.ray@gmail.com or rishi), and the
                            * (%s, %d) is the error domain and code.
                            */
-                          _("Invalid password with username ‘%s’ (%s, %d): "),
+                          _("Invalid password with username “%s” (%s, %d): "),
                           username,
                           g_quark_to_string ((*error)->domain),
                           (*error)->code);

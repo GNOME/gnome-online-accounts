@@ -966,7 +966,7 @@ goa_utils_get_credentials (GoaProvider    *provider,
   if (!g_variant_lookup (credentials, id, "s", &password))
     {
       g_set_error (error, GOA_ERROR, GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Did not find %s with identity ‘%s’ in credentials"),
+                   _("Did not find %s with identity “%s” in credentials"),
                    id, username);
       goto out;
     }

@@ -323,7 +323,7 @@ get_ticket_sync (GoaKerberosProvider *self,
           g_set_error (error,
                        GOA_ERROR,
                        GOA_ERROR_NOT_AUTHORIZED,
-                       _("Could not find saved credentials for principal ‘%s’ in keyring"), identifier);
+                       _("Could not find saved credentials for principal “%s” in keyring"), identifier);
       goto out;
     }
   else if (credentials != NULL)
@@ -336,7 +336,7 @@ get_ticket_sync (GoaKerberosProvider *self,
           g_set_error (error,
                        GOA_ERROR,
                        GOA_ERROR_NOT_AUTHORIZED,
-                       _("Did not find password for principal ‘%s’ in credentials"),
+                       _("Did not find password for principal “%s” in credentials"),
                        identifier);
           goto out;
         }
