@@ -1039,8 +1039,6 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
   goa_utils_set_dialog_title (GOA_PROVIDER (provider), dialog, add_account);
 
   grid = gtk_grid_new ();
-  gtk_container_set_border_width (GTK_CONTAINER (grid), 5);
-  gtk_widget_set_margin_bottom (grid, 6);
   gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), GTK_ORIENTATION_VERTICAL);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 12);
   gtk_container_add (GTK_CONTAINER (vbox), grid);
