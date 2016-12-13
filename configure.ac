@@ -261,10 +261,10 @@ AC_ARG_WITH(google-client-secret,
                             [],
                             [])
 if test "$with_google_client_id" = ""; then
-  with_google_client_id=923794261470.apps.googleusercontent.com
+  with_google_client_id=44438659992-7kgjeitenc16ssihbtdjbgguch7ju55s.apps.googleusercontent.com
 fi
 if test "$with_google_client_secret" = ""; then
-  with_google_client_secret=SlVBAcxamM0TBPlvX2c1zbEY
+  with_google_client_secret=-gMLuQyDiI0XrQS_vx_mhuYF
 fi
 AC_DEFINE_UNQUOTED(GOA_GOOGLE_CLIENT_ID,
                    ["$with_google_client_id"],
