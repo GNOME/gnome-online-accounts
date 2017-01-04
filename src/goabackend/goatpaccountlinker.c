@@ -663,7 +663,7 @@ goa_tp_account_linker_remove_tp_account_finish (GoaTpAccountLinker  *self,
   g_return_val_if_fail (g_task_is_valid (res, self), FALSE);
   task = G_TASK (res);
 
-  g_warn_if_fail (g_task_get_source_tag (task) == goa_tp_account_linker_remove_tp_account);
+  g_return_val_if_fail (g_task_get_source_tag (task) == goa_tp_account_linker_remove_tp_account, FALSE);
 
   return g_task_propagate_boolean (task, error);
 }

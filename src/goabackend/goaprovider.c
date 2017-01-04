@@ -786,7 +786,7 @@ goa_provider_ensure_credentials_finish (GoaProvider         *self,
   g_return_val_if_fail (g_task_is_valid (res, self), FALSE);
   task = G_TASK (res);
 
-  g_warn_if_fail (g_task_get_source_tag (task) == goa_provider_ensure_credentials);
+  g_return_val_if_fail (g_task_get_source_tag (task) == goa_provider_ensure_credentials, FALSE);
 
   /* Workaround for bgo#764163 */
   had_error = g_task_had_error (task);
@@ -1379,7 +1379,7 @@ goa_provider_remove_account_finish_real (GoaProvider   *self,
   g_return_val_if_fail (g_task_is_valid (res, self), FALSE);
   task = G_TASK (res);
 
-  g_warn_if_fail (g_task_get_source_tag (task) == goa_provider_remove_account_real);
+  g_return_val_if_fail (g_task_get_source_tag (task) == goa_provider_remove_account_real, FALSE);
 
   return g_task_propagate_boolean (task, error);
 }

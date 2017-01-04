@@ -819,7 +819,7 @@ remove_account_finish (GoaProvider   *provider,
   g_return_val_if_fail (g_task_is_valid (res, self), FALSE);
   task = G_TASK (res);
 
-  g_warn_if_fail (g_task_get_source_tag (task) == remove_account);
+  g_return_val_if_fail (g_task_get_source_tag (task) == remove_account, FALSE);
 
   return g_task_propagate_boolean (task, error);
 }
