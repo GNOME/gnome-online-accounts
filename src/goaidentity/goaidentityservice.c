@@ -485,6 +485,8 @@ on_got_identity_for_sign_out (GoaIdentityManager *manager,
     {
       g_debug ("GoaIdentityService: Identity could not be signed out: %s",
                error->message);
+      g_simple_async_result_take_error (operation_result, error);
+      g_simple_async_result_complete_in_idle (operation_result);
       goto out;
     }
 
@@ -499,10 +501,11 @@ on_got_identity_for_sign_out (GoaIdentityManager *manager,
                                           NULL,
                                           (GAsyncReadyCallback)
                                           on_identity_signed_out,
-                                          operation_result);
+                                          g_object_ref (operation_result));
 
  out:
   g_clear_object (&identity);
+  g_object_unref (operation_result);
 }
 
 static gboolean
