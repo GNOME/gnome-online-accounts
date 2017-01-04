@@ -251,11 +251,10 @@ sign_in_identity_finish (GoaKerberosProvider  *self,
   GTask *task;
 
   g_return_val_if_fail (GOA_IS_KERBEROS_PROVIDER (self), NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
   g_return_val_if_fail (g_task_is_valid (result, self), NULL);
   task = G_TASK (result);
-
-  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
   return g_task_propagate_pointer (task, error);
 }

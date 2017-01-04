@@ -128,9 +128,9 @@ get_providers_finish_default (GoaProviderFactory  *factory,
   GList *providers;
   gboolean had_error;
 
-  g_return_val_if_fail (g_task_is_valid (result, factory), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
+  g_return_val_if_fail (g_task_is_valid (result, factory), FALSE);
   task = G_TASK (result);
 
   /* Workaround for bgo#764163 */
