@@ -222,6 +222,7 @@ goa_mail_auth_run_finish (GoaMailAuth         *self,
 {
   GTask *task;
 
+  g_return_val_if_fail (GOA_IS_MAIL_AUTH (self), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   g_return_val_if_fail (g_task_is_valid (res, self), FALSE);
@@ -272,6 +273,7 @@ goa_mail_auth_starttls_finish (GoaMailAuth         *self,
 {
   GTask *task;
 
+  g_return_val_if_fail (GOA_IS_MAIL_AUTH (self), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   g_return_val_if_fail (g_task_is_valid (res, self), FALSE);

@@ -410,6 +410,7 @@ goa_mail_client_check_finish (GoaMailClient *self, GAsyncResult *res, GError **e
 {
   GTask *task;
 
+  g_return_val_if_fail (GOA_IS_MAIL_CLIENT (self), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   g_return_val_if_fail (g_task_is_valid (res, self), FALSE);
