@@ -113,6 +113,7 @@ goa_provider_factory_get_providers_finish (GoaProviderFactory  *factory,
   GoaProviderFactoryClass *klass;
 
   g_return_val_if_fail (GOA_IS_PROVIDER_FACTORY (factory), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
   klass = GOA_PROVIDER_FACTORY_GET_CLASS (factory);
   return klass->get_providers_finish (factory, out_providers, result, error);
