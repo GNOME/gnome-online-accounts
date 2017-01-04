@@ -657,6 +657,9 @@ goa_tp_account_linker_remove_tp_account_finish (GoaTpAccountLinker  *self,
 {
   GTask *task;
 
+  g_return_val_if_fail (GOA_IS_TP_ACCOUNT_LINKER (self), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
   g_return_val_if_fail (g_task_is_valid (res, self), FALSE);
   task = G_TASK (res);
 
