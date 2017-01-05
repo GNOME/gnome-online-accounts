@@ -1568,7 +1568,7 @@ sign_in_identity_sync (GoaKerberosProvider  *self,
 {
   GcrSecretExchange  *secret_exchange;
   char               *secret_key;
-  char               *return_key;
+  char               *return_key = NULL;
   char               *concealed_secret;
   char               *identity_object_path = NULL;
   gboolean            keys_exchanged;
@@ -1622,6 +1622,7 @@ sign_in_identity_sync (GoaKerberosProvider  *self,
   g_mutex_unlock (&identity_manager_mutex);
 
  out:
+  g_free (return_key);
   g_object_unref (secret_exchange);
   return identity_object_path;
 }
