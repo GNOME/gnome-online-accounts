@@ -544,6 +544,8 @@ on_secret_keys_exchanged (GoaIdentityService *self,
                                                                   invocation,
                                                                   output_key);
     }
+
+  g_object_unref (invocation);
 }
 
 static void
