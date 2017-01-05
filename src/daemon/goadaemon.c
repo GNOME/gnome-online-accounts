@@ -341,6 +341,8 @@ goa_daemon_init (GoaDaemon *self)
   g_dbus_object_manager_server_set_connection (self->object_manager, self->connection);
 
   queue_check_credentials (self);
+
+  g_list_free_full (providers, g_object_unref);
 }
 
 static void
