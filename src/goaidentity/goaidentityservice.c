@@ -98,23 +98,15 @@ export_identity (GoaIdentityService *self,
   object = G_DBUS_OBJECT_SKELETON (goa_identity_service_object_skeleton_new (object_path));
   interface = G_DBUS_INTERFACE_SKELETON (goa_identity_service_identity_skeleton_new ());
 
-  g_object_bind_property (G_OBJECT (identity),
-                          "identifier",
-                          G_OBJECT (interface),
-                          "identifier",
-                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property (identity, "identifier", interface, "identifier", G_BINDING_SYNC_CREATE);
 
-  g_object_bind_property (G_OBJECT (identity),
+  g_object_bind_property (identity,
                           "expiration-timestamp",
-                          G_OBJECT (interface),
+                          interface,
                           "expiration-timestamp",
                           G_BINDING_SYNC_CREATE);
 
-  g_object_bind_property (G_OBJECT (identity),
-                          "is-signed-in",
-                          G_OBJECT (interface),
-                          "is-signed-in",
-                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property (identity, "is-signed-in", interface, "is-signed-in", G_BINDING_SYNC_CREATE);
 
   g_dbus_object_skeleton_add_interface (object, interface);
   g_object_unref (interface);
@@ -161,7 +153,7 @@ on_sign_in_done (GoaIdentityService *self,
 
   object_path = export_identity (self, identity);
 
-  g_task_return_pointer (operation_result, object_path, (GDestroyNotify) g_free);
+  g_task_return_pointer (operation_result, object_path, g_free);
 
   /* User is signed in, so we're mostly done
    */
@@ -216,7 +208,7 @@ find_object_with_principal (GoaIdentityService *self,
           break;
         }
     }
-  g_list_free_full (objects, (GDestroyNotify) g_object_unref);
+  g_list_free_full (objects, g_object_unref);
 
   return found_object;
 }
@@ -485,11 +477,7 @@ on_got_identity_for_sign_out (GoaIdentityManager *manager,
       goto out;
     }
 
-  g_object_set_data_full (G_OBJECT (operation_result),
-                          "identity",
-                          g_object_ref (identity),
-                          (GDestroyNotify)
-                          g_object_unref);
+  g_object_set_data_full (G_OBJECT (operation_result), "identity", g_object_ref (identity), g_object_unref);
 
   goa_identity_manager_sign_identity_out (manager,
                                           identity,
@@ -633,12 +621,10 @@ goa_identity_service_handle_exchange_secret_keys (GoaIdentityServiceManager *man
   g_object_set_data_full (G_OBJECT (operation_result),
                           "identifier",
                           g_strdup (identifier),
-                          (GDestroyNotify)
                           g_free);
   g_object_set_data_full (G_OBJECT (operation_result),
                           "input-key",
                           g_strdup (input_key),
-                          (GDestroyNotify)
                           g_free);
   sender = g_dbus_method_invocation_get_sender (invocation);
   watch_id = g_bus_watch_name (G_BUS_TYPE_SESSION,
@@ -649,7 +635,6 @@ goa_identity_service_handle_exchange_secret_keys (GoaIdentityServiceManager *man
                                (GBusNameVanishedCallback)
                                on_caller_vanished,
                                g_object_ref (operation_result),
-                               (GDestroyNotify)
                                g_object_unref);
   g_hash_table_insert (self->priv->watched_client_connections,
                        g_strdup (sender),
@@ -676,22 +661,17 @@ goa_identity_service_init (GoaIdentityService *self)
   g_debug ("GoaIdentityService: initializing");
   self->priv->watched_client_connections = g_hash_table_new_full (g_str_hash,
                                                                   g_str_equal,
-                                                                  (GDestroyNotify)
                                                                   g_free,
                                                                   (GDestroyNotify)
                                                                   g_bus_unwatch_name);
 
   self->priv->key_holders = g_hash_table_new_full (g_str_hash,
                                                    g_str_equal,
-                                                   (GDestroyNotify)
                                                    g_free,
-                                                   (GDestroyNotify)
                                                    g_object_unref);
   self->priv->pending_temporary_account_results = g_hash_table_new_full (g_str_hash,
                                                                          g_str_equal,
-                                                                         (GDestroyNotify)
                                                                          g_free,
-                                                                         (GDestroyNotify)
                                                                          g_object_unref);
 }
 
@@ -1059,9 +1039,8 @@ close_system_prompt (GoaIdentityManager  *manager,
   if (data->identity != identity)
     return;
 
-  g_signal_handlers_disconnect_by_func (G_OBJECT (manager),
-                                        G_CALLBACK (close_system_prompt),
-                                        data);
+  g_signal_handlers_disconnect_by_func (manager, G_CALLBACK (close_system_prompt), data);
+
   error = NULL;
   if (!gcr_system_prompt_close (data->prompt, NULL, &error))
     {
@@ -1151,7 +1130,7 @@ query_user (GoaIdentityService *self,
                                        query,
                                        cancellable);
 
-  g_signal_connect (G_OBJECT (self->priv->identity_manager),
+  g_signal_connect (self->priv->identity_manager,
                     "identity-refreshed",
                     G_CALLBACK (close_system_prompt),
                     request);
@@ -1298,7 +1277,7 @@ sign_in (GoaIdentityService     *self,
   operation_result = g_task_new (self, cancellable, callback, user_data);
   g_task_set_task_data (operation_result, user_data, NULL);
 
-  g_signal_connect_object (G_OBJECT (self->priv->identity_manager),
+  g_signal_connect_object (self->priv->identity_manager,
                            "identity-refreshed",
                            G_CALLBACK (cancel_sign_in),
                            operation_result,
@@ -1532,30 +1511,15 @@ on_identities_listed (GoaIdentityManager *manager,
   GError *error = NULL;
   GList *identities, *node;
 
-  g_signal_connect (G_OBJECT (self->priv->identity_manager),
-                    "identity-added",
-                    G_CALLBACK (on_identity_added),
-                    self);
-  g_signal_connect (G_OBJECT (self->priv->identity_manager),
-                    "identity-removed",
-                    G_CALLBACK (on_identity_removed),
-                    self);
-  g_signal_connect (G_OBJECT (self->priv->identity_manager),
-                    "identity-refreshed",
-                    G_CALLBACK (on_identity_refreshed),
-                    self);
-  g_signal_connect (G_OBJECT (self->priv->identity_manager),
+  g_signal_connect (self->priv->identity_manager, "identity-added", G_CALLBACK (on_identity_added), self);
+  g_signal_connect (self->priv->identity_manager, "identity-removed", G_CALLBACK (on_identity_removed), self);
+  g_signal_connect (self->priv->identity_manager, "identity-refreshed", G_CALLBACK (on_identity_refreshed), self);
+  g_signal_connect (self->priv->identity_manager,
                     "identity-needs-renewal",
                     G_CALLBACK (on_identity_needs_renewal),
                     self);
-  g_signal_connect (G_OBJECT (self->priv->identity_manager),
-                    "identity-expiring",
-                    G_CALLBACK (on_identity_expiring),
-                    self);
-  g_signal_connect (G_OBJECT (self->priv->identity_manager),
-                    "identity-expired",
-                    G_CALLBACK (on_identity_expired),
-                    self);
+  g_signal_connect (self->priv->identity_manager, "identity-expiring", G_CALLBACK (on_identity_expiring), self);
+  g_signal_connect (self->priv->identity_manager, "identity-expired", G_CALLBACK (on_identity_expired), self);
 
   identities = goa_identity_manager_list_identities_finish (manager, result, &error);
 
@@ -1603,14 +1567,8 @@ ensure_credentials_for_accounts (GoaIdentityService *self)
 
   object_manager = goa_client_get_object_manager (self->priv->client);
 
-  g_signal_connect (G_OBJECT (object_manager),
-                    "interface-added",
-                    G_CALLBACK (on_account_interface_added),
-                    self);
-  g_signal_connect (G_OBJECT (object_manager),
-                    "interface-removed",
-                    G_CALLBACK (on_account_interface_removed),
-                    self);
+  g_signal_connect (object_manager, "interface-added", G_CALLBACK (on_account_interface_added), self);
+  g_signal_connect (object_manager, "interface-removed", G_CALLBACK (on_account_interface_removed), self);
 
   accounts = goa_client_get_accounts (self->priv->client);
 
