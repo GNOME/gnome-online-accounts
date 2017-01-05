@@ -1736,12 +1736,12 @@ goa_daemon_check_credentials (GoaDaemon *self)
 
       account = goa_object_peek_account (object);
       if (account == NULL)
-        continue;
+        goto cleanup_and_continue;
 
       provider_type = goa_account_get_provider_type (account);
       provider = goa_provider_get_for_provider_type (provider_type);
       if (provider == NULL)
-        continue;
+        goto cleanup_and_continue;
 
       id = goa_account_get_id (account);
       provider_type = goa_account_get_provider_type (account);
@@ -1758,7 +1758,7 @@ goa_daemon_check_credentials (GoaDaemon *self)
                    timestamp,
                    provider_type,
                    id);
-          continue;
+          goto cleanup_and_continue;
         }
 
       data = object_invocation_data_new (object, NULL);
@@ -1768,6 +1768,7 @@ goa_daemon_check_credentials (GoaDaemon *self)
       g_task_set_task_data (task, data, (GDestroyNotify) object_invocation_data_unref);
       g_queue_push_tail (self->ensure_credentials_queue, g_object_ref (task));
 
+    cleanup_and_continue:
       g_clear_object (&provider);
       g_clear_object (&task);
     }
