@@ -839,8 +839,7 @@ on_account_added (GoaManager   *manager,
                                             &error))
     {
       g_task_return_error (operation_result, error);
-      g_object_unref (operation_result);
-      return;
+      goto out;
     }
 
   if (object_path != NULL && object_path[0] != '\0')
@@ -858,6 +857,7 @@ on_account_added (GoaManager   *manager,
   else
     g_task_return_pointer (operation_result, object, g_object_unref);
 
+ out:
   g_object_unref (operation_result);
 }
 
