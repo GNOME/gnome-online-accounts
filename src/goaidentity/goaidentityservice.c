@@ -872,14 +872,9 @@ add_temporary_account (GoaIdentityService *self,
   GVariantBuilder     credentials;
   GVariantBuilder     details;
   GoaManager         *manager;
-  GoaObject *object;
 
   principal = goa_identity_get_identifier (identity);
-
-  object = g_hash_table_lookup (self->priv->pending_temporary_account_results,
-                                principal);
-
-  if (object != NULL)
+  if (g_hash_table_contains (self->priv->pending_temporary_account_results, principal))
     {
       g_debug ("GoaIdentityService: would add temporary identity %s, but it's already pending", principal);
       return;
