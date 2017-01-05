@@ -781,50 +781,15 @@ on_identity_signed_in (GoaIdentityManager *manager,
 }
 
 static void
-on_temporary_account_created_for_identity (GoaIdentityService *self,
-                                           GAsyncResult       *result,
-                                           GoaIdentity        *identity)
-{
-  GoaObject   *object = NULL;
-  const char  *principal;
-  GError      *error;
-  gboolean     had_error;
-
-  principal = goa_identity_get_identifier (identity);
-  g_hash_table_remove (self->priv->pending_temporary_account_results,
-                       principal);
-
-  error = NULL;
-  /* Workaround for bgo#764163 */
-  had_error = g_task_had_error (G_TASK (result));
-  object = g_task_propagate_pointer (G_TASK (result), &error);
-  if (had_error)
-    {
-      const char *identifier;
-
-      identifier = goa_identity_get_identifier (identity);
-      g_debug ("Could not add temporary account for identity %s: %s",
-               identifier,
-               error->message);
-      g_error_free (error);
-      goto out;
-    }
-
-  if (object != NULL)
-    ensure_account_credentials (self, object);
-
- out:
-  g_clear_object (&object);
-}
-
-static void
 on_account_added (GoaManager   *manager,
                   GAsyncResult *result,
                   GTask        *operation_result)
 {
   GoaIdentityService *self;
   GDBusObjectManager *object_manager;
+  const char *principal;
   char *object_path;
+  GoaIdentity *identity;
   GoaObject *object;
   GError *error;
 
@@ -833,12 +798,21 @@ on_account_added (GoaManager   *manager,
   object = NULL;
   error = NULL;
 
+  identity = GOA_IDENTITY (g_task_get_task_data (operation_result));
+
+  principal = goa_identity_get_identifier (identity);
+  g_hash_table_remove (self->priv->pending_temporary_account_results, principal);
+
   if (!goa_manager_call_add_account_finish (manager,
                                             &object_path,
                                             result,
                                             &error))
     {
-      g_task_return_error (operation_result, error);
+      const char *identifier;
+
+      identifier = goa_identity_get_identifier (identity);
+      g_debug ("Could not add temporary account for identity %s: %s", identifier, error->message);
+      g_error_free (error);
       goto out;
     }
 
@@ -852,12 +826,11 @@ on_account_added (GoaManager   *manager,
       g_free (object_path);
     }
 
-  if (object == NULL)
-    g_task_return_pointer (operation_result, NULL, NULL);
-  else
-    g_task_return_pointer (operation_result, object, g_object_unref);
+  if (object != NULL)
+    ensure_account_credentials (self, object);
 
  out:
+  g_clear_object (&object);
   g_object_unref (operation_result);
 }
 
@@ -900,10 +873,9 @@ add_temporary_account (GoaIdentityService *self,
 
   g_debug ("GoaIdentityService: asking to sign back in");
 
-  operation_result = g_task_new (self,
-                                 NULL,
-                                 (GAsyncReadyCallback) on_temporary_account_created_for_identity,
-                                 identity);
+  operation_result = g_task_new (self, NULL, NULL, NULL);
+  g_task_set_task_data (operation_result, identity, NULL);
+
   g_hash_table_insert (self->priv->pending_temporary_account_results,
                        g_strdup (principal),
                        g_object_ref (operation_result));
