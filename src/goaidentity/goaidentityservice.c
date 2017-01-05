@@ -394,10 +394,11 @@ goa_identity_service_handle_sign_in (GoaIdentityServiceManager *manager,
            cancellable,
            (GAsyncReadyCallback)
            on_sign_in_done,
-           operation_result);
+           g_object_ref (operation_result));
 
   g_free (preauth_source);
   g_object_unref (cancellable);
+  g_object_unref (operation_result);
 
   return TRUE;
 }
@@ -505,7 +506,9 @@ goa_identity_service_handle_sign_out (GoaIdentityServiceManager *manager,
                                      NULL,
                                      (GAsyncReadyCallback)
                                      on_got_identity_for_sign_out,
-                                     task);
+                                     g_object_ref (task));
+
+  g_object_unref (task);
   return TRUE;
 }
 
@@ -890,9 +893,10 @@ add_temporary_account (GoaIdentityService *self,
                                 NULL,
                                 (GAsyncReadyCallback)
                                 on_account_added,
-                                operation_result);
+                                g_object_ref (operation_result));
   g_free (realm);
   g_free (preauth_source);
+  g_object_unref (operation_result);
 }
 
 static void
@@ -1261,7 +1265,9 @@ sign_in (GoaIdentityService     *self,
                                          cancellable,
                                          (GAsyncReadyCallback)
                                          on_identity_signed_in,
-                                         operation_result);
+                                         g_object_ref (operation_result));
+
+  g_object_unref (operation_result);
 }
 
 static void
@@ -1413,7 +1419,9 @@ on_account_interface_added (GDBusObjectManager *manager,
                                      NULL,
                                      (GAsyncReadyCallback)
                                      on_got_ticket,
-                                     operation_result);
+                                     g_object_ref (operation_result));
+
+      g_object_unref (operation_result);
       return;
     }
 }
@@ -1467,7 +1475,9 @@ on_account_interface_removed (GDBusObjectManager *manager,
                                      NULL,
                                      (GAsyncReadyCallback)
                                      on_got_identity_for_sign_out,
-                                     task);
+                                     g_object_ref (task));
+
+  g_object_unref (task);
 }
 
 static void
