@@ -874,7 +874,7 @@ add_temporary_account (GoaIdentityService *self,
   g_debug ("GoaIdentityService: asking to sign back in");
 
   operation_result = g_task_new (self, NULL, NULL, NULL);
-  g_task_set_task_data (operation_result, identity, NULL);
+  g_task_set_task_data (operation_result, g_object_ref (identity), g_object_unref);
 
   g_hash_table_insert (self->priv->pending_temporary_account_results,
                        g_strdup (principal),
