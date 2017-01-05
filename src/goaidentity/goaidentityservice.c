@@ -420,6 +420,8 @@ on_sign_out_handled (GoaIdentityService    *self,
   else
     goa_identity_service_manager_complete_sign_out (GOA_IDENTITY_SERVICE_MANAGER (self),
                                                     invocation);
+
+  g_object_unref (invocation);
 }
 
 static void
