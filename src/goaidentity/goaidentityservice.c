@@ -584,7 +584,6 @@ on_caller_watched (GDBusConnection    *connection,
                                        GCR_ERROR_UNRECOGNIZED,
                                        _("Initial secret key is invalid"));
       g_simple_async_result_complete_in_idle (operation_result);
-      g_object_unref (operation_result);
       return;
     }
 
@@ -665,6 +664,7 @@ goa_identity_service_handle_exchange_secret_keys (GoaIdentityServiceManager *man
                        g_strdup (sender),
                        GUINT_TO_POINTER (watch_id));
 
+  g_object_unref (operation_result);
   return TRUE;
 }
 
