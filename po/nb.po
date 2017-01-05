@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts 3.23.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-15 16:53+0200\n"
-"PO-Revision-Date: 2016-10-15 16:53+0200\n"
+"POT-Creation-Date: 2017-01-05 21:52+0100\n"
+"PO-Revision-Date: 2017-01-05 21:52+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
@@ -89,7 +89,7 @@ msgstr "E_gendefinert"
 #: ../src/goabackend/goaexchangeprovider.c:451
 #: ../src/goabackend/goaimapsmtpprovider.c:705
 #: ../src/goabackend/goaimapsmtpprovider.c:725
-#: ../src/goabackend/goakerberosprovider.c:738
+#: ../src/goabackend/goakerberosprovider.c:743
 #: ../src/goabackend/goalastfmprovider.c:422
 #: ../src/goabackend/goaowncloudprovider.c:560
 msgid "User_name"
@@ -103,7 +103,7 @@ msgstr "_Tjener"
 #. --
 #: ../src/goabackend/goaexchangeprovider.c:462
 #: ../src/goabackend/goaimapsmtpprovider.c:738
-#: ../src/goabackend/goakerberosprovider.c:743
+#: ../src/goabackend/goakerberosprovider.c:748
 #: ../src/goabackend/goalastfmprovider.c:431
 #: ../src/goabackend/goaowncloudprovider.c:575
 #: ../src/goabackend/goatelepathyprovider.c:666
@@ -111,7 +111,7 @@ msgid "_Cancel"
 msgstr "A_vbryt"
 
 #: ../src/goabackend/goaexchangeprovider.c:463
-#: ../src/goabackend/goakerberosprovider.c:744
+#: ../src/goabackend/goakerberosprovider.c:749
 #: ../src/goabackend/goalastfmprovider.c:432
 #: ../src/goabackend/goaowncloudprovider.c:576
 msgid "C_onnect"
@@ -119,7 +119,7 @@ msgstr "K_oble til"
 
 #: ../src/goabackend/goaexchangeprovider.c:479
 #: ../src/goabackend/goaimapsmtpprovider.c:754
-#: ../src/goabackend/goakerberosprovider.c:760
+#: ../src/goabackend/goakerberosprovider.c:765
 #: ../src/goabackend/goalastfmprovider.c:448
 #: ../src/goabackend/goaowncloudprovider.c:591
 msgid "Connecting…"
@@ -132,12 +132,12 @@ msgstr "Kobler til …"
 #: ../src/goabackend/goaimapsmtpprovider.c:1043
 #: ../src/goabackend/goaimapsmtpprovider.c:1310
 #: ../src/goabackend/goaimapsmtpprovider.c:1386
-#: ../src/goabackend/goakerberosprovider.c:1157
+#: ../src/goabackend/goakerberosprovider.c:1162
 #: ../src/goabackend/goalastfmprovider.c:643
 #: ../src/goabackend/goalastfmprovider.c:809
 #: ../src/goabackend/goamediaserverprovider.c:434
-#: ../src/goabackend/goaoauth2provider.c:1086
-#: ../src/goabackend/goaoauthprovider.c:862
+#: ../src/goabackend/goaoauth2provider.c:1084
+#: ../src/goabackend/goaoauthprovider.c:860
 #: ../src/goabackend/goaowncloudprovider.c:702
 #: ../src/goabackend/goaowncloudprovider.c:924
 #: ../src/goabackend/goatelepathyprovider.c:490
@@ -174,7 +174,7 @@ msgstr "_Ignorer"
 #: ../src/goabackend/goaimapsmtpprovider.c:1099
 #: ../src/goabackend/goaimapsmtpprovider.c:1356
 #: ../src/goabackend/goaimapsmtpprovider.c:1433
-#: ../src/goabackend/goakerberosprovider.c:1264
+#: ../src/goabackend/goakerberosprovider.c:1269
 #: ../src/goabackend/goalastfmprovider.c:689
 #: ../src/goabackend/goalastfmprovider.c:845
 #: ../src/goabackend/goaowncloudprovider.c:762
@@ -371,53 +371,53 @@ msgstr "SMTP"
 msgid "Enterprise Login (Kerberos)"
 msgstr "Bedriftspålogging (Kerberos)"
 
-#: ../src/goabackend/goakerberosprovider.c:296
+#: ../src/goabackend/goakerberosprovider.c:301
 #, c-format
 msgid "Ticketing is disabled for account"
 msgstr "Ticketing er slått av for kontoen"
 
-#: ../src/goabackend/goakerberosprovider.c:321
+#: ../src/goabackend/goakerberosprovider.c:326
 #, c-format
 msgid "Could not find saved credentials for principal ‘%s’ in keyring"
 msgstr ""
 "Fant ikke lagret påloggingsinformasjon for identitet «%s» på nøkkelring"
 
-#: ../src/goabackend/goakerberosprovider.c:334
+#: ../src/goabackend/goakerberosprovider.c:339
 #, c-format
 msgid "Did not find password for principal ‘%s’ in credentials"
 msgstr "Fant ikke passord for hovedidentitet «%s» i påloggingsinformasjon"
 
-#: ../src/goabackend/goakerberosprovider.c:730
+#: ../src/goabackend/goakerberosprovider.c:735
 msgid "_Domain"
 msgstr "_Domene"
 
-#: ../src/goabackend/goakerberosprovider.c:731
+#: ../src/goabackend/goakerberosprovider.c:736
 msgid "Enterprise domain or realm name"
 msgstr "Bedriftsdomene eller områdenavn"
 
-#: ../src/goabackend/goakerberosprovider.c:973
-#: ../src/goaidentity/goaidentityservice.c:1127
+#: ../src/goabackend/goakerberosprovider.c:978
+#: ../src/goaidentity/goaidentityservice.c:1131
 msgid "Log In to Realm"
 msgstr "Logg inn i område"
 
-#: ../src/goabackend/goakerberosprovider.c:974
+#: ../src/goabackend/goakerberosprovider.c:979
 msgid "Please enter your password below."
 msgstr "Vennligst oppgi ditt passord under."
 
-#: ../src/goabackend/goakerberosprovider.c:975
+#: ../src/goabackend/goakerberosprovider.c:980
 msgid "Remember this password"
 msgstr "Husk dette passordet"
 
-#: ../src/goabackend/goakerberosprovider.c:1109
+#: ../src/goabackend/goakerberosprovider.c:1114
 #, c-format
 msgid "The domain is not valid"
 msgstr "Domenet er ikke gyldig"
 
-#: ../src/goabackend/goakerberosprovider.c:1259
+#: ../src/goabackend/goakerberosprovider.c:1264
 msgid "Error connecting to enterprise identity server"
 msgstr "Feil ved tilkobling til bedriftens identitetstjener"
 
-#: ../src/goabackend/goakerberosprovider.c:1596
+#: ../src/goabackend/goakerberosprovider.c:1601
 #, c-format
 msgid "Identity service returned invalid key"
 msgstr "Identitetstjenesten returnerte en ugyldig nøkkel"
@@ -470,29 +470,29 @@ msgstr "Autoriseringssvar: "
 msgid "Authorization response: %s"
 msgstr "Autoriseringssvar: %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1112
-#: ../src/goabackend/goaoauthprovider.c:893
+#: ../src/goabackend/goaoauth2provider.c:1110
+#: ../src/goabackend/goaoauthprovider.c:891
 msgid "Error getting an Access Token: "
 msgstr "Feil ved henting av tilgangskode: "
 
-#: ../src/goabackend/goaoauth2provider.c:1127
-#: ../src/goabackend/goaoauthprovider.c:906
+#: ../src/goabackend/goaoauth2provider.c:1125
+#: ../src/goabackend/goaoauthprovider.c:904
 msgid "Error getting identity: "
 msgstr "Feil ved henting av identitet: "
 
-#: ../src/goabackend/goaoauth2provider.c:1344
-#: ../src/goabackend/goaoauthprovider.c:1210
+#: ../src/goabackend/goaoauth2provider.c:1342
+#: ../src/goabackend/goaoauthprovider.c:1208
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Ble spurt om å logge inn som %s, men logget inn som %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1506
+#: ../src/goabackend/goaoauth2provider.c:1504
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Påloggingsinformasjon inneholder ikke access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1545
-#: ../src/goabackend/goaoauthprovider.c:1438
+#: ../src/goabackend/goaoauth2provider.c:1543
+#: ../src/goabackend/goaoauthprovider.c:1436
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Klarte ikke å oppdatere tilgangstoken (%s, %d): "
@@ -507,7 +507,7 @@ msgid "Error getting a Request Token: "
 msgstr "Feil ved henting av forespørselstoken: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:807
+#: ../src/goabackend/goaoauthprovider.c:805
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -515,20 +515,20 @@ msgstr ""
 "Forventet statuskode 200 ved mottak av forespørselsnøkkel. Mottok status %d "
 "(%s) i stedet"
 
-#: ../src/goabackend/goaoauthprovider.c:824
+#: ../src/goabackend/goaoauthprovider.c:822
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "Mangler request_token eller request_token_secret hoder i svar"
 
-#: ../src/goabackend/goaoauthprovider.c:1394
+#: ../src/goabackend/goaoauthprovider.c:1392
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr ""
 "Påloggingsinformasjon inneholder ikke access_token eller access_token_secret"
 
 #: ../src/goabackend/goaowncloudprovider.c:68
-msgid "ownCloud"
-msgstr "ownCloud"
+msgid "Nextcloud"
+msgstr "Nextcloud"
 
 #: ../src/goabackend/goaowncloudprovider.c:767
 #: ../src/goabackend/goaowncloudprovider.c:960
@@ -813,15 +813,15 @@ msgstr "Laster «%s» …"
 msgid "Microsoft Account"
 msgstr "Microsoft-konto"
 
-#: ../src/goaidentity/goaidentityservice.c:370
+#: ../src/goaidentity/goaidentityservice.c:374
 msgid "initial secret passed before secret key exchange"
 msgstr "Opprinnelig hemmelighet videresendt før utveksling av hemmelig nøkkel"
 
-#: ../src/goaidentity/goaidentityservice.c:567
+#: ../src/goaidentity/goaidentityservice.c:575
 msgid "Initial secret key is invalid"
 msgstr "Opprinnelig hemmelig nøkkel er ugyldig"
 
-#: ../src/goaidentity/goaidentityservice.c:1132
+#: ../src/goaidentity/goaidentityservice.c:1136
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "Nettverksområde %s trenger informasjon for å logge deg inn."
