@@ -322,9 +322,7 @@ initable_init (GInitable     *initable,
                GError       **error)
 {
   GoaClient *self = GOA_CLIENT (initable);
-  gboolean ret;
-
-  ret = FALSE;
+  gboolean ret = FALSE;
 
   /* This method needs to be idempotent to work with the singleton
    * pattern. See the docs for g_initable_init(). We implement this by
@@ -424,9 +422,8 @@ GoaManager *
 goa_client_get_manager (GoaClient *self)
 {
   GDBusObject *object;
-  GoaManager *manager;
+  GoaManager *manager = NULL;
 
-  manager = NULL;
   object = g_dbus_object_manager_get_object (self->object_manager, "/org/gnome/OnlineAccounts/Manager");
   if (object == NULL)
     goto out;
@@ -455,13 +452,12 @@ goa_client_get_manager (GoaClient *self)
 GList *
 goa_client_get_accounts (GoaClient *self)
 {
-  GList *ret;
+  GList *ret = NULL;
   GList *objects;
   GList *l;
 
   g_return_val_if_fail (GOA_IS_CLIENT (self), NULL);
 
-  ret = NULL;
   objects = g_dbus_object_manager_get_objects (self->object_manager);
   for (l = objects; l != NULL; l = l->next)
     {
@@ -496,9 +492,7 @@ goa_client_lookup_by_id (GoaClient           *self,
 {
   GList *accounts;
   GList *l;
-  GoaObject *ret;
-
-  ret = NULL;
+  GoaObject *ret = NULL;
 
   accounts = goa_client_get_accounts (self);
   for (l = accounts; l != NULL; l = g_list_next (l))
