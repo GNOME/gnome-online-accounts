@@ -80,14 +80,9 @@ main (int    argc,
       char **argv)
 {
   GError *error;
-  GOptionContext *opt_context;
-  gint ret;
-  guint name_owner_id;
-
-  ret = 1;
-  loop = NULL;
-  opt_context = NULL;
-  name_owner_id = 0;
+  GOptionContext *opt_context = NULL;
+  gint ret = 1;
+  guint name_owner_id = 0;
 
   setlocale (LC_ALL, "");
   bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
