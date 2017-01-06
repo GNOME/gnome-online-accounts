@@ -786,9 +786,9 @@ on_identity_signed_in (GoaIdentityManager *manager,
 }
 
 static void
-on_account_added (GoaManager   *manager,
-                  GAsyncResult *result,
-                  GTask        *operation_result)
+on_temporary_account_added (GoaManager   *manager,
+                            GAsyncResult *result,
+                            GTask        *operation_result)
 {
   GoaIdentityService *self;
   GDBusObjectManager *object_manager;
@@ -894,7 +894,7 @@ add_temporary_account (GoaIdentityService *self,
                                 g_variant_builder_end (&details),
                                 NULL,
                                 (GAsyncReadyCallback)
-                                on_account_added,
+                                on_temporary_account_added,
                                 g_object_ref (operation_result));
   g_free (realm);
   g_free (preauth_source);
