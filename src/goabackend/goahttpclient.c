@@ -194,7 +194,7 @@ http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer 
   g_source_set_callback (source, http_client_check_free_in_idle, task, NULL);
   g_source_set_name (source, "[goa] http_client_check_free_in_idle");
 
-  context = g_main_context_get_thread_default ();
+  context = g_task_get_context (task);
   g_source_attach (source, context);
   g_source_unref (source);
 }
