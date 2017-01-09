@@ -53,10 +53,6 @@ struct _GoaClient
 typedef struct
 {
   GObjectClass parent_class;
-
-  void (*account_added) (GoaClient *self, GDBusObject *object);
-  void (*account_removed) (GoaClient *self, GDBusObject *object);
-  void (*account_changed) (GoaClient *self, GDBusObject *object);
 } GoaClientClass;
 
 enum
@@ -192,7 +188,7 @@ goa_client_class_init (GoaClientClass *klass)
     g_signal_new ("account-added",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GoaClientClass, account_added),
+                  0,
                   NULL,
                   NULL,
                   g_cclosure_marshal_VOID__OBJECT,
@@ -211,7 +207,7 @@ goa_client_class_init (GoaClientClass *klass)
     g_signal_new ("account-removed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GoaClientClass, account_removed),
+                  0,
                   NULL,
                   NULL,
                   g_cclosure_marshal_VOID__OBJECT,
@@ -230,7 +226,7 @@ goa_client_class_init (GoaClientClass *klass)
     g_signal_new ("account-changed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GoaClientClass, account_changed),
+                  0,
                   NULL,
                   NULL,
                   g_cclosure_marshal_VOID__OBJECT,
