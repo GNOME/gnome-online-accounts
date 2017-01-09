@@ -30,12 +30,8 @@
 G_BEGIN_DECLS
 
 #define GOA_TYPE_EWS_CLIENT         (goa_ews_client_get_type ())
-#define GOA_EWS_CLIENT(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_EWS_CLIENT, GoaEwsClient))
-#define GOA_IS_EWS_CLIENT(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_EWS_CLIENT))
+G_DECLARE_FINAL_TYPE (GoaEwsClient, goa_ews_client, GOA, EWS_CLIENT, GObject);
 
-typedef struct _GoaEwsClient GoaEwsClient;
-
-GType           goa_ews_client_get_type            (void) G_GNUC_CONST;
 GoaEwsClient   *goa_ews_client_new                 (void);
 void            goa_ews_client_autodiscover        (GoaEwsClient        *self,
                                                     const gchar         *email,

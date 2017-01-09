@@ -37,13 +37,6 @@ struct _GoaEwsClient
   GObject parent_instance;
 };
 
-typedef struct _GoaEwsClientClass GoaEwsClientClass;
-
-struct _GoaEwsClientClass
-{
-  GObjectClass parent_class;
-};
-
 G_DEFINE_TYPE (GoaEwsClient, goa_ews_client, G_TYPE_OBJECT);
 
 /* ---------------------------------------------------------------------------------------------------- */
