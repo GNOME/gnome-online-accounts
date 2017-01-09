@@ -142,23 +142,14 @@ get_identity_sync (GoaOAuthProvider  *oauth_provider,
                    GCancellable      *cancellable,
                    GError           **error)
 {
-  GError *identity_error;
-  RestProxy *proxy;
-  RestProxyCall *call;
-  JsonParser *parser;
+  GError *identity_error = NULL;
+  RestProxy *proxy = NULL;
+  RestProxyCall *call = NULL;
+  JsonParser *parser = NULL;
   JsonObject *json_object;
-  gchar *ret;
-  gchar *id;
-  gchar *presentation_identity;
-
-  ret = NULL;
-
-  identity_error = NULL;
-  proxy = NULL;
-  call = NULL;
-  parser = NULL;
-  id = NULL;
-  presentation_identity = NULL;
+  gchar *ret = NULL;
+  gchar *id = NULL;
+  gchar *presentation_identity = NULL;
 
   /* TODO: cancellable */
 
@@ -270,11 +261,8 @@ static gboolean
 is_deny_node (GoaOAuthProvider *oauth_provider, WebKitDOMNode *node)
 {
   WebKitDOMElement *element;
-  gboolean ret;
-  gchar *id;
-
-  id = NULL;
-  ret = FALSE;
+  gboolean ret = FALSE;
+  gchar *id = NULL;
 
   if (!WEBKIT_DOM_IS_HTML_ANCHOR_ELEMENT (node))
     goto out;
@@ -310,10 +298,8 @@ static gchar *
 parse_request_token_error (GoaOAuthProvider *oauth_provider, RestProxyCall *call)
 {
   const gchar *payload;
-  gchar *msg;
+  gchar *msg = NULL;
   guint status;
-
-  msg = NULL;
 
   payload = rest_proxy_call_get_payload (call);
   status = rest_proxy_call_get_status_code (call);
@@ -335,12 +321,9 @@ build_object (GoaProvider         *provider,
               gboolean             just_added,
               GError             **error)
 {
-  GoaAccount *account;
+  GoaAccount *account = NULL;
   gboolean photos_enabled;
-  gboolean ret;
-
-  account = NULL;
-  ret = FALSE;
+  gboolean ret = FALSE;
 
   /* Chain up */
   if (!GOA_PROVIDER_CLASS (goa_flickr_provider_parent_class)->build_object (provider,
