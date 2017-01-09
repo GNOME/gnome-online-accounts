@@ -50,11 +50,6 @@ struct _GoaClient
   GDBusObjectManager *object_manager;
 };
 
-typedef struct
-{
-  GObjectClass parent_class;
-} GoaClientClass;
-
 enum
 {
   PROP_0,

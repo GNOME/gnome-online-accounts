@@ -28,9 +28,6 @@
 
 G_BEGIN_DECLS
 
-struct _GoaClient;
-typedef struct _GoaClient GoaClient;
-
 G_END_DECLS
 
 #endif /* __GOA_TYPES_H__ */

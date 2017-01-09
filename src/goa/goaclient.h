@@ -23,16 +23,13 @@
 #ifndef __GOA_CLIENT_H__
 #define __GOA_CLIENT_H__
 
-#include <goa/goatypes.h>
 #include <goa/goa-generated.h>
 
 G_BEGIN_DECLS
 
 #define GOA_TYPE_CLIENT  (goa_client_get_type ())
-#define GOA_CLIENT(o)    (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_CLIENT, GoaClient))
-#define GOA_IS_CLIENT(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_CLIENT))
+G_DECLARE_FINAL_TYPE (GoaClient, goa_client, GOA, CLIENT, GObject);
 
-GType               goa_client_get_type           (void) G_GNUC_CONST;
 void                goa_client_new                (GCancellable        *cancellable,
                                                    GAsyncReadyCallback  callback,
                                                    gpointer             user_data);
