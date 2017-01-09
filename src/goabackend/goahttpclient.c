@@ -69,12 +69,10 @@ typedef struct
   gchar *username;
 } CheckAuthData;
 
-static gboolean
+static void
 http_client_check_data_free (gpointer user_data)
 {
   CheckData *data = user_data;
-
-  g_simple_async_result_complete_in_idle (data->res);
 
   if (data->cancellable_id > 0)
     {
@@ -86,8 +84,6 @@ http_client_check_data_free (gpointer user_data)
   g_object_unref (data->res);
   g_object_unref (data->session);
   g_slice_free (CheckData, data);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -141,6 +137,17 @@ http_client_check_cancelled_cb (GCancellable *cancellable, gpointer user_data)
   soup_session_abort (data->session);
 }
 
+static gboolean
+http_client_check_complete_and_free_in_idle (gpointer user_data)
+{
+  CheckData *data = user_data;
+
+  g_simple_async_result_complete_in_idle (data->res);
+  http_client_check_data_free (data);
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer user_data)
 {
@@ -177,8 +184,8 @@ http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer 
 
   source = g_idle_source_new ();
   g_source_set_priority (source, G_PRIORITY_DEFAULT_IDLE);
-  g_source_set_callback (source, http_client_check_data_free, data, NULL);
-  g_source_set_name (source, "[goa] http_client_check_data_free");
+  g_source_set_callback (source, http_client_check_complete_and_free_in_idle, data, NULL);
+  g_source_set_name (source, "[goa] http_client_check_complete_and_free_in_idle");
 
   context = g_main_context_get_thread_default ();
   g_source_attach (source, context);
