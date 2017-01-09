@@ -169,11 +169,8 @@ ews_client_autodiscover_cancelled_cb (GCancellable *cancellable, gpointer user_d
 static gboolean
 ews_client_autodiscover_parse_protocol (xmlNode *node)
 {
-  gboolean as_url;
-  gboolean oab_url;
-
-  as_url = FALSE;
-  oab_url = FALSE;
+  gboolean as_url = FALSE;
+  gboolean oab_url = FALSE;
 
   for (node = node->children; node; node = node->next)
     {
@@ -192,17 +189,15 @@ ews_client_autodiscover_parse_protocol (xmlNode *node)
 static void
 ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpointer user_data)
 {
-  GError *error;
+  GError *error = NULL;
   AutodiscoverData *data = user_data;
-  gboolean op_res;
+  gboolean op_res = FALSE;
   guint status;
   gint idx;
   gsize size;
   xmlDoc *doc;
   xmlNode *node;
 
-  error = NULL;
-  op_res = FALSE;
   size = sizeof (data->msgs) / sizeof (data->msgs[0]);
 
   for (idx = 0; idx < size; idx++)
