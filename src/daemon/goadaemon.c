@@ -54,11 +54,6 @@ struct _GoaDaemon
   guint credentials_timeout_id;
 };
 
-typedef struct
-{
-  GObjectClass parent_class;
-} GoaDaemonClass;
-
 static void on_file_monitor_changed (GFileMonitor     *monitor,
                                      GFile            *file,
                                      GFile            *other_file,

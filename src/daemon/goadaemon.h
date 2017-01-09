@@ -19,16 +19,13 @@
 #ifndef __GOA_DAEMON_H__
 #define __GOA_DAEMON_H__
 
-#include "goadaemontypes.h"
 #include <goa/goa.h>
 
 G_BEGIN_DECLS
 
 #define GOA_TYPE_DAEMON  (goa_daemon_get_type ())
-#define GOA_DAEMON(o)    (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_DAEMON, GoaDaemon))
-#define GOA_IS_DAEMON(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_DAEMON))
+G_DECLARE_FINAL_TYPE (GoaDaemon, goa_daemon, GOA, DAEMON, GObject);
 
-GType               goa_daemon_get_type           (void) G_GNUC_CONST;
 GoaDaemon          *goa_daemon_new                (void);
 
 G_END_DECLS

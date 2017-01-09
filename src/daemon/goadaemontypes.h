@@ -23,9 +23,6 @@
 
 G_BEGIN_DECLS
 
-struct _GoaDaemon;
-typedef struct _GoaDaemon GoaDaemon;
-
 G_END_DECLS
 
 #endif /* __GOA_DAEMON_TYPES_H__ */
