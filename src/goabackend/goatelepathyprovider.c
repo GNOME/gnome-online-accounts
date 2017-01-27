@@ -951,11 +951,11 @@ show_account (GoaProvider         *provider,
 
   goa_utils_account_add_header (object, GTK_GRID (grid), row++);
 
-  /* Translators: This is a label for a series of
-   * options switches. For example: “Use for Mail”. */
   goa_util_add_row_switch_from_keyfile_with_blurb (GTK_GRID (grid),
                                                    row++,
                                                    object,
+                                                   /* Translators: This is a label for a series of
+                                                    * options switches. For example: “Use for Mail”. */
                                                    _("Use for"),
                                                    "chat-disabled",
                                                    _("C_hat"));
