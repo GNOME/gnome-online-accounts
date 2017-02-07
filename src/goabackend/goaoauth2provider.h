@@ -24,7 +24,6 @@
 #define __GOA_OAUTH2_PROVIDER_H__
 
 #include <gio/gio.h>
-#include <goabackend/goabackendtypes.h>
 
 G_BEGIN_DECLS
 

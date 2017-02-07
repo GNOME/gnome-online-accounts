@@ -26,7 +26,6 @@
 #include <gio/gio.h>
 #include <goabackend/goaoauth2provider.h>
 #include <goabackend/goaprovider-priv.h>
-#include <goabackend/goabackendtypes.h>
 #include <webkit2/webkit2.h>
 #include <webkitdom/webkitdom.h>
 
