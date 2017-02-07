@@ -27,7 +27,6 @@ libexec_PROGRAMS = goa-daemon
 
 goa_daemon_SOURCES = 						\
 				main.c				\
-	goadaemontypes.h					\
 	goadaemon.h		goadaemon.c			\
 	$(NULL)
 
