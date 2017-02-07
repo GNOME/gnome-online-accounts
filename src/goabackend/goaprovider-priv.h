@@ -40,7 +40,6 @@ struct _GoaProvider
 {
   /*< private >*/
   GObject parent_instance;
-  GoaProviderPrivate *priv;
 };
 
 /**

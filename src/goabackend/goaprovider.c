@@ -186,10 +186,13 @@ goa_provider_get_property (GObject *object,
                            GParamSpec *pspec)
 {
     GoaProvider *self = GOA_PROVIDER (object);
+    GoaProviderPrivate *priv;
+
+    priv = goa_provider_get_instance_private (self);
 
     switch (property_id) {
     case PROP_PRESEED_DATA:
-        g_value_set_variant (value, self->priv->preseed_data);
+        g_value_set_variant (value, priv->preseed_data);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -219,8 +222,11 @@ static void
 goa_provider_dispose (GObject *object)
 {
   GoaProvider *self = GOA_PROVIDER (object);
+  GoaProviderPrivate *priv;
 
-  g_clear_pointer (&self->priv->preseed_data, g_variant_unref);
+  priv = goa_provider_get_instance_private (self);
+
+  g_clear_pointer (&priv->preseed_data, g_variant_unref);
 
   G_OBJECT_CLASS (goa_provider_parent_class)->dispose (object);
 }
@@ -228,7 +234,6 @@ goa_provider_dispose (GObject *object)
 static void
 goa_provider_init (GoaProvider *self)
 {
-  self->priv = goa_provider_get_instance_private (self);
 }
 
 static void
@@ -1397,9 +1402,13 @@ void
 goa_provider_set_preseed_data (GoaProvider *self,
                                GVariant    *preseed_data)
 {
-  g_clear_pointer (&self->priv->preseed_data, g_variant_unref);
+  GoaProviderPrivate *priv;
+
+  priv = goa_provider_get_instance_private (self);
+
+  g_clear_pointer (&priv->preseed_data, g_variant_unref);
   if (preseed_data != NULL)
-    self->priv->preseed_data = g_variant_ref_sink (preseed_data);
+    priv->preseed_data = g_variant_ref_sink (preseed_data);
   g_object_notify (G_OBJECT (self), "preseed-data");
 }
 
@@ -1415,7 +1424,10 @@ goa_provider_set_preseed_data (GoaProvider *self,
 GVariant *
 goa_provider_get_preseed_data (GoaProvider *self)
 {
-  return self->priv->preseed_data;
+  GoaProviderPrivate *priv;
+
+  priv = goa_provider_get_instance_private (self);
+  return priv->preseed_data;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
