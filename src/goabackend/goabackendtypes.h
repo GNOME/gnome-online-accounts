@@ -28,9 +28,6 @@
 
 G_BEGIN_DECLS
 
-struct _GoaProvider;
-typedef struct _GoaProvider GoaProvider;
-
 G_END_DECLS
 
 #endif /* __GOA_BACKEND_TYPES_H__ */
