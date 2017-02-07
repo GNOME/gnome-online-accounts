@@ -21,12 +21,13 @@
 #include <errno.h>
 #include <string.h>
 
+#include <gio/gio.h>
 #include <glib/gi18n.h>
-#include <gio/gdesktopappinfo.h>
 #include <rest/rest-proxy.h>
 #include <libsoup/soup.h>
 
 #include "goadaemon.h"
+#include "goa/goa.h"
 #include "goabackend/goabackend.h"
 #include "goabackend/goaprovider-priv.h"
 #include "goabackend/goautils.h"

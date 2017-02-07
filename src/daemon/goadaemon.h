@@ -19,7 +19,7 @@
 #ifndef __GOA_DAEMON_H__
 #define __GOA_DAEMON_H__
 
-#include <goa/goa.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
