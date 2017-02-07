@@ -50,7 +50,6 @@ libgoa_backend_1_0_ladir = $(includedir)/goa-1.0/goabackend
 
 libgoa_backend_1_0_la_HEADERS =						\
 	goabackend.h							\
-	goabackendtypes.h						\
 	goabackendenums.h						\
 	goabackendenumtypes.h						\
 	goaprovider.h							\
@@ -67,7 +66,6 @@ nodist_libgoa_backend_1_0_la_SOURCES =					\
 
 libgoa_backend_1_0_la_SOURCES =						\
 	goabackend.h							\
-	goabackendtypes.h						\
 	goabackendenums-priv.h						\
 	goabackendenumtypes.h		goabackendenumtypes.c		\
 	goadlnaservermanager.h		goadlnaservermanager.c		\

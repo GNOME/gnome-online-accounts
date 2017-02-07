@@ -25,7 +25,7 @@
 
 #define __GOA_BACKEND_INSIDE_GOA_BACKEND_H__
 #include <goabackend/goabackendenumtypes.h>
-#include <goabackend/goabackendtypes.h>
+#include <goabackend/goabackendenums.h>
 #include <goabackend/goaprovider.h>
 #undef __GOA_BACKEND_INSIDE_GOA_BACKEND_H__
 
