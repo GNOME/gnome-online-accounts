@@ -27,7 +27,8 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <libsoup/soup.h>
-#include <goabackend/goabackendtypes.h>
+
+#include "goaprovider.h"
 
 G_BEGIN_DECLS
 

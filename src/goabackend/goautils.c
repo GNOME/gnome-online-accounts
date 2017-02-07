@@ -25,7 +25,6 @@
 #include <telepathy-glib/telepathy-glib.h>
 #endif
 
-#include "goaprovider.h"
 #include "goautils.h"
 
 static const SecretSchema secret_password_schema =
