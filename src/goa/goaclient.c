@@ -21,7 +21,6 @@
 
 #include "goaclient.h"
 #include "goaerror.h"
-#include "goa-generated.h"
 
 G_LOCK_DEFINE_STATIC (init_lock);
 
