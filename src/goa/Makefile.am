@@ -77,7 +77,6 @@ libgoa_1_0_la_HEADERS =						\
 	goa.h							\
 	goaclient.h						\
 	goaerror.h						\
-	goatypes.h						\
 	goaenums.h						\
 	goaenumtypes.h						\
 	goaversion.h						\
@@ -89,7 +88,6 @@ libgoa_1_0_la_SOURCES =						\
 	goaclient.h			goaclient.c		\
 	goaerror.h			goaerror.c		\
 	goa-generated.h			goa-generated.c		\
-	goatypes.h						\
 	goaenums.h						\
 	goaenumtypes.h			goaenumtypes.c		\
 	goaversion.h			goaversion.c		\

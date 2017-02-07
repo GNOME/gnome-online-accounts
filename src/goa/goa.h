@@ -24,8 +24,8 @@
 #endif
 
 #define __GOA_INSIDE_GOA_H__
-#include <goa/goatypes.h>
 #include <goa/goaclient.h>
+#include <goa/goaenums.h>
 #include <goa/goaerror.h>
 #include <goa/goaversion.h>
 #include <goa/goa-generated.h>
