@@ -23,6 +23,7 @@
 #ifndef __GOA_CLIENT_H__
 #define __GOA_CLIENT_H__
 
+#include <gio/gio.h>
 #include <goa/goa-generated.h>
 
 G_BEGIN_DECLS
