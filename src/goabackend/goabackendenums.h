@@ -23,7 +23,7 @@
 #ifndef __GOA_BACKEND_ENUMS_H__
 #define __GOA_BACKEND_ENUMS_H__
 
-#include <gio/gio.h>
+#include <glib.h>
 
 G_BEGIN_DECLS
 
