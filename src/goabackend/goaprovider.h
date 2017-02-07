@@ -29,13 +29,8 @@
 G_BEGIN_DECLS
 
 #define GOA_TYPE_PROVIDER         (goa_provider_get_type ())
-#define GOA_PROVIDER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_PROVIDER, GoaProvider))
-#define GOA_PROVIDER_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GOA_TYPE_PROVIDER, GoaProviderClass))
-#define GOA_PROVIDER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GOA_TYPE_PROVIDER, GoaProviderClass))
-#define GOA_IS_PROVIDER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_PROVIDER))
-#define GOA_IS_PROVIDER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GOA_TYPE_PROVIDER))
+G_DECLARE_DERIVABLE_TYPE (GoaProvider, goa_provider, GOA, PROVIDER, GObject);
 
-typedef struct _GoaProviderClass GoaProviderClass;
 typedef struct _GoaProviderPrivate GoaProviderPrivate;
 
 GType                  goa_provider_get_type                     (void) G_GNUC_CONST;

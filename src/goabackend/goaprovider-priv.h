@@ -36,11 +36,6 @@ G_BEGIN_DECLS
  * The #GoaProvider structure contains only private data and should
  * only be accessed using the provided API.
  */
-struct _GoaProvider
-{
-  /*< private >*/
-  GObject parent_instance;
-};
 
 /**
  * GoaProviderClass:
