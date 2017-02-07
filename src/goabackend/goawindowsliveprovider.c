@@ -25,8 +25,6 @@
 
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
-#include "goaoauth2provider.h"
-#include "goaoauth2provider-priv.h"
 #include "goawindowsliveprovider.h"
 #include "goaobjectskeletonutils.h"
 
@@ -40,13 +38,6 @@ struct _GoaWindowsLiveProvider
 {
   /*< private >*/
   GoaOAuth2Provider parent_instance;
-};
-
-typedef struct _GoaWindowsLiveProviderClass GoaWindowsLiveProviderClass;
-
-struct _GoaWindowsLiveProviderClass
-{
-  GoaOAuth2ProviderClass parent_class;
 };
 
 /**
