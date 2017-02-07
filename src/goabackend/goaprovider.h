@@ -24,7 +24,8 @@
 #define __GOA_PROVIDER_H__
 
 #include <gtk/gtk.h>
-#include <goabackend/goabackendtypes.h>
+#include <goa/goa.h>
+#include <goabackend/goabackendenums.h>
 
 G_BEGIN_DECLS
 
