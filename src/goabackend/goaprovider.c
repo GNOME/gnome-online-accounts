@@ -101,9 +101,7 @@ static void goa_provider_show_account_real (GoaProvider         *provider,
                                             GtkGrid             *dummy1,
                                             GtkGrid             *dummy2);
 
-#define GOA_PROVIDER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GOA_TYPE_PROVIDER, GoaProviderPrivate))
-
-G_DEFINE_ABSTRACT_TYPE (GoaProvider, goa_provider, G_TYPE_OBJECT);
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GoaProvider, goa_provider, G_TYPE_OBJECT);
 
 static struct {
   GoaProviderFeatures feature;
@@ -230,15 +228,13 @@ goa_provider_dispose (GObject *object)
 static void
 goa_provider_init (GoaProvider *self)
 {
-  self->priv = GOA_PROVIDER_GET_PRIVATE (self);
+  self->priv = goa_provider_get_instance_private (self);
 }
 
 static void
 goa_provider_class_init (GoaProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  g_type_class_add_private (klass, sizeof (GoaProviderPrivate));
 
   object_class->set_property = goa_provider_set_property;
   object_class->get_property = goa_provider_get_property;
