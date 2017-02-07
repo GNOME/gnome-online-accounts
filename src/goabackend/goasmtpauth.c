@@ -23,7 +23,6 @@
 #include <glib/gi18n-lib.h>
 
 #include "goasmtpauth.h"
-#include "goaprovider.h"
 #include "goautils.h"
 
 /*

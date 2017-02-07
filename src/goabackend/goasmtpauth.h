@@ -27,9 +27,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include <goabackend/goabackendtypes.h>
-
 #include "goamailauth.h"
+#include "goaprovider.h"
 
 G_BEGIN_DECLS
 
