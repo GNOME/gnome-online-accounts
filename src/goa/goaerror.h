@@ -23,7 +23,7 @@
 #ifndef __GOA_ERROR_H__
 #define __GOA_ERROR_H__
 
-#include <goa/goatypes.h>
+#include <glib.h>
 
 G_BEGIN_DECLS
 
