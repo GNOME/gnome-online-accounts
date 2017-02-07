@@ -24,7 +24,6 @@
 #include <stdlib.h>
 
 #include "goaimapauthlogin.h"
-#include "goaprovider.h"
 #include "goautils.h"
 
 /*
