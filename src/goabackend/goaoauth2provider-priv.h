@@ -37,11 +37,6 @@ G_BEGIN_DECLS
  * The #GoaOAuth2Provider structure contains only private data and should
  * only be accessed using the provided API.
  */
-struct _GoaOAuth2Provider
-{
-  /*< private >*/
-  GoaProvider parent_instance;
-};
 
 /**
  * GoaOAuth2ProviderClass:
