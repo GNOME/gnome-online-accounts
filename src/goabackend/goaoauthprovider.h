@@ -31,15 +31,7 @@
 G_BEGIN_DECLS
 
 #define GOA_TYPE_OAUTH_PROVIDER         (goa_oauth_provider_get_type ())
-#define GOA_OAUTH_PROVIDER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_OAUTH_PROVIDER, GoaOAuthProvider))
-#define GOA_OAUTH_PROVIDER_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GOA_TYPE_OAUTH_PROVIDER, GoaOAuthProviderClass))
-#define GOA_OAUTH_PROVIDER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GOA_TYPE_OAUTH_PROVIDER, GoaOAuthProviderClass))
-#define GOA_IS_OAUTH_PROVIDER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_OAUTH_PROVIDER))
-
-#define GOA_IS_OAUTH_PROVIDER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GOA_TYPE_OAUTH_PROVIDER))
-
-typedef struct _GoaOAuthProvider GoaOAuthProvider;
-typedef struct _GoaOAuthProviderClass GoaOAuthProviderClass;
+G_DECLARE_DERIVABLE_TYPE (GoaOAuthProvider, goa_oauth_provider, GOA, OAUTH_PROVIDER, GoaProvider);
 
 /**
  * GoaOAuthProvider:
@@ -47,11 +39,6 @@ typedef struct _GoaOAuthProviderClass GoaOAuthProviderClass;
  * The #GoaOAuthProvider structure contains only private data and should
  * only be accessed using the provided API.
  */
-struct _GoaOAuthProvider
-{
-  /*< private >*/
-  GoaProvider parent_instance;
-};
 
 /**
  * GoaOAuthProviderClass:
@@ -121,7 +108,6 @@ struct _GoaOAuthProviderClass
   gpointer goa_reserved[29];
 };
 
-GType        goa_oauth_provider_get_type                     (void) G_GNUC_CONST;
 const gchar *goa_oauth_provider_get_consumer_key             (GoaOAuthProvider             *provider);
 const gchar *goa_oauth_provider_get_consumer_secret          (GoaOAuthProvider             *provider);
 const gchar *goa_oauth_provider_get_request_uri              (GoaOAuthProvider             *provider);
