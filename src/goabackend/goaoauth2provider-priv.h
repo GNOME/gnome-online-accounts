@@ -41,7 +41,6 @@ struct _GoaOAuth2Provider
 {
   /*< private >*/
   GoaProvider parent_instance;
-  GoaOAuth2ProviderPrivate *priv;
 };
 
 /**

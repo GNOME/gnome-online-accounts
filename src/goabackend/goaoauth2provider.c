@@ -817,7 +817,9 @@ static void
 on_web_view_deny_click (GoaWebView *web_view, gpointer user_data)
 {
   GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
-  GoaOAuth2ProviderPrivate *priv = provider->priv;
+  GoaOAuth2ProviderPrivate *priv;
+
+  priv = goa_oauth2_provider_get_instance_private (provider);
   gtk_dialog_response (priv->dialog, GTK_RESPONSE_CANCEL);
 }
 
@@ -825,7 +827,9 @@ static void
 on_web_view_password_submit (GoaWebView *web_view, const gchar *password, gpointer user_data)
 {
   GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
-  GoaOAuth2ProviderPrivate *priv = provider->priv;
+  GoaOAuth2ProviderPrivate *priv;
+
+  priv = goa_oauth2_provider_get_instance_private (provider);
 
   g_free (priv->password);
   priv->password = g_strdup (password);
@@ -838,7 +842,7 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
                            gpointer                  user_data)
 {
   GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
-  GoaOAuth2ProviderPrivate *priv = provider->priv;
+  GoaOAuth2ProviderPrivate *priv;
   GHashTable *key_value_pairs;
   WebKitNavigationAction *action;
   WebKitURIRequest *request;
@@ -849,6 +853,8 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
   const gchar *redirect_uri;
   const gchar *requested_uri;
   gint response_id = GTK_RESPONSE_NONE;
+
+  priv = goa_oauth2_provider_get_instance_private (provider);
 
   if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION)
     goto default_behaviour;
@@ -983,7 +989,7 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
                          GtkDialog          *dialog,
                          GtkBox             *vbox)
 {
-  GoaOAuth2ProviderPrivate *priv = provider->priv;
+  GoaOAuth2ProviderPrivate *priv;
   gboolean ret;
   gchar *url;
   GSList *cookies;
@@ -1001,12 +1007,14 @@ get_tokens_and_identity (GoaOAuth2Provider  *provider,
                         || (add_account && existing_identity == NULL), FALSE);
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), FALSE);
   g_return_val_if_fail (GTK_IS_BOX (vbox), FALSE);
-  g_return_val_if_fail (priv->error == NULL, FALSE);
 
   ret = FALSE;
   escaped_redirect_uri = NULL;
   escaped_client_id = NULL;
   escaped_scope = NULL;
+
+  priv = goa_oauth2_provider_get_instance_private (provider);
+  g_return_val_if_fail (priv->error == NULL, FALSE);
 
   /* TODO: check with NM whether we're online, if not - return error */
 
@@ -1142,7 +1150,10 @@ add_account_cb (GoaManager   *manager,
                 gpointer      user_data)
 {
   GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (user_data);
-  GoaOAuth2ProviderPrivate *priv = provider->priv;
+  GoaOAuth2ProviderPrivate *priv;
+
+  priv = goa_oauth2_provider_get_instance_private (provider);
+
   goa_manager_call_add_account_finish (manager,
                                        &priv->account_object_path,
                                        res,
@@ -1178,7 +1189,9 @@ static void
 add_credentials_key_values (GoaOAuth2Provider *provider,
                             GVariantBuilder *credentials)
 {
-  GoaOAuth2ProviderPrivate *priv = provider->priv;
+  GoaOAuth2ProviderPrivate *priv;
+
+  priv = goa_oauth2_provider_get_instance_private (provider);
 
   if (priv->authorization_code != NULL)
     g_variant_builder_add (credentials, "{sv}", "authorization_code",
@@ -1201,7 +1214,7 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
                                          GError            **error)
 {
   GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (_provider);
-  GoaOAuth2ProviderPrivate *priv = provider->priv;
+  GoaOAuth2ProviderPrivate *priv;
   GoaObject *ret;
   GVariantBuilder credentials;
   GVariantBuilder details;
@@ -1213,6 +1226,8 @@ goa_oauth2_provider_add_account (GoaProvider *_provider,
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
   ret = NULL;
+
+  priv = goa_oauth2_provider_get_instance_private (provider);
 
   if (!get_tokens_and_identity (provider,
                                 TRUE,
@@ -1286,7 +1301,7 @@ goa_oauth2_provider_refresh_account (GoaProvider  *_provider,
                                      GError      **error)
 {
   GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (_provider);
-  GoaOAuth2ProviderPrivate *priv = provider->priv;
+  GoaOAuth2ProviderPrivate *priv;
   GoaAccount *account;
   GtkWidget *dialog;
   const gchar *existing_identity;
@@ -1301,6 +1316,8 @@ goa_oauth2_provider_refresh_account (GoaProvider  *_provider,
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   ret = FALSE;
+
+  priv = goa_oauth2_provider_get_instance_private (provider);
 
   dialog = gtk_dialog_new_with_buttons (NULL,
                                         parent,
@@ -1713,7 +1730,9 @@ static void
 goa_oauth2_provider_finalize (GObject *object)
 {
   GoaOAuth2Provider *provider = GOA_OAUTH2_PROVIDER (object);
-  GoaOAuth2ProviderPrivate *priv = provider->priv;
+  GoaOAuth2ProviderPrivate *priv;
+
+  priv = goa_oauth2_provider_get_instance_private (provider);
 
   g_clear_pointer (&priv->loop, g_main_loop_unref);
 
@@ -1731,7 +1750,6 @@ goa_oauth2_provider_finalize (GObject *object)
 static void
 goa_oauth2_provider_init (GoaOAuth2Provider *provider)
 {
-  provider->priv = goa_oauth2_provider_get_instance_private (provider);
 }
 
 static void
