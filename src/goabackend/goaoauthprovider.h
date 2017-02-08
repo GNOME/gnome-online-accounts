@@ -40,7 +40,6 @@ G_BEGIN_DECLS
 
 typedef struct _GoaOAuthProvider GoaOAuthProvider;
 typedef struct _GoaOAuthProviderClass GoaOAuthProviderClass;
-typedef struct _GoaOAuthProviderPrivate GoaOAuthProviderPrivate;
 
 /**
  * GoaOAuthProvider:
@@ -52,7 +51,6 @@ struct _GoaOAuthProvider
 {
   /*< private >*/
   GoaProvider parent_instance;
-  GoaOAuthProviderPrivate *priv;
 };
 
 /**
