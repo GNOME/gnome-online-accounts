@@ -34,8 +34,6 @@ G_DECLARE_DERIVABLE_TYPE (GoaProvider, goa_provider, GOA, PROVIDER, GObject);
 
 typedef struct _GoaProviderPrivate GoaProviderPrivate;
 
-GType                  goa_provider_get_type                     (void) G_GNUC_CONST;
-
 const gchar           *goa_provider_get_provider_type            (GoaProvider            *self);
 
 gchar                 *goa_provider_get_provider_name            (GoaProvider            *self,
