@@ -119,11 +119,8 @@ struct _GoaOAuthProviderClass
   gboolean     (*is_password_node)             (GoaOAuthProvider             *provider,
                                                 WebKitDOMHTMLInputElement    *element);
 
-  /*< private >*/
-  GoaOAuthProviderPrivate *priv;
-
   /* Padding for future expansion */
-  gpointer goa_reserved[28];
+  gpointer goa_reserved[29];
 };
 
 GType        goa_oauth_provider_get_type                     (void) G_GNUC_CONST;
