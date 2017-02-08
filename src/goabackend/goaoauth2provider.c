@@ -82,11 +82,9 @@ struct _GoaOAuth2ProviderPrivate
   gchar *password;
 };
 
-#define GOA_OAUTH2_PROVIDER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GOA_TYPE_OAUTH2_PROVIDER, GoaOAuth2ProviderPrivate))
-
 G_LOCK_DEFINE_STATIC (provider_lock);
 
-G_DEFINE_ABSTRACT_TYPE (GoaOAuth2Provider, goa_oauth2_provider, GOA_TYPE_PROVIDER);
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GoaOAuth2Provider, goa_oauth2_provider, GOA_TYPE_PROVIDER);
 
 static gboolean
 is_authorization_error (GError *error)
@@ -1733,7 +1731,7 @@ goa_oauth2_provider_finalize (GObject *object)
 static void
 goa_oauth2_provider_init (GoaOAuth2Provider *provider)
 {
-  provider->priv = GOA_OAUTH2_PROVIDER_GET_PRIVATE (provider);
+  provider->priv = goa_oauth2_provider_get_instance_private (provider);
 }
 
 static void
@@ -1759,8 +1757,6 @@ goa_oauth2_provider_class_init (GoaOAuth2ProviderClass *klass)
   klass->is_deny_node             = goa_oauth2_provider_is_deny_node_default;
   klass->is_password_node         = goa_oauth2_provider_is_password_node_default;
   klass->add_account_key_values   = goa_oauth2_provider_add_account_key_values_default;
-
-  g_type_class_add_private (object_class, sizeof (GoaOAuth2ProviderPrivate));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
