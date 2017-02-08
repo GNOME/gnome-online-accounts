@@ -1,7 +1,7 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright (C) 2010-2013 Collabora Ltd.
- * Copyright (C) 2013 Intel Corporation
+ * Copyright © 2010 – 2013 Collabora Ltd.
+ * Copyright © 2013 Intel Corporation
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
