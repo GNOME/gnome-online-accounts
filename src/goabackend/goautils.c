@@ -326,8 +326,11 @@ goa_utils_set_dialog_title (GoaProvider *provider, GtkDialog *dialog, gboolean a
   gchar *title;
 
   provider_name = goa_provider_get_provider_name (GOA_PROVIDER (provider), NULL);
-  /* Translators: the %s is the name of the provider. eg., Google. */
-  title = g_strdup_printf (_("%s account"), provider_name);
+  /* Translators: this is the title of the "Add Account" and "Refresh
+   * Account" dialogs. The %s is the name of the provider. eg.,
+   * 'Google'.
+   */
+  title = g_strdup_printf (_("%s Account"), provider_name);
   gtk_window_set_title (GTK_WINDOW (dialog), title);
   g_free (title);
   g_free (provider_name);
