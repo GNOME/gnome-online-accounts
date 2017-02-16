@@ -823,6 +823,8 @@ add_account (GoaProvider    *provider,
   else
     g_assert (ret != NULL);
 
+  g_signal_handlers_disconnect_by_func (dialog, dialog_response_cb, &data);
+
   g_free (presentation_identity);
   g_free (server);
   g_free (uri);

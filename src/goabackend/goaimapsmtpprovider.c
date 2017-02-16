@@ -1179,6 +1179,8 @@ add_account (GoaProvider    *provider,
   else
     g_assert (ret != NULL);
 
+  g_signal_handlers_disconnect_by_func (dialog, dialog_response_cb, &data);
+
   g_free (domain);
   g_free (data.account_object_path);
   g_clear_pointer (&data.loop, (GDestroyNotify) g_main_loop_unref);
