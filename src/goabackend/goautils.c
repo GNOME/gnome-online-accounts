@@ -119,6 +119,8 @@ goa_utils_account_add_attention_needed (GoaClient *client, GoaObject *object, Go
   grid = gtk_grid_new ();
   gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), GTK_ORIENTATION_HORIZONTAL);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
+  gtk_widget_set_margin_top (grid, 18);
+  gtk_widget_set_margin_bottom (grid, 6);
   gtk_box_pack_end (vbox, grid, FALSE, TRUE, 0);
 
   image = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
@@ -129,6 +131,7 @@ goa_utils_account_add_attention_needed (GoaClient *client, GoaObject *object, Go
   gtk_widget_set_halign (labels_grid, GTK_ALIGN_FILL);
   gtk_widget_set_hexpand (labels_grid, TRUE);
   gtk_widget_set_valign (labels_grid, GTK_ALIGN_CENTER);
+  gtk_widget_set_margin_end (labels_grid, 12);
   gtk_orientable_set_orientation (GTK_ORIENTABLE (labels_grid), GTK_ORIENTATION_VERTICAL);
   gtk_grid_set_column_spacing (GTK_GRID (labels_grid), 0);
   gtk_container_add (GTK_CONTAINER (grid), labels_grid);
