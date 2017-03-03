@@ -1323,7 +1323,7 @@ dbus_proxy_reload_properties_sync (GDBusProxy    *proxy,
   char *name;
   char *name_owner = NULL;
   GVariant *value;
-  GVariantIter *iter;
+  GVariantIter *iter = NULL;
   gboolean ret = FALSE;
 
   name_owner = g_dbus_proxy_get_name_owner (proxy);
@@ -1349,11 +1349,11 @@ dbus_proxy_reload_properties_sync (GDBusProxy    *proxy,
       g_free (name);
       g_variant_unref (value);
     }
-  g_variant_iter_free (iter);
 
   ret = TRUE;
 
  out:
+  g_clear_pointer (&iter, (GDestroyNotify) g_variant_iter_free);
   g_free (name_owner);
   return ret;
 }
