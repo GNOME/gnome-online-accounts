@@ -1325,11 +1325,14 @@ dbus_proxy_reload_properties_sync (GDBusProxy    *proxy,
 {
   GVariant *result;
   char *name;
+  char *name_owner = NULL;
   GVariant *value;
   GVariantIter *iter;
+  gboolean ret = FALSE;
 
+  name_owner = g_dbus_proxy_get_name_owner (proxy);
   result = g_dbus_connection_call_sync (g_dbus_proxy_get_connection (proxy),
-                                        g_dbus_proxy_get_name_owner (proxy),
+                                        name_owner,
                                         g_dbus_proxy_get_object_path (proxy),
                                         "org.freedesktop.DBus.Properties",
                                         "GetAll",
@@ -1340,7 +1343,7 @@ dbus_proxy_reload_properties_sync (GDBusProxy    *proxy,
                                         cancellable,
                                         NULL);
   if (result == NULL)
-    return FALSE;
+    goto out;
 
   g_variant_get (result, "(a{sv})", &iter);
   while (g_variant_iter_next (iter, "{sv}", &name, &value))
@@ -1351,7 +1354,12 @@ dbus_proxy_reload_properties_sync (GDBusProxy    *proxy,
       g_variant_unref (value);
     }
   g_variant_iter_free (iter);
-  return TRUE;
+
+  ret = TRUE;
+
+ out:
+  g_free (name_owner);
+  return ret;
 }
 
 static gboolean
