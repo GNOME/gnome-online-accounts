@@ -1500,6 +1500,7 @@ static void
 ensure_credentials_queue_collector (GObject *source_object, GAsyncResult *res, gpointer user_data)
 {
   GTask *task = G_TASK (user_data);
+  GTask *task_queued;
   GoaDaemon *self;
   GoaAccount *account;
   GoaProvider *provider = GOA_PROVIDER (source_object);
@@ -1508,7 +1509,9 @@ ensure_credentials_queue_collector (GObject *source_object, GAsyncResult *res, g
   gint expires_in;
 
   self = GOA_DAEMON (g_task_get_source_object (task));
-  g_assert (task == G_TASK (g_queue_pop_head (self->ensure_credentials_queue)));
+
+  task_queued = G_TASK (g_queue_pop_head (self->ensure_credentials_queue));
+  g_assert (task == task_queued);
 
   data = g_task_get_task_data (task);
   account = goa_object_peek_account (data->object);
