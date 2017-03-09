@@ -1324,7 +1324,7 @@ static gboolean
 dbus_proxy_reload_properties_sync (GDBusProxy    *proxy,
                                    GCancellable  *cancellable)
 {
-  GVariant *result;
+  GVariant *result = NULL;
   char *name;
   char *name_owner = NULL;
   GVariant *value;
@@ -1359,6 +1359,7 @@ dbus_proxy_reload_properties_sync (GDBusProxy    *proxy,
 
  out:
   g_clear_pointer (&iter, (GDestroyNotify) g_variant_iter_free);
+  g_clear_pointer (&result, (GDestroyNotify) g_variant_unref);
   g_free (name_owner);
   return ret;
 }
