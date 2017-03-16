@@ -11,9 +11,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-27 00:05+0100\n"
-"PO-Revision-Date: 2017-02-27 00:06+0100\n"
+"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"online-accounts&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2017-03-16 19:06+0000\n"
+"PO-Revision-Date: 2017-03-16 22:47+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl\n"
@@ -271,7 +272,7 @@ msgstr "Servizo non dispoñíbel"
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:114
 #: ../src/goabackend/goalastfmprovider.c:523
-#: ../src/goabackend/goasmtpauth.c:112 ../src/goabackend/goautils.c:890
+#: ../src/goabackend/goasmtpauth.c:112 ../src/goabackend/goautils.c:893
 #, c-format
 msgid "Authentication failed"
 msgstr "A autenticación fallou"
@@ -426,7 +427,7 @@ msgstr "O dominio non é válido"
 msgid "Error connecting to enterprise identity server"
 msgstr "Produciuse un erro ao conectarse ao servidor corporativo de identidade"
 
-#: ../src/goabackend/goakerberosprovider.c:1601
+#: ../src/goabackend/goakerberosprovider.c:1610
 #, c-format
 msgid "Identity service returned invalid key"
 msgstr "O servizo de identidade devolveu unha chave non válida"
@@ -722,93 +723,97 @@ msgstr "_Iniciar sesión"
 msgid "A %s account already exists for %s"
 msgstr "Xa existe unha conta %s para %s"
 
-#. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:330
+#. Translators: this is the title of the "Add Account" and "Refresh
+#. * Account" dialogs. The %s is the name of the provider. eg.,
+#. * 'Google'.
+#.
+#: ../src/goabackend/goautils.c:333
 #, c-format
-msgid "%s account"
+#| msgid "%s account"
+msgid "%s Account"
 msgstr "Conta de %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:388
+#: ../src/goabackend/goautils.c:391
 msgid "Failed to delete credentials from the keyring"
 msgstr "Produciuse un erro ao eliminar as credenciais do anel de chaves"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:440
+#: ../src/goabackend/goautils.c:443
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Produciuse un erro ao obter as credenciais do anel de chaves"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:450
+#: ../src/goabackend/goautils.c:453
 msgid "No credentials found in the keyring"
 msgstr "Non se atoparon as credenciais no anel de chaves"
 
-#: ../src/goabackend/goautils.c:463
+#: ../src/goabackend/goautils.c:466
 msgid "Error parsing result obtained from the keyring: "
 msgstr ""
 "Produciuse un erro ao analizar o resultado obtido desde o anel de chaves: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:506
+#: ../src/goabackend/goautils.c:509
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Credenciais GOA de %s para a identidade %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:523
+#: ../src/goabackend/goautils.c:526
 msgid "Failed to store credentials in the keyring"
 msgstr "Produciuse un erro ao gardar as credenciais no anel de chaves"
 
-#: ../src/goabackend/goautils.c:877
+#: ../src/goabackend/goautils.c:880
 msgid "Cannot resolve hostname"
 msgstr "Non é posíbel resolver o nome de equipo"
 
-#: ../src/goabackend/goautils.c:881
+#: ../src/goabackend/goautils.c:884
 msgid "Cannot resolve proxy hostname"
 msgstr "Non é posíbel resolver o nome de equipo do proxi"
 
-#: ../src/goabackend/goautils.c:886
+#: ../src/goabackend/goautils.c:889
 msgid "Cannot find WebDAV endpoint"
 msgstr "Non é posíbel atopar o punto final WebDAV"
 
-#: ../src/goabackend/goautils.c:895
+#: ../src/goabackend/goautils.c:898
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Código: %u — Resposta non agardada do servidor"
 
-#: ../src/goabackend/goautils.c:911
+#: ../src/goabackend/goautils.c:914
 msgid "The signing certificate authority is not known."
 msgstr "O asinado da autoridade certificadora non se recoñece."
 
-#: ../src/goabackend/goautils.c:915
+#: ../src/goabackend/goautils.c:918
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr ""
 "O certificado non coincide coa identidade agardada do sitio da que se obtivo."
 
-#: ../src/goabackend/goautils.c:920
+#: ../src/goabackend/goautils.c:923
 msgid "The certificate’s activation time is still in the future."
 msgstr "A hora de activación do certificado está aínda no futuro."
 
-#: ../src/goabackend/goautils.c:924
+#: ../src/goabackend/goautils.c:927
 msgid "The certificate has expired."
 msgstr "O certificado caducou."
 
-#: ../src/goabackend/goautils.c:928
+#: ../src/goabackend/goautils.c:931
 msgid "The certificate has been revoked."
 msgstr "O certificado foi revogado."
 
-#: ../src/goabackend/goautils.c:932
+#: ../src/goabackend/goautils.c:935
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "O algoritmo do certificado considérase inseguro."
 
-#: ../src/goabackend/goautils.c:936
+#: ../src/goabackend/goautils.c:939
 msgid "Invalid certificate."
 msgstr "Certificado non válido."
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:971
+#: ../src/goabackend/goautils.c:974
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "Non foi posíbel atopar %s coa identidade «%s» nas credenciais"
@@ -820,8 +825,9 @@ msgid "Loading “%s”…"
 msgstr "Cargando «%s»…"
 
 #: ../src/goabackend/goawindowsliveprovider.c:70
-msgid "Microsoft Account"
-msgstr "Conta de Microsoft"
+#| msgid "Microsoft Account"
+msgid "Microsoft"
+msgstr "Microsoft"
 
 #: ../src/goaidentity/goaidentityservice.c:366
 msgid "initial secret passed before secret key exchange"
