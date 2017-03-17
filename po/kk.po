@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-03 09:04+0000\n"
-"PO-Revision-Date: 2017-03-08 13:14+0500\n"
+"POT-Creation-Date: 2017-03-16 19:06+0000\n"
+"PO-Revision-Date: 2017-03-17 08:32+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.8.12\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #. TODO: more specific
 #: ../src/daemon/goadaemon.c:1132 ../src/daemon/goadaemon.c:1416
@@ -262,7 +262,7 @@ msgstr "Қызмет қолжетерсіз"
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:114
 #: ../src/goabackend/goalastfmprovider.c:523
-#: ../src/goabackend/goasmtpauth.c:112 ../src/goabackend/goautils.c:890
+#: ../src/goabackend/goasmtpauth.c:112 ../src/goabackend/goautils.c:893
 #, c-format
 msgid "Authentication failed"
 msgstr "Аутентификация сәтсіз"
@@ -416,7 +416,7 @@ msgstr "Домен қате"
 msgid "Error connecting to enterprise identity server"
 msgstr "Кәсіпорын идентификаторлары серверіне байланысу қатесі"
 
-#: ../src/goabackend/goakerberosprovider.c:1601
+#: ../src/goabackend/goakerberosprovider.c:1610
 #, c-format
 msgid "Identity service returned invalid key"
 msgstr "Идентификация қызметі жарамсыз кілтті қайтарды"
@@ -709,91 +709,94 @@ msgstr "_Кіру"
 msgid "A %s account already exists for %s"
 msgstr "%s тіркелгісі %s үшін бар болып тұр"
 
-#. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:330
+#. Translators: this is the title of the "Add Account" and "Refresh
+#. * Account" dialogs. The %s is the name of the provider. eg.,
+#. * 'Google'.
+#.
+#: ../src/goabackend/goautils.c:333
 #, c-format
-msgid "%s account"
+msgid "%s Account"
 msgstr "%s тіркелгісі"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:388
+#: ../src/goabackend/goautils.c:391
 msgid "Failed to delete credentials from the keyring"
 msgstr "Тіркелу мәліметтерін кілттер бауынан өшіру қатесі"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:440
+#: ../src/goabackend/goautils.c:443
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Тіркелу мәліметтерін кілттер бауынан алу қатесі"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:450
+#: ../src/goabackend/goautils.c:453
 msgid "No credentials found in the keyring"
 msgstr "Кілттер бауында тіркелу мәліметтері табылмады"
 
-#: ../src/goabackend/goautils.c:463
+#: ../src/goabackend/goautils.c:466
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Кілттер бауынан алынған нәтижені талдау қатесі:"
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:506
+#: ../src/goabackend/goautils.c:509
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "GOA %s тіркелу мәліметтері, %s идентификаторы үшін"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:523
+#: ../src/goabackend/goautils.c:526
 msgid "Failed to store credentials in the keyring"
 msgstr "Тіркелу мәліметтерін кілттер бауында сақтау қатесі"
 
-#: ../src/goabackend/goautils.c:877
+#: ../src/goabackend/goautils.c:880
 msgid "Cannot resolve hostname"
 msgstr "Хост атын шешу мүмкін емес"
 
-#: ../src/goabackend/goautils.c:881
+#: ../src/goabackend/goautils.c:884
 msgid "Cannot resolve proxy hostname"
 msgstr "Прокси хост атын шешу мүмкін емес"
 
-#: ../src/goabackend/goautils.c:886
+#: ../src/goabackend/goautils.c:889
 msgid "Cannot find WebDAV endpoint"
 msgstr "WebDAV түпкі нүктесін табу мүмкін емес"
 
-#: ../src/goabackend/goautils.c:895
+#: ../src/goabackend/goautils.c:898
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Коды: %u — Серверден күтпеген жауап алынды"
 
-#: ../src/goabackend/goautils.c:911
+#: ../src/goabackend/goautils.c:914
 msgid "The signing certificate authority is not known."
 msgstr "Қолтаңба қойған сертификаттың сертификаттау орталығы белгісіз."
 
-#: ../src/goabackend/goautils.c:915
+#: ../src/goabackend/goautils.c:918
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr "Сертификат өзі алынған сайттың күтілген анықтағышына сәйкес келмейді."
 
-#: ../src/goabackend/goautils.c:920
+#: ../src/goabackend/goautils.c:923
 msgid "The certificate’s activation time is still in the future."
 msgstr "Сертификатты белсендіру уақыты әлі болашақта."
 
-#: ../src/goabackend/goautils.c:924
+#: ../src/goabackend/goautils.c:927
 msgid "The certificate has expired."
 msgstr "Сертификаттың мерзімі аяқталған."
 
-#: ../src/goabackend/goautils.c:928
+#: ../src/goabackend/goautils.c:931
 msgid "The certificate has been revoked."
 msgstr "Сертификат қайта шақырылған."
 
-#: ../src/goabackend/goautils.c:932
+#: ../src/goabackend/goautils.c:935
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Сертификат алгоритмі қауіпсіз емес ретінде саналады."
 
-#: ../src/goabackend/goautils.c:936
+#: ../src/goabackend/goautils.c:939
 msgid "Invalid certificate."
 msgstr "Қате сертификат."
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:971
+#: ../src/goabackend/goautils.c:974
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "Тіркелу мәліметтерінде \"%2$s\" идентификаторы бар \"%1$s\" табылмады"
@@ -805,8 +808,8 @@ msgid "Loading “%s”…"
 msgstr "\"%s\" жүктеу…"
 
 #: ../src/goabackend/goawindowsliveprovider.c:70
-msgid "Microsoft Account"
-msgstr "Microsoft тіркелгісі"
+msgid "Microsoft"
+msgstr "Microsoft"
 
 #: ../src/goaidentity/goaidentityservice.c:366
 msgid "initial secret passed before secret key exchange"
