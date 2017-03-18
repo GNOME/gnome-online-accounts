@@ -1,16 +1,16 @@
 # Lithuanian translation for gnome-online-accounts.
 # Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
-# Aurimas Černius <aurisc4@gmail.com>, 2011, 2013, 2014, 2015, 2016.
+# Aurimas Černius <aurisc4@gmail.com>, 2011, 2013, 2014, 2015, 2016, 2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-03 09:04+0000\n"
-"PO-Revision-Date: 2017-03-03 20:04+0200\n"
-"Last-Translator: Moo\n"
+"POT-Creation-Date: 2017-03-16 19:06+0000\n"
+"PO-Revision-Date: 2017-03-18 12:32+0200\n"
+"Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Gtranslator 2.91.7\n"
 
 #. TODO: more specific
 #: ../src/daemon/goadaemon.c:1132 ../src/daemon/goadaemon.c:1416
@@ -263,7 +263,7 @@ msgstr "Tarnyba nepasiekiama"
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:114
 #: ../src/goabackend/goalastfmprovider.c:523
-#: ../src/goabackend/goasmtpauth.c:112 ../src/goabackend/goautils.c:890
+#: ../src/goabackend/goasmtpauth.c:112 ../src/goabackend/goautils.c:893
 #, c-format
 msgid "Authentication failed"
 msgstr "Nepavyko patvirtinti tapatybės"
@@ -415,7 +415,7 @@ msgstr "Šis domenas yra netinkamas"
 msgid "Error connecting to enterprise identity server"
 msgstr "Klaida jungiantis prie kompanijos identitetų serverio"
 
-#: ../src/goabackend/goakerberosprovider.c:1601
+#: ../src/goabackend/goakerberosprovider.c:1610
 #, c-format
 msgid "Identity service returned invalid key"
 msgstr "Identiteto tarnyba grąžino netinkamą raktą"
@@ -709,92 +709,96 @@ msgstr "_Prisijungti"
 msgid "A %s account already exists for %s"
 msgstr "%s paskyra jau yra %s"
 
-#. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:330
+#. Translators: this is the title of the "Add Account" and "Refresh
+#. * Account" dialogs. The %s is the name of the provider. eg.,
+#. * 'Google'.
+#.
+#: ../src/goabackend/goautils.c:333
 #, c-format
-msgid "%s account"
+#| msgid "%s account"
+msgid "%s Account"
 msgstr "%s paskyra"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:388
+#: ../src/goabackend/goautils.c:391
 msgid "Failed to delete credentials from the keyring"
 msgstr "Nepavyko ištrinti įgaliojimų iš raktinės"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:440
+#: ../src/goabackend/goautils.c:443
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Nepavyko gauti įgaliojimų iš raktinės"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:450
+#: ../src/goabackend/goautils.c:453
 msgid "No credentials found in the keyring"
 msgstr "Nepavyko rasti įgaliojimų raktinėje"
 
-#: ../src/goabackend/goautils.c:463
+#: ../src/goabackend/goautils.c:466
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Klaida skaitant iš raktinės gautą rezultatą: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:506
+#: ../src/goabackend/goautils.c:509
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "GOA %s įgaliojimai identifikatoriui %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:523
+#: ../src/goabackend/goautils.c:526
 msgid "Failed to store credentials in the keyring"
 msgstr "Nepavyko įrašyti įgaliojimų į raktinę"
 
-#: ../src/goabackend/goautils.c:877
+#: ../src/goabackend/goautils.c:880
 msgid "Cannot resolve hostname"
 msgstr "Nepavyko rasti serverio"
 
-#: ../src/goabackend/goautils.c:881
+#: ../src/goabackend/goautils.c:884
 msgid "Cannot resolve proxy hostname"
 msgstr "Nepavyko rasti tarpinio serverio"
 
-#: ../src/goabackend/goautils.c:886
+#: ../src/goabackend/goautils.c:889
 msgid "Cannot find WebDAV endpoint"
 msgstr "Nepavyko rasti WebDAV vietos"
 
-#: ../src/goabackend/goautils.c:895
+#: ../src/goabackend/goautils.c:898
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Kodas: %u - nelaukas atsakymas iš serverio"
 
-#: ../src/goabackend/goautils.c:911
+#: ../src/goabackend/goautils.c:914
 msgid "The signing certificate authority is not known."
 msgstr "Nežinoma pasirašanti liudijimų įstaiga."
 
-#: ../src/goabackend/goautils.c:915
+#: ../src/goabackend/goautils.c:918
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr ""
 "Liudijimas neatitinka laukto tinklalapio, iš kurio jis gautas, identiteto."
 
-#: ../src/goabackend/goautils.c:920
+#: ../src/goabackend/goautils.c:923
 msgid "The certificate’s activation time is still in the future."
 msgstr "Liudijimo aktyvavimo laikas vis dar ateityje."
 
-#: ../src/goabackend/goautils.c:924
+#: ../src/goabackend/goautils.c:927
 msgid "The certificate has expired."
 msgstr "Liudijimo galiojimas baigėsi."
 
-#: ../src/goabackend/goautils.c:928
+#: ../src/goabackend/goautils.c:931
 msgid "The certificate has been revoked."
 msgstr "Liudijimas buvo atšauktas."
 
-#: ../src/goabackend/goautils.c:932
+#: ../src/goabackend/goautils.c:935
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Liudijimo algoritmas laikomas nesaugiu."
 
-#: ../src/goabackend/goautils.c:936
+#: ../src/goabackend/goautils.c:939
 msgid "Invalid certificate."
 msgstr "Netinkamas liudijimas."
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:971
+#: ../src/goabackend/goautils.c:974
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "Įgaliojimuose nerastas %s su tapatybe „%s“"
@@ -806,8 +810,9 @@ msgid "Loading “%s”…"
 msgstr "Įkeliama „%s“..."
 
 #: ../src/goabackend/goawindowsliveprovider.c:70
-msgid "Microsoft Account"
-msgstr "Microsoft paskyra"
+#| msgid "Microsoft Account"
+msgid "Microsoft"
+msgstr "Microsoft"
 
 #: ../src/goaidentity/goaidentityservice.c:366
 msgid "initial secret passed before secret key exchange"
