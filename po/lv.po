@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-o"
 "nline-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-13 11:02+0000\n"
-"PO-Revision-Date: 2017-03-18 14:50+0200\n"
+"POT-Creation-Date: 2017-03-18 12:50+0000\n"
+"PO-Revision-Date: 2017-03-19 19:17+0200\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -47,7 +47,6 @@ msgstr "Neizdevās saprast automātiskās atklāšanas atbildes XML"
 #: ../src/goabackend/goaewsclient.c:249 ../src/goabackend/goaewsclient.c:264
 #: ../src/goabackend/goaewsclient.c:279
 #, c-format
-#| msgid "Failed to find ‘%s’ element"
 msgid "Failed to find “%s” element"
 msgstr "Neizdevās atrast “%s” elementu"
 
@@ -69,7 +68,6 @@ msgstr "Microsoft Exchange"
 #: ../src/goabackend/goalastfmprovider.c:281
 #: ../src/goabackend/goaowncloudprovider.c:314
 #, c-format
-#| msgid "Invalid password with username ‘%s’ (%s, %d): "
 msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "Nederīga parole lietotājam “%s” (%s, %d): "
 
@@ -267,7 +265,7 @@ msgstr "Serviss nav pieejams"
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:114
 #: ../src/goabackend/goalastfmprovider.c:523
-#: ../src/goabackend/goasmtpauth.c:112 ../src/goabackend/goautils.c:890
+#: ../src/goabackend/goasmtpauth.c:112 ../src/goabackend/goautils.c:893
 #, c-format
 msgid "Authentication failed"
 msgstr "Neizdevās autentificēties"
@@ -299,7 +297,6 @@ msgstr "IMAP un SMTP"
 #: ../src/goabackend/goaimapsmtpprovider.c:364
 #: ../src/goabackend/goaimapsmtpprovider.c:415
 #, c-format
-#| msgid "Invalid %s with username ‘%s’ (%s, %d): "
 msgid "Invalid %s with username “%s” (%s, %d): "
 msgstr "Nederīgs %s lietotājam “%s” (%s, %d): "
 
@@ -382,13 +379,11 @@ msgstr "Kontam ir izslēgta biļetēšana"
 
 #: ../src/goabackend/goakerberosprovider.c:326
 #, c-format
-#| msgid "Could not find saved credentials for principal ‘%s’ in keyring"
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr "Atslēgu saišķī netika atrasti akreditācijas dati vadītājam “%s”"
 
 #: ../src/goabackend/goakerberosprovider.c:339
 #, c-format
-#| msgid "Did not find password for principal ‘%s’ in credentials"
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "Akreditācijas datos neatrada paroli vadītājam “%s”"
 
@@ -715,64 +710,68 @@ msgstr "Ierak_stīties"
 msgid "A %s account already exists for %s"
 msgstr "%s konts jau eksistē priekš %s"
 
-#. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:330
+#. Translators: this is the title of the "Add Account" and "Refresh
+#. * Account" dialogs. The %s is the name of the provider. eg.,
+#. * 'Google'.
+#.
+#: ../src/goabackend/goautils.c:333
 #, c-format
-msgid "%s account"
+#| msgid "%s account"
+msgid "%s Account"
 msgstr "%s konts"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:388
+#: ../src/goabackend/goautils.c:391
 msgid "Failed to delete credentials from the keyring"
 msgstr "Neizdevās izdzēst akreditācijas datus no atslēgu saišķa"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:440
+#: ../src/goabackend/goautils.c:443
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Neizdevās saņemt akreditācijas datus no atslēgu saišķa"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:450
+#: ../src/goabackend/goautils.c:453
 msgid "No credentials found in the keyring"
 msgstr "Neizdevās atrast akreditācijas datus atslēgu saišķī"
 
-#: ../src/goabackend/goautils.c:463
+#: ../src/goabackend/goautils.c:466
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Kļūda, pasējot rezultātu, kas iegūts no atslēgu saišķa: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:506
+#: ../src/goabackend/goautils.c:509
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "GOA %s akreditācijas dati identitātei %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:523
+#: ../src/goabackend/goautils.c:526
 msgid "Failed to store credentials in the keyring"
 msgstr "Neizdevās noglabāt akreditācijas datus atslēgu saišķī"
 
-#: ../src/goabackend/goautils.c:877
+#: ../src/goabackend/goautils.c:880
 msgid "Cannot resolve hostname"
 msgstr "Nevar atšķetināt resursdatora nosaukumu"
 
-#: ../src/goabackend/goautils.c:881
+#: ../src/goabackend/goautils.c:884
 msgid "Cannot resolve proxy hostname"
 msgstr "Nevar atšķetināt starpnieka servera nosaukumu"
 
-#: ../src/goabackend/goautils.c:886
+#: ../src/goabackend/goautils.c:889
 msgid "Cannot find WebDAV endpoint"
 msgstr "Nevar atrast WebDAV beigu punktu"
 
-#: ../src/goabackend/goautils.c:895
+#: ../src/goabackend/goautils.c:898
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Kods: %u — negaidīta atbilde no servera"
 
-#: ../src/goabackend/goautils.c:911
+#: ../src/goabackend/goautils.c:914
 msgid "The signing certificate authority is not known."
 msgstr "Parakstošā sertifikātu institūcija nav zināma."
 
-#: ../src/goabackend/goautils.c:915
+#: ../src/goabackend/goautils.c:918
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
@@ -780,30 +779,29 @@ msgstr ""
 "Sertifikāts neatbilst gaidītajai vietnes identitātei, no kuras tas tika "
 "saņemts."
 
-#: ../src/goabackend/goautils.c:920
+#: ../src/goabackend/goautils.c:923
 msgid "The certificate’s activation time is still in the future."
 msgstr "Sertifikāta aktivizēšanas laiks vēl aizvien ir nākotnē."
 
-#: ../src/goabackend/goautils.c:924
+#: ../src/goabackend/goautils.c:927
 msgid "The certificate has expired."
 msgstr "Sertifikāta derīgums ir beidzies."
 
-#: ../src/goabackend/goautils.c:928
+#: ../src/goabackend/goautils.c:931
 msgid "The certificate has been revoked."
 msgstr "Sertifikāts tika atsaukts."
 
-#: ../src/goabackend/goautils.c:932
+#: ../src/goabackend/goautils.c:935
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Sertifikāta algoritms tiek uzskatīts par nedrošu."
 
-#: ../src/goabackend/goautils.c:936
+#: ../src/goabackend/goautils.c:939
 msgid "Invalid certificate."
 msgstr "Nederīgs sertifikāts."
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:971
+#: ../src/goabackend/goautils.c:974
 #, c-format
-#| msgid "Did not find %s with identity ‘%s’ in credentials"
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "Akreditācijas datos neizdevās atrast %s ar identitāti “%s”"
 
@@ -814,8 +812,9 @@ msgid "Loading “%s”…"
 msgstr "Ielādē “%s”…"
 
 #: ../src/goabackend/goawindowsliveprovider.c:70
-msgid "Microsoft Account"
-msgstr "Microsoft konts"
+#| msgid "Microsoft Account"
+msgid "Microsoft"
+msgstr "Microsoft"
 
 #: ../src/goaidentity/goaidentityservice.c:366
 msgid "initial secret passed before secret key exchange"
