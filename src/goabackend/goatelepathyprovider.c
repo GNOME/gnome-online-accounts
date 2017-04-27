@@ -942,9 +942,14 @@ show_account (GoaProvider         *provider,
   GtkWidget *button_box = NULL;
   gint row = 0;
 
+  goa_utils_account_add_attention_needed (client, object, provider, vbox);
+
   grid = gtk_grid_new ();
   gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
   gtk_widget_set_hexpand (grid, TRUE);
+  gtk_widget_set_margin_end (grid, 42);
+  gtk_widget_set_margin_start (grid, 42);
+  gtk_widget_set_margin_top (grid, 24);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
   gtk_box_pack_start (vbox, grid, FALSE, TRUE, 0);
@@ -978,8 +983,6 @@ show_account (GoaProvider         *provider,
       FALSE, FALSE, 0);
 
   goa_util_add_row_widget (GTK_GRID (grid), row++, NULL, button_box);
-
-  goa_utils_account_add_attention_needed (client, object, provider, vbox);
 
   edit_data_unref (data);
 }

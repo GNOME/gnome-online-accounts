@@ -66,13 +66,17 @@ attention_needed_data_free (AttentionNeededData *data)
 }
 
 static void
-goa_utils_account_add_attention_needed_button_clicked (GtkButton *button, gpointer user_data)
+goa_utils_account_add_attention_needed_info_bar_response (GtkInfoBar *info_bar,
+                                                          gint        response_id,
+                                                          gpointer    user_data)
 {
   AttentionNeededData *data = (AttentionNeededData *) user_data;
   GtkWidget *parent;
   GError *error;
 
-  parent = gtk_widget_get_toplevel (GTK_WIDGET (button));
+  g_return_if_fail (response_id == GTK_RESPONSE_OK);
+
+  parent = gtk_widget_get_toplevel (GTK_WIDGET (info_bar));
   if (!gtk_widget_is_toplevel (parent))
     {
       g_warning ("Unable to find a toplevel GtkWindow");
@@ -106,9 +110,10 @@ goa_utils_account_add_attention_needed (GoaClient *client, GoaObject *object, Go
 {
   AttentionNeededData *data;
   GoaAccount *account;
-  GtkWidget *button;
+  GtkWidget *content_area;
   GtkWidget *grid;
   GtkWidget *image;
+  GtkWidget *info_bar;
   GtkWidget *label;
   GtkWidget *labels_grid;
 
@@ -116,12 +121,15 @@ goa_utils_account_add_attention_needed (GoaClient *client, GoaObject *object, Go
   if (!goa_account_get_attention_needed (account))
     return;
 
+  info_bar = gtk_info_bar_new ();
+  gtk_container_add (GTK_CONTAINER (vbox), info_bar);
+
+  content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
+
   grid = gtk_grid_new ();
   gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), GTK_ORIENTATION_HORIZONTAL);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
-  gtk_widget_set_margin_top (grid, 18);
-  gtk_widget_set_margin_bottom (grid, 6);
-  gtk_box_pack_end (vbox, grid, FALSE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (content_area), grid);
 
   image = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
   gtk_widget_set_valign (image, GTK_ALIGN_CENTER);
@@ -145,14 +153,12 @@ goa_utils_account_add_attention_needed (GoaClient *client, GoaObject *object, Go
   gtk_style_context_add_class (gtk_widget_get_style_context (label), "dim-label");
   gtk_container_add (GTK_CONTAINER (labels_grid), label);
 
-  button = gtk_button_new_with_mnemonic (_("_Sign In"));
-  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (grid), button);
+  gtk_info_bar_add_button (GTK_INFO_BAR (info_bar), _("_Sign In"), GTK_RESPONSE_OK);
 
   data = attention_needed_data_new (client, object, provider);
-  g_signal_connect_data (button,
-                         "clicked",
-                         G_CALLBACK (goa_utils_account_add_attention_needed_button_clicked),
+  g_signal_connect_data (info_bar,
+                         "response",
+                         G_CALLBACK (goa_utils_account_add_attention_needed_info_bar_response),
                          data,
                          (GClosureNotify) attention_needed_data_free,
                          0);
