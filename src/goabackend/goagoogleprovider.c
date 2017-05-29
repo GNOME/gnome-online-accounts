@@ -355,6 +355,7 @@ build_object (GoaProvider         *provider,
                         "smtp-user-name",  email_address,
                         "smtp-use-auth",   TRUE,
                         "smtp-auth-xoauth2", TRUE,
+                        "smtp-use-ssl",    TRUE,
                         "smtp-use-tls",    TRUE,
                         NULL);
           goa_object_skeleton_set_mail (object, mail);
