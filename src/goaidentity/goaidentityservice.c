@@ -364,7 +364,7 @@ goa_identity_service_handle_sign_in (GoaIdentityServiceManager *manager,
           g_dbus_method_invocation_return_error (invocation,
                                                  GOA_IDENTITY_MANAGER_ERROR,
                                                  GOA_IDENTITY_MANAGER_ERROR_ACCESSING_CREDENTIALS,
-                                                 _("initial secret passed before secret key exchange"));
+                                                 "initial secret passed before secret key exchange");
           return TRUE;
         }
 
