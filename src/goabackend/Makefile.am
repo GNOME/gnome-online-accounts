@@ -99,6 +99,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	nautilus-floating-bar.h		nautilus-floating-bar.c		\
 	$(top_builddir)/src/goaidentity/org.gnome.Identity.c		\
 	$(top_builddir)/src/goaidentity/org.freedesktop.realmd.c	\
+	$(top_srcdir)/src/goaidentity/goaidentitymanagererror.c		\
 	$(NULL)
 
 if BUILD_KERBEROS
