@@ -1531,7 +1531,7 @@ show_account (GoaProvider         *provider,
   gtk_widget_set_margin_top (grid, 24);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
-  gtk_box_pack_start (vbox, grid, FALSE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (vbox), grid);
 
   goa_utils_account_add_header (object, GTK_GRID (grid), row++);
 

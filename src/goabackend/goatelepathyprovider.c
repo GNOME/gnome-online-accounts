@@ -468,7 +468,7 @@ add_account (GoaProvider  *provider,
 
   account_widget = tpaw_account_widget_new_for_protocol (settings,
       dialog, TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET (account_widget), FALSE, FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (account_widget));
   gtk_widget_show (GTK_WIDGET (account_widget));
   g_signal_connect (account_widget, "account-created",
       G_CALLBACK (tp_account_created_cb), &data);
@@ -952,7 +952,7 @@ show_account (GoaProvider         *provider,
   gtk_widget_set_margin_top (grid, 24);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
-  gtk_box_pack_start (vbox, grid, FALSE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (vbox), grid);
 
   goa_utils_account_add_header (object, GTK_GRID (grid), row++);
 
@@ -979,8 +979,7 @@ show_account (GoaProvider         *provider,
   button_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_box_pack_start (GTK_BOX (button_box), params_button,
       FALSE, FALSE, 12);
-  gtk_box_pack_start (GTK_BOX (button_box), details_button,
-      FALSE, FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (button_box), details_button);
 
   goa_util_add_row_widget (GTK_GRID (grid), row++, NULL, button_box);
 
