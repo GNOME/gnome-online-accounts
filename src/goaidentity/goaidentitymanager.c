@@ -119,17 +119,6 @@ goa_identity_manager_default_init (GoaIdentityManagerInterface *interface)
                                             GOA_TYPE_IDENTITY);
 }
 
-GQuark
-goa_identity_manager_error_quark (void)
-{
-  static GQuark error_quark = 0;
-
-  if (error_quark == 0)
-    error_quark = g_quark_from_static_string ("goa-identity-manager-error");
-
-  return error_quark;
-}
-
 void
 goa_identity_manager_get_identity (GoaIdentityManager  *self,
                                    const char          *identifier,

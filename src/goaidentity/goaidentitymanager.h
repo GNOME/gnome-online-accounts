@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 #define GOA_IDENTITY_MANAGER_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GOA_TYPE_IDENTITY_MANAGER, GoaIdentityManagerInterface))
 #define GOA_IS_IDENTITY_MANAGER(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GOA_TYPE_IDENTITY_MANAGER))
 #define GOA_IDENTITY_MANAGER_GET_IFACE(obj)   (G_TYPE_INSTANCE_GET_INTERFACE((obj), GOA_TYPE_IDENTITY_MANAGER, GoaIdentityManagerInterface))
-#define GOA_IDENTITY_MANAGER_ERROR            (goa_identity_manager_error_quark ())
+
 typedef struct _GoaIdentityManager GoaIdentityManager;
 typedef struct _GoaIdentityManagerInterface GoaIdentityManagerInterface;
 
@@ -110,17 +110,7 @@ struct _GoaIdentityManagerInterface
                             GoaIdentity        *identity);
 };
 
-typedef enum
-{
-  GOA_IDENTITY_MANAGER_ERROR_INITIALIZING,
-  GOA_IDENTITY_MANAGER_ERROR_IDENTITY_NOT_FOUND,
-  GOA_IDENTITY_MANAGER_ERROR_CREATING_IDENTITY,
-  GOA_IDENTITY_MANAGER_ERROR_ACCESSING_CREDENTIALS,
-  GOA_IDENTITY_MANAGER_ERROR_UNSUPPORTED_CREDENTIALS
-} GoaIdentityManagerError;
-
 GType  goa_identity_manager_get_type    (void);
-GQuark goa_identity_manager_error_quark (void);
 
 void goa_identity_manager_get_identity (GoaIdentityManager  *identity_manager,
                                         const char          *identifier,

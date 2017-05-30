@@ -20,6 +20,7 @@
 
 #include "goakerberosidentitymanager.h"
 #include "goaidentitymanager.h"
+#include "goaidentitymanagererror.h"
 #include "goaidentitymanagerprivate.h"
 #include "goakerberosidentityinquiry.h"
 

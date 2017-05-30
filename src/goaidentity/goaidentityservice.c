@@ -31,6 +31,7 @@
 #include <goa/goa.h>
 
 #include "goaidentityenumtypes.h"
+#include "goaidentitymanagererror.h"
 #include "goaidentityutils.h"
 
 #include "goakerberosidentitymanager.h"

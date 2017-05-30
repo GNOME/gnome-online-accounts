@@ -30,6 +30,7 @@ identity_headers =						\
 	goaidentityservice.h					\
 	goaidentitymanagerprivate.h				\
 	goaidentitymanager.h					\
+	goaidentitymanagererror.h				\
 	goaidentityutils.h					\
 	goakerberosidentity.h					\
 	goakerberosidentityinquiry.h				\
@@ -43,6 +44,7 @@ identity_sources =						\
 	goaidentityinquiry.c					\
 	goaidentityservice.c					\
 	goaidentitymanager.c					\
+	goaidentitymanagererror.c				\
 	goaidentityutils.c					\
 	goakerberosidentity.c					\
 	goakerberosidentityinquiry.c				\
