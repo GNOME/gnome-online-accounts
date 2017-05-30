@@ -1583,6 +1583,7 @@ sign_in_identity_sync (GoaKerberosProvider  *self,
   char               *concealed_secret;
   char               *identity_object_path = NULL;
   gboolean            keys_exchanged;
+  GError             *local_error;
   GVariantBuilder     details;
 
   secret_exchange = gcr_secret_exchange_new (NULL);
@@ -1624,12 +1625,27 @@ sign_in_identity_sync (GoaKerberosProvider  *self,
     }
 
   g_mutex_lock (&identity_manager_mutex);
+
+  local_error = NULL;
   goa_identity_service_manager_call_sign_in_sync (identity_manager,
                                                   identifier,
                                                   g_variant_builder_end (&details),
                                                   &identity_object_path,
                                                   cancellable,
-                                                  error);
+                                                  &local_error);
+
+  if (local_error != NULL)
+    {
+      if (g_error_matches (local_error,
+                           GOA_IDENTITY_MANAGER_ERROR,
+                           GOA_IDENTITY_MANAGER_ERROR_ACCESSING_CREDENTIALS))
+        {
+          g_assert_not_reached ();
+        }
+
+      g_propagate_error (error, local_error);
+    }
+
   g_mutex_unlock (&identity_manager_mutex);
 
  out:
