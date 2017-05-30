@@ -19,7 +19,6 @@
 #include "config.h"
 
 #include <gio/gio.h>
-#include <glib/gi18n-lib.h>
 
 #include "goaenums.h"
 #include "goaerror.h"
