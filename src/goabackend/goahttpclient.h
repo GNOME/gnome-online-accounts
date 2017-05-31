@@ -30,12 +30,8 @@
 G_BEGIN_DECLS
 
 #define GOA_TYPE_HTTP_CLIENT        (goa_http_client_get_type ())
-#define GOA_HTTP_CLIENT(o)          (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_HTTP_CLIENT, GoaHttpClient))
-#define GOA_IS_HTTP_CLIENT(o)       (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_HTTP_CLIENT))
+G_DECLARE_FINAL_TYPE (GoaHttpClient, goa_http_client, GOA, HTTP_CLIENT, GObject);
 
-typedef struct _GoaHttpClient GoaHttpClient;
-
-GType           goa_http_client_get_type           (void) G_GNUC_CONST;
 GoaHttpClient  *goa_http_client_new                (void);
 void            goa_http_client_check              (GoaHttpClient       *self,
                                                     const gchar         *uri,

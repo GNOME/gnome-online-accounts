@@ -28,13 +28,6 @@ struct _GoaHttpClient
   GObject parent_instance;
 };
 
-typedef struct _GoaHttpClientClass GoaHttpClientClass;
-
-struct _GoaHttpClientClass
-{
-  GObjectClass parent_class;
-};
-
 G_DEFINE_TYPE (GoaHttpClient, goa_http_client, G_TYPE_OBJECT);
 
 /* ---------------------------------------------------------------------------------------------------- */
