@@ -29,36 +29,12 @@ G_BEGIN_DECLS
   (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
    GOA_TYPE_DLNA_SERVER_MANAGER, GoaDlnaServerManager))
 
-#define GOA_DLNA_SERVER_MANAGER_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_CAST ((klass), \
-   GOA_TYPE_DLNA_SERVER_MANAGER, GoaDlnaServerManagerClass))
-
 #define GOA_IS_DLNA_SERVER_MANAGER(obj) \
   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
    GOA_TYPE_DLNA_SERVER_MANAGER))
 
-#define GOA_IS_DLNA_SERVER_MANAGER_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_TYPE ((klass), \
-   GOA_TYPE_DLNA_SERVER_MANAGER))
-
-#define GOA_DLNA_SERVER_MANAGER_GET_CLASS(obj) \
-  (G_TYPE_INSTANCE_GET_CLASS ((obj), \
-   GOA_TYPE_DLNA_SERVER_MANAGER, GoaDlnaServerManagerClass))
-
-typedef struct _GoaDlnaServerManager        GoaDlnaServerManager;
-typedef struct _GoaDlnaServerManagerClass   GoaDlnaServerManagerClass;
-typedef struct _GoaDlnaServerManagerPrivate GoaDlnaServerManagerPrivate;
-
-struct _GoaDlnaServerManager
-{
-  GObject parent_instance;
-  GoaDlnaServerManagerPrivate *priv;
-};
-
-struct _GoaDlnaServerManagerClass
-{
-  GObjectClass parent_class;
-};
+typedef struct _GoaDlnaServerManager      GoaDlnaServerManager;
+typedef struct _GoaDlnaServerManagerClass GoaDlnaServerManagerClass;
 
 GType                       goa_dlna_server_manager_get_type      (void) G_GNUC_CONST;
 
