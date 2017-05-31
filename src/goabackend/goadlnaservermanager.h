@@ -24,19 +24,7 @@
 G_BEGIN_DECLS
 
 #define GOA_TYPE_DLNA_SERVER_MANAGER (goa_dlna_server_manager_get_type ())
-
-#define GOA_DLNA_SERVER_MANAGER(obj) \
-  (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-   GOA_TYPE_DLNA_SERVER_MANAGER, GoaDlnaServerManager))
-
-#define GOA_IS_DLNA_SERVER_MANAGER(obj) \
-  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-   GOA_TYPE_DLNA_SERVER_MANAGER))
-
-typedef struct _GoaDlnaServerManager      GoaDlnaServerManager;
-typedef struct _GoaDlnaServerManagerClass GoaDlnaServerManagerClass;
-
-GType                       goa_dlna_server_manager_get_type      (void) G_GNUC_CONST;
+G_DECLARE_FINAL_TYPE (GoaDlnaServerManager, goa_dlna_server_manager, GOA, DLNA_SERVER_MANAGER, GObject);
 
 GoaDlnaServerManager       *goa_dlna_server_manager_dup_singleton (void);
 

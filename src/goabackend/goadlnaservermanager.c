@@ -30,11 +30,6 @@ struct _GoaDlnaServerManager
   GHashTable *servers;
 };
 
-struct _GoaDlnaServerManagerClass
-{
-  GObjectClass parent_class;
-};
-
 enum
 {
   SERVER_FOUND,
