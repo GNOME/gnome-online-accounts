@@ -21,7 +21,6 @@
 
 #include "goaewsclient.h"
 #include "goaprovider.h"
-#include "goaprovider-priv.h"
 #include "goaexchangeprovider.h"
 #include "goaobjectskeletonutils.h"
 #include "goautils.h"
@@ -29,13 +28,6 @@
 struct _GoaExchangeProvider
 {
   GoaProvider parent_instance;
-};
-
-typedef struct _GoaExchangeProviderClass GoaExchangeProviderClass;
-
-struct _GoaExchangeProviderClass
-{
-  GoaProviderClass parent_class;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GoaExchangeProvider, goa_exchange_provider, GOA_TYPE_PROVIDER,
