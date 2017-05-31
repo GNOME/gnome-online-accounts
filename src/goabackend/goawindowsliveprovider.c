@@ -28,25 +28,10 @@
 #include "goawindowsliveprovider.h"
 #include "goaobjectskeletonutils.h"
 
-/**
- * GoaWindowsLiveProvider:
- *
- * The #GoaWindowsLiveProvider structure contains only private data and should
- * only be accessed using the provided API.
- */
 struct _GoaWindowsLiveProvider
 {
-  /*< private >*/
   GoaOAuth2Provider parent_instance;
 };
-
-/**
- * SECTION:goawindowsliveprovider
- * @title: GoaWindowsLiveProvider
- * @short_description: A provider for Windows Live accounts
- *
- * #GoaWindowsLiveProvider is used for handling Windows Live accounts.
- */
 
 G_DEFINE_TYPE_WITH_CODE (GoaWindowsLiveProvider, goa_windows_live_provider, GOA_TYPE_OAUTH2_PROVIDER,
                          goa_provider_ensure_extension_points_registered ();

@@ -26,15 +26,8 @@
 #include "goaobjectskeletonutils.h"
 #include "goautils.h"
 
-/**
- * GoaExchangeProvider:
- *
- * The #GoaExchangeProvider structure contains only private data and should
- * only be accessed using the provided API.
- */
 struct _GoaExchangeProvider
 {
-  /*< private >*/
   GoaProvider parent_instance;
 };
 
@@ -44,14 +37,6 @@ struct _GoaExchangeProviderClass
 {
   GoaProviderClass parent_class;
 };
-
-/**
- * SECTION:goaexchangeprovider
- * @title: GoaExchangeProvider
- * @short_description: A provider for Microsoft Exchange servers
- *
- * #GoaExchangeProvider is used to access Microsoft Exchange servers.
- */
 
 G_DEFINE_TYPE_WITH_CODE (GoaExchangeProvider, goa_exchange_provider, GOA_TYPE_PROVIDER,
                          goa_provider_ensure_extension_points_registered ();

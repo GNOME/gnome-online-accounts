@@ -28,12 +28,6 @@
 #include "goadleynaservermediadevice.h"
 #include "goadlnaservermanager.h"
 
-/**
- * GoaMediaServerProvider:
- *
- * The #GoaMediaServerProvider structure contains only private data and should
- * only be accessed using the provided API.
- */
 struct _GoaMediaServerProvider
 {
   GoaProvider parent_instance;
@@ -46,14 +40,6 @@ struct _GoaMediaServerProviderClass
 {
   GoaProviderClass parent_class;
 };
-
-/**
- * SECTION:goamediaserverprovider
- * @title: GoaMediaServerProvider
- * @short_description: A provider for Media Server
- *
- * #GoaMediaServerProvider is used for handling Media Servers.
- */
 
 G_DEFINE_TYPE_WITH_CODE (GoaMediaServerProvider, goa_media_server_provider, GOA_TYPE_PROVIDER,
                          goa_provider_ensure_extension_points_registered ();

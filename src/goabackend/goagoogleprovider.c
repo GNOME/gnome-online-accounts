@@ -29,15 +29,8 @@
 #include "goagoogleprovider.h"
 #include "goaobjectskeletonutils.h"
 
-/**
- * GoaGoogleProvider:
- *
- * The #GoaGoogleProvider structure contains only private data and should
- * only be accessed using the provided API.
- */
 struct _GoaGoogleProvider
 {
-  /*< private >*/
   GoaOAuth2Provider parent_instance;
 };
 
@@ -47,14 +40,6 @@ struct _GoaGoogleProviderClass
 {
   GoaOAuth2ProviderClass parent_class;
 };
-
-/**
- * SECTION:goagoogleprovider
- * @title: GoaGoogleProvider
- * @short_description: A provider for Google
- *
- * #GoaGoogleProvider is used for handling Google accounts.
- */
 
 G_DEFINE_TYPE_WITH_CODE (GoaGoogleProvider, goa_google_provider, GOA_TYPE_OAUTH2_PROVIDER,
                          goa_provider_ensure_extension_points_registered ();

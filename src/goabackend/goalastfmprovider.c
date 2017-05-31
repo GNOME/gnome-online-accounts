@@ -32,7 +32,6 @@
 
 struct _GoaLastfmProvider
 {
-  /*< private >*/
   GoaOAuth2Provider parent_instance;
 };
 

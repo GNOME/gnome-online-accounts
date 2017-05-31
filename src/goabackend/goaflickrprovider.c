@@ -29,15 +29,8 @@
 #include "goaflickrprovider.h"
 #include "goaobjectskeletonutils.h"
 
-/**
- * GoaFlickrProvider:
- *
- * The #GoaFlickrProvider structure contains only private data and should
- * only be accessed using the provided API.
- */
 struct _GoaFlickrProvider
 {
-  /*< private >*/
   GoaOAuthProvider parent_instance;
 };
 
@@ -47,14 +40,6 @@ struct _GoaFlickrProviderClass
 {
   GoaOAuthProviderClass parent_class;
 };
-
-/**
- * SECTION:goaflickrprovider
- * @title: GoaFlickrProvider
- * @short_description: A provider for Flickr
- *
- * #GoaFlickrProvider is used for handling Flickr accounts.
- */
 
 G_DEFINE_TYPE_WITH_CODE (GoaFlickrProvider, goa_flickr_provider, GOA_TYPE_OAUTH_PROVIDER,
                          goa_provider_ensure_extension_points_registered ();

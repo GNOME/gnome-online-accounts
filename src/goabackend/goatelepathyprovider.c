@@ -48,15 +48,8 @@ enum {
 
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
-/**
- * GoaTelepathyProvider:
- *
- * The #GoaTelepathyProvider structure contains only private data and should
- * only be accessed using the provided API.
- */
 struct _GoaTelepathyProvider
 {
-  /*< private >*/
   GoaProvider parent_instance;
   GoaTelepathyProviderPrivate *priv;
 };
@@ -67,14 +60,6 @@ struct _GoaTelepathyProviderClass
 {
   GoaProviderClass parent_class;
 };
-
-/**
- * SECTION:goatelepathyprovider
- * @title: GoaTelepathyProvider
- * @short_description: A provider for Telepathy
- *
- * #GoaTelepathyProvider is used for handling Telepathy IM accounts.
- */
 
 G_DEFINE_TYPE (GoaTelepathyProvider, goa_telepathy_provider, GOA_TYPE_PROVIDER);
 

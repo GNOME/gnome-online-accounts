@@ -29,15 +29,8 @@
 #include "goafacebookprovider.h"
 #include "goaobjectskeletonutils.h"
 
-/**
- * GoaFacebookProvider:
- *
- * The #GoaFacebookProvider structure contains only private data and should
- * only be accessed using the provided API.
- */
 struct _GoaFacebookProvider
 {
-  /*< private >*/
   GoaOAuth2Provider parent_instance;
 };
 
@@ -47,14 +40,6 @@ struct _GoaFacebookProviderClass
 {
   GoaOAuth2ProviderClass parent_class;
 };
-
-/**
- * SECTION:goafacebookprovider
- * @title: GoaFacebookProvider
- * @short_description: A provider for Facebook
- *
- * #GoaFacebookProvider is used for handling Facebook accounts.
- */
 
 G_DEFINE_TYPE_WITH_CODE (GoaFacebookProvider, goa_facebook_provider, GOA_TYPE_OAUTH2_PROVIDER,
                          goa_provider_ensure_extension_points_registered ();

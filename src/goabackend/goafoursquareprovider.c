@@ -30,15 +30,8 @@
 #include "goafoursquareprovider.h"
 #include "goaobjectskeletonutils.h"
 
-/**
- * GoaFoursquareProvider:
- *
- * The #GoaFoursquareProvider structure contains only private data and should
- * only be accessed using the provided API.
- */
 struct _GoaFoursquareProvider
 {
-  /*< private >*/
   GoaOAuth2Provider parent_instance;
 };
 
@@ -48,14 +41,6 @@ struct _GoaFoursquareProviderClass
 {
   GoaOAuth2ProviderClass parent_class;
 };
-
-/**
- * SECTION:goafoursquareprovider
- * @title: GoaFoursquareProvider
- * @short_description: A provider for Foursquare
- *
- * #GoaFoursquareProvider is used for handling Foursquare accounts.
- */
 
 G_DEFINE_TYPE_WITH_CODE (GoaFoursquareProvider, goa_foursquare_provider, GOA_TYPE_OAUTH2_PROVIDER,
                          goa_provider_ensure_extension_points_registered ();
