@@ -25,20 +25,12 @@
 
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
-#include "goaoauthprovider.h"
 #include "goaflickrprovider.h"
 #include "goaobjectskeletonutils.h"
 
 struct _GoaFlickrProvider
 {
   GoaOAuthProvider parent_instance;
-};
-
-typedef struct _GoaFlickrProviderClass GoaFlickrProviderClass;
-
-struct _GoaFlickrProviderClass
-{
-  GoaOAuthProviderClass parent_class;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GoaFlickrProvider, goa_flickr_provider, GOA_TYPE_OAUTH_PROVIDER,

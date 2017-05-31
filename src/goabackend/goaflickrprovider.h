@@ -25,15 +25,12 @@
 
 #include <glib-object.h>
 
+#include "goaoauthprovider.h"
+
 G_BEGIN_DECLS
 
 #define GOA_TYPE_FLICKR_PROVIDER   (goa_flickr_provider_get_type ())
-#define GOA_FLICKR_PROVIDER(o)     (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_FLICKR_PROVIDER, GoaFlickrProvider))
-#define GOA_IS_FLICKR_PROVIDER(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_FLICKR_PROVIDER))
-
-typedef struct _GoaFlickrProvider GoaFlickrProvider;
-
-GType goa_flickr_provider_get_type (void) G_GNUC_CONST;
+G_DECLARE_FINAL_TYPE (GoaFlickrProvider, goa_flickr_provider, GOA, FLICKR_PROVIDER, GoaOAuthProvider);
 
 G_END_DECLS
 
