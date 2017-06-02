@@ -114,10 +114,11 @@ goa_utils_account_add_attention_needed (GoaClient *client, GoaObject *object, Go
   GtkWidget *info_bar;
   GtkWidget *label;
   GtkWidget *labels_grid;
+  gchar *markup = NULL;
 
   account = goa_object_peek_account (object);
   if (!goa_account_get_attention_needed (account))
-    return;
+    goto out;
 
   info_bar = gtk_info_bar_new ();
   gtk_container_add (GTK_CONTAINER (vbox), info_bar);
@@ -133,13 +134,14 @@ goa_utils_account_add_attention_needed (GoaClient *client, GoaObject *object, Go
   gtk_grid_set_column_spacing (GTK_GRID (labels_grid), 0);
   gtk_container_add (GTK_CONTAINER (content_area), labels_grid);
 
-  label = gtk_label_new (_("Credentials have expired."));
+  label = gtk_label_new ("");
   gtk_widget_set_halign (label, GTK_ALIGN_START);
+  markup = g_strdup_printf ("<b>%s</b>", _("Credentials have expired."));
+  gtk_label_set_markup (GTK_LABEL (label), markup);
   gtk_container_add (GTK_CONTAINER (labels_grid), label);
 
   label = gtk_label_new (_("Sign in to enable this account."));
   gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "dim-label");
   gtk_container_add (GTK_CONTAINER (labels_grid), label);
 
   gtk_info_bar_add_button (GTK_INFO_BAR (info_bar), _("_Sign In"), GTK_RESPONSE_OK);
@@ -151,6 +153,9 @@ goa_utils_account_add_attention_needed (GoaClient *client, GoaObject *object, Go
                          data,
                          (GClosureNotify) attention_needed_data_free,
                          0);
+
+ out:
+  g_free (markup);
 }
 
 void
