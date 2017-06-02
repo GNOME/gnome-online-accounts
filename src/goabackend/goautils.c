@@ -111,8 +111,6 @@ goa_utils_account_add_attention_needed (GoaClient *client, GoaObject *object, Go
   AttentionNeededData *data;
   GoaAccount *account;
   GtkWidget *content_area;
-  GtkWidget *grid;
-  GtkWidget *image;
   GtkWidget *info_bar;
   GtkWidget *label;
   GtkWidget *labels_grid;
@@ -126,15 +124,6 @@ goa_utils_account_add_attention_needed (GoaClient *client, GoaObject *object, Go
 
   content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
 
-  grid = gtk_grid_new ();
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), GTK_ORIENTATION_HORIZONTAL);
-  gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
-  gtk_container_add (GTK_CONTAINER (content_area), grid);
-
-  image = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
-  gtk_widget_set_valign (image, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (grid), image);
-
   labels_grid = gtk_grid_new ();
   gtk_widget_set_halign (labels_grid, GTK_ALIGN_FILL);
   gtk_widget_set_hexpand (labels_grid, TRUE);
@@ -142,7 +131,7 @@ goa_utils_account_add_attention_needed (GoaClient *client, GoaObject *object, Go
   gtk_widget_set_margin_end (labels_grid, 12);
   gtk_orientable_set_orientation (GTK_ORIENTABLE (labels_grid), GTK_ORIENTATION_VERTICAL);
   gtk_grid_set_column_spacing (GTK_GRID (labels_grid), 0);
-  gtk_container_add (GTK_CONTAINER (grid), labels_grid);
+  gtk_container_add (GTK_CONTAINER (content_area), labels_grid);
 
   label = gtk_label_new (_("Credentials have expired."));
   gtk_widget_set_halign (label, GTK_ALIGN_START);
