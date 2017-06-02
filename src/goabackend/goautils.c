@@ -110,6 +110,7 @@ goa_utils_account_add_attention_needed (GoaClient *client, GoaObject *object, Go
 {
   AttentionNeededData *data;
   GoaAccount *account;
+  GtkWidget *button;
   GtkWidget *content_area;
   GtkWidget *info_bar;
   GtkWidget *label;
@@ -124,12 +125,12 @@ goa_utils_account_add_attention_needed (GoaClient *client, GoaObject *object, Go
   gtk_container_add (GTK_CONTAINER (vbox), info_bar);
 
   content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
+  gtk_widget_set_margin_start (content_area, 6);
 
   labels_grid = gtk_grid_new ();
   gtk_widget_set_halign (labels_grid, GTK_ALIGN_FILL);
   gtk_widget_set_hexpand (labels_grid, TRUE);
   gtk_widget_set_valign (labels_grid, GTK_ALIGN_CENTER);
-  gtk_widget_set_margin_end (labels_grid, 12);
   gtk_orientable_set_orientation (GTK_ORIENTABLE (labels_grid), GTK_ORIENTATION_VERTICAL);
   gtk_grid_set_column_spacing (GTK_GRID (labels_grid), 0);
   gtk_container_add (GTK_CONTAINER (content_area), labels_grid);
@@ -144,7 +145,8 @@ goa_utils_account_add_attention_needed (GoaClient *client, GoaObject *object, Go
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_container_add (GTK_CONTAINER (labels_grid), label);
 
-  gtk_info_bar_add_button (GTK_INFO_BAR (info_bar), _("_Sign In"), GTK_RESPONSE_OK);
+  button = gtk_info_bar_add_button (GTK_INFO_BAR (info_bar), _("_Sign In"), GTK_RESPONSE_OK);
+  gtk_widget_set_margin_end (button, 6);
 
   data = attention_needed_data_new (client, object, provider);
   g_signal_connect_data (info_bar,
