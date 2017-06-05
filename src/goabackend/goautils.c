@@ -137,7 +137,7 @@ goa_utils_account_add_attention_needed (GoaClient *client, GoaObject *object, Go
 
   label = gtk_label_new ("");
   gtk_widget_set_halign (label, GTK_ALIGN_START);
-  markup = g_strdup_printf ("<b>%s</b>", _("Credentials have expired."));
+  markup = g_strdup_printf ("<b>%s</b>", _("Credentials have expired"));
   gtk_label_set_markup (GTK_LABEL (label), markup);
   gtk_container_add (GTK_CONTAINER (labels_grid), label);
 
