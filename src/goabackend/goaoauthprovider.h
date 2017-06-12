@@ -49,7 +49,6 @@ G_DECLARE_DERIVABLE_TYPE (GoaOAuthProvider, goa_oauth_provider, GOA, OAUTH_PROVI
  * @get_authorization_uri: Virtual function for goa_oauth_provider_get_authorization_uri().
  * @get_token_uri: Virtual function for goa_oauth_provider_get_token_uri().
  * @get_callback_uri: Virtual function for goa_oauth_provider_get_callback_uri().
- * @get_authentication_cookie: Virtual function for goa_oauth_provider_get_authentication_cookie().
  * @get_identity_sync: Virtual function for goa_oauth_provider_get_identity_sync().
  * @parse_request_token_error: Virtual function for goa_oauth_provider_parse_request_token_error().
  * @build_authorization_uri: Virtual function for goa_oauth_provider_build_authorization_uri().
@@ -73,7 +72,6 @@ struct _GoaOAuthProviderClass
   const gchar *(*get_authorization_uri)        (GoaOAuthProvider             *provider);
   const gchar *(*get_token_uri)                (GoaOAuthProvider             *provider);
   const gchar *(*get_callback_uri)             (GoaOAuthProvider             *provider);
-  const gchar *(*get_authentication_cookie)    (GoaOAuthProvider             *provider);
 
   gchar       *(*get_identity_sync)            (GoaOAuthProvider             *provider,
                                                 const gchar                  *access_token,
@@ -115,7 +113,6 @@ gchar      **goa_oauth_provider_get_request_uri_params       (GoaOAuthProvider  
 const gchar *goa_oauth_provider_get_authorization_uri        (GoaOAuthProvider             *provider);
 const gchar *goa_oauth_provider_get_token_uri                (GoaOAuthProvider             *provider);
 const gchar *goa_oauth_provider_get_callback_uri             (GoaOAuthProvider             *provider);
-const gchar *goa_oauth_provider_get_authentication_cookie    (GoaOAuthProvider             *provider);
 gchar       *goa_oauth_provider_get_identity_sync            (GoaOAuthProvider          *provider,
                                                               const gchar               *access_token,
                                                               const gchar               *access_token_secret,

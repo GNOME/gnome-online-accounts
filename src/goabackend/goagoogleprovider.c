@@ -164,12 +164,6 @@ get_client_secret (GoaOAuth2Provider *oauth2_provider)
   return GOA_GOOGLE_CLIENT_SECRET;
 }
 
-static const gchar *
-get_authentication_cookie (GoaOAuth2Provider *oauth2_provider)
-{
-  return "LSID";
-}
-
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
@@ -478,7 +472,6 @@ goa_google_provider_class_init (GoaGoogleProviderClass *klass)
   provider_class->get_credentials_generation = get_credentials_generation;
 
   oauth2_class = GOA_OAUTH2_PROVIDER_CLASS (klass);
-  oauth2_class->get_authentication_cookie = get_authentication_cookie;
   oauth2_class->get_authorization_uri     = get_authorization_uri;
   oauth2_class->get_client_id             = get_client_id;
   oauth2_class->get_client_secret         = get_client_secret;

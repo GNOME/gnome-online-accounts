@@ -512,26 +512,6 @@ goa_oauth2_provider_get_client_secret (GoaOAuth2Provider *self)
 }
 
 /**
- * goa_oauth2_provider_get_authentication_cookie:
- * @self: A #GoaOAuth2Provider.
- *
- * Gets the name of a cookie whose presence indicates that the user has been able to
- * log in during the authorization step. This is used to modify the embedded web
- * browser UI that is presented to the user.
- *
- * This is a pure virtual method - a subclass must provide an
- * implementation.
- *
- * Returns: (transfer none): A string owned by @self - do not free.
- */
-const gchar *
-goa_oauth2_provider_get_authentication_cookie (GoaOAuth2Provider *self)
-{
-  g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (self), NULL);
-  return GOA_OAUTH2_PROVIDER_GET_CLASS (self)->get_authentication_cookie (self);
-}
-
-/**
  * goa_oauth2_provider_get_identity_sync:
  * @self: A #GoaOAuth2Provider.
  * @access_token: A valid OAuth 2.0 access token.

@@ -103,12 +103,6 @@ get_callback_uri (GoaOAuthProvider *oauth_provider)
   return "https://www.gnome.org/goa-1.0/oauth";
 }
 
-static const gchar *
-get_authentication_cookie (GoaOAuthProvider *oauth_provider)
-{
-  return "cookie_session";
-}
-
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
@@ -374,7 +368,6 @@ goa_flickr_provider_class_init (GoaFlickrProviderClass *klass)
   oauth_class->get_authorization_uri    = get_authorization_uri;
   oauth_class->get_token_uri            = get_token_uri;
   oauth_class->get_callback_uri         = get_callback_uri;
-  oauth_class->get_authentication_cookie = get_authentication_cookie;
   oauth_class->parse_request_token_error = parse_request_token_error;
   oauth_class->add_account_key_values    = add_account_key_values;
 }

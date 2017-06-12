@@ -123,12 +123,6 @@ get_client_secret (GoaOAuth2Provider *oauth2_provider)
   return NULL;
 }
 
-static const gchar *
-get_authentication_cookie (GoaOAuth2Provider *oauth2_provider)
-{
-  return "PPAuth";
-}
-
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
@@ -383,7 +377,6 @@ goa_windows_live_provider_class_init (GoaWindowsLiveProviderClass *klass)
   oauth2_class->get_scope                = get_scope;
   oauth2_class->get_client_id            = get_client_id;
   oauth2_class->get_client_secret        = get_client_secret;
-  oauth2_class->get_authentication_cookie = get_authentication_cookie;
   oauth2_class->get_identity_sync        = get_identity_sync;
   oauth2_class->is_identity_node         = is_identity_node;
   oauth2_class->add_account_key_values   = add_account_key_values;

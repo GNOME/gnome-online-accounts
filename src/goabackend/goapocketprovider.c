@@ -259,12 +259,6 @@ out:
   return ret;
 }
 
-static const gchar *
-get_authentication_cookie (GoaOAuth2Provider *oauth2_provider)
-{
-  return NULL;
-}
-
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
@@ -445,5 +439,4 @@ goa_pocket_provider_class_init (GoaPocketProviderClass *klass)
   oauth2_class->is_identity_node          = is_identity_node;
   oauth2_class->add_account_key_values    = add_account_key_values;
   oauth2_class->process_redirect_url      = process_redirect_url;
-  oauth2_class->get_authentication_cookie = get_authentication_cookie;
 }

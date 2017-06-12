@@ -397,26 +397,6 @@ goa_oauth_provider_get_callback_uri (GoaOAuthProvider *provider)
 }
 
 /**
- * goa_oauth_provider_get_authentication_cookie:
- * @provider: A #GoaOAuthProvider.
- *
- * Gets the name of a cookie whose presence indicates that the user has been able to
- * log in during the authorization step. This is used to modify the embedded web
- * browser UI that is presented to the user.
- *
- * This is a pure virtual method - a subclass must provide an
- * implementation.
- *
- * Returns: (transfer none): A string owned by @provider - do not free.
- */
-const gchar *
-goa_oauth_provider_get_authentication_cookie (GoaOAuthProvider *provider)
-{
-  g_return_val_if_fail (GOA_IS_OAUTH_PROVIDER (provider), NULL);
-  return GOA_OAUTH_PROVIDER_GET_CLASS (provider)->get_authentication_cookie (provider);
-}
-
-/**
  * goa_oauth_provider_get_identity_sync:
  * @provider: A #GoaOAuthProvider.
  * @access_token: A valid OAuth 1.0 access token.

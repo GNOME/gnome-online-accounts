@@ -41,7 +41,6 @@ const gchar *goa_oauth2_provider_get_redirect_uri             (GoaOAuth2Provider
 const gchar *goa_oauth2_provider_get_scope                    (GoaOAuth2Provider             *provider);
 const gchar *goa_oauth2_provider_get_client_id                (GoaOAuth2Provider             *provider);
 const gchar *goa_oauth2_provider_get_client_secret            (GoaOAuth2Provider             *provider);
-const gchar *goa_oauth2_provider_get_authentication_cookie    (GoaOAuth2Provider             *provider);
 gchar       *goa_oauth2_provider_get_identity_sync            (GoaOAuth2Provider             *provider,
                                                                const gchar              *access_token,
                                                                gchar                   **out_presentation_identity,
