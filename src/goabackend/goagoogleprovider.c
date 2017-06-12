@@ -266,11 +266,11 @@ is_identity_node (GoaOAuth2Provider *oauth2_provider, WebKitDOMHTMLInputElement 
     goto out;
 
   id = webkit_dom_element_get_id (WEBKIT_DOM_ELEMENT (element));
-  if (g_strcmp0 (id, "Email") != 0)
+  if (g_strcmp0 (id, "identifierId") != 0)
     goto out;
 
   name = webkit_dom_html_input_element_get_name (element);
-  if (g_strcmp0 (name, "Email") != 0)
+  if (g_strcmp0 (name, "identifier") != 0)
     goto out;
 
   ret = TRUE;
