@@ -102,11 +102,6 @@ struct _GoaOAuth2ProviderClass
                                                 const gchar                  *redirect_url,
                                                 gchar                       **access_token,
                                                 GError                      **error);
-
-
-  /*< private >*/
-  /* Padding for future expansion */
-  gpointer goa_reserved[28];
 };
 
 G_END_DECLS

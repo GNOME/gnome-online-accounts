@@ -101,9 +101,6 @@ struct _GoaOAuthProviderClass
                                                 WebKitDOMNode                *node);
   gboolean     (*is_password_node)             (GoaOAuthProvider             *provider,
                                                 WebKitDOMHTMLInputElement    *element);
-
-  /* Padding for future expansion */
-  gpointer goa_reserved[29];
 };
 
 const gchar *goa_oauth_provider_get_consumer_key             (GoaOAuthProvider             *provider);
