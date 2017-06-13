@@ -173,6 +173,11 @@ static struct {
     .blurb = N_("_Maps"),
   },
   {
+    .feature = GOA_PROVIDER_FEATURE_TODO,
+    .property = "todo-disabled",
+    .blurb = N_("T_o Do"),
+  },
+  {
     .feature = GOA_PROVIDER_FEATURE_INVALID,
     .property = NULL,
     .blurb = NULL,

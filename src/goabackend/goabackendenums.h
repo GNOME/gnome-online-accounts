@@ -96,6 +96,7 @@ typedef enum /*< flags >*/
   GOA_PROVIDER_FEATURE_PRINTERS  = 1 << 11,
   GOA_PROVIDER_FEATURE_MAPS      = 1 << 12,
   GOA_PROVIDER_FEATURE_MUSIC     = 1 << 13,
+  GOA_PROVIDER_FEATURE_TODO      = 1 << 14,
   GOA_PROVIDER_FEATURE_INVALID   = 0
 } GoaProviderFeatures;
 

@@ -65,6 +65,10 @@ static struct
     .key = "TicketingEnabled"
   },
   {
+    .feature = GOA_PROVIDER_FEATURE_TODO,
+    .key = "TodoEnabled"
+  },
+  {
     .feature = GOA_PROVIDER_FEATURE_READ_LATER,
     .key = "ReadLaterEnabled"
   },

@@ -246,6 +246,18 @@
     -->
     <property name="TicketingDisabled" type="b" access="readwrite"/>
 
+    <!-- TodoDisabled:
+         @since: 3.26.0
+
+         If %TRUE, the account will not expose any
+         #org.gnome.OnlineAccounts.Todo interface. If the account does not
+         provide todo-like capabilities, this property does nothing.
+
+         Note that the #org.gnomeOnlineAccounts.Todo interface is added or
+         removed from the account asynchronously.
+    -->
+    <property name="TodoDisabled" type="b" access="readwrite"/>
+
     <!-- ReadLaterDisabled:
          @since: 3.12.0
 
@@ -777,6 +789,16 @@
       access resources for the account.
     -->
     <method name="GetTicket"/>
+  </interface>
+
+  <!--
+      org.gnome.OnlineAccounts.Todo:
+      @since: 3.26.0
+
+      An account object implements this interface if it provides
+      todo-like capabilities.
+  -->
+  <interface name="org.gnome.OnlineAccounts.Todo">
   </interface>
 
   <!--
