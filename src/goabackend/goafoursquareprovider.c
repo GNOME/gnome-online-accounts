@@ -26,20 +26,12 @@
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goaoauth2provider.h"
-#include "goaoauth2provider-priv.h"
 #include "goafoursquareprovider.h"
 #include "goaobjectskeletonutils.h"
 
 struct _GoaFoursquareProvider
 {
   GoaOAuth2Provider parent_instance;
-};
-
-typedef struct _GoaFoursquareProviderClass GoaFoursquareProviderClass;
-
-struct _GoaFoursquareProviderClass
-{
-  GoaOAuth2ProviderClass parent_class;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GoaFoursquareProvider, goa_foursquare_provider, GOA_TYPE_OAUTH2_PROVIDER,
