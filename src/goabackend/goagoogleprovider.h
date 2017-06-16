@@ -25,15 +25,12 @@
 
 #include <glib-object.h>
 
+#include "goaoauth2provider-priv.h"
+
 G_BEGIN_DECLS
 
 #define GOA_TYPE_GOOGLE_PROVIDER   (goa_google_provider_get_type ())
-#define GOA_GOOGLE_PROVIDER(o)     (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_GOOGLE_PROVIDER, GoaGoogleProvider))
-#define GOA_IS_GOOGLE_PROVIDER(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_GOOGLE_PROVIDER))
-
-typedef struct _GoaGoogleProvider GoaGoogleProvider;
-
-GType goa_google_provider_get_type (void) G_GNUC_CONST;
+G_DECLARE_FINAL_TYPE (GoaGoogleProvider, goa_google_provider, GOA, GOOGLE_PROVIDER, GoaOAuth2Provider);
 
 G_END_DECLS
 
