@@ -98,7 +98,7 @@ AC_ARG_ENABLE([telepathy],
               [AS_HELP_STRING([--enable-telepathy],
               [Enable Telepathy IM provider])],
               [],
-              [enable_telepathy=yes])
+              [enable_telepathy=no])
 if test "$enable_telepathy" != "no"; then
   AC_DEFINE(GOA_TELEPATHY_ENABLED, 1, [Enable Telepathy data provider])
 fi
