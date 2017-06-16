@@ -100,7 +100,7 @@ get_client_secret (GoaOAuth2Provider *oauth2_provider)
 }
 
 static const gchar *
-get_token_uri (GoaOAuth2Provider *oauth_provider)
+get_token_uri (GoaOAuth2Provider *oauth2_provider)
 {
   return "https://todoist.com/oauth/access_token";
 }
