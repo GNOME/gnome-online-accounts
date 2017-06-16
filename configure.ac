@@ -85,7 +85,7 @@ GTK_DOC_CHECK([1.3])
 # Libraries
 #
 
-PKG_CHECK_MODULES(GLIB, [glib-2.0 gio-2.0 gio-unix-2.0 >= 2.44])
+PKG_CHECK_MODULES(GLIB, [glib-2.0 gio-2.0 gio-unix-2.0 >= 2.52])
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
 
@@ -313,6 +313,32 @@ fi
 AC_DEFINE_UNQUOTED(GOA_FACEBOOK_CLIENT_ID, ["$with_facebook_client_id"], [Facebook OAuth 2.0 client id])
 if test "$enable_facebook" != "no"; then
   AC_DEFINE(GOA_FACEBOOK_ENABLED, 1, [Enable Facebook data provider])
+fi
+
+# Todoist
+AC_DEFINE(GOA_TODOIST_NAME, ["todoist"], [ProviderType and extension point name])
+AC_ARG_ENABLE([todoist],
+              [AS_HELP_STRING([--enable-todoist], [Enable Todoist provider])],
+              [],
+              [enable_todoist=no])
+AC_ARG_WITH(todoist-client-id,
+            [AS_HELP_STRING([--with-todoist-client-id], [Todoist OAuth 2.0 client id])],
+            [],
+            [])
+AC_ARG_WITH(todoist-client-secret,
+            [AS_HELP_STRING([--with-todoist-client-secret], [Todoist client secret])],
+            [],
+            [])
+if test "$with_todoist_client_id" = ""; then
+  with_todoist_client_id="2e41575c1dd74f98ad7cfb178e1ba3dd"
+fi
+if test "$with_todoist_client_secret" = ""; then
+  with_todoist_client_secret="3e59831ffdd64633918d19aa0a1efd2b"
+fi
+AC_DEFINE_UNQUOTED(GOA_TODOIST_CLIENT_ID, ["$with_todoist_client_id"], [Todoist OAuth 2.0 client id])
+AC_DEFINE_UNQUOTED(GOA_TODOIST_CLIENT_SECRET, ["$with_todoist_client_secret"], [Todoist client secret])
+if test "$enable_todoist" != "no"; then
+  AC_DEFINE(GOA_TODOIST_ENABLED, 1, [Enable Todoist data provider])
 fi
 
 # Windows Live
@@ -569,6 +595,7 @@ echo "
 	ownCloud provider:              ${enable_owncloud}
 	Kerberos provider:              ${enable_kerberos}
 	Facebook provider:              ${enable_facebook} (OAuth 2.0, id:${with_facebook_client_id})
+	Todoist provider:               ${enable_todoist} (OAuth 2.0, id:${with_todoist_client_id} secret:${with_todoist_client_secret})
 	Windows Live provider:          ${enable_windows_live} (OAuth 2.0, id:${with_windows_live_client_id})
         Telepathy provider:             ${enable_telepathy}
         Pocket provider:                ${enable_pocket} (id:${with_pocket_client_id})
