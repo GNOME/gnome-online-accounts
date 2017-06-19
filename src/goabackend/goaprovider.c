@@ -981,11 +981,11 @@ static struct
 #ifdef GOA_FACEBOOK_ENABLED
   { GOA_FACEBOOK_NAME, goa_facebook_provider_get_type },
 #endif
-#ifdef GOA_FLICKR_ENABLED
-  { GOA_FLICKR_NAME, goa_flickr_provider_get_type },
-#endif
 #ifdef GOA_WINDOWS_LIVE_ENABLED
   { GOA_WINDOWS_LIVE_NAME, goa_windows_live_provider_get_type },
+#endif
+#ifdef GOA_FLICKR_ENABLED
+  { GOA_FLICKR_NAME, goa_flickr_provider_get_type },
 #endif
 #ifdef GOA_POCKET_ENABLED
   { GOA_POCKET_NAME, goa_pocket_provider_get_type },
