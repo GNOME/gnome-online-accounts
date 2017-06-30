@@ -55,6 +55,12 @@ struct _GoaDaemon
   guint credentials_timeout_id;
 };
 
+enum
+{
+  PROP_0,
+  PROP_CONNECTION
+};
+
 static void on_file_monitor_changed (GFileMonitor     *monitor,
                                      GFile            *file,
                                      GFile            *other_file,
@@ -132,6 +138,20 @@ get_all_providers_sync (GCancellable  *cancellable,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
+goa_daemon_constructed (GObject *object)
+{
+  GoaDaemon *self = GOA_DAEMON (object);
+
+  G_OBJECT_CLASS (goa_daemon_parent_class)->constructed (object);
+
+  /* prime the list of accounts */
+  goa_daemon_reload_configuration (self);
+
+  /* Export objects */
+  g_dbus_object_manager_server_set_connection (self->object_manager, self->connection);
+}
+
+static void
 goa_daemon_finalize (GObject *object)
 {
   GoaDaemon *self = GOA_DAEMON (object);
@@ -165,6 +185,23 @@ goa_daemon_finalize (GObject *object)
   g_queue_free_full (self->ensure_credentials_queue, g_object_unref);
 
   G_OBJECT_CLASS (goa_daemon_parent_class)->finalize (object);
+}
+
+static void
+goa_daemon_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec)
+{
+  GoaDaemon *self = GOA_DAEMON (object);
+
+  switch (prop_id)
+    {
+    case PROP_CONNECTION:
+      self->connection = G_DBUS_CONNECTION (g_value_dup_object (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static GFileMonitor *
@@ -282,9 +319,6 @@ goa_daemon_init (GoaDaemon *self)
       goa_provider_initialize (provider);
     }
 
-  /* TODO: maybe nicer to pass in a GDBusConnection* construct property */
-  self->connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
-
   /* Create object manager */
   self->object_manager = g_dbus_object_manager_server_new ("/org/gnome/OnlineAccounts");
 
@@ -321,9 +355,6 @@ goa_daemon_init (GoaDaemon *self)
         g_signal_connect (self->template_file_monitor, "changed", G_CALLBACK (on_file_monitor_changed), self);
     }
 
-  /* prime the list of accounts */
-  goa_daemon_reload_configuration (self);
-
   self->network_monitor = g_network_monitor_get_default ();
   g_signal_connect_object (self->network_monitor,
                            "network-changed",
@@ -332,10 +363,6 @@ goa_daemon_init (GoaDaemon *self)
                            G_CONNECT_SWAPPED);
 
   self->ensure_credentials_queue = g_queue_new ();
-
-  /* Export objects */
-  g_dbus_object_manager_server_set_connection (self->object_manager, self->connection);
-
   queue_check_credentials (self);
 
   g_list_free_full (providers, g_object_unref);
@@ -347,13 +374,26 @@ goa_daemon_class_init (GoaDaemonClass *klass)
   GObjectClass *gobject_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
+  gobject_class->constructed  = goa_daemon_constructed;
   gobject_class->finalize     = goa_daemon_finalize;
+  gobject_class->set_property = goa_daemon_set_property;
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_CONNECTION,
+                                   g_param_spec_object ("connection",
+                                                        "GDBusConnection object",
+                                                        "A connection to a message bus",
+                                                        G_TYPE_DBUS_CONNECTION,
+                                                        G_PARAM_CONSTRUCT_ONLY |
+                                                        G_PARAM_STATIC_STRINGS |
+                                                        G_PARAM_WRITABLE));
 }
 
 GoaDaemon *
-goa_daemon_new (void)
+goa_daemon_new (GDBusConnection *connection)
 {
-  return GOA_DAEMON (g_object_new (GOA_TYPE_DAEMON, NULL));
+  g_return_val_if_fail (G_IS_DBUS_CONNECTION (connection), NULL);
+  return GOA_DAEMON (g_object_new (GOA_TYPE_DAEMON, "connection", connection, NULL));
 }
 
 

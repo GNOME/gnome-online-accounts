@@ -46,7 +46,7 @@ on_bus_acquired (GDBusConnection *connection,
                  gpointer         user_data)
 {
   if (connection != NULL)
-    the_daemon = goa_daemon_new ();
+    the_daemon = goa_daemon_new (connection);
   g_debug ("Connected to the session bus");
 }
 
