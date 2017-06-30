@@ -541,7 +541,7 @@ refresh_identities (GoaKerberosIdentityManager *self,
     {
       error_message =
         krb5_get_error_message (self->priv->kerberos_context, error_code);
-      g_debug ("GoaKerberosIdentityManager:         Error looking up available credential caches: %s",
+      g_debug ("GoaKerberosIdentityManager: Error looking up available credential caches: %s",
                error_message);
       krb5_free_error_message (self->priv->kerberos_context, error_message);
       goto done;
@@ -571,7 +571,7 @@ refresh_identities (GoaKerberosIdentityManager *self,
     {
       error_message =
         krb5_get_error_message (self->priv->kerberos_context, error_code);
-      g_debug ("GoaKerberosIdentityManager:         Error iterating over available credential caches: %s",
+      g_debug ("GoaKerberosIdentityManager: Error iterating over available credential caches: %s",
                error_message);
       krb5_free_error_message (self->priv->kerberos_context, error_message);
     }
