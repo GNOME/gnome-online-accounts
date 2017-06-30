@@ -369,8 +369,8 @@ goa_utils_delete_credentials_for_id_sync (GoaProvider   *provider,
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   password_key = g_strdup_printf ("%s:gen%d:%s",
-                                  goa_provider_get_provider_type (GOA_PROVIDER (provider)),
-                                  goa_provider_get_credentials_generation (GOA_PROVIDER (provider)),
+                                  goa_provider_get_provider_type (provider),
+                                  goa_provider_get_credentials_generation (provider),
                                   id);
 
   secret_password_clear_sync (&secret_password_schema,
@@ -417,8 +417,8 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
   id = goa_account_get_id (goa_object_peek_account (object));
 
   password_key = g_strdup_printf ("%s:gen%d:%s",
-                                  goa_provider_get_provider_type (GOA_PROVIDER (provider)),
-                                  goa_provider_get_credentials_generation (GOA_PROVIDER (provider)),
+                                  goa_provider_get_provider_type (provider),
+                                  goa_provider_get_credentials_generation (provider),
                                   id);
 
   password = secret_password_lookup_sync (&secret_password_schema,
@@ -492,8 +492,8 @@ goa_utils_store_credentials_for_id_sync (GoaProvider   *provider,
   g_variant_unref (credentials);
 
   password_key = g_strdup_printf ("%s:gen%d:%s",
-                                  goa_provider_get_provider_type (GOA_PROVIDER (provider)),
-                                  goa_provider_get_credentials_generation (GOA_PROVIDER (provider)),
+                                  goa_provider_get_provider_type (provider),
+                                  goa_provider_get_credentials_generation (provider),
                                   id);
   /* Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo' */
   password_description = g_strdup_printf (_("GOA %s credentials for identity %s"),
