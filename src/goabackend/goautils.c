@@ -245,9 +245,7 @@ goa_utils_check_duplicate (GoaClient              *client,
 {
   GList *accounts;
   GList *l;
-  gboolean ret;
-
-  ret = FALSE;
+  gboolean ret = FALSE;
 
   accounts = goa_client_get_accounts (client);
   for (l = accounts; l != NULL; l = l->next)
@@ -361,18 +359,14 @@ goa_utils_delete_credentials_for_id_sync (GoaProvider   *provider,
                                           GCancellable  *cancellable,
                                           GError       **error)
 {
-  gboolean ret;
-  gchar *password_key;
+  gboolean ret = FALSE;
+  gchar *password_key = NULL;
   GError *sec_error = NULL;
 
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
   g_return_val_if_fail (id != NULL && id[0] != '\0', FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-
-  ret = FALSE;
-
-  password_key = NULL;
 
   password_key = g_strdup_printf ("%s:gen%d:%s",
                                   goa_provider_get_provider_type (GOA_PROVIDER (provider)),
@@ -409,9 +403,9 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
                                    GCancellable  *cancellable,
                                    GError       **error)
 {
-  gchar *password_key;
-  GVariant *ret;
-  gchar *password;
+  gchar *password_key = NULL;
+  GVariant *ret = NULL;
+  gchar *password = NULL;
   const gchar *id;
   GError *sec_error = NULL;
 
@@ -419,10 +413,6 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
   g_return_val_if_fail (GOA_IS_OBJECT (object) && goa_object_peek_account (object) != NULL, FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-
-  ret = NULL;
-  password_key = NULL;
-  password = NULL;
 
   id = goa_account_get_id (goa_object_peek_account (object));
 
@@ -485,7 +475,7 @@ goa_utils_store_credentials_for_id_sync (GoaProvider   *provider,
                                          GCancellable  *cancellable,
                                          GError       **error)
 {
-  gboolean ret;
+  gboolean ret = FALSE;
   gchar *credentials_str;
   gchar *password_description;
   gchar *password_key;
@@ -496,8 +486,6 @@ goa_utils_store_credentials_for_id_sync (GoaProvider   *provider,
   g_return_val_if_fail (credentials != NULL, FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-
-  ret = FALSE;
 
   credentials_str = g_variant_print (credentials, TRUE);
   g_variant_ref_sink (credentials);
