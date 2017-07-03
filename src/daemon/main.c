@@ -26,6 +26,7 @@
 #include <libintl.h>
 
 #include "goadaemon.h"
+#include "goabackend/goautils.h"
 
 /* ---------------------------------------------------------------------------------------------------- */
 
@@ -53,7 +54,7 @@ on_bus_acquired (GDBusConnection *connection,
   g_debug ("Connected to the session bus");
 
   error = NULL;
-  the_daemon = goa_daemon_new (connection, NULL, &error);
+  the_daemon = goa_daemon_new (connection, GOA_SECRET_SERVICE_BUS_NAME, NULL, &error);
   if (error != NULL)
     {
       g_warning ("Unable to initialize GoaDaemon: %s (%s, %d)",

@@ -1110,6 +1110,7 @@ goa_oauth_provider_refresh_account (GoaProvider  *_provider,
                                     GoaClient    *client,
                                     GoaObject    *object,
                                     GtkWindow    *parent,
+                                    SecretService *secret_service,
                                     GError      **error)
 {
   GoaOAuthProvider *provider = GOA_OAUTH_PROVIDER (_provider);
@@ -1131,6 +1132,7 @@ goa_oauth_provider_refresh_account (GoaProvider  *_provider,
   g_return_val_if_fail (GOA_IS_CLIENT (client), FALSE);
   g_return_val_if_fail (GOA_IS_OBJECT (object), FALSE);
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), FALSE);
+  g_return_val_if_fail (SECRET_IS_SERVICE (secret_service), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   access_token = NULL;
@@ -1205,7 +1207,8 @@ goa_oauth_provider_refresh_account (GoaProvider  *_provider,
   if (password != NULL)
     g_variant_builder_add (&builder, "{sv}", "password", g_variant_new_string (password));
   /* TODO: run in worker thread */
-  if (!goa_utils_store_credentials_for_object_sync (GOA_PROVIDER (provider),
+  if (!goa_utils_store_credentials_for_object_sync (secret_service,
+                                                    GOA_PROVIDER (provider),
                                                     object,
                                                     g_variant_builder_end (&builder),
                                                     NULL, /* GCancellable  */
@@ -1242,6 +1245,7 @@ free_mutex (GMutex *mutex)
  * goa_oauth_provider_get_access_token_sync:
  * @provider: A #GoaOAuthProvider.
  * @object: A #GoaObject.
+ * @secret_service: A #SecretService.
  * @force_refresh: If set to %TRUE, forces a refresh of the access token, if possible.
  * @out_access_token_secret: (out): The secret for the return access token.
  * @out_access_token_expires_in: (out): Return location for how many seconds the returned token is valid for (0 if unknown) or %NULL.
@@ -1273,6 +1277,7 @@ free_mutex (GMutex *mutex)
 gchar *
 goa_oauth_provider_get_access_token_sync (GoaOAuthProvider   *provider,
                                           GoaObject          *object,
+                                          SecretService      *secret_service,
                                           gboolean            force_refresh,
                                           gchar             **out_access_token_secret,
                                           gint               *out_access_token_expires_in,
@@ -1332,7 +1337,8 @@ goa_oauth_provider_get_access_token_sync (GoaOAuthProvider   *provider,
   g_mutex_lock (lock);
 
   /* First, get the credentials from the keyring */
-  credentials = goa_utils_lookup_credentials_sync (GOA_PROVIDER (provider),
+  credentials = goa_utils_lookup_credentials_sync (secret_service,
+                                                   GOA_PROVIDER (provider),
                                                    object,
                                                    cancellable,
                                                    error);
@@ -1437,7 +1443,8 @@ goa_oauth_provider_get_access_token_sync (GoaOAuthProvider   *provider,
     g_variant_builder_add (&builder, "{sv}", "password", g_variant_new_string (password));
 
   /* TODO: run in worker thread */
-  if (!goa_utils_store_credentials_for_object_sync (GOA_PROVIDER (provider),
+  if (!goa_utils_store_credentials_for_object_sync (secret_service,
+                                                    GOA_PROVIDER (provider),
                                                     object,
                                                     g_variant_builder_end (&builder),
                                                     cancellable,
@@ -1491,6 +1498,7 @@ goa_oauth_provider_build_object (GoaProvider         *provider,
                                  GKeyFile            *key_file,
                                  const gchar         *group,
                                  GDBusConnection     *connection,
+                                 SecretService       *secret_service,
                                  gboolean             just_added,
                                  GError             **error)
 {
@@ -1512,10 +1520,12 @@ goa_oauth_provider_build_object (GoaProvider         *provider,
   g_dbus_interface_skeleton_set_flags (G_DBUS_INTERFACE_SKELETON (oauth_based),
                                        G_DBUS_INTERFACE_SKELETON_FLAGS_HANDLE_METHOD_INVOCATIONS_IN_THREAD);
   goa_object_skeleton_set_oauth_based (object, oauth_based);
-  g_signal_connect (oauth_based,
-                    "handle-get-access-token",
-                    G_CALLBACK (on_handle_get_access_token),
-                    NULL);
+  g_signal_connect_data (oauth_based,
+                         "handle-get-access-token",
+                         G_CALLBACK (on_handle_get_access_token),
+                         g_object_ref (secret_service),
+                         (GClosureNotify) g_object_unref,
+                         0);
 
  out:
   g_object_unref (oauth_based);
@@ -1528,6 +1538,7 @@ goa_oauth_provider_build_object (GoaProvider         *provider,
 static gboolean
 goa_oauth_provider_ensure_credentials_sync (GoaProvider    *_provider,
                                             GoaObject      *object,
+                                            SecretService  *secret_service,
                                             gint           *out_expires_in,
                                             GCancellable   *cancellable,
                                             GError        **error)
@@ -1549,6 +1560,7 @@ goa_oauth_provider_ensure_credentials_sync (GoaProvider    *_provider,
  again:
   access_token = goa_oauth_provider_get_access_token_sync (provider,
                                                                    object,
+                                                           secret_service,
                                                                    force_refresh,
                                                                    &access_token_secret,
                                                                    &access_token_expires_in,
@@ -1631,6 +1643,7 @@ on_handle_get_access_token (GoaOAuthBased         *interface,
   GoaAccount *account;
   GoaProvider *provider;
   GError *error;
+  SecretService *secret_service = SECRET_SERVICE (user_data);
   const gchar *id;
   const gchar *method_name;
   const gchar *provider_type;
@@ -1656,6 +1669,7 @@ on_handle_get_access_token (GoaOAuthBased         *interface,
   error = NULL;
   access_token = goa_oauth_provider_get_access_token_sync (GOA_OAUTH_PROVIDER (provider),
                                                                    object,
+                                                           secret_service,
                                                                    FALSE, /* force_refresh */
                                                                    &access_token_secret,
                                                                    &access_token_expires_in,

@@ -19,6 +19,7 @@
 #include "config.h"
 
 #include <glib/gi18n-lib.h>
+#include <libsecret/secret.h>
 
 #include "goaimapauthlogin.h"
 #include "goamailclient.h"
@@ -92,6 +93,7 @@ build_object (GoaProvider         *provider,
               GKeyFile            *key_file,
               const gchar         *group,
               GDBusConnection     *connection,
+              SecretService       *secret_service,
               gboolean             just_added,
               GError             **error)
 {
@@ -136,6 +138,7 @@ build_object (GoaProvider         *provider,
                                                                                key_file,
                                                                                group,
                                                                                connection,
+                                                                               secret_service,
                                                                                just_added,
                                                                                error))
     goto out;
@@ -148,10 +151,12 @@ build_object (GoaProvider         *provider,
       g_dbus_interface_skeleton_set_flags (G_DBUS_INTERFACE_SKELETON (password_based),
                                            G_DBUS_INTERFACE_SKELETON_FLAGS_HANDLE_METHOD_INVOCATIONS_IN_THREAD);
       goa_object_skeleton_set_password_based (object, password_based);
-      g_signal_connect (password_based,
-                        "handle-get-password",
-                        G_CALLBACK (on_handle_get_password),
-                        NULL);
+      g_signal_connect_data (password_based,
+                             "handle-get-password",
+                             G_CALLBACK (on_handle_get_password),
+                             g_object_ref (secret_service),
+                             (GClosureNotify) g_object_unref,
+                             0);
     }
 
   account = goa_object_get_account (GOA_OBJECT (object));
@@ -287,6 +292,7 @@ get_tls_type_from_string_id (const gchar *str)
 static gboolean
 ensure_credentials_sync (GoaProvider         *provider,
                          GoaObject           *object,
+                         SecretService       *secret_service,
                          gint                *out_expires_in,
                          GCancellable        *cancellable,
                          GError             **error)
@@ -324,7 +330,14 @@ ensure_credentials_sync (GoaProvider         *provider,
 
   ret = FALSE;
 
-  if (!goa_utils_get_credentials (provider, object, "imap-password", NULL, &imap_password, cancellable, error))
+  if (!goa_utils_get_credentials (secret_service,
+                                  provider,
+                                  object,
+                                  "imap-password",
+                                  NULL,
+                                  &imap_password,
+                                  cancellable,
+                                  error))
     {
       if (error != NULL)
         {
@@ -377,7 +390,14 @@ ensure_credentials_sync (GoaProvider         *provider,
   if (!goa_util_lookup_keyfile_boolean (object, "SmtpUseAuth"))
     goto smtp_done;
 
-  if (!goa_utils_get_credentials (provider, object, "smtp-password", NULL, &smtp_password, cancellable, error))
+  if (!goa_utils_get_credentials (secret_service,
+                                  provider,
+                                  object,
+                                  "smtp-password",
+                                  NULL,
+                                  &smtp_password,
+                                  cancellable,
+                                  error))
     {
       if (error != NULL)
         {
@@ -1198,6 +1218,7 @@ refresh_account (GoaProvider    *provider,
                  GoaClient      *client,
                  GoaObject      *object,
                  GtkWindow      *parent,
+                 SecretService  *secret_service,
                  GError        **error)
 {
   AddAccountData data;
@@ -1228,6 +1249,7 @@ refresh_account (GoaProvider    *provider,
   g_return_val_if_fail (GOA_IS_CLIENT (client), FALSE);
   g_return_val_if_fail (GOA_IS_OBJECT (object), FALSE);
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), FALSE);
+  g_return_val_if_fail (SECRET_IS_SERVICE (secret_service), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   imap_auth = NULL;
@@ -1449,7 +1471,8 @@ refresh_account (GoaProvider    *provider,
   if (smtp_use_auth)
     g_variant_builder_add (&builder, "{sv}", "smtp-password", g_variant_new_string (smtp_password));
 
-  if (!goa_utils_store_credentials_for_object_sync (provider,
+  if (!goa_utils_store_credentials_for_object_sync (secret_service,
+                                                    provider,
                                                     object,
                                                     g_variant_builder_end (&builder),
                                                     NULL, /* GCancellable */
@@ -1613,6 +1636,7 @@ on_handle_get_password (GoaPasswordBased      *interface,
   GoaAccount *account;
   GoaProvider *provider;
   GError *error;
+  SecretService *secret_service = SECRET_SERVICE (user_data);
   const gchar *account_id;
   const gchar *method_name;
   const gchar *provider_type;
@@ -1632,7 +1656,7 @@ on_handle_get_password (GoaPasswordBased      *interface,
   provider = goa_provider_get_for_provider_type (provider_type);
 
   error = NULL;
-  if (!goa_utils_get_credentials (provider, object, id, NULL, &password, NULL, &error))
+  if (!goa_utils_get_credentials (secret_service, provider, object, id, NULL, &password, NULL, &error))
     {
       g_dbus_method_invocation_take_error (invocation, error);
       goto out;

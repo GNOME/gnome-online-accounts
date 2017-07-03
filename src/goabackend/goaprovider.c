@@ -66,6 +66,7 @@ static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
 static gboolean goa_provider_ensure_credentials_sync_real (GoaProvider   *self,
                                                            GoaObject     *object,
+                                                           SecretService *secret_service,
                                                            gint          *out_expires_in,
                                                            GCancellable  *cancellable,
                                                            GError       **error);
@@ -75,6 +76,7 @@ static gboolean goa_provider_build_object_real (GoaProvider         *self,
                                                 GKeyFile            *key_file,
                                                 const gchar         *group,
                                                 GDBusConnection     *connection,
+                                                SecretService       *secret_service,
                                                 gboolean             just_added,
                                                 GError             **error);
 
@@ -534,13 +536,29 @@ goa_provider_refresh_account (GoaProvider  *self,
                               GtkWindow    *parent,
                               GError      **error)
 {
+  SecretService *secret_service = NULL;
+  gboolean ret = FALSE;
+
   g_return_val_if_fail (GOA_IS_PROVIDER (self), FALSE);
   g_return_val_if_fail (GOA_IS_CLIENT (client), FALSE);
   g_return_val_if_fail (GOA_IS_OBJECT (object) && goa_object_peek_account (object) != NULL, FALSE);
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  return GOA_PROVIDER_GET_CLASS (self)->refresh_account (self, client, object, parent, error);
+  /* TODO: use asynchronous variant */
+  secret_service = secret_service_open_sync (SECRET_TYPE_SERVICE,
+                                             GOA_SECRET_SERVICE_BUS_NAME,
+                                             SECRET_SERVICE_OPEN_SESSION,
+                                             NULL,
+                                             error);
+  if (secret_service == NULL)
+    goto out;
+
+  ret = GOA_PROVIDER_GET_CLASS (self)->refresh_account (self, client, object, parent, secret_service, error);
+
+ out:
+  g_clear_object (&secret_service);
+  return ret;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -634,6 +652,7 @@ goa_provider_show_account_real (GoaProvider         *provider,
  * @key_file: The #GKeyFile with configuation data.
  * @group: The group in @key_file to get data from.
  * @connection: The #GDBusConnection used by the daemon to connect to the message bus.
+ * @secret_service: A #SecretService.
  * @just_added: Whether the account was newly created or being updated.
  * @error: Return location for error or %NULL.
  *
@@ -659,6 +678,7 @@ goa_provider_build_object (GoaProvider         *self,
                            GKeyFile            *key_file,
                            const gchar         *group,
                            GDBusConnection     *connection,
+                           SecretService       *secret_service,
                            gboolean             just_added,
                            GError             **error)
 {
@@ -667,12 +687,14 @@ goa_provider_build_object (GoaProvider         *self,
   g_return_val_if_fail (key_file != NULL, FALSE);
   g_return_val_if_fail (group != NULL, FALSE);
   g_return_val_if_fail (G_IS_DBUS_CONNECTION (connection), FALSE);
+  g_return_val_if_fail (SECRET_IS_SERVICE (secret_service), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
   return GOA_PROVIDER_GET_CLASS (self)->build_object (self,
                                                       object,
                                                       key_file,
                                                       group,
                                                       connection,
+                                                      secret_service,
                                                       just_added,
                                                       error);
 }
@@ -682,15 +704,17 @@ goa_provider_build_object (GoaProvider         *self,
 typedef struct
 {
   GoaObject *object;
+  SecretService *secret_service;
   gint expires_in;
 } EnsureCredentialsData;
 
 static EnsureCredentialsData *
-ensure_credentials_data_new (GoaObject *object)
+ensure_credentials_data_new (GoaObject *object, SecretService *secret_service)
 {
   EnsureCredentialsData *data;
   data = g_new0 (EnsureCredentialsData, 1);
   data->object = g_object_ref (object);
+  data->secret_service = g_object_ref (secret_service);
   return data;
 }
 
@@ -698,6 +722,7 @@ static void
 ensure_credentials_data_free (EnsureCredentialsData *data)
 {
   g_object_unref (data->object);
+  g_object_unref (data->secret_service);
   g_free (data);
 }
 
@@ -715,6 +740,7 @@ ensure_credentials_in_thread_func (GTask              *task,
   error = NULL;
   if (!goa_provider_ensure_credentials_sync (GOA_PROVIDER (object),
                                              data->object,
+                                             data->secret_service,
                                              &data->expires_in,
                                              cancellable,
                                              &error))
@@ -728,6 +754,7 @@ ensure_credentials_in_thread_func (GTask              *task,
  * goa_provider_ensure_credentials:
  * @self: A #GoaProvider.
  * @object: A #GoaObject with a #GoaAccount interface.
+ * @secret_service: A #SecretService.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @callback: The function to call when the request is satisfied.
  * @user_data: Pointer to pass to @callback.
@@ -747,6 +774,7 @@ ensure_credentials_in_thread_func (GTask              *task,
 void
 goa_provider_ensure_credentials (GoaProvider          *self,
                                  GoaObject            *object,
+                                 SecretService        *secret_service,
                                  GCancellable         *cancellable,
                                  GAsyncReadyCallback   callback,
                                  gpointer              user_data)
@@ -758,7 +786,9 @@ goa_provider_ensure_credentials (GoaProvider          *self,
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_task_data (task, ensure_credentials_data_new (object), (GDestroyNotify) ensure_credentials_data_free);
+  g_task_set_task_data (task,
+                        ensure_credentials_data_new (object, secret_service),
+                        (GDestroyNotify) ensure_credentials_data_free);
   g_task_set_source_tag (task, goa_provider_ensure_credentials);
   g_task_run_in_thread (task, ensure_credentials_in_thread_func);
 
@@ -818,6 +848,7 @@ goa_provider_ensure_credentials_finish (GoaProvider         *self,
  * goa_provider_ensure_credentials_sync:
  * @self: A #GoaProvider.
  * @object: A #GoaObject with a #GoaAccount interface.
+ * @secret_service: A #SecretService.
  * @out_expires_in: (out): Return location for how long the expired credentials are good for (0 if unknown) or %NULL.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
@@ -830,6 +861,7 @@ goa_provider_ensure_credentials_finish (GoaProvider         *self,
 gboolean
 goa_provider_ensure_credentials_sync (GoaProvider     *self,
                                       GoaObject       *object,
+                                      SecretService   *secret_service,
                                       gint            *out_expires_in,
                                       GCancellable    *cancellable,
                                       GError         **error)
@@ -869,7 +901,12 @@ goa_provider_ensure_credentials_sync (GoaProvider     *self,
       goto out;
     }
 
-  ret = GOA_PROVIDER_GET_CLASS (self)->ensure_credentials_sync (self, object, out_expires_in, cancellable, error);
+  ret = GOA_PROVIDER_GET_CLASS (self)->ensure_credentials_sync (self,
+                                                                object,
+                                                                secret_service,
+                                                                out_expires_in,
+                                                                cancellable,
+                                                                error);
 
  out:
   if (!ret && error != NULL && *error == NULL)
@@ -890,6 +927,7 @@ goa_provider_ensure_credentials_sync (GoaProvider     *self,
 static gboolean
 goa_provider_ensure_credentials_sync_real (GoaProvider   *self,
                                            GoaObject     *object,
+                                           SecretService *secret_service,
                                            gint          *out_expires_in,
                                            GCancellable  *cancellable,
                                            GError       **error)
@@ -908,6 +946,7 @@ goa_provider_build_object_real (GoaProvider         *self,
                                 GKeyFile            *key_file,
                                 const gchar         *group,
                                 GDBusConnection     *connection,
+                                SecretService       *secret_service,
                                 gboolean             just_added,
                                 GError             **error)
 {

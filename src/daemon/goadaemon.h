@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GoaDaemon, goa_daemon, GOA, DAEMON, GObject);
 
 GoaDaemon          *goa_daemon_new                (GDBusConnection   *connection,
+                                                   const gchar       *secret_service_bus_name,
                                                    GCancellable      *cancellable,
                                                    GError           **error);
 

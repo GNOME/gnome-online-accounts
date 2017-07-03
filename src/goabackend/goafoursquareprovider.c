@@ -280,6 +280,7 @@ build_object (GoaProvider         *provider,
               GKeyFile            *key_file,
               const gchar         *group,
               GDBusConnection     *connection,
+              SecretService       *secret_service,
               gboolean             just_added,
               GError             **error)
 {
@@ -293,6 +294,7 @@ build_object (GoaProvider         *provider,
                                                                                 key_file,
                                                                                 group,
                                                                                 connection,
+                                                                                secret_service,
                                                                                 just_added,
                                                                                 error))
     goto out;

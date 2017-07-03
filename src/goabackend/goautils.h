@@ -26,6 +26,7 @@
 #include <gio/gio.h>
 #include <glib.h>
 #include <gtk/gtk.h>
+#include <libsecret/secret.h>
 #include <libsoup/soup.h>
 
 #include "goaprovider.h"
@@ -33,6 +34,8 @@
 G_BEGIN_DECLS
 
 #define GOA_OAUTH2_ACCESS_DENIED "access_denied"
+
+#define GOA_SECRET_SERVICE_BUS_NAME "org.freedesktop.secrets"
 
 #define GOA_SETTINGS_SCHEMA "org.gnome.online-accounts"
 #define GOA_SETTINGS_WHITELISTED_PROVIDERS "whitelisted-providers"
@@ -62,28 +65,33 @@ gchar           *goa_utils_data_input_stream_read_line (GDataInputStream  *strea
 
 void             goa_utils_set_dialog_title (GoaProvider *provider, GtkDialog *dialog, gboolean add_account);
 
-gboolean         goa_utils_delete_credentials_for_account_sync (GoaProvider    *provider,
+gboolean         goa_utils_delete_credentials_for_account_sync (SecretService  *secret_service,
+                                                                GoaProvider    *provider,
                                                                 GoaAccount     *account,
                                                                 GCancellable   *cancellable,
                                                                 GError        **error);
 
-gboolean         goa_utils_delete_credentials_for_id_sync (GoaProvider    *provider,
+gboolean         goa_utils_delete_credentials_for_id_sync (SecretService  *secret_service,
+                                                           GoaProvider    *provider,
                                                            const gchar    *id,
                                                            GCancellable   *cancellable,
                                                            GError        **error);
 
-GVariant        *goa_utils_lookup_credentials_sync (GoaProvider    *provider,
+GVariant        *goa_utils_lookup_credentials_sync (SecretService  *secret_service,
+                                                    GoaProvider    *provider,
                                                     GoaObject      *object,
                                                     GCancellable   *cancellable,
                                                     GError        **error);
 
-gboolean         goa_utils_store_credentials_for_id_sync (GoaProvider    *provider,
+gboolean         goa_utils_store_credentials_for_id_sync (SecretService  *secret_service,
+                                                          GoaProvider    *provider,
                                                           const gchar    *id,
                                                           GVariant       *credentials,
                                                           GCancellable   *cancellable,
                                                           GError        **error);
 
-gboolean         goa_utils_store_credentials_for_object_sync (GoaProvider    *provider,
+gboolean         goa_utils_store_credentials_for_object_sync (SecretService  *secret_service,
+                                                              GoaProvider    *provider,
                                                               GoaObject      *object,
                                                               GVariant       *credentials,
                                                               GCancellable   *cancellable,
@@ -108,7 +116,8 @@ void             goa_utils_set_error_soup (GError **err, SoupMessage *msg);
 
 void             goa_utils_set_error_ssl (GError **err, GTlsCertificateFlags flags);
 
-gboolean         goa_utils_get_credentials (GoaProvider    *provider,
+gboolean         goa_utils_get_credentials (SecretService  *secret_service,
+                                            GoaProvider    *provider,
                                             GoaObject      *object,
                                             const gchar    *id,
                                             gchar         **username,

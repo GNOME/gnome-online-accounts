@@ -28,6 +28,7 @@
 #include <goabackend/goaprovider.h>
 #include <goabackend/goabackendenums.h>
 #include <gtk/gtk.h>
+#include <libsecret/secret.h>
 
 G_BEGIN_DECLS
 
@@ -75,6 +76,7 @@ struct _GoaProviderClass
                                                            GoaClient              *client,
                                                            GoaObject              *object,
                                                            GtkWindow              *parent,
+                                                           SecretService          *secret_service,
                                                            GError                **error);
 
   /* virtual but with default implementation */
@@ -83,10 +85,12 @@ struct _GoaProviderClass
                                                            GKeyFile               *key_file,
                                                            const gchar            *group,
                                                            GDBusConnection        *connection,
+                                                           SecretService          *secret_service,
                                                            gboolean                just_added,
                                                            GError                **error);
   gboolean                (*ensure_credentials_sync)      (GoaProvider            *self,
                                                            GoaObject              *object,
+                                                           SecretService          *secret_service,
                                                            gint                   *out_expires_in,
                                                            GCancellable           *cancellable,
                                                            GError                **error);
@@ -133,11 +137,13 @@ gboolean    goa_provider_build_object                          (GoaProvider     
                                                                 GKeyFile               *key_file,
                                                                 const gchar            *group,
                                                                 GDBusConnection        *connection,
+                                                                SecretService          *secret_service,
                                                                 gboolean                just_added,
                                                                 GError                **error);
 
 void        goa_provider_ensure_credentials                    (GoaProvider             *self,
                                                                 GoaObject               *object,
+                                                                SecretService           *secret_service,
                                                                 GCancellable            *cancellable,
                                                                 GAsyncReadyCallback      callback,
                                                                 gpointer                 user_data);
@@ -149,6 +155,7 @@ gboolean    goa_provider_ensure_credentials_finish             (GoaProvider     
 
 gboolean    goa_provider_ensure_credentials_sync               (GoaProvider             *self,
                                                                 GoaObject               *object,
+                                                                SecretService           *secret_service,
                                                                 gint                    *out_expires_in,
                                                                 GCancellable            *cancellable,
                                                                 GError                 **error);

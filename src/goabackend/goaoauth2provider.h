@@ -24,6 +24,7 @@
 #define __GOA_OAUTH2_PROVIDER_H__
 
 #include <gio/gio.h>
+#include <libsecret/secret.h>
 
 #include "goabackend/goaprovider.h"
 #include "goabackend/goaprovider-priv.h"
@@ -48,6 +49,7 @@ gchar       *goa_oauth2_provider_get_identity_sync            (GoaOAuth2Provider
                                                                GError                  **error);
 gchar       *goa_oauth2_provider_get_access_token_sync        (GoaOAuth2Provider        *provider,
                                                                GoaObject                *object,
+                                                               SecretService            *secret_service,
                                                                gboolean                 force_refresh,
                                                                gint                     *out_access_token_expires_in,
                                                                GCancellable             *cancellable,

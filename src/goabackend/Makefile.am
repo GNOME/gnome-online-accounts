@@ -162,13 +162,17 @@ libgoawebextension_la_SOURCES =						\
 	$(NULL)
 
 libgoawebextension_la_CFLAGS =						\
+	$(GLIB_CFLAGS) 							\
 	$(REST_CFLAGS)							\
+	$(SECRET_CFLAGS)						\
 	$(WEBKIT_GTK_CFLAGS)						\
 	$(NULL)
 
 libgoawebextension_la_LIBADD =						\
 	libgoa-backend-1.0.la						\
+	$(GLIB_LIBS) 							\
 	$(REST_LIBS)							\
+	$(SECRET_LIBS)							\
 	$(WEBKIT_GTK_LIBS)						\
 	$(NULL)
 

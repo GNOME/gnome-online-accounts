@@ -19,7 +19,6 @@
 #include "config.h"
 
 #include <glib/gi18n-lib.h>
-#include <libsecret/secret.h>
 
 #ifdef GOA_TELEPATHY_ENABLED
 #include <telepathy-glib/telepathy-glib.h>
@@ -337,24 +336,27 @@ goa_utils_set_dialog_title (GoaProvider *provider, GtkDialog *dialog, gboolean a
 }
 
 gboolean
-goa_utils_delete_credentials_for_account_sync (GoaProvider   *provider,
+goa_utils_delete_credentials_for_account_sync (SecretService *secret_service,
+                                               GoaProvider   *provider,
                                                GoaAccount    *object,
                                                GCancellable  *cancellable,
                                                GError       **error)
 {
   const gchar *id;
 
+  g_return_val_if_fail (SECRET_IS_SERVICE (secret_service), FALSE);
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
   g_return_val_if_fail (GOA_IS_ACCOUNT (object), FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   id = goa_account_get_id (object);
-  return goa_utils_delete_credentials_for_id_sync (provider, id, cancellable, error);
+  return goa_utils_delete_credentials_for_id_sync (secret_service, provider, id, cancellable, error);
 }
 
 gboolean
-goa_utils_delete_credentials_for_id_sync (GoaProvider   *provider,
+goa_utils_delete_credentials_for_id_sync (SecretService *secret_service,
+                                          GoaProvider   *provider,
                                           const gchar   *id,
                                           GCancellable  *cancellable,
                                           GError       **error)
@@ -362,7 +364,9 @@ goa_utils_delete_credentials_for_id_sync (GoaProvider   *provider,
   gboolean ret = FALSE;
   gchar *password_key = NULL;
   GError *sec_error = NULL;
+  GHashTable *attributes = NULL;
 
+  g_return_val_if_fail (SECRET_IS_SERVICE (secret_service), FALSE);
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
   g_return_val_if_fail (id != NULL && id[0] != '\0', FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
@@ -373,14 +377,14 @@ goa_utils_delete_credentials_for_id_sync (GoaProvider   *provider,
                                   goa_provider_get_credentials_generation (provider),
                                   id);
 
-  secret_password_clear_sync (&secret_password_schema,
-                              cancellable,
-                              &sec_error,
-                              "goa-identity", password_key,
-                              NULL);
+  attributes = secret_attributes_build (&secret_password_schema, "goa-identity", password_key, NULL);
+  if (attributes == NULL)
+    goto out;
+
+  secret_service_clear_sync (secret_service, &secret_password_schema, attributes, cancellable, &sec_error);
   if (sec_error != NULL)
     {
-      g_warning ("secret_password_clear_sync() failed: %s", sec_error->message);
+      g_warning ("secret_service_clear_sync() failed: %s", sec_error->message);
       g_set_error_literal (error,
                            GOA_ERROR,
                            GOA_ERROR_FAILED, /* TODO: more specific */
@@ -393,22 +397,27 @@ goa_utils_delete_credentials_for_id_sync (GoaProvider   *provider,
   ret = TRUE;
 
  out:
+  g_clear_pointer (&attributes, (GDestroyNotify) g_hash_table_unref);
   g_free (password_key);
   return ret;
 }
 
 GVariant *
-goa_utils_lookup_credentials_sync (GoaProvider   *provider,
+goa_utils_lookup_credentials_sync (SecretService *secret_service,
+                                   GoaProvider   *provider,
                                    GoaObject     *object,
                                    GCancellable  *cancellable,
                                    GError       **error)
 {
   gchar *password_key = NULL;
   GVariant *ret = NULL;
-  gchar *password = NULL;
   const gchar *id;
   GError *sec_error = NULL;
+  GHashTable *attributes = NULL;
+  SecretValue *password_value = NULL;
+  const gchar *password;
 
+  g_return_val_if_fail (SECRET_IS_SERVICE (secret_service), NULL);
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), NULL);
   g_return_val_if_fail (GOA_IS_OBJECT (object) && goa_object_peek_account (object) != NULL, FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), NULL);
@@ -421,14 +430,18 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
                                   goa_provider_get_credentials_generation (provider),
                                   id);
 
-  password = secret_password_lookup_sync (&secret_password_schema,
-                                          cancellable,
-                                          &sec_error,
-                                          "goa-identity", password_key,
-                                          NULL);
+  attributes = secret_attributes_build (&secret_password_schema, "goa-identity", password_key, NULL);
+  if (attributes == NULL)
+    goto out;
+
+  password_value = secret_service_lookup_sync (secret_service,
+                                               &secret_password_schema,
+                                               attributes,
+                                               cancellable,
+                                               &sec_error);
   if (sec_error != NULL)
     {
-      g_warning ("secret_password_lookup_sync() failed: %s", sec_error->message);
+      g_warning ("secret_service_lookup_sync() failed: %s", sec_error->message);
       g_set_error_literal (error,
                            GOA_ERROR,
                            GOA_ERROR_FAILED, /* TODO: more specific */
@@ -436,9 +449,24 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
       g_error_free (sec_error);
       goto out;
     }
-  else if (password == NULL)
+  else if (password_value == NULL)
     {
-      g_warning ("secret_password_lookup_sync() returned NULL");
+      g_warning ("secret_service_lookup_sync() returned NULL");
+      g_set_error_literal (error,
+                           GOA_ERROR,
+                           GOA_ERROR_FAILED, /* TODO: more specific */
+                           _("No credentials found in the keyring"));
+      goto out;
+    }
+
+  password = secret_value_get_text (password_value);
+  if (password == NULL)
+    {
+      const gchar *password_value_content_type;
+
+      password_value_content_type = secret_value_get_content_type (password_value);
+      g_warning ("secret_service_lookup_sync() returned a value with the wrong content-type (%s)",
+                 password_value_content_type);
       g_set_error_literal (error,
                            GOA_ERROR,
                            GOA_ERROR_FAILED, /* TODO: more specific */
@@ -463,13 +491,15 @@ goa_utils_lookup_credentials_sync (GoaProvider   *provider,
     g_variant_ref_sink (ret);
 
  out:
-  g_free (password);
+  g_clear_pointer (&attributes, (GDestroyNotify) g_hash_table_unref);
+  g_clear_pointer (&password_value, secret_value_unref);
   g_free (password_key);
   return ret;
 }
 
 gboolean
-goa_utils_store_credentials_for_id_sync (GoaProvider   *provider,
+goa_utils_store_credentials_for_id_sync (SecretService *secret_service,
+                                         GoaProvider   *provider,
                                          const gchar   *id,
                                          GVariant      *credentials,
                                          GCancellable  *cancellable,
@@ -480,7 +510,10 @@ goa_utils_store_credentials_for_id_sync (GoaProvider   *provider,
   gchar *password_description;
   gchar *password_key;
   GError *sec_error = NULL;
+  GHashTable *attributes = NULL;
+  SecretValue *credentials_value = NULL;
 
+  g_return_val_if_fail (SECRET_IS_SERVICE (secret_service), FALSE);
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
   g_return_val_if_fail (id != NULL && id[0] != '\0', FALSE);
   g_return_val_if_fail (credentials != NULL, FALSE);
@@ -491,25 +524,32 @@ goa_utils_store_credentials_for_id_sync (GoaProvider   *provider,
   g_variant_ref_sink (credentials);
   g_variant_unref (credentials);
 
+  credentials_value = secret_value_new (credentials_str, -1, "text/plain");
+
   password_key = g_strdup_printf ("%s:gen%d:%s",
                                   goa_provider_get_provider_type (provider),
                                   goa_provider_get_credentials_generation (provider),
                                   id);
+
+  attributes = secret_attributes_build (&secret_password_schema, "goa-identity", password_key, NULL);
+  if (attributes == NULL)
+    goto out;
+
   /* Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo' */
   password_description = g_strdup_printf (_("GOA %s credentials for identity %s"),
                                           goa_provider_get_provider_type (GOA_PROVIDER (provider)),
                                           id);
 
-  if (!secret_password_store_sync (&secret_password_schema,
-                                   SECRET_COLLECTION_DEFAULT, /* default keyring */
-                                   password_description,
-                                   credentials_str,
-                                   cancellable,
-                                   &sec_error,
-                                   "goa-identity", password_key,
-                                   NULL))
+  if (!secret_service_store_sync (secret_service,
+                                  &secret_password_schema,
+                                  attributes,
+                                  SECRET_COLLECTION_DEFAULT, /* default keyring */
+                                  password_description,
+                                  credentials_value,
+                                  cancellable,
+                                  &sec_error))
     {
-      g_warning ("secret_password_store_sync() failed: %s", sec_error->message);
+      g_warning ("secret_service_store_sync() failed: %s", sec_error->message);
       g_set_error_literal (error,
                            GOA_ERROR,
                            GOA_ERROR_FAILED, /* TODO: more specific */
@@ -522,6 +562,8 @@ goa_utils_store_credentials_for_id_sync (GoaProvider   *provider,
   ret = TRUE;
 
  out:
+  g_clear_pointer (&attributes, (GDestroyNotify) g_hash_table_unref);
+  g_clear_pointer (&credentials_value, secret_value_unref);
   g_free (credentials_str);
   g_free (password_key);
   g_free (password_description);
@@ -529,7 +571,8 @@ goa_utils_store_credentials_for_id_sync (GoaProvider   *provider,
 }
 
 gboolean
-goa_utils_store_credentials_for_object_sync (GoaProvider   *provider,
+goa_utils_store_credentials_for_object_sync (SecretService *secret_service,
+                                             GoaProvider   *provider,
                                              GoaObject     *object,
                                              GVariant      *credentials,
                                              GCancellable  *cancellable,
@@ -537,6 +580,7 @@ goa_utils_store_credentials_for_object_sync (GoaProvider   *provider,
 {
   const gchar *id;
 
+  g_return_val_if_fail (SECRET_IS_SERVICE (secret_service), FALSE);
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
   g_return_val_if_fail (GOA_IS_OBJECT (object) && goa_object_peek_account (object) != NULL, FALSE);
   g_return_val_if_fail (credentials != NULL, FALSE);
@@ -544,7 +588,7 @@ goa_utils_store_credentials_for_object_sync (GoaProvider   *provider,
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   id = goa_account_get_id (goa_object_peek_account (object));
-  return goa_utils_store_credentials_for_id_sync (provider, id, credentials, cancellable, error);
+  return goa_utils_store_credentials_for_id_sync (secret_service, provider, id, credentials, cancellable, error);
 }
 
 gboolean
@@ -934,7 +978,8 @@ goa_utils_set_error_ssl (GError **err, GTlsCertificateFlags flags)
 }
 
 gboolean
-goa_utils_get_credentials (GoaProvider    *provider,
+goa_utils_get_credentials (SecretService  *secret_service,
+                           GoaProvider    *provider,
                            GoaObject      *object,
                            const gchar    *id,
                            gchar         **out_username,
@@ -948,7 +993,8 @@ goa_utils_get_credentials (GoaProvider    *provider,
   gchar *username = NULL;
   gchar *password = NULL;
 
-  credentials = goa_utils_lookup_credentials_sync (provider,
+  credentials = goa_utils_lookup_credentials_sync (secret_service,
+                                                   provider,
                                                    object,
                                                    cancellable,
                                                    error);

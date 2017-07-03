@@ -24,6 +24,7 @@
 #include <gio/gio.h>
 #include <glib/gi18n.h>
 #include <rest/rest-proxy.h>
+#include <libsecret/secret.h>
 #include <libsoup/soup.h>
 
 #include "goadaemon.h"
@@ -51,6 +52,9 @@ struct _GoaDaemon
   GQueue *ensure_credentials_queue;
   gboolean ensure_credentials_running;
 
+  SecretService *secret_service;
+  gchar *secret_service_bus_name;
+
   guint config_timeout_id;
   guint credentials_timeout_id;
 };
@@ -58,7 +62,8 @@ struct _GoaDaemon
 enum
 {
   PROP_0,
-  PROP_CONNECTION
+  PROP_CONNECTION,
+  PROP_SECRET_SERVICE_BUS_NAME
 };
 
 static void on_file_monitor_changed (GFileMonitor     *monitor,
@@ -147,9 +152,6 @@ goa_daemon_constructed (GObject *object)
 
   G_OBJECT_CLASS (goa_daemon_parent_class)->constructed (object);
 
-  /* prime the list of accounts */
-  goa_daemon_reload_configuration (self);
-
   /* Export objects */
   g_dbus_object_manager_server_set_connection (self->object_manager, self->connection);
 }
@@ -182,6 +184,8 @@ goa_daemon_finalize (GObject *object)
     }
 
   g_free (self->home_conf_file_path);
+  g_free (self->secret_service_bus_name);
+  g_clear_object (&self->secret_service);
   g_object_unref (self->manager);
   g_object_unref (self->object_manager);
   g_object_unref (self->connection);
@@ -199,6 +203,10 @@ goa_daemon_set_property (GObject *object, guint prop_id, const GValue *value, GP
     {
     case PROP_CONNECTION:
       self->connection = G_DBUS_CONNECTION (g_value_dup_object (value));
+      break;
+
+    case PROP_SECRET_SERVICE_BUS_NAME:
+      self->secret_service_bus_name = g_value_dup_string (value);
       break;
 
     default:
@@ -390,12 +398,39 @@ goa_daemon_class_init (GoaDaemonClass *klass)
                                                         G_PARAM_CONSTRUCT_ONLY |
                                                         G_PARAM_STATIC_STRINGS |
                                                         G_PARAM_WRITABLE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_SECRET_SERVICE_BUS_NAME,
+                                   g_param_spec_string ("secret-service-bus-name",
+                                                        "Secret service bus name",
+                                                        "The D-Bus service name of the secret service",
+                                                        NULL,
+                                                        G_PARAM_CONSTRUCT_ONLY |
+                                                        G_PARAM_STATIC_STRINGS |
+                                                        G_PARAM_WRITABLE));
 }
 
 static gboolean
 goa_daemon_initable_init (GInitable *initable, GCancellable *cancellable, GError **error)
 {
-  return TRUE;
+  GoaDaemon *self = GOA_DAEMON (initable);
+  gboolean ret_val = FALSE;
+
+  self->secret_service = secret_service_open_sync (SECRET_TYPE_SERVICE,
+                                                   self->secret_service_bus_name,
+                                                   SECRET_SERVICE_OPEN_SESSION,
+                                                   cancellable,
+                                                   error);
+  if (self->secret_service == NULL)
+    goto out;
+
+  /* prime the list of accounts */
+  goa_daemon_reload_configuration (self);
+
+  ret_val = TRUE;
+
+ out:
+  return ret_val;
 }
 
 static void
@@ -405,13 +440,22 @@ goa_daemon_initable_iface_init (GInitableIface *iface)
 }
 
 GoaDaemon *
-goa_daemon_new (GDBusConnection *connection, GCancellable *cancellable, GError **error)
+goa_daemon_new (GDBusConnection   *connection,
+                const gchar       *secret_service_bus_name,
+                GCancellable      *cancellable,
+                GError           **error)
 {
   g_return_val_if_fail (G_IS_DBUS_CONNECTION (connection), NULL);
+  g_return_val_if_fail (secret_service_bus_name != NULL && secret_service_bus_name[0] != '\0', NULL);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  return GOA_DAEMON (g_initable_new (GOA_TYPE_DAEMON, cancellable, error, "connection", connection, NULL));
+  return GOA_DAEMON (g_initable_new (GOA_TYPE_DAEMON,
+                                     cancellable,
+                                     error,
+                                     "connection", connection,
+                                     "secret-service-bus-name", secret_service_bus_name,
+                                     NULL));
 }
 
 
@@ -597,7 +641,7 @@ add_config_file (GoaDaemon     *self,
                   needs_update = g_key_file_remove_group (key_file, groups[n], NULL);
 
                   error = NULL;
-                  if (!goa_utils_delete_credentials_for_id_sync (provider, id, NULL, &error))
+                  if (!goa_utils_delete_credentials_for_id_sync (self->secret_service, provider, id, NULL, &error))
                     {
                       g_warning ("Unable to clean-up stale keyring entries: %s", error->message);
                       g_error_free (error);
@@ -712,7 +756,14 @@ goa_daemon_update_account_object (GoaDaemon           *self,
   goa_account_set_is_temporary (account, is_temporary);
 
   error = NULL;
-  if (!goa_provider_build_object (provider, object, key_file, group, self->connection, just_added, &error))
+  if (!goa_provider_build_object (provider,
+                                  object,
+                                  key_file,
+                                  group,
+                                  self->connection,
+                                  self->secret_service,
+                                  just_added,
+                                  &error))
     {
       g_warning ("Error parsing account: %s (%s, %d)",
                  error->message, g_quark_to_string (error->domain), error->code);
@@ -1273,7 +1324,8 @@ get_all_providers_cb (GObject      *source,
       /* We don't want to fail AddAccount if we could not store the
        * credentials in the keyring.
        */
-      goa_utils_store_credentials_for_id_sync (provider,
+      goa_utils_store_credentials_for_id_sync (self->secret_service,
+                                               provider,
                                                id,
                                                data->credentials,
                                                NULL, /* GCancellable */
@@ -1478,7 +1530,7 @@ on_account_handle_remove (GoaAccount            *account,
     }
 
   error = NULL;
-  if (!goa_utils_delete_credentials_for_account_sync (provider, account, NULL, &error))
+  if (!goa_utils_delete_credentials_for_account_sync (self->secret_service, provider, account, NULL, &error))
     {
       g_dbus_method_invocation_take_error (invocation, error);
       goto out;
@@ -1657,6 +1709,7 @@ ensure_credentials_queue_check (GoaDaemon *self)
 
   goa_provider_ensure_credentials (provider,
                                    data->object,
+                                   self->secret_service,
                                    NULL, /* GCancellable */
                                    ensure_credentials_queue_collector,
                                    task);

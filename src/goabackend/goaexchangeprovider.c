@@ -18,6 +18,7 @@
 
 #include "config.h"
 #include <glib/gi18n-lib.h>
+#include <libsecret/secret.h>
 
 #include "goaewsclient.h"
 #include "goaprovider.h"
@@ -79,6 +80,7 @@ build_object (GoaProvider         *provider,
               GKeyFile            *key_file,
               const gchar         *group,
               GDBusConnection     *connection,
+              SecretService       *secret_service,
               gboolean             just_added,
               GError             **error)
 {
@@ -97,6 +99,7 @@ build_object (GoaProvider         *provider,
                                                                               key_file,
                                                                               group,
                                                                               connection,
+                                                                              secret_service,
                                                                               just_added,
                                                                               error))
     goto out;
@@ -109,10 +112,12 @@ build_object (GoaProvider         *provider,
       g_dbus_interface_skeleton_set_flags (G_DBUS_INTERFACE_SKELETON (password_based),
                                            G_DBUS_INTERFACE_SKELETON_FLAGS_HANDLE_METHOD_INVOCATIONS_IN_THREAD);
       goa_object_skeleton_set_password_based (object, password_based);
-      g_signal_connect (password_based,
-                        "handle-get-password",
-                        G_CALLBACK (on_handle_get_password),
-                        NULL);
+      g_signal_connect_data (password_based,
+                             "handle-get-password",
+                             G_CALLBACK (on_handle_get_password),
+                             g_object_ref (secret_service),
+                             (GClosureNotify) g_object_unref,
+                             0);
     }
 
   account = goa_object_get_account (GOA_OBJECT (object));
@@ -198,6 +203,7 @@ build_object (GoaProvider         *provider,
 static gboolean
 ensure_credentials_sync (GoaProvider         *provider,
                          GoaObject           *object,
+                         SecretService       *secret_service,
                          gint                *out_expires_in,
                          GCancellable        *cancellable,
                          GError             **error)
@@ -212,7 +218,14 @@ ensure_credentials_sync (GoaProvider         *provider,
   gchar *username = NULL;
   gchar *password = NULL;
 
-  if (!goa_utils_get_credentials (provider, object, "password", &username, &password, cancellable, error))
+  if (!goa_utils_get_credentials (secret_service,
+                                  provider,
+                                  object,
+                                  "password",
+                                  &username,
+                                  &password,
+                                  cancellable,
+                                  error))
     {
       if (error != NULL)
         {
@@ -668,6 +681,7 @@ refresh_account (GoaProvider    *provider,
                  GoaClient      *client,
                  GoaObject      *object,
                  GtkWindow      *parent,
+                 SecretService  *secret_service,
                  GError        **error)
 {
   AddAccountData data;
@@ -787,7 +801,8 @@ refresh_account (GoaProvider    *provider,
   g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&builder, "{sv}", "password", g_variant_new_string (password));
 
-  if (!goa_utils_store_credentials_for_object_sync (provider,
+  if (!goa_utils_store_credentials_for_object_sync (secret_service,
+                                                    provider,
                                                     object,
                                                     g_variant_builder_end (&builder),
                                                     NULL, /* GCancellable */
@@ -846,6 +861,7 @@ on_handle_get_password (GoaPasswordBased      *interface,
   GoaAccount *account;
   GoaProvider *provider;
   GError *error;
+  SecretService *secret_service = SECRET_SERVICE (user_data);
   const gchar *account_id;
   const gchar *method_name;
   const gchar *provider_type;
@@ -863,7 +879,7 @@ on_handle_get_password (GoaPasswordBased      *interface,
   provider = goa_provider_get_for_provider_type (provider_type);
 
   error = NULL;
-  if (!goa_utils_get_credentials (provider, object, "password", NULL, &password, NULL, &error))
+  if (!goa_utils_get_credentials (secret_service, provider, object, "password", NULL, &password, NULL, &error))
     {
       g_dbus_method_invocation_take_error (invocation, error);
       goto out;

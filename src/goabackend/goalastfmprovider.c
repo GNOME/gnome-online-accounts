@@ -102,6 +102,7 @@ build_object (GoaProvider         *provider,
               GKeyFile            *key_file,
               const gchar         *group,
               GDBusConnection     *connection,
+              SecretService       *secret_service,
               gboolean             just_added,
               GError             **error)
 {
@@ -118,6 +119,7 @@ build_object (GoaProvider         *provider,
                                                                             key_file,
                                                                             group,
                                                                             connection,
+                                                                            secret_service,
                                                                             just_added,
                                                                             error))
     goto out;
@@ -250,6 +252,7 @@ lastfm_login_sync (GoaProvider                  *provider,
 static gboolean
 ensure_credentials_sync (GoaProvider         *provider,
                          GoaObject           *object,
+                         SecretService       *secret_service,
                          gint                *out_expires_in,
                          GCancellable        *cancellable,
                          GError             **error)
@@ -258,7 +261,14 @@ ensure_credentials_sync (GoaProvider         *provider,
   gchar *password = NULL;
   gboolean ret = FALSE;
 
-  if (!goa_utils_get_credentials (provider, object, "password", &username, &password, cancellable, error))
+  if (!goa_utils_get_credentials (secret_service,
+                                  provider,
+                                  object,
+                                  "password",
+                                  &username,
+                                  &password,
+                                  cancellable,
+                                  error))
     {
       if (error != NULL)
         {
@@ -753,6 +763,7 @@ refresh_account (GoaProvider    *provider,
                  GoaClient      *client,
                  GoaObject      *object,
                  GtkWindow      *parent,
+                 SecretService  *secret_service,
                  GError        **error)
 {
   AddAccountData data;
@@ -769,6 +780,7 @@ refresh_account (GoaProvider    *provider,
   g_return_val_if_fail (GOA_IS_CLIENT (client), FALSE);
   g_return_val_if_fail (GOA_IS_OBJECT (object), FALSE);
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), FALSE);
+  g_return_val_if_fail (SECRET_IS_SERVICE (secret_service), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   ret = FALSE;
@@ -854,7 +866,8 @@ refresh_account (GoaProvider    *provider,
   g_variant_builder_add (&builder, "{sv}", "password", g_variant_new_string (password));
   g_variant_builder_add (&builder, "{sv}", "access_token", g_variant_new_string (data.access_token));
 
-  if (!goa_utils_store_credentials_for_object_sync (provider,
+  if (!goa_utils_store_credentials_for_object_sync (secret_service,
+                                                    provider,
                                                     object,
                                                     g_variant_builder_end (&builder),
                                                     NULL, /* GCancellable */

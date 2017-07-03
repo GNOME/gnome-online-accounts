@@ -25,6 +25,7 @@
 
 #include <goabackend/goaprovider.h>
 #include <goabackend/goaprovider-priv.h>
+#include <libsecret/secret.h>
 #include <rest/rest-proxy-call.h>
 #include <webkitdom/webkitdom.h>
 
@@ -126,6 +127,7 @@ gchar       *goa_oauth_provider_parse_request_token_error    (GoaOAuthProvider  
                                                               RestProxyCall                *call);
 gchar       *goa_oauth_provider_get_access_token_sync        (GoaOAuthProvider          *provider,
                                                               GoaObject                 *object,
+                                                              SecretService             *secret_service,
                                                               gboolean                   force_refresh,
                                                               gchar                    **out_access_token_secret,
                                                               gint                      *out_access_token_expires_in,

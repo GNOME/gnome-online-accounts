@@ -27,6 +27,7 @@
 #include "goaidentitymanagererror.h"
 
 #include <gcr/gcr.h>
+#include <libsecret/secret.h>
 
 #include "org.gnome.Identity.h"
 
@@ -264,6 +265,7 @@ sign_in_identity_finish (GoaKerberosProvider  *self,
 static gboolean
 get_ticket_sync (GoaKerberosProvider *self,
                  GoaObject           *object,
+                 SecretService       *secret_service,
                  gboolean             is_interactive,
                  GCancellable        *cancellable,
                  GError             **error)
@@ -301,7 +303,8 @@ get_ticket_sync (GoaKerberosProvider *self,
   password = NULL;
 
   lookup_error = NULL;
-  credentials = goa_utils_lookup_credentials_sync (GOA_PROVIDER (self),
+  credentials = goa_utils_lookup_credentials_sync (secret_service,
+                                                   GOA_PROVIDER (self),
                                                    object,
                                                    cancellable,
                                                    &lookup_error);
@@ -385,12 +388,14 @@ notify_is_temporary_cb (GObject *object, GParamSpec *pspec, gpointer user_data)
 
 static gboolean
 on_handle_get_ticket (GoaTicketing          *interface,
-                      GDBusMethodInvocation *invocation)
+                      GDBusMethodInvocation *invocation,
+                      gpointer               user_data)
 {
   GoaObject *object;
   GoaAccount *account;
   GoaProvider *provider;
   GError *error;
+  SecretService *secret_service = SECRET_SERVICE (user_data);
   gboolean got_ticket;
   const gchar *id;
   const gchar *method_name;
@@ -408,6 +413,7 @@ on_handle_get_ticket (GoaTicketing          *interface,
   error = NULL;
   got_ticket = get_ticket_sync (GOA_KERBEROS_PROVIDER (provider),
                                 object,
+                                secret_service,
                                 TRUE /* Allow interaction */,
                                 NULL,
                                 &error);
@@ -427,6 +433,7 @@ build_object (GoaProvider         *provider,
               GKeyFile            *key_file,
               const gchar         *group,
               GDBusConnection     *connection,
+              SecretService       *secret_service,
               gboolean             just_added,
               GError             **error)
 {
@@ -440,6 +447,7 @@ build_object (GoaProvider         *provider,
                                                                               key_file,
                                                                               group,
                                                                               connection,
+                                                                              secret_service,
                                                                               just_added,
                                                                               error))
     goto out;
@@ -458,10 +466,12 @@ build_object (GoaProvider         *provider,
 
           ticketing = goa_ticketing_skeleton_new ();
 
-          g_signal_connect (ticketing,
-                            "handle-get-ticket",
-                            G_CALLBACK (on_handle_get_ticket),
-                            NULL);
+          g_signal_connect_data (ticketing,
+                                 "handle-get-ticket",
+                                 G_CALLBACK (on_handle_get_ticket),
+                                 g_object_ref (secret_service),
+                                 (GClosureNotify) g_object_unref,
+                                 0);
 
           goa_object_skeleton_set_ticketing (object, ticketing);
 
@@ -778,6 +788,7 @@ refresh_account (GoaProvider    *provider,
                  GoaClient      *client,
                  GoaObject      *object,
                  GtkWindow      *parent,
+                 SecretService  *secret_service,
                  GError        **error)
 {
   GoaKerberosProvider *self = GOA_KERBEROS_PROVIDER (provider);
@@ -788,10 +799,12 @@ refresh_account (GoaProvider    *provider,
   g_return_val_if_fail (GOA_IS_CLIENT (client), FALSE);
   g_return_val_if_fail (GOA_IS_OBJECT (object), FALSE);
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), FALSE);
+  g_return_val_if_fail (SECRET_IS_SERVICE (secret_service), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   got_ticket = get_ticket_sync (self,
                                 object,
+                                secret_service,
                                 TRUE /* Allow interaction */,
                                 NULL,
                                 &ticket_error);
@@ -1337,6 +1350,7 @@ dbus_proxy_reload_properties_sync (GDBusProxy    *proxy,
 static gboolean
 ensure_credentials_sync (GoaProvider    *provider,
                          GoaObject      *object,
+                         SecretService  *secret_service,
                          gint           *out_expires_in,
                          GCancellable   *cancellable,
                          GError        **error)
@@ -1374,6 +1388,7 @@ ensure_credentials_sync (GoaProvider    *provider,
       g_mutex_unlock (&identity_manager_mutex);
       ticket_synced = get_ticket_sync (GOA_KERBEROS_PROVIDER (provider),
                                        object,
+                                       secret_service,
                                        FALSE /* Don't allow interaction */,
                                        cancellable,
                                        &lookup_error);

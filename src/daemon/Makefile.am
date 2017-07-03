@@ -34,6 +34,7 @@ goa_daemon_CFLAGS =						\
 	$(GLIB_CFLAGS) 						\
 	$(GTK_CFLAGS)						\
 	$(REST_CFLAGS)						\
+	$(SECRET_CFLAGS)					\
 	$(NULL)
 
 goa_daemon_LDADD = 						\
@@ -42,6 +43,7 @@ goa_daemon_LDADD = 						\
 	$(top_builddir)/src/goabackend/libgoa-backend-1.0.la	\
 	$(GTK_LIBS)						\
 	$(REST_LIBS)						\
+	$(SECRET_LIBS)						\
 	$(NULL)
 
 clean-local :
