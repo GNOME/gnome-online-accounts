@@ -55,6 +55,9 @@ on_name_lost (GDBusConnection *connection,
               const gchar     *name,
               gpointer         user_data)
 {
+  g_return_if_fail (connection == NULL || G_IS_DBUS_CONNECTION (connection));
+  g_return_if_fail (name != NULL && name[0] != '\0');
+
   g_info ("Lost (or failed to acquire) the name %s on the session message bus", name);
   g_main_loop_quit (loop);
 }
@@ -64,6 +67,9 @@ on_name_acquired (GDBusConnection *connection,
                   const gchar     *name,
                   gpointer         user_data)
 {
+  g_return_if_fail (G_IS_DBUS_CONNECTION (connection));
+  g_return_if_fail (name != NULL && name[0] != '\0');
+
   g_debug ("Acquired the name %s on the session message bus", name);
 }
 
