@@ -89,7 +89,10 @@ static void ensure_credentials_queue_check (GoaDaemon *self);
 static void goa_daemon_check_credentials (GoaDaemon *self);
 static void goa_daemon_reload_configuration (GoaDaemon *self);
 
-G_DEFINE_TYPE (GoaDaemon, goa_daemon, G_TYPE_OBJECT);
+static void goa_daemon_initable_iface_init (GInitableIface *initable_iface);
+
+G_DEFINE_TYPE_WITH_CODE (GoaDaemon, goa_daemon, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, goa_daemon_initable_iface_init));
 
 /* ---------------------------------------------------------------------------------------------------- */
 
@@ -389,11 +392,26 @@ goa_daemon_class_init (GoaDaemonClass *klass)
                                                         G_PARAM_WRITABLE));
 }
 
+static gboolean
+goa_daemon_initable_init (GInitable *initable, GCancellable *cancellable, GError **error)
+{
+  return TRUE;
+}
+
+static void
+goa_daemon_initable_iface_init (GInitableIface *iface)
+{
+  iface->init = goa_daemon_initable_init;
+}
+
 GoaDaemon *
-goa_daemon_new (GDBusConnection *connection)
+goa_daemon_new (GDBusConnection *connection, GCancellable *cancellable, GError **error)
 {
   g_return_val_if_fail (G_IS_DBUS_CONNECTION (connection), NULL);
-  return GOA_DAEMON (g_object_new (GOA_TYPE_DAEMON, "connection", connection, NULL));
+  g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  return GOA_DAEMON (g_initable_new (GOA_TYPE_DAEMON, cancellable, error, "connection", connection, NULL));
 }
 
 

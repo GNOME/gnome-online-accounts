@@ -26,7 +26,9 @@ G_BEGIN_DECLS
 #define GOA_TYPE_DAEMON  (goa_daemon_get_type ())
 G_DECLARE_FINAL_TYPE (GoaDaemon, goa_daemon, GOA, DAEMON, GObject);
 
-GoaDaemon          *goa_daemon_new                (GDBusConnection *connection);
+GoaDaemon          *goa_daemon_new                (GDBusConnection   *connection,
+                                                   GCancellable      *cancellable,
+                                                   GError           **error);
 
 G_END_DECLS
 

@@ -45,11 +45,25 @@ on_bus_acquired (GDBusConnection *connection,
                  const gchar     *name,
                  gpointer         user_data)
 {
+  GError *error;
+
   g_return_if_fail (G_IS_DBUS_CONNECTION (connection));
   g_return_if_fail (name != NULL && name[0] != '\0');
 
-  the_daemon = goa_daemon_new (connection);
   g_debug ("Connected to the session bus");
+
+  error = NULL;
+  the_daemon = goa_daemon_new (connection, NULL, &error);
+  if (error != NULL)
+    {
+      g_warning ("Unable to initialize GoaDaemon: %s (%s, %d)",
+                 error->message,
+                 g_quark_to_string (error->domain),
+                 error->code);
+
+      g_main_loop_quit (loop);
+      g_error_free (error);
+    }
 }
 
 static void
