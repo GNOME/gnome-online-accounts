@@ -872,6 +872,14 @@ goa_provider_ensure_credentials_sync (GoaProvider     *self,
   ret = GOA_PROVIDER_GET_CLASS (self)->ensure_credentials_sync (self, object, out_expires_in, cancellable, error);
 
  out:
+  if (!ret && error != NULL && *error == NULL)
+    {
+      const gchar *provider_type;
+
+      provider_type = goa_provider_get_provider_type (self);
+      g_critical ("GoaProvider (%s) failed to set error correctly", provider_type);
+    }
+
   g_clear_object (&account);
   return ret;
 }
