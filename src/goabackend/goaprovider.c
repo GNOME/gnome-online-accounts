@@ -878,6 +878,7 @@ goa_provider_ensure_credentials_sync (GoaProvider     *self,
 
       provider_type = goa_provider_get_provider_type (self);
       g_critical ("GoaProvider (%s) failed to set error correctly", provider_type);
+      g_set_error_literal (error, GOA_ERROR, GOA_ERROR_NOT_AUTHORIZED, _("Unknown error"));
     }
 
   g_clear_object (&account);
