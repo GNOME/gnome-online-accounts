@@ -144,27 +144,20 @@ build_object (GoaProvider         *provider,
               gboolean             just_added,
               GError             **error)
 {
-  GoaAccount *account;
+  GoaAccount *account = NULL;
   gchar *uri_caldav;
   gchar *uri_carddav;
   gchar *uri_webdav;
-  GoaPasswordBased *password_based;
-  SoupURI *uri;
+  GoaPasswordBased *password_based = NULL;
+  SoupURI *uri = NULL;
   gboolean accept_ssl_errors;
   gboolean calendar_enabled;
   gboolean contacts_enabled;
   gboolean documents_enabled;
   gboolean files_enabled;
-  gboolean ret;
+  gboolean ret = FALSE;
   const gchar *identity;
-  gchar *uri_string;
-
-  account = NULL;
-  password_based = NULL;
-  uri = NULL;
-  uri_string = NULL;
-
-  ret = FALSE;
+  gchar *uri_string = NULL;
 
   /* Chain up */
   if (!GOA_PROVIDER_CLASS (goa_owncloud_provider_parent_class)->build_object (provider,
@@ -264,21 +257,13 @@ ensure_credentials_sync (GoaProvider         *provider,
                          GCancellable        *cancellable,
                          GError             **error)
 {
-  GoaHttpClient *http_client;
+  GoaHttpClient *http_client = NULL;
   gboolean accept_ssl_errors;
-  gboolean ret;
-  gchar *username;
-  gchar *password;
-  gchar *uri;
-  gchar *uri_webdav;
-
-  http_client = NULL;
-  password = NULL;
-  uri = NULL;
-  uri_webdav = NULL;
-  username = NULL;
-
-  ret = FALSE;
+  gboolean ret = FALSE;
+  gchar *username = NULL;
+  gchar *password = NULL;
+  gchar *uri = NULL;
+  gchar *uri_webdav = NULL;
 
   if (!goa_utils_get_credentials (provider, object, "password", &username, &password, cancellable, error))
     {
@@ -390,19 +375,14 @@ typedef struct
 static gchar *
 normalize_uri (const gchar *address, gchar **server)
 {
-  SoupURI *uri;
+  SoupURI *uri = NULL;
   const gchar *path;
-  gchar *scheme;
-  gchar *ret;
-  gchar *uri_string;
-  guint std_port;
+  gchar *ret = NULL;
+  gchar *scheme = NULL;
+  gchar *uri_string = NULL;
+  guint std_port = 0;
 
-  uri = NULL;
-  uri_string = NULL;
   scheme = g_uri_parse_scheme (address);
-  std_port = 0;
-
-  ret = NULL;
 
   if (g_strcmp0 (scheme, "http") == 0
       || g_strcmp0 (scheme, "dav") == 0)   /* dav(s) is used by DNS-SD
@@ -476,12 +456,9 @@ static void
 on_uri_username_or_password_changed (GtkEditable *editable, gpointer user_data)
 {
   AddAccountData *data = user_data;
-  gboolean can_add;
+  gboolean can_add = FALSE;
   const gchar *address;
-  gchar *uri;
-
-  can_add = FALSE;
-  uri = NULL;
+  gchar *uri = NULL;
 
   address = gtk_entry_get_text (GTK_ENTRY (data->uri));
   uri = normalize_uri (address, NULL);
@@ -659,26 +636,18 @@ add_account (GoaProvider    *provider,
   AddAccountData data;
   GVariantBuilder credentials;
   GVariantBuilder details;
-  GoaHttpClient *http_client;
-  GoaObject *ret;
-  gboolean accept_ssl_errors;
+  GoaHttpClient *http_client = NULL;
+  GoaObject *ret = NULL;
+  gboolean accept_ssl_errors = FALSE;
   const gchar *uri_text;
   const gchar *password;
   const gchar *username;
   const gchar *provider_type;
-  gchar *presentation_identity;
-  gchar *server;
-  gchar *uri;
+  gchar *presentation_identity = NULL;
+  gchar *server = NULL;
+  gchar *uri = NULL;
   gchar *uri_webdav;
   gint response;
-
-  http_client = NULL;
-  accept_ssl_errors = FALSE;
-  presentation_identity = NULL;
-  server = NULL;
-  uri = NULL;
-
-  ret = NULL;
 
   memset (&data, 0, sizeof (AddAccountData));
   data.cancellable = g_cancellable_new ();
@@ -847,16 +816,16 @@ refresh_account (GoaProvider    *provider,
   AddAccountData data;
   GVariantBuilder credentials;
   GoaAccount *account;
-  GoaHttpClient *http_client;
+  GoaHttpClient *http_client = NULL;
   GtkWidget *dialog;
   GtkWidget *vbox;
   gboolean accept_ssl_errors;
-  gboolean is_template;
-  gboolean ret;
+  gboolean is_template = FALSE;
+  gboolean ret = FALSE;
   const gchar *password;
   const gchar *username;
-  gchar *uri;
-  gchar *uri_webdav;
+  gchar *uri = NULL;
+  gchar *uri_webdav = NULL;
   gint response;
 
   g_return_val_if_fail (GOA_IS_OWNCLOUD_PROVIDER (provider), FALSE);
@@ -864,13 +833,6 @@ refresh_account (GoaProvider    *provider,
   g_return_val_if_fail (GOA_IS_OBJECT (object), FALSE);
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-
-  http_client = NULL;
-  is_template = FALSE;
-  uri = NULL;
-  uri_webdav = NULL;
-
-  ret = FALSE;
 
   dialog = gtk_dialog_new_with_buttons (NULL,
                                         parent,
@@ -1081,11 +1043,9 @@ on_handle_get_password (GoaPasswordBased      *interface,
   const gchar *account_id;
   const gchar *method_name;
   const gchar *provider_type;
-  gchar *password;
+  gchar *password = NULL;
 
   /* TODO: maybe log what app is requesting access */
-
-  password = NULL;
 
   object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (interface)));
   account = goa_object_peek_account (object);
