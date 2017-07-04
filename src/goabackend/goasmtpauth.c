@@ -302,7 +302,7 @@ goa_smtp_auth_class_init (GoaSmtpAuthClass *klass)
   /**
    * GoaSmtpAuth:domain:
    *
-   * The domail.
+   * The domain.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_DOMAIN,
