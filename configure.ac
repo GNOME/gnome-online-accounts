@@ -381,14 +381,14 @@ fi
 AC_DEFINE(GOA_KERBEROS_NAME, ["kerberos"], [ProviderType and extension point name])
 AC_ARG_ENABLE([kerberos],
               [AS_HELP_STRING([--enable-kerberos], [Enable kerberos support])],
-              [with_kerberos=$enableval],
-              [enable_kerberos=no])
+              [enable_kerberos=$enableval],
+              [enable_kerberos=auto])
 AC_PATH_PROG([KRB5_CONFIG], krb5-config, none, $PATH:/usr/kerberos/bin)
 
 if test "x$KRB5_CONFIG" != "xnone"; then
     KRB5_LIBS="`${KRB5_CONFIG} --libs krb5`"
     KRB5_CFLAGS="`${KRB5_CONFIG} --cflags krb5`"
-    have_kerberos=yes
+    PKG_CHECK_MODULES(GCR, gcr-3, [have_kerberos=yes], [have_kerberos=no])
 else
     KRB5_LIBS=""
     KRB5_CFLAGS=""
@@ -398,13 +398,17 @@ AC_SUBST(KRB5_CFLAGS)
 AC_SUBST(KRB5_LIBS)
 
 if test "$enable_kerberos" != "no"; then
-  if test "$have_kerberos" = "no" ; then
+  if test "$enable_kerberos" == "yes" &&
+     test "$have_kerberos" == "no" ; then
       AC_MSG_ERROR([kerberos support requested, but not available])
   fi
 
-  PKG_CHECK_MODULES(GCR, gcr-3)
+  enable_kerberos=$have_kerberos
+
   AC_DEFINE(GCR_API_SUBJECT_TO_CHANGE, 1, [Define to use the GCR API])
   AC_DEFINE(GOA_KERBEROS_ENABLED, 1, [Enable Enterprise Identity data provider])
+else
+  enable_kerberos=no
 fi
 AM_CONDITIONAL(BUILD_KERBEROS, [test x$enable_kerberos != xno])
 
