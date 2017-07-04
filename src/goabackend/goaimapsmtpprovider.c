@@ -343,7 +343,7 @@ ensure_credentials_sync (GoaProvider         *provider,
   imap_username = goa_util_lookup_keyfile_string (object, "ImapUserName");
   imap_tls_type = get_tls_type_from_object (object, "ImapUseSsl", "ImapUseTls");
 
-  imap_auth = goa_imap_auth_login_new (NULL, NULL, imap_username, imap_password);
+  imap_auth = goa_imap_auth_login_new (imap_username, imap_password);
   if (!goa_mail_client_check_sync (mail_client,
                                    imap_server,
                                    imap_tls_type,
@@ -963,7 +963,7 @@ add_account (GoaProvider    *provider,
   imap_username = gtk_entry_get_text (GTK_ENTRY (data.imap_username));
 
   g_cancellable_reset (data.cancellable);
-  imap_auth = goa_imap_auth_login_new (NULL, NULL, imap_username, imap_password);
+  imap_auth = goa_imap_auth_login_new (imap_username, imap_password);
   goa_mail_client_check (mail_client,
                          imap_server,
                          imap_tls_type,
@@ -1318,7 +1318,7 @@ refresh_account (GoaProvider    *provider,
 
   imap_password = gtk_entry_get_text (GTK_ENTRY (data.imap_password));
   g_cancellable_reset (data.cancellable);
-  imap_auth = goa_imap_auth_login_new (NULL, NULL, imap_username, imap_password);
+  imap_auth = goa_imap_auth_login_new (imap_username, imap_password);
   goa_mail_client_check (mail_client,
                          imap_server,
                          imap_tls_type,

@@ -28,7 +28,6 @@
 #include <glib-object.h>
 
 #include "goamailauth.h"
-#include "goaprovider.h"
 
 G_BEGIN_DECLS
 
@@ -39,9 +38,7 @@ G_BEGIN_DECLS
 typedef struct _GoaImapAuthLogin GoaImapAuthLogin;
 
 GType        goa_imap_auth_login_get_type  (void) G_GNUC_CONST;
-GoaMailAuth *goa_imap_auth_login_new       (GoaProvider       *provider,
-                                            GoaObject         *object,
-                                            const gchar       *user_name,
+GoaMailAuth *goa_imap_auth_login_new       (const gchar       *user_name,
                                             const gchar       *password);
 
 G_END_DECLS
