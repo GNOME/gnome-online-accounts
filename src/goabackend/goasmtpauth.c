@@ -183,11 +183,8 @@ smtp_auth_check_454 (const gchar *response, GError **error)
 static gboolean
 smtp_auth_check_greeting (GDataInputStream *input, GCancellable *cancellable, GError **error)
 {
-  gboolean ret;
-  gchar *response;
-
-  response = NULL;
-  ret = FALSE;
+  gboolean ret = FALSE;
+  gchar *response = NULL;
 
  greeting_again:
   response = goa_utils_data_input_stream_read_line (input, NULL, cancellable, error);
@@ -218,13 +215,9 @@ static gchar *
 smtp_auth_get_domain (GoaSmtpAuth   *self,
                       GError       **error)
 {
-  GoaMail *mail;
-  gchar *domain;
-  gchar *email_address;
-
-  mail = NULL;
-  domain = NULL;
-  email_address = NULL;
+  GoaMail *mail = NULL;
+  gchar *domain = NULL;
+  gchar *email_address = NULL;
 
   if (self->domain != NULL)
     {
@@ -272,9 +265,7 @@ smtp_auth_get_password (GoaSmtpAuth       *self,
                         GCancellable      *cancellable,
                         GError           **error)
 {
-  gchar *password;
-
-  password = NULL;
+  gchar *password = NULL;
 
   if (self->password != NULL)
     {
@@ -589,23 +580,14 @@ goa_smtp_auth_run_sync (GoaMailAuth         *auth,
   GoaSmtpAuth *self = GOA_SMTP_AUTH (auth);
   GDataInputStream *input;
   GDataOutputStream *output;
-  gboolean ret;
-  gchar *auth_arg_base64;
-  gchar *auth_arg_plain;
-  gchar *domain;
-  gchar *password;
-  gchar *request;
-  gchar *response;
+  gboolean ret = FALSE;
+  gchar *auth_arg_base64 = NULL;
+  gchar *auth_arg_plain = NULL;
+  gchar *domain = NULL;
+  gchar *password = NULL;
+  gchar *request = NULL;
+  gchar *response = NULL;
   gsize auth_arg_plain_len;
-
-  auth_arg_base64 = NULL;
-  auth_arg_plain = NULL;
-  domain = NULL;
-  password = NULL;
-  request = NULL;
-  response = NULL;
-
-  ret = FALSE;
 
   password = smtp_auth_get_password (self, cancellable, error);
   if (password == NULL)
@@ -756,18 +738,11 @@ goa_smtp_auth_starttls_sync (GoaMailAuth         *auth,
   GoaSmtpAuth *self = GOA_SMTP_AUTH (auth);
   GDataInputStream *input;
   GDataOutputStream *output;
-  gboolean ret;
-  gboolean starttls_supported;
-  gchar *domain;
-  gchar *request;
-  gchar *response;
-
-  starttls_supported = FALSE;
-  domain = NULL;
-  request = NULL;
-  response = NULL;
-
-  ret = FALSE;
+  gboolean ret = FALSE;
+  gboolean starttls_supported = FALSE;
+  gchar *domain = NULL;
+  gchar *request = NULL;
+  gchar *response = NULL;
 
   domain = smtp_auth_get_domain (self, error);
   if (domain == NULL)
