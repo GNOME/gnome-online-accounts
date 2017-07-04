@@ -394,7 +394,7 @@ ensure_credentials_sync (GoaProvider         *provider,
 
   email_address = goa_util_lookup_keyfile_string (object, "EmailAddress");
   goa_utils_parse_email_address (email_address, NULL, &domain);
-  smtp_auth = goa_smtp_auth_new (NULL, NULL, domain, smtp_username, smtp_password);
+  smtp_auth = goa_smtp_auth_new (domain, smtp_username, smtp_password);
   if (!goa_mail_client_check_sync (mail_client,
                                    smtp_server,
                                    smtp_tls_type,
@@ -1056,7 +1056,7 @@ add_account (GoaProvider    *provider,
 
   g_cancellable_reset (data.cancellable);
   goa_utils_parse_email_address (email_address, NULL, &domain);
-  smtp_auth = goa_smtp_auth_new (NULL, NULL, domain, smtp_username, smtp_password);
+  smtp_auth = goa_smtp_auth_new (domain, smtp_username, smtp_password);
   goa_mail_client_check (mail_client,
                          smtp_server,
                          smtp_tls_type,
@@ -1395,7 +1395,7 @@ refresh_account (GoaProvider    *provider,
   smtp_password = gtk_entry_get_text (GTK_ENTRY (data.smtp_password));
   g_cancellable_reset (data.cancellable);
   goa_utils_parse_email_address (email_address, NULL, &domain);
-  smtp_auth = goa_smtp_auth_new (NULL, NULL, domain, smtp_username, smtp_password);
+  smtp_auth = goa_smtp_auth_new (domain, smtp_username, smtp_password);
   goa_mail_client_check (mail_client,
                          smtp_server,
                          smtp_tls_type,

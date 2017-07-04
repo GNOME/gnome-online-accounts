@@ -46,8 +46,6 @@ struct _GoaSmtpAuth
 {
   GoaMailAuth parent_instance;
 
-  GoaProvider *provider;
-  GoaObject *object;
   gboolean auth_supported;
   gboolean greeting_absent;
   gboolean login_supported;
@@ -66,8 +64,6 @@ typedef struct
 enum
 {
   PROP_0,
-  PROP_PROVIDER,
-  PROP_OBJECT,
   PROP_DOMAIN,
   PROP_USERNAME,
   PROP_PASSWORD
@@ -211,111 +207,11 @@ smtp_auth_check_greeting (GDataInputStream *input, GCancellable *cancellable, GE
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static gchar *
-smtp_auth_get_domain (GoaSmtpAuth   *self,
-                      GError       **error)
-{
-  GoaMail *mail = NULL;
-  gchar *domain = NULL;
-  gchar *email_address = NULL;
-
-  if (self->domain != NULL)
-    {
-      domain = g_strdup (self->domain);
-    }
-  else if (self->object != NULL)
-    {
-      mail = goa_object_get_mail (self->object);
-      if (mail == NULL)
-        {
-          g_set_error (error,
-                       GOA_ERROR,
-                       GOA_ERROR_FAILED, /* TODO: more specific */
-                       _("org.gnome.OnlineAccounts.Mail is not available"));
-          goto out;
-        }
-
-      email_address = goa_mail_dup_email_address (mail);
-      if (!goa_utils_parse_email_address (email_address, NULL, &domain))
-        {
-          g_set_error (error,
-                       GOA_ERROR,
-                       GOA_ERROR_FAILED, /* TODO: more specific */
-                       _("Failed to parse email address"));
-          goto out;
-        }
-    }
-  else
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Cannot do SMTP authentication without a domain"));
-      goto out;
-    }
-
- out:
-  g_clear_object (&mail);
-  g_free (email_address);
-  return domain;
-}
-
-static gchar *
-smtp_auth_get_password (GoaSmtpAuth       *self,
-                        GCancellable      *cancellable,
-                        GError           **error)
-{
-  gchar *password = NULL;
-
-  if (self->password != NULL)
-    {
-      password = g_strdup (self->password);
-    }
-  else if (self->provider != NULL && self->object != NULL)
-    {
-      GVariant *credentials;
-      credentials = goa_utils_lookup_credentials_sync (self->provider,
-                                                       self->object,
-                                                       cancellable,
-                                                       error);
-      if (credentials == NULL)
-        {
-          g_prefix_error (error, "Error looking up credentials for SMTP in keyring: ");
-          goto out;
-        }
-      if (!g_variant_lookup (credentials, "smtp-password", "s", &password))
-        {
-          g_set_error (error,
-                       GOA_ERROR,
-                       GOA_ERROR_FAILED, /* TODO: more specific */
-                       _("Did not find smtp-password in credentials"));
-          g_variant_unref (credentials);
-          goto out;
-        }
-      g_variant_unref (credentials);
-    }
-  else
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED, /* TODO: more specific */
-                   _("Cannot do SMTP authentication without a password"));
-      goto out;
-    }
-
- out:
-  return password;
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
 static void
 goa_smtp_auth_finalize (GObject *object)
 {
   GoaSmtpAuth *self = GOA_SMTP_AUTH (object);
 
-  g_clear_object (&self->provider);
-  g_clear_object (&self->object);
   g_free (self->domain);
   g_free (self->username);
   g_free (self->password);
@@ -333,14 +229,6 @@ goa_smtp_auth_get_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_PROVIDER:
-      g_value_set_object (value, self->provider);
-      break;
-
-    case PROP_OBJECT:
-      g_value_set_object (value, self->object);
-      break;
-
     case PROP_DOMAIN:
       g_value_set_string (value, self->domain);
       break;
@@ -369,14 +257,6 @@ goa_smtp_auth_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_PROVIDER:
-      self->provider = g_value_dup_object (value);
-      break;
-
-    case PROP_OBJECT:
-      self->object = g_value_dup_object (value);
-      break;
-
     case PROP_DOMAIN:
       self->domain = g_value_dup_string (value);
       break;
@@ -420,44 +300,9 @@ goa_smtp_auth_class_init (GoaSmtpAuthClass *klass)
   auth_class->starttls_sync = goa_smtp_auth_starttls_sync;
 
   /**
-   * GoaSmtpAuth:provider:
-   *
-   * The #GoaProvider object for the account or %NULL.
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_PROVIDER,
-                                   g_param_spec_object ("provider",
-                                                        "provider",
-                                                        "provider",
-                                                        GOA_TYPE_PROVIDER,
-                                                        G_PARAM_READABLE |
-                                                        G_PARAM_WRITABLE |
-                                                        G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_STRINGS));
-
-  /**
-   * GoaSmtpAuth:object:
-   *
-   * The #GoaObject object for the account.
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_OBJECT,
-                                   g_param_spec_object ("object",
-                                                        "object",
-                                                        "object",
-                                                        GOA_TYPE_OBJECT,
-                                                        G_PARAM_READABLE |
-                                                        G_PARAM_WRITABLE |
-                                                        G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_STRINGS));
-
-  /**
    * GoaSmtpAuth:domain:
    *
-   * The domail or %NULL.
-   *
-   * If this is %NULL, the domain is obtained from the
-   * email address associated with the #GoaObject.
+   * The domail.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_DOMAIN,
@@ -489,14 +334,7 @@ goa_smtp_auth_class_init (GoaSmtpAuthClass *klass)
   /**
    * GoaSmtpAuth:password:
    *
-   * The password or %NULL.
-   *
-   * If this is %NULL, the credentials are looked up using
-   * goa_utils_lookup_credentials_sync() using the
-   * #GoaSmtpAuth:provider and #GoaSmtpAuth:object for @provider and
-   * @object. The credentials are expected to be a %G_VARIANT_VARDICT
-   * and the key <literal>smtp-password</literal> is used to look up
-   * the password.
+   * The password.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_PASSWORD,
@@ -514,13 +352,9 @@ goa_smtp_auth_class_init (GoaSmtpAuthClass *klass)
 
 /**
  * goa_smtp_auth_new:
- * @provider: (allow-none): A #GoaPlainProvider or %NULL.
- * @object: (allow-none): An account object or %NULL.
- * @domain: (allow-none): The domain to use or %NULL to look it up
- * (see the #GoaSmtpAuth:domain property).
+ * @domain: The domain to use.
  * @username: The user name to use.
- * @password: (allow-none): The password to use or %NULL to look it up
- * (see the #GoaSmtpAuth:password property).
+ * @password: The password to use.
  *
  * Creates a new #GoaMailAuth to be used for username/password
  * authentication using LOGIN or PLAIN over SMTP.
@@ -529,18 +363,15 @@ goa_smtp_auth_class_init (GoaSmtpAuthClass *klass)
  * g_object_unref().
  */
 GoaMailAuth *
-goa_smtp_auth_new (GoaProvider       *provider,
-                   GoaObject         *object,
-                   const gchar       *domain,
+goa_smtp_auth_new (const gchar       *domain,
                    const gchar       *username,
                    const gchar       *password)
 {
-  g_return_val_if_fail (provider == NULL || GOA_IS_PROVIDER (provider), NULL);
-  g_return_val_if_fail (object == NULL || GOA_IS_OBJECT (object), NULL);
+  g_return_val_if_fail (domain != NULL && domain[0] != '\0', NULL);
   g_return_val_if_fail (username != NULL, NULL);
+  g_return_val_if_fail (password != NULL && password[0] != '\0', NULL);
+
   return GOA_MAIL_AUTH (g_object_new (GOA_TYPE_SMTP_AUTH,
-                                      "provider", provider,
-                                      "object", object,
                                       "domain", domain,
                                       "user-name", username,
                                       "password", password,
@@ -583,19 +414,9 @@ goa_smtp_auth_run_sync (GoaMailAuth         *auth,
   gboolean ret = FALSE;
   gchar *auth_arg_base64 = NULL;
   gchar *auth_arg_plain = NULL;
-  gchar *domain = NULL;
-  gchar *password = NULL;
   gchar *request = NULL;
   gchar *response = NULL;
   gsize auth_arg_plain_len;
-
-  password = smtp_auth_get_password (self, cancellable, error);
-  if (password == NULL)
-    goto out;
-
-  domain = smtp_auth_get_domain (self, error);
-  if (domain == NULL)
-    goto out;
 
   input = goa_mail_auth_get_input (auth);
   output = goa_mail_auth_get_output (auth);
@@ -610,7 +431,7 @@ goa_smtp_auth_run_sync (GoaMailAuth         *auth,
 
   /* Send EHLO */
 
-  request = g_strdup_printf ("EHLO %s\r\n", domain);
+  request = g_strdup_printf ("EHLO %s\r\n", self->domain);
   g_debug ("> %s", request);
   if (!g_data_output_stream_put_string (output, request, cancellable, error))
     goto out;
@@ -663,8 +484,8 @@ goa_smtp_auth_run_sync (GoaMailAuth         *auth,
     {
       /* AUTH PLAIN */
 
-      auth_arg_plain = g_strdup_printf ("%s%c%s%c%s", self->username, '\0', self->username, '\0', password);
-      auth_arg_plain_len = 2 * strlen (self->username) + 2 + strlen (password);
+      auth_arg_plain = g_strdup_printf ("%s%c%s%c%s", self->username, '\0', self->username, '\0', self->password);
+      auth_arg_plain_len = 2 * strlen (self->username) + 2 + strlen (self->password);
       auth_arg_base64 = g_base64_encode ((guchar *) auth_arg_plain, auth_arg_plain_len);
 
       request = g_strdup_printf ("AUTH PLAIN %s\r\n", auth_arg_base64);
@@ -697,8 +518,8 @@ goa_smtp_auth_run_sync (GoaMailAuth         *auth,
       g_free (auth_arg_plain);
       g_free (auth_arg_base64);
 
-      auth_arg_plain = g_strdup (password);
-      auth_arg_plain_len = strlen (password);
+      auth_arg_plain = g_strdup (self->password);
+      auth_arg_plain_len = strlen (self->password);
       auth_arg_base64 = g_base64_encode ((guchar *) auth_arg_plain, auth_arg_plain_len);
 
       request = g_strdup_printf ("%s\r\n", auth_arg_base64);
@@ -721,8 +542,6 @@ goa_smtp_auth_run_sync (GoaMailAuth         *auth,
  out:
   g_free (auth_arg_base64);
   g_free (auth_arg_plain);
-  g_free (domain);
-  g_free (password);
   g_free (response);
   g_free (request);
   return ret;
@@ -740,13 +559,8 @@ goa_smtp_auth_starttls_sync (GoaMailAuth         *auth,
   GDataOutputStream *output;
   gboolean ret = FALSE;
   gboolean starttls_supported = FALSE;
-  gchar *domain = NULL;
   gchar *request = NULL;
   gchar *response = NULL;
-
-  domain = smtp_auth_get_domain (self, error);
-  if (domain == NULL)
-    goto out;
 
   input = goa_mail_auth_get_input (auth);
   output = goa_mail_auth_get_output (auth);
@@ -758,7 +572,7 @@ goa_smtp_auth_starttls_sync (GoaMailAuth         *auth,
 
   /* Send EHLO */
 
-  request = g_strdup_printf ("EHLO %s\r\n", domain);
+  request = g_strdup_printf ("EHLO %s\r\n", self->domain);
   g_debug ("> %s", request);
   if (!g_data_output_stream_put_string (output, request, cancellable, error))
     goto out;
@@ -818,7 +632,6 @@ goa_smtp_auth_starttls_sync (GoaMailAuth         *auth,
   ret = TRUE;
 
  out:
-  g_free (domain);
   g_free (response);
   g_free (request);
   return ret;
