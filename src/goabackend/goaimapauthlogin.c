@@ -100,10 +100,9 @@ imap_auth_login_check_BYE (const gchar *response, GError **error)
 static gboolean
 imap_auth_login_check_NO (const gchar *response, GError **error)
 {
-  gboolean ret;
-  gchar *str;
+  gboolean ret = FALSE;
+  gchar *str = NULL;
 
-  ret = FALSE;
   str = g_strdup_printf ("%s NO", IMAP_TAG);
 
   if (g_str_has_prefix (response, str))
@@ -146,9 +145,7 @@ imap_auth_login_check_not_LOGIN (const gchar *response, GError **error)
 static gboolean
 imap_auth_login_check_not_OK (const gchar *response, gboolean tagged, GError **error)
 {
-  gboolean ret;
-
-  ret = FALSE;
+  gboolean ret = FALSE;
 
   if (tagged)
     {
@@ -446,15 +443,10 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *auth,
   GoaImapAuthLogin *self = GOA_IMAP_AUTH_LOGIN (auth);
   GDataInputStream *input;
   GDataOutputStream *output;
-  gchar *request;
-  gchar *response;
-  gboolean ret;
-  gchar *password;
-
-  request = NULL;
-  response = NULL;
-  password = NULL;
-  ret = FALSE;
+  gchar *request = NULL;
+  gchar *response = NULL;
+  gboolean ret = FALSE;
+  gchar *password = NULL;
 
   if (self->password != NULL)
     {
@@ -589,14 +581,9 @@ goa_imap_auth_login_starttls_sync (GoaMailAuth         *auth,
   GoaImapAuthLogin *self = GOA_IMAP_AUTH_LOGIN (auth);
   GDataInputStream *input;
   GDataOutputStream *output;
-  gchar *request;
-  gchar *response;
-  gboolean ret;
-
-  request = NULL;
-  response = NULL;
-
-  ret = FALSE;
+  gchar *request = NULL;
+  gchar *response = NULL;
+  gboolean ret = FALSE;
 
   input = goa_mail_auth_get_input (auth);
   output = goa_mail_auth_get_output (auth);
