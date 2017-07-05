@@ -271,6 +271,8 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
   GoaPocketProvider *self = GOA_POCKET_PROVIDER (oauth2_provider);
   if (out_presentation_identity != NULL)
     *out_presentation_identity = g_strdup (self->identity);
+  if (!self->identity)
+    g_set_error (error, GOA_ERROR, GOA_ERROR_FAILED, "Identity is saved to disk already");
   return g_strdup (self->identity);
 }
 
