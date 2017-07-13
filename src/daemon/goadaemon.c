@@ -637,12 +637,12 @@ add_config_file (GoaDaemon     *self,
 
 /* returns FALSE if object is not (or no longer) valid */
 static gboolean
-update_account_object (GoaDaemon           *self,
-                       GoaObjectSkeleton   *object,
-                       const gchar         *path,
-                       const gchar         *group,
-                       GKeyFile            *key_file,
-                       gboolean             just_added)
+goa_daemon_update_account_object (GoaDaemon           *self,
+                                  GoaObjectSkeleton   *object,
+                                  const gchar         *path,
+                                  const gchar         *group,
+                                  GKeyFile            *key_file,
+                                  gboolean             just_added)
 {
   GoaAccount *account = NULL;
   GoaProvider *provider = NULL;
@@ -809,12 +809,12 @@ process_config_entries (GoaDaemon  *self,
       g_warn_if_fail (key_file_data != NULL);
 
       object = goa_object_skeleton_new (object_path);
-      if (update_account_object (self,
-                                 object,
-                                 key_file_data->path,
-                                 group,
-                                 key_file_data->key_file,
-                                 TRUE))
+      if (goa_daemon_update_account_object (self,
+                                            object,
+                                            key_file_data->path,
+                                            group,
+                                            key_file_data->key_file,
+                                            TRUE))
         {
           g_dbus_object_manager_server_export (self->object_manager, G_DBUS_OBJECT_SKELETON (object));
           g_signal_connect (goa_object_peek_account (GOA_OBJECT (object)),
@@ -843,12 +843,12 @@ process_config_entries (GoaDaemon  *self,
 
       object = GOA_OBJECT (g_dbus_object_manager_get_object (G_DBUS_OBJECT_MANAGER (self->object_manager), object_path));
       g_warn_if_fail (object != NULL);
-      if (!update_account_object (self,
-                                  GOA_OBJECT_SKELETON (object),
-                                  key_file_data->path,
-                                  group,
-                                  key_file_data->key_file,
-                                  FALSE))
+      if (!goa_daemon_update_account_object (self,
+                                             GOA_OBJECT_SKELETON (object),
+                                             key_file_data->path,
+                                             group,
+                                             key_file_data->key_file,
+                                             FALSE))
         {
           g_signal_handlers_disconnect_by_func (goa_object_peek_account (object),
                                                 G_CALLBACK (on_account_handle_remove),
