@@ -128,6 +128,23 @@ void        goa_provider_ensure_builtins_loaded                (void);
 
 void        goa_provider_ensure_extension_points_registered    (void);
 
+void        goa_provider_ensure_credentials                    (GoaProvider             *self,
+                                                                GoaObject               *object,
+                                                                GCancellable            *cancellable,
+                                                                GAsyncReadyCallback      callback,
+                                                                gpointer                 user_data);
+
+gboolean    goa_provider_ensure_credentials_finish             (GoaProvider             *self,
+                                                                gint                    *out_expires_in,
+                                                                GAsyncResult            *res,
+                                                                GError                 **error);
+
+gboolean    goa_provider_ensure_credentials_sync               (GoaProvider             *self,
+                                                                GoaObject               *object,
+                                                                gint                    *out_expires_in,
+                                                                GCancellable            *cancellable,
+                                                                GError                 **error);
+
 void        goa_provider_initialize                            (GoaProvider             *self);
 
 void        goa_provider_remove_account                        (GoaProvider             *self,

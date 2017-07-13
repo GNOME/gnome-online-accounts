@@ -79,23 +79,6 @@ gboolean               goa_provider_build_object                 (GoaProvider   
                                                                   gboolean                just_added,
                                                                   GError                **error);
 
-void                   goa_provider_ensure_credentials           (GoaProvider            *self,
-                                                                  GoaObject              *object,
-                                                                  GCancellable           *cancellable,
-                                                                  GAsyncReadyCallback     callback,
-                                                                  gpointer                user_data);
-
-gboolean               goa_provider_ensure_credentials_finish    (GoaProvider            *self,
-                                                                  gint                   *out_expires_in,
-                                                                  GAsyncResult           *res,
-                                                                  GError                **error);
-
-gboolean               goa_provider_ensure_credentials_sync      (GoaProvider            *self,
-                                                                  GoaObject              *object,
-                                                                  gint                   *out_expires_in,
-                                                                  GCancellable           *cancellable,
-                                                                  GError                **error);
-
 guint                  goa_provider_get_credentials_generation   (GoaProvider            *self);
 
 void                   goa_provider_get_all                      (GAsyncReadyCallback     callback,
