@@ -128,6 +128,14 @@ void        goa_provider_ensure_builtins_loaded                (void);
 
 void        goa_provider_ensure_extension_points_registered    (void);
 
+gboolean    goa_provider_build_object                          (GoaProvider            *self,
+                                                                GoaObjectSkeleton      *object,
+                                                                GKeyFile               *key_file,
+                                                                const gchar            *group,
+                                                                GDBusConnection        *connection,
+                                                                gboolean                just_added,
+                                                                GError                **error);
+
 void        goa_provider_ensure_credentials                    (GoaProvider             *self,
                                                                 GoaObject               *object,
                                                                 GCancellable            *cancellable,

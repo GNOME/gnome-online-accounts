@@ -71,14 +71,6 @@ void                   goa_provider_show_account                 (GoaProvider   
                                                                   GtkGrid                *dummy1,
                                                                   GtkGrid                *dummy2);
 
-gboolean               goa_provider_build_object                 (GoaProvider            *self,
-                                                                  GoaObjectSkeleton      *object,
-                                                                  GKeyFile               *key_file,
-                                                                  const gchar            *group,
-                                                                  GDBusConnection        *connection,
-                                                                  gboolean                just_added,
-                                                                  GError                **error);
-
 guint                  goa_provider_get_credentials_generation   (GoaProvider            *self);
 
 void                   goa_provider_get_all                      (GAsyncReadyCallback     callback,
