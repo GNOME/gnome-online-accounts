@@ -286,9 +286,7 @@ get_ticket_sync (GoaKerberosProvider *self,
   const char          *password;
   const char          *preauth_source;
   char                *object_path = NULL;
-  gboolean             ret;
-
-  ret = FALSE;
+  gboolean             ret = FALSE;
 
   account = goa_object_get_account (object);
   identifier = goa_account_get_identity (account);
@@ -441,12 +439,9 @@ build_object (GoaProvider         *provider,
               GError             **error)
 {
   GoaAccount   *account;
-  GoaTicketing *ticketing;
+  GoaTicketing *ticketing = NULL;
   gboolean      ticketing_enabled;
-  gboolean      ret;
-
-  ticketing = NULL;
-  ret = FALSE;
+  gboolean      ret = FALSE;
 
   if (!GOA_PROVIDER_CLASS (goa_kerberos_provider_parent_class)->build_object (provider,
                                                                               object,
@@ -1131,17 +1126,14 @@ add_account (GoaProvider    *provider,
   SignInRequest request;
   GVariantBuilder credentials;
   GVariantBuilder details;
-  GoaObject   *object;
+  GoaObject   *object = NULL;
   GoaAccount  *account;
   char        *realm;
   const char  *username;
   const char *provider_type;
-  gchar      *principal;
+  gchar      *principal = NULL;
   gint        response;
   GVariant   *options;
-
-  object = NULL;
-  principal = NULL;
 
   memset (&request, 0, sizeof (SignInRequest));
   request.cancellable = g_cancellable_new ();
