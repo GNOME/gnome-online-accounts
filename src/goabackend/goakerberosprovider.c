@@ -140,6 +140,7 @@ typedef struct
   gboolean realm_chosen;
 
   gchar *account_object_path;
+  gchar *password;
 
   GError *error;
   GCancellable *cancellable;
@@ -265,7 +266,7 @@ on_account_signed_in (GoaProvider   *provider,
                       GAsyncResult  *result,
                       SignInRequest *request)
 {
-  g_task_propagate_boolean (G_TASK (result), &request->error);
+  request->password = g_task_propagate_pointer (G_TASK (result), &request->error);
   g_main_loop_quit (request->loop);
 }
 
@@ -779,17 +780,6 @@ add_account_cb (GoaManager   *manager,
   if (request->error != NULL)
     translate_error (&request->error);
   g_main_loop_quit (request->loop);
-  gtk_widget_set_sensitive (request->connect_button, TRUE);
-  gtk_widget_hide (request->progress_grid);
-}
-
-static void
-remove_account_cb (GoaAccount   *account,
-                   GAsyncResult *result,
-                   GMainLoop    *loop)
-{
-  goa_account_call_remove_finish (account, result, NULL);
-  g_main_loop_quit (loop);
 }
 
 static gboolean
@@ -831,10 +821,8 @@ on_initial_sign_in_done (GoaKerberosProvider *self,
 {
   GError     *error;
   gboolean    remember_password;
-  GoaObject  *object;
+  const char *password = NULL;
   char       *object_path;
-
-  object = g_task_get_source_tag (operation_result);
 
   remember_password = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (operation_result),
                                                           "remember-password"));
@@ -849,35 +837,16 @@ on_initial_sign_in_done (GoaKerberosProvider *self,
 
   if (remember_password)
     {
-      GVariantBuilder  builder;
-
-      if (object_path != NULL && object != NULL)
+      if (object_path != NULL)
         {
           GcrSecretExchange *secret_exchange;
-          const char        *password;
 
           secret_exchange = g_object_get_data (G_OBJECT (operation_result), "secret-exchange");
           password = gcr_secret_exchange_get_secret (secret_exchange, NULL);
-
-          /* FIXME: we go to great lengths to keep the password in non-pageable memory,
-           * and then just duplicate it into a gvariant here
-           */
-          g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
-          g_variant_builder_add (&builder,
-                                 "{sv}",
-                                 "password",
-                                 g_variant_new_string (password));
-
-          error = NULL;
-          goa_utils_store_credentials_for_object_sync (GOA_PROVIDER (self),
-                                                       object,
-                                                       g_variant_builder_end (&builder),
-                                                       NULL,
-                                                       NULL);
         }
     }
 
-  g_task_return_boolean (operation_result, TRUE);
+  g_task_return_pointer (operation_result, g_strdup (password), g_free);
 
  out:
   g_free (object_path);
@@ -984,7 +953,6 @@ on_system_prompt_open_for_initial_sign_in (GcrSystemPrompt     *system_prompt,
 
 static void
 perform_initial_sign_in (GoaKerberosProvider *self,
-                         GoaObject           *object,
                          const char          *principal,
                          SignInRequest       *request)
 {
@@ -995,7 +963,6 @@ perform_initial_sign_in (GoaKerberosProvider *self,
   cancellable = g_cancellable_new ();
 
   operation_result = g_task_new (self, cancellable, (GAsyncReadyCallback) on_account_signed_in, request);
-  g_task_set_source_tag (operation_result, object);
 
   g_object_set_data (G_OBJECT (operation_result),
                      "principal",
@@ -1127,8 +1094,7 @@ add_account (GoaProvider    *provider,
   GVariantBuilder credentials;
   GVariantBuilder details;
   GoaObject   *object = NULL;
-  GoaAccount  *account;
-  char        *realm;
+  char        *realm = NULL;
   const char  *username;
   const char *provider_type;
   gchar      *principal = NULL;
@@ -1201,39 +1167,9 @@ start_over:
                                   &request.error))
     goto out;
 
-  /* If there isn't an account, then go ahead and create one
+  /* If there isn't an account, try to sign it in
    */
-  g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
-
-  g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
-  g_variant_builder_add (&details, "{ss}", "Realm", realm);
-  g_variant_builder_add (&details, "{ss}", "IsTemporary", "true");
-  g_variant_builder_add (&details, "{ss}", "TicketingEnabled", "true");
-
-  g_free (realm);
-
-  goa_manager_call_add_account (goa_client_get_manager (client),
-                                goa_provider_get_provider_type (provider),
-                                principal,
-                                principal,
-                                g_variant_builder_end (&credentials),
-                                g_variant_builder_end (&details),
-                                NULL, /* GCancellable* */
-                                (GAsyncReadyCallback) add_account_cb,
-                                &request);
-  gtk_widget_set_sensitive (request.connect_button, FALSE);
-  gtk_widget_show (request.progress_grid);
-  g_main_loop_run (request.loop);
-  if (request.error != NULL)
-    goto out;
-
-  object = GOA_OBJECT (g_dbus_object_manager_get_object (goa_client_get_object_manager (client),
-                                                         request.account_object_path));
-  account = goa_object_peek_account (object);
-
-  /* After the account is created, try to sign it in
-   */
-  perform_initial_sign_in (self, object, principal, &request);
+  perform_initial_sign_in (self, principal, &request);
 
   gtk_widget_set_sensitive (request.connect_button, FALSE);
   gtk_widget_show (request.progress_grid);
@@ -1263,23 +1199,48 @@ start_over:
           gtk_widget_set_no_show_all (request.cluebar, FALSE);
           gtk_widget_show_all (request.cluebar);
         }
-      g_clear_error (&request.error);
 
-      /* If it couldn't be signed in, then delete it and start over
-       */
-      goa_account_call_remove (account,
-                               NULL,
-                               (GAsyncReadyCallback)
-                               remove_account_cb,
-                               request.loop);
-      g_main_loop_run (request.loop);
-      g_clear_object (&object);
+      g_clear_error (&request.error);
+      g_clear_pointer (&request.password, g_free);
+      g_clear_pointer (&realm, g_free);
       goto start_over;
     }
 
-  goa_account_set_is_temporary (account, FALSE);
-
   gtk_widget_hide (GTK_WIDGET (dialog));
+
+  /* FIXME: we go to great lengths to keep the password in non-pageable memory,
+   * and then just duplicate it into a gvariant here
+   */
+
+  g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
+  if (request.password != NULL)
+    g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (request.password));
+
+  g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
+  g_variant_builder_add (&details, "{ss}", "Realm", realm);
+  g_variant_builder_add (&details, "{ss}", "IsTemporary", "false");
+  g_variant_builder_add (&details, "{ss}", "TicketingEnabled", "true");
+
+  /* OK, everything is dandy, add the account */
+  /* we want the GoaClient to update before this method returns (so it
+   * can create a proxy for the new object) so run the mainloop while
+   * waiting for this to complete
+   */
+  goa_manager_call_add_account (goa_client_get_manager (client),
+                                goa_provider_get_provider_type (provider),
+                                principal,
+                                principal,
+                                g_variant_builder_end (&credentials),
+                                g_variant_builder_end (&details),
+                                NULL, /* GCancellable* */
+                                (GAsyncReadyCallback) add_account_cb,
+                                &request);
+  g_main_loop_run (request.loop);
+  if (request.error != NULL)
+    goto out;
+
+  object = GOA_OBJECT (g_dbus_object_manager_get_object (goa_client_get_object_manager (client),
+                                                         request.account_object_path));
 
  out:
   /* We might have an object even when request.error is set.
@@ -1307,7 +1268,9 @@ start_over:
       g_object_unref (request.realm_provider);
     }
 
+  g_free (realm);
   g_free (request.account_object_path);
+  g_free (request.password);
   g_free (principal);
   g_clear_pointer (&request.loop, (GDestroyNotify) g_main_loop_unref);
   return object;
