@@ -261,15 +261,6 @@ sign_in_identity_finish (GoaKerberosProvider  *self,
   return g_task_propagate_pointer (task, error);
 }
 
-static void
-on_account_signed_in (GoaProvider   *provider,
-                      GAsyncResult  *result,
-                      SignInRequest *request)
-{
-  request->password = g_task_propagate_pointer (G_TASK (result), &request->error);
-  g_main_loop_quit (request->loop);
-}
-
 static gboolean
 get_ticket_sync (GoaKerberosProvider *self,
                  GoaObject           *object,
@@ -954,15 +945,14 @@ on_system_prompt_open_for_initial_sign_in (GcrSystemPrompt     *system_prompt,
 static void
 perform_initial_sign_in (GoaKerberosProvider *self,
                          const char          *principal,
-                         SignInRequest       *request)
+                         GCancellable        *cancellable,
+                         GAsyncReadyCallback  callback,
+                         gpointer             user_data)
 {
 
   GTask        *operation_result;
-  GCancellable *cancellable;
 
-  cancellable = g_cancellable_new ();
-
-  operation_result = g_task_new (self, cancellable, (GAsyncReadyCallback) on_account_signed_in, request);
+  operation_result = g_task_new (self, cancellable, callback, user_data);
 
   g_object_set_data (G_OBJECT (operation_result),
                      "principal",
@@ -974,8 +964,22 @@ perform_initial_sign_in (GoaKerberosProvider *self,
                                 (GAsyncReadyCallback)
                                 on_system_prompt_open_for_initial_sign_in,
                                 operation_result);
+}
 
-  g_object_unref (cancellable);
+static gchar *
+perform_initial_sign_in_finish (GoaKerberosProvider   *self,
+                                GAsyncResult          *result,
+                                GError               **error)
+{
+  GTask *task;
+
+  g_return_val_if_fail (GOA_IS_KERBEROS_PROVIDER (self), NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
+  task = G_TASK (result);
+
+  return g_task_propagate_pointer (task, error);
 }
 
 static char *
@@ -1082,6 +1086,16 @@ on_discover_realm (GObject *source,
   gtk_widget_hide (request->progress_grid);
 }
 
+static void
+perform_initial_sign_in_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
+{
+  GoaKerberosProvider *self = GOA_KERBEROS_PROVIDER (source_object);
+  SignInRequest *request = user_data;
+
+  request->password = perform_initial_sign_in_finish (self, res, &request->error);
+  g_main_loop_quit (request->loop);
+}
+
 static GoaObject *
 add_account (GoaProvider    *provider,
              GoaClient      *client,
@@ -1169,7 +1183,7 @@ start_over:
 
   /* If there isn't an account, try to sign it in
    */
-  perform_initial_sign_in (self, principal, &request);
+  perform_initial_sign_in (self, principal, NULL, perform_initial_sign_in_cb, &request);
 
   gtk_widget_set_sensitive (request.connect_button, FALSE);
   gtk_widget_show (request.progress_grid);
