@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-06-16 17:08+0000\n"
-"PO-Revision-Date: 2017-06-17 13:49+0500\n"
+"POT-Creation-Date: 2017-07-26 13:55+0000\n"
+"PO-Revision-Date: 2017-07-27 17:09+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -17,20 +17,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.0.2\n"
+"X-Generator: Poedit 1.8.12\n"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1132 ../src/daemon/goadaemon.c:1416
+#: ../src/daemon/goadaemon.c:1172 ../src/daemon/goadaemon.c:1456
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Келесі үшін ұсынушы табылмады: %s"
 
-#: ../src/daemon/goadaemon.c:1359
+#: ../src/daemon/goadaemon.c:1399
 msgid "IsLocked property is set for account"
 msgstr "Тіркелгі үшін IsLocked қасиеті орнатылған"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1404
+#: ../src/daemon/goadaemon.c:1444
 msgid "ProviderType property is not set for account"
 msgstr "ProviderType қасиеті тіркелгі үшін орнатылмаған"
 
@@ -64,7 +64,7 @@ msgstr "Microsoft Exchange"
 #.
 #: ../src/goabackend/goaexchangeprovider.c:248
 #: ../src/goabackend/goalastfmprovider.c:280
-#: ../src/goabackend/goaowncloudprovider.c:314
+#: ../src/goabackend/goaowncloudprovider.c:299
 #, c-format
 msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "\"%s\" пайдаланушы аты үшін пароль қате (%s, %d): "
@@ -78,7 +78,7 @@ msgstr "_Эл. пошта"
 #: ../src/goabackend/goaimapsmtpprovider.c:706
 #: ../src/goabackend/goaimapsmtpprovider.c:726
 #: ../src/goabackend/goalastfmprovider.c:422
-#: ../src/goabackend/goaowncloudprovider.c:561
+#: ../src/goabackend/goaowncloudprovider.c:538
 msgid "_Password"
 msgstr "Пар_оль"
 
@@ -89,39 +89,39 @@ msgstr "Таң_дауыңызша"
 #: ../src/goabackend/goaexchangeprovider.c:411
 #: ../src/goabackend/goaimapsmtpprovider.c:705
 #: ../src/goabackend/goaimapsmtpprovider.c:725
-#: ../src/goabackend/goakerberosprovider.c:744
+#: ../src/goabackend/goakerberosprovider.c:739
 #: ../src/goabackend/goalastfmprovider.c:421
-#: ../src/goabackend/goaowncloudprovider.c:560
+#: ../src/goabackend/goaowncloudprovider.c:537
 msgid "User_name"
 msgstr "Па_йдаланушы аты"
 
 #: ../src/goabackend/goaexchangeprovider.c:412
-#: ../src/goabackend/goaowncloudprovider.c:559
+#: ../src/goabackend/goaowncloudprovider.c:536
 msgid "_Server"
 msgstr "С_ервер"
 
 #. --
 #: ../src/goabackend/goaexchangeprovider.c:422
 #: ../src/goabackend/goaimapsmtpprovider.c:738
-#: ../src/goabackend/goakerberosprovider.c:749
+#: ../src/goabackend/goakerberosprovider.c:744
 #: ../src/goabackend/goalastfmprovider.c:430
-#: ../src/goabackend/goaowncloudprovider.c:575
+#: ../src/goabackend/goaowncloudprovider.c:552
 #: ../src/goabackend/goatelepathyprovider.c:651
 msgid "_Cancel"
 msgstr "Ба_с тарту"
 
 #: ../src/goabackend/goaexchangeprovider.c:423
-#: ../src/goabackend/goakerberosprovider.c:750
+#: ../src/goabackend/goakerberosprovider.c:745
 #: ../src/goabackend/goalastfmprovider.c:431
-#: ../src/goabackend/goaowncloudprovider.c:576
+#: ../src/goabackend/goaowncloudprovider.c:553
 msgid "C_onnect"
 msgstr "Ба_йланысу"
 
 #: ../src/goabackend/goaexchangeprovider.c:439
 #: ../src/goabackend/goaimapsmtpprovider.c:754
-#: ../src/goabackend/goakerberosprovider.c:766
+#: ../src/goabackend/goakerberosprovider.c:761
 #: ../src/goabackend/goalastfmprovider.c:447
-#: ../src/goabackend/goaowncloudprovider.c:591
+#: ../src/goabackend/goaowncloudprovider.c:568
 msgid "Connecting…"
 msgstr "Байланысты орнату..."
 
@@ -132,14 +132,14 @@ msgstr "Байланысты орнату..."
 #: ../src/goabackend/goaimapsmtpprovider.c:1043
 #: ../src/goabackend/goaimapsmtpprovider.c:1312
 #: ../src/goabackend/goaimapsmtpprovider.c:1388
-#: ../src/goabackend/goakerberosprovider.c:1163
+#: ../src/goabackend/goakerberosprovider.c:1155
 #: ../src/goabackend/goalastfmprovider.c:642
 #: ../src/goabackend/goalastfmprovider.c:810
 #: ../src/goabackend/goamediaserverprovider.c:420
 #: ../src/goabackend/goaoauth2provider.c:1071
 #: ../src/goabackend/goaoauthprovider.c:840
-#: ../src/goabackend/goaowncloudprovider.c:702
-#: ../src/goabackend/goaowncloudprovider.c:926
+#: ../src/goabackend/goaowncloudprovider.c:671
+#: ../src/goabackend/goaowncloudprovider.c:888
 #: ../src/goabackend/goatelepathyprovider.c:475
 #: ../src/goabackend/goatelepathyprovider.c:514
 #: ../src/goabackend/goatelepathyprovider.c:682
@@ -155,8 +155,8 @@ msgstr "Сұхбат тайдырылды"
 #: ../src/goabackend/goaimapsmtpprovider.c:1416
 #: ../src/goabackend/goalastfmprovider.c:676
 #: ../src/goabackend/goalastfmprovider.c:829
-#: ../src/goabackend/goaowncloudprovider.c:744
-#: ../src/goabackend/goaowncloudprovider.c:950
+#: ../src/goabackend/goaowncloudprovider.c:713
+#: ../src/goabackend/goaowncloudprovider.c:912
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "Сұхбат тайдырылды (%s, %d): "
@@ -164,7 +164,7 @@ msgstr "Сұхбат тайдырылды (%s, %d): "
 #: ../src/goabackend/goaexchangeprovider.c:590
 #: ../src/goabackend/goaimapsmtpprovider.c:997
 #: ../src/goabackend/goaimapsmtpprovider.c:1094
-#: ../src/goabackend/goaowncloudprovider.c:757
+#: ../src/goabackend/goaowncloudprovider.c:726
 msgid "_Ignore"
 msgstr "Еле_меу"
 
@@ -174,11 +174,11 @@ msgstr "Еле_меу"
 #: ../src/goabackend/goaimapsmtpprovider.c:1099
 #: ../src/goabackend/goaimapsmtpprovider.c:1358
 #: ../src/goabackend/goaimapsmtpprovider.c:1435
-#: ../src/goabackend/goakerberosprovider.c:1270
+#: ../src/goabackend/goakerberosprovider.c:1262
 #: ../src/goabackend/goalastfmprovider.c:688
 #: ../src/goabackend/goalastfmprovider.c:846
-#: ../src/goabackend/goaowncloudprovider.c:762
-#: ../src/goabackend/goaowncloudprovider.c:969
+#: ../src/goabackend/goaowncloudprovider.c:731
+#: ../src/goabackend/goaowncloudprovider.c:931
 msgid "_Try Again"
 msgstr "Қай_тадан көру"
 
@@ -193,8 +193,8 @@ msgstr "Facebook"
 
 #: ../src/goabackend/goafacebookprovider.c:179
 #: ../src/goabackend/goaflickrprovider.c:146
-#: ../src/goabackend/goafoursquareprovider.c:161
-#: ../src/goabackend/goagoogleprovider.c:198
+#: ../src/goabackend/goafoursquareprovider.c:153
+#: ../src/goabackend/goagoogleprovider.c:190
 #: ../src/goabackend/goatodoistprovider.c:192
 #: ../src/goabackend/goawindowsliveprovider.c:158
 #, c-format
@@ -211,14 +211,14 @@ msgstr "Идентификацияны сұрау кезінде 200 күйі к
 #: ../src/goabackend/goaflickrprovider.c:187
 #: ../src/goabackend/goaflickrprovider.c:197
 #: ../src/goabackend/goaflickrprovider.c:207
-#: ../src/goabackend/goafoursquareprovider.c:180
-#: ../src/goabackend/goafoursquareprovider.c:192
-#: ../src/goabackend/goafoursquareprovider.c:203
-#: ../src/goabackend/goafoursquareprovider.c:214
-#: ../src/goabackend/goafoursquareprovider.c:225
-#: ../src/goabackend/goafoursquareprovider.c:236
-#: ../src/goabackend/goagoogleprovider.c:217
-#: ../src/goabackend/goagoogleprovider.c:229
+#: ../src/goabackend/goafoursquareprovider.c:172
+#: ../src/goabackend/goafoursquareprovider.c:184
+#: ../src/goabackend/goafoursquareprovider.c:195
+#: ../src/goabackend/goafoursquareprovider.c:206
+#: ../src/goabackend/goafoursquareprovider.c:217
+#: ../src/goabackend/goafoursquareprovider.c:228
+#: ../src/goabackend/goagoogleprovider.c:209
+#: ../src/goabackend/goagoogleprovider.c:221
 #: ../src/goabackend/goalastfmprovider.c:211
 #: ../src/goabackend/goalastfmprovider.c:220
 #: ../src/goabackend/goalastfmprovider.c:230
@@ -232,7 +232,7 @@ msgstr "Идентификацияны сұрау кезінде 200 күйі к
 #: ../src/goabackend/goaoauth2provider.c:764
 #: ../src/goabackend/goatodoistprovider.c:211
 #: ../src/goabackend/goatodoistprovider.c:223
-#: ../src/goabackend/goatodoistprovider.c:234 ../src/goabackend/goautils.c:315
+#: ../src/goabackend/goatodoistprovider.c:234 ../src/goabackend/goautils.c:313
 #: ../src/goabackend/goawindowsliveprovider.c:177
 #: ../src/goabackend/goawindowsliveprovider.c:189
 #: ../src/goabackend/goawindowsliveprovider.c:201
@@ -249,34 +249,34 @@ msgid "Your system time is invalid. Check your date and time settings."
 msgstr ""
 "Сіздің жүйелік уақытыңыз қате. Жүйенің күн мен уақыт баптауларын тексеріңіз."
 
-#: ../src/goabackend/goafoursquareprovider.c:64
+#: ../src/goabackend/goafoursquareprovider.c:56
 msgid "Foursquare"
 msgstr "Foursquare"
 
-#: ../src/goabackend/goagoogleprovider.c:63
+#: ../src/goabackend/goagoogleprovider.c:55
 msgid "Google"
 msgstr "Google"
 
 #. TODO: more specific
-#: ../src/goabackend/goaimapauthlogin.c:93 ../src/goabackend/goasmtpauth.c:159
+#: ../src/goabackend/goaimapauthlogin.c:89 ../src/goabackend/goasmtpauth.c:155
 #, c-format
 msgid "Service not available"
 msgstr "Қызмет қолжетерсіз"
 
 #. TODO: more specific
-#: ../src/goabackend/goaimapauthlogin.c:114
+#: ../src/goabackend/goaimapauthlogin.c:109
 #: ../src/goabackend/goalastfmprovider.c:522
-#: ../src/goabackend/goasmtpauth.c:112 ../src/goabackend/goautils.c:895
+#: ../src/goabackend/goasmtpauth.c:108 ../src/goabackend/goautils.c:883
 #, c-format
 msgid "Authentication failed"
 msgstr "Аутентификация сәтсіз"
 
-#: ../src/goabackend/goaimapauthlogin.c:139
+#: ../src/goabackend/goaimapauthlogin.c:134
 #, c-format
 msgid "Server does not support PLAIN"
 msgstr "Сервер PLAIN тәсілін қолдамайды"
 
-#: ../src/goabackend/goaimapauthlogin.c:193 ../src/goabackend/goasmtpauth.c:817
+#: ../src/goabackend/goaimapauthlogin.c:186 ../src/goabackend/goasmtpauth.c:606
 #, c-format
 msgid "Server does not support STARTTLS"
 msgstr "Сервер STARTTLS тәсілін қолдамайды"
@@ -373,54 +373,54 @@ msgstr "SMTP"
 msgid "Enterprise Login (Kerberos)"
 msgstr "Кәсіпорын тіркелгісі (Kerberos)"
 
-#: ../src/goabackend/goakerberosprovider.c:302
+#: ../src/goabackend/goakerberosprovider.c:300
 #, c-format
 msgid "Ticketing is disabled for account"
 msgstr "Тіркелгі үшін билет алу сөндірілген"
 
-#: ../src/goabackend/goakerberosprovider.c:327
+#: ../src/goabackend/goakerberosprovider.c:325
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr ""
 "Кілттер бауында \"%s\" қатынау әкімшісі үшін сақталған тіркелу мәліметтері "
 "табылмады"
 
-#: ../src/goabackend/goakerberosprovider.c:340
+#: ../src/goabackend/goakerberosprovider.c:338
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "Тіркелу мәліметтерінде \"%s\" қатынау әкімшісі үшін пароль табылмады"
 
-#: ../src/goabackend/goakerberosprovider.c:736
+#: ../src/goabackend/goakerberosprovider.c:731
 msgid "_Domain"
 msgstr "До_мен"
 
-#: ../src/goabackend/goakerberosprovider.c:737
+#: ../src/goabackend/goakerberosprovider.c:732
 msgid "Enterprise domain or realm name"
 msgstr "Кәсіпорын домені не желілік аймақ атауы"
 
-#: ../src/goabackend/goakerberosprovider.c:979
+#: ../src/goabackend/goakerberosprovider.c:974
 #: ../src/goaidentity/goaidentityservice.c:1084
 msgid "Log In to Realm"
 msgstr "Желілік аймаққа кіру"
 
-#: ../src/goabackend/goakerberosprovider.c:980
+#: ../src/goabackend/goakerberosprovider.c:975
 msgid "Please enter your password below."
 msgstr "Төменде пароліңізді енгізіңіз."
 
-#: ../src/goabackend/goakerberosprovider.c:981
+#: ../src/goabackend/goakerberosprovider.c:976
 msgid "Remember this password"
 msgstr "Бұл парольді еске сақтау"
 
-#: ../src/goabackend/goakerberosprovider.c:1115
+#: ../src/goabackend/goakerberosprovider.c:1110
 #, c-format
 msgid "The domain is not valid"
 msgstr "Домен қате"
 
-#: ../src/goabackend/goakerberosprovider.c:1265
+#: ../src/goabackend/goakerberosprovider.c:1257
 msgid "Error connecting to enterprise identity server"
 msgstr "Кәсіпорын идентификаторлары серверіне байланысу қатесі"
 
-#: ../src/goabackend/goakerberosprovider.c:1612
+#: ../src/goabackend/goakerberosprovider.c:1604
 #, c-format
 msgid "Identity service returned invalid key"
 msgstr "Идентификация қызметі жарамсыз кілтті қайтарды"
@@ -531,8 +531,8 @@ msgstr "Тіркелу мәліметтерінде access_token не access_tok
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: ../src/goabackend/goaowncloudprovider.c:767
-#: ../src/goabackend/goaowncloudprovider.c:962
+#: ../src/goabackend/goaowncloudprovider.c:736
+#: ../src/goabackend/goaowncloudprovider.c:924
 msgid "Error connecting to ownCloud server"
 msgstr "ownCloud серверіне байланысты орнату қатесі"
 
@@ -610,48 +610,22 @@ msgstr "Не үшін қолдану"
 msgid "Account is disabled"
 msgstr "Тіркелгі сөндірілген"
 
-#: ../src/goabackend/goaprovider.c:891
+#: ../src/goabackend/goaprovider.c:881
+msgid "Unknown error"
+msgstr "Белгісіз қате"
+
+#: ../src/goabackend/goaprovider.c:900
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync %s түрі үшін іске асырылмаған"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauth.c:174
+#: ../src/goabackend/goasmtpauth.c:170
 #, c-format
 msgid "TLS not available"
 msgstr "TLS қолжетерсіз"
 
-#. TODO: more specific
-#: ../src/goabackend/goasmtpauth.c:241
-#, c-format
-msgid "org.gnome.OnlineAccounts.Mail is not available"
-msgstr "org.gnome.OnlineAccounts.Mail қолжетерсіз"
-
-#. TODO: more specific
-#: ../src/goabackend/goasmtpauth.c:251
-#, c-format
-msgid "Failed to parse email address"
-msgstr "Эл. пошта адресін талдау сәтсіз"
-
-#. TODO: more specific
-#: ../src/goabackend/goasmtpauth.c:260
-#, c-format
-msgid "Cannot do SMTP authentication without a domain"
-msgstr "SMTP аутентификациясын доменсіз жасау мүмкін емес"
-
-#. TODO: more specific
-#: ../src/goabackend/goasmtpauth.c:300
-#, c-format
-msgid "Did not find smtp-password in credentials"
-msgstr "Тіркелу мәліметтерінде парольді (smtp) табу мүмкін емес"
-
-#. TODO: more specific
-#: ../src/goabackend/goasmtpauth.c:311
-#, c-format
-msgid "Cannot do SMTP authentication without a password"
-msgstr "SMTP аутентификациясын парольсіз жасау мүмкін емес"
-
-#: ../src/goabackend/goasmtpauth.c:673
+#: ../src/goabackend/goasmtpauth.c:476
 #, c-format
 msgid "Unknown authentication mechanism"
 msgstr "Аутентификация механизмі белгісіз"
@@ -716,7 +690,7 @@ msgstr "Бұл тіркелгіні іске қосу үшін кіріңіз."
 msgid "_Sign In"
 msgstr "_Кіру"
 
-#: ../src/goabackend/goautils.c:282
+#: ../src/goabackend/goautils.c:280
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "%s тіркелгісі %s үшін бар болып тұр"
@@ -725,90 +699,90 @@ msgstr "%s тіркелгісі %s үшін бар болып тұр"
 #. * Account" dialogs. The %s is the name of the provider. eg.,
 #. * 'Google'.
 #.
-#: ../src/goabackend/goautils.c:335
+#: ../src/goabackend/goautils.c:333
 #, c-format
 msgid "%s Account"
 msgstr "%s тіркелгісі"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:393
+#: ../src/goabackend/goautils.c:387
 msgid "Failed to delete credentials from the keyring"
 msgstr "Тіркелу мәліметтерін кілттер бауынан өшіру қатесі"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:445
+#: ../src/goabackend/goautils.c:435
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Тіркелу мәліметтерін кілттер бауынан алу қатесі"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:455
+#: ../src/goabackend/goautils.c:445
 msgid "No credentials found in the keyring"
 msgstr "Кілттер бауында тіркелу мәліметтері табылмады"
 
-#: ../src/goabackend/goautils.c:468
+#: ../src/goabackend/goautils.c:458
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Кілттер бауынан алынған нәтижені талдау қатесі:"
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:511
+#: ../src/goabackend/goautils.c:499
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "GOA %s тіркелу мәліметтері, %s идентификаторы үшін"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:528
+#: ../src/goabackend/goautils.c:516
 msgid "Failed to store credentials in the keyring"
 msgstr "Тіркелу мәліметтерін кілттер бауында сақтау қатесі"
 
-#: ../src/goabackend/goautils.c:882
+#: ../src/goabackend/goautils.c:870
 msgid "Cannot resolve hostname"
 msgstr "Хост атын шешу мүмкін емес"
 
-#: ../src/goabackend/goautils.c:886
+#: ../src/goabackend/goautils.c:874
 msgid "Cannot resolve proxy hostname"
 msgstr "Прокси хост атын шешу мүмкін емес"
 
-#: ../src/goabackend/goautils.c:891
+#: ../src/goabackend/goautils.c:879
 msgid "Cannot find WebDAV endpoint"
 msgstr "WebDAV түпкі нүктесін табу мүмкін емес"
 
-#: ../src/goabackend/goautils.c:900
+#: ../src/goabackend/goautils.c:888
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Коды: %u — Серверден күтпеген жауап алынды"
 
-#: ../src/goabackend/goautils.c:916
+#: ../src/goabackend/goautils.c:904
 msgid "The signing certificate authority is not known."
 msgstr "Қолтаңба қойған сертификаттың сертификаттау орталығы белгісіз."
 
-#: ../src/goabackend/goautils.c:920
+#: ../src/goabackend/goautils.c:908
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr "Сертификат өзі алынған сайттың күтілген анықтағышына сәйкес келмейді."
 
-#: ../src/goabackend/goautils.c:925
+#: ../src/goabackend/goautils.c:913
 msgid "The certificate’s activation time is still in the future."
 msgstr "Сертификатты белсендіру уақыты әлі болашақта."
 
-#: ../src/goabackend/goautils.c:929
+#: ../src/goabackend/goautils.c:917
 msgid "The certificate has expired."
 msgstr "Сертификаттың мерзімі аяқталған."
 
-#: ../src/goabackend/goautils.c:933
+#: ../src/goabackend/goautils.c:921
 msgid "The certificate has been revoked."
 msgstr "Сертификат қайта шақырылған."
 
-#: ../src/goabackend/goautils.c:937
+#: ../src/goabackend/goautils.c:925
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Сертификат алгоритмі қауіпсіз емес ретінде саналады."
 
-#: ../src/goabackend/goautils.c:941
+#: ../src/goabackend/goautils.c:929
 msgid "Invalid certificate."
 msgstr "Қате сертификат."
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:976
+#: ../src/goabackend/goautils.c:964
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "Тіркелу мәліметтерінде \"%2$s\" идентификаторы бар \"%1$s\" табылмады"
@@ -892,6 +866,21 @@ msgstr "Идентификаторды табу мүмкін емес"
 #: ../src/goaidentity/goakerberosidentitymanager.c:842
 msgid "Could not create credential cache for identity"
 msgstr "Идентификатор үшін тіркелу мәліметтері кэшін жасау мүмкін емес"
+
+#~ msgid "org.gnome.OnlineAccounts.Mail is not available"
+#~ msgstr "org.gnome.OnlineAccounts.Mail қолжетерсіз"
+
+#~ msgid "Failed to parse email address"
+#~ msgstr "Эл. пошта адресін талдау сәтсіз"
+
+#~ msgid "Cannot do SMTP authentication without a domain"
+#~ msgstr "SMTP аутентификациясын доменсіз жасау мүмкін емес"
+
+#~ msgid "Did not find smtp-password in credentials"
+#~ msgstr "Тіркелу мәліметтерінде парольді (smtp) табу мүмкін емес"
+
+#~ msgid "Cannot do SMTP authentication without a password"
+#~ msgstr "SMTP аутентификациясын парольсіз жасау мүмкін емес"
 
 #~ msgid "initial secret passed before secret key exchange"
 #~ msgstr "бастапқы құпия кілті құпия кілттермен алмасуға дейін берілді"
