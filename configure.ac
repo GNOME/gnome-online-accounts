@@ -405,8 +405,10 @@ if test "$enable_kerberos" != "no"; then
 
   enable_kerberos=$have_kerberos
 
-  AC_DEFINE(GCR_API_SUBJECT_TO_CHANGE, 1, [Define to use the GCR API])
-  AC_DEFINE(GOA_KERBEROS_ENABLED, 1, [Enable Enterprise Identity data provider])
+  if test "$enable_kerberos" == "yes"; then
+    AC_DEFINE(GCR_API_SUBJECT_TO_CHANGE, 1, [Define to use the GCR API])
+    AC_DEFINE(GOA_KERBEROS_ENABLED, 1, [Enable Enterprise Identity data provider])
+  fi
 else
   enable_kerberos=no
 fi
