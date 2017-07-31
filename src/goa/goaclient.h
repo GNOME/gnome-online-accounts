@@ -29,7 +29,7 @@
 G_BEGIN_DECLS
 
 #define GOA_TYPE_CLIENT  (goa_client_get_type ())
-G_DECLARE_FINAL_TYPE (GoaClient, goa_client, GOA, CLIENT, GObject);
+G_DECLARE_FINAL_TYPE (GoaClient, goa_client, GOA, CLIENT, GObject)
 
 void                goa_client_new                (GCancellable        *cancellable,
                                                    GAsyncReadyCallback  callback,
