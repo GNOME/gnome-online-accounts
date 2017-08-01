@@ -229,8 +229,7 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
     }
 
   json_object = json_node_get_object (json_parser_get_root (parser));
-  id = g_strdup (json_object_get_string_member (json_object, "id"));
-  if (id == NULL)
+  if (!json_object_has_member (json_object, "id"))
     {
       g_warning ("Did not find id in JSON data");
       g_set_error (error,
@@ -239,19 +238,18 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
                    _("Could not parse response"));
       goto out;
     }
-  presentation_identity = g_strdup (json_object_get_string_member (json_object, "email"));
-  if (presentation_identity == NULL)
+
+  id = g_strdup (json_object_get_string_member (json_object, "id"));
+
+  if (json_object_has_member (json_object, "email"))
+    presentation_identity = g_strdup (json_object_get_string_member (json_object, "email"));
+  else if (json_object_has_member (json_object, "username"))
+    presentation_identity = g_strdup (json_object_get_string_member (json_object, "username"));
+  else
     {
-      presentation_identity = g_strdup (json_object_get_string_member (json_object, "username"));
-      if (presentation_identity == NULL)
-        {
-          g_warning ("Did not find email or username in JSON data");
-          g_set_error (error,
-                       GOA_ERROR,
-                       GOA_ERROR_FAILED,
-                       _("Could not parse response"));
-          goto out;
-        }
+      g_warning ("Did not find email or username in JSON data");
+      g_set_error (error, GOA_ERROR, GOA_ERROR_FAILED, _("Could not parse response"));
+      goto out;
     }
 
   ret = id;
