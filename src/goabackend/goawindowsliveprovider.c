@@ -179,8 +179,7 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
     }
 
   json_object = json_node_get_object (json_parser_get_root (parser));
-  id = g_strdup (json_object_get_string_member (json_object, "id"));
-  if (id == NULL)
+  if (!json_object_has_member (json_object, "id"))
     {
       g_warning ("Did not find id in JSON data");
       g_set_error (error,
@@ -189,10 +188,20 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
                    _("Could not parse response"));
       goto out;
     }
+  if (!json_object_has_member (json_object, "emails"))
+    {
+      g_warning ("Did not find emails in JSON data");
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Could not parse response"));
+      goto out;
+    }
+
+  id = g_strdup (json_object_get_string_member (json_object, "id"));
 
   json_object = json_object_get_object_member (json_object, "emails");
-  presentation_identity = g_strdup (json_object_get_string_member (json_object, "account"));
-  if (presentation_identity == NULL)
+  if (!json_object_has_member (json_object, "account"))
     {
       g_warning ("Did not find emails.account in JSON data");
       g_set_error (error,
@@ -201,6 +210,8 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
                    _("Could not parse response"));
       goto out;
     }
+
+  presentation_identity = g_strdup (json_object_get_string_member (json_object, "account"));
 
   ret = id;
   id = NULL;
