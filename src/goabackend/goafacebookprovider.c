@@ -191,7 +191,10 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
   proxy = rest_proxy_new ("https://graph.facebook.com/me", FALSE);
   call = rest_proxy_new_call (proxy);
   rest_proxy_call_set_method (call, "GET");
-  rest_proxy_call_add_param (call, "access_token", access_token);
+  rest_proxy_call_add_params (call,
+                              "access_token", access_token,
+                              "fields", "id,email",
+                              NULL);
 
   if (!rest_proxy_call_sync (call, error))
     goto out;
@@ -238,19 +241,15 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
                    _("Could not parse response"));
       goto out;
     }
-
-  id = g_strdup (json_object_get_string_member (json_object, "id"));
-
-  if (json_object_has_member (json_object, "email"))
-    presentation_identity = g_strdup (json_object_get_string_member (json_object, "email"));
-  else if (json_object_has_member (json_object, "username"))
-    presentation_identity = g_strdup (json_object_get_string_member (json_object, "username"));
-  else
+  if (!json_object_has_member (json_object, "email"))
     {
-      g_warning ("Did not find email or username in JSON data");
+      g_warning ("Did not find email in JSON data");
       g_set_error (error, GOA_ERROR, GOA_ERROR_FAILED, _("Could not parse response"));
       goto out;
     }
+
+  id = g_strdup (json_object_get_string_member (json_object, "id"));
+  presentation_identity = g_strdup (json_object_get_string_member (json_object, "email"));
 
   ret = id;
   id = NULL;
