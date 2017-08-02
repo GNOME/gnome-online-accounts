@@ -176,7 +176,7 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
   json_object = json_node_get_object (json_parser_get_root (parser));
   if (!json_object_has_member (json_object, "response"))
     {
-      g_warning ("Did not find response object in JSON data");
+      g_warning ("Did not find response in JSON data");
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
@@ -187,7 +187,7 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
   json_object = json_object_get_object_member (json_object, "response");
   if (!json_object_has_member (json_object, "user"))
     {
-      g_warning ("Did not find user object in JSON data");
+      g_warning ("Did not find response.user in JSON data");
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
@@ -198,7 +198,7 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
   json_object = json_object_get_object_member (json_object, "user");
   if (!json_object_has_member (json_object, "id"))
     {
-      g_warning ("Did not find id in JSON data");
+      g_warning ("Did not find response.user.id in JSON data");
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
@@ -207,7 +207,7 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
     }
   if (!json_object_has_member (json_object, "contact"))
     {
-      g_warning ("Did not find contact object in JSON data");
+      g_warning ("Did not find response.user.contact in JSON data");
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
@@ -220,7 +220,7 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
   json_object = json_object_get_object_member (json_object, "contact");
   if (!json_object_has_member (json_object, "email"))
     {
-      g_warning ("Did not find email in JSON data");
+      g_warning ("Did not find response.user.contact.email in JSON data");
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
