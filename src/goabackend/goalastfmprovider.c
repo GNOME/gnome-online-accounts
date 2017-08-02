@@ -225,6 +225,7 @@ lastfm_login_sync (GoaProvider                  *provider,
   json_obj = json_node_get_object (root);
   if (!json_object_has_member (json_obj, "session"))
     {
+      g_warning ("Did not find session in JSON data");
       g_set_error (error, GOA_ERROR, GOA_ERROR_FAILED, _("Could not parse response"));
       goto out;
     }
@@ -232,11 +233,13 @@ lastfm_login_sync (GoaProvider                  *provider,
   session_obj = json_node_get_object (json_object_get_member (json_obj, "session"));
   if (!json_object_has_member (session_obj, "name"))
     {
+      g_warning ("Did not find session.name in JSON data");
       g_set_error (error, GOA_ERROR, GOA_ERROR_FAILED, _("Could not parse response"));
       goto out;
     }
   if (!json_object_has_member (session_obj, "key"))
     {
+      g_warning ("Did not find session.key in JSON data");
       g_set_error (error, GOA_ERROR, GOA_ERROR_FAILED, _("Could not parse response"));
       goto out;
     }
@@ -521,6 +524,7 @@ check_cb (RestProxyCall *call,
   json_obj = json_node_get_object (json_parser_get_root (parser));
   if (!json_object_has_member (json_obj, "session"))
     {
+      g_warning ("Did not find session in JSON data");
       g_set_error (&data->error, GOA_ERROR, GOA_ERROR_FAILED, _("Authentication failed"));
       goto out;
     }
@@ -529,11 +533,13 @@ check_cb (RestProxyCall *call,
   session_obj = json_node_get_object (session);
   if (!json_object_has_member (session_obj, "name"))
     {
+      g_warning ("Did not find session.name in JSON data");
       g_set_error (&data->error, GOA_ERROR, GOA_ERROR_FAILED, _("Could not parse response"));
       goto out;
     }
   if (!json_object_has_member (session_obj, "key"))
     {
+      g_warning ("Did not find session.key in JSON data");
       g_set_error (&data->error, GOA_ERROR, GOA_ERROR_FAILED, _("Could not parse response"));
       goto out;
     }
