@@ -167,8 +167,7 @@ get_identity_sync (GoaOAuthProvider  *oauth_provider,
     }
 
   json_object = json_node_get_object (json_parser_get_root (parser));
-  json_object = json_object_get_object_member (json_object, "user");
-  if (json_object == NULL)
+  if (!json_object_has_member (json_object, "user"))
     {
       g_warning ("Did not find user in JSON data");
       g_set_error (error,
@@ -177,8 +176,9 @@ get_identity_sync (GoaOAuthProvider  *oauth_provider,
                    _("Could not parse response"));
       goto out;
     }
-  id = g_strdup (json_object_get_string_member (json_object, "id"));
-  if (id == NULL)
+
+  json_object = json_object_get_object_member (json_object, "user");
+  if (!json_object_has_member (json_object, "id"))
     {
       g_warning ("Did not find user.id in JSON data");
       g_set_error (error,
@@ -187,8 +187,7 @@ get_identity_sync (GoaOAuthProvider  *oauth_provider,
                    _("Could not parse response"));
       goto out;
     }
-  json_object = json_object_get_object_member (json_object, "username");
-  if (json_object == NULL)
+  if (!json_object_has_member (json_object, "username"))
     {
       g_warning ("Did not find user.username in JSON data");
       g_set_error (error,
@@ -197,8 +196,11 @@ get_identity_sync (GoaOAuthProvider  *oauth_provider,
                    _("Could not parse response"));
       goto out;
     }
-  presentation_identity = g_strdup (json_object_get_string_member (json_object, "_content"));
-  if (presentation_identity == NULL)
+
+  id = g_strdup (json_object_get_string_member (json_object, "id"));
+
+  json_object = json_object_get_object_member (json_object, "username");
+  if (!json_object_has_member (json_object, "_content"))
     {
       g_warning ("Did not find user.username._content in JSON data");
       g_set_error (error,
@@ -207,6 +209,8 @@ get_identity_sync (GoaOAuthProvider  *oauth_provider,
                    _("Could not parse response"));
       goto out;
     }
+
+  presentation_identity = g_strdup (json_object_get_string_member (json_object, "_content"));
 
   ret = id;
   id = NULL;
