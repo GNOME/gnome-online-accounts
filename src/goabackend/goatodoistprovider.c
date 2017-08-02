@@ -226,7 +226,7 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
   json_object_user = json_object_get_object_member (json_object, "user");
   if (!json_object_has_member (json_object_user, "email"))
     {
-      g_warning ("Did not find email in JSON data");
+      g_warning ("Did not find user.email in JSON data");
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
