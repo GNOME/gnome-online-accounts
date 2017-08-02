@@ -69,7 +69,7 @@ http_client_log_printer (SoupLogger         *logger,
   gchar *message;
 
   message = g_strdup_printf ("%c %s", direction, data);
-  g_log_default_handler ("goa", G_LOG_LEVEL_DEBUG, message, NULL);
+  g_log_default_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, message, NULL);
   g_free (message);
 }
 
