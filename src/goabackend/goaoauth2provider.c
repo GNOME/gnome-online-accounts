@@ -754,8 +754,7 @@ get_tokens_sync (GoaOAuth2Provider  *self,
           goto out;
         }
       object = json_node_get_object (json_parser_get_root (parser));
-      ret_access_token = g_strdup (json_object_get_string_member (object, "access_token"));
-      if (ret_access_token == NULL)
+      if (!json_object_has_member (object, "access_token"))
         {
           g_warning ("Did not find access_token in JSON data");
           g_set_error (error,
@@ -765,6 +764,9 @@ get_tokens_sync (GoaOAuth2Provider  *self,
           g_object_unref (parser);
           goto out;
         }
+
+      ret_access_token = g_strdup (json_object_get_string_member (object, "access_token"));
+
       /* refresh_token is optional... */
       if (json_object_has_member (object, "refresh_token"))
         ret_refresh_token = g_strdup (json_object_get_string_member (object, "refresh_token"));
