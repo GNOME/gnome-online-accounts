@@ -211,8 +211,7 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
     }
 
   json_object = json_node_get_object (json_parser_get_root (parser));
-  email = g_strdup (json_object_get_string_member (json_object, "email"));
-  if (email == NULL)
+  if (!json_object_has_member (json_object, "email"))
     {
       g_warning ("Did not find email in JSON data");
       g_set_error (error,
@@ -222,6 +221,7 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
       goto out;
     }
 
+  email = g_strdup (json_object_get_string_member (json_object, "email"));
 
   ret = email;
   email = NULL;
