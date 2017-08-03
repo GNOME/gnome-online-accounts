@@ -519,26 +519,26 @@ check_cb (RestProxyCall *call,
     }
 
   json_obj = json_node_get_object (json_parser_get_root (parser));
-  session = json_object_get_member (json_obj, "session");
-  if (session == NULL)
+  if (!json_object_has_member (json_obj, "session"))
     {
       g_set_error (&data->error, GOA_ERROR, GOA_ERROR_FAILED, _("Authentication failed"));
       goto out;
     }
-  session_obj = json_node_get_object (session);
 
-  if (json_object_get_string_member (session_obj, "name") == NULL)
+  session = json_object_get_member (json_obj, "session");
+  session_obj = json_node_get_object (session);
+  if (!json_object_has_member (session_obj, "name"))
+    {
+      g_set_error (&data->error, GOA_ERROR, GOA_ERROR_FAILED, _("Could not parse response"));
+      goto out;
+    }
+  if (!json_object_has_member (session_obj, "key"))
     {
       g_set_error (&data->error, GOA_ERROR, GOA_ERROR_FAILED, _("Could not parse response"));
       goto out;
     }
 
   data->access_token = g_strdup (json_object_get_string_member (session_obj, "key"));
-  if (data->access_token == NULL)
-    {
-      g_set_error (&data->error, GOA_ERROR, GOA_ERROR_FAILED, _("Could not parse response"));
-      goto out;
-    }
 
  out:
   g_main_loop_quit (data->loop);
