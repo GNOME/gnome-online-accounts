@@ -21,6 +21,7 @@
 #include <libsoup/soup.h>
 
 #include "goahttpclient.h"
+#include "goasouplogger.h"
 #include "goautils.h"
 
 struct _GoaHttpClient
@@ -48,22 +49,6 @@ GoaHttpClient *
 goa_http_client_new (void)
 {
   return GOA_HTTP_CLIENT (g_object_new (GOA_TYPE_HTTP_CLIENT, NULL));
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-static void
-http_client_log_printer (SoupLogger         *logger,
-                         SoupLoggerLogLevel  level,
-                         gchar               direction,
-                         const gchar        *data,
-                         gpointer            user_data)
-{
-  gchar *message;
-
-  message = g_strdup_printf ("%c %s", direction, data);
-  g_log_default_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, message, NULL);
-  g_free (message);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -225,8 +210,7 @@ goa_http_client_check (GoaHttpClient       *self,
   data->session = soup_session_new_with_options (SOUP_SESSION_SSL_STRICT, FALSE,
                                                  NULL);
 
-  logger = soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
-  soup_logger_set_printer (logger, http_client_log_printer, NULL, NULL);
+  logger = goa_soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
   soup_session_add_feature (data->session, SOUP_SESSION_FEATURE (logger));
   g_object_unref (logger);
 
