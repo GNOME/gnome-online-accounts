@@ -54,4 +54,4 @@ gboolean        goa_http_client_check_sync         (GoaHttpClient       *self,
 
 G_END_DECLS
 
-#endif /* __GOA_EWS_CLIENT_H__ */
+#endif /* __GOA_HTTP_CLIENT_H__ */
