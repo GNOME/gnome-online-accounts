@@ -32,6 +32,7 @@
 #include "goaoauth2provider-priv.h"
 #include "goaoauth2provider-web-extension.h"
 #include "goaoauth2provider-web-view.h"
+#include "goarestproxy.h"
 
 /**
  * SECTION:goaoauth2provider
@@ -653,7 +654,7 @@ get_tokens_sync (GoaOAuth2Provider  *self,
   gsize payload_length;
   const gchar *client_secret;
 
-  proxy = rest_proxy_new (goa_oauth2_provider_get_token_uri (self), FALSE);
+  proxy = goa_rest_proxy_new (goa_oauth2_provider_get_token_uri (self), FALSE);
   call = rest_proxy_new_call (proxy);
 
   rest_proxy_call_set_method (call, "POST");
