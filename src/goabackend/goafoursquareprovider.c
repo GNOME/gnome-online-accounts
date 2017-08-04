@@ -28,6 +28,7 @@
 #include "goaoauth2provider.h"
 #include "goafoursquareprovider.h"
 #include "goaobjectskeletonutils.h"
+#include "goarestproxy.h"
 
 struct _GoaFoursquareProvider
 {
@@ -135,7 +136,7 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
 
   /* TODO: cancellable */
 
-  proxy = rest_proxy_new ("https://api.foursquare.com/v2/users/self", FALSE);
+  proxy = goa_rest_proxy_new ("https://api.foursquare.com/v2/users/self", FALSE);
   call = rest_proxy_new_call (proxy);
   rest_proxy_call_set_method (call, "GET");
   rest_proxy_call_add_param (call, "oauth_token", access_token);
