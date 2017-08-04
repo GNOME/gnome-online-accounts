@@ -27,6 +27,7 @@
 #include "goaprovider-priv.h"
 #include "goawindowsliveprovider.h"
 #include "goaobjectskeletonutils.h"
+#include "goarestproxy.h"
 
 struct _GoaWindowsLiveProvider
 {
@@ -143,7 +144,7 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
 
   /* TODO: cancellable */
 
-  proxy = rest_proxy_new ("https://apis.live.net/v5.0/me", FALSE);
+  proxy = goa_rest_proxy_new ("https://apis.live.net/v5.0/me", FALSE);
   call = rest_proxy_new_call (proxy);
   rest_proxy_call_set_method (call, "GET");
   rest_proxy_call_add_param (call, "access_token", access_token);
