@@ -28,6 +28,7 @@
 #include "goaoauth2provider-priv.h"
 #include "goatodoistprovider.h"
 #include "goaobjectskeletonutils.h"
+#include "goarestproxy.h"
 
 
 struct _GoaTodoistProvider
@@ -175,7 +176,7 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
   gchar *email = NULL;
   gchar *ret = NULL;
 
-  proxy = rest_proxy_new ("https://todoist.com/API/v7/sync", FALSE);
+  proxy = goa_rest_proxy_new ("https://todoist.com/API/v7/sync", FALSE);
   call = rest_proxy_new_call (proxy);
   rest_proxy_call_set_method (call, "GET");
   rest_proxy_call_add_param (call, "token", access_token);
