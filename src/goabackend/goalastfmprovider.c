@@ -28,6 +28,7 @@
 #include "goaoauth2provider.h"
 #include "goaoauth2provider-priv.h"
 #include "goalastfmprovider.h"
+#include "goarestproxy.h"
 #include "goautils.h"
 
 struct _GoaLastfmProvider
@@ -190,7 +191,7 @@ lastfm_login_sync (GoaProvider                  *provider,
                          GOA_LASTFM_CLIENT_SECRET);
   sig_md5 = g_compute_checksum_for_string (G_CHECKSUM_MD5, sig, -1);
 
-  call = rest_proxy_new_call (rest_proxy_new (get_request_uri (provider), FALSE));
+  call = rest_proxy_new_call (goa_rest_proxy_new (get_request_uri (provider), FALSE));
 
   rest_proxy_call_set_method (call, "POST");
   rest_proxy_call_add_header (call, "Content-Type", "application/x-www-form-urlencoded");
@@ -594,7 +595,7 @@ lastfm_login (GoaProvider                  *provider,
                          GOA_LASTFM_CLIENT_SECRET);
   sig_md5 = g_compute_checksum_for_string (G_CHECKSUM_MD5, sig, -1);
 
-  call = rest_proxy_new_call (rest_proxy_new (get_request_uri (provider), FALSE));
+  call = rest_proxy_new_call (goa_rest_proxy_new (get_request_uri (provider), FALSE));
 
   rest_proxy_call_set_method (call, "POST");
   rest_proxy_call_add_header (call, "Content-Type", "application/x-www-form-urlencoded");
