@@ -641,24 +641,17 @@ get_tokens_sync (GoaOAuth2Provider  *self,
                  GCancellable       *cancellable,
                  GError            **error)
 {
-  GError *tokens_error;
+  GError *tokens_error = NULL;
   RestProxy *proxy;
   RestProxyCall *call;
-  gchar *ret;
+  gchar *ret = NULL;
   guint status_code;
-  gchar *ret_access_token;
-  gint ret_access_token_expires_in;
-  gchar *ret_refresh_token;
+  gchar *ret_access_token = NULL;
+  gint ret_access_token_expires_in = 0;
+  gchar *ret_refresh_token = NULL;
   const gchar *payload;
   gsize payload_length;
   const gchar *client_secret;
-
-  ret = NULL;
-  ret_access_token = NULL;
-  ret_access_token_expires_in = 0;
-  ret_refresh_token = NULL;
-
-  tokens_error = NULL;
 
   proxy = rest_proxy_new (goa_oauth2_provider_get_token_uri (self), FALSE);
   call = rest_proxy_new_call (proxy);
@@ -973,7 +966,7 @@ get_tokens_and_identity (GoaOAuth2Provider  *self,
                          GtkBox             *vbox)
 {
   GoaOAuth2ProviderPrivate *priv;
-  gboolean ret;
+  gboolean ret = FALSE;
   gchar *url;
   GSList *cookies;
   GtkWidget *embed;
@@ -981,20 +974,15 @@ get_tokens_and_identity (GoaOAuth2Provider  *self,
   GVariant *preseed_data;
   GtkWidget *web_view;
   const gchar *scope;
-  gchar *escaped_redirect_uri;
-  gchar *escaped_client_id;
-  gchar *escaped_scope;
+  gchar *escaped_redirect_uri = NULL;
+  gchar *escaped_client_id = NULL;
+  gchar *escaped_scope = NULL;
 
   g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (self), FALSE);
   g_return_val_if_fail ((!add_account && existing_identity != NULL && existing_identity[0] != '\0')
                         || (add_account && existing_identity == NULL), FALSE);
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), FALSE);
   g_return_val_if_fail (GTK_IS_BOX (vbox), FALSE);
-
-  ret = FALSE;
-  escaped_redirect_uri = NULL;
-  escaped_client_id = NULL;
-  escaped_scope = NULL;
 
   priv = goa_oauth2_provider_get_instance_private (self);
   g_return_val_if_fail (priv->error == NULL, FALSE);
@@ -1198,7 +1186,7 @@ goa_oauth2_provider_add_account (GoaProvider *provider,
 {
   GoaOAuth2Provider *self = GOA_OAUTH2_PROVIDER (provider);
   GoaOAuth2ProviderPrivate *priv;
-  GoaObject *ret;
+  GoaObject *ret = NULL;
   GVariantBuilder credentials;
   GVariantBuilder details;
 
@@ -1207,8 +1195,6 @@ goa_oauth2_provider_add_account (GoaProvider *provider,
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), NULL);
   g_return_val_if_fail (GTK_IS_BOX (vbox), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-
-  ret = NULL;
 
   priv = goa_oauth2_provider_get_instance_private (self);
 
@@ -1286,15 +1272,13 @@ goa_oauth2_provider_refresh_account (GoaProvider  *provider,
   const gchar *existing_identity;
   const gchar *existing_presentation_identity;
   GVariantBuilder builder;
-  gboolean ret;
+  gboolean ret = FALSE;
 
   g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (self), FALSE);
   g_return_val_if_fail (GOA_IS_CLIENT (client), FALSE);
   g_return_val_if_fail (GOA_IS_OBJECT (object), FALSE);
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-
-  ret = FALSE;
 
   priv = goa_oauth2_provider_get_instance_private (self);
 
@@ -1413,35 +1397,25 @@ goa_oauth2_provider_get_access_token_sync (GoaOAuth2Provider  *self,
                                            GCancellable       *cancellable,
                                            GError            **error)
 {
-  GVariant *credentials;
+  GVariant *credentials = NULL;
   GVariantIter iter;
   const gchar *key;
   GVariant *value;
-  gchar *authorization_code;
-  gchar *access_token;
-  gint access_token_expires_in;
-  gchar *refresh_token;
-  gchar *old_refresh_token;
-  gchar *password;
-  gboolean success;
+  gchar *authorization_code = NULL;
+  gchar *access_token = NULL;
+  gint access_token_expires_in = 0;
+  gchar *refresh_token = NULL;
+  gchar *old_refresh_token = NULL;
+  gchar *password = NULL;
+  gboolean success = FALSE;
   GVariantBuilder builder;
-  gchar *ret;
+  gchar *ret = NULL;
   GMutex *lock;
 
   g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (self), NULL);
   g_return_val_if_fail (GOA_IS_OBJECT (object), NULL);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-
-  ret = NULL;
-  credentials = NULL;
-  authorization_code = NULL;
-  access_token = NULL;
-  refresh_token = NULL;
-  old_refresh_token = NULL;
-  password = NULL;
-  access_token_expires_in = 0;
-  success = FALSE;
 
   /* provider_lock is too coarse, use a per-object lock instead */
   G_LOCK (provider_lock);
@@ -1649,16 +1623,11 @@ goa_oauth2_provider_ensure_credentials_sync (GoaProvider   *provider,
                                              GError       **error)
 {
   GoaOAuth2Provider *self = GOA_OAUTH2_PROVIDER (provider);
-  gboolean ret;
-  gchar *access_token;
+  gboolean ret = FALSE;
+  gchar *access_token = NULL;
   gint access_token_expires_in;
-  gchar *identity;
-  gboolean force_refresh;
-
-  ret = FALSE;
-  access_token = NULL;
-  identity = NULL;
-  force_refresh = FALSE;
+  gchar *identity = NULL;
+  gboolean force_refresh = FALSE;
 
  again:
   access_token = goa_oauth2_provider_get_access_token_sync (self,
@@ -1771,12 +1740,10 @@ on_handle_get_access_token (GoaOAuth2Based        *interface,
   const gchar *id;
   const gchar *method_name;
   const gchar *provider_type;
-  gchar *access_token;
+  gchar *access_token = NULL;
   gint access_token_expires_in;
 
   /* TODO: maybe log what app is requesting access */
-
-  access_token = NULL;
 
   object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (interface)));
   account = goa_object_peek_account (object);
