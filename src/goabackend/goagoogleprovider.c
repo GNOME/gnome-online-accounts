@@ -27,6 +27,7 @@
 #include "goaoauth2provider.h"
 #include "goagoogleprovider.h"
 #include "goaobjectskeletonutils.h"
+#include "goarestproxy.h"
 
 struct _GoaGoogleProvider
 {
@@ -175,7 +176,7 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
 
   /* TODO: cancellable */
 
-  proxy = rest_proxy_new ("https://www.googleapis.com/oauth2/v2/userinfo", FALSE);
+  proxy = goa_rest_proxy_new ("https://www.googleapis.com/oauth2/v2/userinfo", FALSE);
   call = rest_proxy_new_call (proxy);
   rest_proxy_call_set_method (call, "GET");
   rest_proxy_call_add_param (call, "access_token", access_token);
