@@ -433,7 +433,13 @@ goa_oauth_provider_get_identity_sync (GoaOAuthProvider *provider,
   g_return_val_if_fail (access_token != NULL, NULL);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-  return GOA_OAUTH_PROVIDER_GET_CLASS (provider)->get_identity_sync (provider, access_token, access_token_secret, out_presentation_identity, cancellable, error);
+
+  return GOA_OAUTH_PROVIDER_GET_CLASS (provider)->get_identity_sync (provider,
+                                                                     access_token,
+                                                                     access_token_secret,
+                                                                     out_presentation_identity,
+                                                                     cancellable,
+                                                                     error);
 }
 
 /**
