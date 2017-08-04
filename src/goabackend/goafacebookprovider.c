@@ -27,6 +27,7 @@
 #include "goaoauth2provider.h"
 #include "goafacebookprovider.h"
 #include "goaobjectskeletonutils.h"
+#include "goarestproxy.h"
 
 struct _GoaFacebookProvider
 {
@@ -159,7 +160,7 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
 
   /* TODO: cancellable */
 
-  proxy = rest_proxy_new ("https://graph.facebook.com/me", FALSE);
+  proxy = goa_rest_proxy_new ("https://graph.facebook.com/me", FALSE);
   call = rest_proxy_new_call (proxy);
   rest_proxy_call_set_method (call, "GET");
   rest_proxy_call_add_params (call,
