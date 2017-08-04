@@ -29,6 +29,7 @@
 #include "goaoauth2provider-priv.h"
 #include "goapocketprovider.h"
 #include "goaobjectskeletonutils.h"
+#include "goarestproxy.h"
 
 #define V3_OAUTH_AUTHORIZE_URL "https://getpocket.com/v3/oauth/authorize"
 
@@ -140,7 +141,7 @@ build_authorization_uri (GoaOAuth2Provider  *oauth2_provider,
   if (self->authorization_uri != NULL)
     goto end;
 
-  proxy = rest_proxy_new (get_request_uri (oauth2_provider), FALSE);
+  proxy = goa_rest_proxy_new (get_request_uri (oauth2_provider), FALSE);
   call = rest_proxy_new_call (proxy);
 
   rest_proxy_call_set_method (call, "POST");
@@ -223,7 +224,7 @@ process_redirect_url (GoaOAuth2Provider            *oauth2_provider,
   const gchar *payload;
   gboolean ret = FALSE;
 
-  proxy = rest_proxy_new (V3_OAUTH_AUTHORIZE_URL, FALSE);
+  proxy = goa_rest_proxy_new (V3_OAUTH_AUTHORIZE_URL, FALSE);
   call = rest_proxy_new_call (proxy);
 
   rest_proxy_call_set_method (call, "POST");
