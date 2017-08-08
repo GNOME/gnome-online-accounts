@@ -10,322 +10,226 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-11-19 13:08+0000\n"
-"PO-Revision-Date: 2013-12-16 13:05+0530\n"
-"Last-Translator: Akhilan <akhilkrishnans@gmail.com>\n"
+"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts&keywords=I18N"
+"+L10N&component=general\n"
+"POT-Creation-Date: 2017-08-05 20:13+0000\n"
+"PO-Revision-Date: 2017-08-08 18:01+0530\n"
+"Last-Translator: ബാലശങ്കർ സി <balasankarc@autistici.org>\n"
 "Language-Team: Swatantra Malayalam Computing\n"
 "Language: ml\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.7.1\n"
+"X-Generator: Poedit 2.0.2\n"
 "X-Project-Style: gnome\n"
 
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:788
-#: ../src/daemon/goadaemon.c:1034
+#: ../src/daemon/goadaemon.c:1172 ../src/daemon/goadaemon.c:1456
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "ദേതാവിനെ കണ്ടുപിടിക്കുന്നതിൽ പരാജയം: %s"
 
+#: ../src/daemon/goadaemon.c:1399
+msgid "IsLocked property is set for account"
+msgstr "IsLocked വിശേഷത അക്കൌണ്ടിനു് സജ്ജമാക്കിയിട്ടുണ്ട്"
+
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1022
+#: ../src/daemon/goadaemon.c:1444
 msgid "ProviderType property is not set for account"
 msgstr "ProviderType വിശേഷത അക്കൌണ്ടിനു് സജ്ജമാക്കിയിട്ടില്ല"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:234
-#: ../src/goabackend/goahttpclient.c:175
-#, fuzzy, c-format
-#| msgid "Code: %u - Unexpected response from server"
-msgid "Code: %u — Unexpected response from server"
-msgstr "കോഡ്: %u - സെര്‍വറില്‍ നിന്നും അപ്രതീക്ഷിതമായ മറുപടി"
-
-#. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:250
+#: ../src/goabackend/goaewsclient.c:238
 #, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "ഓട്ടോഡിസ്കവര്‍ മറുപടി എക്സ്എംഎല്‍ പാഴ്സ് ചെയ്യുന്നതില്‍ പരാജയം"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: ../src/goabackend/goaewsclient.c:261
-#: ../src/goabackend/goaewsclient.c:276
-#: ../src/goabackend/goaewsclient.c:291
-#, fuzzy, c-format
-#| msgid "Failed to find Response element"
-msgid "Failed to find ‘%s’ element"
-msgstr "റസ്പോണ്‍സ് എലമെന്റ് കണ്ടുപിടിയ്ക്കുന്നതില്‍ പരാജയം"
+#: ../src/goabackend/goaewsclient.c:249 ../src/goabackend/goaewsclient.c:264 ../src/goabackend/goaewsclient.c:279
+#, c-format
+msgid "Failed to find “%s” element"
+msgstr "\"%s\" എലമെന്റ് കണ്ടുപിടിയ്ക്കുന്നതില്‍ പരാജയം"
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:308
+#: ../src/goabackend/goaewsclient.c:300
 #, c-format
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "ഓട്ടോഡിസ്കവര്‍ റസ്പോണ്‍സില്‍ ASUrl, OABUrl എന്നിവ കണ്ടുപിടിയ്ക്കുന്നതില്‍ പരാജയം"
 
-#: ../src/goabackend/goaexchangeprovider.c:79
+#: ../src/goabackend/goaexchangeprovider.c:51
 msgid "Microsoft Exchange"
 msgstr "മൈക്രോസോഫ്റ്റ് എക്സ്ചെയിഞ്ച്"
-
-#. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:317
-#: ../src/goabackend/goaexchangeprovider.c:1028
-#: ../src/goabackend/goaowncloudprovider.c:403
-#: ../src/goabackend/goaowncloudprovider.c:1190
-#, fuzzy, c-format
-#| msgid "Did not find password with identity `%s' in credentials"
-msgid "Did not find password with identity ‘%s’ in credentials"
-msgstr "`%s' ഉപയോക്താവിനുള്ള രഹസ്യവാക്ക് കണ്ടുപിടിക്കുവാനായില്ല"
 
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
 #.
-#: ../src/goabackend/goaexchangeprovider.c:345
-#: ../src/goabackend/goaowncloudprovider.c:426
-#, fuzzy, c-format
-#| msgid "Invalid password with username `%s' (%s, %d): "
-msgid "Invalid password with username ‘%s’ (%s, %d): "
-msgstr "`%s' (%s, %d) ഉപയോക്താവിനുള്ള രഹസ്യവാക്ക് തെറ്റ്: "
+#: ../src/goabackend/goaexchangeprovider.c:248 ../src/goabackend/goalastfmprovider.c:287
+#: ../src/goabackend/goaowncloudprovider.c:299
+#, c-format
+msgid "Invalid password with username “%s” (%s, %d): "
+msgstr "\"%s\" (%s, %d) ഉപയോക്താവിനുള്ള രഹസ്യവാക്ക് തെറ്റ്: "
 
-#: ../src/goabackend/goaexchangeprovider.c:499
-#: ../src/goabackend/goaimapsmtpprovider.c:707
+#: ../src/goabackend/goaexchangeprovider.c:396 ../src/goabackend/goaimapsmtpprovider.c:686
 msgid "_E-mail"
 msgstr "_ഈമെയില്‍"
 
-#: ../src/goabackend/goaexchangeprovider.c:500
-#: ../src/goabackend/goaimapsmtpprovider.c:727
-#: ../src/goabackend/goaimapsmtpprovider.c:747
-#: ../src/goabackend/goaowncloudprovider.c:655
+#: ../src/goabackend/goaexchangeprovider.c:397 ../src/goabackend/goaimapsmtpprovider.c:706
+#: ../src/goabackend/goaimapsmtpprovider.c:726 ../src/goabackend/goalastfmprovider.c:429
+#: ../src/goabackend/goaowncloudprovider.c:538
 msgid "_Password"
 msgstr "_രഹസ്യവാക്ക്"
 
-#: ../src/goabackend/goaexchangeprovider.c:503
+#: ../src/goabackend/goaexchangeprovider.c:400
 msgid "_Custom"
 msgstr "_യഥേഷ്ടം"
 
-#: ../src/goabackend/goaexchangeprovider.c:514
-#: ../src/goabackend/goaimapsmtpprovider.c:726
-#: ../src/goabackend/goaimapsmtpprovider.c:746
-#: ../src/goabackend/goakerberosprovider.c:1132
-#: ../src/goabackend/goaowncloudprovider.c:654
+#: ../src/goabackend/goaexchangeprovider.c:411 ../src/goabackend/goaimapsmtpprovider.c:705
+#: ../src/goabackend/goaimapsmtpprovider.c:725 ../src/goabackend/goakerberosprovider.c:739
+#: ../src/goabackend/goalastfmprovider.c:428 ../src/goabackend/goaowncloudprovider.c:537
 msgid "User_name"
 msgstr "ഉപയോക്തൃ_നാമം"
 
-#: ../src/goabackend/goaexchangeprovider.c:515
-#: ../src/goabackend/goaowncloudprovider.c:653
+#: ../src/goabackend/goaexchangeprovider.c:412 ../src/goabackend/goaowncloudprovider.c:536
 msgid "_Server"
 msgstr "_സര്‍വര്‍"
 
-#: ../src/goabackend/goaexchangeprovider.c:545
-#: ../src/goabackend/goaimapsmtpprovider.c:779
-#: ../src/goabackend/goakerberosprovider.c:1157
-#: ../src/goabackend/goaowncloudprovider.c:684
+#. --
+#: ../src/goabackend/goaexchangeprovider.c:422 ../src/goabackend/goaimapsmtpprovider.c:738
+#: ../src/goabackend/goakerberosprovider.c:744 ../src/goabackend/goalastfmprovider.c:437
+#: ../src/goabackend/goaowncloudprovider.c:552 ../src/goabackend/goatelepathyprovider.c:651
+msgid "_Cancel"
+msgstr "റദ്ദാക്കുക (_C)"
+
+#: ../src/goabackend/goaexchangeprovider.c:423 ../src/goabackend/goakerberosprovider.c:745
+#: ../src/goabackend/goalastfmprovider.c:438 ../src/goabackend/goaowncloudprovider.c:553
+msgid "C_onnect"
+msgstr "ബന്ധിപ്പിയ്ക്കുക (_o)"
+
+#: ../src/goabackend/goaexchangeprovider.c:439 ../src/goabackend/goaimapsmtpprovider.c:754
+#: ../src/goabackend/goakerberosprovider.c:761 ../src/goabackend/goalastfmprovider.c:454
+#: ../src/goabackend/goaowncloudprovider.c:568
 msgid "Connecting…"
 msgstr "ബന്ധിപ്പിച്ചുകൊണ്ടിരിയ്ക്കുന്നു…"
 
-#: ../src/goabackend/goaexchangeprovider.c:650
-#: ../src/goabackend/goaexchangeprovider.c:845
-#: ../src/goabackend/goaimapsmtpprovider.c:939
-#: ../src/goabackend/goaimapsmtpprovider.c:974
-#: ../src/goabackend/goaimapsmtpprovider.c:1062
-#: ../src/goabackend/goaimapsmtpprovider.c:1318
-#: ../src/goabackend/goaimapsmtpprovider.c:1391
-#: ../src/goabackend/goakerberosprovider.c:1548
-#: ../src/goabackend/goaoauth2provider.c:1136
-#: ../src/goabackend/goaoauthprovider.c:1041
-#: ../src/goabackend/goaowncloudprovider.c:795
-#: ../src/goabackend/goaowncloudprovider.c:1008
-#: ../src/goabackend/goatelepathyprovider.c:487
-#: ../src/goabackend/goatelepathyprovider.c:536
-#: ../src/goabackend/goatelepathyprovider.c:710
+#: ../src/goabackend/goaexchangeprovider.c:539 ../src/goabackend/goaexchangeprovider.c:733
+#: ../src/goabackend/goaimapsmtpprovider.c:916 ../src/goabackend/goaimapsmtpprovider.c:951
+#: ../src/goabackend/goaimapsmtpprovider.c:1043 ../src/goabackend/goaimapsmtpprovider.c:1312
+#: ../src/goabackend/goaimapsmtpprovider.c:1388 ../src/goabackend/goakerberosprovider.c:1155
+#: ../src/goabackend/goalastfmprovider.c:652 ../src/goabackend/goalastfmprovider.c:820
+#: ../src/goabackend/goamediaserverprovider.c:420 ../src/goabackend/goaoauth2provider.c:1062
+#: ../src/goabackend/goaoauthprovider.c:832 ../src/goabackend/goaowncloudprovider.c:671
+#: ../src/goabackend/goaowncloudprovider.c:888 ../src/goabackend/goatelepathyprovider.c:475
+#: ../src/goabackend/goatelepathyprovider.c:514 ../src/goabackend/goatelepathyprovider.c:682
 #, c-format
 msgid "Dialog was dismissed"
 msgstr "സംവാദം വേണ്ടെന്ന് വെച്ചു"
 
-#: ../src/goabackend/goaexchangeprovider.c:688
-#: ../src/goabackend/goaexchangeprovider.c:873
-#: ../src/goabackend/goaimapsmtpprovider.c:1004
-#: ../src/goabackend/goaimapsmtpprovider.c:1095
-#: ../src/goabackend/goaimapsmtpprovider.c:1342
-#: ../src/goabackend/goaimapsmtpprovider.c:1416
-#: ../src/goabackend/goaowncloudprovider.c:837
-#: ../src/goabackend/goaowncloudprovider.c:1029
+#: ../src/goabackend/goaexchangeprovider.c:577 ../src/goabackend/goaexchangeprovider.c:761
+#: ../src/goabackend/goaimapsmtpprovider.c:984 ../src/goabackend/goaimapsmtpprovider.c:1081
+#: ../src/goabackend/goaimapsmtpprovider.c:1339 ../src/goabackend/goaimapsmtpprovider.c:1416
+#: ../src/goabackend/goalastfmprovider.c:686 ../src/goabackend/goalastfmprovider.c:839
+#: ../src/goabackend/goaowncloudprovider.c:713 ../src/goabackend/goaowncloudprovider.c:912
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "സംവാദം വേണ്ടെന്ന് വെച്ചു (%s, %d): "
 
-#: ../src/goabackend/goaexchangeprovider.c:701
-#: ../src/goabackend/goaimapsmtpprovider.c:1017
-#: ../src/goabackend/goaimapsmtpprovider.c:1108
-#: ../src/goabackend/goaowncloudprovider.c:850
+#: ../src/goabackend/goaexchangeprovider.c:590 ../src/goabackend/goaimapsmtpprovider.c:997
+#: ../src/goabackend/goaimapsmtpprovider.c:1094 ../src/goabackend/goaowncloudprovider.c:726
 msgid "_Ignore"
 msgstr "_അവഗണിക്കുക"
 
-#: ../src/goabackend/goaexchangeprovider.c:706
-#: ../src/goabackend/goaexchangeprovider.c:892
-#: ../src/goabackend/goaimapsmtpprovider.c:1022
-#: ../src/goabackend/goaimapsmtpprovider.c:1113
-#: ../src/goabackend/goaimapsmtpprovider.c:1361
-#: ../src/goabackend/goaimapsmtpprovider.c:1435
-#: ../src/goabackend/goakerberosprovider.c:1658
-#: ../src/goabackend/goaowncloudprovider.c:855
-#: ../src/goabackend/goaowncloudprovider.c:1048
+#: ../src/goabackend/goaexchangeprovider.c:595 ../src/goabackend/goaexchangeprovider.c:780
+#: ../src/goabackend/goaimapsmtpprovider.c:1002 ../src/goabackend/goaimapsmtpprovider.c:1099
+#: ../src/goabackend/goaimapsmtpprovider.c:1358 ../src/goabackend/goaimapsmtpprovider.c:1435
+#: ../src/goabackend/goakerberosprovider.c:1262 ../src/goabackend/goalastfmprovider.c:698
+#: ../src/goabackend/goalastfmprovider.c:856 ../src/goabackend/goaowncloudprovider.c:731
+#: ../src/goabackend/goaowncloudprovider.c:931
 msgid "_Try Again"
 msgstr "_വീണ്ടും ശ്രമിയ്ക്കുക"
 
-#: ../src/goabackend/goaexchangeprovider.c:711
-#: ../src/goabackend/goaexchangeprovider.c:885
+#: ../src/goabackend/goaexchangeprovider.c:600 ../src/goabackend/goaexchangeprovider.c:773
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "മൈക്രോസോഫ്റ്റ് എക്സ്ചെയിഞ്ച് സര്‍വറിലേക്കു് കണക്ട് ചെയ്യുമ്പോള്‍ പിശക്"
 
-#. Translators: This is a label for a series of
-#. * options switches. For example: “Use for Mail”.
-#: ../src/goabackend/goaexchangeprovider.c:947
-#: ../src/goabackend/goafacebookprovider.c:398
-#: ../src/goabackend/goaflickrprovider.c:427
-#: ../src/goabackend/goagoogleprovider.c:531
-#: ../src/goabackend/goakerberosprovider.c:1731
-#: ../src/goabackend/goaowncloudprovider.c:1104
-#: ../src/goabackend/goatelepathyprovider.c:917
-#: ../src/goabackend/goawindowsliveprovider.c:455
-msgid "Use for"
-msgstr "എന്തിനുപയോഗിയ്ക്കുന്നു"
-
-#: ../src/goabackend/goaexchangeprovider.c:949
-#: ../src/goabackend/goagoogleprovider.c:533
-#: ../src/goabackend/goawindowsliveprovider.c:457
-msgid "_Mail"
-msgstr "_മെയില്‍"
-
-#: ../src/goabackend/goaexchangeprovider.c:954
-#: ../src/goabackend/goagoogleprovider.c:538
-#: ../src/goabackend/goaowncloudprovider.c:1106
-msgid "Cale_ndar"
-msgstr "_കലണ്ടര്‍"
-
-#: ../src/goabackend/goaexchangeprovider.c:959
-#: ../src/goabackend/goagoogleprovider.c:543
-#: ../src/goabackend/goaowncloudprovider.c:1111
-msgid "_Contacts"
-msgstr "_വിലാസങ്ങള്‍"
-
-#: ../src/goabackend/goafacebookprovider.c:82
+#: ../src/goabackend/goafacebookprovider.c:56
 msgid "Facebook"
 msgstr "ഫേസ്ബുക്ക്"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:211
-#: ../src/goabackend/goaflickrprovider.c:189
-#: ../src/goabackend/goagoogleprovider.c:210
-#: ../src/goabackend/goatwitterprovider.c:166
-#: ../src/goabackend/goawindowsliveprovider.c:197
-#: ../src/goabackend/goayahooprovider.c:187
-#, fuzzy, c-format
-#| msgid ""
-#| "Expected status 200 when requesting user id, instead got status %d (%s)"
+#: ../src/goabackend/goafacebookprovider.c:183 ../src/goabackend/goaflickrprovider.c:146
+#: ../src/goabackend/goafoursquareprovider.c:154 ../src/goabackend/goagoogleprovider.c:191
+#: ../src/goabackend/goatodoistprovider.c:193 ../src/goabackend/goawindowsliveprovider.c:159
+#, c-format
 msgid "Expected status 200 when requesting your identity, instead got status %d (%s)"
-msgstr "യൂസര്‍ ഐഡിക്ക് അപേക്ഷിച്ചപ്പോള്‍ പ്രതീക്ഷിച്ച സ്ഥിതി 200 പകരം ലഭിച്ചത് സ്ഥിതി %d (%s) ആണ്"
+msgstr "താങ്കൾ ആരാണെന്നറിയാനുള്ള അപേക്ഷയുടെ മറുപടിയ്ക്ക് പ്രതീക്ഷിച്ച സ്ഥിതി 200, പക്ഷേ ലഭിച്ചത് സ്ഥിതി %d (%s) ആണ്"
 
-#: ../src/goabackend/goafacebookprovider.c:230
-#: ../src/goabackend/goafacebookprovider.c:242
-#: ../src/goabackend/goafacebookprovider.c:252
-#: ../src/goabackend/goaflickrprovider.c:208
-#: ../src/goabackend/goaflickrprovider.c:220
-#: ../src/goabackend/goaflickrprovider.c:230
-#: ../src/goabackend/goaflickrprovider.c:240
-#: ../src/goabackend/goaflickrprovider.c:250
-#: ../src/goabackend/goagoogleprovider.c:229
-#: ../src/goabackend/goagoogleprovider.c:241
-#: ../src/goabackend/goaoauth2provider.c:682
-#: ../src/goabackend/goaoauth2provider.c:712
-#: ../src/goabackend/goaoauth2provider.c:724
-#: ../src/goabackend/goatwitterprovider.c:185
-#: ../src/goabackend/goatwitterprovider.c:197
-#: ../src/goabackend/goatwitterprovider.c:207
-#: ../src/goabackend/goawindowsliveprovider.c:216
-#: ../src/goabackend/goawindowsliveprovider.c:228
-#: ../src/goabackend/goawindowsliveprovider.c:240
-#: ../src/goabackend/goayahooprovider.c:206
-#: ../src/goabackend/goayahooprovider.c:218
-#: ../src/goabackend/goayahooprovider.c:229
-#: ../src/goabackend/goayahooprovider.c:275
-#: ../src/goabackend/goayahooprovider.c:287
-#: ../src/goabackend/goayahooprovider.c:298
+#. TODO: more specific
+#: ../src/goabackend/goafacebookprovider.c:202 ../src/goabackend/goafacebookprovider.c:213
+#: ../src/goabackend/goafacebookprovider.c:219 ../src/goabackend/goaflickrprovider.c:165
+#: ../src/goabackend/goaflickrprovider.c:176 ../src/goabackend/goaflickrprovider.c:187
+#: ../src/goabackend/goaflickrprovider.c:196 ../src/goabackend/goaflickrprovider.c:209
+#: ../src/goabackend/goafoursquareprovider.c:173 ../src/goabackend/goafoursquareprovider.c:184
+#: ../src/goabackend/goafoursquareprovider.c:195 ../src/goabackend/goafoursquareprovider.c:206
+#: ../src/goabackend/goafoursquareprovider.c:215 ../src/goabackend/goafoursquareprovider.c:228
+#: ../src/goabackend/goagoogleprovider.c:210 ../src/goabackend/goagoogleprovider.c:221
+#: ../src/goabackend/goalastfmprovider.c:212 ../src/goabackend/goalastfmprovider.c:221
+#: ../src/goabackend/goalastfmprovider.c:230 ../src/goabackend/goalastfmprovider.c:238
+#: ../src/goabackend/goalastfmprovider.c:244 ../src/goabackend/goalastfmprovider.c:512
+#: ../src/goabackend/goalastfmprovider.c:521 ../src/goabackend/goalastfmprovider.c:538
+#: ../src/goabackend/goalastfmprovider.c:544 ../src/goabackend/goaoauth2provider.c:716
+#: ../src/goabackend/goaoauth2provider.c:746 ../src/goabackend/goaoauth2provider.c:757
+#: ../src/goabackend/goatodoistprovider.c:212 ../src/goabackend/goatodoistprovider.c:223
+#: ../src/goabackend/goatodoistprovider.c:234 ../src/goabackend/goautils.c:313 ../src/goabackend/goawindowsliveprovider.c:178
+#: ../src/goabackend/goawindowsliveprovider.c:189 ../src/goabackend/goawindowsliveprovider.c:198
+#: ../src/goabackend/goawindowsliveprovider.c:211
 #, c-format
 msgid "Could not parse response"
 msgstr "മറുപടി പാഴ്സ് ചെയ്യുവാന്‍ സാധ്യമായില്ല"
 
-#: ../src/goabackend/goafacebookprovider.c:400
-#: ../src/goabackend/goagoogleprovider.c:548
-#: ../src/goabackend/goatelepathyprovider.c:919
-#: ../src/goabackend/goawindowsliveprovider.c:462
-msgid "C_hat"
-msgstr "_സല്ലാപ്പം"
-
-#: ../src/goabackend/goaflickrprovider.c:83
+#: ../src/goabackend/goaflickrprovider.c:55
 msgid "Flickr"
 msgstr "ഫ്ലിക്കര്‍"
 
-#: ../src/goabackend/goaflickrprovider.c:328
-#: ../src/goabackend/goayahooprovider.c:350
+#: ../src/goabackend/goaflickrprovider.c:283
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "നിങ്ങളുടെ സിസ്റ്റത്തിലെ സമയം തെറ്റാണു്. തീയതി, സമയ ക്രമീകരണങ്ങള്‍ പരിശോധിയ്ക്കുക."
 
-#: ../src/goabackend/goaflickrprovider.c:429
-msgid "_Photos"
-msgstr "_ചിത്രങ്ങള്‍"
+#: ../src/goabackend/goafoursquareprovider.c:57
+msgid "Foursquare"
+msgstr "ഫോർസ്ക്വയർ"
 
-#: ../src/goabackend/goagoogleprovider.c:82
+#: ../src/goabackend/goagoogleprovider.c:56
 msgid "Google"
 msgstr "ഗൂഗിള്‍"
 
-#: ../src/goabackend/goagoogleprovider.c:553
-#: ../src/goabackend/goaowncloudprovider.c:1116
-#: ../src/goabackend/goawindowsliveprovider.c:467
-msgid "_Documents"
-msgstr "_രേഖകള്‍"
-
 #. TODO: more specific
-#: ../src/goabackend/goaimapauthlogin.c:99
-#: ../src/goabackend/goasmtpauthplain.c:146
+#: ../src/goabackend/goaimapauthlogin.c:89 ../src/goabackend/goasmtpauth.c:155
 #, c-format
 msgid "Service not available"
 msgstr "സേവനം ലഭ്യമല്ല"
 
 #. TODO: more specific
-#: ../src/goabackend/goaimapauthlogin.c:120
-#: ../src/goabackend/goasmtpauthplain.c:115
+#: ../src/goabackend/goaimapauthlogin.c:109 ../src/goabackend/goalastfmprovider.c:529 ../src/goabackend/goasmtpauth.c:108
+#: ../src/goabackend/goautils.c:883
 #, c-format
 msgid "Authentication failed"
 msgstr "ആധികാരത ഉറപ്പാക്കൽ പരാജയപ്പെട്ടു"
 
-#: ../src/goabackend/goaimapauthlogin.c:145
-#: ../src/goabackend/goasmtpauthplain.c:646
+#: ../src/goabackend/goaimapauthlogin.c:134
 #, c-format
 msgid "Server does not support PLAIN"
 msgstr "സെർവർ PLAIN പിന്തുണയ്ക്കുന്നില്ല"
 
-#: ../src/goabackend/goaimapauthlogin.c:199
-#: ../src/goabackend/goasmtpauthplain.c:751
+#: ../src/goabackend/goaimapauthlogin.c:186 ../src/goabackend/goasmtpauth.c:606
 #, c-format
 msgid "Server does not support STARTTLS"
 msgstr "സെർവർ STARTTLS പിന്തുണയ്ക്കുന്നില്ല"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:82
+#: ../src/goabackend/goaimapsmtpprovider.c:61
 msgid "IMAP and SMTP"
 msgstr "IMAP ഉം SMTP ഉം"
-
-#. Translators: the first parameter is a field name. The second is
-#. * a GOA account identifier.
-#: ../src/goabackend/goaimapsmtpprovider.c:364
-#: ../src/goabackend/goaimapsmtpprovider.c:422
-#, fuzzy, c-format
-#| msgid "Did not find password with identity `%s' in credentials"
-msgid "Did not find %s with identity ‘%s’ in credentials"
-msgstr "`%s' ഉപയോക്താവിനുള്ള രഹസ്യവാക്ക് കണ്ടുപിടിക്കുവാനായില്ല"
 
 #. Translators: the first %s is a field name. The
 #. * second %s is the IMAP
@@ -337,12 +241,10 @@ msgstr "`%s' ഉപയോക്താവിനുള്ള രഹസ്യവാ
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:395
-#: ../src/goabackend/goaimapsmtpprovider.c:455
-#, fuzzy, c-format
-#| msgid "Invalid password with username `%s' (%s, %d): "
-msgid "Invalid %s with username ‘%s’ (%s, %d): "
-msgstr "`%s' (%s, %d) ഉപയോക്താവിനുള്ള രഹസ്യവാക്ക് തെറ്റ്: "
+#: ../src/goabackend/goaimapsmtpprovider.c:364 ../src/goabackend/goaimapsmtpprovider.c:415
+#, c-format
+msgid "Invalid %s with username “%s” (%s, %d): "
+msgstr "ഉപയോക്താവിനുള്ള %s അസാധുവാണ് - “%s” (%s, %d) : "
 
 #. Translators: the following four strings are used to show a
 #. * combo box similar to the one in the evolution module.
@@ -350,461 +252,525 @@ msgstr "`%s' (%s, %d) ഉപയോക്താവിനുള്ള രഹസ്
 #. *             STARTTLS after connecting
 #. *             SSL on a dedicated port
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:642
+#: ../src/goabackend/goaimapsmtpprovider.c:603
 msgid "_Encryption"
 msgstr "_രഹസ്യകോഡിംഗ്"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:645
+#: ../src/goabackend/goaimapsmtpprovider.c:606
 msgid "None"
 msgstr "ഒന്നുമില്ല"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:648
+#: ../src/goabackend/goaimapsmtpprovider.c:609
 msgid "STARTTLS after connecting"
 msgstr "കണക്ട് ചെയ്ത ശേഷം STARTTLS"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:651
+#: ../src/goabackend/goaimapsmtpprovider.c:612
 msgid "SSL on a dedicated port"
 msgstr "SSL ഒരു പ്രത്യേക പോർട്ടിൽ"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:708
+#: ../src/goabackend/goaimapsmtpprovider.c:687
 msgid "_Name"
 msgstr "_പേര്"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:725
+#: ../src/goabackend/goaimapsmtpprovider.c:704
 msgid "IMAP _Server"
 msgstr "IMAP _സര്‍വര്‍"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:745
+#: ../src/goabackend/goaimapsmtpprovider.c:724
 msgid "SMTP _Server"
 msgstr "SMTP _സര്‍വര്‍"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1027
-#: ../src/goabackend/goaimapsmtpprovider.c:1354
+#: ../src/goabackend/goaimapsmtpprovider.c:739 ../src/goabackend/goaimapsmtpprovider.c:1023
+#: ../src/goabackend/goaimapsmtpprovider.c:1368
+msgid "_Forward"
+msgstr "മുമ്പോട്ട് (_F)"
+
+#: ../src/goabackend/goaimapsmtpprovider.c:1007 ../src/goabackend/goaimapsmtpprovider.c:1351
 msgid "Error connecting to IMAP server"
 msgstr "IMAP സര്‍വറിലേക്കു് ബന്ധിപ്പിക്കുമ്പോള്‍ ചെയ്യുമ്പോള്‍ പിശക്"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1118
-#: ../src/goabackend/goaimapsmtpprovider.c:1428
+#: ../src/goabackend/goaimapsmtpprovider.c:1104 ../src/goabackend/goaimapsmtpprovider.c:1428
 msgid "Error connecting to SMTP server"
 msgstr "SMTP സര്‍വറിലേക്കു് ബന്ധിപ്പിക്കുമ്പോള്‍ ചെയ്യുമ്പോള്‍ പിശക്"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1527
+#: ../src/goabackend/goaimapsmtpprovider.c:1541
 msgid "E-mail"
 msgstr "ഈമെയില്‍"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1531
+#: ../src/goabackend/goaimapsmtpprovider.c:1545
 msgid "Name"
 msgstr "പേര്"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1541
-#: ../src/goabackend/goaimapsmtpprovider.c:1544
+#: ../src/goabackend/goaimapsmtpprovider.c:1555 ../src/goabackend/goaimapsmtpprovider.c:1559
 msgid "IMAP"
 msgstr "IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1555
-#: ../src/goabackend/goaimapsmtpprovider.c:1558
+#: ../src/goabackend/goaimapsmtpprovider.c:1570 ../src/goabackend/goaimapsmtpprovider.c:1574
 msgid "SMTP"
 msgstr "SMTP"
 
-#: ../src/goabackend/goakerberosprovider.c:87
+#: ../src/goabackend/goakerberosprovider.c:102
 msgid "Enterprise Login (Kerberos)"
 msgstr "എന്റര്‍പ്രൈസ് പ്രവേശനം (കര്‍ബറോസ്)"
 
-#: ../src/goabackend/goakerberosprovider.c:455
-msgid "Identity service returned invalid key"
-msgstr "ഐ‍ഡന്റിറ്റി സര്‍വീസ് തെറ്റായ കീ ലഭ്യമാക്കി"
+#: ../src/goabackend/goakerberosprovider.c:300
+#, c-format
+msgid "Ticketing is disabled for account"
+msgstr "ഈ അക്കൗണ്ടിന് ടിക്കറ്റിങ്ങ് അനുവദിച്ചിട്ടില്ല"
 
-#: ../src/goabackend/goakerberosprovider.c:727
-#, fuzzy, c-format
-#| msgid "Could not find saved credentials for principal `%s' in keyring"
-msgid "Could not find saved credentials for principal ‘%s’ in keyring"
-msgstr "കീറിങിലുള്ള പ്രധാന `%s'-നു് സൂക്ഷിച്ച ആധികാരിക വിവരങ്ങള്‍ ലഭ്യമായില്ല"
+#: ../src/goabackend/goakerberosprovider.c:325
+#, c-format
+msgid "Could not find saved credentials for principal “%s” in keyring"
+msgstr "താക്കോൽക്കൂട്ടത്തിൽ പ്രധാന `%s'-നു് സൂക്ഷിച്ച യോഗ്യതകൾ ലഭ്യമായില്ല"
 
-#: ../src/goabackend/goakerberosprovider.c:740
-#, fuzzy, c-format
-#| msgid "Did not find password for principal `%s' in credentials"
-msgid "Did not find password for principal ‘%s’ in credentials"
-msgstr "പ്രധാന `%s'-നുള്ള രഹസ്യവാക്ക് ലഭ്യമായില്ല"
+#: ../src/goabackend/goakerberosprovider.c:338
+#, c-format
+msgid "Did not find password for principal “%s” in credentials"
+msgstr "പ്രധാന \"%s\"നുള്ള രഹസ്യവാക്ക് യോഗ്യതകളിൽ ലഭ്യമായില്ല"
 
-#: ../src/goabackend/goakerberosprovider.c:1124
+#: ../src/goabackend/goakerberosprovider.c:731
 msgid "_Domain"
 msgstr "_ഡൊമെയിന്‍"
 
-#: ../src/goabackend/goakerberosprovider.c:1125
+#: ../src/goabackend/goakerberosprovider.c:732
 msgid "Enterprise domain or realm name"
 msgstr "എന്റര്‍പ്രൈസ് ഡൊമെയിന്‍ അല്ലെങ്കില്‍ സാമ്രാജ്യത്തിന്റെ പേരു്"
 
-#: ../src/goabackend/goakerberosprovider.c:1357
-#: ../src/goaidentity/goaidentityservice.c:1114
+#: ../src/goabackend/goakerberosprovider.c:974 ../src/goaidentity/goaidentityservice.c:1084
 msgid "Log In to Realm"
 msgstr "സാമ്രാജ്യത്തിലേക്കു് പ്രവേശിയ്ക്കുക"
 
-#: ../src/goabackend/goakerberosprovider.c:1358
+#: ../src/goabackend/goakerberosprovider.c:975
 msgid "Please enter your password below."
 msgstr "ദയവായി താഴെ നിങ്ങളുടെ രഹസ്യവാക്ക് നല്‍കുക."
 
-#: ../src/goabackend/goakerberosprovider.c:1359
+#: ../src/goabackend/goakerberosprovider.c:976
 msgid "Remember this password"
 msgstr "ഈ രഹസ്യവാക്ക് ഓര്‍ത്തു്വയ്ക്കുക"
 
-#: ../src/goabackend/goakerberosprovider.c:1498
+#: ../src/goabackend/goakerberosprovider.c:1110
 #, c-format
 msgid "The domain is not valid"
 msgstr "ഈ ഡൊമൈന്‍ സാധുവല്ല"
 
-#: ../src/goabackend/goakerberosprovider.c:1653
+#: ../src/goabackend/goakerberosprovider.c:1257
 msgid "Error connecting to enterprise identity server"
 msgstr "എന്റര്‍പ്രൈസ് ഐഡന്റി സര്‍വറിലേക്കു് കണക്ട് ചെയ്യുന്നതില്‍ പിശക്"
 
-#: ../src/goabackend/goakerberosprovider.c:1733
-msgid "Network _Resources"
-msgstr "നെറ്റ്‌വര്‍ക്ക്  സ്രോ_തസ്സുകള്‍"
+#: ../src/goabackend/goakerberosprovider.c:1604
+#, c-format
+msgid "Identity service returned invalid key"
+msgstr "ഐ‍ഡന്റിറ്റി സര്‍വീസ് തെറ്റായ കീ ലഭ്യമാക്കി"
+
+#: ../src/goabackend/goalastfmprovider.c:65
+msgid "Last.fm"
+msgstr "ലാസ്റ്റ്.എഫെം"
+
+#: ../src/goabackend/goalastfmprovider.c:700 ../src/goabackend/goalastfmprovider.c:850
+msgid "Error connecting to Last.fm"
+msgstr "ലാസ്റ്റ്.എഫെമിലേക്ക് ബന്ധിപ്പിക്കുന്നതിൽ പിഴവ്"
+
+#: ../src/goabackend/goamediaserverprovider.c:63
+msgid "Media Server"
+msgstr "മീഡിയ സര്‍വര്‍"
+
+#: ../src/goabackend/goamediaserverprovider.c:316
+msgid "Personal content can be added to your applications through a media server account."
+msgstr "ഒരു മീഡിയ സെർവർ അക്കൗണ്ടിലൂടെ താങ്കളുടെ പ്രയോഗങ്ങളിലേക്ക് വ്യക്തിഗതവിവരങ്ങൾ ചേർക്കാവുന്നതാണ്."
+
+#: ../src/goabackend/goamediaserverprovider.c:329
+msgid "Available Media Servers"
+msgstr "ലഭ്യമായ മീഡിയ സെർവറുകൾ"
+
+#: ../src/goabackend/goamediaserverprovider.c:360
+msgid "No media servers found"
+msgstr "മീഡിയ സെർവറുകളൊന്നും കണ്ടെത്തിയില്ല"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:658
-#: ../src/goabackend/goaoauthprovider.c:586
+#: ../src/goabackend/goaoauth2provider.c:692 ../src/goabackend/goaoauthprovider.c:538
 #, c-format
 msgid "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr "ടോക്കണിന് അപേക്ഷിച്ചപ്പോള്‍ പ്രതീക്ഷിച്ച സ്ഥിതി 200 ന് പകരം ലഭിച്ചത് %d (%s) ആണ്"
 
-#: ../src/goabackend/goaoauth2provider.c:965
-#, fuzzy, c-format
-#| msgid "Authorization response was \"%s\""
-msgid "Authorization response was ‘%s’"
-msgstr "അനുമതി ചോദിച്ചപ്പോള്‍ മറുപടി \"%s\" ആയിരുന്നു"
+#: ../src/goabackend/goaoauth2provider.c:874
+msgid "Authorization response: "
+msgstr "അനുമതി ചോദിച്ചപ്പോൾ കിട്ടിയ മറുപടി: "
 
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:1062
+#: ../src/goabackend/goaoauth2provider.c:944
 #, c-format
-msgid "Paste authorization code obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr "<a href=\"%s\">അനുമതി താളില്‍</a> നിന്നും ലഭിച്ച കോഡ് നൽകുക:"
+msgid "Authorization response: %s"
+msgstr "അനുമതി ചോദിച്ചപ്പോള്‍ കിട്ടിയ മറുപടി: %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1162
-#: ../src/goabackend/goaoauthprovider.c:1072
+#: ../src/goabackend/goaoauth2provider.c:1088 ../src/goabackend/goaoauthprovider.c:863
 msgid "Error getting an Access Token: "
 msgstr "പ്രവേശന ടൊക്കണ്‍ ലഭ്യമാക്കുന്നതില്‍ പിശക്: "
 
-#: ../src/goabackend/goaoauth2provider.c:1177
-#: ../src/goabackend/goaoauthprovider.c:1085
+#: ../src/goabackend/goaoauth2provider.c:1103 ../src/goabackend/goaoauthprovider.c:876
 msgid "Error getting identity: "
 msgstr "തിരിച്ചറിയല്‍ ലഭ്യമാക്കുന്നതില്‍ പിശക്: "
 
-#: ../src/goabackend/goaoauth2provider.c:1389
-#: ../src/goabackend/goaoauthprovider.c:1391
-#, fuzzy, c-format
-#| msgid "Was asked to login as %s, but logged in as %s"
+#: ../src/goabackend/goaoauth2provider.c:1321 ../src/goabackend/goaoauthprovider.c:1164
+#, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
-msgstr "%s ആയാണു് അകത്തുകയറാന്‍ ആവശ്യപ്പെട്ടെങ്കിലും %s ആയാണ് അകത്തുകയറിയത്"
+msgstr "%s ആയാണു് പ്രവേശിക്കാൻ ആവശ്യപ്പെട്ടെങ്കിലും %s ആയാണ് പ്രവേശിച്ചത്"
 
-#: ../src/goabackend/goaoauth2provider.c:1548
+#: ../src/goabackend/goaoauth2provider.c:1473
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "അടയാളവാക്കുകളില്‍ access_token ഇല്ല"
 
-#: ../src/goabackend/goaoauth2provider.c:1587
-#: ../src/goabackend/goaoauthprovider.c:1619
+#: ../src/goabackend/goaoauth2provider.c:1512 ../src/goabackend/goaoauthprovider.c:1379
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "പ്രവേശന ടോക്കണ്‍ പുതുക്കുന്നതില്‍ പിശക് (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:609
+#: ../src/goabackend/goaoauthprovider.c:561
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "മറുപടി തലക്കെട്ടില്‍ acees_token ഉം access_token_secret ഉം കാണ്മാനില്ല"
 
-#: ../src/goabackend/goaoauthprovider.c:911
+#: ../src/goabackend/goaoauthprovider.c:746
 msgid "Error getting a Request Token: "
 msgstr "അപേക്ഷാ ടോക്കണ്‍ ലഭിക്കുന്നതില്‍  പിശക്: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:944
+#: ../src/goabackend/goaoauthprovider.c:777
 #, c-format
 msgid "Expected status 200 for getting a Request Token, instead got status %d (%s)"
-msgstr "അപേക്ഷാ ടോക്കണ്‍ ലഭിക്കുന്നതില്‍ പ്രതീക്ഷിച്ചിരുന്ന അവസ്ഥ 200 ന് പകരം ലഭിച്ചത് %d (%s) ആണ്"
+msgstr "അപേക്ഷാ ടോക്കണ്‍ ലഭിക്കുന്നതിനു് പ്രതീക്ഷിച്ച അവസ്ഥ 200, പക്ഷേ ലഭിച്ചത് %d (%s) ആണ്"
 
-#: ../src/goabackend/goaoauthprovider.c:961
+#: ../src/goabackend/goaoauthprovider.c:794
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "മറുപടി തലക്കെട്ടില്‍ request_token ഉം request_token_secret ഉം കാണ്മാനില്ല"
 
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:978
-#, c-format
-msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr "<a href=\"%s\">അനുമതി താളില്‍</a> നിന്നും ലഭിച്ച ടോക്കണ്‍ നൽകുക:"
-
-#: ../src/goabackend/goaoauthprovider.c:1575
+#: ../src/goabackend/goaoauthprovider.c:1335
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "access_token ഉം access_token_secret ഉം അടയാളവാക്കുകളിലില്ല"
 
-#: ../src/goabackend/goaowncloudprovider.c:87
-msgid "ownCloud"
-msgstr "ഔണ്‍ ക്ലൌഡ്"
+#: ../src/goabackend/goaowncloudprovider.c:68
+msgid "Nextcloud"
+msgstr "നെക്സ്റ്റ്ക്ലൗഡ്"
 
-#: ../src/goabackend/goaowncloudprovider.c:860
-#: ../src/goabackend/goaowncloudprovider.c:1041
+#: ../src/goabackend/goaowncloudprovider.c:736 ../src/goabackend/goaowncloudprovider.c:924
 msgid "Error connecting to ownCloud server"
 msgstr "ഔണ്‍ ക്ലൌഡ് സര്‍വറിലേക്കു് ബന്ധിപ്പിക്കുമ്പോള്‍ ചെയ്യുമ്പോള്‍ പിശക്"
 
-#: ../src/goabackend/goaowncloudprovider.c:1121
+#: ../src/goabackend/goapocketprovider.c:74
+msgid "Pocket"
+msgstr "പോക്കറ്റ്"
+
+#. TODO: more specific
+#: ../src/goabackend/goapocketprovider.c:249
+#, c-format
+msgid "No username or access_token"
+msgstr "ഉപയോക്തൃനാമമോ ആക്സസ് ടോക്കണോ ഇല്ല"
+
+#: ../src/goabackend/goaprovider.c:119
+msgid "_Mail"
+msgstr "_മെയില്‍"
+
+#: ../src/goabackend/goaprovider.c:124
+msgid "Cale_ndar"
+msgstr "_കലണ്ടര്‍"
+
+#: ../src/goabackend/goaprovider.c:129
+msgid "_Contacts"
+msgstr "_വിലാസങ്ങള്‍"
+
+#: ../src/goabackend/goaprovider.c:134 ../src/goabackend/goatelepathyprovider.c:951
+msgid "C_hat"
+msgstr "_സല്ലാപ്പം"
+
+#: ../src/goabackend/goaprovider.c:139
+msgid "_Documents"
+msgstr "_രേഖകള്‍"
+
+#: ../src/goabackend/goaprovider.c:144
+msgid "M_usic"
+msgstr "സംഗീതം (_u)"
+
+#: ../src/goabackend/goaprovider.c:149
+msgid "_Photos"
+msgstr "_ചിത്രങ്ങള്‍"
+
+#: ../src/goabackend/goaprovider.c:154
 msgid "_Files"
 msgstr "_ഫയലുകള്‍"
 
-#: ../src/goabackend/goaprovider.c:688
+#: ../src/goabackend/goaprovider.c:159
+msgid "Network _Resources"
+msgstr "നെറ്റ്‌വര്‍ക്ക്  സ്രോ_തസ്സുകള്‍"
+
+#: ../src/goabackend/goaprovider.c:164
+msgid "_Read Later"
+msgstr "പിന്നീട് വായിക്കുക (_R)"
+
+#: ../src/goabackend/goaprovider.c:169
+msgid "Prin_ters"
+msgstr "പ്രിന്ററുകൾ (_t)"
+
+#: ../src/goabackend/goaprovider.c:174
+msgid "_Maps"
+msgstr "ഭൂപടങ്ങൾ (_M)"
+
+#: ../src/goabackend/goaprovider.c:179
+msgid "T_o Do"
+msgstr "ചെയ്യാനുള്ളവ (_o)"
+
+#. Translators: This is a label for a series of
+#. * options switches. For example: “Use for Mail”.
+#: ../src/goabackend/goaprovider.c:613 ../src/goabackend/goatelepathyprovider.c:949
+msgid "Use for"
+msgstr "എന്തിനുപയോഗിയ്ക്കുന്നു"
+
+#: ../src/goabackend/goaprovider.c:868
+msgid "Account is disabled"
+msgstr "അക്കൗണ്ട് പ്രവർത്തനരഹിതമാണ്"
+
+#: ../src/goabackend/goaprovider.c:881
+msgid "Unknown error"
+msgstr "അറിയാത്ത പിഴവ്"
+
+#: ../src/goabackend/goaprovider.c:900
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "%s ല്‍ ensure_credentials_sync ലഭ്യമാക്കിയിട്ടില്ല"
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:161
+#: ../src/goabackend/goasmtpauth.c:170
 #, c-format
 msgid "TLS not available"
 msgstr "TLS ലഭ്യമല്ല"
 
-#. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:227
+#: ../src/goabackend/goasmtpauth.c:476
 #, c-format
-msgid "org.gnome.OnlineAccounts.Mail is not available"
-msgstr "org.gnome.OnlineAccounts.Mail ലഭ്യമല്ല"
+msgid "Unknown authentication mechanism"
+msgstr "അജ്ഞാതമായ ആധികാരികത ഉറപ്പാക്കൽ പ്രക്രിയ"
 
-#. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:237
-#, c-format
-msgid "Failed to parse email address"
-msgstr "ഇമെയില്‍ പാഴ്സ് ചെയ്യുന്നതില്‍ പരാജയം"
-
-#. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:249
-#, c-format
-msgid "Cannot do SMTP PLAIN without a domain"
-msgstr "ഡൊമയ്ൻ ഇല്ലാതെ SMTP PLAIN ചെയ്യാൻ സാധ്യമല്ല"
-
-#. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:287
-#, c-format
-msgid "Did not find smtp-password in credentials"
-msgstr "smtp രഹസ്യവാക്ക് കണ്ടുപിടിക്കുവാനായില്ല"
-
-#. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:298
-#, c-format
-msgid "Cannot do SMTP PLAIN without a password"
-msgstr "രഹസ്യവാക്ക് ഇല്ലാതെ ഇത്ചെയ്യാൻ സാധ്യമല്ല"
-
-#: ../src/goabackend/goatelepathyprovider.c:184
+#: ../src/goabackend/goatelepathyprovider.c:172
 #, c-format
 msgid "Telepathy chat account not found"
 msgstr "ടെലിപ്പതി ചാറ്റ് അക്കൗണ്ട് കണ്ടെത്താനായില്ല"
 
-#: ../src/goabackend/goatelepathyprovider.c:393
-#, fuzzy, c-format
-#| msgid "Failed to find Account element"
-msgid "Failed to initialize a GOA client"
-msgstr "അക്കൌണ്ട് എലമെന്റ് കണ്ടുപിടിയ്ക്കുന്നതില്‍ പരാജയം"
-
-#: ../src/goabackend/goatelepathyprovider.c:436
-#, fuzzy, c-format
-#| msgid "Failed to find a provider for: %s"
+#: ../src/goabackend/goatelepathyprovider.c:434
+#, c-format
 msgid "Failed to create a user interface for %s"
-msgstr "ദേതാവിനെ കണ്ടുപിടിക്കുന്നതിൽ പരാജയം: %s"
+msgstr "%s നു് വേണ്ടി ഒരു ഉപയോക്തൃ സമ്പർക്കമുഖം സൃഷ്ടിക്കാനായില്ല"
 
-#: ../src/goabackend/goatelepathyprovider.c:563
-#, fuzzy
-#| msgid "Connecting…"
+#: ../src/goabackend/goatelepathyprovider.c:540
 msgid "Connection Settings"
-msgstr "ബന്ധിപ്പിച്ചുകൊണ്ടിരിയ്ക്കുന്നു…"
+msgstr "ബന്ധത്തിന്റെ ക്രമീകരണങ്ങൾ"
 
-#: ../src/goabackend/goatelepathyprovider.c:672
+#: ../src/goabackend/goatelepathyprovider.c:646
 msgid "Personal Details"
 msgstr "സ്വകാര്യവിവരങ്ങൾ"
 
-#: ../src/goabackend/goatelepathyprovider.c:881
+#: ../src/goabackend/goatelepathyprovider.c:652
+msgid "_OK"
+msgstr "ശരി (_O)"
+
+#: ../src/goabackend/goatelepathyprovider.c:898
 msgid "Cannot save the connection parameters"
 msgstr "ബന്ധപ്പെടാനുള്ള വിവരങ്ങൾ സംരക്ഷിക്കാനായില്ല"
 
-#: ../src/goabackend/goatelepathyprovider.c:893
+#: ../src/goabackend/goatelepathyprovider.c:911
 msgid "Cannot save your personal information on the server"
 msgstr "സ്വകാര്യവിവരങ്ങൾ സെർവ്വറിൽ സംരക്ഷിക്കാനായില്ല"
 
 #. Connection Settings button
-#: ../src/goabackend/goatelepathyprovider.c:924
-#, fuzzy
-#| msgid "Connecting…"
+#: ../src/goabackend/goatelepathyprovider.c:956
 msgid "_Connection Settings"
-msgstr "ബന്ധിപ്പിച്ചുകൊണ്ടിരിയ്ക്കുന്നു…"
+msgstr "ബന്ധത്തിന്റെ ക്രമീകരണങ്ങൾ (_C)"
 
 #. Edit Personal Information button
-#: ../src/goabackend/goatelepathyprovider.c:928
+#: ../src/goabackend/goatelepathyprovider.c:960
 msgid "_Personal Details"
 msgstr "സ്വകാര്യവിവരങ്ങൾ"
 
-#: ../src/goabackend/goatwitterprovider.c:81
-msgid "Twitter"
-msgstr "ട്വിറ്റര്‍"
+#: ../src/goabackend/goatodoistprovider.c:58
+msgid "Todoist"
+msgstr "ടുഡൂയിസ്റ്റ്"
 
-#: ../src/goabackend/goautils.c:120
+#: ../src/goabackend/goautils.c:96
+msgid "Error logging into the account"
+msgstr "അക്കൗണ്ടിലേക്ക് പ്രവേശിക്കുന്നതിൽ പിഴവ്"
+
+#: ../src/goabackend/goautils.c:140
+msgid "Credentials have expired"
+msgstr "യോഗ്യതകളുടെ കാലാവധി കഴിഞ്ഞിരിക്കുന്നു."
+
+#: ../src/goabackend/goautils.c:144
+msgid "Sign in to enable this account."
+msgstr "ഈ അക്കൗണ്ട് പ്രവർത്തനസജ്ജമാക്കാൻ പ്രവേശിക്കുക."
+
+#: ../src/goabackend/goautils.c:148
+msgid "_Sign In"
+msgstr "പ്രവേശിക്കുക (_S)"
+
+#: ../src/goabackend/goautils.c:280
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "ഒരു %s അക്കൌണ്ട് %s-നു് നിലവിലുണ്ടു്"
 
-#. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:142
+#. Translators: this is the title of the "Add Account" and "Refresh
+#. * Account" dialogs. The %s is the name of the provider. eg.,
+#. * 'Google'.
+#.
+#: ../src/goabackend/goautils.c:333
 #, c-format
-msgid "%s account"
+msgid "%s Account"
 msgstr "%s അക്കൌണ്ട്"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:186
+#: ../src/goabackend/goautils.c:387
 msgid "Failed to delete credentials from the keyring"
 msgstr "കീറിങില്‍ നിന്നും ആധികാരികത ഉറപ്പാക്കുന്ന വിവരങ്ങള്‍ വെട്ടി നീക്കുന്നതില്‍ പരാജയം"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:238
+#: ../src/goabackend/goautils.c:435
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "കീറിങില്‍ നിന്നും ആധികാരികത ഉറപ്പാക്കുന്ന വിവരങ്ങള്‍ ലഭ്യമാക്കുന്നതില്‍ പരാജയം"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:248
+#: ../src/goabackend/goautils.c:445
 msgid "No credentials found in the keyring"
 msgstr "താക്കോല്‍കൂട്ടത്തില്‍ ആധികാരികത ഉറപ്പാക്കുന്ന വിവരങ്ങള്‍ ഒന്നുമില്ല"
 
-#: ../src/goabackend/goautils.c:261
+#: ../src/goabackend/goautils.c:458
 msgid "Error parsing result obtained from the keyring: "
 msgstr "ചാവിക്കൂട്ടത്തില്‍ നിന്ന് ഫലം കണ്ടുപിടിക്കുന്നതില്‍ പിശക്: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:304
+#: ../src/goabackend/goautils.c:499
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "%2$s തിരിച്ചറിയലിന്റെ GOA %1$s അടയാളവാക്കുകള്‍"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:321
+#: ../src/goabackend/goautils.c:516
 msgid "Failed to store credentials in the keyring"
 msgstr "കീറിങില്‍ നിന്നും ആധികാരികത ഉറപ്പാക്കുന്ന വിവരങ്ങള്‍ സൂക്ഷിക്കുന്നതില്‍ പരാജയം"
 
-#: ../src/goabackend/goautils.c:542
+#: ../src/goabackend/goautils.c:870
+msgid "Cannot resolve hostname"
+msgstr "ഹോസ്റ്റ്നെയിം കണ്ടെത്താനായില്ല"
+
+#: ../src/goabackend/goautils.c:874
+msgid "Cannot resolve proxy hostname"
+msgstr "പ്രോക്സി ഹോസ്റ്റ്നെയിം കണ്ടെത്താനായില്ല"
+
+#: ../src/goabackend/goautils.c:879
+msgid "Cannot find WebDAV endpoint"
+msgstr "വെബ്ഡാവ് വിലാസം കണ്ടെത്താനായില്ല"
+
+#: ../src/goabackend/goautils.c:888
+#, c-format
+msgid "Code: %u — Unexpected response from server"
+msgstr "കോഡ്: %u - സെര്‍വറില്‍ നിന്നും അപ്രതീക്ഷിതമായ മറുപടി"
+
+#: ../src/goabackend/goautils.c:904
 msgid "The signing certificate authority is not known."
 msgstr "സാക്ഷ്യപത്രം സാക്ഷ്യപ്പെടുത്തിയ ആളിനെ അറിയില്ല."
 
-#: ../src/goabackend/goautils.c:546
+#: ../src/goabackend/goautils.c:908
 msgid "The certificate does not match the expected identity of the site that it was retrieved from."
 msgstr "സാക്ഷ്യപത്രം കിട്ടിയ സൈറ്റിന്റെ തിരിച്ചറിയല്‍ സാക്ഷ്യപത്രവുമായി ചേരുന്നില്ല."
 
-#: ../src/goabackend/goautils.c:551
-#, fuzzy
-#| msgid "The certificate's activation time is still in the future."
+#: ../src/goabackend/goautils.c:913
 msgid "The certificate’s activation time is still in the future."
 msgstr "ഈ സാക്ഷ്യപത്രത്തിന്റെ ആരംഭ സമയം ഭാവിയിലാണ്."
 
-#: ../src/goabackend/goautils.c:555
+#: ../src/goabackend/goautils.c:917
 msgid "The certificate has expired."
 msgstr "സാക്ഷ്യപത്രത്തിന്റെ കാലാവധി കഴിഞ്ഞിരിക്കുന്നു."
 
-#: ../src/goabackend/goautils.c:559
+#: ../src/goabackend/goautils.c:921
 msgid "The certificate has been revoked."
 msgstr "ഈ സാക്ഷ്യപത്രം പിന്‍വലിച്ചതാണു്."
 
-#: ../src/goabackend/goautils.c:563
-#, fuzzy
-#| msgid "The certificate's algorithm is considered insecure."
+#: ../src/goabackend/goautils.c:925
 msgid "The certificate’s algorithm is considered insecure."
-msgstr "സാക്ഷ്യപത്രത്തിനുപയോഗിച്ചിരിക്കുന്ന ആല്‍ഗോരിതം സുരക്ഷിതമല്ല."
+msgstr "സാക്ഷ്യപത്രത്തിനുപയോഗിച്ചിരിക്കുന്ന അല്‍ഗോരിതം സുരക്ഷിതമല്ല."
 
-#: ../src/goabackend/goautils.c:567
+#: ../src/goabackend/goautils.c:929
 msgid "Invalid certificate."
 msgstr "അസാധുവായ സാക്ഷ്യപത്രം."
 
+#. TODO: more specific
+#: ../src/goabackend/goautils.c:964
+#, c-format
+msgid "Did not find %s with identity “%s” in credentials"
+msgstr "\"%s\" എന്ന വ്യക്തിത്വമുള്ള %sനെ യോഗ്യതകളിൽ കണ്ടെത്തിയില്ല"
+
 #. translators: %s here is the address of the web page
-#: ../src/goabackend/goawebview.c:74
+#: ../src/goabackend/goawebview.c:95
 #, c-format
 msgid "Loading “%s”…"
-msgstr "“%s” ലഭ്യമാക്കുന്നു..."
+msgstr "“%s” ലഭ്യമാക്കുന്നു…"
 
-#: ../src/goabackend/goawindowsliveprovider.c:84
-msgid "Windows Live"
-msgstr "വിന്‍ഡോസ് ലൈവ്"
+#: ../src/goabackend/goawindowsliveprovider.c:56
+msgid "Microsoft"
+msgstr "മൈക്രോസോഫ്റ്റ്"
 
-#: ../src/goabackend/goayahooprovider.c:81
-msgid "Yahoo"
-msgstr "യാഹൂ"
-
-#: ../src/goabackend/goayahooprovider.c:255
-#, c-format
-msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-msgstr "പേര് അപേക്ഷിച്ചപ്പോള്‍ പ്രതീക്ഷിച്ച സ്ഥിതി 200 ന് പകരം ലഭിച്ചത് %d (%s) ആണ്"
-
-#: ../src/goaidentity/goaalarm.c:216
-msgid "Time"
-msgstr "സമയം"
-
-#: ../src/goaidentity/goaalarm.c:217
-msgid "Time to fire"
-msgstr "ലഭ്യമാക്കുന്നതിനുള്ള സമയം"
-
-#: ../src/goaidentity/goaidentityservice.c:379
-msgid "initial secret passed before secret key exchange"
-msgstr "രഹസ്യ കീ കൈമാറ്റത്തിനു് പകരം പ്രാരംഭ രഹസ്യം നല്‍കിയിരിയ്ക്കുന്നു"
-
-#: ../src/goaidentity/goaidentityservice.c:571
+#: ../src/goaidentity/goaidentityservice.c:569
 msgid "Initial secret key is invalid"
 msgstr "പ്രാരംഭ രഹസ്യ കീ അസാധുവാണു്"
 
-#: ../src/goaidentity/goaidentityservice.c:1119
+#: ../src/goaidentity/goaidentityservice.c:1089
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "നെറ്റ്‌വര്‍ക്ക് സാമ്രാജ്യം %s-നു് പ്രവേശനത്തിനു് ചില വിവരങ്ങള്‍ ആവശ്യമുണ്ടു്."
 
-#: ../src/goaidentity/goakerberosidentity.c:264
-#: ../src/goaidentity/goakerberosidentity.c:273
-#: ../src/goaidentity/goakerberosidentity.c:601
+#: ../src/goaidentity/goakerberosidentity.c:276 ../src/goaidentity/goakerberosidentity.c:285
+#: ../src/goaidentity/goakerberosidentity.c:713
 msgid "Could not find identity in credential cache: %k"
 msgstr "ക്യാഷില്‍ തിരിച്ചറിയുന്നതിനുള്ള ആധികാരികത കണ്ടുപിടിയ്ക്കുവാന്‍ സാധ്യമല്ല : %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:614
+#: ../src/goaidentity/goakerberosidentity.c:727
 msgid "Could not find identity credentials in cache: %k"
 msgstr "ക്യാഷില്‍ തിരിച്ചറിയുന്നതിനുള്ള ആധികാരികത കണ്ടുപിടിയ്ക്കുവാന്‍ സാധ്യമല്ല : %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:652
+#: ../src/goaidentity/goakerberosidentity.c:779
 msgid "Could not sift through identity credentials in cache: %k"
 msgstr "ക്യാഷില്‍ തിരിച്ചറിയുന്നതിനുള്ള ആധികാരികത നീക്കുവാന്‍ സാധ്യമല്ല : %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:669
+#: ../src/goaidentity/goakerberosidentity.c:797
 msgid "Could not finish up sifting through identity credentials in cache: %k"
 msgstr "ക്യാഷില്‍ തിരിച്ചറിയുന്നതിനുള്ള ആധികാരികത സജ്ജമാക്കുവാന്‍ സാധ്യമല്ല : %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:953
+#: ../src/goaidentity/goakerberosidentity.c:1111
 #, c-format
 msgid "No associated identification found"
 msgstr "ബന്ധമുള്ള തിരിച്ചറിയല്‍ ലഭ്യമായി"
 
-#: ../src/goaidentity/goakerberosidentity.c:1034
+#: ../src/goaidentity/goakerberosidentity.c:1194
 msgid "Could not create credential cache: %k"
 msgstr "ആധികാരികത ക്യാഷ് തയ്യാറാക്കുവാന്‍ സാധ്യമല്ല: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1068
+#: ../src/goaidentity/goakerberosidentity.c:1228
 msgid "Could not initialize credentials cache: %k"
 msgstr "ആധികാരികത ക്യാഷ് പ്രാരംഭത്തിനു് സാധ്യമല്ല: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1085
+#: ../src/goaidentity/goakerberosidentity.c:1245
 msgid "Could not store new credentials in credentials cache: %k"
 msgstr "ക്യാഷില്‍ തിരിച്ചറിയുന്നതിനുള്ള ആധികാരികത സൂക്ഷിയ്ക്കുവാന്‍ സാധ്യമല്ല : %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1360
+#: ../src/goaidentity/goakerberosidentity.c:1540
 #, c-format
 msgid "Could not renew identity: Not signed in"
 msgstr "തിരിച്ചറിയല്‍ പുതുക്കുവാന്‍ സാധ്യമല്ല: ഒപ്പിട്ടില്ല"
 
-#: ../src/goaidentity/goakerberosidentity.c:1372
+#: ../src/goaidentity/goakerberosidentity.c:1552
 msgid "Could not renew identity: %k"
 msgstr "തിരിച്ചറിയല്‍ പുതുക്കുവാന്‍ സാധ്യമല്ല: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1389
+#: ../src/goaidentity/goakerberosidentity.c:1569
 msgid "Could not get new credentials to renew identity %s: %k"
 msgstr "%s തിരിച്ചറിയല്‍ പുതുക്കുന്നതിനായി പുതിയ ആധികാരികതകള്‍ ലഭ്യമല്ല: %k"
 
-#: ../src/goaidentity/goakerberosidentity.c:1429
+#: ../src/goaidentity/goakerberosidentity.c:1611
 msgid "Could not erase identity: %k"
 msgstr "തിരിച്ചറിയില്‍ മായിയ്ക്കുവാന്‍ സാധ്യമല്ല: %k"
 
@@ -812,16 +778,70 @@ msgstr "തിരിച്ചറിയില്‍ മായിയ്ക്ക�
 msgid "Could not find identity"
 msgstr "തിരിച്ചറിയല്‍ കണ്ടുപിടിയ്ക്കുവാനായില്ല"
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:846
+#: ../src/goaidentity/goakerberosidentitymanager.c:842
 msgid "Could not create credential cache for identity"
 msgstr "തിരിച്ചറിയുന്നതിനായി ആധികാരികത ക്യാഷ് തയ്യാറാക്കുവാന്‍ സാധ്യമല്ല"
+
+#, fuzzy
+#~| msgid "Did not find password with identity `%s' in credentials"
+#~ msgid "Did not find password with identity ‘%s’ in credentials"
+#~ msgstr "`%s' ഉപയോക്താവിനുള്ള രഹസ്യവാക്ക് കണ്ടുപിടിക്കുവാനായില്ല"
+
+#~ msgid "Paste authorization code obtained from the <a href=\"%s\">authorization page</a>:"
+#~ msgstr "<a href=\"%s\">അനുമതി താളില്‍</a> നിന്നും ലഭിച്ച കോഡ് നൽകുക:"
+
+#~ msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
+#~ msgstr "<a href=\"%s\">അനുമതി താളില്‍</a> നിന്നും ലഭിച്ച ടോക്കണ്‍ നൽകുക:"
+
+#~ msgid "ownCloud"
+#~ msgstr "ഔണ്‍ ക്ലൌഡ്"
+
+#~ msgid "org.gnome.OnlineAccounts.Mail is not available"
+#~ msgstr "org.gnome.OnlineAccounts.Mail ലഭ്യമല്ല"
+
+#~ msgid "Failed to parse email address"
+#~ msgstr "ഇമെയില്‍ പാഴ്സ് ചെയ്യുന്നതില്‍ പരാജയം"
+
+#~ msgid "Cannot do SMTP PLAIN without a domain"
+#~ msgstr "ഡൊമയ്ൻ ഇല്ലാതെ SMTP PLAIN ചെയ്യാൻ സാധ്യമല്ല"
+
+#~ msgid "Did not find smtp-password in credentials"
+#~ msgstr "smtp രഹസ്യവാക്ക് കണ്ടുപിടിക്കുവാനായില്ല"
+
+#~ msgid "Cannot do SMTP PLAIN without a password"
+#~ msgstr "രഹസ്യവാക്ക് ഇല്ലാതെ ഇത്ചെയ്യാൻ സാധ്യമല്ല"
+
+#, fuzzy
+#~| msgid "Failed to find Account element"
+#~ msgid "Failed to initialize a GOA client"
+#~ msgstr "അക്കൌണ്ട് എലമെന്റ് കണ്ടുപിടിയ്ക്കുന്നതില്‍ പരാജയം"
+
+#~ msgid "Twitter"
+#~ msgstr "ട്വിറ്റര്‍"
+
+#~ msgid "Windows Live"
+#~ msgstr "വിന്‍ഡോസ് ലൈവ്"
+
+#~ msgid "Yahoo"
+#~ msgstr "യാഹൂ"
+
+#~ msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+#~ msgstr "പേര് അപേക്ഷിച്ചപ്പോള്‍ പ്രതീക്ഷിച്ച സ്ഥിതി 200 ന് പകരം ലഭിച്ചത് %d (%s) ആണ്"
+
+#~ msgid "Time"
+#~ msgstr "സമയം"
+
+#~ msgid "Time to fire"
+#~ msgstr "ലഭ്യമാക്കുന്നതിനുള്ള സമയം"
+
+#~ msgid "initial secret passed before secret key exchange"
+#~ msgstr "രഹസ്യ കീ കൈമാറ്റത്തിനു് പകരം പ്രാരംഭ രഹസ്യം നല്‍കിയിരിയ്ക്കുന്നു"
 
 #~ msgid "Failed to find Autodiscover element"
 #~ msgstr "ഓട്ടോഡിസ്കവര്‍ എലമെന്റ് കണ്ടുപിടിയ്ക്കുന്നതില്‍ പരാജയം"
 
 #~ msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
-#~ msgstr ""
-#~ "Guid ന് അപേക്ഷിച്ചപ്പോള്‍ പ്രതീക്ഷിച്ച സ്ഥിതി 200 പകരം ലഭിച്ചത് സ്ഥിതി %d (%s) ആണ്"
+#~ msgstr "Guid ന് അപേക്ഷിച്ചപ്പോള്‍ പ്രതീക്ഷിച്ച സ്ഥിതി 200 പകരം ലഭിച്ചത് സ്ഥിതി %d (%s) ആണ്"
 
 #~ msgid "Did not find imap-password with identity `%s' in credentials"
 #~ msgstr "`%s' ഉപയോക്താവിനുള്ള imap രഹസ്യവാക്ക് കണ്ടുപിടിക്കുവാനായില്ല"
@@ -917,22 +937,18 @@ msgstr "തിരിച്ചറിയുന്നതിനായി ആധി�
 #~ msgstr "പിന്തുണയ്ക്കുന്ന ആധികാരികത ഉറപ്പാക്കല്‍ വിവരങ്ങള്‍ ലഭ്യമാക്കുവാനായില്ല"
 
 #~ msgid ""
-#~ "In order to use this enterprise identity, the computer needs to be "
-#~ "enrolled in the domain. Please have your network administrator type their "
-#~ "domain password here."
+#~ "In order to use this enterprise identity, the computer needs to be enrolled in the domain. Please have your network "
+#~ "administrator type their domain password here."
 #~ msgstr ""
-#~ "ഈ എന്റര്‍പ്രൈസ് തിരിച്ചറിയല്‍ ഉപയോഗിയ്ക്കുന്നതിനായി, കമ്പ്യൂട്ടര്‍ ഡൊമെയിനില്‍ നല്‍കേണ്ടതുണ്ടു്. "
-#~ "ദയവായി ഇവിടെ ഡൊമെയിന്‍ രഹസ്യവാക്ക് ടൈപ്പ് ചെയ്യുവാന്‍ നെറ്റ്‌വര്‍ക്ക് അഡ്മിനിസ്ട്രേറ്ററിനെ "
-#~ "അനുവദിയ്ക്കുക."
+#~ "ഈ എന്റര്‍പ്രൈസ് തിരിച്ചറിയല്‍ ഉപയോഗിയ്ക്കുന്നതിനായി, കമ്പ്യൂട്ടര്‍ ഡൊമെയിനില്‍ നല്‍കേണ്ടതുണ്ടു്. ദയവായി ഇവിടെ ഡൊമെയിന്‍ രഹസ്യവാക്ക് ടൈപ്പ് ചെയ്യുവാന്‍ "
+#~ "നെറ്റ്‌വര്‍ക്ക് അഡ്മിനിസ്ട്രേറ്ററിനെ അനുവദിയ്ക്കുക."
 
 #~ msgid ""
-#~ "In order to use this enterprise identity, the computer needs to be "
-#~ "enrolled in the domain. Please have your network administrator type their "
-#~ "domain username here."
+#~ "In order to use this enterprise identity, the computer needs to be enrolled in the domain. Please have your network "
+#~ "administrator type their domain username here."
 #~ msgstr ""
-#~ "ഈ എന്റര്‍പ്രൈസ് തിരിച്ചറിയല്‍ ഉപയോഗിയ്ക്കുന്നതിനായി, കമ്പ്യൂട്ടര്‍ ഡൊമെയിനില്‍ നല്‍കേണ്ടതുണ്ടു്. "
-#~ "ദയവായി ഇവിടെ ഡൊമെയിന്‍ ഉപയോക്തൃനാമം ടൈപ്പ് ചെയ്യുവാന്‍ നെറ്റ്‌വര്‍ക്ക് അഡ്മിനിസ്ട്രേറ്ററിനെ "
-#~ "അനുവദിയ്ക്കുക."
+#~ "ഈ എന്റര്‍പ്രൈസ് തിരിച്ചറിയല്‍ ഉപയോഗിയ്ക്കുന്നതിനായി, കമ്പ്യൂട്ടര്‍ ഡൊമെയിനില്‍ നല്‍കേണ്ടതുണ്ടു്. ദയവായി ഇവിടെ ഡൊമെയിന്‍ ഉപയോക്തൃനാമം ടൈപ്പ് ചെയ്യുവാന്‍ "
+#~ "നെറ്റ്‌വര്‍ക്ക് അഡ്മിനിസ്ട്രേറ്ററിനെ അനുവദിയ്ക്കുക."
 
 #~ msgid "No such domain or realm found"
 #~ msgstr "അത്തരം ഡൊമെയിന്‍ അല്ലെങ്കില്‍ സാമ്രാജ്യം ലഭ്യമല്ല"
