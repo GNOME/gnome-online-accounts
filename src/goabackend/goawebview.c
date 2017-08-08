@@ -272,12 +272,15 @@ goa_web_view_constructed (GObject *object)
 {
   GoaWebView *self = GOA_WEB_VIEW (object);
   WebKitCookieManager *cookie_manager;
+  const gchar *const *language_names;
   gchar *jar_dir;
   gchar *jar_file;
 
   G_OBJECT_CLASS (goa_web_view_parent_class)->constructed (object);
 
   self->context = webkit_web_context_new ();
+  language_names = g_get_language_names ();
+  webkit_web_context_set_preferred_languages (self->context, language_names);
   g_signal_connect_swapped (self->context,
                             "initialize-web-extensions",
                             G_CALLBACK (web_view_initialize_web_extensions_cb),
