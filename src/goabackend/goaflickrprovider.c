@@ -27,6 +27,7 @@
 #include "goaprovider-priv.h"
 #include "goaflickrprovider.h"
 #include "goaobjectskeletonutils.h"
+#include "goasouplogger.h"
 
 struct _GoaFlickrProvider
 {
@@ -118,6 +119,7 @@ get_identity_sync (GoaOAuthProvider  *oauth_provider,
   RestProxyCall *call = NULL;
   JsonParser *parser = NULL;
   JsonObject *json_object;
+  SoupLogger *logger = NULL;
   gchar *ret = NULL;
   gchar *id = NULL;
   gchar *presentation_identity = NULL;
@@ -130,6 +132,9 @@ get_identity_sync (GoaOAuthProvider  *oauth_provider,
                                       access_token_secret,
                                       "https://api.flickr.com/services/rest",
                                       FALSE);
+  logger = goa_soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
+  rest_proxy_add_soup_feature (proxy, SOUP_SESSION_FEATURE (logger));
+
   call = rest_proxy_new_call (proxy);
   rest_proxy_call_add_param (call, "method", "flickr.test.login");
   rest_proxy_call_add_param (call, "format", "json");
@@ -225,6 +230,7 @@ get_identity_sync (GoaOAuthProvider  *oauth_provider,
   g_clear_error (&identity_error);
   g_clear_object (&call);
   g_clear_object (&proxy);
+  g_clear_object (&logger);
   g_free (id);
   g_free (presentation_identity);
   return ret;
