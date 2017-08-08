@@ -641,11 +641,15 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
                            WebKitPolicyDecisionType  decision_type,
                            gpointer                  user_data)
 {
+  GHashTable *key_value_pairs;
   IdentifyData *data = user_data;
+  SoupURI *uri;
   WebKitNavigationAction *action;
   WebKitURIRequest *request;
+  const gchar *query;
   const gchar *redirect_uri;
   const gchar *requested_uri;
+  gint response_id = GTK_RESPONSE_NONE;
 
   if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION)
     return FALSE;
@@ -656,28 +660,31 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
   request = webkit_navigation_action_get_request (action);
   requested_uri = webkit_uri_request_get_uri (request);
   redirect_uri = goa_oauth_provider_get_callback_uri (data->provider);
-  if (g_str_has_prefix (requested_uri, redirect_uri))
-    {
-      SoupURI *uri;
-      GHashTable *key_value_pairs;
 
-      uri = soup_uri_new (requested_uri);
-      key_value_pairs = soup_form_decode (uri->query);
+  if (!g_str_has_prefix (requested_uri, redirect_uri))
+    goto default_behaviour;
 
-      /* TODO: error handling? */
-      data->oauth_verifier = g_strdup (g_hash_table_lookup (key_value_pairs, "oauth_verifier"));
-      if (data->oauth_verifier != NULL)
-        {
-          gtk_dialog_response (data->dialog, GTK_RESPONSE_OK);
-        }
-      g_hash_table_unref (key_value_pairs);
-      webkit_policy_decision_ignore (decision);
-      return TRUE; /* ignore the request */
-    }
-  else
-    {
-      return FALSE; /* make default behavior apply */
-    }
+  uri = soup_uri_new (requested_uri);
+  query = soup_uri_get_query (uri);
+
+  key_value_pairs = soup_form_decode (query);
+
+  /* TODO: error handling? */
+  data->oauth_verifier = g_strdup (g_hash_table_lookup (key_value_pairs, "oauth_verifier"));
+  if (data->oauth_verifier != NULL)
+    response_id = GTK_RESPONSE_OK;
+
+  g_hash_table_unref (key_value_pairs);
+  goto ignore_request;
+
+ ignore_request:
+  if (response_id != GTK_RESPONSE_NONE)
+    gtk_dialog_response (data->dialog, response_id);
+  webkit_policy_decision_ignore (decision);
+  return TRUE;
+
+ default_behaviour:
+  return FALSE;
 }
 
 static void
