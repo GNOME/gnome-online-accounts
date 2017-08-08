@@ -667,19 +667,30 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
   uri = soup_uri_new (requested_uri);
   query = soup_uri_get_query (uri);
 
-  key_value_pairs = soup_form_decode (query);
+  if (query != NULL)
+    {
+      key_value_pairs = soup_form_decode (query);
 
-  /* TODO: error handling? */
-  data->oauth_verifier = g_strdup (g_hash_table_lookup (key_value_pairs, "oauth_verifier"));
+      data->oauth_verifier = g_strdup (g_hash_table_lookup (key_value_pairs, "oauth_verifier"));
+      if (data->oauth_verifier != NULL)
+        response_id = GTK_RESPONSE_OK;
+
+      g_hash_table_unref (key_value_pairs);
+    }
+
   if (data->oauth_verifier != NULL)
-    response_id = GTK_RESPONSE_OK;
+    goto ignore_request;
 
-  g_hash_table_unref (key_value_pairs);
+  /* TODO: The only OAuth1 provider is Flickr. It doesn't send any
+   * error code and only redirects to the URI specified in the Flickr
+   * App Garden. Re-evaluate when the situation changes.
+   */
+  response_id = GTK_RESPONSE_CANCEL;
   goto ignore_request;
 
  ignore_request:
-  if (response_id != GTK_RESPONSE_NONE)
-    gtk_dialog_response (data->dialog, response_id);
+  g_assert (response_id != GTK_RESPONSE_NONE);
+  gtk_dialog_response (data->dialog, response_id);
   webkit_policy_decision_ignore (decision);
   return TRUE;
 
