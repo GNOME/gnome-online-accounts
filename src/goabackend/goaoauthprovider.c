@@ -29,6 +29,7 @@
 #include "goautils.h"
 #include "goawebview.h"
 #include "goaoauthprovider.h"
+#include "goasouplogger.h"
 
 /**
  * SECTION:goaoauthprovider
@@ -502,6 +503,7 @@ get_tokens_sync (GoaOAuthProvider  *provider,
 {
   RestProxy *proxy;
   RestProxyCall *call;
+  SoupLogger *logger = NULL;
   gchar *ret = NULL;
   guint status_code;
   GHashTable *f;
@@ -516,6 +518,8 @@ get_tokens_sync (GoaOAuthProvider  *provider,
                            goa_oauth_provider_get_consumer_secret (provider),
                            goa_oauth_provider_get_token_uri (provider),
                            FALSE);
+  logger = goa_soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
+  rest_proxy_add_soup_feature (proxy, SOUP_SESSION_FEATURE (logger));
   oauth_proxy_set_token (OAUTH_PROXY (proxy), token);
   oauth_proxy_set_token_secret (OAUTH_PROXY (proxy), token_secret);
   call = rest_proxy_new_call (proxy);
@@ -584,6 +588,7 @@ get_tokens_sync (GoaOAuthProvider  *provider,
   g_free (ret_session_handle);
   g_clear_object (&call);
   g_clear_object (&proxy);
+  g_clear_object (&logger);
   return ret;
 }
 
@@ -704,6 +709,7 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
   gchar *escaped_request_token = NULL;
   RestProxy *proxy = NULL;
   RestProxyCall *call = NULL;
+  SoupLogger *logger = NULL;
   GHashTable *f;
   GtkWidget *embed;
   GtkWidget *grid;
@@ -730,6 +736,9 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
   proxy = oauth_proxy_new (goa_oauth_provider_get_consumer_key (provider),
                            goa_oauth_provider_get_consumer_secret (provider),
                            goa_oauth_provider_get_request_uri (provider), FALSE);
+  logger = goa_soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
+  rest_proxy_add_soup_feature (proxy, SOUP_SESSION_FEATURE (logger));
+
   call = rest_proxy_new_call (proxy);
   rest_proxy_call_set_method (call, "POST");
   rest_proxy_call_add_param (call, "oauth_callback", goa_oauth_provider_get_callback_uri (provider));
@@ -924,6 +933,7 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
 
   g_strfreev (request_params);
   g_clear_object (&proxy);
+  g_clear_object (&logger);
   return ret;
 }
 
