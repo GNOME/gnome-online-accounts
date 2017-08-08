@@ -82,19 +82,19 @@ get_consumer_secret (GoaOAuthProvider *oauth_provider)
 static const gchar *
 get_request_uri (GoaOAuthProvider *oauth_provider)
 {
-  return "https://m.flickr.com/services/oauth/request_token";
+  return "https://www.flickr.com/services/oauth/request_token";
 }
 
 static const gchar *
 get_authorization_uri (GoaOAuthProvider *oauth_provider)
 {
-  return "https://m.flickr.com/services/oauth/authorize";
+  return "https://www.flickr.com/services/oauth/authorize";
 }
 
 static const gchar *
 get_token_uri (GoaOAuthProvider *oauth_provider)
 {
-  return "https://m.flickr.com/services/oauth/access_token";
+  return "https://www.flickr.com/services/oauth/access_token";
 }
 
 static const gchar *
