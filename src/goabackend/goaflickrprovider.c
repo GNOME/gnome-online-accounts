@@ -123,7 +123,11 @@ get_token_uri (GoaOAuthProvider *oauth_provider)
 static const gchar *
 get_callback_uri (GoaOAuthProvider *oauth_provider)
 {
-  return "https://www.gnome.org/goa-1.0/oauth";
+  /* Should match the URI specified in the Flickr App
+   * Garden in order to detect when the user denied access via
+   * the OAuth1 web page.
+   */
+  return "https://www.gnome.org/";
 }
 
 static const gchar *
