@@ -29,10 +29,13 @@ EXTRA_DIST =						\
 	org.gnome.OnlineAccounts.service.in		\
 	$(NULL)
 
-DISTCLEANFILES =					\
-	$(gsettings_SCHEMAS)				\
+CLEANFILES =						\
 	org.gnome.OnlineAccounts.service		\
 	org.gnome.Identity.service			\
+	$(NULL)
+
+DISTCLEANFILES =					\
+	$(gsettings_SCHEMAS)				\
 	$(NULL)
 
 clean-local :
