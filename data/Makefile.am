@@ -9,7 +9,6 @@ if BUILD_BACKEND
 gsettings_SCHEMAS = $(gsettings_in_files:.xml.in=.xml)
 @INTLTOOL_XML_RULE@
 @GSETTINGS_RULES@
-endif
 
 servicedir       = $(datadir)/dbus-1/services
 service_in_files = org.gnome.OnlineAccounts.service.in
@@ -19,9 +18,9 @@ service_in_files += org.gnome.Identity.service.in
 endif
 
 service_DATA     = $(service_in_files:.service.in=.service)
-
 %.service: %.service.in Makefile
 	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
+endif
 
 EXTRA_DIST =						\
 	$(gsettings_in_files)				\
