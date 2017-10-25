@@ -38,7 +38,6 @@ struct _GoaWebView
   GtkWidget *floating_bar;
   GtkWidget *progress_bar;
   GtkWidget *web_view;
-  SoupCookieJar *cookie_jar;
   WebKitUserContentManager *user_content_manager;
   WebKitWebContext *context;
   gchar *existing_identity;
@@ -271,10 +270,7 @@ static void
 goa_web_view_constructed (GObject *object)
 {
   GoaWebView *self = GOA_WEB_VIEW (object);
-  WebKitCookieManager *cookie_manager;
   const gchar *const *language_names;
-  gchar *jar_dir;
-  gchar *jar_file;
 
   G_OBJECT_CLASS (goa_web_view_parent_class)->constructed (object);
 
@@ -285,16 +281,6 @@ goa_web_view_constructed (GObject *object)
                             "initialize-web-extensions",
                             G_CALLBACK (web_view_initialize_web_extensions_cb),
                             self);
-
-  cookie_manager = webkit_web_context_get_cookie_manager (self->context);
-  jar_file = g_build_filename (g_get_user_cache_dir (), "goa-1.0", "cookies.sqlite", NULL);
-  jar_dir = g_path_get_dirname (jar_file);
-  g_mkdir_with_parents (jar_dir, 0700);
-  self->cookie_jar = soup_cookie_jar_db_new (jar_file, FALSE);
-  webkit_cookie_manager_set_persistent_storage (cookie_manager, jar_file, WEBKIT_COOKIE_PERSISTENT_STORAGE_SQLITE);
-  webkit_cookie_manager_delete_all_cookies (cookie_manager);
-  g_free (jar_dir);
-  g_free (jar_file);
 
   self->user_content_manager = webkit_user_content_manager_new ();
   g_signal_connect_swapped (self->user_content_manager,
@@ -359,7 +345,6 @@ goa_web_view_dispose (GObject *object)
 {
   GoaWebView *self = GOA_WEB_VIEW (object);
 
-  g_clear_object (&self->cookie_jar);
   g_clear_object (&self->user_content_manager);
   g_clear_object (&self->context);
 
@@ -513,17 +498,4 @@ goa_web_view_fake_mobile (GoaWebView *self)
   webkit_settings_set_user_agent (settings,
                                   "Mozilla/5.0 (GNOME; not Android) "
                                   "AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile");
-}
-
-void
-goa_web_view_add_cookies (GoaWebView *self,
-                          GSList     *cookies)
-{
-  GSList *l;
-
-  for (l = cookies; l != NULL; l = l->next)
-    {
-      SoupCookie *cookie = l->data;
-      soup_cookie_jar_add_cookie (self->cookie_jar, soup_cookie_copy (cookie));
-    }
 }

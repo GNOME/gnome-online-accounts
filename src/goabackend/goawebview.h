@@ -37,8 +37,6 @@ GtkWidget             *goa_web_view_new                    (GoaProvider *provide
                                                             const gchar *existing_identity);
 GtkWidget             *goa_web_view_get_view               (GoaWebView *self);
 void                   goa_web_view_fake_mobile            (GoaWebView *self);
-void                   goa_web_view_add_cookies            (GoaWebView *self,
-                                                            GSList     *cookies);
 
 G_END_DECLS
 

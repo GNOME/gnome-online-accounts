@@ -47,9 +47,11 @@ GoaProviderGroup       goa_provider_get_provider_group           (GoaProvider   
 
 GoaProviderFeatures    goa_provider_get_provider_features        (GoaProvider            *self);
 
+G_DEPRECATED
 void                   goa_provider_set_preseed_data             (GoaProvider            *self,
                                                                   GVariant               *preseed_data);
 
+G_DEPRECATED
 GVariant              *goa_provider_get_preseed_data             (GoaProvider            *self);
 
 GoaObject             *goa_provider_add_account                  (GoaProvider            *self,

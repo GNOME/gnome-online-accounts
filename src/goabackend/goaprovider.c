@@ -51,11 +51,6 @@
  * #GoaProvider is the base type for all providers.
  */
 
-struct _GoaProviderPrivate
-{
-  GVariant *preseed_data;
-};
-
 enum {
   PROP_0,
   PROP_PRESEED_DATA,
@@ -102,7 +97,7 @@ static void goa_provider_show_account_real (GoaProvider         *provider,
                                             GtkGrid             *dummy1,
                                             GtkGrid             *dummy2);
 
-G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GoaProvider, goa_provider, G_TYPE_OBJECT);
+G_DEFINE_ABSTRACT_TYPE (GoaProvider, goa_provider, G_TYPE_OBJECT);
 
 static struct {
   GoaProviderFeatures feature;
@@ -191,14 +186,9 @@ goa_provider_get_property (GObject *object,
                            GValue *value,
                            GParamSpec *pspec)
 {
-    GoaProvider *self = GOA_PROVIDER (object);
-    GoaProviderPrivate *priv;
-
-    priv = goa_provider_get_instance_private (self);
-
     switch (property_id) {
     case PROP_PRESEED_DATA:
-        g_value_set_variant (value, priv->preseed_data);
+        g_value_set_variant (value, NULL);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -212,29 +202,13 @@ goa_provider_set_property (GObject *object,
                            const GValue *value,
                            GParamSpec *pspec)
 {
-    GoaProvider *self = GOA_PROVIDER (object);
-
     switch (property_id) {
     case PROP_PRESEED_DATA:
-        goa_provider_set_preseed_data (self, g_value_get_variant (value));
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
         break;
     }
-}
-
-static void
-goa_provider_dispose (GObject *object)
-{
-  GoaProvider *self = GOA_PROVIDER (object);
-  GoaProviderPrivate *priv;
-
-  priv = goa_provider_get_instance_private (self);
-
-  g_clear_pointer (&priv->preseed_data, g_variant_unref);
-
-  G_OBJECT_CLASS (goa_provider_parent_class)->dispose (object);
 }
 
 static void
@@ -249,7 +223,6 @@ goa_provider_class_init (GoaProviderClass *klass)
 
   object_class->set_property = goa_provider_set_property;
   object_class->get_property = goa_provider_get_property;
-  object_class->dispose = goa_provider_dispose;
 
   klass->build_object = goa_provider_build_object_real;
   klass->ensure_credentials_sync = goa_provider_ensure_credentials_sync_real;
@@ -289,6 +262,8 @@ goa_provider_class_init (GoaProviderClass *klass)
  * </informalexample>
  *
  * Unknown or unsupported keys will be ignored by providers.
+ *
+ * Deprecated: 3.28: This property does nothing.
  */
   properties[PROP_PRESEED_DATA] =
     g_param_spec_variant ("preseed-data",
@@ -298,7 +273,7 @@ goa_provider_class_init (GoaProviderClass *klass)
         "browser session or the entrypoint url for self-hosted services).",
         G_VARIANT_TYPE_VARDICT,
         NULL,
-        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+        G_PARAM_DEPRECATED | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 }
@@ -1418,19 +1393,13 @@ goa_provider_remove_account_finish_real (GoaProvider   *self,
  *
  * If the @preseed_data #GVariant is floating, it is consumed to allow
  * 'inline' use of the g_variant_new() family of functions.
+ *
+ * Deprecated: 3.28: This function does nothing.
  */
 void
 goa_provider_set_preseed_data (GoaProvider *self,
                                GVariant    *preseed_data)
 {
-  GoaProviderPrivate *priv;
-
-  priv = goa_provider_get_instance_private (self);
-
-  g_clear_pointer (&priv->preseed_data, g_variant_unref);
-  if (preseed_data != NULL)
-    priv->preseed_data = g_variant_ref_sink (preseed_data);
-  g_object_notify (G_OBJECT (self), "preseed-data");
 }
 
 /**
@@ -1441,14 +1410,13 @@ goa_provider_set_preseed_data (GoaProvider *self,
  *
  * Returns: (transfer none): A #GVariant that is known to be valid until
  *   the property is overridden or the provider freed.
+ *
+ * Deprecated: 3.28: This function does nothing.
  */
 GVariant *
 goa_provider_get_preseed_data (GoaProvider *self)
 {
-  GoaProviderPrivate *priv;
-
-  priv = goa_provider_get_instance_private (self);
-  return priv->preseed_data;
+  return NULL;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
