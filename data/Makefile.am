@@ -3,11 +3,9 @@ NULL =
 
 SUBDIRS = icons
 
-gsettings_in_files = org.gnome.online-accounts.gschema.xml.in
+gsettings_SCHEMAS = org.gnome.online-accounts.gschema.xml
 
 if BUILD_BACKEND
-gsettings_SCHEMAS = $(gsettings_in_files:.xml.in=.xml)
-@INTLTOOL_XML_RULE@
 @GSETTINGS_RULES@
 
 servicedir       = $(datadir)/dbus-1/services
@@ -23,7 +21,7 @@ service_DATA     = $(service_in_files:.service.in=.service)
 endif
 
 EXTRA_DIST =						\
-	$(gsettings_in_files)				\
+	$(gsettings_SCHEMAS)				\
 	dbus-interfaces.xml				\
 	org.gnome.Identity.service.in			\
 	org.gnome.OnlineAccounts.service.in		\
@@ -32,10 +30,6 @@ EXTRA_DIST =						\
 CLEANFILES =						\
 	org.gnome.OnlineAccounts.service		\
 	org.gnome.Identity.service			\
-	$(NULL)
-
-DISTCLEANFILES =					\
-	$(gsettings_SCHEMAS)				\
 	$(NULL)
 
 clean-local :

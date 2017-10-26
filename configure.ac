@@ -566,7 +566,6 @@ data/icons/32x32/Makefile
 data/icons/48x48/Makefile
 data/icons/96x96/Makefile
 data/icons/256x256/Makefile
-data/org.gnome.online-accounts.gschema.xml
 src/Makefile
 src/goa/Makefile
 src/goa/goa-1.0.pc
