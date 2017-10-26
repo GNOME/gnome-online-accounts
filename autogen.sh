@@ -22,7 +22,7 @@ if [ "$#" = 0 -a "x$NOCONFIGURE" = "x" ]; then
 	echo "" >&2
 fi
 
-git submodule update --init --recursive
+git submodule update --init --recursive || exit 1
 
 cd $srcdir/telepathy-account-widgets
 NOCONFIGURE=1 sh autogen.sh
