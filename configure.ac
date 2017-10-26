@@ -12,7 +12,8 @@ m4_define([goa_version],
 AC_INIT([GNOME Online Accounts],
         [goa_version],
         [https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts],
-        [gnome-online-accounts])
+        [gnome-online-accounts],
+        [https://wiki.gnome.org/Projects/GnomeOnlineAccounts])
 
 AM_INIT_AUTOMAKE([1.9 foreign dist-xz no-dist-gzip tar-ustar])
 AC_CONFIG_MACRO_DIR([m4])
