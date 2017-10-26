@@ -22,7 +22,10 @@ AC_CONFIG_HEADERS([config.h])
 
 AM_MAINTAINER_MODE([enable])
 
-GNOME_DEBUG_CHECK
+AX_IS_RELEASE([git-directory])
+
+AX_CHECK_ENABLE_DEBUG([yes],,, [$ax_is_release])
+AX_COMPILER_FLAGS([WARN_CFLAGS], [WARN_LDFLAGS], [$ax_is_release])
 
 AC_PROG_CC
 AC_ISC_POSIX
@@ -66,9 +69,8 @@ AC_DEFINE(GOA_MICRO_VERSION,
 # Initialization
 #
 
+AX_REQUIRE_DEFINED([GLIB_GSETTINGS])
 GLIB_GSETTINGS
-GNOME_COMPILE_WARNINGS([maximum])
-GNOME_MAINTAINER_MODE_DEFINES
 
 AC_ARG_ENABLE([documentation],
 	AS_HELP_STRING([--enable-documentation], [enable man pages and HTML]),
@@ -81,6 +83,7 @@ if test x$enable_documentation = xyes; then
    fi
 fi
 
+AX_REQUIRE_DEFINED([GTK_DOC_CHECK])
 GTK_DOC_CHECK([1.3])
 
 # Libraries
@@ -90,7 +93,9 @@ PKG_CHECK_MODULES(GLIB, [glib-2.0 gio-2.0 gio-unix-2.0 >= 2.52])
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
 
+AX_REQUIRE_DEFINED([GOBJECT_INTROSPECTION_CHECK])
 GOBJECT_INTROSPECTION_CHECK([0.6.2])
+
 VAPIGEN_CHECK()
 
 # Telepathy
@@ -495,10 +500,15 @@ fi
 # Internationalization
 #
 
+AX_REQUIRE_DEFINED([IT_PROG_INTLTOOL])
 IT_PROG_INTLTOOL([0.50.1])
+
 GETTEXT_PACKAGE=gnome-online-accounts
 AC_SUBST([GETTEXT_PACKAGE])
+
+AX_REQUIRE_DEFINED([AM_GLIB_GNU_GETTEXT])
 AM_GLIB_GNU_GETTEXT
+
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[gettext domain])
 
 # goaconfig.h

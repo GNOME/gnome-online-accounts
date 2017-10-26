@@ -102,6 +102,7 @@ libgoa_1_0_la_LIBADD = 						\
 	$(NULL)
 
 libgoa_1_0_la_LDFLAGS = 					\
+	$(WARN_LDFLAGS)						\
 	-version-info $(GOA_LT_VERSION)				\
 	$(NULL)
 
@@ -120,7 +121,7 @@ Goa_1_0_gir_EXPORT_PACKAGES = goa-1.0
 Goa_1_0_gir_LIBS = goa-1.0
 Goa_1_0_gir_FILES = $(libgoa_1_0_la_HEADERS) $(libgoa_1_0_la_SOURCES)
 Goa_1_0_gir_CFLAGS = $(AM_CPPFLAGS) $(libgoa_1_0_la_CFLAGS)
-Goa_1_0_gir_SCANNERFLAGS = --c-include='goa/goa.h'
+Goa_1_0_gir_SCANNERFLAGS = $(WARN_SCANNERFLAGS) --c-include='goa/goa.h'
 INTROSPECTION_GIRS += Goa-1.0.gir
 
 girdir = $(datadir)/gir-1.0

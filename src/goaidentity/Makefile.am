@@ -122,6 +122,10 @@ goa_identity_service_LDADD = 					\
 	$(GCR_LIBS)						\
 	$(NULL)
 
+goa_identity_service_LDFLAGS = 					\
+	$(WARN_LDFLAGS)						\
+	$(NULL)
+
 else
 EXTRA_DIST += $(identity_sources)
 endif

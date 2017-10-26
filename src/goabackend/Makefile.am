@@ -149,6 +149,7 @@ libgoa_backend_1_0_la_LIBADD = 					\
 	$(NULL)
 
 libgoa_backend_1_0_la_LDFLAGS = 				\
+	$(WARN_LDFLAGS)						\
 	-version-info $(GOA_BACKEND_LT_VERSION)			\
 	$(NULL)
 

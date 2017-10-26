@@ -44,6 +44,10 @@ goa_daemon_LDADD = 						\
 	$(REST_LIBS)						\
 	$(NULL)
 
+goa_daemon_LDFLAGS = 						\
+	$(WARN_LDFLAGS)						\
+	$(NULL)
+
 clean-local :
 	rm -f *~
 
