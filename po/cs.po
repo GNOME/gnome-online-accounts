@@ -8,16 +8,28 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-07-14 10:59+0000\n"
-"PO-Revision-Date: 2017-08-02 11:53+0200\n"
+"POT-Creation-Date: 2017-10-26 16:05+0000\n"
+"PO-Revision-Date: 2017-10-29 21:19+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
-"Language-Team: čeština <gnome-cs-list@gnome.org>>\n"
+"Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Gtranslator 2.91.7\n"
+
+#: ../data/org.gnome.online-accounts.gschema.xml.h:1
+msgid "List of providers that are allowed to be loaded"
+msgstr "Seznam poskytovatelů povolených k načtení"
+
+#: ../data/org.gnome.online-accounts.gschema.xml.h:2
+msgid ""
+"A list of strings representing the providers that are allowed to be loaded "
+"(default: 'all'). This is only evaluated on startup."
+msgstr ""
+"Seznam řetězců představujících poskytovatele, u kterých je povoleno načtení "
+"(výchozí: 'all'). Vyhodnocuje se jen při spuštění."
 
 #. TODO: more specific
 #: ../src/daemon/goadaemon.c:1172 ../src/daemon/goadaemon.c:1456
@@ -63,7 +75,7 @@ msgstr "Microsoft Exchange"
 #. * (%s, %d) is the error domain and code.
 #.
 #: ../src/goabackend/goaexchangeprovider.c:248
-#: ../src/goabackend/goalastfmprovider.c:280
+#: ../src/goabackend/goalastfmprovider.c:287
 #: ../src/goabackend/goaowncloudprovider.c:299
 #, c-format
 msgid "Invalid password with username “%s” (%s, %d): "
@@ -77,7 +89,7 @@ msgstr "_E-mail"
 #: ../src/goabackend/goaexchangeprovider.c:397
 #: ../src/goabackend/goaimapsmtpprovider.c:706
 #: ../src/goabackend/goaimapsmtpprovider.c:726
-#: ../src/goabackend/goalastfmprovider.c:422
+#: ../src/goabackend/goalastfmprovider.c:429
 #: ../src/goabackend/goaowncloudprovider.c:538
 msgid "_Password"
 msgstr "_Heslo"
@@ -89,8 +101,8 @@ msgstr "_Vlastní"
 #: ../src/goabackend/goaexchangeprovider.c:411
 #: ../src/goabackend/goaimapsmtpprovider.c:705
 #: ../src/goabackend/goaimapsmtpprovider.c:725
-#: ../src/goabackend/goakerberosprovider.c:744
-#: ../src/goabackend/goalastfmprovider.c:421
+#: ../src/goabackend/goakerberosprovider.c:739
+#: ../src/goabackend/goalastfmprovider.c:428
 #: ../src/goabackend/goaowncloudprovider.c:537
 msgid "User_name"
 msgstr "Uživatelské j_méno"
@@ -103,24 +115,24 @@ msgstr "_Server"
 #. --
 #: ../src/goabackend/goaexchangeprovider.c:422
 #: ../src/goabackend/goaimapsmtpprovider.c:738
-#: ../src/goabackend/goakerberosprovider.c:749
-#: ../src/goabackend/goalastfmprovider.c:430
+#: ../src/goabackend/goakerberosprovider.c:744
+#: ../src/goabackend/goalastfmprovider.c:437
 #: ../src/goabackend/goaowncloudprovider.c:552
 #: ../src/goabackend/goatelepathyprovider.c:651
 msgid "_Cancel"
 msgstr "_Zrušit"
 
 #: ../src/goabackend/goaexchangeprovider.c:423
-#: ../src/goabackend/goakerberosprovider.c:750
-#: ../src/goabackend/goalastfmprovider.c:431
+#: ../src/goabackend/goakerberosprovider.c:745
+#: ../src/goabackend/goalastfmprovider.c:438
 #: ../src/goabackend/goaowncloudprovider.c:553
 msgid "C_onnect"
 msgstr "Přip_ojit"
 
 #: ../src/goabackend/goaexchangeprovider.c:439
 #: ../src/goabackend/goaimapsmtpprovider.c:754
-#: ../src/goabackend/goakerberosprovider.c:766
-#: ../src/goabackend/goalastfmprovider.c:447
+#: ../src/goabackend/goakerberosprovider.c:761
+#: ../src/goabackend/goalastfmprovider.c:454
 #: ../src/goabackend/goaowncloudprovider.c:568
 msgid "Connecting…"
 msgstr "Připojuje se…"
@@ -132,12 +144,12 @@ msgstr "Připojuje se…"
 #: ../src/goabackend/goaimapsmtpprovider.c:1043
 #: ../src/goabackend/goaimapsmtpprovider.c:1312
 #: ../src/goabackend/goaimapsmtpprovider.c:1388
-#: ../src/goabackend/goakerberosprovider.c:1163
-#: ../src/goabackend/goalastfmprovider.c:642
-#: ../src/goabackend/goalastfmprovider.c:810
+#: ../src/goabackend/goakerberosprovider.c:1155
+#: ../src/goabackend/goalastfmprovider.c:652
+#: ../src/goabackend/goalastfmprovider.c:820
 #: ../src/goabackend/goamediaserverprovider.c:420
-#: ../src/goabackend/goaoauth2provider.c:1071
-#: ../src/goabackend/goaoauthprovider.c:840
+#: ../src/goabackend/goaoauth2provider.c:995
+#: ../src/goabackend/goaoauthprovider.c:859
 #: ../src/goabackend/goaowncloudprovider.c:671
 #: ../src/goabackend/goaowncloudprovider.c:888
 #: ../src/goabackend/goatelepathyprovider.c:475
@@ -153,8 +165,8 @@ msgstr "Dialogové okno bylo zavřeno"
 #: ../src/goabackend/goaimapsmtpprovider.c:1081
 #: ../src/goabackend/goaimapsmtpprovider.c:1339
 #: ../src/goabackend/goaimapsmtpprovider.c:1416
-#: ../src/goabackend/goalastfmprovider.c:676
-#: ../src/goabackend/goalastfmprovider.c:829
+#: ../src/goabackend/goalastfmprovider.c:686
+#: ../src/goabackend/goalastfmprovider.c:839
 #: ../src/goabackend/goaowncloudprovider.c:713
 #: ../src/goabackend/goaowncloudprovider.c:912
 #, c-format
@@ -174,9 +186,9 @@ msgstr "_Ignorovat"
 #: ../src/goabackend/goaimapsmtpprovider.c:1099
 #: ../src/goabackend/goaimapsmtpprovider.c:1358
 #: ../src/goabackend/goaimapsmtpprovider.c:1435
-#: ../src/goabackend/goakerberosprovider.c:1270
-#: ../src/goabackend/goalastfmprovider.c:688
-#: ../src/goabackend/goalastfmprovider.c:846
+#: ../src/goabackend/goakerberosprovider.c:1262
+#: ../src/goabackend/goalastfmprovider.c:698
+#: ../src/goabackend/goalastfmprovider.c:856
 #: ../src/goabackend/goaowncloudprovider.c:731
 #: ../src/goabackend/goaowncloudprovider.c:931
 msgid "_Try Again"
@@ -187,16 +199,16 @@ msgstr "Zkusi_t znovu"
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Chyba připojování k serveru Macrosoft Exchange"
 
-#: ../src/goabackend/goafacebookprovider.c:55
+#: ../src/goabackend/goafacebookprovider.c:56
 msgid "Facebook"
 msgstr "Facebook"
 
-#: ../src/goabackend/goafacebookprovider.c:179
-#: ../src/goabackend/goaflickrprovider.c:146
-#: ../src/goabackend/goafoursquareprovider.c:153
-#: ../src/goabackend/goagoogleprovider.c:190
-#: ../src/goabackend/goatodoistprovider.c:192
-#: ../src/goabackend/goawindowsliveprovider.c:158
+#: ../src/goabackend/goafacebookprovider.c:183
+#: ../src/goabackend/goaflickrprovider.c:155
+#: ../src/goabackend/goafoursquareprovider.c:154
+#: ../src/goabackend/goagoogleprovider.c:191
+#: ../src/goabackend/goatodoistprovider.c:193
+#: ../src/goabackend/goawindowsliveprovider.c:159
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
@@ -205,79 +217,81 @@ msgstr ""
 "obdržen %d (%s)"
 
 #. TODO: more specific
-#: ../src/goabackend/goafacebookprovider.c:198
-#: ../src/goabackend/goafacebookprovider.c:210
-#: ../src/goabackend/goafacebookprovider.c:223
-#: ../src/goabackend/goaflickrprovider.c:165
-#: ../src/goabackend/goaflickrprovider.c:177
-#: ../src/goabackend/goaflickrprovider.c:187
-#: ../src/goabackend/goaflickrprovider.c:197
-#: ../src/goabackend/goaflickrprovider.c:207
-#: ../src/goabackend/goafoursquareprovider.c:172
+#: ../src/goabackend/goafacebookprovider.c:202
+#: ../src/goabackend/goafacebookprovider.c:213
+#: ../src/goabackend/goafacebookprovider.c:219
+#: ../src/goabackend/goaflickrprovider.c:174
+#: ../src/goabackend/goaflickrprovider.c:185
+#: ../src/goabackend/goaflickrprovider.c:196
+#: ../src/goabackend/goaflickrprovider.c:205
+#: ../src/goabackend/goaflickrprovider.c:218
+#: ../src/goabackend/goafoursquareprovider.c:173
 #: ../src/goabackend/goafoursquareprovider.c:184
 #: ../src/goabackend/goafoursquareprovider.c:195
 #: ../src/goabackend/goafoursquareprovider.c:206
-#: ../src/goabackend/goafoursquareprovider.c:217
+#: ../src/goabackend/goafoursquareprovider.c:215
 #: ../src/goabackend/goafoursquareprovider.c:228
-#: ../src/goabackend/goagoogleprovider.c:209
+#: ../src/goabackend/goagoogleprovider.c:210
 #: ../src/goabackend/goagoogleprovider.c:221
-#: ../src/goabackend/goalastfmprovider.c:211
-#: ../src/goabackend/goalastfmprovider.c:220
+#: ../src/goabackend/goalastfmprovider.c:212
+#: ../src/goabackend/goalastfmprovider.c:221
 #: ../src/goabackend/goalastfmprovider.c:230
-#: ../src/goabackend/goalastfmprovider.c:237
-#: ../src/goabackend/goalastfmprovider.c:505
-#: ../src/goabackend/goalastfmprovider.c:514
-#: ../src/goabackend/goalastfmprovider.c:529
-#: ../src/goabackend/goalastfmprovider.c:536
-#: ../src/goabackend/goaoauth2provider.c:722
-#: ../src/goabackend/goaoauth2provider.c:752
-#: ../src/goabackend/goaoauth2provider.c:764
-#: ../src/goabackend/goatodoistprovider.c:211
+#: ../src/goabackend/goalastfmprovider.c:238
+#: ../src/goabackend/goalastfmprovider.c:244
+#: ../src/goabackend/goalastfmprovider.c:512
+#: ../src/goabackend/goalastfmprovider.c:521
+#: ../src/goabackend/goalastfmprovider.c:538
+#: ../src/goabackend/goalastfmprovider.c:544
+#: ../src/goabackend/goaoauth2provider.c:656
+#: ../src/goabackend/goaoauth2provider.c:686
+#: ../src/goabackend/goaoauth2provider.c:697
+#: ../src/goabackend/goatodoistprovider.c:212
 #: ../src/goabackend/goatodoistprovider.c:223
 #: ../src/goabackend/goatodoistprovider.c:234 ../src/goabackend/goautils.c:313
-#: ../src/goabackend/goawindowsliveprovider.c:177
+#: ../src/goabackend/goawindowsliveprovider.c:178
 #: ../src/goabackend/goawindowsliveprovider.c:189
-#: ../src/goabackend/goawindowsliveprovider.c:201
+#: ../src/goabackend/goawindowsliveprovider.c:198
+#: ../src/goabackend/goawindowsliveprovider.c:211
 #, c-format
 msgid "Could not parse response"
 msgstr "Nelze zpracovat odpověď"
 
-#: ../src/goabackend/goaflickrprovider.c:55
+#: ../src/goabackend/goaflickrprovider.c:56
 msgid "Flickr"
 msgstr "Flickr"
 
-#: ../src/goabackend/goaflickrprovider.c:279
+#: ../src/goabackend/goaflickrprovider.c:293
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "Vás systémový čas je neplatný. Zkontrolujte své nastavení data a času."
 
-#: ../src/goabackend/goafoursquareprovider.c:56
+#: ../src/goabackend/goafoursquareprovider.c:57
 msgid "Foursquare"
 msgstr "Foursquare"
 
-#: ../src/goabackend/goagoogleprovider.c:55
+#: ../src/goabackend/goagoogleprovider.c:56
 msgid "Google"
 msgstr "Google"
 
 #. TODO: more specific
-#: ../src/goabackend/goaimapauthlogin.c:93 ../src/goabackend/goasmtpauth.c:155
+#: ../src/goabackend/goaimapauthlogin.c:89 ../src/goabackend/goasmtpauth.c:155
 #, c-format
 msgid "Service not available"
 msgstr "Služba není dostupná"
 
 #. TODO: more specific
-#: ../src/goabackend/goaimapauthlogin.c:113
-#: ../src/goabackend/goalastfmprovider.c:522
+#: ../src/goabackend/goaimapauthlogin.c:109
+#: ../src/goabackend/goalastfmprovider.c:529
 #: ../src/goabackend/goasmtpauth.c:108 ../src/goabackend/goautils.c:883
 #, c-format
 msgid "Authentication failed"
 msgstr "Autentizace selhala"
 
-#: ../src/goabackend/goaimapauthlogin.c:138
+#: ../src/goabackend/goaimapauthlogin.c:134
 #, c-format
 msgid "Server does not support PLAIN"
 msgstr "Server nepodporuje autentizaci PLAIN"
 
-#: ../src/goabackend/goaimapauthlogin.c:190 ../src/goabackend/goasmtpauth.c:606
+#: ../src/goabackend/goaimapauthlogin.c:186 ../src/goabackend/goasmtpauth.c:606
 #, c-format
 msgid "Server does not support STARTTLS"
 msgstr "Server nepodporuje STARTTLS"
@@ -374,62 +388,62 @@ msgstr "SMTP"
 msgid "Enterprise Login (Kerberos)"
 msgstr "Podnikové přihlášení (Kerberos)"
 
-#: ../src/goabackend/goakerberosprovider.c:302
+#: ../src/goabackend/goakerberosprovider.c:300
 #, c-format
 msgid "Ticketing is disabled for account"
 msgstr "Vydávání lístků je pro tento účet zakázáno"
 
-#: ../src/goabackend/goakerberosprovider.c:327
+#: ../src/goabackend/goakerberosprovider.c:325
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr "V klíčence nelze najít uložená pověření pro principál „%s“"
 
-#: ../src/goabackend/goakerberosprovider.c:340
+#: ../src/goabackend/goakerberosprovider.c:338
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "V pověřeních nebylo nalezeno heslo pro principál „%s“"
 
-#: ../src/goabackend/goakerberosprovider.c:736
+#: ../src/goabackend/goakerberosprovider.c:731
 msgid "_Domain"
 msgstr "_Doména"
 
-#: ../src/goabackend/goakerberosprovider.c:737
+#: ../src/goabackend/goakerberosprovider.c:732
 msgid "Enterprise domain or realm name"
 msgstr "Název podnikové domény nebo sféry"
 
-#: ../src/goabackend/goakerberosprovider.c:979
+#: ../src/goabackend/goakerberosprovider.c:974
 #: ../src/goaidentity/goaidentityservice.c:1084
 msgid "Log In to Realm"
 msgstr "Přihlášení do sféry"
 
-#: ../src/goabackend/goakerberosprovider.c:980
+#: ../src/goabackend/goakerberosprovider.c:975
 msgid "Please enter your password below."
 msgstr "Níže prosím zadejte své heslo"
 
-#: ../src/goabackend/goakerberosprovider.c:981
+#: ../src/goabackend/goakerberosprovider.c:976
 msgid "Remember this password"
 msgstr "Zapamatovat toto heslo"
 
-#: ../src/goabackend/goakerberosprovider.c:1115
+#: ../src/goabackend/goakerberosprovider.c:1110
 #, c-format
 msgid "The domain is not valid"
 msgstr "Doména není platná"
 
-#: ../src/goabackend/goakerberosprovider.c:1265
+#: ../src/goabackend/goakerberosprovider.c:1257
 msgid "Error connecting to enterprise identity server"
 msgstr "Chyba připojování k serveru s podnikovými identitami"
 
-#: ../src/goabackend/goakerberosprovider.c:1612
+#: ../src/goabackend/goakerberosprovider.c:1604
 #, c-format
 msgid "Identity service returned invalid key"
 msgstr "Služba identit vrátila neplatný klíč"
 
-#: ../src/goabackend/goalastfmprovider.c:64
+#: ../src/goabackend/goalastfmprovider.c:65
 msgid "Last.fm"
 msgstr "Last.fm"
 
-#: ../src/goabackend/goalastfmprovider.c:690
-#: ../src/goabackend/goalastfmprovider.c:840
+#: ../src/goabackend/goalastfmprovider.c:700
+#: ../src/goabackend/goalastfmprovider.c:850
 msgid "Error connecting to Last.fm"
 msgstr "Chyba připojování k Last.fm"
 
@@ -454,8 +468,8 @@ msgid "No media servers found"
 msgstr "Nebyly nalezeny žádné multimediální servery"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:698
-#: ../src/goabackend/goaoauthprovider.c:539
+#: ../src/goabackend/goaoauth2provider.c:632
+#: ../src/goabackend/goaoauthprovider.c:542
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -463,53 +477,53 @@ msgstr ""
 "Při požadavku o přístupový tiket očekáván stavový kód 200, místo toho získán "
 "%d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:878
+#: ../src/goabackend/goaoauth2provider.c:814
 msgid "Authorization response: "
 msgstr "Odezva autorizace: "
 
-#: ../src/goabackend/goaoauth2provider.c:948
+#: ../src/goabackend/goaoauth2provider.c:884
 #, c-format
 msgid "Authorization response: %s"
 msgstr "Odezva autorizace: %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1097
-#: ../src/goabackend/goaoauthprovider.c:871
+#: ../src/goabackend/goaoauth2provider.c:1021
+#: ../src/goabackend/goaoauthprovider.c:890
 msgid "Error getting an Access Token: "
 msgstr "Chyba při získávání přístupového tiketu: "
 
-#: ../src/goabackend/goaoauth2provider.c:1112
-#: ../src/goabackend/goaoauthprovider.c:884
+#: ../src/goabackend/goaoauth2provider.c:1036
+#: ../src/goabackend/goaoauthprovider.c:903
 msgid "Error getting identity: "
 msgstr "Chyba při získávání identity: "
 
-#: ../src/goabackend/goaoauth2provider.c:1334
-#: ../src/goabackend/goaoauthprovider.c:1188
+#: ../src/goabackend/goaoauth2provider.c:1254
+#: ../src/goabackend/goaoauthprovider.c:1192
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Bylo žádáno o přihlášení jako %s, ale provedlo se jako %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1496
+#: ../src/goabackend/goaoauth2provider.c:1406
 #, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Pověření neobsahuje access_token"
 
-#: ../src/goabackend/goaoauth2provider.c:1535
-#: ../src/goabackend/goaoauthprovider.c:1416
+#: ../src/goabackend/goaoauth2provider.c:1445
+#: ../src/goabackend/goaoauthprovider.c:1407
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Selhalo občerstvení přístupového tiketu (%s, %d): "
 
-#: ../src/goabackend/goaoauthprovider.c:562
+#: ../src/goabackend/goaoauthprovider.c:565
 #, c-format
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "V odpovědi schází hlavičky access_token nebo access_token_secret"
 
-#: ../src/goabackend/goaoauthprovider.c:754
+#: ../src/goabackend/goaoauthprovider.c:773
 msgid "Error getting a Request Token: "
 msgstr "Chyba při získávání žádacího tiketu: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:785
+#: ../src/goabackend/goaoauthprovider.c:804
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -517,12 +531,12 @@ msgstr ""
 "Při požadavku o žádací tiket očekáván stavový kód 200, místo toho získán %d "
 "(%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:802
+#: ../src/goabackend/goaoauthprovider.c:821
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "V odpovědi schází hlavičky request_token nebo request_token_secre"
 
-#: ../src/goabackend/goaoauthprovider.c:1372
+#: ../src/goabackend/goaoauthprovider.c:1363
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Pověření neobsahuje contain access_token nebo access_token_secret"
@@ -536,85 +550,85 @@ msgstr "Nextcloud"
 msgid "Error connecting to ownCloud server"
 msgstr "Chyba připojování k serveru ownCloud"
 
-#: ../src/goabackend/goapocketprovider.c:73
+#: ../src/goabackend/goapocketprovider.c:74
 msgid "Pocket"
 msgstr "Pocket"
 
 #. TODO: more specific
-#: ../src/goabackend/goapocketprovider.c:248
+#: ../src/goabackend/goapocketprovider.c:249
 #, c-format
 msgid "No username or access_token"
 msgstr "Žádné uživatelské jméno nebo přístupový tiket"
 
-#: ../src/goabackend/goaprovider.c:119
+#: ../src/goabackend/goaprovider.c:114
 msgid "_Mail"
 msgstr "_Pošta"
 
-#: ../src/goabackend/goaprovider.c:124
+#: ../src/goabackend/goaprovider.c:119
 msgid "Cale_ndar"
 msgstr "Kale_ndář"
 
-#: ../src/goabackend/goaprovider.c:129
+#: ../src/goabackend/goaprovider.c:124
 msgid "_Contacts"
 msgstr "_Kontakty"
 
-#: ../src/goabackend/goaprovider.c:134
+#: ../src/goabackend/goaprovider.c:129
 #: ../src/goabackend/goatelepathyprovider.c:951
 msgid "C_hat"
 msgstr "Disk_uze"
 
-#: ../src/goabackend/goaprovider.c:139
+#: ../src/goabackend/goaprovider.c:134
 msgid "_Documents"
 msgstr "_Dokumenty"
 
-#: ../src/goabackend/goaprovider.c:144
+#: ../src/goabackend/goaprovider.c:139
 msgid "M_usic"
 msgstr "H_udba"
 
-#: ../src/goabackend/goaprovider.c:149
+#: ../src/goabackend/goaprovider.c:144
 msgid "_Photos"
 msgstr "_Fotografie"
 
-#: ../src/goabackend/goaprovider.c:154
+#: ../src/goabackend/goaprovider.c:149
 msgid "_Files"
 msgstr "_Soubory"
 
-#: ../src/goabackend/goaprovider.c:159
+#: ../src/goabackend/goaprovider.c:154
 msgid "Network _Resources"
 msgstr "Síťové p_rostředky"
 
-#: ../src/goabackend/goaprovider.c:164
+#: ../src/goabackend/goaprovider.c:159
 msgid "_Read Later"
 msgstr "_Přečíst později"
 
-#: ../src/goabackend/goaprovider.c:169
+#: ../src/goabackend/goaprovider.c:164
 msgid "Prin_ters"
 msgstr "_Tiskárny"
 
-#: ../src/goabackend/goaprovider.c:174
+#: ../src/goabackend/goaprovider.c:169
 msgid "_Maps"
 msgstr "_Mapy"
 
-#: ../src/goabackend/goaprovider.c:179
+#: ../src/goabackend/goaprovider.c:174
 msgid "T_o Do"
 msgstr "Úk_oly"
 
 #. Translators: This is a label for a series of
 #. * options switches. For example: “Use for Mail”.
-#: ../src/goabackend/goaprovider.c:613
+#: ../src/goabackend/goaprovider.c:588
 #: ../src/goabackend/goatelepathyprovider.c:949
 msgid "Use for"
 msgstr "Použít pro"
 
-#: ../src/goabackend/goaprovider.c:868
+#: ../src/goabackend/goaprovider.c:843
 msgid "Account is disabled"
 msgstr "Účet je zakázaný"
 
-#: ../src/goabackend/goaprovider.c:881
+#: ../src/goabackend/goaprovider.c:856
 msgid "Unknown error"
 msgstr "Neznámá chyba"
 
-#: ../src/goabackend/goaprovider.c:900
+#: ../src/goabackend/goaprovider.c:875
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync není implementováno na typu %s"
@@ -670,7 +684,7 @@ msgstr "Nastavení _připojení"
 msgid "_Personal Details"
 msgstr "_Osobní údaje"
 
-#: ../src/goabackend/goatodoistprovider.c:57
+#: ../src/goabackend/goatodoistprovider.c:58
 msgid "Todoist"
 msgstr "Todoist"
 
@@ -789,12 +803,12 @@ msgid "Did not find %s with identity “%s” in credentials"
 msgstr "V pověřeních nebyla nalezena položka %s s identitou „%s“"
 
 #. translators: %s here is the address of the web page
-#: ../src/goabackend/goawebview.c:95
+#: ../src/goabackend/goawebview.c:94
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Načítá se „%s“…"
 
-#: ../src/goabackend/goawindowsliveprovider.c:55
+#: ../src/goabackend/goawindowsliveprovider.c:56
 msgid "Microsoft"
 msgstr "Microsoft"
 
