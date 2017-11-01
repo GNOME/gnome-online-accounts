@@ -728,7 +728,6 @@ process_config_entries (GoaDaemon  *self,
                         GHashTable *group_name_to_key_file_data)
 {
   GHashTableIter iter;
-  const gchar *group;
   KeyFileData *key_file_data;
   GList *existing_object_paths = NULL;
   GList *config_object_paths = NULL;
@@ -751,28 +750,32 @@ process_config_entries (GoaDaemon  *self,
     g_list_free_full (existing_objects, g_object_unref);
   }
 
-  g_hash_table_iter_init (&iter, group_name_to_key_file_data);
-  while (g_hash_table_iter_next (&iter, (gpointer*) &group, (gpointer*) &key_file_data))
-    {
-      const gchar *id;
-      gchar *object_path;
+  {
+    const gchar *group;
 
-      if (!g_str_has_prefix (group, "Account "))
-        continue;
+    g_hash_table_iter_init (&iter, group_name_to_key_file_data);
+    while (g_hash_table_iter_next (&iter, (gpointer*) &group, (gpointer*) &key_file_data))
+      {
+        const gchar *id;
+        gchar *object_path;
 
-      id = account_group_to_id (group);
-
-      /* create and validate object path */
-      object_path = g_strdup_printf ("/org/gnome/OnlineAccounts/Accounts/%s", id);
-      if (strstr (id, "/") != NULL || !g_variant_is_object_path (object_path))
-        {
-          g_warning ("`%s' is not a valid account identifier", group);
-          g_free (object_path);
+        if (!g_str_has_prefix (group, "Account "))
           continue;
-        }
-      /* steals object_path variable */
-      config_object_paths = g_list_prepend (config_object_paths, object_path);
-    }
+
+        id = account_group_to_id (group);
+
+        /* create and validate object path */
+        object_path = g_strdup_printf ("/org/gnome/OnlineAccounts/Accounts/%s", id);
+        if (strstr (id, "/") != NULL || !g_variant_is_object_path (object_path))
+          {
+            g_warning ("`%s' is not a valid account identifier", group);
+            g_free (object_path);
+            continue;
+          }
+        /* steals object_path variable */
+        config_object_paths = g_list_prepend (config_object_paths, object_path);
+      }
+  }
 
   existing_object_paths = g_list_sort (existing_object_paths, (GCompareFunc) g_strcmp0);
   config_object_paths = g_list_sort (config_object_paths, (GCompareFunc) g_strcmp0);
