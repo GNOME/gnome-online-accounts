@@ -927,7 +927,6 @@ process_template_entries (GoaDaemon  *self,
   GList *config_object_groups = NULL;
   GList *config_template_groups = NULL;
   GList *added;
-  GList *removed;
   GList *unchanged;
   GList *l;
 
@@ -954,7 +953,7 @@ process_template_entries (GoaDaemon  *self,
                      config_template_groups,
                      (GCompareFunc) compare_account_and_template_groups,
                      &added,
-                     &removed,
+                     NULL,
                      &unchanged);
 
   for (l = added; l != NULL; l = l->next)
@@ -1077,7 +1076,6 @@ process_template_entries (GoaDaemon  *self,
 
   g_hash_table_unref (key_files_to_update);
   g_key_file_unref (home_conf_key_file);
-  g_list_free (removed);
   g_list_free (added);
   g_list_free (unchanged);
   g_list_free_full (config_object_groups, g_free);
