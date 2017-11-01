@@ -91,12 +91,12 @@ static void initable_interface_init (GInitableIface *interface);
 static void reset_alarms (GoaKerberosIdentity *self);
 static void clear_alarms (GoaKerberosIdentity *self);
 static gboolean goa_kerberos_identity_is_signed_in (GoaIdentity *identity);
-static void set_error_from_krb5_error_code (GoaKerberosIdentity  *self,
-                                            GError              **error,
-                                            gint                  code,
-                                            krb5_error_code       error_code,
-                                            const char           *format,
-                                            ...);
+static void set_and_prefix_error_from_krb5_error_code (GoaKerberosIdentity  *self,
+                                                       GError              **error,
+                                                       gint                  code,
+                                                       krb5_error_code       error_code,
+                                                       const char           *format,
+                                                       ...) G_GNUC_PRINTF (5, 6);
 
 G_LOCK_DEFINE_STATIC (identity_lock);
 
@@ -268,21 +268,19 @@ get_identifier (GoaKerberosIdentity  *self,
     {
       if (error_code == KRB5_CC_END)
         {
-          set_error_from_krb5_error_code (self,
-                                          error,
-                                          GOA_IDENTITY_ERROR_CREDENTIALS_UNAVAILABLE,
-                                          error_code,
-                                          _
-                                          ("Could not find identity in credential cache: %k"));
+          set_and_prefix_error_from_krb5_error_code (self,
+                                                     error,
+                                                     GOA_IDENTITY_ERROR_CREDENTIALS_UNAVAILABLE,
+                                                     error_code,
+                                                     _("Could not find identity in credential cache: "));
         }
       else
         {
-          set_error_from_krb5_error_code (self,
-                                          error,
-                                          GOA_IDENTITY_ERROR_ENUMERATING_CREDENTIALS,
-                                          error_code,
-                                          _
-                                          ("Could not find identity in credential cache: %k"));
+          set_and_prefix_error_from_krb5_error_code (self,
+                                                     error,
+                                                     GOA_IDENTITY_ERROR_ENUMERATING_CREDENTIALS,
+                                                     error_code,
+                                                     _("Could not find identity in credential cache: "));
         }
       return NULL;
     }
@@ -321,32 +319,28 @@ goa_kerberos_identity_init (GoaKerberosIdentity *self)
 }
 
 static void
-set_error_from_krb5_error_code (GoaKerberosIdentity  *self,
-                                GError              **error,
-                                gint                  code,
-                                krb5_error_code       error_code,
-                                const char           *format,
-                                ...)
+set_and_prefix_error_from_krb5_error_code (GoaKerberosIdentity  *self,
+                                           GError              **error,
+                                           gint                  code,
+                                           krb5_error_code       error_code,
+                                           const char           *format,
+                                           ...)
 {
   const char *error_message;
-  char *literal_message;
-  char *expanded_format;
+  char *literal_prefix;
   va_list args;
-  char **chunks;
 
   error_message = krb5_get_error_message (self->priv->kerberos_context, error_code);
-  chunks = g_strsplit (format, "%k", -1);
-  expanded_format = g_strjoinv (error_message, chunks);
-  g_strfreev (chunks);
-  krb5_free_error_message (self->priv->kerberos_context, error_message);
+  g_set_error_literal (error, GOA_IDENTITY_ERROR, code, error_message);
 
   va_start (args, format);
-  literal_message = g_strdup_vprintf (expanded_format, args);
+  literal_prefix = g_strdup_vprintf (format, args);
   va_end (args);
-  g_free (expanded_format);
 
-  g_set_error_literal (error, GOA_IDENTITY_ERROR, code, literal_message);
-  g_free (literal_message);
+  g_prefix_error (error, "%s", literal_prefix);
+
+  g_free (literal_prefix);
+  krb5_free_error_message (self->priv->kerberos_context, error_message);
 }
 
 char *
@@ -706,12 +700,11 @@ verify_identity (GoaKerberosIdentity  *self,
       if (error_code == KRB5_CC_END || error_code == KRB5_FCC_NOFILE)
         goto out;
 
-      set_error_from_krb5_error_code (self,
-                                      error,
-                                      GOA_IDENTITY_ERROR_NOT_FOUND,
-                                      error_code,
-                                      _("Could not find identity in "
-                                        "credential cache: %k"));
+      set_and_prefix_error_from_krb5_error_code (self,
+                                                 error,
+                                                 GOA_IDENTITY_ERROR_NOT_FOUND,
+                                                 error_code,
+                                                 _("Could not find identity in credential cache: "));
       verification_level = VERIFICATION_LEVEL_ERROR;
       goto out;
     }
@@ -720,12 +713,11 @@ verify_identity (GoaKerberosIdentity  *self,
                                       self->priv->credentials_cache, &cursor);
   if (error_code != 0)
     {
-      set_error_from_krb5_error_code (self,
-                                      error,
-                                      GOA_IDENTITY_ERROR_CREDENTIALS_UNAVAILABLE,
-                                      error_code,
-                                      _("Could not find identity "
-                                        "credentials in cache: %k"));
+      set_and_prefix_error_from_krb5_error_code (self,
+                                                 error,
+                                                 GOA_IDENTITY_ERROR_CREDENTIALS_UNAVAILABLE,
+                                                 error_code,
+                                                 _("Could not find identity credentials in cache: "));
 
       verification_level = VERIFICATION_LEVEL_ERROR;
       goto out;
@@ -772,12 +764,11 @@ verify_identity (GoaKerberosIdentity  *self,
     {
       verification_level = VERIFICATION_LEVEL_ERROR;
 
-      set_error_from_krb5_error_code (self,
-                                      error,
-                                      GOA_IDENTITY_ERROR_ENUMERATING_CREDENTIALS,
-                                      error_code,
-                                      _("Could not sift through identity "
-                                        "credentials in cache: %k"));
+      set_and_prefix_error_from_krb5_error_code (self,
+                                                 error,
+                                                 GOA_IDENTITY_ERROR_ENUMERATING_CREDENTIALS,
+                                                 error_code,
+                                                 _("Could not sift through identity credentials in cache: "));
       goto end_sequence;
     }
 
@@ -790,12 +781,12 @@ verify_identity (GoaKerberosIdentity  *self,
     {
       verification_level = VERIFICATION_LEVEL_ERROR;
 
-      set_error_from_krb5_error_code (self,
-                                      error,
-                                      GOA_IDENTITY_ERROR_ENUMERATING_CREDENTIALS,
-                                      error_code,
-                                      _("Could not finish up sifting through "
-                                        "identity credentials in cache: %k"));
+      set_and_prefix_error_from_krb5_error_code (self,
+                                                 error,
+                                                 GOA_IDENTITY_ERROR_ENUMERATING_CREDENTIALS,
+                                                 error_code,
+                                                 _("Could not finish up sifting through "
+                                                   "identity credentials in cache: "));
       goto out;
     }
 out:
@@ -1187,11 +1178,11 @@ create_credential_cache (GoaKerberosIdentity  *self,
 
   if (error_code != 0)
     {
-      set_error_from_krb5_error_code (self,
-                                      error,
-                                      GOA_IDENTITY_ERROR_ALLOCATING_CREDENTIALS,
-                                      error_code,
-                                      _("Could not create credential cache: %k"));
+      set_and_prefix_error_from_krb5_error_code (self,
+                                                 error,
+                                                 GOA_IDENTITY_ERROR_ALLOCATING_CREDENTIALS,
+                                                 error_code,
+                                                 _("Could not create credential cache: "));
 
       return FALSE;
     }
@@ -1221,12 +1212,11 @@ goa_kerberos_identity_update_credentials (GoaKerberosIdentity  *self,
                                    principal);
   if (error_code != 0)
     {
-      set_error_from_krb5_error_code (self,
-                                      error,
-                                      GOA_IDENTITY_ERROR_ALLOCATING_CREDENTIALS,
-                                      error_code,
-                                      _("Could not initialize credentials "
-                                        "cache: %k"));
+      set_and_prefix_error_from_krb5_error_code (self,
+                                                 error,
+                                                 GOA_IDENTITY_ERROR_ALLOCATING_CREDENTIALS,
+                                                 error_code,
+                                                 _("Could not initialize credentials cache: "));
 
       krb5_free_cred_contents (self->priv->kerberos_context, new_credentials);
       goto out;
@@ -1238,12 +1228,11 @@ goa_kerberos_identity_update_credentials (GoaKerberosIdentity  *self,
 
   if (error_code != 0)
     {
-      set_error_from_krb5_error_code (self,
-                                      error,
-                                      GOA_IDENTITY_ERROR_SAVING_CREDENTIALS,
-                                      error_code,
-                                      _("Could not store new credentials in "
-                                        "credentials cache: %k"));
+      set_and_prefix_error_from_krb5_error_code (self,
+                                                 error,
+                                                 GOA_IDENTITY_ERROR_SAVING_CREDENTIALS,
+                                                 error_code,
+                                                 _("Could not store new credentials in credentials cache: "));
 
       krb5_free_cred_contents (self->priv->kerberos_context, new_credentials);
       goto out;
@@ -1315,10 +1304,12 @@ goa_kerberos_identity_sign_in (GoaKerberosIdentity     *self,
                                               &options);
   if (error_code != 0)
     {
-      set_error_from_krb5_error_code (self,
-                                      error,
-                                      GOA_IDENTITY_ERROR_ALLOCATING_CREDENTIALS,
-                                      error_code, "%k");
+      set_and_prefix_error_from_krb5_error_code (self,
+                                                 error,
+                                                 GOA_IDENTITY_ERROR_ALLOCATING_CREDENTIALS,
+                                                 error_code,
+                                                 "%s",
+                                                 ""); /* Silence -Wformat-zero-length */
       if (destroy_notify)
         destroy_notify (inquiry_data);
       return FALSE;
@@ -1344,11 +1335,12 @@ goa_kerberos_identity_sign_in (GoaKerberosIdentity     *self,
 
   if (error_code != 0)
     {
-      set_error_from_krb5_error_code (self,
-                                      error,
-                                      GOA_IDENTITY_ERROR_PARSING_IDENTIFIER,
-                                      error_code,
-                                      "%k");
+      set_and_prefix_error_from_krb5_error_code (self,
+                                                 error,
+                                                 GOA_IDENTITY_ERROR_PARSING_IDENTIFIER,
+                                                 error_code,
+                                                 "%s",
+                                                 ""); /* Silence -Wformat-zero-length */
       if (destroy_notify)
         destroy_notify (inquiry_data);
       return FALSE;
@@ -1403,11 +1395,12 @@ goa_kerberos_identity_sign_in (GoaKerberosIdentity     *self,
 
   if (error_code != 0)
     {
-      set_error_from_krb5_error_code (self,
-                                      error,
-                                      GOA_IDENTITY_ERROR_AUTHENTICATION_FAILED,
-                                      error_code,
-                                      "%k");
+      set_and_prefix_error_from_krb5_error_code (self,
+                                                 error,
+                                                 GOA_IDENTITY_ERROR_AUTHENTICATION_FAILED,
+                                                 error_code,
+                                                 "%s",
+                                                 ""); /* Silence -Wformat-zero-length */
       if (destroy_notify)
         destroy_notify (inquiry_data);
       sign_in_operation_free (operation);
@@ -1546,10 +1539,10 @@ goa_kerberos_identity_renew (GoaKerberosIdentity *self, GError **error)
 
   if (error_code != 0)
     {
-      set_error_from_krb5_error_code (self,
-                                      error,
-                                      GOA_IDENTITY_ERROR_CREDENTIALS_UNAVAILABLE,
-                                      error_code, _("Could not renew identity: %k"));
+      set_and_prefix_error_from_krb5_error_code (self,
+                                                 error,
+                                                 GOA_IDENTITY_ERROR_CREDENTIALS_UNAVAILABLE,
+                                                 error_code, _("Could not renew identity: "));
       goto out;
     }
 
@@ -1561,13 +1554,12 @@ goa_kerberos_identity_renew (GoaKerberosIdentity *self, GError **error)
                                        self->priv->credentials_cache, NULL);
   if (error_code != 0)
     {
-      set_error_from_krb5_error_code (self,
-                                      error,
-                                      GOA_IDENTITY_ERROR_RENEWING,
-                                      error_code,
-                                      _
-                                      ("Could not get new credentials to renew identity %s: %k"),
-                                      name);
+      set_and_prefix_error_from_krb5_error_code (self,
+                                                 error,
+                                                 GOA_IDENTITY_ERROR_RENEWING,
+                                                 error_code,
+                                                 _("Could not get new credentials to renew identity %s: "),
+                                                 name);
       goto free_principal;
     }
 
@@ -1605,10 +1597,10 @@ goa_kerberos_identity_erase (GoaKerberosIdentity *self, GError **error)
 
   if (error_code != 0)
     {
-      set_error_from_krb5_error_code (self,
-                                      error,
-                                      GOA_IDENTITY_ERROR_REMOVING_CREDENTIALS,
-                                      error_code, _("Could not erase identity: %k"));
+      set_and_prefix_error_from_krb5_error_code (self,
+                                                 error,
+                                                 GOA_IDENTITY_ERROR_REMOVING_CREDENTIALS,
+                                                 error_code, _("Could not erase identity: "));
       return FALSE;
     }
 
