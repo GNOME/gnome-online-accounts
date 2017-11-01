@@ -94,7 +94,7 @@ goa_identity_utils_escape_object_path (const char *data,
 static char *
 dashed_string_to_studly_caps (const char *dashed_string)
 {
-  char *studly_string;;
+  char *studly_string;
   size_t studly_string_length;
   size_t i;
 
