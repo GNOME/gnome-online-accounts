@@ -1120,6 +1120,8 @@ query_user (GoaIdentityService *self,
                                  on_password_system_prompt_answered,
                                  request);
       break;
+    default:
+      break;
     }
 }
 

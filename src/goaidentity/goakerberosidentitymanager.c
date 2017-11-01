@@ -1047,6 +1047,8 @@ on_job_scheduled (GIOSchedulerJob            *job,
           renew_identity (operation->manager, operation);
           processed_operation = TRUE;
           break;
+        default:
+          break;
         }
 
       operation->job = NULL;
