@@ -403,30 +403,31 @@ static void
 diff_sorted_lists (GList *list1,
                    GList *list2,
                    GCompareFunc compare,
-                   GList **added,
-                   GList **removed,
-                   GList **unchanged)
+                   GList **out_added,
+                   GList **out_removed,
+                   GList **out_unchanged)
 {
+  GList *added = NULL;
+  GList *removed = NULL;
+  GList *unchanged = NULL;
   gint order;
-
-  *added = *removed = *unchanged = NULL;
 
   while (list1 != NULL && list2 != NULL)
     {
       order = (*compare) (list1->data, list2->data);
       if (order < 0)
         {
-          *removed = g_list_prepend (*removed, list1->data);
+          removed = g_list_prepend (removed, list1->data);
           list1 = list1->next;
         }
       else if (order > 0)
         {
-          *added = g_list_prepend (*added, list2->data);
+          added = g_list_prepend (added, list2->data);
           list2 = list2->next;
         }
       else
         { /* same item */
-          *unchanged = g_list_prepend (*unchanged, list1->data);
+          unchanged = g_list_prepend (unchanged, list1->data);
           list1 = list1->next;
           list2 = list2->next;
         }
@@ -434,14 +435,36 @@ diff_sorted_lists (GList *list1,
 
   while (list1 != NULL)
     {
-      *removed = g_list_prepend (*removed, list1->data);
+      removed = g_list_prepend (removed, list1->data);
       list1 = list1->next;
     }
   while (list2 != NULL)
     {
-      *added = g_list_prepend (*added, list2->data);
+      added = g_list_prepend (added, list2->data);
       list2 = list2->next;
     }
+
+  if (out_added != NULL)
+    {
+      *out_added = added;
+      added = NULL;
+    }
+
+  if (out_removed != NULL)
+    {
+      *out_removed = removed;
+      removed = NULL;
+    }
+
+  if (out_unchanged != NULL)
+    {
+      *out_unchanged = unchanged;
+      unchanged = NULL;
+    }
+
+  g_list_free (added);
+  g_list_free (removed);
+  g_list_free (unchanged);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
