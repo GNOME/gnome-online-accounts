@@ -499,7 +499,7 @@ build_object (GoaProvider         *provider,
       g_signal_connect (account,
                         "notify::ticketing-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
-                        "TicketingEnabled");
+                        (gpointer) "TicketingEnabled");
     }
 
   ret = TRUE;

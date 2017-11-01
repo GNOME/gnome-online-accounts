@@ -377,7 +377,7 @@ build_object (GoaProvider         *provider,
       g_signal_connect (account,
                         "notify::read-later-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
-                        "ReadLaterEnabled");
+                        (gpointer) "ReadLaterEnabled");
     }
 
   ret = TRUE;

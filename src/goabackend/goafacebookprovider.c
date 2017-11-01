@@ -305,7 +305,7 @@ build_object (GoaProvider         *provider,
       g_signal_connect (account,
                         "notify::photos-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
-                        "PhotosEnabled");
+                        (gpointer) "PhotosEnabled");
     }
 
   /* Maps */
@@ -318,7 +318,7 @@ build_object (GoaProvider         *provider,
       g_signal_connect (account,
                         "notify::maps-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
-                        "MapsEnabled");
+                        (gpointer) "MapsEnabled");
     }
 
   ret = TRUE;

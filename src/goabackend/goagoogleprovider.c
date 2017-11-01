@@ -388,35 +388,35 @@ build_object (GoaProvider         *provider,
       g_signal_connect (account,
                         "notify::mail-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
-                        "MailEnabled");
+                        (gpointer) "MailEnabled");
       g_signal_connect (account,
                         "notify::calendar-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
-                        "CalendarEnabled");
+                        (gpointer) "CalendarEnabled");
       g_signal_connect (account,
                         "notify::contacts-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
-                        "ContactsEnabled");
+                        (gpointer) "ContactsEnabled");
       g_signal_connect (account,
                         "notify::chat-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
-                        "ChatEnabled");
+                        (gpointer) "ChatEnabled");
       g_signal_connect (account,
                         "notify::documents-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
-                        "DocumentsEnabled");
+                        (gpointer) "DocumentsEnabled");
       g_signal_connect (account,
                         "notify::photos-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
-                        "PhotosEnabled");
+                        (gpointer) "PhotosEnabled");
       g_signal_connect (account,
                         "notify::files-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
-                        "FilesEnabled");
+                        (gpointer) "FilesEnabled");
       g_signal_connect (account,
                         "notify::printers-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
-                        "PrintersEnabled");
+                        (gpointer) "PrintersEnabled");
     }
 
   ret = TRUE;

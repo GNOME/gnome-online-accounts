@@ -207,8 +207,8 @@ get_provider_icon (GoaProvider *provider,
                    GoaObject   *object)
 {
   GoaTelepathyProviderPrivate *priv = GOA_TELEPATHY_PROVIDER (provider)->priv;
+  const gchar *icon_names[3];
   gchar *icon_name;
-  gchar *icon_names[3];
   GIcon *icon;
 
   /* Use symbolic icons for generic protocols. Use icons for the
@@ -237,7 +237,7 @@ get_provider_icon (GoaProvider *provider,
   /* If the icon doesn't exist, just try with the default icon. */
   icon_names[1] = "goa-account";
   icon_names[2] = NULL;
-  icon = g_themed_icon_new_from_names (icon_names, -1);
+  icon = g_themed_icon_new_from_names ((gchar **) icon_names, -1);
 
   g_free (icon_name);
 
@@ -738,7 +738,7 @@ build_object (GoaProvider        *provider,
       g_signal_connect (account,
                         "notify::chat-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
-                        "ChatEnabled");
+                        (gpointer) "ChatEnabled");
     }
 
   ret = TRUE;

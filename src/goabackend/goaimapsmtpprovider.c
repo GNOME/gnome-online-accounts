@@ -230,7 +230,7 @@ build_object (GoaProvider         *provider,
       g_signal_connect (account,
                         "notify::mail-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
-                        "Enabled");
+                        (gpointer) "Enabled");
     }
 
   ret = TRUE;

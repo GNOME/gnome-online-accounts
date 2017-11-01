@@ -289,7 +289,7 @@ build_object (GoaProvider         *provider,
       g_signal_connect (account,
                         "notify::todo-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
-                        "TodoEnabled");
+                        (gpointer) "TodoEnabled");
     }
 
   ret = TRUE;
