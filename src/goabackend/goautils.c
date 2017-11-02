@@ -925,6 +925,8 @@ goa_utils_set_error_ssl (GError **err, GTlsCertificateFlags flags)
       error_msg = _("The certificate’s algorithm is considered insecure.");
       break;
 
+    case G_TLS_CERTIFICATE_GENERIC_ERROR:
+    case G_TLS_CERTIFICATE_VALIDATE_ALL:
     default:
       error_msg = _("Invalid certificate.");
       break;
