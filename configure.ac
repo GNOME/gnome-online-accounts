@@ -124,7 +124,7 @@ if test "$enable_backend" != "no"; then
   AC_SUBST(GTK_CFLAGS)
   AC_SUBST(GTK_LIBS)
 
-  PKG_CHECK_MODULES(WEBKIT_GTK, [webkit2gtk-4.0 >= 2.7.2])
+  PKG_CHECK_MODULES(WEBKIT_GTK, [webkit2gtk-4.0 >= 2.12.0])
   AC_SUBST(WEBKIT_GTK_CFLAGS)
   AC_SUBST(WEBKIT_GTK_LIBS)
 

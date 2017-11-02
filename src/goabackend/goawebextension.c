@@ -77,19 +77,19 @@ web_extension_document_loaded_cb (WebKitWebPage *web_page, gpointer user_data)
   GoaWebExtension *self = GOA_WEB_EXTENSION (user_data);
   WebKitDOMDocument *document;
   WebKitDOMDOMWindow *dom_window;
-  WebKitDOMNodeList *elements = NULL;
+  WebKitDOMHTMLCollection *elements = NULL;
   gulong element_count;
   gulong i;
 
   document = webkit_web_page_get_dom_document (web_page);
-  elements = webkit_dom_document_get_elements_by_tag_name (document, "*");
-  element_count = webkit_dom_node_list_get_length (elements);
+  elements = webkit_dom_document_get_elements_by_tag_name_as_html_collection (document, "*");
+  element_count = webkit_dom_html_collection_get_length (elements);
 
   dom_window = webkit_dom_document_get_default_view (document);
 
   for (i = 0; i < element_count; i++)
     {
-      WebKitDOMNode *element = webkit_dom_node_list_item (elements, i);
+      WebKitDOMNode *element = webkit_dom_html_collection_item (elements, i);
 
       if ((GOA_IS_OAUTH_PROVIDER (self->provider)
            && goa_oauth_provider_is_deny_node (GOA_OAUTH_PROVIDER (self->provider), element))
