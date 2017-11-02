@@ -185,8 +185,8 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
   GError *error = NULL;
   AutodiscoverData *data = user_data;
   gboolean op_res = FALSE;
+  guint idx;
   guint status;
-  gint idx;
   gsize size;
   xmlDoc *doc;
   xmlNode *node;
