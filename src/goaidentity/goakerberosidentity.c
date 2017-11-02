@@ -1090,12 +1090,13 @@ goa_kerberos_identity_initable_init (GInitable     *initable,
       return TRUE;
 
     case VERIFICATION_LEVEL_ERROR:
+    default:
       if (verification_error != NULL)
         {
           g_propagate_error (error, verification_error);
           return FALSE;
         }
-    default:
+
       g_set_error (error,
                    GOA_IDENTITY_ERROR,
                    GOA_IDENTITY_ERROR_VERIFYING,
