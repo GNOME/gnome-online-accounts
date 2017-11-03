@@ -482,9 +482,8 @@ refresh_identity (GoaKerberosIdentityManager *self,
   identifier = goa_identity_get_identifier (identity);
 
   if (identifier == NULL)
-    {
-      return;
-    }
+    return;
+
   old_identity = g_hash_table_lookup (self->priv->identities, identifier);
 
   if (old_identity != NULL)
@@ -767,18 +766,22 @@ get_new_credentials_cache (GoaKerberosIdentityManager *self,
 
   if (g_strcmp0 (self->priv->credentials_cache_type, "FILE") == 0)
     {
-      g_debug ("GoaKerberosIdentityManager: credential cache type %s doesn't supports cache collections", self->priv->credentials_cache_type);
+      g_debug ("GoaKerberosIdentityManager: credential cache type %s doesn't supports cache collections",
+               self->priv->credentials_cache_type);
       supports_multiple_identities = FALSE;
     }
   else if (g_strcmp0 (self->priv->credentials_cache_type, "DIR") == 0 ||
            g_strcmp0 (self->priv->credentials_cache_type, "KEYRING") == 0)
     {
-      g_debug ("GoaKerberosIdentityManager: credential cache type %s supports cache collections", self->priv->credentials_cache_type);
+      g_debug ("GoaKerberosIdentityManager: credential cache type %s supports cache collections",
+               self->priv->credentials_cache_type);
       supports_multiple_identities = TRUE;
     }
   else
     {
-      g_debug ("GoaKerberosIdentityManager: don't know if credential cache type %s supports cache collections, assuming yes", self->priv->credentials_cache_type);
+      g_debug ("GoaKerberosIdentityManager: don't know if credential cache type %s supports cache collections, "
+               "assuming yes",
+               self->priv->credentials_cache_type);
       supports_multiple_identities = TRUE;
     }
 
@@ -1450,7 +1453,8 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
     {
       if (monitoring_error != NULL)
         {
-          g_warning ("GoaKerberosIdentityManager: Could not monitor credentials for %s (type %s), reverting to polling: %s",
+          g_warning ("GoaKerberosIdentityManager: Could not monitor credentials for %s (type %s), reverting to "
+                     "polling: %s",
                      cache_path,
                      cache_type,
                      monitoring_error != NULL? monitoring_error->message : "");
@@ -1467,7 +1471,9 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
     }
 
   if (!can_monitor)
-    self->priv->polling_timeout_id = g_timeout_add_seconds (FALLBACK_POLLING_INTERVAL, (GSourceFunc) on_polling_timeout, self);
+    self->priv->polling_timeout_id = g_timeout_add_seconds (FALLBACK_POLLING_INTERVAL,
+                                                            (GSourceFunc) on_polling_timeout,
+                                                            self);
 
   krb5_cc_close (self->priv->kerberos_context, default_cache);
 
