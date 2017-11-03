@@ -79,31 +79,12 @@ goaidentityenumtypes.c: goaidentityenumtypes.c.in $(identity_headers)
 EXTRA_DIST += goaidentityenumtypes.c.in
 BUILT_SOURCES += goaidentityenumtypes.c
 
-realmd_dbus_built_sources =					\
-	org.freedesktop.realmd.h				\
-	org.freedesktop.realmd.c				\
-	$(NULL)
-
-$(realmd_dbus_built_sources) : Makefile.am org.freedesktop.realmd.xml
-	$(AM_V_GEN) gdbus-codegen						\
-		--interface-prefix org.freedesktop.realmd.	\
-		--generate-c-code org.freedesktop.realmd	\
-		--c-generate-object-manager			\
-		--c-namespace GoaRealm				\
-		--annotate "org.freedesktop.realmd.Realm"	\
-		            org.gtk.GDBus.C.Name Common		\
-		$(srcdir)/org.freedesktop.realmd.xml		\
-		$(NULL)
-BUILT_SOURCES += $(realmd_dbus_built_sources)
-EXTRA_DIST += org.freedesktop.realmd.xml
-
 if BUILD_KERBEROS
 libexec_PROGRAMS = goa-identity-service
 
 goa_identity_service_SOURCES = 					\
 	goaidentityenumtypes.h		goaidentityenumtypes.c	\
 	$(identity_dbus_built_sources)				\
-	$(realmd_dbus_built_sources)				\
 	$(identity_sources)					\
 	$(NULL)
 
