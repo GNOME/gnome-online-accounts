@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-11 01:09+0200\n"
-"PO-Revision-Date: 2017-08-11 01:10+0200\n"
+"POT-Creation-Date: 2017-11-07 18:23+0100\n"
+"PO-Revision-Date: 2017-11-07 18:24+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -92,7 +92,6 @@ msgstr "_Niestandardowe"
 #: ../src/goabackend/goaexchangeprovider.c:411
 #: ../src/goabackend/goaimapsmtpprovider.c:705
 #: ../src/goabackend/goaimapsmtpprovider.c:725
-#: ../src/goabackend/goakerberosprovider.c:739
 #: ../src/goabackend/goalastfmprovider.c:428
 #: ../src/goabackend/goaowncloudprovider.c:537
 msgid "User_name"
@@ -106,7 +105,7 @@ msgstr "_Serwer"
 #. --
 #: ../src/goabackend/goaexchangeprovider.c:422
 #: ../src/goabackend/goaimapsmtpprovider.c:738
-#: ../src/goabackend/goakerberosprovider.c:744
+#: ../src/goabackend/goakerberosprovider.c:570
 #: ../src/goabackend/goalastfmprovider.c:437
 #: ../src/goabackend/goaowncloudprovider.c:552
 #: ../src/goabackend/goatelepathyprovider.c:651
@@ -114,7 +113,7 @@ msgid "_Cancel"
 msgstr "_Anuluj"
 
 #: ../src/goabackend/goaexchangeprovider.c:423
-#: ../src/goabackend/goakerberosprovider.c:745
+#: ../src/goabackend/goakerberosprovider.c:571
 #: ../src/goabackend/goalastfmprovider.c:438
 #: ../src/goabackend/goaowncloudprovider.c:553
 msgid "C_onnect"
@@ -122,7 +121,7 @@ msgstr "P_ołącz"
 
 #: ../src/goabackend/goaexchangeprovider.c:439
 #: ../src/goabackend/goaimapsmtpprovider.c:754
-#: ../src/goabackend/goakerberosprovider.c:761
+#: ../src/goabackend/goakerberosprovider.c:586
 #: ../src/goabackend/goalastfmprovider.c:454
 #: ../src/goabackend/goaowncloudprovider.c:568
 msgid "Connecting…"
@@ -135,7 +134,7 @@ msgstr "Łączenie…"
 #: ../src/goabackend/goaimapsmtpprovider.c:1043
 #: ../src/goabackend/goaimapsmtpprovider.c:1312
 #: ../src/goabackend/goaimapsmtpprovider.c:1388
-#: ../src/goabackend/goakerberosprovider.c:1155
+#: ../src/goabackend/goakerberosprovider.c:877
 #: ../src/goabackend/goalastfmprovider.c:652
 #: ../src/goabackend/goalastfmprovider.c:820
 #: ../src/goabackend/goamediaserverprovider.c:420
@@ -177,7 +176,7 @@ msgstr "Z_ignoruj"
 #: ../src/goabackend/goaimapsmtpprovider.c:1099
 #: ../src/goabackend/goaimapsmtpprovider.c:1358
 #: ../src/goabackend/goaimapsmtpprovider.c:1435
-#: ../src/goabackend/goakerberosprovider.c:1262
+#: ../src/goabackend/goakerberosprovider.c:957
 #: ../src/goabackend/goalastfmprovider.c:698
 #: ../src/goabackend/goalastfmprovider.c:856
 #: ../src/goabackend/goaowncloudprovider.c:731
@@ -273,7 +272,7 @@ msgstr "Usługa jest niedostępna"
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:109
 #: ../src/goabackend/goalastfmprovider.c:529
-#: ../src/goabackend/goasmtpauth.c:108 ../src/goabackend/goautils.c:883
+#: ../src/goabackend/goasmtpauth.c:108 ../src/goabackend/goautils.c:878
 #, c-format
 msgid "Authentication failed"
 msgstr "Uwierzytelnienie się nie powiodło"
@@ -376,58 +375,49 @@ msgstr "IMAP"
 msgid "SMTP"
 msgstr "SMTP"
 
-#: ../src/goabackend/goakerberosprovider.c:102
+#: ../src/goabackend/goakerberosprovider.c:100
 msgid "Enterprise Login (Kerberos)"
 msgstr "Logowanie firmowe (Kerberos)"
 
-#: ../src/goabackend/goakerberosprovider.c:300
+#: ../src/goabackend/goakerberosprovider.c:227
 #, c-format
 msgid "Ticketing is disabled for account"
 msgstr "Dla konta wyłączono obsługę biletów"
 
-#: ../src/goabackend/goakerberosprovider.c:325
+#: ../src/goabackend/goakerberosprovider.c:252
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr ""
 "Nie można odnaleźć zapisanych danych uwierzytelniających dla naczelnika „%s” "
 "w bazie kluczy"
 
-#: ../src/goabackend/goakerberosprovider.c:338
+#: ../src/goabackend/goakerberosprovider.c:265
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "Nie odnaleziono hasła dla naczelnika „%s” w danych uwierzytelniających"
 
-#: ../src/goabackend/goakerberosprovider.c:731
-msgid "_Domain"
-msgstr "_Domena"
+#: ../src/goabackend/goakerberosprovider.c:565
+msgid "_Principal"
+msgstr "Na_czelnik"
 
-#: ../src/goabackend/goakerberosprovider.c:732
-msgid "Enterprise domain or realm name"
-msgstr "Domena firmowa lub nazwa obszaru"
-
-#: ../src/goabackend/goakerberosprovider.c:974
+#: ../src/goabackend/goakerberosprovider.c:799
 #: ../src/goaidentity/goaidentityservice.c:1084
 msgid "Log In to Realm"
 msgstr "Zaloguj do obszaru"
 
-#: ../src/goabackend/goakerberosprovider.c:975
+#: ../src/goabackend/goakerberosprovider.c:800
 msgid "Please enter your password below."
 msgstr "Proszę wprowadzić hasło poniżej."
 
-#: ../src/goabackend/goakerberosprovider.c:976
+#: ../src/goabackend/goakerberosprovider.c:801
 msgid "Remember this password"
 msgstr "Zapamiętanie tego hasła"
 
-#: ../src/goabackend/goakerberosprovider.c:1110
-#, c-format
-msgid "The domain is not valid"
-msgstr "Domena jest nieprawidłowa"
-
-#: ../src/goabackend/goakerberosprovider.c:1257
+#: ../src/goabackend/goakerberosprovider.c:952
 msgid "Error connecting to enterprise identity server"
 msgstr "Błąd podczas łączenia z serwerem tożsamości firmowej"
 
-#: ../src/goabackend/goakerberosprovider.c:1604
+#: ../src/goabackend/goakerberosprovider.c:1290
 #, c-format
 msgid "Identity service returned invalid key"
 msgstr "Usługa tożsamości zwróciła nieprawidłowy klucz"
@@ -743,28 +733,28 @@ msgid "Failed to store credentials in the keyring"
 msgstr ""
 "Przechowanie danych uwierzytelniających w bazie kluczy się nie powiodło"
 
-#: ../src/goabackend/goautils.c:870
+#: ../src/goabackend/goautils.c:865
 msgid "Cannot resolve hostname"
 msgstr "Nie można rozwiązać nazwy komputera"
 
-#: ../src/goabackend/goautils.c:874
+#: ../src/goabackend/goautils.c:869
 msgid "Cannot resolve proxy hostname"
 msgstr "Nie można rozwiązać nazwy komputera pośrednika"
 
-#: ../src/goabackend/goautils.c:879
+#: ../src/goabackend/goautils.c:874
 msgid "Cannot find WebDAV endpoint"
 msgstr "Nie można odnaleźć punktu końcowego WebDAV"
 
-#: ../src/goabackend/goautils.c:888
+#: ../src/goabackend/goautils.c:883
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Kod: %u — nieoczekiwana odpowiedź od serwera"
 
-#: ../src/goabackend/goautils.c:904
+#: ../src/goabackend/goautils.c:899
 msgid "The signing certificate authority is not known."
 msgstr "Ośrodek podpisywania certyfikatów jest nieznany."
 
-#: ../src/goabackend/goautils.c:908
+#: ../src/goabackend/goautils.c:903
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
@@ -772,28 +762,28 @@ msgstr ""
 "Certyfikat nie zgadza się z oczekiwaną tożsamością witryny, z której został "
 "pobrany."
 
-#: ../src/goabackend/goautils.c:913
+#: ../src/goabackend/goautils.c:908
 msgid "The certificate’s activation time is still in the future."
 msgstr "Czas aktywacji certyfikatu jest wciąż w przyszłości."
 
-#: ../src/goabackend/goautils.c:917
+#: ../src/goabackend/goautils.c:912
 msgid "The certificate has expired."
 msgstr "Certyfikat wygasł."
 
-#: ../src/goabackend/goautils.c:921
+#: ../src/goabackend/goautils.c:916
 msgid "The certificate has been revoked."
 msgstr "Certyfikat został odwołany."
 
-#: ../src/goabackend/goautils.c:925
+#: ../src/goabackend/goautils.c:920
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Algorytm certyfikatu jest uważany za niebezpieczny."
 
-#: ../src/goabackend/goautils.c:929
+#: ../src/goabackend/goautils.c:924
 msgid "Invalid certificate."
 msgstr "Nieprawidłowy certyfikat."
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:964
+#: ../src/goabackend/goautils.c:959
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "Nie odnaleziono %s z tożsamością „%s” w danych uwierzytelniających"
