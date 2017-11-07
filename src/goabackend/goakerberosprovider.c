@@ -960,7 +960,7 @@ on_system_prompt_open_for_initial_sign_in (GcrSystemPrompt     *system_prompt,
                                            GTask               *operation_result)
 {
   GCancellable *cancellable;
-  GcrPrompt    *prompt;
+  GcrPrompt    *prompt = NULL;
   GError       *error;
 
   cancellable = g_task_get_cancellable (operation_result);
@@ -971,8 +971,7 @@ on_system_prompt_open_for_initial_sign_in (GcrSystemPrompt     *system_prompt,
     {
       g_task_return_error (operation_result, error);
       g_object_unref (operation_result);
-
-      return;
+      goto out;
     }
 
   gcr_prompt_set_title (prompt, _("Log In to Realm"));
@@ -984,6 +983,9 @@ on_system_prompt_open_for_initial_sign_in (GcrSystemPrompt     *system_prompt,
                              (GAsyncReadyCallback)
                              on_system_prompt_answered_for_initial_sign_in,
                              operation_result);
+
+ out:
+  g_clear_object (&prompt);
 }
 
 static void
