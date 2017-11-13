@@ -15,16 +15,16 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-"
 "accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-03-16 19:06+0000\n"
-"PO-Revision-Date: 2017-03-16 20:40+0100\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"POT-Creation-Date: 2017-11-11 18:54+0000\n"
+"PO-Revision-Date: 2017-11-12 12:16+0100\n"
+"Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.12\n"
+"X-Generator: Poedit 2.0.4\n"
 
 #. TODO: more specific
 #: ../src/daemon/goadaemon.c:1132 ../src/daemon/goadaemon.c:1416
@@ -98,7 +98,6 @@ msgstr "_Benutzerdefiniert"
 #: ../src/goabackend/goaexchangeprovider.c:434
 #: ../src/goabackend/goaimapsmtpprovider.c:705
 #: ../src/goabackend/goaimapsmtpprovider.c:725
-#: ../src/goabackend/goakerberosprovider.c:743
 #: ../src/goabackend/goalastfmprovider.c:422
 #: ../src/goabackend/goaowncloudprovider.c:560
 msgid "User_name"
@@ -112,7 +111,7 @@ msgstr "_Server"
 #. --
 #: ../src/goabackend/goaexchangeprovider.c:445
 #: ../src/goabackend/goaimapsmtpprovider.c:738
-#: ../src/goabackend/goakerberosprovider.c:748
+#: ../src/goabackend/goakerberosprovider.c:574
 #: ../src/goabackend/goalastfmprovider.c:431
 #: ../src/goabackend/goaowncloudprovider.c:575
 #: ../src/goabackend/goatelepathyprovider.c:666
@@ -120,7 +119,7 @@ msgid "_Cancel"
 msgstr "A_bbrechen"
 
 #: ../src/goabackend/goaexchangeprovider.c:446
-#: ../src/goabackend/goakerberosprovider.c:749
+#: ../src/goabackend/goakerberosprovider.c:575
 #: ../src/goabackend/goalastfmprovider.c:432
 #: ../src/goabackend/goaowncloudprovider.c:576
 msgid "C_onnect"
@@ -128,7 +127,7 @@ msgstr "_Verbinden"
 
 #: ../src/goabackend/goaexchangeprovider.c:462
 #: ../src/goabackend/goaimapsmtpprovider.c:754
-#: ../src/goabackend/goakerberosprovider.c:765
+#: ../src/goabackend/goakerberosprovider.c:590
 #: ../src/goabackend/goalastfmprovider.c:448
 #: ../src/goabackend/goaowncloudprovider.c:591
 msgid "Connecting…"
@@ -141,10 +140,10 @@ msgstr "Verbindung wird hergestellt …"
 #: ../src/goabackend/goaimapsmtpprovider.c:1043
 #: ../src/goabackend/goaimapsmtpprovider.c:1312
 #: ../src/goabackend/goaimapsmtpprovider.c:1388
-#: ../src/goabackend/goakerberosprovider.c:1162
+#: ../src/goabackend/goakerberosprovider.c:884
 #: ../src/goabackend/goalastfmprovider.c:643 ../src/goabackend/goalastfmprovider.c:811
 #: ../src/goabackend/goamediaserverprovider.c:434
-#: ../src/goabackend/goaoauth2provider.c:1091 ../src/goabackend/goaoauthprovider.c:860
+#: ../src/goabackend/goaoauth2provider.c:1091 ../src/goabackend/goaoauthprovider.c:878
 #: ../src/goabackend/goaowncloudprovider.c:702
 #: ../src/goabackend/goaowncloudprovider.c:926
 #: ../src/goabackend/goatelepathyprovider.c:490
@@ -180,7 +179,7 @@ msgstr "_Ignorieren"
 #: ../src/goabackend/goaimapsmtpprovider.c:1099
 #: ../src/goabackend/goaimapsmtpprovider.c:1358
 #: ../src/goabackend/goaimapsmtpprovider.c:1435
-#: ../src/goabackend/goakerberosprovider.c:1269
+#: ../src/goabackend/goakerberosprovider.c:964
 #: ../src/goabackend/goalastfmprovider.c:689 ../src/goabackend/goalastfmprovider.c:847
 #: ../src/goabackend/goaowncloudprovider.c:762
 #: ../src/goabackend/goaowncloudprovider.c:969
@@ -196,8 +195,8 @@ msgstr "Fehler beim Verbinden zum Microsoft Exchange-Server"
 msgid "Facebook"
 msgstr "Facebook"
 
-#: ../src/goabackend/goafacebookprovider.c:208
-#: ../src/goabackend/goaflickrprovider.c:175
+#: ../src/goabackend/goafacebookprovider.c:211
+#: ../src/goabackend/goaflickrprovider.c:179
 #: ../src/goabackend/goafoursquareprovider.c:182
 #: ../src/goabackend/goagoogleprovider.c:219
 #: ../src/goabackend/goawindowsliveprovider.c:179
@@ -208,12 +207,12 @@ msgstr ""
 "stattdessen der Statuscode %d (%s) empfangen"
 
 #. TODO: more specific
-#: ../src/goabackend/goafacebookprovider.c:227
-#: ../src/goabackend/goafacebookprovider.c:239
-#: ../src/goabackend/goafacebookprovider.c:252
-#: ../src/goabackend/goaflickrprovider.c:194 ../src/goabackend/goaflickrprovider.c:206
-#: ../src/goabackend/goaflickrprovider.c:216 ../src/goabackend/goaflickrprovider.c:226
-#: ../src/goabackend/goaflickrprovider.c:236
+#: ../src/goabackend/goafacebookprovider.c:230
+#: ../src/goabackend/goafacebookprovider.c:241
+#: ../src/goabackend/goafacebookprovider.c:247
+#: ../src/goabackend/goaflickrprovider.c:198 ../src/goabackend/goaflickrprovider.c:210
+#: ../src/goabackend/goaflickrprovider.c:220 ../src/goabackend/goaflickrprovider.c:230
+#: ../src/goabackend/goaflickrprovider.c:240
 #: ../src/goabackend/goafoursquareprovider.c:201
 #: ../src/goabackend/goafoursquareprovider.c:213
 #: ../src/goabackend/goafoursquareprovider.c:224
@@ -238,7 +237,7 @@ msgstr "Antwort konnte nicht analysiert werden"
 msgid "Flickr"
 msgstr "Flickr"
 
-#: ../src/goabackend/goaflickrprovider.c:308
+#: ../src/goabackend/goaflickrprovider.c:312
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr ""
 "Ihre Systemzeit ist ungültig. Überprüfen Sie ihre Datums- und Zeiteinstellungen."
@@ -260,7 +259,7 @@ msgstr "Dienst nicht erreichbar"
 
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:114 ../src/goabackend/goalastfmprovider.c:523
-#: ../src/goabackend/goasmtpauth.c:112 ../src/goabackend/goautils.c:893
+#: ../src/goabackend/goasmtpauth.c:112 ../src/goabackend/goautils.c:888
 #, c-format
 msgid "Authentication failed"
 msgstr "Legitimierung gescheitert"
@@ -363,58 +362,49 @@ msgstr "IMAP"
 msgid "SMTP"
 msgstr "SMTP"
 
-#: ../src/goabackend/goakerberosprovider.c:101
+#: ../src/goabackend/goakerberosprovider.c:99
 msgid "Enterprise Login (Kerberos)"
 msgstr "Unternehmensanmeldung (Kerberos)"
 
-#: ../src/goabackend/goakerberosprovider.c:301
+#: ../src/goabackend/goakerberosprovider.c:228
 #, c-format
 msgid "Ticketing is disabled for account"
 msgstr "Ticketanforderung ist für das Konto deaktiviert"
 
-#: ../src/goabackend/goakerberosprovider.c:326
+#: ../src/goabackend/goakerberosprovider.c:253
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr ""
 "Gespeicherte Anmeldedaten für Prinzipal »%s« konnten nicht im Schlüsselbund "
 "gefunden werden"
 
-#: ../src/goabackend/goakerberosprovider.c:339
+#: ../src/goabackend/goakerberosprovider.c:266
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "Passwort für Prinzipal »%s« wurde nicht in den Anmeldedaten gefunden"
 
-#: ../src/goabackend/goakerberosprovider.c:735
-msgid "_Domain"
-msgstr "_Domäne"
+#: ../src/goabackend/goakerberosprovider.c:569
+msgid "_Principal"
+msgstr "_Principal"
 
-#: ../src/goabackend/goakerberosprovider.c:736
-msgid "Enterprise domain or realm name"
-msgstr "Unternehmensdomäne oder Bereichsname"
-
-#: ../src/goabackend/goakerberosprovider.c:978
+#: ../src/goabackend/goakerberosprovider.c:803
 #: ../src/goaidentity/goaidentityservice.c:1083
 msgid "Log In to Realm"
 msgstr "Beim Bereich anmelden"
 
-#: ../src/goabackend/goakerberosprovider.c:979
+#: ../src/goabackend/goakerberosprovider.c:804
 msgid "Please enter your password below."
 msgstr "Bitten geben Sie unten Ihr Passwort ein."
 
-#: ../src/goabackend/goakerberosprovider.c:980
+#: ../src/goabackend/goakerberosprovider.c:805
 msgid "Remember this password"
 msgstr "Passwort merken"
 
-#: ../src/goabackend/goakerberosprovider.c:1114
-#, c-format
-msgid "The domain is not valid"
-msgstr "Die Domäne ist ungültig"
-
-#: ../src/goabackend/goakerberosprovider.c:1264
+#: ../src/goabackend/goakerberosprovider.c:959
 msgid "Error connecting to enterprise identity server"
 msgstr "Fehler beim Verbinden mit Unternehmensidentitätsserver"
 
-#: ../src/goabackend/goakerberosprovider.c:1610
+#: ../src/goabackend/goakerberosprovider.c:1296
 #, c-format
 msgid "Identity service returned invalid key"
 msgstr "Identitätsdienst gab ungültigen Schlüssel zurück"
@@ -463,16 +453,16 @@ msgstr "Legitimierungsantwort:"
 msgid "Authorization response: %s"
 msgstr "Legitimierungsantwort: »%s«"
 
-#: ../src/goabackend/goaoauth2provider.c:1117 ../src/goabackend/goaoauthprovider.c:891
+#: ../src/goabackend/goaoauth2provider.c:1117 ../src/goabackend/goaoauthprovider.c:909
 msgid "Error getting an Access Token: "
 msgstr "Fehler beim Holen des Zugriffs-Tokens:"
 
-#: ../src/goabackend/goaoauth2provider.c:1132 ../src/goabackend/goaoauthprovider.c:904
+#: ../src/goabackend/goaoauth2provider.c:1132 ../src/goabackend/goaoauthprovider.c:922
 msgid "Error getting identity: "
 msgstr "Fehler beim Ermitteln der Identität:"
 
 #: ../src/goabackend/goaoauth2provider.c:1354
-#: ../src/goabackend/goaoauthprovider.c:1208
+#: ../src/goabackend/goaoauthprovider.c:1226
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Anmeldung als %s wurde angefragt, aber als %s angemeldet"
@@ -483,7 +473,7 @@ msgid "Credentials do not contain access_token"
 msgstr "Anmeldedaten enthalten nicht »access_token«"
 
 #: ../src/goabackend/goaoauth2provider.c:1555
-#: ../src/goabackend/goaoauthprovider.c:1436
+#: ../src/goabackend/goaoauthprovider.c:1454
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Fehler beim Holen des Zugriffs-Tokens (%s, %d):"
@@ -493,25 +483,25 @@ msgstr "Fehler beim Holen des Zugriffs-Tokens (%s, %d):"
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "Fehlende Kopfzeilen »access_token« oder »access_token_secret« in Antwort"
 
-#: ../src/goabackend/goaoauthprovider.c:774
+#: ../src/goabackend/goaoauthprovider.c:792
 msgid "Error getting a Request Token: "
 msgstr "Fehler beim Holen des Anfrage-Tokens:"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:805
+#: ../src/goabackend/goaoauthprovider.c:823
 #, c-format
 msgid "Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr ""
 "Bei der Abfrage des Anfrage-Tokens wurde Status 200 erwartet und stattdessen Status "
 "%d (%s) erhalten"
 
-#: ../src/goabackend/goaoauthprovider.c:822
+#: ../src/goabackend/goaoauthprovider.c:840
 #, c-format
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr ""
 "Fehlende Kopfzeilen mit »request_token« oder »request_token_secret« in der Antwort"
 
-#: ../src/goabackend/goaoauthprovider.c:1392
+#: ../src/goabackend/goaoauthprovider.c:1410
 #, c-format
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Anmeldedaten enthalten weder »access_token« noch »access_token_secret«"
@@ -740,28 +730,28 @@ msgstr "GOA %s-Anmeldedaten für Identität %s"
 msgid "Failed to store credentials in the keyring"
 msgstr "Fehler beim Speichern der Anmeldedaten im Schlüsselbund"
 
-#: ../src/goabackend/goautils.c:880
+#: ../src/goabackend/goautils.c:875
 msgid "Cannot resolve hostname"
 msgstr "Rechnername konnte nicht aufgelöst werden"
 
-#: ../src/goabackend/goautils.c:884
+#: ../src/goabackend/goautils.c:879
 msgid "Cannot resolve proxy hostname"
 msgstr "Proxy-Rechnername konnte nicht aufgelöst werden"
 
-#: ../src/goabackend/goautils.c:889
+#: ../src/goabackend/goautils.c:884
 msgid "Cannot find WebDAV endpoint"
 msgstr "WebDAV-Endpunkt konnte nicht gefunden werden"
 
-#: ../src/goabackend/goautils.c:898
+#: ../src/goabackend/goautils.c:893
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Code: %u — Unerwartete Antwort vom Server"
 
-#: ../src/goabackend/goautils.c:914
+#: ../src/goabackend/goautils.c:909
 msgid "The signing certificate authority is not known."
 msgstr "Der Zertifikatsaussteller ist nicht bekannt."
 
-#: ../src/goabackend/goautils.c:918
+#: ../src/goabackend/goautils.c:913
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
@@ -769,28 +759,28 @@ msgstr ""
 "Das Zertifikat entspricht nicht der erwarteten Identität der Seite, von der es "
 "bezogen wurde."
 
-#: ../src/goabackend/goautils.c:923
+#: ../src/goabackend/goautils.c:918
 msgid "The certificate’s activation time is still in the future."
 msgstr "Die Aktivierungszeit des Zertifikats liegt in der Zukunft"
 
-#: ../src/goabackend/goautils.c:927
+#: ../src/goabackend/goautils.c:922
 msgid "The certificate has expired."
 msgstr "Das Zertifikat ist abgelaufen."
 
-#: ../src/goabackend/goautils.c:931
+#: ../src/goabackend/goautils.c:926
 msgid "The certificate has been revoked."
 msgstr "Das Zertifikat wurde zurückgezogen."
 
-#: ../src/goabackend/goautils.c:935
+#: ../src/goabackend/goautils.c:930
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Der Algorithmus des Zertifikats gilt als unsicher."
 
-#: ../src/goabackend/goautils.c:939
+#: ../src/goabackend/goautils.c:934
 msgid "Invalid certificate."
 msgstr "Ungültiges Zertifikat."
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:974
+#: ../src/goabackend/goautils.c:969
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "»%s« wurde in den Anmeldedaten für »%s« nicht gefunden"
@@ -802,7 +792,6 @@ msgid "Loading “%s”…"
 msgstr "»%s« laden …"
 
 #: ../src/goabackend/goawindowsliveprovider.c:70
-#| msgid "Microsoft Account"
 msgid "Microsoft"
 msgstr "Microsoft"
 
@@ -881,6 +870,15 @@ msgstr "Identität konnte nicht gefunden werden"
 #: ../src/goaidentity/goakerberosidentitymanager.c:841
 msgid "Could not create credential cache for identity"
 msgstr "Anmeldedaten-Cache für Identität konnte nicht erstellt werden"
+
+#~ msgid "_Domain"
+#~ msgstr "_Domäne"
+
+#~ msgid "Enterprise domain or realm name"
+#~ msgstr "Unternehmensdomäne oder Bereichsname"
+
+#~ msgid "The domain is not valid"
+#~ msgstr "Die Domäne ist ungültig"
 
 #~ msgid "ownCloud"
 #~ msgstr "ownCloud"
