@@ -7,6 +7,7 @@ icon_DATA = 				\
 	goa-account-google.png		\
 	goa-account-msn.png		\
 	goa-account-owncloud.png	\
+	goa-account-nextcloud.png	\
 	goa-account-pocket.png		\
 	goa-account-foursquare.png	\
 	goa-account-flickr.png		\

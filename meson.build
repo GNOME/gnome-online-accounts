@@ -207,6 +207,11 @@ config_h.set_quoted('GOA_OWNCLOUD_NAME', 'owncloud')
 enable_owncloud = get_option('owncloud')
 config_h.set('GOA_OWNCLOUD_ENABLED', enable_owncloud)
 
+# nextCloud
+config_h.set_quoted('GOA_NEXTCLOUD_NAME', 'nextcloud')
+enable_nextcloud = get_option('nextcloud')
+config_h.set('GOA_NEXTCLOUD_ENABLED', enable_nextcloud)
+
 # Pocket
 config_h.set_quoted('GOA_POCKET_NAME', 'pocket')
 
@@ -338,6 +343,7 @@ output += '\n'
 output += '        Media Server provider:          ' + enable_media_server.to_string() + '\n'
 output += '        Microsoft Exchange provider:    ' + enable_exchange.to_string() + '\n'
 output += '        ownCloud provider:              ' + enable_owncloud.to_string() + '\n'
+output += '        nextCloud provider:             ' + enable_nextcloud.to_string() + '\n'
 output += '        Pocket provider:                ' + enable_pocket.to_string()
 if enable_pocket
   output += ' (id:@0@)'.format(pocket_client_id)

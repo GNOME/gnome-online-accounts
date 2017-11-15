@@ -27,6 +27,7 @@
 #include "goafacebookprovider.h"
 #include "goaimapsmtpprovider.h"
 #include "goaowncloudprovider.h"
+#include "goanextcloudprovider.h"
 #include "goaflickrprovider.h"
 #include "goafoursquareprovider.h"
 #include "goawindowsliveprovider.h"
@@ -937,6 +938,9 @@ static struct
 #endif
 #ifdef GOA_OWNCLOUD_ENABLED
   { GOA_OWNCLOUD_NAME, goa_owncloud_provider_get_type },
+#endif
+#ifdef GOA_NEXTCLOUD_ENABLED
+  { GOA_NEXTCLOUD_NAME, goa_nextcloud_provider_get_type },
 #endif
 #ifdef GOA_FACEBOOK_ENABLED
   { GOA_FACEBOOK_NAME, goa_facebook_provider_get_type },

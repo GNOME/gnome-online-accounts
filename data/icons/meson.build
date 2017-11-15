@@ -4,6 +4,7 @@ icon_data = [
   'goa-account-foursquare.png',
   'goa-account-google.png',
   'goa-account-msn.png',
+  'goa-account-nextcloud.png',
   'goa-account-owncloud.png',
   'goa-account.png',
   'goa-account-pocket.png',
