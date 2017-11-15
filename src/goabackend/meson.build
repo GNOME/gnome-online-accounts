@@ -43,6 +43,7 @@ sources = enum_sources + files(
   'goamediaserverprovider.c',
   'goaobjectskeletonutils.c',
   'goaowncloudprovider.c',
+  'goanextcloudprovider.c',
   'goapocketprovider.c',
   'goaprovider.c',
   'goarestproxy.c',
