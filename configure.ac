@@ -264,6 +264,16 @@ if test "$enable_owncloud" != "no"; then
   AC_DEFINE(GOA_OWNCLOUD_ENABLED, 1, [Enable ownCloud data provider])
 fi
 
+# NextCloud
+AC_DEFINE(GOA_NEXTCLOUD_NAME, ["nextcloud"], [ProviderType and extension point name])
+AC_ARG_ENABLE([nextcloud],
+              [AS_HELP_STRING([--enable-nextcloud], [Enable NextCloud provider])],
+              [],
+              [enable_nextcloud=yes])
+if test "$enable_nextcloud" != "no"; then
+  AC_DEFINE(GOA_NEXTCLOUD_ENABLED, 1, [Enable NextCloud data provider])
+fi
+
 # Facebook
 AC_DEFINE(GOA_FACEBOOK_NAME, ["facebook"], [ProviderType and extension point name])
 AC_ARG_ENABLE([facebook],
