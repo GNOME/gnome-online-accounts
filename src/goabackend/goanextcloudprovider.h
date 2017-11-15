@@ -20,23 +20,19 @@
 #error "Only <goabackend/goabackend.h> can be included directly."
 #endif
 
-#ifndef __GOA_OWNCLOUD_PROVIDER_H__
-#define __GOA_OWNCLOUD_PROVIDER_H__
+#ifndef __GOA_NEXTCLOUD_PROVIDER_H__
+#define __GOA_NEXTCLOUD_PROVIDER_H__
 
 #include <glib-object.h>
 
 #include "goaprovider-priv.h"
+#include "goaowncloudprovider.h"
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_OWNCLOUD_PROVIDER (goa_owncloud_provider_get_type ())
-G_DECLARE_DERIVABLE_TYPE  (GoaOwncloudProvider, goa_owncloud_provider, GOA, OWNCLOUD_PROVIDER, GoaProvider);
-
-struct _GoaOwncloudProviderClass
-{
-  GoaProviderClass parent_class;
-};
+#define GOA_TYPE_NEXTCLOUD_PROVIDER (goa_nextcloud_provider_get_type ())
+G_DECLARE_FINAL_TYPE (GoaNextcloudProvider, goa_nextcloud_provider, GOA, NEXTCLOUD_PROVIDER, GoaOwncloudProvider);
 
 G_END_DECLS
 
-#endif /* __GOA_OWNCLOUD_PROVIDER_H__ */
+#endif /* __GOA_NEXTCLOUD_PROVIDER_H__ */

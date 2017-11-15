@@ -30,11 +30,6 @@
 #include "goaobjectskeletonutils.h"
 #include "goautils.h"
 
-struct _GoaOwncloudProvider
-{
-  GoaProvider parent_instance;
-};
-
 G_DEFINE_TYPE_WITH_CODE (GoaOwncloudProvider, goa_owncloud_provider, GOA_TYPE_PROVIDER,
                          goa_provider_ensure_extension_points_registered ();
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
@@ -57,7 +52,7 @@ get_provider_type (GoaProvider *provider)
 static gchar *
 get_provider_name (GoaProvider *provider, GoaObject *object)
 {
-  return g_strdup(_("Nextcloud"));
+  return g_strdup(_("ownCloud"));
 }
 
 static GoaProviderGroup
