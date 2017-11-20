@@ -77,7 +77,7 @@ web_extension_document_loaded_cb (WebKitWebPage *web_page, gpointer user_data)
   GoaWebExtension *self = GOA_WEB_EXTENSION (user_data);
   WebKitDOMDocument *document;
   WebKitDOMDOMWindow *dom_window;
-  WebKitDOMNodeList *elements;
+  WebKitDOMNodeList *elements = NULL;
   gulong element_count;
   gulong i;
 
@@ -141,6 +141,8 @@ web_extension_document_loaded_cb (WebKitWebPage *web_page, gpointer user_data)
             }
         }
     }
+
+  g_clear_object (&elements);
 }
 
 static void
