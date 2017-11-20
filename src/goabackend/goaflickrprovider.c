@@ -243,28 +243,6 @@ get_identity_sync (GoaOAuthProvider  *oauth_provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-is_deny_node (GoaOAuthProvider *oauth_provider, WebKitDOMNode *node)
-{
-  WebKitDOMElement *element;
-  gboolean ret = FALSE;
-  gchar *id = NULL;
-
-  if (!WEBKIT_DOM_IS_HTML_ANCHOR_ELEMENT (node))
-    goto out;
-
-  element = WEBKIT_DOM_ELEMENT (node);
-  id = webkit_dom_element_get_id (element);
-  if (g_strcmp0 (id, "auth-disallow") != 0)
-    goto out;
-
-  ret = TRUE;
-
- out:
-  g_free (id);
-  return ret;
-}
-
-static gboolean
 is_identity_node (GoaOAuthProvider *oauth_provider, WebKitDOMHTMLInputElement *element)
 {
   /* Flickr does not provide a way to query the string used by the
@@ -374,7 +352,6 @@ goa_flickr_provider_class_init (GoaFlickrProviderClass *klass)
 
   oauth_class = GOA_OAUTH_PROVIDER_CLASS (klass);
   oauth_class->get_identity_sync        = get_identity_sync;
-  oauth_class->is_deny_node             = is_deny_node;
   oauth_class->is_identity_node         = is_identity_node;
   oauth_class->get_consumer_key         = get_consumer_key;
   oauth_class->get_consumer_secret      = get_consumer_secret;
