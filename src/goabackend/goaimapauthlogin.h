@@ -31,12 +31,8 @@
 G_BEGIN_DECLS
 
 #define GOA_TYPE_IMAP_AUTH_LOGIN         (goa_imap_auth_login_get_type ())
-#define GOA_IMAP_AUTH_LOGIN(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_IMAP_AUTH_LOGIN, GoaImapAuthLogin))
-#define GOA_IS_IMAP_AUTH_LOGIN(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_IMAP_AUTH_LOGIN))
+G_DECLARE_FINAL_TYPE (GoaImapAuthLogin, goa_imap_auth_login, GOA, IMAP_AUTH_LOGIN, GoaMailAuth);
 
-typedef struct _GoaImapAuthLogin GoaImapAuthLogin;
-
-GType        goa_imap_auth_login_get_type  (void) G_GNUC_CONST;
 GoaMailAuth *goa_imap_auth_login_new       (const gchar       *user_name,
                                             const gchar       *password);
 

@@ -52,12 +52,6 @@ struct _GoaImapAuthLogin
   gchar *password;
 };
 
-typedef struct
-{
-  GoaMailAuthClass parent_class;
-
-} GoaImapAuthLoginClass;
-
 enum
 {
   PROP_0,
