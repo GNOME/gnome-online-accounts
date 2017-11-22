@@ -35,7 +35,7 @@ enum
   PROP_OUTPUT
 };
 
-G_DEFINE_ABSTRACT_TYPE (GoaMailAuth, goa_mail_auth, G_TYPE_OBJECT);
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GoaMailAuth, goa_mail_auth, G_TYPE_OBJECT);
 
 /* ---------------------------------------------------------------------------------------------------- */
 
@@ -140,7 +140,7 @@ goa_mail_auth_set_property (GObject      *object,
 static void
 goa_mail_auth_init (GoaMailAuth *self)
 {
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GOA_TYPE_MAIL_AUTH, GoaMailAuthPrivate);
+  self->priv = goa_mail_auth_get_instance_private (self);
 }
 
 static void
@@ -169,8 +169,6 @@ goa_mail_auth_class_init (GoaMailAuthClass *klass)
                                                         G_TYPE_DATA_OUTPUT_STREAM,
                                                         G_PARAM_READWRITE |
                                                         G_PARAM_STATIC_STRINGS));
-
-  g_type_class_add_private (klass, sizeof (GoaMailAuthPrivate));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
