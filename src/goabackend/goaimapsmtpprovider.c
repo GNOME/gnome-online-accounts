@@ -95,40 +95,26 @@ build_object (GoaProvider         *provider,
               gboolean             just_added,
               GError             **error)
 {
-  GoaAccount *account;
-  GoaMail *mail;
-  GoaPasswordBased *password_based;
+  GoaAccount *account = NULL;
+  GoaMail *mail = NULL;
+  GoaPasswordBased *password_based = NULL;
   gboolean enabled;
   gboolean imap_accept_ssl_errors;
   gboolean imap_use_ssl;
   gboolean imap_use_tls;
-  gboolean ret;
+  gboolean ret = FALSE;
   gboolean smtp_accept_ssl_errors;
-  gboolean smtp_auth_login;
-  gboolean smtp_auth_plain;
+  gboolean smtp_auth_login = FALSE;
+  gboolean smtp_auth_plain = FALSE;
   gboolean smtp_use_auth;
   gboolean smtp_use_ssl;
   gboolean smtp_use_tls;
-  gchar *email_address;
-  gchar *imap_host;
-  gchar *imap_username;
-  gchar *name;
-  gchar *smtp_host;
-  gchar *smtp_username;
-
-  account = NULL;
-  mail = NULL;
-  password_based = NULL;
-  email_address = NULL;
-  imap_host = NULL;
-  imap_username = NULL;
-  name = NULL;
-  smtp_auth_login = FALSE;
-  smtp_auth_plain = FALSE;
-  smtp_host = NULL;
-  smtp_username = NULL;
-
-  ret = FALSE;
+  gchar *email_address = NULL;
+  gchar *imap_host = NULL;
+  gchar *imap_username = NULL;
+  gchar *name = NULL;
+  gchar *smtp_host = NULL;
+  gchar *smtp_username = NULL;
 
   /* Chain up */
   if (!GOA_PROVIDER_CLASS (goa_imap_smtp_provider_parent_class)->build_object (provider,
@@ -291,38 +277,23 @@ ensure_credentials_sync (GoaProvider         *provider,
                          GCancellable        *cancellable,
                          GError             **error)
 {
-  GVariant *credentials;
-  GoaMailAuth *imap_auth;
-  GoaMailAuth *smtp_auth;
-  GoaMailClient *mail_client;
+  GVariant *credentials = NULL;
+  GoaMailAuth *imap_auth = NULL;
+  GoaMailAuth *smtp_auth = NULL;
+  GoaMailClient *mail_client = NULL;
   GoaTlsType imap_tls_type;
   GoaTlsType smtp_tls_type;
   gboolean imap_accept_ssl_errors;
-  gboolean ret;
+  gboolean ret = FALSE;
   gboolean smtp_accept_ssl_errors;
-  gchar *domain;
-  gchar *email_address;
-  gchar *imap_password;
-  gchar *imap_server;
-  gchar *imap_username;
-  gchar *smtp_password;
-  gchar *smtp_server;
-  gchar *smtp_username;
-
-  credentials = NULL;
-  domain = NULL;
-  email_address = NULL;
-  imap_auth = NULL;
-  smtp_auth = NULL;
-  mail_client = NULL;
-  imap_password = NULL;
-  imap_server = NULL;
-  imap_username = NULL;
-  smtp_password = NULL;
-  smtp_server = NULL;
-  smtp_username = NULL;
-
-  ret = FALSE;
+  gchar *domain = NULL;
+  gchar *email_address = NULL;
+  gchar *imap_password = NULL;
+  gchar *imap_server = NULL;
+  gchar *imap_username = NULL;
+  gchar *smtp_password = NULL;
+  gchar *smtp_server = NULL;
+  gchar *smtp_username = NULL;
 
   if (!goa_utils_get_credentials (provider, object, "imap-password", NULL, &imap_password, cancellable, error))
     {
@@ -564,9 +535,7 @@ static void
 on_smtp_changed (GtkEditable *editable, gpointer user_data)
 {
   AddAccountData *data = user_data;
-  gboolean can_add;
-
-  can_add = FALSE;
+  gboolean can_add = FALSE;
 
   if (gtk_entry_get_text_length (GTK_ENTRY (data->smtp_server)) == 0)
     goto out;
@@ -782,15 +751,10 @@ static void
 guess_imap_smtp (AddAccountData *data)
 {
   const gchar *email_address;
-  gchar *imap_server;
-  gchar *smtp_server;
-  gchar *username;
-  gchar *domain;
-
-  domain = NULL;
-  imap_server = NULL;
-  smtp_server = NULL;
-  username = NULL;
+  gchar *imap_server = NULL;
+  gchar *smtp_server = NULL;
+  gchar *username = NULL;
+  gchar *domain = NULL;
 
   email_address = gtk_entry_get_text (GTK_ENTRY (data->email_address));
   if (!goa_utils_parse_email_address (email_address, &username, &domain))
@@ -859,10 +823,10 @@ add_account (GoaProvider    *provider,
   AddAccountData data;
   GVariantBuilder credentials;
   GVariantBuilder details;
-  GoaMailAuth *imap_auth;
-  GoaMailAuth *smtp_auth;
-  GoaMailClient *mail_client;
-  GoaObject *ret;
+  GoaMailAuth *imap_auth = NULL;
+  GoaMailAuth *smtp_auth = NULL;
+  GoaMailClient *mail_client = NULL;
+  GoaObject *ret = NULL;
   GoaTlsType imap_tls_type;
   GoaTlsType smtp_tls_type;
   gboolean imap_accept_ssl_errors;
@@ -880,15 +844,8 @@ add_account (GoaProvider    *provider,
   const gchar *smtp_password;
   const gchar *smtp_server;
   const gchar *smtp_username;
-  gchar *domain;
+  gchar *domain = NULL;
   gint response;
-
-  imap_auth = NULL;
-  smtp_auth = NULL;
-  mail_client = NULL;
-  domain = NULL;
-
-  ret = NULL;
 
   memset (&data, 0, sizeof (AddAccountData));
   data.cancellable = g_cancellable_new ();
@@ -1203,25 +1160,25 @@ refresh_account (GoaProvider    *provider,
   AddAccountData data;
   GVariantBuilder builder;
   GoaAccount *account;
-  GoaMailAuth *imap_auth;
-  GoaMailAuth *smtp_auth;
-  GoaMailClient *mail_client;
+  GoaMailAuth *imap_auth = NULL;
+  GoaMailAuth *smtp_auth = NULL;
+  GoaMailClient *mail_client = NULL;
   GoaTlsType imap_tls_type;
   GoaTlsType smtp_tls_type;
   GtkWidget *dialog;
   GtkWidget *vbox;
   gboolean imap_accept_ssl_errors;
-  gboolean ret;
+  gboolean ret = FALSE;
   gboolean smtp_accept_ssl_errors;
   gboolean smtp_use_auth;
   const gchar *imap_password;
   const gchar *smtp_password;
-  gchar *domain;
-  gchar *email_address;
-  gchar *imap_server;
-  gchar *imap_username;
-  gchar *smtp_server;
-  gchar *smtp_username;
+  gchar *domain = NULL;
+  gchar *email_address = NULL;
+  gchar *imap_server = NULL;
+  gchar *imap_username = NULL;
+  gchar *smtp_server = NULL;
+  gchar *smtp_username = NULL;
   gint response;
 
   g_return_val_if_fail (GOA_IS_IMAP_SMTP_PROVIDER (provider), FALSE);
@@ -1229,18 +1186,6 @@ refresh_account (GoaProvider    *provider,
   g_return_val_if_fail (GOA_IS_OBJECT (object), FALSE);
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-
-  imap_auth = NULL;
-  smtp_auth = NULL;
-  mail_client = NULL;
-  domain = NULL;
-  email_address = NULL;
-  imap_server = NULL;
-  imap_username = NULL;
-  smtp_server = NULL;
-  smtp_username = NULL;
-
-  ret = FALSE;
 
   dialog = gtk_dialog_new_with_buttons (NULL,
                                         parent,
@@ -1517,9 +1462,7 @@ show_account (GoaProvider         *provider,
   const gchar *username;
   gchar *value_str;
   gchar *value_str_1;
-  gint row;
-
-  row = 0;
+  gint row = 0;
 
   goa_utils_account_add_attention_needed (client, object, provider, vbox);
 
@@ -1616,11 +1559,9 @@ on_handle_get_password (GoaPasswordBased      *interface,
   const gchar *account_id;
   const gchar *method_name;
   const gchar *provider_type;
-  gchar *password;
+  gchar *password = NULL;
 
   /* TODO: maybe log what app is requesting access */
-
-  password = NULL;
 
   object = GOA_OBJECT (g_dbus_interface_get_object (G_DBUS_INTERFACE (interface)));
   account = goa_object_peek_account (object);
