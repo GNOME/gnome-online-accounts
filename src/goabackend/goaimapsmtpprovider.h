@@ -25,15 +25,12 @@
 
 #include <glib-object.h>
 
+#include "goaprovider-priv.h"
+
 G_BEGIN_DECLS
 
 #define GOA_TYPE_IMAP_SMTP_PROVIDER   (goa_imap_smtp_provider_get_type ())
-#define GOA_IMAP_SMTP_PROVIDER(o)     (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_IMAP_SMTP_PROVIDER, GoaImapSmtpProvider))
-#define GOA_IS_IMAP_SMTP_PROVIDER(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_IMAP_SMTP_PROVIDER))
-
-typedef struct _GoaImapSmtpProvider GoaImapSmtpProvider;
-
-GType goa_imap_smtp_provider_get_type (void) G_GNUC_CONST;
+G_DECLARE_FINAL_TYPE (GoaImapSmtpProvider, goa_imap_smtp_provider, GOA, IMAP_SMTP_PROVIDER, GoaProvider);
 
 G_END_DECLS
 

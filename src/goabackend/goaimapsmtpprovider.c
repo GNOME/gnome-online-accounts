@@ -24,20 +24,12 @@
 #include "goamailclient.h"
 #include "goaimapsmtpprovider.h"
 #include "goaprovider.h"
-#include "goaprovider-priv.h"
 #include "goasmtpauth.h"
 #include "goautils.h"
 
 struct _GoaImapSmtpProvider
 {
   GoaProvider parent_instance;
-};
-
-typedef struct _GoaImapSmtpProviderClass GoaImapSmtpProviderClass;
-
-struct _GoaImapSmtpProviderClass
-{
-  GoaProviderClass parent_class;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GoaImapSmtpProvider, goa_imap_smtp_provider, GOA_TYPE_PROVIDER,
