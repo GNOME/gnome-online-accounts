@@ -189,15 +189,6 @@ sign_in_identity_finish (GoaKerberosProvider  *self,
   return g_task_propagate_pointer (task, error);
 }
 
-static void
-on_account_signed_in (GoaProvider   *provider,
-                      GAsyncResult  *result,
-                      SignInRequest *request)
-{
-  g_task_propagate_boolean (G_TASK (result), &request->error);
-  g_main_loop_quit (request->loop);
-}
-
 static gboolean
 get_ticket_sync (GoaKerberosProvider *self,
                  GoaObject           *object,
@@ -838,6 +829,15 @@ perform_initial_sign_in (GoaKerberosProvider *self,
                                 (GAsyncReadyCallback)
                                 on_system_prompt_open_for_initial_sign_in,
                                 operation_result);
+}
+
+static void
+on_account_signed_in (GoaProvider   *provider,
+                      GAsyncResult  *result,
+                      SignInRequest *request)
+{
+  g_task_propagate_boolean (G_TASK (result), &request->error);
+  g_main_loop_quit (request->loop);
 }
 
 static GoaObject *
