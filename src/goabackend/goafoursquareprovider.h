@@ -29,7 +29,7 @@
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_FOURSQUARE_PROVIDER   (goa_foursquare_provider_get_type ())
+#define GOA_TYPE_FOURSQUARE_PROVIDER (goa_foursquare_provider_get_type ())
 G_DECLARE_FINAL_TYPE (GoaFoursquareProvider, goa_foursquare_provider, GOA, FOURSQUARE_PROVIDER, GoaOAuth2Provider);
 
 G_END_DECLS

@@ -29,7 +29,7 @@
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_HTTP_CLIENT        (goa_http_client_get_type ())
+#define GOA_TYPE_HTTP_CLIENT (goa_http_client_get_type ())
 G_DECLARE_FINAL_TYPE (GoaHttpClient, goa_http_client, GOA, HTTP_CLIENT, GObject);
 
 GoaHttpClient  *goa_http_client_new                (void);

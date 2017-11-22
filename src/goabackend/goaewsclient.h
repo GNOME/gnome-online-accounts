@@ -29,7 +29,7 @@
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_EWS_CLIENT         (goa_ews_client_get_type ())
+#define GOA_TYPE_EWS_CLIENT (goa_ews_client_get_type ())
 G_DECLARE_FINAL_TYPE (GoaEwsClient, goa_ews_client, GOA, EWS_CLIENT, GObject);
 
 GoaEwsClient   *goa_ews_client_new                 (void);

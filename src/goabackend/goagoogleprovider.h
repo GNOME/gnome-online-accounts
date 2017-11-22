@@ -29,7 +29,7 @@
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_GOOGLE_PROVIDER   (goa_google_provider_get_type ())
+#define GOA_TYPE_GOOGLE_PROVIDER (goa_google_provider_get_type ())
 G_DECLARE_FINAL_TYPE (GoaGoogleProvider, goa_google_provider, GOA, GOOGLE_PROVIDER, GoaOAuth2Provider);
 
 G_END_DECLS

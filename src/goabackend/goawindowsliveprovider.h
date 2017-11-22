@@ -31,7 +31,7 @@
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_WINDOWS_LIVE_PROVIDER   (goa_windows_live_provider_get_type ())
+#define GOA_TYPE_WINDOWS_LIVE_PROVIDER (goa_windows_live_provider_get_type ())
 G_DECLARE_FINAL_TYPE (GoaWindowsLiveProvider,
                       goa_windows_live_provider,
                       GOA,

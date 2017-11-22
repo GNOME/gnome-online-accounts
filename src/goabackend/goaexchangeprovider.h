@@ -29,7 +29,7 @@
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_EXCHANGE_PROVIDER   (goa_exchange_provider_get_type ())
+#define GOA_TYPE_EXCHANGE_PROVIDER (goa_exchange_provider_get_type ())
 G_DECLARE_FINAL_TYPE (GoaExchangeProvider, goa_exchange_provider, GOA, EXCHANGE_PROVIDER, GoaProvider);
 
 G_END_DECLS

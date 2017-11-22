@@ -29,7 +29,7 @@
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_FLICKR_PROVIDER   (goa_flickr_provider_get_type ())
+#define GOA_TYPE_FLICKR_PROVIDER (goa_flickr_provider_get_type ())
 G_DECLARE_FINAL_TYPE (GoaFlickrProvider, goa_flickr_provider, GOA, FLICKR_PROVIDER, GoaOAuthProvider);
 
 G_END_DECLS

@@ -29,7 +29,7 @@
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_IMAP_SMTP_PROVIDER   (goa_imap_smtp_provider_get_type ())
+#define GOA_TYPE_IMAP_SMTP_PROVIDER (goa_imap_smtp_provider_get_type ())
 G_DECLARE_FINAL_TYPE (GoaImapSmtpProvider, goa_imap_smtp_provider, GOA, IMAP_SMTP_PROVIDER, GoaProvider);
 
 G_END_DECLS

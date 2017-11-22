@@ -29,7 +29,7 @@
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_FACEBOOK_PROVIDER   (goa_facebook_provider_get_type ())
+#define GOA_TYPE_FACEBOOK_PROVIDER (goa_facebook_provider_get_type ())
 G_DECLARE_FINAL_TYPE (GoaFacebookProvider, goa_facebook_provider, GOA, FACEBOOK_PROVIDER, GoaOAuth2Provider);
 
 G_END_DECLS

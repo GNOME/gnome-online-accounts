@@ -28,7 +28,7 @@
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_CLIENT  (goa_client_get_type ())
+#define GOA_TYPE_CLIENT (goa_client_get_type ())
 G_DECLARE_FINAL_TYPE (GoaClient, goa_client, GOA, CLIENT, GObject)
 
 void                goa_client_new                (GCancellable        *cancellable,
@@ -43,7 +43,6 @@ GoaManager         *goa_client_get_manager        (GoaClient           *self);
 GList              *goa_client_get_accounts       (GoaClient           *self);
 GoaObject          *goa_client_lookup_by_id       (GoaClient           *self,
                                                    const gchar         *id);
-
 
 G_END_DECLS
 
