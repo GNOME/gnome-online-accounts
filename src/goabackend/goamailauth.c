@@ -77,7 +77,9 @@ static void
 goa_mail_auth_dispose (GObject *object)
 {
   GoaMailAuth *self = GOA_MAIL_AUTH (object);
-  GoaMailAuthPrivate *priv = self->priv;
+  GoaMailAuthPrivate *priv;
+
+  priv = goa_mail_auth_get_instance_private (self);
 
   g_clear_object (&priv->input);
   g_clear_object (&priv->output);
@@ -92,7 +94,9 @@ goa_mail_auth_get_property (GObject      *object,
                             GParamSpec   *pspec)
 {
   GoaMailAuth *self = GOA_MAIL_AUTH (object);
-  GoaMailAuthPrivate *priv = self->priv;
+  GoaMailAuthPrivate *priv;
+
+  priv = goa_mail_auth_get_instance_private (self);
 
   switch (prop_id)
     {
@@ -117,7 +121,9 @@ goa_mail_auth_set_property (GObject      *object,
                             GParamSpec   *pspec)
 {
   GoaMailAuth *self = GOA_MAIL_AUTH (object);
-  GoaMailAuthPrivate *priv = self->priv;
+  GoaMailAuthPrivate *priv;
+
+  priv = goa_mail_auth_get_instance_private (self);
 
   switch (prop_id)
     {
@@ -140,7 +146,6 @@ goa_mail_auth_set_property (GObject      *object,
 static void
 goa_mail_auth_init (GoaMailAuth *self)
 {
-  self->priv = goa_mail_auth_get_instance_private (self);
 }
 
 static void
@@ -287,14 +292,19 @@ goa_mail_auth_starttls_finish (GoaMailAuth         *self,
 GDataInputStream *
 goa_mail_auth_get_input (GoaMailAuth *self)
 {
-  return self->priv->input;
+  GoaMailAuthPrivate *priv;
+
+  priv = goa_mail_auth_get_instance_private (self);
+  return priv->input;
 }
 
 void
 goa_mail_auth_set_input (GoaMailAuth      *self,
                          GDataInputStream *input)
 {
-  GoaMailAuthPrivate *priv = self->priv;
+  GoaMailAuthPrivate *priv;
+
+  priv = goa_mail_auth_get_instance_private (self);
 
   if (priv->input == input)
     return;
@@ -307,14 +317,19 @@ goa_mail_auth_set_input (GoaMailAuth      *self,
 GDataOutputStream *
 goa_mail_auth_get_output (GoaMailAuth  *self)
 {
-  return self->priv->output;
+  GoaMailAuthPrivate *priv;
+
+  priv = goa_mail_auth_get_instance_private (self);
+  return priv->output;
 }
 
 void
 goa_mail_auth_set_output (GoaMailAuth       *self,
                           GDataOutputStream *output)
 {
-  GoaMailAuthPrivate *priv = self->priv;
+  GoaMailAuthPrivate *priv;
+
+  priv = goa_mail_auth_get_instance_private (self);
 
   if (priv->output == output)
     return;

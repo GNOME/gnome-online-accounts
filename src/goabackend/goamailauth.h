@@ -44,7 +44,6 @@ struct _GoaMailAuth
 {
   /*< private >*/
   GObject parent_instance;
-  GoaMailAuthPrivate *priv;
 };
 
 struct _GoaMailAuthClass
