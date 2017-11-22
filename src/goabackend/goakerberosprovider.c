@@ -120,6 +120,8 @@ get_provider_icon (GoaProvider *provider, GoaObject *object)
 
 typedef struct
 {
+  GCancellable *cancellable;
+
   GtkDialog *dialog;
   GMainLoop *loop;
 
@@ -745,8 +747,10 @@ on_system_prompt_answered_for_initial_sign_in (GcrPrompt          *prompt,
         }
       else
         {
-          g_cancellable_cancel (cancellable);
-          g_task_return_error_if_cancelled (operation_result);
+          g_task_return_new_error (operation_result,
+                                   G_IO_ERROR,
+                                   G_IO_ERROR_CANCELLED,
+                                   _("Operation was cancelled"));
         }
 
       g_object_unref (operation_result);
@@ -814,15 +818,14 @@ static void
 perform_initial_sign_in (GoaKerberosProvider *self,
                          GoaObject           *object,
                          const char          *principal,
-                         SignInRequest       *request)
+                         GCancellable        *cancellable,
+                         GAsyncReadyCallback  callback,
+                         gpointer             user_data)
 {
 
   GTask        *operation_result;
-  GCancellable *cancellable;
 
-  cancellable = g_cancellable_new ();
-
-  operation_result = g_task_new (self, cancellable, (GAsyncReadyCallback) on_account_signed_in, request);
+  operation_result = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (operation_result, object);
 
   g_object_set_data (G_OBJECT (operation_result),
@@ -835,8 +838,6 @@ perform_initial_sign_in (GoaKerberosProvider *self,
                                 (GAsyncReadyCallback)
                                 on_system_prompt_open_for_initial_sign_in,
                                 operation_result);
-
-  g_object_unref (cancellable);
 }
 
 static GoaObject *
@@ -859,6 +860,7 @@ add_account (GoaProvider    *provider,
   gint        response;
 
   memset (&request, 0, sizeof (SignInRequest));
+  request.cancellable = g_cancellable_new ();
   request.loop = g_main_loop_new (NULL, FALSE);
   request.dialog = dialog;
   request.error = NULL;
@@ -926,7 +928,12 @@ start_over:
 
   /* After the account is created, try to sign it in
    */
-  perform_initial_sign_in (self, object, principal, &request);
+  perform_initial_sign_in (self,
+                           object,
+                           principal,
+                           request.cancellable,
+                           (GAsyncReadyCallback) on_account_signed_in,
+                           &request);
 
   gtk_widget_set_sensitive (request.connect_button, FALSE);
   gtk_widget_set_sensitive (request.principal, FALSE);
@@ -996,6 +1003,7 @@ start_over:
   g_free (principal);
   g_free (realm);
   g_clear_pointer (&request.loop, (GDestroyNotify) g_main_loop_unref);
+  g_clear_object (&request.cancellable);
   return object;
 }
 
