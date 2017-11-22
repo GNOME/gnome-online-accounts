@@ -30,21 +30,9 @@
 G_BEGIN_DECLS
 
 #define GOA_TYPE_MAIL_AUTH         (goa_mail_auth_get_type ())
-#define GOA_MAIL_AUTH(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_MAIL_AUTH, GoaMailAuth))
-#define GOA_MAIL_AUTH_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GOA_TYPE_MAIL_AUTH, GoaMailAuthClass))
-#define GOA_MAIL_AUTH_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GOA_TYPE_MAIL_AUTH, GoaMailAuthClass))
-#define GOA_IS_MAIL_AUTH(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_MAIL_AUTH))
-#define GOA_IS_MAIL_AUTH_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GOA_TYPE_MAIL_AUTH))
+G_DECLARE_DERIVABLE_TYPE (GoaMailAuth, goa_mail_auth, GOA, MAIL_AUTH, GObject);
 
-typedef struct _GoaMailAuth GoaMailAuth;
-typedef struct _GoaMailAuthClass GoaMailAuthClass;
 typedef struct _GoaMailAuthPrivate GoaMailAuthPrivate;
-
-struct _GoaMailAuth
-{
-  /*< private >*/
-  GObject parent_instance;
-};
 
 struct _GoaMailAuthClass
 {
@@ -58,7 +46,6 @@ struct _GoaMailAuthClass
                                    GError          **error);
 };
 
-GType                 goa_mail_auth_get_type           (void) G_GNUC_CONST;
 gboolean              goa_mail_auth_is_needed          (GoaMailAuth         *self);
 void                  goa_mail_auth_run                (GoaMailAuth         *self,
                                                         GCancellable        *cancellable,
