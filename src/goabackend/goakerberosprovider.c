@@ -831,12 +831,29 @@ perform_initial_sign_in (GoaKerberosProvider *self,
                                 operation_result);
 }
 
-static void
-on_account_signed_in (GoaProvider   *provider,
-                      GAsyncResult  *result,
-                      SignInRequest *request)
+static gboolean
+perform_initial_sign_in_finish (GoaKerberosProvider  *self,
+                                GAsyncResult         *result,
+                                GError              **error)
 {
-  g_task_propagate_boolean (G_TASK (result), &request->error);
+  GTask *task;
+
+  g_return_val_if_fail (GOA_IS_KERBEROS_PROVIDER (self), FALSE);
+
+  g_return_val_if_fail (g_task_is_valid (result, self), FALSE);
+  task = G_TASK (result);
+
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  return g_task_propagate_boolean (task, error);
+}
+
+static void
+on_account_signed_in (GoaKerberosProvider  *self,
+                      GAsyncResult         *result,
+                      SignInRequest        *request)
+{
+  perform_initial_sign_in_finish (self, result, &request->error);
   g_main_loop_quit (request->loop);
 }
 
