@@ -23,7 +23,6 @@
 #ifndef __GOA_IMAP_AUTH_LOGIN_H__
 #define __GOA_IMAP_AUTH_LOGIN_H__
 
-#include <gio/gio.h>
 #include <glib.h>
 #include <glib-object.h>
 
