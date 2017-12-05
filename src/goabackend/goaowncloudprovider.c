@@ -26,7 +26,6 @@
 
 #include "goahttpclient.h"
 #include "goaprovider.h"
-#include "goaprovider-priv.h"
 #include "goaowncloudprovider.h"
 #include "goaobjectskeletonutils.h"
 #include "goautils.h"
@@ -34,13 +33,6 @@
 struct _GoaOwncloudProvider
 {
   GoaProvider parent_instance;
-};
-
-typedef struct _GoaOwncloudProviderClass GoaOwncloudProviderClass;
-
-struct _GoaOwncloudProviderClass
-{
-  GoaProviderClass parent_class;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GoaOwncloudProvider, goa_owncloud_provider, GOA_TYPE_PROVIDER,
