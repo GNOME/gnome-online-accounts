@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-09-09 15:05+0000\n"
-"PO-Revision-Date: 2017-09-19 00:50+0300\n"
+"POT-Creation-Date: 2017-12-05 15:52+0000\n"
+"PO-Revision-Date: 2017-12-13 20:39+0300\n"
 "Last-Translator: Stas Solovey <whats_up@tut.by>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.0.5\n"
 
 #. TODO: more specific
 #: ../src/daemon/goadaemon.c:1172 ../src/daemon/goadaemon.c:1456
@@ -93,7 +93,6 @@ msgstr "П_ользовательский"
 #: ../src/goabackend/goaexchangeprovider.c:411
 #: ../src/goabackend/goaimapsmtpprovider.c:705
 #: ../src/goabackend/goaimapsmtpprovider.c:725
-#: ../src/goabackend/goakerberosprovider.c:739
 #: ../src/goabackend/goalastfmprovider.c:428
 #: ../src/goabackend/goaowncloudprovider.c:537
 msgid "User_name"
@@ -107,7 +106,7 @@ msgstr "_Сервер"
 #. --
 #: ../src/goabackend/goaexchangeprovider.c:422
 #: ../src/goabackend/goaimapsmtpprovider.c:738
-#: ../src/goabackend/goakerberosprovider.c:744
+#: ../src/goabackend/goakerberosprovider.c:570
 #: ../src/goabackend/goalastfmprovider.c:437
 #: ../src/goabackend/goaowncloudprovider.c:552
 #: ../src/goabackend/goatelepathyprovider.c:651
@@ -115,7 +114,7 @@ msgid "_Cancel"
 msgstr "_Отмена"
 
 #: ../src/goabackend/goaexchangeprovider.c:423
-#: ../src/goabackend/goakerberosprovider.c:745
+#: ../src/goabackend/goakerberosprovider.c:571
 #: ../src/goabackend/goalastfmprovider.c:438
 #: ../src/goabackend/goaowncloudprovider.c:553
 msgid "C_onnect"
@@ -123,7 +122,7 @@ msgstr "_Подключиться"
 
 #: ../src/goabackend/goaexchangeprovider.c:439
 #: ../src/goabackend/goaimapsmtpprovider.c:754
-#: ../src/goabackend/goakerberosprovider.c:761
+#: ../src/goabackend/goakerberosprovider.c:586
 #: ../src/goabackend/goalastfmprovider.c:454
 #: ../src/goabackend/goaowncloudprovider.c:568
 msgid "Connecting…"
@@ -136,7 +135,7 @@ msgstr "Подключение…"
 #: ../src/goabackend/goaimapsmtpprovider.c:1043
 #: ../src/goabackend/goaimapsmtpprovider.c:1312
 #: ../src/goabackend/goaimapsmtpprovider.c:1388
-#: ../src/goabackend/goakerberosprovider.c:1155
+#: ../src/goabackend/goakerberosprovider.c:877
 #: ../src/goabackend/goalastfmprovider.c:652
 #: ../src/goabackend/goalastfmprovider.c:820
 #: ../src/goabackend/goamediaserverprovider.c:420
@@ -178,7 +177,7 @@ msgstr "_Игнорировать"
 #: ../src/goabackend/goaimapsmtpprovider.c:1099
 #: ../src/goabackend/goaimapsmtpprovider.c:1358
 #: ../src/goabackend/goaimapsmtpprovider.c:1435
-#: ../src/goabackend/goakerberosprovider.c:1262
+#: ../src/goabackend/goakerberosprovider.c:957
 #: ../src/goabackend/goalastfmprovider.c:698
 #: ../src/goabackend/goalastfmprovider.c:856
 #: ../src/goabackend/goaowncloudprovider.c:731
@@ -273,7 +272,7 @@ msgstr "Служба недоступна"
 #. TODO: more specific
 #: ../src/goabackend/goaimapauthlogin.c:109
 #: ../src/goabackend/goalastfmprovider.c:529
-#: ../src/goabackend/goasmtpauth.c:108 ../src/goabackend/goautils.c:883
+#: ../src/goabackend/goasmtpauth.c:108 ../src/goabackend/goautils.c:878
 #, c-format
 msgid "Authentication failed"
 msgstr "Сбой аутентификации"
@@ -376,59 +375,50 @@ msgstr "IMAP"
 msgid "SMTP"
 msgstr "SMTP"
 
-#: ../src/goabackend/goakerberosprovider.c:102
+#: ../src/goabackend/goakerberosprovider.c:100
 msgid "Enterprise Login (Kerberos)"
 msgstr "Вход в систему (Kerberos)"
 
-#: ../src/goabackend/goakerberosprovider.c:300
+#: ../src/goabackend/goakerberosprovider.c:227
 #, c-format
 msgid "Ticketing is disabled for account"
 msgstr "Выдача билетов отключена для этой учётной записи"
 
-#: ../src/goabackend/goakerberosprovider.c:325
+#: ../src/goabackend/goakerberosprovider.c:252
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr ""
 "Не удалось найти в связке ключей сохранённые учётные данные для "
 "администратора доступа «%s»"
 
-#: ../src/goabackend/goakerberosprovider.c:338
+#: ../src/goabackend/goakerberosprovider.c:265
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr ""
 "Не удалось найти в учётных данных пароль для администратора доступа «%s»"
 
-#: ../src/goabackend/goakerberosprovider.c:731
-msgid "_Domain"
-msgstr "_Домен"
+#: ../src/goabackend/goakerberosprovider.c:565
+msgid "_Principal"
+msgstr "_Основной"
 
-#: ../src/goabackend/goakerberosprovider.c:732
-msgid "Enterprise domain or realm name"
-msgstr "Корпоративный домен или имя области"
-
-#: ../src/goabackend/goakerberosprovider.c:974
+#: ../src/goabackend/goakerberosprovider.c:799
 #: ../src/goaidentity/goaidentityservice.c:1084
 msgid "Log In to Realm"
 msgstr "Войти в область"
 
-#: ../src/goabackend/goakerberosprovider.c:975
+#: ../src/goabackend/goakerberosprovider.c:800
 msgid "Please enter your password below."
 msgstr "Введите ниже ваш пароль."
 
-#: ../src/goabackend/goakerberosprovider.c:976
+#: ../src/goabackend/goakerberosprovider.c:801
 msgid "Remember this password"
 msgstr "Запомнить пароль"
 
-#: ../src/goabackend/goakerberosprovider.c:1110
-#, c-format
-msgid "The domain is not valid"
-msgstr "Недопустимое имя домена"
-
-#: ../src/goabackend/goakerberosprovider.c:1257
+#: ../src/goabackend/goakerberosprovider.c:952
 msgid "Error connecting to enterprise identity server"
 msgstr "Ошибка подключения к корпоративному серверу идентификации"
 
-#: ../src/goabackend/goakerberosprovider.c:1604
+#: ../src/goabackend/goakerberosprovider.c:1290
 #, c-format
 msgid "Identity service returned invalid key"
 msgstr "Служба идентификации вернула неверный ключ"
@@ -744,55 +734,55 @@ msgstr "Учётные данные GOA %s для идентификатора %
 msgid "Failed to store credentials in the keyring"
 msgstr "Не удалось сохранить учётные данные в связке ключей"
 
-#: ../src/goabackend/goautils.c:870
+#: ../src/goabackend/goautils.c:865
 msgid "Cannot resolve hostname"
 msgstr "Не удается разрешить имя хоста"
 
-#: ../src/goabackend/goautils.c:874
+#: ../src/goabackend/goautils.c:869
 msgid "Cannot resolve proxy hostname"
 msgstr "Не удается разрешить имя хоста прокси"
 
-#: ../src/goabackend/goautils.c:879
+#: ../src/goabackend/goautils.c:874
 msgid "Cannot find WebDAV endpoint"
 msgstr "Не удалось найти конечную точку WebDAV"
 
-#: ../src/goabackend/goautils.c:888
+#: ../src/goabackend/goautils.c:883
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Код: %u — неожиданный ответ от сервера"
 
-#: ../src/goabackend/goautils.c:904
+#: ../src/goabackend/goautils.c:899
 msgid "The signing certificate authority is not known."
 msgstr "Неизвестный центр сертификации."
 
-#: ../src/goabackend/goautils.c:908
+#: ../src/goabackend/goautils.c:903
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr "Сертификат, полученный с сайта, не соответствует подлинности сайта."
 
-#: ../src/goabackend/goautils.c:913
+#: ../src/goabackend/goautils.c:908
 msgid "The certificate’s activation time is still in the future."
 msgstr "Время активации сертификата ещё не наступило."
 
-#: ../src/goabackend/goautils.c:917
+#: ../src/goabackend/goautils.c:912
 msgid "The certificate has expired."
 msgstr "Сертификат устарел."
 
-#: ../src/goabackend/goautils.c:921
+#: ../src/goabackend/goautils.c:916
 msgid "The certificate has been revoked."
 msgstr "Сертификат был отозван."
 
-#: ../src/goabackend/goautils.c:925
+#: ../src/goabackend/goautils.c:920
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Небезопасный алгоритм сертификата."
 
-#: ../src/goabackend/goautils.c:929
+#: ../src/goabackend/goautils.c:924
 msgid "Invalid certificate."
 msgstr "Неверный сертификат."
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:964
+#: ../src/goabackend/goautils.c:959
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "Не удалось найти поле %s с именем пользователя «%s» в учётных данных"
@@ -877,6 +867,15 @@ msgstr "Не удалось найти идентификатор"
 #: ../src/goaidentity/goakerberosidentitymanager.c:842
 msgid "Could not create credential cache for identity"
 msgstr "Не удалось создать кэш учётных данных для идентификатора"
+
+#~ msgid "_Domain"
+#~ msgstr "_Домен"
+
+#~ msgid "Enterprise domain or realm name"
+#~ msgstr "Корпоративный домен или имя области"
+
+#~ msgid "The domain is not valid"
+#~ msgstr "Недопустимое имя домена"
 
 #~ msgid "org.gnome.OnlineAccounts.Mail is not available"
 #~ msgstr "Объект org.gnome.OnlineAccounts.Mail недоступен"
