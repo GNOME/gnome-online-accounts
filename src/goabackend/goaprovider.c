@@ -34,6 +34,7 @@
 #include "goamediaserverprovider.h"
 #include "goalastfmprovider.h"
 #include "goatodoistprovider.h"
+#include "goaubuntussoprovider.h"
 
 #ifdef GOA_KERBEROS_ENABLED
 #include "goakerberosprovider.h"
@@ -933,6 +934,9 @@ static struct
    * important because it affects the order in which they are
    * returned by goa_provider_get_all.
    */
+#ifdef GOA_UBUNTU_SSO_ENABLED
+  { GOA_UBUNTU_SSO_NAME, goa_ubuntu_sso_provider_get_type },
+#endif
 #ifdef GOA_GOOGLE_ENABLED
   { GOA_GOOGLE_NAME, goa_google_provider_get_type },
 #endif

@@ -135,6 +135,12 @@ if test "$enable_backend" != "no"; then
   PKG_CHECK_MODULES(LIBXML, [libxml-2.0])
   AC_SUBST(LIBXML_CFLAGS)
   AC_SUBST(LIBXML_LIBS)
+
+  if test "$enable_ubuntu_sso" != "no"; then
+    PKG_CHECK_MODULES(SNAPD_GLIB, [snapd-glib >= 1.11])
+    AC_SUBST(SNAPD_GLIB_CFLAGS)
+    AC_SUBST(SNAPD_GLIB_LIBS)
+  fi
 fi
 
 AC_ARG_ENABLE([inspector],
@@ -342,6 +348,16 @@ fi
 AC_DEFINE_UNQUOTED(GOA_POCKET_CLIENT_ID, ["$with_pocket_client_id"], [Pocket OAuth 2.0 client id])
 if test "$enable_pocket" != "no"; then
   AC_DEFINE(GOA_POCKET_ENABLED, 1, [Enable Pocket data provider])
+fi
+
+# Ubuntu SSO
+AC_DEFINE(GOA_UBUNTU_SSO_NAME, ["ubuntusso"], [ProviderType and extension point name])
+AC_ARG_ENABLE([ubuntu-sso],
+              [AS_HELP_STRING([--enable-ubuntu-sso], [Enable Ubuntu SSO provider])],
+              [],
+              [enable_ubuntu_sso=no])
+if test "$enable_ubuntu_sso" != "no"; then
+  AC_DEFINE(GOA_UBUNTU_SSO_ENABLED, 1, [Enable Ubuntu SSO data provider])
 fi
 
 # Kerberos
@@ -575,6 +591,7 @@ echo "
 	Windows Live provider:          ${enable_windows_live} (OAuth 2.0, id:${with_windows_live_client_id})
         Pocket provider:                ${enable_pocket} (id:${with_pocket_client_id})
 	Last.fm provider:               ${enable_lastfm} (id:${with_lastfm_client_id} secret:${with_lastfm_client_secret})
+        Ubuntu SSO provider:            ${enable_ubuntu_sso}
 
 	Maintainer mode:                ${USE_MAINTAINER_MODE}
 	Building api docs:              ${enable_gtk_doc}
