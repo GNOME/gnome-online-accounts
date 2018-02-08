@@ -96,6 +96,7 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goapocketprovider.h		goapocketprovider.c		\
 	goalastfmprovider.h		goalastfmprovider.c		\
 	goatodoistprovider.h		goatodoistprovider.c		\
+	goaubuntussoprovider.h		goaubuntussoprovider.c		\
 	goaobjectskeletonutils.h	goaobjectskeletonutils.c	\
 	goautils.h			goautils.c			\
 	goawebview.h			goawebview.c			\
@@ -121,6 +122,7 @@ libgoa_backend_1_0_la_CFLAGS =					\
 	$(LIBXML_CFLAGS)					\
 	$(TP_CFLAGS)						\
 	$(TPAW_CFLAGS)						\
+	$(SNAPD_GLIB_CFLAGS)					\
 	$(NULL)
 
 libgoa_backend_1_0_la_LIBADD = 					\
@@ -136,6 +138,7 @@ libgoa_backend_1_0_la_LIBADD = 					\
 	$(LIBXML_LIBS)						\
 	$(TP_LIBS)						\
 	$(TPAW_LIBS)						\
+	$(SNAPD_GLIB_LIBS)					\
 	$(NULL)
 
 libgoa_backend_1_0_la_LDFLAGS = 				\
