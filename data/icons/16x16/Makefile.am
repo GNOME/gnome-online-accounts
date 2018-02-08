@@ -11,6 +11,7 @@ icon_DATA =				\
 	goa-account-pocket.png		\
 	goa-account-foursquare.png	\
 	goa-account-todoist.png	\
+	goa-account-ubuntusso.png	\
 	$(NULL)
 
 EXTRA_DIST = \
