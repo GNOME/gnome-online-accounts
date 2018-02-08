@@ -34,6 +34,7 @@
 #include "goamediaserverprovider.h"
 #include "goalastfmprovider.h"
 #include "goatodoistprovider.h"
+#include "goaubuntussoprovider.h"
 
 #ifdef GOA_KERBEROS_ENABLED
 #include "goakerberosprovider.h"
@@ -971,6 +972,9 @@ static struct
 #endif
 #ifdef GOA_MEDIA_SERVER_ENABLED
   { GOA_MEDIA_SERVER_NAME, goa_media_server_provider_get_type },
+#endif
+#ifdef GOA_UBUNTU_SSO_ENABLED
+  { GOA_UBUNTU_SSO_NAME, goa_ubuntu_sso_provider_get_type },
 #endif
   { NULL, NULL }
 };
