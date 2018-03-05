@@ -79,7 +79,7 @@ get_authorization_uri (GoaOAuth2Provider *oauth2_provider)
 static const gchar *
 get_scope (GoaOAuth2Provider *oauth2_provider)
 {
-  return "data:read_write,data:delete,task:add";
+  return "data:read_write,data:delete,task:add,project:delete";
 }
 
 static const gchar *
