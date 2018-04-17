@@ -77,8 +77,6 @@ static guint goa_provider_get_credentials_generation_real (GoaProvider *self);
 static GIcon *goa_provider_get_provider_icon_real (GoaProvider *self,
                                                    GoaObject   *object);
 
-static void goa_provider_initialize_real (GoaProvider *self);
-
 static void goa_provider_remove_account_real (GoaProvider          *self,
                                               GoaObject            *object,
                                               GCancellable         *cancellable,
@@ -227,7 +225,6 @@ goa_provider_class_init (GoaProviderClass *klass)
   klass->ensure_credentials_sync = goa_provider_ensure_credentials_sync_real;
   klass->get_credentials_generation = goa_provider_get_credentials_generation_real;
   klass->get_provider_icon = goa_provider_get_provider_icon_real;
-  klass->initialize = goa_provider_initialize_real;
   klass->remove_account = goa_provider_remove_account_real;
   klass->remove_account_finish = goa_provider_remove_account_finish_real;
   klass->show_account = goa_provider_show_account_real;
@@ -395,21 +392,6 @@ goa_provider_get_provider_features (GoaProvider *self)
   g_return_val_if_fail (GOA_IS_PROVIDER (self), GOA_PROVIDER_FEATURE_INVALID);
   g_return_val_if_fail (GOA_PROVIDER_GET_CLASS (self)->get_provider_features != NULL, GOA_PROVIDER_FEATURE_INVALID);
   return GOA_PROVIDER_GET_CLASS (self)->get_provider_features (self);
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-void
-goa_provider_initialize (GoaProvider *self)
-{
-  g_return_if_fail (GOA_IS_PROVIDER (self));
-
-  GOA_PROVIDER_GET_CLASS (self)->initialize (self);
-}
-
-static void
-goa_provider_initialize_real (GoaProvider *self)
-{
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
