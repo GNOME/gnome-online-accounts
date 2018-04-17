@@ -133,34 +133,6 @@ goa_object_skeleton_attach_documents (GoaObjectSkeleton *object,
 }
 
 void
-goa_object_skeleton_attach_chat (GoaObjectSkeleton *object,
-                                 gboolean           chat_enabled)
-{
-#ifdef GOA_TELEPATHY_ENABLED
-  GoaChat *chat;
-
-  chat = goa_object_get_chat (GOA_OBJECT (object));
-  if (chat_enabled)
-    {
-      if (chat == NULL)
-        {
-          chat = goa_chat_skeleton_new ();
-          goa_object_skeleton_set_chat (object, chat);
-        }
-    }
-  else
-    {
-      if (chat != NULL)
-        goa_object_skeleton_set_chat (object, NULL);
-    }
-  g_clear_object (&chat);
-#else
-  g_debug("Compiled without Telepathy support, chat is disabled");
-  goa_object_skeleton_set_chat (object, NULL);
-#endif
-}
-
-void
 goa_object_skeleton_attach_photos (GoaObjectSkeleton *object,
                                    gboolean           photos_enabled)
 {

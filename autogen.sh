@@ -22,12 +22,6 @@ if [ "$#" = 0 -a "x$NOCONFIGURE" = "x" ]; then
 	echo "" >&2
 fi
 
-git submodule update --init --recursive || exit 1
-
-cd $srcdir/telepathy-account-widgets
-NOCONFIGURE=1 sh autogen.sh
-cd ..
-
 aclocal --install || exit 1
 gtkdocize --copy || exit 1
 autoreconf --verbose --force --install || exit 1

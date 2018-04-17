@@ -98,18 +98,6 @@ GOBJECT_INTROSPECTION_CHECK([0.6.2])
 
 VAPIGEN_CHECK()
 
-# Telepathy
-AC_DEFINE(GOA_TELEPATHY_NAME, ["telepathy"], [ProviderType and extension point name])
-AC_ARG_ENABLE([telepathy],
-              [AS_HELP_STRING([--enable-telepathy],
-              [Enable Telepathy IM provider])],
-              [],
-              [enable_telepathy=no])
-if test "$enable_telepathy" != "no"; then
-  AC_DEFINE(GOA_TELEPATHY_ENABLED, 1, [Enable Telepathy data provider])
-fi
-AM_CONDITIONAL(BUILD_TELEPATHY, [test x$enable_telepathy != xno])
-
 AC_ARG_ENABLE([backend],
               [AS_HELP_STRING([--enable-backend],
               [Enable goabackend library])],
@@ -147,33 +135,6 @@ if test "$enable_backend" != "no"; then
   PKG_CHECK_MODULES(LIBXML, [libxml-2.0])
   AC_SUBST(LIBXML_CFLAGS)
   AC_SUBST(LIBXML_LIBS)
-
-  if test "$enable_telepathy" != "no"; then
-    PKG_CHECK_MODULES(TP, [telepathy-glib])
-    AC_SUBST(TP_CFLAGS)
-    AC_SUBST(TP_LIBS)
-
-    # telepathy-account-widgets
-    prev_top_build_prefix=$ac_top_build_prefix
-    prev_ac_configure_args=$ac_configure_args
-    ac_configure_args="$ac_configure_args --with-cheese=no --disable-gudev --enable-ubuntu-online-accounts=no"
-    # install the data together with the rest of GOA's data
-    ac_configure_args="$ac_configure_args --with-pkgdatadir=${datadir}/gnome-online-accounts"
-    # GOA ships its icons directly in ${datadir}/icons (usually /usr/share/icons/) and not
-    # in its own data directory
-    ac_configure_args="$ac_configure_args --with-icondir=${datadir}/icons"
-    # Change the name of tpaw's .mo files to avoid conflicts with other packages using tp-aw
-    ac_configure_args="$ac_configure_args --with-gettext-package=gnome-online-accounts-tpaw"
-    # Disable the installation of the GSettings schema to avoid multiple components shipping
-    # the same file. See https://bugzilla.gnome.org/show_bug.cgi?id=706803
-    ac_configure_args="$ac_configure_args --disable-schemas-compile --disable-settings"
-    AX_CONFIG_DIR([telepathy-account-widgets])
-    ac_top_build_prefix=$prev_top_build_prefix
-    ac_configure_args=$prev_ac_configure_args
-
-    export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:"$ac_top_build_prefix"telepathy-account-widgets/
-    PKG_CHECK_MODULES(TPAW, telepathy-account-widgets)
-  fi
 fi
 
 AC_ARG_ENABLE([inspector],
@@ -612,7 +573,6 @@ echo "
 	Facebook provider:              ${enable_facebook} (OAuth 2.0, id:${with_facebook_client_id})
 	Todoist provider:               ${enable_todoist} (OAuth 2.0, id:${with_todoist_client_id} secret:${with_todoist_client_secret})
 	Windows Live provider:          ${enable_windows_live} (OAuth 2.0, id:${with_windows_live_client_id})
-        Telepathy provider:             ${enable_telepathy}
         Pocket provider:                ${enable_pocket} (id:${with_pocket_client_id})
 	Last.fm provider:               ${enable_lastfm} (id:${with_lastfm_client_id} secret:${with_lastfm_client_secret})
 

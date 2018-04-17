@@ -46,8 +46,6 @@ void             goa_utils_account_add_attention_needed (GoaClient    *client,
 
 void             goa_utils_account_add_header (GoaObject *object, GtkGrid *grid, gint row);
 
-void             goa_utils_initialize_client_factory (void);
-
 gboolean         goa_utils_check_duplicate (GoaClient              *client,
                                             const gchar            *identity,
                                             const gchar            *presentation_identity,

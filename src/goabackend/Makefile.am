@@ -110,14 +110,6 @@ libgoa_backend_1_0_la_SOURCES +=					\
 	goakerberosprovider.h		goakerberosprovider.c
 endif
 
-if BUILD_TELEPATHY
-libgoa_backend_1_0_la_SOURCES +=					\
-	goatelepathyfactory.h		goatelepathyfactory.c		\
-	goatelepathyprovider.h		goatelepathyprovider.c		\
-	goatpaccountlinker.h		goatpaccountlinker.c		\
-	$(NULL)
-endif
-
 libgoa_backend_1_0_la_CFLAGS =					\
 	$(WEBKIT_GTK_CFLAGS)					\
 	$(JSON_GLIB_CFLAGS)					\

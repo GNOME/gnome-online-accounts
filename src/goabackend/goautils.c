@@ -21,10 +21,6 @@
 #include <glib/gi18n-lib.h>
 #include <libsecret/secret.h>
 
-#ifdef GOA_TELEPATHY_ENABLED
-#include <telepathy-glib/telepathy-glib.h>
-#endif
-
 #include "goautils.h"
 
 static const SecretSchema secret_password_schema =
@@ -197,42 +193,6 @@ goa_utils_account_add_header (GoaObject *object, GtkGrid *grid, gint row)
   gtk_widget_set_margin_bottom (label, 12);
   g_free (markup);
   gtk_grid_attach (grid, label, 1, row, 3, 1);
-}
-
-void
-goa_utils_initialize_client_factory (void)
-{
-  static gsize once_init_value = 0;
-
-  if (g_once_init_enter (&once_init_value))
-    {
-#ifdef GOA_TELEPATHY_ENABLED
-      TpSimpleClientFactory *factory;
-      TpAccountManager *account_manager;
-      GQuark account_features[] = {TP_ACCOUNT_FEATURE_ADDRESSING,
-                                   TP_ACCOUNT_FEATURE_STORAGE,
-                                   TP_ACCOUNT_FEATURE_CONNECTION,
-                                   0};
-      GQuark connection_features[] = {TP_CONNECTION_FEATURE_AVATAR_REQUIREMENTS,
-                                      TP_CONNECTION_FEATURE_CONTACT_INFO,
-                                      0};
-
-      /* We make sure that new instances of Telepathy objects will have all
-       * the features we need.
-       */
-      factory = tp_simple_client_factory_new (NULL);
-      tp_simple_client_factory_add_account_features (factory, account_features);
-      tp_simple_client_factory_add_connection_features (factory, connection_features);
-
-      account_manager = tp_account_manager_new_with_factory (factory);
-      tp_account_manager_set_default (account_manager);
-
-      g_object_unref (account_manager);
-      g_object_unref (factory);
-#endif
-
-      g_once_init_leave (&once_init_value, 1);
-    }
 }
 
 gboolean
