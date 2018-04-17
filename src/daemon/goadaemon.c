@@ -291,9 +291,6 @@ static void
 goa_daemon_init (GoaDaemon *self)
 {
   static volatile GQuark goa_error_domain = 0;
-  GError *error;
-  GList *l;
-  GList *providers = NULL;
   GoaObjectSkeleton *object;
   gchar *path;
 
@@ -303,21 +300,7 @@ goa_daemon_init (GoaDaemon *self)
   goa_error_domain = GOA_ERROR;
   goa_error_domain; /* shut up -Wunused-but-set-variable */
 
-  error = NULL;
-  if (!get_all_providers_sync (NULL, &providers, &error))
-    {
-      g_warning ("Unable to get the list of providers: %s (%s, %d)",
-                 error->message,
-                 g_quark_to_string (error->domain),
-                 error->code);
-      g_error_free (error);
-    }
-
-  for (l = providers; l != NULL; l = l->next)
-    {
-      GoaProvider *provider = GOA_PROVIDER (l->data);
-      goa_provider_initialize (provider);
-    }
+  goa_provider_ensure_builtins_loaded ();
 
   /* Create object manager */
   self->object_manager = g_dbus_object_manager_server_new ("/org/gnome/OnlineAccounts");
@@ -364,8 +347,6 @@ goa_daemon_init (GoaDaemon *self)
 
   self->ensure_credentials_queue = g_queue_new ();
   queue_check_credentials (self);
-
-  g_list_free_full (providers, g_object_unref);
 }
 
 static void
