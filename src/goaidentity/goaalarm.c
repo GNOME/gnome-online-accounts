@@ -281,10 +281,14 @@ on_timer_source_ready (GObject *stream, GoaAlarm *self)
 
   if (bytes_read < 0)
     {
-      g_warning ("GoaAlarm: failed to read from timer fd: %s\n",
-                 error->message);
-      g_error_free (error);
-      goto out;
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_debug ("GoaAlarm: discontinuity detected from timer fd");
+      else
+        {
+          g_warning ("GoaAlarm: failed to read from timer fd: %s\n",
+                     error->message);
+          goto out;
+        }
     }
 
   if (bytes_read == sizeof (gint64))
@@ -300,6 +304,7 @@ on_timer_source_ready (GObject *stream, GoaAlarm *self)
   run_again = TRUE;
 out:
   g_rec_mutex_unlock (&self->priv->lock);
+  g_clear_error (&error);
   return run_again;
 }
 #endif /*HAVE_TIMERFD */
