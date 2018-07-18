@@ -11,7 +11,11 @@ SUBDIRS += po
 
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
-DISTCHECK_CONFIGURE_FLAGS=--enable-introspection --enable-gtk-doc
+DISTCHECK_CONFIGURE_FLAGS = \
+	--enable-documentation \
+	--enable-gtk-doc \
+	--enable-introspection \
+	$(NULL)
 
 MAINTAINERCLEANFILES = \
 	$(GITIGNORE_MAINTAINERCLEANFILES_TOPLEVEL) \

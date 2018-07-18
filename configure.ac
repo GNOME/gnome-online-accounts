@@ -74,7 +74,7 @@ GLIB_GSETTINGS
 
 AC_ARG_ENABLE([documentation],
 	AS_HELP_STRING([--enable-documentation], [enable man pages]),
-	[], [enable_documentation=yes])
+	[], [enable_documentation=no])
 AM_CONDITIONAL(ENABLE_DOCUMENTATION, test x$enable_documentation = xyes)
 if test x$enable_documentation = xyes; then
    AC_PATH_PROG([XSLTPROC], [xsltproc])
