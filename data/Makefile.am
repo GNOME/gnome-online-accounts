@@ -3,9 +3,10 @@ NULL =
 
 SUBDIRS = icons
 
-gsettings_SCHEMAS = org.gnome.online-accounts.gschema.xml
+gsettings_schema_files = org.gnome.online-accounts.gschema.xml
 
 if BUILD_BACKEND
+gsettings_SCHEMAS = $(gsettings_schema_files)
 @GSETTINGS_RULES@
 
 servicedir       = $(datadir)/dbus-1/services
@@ -21,7 +22,7 @@ service_DATA     = $(service_in_files:.service.in=.service)
 endif
 
 EXTRA_DIST =						\
-	$(gsettings_SCHEMAS)				\
+	$(gsettings_schema_files)			\
 	dbus-interfaces.xml				\
 	org.gnome.Identity.service.in			\
 	org.gnome.OnlineAccounts.service.in		\
