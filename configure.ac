@@ -73,7 +73,7 @@ AX_REQUIRE_DEFINED([GLIB_GSETTINGS])
 GLIB_GSETTINGS
 
 AC_ARG_ENABLE([documentation],
-	AS_HELP_STRING([--enable-documentation], [enable man pages and HTML]),
+	AS_HELP_STRING([--enable-documentation], [enable man pages]),
 	[], [enable_documentation=yes])
 AM_CONDITIONAL(ENABLE_DOCUMENTATION, test x$enable_documentation = xyes)
 if test x$enable_documentation = xyes; then
