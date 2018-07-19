@@ -685,12 +685,9 @@ goa_identity_service_finalize (GObject *object)
 
   g_clear_object (&self->priv->identity_manager);
   g_clear_object (&self->priv->object_manager_server);
-  g_clear_pointer (&self->priv->watched_client_connections,
-                   (GDestroyNotify) g_hash_table_unref);
-  g_clear_pointer (&self->priv->key_holders,
-                   (GDestroyNotify) g_hash_table_unref);
-  g_clear_pointer (&self->priv->pending_temporary_account_results,
-                   (GDestroyNotify) g_hash_table_unref);
+  g_clear_pointer (&self->priv->watched_client_connections, g_hash_table_unref);
+  g_clear_pointer (&self->priv->key_holders, g_hash_table_unref);
+  g_clear_pointer (&self->priv->pending_temporary_account_results, g_hash_table_unref);
 
   G_OBJECT_CLASS (goa_identity_service_parent_class)->finalize (object);
 }
