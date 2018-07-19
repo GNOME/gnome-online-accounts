@@ -128,9 +128,7 @@ enable_vapi = get_option('vapi')
 # Microsoft Exchange
 config_h.set_quoted('GOA_EXCHANGE_NAME', 'exchange')
 enable_exchange = get_option('exchange')
-if enable_exchange
-  config_h.set('GOA_EXCHANGE_ENABLED', enable_exchange)
-endif
+config_h.set('GOA_EXCHANGE_ENABLED', enable_exchange)
 
 # Facebook
 config_h.set_quoted('GOA_FACEBOOK_NAME', 'facebook')
@@ -139,9 +137,7 @@ facebook_client_id = get_option('facebook_client_id')
 config_h.set_quoted('GOA_FACEBOOK_CLIENT_ID', facebook_client_id)
 
 enable_facebook = get_option('facebook')
-if enable_facebook
-  config_h.set('GOA_FACEBOOK_ENABLED', enable_facebook)
-endif
+config_h.set('GOA_FACEBOOK_ENABLED', enable_facebook)
 
 # Flickr
 config_h.set_quoted('GOA_FLICKR_NAME', 'flickr')
@@ -153,9 +149,7 @@ flickr_consumer_secret = get_option('flickr_consumer_secret')
 config_h.set_quoted('GOA_FLICKR_CONSUMER_SECRET', flickr_consumer_secret)
 
 enable_flickr = get_option('flickr')
-if enable_flickr
-  config_h.set('GOA_FLICKR_ENABLED', enable_flickr)
-endif
+config_h.set('GOA_FLICKR_ENABLED', enable_flickr)
 
 # Foursquare
 config_h.set_quoted('GOA_FOURSQUARE_NAME', 'foursquare')
@@ -164,9 +158,7 @@ foursquare_client_id = get_option('foursquare_client_id')
 config_h.set_quoted('GOA_FOURSQUARE_CLIENT_ID', foursquare_client_id)
 
 enable_foursquare = get_option('foursquare')
-if enable_foursquare
-  config_h.set('GOA_FOURSQUARE_ENABLED', enable_foursquare)
-endif
+config_h.set('GOA_FOURSQUARE_ENABLED', enable_foursquare)
 
 # Google
 config_h.set_quoted('GOA_GOOGLE_NAME', 'google')
@@ -178,17 +170,13 @@ google_client_secret = get_option('google_client_secret')
 config_h.set_quoted('GOA_GOOGLE_CLIENT_SECRET', google_client_secret)
 
 enable_google = get_option('google')
-if enable_google
-  config_h.set('GOA_GOOGLE_ENABLED', enable_google)
-endif
+config_h.set('GOA_GOOGLE_ENABLED', enable_google)
 
 # IMAP/SMTP
 config_h.set_quoted('GOA_IMAP_SMTP_NAME', 'imap_smtp')
 
 enable_imap_smtp = get_option('imap_smtp')
-if enable_imap_smtp
-  config_h.set('GOA_IMAP_SMTP_ENABLED', enable_imap_smtp)
-endif
+config_h.set('GOA_IMAP_SMTP_ENABLED', enable_imap_smtp)
 
 # Kerberos
 config_h.set_quoted('GOA_KERBEROS_NAME', 'kerberos')
@@ -199,16 +187,14 @@ if enable_kerberos
   krb5_dep = dependency('krb5')
 
   config_h.set('GCR_API_SUBJECT_TO_CHANGE', true)
-  config_h.set('GOA_KERBEROS_ENABLED', enable_kerberos)
 endif
+config_h.set('GOA_KERBEROS_ENABLED', enable_kerberos)
 
 # Media Server
 config_h.set_quoted('GOA_MEDIA_SERVER_NAME', 'media-server')
 
 enable_media_server = get_option('media_server')
-if enable_media_server
-  config_h.set('GOA_MEDIA_SERVER_ENABLED', enable_media_server)
-endif
+config_h.set('GOA_MEDIA_SERVER_ENABLED', enable_media_server)
 
 # Last.fm
 config_h.set_quoted('GOA_LASTFM_NAME', 'lastfm')
@@ -220,16 +206,12 @@ lastfm_client_secret = get_option('lastfm_client_secret')
 config_h.set_quoted('GOA_LASTFM_CLIENT_SECRET', lastfm_client_secret)
 
 enable_lastfm = get_option('lastfm')
-if enable_lastfm
-  config_h.set('GOA_LASTFM_ENABLED', enable_lastfm)
-endif
+config_h.set('GOA_LASTFM_ENABLED', enable_lastfm)
 
 # ownCloud
 config_h.set_quoted('GOA_OWNCLOUD_NAME', 'owncloud')
 enable_owncloud = get_option('owncloud')
-if enable_owncloud
-  config_h.set('GOA_OWNCLOUD_ENABLED', enable_owncloud)
-endif
+config_h.set('GOA_OWNCLOUD_ENABLED', enable_owncloud)
 
 # Pocket
 config_h.set_quoted('GOA_POCKET_NAME', 'pocket')
@@ -238,9 +220,7 @@ pocket_client_id = get_option('pocket_client_id')
 config_h.set_quoted('GOA_POCKET_CLIENT_ID', pocket_client_id)
 
 enable_pocket = get_option('pocket')
-if enable_pocket
-  config_h.set('GOA_POCKET_ENABLED', enable_pocket)
-endif
+config_h.set('GOA_POCKET_ENABLED', enable_pocket)
 
 # Todoist
 config_h.set_quoted('GOA_TODOIST_NAME', 'todoist')
@@ -252,9 +232,7 @@ todoist_client_secret = get_option('todoist_client_secret')
 config_h.set_quoted('GOA_TODOIST_CLIENT_SECRET', todoist_client_secret)
 
 enable_todoist = get_option('todoist')
-if enable_todoist
-  config_h.set('GOA_TODOIST_ENABLED', enable_todoist)
-endif
+config_h.set('GOA_TODOIST_ENABLED', enable_todoist)
 
 # Windows Live
 config_h.set_quoted('GOA_WINDOWS_LIVE_NAME', 'windows_live')
@@ -263,9 +241,7 @@ windows_live_client_id = get_option('windows_live_client_id')
 config_h.set_quoted('GOA_WINDOWS_LIVE_CLIENT_ID', windows_live_client_id)
 
 enable_windows_live = get_option('windows_live')
-if enable_windows_live
-  config_h.set('GOA_WINDOWS_LIVE_ENABLED', enable_windows_live)
-endif
+config_h.set('GOA_WINDOWS_LIVE_ENABLED', enable_windows_live)
 
 # Optional timerfd support
 timerfd_support_src = '''
