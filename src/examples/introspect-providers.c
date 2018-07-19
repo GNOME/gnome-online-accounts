@@ -157,7 +157,7 @@ get_all (GObject *source_object, GAsyncResult *res, gpointer user_data)
   g_print ("%s", key_file_data);
 
  out:
-  g_clear_pointer (&key_file, (GDestroyNotify) g_key_file_unref);
+  g_clear_pointer (&key_file, g_key_file_unref);
   g_free (key_file_data);
   g_list_free_full (providers, g_object_unref);
   g_main_loop_quit (loop);

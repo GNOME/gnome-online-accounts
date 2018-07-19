@@ -235,7 +235,7 @@ build_object (GoaProvider         *provider,
 
  out:
   g_clear_object (&password_based);
-  g_clear_pointer (&uri, (GDestroyNotify *) soup_uri_free);
+  g_clear_pointer (&uri, soup_uri_free);
   g_free (uri_string);
   return ret;
 }
@@ -438,7 +438,7 @@ normalize_uri (const gchar *address, gchar **server)
   ret = soup_uri_to_string (uri, FALSE);
 
  out:
-  g_clear_pointer (&uri, (GDestroyNotify *) soup_uri_free);
+  g_clear_pointer (&uri, soup_uri_free);
   g_free (scheme);
   g_free (uri_string);
   return ret;
@@ -793,7 +793,7 @@ add_account (GoaProvider    *provider,
   g_free (server);
   g_free (uri);
   g_free (data.account_object_path);
-  g_clear_pointer (&data.loop, (GDestroyNotify) g_main_loop_unref);
+  g_clear_pointer (&data.loop, g_main_loop_unref);
   g_clear_object (&data.cancellable);
   g_clear_object (&http_client);
   return ret;
@@ -997,7 +997,7 @@ refresh_account (GoaProvider    *provider,
   g_free (uri);
   g_free (uri_webdav);
   g_free (data.account_object_path);
-  g_clear_pointer (&data.loop, (GDestroyNotify) g_main_loop_unref);
+  g_clear_pointer (&data.loop, g_main_loop_unref);
   g_clear_object (&data.cancellable);
   g_clear_object (&http_client);
   return ret;

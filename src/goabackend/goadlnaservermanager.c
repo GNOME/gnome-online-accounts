@@ -171,7 +171,7 @@ goa_dlna_server_manager_dispose (GObject *object)
 {
   GoaDlnaServerManager *self = GOA_DLNA_SERVER_MANAGER (object);
 
-  g_clear_pointer (&self->servers, (GDestroyNotify) g_hash_table_unref);
+  g_clear_pointer (&self->servers, g_hash_table_unref);
   g_clear_object (&self->proxy);
 
   G_OBJECT_CLASS (goa_dlna_server_manager_parent_class)->dispose (object);

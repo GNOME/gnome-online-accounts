@@ -939,7 +939,7 @@ goa_utils_get_credentials (GoaProvider    *provider,
 
 out:
   g_clear_object (&account);
-  g_clear_pointer (&credentials, (GDestroyNotify) g_variant_unref);
+  g_clear_pointer (&credentials, g_variant_unref);
   g_free (username);
   g_free (password);
   return ret;

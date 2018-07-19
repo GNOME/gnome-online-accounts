@@ -474,7 +474,7 @@ add_account (GoaProvider  *provider,
   g_free (data.account_object_path);
   g_free (data.friendly_name);
   g_free (data.udn);
-  g_clear_pointer (&data.loop, (GDestroyNotify) g_main_loop_unref);
+  g_clear_pointer (&data.loop, g_main_loop_unref);
   return ret;
 }
 

@@ -81,11 +81,11 @@ goa_alarm_dispose (GObject *object)
   GoaAlarm *self = GOA_ALARM (object);
 
   g_clear_object (&self->priv->stream);
-  g_clear_pointer (&self->priv->immediate_wakeup_source, (GDestroyNotify) g_source_destroy);
-  g_clear_pointer (&self->priv->scheduled_wakeup_source, (GDestroyNotify) g_source_destroy);
-  g_clear_pointer (&self->priv->context, (GDestroyNotify) g_main_context_unref);
-  g_clear_pointer (&self->priv->time, (GDestroyNotify) g_date_time_unref);
-  g_clear_pointer (&self->priv->previous_wakeup_time, (GDestroyNotify) g_date_time_unref);
+  g_clear_pointer (&self->priv->immediate_wakeup_source, g_source_destroy);
+  g_clear_pointer (&self->priv->scheduled_wakeup_source, g_source_destroy);
+  g_clear_pointer (&self->priv->context, g_main_context_unref);
+  g_clear_pointer (&self->priv->time, g_date_time_unref);
+  g_clear_pointer (&self->priv->previous_wakeup_time, g_date_time_unref);
 
   G_OBJECT_CLASS (goa_alarm_parent_class)->dispose (object);
 }
