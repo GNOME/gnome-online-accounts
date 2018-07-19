@@ -10,6 +10,11 @@ if enable_gtk_doc
     configuration: version_conf
   )
 
+  expand_content_files = files(
+    'goa-daemon.xml',
+    'goa-overview.xml'
+  )
+
   gnome.gtkdoc(
     goa_name,
     main_xml: goa_name + '-docs.xml',
@@ -18,6 +23,7 @@ if enable_gtk_doc
     mkdb_args: '--name-space=' + goa_name,
     fixxref_args: '--html-dir=' + join_paths(goa_prefix, gnome.gtkdoc_html_dir(goa_name)),
     gobject_typesfile: files(goa_name + '.types'),
+    expand_content_files: expand_content_files,
     install: true
   )
 endif
