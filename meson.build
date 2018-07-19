@@ -284,9 +284,8 @@ timerfd_support_src = '''
   };
 '''
 
-have_timerfd = cc.compiles(timerfd_support_src, name: 'timerfd support')
-if have_timerfd
-  config_h.set('HAVE_TIMERFD', have_timerfd)
+if cc.compiles(timerfd_support_src, name: 'timerfd support')
+  config_h.set('HAVE_TIMERFD', true)
 
   # libc headers tend to trail kernel support
   # so compensate if necessary
