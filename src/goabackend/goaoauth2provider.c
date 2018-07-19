@@ -1500,7 +1500,7 @@ goa_oauth2_provider_get_access_token_sync (GoaOAuth2Provider  *self,
   g_free (refresh_token);
   g_free (old_refresh_token);
   g_free (password);
-  g_clear_pointer (&credentials, (GDestroyNotify) g_variant_unref);
+  g_clear_pointer (&credentials, g_variant_unref);
 
   g_mutex_unlock (lock);
 

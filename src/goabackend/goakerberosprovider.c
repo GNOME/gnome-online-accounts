@@ -281,7 +281,7 @@ get_ticket_sync (GoaKerberosProvider *self,
   g_clear_object (&account);
   g_clear_object (&ticketing);
   g_free (object_path);
-  g_clear_pointer (&credentials, (GDestroyNotify) g_variant_unref);
+  g_clear_pointer (&credentials, g_variant_unref);
   return ret;
 }
 
@@ -1019,7 +1019,7 @@ start_over:
   g_free (request.account_object_path);
   g_free (principal);
   g_free (realm);
-  g_clear_pointer (&request.loop, (GDestroyNotify) g_main_loop_unref);
+  g_clear_pointer (&request.loop, g_main_loop_unref);
   g_clear_object (&request.cancellable);
   return object;
 }
@@ -1062,8 +1062,8 @@ dbus_proxy_reload_properties_sync (GDBusProxy    *proxy,
   ret = TRUE;
 
  out:
-  g_clear_pointer (&iter, (GDestroyNotify) g_variant_iter_free);
-  g_clear_pointer (&result, (GDestroyNotify) g_variant_unref);
+  g_clear_pointer (&iter, g_variant_iter_free);
+  g_clear_pointer (&result, g_variant_unref);
   g_free (name_owner);
   return ret;
 }

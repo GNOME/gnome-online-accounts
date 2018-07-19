@@ -751,7 +751,7 @@ add_account (GoaProvider    *provider,
 
   g_free (data.access_token);
   g_free (data.account_object_path);
-  g_clear_pointer (&data.loop, (GDestroyNotify) g_main_loop_unref);
+  g_clear_pointer (&data.loop, g_main_loop_unref);
   g_clear_object (&data.cancellable);
   return ret;
 }
@@ -881,7 +881,7 @@ refresh_account (GoaProvider    *provider,
     g_propagate_error (error, data.error);
 
   gtk_widget_destroy (dialog);
-  g_clear_pointer (&data.loop, (GDestroyNotify) g_main_loop_unref);
+  g_clear_pointer (&data.loop, g_main_loop_unref);
   g_free (data.access_token);
   g_clear_object (&data.cancellable);
   return ret;

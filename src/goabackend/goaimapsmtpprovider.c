@@ -405,7 +405,7 @@ ensure_credentials_sync (GoaProvider         *provider,
   g_free (smtp_password);
   g_free (smtp_server);
   g_free (smtp_username);
-  g_clear_pointer (&credentials, (GDestroyNotify) g_variant_unref);
+  g_clear_pointer (&credentials, g_variant_unref);
   return ret;
 }
 
@@ -1132,7 +1132,7 @@ add_account (GoaProvider    *provider,
 
   g_free (domain);
   g_free (data.account_object_path);
-  g_clear_pointer (&data.loop, (GDestroyNotify) g_main_loop_unref);
+  g_clear_pointer (&data.loop, g_main_loop_unref);
   g_clear_object (&data.cancellable);
   g_clear_object (&imap_auth);
   g_clear_object (&smtp_auth);
@@ -1411,7 +1411,7 @@ refresh_account (GoaProvider    *provider,
   g_free (imap_username);
   g_free (smtp_server);
   g_free (smtp_username);
-  g_clear_pointer (&data.loop, (GDestroyNotify) g_main_loop_unref);
+  g_clear_pointer (&data.loop, g_main_loop_unref);
   g_clear_object (&data.cancellable);
   g_clear_object (&imap_auth);
   g_clear_object (&smtp_auth);

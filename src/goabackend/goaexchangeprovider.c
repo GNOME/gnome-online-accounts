@@ -655,7 +655,7 @@ add_account (GoaProvider    *provider,
   g_signal_handlers_disconnect_by_func (dialog, dialog_response_cb, &data);
 
   g_free (data.account_object_path);
-  g_clear_pointer (&data.loop, (GDestroyNotify) g_main_loop_unref);
+  g_clear_pointer (&data.loop, g_main_loop_unref);
   g_clear_object (&data.cancellable);
   g_clear_object (&ews_client);
   return ret;
@@ -805,7 +805,7 @@ refresh_account (GoaProvider    *provider,
     g_propagate_error (error, data.error);
 
   gtk_widget_destroy (dialog);
-  g_clear_pointer (&data.loop, (GDestroyNotify) g_main_loop_unref);
+  g_clear_pointer (&data.loop, g_main_loop_unref);
   g_clear_object (&data.cancellable);
   g_clear_object (&ews_client);
   return ret;

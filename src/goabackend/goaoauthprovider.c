@@ -941,7 +941,7 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
   g_free (url);
 
   g_free (data.oauth_verifier);
-  g_clear_pointer (&data.loop, (GDestroyNotify) g_main_loop_unref);
+  g_clear_pointer (&data.loop, g_main_loop_unref);
   g_free (data.access_token);
   g_free (data.access_token_secret);
   g_free (escaped_request_token);
@@ -1111,7 +1111,7 @@ goa_oauth_provider_add_account (GoaProvider *_provider,
   g_free (access_token_secret);
   g_free (session_handle);
   g_free (data.account_object_path);
-  g_clear_pointer (&data.loop, (GDestroyNotify) g_main_loop_unref);
+  g_clear_pointer (&data.loop, g_main_loop_unref);
   return ret;
 }
 
@@ -1463,7 +1463,7 @@ goa_oauth_provider_get_access_token_sync (GoaOAuthProvider   *provider,
   g_free (access_token_secret_for_refresh);
   g_free (session_handle_for_refresh);
   g_free (password);
-  g_clear_pointer (&credentials, (GDestroyNotify) g_variant_unref);
+  g_clear_pointer (&credentials, g_variant_unref);
 
   g_mutex_unlock (lock);
 

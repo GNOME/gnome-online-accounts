@@ -1232,7 +1232,7 @@ get_all_providers_cb (GObject      *source,
   g_free (key_file_data);
   g_free (group);
   g_free (id);
-  g_clear_pointer (&key_file, (GDestroyNotify) g_key_file_unref);
+  g_clear_pointer (&key_file, g_key_file_unref);
   g_object_unref (data->daemon);
   g_object_unref (data->manager);
   g_object_unref (data->invocation);
@@ -1436,7 +1436,7 @@ on_account_handle_remove (GoaAccount            *account,
  out:
   g_clear_object (&provider);
   g_clear_object (&task);
-  g_clear_pointer (&key_file, (GDestroyNotify) g_key_file_unref);
+  g_clear_pointer (&key_file, g_key_file_unref);
   g_free (group);
   return TRUE; /* invocation was handled */
 }
