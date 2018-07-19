@@ -6,7 +6,6 @@ project(
   meson_version: '>= 0.47.2'
 )
 
-goa_long_name = 'gnome-online-accounts'
 goa_name = 'goa'
 
 goa_version = meson.project_version()
@@ -31,7 +30,7 @@ goa_libexecdir = join_paths(goa_prefix, get_option('libexecdir'))
 goa_localedir = join_paths(goa_prefix, get_option('localedir'))
 goa_mandir = join_paths(goa_prefix, get_option('mandir'))
 
-goa_pkgdatadir = join_paths(goa_datadir, goa_long_name)
+goa_pkgdatadir = join_paths(goa_datadir, meson.project_name())
 goa_pkgincludedir = join_paths(goa_includedir, goa_api_name)
 goa_pkglibdir = join_paths(goa_libdir, goa_api_name)
 
@@ -55,7 +54,7 @@ config_h = configuration_data()
 # quoted defines
 config_h.set_quoted('PACKAGE_VERSION', goa_version)
 # i18n
-config_h.set_quoted('GETTEXT_PACKAGE', goa_long_name)
+config_h.set_quoted('GETTEXT_PACKAGE', meson.project_name())
 
 # version values
 config_h.set('GOA_MAJOR_VERSION', goa_major_version)
