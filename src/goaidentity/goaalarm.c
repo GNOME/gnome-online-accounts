@@ -22,7 +22,7 @@
 
 #ifdef HAVE_TIMERFD
 #include <sys/timerfd.h>
-#endif
+#endif /*HAVE_TIMERFD */
 
 #include <errno.h>
 #include <unistd.h>
@@ -302,7 +302,7 @@ out:
   g_rec_mutex_unlock (&self->priv->lock);
   return run_again;
 }
-#endif
+#endif /*HAVE_TIMERFD */
 
 static gboolean
 schedule_wakeups_with_timerfd (GoaAlarm *self)
