@@ -11,7 +11,7 @@ m4_define([goa_version],
 
 AC_INIT([GNOME Online Accounts],
         [goa_version],
-        [https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-online-accounts],
+        [https://gitlab.gnome.org/GNOME/gnome-online-accounts/issues],
         [gnome-online-accounts],
         [https://wiki.gnome.org/Projects/GnomeOnlineAccounts])
 
