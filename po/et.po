@@ -7,172 +7,276 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-09-10 18:52+0000\n"
-"PO-Revision-Date: 2013-09-11 08:19+0300\n"
-"Last-Translator: Mattias Põldaru <mahfiaz@gmail.com>\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
+"issues\n"
+"POT-Creation-Date: 2018-07-19 12:58+0000\n"
+"PO-Revision-Date: 2018-09-01 22:07+0300\n"
+"Last-Translator: Liivia Lilleväli <liivia.l10n@gmail.com>\n"
 "Language-Team: Estonian <>\n"
 "Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 2.1.1\n"
+"X-DamnedLies-Scope: partial\n"
 
 #. TODO: more specific
+#: src/daemon/goadaemon.c:1131 src/daemon/goadaemon.c:1415
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "%s jaoks ei leitud pakkujat"
 
+#: src/daemon/goadaemon.c:1358
+#, fuzzy
+#| msgid "ProviderType property is not set for account"
+msgid "IsLocked property is set for account"
+msgstr "Selle konto jaoks pole ProviderType omadus määratud"
+
 #. TODO: more specific
+#: src/daemon/goadaemon.c:1403
 msgid "ProviderType property is not set for account"
 msgstr "Selle konto jaoks pole ProviderType omadus määratud"
 
 #. TODO: more specific
-#, c-format
-msgid "Code: %u — Unexpected response from server"
-msgstr "Kood %u — server andis ootamatu vastuse"
-
-#. TODO: more specific
-#, c-format
+#: src/goabackend/goaewsclient.c:238
 msgid "Failed to parse autodiscover response XML"
 msgstr "Automaattuvastuse vastuse XML-i parsimine nurjus"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#, c-format
-msgid "Failed to find ‘%s’ element"
+#: src/goabackend/goaewsclient.c:249 src/goabackend/goaewsclient.c:264
+#: src/goabackend/goaewsclient.c:279
+#, fuzzy, c-format
+#| msgid "Failed to find ‘%s’ element"
+msgid "Failed to find “%s” element"
 msgstr "'%s' elementi ei leitud"
 
 #. TODO: more specific
-#, c-format
+#: src/goabackend/goaewsclient.c:300
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "ASUrl-i ja OABUrl-i ei leitud automaattuvastuse vastuses"
 
+#: src/goabackend/goaexchangeprovider.c:51
 msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
-
-#. TODO: more specific
-#, c-format
-msgid "Did not find password with identity ‘%s’ in credentials"
-msgstr "Ei leitud identiteedile '%s' vastavat parooli"
 
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
 #.
-#, c-format
-msgid "Invalid password with username ‘%s’ (%s, %d): "
+#: src/goabackend/goaexchangeprovider.c:248
+#: src/goabackend/goalastfmprovider.c:287
+#: src/goabackend/goaowncloudprovider.c:291
+#, fuzzy, c-format
+#| msgid "Invalid password with username ‘%s’ (%s, %d): "
+msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "Parool ei sobi kasutajanimega '%s' (%s, %d): "
 
+#: src/goabackend/goaexchangeprovider.c:396
+#: src/goabackend/goaimapsmtpprovider.c:647
 msgid "_E-mail"
 msgstr "_E-mail"
 
+#: src/goabackend/goaexchangeprovider.c:397
+#: src/goabackend/goaimapsmtpprovider.c:667
+#: src/goabackend/goaimapsmtpprovider.c:687
+#: src/goabackend/goalastfmprovider.c:429
+#: src/goabackend/goaowncloudprovider.c:530
 msgid "_Password"
 msgstr "_Parool"
 
+#: src/goabackend/goaexchangeprovider.c:400
 msgid "_Custom"
 msgstr "_Kohandatud"
 
+#: src/goabackend/goaexchangeprovider.c:411
+#: src/goabackend/goaimapsmtpprovider.c:666
+#: src/goabackend/goaimapsmtpprovider.c:686
+#: src/goabackend/goalastfmprovider.c:428
+#: src/goabackend/goaowncloudprovider.c:529
 msgid "User_name"
 msgstr "_Kasutajanimi"
 
+#: src/goabackend/goaexchangeprovider.c:412
+#: src/goabackend/goaowncloudprovider.c:528
 msgid "_Server"
 msgstr "_Server"
 
+#. --
+#: src/goabackend/goaexchangeprovider.c:422
+#: src/goabackend/goaimapsmtpprovider.c:699
+#: src/goabackend/goakerberosprovider.c:563
+#: src/goabackend/goalastfmprovider.c:437
+#: src/goabackend/goaowncloudprovider.c:544
+msgid "_Cancel"
+msgstr "_Tühista"
+
+#: src/goabackend/goaexchangeprovider.c:423
+#: src/goabackend/goakerberosprovider.c:564
+#: src/goabackend/goalastfmprovider.c:438
+#: src/goabackend/goaowncloudprovider.c:545
+msgid "C_onnect"
+msgstr "Ü_hendu"
+
+#: src/goabackend/goaexchangeprovider.c:439
+#: src/goabackend/goaimapsmtpprovider.c:715
+#: src/goabackend/goakerberosprovider.c:579
+#: src/goabackend/goalastfmprovider.c:454
+#: src/goabackend/goaowncloudprovider.c:560
 msgid "Connecting…"
 msgstr "Ühendumine…"
 
-#, c-format
+#: src/goabackend/goaexchangeprovider.c:539
+#: src/goabackend/goaexchangeprovider.c:733
+#: src/goabackend/goaimapsmtpprovider.c:865
+#: src/goabackend/goaimapsmtpprovider.c:900
+#: src/goabackend/goaimapsmtpprovider.c:992
+#: src/goabackend/goaimapsmtpprovider.c:1249
+#: src/goabackend/goaimapsmtpprovider.c:1325
+#: src/goabackend/goakerberosprovider.c:896
+#: src/goabackend/goalastfmprovider.c:652
+#: src/goabackend/goalastfmprovider.c:820
+#: src/goabackend/goamediaserverprovider.c:420
+#: src/goabackend/goaoauth2provider.c:995 src/goabackend/goaoauthprovider.c:859
+#: src/goabackend/goaowncloudprovider.c:663
+#: src/goabackend/goaowncloudprovider.c:883
 msgid "Dialog was dismissed"
-msgstr "Dialoog katkestati"
+msgstr "Dialoog tühistati"
 
+#: src/goabackend/goaexchangeprovider.c:577
+#: src/goabackend/goaexchangeprovider.c:761
+#: src/goabackend/goaimapsmtpprovider.c:933
+#: src/goabackend/goaimapsmtpprovider.c:1030
+#: src/goabackend/goaimapsmtpprovider.c:1276
+#: src/goabackend/goaimapsmtpprovider.c:1353
+#: src/goabackend/goalastfmprovider.c:686
+#: src/goabackend/goalastfmprovider.c:839
+#: src/goabackend/goaowncloudprovider.c:708
+#: src/goabackend/goaowncloudprovider.c:910
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "Dialoog katkestati (%s, %d): "
 
+#: src/goabackend/goaexchangeprovider.c:590
+#: src/goabackend/goaimapsmtpprovider.c:946
+#: src/goabackend/goaimapsmtpprovider.c:1043
+#: src/goabackend/goaowncloudprovider.c:721
 msgid "_Ignore"
 msgstr "_Eira"
 
+#: src/goabackend/goaexchangeprovider.c:595
+#: src/goabackend/goaexchangeprovider.c:780
+#: src/goabackend/goaimapsmtpprovider.c:951
+#: src/goabackend/goaimapsmtpprovider.c:1048
+#: src/goabackend/goaimapsmtpprovider.c:1295
+#: src/goabackend/goaimapsmtpprovider.c:1372
+#: src/goabackend/goakerberosprovider.c:981
+#: src/goabackend/goalastfmprovider.c:698
+#: src/goabackend/goalastfmprovider.c:856
+#: src/goabackend/goaowncloudprovider.c:726
+#: src/goabackend/goaowncloudprovider.c:929
 msgid "_Try Again"
 msgstr "_Proovi uuesti"
 
+#: src/goabackend/goaexchangeprovider.c:600
+#: src/goabackend/goaexchangeprovider.c:773
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Viga ühendumisel Microsoft Exchange serveriga"
 
-#. Translators: This is a label for a series of
-#. * options switches. For example: “Use for Mail”.
-msgid "Use for"
-msgstr "Kasutatakse:"
-
-msgid "_Mail"
-msgstr "_E-posti"
-
-msgid "Cale_ndar"
-msgstr "K_alenderit"
-
-msgid "_Contacts"
-msgstr "_Kontakte"
-
+#: src/goabackend/goafacebookprovider.c:56
 msgid "Facebook"
-msgstr "Facebooki"
+msgstr "Facebook"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: src/goabackend/goafacebookprovider.c:183
+#: src/goabackend/goaflickrprovider.c:155
+#: src/goabackend/goafoursquareprovider.c:154
+#: src/goabackend/goagoogleprovider.c:183
+#: src/goabackend/goatodoistprovider.c:193
+#: src/goabackend/goawindowsliveprovider.c:159
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
 msgstr ""
 "Sinu identiteedi pärimisel oodati olekut 200, selle asemel saadi olek %d (%s)"
 
-#, c-format
+#. TODO: more specific
+#: src/goabackend/goafacebookprovider.c:202
+#: src/goabackend/goafacebookprovider.c:213
+#: src/goabackend/goafacebookprovider.c:219
+#: src/goabackend/goaflickrprovider.c:174
+#: src/goabackend/goaflickrprovider.c:185
+#: src/goabackend/goaflickrprovider.c:196
+#: src/goabackend/goaflickrprovider.c:205
+#: src/goabackend/goaflickrprovider.c:218
+#: src/goabackend/goafoursquareprovider.c:173
+#: src/goabackend/goafoursquareprovider.c:184
+#: src/goabackend/goafoursquareprovider.c:195
+#: src/goabackend/goafoursquareprovider.c:206
+#: src/goabackend/goafoursquareprovider.c:215
+#: src/goabackend/goafoursquareprovider.c:228
+#: src/goabackend/goagoogleprovider.c:202
+#: src/goabackend/goagoogleprovider.c:213
+#: src/goabackend/goalastfmprovider.c:212
+#: src/goabackend/goalastfmprovider.c:221
+#: src/goabackend/goalastfmprovider.c:230
+#: src/goabackend/goalastfmprovider.c:238
+#: src/goabackend/goalastfmprovider.c:244
+#: src/goabackend/goalastfmprovider.c:512
+#: src/goabackend/goalastfmprovider.c:521
+#: src/goabackend/goalastfmprovider.c:538
+#: src/goabackend/goalastfmprovider.c:544
+#: src/goabackend/goaoauth2provider.c:656
+#: src/goabackend/goaoauth2provider.c:686
+#: src/goabackend/goaoauth2provider.c:697
+#: src/goabackend/goatodoistprovider.c:212
+#: src/goabackend/goatodoistprovider.c:223
+#: src/goabackend/goatodoistprovider.c:234 src/goabackend/goautils.c:273
+#: src/goabackend/goawindowsliveprovider.c:178
+#: src/goabackend/goawindowsliveprovider.c:189
+#: src/goabackend/goawindowsliveprovider.c:198
+#: src/goabackend/goawindowsliveprovider.c:211
 msgid "Could not parse response"
 msgstr "Vastust pole võimalik parsida"
 
-msgid "C_hat"
-msgstr "_Vestlus"
-
+#: src/goabackend/goaflickrprovider.c:56
 msgid "Flickr"
 msgstr "Flickr"
 
+#: src/goabackend/goaflickrprovider.c:271
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr "Su arvuti kell on vale. Kontrolli kella ja kuupäeva sätteid."
 
-msgid "_Photos"
-msgstr "_Fotod"
+#: src/goabackend/goafoursquareprovider.c:57
+msgid "Foursquare"
+msgstr "Foursquare"
 
+#: src/goabackend/goagoogleprovider.c:56
 msgid "Google"
 msgstr "Google"
 
-msgid "_Documents"
-msgstr "_Dokumendid"
-
 #. TODO: more specific
-#, c-format
+#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goasmtpauth.c:155
 msgid "Service not available"
 msgstr "Teenus pole saadaval"
 
 #. TODO: more specific
-#, c-format
+#: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goalastfmprovider.c:529
+#: src/goabackend/goasmtpauth.c:108 src/goabackend/goautils.c:838
 msgid "Authentication failed"
 msgstr "Autentimine nurjus"
 
-#, c-format
+#: src/goabackend/goaimapauthlogin.c:129
 msgid "Server does not support PLAIN"
 msgstr "Server ei toeta PLAIN ühendust"
 
-#, c-format
+#: src/goabackend/goaimapauthlogin.c:181 src/goabackend/goasmtpauth.c:606
 msgid "Server does not support STARTTLS"
 msgstr "Server ei toeta STARTTLS ühendust"
 
+#: src/goabackend/goaimapsmtpprovider.c:53
 msgid "IMAP and SMTP"
 msgstr "IMAP ja SMTP"
-
-#. Translators: the first parameter is a field name. The second is
-#. * a GOA account identifier.
-#, c-format
-msgid "Did not find %s with identity ‘%s’ in credentials"
-msgstr "Ei leitud identiteedile '%s' vastavat välja '%s'"
 
 #. Translators: the first %s is a field name. The
 #. * second %s is the IMAP
@@ -184,8 +288,11 @@ msgstr "Ei leitud identiteedile '%s' vastavat välja '%s'"
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#, c-format
-msgid "Invalid %s with username ‘%s’ (%s, %d): "
+#: src/goabackend/goaimapsmtpprovider.c:327
+#: src/goabackend/goaimapsmtpprovider.c:378
+#, fuzzy, c-format
+#| msgid "Invalid %s with username ‘%s’ (%s, %d): "
+msgid "Invalid %s with username “%s” (%s, %d): "
 msgstr "%s ei sobi kasutajanimega '%s' (%s, %d): "
 
 #. Translators: the following four strings are used to show a
@@ -194,133 +301,207 @@ msgstr "%s ei sobi kasutajanimega '%s' (%s, %d): "
 #. *             STARTTLS after connecting
 #. *             SSL on a dedicated port
 #.
+#: src/goabackend/goaimapsmtpprovider.c:564
 msgid "_Encryption"
 msgstr "_Krüpteering"
 
+#: src/goabackend/goaimapsmtpprovider.c:567
 msgid "None"
 msgstr "Puudub"
 
+#: src/goabackend/goaimapsmtpprovider.c:570
 msgid "STARTTLS after connecting"
 msgstr "STARTTLS pärast ühendumist"
 
+#: src/goabackend/goaimapsmtpprovider.c:573
 msgid "SSL on a dedicated port"
 msgstr "SSL eraldi pordi kaudu"
 
+#: src/goabackend/goaimapsmtpprovider.c:648
 msgid "_Name"
 msgstr "_Nimi"
 
+#: src/goabackend/goaimapsmtpprovider.c:665
 msgid "IMAP _Server"
 msgstr "IMAP _server"
 
+#: src/goabackend/goaimapsmtpprovider.c:685
 msgid "SMTP _Server"
 msgstr "SMTP _server"
 
+#: src/goabackend/goaimapsmtpprovider.c:700
+#: src/goabackend/goaimapsmtpprovider.c:972
+#: src/goabackend/goaimapsmtpprovider.c:1305
+msgid "_Forward"
+msgstr "_Edasi"
+
+#: src/goabackend/goaimapsmtpprovider.c:956
+#: src/goabackend/goaimapsmtpprovider.c:1288
 msgid "Error connecting to IMAP server"
 msgstr "Viga ühendumisel IMAP serveriga"
 
+#: src/goabackend/goaimapsmtpprovider.c:1053
+#: src/goabackend/goaimapsmtpprovider.c:1365
 msgid "Error connecting to SMTP server"
 msgstr "Viga ühendumisel SMTP serveriga"
 
+#: src/goabackend/goaimapsmtpprovider.c:1476
 msgid "E-mail"
 msgstr "E-mail"
 
+#: src/goabackend/goaimapsmtpprovider.c:1480
 msgid "Name"
 msgstr "Nimi"
 
+#: src/goabackend/goaimapsmtpprovider.c:1490
+#: src/goabackend/goaimapsmtpprovider.c:1494
 msgid "IMAP"
 msgstr "IMAP"
 
+#: src/goabackend/goaimapsmtpprovider.c:1505
+#: src/goabackend/goaimapsmtpprovider.c:1509
 msgid "SMTP"
 msgstr "SMTP"
 
+#: src/goabackend/goakerberosprovider.c:100
 msgid "Enterprise Login (Kerberos)"
 msgstr "Ettevõtte kontoga sisselogimine (Kerberos)"
 
-msgid "Identity service returned invalid key"
-msgstr "Identity teenus tagastas sobimatu võtme"
+#: src/goabackend/goakerberosprovider.c:220
+msgid "Ticketing is disabled for account"
+msgstr ""
 
 # See principal on üsna kahtlane sõna, aga ehk ei tee kellegile viga.
-#, c-format
-msgid "Could not find saved credentials for principal ‘%s’ in keyring"
+#: src/goabackend/goakerberosprovider.c:245
+#, fuzzy, c-format
+#| msgid "Could not find saved credentials for principal ‘%s’ in keyring"
+msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr ""
 "Peavalduse (principal) '%s' jaoks salvestatud parooli polnud võimalik "
 "võtmerõngast leida"
 
-#, c-format
-msgid "Did not find password for principal ‘%s’ in credentials"
+#: src/goabackend/goakerberosprovider.c:258
+#, fuzzy, c-format
+#| msgid "Did not find password for principal ‘%s’ in credentials"
+msgid "Did not find password for principal “%s” in credentials"
 msgstr ""
 "Peavalduse (principal) '%s' jaoks salvestatud parooli ei leitud võtmerõngast"
 
-msgid "_Domain"
-msgstr "_Domeen"
+#: src/goabackend/goakerberosprovider.c:558
+msgid "_Principal"
+msgstr ""
 
-msgid "Enterprise domain or realm name"
-msgstr "Ettevõtte domeeni või valduse (realm) nimi"
+#: src/goabackend/goakerberosprovider.c:744
+msgid "Operation was cancelled"
+msgstr ""
 
+#: src/goabackend/goakerberosprovider.c:794
+#: src/goaidentity/goaidentityservice.c:1069
 msgid "Log In to Realm"
 msgstr "Valdusesse (realm) sisselogimine"
 
+#: src/goabackend/goakerberosprovider.c:795
 msgid "Please enter your password below."
 msgstr "Palun sisesta oma parool."
 
+#: src/goabackend/goakerberosprovider.c:796
 msgid "Remember this password"
 msgstr "Parooli meeldejätmine"
 
-#, c-format
-msgid "The domain is not valid"
-msgstr "Domeen pole õige"
-
+#: src/goabackend/goakerberosprovider.c:976
 msgid "Error connecting to enterprise identity server"
 msgstr "Viga ettevõtte identity serverisse sisselogimisel"
 
-msgid "Network _Resources"
-msgstr "Võrgu_ressursid"
+#: src/goabackend/goakerberosprovider.c:1315
+msgid "Identity service returned invalid key"
+msgstr "Identity teenus tagastas sobimatu võtme"
+
+#: src/goabackend/goalastfmprovider.c:65
+msgid "Last.fm"
+msgstr "Last.fm"
+
+#: src/goabackend/goalastfmprovider.c:700
+#: src/goabackend/goalastfmprovider.c:850
+#, fuzzy
+#| msgid "Error connecting to IMAP server"
+msgid "Error connecting to Last.fm"
+msgstr "Viga ühendumisel IMAP serveriga"
+
+#: src/goabackend/goamediaserverprovider.c:63
+msgid "Media Server"
+msgstr "Meediaserver"
+
+#: src/goabackend/goamediaserverprovider.c:316
+msgid ""
+"Personal content can be added to your applications through a media server "
+"account."
+msgstr ""
+
+#: src/goabackend/goamediaserverprovider.c:329
+msgid "Available Media Servers"
+msgstr "Saadaolevad meediaserverid"
+
+#: src/goabackend/goamediaserverprovider.c:360
+msgid "No media servers found"
+msgstr "Ühtki meediaserverit ei leitud"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: src/goabackend/goaoauth2provider.c:632 src/goabackend/goaoauthprovider.c:542
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr ""
 "Ligipääsu märgi pärimisel oodati olekut 200, selle asemel saadi olek %d (%s)"
 
-#, c-format
-msgid "Authorization response was ‘%s’"
+#: src/goabackend/goaoauth2provider.c:814
+#, fuzzy
+#| msgid "Authorization response was ‘%s’"
+msgid "Authorization response: "
 msgstr "Vastus autoriseerimisele oli '%s'"
 
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#, c-format
-msgid ""
-"Paste authorization code obtained from the <a href=\"%s\">authorization "
-"page</a>:"
-msgstr "Aseta siia <a href=\"%s\">autoriseerimise lehelt</a> saadud kood:"
+#: src/goabackend/goaoauth2provider.c:884
+#, fuzzy, c-format
+#| msgid "Authorization response was ‘%s’"
+msgid "Authorization response: %s"
+msgstr "Vastus autoriseerimisele oli '%s'"
 
+#: src/goabackend/goaoauth2provider.c:1021
+#: src/goabackend/goaoauthprovider.c:890
 msgid "Error getting an Access Token: "
 msgstr "Viga turvamärgi hankimisel: "
 
+#: src/goabackend/goaoauth2provider.c:1036
+#: src/goabackend/goaoauthprovider.c:903
 msgid "Error getting identity: "
 msgstr "Viga identiteedi hankimisel: "
 
+#: src/goabackend/goaoauth2provider.c:1254
+#: src/goabackend/goaoauthprovider.c:1192
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr ""
 "Paluti sisse logida nimega %s, kuid selle asemel logiti sisse nimega %s"
 
-#, c-format
+#: src/goabackend/goaoauth2provider.c:1406
 msgid "Credentials do not contain access_token"
 msgstr "Autentimistõendid ei sisalda access_token'it"
 
+#: src/goabackend/goaoauth2provider.c:1445
+#: src/goabackend/goaoauthprovider.c:1407
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Turvamärgi värskendamine nurjus (%s, %d): "
 
-#, c-format
+#: src/goabackend/goaoauthprovider.c:565
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr "Vastuses puudub päis access_token või access_token_secret"
 
+#: src/goabackend/goaoauthprovider.c:773
 msgid "Error getting a Request Token: "
 msgstr "Viga turvamärgi (Request token) hankimisel: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: src/goabackend/goaoauthprovider.c:804
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -328,227 +509,417 @@ msgstr ""
 "Turvamärgi (Request token) pärimisel oodati olekut 200, selle asemel saadi "
 "olek %d (%s)"
 
-#, c-format
+#: src/goabackend/goaoauthprovider.c:821
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr "Vastuses puudub päis request_token või request_token_secret"
 
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#, c-format
-msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr "Aseta siia <a href=\"%s\">autoriseerimise lehelt</a> saadud turvamärk:"
-
-#, c-format
+#: src/goabackend/goaoauthprovider.c:1363
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Autentimistõendis ei sisaldu access_token või access_token_secret"
 
-msgid "ownCloud"
-msgstr "ownCloud"
+#: src/goabackend/goaowncloudprovider.c:60
+msgid "Nextcloud"
+msgstr "Nextcloud"
 
+#: src/goabackend/goaowncloudprovider.c:731
+#: src/goabackend/goaowncloudprovider.c:922
 msgid "Error connecting to ownCloud server"
 msgstr "Viga ühendumisel ownCloud serveriga"
 
-msgid "_Files"
-msgstr "_Failid"
+#: src/goabackend/goapocketprovider.c:74
+msgid "Pocket"
+msgstr "Pocket"
 
+#. TODO: more specific
+#: src/goabackend/goapocketprovider.c:249
+msgid "No username or access_token"
+msgstr ""
+
+#: src/goabackend/goaprovider.c:110
+msgid "_Mail"
+msgstr "_E-posti"
+
+#: src/goabackend/goaprovider.c:115
+msgid "Cale_ndar"
+msgstr "K_alendrit"
+
+#: src/goabackend/goaprovider.c:120
+msgid "_Contacts"
+msgstr "_Kontakte"
+
+#: src/goabackend/goaprovider.c:125
+msgid "C_hat"
+msgstr "_Vestlust"
+
+#: src/goabackend/goaprovider.c:130
+msgid "_Documents"
+msgstr "_Dokumente"
+
+#: src/goabackend/goaprovider.c:135
+msgid "M_usic"
+msgstr "M_uusikat"
+
+#: src/goabackend/goaprovider.c:140
+msgid "_Photos"
+msgstr "F_otosid"
+
+#: src/goabackend/goaprovider.c:145
+msgid "_Files"
+msgstr "_Faile"
+
+#: src/goabackend/goaprovider.c:150
+msgid "Network _Resources"
+msgstr "Võrgu_ressursse"
+
+#: src/goabackend/goaprovider.c:155
+msgid "_Read Later"
+msgstr "_Loe Hiljem"
+
+#: src/goabackend/goaprovider.c:160
+msgid "Prin_ters"
+msgstr "Prin_tereid"
+
+#: src/goabackend/goaprovider.c:165
+msgid "_Maps"
+msgstr "_Kaarte"
+
+#: src/goabackend/goaprovider.c:170
+msgid "T_o Do"
+msgstr "Ül_esandeid"
+
+#. Translators: This is a label for a series of
+#. * options switches. For example: “Use for Mail”.
+#: src/goabackend/goaprovider.c:568
+msgid "Use for"
+msgstr "Kasutatakse:"
+
+#: src/goabackend/goaprovider.c:823
+msgid "Account is disabled"
+msgstr ""
+
+#: src/goabackend/goaprovider.c:836
+msgid "Unknown error"
+msgstr ""
+
+#: src/goabackend/goaprovider.c:855
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync ei ole liigi %s jaoks teostatud"
 
 #. TODO: more specific
-#, c-format
+#: src/goabackend/goasmtpauth.c:170
 msgid "TLS not available"
 msgstr "TLS pole saadaval"
 
-#. TODO: more specific
-#, c-format
-msgid "org.gnome.OnlineAccounts.Mail is not available"
-msgstr "org.gnome.OnlineAccounts.Mail pole saadaval"
+#: src/goabackend/goasmtpauth.c:476
+#, fuzzy
+#| msgid "Authentication failed"
+msgid "Unknown authentication mechanism"
+msgstr "Autentimine nurjus"
 
-#. TODO: more specific
-#, c-format
-msgid "Failed to parse email address"
-msgstr "Meiliaadressi parsimine nurjus"
+#: src/goabackend/goatodoistprovider.c:58
+msgid "Todoist"
+msgstr "Todoist"
 
-#. TODO: more specific
-#, c-format
-msgid "Cannot do SMTP PLAIN without a domain"
-msgstr "SMTP PLAIN ühendust pole võimalik ilma domeenita luua"
+#: src/goabackend/goautils.c:92
+msgid "Error logging into the account"
+msgstr ""
 
-#. TODO: more specific
-#, c-format
-msgid "Did not find smtp-password in credentials"
-msgstr "Autentimistõendite hulgast ei leitud SMTP parooli"
+#: src/goabackend/goautils.c:136
+#, fuzzy
+#| msgid "The certificate has expired."
+msgid "Credentials have expired"
+msgstr "Sertifikaat on aegunud."
 
-#. TODO: more specific
-#, c-format
-msgid "Cannot do SMTP PLAIN without a password"
-msgstr "SMTP PLAIN ühendust pole võimalik ilma paroolita luua"
+#: src/goabackend/goautils.c:140
+msgid "Sign in to enable this account."
+msgstr "Logi sisse selle konto lubamiseks."
 
-#, c-format
-msgid "Telepathy chat account not found"
-msgstr "Telepathy vestluskontot ei leitud"
+#: src/goabackend/goautils.c:144
+msgid "_Sign In"
+msgstr "_Logi sisse"
 
-#, c-format
-msgid "Failed to initialize a GOA client"
-msgstr "GOA klienti polnud võimalik lähtestada"
-
-#, c-format
-msgid "Failed to create a user interface for %s"
-msgstr "%s jaoks ei suudetud luua kasutajaliidest"
-
-msgid "Connection Settings"
-msgstr "Ühenduse sätted"
-
-msgid "Personal Details"
-msgstr "Isiklikud andmed"
-
-msgid "Cannot save the connection parameters"
-msgstr "Ühenduse parameetreid pole võimalik salvestada"
-
-msgid "Cannot save your personal information on the server"
-msgstr "Sinu isiklikke andmeid pole võimalik serverisse salvestada"
-
-#. Connection Settings button
-msgid "_Connection Settings"
-msgstr "Ühenduse _sätted"
-
-#. Edit Personal Information button
-msgid "_Personal Details"
-msgstr "_Isiklikud andmed"
-
-msgid "Twitter"
-msgstr "Twitter"
-
+#: src/goabackend/goautils.c:240
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "%s konto on juba olemas kasutajale %s"
 
-#. Translators: the %s is the name of the provider. eg., Google.
+#. Translators: this is the title of the "Add Account" and "Refresh
+#. * Account" dialogs. The %s is the name of the provider. eg.,
+#. * 'Google'.
+#.
+#: src/goabackend/goautils.c:293
 #, c-format
-msgid "%s account"
+msgid "%s Account"
 msgstr "%s konto"
 
 #. TODO: more specific
+#: src/goabackend/goautils.c:347
 msgid "Failed to delete credentials from the keyring"
 msgstr "Autentimistõendite kustutamine võtmerõngast nurjus"
 
 #. TODO: more specific
+#: src/goabackend/goautils.c:395
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Autentimistõendite hankimine võtmerõngast nurjus"
 
 #. TODO: more specific
+#: src/goabackend/goautils.c:405
 msgid "No credentials found in the keyring"
 msgstr "Võtmerõngast ei leitud autentimistõendeid"
 
+#: src/goabackend/goautils.c:418
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Viga võtmerõngast saadud vastuse parsimisel: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#: src/goabackend/goautils.c:459
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "GOA %s autentimistõendid identiteedi %s jaoks"
 
 #. TODO: more specific
+#: src/goabackend/goautils.c:476
 msgid "Failed to store credentials in the keyring"
 msgstr "Autentimistõendite salvestamine võtmerõngasse nurjus"
 
+#: src/goabackend/goautils.c:825
+#, fuzzy
+#| msgid "Cannot save the connection parameters"
+msgid "Cannot resolve hostname"
+msgstr "Ühenduse parameetreid pole võimalik salvestada"
+
+#: src/goabackend/goautils.c:829
+msgid "Cannot resolve proxy hostname"
+msgstr ""
+
+#: src/goabackend/goautils.c:834
+msgid "Cannot find WebDAV endpoint"
+msgstr ""
+
+#: src/goabackend/goautils.c:843
+#, c-format
+msgid "Code: %u — Unexpected response from server"
+msgstr "Kood %u — server andis ootamatu vastuse"
+
+#: src/goabackend/goautils.c:859
 msgid "The signing certificate authority is not known."
 msgstr "Allkirjastamise sertifikaadi tunnustaja on tundmatu."
 
+#: src/goabackend/goautils.c:863
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr "Sertifikaat ei vasta saidi, kust see saadi, eeldatavale identiteedile."
 
+#: src/goabackend/goautils.c:868
 msgid "The certificate’s activation time is still in the future."
 msgstr "Sertifikaadi kehtivuse algus on ikka veel tulevikus."
 
+#: src/goabackend/goautils.c:872
 msgid "The certificate has expired."
 msgstr "Sertifikaat on aegunud."
 
+#: src/goabackend/goautils.c:876
 msgid "The certificate has been revoked."
 msgstr "Sertifikaat on tühistatud."
 
+#: src/goabackend/goautils.c:880
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Sertifikaadi algoritm on ebaturvaline."
 
+#: src/goabackend/goautils.c:886
 msgid "Invalid certificate."
 msgstr "Vigane sertifikaat."
 
+#. TODO: more specific
+#: src/goabackend/goautils.c:921
+#, fuzzy, c-format
+#| msgid "Did not find %s with identity ‘%s’ in credentials"
+msgid "Did not find %s with identity “%s” in credentials"
+msgstr "Ei leitud identiteedile '%s' vastavat välja '%s'"
+
 #. translators: %s here is the address of the web page
+#: src/goabackend/goawebview.c:94
 #, c-format
 msgid "Loading “%s”…"
-msgstr "“%s” laadimine…"
+msgstr "„%s“ laadimine…"
 
-msgid "Windows Live"
-msgstr "Windows Live"
+#: src/goabackend/goawindowsliveprovider.c:56
+msgid "Microsoft"
+msgstr "Microsoft"
 
-msgid "Yahoo"
-msgstr "Yahoo"
-
-#, c-format
-msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-msgstr "'name' pärimisel oodati olekut 200, selle asemel saadi olek %d (%s)"
-
-msgid "Time"
-msgstr "Aeg"
-
-msgid "Time to fire"
-msgstr "Millal käivitatakse"
-
-msgid "initial secret passed before secret key exchange"
-msgstr "esialgne saladus, mis antakse enne salavõtme vahetust"
-
+#: src/goaidentity/goaidentityservice.c:568
 msgid "Initial secret key is invalid"
 msgstr "Esialgne salavõti on vale"
 
+#: src/goaidentity/goaidentityservice.c:1074
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "Võrguvaldus (realm) %s vajab andmeid, et sind sisse logida."
 
-msgid "Could not find identity in credential cache: %k"
+#: src/goaidentity/goakerberosidentity.c:275
+#: src/goaidentity/goakerberosidentity.c:283
+#: src/goaidentity/goakerberosidentity.c:707
+#, fuzzy
+#| msgid "Could not find identity in credential cache: %k"
+msgid "Could not find identity in credential cache: "
 msgstr "Identiteeti ei leitud paroolide puhvrist: %k"
 
-msgid "Could not find identity credentials in cache: %k"
+#: src/goaidentity/goakerberosidentity.c:720
+#, fuzzy
+#| msgid "Could not find identity credentials in cache: %k"
+msgid "Could not find identity credentials in cache: "
 msgstr "Puhvrist ei leitud identiteedi parooli: %k"
 
-msgid "Could not sift through identity credentials in cache: %k"
+#: src/goaidentity/goakerberosidentity.c:771
+#, fuzzy
+#| msgid "Could not sift through identity credentials in cache: %k"
+msgid "Could not sift through identity credentials in cache: "
 msgstr "Identiteediparoolide puhvrit pole võimalik sõeluda: %k"
 
-msgid "Could not finish up sifting through identity credentials in cache: %k"
+#: src/goaidentity/goakerberosidentity.c:788
+#, fuzzy
+#| msgid ""
+#| "Could not finish up sifting through identity credentials in cache: %k"
+msgid "Could not finish up sifting through identity credentials in cache: "
 msgstr "Identiteediparoolide puhvri sõelumist pole võimalik lõpetada: %k"
 
-#, c-format
+#: src/goaidentity/goakerberosidentity.c:1103
 msgid "No associated identification found"
 msgstr "Seonduvat identifikaatorit ei leitud"
 
-msgid "Could not create credential cache: %k"
+#: src/goaidentity/goakerberosidentity.c:1186
+#, fuzzy
+#| msgid "Could not create credential cache: %k"
+msgid "Could not create credential cache: "
 msgstr "Paroolide puhvrit pole võimalik luua: %k"
 
-msgid "Could not initialize credentials cache: %k"
+#: src/goaidentity/goakerberosidentity.c:1220
+#, fuzzy
+#| msgid "Could not initialize credentials cache: %k"
+msgid "Could not initialize credentials cache: "
 msgstr "Paroolide puhvrit pole võimalik lähtestada: %k"
 
-msgid "Could not store new credentials in credentials cache: %k"
+#: src/goaidentity/goakerberosidentity.c:1236
+#, fuzzy
+#| msgid "Could not store new credentials in credentials cache: %k"
+msgid "Could not store new credentials in credentials cache: "
 msgstr "Uute autentimistõendite salvestamine puhvrisse nurjus: %k"
 
-#, c-format
+#: src/goaidentity/goakerberosidentity.c:1534
 msgid "Could not renew identity: Not signed in"
 msgstr "Identiteeti pole võimalik uuendada: pole sisse logitud"
 
-msgid "Could not renew identity: %k"
+#: src/goaidentity/goakerberosidentity.c:1546
+#, fuzzy
+#| msgid "Could not renew identity: %k"
+msgid "Could not renew identity: "
 msgstr "Identiteeti pole võimalik uuendada: %k"
 
-msgid "Could not get new credentials to renew identity %s: %k"
+#: src/goaidentity/goakerberosidentity.c:1562
+#, fuzzy, c-format
+#| msgid "Could not get new credentials to renew identity %s: %k"
+msgid "Could not get new credentials to renew identity %s: "
 msgstr "Pole võimalik hankida parooli identiteedi %s uuendamiseks: %k"
 
-msgid "Could not erase identity: %k"
+#: src/goaidentity/goakerberosidentity.c:1604
+#, fuzzy
+#| msgid "Could not erase identity: %k"
+msgid "Could not erase identity: "
 msgstr "Identiteeti pole võimalik kustutada: %k"
 
+#: src/goaidentity/goakerberosidentitymanager.c:749
 msgid "Could not find identity"
 msgstr "Identiteeti ei leitud"
 
+#: src/goaidentity/goakerberosidentitymanager.c:845
 msgid "Could not create credential cache for identity"
 msgstr "Pole võimalik luua paroolide puhvrit identiteedi jaoks"
+
+#~ msgid "Did not find password with identity ‘%s’ in credentials"
+#~ msgstr "Ei leitud identiteedile '%s' vastavat parooli"
+
+#~ msgid "_Domain"
+#~ msgstr "_Domeen"
+
+#~ msgid "Enterprise domain or realm name"
+#~ msgstr "Ettevõtte domeeni või valduse (realm) nimi"
+
+#~ msgid "The domain is not valid"
+#~ msgstr "Domeen pole õige"
+
+#~ msgid ""
+#~ "Paste authorization code obtained from the <a href=\"%s\">authorization "
+#~ "page</a>:"
+#~ msgstr "Aseta siia <a href=\"%s\">autoriseerimise lehelt</a> saadud kood:"
+
+#~ msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
+#~ msgstr ""
+#~ "Aseta siia <a href=\"%s\">autoriseerimise lehelt</a> saadud turvamärk:"
+
+#~ msgid "ownCloud"
+#~ msgstr "ownCloud"
+
+#~ msgid "org.gnome.OnlineAccounts.Mail is not available"
+#~ msgstr "org.gnome.OnlineAccounts.Mail pole saadaval"
+
+#~ msgid "Failed to parse email address"
+#~ msgstr "Meiliaadressi parsimine nurjus"
+
+#~ msgid "Cannot do SMTP PLAIN without a domain"
+#~ msgstr "SMTP PLAIN ühendust pole võimalik ilma domeenita luua"
+
+#~ msgid "Did not find smtp-password in credentials"
+#~ msgstr "Autentimistõendite hulgast ei leitud SMTP parooli"
+
+#~ msgid "Cannot do SMTP PLAIN without a password"
+#~ msgstr "SMTP PLAIN ühendust pole võimalik ilma paroolita luua"
+
+#~ msgid "Telepathy chat account not found"
+#~ msgstr "Telepathy vestluskontot ei leitud"
+
+#~ msgid "Failed to initialize a GOA client"
+#~ msgstr "GOA klienti polnud võimalik lähtestada"
+
+#~ msgid "Failed to create a user interface for %s"
+#~ msgstr "%s jaoks ei suudetud luua kasutajaliidest"
+
+#~ msgid "Connection Settings"
+#~ msgstr "Ühenduse sätted"
+
+#~ msgid "Personal Details"
+#~ msgstr "Isiklikud andmed"
+
+#~ msgid "Cannot save your personal information on the server"
+#~ msgstr "Sinu isiklikke andmeid pole võimalik serverisse salvestada"
+
+#~ msgid "_Connection Settings"
+#~ msgstr "Ühenduse _sätted"
+
+#~ msgid "_Personal Details"
+#~ msgstr "_Isiklikud andmed"
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#~ msgid "Windows Live"
+#~ msgstr "Windows Live"
+
+#~ msgid "Yahoo"
+#~ msgstr "Yahoo"
+
+#~ msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+#~ msgstr "'name' pärimisel oodati olekut 200, selle asemel saadi olek %d (%s)"
+
+#~ msgid "Time"
+#~ msgstr "Aeg"
+
+#~ msgid "Time to fire"
+#~ msgstr "Millal käivitatakse"
+
+#~ msgid "initial secret passed before secret key exchange"
+#~ msgstr "esialgne saladus, mis antakse enne salavõtme vahetust"
 
 #~ msgid "Failed to find Autodiscover element"
 #~ msgstr "Automaattuvastuse elementi ei leitud"
