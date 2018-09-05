@@ -1,0 +1,16 @@
+before_script:
+  - id
+  - uname -a
+  - apt-get install git
+
+build:
+  image: ubuntu:bionic
+  script:
+    - git clone https://github.com/mesonbuild/meson.git
+    - cd meson
+    - python3 setup.py install
+    - meson --version
+    - mkdir builddir
+    - meson builddir
+    - cd builddid
+    - ninja
