@@ -1,0 +1,13 @@
+image: ubuntu:bionic
+before_script:
+  - id
+  - uname -a
+  - apt-get install ninja meson
+  - meson --version
+
+build:
+  script:
+    - mkdir builddir
+    - meson builddir
+    - cd builddid
+    - ninja
