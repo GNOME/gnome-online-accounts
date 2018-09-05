@@ -1,0 +1,11 @@
+before_script:
+  - id
+  - uname -a
+  - apt install ninja meson
+
+build:
+  script:
+    - mkdir builddir
+    - meson builddir
+    - cd builddid
+    - ninja
