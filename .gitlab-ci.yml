@@ -1,0 +1,12 @@
+before_script:
+  - id
+  - uname -a
+
+build:
+  image: DeepDiver1975/docker-gnome-meson:latest
+  script:
+    - meson --version
+    - mkdir builddir
+    - meson builddir
+    - cd builddir
+    - ninja
