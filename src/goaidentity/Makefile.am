@@ -16,7 +16,6 @@ AM_CPPFLAGS = 							\
 	-DPACKAGE_LOCALSTATE_DIR=\""$(localstatedir)"\" 	\
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" 		\
 	-DPACKAGE_LIB_DIR=\""$(libdir)"\" 			\
-	-D_POSIX_PTHREAD_SEMANTICS -D_REENTRANT			\
 	-DGOA_API_IS_SUBJECT_TO_CHANGE				\
 	-DGOA_BACKEND_API_IS_SUBJECT_TO_CHANGE			\
 	$(WARN_CFLAGS)						\
