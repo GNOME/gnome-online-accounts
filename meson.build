@@ -63,7 +63,6 @@ config_h.set('GOA_MICRO_VERSION', goa_micro_version)
 
 # compiler flags
 common_flags = [
-  '-DHAVE_CONFIG_H',
   '-D_POSIX_PTHREAD_SEMANTICS',
   '-D_REENTRANT'
 ]
