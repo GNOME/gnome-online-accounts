@@ -62,10 +62,6 @@ config_h.set('GOA_MINOR_VERSION', goa_minor_version)
 config_h.set('GOA_MICRO_VERSION', goa_micro_version)
 
 # compiler flags
-common_flags = [
-  '-D_POSIX_PTHREAD_SEMANTICS',
-  '-D_REENTRANT'
-]
 compiler_flags = []
 
 if goa_buildtype.contains('debug')
@@ -82,7 +78,7 @@ if goa_buildtype.contains('debug')
   ])
 endif
 
-add_project_arguments(common_flags + compiler_flags, language: 'c')
+add_project_arguments(compiler_flags, language: 'c')
 
 glib_req_version = '>= 2.52'
 
