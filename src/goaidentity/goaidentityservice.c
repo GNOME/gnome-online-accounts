@@ -66,6 +66,7 @@ sign_in (GoaIdentityService     *self,
 G_DEFINE_TYPE_WITH_CODE (GoaIdentityService,
                          goa_identity_service,
                          GOA_IDENTITY_SERVICE_TYPE_MANAGER_SKELETON,
+                         G_ADD_PRIVATE (GoaIdentityService)
                          G_IMPLEMENT_INTERFACE (GOA_IDENTITY_SERVICE_TYPE_MANAGER,
                                                 identity_service_manager_interface_init));
 
@@ -1704,8 +1705,6 @@ goa_identity_service_class_init (GoaIdentityServiceClass *service_class)
 
   goa_identity_utils_register_error_domain (GOA_IDENTITY_ERROR, GOA_TYPE_IDENTITY_ERROR);
   goa_identity_utils_register_error_domain (GOA_IDENTITY_MANAGER_ERROR, GOA_TYPE_IDENTITY_MANAGER_ERROR);
-
-  g_type_class_add_private (service_class, sizeof (GoaIdentityServicePrivate));
 }
 
 GoaIdentityService *

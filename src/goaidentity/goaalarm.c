@@ -73,7 +73,8 @@ static void goa_alarm_set_time (GoaAlarm *self, GDateTime *time);
 static void clear_wakeup_source_pointer (GoaAlarm *self);
 static guint signals[NUMBER_OF_SIGNALS] = { 0 };
 
-G_DEFINE_TYPE (GoaAlarm, goa_alarm, G_TYPE_OBJECT);
+G_DEFINE_TYPE_WITH_CODE (GoaAlarm, goa_alarm, G_TYPE_OBJECT,
+                         G_ADD_PRIVATE (GoaAlarm));
 
 static void
 goa_alarm_dispose (GObject *object)
@@ -151,8 +152,6 @@ goa_alarm_class_init (GoaAlarmClass *klass)
   object_class->finalize = goa_alarm_finalize;
   object_class->get_property = goa_alarm_get_property;
   object_class->set_property = goa_alarm_set_property;
-
-  g_type_class_add_private (klass, sizeof (GoaAlarmPrivate));
 
   signals[FIRED] = g_signal_new ("fired",
                                  G_TYPE_FROM_CLASS (klass),

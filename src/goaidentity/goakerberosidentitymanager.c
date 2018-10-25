@@ -112,6 +112,7 @@ static void on_identity_expired (GoaIdentity                *identity,
 G_DEFINE_TYPE_WITH_CODE (GoaKerberosIdentityManager,
                          goa_kerberos_identity_manager,
                          G_TYPE_OBJECT,
+                         G_ADD_PRIVATE (GoaKerberosIdentityManager)
                          G_IMPLEMENT_INTERFACE (GOA_TYPE_IDENTITY_MANAGER,
                                                 identity_manager_interface_init)
                          G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE,
@@ -1664,8 +1665,6 @@ goa_kerberos_identity_manager_class_init (GoaKerberosIdentityManagerClass *klass
 
   object_class->dispose = goa_kerberos_identity_manager_dispose;
   object_class->finalize = goa_kerberos_identity_manager_finalize;
-
-  g_type_class_add_private (klass, sizeof (GoaKerberosIdentityManagerPrivate));
 }
 
 GoaIdentityManager *

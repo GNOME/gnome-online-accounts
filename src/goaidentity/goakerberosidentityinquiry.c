@@ -50,6 +50,7 @@ static void initable_interface_init (GInitableIface *interface);
 G_DEFINE_TYPE_WITH_CODE (GoaKerberosIdentityInquiry,
                          goa_kerberos_identity_inquiry,
                          G_TYPE_OBJECT,
+                         G_ADD_PRIVATE (GoaKerberosIdentityInquiry)
                          G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE,
                                                 initable_interface_init)
                          G_IMPLEMENT_INTERFACE (GOA_TYPE_IDENTITY_INQUIRY,
@@ -125,8 +126,6 @@ goa_kerberos_identity_inquiry_class_init (GoaKerberosIdentityInquiryClass *klass
 
   object_class->dispose = goa_kerberos_identity_inquiry_dispose;
   object_class->finalize = goa_kerberos_identity_inquiry_finalize;
-
-  g_type_class_add_private (klass, sizeof (GoaKerberosIdentityInquiryPrivate));
 }
 
 static void
