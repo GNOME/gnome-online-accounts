@@ -103,6 +103,7 @@ G_LOCK_DEFINE_STATIC (identity_lock);
 G_DEFINE_TYPE_WITH_CODE (GoaKerberosIdentity,
                          goa_kerberos_identity,
                          G_TYPE_OBJECT,
+                         G_ADD_PRIVATE (GoaKerberosIdentity)
                          G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE,
                                                 initable_interface_init)
                          G_IMPLEMENT_INTERFACE (GOA_TYPE_IDENTITY,
@@ -185,8 +186,6 @@ goa_kerberos_identity_class_init (GoaKerberosIdentityClass *klass)
   object_class->dispose = goa_kerberos_identity_dispose;
   object_class->finalize = goa_kerberos_identity_finalize;
   object_class->get_property = goa_kerberos_identity_get_property;
-
-  g_type_class_add_private (klass, sizeof (GoaKerberosIdentityPrivate));
 
   signals[EXPIRING] = g_signal_new ("expiring",
                                     G_TYPE_FROM_CLASS (klass),
