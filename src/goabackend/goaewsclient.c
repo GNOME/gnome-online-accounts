@@ -64,7 +64,7 @@ goa_ews_client_new (void)
 typedef struct
 {
   GCancellable *cancellable;
-  GSimpleAsyncResult *res;
+  GError *error;
   SoupMessage *msgs[2];
   SoupSession *session;
   gboolean accept_ssl_errors;
@@ -90,9 +90,10 @@ ews_client_autodiscover_data_free (gpointer user_data)
       g_object_unref (data->cancellable);
     }
 
+  g_clear_error (&data->error);
+
   /* soup_session_queue_message stole the references to data->msgs */
   xmlOutputBufferClose (data->buf);
-  g_object_unref (data->res);
   g_object_unref (data->session);
   g_slice_free (AutodiscoverData, data);
 }
@@ -132,20 +133,20 @@ ews_client_authenticate (SoupSession *session,
 static void
 ews_client_request_started (SoupSession *session, SoupMessage *msg, SoupSocket *socket, gpointer user_data)
 {
-  AutodiscoverData *data = user_data;
-  GError *error;
+  AutodiscoverData *data;
+  GTask *task = G_TASK (user_data);
   GTlsCertificateFlags cert_flags;
 
   g_debug ("goa_ews_client_autodiscover(): request started (%p)", msg);
 
-  error = NULL;
+  data = (AutodiscoverData *) g_task_get_task_data (task);
 
   if (!data->accept_ssl_errors
       && soup_message_get_https_status (msg, NULL, &cert_flags)
-      && cert_flags != 0)
+      && cert_flags != 0
+      && data->error == NULL)
     {
-      goa_utils_set_error_ssl (&error, cert_flags);
-      g_simple_async_result_take_error (data->res, error);
+      goa_utils_set_error_ssl (&data->error, cert_flags);
 
       /* The callback will be invoked after we have returned to the
        * main loop.
@@ -157,9 +158,12 @@ ews_client_request_started (SoupSession *session, SoupMessage *msg, SoupSocket *
 static void
 ews_client_autodiscover_cancelled_cb (GCancellable *cancellable, gpointer user_data)
 {
-  AutodiscoverData *data = user_data;
+  AutodiscoverData *data;
+  GTask *task = G_TASK (user_data);
 
   g_debug ("goa_ews_client_autodiscover(): cancelled");
+
+  data = (AutodiscoverData *) g_task_get_task_data (task);
 
   /* The callback will be invoked after we have returned to the main
    * loop.
@@ -191,7 +195,8 @@ static void
 ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpointer user_data)
 {
   GError *error = NULL;
-  AutodiscoverData *data = user_data;
+  AutodiscoverData *data;
+  GTask *task = G_TASK (user_data);
   gboolean op_res = FALSE;
   guint idx;
   guint status;
@@ -201,6 +206,7 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
 
   g_debug ("goa_ews_client_autodiscover(): response (%p, %u)", msg, msg->status_code);
 
+  data = (AutodiscoverData *) g_task_get_task_data (task);
   size = sizeof (data->msgs) / sizeof (data->msgs[0]);
 
   for (idx = 0; idx < size; idx++)
@@ -221,19 +227,19 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
   if (status == SOUP_STATUS_CANCELLED)
     {
       /* If we are being aborted by the GCancellable, then the
-       * GSimpleAsyncResult is responsible for setting the GError
-       * automatically.
+       * GTask is responsible for setting the GError automatically.
        *
        * If a previous autodiscover attempt for the same GAsyncResult
        * was successful then no additional attempts are required and
        * we should use the result from the earlier attempt.
        */
-      op_res = g_simple_async_result_get_op_res_gboolean (data->res);
       goto out;
     }
   else if (status != SOUP_STATUS_OK)
     {
       g_warning ("goa_ews_client_autodiscover() failed: %u — %s", msg->status_code, msg->reason_phrase);
+      g_return_if_fail (data->error == NULL);
+
       goa_utils_set_error_soup (&error, msg);
       goto out;
     }
@@ -319,7 +325,6 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
    * that it won't get lost when we hear from another autodiscover
    * attempt for the same GAsyncResult.
    */
-  g_simple_async_result_set_op_res_gboolean (data->res, op_res);
 
   for (idx = 0; idx < size; idx++)
     {
@@ -333,8 +338,9 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
     }
 
  out:
-  /* error == NULL, if we are being aborted by the GCancellable, an
-   * SSL error or another message that was successful.
+  /* op_res == FALSE, if we are being aborted by the GCancellable, an
+   * SSL error, another message that was successful or an error
+   * encountered while parsing this response.
    */
   if (!op_res)
     {
@@ -344,23 +350,24 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
       if (data->pending > 1)
         g_clear_error (&error);
 
-      if (error != NULL)
-        g_simple_async_result_take_error (data->res, error);
+      if (error != NULL && data->error == NULL)
+        {
+          g_propagate_error (&data->error, error);
+          error = NULL;
+        }
     }
 
   data->pending--;
   if (data->pending == 0)
     {
-      /* The result of the GAsyncResult should already be set when we
-       * get here. If it wasn't explicitly set to TRUE then
-       * autodiscovery has failed and the default value of the
-       * GAsyncResult (which is FALSE) should be returned to the
-       * original caller.
-       */
-
-      g_simple_async_result_complete_in_idle (data->res);
-      ews_client_autodiscover_data_free (data);
+      if (data->error != NULL)
+        g_task_return_error (task, g_steal_pointer (&data->error));
+      else
+        g_task_return_boolean (task, TRUE);
     }
+
+  g_clear_error (&error);
+  g_object_unref (task);
 }
 
 static xmlDoc *
@@ -455,6 +462,7 @@ goa_ews_client_autodiscover (GoaEwsClient        *self,
 {
   AutodiscoverData *data;
   AutodiscoverAuthData *auth;
+  GTask *task = NULL;
   gchar *url1;
   gchar *url2;
   xmlDoc *doc;
@@ -466,6 +474,12 @@ goa_ews_client_autodiscover (GoaEwsClient        *self,
   g_return_if_fail (username != NULL && username[0] != '\0');
   g_return_if_fail (server != NULL && server[0] != '\0');
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, goa_ews_client_autodiscover);
+
+  data = g_slice_new0 (AutodiscoverData);
+  g_task_set_task_data (task, data, ews_client_autodiscover_data_free);
 
   doc = ews_client_create_autodiscover_xml (email);
   buf = xmlAllocOutputBuffer (NULL);
@@ -482,9 +496,8 @@ goa_ews_client_autodiscover (GoaEwsClient        *self,
    * to time out. So run both queries in parallel and let the fastest
    * (successful) one win.
    */
-  data = g_slice_new0 (AutodiscoverData);
+
   data->buf = buf;
-  data->res = g_simple_async_result_new (G_OBJECT (self), callback, user_data, goa_ews_client_autodiscover);
   data->msgs[0] = ews_client_create_msg_for_url (url1, buf);
   data->msgs[1] = ews_client_create_msg_for_url (url2, buf);
   data->pending = sizeof (data->msgs) / sizeof (data->msgs[0]);
@@ -496,11 +509,10 @@ goa_ews_client_autodiscover (GoaEwsClient        *self,
   if (cancellable != NULL)
     {
       data->cancellable = g_object_ref (cancellable);
-      data->cancellable_id = g_cancellable_connect (data->cancellable,
+      data->cancellable_id = g_cancellable_connect (cancellable,
                                                     G_CALLBACK (ews_client_autodiscover_cancelled_cb),
-                                                    data,
+                                                    task,
                                                     NULL);
-      g_simple_async_result_set_check_cancellable (data->res, data->cancellable);
     }
 
   auth = g_slice_new0 (AutodiscoverAuthData);
@@ -513,31 +525,36 @@ goa_ews_client_autodiscover (GoaEwsClient        *self,
                          ews_client_autodiscover_auth_data_free,
                          0);
 
-  g_signal_connect (data->session, "request-started", G_CALLBACK (ews_client_request_started), data);
+  g_signal_connect (data->session, "request-started", G_CALLBACK (ews_client_request_started), task);
 
-  soup_session_queue_message (data->session, data->msgs[0], ews_client_autodiscover_response_cb, data);
-  soup_session_queue_message (data->session, data->msgs[1], ews_client_autodiscover_response_cb, data);
+  soup_session_queue_message (data->session,
+                              data->msgs[0],
+                              ews_client_autodiscover_response_cb,
+                              g_object_ref (task));
+  soup_session_queue_message (data->session,
+                              data->msgs[1],
+                              ews_client_autodiscover_response_cb,
+                              g_object_ref (task));
 
   g_free (url2);
   g_free (url1);
+  g_object_unref (task);
   xmlFreeDoc (doc);
 }
 
 gboolean
 goa_ews_client_autodiscover_finish (GoaEwsClient *self, GAsyncResult *res, GError **error)
 {
-  GSimpleAsyncResult *simple;
+  GTask *task;
 
-  g_return_val_if_fail (g_simple_async_result_is_valid (res, G_OBJECT (self), goa_ews_client_autodiscover),
-                        FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  simple = G_SIMPLE_ASYNC_RESULT (res);
+  g_return_val_if_fail (g_task_is_valid (res, self), FALSE);
+  task = G_TASK (res);
 
-  if (g_simple_async_result_propagate_error (simple, error))
-    return FALSE;
+  g_return_val_if_fail (g_task_get_source_tag (task) == goa_ews_client_autodiscover, FALSE);
 
-  return g_simple_async_result_get_op_res_gboolean (simple);
+  return g_task_propagate_boolean (task, error);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
