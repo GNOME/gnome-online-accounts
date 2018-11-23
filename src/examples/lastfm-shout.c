@@ -31,7 +31,7 @@ main (int argc, char **argv)
   GError *error = NULL;
   GoaClient *client;
   GList *accounts, *l;
-  GoaAccount *account;
+  GoaAccount *account = NULL;
   GoaOAuth2Based *oauth2 = NULL;
   char *access_token = NULL;
   RestProxy *proxy;
@@ -67,8 +67,10 @@ main (int argc, char **argv)
 
   g_list_free_full (accounts, (GDestroyNotify) g_object_unref);
 
-  g_assert (account);
-  g_assert (oauth2);
+  if (account == NULL || oauth2 == NULL) {
+    g_print ("Last.fm account not found\n");
+    return 1;
+  }
 
   if (!goa_oauth2_based_call_get_access_token_sync (oauth2, &access_token, NULL, NULL, &error)) {
     g_error ("Could not get access token %s\n", error->message);
