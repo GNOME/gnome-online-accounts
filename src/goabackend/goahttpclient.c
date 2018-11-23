@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright © 2012 – 2017 Red Hat, Inc.
+ * Copyright © 2012 – 2018 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -126,6 +126,10 @@ http_client_request_started (SoupSession *session, SoupMessage *msg, SoupSocket 
     {
       goa_utils_set_error_ssl (&error, cert_flags);
       g_task_return_error (task, error);
+
+      /* The callback will be invoked after we have returned to the
+       * main loop.
+       */
       soup_session_abort (data->session);
     }
 }
@@ -140,26 +144,19 @@ http_client_check_cancelled_cb (GCancellable *cancellable, gpointer user_data)
   data = g_task_get_task_data (task);
 
   cancelled = g_task_return_error_if_cancelled (task);
+
+  /* The callback will be invoked after we have returned to the main
+   * loop.
+   */
   soup_session_abort (data->session);
 
   g_return_if_fail (cancelled);
-}
-
-static gboolean
-http_client_check_free_in_idle (gpointer user_data)
-{
-  GTask *task = G_TASK (user_data);
-
-  g_object_unref (task);
-  return G_SOURCE_REMOVE;
 }
 
 static void
 http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer user_data)
 {
   GError *error;
-  GMainContext *context;
-  GSource *source;
   GTask *task = G_TASK (user_data);
 
   error = NULL;
@@ -181,22 +178,7 @@ http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer 
   g_task_return_boolean (task, TRUE);
 
  out:
-  /* We might be invoked from a GCancellable::cancelled
-   * handler, and unreffing the GTask will disconnect the
-   * handler. Since disconnecting from inside the handler will cause a
-   * deadlock [1], we use an idle handler to break them up.
-   *
-   * [1] https://bugzilla.gnome.org/show_bug.cgi?id=705395
-   */
-
-  source = g_idle_source_new ();
-  g_source_set_priority (source, G_PRIORITY_DEFAULT_IDLE);
-  g_source_set_callback (source, http_client_check_free_in_idle, task, NULL);
-  g_source_set_name (source, "[goa] http_client_check_free_in_idle");
-
-  context = g_task_get_context (task);
-  g_source_attach (source, context);
-  g_source_unref (source);
+  g_object_unref (task);
 }
 
 void
