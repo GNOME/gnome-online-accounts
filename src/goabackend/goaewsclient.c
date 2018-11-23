@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright © 2012 – 2017 Red Hat, Inc.
+ * Copyright © 2012 – 2018 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -79,12 +79,10 @@ typedef struct
   gchar *username;
 } AutodiscoverAuthData;
 
-static gboolean
+static void
 ews_client_autodiscover_data_free (gpointer user_data)
 {
   AutodiscoverData *data = user_data;
-
-  g_simple_async_result_complete_in_idle (data->res);
 
   if (data->cancellable_id > 0)
     {
@@ -97,8 +95,6 @@ ews_client_autodiscover_data_free (gpointer user_data)
   g_object_unref (data->res);
   g_object_unref (data->session);
   g_slice_free (AutodiscoverData, data);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -148,6 +144,10 @@ ews_client_request_started (SoupSession *session, SoupMessage *msg, SoupSocket *
     {
       goa_utils_set_error_ssl (&error, cert_flags);
       g_simple_async_result_take_error (data->res, error);
+
+      /* The callback will be invoked after we have returned to the
+       * main loop.
+       */
       soup_session_abort (data->session);
     }
 }
@@ -156,6 +156,10 @@ static void
 ews_client_autodiscover_cancelled_cb (GCancellable *cancellable, gpointer user_data)
 {
   AutodiscoverData *data = user_data;
+
+  /* The callback will be invoked after we have returned to the main
+   * loop.
+   */
   soup_session_abort (data->session);
 }
 
@@ -337,9 +341,6 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
   data->pending--;
   if (data->pending == 0)
     {
-      GMainContext *context;
-      GSource *source;
-
       /* The result of the GAsyncResult should already be set when we
        * get here. If it wasn't explicitly set to TRUE then
        * autodiscovery has failed and the default value of the
@@ -347,14 +348,8 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
        * original caller.
        */
 
-      source = g_idle_source_new ();
-      g_source_set_priority (source, G_PRIORITY_DEFAULT_IDLE);
-      g_source_set_callback (source, ews_client_autodiscover_data_free, data, NULL);
-      g_source_set_name (source, "[goa] ews_client_autodiscover_data_free");
-
-      context = g_main_context_get_thread_default ();
-      g_source_attach (source, context);
-      g_source_unref (source);
+      g_simple_async_result_complete_in_idle (data->res);
+      ews_client_autodiscover_data_free (data);
     }
 }
 
