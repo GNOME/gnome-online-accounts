@@ -117,7 +117,7 @@ http_client_request_started (SoupSession *session, SoupMessage *msg, SoupSocket 
   GError *error;
   GTlsCertificateFlags cert_flags;
 
-  data = g_task_get_task_data (task);
+  data = (CheckData *) g_task_get_task_data (task);
   error = NULL;
 
   if (!data->accept_ssl_errors
