@@ -10,7 +10,6 @@ icon_DATA = 				\
 	goa-account-owncloud.png	\
 	goa-account-pocket.png		\
 	goa-account-foursquare.png	\
-	goa-account-todoist.png	\
 	$(NULL)
 
 EXTRA_DIST = \

@@ -33,7 +33,6 @@
 #include "goapocketprovider.h"
 #include "goamediaserverprovider.h"
 #include "goalastfmprovider.h"
-#include "goatodoistprovider.h"
 
 #ifdef GOA_KERBEROS_ENABLED
 #include "goakerberosprovider.h"
@@ -959,9 +958,6 @@ static struct
 #endif
 #ifdef GOA_LASTFM_ENABLED
   { GOA_LASTFM_NAME, goa_lastfm_provider_get_type },
-#endif
-#ifdef GOA_TODOIST_ENABLED
-  { GOA_TODOIST_NAME, goa_todoist_provider_get_type },
 #endif
 #ifdef GOA_IMAP_SMTP_ENABLED
   { GOA_IMAP_SMTP_NAME, goa_imap_smtp_provider_get_type },

@@ -256,7 +256,9 @@
          Note that the #org.gnomeOnlineAccounts.Todo interface is added or
          removed from the account asynchronously.
     -->
-    <property name="TodoDisabled" type="b" access="readwrite"/>
+    <property name="TodoDisabled" type="b" access="readwrite">
+      <annotation name="org.freedesktop.DBus.Deprecated" value="true"/>
+    </property>
 
     <!-- ReadLaterDisabled:
          @since: 3.12.0
@@ -797,8 +799,12 @@
 
       An account object implements this interface if it provides
       todo-like capabilities.
+
+      The #org.gnome.OnlineAccounts.Todo interface is not used by
+      any account.
   -->
   <interface name="org.gnome.OnlineAccounts.Todo">
+    <annotation name="org.freedesktop.DBus.Deprecated" value="true"/>
   </interface>
 
   <!--

@@ -216,18 +216,6 @@ config_h.set_quoted('GOA_POCKET_CLIENT_ID', pocket_client_id)
 enable_pocket = get_option('pocket')
 config_h.set('GOA_POCKET_ENABLED', enable_pocket)
 
-# Todoist
-config_h.set_quoted('GOA_TODOIST_NAME', 'todoist')
-
-todoist_client_id = get_option('todoist_client_id')
-config_h.set_quoted('GOA_TODOIST_CLIENT_ID', todoist_client_id)
-
-todoist_client_secret = get_option('todoist_client_secret')
-config_h.set_quoted('GOA_TODOIST_CLIENT_SECRET', todoist_client_secret)
-
-enable_todoist = get_option('todoist')
-config_h.set('GOA_TODOIST_ENABLED', enable_todoist)
-
 # Windows Live
 config_h.set_quoted('GOA_WINDOWS_LIVE_NAME', 'windows_live')
 
@@ -353,11 +341,6 @@ output += '        ownCloud provider:              ' + enable_owncloud.to_string
 output += '        Pocket provider:                ' + enable_pocket.to_string()
 if enable_pocket
   output += ' (id:@0@)'.format(pocket_client_id)
-endif
-output += '\n'
-output += '        Todoist provider:               ' + enable_todoist.to_string()
-if enable_todoist
-  output += ' (OAuth 2.0, id:@0@ secret:@1@)'.format(todoist_client_id, todoist_client_secret)
 endif
 output += '\n'
 output += '        Windows Live provider:          ' + enable_windows_live.to_string()

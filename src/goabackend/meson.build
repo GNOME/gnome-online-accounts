@@ -48,7 +48,6 @@ sources = enum_sources + files(
   'goarestproxy.c',
   'goasmtpauth.c',
   'goasouplogger.c',
-  'goatodoistprovider.c',
   'goautils.c',
   'goawebview.c',
   'goawindowsliveprovider.c',

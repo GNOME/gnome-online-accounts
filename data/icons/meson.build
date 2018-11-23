@@ -7,7 +7,6 @@ icon_data = [
   'goa-account-owncloud.png',
   'goa-account.png',
   'goa-account-pocket.png',
-  'goa-account-todoist.png'
 ]
 
 icon_data_256 = ['goa-account.png']

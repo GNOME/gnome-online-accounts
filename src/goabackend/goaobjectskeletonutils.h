@@ -55,9 +55,6 @@ void             goa_object_skeleton_attach_photos         (GoaObjectSkeleton *o
 void             goa_object_skeleton_attach_printers       (GoaObjectSkeleton *object,
                                                             gboolean           printers_enabled);
 
-void             goa_object_skeleton_attach_todo           (GoaObjectSkeleton *object,
-                                                            gboolean           todo_enabled);
-
 void             goa_object_skeleton_attach_read_later     (GoaObjectSkeleton *object,
                                                             gboolean           read_later_enabled);
 

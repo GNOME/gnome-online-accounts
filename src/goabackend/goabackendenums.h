@@ -71,6 +71,7 @@ typedef enum
  * @GOA_PROVIDER_FEATURE_PRINTERS: Network printing services (e.g. Google Cloud Print).
  * @GOA_PROVIDER_FEATURE_MAPS: Maps related services (e.g. Foursquare, Facebook).
  * @GOA_PROVIDER_FEATURE_MUSIC: Music related services (e.g. Vkontakte).
+ * @GOA_PROVIDER_FEATURE_TODO: Deprecated; currently unused.
  * @GOA_PROVIDER_FEATURE_INVALID: Used for error handling. No provider
  *   should provide this feature.
  *

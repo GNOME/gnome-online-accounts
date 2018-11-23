@@ -205,29 +205,6 @@ goa_object_skeleton_attach_maps (GoaObjectSkeleton *object,
 }
 
 void
-goa_object_skeleton_attach_todo (GoaObjectSkeleton *object,
-                                 gboolean           todo_enabled)
-{
-  GoaTodo *todo = NULL;
-
-  todo = goa_object_get_todo (GOA_OBJECT (object));
-  if (todo_enabled)
-    {
-      if (todo == NULL)
-        {
-          todo = goa_todo_skeleton_new ();
-          goa_object_skeleton_set_todo (object, todo);
-        }
-    }
-  else
-    {
-      if (todo != NULL)
-        goa_object_skeleton_set_todo (object, NULL);
-    }
-  g_clear_object (&todo);
-}
-
-void
 goa_object_skeleton_attach_read_later (GoaObjectSkeleton *object,
                                        gboolean           read_later_enabled)
 {
