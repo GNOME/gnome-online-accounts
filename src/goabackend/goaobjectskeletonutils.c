@@ -110,29 +110,6 @@ goa_object_skeleton_attach_contacts (GoaObjectSkeleton *object,
 }
 
 void
-goa_object_skeleton_attach_documents (GoaObjectSkeleton *object,
-                                      gboolean           documents_enabled)
-{
-  GoaDocuments *documents;
-
-  documents = goa_object_get_documents (GOA_OBJECT (object));
-  if (documents_enabled)
-    {
-      if (documents == NULL)
-        {
-          documents = goa_documents_skeleton_new ();
-          goa_object_skeleton_set_documents (object, documents);
-        }
-    }
-  else
-    {
-      if (documents != NULL)
-        goa_object_skeleton_set_documents (object, NULL);
-    }
-  g_clear_object (&documents);
-}
-
-void
 goa_object_skeleton_attach_photos (GoaObjectSkeleton *object,
                                    gboolean           photos_enabled)
 {

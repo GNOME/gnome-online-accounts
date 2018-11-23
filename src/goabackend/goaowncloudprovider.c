@@ -72,7 +72,6 @@ get_provider_features (GoaProvider *provider)
   return GOA_PROVIDER_FEATURE_BRANDED |
          GOA_PROVIDER_FEATURE_CALENDAR |
          GOA_PROVIDER_FEATURE_CONTACTS |
-         GOA_PROVIDER_FEATURE_DOCUMENTS |
          GOA_PROVIDER_FEATURE_FILES;
 }
 
@@ -145,7 +144,6 @@ build_object (GoaProvider         *provider,
   gboolean accept_ssl_errors;
   gboolean calendar_enabled;
   gboolean contacts_enabled;
-  gboolean documents_enabled;
   gboolean files_enabled;
   gboolean ret = FALSE;
   const gchar *identity;
@@ -196,10 +194,6 @@ build_object (GoaProvider         *provider,
   goa_object_skeleton_attach_contacts (object, uri_carddav, contacts_enabled, accept_ssl_errors);
   g_free (uri_carddav);
 
-  /* Documents */
-  documents_enabled = g_key_file_get_boolean (key_file, group, "DocumentsEnabled", NULL);
-  goa_object_skeleton_attach_documents (object, documents_enabled);
-
   /* Files */
   files_enabled = g_key_file_get_boolean (key_file, group, "FilesEnabled", NULL);
   uri_webdav = get_webdav_uri (uri);
@@ -210,7 +204,6 @@ build_object (GoaProvider         *provider,
     {
       goa_account_set_calendar_disabled (account, !calendar_enabled);
       goa_account_set_contacts_disabled (account, !contacts_enabled);
-      goa_account_set_documents_disabled (account, !documents_enabled);
       goa_account_set_files_disabled (account, !files_enabled);
 
       g_signal_connect (account,
@@ -221,10 +214,6 @@ build_object (GoaProvider         *provider,
                         "notify::contacts-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
                         (gpointer) "ContactsEnabled");
-      g_signal_connect (account,
-                        "notify::documents-disabled",
-                        G_CALLBACK (goa_util_account_notify_property_cb),
-                        (gpointer) "DocumentsEnabled");
       g_signal_connect (account,
                         "notify::files-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
@@ -750,7 +739,6 @@ add_account (GoaProvider    *provider,
   g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
   g_variant_builder_add (&details, "{ss}", "CalendarEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "ContactsEnabled", "true");
-  g_variant_builder_add (&details, "{ss}", "DocumentsEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "FilesEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "Uri", uri);
   g_variant_builder_add (&details, "{ss}", "AcceptSslErrors", (accept_ssl_errors) ? "true" : "false");

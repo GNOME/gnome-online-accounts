@@ -73,8 +73,7 @@ static GoaProviderFeatures
 get_provider_features (GoaProvider *provider)
 {
   return GOA_PROVIDER_FEATURE_BRANDED |
-         GOA_PROVIDER_FEATURE_MAIL |
-         GOA_PROVIDER_FEATURE_DOCUMENTS;
+         GOA_PROVIDER_FEATURE_MAIL;
 }
 
 static const gchar *
@@ -102,14 +101,13 @@ get_scope (GoaOAuth2Provider *oauth2_provider)
 {
   return "wl.imap,"
          "wl.offline_access,"
-         "wl.skydrive_update,"
          "wl.emails";
 }
 
 static guint
 get_credentials_generation (GoaProvider *provider)
 {
-  return 3;
+  return 4;
 }
 
 static const gchar *
@@ -276,7 +274,6 @@ build_object (GoaProvider         *provider,
   GoaAccount *account = NULL;
   GoaMail *mail = NULL;
   gboolean mail_enabled;
-  gboolean documents_enabled;
   gboolean ret = FALSE;
   const gchar *email_address;
 
@@ -323,23 +320,14 @@ build_object (GoaProvider         *provider,
         goa_object_skeleton_set_mail (object, NULL);
     }
 
-  /* Documents */
-  documents_enabled = g_key_file_get_boolean (key_file, group, "DocumentsEnabled", NULL);
-  goa_object_skeleton_attach_documents (object, documents_enabled);
-
   if (just_added)
     {
       goa_account_set_mail_disabled (account, !mail_enabled);
-      goa_account_set_documents_disabled (account, !documents_enabled);
 
       g_signal_connect (account,
                         "notify::mail-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
                         (gpointer) "MailEnabled");
-      g_signal_connect (account,
-                        "notify::documents-disabled",
-                        G_CALLBACK (goa_util_account_notify_property_cb),
-                        (gpointer) "DocumentsEnabled");
     }
 
   ret = TRUE;
@@ -357,7 +345,6 @@ add_account_key_values (GoaOAuth2Provider *oauth2_provider,
                         GVariantBuilder   *builder)
 {
   g_variant_builder_add (builder, "{ss}", "MailEnabled", "true");
-  g_variant_builder_add (builder, "{ss}", "DocumentsEnabled", "true");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

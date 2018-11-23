@@ -172,7 +172,9 @@
          Note that the #org.gnomeOnlineAccounts.Documents interface is added or
          removed from the account asynchronously.
     -->
-    <property name="DocumentsDisabled" type="b" access="readwrite"/>
+    <property name="DocumentsDisabled" type="b" access="readwrite">
+      <annotation name="org.freedesktop.DBus.Deprecated" value="true"/>
+    </property>
 
     <!-- MapsDisabled:
          @since: 3.14.0
@@ -668,8 +670,12 @@
 
       An account object implements this interface if it provides
       documents-like capabilities.
+
+      The #org.gnome.OnlineAccounts.Documents interface is not used
+      by any account.
   -->
   <interface name="org.gnome.OnlineAccounts.Documents">
+    <annotation name="org.freedesktop.DBus.Deprecated" value="true"/>
   </interface>
 
   <!--

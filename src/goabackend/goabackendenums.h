@@ -63,7 +63,7 @@ typedef enum
  * @GOA_PROVIDER_FEATURE_CALENDAR: Calendaring services (ie. CalDAV).
  * @GOA_PROVIDER_FEATURE_CONTACTS: Addressbook services (ie. CardDAV).
  * @GOA_PROVIDER_FEATURE_CHAT: Instant messaging services (ie. XMPP, IRC).
- * @GOA_PROVIDER_FEATURE_DOCUMENTS: Documents storage services (ie. Google Documents).
+ * @GOA_PROVIDER_FEATURE_DOCUMENTS: Deprecated; currently unused.
  * @GOA_PROVIDER_FEATURE_PHOTOS: Photos storage services (ie. Flickr).
  * @GOA_PROVIDER_FEATURE_FILES: Files storage services (ie. WebDAV).
  * @GOA_PROVIDER_FEATURE_TICKETING: Ticketing services (ie. Kerberos).
