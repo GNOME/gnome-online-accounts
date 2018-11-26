@@ -56,6 +56,7 @@ goa_http_client_new (void)
 typedef struct
 {
   GCancellable *cancellable;
+  GError *error;
   SoupMessage *msg;
   SoupSession *session;
   gboolean accept_ssl_errors;
@@ -78,6 +79,8 @@ http_client_check_data_free (gpointer user_data)
       g_cancellable_disconnect (data->cancellable, data->cancellable_id);
       g_object_unref (data->cancellable);
     }
+
+  g_clear_error (&data->error);
 
   /* soup_session_queue_message stole the references to data->msg */
   g_object_unref (data->session);
@@ -114,18 +117,16 @@ http_client_request_started (SoupSession *session, SoupMessage *msg, SoupSocket 
 {
   CheckData *data;
   GTask *task = G_TASK (user_data);
-  GError *error;
   GTlsCertificateFlags cert_flags;
 
   data = (CheckData *) g_task_get_task_data (task);
-  error = NULL;
 
   if (!data->accept_ssl_errors
       && soup_message_get_https_status (msg, NULL, &cert_flags)
-      && cert_flags != 0)
+      && cert_flags != 0
+      && data->error == NULL)
     {
-      goa_utils_set_error_ssl (&error, cert_flags);
-      g_task_return_error (task, error);
+      goa_utils_set_error_ssl (&data->error, cert_flags);
 
       /* The callback will be invoked after we have returned to the
        * main loop.
@@ -139,45 +140,55 @@ http_client_check_cancelled_cb (GCancellable *cancellable, gpointer user_data)
 {
   CheckData *data;
   GTask *task = G_TASK (user_data);
-  gboolean cancelled;
 
   data = g_task_get_task_data (task);
 
-  cancelled = g_task_return_error_if_cancelled (task);
+  if (data->error == NULL)
+    {
+      gboolean cancelled;
 
-  /* The callback will be invoked after we have returned to the main
-   * loop.
-   */
-  soup_session_abort (data->session);
+      cancelled = g_cancellable_set_error_if_cancelled (cancellable, &data->error);
 
-  g_return_if_fail (cancelled);
+      /* The callback will be invoked after we have returned to the
+       * main loop.
+       */
+      soup_session_abort (data->session);
+
+      g_return_if_fail (cancelled);
+    }
 }
 
 static void
 http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer user_data)
 {
-  GError *error;
+  CheckData *data;
   GTask *task = G_TASK (user_data);
 
-  error = NULL;
+  data = (CheckData *) g_task_get_task_data (task);
 
   /* status == SOUP_STATUS_CANCELLED, if we are being aborted by the
-   * GCancellable or due to an SSL error. The GTask was already
-   * 'returned' by the respective callbacks.
+   * GCancellable or due to an SSL error.
    */
   if (msg->status_code == SOUP_STATUS_CANCELLED)
-    goto out;
+    {
+      g_return_if_fail (data->error != NULL);
+      goto out;
+    }
   else if (msg->status_code != SOUP_STATUS_OK)
     {
       g_warning ("goa_http_client_check() failed: %u — %s", msg->status_code, msg->reason_phrase);
-      goa_utils_set_error_soup (&error, msg);
-      g_task_return_error (task, error);
+      if (data->error == NULL)
+        goa_utils_set_error_soup (&data->error, msg);
+
       goto out;
     }
 
-  g_task_return_boolean (task, TRUE);
-
  out:
+  if (data->error != NULL)
+    g_task_return_error (task, g_steal_pointer (&data->error));
+  else
+    g_task_return_boolean (task, TRUE);
+
   g_object_unref (task);
 }
 
