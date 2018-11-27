@@ -143,43 +143,43 @@ http_client_check_cancelled_cb (GCancellable *cancellable, gpointer user_data)
 
   data = g_task_get_task_data (task);
 
-  if (data->error == NULL)
-    {
-      gboolean cancelled;
-
-      cancelled = g_cancellable_set_error_if_cancelled (cancellable, &data->error);
-
-      /* The callback will be invoked after we have returned to the
-       * main loop.
-       */
-      soup_session_abort (data->session);
-
-      g_return_if_fail (cancelled);
-    }
+  /* The callback will be invoked after we have returned to the main
+   * loop.
+   */
+  soup_session_abort (data->session);
 }
 
 static void
 http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer user_data)
 {
   CheckData *data;
+  GCancellable *cancellable;
   GTask *task = G_TASK (user_data);
 
   data = (CheckData *) g_task_get_task_data (task);
+  cancellable = g_task_get_cancellable (task);
 
   /* status == SOUP_STATUS_CANCELLED, if we are being aborted by the
    * GCancellable or due to an SSL error.
    */
   if (msg->status_code == SOUP_STATUS_CANCELLED)
     {
-      g_return_if_fail (data->error != NULL);
+      /* If we are being aborted by the GCancellable then there might
+       * or might not be an error. The GCancellable can be triggered
+       * from a different thread, so it depends on the exact ordering
+       * of events across threads.
+       */
+      if (data->error == NULL)
+        g_cancellable_set_error_if_cancelled (cancellable, &data->error);
+
       goto out;
     }
   else if (msg->status_code != SOUP_STATUS_OK)
     {
       g_warning ("goa_http_client_check() failed: %u — %s", msg->status_code, msg->reason_phrase);
-      if (data->error == NULL)
-        goa_utils_set_error_soup (&data->error, msg);
+      g_return_if_fail (data->error == NULL);
 
+      goa_utils_set_error_soup (&data->error, msg);
       goto out;
     }
 
