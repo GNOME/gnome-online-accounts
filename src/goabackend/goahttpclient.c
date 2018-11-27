@@ -141,7 +141,7 @@ http_client_check_cancelled_cb (GCancellable *cancellable, gpointer user_data)
   CheckData *data;
   GTask *task = G_TASK (user_data);
 
-  data = g_task_get_task_data (task);
+  data = (CheckData *) g_task_get_task_data (task);
 
   /* The callback will be invoked after we have returned to the main
    * loop.
@@ -219,8 +219,7 @@ goa_http_client_check (GoaHttpClient       *self,
   data = g_slice_new0 (CheckData);
   g_task_set_task_data (task, data, http_client_check_data_free);
 
-  data->session = soup_session_new_with_options (SOUP_SESSION_SSL_STRICT, FALSE,
-                                                 NULL);
+  data->session = soup_session_new_with_options (SOUP_SESSION_SSL_STRICT, FALSE, NULL);
 
   logger = goa_soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
   soup_session_add_feature (data->session, SOUP_SESSION_FEATURE (logger));
