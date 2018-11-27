@@ -119,6 +119,8 @@ http_client_request_started (SoupSession *session, SoupMessage *msg, SoupSocket 
   GTask *task = G_TASK (user_data);
   GTlsCertificateFlags cert_flags;
 
+  g_debug ("goa_http_client_check(): request started (%p)", msg);
+
   data = (CheckData *) g_task_get_task_data (task);
 
   if (!data->accept_ssl_errors
@@ -141,6 +143,8 @@ http_client_check_cancelled_cb (GCancellable *cancellable, gpointer user_data)
   CheckData *data;
   GTask *task = G_TASK (user_data);
 
+  g_debug ("goa_http_client_check(): cancelled");
+
   data = (CheckData *) g_task_get_task_data (task);
 
   /* The callback will be invoked after we have returned to the main
@@ -155,6 +159,8 @@ http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer 
   CheckData *data;
   GCancellable *cancellable;
   GTask *task = G_TASK (user_data);
+
+  g_debug ("goa_http_client_check(): response (%p, %u)", msg, msg->status_code);
 
   data = (CheckData *) g_task_get_task_data (task);
   cancellable = g_task_get_cancellable (task);
