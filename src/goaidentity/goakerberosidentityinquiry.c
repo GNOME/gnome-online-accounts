@@ -157,7 +157,7 @@ goa_kerberos_identity_inquiry_new (GoaKerberosIdentity * identity,
   self = GOA_KERBEROS_IDENTITY_INQUIRY (object);
 
   /* FIXME: make these construct properties */
-  self->priv->identity = g_object_ref (identity);
+  self->priv->identity = g_object_ref (GOA_IDENTITY (identity));
   self->priv->name = g_strdup (name);
   self->priv->banner = g_strdup (banner);
 
