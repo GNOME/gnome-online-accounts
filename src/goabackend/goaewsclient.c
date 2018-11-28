@@ -136,6 +136,8 @@ ews_client_request_started (SoupSession *session, SoupMessage *msg, SoupSocket *
   GError *error;
   GTlsCertificateFlags cert_flags;
 
+  g_debug ("goa_ews_client_autodiscover(): request started (%p)", msg);
+
   error = NULL;
 
   if (!data->accept_ssl_errors
@@ -156,6 +158,8 @@ static void
 ews_client_autodiscover_cancelled_cb (GCancellable *cancellable, gpointer user_data)
 {
   AutodiscoverData *data = user_data;
+
+  g_debug ("goa_ews_client_autodiscover(): cancelled");
 
   /* The callback will be invoked after we have returned to the main
    * loop.
@@ -194,6 +198,8 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
   gsize size;
   xmlDoc *doc;
   xmlNode *node;
+
+  g_debug ("goa_ews_client_autodiscover(): response (%p, %u)", msg, msg->status_code);
 
   size = sizeof (data->msgs) / sizeof (data->msgs[0]);
 
