@@ -74,7 +74,7 @@ typedef struct
   GoaKerberosIdentityManager *manager;
   OperationType type;
   GMainContext *context;
-  GSimpleAsyncResult *result;
+  GTask *task;
 
   union
   {
@@ -124,7 +124,7 @@ static Operation *
 operation_new (GoaKerberosIdentityManager *self,
                GCancellable               *cancellable,
                OperationType               type,
-               GSimpleAsyncResult         *result)
+               GTask                      *task)
 {
   Operation *operation;
 
@@ -143,9 +143,9 @@ operation_new (GoaKerberosIdentityManager *self,
 
   operation->context = g_main_context_ref_thread_default ();
 
-  if (result != NULL)
-    g_object_ref (result);
-  operation->result = result;
+  if (task != NULL)
+    g_object_ref (task);
+  operation->task = task;
 
   operation->identity = NULL;
 
@@ -169,7 +169,7 @@ operation_free (Operation *operation)
       g_clear_pointer (&operation->identifier, g_free);
       g_clear_pointer (&operation->preauth_source, g_free);
     }
-  g_clear_object (&operation->result);
+  g_clear_object (&operation->task);
 
   g_slice_free (Operation, operation);
 }
@@ -689,9 +689,7 @@ list_identities (GoaKerberosIdentityManager *self,
   identities = g_list_sort (identities, (GCompareFunc) identity_sort_func);
 
   g_list_foreach (identities, (GFunc) g_object_ref, NULL);
-  g_simple_async_result_set_op_res_gpointer (operation->result,
-                                             identities,
-                                             (GDestroyNotify) free_identity_list);
+  g_task_return_pointer (operation->task, identities, (GDestroyNotify) free_identity_list);
 }
 
 static void
@@ -718,10 +716,10 @@ renew_identity (GoaKerberosIdentityManager *self,
       g_debug ("GoaKerberosIdentityManager: could not renew identity: %s",
                error->message);
 
-      g_simple_async_result_set_from_error (operation->result, error);
+      g_task_return_error (operation->task, error);
     }
 
-  g_simple_async_result_set_op_res_gboolean (operation->result, was_renewed);
+  g_task_return_boolean (operation->task, was_renewed);
 }
 
 static void
@@ -823,18 +821,14 @@ get_identity (GoaKerberosIdentityManager *self,
 
   if (identity == NULL)
     {
-      g_simple_async_result_set_error (operation->result,
-                                       GOA_IDENTITY_MANAGER_ERROR,
-                                       GOA_IDENTITY_MANAGER_ERROR_IDENTITY_NOT_FOUND,
-                                       _("Could not find identity"));
-      g_simple_async_result_set_op_res_gpointer (operation->result, NULL, NULL);
-
+      g_task_return_new_error (operation->task,
+                               GOA_IDENTITY_MANAGER_ERROR,
+                               GOA_IDENTITY_MANAGER_ERROR_IDENTITY_NOT_FOUND,
+                               _("Could not find identity"));
       return;
     }
 
-  g_simple_async_result_set_op_res_gpointer (operation->result,
-                                             g_object_ref (identity),
-                                             g_object_unref);
+  g_task_return_pointer (operation->task, g_object_ref (identity), g_object_unref);
 }
 
 static krb5_error_code
@@ -919,11 +913,10 @@ sign_in_identity (GoaKerberosIdentityManager *self,
                    error_message);
           krb5_free_error_message (self->priv->kerberos_context, error_message);
 
-          g_simple_async_result_set_error (operation->result,
-                                           GOA_IDENTITY_MANAGER_ERROR,
-                                           GOA_IDENTITY_MANAGER_ERROR_CREATING_IDENTITY,
-                                           _("Could not create credential cache for identity"));
-          g_simple_async_result_set_op_res_gpointer (operation->result, NULL, NULL);
+          g_task_return_new_error (operation->task,
+                                   GOA_IDENTITY_MANAGER_ERROR,
+                                   GOA_IDENTITY_MANAGER_ERROR_CREATING_IDENTITY,
+                                   _("Could not create credential cache for identity"));
           return;
         }
 
@@ -933,10 +926,7 @@ sign_in_identity (GoaKerberosIdentityManager *self,
       if (identity == NULL)
         {
           krb5_cc_destroy (self->priv->kerberos_context, credentials_cache);
-          g_simple_async_result_take_error (operation->result, error);
-          g_simple_async_result_set_op_res_gpointer (operation->result,
-                                                     NULL,
-                                                     NULL);
+          g_task_return_error (operation->task, error);
           return;
         }
       krb5_cc_close (self->priv->kerberos_context, credentials_cache);
@@ -962,18 +952,11 @@ sign_in_identity (GoaKerberosIdentityManager *self,
       if (is_new_identity)
         goa_kerberos_identity_erase (GOA_KERBEROS_IDENTITY (identity), NULL);
 
-      g_simple_async_result_set_from_error (operation->result, error);
-      g_simple_async_result_set_op_res_gpointer (operation->result,
-                                                 NULL,
-                                                 NULL);
-
+      g_task_return_error (operation->task, error);
     }
   else
     {
-      g_simple_async_result_set_op_res_gpointer (operation->result,
-                                                 g_object_ref (identity),
-                                                 g_object_unref);
-
+      g_task_return_pointer (operation->task, g_object_ref (identity), g_object_unref);
       g_hash_table_replace (self->priv->identities,
                             g_strdup (operation->identifier),
                             g_object_ref (identity));
@@ -1007,6 +990,8 @@ sign_out_identity (GoaKerberosIdentityManager *self,
                error->message);
       g_error_free (error);
     }
+
+  g_task_return_boolean (operation->task, TRUE);
 }
 
 static void
@@ -1051,15 +1036,11 @@ goa_kerberos_identity_manager_thread_pool_func (gpointer data, gpointer user_dat
 {
   Operation *operation = (Operation *) data;
   GoaKerberosIdentityManager *self = GOA_KERBEROS_IDENTITY_MANAGER (operation->manager);
-  GError *error;
   gboolean processed_operation = FALSE;
 
-  error = NULL;
-  if (operation->result != NULL && g_cancellable_set_error_if_cancelled (operation->cancellable, &error))
+  if (operation->task != NULL && g_task_return_error_if_cancelled (operation->task))
     {
-      g_simple_async_result_take_error (operation->result, error);
-      g_simple_async_result_complete_in_idle (operation->result);
-      g_clear_object (&operation->result);
+      g_clear_object (&operation->task);
       goto out;
     }
 
@@ -1086,11 +1067,11 @@ goa_kerberos_identity_manager_thread_pool_func (gpointer data, gpointer user_dat
        * a chance to look at the batch of
        * results we already processed
        */
-      g_assert (operation->result != NULL);
+      g_assert (operation->task != NULL);
 
       g_debug ("GoaKerberosIdentityManager: Blocking until identities list processed");
       block_scheduler_job (self);
-      g_object_weak_ref (G_OBJECT (operation->result), (GWeakNotify) stop_blocking_scheduler_job, self);
+      g_object_weak_ref (G_OBJECT (operation->task), (GWeakNotify) stop_blocking_scheduler_job, self);
       g_debug ("GoaKerberosIdentityManager: Continuing");
       break;
 
@@ -1113,12 +1094,7 @@ goa_kerberos_identity_manager_thread_pool_func (gpointer data, gpointer user_dat
       break;
     }
 
-  if (operation->result != NULL)
-    {
-      g_simple_async_result_complete_in_idle (operation->result);
-      g_clear_object (&operation->result);
-    }
-
+  g_clear_object (&operation->task);
   wait_for_scheduler_job_to_become_unblocked (self);
 
   /* Don't bother saying "Waiting for next operation" if this operation
@@ -1140,15 +1116,14 @@ goa_kerberos_identity_manager_get_identity (GoaIdentityManager   *manager,
                                             gpointer              user_data)
 {
   GoaKerberosIdentityManager *self = GOA_KERBEROS_IDENTITY_MANAGER (manager);
-  GSimpleAsyncResult *result;
+  GTask *task;
   Operation *operation;
 
-  result = g_simple_async_result_new (G_OBJECT (self),
-                                      callback,
-                                      user_data,
-                                      goa_kerberos_identity_manager_get_identity);
-  operation = operation_new (self, cancellable, OPERATION_TYPE_GET_IDENTITY, result);
-  g_object_unref (result);
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, goa_kerberos_identity_manager_get_identity);
+
+  operation = operation_new (self, cancellable, OPERATION_TYPE_GET_IDENTITY, task);
+  g_object_unref (task);
 
   operation->identifier = g_strdup (identifier);
 
@@ -1160,16 +1135,8 @@ goa_kerberos_identity_manager_get_identity_finish (GoaIdentityManager  *self,
                                                    GAsyncResult        *result,
                                                    GError             **error)
 {
-  GoaIdentity *identity;
-
-  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result),
-                                             error))
-    return NULL;
-
-  identity =
-    g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
-
-  return g_object_ref (identity);
+  GTask *task = G_TASK (result);
+  return g_task_propagate_pointer (task, error);
 }
 
 static void
@@ -1179,16 +1146,14 @@ goa_kerberos_identity_manager_list_identities (GoaIdentityManager  *manager,
                                                gpointer             user_data)
 {
   GoaKerberosIdentityManager *self = GOA_KERBEROS_IDENTITY_MANAGER (manager);
-  GSimpleAsyncResult         *result;
+  GTask                      *task;
   Operation                  *operation;
 
-  result = g_simple_async_result_new (G_OBJECT (self),
-                                      callback,
-                                      user_data,
-                                      goa_kerberos_identity_manager_list_identities);
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, goa_kerberos_identity_manager_list_identities);
 
-  operation = operation_new (self, cancellable, OPERATION_TYPE_LIST, result);
-  g_object_unref (result);
+  operation = operation_new (self, cancellable, OPERATION_TYPE_LIST, task);
+  g_object_unref (task);
 
   g_thread_pool_push (self->priv->thread_pool, operation, NULL);
 }
@@ -1198,17 +1163,8 @@ goa_kerberos_identity_manager_list_identities_finish (GoaIdentityManager  *manag
                                                       GAsyncResult        *result,
                                                       GError             **error)
 {
-  GList *identities;
-
-  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result),
-                                             error))
-    return NULL;
-
-  identities =
-    g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
-
-  return identities;
-
+  GTask *task = G_TASK (result);
+  return g_task_propagate_pointer (task, error);
 }
 
 static void
@@ -1219,15 +1175,14 @@ goa_kerberos_identity_manager_renew_identity (GoaIdentityManager  *manager,
                                               gpointer             user_data)
 {
   GoaKerberosIdentityManager *self = GOA_KERBEROS_IDENTITY_MANAGER (manager);
-  GSimpleAsyncResult *result;
+  GTask *task;
   Operation *operation;
 
-  result = g_simple_async_result_new (G_OBJECT (self),
-                                      callback,
-                                      user_data,
-                                      goa_kerberos_identity_manager_renew_identity);
-  operation = operation_new (self, cancellable, OPERATION_TYPE_RENEW, result);
-  g_object_unref (result);
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, goa_kerberos_identity_manager_renew_identity);
+
+  operation = operation_new (self, cancellable, OPERATION_TYPE_RENEW, task);
+  g_object_unref (task);
 
   operation->identity = g_object_ref (identity);
 
@@ -1239,9 +1194,8 @@ goa_kerberos_identity_manager_renew_identity_finish (GoaIdentityManager  *self,
                                                      GAsyncResult        *result,
                                                      GError             **error)
 {
-  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result),
-                                             error))
-    return;
+  GTask *task = G_TASK (result);
+  g_task_propagate_pointer (task, error);
 }
 
 static void
@@ -1257,15 +1211,14 @@ goa_kerberos_identity_manager_sign_identity_in (GoaIdentityManager     *manager,
                                                 gpointer                user_data)
 {
   GoaKerberosIdentityManager *self = GOA_KERBEROS_IDENTITY_MANAGER (manager);
-  GSimpleAsyncResult *result;
+  GTask *task;
   Operation *operation;
 
-  result = g_simple_async_result_new (G_OBJECT (self),
-                                      callback,
-                                      user_data,
-                                      goa_kerberos_identity_manager_sign_identity_in);
-  operation = operation_new (self, cancellable, OPERATION_TYPE_SIGN_IN, result);
-  g_object_unref (result);
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, goa_kerberos_identity_manager_sign_identity_in);
+
+  operation = operation_new (self, cancellable, OPERATION_TYPE_SIGN_IN, task);
+  g_object_unref (task);
 
   operation->identifier = g_strdup (identifier);
   /* Not duped. Caller is responsible for ensuring it stays alive
@@ -1288,15 +1241,8 @@ goa_kerberos_identity_manager_sign_identity_in_finish (GoaIdentityManager  *self
                                                        GAsyncResult        *result,
                                                        GError             **error)
 {
-  GoaIdentity *identity;
-
-  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
-    return NULL;
-
-  identity =
-    g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
-
-  return identity;
+  GTask *task = G_TASK (result);
+  return g_task_propagate_pointer (task, error);
 }
 
 static void
@@ -1307,15 +1253,14 @@ goa_kerberos_identity_manager_sign_identity_out (GoaIdentityManager  *manager,
                                                  gpointer             user_data)
 {
   GoaKerberosIdentityManager *self = GOA_KERBEROS_IDENTITY_MANAGER (manager);
-  GSimpleAsyncResult *result;
+  GTask *task;
   Operation *operation;
 
-  result = g_simple_async_result_new (G_OBJECT (self),
-                                      callback,
-                                      user_data,
-                                      goa_kerberos_identity_manager_sign_identity_out);
-  operation = operation_new (self, cancellable, OPERATION_TYPE_SIGN_OUT, result);
-  g_object_unref (result);
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, goa_kerberos_identity_manager_sign_identity_out);
+
+  operation = operation_new (self, cancellable, OPERATION_TYPE_SIGN_OUT, task);
+  g_object_unref (task);
 
   operation->identity = g_object_ref (identity);
 
@@ -1327,10 +1272,8 @@ goa_kerberos_identity_manager_sign_identity_out_finish (GoaIdentityManager  *sel
                                                         GAsyncResult        *result,
                                                         GError             **error)
 {
-  if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
-    return;
-
-  return;
+  GTask *task = G_TASK (result);
+  g_task_propagate_pointer (task, error);
 }
 
 static char *
