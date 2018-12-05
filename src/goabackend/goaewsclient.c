@@ -220,7 +220,11 @@ ews_client_autodiscover_response_cb (SoupSession *session, SoupMessage *msg, gpo
    */
   if (status == SOUP_STATUS_CANCELLED)
     {
-      /* If a previous autodiscover attempt for the same GAsyncResult
+      /* If we are being aborted by the GCancellable, then the
+       * GSimpleAsyncResult is responsible for setting the GError
+       * automatically.
+       *
+       * If a previous autodiscover attempt for the same GAsyncResult
        * was successful then no additional attempts are required and
        * we should use the result from the earlier attempt.
        */
