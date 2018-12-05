@@ -80,7 +80,7 @@ typedef struct
     GoaIdentity *identity;
     struct
     {
-      const char *identifier;
+      char *identifier;
       gconstpointer initial_password;
       char *preauth_source;
       GoaIdentitySignInFlags sign_in_flags;
