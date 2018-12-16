@@ -1,0 +1,797 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
+"issues\n"
+"POT-Creation-Date: 2018-12-12 15:40+0000\n"
+"PO-Revision-Date: 2018-12-16 20:43+0100\n"
+"Language: kab\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.2\n"
+
+#: data/org.gnome.online-accounts.gschema.xml:6
+msgid "List of providers that are allowed to be loaded"
+msgstr "Tabdart n imefkiyen i yettusirgen ad ttuɛebbin"
+
+#: data/org.gnome.online-accounts.gschema.xml:7
+msgid ""
+"A list of strings representing the providers that are allowed to be loaded "
+"(default: 'all'). This is only evaluated on startup."
+msgstr ""
+
+#. TODO: more specific
+#: src/daemon/goadaemon.c:1131 src/daemon/goadaemon.c:1415
+#, c-format
+msgid "Failed to find a provider for: %s"
+msgstr "D awezɣi tifin n imefki i : %s"
+
+#: src/daemon/goadaemon.c:1358
+msgid "IsLocked property is set for account"
+msgstr "Ayla IsLocked yettuseɣwer i wemiḍan-agi"
+
+#. TODO: more specific
+#: src/daemon/goadaemon.c:1403
+msgid "ProviderType property is not set for account"
+msgstr "Ayla ProviderType ur yettuseɣwer ara i wemiḍan-agi"
+
+#. TODO: more specific
+#: src/goabackend/goaewsclient.c:258
+msgid "Failed to parse autodiscover response XML"
+msgstr "Anezri n tesleḍt n tririt XML autodiscover"
+
+#. TODO: more specific
+#. Translators: the parameter is an XML element name.
+#: src/goabackend/goaewsclient.c:269 src/goabackend/goaewsclient.c:284
+#: src/goabackend/goaewsclient.c:299
+#, c-format
+msgid "Failed to find “%s” element"
+msgstr "D awezɣi tifin n uferdis “%s”"
+
+#. TODO: more specific
+#: src/goabackend/goaewsclient.c:320
+msgid "Failed to find ASUrl and OABUrl in autodiscover response"
+msgstr "D awezɣi tifin n ASUrl akked OABUrl di tririt n autodiscover"
+
+#: src/goabackend/goaexchangeprovider.c:51
+msgid "Microsoft Exchange"
+msgstr "Microsoft Exchange"
+
+#. Translators: the first %s is the username
+#. * (eg., debarshi.ray@gmail.com or rishi), and the
+#. * (%s, %d) is the error domain and code.
+#.
+#: src/goabackend/goaexchangeprovider.c:248
+#: src/goabackend/goalastfmprovider.c:287
+#: src/goabackend/goaowncloudprovider.c:291
+#, c-format
+msgid "Invalid password with username “%s” (%s, %d): "
+msgstr "Awal n uɛeddi d armeɣtu akked yisem n useqdac “%s” (%s, %d): "
+
+#: src/goabackend/goaexchangeprovider.c:396
+#: src/goabackend/goaimapsmtpprovider.c:647
+msgid "_E-mail"
+msgstr "_E-mail"
+
+#: src/goabackend/goaexchangeprovider.c:397
+#: src/goabackend/goaimapsmtpprovider.c:667
+#: src/goabackend/goaimapsmtpprovider.c:687
+#: src/goabackend/goalastfmprovider.c:429
+#: src/goabackend/goaowncloudprovider.c:530
+msgid "_Password"
+msgstr "A_wal n uɛeddi"
+
+#: src/goabackend/goaexchangeprovider.c:400
+msgid "_Custom"
+msgstr "_Sagen"
+
+#: src/goabackend/goaexchangeprovider.c:411
+#: src/goabackend/goaimapsmtpprovider.c:666
+#: src/goabackend/goaimapsmtpprovider.c:686
+#: src/goabackend/goalastfmprovider.c:428
+#: src/goabackend/goaowncloudprovider.c:529
+msgid "User_name"
+msgstr "I_sem n useqdac"
+
+#: src/goabackend/goaexchangeprovider.c:412
+#: src/goabackend/goaowncloudprovider.c:528
+msgid "_Server"
+msgstr "A_qeddac"
+
+#. --
+#: src/goabackend/goaexchangeprovider.c:422
+#: src/goabackend/goaimapsmtpprovider.c:699
+#: src/goabackend/goakerberosprovider.c:563
+#: src/goabackend/goalastfmprovider.c:437
+#: src/goabackend/goaowncloudprovider.c:544
+msgid "_Cancel"
+msgstr "Se_mmet"
+
+#: src/goabackend/goaexchangeprovider.c:423
+#: src/goabackend/goakerberosprovider.c:564
+#: src/goabackend/goalastfmprovider.c:438
+#: src/goabackend/goaowncloudprovider.c:545
+msgid "C_onnect"
+msgstr "Tu_qqna"
+
+#: src/goabackend/goaexchangeprovider.c:439
+#: src/goabackend/goaimapsmtpprovider.c:715
+#: src/goabackend/goakerberosprovider.c:579
+#: src/goabackend/goalastfmprovider.c:454
+#: src/goabackend/goaowncloudprovider.c:560
+msgid "Connecting…"
+msgstr "Tuqqna…"
+
+#: src/goabackend/goaexchangeprovider.c:539
+#: src/goabackend/goaexchangeprovider.c:733
+#: src/goabackend/goaimapsmtpprovider.c:865
+#: src/goabackend/goaimapsmtpprovider.c:900
+#: src/goabackend/goaimapsmtpprovider.c:992
+#: src/goabackend/goaimapsmtpprovider.c:1249
+#: src/goabackend/goaimapsmtpprovider.c:1325
+#: src/goabackend/goakerberosprovider.c:896
+#: src/goabackend/goalastfmprovider.c:652
+#: src/goabackend/goalastfmprovider.c:820
+#: src/goabackend/goamediaserverprovider.c:420
+#: src/goabackend/goaoauth2provider.c:995 src/goabackend/goaoauthprovider.c:859
+#: src/goabackend/goaowncloudprovider.c:663
+#: src/goabackend/goaowncloudprovider.c:883
+msgid "Dialog was dismissed"
+msgstr "Adiwenni ur yettwaqbal ara"
+
+#: src/goabackend/goaexchangeprovider.c:577
+#: src/goabackend/goaexchangeprovider.c:761
+#: src/goabackend/goaimapsmtpprovider.c:933
+#: src/goabackend/goaimapsmtpprovider.c:1030
+#: src/goabackend/goaimapsmtpprovider.c:1276
+#: src/goabackend/goaimapsmtpprovider.c:1353
+#: src/goabackend/goalastfmprovider.c:686
+#: src/goabackend/goalastfmprovider.c:839
+#: src/goabackend/goaowncloudprovider.c:708
+#: src/goabackend/goaowncloudprovider.c:910
+#, c-format
+msgid "Dialog was dismissed (%s, %d): "
+msgstr "Adiwenni ur yettwaqbal ara (%s, %d) : "
+
+#: src/goabackend/goaexchangeprovider.c:590
+#: src/goabackend/goaimapsmtpprovider.c:946
+#: src/goabackend/goaimapsmtpprovider.c:1043
+#: src/goabackend/goaowncloudprovider.c:721
+msgid "_Ignore"
+msgstr "_Ttu"
+
+#: src/goabackend/goaexchangeprovider.c:595
+#: src/goabackend/goaexchangeprovider.c:780
+#: src/goabackend/goaimapsmtpprovider.c:951
+#: src/goabackend/goaimapsmtpprovider.c:1048
+#: src/goabackend/goaimapsmtpprovider.c:1295
+#: src/goabackend/goaimapsmtpprovider.c:1372
+#: src/goabackend/goakerberosprovider.c:981
+#: src/goabackend/goalastfmprovider.c:698
+#: src/goabackend/goalastfmprovider.c:856
+#: src/goabackend/goaowncloudprovider.c:726
+#: src/goabackend/goaowncloudprovider.c:929
+msgid "_Try Again"
+msgstr "_Eɛreḍ tikkelt-nniḍen"
+
+#: src/goabackend/goaexchangeprovider.c:600
+#: src/goabackend/goaexchangeprovider.c:773
+msgid "Error connecting to Microsoft Exchange server"
+msgstr "Anezri di tuqqna ɣer uqeddac Microsoft Exchange"
+
+#: src/goabackend/goafacebookprovider.c:56
+msgid "Facebook"
+msgstr "Facebook"
+
+#: src/goabackend/goafacebookprovider.c:183
+#: src/goabackend/goaflickrprovider.c:155
+#: src/goabackend/goafoursquareprovider.c:154
+#: src/goabackend/goagoogleprovider.c:183
+#: src/goabackend/goawindowsliveprovider.c:159
+#, c-format
+msgid ""
+"Expected status 200 when requesting your identity, instead got status %d (%s)"
+msgstr ""
+"Addad 200 yetturaǧǧu mi d-tella tuttra n tmagit-inek, deg wemkan-is neṭtef-d "
+"addad %d (%s)"
+
+#. TODO: more specific
+#: src/goabackend/goafacebookprovider.c:202
+#: src/goabackend/goafacebookprovider.c:213
+#: src/goabackend/goafacebookprovider.c:219
+#: src/goabackend/goaflickrprovider.c:174
+#: src/goabackend/goaflickrprovider.c:185
+#: src/goabackend/goaflickrprovider.c:196
+#: src/goabackend/goaflickrprovider.c:205
+#: src/goabackend/goaflickrprovider.c:218
+#: src/goabackend/goafoursquareprovider.c:173
+#: src/goabackend/goafoursquareprovider.c:184
+#: src/goabackend/goafoursquareprovider.c:195
+#: src/goabackend/goafoursquareprovider.c:206
+#: src/goabackend/goafoursquareprovider.c:215
+#: src/goabackend/goafoursquareprovider.c:228
+#: src/goabackend/goagoogleprovider.c:202
+#: src/goabackend/goagoogleprovider.c:213
+#: src/goabackend/goalastfmprovider.c:212
+#: src/goabackend/goalastfmprovider.c:221
+#: src/goabackend/goalastfmprovider.c:230
+#: src/goabackend/goalastfmprovider.c:238
+#: src/goabackend/goalastfmprovider.c:244
+#: src/goabackend/goalastfmprovider.c:512
+#: src/goabackend/goalastfmprovider.c:521
+#: src/goabackend/goalastfmprovider.c:538
+#: src/goabackend/goalastfmprovider.c:544
+#: src/goabackend/goaoauth2provider.c:656
+#: src/goabackend/goaoauth2provider.c:686
+#: src/goabackend/goaoauth2provider.c:697 src/goabackend/goautils.c:273
+#: src/goabackend/goawindowsliveprovider.c:178
+#: src/goabackend/goawindowsliveprovider.c:189
+#: src/goabackend/goawindowsliveprovider.c:198
+#: src/goabackend/goawindowsliveprovider.c:211
+msgid "Could not parse response"
+msgstr "D awezɣi tasleḍt n tririt"
+
+#: src/goabackend/goaflickrprovider.c:56
+msgid "Flickr"
+msgstr "Flickr"
+
+#: src/goabackend/goaflickrprovider.c:271
+msgid "Your system time is invalid. Check your date and time settings."
+msgstr "Azemz n unagraw-inek d armeɣtu. Selken iɣewwaren n uzemz d usrag."
+
+#: src/goabackend/goafoursquareprovider.c:57
+msgid "Foursquare"
+msgstr "Foursquare"
+
+#: src/goabackend/goagoogleprovider.c:56
+msgid "Google"
+msgstr "Google"
+
+#. TODO: more specific
+#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goasmtpauth.c:155
+msgid "Service not available"
+msgstr "Ameẓlu ur yewjid ara"
+
+#. TODO: more specific
+#: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goalastfmprovider.c:529
+#: src/goabackend/goasmtpauth.c:108 src/goabackend/goautils.c:838
+msgid "Authentication failed"
+msgstr "Anezri n usnekwu"
+
+#: src/goabackend/goaimapauthlogin.c:129
+msgid "Server does not support PLAIN"
+msgstr "Aqeddac ur yezmir ara i PLAIN"
+
+#: src/goabackend/goaimapauthlogin.c:181 src/goabackend/goasmtpauth.c:606
+msgid "Server does not support STARTTLS"
+msgstr "Aqeddac ur yezmir ara i STARTTLS"
+
+#: src/goabackend/goaimapsmtpprovider.c:53
+msgid "IMAP and SMTP"
+msgstr "IMAP akked SMTP"
+
+#. Translators: the first %s is a field name. The
+#. * second %s is the IMAP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#. Translators: the first %s is a field name. The
+#. * second %s is the SMTP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#: src/goabackend/goaimapsmtpprovider.c:327
+#: src/goabackend/goaimapsmtpprovider.c:378
+#, c-format
+msgid "Invalid %s with username “%s” (%s, %d): "
+msgstr ""
+
+#. Translators: the following four strings are used to show a
+#. * combo box similar to the one in the evolution module.
+#. * Encryption: None
+#. *             STARTTLS after connecting
+#. *             SSL on a dedicated port
+#.
+#: src/goabackend/goaimapsmtpprovider.c:564
+msgid "_Encryption"
+msgstr "A_wgelhen"
+
+#: src/goabackend/goaimapsmtpprovider.c:567
+msgid "None"
+msgstr "Ulac"
+
+#: src/goabackend/goaimapsmtpprovider.c:570
+msgid "STARTTLS after connecting"
+msgstr "STARTTLS mbaɛd tuqqna"
+
+#: src/goabackend/goaimapsmtpprovider.c:573
+msgid "SSL on a dedicated port"
+msgstr "SSL ɣef tewwurt yettwaḥerran"
+
+#: src/goabackend/goaimapsmtpprovider.c:648
+msgid "_Name"
+msgstr "I_sem"
+
+#: src/goabackend/goaimapsmtpprovider.c:665
+msgid "IMAP _Server"
+msgstr "A_qeddac IMAP"
+
+#: src/goabackend/goaimapsmtpprovider.c:685
+msgid "SMTP _Server"
+msgstr "A_qeddac SMTP"
+
+#: src/goabackend/goaimapsmtpprovider.c:700
+#: src/goabackend/goaimapsmtpprovider.c:972
+#: src/goabackend/goaimapsmtpprovider.c:1305
+msgid "_Forward"
+msgstr "U_ḍfir"
+
+#: src/goabackend/goaimapsmtpprovider.c:956
+#: src/goabackend/goaimapsmtpprovider.c:1288
+msgid "Error connecting to IMAP server"
+msgstr "Anezri di tuqqna ɣer uqeddac IMAP"
+
+#: src/goabackend/goaimapsmtpprovider.c:1053
+#: src/goabackend/goaimapsmtpprovider.c:1365
+msgid "Error connecting to SMTP server"
+msgstr "Anezri di tuqqna ɣer uqeddac SMTP"
+
+#: src/goabackend/goaimapsmtpprovider.c:1476
+msgid "E-mail"
+msgstr "Imayl"
+
+#: src/goabackend/goaimapsmtpprovider.c:1480
+msgid "Name"
+msgstr "Isem"
+
+#: src/goabackend/goaimapsmtpprovider.c:1490
+#: src/goabackend/goaimapsmtpprovider.c:1494
+msgid "IMAP"
+msgstr "IMAP"
+
+#: src/goabackend/goaimapsmtpprovider.c:1505
+#: src/goabackend/goaimapsmtpprovider.c:1509
+msgid "SMTP"
+msgstr "SMTP"
+
+#: src/goabackend/goakerberosprovider.c:100
+msgid "Enterprise Login (Kerberos)"
+msgstr "Tuqqna n teṛmist (Kerberos)"
+
+#: src/goabackend/goakerberosprovider.c:220
+msgid "Ticketing is disabled for account"
+msgstr ""
+
+#: src/goabackend/goakerberosprovider.c:245
+#, c-format
+msgid "Could not find saved credentials for principal “%s” in keyring"
+msgstr ""
+
+#: src/goabackend/goakerberosprovider.c:258
+#, c-format
+msgid "Did not find password for principal “%s” in credentials"
+msgstr ""
+
+#: src/goabackend/goakerberosprovider.c:558
+msgid "_Principal"
+msgstr "A_gejdan"
+
+#: src/goabackend/goakerberosprovider.c:744
+msgid "Operation was cancelled"
+msgstr "Tamhelt tettusefsex"
+
+#: src/goabackend/goakerberosprovider.c:794
+#: src/goaidentity/goaidentityservice.c:1070
+msgid "Log In to Realm"
+msgstr "Tuqqna ɣer wawal n taɣult"
+
+#: src/goabackend/goakerberosprovider.c:795
+msgid "Please enter your password below."
+msgstr "Ttxil-k sekcem awal n uɛeddi inek uksar-agi."
+
+#: src/goabackend/goakerberosprovider.c:796
+msgid "Remember this password"
+msgstr "Mekti awal-agi n uɛeddi"
+
+#: src/goabackend/goakerberosprovider.c:976
+msgid "Error connecting to enterprise identity server"
+msgstr "Anezri di tuqqna ɣer uqeddac n tmagit n teṛmist"
+
+#: src/goabackend/goakerberosprovider.c:1315
+msgid "Identity service returned invalid key"
+msgstr "Ameẓlu n tmagit yerra-d tasarut tarmeɣtut"
+
+#: src/goabackend/goalastfmprovider.c:65
+msgid "Last.fm"
+msgstr ""
+
+#: src/goabackend/goalastfmprovider.c:700
+#: src/goabackend/goalastfmprovider.c:850
+msgid "Error connecting to Last.fm"
+msgstr ""
+
+#: src/goabackend/goamediaserverprovider.c:63
+msgid "Media Server"
+msgstr "Aqeddac agetmidya"
+
+#: src/goabackend/goamediaserverprovider.c:316
+msgid ""
+"Personal content can be added to your applications through a media server "
+"account."
+msgstr ""
+"Tzemreḍ ad ternuḍ agbur udmawan ɣer wesnas-inek s ttawil n umiḍan n uqeddac "
+"n imidyaten."
+
+#: src/goabackend/goamediaserverprovider.c:329
+msgid "Available Media Servers"
+msgstr "Iqeddacen imidyaten iwejden"
+
+#: src/goabackend/goamediaserverprovider.c:360
+msgid "No media servers found"
+msgstr "Ur d-nufi ara aqeddac amidya"
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: src/goabackend/goaoauth2provider.c:632 src/goabackend/goaoauthprovider.c:542
+#, c-format
+msgid ""
+"Expected status 200 when requesting access token, instead got status %d (%s)"
+msgstr ""
+"Yetturaǧǧu waddad 200 mi d-tella tuttra n tiddest n wadduf, neṭṭef-d deg "
+"wemkan-is addad %d (%s)"
+
+#: src/goabackend/goaoauth2provider.c:814
+msgid "Authorization response: "
+msgstr "Tiririt ɣef usireg: "
+
+#: src/goabackend/goaoauth2provider.c:884
+#, c-format
+msgid "Authorization response: %s"
+msgstr "Tiririt ɣef usireg: %s"
+
+#: src/goabackend/goaoauth2provider.c:1021
+#: src/goabackend/goaoauthprovider.c:890
+msgid "Error getting an Access Token: "
+msgstr "Anezri deg waggay n tiddest n wadduf: "
+
+#: src/goabackend/goaoauth2provider.c:1036
+#: src/goabackend/goaoauthprovider.c:903
+msgid "Error getting identity: "
+msgstr "Anezri deg waggay n tmagit: "
+
+#: src/goabackend/goaoauth2provider.c:1254
+#: src/goabackend/goaoauthprovider.c:1192
+#, c-format
+msgid "Was asked to log in as %s, but logged in as %s"
+msgstr "Yella-d usuter i tuqqna d %s, maca tuqqna tella-d am %s"
+
+#: src/goabackend/goaoauth2provider.c:1406
+msgid "Credentials do not contain access_token"
+msgstr "Isefka n usnekwu ur sɛin ara access_token"
+
+#: src/goabackend/goaoauth2provider.c:1445
+#: src/goabackend/goaoauthprovider.c:1407
+#, c-format
+msgid "Failed to refresh access token (%s, %d): "
+msgstr "Anezri deg uwennez n tiddest n unekcum (%s, %d) : "
+
+#: src/goabackend/goaoauthprovider.c:565
+msgid "Missing access_token or access_token_secret headers in response"
+msgstr "Inixfan access_token neɣ access_token_secret xuṣṣent di tririt"
+
+#: src/goabackend/goaoauthprovider.c:773
+msgid "Error getting a Request Token: "
+msgstr "Anezri deg waggay n tiddest n tuttra: "
+
+#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#: src/goabackend/goaoauthprovider.c:804
+#, c-format
+msgid ""
+"Expected status 200 for getting a Request Token, instead got status %d (%s)"
+msgstr ""
+"Yetturaǧǧu waddad 200 mi d-tella tuṭṭfa n tiddest n tuttra, neṭṭef-d deg "
+"wemkan-is addad %d (%s)"
+
+#: src/goabackend/goaoauthprovider.c:821
+msgid "Missing request_token or request_token_secret headers in response"
+msgstr "Inixfan request_token neɣ request_token_secret xuṣṣent di tririt"
+
+#: src/goabackend/goaoauthprovider.c:1363
+msgid "Credentials do not contain access_token or access_token_secret"
+msgstr "Isefka n usnekwu ur sɛin ara access_token neɣ access_token_secret"
+
+#: src/goabackend/goaowncloudprovider.c:60
+msgid "Nextcloud"
+msgstr ""
+
+#: src/goabackend/goaowncloudprovider.c:731
+#: src/goabackend/goaowncloudprovider.c:922
+msgid "Error connecting to ownCloud server"
+msgstr "Anezri di tuqqna ɣer uqeddac ownCloud"
+
+#: src/goabackend/goapocketprovider.c:74
+msgid "Pocket"
+msgstr "Pocket"
+
+#. TODO: more specific
+#: src/goabackend/goapocketprovider.c:249
+msgid "No username or access_token"
+msgstr "Ulac isem n useqdac neɣ ti_ddest n unekcum"
+
+#: src/goabackend/goaprovider.c:109
+msgid "_Mail"
+msgstr "I_mayl"
+
+#: src/goabackend/goaprovider.c:114
+msgid "Cale_ndar"
+msgstr "Ta_fada"
+
+#: src/goabackend/goaprovider.c:119
+msgid "_Contacts"
+msgstr "A_nermis"
+
+#: src/goabackend/goaprovider.c:124
+msgid "C_hat"
+msgstr "A_meslay"
+
+#: src/goabackend/goaprovider.c:129
+msgid "_Documents"
+msgstr "I_ttafttaren"
+
+#: src/goabackend/goaprovider.c:134
+msgid "M_usic"
+msgstr "A_ẓawan"
+
+#: src/goabackend/goaprovider.c:139
+msgid "_Photos"
+msgstr "Ti_wlafin"
+
+#: src/goabackend/goaprovider.c:144
+msgid "_Files"
+msgstr "I_fuyla"
+
+#: src/goabackend/goaprovider.c:149
+msgid "Network _Resources"
+msgstr "I_ɣbula n uẓeṭṭa"
+
+#: src/goabackend/goaprovider.c:154
+msgid "_Read Later"
+msgstr "_Ɣer ar ḍeqqal"
+
+#: src/goabackend/goaprovider.c:159
+msgid "Prin_ters"
+msgstr "Tisaggazin"
+
+#: src/goabackend/goaprovider.c:164
+msgid "_Maps"
+msgstr "Ti_karḍiwin"
+
+#: src/goabackend/goaprovider.c:169
+msgid "T_o Do"
+msgstr ""
+
+#. Translators: This is a label for a series of
+#. * options switches. For example: “Use for Mail”.
+#: src/goabackend/goaprovider.c:567
+msgid "Use for"
+msgstr "Seqdec i"
+
+#: src/goabackend/goaprovider.c:822
+msgid "Account is disabled"
+msgstr "Amiḍan yexsi"
+
+#: src/goabackend/goaprovider.c:835
+msgid "Unknown error"
+msgstr "Tuccḍa tarussint"
+
+#: src/goabackend/goaprovider.c:854
+#, c-format
+msgid "ensure_credentials_sync is not implemented on type %s"
+msgstr ""
+
+#. TODO: more specific
+#: src/goabackend/goasmtpauth.c:170
+msgid "TLS not available"
+msgstr "TLS ur yewjid ara"
+
+#: src/goabackend/goasmtpauth.c:476
+msgid "Unknown authentication mechanism"
+msgstr "Tarrayt n usnekwu ur tettwassen ara"
+
+#: src/goabackend/goautils.c:92
+msgid "Error logging into the account"
+msgstr "Tuccḍa di tuqqna ɣer umiḍan"
+
+#: src/goabackend/goautils.c:136
+msgid "Credentials have expired"
+msgstr ""
+
+#: src/goabackend/goautils.c:140
+msgid "Sign in to enable this account."
+msgstr "Qqen iwakken ad tesremdeḍ amiḍan-agi"
+
+#: src/goabackend/goautils.c:144
+msgid "_Sign In"
+msgstr "_Qqen"
+
+#: src/goabackend/goautils.c:240
+#, c-format
+msgid "A %s account already exists for %s"
+msgstr "Amiḍan %s yella yakan i %s"
+
+#. Translators: this is the title of the "Add Account" and "Refresh
+#. * Account" dialogs. The %s is the name of the provider. eg.,
+#. * 'Google'.
+#.
+#: src/goabackend/goautils.c:293
+#, c-format
+msgid "%s Account"
+msgstr ""
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:347
+msgid "Failed to delete credentials from the keyring"
+msgstr "Anezri di tukksa n isefka n usnekwu seg wezebg n tsura"
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:395
+msgid "Failed to retrieve credentials from the keyring"
+msgstr "Anezri di tririt n isefka n usnekwu seg wezebg n tsura"
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:405
+msgid "No credentials found in the keyring"
+msgstr "Ur d-nufi ara isallan n usnekwu deg wezebg n tsura"
+
+#: src/goabackend/goautils.c:418
+msgid "Error parsing result obtained from the keyring: "
+msgstr "Anezri di tesleḍt n ugmuḍ i d-yeffɣen seg wezebg n tsura: "
+
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#: src/goabackend/goautils.c:459
+#, c-format
+msgid "GOA %s credentials for identity %s"
+msgstr "Isefka n usnekwu GOA %s i nekwa %s"
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:476
+msgid "Failed to store credentials in the keyring"
+msgstr "Anezri deg wesekles n isefka n usnekwu deg wezebg n tsura"
+
+#: src/goabackend/goautils.c:825
+msgid "Cannot resolve hostname"
+msgstr "D awezɣi ferru n yisem n usneftaɣ"
+
+#: src/goabackend/goautils.c:829
+msgid "Cannot resolve proxy hostname"
+msgstr "D awezɣi ferru n yisem n usneftaɣ n upṛuksi"
+
+#: src/goabackend/goautils.c:834
+msgid "Cannot find WebDAV endpoint"
+msgstr ""
+
+#: src/goabackend/goautils.c:843
+#, c-format
+msgid "Code: %u — Unexpected response from server"
+msgstr "Tangalt : %u — Tiririt ur netturaǧu ara sɣur aqeddac"
+
+#: src/goabackend/goautils.c:859
+msgid "The signing certificate authority is not known."
+msgstr "Adabu n uselken n uzmal ur yettwassen ara."
+
+#: src/goabackend/goautils.c:863
+msgid ""
+"The certificate does not match the expected identity of the site that it was "
+"retrieved from."
+msgstr "Aselkin ur inmeɣra ara akked tmagit yetturaǧun i wesmel seg i d-yekka."
+
+#: src/goabackend/goautils.c:868
+msgid "The certificate’s activation time is still in the future."
+msgstr "Azemz n usermed n uselkin mazal-it deg yimal."
+
+#: src/goabackend/goautils.c:872
+msgid "The certificate has expired."
+msgstr "Aselkin iɛedda-t wakud."
+
+#: src/goabackend/goautils.c:876
+msgid "The certificate has been revoked."
+msgstr "Aselkin tettwakkes-as twuri-nes."
+
+#: src/goabackend/goautils.c:880
+msgid "The certificate’s algorithm is considered insecure."
+msgstr "Awerzim n uselkin ittuneḥsab mačči d aɣelsan."
+
+#: src/goabackend/goautils.c:886
+msgid "Invalid certificate."
+msgstr "Aselkin d armeɣtu."
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:921
+#, c-format
+msgid "Did not find %s with identity “%s” in credentials"
+msgstr ""
+
+#. translators: %s here is the address of the web page
+#: src/goabackend/goawebview.c:94
+#, c-format
+msgid "Loading “%s”…"
+msgstr "Aɛebbi n « %s »…"
+
+#: src/goabackend/goawindowsliveprovider.c:56
+msgid "Microsoft"
+msgstr "Microsoft"
+
+#: src/goaidentity/goaidentityservice.c:569
+msgid "Initial secret key is invalid"
+msgstr "Tasarutt tuffirt n tazwara d armeɣtut"
+
+#: src/goaidentity/goaidentityservice.c:1075
+#, c-format
+msgid "The network realm %s needs some information to sign you in."
+msgstr "Awal n taɣult n uẓeṭṭa %s yeḥwaǧ kra n isallan iwakken ad k-yeqqen."
+
+#: src/goaidentity/goakerberosidentity.c:274
+#: src/goaidentity/goakerberosidentity.c:282
+#: src/goaidentity/goakerberosidentity.c:706
+msgid "Could not find identity in credential cache: "
+msgstr ""
+
+#: src/goaidentity/goakerberosidentity.c:719
+msgid "Could not find identity credentials in cache: "
+msgstr ""
+
+#: src/goaidentity/goakerberosidentity.c:770
+msgid "Could not sift through identity credentials in cache: "
+msgstr ""
+
+#: src/goaidentity/goakerberosidentity.c:787
+msgid "Could not finish up sifting through identity credentials in cache: "
+msgstr ""
+
+#: src/goaidentity/goakerberosidentity.c:1102
+msgid "No associated identification found"
+msgstr "Ur d-nufi ara asenkwu yeduklen"
+
+#: src/goaidentity/goakerberosidentity.c:1185
+msgid "Could not create credential cache: "
+msgstr ""
+
+#: src/goaidentity/goakerberosidentity.c:1219
+msgid "Could not initialize credentials cache: "
+msgstr ""
+
+#: src/goaidentity/goakerberosidentity.c:1235
+msgid "Could not store new credentials in credentials cache: "
+msgstr ""
+
+#: src/goaidentity/goakerberosidentity.c:1533
+msgid "Could not renew identity: Not signed in"
+msgstr ""
+
+#: src/goaidentity/goakerberosidentity.c:1545
+msgid "Could not renew identity: "
+msgstr ""
+
+#: src/goaidentity/goakerberosidentity.c:1561
+#, c-format
+msgid "Could not get new credentials to renew identity %s: "
+msgstr ""
+
+#: src/goaidentity/goakerberosidentity.c:1603
+msgid "Could not erase identity: "
+msgstr ""
+
+#: src/goaidentity/goakerberosidentitymanager.c:750
+msgid "Could not find identity"
+msgstr "Ur d-nufi ara tamagit"
+
+#: src/goaidentity/goakerberosidentitymanager.c:846
+msgid "Could not create credential cache for identity"
+msgstr "D awezɣi asnulfu n tzarkatut n isefka n usnekwu i nekwa"
