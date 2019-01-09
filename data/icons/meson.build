@@ -1,24 +1,26 @@
-icon_data = [
-  'goa-account-facebook.png',
-  'goa-account-flickr.png',
-  'goa-account-foursquare.png',
-  'goa-account-google.png',
-  'goa-account-msn.png',
-  'goa-account-owncloud.png',
-  'goa-account.png',
-  'goa-account-pocket.png',
+icon_scalable_data = [
+  'goa-account-facebook.svg',
+  'goa-account-flickr.svg',
+  'goa-account-foursquare.svg',
+  'goa-account-google.svg',
+  'goa-account-msn.svg',
+  'goa-account-owncloud.svg',
+  'goa-account-pocket.svg',
 ]
 
-icon_data_256 = ['goa-account.png']
+icon_symbolic_data = [
+  'goa-account-facebook-symbolic.svg',
+  'goa-account-flickr-symbolic.svg',
+  'goa-account-foursquare-symbolic.svg',
+  'goa-account-google-symbolic.svg',
+  'goa-account-msn-symbolic.svg',
+  'goa-account-owncloud-symbolic.svg',
+  'goa-account-pocket-symbolic.svg',
+]
 
 icons = [
-  ['16x16', icon_data],
-  ['22x22', icon_data],
-  ['24x24', icon_data],
-  ['32x32', icon_data],
-  ['48x48', icon_data],
-  ['96x96', icon_data],
-  ['256x256', icon_data_256]
+  ['scalable', icon_scalable_data],
+  ['symbolic', icon_symbolic_data],
 ]
 
 foreach icon: icons
