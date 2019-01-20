@@ -4,9 +4,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts gnome-3-10\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-09-27 13:14+0000\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
+"issues\n"
+"POT-Creation-Date: 2019-01-17 11:24+0000\n"
 "PO-Revision-Date: 2013-09-27 15:56+0200\n"
 "Last-Translator: F Wolff <friedel@translate.org.za>\n"
 "Language-Team: translate-discuss-af@lists.sourceforge.net\n"
@@ -18,330 +18,289 @@ msgstr ""
 "X-Generator: Virtaal 0.7.1\n"
 "X-Project-Style: gnome\n"
 
+#: data/org.gnome.online-accounts.gschema.xml:6
+msgid "List of providers that are allowed to be loaded"
+msgstr ""
+
+#: data/org.gnome.online-accounts.gschema.xml:7
+msgid ""
+"A list of strings representing the providers that are allowed to be loaded "
+"(default: 'all'). This is only evaluated on startup."
+msgstr ""
+
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:788 ../src/daemon/goadaemon.c:1034
+#: src/daemon/goadaemon.c:1196 src/daemon/goadaemon.c:1480
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Kon nie 'n verskaffer vind vir %s nie"
 
+#: src/daemon/goadaemon.c:1423
+msgid "IsLocked property is set for account"
+msgstr ""
+
 #. TODO: more specific
-#: ../src/daemon/goadaemon.c:1022
+#: src/daemon/goadaemon.c:1468
 msgid "ProviderType property is not set for account"
 msgstr ""
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:234 ../src/goabackend/goahttpclient.c:175
-#, c-format
-msgid "Code: %u - Unexpected response from server"
-msgstr ""
-
-#. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:250
-#, c-format
+#: src/goabackend/goaewsclient.c:238
 msgid "Failed to parse autodiscover response XML"
 msgstr ""
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:260
+#. Translators: the parameter is an XML element name.
+#: src/goabackend/goaewsclient.c:249 src/goabackend/goaewsclient.c:264
+#: src/goabackend/goaewsclient.c:279
 #, c-format
-msgid "Failed to find Autodiscover element"
+msgid "Failed to find “%s” element"
 msgstr ""
 
 #. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:274
-#, c-format
-msgid "Failed to find Response element"
-msgstr ""
-
-#. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:288
-#, c-format
-msgid "Failed to find Account element"
-msgstr ""
-
-#. TODO: more specific
-#: ../src/goabackend/goaewsclient.c:305
-#, c-format
+#: src/goabackend/goaewsclient.c:300
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr ""
 
-#: ../src/goabackend/goaexchangeprovider.c:79
+#: src/goabackend/goaexchangeprovider.c:51
 msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
-
-#. TODO: more specific
-#: ../src/goabackend/goaexchangeprovider.c:317
-#: ../src/goabackend/goaexchangeprovider.c:1026
-#: ../src/goabackend/goaowncloudprovider.c:403
-#: ../src/goabackend/goaowncloudprovider.c:1188
-#, c-format
-msgid "Did not find password with identity `%s' in credentials"
-msgstr ""
 
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
 #.
-#: ../src/goabackend/goaexchangeprovider.c:345
-#: ../src/goabackend/goaowncloudprovider.c:426
+#: src/goabackend/goaexchangeprovider.c:248
+#: src/goabackend/goalastfmprovider.c:287
+#: src/goabackend/goaowncloudprovider.c:291
 #, c-format
-msgid "Invalid password with username `%s' (%s, %d): "
+msgid "Invalid password with username “%s” (%s, %d): "
 msgstr ""
 
-#: ../src/goabackend/goaexchangeprovider.c:499
-#: ../src/goabackend/goaimapsmtpprovider.c:697
+#: src/goabackend/goaexchangeprovider.c:396
+#: src/goabackend/goaimapsmtpprovider.c:647
 msgid "_E-mail"
 msgstr "_E-pos"
 
-#: ../src/goabackend/goaexchangeprovider.c:500
-#: ../src/goabackend/goaimapsmtpprovider.c:717
-#: ../src/goabackend/goaimapsmtpprovider.c:737
-#: ../src/goabackend/goaowncloudprovider.c:655
+#: src/goabackend/goaexchangeprovider.c:397
+#: src/goabackend/goaimapsmtpprovider.c:667
+#: src/goabackend/goaimapsmtpprovider.c:687
+#: src/goabackend/goalastfmprovider.c:429
+#: src/goabackend/goaowncloudprovider.c:530
 msgid "_Password"
 msgstr "_Wagwoord"
 
-#: ../src/goabackend/goaexchangeprovider.c:503
+#: src/goabackend/goaexchangeprovider.c:400
 msgid "_Custom"
 msgstr "_Pasgemaak"
 
-#: ../src/goabackend/goaexchangeprovider.c:514
-#: ../src/goabackend/goaimapsmtpprovider.c:716
-#: ../src/goabackend/goaimapsmtpprovider.c:736
-#: ../src/goabackend/goakerberosprovider.c:1129
-#: ../src/goabackend/goaowncloudprovider.c:654
+#: src/goabackend/goaexchangeprovider.c:411
+#: src/goabackend/goaimapsmtpprovider.c:666
+#: src/goabackend/goaimapsmtpprovider.c:686
+#: src/goabackend/goalastfmprovider.c:428
+#: src/goabackend/goaowncloudprovider.c:529
 msgid "User_name"
 msgstr "Gebruiker_naam"
 
-#: ../src/goabackend/goaexchangeprovider.c:515
-#: ../src/goabackend/goaowncloudprovider.c:653
+#: src/goabackend/goaexchangeprovider.c:412
+#: src/goabackend/goaowncloudprovider.c:528
 msgid "_Server"
 msgstr "_Bediener"
 
-#: ../src/goabackend/goaexchangeprovider.c:545
-#: ../src/goabackend/goaimapsmtpprovider.c:769
-#: ../src/goabackend/goakerberosprovider.c:1154
-#: ../src/goabackend/goaowncloudprovider.c:684
+#. --
+#: src/goabackend/goaexchangeprovider.c:422
+#: src/goabackend/goaimapsmtpprovider.c:699
+#: src/goabackend/goakerberosprovider.c:563
+#: src/goabackend/goalastfmprovider.c:437
+#: src/goabackend/goaowncloudprovider.c:544
+#: src/goabackend/goatelepathyprovider.c:651
+msgid "_Cancel"
+msgstr ""
+
+#: src/goabackend/goaexchangeprovider.c:423
+#: src/goabackend/goakerberosprovider.c:564
+#: src/goabackend/goalastfmprovider.c:438
+#: src/goabackend/goaowncloudprovider.c:545
+#, fuzzy
+#| msgid "Connecting…"
+msgid "C_onnect"
+msgstr "Koppel tans…"
+
+#: src/goabackend/goaexchangeprovider.c:439
+#: src/goabackend/goaimapsmtpprovider.c:715
+#: src/goabackend/goakerberosprovider.c:579
+#: src/goabackend/goalastfmprovider.c:454
+#: src/goabackend/goaowncloudprovider.c:560
 msgid "Connecting…"
 msgstr "Koppel tans…"
 
-#: ../src/goabackend/goaexchangeprovider.c:650
-#: ../src/goabackend/goaexchangeprovider.c:845
-#: ../src/goabackend/goaimapsmtpprovider.c:929
-#: ../src/goabackend/goaimapsmtpprovider.c:964
-#: ../src/goabackend/goaimapsmtpprovider.c:1052
-#: ../src/goabackend/goaimapsmtpprovider.c:1308
-#: ../src/goabackend/goaimapsmtpprovider.c:1381
-#: ../src/goabackend/goakerberosprovider.c:1545
-#: ../src/goabackend/goaoauth2provider.c:1133
-#: ../src/goabackend/goaoauthprovider.c:1041
-#: ../src/goabackend/goaowncloudprovider.c:795
-#: ../src/goabackend/goaowncloudprovider.c:1008
-#: ../src/goabackend/goatelepathyprovider.c:467
-#: ../src/goabackend/goatelepathyprovider.c:516
-#: ../src/goabackend/goatelepathyprovider.c:690
-#, c-format
+#: src/goabackend/goaexchangeprovider.c:539
+#: src/goabackend/goaexchangeprovider.c:733
+#: src/goabackend/goaimapsmtpprovider.c:865
+#: src/goabackend/goaimapsmtpprovider.c:900
+#: src/goabackend/goaimapsmtpprovider.c:992
+#: src/goabackend/goaimapsmtpprovider.c:1249
+#: src/goabackend/goaimapsmtpprovider.c:1325
+#: src/goabackend/goakerberosprovider.c:896
+#: src/goabackend/goalastfmprovider.c:652
+#: src/goabackend/goalastfmprovider.c:820
+#: src/goabackend/goamediaserverprovider.c:420
+#: src/goabackend/goaoauth2provider.c:995 src/goabackend/goaoauthprovider.c:859
+#: src/goabackend/goaowncloudprovider.c:663
+#: src/goabackend/goaowncloudprovider.c:883
+#: src/goabackend/goatelepathyprovider.c:475
+#: src/goabackend/goatelepathyprovider.c:514
+#: src/goabackend/goatelepathyprovider.c:682
 msgid "Dialog was dismissed"
 msgstr ""
 
-#: ../src/goabackend/goaexchangeprovider.c:688
-#: ../src/goabackend/goaexchangeprovider.c:873
-#: ../src/goabackend/goaimapsmtpprovider.c:994
-#: ../src/goabackend/goaimapsmtpprovider.c:1085
-#: ../src/goabackend/goaimapsmtpprovider.c:1332
-#: ../src/goabackend/goaimapsmtpprovider.c:1406
-#: ../src/goabackend/goaowncloudprovider.c:837
-#: ../src/goabackend/goaowncloudprovider.c:1029
+#: src/goabackend/goaexchangeprovider.c:577
+#: src/goabackend/goaexchangeprovider.c:761
+#: src/goabackend/goaimapsmtpprovider.c:933
+#: src/goabackend/goaimapsmtpprovider.c:1030
+#: src/goabackend/goaimapsmtpprovider.c:1276
+#: src/goabackend/goaimapsmtpprovider.c:1353
+#: src/goabackend/goalastfmprovider.c:686
+#: src/goabackend/goalastfmprovider.c:839
+#: src/goabackend/goaowncloudprovider.c:708
+#: src/goabackend/goaowncloudprovider.c:910
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr ""
 
-#: ../src/goabackend/goaexchangeprovider.c:701
-#: ../src/goabackend/goaimapsmtpprovider.c:1007
-#: ../src/goabackend/goaimapsmtpprovider.c:1098
-#: ../src/goabackend/goaowncloudprovider.c:850
+#: src/goabackend/goaexchangeprovider.c:590
+#: src/goabackend/goaimapsmtpprovider.c:946
+#: src/goabackend/goaimapsmtpprovider.c:1043
+#: src/goabackend/goaowncloudprovider.c:721
 msgid "_Ignore"
 msgstr "_Ignoreer"
 
-#: ../src/goabackend/goaexchangeprovider.c:706
-#: ../src/goabackend/goaexchangeprovider.c:892
-#: ../src/goabackend/goaimapsmtpprovider.c:1012
-#: ../src/goabackend/goaimapsmtpprovider.c:1103
-#: ../src/goabackend/goaimapsmtpprovider.c:1351
-#: ../src/goabackend/goaimapsmtpprovider.c:1425
-#: ../src/goabackend/goakerberosprovider.c:1655
-#: ../src/goabackend/goaowncloudprovider.c:855
-#: ../src/goabackend/goaowncloudprovider.c:1048
+#: src/goabackend/goaexchangeprovider.c:595
+#: src/goabackend/goaexchangeprovider.c:780
+#: src/goabackend/goaimapsmtpprovider.c:951
+#: src/goabackend/goaimapsmtpprovider.c:1048
+#: src/goabackend/goaimapsmtpprovider.c:1295
+#: src/goabackend/goaimapsmtpprovider.c:1372
+#: src/goabackend/goakerberosprovider.c:981
+#: src/goabackend/goalastfmprovider.c:698
+#: src/goabackend/goalastfmprovider.c:856
+#: src/goabackend/goaowncloudprovider.c:726
+#: src/goabackend/goaowncloudprovider.c:929
 msgid "_Try Again"
 msgstr "_Probeer weer"
 
-#: ../src/goabackend/goaexchangeprovider.c:711
-#: ../src/goabackend/goaexchangeprovider.c:885
+#: src/goabackend/goaexchangeprovider.c:600
+#: src/goabackend/goaexchangeprovider.c:773
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Kon nie koppel aan die Microsoft Exchange-bediener nie"
 
-#: ../src/goabackend/goaexchangeprovider.c:945
-#: ../src/goabackend/goafacebookprovider.c:415
-#: ../src/goabackend/goaflickrprovider.c:425
-#: ../src/goabackend/goagoogleprovider.c:547
-#: ../src/goabackend/goakerberosprovider.c:1726
-#: ../src/goabackend/goaowncloudprovider.c:1102
-#: ../src/goabackend/goatelepathyprovider.c:895
-#: ../src/goabackend/goawindowsliveprovider.c:430
-msgid "Use for"
-msgstr "Gebruik vir"
-
-#: ../src/goabackend/goaexchangeprovider.c:947
-#: ../src/goabackend/goagoogleprovider.c:549
-msgid "_Mail"
-msgstr "_Pos"
-
-#: ../src/goabackend/goaexchangeprovider.c:952
-#: ../src/goabackend/goagoogleprovider.c:554
-#: ../src/goabackend/goaowncloudprovider.c:1104
-msgid "Cale_ndar"
-msgstr "Kale_nder"
-
-#: ../src/goabackend/goaexchangeprovider.c:957
-#: ../src/goabackend/goagoogleprovider.c:559
-#: ../src/goabackend/goaowncloudprovider.c:1109
-msgid "_Contacts"
-msgstr "_Kontakte"
-
-#: ../src/goabackend/goafacebookprovider.c:82
+#: src/goabackend/goafacebookprovider.c:56
 msgid "Facebook"
 msgstr "Facebook"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:211
-#: ../src/goabackend/goagoogleprovider.c:210
-#: ../src/goabackend/goatwitterprovider.c:166
-#: ../src/goabackend/goawindowsliveprovider.c:195
-#: ../src/goabackend/goayahooprovider.c:187
+#: src/goabackend/goafacebookprovider.c:183
+#: src/goabackend/goaflickrprovider.c:155
+#: src/goabackend/goafoursquareprovider.c:154
+#: src/goabackend/goagoogleprovider.c:191
+#: src/goabackend/goatodoistprovider.c:193
+#: src/goabackend/goawindowsliveprovider.c:159
 #, c-format
-msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+msgid ""
+"Expected status 200 when requesting your identity, instead got status %d (%s)"
 msgstr ""
 
-#: ../src/goabackend/goafacebookprovider.c:230
-#: ../src/goabackend/goafacebookprovider.c:242
-#: ../src/goabackend/goafacebookprovider.c:252
-#: ../src/goabackend/goaflickrprovider.c:208
-#: ../src/goabackend/goaflickrprovider.c:220
-#: ../src/goabackend/goaflickrprovider.c:230
-#: ../src/goabackend/goaflickrprovider.c:240
-#: ../src/goabackend/goaflickrprovider.c:250
-#: ../src/goabackend/goagoogleprovider.c:229
-#: ../src/goabackend/goagoogleprovider.c:241
-#: ../src/goabackend/goaoauth2provider.c:682
-#: ../src/goabackend/goaoauth2provider.c:712
-#: ../src/goabackend/goaoauth2provider.c:724
-#: ../src/goabackend/goatwitterprovider.c:185
-#: ../src/goabackend/goatwitterprovider.c:197
-#: ../src/goabackend/goatwitterprovider.c:207
-#: ../src/goabackend/goawindowsliveprovider.c:214
-#: ../src/goabackend/goawindowsliveprovider.c:226
-#: ../src/goabackend/goawindowsliveprovider.c:238
-#: ../src/goabackend/goayahooprovider.c:206
-#: ../src/goabackend/goayahooprovider.c:218
-#: ../src/goabackend/goayahooprovider.c:229
-#: ../src/goabackend/goayahooprovider.c:275
-#: ../src/goabackend/goayahooprovider.c:287
-#: ../src/goabackend/goayahooprovider.c:298
-#, c-format
+#. TODO: more specific
+#: src/goabackend/goafacebookprovider.c:202
+#: src/goabackend/goafacebookprovider.c:213
+#: src/goabackend/goafacebookprovider.c:219
+#: src/goabackend/goaflickrprovider.c:174
+#: src/goabackend/goaflickrprovider.c:185
+#: src/goabackend/goaflickrprovider.c:196
+#: src/goabackend/goaflickrprovider.c:205
+#: src/goabackend/goaflickrprovider.c:218
+#: src/goabackend/goafoursquareprovider.c:173
+#: src/goabackend/goafoursquareprovider.c:184
+#: src/goabackend/goafoursquareprovider.c:195
+#: src/goabackend/goafoursquareprovider.c:206
+#: src/goabackend/goafoursquareprovider.c:215
+#: src/goabackend/goafoursquareprovider.c:228
+#: src/goabackend/goagoogleprovider.c:210
+#: src/goabackend/goagoogleprovider.c:221
+#: src/goabackend/goalastfmprovider.c:212
+#: src/goabackend/goalastfmprovider.c:221
+#: src/goabackend/goalastfmprovider.c:230
+#: src/goabackend/goalastfmprovider.c:238
+#: src/goabackend/goalastfmprovider.c:244
+#: src/goabackend/goalastfmprovider.c:512
+#: src/goabackend/goalastfmprovider.c:521
+#: src/goabackend/goalastfmprovider.c:538
+#: src/goabackend/goalastfmprovider.c:544
+#: src/goabackend/goaoauth2provider.c:656
+#: src/goabackend/goaoauth2provider.c:686
+#: src/goabackend/goaoauth2provider.c:697
+#: src/goabackend/goatodoistprovider.c:212
+#: src/goabackend/goatodoistprovider.c:223
+#: src/goabackend/goatodoistprovider.c:234 src/goabackend/goautils.c:313
+#: src/goabackend/goawindowsliveprovider.c:178
+#: src/goabackend/goawindowsliveprovider.c:189
+#: src/goabackend/goawindowsliveprovider.c:198
+#: src/goabackend/goawindowsliveprovider.c:211
 msgid "Could not parse response"
 msgstr "Kon nie antwoord ontleed nie"
 
-#: ../src/goabackend/goafacebookprovider.c:417
-#: ../src/goabackend/goagoogleprovider.c:564
-#: ../src/goabackend/goatelepathyprovider.c:897
-#: ../src/goabackend/goawindowsliveprovider.c:432
-msgid "C_hat"
-msgstr "_Gesels"
-
-#: ../src/goabackend/goaflickrprovider.c:83
+#: src/goabackend/goaflickrprovider.c:56
 msgid "Flickr"
 msgstr "Flickr"
 
-#: ../src/goabackend/goaflickrprovider.c:189
-#, c-format
-msgid "Expected status 200 when requesting user id, instead got status %d (%s)"
-msgstr ""
-
-#: ../src/goabackend/goaflickrprovider.c:328
-#: ../src/goabackend/goayahooprovider.c:350
+#: src/goabackend/goaflickrprovider.c:271
 msgid "Your system time is invalid. Check your date and time settings."
 msgstr ""
 "Die stelsel se tyd is ongeldig. Kontroleer die instellings vir datum en tyd."
 
-#: ../src/goabackend/goaflickrprovider.c:427
-msgid "_Photos"
-msgstr "_Foto's"
+#: src/goabackend/goafoursquareprovider.c:57
+msgid "Foursquare"
+msgstr ""
 
-#: ../src/goabackend/goagoogleprovider.c:82
+#: src/goabackend/goagoogleprovider.c:56
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:569
-#: ../src/goabackend/goaowncloudprovider.c:1114
-#: ../src/goabackend/goawindowsliveprovider.c:437
-msgid "_Documents"
-msgstr "_Dokumente"
-
 #. TODO: more specific
-#: ../src/goabackend/goaimapauthlogin.c:99
-#: ../src/goabackend/goasmtpauthplain.c:146
-#, c-format
+#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goasmtpauth.c:155
 msgid "Service not available"
 msgstr "Diens nie beskikbaar nie"
 
 #. TODO: more specific
-#: ../src/goabackend/goaimapauthlogin.c:120
-#: ../src/goabackend/goasmtpauthplain.c:115
-#, c-format
+#: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goalastfmprovider.c:529
+#: src/goabackend/goasmtpauth.c:108 src/goabackend/goautils.c:878
 msgid "Authentication failed"
 msgstr ""
 
-#: ../src/goabackend/goaimapauthlogin.c:145
-#: ../src/goabackend/goasmtpauthplain.c:646
-#, c-format
+#: src/goabackend/goaimapauthlogin.c:129
 msgid "Server does not support PLAIN"
 msgstr "Bediener ondersteun nie PLAIN nie"
 
-#: ../src/goabackend/goaimapauthlogin.c:199
-#: ../src/goabackend/goasmtpauthplain.c:751
-#, c-format
+#: src/goabackend/goaimapauthlogin.c:181 src/goabackend/goasmtpauth.c:606
 msgid "Server does not support STARTTLS"
 msgstr "Bediener ondersteun nie STARTTLS nie"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:82
+#: src/goabackend/goaimapsmtpprovider.c:53
 msgid "IMAP and SMTP"
 msgstr "IMAP en SMTP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:362
-#, c-format
-msgid "Did not find imap-password with identity `%s' in credentials"
-msgstr ""
-
-#. Translators: the first %s is the IMAP
+#. Translators: the first %s is a field name. The
+#. * second %s is the IMAP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:391
-#, c-format
-msgid "Invalid imap-password with username `%s' (%s, %d): "
-msgstr ""
-
-#: ../src/goabackend/goaimapsmtpprovider.c:415
-#, c-format
-msgid "Did not find smtp-password with identity `%s' in credentials"
-msgstr ""
-
-#. Translators: the first %s is the SMTP
+#. Translators: the first %s is a field name. The
+#. * second %s is the SMTP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:446
+#: src/goabackend/goaimapsmtpprovider.c:327
+#: src/goabackend/goaimapsmtpprovider.c:378
 #, c-format
-msgid "Invalid smtp-password with username `%s' (%s, %d): "
+msgid "Invalid %s with username “%s” (%s, %d): "
 msgstr ""
 
 #. Translators: the following four strings are used to show a
@@ -350,461 +309,567 @@ msgstr ""
 #. *             STARTTLS after connecting
 #. *             SSL on a dedicated port
 #.
-#: ../src/goabackend/goaimapsmtpprovider.c:632
+#: src/goabackend/goaimapsmtpprovider.c:564
 msgid "_Encryption"
 msgstr "_Enkripsie"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:635
+#: src/goabackend/goaimapsmtpprovider.c:567
 msgid "None"
 msgstr "Geen"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:638
+#: src/goabackend/goaimapsmtpprovider.c:570
 msgid "STARTTLS after connecting"
 msgstr ""
 
-#: ../src/goabackend/goaimapsmtpprovider.c:641
+#: src/goabackend/goaimapsmtpprovider.c:573
 msgid "SSL on a dedicated port"
 msgstr "SSL op toegewyde poort"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:698
+#: src/goabackend/goaimapsmtpprovider.c:648
 msgid "_Name"
 msgstr "_Naam"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:715
+#: src/goabackend/goaimapsmtpprovider.c:665
 msgid "IMAP _Server"
 msgstr "IMAP-_bediener"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:735
+#: src/goabackend/goaimapsmtpprovider.c:685
 msgid "SMTP _Server"
 msgstr "SMTP-_bediener"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1017
-#: ../src/goabackend/goaimapsmtpprovider.c:1344
+#: src/goabackend/goaimapsmtpprovider.c:700
+#: src/goabackend/goaimapsmtpprovider.c:972
+#: src/goabackend/goaimapsmtpprovider.c:1305
+msgid "_Forward"
+msgstr ""
+
+#: src/goabackend/goaimapsmtpprovider.c:956
+#: src/goabackend/goaimapsmtpprovider.c:1288
 msgid "Error connecting to IMAP server"
 msgstr "Fout met die koppeling aan die IMAP-bediener"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1108
-#: ../src/goabackend/goaimapsmtpprovider.c:1418
+#: src/goabackend/goaimapsmtpprovider.c:1053
+#: src/goabackend/goaimapsmtpprovider.c:1365
 msgid "Error connecting to SMTP server"
 msgstr "Fout met die koppeling aan die SMTP-bediener"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1517
+#: src/goabackend/goaimapsmtpprovider.c:1476
 msgid "E-mail"
 msgstr "E-pos"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1521
+#: src/goabackend/goaimapsmtpprovider.c:1480
 msgid "Name"
 msgstr "Naam"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1531
-#: ../src/goabackend/goaimapsmtpprovider.c:1534
+#: src/goabackend/goaimapsmtpprovider.c:1490
+#: src/goabackend/goaimapsmtpprovider.c:1494
 msgid "IMAP"
 msgstr "IMAP"
 
-#: ../src/goabackend/goaimapsmtpprovider.c:1545
-#: ../src/goabackend/goaimapsmtpprovider.c:1548
+#: src/goabackend/goaimapsmtpprovider.c:1505
+#: src/goabackend/goaimapsmtpprovider.c:1509
 msgid "SMTP"
 msgstr "SMTP"
 
-#: ../src/goabackend/goakerberosprovider.c:87
+#: src/goabackend/goakerberosprovider.c:100
 msgid "Enterprise Login (Kerberos)"
 msgstr "Ondernemingaanmelding (Kerberos)"
 
-#: ../src/goabackend/goakerberosprovider.c:455
-msgid "Identity service returned invalid key"
-msgstr "Identiteitsdiens het net ongeldige sleutel geantwoord"
+#: src/goabackend/goakerberosprovider.c:220
+msgid "Ticketing is disabled for account"
+msgstr ""
 
-#: ../src/goabackend/goakerberosprovider.c:728
+#: src/goabackend/goakerberosprovider.c:245
 #, c-format
-msgid "Could not find saved credentials for principal `%s' in keyring"
+msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr ""
 
-#: ../src/goabackend/goakerberosprovider.c:738
+#: src/goabackend/goakerberosprovider.c:258
 #, c-format
-msgid "Did not find password for principal `%s' in credentials"
+msgid "Did not find password for principal “%s” in credentials"
 msgstr ""
 
-#: ../src/goabackend/goakerberosprovider.c:1121
-msgid "_Domain"
-msgstr "_Domein"
-
-#: ../src/goabackend/goakerberosprovider.c:1122
-msgid "Enterprise domain or realm name"
+#: src/goabackend/goakerberosprovider.c:558
+msgid "_Principal"
 msgstr ""
 
-#: ../src/goabackend/goakerberosprovider.c:1354
-#: ../src/goaidentity/goaidentityservice.c:1085
+#: src/goabackend/goakerberosprovider.c:744
+msgid "Operation was cancelled"
+msgstr ""
+
+#: src/goabackend/goakerberosprovider.c:794
+#: src/goaidentity/goaidentityservice.c:1072
 msgid "Log In to Realm"
 msgstr ""
 
-#: ../src/goabackend/goakerberosprovider.c:1355
+#: src/goabackend/goakerberosprovider.c:795
 msgid "Please enter your password below."
 msgstr "Tik u wagwoord onder in."
 
-#: ../src/goabackend/goakerberosprovider.c:1356
+#: src/goabackend/goakerberosprovider.c:796
 msgid "Remember this password"
 msgstr "Onthou dié wagwoord"
 
-#: ../src/goabackend/goakerberosprovider.c:1495
-#, c-format
-msgid "The domain is not valid"
-msgstr "Die domein is nie geldig nie"
-
-#: ../src/goabackend/goakerberosprovider.c:1650
+#: src/goabackend/goakerberosprovider.c:976
 msgid "Error connecting to enterprise identity server"
 msgstr ""
 
-#: ../src/goabackend/goakerberosprovider.c:1728
-msgid "Network _Resources"
-msgstr "Netwe_rkhulpbronne"
+#: src/goabackend/goakerberosprovider.c:1315
+msgid "Identity service returned invalid key"
+msgstr "Identiteitsdiens het net ongeldige sleutel geantwoord"
+
+#: src/goabackend/goalastfmprovider.c:65
+msgid "Last.fm"
+msgstr ""
+
+#: src/goabackend/goalastfmprovider.c:700
+#: src/goabackend/goalastfmprovider.c:850
+#, fuzzy
+#| msgid "Error connecting to IMAP server"
+msgid "Error connecting to Last.fm"
+msgstr "Fout met die koppeling aan die IMAP-bediener"
+
+#: src/goabackend/goamediaserverprovider.c:63
+#, fuzzy
+#| msgid "IMAP _Server"
+msgid "Media Server"
+msgstr "IMAP-_bediener"
+
+#: src/goabackend/goamediaserverprovider.c:316
+msgid ""
+"Personal content can be added to your applications through a media server "
+"account."
+msgstr ""
+
+#: src/goabackend/goamediaserverprovider.c:329
+msgid "Available Media Servers"
+msgstr ""
+
+#: src/goabackend/goamediaserverprovider.c:360
+msgid "No media servers found"
+msgstr ""
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:658
-#: ../src/goabackend/goaoauthprovider.c:586
+#: src/goabackend/goaoauth2provider.c:632 src/goabackend/goaoauthprovider.c:542
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr ""
 
-#: ../src/goabackend/goaoauth2provider.c:916
-#: ../src/goabackend/goaoauth2provider.c:956
-#, c-format
-msgid "Authorization response was \"%s\""
+#: src/goabackend/goaoauth2provider.c:814
+msgid "Authorization response: "
 msgstr ""
 
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:1059
+#: src/goabackend/goaoauth2provider.c:884
 #, c-format
-msgid ""
-"Paste authorization code obtained from the <a href=\"%s\">authorization "
-"page</a>:"
+msgid "Authorization response: %s"
 msgstr ""
 
-#: ../src/goabackend/goaoauth2provider.c:1159
-#: ../src/goabackend/goaoauthprovider.c:1072
+#: src/goabackend/goaoauth2provider.c:1021
+#: src/goabackend/goaoauthprovider.c:890
 msgid "Error getting an Access Token: "
 msgstr ""
 
-#: ../src/goabackend/goaoauth2provider.c:1174
-#: ../src/goabackend/goaoauthprovider.c:1085
+#: src/goabackend/goaoauth2provider.c:1036
+#: src/goabackend/goaoauthprovider.c:903
 msgid "Error getting identity: "
 msgstr ""
 
-#: ../src/goabackend/goaoauth2provider.c:1386
-#: ../src/goabackend/goaoauthprovider.c:1391
+#: src/goabackend/goaoauth2provider.c:1254
+#: src/goabackend/goaoauthprovider.c:1192
 #, c-format
-msgid "Was asked to login as %s, but logged in as %s"
+msgid "Was asked to log in as %s, but logged in as %s"
 msgstr ""
 
-#: ../src/goabackend/goaoauth2provider.c:1545
-#, c-format
+#: src/goabackend/goaoauth2provider.c:1406
 msgid "Credentials do not contain access_token"
 msgstr ""
 
-#: ../src/goabackend/goaoauth2provider.c:1584
-#: ../src/goabackend/goaoauthprovider.c:1619
+#: src/goabackend/goaoauth2provider.c:1445
+#: src/goabackend/goaoauthprovider.c:1407
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr ""
 
-#: ../src/goabackend/goaoauthprovider.c:609
-#, c-format
+#: src/goabackend/goaoauthprovider.c:565
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr ""
 
-#: ../src/goabackend/goaoauthprovider.c:911
+#: src/goabackend/goaoauthprovider.c:773
 msgid "Error getting a Request Token: "
 msgstr ""
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:944
+#: src/goabackend/goaoauthprovider.c:804
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr ""
 
-#: ../src/goabackend/goaoauthprovider.c:961
-#, c-format
+#: src/goabackend/goaoauthprovider.c:821
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr ""
 
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:978
-#, c-format
-msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr ""
-
-#: ../src/goabackend/goaoauthprovider.c:1575
-#, c-format
+#: src/goabackend/goaoauthprovider.c:1363
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr ""
 
-#: ../src/goabackend/goaowncloudprovider.c:87
-msgid "ownCloud"
-msgstr "ownCloud"
+#: src/goabackend/goaowncloudprovider.c:60
+msgid "Nextcloud"
+msgstr ""
 
-#: ../src/goabackend/goaowncloudprovider.c:860
-#: ../src/goabackend/goaowncloudprovider.c:1041
+#: src/goabackend/goaowncloudprovider.c:731
+#: src/goabackend/goaowncloudprovider.c:922
 msgid "Error connecting to ownCloud server"
 msgstr "Fout met die koppeling aan die ownCloud-bediener"
 
-#: ../src/goabackend/goaowncloudprovider.c:1119
+#: src/goabackend/goapocketprovider.c:74
+msgid "Pocket"
+msgstr ""
+
+#. TODO: more specific
+#: src/goabackend/goapocketprovider.c:249
+msgid "No username or access_token"
+msgstr ""
+
+#: src/goabackend/goaprovider.c:114
+msgid "_Mail"
+msgstr "_Pos"
+
+#: src/goabackend/goaprovider.c:119
+msgid "Cale_ndar"
+msgstr "Kale_nder"
+
+#: src/goabackend/goaprovider.c:124
+msgid "_Contacts"
+msgstr "_Kontakte"
+
+#: src/goabackend/goaprovider.c:129 src/goabackend/goatelepathyprovider.c:951
+msgid "C_hat"
+msgstr "_Gesels"
+
+#: src/goabackend/goaprovider.c:134
+msgid "_Documents"
+msgstr "_Dokumente"
+
+#: src/goabackend/goaprovider.c:139
+msgid "M_usic"
+msgstr ""
+
+#: src/goabackend/goaprovider.c:144
+msgid "_Photos"
+msgstr "_Foto's"
+
+#: src/goabackend/goaprovider.c:149
 msgid "_Files"
 msgstr "_Lêers"
 
-#: ../src/goabackend/goaprovider.c:688
+#: src/goabackend/goaprovider.c:154
+msgid "Network _Resources"
+msgstr "Netwe_rkhulpbronne"
+
+#: src/goabackend/goaprovider.c:159
+msgid "_Read Later"
+msgstr ""
+
+#: src/goabackend/goaprovider.c:164
+msgid "Prin_ters"
+msgstr ""
+
+#: src/goabackend/goaprovider.c:169
+msgid "_Maps"
+msgstr ""
+
+#: src/goabackend/goaprovider.c:174
+msgid "T_o Do"
+msgstr ""
+
+#. Translators: This is a label for a series of
+#. * options switches. For example: “Use for Mail”.
+#: src/goabackend/goaprovider.c:588 src/goabackend/goatelepathyprovider.c:949
+msgid "Use for"
+msgstr "Gebruik vir"
+
+#: src/goabackend/goaprovider.c:843
+msgid "Account is disabled"
+msgstr ""
+
+#: src/goabackend/goaprovider.c:856
+msgid "Unknown error"
+msgstr ""
+
+#: src/goabackend/goaprovider.c:875
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr ""
 
 #. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:161
-#, c-format
+#: src/goabackend/goasmtpauth.c:170
 msgid "TLS not available"
 msgstr "TLS nie beskikbaar nie"
 
-#. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:227
-#, c-format
-msgid "org.gnome.OnlineAccounts.Mail is not available"
+#: src/goabackend/goasmtpauth.c:476
+msgid "Unknown authentication mechanism"
 msgstr ""
 
-#. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:237
-#, c-format
-msgid "Failed to parse email address"
-msgstr ""
-
-#. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:249
-#, c-format
-msgid "Cannot do SMTP PLAIN without a domain"
-msgstr ""
-
-#. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:287
-#, c-format
-msgid "Did not find smtp-password in credentials"
-msgstr ""
-
-#. TODO: more specific
-#: ../src/goabackend/goasmtpauthplain.c:298
-#, c-format
-msgid "Cannot do SMTP PLAIN without a password"
-msgstr ""
-
-#: ../src/goabackend/goatelepathyprovider.c:184
-#, c-format
+#: src/goabackend/goatelepathyprovider.c:172
 msgid "Telepathy chat account not found"
 msgstr ""
 
-#: ../src/goabackend/goatelepathyprovider.c:373
-#, c-format
-msgid "Failed to initialize a GOA client"
-msgstr ""
-
-#: ../src/goabackend/goatelepathyprovider.c:416
+#: src/goabackend/goatelepathyprovider.c:434
 #, c-format
 msgid "Failed to create a user interface for %s"
 msgstr ""
 
-#: ../src/goabackend/goatelepathyprovider.c:543
+#: src/goabackend/goatelepathyprovider.c:540
 msgid "Connection Settings"
 msgstr "Verbindinginstellings"
 
-#: ../src/goabackend/goatelepathyprovider.c:652
+#: src/goabackend/goatelepathyprovider.c:646
 msgid "Personal Details"
 msgstr "Persoonlike besonderhede"
 
-#: ../src/goabackend/goatelepathyprovider.c:861
+#: src/goabackend/goatelepathyprovider.c:652
+msgid "_OK"
+msgstr ""
+
+#: src/goabackend/goatelepathyprovider.c:898
 msgid "Cannot save the connection parameters"
 msgstr ""
 
-#: ../src/goabackend/goatelepathyprovider.c:873
+#: src/goabackend/goatelepathyprovider.c:911
 msgid "Cannot save your personal information on the server"
 msgstr ""
 
 #. Connection Settings button
-#: ../src/goabackend/goatelepathyprovider.c:902
+#: src/goabackend/goatelepathyprovider.c:956
 msgid "_Connection Settings"
 msgstr "_Verbindinginstellings"
 
 #. Edit Personal Information button
-#: ../src/goabackend/goatelepathyprovider.c:906
+#: src/goabackend/goatelepathyprovider.c:960
 msgid "_Personal Details"
 msgstr "_Persoonlike besonderhede"
 
-#: ../src/goabackend/goatwitterprovider.c:81
-msgid "Twitter"
-msgstr "Twitter"
+#: src/goabackend/goatodoistprovider.c:58
+msgid "Todoist"
+msgstr ""
 
-#: ../src/goabackend/goautils.c:120
+#: src/goabackend/goautils.c:96
+msgid "Error logging into the account"
+msgstr ""
+
+#: src/goabackend/goautils.c:140
+msgid "Credentials have expired"
+msgstr ""
+
+#: src/goabackend/goautils.c:144
+msgid "Sign in to enable this account."
+msgstr ""
+
+#: src/goabackend/goautils.c:148
+msgid "_Sign In"
+msgstr ""
+
+#: src/goabackend/goautils.c:280
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "'n %s-rekening bestaan reeds vir %s"
 
-#. Translators: the %s is the name of the provider. eg., Google.
-#: ../src/goabackend/goautils.c:142
-#, c-format
-msgid "%s account"
+#. Translators: this is the title of the "Add Account" and "Refresh
+#. * Account" dialogs. The %s is the name of the provider. eg.,
+#. * 'Google'.
+#.
+#: src/goabackend/goautils.c:333
+#, fuzzy, c-format
+#| msgid "%s account"
+msgid "%s Account"
 msgstr "%s-rekening"
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:186
+#: src/goabackend/goautils.c:387
 msgid "Failed to delete credentials from the keyring"
 msgstr ""
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:238
+#: src/goabackend/goautils.c:435
 msgid "Failed to retrieve credentials from the keyring"
 msgstr ""
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:248
+#: src/goabackend/goautils.c:445
 msgid "No credentials found in the keyring"
 msgstr ""
 
-#: ../src/goabackend/goautils.c:261
+#: src/goabackend/goautils.c:458
 msgid "Error parsing result obtained from the keyring: "
 msgstr ""
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goautils.c:304
+#: src/goabackend/goautils.c:499
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr ""
 
 #. TODO: more specific
-#: ../src/goabackend/goautils.c:321
+#: src/goabackend/goautils.c:516
 msgid "Failed to store credentials in the keyring"
 msgstr ""
 
-#: ../src/goabackend/goautils.c:542
+#: src/goabackend/goautils.c:865
+msgid "Cannot resolve hostname"
+msgstr ""
+
+#: src/goabackend/goautils.c:869
+msgid "Cannot resolve proxy hostname"
+msgstr ""
+
+#: src/goabackend/goautils.c:874
+msgid "Cannot find WebDAV endpoint"
+msgstr ""
+
+#: src/goabackend/goautils.c:883
+#, c-format
+msgid "Code: %u — Unexpected response from server"
+msgstr ""
+
+#: src/goabackend/goautils.c:899
 msgid "The signing certificate authority is not known."
 msgstr ""
 
-#: ../src/goabackend/goautils.c:546
+#: src/goabackend/goautils.c:903
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr ""
 
-#: ../src/goabackend/goautils.c:551
-msgid "The certificate's activation time is still in the future."
+#: src/goabackend/goautils.c:908
+msgid "The certificate’s activation time is still in the future."
 msgstr ""
 
-#: ../src/goabackend/goautils.c:555
+#: src/goabackend/goautils.c:912
 msgid "The certificate has expired."
 msgstr ""
 
-#: ../src/goabackend/goautils.c:559
+#: src/goabackend/goautils.c:916
 msgid "The certificate has been revoked."
 msgstr ""
 
-#: ../src/goabackend/goautils.c:563
-msgid "The certificate's algorithm is considered insecure."
+#: src/goabackend/goautils.c:920
+msgid "The certificate’s algorithm is considered insecure."
 msgstr ""
 
-#: ../src/goabackend/goautils.c:567
+#: src/goabackend/goautils.c:926
 msgid "Invalid certificate."
 msgstr ""
 
+#. TODO: more specific
+#: src/goabackend/goautils.c:961
+#, c-format
+msgid "Did not find %s with identity “%s” in credentials"
+msgstr ""
+
 #. translators: %s here is the address of the web page
-#: ../src/goabackend/goawebview.c:74
+#: src/goabackend/goawebview.c:94
 #, c-format
 msgid "Loading “%s”…"
 msgstr "Laai tans “%s”…"
 
-#: ../src/goabackend/goawindowsliveprovider.c:84
-msgid "Windows Live"
-msgstr "Windows Live"
+#: src/goabackend/goawindowsliveprovider.c:56
+#, fuzzy
+#| msgid "Microsoft Exchange"
+msgid "Microsoft"
+msgstr "Microsoft Exchange"
 
-#: ../src/goabackend/goayahooprovider.c:81
-msgid "Yahoo"
-msgstr "Yahoo"
-
-#: ../src/goabackend/goayahooprovider.c:255
-#, c-format
-msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-msgstr ""
-
-#: ../src/goaidentity/goaalarm.c:245
-msgid "Time"
-msgstr "Tyd"
-
-#: ../src/goaidentity/goaalarm.c:246
-msgid "Time to fire"
-msgstr ""
-
-#: ../src/goaidentity/goaidentityservice.c:378
-msgid "initial secret passed before secret key exchange"
-msgstr ""
-
-#: ../src/goaidentity/goaidentityservice.c:570
+#: src/goaidentity/goaidentityservice.c:568
 msgid "Initial secret key is invalid"
 msgstr ""
 
-#: ../src/goaidentity/goaidentityservice.c:1090
+#: src/goaidentity/goaidentityservice.c:1077
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr ""
 
-#: ../src/goaidentity/goakerberosidentity.c:269
-#: ../src/goaidentity/goakerberosidentity.c:278
-#: ../src/goaidentity/goakerberosidentity.c:606
-msgid "Could not find identity in credential cache: %k"
+#: src/goaidentity/goakerberosidentity.c:275
+#: src/goaidentity/goakerberosidentity.c:283
+#: src/goaidentity/goakerberosidentity.c:707
+msgid "Could not find identity in credential cache: "
 msgstr ""
 
-#: ../src/goaidentity/goakerberosidentity.c:619
-msgid "Could not find identity credentials in cache: %k"
+#: src/goaidentity/goakerberosidentity.c:720
+msgid "Could not find identity credentials in cache: "
 msgstr ""
 
-#: ../src/goaidentity/goakerberosidentity.c:657
-msgid "Could not sift through identity credentials in cache: %k"
+#: src/goaidentity/goakerberosidentity.c:771
+msgid "Could not sift through identity credentials in cache: "
 msgstr ""
 
-#: ../src/goaidentity/goakerberosidentity.c:674
-msgid "Could not finish up sifting through identity credentials in cache: %k"
+#: src/goaidentity/goakerberosidentity.c:788
+msgid "Could not finish up sifting through identity credentials in cache: "
 msgstr ""
 
-#: ../src/goaidentity/goakerberosidentity.c:1012
-#, c-format
+#: src/goaidentity/goakerberosidentity.c:1103
 msgid "No associated identification found"
 msgstr ""
 
-#: ../src/goaidentity/goakerberosidentity.c:1093
-msgid "Could not create credential cache: %k"
+#: src/goaidentity/goakerberosidentity.c:1186
+msgid "Could not create credential cache: "
 msgstr ""
 
-#: ../src/goaidentity/goakerberosidentity.c:1127
-msgid "Could not initialize credentials cache: %k"
+#: src/goaidentity/goakerberosidentity.c:1220
+msgid "Could not initialize credentials cache: "
 msgstr ""
 
-#: ../src/goaidentity/goakerberosidentity.c:1146
-msgid "Could not store new credentials in credentials cache: %k"
+#: src/goaidentity/goakerberosidentity.c:1236
+msgid "Could not store new credentials in credentials cache: "
 msgstr ""
 
-#: ../src/goaidentity/goakerberosidentity.c:1423
-#, c-format
+#: src/goaidentity/goakerberosidentity.c:1534
 msgid "Could not renew identity: Not signed in"
 msgstr ""
 
-#: ../src/goaidentity/goakerberosidentity.c:1435
-msgid "Could not renew identity: %k"
+#: src/goaidentity/goakerberosidentity.c:1546
+#, fuzzy
+#| msgid "Could not parse response"
+msgid "Could not renew identity: "
+msgstr "Kon nie antwoord ontleed nie"
+
+#: src/goaidentity/goakerberosidentity.c:1562
+#, c-format
+msgid "Could not get new credentials to renew identity %s: "
 msgstr ""
 
-#: ../src/goaidentity/goakerberosidentity.c:1452
-msgid "Could not get new credentials to renew identity %s: %k"
-msgstr ""
+#: src/goaidentity/goakerberosidentity.c:1604
+#, fuzzy
+#| msgid "Could not parse response"
+msgid "Could not erase identity: "
+msgstr "Kon nie antwoord ontleed nie"
 
-#: ../src/goaidentity/goakerberosidentity.c:1492
-msgid "Could not erase identity: %k"
-msgstr ""
-
-#: ../src/goaidentity/goakerberosidentitymanager.c:747
+#: src/goaidentity/goakerberosidentitymanager.c:749
 msgid "Could not find identity"
 msgstr ""
 
-#: ../src/goaidentity/goakerberosidentitymanager.c:824
+#: src/goaidentity/goakerberosidentitymanager.c:845
 msgid "Could not create credential cache for identity"
 msgstr ""
+
+#~ msgid "_Domain"
+#~ msgstr "_Domein"
+
+#~ msgid "The domain is not valid"
+#~ msgstr "Die domein is nie geldig nie"
+
+#~ msgid "ownCloud"
+#~ msgstr "ownCloud"
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#~ msgid "Windows Live"
+#~ msgstr "Windows Live"
+
+#~ msgid "Yahoo"
+#~ msgstr "Yahoo"
+
+#~ msgid "Time"
+#~ msgstr "Tyd"
