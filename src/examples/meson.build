@@ -8,7 +8,6 @@ if enable_goabackend
   programs += [
     ['introspect-providers', libgoa_backend_dep],
     ['list-providers', libgoa_backend_dep],
-    ['add-pocket', [libgoa_dep, rest_dep]]
   ]
 endif
 
