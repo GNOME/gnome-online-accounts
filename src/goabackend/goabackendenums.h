@@ -67,7 +67,7 @@ typedef enum
  * @GOA_PROVIDER_FEATURE_PHOTOS: Photos storage services (ie. Flickr).
  * @GOA_PROVIDER_FEATURE_FILES: Files storage services (ie. WebDAV).
  * @GOA_PROVIDER_FEATURE_TICKETING: Ticketing services (ie. Kerberos).
- * @GOA_PROVIDER_FEATURE_READ_LATER: Read later services (eg. Pocket).
+ * @GOA_PROVIDER_FEATURE_READ_LATER: Deprecated; currently unused.
  * @GOA_PROVIDER_FEATURE_PRINTERS: Network printing services (e.g. Google Cloud Print).
  * @GOA_PROVIDER_FEATURE_MAPS: Maps related services (e.g. Foursquare, Facebook).
  * @GOA_PROVIDER_FEATURE_MUSIC: Music related services (e.g. Vkontakte).

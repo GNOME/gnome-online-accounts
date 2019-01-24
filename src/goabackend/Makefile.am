@@ -92,7 +92,6 @@ libgoa_backend_1_0_la_SOURCES =						\
 	goaflickrprovider.h		goaflickrprovider.c		\
 	goafoursquareprovider.h		goafoursquareprovider.c		\
 	goawindowsliveprovider.h	goawindowsliveprovider.c	\
-	goapocketprovider.h		goapocketprovider.c		\
 	goalastfmprovider.h		goalastfmprovider.c		\
 	goaobjectskeletonutils.h	goaobjectskeletonutils.c	\
 	goautils.h			goautils.c			\

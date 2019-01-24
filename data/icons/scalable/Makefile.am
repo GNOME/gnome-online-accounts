@@ -11,7 +11,6 @@ icon_DATA =				\
 	goa-account-lastfm.svg		\
 	goa-account-msn.svg		\
 	goa-account-owncloud.svg	\
-	goa-account-pocket.svg		\
 	goa-account-foursquare.svg	\
 	$(NULL)
 

@@ -9,7 +9,6 @@ icon_scalable_data = [
   'goa-account-lastfm.svg',
   'goa-account-msn.svg',
   'goa-account-owncloud.svg',
-  'goa-account-pocket.svg',
 ]
 
 icon_symbolic_data = [
@@ -22,7 +21,6 @@ icon_symbolic_data = [
   'goa-account-lastfm-symbolic.svg',
   'goa-account-msn-symbolic.svg',
   'goa-account-owncloud-symbolic.svg',
-  'goa-account-pocket-symbolic.svg',
 ]
 
 icons = [
