@@ -207,15 +207,6 @@ config_h.set_quoted('GOA_OWNCLOUD_NAME', 'owncloud')
 enable_owncloud = get_option('owncloud')
 config_h.set('GOA_OWNCLOUD_ENABLED', enable_owncloud)
 
-# Pocket
-config_h.set_quoted('GOA_POCKET_NAME', 'pocket')
-
-pocket_client_id = get_option('pocket_client_id')
-config_h.set_quoted('GOA_POCKET_CLIENT_ID', pocket_client_id)
-
-enable_pocket = get_option('pocket')
-config_h.set('GOA_POCKET_ENABLED', enable_pocket)
-
 # Windows Live
 config_h.set_quoted('GOA_WINDOWS_LIVE_NAME', 'windows_live')
 
@@ -338,10 +329,6 @@ output += '\n'
 output += '        Media Server provider:          ' + enable_media_server.to_string() + '\n'
 output += '        Microsoft Exchange provider:    ' + enable_exchange.to_string() + '\n'
 output += '        ownCloud provider:              ' + enable_owncloud.to_string() + '\n'
-output += '        Pocket provider:                ' + enable_pocket.to_string()
-if enable_pocket
-  output += ' (id:@0@)'.format(pocket_client_id)
-endif
 output += '\n'
 output += '        Windows Live provider:          ' + enable_windows_live.to_string()
 if enable_windows_live
