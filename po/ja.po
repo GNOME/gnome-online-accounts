@@ -2,7 +2,7 @@
 # Copyright (C) 2011,2012 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
 # Takeshi AIHANA <takeshi.aihana@gmail.com>, 2011.
-# Hajime Taira <htaira@redhat.com>, 2012.
+# Hajime Taira <htaira@redhat.com>, 2012, 2016.
 # Shuuji Takahashi <shuuji3@gmail.com>, 2012.
 # Noriko Mizumoto <noriko@fedoraproject.org>, 2012.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2012.
@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
 "POT-Creation-Date: 2018-11-23 11:50+0000\n"
-"PO-Revision-Date: 2019-01-30 20:00+0900\n"
+"PO-Revision-Date: 2019-01-30 20:08+0900\n"
 "Last-Translator: Hajime Taira <htaira@redhat.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
@@ -61,10 +61,9 @@ msgstr "自動検出の応答 XML の解析に失敗しました"
 #. Translators: the parameter is an XML element name.
 #: src/goabackend/goaewsclient.c:249 src/goabackend/goaewsclient.c:264
 #: src/goabackend/goaewsclient.c:279
-#, fuzzy, c-format
-#| msgid "Failed to find ‘%s’ element"
+#, c-format
 msgid "Failed to find “%s” element"
-msgstr "‘%s’エレメントの検出に失敗しました"
+msgstr "“%s”エレメントの検出に失敗しました"
 
 #. TODO: more specific
 #: src/goabackend/goaewsclient.c:300
@@ -82,10 +81,9 @@ msgstr "Microsoft Exchange"
 #: src/goabackend/goaexchangeprovider.c:248
 #: src/goabackend/goalastfmprovider.c:287
 #: src/goabackend/goaowncloudprovider.c:291
-#, fuzzy, c-format
-#| msgid "Invalid password with username ‘%s’ (%s, %d): "
+#, c-format
 msgid "Invalid password with username “%s” (%s, %d): "
-msgstr "ユーザー名‘%s’のパスワードが不正です (%s, %d):"
+msgstr "ユーザー名“%s”のパスワードが不正です (%s, %d):"
 
 #: src/goabackend/goaexchangeprovider.c:396
 #: src/goabackend/goaimapsmtpprovider.c:647
@@ -303,10 +301,9 @@ msgstr "IMAP と SMTP"
 #.
 #: src/goabackend/goaimapsmtpprovider.c:327
 #: src/goabackend/goaimapsmtpprovider.c:378
-#, fuzzy, c-format
-#| msgid "Invalid %s with username ‘%s’ (%s, %d): "
+#, c-format
 msgid "Invalid %s with username “%s” (%s, %d): "
-msgstr "ユーザー名‘%2$s’の %1$s が不正です (%3$s, %4$d): "
+msgstr "ユーザー名“%2$s”の %1$s が不正です (%3$s, %4$d): "
 
 #. Translators: the following four strings are used to show a
 #. * combo box similar to the one in the evolution module.
@@ -385,16 +382,14 @@ msgid "Ticketing is disabled for account"
 msgstr "このアカウントのチケッティングは無効化されています"
 
 #: src/goabackend/goakerberosprovider.c:245
-#, fuzzy, c-format
-#| msgid "Could not find saved credentials for principal ‘%s’ in keyring"
+#, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
-msgstr "キーリングにユーザー‘%s’用に保存した証明書が見つかりませんでした"
+msgstr "キーリングにユーザー“%s”用に保存した証明書が見つかりませんでした"
 
 #: src/goabackend/goakerberosprovider.c:258
-#, fuzzy, c-format
-#| msgid "Did not find password for principal ‘%s’ in credentials"
+#, c-format
 msgid "Did not find password for principal “%s” in credentials"
-msgstr "証明書の中にユーザー‘%s’のパスワードが見つかりませんでした"
+msgstr "証明書の中にユーザー“%s”のパスワードが見つかりませんでした"
 
 #: src/goabackend/goakerberosprovider.c:558
 msgid "_Principal"
@@ -529,7 +524,7 @@ msgstr "証明書に access_token や access_token_secret が含まれていま�
 
 #: src/goabackend/goaowncloudprovider.c:60
 msgid "Nextcloud"
-msgstr ""
+msgstr "Nextcloud"
 
 #: src/goabackend/goaowncloudprovider.c:731
 #: src/goabackend/goaowncloudprovider.c:922
@@ -595,7 +590,7 @@ msgstr "地図(_M)"
 
 #: src/goabackend/goaprovider.c:169
 msgid "T_o Do"
-msgstr ""
+msgstr "To Do(_O)"
 
 #. Translators: This is a label for a series of
 #. * options switches. For example: “Use for Mail”.
@@ -641,7 +636,7 @@ msgstr ""
 
 #: src/goabackend/goautils.c:144
 msgid "_Sign In"
-msgstr ""
+msgstr "サインイン(_S)"
 
 #: src/goabackend/goautils.c:240
 #, c-format
@@ -653,8 +648,7 @@ msgstr "%s アカウントは、すでに %s に使用されています。"
 #. * 'Google'.
 #.
 #: src/goabackend/goautils.c:293
-#, fuzzy, c-format
-#| msgid "%s account"
+#, c-format
 msgid "%s Account"
 msgstr "%s アカウント"
 
@@ -737,10 +731,9 @@ msgstr "不正な証明書です。"
 
 #. TODO: more specific
 #: src/goabackend/goautils.c:921
-#, fuzzy, c-format
-#| msgid "Did not find %s with identity ‘%s’ in credentials"
+#, c-format
 msgid "Did not find %s with identity “%s” in credentials"
-msgstr "資格情報に識別子‘%2$s’の %1$s が見つかりませんでした。"
+msgstr "資格情報に識別子“%2$s”の %1$s が見つかりませんでした。"
 
 #. translators: %s here is the address of the web page
 #: src/goabackend/goawebview.c:94
@@ -749,10 +742,8 @@ msgid "Loading “%s”…"
 msgstr "“%s”をロード中…"
 
 #: src/goabackend/goawindowsliveprovider.c:56
-#, fuzzy
-#| msgid "Microsoft Account"
 msgid "Microsoft"
-msgstr "Microsoft アカウント"
+msgstr "Microsoft"
 
 #: src/goaidentity/goaidentityservice.c:568
 msgid "Initial secret key is invalid"
@@ -768,73 +759,53 @@ msgstr ""
 #: src/goaidentity/goakerberosidentity.c:275
 #: src/goaidentity/goakerberosidentity.c:283
 #: src/goaidentity/goakerberosidentity.c:707
-#, fuzzy
-#| msgid "Could not find identity in credential cache: %k"
 msgid "Could not find identity in credential cache: "
-msgstr "証明書キャッシュに識別情報が見つかりませんでした: %k"
+msgstr "証明書キャッシュに識別情報が見つかりませんでした: "
 
 #: src/goaidentity/goakerberosidentity.c:720
-#, fuzzy
-#| msgid "Could not find identity credentials in cache: %k"
 msgid "Could not find identity credentials in cache: "
-msgstr "キャッシュに識別情報の証明書が見つかりませんでした: %k"
+msgstr "キャッシュに識別情報の証明書が見つかりませんでした: "
 
 #: src/goaidentity/goakerberosidentity.c:771
-#, fuzzy
-#| msgid "Could not sift through identity credentials in cache: %k"
 msgid "Could not sift through identity credentials in cache: "
-msgstr "キャッシュにある識別情報の証明書の選別ができませんでした: %k"
+msgstr "キャッシュにある識別情報の証明書の選別ができませんでした: "
 
 #: src/goaidentity/goakerberosidentity.c:788
-#, fuzzy
-#| msgid ""
-#| "Could not finish up sifting through identity credentials in cache: %k"
 msgid "Could not finish up sifting through identity credentials in cache: "
-msgstr "キャッシュにある識別情報の証明書の選別を終了できませんでした: %k"
+msgstr "キャッシュにある識別情報の証明書の選別を終了できませんでした: "
 
 #: src/goaidentity/goakerberosidentity.c:1103
 msgid "No associated identification found"
 msgstr "関連のある ID が見つかりませんでした"
 
 #: src/goaidentity/goakerberosidentity.c:1186
-#, fuzzy
-#| msgid "Could not create credential cache: %k"
 msgid "Could not create credential cache: "
-msgstr "証明書キャッシュを作成できませんでした: %k"
+msgstr "証明書キャッシュを作成できませんでした: "
 
 #: src/goaidentity/goakerberosidentity.c:1220
-#, fuzzy
-#| msgid "Could not initialize credentials cache: %k"
 msgid "Could not initialize credentials cache: "
-msgstr "証明書用キャッシュを初期化できませんでした: %k"
+msgstr "証明書用キャッシュを初期化できませんでした: "
 
 #: src/goaidentity/goakerberosidentity.c:1236
-#, fuzzy
-#| msgid "Could not store new credentials in credentials cache: %k"
 msgid "Could not store new credentials in credentials cache: "
-msgstr "証明書用キャッシュに新しい証明書を保存できませんでした: %k"
+msgstr "証明書用キャッシュに新しい証明書を保存できませんでした: "
 
 #: src/goaidentity/goakerberosidentity.c:1534
 msgid "Could not renew identity: Not signed in"
 msgstr "識別情報を更新できませんでした: サインインしていません"
 
 #: src/goaidentity/goakerberosidentity.c:1546
-#, fuzzy
-#| msgid "Could not renew identity: %k"
 msgid "Could not renew identity: "
-msgstr "識別情報を更新できませんでした: %k"
+msgstr "識別情報を更新できませんでした: "
 
 #: src/goaidentity/goakerberosidentity.c:1562
-#, fuzzy, c-format
-#| msgid "Could not get new credentials to renew identity %s: %k"
+#, c-format
 msgid "Could not get new credentials to renew identity %s: "
-msgstr "識別情報 %s の更新に必要な新しい証明書が取得できませんでした: %k"
+msgstr "識別情報 %s の更新に必要な新しい証明書が取得できませんでした: "
 
 #: src/goaidentity/goakerberosidentity.c:1604
-#, fuzzy
-#| msgid "Could not erase identity: %k"
 msgid "Could not erase identity: "
-msgstr "識別情報の消去ができませんでした: %k"
+msgstr "識別情報の消去ができませんでした: "
 
 #: src/goaidentity/goakerberosidentitymanager.c:749
 msgid "Could not find identity"
