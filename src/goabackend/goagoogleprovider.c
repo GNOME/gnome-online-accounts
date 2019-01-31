@@ -172,6 +172,7 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
   call = rest_proxy_new_call (proxy);
   rest_proxy_call_set_method (call, "GET");
   rest_proxy_call_add_param (call, "access_token", access_token);
+  rest_proxy_call_add_param (call, "fields", "email");
 
   if (!rest_proxy_call_sync (call, error))
     goto out;
