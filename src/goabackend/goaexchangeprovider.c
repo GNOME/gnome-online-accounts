@@ -61,7 +61,6 @@ static GoaProviderFeatures
 get_provider_features (GoaProvider *provider)
 {
   return GOA_PROVIDER_FEATURE_BRANDED |
-         GOA_PROVIDER_FEATURE_MAIL |
          GOA_PROVIDER_FEATURE_CALENDAR |
          GOA_PROVIDER_FEATURE_CONTACTS;
 }
@@ -84,11 +83,9 @@ build_object (GoaProvider         *provider,
 {
   GoaAccount *account = NULL;
   GoaExchange *exchange = NULL;
-  GoaMail *mail = NULL;
   GoaPasswordBased *password_based = NULL;
   gboolean calendar_enabled;
   gboolean contacts_enabled;
-  gboolean mail_enabled;
   gboolean ret = FALSE;
 
   /* Chain up */
@@ -116,27 +113,6 @@ build_object (GoaProvider         *provider,
     }
 
   account = goa_object_get_account (GOA_OBJECT (object));
-
-  /* Email */
-  mail = goa_object_get_mail (GOA_OBJECT (object));
-  mail_enabled = g_key_file_get_boolean (key_file, group, "MailEnabled", NULL);
-  if (mail_enabled)
-    {
-      if (mail == NULL)
-        {
-          const gchar *email_address;
-
-          email_address = goa_account_get_presentation_identity (account);
-          mail = goa_mail_skeleton_new ();
-          g_object_set (G_OBJECT (mail), "email-address", email_address, NULL);
-          goa_object_skeleton_set_mail (object, mail);
-        }
-    }
-  else
-    {
-      if (mail != NULL)
-        goa_object_skeleton_set_mail (object, NULL);
-    }
 
   /* Calendar */
   calendar_enabled = g_key_file_get_boolean (key_file, group, "CalendarEnabled", NULL);
@@ -166,14 +142,9 @@ build_object (GoaProvider         *provider,
 
   if (just_added)
     {
-      goa_account_set_mail_disabled (account, !mail_enabled);
       goa_account_set_calendar_disabled (account, !calendar_enabled);
       goa_account_set_contacts_disabled (account, !contacts_enabled);
 
-      g_signal_connect (account,
-                        "notify::mail-disabled",
-                        G_CALLBACK (goa_util_account_notify_property_cb),
-                        (gpointer) "MailEnabled");
       g_signal_connect (account,
                         "notify::calendar-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
@@ -188,7 +159,6 @@ build_object (GoaProvider         *provider,
 
  out:
   g_clear_object (&exchange);
-  g_clear_object (&mail);
   g_clear_object (&password_based);
   return ret;
 }
@@ -614,7 +584,6 @@ add_account (GoaProvider    *provider,
   g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (password));
 
   g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
-  g_variant_builder_add (&details, "{ss}", "MailEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "CalendarEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "ContactsEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "Host", server);

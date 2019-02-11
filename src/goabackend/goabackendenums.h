@@ -34,7 +34,7 @@ G_BEGIN_DECLS
  * @GOA_PROVIDER_GROUP_CONTACTS: Providers that offer address book services.
  *   For example, CardDAV.
  * @GOA_PROVIDER_GROUP_MAIL: Providers that offer email-like messaging
- *   services. For example, IMAP and SMTP.
+ *   services. For example, IMAP and SMTP. Currently unused.
  * @GOA_PROVIDER_GROUP_TICKETING: Providers with ticketing
  *   capabilities. For example, Kerberos.
  * @GOA_PROVIDER_GROUP_CHAT: Providers that offer chat-like messaging
@@ -59,7 +59,7 @@ typedef enum
 /**
  * GoaProviderFeatures:
  * @GOA_PROVIDER_FEATURE_BRANDED: Common providers to be highlighted (ie. Google, OwnCloud).
- * @GOA_PROVIDER_FEATURE_MAIL: Mail services (ie. SMTP, IMAP).
+ * @GOA_PROVIDER_FEATURE_MAIL: Mail services (ie. SMTP, IMAP); currently unused.
  * @GOA_PROVIDER_FEATURE_CALENDAR: Calendaring services (ie. CalDAV).
  * @GOA_PROVIDER_FEATURE_CONTACTS: Addressbook services (ie. CardDAV).
  * @GOA_PROVIDER_FEATURE_CHAT: Instant messaging services (ie. XMPP, IRC).
