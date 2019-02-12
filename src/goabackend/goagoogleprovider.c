@@ -131,6 +131,12 @@ get_scope (GoaOAuth2Provider *oauth2_provider)
          "https://www.googleapis.com/auth/tasks";
 }
 
+static gboolean
+get_use_pkce (GoaOAuth2Provider *oauth2_provider)
+{
+  return TRUE;
+}
+
 static guint
 get_credentials_generation (GoaProvider *provider)
 {
@@ -453,6 +459,7 @@ goa_google_provider_class_init (GoaGoogleProviderClass *klass)
   oauth2_class->get_identity_sync         = get_identity_sync;
   oauth2_class->get_redirect_uri          = get_redirect_uri;
   oauth2_class->get_scope                 = get_scope;
+  oauth2_class->get_use_pkce              = get_use_pkce;
   oauth2_class->is_identity_node          = is_identity_node;
   oauth2_class->get_token_uri             = get_token_uri;
   oauth2_class->add_account_key_values    = add_account_key_values;
