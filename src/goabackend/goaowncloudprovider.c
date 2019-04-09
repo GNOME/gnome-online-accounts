@@ -728,7 +728,7 @@ add_account (GoaProvider    *provider,
         }
 
       markup = g_strdup_printf ("<b>%s:</b>\n%s",
-                                _("Error connecting to ownCloud server"),
+                                _("Error connecting to Nextcloud server"),
                                 data.error->message);
       g_clear_error (&data.error);
 
@@ -919,7 +919,7 @@ refresh_account (GoaProvider    *provider,
       gchar *markup;
 
       markup = g_strdup_printf ("<b>%s:</b>\n%s",
-                                _("Error connecting to ownCloud server"),
+                                _("Error connecting to Nextcloud server"),
                                 data.error->message);
       g_clear_error (&data.error);
 
