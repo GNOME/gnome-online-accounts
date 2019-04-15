@@ -67,6 +67,7 @@ get_provider_features (GoaProvider *provider)
 {
   return GOA_PROVIDER_FEATURE_BRANDED |
          GOA_PROVIDER_FEATURE_PHOTOS |
+         GOA_PROVIDER_FEATURE_CONTACTS |
          GOA_PROVIDER_FEATURE_MAPS;
 }
 
@@ -112,6 +113,7 @@ get_scope (GoaOAuth2Provider *oauth2_provider)
   /* see https://developers.facebook.com/docs/authentication/permissions/ */
   /* Note: Email is requested to obtain a human understandable unique Id  */
   return
+    "user_friends,"
     "user_events,"
     "email,"
     "user_photos,"
@@ -122,7 +124,7 @@ get_scope (GoaOAuth2Provider *oauth2_provider)
 static guint
 get_credentials_generation (GoaProvider *provider)
 {
-  return 3;
+  return 4;
 }
 
 static const gchar *
@@ -280,6 +282,7 @@ build_object (GoaProvider         *provider,
   GoaAccount *account = NULL;
   gboolean photos_enabled;
   gboolean maps_enabled;
+  gboolean contacts_enabled;
   gboolean ret = FALSE;
 
   /* Chain up */
@@ -323,6 +326,25 @@ build_object (GoaProvider         *provider,
 
   ret = TRUE;
 
+  /* Contacts */
+  contacts_enabled = g_key_file_get_boolean (key_file, group, "ContactsEnabled", NULL);
+  goa_object_skeleton_attach_contacts (object,
+                                       "https://graph.facebook.com/me/friends",
+                                       contacts_enabled,
+                                       FALSE);
+
+  if (just_added)
+    {
+      goa_account_set_contacts_disabled (account, !contacts_enabled);
+      g_signal_connect (account,
+                        "notify::contacts-disabled",
+                        G_CALLBACK (goa_util_account_notify_property_cb),
+                        "ContactsEnabled");
+    }
+
+  ret = TRUE;
+
+
  out:
   g_clear_object (&account);
   return ret;
@@ -336,6 +358,7 @@ add_account_key_values (GoaOAuth2Provider *oauth2_provider,
 {
   g_variant_builder_add (builder, "{ss}", "PhotosEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "MapsEnabled", "true");
+  g_variant_builder_add (builder, "{ss}", "ContactsEnabled", "true");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
