@@ -298,7 +298,7 @@ goa_web_view_constructed (GObject *object)
                                              "user-content-manager", self->user_content_manager,
                                              "web-context", self->context,
                                              NULL));
-  gtk_widget_set_size_request (self->web_view, 500, 400);
+  gtk_widget_set_size_request (self->web_view, 300, 200);
   gtk_container_add (GTK_CONTAINER (self), self->web_view);
 
 #ifdef GOA_INSPECTOR_ENABLED
