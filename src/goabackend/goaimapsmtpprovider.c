@@ -1461,9 +1461,9 @@ show_account (GoaProvider         *provider,
   grid = gtk_grid_new ();
   gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
   gtk_widget_set_hexpand (grid, TRUE);
-  gtk_widget_set_margin_end (grid, 72);
-  gtk_widget_set_margin_start (grid, 72);
-  gtk_widget_set_margin_top (grid, 24);
+  gtk_widget_set_margin_end (grid, 12);
+  gtk_widget_set_margin_start (grid, 12);
+  gtk_widget_set_margin_top (grid, 12);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
   gtk_container_add (GTK_CONTAINER (vbox), grid);
