@@ -31,6 +31,12 @@
 #include "goawebview.h"
 #include "nautilus-floating-bar.h"
 
+#define GOA_WEB_VIEW_MINIMUM_HEIGHT 300
+#define GOA_WEB_VIEW_NATURAL_HEIGHT 400
+
+#define GOA_WEB_VIEW_MINIMUM_WIDTH 300
+#define GOA_WEB_VIEW_NATURAL_WIDTH 500
+
 struct _GoaWebView
 {
   GtkOverlay parent_instance;
@@ -298,7 +304,6 @@ goa_web_view_constructed (GObject *object)
                                              "user-content-manager", self->user_content_manager,
                                              "web-context", self->context,
                                              NULL));
-  gtk_widget_set_size_request (self->web_view, 500, 400);
   gtk_container_add (GTK_CONTAINER (self), self->web_view);
 
 #ifdef GOA_INSPECTOR_ENABLED
@@ -406,6 +411,28 @@ goa_web_view_set_property (GObject *object, guint prop_id, const GValue *value, 
 }
 
 static void
+goa_web_view_get_preferred_height (GtkWidget *widget,
+                                   gint      *minimum,
+                                   gint      *natural)
+{
+  if (minimum)
+    *minimum = GOA_WEB_VIEW_MINIMUM_HEIGHT;
+  if (natural)
+    *natural = GOA_WEB_VIEW_NATURAL_HEIGHT;
+}
+
+static void
+goa_web_view_get_preferred_width (GtkWidget *widget,
+                                  gint      *minimum,
+                                  gint      *natural)
+{
+  if (minimum)
+    *minimum = GOA_WEB_VIEW_MINIMUM_WIDTH;
+  if (natural)
+    *natural = GOA_WEB_VIEW_NATURAL_WIDTH;
+}
+
+static void
 goa_web_view_init (GoaWebView *self)
 {
 }
@@ -414,12 +441,18 @@ static void
 goa_web_view_class_init (GoaWebViewClass *klass)
 {
   GObjectClass *object_class;
+  GtkWidgetClass *widget_class;
 
   object_class = G_OBJECT_CLASS (klass);
+  widget_class = GTK_WIDGET_CLASS (klass);
+
   object_class->constructed = goa_web_view_constructed;
   object_class->dispose = goa_web_view_dispose;
   object_class->finalize = goa_web_view_finalize;
   object_class->set_property = goa_web_view_set_property;
+
+  widget_class->get_preferred_height = goa_web_view_get_preferred_height;
+  widget_class->get_preferred_width = goa_web_view_get_preferred_width;
 
   g_object_class_install_property (object_class,
                                    PROP_EXISTING_IDENTITY,
