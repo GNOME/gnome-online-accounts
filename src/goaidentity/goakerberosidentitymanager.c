@@ -73,8 +73,9 @@ typedef struct
   GCancellable *cancellable;
   GoaKerberosIdentityManager *manager;
   OperationType type;
+  GMainContext *context;
   GSimpleAsyncResult *result;
-  GIOSchedulerJob *job;
+
   union
   {
     GoaIdentity *identity;
@@ -138,6 +139,8 @@ operation_new (GoaKerberosIdentityManager *self,
     g_object_ref (cancellable);
   operation->cancellable = cancellable;
 
+  operation->context = g_main_context_ref_thread_default ();
+
   if (result != NULL)
     g_object_ref (result);
   operation->result = result;
@@ -151,6 +154,7 @@ static void
 operation_free (Operation *operation)
 {
   g_clear_object (&operation->cancellable);
+  g_clear_pointer (&operation->context, g_main_context_unref);
 
   if (operation->type != OPERATION_TYPE_SIGN_IN &&
       operation->type != OPERATION_TYPE_GET_IDENTITY)
@@ -165,6 +169,82 @@ operation_free (Operation *operation)
   g_clear_object (&operation->result);
 
   g_slice_free (Operation, operation);
+}
+
+typedef struct {
+  GSourceFunc func;
+  gboolean ret_val;
+  gpointer data;
+  GDestroyNotify notify;
+
+  GMutex ack_lock;
+  GCond ack_condition;
+  gboolean ack;
+} MainLoopProxy;
+
+static gboolean
+mainloop_proxy_func (gpointer data)
+{
+  MainLoopProxy *proxy = data;
+
+  proxy->ret_val = proxy->func (proxy->data);
+
+  if (proxy->notify)
+    proxy->notify (proxy->data);
+
+  g_mutex_lock (&proxy->ack_lock);
+  proxy->ack = TRUE;
+  g_cond_signal (&proxy->ack_condition);
+  g_mutex_unlock (&proxy->ack_lock);
+
+  return FALSE;
+}
+
+static void
+mainloop_proxy_free (MainLoopProxy *proxy)
+{
+  g_mutex_clear (&proxy->ack_lock);
+  g_cond_clear (&proxy->ack_condition);
+  g_free (proxy);
+}
+
+static gboolean
+goa_kerberos_identify_manager_send_to_context (GMainContext   *context,
+                                               GSourceFunc     func,
+                                               gpointer        user_data,
+                                               GDestroyNotify  notify)
+{
+  GSource *source;
+  MainLoopProxy *proxy;
+  gboolean ret_val;
+
+  g_return_val_if_fail (context != NULL, FALSE);
+  g_return_val_if_fail (func != NULL, FALSE);
+
+  proxy = g_new0 (MainLoopProxy, 1);
+  proxy->func = func;
+  proxy->data = user_data;
+  proxy->notify = notify;
+  g_mutex_init (&proxy->ack_lock);
+  g_cond_init (&proxy->ack_condition);
+  g_mutex_lock (&proxy->ack_lock);
+
+  source = g_idle_source_new ();
+  g_source_set_priority (source, G_PRIORITY_DEFAULT);
+  g_source_set_callback (source, mainloop_proxy_func, proxy, NULL);
+  g_source_set_name (source, "[goa] mainloop_proxy_func");
+
+  g_source_attach (source, context);
+  g_source_unref (source);
+
+  while (!proxy->ack)
+    g_cond_wait (&proxy->ack_condition, &proxy->ack_lock);
+  g_mutex_unlock (&proxy->ack_lock);
+
+  ret_val = proxy->ret_val;
+  mainloop_proxy_free (proxy);
+
+  return ret_val;
 }
 
 static void
@@ -364,11 +444,11 @@ remove_identity (GoaKerberosIdentityManager *self,
   g_hash_table_remove (self->priv->expired_identities, identifier);
   g_hash_table_remove (self->priv->identities, identifier);
 
-  g_io_scheduler_job_send_to_mainloop (operation->job,
-                                       (GSourceFunc)
-                                       do_identity_signal_removed_work,
-                                       work,
-                                       (GDestroyNotify) identity_signal_work_free);
+  goa_kerberos_identify_manager_send_to_context (operation->context,
+                                                 (GSourceFunc)
+                                                 do_identity_signal_removed_work,
+                                                 work,
+                                                 (GDestroyNotify) identity_signal_work_free);
   /* If there's only one identity for this realm now, then we can
    * rename that identity to just the realm name
    */
@@ -378,12 +458,12 @@ remove_identity (GoaKerberosIdentityManager *self,
 
       work = identity_signal_work_new (self, other_identity);
 
-      g_io_scheduler_job_send_to_mainloop (operation->job,
-                                           (GSourceFunc)
-                                           do_identity_signal_renamed_work,
-                                           work,
-                                           (GDestroyNotify)
-                                           identity_signal_work_free);
+      goa_kerberos_identify_manager_send_to_context (operation->context,
+                                                     (GSourceFunc)
+                                                     do_identity_signal_renamed_work,
+                                                     work,
+                                                     (GDestroyNotify)
+                                                     identity_signal_work_free);
     }
 }
 
@@ -437,12 +517,12 @@ update_identity (GoaKerberosIdentityManager *self,
                goa_identity_get_identifier (identity));
 
       work = identity_signal_work_new (self, identity);
-      g_io_scheduler_job_send_to_mainloop (operation->job,
-                                           (GSourceFunc)
-                                           do_identity_signal_refreshed_work,
-                                           work,
-                                           (GDestroyNotify)
-                                           identity_signal_work_free);
+      goa_kerberos_identify_manager_send_to_context (operation->context,
+                                                     (GSourceFunc)
+                                                     do_identity_signal_refreshed_work,
+                                                     work,
+                                                     (GDestroyNotify)
+                                                     identity_signal_work_free);
     }
 }
 
@@ -464,11 +544,11 @@ add_identity (GoaKerberosIdentityManager *self,
     }
 
   work = identity_signal_work_new (self, identity);
-  g_io_scheduler_job_send_to_mainloop (operation->job,
-                                       (GSourceFunc)
-                                       do_identity_signal_added_work,
-                                       work,
-                                       (GDestroyNotify) identity_signal_work_free);
+  goa_kerberos_identify_manager_send_to_context (operation->context,
+                                                 (GSourceFunc)
+                                                 do_identity_signal_added_work,
+                                                 work,
+                                                 (GDestroyNotify) identity_signal_work_free);
 }
 
 static void
@@ -685,10 +765,10 @@ start_inquiry (Operation          *operation,
                     operation);
 
   operation->inquiry = inquiry;
-  g_io_scheduler_job_send_to_mainloop (operation->job,
-                                       (GSourceFunc)
-                                       do_identity_inquiry,
-                                       operation, NULL);
+  goa_kerberos_identify_manager_send_to_context (operation->context,
+                                                 (GSourceFunc)
+                                                 do_identity_inquiry,
+                                                 operation, NULL);
 }
 
 static void
@@ -998,8 +1078,6 @@ on_job_scheduled (GIOSchedulerJob            *job,
           continue;
         }
 
-      operation->job = job;
-
       switch (operation->type)
         {
         case OPERATION_TYPE_STOP_JOB:
@@ -1049,8 +1127,6 @@ on_job_scheduled (GIOSchedulerJob            *job,
         default:
           break;
         }
-
-      operation->job = NULL;
 
       if (operation->result != NULL)
         {
