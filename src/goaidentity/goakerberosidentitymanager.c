@@ -530,11 +530,7 @@ refresh_identities (GoaKerberosIdentityManager *self,
     }
 
   g_debug ("GoaKerberosIdentityManager: Refreshing identities");
-  refreshed_identities = g_hash_table_new_full (g_str_hash,
-                                                g_str_equal,
-                                                (GDestroyNotify)
-                                                g_free,
-                                                (GDestroyNotify) g_object_unref);
+  refreshed_identities = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
   error_code = krb5_cccol_cursor_new (self->priv->kerberos_context, &cursor);
 
   if (error_code != 0)
@@ -692,7 +688,7 @@ start_inquiry (Operation          *operation,
   g_io_scheduler_job_send_to_mainloop (operation->job,
                                        (GSourceFunc)
                                        do_identity_inquiry,
-                                       operation, (GDestroyNotify) NULL);
+                                       operation, NULL);
 }
 
 static void
@@ -755,7 +751,7 @@ get_identity (GoaKerberosIdentityManager *self,
 
   g_simple_async_result_set_op_res_gpointer (operation->result,
                                              g_object_ref (identity),
-                                             (GDestroyNotify) g_object_unref);
+                                             g_object_unref);
 }
 
 static krb5_error_code
@@ -893,7 +889,6 @@ sign_in_identity (GoaKerberosIdentityManager *self,
     {
       g_simple_async_result_set_op_res_gpointer (operation->result,
                                                  g_object_ref (identity),
-                                                 (GDestroyNotify)
                                                  g_object_unref);
 
       g_hash_table_replace (self->priv->identities,
@@ -1552,20 +1547,9 @@ goa_kerberos_identity_manager_init (GoaKerberosIdentityManager *self)
   self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
                                             GOA_TYPE_KERBEROS_IDENTITY_MANAGER,
                                             GoaKerberosIdentityManagerPrivate);
-  self->priv->identities = g_hash_table_new_full (g_str_hash,
-                                                  g_str_equal,
-                                                  (GDestroyNotify)
-                                                  g_free,
-                                                  (GDestroyNotify) g_object_unref);
-  self->priv->expired_identities = g_hash_table_new_full (g_str_hash,
-                                                          g_str_equal,
-                                                          (GDestroyNotify)
-                                                          g_free, NULL);
-
-  self->priv->identities_by_realm = g_hash_table_new_full (g_str_hash,
-                                                           g_str_equal,
-                                                           (GDestroyNotify)
-                                                           g_free, NULL);
+  self->priv->identities = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+  self->priv->expired_identities = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  self->priv->identities_by_realm = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   self->priv->pending_operations = g_async_queue_new ();
 
   g_mutex_init (&self->priv->scheduler_job_lock);
