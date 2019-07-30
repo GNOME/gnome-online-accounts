@@ -267,6 +267,26 @@ web_view_script_message_received_password_submit_cb (GoaWebView *self, WebKitJav
 }
 
 static void
+goa_web_view_get_preferred_height (GtkWidget *widget, gint *minimum_size, gint *natural_size)
+{
+  *minimum_size = 200;
+  *natural_size = 400;
+}
+
+static void
+goa_web_view_get_preferred_width (GtkWidget *widget, gint *minimum_size, gint *natural_size)
+{
+  *minimum_size = 300;
+  *natural_size = 500;
+}
+
+static GtkSizeRequestMode
+goa_web_view_get_request_mode (GtkWidget *widget)
+{
+  return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+}
+
+static void
 goa_web_view_constructed (GObject *object)
 {
   GoaWebView *self = GOA_WEB_VIEW (object);
@@ -298,7 +318,6 @@ goa_web_view_constructed (GObject *object)
                                              "user-content-manager", self->user_content_manager,
                                              "web-context", self->context,
                                              NULL));
-  gtk_widget_set_size_request (self->web_view, 500, 400);
   gtk_container_add (GTK_CONTAINER (self), self->web_view);
 
 #ifdef GOA_INSPECTOR_ENABLED
@@ -414,11 +433,16 @@ static void
 goa_web_view_class_init (GoaWebViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = goa_web_view_constructed;
   object_class->dispose = goa_web_view_dispose;
   object_class->finalize = goa_web_view_finalize;
   object_class->set_property = goa_web_view_set_property;
+
+  widget_class->get_preferred_height = goa_web_view_get_preferred_height;
+  widget_class->get_preferred_width = goa_web_view_get_preferred_width;
+  widget_class->get_request_mode = goa_web_view_get_request_mode;
 
   g_object_class_install_property (object_class,
                                    PROP_EXISTING_IDENTITY,
