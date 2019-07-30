@@ -413,9 +413,8 @@ goa_web_view_init (GoaWebView *self)
 static void
 goa_web_view_class_init (GoaWebViewClass *klass)
 {
-  GObjectClass *object_class;
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class = G_OBJECT_CLASS (klass);
   object_class->constructed = goa_web_view_constructed;
   object_class->dispose = goa_web_view_dispose;
   object_class->finalize = goa_web_view_finalize;
