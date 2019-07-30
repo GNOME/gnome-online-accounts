@@ -270,14 +270,14 @@ static void
 goa_web_view_get_preferred_height (GtkWidget *widget, gint *minimum_size, gint *natural_size)
 {
   *minimum_size = 200;
-  *natural_size = 400;
+  *natural_size = 600;
 }
 
 static void
 goa_web_view_get_preferred_width (GtkWidget *widget, gint *minimum_size, gint *natural_size)
 {
   *minimum_size = 300;
-  *natural_size = 500;
+  *natural_size = 600;
 }
 
 static GtkSizeRequestMode
