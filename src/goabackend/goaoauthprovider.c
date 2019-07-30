@@ -844,7 +844,7 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
   g_signal_connect (web_view, "password-submit", G_CALLBACK (on_web_view_password_submit), &data);
 
   gtk_container_add (GTK_CONTAINER (grid), web_view);
-  gtk_window_set_default_size (GTK_WINDOW (dialog), -1, -1);
+  gtk_window_set_default_size (GTK_WINDOW (dialog), 600, 600);
 
   gtk_widget_show_all (GTK_WIDGET (vbox));
   gtk_dialog_run (GTK_DIALOG (dialog));
