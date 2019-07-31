@@ -1,5 +1,6 @@
 icon_scalable_data = [
   'goa-account-facebook.svg',
+  'goa-account-fedora.svg',
   'goa-account-flickr.svg',
   'goa-account-foursquare.svg',
   'goa-account-google.svg',
