@@ -133,6 +133,18 @@ config_h.set_quoted('GOA_FACEBOOK_CLIENT_ID', facebook_client_id)
 enable_facebook = get_option('facebook')
 config_h.set('GOA_FACEBOOK_ENABLED', enable_facebook)
 
+# Fedora
+config_h.set_quoted('GOA_FEDORA_NAME', 'fedora')
+
+enable_fedora = get_option('fedora')
+if enable_fedora
+  gcr_dep = dependency('gcr-3')
+  krb5_dep = dependency('krb5')
+
+  config_h.set('GCR_API_SUBJECT_TO_CHANGE', true)
+endif
+config_h.set('GOA_FEDORA_ENABLED', enable_fedora)
+
 # Flickr
 config_h.set_quoted('GOA_FLICKR_NAME', 'flickr')
 
@@ -313,6 +325,7 @@ if enable_facebook
   output += ' (OAuth 2.0, id:@0@)'.format(facebook_client_id)
 endif
 output += '\n'
+output += '        Fedora Account System provider: ' + enable_fedora.to_string() + '\n'
 output += '        Flickr provider:                ' + enable_flickr.to_string()
 if enable_flickr
   output += ' (OAuth 1.0, key:@0@)'.format(flickr_consumer_key)
