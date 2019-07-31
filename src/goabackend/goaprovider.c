@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright © 2011 – 2017 Red Hat, Inc.
+ * Copyright © 2011 – 2019 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -33,6 +33,10 @@
 #include "goapocketprovider.h"
 #include "goamediaserverprovider.h"
 #include "goalastfmprovider.h"
+
+#ifdef GOA_FEDORA_ENABLED
+#include "goafedoraprovider.h"
+#endif
 
 #ifdef GOA_KERBEROS_ENABLED
 #include "goakerberosprovider.h"
@@ -958,6 +962,9 @@ static struct
 #endif
 #ifdef GOA_LASTFM_ENABLED
   { GOA_LASTFM_NAME, goa_lastfm_provider_get_type },
+#endif
+#ifdef GOA_FEDORA_ENABLED
+  { GOA_FEDORA_NAME, goa_fedora_provider_get_type },
 #endif
 #ifdef GOA_IMAP_SMTP_ENABLED
   { GOA_IMAP_SMTP_NAME, goa_imap_smtp_provider_get_type },
