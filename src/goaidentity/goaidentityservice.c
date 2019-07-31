@@ -189,7 +189,7 @@ find_object_with_principal (GoaIdentityService *self,
 
       provider_type = goa_account_get_provider_type (account);
 
-      if (g_strcmp0 (provider_type, "kerberos") != 0)
+      if (g_strcmp0 (provider_type, "fedora") != 0) && g_strcmp0 (provider_type, "kerberos") != 0)
         continue;
 
       if (must_be_enabled)
