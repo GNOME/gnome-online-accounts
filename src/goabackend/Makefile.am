@@ -103,6 +103,11 @@ libgoa_backend_1_0_la_SOURCES =						\
 	$(NULL)
 
 if BUILD_KERBEROS
+if BUILD_FEDORA
+libgoa_backend_1_0_la_SOURCES +=					\
+	goafedoraprovider.h		goafedoraprovider.c
+endif
+
 libgoa_backend_1_0_la_SOURCES +=					\
 	goakerberosprovider.h		goakerberosprovider.c
 endif
