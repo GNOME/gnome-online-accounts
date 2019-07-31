@@ -93,11 +93,17 @@ cflags = [
   '-DPACKAGE_WEB_EXTENSIONS_DIR="@0@"'.format(join_paths(goa_pkglibdir, 'web-extensions'))
 ]
 
+if enable_fedora
+  sources += files('goafedoraprovider.c')
+endif
+
 if enable_kerberos
-  sources += identity_dbus_sources + identity_manager_error_src + files('goakerberosprovider.c')
+  sources += files('goakerberosprovider.c')
+endif
 
+if enable_fedora or enable_kerberos
+  sources += identity_dbus_sources + identity_manager_error_src
   incs += goaidentity_inc
-
   deps += [gcr_dep]
 endif
 

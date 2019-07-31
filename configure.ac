@@ -167,6 +167,44 @@ if test "$enable_exchange" != "no"; then
   AC_DEFINE(GOA_EXCHANGE_ENABLED, 1, [Enable Microsoft Exchange data provider])
 fi
 
+# Fedora
+AC_DEFINE(GOA_FEDORA_NAME, ["fedora"], [ProviderType and extension point name])
+AC_DEFINE(GOA_FEDORA_REALM, ["FEDORAPROJECT.ORG"], [Kerberos realm used by the Fedora Account System])
+AC_ARG_ENABLE([fedora],
+              [AS_HELP_STRING([--enable-fedora], [Enable Fedora Account System support])],
+              [enable_fedora=$enableval],
+              [enable_fedora=auto])
+AC_PATH_PROG([KRB5_CONFIG], krb5-config, none, $PATH:/usr/kerberos/bin)
+
+if test "x$KRB5_CONFIG" != "xnone"; then
+    KRB5_LIBS="`${KRB5_CONFIG} --libs krb5`"
+    KRB5_CFLAGS="`${KRB5_CONFIG} --cflags krb5`"
+    PKG_CHECK_MODULES(GCR, gcr-3, [have_fedora=yes], [have_fedora=no])
+else
+    KRB5_LIBS=""
+    KRB5_CFLAGS=""
+    have_fedora=no
+fi
+AC_SUBST(KRB5_CFLAGS)
+AC_SUBST(KRB5_LIBS)
+
+if test "$enable_fedora" != "no"; then
+  if test "$enable_fedora" == "yes" &&
+     test "$have_fedora" == "no" ; then
+      AC_MSG_ERROR([Fedora Account System support requested, but not available])
+  fi
+
+  enable_fedora=$have_fedora
+
+  if test "$enable_fedora" == "yes"; then
+    AC_DEFINE(GCR_API_SUBJECT_TO_CHANGE, 1, [Define to use the GCR API])
+    AC_DEFINE(GOA_FEDORA_ENABLED, 1, [Enable Fedora Account System provider])
+  fi
+else
+  enable_fedora=no
+fi
+AM_CONDITIONAL(BUILD_FEDORA, [test x$enable_fedora != xno])
+
 # Flickr
 AC_DEFINE(GOA_FLICKR_NAME, ["flickr"], [ProviderType and extension point name])
 AC_ARG_ENABLE([flickr],
@@ -387,7 +425,7 @@ fi
 # Identity service
 #
 
-AM_CONDITIONAL(BUILD_IDENTITY_SERVICE, [test x$enable_kerberos != xno])
+AM_CONDITIONAL(BUILD_IDENTITY_SERVICE, [test x$enable_fedora != xno || test x$enable_kerberos != xno])
 
 # Optional timerfd support
 AC_MSG_CHECKING([for timerfd support])
@@ -543,6 +581,7 @@ echo "
 	introspection:		        ${found_introspection}
 	template file:		        ${with_template_file}
 
+	Fedora Account System provider: ${enable_fedora}
 	Flickr provider:                ${enable_flickr} (OAuth 1.0, key:${with_flickr_consumer_key} secret:${with_flickr_consumer_secret})
 	Foursquare provider:            ${enable_foursquare} (id:${with_foursquare_client_id})
 	Google provider:                ${enable_google} (OAuth 2.0, id:${with_google_client_id} secret:${with_google_client_secret})
