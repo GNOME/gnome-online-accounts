@@ -96,6 +96,10 @@ cflags = [
 if enable_kerberos
   sources += identity_dbus_sources + identity_manager_error_src + files('goakerberosprovider.c')
 
+  if enable_fedora
+    sources += files('goafedoraprovider.c')
+  endif
+
   incs += goaidentity_inc
 
   deps += [gcr_dep]
