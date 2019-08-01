@@ -643,40 +643,69 @@ refresh_account (GoaProvider    *provider,
   return got_ticket;
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct
+{
+  GcrSecretExchange *secret_exchange;
+  GoaObject *object;
+  gboolean remember_password;
+  gchar *principal;
+} InitialSignInData;
+
+static InitialSignInData *
+initial_sign_in_data_new (GoaObject *object, const gchar *principal)
+{
+  InitialSignInData *data;
+
+  data = g_slice_new0 (InitialSignInData);
+
+  if (object != NULL)
+    data->object = g_object_ref (object);
+
+  data->principal = g_strdup (principal);
+
+  return data;
+}
+
+static void
+initial_sign_in_data_free (InitialSignInData *data)
+{
+  g_clear_object (&data->secret_exchange);
+  g_clear_object (&data->object);
+  g_free (data->principal);
+
+  g_slice_free (InitialSignInData, data);
+}
+
 static void
 on_initial_sign_in_done (GoaKerberosProvider *self,
                          GAsyncResult        *result,
-                         GTask               *operation_result)
+                         GTask               *task)
 {
   GError     *error;
-  gboolean    remember_password;
-  GoaObject  *object;
+  InitialSignInData *data;
   char       *object_path;
 
-  object = g_task_get_source_tag (operation_result);
-
-  remember_password = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (operation_result),
-                                                          "remember-password"));
+  data = (InitialSignInData *) g_task_get_task_data (task);
 
   error = NULL;
   object_path = sign_in_identity_finish (self, result, &error);
   if (error != NULL)
     {
-      g_task_return_error (operation_result, error);
+      g_task_return_error (task, error);
       goto out;
     }
 
-  if (remember_password)
+  if (data->remember_password)
     {
       GVariantBuilder  builder;
 
-      if (object_path != NULL && object != NULL)
+      if (object_path != NULL && data->object != NULL)
         {
-          GcrSecretExchange *secret_exchange;
-          const char        *password;
+          const char *password;
 
-          secret_exchange = g_object_get_data (G_OBJECT (operation_result), "secret-exchange");
-          password = gcr_secret_exchange_get_secret (secret_exchange, NULL);
+          password = gcr_secret_exchange_get_secret (data->secret_exchange, NULL);
 
           /* FIXME: we go to great lengths to keep the password in non-pageable memory,
            * and then just duplicate it into a gvariant here
@@ -689,36 +718,36 @@ on_initial_sign_in_done (GoaKerberosProvider *self,
 
           error = NULL;
           goa_utils_store_credentials_for_object_sync (GOA_PROVIDER (self),
-                                                       object,
+                                                       data->object,
                                                        g_variant_builder_end (&builder),
                                                        NULL,
                                                        NULL);
         }
     }
 
-  g_task_return_boolean (operation_result, TRUE);
+  g_task_return_boolean (task, TRUE);
 
  out:
   g_free (object_path);
-  g_object_unref (operation_result);
+  g_object_unref (task);
 }
 
 static void
 on_system_prompt_answered_for_initial_sign_in (GcrPrompt          *prompt,
                                                GAsyncResult       *result,
-                                               GTask              *operation_result)
+                                               GTask              *task)
 {
   GoaKerberosProvider *self;
   GCancellable        *cancellable;
   GError              *error;
-  const char          *principal;
+  InitialSignInData   *data;
   const char          *password;
   const char          *preauth_source;
   GcrSecretExchange   *secret_exchange;
 
-  self = GOA_KERBEROS_PROVIDER (g_task_get_source_object (operation_result));
-  principal = g_object_get_data (G_OBJECT (operation_result), "principal");
-  cancellable = g_task_get_cancellable (operation_result);
+  self = GOA_KERBEROS_PROVIDER (g_task_get_source_object (task));
+  cancellable = g_task_get_cancellable (task);
+  data = (InitialSignInData *) g_task_get_task_data (task);
 
   /* We currently don't prompt the user to choose a preauthentication source during initial sign in
    * so we assume there's no preauthentication source
@@ -734,60 +763,54 @@ on_system_prompt_answered_for_initial_sign_in (GcrPrompt          *prompt,
 
       if (error != NULL)
         {
-          g_task_return_error (operation_result, error);
+          g_task_return_error (task, error);
         }
       else
         {
-          g_task_return_new_error (operation_result,
+          g_task_return_new_error (task,
                                    G_IO_ERROR,
                                    G_IO_ERROR_CANCELLED,
                                    _("Operation was cancelled"));
         }
 
-      g_object_unref (operation_result);
+      g_object_unref (task);
       return;
     }
 
   secret_exchange = gcr_system_prompt_get_secret_exchange (GCR_SYSTEM_PROMPT (prompt));
-  g_object_set_data_full (G_OBJECT (operation_result),
-                          "secret-exchange",
-                          g_object_ref (secret_exchange),
-                          (GDestroyNotify)
-                          g_object_unref);
+  data->secret_exchange = g_object_ref (secret_exchange);
 
-  g_object_set_data (G_OBJECT (operation_result),
-                     "remember-password",
-                     GINT_TO_POINTER (gcr_prompt_get_choice_chosen (prompt)));
+  data->remember_password = gcr_prompt_get_choice_chosen (prompt);
 
   gcr_system_prompt_close (GCR_SYSTEM_PROMPT (prompt), NULL, NULL);
 
   sign_in_identity (self,
-                    principal,
+                    data->principal,
                     password,
                     preauth_source,
                     cancellable,
                     (GAsyncReadyCallback)
                     on_initial_sign_in_done,
-                    operation_result);
+                    task);
 }
 
 static void
 on_system_prompt_open_for_initial_sign_in (GcrSystemPrompt     *system_prompt,
                                            GAsyncResult        *result,
-                                           GTask               *operation_result)
+                                           GTask               *task)
 {
   GCancellable *cancellable;
   GcrPrompt    *prompt = NULL;
   GError       *error;
 
-  cancellable = g_task_get_cancellable (operation_result);
+  cancellable = g_task_get_cancellable (task);
   error = NULL;
   prompt = gcr_system_prompt_open_finish (result, &error);
 
   if (prompt == NULL)
     {
-      g_task_return_error (operation_result, error);
-      g_object_unref (operation_result);
+      g_task_return_error (task, error);
+      g_object_unref (task);
       goto out;
     }
 
@@ -799,7 +822,7 @@ on_system_prompt_open_for_initial_sign_in (GcrSystemPrompt     *system_prompt,
                              cancellable,
                              (GAsyncReadyCallback)
                              on_system_prompt_answered_for_initial_sign_in,
-                             operation_result);
+                             task);
 
  out:
   g_clear_object (&prompt);
@@ -814,21 +837,19 @@ perform_initial_sign_in (GoaKerberosProvider *self,
                          gpointer             user_data)
 {
 
-  GTask        *operation_result;
+  GTask *task;
+  InitialSignInData *data;
 
-  operation_result = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (operation_result, object);
+  data = initial_sign_in_data_new (object, principal);
 
-  g_object_set_data (G_OBJECT (operation_result),
-                     "principal",
-                     (gpointer)
-                     principal);
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_task_data (task, data, (GDestroyNotify) initial_sign_in_data_free);
 
   gcr_system_prompt_open_async (-1,
                                 cancellable,
                                 (GAsyncReadyCallback)
                                 on_system_prompt_open_for_initial_sign_in,
-                                operation_result);
+                                task);
 }
 
 static gboolean
@@ -847,6 +868,8 @@ perform_initial_sign_in_finish (GoaKerberosProvider  *self,
 
   return g_task_propagate_boolean (task, error);
 }
+
+/* ---------------------------------------------------------------------------------------------------- */
 
 static void
 on_account_signed_in (GoaKerberosProvider  *self,
