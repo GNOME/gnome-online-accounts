@@ -112,6 +112,8 @@ get_provider_icon (GoaProvider *provider, GoaObject *object)
   return g_themed_icon_new_with_default_fallbacks ("dialog-password-symbolic");
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+
 typedef struct
 {
   GCancellable *cancellable;
@@ -129,7 +131,9 @@ typedef struct
   gchar *account_object_path;
 
   GError *error;
-} SignInRequest;
+} AddAccountData;
+
+/* ---------------------------------------------------------------------------------------------------- */
 
 static void
 translate_error (GError **error)
@@ -851,6 +855,8 @@ on_account_signed_in (GoaFedoraProvider  *self,
   g_main_loop_quit (request->loop);
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+
 static GoaObject *
 add_account (GoaProvider    *provider,
              GoaClient      *client,
@@ -859,53 +865,49 @@ add_account (GoaProvider    *provider,
              GError        **error)
 {
   GoaFedoraProvider *self = GOA_FEDORA_PROVIDER (provider);
-  SignInRequest request;
+  AddAccountData data;
   GVariantBuilder credentials;
   GVariantBuilder details;
-  GoaObject   *object = NULL;
-  GoaAccount  *account;
-  char        *realm = NULL;
-  const char *principal_text;
-  const char *provider_type;
-  gchar      *principal = NULL;
-  gint        response;
+  GoaObject *object = NULL;
+  GoaAccount *account;
+  const gchar *principal_text;
+  const gchar *provider_type;
+  gchar *principal = NULL;
+  gchar *realm = NULL;
+  gint response;
 
-  memset (&request, 0, sizeof (SignInRequest));
-  request.cancellable = g_cancellable_new ();
-  request.loop = g_main_loop_new (NULL, FALSE);
-  request.dialog = dialog;
-  request.error = NULL;
+  memset (&data, 0, sizeof (AddAccountData));
+  data.cancellable = g_cancellable_new ();
+  data.loop = g_main_loop_new (NULL, FALSE);
+  data.dialog = dialog;
+  data.error = NULL;
 
-  create_account_details_ui (self, dialog, GTK_WIDGET (vbox), TRUE, &request);
+  create_account_details_ui (self, dialog, GTK_WIDGET (vbox), TRUE, &data);
   gtk_widget_show_all (GTK_WIDGET (vbox));
+  g_signal_connect (dialog, "response", G_CALLBACK (dialog_response_cb), &data);
 
-start_over:
+ start_over:
   response = gtk_dialog_run (dialog);
-
   if (response != GTK_RESPONSE_OK)
     {
-      g_set_error (&request.error,
-                   GOA_ERROR,
-                   GOA_ERROR_DIALOG_DISMISSED,
-                   _("Dialog was dismissed"));
+      g_set_error (&data.error, GOA_ERROR, GOA_ERROR_DIALOG_DISMISSED, _("Dialog was dismissed"));
       goto out;
     }
 
-  principal_text = gtk_entry_get_text (GTK_ENTRY (request.principal));
+  principal_text = gtk_entry_get_text (GTK_ENTRY (data.principal));
   principal = normalize_principal (principal_text, &realm);
-  gtk_entry_set_text (GTK_ENTRY (request.principal), principal);
+  gtk_entry_set_text (GTK_ENTRY (data.principal), principal);
 
   /* See if there's already an account of this type with the
    * given identity
    */
   provider_type = goa_provider_get_provider_type (provider);
-
   if (!goa_utils_check_duplicate (client,
                                   principal,
                                   principal,
                                   provider_type,
                                   (GoaPeekInterfaceFunc) goa_object_peek_account,
-                                  &request.error))
+                                  &data.error))
     goto out;
 
   /* If there isn't an account, then go ahead and create one
@@ -925,16 +927,16 @@ start_over:
                                 g_variant_builder_end (&details),
                                 NULL, /* GCancellable* */
                                 (GAsyncReadyCallback) add_account_cb,
-                                &request);
-  gtk_widget_set_sensitive (request.connect_button, FALSE);
-  gtk_widget_set_sensitive (request.principal, FALSE);
-  show_progress_ui (GTK_CONTAINER (request.progress_grid), TRUE);
-  g_main_loop_run (request.loop);
-  if (request.error != NULL)
+                                &data);
+  gtk_widget_set_sensitive (data.connect_button, FALSE);
+  gtk_widget_set_sensitive (data.principal, FALSE);
+  show_progress_ui (GTK_CONTAINER (data.progress_grid), TRUE);
+  g_main_loop_run (data.loop);
+  if (data.error != NULL)
     goto out;
 
   object = GOA_OBJECT (g_dbus_object_manager_get_object (goa_client_get_object_manager (client),
-                                                         request.account_object_path));
+                                                         data.account_object_path));
   account = goa_object_peek_account (object);
 
   /* After the account is created, try to sign it in
@@ -942,25 +944,25 @@ start_over:
   perform_initial_sign_in (self,
                            object,
                            principal,
-                           request.cancellable,
+                           data.cancellable,
                            (GAsyncReadyCallback) on_account_signed_in,
-                           &request);
+                           &data);
 
-  gtk_widget_set_sensitive (request.connect_button, FALSE);
-  gtk_widget_set_sensitive (request.principal, FALSE);
-  show_progress_ui (GTK_CONTAINER (request.progress_grid), TRUE);
+  gtk_widget_set_sensitive (data.connect_button, FALSE);
+  gtk_widget_set_sensitive (data.principal, FALSE);
+  show_progress_ui (GTK_CONTAINER (data.progress_grid), TRUE);
 
-  g_main_loop_run (request.loop);
+  g_main_loop_run (data.loop);
 
-  gtk_widget_set_sensitive (request.connect_button, TRUE);
-  gtk_widget_set_sensitive (request.principal, TRUE);
-  show_progress_ui (GTK_CONTAINER (request.progress_grid), FALSE);
+  gtk_widget_set_sensitive (data.connect_button, TRUE);
+  gtk_widget_set_sensitive (data.principal, TRUE);
+  show_progress_ui (GTK_CONTAINER (data.progress_grid), FALSE);
 
-  if (request.error != NULL)
+  if (data.error != NULL)
     {
       gchar *markup;
 
-      translate_error (&request.error);
+      translate_error (&data.error);
 
       if (!g_error_matches (request.error,
                             G_IO_ERROR,
@@ -1017,6 +1019,8 @@ start_over:
   g_clear_object (&request.cancellable);
   return object;
 }
+
+/* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
 dbus_proxy_reload_properties_sync (GDBusProxy    *proxy,
