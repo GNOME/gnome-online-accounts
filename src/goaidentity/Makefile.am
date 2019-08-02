@@ -78,7 +78,7 @@ goaidentityenumtypes.c: goaidentityenumtypes.c.in $(identity_headers)
 EXTRA_DIST += goaidentityenumtypes.c.in
 BUILT_SOURCES += goaidentityenumtypes.c
 
-if BUILD_KERBEROS
+if BUILD_IDENTITY_SERVICE
 libexec_PROGRAMS = goa-identity-service
 
 goa_identity_service_SOURCES = 					\
