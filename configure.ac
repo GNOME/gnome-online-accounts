@@ -384,6 +384,11 @@ if test "$enable_lastfm" != "no"; then
   AC_DEFINE(GOA_LASTFM_ENABLED, 1, [Enable LastFM data provider])
 fi
 
+# Identity service
+#
+
+AM_CONDITIONAL(BUILD_IDENTITY_SERVICE, [test x$enable_kerberos != xno])
+
 # Optional timerfd support
 AC_MSG_CHECKING([for timerfd support])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
