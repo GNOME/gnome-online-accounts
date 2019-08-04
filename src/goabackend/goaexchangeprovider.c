@@ -269,6 +269,32 @@ ensure_credentials_sync (GoaProvider         *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+typedef struct
+{
+  GCancellable *cancellable;
+
+  GtkDialog *dialog;
+  GMainLoop *loop;
+
+  GtkWidget *cluebar;
+  GtkWidget *cluebar_label;
+  GtkWidget *connect_button;
+  GtkWidget *progress_grid;
+
+  GtkWidget *email_address;
+  GtkWidget *password;
+
+  GtkWidget *expander;
+  GtkWidget *username;
+  GtkWidget *server;
+
+  gchar *account_object_path;
+
+  GError *error;
+} AddAccountData;
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static void
 add_entry (GtkWidget     *grid,
            gint           row,
@@ -295,34 +321,6 @@ add_entry (GtkWidget     *grid,
   if (out_entry != NULL)
     *out_entry = entry;
 }
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-typedef struct
-{
-  GCancellable *cancellable;
-
-  GtkDialog *dialog;
-  GMainLoop *loop;
-
-  GtkWidget *cluebar;
-  GtkWidget *cluebar_label;
-  GtkWidget *connect_button;
-  GtkWidget *progress_grid;
-
-  GtkWidget *email_address;
-  GtkWidget *password;
-
-  GtkWidget *expander;
-  GtkWidget *username;
-  GtkWidget *server;
-
-  gchar *account_object_path;
-
-  GError *error;
-} AddAccountData;
-
-/* ---------------------------------------------------------------------------------------------------- */
 
 static void
 on_email_address_or_password_changed (GtkEditable *editable, gpointer user_data)
