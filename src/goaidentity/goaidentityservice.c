@@ -772,33 +772,25 @@ on_identity_signed_in (GoaIdentityManager *manager,
   g_object_unref (operation_result);
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+
 static void
-on_temporary_account_added (GoaManager   *manager,
-                            GAsyncResult *result,
-                            GTask        *task)
+on_temporary_account_added (GObject *source_object, GAsyncResult *result, gpointer user_data)
 {
-  GoaIdentityService *self;
-  GDBusObjectManager *object_manager;
+  GoaIdentityService *self = GOA_IDENTITY_SERVICE (source_object);
+  GoaIdentity *identity = GOA_IDENTITY (user_data);
   const char *principal;
-  char *object_path;
-  GoaIdentity *identity;
+
   GoaObject *object;
   GError *error;
 
-  self = GOA_IDENTITY_SERVICE (g_task_get_source_object (task));
-  object_path = NULL;
-  object = NULL;
   error = NULL;
-
-  identity = GOA_IDENTITY (g_task_get_task_data (task));
 
   principal = goa_identity_get_identifier (identity);
   g_hash_table_remove (self->priv->pending_temporary_account_results, principal);
 
-  if (!goa_manager_call_add_account_finish (manager,
-                                            &object_path,
-                                            result,
-                                            &error))
+  object = add_temporary_account_as_kerberos_finish (self, result, &error);
+  if (error != NULL)
     {
       const char *identifier;
 
@@ -808,35 +800,134 @@ on_temporary_account_added (GoaManager   *manager,
       goto out;
     }
 
-  if (object_path != NULL && object_path[0] != '\0')
-    {
-      g_debug ("Created account for identity with object path %s", object_path);
-
-      object_manager = goa_client_get_object_manager (self->priv->client);
-      object = GOA_OBJECT (g_dbus_object_manager_get_object (object_manager,
-                                                             object_path));
-      g_free (object_path);
-    }
-
-  if (object != NULL)
-    ensure_account_credentials (self, object);
+  ensure_account_credentials (self, object);
 
  out:
   g_clear_object (&object);
+  g_object_unref (identity);
+}
+
+static void
+add_temporary_account_as_kerberos_add_account (GObject *source_object, GAsyncResult *res, gpointer user_data)
+{
+  GoaIdentityService *self;
+  GDBusObjectManager *object_manager;
+  GError *error;
+  GTask *task = G_TASK (user_data);
+  GoaIdentity *identity;
+  GoaManager *manager = GOA_MANAGER (source_object);
+  GoaObject *object = NULL;
+  gchar *object_path = NULL;
+
+  self = GOA_IDENTITY_SERVICE (g_task_get_source_object (task));
+  identity = GOA_IDENTITY (g_task_get_task_data (task));
+
+  error = NULL;
+  if (!goa_manager_call_add_account_finish (manager, &object_path, res, &error))
+    {
+      g_task_return_error (task, error);
+      goto out;
+    }
+
+  if (object_path == NULL || object_path[0] != '\0')
+    {
+      g_task_return_new_error (task,
+                               GOA_ERROR,
+                               GOA_ERROR_FAILED, /* TODO: more specific */
+                               _("Empty object path"));
+      goto out;
+    }
+
+  g_debug ("Created account for identity with object path %s", object_path);
+
+  object_manager = goa_client_get_object_manager (self->priv->client);
+  object = GOA_OBJECT (g_dbus_object_manager_get_object (object_manager, object_path));
+  if (object == NULL)
+    {
+      g_task_return_new_error (task,
+                               GOA_ERROR,
+                               GOA_ERROR_FAILED, /* TODO: more specific */
+                               _("Couldn't get GoaObject for object path %s"),
+                               object_path);
+      goto out;
+    }
+
+  g_task_return_pointer (task, g_object_ref (object), g_object_unref);
+
+ out:
+  g_free (object_path);
+  g_clear_object (&object);
   g_object_unref (task);
+}
+
+static void
+add_temporary_account_as_kerberos (GoaIdentityService *self,
+                                   GoaIdentity *identity,
+                                   GCancellable *cancellable,
+                                   GAsyncReadyCallback callback,
+                                   gpointer user_data)
+{
+  GTask *task = NULL;
+  GVariantBuilder credentials;
+  GVariantBuilder details;
+  const gchar *principal;
+  gchar *preauth_source = NULL;
+  gchar *realm = NULL;
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, add_temporary_account_as_kerberos);
+  g_task_set_task_data (task, g_object_ref (identity), g_object_unref);
+
+  principal = goa_identity_get_identifier (identity);
+
+  g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
+
+  g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
+  realm = goa_kerberos_identity_get_realm_name (GOA_KERBEROS_IDENTITY (identity));
+  g_variant_builder_add (&details, "{ss}", "Realm", realm);
+  g_variant_builder_add (&details, "{ss}", "IsTemporary", "true");
+
+  preauth_source = goa_kerberos_identity_get_preauthentication_source (GOA_KERBEROS_IDENTITY (identity));
+  if (preauth_source != NULL)
+    g_variant_builder_add (&details, "{ss}", "PreauthenticationSource", preauth_source);
+
+  g_variant_builder_add (&details, "{ss}", "TicketingEnabled", "true");
+
+  manager = goa_client_get_manager (self->priv->client);
+  goa_manager_call_add_account (manager,
+                                "kerberos",
+                                principal,
+                                principal,
+                                g_variant_builder_end (&credentials),
+                                g_variant_builder_end (&details),
+                                NULL,
+                                add_temporary_account_as_kerberos_add_account,
+                                g_object_ref (task));
+
+  g_free (preauth_source);
+  g_free (realm);
+  g_object_unref (task);
+}
+
+static GoaObject *
+add_temporary_account_as_kerberos_finish (GoaIdentityService *self, GAsyncResult *res, GError **error)
+{
+  GTask *task;
+
+  g_return_val_if_fail (g_task_is_valid (res, self), NULL);
+  task = G_TASK (res);
+
+  g_return_val_if_fail (g_task_get_source_tag (task) == add_temporary_account_as_kerberos, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  return g_task_propagate_pointer (task, error);
 }
 
 static void
 add_temporary_account (GoaIdentityService *self,
                        GoaIdentity        *identity)
 {
-  char               *realm;
-  char               *preauth_source;
-  const char         *principal;
-  GTask              *task;
-  GVariantBuilder     credentials;
-  GVariantBuilder     details;
-  GoaManager         *manager;
+  const char *principal;
 
   principal = goa_identity_get_identifier (identity);
   if (g_hash_table_contains (self->priv->pending_temporary_account_results, principal))
@@ -850,43 +941,16 @@ add_temporary_account (GoaIdentityService *self,
   /* If there's no account for this identity then create a temporary one.
    */
 
-  realm = goa_kerberos_identity_get_realm_name (GOA_KERBEROS_IDENTITY (identity));
-  preauth_source = goa_kerberos_identity_get_preauthentication_source (GOA_KERBEROS_IDENTITY (identity));
-
-  g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
-
-  g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
-  g_variant_builder_add (&details, "{ss}", "Realm", realm);
-  g_variant_builder_add (&details, "{ss}", "IsTemporary", "true");
-  if (preauth_source != NULL)
-    g_variant_builder_add (&details, "{ss}", "PreauthenticationSource", preauth_source);
-  g_variant_builder_add (&details, "{ss}", "TicketingEnabled", "true");
-
-
   g_debug ("GoaIdentityService: asking to sign back in");
-
-  task = g_task_new (self, NULL, NULL, NULL);
-  g_task_set_task_data (task, g_object_ref (identity), g_object_unref);
 
   g_hash_table_insert (self->priv->pending_temporary_account_results,
                        g_strdup (principal),
-                       g_object_ref (operation_result));
+                       g_object_ref (task));
 
-  manager = goa_client_get_manager (self->priv->client);
-  goa_manager_call_add_account (manager,
-                                "kerberos",
-                                principal,
-                                principal,
-                                g_variant_builder_end (&credentials),
-                                g_variant_builder_end (&details),
-                                NULL,
-                                (GAsyncReadyCallback)
-                                on_temporary_account_added,
-                                g_object_ref (task));
-  g_free (realm);
-  g_free (preauth_source);
-  g_object_unref (task);
+  add_temporary_account_as_kerberos (self, identity, NULL, on_temporary_account_added, g_object_ref (identity));
 }
+
+/* ---------------------------------------------------------------------------------------------------- */
 
 static void
 on_identity_added (GoaIdentityManager *identity_manager,
