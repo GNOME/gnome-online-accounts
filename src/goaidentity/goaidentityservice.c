@@ -775,7 +775,7 @@ on_identity_signed_in (GoaIdentityManager *manager,
 static void
 on_temporary_account_added (GoaManager   *manager,
                             GAsyncResult *result,
-                            GTask        *operation_result)
+                            GTask        *task)
 {
   GoaIdentityService *self;
   GDBusObjectManager *object_manager;
@@ -785,12 +785,12 @@ on_temporary_account_added (GoaManager   *manager,
   GoaObject *object;
   GError *error;
 
-  self = GOA_IDENTITY_SERVICE (g_task_get_source_object (operation_result));
+  self = GOA_IDENTITY_SERVICE (g_task_get_source_object (task));
   object_path = NULL;
   object = NULL;
   error = NULL;
 
-  identity = GOA_IDENTITY (g_task_get_task_data (operation_result));
+  identity = GOA_IDENTITY (g_task_get_task_data (task));
 
   principal = goa_identity_get_identifier (identity);
   g_hash_table_remove (self->priv->pending_temporary_account_results, principal);
@@ -823,7 +823,7 @@ on_temporary_account_added (GoaManager   *manager,
 
  out:
   g_clear_object (&object);
-  g_object_unref (operation_result);
+  g_object_unref (task);
 }
 
 static void
@@ -833,7 +833,7 @@ add_temporary_account (GoaIdentityService *self,
   char               *realm;
   char               *preauth_source;
   const char         *principal;
-  GTask              *operation_result;
+  GTask              *task;
   GVariantBuilder     credentials;
   GVariantBuilder     details;
   GoaManager         *manager;
@@ -865,12 +865,10 @@ add_temporary_account (GoaIdentityService *self,
 
   g_debug ("GoaIdentityService: asking to sign back in");
 
-  operation_result = g_task_new (self, NULL, NULL, NULL);
-  g_task_set_task_data (operation_result, g_object_ref (identity), g_object_unref);
+  task = g_task_new (self, NULL, NULL, NULL);
+  g_task_set_task_data (task, g_object_ref (identity), g_object_unref);
 
-  g_hash_table_insert (self->priv->pending_temporary_account_results,
-                       g_strdup (principal),
-                       g_object_ref (operation_result));
+  g_hash_table_insert (self->priv->pending_temporary_account_results, g_strdup (principal), g_object_ref (task));
 
   manager = goa_client_get_manager (self->priv->client);
   goa_manager_call_add_account (manager,
@@ -882,10 +880,10 @@ add_temporary_account (GoaIdentityService *self,
                                 NULL,
                                 (GAsyncReadyCallback)
                                 on_temporary_account_added,
-                                g_object_ref (operation_result));
+                                g_object_ref (task));
   g_free (realm);
   g_free (preauth_source);
-  g_object_unref (operation_result);
+  g_object_unref (task);
 }
 
 static void
