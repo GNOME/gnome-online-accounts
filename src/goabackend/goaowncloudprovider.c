@@ -312,6 +312,29 @@ ensure_credentials_sync (GoaProvider         *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+typedef struct
+{
+  GCancellable *cancellable;
+
+  GtkDialog *dialog;
+  GMainLoop *loop;
+
+  GtkWidget *cluebar;
+  GtkWidget *cluebar_label;
+  GtkWidget *connect_button;
+  GtkWidget *progress_grid;
+
+  GtkWidget *uri;
+  GtkWidget *username;
+  GtkWidget *password;
+
+  gchar *account_object_path;
+
+  GError *error;
+} AddAccountData;
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static void
 add_entry (GtkWidget     *grid,
            gint           row,
@@ -338,31 +361,6 @@ add_entry (GtkWidget     *grid,
   if (out_entry != NULL)
     *out_entry = entry;
 }
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-typedef struct
-{
-  GCancellable *cancellable;
-
-  GtkDialog *dialog;
-  GMainLoop *loop;
-
-  GtkWidget *cluebar;
-  GtkWidget *cluebar_label;
-  GtkWidget *connect_button;
-  GtkWidget *progress_grid;
-
-  GtkWidget *uri;
-  GtkWidget *username;
-  GtkWidget *password;
-
-  gchar *account_object_path;
-
-  GError *error;
-} AddAccountData;
-
-/* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
 normalize_uri (const gchar *address, gchar **server)
@@ -466,25 +464,6 @@ on_uri_username_or_password_changed (GtkEditable *editable, gpointer user_data)
 }
 
 static void
-show_progress_ui (GtkContainer *container, gboolean progress)
-{
-  GList *children;
-  GList *l;
-
-  children = gtk_container_get_children (container);
-  for (l = children; l != NULL; l = l->next)
-    {
-      GtkWidget *widget = GTK_WIDGET (l->data);
-      gdouble opacity;
-
-      opacity = progress ? 1.0 : 0.0;
-      gtk_widget_set_opacity (widget, opacity);
-    }
-
-  g_list_free (children);
-}
-
-static void
 create_account_details_ui (GoaProvider    *provider,
                            GtkDialog      *dialog,
                            GtkBox         *vbox,
@@ -580,6 +559,25 @@ create_account_details_ui (GoaProvider    *provider,
           gtk_window_set_default_size (GTK_WINDOW (data->dialog), (gint) (0.5 * width), -1);
         }
     }
+}
+
+static void
+show_progress_ui (GtkContainer *container, gboolean progress)
+{
+  GList *children;
+  GList *l;
+
+  children = gtk_container_get_children (container);
+  for (l = children; l != NULL; l = l->next)
+    {
+      GtkWidget *widget = GTK_WIDGET (l->data);
+      gdouble opacity;
+
+      opacity = progress ? 1.0 : 0.0;
+      gtk_widget_set_opacity (widget, opacity);
+    }
+
+  g_list_free (children);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
