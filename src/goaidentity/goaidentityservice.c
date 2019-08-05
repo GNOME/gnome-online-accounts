@@ -189,7 +189,7 @@ find_object_with_principal (GoaIdentityService *self,
 
       provider_type = goa_account_get_provider_type (account);
 
-      if (g_strcmp0 (provider_type, "kerberos") != 0)
+      if (g_strcmp0 (provider_type, GOA_KERBEROS_NAME) != 0)
         continue;
 
       if (must_be_enabled)
@@ -870,7 +870,7 @@ add_temporary_account (GoaIdentityService *self,
 
   manager = goa_client_get_manager (self->priv->client);
   goa_manager_call_add_account (manager,
-                                "kerberos",
+                                GOA_KERBEROS_NAME,
                                 principal,
                                 principal,
                                 g_variant_builder_end (&credentials),
