@@ -1105,8 +1105,13 @@ get_all_providers_cb (GObject      *source,
 
   /* TODO: could check for @type */
 
-  if (!goa_provider_get_all_finish (&providers, res, NULL))
-    goto out;
+  error = NULL;
+  if (!goa_provider_get_all_finish (&providers, res, &error))
+    {
+      g_prefix_error (&error, "Error getting all providers: ");
+      g_dbus_method_invocation_take_error (data->invocation, error);
+      goto out;
+    }
 
   for (l = providers; l != NULL; l = l->next)
     {
