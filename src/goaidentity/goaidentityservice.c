@@ -808,20 +808,16 @@ on_temporary_account_added (GoaManager   *manager,
       goto out;
     }
 
-  if (object_path != NULL && object_path[0] != '\0')
-    {
-      g_debug ("Created account for identity with object path %s", object_path);
+  g_debug ("Created account for identity with object path %s", object_path);
 
-      object_manager = goa_client_get_object_manager (self->priv->client);
-      object = GOA_OBJECT (g_dbus_object_manager_get_object (object_manager,
-                                                             object_path));
-      g_free (object_path);
-    }
+  object_manager = goa_client_get_object_manager (self->priv->client);
+  object = GOA_OBJECT (g_dbus_object_manager_get_object (object_manager, object_path));
 
   if (object != NULL)
     ensure_account_credentials (self, object);
 
  out:
+  g_free (object_path);
   g_clear_object (&object);
   g_object_unref (task);
 }
