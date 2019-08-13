@@ -146,6 +146,38 @@ translate_error (GError **error)
   g_dbus_error_strip_remote_error (*error);
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct
+{
+  gchar *identifier;
+  gchar *password;
+  gchar *preauth_source;
+} SignInIdentityData;
+
+static SignInIdentityData *
+sign_in_identity_data_new (const gchar *identifier, const gchar *password, const gchar *preauth_source)
+{
+  SignInIdentityData *data;
+
+  data = g_slice_new0 (SignInIdentityData);
+  data->identifier = g_strdup (identifier);
+  data->password = g_strdup (password);
+  data->preauth_source = g_strdup (preauth_source);
+
+  return data;
+}
+
+static void
+sign_in_identity_data_free (SignInIdentityData *data)
+{
+  g_free (data->identifier);
+  g_free (data->password);
+  g_free (data->preauth_source);
+
+  g_slice_free (SignInIdentityData, data);
+}
+
 static void
 sign_in_identity (GoaKerberosProvider  *self,
                   const char           *identifier,
@@ -156,18 +188,12 @@ sign_in_identity (GoaKerberosProvider  *self,
                   gpointer              user_data)
 {
   GTask *task;
+  SignInIdentityData *data = NULL;
+
+  data = sign_in_identity_data_new (identifier, password, preauth_source);
 
   task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, (gpointer) identifier);
-
-  g_object_set_data (G_OBJECT (task),
-                     "password",
-                     (gpointer)
-                     password);
-  g_object_set_data_full (G_OBJECT (task),
-                          "preauthentication-source",
-                          g_strdup (preauth_source),
-                          g_free);
+  g_task_set_task_data (task, data, (GDestroyNotify) sign_in_identity_data_free);
   g_task_run_in_thread (task, (GTaskThreadFunc) sign_in_thread);
 
   g_object_unref (task);
@@ -188,6 +214,8 @@ sign_in_identity_finish (GoaKerberosProvider  *self,
 
   return g_task_propagate_pointer (task, error);
 }
+
+/* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
 get_ticket_sync (GoaKerberosProvider *self,
@@ -1383,21 +1411,20 @@ sign_in_identity_sync (GoaKerberosProvider  *self,
 static void
 sign_in_thread (GTask               *task,
                 GoaKerberosProvider *self,
-                gpointer             task_data G_GNUC_UNUSED,
+                gpointer             task_data,
                 GCancellable        *cancellable)
 {
-  const char *identifier;
-  const char *password;
-  const char *preauth_source;
+  SignInIdentityData *data = (SignInIdentityData *) task_data;
   char *object_path;
   GError *error;
 
-  identifier = g_task_get_source_tag (task);
-  password = g_object_get_data (G_OBJECT (task), "password");
-  preauth_source = g_object_get_data (G_OBJECT (task), "preauth-source");
-
   error = NULL;
-  object_path = sign_in_identity_sync (self, identifier, password, preauth_source, cancellable, &error);
+  object_path = sign_in_identity_sync (self,
+                                       data->identifier,
+                                       data->password,
+                                       data->preauth_source,
+                                       cancellable,
+                                       &error);
   if (object_path == NULL)
     g_task_return_error (task, error);
   else
