@@ -155,22 +155,22 @@ sign_in_identity (GoaKerberosProvider  *self,
                   GAsyncReadyCallback   callback,
                   gpointer              user_data)
 {
-  GTask *operation_result;
+  GTask *task;
 
-  operation_result = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (operation_result, (gpointer) identifier);
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, (gpointer) identifier);
 
-  g_object_set_data (G_OBJECT (operation_result),
+  g_object_set_data (G_OBJECT (task),
                      "password",
                      (gpointer)
                      password);
-  g_object_set_data_full (G_OBJECT (operation_result),
+  g_object_set_data_full (G_OBJECT (task),
                           "preauthentication-source",
                           g_strdup (preauth_source),
                           g_free);
-  g_task_run_in_thread (operation_result, (GTaskThreadFunc) sign_in_thread);
+  g_task_run_in_thread (task, (GTaskThreadFunc) sign_in_thread);
 
-  g_object_unref (operation_result);
+  g_object_unref (task);
 }
 
 static gchar *
