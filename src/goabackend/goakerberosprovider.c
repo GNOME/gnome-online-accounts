@@ -1428,7 +1428,7 @@ sign_in_thread (GTask               *task,
   if (object_path == NULL)
     g_task_return_error (task, error);
   else
-    g_task_return_pointer (task, object_path, NULL);
+    g_task_return_pointer (task, object_path, g_free);
 }
 
 
