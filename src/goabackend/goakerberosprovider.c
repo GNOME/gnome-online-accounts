@@ -975,7 +975,7 @@ start_over:
   g_variant_builder_add (&details, "{ss}", "TicketingEnabled", "true");
 
   goa_manager_call_add_account (goa_client_get_manager (client),
-                                goa_provider_get_provider_type (provider),
+                                provider_type,
                                 principal,
                                 principal,
                                 g_variant_builder_end (&credentials),
