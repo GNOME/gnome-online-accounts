@@ -41,6 +41,7 @@ BUILT_SOURCES += $(dbus_built_sources)
 $(dbus_built_sources) : Makefile.am $(top_srcdir)/data/dbus-interfaces.xml
 	$(AM_V_GEN) gdbus-codegen							                \
 		--interface-prefix org.gnome.OnlineAccounts.                          	\
+		--c-generate-autocleanup all						\
 		--c-namespace Goa							\
 		--c-generate-object-manager						\
 		--generate-c-code goa-generated                             		\
