@@ -189,6 +189,7 @@ EXTRA_DIST +=								\
 
 goadleynaservermanager.h goadleynaservermanager.c: goadleynaservermanager.xml
 	$(AM_V_GEN)gdbus-codegen						\
+		--c-generate-autocleanup all					\
 		--c-namespace DleynaServer					\
 		--generate-c-code goadleynaservermanager			\
 		--interface-prefix com.intel.dLeynaServer.			\
@@ -196,6 +197,7 @@ goadleynaservermanager.h goadleynaservermanager.c: goadleynaservermanager.xml
 
 goadleynaservermediadevice.h goadleynaservermediadevice.c: goadleynaservermediadevice.xml
 	$(AM_V_GEN)gdbus-codegen								\
+		--c-generate-autocleanup all							\
 		--c-namespace DleynaServer							\
 		--generate-c-code goadleynaservermediadevice					\
 		--interface-prefix com.intel.dLeynaServer.					\

@@ -36,6 +36,7 @@ dbus_sources = gnome.gdbus_codegen(
   sources: dbus_ifaces,
   interface_prefix: 'org.gnome.OnlineAccounts.',
   namespace: goa_ns,
+  autocleanup: 'all',
   object_manager: true,
   docbook: dbus + '-doc',
   install_header: true,
