@@ -60,7 +60,8 @@ sources += gnome.gdbus_codegen(
   dbus,
   dbus + '.xml',
   interface_prefix: 'com.intel.dLeynaServer.',
-  namespace: 'DleynaServer'
+  namespace: 'DleynaServer',
+  autocleanup: 'all',
 )
 
 dbus = 'goadleynaservermediadevice'
@@ -69,7 +70,8 @@ sources += gnome.gdbus_codegen(
   dbus,
   dbus + '.xml',
   interface_prefix: 'com.intel.dLeynaServer.',
-  namespace: 'DleynaServer'
+  namespace: 'DleynaServer',
+  autocleanup: 'all',
 )
 
 incs = common_incs
