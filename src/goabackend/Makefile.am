@@ -102,6 +102,11 @@ libgoa_backend_1_0_la_SOURCES =						\
 	$(top_srcdir)/src/goaidentity/goaidentitymanagererror.c		\
 	$(NULL)
 
+if BUILD_FEDORA
+libgoa_backend_1_0_la_SOURCES +=					\
+	goafedoraprovider.h		goafedoraprovider.c
+endif
+
 if BUILD_KERBEROS
 libgoa_backend_1_0_la_SOURCES +=					\
 	goakerberosprovider.h		goakerberosprovider.c
