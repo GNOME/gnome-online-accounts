@@ -2,23 +2,23 @@
 # Copyright (C) 2012 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
 # Dimitris Spingos (Δημήτρης Σπίγγος) <dmtrs32@gmail.com>, 2013, 2014.
-# Efstathios Iosifidis <iosifidis@opensuse.org>, 2012, 2013, 2015, 2018.
+# Efstathios Iosifidis <iosifidis@opensuse.org>, 2012-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
-"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-02-07 22:50+0000\n"
-"PO-Revision-Date: 2018-03-07 00:03+0200\n"
-"Last-Translator: Tom Tryfonidis <tomtryf@gnome.org>\n"
-"Language-Team: Ελληνικά <>\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
+"issues\n"
+"POT-Creation-Date: 2019-08-26 13:01+0000\n"
+"PO-Revision-Date: 2019-09-05 19:03+0300\n"
+"Last-Translator: Efstathios Iosifidis <iosifidis@opensuse.org>\n"
+"Language-Team: Greek, Modern (1453-) <gnome-el-list@gnome.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.6\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Generator: Gtranslator 3.32.1\n"
 "X-Project-Style: gnome\n"
 
 #: data/org.gnome.online-accounts.gschema.xml:6
@@ -35,35 +35,35 @@ msgstr ""
 "την εκκίνηση."
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1196 src/daemon/goadaemon.c:1480
+#: src/daemon/goadaemon.c:1136 src/daemon/goadaemon.c:1433
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Αποτυχία εύρεσης παρόχου για: %s"
 
-#: src/daemon/goadaemon.c:1423
+#: src/daemon/goadaemon.c:1376
 msgid "IsLocked property is set for account"
 msgstr "Η ιδιότητα IsLocked έχει οριστεί για το λογαριασμό"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1468
+#: src/daemon/goadaemon.c:1421
 msgid "ProviderType property is not set for account"
 msgstr "Η ιδιότητα ProviderType δεν έχει οριστεί για το λογαριασμό"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:238
+#: src/goabackend/goaewsclient.c:258
 msgid "Failed to parse autodiscover response XML"
 msgstr "Αποτυχία ανάλυσης απόκρισης αυτόματου εντοπισμού XML"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: src/goabackend/goaewsclient.c:249 src/goabackend/goaewsclient.c:264
-#: src/goabackend/goaewsclient.c:279
+#: src/goabackend/goaewsclient.c:269 src/goabackend/goaewsclient.c:284
+#: src/goabackend/goaewsclient.c:299
 #, c-format
 msgid "Failed to find “%s” element"
 msgstr "Αποτυχία εύρεσης στοιχείου «%s»"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:300
+#: src/goabackend/goaewsclient.c:320
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "Αποτυχία εύρεσης ASUrl και OABUrl στην απόκριση αυτόματου εντοπισμού"
 
@@ -82,118 +82,122 @@ msgstr "Microsoft Exchange"
 msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "Μη έγκυρος κωδικός πρόσβασης με όνομα χρήστη «%s» (%s, %d): "
 
-#: src/goabackend/goaexchangeprovider.c:396
+#: src/goabackend/goaexchangeprovider.c:394
 #: src/goabackend/goaimapsmtpprovider.c:647
 msgid "_E-mail"
 msgstr "_Ηλεκτρονική διεύθυνση"
 
-#: src/goabackend/goaexchangeprovider.c:397
+#: src/goabackend/goaexchangeprovider.c:395
+#: src/goabackend/goafedoraprovider.c:574
 #: src/goabackend/goaimapsmtpprovider.c:667
 #: src/goabackend/goaimapsmtpprovider.c:687
 #: src/goabackend/goalastfmprovider.c:429
-#: src/goabackend/goaowncloudprovider.c:530
+#: src/goabackend/goaowncloudprovider.c:509
 msgid "_Password"
 msgstr "_Κωδικός πρόσβασης"
 
-#: src/goabackend/goaexchangeprovider.c:400
+#: src/goabackend/goaexchangeprovider.c:398
 msgid "_Custom"
 msgstr "_Προσαρμοσμένο"
 
-#: src/goabackend/goaexchangeprovider.c:411
+#: src/goabackend/goaexchangeprovider.c:409
+#: src/goabackend/goafedoraprovider.c:573
 #: src/goabackend/goaimapsmtpprovider.c:666
 #: src/goabackend/goaimapsmtpprovider.c:686
 #: src/goabackend/goalastfmprovider.c:428
-#: src/goabackend/goaowncloudprovider.c:529
+#: src/goabackend/goaowncloudprovider.c:508
 msgid "User_name"
 msgstr "Όνομα_χρήστη"
 
-#: src/goabackend/goaexchangeprovider.c:412
-#: src/goabackend/goaowncloudprovider.c:528
+#: src/goabackend/goaexchangeprovider.c:410
+#: src/goabackend/goaowncloudprovider.c:507
 msgid "_Server"
 msgstr "Διακομι_στής "
 
 #. --
-#: src/goabackend/goaexchangeprovider.c:422
+#: src/goabackend/goaexchangeprovider.c:420
+#: src/goabackend/goafedoraprovider.c:581
 #: src/goabackend/goaimapsmtpprovider.c:699
-#: src/goabackend/goakerberosprovider.c:563
+#: src/goabackend/goakerberosprovider.c:591
 #: src/goabackend/goalastfmprovider.c:437
-#: src/goabackend/goaowncloudprovider.c:544
-#: src/goabackend/goatelepathyprovider.c:651
+#: src/goabackend/goaowncloudprovider.c:523
 msgid "_Cancel"
 msgstr "A_κύρωση"
 
-#: src/goabackend/goaexchangeprovider.c:423
-#: src/goabackend/goakerberosprovider.c:564
+#: src/goabackend/goaexchangeprovider.c:421
+#: src/goabackend/goafedoraprovider.c:582
+#: src/goabackend/goakerberosprovider.c:592
 #: src/goabackend/goalastfmprovider.c:438
-#: src/goabackend/goaowncloudprovider.c:545
+#: src/goabackend/goaowncloudprovider.c:524
 msgid "C_onnect"
 msgstr "Σύν_δεση"
 
-#: src/goabackend/goaexchangeprovider.c:439
+#: src/goabackend/goaexchangeprovider.c:437
+#: src/goabackend/goafedoraprovider.c:597
 #: src/goabackend/goaimapsmtpprovider.c:715
-#: src/goabackend/goakerberosprovider.c:579
+#: src/goabackend/goakerberosprovider.c:607
 #: src/goabackend/goalastfmprovider.c:454
-#: src/goabackend/goaowncloudprovider.c:560
+#: src/goabackend/goaowncloudprovider.c:539
 msgid "Connecting…"
 msgstr "Σύνδεση…"
 
-#: src/goabackend/goaexchangeprovider.c:539
-#: src/goabackend/goaexchangeprovider.c:733
+#: src/goabackend/goaexchangeprovider.c:537
+#: src/goabackend/goaexchangeprovider.c:731
+#: src/goabackend/goafedoraprovider.c:746
 #: src/goabackend/goaimapsmtpprovider.c:865
 #: src/goabackend/goaimapsmtpprovider.c:900
 #: src/goabackend/goaimapsmtpprovider.c:992
 #: src/goabackend/goaimapsmtpprovider.c:1249
 #: src/goabackend/goaimapsmtpprovider.c:1325
-#: src/goabackend/goakerberosprovider.c:896
+#: src/goabackend/goakerberosprovider.c:947
 #: src/goabackend/goalastfmprovider.c:652
 #: src/goabackend/goalastfmprovider.c:820
 #: src/goabackend/goamediaserverprovider.c:420
 #: src/goabackend/goaoauth2provider.c:995 src/goabackend/goaoauthprovider.c:859
-#: src/goabackend/goaowncloudprovider.c:663
-#: src/goabackend/goaowncloudprovider.c:883
-#: src/goabackend/goatelepathyprovider.c:475
-#: src/goabackend/goatelepathyprovider.c:514
-#: src/goabackend/goatelepathyprovider.c:682
+#: src/goabackend/goaowncloudprovider.c:661
+#: src/goabackend/goaowncloudprovider.c:881
 msgid "Dialog was dismissed"
 msgstr "Απορρίφθηκε το παράθυρο διαλόγου"
 
-#: src/goabackend/goaexchangeprovider.c:577
-#: src/goabackend/goaexchangeprovider.c:761
+#: src/goabackend/goaexchangeprovider.c:575
+#: src/goabackend/goaexchangeprovider.c:759
+#: src/goabackend/goafedoraprovider.c:792
 #: src/goabackend/goaimapsmtpprovider.c:933
 #: src/goabackend/goaimapsmtpprovider.c:1030
 #: src/goabackend/goaimapsmtpprovider.c:1276
 #: src/goabackend/goaimapsmtpprovider.c:1353
 #: src/goabackend/goalastfmprovider.c:686
 #: src/goabackend/goalastfmprovider.c:839
-#: src/goabackend/goaowncloudprovider.c:708
-#: src/goabackend/goaowncloudprovider.c:910
+#: src/goabackend/goaowncloudprovider.c:706
+#: src/goabackend/goaowncloudprovider.c:908
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "Απορρίφθηκε ο διάλογος (%s, %d): "
 
-#: src/goabackend/goaexchangeprovider.c:590
+#: src/goabackend/goaexchangeprovider.c:588
 #: src/goabackend/goaimapsmtpprovider.c:946
 #: src/goabackend/goaimapsmtpprovider.c:1043
-#: src/goabackend/goaowncloudprovider.c:721
+#: src/goabackend/goaowncloudprovider.c:719
 msgid "_Ignore"
 msgstr "_Παράβλεψη"
 
-#: src/goabackend/goaexchangeprovider.c:595
-#: src/goabackend/goaexchangeprovider.c:780
+#: src/goabackend/goaexchangeprovider.c:593
+#: src/goabackend/goaexchangeprovider.c:778
+#: src/goabackend/goafedoraprovider.c:803
 #: src/goabackend/goaimapsmtpprovider.c:951
 #: src/goabackend/goaimapsmtpprovider.c:1048
 #: src/goabackend/goaimapsmtpprovider.c:1295
 #: src/goabackend/goaimapsmtpprovider.c:1372
-#: src/goabackend/goakerberosprovider.c:981
+#: src/goabackend/goakerberosprovider.c:1040
 #: src/goabackend/goalastfmprovider.c:698
 #: src/goabackend/goalastfmprovider.c:856
-#: src/goabackend/goaowncloudprovider.c:726
-#: src/goabackend/goaowncloudprovider.c:929
+#: src/goabackend/goaowncloudprovider.c:724
+#: src/goabackend/goaowncloudprovider.c:927
 msgid "_Try Again"
 msgstr "_Προσπαθήστε ξανά"
 
-#: src/goabackend/goaexchangeprovider.c:600
-#: src/goabackend/goaexchangeprovider.c:773
+#: src/goabackend/goaexchangeprovider.c:598
+#: src/goabackend/goaexchangeprovider.c:771
 msgid "Error connecting to Microsoft Exchange server"
 msgstr "Σφάλμα σύνδεσης στον διακομιστή Microsoft Exchange"
 
@@ -204,8 +208,7 @@ msgstr "Facebook"
 #: src/goabackend/goafacebookprovider.c:183
 #: src/goabackend/goaflickrprovider.c:155
 #: src/goabackend/goafoursquareprovider.c:154
-#: src/goabackend/goagoogleprovider.c:191
-#: src/goabackend/goatodoistprovider.c:193
+#: src/goabackend/goagoogleprovider.c:184
 #: src/goabackend/goawindowsliveprovider.c:159
 #, c-format
 msgid ""
@@ -229,8 +232,8 @@ msgstr ""
 #: src/goabackend/goafoursquareprovider.c:206
 #: src/goabackend/goafoursquareprovider.c:215
 #: src/goabackend/goafoursquareprovider.c:228
-#: src/goabackend/goagoogleprovider.c:210
-#: src/goabackend/goagoogleprovider.c:221
+#: src/goabackend/goagoogleprovider.c:203
+#: src/goabackend/goagoogleprovider.c:214
 #: src/goabackend/goalastfmprovider.c:212
 #: src/goabackend/goalastfmprovider.c:221
 #: src/goabackend/goalastfmprovider.c:230
@@ -242,16 +245,47 @@ msgstr ""
 #: src/goabackend/goalastfmprovider.c:544
 #: src/goabackend/goaoauth2provider.c:656
 #: src/goabackend/goaoauth2provider.c:686
-#: src/goabackend/goaoauth2provider.c:697
-#: src/goabackend/goatodoistprovider.c:212
-#: src/goabackend/goatodoistprovider.c:223
-#: src/goabackend/goatodoistprovider.c:234 src/goabackend/goautils.c:313
+#: src/goabackend/goaoauth2provider.c:697 src/goabackend/goautils.c:273
 #: src/goabackend/goawindowsliveprovider.c:178
 #: src/goabackend/goawindowsliveprovider.c:189
 #: src/goabackend/goawindowsliveprovider.c:198
 #: src/goabackend/goawindowsliveprovider.c:211
 msgid "Could not parse response"
 msgstr "Αδυναμία ανάλυσης απόκρισης "
+
+#: src/goabackend/goafedoraprovider.c:94
+msgid "Fedora"
+msgstr "Fedora"
+
+#: src/goabackend/goafedoraprovider.c:208
+#: src/goabackend/goakerberosprovider.c:248
+msgid "Ticketing is disabled for account"
+msgstr ""
+"Η δημιουργία εισητηρίου έχει απενεργοποιηθεί για το λογαριασμό Kerberos"
+
+#: src/goabackend/goafedoraprovider.c:233
+#: src/goabackend/goakerberosprovider.c:273
+#, c-format
+msgid "Could not find saved credentials for principal “%s” in keyring"
+msgstr ""
+"Αδυναμία εύρεσης αποθηκευμένων διαπιστευτηρίων για το κύριο «%s» στην "
+"κλειδοθήκη"
+
+#: src/goabackend/goafedoraprovider.c:246
+#: src/goabackend/goakerberosprovider.c:286
+#, c-format
+msgid "Did not find password for principal “%s” in credentials"
+msgstr "Δε βρέθηκε κωδικός πρόσβασης για το κύριο «%s» στα διαπιστευτήρια"
+
+#: src/goabackend/goafedoraprovider.c:805
+#| msgid "Error connecting to Last.fm"
+msgid "Error connecting to Fedora"
+msgstr "Σφάλμα σύνδεσης στο Fedora"
+
+#: src/goabackend/goafedoraprovider.c:1198
+#: src/goabackend/goakerberosprovider.c:1374
+msgid "Identity service returned invalid key"
+msgstr "Η υπηρεσία ταυτότητας επέστρεψε μη έγκυρο κλειδί"
 
 #: src/goabackend/goaflickrprovider.c:56
 msgid "Flickr"
@@ -278,7 +312,7 @@ msgstr "Δεν είναι διαθέσιμη η υπηρεσία"
 
 #. TODO: more specific
 #: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goalastfmprovider.c:529
-#: src/goabackend/goasmtpauth.c:108 src/goabackend/goautils.c:878
+#: src/goabackend/goasmtpauth.c:108 src/goabackend/goautils.c:838
 msgid "Authentication failed"
 msgstr "Αποτυχία πιστοποίησης"
 
@@ -382,51 +416,30 @@ msgstr "SMTP"
 msgid "Enterprise Login (Kerberos)"
 msgstr "Εταιρική σύνδεση (Kerberos)"
 
-#: src/goabackend/goakerberosprovider.c:220
-msgid "Ticketing is disabled for account"
-msgstr ""
-"Η δημιουργία εισητηρίου έχει απενεργοποιηθεί για το λογαριασμό Kerberos"
-
-#: src/goabackend/goakerberosprovider.c:245
-#, c-format
-msgid "Could not find saved credentials for principal “%s” in keyring"
-msgstr ""
-"Αδυναμία εύρεσης αποθηκευμένων διαπιστευτηρίων για το κύριο «%s» στην "
-"κλειδοθήκη"
-
-#: src/goabackend/goakerberosprovider.c:258
-#, c-format
-msgid "Did not find password for principal “%s” in credentials"
-msgstr "Δε βρέθηκε κωδικός πρόσβασης για το κύριο «%s» στα διαπιστευτήρια"
-
-#: src/goabackend/goakerberosprovider.c:558
+#: src/goabackend/goakerberosprovider.c:586
 msgid "_Principal"
 msgstr "_Κύριος"
 
-#: src/goabackend/goakerberosprovider.c:744
+#: src/goabackend/goakerberosprovider.c:801
 msgid "Operation was cancelled"
 msgstr "Η λειτουργία ακυρώθηκε"
 
-#: src/goabackend/goakerberosprovider.c:794
-#: src/goaidentity/goaidentityservice.c:1072
+#: src/goabackend/goakerberosprovider.c:845
+#: src/goaidentity/goaidentityservice.c:1287
 msgid "Log In to Realm"
 msgstr "Σύνδεση σε Realm"
 
-#: src/goabackend/goakerberosprovider.c:795
+#: src/goabackend/goakerberosprovider.c:846
 msgid "Please enter your password below."
 msgstr "Παρακαλούμε πληκτρολογήστε τον κωδικό πρόσβασής σας παρακάτω."
 
-#: src/goabackend/goakerberosprovider.c:796
+#: src/goabackend/goakerberosprovider.c:847
 msgid "Remember this password"
 msgstr "Απομνημόνευση κωδικού πρόσβασης"
 
-#: src/goabackend/goakerberosprovider.c:976
+#: src/goabackend/goakerberosprovider.c:1035
 msgid "Error connecting to enterprise identity server"
 msgstr "Σφάλμα σύνδεσης στον εταιρικό διακομιστή ταυτοτήτων"
-
-#: src/goabackend/goakerberosprovider.c:1315
-msgid "Identity service returned invalid key"
-msgstr "Η υπηρεσία ταυτότητας επέστρεψε μη έγκυρο κλειδί"
 
 #: src/goabackend/goalastfmprovider.c:65
 msgid "Last.fm"
@@ -531,10 +544,11 @@ msgstr "Τα διαπιστευτήρια δεν περιέχουν τα access_
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: src/goabackend/goaowncloudprovider.c:731
-#: src/goabackend/goaowncloudprovider.c:922
-msgid "Error connecting to ownCloud server"
-msgstr "Σφάλμα σύνδεσης στον διακομιστή ownCloud"
+#: src/goabackend/goaowncloudprovider.c:729
+#: src/goabackend/goaowncloudprovider.c:920
+#| msgid "Error connecting to ownCloud server"
+msgid "Error connecting to Nextcloud server"
+msgstr "Σφάλμα σύνδεσης στον διακομιστή Nextcloud"
 
 #: src/goabackend/goapocketprovider.c:74
 msgid "Pocket"
@@ -545,73 +559,73 @@ msgstr "Pocket"
 msgid "No username or access_token"
 msgstr "Χωρίς όνομα χρήστη ή διακρι_τικό πρόσβασης"
 
-#: src/goabackend/goaprovider.c:114
+#: src/goabackend/goaprovider.c:113
 msgid "_Mail"
 msgstr "Αλλ_ηλογραφία"
 
-#: src/goabackend/goaprovider.c:119
+#: src/goabackend/goaprovider.c:118
 msgid "Cale_ndar"
 msgstr "Ημερο_λόγιο"
 
-#: src/goabackend/goaprovider.c:124
+#: src/goabackend/goaprovider.c:123
 msgid "_Contacts"
 msgstr "Επα_φές"
 
-#: src/goabackend/goaprovider.c:129 src/goabackend/goatelepathyprovider.c:951
+#: src/goabackend/goaprovider.c:128
 msgid "C_hat"
 msgstr "_Συνομιλία"
 
-#: src/goabackend/goaprovider.c:134
+#: src/goabackend/goaprovider.c:133
 msgid "_Documents"
 msgstr "Έ_γγραφα"
 
-#: src/goabackend/goaprovider.c:139
+#: src/goabackend/goaprovider.c:138
 msgid "M_usic"
 msgstr "Μ_ουσική"
 
-#: src/goabackend/goaprovider.c:144
+#: src/goabackend/goaprovider.c:143
 msgid "_Photos"
 msgstr "_Φωτογραφίες"
 
-#: src/goabackend/goaprovider.c:149
+#: src/goabackend/goaprovider.c:148
 msgid "_Files"
 msgstr "_Αρχεία"
 
-#: src/goabackend/goaprovider.c:154
+#: src/goabackend/goaprovider.c:153
 msgid "Network _Resources"
 msgstr "Πό_ροι δικτύου"
 
-#: src/goabackend/goaprovider.c:159
+#: src/goabackend/goaprovider.c:158
 msgid "_Read Later"
 msgstr "Να διαβαστεί α_ργότερα"
 
-#: src/goabackend/goaprovider.c:164
+#: src/goabackend/goaprovider.c:163
 msgid "Prin_ters"
 msgstr "Εκτυπω_τές"
 
-#: src/goabackend/goaprovider.c:169
+#: src/goabackend/goaprovider.c:168
 msgid "_Maps"
 msgstr "_Χάρτες"
 
-#: src/goabackend/goaprovider.c:174
+#: src/goabackend/goaprovider.c:173
 msgid "T_o Do"
 msgstr "Προς _τακτοποίηση"
 
 #. Translators: This is a label for a series of
 #. * options switches. For example: “Use for Mail”.
-#: src/goabackend/goaprovider.c:588 src/goabackend/goatelepathyprovider.c:949
+#: src/goabackend/goaprovider.c:571
 msgid "Use for"
 msgstr "Χρήση για"
 
-#: src/goabackend/goaprovider.c:843
+#: src/goabackend/goaprovider.c:826
 msgid "Account is disabled"
 msgstr "Ο λογαριασμός είναι απενεργοποιημένος"
 
-#: src/goabackend/goaprovider.c:856
+#: src/goabackend/goaprovider.c:839
 msgid "Unknown error"
 msgstr "Άγνωστο σφάλμα"
 
-#: src/goabackend/goaprovider.c:875
+#: src/goabackend/goaprovider.c:858
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "Το ensure_credentials_sync δεν έχει υλοποιηθεί στον τύπο %s"
@@ -625,66 +639,23 @@ msgstr "Το TLS δεν είναι διαθέσιμο"
 msgid "Unknown authentication mechanism"
 msgstr "Άγνωστος μηχανισμός πιστοποίησης"
 
-#: src/goabackend/goatelepathyprovider.c:172
-msgid "Telepathy chat account not found"
-msgstr "Δεν βρέθηκε λογαριασμός συνομιλίας Telepathy"
-
-#: src/goabackend/goatelepathyprovider.c:434
-#, c-format
-msgid "Failed to create a user interface for %s"
-msgstr "Αποτυχία δημιουργίας διεπαφής χρήστη για %s"
-
-#: src/goabackend/goatelepathyprovider.c:540
-msgid "Connection Settings"
-msgstr "Ρυθμίσεις σύνδεσης"
-
-#: src/goabackend/goatelepathyprovider.c:646
-msgid "Personal Details"
-msgstr "Προσωπικές λεπτομέρειες"
-
-#: src/goabackend/goatelepathyprovider.c:652
-msgid "_OK"
-msgstr "Ε_ντάξει"
-
-#: src/goabackend/goatelepathyprovider.c:898
-msgid "Cannot save the connection parameters"
-msgstr "Αδυναμία αποθήκευσης παραμέτρων σύνδεσης"
-
-#: src/goabackend/goatelepathyprovider.c:911
-msgid "Cannot save your personal information on the server"
-msgstr "Αδυναμία αποθήκευσης των προσωπικών σας πληροφοριών στον διακομιστή"
-
-#. Connection Settings button
-#: src/goabackend/goatelepathyprovider.c:956
-msgid "_Connection Settings"
-msgstr "_Ρυθμίσεις σύνδεσης"
-
-#. Edit Personal Information button
-#: src/goabackend/goatelepathyprovider.c:960
-msgid "_Personal Details"
-msgstr "_Προσωπικές λεπτομέρειες"
-
-#: src/goabackend/goatodoistprovider.c:58
-msgid "Todoist"
-msgstr "Todoist"
-
-#: src/goabackend/goautils.c:96
+#: src/goabackend/goautils.c:92
 msgid "Error logging into the account"
 msgstr "Σφάλμα σύνδεσης στο λογαριασμό"
 
-#: src/goabackend/goautils.c:140
+#: src/goabackend/goautils.c:136
 msgid "Credentials have expired"
 msgstr "Τα διαπιστευτήρια έχουν λήξει"
 
-#: src/goabackend/goautils.c:144
+#: src/goabackend/goautils.c:140
 msgid "Sign in to enable this account."
 msgstr "Συνδεθείτε για να ενεργοποιήσετε τον λογαριασμό."
 
-#: src/goabackend/goautils.c:148
+#: src/goabackend/goautils.c:144
 msgid "_Sign In"
 msgstr "_Σύνδεση"
 
-#: src/goabackend/goautils.c:280
+#: src/goabackend/goautils.c:240
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "Yπάρχει ήδη o λογαριασμός %s για %s"
@@ -693,63 +664,63 @@ msgstr "Yπάρχει ήδη o λογαριασμός %s για %s"
 #. * Account" dialogs. The %s is the name of the provider. eg.,
 #. * 'Google'.
 #.
-#: src/goabackend/goautils.c:333
+#: src/goabackend/goautils.c:293
 #, c-format
 msgid "%s Account"
 msgstr "Λογαριασμός %s"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:387
+#: src/goabackend/goautils.c:347
 msgid "Failed to delete credentials from the keyring"
 msgstr "Αποτυχία διαγραφής διαπιστευτηρίων από την κλειδοθήκη"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:435
+#: src/goabackend/goautils.c:395
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Αποτυχία ανάκλησης διαπιστευτηρίων από την κλειδοθήκη"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:445
+#: src/goabackend/goautils.c:405
 msgid "No credentials found in the keyring"
 msgstr "Δεν βρέθηκαν διαπιστευτήρια στην κλειδοθήκη"
 
-#: src/goabackend/goautils.c:458
+#: src/goabackend/goautils.c:418
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Σφάλμα ανάλυσης αποτελέσματος που ελήφθη από την κλειδοθήκη: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: src/goabackend/goautils.c:499
+#: src/goabackend/goautils.c:459
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Διαπιστευτήρια GOA %s για την ταυτότητα %s"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:516
+#: src/goabackend/goautils.c:476
 msgid "Failed to store credentials in the keyring"
 msgstr "Αποτυχία αποθήκευσης διαπιστευτηρίων στην κλειδοθήκη"
 
-#: src/goabackend/goautils.c:865
+#: src/goabackend/goautils.c:825
 msgid "Cannot resolve hostname"
 msgstr "Αδυναμία επίλυσης ονόματος διακομιστή"
 
-#: src/goabackend/goautils.c:869
+#: src/goabackend/goautils.c:829
 msgid "Cannot resolve proxy hostname"
 msgstr "Αδυναμία επίλυσης ονόματος διακομιστή του διαμεσολαβητή"
 
-#: src/goabackend/goautils.c:874
+#: src/goabackend/goautils.c:834
 msgid "Cannot find WebDAV endpoint"
 msgstr "Αδυναμία εύρεσης τελικού σημείου WebDAV"
 
-#: src/goabackend/goautils.c:883
+#: src/goabackend/goautils.c:843
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Κωδικός: %u - Μη αναμενόμενη απόκριση από τον διακομιστή"
 
-#: src/goabackend/goautils.c:899
+#: src/goabackend/goautils.c:859
 msgid "The signing certificate authority is not known."
 msgstr "Η αρχή υπογραφής του πιστοποιητικού δεν είναι γνωστή."
 
-#: src/goabackend/goautils.c:903
+#: src/goabackend/goautils.c:863
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
@@ -757,29 +728,29 @@ msgstr ""
 "Το πιστοποιητικό δεν ταιριάζει με την αναμενόμενη ταυτότητα της ιστοσελίδας "
 "από την οποία έχει ληφθεί."
 
-#: src/goabackend/goautils.c:908
+#: src/goabackend/goautils.c:868
 msgid "The certificate’s activation time is still in the future."
 msgstr ""
 "Ο χρόνος ενεργοποίησης του πιστοποιητικού εξακολουθεί να είναι στο μέλλον."
 
-#: src/goabackend/goautils.c:912
+#: src/goabackend/goautils.c:872
 msgid "The certificate has expired."
 msgstr "Το πιστοποιητικό έχει λήξει."
 
-#: src/goabackend/goautils.c:916
+#: src/goabackend/goautils.c:876
 msgid "The certificate has been revoked."
 msgstr "Το πιστοποιητικό έχει ανακληθεί."
 
-#: src/goabackend/goautils.c:920
+#: src/goabackend/goautils.c:880
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Ο αλγόριθμος του πιστοποιητικού θεωρείται μη ασφαλής."
 
-#: src/goabackend/goautils.c:926
+#: src/goabackend/goautils.c:886
 msgid "Invalid certificate."
 msgstr "Άκυρο πιστοποιητικό."
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:961
+#: src/goabackend/goautils.c:921
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "Δε βρέθηκε %s με ταυτότητα «%s» στα διαπιστευτήρια"
@@ -794,76 +765,113 @@ msgstr "Φόρτωση του «%s»…"
 msgid "Microsoft"
 msgstr "Microsoft"
 
-#: src/goaidentity/goaidentityservice.c:568
+#: src/goaidentity/goaidentityservice.c:569
 msgid "Initial secret key is invalid"
 msgstr "Το αρχικό μυστικό κλειδί δεν είναι έγκυρο"
 
-#: src/goaidentity/goaidentityservice.c:1077
+#. TODO: more specific
+#: src/goaidentity/goaidentityservice.c:806
+#: src/goaidentity/goaidentityservice.c:910
+#, c-format
+msgid "Couldn't get GoaObject for object path %s"
+msgstr "Δεν ήταν δυνατή η λήψη του GoaObject για τη διαδρομή αντικειμένου %s"
+
+#: src/goaidentity/goaidentityservice.c:1292
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "Το δίκτυο realm %s χρειάζεται μερικές πληροφορίες για να σας συνδέσει."
 
-#: src/goaidentity/goakerberosidentity.c:275
-#: src/goaidentity/goakerberosidentity.c:283
-#: src/goaidentity/goakerberosidentity.c:707
+#: src/goaidentity/goakerberosidentity.c:274
+#: src/goaidentity/goakerberosidentity.c:282
+#: src/goaidentity/goakerberosidentity.c:706
 msgid "Could not find identity in credential cache: "
 msgstr "Αδυναμία εύρεσης ταυτότητας στη μνήμη διαπιστευτηρίων: "
 
-#: src/goaidentity/goakerberosidentity.c:720
+#: src/goaidentity/goakerberosidentity.c:719
 msgid "Could not find identity credentials in cache: "
 msgstr "Αδυναμία εύρεσης διαπιστευτηρίων ταυτότητας στη μνήμη: "
 
-#: src/goaidentity/goakerberosidentity.c:771
+#: src/goaidentity/goakerberosidentity.c:770
 msgid "Could not sift through identity credentials in cache: "
 msgstr ""
 "Αδυναμία λεπτομερούς εξέτασης των διαπιστευτηρίων ταυτότητας στη μνήμη: "
 
-#: src/goaidentity/goakerberosidentity.c:788
+#: src/goaidentity/goakerberosidentity.c:787
 msgid "Could not finish up sifting through identity credentials in cache: "
 msgstr ""
 "Αδυναμία καθαρισμού της λεπτομερούς εξέτασης των διαπιστευτηρίων ταυτότητας "
 "στη μνήμη:"
 
-#: src/goaidentity/goakerberosidentity.c:1103
+#: src/goaidentity/goakerberosidentity.c:1102
 msgid "No associated identification found"
 msgstr "Δε βρέθηκε σχετική ταυτότητα"
 
-#: src/goaidentity/goakerberosidentity.c:1186
+#: src/goaidentity/goakerberosidentity.c:1185
 msgid "Could not create credential cache: "
 msgstr "Αδυναμία δημιουργίας μνήμης διαπιστευτηρίων: "
 
-#: src/goaidentity/goakerberosidentity.c:1220
+#: src/goaidentity/goakerberosidentity.c:1219
 msgid "Could not initialize credentials cache: "
 msgstr "Αδυναμία αρχικοποιήσης μνήμης διαπιστευτηρίων: "
 
-#: src/goaidentity/goakerberosidentity.c:1236
+#: src/goaidentity/goakerberosidentity.c:1235
 msgid "Could not store new credentials in credentials cache: "
 msgstr "Αδυναμία αποθήκευσης νέων διαπιστευτηρίων στη μνήμη διαπιστευτηρίων: "
 
-#: src/goaidentity/goakerberosidentity.c:1534
+#: src/goaidentity/goakerberosidentity.c:1533
 msgid "Could not renew identity: Not signed in"
 msgstr "Αδυναμία ανανέωσης της ταυτότητας: Δεν συνδέθηκε"
 
-#: src/goaidentity/goakerberosidentity.c:1546
+#: src/goaidentity/goakerberosidentity.c:1545
 msgid "Could not renew identity: "
 msgstr "Αδυναμία ανανέωσης ταυτότητας: "
 
-#: src/goaidentity/goakerberosidentity.c:1562
+#: src/goaidentity/goakerberosidentity.c:1561
 #, c-format
 msgid "Could not get new credentials to renew identity %s: "
 msgstr "Αδυναμία λήψης νέων διαπιστευτηρίων για ανανέωση της ταυτότητας %s: "
 
-#: src/goaidentity/goakerberosidentity.c:1604
+#: src/goaidentity/goakerberosidentity.c:1603
 msgid "Could not erase identity: "
 msgstr "Αδυναμία διαγραφής ταυτότητας: "
 
-#: src/goaidentity/goakerberosidentitymanager.c:749
+#: src/goaidentity/goakerberosidentitymanager.c:827
 msgid "Could not find identity"
 msgstr "Αδυναμία εύρεσης ταυτότητας"
 
-#: src/goaidentity/goakerberosidentitymanager.c:845
+#: src/goaidentity/goakerberosidentitymanager.c:919
 msgid "Could not create credential cache for identity"
 msgstr "Αδυναμία δημιουργίας μνήμης διαπιστευτηρίων για την ταυτότητα"
+
+#~ msgid "Telepathy chat account not found"
+#~ msgstr "Δεν βρέθηκε λογαριασμός συνομιλίας Telepathy"
+
+#~ msgid "Failed to create a user interface for %s"
+#~ msgstr "Αποτυχία δημιουργίας διεπαφής χρήστη για %s"
+
+#~ msgid "Connection Settings"
+#~ msgstr "Ρυθμίσεις σύνδεσης"
+
+#~ msgid "Personal Details"
+#~ msgstr "Προσωπικές λεπτομέρειες"
+
+#~ msgid "_OK"
+#~ msgstr "Ε_ντάξει"
+
+#~ msgid "Cannot save the connection parameters"
+#~ msgstr "Αδυναμία αποθήκευσης παραμέτρων σύνδεσης"
+
+#~ msgid "Cannot save your personal information on the server"
+#~ msgstr "Αδυναμία αποθήκευσης των προσωπικών σας πληροφοριών στον διακομιστή"
+
+#~ msgid "_Connection Settings"
+#~ msgstr "_Ρυθμίσεις σύνδεσης"
+
+#~ msgid "_Personal Details"
+#~ msgstr "_Προσωπικές λεπτομέρειες"
+
+#~ msgid "Todoist"
+#~ msgstr "Todoist"
 
 #~ msgid "_Domain"
 #~ msgstr "_Τομέας"
