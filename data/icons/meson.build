@@ -1,4 +1,5 @@
 icon_scalable_data = [
+  'goa-account.svg',
   'goa-account-facebook.svg',
   'goa-account-flickr.svg',
   'goa-account-foursquare.svg',
@@ -9,6 +10,7 @@ icon_scalable_data = [
 ]
 
 icon_symbolic_data = [
+  'goa-account-symbolic.svg',
   'goa-account-facebook-symbolic.svg',
   'goa-account-flickr-symbolic.svg',
   'goa-account-foursquare-symbolic.svg',
