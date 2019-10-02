@@ -1,7 +1,9 @@
+-include $(INTROSPECTION_MAKEFILE)
 
 NULL =
 CLEANFILES =
 EXTRA_DIST =
+INTROSPECTION_GIRS =
 
 AM_CPPFLAGS = 							\
 	-I$(top_builddir)/src -I$(top_srcdir)/src		\
@@ -212,6 +214,33 @@ goadleynaservermediadevice.h goadleynaservermediadevice.c: goadleynaservermediad
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = goa-backend-1.0.pc
+
+# ----------------------------------------------------------------------------------------------------
+
+if HAVE_INTROSPECTION
+introspection_sources =						\
+	$(libgoa_backend_1_0_la_HEADERS)			\
+	goabackendenumtypes.c					\
+	goaprovider.c
+
+GoaBackend-1.0.gir: libgoa-backend-1.0.la
+GoaBackend_1_0_gir_INCLUDES = Gio-2.0 Gtk-3.0 Goa-1.0
+GoaBackend_1_0_gir_EXPORT_PACKAGES = goa-backend-1.0
+GoaBackend_1_0_gir_LIBS = goa-backend-1.0
+GoaBackend_1_0_gir_FILES = $(introspection_sources)
+GoaBackend_1_0_gir_CFLAGS = $(AM_CPPFLAGS) $(libgoa_backend_1_0_la_CFLAGS)
+GoaBackend_1_0_gir_SCANNERFLAGS = $(WARN_SCANNERFLAGS) --c-include='goabackend/goabackend.h' --identifier-prefix=Goa
+INTROSPECTION_GIRS += GoaBackend-1.0.gir
+
+girdir = $(datadir)/gir-1.0
+gir_DATA = GoaBackend-1.0.gir
+
+typelibsdir = $(libdir)/girepository-1.0
+typelibs_DATA = GoaBackend-1.0.typelib
+
+CLEANFILES += $(gir_DATA) $(typelibs_DATA)
+
+endif # HAVE_INTROSPECTION
 
 # ----------------------------------------------------------------------------------------------------
 

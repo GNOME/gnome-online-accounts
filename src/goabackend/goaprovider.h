@@ -30,7 +30,7 @@
 G_BEGIN_DECLS
 
 #define GOA_TYPE_PROVIDER         (goa_provider_get_type ())
-G_DECLARE_DERIVABLE_TYPE (GoaProvider, goa_provider, GOA, PROVIDER, GObject);
+G_DECLARE_DERIVABLE_TYPE (GoaProvider, goa_provider, GOA, PROVIDER, GObject)
 
 typedef struct _GoaProviderPrivate GoaProviderPrivate;
 
