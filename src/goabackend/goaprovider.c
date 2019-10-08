@@ -544,6 +544,7 @@ goa_provider_show_account_real (GoaProvider         *provider,
                                 GtkGrid             *dummy2)
 {
   GoaProviderFeatures features;
+  GtkStyleContext *context;
   GtkWidget *grid;
   gint row;
   guint i;
@@ -554,11 +555,13 @@ goa_provider_show_account_real (GoaProvider         *provider,
   goa_utils_account_add_attention_needed (client, object, provider, vbox);
 
   grid = gtk_grid_new ();
+  context = gtk_widget_get_style_context (grid);
+  gtk_style_context_add_class (context, "account-box");
   gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
   gtk_widget_set_hexpand (grid, TRUE);
-  gtk_widget_set_margin_end (grid, 72);
-  gtk_widget_set_margin_start (grid, 72);
-  gtk_widget_set_margin_top (grid, 24);
+  gtk_widget_set_margin_end (grid, 12);
+  gtk_widget_set_margin_start (grid, 12);
+  gtk_widget_set_margin_top (grid, 12);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
   gtk_container_add (GTK_CONTAINER (vbox), grid);
