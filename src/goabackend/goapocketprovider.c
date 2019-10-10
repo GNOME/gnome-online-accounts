@@ -128,7 +128,9 @@ build_authorization_uri (GoaOAuth2Provider  *oauth2_provider,
                          const gchar        *authorization_uri,
                          const gchar        *escaped_redirect_uri,
                          const gchar        *escaped_client_id,
-                         const gchar        *escaped_scope)
+                         const gchar        *escaped_scope,
+                         const gchar        *code_challenge_method,
+                         const gchar        *code_challenge)
 {
   GoaPocketProvider *self = GOA_POCKET_PROVIDER (oauth2_provider);
   RestProxy *proxy = NULL;

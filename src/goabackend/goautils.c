@@ -944,3 +944,65 @@ out:
   g_free (password);
   return ret;
 }
+
+static void
+replace_all (gchar *str, gchar find, gchar replace)
+{
+  gchar *current_pos = strchr (str, find);
+  while (current_pos)
+    {
+      *current_pos = replace;
+      current_pos = strchr (current_pos,find);
+    }
+}
+
+gchar *
+goa_utils_base64_url_encode (const guchar *data, gsize len)
+{
+  gchar *ret;
+
+  g_return_val_if_fail (data != NULL, NULL);
+
+  ret = g_base64_encode (data, len);
+  replace_all (ret, '+', '-');
+  replace_all (ret, '/', '_');
+  replace_all (ret, '=', '\0');
+
+  return ret;
+}
+
+gchar *
+goa_utils_generate_code_verifier (void)
+{
+  g_autoptr(GRand) rand = NULL;
+  guint32 ints[8];
+  gchar *ret = NULL;
+
+  /* Generates a 'code_verifier' as described in section 4.1 of RFC 7636. */
+  rand = g_rand_new_with_seed (time (NULL));
+  for (int i = 0; i < 8; ++i)
+    ints[i] = g_rand_int (rand);
+
+  ret = goa_utils_base64_url_encode ((const guchar *) ints,
+                                     sizeof(guint32) * 8);
+
+  return ret;
+}
+
+gchar *
+goa_utils_generate_code_challenge (const gchar *code_verifier)
+{
+  g_autoptr(GChecksum) checksum = NULL;
+  g_autofree guint8 *digest = NULL;
+  gsize digest_len;
+
+  checksum = g_checksum_new (G_CHECKSUM_SHA256);
+
+  digest_len = g_checksum_type_get_length (G_CHECKSUM_SHA256);
+  digest = g_malloc (digest_len);
+
+  g_checksum_update (checksum, (const guchar *) code_verifier, -1);
+  g_checksum_get_digest (checksum, digest, &digest_len);
+
+  return goa_utils_base64_url_encode (digest, digest_len);
+}
