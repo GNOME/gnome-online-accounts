@@ -203,26 +203,3 @@ goa_object_skeleton_attach_maps (GoaObjectSkeleton *object,
     }
   g_clear_object (&maps);
 }
-
-void
-goa_object_skeleton_attach_read_later (GoaObjectSkeleton *object,
-                                       gboolean           read_later_enabled)
-{
-  GoaReadLater *readlater = NULL;
-
-  readlater = goa_object_get_read_later (GOA_OBJECT (object));
-  if (read_later_enabled)
-    {
-      if (readlater == NULL)
-        {
-          readlater = goa_read_later_skeleton_new ();
-          goa_object_skeleton_set_read_later (object, readlater);
-        }
-    }
-  else
-    {
-      if (readlater != NULL)
-        goa_object_skeleton_set_read_later (object, NULL);
-    }
-  g_clear_object (&readlater);
-}
