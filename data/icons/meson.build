@@ -1,10 +1,12 @@
 icon_scalable_data = [
   'goa-account.svg',
+  'goa-account-exchange.svg',
   'goa-account-facebook.svg',
   'goa-account-fedora.svg',
   'goa-account-flickr.svg',
   'goa-account-foursquare.svg',
   'goa-account-google.svg',
+  'goa-account-lastfm.svg',
   'goa-account-msn.svg',
   'goa-account-owncloud.svg',
   'goa-account-pocket.svg',
@@ -12,10 +14,12 @@ icon_scalable_data = [
 
 icon_symbolic_data = [
   'goa-account-symbolic.svg',
+  'goa-account-exchange-symbolic.svg',
   'goa-account-facebook-symbolic.svg',
   'goa-account-flickr-symbolic.svg',
   'goa-account-foursquare-symbolic.svg',
   'goa-account-google-symbolic.svg',
+  'goa-account-lastfm-symbolic.svg',
   'goa-account-msn-symbolic.svg',
   'goa-account-owncloud-symbolic.svg',
   'goa-account-pocket-symbolic.svg',
