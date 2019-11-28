@@ -37,8 +37,6 @@ typedef struct _GoaAlarmPrivate GoaAlarmPrivate;
 struct _GoaAlarm
 {
   GObject parent;
-
-  GoaAlarmPrivate *priv;
 };
 
 struct _GoaAlarmClass
