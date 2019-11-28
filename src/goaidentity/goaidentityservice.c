@@ -176,13 +176,11 @@ find_object_with_principal (GoaIdentityService *self,
   GoaIdentityServicePrivate *priv;
   GList      *objects;
   GList      *node;
-  GoaObject  *found_object;
+  GoaObject  *found_object = NULL;
 
   priv = goa_identity_service_get_instance_private (self);
 
   objects = goa_client_get_accounts (priv->client);
-
-  found_object = NULL;
   for (node = objects; node != NULL; node = node->next)
     {
       GoaObject *object = GOA_OBJECT (node->data);
@@ -345,14 +343,10 @@ goa_identity_service_handle_sign_in (GoaIdentityServiceManager *manager,
   GoaIdentityServicePrivate *priv;
   GTask                  *operation_result;
   GoaIdentitySignInFlags  flags;
-  char                   *secret_key;
-  char                   *preauth_source;
-  gconstpointer           initial_password;
+  char                   *secret_key = NULL;
+  char                   *preauth_source = NULL;
+  gconstpointer           initial_password = NULL;
   GCancellable           *cancellable;
-
-  secret_key = NULL;
-  preauth_source = NULL;
-  initial_password = NULL;
 
   priv = goa_identity_service_get_instance_private (self);
 
