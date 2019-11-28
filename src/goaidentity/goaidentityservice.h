@@ -39,7 +39,6 @@ typedef struct _GoaIdentityServicePrivate GoaIdentityServicePrivate;
 struct _GoaIdentityService
 {
   GoaIdentityServiceManagerSkeleton  parent_instance;
-  GoaIdentityServicePrivate         *priv;
 };
 
 struct _GoaIdentityServiceClass
