@@ -48,8 +48,6 @@ enum _GoaKerberosIdentityDescriptionLevel
 struct _GoaKerberosIdentity
 {
   GObject parent;
-
-  GoaKerberosIdentityPrivate *priv;
 };
 
 struct _GoaKerberosIdentityClass
