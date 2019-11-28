@@ -39,7 +39,6 @@ typedef struct _GoaKerberosIdentityManagerPrivate GoaKerberosIdentityManagerPriv
 struct _GoaKerberosIdentityManager
 {
   GObject parent_instance;
-  GoaKerberosIdentityManagerPrivate *priv;
 };
 
 struct _GoaKerberosIdentityManagerClass
