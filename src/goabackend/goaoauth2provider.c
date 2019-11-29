@@ -1087,7 +1087,7 @@ abs_usec_to_duration (gint64 abs_usec)
   g_get_current_time (&now);
   ret = abs_usec - (((gint64) now.tv_sec) * 1000L * 1000L + ((gint64) now.tv_usec));
   ret /= 1000L * 1000L;
-  return ret;
+  return (gint) ret;
 }
 
 static void
