@@ -1066,30 +1066,6 @@ add_account_cb (GoaManager   *manager,
   g_main_loop_quit (priv->loop);
 }
 
-static gint64
-duration_to_abs_usec (gint duration_sec)
-{
-  gint64 ret;
-  GTimeVal now;
-
-  g_get_current_time (&now);
-  ret = ((gint64) now.tv_sec) * 1000L * 1000L + ((gint64) now.tv_usec);
-  ret += ((gint64) duration_sec) * 1000L * 1000L;
-  return ret;
-}
-
-static gint
-abs_usec_to_duration (gint64 abs_usec)
-{
-  gint64 ret;
-  GTimeVal now;
-
-  g_get_current_time (&now);
-  ret = abs_usec - (((gint64) now.tv_sec) * 1000L * 1000L + ((gint64) now.tv_usec));
-  ret /= 1000L * 1000L;
-  return (gint) ret;
-}
-
 static void
 add_credentials_key_values (GoaOAuth2Provider *self,
                             GVariantBuilder *credentials)
@@ -1104,7 +1080,7 @@ add_credentials_key_values (GoaOAuth2Provider *self,
   g_variant_builder_add (credentials, "{sv}", "access_token", g_variant_new_string (priv->access_token));
   if (priv->access_token_expires_in > 0)
     g_variant_builder_add (credentials, "{sv}", "access_token_expires_at",
-                           g_variant_new_int64 (duration_to_abs_usec (priv->access_token_expires_in)));
+                           g_variant_new_int64 (goa_utils_convert_duration_sec_to_abs_usec (priv->access_token_expires_in)));
   if (priv->refresh_token != NULL)
     g_variant_builder_add (credentials, "{sv}", "refresh_token", g_variant_new_string (priv->refresh_token));
   if (priv->password != NULL)
@@ -1388,7 +1364,7 @@ goa_oauth2_provider_get_access_token_sync (GoaOAuth2Provider  *self,
       if (g_strcmp0 (key, "access_token") == 0)
         access_token = g_variant_dup_string (value, NULL);
       else if (g_strcmp0 (key, "access_token_expires_at") == 0)
-        access_token_expires_in = abs_usec_to_duration (g_variant_get_int64 (value));
+        access_token_expires_in = goa_utils_convert_abs_usec_to_duration_sec (g_variant_get_int64 (value));
       else if (g_strcmp0 (key, "refresh_token") == 0)
         refresh_token = g_variant_dup_string (value, NULL);
       else if (g_strcmp0 (key, "authorization_code") == 0)
@@ -1465,7 +1441,7 @@ goa_oauth2_provider_get_access_token_sync (GoaOAuth2Provider  *self,
   g_variant_builder_add (&builder, "{sv}", "access_token", g_variant_new_string (access_token));
   if (access_token_expires_in > 0)
     g_variant_builder_add (&builder, "{sv}", "access_token_expires_at",
-                           g_variant_new_int64 (duration_to_abs_usec (access_token_expires_in)));
+                           g_variant_new_int64 (goa_utils_convert_duration_sec_to_abs_usec (access_token_expires_in)));
   if (refresh_token != NULL)
     g_variant_builder_add (&builder, "{sv}", "refresh_token", g_variant_new_string (refresh_token));
   if (password != NULL)

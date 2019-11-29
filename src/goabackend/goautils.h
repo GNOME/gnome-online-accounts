@@ -53,6 +53,10 @@ gboolean         goa_utils_check_duplicate (GoaClient              *client,
                                             GoaPeekInterfaceFunc    func,
                                             GError                **error);
 
+gint             goa_utils_convert_abs_usec_to_duration_sec (gint64 abs_usec);
+
+gint64           goa_utils_convert_duration_sec_to_abs_usec (gint duration_sec);
+
 gchar           *goa_utils_data_input_stream_read_line (GDataInputStream  *stream,
                                                         gsize             *length,
                                                         GCancellable      *cancellable,

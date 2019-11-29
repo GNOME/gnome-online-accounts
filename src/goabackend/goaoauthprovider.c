@@ -977,30 +977,6 @@ add_account_cb (GoaManager   *manager,
   g_main_loop_quit (data->loop);
 }
 
-static gint64
-duration_to_abs_usec (gint duration_sec)
-{
-  gint64 ret;
-  GTimeVal now;
-
-  g_get_current_time (&now);
-  ret = ((gint64) now.tv_sec) * 1000L * 1000L + ((gint64) now.tv_usec);
-  ret += ((gint64) duration_sec) * 1000L * 1000L;
-  return ret;
-}
-
-static gint
-abs_usec_to_duration (gint64 abs_usec)
-{
-  gint64 ret;
-  GTimeVal now;
-
-  g_get_current_time (&now);
-  ret = abs_usec - (((gint64) now.tv_sec) * 1000L * 1000L + ((gint64) now.tv_usec));
-  ret /= 1000L * 1000L;
-  return (gint) ret;
-}
-
 static GoaObject *
 goa_oauth_provider_add_account (GoaProvider *_provider,
                                 GoaClient   *client,
@@ -1063,12 +1039,12 @@ goa_oauth_provider_add_account (GoaProvider *_provider,
   g_variant_builder_add (&credentials, "{sv}", "access_token_secret", g_variant_new_string (access_token_secret));
   if (access_token_expires_in > 0)
     g_variant_builder_add (&credentials, "{sv}", "access_token_expires_at",
-                           g_variant_new_int64 (duration_to_abs_usec (access_token_expires_in)));
+                           g_variant_new_int64 (goa_utils_convert_duration_sec_to_abs_usec (access_token_expires_in)));
   if (session_handle != NULL)
     g_variant_builder_add (&credentials, "{sv}", "session_handle", g_variant_new_string (session_handle));
   if (session_handle_expires_in > 0)
     g_variant_builder_add (&credentials, "{sv}", "session_handle_expires_at",
-                           g_variant_new_int64 (duration_to_abs_usec (session_handle_expires_in)));
+                           g_variant_new_int64 (goa_utils_convert_duration_sec_to_abs_usec (session_handle_expires_in)));
   if (password != NULL)
     g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (password));
 
@@ -1200,12 +1176,12 @@ goa_oauth_provider_refresh_account (GoaProvider  *_provider,
   g_variant_builder_add (&builder, "{sv}", "access_token_secret", g_variant_new_string (access_token_secret));
   if (access_token_expires_in > 0)
     g_variant_builder_add (&builder, "{sv}", "access_token_expires_at",
-                           g_variant_new_int64 (duration_to_abs_usec (access_token_expires_in)));
+                           g_variant_new_int64 (goa_utils_convert_duration_sec_to_abs_usec (access_token_expires_in)));
   if (session_handle != NULL)
     g_variant_builder_add (&builder, "{sv}", "session_handle", g_variant_new_string (session_handle));
   if (session_handle_expires_in > 0)
     g_variant_builder_add (&builder, "{sv}", "session_handle_expires_at",
-                           g_variant_new_int64 (duration_to_abs_usec (session_handle_expires_in)));
+                           g_variant_new_int64 (goa_utils_convert_duration_sec_to_abs_usec (session_handle_expires_in)));
   if (password != NULL)
     g_variant_builder_add (&builder, "{sv}", "password", g_variant_new_string (password));
   /* TODO: run in worker thread */
@@ -1345,11 +1321,11 @@ goa_oauth_provider_get_access_token_sync (GoaOAuthProvider   *provider,
       else if (g_strcmp0 (key, "access_token_secret") == 0)
         access_token_secret = g_variant_dup_string (value, NULL);
       else if (g_strcmp0 (key, "access_token_expires_at") == 0)
-        access_token_expires_in = abs_usec_to_duration (g_variant_get_int64 (value));
+        access_token_expires_in = goa_utils_convert_abs_usec_to_duration_sec (g_variant_get_int64 (value));
       else if (g_strcmp0 (key, "session_handle") == 0)
         session_handle = g_variant_dup_string (value, NULL);
       else if (g_strcmp0 (key, "session_handle_expires_at") == 0)
-        session_handle_expires_in = abs_usec_to_duration (g_variant_get_int64 (value));
+        session_handle_expires_in = goa_utils_convert_abs_usec_to_duration_sec (g_variant_get_int64 (value));
       else if (g_strcmp0 (key, "password") == 0)
         password = g_variant_dup_string (value, NULL);
       g_variant_unref (value);
@@ -1418,12 +1394,12 @@ goa_oauth_provider_get_access_token_sync (GoaOAuthProvider   *provider,
   g_variant_builder_add (&builder, "{sv}", "access_token_secret", g_variant_new_string (access_token_secret));
   if (access_token_expires_in > 0)
     g_variant_builder_add (&builder, "{sv}", "access_token_expires_at",
-                           g_variant_new_int64 (duration_to_abs_usec (access_token_expires_in)));
+                           g_variant_new_int64 (goa_utils_convert_duration_sec_to_abs_usec (access_token_expires_in)));
   if (session_handle != NULL)
     g_variant_builder_add (&builder, "{sv}", "session_handle", g_variant_new_string (session_handle));
   if (session_handle_expires_in > 0)
     g_variant_builder_add (&builder, "{sv}", "session_handle_expires_at",
-                           g_variant_new_int64 (duration_to_abs_usec (session_handle_expires_in)));
+                           g_variant_new_int64 (goa_utils_convert_duration_sec_to_abs_usec (session_handle_expires_in)));
   if (password != NULL)
     g_variant_builder_add (&builder, "{sv}", "password", g_variant_new_string (password));
 
