@@ -99,10 +99,13 @@ static void
 goa_kerberos_identity_inquiry_dispose (GObject *object)
 {
   GoaKerberosIdentityInquiry *self = GOA_KERBEROS_IDENTITY_INQUIRY (object);
+  GoaKerberosIdentityInquiryPrivate *priv;
 
-  g_clear_object (&self->priv->identity);
-  g_clear_pointer (&self->priv->name, g_free);
-  g_clear_pointer (&self->priv->banner, g_free);
+  priv = goa_kerberos_identity_inquiry_get_instance_private (self);
+
+  g_clear_object (&priv->identity);
+  g_clear_pointer (&priv->name, g_free);
+  g_clear_pointer (&priv->banner, g_free);
 
   G_OBJECT_CLASS (goa_kerberos_identity_inquiry_parent_class)->dispose (object);
 }
@@ -111,8 +114,11 @@ static void
 goa_kerberos_identity_inquiry_finalize (GObject *object)
 {
   GoaKerberosIdentityInquiry *self = GOA_KERBEROS_IDENTITY_INQUIRY (object);
+  GoaKerberosIdentityInquiryPrivate *priv;
 
-  g_list_free_full (self->priv->queries, (GDestroyNotify) goa_kerberos_identity_query_free);
+  priv = goa_kerberos_identity_inquiry_get_instance_private (self);
+
+  g_list_free_full (priv->queries, (GDestroyNotify) goa_kerberos_identity_query_free);
 
   G_OBJECT_CLASS (goa_kerberos_identity_inquiry_parent_class)->finalize (object);
 }
@@ -131,9 +137,6 @@ goa_kerberos_identity_inquiry_class_init (GoaKerberosIdentityInquiryClass *klass
 static void
 goa_kerberos_identity_inquiry_init (GoaKerberosIdentityInquiry *self)
 {
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
-                                            GOA_TYPE_KERBEROS_IDENTITY_INQUIRY,
-                                            GoaKerberosIdentityInquiryPrivate);
 }
 
 GoaIdentityInquiry *
@@ -142,6 +145,7 @@ goa_kerberos_identity_inquiry_new (GoaKerberosIdentity * identity,
                                    const char *banner,
                                    krb5_prompt prompts[], int number_of_prompts)
 {
+  GoaKerberosIdentityInquiryPrivate *priv;
   GObject *object;
   GoaIdentityInquiry *inquiry;
   GoaKerberosIdentityInquiry *self;
@@ -155,25 +159,26 @@ goa_kerberos_identity_inquiry_new (GoaKerberosIdentity * identity,
 
   inquiry = GOA_IDENTITY_INQUIRY (object);
   self = GOA_KERBEROS_IDENTITY_INQUIRY (object);
+  priv = goa_kerberos_identity_inquiry_get_instance_private (self);
 
   /* FIXME: make these construct properties */
-  self->priv->identity = g_object_ref (GOA_IDENTITY (identity));
-  self->priv->name = g_strdup (name);
-  self->priv->banner = g_strdup (banner);
+  priv->identity = g_object_ref (GOA_IDENTITY (identity));
+  priv->name = g_strdup (name);
+  priv->banner = g_strdup (banner);
 
-  self->priv->number_of_queries = 0;
+  priv->number_of_queries = 0;
   for (i = 0; i < number_of_prompts; i++)
     {
       GoaKerberosIdentityQuery *query;
 
       query = goa_kerberos_identity_query_new (inquiry, &prompts[i]);
 
-      self->priv->queries = g_list_prepend (self->priv->queries, query);
-      self->priv->number_of_queries++;
+      priv->queries = g_list_prepend (priv->queries, query);
+      priv->number_of_queries++;
     }
-  self->priv->queries = g_list_reverse (self->priv->queries);
+  priv->queries = g_list_reverse (priv->queries);
 
-  self->priv->number_of_unanswered_queries = self->priv->number_of_queries;
+  priv->number_of_unanswered_queries = priv->number_of_queries;
 
   error = NULL;
   if (!g_initable_init (G_INITABLE (self), NULL, &error))
@@ -191,75 +196,84 @@ static GoaIdentity *
 goa_kerberos_identity_inquiry_get_identity (GoaIdentityInquiry *inquiry)
 {
   GoaKerberosIdentityInquiry *self;
+  GoaKerberosIdentityInquiryPrivate *priv;
 
   g_return_val_if_fail (GOA_IS_KERBEROS_IDENTITY_INQUIRY (inquiry), NULL);
 
   self = GOA_KERBEROS_IDENTITY_INQUIRY (inquiry);
-
-  return self->priv->identity;
+  priv = goa_kerberos_identity_inquiry_get_instance_private (self);
+  return priv->identity;
 }
 
 static char *
 goa_kerberos_identity_inquiry_get_name (GoaIdentityInquiry *inquiry)
 {
   GoaKerberosIdentityInquiry *self;
+  GoaKerberosIdentityInquiryPrivate *priv;
 
   g_return_val_if_fail (GOA_IS_KERBEROS_IDENTITY_INQUIRY (inquiry), NULL);
 
   self = GOA_KERBEROS_IDENTITY_INQUIRY (inquiry);
-
-  return g_strdup (self->priv->name);
+  priv = goa_kerberos_identity_inquiry_get_instance_private (self);
+  return g_strdup (priv->name);
 }
 
 static char *
 goa_kerberos_identity_inquiry_get_banner (GoaIdentityInquiry *inquiry)
 {
   GoaKerberosIdentityInquiry *self;
+  GoaKerberosIdentityInquiryPrivate *priv;
 
   g_return_val_if_fail (GOA_IS_KERBEROS_IDENTITY_INQUIRY (inquiry), NULL);
 
   self = GOA_KERBEROS_IDENTITY_INQUIRY (inquiry);
-
-  return g_strdup (self->priv->banner);
+  priv = goa_kerberos_identity_inquiry_get_instance_private (self);
+  return g_strdup (priv->banner);
 }
 
 static gboolean
 goa_kerberos_identity_inquiry_is_complete (GoaIdentityInquiry *inquiry)
 {
   GoaKerberosIdentityInquiry *self;
+  GoaKerberosIdentityInquiryPrivate *priv;
 
   g_return_val_if_fail (GOA_IS_KERBEROS_IDENTITY_INQUIRY (inquiry), FALSE);
 
   self = GOA_KERBEROS_IDENTITY_INQUIRY (inquiry);
-
-  return self->priv->number_of_unanswered_queries == 0 || self->priv->is_failed;
+  priv = goa_kerberos_identity_inquiry_get_instance_private (self);
+  return priv->number_of_unanswered_queries == 0 || priv->is_failed;
 }
 
 static gboolean
 goa_kerberos_identity_inquiry_is_failed (GoaIdentityInquiry *inquiry)
 {
   GoaKerberosIdentityInquiry *self;
+  GoaKerberosIdentityInquiryPrivate *priv;
 
   g_return_val_if_fail (GOA_IS_KERBEROS_IDENTITY_INQUIRY (inquiry), FALSE);
 
   self = GOA_KERBEROS_IDENTITY_INQUIRY (inquiry);
-
-  return self->priv->is_failed;
+  priv = goa_kerberos_identity_inquiry_get_instance_private (self);
+  return priv->is_failed;
 }
 
 static void
 goa_kerberos_identity_inquiry_mark_query_answered (GoaKerberosIdentityInquiry * self,
                                                    GoaKerberosIdentityQuery * query)
 {
+  GoaKerberosIdentityInquiryPrivate *priv;
+
+  priv = goa_kerberos_identity_inquiry_get_instance_private (self);
+
   if (query->is_answered)
     {
       return;
     }
 
   query->is_answered = TRUE;
-  self->priv->number_of_unanswered_queries--;
+  priv->number_of_unanswered_queries--;
 
-  if (self->priv->number_of_unanswered_queries == 0)
+  if (priv->number_of_unanswered_queries == 0)
     {
       _goa_identity_inquiry_emit_complete (GOA_IDENTITY_INQUIRY (self));
     }
@@ -268,7 +282,11 @@ goa_kerberos_identity_inquiry_mark_query_answered (GoaKerberosIdentityInquiry * 
 static void
 goa_kerberos_identity_inquiry_fail (GoaKerberosIdentityInquiry *self)
 {
-  self->priv->is_failed = TRUE;
+  GoaKerberosIdentityInquiryPrivate *priv;
+
+  priv = goa_kerberos_identity_inquiry_get_instance_private (self);
+
+  priv->is_failed = TRUE;
   _goa_identity_inquiry_emit_complete (GOA_IDENTITY_INQUIRY (self));
 }
 
@@ -308,8 +326,10 @@ goa_kerberos_identity_inquiry_iter_init (GoaIdentityInquiryIter * iter,
                                          GoaIdentityInquiry * inquiry)
 {
   GoaKerberosIdentityInquiry *self = GOA_KERBEROS_IDENTITY_INQUIRY (inquiry);
+  GoaKerberosIdentityInquiryPrivate *priv;
 
-  iter->data = self->priv->queries;
+  priv = goa_kerberos_identity_inquiry_get_instance_private (self);
+  iter->data = priv->queries;
 }
 
 static GoaIdentityQuery *

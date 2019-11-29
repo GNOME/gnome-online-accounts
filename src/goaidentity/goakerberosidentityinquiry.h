@@ -48,8 +48,6 @@ typedef enum
 struct _GoaKerberosIdentityInquiry
 {
   GObject parent;
-
-  GoaKerberosIdentityInquiryPrivate *priv;
 };
 
 struct _GoaKerberosIdentityInquiryClass
