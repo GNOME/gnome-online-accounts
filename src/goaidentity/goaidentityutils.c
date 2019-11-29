@@ -110,9 +110,7 @@ dashed_string_to_studly_caps (const char *dashed_string)
     {
       if (studly_string[i] == '-' || studly_string[i] == '_')
         {
-          g_memmove (studly_string + i,
-                     studly_string + i + 1,
-                     studly_string_length - i - 1);
+          memmove (studly_string + i, studly_string + i + 1, studly_string_length - i - 1);
           studly_string_length--;
           if (g_ascii_isalpha (studly_string[i]))
             studly_string[i] = g_ascii_toupper (studly_string[i]);
