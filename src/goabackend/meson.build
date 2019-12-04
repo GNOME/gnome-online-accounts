@@ -78,6 +78,7 @@ incs = common_incs
 
 deps = [
   gtk_dep,
+  javascript_core_gtk_dep,
   json_glib_dep,
   libgoa_dep,
   libsecret_dep,

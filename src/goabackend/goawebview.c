@@ -24,7 +24,7 @@
 
 #include <glib.h>
 #include <glib/gi18n-lib.h>
-#include <JavaScriptCore/JavaScript.h>
+#include <jsc/jsc.h>
 #include <libsoup/soup.h>
 #include <webkit2/webkit2.h>
 
@@ -244,26 +244,15 @@ web_view_script_message_received_deny_click_cb (GoaWebView *self)
 static void
 web_view_script_message_received_password_submit_cb (GoaWebView *self, WebKitJavascriptResult *js_result)
 {
-  JSGlobalContextRef js_context;
-  JSStringRef js_string;
-  JSValueRef js_value;
-  gsize max_size;
+  JSCValue *jsc_value;
+  gchar *password = NULL;
 
-  js_value = webkit_javascript_result_get_value (js_result);
-  js_context = webkit_javascript_result_get_global_context (js_result);
-  js_string = JSValueToStringCopy (js_context, js_value, NULL);
-  max_size = JSStringGetMaximumUTF8CStringSize (js_string);
-  if (max_size > 0)
-    {
-      gchar *password;
+  jsc_value = webkit_javascript_result_get_js_value (js_result);
+  password = jsc_value_to_string (jsc_value);
+  if (password != NULL && password[0] != '\0')
+    g_signal_emit (self, signals[PASSWORD_SUBMIT], 0, password);
 
-      password = g_malloc0 (max_size);
-      JSStringGetUTF8CString (js_string, password, max_size);
-      g_signal_emit (self, signals[PASSWORD_SUBMIT], 0, password);
-      g_free (password);
-    }
-
-  JSStringRelease (js_string);
+  g_free (password);
 }
 
 static void
