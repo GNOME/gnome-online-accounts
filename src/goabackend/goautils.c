@@ -254,11 +254,11 @@ goa_utils_check_duplicate (GoaClient              *client,
 gint
 goa_utils_convert_abs_usec_to_duration_sec (gint64 abs_usec)
 {
+  gint64 now;
   gint64 ret;
-  GTimeVal now;
 
-  g_get_current_time (&now);
-  ret = abs_usec - (((gint64) now.tv_sec) * 1000L * 1000L + ((gint64) now.tv_usec));
+  now = g_get_real_time ();
+  ret = abs_usec - now;
   ret /= 1000L * 1000L;
   return (gint) ret;
 }
@@ -266,12 +266,11 @@ goa_utils_convert_abs_usec_to_duration_sec (gint64 abs_usec)
 gint64
 goa_utils_convert_duration_sec_to_abs_usec (gint duration_sec)
 {
+  gint64 now;
   gint64 ret;
-  GTimeVal now;
 
-  g_get_current_time (&now);
-  ret = ((gint64) now.tv_sec) * 1000L * 1000L + ((gint64) now.tv_usec);
-  ret += ((gint64) duration_sec) * 1000L * 1000L;
+  now = g_get_real_time ();
+  ret = now + ((gint64) duration_sec) * 1000L * 1000L;
   return ret;
 }
 
