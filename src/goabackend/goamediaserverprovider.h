@@ -25,15 +25,12 @@
 
 #include <glib-object.h>
 
+#include "goaprovider-priv.h"
+
 G_BEGIN_DECLS
 
 #define GOA_TYPE_MEDIA_SERVER_PROVIDER   (goa_media_server_provider_get_type ())
-#define GOA_MEDIA_SERVER_PROVIDER(o)     (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_MEDIA_SERVER_PROVIDER, GoaMediaServerProvider))
-#define GOA_IS_MEDIA_SERVER_PROVIDER(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_MEDIA_SERVER_PROVIDER))
-
-typedef struct _GoaMediaServerProvider GoaMediaServerProvider;
-
-GType goa_media_server_provider_get_type (void) G_GNUC_CONST;
+G_DECLARE_FINAL_TYPE (GoaMediaServerProvider, goa_media_server_provider, GOA, MEDIA_SERVER_PROVIDER, GoaProvider);
 
 G_END_DECLS
 

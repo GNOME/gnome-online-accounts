@@ -22,7 +22,6 @@
 #include "goaprovider.h"
 #include "goaobjectskeletonutils.h"
 #include "goautils.h"
-#include "goaprovider-priv.h"
 #include "goamediaserverprovider.h"
 #include "goadleynaservermanager.h"
 #include "goadleynaservermediadevice.h"
@@ -32,13 +31,6 @@ struct _GoaMediaServerProvider
 {
   GoaProvider parent_instance;
   GoaDlnaServerManager *dlna_mngr;
-};
-
-typedef struct _GoaMediaServerProviderClass GoaMediaServerProviderClass;
-
-struct _GoaMediaServerProviderClass
-{
-  GoaProviderClass parent_class;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GoaMediaServerProvider, goa_media_server_provider, GOA_TYPE_PROVIDER,
