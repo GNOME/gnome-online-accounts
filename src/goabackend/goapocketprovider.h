@@ -25,15 +25,12 @@
 
 #include <glib-object.h>
 
+#include "goaoauth2provider-priv.h"
+
 G_BEGIN_DECLS
 
 #define GOA_TYPE_POCKET_PROVIDER   (goa_pocket_provider_get_type ())
-#define GOA_POCKET_PROVIDER(o)     (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_POCKET_PROVIDER, GoaPocketProvider))
-#define GOA_IS_POCKET_PROVIDER(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_POCKET_PROVIDER))
-
-typedef struct _GoaPocketProvider GoaPocketProvider;
-
-GType goa_pocket_provider_get_type (void) G_GNUC_CONST;
+G_DECLARE_FINAL_TYPE (GoaPocketProvider, goa_pocket_provider, GOA, POCKET_PROVIDER, GoaOAuth2Provider);
 
 G_END_DECLS
 

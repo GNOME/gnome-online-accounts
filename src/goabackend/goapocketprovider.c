@@ -26,7 +26,6 @@
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goaoauth2provider.h"
-#include "goaoauth2provider-priv.h"
 #include "goapocketprovider.h"
 #include "goaobjectskeletonutils.h"
 #include "goarestproxy.h"
@@ -43,13 +42,6 @@ struct _GoaPocketProvider
    * http://getpocket.com/developer/docs/authentication */
   gchar *code;
   gchar *identity;
-};
-
-typedef struct _GoaPocketProviderClass GoaPocketProviderClass;
-
-struct _GoaPocketProviderClass
-{
-  GoaOAuth2ProviderClass parent_class;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GoaPocketProvider, goa_pocket_provider, GOA_TYPE_OAUTH2_PROVIDER,
