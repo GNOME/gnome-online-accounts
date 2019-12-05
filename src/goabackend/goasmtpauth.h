@@ -32,12 +32,8 @@
 G_BEGIN_DECLS
 
 #define GOA_TYPE_SMTP_AUTH         (goa_smtp_auth_get_type ())
-#define GOA_SMTP_AUTH(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_SMTP_AUTH, GoaSmtpAuth))
-#define GOA_IS_SMTP_AUTH(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_SMTP_AUTH))
+G_DECLARE_FINAL_TYPE (GoaSmtpAuth, goa_smtp_auth, GOA, SMTP_AUTH, GoaMailAuth);
 
-typedef struct _GoaSmtpAuth GoaSmtpAuth;
-
-GType        goa_smtp_auth_get_type  (void) G_GNUC_CONST;
 GoaMailAuth *goa_smtp_auth_new       (const gchar       *domain,
                                       const gchar       *user_name,
                                       const gchar       *password);
