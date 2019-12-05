@@ -20,7 +20,6 @@
 #include <glib/gi18n-lib.h>
 
 #include "goaprovider.h"
-#include "goaprovider-priv.h"
 #include "goakerberosprovider.h"
 #include "goautils.h"
 #include "goaidentity.h"
@@ -33,13 +32,6 @@
 struct _GoaKerberosProvider
 {
   GoaProvider parent_instance;
-};
-
-typedef struct _GoaKerberosProviderClass GoaKerberosProviderClass;
-
-struct _GoaKerberosProviderClass
-{
-  GoaProviderClass parent_class;
 };
 
 static GoaIdentityServiceManager *identity_manager;
