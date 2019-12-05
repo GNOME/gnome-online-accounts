@@ -25,15 +25,12 @@
 
 #include <glib-object.h>
 
+#include "goaoauth2provider-priv.h"
+
 G_BEGIN_DECLS
 
 #define GOA_TYPE_LASTFM_PROVIDER   (goa_lastfm_provider_get_type ())
-#define GOA_LASTFM_PROVIDER(o)     (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_LASTFM_PROVIDER, GoaLastfmProvider))
-#define GOA_IS_LASTFM_PROVIDER(o)  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_LASTFM_PROVIDER))
-
-typedef struct _GoaLastfmProvider GoaLastfmProvider;
-
-GType goa_lastfm_provider_get_type (void) G_GNUC_CONST;
+G_DECLARE_FINAL_TYPE (GoaLastfmProvider, goa_lastfm_provider, GOA, LASTFM_PROVIDER, GoaOAuth2Provider);
 
 G_END_DECLS
 

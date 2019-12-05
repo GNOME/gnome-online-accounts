@@ -26,7 +26,6 @@
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
 #include "goaoauth2provider.h"
-#include "goaoauth2provider-priv.h"
 #include "goalastfmprovider.h"
 #include "goarestproxy.h"
 #include "goautils.h"
@@ -34,13 +33,6 @@
 struct _GoaLastfmProvider
 {
   GoaOAuth2Provider parent_instance;
-};
-
-typedef struct _GoaLastfmProviderClass GoaLastfmProviderClass;
-
-struct _GoaLastfmProviderClass
-{
-  GoaOAuth2ProviderClass parent_class;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GoaLastfmProvider, goa_lastfm_provider, GOA_TYPE_OAUTH2_PROVIDER,
