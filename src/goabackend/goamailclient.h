@@ -33,12 +33,8 @@
 G_BEGIN_DECLS
 
 #define GOA_TYPE_MAIL_CLIENT         (goa_mail_client_get_type ())
-#define GOA_MAIL_CLIENT(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOA_TYPE_MAIL_CLIENT, GoaMailClient))
-#define GOA_IS_MAIL_CLIENT(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GOA_TYPE_MAIL_CLIENT))
+G_DECLARE_FINAL_TYPE (GoaMailClient, goa_mail_client, GOA, MAIL_CLIENT, GObject);
 
-typedef struct _GoaMailClient GoaMailClient;
-
-GType           goa_mail_client_get_type          (void) G_GNUC_CONST;
 GoaMailClient  *goa_mail_client_new               (void);
 void            goa_mail_client_check             (GoaMailClient        *self,
                                                    const gchar          *host_and_port,

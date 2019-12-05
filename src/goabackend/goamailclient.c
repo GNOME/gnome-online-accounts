@@ -32,13 +32,6 @@ struct _GoaMailClient
   GObject parent_instance;
 };
 
-typedef struct _GoaMailClientClass GoaMailClientClass;
-
-struct _GoaMailClientClass
-{
-  GObjectClass parent_class;
-};
-
 G_DEFINE_TYPE (GoaMailClient, goa_mail_client, G_TYPE_OBJECT);
 
 /* ---------------------------------------------------------------------------------------------------- */
