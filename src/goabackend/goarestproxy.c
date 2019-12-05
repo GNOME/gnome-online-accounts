@@ -26,11 +26,6 @@ struct _GoaRestProxy
   RestProxy parent_instance;
 };
 
-struct _GoaRestProxyClass
-{
-  RestProxyClass parent_class;
-};
-
 G_DEFINE_TYPE (GoaRestProxy, goa_rest_proxy, REST_TYPE_PROXY);
 
 /* ---------------------------------------------------------------------------------------------------- */

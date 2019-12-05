@@ -27,20 +27,10 @@
 
 G_BEGIN_DECLS
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (RestProxy, g_object_unref);
+
 #define GOA_TYPE_REST_PROXY (goa_rest_proxy_get_type ())
-
-#define GOA_REST_PROXY(obj) \
-  (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-   GOA_TYPE_REST_PROXY, GoaRestProxy))
-
-#define GOA_IS_REST_PROXY(obj) \
-  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-   GOA_TYPE_REST_PROXY))
-
-typedef struct _GoaRestProxy      GoaRestProxy;
-typedef struct _GoaRestProxyClass GoaRestProxyClass;
-
-GType          goa_rest_proxy_get_type           (void) G_GNUC_CONST;
+G_DECLARE_FINAL_TYPE (GoaRestProxy, goa_rest_proxy, GOA, REST_PROXY, RestProxy);
 
 RestProxy     *goa_rest_proxy_new                (const gchar  *url_format,
                                                   gboolean      binding_required);
