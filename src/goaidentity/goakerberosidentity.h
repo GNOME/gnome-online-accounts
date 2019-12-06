@@ -28,13 +28,9 @@
 G_BEGIN_DECLS
 #define GOA_TYPE_KERBEROS_IDENTITY             (goa_kerberos_identity_get_type ())
 #define GOA_KERBEROS_IDENTITY(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GOA_TYPE_KERBEROS_IDENTITY, GoaKerberosIdentity))
-#define GOA_KERBEROS_IDENTITY_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GOA_TYPE_KERBEROS_IDENTITY, GoaKerberosIdentityClass))
 #define GOA_IS_KERBEROS_IDENTITY(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GOA_TYPE_KERBEROS_IDENTITY))
-#define GOA_IS_KERBEROS_IDENTITY_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GOA_TYPE_KERBEROS_IDENTITY))
-#define GOA_KERBEROS_IDENTITY_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS((obj), GOA_TYPE_KERBEROS_IDENTITY, GoaKerberosIdentityClass))
 typedef struct _GoaKerberosIdentity GoaKerberosIdentity;
 typedef struct _GoaKerberosIdentityClass GoaKerberosIdentityClass;
-typedef struct _GoaKerberosIdentityPrivate GoaKerberosIdentityPrivate;
 typedef enum _GoaKerberosIdentityDescriptionLevel
   GoaKerberosIdentityDescriptionLevel;
 
@@ -43,16 +39,6 @@ enum _GoaKerberosIdentityDescriptionLevel
   GOA_KERBEROS_IDENTITY_DESCRIPTION_REALM,
   GOA_KERBEROS_IDENTITY_DESCRIPTION_USERNAME_AND_REALM,
   GOA_KERBEROS_IDENTITY_DESCRIPTION_USERNAME_ROLE_AND_REALM
-};
-
-struct _GoaKerberosIdentity
-{
-  GObject parent;
-};
-
-struct _GoaKerberosIdentityClass
-{
-  GObjectClass parent_class;
 };
 
 GType goa_kerberos_identity_get_type (void);
