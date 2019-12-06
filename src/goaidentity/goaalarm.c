@@ -41,8 +41,10 @@ typedef enum
   GOA_ALARM_TYPE_TIMEOUT,
 } GoaAlarmType;
 
-struct _GoaAlarmPrivate
+struct _GoaAlarm
 {
+  GObject parent;
+
   GDateTime *time;
   GDateTime *previous_wakeup_time;
   GMainContext *context;
@@ -52,6 +54,14 @@ struct _GoaAlarmPrivate
   GoaAlarmType type;
   GSource *scheduled_wakeup_source;
   GInputStream *stream; /* NULL, unless using timerfd */
+};
+
+struct _GoaAlarmClass
+{
+  GObjectClass parent_class;
+
+  void (* fired)   (GoaAlarm *alarm);
+  void (* rearmed) (GoaAlarm *alarm);
 };
 
 enum
@@ -73,22 +83,19 @@ static void goa_alarm_set_time (GoaAlarm *self, GDateTime *time);
 static void clear_wakeup_source_pointer (GoaAlarm *self);
 static guint signals[NUMBER_OF_SIGNALS] = { 0 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GoaAlarm, goa_alarm, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GoaAlarm, goa_alarm, G_TYPE_OBJECT);
 
 static void
 goa_alarm_dispose (GObject *object)
 {
   GoaAlarm *self = GOA_ALARM (object);
-  GoaAlarmPrivate *priv;
 
-  priv = goa_alarm_get_instance_private (self);
-
-  g_clear_object (&priv->stream);
-  g_clear_pointer (&priv->immediate_wakeup_source, g_source_destroy);
-  g_clear_pointer (&priv->scheduled_wakeup_source, g_source_destroy);
-  g_clear_pointer (&priv->context, g_main_context_unref);
-  g_clear_pointer (&priv->time, g_date_time_unref);
-  g_clear_pointer (&priv->previous_wakeup_time, g_date_time_unref);
+  g_clear_object (&self->stream);
+  g_clear_pointer (&self->immediate_wakeup_source, g_source_destroy);
+  g_clear_pointer (&self->scheduled_wakeup_source, g_source_destroy);
+  g_clear_pointer (&self->context, g_main_context_unref);
+  g_clear_pointer (&self->time, g_date_time_unref);
+  g_clear_pointer (&self->previous_wakeup_time, g_date_time_unref);
 
   G_OBJECT_CLASS (goa_alarm_parent_class)->dispose (object);
 }
@@ -97,11 +104,8 @@ static void
 goa_alarm_finalize (GObject *object)
 {
   GoaAlarm *self = GOA_ALARM (object);
-  GoaAlarmPrivate *priv;
 
-  priv = goa_alarm_get_instance_private (self);
-
-  g_rec_mutex_clear (&priv->lock);
+  g_rec_mutex_clear (&self->lock);
 
   G_OBJECT_CLASS (goa_alarm_parent_class)->finalize (object);
 }
@@ -134,14 +138,11 @@ goa_alarm_get_property (GObject    *object,
                         GParamSpec *param_spec)
 {
   GoaAlarm *self = GOA_ALARM (object);
-  GoaAlarmPrivate *priv;
-
-  priv = goa_alarm_get_instance_private (self);
 
   switch (property_id)
     {
     case PROP_TIME:
-      g_value_set_boxed (value, priv->time);
+      g_value_set_boxed (value, self->time);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, param_spec);
@@ -183,10 +184,7 @@ goa_alarm_class_init (GoaAlarmClass *klass)
 static void
 goa_alarm_init (GoaAlarm *self)
 {
-  GoaAlarmPrivate *priv;
-
-  priv = goa_alarm_get_instance_private (self);
-  g_rec_mutex_init (&priv->lock);
+  g_rec_mutex_init (&self->lock);
 }
 
 static void
@@ -204,19 +202,16 @@ rearm_alarm (GoaAlarm *self)
 static void
 fire_or_rearm_alarm (GoaAlarm *self)
 {
-  GoaAlarmPrivate *priv;
   GTimeSpan time_until_fire;
   GTimeSpan previous_time_until_fire;
   GDateTime *now;
 
-  priv = goa_alarm_get_instance_private (self);
-
   now = g_date_time_new_now_local ();
-  time_until_fire = g_date_time_difference (priv->time, now);
+  time_until_fire = g_date_time_difference (self->time, now);
 
-  if (priv->previous_wakeup_time == NULL)
+  if (self->previous_wakeup_time == NULL)
     {
-      priv->previous_wakeup_time = now;
+      self->previous_wakeup_time = now;
 
       /* If, according to the time, we're past when we should have fired,
        * then fire the alarm.
@@ -226,10 +221,10 @@ fire_or_rearm_alarm (GoaAlarm *self)
     }
   else
     {
-      previous_time_until_fire = g_date_time_difference (priv->time, priv->previous_wakeup_time);
+      previous_time_until_fire = g_date_time_difference (self->time, self->previous_wakeup_time);
 
-      g_date_time_unref (priv->previous_wakeup_time);
-      priv->previous_wakeup_time = now;
+      g_date_time_unref (self->previous_wakeup_time);
+      self->previous_wakeup_time = now;
 
       /* If, according to the time, we're past when we should have fired,
        * and this is the first wakeup where that's been true then fire
@@ -255,15 +250,11 @@ fire_or_rearm_alarm (GoaAlarm *self)
 static gboolean
 on_immediate_wakeup_source_ready (GoaAlarm *self)
 {
-  GoaAlarmPrivate *priv;
+  g_return_val_if_fail (self->type != GOA_ALARM_TYPE_UNSCHEDULED, FALSE);
 
-  priv = goa_alarm_get_instance_private (self);
-
-  g_return_val_if_fail (priv->type != GOA_ALARM_TYPE_UNSCHEDULED, FALSE);
-
-  g_rec_mutex_lock (&priv->lock);
+  g_rec_mutex_lock (&self->lock);
   fire_or_rearm_alarm (self);
-  g_rec_mutex_unlock (&priv->lock);
+  g_rec_mutex_unlock (&self->lock);
   return FALSE;
 }
 
@@ -271,22 +262,20 @@ on_immediate_wakeup_source_ready (GoaAlarm *self)
 static gboolean
 on_timer_source_ready (GObject *stream, GoaAlarm *self)
 {
-  GoaAlarmPrivate *priv;
   gint64 number_of_fires;
   gssize bytes_read;
   gboolean run_again = FALSE;
   GError *error = NULL;
 
   g_return_val_if_fail (GOA_IS_ALARM (self), FALSE);
-  priv = goa_alarm_get_instance_private (self);
 
-  g_rec_mutex_lock (&priv->lock);
+  g_rec_mutex_lock (&self->lock);
 
-  if (priv->type != GOA_ALARM_TYPE_TIMER)
+  if (self->type != GOA_ALARM_TYPE_TIMER)
     {
       g_warning ("GoaAlarm: timer source ready callback called "
                  "when timer source isn't supposed to be used. "
-                 "Current timer type is %u", priv->type);
+                 "Current timer type is %u", self->type);
       goto out;
     }
 
@@ -319,7 +308,7 @@ on_timer_source_ready (GObject *stream, GoaAlarm *self)
   fire_or_rearm_alarm (self);
   run_again = TRUE;
 out:
-  g_rec_mutex_unlock (&priv->lock);
+  g_rec_mutex_unlock (&self->lock);
   g_clear_error (&error);
   return run_again;
 }
@@ -329,14 +318,11 @@ static gboolean
 schedule_wakeups_with_timerfd (GoaAlarm *self)
 {
 #ifdef HAVE_TIMERFD
-  GoaAlarmPrivate *priv;
   struct itimerspec timer_spec;
   int fd;
   int result;
   GSource *source;
   static gboolean seen_before = FALSE;
-
-  priv = goa_alarm_get_instance_private (self);
 
   if (!seen_before)
     {
@@ -353,7 +339,7 @@ schedule_wakeups_with_timerfd (GoaAlarm *self)
     }
 
   memset (&timer_spec, 0, sizeof (timer_spec));
-  timer_spec.it_value.tv_sec = g_date_time_to_unix (priv->time) + 1;
+  timer_spec.it_value.tv_sec = g_date_time_to_unix (self->time) + 1;
 
   result = timerfd_settime (fd,
                             TFD_TIMER_ABSTIME | TFD_TIMER_CANCEL_ON_SET,
@@ -365,15 +351,15 @@ schedule_wakeups_with_timerfd (GoaAlarm *self)
       return FALSE;
     }
 
-  priv->type = GOA_ALARM_TYPE_TIMER;
-  priv->stream = g_unix_input_stream_new (fd, TRUE);
+  self->type = GOA_ALARM_TYPE_TIMER;
+  self->stream = g_unix_input_stream_new (fd, TRUE);
 
-  source = g_pollable_input_stream_create_source (G_POLLABLE_INPUT_STREAM (priv->stream), NULL);
-  priv->scheduled_wakeup_source = source;
-  g_source_set_callback (priv->scheduled_wakeup_source,
+  source = g_pollable_input_stream_create_source (G_POLLABLE_INPUT_STREAM (self->stream), NULL);
+  self->scheduled_wakeup_source = source;
+  g_source_set_callback (self->scheduled_wakeup_source,
                          (GSourceFunc) on_timer_source_ready, self,
                          (GDestroyNotify) clear_wakeup_source_pointer);
-  g_source_attach (priv->scheduled_wakeup_source, priv->context);
+  g_source_attach (self->scheduled_wakeup_source, self->context);
   g_source_unref (source);
 
   return TRUE;
@@ -386,14 +372,11 @@ schedule_wakeups_with_timerfd (GoaAlarm *self)
 static gboolean
 on_timeout_source_ready (GoaAlarm *self)
 {
-  GoaAlarmPrivate *priv;
-
   g_return_val_if_fail (GOA_IS_ALARM (self), FALSE);
-  priv = goa_alarm_get_instance_private (self);
 
-  g_rec_mutex_lock (&priv->lock);
+  g_rec_mutex_lock (&self->lock);
 
-  if (priv->type == GOA_ALARM_TYPE_UNSCHEDULED)
+  if (self->type == GOA_ALARM_TYPE_UNSCHEDULED)
     goto out;
 
   fire_or_rearm_alarm (self);
@@ -401,34 +384,28 @@ on_timeout_source_ready (GoaAlarm *self)
   schedule_wakeups_with_timeout_source (self);
 
 out:
-  g_rec_mutex_unlock (&priv->lock);
+  g_rec_mutex_unlock (&self->lock);
   return FALSE;
 }
 
 static void
 clear_wakeup_source_pointer (GoaAlarm *self)
 {
-  GoaAlarmPrivate *priv;
-
-  priv = goa_alarm_get_instance_private (self);
-  priv->scheduled_wakeup_source = NULL;
+  self->scheduled_wakeup_source = NULL;
 }
 
 static void
 schedule_wakeups_with_timeout_source (GoaAlarm *self)
 {
-  GoaAlarmPrivate *priv;
   GDateTime *now;
   GSource   *source;
   GTimeSpan  time_span;
   guint      interval;
 
-  priv = goa_alarm_get_instance_private (self);
-
-  priv->type = GOA_ALARM_TYPE_TIMEOUT;
+  self->type = GOA_ALARM_TYPE_TIMEOUT;
 
   now = g_date_time_new_now_local ();
-  time_span = g_date_time_difference (priv->time, now);
+  time_span = g_date_time_difference (self->time, now);
   g_date_time_unref (now);
 
   time_span =
@@ -442,13 +419,13 @@ schedule_wakeups_with_timeout_source (GoaAlarm *self)
 
   source = g_timeout_source_new (interval);
 
-  priv->scheduled_wakeup_source = source;
-  g_source_set_callback (priv->scheduled_wakeup_source,
+  self->scheduled_wakeup_source = source;
+  g_source_set_callback (self->scheduled_wakeup_source,
                          (GSourceFunc)
                          on_timeout_source_ready,
                          self, (GDestroyNotify) clear_wakeup_source_pointer);
 
-  g_source_attach (priv->scheduled_wakeup_source, priv->context);
+  g_source_attach (self->scheduled_wakeup_source, self->context);
   g_source_unref (source);
 }
 
@@ -475,63 +452,50 @@ schedule_wakeups (GoaAlarm *self)
 static void
 clear_immediate_wakeup_source_pointer (GoaAlarm *self)
 {
-  GoaAlarmPrivate *priv;
-
-  priv = goa_alarm_get_instance_private (self);
-  priv->immediate_wakeup_source = NULL;
+  self->immediate_wakeup_source = NULL;
 }
 
 static void
 schedule_immediate_wakeup (GoaAlarm *self)
 {
-  GoaAlarmPrivate *priv;
   GSource *source;
-
-  priv = goa_alarm_get_instance_private (self);
 
   source = g_idle_source_new ();
 
-  priv->immediate_wakeup_source = source;
-  g_source_set_callback (priv->immediate_wakeup_source,
+  self->immediate_wakeup_source = source;
+  g_source_set_callback (self->immediate_wakeup_source,
                          (GSourceFunc)
                          on_immediate_wakeup_source_ready,
                          self,
                          (GDestroyNotify) clear_immediate_wakeup_source_pointer);
 
-  g_source_attach (priv->immediate_wakeup_source, priv->context);
+  g_source_attach (self->immediate_wakeup_source, self->context);
   g_source_unref (source);
 }
 
 static void
 goa_alarm_set_time (GoaAlarm *self, GDateTime *time)
 {
-  GoaAlarmPrivate *priv;
-
-  priv = goa_alarm_get_instance_private (self);
-
-  g_rec_mutex_lock (&priv->lock);
+  g_rec_mutex_lock (&self->lock);
 
   g_date_time_ref (time);
-  priv->time = time;
+  self->time = time;
 
-  if (priv->context == NULL)
-    priv->context = g_main_context_ref (g_main_context_default ());
+  if (self->context == NULL)
+    self->context = g_main_context_ref (g_main_context_default ());
 
   schedule_wakeups (self);
 
   /* Wake up right away, in case it's already expired leaving the gate */
   schedule_immediate_wakeup (self);
-  g_rec_mutex_unlock (&priv->lock);
+  g_rec_mutex_unlock (&self->lock);
   g_object_notify (G_OBJECT (self), "time");
 }
 
 GDateTime *
 goa_alarm_get_time (GoaAlarm *self)
 {
-  GoaAlarmPrivate *priv;
-
-  priv = goa_alarm_get_instance_private (self);
-  return priv->time;
+  return self->time;
 }
 
 GoaAlarm *

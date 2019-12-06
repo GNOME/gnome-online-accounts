@@ -26,26 +26,9 @@
 G_BEGIN_DECLS
 #define GOA_TYPE_ALARM             (goa_alarm_get_type ())
 #define GOA_ALARM(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GOA_TYPE_ALARM, GoaAlarm))
-#define GOA_ALARM_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GOA_TYPE_ALARM, GoaAlarmClass))
 #define GOA_IS_ALARM(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GOA_TYPE_ALARM))
-#define GOA_IS_ALARM_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GOA_TYPE_ALARM))
-#define GOA_ALARM_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS((obj), GOA_TYPE_ALARM, GoaAlarmClass))
 typedef struct _GoaAlarm GoaAlarm;
 typedef struct _GoaAlarmClass GoaAlarmClass;
-typedef struct _GoaAlarmPrivate GoaAlarmPrivate;
-
-struct _GoaAlarm
-{
-  GObject parent;
-};
-
-struct _GoaAlarmClass
-{
-  GObjectClass parent_class;
-
-  void (* fired)   (GoaAlarm *alarm);
-  void (* rearmed) (GoaAlarm *alarm);
-};
 
 GType goa_alarm_get_type (void);
 
