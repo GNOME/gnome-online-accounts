@@ -27,7 +27,8 @@
 #include "goaidentityinquiry.h"
 
 G_BEGIN_DECLS
-#define GOA_TYPE_IDENTITY_MANAGER             (goa_identity_manager_get_type ())
+
+#define GOA_TYPE_IDENTITY_MANAGER (goa_identity_manager_get_type ())
 G_DECLARE_INTERFACE (GoaIdentityManager, goa_identity_manager, GOA, IDENTITY_MANAGER, GObject);
 
 struct _GoaIdentityManagerInterface
@@ -156,4 +157,5 @@ char *goa_identity_manager_name_identity (GoaIdentityManager *identity_manager,
                                           GoaIdentity        *identity);
 
 G_END_DECLS
+
 #endif /* __GOA_IDENTITY_MANAGER_H__ */
