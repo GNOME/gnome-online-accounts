@@ -24,10 +24,13 @@
 #include <gio/gio.h>
 
 G_BEGIN_DECLS
-#define GOA_TYPE_ALARM             (goa_alarm_get_type ())
+
+#define GOA_TYPE_ALARM (goa_alarm_get_type ())
 G_DECLARE_FINAL_TYPE (GoaAlarm, goa_alarm, GOA, ALARM, GObject);
 
 GoaAlarm *goa_alarm_new (GDateTime *time);
 GDateTime *goa_alarm_get_time (GoaAlarm *alarm);
+
 G_END_DECLS
+
 #endif /* __GOA_ALARM_H__ */
