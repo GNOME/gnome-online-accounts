@@ -26,13 +26,8 @@
 G_BEGIN_DECLS
 
 #define GOA_TYPE_WEB_EXTENSION            (goa_web_extension_get_type())
-#define GOA_WEB_EXTENSION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GOA_TYPE_WEB_EXTENSION, GoaWebExtension))
-#define GOA_IS_WEB_EXTENSION(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GOA_TYPE_WEB_EXTENSION))
+G_DECLARE_FINAL_TYPE (GoaWebExtension, goa_web_extension, GOA, WEB_EXTENSION, GObject);
 
-typedef struct _GoaWebExtension      GoaWebExtension;
-typedef struct _GoaWebExtensionClass GoaWebExtensionClass;
-
-GType                goa_web_extension_get_type   (void);
 GoaWebExtension     *goa_web_extension_new        (WebKitWebExtension *wk_extension,
                                                    const gchar        *provider_type,
                                                    const gchar        *existing_identity);

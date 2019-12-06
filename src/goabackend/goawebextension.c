@@ -36,11 +36,6 @@ struct _GoaWebExtension
   gchar *provider_type;
 };
 
-struct _GoaWebExtensionClass
-{
-  GObjectClass parent;
-};
-
 enum
 {
   PROP_0,
