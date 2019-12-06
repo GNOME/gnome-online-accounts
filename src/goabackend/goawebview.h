@@ -26,13 +26,8 @@
 G_BEGIN_DECLS
 
 #define GOA_TYPE_WEB_VIEW            (goa_web_view_get_type ())
-#define GOA_WEB_VIEW(object)         (G_TYPE_CHECK_INSTANCE_CAST ((object), GOA_TYPE_WEB_VIEW, GoaWebView))
-#define GOA_IS_WEB_VIEW(object)      (G_TYPE_CHECK_INSTANCE_TYPE ((object), GOA_TYPE_WEB_VIEW))
+G_DECLARE_FINAL_TYPE (GoaWebView, goa_web_view, GOA, WEB_VIEW, GtkOverlay);
 
-typedef struct _GoaWebView      GoaWebView;
-typedef struct _GoaWebViewClass GoaWebViewClass;
-
-GType                  goa_web_view_get_type               (void) G_GNUC_CONST;
 GtkWidget             *goa_web_view_new                    (GoaProvider *provider,
                                                             const gchar *existing_identity);
 GtkWidget             *goa_web_view_get_view               (GoaWebView *self);

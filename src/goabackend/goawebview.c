@@ -46,11 +46,6 @@ struct _GoaWebView
   gulong notify_progress_id;
 };
 
-struct _GoaWebViewClass
-{
-  GtkOverlayClass parent_class;
-};
-
 enum
 {
   PROP_0,
