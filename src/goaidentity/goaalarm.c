@@ -56,11 +56,6 @@ struct _GoaAlarm
   GInputStream *stream; /* NULL, unless using timerfd */
 };
 
-struct _GoaAlarmClass
-{
-  GObjectClass parent_class;
-};
-
 enum
 {
   FIRED,

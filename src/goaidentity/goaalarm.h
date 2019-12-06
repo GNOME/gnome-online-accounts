@@ -25,12 +25,7 @@
 
 G_BEGIN_DECLS
 #define GOA_TYPE_ALARM             (goa_alarm_get_type ())
-#define GOA_ALARM(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GOA_TYPE_ALARM, GoaAlarm))
-#define GOA_IS_ALARM(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GOA_TYPE_ALARM))
-typedef struct _GoaAlarm GoaAlarm;
-typedef struct _GoaAlarmClass GoaAlarmClass;
-
-GType goa_alarm_get_type (void);
+G_DECLARE_FINAL_TYPE (GoaAlarm, goa_alarm, GOA, ALARM, GObject);
 
 GoaAlarm *goa_alarm_new (GDateTime *time);
 GDateTime *goa_alarm_get_time (GoaAlarm *alarm);
