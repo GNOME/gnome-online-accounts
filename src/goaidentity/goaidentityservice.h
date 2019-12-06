@@ -23,14 +23,12 @@
 #include <glib-object.h>
 #include <gio/gio.h>
 
+#include "org.gnome.Identity.h"
+
 G_BEGIN_DECLS
 #define GOA_TYPE_IDENTITY_SERVICE           (goa_identity_service_get_type ())
-#define GOA_IDENTITY_SERVICE(obj)           (G_TYPE_CHECK_INSTANCE_CAST (obj, GOA_TYPE_IDENTITY_SERVICE, GoaIdentityService))
-#define GOA_IS_IDENTITY_SERVICE(obj)        (G_TYPE_CHECK_INSTANCE_TYPE (obj, GOA_TYPE_IDENTITY_SERVICE))
-typedef struct _GoaIdentityService GoaIdentityService;
-typedef struct _GoaIdentityServiceClass GoaIdentityServiceClass;
+G_DECLARE_FINAL_TYPE (GoaIdentityService, goa_identity_service, GOA, IDENTITY_SERVICE, GoaIdentityServiceManagerSkeleton);
 
-GType goa_identity_service_get_type (void);
 GoaIdentityService *goa_identity_service_new (void);
 gboolean goa_identity_service_activate   (GoaIdentityService  *service,
                                           GError             **error);

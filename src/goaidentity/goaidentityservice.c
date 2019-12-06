@@ -36,8 +36,6 @@
 
 #include "goakerberosidentitymanager.h"
 
-#include "org.gnome.Identity.h"
-
 struct _GoaIdentityService
 {
   GoaIdentityServiceManagerSkeleton  parent_instance;
@@ -53,11 +51,6 @@ struct _GoaIdentityService
   GHashTable               *pending_temporary_account_results;
 
   GoaClient                *client;
-};
-
-struct _GoaIdentityServiceClass
-{
-  GoaIdentityServiceManagerSkeletonClass  parent_class;
 };
 
 static void identity_service_manager_interface_init (GoaIdentityServiceManagerIface *interface);
