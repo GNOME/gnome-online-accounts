@@ -24,13 +24,9 @@
 
 G_BEGIN_DECLS
 #define GOA_TYPE_IDENTITY             (goa_identity_get_type ())
-#define GOA_IDENTITY(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GOA_TYPE_IDENTITY, GoaIdentity))
-#define GOA_IDENTITY_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GOA_TYPE_IDENTITY, GoaIdentityInterface))
-#define GOA_IS_IDENTITY(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GOA_TYPE_IDENTITY))
-#define GOA_IDENTITY_GET_IFACE(obj)   (G_TYPE_INSTANCE_GET_INTERFACE((obj), GOA_TYPE_IDENTITY, GoaIdentityInterface))
+G_DECLARE_INTERFACE (GoaIdentity, goa_identity, GOA, IDENTITY, GObject);
+
 #define GOA_IDENTITY_ERROR            (goa_identity_error_quark ())
-typedef struct _GoaIdentity GoaIdentity;
-typedef struct _GoaIdentityInterface GoaIdentityInterface;
 
 struct _GoaIdentityInterface
 {
@@ -62,7 +58,6 @@ typedef enum
   GOA_IDENTITY_SIGN_IN_FLAGS_DISALLOW_PROXYING           = 1 << 2
 } GoaIdentitySignInFlags;
 
-GType  goa_identity_get_type    (void);
 GQuark goa_identity_error_quark (void);
 
 const char  *goa_identity_get_identifier            (GoaIdentity *identity);
