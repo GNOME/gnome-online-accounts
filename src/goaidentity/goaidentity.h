@@ -23,10 +23,11 @@
 #include <glib-object.h>
 
 G_BEGIN_DECLS
-#define GOA_TYPE_IDENTITY             (goa_identity_get_type ())
+
+#define GOA_TYPE_IDENTITY (goa_identity_get_type ())
 G_DECLARE_INTERFACE (GoaIdentity, goa_identity, GOA, IDENTITY, GObject);
 
-#define GOA_IDENTITY_ERROR            (goa_identity_error_quark ())
+#define GOA_IDENTITY_ERROR (goa_identity_error_quark ())
 
 struct _GoaIdentityInterface
 {
@@ -63,6 +64,6 @@ GQuark goa_identity_error_quark (void);
 const char  *goa_identity_get_identifier            (GoaIdentity *identity);
 gboolean     goa_identity_is_signed_in              (GoaIdentity *identity);
 
-
 G_END_DECLS
+
 #endif /* __GOA_IDENTITY_H__ */
