@@ -28,13 +28,7 @@
 
 G_BEGIN_DECLS
 #define GOA_TYPE_IDENTITY_MANAGER             (goa_identity_manager_get_type ())
-#define GOA_IDENTITY_MANAGER(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GOA_TYPE_IDENTITY_MANAGER, GoaIdentityManager))
-#define GOA_IDENTITY_MANAGER_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GOA_TYPE_IDENTITY_MANAGER, GoaIdentityManagerInterface))
-#define GOA_IS_IDENTITY_MANAGER(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GOA_TYPE_IDENTITY_MANAGER))
-#define GOA_IDENTITY_MANAGER_GET_IFACE(obj)   (G_TYPE_INSTANCE_GET_INTERFACE((obj), GOA_TYPE_IDENTITY_MANAGER, GoaIdentityManagerInterface))
-
-typedef struct _GoaIdentityManager GoaIdentityManager;
-typedef struct _GoaIdentityManagerInterface GoaIdentityManagerInterface;
+G_DECLARE_INTERFACE (GoaIdentityManager, goa_identity_manager, GOA, IDENTITY_MANAGER, GObject);
 
 struct _GoaIdentityManagerInterface
 {
@@ -109,8 +103,6 @@ struct _GoaIdentityManagerInterface
   char * (* name_identity) (GoaIdentityManager *identity_manager,
                             GoaIdentity        *identity);
 };
-
-GType  goa_identity_manager_get_type    (void);
 
 void goa_identity_manager_get_identity (GoaIdentityManager  *identity_manager,
                                         const char          *identifier,
