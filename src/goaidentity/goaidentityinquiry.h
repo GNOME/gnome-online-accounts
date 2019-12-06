@@ -29,12 +29,8 @@
 
 G_BEGIN_DECLS
 #define GOA_TYPE_IDENTITY_INQUIRY             (goa_identity_inquiry_get_type ())
-#define GOA_IDENTITY_INQUIRY(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GOA_TYPE_IDENTITY_INQUIRY, GoaIdentityInquiry))
-#define GOA_IDENTITY_INQUIRY_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GOA_TYPE_IDENTITY_INQUIRY, GoaIdentityInquiryClass))
-#define GOA_IS_IDENTITY_INQUIRY(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GOA_TYPE_IDENTITY_INQUIRY))
-#define GOA_IDENTITY_INQUIRY_GET_IFACE(obj)   (G_TYPE_INSTANCE_GET_INTERFACE((obj), GOA_TYPE_IDENTITY_INQUIRY, GoaIdentityInquiryInterface))
-typedef struct _GoaIdentityInquiry GoaIdentityInquiry;
-typedef struct _GoaIdentityInquiryInterface GoaIdentityInquiryInterface;
+G_DECLARE_INTERFACE (GoaIdentityInquiry, goa_identity_inquiry, GOA, IDENTITY_INQUIRY, GObject);
+
 typedef struct _GoaIdentityInquiryIter GoaIdentityInquiryIter;
 
 typedef struct _GoaIdentityQuery GoaIdentityQuery;
@@ -81,8 +77,6 @@ struct _GoaIdentityInquiryInterface
                                         GoaIdentityQuery   *query);
   gboolean             (* is_failed)  (GoaIdentityInquiry *inquiry);
 };
-
-GType goa_identity_inquiry_get_type (void);
 
 GoaIdentity *goa_identity_inquiry_get_identity (GoaIdentityInquiry *inquiry);
 char        *goa_identity_inquiry_get_name     (GoaIdentityInquiry *inquiry);
