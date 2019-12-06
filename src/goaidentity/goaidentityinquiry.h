@@ -28,7 +28,8 @@
 #include "goaidentity.h"
 
 G_BEGIN_DECLS
-#define GOA_TYPE_IDENTITY_INQUIRY             (goa_identity_inquiry_get_type ())
+
+#define GOA_TYPE_IDENTITY_INQUIRY (goa_identity_inquiry_get_type ())
 G_DECLARE_INTERFACE (GoaIdentityInquiry, goa_identity_inquiry, GOA, IDENTITY_INQUIRY, GObject);
 
 typedef struct _GoaIdentityInquiryIter GoaIdentityInquiryIter;
