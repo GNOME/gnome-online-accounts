@@ -59,9 +59,6 @@ struct _GoaAlarm
 struct _GoaAlarmClass
 {
   GObjectClass parent_class;
-
-  void (* fired)   (GoaAlarm *alarm);
-  void (* rearmed) (GoaAlarm *alarm);
 };
 
 enum
