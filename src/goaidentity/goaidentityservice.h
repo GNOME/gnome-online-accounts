@@ -26,7 +26,8 @@
 #include "org.gnome.Identity.h"
 
 G_BEGIN_DECLS
-#define GOA_TYPE_IDENTITY_SERVICE           (goa_identity_service_get_type ())
+
+#define GOA_TYPE_IDENTITY_SERVICE (goa_identity_service_get_type ())
 G_DECLARE_FINAL_TYPE (GoaIdentityService, goa_identity_service, GOA, IDENTITY_SERVICE, GoaIdentityServiceManagerSkeleton);
 
 GoaIdentityService *goa_identity_service_new (void);
@@ -35,4 +36,5 @@ gboolean goa_identity_service_activate   (GoaIdentityService  *service,
 void     goa_identity_service_deactivate (GoaIdentityService  *service);
 
 G_END_DECLS
+
 #endif /* __GOA_IDENTITY_SERVICE_H__ */
