@@ -23,28 +23,12 @@
 #include <glib-object.h>
 #include <gio/gio.h>
 
-#include "org.gnome.Identity.h"
-
 G_BEGIN_DECLS
 #define GOA_TYPE_IDENTITY_SERVICE           (goa_identity_service_get_type ())
 #define GOA_IDENTITY_SERVICE(obj)           (G_TYPE_CHECK_INSTANCE_CAST (obj, GOA_TYPE_IDENTITY_SERVICE, GoaIdentityService))
-#define GOA_IDENTITY_SERVICE_CLASS(cls)     (G_TYPE_CHECK_CLASS_CAST (cls, GOA_TYPE_IDENTITY_SERVICE, GoaIdentityServiceClass))
 #define GOA_IS_IDENTITY_SERVICE(obj)        (G_TYPE_CHECK_INSTANCE_TYPE (obj, GOA_TYPE_IDENTITY_SERVICE))
-#define GOA_IS_IDENTITY_SERVICE_CLASS(obj)  (G_TYPE_CHECK_CLASS_TYPE (obj, GOA_TYPE_IDENTITY_SERVICE))
-#define GOA_IDENTITY_SERVICE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GOA_TYPE_IDENTITY_SERVICE, GoaIdentityServiceClass))
 typedef struct _GoaIdentityService GoaIdentityService;
 typedef struct _GoaIdentityServiceClass GoaIdentityServiceClass;
-typedef struct _GoaIdentityServicePrivate GoaIdentityServicePrivate;
-
-struct _GoaIdentityService
-{
-  GoaIdentityServiceManagerSkeleton  parent_instance;
-};
-
-struct _GoaIdentityServiceClass
-{
-  GoaIdentityServiceManagerSkeletonClass  parent_class;
-};
 
 GType goa_identity_service_get_type (void);
 GoaIdentityService *goa_identity_service_new (void);
