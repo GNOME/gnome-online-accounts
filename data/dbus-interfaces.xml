@@ -298,6 +298,18 @@
     <method name="EnsureCredentials">
       <arg name="expires_in" type="i" direction="out"/>
     </method>
+
+    <!--
+        RetryFeature:
+        @feature: The feature to retry.
+
+        Retries getting the authentication details for a given
+        feature if it was not available when the account was added
+    -->
+    <method name="RetryFeature">
+      <arg name="feature" type="s" direction="in"/>
+      <arg name="result" type="b" direction="out"/>
+    </method>
   </interface>
 
   <!--
