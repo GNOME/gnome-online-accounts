@@ -153,6 +153,7 @@ build_object (GoaProvider         *provider,
   gchar *uri_caldav;
   gchar *uri_carddav;
   gchar *uri_webdav;
+  gchar *uri_music_ampache;
   GoaPasswordBased *password_based = NULL;
   SoupURI *uri = NULL;
   gboolean accept_ssl_errors;
@@ -222,7 +223,9 @@ build_object (GoaProvider         *provider,
 
   /* Music */
   music_enabled = g_key_file_get_boolean (key_file, group, "MusicEnabled", NULL);
-  goa_object_skeleton_attach_music (object, music_enabled);
+  uri_music_ampache = g_strconcat (uri_string, MUSIC_AMPACHE_ENDPOINT, NULL);
+  goa_object_skeleton_attach_music (object, uri_music_ampache, music_enabled, accept_ssl_errors);
+  g_free (uri_music_ampache);
 
   if (just_added)
     {

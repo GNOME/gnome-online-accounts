@@ -50,6 +50,7 @@ void             goa_object_skeleton_attach_maps           (GoaObjectSkeleton *o
                                                             gboolean           maps_enabled);
 
 void             goa_object_skeleton_attach_music          (GoaObjectSkeleton *object,
+                                                            const gchar       *uri,
                                                             gboolean           music_enabled,
                                                             gboolean           accept_ssl_errors);
 
