@@ -25,6 +25,8 @@
 #include <json-glib/json-glib.h>
 #include <libsoup/soup.h>
 #include <rest/rest-proxy.h>
+#include <rest/rest-xml-node.h>
+#include <rest/rest-xml-parser.h>
 
 #include "goahttpclient.h"
 #include "goaprovider.h"
@@ -48,6 +50,7 @@ G_DEFINE_TYPE_WITH_CODE (GoaOwncloudProvider, goa_owncloud_provider, GOA_TYPE_PR
 
 static const gchar *CALDAV_ENDPOINT = "remote.php/caldav/";
 static const gchar *CARDDAV_ENDPOINT = "remote.php/carddav/";
+static const gchar *MUSIC_AMPACHE_ENDPOINT = "index.php/apps/music/ampache/server/xml.server.php";
 static const gchar *MUSIC_PASSWORD_GENERATE_ENDPOINT = "index.php/apps/music/api/settings/userkey/generate";
 static const gchar *WEBDAV_ENDPOINT = "remote.php/webdav/";
 
@@ -257,6 +260,96 @@ build_object (GoaProvider         *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
+music_validate_password_sync (GoaObject    *object,
+                              const gchar  *username,
+                              const gchar  *password,
+                              GError       **error)
+{
+  RestProxy *proxy;
+  RestProxyCall *call;
+  RestXmlParser *parser;
+  RestXmlNode *root_node;
+  RestXmlNode *error_node;
+  gint64 time;
+  gchar *key;
+  gchar *time_key;
+  gchar *passphrase;
+  gchar *uri;
+  gchar *uri_music_ampache;
+  gchar *timestamp;
+  const gchar *payload;
+  gboolean ret;
+
+  call = NULL;
+  parser = NULL;
+  root_node = NULL;
+  error_node = NULL;
+  uri = NULL;
+  uri_music_ampache = NULL;
+  proxy = NULL;
+  timestamp = NULL;
+  ret = FALSE;
+
+  time = g_get_real_time () / 1000000;
+  timestamp = g_strdup_printf ("%ld", time);
+  key = g_compute_checksum_for_string (G_CHECKSUM_SHA256, password, -1);
+  time_key = g_strdup_printf ("%s%s", timestamp, key);
+  passphrase = g_compute_checksum_for_string (G_CHECKSUM_SHA256, time_key, -1);
+
+  uri = goa_util_lookup_keyfile_string (object, "Uri");
+  uri_music_ampache = g_strconcat (uri, MUSIC_AMPACHE_ENDPOINT, NULL);
+  proxy = rest_proxy_new (uri_music_ampache, FALSE);
+  call = rest_proxy_new_call (proxy);
+
+  rest_proxy_call_set_method (call, "GET");
+  rest_proxy_call_add_param (call, "action", "handshake");
+  rest_proxy_call_add_param (call, "auth", passphrase);
+  rest_proxy_call_add_param (call, "timestamp", timestamp);
+  rest_proxy_call_add_param (call, "version", "350001");
+  rest_proxy_call_add_param (call, "user", username);
+
+  if (!rest_proxy_call_sync (call, error))
+    goto out;
+
+  payload = rest_proxy_call_get_payload (call);
+  if (payload == NULL)
+    {
+      g_set_error (error, GOA_ERROR, GOA_ERROR_FAILED, _("Could not parse response"));
+      goto out;
+    }
+
+  parser = rest_xml_parser_new ();
+  root_node = rest_xml_parser_parse_from_data (parser,
+                                               payload,
+                                               rest_proxy_call_get_payload_length (call));
+
+  if (root_node == NULL)
+    {
+      g_set_error (error, GOA_ERROR, GOA_ERROR_FAILED, _("Could not parse response"));
+      goto out;
+    }
+
+  error_node = rest_xml_node_find (root_node, "auth");
+  if (error_node != NULL)
+    ret = TRUE;
+
+ out:
+  if(root_node != NULL)
+    rest_xml_node_unref (root_node);
+
+  g_free (uri);
+  g_free (uri_music_ampache);
+  g_free (key);
+  g_free (time_key);
+  g_free (timestamp);
+  g_free (passphrase);
+  g_clear_object (&parser);
+  g_clear_object (&call);
+  g_clear_object (&proxy);
+  return ret;
+}
+
+static gboolean
 ensure_credentials_sync (GoaProvider         *provider,
                          GoaObject           *object,
                          gint                *out_expires_in,
@@ -268,6 +361,7 @@ ensure_credentials_sync (GoaProvider         *provider,
   gboolean ret = FALSE;
   gchar *username = NULL;
   gchar *password = NULL;
+  gchar *music_password = NULL;
   gchar *uri = NULL;
   gchar *uri_webdav = NULL;
 
@@ -312,12 +406,32 @@ ensure_credentials_sync (GoaProvider         *provider,
       goto out;
     }
 
+  if (goa_utils_get_credentials (provider, object, "music_password",
+                                 &username, &music_password, cancellable,
+                                 error) &&
+      !music_validate_password_sync (object, username, music_password, error))
+    {
+      if (error != NULL && *error != NULL)
+        {
+          g_prefix_error (error, _("Invalid Music password"));
+          (*error)->domain = GOA_ERROR;
+          (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
+        }
+      else if (error != NULL)
+        {
+          g_set_error (error, GOA_ERROR, GOA_ERROR_NOT_AUTHORIZED, _("Invalid Music Password"));
+        }
+      ret = FALSE;
+      goto out;
+    }
+
   if (out_expires_in != NULL)
     *out_expires_in = 0;
 
  out:
   g_clear_object (&http_client);
   g_free (username);
+  g_free (music_password);
   g_free (password);
   g_free (uri);
   g_free (uri_webdav);
@@ -1344,7 +1458,7 @@ goa_owncloud_provider_class_init (GoaOwncloudProviderClass *klass)
 static gboolean
 on_handle_get_password (GoaPasswordBased      *interface,
                         GDBusMethodInvocation *invocation,
-                        const gchar           *id, /* unused */
+                        const gchar           *id,
                         gpointer               user_data)
 {
   GoaObject *object;
@@ -1368,7 +1482,7 @@ on_handle_get_password (GoaPasswordBased      *interface,
   provider = goa_provider_get_for_provider_type (provider_type);
 
   error = NULL;
-  if (!goa_utils_get_credentials (provider, object, "password", NULL, &password, NULL, &error))
+  if (!goa_utils_get_credentials (provider, object, id, NULL, &password, NULL, &error))
     {
       g_dbus_method_invocation_take_error (invocation, error);
       goto out;
