@@ -27,6 +27,7 @@
 #include "goaprovider-priv.h"
 #include "goaoauth2provider.h"
 #include "goalastfmprovider.h"
+#include "goaobjectskeletonutils.h"
 #include "goarestproxy.h"
 #include "goautils.h"
 
@@ -99,7 +100,6 @@ build_object (GoaProvider         *provider,
               GError             **error)
 {
   GoaAccount *account;
-  GoaMusic *music = NULL;
   gboolean music_enabled;
   gboolean ret = FALSE;
 
@@ -118,21 +118,8 @@ build_object (GoaProvider         *provider,
   account = goa_object_get_account (GOA_OBJECT (object));
 
   /* Music */
-  music = goa_object_get_music (GOA_OBJECT (object));
   music_enabled = g_key_file_get_boolean (key_file, group, "MusicEnabled", NULL);
-  if (music_enabled)
-    {
-      if (music == NULL)
-        {
-          music = goa_music_skeleton_new ();
-          goa_object_skeleton_set_music (object, music);
-        }
-    }
-  else
-    {
-      if (music != NULL)
-        goa_object_skeleton_set_music (object, NULL);
-    }
+  goa_object_skeleton_attach_music (object, music_enabled);
 
   if (just_added)
     {
@@ -147,7 +134,6 @@ build_object (GoaProvider         *provider,
   ret = TRUE;
 
  out:
-  g_clear_object (&music);
   g_clear_object (&account);
   return ret;
 }
