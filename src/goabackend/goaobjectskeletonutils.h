@@ -49,6 +49,9 @@ void             goa_object_skeleton_attach_files          (GoaObjectSkeleton *o
 void             goa_object_skeleton_attach_maps           (GoaObjectSkeleton *object,
                                                             gboolean           maps_enabled);
 
+void             goa_object_skeleton_attach_music          (GoaObjectSkeleton *object,
+                                                            gboolean           music_enabled);
+
 void             goa_object_skeleton_attach_photos         (GoaObjectSkeleton *object,
                                                             gboolean           photos_enabled);
 

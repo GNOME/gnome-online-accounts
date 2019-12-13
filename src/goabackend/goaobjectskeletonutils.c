@@ -133,6 +133,29 @@ goa_object_skeleton_attach_documents (GoaObjectSkeleton *object,
 }
 
 void
+goa_object_skeleton_attach_music (GoaObjectSkeleton *object,
+                                  gboolean           music_enabled)
+{
+  GoaMusic *music;
+
+  music = goa_object_get_music (GOA_OBJECT (object));
+  if (music_enabled)
+    {
+      if (music == NULL)
+        {
+          music = goa_music_skeleton_new ();
+          goa_object_skeleton_set_music (object, music);
+        }
+    }
+  else
+    {
+      if (music != NULL)
+        goa_object_skeleton_set_music (object, NULL);
+    }
+  g_clear_object (&music);
+}
+
+void
 goa_object_skeleton_attach_photos (GoaObjectSkeleton *object,
                                    gboolean           photos_enabled)
 {
