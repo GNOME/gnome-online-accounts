@@ -135,6 +135,12 @@ static gboolean on_handle_get_password (GoaPasswordBased      *interface,
                                         gpointer               user_data);
 
 static gboolean
+on_handle_retry_feature (GoaAccount            *account,
+                         GDBusMethodInvocation *invocation,
+                         const gchar           *feature,
+                         gpointer               user_data);
+
+static gboolean
 build_object (GoaProvider         *provider,
               GoaObjectSkeleton   *object,
               GKeyFile            *key_file,
@@ -247,6 +253,14 @@ build_object (GoaProvider         *provider,
                         G_CALLBACK (goa_util_account_notify_property_cb),
                         (gpointer) "MusicEnabled");
     }
+
+  /* Ensure D-Bus method invocations run in their own thread */
+  g_dbus_interface_skeleton_set_flags (G_DBUS_INTERFACE_SKELETON (account),
+                                       G_DBUS_INTERFACE_SKELETON_FLAGS_HANDLE_METHOD_INVOCATIONS_IN_THREAD);
+  g_signal_connect (account,
+                    "handle-retry-feature",
+                    G_CALLBACK (on_handle_retry_feature),
+                    object);
 
   ret = TRUE;
 
@@ -1454,6 +1468,118 @@ goa_owncloud_provider_class_init (GoaOwncloudProviderClass *klass)
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
+
+static gboolean
+on_handle_retry_feature (GoaAccount            *account,
+                         GDBusMethodInvocation *invocation,
+                         const gchar           *feature,
+                         gpointer               user_data)
+{
+  GoaObject *object;
+  GoaProvider *provider;
+  GVariantBuilder credentials;
+  MusicData music_data;
+  gchar *uri;
+  gchar *uri_music;
+  gchar *provider_type;
+  gchar *music_error;
+
+  uri = NULL;
+  uri_music = NULL;
+  provider_type = NULL;
+  provider = NULL;
+  music_error = NULL;
+  object = user_data;
+
+  provider_type = goa_account_dup_provider_type (account);
+  provider = goa_provider_get_for_provider_type (provider_type);
+  uri = goa_util_lookup_keyfile_string (object, "Uri");
+  uri_music = g_strconcat (uri, MUSIC_PASSWORD_GENERATE_ENDPOINT, NULL);
+  memset (&music_data, 0, sizeof (MusicData));
+  music_data.cancellable = g_cancellable_new ();
+  music_data.loop = g_main_loop_new (NULL, FALSE);
+  music_data.error = NULL;
+
+  if (g_strcmp0 (feature, "music") != 0)
+    {
+      g_dbus_method_invocation_return_error (invocation,
+                                             GOA_ERROR,
+                                             GOA_ERROR_NOT_SUPPORTED,
+                                             "Retry not implemented for this feature");
+      goto out;
+    }
+
+  music_error = goa_util_lookup_keyfile_string (object, "MusicError");
+  if (music_error == NULL)
+    {
+      g_dbus_method_invocation_return_error (invocation,
+                                             GOA_ERROR,
+                                             GOA_ERROR_ACCOUNT_EXISTS,
+                                             "Music credentials already exist for the account");
+      goto out;
+    }
+
+  goa_utils_get_credentials (provider,
+                             object,
+                             "password",
+                             (gchar **)&music_data.username,
+                             (gchar **)&music_data.password,
+                             music_data.cancellable,
+                             &music_data.error);
+
+  music_generate_password (provider,
+                           uri_music,
+                           music_data.cancellable,
+                           (RestProxyCallAsyncCallback) generate_password_cb,
+                           &music_data);
+
+  g_main_loop_run (music_data.loop);
+
+  if (music_data.error == NULL)
+    {
+      g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
+      g_variant_builder_add (&credentials, "{sv}", "password",
+                             g_variant_new_string (music_data.password));
+      g_variant_builder_add (&credentials, "{sv}", "music_password",
+                             g_variant_new_string (music_data.music_password));
+      goa_utils_store_credentials_for_object_sync (provider,
+                                                   object,
+                                                   g_variant_builder_end (&credentials),
+                                                   NULL,
+                                                   &music_data.error);
+      if (music_data.error == NULL)
+        {
+          goa_utils_keyfile_remove_key (account, "MusicError");
+          goa_account_set_music_disabled (account, FALSE);
+          goa_account_complete_retry_feature (account, invocation, TRUE);
+        }
+      else
+        {
+          g_dbus_method_invocation_return_error (invocation,
+                                                 music_data.error->domain,
+                                                 music_data.error->code,
+                                                 "Error storing credentials in keyring");
+        }
+    }
+  else
+    {
+      g_dbus_method_invocation_return_error (invocation,
+                                             music_data.error->domain,
+                                             music_data.error->code,
+                                             "Error generating password");
+    }
+
+ out:
+  g_free (music_error);
+  g_free (uri);
+  g_free (uri_music);
+  g_free (provider_type);
+  g_object_unref (provider);
+  g_clear_pointer (&music_data.loop, (GDestroyNotify) g_main_loop_unref);
+  g_clear_object (&music_data.cancellable);
+  g_clear_error (&music_data.error);
+  return TRUE;
+}
 
 static gboolean
 on_handle_get_password (GoaPasswordBased      *interface,
