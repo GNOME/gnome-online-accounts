@@ -44,4 +44,6 @@ GoaIdentityInquiry *goa_kerberos_identity_inquiry_new (GoaKerberosIdentity *iden
                                                        krb5_prompt          prompts[],
                                                        int                  number_of_prompts);
 
+G_END_DECLS
+
 #endif /* __GOA_KERBEROS_IDENTITY_INQUIRY_H__ */
