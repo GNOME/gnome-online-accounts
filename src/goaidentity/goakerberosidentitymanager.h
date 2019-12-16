@@ -27,7 +27,8 @@
 #include "goakerberosidentity.h"
 
 G_BEGIN_DECLS
-#define GOA_TYPE_KERBEROS_IDENTITY_MANAGER           (goa_kerberos_identity_manager_get_type ())
+
+#define GOA_TYPE_KERBEROS_IDENTITY_MANAGER (goa_kerberos_identity_manager_get_type ())
 G_DECLARE_FINAL_TYPE (GoaKerberosIdentityManager, goa_kerberos_identity_manager, GOA, KERBEROS_IDENTITY_MANAGER, GObject);
 
 GoaIdentityManager *goa_kerberos_identity_manager_new (GCancellable  *cancellable,
@@ -35,5 +36,7 @@ GoaIdentityManager *goa_kerberos_identity_manager_new (GCancellable  *cancellabl
 
 void goa_kerberos_identity_manager_start_test (GoaKerberosIdentityManager  *manager,
                                                GError                     **error);
+
 G_END_DECLS
+
 #endif /* __GOA_KERBEROS_IDENTITY_MANAGER_H__ */
