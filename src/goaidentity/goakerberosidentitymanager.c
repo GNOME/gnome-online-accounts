@@ -59,11 +59,6 @@ struct _GoaKerberosIdentityManager
   guint polling_timeout_id;
 };
 
-struct _GoaKerberosIdentityManagerClass
-{
-  GObjectClass parent_class;
-};
-
 typedef enum
 {
   OPERATION_TYPE_REFRESH,

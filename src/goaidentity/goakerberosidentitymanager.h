@@ -28,12 +28,8 @@
 
 G_BEGIN_DECLS
 #define GOA_TYPE_KERBEROS_IDENTITY_MANAGER           (goa_kerberos_identity_manager_get_type ())
-#define GOA_KERBEROS_IDENTITY_MANAGER(obj)           (G_TYPE_CHECK_INSTANCE_CAST (obj, GOA_TYPE_KERBEROS_IDENTITY_MANAGER, GoaKerberosIdentityManager))
-#define GOA_IS_KERBEROS_IDENTITY_MANAGER(obj)        (G_TYPE_CHECK_INSTANCE_TYPE (obj, GOA_TYPE_KERBEROS_IDENTITY_MANAGER))
-typedef struct _GoaKerberosIdentityManager GoaKerberosIdentityManager;
-typedef struct _GoaKerberosIdentityManagerClass GoaKerberosIdentityManagerClass;
+G_DECLARE_FINAL_TYPE (GoaKerberosIdentityManager, goa_kerberos_identity_manager, GOA, KERBEROS_IDENTITY_MANAGER, GObject);
 
-GType goa_kerberos_identity_manager_get_type (void);
 GoaIdentityManager *goa_kerberos_identity_manager_new (GCancellable  *cancellable,
                                                        GError       **error);
 
