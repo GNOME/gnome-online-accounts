@@ -37,11 +37,6 @@ struct _GoaKerberosIdentityInquiry
   gboolean is_failed;
 };
 
-struct _GoaKerberosIdentityInquiryClass
-{
-  GObjectClass parent_class;
-};
-
 typedef struct
 {
   GoaIdentityInquiry *inquiry;

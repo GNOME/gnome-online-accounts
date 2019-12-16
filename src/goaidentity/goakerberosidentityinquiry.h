@@ -29,18 +29,13 @@
 
 G_BEGIN_DECLS
 #define GOA_TYPE_KERBEROS_IDENTITY_INQUIRY             (goa_kerberos_identity_inquiry_get_type ())
-#define GOA_KERBEROS_IDENTITY_INQUIRY(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GOA_TYPE_KERBEROS_IDENTITY_INQUIRY, GoaKerberosIdentityInquiry))
-#define GOA_IS_KERBEROS_IDENTITY_INQUIRY(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GOA_TYPE_KERBEROS_IDENTITY_INQUIRY))
-typedef struct _GoaKerberosIdentityInquiry GoaKerberosIdentityInquiry;
-typedef struct _GoaKerberosIdentityInquiryClass GoaKerberosIdentityInquiryClass;
+G_DECLARE_FINAL_TYPE (GoaKerberosIdentityInquiry, goa_kerberos_identity_inquiry, GOA, KERBEROS_IDENTITY_INQUIRY, GObject);
 
 typedef enum
 {
   GOA_KERBEROS_IDENTITY_QUERY_MODE_INVISIBLE,
   GOA_KERBEROS_IDENTITY_QUERY_MODE_VISIBLE
 } GoaKerberosIdentityQueryMode;
-
-GType goa_kerberos_identity_inquiry_get_type (void);
 
 GoaIdentityInquiry *goa_kerberos_identity_inquiry_new (GoaKerberosIdentity *identity,
                                                        const char          *name,
