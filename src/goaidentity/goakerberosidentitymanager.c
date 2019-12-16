@@ -35,8 +35,10 @@
 
 #include <krb5.h>
 
-struct _GoaKerberosIdentityManagerPrivate
+struct _GoaKerberosIdentityManager
 {
+  GObject parent_instance;
+
   GHashTable *identities;
   GHashTable *expired_identities;
   GHashTable *identities_by_realm;
@@ -55,6 +57,11 @@ struct _GoaKerberosIdentityManagerPrivate
   volatile int pending_refresh_count;
 
   guint polling_timeout_id;
+};
+
+struct _GoaKerberosIdentityManagerClass
+{
+  GObjectClass parent_class;
 };
 
 typedef enum
@@ -113,7 +120,6 @@ static void on_identity_expired (GoaIdentity                *identity,
 G_DEFINE_TYPE_WITH_CODE (GoaKerberosIdentityManager,
                          goa_kerberos_identity_manager,
                          G_TYPE_OBJECT,
-                         G_ADD_PRIVATE (GoaKerberosIdentityManager)
                          G_IMPLEMENT_INTERFACE (GOA_TYPE_IDENTITY_MANAGER,
                                                 identity_manager_interface_init)
                          G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE,
@@ -126,15 +132,12 @@ operation_new (GoaKerberosIdentityManager *self,
                OperationType               type,
                GTask                      *task)
 {
-  GoaKerberosIdentityManagerPrivate *priv;
   Operation *operation;
-
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
 
   operation = g_slice_new0 (Operation);
 
   operation->manager = self;
-  operation->scheduler_cancellable = g_object_ref (priv->scheduler_cancellable);
+  operation->scheduler_cancellable = g_object_ref (self->scheduler_cancellable);
 
   operation->type = type;
 
@@ -256,15 +259,12 @@ goa_kerberos_identify_manager_send_to_context (GMainContext   *context,
 static void
 schedule_refresh (GoaKerberosIdentityManager *self)
 {
-  GoaKerberosIdentityManagerPrivate *priv;
   Operation *operation;
 
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
-
-  g_atomic_int_inc (&priv->pending_refresh_count);
+  g_atomic_int_inc (&self->pending_refresh_count);
 
   operation = operation_new (self, NULL, OPERATION_TYPE_REFRESH, NULL);
-  g_thread_pool_push (priv->thread_pool, operation, NULL);
+  g_thread_pool_push (self->thread_pool, operation, NULL);
 }
 
 static IdentitySignalWork *
@@ -424,34 +424,31 @@ remove_identity (GoaKerberosIdentityManager *self,
                  Operation                  *operation,
                  GoaIdentity                *identity)
 {
-  GoaKerberosIdentityManagerPrivate *priv;
   IdentitySignalWork *work;
   const char *identifier;
   char *name;
   GList *other_identities = NULL;
-
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
 
   identifier = goa_identity_get_identifier (identity);
   name = goa_kerberos_identity_get_realm_name (GOA_KERBEROS_IDENTITY (identity));
 
   if (name != NULL)
     {
-      other_identities = g_hash_table_lookup (priv->identities_by_realm, name);
-      g_hash_table_remove (priv->identities_by_realm, name);
+      other_identities = g_hash_table_lookup (self->identities_by_realm, name);
+      g_hash_table_remove (self->identities_by_realm, name);
 
       other_identities = g_list_remove (other_identities, identity);
     }
 
 
   if (other_identities != NULL)
-    g_hash_table_replace (priv->identities_by_realm, g_strdup (name), other_identities);
+    g_hash_table_replace (self->identities_by_realm, g_strdup (name), other_identities);
 
   g_free (name);
 
   work = identity_signal_work_new (self, identity);
-  g_hash_table_remove (priv->expired_identities, identifier);
-  g_hash_table_remove (priv->identities, identifier);
+  g_hash_table_remove (self->expired_identities, identifier);
+  g_hash_table_remove (self->identities, identifier);
 
   goa_kerberos_identify_manager_send_to_context (operation->context,
                                                  (GSourceFunc)
@@ -481,13 +478,10 @@ drop_stale_identities (GoaKerberosIdentityManager *self,
                        Operation                  *operation,
                        GHashTable                 *known_identities)
 {
-  GoaKerberosIdentityManagerPrivate *priv;
   GList *stale_identity_ids;
   GList *node;
 
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
-
-  stale_identity_ids = g_hash_table_get_keys (priv->identities);
+  stale_identity_ids = g_hash_table_get_keys (self->identities);
 
   node = stale_identity_ids;
   while (node != NULL)
@@ -498,7 +492,7 @@ drop_stale_identities (GoaKerberosIdentityManager *self,
       identity = g_hash_table_lookup (known_identities, identifier);
       if (identity == NULL)
         {
-          identity = g_hash_table_lookup (priv->identities, identifier);
+          identity = g_hash_table_lookup (self->identities, identifier);
 
           if (identity != NULL)
             {
@@ -544,15 +538,12 @@ add_identity (GoaKerberosIdentityManager *self,
               GoaIdentity                *identity,
               const char                 *identifier)
 {
-  GoaKerberosIdentityManagerPrivate *priv;
   IdentitySignalWork *work;
 
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
-
-  g_hash_table_replace (priv->identities, g_strdup (identifier), g_object_ref (identity));
+  g_hash_table_replace (self->identities, g_strdup (identifier), g_object_ref (identity));
 
   if (!goa_identity_is_signed_in (identity))
-    g_hash_table_replace (priv->expired_identities, g_strdup (identifier), identity);
+    g_hash_table_replace (self->expired_identities, g_strdup (identifier), identity);
 
   work = identity_signal_work_new (self, identity);
   goa_kerberos_identify_manager_send_to_context (operation->context,
@@ -568,18 +559,15 @@ refresh_identity (GoaKerberosIdentityManager *self,
                   GHashTable                 *refreshed_identities,
                   GoaIdentity                *identity)
 {
-  GoaKerberosIdentityManagerPrivate *priv;
   const char *identifier;
   GoaIdentity *old_identity;
-
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
 
   identifier = goa_identity_get_identifier (identity);
 
   if (identifier == NULL)
     return;
 
-  old_identity = g_hash_table_lookup (priv->identities, identifier);
+  old_identity = g_hash_table_lookup (self->identities, identifier);
 
   if (old_identity != NULL)
     {
@@ -610,42 +598,39 @@ static gboolean
 refresh_identities (GoaKerberosIdentityManager *self,
                     Operation                  *operation)
 {
-  GoaKerberosIdentityManagerPrivate *priv;
   krb5_error_code error_code;
   krb5_ccache cache;
   krb5_cccol_cursor cursor;
   const char *error_message;
   GHashTable *refreshed_identities;
 
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
-
   /* If we have more refreshes queued up, don't bother doing this one
    */
-  if (!g_atomic_int_dec_and_test (&priv->pending_refresh_count))
+  if (!g_atomic_int_dec_and_test (&self->pending_refresh_count))
     {
       return FALSE;
     }
 
   g_debug ("GoaKerberosIdentityManager: Refreshing identities");
   refreshed_identities = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
-  error_code = krb5_cccol_cursor_new (priv->kerberos_context, &cursor);
+  error_code = krb5_cccol_cursor_new (self->kerberos_context, &cursor);
 
   if (error_code != 0)
     {
-      error_message = krb5_get_error_message (priv->kerberos_context, error_code);
+      error_message = krb5_get_error_message (self->kerberos_context, error_code);
       g_debug ("GoaKerberosIdentityManager: Error looking up available credential caches: %s",
                error_message);
-      krb5_free_error_message (priv->kerberos_context, error_message);
+      krb5_free_error_message (self->kerberos_context, error_message);
       goto done;
     }
 
-  error_code = krb5_cccol_cursor_next (priv->kerberos_context, cursor, &cache);
+  error_code = krb5_cccol_cursor_next (self->kerberos_context, cursor, &cache);
 
   while (error_code == 0 && cache != NULL)
     {
       GoaIdentity *identity;
 
-      identity = goa_kerberos_identity_new (priv->kerberos_context, cache, NULL);
+      identity = goa_kerberos_identity_new (self->kerberos_context, cache, NULL);
 
       if (identity != NULL)
         {
@@ -653,19 +638,19 @@ refresh_identities (GoaKerberosIdentityManager *self,
           g_object_unref (identity);
         }
 
-      krb5_cc_close (priv->kerberos_context, cache);
-      error_code = krb5_cccol_cursor_next (priv->kerberos_context, cursor, &cache);
+      krb5_cc_close (self->kerberos_context, cache);
+      error_code = krb5_cccol_cursor_next (self->kerberos_context, cursor, &cache);
     }
 
   if (error_code != 0)
     {
-      error_message = krb5_get_error_message (priv->kerberos_context, error_code);
+      error_message = krb5_get_error_message (self->kerberos_context, error_code);
       g_debug ("GoaKerberosIdentityManager: Error iterating over available credential caches: %s",
                error_message);
-      krb5_free_error_message (priv->kerberos_context, error_message);
+      krb5_free_error_message (self->kerberos_context, error_message);
     }
 
-  krb5_cccol_cursor_free (priv->kerberos_context, &cursor);
+  krb5_cccol_cursor_free (self->kerberos_context, &cursor);
 done:
   drop_stale_identities (self, operation, refreshed_identities);
   g_hash_table_unref (refreshed_identities);
@@ -691,13 +676,10 @@ static void
 list_identities (GoaKerberosIdentityManager *self,
                  Operation                  *operation)
 {
-  GoaKerberosIdentityManagerPrivate *priv;
   GList *identities;
 
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
-
   g_debug ("GoaKerberosIdentityManager: Listing identities");
-  identities = g_hash_table_get_values (priv->identities);
+  identities = g_hash_table_get_values (self->identities);
 
   identities = g_list_sort (identities, (GCompareFunc) identity_sort_func);
 
@@ -827,13 +809,10 @@ static void
 get_identity (GoaKerberosIdentityManager *self,
               Operation                  *operation)
 {
-  GoaKerberosIdentityManagerPrivate *priv;
   GoaIdentity *identity;
 
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
-
   g_debug ("GoaKerberosIdentityManager: get identity %s", operation->identifier);
-  identity = g_hash_table_lookup (priv->identities, operation->identifier);
+  identity = g_hash_table_lookup (self->identities, operation->identifier);
 
   if (identity == NULL)
     {
@@ -851,28 +830,25 @@ static krb5_error_code
 get_new_credentials_cache (GoaKerberosIdentityManager *self,
                            krb5_ccache                *credentials_cache)
 {
-  GoaKerberosIdentityManagerPrivate *priv;
   krb5_error_code error_code;
   gboolean supports_multiple_identities;
 
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
-
-  if (g_strcmp0 (priv->credentials_cache_type, "FILE") == 0)
+  if (g_strcmp0 (self->credentials_cache_type, "FILE") == 0)
     {
       g_debug ("GoaKerberosIdentityManager: credential cache type %s doesn't supports cache collections",
-               priv->credentials_cache_type);
+               self->credentials_cache_type);
       supports_multiple_identities = FALSE;
     }
-  else if (g_strcmp0 (priv->credentials_cache_type, "DIR") == 0 || g_strcmp0 (priv->credentials_cache_type, "KEYRING") == 0)
+  else if (g_strcmp0 (self->credentials_cache_type, "DIR") == 0 || g_strcmp0 (self->credentials_cache_type, "KEYRING") == 0)
     {
-      g_debug ("GoaKerberosIdentityManager: credential cache type %s supports cache collections", priv->credentials_cache_type);
+      g_debug ("GoaKerberosIdentityManager: credential cache type %s supports cache collections", self->credentials_cache_type);
       supports_multiple_identities = TRUE;
     }
   else
     {
       g_debug ("GoaKerberosIdentityManager: don't know if credential cache type %s supports cache collections, "
                "assuming yes",
-               priv->credentials_cache_type);
+               self->credentials_cache_type);
       supports_multiple_identities = TRUE;
     }
 
@@ -885,10 +861,10 @@ get_new_credentials_cache (GoaKerberosIdentityManager *self,
    * ccache names for subsequent tickets.
    *
    */
-  if (!supports_multiple_identities || g_hash_table_size (priv->identities) == 0)
-    error_code = krb5_cc_default (priv->kerberos_context, credentials_cache);
+  if (!supports_multiple_identities || g_hash_table_size (self->identities) == 0)
+    error_code = krb5_cc_default (self->kerberos_context, credentials_cache);
   else
-    error_code = krb5_cc_new_unique (priv->kerberos_context, priv->credentials_cache_type, NULL, credentials_cache);
+    error_code = krb5_cc_new_unique (self->kerberos_context, self->credentials_cache_type, NULL, credentials_cache);
 
   return error_code;
 }
@@ -897,18 +873,15 @@ static void
 sign_in_identity (GoaKerberosIdentityManager *self,
                   Operation                  *operation)
 {
-  GoaKerberosIdentityManagerPrivate *priv;
   GoaIdentity *identity;
   GError *error;
   krb5_error_code error_code;
   gboolean is_new_identity = FALSE;
 
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
-
   g_debug ("GoaKerberosIdentityManager: signing in identity %s",
            operation->identifier);
   error = NULL;
-  identity = g_hash_table_lookup (priv->identities, operation->identifier);
+  identity = g_hash_table_lookup (self->identities, operation->identifier);
   if (identity == NULL)
     {
       krb5_ccache credentials_cache;
@@ -919,10 +892,10 @@ sign_in_identity (GoaKerberosIdentityManager *self,
         {
           const char *error_message;
 
-          error_message = krb5_get_error_message (priv->kerberos_context, error_code);
+          error_message = krb5_get_error_message (self->kerberos_context, error_code);
           g_debug ("GoaKerberosIdentityManager:         Error creating new cache for identity credentials: %s",
                    error_message);
-          krb5_free_error_message (priv->kerberos_context, error_message);
+          krb5_free_error_message (self->kerberos_context, error_message);
 
           g_task_return_new_error (operation->task,
                                    GOA_IDENTITY_MANAGER_ERROR,
@@ -931,14 +904,14 @@ sign_in_identity (GoaKerberosIdentityManager *self,
           return;
         }
 
-      identity = goa_kerberos_identity_new (priv->kerberos_context, credentials_cache, &error);
+      identity = goa_kerberos_identity_new (self->kerberos_context, credentials_cache, &error);
       if (identity == NULL)
         {
-          krb5_cc_destroy (priv->kerberos_context, credentials_cache);
+          krb5_cc_destroy (self->kerberos_context, credentials_cache);
           g_task_return_error (operation->task, error);
           return;
         }
-      krb5_cc_close (priv->kerberos_context, credentials_cache);
+      krb5_cc_close (self->kerberos_context, credentials_cache);
       is_new_identity = TRUE;
     }
   else
@@ -966,7 +939,7 @@ sign_in_identity (GoaKerberosIdentityManager *self,
   else
     {
       g_task_return_pointer (operation->task, g_object_ref (identity), g_object_unref);
-      g_hash_table_replace (priv->identities, g_strdup (operation->identifier), g_object_ref (identity));
+      g_hash_table_replace (self->identities, g_strdup (operation->identifier), g_object_ref (identity));
     }
 
   g_object_unref (identity);
@@ -1004,41 +977,29 @@ sign_out_identity (GoaKerberosIdentityManager *self,
 static void
 block_scheduler_job (GoaKerberosIdentityManager *self)
 {
-  GoaKerberosIdentityManagerPrivate *priv;
-
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
-
-  g_mutex_lock (&priv->scheduler_job_lock);
-  while (priv->is_blocking_scheduler_job)
-    g_cond_wait (&priv->scheduler_job_unblocked, &priv->scheduler_job_lock);
-  priv->is_blocking_scheduler_job = TRUE;
-  g_mutex_unlock (&priv->scheduler_job_lock);
+  g_mutex_lock (&self->scheduler_job_lock);
+  while (self->is_blocking_scheduler_job)
+    g_cond_wait (&self->scheduler_job_unblocked, &self->scheduler_job_lock);
+  self->is_blocking_scheduler_job = TRUE;
+  g_mutex_unlock (&self->scheduler_job_lock);
 }
 
 static void
 stop_blocking_scheduler_job (GoaKerberosIdentityManager *self)
 {
-  GoaKerberosIdentityManagerPrivate *priv;
-
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
-
-  g_mutex_lock (&priv->scheduler_job_lock);
-  priv->is_blocking_scheduler_job = FALSE;
-  g_cond_signal (&priv->scheduler_job_unblocked);
-  g_mutex_unlock (&priv->scheduler_job_lock);
+  g_mutex_lock (&self->scheduler_job_lock);
+  self->is_blocking_scheduler_job = FALSE;
+  g_cond_signal (&self->scheduler_job_unblocked);
+  g_mutex_unlock (&self->scheduler_job_lock);
 }
 
 static void
 wait_for_scheduler_job_to_become_unblocked (GoaKerberosIdentityManager *self)
 {
-  GoaKerberosIdentityManagerPrivate *priv;
-
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
-
-  g_mutex_lock (&priv->scheduler_job_lock);
-  while (priv->is_blocking_scheduler_job)
-    g_cond_wait (&priv->scheduler_job_unblocked, &priv->scheduler_job_lock);
-  g_mutex_unlock (&priv->scheduler_job_lock);
+  g_mutex_lock (&self->scheduler_job_lock);
+  while (self->is_blocking_scheduler_job)
+    g_cond_wait (&self->scheduler_job_unblocked, &self->scheduler_job_lock);
+  g_mutex_unlock (&self->scheduler_job_lock);
 }
 
 static void
@@ -1133,11 +1094,8 @@ goa_kerberos_identity_manager_get_identity (GoaIdentityManager   *manager,
                                             gpointer              user_data)
 {
   GoaKerberosIdentityManager *self = GOA_KERBEROS_IDENTITY_MANAGER (manager);
-  GoaKerberosIdentityManagerPrivate *priv;
   GTask *task;
   Operation *operation;
-
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, goa_kerberos_identity_manager_get_identity);
@@ -1147,7 +1105,7 @@ goa_kerberos_identity_manager_get_identity (GoaIdentityManager   *manager,
 
   operation->identifier = g_strdup (identifier);
 
-  g_thread_pool_push (priv->thread_pool, operation, NULL);
+  g_thread_pool_push (self->thread_pool, operation, NULL);
 }
 
 static GoaIdentity *
@@ -1166,11 +1124,8 @@ goa_kerberos_identity_manager_list_identities (GoaIdentityManager  *manager,
                                                gpointer             user_data)
 {
   GoaKerberosIdentityManager *self = GOA_KERBEROS_IDENTITY_MANAGER (manager);
-  GoaKerberosIdentityManagerPrivate *priv;
   GTask                      *task;
   Operation                  *operation;
-
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, goa_kerberos_identity_manager_list_identities);
@@ -1178,7 +1133,7 @@ goa_kerberos_identity_manager_list_identities (GoaIdentityManager  *manager,
   operation = operation_new (self, cancellable, OPERATION_TYPE_LIST, task);
   g_object_unref (task);
 
-  g_thread_pool_push (priv->thread_pool, operation, NULL);
+  g_thread_pool_push (self->thread_pool, operation, NULL);
 }
 
 static GList *
@@ -1198,11 +1153,8 @@ goa_kerberos_identity_manager_renew_identity (GoaIdentityManager  *manager,
                                               gpointer             user_data)
 {
   GoaKerberosIdentityManager *self = GOA_KERBEROS_IDENTITY_MANAGER (manager);
-  GoaKerberosIdentityManagerPrivate *priv;
   GTask *task;
   Operation *operation;
-
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, goa_kerberos_identity_manager_renew_identity);
@@ -1212,7 +1164,7 @@ goa_kerberos_identity_manager_renew_identity (GoaIdentityManager  *manager,
 
   operation->identity = g_object_ref (identity);
 
-  g_thread_pool_push (priv->thread_pool, operation, NULL);
+  g_thread_pool_push (self->thread_pool, operation, NULL);
 }
 
 static void
@@ -1237,11 +1189,8 @@ goa_kerberos_identity_manager_sign_identity_in (GoaIdentityManager     *manager,
                                                 gpointer                user_data)
 {
   GoaKerberosIdentityManager *self = GOA_KERBEROS_IDENTITY_MANAGER (manager);
-  GoaKerberosIdentityManagerPrivate *priv;
   GTask *task;
   Operation *operation;
-
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, goa_kerberos_identity_manager_sign_identity_in);
@@ -1262,7 +1211,7 @@ goa_kerberos_identity_manager_sign_identity_in (GoaIdentityManager     *manager,
   g_cond_init (&operation->inquiry_finished_condition);
   operation->is_inquiring = FALSE;
 
-  g_thread_pool_push (priv->thread_pool, operation, NULL);
+  g_thread_pool_push (self->thread_pool, operation, NULL);
 }
 
 static GoaIdentity *
@@ -1282,11 +1231,8 @@ goa_kerberos_identity_manager_sign_identity_out (GoaIdentityManager  *manager,
                                                  gpointer             user_data)
 {
   GoaKerberosIdentityManager *self = GOA_KERBEROS_IDENTITY_MANAGER (manager);
-  GoaKerberosIdentityManagerPrivate *priv;
   GTask *task;
   Operation *operation;
-
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, goa_kerberos_identity_manager_sign_identity_out);
@@ -1296,7 +1242,7 @@ goa_kerberos_identity_manager_sign_identity_out (GoaIdentityManager  *manager,
 
   operation->identity = g_object_ref (identity);
 
-  g_thread_pool_push (priv->thread_pool, operation, NULL);
+  g_thread_pool_push (self->thread_pool, operation, NULL);
 }
 
 static void
@@ -1313,19 +1259,16 @@ goa_kerberos_identity_manager_name_identity (GoaIdentityManager *manager,
                                              GoaIdentity        *identity)
 {
   GoaKerberosIdentityManager *self = GOA_KERBEROS_IDENTITY_MANAGER (manager);
-  GoaKerberosIdentityManagerPrivate *priv;
   char *name;
   GList *other_identities;
   gboolean other_identity_needs_rename;
-
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
 
   name = goa_kerberos_identity_get_realm_name (GOA_KERBEROS_IDENTITY (identity));
 
   if (name == NULL)
     return NULL;
 
-  other_identities = g_hash_table_lookup (priv->identities_by_realm, name);
+  other_identities = g_hash_table_lookup (self->identities_by_realm, name);
 
   /* If there was already exactly one identity for this realm before,
    * then it was going by just the realm name, so we need to rename it
@@ -1338,7 +1281,7 @@ goa_kerberos_identity_manager_name_identity (GoaIdentityManager *manager,
   other_identities = g_list_remove (other_identities, identity);
   other_identities = g_list_prepend (other_identities, identity);
 
-  g_hash_table_replace (priv->identities_by_realm, g_strdup (name), other_identities);
+  g_hash_table_replace (self->identities_by_realm, g_strdup (name), other_identities);
 
   if (other_identities->next != NULL)
     {
@@ -1395,7 +1338,6 @@ static gboolean
 monitor_credentials_cache (GoaKerberosIdentityManager  *self,
                            GError                     **error)
 {
-  GoaKerberosIdentityManagerPrivate *priv;
   krb5_ccache default_cache;
   const char *cache_type;
   const char *cache_path;
@@ -1404,25 +1346,23 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
   GError *monitoring_error = NULL;
   gboolean can_monitor = TRUE;
 
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
-
-  error_code = krb5_cc_default (priv->kerberos_context, &default_cache);
+  error_code = krb5_cc_default (self->kerberos_context, &default_cache);
 
   if (error_code != 0)
     {
       const char *error_message;
-      error_message = krb5_get_error_message (priv->kerberos_context, error_code);
+      error_message = krb5_get_error_message (self->kerberos_context, error_code);
 
       g_set_error_literal (error,
                            GOA_IDENTITY_MANAGER_ERROR,
                            GOA_IDENTITY_MANAGER_ERROR_ACCESSING_CREDENTIALS,
                            error_message);
-      krb5_free_error_message (priv->kerberos_context, error_message);
+      krb5_free_error_message (self->kerberos_context, error_message);
 
       return FALSE;
     }
 
-  cache_type = krb5_cc_get_type (priv->kerberos_context, default_cache);
+  cache_type = krb5_cc_get_type (self->kerberos_context, default_cache);
   g_assert (cache_type != NULL);
 
   if (strcmp (cache_type, "FILE") != 0 && strcmp (cache_type, "DIR") != 0)
@@ -1432,8 +1372,8 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
       can_monitor = FALSE;
     }
 
-  g_free (priv->credentials_cache_type);
-  priv->credentials_cache_type = g_strdup (cache_type);
+  g_free (self->credentials_cache_type);
+  self->credentials_cache_type = g_strdup (cache_type);
 
   /* If we're using a FILE type credential cache, then the
    * default cache file is the only cache we care about,
@@ -1443,7 +1383,7 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
    * cache file is one of many possible cache files, all in the
    * same directory.  We want to monitor that directory.
    */
-  cache_path = krb5_cc_get_name (priv->kerberos_context, default_cache);
+  cache_path = krb5_cc_get_name (self->kerberos_context, default_cache);
 
   /* The cache name might have a : in front of it.
    * See goakerberosidentity.c (fetch_raw_credentials) for similar code
@@ -1497,15 +1437,15 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
     }
   else
     {
-      priv->credentials_cache_changed_signal_id = g_signal_connect (G_OBJECT (monitor), "changed",
+      self->credentials_cache_changed_signal_id = g_signal_connect (G_OBJECT (monitor), "changed",
                                                                     G_CALLBACK (on_credentials_cache_changed), self);
-      priv->credentials_cache_monitor = monitor;
+      self->credentials_cache_monitor = monitor;
     }
 
   if (!can_monitor)
-    priv->polling_timeout_id = g_timeout_add_seconds (FALLBACK_POLLING_INTERVAL, (GSourceFunc) on_polling_timeout, self);
+    self->polling_timeout_id = g_timeout_add_seconds (FALLBACK_POLLING_INTERVAL, (GSourceFunc) on_polling_timeout, self);
 
-  krb5_cc_close (priv->kerberos_context, default_cache);
+  krb5_cc_close (self->kerberos_context, default_cache);
 
   return TRUE;
 }
@@ -1513,22 +1453,18 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
 static void
 stop_watching_credentials_cache (GoaKerberosIdentityManager *self)
 {
-  GoaKerberosIdentityManagerPrivate *priv;
-
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
-
-  if (priv->credentials_cache_monitor != NULL)
+  if (self->credentials_cache_monitor != NULL)
     {
-      if (!g_file_monitor_is_cancelled (priv->credentials_cache_monitor))
-        g_file_monitor_cancel (priv->credentials_cache_monitor);
+      if (!g_file_monitor_is_cancelled (self->credentials_cache_monitor))
+        g_file_monitor_cancel (self->credentials_cache_monitor);
 
-      g_clear_object (&priv->credentials_cache_monitor);
+      g_clear_object (&self->credentials_cache_monitor);
     }
 
-  if (priv->polling_timeout_id != 0)
+  if (self->polling_timeout_id != 0)
     {
-      g_source_remove (priv->polling_timeout_id);
-      priv->polling_timeout_id = 0;
+      g_source_remove (self->polling_timeout_id);
+      self->polling_timeout_id = 0;
     }
 }
 
@@ -1538,26 +1474,23 @@ goa_kerberos_identity_manager_initable_init (GInitable     *initable,
                                              GError       **error)
 {
   GoaKerberosIdentityManager *self = GOA_KERBEROS_IDENTITY_MANAGER (initable);
-  GoaKerberosIdentityManagerPrivate *priv;
   krb5_error_code error_code;
   GError *monitoring_error;
-
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
 
   if (g_cancellable_set_error_if_cancelled (cancellable, error))
     return FALSE;
 
-  error_code = krb5_init_context (&priv->kerberos_context);
+  error_code = krb5_init_context (&self->kerberos_context);
 
   if (error_code != 0)
     {
       const char *error_message;
-      error_message = krb5_get_error_message (priv->kerberos_context, error_code);
+      error_message = krb5_get_error_message (self->kerberos_context, error_code);
 
       g_set_error_literal (error,
                            GOA_IDENTITY_MANAGER_ERROR,
                            GOA_IDENTITY_MANAGER_ERROR_INITIALIZING, error_message);
-      krb5_free_error_message (priv->kerberos_context, error_message);
+      krb5_free_error_message (self->kerberos_context, error_message);
 
       return FALSE;
     }
@@ -1584,66 +1517,60 @@ initable_interface_init (GInitableIface *interface)
 static void
 goa_kerberos_identity_manager_init (GoaKerberosIdentityManager *self)
 {
-  GoaKerberosIdentityManagerPrivate *priv;
   GError *error;
 
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
-
-  priv->identities = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
-  priv->expired_identities = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-  priv->identities_by_realm = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  self->identities = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+  self->expired_identities = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  self->identities_by_realm = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
   error = NULL;
-  priv->thread_pool = g_thread_pool_new (goa_kerberos_identity_manager_thread_pool_func, NULL, 1, FALSE, &error);
+  self->thread_pool = g_thread_pool_new (goa_kerberos_identity_manager_thread_pool_func, NULL, 1, FALSE, &error);
   g_assert_no_error (error);
 
-  g_mutex_init (&priv->scheduler_job_lock);
-  g_cond_init (&priv->scheduler_job_unblocked);
+  g_mutex_init (&self->scheduler_job_lock);
+  g_cond_init (&self->scheduler_job_unblocked);
 
-  priv->scheduler_cancellable = g_cancellable_new ();
-  g_cancellable_connect (priv->scheduler_cancellable, G_CALLBACK (on_scheduler_cancellable_cancelled), self, NULL);
+  self->scheduler_cancellable = g_cancellable_new ();
+  g_cancellable_connect (self->scheduler_cancellable, G_CALLBACK (on_scheduler_cancellable_cancelled), self, NULL);
 }
 
 static void
 goa_kerberos_identity_manager_dispose (GObject *object)
 {
   GoaKerberosIdentityManager *self = GOA_KERBEROS_IDENTITY_MANAGER (object);
-  GoaKerberosIdentityManagerPrivate *priv;
 
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
-
-  if (priv->scheduler_cancellable != NULL)
+  if (self->scheduler_cancellable != NULL)
     {
-      if (!g_cancellable_is_cancelled (priv->scheduler_cancellable))
+      if (!g_cancellable_is_cancelled (self->scheduler_cancellable))
         {
-          g_cancellable_cancel (priv->scheduler_cancellable);
+          g_cancellable_cancel (self->scheduler_cancellable);
         }
 
-      g_clear_object (&priv->scheduler_cancellable);
+      g_clear_object (&self->scheduler_cancellable);
     }
 
-  if (priv->thread_pool != NULL)
+  if (self->thread_pool != NULL)
     {
-      g_thread_pool_free (priv->thread_pool, FALSE, TRUE);
-      priv->thread_pool = NULL;
+      g_thread_pool_free (self->thread_pool, FALSE, TRUE);
+      self->thread_pool = NULL;
     }
 
-  if (priv->identities_by_realm != NULL)
+  if (self->identities_by_realm != NULL)
     {
-      g_hash_table_unref (priv->identities_by_realm);
-      priv->identities_by_realm = NULL;
+      g_hash_table_unref (self->identities_by_realm);
+      self->identities_by_realm = NULL;
     }
 
-  if (priv->expired_identities != NULL)
+  if (self->expired_identities != NULL)
     {
-      g_hash_table_unref (priv->expired_identities);
-      priv->expired_identities = NULL;
+      g_hash_table_unref (self->expired_identities);
+      self->expired_identities = NULL;
     }
 
-  if (priv->identities != NULL)
+  if (self->identities != NULL)
     {
-      g_hash_table_unref (priv->identities);
-      priv->identities = NULL;
+      g_hash_table_unref (self->identities);
+      self->identities = NULL;
     }
 
   stop_watching_credentials_cache (self);
@@ -1655,14 +1582,11 @@ static void
 goa_kerberos_identity_manager_finalize (GObject *object)
 {
   GoaKerberosIdentityManager *self = GOA_KERBEROS_IDENTITY_MANAGER (object);
-  GoaKerberosIdentityManagerPrivate *priv;
 
-  priv = goa_kerberos_identity_manager_get_instance_private (self);
+  g_free (self->credentials_cache_type);
 
-  g_free (priv->credentials_cache_type);
-
-  g_cond_clear (&priv->scheduler_job_unblocked);
-  krb5_free_context (priv->kerberos_context);
+  g_cond_clear (&self->scheduler_job_unblocked);
+  krb5_free_context (self->kerberos_context);
 
   G_OBJECT_CLASS (goa_kerberos_identity_manager_parent_class)->finalize (object);
 }
