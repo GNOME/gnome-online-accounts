@@ -30,29 +30,15 @@
 G_BEGIN_DECLS
 #define GOA_TYPE_KERBEROS_IDENTITY_INQUIRY             (goa_kerberos_identity_inquiry_get_type ())
 #define GOA_KERBEROS_IDENTITY_INQUIRY(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GOA_TYPE_KERBEROS_IDENTITY_INQUIRY, GoaKerberosIdentityInquiry))
-#define GOA_KERBEROS_IDENTITY_INQUIRY_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GOA_TYPE_KERBEROS_IDENTITY_INQUIRY, GoaKerberosIdentityInquiryClass))
 #define GOA_IS_KERBEROS_IDENTITY_INQUIRY(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GOA_TYPE_KERBEROS_IDENTITY_INQUIRY))
-#define GOA_IS_KERBEROS_IDENTITY_INQUIRY_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GOA_TYPE_KERBEROS_IDENTITY_INQUIRY))
-#define GOA_KERBEROS_IDENTITY_INQUIRY_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS((obj), GOA_TYPE_KERBEROS_IDENTITY_INQUIRY, GoaKerberosIdentityInquiryClass))
 typedef struct _GoaKerberosIdentityInquiry GoaKerberosIdentityInquiry;
 typedef struct _GoaKerberosIdentityInquiryClass GoaKerberosIdentityInquiryClass;
-typedef struct _GoaKerberosIdentityInquiryPrivate GoaKerberosIdentityInquiryPrivate;
 
 typedef enum
 {
   GOA_KERBEROS_IDENTITY_QUERY_MODE_INVISIBLE,
   GOA_KERBEROS_IDENTITY_QUERY_MODE_VISIBLE
 } GoaKerberosIdentityQueryMode;
-
-struct _GoaKerberosIdentityInquiry
-{
-  GObject parent;
-};
-
-struct _GoaKerberosIdentityInquiryClass
-{
-  GObjectClass parent_class;
-};
 
 GType goa_kerberos_identity_inquiry_get_type (void);
 
