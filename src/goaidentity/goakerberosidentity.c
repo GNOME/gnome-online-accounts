@@ -66,11 +66,6 @@ struct _GoaKerberosIdentity
   guint             is_signed_in_idle_id;
 };
 
-struct _GoaKerberosIdentityClass
-{
-  GObjectClass parent_class;
-};
-
 enum
 {
   EXPIRING,

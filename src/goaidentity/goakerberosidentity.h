@@ -27,10 +27,7 @@
 
 G_BEGIN_DECLS
 #define GOA_TYPE_KERBEROS_IDENTITY             (goa_kerberos_identity_get_type ())
-#define GOA_KERBEROS_IDENTITY(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GOA_TYPE_KERBEROS_IDENTITY, GoaKerberosIdentity))
-#define GOA_IS_KERBEROS_IDENTITY(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GOA_TYPE_KERBEROS_IDENTITY))
-typedef struct _GoaKerberosIdentity GoaKerberosIdentity;
-typedef struct _GoaKerberosIdentityClass GoaKerberosIdentityClass;
+G_DECLARE_FINAL_TYPE (GoaKerberosIdentity, goa_kerberos_identity, GOA, KERBEROS_IDENTITY, GObject);
 typedef enum _GoaKerberosIdentityDescriptionLevel
   GoaKerberosIdentityDescriptionLevel;
 
@@ -40,8 +37,6 @@ enum _GoaKerberosIdentityDescriptionLevel
   GOA_KERBEROS_IDENTITY_DESCRIPTION_USERNAME_AND_REALM,
   GOA_KERBEROS_IDENTITY_DESCRIPTION_USERNAME_ROLE_AND_REALM
 };
-
-GType goa_kerberos_identity_get_type (void);
 
 GoaIdentity *goa_kerberos_identity_new (krb5_context   kerberos_context,
                                         krb5_ccache    cache,
