@@ -37,7 +37,6 @@ G_BEGIN_DECLS
 typedef struct _GoaKerberosIdentityInquiry GoaKerberosIdentityInquiry;
 typedef struct _GoaKerberosIdentityInquiryClass GoaKerberosIdentityInquiryClass;
 typedef struct _GoaKerberosIdentityInquiryPrivate GoaKerberosIdentityInquiryPrivate;
-typedef struct _GoaKerberosIdentityInquiryIter GoaKerberosIdentityInquiryIter;
 
 typedef enum
 {
