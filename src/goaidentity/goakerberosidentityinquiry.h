@@ -28,7 +28,8 @@
 #include "goakerberosidentity.h"
 
 G_BEGIN_DECLS
-#define GOA_TYPE_KERBEROS_IDENTITY_INQUIRY             (goa_kerberos_identity_inquiry_get_type ())
+
+#define GOA_TYPE_KERBEROS_IDENTITY_INQUIRY (goa_kerberos_identity_inquiry_get_type ())
 G_DECLARE_FINAL_TYPE (GoaKerberosIdentityInquiry, goa_kerberos_identity_inquiry, GOA, KERBEROS_IDENTITY_INQUIRY, GObject);
 
 typedef enum
