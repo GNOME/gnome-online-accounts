@@ -26,17 +26,16 @@
 #include "goaidentityinquiry.h"
 
 G_BEGIN_DECLS
-#define GOA_TYPE_KERBEROS_IDENTITY             (goa_kerberos_identity_get_type ())
-G_DECLARE_FINAL_TYPE (GoaKerberosIdentity, goa_kerberos_identity, GOA, KERBEROS_IDENTITY, GObject);
-typedef enum _GoaKerberosIdentityDescriptionLevel
-  GoaKerberosIdentityDescriptionLevel;
 
-enum _GoaKerberosIdentityDescriptionLevel
+#define GOA_TYPE_KERBEROS_IDENTITY (goa_kerberos_identity_get_type ())
+G_DECLARE_FINAL_TYPE (GoaKerberosIdentity, goa_kerberos_identity, GOA, KERBEROS_IDENTITY, GObject);
+
+typedef enum
 {
   GOA_KERBEROS_IDENTITY_DESCRIPTION_REALM,
   GOA_KERBEROS_IDENTITY_DESCRIPTION_USERNAME_AND_REALM,
   GOA_KERBEROS_IDENTITY_DESCRIPTION_USERNAME_ROLE_AND_REALM
-};
+} GoaKerberosIdentityDescriptionLevel;
 
 GoaIdentity *goa_kerberos_identity_new (krb5_context   kerberos_context,
                                         krb5_ccache    cache,
@@ -62,5 +61,7 @@ gboolean goa_kerberos_identity_erase (GoaKerberosIdentity *self,
 char *goa_kerberos_identity_get_principal_name (GoaKerberosIdentity *self);
 char *goa_kerberos_identity_get_realm_name     (GoaKerberosIdentity *self);
 char *goa_kerberos_identity_get_preauthentication_source     (GoaKerberosIdentity *self);
+
 G_END_DECLS
+
 #endif /* __GOA_KERBEROS_IDENTITY_H__ */
