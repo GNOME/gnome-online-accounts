@@ -1,4 +1,5 @@
 goa_inc = include_directories('.')
+libgoa_headers_built = []
 
 enum_headers = files('goaenums.h')
 
@@ -29,6 +30,8 @@ goaconfig_h = configure_file(
   install_dir: join_paths(goa_pkglibdir, 'include')
 )
 
+libgoa_headers_built += goaconfig_h
+
 dbus = 'goa-generated'
 
 dbus_sources = gnome.gdbus_codegen(
@@ -43,6 +46,8 @@ dbus_sources = gnome.gdbus_codegen(
   install_dir: join_paths(goa_pkgincludedir, goa_name)
 )
 
+libgoa_headers_built += dbus_sources[1]
+
 enum = 'goaenumtypes'
 
 enum_sources = gnome.mkenums(
@@ -53,6 +58,8 @@ enum_sources = gnome.mkenums(
   install_header: true,
   install_dir: join_paths(goa_pkgincludedir, goa_name)
 )
+
+libgoa_headers_built += enum_sources[1]
 
 sources = [goaconfig_h] + dbus_sources + enum_sources + files(
   'goaclient.c',
@@ -81,7 +88,7 @@ libgoa = shared_library(
 )
 
 libgoa_dep = declare_dependency(
-  sources: [goaconfig_h, dbus_sources[1], enum_sources[1]],
+  sources: libgoa_headers_built,
   include_directories: goa_inc,
   dependencies: deps,
   link_with: libgoa
