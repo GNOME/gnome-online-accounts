@@ -5,6 +5,10 @@ libgoa_deps_public = [
   glib_dep,
 ]
 
+libgoa_deps = libgoa_deps_public + [
+  gio_unix_dep,
+]
+
 libgoa_headers_static = files(
   'goaclient.h',
   'goaerror.h',
@@ -88,7 +92,7 @@ libgoa = shared_library(
   sources: libgoa_sources,
   version: goa_libversion,
   include_directories: common_incs,
-  dependencies: libgoa_deps_public + [gio_unix_dep],
+  dependencies: libgoa_deps,
   c_args: cflags,
   install: true
 )
