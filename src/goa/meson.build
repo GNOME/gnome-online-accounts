@@ -1,4 +1,12 @@
 goa_inc = include_directories('.')
+
+libgoa_headers_static = files(
+  'goaclient.h',
+  'goaerror.h',
+  'goa.h',
+  'goaversion.h'
+)
+
 libgoa_headers_built = []
 
 libgoa_sources = files(
@@ -9,15 +17,10 @@ libgoa_sources = files(
 
 enum_headers = files('goaenums.h')
 
-headers = enum_headers + files(
-  'goaclient.h',
-  'goaerror.h',
-  'goa.h',
-  'goaversion.h'
-)
+libgoa_headers_static += enum_headers
 
 install_headers(
-  headers,
+  libgoa_headers_static,
   install_dir: join_paths(goa_pkgincludedir, goa_name)
 )
 
@@ -112,7 +115,7 @@ pkg.generate(
 if enable_introspection
   libgoa_gir = gnome.generate_gir(
     libgoa,
-    sources: libgoa_sources + headers,
+    sources: libgoa_sources + libgoa_headers_static,
     includes: 'Gio-2.0',
     nsversion: goa_api_version,
     namespace: goa_ns,
