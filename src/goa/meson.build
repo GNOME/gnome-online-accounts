@@ -1,6 +1,12 @@
 goa_inc = include_directories('.')
 libgoa_headers_built = []
 
+libgoa_sources = files(
+  'goaclient.c',
+  'goaerror.c',
+  'goaversion.c'
+)
+
 enum_headers = files('goaenums.h')
 
 headers = enum_headers + files(
@@ -31,6 +37,7 @@ goaconfig_h = configure_file(
 )
 
 libgoa_headers_built += goaconfig_h
+libgoa_sources += goaconfig_h
 
 dbus = 'goa-generated'
 
@@ -47,6 +54,7 @@ dbus_sources = gnome.gdbus_codegen(
 )
 
 libgoa_headers_built += dbus_sources[1]
+libgoa_sources += dbus_sources
 
 enum = 'goaenumtypes'
 
@@ -60,12 +68,7 @@ enum_sources = gnome.mkenums(
 )
 
 libgoa_headers_built += enum_sources[1]
-
-sources = [goaconfig_h] + dbus_sources + enum_sources + files(
-  'goaclient.c',
-  'goaerror.c',
-  'goaversion.c'
-)
+libgoa_sources += enum_sources
 
 deps = [
   gio_dep,
@@ -79,7 +82,7 @@ cflags = [
 
 libgoa = shared_library(
   goa_api_name,
-  sources: sources,
+  sources: libgoa_sources,
   version: goa_libversion,
   include_directories: common_incs,
   dependencies: deps + [gio_unix_dep],
@@ -109,7 +112,7 @@ pkg.generate(
 if enable_introspection
   libgoa_gir = gnome.generate_gir(
     libgoa,
-    sources: sources + headers,
+    sources: libgoa_sources + headers,
     includes: 'Gio-2.0',
     nsversion: goa_api_version,
     namespace: goa_ns,
