@@ -1,5 +1,10 @@
 goa_inc = include_directories('.')
 
+libgoa_deps_public = [
+  gio_dep,
+  glib_dep,
+]
+
 libgoa_headers_static = files(
   'goaclient.h',
   'goaerror.h',
@@ -73,11 +78,6 @@ enum_sources = gnome.mkenums(
 libgoa_headers_built += enum_sources[1]
 libgoa_sources += enum_sources
 
-deps = [
-  gio_dep,
-  glib_dep
-]
-
 cflags = [
   '-DG_LOG_DOMAIN="@0@"'.format(goa_ns),
   '-DGOA_COMPILATION'
@@ -88,7 +88,7 @@ libgoa = shared_library(
   sources: libgoa_sources,
   version: goa_libversion,
   include_directories: common_incs,
-  dependencies: deps + [gio_unix_dep],
+  dependencies: libgoa_deps_public + [gio_unix_dep],
   c_args: cflags,
   install: true
 )
@@ -96,7 +96,7 @@ libgoa = shared_library(
 libgoa_dep = declare_dependency(
   sources: libgoa_headers_built,
   include_directories: goa_inc,
-  dependencies: deps,
+  dependencies: libgoa_deps_public,
   link_with: libgoa
 )
 
@@ -108,7 +108,7 @@ pkg.generate(
   filebase: goa_api_name,
   subdirs: goa_api_name,
   extra_cflags: ['-I${libdir}/@0@/include'.format(goa_api_name)],
-  requires: deps,
+  requires: libgoa_deps_public,
   variables: 'exec_prefix=${prefix}'
 )
 
