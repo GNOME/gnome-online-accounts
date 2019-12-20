@@ -24,14 +24,11 @@ libgoa_sources = files(
   'goaversion.c'
 )
 
-enum_headers = files('goaenums.h')
+enum_headers = files(
+  'goaenums.h',
+)
 
 libgoa_headers_static += enum_headers
-
-install_headers(
-  libgoa_headers_static,
-  install_dir: join_paths(goa_pkgincludedir, goa_name)
-)
 
 goaconfig_conf = configuration_data()
 goaconfig_conf.set('GOA_MAJOR_VERSION', goa_major_version)
@@ -86,6 +83,11 @@ cflags = [
   '-DG_LOG_DOMAIN="@0@"'.format(goa_ns),
   '-DGOA_COMPILATION'
 ]
+
+install_headers(
+  libgoa_headers_static,
+  install_dir: join_paths(goa_pkgincludedir, goa_name)
+)
 
 libgoa = shared_library(
   goa_api_name,
