@@ -152,7 +152,7 @@ deps = [
 
 libgoa_web_extension = shared_module(
   'goawebextension',
-  sources + [goaconfig_h, libgoa_backend_headers_built],
+  sources,
   include_directories: common_incs + [goa_inc],
   dependencies: deps,
   c_args: cflags,
