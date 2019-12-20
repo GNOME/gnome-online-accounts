@@ -1,4 +1,5 @@
 goabackend_inc = include_directories('.')
+libgoa_backend_headers_built = []
 
 enum_headers = files('goabackendenums.h')
 
@@ -22,6 +23,8 @@ enum_sources = gnome.mkenums(
   install_header: true,
   install_dir: join_paths(goa_pkgincludedir, 'goabackend')
 )
+
+libgoa_backend_headers_built += enum_sources[1]
 
 sources = enum_sources + files(
   'goaoauth2provider.c',
@@ -120,7 +123,7 @@ libgoa_backend = shared_library(
 )
 
 libgoa_backend_dep = declare_dependency(
-  sources: enum_sources[1],
+  sources: libgoa_backend_headers_built,
   include_directories: goabackend_inc,
   dependencies: [gtk_dep, libgoa_dep],
   link_with: libgoa_backend
@@ -149,7 +152,7 @@ deps = [
 
 libgoa_web_extension = shared_module(
   'goawebextension',
-  sources + [goaconfig_h, enum_sources[1]],
+  sources + [goaconfig_h, libgoa_backend_headers_built],
   include_directories: common_incs + [goa_inc],
   dependencies: deps,
   c_args: cflags,
