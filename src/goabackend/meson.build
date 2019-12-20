@@ -67,6 +67,7 @@ dbus_sources = gnome.gdbus_codegen(
   autocleanup: 'all',
 )
 
+libgoa_backend_headers_built += dbus_sources[1]
 libgoa_backend_sources += dbus_sources
 
 dbus = 'goadleynaservermediadevice'
@@ -79,6 +80,7 @@ dbus_sources = gnome.gdbus_codegen(
   autocleanup: 'all',
 )
 
+libgoa_backend_headers_built += dbus_sources[1]
 libgoa_backend_sources += dbus_sources
 
 incs = common_incs
