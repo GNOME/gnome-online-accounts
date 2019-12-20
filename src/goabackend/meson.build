@@ -1,32 +1,7 @@
 goabackend_inc = include_directories('.')
 libgoa_backend_headers_built = []
 
-enum_headers = files('goabackendenums.h')
-
-headers = enum_headers + files(
-  'goabackend.h',
-  'goaprovider.h'
-)
-
-install_headers(
-  headers,
-  install_dir: join_paths(goa_pkgincludedir, 'goabackend')
-)
-
-enum = 'goabackendenumtypes'
-
-enum_sources = gnome.mkenums(
-  enum,
-  sources: enum_headers,
-  c_template: enum + '.c.template',
-  h_template: enum + '.h.template',
-  install_header: true,
-  install_dir: join_paths(goa_pkgincludedir, 'goabackend')
-)
-
-libgoa_backend_headers_built += enum_sources[1]
-
-sources = enum_sources + files(
+libgoa_backend_sources = files(
   'goaoauth2provider.c',
   'goaoauthprovider.c',
   'goabackendinit.c',
@@ -56,25 +31,55 @@ sources = enum_sources + files(
   'nautilus-floating-bar.c'
 )
 
+enum_headers = files('goabackendenums.h')
+
+headers = enum_headers + files(
+  'goabackend.h',
+  'goaprovider.h'
+)
+
+install_headers(
+  headers,
+  install_dir: join_paths(goa_pkgincludedir, 'goabackend')
+)
+
+enum = 'goabackendenumtypes'
+
+enum_sources = gnome.mkenums(
+  enum,
+  sources: enum_headers,
+  c_template: enum + '.c.template',
+  h_template: enum + '.h.template',
+  install_header: true,
+  install_dir: join_paths(goa_pkgincludedir, 'goabackend')
+)
+
+libgoa_backend_headers_built += enum_sources[1]
+libgoa_backend_sources += enum_sources
+
 dbus = 'goadleynaservermanager'
 
-sources += gnome.gdbus_codegen(
+dbus_sources = gnome.gdbus_codegen(
   dbus,
   dbus + '.xml',
   interface_prefix: 'com.intel.dLeynaServer.',
   namespace: 'DleynaServer',
   autocleanup: 'all',
 )
+
+libgoa_backend_sources += dbus_sources
 
 dbus = 'goadleynaservermediadevice'
 
-sources += gnome.gdbus_codegen(
+dbus_sources = gnome.gdbus_codegen(
   dbus,
   dbus + '.xml',
   interface_prefix: 'com.intel.dLeynaServer.',
   namespace: 'DleynaServer',
   autocleanup: 'all',
 )
+
+libgoa_backend_sources += dbus_sources
 
 incs = common_incs
 
@@ -99,22 +104,22 @@ cflags = [
 ]
 
 if enable_fedora
-  sources += files('goafedoraprovider.c')
+  libgoa_backend_sources += files('goafedoraprovider.c')
 endif
 
 if enable_kerberos
-  sources += files('goakerberosprovider.c')
+  libgoa_backend_sources += files('goakerberosprovider.c')
 endif
 
 if enable_fedora or enable_kerberos
-  sources += identity_dbus_sources + identity_manager_error_src
+  libgoa_backend_sources += identity_dbus_sources + identity_manager_error_src
   incs += goaidentity_inc
   deps += [gcr_dep]
 endif
 
 libgoa_backend = shared_library(
   goa_backend_api_name,
-  sources,
+  libgoa_backend_sources,
   version: goa_backend_libversion,
   include_directories: incs,
   dependencies: deps,
