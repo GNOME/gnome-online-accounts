@@ -145,7 +145,7 @@ pkg.generate(
   variables: 'exec_prefix=${prefix}'
 )
 
-sources = files(
+libgoawebextension_sources = files(
   'goawebextension.c',
   'goawebextensionmain.c'
 )
@@ -157,7 +157,7 @@ deps = [
 
 libgoa_web_extension = shared_module(
   'goawebextension',
-  sources,
+  libgoawebextension_sources,
   include_directories: common_incs + [goa_inc],
   dependencies: deps,
   c_args: cflags,
