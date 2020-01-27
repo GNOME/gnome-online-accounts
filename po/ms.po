@@ -6,206 +6,527 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"online-accounts&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-11-13 10:00+0000\n"
-"PO-Revision-Date: 2011-11-15 23:28+0730\n"
-"Last-Translator: Umarzuki Bin Mochlis Moktar <umarzuki@gmail.com>\n"
-"Language-Team: Malay <gnome-ms@googlegroups.com>\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
+"issues\n"
+"POT-Creation-Date: 2020-01-04 22:11+0000\n"
+"PO-Revision-Date: 2020-01-26 09:20+0800\n"
+"Last-Translator: abuyop <abuyop@gmail.com>\n"
+"Language-Team: Pasukan Terjemahan GNOME Malaysia\n"
 "Language: ms\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Malay\n"
-"X-Poedit-Country: MALAYSIA\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 2.0.6\n"
 
-#: ../src/daemon/goadaemon.c:871
-msgid "An online account needs attention"
-msgstr "Akaun dalam talian memerlukan perhatian"
+#: data/org.gnome.online-accounts.gschema.xml:6
+msgid "List of providers that are allowed to be loaded"
+msgstr "Senarai penyedia yang boleh dimuatkan"
 
-#: ../src/daemon/goadaemon.c:878
-msgid "Open Online Accounts..."
-msgstr "Buka Akaun Atas Talian..."
+#: data/org.gnome.online-accounts.gschema.xml:7
+msgid ""
+"A list of strings representing the providers that are allowed to be loaded "
+"(default: 'all'). This is only evaluated on startup."
+msgstr ""
+"Satu senarai rentetan yang mewakili penyedia yang boleh dimuatkan (lalai: "
+"'semua'). Ia hanya dinilai ketika permulaan."
 
-#: ../src/goabackend/goafacebookprovider.c:78
+#. TODO: more specific
+#: src/daemon/goadaemon.c:1136 src/daemon/goadaemon.c:1433
+#, c-format
+msgid "Failed to find a provider for: %s"
+msgstr "Gagal mencari penyedia untuk: %s"
+
+#: src/daemon/goadaemon.c:1376
+msgid "IsLocked property is set for account"
+msgstr "Sifat IsLocked ditetapkan untuk akaun"
+
+#. TODO: more specific
+#: src/daemon/goadaemon.c:1421
+msgid "ProviderType property is not set for account"
+msgstr "Sifat ProviderType tidak ditetapkan untuk akaun"
+
+#. TODO: more specific
+#: src/goabackend/goaewsclient.c:258
+msgid "Failed to parse autodiscover response XML"
+msgstr "Gagal menghurai respons XML auto-temui"
+
+#. TODO: more specific
+#. Translators: the parameter is an XML element name.
+#: src/goabackend/goaewsclient.c:269 src/goabackend/goaewsclient.c:284
+#: src/goabackend/goaewsclient.c:299
+#, c-format
+msgid "Failed to find “%s” element"
+msgstr "Gagal mencari unsur “%s”"
+
+#. TODO: more specific
+#: src/goabackend/goaewsclient.c:320
+msgid "Failed to find ASUrl and OABUrl in autodiscover response"
+msgstr "Gagal mencari ASUrl dan OABUrl dalam respons auto-temui"
+
+#: src/goabackend/goaexchangeprovider.c:51
+msgid "Microsoft Exchange"
+msgstr "Microsoft Exchange"
+
+#. Translators: the first %s is the username
+#. * (eg., debarshi.ray@gmail.com or rishi), and the
+#. * (%s, %d) is the error domain and code.
+#.
+#: src/goabackend/goaexchangeprovider.c:248
+#: src/goabackend/goalastfmprovider.c:279
+#: src/goabackend/goaowncloudprovider.c:291
+#, c-format
+msgid "Invalid password with username “%s” (%s, %d): "
+msgstr "Kata laluan tidak sah dengan nama pengguna “%s” (%s, %d): "
+
+#: src/goabackend/goaexchangeprovider.c:394
+#: src/goabackend/goaimapsmtpprovider.c:647
+msgid "_E-mail"
+msgstr "_E-mel"
+
+#: src/goabackend/goaexchangeprovider.c:395
+#: src/goabackend/goafedoraprovider.c:574
+#: src/goabackend/goaimapsmtpprovider.c:667
+#: src/goabackend/goaimapsmtpprovider.c:687
+#: src/goabackend/goalastfmprovider.c:421
+#: src/goabackend/goaowncloudprovider.c:509
+msgid "_Password"
+msgstr "_Kata Laluan"
+
+#: src/goabackend/goaexchangeprovider.c:398
+msgid "_Custom"
+msgstr "_Suai"
+
+#: src/goabackend/goaexchangeprovider.c:409
+#: src/goabackend/goafedoraprovider.c:573
+#: src/goabackend/goaimapsmtpprovider.c:666
+#: src/goabackend/goaimapsmtpprovider.c:686
+#: src/goabackend/goalastfmprovider.c:420
+#: src/goabackend/goaowncloudprovider.c:508
+#| msgid "User Name"
+msgid "User_name"
+msgstr "_Nama pengguna"
+
+#: src/goabackend/goaexchangeprovider.c:410
+#: src/goabackend/goaowncloudprovider.c:507
+msgid "_Server"
+msgstr "Pela_yan"
+
+#. --
+#: src/goabackend/goaexchangeprovider.c:420
+#: src/goabackend/goafedoraprovider.c:581
+#: src/goabackend/goaimapsmtpprovider.c:699
+#: src/goabackend/goakerberosprovider.c:583
+#: src/goabackend/goalastfmprovider.c:429
+#: src/goabackend/goaowncloudprovider.c:523
+msgid "_Cancel"
+msgstr "_Batal"
+
+#: src/goabackend/goaexchangeprovider.c:421
+#: src/goabackend/goafedoraprovider.c:582
+#: src/goabackend/goakerberosprovider.c:584
+#: src/goabackend/goalastfmprovider.c:430
+#: src/goabackend/goaowncloudprovider.c:524
+msgid "C_onnect"
+msgstr "Sa_mbung"
+
+#: src/goabackend/goaexchangeprovider.c:437
+#: src/goabackend/goafedoraprovider.c:597
+#: src/goabackend/goaimapsmtpprovider.c:715
+#: src/goabackend/goakerberosprovider.c:599
+#: src/goabackend/goalastfmprovider.c:446
+#: src/goabackend/goaowncloudprovider.c:539
+msgid "Connecting…"
+msgstr "Menyambung…"
+
+#: src/goabackend/goaexchangeprovider.c:537
+#: src/goabackend/goaexchangeprovider.c:731
+#: src/goabackend/goafedoraprovider.c:746
+#: src/goabackend/goaimapsmtpprovider.c:865
+#: src/goabackend/goaimapsmtpprovider.c:900
+#: src/goabackend/goaimapsmtpprovider.c:992
+#: src/goabackend/goaimapsmtpprovider.c:1249
+#: src/goabackend/goaimapsmtpprovider.c:1325
+#: src/goabackend/goakerberosprovider.c:939
+#: src/goabackend/goalastfmprovider.c:644
+#: src/goabackend/goalastfmprovider.c:812
+#: src/goabackend/goamediaserverprovider.c:412
+#: src/goabackend/goaoauth2provider.c:995 src/goabackend/goaoauthprovider.c:859
+#: src/goabackend/goaowncloudprovider.c:661
+#: src/goabackend/goaowncloudprovider.c:881
+msgid "Dialog was dismissed"
+msgstr "Dialog telah dikeluarkan"
+
+#: src/goabackend/goaexchangeprovider.c:575
+#: src/goabackend/goaexchangeprovider.c:759
+#: src/goabackend/goafedoraprovider.c:792
+#: src/goabackend/goaimapsmtpprovider.c:933
+#: src/goabackend/goaimapsmtpprovider.c:1030
+#: src/goabackend/goaimapsmtpprovider.c:1276
+#: src/goabackend/goaimapsmtpprovider.c:1353
+#: src/goabackend/goalastfmprovider.c:678
+#: src/goabackend/goalastfmprovider.c:831
+#: src/goabackend/goaowncloudprovider.c:706
+#: src/goabackend/goaowncloudprovider.c:908
+#, c-format
+#| msgid "Dialog was dismissed"
+msgid "Dialog was dismissed (%s, %d): "
+msgstr "Dialog telah dikeluarkan (%s, %d): "
+
+#: src/goabackend/goaexchangeprovider.c:588
+#: src/goabackend/goaimapsmtpprovider.c:946
+#: src/goabackend/goaimapsmtpprovider.c:1043
+#: src/goabackend/goaowncloudprovider.c:719
+msgid "_Ignore"
+msgstr "_Abai"
+
+#: src/goabackend/goaexchangeprovider.c:593
+#: src/goabackend/goaexchangeprovider.c:778
+#: src/goabackend/goafedoraprovider.c:803
+#: src/goabackend/goaimapsmtpprovider.c:951
+#: src/goabackend/goaimapsmtpprovider.c:1048
+#: src/goabackend/goaimapsmtpprovider.c:1295
+#: src/goabackend/goaimapsmtpprovider.c:1372
+#: src/goabackend/goakerberosprovider.c:1032
+#: src/goabackend/goalastfmprovider.c:690
+#: src/goabackend/goalastfmprovider.c:848
+#: src/goabackend/goaowncloudprovider.c:724
+#: src/goabackend/goaowncloudprovider.c:927
+msgid "_Try Again"
+msgstr "_Cuba Lagi"
+
+#: src/goabackend/goaexchangeprovider.c:598
+#: src/goabackend/goaexchangeprovider.c:771
+msgid "Error connecting to Microsoft Exchange server"
+msgstr "Ralat menyambung dengan pelayan Microsoft Exchange"
+
+#: src/goabackend/goafacebookprovider.c:56
 msgid "Facebook"
 msgstr "Facebook"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goafacebookprovider.c:162
-#: ../src/goabackend/goagoogleprovider.c:195
-#: ../src/goabackend/goatwitterprovider.c:160
-#: ../src/goabackend/goayahooprovider.c:163
+#: src/goabackend/goafacebookprovider.c:183
+#: src/goabackend/goaflickrprovider.c:155
+#: src/goabackend/goafoursquareprovider.c:154
+#: src/goabackend/goagoogleprovider.c:184
+#: src/goabackend/goawindowsliveprovider.c:159
 #, c-format
-msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+#| msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
+msgid ""
+"Expected status 200 when requesting your identity, instead got status %d (%s)"
 msgstr ""
-"Dijangka mendapat status 200 apabila meminta guid, tetapi mendapat status %d "
+"Jangkakan status 200 bila meminta identiti anda, tetapi mendapat status %d "
 "(%s)"
 
-#: ../src/goabackend/goafacebookprovider.c:174
-#: ../src/goabackend/goagoogleprovider.c:207
-#: ../src/goabackend/goaoauth2provider.c:475
-#: ../src/goabackend/goatwitterprovider.c:172
-#: ../src/goabackend/goayahooprovider.c:175
-msgid "Error parsing response as JSON: "
-msgstr "Ralat respons parsing sebagai JSON:"
+#. TODO: more specific
+#: src/goabackend/goafacebookprovider.c:202
+#: src/goabackend/goafacebookprovider.c:213
+#: src/goabackend/goafacebookprovider.c:219
+#: src/goabackend/goaflickrprovider.c:174
+#: src/goabackend/goaflickrprovider.c:185
+#: src/goabackend/goaflickrprovider.c:196
+#: src/goabackend/goaflickrprovider.c:205
+#: src/goabackend/goaflickrprovider.c:218
+#: src/goabackend/goafoursquareprovider.c:173
+#: src/goabackend/goafoursquareprovider.c:184
+#: src/goabackend/goafoursquareprovider.c:195
+#: src/goabackend/goafoursquareprovider.c:206
+#: src/goabackend/goafoursquareprovider.c:215
+#: src/goabackend/goafoursquareprovider.c:228
+#: src/goabackend/goagoogleprovider.c:203
+#: src/goabackend/goagoogleprovider.c:214
+#: src/goabackend/goalastfmprovider.c:204
+#: src/goabackend/goalastfmprovider.c:213
+#: src/goabackend/goalastfmprovider.c:222
+#: src/goabackend/goalastfmprovider.c:230
+#: src/goabackend/goalastfmprovider.c:236
+#: src/goabackend/goalastfmprovider.c:504
+#: src/goabackend/goalastfmprovider.c:513
+#: src/goabackend/goalastfmprovider.c:530
+#: src/goabackend/goalastfmprovider.c:536
+#: src/goabackend/goaoauth2provider.c:656
+#: src/goabackend/goaoauth2provider.c:686
+#: src/goabackend/goaoauth2provider.c:697 src/goabackend/goautils.c:296
+#: src/goabackend/goawindowsliveprovider.c:178
+#: src/goabackend/goawindowsliveprovider.c:189
+#: src/goabackend/goawindowsliveprovider.c:198
+#: src/goabackend/goawindowsliveprovider.c:211
+msgid "Could not parse response"
+msgstr "Tidak dapat menghurai respons"
 
-#: ../src/goabackend/goafacebookprovider.c:185
+#: src/goabackend/goafedoraprovider.c:94
+msgid "Fedora"
+msgstr "Fedora"
+
+#: src/goabackend/goafedoraprovider.c:208
+#: src/goabackend/goakerberosprovider.c:240
+msgid "Ticketing is disabled for account"
+msgstr "Pertiketan dilumpuhkan untuk akaun"
+
+#: src/goabackend/goafedoraprovider.c:233
+#: src/goabackend/goakerberosprovider.c:265
 #, c-format
-msgid "Didn't find username member in JSON data"
-msgstr "Tidak menjumpai nama pengguna ahli di dalam data JSON"
+msgid "Could not find saved credentials for principal “%s” in keyring"
+msgstr ""
+"Tidak dapat mencari kelayakan tersimpan untuk prinsipal “%s” dalam gelang "
+"kunci"
 
-#: ../src/goabackend/goafacebookprovider.c:194
+#: src/goabackend/goafedoraprovider.c:246
+#: src/goabackend/goakerberosprovider.c:278
 #, c-format
-msgid "Didn't find name member in JSON data"
-msgstr "Tidak dapat mencari nama ahli di dalam data JSON "
+msgid "Did not find password for principal “%s” in credentials"
+msgstr "Tidak dapat mencari kata laluan untuk prinsipal “%s” dalam kelayakan"
 
-#: ../src/goabackend/goafacebookprovider.c:282
-#: ../src/goabackend/goatwitterprovider.c:260
-msgid "User Name"
-msgstr "Nama Pengguna"
+#: src/goabackend/goafedoraprovider.c:805
+msgid "Error connecting to Fedora"
+msgstr "Ralat ketika bersambung dengan Fedora"
 
-#: ../src/goabackend/goafacebookprovider.c:283
-#: ../src/goabackend/goagoogleprovider.c:430
-msgid "Chat"
-msgstr "Sembang"
+#: src/goabackend/goafedoraprovider.c:1198
+#: src/goabackend/goakerberosprovider.c:1366
+msgid "Identity service returned invalid key"
+msgstr "Perkhidmatan identiti kembalikan kunci tidak sah"
 
-#: ../src/goabackend/goagoogleprovider.c:78
+#: src/goabackend/goaflickrprovider.c:56
+msgid "Flickr"
+msgstr "Flickr"
+
+#: src/goabackend/goaflickrprovider.c:271
+msgid "Your system time is invalid. Check your date and time settings."
+msgstr "Masa sistem anda tidak sah. Semak tetapan tarikh dan waktu anda."
+
+#: src/goabackend/goafoursquareprovider.c:57
+msgid "Foursquare"
+msgstr "Foursquare"
+
+#: src/goabackend/goagoogleprovider.c:56
 msgid "Google"
 msgstr "Google"
 
-#: ../src/goabackend/goagoogleprovider.c:218
+#. TODO: more specific
+#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goasmtpauth.c:149
+msgid "Service not available"
+msgstr "Perkhidmatan tidak tersedia"
+
+#. TODO: more specific
+#: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goalastfmprovider.c:521
+#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:861
+msgid "Authentication failed"
+msgstr "Pengesahihan gagal"
+
+#: src/goabackend/goaimapauthlogin.c:129
+msgid "Server does not support PLAIN"
+msgstr "Pelayan tidak menyokong PLAIN"
+
+#: src/goabackend/goaimapauthlogin.c:181 src/goabackend/goasmtpauth.c:600
+msgid "Server does not support STARTTLS"
+msgstr "Pelayan tidak menyokong STARTTLS"
+
+#: src/goabackend/goaimapsmtpprovider.c:53
+msgid "IMAP and SMTP"
+msgstr "IMAP dan SMTP"
+
+#. Translators: the first %s is a field name. The
+#. * second %s is the IMAP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#. Translators: the first %s is a field name. The
+#. * second %s is the SMTP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#: src/goabackend/goaimapsmtpprovider.c:327
+#: src/goabackend/goaimapsmtpprovider.c:378
 #, c-format
-msgid "Didn't find data member in JSON data"
-msgstr "Tidak menjumpai data ahli di dalam data JSON"
+msgid "Invalid %s with username “%s” (%s, %d): "
+msgstr "Nama pengguna %s tidak sah dengan nama pengguna “%s” (%s, %d): "
 
-#: ../src/goabackend/goagoogleprovider.c:228
-#, c-format
-msgid "Didn't find email member in JSON data"
-msgstr "Tidak menjumpai email ahli di dalam data JSON"
+#. Translators: the following four strings are used to show a
+#. * combo box similar to the one in the evolution module.
+#. * Encryption: None
+#. *             STARTTLS after connecting
+#. *             SSL on a dedicated port
+#.
+#: src/goabackend/goaimapsmtpprovider.c:564
+msgid "_Encryption"
+msgstr "P_enyulitan"
 
-#: ../src/goabackend/goagoogleprovider.c:425
-msgid "Email Address"
-msgstr "Alamat Email"
+#: src/goabackend/goaimapsmtpprovider.c:567
+msgid "None"
+msgstr "Tiada"
 
-#: ../src/goabackend/goagoogleprovider.c:426
-msgid "Use this account for"
-msgstr "Guna akaun ini untuk"
+#: src/goabackend/goaimapsmtpprovider.c:570
+msgid "STARTTLS after connecting"
+msgstr "STARTTLS selepas menyambung"
 
-#: ../src/goabackend/goagoogleprovider.c:427
-msgid "Mail"
-msgstr "Surat"
+#: src/goabackend/goaimapsmtpprovider.c:573
+msgid "SSL on a dedicated port"
+msgstr "SSL pada port khusus"
 
-#: ../src/goabackend/goagoogleprovider.c:428
-msgid "Calendar"
-msgstr "Kalendar"
+#: src/goabackend/goaimapsmtpprovider.c:648
+#| msgid "Name"
+msgid "_Name"
+msgstr "_Nama"
 
-#: ../src/goabackend/goagoogleprovider.c:429
-msgid "Contacts"
-msgstr "Kenalan"
+#: src/goabackend/goaimapsmtpprovider.c:665
+msgid "IMAP _Server"
+msgstr "_Pelayan IMAP"
 
-#: ../src/goabackend/goagoogleprovider.c:431
-msgid "Documents"
-msgstr "Dokumen-dokumen"
+#: src/goabackend/goaimapsmtpprovider.c:685
+msgid "SMTP _Server"
+msgstr "_Pelayan SMTP"
+
+#: src/goabackend/goaimapsmtpprovider.c:700
+#: src/goabackend/goaimapsmtpprovider.c:972
+#: src/goabackend/goaimapsmtpprovider.c:1305
+msgid "_Forward"
+msgstr "Ma_ju"
+
+#: src/goabackend/goaimapsmtpprovider.c:956
+#: src/goabackend/goaimapsmtpprovider.c:1288
+msgid "Error connecting to IMAP server"
+msgstr "Ralat menyambung dengan pelayan IMAP"
+
+#: src/goabackend/goaimapsmtpprovider.c:1053
+#: src/goabackend/goaimapsmtpprovider.c:1365
+msgid "Error connecting to SMTP server"
+msgstr "Ralat menyambung dengan pelayan SMTP"
+
+#: src/goabackend/goaimapsmtpprovider.c:1476
+msgid "E-mail"
+msgstr "E-mel"
+
+#: src/goabackend/goaimapsmtpprovider.c:1480
+msgid "Name"
+msgstr "Nama"
+
+#: src/goabackend/goaimapsmtpprovider.c:1490
+#: src/goabackend/goaimapsmtpprovider.c:1494
+msgid "IMAP"
+msgstr "IMAP"
+
+#: src/goabackend/goaimapsmtpprovider.c:1505
+#: src/goabackend/goaimapsmtpprovider.c:1509
+msgid "SMTP"
+msgstr "SMTP"
+
+#: src/goabackend/goakerberosprovider.c:92
+msgid "Enterprise Login (Kerberos)"
+msgstr "Daftar Masuk Enterprise (Kerberos)"
+
+#: src/goabackend/goakerberosprovider.c:578
+msgid "_Principal"
+msgstr "_Prinsipal"
+
+#: src/goabackend/goakerberosprovider.c:793
+msgid "Operation was cancelled"
+msgstr "Operasi telah dibatalkan"
+
+#: src/goabackend/goakerberosprovider.c:837
+#: src/goaidentity/goaidentityservice.c:1265
+msgid "Log In to Realm"
+msgstr "Daftar Masuk ke Realm"
+
+#: src/goabackend/goakerberosprovider.c:838
+msgid "Please enter your password below."
+msgstr "Sila masukkan kata laluan anda di bawah."
+
+#: src/goabackend/goakerberosprovider.c:839
+msgid "Remember this password"
+msgstr "Ingat kata laluan ini"
+
+#: src/goabackend/goakerberosprovider.c:1027
+#| msgid "Error getting identity: "
+msgid "Error connecting to enterprise identity server"
+msgstr "Ralat menyambung dengan pelayan identiti enterprise"
+
+#: src/goabackend/goalastfmprovider.c:57
+msgid "Last.fm"
+msgstr "Last.fm"
+
+#: src/goabackend/goalastfmprovider.c:692
+#: src/goabackend/goalastfmprovider.c:842
+msgid "Error connecting to Last.fm"
+msgstr "Ralat menyambung ke Last.fm"
+
+#: src/goabackend/goamediaserverprovider.c:55
+msgid "Media Server"
+msgstr "Pelayan Media"
+
+#: src/goabackend/goamediaserverprovider.c:308
+msgid ""
+"Personal content can be added to your applications through a media server "
+"account."
+msgstr ""
+"Kandungan peribadi boleh ditambahkan ke dalam aplikasi anda melalui sebuah "
+"akaun pelayan media."
+
+#: src/goabackend/goamediaserverprovider.c:321
+msgid "Available Media Servers"
+msgstr "Pelayan Media Tersedia"
+
+#: src/goabackend/goamediaserverprovider.c:352
+msgid "No media servers found"
+msgstr "Tiada pelayan media yang ditemui"
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauth2provider.c:432
-#: ../src/goabackend/goaoauthprovider.c:440
+#: src/goabackend/goaoauth2provider.c:632 src/goabackend/goaoauthprovider.c:542
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr ""
-"Dijangka mendapat status 200 apabila meminta token akses, tetapi mendapat "
-"status%d (%s)"
+"Dijangka mendapat status 200 apabila meminta token capaian, tetapi mendapat "
+"status %d (%s)"
 
-#: ../src/goabackend/goaoauth2provider.c:452
+#: src/goabackend/goaoauth2provider.c:814
+#| msgid "Authorization response was \"%s\""
+msgid "Authorization response: "
+msgstr "Respons keizinan: "
+
+#: src/goabackend/goaoauth2provider.c:884
 #, c-format
-msgid "Didn't find access_token in non-JSON data"
-msgstr "Tidak menjumpai token_akses dalam data bukan JSON"
+#| msgid "Authorization response was \"%s\""
+msgid "Authorization response: %s"
+msgstr "Respons keizinan: %s"
 
-#: ../src/goabackend/goaoauth2provider.c:486
-#, c-format
-msgid "Didn't find access_token in JSON data"
-msgstr "Tidak menjumpai token_akses dalam data JSON"
-
-#: ../src/goabackend/goaoauth2provider.c:570
-#, c-format
-msgid "Authorization response was \"%s\""
-msgstr "Respon kebenaran adalah \"%s\""
-
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauth2provider.c:651
-#, c-format
-msgid ""
-"Paste authorization code obtained from the <a href=\"%s\">authorization "
-"page</a>:"
-msgstr ""
-"Tampalkan kod kebenaran yang diperolehi dari laman <a href=\"%s\">laman "
-"kebenaran</a>:"
-
-#: ../src/goabackend/goaoauth2provider.c:725
-#: ../src/goabackend/goaoauthprovider.c:751
-#, c-format
-msgid "Dialog was dismissed"
-msgstr "Dialog telah ditolak"
-
-#: ../src/goabackend/goaoauth2provider.c:749
-#: ../src/goabackend/goaoauthprovider.c:782
+#: src/goabackend/goaoauth2provider.c:1021
+#: src/goabackend/goaoauthprovider.c:890
 msgid "Error getting an Access Token: "
-msgstr "Ralat mendapatkan satu Token Akses:"
+msgstr "Ralat mendapatkan satu Token Capaian: "
 
-#: ../src/goabackend/goaoauth2provider.c:761
-#: ../src/goabackend/goaoauthprovider.c:795
+#: src/goabackend/goaoauth2provider.c:1036
+#: src/goabackend/goaoauthprovider.c:903
 msgid "Error getting identity: "
-msgstr "Ralat mendapatkan identiti:"
+msgstr "Ralat mendapatkan identiti: "
 
-#: ../src/goabackend/goaoauth2provider.c:926
-#: ../src/goabackend/goaoauthprovider.c:972
+#: src/goabackend/goaoauth2provider.c:1230
+#: src/goabackend/goaoauthprovider.c:1168
 #, c-format
-msgid "There is already an account for the identity %s"
-msgstr "Telah terdapat satu akaun untuk identiti %s"
+#| msgid "Was asked to login as %s, but logged in as %s"
+msgid "Was asked to log in as %s, but logged in as %s"
+msgstr ""
+"Telah ditanya untuk mendaftar masuk sebagai %s, tetapi berdaftar masuk "
+"sebagai %s"
 
-#: ../src/goabackend/goaoauth2provider.c:1051
-#: ../src/goabackend/goaoauthprovider.c:1102
-#, c-format
-msgid "Was asked to login as %s, but logged in as %s"
-msgstr "Telah diminta untuk log masuk sebagai %s, tetapi log masuk sebagai %s"
-
-#: ../src/goabackend/goaoauth2provider.c:1187
-#: ../src/goabackend/goaoauthprovider.c:1250
-#, c-format
-msgid "Credentials not found in keyring (%s, %d): "
-msgstr "Bukti kelayakan tidak dijumpai dalam gegelang kunci (%s, %d):"
-
-#: ../src/goabackend/goaoauth2provider.c:1214
-#, c-format
+#: src/goabackend/goaoauth2provider.c:1382
 msgid "Credentials do not contain access_token"
-msgstr "Bukti kelayakan tidak mengandungi token_akses"
+msgstr "Kelayakan tidak mengandungi token_capaian"
 
-#: ../src/goabackend/goaoauth2provider.c:1253
-#: ../src/goabackend/goaoauthprovider.c:1323
+#: src/goabackend/goaoauth2provider.c:1421
+#: src/goabackend/goaoauthprovider.c:1383
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
-msgstr "Gagal untuk menyegarkan token akses (%s,%d):"
+msgstr "Gagal untuk menyegarkan semula token capaian (%s, %d): "
 
-#: ../src/goabackend/goaoauth2provider.c:1288
-#: ../src/goabackend/goaoauthprovider.c:1353
-#, c-format
-msgid "Error storing credentials in keyring (%s, %d): "
-msgstr "Ralat menyimpan kelayakan dalam gegelang kunci (%s,%d):"
-
-#: ../src/goabackend/goaoauthprovider.c:463
-#, c-format
+#: src/goabackend/goaoauthprovider.c:565
 msgid "Missing access_token or access_token_secret headers in response"
-msgstr ""
-"Akses hilang_tanda atau pengepala akses_rahsia _token sebagai tindak balas"
+msgstr "Token_capaian hilang atau pengepala access_token_secret dalam respons"
 
-#: ../src/goabackend/goaoauthprovider.c:636
+#: src/goabackend/goaoauthprovider.c:773
 msgid "Error getting a Request Token: "
-msgstr "Ralat mendapat Token Permintaan:"
+msgstr "Ralat mendapat satu Token Permintaan: "
 
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: ../src/goabackend/goaoauthprovider.c:645
+#: src/goabackend/goaoauthprovider.c:804
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
@@ -213,102 +534,400 @@ msgstr ""
 "Status 200 dijangka untuk mendapatkan Token Permintaan, sebaliknya mendapat "
 "status %d (%s)"
 
-#: ../src/goabackend/goaoauthprovider.c:659
-#, c-format
+#: src/goabackend/goaoauthprovider.c:821
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr ""
-"Hilang token_permintaan atau kepala permintaan_rahsia_token di dalam tindak "
-"balas"
+"token_permintaan  hilang atau kepala request_token_secret dalam respons"
 
-#. Translators: The verb "Paste" is used when asking the user to paste a string from a web browser window
-#: ../src/goabackend/goaoauthprovider.c:676
-#, c-format
-msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-msgstr ""
-"Tampalkan token yang diperolehi daripada <a href=\"%s\">laman kebenaran</a>:"
-
-#: ../src/goabackend/goaoauthprovider.c:1279
-#, c-format
+#: src/goabackend/goaoauthprovider.c:1339
 msgid "Credentials do not contain access_token or access_token_secret"
-msgstr "Bukti kelayakan tidak mengandungi  token_akses atau akses_rahsia_token"
+msgstr "Kelayakan tidak mengandungi token_capaian atau access_token_secret"
 
-#: ../src/goabackend/goaprovider.c:522
+#: src/goabackend/goaowncloudprovider.c:60
+msgid "Nextcloud"
+msgstr "Nextcloud"
+
+#: src/goabackend/goaowncloudprovider.c:729
+#: src/goabackend/goaowncloudprovider.c:920
+msgid "Error connecting to Nextcloud server"
+msgstr "Ralat ketika bersambung dengan pelayan Nextcloud"
+
+#: src/goabackend/goaprovider.c:112
+#| msgid "Mail"
+msgid "_Mail"
+msgstr "_Mel"
+
+#: src/goabackend/goaprovider.c:117
+#| msgid "Calendar"
+msgid "Cale_ndar"
+msgstr "Kale_ndar"
+
+#: src/goabackend/goaprovider.c:122
+#| msgid "Contacts"
+msgid "_Contacts"
+msgstr "_Kenalan"
+
+#: src/goabackend/goaprovider.c:127
+msgid "C_hat"
+msgstr "S_embang"
+
+#: src/goabackend/goaprovider.c:132
+#| msgid "Documents"
+msgid "_Documents"
+msgstr "_Dokumen"
+
+#: src/goabackend/goaprovider.c:137
+msgid "M_usic"
+msgstr "M_uzik"
+
+#: src/goabackend/goaprovider.c:142
+msgid "_Photos"
+msgstr "_Foto"
+
+#: src/goabackend/goaprovider.c:147
+msgid "_Files"
+msgstr "_Fail"
+
+#: src/goabackend/goaprovider.c:152
+msgid "Network _Resources"
+msgstr "_Sumber Rangkaian"
+
+#: src/goabackend/goaprovider.c:157
+msgid "_Read Later"
+msgstr "Ba_ca Kemudian"
+
+#: src/goabackend/goaprovider.c:162
+msgid "Prin_ters"
+msgstr "Pence_tak"
+
+#: src/goabackend/goaprovider.c:167
+msgid "_Maps"
+msgstr "_Peta"
+
+#: src/goabackend/goaprovider.c:172
+msgid "T_o Do"
+msgstr "_Perlu Buat"
+
+#. Translators: This is a label for a series of
+#. * options switches. For example: “Use for Mail”.
+#: src/goabackend/goaprovider.c:570
+msgid "Use for"
+msgstr "Guna untuk"
+
+#: src/goabackend/goaprovider.c:825
+msgid "Account is disabled"
+msgstr "Akaun dilumpuhkan"
+
+#: src/goabackend/goaprovider.c:838
+msgid "Unknown error"
+msgstr "Ralat tidak diketahui"
+
+#: src/goabackend/goaprovider.c:857
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
-msgstr "memastikan_selari_kelayakan tidak dilaksanakan pada jenis %s"
+msgstr "ensure_credentials_sync tidak disegerakkan pada jenis %s"
+
+#. TODO: more specific
+#: src/goabackend/goasmtpauth.c:164
+msgid "TLS not available"
+msgstr "TLS tidak tersedia"
+
+#: src/goabackend/goasmtpauth.c:470
+msgid "Unknown authentication mechanism"
+msgstr "Mekanisma pengesahihan tidak diketahui"
+
+#: src/goabackend/goautils.c:92
+msgid "Error logging into the account"
+msgstr "Ralat mendaftar masuk ke dalam akaun"
+
+#: src/goabackend/goautils.c:136
+msgid "Credentials have expired"
+msgstr "Kelayakan telah luput"
+
+#: src/goabackend/goautils.c:140
+msgid "Sign in to enable this account."
+msgstr "Daftar masuk untuk membenarkan akaun ini."
+
+#: src/goabackend/goautils.c:144
+msgid "_Sign In"
+msgstr "_Daftar Masuk"
+
+#: src/goabackend/goautils.c:240
+#, c-format
+msgid "A %s account already exists for %s"
+msgstr "Satu akaun %s sudah wujud untuk %s"
+
+#. Translators: this is the title of the "Add Account" and "Refresh
+#. * Account" dialogs. The %s is the name of the provider. eg.,
+#. * 'Google'.
+#.
+#: src/goabackend/goautils.c:316
+#, c-format
+msgid "%s Account"
+msgstr "Akaun %s"
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:370
+#| msgid "Failed to retrieve credentials from the keyring: %s"
+msgid "Failed to delete credentials from the keyring"
+msgstr "Gagal memadam kelayakan daripada gelang kunci"
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:418
+#| msgid "Failed to retrieve credentials from the keyring: %s"
+msgid "Failed to retrieve credentials from the keyring"
+msgstr "Gagal memperoleh kelayakan daripada gelang kunci"
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:428
+#| msgid "Credentials not found in keyring (%s, %d): "
+msgid "No credentials found in the keyring"
+msgstr "Tiada kelayakan ditemui dalam gelang kunci"
+
+#: src/goabackend/goautils.c:441
+msgid "Error parsing result obtained from the keyring: "
+msgstr "Ralat menghurai keputusan yang diperolehi daripada gelang kunci: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: ../src/goabackend/goaprovider.c:737
+#: src/goabackend/goautils.c:482
 #, c-format
 msgid "GOA %s credentials for identity %s"
-msgstr "GOA %s bukti kelayakan untuk identiti %s"
+msgstr "Kelayakan %s GOA untuk identiti %s"
 
 #. TODO: more specific
-#: ../src/goabackend/goaprovider.c:751
+#: src/goabackend/goautils.c:499
+#| msgid "Failed to store credentials in the keyring: %s"
+msgid "Failed to store credentials in the keyring"
+msgstr "Gagal menyimpan kelayakan dalam gelang kunci"
+
+#: src/goabackend/goautils.c:848
+msgid "Cannot resolve hostname"
+msgstr "Tidak dapat meleraikan nama hos"
+
+#: src/goabackend/goautils.c:852
+msgid "Cannot resolve proxy hostname"
+msgstr "Tidak dapat meleraikan nama hos proksi"
+
+#: src/goabackend/goautils.c:857
+msgid "Cannot find WebDAV endpoint"
+msgstr "Tidak dapat mencari titik akhir WebDAV"
+
+#: src/goabackend/goautils.c:866
 #, c-format
-msgid "Failed to store credentials in the keyring: %s"
-msgstr "Gagal untuk menyimpan bukti kelayakan di dalam gegelang kunci: %s"
+msgid "Code: %u — Unexpected response from server"
+msgstr "Kod: %u — Respons tidak dijangka daripada pelayan"
 
-#. TODO: more specific
-#: ../src/goabackend/goaprovider.c:822
-#, c-format
-msgid "Failed to retrieve credentials from the keyring: %s"
-msgstr "Gagal untuk mendapatkan bukti kelayakan daripada gegelang kunci: %s"
+#: src/goabackend/goautils.c:882
+msgid "The signing certificate authority is not known."
+msgstr "Autoriti sijil tanda tangan tidak diketahui."
 
-#: ../src/goabackend/goaprovider.c:834
-msgid "Error parsing result obtained from the keyring: "
-msgstr "Ralat parsing hasil yang diperolehi dari gegelang kunci:"
-
-#: ../src/goabackend/goatwitterprovider.c:78
-msgid "Twitter"
-msgstr "Twitter"
-
-#: ../src/goabackend/goatwitterprovider.c:183
-#, c-format
-msgid "Didn't find id_str member in JSON data"
-msgstr "Tidak menjumpai ahli id_str dalam data JSON"
-
-#: ../src/goabackend/goatwitterprovider.c:192
-#, c-format
-msgid "Didn't find screen_name member in JSON data"
-msgstr "Tidak menjumpai nama_skrin ahli di dalam data JSON"
-
-#: ../src/goabackend/goayahooprovider.c:78
-msgid "Yahoo"
-msgstr "Yahoo"
-
-#: ../src/goabackend/goayahooprovider.c:186
-#, c-format
-msgid "Didn't find guid member in JSON data"
-msgstr "Tidak menjumpai ahli guid di dalam data JSON"
-
-#: ../src/goabackend/goayahooprovider.c:196
-#, c-format
-msgid "Didn't find value member in JSON data"
-msgstr "Tidak menjumpai nilai ahli di dalam data JSON"
-
-#: ../src/goabackend/goayahooprovider.c:222
-#, c-format
-msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+#: src/goabackend/goautils.c:886
+msgid ""
+"The certificate does not match the expected identity of the site that it was "
+"retrieved from."
 msgstr ""
-"Dijangka status 200 apabila meminta nama, sebaliknya mendapat status %d (%s)"
+"Sijil tidak sepadan dengan identiti dijangka bagi tapak yang ia perolehi."
 
-#: ../src/goabackend/goayahooprovider.c:235
-msgid "Error parsing usercard response as JSON: "
-msgstr "Ralat menghuraikan pengguna kad jawapan sebagai JSON:"
+#: src/goabackend/goautils.c:891
+msgid "The certificate’s activation time is still in the future."
+msgstr "Masa pengaktifan sijil masih berada padad masa hadapan."
 
-#: ../src/goabackend/goayahooprovider.c:246
+#: src/goabackend/goautils.c:895
+msgid "The certificate has expired."
+msgstr "Sijil sudah tamat tempoh."
+
+#: src/goabackend/goautils.c:899
+msgid "The certificate has been revoked."
+msgstr "Sijil telah ditarik balik."
+
+#: src/goabackend/goautils.c:903
+msgid "The certificate’s algorithm is considered insecure."
+msgstr "Algoritma sijil dianggap tidak selamat."
+
+#: src/goabackend/goautils.c:909
+msgid "Invalid certificate."
+msgstr "Sijil tidak sah."
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:944
 #, c-format
-msgid "Didn't find profile member in JSON data"
-msgstr "Tidak menjumpai profile ahli dalam data JSON"
+msgid "Did not find %s with identity “%s” in credentials"
+msgstr "Tidak dapat mencari %s dengan identiti \"%s\" dalam kelayakan"
 
-#: ../src/goabackend/goayahooprovider.c:256
+#. translators: %s here is the address of the web page
+#: src/goabackend/goawebview.c:89
 #, c-format
-msgid "Didn't find nickname member in JSON data"
-msgstr "Tidak menjumpai nama samaran ahli di dalam data JSON"
+msgid "Loading “%s”…"
+msgstr "Memuatkan \"%s\"…"
 
-#. TODO: look up email address / screenname from GUID
-#: ../src/goabackend/goayahooprovider.c:324
-msgid "Name"
-msgstr "Nama"
+#: src/goabackend/goawindowsliveprovider.c:56
+msgid "Microsoft"
+msgstr "Microsoft"
 
+#: src/goaidentity/goaidentityservice.c:564
+msgid "Initial secret key is invalid"
+msgstr "Kunci rahsia awalan tidak sah"
+
+#. TODO: more specific
+#: src/goaidentity/goaidentityservice.c:786
+#: src/goaidentity/goaidentityservice.c:890
+#, c-format
+msgid "Couldn't get GoaObject for object path %s"
+msgstr "Tidak memperoleh GoaObject untuk laluan objek %s"
+
+#: src/goaidentity/goaidentityservice.c:1270
+#, c-format
+msgid "The network realm %s needs some information to sign you in."
+msgstr ""
+"Wilayah rangkaian %s perlu beberapa maklumat untuk mendaftar masuk anda."
+
+#: src/goaidentity/goakerberosidentity.c:271
+#: src/goaidentity/goakerberosidentity.c:279
+#: src/goaidentity/goakerberosidentity.c:666
+msgid "Could not find identity in credential cache: "
+msgstr "Tidak dapat mencari identiti dalam cache kelayakan: "
+
+#: src/goaidentity/goakerberosidentity.c:678
+msgid "Could not find identity credentials in cache: "
+msgstr "Tidak dapat mencari kelayakan identiti dalam cache: "
+
+#: src/goaidentity/goakerberosidentity.c:721
+msgid "Could not sift through identity credentials in cache: "
+msgstr "Tidak dapat mentadbir melalui kelayakan identiti dalam cache: "
+
+#: src/goaidentity/goakerberosidentity.c:735
+msgid "Could not finish up sifting through identity credentials in cache: "
+msgstr ""
+"Tidak dapat menyelesaikan pentadbiran melalui kelayakan identiti dalam "
+"cache: "
+
+#: src/goaidentity/goakerberosidentity.c:1019
+msgid "No associated identification found"
+msgstr "Tiada pengesahan berkaitan ditemui"
+
+#: src/goaidentity/goakerberosidentity.c:1098
+msgid "Could not create credential cache: "
+msgstr "Tidak dapat mencipta cache kelayakan: "
+
+#: src/goaidentity/goakerberosidentity.c:1130
+msgid "Could not initialize credentials cache: "
+msgstr "Tidak dapat mengawalkan cache kelayakan: "
+
+#: src/goaidentity/goakerberosidentity.c:1143
+#| msgid "Failed to store credentials in the keyring: %s"
+msgid "Could not store new credentials in credentials cache: "
+msgstr "Tidak dapat menyimpan kelayakan baharu dalam cache kelayakan: "
+
+#: src/goaidentity/goakerberosidentity.c:1431
+msgid "Could not renew identity: Not signed in"
+msgstr "Tidak dapat memperbaharui identiti: Tidak ditandatangani"
+
+#: src/goaidentity/goakerberosidentity.c:1441
+#| msgid "Error getting identity: "
+msgid "Could not renew identity: "
+msgstr "Tidak dapat memperbaharui identiti: "
+
+#: src/goaidentity/goakerberosidentity.c:1454
+#, c-format
+#| msgid "GOA %s credentials for identity %s"
+msgid "Could not get new credentials to renew identity %s: "
+msgstr "Tidak mendapat kelayakan baharu untuk memperbaharui identiti %s: "
+
+#: src/goaidentity/goakerberosidentity.c:1495
+msgid "Could not erase identity: "
+msgstr "Tidak dapat memadam identiti: "
+
+#: src/goaidentity/goakerberosidentitymanager.c:817
+msgid "Could not find identity"
+msgstr "Tidak dapat mencari identiti"
+
+#: src/goaidentity/goakerberosidentitymanager.c:898
+#| msgid "GOA %s credentials for identity %s"
+msgid "Could not create credential cache for identity"
+msgstr "Tidak dapat mencipta cache identiti untuk identiti"
+
+#~ msgid "An online account needs attention"
+#~ msgstr "Akaun dalam talian memerlukan perhatian"
+
+#~ msgid "Open Online Accounts..."
+#~ msgstr "Buka Akaun Atas Talian..."
+
+#~ msgid "Error parsing response as JSON: "
+#~ msgstr "Ralat respons parsing sebagai JSON:"
+
+#~ msgid "Didn't find username member in JSON data"
+#~ msgstr "Tidak menjumpai nama pengguna ahli di dalam data JSON"
+
+#~ msgid "Didn't find name member in JSON data"
+#~ msgstr "Tidak dapat mencari nama ahli di dalam data JSON "
+
+#~ msgid "Chat"
+#~ msgstr "Sembang"
+
+#~ msgid "Didn't find data member in JSON data"
+#~ msgstr "Tidak menjumpai data ahli di dalam data JSON"
+
+#~ msgid "Didn't find email member in JSON data"
+#~ msgstr "Tidak menjumpai email ahli di dalam data JSON"
+
+#~ msgid "Email Address"
+#~ msgstr "Alamat Email"
+
+#~ msgid "Use this account for"
+#~ msgstr "Guna akaun ini untuk"
+
+#~ msgid "Didn't find access_token in non-JSON data"
+#~ msgstr "Tidak menjumpai token_akses dalam data bukan JSON"
+
+#~ msgid "Didn't find access_token in JSON data"
+#~ msgstr "Tidak menjumpai token_akses dalam data JSON"
+
+#~ msgid ""
+#~ "Paste authorization code obtained from the <a href=\"%s\">authorization "
+#~ "page</a>:"
+#~ msgstr ""
+#~ "Tampalkan kod kebenaran yang diperolehi dari laman <a href=\"%s\">laman "
+#~ "kebenaran</a>:"
+
+#~ msgid "There is already an account for the identity %s"
+#~ msgstr "Telah terdapat satu akaun untuk identiti %s"
+
+#~ msgid "Error storing credentials in keyring (%s, %d): "
+#~ msgstr "Ralat menyimpan kelayakan dalam gegelang kunci (%s,%d):"
+
+#~ msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
+#~ msgstr ""
+#~ "Tampalkan token yang diperolehi daripada <a href=\"%s\">laman kebenaran</"
+#~ "a>:"
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#~ msgid "Didn't find id_str member in JSON data"
+#~ msgstr "Tidak menjumpai ahli id_str dalam data JSON"
+
+#~ msgid "Didn't find screen_name member in JSON data"
+#~ msgstr "Tidak menjumpai nama_skrin ahli di dalam data JSON"
+
+#~ msgid "Yahoo"
+#~ msgstr "Yahoo"
+
+#~ msgid "Didn't find guid member in JSON data"
+#~ msgstr "Tidak menjumpai ahli guid di dalam data JSON"
+
+#~ msgid "Didn't find value member in JSON data"
+#~ msgstr "Tidak menjumpai nilai ahli di dalam data JSON"
+
+#~ msgid "Expected status 200 when requesting name, instead got status %d (%s)"
+#~ msgstr ""
+#~ "Dijangka status 200 apabila meminta nama, sebaliknya mendapat status %d "
+#~ "(%s)"
+
+#~ msgid "Error parsing usercard response as JSON: "
+#~ msgstr "Ralat menghuraikan pengguna kad jawapan sebagai JSON:"
+
+#~ msgid "Didn't find profile member in JSON data"
+#~ msgstr "Tidak menjumpai profile ahli dalam data JSON"
+
+#~ msgid "Didn't find nickname member in JSON data"
+#~ msgstr "Tidak menjumpai nama samaran ahli di dalam data JSON"
