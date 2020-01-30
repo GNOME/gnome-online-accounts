@@ -1351,17 +1351,17 @@ identity_manager_interface_init (GoaIdentityManagerInterface *interface)
 }
 
 static void
-on_credentials_cache_changed (GFileMonitor               *monitor,
-                              GFile                      *file,
-                              GFile                      *other_file,
-                              GFileMonitorEvent          *event_type,
-                              GoaKerberosIdentityManager *self)
+credentials_cache_file_monitor_changed (GFileMonitor               *monitor,
+                                        GFile                      *file,
+                                        GFile                      *other_file,
+                                        GFileMonitorEvent          *event_type,
+                                        GoaKerberosIdentityManager *self)
 {
   schedule_refresh (self);
 }
 
 static gboolean
-on_polling_timeout (GoaKerberosIdentityManager *self)
+credentials_cache_polling_timeout (GoaKerberosIdentityManager *self)
 {
   schedule_refresh (self);
 
@@ -1471,12 +1471,16 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
     }
   else
     {
-      g_signal_connect (G_OBJECT (monitor), "changed", G_CALLBACK (on_credentials_cache_changed), self);
+      g_signal_connect (G_OBJECT (monitor), "changed", G_CALLBACK (credentials_cache_file_monitor_changed), self);
       self->credentials_cache_monitor = monitor;
     }
 
   if (!can_monitor)
-    self->polling_timeout_id = g_timeout_add_seconds (FALLBACK_POLLING_INTERVAL, (GSourceFunc) on_polling_timeout, self);
+    {
+      self->polling_timeout_id = g_timeout_add_seconds (FALLBACK_POLLING_INTERVAL,
+                                                        (GSourceFunc) credentials_cache_polling_timeout,
+                                                        self);
+    }
 
   krb5_cc_close (self->kerberos_context, default_cache);
 
