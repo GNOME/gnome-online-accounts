@@ -46,7 +46,7 @@ struct _GoaKerberosIdentityManager
   GThreadPool *thread_pool;
 
   krb5_context kerberos_context;
-  GFileMonitor *credentials_cache_monitor;
+  GFileMonitor *credentials_cache_file_monitor;
   char *credentials_cache_type;
 
   GMutex scheduler_job_lock;
@@ -55,7 +55,7 @@ struct _GoaKerberosIdentityManager
 
   volatile int pending_refresh_count;
 
-  guint polling_timeout_id;
+  guint credentials_cache_polling_timeout_id;
 };
 
 typedef enum
@@ -1432,14 +1432,14 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
   else
     {
       g_signal_connect (G_OBJECT (monitor), "changed", G_CALLBACK (credentials_cache_file_monitor_changed), self);
-      self->credentials_cache_monitor = monitor;
+      self->credentials_cache_file_monitor = monitor;
     }
 
   if (!can_monitor)
     {
-      self->polling_timeout_id = g_timeout_add_seconds (FALLBACK_POLLING_INTERVAL,
-                                                        (GSourceFunc) credentials_cache_polling_timeout,
-                                                        self);
+      self->credentials_cache_polling_timeout_id = g_timeout_add_seconds (FALLBACK_POLLING_INTERVAL,
+                                                                          (GSourceFunc) credentials_cache_polling_timeout,
+                                                                          self);
     }
 
   krb5_cc_close (self->kerberos_context, default_cache);
@@ -1450,18 +1450,18 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
 static void
 stop_watching_credentials_cache (GoaKerberosIdentityManager *self)
 {
-  if (self->credentials_cache_monitor != NULL)
+  if (self->credentials_cache_file_monitor != NULL)
     {
-      if (!g_file_monitor_is_cancelled (self->credentials_cache_monitor))
-        g_file_monitor_cancel (self->credentials_cache_monitor);
+      if (!g_file_monitor_is_cancelled (self->credentials_cache_file_monitor))
+        g_file_monitor_cancel (self->credentials_cache_file_monitor);
 
-      g_clear_object (&self->credentials_cache_monitor);
+      g_clear_object (&self->credentials_cache_file_monitor);
     }
 
-  if (self->polling_timeout_id != 0)
+  if (self->credentials_cache_polling_timeout_id != 0)
     {
-      g_source_remove (self->polling_timeout_id);
-      self->polling_timeout_id = 0;
+      g_source_remove (self->credentials_cache_polling_timeout_id);
+      self->credentials_cache_polling_timeout_id = 0;
     }
 }
 
