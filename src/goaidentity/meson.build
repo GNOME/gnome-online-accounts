@@ -56,7 +56,8 @@ deps = [
   gcr_dep,
   gio_unix_dep,
   krb5_dep,
-  libgoa_dep
+  libgoa_dep,
+  libkeyutils_dep,
 ]
 
 cflags = [
