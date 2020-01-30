@@ -93,6 +93,7 @@ goa_identity_service_CFLAGS =					\
 	$(GLIB_CFLAGS) 						\
 	$(GTK_CFLAGS)						\
 	$(KRB5_CFLAGS)						\
+	$(LIBKEYUTILS_CFLAGS)					\
 	$(GCR_CFLAGS)						\
 	$(NULL)
 
@@ -101,6 +102,7 @@ goa_identity_service_LDADD = 					\
 	$(GLIB_LIBS) 						\
 	$(GTK_LIBS)						\
 	$(KRB5_LIBS)						\
+	$(LIBKEYUTILS_LIBS)					\
 	$(GCR_LIBS)						\
 	$(NULL)
 

@@ -2,7 +2,10 @@ project(
   'gnome-online-accounts', 'c',
   version: '3.35.3',
   license: 'LGPL2+',
-  default_options: 'buildtype=debugoptimized',
+  default_options: [
+    'buildtype=debugoptimized',
+    'c_std=gnu99',
+  ],
   meson_version: '>= 0.50.0'
 )
 
@@ -137,6 +140,7 @@ enable_fedora = get_option('fedora')
 if enable_fedora
   gcr_dep = dependency('gcr-3')
   krb5_dep = dependency('krb5')
+  libkeyutils_dep = dependency('libkeyutils', version: '>= 1.6.2')
 
   config_h.set('GCR_API_SUBJECT_TO_CHANGE', true)
 endif
@@ -188,6 +192,7 @@ enable_kerberos = get_option('kerberos')
 if enable_kerberos
   gcr_dep = dependency('gcr-3')
   krb5_dep = dependency('krb5')
+  libkeyutils_dep = dependency('libkeyutils', version: '>= 1.6.2')
 
   config_h.set('GCR_API_SUBJECT_TO_CHANGE', true)
 endif
@@ -224,6 +229,10 @@ config_h.set_quoted('GOA_WINDOWS_LIVE_CLIENT_ID', windows_live_client_id)
 
 enable_windows_live = get_option('windows_live')
 config_h.set('GOA_WINDOWS_LIVE_ENABLED', enable_windows_live)
+
+if cc.has_function('pipe2')
+  config_h.set('HAVE_PIPE2', true)
+endif
 
 # Optional timerfd support
 timerfd_support_src = '''

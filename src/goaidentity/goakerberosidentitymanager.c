@@ -18,19 +18,30 @@
 
 #include "config.h"
 
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE 1
+#endif
+
 #include "goakerberosidentitymanager.h"
 #include "goaidentitymanager.h"
 #include "goaidentitymanagererror.h"
 #include "goaidentitymanagerprivate.h"
 #include "goakerberosidentityinquiry.h"
+#include "goalinuxnotificationstream.h"
 
+#include <errno.h>
 #include <fcntl.h>
+#include <keyutils.h>
 #include <string.h>
+#include <unistd.h>
+#include <linux/watch_queue.h>
+#include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
+#include <glib-unix.h>
 #include <gio/gio.h>
 
 #include <krb5.h>
@@ -55,6 +66,7 @@ struct _GoaKerberosIdentityManager
 
   volatile int pending_refresh_count;
 
+  guint credentials_cache_keyring_notification_id;
   guint credentials_cache_polling_timeout_id;
 };
 
@@ -120,6 +132,17 @@ G_DEFINE_TYPE_WITH_CODE (GoaKerberosIdentityManager,
                                                 initable_interface_init));
 #define FALLBACK_POLLING_INTERVAL 5
 
+enum
+{
+  WATCH_QUEUE_BUFFER_SIZE = 256
+};
+
+static const struct watch_notification_filter watch_queue_notification_filter =
+{
+  .nr_filters = 1,
+  .filters = { [0] = { .type = WATCH_TYPE_KEY_NOTIFY, .info_filter = 0, .info_mask = 0, .subtype_filter[0] = G_MAXUINT } }
+};
+
 static Operation *
 operation_new (GoaKerberosIdentityManager *self,
                GCancellable               *cancellable,
@@ -172,6 +195,83 @@ operation_free (Operation *operation)
   g_clear_object (&operation->task);
 
   g_slice_free (Operation, operation);
+}
+
+static GSource *
+goa_kerberos_identity_manager_keyring_source_new (GError **error)
+{
+  GSource *ret = NULL;
+
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+#ifdef HAVE_PIPE2
+  {
+    g_autoptr (GInputStream) stream = NULL;
+    gint error_code;
+    gint fds[2] = { -1, -1 };
+
+    error_code = pipe2 (fds, O_NOTIFICATION_PIPE);
+    if (error_code == -1)
+      {
+        const gchar *error_str;
+
+        error_str = g_strerror (errno);
+        g_set_error_literal (error, G_UNIX_ERROR, 0, error_str);
+        goto out;
+      }
+
+    error_code = ioctl (fds[0], IOC_WATCH_QUEUE_SET_SIZE, WATCH_QUEUE_BUFFER_SIZE);
+    if (error_code == -1)
+      {
+        const gchar *error_str;
+
+        error_str = g_strerror (errno);
+        g_set_error_literal (error, G_UNIX_ERROR, 0, error_str);
+        goto out;
+      }
+
+    error_code = ioctl(fds[0], IOC_WATCH_QUEUE_SET_FILTER, &watch_queue_notification_filter);
+    if (error_code == -1)
+      {
+        const gchar *error_str;
+
+        error_str = g_strerror (errno);
+        g_set_error_literal (error, G_UNIX_ERROR, 0, error_str);
+        goto out;
+      }
+
+    error_code = keyctl_watch_key (KEY_SPEC_SESSION_KEYRING, fds[0], 0x01);
+    if (error_code == -1)
+      {
+        const gchar *error_str;
+
+        error_str = g_strerror (errno);
+        g_set_error_literal (error, G_UNIX_ERROR, 0, error_str);
+        goto out;
+      }
+
+    error_code = keyctl_watch_key (KEY_SPEC_USER_KEYRING, fds[0], 0x02);
+    if (error_code == -1)
+      {
+        const gchar *error_str;
+
+        error_str = g_strerror (errno);
+        g_set_error_literal (error, G_UNIX_ERROR, 0, error_str);
+        goto out;
+      }
+
+    stream = goa_linux_notification_stream_new (fds[0], fds[1]);
+    ret = g_pollable_input_stream_create_source (G_POLLABLE_INPUT_STREAM (stream), NULL);
+  }
+#else
+  {
+    g_set_error_literal (error, G_UNIX_ERROR, 0, "pipe2(2) not supported");
+    goto out;
+  }
+#endif
+
+ out:
+  return ret;
 }
 
 typedef struct {
@@ -1321,6 +1421,41 @@ credentials_cache_file_monitor_changed (GFileMonitor               *monitor,
 }
 
 static gboolean
+credentials_cache_keyring_notification (GPollableInputStream *stream, GoaKerberosIdentityManager *self)
+{
+  gssize bytes_read;
+  guchar buffer[433];
+
+  {
+    g_autoptr (GError) error = NULL;
+
+    bytes_read = g_pollable_input_stream_read_nonblocking (stream, buffer, sizeof (buffer), NULL, &error);
+    if (error != NULL)
+      {
+        if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_WOULD_BLOCK))
+          g_debug ("GoaKerberosIdentityManager: Keyring notification source not yet ready");
+        else
+          g_warning ("GoaKerberosIdentityManager: Could not read keyring notification source: %s", error->message);
+
+        goto out;
+      }
+  }
+
+  if (bytes_read != (gssize) sizeof (buffer))
+    {
+      g_warning ("GoaKerberosIdentityManager: Expected to read %" G_GSIZE_FORMAT " bytes, "
+                 "but received only %" G_GSSIZE_FORMAT " bytes",
+                 sizeof (buffer),
+                 bytes_read);
+    }
+
+  schedule_refresh (self);
+
+ out:
+  return G_SOURCE_CONTINUE;
+}
+
+static gboolean
 credentials_cache_polling_timeout (GoaKerberosIdentityManager *self)
 {
   schedule_refresh (self);
@@ -1433,6 +1568,28 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
 
       g_object_unref (file);
     }
+  else if (strcmp (cache_type, "KEYRING") == 0)
+    {
+      GSource *keyring_source = NULL;
+
+      monitoring_error = NULL;
+      keyring_source = goa_kerberos_identity_manager_keyring_source_new (&monitoring_error);
+      if (monitoring_error != NULL)
+        {
+          g_warning ("GoaKerberosIdentityManager: Could not monitor credentials for %s (type %s), reverting to polling: %s",
+                     cache_path,
+                     cache_type,
+                     monitoring_error->message);
+
+          can_monitor = FALSE;
+          g_error_free (monitoring_error);
+        }
+
+      g_source_set_callback (keyring_source, (GSourceFunc) credentials_cache_keyring_notification, self, NULL);
+      self->credentials_cache_keyring_notification_id = g_source_attach (keyring_source, NULL);
+
+      g_clear_pointer (&keyring_source, g_source_unref);
+    }
   else
     {
       can_monitor = FALSE;
@@ -1462,6 +1619,12 @@ stop_watching_credentials_cache (GoaKerberosIdentityManager *self)
         g_file_monitor_cancel (self->credentials_cache_file_monitor);
 
       g_clear_object (&self->credentials_cache_file_monitor);
+    }
+
+  if (self->credentials_cache_keyring_notification_id != 0)
+    {
+      g_source_remove (self->credentials_cache_keyring_notification_id);
+      self->credentials_cache_keyring_notification_id = 0;
     }
 
   if (self->credentials_cache_polling_timeout_id != 0)

@@ -31,6 +31,12 @@ AX_COMPILER_FLAGS([WARN_CFLAGS],
                   [-Wno-cast-function-type -Wno-error=cast-function-type])
 
 AC_PROG_CC
+
+AC_PROG_CC_C99
+if test x$ac_cv_prog_cc_c99 = xno; then
+   AC_MSG_ERROR([C99-compatible compiler is needed])
+fi
+
 AC_PROG_LIBTOOL
 
 PKG_PROG_PKG_CONFIG(0.16)
@@ -410,6 +416,12 @@ fi
 #
 
 AM_CONDITIONAL(BUILD_IDENTITY_SERVICE, [test x$enable_fedora != xno || test x$enable_kerberos != xno])
+
+PKG_CHECK_MODULES([LIBKEYUTILS], [libkeyutils >= 1.6.2])
+AC_SUBST(LIBKEYUTILS_CFLAGS)
+AC_SUBST(LIBKEYUTILS_LIBS)
+
+AC_CHECK_FUNCS(pipe2)
 
 # Optional timerfd support
 AC_MSG_CHECKING([for timerfd support])

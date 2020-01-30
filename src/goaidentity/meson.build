@@ -55,7 +55,8 @@ sources += gnome.mkenums(
 deps = [
   gcr_dep,
   krb5_dep,
-  libgoa_dep
+  libgoa_dep,
+  libkeyutils_dep,
 ]
 
 cflags = [
