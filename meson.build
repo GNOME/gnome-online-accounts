@@ -51,17 +51,13 @@ cc = meson.get_compiler('c')
 
 config_h = configuration_data()
 
-# quoted defines
 config_h.set_quoted('PACKAGE_VERSION', goa_version)
-# i18n
 config_h.set_quoted('GETTEXT_PACKAGE', meson.project_name())
 
-# version values
 config_h.set('GOA_MAJOR_VERSION', goa_major_version)
 config_h.set('GOA_MINOR_VERSION', goa_minor_version)
 config_h.set('GOA_MICRO_VERSION', goa_micro_version)
 
-# compiler flags
 compiler_flags = []
 
 if goa_buildtype.contains('debug')
@@ -86,7 +82,6 @@ gio_dep = dependency('gio-2.0', version: glib_req_version)
 gio_unix_dep = dependency('gio-unix-2.0', version: glib_req_version)
 glib_dep = dependency('glib-2.0', version: glib_req_version)
 
-# Check for dbus service dir
 dbus_dep = dependency('dbus-1')
 dbus_service_dir = dbus_dep.get_pkgconfig_variable('session_bus_services_dir',
                                                    define_variable: ['datadir', goa_datadir])
