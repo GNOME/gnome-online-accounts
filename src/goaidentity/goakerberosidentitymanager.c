@@ -47,7 +47,6 @@ struct _GoaKerberosIdentityManager
 
   krb5_context kerberos_context;
   GFileMonitor *credentials_cache_monitor;
-  gulong credentials_cache_changed_signal_id;
   char *credentials_cache_type;
 
   GMutex scheduler_job_lock;
@@ -1432,8 +1431,7 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
     }
   else
     {
-      self->credentials_cache_changed_signal_id = g_signal_connect (G_OBJECT (monitor), "changed",
-                                                                    G_CALLBACK (on_credentials_cache_changed), self);
+      g_signal_connect (G_OBJECT (monitor), "changed", G_CALLBACK (on_credentials_cache_changed), self);
       self->credentials_cache_monitor = monitor;
     }
 
