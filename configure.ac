@@ -31,7 +31,6 @@ AX_COMPILER_FLAGS([WARN_CFLAGS],
                   [-Wno-cast-function-type -Wno-error=cast-function-type])
 
 AC_PROG_CC
-AC_HEADER_STDC
 AC_PROG_LIBTOOL
 
 PKG_PROG_PKG_CONFIG(0.16)
