@@ -76,6 +76,12 @@ static gboolean on_manager_handle_add_account (GoaManager            *object,
                                                GVariant              *details,
                                                gpointer               user_data);
 
+static gboolean
+on_manager_handle_is_supported_provider (GoaManager             *manager,
+                                         GDBusMethodInvocation  *invocation,
+                                         const gchar            *provider_type,
+                                         gpointer                user_data);
+
 static gboolean on_account_handle_remove (GoaAccount            *account,
                                           GDBusMethodInvocation *invocation,
                                           gpointer               user_data);
@@ -265,6 +271,7 @@ goa_daemon_init (GoaDaemon *self)
                     "handle-add-account",
                     G_CALLBACK (on_manager_handle_add_account),
                     self);
+  g_signal_connect (self->manager, "handle-is-supported-provider", G_CALLBACK (on_manager_handle_is_supported_provider), NULL);
   object = goa_object_skeleton_new ("/org/gnome/OnlineAccounts/Manager");
   goa_object_skeleton_set_manager (object, self->manager);
   g_dbus_object_manager_server_export (self->object_manager, G_DBUS_OBJECT_SKELETON (object));
@@ -1288,6 +1295,26 @@ on_manager_handle_add_account (GoaManager             *manager,
   goa_provider_get_all (get_all_providers_cb, data);
 
   return TRUE; /* invocation was handled */
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gboolean
+on_manager_handle_is_supported_provider (GoaManager             *manager,
+                                         GDBusMethodInvocation  *invocation,
+                                         const gchar            *provider_type,
+                                         gpointer                user_data)
+{
+  GoaProvider *provider = NULL;
+  gboolean is_supported;
+
+  provider = goa_provider_get_for_provider_type (provider_type);
+  is_supported = provider == NULL ? FALSE : TRUE;
+
+  goa_manager_complete_is_supported_provider (manager, invocation, is_supported);
+
+  g_clear_object (&provider);
+  return TRUE;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

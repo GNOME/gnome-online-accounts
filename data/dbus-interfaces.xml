@@ -421,6 +421,20 @@
       <arg name="account_object_path" type="o" direction="out"/>
     </method>
 
+    <!--
+        IsSupportedProvider:
+        @provider_type: A provider of online accounts
+        @is_supported: Whether the provider is supported or not
+
+        Checks if a certain type of provider of online accounts (for example,
+        "google" or "lastfm") is supported. If @provider_type is supported,
+        then @is_supported is set to %TRUE.
+    -->
+    <method name="IsSupportedProvider">
+      <arg name="provider_type" type="s" direction="in"/>
+      <arg name="is_supported" type="b" direction="out"/>
+    </method>
+
   </interface>
 
 
