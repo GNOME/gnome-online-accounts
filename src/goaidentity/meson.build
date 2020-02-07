@@ -12,7 +12,8 @@ headers = files(
   'goaidentityutils.h',
   'goakerberosidentity.h',
   'goakerberosidentityinquiry.h',
-  'goakerberosidentitymanager.h'
+  'goakerberosidentitymanager.h',
+  'goalinuxnotificationstream.h',
 )
 
 dbus = 'org.gnome.Identity'
@@ -38,6 +39,7 @@ sources = identity_manager_error_src + files(
   'goakerberosidentity.c',
   'goakerberosidentityinquiry.c',
   'goakerberosidentitymanager.c',
+  'goalinuxnotificationstream.c',
   'main.c'
 )
 
