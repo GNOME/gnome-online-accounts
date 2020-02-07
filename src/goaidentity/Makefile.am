@@ -34,6 +34,7 @@ identity_headers =						\
 	goakerberosidentity.h					\
 	goakerberosidentityinquiry.h				\
 	goakerberosidentitymanager.h				\
+	goalinuxnotificationstream.h				\
 	$(NULL)
 
 identity_sources =						\
@@ -48,6 +49,7 @@ identity_sources =						\
 	goakerberosidentity.c					\
 	goakerberosidentityinquiry.c				\
 	goakerberosidentitymanager.c				\
+	goalinuxnotificationstream.c				\
 	main.c							\
 	$(NULL)
 
