@@ -1375,7 +1375,6 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
   krb5_ccache default_cache;
   const char *cache_type;
   const char *cache_path;
-  GFileMonitor *monitor = NULL;
   krb5_error_code error_code;
   GError *monitoring_error = NULL;
   gboolean can_monitor = TRUE;
@@ -1399,13 +1398,6 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
   cache_type = krb5_cc_get_type (self->kerberos_context, default_cache);
   g_assert (cache_type != NULL);
 
-  if (strcmp (cache_type, "FILE") != 0 && strcmp (cache_type, "DIR") != 0)
-    {
-      g_warning ("GoaKerberosIdentityManager: Using polling for change notification for credential cache type '%s'",
-                 cache_type);
-      can_monitor = FALSE;
-    }
-
   g_free (self->credentials_cache_type);
   self->credentials_cache_type = g_strdup (cache_type);
 
@@ -1427,56 +1419,70 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
   if (cache_path[0] == ':')
     cache_path++;
 
-  if (can_monitor)
+  if (strcmp (cache_type, "FILE") == 0 || strcmp (cache_type, "DIR") == 0)
     {
-      GFile *file;
+      GFile *file = NULL;
+      GFileMonitor *monitor = NULL;
 
       file = g_file_new_for_path (cache_path);
 
-      monitoring_error = NULL;
       if (strcmp (cache_type, "FILE") == 0)
         {
-          monitor = g_file_monitor_file (file,
-                                         G_FILE_MONITOR_NONE,
-                                         NULL,
-                                         &monitoring_error);
+          monitoring_error = NULL;
+          monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &monitoring_error);
+          if (monitoring_error != NULL)
+            {
+              g_warning ("GoaKerberosIdentityManager: Could not monitor credentials for %s (type %s), reverting to "
+                         "polling: %s",
+                         cache_path,
+                         cache_type,
+                         monitoring_error->message);
+
+              can_monitor = FALSE;
+              g_error_free (monitoring_error);
+            }
         }
       else if (strcmp (cache_type, "DIR") == 0)
         {
           GFile *directory;
 
           directory = g_file_get_parent (file);
-          monitor = g_file_monitor_directory (directory,
-                                              G_FILE_MONITOR_NONE,
-                                              NULL,
-                                              &monitoring_error);
+
+          monitoring_error = NULL;
+          monitor = g_file_monitor_directory (directory, G_FILE_MONITOR_NONE, NULL, &monitoring_error);
+          if (monitoring_error != NULL)
+            {
+              g_warning ("GoaKerberosIdentityManager: Could not monitor credentials for %s (type %s), reverting to "
+                         "polling: %s",
+                         cache_path,
+                         cache_type,
+                         monitoring_error->message);
+
+              can_monitor = FALSE;
+              g_error_free (monitoring_error);
+            }
+
           g_object_unref (directory);
-
         }
-      g_object_unref (file);
-    }
 
-  if (monitor == NULL)
-    {
-      if (monitoring_error != NULL)
+      if (monitor != NULL)
         {
-          g_warning ("GoaKerberosIdentityManager: Could not monitor credentials for %s (type %s), reverting to "
-                     "polling: %s",
-                     cache_path,
-                     cache_type,
-                     monitoring_error != NULL? monitoring_error->message : "");
-          g_clear_error (&monitoring_error);
+          g_signal_connect (G_OBJECT (monitor), "changed", G_CALLBACK (credentials_cache_file_monitor_changed), self);
+          self->credentials_cache_file_monitor = monitor;
         }
-      can_monitor = FALSE;
+
+      g_object_unref (file);
     }
   else
     {
-      g_signal_connect (G_OBJECT (monitor), "changed", G_CALLBACK (credentials_cache_file_monitor_changed), self);
-      self->credentials_cache_file_monitor = monitor;
+      can_monitor = FALSE;
     }
 
   if (!can_monitor)
     {
+      g_warning ("GoaKerberosIdentityManager: Using polling for change notification for credential cache type '%s'",
+                 cache_type);
+
       self->credentials_cache_polling_timeout_id = g_timeout_add_seconds (FALLBACK_POLLING_INTERVAL,
                                                                           (GSourceFunc) credentials_cache_polling_timeout,
                                                                           self);
