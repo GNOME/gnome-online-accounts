@@ -100,6 +100,7 @@ build_object (GoaProvider         *provider,
               GError             **error)
 {
   GoaAccount *account;
+  gboolean accept_ssl_errors;
   gboolean music_enabled;
   gboolean ret = FALSE;
 
@@ -119,7 +120,8 @@ build_object (GoaProvider         *provider,
 
   /* Music */
   music_enabled = g_key_file_get_boolean (key_file, group, "MusicEnabled", NULL);
-  goa_object_skeleton_attach_music (object, music_enabled);
+  accept_ssl_errors = g_key_file_get_boolean (key_file, group, "AcceptSslErrors", NULL);
+  goa_object_skeleton_attach_music (object, music_enabled, accept_ssl_errors);
 
   if (just_added)
     {

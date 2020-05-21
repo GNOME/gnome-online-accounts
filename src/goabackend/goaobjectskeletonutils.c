@@ -134,7 +134,8 @@ goa_object_skeleton_attach_documents (GoaObjectSkeleton *object,
 
 void
 goa_object_skeleton_attach_music (GoaObjectSkeleton *object,
-                                  gboolean           music_enabled)
+                                  gboolean           music_enabled,
+                                  gboolean           accept_ssl_errors)
 {
   GoaMusic *music;
 
@@ -144,6 +145,9 @@ goa_object_skeleton_attach_music (GoaObjectSkeleton *object,
       if (music == NULL)
         {
           music = goa_music_skeleton_new ();
+          g_object_set (G_OBJECT (music),
+                        "accept-ssl-errors", accept_ssl_errors,
+                        NULL);
           goa_object_skeleton_set_music (object, music);
         }
     }
