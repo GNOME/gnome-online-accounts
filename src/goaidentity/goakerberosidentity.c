@@ -1048,6 +1048,9 @@ on_kerberos_inquiry (krb5_context      kerberos_context,
   GoaIdentityInquiry *inquiry;
   krb5_error_code error_code = 0;
 
+  if (number_of_prompts == 0)
+    goto out;
+
   inquiry = goa_kerberos_identity_inquiry_new (operation->identity,
                                                name,
                                                banner,
@@ -1068,6 +1071,7 @@ on_kerberos_inquiry (krb5_context      kerberos_context,
 
   g_object_unref (inquiry);
 
+ out:
   return error_code;
 }
 
