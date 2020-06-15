@@ -103,7 +103,7 @@ if enable_goabackend
   libsoup_dep = dependency('libsoup-2.4', version: '>= 2.42')
   libxml_dep = dependency('libxml-2.0')
   rest_dep = dependency('rest-0.7')
-  webkit_gtk_dep = dependency('webkit2gtk-4.0', version: '>= 2.12.0')
+  webkit_gtk_dep = dependency('webkit2gtk-4.0', version: '>= 2.26.0')
 endif
 config_h.set('GOA_BACKEND_ENABLED', enable_goabackend)
 

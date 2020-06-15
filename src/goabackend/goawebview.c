@@ -287,6 +287,7 @@ goa_web_view_constructed (GObject *object)
   self->context = webkit_web_context_new ();
   language_names = g_get_language_names ();
   webkit_web_context_set_preferred_languages (self->context, language_names);
+  webkit_web_context_set_sandbox_enabled (self->context, TRUE);
   g_signal_connect_swapped (self->context,
                             "initialize-web-extensions",
                             G_CALLBACK (web_view_initialize_web_extensions_cb),
