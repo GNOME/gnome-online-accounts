@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright © 2011 – 2017 Red Hat, Inc.
+ * Copyright © 2011 – 2020 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,11 +31,9 @@
 
 static GMainLoop *loop = NULL;
 static gboolean opt_replace = FALSE;
-static gboolean opt_no_sigint = FALSE;
 static GOptionEntry opt_entries[] =
 {
   {"replace", 0, 0, G_OPTION_ARG_NONE, &opt_replace, "Replace existing daemon", NULL},
-  {"no-sigint", 0, 0, G_OPTION_ARG_NONE, &opt_no_sigint, "Do not handle SIGINT for controlled shutdown", NULL},
   {NULL }
 };
 static GoaDaemon *the_daemon = NULL;
@@ -110,11 +108,7 @@ main (int    argc,
   g_message ("goa-daemon version %s starting", PACKAGE_VERSION);
 
   loop = g_main_loop_new (NULL, FALSE);
-
-  if (!opt_no_sigint)
-    {
-      g_unix_signal_add (SIGINT, on_sigint, NULL);
-    }
+  g_unix_signal_add (SIGINT, on_sigint, NULL);
 
   name_owner_id = g_bus_own_name (G_BUS_TYPE_SESSION,
                                   "org.gnome.OnlineAccounts",
