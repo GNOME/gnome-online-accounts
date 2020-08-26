@@ -33,6 +33,8 @@ G_BEGIN_DECLS
  *   example, Google.
  * @GOA_PROVIDER_GROUP_CONTACTS: Providers that offer address book services.
  *   For example, CardDAV.
+ * @GOA_PROVIDER_GROUP_CALENDAR: Providers that offer calendar services.
+ *   For example, CalDAV.
  * @GOA_PROVIDER_GROUP_MAIL: Providers that offer email-like messaging
  *   services. For example, IMAP and SMTP.
  * @GOA_PROVIDER_GROUP_TICKETING: Providers with ticketing
@@ -50,6 +52,7 @@ typedef enum
 {
   GOA_PROVIDER_GROUP_BRANDED,
   GOA_PROVIDER_GROUP_CONTACTS,
+  GOA_PROVIDER_GROUP_CALENDAR,
   GOA_PROVIDER_GROUP_MAIL,
   GOA_PROVIDER_GROUP_TICKETING,
   GOA_PROVIDER_GROUP_CHAT,

@@ -156,6 +156,12 @@ config_h.set_quoted('GOA_IMAP_SMTP_NAME', 'imap_smtp')
 enable_imap_smtp = get_option('imap_smtp')
 config_h.set('GOA_IMAP_SMTP_ENABLED', enable_imap_smtp)
 
+# CalDAV
+config_h.set_quoted('GOA_CALDAV_NAME', 'caldav')
+
+enable_caldav = get_option('caldav')
+config_h.set('GOA_CALDAV_ENABLED', enable_caldav)
+
 # Kerberos
 config_h.set_quoted('GOA_KERBEROS_NAME', 'kerberos')
 
@@ -297,6 +303,7 @@ summary({
     'Fedora Account System': enable_fedora,
     'Google': enable_google,
     'IMAP/SMTP': enable_imap_smtp,
+    'CalDAV': enable_caldav,
     'Kerberos': enable_kerberos,
     'Last.fm': enable_lastfm,
     'Media Server': enable_media_server,
