@@ -1046,7 +1046,7 @@ on_kerberos_inquiry (krb5_context      kerberos_context,
                      krb5_prompt       prompts[])
 {
   GoaIdentityInquiry *inquiry;
-  krb5_error_code error_code;
+  krb5_error_code error_code = 0;
 
   inquiry = goa_kerberos_identity_inquiry_new (operation->identity,
                                                name,
@@ -1065,8 +1065,6 @@ on_kerberos_inquiry (krb5_context      kerberos_context,
 
   if (g_cancellable_is_cancelled (operation->cancellable))
     error_code = KRB5_LIBOS_PWDINTR;
-  else
-    error_code = 0;
 
   g_object_unref (inquiry);
 
