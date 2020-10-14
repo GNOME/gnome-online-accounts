@@ -27,14 +27,7 @@
 static GoaWebExtension *the_extension;
 
 /* Silence -Wmissing-prototypes */
-void webkit_web_extension_initialize (WebKitWebExtension *wk_extension);
 void webkit_web_extension_initialize_with_user_data (WebKitWebExtension *wk_extension, GVariant *user_data);
-
-G_MODULE_EXPORT void
-webkit_web_extension_initialize (WebKitWebExtension *wk_extension)
-{
-  g_warning ("Error initializing web extension: user data not set");
-}
 
 G_MODULE_EXPORT void
 webkit_web_extension_initialize_with_user_data (WebKitWebExtension *wk_extension, GVariant *user_data)
