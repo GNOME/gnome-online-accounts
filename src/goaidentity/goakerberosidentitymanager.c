@@ -1445,6 +1445,36 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
       g_object_unref (directory);
       g_object_unref (file);
     }
+  else if (strcmp (cache_type, "KCM") == 0)
+    {
+      GError *create_error = NULL;
+      GFile *directory = NULL;
+      GFile *file = NULL;
+      GFileOutputStream *stream = NULL;
+      const gchar *runtime_dir;
+
+      runtime_dir = g_get_user_runtime_dir ();
+      directory = g_file_new_for_path (runtime_dir);
+      file = g_file_get_child (directory, ".kcm-notifications");
+
+      monitoring_error = NULL;
+
+      stream = g_file_create (file, G_FILE_CREATE_NONE, NULL, &create_error);
+      if (create_error != NULL)
+        {
+          if (g_error_matches (create_error, G_IO_ERROR, G_IO_ERROR_EXISTS))
+            g_error_free (create_error);
+          else
+            g_propagate_error (&monitoring_error, create_error);
+        }
+
+      if (monitoring_error == NULL)
+        monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &monitoring_error);
+
+      g_clear_object (&stream);
+      g_object_unref (directory);
+      g_object_unref (file);
+    }
 
   if (monitor == NULL)
     {
