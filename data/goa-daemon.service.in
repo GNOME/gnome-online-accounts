@@ -1,5 +1,7 @@
 [Unit]
 Description=GNOME Online Accounts service
+# Terminate automatically on logout from GUI session
+PartOf=graphical-session.target
 
 [Service]
 ExecStart=@libexecdir@/goa-daemon
