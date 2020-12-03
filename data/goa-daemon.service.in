@@ -1,0 +1,7 @@
+[Unit]
+Description=GNOME Online Accounts service
+
+[Service]
+ExecStart=@libexecdir@/goa-daemon
+Type=dbus
+BusName=org.gnome.OnlineAccounts

@@ -11,12 +11,17 @@ gsettings_SCHEMAS = $(gsettings_schema_files)
 
 servicedir       = $(datadir)/dbus-1/services
 service_in_files = org.gnome.OnlineAccounts.service.in
+systemduserunitdir = $(prefix)/lib/systemd/user
+systemd_service_in_files = goa-daemon.service.in
 
 if BUILD_KERBEROS
 service_in_files += org.gnome.Identity.service.in
+systemd_service_in_files += goa-identity-service.service.in
 endif
 
 service_DATA     = $(service_in_files:.service.in=.service)
+systemduserunit_DATA = $(systemd_service_in_files:.service.in=.service)
+
 %.service: %.service.in Makefile
 	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
 endif
@@ -24,11 +29,15 @@ endif
 EXTRA_DIST =						\
 	$(gsettings_schema_files)			\
 	dbus-interfaces.xml				\
+	goa-daemon.service.in				\
+	goa-identity-service.service.in			\
 	org.gnome.Identity.service.in			\
 	org.gnome.OnlineAccounts.service.in		\
 	$(NULL)
 
 CLEANFILES =						\
+	goa-daemon.service				\
+	goa-identity-service.service			\
 	org.gnome.OnlineAccounts.service		\
 	org.gnome.Identity.service			\
 	$(NULL)

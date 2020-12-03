@@ -86,6 +86,20 @@ dbus_dep = dependency('dbus-1')
 dbus_service_dir = dbus_dep.get_pkgconfig_variable('session_bus_services_dir',
                                                    define_variable: ['datadir', goa_datadir])
 
+systemd_userunitdir = get_option('systemduserunitdir')
+
+if systemd_userunitdir == ''
+  systemd_dep = dependency('systemd', required: false)
+
+  if systemd_dep.found()
+    systemd_userunitdir = systemd_dep.get_pkgconfig_variable('systemduserunitdir')
+  else
+    # Fall back to the upstream default.
+    # Note that this is always 'lib', even if libdir is something else
+    systemd_userunitdir = join_paths(goa_prefix, 'lib', 'systemd', 'user')
+  endif
+endif
+
 # Libraries
 # introspection support
 enable_introspection = get_option('introspection')

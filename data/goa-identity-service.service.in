@@ -1,0 +1,7 @@
+[Unit]
+Description=GNOME identity service for Kerberos
+
+[Service]
+ExecStart=@libexecdir@/goa-identity-service
+Type=dbus
+BusName=org.gnome.Identity

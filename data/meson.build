@@ -9,8 +9,10 @@ if enable_goabackend
   )
 
   services = ['org.gnome.OnlineAccounts.service']
+  systemd_services = ['goa-daemon.service']
   if enable_kerberos
     services += 'org.gnome.Identity.service'
+    systemd_services += ['goa-identity-service.service']
   endif
 
   service_conf = configuration_data()
@@ -23,6 +25,16 @@ if enable_goabackend
       configuration: service_conf,
       install: true,
       install_dir: dbus_service_dir
+    )
+  endforeach
+
+  foreach service: systemd_services
+    configure_file(
+      input: service + '.in',
+      output: service,
+      configuration: service_conf,
+      install: true,
+      install_dir: systemd_userunitdir
     )
   endforeach
 endif
