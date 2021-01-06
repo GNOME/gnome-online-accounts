@@ -75,7 +75,6 @@ msgstr "Microsoft Exchange"
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
-#.
 #: src/goabackend/goaexchangeprovider.c:248
 #: src/goabackend/goalastfmprovider.c:287
 #: src/goabackend/goaowncloudprovider.c:291
@@ -333,12 +332,10 @@ msgstr "IMAP i SMTP"
 #. * second %s is the IMAP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
-#.
 #. Translators: the first %s is a field name. The
 #. * second %s is the SMTP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
-#.
 #: src/goabackend/goaimapsmtpprovider.c:327
 #: src/goabackend/goaimapsmtpprovider.c:378
 #, c-format
@@ -350,7 +347,6 @@ msgstr "%s no vàlid amb l'usuari «%s» (%s, %d): "
 #. * Encryption: None
 #. *             STARTTLS after connecting
 #. *             SSL on a dedicated port
-#.
 #: src/goabackend/goaimapsmtpprovider.c:564
 msgid "_Encryption"
 msgstr "_Encriptació"
@@ -472,7 +468,8 @@ msgstr "Servidors multimèdia disponibles"
 msgid "No media servers found"
 msgstr "No s'ha trobat cap servidor multimèdia"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#. Translators: the %d is a HTTP status code and the %s is a textual
+#. description of it
 #: src/goabackend/goaoauth2provider.c:632 src/goabackend/goaoauthprovider.c:542
 #, c-format
 msgid ""
@@ -526,14 +523,15 @@ msgstr ""
 msgid "Error getting a Request Token: "
 msgstr "S'ha produït un error en obtenir el testimoni de sol·licitud: "
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
+#. Translators: the %d is a HTTP status code and the %s is a textual
+#. description of it
 #: src/goabackend/goaoauthprovider.c:804
 #, c-format
 msgid ""
 "Expected status 200 for getting a Request Token, instead got status %d (%s)"
 msgstr ""
-"S'esperava l'estat 200 per obtenir el testimoni de sol·licitud demanat, però "
-"s'ha rebut l'estat %d (%s)"
+"S'esperava l'estat 200 per a obtenir el testimoni de sol·licitud demanat, "
+"però s'ha rebut l'estat %d (%s)"
 
 #: src/goabackend/goaoauthprovider.c:821
 msgid "Missing request_token or request_token_secret headers in response"
@@ -656,7 +654,7 @@ msgstr "Les credencials han vençut"
 
 #: src/goabackend/goautils.c:140
 msgid "Sign in to enable this account."
-msgstr "Inicia la sessió per habilitar aquest compte."
+msgstr "Inicia la sessió per a habilitar aquest compte."
 
 #: src/goabackend/goautils.c:144
 msgid "_Sign In"
@@ -670,7 +668,6 @@ msgstr "Ja existeix un compte del %s per %s"
 #. Translators: this is the title of the "Add Account" and "Refresh
 #. * Account" dialogs. The %s is the name of the provider. eg.,
 #. * 'Google'.
-#.
 #: src/goabackend/goautils.c:293
 #, c-format
 msgid "%s Account"
@@ -786,7 +783,8 @@ msgstr "No s'ha pogut obtenir un camí per l'objecte GoaObject %s"
 #: src/goaidentity/goaidentityservice.c:1292
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
-msgstr "El regne de xarxa %s necessita informació per poder deixar-vos entrar."
+msgstr ""
+"El regne de xarxa %s necessita informació per a poder deixar-vos entrar."
 
 #: src/goaidentity/goakerberosidentity.c:274
 #: src/goaidentity/goakerberosidentity.c:282
@@ -841,7 +839,7 @@ msgstr "No s'ha pogut renovar la identitat: "
 #, c-format
 msgid "Could not get new credentials to renew identity %s: "
 msgstr ""
-"No s'han pogut obtenir les credencials noves per renovar la identitat %s: "
+"No s'han pogut obtenir les credencials noves per a renovar la identitat %s: "
 
 #: src/goaidentity/goakerberosidentity.c:1603
 msgid "Could not erase identity: "
