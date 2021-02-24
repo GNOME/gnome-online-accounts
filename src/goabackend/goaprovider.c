@@ -22,6 +22,7 @@
 
 #include "goaprovider.h"
 #include "goaprovider-priv.h"
+#include "goacarddavprovider.h"
 #include "goaexchangeprovider.h"
 #include "goagoogleprovider.h"
 #include "goaimapsmtpprovider.h"
@@ -956,6 +957,9 @@ static struct
 #endif
 #ifdef GOA_CALDAV_ENABLED
   { GOA_CALDAV_NAME, goa_caldav_provider_get_type },
+#endif
+#ifdef GOA_CARDDAV_ENABLED
+  { GOA_CARDDAV_NAME, goa_carddav_provider_get_type },
 #endif
 #ifdef GOA_KERBEROS_ENABLED
   { GOA_KERBEROS_NAME, goa_kerberos_provider_get_type },

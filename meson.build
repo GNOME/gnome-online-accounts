@@ -162,6 +162,12 @@ config_h.set_quoted('GOA_CALDAV_NAME', 'caldav')
 enable_caldav = get_option('caldav')
 config_h.set('GOA_CALDAV_ENABLED', enable_caldav)
 
+# CardDAV
+config_h.set_quoted('GOA_CARDDAV_NAME', 'carddav')
+
+enable_carddav = get_option('carddav')
+config_h.set('GOA_CARDDAV_ENABLED', enable_carddav)
+
 # Kerberos
 config_h.set_quoted('GOA_KERBEROS_NAME', 'kerberos')
 
@@ -304,6 +310,7 @@ summary({
     'Google': enable_google,
     'IMAP/SMTP': enable_imap_smtp,
     'CalDAV': enable_caldav,
+    'CardDAV': enable_carddav,
     'Kerberos': enable_kerberos,
     'Last.fm': enable_lastfm,
     'Media Server': enable_media_server,
