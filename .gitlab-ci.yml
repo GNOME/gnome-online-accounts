@@ -1,0 +1,18 @@
+image: fedora:latest
+
+stages:
+  - build
+
+build-meson:
+  stage: build
+  except:
+    - tags
+  before_script:
+    - dnf update -y --nogpgcheck
+    - dnf -y install --nogpgcheck
+      meson gcc dbus-devel gcr-devel glib2-devel gobject-introspection-devel
+      gtk-doc gtk3-devel json-glib-devel krb5-devel libsecret-devel
+      libsoup-devel rest-devel vala webkit2gtk3-devel
+  script:
+    - meson setup -Dgtk_doc=true _build
+    - meson compile -C _build
