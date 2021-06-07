@@ -25,7 +25,7 @@
 
 #include <goabackend/goaprovider.h>
 #include <goabackend/goaprovider-priv.h>
-#include <rest/rest-proxy-call.h>
+#include <rest/rest.h>
 #include <webkitdom/webkitdom.h>
 
 G_BEGIN_DECLS

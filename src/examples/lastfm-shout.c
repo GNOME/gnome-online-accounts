@@ -22,8 +22,7 @@
 #include <goa/goa.h>
 
 #include <locale.h>
-#include <rest/rest-proxy.h>
-#include <rest/rest-proxy-call.h>
+#include <rest/rest.h>
 
 int
 main (int argc, char **argv)

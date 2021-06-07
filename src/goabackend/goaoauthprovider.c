@@ -20,7 +20,7 @@
 #include <glib/gi18n-lib.h>
 #include <stdlib.h>
 
-#include <rest/oauth-proxy.h>
+#include <rest/rest.h>
 #include <libsoup/soup.h>
 #include <json-glib/json-glib.h>
 #include <webkit2/webkit2.h>
@@ -77,10 +77,14 @@ is_authorization_error (GError *error)
   g_return_val_if_fail (error != NULL, FALSE);
 
   ret = FALSE;
-  if (error->domain == REST_PROXY_ERROR || error->domain == SOUP_HTTP_ERROR)
+  if (error->domain == REST_PROXY_ERROR)
     {
       if (SOUP_STATUS_IS_CLIENT_ERROR (error->code))
         ret = TRUE;
+    }
+  else if (g_error_matches (error, GOA_ERROR, GOA_ERROR_NOT_AUTHORIZED))
+    {
+      ret = TRUE;
     }
   return ret;
 }
@@ -701,9 +705,15 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
 }
 
 static void
-rest_proxy_call_cb (RestProxyCall *call, const GError *error, GObject *weak_object, gpointer user_data)
+rest_proxy_call_cb (GObject *source, GAsyncResult *result, gpointer user_data)
 {
+  RestProxyCall *call = REST_PROXY_CALL (source);
   IdentifyData *data = user_data;
+
+  if (!rest_proxy_call_invoke_finish (call, result, &data->error))
+    {
+      g_prefix_error (&data->error, _("Error getting a Request Token: "));
+    }
   g_main_loop_quit (data->loop);
 }
 
@@ -770,11 +780,7 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
       for (n = 0; request_params[n] != NULL; n += 2)
         rest_proxy_call_add_param (call, request_params[n], request_params[n+1]);
     }
-  if (!rest_proxy_call_async (call, rest_proxy_call_cb, NULL, &data, &data.error))
-    {
-      g_prefix_error (&data.error, _("Error getting a Request Token: "));
-      goto out;
-    }
+  rest_proxy_call_invoke_async (call, NULL, rest_proxy_call_cb, &data);
 
   goa_utils_set_dialog_title (GOA_PROVIDER (provider), dialog, add_account);
 
@@ -795,6 +801,9 @@ get_tokens_and_identity (GoaOAuthProvider *provider,
 
   g_main_loop_run (data.loop);
   gtk_container_remove (GTK_CONTAINER (grid), spinner);
+
+  if (data.error)
+    goto out;
 
   if (rest_proxy_call_get_status_code (call) != 200)
     {

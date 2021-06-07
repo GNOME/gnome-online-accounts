@@ -20,7 +20,7 @@
 #include <glib/gi18n-lib.h>
 #include <stdlib.h>
 
-#include <rest/oauth2-proxy.h>
+#include <rest/rest.h>
 #include <libsoup/soup.h>
 #include <json-glib/json-glib.h>
 #include <webkit2/webkit2.h>
@@ -95,10 +95,14 @@ is_authorization_error (GError *error)
   g_return_val_if_fail (error != NULL, FALSE);
 
   ret = FALSE;
-  if (error->domain == REST_PROXY_ERROR || error->domain == SOUP_HTTP_ERROR)
+  if (error->domain == REST_PROXY_ERROR)
     {
       if (SOUP_STATUS_IS_CLIENT_ERROR (error->code))
         ret = TRUE;
+    }
+  else if (g_error_matches (error, GOA_ERROR, GOA_ERROR_NOT_AUTHORIZED))
+    {
+      ret = TRUE;
     }
   return ret;
 }
@@ -763,7 +767,7 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
   GHashTable *key_value_pairs;
   WebKitNavigationAction *action;
   WebKitURIRequest *request;
-  GUri *uri;
+  GUri *uri = NULL;
   const gchar *fragment;
   const gchar *oauth2_error;
   const gchar *query;
@@ -889,7 +893,8 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
   goto ignore_request;
 
  ignore_request:
-  g_uri_unref (uri);
+  if (uri)
+    g_uri_unref (uri);
   g_assert (response_id != GTK_RESPONSE_NONE);
   if (response_id < 0)
     gtk_dialog_response (priv->dialog, response_id);

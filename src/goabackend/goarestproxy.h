@@ -23,11 +23,9 @@
 #ifndef __GOA_REST_PROXY_H__
 #define __GOA_REST_PROXY_H__
 
-#include <rest/rest-proxy.h>
+#include <rest/rest.h>
 
 G_BEGIN_DECLS
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (RestProxy, g_object_unref);
 
 #define GOA_TYPE_REST_PROXY (goa_rest_proxy_get_type ())
 G_DECLARE_FINAL_TYPE (GoaRestProxy, goa_rest_proxy, GOA, REST_PROXY, RestProxy);

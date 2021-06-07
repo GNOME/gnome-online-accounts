@@ -20,7 +20,7 @@
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
-#include <rest/oauth-proxy.h>
+#include <rest/rest.h>
 #include <json-glib/json-glib.h>
 
 #include "goaprovider.h"

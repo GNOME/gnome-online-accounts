@@ -82,7 +82,7 @@ http_client_check_data_free (gpointer user_data)
 
   g_clear_error (&data->error);
 
-  /* soup_session_queue_message stole the references to data->msg */
+  g_object_unref (data->msg);
   g_object_unref (data->session);
   g_slice_free (CheckData, data);
 }
@@ -97,9 +97,8 @@ http_client_check_auth_data_free (gpointer data, GClosure *closure)
   g_slice_free (CheckAuthData, auth);
 }
 
-static void
-http_client_authenticate (SoupSession *session,
-                         SoupMessage *msg,
+static gboolean
+http_client_authenticate (SoupMessage *msg,
                          SoupAuth *auth,
                          gboolean retrying,
                          gpointer user_data)
@@ -107,26 +106,26 @@ http_client_authenticate (SoupSession *session,
   CheckAuthData *data = user_data;
 
   if (retrying)
-    return;
+    return FALSE;
 
   soup_auth_authenticate (auth, data->username, data->password);
+  return TRUE;
 }
 
-static void
-http_client_request_started (SoupSession *session, SoupMessage *msg, SoupSocket *socket, gpointer user_data)
+static gboolean
+http_client_accept_certificate (SoupMessage *msg, GTlsCertificate *cert, GTlsCertificateFlags cert_flags, gpointer user_data)
 {
   CheckData *data;
   GTask *task = G_TASK (user_data);
-  GTlsCertificateFlags cert_flags;
 
   g_debug ("goa_http_client_check(): request started (%p)", msg);
 
   data = (CheckData *) g_task_get_task_data (task);
 
-  if (!data->accept_ssl_errors
-      && soup_message_get_https_status (msg, NULL, &cert_flags)
-      && cert_flags != 0
-      && data->error == NULL)
+  if (data->accept_ssl_errors || cert_flags == 0)
+    return TRUE;
+
+  if (data->error == NULL)
     {
       goa_utils_set_error_ssl (&data->error, cert_flags);
 
@@ -135,6 +134,8 @@ http_client_request_started (SoupSession *session, SoupMessage *msg, SoupSocket 
        */
       soup_session_abort (data->session);
     }
+
+  return FALSE;
 }
 
 static void
@@ -154,21 +155,27 @@ http_client_check_cancelled_cb (GCancellable *cancellable, gpointer user_data)
 }
 
 static void
-http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer user_data)
+http_client_check_response_cb (SoupSession *session, GAsyncResult *result, gpointer user_data)
 {
+  SoupMessage *msg;
   CheckData *data;
-  GCancellable *cancellable;
   GTask *task = G_TASK (user_data);
+  guint status;
+  GBytes *body;
+  GError *error = NULL;
 
-  g_debug ("goa_http_client_check(): response (%p, %u)", msg, msg->status_code);
+  msg = soup_session_get_async_result_message (session, result);
+
+  g_debug ("goa_http_client_check(): response (%p, %u)", msg, soup_message_get_status (msg));
+
+  body = soup_session_send_and_read_finish (session, result, &error);
 
   data = (CheckData *) g_task_get_task_data (task);
-  cancellable = g_task_get_cancellable (task);
 
-  /* status == SOUP_STATUS_CANCELLED, if we are being aborted by the
+  /* G_IO_ERROR_CANCELLED, if we are being aborted by the
    * GCancellable or due to an SSL error.
    */
-  if (msg->status_code == SOUP_STATUS_CANCELLED)
+  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
     {
       /* If we are being aborted by the GCancellable then there might
        * or might not be an error. The GCancellable can be triggered
@@ -176,20 +183,27 @@ http_client_check_response_cb (SoupSession *session, SoupMessage *msg, gpointer 
        * of events across threads.
        */
       if (data->error == NULL)
-        g_cancellable_set_error_if_cancelled (cancellable, &data->error);
+        g_propagate_error (&data->error, g_steal_pointer (&error));
 
       goto out;
     }
-  else if (msg->status_code != SOUP_STATUS_OK)
+
+  status = soup_message_get_status (msg);
+  if (status != SOUP_STATUS_OK || error)
     {
-      g_warning ("goa_http_client_check() failed: %u — %s", msg->status_code, msg->reason_phrase);
+      g_warning ("goa_http_client_check() failed: %u — %s", status, soup_message_get_reason_phrase (msg));
       g_return_if_fail (data->error == NULL);
 
-      goa_utils_set_error_soup (&data->error, msg);
+      if (error)
+        g_propagate_error (&data->error, g_steal_pointer (&error));
+      else
+        goa_utils_set_error_soup (&data->error, msg);
       goto out;
     }
 
  out:
+  g_clear_error (&error);
+  g_clear_pointer (&body, g_bytes_unref);
   if (data->error != NULL)
     g_task_return_error (task, g_steal_pointer (&data->error));
   else
@@ -225,7 +239,7 @@ goa_http_client_check (GoaHttpClient       *self,
   data = g_slice_new0 (CheckData);
   g_task_set_task_data (task, data, http_client_check_data_free);
 
-  data->session = soup_session_new_with_options (SOUP_SESSION_SSL_STRICT, FALSE, NULL);
+  data->session = soup_session_new ();
 
   logger = goa_soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
   soup_session_add_feature (data->session, SOUP_SESSION_FEATURE (logger));
@@ -246,15 +260,21 @@ goa_http_client_check (GoaHttpClient       *self,
   auth = g_slice_new0 (CheckAuthData);
   auth->username = g_strdup (username);
   auth->password = g_strdup (password);
-  g_signal_connect_data (data->session,
+  g_signal_connect_data (data->msg,
                          "authenticate",
                          G_CALLBACK (http_client_authenticate),
                          auth,
                          http_client_check_auth_data_free,
                          0);
 
-  g_signal_connect (data->session, "request-started", G_CALLBACK (http_client_request_started), task);
-  soup_session_queue_message (data->session, data->msg, http_client_check_response_cb, g_object_ref (task));
+  g_signal_connect (data->msg, "accept-certificate", G_CALLBACK (http_client_accept_certificate), task);
+
+  soup_session_send_and_read_async (data->session,
+                                    data->msg,
+                                    G_PRIORITY_DEFAULT,
+                                    data->cancellable,
+                                    (GAsyncReadyCallback)http_client_check_response_cb,
+                                    g_object_ref (task));
 
   g_object_unref (task);
 }

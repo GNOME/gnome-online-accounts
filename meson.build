@@ -97,13 +97,13 @@ endif
 enable_goabackend = get_option('goabackend')
 if enable_goabackend
   gtk_dep = dependency('gtk+-3.0', version: '>= 3.19.12')
-  javascript_core_gtk_dep = dependency('javascriptcoregtk-4.0', version: '>= 2.12.0')
+  javascript_core_gtk_dep = dependency('javascriptcoregtk-4.1', version: '>= 2.33.1')
   json_glib_dep = dependency('json-glib-1.0')
   libsecret_dep = dependency('libsecret-1')
-  libsoup_dep = dependency('libsoup-2.4', version: '>= 2.42')
+  libsoup_dep = dependency('libsoup-3.0', version: '>= 2.99.8')
   libxml_dep = dependency('libxml-2.0')
-  rest_dep = dependency('rest-0.7')
-  webkit_gtk_dep = dependency('webkit2gtk-4.0', version: '>= 2.26.0')
+  rest_dep = dependency('rest-1.0')
+  webkit_gtk_dep = dependency('webkit2gtk-4.1', version: '>= 2.33.1')
 endif
 config_h.set('GOA_BACKEND_ENABLED', enable_goabackend)
 
