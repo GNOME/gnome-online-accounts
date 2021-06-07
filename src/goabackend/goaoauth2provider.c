@@ -763,7 +763,7 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
   GHashTable *key_value_pairs;
   WebKitNavigationAction *action;
   WebKitURIRequest *request;
-  SoupURI *uri;
+  GUri *uri;
   const gchar *fragment;
   const gchar *oauth2_error;
   const gchar *query;
@@ -793,9 +793,9 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
   if (!g_str_has_prefix (requested_uri, redirect_uri))
     goto default_behaviour;
 
-  uri = soup_uri_new (requested_uri);
-  fragment = soup_uri_get_fragment (uri);
-  query = soup_uri_get_query (uri);
+  uri = g_uri_parse (requested_uri, G_URI_FLAGS_ENCODED, NULL);
+  fragment = g_uri_get_fragment (uri);
+  query = g_uri_get_query (uri);
 
   /* Three cases:
    * 1) we can either have the backend handle the URI for us, or
@@ -808,7 +808,7 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
     {
       gchar *url;
 
-      url = soup_uri_to_string (uri, FALSE);
+      url = g_uri_to_string (uri);
       if (!goa_oauth2_provider_process_redirect_url (self, url, &priv->access_token, &priv->error))
         {
           g_prefix_error (&priv->error, _("Authorization response: "));
@@ -889,6 +889,7 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
   goto ignore_request;
 
  ignore_request:
+  g_uri_unref (uri);
   g_assert (response_id != GTK_RESPONSE_NONE);
   if (response_id < 0)
     gtk_dialog_response (priv->dialog, response_id);
