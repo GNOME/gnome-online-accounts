@@ -95,10 +95,14 @@ is_authorization_error (GError *error)
   g_return_val_if_fail (error != NULL, FALSE);
 
   ret = FALSE;
-  if (error->domain == REST_PROXY_ERROR || error->domain == SOUP_HTTP_ERROR)
+  if (error->domain == REST_PROXY_ERROR)
     {
       if (SOUP_STATUS_IS_CLIENT_ERROR (error->code))
         ret = TRUE;
+    }
+  else if (g_error_matches (error, GOA_ERROR, GOA_ERROR_NOT_AUTHORIZED))
+    {
+      ret = TRUE;
     }
   return ret;
 }

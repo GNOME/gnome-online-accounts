@@ -483,8 +483,7 @@ add_account_cb (GoaManager *manager, GAsyncResult *res, gpointer user_data)
 
 static void
 check_cb (RestProxyCall *call,
-          const GError *error,
-          GObject *weak_object,
+          GAsyncResult *result,
           gpointer user_data)
 {
   AddAccountData *data = user_data;
@@ -493,6 +492,9 @@ check_cb (RestProxyCall *call,
   JsonObject *json_obj;
   JsonObject *session_obj;
   const gchar *payload;
+
+  if (!rest_proxy_call_invoke_finish (call, result, &data->error))
+    goto out;
 
   parser = NULL;
 
@@ -562,12 +564,12 @@ on_rest_proxy_call_cancelled_cb (GCancellable *cancellable, RestProxyCall *call)
 }
 
 static void
-lastfm_login (GoaProvider                  *provider,
-              const gchar                  *username,
-              const gchar                  *password,
-              GCancellable                 *cancellable,
-              RestProxyCallAsyncCallback   callback,
-              gpointer                     user_data)
+lastfm_login (GoaProvider          *provider,
+              const gchar          *username,
+              const gchar          *password,
+              GCancellable         *cancellable,
+              GAsyncReadyCallback   callback,
+              gpointer              user_data)
 {
   AddAccountData *data = user_data;
   RestProxyCall *call;
@@ -598,7 +600,7 @@ lastfm_login (GoaProvider                  *provider,
   rest_proxy_call_add_param (call, "api_sig", sig_md5);
   rest_proxy_call_add_param (call, "format", "json");
 
-  rest_proxy_call_async (call, callback, NULL, data, &data->error);
+  rest_proxy_call_invoke_async (call, NULL, callback, data);
 
   g_signal_connect (cancellable, "cancelled", G_CALLBACK (on_rest_proxy_call_cancelled_cb), call);
 
@@ -665,7 +667,7 @@ add_account (GoaProvider    *provider,
                 username,
                 password,
                 data.cancellable,
-                (RestProxyCallAsyncCallback) check_cb,
+                (GAsyncReadyCallback) check_cb,
                 &data);
 
   gtk_widget_set_sensitive (data.connect_button, FALSE);
@@ -819,7 +821,7 @@ refresh_account (GoaProvider    *provider,
                 username,
                 password,
                 data.cancellable,
-                (RestProxyCallAsyncCallback) check_cb,
+                (GAsyncReadyCallback) check_cb,
                 &data);
   gtk_widget_set_sensitive (data.connect_button, FALSE);
   gtk_widget_show (data.progress_grid);

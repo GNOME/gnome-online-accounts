@@ -27,9 +27,6 @@
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_SOUP_LOGGER (goa_soup_logger_get_type ())
-G_DECLARE_FINAL_TYPE (GoaSoupLogger, goa_soup_logger, GOA, SOUP_LOGGER, SoupLogger);
-
 SoupLogger     *goa_soup_logger_new                (SoupLoggerLogLevel   level,
                                                     gint                 max_body_size);
 

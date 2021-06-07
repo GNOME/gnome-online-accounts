@@ -22,15 +22,6 @@
 
 #include "goasouplogger.h"
 
-struct _GoaSoupLogger
-{
-  SoupLogger parent_instance;
-};
-
-G_DEFINE_TYPE (GoaSoupLogger, goa_soup_logger, SOUP_TYPE_LOGGER);
-
-/* ---------------------------------------------------------------------------------------------------- */
-
 static void
 goa_soup_logger_printer (SoupLogger         *logger,
                          SoupLoggerLogLevel  level,
@@ -45,24 +36,16 @@ goa_soup_logger_printer (SoupLogger         *logger,
   g_free (message);
 }
 
-/* ---------------------------------------------------------------------------------------------------- */
-
-static void
-goa_soup_logger_init (GoaSoupLogger *self)
-{
-  soup_logger_set_printer (SOUP_LOGGER (self), goa_soup_logger_printer, NULL, NULL);
-}
-
-static void
-goa_soup_logger_class_init (GoaSoupLoggerClass *klass)
-{
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
 SoupLogger *
 goa_soup_logger_new (SoupLoggerLogLevel   level,
                      gint                 max_body_size)
 {
-  return g_object_new (GOA_TYPE_SOUP_LOGGER, "level", level, "max-body-size", max_body_size, NULL);
+  SoupLogger *logger;
+
+  logger = soup_logger_new (level);
+  if (max_body_size != -1)
+    soup_logger_set_max_body_size (logger, max_body_size);
+  soup_logger_set_printer (logger, goa_soup_logger_printer, NULL, NULL);
+
+  return logger;
 }
