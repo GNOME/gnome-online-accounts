@@ -76,7 +76,7 @@ endif
 
 add_project_arguments(compiler_flags, language: 'c')
 
-glib_req_version = '>= 2.52'
+glib_req_version = '>= 2.67.4'
 
 gio_dep = dependency('gio-2.0', version: glib_req_version)
 gio_unix_dep = dependency('gio-unix-2.0', version: glib_req_version)

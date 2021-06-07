@@ -643,7 +643,7 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
 {
   GHashTable *key_value_pairs;
   IdentifyData *data = user_data;
-  SoupURI *uri;
+  GUri *uri;
   WebKitNavigationAction *action;
   WebKitURIRequest *request;
   const gchar *query;
@@ -664,8 +664,8 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
   if (!g_str_has_prefix (requested_uri, redirect_uri))
     goto default_behaviour;
 
-  uri = soup_uri_new (requested_uri);
-  query = soup_uri_get_query (uri);
+  uri = g_uri_parse (requested_uri, G_URI_FLAGS_ENCODED, NULL);
+  query = g_uri_get_query (uri);
 
   if (query != NULL)
     {
@@ -677,6 +677,8 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
 
       g_hash_table_unref (key_value_pairs);
     }
+
+  g_uri_unref (uri);
 
   if (data->oauth_verifier != NULL)
     goto ignore_request;
