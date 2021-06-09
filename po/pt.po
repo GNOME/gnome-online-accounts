@@ -8,34 +8,35 @@
 # Pedro Albuquerque <palbuquerque73@gmail.com>, 2014, 2015.
 # Sérgio Cardeira <cardeira.sergio@gmail.com>, 2016.
 # Juliano Camargo <julianosc@pm.me>, 2020.
+# José Vieira <jvieira33@sapo.pt>, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 3.14\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2020-02-05 13:15+0000\n"
-"PO-Revision-Date: 2020-08-24 02:09+0100\n"
-"Last-Translator: Juliano Camargo <julianosc@pm.me>\n"
-"Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
+"POT-Creation-Date: 2021-05-10 20:08+0000\n"
+"PO-Revision-Date: 2021-06-02 16:52+0100\n"
+"Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
+"Language-Team: Português <@>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Gtranslator 3.36.0\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Generator: Poedit 2.4.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: data/org.gnome.online-accounts.gschema.xml:6
 msgid "List of providers that are allowed to be loaded"
-msgstr "Lista de fornecedores que são permitidos a serem carregados"
+msgstr "Lista de fornecedores que podem ser carregados"
 
 #: data/org.gnome.online-accounts.gschema.xml:7
 msgid ""
 "A list of strings representing the providers that are allowed to be loaded "
 "(default: 'all'). This is only evaluated on startup."
 msgstr ""
-"Uma lista de textos a representar os fornecedores que são permitidos a serem "
-"carregados (predefinido: 'todos'). Isto é verificado apenas no arranque."
+"Uma lista de entradas correspondentes aos fornecedores que podem ser "
+"carregados (predefinição: 'todos'). Isto é verificado apenas no arranque."
 
 #. TODO: more specific
 #: src/daemon/goadaemon.c:1143 src/daemon/goadaemon.c:1460
@@ -45,17 +46,17 @@ msgstr "Falha ao procurar um fornecedor para: %s"
 
 #: src/daemon/goadaemon.c:1403
 msgid "IsLocked property is set for account"
-msgstr "A propriedade IsLocked está definida para a conta"
+msgstr "A propriedade 'Está Bloqueado' está definida para a conta"
 
 #. TODO: more specific
 #: src/daemon/goadaemon.c:1448
 msgid "ProviderType property is not set for account"
-msgstr "A propriedade ProviderType não está definida para a conta"
+msgstr "A propriedade 'Tipo de Fornecedor' não está definida para a conta"
 
 #. TODO: more specific
 #: src/goabackend/goaewsclient.c:258
 msgid "Failed to parse autodiscover response XML"
-msgstr "Falha ao processar a resposta XML de autodescoberta"
+msgstr "Falha ao analisar a resposta XML de autodescoberta"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
@@ -63,7 +64,7 @@ msgstr "Falha ao processar a resposta XML de autodescoberta"
 #: src/goabackend/goaewsclient.c:299
 #, c-format
 msgid "Failed to find “%s” element"
-msgstr "Falha ao localizar elemento \"%s\""
+msgstr "Falha ao localizar o elemento \"%s\""
 
 #. TODO: more specific
 #: src/goabackend/goaewsclient.c:320
@@ -133,7 +134,7 @@ msgstr "_Cancelar"
 #: src/goabackend/goalastfmprovider.c:430
 #: src/goabackend/goaowncloudprovider.c:524
 msgid "C_onnect"
-msgstr "A li_gar"
+msgstr "_Ligar"
 
 #: src/goabackend/goaexchangeprovider.c:437
 #: src/goabackend/goafedoraprovider.c:597
@@ -252,7 +253,7 @@ msgstr "Esperado estado 200 ao pedir a sua identidade, obtido o estado %d (%s)"
 #: src/goabackend/goawindowsliveprovider.c:198
 #: src/goabackend/goawindowsliveprovider.c:211
 msgid "Could not parse response"
-msgstr "Impossível processar resposta"
+msgstr "Impossível analisar resposta"
 
 #: src/goabackend/goafedoraprovider.c:94
 msgid "Fedora"
@@ -261,31 +262,32 @@ msgstr "Fedora"
 #: src/goabackend/goafedoraprovider.c:208
 #: src/goabackend/goakerberosprovider.c:240
 msgid "Ticketing is disabled for account"
-msgstr "Criação de 'ticketis' está desativa nesta conta"
+msgstr "Criação de 'tickets' está desativa nesta conta"
 
 #: src/goabackend/goafedoraprovider.c:233
 #: src/goabackend/goakerberosprovider.c:265
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr ""
-"Impossível encontrar as credenciais gravadas do \"%s\" principal no chaveiro"
+"Não foi possível encontrar no chaveiro as credenciais guardadas do \"%s\" "
+"principal"
 
 #: src/goabackend/goafedoraprovider.c:246
 #: src/goabackend/goakerberosprovider.c:278
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr ""
-"Impossível encontrar a palavra-passe do principal \"%s\" nas credenciais"
+"Não foi possível encontrar nas credenciais a palavra-passe do \"%s\" "
+"principal"
 
 #: src/goabackend/goafedoraprovider.c:805
-#| msgid "Error connecting to Last.fm"
 msgid "Error connecting to Fedora"
 msgstr "Erro ao ligar-se ao Fedora"
 
 #: src/goabackend/goafedoraprovider.c:1198
 #: src/goabackend/goakerberosprovider.c:1366
 msgid "Identity service returned invalid key"
-msgstr "Serviço de identificação devolveu chave inválida"
+msgstr "O serviço de identificação devolveu chave inválida"
 
 #: src/goabackend/goaflickrprovider.c:56
 msgid "Flickr"
@@ -293,9 +295,7 @@ msgstr "Flickr"
 
 #: src/goabackend/goaflickrprovider.c:271
 msgid "Your system time is invalid. Check your date and time settings."
-msgstr ""
-"A sua hora de sistema é inválida. Verifique as suas definições de data e "
-"hora."
+msgstr "A hora de sistema é inválida. Verifique as definições de data e hora."
 
 #: src/goabackend/goafoursquareprovider.c:57
 msgid "Foursquare"
@@ -328,6 +328,8 @@ msgstr "O servidor não suporta STARTTLS"
 msgid "IMAP and SMTP"
 msgstr "IMAP e SMTP"
 
+# inválido/a ?
+# a que se refere o %s ?
 #. Translators: the first %s is a field name. The
 #. * second %s is the IMAP
 #. * username (eg., rishi), and the (%s, %d)
@@ -342,7 +344,7 @@ msgstr "IMAP e SMTP"
 #: src/goabackend/goaimapsmtpprovider.c:378
 #, c-format
 msgid "Invalid %s with username “%s” (%s, %d): "
-msgstr "%s inválido/a com o nome de utilizador \"%s\" (%s, %d): "
+msgstr "%s inválido/a com o nome_de_utilizador \"%s\" (%s, %d): "
 
 #. Translators: the following four strings are used to show a
 #. * combo box similar to the one in the evolution module.
@@ -427,7 +429,7 @@ msgstr "A operação foi cancelada"
 #: src/goabackend/goakerberosprovider.c:837
 #: src/goaidentity/goaidentityservice.c:1265
 msgid "Log In to Realm"
-msgstr "Iniciar sessão no reino"
+msgstr "Aceder à Realm"
 
 #: src/goabackend/goakerberosprovider.c:838
 msgid "Please enter your password below."
@@ -459,7 +461,7 @@ msgid ""
 "Personal content can be added to your applications through a media server "
 "account."
 msgstr ""
-"Pode adicionar conteúdo pessoal às suas aplicações através de uma conta num "
+"Pode adicionar conteúdo pessoal às aplicações através de uma conta num "
 "servidor de multimédia."
 
 #: src/goabackend/goamediaserverprovider.c:321
@@ -470,6 +472,27 @@ msgstr "Servidores multimédia disponíveis"
 msgid "No media servers found"
 msgstr "Não foram encontrados servidores"
 
+# Notas:
+# Notas:
+# token -> símbolo, sinal, marca
+#
+# duas linhas abaixo
+# (Editar)
+#
+# Comentários extraídos:
+# Translators: the %d is a HTTP status code and the %s is a textual description of it
+#
+#
+# Formato:
+# C
+# (Editar)
+#
+# Comentários extraídos:
+# Translators: the %d is a HTTP status code and the %s is a textual description of it
+#
+#
+# Formato:
+# C
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: src/goabackend/goaoauth2provider.c:632 src/goabackend/goaoauthprovider.c:542
 #, c-format
@@ -501,11 +524,11 @@ msgstr "Erro ao obter identidade: "
 #: src/goabackend/goaoauthprovider.c:1168
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
-msgstr "Foi pedido para iniciar sessão como %s mas iniciou sessão como %s"
+msgstr "Foi pedido para aceder como %s mas iniciou sessão como %s"
 
 #: src/goabackend/goaoauth2provider.c:1382
 msgid "Credentials do not contain access_token"
-msgstr "Credenciais não contêm access_token"
+msgstr "Credenciais não contêm símbolo_de_acesso"
 
 #: src/goabackend/goaoauth2provider.c:1421
 #: src/goabackend/goaoauthprovider.c:1383
@@ -516,13 +539,14 @@ msgstr "Falha ao atualizar o símbolo de acesso (%s, %d): "
 #: src/goabackend/goaoauthprovider.c:565
 msgid "Missing access_token or access_token_secret headers in response"
 msgstr ""
-"Não foram recebidos os cabeçalhos \"access_token\" ou \"access_token_secret"
-"\" na resposta"
+"Não foram recebidos os cabeçalhos de símbolo_de_acesso ou "
+"símbolo_de_acesso_secreto na resposta"
 
 #: src/goabackend/goaoauthprovider.c:773
 msgid "Error getting a Request Token: "
 msgstr "Erro ao obter um símbolo de pedido: "
 
+# idem
 #. Translators: the %d is a HTTP status code and the %s is a textual description of it
 #: src/goabackend/goaoauthprovider.c:804
 #, c-format
@@ -531,12 +555,14 @@ msgid ""
 msgstr ""
 "Esperado estado 200 ao obter um símbolo de pedido, obtido o estado %d (%s)"
 
+# idem
 #: src/goabackend/goaoauthprovider.c:821
 msgid "Missing request_token or request_token_secret headers in response"
 msgstr ""
 "Não foram recebidos os cabeçalhos \"request_token\" ou \"request_token_secret"
 "\" na resposta"
 
+# idem
 #: src/goabackend/goaoauthprovider.c:1339
 msgid "Credentials do not contain access_token or access_token_secret"
 msgstr "Credenciais não contêm access_token ou access_token_secret"
@@ -547,7 +573,6 @@ msgstr "Nextcloud"
 
 #: src/goabackend/goaowncloudprovider.c:729
 #: src/goabackend/goaowncloudprovider.c:920
-#| msgid "Error connecting to ownCloud server"
 msgid "Error connecting to Nextcloud server"
 msgstr "Erro ao ligar-se ao servidor Nextcloud"
 
@@ -633,7 +658,7 @@ msgstr "Mecanismo de autenticação desconhecido"
 
 #: src/goabackend/goautils.c:92
 msgid "Error logging into the account"
-msgstr "Erro ao iniciar sessão na conta"
+msgstr "Erro ao aceder à conta"
 
 #: src/goabackend/goautils.c:136
 msgid "Credentials have expired"
@@ -641,11 +666,11 @@ msgstr "As credenciais expiraram"
 
 #: src/goabackend/goautils.c:140
 msgid "Sign in to enable this account."
-msgstr "Inicie sessão para ativar esta conta."
+msgstr "Entre para ativar esta conta."
 
 #: src/goabackend/goautils.c:144
 msgid "_Sign In"
-msgstr "_Iniciar sessão"
+msgstr "_Entrar"
 
 #: src/goabackend/goautils.c:240
 #, c-format
@@ -664,12 +689,12 @@ msgstr "Conta %s"
 #. TODO: more specific
 #: src/goabackend/goautils.c:370
 msgid "Failed to delete credentials from the keyring"
-msgstr "Falha ao apagar as credenciais do chaveiro"
+msgstr "Falha ao eliminar as credenciais do chaveiro"
 
 #. TODO: more specific
 #: src/goabackend/goautils.c:418
 msgid "Failed to retrieve credentials from the keyring"
-msgstr "Falha ao obter as credenciais do chaveiro"
+msgstr "Falha ao recuperar as credenciais do chaveiro"
 
 #. TODO: more specific
 #: src/goabackend/goautils.c:428
@@ -678,7 +703,7 @@ msgstr "Nenhumas credenciais encontradas no chaveiro"
 
 #: src/goabackend/goautils.c:441
 msgid "Error parsing result obtained from the keyring: "
-msgstr "Erro ao processar o resultado obtido do chaveiro: "
+msgstr "Erro ao analisar o resultado obtido do chaveiro: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
 #: src/goabackend/goautils.c:482
@@ -693,11 +718,11 @@ msgstr "Falha ao armazenar as credenciais no chaveiro"
 
 #: src/goabackend/goautils.c:848
 msgid "Cannot resolve hostname"
-msgstr "Impossível resolver o nome de máquina"
+msgstr "Impossível terminar o nome de_hospedeiro"
 
 #: src/goabackend/goautils.c:852
 msgid "Cannot resolve proxy hostname"
-msgstr "Impossível resolver o nome de máquina do proxy"
+msgstr "Impossível terminar o nome de_hospedeiro do proxy"
 
 #: src/goabackend/goautils.c:857
 msgid "Cannot find WebDAV endpoint"
@@ -717,7 +742,7 @@ msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr ""
-"O certificado não coincide com a identidade esperada do site do qual foi "
+"O certificado não coincide com a identidade esperada do sítio do qual foi "
 "obtido."
 
 #: src/goabackend/goautils.c:891
@@ -758,25 +783,25 @@ msgstr "Microsoft"
 
 #: src/goaidentity/goaidentityservice.c:564
 msgid "Initial secret key is invalid"
-msgstr "Chave secreta inicial é inválida"
+msgstr "A chave secreta inicial é inválida"
 
 #. TODO: more specific
 #: src/goaidentity/goaidentityservice.c:786
 #: src/goaidentity/goaidentityservice.c:890
 #, c-format
 msgid "Couldn't get GoaObject for object path %s"
-msgstr "Impossível obter o GoaObject para caminho do objeto %s"
+msgstr "Impossível obter o GoaObject para o caminho de objeto %s"
 
 #: src/goaidentity/goaidentityservice.c:1270
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
-msgstr "O reino de rede %s requer alguma informação para iniciar a sua sessão."
+msgstr "A rede realm %s requer alguma informação para iniciar a sua sessão."
 
 #: src/goaidentity/goakerberosidentity.c:271
 #: src/goaidentity/goakerberosidentity.c:279
 #: src/goaidentity/goakerberosidentity.c:666
 msgid "Could not find identity in credential cache: "
-msgstr "Impossível encontrar a identidade na cache de credenciais: "
+msgstr "Não foi possível encontrar a identidade na cache de credenciais: "
 
 #: src/goaidentity/goakerberosidentity.c:678
 msgid "Could not find identity credentials in cache: "
@@ -795,32 +820,32 @@ msgstr ""
 msgid "No associated identification found"
 msgstr "Não foi encontrada nenhuma identificação associada"
 
-#: src/goaidentity/goakerberosidentity.c:1098
+#: src/goaidentity/goakerberosidentity.c:1100
 msgid "Could not create credential cache: "
 msgstr "Impossível criar cache de credenciais: "
 
-#: src/goaidentity/goakerberosidentity.c:1130
+#: src/goaidentity/goakerberosidentity.c:1132
 msgid "Could not initialize credentials cache: "
 msgstr "Impossível inicializar a cache de credenciais: "
 
-#: src/goaidentity/goakerberosidentity.c:1143
+#: src/goaidentity/goakerberosidentity.c:1145
 msgid "Could not store new credentials in credentials cache: "
 msgstr "Impossível armazenar as novas credenciais na cache de credenciais: "
 
-#: src/goaidentity/goakerberosidentity.c:1431
+#: src/goaidentity/goakerberosidentity.c:1433
 msgid "Could not renew identity: Not signed in"
-msgstr "Impossível renovar a identidade: não tem uma sessão iniciada"
+msgstr "Impossível renovar a identidade: o sistema não foi acedido"
 
-#: src/goaidentity/goakerberosidentity.c:1441
+#: src/goaidentity/goakerberosidentity.c:1443
 msgid "Could not renew identity: "
 msgstr "Impossível renovar a identidade: "
 
-#: src/goaidentity/goakerberosidentity.c:1454
+#: src/goaidentity/goakerberosidentity.c:1456
 #, c-format
 msgid "Could not get new credentials to renew identity %s: "
 msgstr "Impossível obter novas credenciais para renovar a identidade %s: "
 
-#: src/goaidentity/goakerberosidentity.c:1495
+#: src/goaidentity/goakerberosidentity.c:1497
 msgid "Could not erase identity: "
 msgstr "Impossível apagar a identidade: "
 
