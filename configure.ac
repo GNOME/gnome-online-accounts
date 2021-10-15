@@ -1,5 +1,5 @@
 m4_define([goa_major_version], [3])
-m4_define([goa_minor_version], [41])
+m4_define([goa_minor_version], [43])
 m4_define([goa_micro_version], [1])
 m4_define([goa_nano_version], [0])
 
