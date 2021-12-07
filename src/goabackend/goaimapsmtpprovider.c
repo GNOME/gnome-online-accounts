@@ -409,6 +409,8 @@ typedef struct
   GoaObject *object;
 
   GoaMailAuth *smtp_auth;
+  GHashTable *smtp_table;
+  GHashTable *imap_table;
   gboolean imap_accept_ssl_errors;
   gboolean imap_had_ssl_errors;
   gboolean smtp_accept_ssl_errors;
@@ -442,8 +444,17 @@ add_account_data_free (gpointer user_data)
   g_clear_object (&data->client);
   g_clear_object (&data->object);
   g_clear_object (&data->smtp_auth);
+  g_clear_pointer (&data->smtp_table, g_hash_table_unref);
+  g_clear_pointer (&data->imap_table, g_hash_table_unref);
   g_free (data);
 }
+
+typedef struct
+{
+  char *hostname;
+  char *username;
+  char *socket_type;
+} AutoconfigData;
 
 /* ---------------------------------------------------------------------------------------------------- */
 
@@ -490,6 +501,10 @@ on_login_changed (GtkEditable    *editable,
   goa_provider_dialog_set_state (data->dialog, state);
 }
 
+
+static void
+guess_imap_smtp (AddAccountData *data);
+
 static void
 on_email_changed (GtkEditable    *editable,
                   AddAccountData *data)
@@ -520,6 +535,54 @@ on_email_changed (GtkEditable    *editable,
   gtk_editable_set_text (GTK_EDITABLE (data->smtp_server), smtp_domain);
   gtk_editable_set_text (GTK_EDITABLE (data->smtp_username), username);
   gtk_editable_set_text (GTK_EDITABLE (data->smtp_password), password);
+
+  guess_imap_smtp (data);
+}
+
+static const char *encryption_to_string[] = {
+  "plain",
+  "starttls",
+  "ssl",
+};
+
+static void
+on_imap_encryption_changed (GtkWidget  *widget,
+                            GParamSpec *pspec,
+                            gpointer    user_data)
+{
+  AddAccountData *data = user_data;
+  AutoconfigData *autoconfig = NULL;
+  GoaTlsType encryption_type = GOA_TLS_TYPE_NONE;
+  const char *key = NULL;
+
+  g_object_get (data->imap_encryption, "selected", &encryption_type, NULL);
+  key = encryption_to_string[CLAMP (encryption_type, GOA_TLS_TYPE_NONE, GOA_TLS_TYPE_SSL)];
+
+  if (g_hash_table_lookup_extended (data->imap_table, key, NULL, (gpointer*)&autoconfig))
+    {
+      gtk_editable_set_text (GTK_EDITABLE (data->imap_username), autoconfig->username);
+      gtk_editable_set_text (GTK_EDITABLE (data->imap_server), autoconfig->hostname);
+    }
+}
+
+static void
+on_smtp_encryption_changed (GtkWidget  *widget,
+                            GParamSpec *pspec,
+                            gpointer    user_data)
+{
+  AddAccountData *data = user_data;
+  AutoconfigData *autoconfig = NULL;
+  GoaTlsType encryption_type = GOA_TLS_TYPE_NONE;
+  const char *key = NULL;
+
+  g_object_get (data->imap_encryption, "selected", &encryption_type, NULL);
+  key = encryption_to_string[CLAMP (encryption_type, GOA_TLS_TYPE_NONE, GOA_TLS_TYPE_SSL)];
+
+  if (g_hash_table_lookup_extended (data->smtp_table, key, NULL, (gpointer*)&autoconfig))
+    {
+      gtk_editable_set_text (GTK_EDITABLE (data->smtp_username), autoconfig->username);
+      gtk_editable_set_text (GTK_EDITABLE (data->smtp_server), autoconfig->hostname);
+    }
 }
 
 static void
@@ -581,6 +644,7 @@ create_account_details_ui (GoaProvider    *provider,
                                                              _("Encryption"),
                                                              (GStrv)encryption_types);
       g_object_set (data->imap_encryption, "selected", GOA_TLS_TYPE_SSL, NULL);
+      g_signal_connect (data->imap_encryption, "notify::selected", G_CALLBACK (on_imap_encryption_changed), data);
     }
 
   g_signal_connect (data->imap_server, "changed", G_CALLBACK (on_login_changed), data);
@@ -607,11 +671,261 @@ create_account_details_ui (GoaProvider    *provider,
                                                              _("Encryption"),
                                                              (GStrv)encryption_types);
       g_object_set (data->smtp_encryption, "selected", GOA_TLS_TYPE_SSL, NULL);
+      g_signal_connect (data->smtp_encryption, "notify::selected", G_CALLBACK (on_smtp_encryption_changed), data);
     }
 
   g_signal_connect (data->smtp_server, "changed", G_CALLBACK (on_login_changed), data);
   g_signal_connect (data->smtp_username, "changed", G_CALLBACK (on_login_changed), data);
   g_signal_connect (data->smtp_password, "changed", G_CALLBACK (on_login_changed), data);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct {
+  gboolean        from_incoming_server;
+  gboolean        from_outgoing_server;
+  gboolean        is_pop3;
+
+  const gchar    *email_address;
+  const gchar    *username;
+  const gchar    *domain;
+
+  AddAccountData *data;
+
+  AutoconfigData *autoconfig;
+} ParserData;
+
+static void
+autoconfig_free (gpointer data)
+{
+  AutoconfigData *autoconfig = data;
+
+  g_free (autoconfig->hostname);
+  g_free (autoconfig->username);
+  g_free (autoconfig);
+}
+
+static void
+autoconfig_username (ParserData  *parser_data,
+                     const gchar *username_type)
+{
+  if (!g_strcmp0 (username_type, "%EMAILADDRESS%"))
+    parser_data->autoconfig->username = g_strdup (parser_data->email_address);
+  else if (!g_strcmp0 (username_type, "%EMAILLOCALPART%"))
+    parser_data->autoconfig->username = g_strdup (parser_data->username);
+  else if (!g_strcmp0 (username_type, "%EMAILDOMAIN%"))
+    parser_data->autoconfig->username = g_strdup (parser_data->domain);
+}
+
+static void
+parse_start_element (GMarkupParseContext  *context,
+                     const gchar          *element_name,
+                     const gchar         **attribute_names,
+                     const gchar         **attribute_values,
+                     gpointer              user_data,
+                     GError              **error)
+{
+  ParserData *parser_data = user_data;
+  const gchar *server_type = NULL;
+
+  gboolean is_incoming_server = g_strcmp0 (element_name, "incomingServer") == 0;
+  gboolean is_outgoing_server = g_strcmp0 (element_name, "outgoingServer") == 0;
+
+  if (is_incoming_server || is_outgoing_server)
+    {
+      g_markup_collect_attributes (element_name,
+                                   attribute_names,
+                                   attribute_values,
+                                   NULL,
+                                   G_MARKUP_COLLECT_STRING,
+                                   "type", &server_type,
+                                   G_MARKUP_COLLECT_INVALID);
+
+        parser_data->is_pop3 = g_strcmp0 (server_type, "pop3") == 0;
+        if (!parser_data->is_pop3)
+          parser_data->autoconfig = g_new0 (AutoconfigData, 1);
+    }
+  else
+    {
+      const GSList *parents = g_markup_parse_context_get_element_stack (context);
+      if (parents->next == NULL)
+        {
+          parser_data->from_incoming_server = FALSE;
+          parser_data->from_outgoing_server = FALSE;
+        }
+      else
+        {
+          parser_data->from_incoming_server = g_strcmp0 (parents->next->data, "incomingServer") == 0 &&
+                                                        !parser_data->is_pop3;
+          parser_data->from_outgoing_server = g_strcmp0 (parents->next->data, "outgoingServer") == 0;
+        }
+    }
+}
+
+static void
+parse_end_element (GMarkupParseContext  *context,
+                   const gchar          *element_name,
+                   gpointer              user_data,
+                   GError              **error)
+{
+  ParserData *parser_data = user_data;
+
+  gboolean is_incoming_server = g_strcmp0 (element_name, "incomingServer") == 0;
+  gboolean is_outgoing_server = g_strcmp0 (element_name, "outgoingServer") == 0;
+
+  if (!parser_data->is_pop3 && is_incoming_server) {
+    g_hash_table_insert (parser_data->data->imap_table,
+                         parser_data->autoconfig->socket_type,
+                         parser_data->autoconfig);
+  } else if (is_outgoing_server) {
+    g_hash_table_insert (parser_data->data->smtp_table,
+                         parser_data->autoconfig->socket_type,
+                         parser_data->autoconfig);
+  }
+}
+
+static void
+parse_text_element (GMarkupParseContext *context,
+                    const gchar         *in_text,
+                    gsize                in_text_length,
+                    gpointer             user_data,
+                    GError             **error)
+{
+  ParserData *parser_data = user_data;
+  const gchar *element_name = g_markup_parse_context_get_element (context);
+
+  if (parser_data->from_incoming_server || parser_data->from_outgoing_server) {
+    if (!g_strcmp0 (element_name, "hostname"))
+      parser_data->autoconfig->hostname = g_strdup (in_text);
+    else if (!g_strcmp0 (element_name, "socketType"))
+      parser_data->autoconfig->socket_type = g_ascii_strdown (in_text, -1);
+    else if (!g_strcmp0 (element_name, "username"))
+      autoconfig_username (parser_data, in_text);
+  }
+}
+
+static GMarkupParser parsers_func = {
+  parse_start_element,
+  parse_end_element,
+  parse_text_element,
+};
+
+static gboolean
+start_autoconfig (AddAccountData *data,
+                  const gchar    *uri,
+                  const gchar    *email_address,
+                  const gchar    *username,
+                  const gchar    *domain)
+{
+  GMarkupParseContext *context = NULL;
+  SoupSession *soup_session = NULL;
+  SoupMessage *soup_message = NULL;
+  GBytes *body = NULL;
+  ParserData *parser_data = NULL;
+  gboolean success = FALSE;
+  GError *error = NULL;
+
+  soup_session = soup_session_new_with_options ("timeout", 15, NULL);
+
+  soup_message = soup_message_new (SOUP_METHOD_GET, uri);
+  if (!soup_message)
+    goto out;
+
+  soup_message_set_flags (soup_message, SOUP_MESSAGE_NO_REDIRECT);
+
+  body = soup_session_send_and_read (soup_session, soup_message, NULL, &error);
+  if (error != NULL)
+    goto out;
+
+  parser_data = g_new0 (ParserData, 1);
+  parser_data->from_incoming_server = FALSE;
+  parser_data->from_outgoing_server = FALSE;
+  parser_data->email_address = email_address;
+  parser_data->username = username;
+  parser_data->domain = domain;
+  parser_data->data = data;
+
+  g_message ("BODY: %s", (char *)g_bytes_get_data (body, NULL));
+  context = g_markup_parse_context_new (&parsers_func,
+                                        0,
+                                        parser_data,
+                                        g_free);
+
+  success = g_markup_parse_context_parse (context,
+                                          g_bytes_get_data (body, NULL),
+                                          g_bytes_get_size (body),
+                                          &error);
+  if (success)
+    g_markup_parse_context_end_parse (context, &error);
+
+  if (error)
+    g_warning ("Error while parsing %s : %s", uri, error->message);
+
+  out:
+    g_clear_pointer (&context, g_markup_parse_context_free);
+    g_clear_pointer (&body, g_bytes_unref);
+    g_clear_object (&soup_session);
+    g_clear_object (&soup_message);
+    g_clear_error (&error);
+
+  return success;
+}
+
+static void
+guess_imap_smtp (AddAccountData *data)
+{
+  const gchar *email_address;
+  gboolean success = FALSE;
+  gchar *username = NULL;
+  gchar *domain = NULL;
+  gchar *uri = NULL;
+  int i;
+
+  const gchar *uris[][2] = {
+    { "https://autoconfig.", "/mail/config-v1.1.xml?" },
+    { "http://autoconfig.", "/mail/config-v1.1.xml?"},
+
+    { "https://", "/.well-known/autoconfig/mail/config-v1.1.xml?"},
+    { "http://", "/.well-known/autoconfig/mail/config-v1.1.xml?"},
+
+    { "https://autoconfig.thunderbird.net/v1.1/", "" }
+  };
+
+  email_address = gtk_editable_get_text (GTK_EDITABLE (data->email_address));
+  if (!goa_utils_parse_email_address (email_address, &username, &domain))
+    goto out;
+
+  data->imap_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, autoconfig_free);
+  data->smtp_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, autoconfig_free);
+
+  for (i = 0; i < G_N_ELEMENTS (uris); i++) {
+    uri = g_strconcat (uris[i][0], domain, uris[i][1], NULL);
+
+    success = start_autoconfig (data, uri, email_address, username, domain);
+
+    g_free (uri);
+
+    if (success)
+      break;
+  }
+
+  if (g_hash_table_contains (data->imap_table, "starttls"))
+    g_object_set (data->imap_encryption, "selected", GOA_TLS_TYPE_STARTTLS, NULL);
+  else if (g_hash_table_contains (data->imap_table, "ssl"))
+    g_object_set (data->imap_encryption, "selected", GOA_TLS_TYPE_SSL, NULL);
+  else if (g_hash_table_contains (data->imap_table, "plain"))
+    g_object_set (data->imap_encryption, "selected", GOA_TLS_TYPE_NONE, NULL);
+
+  if (g_hash_table_contains (data->smtp_table, "starttls"))
+    g_object_set (data->smtp_encryption, "selected", GOA_TLS_TYPE_STARTTLS, NULL);
+  else if (g_hash_table_contains (data->smtp_table, "ssl"))
+    g_object_set (data->smtp_encryption, "selected", GOA_TLS_TYPE_SSL, NULL);
+  else if (g_hash_table_contains (data->smtp_table, "plain"))
+    g_object_set (data->smtp_encryption, "selected", GOA_TLS_TYPE_NONE, NULL);
+
+ out:
+  g_free (username);
+  g_free (domain);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
