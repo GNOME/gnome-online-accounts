@@ -502,7 +502,7 @@ on_login_changed (GtkEditable    *editable,
 }
 
 
-static void
+static gboolean
 guess_imap_smtp (AddAccountData *data);
 
 static void
@@ -871,13 +871,27 @@ start_autoconfig (AddAccountData *data,
   return success;
 }
 
-static void
-guess_imap_smtp (AddAccountData *data)
+static gint
+sort_mx_prefs (gconstpointer a,
+               gconstpointer b)
 {
-  const gchar *email_address;
+  GVariant *variant_a = (GVariant*)a;
+  GVariant *variant_b = (GVariant*)b;
+  guint16 pref_a, pref_b;
+
+  g_variant_get (variant_a, "(qs)", &pref_a, NULL);
+  g_variant_get (variant_b, "(qs)", &pref_b, NULL);
+
+  return pref_a > pref_b;
+}
+
+static gboolean
+get_autoconfig_from_uri (AddAccountData *data,
+                         const gchar    *email_address,
+                         gchar          *username,
+                         gchar          *domain)
+{
   gboolean success = FALSE;
-  gchar *username = NULL;
-  gchar *domain = NULL;
   gchar *uri = NULL;
   int i;
 
@@ -891,15 +905,9 @@ guess_imap_smtp (AddAccountData *data)
     { "https://autoconfig.thunderbird.net/v1.1/", "" }
   };
 
-  email_address = gtk_editable_get_text (GTK_EDITABLE (data->email_address));
-  if (!goa_utils_parse_email_address (email_address, &username, &domain))
-    goto out;
-
-  data->imap_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, autoconfig_free);
-  data->smtp_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, autoconfig_free);
-
   for (i = 0; i < G_N_ELEMENTS (uris); i++) {
     uri = g_strconcat (uris[i][0], domain, uris[i][1], NULL);
+    g_debug ("Try to get autoconfig with uri :  %s", uri);
 
     success = start_autoconfig (data, uri, email_address, username, domain);
 
@@ -907,6 +915,57 @@ guess_imap_smtp (AddAccountData *data)
 
     if (success)
       break;
+  }
+
+  return success;
+}
+
+static gboolean
+guess_imap_smtp (AddAccountData *data)
+{
+  GList *list = NULL, *it = NULL;
+  const gchar *email_address;
+  GResolver *resolver = NULL;
+  gboolean success = FALSE;
+  gchar *username = NULL;
+  gchar *domain = NULL;
+
+  email_address = gtk_editable_get_text (GTK_EDITABLE (data->email_address));
+  if (!goa_utils_parse_email_address (email_address, &username, &domain))
+    goto out;
+
+  data->imap_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, autoconfig_free);
+  data->smtp_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, autoconfig_free);
+
+  success = get_autoconfig_from_uri (data, email_address, username, domain);
+
+  if (!success) {
+    resolver = g_resolver_get_default ();
+    g_debug ("Autocongif with domain %s failed. Trying with MX record", domain);
+    list = g_resolver_lookup_records (g_resolver_get_default (),
+                                      domain,
+                                      G_RESOLVER_RECORD_MX,
+                                      NULL, NULL);
+    list = g_list_sort (list, sort_mx_prefs); // Sort by preferences
+    for (it = list; it != NULL; it = it->next) {
+      GVariant *variant = it->data;
+      const gchar *base_domain= NULL;
+      gchar *hostname = NULL;
+
+      g_variant_get (variant, "(qs)", NULL, &hostname);
+
+      base_domain = soup_tld_get_base_domain (hostname, NULL);
+      if (base_domain != NULL)
+        success = get_autoconfig_from_uri (data, email_address, username, g_strdup (base_domain));
+
+      if (success)
+        break;
+
+      g_free (hostname);
+    }
+
+    g_list_free_full (list, (GDestroyNotify)g_variant_unref);
+    g_object_unref (resolver);
   }
 
   if (g_hash_table_contains (data->imap_table, "starttls"))
@@ -926,6 +985,8 @@ guess_imap_smtp (AddAccountData *data)
  out:
   g_free (username);
   g_free (domain);
+
+  return success;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
