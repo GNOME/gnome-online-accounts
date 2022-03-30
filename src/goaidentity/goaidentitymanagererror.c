@@ -35,10 +35,10 @@ GQuark
 goa_identity_manager_error_quark (void)
 {
   G_STATIC_ASSERT (G_N_ELEMENTS (dbus_error_entries) == GOA_IDENTITY_MANAGER_ERROR_NUM_ENTRIES);
-  static volatile gsize quark_volatile = 0;
+  static gsize quark = 0;
   g_dbus_error_register_error_domain ("goa-identity-manager-error",
-                                      &quark_volatile,
+                                      &quark,
                                       dbus_error_entries,
                                       G_N_ELEMENTS (dbus_error_entries));
-  return (GQuark) quark_volatile;
+  return (GQuark) quark;
 }

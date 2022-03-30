@@ -118,12 +118,10 @@ goa_client_finalize (GObject *object)
 static void
 goa_client_init (GoaClient *self)
 {
-  static volatile GQuark goa_error_domain = 0;
   /* this will force associating errors in the GOA_ERROR error domain
    * with org.freedesktop.Goa.Error.* errors via g_dbus_error_register_error_domain().
    */
-  goa_error_domain = GOA_ERROR;
-  goa_error_domain; /* shut up -Wunused-but-set-variable */
+  goa_error_quark ();
 }
 
 static void

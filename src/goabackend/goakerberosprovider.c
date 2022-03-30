@@ -1530,7 +1530,6 @@ goa_kerberos_provider_init (GoaKerberosProvider *provider)
 static void
 goa_kerberos_provider_class_init (GoaKerberosProviderClass *kerberos_class)
 {
-  static volatile GQuark goa_identity_manager_error_domain = 0;
   GoaProviderClass *provider_class;
 
   provider_class = GOA_PROVIDER_CLASS (kerberos_class);
@@ -1551,6 +1550,5 @@ goa_kerberos_provider_class_init (GoaKerberosProviderClass *kerberos_class)
    * org.gnome.Identity.Manager.Error.* errors via
    * g_dbus_error_register_error_domain().
    */
-  goa_identity_manager_error_domain = GOA_IDENTITY_MANAGER_ERROR;
-  goa_identity_manager_error_domain; /* shut up -Wunused-but-set-variable */
+  goa_identity_manager_error_quark ();
 }
