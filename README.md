@@ -1,9 +1,8 @@
-GNOME Online Accounts - Single sign-on framework for GNOME
-==========================================================
+# GNOME Online Accounts
+Single sign-on framework for GNOME
 
 
-Google
-------
+## Google
 
 OAuth 2.0:
 https://developers.google.com/accounts/docs/OAuth2InstalledApp
@@ -31,8 +30,7 @@ We are allowed to embed the client_secret in the source code. See
 https://developers.google.com/accounts/docs/OAuth2InstalledApp#overview
 
 
-Windows Live
-------------
+## Windows Live
 
 OAuth 2.0: http://msdn.microsoft.com/en-us/library/live/hh243647.aspx
 
