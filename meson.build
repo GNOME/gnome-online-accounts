@@ -129,7 +129,7 @@ config_h.set_quoted('GOA_FEDORA_NAME', 'fedora')
 config_h.set_quoted('GOA_FEDORA_REALM', 'FEDORAPROJECT.ORG')
 
 enable_fedora = get_option('fedora')
-if enable_fedora
+if enable_goabackend and enable_fedora
   gcr_dep = dependency('gcr-3')
   krb5_dep = dependency('krb5')
 
@@ -159,7 +159,7 @@ config_h.set('GOA_IMAP_SMTP_ENABLED', enable_imap_smtp)
 config_h.set_quoted('GOA_KERBEROS_NAME', 'kerberos')
 
 enable_kerberos = get_option('kerberos')
-if enable_kerberos
+if enable_goabackend and enable_kerberos
   gcr_dep = dependency('gcr-3')
   krb5_dep = dependency('krb5')
 
