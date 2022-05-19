@@ -333,17 +333,17 @@ goa_kerberos_identity_query_get_mode (GoaIdentityInquiry * inquiry,
   GoaKerberosIdentityQuery *kerberos_query = (GoaKerberosIdentityQuery *) query;
 
   g_return_val_if_fail (GOA_IS_KERBEROS_IDENTITY_INQUIRY (inquiry),
-                        GOA_KERBEROS_IDENTITY_QUERY_MODE_INVISIBLE);
+                        GOA_IDENTITY_QUERY_MODE_INVISIBLE);
   g_return_val_if_fail (inquiry == kerberos_query->inquiry,
-                        GOA_KERBEROS_IDENTITY_QUERY_MODE_INVISIBLE);
+                        GOA_IDENTITY_QUERY_MODE_INVISIBLE);
 
   if (kerberos_query->kerberos_prompt->hidden)
     {
-      return GOA_KERBEROS_IDENTITY_QUERY_MODE_INVISIBLE;
+      return GOA_IDENTITY_QUERY_MODE_INVISIBLE;
     }
   else
     {
-      return GOA_KERBEROS_IDENTITY_QUERY_MODE_VISIBLE;
+      return GOA_IDENTITY_QUERY_MODE_VISIBLE;
     }
 }
 
@@ -354,7 +354,7 @@ goa_kerberos_identity_query_get_prompt (GoaIdentityInquiry * inquiry,
   GoaKerberosIdentityQuery *kerberos_query = (GoaKerberosIdentityQuery *) query;
 
   g_return_val_if_fail (GOA_IS_KERBEROS_IDENTITY_INQUIRY (inquiry),
-                        GOA_KERBEROS_IDENTITY_QUERY_MODE_INVISIBLE);
+                        GOA_IDENTITY_QUERY_MODE_INVISIBLE);
   g_return_val_if_fail (inquiry == kerberos_query->inquiry, NULL);
 
   return g_strdup (kerberos_query->kerberos_prompt->prompt);
@@ -367,7 +367,7 @@ goa_kerberos_identity_query_is_answered (GoaIdentityInquiry * inquiry,
   GoaKerberosIdentityQuery *kerberos_query = (GoaKerberosIdentityQuery *) query;
 
   g_return_val_if_fail (GOA_IS_KERBEROS_IDENTITY_INQUIRY (inquiry),
-                        GOA_KERBEROS_IDENTITY_QUERY_MODE_INVISIBLE);
+                        GOA_IDENTITY_QUERY_MODE_INVISIBLE);
   g_return_val_if_fail (inquiry == kerberos_query->inquiry, FALSE);
 
   return kerberos_query->is_answered;
