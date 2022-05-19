@@ -11,5 +11,6 @@ if enable_goabackend
 
   subdir('goabackend')
   subdir('daemon')
-  subdir('examples')
 endif
+
+subdir('examples')

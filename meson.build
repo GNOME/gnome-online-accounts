@@ -102,13 +102,14 @@ if enable_goabackend
   libsecret_dep = dependency('libsecret-1')
   libsoup_dep = dependency('libsoup-3.0', version: '>= 3.0', fallback: ['libsoup'])
   libxml_dep = dependency('libxml-2.0')
-  rest_dep = dependency('rest-1.0',
-    version: '>= 0.9.0',
-    fallback: ['librest', 'librest_dep'],
-    default_options: ['soup2=false', 'examples=false', 'tests=false', 'gtk_doc=false'],
-  )
   webkit_gtk_dep = dependency('webkit2gtk-4.1', version: '>= 2.33.1')
 endif
+rest_dep = dependency('rest-1.0',
+  version: '>= 0.9.0',
+  fallback: ['librest', 'librest_dep'],
+  required: enable_goabackend,
+  default_options: ['soup2=false', 'examples=false', 'tests=false', 'gtk_doc=false'],
+)
 config_h.set('GOA_BACKEND_ENABLED', enable_goabackend)
 
 enable_inspector = get_option('inspector')
