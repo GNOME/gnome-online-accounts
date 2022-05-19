@@ -14,3 +14,16 @@ build-meson:
     - meson setup -Dgtk_doc=true _build
     - meson compile -C _build
     - meson test -C _build
+
+build-meson-nobackend:
+  image: fedora:latest
+  stage: build
+  before_script:
+    - dnf update -y
+    - dnf -y install
+      meson gcc dbus-devel glib2-devel gobject-introspection-devel
+      gtk3-devel rest-devel vala
+  script:
+    - meson setup -Dgtk_doc=false -Dgoabackend=false _build
+    - meson compile -C _build
+    - meson test -C _build
