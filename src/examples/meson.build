@@ -16,6 +16,7 @@ foreach program: programs
     program[0],
     program[0] + '.c',
     include_directories: common_incs,
-    dependencies: program[1]
+    dependencies: program[1],
+    install: false,
   )
 endforeach
