@@ -233,24 +233,6 @@ if test "$enable_flickr" != "no"; then
   AC_DEFINE(GOA_FLICKR_ENABLED, 1, [Enable Flickr data provider])
 fi
 
-# Foursquare
-AC_DEFINE(GOA_FOURSQUARE_NAME, ["foursquare"], [ProviderType and extension point name])
-AC_ARG_ENABLE([foursquare],
-              [AS_HELP_STRING([--enable-foursquare], [Enable Foursquare provider])],
-              [],
-              [enable_foursquare=yes])
-AC_ARG_WITH(foursquare-client-id,
-            [AS_HELP_STRING([--with-foursquare-client-id], [Foursquare OAuth 2.0 client id])],
-            [],
-            [])
-if test "$with_foursquare_client_id" = ""; then
-  with_foursquare_client_id="MBNU2NES5HASNDQJ25YPFGG2UGRZHPI3IYTNJGE0KIWT2HCF"
-fi
-AC_DEFINE_UNQUOTED(GOA_FOURSQUARE_CLIENT_ID, ["$with_foursquare_client_id"], [Foursquare OAuth 2.0 client id])
-if test "$enable_foursquare" != "no"; then
-  AC_DEFINE(GOA_FOURSQUARE_ENABLED, 1, [Enable Foursquare data provider])
-fi
-
 # Google
 AC_DEFINE(GOA_GOOGLE_NAME, ["google"], [ProviderType and extension point name])
 AC_ARG_ENABLE([google],
@@ -567,7 +549,6 @@ echo "
 
 	Fedora Account System provider: ${enable_fedora}
 	Flickr provider:                ${enable_flickr} (OAuth 1.0, key:${with_flickr_consumer_key} secret:${with_flickr_consumer_secret})
-	Foursquare provider:            ${enable_foursquare} (id:${with_foursquare_client_id})
 	Google provider:                ${enable_google} (OAuth 2.0, id:${with_google_client_id} secret:${with_google_client_secret})
 	IMAP/SMTP provider:             ${enable_imap_smtp}
 	Media Server provider:          ${enable_media_server}

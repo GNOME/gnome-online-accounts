@@ -10,7 +10,6 @@ libgoa_backend_sources = files(
   'goaexchangeprovider.c',
   'goafacebookprovider.c',
   'goaflickrprovider.c',
-  'goafoursquareprovider.c',
   'goagoogleprovider.c',
   'goahttpclient.c',
   'goaimapauthlogin.c',

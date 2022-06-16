@@ -154,15 +154,6 @@ config_h.set_quoted('GOA_FLICKR_CONSUMER_SECRET', flickr_consumer_secret)
 enable_flickr = get_option('flickr')
 config_h.set('GOA_FLICKR_ENABLED', enable_flickr)
 
-# Foursquare
-config_h.set_quoted('GOA_FOURSQUARE_NAME', 'foursquare')
-
-foursquare_client_id = get_option('foursquare_client_id')
-config_h.set_quoted('GOA_FOURSQUARE_CLIENT_ID', foursquare_client_id)
-
-enable_foursquare = get_option('foursquare')
-config_h.set('GOA_FOURSQUARE_ENABLED', enable_foursquare)
-
 # Google
 config_h.set_quoted('GOA_GOOGLE_NAME', 'google')
 
@@ -317,11 +308,6 @@ output += '        Fedora Account System provider: ' + enable_fedora.to_string()
 output += '        Flickr provider:                ' + enable_flickr.to_string()
 if enable_flickr
   output += ' (OAuth 1.0, key:@0@)'.format(flickr_consumer_key)
-endif
-output += '\n'
-output += '        Foursquare provider:            ' + enable_foursquare.to_string()
-if enable_foursquare
-  output += ' (id:@0@)'.format(foursquare_client_id)
 endif
 output += '\n'
 output += '        Google provider:                ' + enable_google.to_string()

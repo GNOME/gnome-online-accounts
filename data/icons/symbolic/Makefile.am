@@ -10,7 +10,6 @@ icon_DATA =					\
 	goa-account-lastfm-symbolic.svg		\
 	goa-account-msn-symbolic.svg		\
 	goa-account-owncloud-symbolic.svg	\
-	goa-account-foursquare-symbolic.svg	\
 	$(NULL)
 
 EXTRA_DIST = \
