@@ -26,7 +26,6 @@
 #include "goagoogleprovider.h"
 #include "goaimapsmtpprovider.h"
 #include "goaowncloudprovider.h"
-#include "goaflickrprovider.h"
 #include "goawindowsliveprovider.h"
 #include "goamediaserverprovider.h"
 #include "goalastfmprovider.h"
@@ -941,9 +940,6 @@ static struct
 #endif
 #ifdef GOA_WINDOWS_LIVE_ENABLED
   { GOA_WINDOWS_LIVE_NAME, goa_windows_live_provider_get_type },
-#endif
-#ifdef GOA_FLICKR_ENABLED
-  { GOA_FLICKR_NAME, goa_flickr_provider_get_type },
 #endif
 #ifdef GOA_EXCHANGE_ENABLED
   { GOA_EXCHANGE_NAME, goa_exchange_provider_get_type },

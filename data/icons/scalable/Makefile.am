@@ -5,7 +5,6 @@ icon_DATA =				\
 	goa-account.svg			\
 	goa-account-exchange.svg	\
 	goa-account-fedora.svg		\
-	goa-account-flickr.svg		\
 	goa-account-google.svg		\
 	goa-account-lastfm.svg		\
 	goa-account-msn.svg		\
