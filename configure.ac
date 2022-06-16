@@ -207,32 +207,6 @@ else
 fi
 AM_CONDITIONAL(BUILD_FEDORA, [test x$enable_fedora != xno])
 
-# Flickr
-AC_DEFINE(GOA_FLICKR_NAME, ["flickr"], [ProviderType and extension point name])
-AC_ARG_ENABLE([flickr],
-              [AS_HELP_STRING([--enable-flickr], [Enable Flickr provider])],
-              [],
-              [enable_flickr=yes])
-AC_ARG_WITH(flickr-consumer-key,
-            [AS_HELP_STRING([--with-flickr-consumer-key], [Flickr OAuth 1.0 consumer key])],
-            [],
-            [])
-AC_ARG_WITH(flickr-consumer-secret,
-            [AS_HELP_STRING([--with-flickr-consumer-secret], [Flickr OAuth 1.0 consumer secret])],
-            [],
-            [])
-if test "$with_flickr_consumer_key" = ""; then
-  with_flickr_consumer_key=ed00ad7e0869897506e23c0d18e34d01
-fi
-if test "$with_flickr_consumer_secret" = ""; then
-  with_flickr_consumer_secret=ebd556dd187188b1
-fi
-AC_DEFINE_UNQUOTED(GOA_FLICKR_CONSUMER_KEY, ["$with_flickr_consumer_key"], [Flickr OAuth 1.0 consumer key])
-AC_DEFINE_UNQUOTED(GOA_FLICKR_CONSUMER_SECRET, ["$with_flickr_consumer_secret"], [Flickr OAuth 1.0 consumer secret])
-if test "$enable_flickr" != "no"; then
-  AC_DEFINE(GOA_FLICKR_ENABLED, 1, [Enable Flickr data provider])
-fi
-
 # Google
 AC_DEFINE(GOA_GOOGLE_NAME, ["google"], [ProviderType and extension point name])
 AC_ARG_ENABLE([google],
@@ -530,7 +504,6 @@ echo "
 	template file:		        ${with_template_file}
 
 	Fedora Account System provider: ${enable_fedora}
-	Flickr provider:                ${enable_flickr} (OAuth 1.0, key:${with_flickr_consumer_key} secret:${with_flickr_consumer_secret})
 	Google provider:                ${enable_google} (OAuth 2.0, id:${with_google_client_id} secret:${with_google_client_secret})
 	IMAP/SMTP provider:             ${enable_imap_smtp}
 	Media Server provider:          ${enable_media_server}

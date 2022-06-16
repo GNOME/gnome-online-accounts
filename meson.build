@@ -137,18 +137,6 @@ if enable_fedora
 endif
 config_h.set('GOA_FEDORA_ENABLED', enable_fedora)
 
-# Flickr
-config_h.set_quoted('GOA_FLICKR_NAME', 'flickr')
-
-flickr_consumer_key = get_option('flickr_consumer_key')
-config_h.set_quoted('GOA_FLICKR_CONSUMER_KEY', flickr_consumer_key)
-
-flickr_consumer_secret = get_option('flickr_consumer_secret')
-config_h.set_quoted('GOA_FLICKR_CONSUMER_SECRET', flickr_consumer_secret)
-
-enable_flickr = get_option('flickr')
-config_h.set('GOA_FLICKR_ENABLED', enable_flickr)
-
 # Google
 config_h.set_quoted('GOA_GOOGLE_NAME', 'google')
 
@@ -295,10 +283,6 @@ output += '        inspector:                      ' + enable_inspector.to_strin
 output += '        introspection:                  ' + enable_introspection.to_string() + '\n'
 output += '        template file:                  ' + template_file + '\n\n'
 output += '        Fedora Account System provider: ' + enable_fedora.to_string() + '\n'
-output += '        Flickr provider:                ' + enable_flickr.to_string()
-if enable_flickr
-  output += ' (OAuth 1.0, key:@0@)'.format(flickr_consumer_key)
-endif
 output += '\n'
 output += '        Google provider:                ' + enable_google.to_string()
 if enable_google
