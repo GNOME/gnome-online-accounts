@@ -120,15 +120,6 @@ config_h.set_quoted('GOA_EXCHANGE_NAME', 'exchange')
 enable_exchange = get_option('exchange')
 config_h.set('GOA_EXCHANGE_ENABLED', enable_exchange)
 
-# Facebook
-config_h.set_quoted('GOA_FACEBOOK_NAME', 'facebook')
-
-facebook_client_id = get_option('facebook_client_id')
-config_h.set_quoted('GOA_FACEBOOK_CLIENT_ID', facebook_client_id)
-
-enable_facebook = get_option('facebook')
-config_h.set('GOA_FACEBOOK_ENABLED', enable_facebook)
-
 # Fedora
 config_h.set_quoted('GOA_FEDORA_NAME', 'fedora')
 config_h.set_quoted('GOA_FEDORA_REALM', 'FEDORAPROJECT.ORG')
@@ -299,11 +290,6 @@ output += '        goabackend:                     ' + enable_goabackend.to_stri
 output += '        inspector:                      ' + enable_inspector.to_string() + '\n'
 output += '        introspection:                  ' + enable_introspection.to_string() + '\n'
 output += '        template file:                  ' + template_file + '\n\n'
-output += '        Facebook provider:              ' + enable_facebook.to_string()
-if enable_facebook
-  output += ' (OAuth 2.0, id:@0@)'.format(facebook_client_id)
-endif
-output += '\n'
 output += '        Fedora Account System provider: ' + enable_fedora.to_string() + '\n'
 output += '        Flickr provider:                ' + enable_flickr.to_string()
 if enable_flickr

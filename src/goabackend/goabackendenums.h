@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 /**
  * GoaProviderGroup:
  * @GOA_PROVIDER_GROUP_BRANDED: Providers with a well-known brand. For
- *   example, Google and Facebook.
+ *   example, Google.
  * @GOA_PROVIDER_GROUP_CONTACTS: Providers that offer address book services.
  *   For example, CardDAV.
  * @GOA_PROVIDER_GROUP_MAIL: Providers that offer email-like messaging
@@ -69,7 +69,7 @@ typedef enum
  * @GOA_PROVIDER_FEATURE_TICKETING: Ticketing services (ie. Kerberos).
  * @GOA_PROVIDER_FEATURE_READ_LATER: Deprecated; currently unused.
  * @GOA_PROVIDER_FEATURE_PRINTERS: Network printing services (e.g. Google Cloud Print).
- * @GOA_PROVIDER_FEATURE_MAPS: Maps related services (e.g. Facebook).
+ * @GOA_PROVIDER_FEATURE_MAPS: Deprecated; currently unused.
  * @GOA_PROVIDER_FEATURE_MUSIC: Music related services (e.g. Vkontakte).
  * @GOA_PROVIDER_FEATURE_TODO: Deprecated; currently unused.
  * @GOA_PROVIDER_FEATURE_INVALID: Used for error handling. No provider

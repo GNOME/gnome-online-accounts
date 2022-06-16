@@ -2,25 +2,6 @@ GNOME Online Accounts - Single sign-on framework for GNOME
 ==========================================================
 
 
-Facebook
---------
-
-OAuth 2.0:
-https://developers.facebook.com/docs/authentication/
-https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow
-https://developers.facebook.com/docs/reference/dialogs/oauth/
-https://developers.facebook.com/tools/explorer/
-
-Scopes: https://developers.facebook.com/docs/authentication/permissions/
-
-Notes:
-The client-side flow returns the access_token and expires_in in the URI's
-fragment, and does not provide a refresh_token. However, if the user denied
-access then the error is returned in the URI's query. The URIs look like this:
-  - <get_redirect_uri>?#access_token=...
-  - <get_redirect_uri>?error=access_denied...#_=_
-
-
 Flickr
 ------
 

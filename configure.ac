@@ -289,24 +289,6 @@ if test "$enable_owncloud" != "no"; then
   AC_DEFINE(GOA_OWNCLOUD_ENABLED, 1, [Enable ownCloud data provider])
 fi
 
-# Facebook
-AC_DEFINE(GOA_FACEBOOK_NAME, ["facebook"], [ProviderType and extension point name])
-AC_ARG_ENABLE([facebook],
-              [AS_HELP_STRING([--enable-facebook], [Enable Facebook provider])],
-              [],
-              [enable_facebook=yes])
-AC_ARG_WITH(facebook-client-id,
-            [AS_HELP_STRING([--with-facebook-client-id], [Facebook OAuth 2.0 client id])],
-            [],
-            [])
-if test "$with_facebook_client_id" = ""; then
-  with_facebook_client_id=297654143624603
-fi
-AC_DEFINE_UNQUOTED(GOA_FACEBOOK_CLIENT_ID, ["$with_facebook_client_id"], [Facebook OAuth 2.0 client id])
-if test "$enable_facebook" != "no"; then
-  AC_DEFINE(GOA_FACEBOOK_ENABLED, 1, [Enable Facebook data provider])
-fi
-
 # Windows Live
 AC_DEFINE(GOA_WINDOWS_LIVE_NAME, ["windows_live"], [ProviderType and extension point name])
 AC_ARG_ENABLE([windows-live],
@@ -555,7 +537,6 @@ echo "
 	Microsoft Exchange provider:    ${enable_exchange}
 	ownCloud provider:              ${enable_owncloud}
 	Kerberos provider:              ${enable_kerberos}
-	Facebook provider:              ${enable_facebook} (OAuth 2.0, id:${with_facebook_client_id})
 	Windows Live provider:          ${enable_windows_live} (OAuth 2.0, id:${with_windows_live_client_id})
 	Last.fm provider:               ${enable_lastfm} (id:${with_lastfm_client_id} secret:${with_lastfm_client_secret})
 

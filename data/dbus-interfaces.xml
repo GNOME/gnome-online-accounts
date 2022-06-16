@@ -186,7 +186,9 @@
          Note that the #org.gnomeOnlineAccounts.Maps interface is added or
          removed from the account asynchronously.
     -->
-    <property name="MapsDisabled" type="b" access="readwrite"/>
+    <property name="MapsDisabled" type="b" access="readwrite">
+      <annotation name="org.freedesktop.DBus.Deprecated" value="true"/>
+    </property>
 
     <!-- MusicDisabled:
          @since: 3.18.0
@@ -688,8 +690,12 @@
 
       An account object implements this interface if it provides
       maps-like capabilities.
+
+      The #org.gnome.OnlineAccounts.Maps interface is not used by
+      any account.
   -->
   <interface name="org.gnome.OnlineAccounts.Maps">
+    <annotation name="org.freedesktop.DBus.Deprecated" value="true"/>
   </interface>
 
   <!--

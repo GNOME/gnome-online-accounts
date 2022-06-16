@@ -4,7 +4,6 @@ icondir = $(datadir)/icons/hicolor/scalable/apps
 icon_DATA =				\
 	goa-account.svg			\
 	goa-account-exchange.svg	\
-	goa-account-facebook.svg	\
 	goa-account-fedora.svg		\
 	goa-account-flickr.svg		\
 	goa-account-google.svg		\
