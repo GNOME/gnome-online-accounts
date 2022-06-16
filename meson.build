@@ -83,8 +83,8 @@ gio_unix_dep = dependency('gio-unix-2.0', version: glib_req_version)
 glib_dep = dependency('glib-2.0', version: glib_req_version)
 
 dbus_dep = dependency('dbus-1')
-dbus_service_dir = dbus_dep.get_pkgconfig_variable('session_bus_services_dir',
-                                                   define_variable: ['datadir', goa_datadir])
+dbus_service_dir = dbus_dep.get_variable(pkgconfig: 'session_bus_services_dir',
+                                         pkgconfig_define: ['datadir', goa_datadir])
 
 # Libraries
 # introspection support
