@@ -105,7 +105,7 @@ if enable_goabackend
   rest_dep = dependency('rest-1.0',
     version: '>= 0.9.0',
     fallback: ['librest', 'librest_dep'],
-    default_options: ['soup2=false', 'examples=false', 'gtk_doc=false'],
+    default_options: ['soup2=false', 'examples=false', 'tests=false', 'gtk_doc=false'],
   )
   webkit_gtk_dep = dependency('webkit2gtk-4.1', version: '>= 2.33.1')
 endif
