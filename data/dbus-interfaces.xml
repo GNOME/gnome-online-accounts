@@ -272,7 +272,9 @@
          Note that the #org.gnomeOnlineAccounts.ReadLater interface is added or
          removed from the account asynchronously.
     -->
-    <property name="ReadLaterDisabled" type="b" access="readwrite"/>
+    <property name="ReadLaterDisabled" type="b" access="readwrite">
+      <annotation name="org.freedesktop.DBus.Deprecated" value="true"/>
+    </property>
 
     <!--
         Remove:
