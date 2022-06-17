@@ -240,6 +240,7 @@ goa_http_client_check (GoaHttpClient       *self,
   g_task_set_task_data (task, data, http_client_check_data_free);
 
   data->session = soup_session_new ();
+  soup_session_set_user_agent (data->session, "gnome-online-accounts/" PACKAGE_VERSION " ");
 
   logger = goa_soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
   soup_session_add_feature (data->session, SOUP_SESSION_FEATURE (logger));
