@@ -1,46 +1,13 @@
 GNOME Online Accounts - Single sign-on framework for GNOME
 ==========================================================
 
+GNOME Online Accounts is a single sign-on framework for GNOME. It aims to
+provide a way for users to setup online accounts to be used by the core
+system and core applications only. Calendar entries show up in GNOME Shell,
+e-mail in Evolution, online storages are exposed as GVolumes, and so on.
 
-Google
-------
+Goals
+-----
 
-OAuth 2.0:
-https://developers.google.com/accounts/docs/OAuth2InstalledApp
-https://developers.google.com/apis-explorer/
-https://developers.google.com/oauthplayground/
-
-Scopes:
-https://developers.google.com/accounts/docs/OAuth2Login
-https://developers.google.com/google-apps/calendar/auth
-https://developers.google.com/google-apps/contacts/v3/
-https://developers.google.com/drive/web/scopes
-https://developers.google.com/google-apps/gmail/oauth_protocol
-https://developers.google.com/picasa-web/docs/2.0/developers_guide_protocol
-https://developers.google.com/talk/jep_extensions/oauth
-https://developers.google.com/cloud-print/docs/devguide
-
-Sometimes the documentation is lacking. In such cases, the following can be
-useful:
-https://developers.google.com/apis-explorer/
-https://developers.google.com/oauthplayground/
-https://discovery-check.appspot.com/
-
-Notes:
-We are allowed to embed the client_secret in the source code. See
-https://developers.google.com/accounts/docs/OAuth2InstalledApp#overview
-
-
-Windows Live
-------------
-
-OAuth 2.0: http://msdn.microsoft.com/en-us/library/live/hh243647.aspx
-
-Scopes:
-http://msdn.microsoft.com/en-us/library/live/hh243646.aspx
-http://blogs.office.com/b/microsoft-outlook/archive/2013/09/12/outlook-com-now-with-imap.aspx
-
-Notes:
-We do not need the client_secret because we are marked as a desktop or mobile
-application, and we use https://login.live.com/oauth20_desktop.srf as the
-redirect_uri.
+For more information on the goals of the GNOME Online Accounts project, please
+see the [goals documentation](./doc/goals.md).
