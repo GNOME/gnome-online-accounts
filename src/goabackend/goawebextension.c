@@ -21,7 +21,6 @@
 
 #include <webkitdom/webkitdom.h>
 
-#include "goaoauthprovider.h"
 #include "goaoauth2provider.h"
 #include "goaoauth2provider-web-extension.h"
 #include "goaprovider.h"
@@ -86,10 +85,8 @@ web_extension_document_loaded_cb (WebKitWebPage *web_page, gpointer user_data)
     {
       WebKitDOMNode *element = webkit_dom_html_collection_item (elements, i);
 
-      if ((GOA_IS_OAUTH_PROVIDER (self->provider)
-           && goa_oauth_provider_is_deny_node (GOA_OAUTH_PROVIDER (self->provider), element))
-          || (GOA_IS_OAUTH2_PROVIDER (self->provider)
-              && goa_oauth2_provider_is_deny_node (GOA_OAUTH2_PROVIDER (self->provider), element)))
+      if (GOA_IS_OAUTH2_PROVIDER (self->provider)
+          && goa_oauth2_provider_is_deny_node (GOA_OAUTH2_PROVIDER (self->provider), element))
         {
           webkit_dom_event_target_add_event_listener (WEBKIT_DOM_EVENT_TARGET (element),
                                                       "click",
@@ -100,24 +97,18 @@ web_extension_document_loaded_cb (WebKitWebPage *web_page, gpointer user_data)
       else if (self->existing_identity != NULL
                && self->existing_identity[0] != '\0'
                && WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element)
-               && ((GOA_IS_OAUTH_PROVIDER (self->provider)
-                    && goa_oauth_provider_is_identity_node (GOA_OAUTH_PROVIDER (self->provider),
-                                                            WEBKIT_DOM_HTML_INPUT_ELEMENT (element)))
-                   || (GOA_IS_OAUTH2_PROVIDER (self->provider)
-                       && goa_oauth2_provider_is_identity_node (GOA_OAUTH2_PROVIDER (self->provider),
-                                                                WEBKIT_DOM_HTML_INPUT_ELEMENT (element)))))
+               && ((GOA_IS_OAUTH2_PROVIDER (self->provider)
+                   && goa_oauth2_provider_is_identity_node (GOA_OAUTH2_PROVIDER (self->provider),
+                                                            WEBKIT_DOM_HTML_INPUT_ELEMENT (element)))))
         {
           webkit_dom_html_input_element_set_value (WEBKIT_DOM_HTML_INPUT_ELEMENT (element),
                                                    self->existing_identity);
           webkit_dom_html_input_element_set_read_only (WEBKIT_DOM_HTML_INPUT_ELEMENT (element), TRUE);
         }
       else if (WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element)
-               && ((GOA_IS_OAUTH_PROVIDER (self->provider)
-                   && goa_oauth_provider_is_password_node (GOA_OAUTH_PROVIDER (self->provider),
-                                                           WEBKIT_DOM_HTML_INPUT_ELEMENT (element)))
-                   || (GOA_IS_OAUTH2_PROVIDER (self->provider)
-                       && goa_oauth2_provider_is_password_node (GOA_OAUTH2_PROVIDER (self->provider),
-                                                                WEBKIT_DOM_HTML_INPUT_ELEMENT (element)))))
+               && (GOA_IS_OAUTH2_PROVIDER (self->provider)
+                   && goa_oauth2_provider_is_password_node (GOA_OAUTH2_PROVIDER (self->provider),
+                                                            WEBKIT_DOM_HTML_INPUT_ELEMENT (element))))
         {
           WebKitDOMHTMLFormElement *form;
 

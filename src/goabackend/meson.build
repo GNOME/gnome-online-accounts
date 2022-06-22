@@ -3,7 +3,6 @@ libgoa_backend_headers_built = []
 
 libgoa_backend_sources = files(
   'goaoauth2provider.c',
-  'goaoauthprovider.c',
   'goabackendinit.c',
   'goadlnaservermanager.c',
   'goaewsclient.c',
