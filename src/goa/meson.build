@@ -35,11 +35,8 @@ goaconfig_conf.set('GOA_MAJOR_VERSION', goa_major_version)
 goaconfig_conf.set('GOA_MINOR_VERSION', goa_minor_version)
 goaconfig_conf.set('GOA_MICRO_VERSION', goa_micro_version)
 
-goaconfig = 'goaconfig.h'
-
 goaconfig_h = configure_file(
-  input: goaconfig + '.in',
-  output: goaconfig,
+  output: 'goaconfig.h',
   configuration: goaconfig_conf,
   install: true,
   install_dir: join_paths(goa_pkglibdir, 'include')
