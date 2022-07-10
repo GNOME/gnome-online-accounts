@@ -271,42 +271,65 @@ meson.add_install_script(
   enable_goabackend ? 'compile-schemas' : ''
 )
 
-output = '\n        gnome-online-accounts ' + goa_version + '\n'
-output += '        =============================\n'
-output += '        prefix:                         ' + goa_prefix + '\n'
-output += '        libdir:                         ' + goa_libdir + '\n'
-output += '        libexecdir:                     ' + goa_libexecdir + '\n'
-output += '        datadir:                        ' + goa_datadir + '\n'
-output += '        compiler:                       ' + cc.get_id() + '\n'
-output += '        cflags:                         ' + ' '.join(compiler_flags) + '\n\n'
-output += '        goabackend:                     ' + enable_goabackend.to_string() + '\n'
-output += '        inspector:                      ' + enable_inspector.to_string() + '\n'
-output += '        introspection:                  ' + enable_introspection.to_string() + '\n'
-output += '        template file:                  ' + template_file + '\n\n'
-output += '        Fedora Account System provider: ' + enable_fedora.to_string() + '\n'
-output += '\n'
-output += '        Google provider:                ' + enable_google.to_string()
+summary({
+    'prefix': goa_prefix,
+    'libdir': goa_libdir,
+    'libexecdir': goa_libexecdir,
+    'datadir': goa_datadir,
+  },
+  section: 'Directories',
+)
+
+summary({
+    'Backend': enable_goabackend,
+    'Inspector': enable_inspector,
+    'Introspection': enable_introspection,
+    'Template tile': template_file,
+    'Vala support': enable_vapi,
+    'API docs': enable_gtk_doc,
+    'Man pages': enable_man,
+  },
+  bool_yn: true,
+  section: 'Options',
+)
+
+summary({
+    'Fedora Account System': enable_fedora,
+    'Google': enable_google,
+    'IMAP/SMTP': enable_imap_smtp,
+    'Kerberos': enable_kerberos,
+    'Last.fm': enable_lastfm,
+    'Media Server': enable_media_server,
+    'Microsoft Exchange': enable_exchange,
+    'ownCloud': enable_owncloud,
+    'Windows Live': enable_windows_live,
+  },
+  bool_yn: true,
+  section: 'Providers',
+)
+
 if enable_google
-  output += ' (OAuth 2.0, id:@0@ secret:@1@)'.format(google_client_id, google_client_secret)
+  summary({
+      'id': google_client_id,
+      'secret': google_client_secret,
+    },
+    section: 'Google Provider OAuth 2.0',
+  )
 endif
-output += '\n'
-output += '        IMAP/SMTP provider:             ' + enable_imap_smtp.to_string() + '\n'
-output += '        Kerberos provider:              ' + enable_kerberos.to_string() + '\n'
-output += '        Last.fm provider:               ' + enable_lastfm.to_string()
+
 if enable_lastfm
-  output += ' (id:@0@ secret:@1@)'.format(lastfm_client_id, lastfm_client_secret)
+  summary({
+      'id': lastfm_client_id,
+      'secret': lastfm_client_secret,
+    },
+    section: 'Last.fm Provider OAuth 2.0',
+  )
 endif
-output += '\n'
-output += '        Media Server provider:          ' + enable_media_server.to_string() + '\n'
-output += '        Microsoft Exchange provider:    ' + enable_exchange.to_string() + '\n'
-output += '        ownCloud provider:              ' + enable_owncloud.to_string() + '\n'
-output += '        Windows Live provider:          ' + enable_windows_live.to_string()
+
 if enable_windows_live
-  output += ' (OAuth 2.0, id:@0@)'.format(windows_live_client_id)
+  summary({
+      'id': windows_live_client_id,
+    },
+    section: 'Windows Live Provider OAuth 2.0',
+  )
 endif
-output += '\n\n'
-output += '        Build type:                     ' + goa_buildtype + '\n'
-output += '        Vala:                           ' + enable_vapi.to_string() + '\n'
-output += '        Build api docs:                 ' + enable_gtk_doc.to_string() + '\n'
-output += '        Build man:                      ' + enable_man.to_string()
-message(output)
