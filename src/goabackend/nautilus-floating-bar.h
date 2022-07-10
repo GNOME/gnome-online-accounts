@@ -42,11 +42,9 @@
 
 typedef struct _NautilusFloatingBar NautilusFloatingBar;
 typedef struct _NautilusFloatingBarClass NautilusFloatingBarClass;
-typedef struct _NautilusFloatingBarDetails NautilusFloatingBarDetails;
 
 struct _NautilusFloatingBar {
 	GtkBox parent;
-	NautilusFloatingBarDetails *priv;
 };
 
 struct _NautilusFloatingBarClass {

@@ -25,14 +25,14 @@
 
 #include "nautilus-floating-bar.h"
 
-struct _NautilusFloatingBarDetails {
+typedef struct {
 	gchar *label;
 
 	GtkWidget *label_widget;
 	GtkWidget *spinner;
 	gboolean show_spinner;
 	gboolean is_interactive;
-};
+} NautilusFloatingBarPrivate;
 
 enum {
 	PROP_LABEL = 1,
@@ -48,8 +48,7 @@ enum {
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 static guint signals[NUM_SIGNALS] = { 0, };
 
-G_DEFINE_TYPE (NautilusFloatingBar, nautilus_floating_bar,
-               GTK_TYPE_BOX);
+G_DEFINE_TYPE_WITH_PRIVATE (NautilusFloatingBar, nautilus_floating_bar, GTK_TYPE_BOX)
 
 static void
 action_button_clicked_cb (GtkButton *button,
@@ -67,8 +66,9 @@ static void
 nautilus_floating_bar_finalize (GObject *obj)
 {
 	NautilusFloatingBar *self = NAUTILUS_FLOATING_BAR (obj);
+        NautilusFloatingBarPrivate *priv = nautilus_floating_bar_get_instance_private (self);
 
-	g_free (self->priv->label);
+	g_free (priv->label);
 
 	G_OBJECT_CLASS (nautilus_floating_bar_parent_class)->finalize (obj);
 }
@@ -80,13 +80,14 @@ nautilus_floating_bar_get_property (GObject *object,
 				    GParamSpec *pspec)
 {
 	NautilusFloatingBar *self = NAUTILUS_FLOATING_BAR (object);
+        NautilusFloatingBarPrivate *priv = nautilus_floating_bar_get_instance_private (self);
 
 	switch (property_id) {
 	case PROP_LABEL:
-		g_value_set_string (value, self->priv->label);
+		g_value_set_string (value, priv->label);
 		break;
 	case PROP_SHOW_SPINNER:
-		g_value_set_boolean (value, self->priv->show_spinner);
+		g_value_set_boolean (value, priv->show_spinner);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -118,7 +119,9 @@ nautilus_floating_bar_set_property (GObject *object,
 static void
 update_label (NautilusFloatingBar *self)
 {
-	gtk_label_set_text (GTK_LABEL (self->priv->label_widget), self->priv->label);
+        NautilusFloatingBarPrivate *priv = nautilus_floating_bar_get_instance_private (self);
+
+	gtk_label_set_text (GTK_LABEL (priv->label_widget), priv->label);
 }
 
 static gboolean
@@ -126,13 +129,15 @@ overlay_enter_notify_cb (GtkWidget        *parent,
 			 GdkEventCrossing *event,
 			 gpointer          user_data)
 {
+        NautilusFloatingBar *self = user_data;
+        NautilusFloatingBarPrivate *priv = nautilus_floating_bar_get_instance_private (self);
 	GtkWidget *widget = user_data;
 
 	if (event->window != gtk_widget_get_window (widget)) {
 		return FALSE;
 	}
 
-	if (NAUTILUS_FLOATING_BAR (widget)->priv->is_interactive) {
+	if (priv->is_interactive) {
 		return FALSE;
 	}
 
@@ -170,11 +175,12 @@ static void
 nautilus_floating_bar_show (GtkWidget *widget)
 {
 	NautilusFloatingBar *self = NAUTILUS_FLOATING_BAR (widget);
+        NautilusFloatingBarPrivate *priv = nautilus_floating_bar_get_instance_private (self);
 
 	GTK_WIDGET_CLASS (nautilus_floating_bar_parent_class)->show (widget);
 
-	if (self->priv->show_spinner) {
-		gtk_spinner_start (GTK_SPINNER (self->priv->spinner));
+	if (priv->show_spinner) {
+		gtk_spinner_start (GTK_SPINNER (priv->spinner));
 	}
 }
 
@@ -182,10 +188,11 @@ static void
 nautilus_floating_bar_hide (GtkWidget *widget)
 {
 	NautilusFloatingBar *self = NAUTILUS_FLOATING_BAR (widget);
+        NautilusFloatingBarPrivate *priv = nautilus_floating_bar_get_instance_private (self);
 
 	GTK_WIDGET_CLASS (nautilus_floating_bar_parent_class)->hide (widget);
 
-	gtk_spinner_stop (GTK_SPINNER (self->priv->spinner));
+	gtk_spinner_stop (GTK_SPINNER (priv->spinner));
 }
 
 static gboolean
@@ -216,6 +223,7 @@ static void
 nautilus_floating_bar_constructed (GObject *obj)
 {
 	NautilusFloatingBar *self = NAUTILUS_FLOATING_BAR (obj);
+        NautilusFloatingBarPrivate *priv = nautilus_floating_bar_get_instance_private (self);
 	GtkWidget *w, *box;
 
 	G_OBJECT_CLASS (nautilus_floating_bar_parent_class)->constructed (obj);
@@ -224,8 +232,8 @@ nautilus_floating_bar_constructed (GObject *obj)
 
 	w = gtk_spinner_new ();
 	gtk_box_pack_start (GTK_BOX (box), w, FALSE, FALSE, 0);
-	gtk_widget_set_visible (w, self->priv->show_spinner);
-	self->priv->spinner = w;
+	gtk_widget_set_visible (w, priv->show_spinner);
+	priv->spinner = w;
 
 	gtk_widget_set_size_request (w, 16, 16);
 	gtk_widget_set_margin_start (w, 8);
@@ -240,7 +248,7 @@ nautilus_floating_bar_constructed (GObject *obj)
 		      "margin-right", 12,
 		      "max-width-chars", 60,
 		      NULL);
-	self->priv->label_widget = w;
+	priv->label_widget = w;
 	gtk_widget_show (w);
 }
 
@@ -248,9 +256,6 @@ static void
 nautilus_floating_bar_init (NautilusFloatingBar *self)
 {
 	GtkStyleContext *context;
-
-	self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, NAUTILUS_TYPE_FLOATING_BAR,
-						  NautilusFloatingBarDetails);
 
 	context = gtk_widget_get_style_context (GTK_WIDGET (self));
 	gtk_style_context_add_class (context, "floating-bar");
@@ -294,7 +299,6 @@ nautilus_floating_bar_class_init (NautilusFloatingBarClass *klass)
 			      G_TYPE_NONE, 1,
 			      G_TYPE_INT);
 
-	g_type_class_add_private (klass, sizeof (NautilusFloatingBarDetails));
 	g_object_class_install_properties (oclass, NUM_PROPERTIES, properties);
 }
 
@@ -302,9 +306,11 @@ void
 nautilus_floating_bar_set_label (NautilusFloatingBar *self,
 				 const gchar *label)
 {
-	if (g_strcmp0 (self->priv->label, label) != 0) {
-		g_free (self->priv->label);
-		self->priv->label = g_strdup (label);
+        NautilusFloatingBarPrivate *priv = nautilus_floating_bar_get_instance_private (self);
+
+	if (g_strcmp0 (priv->label, label) != 0) {
+		g_free (priv->label);
+		priv->label = g_strdup (label);
 
 		g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_LABEL]);
 
@@ -316,10 +322,11 @@ void
 nautilus_floating_bar_set_show_spinner (NautilusFloatingBar *self,
 					gboolean show_spinner)
 {
-	if (self->priv->show_spinner != show_spinner) {
-		self->priv->show_spinner = show_spinner;
-		gtk_widget_set_visible (self->priv->spinner,
-					show_spinner);
+        NautilusFloatingBarPrivate *priv = nautilus_floating_bar_get_instance_private (self);
+
+	if (priv->show_spinner != show_spinner) {
+		priv->show_spinner = show_spinner;
+		gtk_widget_set_visible (priv->spinner, show_spinner);
 
 		g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_SPINNER]);
 	}
@@ -342,6 +349,7 @@ nautilus_floating_bar_add_action (NautilusFloatingBar *self,
 				  const gchar *icon_name,
 				  gint action_id)
 {
+        NautilusFloatingBarPrivate *priv = nautilus_floating_bar_get_instance_private (self);
 	GtkWidget *w, *button;
 
 	w = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
@@ -358,12 +366,13 @@ nautilus_floating_bar_add_action (NautilusFloatingBar *self,
 	g_signal_connect (button, "clicked",
 			  G_CALLBACK (action_button_clicked_cb), self);
 
-	self->priv->is_interactive = TRUE;
+	priv->is_interactive = TRUE;
 }
 
 void
 nautilus_floating_bar_cleanup_actions (NautilusFloatingBar *self)
 {
+        NautilusFloatingBarPrivate *priv = nautilus_floating_bar_get_instance_private (self);
 	GtkWidget *widget;
 	GList *children, *l;
 	gpointer data;
@@ -384,5 +393,5 @@ nautilus_floating_bar_cleanup_actions (NautilusFloatingBar *self)
 
 	g_list_free (children);
 
-	self->priv->is_interactive = FALSE;
+	priv->is_interactive = FALSE;
 }
