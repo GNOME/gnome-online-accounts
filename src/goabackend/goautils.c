@@ -964,3 +964,100 @@ out:
   g_free (password);
   return ret;
 }
+
+char *
+goa_utils_dav_normalize_uri (const char  *address,
+                             char       **server)
+{
+  GUri *uri = NULL;
+  GUri *uri_tmp = NULL;
+  const gchar *path;
+  const gchar *new_scheme;
+  gchar *new_path = NULL;
+  gchar *ret = NULL;
+  gchar *scheme = NULL;
+  gchar *uri_string = NULL;
+  guint std_port = 0;
+
+  scheme = g_uri_parse_scheme (address);
+
+  /* dav(s) is used by DNS-SD and gvfs */
+  if (g_strcmp0 (scheme, "http") == 0 ||
+      g_strcmp0 (scheme, "dav") == 0)
+    {
+      uri_string = g_strdup (address);
+      std_port = 80;
+    }
+  else if (g_strcmp0 (scheme, "https") == 0 ||
+           g_strcmp0 (scheme, "davs") == 0)
+    {
+      uri_string = g_strdup (address);
+      std_port = 443;
+    }
+  else if (scheme == NULL)
+    {
+      uri_string = g_strconcat ("https://", address, NULL);
+      std_port = 443;
+    }
+  else
+    goto out;
+
+  uri = g_uri_parse (uri_string, G_URI_FLAGS_ENCODED, NULL);
+  if (uri == NULL)
+    goto out;
+
+  if (g_strcmp0 (scheme, "dav") == 0)
+    new_scheme = "http";
+  else if (g_strcmp0 (scheme, "davs") == 0)
+    new_scheme = "https";
+  else
+    new_scheme = g_uri_get_scheme (uri);
+
+  path = g_uri_get_path (uri);
+  if (!g_str_has_suffix (path, "/"))
+    new_path = g_strconcat (path, "/", NULL);
+
+  uri_tmp = g_uri_build (g_uri_get_flags (uri),
+                         new_scheme,
+                         g_uri_get_userinfo (uri),
+                         g_uri_get_host (uri),
+                         g_uri_get_port (uri),
+                         new_path ? new_path : path,
+                         g_uri_get_query (uri),
+                         g_uri_get_fragment (uri));
+  g_free (new_path);
+  g_uri_unref (uri);
+  uri = uri_tmp;
+  path = g_uri_get_path (uri);
+
+  if (server != NULL)
+    {
+      char *port_string;
+      char *pretty_path;
+      int port;
+
+      port = g_uri_get_port (uri);
+      port_string = g_strdup_printf (":%d", port);
+
+      pretty_path = g_strdup (path);
+      pretty_path[strlen(pretty_path) - 1] = '\0';
+
+      *server = g_strconcat (g_uri_get_host (uri),
+                             (port == std_port || port == -1)
+                               ? ""
+                               : port_string, pretty_path,
+                             NULL);
+
+      g_free (port_string);
+      g_free (pretty_path);
+    }
+
+  ret = g_uri_to_string (uri);
+
+ out:
+  g_clear_pointer (&uri, g_uri_unref);
+  g_free (scheme);
+  g_free (uri_string);
+  return ret;
+}
+

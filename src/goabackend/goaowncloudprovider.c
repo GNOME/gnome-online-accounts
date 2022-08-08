@@ -361,97 +361,6 @@ add_entry (GtkWidget     *grid,
     *out_entry = entry;
 }
 
-static gchar *
-normalize_uri (const gchar *address, gchar **server)
-{
-  GUri *uri = NULL;
-  GUri *uri_tmp = NULL;
-  const gchar *path;
-  const gchar *new_scheme;
-  gchar *new_path = NULL;
-  gchar *ret = NULL;
-  gchar *scheme = NULL;
-  gchar *uri_string = NULL;
-  guint std_port = 0;
-
-  scheme = g_uri_parse_scheme (address);
-
-  if (g_strcmp0 (scheme, "http") == 0
-      || g_strcmp0 (scheme, "dav") == 0)   /* dav(s) is used by DNS-SD
-                                              and gvfs */
-    {
-      uri_string = g_strdup (address);
-      std_port = 80;
-    }
-  else if (g_strcmp0 (scheme, "https") == 0
-           || g_strcmp0 (scheme, "davs") == 0)
-    {
-      uri_string = g_strdup (address);
-      std_port = 443;
-    }
-  else if (scheme == NULL)
-    {
-      uri_string = g_strconcat ("https://", address, NULL);
-      std_port = 443;
-    }
-  else
-    goto out;
-
-  uri = g_uri_parse (uri_string, G_URI_FLAGS_ENCODED, NULL);
-  if (uri == NULL)
-    goto out;
-
-  if (g_strcmp0 (scheme, "dav") == 0)
-    new_scheme = "http";
-  else if (g_strcmp0 (scheme, "davs") == 0)
-    new_scheme = "https";
-  else
-    new_scheme = g_uri_get_scheme (uri);
-
-  path = g_uri_get_path (uri);
-  if (!g_str_has_suffix (path, "/"))
-      new_path = g_strconcat (path, "/", NULL);
-
-  uri_tmp = g_uri_build (g_uri_get_flags (uri),
-                         new_scheme,
-                         g_uri_get_userinfo (uri),
-                         g_uri_get_host (uri),
-                         g_uri_get_port (uri),
-                         new_path ? new_path : path,
-                         g_uri_get_query (uri),
-                         g_uri_get_fragment (uri));
-  g_free (new_path);
-  g_uri_unref (uri);
-  uri = uri_tmp;
-  path = g_uri_get_path (uri);
-
-  if (server != NULL)
-    {
-      gchar *port_string;
-      gchar *pretty_path;
-      gint port;
-
-      port = g_uri_get_port (uri);
-      port_string = g_strdup_printf (":%d", port);
-
-      pretty_path = g_strdup (path);
-      pretty_path[strlen(pretty_path) - 1] = '\0';
-
-      *server = g_strconcat (g_uri_get_host (uri), (port == std_port || port == -1) ? "" : port_string, pretty_path, NULL);
-
-      g_free (port_string);
-      g_free (pretty_path);
-    }
-
-  ret = g_uri_to_string (uri);
-
- out:
-  g_clear_pointer (&uri, g_uri_unref);
-  g_free (scheme);
-  g_free (uri_string);
-  return ret;
-}
-
 static void
 on_uri_username_or_password_changed (GtkEditable *editable, gpointer user_data)
 {
@@ -461,7 +370,7 @@ on_uri_username_or_password_changed (GtkEditable *editable, gpointer user_data)
   gchar *uri = NULL;
 
   address = gtk_entry_get_text (GTK_ENTRY (data->uri));
-  uri = normalize_uri (address, NULL);
+  uri = goa_utils_dav_normalize_uri (address, NULL);
   if (uri == NULL)
     goto out;
 
@@ -676,7 +585,7 @@ add_account (GoaProvider    *provider,
   username = gtk_entry_get_text (GTK_ENTRY (data.username));
   password = gtk_entry_get_text (GTK_ENTRY (data.password));
 
-  uri = normalize_uri (uri_text, &server);
+  uri = goa_utils_dav_normalize_uri (uri_text, &server);
   presentation_identity = g_strconcat (username, "@", server, NULL);
 
   /* See if there's already an account of this type with the
@@ -957,7 +866,7 @@ refresh_account (GoaProvider    *provider,
       id = goa_account_get_id (account);
       provider_type = goa_provider_get_provider_type (provider);
 
-      dummy = normalize_uri (uri, &server);
+      dummy = goa_utils_dav_normalize_uri (uri, &server);
       presentation_identity = g_strconcat (username, "@", server, NULL);
       g_free (dummy);
       g_free (server);

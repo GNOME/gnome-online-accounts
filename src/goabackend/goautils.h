@@ -118,6 +118,9 @@ gboolean         goa_utils_get_credentials (GoaProvider    *provider,
                                             GCancellable   *cancellable,
                                             GError        **error);
 
+char *           goa_utils_dav_normalize_uri (const char  *address,
+                                              char       **server);
+
 G_END_DECLS
 
 #endif /* __GOA_UTILS_H__ */
