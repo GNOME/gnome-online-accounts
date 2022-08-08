@@ -10,6 +10,44 @@ if enable_gtk_doc
     configuration: version_conf
   )
 
+  ignored_headers = [
+    # builddir/goabackend
+    'goadleynaservermanager.h',
+    'goadleynaservermediadevice.h',
+
+    # srcdir/goabackend
+    'gconstructor.h',
+    'goabackendenums-priv.h',
+    'goadlnaservermanager.h',
+    'goaewsclient.h',
+    'goaexchangeprovider.h',
+    'goafedoraprovider.h',
+    'goagoogleprovider.h',
+    'goahttpclient.h',
+    'goaimapauthlogin.h',
+    'goaimapsmtpprovider.h',
+    'goakerberosprovider.h',
+    'goalastfmprovider.h',
+    'goamailauth.h',
+    'goamailclient.h',
+    'goamediaserverprovider.h',
+    'goaoauth2provider-priv.h',
+    'goaoauth2provider-web-extension.h',
+    'goaoauth2provider-web-view.h',
+    'goaoauth2provider.h',
+    'goaobjectskeletonutils.h',
+    'goaowncloudprovider.h',
+    'goaprovider-priv.h',
+    'goarestproxy.h',
+    'goasmtpauth.h',
+    'goasouplogger.h',
+    'goautils.h',
+    'goawebextension.h',
+    'goawebview.h',
+    'goawindowsliveprovider.h',
+    'nautilus-floating-bar.h',
+  ]
+
   expand_content_files = files(
     'goa-daemon.xml',
     'goa-overview.xml'
@@ -19,12 +57,13 @@ if enable_gtk_doc
     goa_name,
     main_xml: goa_name + '-docs.xml',
     src_dir: [goa_inc, goabackend_inc],
+    ignore_headers: ignored_headers,
     dependencies: libgoa_backend_dep,
     mkdb_args: '--name-space=' + goa_name,
     fixxref_args: '--html-dir=' + join_paths(goa_prefix, gnome.gtkdoc_html_dir(goa_name)),
     gobject_typesfile: files(goa_name + '.types'),
     expand_content_files: expand_content_files,
-    install: true
+    install: true,
   )
 endif
 
