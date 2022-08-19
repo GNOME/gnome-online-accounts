@@ -93,7 +93,6 @@ build_object (GoaProvider         *provider,
   GoaAccount *account = NULL;
   gchar *uri_string = NULL;
   GUri *uri = NULL;
-  gchar *uri_string_with_user = NULL;
   GoaPasswordBased *password_based = NULL;
   gboolean accept_ssl_errors;
   gboolean contacts_enabled;
@@ -102,12 +101,12 @@ build_object (GoaProvider         *provider,
 
   /* Chain up */
   if (!GOA_PROVIDER_CLASS (goa_carddav_provider_parent_class)->build_object (provider,
-                                                                              object,
-                                                                              key_file,
-                                                                              group,
-                                                                              connection,
-                                                                              just_added,
-                                                                              error))
+                                                                             object,
+                                                                             key_file,
+                                                                             group,
+                                                                             connection,
+                                                                             just_added,
+                                                                             error))
     goto out;
 
   password_based = goa_object_get_password_based (GOA_OBJECT (object));
@@ -128,7 +127,7 @@ build_object (GoaProvider         *provider,
   identity = goa_account_get_identity (account);
   uri_string = g_key_file_get_string (key_file, group, "Uri", NULL);
   uri = g_uri_parse (uri_string, G_URI_FLAGS_ENCODED, NULL);
-  if (uri != NULL)
+  if (uri != NULL && identity != NULL)
     {
       GUri *tmp_uri =
         g_uri_build_with_user (g_uri_get_flags (uri),
@@ -142,18 +141,19 @@ build_object (GoaProvider         *provider,
                                g_uri_get_query (uri),
                                g_uri_get_fragment (uri));
 
-      uri_string_with_user = g_uri_to_string (tmp_uri);
-
       g_uri_unref (uri);
       uri = tmp_uri;
     }
 
-  accept_ssl_errors = g_key_file_get_boolean (key_file, group, "AcceptSslErrors", NULL);
+  if (uri != NULL)
+    {
+      g_free (uri_string);
+      uri_string = g_uri_to_string (uri);
+    }
 
-  /* Contacts */
+  accept_ssl_errors = g_key_file_get_boolean (key_file, group, "AcceptSslErrors", NULL);
   contacts_enabled = g_key_file_get_boolean (key_file, group, "ContactsEnabled", NULL);
-  goa_object_skeleton_attach_contacts (object, uri_string_with_user, contacts_enabled, accept_ssl_errors);
-  g_free (uri_string_with_user);
+  goa_object_skeleton_attach_contacts (object, uri_string, contacts_enabled, accept_ssl_errors);
 
   if (just_added)
     {
@@ -233,7 +233,7 @@ ensure_credentials_sync (GoaProvider         *provider,
   if (out_expires_in != NULL)
     *out_expires_in = 0;
 
- out:
+out:
   g_clear_object (&http_client);
   g_free (username);
   g_free (password);
@@ -576,7 +576,7 @@ add_account (GoaProvider    *provider,
         }
 
       markup = g_strdup_printf ("<b>%s:</b>\n%s",
-                                _("Error connecting to CradDav server"),
+                                _("Error connecting to CardDav server"),
                                 data.error->message);
       g_clear_error (&data.error);
 
@@ -623,7 +623,7 @@ add_account (GoaProvider    *provider,
   ret = GOA_OBJECT (g_dbus_object_manager_get_object (goa_client_get_object_manager (client),
                                                       data.account_object_path));
 
- out:
+out:
   /* We might have an object even when data.error is set.
    * eg., if we failed to store the credentials in the keyring.
    */
@@ -785,9 +785,9 @@ refresh_account (GoaProvider    *provider,
       GoaManager *manager;
       const gchar *id;
       const gchar *provider_type;
-      gchar *dummy = NULL;
-      gchar *presentation_identity = NULL;
-      gchar *server = NULL;
+      gchar *dummy;
+      gchar *presentation_identity;
+      gchar *server;
 
       manager = goa_client_get_manager (client);
       id = goa_account_get_id (account);
@@ -832,7 +832,7 @@ refresh_account (GoaProvider    *provider,
 
   ret = TRUE;
 
- out:
+out:
   if (data.error != NULL)
     g_propagate_error (error, data.error);
 
@@ -906,7 +906,7 @@ on_handle_get_password (GoaPasswordBased      *interface,
 
   goa_password_based_complete_get_password (interface, invocation, password);
 
- out:
+out:
   g_free (password);
   g_object_unref (provider);
   return TRUE; /* invocation was handled */

@@ -18,6 +18,8 @@
 
 #include "config.h"
 
+#include <string.h>
+
 #include <glib/gi18n-lib.h>
 
 #include <libsoup/soup.h>
@@ -91,9 +93,8 @@ build_object (GoaProvider         *provider,
   GoaAccount *account = NULL;
   gchar *uri_string = NULL;
   GUri *uri = NULL;
-  gchar *uri_string_with_user = NULL;
   GoaPasswordBased *password_based = NULL;
-  gboolean enabled;
+  gboolean calendar_enabled;
   gboolean accept_ssl_errors;
   gboolean ret = FALSE;
   const gchar *identity;
@@ -126,7 +127,7 @@ build_object (GoaProvider         *provider,
   identity = goa_account_get_identity (account);
   uri_string = g_key_file_get_string (key_file, group, "Uri", NULL);
   uri = g_uri_parse (uri_string, G_URI_FLAGS_ENCODED, NULL);
-  if (uri != NULL)
+  if (uri != NULL && identity != NULL)
     {
       GUri *tmp_uri =
         g_uri_build_with_user (g_uri_get_flags (uri),
@@ -140,30 +141,32 @@ build_object (GoaProvider         *provider,
                                g_uri_get_query (uri),
                                g_uri_get_fragment (uri));
 
-      uri_string_with_user = g_uri_to_string (tmp_uri);
-
       g_uri_unref (uri);
       uri = tmp_uri;
     }
 
-  accept_ssl_errors = g_key_file_get_boolean (key_file, group, "AcceptSslErrors", NULL);
+  if (uri != NULL)
+    {
+      g_free (uri_string);
+      uri_string = g_uri_to_string (uri);
+    }
 
-  enabled = g_key_file_get_boolean (key_file, group, "Enabled", NULL);
-  goa_object_skeleton_attach_calendar (object, uri_string_with_user, enabled, accept_ssl_errors);
-  g_free (uri_string_with_user);
+  accept_ssl_errors = g_key_file_get_boolean (key_file, group, "AcceptSslErrors", NULL);
+  calendar_enabled = g_key_file_get_boolean (key_file, group, "CalendarEnabled", NULL);
+  goa_object_skeleton_attach_calendar (object, uri_string, calendar_enabled, accept_ssl_errors);
 
   if (just_added)
     {
-      goa_account_set_calendar_disabled (account, !enabled);
+      goa_account_set_calendar_disabled (account, !calendar_enabled);
       g_signal_connect (account,
                         "notify::calendar-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
-                        (gpointer) "Enabled");
+                        (gpointer) "CalendarEnabled");
     }
 
   ret = TRUE;
 
- out:
+out:
   g_clear_object (&account);
   g_clear_object (&password_based);
   g_clear_pointer (&uri, g_uri_unref);
@@ -230,9 +233,7 @@ ensure_credentials_sync (GoaProvider         *provider,
   if (out_expires_in != NULL)
     *out_expires_in = 0;
 
-  ret = TRUE;
-
- out:
+out:
   g_clear_object (&http_client);
   g_free (username);
   g_free (password);
@@ -292,8 +293,6 @@ add_entry (GtkWidget     *grid,
     *out_entry = entry;
 }
 
-/* ---------------------------------------------------------------------------------------------------- */
-
 static void
 on_uri_username_or_password_changed (GtkEditable *editable, gpointer user_data)
 {
@@ -310,7 +309,7 @@ on_uri_username_or_password_changed (GtkEditable *editable, gpointer user_data)
   can_add = gtk_entry_get_text_length (GTK_ENTRY (data->username)) != 0
             && gtk_entry_get_text_length (GTK_ENTRY (data->password)) != 0;
 
- out:
+out:
   gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, can_add);
   g_free (uri);
 }
@@ -485,6 +484,7 @@ add_account (GoaProvider    *provider,
   const gchar *password;
   const gchar *username;
   const gchar *provider_type;
+  gchar *presentation_identity = NULL;
   gchar *server = NULL;
   gchar *uri = NULL;
   gint response;
@@ -517,6 +517,10 @@ add_account (GoaProvider    *provider,
   password = gtk_entry_get_text (GTK_ENTRY (data.password));
 
   uri = goa_utils_dav_normalize_uri (uri_text, &server);
+  if (strchr (username, '@') != NULL)
+    presentation_identity = g_strdup (username);
+  else
+    presentation_identity = g_strconcat (username, "@", server, NULL);
 
   /* See if there's already an account of this type with the
    * given identity
@@ -524,7 +528,7 @@ add_account (GoaProvider    *provider,
   provider_type = goa_provider_get_provider_type (provider);
   if (!goa_utils_check_duplicate (client,
                                   username,
-                                  username,
+                                  presentation_identity,
                                   provider_type,
                                   (GoaPeekInterfaceFunc) goa_object_peek_password_based,
                                   &data.error))
@@ -582,6 +586,7 @@ add_account (GoaProvider    *provider,
       gtk_widget_set_no_show_all (data.cluebar, FALSE);
       gtk_widget_show_all (data.cluebar);
 
+      g_clear_pointer (&presentation_identity, g_free);
       g_clear_pointer (&server, g_free);
       g_clear_pointer (&uri, g_free);
       goto http_again;
@@ -593,9 +598,8 @@ add_account (GoaProvider    *provider,
   g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (password));
 
   g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
-  g_variant_builder_add (&details, "{ss}", "Enabled", "true");
+  g_variant_builder_add (&details, "{ss}", "CalendarEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "Uri", uri);
-  g_variant_builder_add (&details, "{ss}", "Username", username);
   g_variant_builder_add (&details, "{ss}", "AcceptSslErrors", (accept_ssl_errors) ? "true" : "false");
 
   /* OK, everything is dandy, add the account */
@@ -606,7 +610,7 @@ add_account (GoaProvider    *provider,
   goa_manager_call_add_account (goa_client_get_manager (client),
                                 goa_provider_get_provider_type (provider),
                                 username,
-                                username,
+                                presentation_identity,
                                 g_variant_builder_end (&credentials),
                                 g_variant_builder_end (&details),
                                 NULL, /* GCancellable* */
@@ -619,7 +623,7 @@ add_account (GoaProvider    *provider,
   ret = GOA_OBJECT (g_dbus_object_manager_get_object (goa_client_get_object_manager (client),
                                                       data.account_object_path));
 
- out:
+out:
   /* We might have an object even when data.error is set.
    * eg., if we failed to store the credentials in the keyring.
    */
@@ -630,6 +634,7 @@ add_account (GoaProvider    *provider,
 
   g_signal_handlers_disconnect_by_func (dialog, dialog_response_cb, &data);
 
+  g_free (presentation_identity);
   g_free (server);
   g_free (uri);
   g_free (data.account_object_path);
@@ -756,7 +761,7 @@ refresh_account (GoaProvider    *provider,
     {
       gchar *markup;
 
-      markup = g_strdup_printf ("<b>%s</b>\n%s",
+      markup = g_strdup_printf ("<b>%s:</b>\n%s",
                                 _("Error connecting to CalDAV server"),
                                 data.error->message);
       g_clear_error (&data.error);
@@ -780,10 +785,18 @@ refresh_account (GoaProvider    *provider,
       GoaManager *manager;
       const gchar *id;
       const gchar *provider_type;
+      gchar *dummy;
+      gchar *presentation_identity;
+      gchar *server;
 
       manager = goa_client_get_manager (client);
       id = goa_account_get_id (account);
       provider_type = goa_provider_get_provider_type (provider);
+
+      dummy = goa_utils_dav_normalize_uri (uri, &server);
+      presentation_identity = g_strconcat (username, "@", server, NULL);
+      g_free (dummy);
+      g_free (server);
 
       g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
       g_variant_builder_add (&details, "{ss}", "Id", id);
@@ -791,12 +804,13 @@ refresh_account (GoaProvider    *provider,
       goa_manager_call_add_account (manager,
                                     provider_type,
                                     username,
-                                    username,
+                                    presentation_identity,
                                     g_variant_builder_end (&credentials),
                                     g_variant_builder_end (&details),
                                     NULL, /* GCancellable* */
                                     (GAsyncReadyCallback) add_account_cb,
                                     &data);
+      g_free (presentation_identity);
 
       g_main_loop_run (data.loop);
       if (data.error != NULL)
@@ -818,7 +832,7 @@ refresh_account (GoaProvider    *provider,
 
   ret = TRUE;
 
- out:
+out:
   if (data.error != NULL)
     g_propagate_error (error, data.error);
 
@@ -834,7 +848,9 @@ refresh_account (GoaProvider    *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-goa_caldav_provider_init (GoaCaldavProvider *provider) {}
+goa_caldav_provider_init (GoaCaldavProvider *provider)
+{
+}
 
 static void
 goa_caldav_provider_class_init (GoaCaldavProviderClass *klass)
@@ -890,7 +906,7 @@ on_handle_get_password (GoaPasswordBased      *interface,
 
   goa_password_based_complete_get_password (interface, invocation, password);
 
- out:
+out:
   g_free (password);
   g_object_unref (provider);
   return TRUE; /* invocation was handled */
