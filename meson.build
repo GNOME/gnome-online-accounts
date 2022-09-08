@@ -3,7 +3,7 @@ project(
   version: '3.45.3',
   license: 'LGPL2+',
   default_options: 'buildtype=debugoptimized',
-  meson_version: '>= 0.56.0'
+  meson_version: '>= 0.57.0',
 )
 
 goa_name = 'goa'
@@ -265,10 +265,9 @@ endif
 
 subdir('po')
 
-meson.add_install_script(
-  'meson_post_install.py',
-  goa_datadir,
-  enable_goabackend ? 'compile-schemas' : ''
+gnome.post_install(
+  glib_compile_schemas: true,
+  gtk_update_icon_cache: true,
 )
 
 summary({
