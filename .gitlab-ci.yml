@@ -14,6 +14,7 @@ build-meson:
     - meson setup -Dgtk_doc=true _build
     - meson compile -C _build
     - meson test -C _build
+    - meson install -C _build
 
 build-meson-nobackend:
   image: fedora:latest
@@ -27,3 +28,4 @@ build-meson-nobackend:
     - meson setup -Dgtk_doc=false -Dgoabackend=false _build
     - meson compile -C _build
     - meson test -C _build
+    - meson install -C _build
