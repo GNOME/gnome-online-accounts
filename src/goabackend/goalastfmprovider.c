@@ -100,6 +100,8 @@ build_object (GoaProvider         *provider,
 {
   GoaAccount *account;
   GoaMusic *music = NULL;
+  GKeyFile *goa_conf;
+  const gchar *provider_type;
   gboolean music_enabled;
   gboolean ret = FALSE;
 
@@ -115,11 +117,17 @@ build_object (GoaProvider         *provider,
                                                                             error))
     goto out;
 
+  provider_type = goa_provider_get_provider_type (provider);
+  goa_conf = goa_util_open_goa_conf ();
   account = goa_object_get_account (GOA_OBJECT (object));
 
   /* Music */
   music = goa_object_get_music (GOA_OBJECT (object));
-  music_enabled = g_key_file_get_boolean (key_file, group, "MusicEnabled", NULL);
+  music_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_MUSIC) &&
+                  g_key_file_get_boolean (key_file, group, "MusicEnabled", NULL);
+
+  g_clear_pointer (&goa_conf, g_key_file_free);
+
   if (music_enabled)
     {
       if (music == NULL)

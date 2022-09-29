@@ -108,6 +108,10 @@ GtkWidget *goa_util_add_row_switch_from_keyfile_with_blurb (GtkGrid      *grid,
                                                             const gchar  *label_text,
                                                             const gchar  *key,
                                                             const gchar  *blurb);
+GKeyFile *	goa_util_open_goa_conf			(void);
+gboolean	goa_util_provider_feature_is_enabled	(GKeyFile *goa_conf,
+							 const gchar *provider_type,
+							 GoaProviderFeatures feature);
 
 G_END_DECLS
 

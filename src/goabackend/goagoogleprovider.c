@@ -306,6 +306,8 @@ build_object (GoaProvider         *provider,
 {
   GoaAccount *account = NULL;
   GoaMail *mail = NULL;
+  GKeyFile *goa_conf;
+  const gchar *provider_type;
   gchar *uri_caldav;
   gchar *uri_drive;
   gboolean ret = FALSE;
@@ -327,12 +329,15 @@ build_object (GoaProvider         *provider,
                                                                             error))
     goto out;
 
+  provider_type = goa_provider_get_provider_type (provider);
+  goa_conf = goa_util_open_goa_conf ();
   account = goa_object_get_account (GOA_OBJECT (object));
   email_address = goa_account_get_identity (account);
 
   /* Email */
   mail = goa_object_get_mail (GOA_OBJECT (object));
-  mail_enabled = g_key_file_get_boolean (key_file, group, "MailEnabled", NULL);
+  mail_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_MAIL) &&
+                 g_key_file_get_boolean (key_file, group, "MailEnabled", NULL);
   if (mail_enabled)
     {
       if (mail == NULL)
@@ -362,31 +367,38 @@ build_object (GoaProvider         *provider,
     }
 
   /* Calendar */
-  calendar_enabled = g_key_file_get_boolean (key_file, group, "CalendarEnabled", NULL);
+  calendar_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_CALENDAR) &&
+                     g_key_file_get_boolean (key_file, group, "CalendarEnabled", NULL);
   uri_caldav = g_strconcat ("https://apidata.googleusercontent.com/caldav/v2/", email_address, "/user", NULL);
   goa_object_skeleton_attach_calendar (object, uri_caldav, calendar_enabled, FALSE);
   g_free (uri_caldav);
 
   /* Contacts */
-  contacts_enabled = g_key_file_get_boolean (key_file, group, "ContactsEnabled", NULL);
+  contacts_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_CONTACTS) &&
+                     g_key_file_get_boolean (key_file, group, "ContactsEnabled", NULL);
   goa_object_skeleton_attach_contacts (object,
                                        "https://www.googleapis.com/.well-known/carddav",
                                        contacts_enabled,
                                        FALSE);
 
   /* Photos */
-  photos_enabled = g_key_file_get_boolean (key_file, group, "PhotosEnabled", NULL);
+  photos_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_PHOTOS) &&
+                   g_key_file_get_boolean (key_file, group, "PhotosEnabled", NULL);
   goa_object_skeleton_attach_photos (object, photos_enabled);
 
   /* Files */
-  files_enabled = g_key_file_get_boolean (key_file, group, "FilesEnabled", NULL);
+  files_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_FILES) &&
+                  g_key_file_get_boolean (key_file, group, "FilesEnabled", NULL);
   uri_drive = g_strconcat ("google-drive://", email_address, "/", NULL);
   goa_object_skeleton_attach_files (object, uri_drive, files_enabled, FALSE);
   g_free (uri_drive);
 
   /* Printers */
-  printers_enabled = g_key_file_get_boolean (key_file, group, "PrintersEnabled", NULL);
+  printers_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_PRINTERS) &&
+                     g_key_file_get_boolean (key_file, group, "PrintersEnabled", NULL);
   goa_object_skeleton_attach_printers (object, printers_enabled);
+
+  g_clear_pointer (&goa_conf, g_key_file_free);
 
   if (just_added)
     {

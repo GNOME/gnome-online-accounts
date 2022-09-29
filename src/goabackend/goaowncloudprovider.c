@@ -136,6 +136,8 @@ build_object (GoaProvider         *provider,
   gchar *uri_webdav;
   GoaPasswordBased *password_based = NULL;
   GUri *uri = NULL;
+  GKeyFile *goa_conf;
+  const gchar *provider_type;
   gboolean accept_ssl_errors;
   gboolean calendar_enabled;
   gboolean contacts_enabled;
@@ -168,6 +170,8 @@ build_object (GoaProvider         *provider,
                         NULL);
     }
 
+  provider_type = goa_provider_get_provider_type (provider);
+  goa_conf = goa_util_open_goa_conf ();
   account = goa_object_get_account (GOA_OBJECT (object));
   identity = goa_account_get_identity (account);
   uri_string = g_key_file_get_string (key_file, group, "Uri", NULL);
@@ -193,22 +197,27 @@ build_object (GoaProvider         *provider,
   accept_ssl_errors = g_key_file_get_boolean (key_file, group, "AcceptSslErrors", NULL);
 
   /* Calendar */
-  calendar_enabled = g_key_file_get_boolean (key_file, group, "CalendarEnabled", NULL);
+  calendar_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_CALENDAR) &&
+                     g_key_file_get_boolean (key_file, group, "CalendarEnabled", NULL);
   uri_caldav = uri_to_string_with_path (uri, CALDAV_ENDPOINT);
   goa_object_skeleton_attach_calendar (object, uri_caldav, calendar_enabled, accept_ssl_errors);
   g_free (uri_caldav);
 
   /* Contacts */
-  contacts_enabled = g_key_file_get_boolean (key_file, group, "ContactsEnabled", NULL);
+  contacts_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_CONTACTS) &&
+                     g_key_file_get_boolean (key_file, group, "ContactsEnabled", NULL);
   uri_carddav = uri_to_string_with_path (uri, CARDDAV_ENDPOINT);
   goa_object_skeleton_attach_contacts (object, uri_carddav, contacts_enabled, accept_ssl_errors);
   g_free (uri_carddav);
 
   /* Files */
-  files_enabled = g_key_file_get_boolean (key_file, group, "FilesEnabled", NULL);
+  files_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_FILES) &&
+                  g_key_file_get_boolean (key_file, group, "FilesEnabled", NULL);
   uri_webdav = get_webdav_uri (uri);
   goa_object_skeleton_attach_files (object, uri_webdav, files_enabled, accept_ssl_errors);
   g_free (uri_webdav);
+
+  g_clear_pointer (&goa_conf, g_key_file_free);
 
   if (just_added)
     {

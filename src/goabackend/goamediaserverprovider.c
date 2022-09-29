@@ -88,6 +88,8 @@ build_object (GoaProvider        *provider,
   gboolean ret;
   GoaAccount *account;
   GoaMediaServer *mediaserver;
+  GKeyFile *goa_conf;
+  const gchar *provider_type;
   const gchar *udn;
   gboolean photos_enabled;
 
@@ -106,12 +108,17 @@ build_object (GoaProvider        *provider,
                                                                                   error))
     goto out;
 
+  provider_type = goa_provider_get_provider_type (provider);
+  goa_conf = goa_util_open_goa_conf ();
   account = goa_object_get_account (GOA_OBJECT (object));
   udn = goa_account_get_identity (account);
 
   /* Photos */
-  photos_enabled = g_key_file_get_boolean (key_file, group, "PhotosEnabled", NULL);
+  photos_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_PHOTOS) &&
+                   g_key_file_get_boolean (key_file, group, "PhotosEnabled", NULL);
   goa_object_skeleton_attach_photos (object, photos_enabled);
+
+  g_clear_pointer (&goa_conf, g_key_file_free);
 
   /* Media Server */
   mediaserver = goa_object_get_media_server (GOA_OBJECT (object));
