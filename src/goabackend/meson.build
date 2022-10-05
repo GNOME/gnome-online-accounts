@@ -157,9 +157,8 @@ libgoa_web_extension = shared_module(
   'goawebextension',
   libgoawebextension_sources,
   include_directories: common_incs + [goa_inc],
-  dependencies: deps,
+  dependencies: [deps, libgoa_backend_dep],
   c_args: cflags,
-  link_with: libgoa_backend,
   install: true,
   install_dir: join_paths(goa_pkglibdir, 'web-extensions')
 )
