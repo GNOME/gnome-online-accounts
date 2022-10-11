@@ -706,6 +706,7 @@ renew_identity (GoaKerberosIdentityManager *self,
                error->message);
 
       g_task_return_error (operation->task, error);
+      return;
     }
 
   g_task_return_boolean (operation->task, was_renewed);
