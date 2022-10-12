@@ -834,7 +834,9 @@ get_new_credentials_cache (GoaKerberosIdentityManager *self,
                self->credentials_cache_type);
       supports_multiple_identities = FALSE;
     }
-  else if (g_strcmp0 (self->credentials_cache_type, "DIR") == 0 || g_strcmp0 (self->credentials_cache_type, "KEYRING") == 0)
+  else if (g_strcmp0 (self->credentials_cache_type, "DIR") == 0
+           || g_strcmp0 (self->credentials_cache_type, "KCM") == 0
+           || g_strcmp0 (self->credentials_cache_type, "KEYRING") == 0)
     {
       g_debug ("GoaKerberosIdentityManager: credential cache type %s supports cache collections", self->credentials_cache_type);
       supports_multiple_identities = TRUE;
