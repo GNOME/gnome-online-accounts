@@ -1430,7 +1430,7 @@ goa_kerberos_identity_renew (GoaKerberosIdentity *self, GError **error)
       g_set_error (error,
                    GOA_IDENTITY_ERROR,
                    GOA_IDENTITY_ERROR_CREDENTIALS_UNAVAILABLE,
-                   _("Could not renew identity: Not signed in"));
+                   _("Not signed in"));
       goto out;
     }
 
@@ -1440,7 +1440,8 @@ goa_kerberos_identity_renew (GoaKerberosIdentity *self, GError **error)
       set_and_prefix_error_from_krb5_error_code (self,
                                                  error,
                                                  GOA_IDENTITY_ERROR_CREDENTIALS_UNAVAILABLE,
-                                                 error_code, _("Could not renew identity: "));
+                                                 error_code,
+                                                 _("Could not get the default principal: "));
       goto out;
     }
 
