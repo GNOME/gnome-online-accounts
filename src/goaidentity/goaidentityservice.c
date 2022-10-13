@@ -1097,7 +1097,7 @@ on_identity_added (GoaIdentityManager *identity_manager,
 
   object = find_object_with_principal (self, identifier, FALSE);
 
-  if (object == NULL)
+  if (object == NULL && goa_identity_is_signed_in (identity))
     add_temporary_account (self, identity);
 
   g_clear_object (&object);
