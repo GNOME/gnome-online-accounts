@@ -1454,7 +1454,7 @@ goa_kerberos_identity_renew (GoaKerberosIdentity *self, GError **error)
                                                  error,
                                                  GOA_IDENTITY_ERROR_RENEWING,
                                                  error_code,
-                                                 _("Could not get new credentials to renew identity %s: "),
+                                                 _("Could not get renewed credentials from the KDC for identity %s: "),
                                                  name);
       goto free_principal;
     }
