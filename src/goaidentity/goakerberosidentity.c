@@ -520,10 +520,7 @@ typedef struct
 static void
 clear_idle_id (NotifyRequest *request)
 {
-  G_LOCK (identity_lock);
   *request->idle_id = 0;
-  G_UNLOCK (identity_lock);
-
   g_object_unref (request->self);
   g_slice_free (NotifyRequest, request);
 }
@@ -543,10 +540,8 @@ queue_notify (GoaKerberosIdentity *self,
 {
   NotifyRequest *request;
 
-  G_LOCK (identity_lock);
   if (*idle_id != 0)
     {
-      G_UNLOCK (identity_lock);
       return;
     }
 
@@ -561,7 +556,6 @@ queue_notify (GoaKerberosIdentity *self,
                               request,
                               (GDestroyNotify)
                               clear_idle_id);
-  G_UNLOCK (identity_lock);
 }
 
 static gboolean
