@@ -42,8 +42,8 @@ G_DEFINE_TYPE_WITH_CODE (GoaOwncloudProvider, goa_owncloud_provider, GOA_TYPE_PR
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static const gchar *CALDAV_ENDPOINT = "remote.php/caldav/";
-static const gchar *CARDDAV_ENDPOINT = "remote.php/carddav/";
+static const gchar *CALDAV_ENDPOINT = "remote.php/dav/";
+static const gchar *CARDDAV_ENDPOINT = "remote.php/dav/";
 static const gchar *WEBDAV_ENDPOINT = "remote.php/webdav/";
 
 static const gchar *
