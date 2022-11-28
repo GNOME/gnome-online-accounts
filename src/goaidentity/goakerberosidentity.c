@@ -1580,6 +1580,8 @@ goa_kerberos_identity_update (GoaKerberosIdentity *self,
       goa_kerberos_identity_add_credentials_cache (self, copied_cache);
     }
 
+  clear_alarms (new_identity);
+
   if (comparison >= 0)
     return;
 
