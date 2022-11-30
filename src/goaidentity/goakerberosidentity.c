@@ -1576,7 +1576,7 @@ goa_kerberos_identity_update (GoaKerberosIdentity *self,
       krb5_cc_dup (new_identity->kerberos_context, credentials_cache, &copied_cache);
 
       if (comparison < 0)
-        g_clear_pointer (&self->active_credentials_cache_name, &g_free);
+        g_clear_pointer (&self->active_credentials_cache_name, g_free);
 
       goa_kerberos_identity_add_credentials_cache (self, copied_cache);
     }
