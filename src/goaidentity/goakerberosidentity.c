@@ -1564,6 +1564,7 @@ goa_kerberos_identity_update (GoaKerberosIdentity *self,
   char *preauth_identity_source = NULL;
   int comparison;
 
+  G_LOCK (identity_lock);
   comparison = goa_kerberos_identity_compare (self, new_identity);
 
   if (new_identity->active_credentials_cache_name != NULL)
@@ -1580,6 +1581,7 @@ goa_kerberos_identity_update (GoaKerberosIdentity *self,
 
       goa_kerberos_identity_add_credentials_cache (self, copied_cache);
     }
+  G_UNLOCK (identity_lock);
 
   clear_alarms (new_identity);
 
