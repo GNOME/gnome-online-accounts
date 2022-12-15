@@ -1719,6 +1719,8 @@ goa_kerberos_identity_erase (GoaKerberosIdentity *self, GError **error)
                                                              self->active_credentials_cache_name);
       g_debug ("GoaKerberosIdentity: Destroying active credentials cache %s", self->active_credentials_cache_name);
       error_code = krb5_cc_destroy (self->kerberos_context, credentials_cache);
+      g_hash_table_remove (self->credentials_caches, self->active_credentials_cache_name);
+
       g_clear_pointer (&self->active_credentials_cache_name, g_free);
 
       if (error_code != 0)
