@@ -984,11 +984,10 @@ goa_kerberos_identity_initable_init (GInitable     *initable,
 
   if (self->identifier == NULL)
     {
-      self->identifier = get_identifier (self, error);
-      if (self->identifier == NULL)
-        return FALSE;
+      self->identifier = get_identifier (self, NULL);
 
-      queue_notify (self, &self->identifier_idle_id, "identifier");
+      if (self->identifier != NULL)
+        queue_notify (self, &self->identifier_idle_id, "identifier");
     }
 
   verification_error = NULL;
