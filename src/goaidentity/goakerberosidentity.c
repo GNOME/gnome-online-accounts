@@ -1121,11 +1121,10 @@ goa_kerberos_identity_initable_init (GInitable     *initable,
 
   if (self->identifier == NULL)
     {
-      self->identifier = get_identifier (self, error);
-      if (self->identifier == NULL)
-        return FALSE;
+      self->identifier = get_identifier (self, NULL);
 
-      queue_notify (self, &self->identifier_idle_id, "identifier");
+      if (self->identifier != NULL)
+        queue_notify (self, &self->identifier_idle_id, "identifier");
     }
 
   verification_error = NULL;
@@ -1508,7 +1507,7 @@ update_identifier (GoaKerberosIdentity *self, GoaKerberosIdentity *new_identity)
 {
   char *new_identifier;
 
-  new_identifier = get_identifier (self, NULL);
+  new_identifier = get_identifier (new_identity, NULL);
   if (g_strcmp0 (self->identifier, new_identifier) != 0 && new_identifier != NULL)
     {
       g_free (self->identifier);
