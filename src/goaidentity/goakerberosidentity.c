@@ -1554,6 +1554,41 @@ goa_kerberos_identity_compare (GoaKerberosIdentity *self,
   return 0;
 }
 
+static char *
+get_default_cache_name (GoaKerberosIdentity *self)
+{
+  int error_code;
+  krb5_ccache default_cache;
+  krb5_principal principal;
+  char *default_cache_name;
+  char *principal_name;
+
+  error_code = krb5_cc_default (self->kerberos_context, &default_cache);
+
+  if (error_code != 0)
+    return NULL;
+
+  /* Return NULL if the default cache doesn't pass basic sanity checks
+   */
+  error_code = krb5_cc_get_principal (self->kerberos_context, default_cache, &principal);
+
+  if (error_code != 0)
+    return NULL;
+
+  error_code = krb5_unparse_name_flags (self->kerberos_context, principal, 0, &principal_name);
+  krb5_free_principal (self->kerberos_context, principal);
+
+  if (error_code != 0)
+    return NULL;
+
+  krb5_free_unparsed_name (self->kerberos_context, principal_name);
+
+  default_cache_name = g_strdup (krb5_cc_get_name (self->kerberos_context, default_cache));
+  krb5_cc_close (self->kerberos_context, default_cache);
+
+  return default_cache_name;
+}
+
 void
 goa_kerberos_identity_update (GoaKerberosIdentity *self,
                               GoaKerberosIdentity *new_identity)
@@ -1564,21 +1599,45 @@ goa_kerberos_identity_update (GoaKerberosIdentity *self,
   int comparison;
 
   G_LOCK (identity_lock);
+
+  old_verification_level = self->cached_verification_level;
+  new_verification_level = new_identity->cached_verification_level;
+
   comparison = goa_kerberos_identity_compare (self, new_identity);
 
   if (new_identity->active_credentials_cache_name != NULL)
     {
+      g_autofree char *default_cache_name = NULL;
       krb5_ccache credentials_cache;
       krb5_ccache copied_cache;
+      gboolean should_switch_to_new_credentials_cache = FALSE;
+
+      default_cache_name = get_default_cache_name (self);
+
+      if (default_cache_name == NULL)
+        should_switch_to_new_credentials_cache = TRUE;
 
       credentials_cache = (krb5_ccache) g_hash_table_lookup (new_identity->credentials_caches,
                                                              new_identity->active_credentials_cache_name);
       krb5_cc_dup (new_identity->kerberos_context, credentials_cache, &copied_cache);
 
+      if (g_strcmp0 (default_cache_name, self->active_credentials_cache_name) == 0)
+        {
+          if ((comparison < 0) ||
+              (comparison == 0 && old_verification_level != VERIFICATION_LEVEL_SIGNED_IN))
+            should_switch_to_new_credentials_cache = TRUE;
+        }
+
       if (comparison < 0)
-        g_clear_pointer (&self->active_credentials_cache_name, g_free);
+        {
+          g_clear_pointer (&self->active_credentials_cache_name, g_free);
+          self->active_credentials_cache_name = g_strdup (new_identity->active_credentials_cache_name);
+        }
 
       goa_kerberos_identity_add_credentials_cache (self, copied_cache);
+
+      if (should_switch_to_new_credentials_cache)
+        krb5_cc_switch (self->kerberos_context, copied_cache);
     }
   G_UNLOCK (identity_lock);
 
@@ -1592,8 +1651,6 @@ goa_kerberos_identity_update (GoaKerberosIdentity *self,
   time_changed |= set_start_time (self, new_identity->start_time);
   time_changed |= set_renewal_time (self, new_identity->renewal_time);
   time_changed |= set_expiration_time (self, new_identity->expiration_time);
-  old_verification_level = self->cached_verification_level;
-  new_verification_level = new_identity->cached_verification_level;
   G_UNLOCK (identity_lock);
 
   if (time_changed)
@@ -1719,6 +1776,8 @@ goa_kerberos_identity_erase (GoaKerberosIdentity *self, GError **error)
                                                              self->active_credentials_cache_name);
       g_debug ("GoaKerberosIdentity: Destroying active credentials cache %s", self->active_credentials_cache_name);
       error_code = krb5_cc_destroy (self->kerberos_context, credentials_cache);
+      g_hash_table_remove (self->credentials_caches, self->active_credentials_cache_name);
+
       g_clear_pointer (&self->active_credentials_cache_name, g_free);
 
       if (error_code != 0)
