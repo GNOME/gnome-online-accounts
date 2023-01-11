@@ -1,5 +1,5 @@
 # Turkish translation for gnome-online-accounts.
-# Copyright (C) 2011-2022 gnome-online-accounts's COPYRIGHT HOLDER
+# Copyright (C) 2011-2023 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
 #
 # Osman Karagöz <osmank3@gmail.com>, 2013.
@@ -7,23 +7,24 @@
 # Gökhan Gurbetoğlu <ggurbet@gmail.com>, 2014.
 # Furkan Tokaç <developmentft@gmail.com>, 2017.
 # Muhammet Kara <muhammetk@gmail.com>, 2011, 2013, 2014, 2015, 2016, 2017.
-# Emin Tufan Çetin <etcetin@gmail.com>, 2017-2019.
+# Sabri Ünal <libreajans@gmail.com>, 2023.
+# Emin Tufan Çetin <etcetin@gmail.com>, 2017-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2022-07-10 21:39+0000\n"
-"PO-Revision-Date: 2019-08-28 00:15+0300\n"
+"POT-Creation-Date: 2022-12-27 10:28+0000\n"
+"PO-Revision-Date: 2023-01-11 21:45+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: Gtranslator 3.32.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: data/org.gnome.online-accounts.gschema.xml:6
 msgid "List of providers that are allowed to be loaded"
@@ -235,22 +236,22 @@ msgstr "Fedoraʼya bağlanırken hata"
 msgid "Identity service returned invalid key"
 msgstr "Kimlik hizmeti geçersiz anahtar gönderdi"
 
-#: src/goabackend/goagoogleprovider.c:56
+#: src/goabackend/goagoogleprovider.c:57
 msgid "Google"
 msgstr "Google"
 
-#: src/goabackend/goagoogleprovider.c:183
+#: src/goabackend/goagoogleprovider.c:215
 #: src/goabackend/goawindowsliveprovider.c:157
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
 msgstr ""
-"Kimliğiniz istenirken durum kodu 200 bekleniyordu, fakat %d (%s) durumu "
+"Kimliğiniz istenirken durum kodu 200 bekleniyordu, ancak %d (%s) durumu "
 "alındı"
 
 #. TODO: more specific
-#: src/goabackend/goagoogleprovider.c:202
-#: src/goabackend/goagoogleprovider.c:213
+#: src/goabackend/goagoogleprovider.c:234
+#: src/goabackend/goagoogleprovider.c:245
 #: src/goabackend/goalastfmprovider.c:204
 #: src/goabackend/goalastfmprovider.c:213
 #: src/goabackend/goalastfmprovider.c:222
@@ -463,7 +464,7 @@ msgstr "Kimlik alınırken hata oluştu: "
 #: src/goabackend/goaoauth2provider.c:1236
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
-msgstr "%s olarak giriş yapılması istendi, fakat %s olarak giriş yapıldı"
+msgstr "%s olarak giriş yapılması istendi, ancak %s olarak giriş yapıldı"
 
 #: src/goabackend/goaoauth2provider.c:1388
 msgid "Credentials do not contain access_token"
@@ -694,61 +695,61 @@ msgstr "%s nesne yolu için GoaObject alınırken hata"
 msgid "The network realm %s needs some information to sign you in."
 msgstr "%s ağ alanı size oturum açabilmek için bazı bilgilere gereksiniyor."
 
-#: src/goaidentity/goakerberosidentity.c:271
-#: src/goaidentity/goakerberosidentity.c:279
-#: src/goaidentity/goakerberosidentity.c:666
+#: src/goaidentity/goakerberosidentity.c:293
+#: src/goaidentity/goakerberosidentity.c:301
+#: src/goaidentity/goakerberosidentity.c:698
 msgid "Could not find identity in credential cache: "
 msgstr "Kimlik bilgileri önbelleğinde kimlik bulunamadı: "
 
-#: src/goaidentity/goakerberosidentity.c:678
+#: src/goaidentity/goakerberosidentity.c:710
 msgid "Could not find identity credentials in cache: "
 msgstr "Önbellekte kimlik bilgileri bulunamadı: "
 
-#: src/goaidentity/goakerberosidentity.c:721
+#: src/goaidentity/goakerberosidentity.c:754
 msgid "Could not sift through identity credentials in cache: "
 msgstr "Önbellekteki kimlik bilgileri sırayla gezilemedi: "
 
-#: src/goaidentity/goakerberosidentity.c:735
+#: src/goaidentity/goakerberosidentity.c:766
 msgid "Could not finish up sifting through identity credentials in cache: "
 msgstr "Önbellekteki kimlik bilgilerinin sırayla gezilmesi bitirilemedi: "
 
-#: src/goaidentity/goakerberosidentity.c:1019
+#: src/goaidentity/goakerberosidentity.c:1156
 msgid "No associated identification found"
 msgstr "İlişkili tanımlama bulunamadı"
 
-#: src/goaidentity/goakerberosidentity.c:1100
+#: src/goaidentity/goakerberosidentity.c:1263
 msgid "Could not create credential cache: "
 msgstr "Yetki önbelleği oluşturulamadı: "
 
-#: src/goaidentity/goakerberosidentity.c:1132
+#: src/goaidentity/goakerberosidentity.c:1302
 msgid "Could not initialize credentials cache: "
 msgstr "Kimlik bilgileri önbelleği ilklendirilemedi: "
 
-#: src/goaidentity/goakerberosidentity.c:1145
+#: src/goaidentity/goakerberosidentity.c:1315
 msgid "Could not store new credentials in credentials cache: "
 msgstr "Yeni kimlik bilgileri önbelleğe kaydedilemedi: "
 
-#: src/goaidentity/goakerberosidentity.c:1433
-msgid "Could not renew identity: Not signed in"
-msgstr "Kimlik yenilenemedi: Oturum açılmamış"
+#: src/goaidentity/goakerberosidentity.c:1714
+msgid "Not signed in"
+msgstr "Giriş yapılmadı"
 
-#: src/goaidentity/goakerberosidentity.c:1443
-msgid "Could not renew identity: "
-msgstr "Kimlik yenilenemedi: "
+#: src/goaidentity/goakerberosidentity.c:1727
+msgid "Could not get the default principal: "
+msgstr "Öntanımlı tanıtıcı kimlik alınamadı: "
 
-#: src/goaidentity/goakerberosidentity.c:1456
+#: src/goaidentity/goakerberosidentity.c:1740
 #, c-format
-msgid "Could not get new credentials to renew identity %s: "
-msgstr "%s kimliğini yenilemek için yeni bilgiler alınamadı: "
+msgid "Could not get renewed credentials from the KDC for identity %s: "
+msgstr "%s kimliği için KDC’den yenilenen kimlik bilgileri alınamadı: "
 
-#: src/goaidentity/goakerberosidentity.c:1497
+#: src/goaidentity/goakerberosidentity.c:1788
 msgid "Could not erase identity: "
 msgstr "Kimlik silinemedi: "
 
-#: src/goaidentity/goakerberosidentitymanager.c:816
+#: src/goaidentity/goakerberosidentitymanager.c:817
 msgid "Could not find identity"
 msgstr "Kimlik bulunamadı"
 
-#: src/goaidentity/goakerberosidentitymanager.c:897
+#: src/goaidentity/goakerberosidentitymanager.c:900
 msgid "Could not create credential cache for identity"
 msgstr "Kimlik için kimlik bilgileri önbelleği oluşturulamadı"
