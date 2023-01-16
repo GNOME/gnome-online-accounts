@@ -1589,20 +1589,62 @@ get_default_cache_name (GoaKerberosIdentity *self)
   return default_cache_name;
 }
 
+static char *
+get_default_principal (GoaKerberosIdentity *self)
+{
+  int error_code;
+  krb5_ccache default_cache;
+  krb5_principal principal;
+  char *unparsed_principal, *principal_name;
+
+  error_code = krb5_cc_default (self->kerberos_context, &default_cache);
+
+  if (error_code != 0)
+    return NULL;
+
+  /* Return NULL if the default cache doesn't pass basic sanity checks
+   */
+  error_code = krb5_cc_get_principal (self->kerberos_context, default_cache, &principal);
+
+  if (error_code != 0)
+    return NULL;
+
+  error_code = krb5_unparse_name_flags (self->kerberos_context, principal, 0, &unparsed_principal);
+  krb5_free_principal (self->kerberos_context, principal);
+
+  if (error_code != 0)
+    return NULL;
+
+  principal_name = g_strdup (unparsed_principal);
+  krb5_free_unparsed_name (self->kerberos_context, unparsed_principal);
+
+  krb5_cc_close (self->kerberos_context, default_cache);
+
+  return principal_name;
+}
+
 void
 goa_kerberos_identity_update (GoaKerberosIdentity *self,
                               GoaKerberosIdentity *new_identity)
 {
   VerificationLevel old_verification_level, new_verification_level;
+  gboolean should_set_cache_active = FALSE;
   gboolean time_changed = FALSE;
   char *preauth_identity_source = NULL;
+  g_autofree char *default_principal = NULL;
   int comparison;
 
   G_LOCK (identity_lock);
 
+  g_debug ("GoaKerberosIdentity: Evaluating updated credentials for identity %s "
+           "(old credentials cache name: %s, new credentials cache name: %s)",
+           self->identifier,
+           self->active_credentials_cache_name,
+           new_identity->active_credentials_cache_name);
   old_verification_level = self->cached_verification_level;
   new_verification_level = new_identity->cached_verification_level;
 
+  default_principal = get_default_principal (self);
   comparison = goa_kerberos_identity_compare (self, new_identity);
 
   if (new_identity->active_credentials_cache_name != NULL)
@@ -1610,25 +1652,139 @@ goa_kerberos_identity_update (GoaKerberosIdentity *self,
       g_autofree char *default_cache_name = NULL;
       krb5_ccache credentials_cache;
       krb5_ccache copied_cache;
-      gboolean should_switch_to_new_credentials_cache = FALSE;
+      gboolean should_set_cache_as_default = FALSE;
+      gboolean is_default_principal = FALSE, is_default_cache = FALSE;
+      gboolean cache_already_active = FALSE;
+
+      is_default_principal = g_strcmp0 (default_principal, self->identifier) == 0;
 
       default_cache_name = get_default_cache_name (self);
+      is_default_cache = g_strcmp0 (default_cache_name, self->active_credentials_cache_name) == 0;
+      cache_already_active = g_strcmp0 (self->active_credentials_cache_name, new_identity->active_credentials_cache_name) == 0;
 
-      if (default_cache_name == NULL)
-        should_switch_to_new_credentials_cache = TRUE;
+      g_debug ("GoaKerberosIdentity: Default credentials cache is '%s' (is %sus, is %sactive)", default_cache_name, is_default_cache? "" : "not ", cache_already_active? "" : "not ");
 
+      if (default_principal == NULL)
+        {
+          should_set_cache_as_default = TRUE;
+          should_set_cache_active = TRUE;
+
+          g_debug ("GoaKerberosIdentity: Setting default credentials cache to '%s' (principal %s) "
+                   "because there is no active default",
+                   new_identity->active_credentials_cache_name,
+                   self->identifier);
+        }
+      else if (!is_default_principal)
+        {
+          g_debug ("GoaKerberosIdentity: Not switching default credentials cache from '%s' to '%s' (principal %s) "
+                   "because identity is currently not default (credentials already active? %s)",
+                   default_cache_name,
+                   new_identity->active_credentials_cache_name,
+                   self->identifier,
+                   cache_already_active? "yes" : "no");
+          should_set_cache_as_default = FALSE;
+
+          if (comparison < 0)
+            {
+              should_set_cache_active = TRUE;
+
+              g_debug ("GoaKerberosIdentity: Switching identity %s from credentials cache '%s' to credentials cache '%s' "
+                       "because it has better credentials",
+                       self->identifier,
+                       self->active_credentials_cache_name,
+                       new_identity->active_credentials_cache_name);
+            }
+          else if (comparison == 0 && old_verification_level != VERIFICATION_LEVEL_SIGNED_IN)
+            {
+              should_set_cache_active = TRUE;
+
+              g_debug ("GoaKerberosIdentity: Switching identity %s from credentials cache '%s' to "
+                       "'%s' because it is newer and is otherwise just as good",
+                       self->identifier,
+                       self->active_credentials_cache_name,
+                       new_identity->active_credentials_cache_name);
+            }
+          else
+            {
+              should_set_cache_active = FALSE;
+
+              g_debug ("GoaKerberosIdentity: Not switching identity %s from credentials cache '%s' to '%s' "
+                       "because it has less good credentials",
+                       self->identifier,
+                       default_cache_name,
+                       new_identity->active_credentials_cache_name);
+            }
+        }
+      else if (cache_already_active)
+        {
+          if (is_default_cache)
+            {
+              should_set_cache_as_default = FALSE;
+              should_set_cache_active = FALSE;
+
+              g_debug ("GoaKerberosIdentity: Not setting default credentials cache to '%s' "
+                       "because cache is already active for identity %s and identity is default",
+                       new_identity->active_credentials_cache_name,
+                       self->identifier);
+            }
+          else
+            {
+              should_set_cache_as_default = TRUE;
+              should_set_cache_active = TRUE;
+
+              g_debug ("GoaKerberosIdentity: Switching default credentials cache from '%s' to '%s' "
+                       "because identity %s is default and cache is supposed to be active already but isn't",
+                       default_cache_name,
+                       new_identity->active_credentials_cache_name,
+                       self->identifier);
+            }
+        }
+      else
+        {
+          if (comparison < 0)
+            {
+              should_set_cache_as_default = TRUE;
+              should_set_cache_active = TRUE;
+
+              g_debug ("GoaKerberosIdentity: Switching default credentials cache from '%s' to '%s' "
+                       "because identity %s is default and the cache has better credentials than those "
+                       "in '%s'",
+                       default_cache_name,
+                       new_identity->active_credentials_cache_name,
+                       self->identifier,
+                       self->active_credentials_cache_name);
+            }
+          else if (comparison == 0 && old_verification_level != VERIFICATION_LEVEL_SIGNED_IN)
+            {
+              should_set_cache_as_default = TRUE;
+              should_set_cache_active = TRUE;
+
+              g_debug ("GoaKerberosIdentity: Switching default credentials cache from '%s' to '%s' "
+                       "because identity %s is default, and the cache has newer, and otherwise "
+                       "just as good credentials as those in '%s'",
+                       default_cache_name,
+                       new_identity->active_credentials_cache_name,
+                       self->identifier,
+                       self->active_credentials_cache_name);
+            }
+          else
+            {
+              should_set_cache_as_default = FALSE;
+              should_set_cache_active = FALSE;
+
+              g_debug ("GoaKerberosIdentity: Not switching default credentials cache from '%s' to '%s' "
+                       "because identity %s is default but newer credentials aren't as good as those in '%s'",
+                       default_cache_name,
+                       new_identity->active_credentials_cache_name,
+                       self->identifier,
+                       self->active_credentials_cache_name);
+            }
+        }
       credentials_cache = (krb5_ccache) g_hash_table_lookup (new_identity->credentials_caches,
                                                              new_identity->active_credentials_cache_name);
       krb5_cc_dup (new_identity->kerberos_context, credentials_cache, &copied_cache);
 
-      if (g_strcmp0 (default_cache_name, self->active_credentials_cache_name) == 0)
-        {
-          if ((comparison < 0) ||
-              (comparison == 0 && old_verification_level != VERIFICATION_LEVEL_SIGNED_IN))
-            should_switch_to_new_credentials_cache = TRUE;
-        }
-
-      if (comparison < 0)
+      if (should_set_cache_active)
         {
           g_clear_pointer (&self->active_credentials_cache_name, g_free);
           self->active_credentials_cache_name = g_strdup (new_identity->active_credentials_cache_name);
@@ -1636,17 +1792,19 @@ goa_kerberos_identity_update (GoaKerberosIdentity *self,
 
       goa_kerberos_identity_add_credentials_cache (self, copied_cache);
 
-      if (should_switch_to_new_credentials_cache)
+      if (should_set_cache_as_default)
         krb5_cc_switch (self->kerberos_context, copied_cache);
     }
   G_UNLOCK (identity_lock);
 
   clear_alarms (new_identity);
 
-  if (comparison >= 0)
+  if (!should_set_cache_active)
     return;
 
   G_LOCK (identity_lock);
+  g_debug ("GoaKerberosIdentity: Setting identity %s to use updated credentials in credentials cache '%s'",
+           self->identifier, self->active_credentials_cache_name);
   update_identifier (self, new_identity);
   time_changed |= set_start_time (self, new_identity->start_time);
   time_changed |= set_renewal_time (self, new_identity->renewal_time);
@@ -1656,9 +1814,19 @@ goa_kerberos_identity_update (GoaKerberosIdentity *self,
   if (time_changed)
     {
       if (new_verification_level == VERIFICATION_LEVEL_SIGNED_IN)
-        reset_alarms (self);
+        {
+          g_debug ("GoaKerberosIdentity: identity %s credentials have updated times, resetting alarms", self->identifier);
+          reset_alarms (self);
+        }
       else
-        clear_alarms (self);
+        {
+          g_debug ("GoaKerberosIdentity: identity %s credentials are now expired, clearing alarms", self->identifier);
+          clear_alarms (self);
+        }
+    }
+  else
+    {
+      g_debug ("GoaKerberosIdentity: identity %s credentials do not have updated times, so not adjusting alarms", self->identifier);
     }
 
   G_LOCK (identity_lock);
