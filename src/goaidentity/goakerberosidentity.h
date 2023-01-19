@@ -41,6 +41,11 @@ GoaIdentity *goa_kerberos_identity_new (krb5_context   kerberos_context,
                                         krb5_ccache    cache,
                                         GError       **error);
 
+gboolean goa_kerberos_identity_has_credentials_cache (GoaKerberosIdentity  *self,
+                                                      krb5_ccache           credentials_cache);
+void goa_kerberos_identity_add_credentials_cache (GoaKerberosIdentity  *self,
+                                                  krb5_ccache           cache);
+
 gboolean goa_kerberos_identity_sign_in (GoaKerberosIdentity     *self,
                                         const char              *principal_name,
                                         gconstpointer            initial_password,
@@ -51,8 +56,7 @@ gboolean goa_kerberos_identity_sign_in (GoaKerberosIdentity     *self,
                                         GDestroyNotify           destroy_notify,
                                         GCancellable            *cancellable,
                                         GError                 **error);
-void goa_kerberos_identity_update (GoaKerberosIdentity *identity,
-                                   GoaKerberosIdentity *new_identity);
+void goa_kerberos_identity_refresh (GoaKerberosIdentity *identity);
 gboolean goa_kerberos_identity_renew (GoaKerberosIdentity  *self,
                                       GError              **error);
 gboolean goa_kerberos_identity_erase (GoaKerberosIdentity *self,
