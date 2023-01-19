@@ -499,34 +499,6 @@ drop_stale_identities (GoaKerberosIdentityManager *self,
 }
 
 static void
-update_identity (GoaKerberosIdentityManager *self,
-                 Operation                  *operation,
-                 GoaIdentity                *identity,
-                 GoaIdentity                *new_identity)
-{
-
-  goa_kerberos_identity_update (GOA_KERBEROS_IDENTITY (identity),
-                                GOA_KERBEROS_IDENTITY (new_identity));
-
-  if (goa_identity_is_signed_in (identity))
-    {
-      IdentitySignalWork *work;
-
-      /* if it's not expired, send out a refresh signal */
-      g_debug ("GoaKerberosIdentityManager: identity '%s' refreshed",
-               goa_identity_get_identifier (identity));
-
-      work = identity_signal_work_new (self, identity);
-      goa_kerberos_identify_manager_send_to_context (operation->context,
-                                                     (GSourceFunc)
-                                                     do_identity_signal_refreshed_work,
-                                                     work,
-                                                     (GDestroyNotify)
-                                                     identity_signal_work_free);
-    }
-}
-
-static void
 add_identity (GoaKerberosIdentityManager *self,
               Operation                  *operation,
               GoaIdentity                *identity,
@@ -547,40 +519,69 @@ add_identity (GoaKerberosIdentityManager *self,
                                                  (GDestroyNotify) identity_signal_work_free);
 }
 
-static void
-refresh_identity (GoaKerberosIdentityManager *self,
-                  Operation                  *operation,
-                  GHashTable                 *refreshed_identities,
-                  GoaIdentity                *identity)
+static char *
+get_principal_from_cache (GoaKerberosIdentityManager *self,
+                          krb5_ccache                 cache)
 {
-  const char *identifier;
-  GoaIdentity *old_identity;
+  int error_code;
+  krb5_principal principal;
+  char *unparsed_name;
+  char *principal_name;
 
-  identifier = goa_identity_get_identifier (identity);
+  error_code = krb5_cc_get_principal (self->kerberos_context, cache, &principal);
+
+  error_code = krb5_unparse_name_flags (self->kerberos_context, principal, 0, &unparsed_name);
+  krb5_free_principal (self->kerberos_context, principal);
+
+  if (error_code != 0)
+    return NULL;
+
+  principal_name = g_strdup (unparsed_name);
+
+  krb5_free_unparsed_name (self->kerberos_context, unparsed_name);
+
+  return principal_name;
+}
+
+static void
+import_credentials_cache (GoaKerberosIdentityManager *self,
+                          Operation                  *operation,
+                          GHashTable                 *refreshed_identities,
+                          krb5_ccache                 cache)
+{
+  g_autofree char *identifier = NULL;
+  GoaIdentity *identity = NULL;
+
+  identifier = get_principal_from_cache (self, cache);
 
   if (identifier == NULL)
     return;
 
-  old_identity = g_hash_table_lookup (self->identities, identifier);
+  identity = g_hash_table_lookup (self->identities, identifier);
 
-  if (old_identity != NULL)
+  if (identity == NULL)
     {
-      g_debug ("GoaKerberosIdentityManager: refreshing identity '%s'", identifier);
-      update_identity (self, operation, old_identity, identity);
+      g_autoptr(GError) error = NULL;
 
-      /* Reuse the old identity, so any object data set up on it doesn't
-       * disappear spurriously
-       */
-      identifier = goa_identity_get_identifier (old_identity);
-      identity = old_identity;
+      g_debug ("GoaKerberosIdentityManager: Adding new identity '%s'", identifier);
+      identity = goa_kerberos_identity_new (self->kerberos_context, cache, &error);
+
+      if (error != NULL)
+        {
+          g_debug ("GoaKerberosIdentityManager: Could not track identity %s: %s",
+                   identifier, error->message);
+          return;
+        }
+
+      add_identity (self, operation, identity, identifier);
     }
   else
     {
-      g_debug ("GoaKerberosIdentityManager: adding new identity '%s'", identifier);
-      add_identity (self, operation, identity, identifier);
+      if (!goa_kerberos_identity_has_credentials_cache (GOA_KERBEROS_IDENTITY (identity), cache))
+        goa_kerberos_identity_add_credentials_cache (GOA_KERBEROS_IDENTITY (identity), cache);
     }
 
-  /* Track refreshed identities so we can emit removals when we're done fully
+  /* Track refreshed identities so we can emit refreshes and removals when we're done fully
    * enumerating the collection of credential caches
    */
   g_hash_table_replace (refreshed_identities,
@@ -597,6 +598,9 @@ refresh_identities (GoaKerberosIdentityManager *self,
   krb5_cccol_cursor cursor;
   const char *error_message;
   GHashTable *refreshed_identities;
+  GHashTableIter iter;
+  const char *name;
+  GoaIdentity *identity;
 
   /* If we have more refreshes queued up, don't bother doing this one
    */
@@ -622,15 +626,7 @@ refresh_identities (GoaKerberosIdentityManager *self,
 
   while (error_code == 0 && cache != NULL)
     {
-      GoaIdentity *identity;
-
-      identity = goa_kerberos_identity_new (self->kerberos_context, cache, NULL);
-
-      if (identity != NULL)
-        {
-          refresh_identity (self, operation, refreshed_identities, identity);
-          g_object_unref (identity);
-        }
+      import_credentials_cache (self, operation, refreshed_identities, cache);
 
       krb5_cc_close (self->kerberos_context, cache);
       error_code = krb5_cccol_cursor_next (self->kerberos_context, cursor, &cache);
@@ -645,6 +641,30 @@ refresh_identities (GoaKerberosIdentityManager *self,
     }
 
   krb5_cccol_cursor_free (self->kerberos_context, &cursor);
+
+  g_hash_table_iter_init (&iter, self->identities);
+  while (g_hash_table_iter_next (&iter, (gpointer *) &name, (gpointer*) &identity))
+    {
+      goa_kerberos_identity_refresh (GOA_KERBEROS_IDENTITY (identity));
+
+      if (goa_identity_is_signed_in (identity))
+        {
+          IdentitySignalWork *work;
+
+          /* if it's not expired, send out a refresh signal */
+          g_debug ("GoaKerberosIdentityManager: identity '%s' refreshed",
+                   goa_identity_get_identifier (identity));
+
+          work = identity_signal_work_new (self, identity);
+          goa_kerberos_identify_manager_send_to_context (operation->context,
+                                                         (GSourceFunc)
+                                                         do_identity_signal_refreshed_work,
+                                                         work,
+                                                         (GDestroyNotify)
+                                                         identity_signal_work_free);
+        }
+    }
+
 done:
   drop_stale_identities (self, operation, refreshed_identities);
   g_hash_table_unref (refreshed_identities);
