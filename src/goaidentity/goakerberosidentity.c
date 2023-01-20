@@ -646,11 +646,8 @@ examine_credentials (GoaKerberosIdentity *self,
 
   credentials_end_time = credentials->times.endtime;
 
-  if (self->start_time == 0)
-    *start_time = credentials_start_time;
-  else
-    *start_time = MIN (self->start_time, credentials_start_time);
-  *expiration_time = MAX (credentials->times.endtime, self->expiration_time);
+  *start_time = credentials_start_time;
+  *expiration_time = credentials->times.endtime;
   G_UNLOCK (identity_lock);
 
   current_time = get_current_time (self);
@@ -798,92 +795,341 @@ out:
   return verification_level;
 }
 
+static char *
+get_default_principal (GoaKerberosIdentity *self)
+{
+  int error_code;
+  krb5_ccache default_cache;
+  krb5_principal principal;
+  char *unparsed_principal, *principal_name;
+
+  error_code = krb5_cc_default (self->kerberos_context, &default_cache);
+
+  if (error_code != 0)
+    return NULL;
+
+  /* Return NULL if the default cache doesn't pass basic sanity checks
+   */
+  error_code = krb5_cc_get_principal (self->kerberos_context, default_cache, &principal);
+
+  if (error_code != 0)
+    return NULL;
+
+  error_code = krb5_unparse_name_flags (self->kerberos_context, principal, 0, &unparsed_principal);
+  krb5_free_principal (self->kerberos_context, principal);
+
+  if (error_code != 0)
+    return NULL;
+
+  principal_name = g_strdup (unparsed_principal);
+  krb5_free_unparsed_name (self->kerberos_context, unparsed_principal);
+
+  krb5_cc_close (self->kerberos_context, default_cache);
+
+  return principal_name;
+}
+
+static char *
+get_default_cache_name (GoaKerberosIdentity *self)
+{
+  int error_code;
+  krb5_ccache default_cache;
+  krb5_principal principal;
+  char *default_cache_name;
+  char *principal_name;
+
+  error_code = krb5_cc_default (self->kerberos_context, &default_cache);
+
+  if (error_code != 0)
+    return NULL;
+
+  /* Return NULL if the default cache doesn't pass basic sanity checks
+   */
+  error_code = krb5_cc_get_principal (self->kerberos_context, default_cache, &principal);
+
+  if (error_code != 0)
+    return NULL;
+
+  error_code = krb5_unparse_name_flags (self->kerberos_context, principal, 0, &principal_name);
+  krb5_free_principal (self->kerberos_context, principal);
+
+  if (error_code != 0)
+    return NULL;
+
+  krb5_free_unparsed_name (self->kerberos_context, principal_name);
+
+  default_cache_name = g_strdup (krb5_cc_get_name (self->kerberos_context, default_cache));
+  krb5_cc_close (self->kerberos_context, default_cache);
+
+  return default_cache_name;
+}
+
 static VerificationLevel
 verify_identity (GoaKerberosIdentity  *self,
                  char                **preauth_identity_source,
                  GError              **error)
 {
   krb5_ccache credentials_cache;
+  g_autofree char *default_principal = NULL;
+  g_autofree char *default_credentials_cache_name = NULL;
+  gboolean is_default_principal;
+  gboolean is_default_credentials_cache;
+  gboolean should_switch_default_credentials_cache = FALSE;
+  gboolean time_changed = FALSE;
   const char *name;
-  krb5_timestamp start_time = 0;
-  krb5_timestamp renewal_time = 0;
-  krb5_timestamp expiration_time = 0;
-  VerificationLevel verification_level = VERIFICATION_LEVEL_UNVERIFIED;
+  krb5_timestamp best_start_time = 0;
+  krb5_timestamp best_renewal_time = 0;
+  krb5_timestamp best_expiration_time = 0;
+  g_autofree char *best_preauth_identity_source = NULL;
+  g_autofree char *best_credentials_cache_name = NULL;
+  VerificationLevel old_verification_level = VERIFICATION_LEVEL_UNVERIFIED;
+  VerificationLevel best_verification_level = VERIFICATION_LEVEL_UNVERIFIED;
   GHashTableIter iter;
 
   if (self->active_credentials_cache_name != NULL)
     {
+      G_LOCK (identity_lock);
       credentials_cache = (krb5_ccache) g_hash_table_lookup (self->credentials_caches,
                                                              self->active_credentials_cache_name);
+      G_UNLOCK (identity_lock);
 
-      verification_level = verify_identity_in_credentials_cache (self,
-                                                                 preauth_identity_source,
-                                                                 credentials_cache,
-                                                                 &start_time,
-                                                                 &renewal_time,
-                                                                 &expiration_time,
-                                                                 error);
-      if (verification_level == VERIFICATION_LEVEL_SIGNED_IN)
+      best_verification_level = verify_identity_in_credentials_cache (self,
+                                                                      &best_preauth_identity_source,
+                                                                      credentials_cache,
+                                                                      &best_start_time,
+                                                                      &best_renewal_time,
+                                                                      &best_expiration_time,
+                                                                      error);
+      G_LOCK (identity_lock);
+      best_credentials_cache_name = g_strdup (self->active_credentials_cache_name);
+      G_UNLOCK (identity_lock);
+
+      if (best_verification_level == VERIFICATION_LEVEL_SIGNED_IN)
         goto out;
 
-      if (verification_level == VERIFICATION_LEVEL_UNVERIFIED)
+      if (best_verification_level == VERIFICATION_LEVEL_UNVERIFIED ||
+          best_verification_level == VERIFICATION_LEVEL_ERROR)
         {
-          krb5_cc_close (self->kerberos_context, credentials_cache);
-          g_hash_table_remove (self->credentials_caches, self->active_credentials_cache_name);
-          g_clear_pointer (&self->active_credentials_cache_name, g_free);
+          g_clear_pointer (&best_credentials_cache_name, g_free);
+
+          G_LOCK (identity_lock);
+          if (self->identifier != NULL)
+            {
+              krb5_cc_close (self->kerberos_context, credentials_cache);
+              g_hash_table_remove (self->credentials_caches, self->active_credentials_cache_name);
+              g_clear_pointer (&self->active_credentials_cache_name, g_free);
+            }
+          G_UNLOCK (identity_lock);
         }
   }
 
-  self->start_time = 0;
-  self->renewal_time = 0;
-  self->expiration_time = 0;
+  G_LOCK (identity_lock);
+  old_verification_level = self->cached_verification_level;
+  G_UNLOCK (identity_lock);
 
+  G_LOCK (identity_lock);
   g_hash_table_iter_init (&iter, self->credentials_caches);
   while (g_hash_table_iter_next (&iter, (gpointer *) &name, (gpointer*) &credentials_cache))
     {
       krb5_timestamp new_start_time = 0;
       krb5_timestamp new_renewal_time = 0;
       krb5_timestamp new_expiration_time = 0;
+      g_autofree char *new_preauth_identity_source = NULL;
+      VerificationLevel verification_level = VERIFICATION_LEVEL_UNVERIFIED;
+      gboolean has_better_credentials = FALSE;
 
       if (g_strcmp0 (name, self->active_credentials_cache_name) == 0)
         continue;
 
-      g_clear_pointer (preauth_identity_source, g_free);
+      G_UNLOCK (identity_lock);
+
+      if (preauth_identity_source != NULL)
+        g_clear_pointer (preauth_identity_source, g_free);
+
       verification_level = verify_identity_in_credentials_cache (self,
-                                                                 preauth_identity_source,
+                                                                 &new_preauth_identity_source,
                                                                  credentials_cache,
                                                                  &new_start_time,
                                                                  &new_renewal_time,
                                                                  &new_expiration_time,
                                                                  error);
 
-      if (verification_level == VERIFICATION_LEVEL_SIGNED_IN ||
-          self->active_credentials_cache_name == NULL)
+      if (verification_level == VERIFICATION_LEVEL_UNVERIFIED ||
+          verification_level == VERIFICATION_LEVEL_ERROR)
         {
-          g_clear_pointer (&self->active_credentials_cache_name, g_free);
-          self->active_credentials_cache_name = g_strdup (name);
-          start_time = new_start_time;
-          renewal_time = new_renewal_time;
-          expiration_time = new_expiration_time;
+          G_LOCK (identity_lock);
+          if (self->identifier != NULL)
+            {
+              krb5_cc_close (self->kerberos_context, credentials_cache);
+              g_hash_table_iter_remove (&iter);
+            }
 
-          if (verification_level == VERIFICATION_LEVEL_SIGNED_IN)
-            break;
+          /* Note: The lock is held while iterating */
+          continue;
         }
-      else if (verification_level == VERIFICATION_LEVEL_UNVERIFIED)
+
+      if (best_verification_level < verification_level)
+        has_better_credentials = TRUE;
+      else if (best_verification_level > verification_level)
+        has_better_credentials = FALSE;
+      else if (best_expiration_time < new_expiration_time)
+        has_better_credentials = TRUE;
+      else if (best_expiration_time > new_expiration_time)
+        has_better_credentials = FALSE;
+      else if (best_start_time > new_start_time)
+        has_better_credentials = TRUE;
+      else if (best_start_time > new_start_time)
+        has_better_credentials = FALSE;
+      else if (best_renewal_time < new_renewal_time)
+        has_better_credentials = TRUE;
+      else if (best_renewal_time > new_renewal_time)
+        has_better_credentials = FALSE;
+      else
+        has_better_credentials = FALSE;
+
+      if (has_better_credentials)
         {
-          krb5_cc_close (self->kerberos_context, credentials_cache);
-          g_hash_table_iter_remove (&iter);
+          best_verification_level = verification_level;
+          best_start_time = new_start_time;
+          best_renewal_time = new_renewal_time;
+          best_expiration_time = new_expiration_time;
+
+          g_clear_pointer (&best_preauth_identity_source, g_free);
+          best_preauth_identity_source = g_steal_pointer (&new_preauth_identity_source);
+
+          g_clear_pointer (&best_credentials_cache_name, g_free);
+          best_credentials_cache_name = g_strdup (name);
         }
+
+      G_LOCK (identity_lock);
+    }
+  G_UNLOCK (identity_lock);
+
+  if (best_credentials_cache_name == NULL)
+    {
+      g_hash_table_iter_init (&iter, self->credentials_caches);
+      if (g_hash_table_iter_next (&iter, (gpointer *) &name, (gpointer*) &credentials_cache))
+        best_credentials_cache_name = g_strdup (name);
     }
 
 out:
+
   G_LOCK (identity_lock);
-  set_start_time (self, start_time);
-  set_renewal_time (self, renewal_time);
-  set_expiration_time (self, expiration_time);
+  g_clear_pointer (&self->active_credentials_cache_name, g_free);
+  self->active_credentials_cache_name = g_steal_pointer (&best_credentials_cache_name);
   G_UNLOCK (identity_lock);
 
-  return verification_level;
+  *preauth_identity_source = g_steal_pointer (&best_preauth_identity_source);
+
+  if (best_verification_level > VERIFICATION_LEVEL_UNVERIFIED)
+    {
+      G_LOCK (identity_lock);
+      time_changed |= set_start_time (self, best_start_time);
+      time_changed |= set_renewal_time (self, best_renewal_time);
+      time_changed |= set_expiration_time (self, best_expiration_time);
+      G_UNLOCK (identity_lock);
+
+      if (time_changed)
+      {
+          if (best_verification_level == VERIFICATION_LEVEL_SIGNED_IN)
+          {
+              g_debug ("GoaKerberosIdentity: identity %s credentials have updated times, resetting alarms", self->identifier);
+              reset_alarms (self);
+          }
+          else
+          {
+              g_debug ("GoaKerberosIdentity: identity %s credentials are now expired, clearing alarms", self->identifier);
+              clear_alarms (self);
+          }
+      }
+      else
+      {
+          g_debug ("GoaKerberosIdentity: identity %s credentials do not have updated times, so not adjusting alarms", self->identifier);
+      }
+    }
+  else
+    {
+      g_debug ("GoaKerberosIdentity: identity is unverified, clearing alarms");
+      clear_alarms (self);
+    }
+
+  if (best_verification_level != old_verification_level)
+    {
+      if (old_verification_level == VERIFICATION_LEVEL_SIGNED_IN &&
+          best_verification_level == VERIFICATION_LEVEL_EXISTS)
+        {
+          G_LOCK (identity_lock);
+          self->cached_verification_level = best_verification_level;
+          G_UNLOCK (identity_lock);
+
+          g_signal_emit (G_OBJECT (self), signals[EXPIRED], 0);
+        }
+      else if (old_verification_level == VERIFICATION_LEVEL_EXISTS &&
+               best_verification_level == VERIFICATION_LEVEL_SIGNED_IN)
+        {
+          G_LOCK (identity_lock);
+          self->cached_verification_level = best_verification_level;
+          G_UNLOCK (identity_lock);
+
+          g_signal_emit (G_OBJECT (self), signals[UNEXPIRED], 0);
+        }
+      else
+        {
+          G_LOCK (identity_lock);
+          self->cached_verification_level = best_verification_level;
+          G_UNLOCK (identity_lock);
+        }
+      queue_notify (self, &self->is_signed_in_idle_id, "is-signed-in");
+    }
+
+  default_principal = get_default_principal (self);
+  is_default_principal = g_strcmp0 (default_principal, self->identifier) == 0;
+
+  default_credentials_cache_name = get_default_cache_name (self);
+  is_default_credentials_cache = g_strcmp0 (default_credentials_cache_name, self->active_credentials_cache_name) == 0;
+
+  if (self->active_credentials_cache_name == NULL)
+    {
+      g_debug ("GoaKerberosIdentity: Not switching default credentials cache because identity %s has no active credentials cache to switch to", self->identifier);
+      should_switch_default_credentials_cache = FALSE;
+    }
+  else if (self->identifier == NULL)
+    {
+      g_debug ("GoaKerberosIdentity: Not switching default credentials cache to '%s' because it is not yet initialized", self->active_credentials_cache_name);
+      should_switch_default_credentials_cache = FALSE;
+    }
+  else if (default_principal == NULL) 
+    {
+      g_debug ("GoaKerberosIdentity: Switching default credentials cache to '%s' (identity %s) because there is currently no default", self->active_credentials_cache_name, self->identifier);
+      should_switch_default_credentials_cache = TRUE;
+    }
+  else if (!is_default_principal)
+    {
+      g_debug ("GoaKerberosIdentity: Not switching default credentials cache because identity %s is not the default identity", self->identifier);
+      should_switch_default_credentials_cache = FALSE;
+    }
+  else if (!is_default_credentials_cache)
+    {
+      g_debug ("GoaKerberosIdentity: Switching default credentials cache from '%s' to '%s' because identity %s is the default, and that credentials cache is supposed to be the active cache for that identity",
+               default_credentials_cache_name, self->active_credentials_cache_name, self->identifier);
+      should_switch_default_credentials_cache = TRUE;
+    }
+  else
+    {
+      g_debug ("GoaKerberosIdentity: Not switching default credentials cache to '%s' for identity %s because it's already the default", self->active_credentials_cache_name, self->identifier);
+      should_switch_default_credentials_cache = FALSE;
+    }
+
+  if (should_switch_default_credentials_cache)
+    {
+      G_LOCK (identity_lock);
+      credentials_cache = (krb5_ccache) g_hash_table_lookup (self->credentials_caches,
+                                                             self->active_credentials_cache_name);
+      krb5_cc_switch (self->kerberos_context, credentials_cache);
+      G_UNLOCK (identity_lock);
+    }
+
+  return best_verification_level;
 }
 
 static gboolean
@@ -1086,6 +1332,8 @@ reset_alarms (GoaKerberosIdentity *self)
 
   if (renewal_time != NULL)
     reset_alarm (self, &self->renewal_alarm, renewal_time);
+  else if (self->renewal_alarm != NULL)
+    clear_alarm_and_unref_on_idle (self, &self->renewal_alarm);
 
   reset_alarm (self, &self->expiring_alarm, expiring_time);
   reset_alarm (self, &self->expiration_alarm, expiration_time);
@@ -1212,11 +1460,23 @@ on_kerberos_inquiry (krb5_context      kerberos_context,
   return error_code;
 }
 
-static void
+gboolean
+goa_kerberos_identity_has_credentials_cache (GoaKerberosIdentity  *self,
+                                             krb5_ccache           credentials_cache)
+{
+  const char *cache_name;
+
+  cache_name = krb5_cc_get_name (self->kerberos_context, credentials_cache);
+
+  return g_hash_table_contains (self->credentials_caches, cache_name);
+}
+
+void
 goa_kerberos_identity_add_credentials_cache (GoaKerberosIdentity  *self,
                                              krb5_ccache           credentials_cache)
 {
   const char *cache_name;
+  krb5_ccache copied_cache;
 
   cache_name = krb5_cc_get_name (self->kerberos_context, credentials_cache);
 
@@ -1224,12 +1484,22 @@ goa_kerberos_identity_add_credentials_cache (GoaKerberosIdentity  *self,
     {
       krb5_ccache old_credentials_cache;
 
+      g_debug ("GoaKerberosIdentity: Updating credentials in credentials cache '%s' for identity %s ", cache_name, self->identifier);
+
       old_credentials_cache = (krb5_ccache) g_hash_table_lookup (self->credentials_caches, cache_name);
 
       krb5_cc_close (self->kerberos_context, old_credentials_cache);
     }
+  else
+    {
+      if (self->identifier != NULL)
+        g_debug ("GoaKerberosIdentity: Associating identity %s with new credentials cache '%s'", self->identifier, cache_name);
+      else
+        g_debug ("GoaKerberosIdentity: Associating new identity with new credentials cache '%s'", cache_name);
+    }
 
-  g_hash_table_replace (self->credentials_caches, g_strdup (cache_name), credentials_cache);
+  krb5_cc_dup (self->kerberos_context, credentials_cache, &copied_cache);
+  g_hash_table_replace (self->credentials_caches, g_strdup (cache_name), copied_cache);
 
   if (self->active_credentials_cache_name == NULL)
     {
@@ -1266,6 +1536,7 @@ create_credentials_cache (GoaKerberosIdentity  *self,
     }
 
   goa_kerberos_identity_add_credentials_cache (self, new_cache);
+  krb5_cc_close (self->kerberos_context, new_cache);
 
   return TRUE;
 }
@@ -1375,7 +1646,6 @@ goa_kerberos_identity_sign_in (GoaKerberosIdentity     *self,
   krb5_get_init_creds_opt *options;
   krb5_deltat start_time;
   char *service_name;
-  gboolean signed_in;
 
   if (g_cancellable_set_error_if_cancelled (cancellable, error))
     return FALSE;
@@ -1393,8 +1663,6 @@ goa_kerberos_identity_sign_in (GoaKerberosIdentity     *self,
         destroy_notify (inquiry_data);
       return FALSE;
     }
-
-  signed_in = FALSE;
 
   operation = sign_in_operation_new (self,
                                      inquiry_func,
@@ -1495,180 +1763,48 @@ goa_kerberos_identity_sign_in (GoaKerberosIdentity     *self,
     }
   krb5_free_principal (self->kerberos_context, principal);
 
-  g_debug ("GoaKerberosIdentity: identity signed in");
-  signed_in = TRUE;
 done:
 
-  return signed_in;
-}
-
-static void
-update_identifier (GoaKerberosIdentity *self, GoaKerberosIdentity *new_identity)
-{
-  char *new_identifier;
-
-  new_identifier = get_identifier (new_identity, NULL);
-  if (g_strcmp0 (self->identifier, new_identifier) != 0 && new_identifier != NULL)
-    {
-      g_free (self->identifier);
-      self->identifier = new_identifier;
-      queue_notify (self, &self->identifier_idle_id, "identifier");
-    }
-  else
-    {
-      g_free (new_identifier);
-    }
-}
-
-static int
-goa_kerberos_identity_compare (GoaKerberosIdentity *self,
-                               GoaKerberosIdentity *new_identity)
-{
-  if (self->cached_verification_level < new_identity->cached_verification_level)
-    return -100;
-
-  if (self->cached_verification_level > new_identity->cached_verification_level)
-    return 100;
+  goa_kerberos_identity_refresh (self);
 
   if (self->cached_verification_level != VERIFICATION_LEVEL_SIGNED_IN)
-    return 50;
+    {
+      g_debug ("GoaKerberosIdentity: Identity '%s' could not be signed in", principal_name);
+      return FALSE;
+    }
 
-  if (self->expiration_time < new_identity->expiration_time)
-    return -10;
-
-  if (self->expiration_time > new_identity->expiration_time)
-    return 10;
-
-  if (self->start_time > new_identity->start_time)
-    return -5;
-
-  if (self->start_time < new_identity->start_time)
-    return 5;
-
-  if (self->renewal_time < new_identity->renewal_time)
-    return -1;
-
-  if (self->renewal_time > new_identity->renewal_time)
-    return 1;
-
-  return 0;
-}
-
-static char *
-get_default_cache_name (GoaKerberosIdentity *self)
-{
-  int error_code;
-  krb5_ccache default_cache;
-  krb5_principal principal;
-  char *default_cache_name;
-  char *principal_name;
-
-  error_code = krb5_cc_default (self->kerberos_context, &default_cache);
-
-  if (error_code != 0)
-    return NULL;
-
-  /* Return NULL if the default cache doesn't pass basic sanity checks
-   */
-  error_code = krb5_cc_get_principal (self->kerberos_context, default_cache, &principal);
-
-  if (error_code != 0)
-    return NULL;
-
-  error_code = krb5_unparse_name_flags (self->kerberos_context, principal, 0, &principal_name);
-  krb5_free_principal (self->kerberos_context, principal);
-
-  if (error_code != 0)
-    return NULL;
-
-  krb5_free_unparsed_name (self->kerberos_context, principal_name);
-
-  default_cache_name = g_strdup (krb5_cc_get_name (self->kerberos_context, default_cache));
-  krb5_cc_close (self->kerberos_context, default_cache);
-
-  return default_cache_name;
+  g_debug ("GoaKerberosIdentity: Identity '%s' signed in", principal_name);
+  return TRUE;
 }
 
 void
-goa_kerberos_identity_update (GoaKerberosIdentity *self,
-                              GoaKerberosIdentity *new_identity)
+goa_kerberos_identity_refresh (GoaKerberosIdentity *self)
 {
   VerificationLevel old_verification_level, new_verification_level;
-  gboolean time_changed = FALSE;
-  char *preauth_identity_source = NULL;
-  int comparison;
+  g_autofree char *preauth_identity_source = NULL;
+  g_autoptr (GError) error = NULL;
+
+  g_debug ("GoaKerberosIdentity: Refreshing identity %s (active credentials cache: %s)",
+           self->identifier,
+           self->active_credentials_cache_name);
 
   G_LOCK (identity_lock);
-
   old_verification_level = self->cached_verification_level;
-  new_verification_level = new_identity->cached_verification_level;
-
-  comparison = goa_kerberos_identity_compare (self, new_identity);
-
-  if (new_identity->active_credentials_cache_name != NULL)
-    {
-      g_autofree char *default_cache_name = NULL;
-      krb5_ccache credentials_cache;
-      krb5_ccache copied_cache;
-      gboolean should_switch_to_new_credentials_cache = FALSE;
-
-      default_cache_name = get_default_cache_name (self);
-
-      if (default_cache_name == NULL)
-        should_switch_to_new_credentials_cache = TRUE;
-
-      credentials_cache = (krb5_ccache) g_hash_table_lookup (new_identity->credentials_caches,
-                                                             new_identity->active_credentials_cache_name);
-      krb5_cc_dup (new_identity->kerberos_context, credentials_cache, &copied_cache);
-
-      if (g_strcmp0 (default_cache_name, self->active_credentials_cache_name) == 0)
-        {
-          if ((comparison < 0) ||
-              (comparison == 0 && old_verification_level != VERIFICATION_LEVEL_SIGNED_IN))
-            should_switch_to_new_credentials_cache = TRUE;
-        }
-
-      if (comparison < 0)
-        {
-          g_clear_pointer (&self->active_credentials_cache_name, g_free);
-          self->active_credentials_cache_name = g_strdup (new_identity->active_credentials_cache_name);
-        }
-
-      goa_kerberos_identity_add_credentials_cache (self, copied_cache);
-
-      if (should_switch_to_new_credentials_cache)
-        krb5_cc_switch (self->kerberos_context, copied_cache);
-    }
   G_UNLOCK (identity_lock);
 
-  clear_alarms (new_identity);
-
-  if (comparison >= 0)
-    return;
+  new_verification_level = verify_identity (self, &preauth_identity_source, &error);
 
   G_LOCK (identity_lock);
-  update_identifier (self, new_identity);
-  time_changed |= set_start_time (self, new_identity->start_time);
-  time_changed |= set_renewal_time (self, new_identity->renewal_time);
-  time_changed |= set_expiration_time (self, new_identity->expiration_time);
-  G_UNLOCK (identity_lock);
-
-  if (time_changed)
+  if (g_strcmp0 (self->preauth_identity_source, preauth_identity_source) != 0)
     {
-      if (new_verification_level == VERIFICATION_LEVEL_SIGNED_IN)
-        reset_alarms (self);
-      else
-        clear_alarms (self);
+      g_free (self->preauth_identity_source);
+      self->preauth_identity_source = g_steal_pointer (&preauth_identity_source);
     }
-
-  G_LOCK (identity_lock);
-  g_free (self->preauth_identity_source);
-  self->preauth_identity_source = preauth_identity_source;
   G_UNLOCK (identity_lock);
 
   if (new_verification_level != old_verification_level)
     {
-      if (old_verification_level == VERIFICATION_LEVEL_SIGNED_IN &&
+      if ((old_verification_level == VERIFICATION_LEVEL_SIGNED_IN) &&
           new_verification_level == VERIFICATION_LEVEL_EXISTS)
         {
           G_LOCK (identity_lock);
@@ -1692,7 +1828,9 @@ goa_kerberos_identity_update (GoaKerberosIdentity *self,
           self->cached_verification_level = new_verification_level;
           G_UNLOCK (identity_lock);
         }
+      G_LOCK (identity_lock);
       queue_notify (self, &self->is_signed_in_idle_id, "is-signed-in");
+      G_UNLOCK (identity_lock);
     }
 }
 
@@ -1804,13 +1942,11 @@ GoaIdentity *
 goa_kerberos_identity_new (krb5_context context, krb5_ccache cache, GError **error)
 {
   GoaKerberosIdentity *self;
-  krb5_ccache copied_cache;
 
   self = GOA_KERBEROS_IDENTITY (g_object_new (GOA_TYPE_KERBEROS_IDENTITY, NULL));
   self->kerberos_context = context;
 
-  krb5_cc_dup (self->kerberos_context, cache, &copied_cache);
-  goa_kerberos_identity_add_credentials_cache (self, copied_cache);
+  goa_kerberos_identity_add_credentials_cache (self, cache);
 
   error = NULL;
   if (!g_initable_init (G_INITABLE (self), NULL, error))
