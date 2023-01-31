@@ -82,7 +82,7 @@ web_view_create_loading_title (const gchar *url)
 
   g_return_val_if_fail (url != NULL && url[0] != '\0', NULL);
 
-  uri = g_uri_parse (url, G_URI_FLAGS_NONE, NULL);
+  uri = g_uri_parse (url, G_URI_FLAGS_PARSE_RELAXED, NULL);
   hostname = g_uri_get_host (uri);
   /* translators: %s here is the address of the web page */
   title = g_strdup_printf (_("Loading “%s”…"), hostname);

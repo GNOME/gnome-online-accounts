@@ -171,7 +171,7 @@ build_object (GoaProvider         *provider,
   account = goa_object_get_account (GOA_OBJECT (object));
   identity = goa_account_get_identity (account);
   uri_string = g_key_file_get_string (key_file, group, "Uri", NULL);
-  uri = g_uri_parse (uri_string, G_URI_FLAGS_ENCODED, NULL);
+  uri = g_uri_parse (uri_string, G_URI_FLAGS_ENCODED | G_URI_FLAGS_PARSE_RELAXED, NULL);
   if (uri != NULL)
     {
       GUri *tmp_uri;
@@ -397,7 +397,7 @@ normalize_uri (const gchar *address, gchar **server)
   else
     goto out;
 
-  uri = g_uri_parse (uri_string, G_URI_FLAGS_ENCODED, NULL);
+  uri = g_uri_parse (uri_string, G_URI_FLAGS_ENCODED | G_URI_FLAGS_PARSE_RELAXED, NULL);
   if (uri == NULL)
     goto out;
 

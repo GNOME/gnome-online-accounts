@@ -797,7 +797,7 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
   if (!g_str_has_prefix (requested_uri, redirect_uri))
     goto default_behaviour;
 
-  uri = g_uri_parse (requested_uri, G_URI_FLAGS_ENCODED, NULL);
+  uri = g_uri_parse (requested_uri, G_URI_FLAGS_ENCODED | G_URI_FLAGS_PARSE_RELAXED, NULL);
   fragment = g_uri_get_fragment (uri);
   query = g_uri_get_query (uri);
 
