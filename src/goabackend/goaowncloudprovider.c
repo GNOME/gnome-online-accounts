@@ -175,10 +175,12 @@ build_object (GoaProvider         *provider,
   if (uri != NULL)
     {
       GUri *tmp_uri;
+      gchar *encoded_identity;
 
+      encoded_identity = g_uri_escape_string (identity, NULL, FALSE);
       tmp_uri = g_uri_build_with_user (g_uri_get_flags (uri),
                                        g_uri_get_scheme (uri),
-                                       identity,
+                                       encoded_identity,
                                        g_uri_get_password (uri),
                                        g_uri_get_auth_params (uri),
                                        g_uri_get_host (uri),
@@ -186,6 +188,7 @@ build_object (GoaProvider         *provider,
                                        g_uri_get_path (uri),
                                        g_uri_get_query (uri),
                                        g_uri_get_fragment (uri));
+      g_free (encoded_identity);
       g_uri_unref (uri);
       uri = tmp_uri;
     }
