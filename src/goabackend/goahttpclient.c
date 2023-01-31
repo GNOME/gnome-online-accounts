@@ -128,11 +128,6 @@ http_client_accept_certificate (SoupMessage *msg, GTlsCertificate *cert, GTlsCer
   if (data->error == NULL)
     {
       goa_utils_set_error_ssl (&data->error, cert_flags);
-
-      /* The callback will be invoked after we have returned to the
-       * main loop.
-       */
-      soup_session_abort (data->session);
     }
 
   return FALSE;
@@ -187,6 +182,10 @@ http_client_check_response_cb (SoupSession *session, GAsyncResult *result, gpoin
 
       goto out;
     }
+
+  /* use previously set error, like the SSL error */
+  if (data->error != NULL)
+    goto out;
 
   status = soup_message_get_status (msg);
   if (status != SOUP_STATUS_OK || error)
