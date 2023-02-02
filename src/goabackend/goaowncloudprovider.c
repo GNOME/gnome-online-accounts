@@ -171,14 +171,16 @@ build_object (GoaProvider         *provider,
   account = goa_object_get_account (GOA_OBJECT (object));
   identity = goa_account_get_identity (account);
   uri_string = g_key_file_get_string (key_file, group, "Uri", NULL);
-  uri = g_uri_parse (uri_string, G_URI_FLAGS_ENCODED, NULL);
+  uri = g_uri_parse (uri_string, G_URI_FLAGS_ENCODED | G_URI_FLAGS_PARSE_RELAXED, NULL);
   if (uri != NULL)
     {
       GUri *tmp_uri;
+      gchar *encoded_identity;
 
+      encoded_identity = g_uri_escape_string (identity, NULL, FALSE);
       tmp_uri = g_uri_build_with_user (g_uri_get_flags (uri),
                                        g_uri_get_scheme (uri),
-                                       identity,
+                                       encoded_identity,
                                        g_uri_get_password (uri),
                                        g_uri_get_auth_params (uri),
                                        g_uri_get_host (uri),
@@ -186,6 +188,7 @@ build_object (GoaProvider         *provider,
                                        g_uri_get_path (uri),
                                        g_uri_get_query (uri),
                                        g_uri_get_fragment (uri));
+      g_free (encoded_identity);
       g_uri_unref (uri);
       uri = tmp_uri;
     }
@@ -397,7 +400,7 @@ normalize_uri (const gchar *address, gchar **server)
   else
     goto out;
 
-  uri = g_uri_parse (uri_string, G_URI_FLAGS_ENCODED, NULL);
+  uri = g_uri_parse (uri_string, G_URI_FLAGS_ENCODED | G_URI_FLAGS_PARSE_RELAXED, NULL);
   if (uri == NULL)
     goto out;
 
