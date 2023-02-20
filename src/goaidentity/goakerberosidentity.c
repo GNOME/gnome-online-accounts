@@ -576,7 +576,7 @@ queue_notify (GoaKerberosIdentity *self,
   request->idle_id = idle_id;
   request->property_name = property_name;
 
-  *idle_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+  *idle_id = g_idle_add_full (G_PRIORITY_DEFAULT,
                               (GSourceFunc)
                               on_notify_queued,
                               request,
