@@ -1055,31 +1055,21 @@ out:
 
   if (best_verification_level != old_verification_level)
     {
+      G_LOCK (identity_lock);
+      self->cached_verification_level = best_verification_level;
+      queue_notify (self, &self->is_signed_in_idle_id, "is-signed-in");
+      G_UNLOCK (identity_lock);
+
       if (old_verification_level == VERIFICATION_LEVEL_SIGNED_IN &&
           best_verification_level == VERIFICATION_LEVEL_EXISTS)
         {
-          G_LOCK (identity_lock);
-          self->cached_verification_level = best_verification_level;
-          G_UNLOCK (identity_lock);
-
           g_signal_emit (G_OBJECT (self), signals[EXPIRED], 0);
         }
       else if (old_verification_level == VERIFICATION_LEVEL_EXISTS &&
                best_verification_level == VERIFICATION_LEVEL_SIGNED_IN)
         {
-          G_LOCK (identity_lock);
-          self->cached_verification_level = best_verification_level;
-          G_UNLOCK (identity_lock);
-
           g_signal_emit (G_OBJECT (self), signals[UNEXPIRED], 0);
         }
-      else
-        {
-          G_LOCK (identity_lock);
-          self->cached_verification_level = best_verification_level;
-          G_UNLOCK (identity_lock);
-        }
-      queue_notify (self, &self->is_signed_in_idle_id, "is-signed-in");
     }
 
   default_principal = get_default_principal (self);
