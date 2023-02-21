@@ -886,6 +886,10 @@ verify_identity (GoaKerberosIdentity  *self,
   VerificationLevel best_verification_level = VERIFICATION_LEVEL_UNVERIFIED;
   GHashTableIter iter;
 
+  G_LOCK (identity_lock);
+  old_verification_level = self->cached_verification_level;
+  G_UNLOCK (identity_lock);
+
   if (self->active_credentials_cache_name != NULL)
     {
       G_LOCK (identity_lock);
@@ -922,10 +926,6 @@ verify_identity (GoaKerberosIdentity  *self,
           G_UNLOCK (identity_lock);
         }
   }
-
-  G_LOCK (identity_lock);
-  old_verification_level = self->cached_verification_level;
-  G_UNLOCK (identity_lock);
 
   G_LOCK (identity_lock);
   g_hash_table_iter_init (&iter, self->credentials_caches);
