@@ -1469,11 +1469,9 @@ on_identity_expiring (GoaIdentityManager *identity_manager,
   ensure_account_credentials (self, object);
   g_clear_object (&object);
 }
-
 static void
-on_identity_expired (GoaIdentityManager *identity_manager,
-                     GoaIdentity        *identity,
-                     GoaIdentityService *self)
+handle_identity_expired (GoaIdentityService *self,
+                         GoaIdentity        *identity)
 {
   const char *principal;
   GoaObject  *object;
@@ -1489,6 +1487,14 @@ on_identity_expired (GoaIdentityManager *identity_manager,
 
   ensure_account_credentials (self, object);
   g_clear_object (&object);
+}
+
+static void
+on_identity_expired (GoaIdentityManager *identity_manager,
+                     GoaIdentity        *identity,
+                     GoaIdentityService *self)
+{
+  handle_identity_expired (self, identity);
 }
 
 static void
@@ -1705,6 +1711,12 @@ on_identities_listed (GoaIdentityManager *manager,
         g_object_unref (object);
 
       g_free (object_path);
+
+      /* Treat identities that started out expired as if they just expired, in case
+       * the identity service is started long after goa-daemon
+       */
+      if (!goa_identity_is_signed_in (identity))
+        handle_identity_expired (self, identity);
     }
 
  out:

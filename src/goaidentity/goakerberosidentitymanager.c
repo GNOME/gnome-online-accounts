@@ -282,11 +282,28 @@ identity_signal_work_free (IdentitySignalWork *work)
 }
 
 static void
+do_identity_signal_expired_work (IdentitySignalWork *work)
+{
+  GoaKerberosIdentityManager *self = work->manager;
+  GoaIdentity *identity = work->identity;
+
+  g_debug ("GoaKerberosIdentityManager: identity expired");
+  _goa_identity_manager_emit_identity_expired (GOA_IDENTITY_MANAGER (self), identity);
+}
+
+static void
 on_identity_expired (GoaIdentity                *identity,
                      GoaKerberosIdentityManager *self)
 {
-  _goa_identity_manager_emit_identity_expired (GOA_IDENTITY_MANAGER (self),
-                                               identity);
+  IdentitySignalWork *work;
+
+  work = identity_signal_work_new (self, identity);
+  goa_kerberos_identify_manager_send_to_context (g_main_context_default (),
+                                                 (GSourceFunc)
+                                                 do_identity_signal_expired_work,
+                                                 work,
+                                                 (GDestroyNotify)
+                                                 identity_signal_work_free);
 }
 
 static void

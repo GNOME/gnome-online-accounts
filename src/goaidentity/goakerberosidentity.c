@@ -576,7 +576,7 @@ queue_notify (GoaKerberosIdentity *self,
   request->idle_id = idle_id;
   request->property_name = property_name;
 
-  *idle_id = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+  *idle_id = g_idle_add_full (G_PRIORITY_DEFAULT,
                               (GSourceFunc)
                               on_notify_queued,
                               request,
@@ -886,6 +886,10 @@ verify_identity (GoaKerberosIdentity  *self,
   VerificationLevel best_verification_level = VERIFICATION_LEVEL_UNVERIFIED;
   GHashTableIter iter;
 
+  G_LOCK (identity_lock);
+  old_verification_level = self->cached_verification_level;
+  G_UNLOCK (identity_lock);
+
   if (self->active_credentials_cache_name != NULL)
     {
       G_LOCK (identity_lock);
@@ -922,10 +926,6 @@ verify_identity (GoaKerberosIdentity  *self,
           G_UNLOCK (identity_lock);
         }
   }
-
-  G_LOCK (identity_lock);
-  old_verification_level = self->cached_verification_level;
-  G_UNLOCK (identity_lock);
 
   G_LOCK (identity_lock);
   g_hash_table_iter_init (&iter, self->credentials_caches);
@@ -1055,31 +1055,21 @@ out:
 
   if (best_verification_level != old_verification_level)
     {
+      G_LOCK (identity_lock);
+      self->cached_verification_level = best_verification_level;
+      queue_notify (self, &self->is_signed_in_idle_id, "is-signed-in");
+      G_UNLOCK (identity_lock);
+
       if (old_verification_level == VERIFICATION_LEVEL_SIGNED_IN &&
           best_verification_level == VERIFICATION_LEVEL_EXISTS)
         {
-          G_LOCK (identity_lock);
-          self->cached_verification_level = best_verification_level;
-          G_UNLOCK (identity_lock);
-
           g_signal_emit (G_OBJECT (self), signals[EXPIRED], 0);
         }
       else if (old_verification_level == VERIFICATION_LEVEL_EXISTS &&
                best_verification_level == VERIFICATION_LEVEL_SIGNED_IN)
         {
-          G_LOCK (identity_lock);
-          self->cached_verification_level = best_verification_level;
-          G_UNLOCK (identity_lock);
-
           g_signal_emit (G_OBJECT (self), signals[UNEXPIRED], 0);
         }
-      else
-        {
-          G_LOCK (identity_lock);
-          self->cached_verification_level = best_verification_level;
-          G_UNLOCK (identity_lock);
-        }
-      queue_notify (self, &self->is_signed_in_idle_id, "is-signed-in");
     }
 
   default_principal = get_default_principal (self);
@@ -1780,7 +1770,6 @@ done:
 void
 goa_kerberos_identity_refresh (GoaKerberosIdentity *self)
 {
-  VerificationLevel old_verification_level, new_verification_level;
   g_autofree char *preauth_identity_source = NULL;
   g_autoptr (GError) error = NULL;
 
@@ -1788,11 +1777,13 @@ goa_kerberos_identity_refresh (GoaKerberosIdentity *self)
            self->identifier,
            self->active_credentials_cache_name);
 
-  G_LOCK (identity_lock);
-  old_verification_level = self->cached_verification_level;
-  G_UNLOCK (identity_lock);
+  verify_identity (self, &preauth_identity_source, &error);
 
-  new_verification_level = verify_identity (self, &preauth_identity_source, &error);
+  if (error != NULL)
+    {
+      g_debug ("GoaKerberosIdentity: Could not verify identity %s: %s", self->identifier, error->message);
+      return;
+    }
 
   G_LOCK (identity_lock);
   if (g_strcmp0 (self->preauth_identity_source, preauth_identity_source) != 0)
@@ -1801,37 +1792,6 @@ goa_kerberos_identity_refresh (GoaKerberosIdentity *self)
       self->preauth_identity_source = g_steal_pointer (&preauth_identity_source);
     }
   G_UNLOCK (identity_lock);
-
-  if (new_verification_level != old_verification_level)
-    {
-      if ((old_verification_level == VERIFICATION_LEVEL_SIGNED_IN) &&
-          new_verification_level == VERIFICATION_LEVEL_EXISTS)
-        {
-          G_LOCK (identity_lock);
-          self->cached_verification_level = new_verification_level;
-          G_UNLOCK (identity_lock);
-
-          g_signal_emit (G_OBJECT (self), signals[EXPIRED], 0);
-        }
-      else if (old_verification_level == VERIFICATION_LEVEL_EXISTS &&
-               new_verification_level == VERIFICATION_LEVEL_SIGNED_IN)
-        {
-          G_LOCK (identity_lock);
-          self->cached_verification_level = new_verification_level;
-          G_UNLOCK (identity_lock);
-
-          g_signal_emit (G_OBJECT (self), signals[UNEXPIRED], 0);
-        }
-      else
-        {
-          G_LOCK (identity_lock);
-          self->cached_verification_level = new_verification_level;
-          G_UNLOCK (identity_lock);
-        }
-      G_LOCK (identity_lock);
-      queue_notify (self, &self->is_signed_in_idle_id, "is-signed-in");
-      G_UNLOCK (identity_lock);
-    }
 }
 
 gboolean
