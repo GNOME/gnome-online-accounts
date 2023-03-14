@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright © 2012 – 2023 Red Hat, Inc.
+ * Copyright © 2012 – 2017 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -875,8 +875,7 @@ get_new_credentials_cache (GoaKerberosIdentityManager *self,
            || g_strcmp0 (self->credentials_cache_type, "KCM") == 0
            || g_strcmp0 (self->credentials_cache_type, "KEYRING") == 0)
     {
-      g_debug ("GoaKerberosIdentityManager: credential cache type %s supports cache collections",
-               self->credentials_cache_type);
+      g_debug ("GoaKerberosIdentityManager: credential cache type %s supports cache collections", self->credentials_cache_type);
       supports_multiple_identities = TRUE;
     }
   else
@@ -1379,6 +1378,7 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
   GFileMonitor *monitor = NULL;
   krb5_error_code error_code;
   GError *monitoring_error = NULL;
+  gboolean can_monitor = TRUE;
 
   error_code = krb5_cc_default (self->kerberos_context, &default_cache);
 
@@ -1398,6 +1398,13 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
 
   cache_type = krb5_cc_get_type (self->kerberos_context, default_cache);
   g_assert (cache_type != NULL);
+
+  if (strcmp (cache_type, "FILE") != 0 && strcmp (cache_type, "DIR") != 0)
+    {
+      g_warning ("GoaKerberosIdentityManager: Using polling for change notification for credential cache type '%s'",
+                 cache_type);
+      can_monitor = FALSE;
+    }
 
   g_free (self->credentials_cache_type);
   self->credentials_cache_type = g_strdup (cache_type);
@@ -1420,71 +1427,38 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
   if (cache_path[0] == ':')
     cache_path++;
 
-  if (strcmp (cache_type, "FILE") == 0)
+  if (can_monitor)
     {
       GFile *file;
 
       file = g_file_new_for_path (cache_path);
 
       monitoring_error = NULL;
-      monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &monitoring_error);
-
-      g_object_unref (file);
-    }
-  else if (strcmp (cache_type, "DIR") == 0)
-    {
-      GFile *directory;
-      GFile *file;
-
-      file = g_file_new_for_path (cache_path);
-      directory = g_file_get_parent (file);
-
-      monitoring_error = NULL;
-      monitor = g_file_monitor_directory (directory, G_FILE_MONITOR_NONE, NULL, &monitoring_error);
-
-      g_object_unref (directory);
-      g_object_unref (file);
-    }
-  else if (strcmp (cache_type, "KCM") == 0)
-    {
-      GError *create_error = NULL;
-      GFile *directory = NULL;
-      GFile *file = NULL;
-      GFileOutputStream *stream = NULL;
-      const gchar *runtime_dir;
-
-      runtime_dir = g_get_user_runtime_dir ();
-      directory = g_file_new_for_path (runtime_dir);
-      file = g_file_get_child (directory, ".kcm-notifications");
-
-      monitoring_error = NULL;
-
-      stream = g_file_create (file, G_FILE_CREATE_NONE, NULL, &create_error);
-      if (create_error != NULL)
+      if (strcmp (cache_type, "FILE") == 0)
         {
-          if (g_error_matches (create_error, G_IO_ERROR, G_IO_ERROR_EXISTS))
-            g_error_free (create_error);
-          else
-            g_propagate_error (&monitoring_error, create_error);
+          monitor = g_file_monitor_file (file,
+                                         G_FILE_MONITOR_NONE,
+                                         NULL,
+                                         &monitoring_error);
         }
+      else if (strcmp (cache_type, "DIR") == 0)
+        {
+          GFile *directory;
 
-      if (monitoring_error == NULL)
-        monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &monitoring_error);
+          directory = g_file_get_parent (file);
+          monitor = g_file_monitor_directory (directory,
+                                              G_FILE_MONITOR_NONE,
+                                              NULL,
+                                              &monitoring_error);
+          g_object_unref (directory);
 
-      g_clear_object (&stream);
-      g_object_unref (directory);
+        }
       g_object_unref (file);
     }
 
   if (monitor == NULL)
     {
-      if (monitoring_error == NULL)
-        {
-          g_warning ("GoaKerberosIdentityManager: Using polling for change notification for credential "
-                     "cache type '%s'",
-                     cache_type);
-        }
-      else
+      if (monitoring_error != NULL)
         {
           g_warning ("GoaKerberosIdentityManager: Could not monitor credentials for %s (type %s), reverting to "
                      "polling: %s",
@@ -1493,16 +1467,16 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
                      monitoring_error != NULL? monitoring_error->message : "");
           g_clear_error (&monitoring_error);
         }
-
-      self->polling_timeout_id = g_timeout_add_seconds (FALLBACK_POLLING_INTERVAL,
-                                                        (GSourceFunc) on_polling_timeout,
-                                                        self);
+      can_monitor = FALSE;
     }
   else
     {
       g_signal_connect (G_OBJECT (monitor), "changed", G_CALLBACK (on_credentials_cache_changed), self);
       self->credentials_cache_monitor = monitor;
     }
+
+  if (!can_monitor)
+    self->polling_timeout_id = g_timeout_add_seconds (FALLBACK_POLLING_INTERVAL, (GSourceFunc) on_polling_timeout, self);
 
   krb5_cc_close (self->kerberos_context, default_cache);
 
