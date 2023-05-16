@@ -81,6 +81,7 @@ struct _GoaOAuth2ProviderPrivate
   gchar *identity;
   gchar *presentation_identity;
   gchar *password;
+  char *requested_uri;
 };
 
 G_LOCK_DEFINE_STATIC (provider_lock);
@@ -757,42 +758,19 @@ on_web_view_password_submit (GoaWebView *web_view, const gchar *password, gpoint
 }
 
 static gboolean
-on_web_view_decide_policy (WebKitWebView            *web_view,
-                           WebKitPolicyDecision     *decision,
-                           WebKitPolicyDecisionType  decision_type,
-                           gpointer                  user_data)
+parse_requested_uri (GoaOAuth2Provider *self,
+                     const gchar       *requested_uri)
 {
-  GoaOAuth2Provider *self = GOA_OAUTH2_PROVIDER (user_data);
   GoaOAuth2ProviderPrivate *priv;
   GHashTable *key_value_pairs;
-  WebKitNavigationAction *action;
-  WebKitURIRequest *request;
   GUri *uri = NULL;
   const gchar *fragment;
   const gchar *oauth2_error;
   const gchar *query;
   const gchar *redirect_uri;
-  const gchar *requested_uri;
-  gint response_id = GTK_RESPONSE_NONE;
 
   priv = goa_oauth2_provider_get_instance_private (self);
 
-  if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION)
-    goto default_behaviour;
-
-  if (goa_oauth2_provider_decide_navigation_policy (self,
-                                                    web_view,
-                                                    WEBKIT_NAVIGATION_POLICY_DECISION (decision)))
-    {
-      response_id = 0;
-      goto ignore_request;
-    }
-
-  /* TODO: use oauth2_proxy_extract_access_token() */
-
-  action = webkit_navigation_policy_decision_get_navigation_action (WEBKIT_NAVIGATION_POLICY_DECISION (decision));
-  request = webkit_navigation_action_get_request (action);
-  requested_uri = webkit_uri_request_get_uri (request);
   redirect_uri = goa_oauth2_provider_get_redirect_uri (self);
   if (!g_str_has_prefix (requested_uri, redirect_uri))
     goto default_behaviour;
@@ -818,10 +796,7 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
           g_prefix_error (&priv->error, _("Authorization response: "));
           priv->error->domain = GOA_ERROR;
           priv->error->code = GOA_ERROR_NOT_AUTHORIZED;
-          response_id = GTK_RESPONSE_CLOSE;
         }
-      else
-        response_id = GTK_RESPONSE_OK;
 
       g_free (url);
       goto ignore_request;
@@ -850,8 +825,6 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
             priv->access_token_expires_in = atoi (expires_in_str);
 
           priv->refresh_token = g_strdup (g_hash_table_lookup (key_value_pairs, "refresh_token"));
-
-          response_id = GTK_RESPONSE_OK;
         }
       g_hash_table_unref (key_value_pairs);
     }
@@ -864,9 +837,6 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
       key_value_pairs = soup_form_decode (query);
 
       priv->authorization_code = g_strdup (g_hash_table_lookup (key_value_pairs, "code"));
-      if (priv->authorization_code != NULL)
-        response_id = GTK_RESPONSE_OK;
-
       g_hash_table_unref (key_value_pairs);
     }
 
@@ -878,16 +848,13 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
    */
   key_value_pairs = soup_form_decode (query);
   oauth2_error = (const gchar *) g_hash_table_lookup (key_value_pairs, "error");
-  if (g_strcmp0 (oauth2_error, GOA_OAUTH2_ACCESS_DENIED) == 0)
-    response_id = GTK_RESPONSE_CANCEL;
-  else
+  if (g_strcmp0 (oauth2_error, GOA_OAUTH2_ACCESS_DENIED) != 0)
     {
       g_set_error (&priv->error,
                    GOA_ERROR,
                    GOA_ERROR_NOT_AUTHORIZED,
                    _("Authorization response: %s"),
                    oauth2_error);
-      response_id = GTK_RESPONSE_CLOSE;
     }
   g_hash_table_unref (key_value_pairs);
   goto ignore_request;
@@ -895,13 +862,52 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
  ignore_request:
   if (uri)
     g_uri_unref (uri);
-  g_assert (response_id != GTK_RESPONSE_NONE);
-  if (response_id < 0)
-    gtk_dialog_response (priv->dialog, response_id);
+  return TRUE;
+
+ default_behaviour:
+  return FALSE;
+}
+
+static gboolean
+on_web_view_decide_policy (WebKitWebView            *web_view,
+                           WebKitPolicyDecision     *decision,
+                           WebKitPolicyDecisionType  decision_type,
+                           gpointer                  user_data)
+{
+  GoaOAuth2Provider *self = GOA_OAUTH2_PROVIDER (user_data);
+  GoaOAuth2ProviderPrivate *priv;
+  WebKitNavigationAction *action;
+  WebKitURIRequest *request;
+  const gchar *requested_uri;
+
+  priv = goa_oauth2_provider_get_instance_private (self);
+
+  if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION)
+    goto default_behaviour;
+
+  if (goa_oauth2_provider_decide_navigation_policy (self,
+                                                    web_view,
+                                                    WEBKIT_NAVIGATION_POLICY_DECISION (decision)))
+    {
+      goto ignore_request;
+    }
+
+  /* TODO: use oauth2_proxy_extract_access_token() */
+
+  action = webkit_navigation_policy_decision_get_navigation_action (WEBKIT_NAVIGATION_POLICY_DECISION (decision));
+  request = webkit_navigation_action_get_request (action);
+  requested_uri = webkit_uri_request_get_uri (request);
+
+ if (!parse_requested_uri (self, requested_uri))
+   goto ignore_request;
+
+ ignore_request:
+  gtk_dialog_response (priv->dialog, GTK_RESPONSE_CLOSE);
   webkit_policy_decision_ignore (decision);
   return TRUE;
 
  default_behaviour:
+  gtk_dialog_response (priv->dialog, GTK_RESPONSE_OK);
   return FALSE;
 }
 
@@ -973,19 +979,33 @@ get_tokens_and_identity (GoaOAuth2Provider  *self,
   if (goa_oauth2_provider_get_use_mobile_browser (self))
     goa_web_view_fake_mobile (GOA_WEB_VIEW (web_view));
 
-  webkit_web_view_load_uri (WEBKIT_WEB_VIEW (embed), url);
-  g_signal_connect (embed,
-                    "decide-policy",
-                    G_CALLBACK (on_web_view_decide_policy),
-                    self);
-  g_signal_connect (web_view, "deny-click", G_CALLBACK (on_web_view_deny_click), self);
-  g_signal_connect (web_view, "password-submit", G_CALLBACK (on_web_view_password_submit), self);
+  unlink ("/tmp/url");
+  system (g_strdup_printf ("firefox '%s'", url));
+  while (!g_file_test ("/tmp/url", G_FILE_TEST_EXISTS))
+    g_usleep (G_USEC_PER_SEC);
 
-  gtk_container_add (GTK_CONTAINER (grid), web_view);
-  gtk_window_set_default_size (GTK_WINDOW (dialog), -1, -1);
+  g_file_get_contents ("/tmp/url", &priv->requested_uri, NULL, NULL);
 
-  gtk_widget_show_all (GTK_WIDGET (vbox));
-  gtk_dialog_run (GTK_DIALOG (dialog));
+  if (priv->requested_uri != NULL)
+    {
+      parse_requested_uri (self, priv->requested_uri);
+    }
+  else
+    {
+      webkit_web_view_load_uri (WEBKIT_WEB_VIEW (embed), url);
+      g_signal_connect (embed,
+                        "decide-policy",
+                        G_CALLBACK (on_web_view_decide_policy),
+                        self);
+      g_signal_connect (web_view, "deny-click", G_CALLBACK (on_web_view_deny_click), self);
+      g_signal_connect (web_view, "password-submit", G_CALLBACK (on_web_view_password_submit), self);
+
+      gtk_container_add (GTK_CONTAINER (grid), web_view);
+      gtk_window_set_default_size (GTK_WINDOW (dialog), -1, -1);
+
+      gtk_widget_show_all (GTK_WIDGET (vbox));
+      gtk_dialog_run (GTK_DIALOG (dialog));
+    }
 
   /* We can have either the auth code, with which we'll obtain the token, or
    * the token directly if we are using a client side flow, since we don't
