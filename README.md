@@ -17,7 +17,6 @@ https://developers.google.com/drive/web/scopes
 https://developers.google.com/google-apps/gmail/oauth_protocol
 https://developers.google.com/picasa-web/docs/2.0/developers_guide_protocol
 https://developers.google.com/talk/jep_extensions/oauth
-https://developers.google.com/cloud-print/docs/devguide
 
 Sometimes the documentation is lacking. In such cases, the following can be
 useful:

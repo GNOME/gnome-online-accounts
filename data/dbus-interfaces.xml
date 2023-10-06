@@ -212,7 +212,9 @@
          Note that the #org.gnomeOnlineAccounts.Printers interface is added or
          removed from the account asynchronously.
     -->
-    <property name="PrintersDisabled" type="b" access="readwrite"/>
+    <property name="PrintersDisabled" type="b" access="readwrite">
+      <annotation name="org.freedesktop.DBus.Deprecated" value="true"/>
+    </property>
 
     <!-- PhotosDisabled:
          @since: 3.8.0
@@ -859,6 +861,7 @@
       network printing capabilities.
   -->
   <interface name="org.gnome.OnlineAccounts.Printers">
+    <annotation name="org.freedesktop.DBus.Deprecated" value="true"/>
   </interface>
 
 </node>
