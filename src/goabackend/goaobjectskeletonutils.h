@@ -46,9 +46,6 @@ void             goa_object_skeleton_attach_files          (GoaObjectSkeleton *o
 void             goa_object_skeleton_attach_photos         (GoaObjectSkeleton *object,
                                                             gboolean           photos_enabled);
 
-void             goa_object_skeleton_attach_printers       (GoaObjectSkeleton *object,
-                                                            gboolean           printers_enabled);
-
 G_END_DECLS
 
 #endif /* __GOA_OBJECT_SKELETON_UTILS_H__ */

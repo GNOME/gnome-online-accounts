@@ -71,8 +71,7 @@ get_provider_features (GoaProvider *provider)
          GOA_PROVIDER_FEATURE_CALENDAR |
          GOA_PROVIDER_FEATURE_CONTACTS |
          GOA_PROVIDER_FEATURE_PHOTOS |
-         GOA_PROVIDER_FEATURE_FILES |
-         GOA_PROVIDER_FEATURE_PRINTERS;
+         GOA_PROVIDER_FEATURE_FILES;
 }
 
 static const gchar *
@@ -155,9 +154,6 @@ get_scope (GoaOAuth2Provider *oauth2_provider)
          /* GMail IMAP and SMTP access */
          "https://mail.google.com/ "
 
-         /* Google Cloud Print */
-         "https://www.googleapis.com/auth/cloudprint "
-
          /* Google Tasks - undocumented */
          "https://www.googleapis.com/auth/tasks";
 }
@@ -165,7 +161,7 @@ get_scope (GoaOAuth2Provider *oauth2_provider)
 static guint
 get_credentials_generation (GoaProvider *provider)
 {
-  return 11;
+  return 12;
 }
 
 static const gchar *
@@ -314,7 +310,6 @@ build_object (GoaProvider         *provider,
   gboolean contacts_enabled;
   gboolean files_enabled;
   gboolean photos_enabled;
-  gboolean printers_enabled;
   const gchar *email_address;
 
   /* Chain up */
@@ -384,10 +379,6 @@ build_object (GoaProvider         *provider,
   goa_object_skeleton_attach_files (object, uri_drive, files_enabled, FALSE);
   g_free (uri_drive);
 
-  /* Printers */
-  printers_enabled = g_key_file_get_boolean (key_file, group, "PrintersEnabled", NULL);
-  goa_object_skeleton_attach_printers (object, printers_enabled);
-
   if (just_added)
     {
       goa_account_set_mail_disabled (account, !mail_enabled);
@@ -395,7 +386,6 @@ build_object (GoaProvider         *provider,
       goa_account_set_contacts_disabled (account, !contacts_enabled);
       goa_account_set_photos_disabled (account, !photos_enabled);
       goa_account_set_files_disabled (account, !files_enabled);
-      goa_account_set_printers_disabled (account, !printers_enabled);
 
       g_signal_connect (account,
                         "notify::mail-disabled",
@@ -417,10 +407,6 @@ build_object (GoaProvider         *provider,
                         "notify::files-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
                         (gpointer) "FilesEnabled");
-      g_signal_connect (account,
-                        "notify::printers-disabled",
-                        G_CALLBACK (goa_util_account_notify_property_cb),
-                        (gpointer) "PrintersEnabled");
     }
 
   ret = TRUE;
@@ -442,7 +428,6 @@ add_account_key_values (GoaOAuth2Provider  *oauth2_provider,
   g_variant_builder_add (builder, "{ss}", "ContactsEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "PhotosEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "FilesEnabled", "true");
-  g_variant_builder_add (builder, "{ss}", "PrintersEnabled", "true");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

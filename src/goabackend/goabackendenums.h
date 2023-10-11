@@ -68,7 +68,7 @@ typedef enum
  * @GOA_PROVIDER_FEATURE_FILES: Files storage services (ie. WebDAV).
  * @GOA_PROVIDER_FEATURE_TICKETING: Ticketing services (ie. Kerberos).
  * @GOA_PROVIDER_FEATURE_READ_LATER: Deprecated; currently unused.
- * @GOA_PROVIDER_FEATURE_PRINTERS: Network printing services (e.g. Google Cloud Print).
+ * @GOA_PROVIDER_FEATURE_PRINTERS: Deprecated; currently unused.
  * @GOA_PROVIDER_FEATURE_MAPS: Deprecated; currently unused.
  * @GOA_PROVIDER_FEATURE_MUSIC: Music related services (e.g. Vkontakte).
  * @GOA_PROVIDER_FEATURE_TODO: Deprecated; currently unused.
