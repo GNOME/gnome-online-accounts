@@ -813,13 +813,19 @@ get_default_principal (GoaKerberosIdentity *self)
   error_code = krb5_cc_get_principal (self->kerberos_context, default_cache, &principal);
 
   if (error_code != 0)
-    return NULL;
+    {
+      krb5_cc_close (self->kerberos_context, default_cache);
+      return NULL;
+    }
 
   error_code = krb5_unparse_name_flags (self->kerberos_context, principal, 0, &unparsed_principal);
   krb5_free_principal (self->kerberos_context, principal);
 
   if (error_code != 0)
-    return NULL;
+    {
+      krb5_cc_close (self->kerberos_context, default_cache);
+      return NULL;
+    }
 
   principal_name = g_strdup (unparsed_principal);
   krb5_free_unparsed_name (self->kerberos_context, unparsed_principal);
@@ -848,13 +854,19 @@ get_default_cache_name (GoaKerberosIdentity *self)
   error_code = krb5_cc_get_principal (self->kerberos_context, default_cache, &principal);
 
   if (error_code != 0)
-    return NULL;
+    {
+      krb5_cc_close (self->kerberos_context, default_cache);
+      return NULL;
+    }
 
   error_code = krb5_unparse_name_flags (self->kerberos_context, principal, 0, &principal_name);
   krb5_free_principal (self->kerberos_context, principal);
 
   if (error_code != 0)
-    return NULL;
+    {
+      krb5_cc_close (self->kerberos_context, default_cache);
+      return NULL;
+    }
 
   krb5_free_unparsed_name (self->kerberos_context, principal_name);
 
