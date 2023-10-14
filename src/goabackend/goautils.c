@@ -22,6 +22,7 @@
 #include <libsecret/secret.h>
 
 #include "goautils.h"
+#include "goautils-priv.h"
 
 static const SecretSchema secret_password_schema =
 {
@@ -963,4 +964,81 @@ out:
   g_free (username);
   g_free (password);
   return ret;
+}
+
+/*< private >
+ * goa_utils_dialog_add_combo_box:
+ * @grid: `GtkGrid` to add the combo box to
+ * @row: the row offset
+ * @text: the combo box label
+ * @out_combo: (out) (nullable): a pointer to return the entry to
+ *
+ * Add a `GtkComboBox` to @grid at @row, with the label @text.
+ */
+void
+goa_utils_dialog_add_combo_box (GtkWidget    *grid,
+                                gint          row,
+                                const gchar  *text,
+                                GtkWidget   **out_combo_box)
+{
+  GtkStyleContext *context;
+  GtkWidget *box;
+  GtkWidget *label;
+  GtkWidget *combo_box;
+
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+  gtk_widget_set_hexpand (box, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), box, 0, row, 1, 1);
+
+  label = gtk_label_new_with_mnemonic (text);
+  context = gtk_widget_get_style_context (label);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_container_add (GTK_CONTAINER (box), label);
+
+  combo_box = gtk_combo_box_text_new ();
+  gtk_container_add (GTK_CONTAINER (box), combo_box);
+
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo_box);
+  if (out_combo_box != NULL)
+    *out_combo_box = combo_box;
+}
+
+/*< private >
+ * goa_utils_dialog_add_entry:
+ * @grid: `GtkGrid` to add the entry to
+ * @row: the row offset
+ * @text: the entry label
+ * @out_entry: (out) (nullable): a pointer to return the entry to
+ *
+ * Add an `GtkGrid` to @grid at @row, with the label @text.
+ */
+void
+goa_utils_dialog_add_entry (GtkWidget    *grid,
+                            gint          row,
+                            const gchar  *text,
+                            GtkWidget   **out_entry)
+{
+  GtkStyleContext *context;
+  GtkWidget *box;
+  GtkWidget *label;
+  GtkWidget *entry;
+
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+  gtk_widget_set_hexpand (box, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), box, 0, row, 1, 1);
+
+  label = gtk_label_new_with_mnemonic (text);
+  context = gtk_widget_get_style_context (label);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_container_add (GTK_CONTAINER (box), label);
+
+  entry = gtk_entry_new ();
+  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
+  gtk_container_add (GTK_CONTAINER (box), entry);
+
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+  if (out_entry != NULL)
+    *out_entry = entry;
 }

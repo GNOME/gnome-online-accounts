@@ -26,6 +26,7 @@
 #include "goaprovider.h"
 #include "goasmtpauth.h"
 #include "goautils.h"
+#include "goautils-priv.h"
 
 struct _GoaImapSmtpProvider
 {
@@ -411,61 +412,6 @@ ensure_credentials_sync (GoaProvider         *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static void
-add_combo_box (GtkWidget     *grid,
-               gint           row,
-               const gchar   *text,
-               GtkWidget    **out_combo_box)
-{
-  GtkStyleContext *context;
-  GtkWidget *label;
-  GtkWidget *combo_box;
-
-  label = gtk_label_new_with_mnemonic (text);
-  context = gtk_widget_get_style_context (label);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
-  gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), label, 0, row, 1, 1);
-
-  combo_box = gtk_combo_box_text_new ();
-  gtk_widget_set_hexpand (combo_box, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), combo_box, 1, row, 3, 1);
-
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo_box);
-  if (out_combo_box != NULL)
-    *out_combo_box = combo_box;
-}
-
-static void
-add_entry (GtkWidget     *grid,
-           gint           row,
-           const gchar   *text,
-           GtkWidget    **out_entry)
-{
-  GtkStyleContext *context;
-  GtkWidget *label;
-  GtkWidget *entry;
-
-  label = gtk_label_new_with_mnemonic (text);
-  context = gtk_widget_get_style_context (label);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
-  gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), label, 0, row, 1, 1);
-
-  entry = gtk_entry_new ();
-  gtk_widget_set_hexpand (entry, TRUE);
-  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-  gtk_grid_attach (GTK_GRID (grid), entry, 1, row, 3, 1);
-
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-  if (out_entry != NULL)
-    *out_entry = entry;
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
 typedef struct
 {
   GCancellable *cancellable;
@@ -561,7 +507,7 @@ create_encryption_ui (GtkWidget  *grid,
    *             STARTTLS after connecting
    *             SSL on a dedicated port
    */
-  add_combo_box (grid, row, _("_Encryption"), out_combo_box);
+  goa_utils_dialog_add_combo_box (grid, row, _("_Encryption"), out_combo_box);
   gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (*out_combo_box),
                              "none",
                              _("None"));
@@ -644,8 +590,8 @@ create_account_details_ui (GoaProvider    *provider,
       gtk_notebook_append_page (GTK_NOTEBOOK (data->notebook), grid1, NULL);
 
       row = 0;
-      add_entry (grid1, row++, _("_E-mail"), &data->email_address);
-      add_entry (grid1, row++, _("_Name"), &data->name);
+      goa_utils_dialog_add_entry (grid1, row++, _("_E-mail"), &data->email_address);
+      goa_utils_dialog_add_entry (grid1, row++, _("_Name"), &data->name);
 
       real_name = g_get_real_name ();
       if (g_strcmp0 (real_name, "Unknown") != 0)
@@ -662,9 +608,9 @@ create_account_details_ui (GoaProvider    *provider,
   gtk_notebook_append_page (GTK_NOTEBOOK (data->notebook), grid1, NULL);
 
   row = 0;
-  add_entry (grid1, row++, _("IMAP _Server"), &data->imap_server);
-  add_entry (grid1, row++, _("User_name"), &data->imap_username);
-  add_entry (grid1, row++, _("_Password"), &data->imap_password);
+  goa_utils_dialog_add_entry (grid1, row++, _("IMAP _Server"), &data->imap_server);
+  goa_utils_dialog_add_entry (grid1, row++, _("User_name"), &data->imap_username);
+  goa_utils_dialog_add_entry (grid1, row++, _("_Password"), &data->imap_password);
   gtk_entry_set_visibility (GTK_ENTRY (data->imap_password), FALSE);
 
   if (new_account)
@@ -682,9 +628,9 @@ create_account_details_ui (GoaProvider    *provider,
   gtk_notebook_append_page (GTK_NOTEBOOK (data->notebook), grid1, NULL);
 
   row = 0;
-  add_entry (grid1, row++, _("SMTP _Server"), &data->smtp_server);
-  add_entry (grid1, row++, _("User_name"), &data->smtp_username);
-  add_entry (grid1, row++, _("_Password"), &data->smtp_password);
+  goa_utils_dialog_add_entry (grid1, row++, _("SMTP _Server"), &data->smtp_server);
+  goa_utils_dialog_add_entry (grid1, row++, _("User_name"), &data->smtp_username);
+  goa_utils_dialog_add_entry (grid1, row++, _("_Password"), &data->smtp_password);
   gtk_entry_set_visibility (GTK_ENTRY (data->smtp_password), FALSE);
 
   if (new_account)

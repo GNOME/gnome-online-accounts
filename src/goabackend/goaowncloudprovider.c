@@ -27,6 +27,7 @@
 #include "goaowncloudprovider.h"
 #include "goaobjectskeletonutils.h"
 #include "goautils.h"
+#include "goautils-priv.h"
 
 struct _GoaOwncloudProvider
 {
@@ -337,33 +338,6 @@ typedef struct
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static void
-add_entry (GtkWidget     *grid,
-           gint           row,
-           const gchar   *text,
-           GtkWidget    **out_entry)
-{
-  GtkStyleContext *context;
-  GtkWidget *label;
-  GtkWidget *entry;
-
-  label = gtk_label_new_with_mnemonic (text);
-  context = gtk_widget_get_style_context (label);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
-  gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), label, 0, row, 1, 1);
-
-  entry = gtk_entry_new ();
-  gtk_widget_set_hexpand (entry, TRUE);
-  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-  gtk_grid_attach (GTK_GRID (grid), entry, 1, row, 3, 1);
-
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-  if (out_entry != NULL)
-    *out_entry = entry;
-}
-
 static gchar *
 normalize_uri (const gchar *address, gchar **server)
 {
@@ -517,9 +491,9 @@ create_account_details_ui (GoaProvider    *provider,
   gtk_container_add (GTK_CONTAINER (grid0), grid1);
 
   row = 0;
-  add_entry (grid1, row++, _("_Server"), &data->uri);
-  add_entry (grid1, row++, _("User_name"), &data->username);
-  add_entry (grid1, row++, _("_Password"), &data->password);
+  goa_utils_dialog_add_entry (grid1, row++, _("_Server"), &data->uri);
+  goa_utils_dialog_add_entry (grid1, row++, _("User_name"), &data->username);
+  goa_utils_dialog_add_entry (grid1, row++, _("_Password"), &data->password);
   gtk_entry_set_visibility (GTK_ENTRY (data->password), FALSE);
 
   if (new_account)
