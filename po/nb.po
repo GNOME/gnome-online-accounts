@@ -8,59 +8,62 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts 3.38.x\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/issues\n"
-"POT-Creation-Date: 2020-10-09 14:42+0000\n"
-"PO-Revision-Date: 2020-11-30 14:12+0100\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
+"issues\n"
+"POT-Creation-Date: 2023-05-05 13:06+0000\n"
+"PO-Revision-Date: 2023-10-15 20:08+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.5\n"
+"X-Generator: Poedit 3.4\n"
 
 #: data/org.gnome.online-accounts.gschema.xml:6
 msgid "List of providers that are allowed to be loaded"
-msgstr "Liste med tilbydere som kan lastes"
+msgstr "Liste med innlastbare tjenester"
 
 #: data/org.gnome.online-accounts.gschema.xml:7
 msgid ""
 "A list of strings representing the providers that are allowed to be loaded "
 "(default: 'all'). This is only evaluated on startup."
-msgstr "En liste med strenger som representerer tilbydere som kan lastes (forvalg: «all»). Denne sjekkes kun ved oppstart."
+msgstr ""
+"En liste hvor hvert element representerer en tjeneste som kan lastes inn "
+"(standard: alle). Denne blir bare lest av ved oppstart."
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1143 src/daemon/goadaemon.c:1460
+#: src/daemon/goadaemon.c:1141 src/daemon/goadaemon.c:1458
 #, c-format
 msgid "Failed to find a provider for: %s"
-msgstr "Klarte ikke å finne en tilbyder for: %s"
+msgstr "Fant ikke tjeneste for: %s"
 
-#: src/daemon/goadaemon.c:1403
+#: src/daemon/goadaemon.c:1401
 msgid "IsLocked property is set for account"
-msgstr "Egenskap IsLocked er satt for kontoen"
+msgstr "Verdi IsLocked er satt for kontoen"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1448
+#: src/daemon/goadaemon.c:1446
 msgid "ProviderType property is not set for account"
-msgstr "Egenskap ProviderType er ikke satt for kontoen"
+msgstr "Verdi ProviderType er ikke satt for kontoen"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:258
+#: src/goabackend/goaewsclient.c:283
 msgid "Failed to parse autodiscover response XML"
-msgstr "Klarte ikke å lese XML-svar for automatisk gjenkjenning"
+msgstr "Lesing av XML fra automatisk gjenkjenning mislyktes"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: src/goabackend/goaewsclient.c:269 src/goabackend/goaewsclient.c:284
-#: src/goabackend/goaewsclient.c:299
+#: src/goabackend/goaewsclient.c:294 src/goabackend/goaewsclient.c:309
+#: src/goabackend/goaewsclient.c:324
 #, c-format
 msgid "Failed to find “%s” element"
-msgstr "Klarte ikke å finne element «%s»"
+msgstr "Fant ikke element “%s”"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:320
+#: src/goabackend/goaewsclient.c:345
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
-msgstr "Klarte ikke å finne ASUrl og OABUrl i svar for automatisk gjenkjenning"
+msgstr "Fant ikke ASUrl og OABUrl i svar fra automatisk gjenkjenning"
 
 #: src/goabackend/goaexchangeprovider.c:51
 msgid "Microsoft Exchange"
@@ -72,10 +75,10 @@ msgstr "Microsoft Exchange"
 #.
 #: src/goabackend/goaexchangeprovider.c:248
 #: src/goabackend/goalastfmprovider.c:279
-#: src/goabackend/goaowncloudprovider.c:291
+#: src/goabackend/goaowncloudprovider.c:293
 #, c-format
 msgid "Invalid password with username “%s” (%s, %d): "
-msgstr "Ugyldig passord med brukernavn «%s» (%s, %d): "
+msgstr "Ugyldig passord for brukernavn “%s” (%s, %d): "
 
 #: src/goabackend/goaexchangeprovider.c:394
 #: src/goabackend/goaimapsmtpprovider.c:647
@@ -87,7 +90,7 @@ msgstr "_E-post"
 #: src/goabackend/goaimapsmtpprovider.c:667
 #: src/goabackend/goaimapsmtpprovider.c:687
 #: src/goabackend/goalastfmprovider.c:421
-#: src/goabackend/goaowncloudprovider.c:509
+#: src/goabackend/goaowncloudprovider.c:522
 msgid "_Password"
 msgstr "_Passord"
 
@@ -100,12 +103,12 @@ msgstr "E_gendefinert"
 #: src/goabackend/goaimapsmtpprovider.c:666
 #: src/goabackend/goaimapsmtpprovider.c:686
 #: src/goabackend/goalastfmprovider.c:420
-#: src/goabackend/goaowncloudprovider.c:508
+#: src/goabackend/goaowncloudprovider.c:521
 msgid "User_name"
-msgstr "Br_ukernavn"
+msgstr "B_rukernavn"
 
 #: src/goabackend/goaexchangeprovider.c:410
-#: src/goabackend/goaowncloudprovider.c:507
+#: src/goabackend/goaowncloudprovider.c:520
 msgid "_Server"
 msgstr "_Tjener"
 
@@ -115,26 +118,26 @@ msgstr "_Tjener"
 #: src/goabackend/goaimapsmtpprovider.c:699
 #: src/goabackend/goakerberosprovider.c:583
 #: src/goabackend/goalastfmprovider.c:429
-#: src/goabackend/goaowncloudprovider.c:523
+#: src/goabackend/goaowncloudprovider.c:536
 msgid "_Cancel"
-msgstr "A_vbryt"
+msgstr "_Avbryt"
 
 #: src/goabackend/goaexchangeprovider.c:421
 #: src/goabackend/goafedoraprovider.c:582
 #: src/goabackend/goakerberosprovider.c:584
 #: src/goabackend/goalastfmprovider.c:430
-#: src/goabackend/goaowncloudprovider.c:524
+#: src/goabackend/goaowncloudprovider.c:537
 msgid "C_onnect"
-msgstr "K_oble til"
+msgstr "_Koble til"
 
 #: src/goabackend/goaexchangeprovider.c:437
 #: src/goabackend/goafedoraprovider.c:597
 #: src/goabackend/goaimapsmtpprovider.c:715
 #: src/goabackend/goakerberosprovider.c:599
 #: src/goabackend/goalastfmprovider.c:446
-#: src/goabackend/goaowncloudprovider.c:539
+#: src/goabackend/goaowncloudprovider.c:552
 msgid "Connecting…"
-msgstr "Kobler til …"
+msgstr "Kobler til…"
 
 #: src/goabackend/goaexchangeprovider.c:537
 #: src/goabackend/goaexchangeprovider.c:731
@@ -148,11 +151,11 @@ msgstr "Kobler til …"
 #: src/goabackend/goalastfmprovider.c:644
 #: src/goabackend/goalastfmprovider.c:812
 #: src/goabackend/goamediaserverprovider.c:412
-#: src/goabackend/goaoauth2provider.c:995 src/goabackend/goaoauthprovider.c:859
-#: src/goabackend/goaowncloudprovider.c:661
-#: src/goabackend/goaowncloudprovider.c:881
+#: src/goabackend/goaoauth2provider.c:1001
+#: src/goabackend/goaowncloudprovider.c:674
+#: src/goabackend/goaowncloudprovider.c:893
 msgid "Dialog was dismissed"
-msgstr "Dialogen ble forkastet"
+msgstr "Vindu avvist"
 
 #: src/goabackend/goaexchangeprovider.c:575
 #: src/goabackend/goaexchangeprovider.c:759
@@ -163,16 +166,16 @@ msgstr "Dialogen ble forkastet"
 #: src/goabackend/goaimapsmtpprovider.c:1353
 #: src/goabackend/goalastfmprovider.c:678
 #: src/goabackend/goalastfmprovider.c:831
-#: src/goabackend/goaowncloudprovider.c:706
-#: src/goabackend/goaowncloudprovider.c:908
+#: src/goabackend/goaowncloudprovider.c:719
+#: src/goabackend/goaowncloudprovider.c:920
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
-msgstr "Dialogen ble forkastet (%s, %d): "
+msgstr "Vindu avvist (%s, %d): "
 
 #: src/goabackend/goaexchangeprovider.c:588
 #: src/goabackend/goaimapsmtpprovider.c:946
 #: src/goabackend/goaimapsmtpprovider.c:1043
-#: src/goabackend/goaowncloudprovider.c:719
+#: src/goabackend/goaowncloudprovider.c:732
 msgid "_Ignore"
 msgstr "_Ignorer"
 
@@ -186,49 +189,60 @@ msgstr "_Ignorer"
 #: src/goabackend/goakerberosprovider.c:1032
 #: src/goabackend/goalastfmprovider.c:690
 #: src/goabackend/goalastfmprovider.c:848
-#: src/goabackend/goaowncloudprovider.c:724
-#: src/goabackend/goaowncloudprovider.c:927
+#: src/goabackend/goaowncloudprovider.c:737
+#: src/goabackend/goaowncloudprovider.c:939
 msgid "_Try Again"
 msgstr "_Prøv igjen"
 
 #: src/goabackend/goaexchangeprovider.c:598
 #: src/goabackend/goaexchangeprovider.c:771
 msgid "Error connecting to Microsoft Exchange server"
-msgstr "Feil ved tilkobling til Microsoft Exchange tjener"
+msgstr "Feil ved tilkobling til Microsoft Exchange-tjener"
 
-#: src/goabackend/goafacebookprovider.c:56
-msgid "Facebook"
-msgstr "Facebook"
+#: src/goabackend/goafedoraprovider.c:94
+msgid "Fedora"
+msgstr "Fedora"
 
-#: src/goabackend/goafacebookprovider.c:183
-#: src/goabackend/goaflickrprovider.c:155
-#: src/goabackend/goafoursquareprovider.c:154
-#: src/goabackend/goagoogleprovider.c:184
-#: src/goabackend/goawindowsliveprovider.c:159
+#: src/goabackend/goafedoraprovider.c:208
+#: src/goabackend/goakerberosprovider.c:240
+msgid "Ticketing is disabled for account"
+msgstr "Tilbakemelding er slått av for kontoen"
+
+#: src/goabackend/goafedoraprovider.c:233
+#: src/goabackend/goakerberosprovider.c:265
+#, c-format
+msgid "Could not find saved credentials for principal “%s” in keyring"
+msgstr "Fant ikke innloggingsdata for “%s”"
+
+#: src/goabackend/goafedoraprovider.c:246
+#: src/goabackend/goakerberosprovider.c:278
+#, c-format
+msgid "Did not find password for principal “%s” in credentials"
+msgstr "Fant ikke passord for “%s” i innloggingsdata"
+
+#: src/goabackend/goafedoraprovider.c:805
+msgid "Error connecting to Fedora"
+msgstr "Tilkobling til Fedora mislyktes"
+
+#: src/goabackend/goafedoraprovider.c:1198
+#: src/goabackend/goakerberosprovider.c:1366
+msgid "Identity service returned invalid key"
+msgstr "Innloggingstjeneste oppga ugyldig nøkkel"
+
+#: src/goabackend/goagoogleprovider.c:57
+msgid "Google"
+msgstr "Google"
+
+#: src/goabackend/goagoogleprovider.c:215
+#: src/goabackend/goawindowsliveprovider.c:157
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
-msgstr ""
-"Forventet statuskode 200 ved forespørsel om identiteten din. Mottok status "
-"%d (%s) i stedet"
+msgstr "Forventet statuskode 200, fikk %d (%s) i stedet"
 
 #. TODO: more specific
-#: src/goabackend/goafacebookprovider.c:202
-#: src/goabackend/goafacebookprovider.c:213
-#: src/goabackend/goafacebookprovider.c:219
-#: src/goabackend/goaflickrprovider.c:174
-#: src/goabackend/goaflickrprovider.c:185
-#: src/goabackend/goaflickrprovider.c:196
-#: src/goabackend/goaflickrprovider.c:205
-#: src/goabackend/goaflickrprovider.c:218
-#: src/goabackend/goafoursquareprovider.c:173
-#: src/goabackend/goafoursquareprovider.c:184
-#: src/goabackend/goafoursquareprovider.c:195
-#: src/goabackend/goafoursquareprovider.c:206
-#: src/goabackend/goafoursquareprovider.c:215
-#: src/goabackend/goafoursquareprovider.c:228
-#: src/goabackend/goagoogleprovider.c:203
-#: src/goabackend/goagoogleprovider.c:214
+#: src/goabackend/goagoogleprovider.c:234
+#: src/goabackend/goagoogleprovider.c:245
 #: src/goabackend/goalastfmprovider.c:204
 #: src/goabackend/goalastfmprovider.c:213
 #: src/goabackend/goalastfmprovider.c:222
@@ -238,74 +252,26 @@ msgstr ""
 #: src/goabackend/goalastfmprovider.c:513
 #: src/goabackend/goalastfmprovider.c:530
 #: src/goabackend/goalastfmprovider.c:536
-#: src/goabackend/goaoauth2provider.c:656
-#: src/goabackend/goaoauth2provider.c:686
-#: src/goabackend/goaoauth2provider.c:697 src/goabackend/goautils.c:296
-#: src/goabackend/goawindowsliveprovider.c:178
-#: src/goabackend/goawindowsliveprovider.c:189
-#: src/goabackend/goawindowsliveprovider.c:198
-#: src/goabackend/goawindowsliveprovider.c:211
+#: src/goabackend/goaoauth2provider.c:660
+#: src/goabackend/goaoauth2provider.c:690
+#: src/goabackend/goaoauth2provider.c:701 src/goabackend/goautils.c:296
+#: src/goabackend/goawindowsliveprovider.c:176
+#: src/goabackend/goawindowsliveprovider.c:187
+#: src/goabackend/goawindowsliveprovider.c:196
+#: src/goabackend/goawindowsliveprovider.c:209
 msgid "Could not parse response"
-msgstr "Klarte ikke å lese svar"
-
-#: src/goabackend/goafedoraprovider.c:94
-msgid "Fedora"
-msgstr "Fedora"
-
-#: src/goabackend/goafedoraprovider.c:208
-#: src/goabackend/goakerberosprovider.c:240
-msgid "Ticketing is disabled for account"
-msgstr "Ticketing er slått av for kontoen"
-
-#: src/goabackend/goafedoraprovider.c:233
-#: src/goabackend/goakerberosprovider.c:265
-#, c-format
-msgid "Could not find saved credentials for principal “%s” in keyring"
-msgstr ""
-"Fant ikke lagret påloggingsinformasjon for identitet «%s» på nøkkelring"
-
-#: src/goabackend/goafedoraprovider.c:246
-#: src/goabackend/goakerberosprovider.c:278
-#, c-format
-msgid "Did not find password for principal “%s” in credentials"
-msgstr "Fant ikke passord for hovedidentitet «%s» i påloggingsinformasjon"
-
-#: src/goabackend/goafedoraprovider.c:805
-msgid "Error connecting to Fedora"
-msgstr "Feil ved tilkobling til Fedora"
-
-#: src/goabackend/goafedoraprovider.c:1198
-#: src/goabackend/goakerberosprovider.c:1366
-msgid "Identity service returned invalid key"
-msgstr "Identitetstjenesten returnerte en ugyldig nøkkel"
-
-#: src/goabackend/goaflickrprovider.c:56
-msgid "Flickr"
-msgstr "Flickr"
-
-#: src/goabackend/goaflickrprovider.c:271
-msgid "Your system time is invalid. Check your date and time settings."
-msgstr ""
-"Systemklokken er ugyldig. Sjekk dine innstillinger for dato og klokkeslett."
-
-#: src/goabackend/goafoursquareprovider.c:57
-msgid "Foursquare"
-msgstr "Foursquare"
-
-#: src/goabackend/goagoogleprovider.c:56
-msgid "Google"
-msgstr "Google"
+msgstr "Tolking av svar mislyktes"
 
 #. TODO: more specific
 #: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goasmtpauth.c:149
 msgid "Service not available"
-msgstr "Tjenesten er ikke tilgjengelig"
+msgstr "Tjeneste ikke tilgjengelig"
 
 #. TODO: more specific
 #: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goalastfmprovider.c:521
-#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:861
+#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:857
 msgid "Authentication failed"
-msgstr "Autentisering feilet"
+msgstr "Autentisering mislyktes"
 
 #: src/goabackend/goaimapauthlogin.c:129
 msgid "Server does not support PLAIN"
@@ -333,7 +299,7 @@ msgstr "IMAP og SMTP"
 #: src/goabackend/goaimapsmtpprovider.c:378
 #, c-format
 msgid "Invalid %s with username “%s” (%s, %d): "
-msgstr "Ugyldig %s med brukernavn «%s» (%s, %d): "
+msgstr "Ugyldig %s for brukernavn “%s” (%s, %d): "
 
 #. Translators: the following four strings are used to show a
 #. * combo box similar to the one in the evolution module.
@@ -343,7 +309,7 @@ msgstr "Ugyldig %s med brukernavn «%s» (%s, %d): "
 #.
 #: src/goabackend/goaimapsmtpprovider.c:564
 msgid "_Encryption"
-msgstr "Krypt_ering"
+msgstr "Kryp_tering"
 
 #: src/goabackend/goaimapsmtpprovider.c:567
 msgid "None"
@@ -351,7 +317,7 @@ msgstr "Ingen"
 
 #: src/goabackend/goaimapsmtpprovider.c:570
 msgid "STARTTLS after connecting"
-msgstr "STARTTLES etter tilkobling"
+msgstr "STARTTLS etter tilkobling"
 
 #: src/goabackend/goaimapsmtpprovider.c:573
 msgid "SSL on a dedicated port"
@@ -373,17 +339,17 @@ msgstr "SMTP-_tjener"
 #: src/goabackend/goaimapsmtpprovider.c:972
 #: src/goabackend/goaimapsmtpprovider.c:1305
 msgid "_Forward"
-msgstr "_Fremover"
+msgstr "Gå _videre"
 
 #: src/goabackend/goaimapsmtpprovider.c:956
 #: src/goabackend/goaimapsmtpprovider.c:1288
 msgid "Error connecting to IMAP server"
-msgstr "Feil ved tilkobling til IMAP-tjener"
+msgstr "Tilkobling til IMAP-tjener mislyktes"
 
 #: src/goabackend/goaimapsmtpprovider.c:1053
 #: src/goabackend/goaimapsmtpprovider.c:1365
 msgid "Error connecting to SMTP server"
-msgstr "Feil ved tilkobling til SMTP-tjener"
+msgstr "Tilkobling til SMTP-tjener mislyktes"
 
 #: src/goabackend/goaimapsmtpprovider.c:1476
 msgid "E-mail"
@@ -405,7 +371,7 @@ msgstr "SMTP"
 
 #: src/goabackend/goakerberosprovider.c:92
 msgid "Enterprise Login (Kerberos)"
-msgstr "Bedriftspålogging (Kerberos)"
+msgstr "Bedriftsinnlogging (Kerberos)"
 
 #: src/goabackend/goakerberosprovider.c:578
 msgid "_Principal"
@@ -413,16 +379,16 @@ msgstr "_Hovedidentitet"
 
 #: src/goabackend/goakerberosprovider.c:793
 msgid "Operation was cancelled"
-msgstr "Operasjonen ble avbrutt"
+msgstr "Operasjon avbrutt"
 
 #: src/goabackend/goakerberosprovider.c:837
 #: src/goaidentity/goaidentityservice.c:1265
 msgid "Log In to Realm"
-msgstr "Logg inn i område"
+msgstr "Logg inn i domene"
 
 #: src/goabackend/goakerberosprovider.c:838
 msgid "Please enter your password below."
-msgstr "Vennligst oppgi ditt passord under."
+msgstr "Oppgi passordet ditt under."
 
 #: src/goabackend/goakerberosprovider.c:839
 msgid "Remember this password"
@@ -430,7 +396,7 @@ msgstr "Husk dette passordet"
 
 #: src/goabackend/goakerberosprovider.c:1027
 msgid "Error connecting to enterprise identity server"
-msgstr "Feil ved tilkobling til bedriftens identitetstjener"
+msgstr "Tilkobling til bedriftens innloggingstjener mislyktes"
 
 #: src/goabackend/goalastfmprovider.c:57
 msgid "Last.fm"
@@ -439,19 +405,17 @@ msgstr "Last.fm"
 #: src/goabackend/goalastfmprovider.c:692
 #: src/goabackend/goalastfmprovider.c:842
 msgid "Error connecting to Last.fm"
-msgstr "Feil ved tilkobling til Last.fm"
+msgstr "Tilkobling til Last.fm mislyktes"
 
 #: src/goabackend/goamediaserverprovider.c:55
 msgid "Media Server"
-msgstr "Medie-tjener"
+msgstr "Medietjener"
 
 #: src/goabackend/goamediaserverprovider.c:308
 msgid ""
 "Personal content can be added to your applications through a media server "
 "account."
-msgstr ""
-"Personlig innhold kan legges til i dine programmer gjennom en "
-"medietjenerkonto."
+msgstr "Du kan la apper vise personlig innhold med en konto på en medietjener."
 
 #: src/goabackend/goamediaserverprovider.c:321
 msgid "Available Media Servers"
@@ -461,155 +425,122 @@ msgstr "Tilgjengelige medietjenere"
 msgid "No media servers found"
 msgstr "Fant ingen medietjenere"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: src/goabackend/goaoauth2provider.c:632 src/goabackend/goaoauthprovider.c:542
+#: src/goabackend/goaoauth2provider.c:636
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
-msgstr ""
-"Forventet statuskode 200 ved forespørsel om tilgangsnøkkel. Mottok status %d "
-"(%s) i stedet"
+msgstr "Forventet statuskode 200, fikk %d (%s) i stedet"
 
-#: src/goabackend/goaoauth2provider.c:814
+#: src/goabackend/goaoauth2provider.c:818
 msgid "Authorization response: "
 msgstr "Autoriseringssvar: "
 
-#: src/goabackend/goaoauth2provider.c:884
+#: src/goabackend/goaoauth2provider.c:888
 #, c-format
 msgid "Authorization response: %s"
 msgstr "Autoriseringssvar: %s"
 
-#: src/goabackend/goaoauth2provider.c:1021
-#: src/goabackend/goaoauthprovider.c:890
+#: src/goabackend/goaoauth2provider.c:1027
 msgid "Error getting an Access Token: "
-msgstr "Feil ved henting av tilgangskode: "
+msgstr "Henting av tilgangskode mislyktes: "
 
-#: src/goabackend/goaoauth2provider.c:1036
-#: src/goabackend/goaoauthprovider.c:903
+#: src/goabackend/goaoauth2provider.c:1042
 msgid "Error getting identity: "
-msgstr "Feil ved henting av identitet: "
+msgstr "Henting av innloggingsdata mislyktes: "
 
-#: src/goabackend/goaoauth2provider.c:1230
-#: src/goabackend/goaoauthprovider.c:1168
+#: src/goabackend/goaoauth2provider.c:1236
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Ble spurt om å logge inn som %s, men logget inn som %s"
 
-#: src/goabackend/goaoauth2provider.c:1382
+#: src/goabackend/goaoauth2provider.c:1388
 msgid "Credentials do not contain access_token"
-msgstr "Påloggingsinformasjon inneholder ikke access_token"
+msgstr "Innloggingsdata inneholder ikke verdien “access_token”"
 
-#: src/goabackend/goaoauth2provider.c:1421
-#: src/goabackend/goaoauthprovider.c:1383
+#: src/goabackend/goaoauth2provider.c:1427
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
-msgstr "Klarte ikke å oppdatere tilgangstoken (%s, %d): "
+msgstr "Oppdatering av tilgangsnøkkel mislyktes (%s, %d): "
 
-#: src/goabackend/goaoauthprovider.c:565
-msgid "Missing access_token or access_token_secret headers in response"
-msgstr "Mangler access_token eller access_token_secret hoder i svar"
-
-#: src/goabackend/goaoauthprovider.c:773
-msgid "Error getting a Request Token: "
-msgstr "Feil ved henting av forespørselstoken: "
-
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: src/goabackend/goaoauthprovider.c:804
-#, c-format
-msgid ""
-"Expected status 200 for getting a Request Token, instead got status %d (%s)"
-msgstr ""
-"Forventet statuskode 200 ved mottak av forespørselsnøkkel. Mottok status %d "
-"(%s) i stedet"
-
-#: src/goabackend/goaoauthprovider.c:821
-msgid "Missing request_token or request_token_secret headers in response"
-msgstr "Mangler request_token eller request_token_secret hoder i svar"
-
-#: src/goabackend/goaoauthprovider.c:1339
-msgid "Credentials do not contain access_token or access_token_secret"
-msgstr ""
-"Påloggingsinformasjon inneholder ikke access_token eller access_token_secret"
-
-#: src/goabackend/goaowncloudprovider.c:60
+#: src/goabackend/goaowncloudprovider.c:58
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: src/goabackend/goaowncloudprovider.c:729
-#: src/goabackend/goaowncloudprovider.c:920
+#: src/goabackend/goaowncloudprovider.c:742
+#: src/goabackend/goaowncloudprovider.c:932
 msgid "Error connecting to Nextcloud server"
-msgstr "Feil ved tilkobling til Nextcloud-tjener"
+msgstr "Tilkobling til Nextcloud-tjener mislyktes"
 
-#: src/goabackend/goaprovider.c:112
+#: src/goabackend/goaprovider.c:109
 msgid "_Mail"
-msgstr "E-_post"
+msgstr "_E-post"
 
-#: src/goabackend/goaprovider.c:117
+#: src/goabackend/goaprovider.c:114
 msgid "Cale_ndar"
-msgstr "Kale_nder"
+msgstr "_Kalender"
 
-#: src/goabackend/goaprovider.c:122
+#: src/goabackend/goaprovider.c:119
 msgid "_Contacts"
-msgstr "_Kontakter"
+msgstr "Kon_takter"
 
-#: src/goabackend/goaprovider.c:127
+#: src/goabackend/goaprovider.c:124
 msgid "C_hat"
-msgstr "_Prat"
+msgstr "_Meldinger"
 
-#: src/goabackend/goaprovider.c:132
+#: src/goabackend/goaprovider.c:129
 msgid "_Documents"
 msgstr "_Dokumenter"
 
-#: src/goabackend/goaprovider.c:137
+#: src/goabackend/goaprovider.c:134
 msgid "M_usic"
-msgstr "M_usikk"
+msgstr "Mu_sikk"
 
-#: src/goabackend/goaprovider.c:142
+#: src/goabackend/goaprovider.c:139
 msgid "_Photos"
 msgstr "_Bilder"
 
-#: src/goabackend/goaprovider.c:147
+#: src/goabackend/goaprovider.c:144
 msgid "_Files"
 msgstr "_Filer"
 
-#: src/goabackend/goaprovider.c:152
+#: src/goabackend/goaprovider.c:149
 msgid "Network _Resources"
-msgstr "Nettverks_ressurser"
+msgstr "_Nettverksressurser"
 
-#: src/goabackend/goaprovider.c:157
+#: src/goabackend/goaprovider.c:154
 msgid "_Read Later"
-msgstr "Les sene_re"
+msgstr "_Les senere"
 
-#: src/goabackend/goaprovider.c:162
+#: src/goabackend/goaprovider.c:159
 msgid "Prin_ters"
 msgstr "_Skrivere"
 
-#: src/goabackend/goaprovider.c:167
+#: src/goabackend/goaprovider.c:164
 msgid "_Maps"
 msgstr "_Kart"
 
-#: src/goabackend/goaprovider.c:172
+#: src/goabackend/goaprovider.c:169
 msgid "T_o Do"
 msgstr "_Oppgaver"
 
 #. Translators: This is a label for a series of
 #. * options switches. For example: “Use for Mail”.
-#: src/goabackend/goaprovider.c:570
+#: src/goabackend/goaprovider.c:567
 msgid "Use for"
-msgstr "Bruk for"
+msgstr "Bruk til"
 
-#: src/goabackend/goaprovider.c:825
+#: src/goabackend/goaprovider.c:822
 msgid "Account is disabled"
 msgstr "Kontoen er deaktivert"
 
-#: src/goabackend/goaprovider.c:838
+#: src/goabackend/goaprovider.c:835
 msgid "Unknown error"
 msgstr "Ukjent feil"
 
-#: src/goabackend/goaprovider.c:857
+#: src/goabackend/goaprovider.c:854
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
-msgstr "ensure_credentials_sync er ikke implementert på type %s"
+msgstr "“ensure_credentials_sync”er ikke implementert for type “%s”"
 
 #. TODO: more specific
 #: src/goabackend/goasmtpauth.c:164
@@ -618,15 +549,15 @@ msgstr "TLS er ikke tilgjengelig"
 
 #: src/goabackend/goasmtpauth.c:470
 msgid "Unknown authentication mechanism"
-msgstr "Ukjent autentiseringsmekanisme"
+msgstr "Ukjent mekanisme for autorisering"
 
 #: src/goabackend/goautils.c:92
 msgid "Error logging into the account"
-msgstr "Feil ved innlogging til kontoen"
+msgstr "Innlogging mislyktes"
 
 #: src/goabackend/goautils.c:136
 msgid "Credentials have expired"
-msgstr "Påloggingsinformasjonen har utløpt"
+msgstr "Innloggingsdata har utløpt"
 
 #: src/goabackend/goautils.c:140
 msgid "Sign in to enable this account."
@@ -653,93 +584,84 @@ msgstr "%s-konto"
 #. TODO: more specific
 #: src/goabackend/goautils.c:370
 msgid "Failed to delete credentials from the keyring"
-msgstr "Klarte ikke å slette påloggingsinformasjon fra nøkkelringen"
+msgstr "Sletting av innloggingsdata mislyktes"
 
 #. TODO: more specific
 #: src/goabackend/goautils.c:418
 msgid "Failed to retrieve credentials from the keyring"
-msgstr "Klarte ikke å hente påloggingsinformasjon fra nøkkelringen"
+msgstr "Henting av innloggingsdata mislyktes"
 
 #. TODO: more specific
 #: src/goabackend/goautils.c:428
 msgid "No credentials found in the keyring"
-msgstr "Fant ingen påloggingsinformasjon på nøkkelringen"
+msgstr "Fant ingen innloggingsdata"
 
 #: src/goabackend/goautils.c:441
 msgid "Error parsing result obtained from the keyring: "
-msgstr "Feil ved lesing av resultat fra nøkkelring: "
+msgstr "Tolking av resultat mislyktes: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
 #: src/goabackend/goautils.c:482
 #, c-format
 msgid "GOA %s credentials for identity %s"
-msgstr "GOA %s påloggingsinformasjon for identitet %s"
+msgstr "GOA %s-innloggingsdata for %s"
 
 #. TODO: more specific
 #: src/goabackend/goautils.c:499
 msgid "Failed to store credentials in the keyring"
-msgstr "Klarte ikke å lagre påloggingsinformasjon på nøkkelringen"
+msgstr "Lagring av innloggingsdata mislyktes"
 
-#: src/goabackend/goautils.c:848
-msgid "Cannot resolve hostname"
-msgstr "Klarte ikke å slå opp navn"
-
-#: src/goabackend/goautils.c:852
-msgid "Cannot resolve proxy hostname"
-msgstr "Kan ikke slå opp navn for proxy"
-
-#: src/goabackend/goautils.c:857
+#: src/goabackend/goautils.c:851
 msgid "Cannot find WebDAV endpoint"
-msgstr "Fant ikke WebDAV-endepunkt"
+msgstr "Fant ikke WebDAV-mottakspunkt"
 
-#: src/goabackend/goautils.c:866
+#: src/goabackend/goautils.c:862
 #, c-format
 msgid "Code: %u — Unexpected response from server"
-msgstr "Kode: %u - Uventet svar fra tjener"
+msgstr "Kode: %u - Uforventet svar fra tjener"
 
-#: src/goabackend/goautils.c:882
+#: src/goabackend/goautils.c:879
 msgid "The signing certificate authority is not known."
-msgstr "Signerende sertifikatautoritet er ikke kjent."
+msgstr "Signeringsautoriteten er ukjent."
 
-#: src/goabackend/goautils.c:886
+#: src/goabackend/goautils.c:883
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr ""
-"Sertifikatet stemmer ikke overens med forventet identitet for nettstedet det "
-"ble hentet fra."
+"Sertifikatet passer ikke med den forventede identiteten opphavsnettstedet."
 
-#: src/goabackend/goautils.c:891
+#: src/goabackend/goautils.c:888
 msgid "The certificate’s activation time is still in the future."
 msgstr "Sertifikatets aktiviseringstidspunkt er fortsatt i fremtiden."
 
-#: src/goabackend/goautils.c:895
+#: src/goabackend/goautils.c:892
 msgid "The certificate has expired."
 msgstr "Sertifikatet har utløpt."
 
-#: src/goabackend/goautils.c:899
+#: src/goabackend/goautils.c:896
 msgid "The certificate has been revoked."
 msgstr "Sertifikatet har blitt tilbaketrukket."
 
-#: src/goabackend/goautils.c:903
+#: src/goabackend/goautils.c:900
 msgid "The certificate’s algorithm is considered insecure."
-msgstr "Sertifikatets algoritme blir sett på som usikker."
+msgstr "Sertifikatets algoritme er usikker."
 
-#: src/goabackend/goautils.c:909
+#: src/goabackend/goautils.c:906
 msgid "Invalid certificate."
 msgstr "Ugyldig sertifikat."
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:944
+#: src/goabackend/goautils.c:941
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
-msgstr "Fant ikke %s med identitet «%s» i påloggingsinformasjonen"
+msgstr "Fant ikke %s med identitet “%s” i innloggingsdata"
 
 #. translators: %s here is the address of the web page
-#: src/goabackend/goawebview.c:89
+#: src/goabackend/goawebview.c:88
 #, c-format
 msgid "Loading “%s”…"
-msgstr "Laster «%s» …"
+msgstr "Laster inn “%s” …"
 
 #: src/goabackend/goawindowsliveprovider.c:56
 msgid "Microsoft"
@@ -747,75 +669,123 @@ msgstr "Microsoft"
 
 #: src/goaidentity/goaidentityservice.c:564
 msgid "Initial secret key is invalid"
-msgstr "Opprinnelig hemmelig nøkkel er ugyldig"
+msgstr "Opprinnelig nøkkel er ugyldig"
 
 #. TODO: more specific
 #: src/goaidentity/goaidentityservice.c:786
 #: src/goaidentity/goaidentityservice.c:890
 #, c-format
 msgid "Couldn't get GoaObject for object path %s"
-msgstr "Kunne ikke hente GoaObject for objektsti %s"
+msgstr "Henting av GoaObject for objektsti %s mislyktes"
 
 #: src/goaidentity/goaidentityservice.c:1270
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
-msgstr "Nettverksområde %s trenger informasjon for å logge deg inn."
+msgstr "Nettverksdomenet %s trenger informasjon for å logge deg inn."
 
-#: src/goaidentity/goakerberosidentity.c:271
-#: src/goaidentity/goakerberosidentity.c:279
-#: src/goaidentity/goakerberosidentity.c:666
+#: src/goaidentity/goakerberosidentity.c:293
+#: src/goaidentity/goakerberosidentity.c:301
+#: src/goaidentity/goakerberosidentity.c:695
 msgid "Could not find identity in credential cache: "
-msgstr "Fant ikke identiteten i mellomlager for påloggingsinformasjon: "
+msgstr "Fant ikke innloggingsdata i database: "
 
-#: src/goaidentity/goakerberosidentity.c:678
+#: src/goaidentity/goakerberosidentity.c:707
 msgid "Could not find identity credentials in cache: "
-msgstr "Fant ikke påloggingsinformasjon for identiteten i mellomlager: "
+msgstr "Fant ikke innloggingsdata i database: "
 
-#: src/goaidentity/goakerberosidentity.c:721
+#: src/goaidentity/goakerberosidentity.c:751
 msgid "Could not sift through identity credentials in cache: "
-msgstr "Klarte ikke å se se gjennom akkreditiver i mellomlager: "
+msgstr "Behandling av innloggingsdata mislyktes: "
 
-#: src/goaidentity/goakerberosidentity.c:735
+#: src/goaidentity/goakerberosidentity.c:763
 msgid "Could not finish up sifting through identity credentials in cache: "
-msgstr "Klarte ikke å gå gjennom akkreditiver i mellomlager: "
+msgstr "Behandling av innloggingsdata mislyktes: "
 
-#: src/goaidentity/goakerberosidentity.c:1019
+#: src/goaidentity/goakerberosidentity.c:1394
 msgid "No associated identification found"
-msgstr "Ingen assosiert identifikasjon funnet"
+msgstr "Ingen samsvarende innloggingsdata funnet"
 
-#: src/goaidentity/goakerberosidentity.c:1098
+#: src/goaidentity/goakerberosidentity.c:1523
 msgid "Could not create credential cache: "
-msgstr "Klarte ikke å lage mellomlager for akkreditiver: "
+msgstr "Oppretting av innloggingsdatabase mislyktes: "
 
-#: src/goaidentity/goakerberosidentity.c:1130
+#: src/goaidentity/goakerberosidentity.c:1563
 msgid "Could not initialize credentials cache: "
-msgstr "Klarte ikke å laste inn akkreditiv-mellomlager: "
+msgstr "Innlasting av innloggingsdatabase mislyktes: "
 
-#: src/goaidentity/goakerberosidentity.c:1143
+#: src/goaidentity/goakerberosidentity.c:1576
 msgid "Could not store new credentials in credentials cache: "
-msgstr "Klarte ikke å lagre ny påloggingsinformasjon i mellomlager: %k"
+msgstr "Lagring av nye opplysninger i innloggingsdatabase mislyktes:"
 
-#: src/goaidentity/goakerberosidentity.c:1431
-msgid "Could not renew identity: Not signed in"
-msgstr "Klarte ikke å fornye identitet: Du er ikke logget inn"
+#: src/goaidentity/goakerberosidentity.c:1812
+msgid "Not signed in"
+msgstr "Ikke logget inn"
 
-#: src/goaidentity/goakerberosidentity.c:1441
-msgid "Could not renew identity: "
-msgstr "Klarte ikke å fornye identitet: "
+#: src/goaidentity/goakerberosidentity.c:1825
+msgid "Could not get the default principal: "
+msgstr "Henting av standardidentitet mislyktes:"
 
-#: src/goaidentity/goakerberosidentity.c:1454
+#: src/goaidentity/goakerberosidentity.c:1838
 #, c-format
-msgid "Could not get new credentials to renew identity %s: "
-msgstr "Klarte ikke å hente nye akkreditiver for å fornye identiteten %s: "
+msgid "Could not get renewed credentials from the KDC for identity %s: "
+msgstr "Henting av fornyede innloggingsdata for %s mislyktes:"
 
-#: src/goaidentity/goakerberosidentity.c:1495
+#: src/goaidentity/goakerberosidentity.c:1886
 msgid "Could not erase identity: "
-msgstr "Klarte ikke å slette identitet: "
+msgstr "Sletting av innloggingsdata mislyktes: "
 
-#: src/goaidentity/goakerberosidentitymanager.c:816
+#: src/goaidentity/goakerberosidentitymanager.c:854
 msgid "Could not find identity"
-msgstr "Fant ikke identitet"
+msgstr "Fant ikke innloggingsdata"
 
-#: src/goaidentity/goakerberosidentitymanager.c:897
+#: src/goaidentity/goakerberosidentitymanager.c:937
 msgid "Could not create credential cache for identity"
-msgstr "Klarte ikke å lage akkreditiv-mellomlager"
+msgstr "Oppretting av innloggingsdatabase mislyktes"
+
+#~ msgid "Facebook"
+#~ msgstr "Facebook"
+
+#~ msgid "Flickr"
+#~ msgstr "Flickr"
+
+#~ msgid "Your system time is invalid. Check your date and time settings."
+#~ msgstr ""
+#~ "Systemklokken er ugyldig. Sjekk dine innstillinger for dato og "
+#~ "klokkeslett."
+
+#~ msgid "Foursquare"
+#~ msgstr "Foursquare"
+
+#~ msgid "Missing access_token or access_token_secret headers in response"
+#~ msgstr "Mangler access_token eller access_token_secret hoder i svar"
+
+#~ msgid "Error getting a Request Token: "
+#~ msgstr "Feil ved henting av forespørselstoken: "
+
+#, c-format
+#~ msgid ""
+#~ "Expected status 200 for getting a Request Token, instead got status %d "
+#~ "(%s)"
+#~ msgstr ""
+#~ "Forventet statuskode 200 ved mottak av forespørselsnøkkel. Mottok status "
+#~ "%d (%s) i stedet"
+
+#~ msgid "Missing request_token or request_token_secret headers in response"
+#~ msgstr "Mangler request_token eller request_token_secret hoder i svar"
+
+#~ msgid "Credentials do not contain access_token or access_token_secret"
+#~ msgstr ""
+#~ "Påloggingsinformasjon inneholder ikke access_token eller "
+#~ "access_token_secret"
+
+#~ msgid "Cannot resolve hostname"
+#~ msgstr "Klarte ikke å slå opp navn"
+
+#~ msgid "Cannot resolve proxy hostname"
+#~ msgstr "Kan ikke slå opp navn for proxy"
+
+#~ msgid "Could not renew identity: Not signed in"
+#~ msgstr "Klarte ikke å fornye identitet: Du er ikke logget inn"
+
+#~ msgid "Could not renew identity: "
+#~ msgstr "Klarte ikke å fornye identitet: "
