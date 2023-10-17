@@ -70,7 +70,6 @@ get_provider_features (GoaProvider *provider)
          GOA_PROVIDER_FEATURE_MAIL |
          GOA_PROVIDER_FEATURE_CALENDAR |
          GOA_PROVIDER_FEATURE_CONTACTS |
-         GOA_PROVIDER_FEATURE_PHOTOS |
          GOA_PROVIDER_FEATURE_FILES;
 }
 
@@ -147,9 +146,6 @@ get_scope (GoaOAuth2Provider *oauth2_provider)
          /* Google Documents List Data API */
          "https://docs.googleusercontent.com/ "
          "https://spreadsheets.google.com/feeds/ "
-
-         /* Google PicasaWeb API (GData) */
-         "https://picasaweb.google.com/data/ "
 
          /* GMail IMAP and SMTP access */
          "https://mail.google.com/ "
@@ -309,7 +305,6 @@ build_object (GoaProvider         *provider,
   gboolean calendar_enabled;
   gboolean contacts_enabled;
   gboolean files_enabled;
-  gboolean photos_enabled;
   const gchar *email_address;
 
   /* Chain up */
@@ -369,10 +364,6 @@ build_object (GoaProvider         *provider,
                                        contacts_enabled,
                                        FALSE);
 
-  /* Photos */
-  photos_enabled = g_key_file_get_boolean (key_file, group, "PhotosEnabled", NULL);
-  goa_object_skeleton_attach_photos (object, photos_enabled);
-
   /* Files */
   files_enabled = g_key_file_get_boolean (key_file, group, "FilesEnabled", NULL);
   uri_drive = g_strconcat ("google-drive://", email_address, "/", NULL);
@@ -384,7 +375,6 @@ build_object (GoaProvider         *provider,
       goa_account_set_mail_disabled (account, !mail_enabled);
       goa_account_set_calendar_disabled (account, !calendar_enabled);
       goa_account_set_contacts_disabled (account, !contacts_enabled);
-      goa_account_set_photos_disabled (account, !photos_enabled);
       goa_account_set_files_disabled (account, !files_enabled);
 
       g_signal_connect (account,
@@ -399,10 +389,6 @@ build_object (GoaProvider         *provider,
                         "notify::contacts-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
                         (gpointer) "ContactsEnabled");
-      g_signal_connect (account,
-                        "notify::photos-disabled",
-                        G_CALLBACK (goa_util_account_notify_property_cb),
-                        (gpointer) "PhotosEnabled");
       g_signal_connect (account,
                         "notify::files-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
@@ -426,7 +412,6 @@ add_account_key_values (GoaOAuth2Provider  *oauth2_provider,
   g_variant_builder_add (builder, "{ss}", "MailEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "CalendarEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "ContactsEnabled", "true");
-  g_variant_builder_add (builder, "{ss}", "PhotosEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "FilesEnabled", "true");
 }
 
