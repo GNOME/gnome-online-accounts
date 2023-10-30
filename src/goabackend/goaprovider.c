@@ -1106,8 +1106,7 @@ goa_provider_get_all (GAsyncReadyCallback callback,
     }
 
   g_task_return_pointer (task, g_steal_pointer (&providers), free_list_and_unref);
-
-  g_list_free_full (providers, g_object_unref);
+  g_object_unref (task);
 }
 
 /**
