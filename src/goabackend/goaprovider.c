@@ -672,7 +672,7 @@ ensure_credentials_in_thread_func (GTask              *task,
                                              &data->expires_in,
                                              cancellable,
                                              &error))
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_boolean (task, TRUE);
 }
