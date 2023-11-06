@@ -257,37 +257,6 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-is_identity_node (GoaOAuth2Provider *oauth2_provider, WebKitDOMHTMLInputElement *element)
-{
-  gboolean ret = FALSE;
-  gchar *element_type = NULL;
-  gchar *id = NULL;
-  gchar *name = NULL;
-
-  g_object_get (element, "type", &element_type, NULL);
-  if (g_strcmp0 (element_type, "email") != 0)
-    goto out;
-
-  id = webkit_dom_element_get_id (WEBKIT_DOM_ELEMENT (element));
-  if (g_strcmp0 (id, "identifierId") != 0)
-    goto out;
-
-  name = webkit_dom_html_input_element_get_name (element);
-  if (g_strcmp0 (name, "identifier") != 0)
-    goto out;
-
-  ret = TRUE;
-
- out:
-  g_free (element_type);
-  g_free (id);
-  g_free (name);
-  return ret;
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-static gboolean
 build_object (GoaProvider         *provider,
               GoaObjectSkeleton   *object,
               GKeyFile            *key_file,
@@ -457,7 +426,6 @@ goa_google_provider_class_init (GoaGoogleProviderClass *klass)
   oauth2_class->get_identity_sync         = get_identity_sync;
   oauth2_class->get_redirect_uri          = get_redirect_uri;
   oauth2_class->get_scope                 = get_scope;
-  oauth2_class->is_identity_node          = is_identity_node;
   oauth2_class->get_token_uri             = get_token_uri;
   oauth2_class->add_account_key_values    = add_account_key_values;
 }

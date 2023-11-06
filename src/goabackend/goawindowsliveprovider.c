@@ -234,36 +234,6 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-is_identity_node (GoaOAuth2Provider *oauth2_provider, WebKitDOMHTMLInputElement *element)
-{
-  gboolean ret = FALSE;
-  gchar *element_type = NULL;
-  gchar *name = NULL;
-
-  /* FIXME: This does not show up in
-   *        webkit_dom_document_get_elements_by_tag_name, but can be
-   *        seen in the inspector. Needs further investigation.
-   */
-
-  g_object_get (element, "type", &element_type, NULL);
-  if (g_strcmp0 (element_type, "email") != 0)
-    goto out;
-
-  name = webkit_dom_html_input_element_get_name (element);
-  if (g_strcmp0 (name, "login") != 0)
-    goto out;
-
-  ret = TRUE;
-
- out:
-  g_free (element_type);
-  g_free (name);
-  return ret;
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-static gboolean
 build_object (GoaProvider         *provider,
               GoaObjectSkeleton   *object,
               GKeyFile            *key_file,
@@ -378,6 +348,5 @@ goa_windows_live_provider_class_init (GoaWindowsLiveProviderClass *klass)
   oauth2_class->get_client_id            = get_client_id;
   oauth2_class->get_client_secret        = get_client_secret;
   oauth2_class->get_identity_sync        = get_identity_sync;
-  oauth2_class->is_identity_node         = is_identity_node;
   oauth2_class->add_account_key_values   = add_account_key_values;
 }

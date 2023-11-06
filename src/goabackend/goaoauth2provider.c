@@ -24,15 +24,11 @@
 #include <libsoup/soup.h>
 #include <libsecret/secret.h>
 #include <json-glib/json-glib.h>
-#include <webkit2/webkit2.h>
 
 #include "goaprovider.h"
 #include "goautils.h"
-#include "goawebview.h"
 #include "goaoauth2provider.h"
 #include "goaoauth2provider-priv.h"
-#include "goaoauth2provider-web-extension.h"
-#include "goaoauth2provider-web-view.h"
 #include "goarestproxy.h"
 
 /**
@@ -141,70 +137,6 @@ goa_oauth2_provider_get_use_mobile_browser (GoaOAuth2Provider *self)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static gboolean
-goa_oauth2_provider_is_deny_node_default (GoaOAuth2Provider *self, WebKitDOMNode *node)
-{
-  return FALSE;
-}
-
-/**
- * goa_oauth2_provider_is_deny_node:
- * @self: A #GoaOAuth2Provider.
- * @node: A WebKitDOMNode.
- *
- * Checks whether @node is the HTML UI element that the user can use
- * to deny permission to access his account. Usually they are either a
- * WebKitDOMHTMLButtonElement or a WebKitDOMHTMLInputElement.
- *
- * Please note that providers may have multiple such elements in their
- * UI and this method should catch all of them.
- *
- * This is a virtual method where the default implementation returns
- * %FALSE.
- *
- * Returns: %TRUE if the @node can be used to deny permission.
- */
-gboolean
-goa_oauth2_provider_is_deny_node (GoaOAuth2Provider *self, WebKitDOMNode *node)
-{
-  g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (self), FALSE);
-  return GOA_OAUTH2_PROVIDER_GET_CLASS (self)->is_deny_node (self, node);
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-static gboolean
-goa_oauth2_provider_is_password_node_default (GoaOAuth2Provider *self, WebKitDOMHTMLInputElement *element)
-{
-  return FALSE;
-}
-
-/**
- * goa_oauth2_provider_is_password_node:
- * @self: A #GoaOAuth2Provider.
- * @element: A WebKitDOMHTMLInputElement
- *
- * Checks whether @element is the HTML UI element that the user can
- * use to enter her password. This can be used to offer a
- * #GoaPasswordBased interface by saving the user's
- * password. Providers usually frown upon doing this, so this is not
- * recommended.
- *
- * This is a virtual method where the default implementation returns
- * %FALSE.
- *
- * Returns: %TRUE if @element can be used to enter the password.
- */
-gboolean
-goa_oauth2_provider_is_password_node (GoaOAuth2Provider *self, WebKitDOMHTMLInputElement *element)
-{
-  g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (self), FALSE);
-  g_return_val_if_fail (WEBKIT_DOM_IS_HTML_INPUT_ELEMENT (element), FALSE);
-  return GOA_OAUTH2_PROVIDER_GET_CLASS (self)->is_password_node (self, element);
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
 static void
 goa_oauth2_provider_add_account_key_values_default (GoaOAuth2Provider *self,
                                                     GVariantBuilder   *builder)
@@ -290,45 +222,6 @@ goa_oauth2_provider_build_authorization_uri (GoaOAuth2Provider  *self,
                                                                         escaped_redirect_uri,
                                                                         escaped_client_id,
                                                                         escaped_scope);
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-static gboolean
-goa_oauth2_provider_decide_navigation_policy_default (GoaOAuth2Provider               *self,
-                                                      WebKitWebView                   *web_view,
-                                                      WebKitNavigationPolicyDecision  *decision)
-{
-  return FALSE;
-}
-
-/*
- * goa_oauth2_provider_decide_navigation_policy_default:
- * @self: A #GoaOAuth2Provider.
- * @decision: A #WebKitNavigationPolicyDecision
- *
- * Certain OAuth2-like, but not exactly <ulink
- * url="http://tools.ietf.org/html/draft-ietf-oauth-v2-15">OAuth2</ulink>,
- * providers may not send us to the redirect URI, as expected. They
- * might need some special handling for that. This is a provider
- * specific hook to accommodate them.
- *
- * This is a virtual method where the default implementation returns
- * %FALSE.
- *
- * Returns: %TRUE if @provider decided what to do with @decision,
- * %FALSE otherwise.
- */
-gboolean
-goa_oauth2_provider_decide_navigation_policy (GoaOAuth2Provider               *self,
-                                              WebKitWebView                   *web_view,
-                                              WebKitNavigationPolicyDecision  *decision)
-{
-  g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (self), FALSE);
-  g_return_val_if_fail (WEBKIT_IS_WEB_VIEW (web_view), FALSE);
-  g_return_val_if_fail (WEBKIT_IS_NAVIGATION_POLICY_DECISION (decision), FALSE);
-
-  return GOA_OAUTH2_PROVIDER_GET_CLASS (self)->decide_navigation_policy (self, web_view, decision);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -556,26 +449,6 @@ goa_oauth2_provider_get_identity_sync (GoaOAuth2Provider    *self,
                                                                   out_presentation_identity,
                                                                   cancellable,
                                                                   error);
-}
-
-/**
- * goa_oauth2_provider_is_identity_node:
- * @self: A #GoaOAuth2Provider.
- * @element: A WebKitDOMHTMLInputElement.
- *
- * Checks whether @element is the HTML UI element that the user can
- * use to identify herself at the provider.
- *
- * This is a pure virtual method - a subclass must provide an
- * implementation.
- *
- * Returns: %TRUE if the @element can be used to deny permission.
- */
-gboolean
-goa_oauth2_provider_is_identity_node (GoaOAuth2Provider *self, WebKitDOMHTMLInputElement *element)
-{
-  g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (self), FALSE);
-  return GOA_OAUTH2_PROVIDER_GET_CLASS (self)->is_identity_node (self, element);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -1741,12 +1614,9 @@ goa_oauth2_provider_class_init (GoaOAuth2ProviderClass *klass)
   provider_class->ensure_credentials_sync    = goa_oauth2_provider_ensure_credentials_sync;
 
   klass->build_authorization_uri  = goa_oauth2_provider_build_authorization_uri_default;
-  klass->decide_navigation_policy = goa_oauth2_provider_decide_navigation_policy_default;
   klass->get_token_uri            = goa_oauth2_provider_get_token_uri_default;
   klass->get_scope                = goa_oauth2_provider_get_scope_default;
   klass->get_use_mobile_browser   = goa_oauth2_provider_get_use_mobile_browser_default;
-  klass->is_deny_node             = goa_oauth2_provider_is_deny_node_default;
-  klass->is_password_node         = goa_oauth2_provider_is_password_node_default;
   klass->add_account_key_values   = goa_oauth2_provider_add_account_key_values_default;
 }
 

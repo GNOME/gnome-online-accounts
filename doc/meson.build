@@ -43,7 +43,6 @@ if enable_gtk_doc
     'goasouplogger.h',
     'goautils.h',
     'goawebextension.h',
-    'goawebview.h',
     'goawindowsliveprovider.h',
     'nautilus-floating-bar.h',
   ]
