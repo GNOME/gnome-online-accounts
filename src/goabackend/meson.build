@@ -162,3 +162,17 @@ libgoa_web_extension = shared_module(
   install: true,
   install_dir: join_paths(goa_pkglibdir, 'web-extensions')
 )
+
+executable('goa-oauth2-handler',
+  'goaoauth2handler.c',
+  dependencies: [
+    glib_dep,
+    libsecret_dep,
+  ],
+  c_args: [
+    '-DG_LOG_DOMAIN="@0@"'.format('goa-oauth2-handler'),
+  ],
+  include_directories: common_incs,
+  install: true,
+  install_dir: goa_libexecdir,
+)

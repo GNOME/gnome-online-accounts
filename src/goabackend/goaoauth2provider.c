@@ -22,6 +22,7 @@
 
 #include <rest/rest.h>
 #include <libsoup/soup.h>
+#include <libsecret/secret.h>
 #include <json-glib/json-glib.h>
 #include <webkit2/webkit2.h>
 
@@ -81,6 +82,8 @@ struct _GoaOAuth2ProviderPrivate
   gchar *identity;
   gchar *presentation_identity;
   gchar *password;
+  gchar *request_uri;
+  SecretCollection *session;
 };
 
 G_LOCK_DEFINE_STATIC (provider_lock);
@@ -734,72 +737,34 @@ get_tokens_sync (GoaOAuth2Provider  *self,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static void
-on_web_view_deny_click (GoaWebView *web_view, gpointer user_data)
-{
-  GoaOAuth2Provider *self = GOA_OAUTH2_PROVIDER (user_data);
-  GoaOAuth2ProviderPrivate *priv;
-
-  priv = goa_oauth2_provider_get_instance_private (self);
-  gtk_dialog_response (priv->dialog, GTK_RESPONSE_CANCEL);
-}
-
-static void
-on_web_view_password_submit (GoaWebView *web_view, const gchar *password, gpointer user_data)
-{
-  GoaOAuth2Provider *self = GOA_OAUTH2_PROVIDER (user_data);
-  GoaOAuth2ProviderPrivate *priv;
-
-  priv = goa_oauth2_provider_get_instance_private (self);
-
-  g_free (priv->password);
-  priv->password = g_strdup (password);
-}
-
 static gboolean
-on_web_view_decide_policy (WebKitWebView            *web_view,
-                           WebKitPolicyDecision     *decision,
-                           WebKitPolicyDecisionType  decision_type,
-                           gpointer                  user_data)
+parse_requested_uri (GoaOAuth2Provider  *self,
+                     const char         *requested_uri)
 {
-  GoaOAuth2Provider *self = GOA_OAUTH2_PROVIDER (user_data);
-  GoaOAuth2ProviderPrivate *priv;
-  GHashTable *key_value_pairs;
-  WebKitNavigationAction *action;
-  WebKitURIRequest *request;
-  GUri *uri = NULL;
+  GoaOAuth2ProviderPrivate *priv = goa_oauth2_provider_get_instance_private (self);
+  g_autoptr (GHashTable) key_value_pairs = NULL;
+  g_autoptr (GUri) uri = NULL;
   const gchar *fragment;
   const gchar *oauth2_error;
   const gchar *query;
   const gchar *redirect_uri;
-  const gchar *requested_uri;
-  gint response_id = GTK_RESPONSE_NONE;
 
-  priv = goa_oauth2_provider_get_instance_private (self);
+  g_assert (priv->error == NULL);
 
-  if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION)
-    goto default_behaviour;
-
-  if (goa_oauth2_provider_decide_navigation_policy (self,
-                                                    web_view,
-                                                    WEBKIT_NAVIGATION_POLICY_DECISION (decision)))
-    {
-      response_id = 0;
-      goto ignore_request;
-    }
-
-  /* TODO: use oauth2_proxy_extract_access_token() */
-
-  action = webkit_navigation_policy_decision_get_navigation_action (WEBKIT_NAVIGATION_POLICY_DECISION (decision));
-  request = webkit_navigation_action_get_request (action);
-  requested_uri = webkit_uri_request_get_uri (request);
   redirect_uri = goa_oauth2_provider_get_redirect_uri (self);
   if (!g_str_has_prefix (requested_uri, redirect_uri))
-    goto default_behaviour;
+    {
+      g_set_error (&priv->error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   "Invalid URI: %s",
+                   requested_uri);
+      return FALSE;
+    }
 
-  uri = g_uri_parse (requested_uri, G_URI_FLAGS_ENCODED | G_URI_FLAGS_PARSE_RELAXED, NULL);
-  fragment = g_uri_get_fragment (uri);
-  query = g_uri_get_query (uri);
+  uri = g_uri_parse (requested_uri, G_URI_FLAGS_ENCODED | G_URI_FLAGS_PARSE_RELAXED, &priv->error);
+  if (uri == NULL)
+    return FALSE;
 
   /* Three cases:
    * 1) we can either have the backend handle the URI for us, or
@@ -810,7 +775,7 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
    */
   if (GOA_OAUTH2_PROVIDER_GET_CLASS (self)->process_redirect_url)
     {
-      gchar *url;
+      g_autofree char *url = NULL;
 
       url = g_uri_to_string (uri);
       if (!goa_oauth2_provider_process_redirect_url (self, url, &priv->access_token, &priv->error))
@@ -818,15 +783,14 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
           g_prefix_error (&priv->error, _("Authorization response: "));
           priv->error->domain = GOA_ERROR;
           priv->error->code = GOA_ERROR_NOT_AUTHORIZED;
-          response_id = GTK_RESPONSE_CLOSE;
-        }
-      else
-        response_id = GTK_RESPONSE_OK;
 
-      g_free (url);
-      goto ignore_request;
+          return FALSE;
+        }
+
+      return TRUE;
     }
 
+  fragment = g_uri_get_fragment (uri);
   if (fragment != NULL)
     {
       /* fragment is encoded into a key/value pairs for the token and
@@ -850,28 +814,24 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
             priv->access_token_expires_in = atoi (expires_in_str);
 
           priv->refresh_token = g_strdup (g_hash_table_lookup (key_value_pairs, "refresh_token"));
-
-          response_id = GTK_RESPONSE_OK;
         }
-      g_hash_table_unref (key_value_pairs);
+      g_clear_pointer (&key_value_pairs, g_hash_table_unref);
+
+      if (priv->access_token != NULL)
+        return TRUE;
     }
 
-  if (priv->access_token != NULL)
-    goto ignore_request;
-
+  query = g_uri_get_query (uri);
   if (query != NULL)
     {
       key_value_pairs = soup_form_decode (query);
 
       priv->authorization_code = g_strdup (g_hash_table_lookup (key_value_pairs, "code"));
+      g_clear_pointer (&key_value_pairs, g_hash_table_unref);
+
       if (priv->authorization_code != NULL)
-        response_id = GTK_RESPONSE_OK;
-
-      g_hash_table_unref (key_value_pairs);
+        return TRUE;
     }
-
-  if (priv->authorization_code != NULL)
-    goto ignore_request;
 
   /* In case we don't find the access_token or auth code, then look
    * for the error in the query part of the URI.
@@ -879,30 +839,142 @@ on_web_view_decide_policy (WebKitWebView            *web_view,
   key_value_pairs = soup_form_decode (query);
   oauth2_error = (const gchar *) g_hash_table_lookup (key_value_pairs, "error");
   if (g_strcmp0 (oauth2_error, GOA_OAUTH2_ACCESS_DENIED) == 0)
-    response_id = GTK_RESPONSE_CANCEL;
-  else
     {
       g_set_error (&priv->error,
                    GOA_ERROR,
                    GOA_ERROR_NOT_AUTHORIZED,
                    _("Authorization response: %s"),
                    oauth2_error);
-      response_id = GTK_RESPONSE_CLOSE;
     }
-  g_hash_table_unref (key_value_pairs);
-  goto ignore_request;
+  else
+    {
+      g_set_error_literal (&priv->error,
+                           GOA_ERROR,
+                           GOA_ERROR_FAILED,
+                           _("Failed to authenticate"));
+    }
 
- ignore_request:
-  if (uri)
-    g_uri_unref (uri);
-  g_assert (response_id != GTK_RESPONSE_NONE);
-  if (response_id < 0)
-    gtk_dialog_response (priv->dialog, response_id);
-  webkit_policy_decision_ignore (decision);
-  return TRUE;
-
- default_behaviour:
   return FALSE;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static const SecretSchema oauth2_schema =
+{
+  .name = "org.gnome.OnlineAccounts.OAuth2",
+  .flags = SECRET_SCHEMA_NONE,
+  .attributes = {
+    {
+      .name = "goa-oauth2-client",
+      .type = SECRET_SCHEMA_ATTRIBUTE_STRING,
+    },
+    {
+      .name = "goa-oauth2-provider",
+      .type = SECRET_SCHEMA_ATTRIBUTE_STRING,
+    },
+    { "NULL", 0 }
+  }
+};
+
+static void
+on_secrets_changed (SecretCollection  *collection,
+                    GParamSpec        *pspec,
+                    GoaOAuth2Provider *self)
+{
+  GoaOAuth2ProviderPrivate *priv = goa_oauth2_provider_get_instance_private (self);
+  const char *client_id = NULL;
+  const char *provider_type = NULL;
+  g_autofree char *requested_uri = NULL;
+  GtkResponseType response_id = GTK_RESPONSE_NONE;
+
+  client_id = goa_oauth2_provider_get_client_id (self);
+  provider_type = goa_provider_get_provider_type (GOA_PROVIDER (self));
+  requested_uri = secret_password_lookup_sync (&oauth2_schema, NULL, NULL,
+                                               "goa-oauth2-client", client_id,
+                                               "goa-oauth2-provider", provider_type,
+                                               NULL);
+
+  if (requested_uri != NULL)
+    {
+      if (parse_requested_uri (self, requested_uri))
+        response_id = GTK_RESPONSE_OK;
+      else
+        response_id = GTK_RESPONSE_CANCEL;
+    }
+
+  if (response_id != GTK_RESPONSE_NONE)
+    {
+      g_signal_handlers_disconnect_by_func (collection, on_secrets_changed, self);
+      gtk_dialog_response (priv->dialog, response_id);
+    }
+}
+
+static void
+secret_service_get_cb (GObject           *object,
+                       GAsyncResult      *result,
+                       GoaOAuth2Provider *self)
+{
+  GoaOAuth2ProviderPrivate *priv = goa_oauth2_provider_get_instance_private (self);
+  g_autoptr (SecretService) service = NULL;
+  g_autolist (SecretCollection) collections = NULL;
+
+  service = secret_service_get_finish (result, &priv->error);
+  if (service == NULL)
+    goto out;
+
+  collections = secret_service_get_collections (service);
+  for (const GList *iter = collections; iter != NULL; iter = iter->next)
+    {
+      g_autofree char *label = secret_collection_get_label (iter->data);
+
+      /* The session collection is an empty string (?) */
+      if (g_strcmp0 (label, "") == 0)
+        {
+          const char *client_id = NULL;
+          const char *provider_type = NULL;
+
+          /* Ensure there's no dangling entry */
+          client_id = goa_oauth2_provider_get_client_id (self);
+          provider_type = goa_provider_get_provider_type (GOA_PROVIDER (self));
+          secret_password_clear_sync (&oauth2_schema, NULL, NULL,
+                                      "goa-oauth2-client", client_id,
+                                      "goa-oauth2-provider", provider_type,
+                                      NULL);
+
+          /* Watch the session collection for the requested URI */
+          priv->session = g_object_ref (iter->data);
+          g_signal_connect_object (priv->session,
+                                   "notify::items",
+                                   G_CALLBACK (on_secrets_changed),
+                                   self,
+                                   0);
+          goto out;
+        }
+    }
+
+  if (priv->session == NULL && priv->error == NULL)
+    {
+      g_set_error (&priv->error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   "Failed to connect to session keyring");
+      goto out;
+    }
+
+out:
+  g_main_loop_quit (priv->loop);
+}
+
+static void
+on_continue_in_browser (GtkButton         *button,
+                        GoaOAuth2Provider *self)
+{
+  GoaOAuth2ProviderPrivate *priv = goa_oauth2_provider_get_instance_private (self);
+
+  if (!g_app_info_launch_default_for_uri (priv->request_uri, NULL, &priv->error))
+    gtk_dialog_response (priv->dialog, GTK_RESPONSE_CANCEL);
+  else
+    gtk_widget_set_sensitive (GTK_WIDGET (button), FALSE);
 }
 
 static gboolean
@@ -912,12 +984,13 @@ get_tokens_and_identity (GoaOAuth2Provider  *self,
                          GtkDialog          *dialog,
                          GtkBox             *vbox)
 {
-  GoaOAuth2ProviderPrivate *priv;
+  GoaOAuth2ProviderPrivate *priv = goa_oauth2_provider_get_instance_private (self);
   gboolean ret = FALSE;
-  gchar *url;
-  GtkWidget *embed;
+  int response_id = GTK_RESPONSE_NONE;
   GtkWidget *grid;
-  GtkWidget *web_view;
+  GtkWidget *image;
+  GtkWidget *label;
+  GtkWidget *button;
   const gchar *scope;
   gchar *escaped_redirect_uri = NULL;
   gchar *escaped_client_id = NULL;
@@ -929,7 +1002,6 @@ get_tokens_and_identity (GoaOAuth2Provider  *self,
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), FALSE);
   g_return_val_if_fail (GTK_IS_BOX (vbox), FALSE);
 
-  priv = goa_oauth2_provider_get_instance_private (self);
   g_return_val_if_fail (priv->error == NULL, FALSE);
 
   /* TODO: check with NM whether we're online, if not - return error */
@@ -943,6 +1015,8 @@ get_tokens_and_identity (GoaOAuth2Provider  *self,
   g_clear_pointer (&priv->authorization_code, g_free);
   g_clear_pointer (&priv->access_token, g_free);
   g_clear_pointer (&priv->refresh_token, g_free);
+  g_clear_pointer (&priv->request_uri, g_free);
+  g_clear_object (&priv->session);
 
   /* TODO: use oauth2_proxy_build_login_url_full() */
   escaped_redirect_uri = g_uri_escape_string (goa_oauth2_provider_get_redirect_uri (self), NULL, TRUE);
@@ -952,40 +1026,70 @@ get_tokens_and_identity (GoaOAuth2Provider  *self,
     escaped_scope = g_uri_escape_string (goa_oauth2_provider_get_scope (self), NULL, TRUE);
   else
     escaped_scope = NULL;
-  url = goa_oauth2_provider_build_authorization_uri (self,
-                                                     goa_oauth2_provider_get_authorization_uri (self),
-                                                     escaped_redirect_uri,
-                                                     escaped_client_id,
-                                                     escaped_scope);
+  priv->request_uri = goa_oauth2_provider_build_authorization_uri (self,
+                                                                   goa_oauth2_provider_get_authorization_uri (self),
+                                                                   escaped_redirect_uri,
+                                                                   escaped_client_id,
+                                                                   escaped_scope);
 
   goa_utils_set_dialog_title (GOA_PROVIDER (self), dialog, add_account);
 
-  grid = gtk_grid_new ();
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), GTK_ORIENTATION_VERTICAL);
-  gtk_grid_set_row_spacing (GTK_GRID (grid), 12);
+  grid = g_object_new (GTK_TYPE_BOX,
+                       "orientation", GTK_ORIENTATION_VERTICAL,
+                       "spacing",     18,
+                       "halign",      GTK_ALIGN_CENTER,
+                       "hexpand",     TRUE,
+                       "valign",      GTK_ALIGN_CENTER,
+                       "vexpand",     TRUE,
+                       NULL);
   gtk_container_add (GTK_CONTAINER (vbox), grid);
 
-  web_view = goa_web_view_new (GOA_PROVIDER (self), existing_identity);
-  gtk_widget_set_hexpand (web_view, TRUE);
-  gtk_widget_set_vexpand (web_view, TRUE);
-  embed = goa_web_view_get_view (GOA_WEB_VIEW (web_view));
+  image = g_object_new (GTK_TYPE_IMAGE,
+                        "icon-name",  "web-browser-symbolic",
+                        "pixel-size", 128,
+                        NULL);
+  gtk_style_context_add_class (gtk_widget_get_style_context (image), "dim-label");
+  gtk_container_add (GTK_CONTAINER (grid), image);
 
-  if (goa_oauth2_provider_get_use_mobile_browser (self))
-    goa_web_view_fake_mobile (GOA_WEB_VIEW (web_view));
+  label = gtk_label_new (_("Sign in with your browser to setup an account."));
+  gtk_style_context_add_class (gtk_widget_get_style_context (label), "heading");
+  gtk_container_add (GTK_CONTAINER (grid), label);
 
-  webkit_web_view_load_uri (WEBKIT_WEB_VIEW (embed), url);
-  g_signal_connect (embed,
-                    "decide-policy",
-                    G_CALLBACK (on_web_view_decide_policy),
-                    self);
-  g_signal_connect (web_view, "deny-click", G_CALLBACK (on_web_view_deny_click), self);
-  g_signal_connect (web_view, "password-submit", G_CALLBACK (on_web_view_password_submit), self);
-
-  gtk_container_add (GTK_CONTAINER (grid), web_view);
-  gtk_window_set_default_size (GTK_WINDOW (dialog), -1, -1);
+  button = gtk_button_new_with_label (_("Continue"));
+  gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
+  gtk_style_context_add_class (gtk_widget_get_style_context (button), "suggested-action");
+  g_signal_connect_object (button,
+                           "clicked",
+                           G_CALLBACK (on_continue_in_browser),
+                           self, 0);
+  gtk_container_add (GTK_CONTAINER (grid), button);
+  gtk_dialog_add_button (priv->dialog, _("_Cancel"), GTK_RESPONSE_CANCEL);
 
   gtk_widget_show_all (GTK_WIDGET (vbox));
-  gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_window_set_default_size (GTK_WINDOW (dialog), -1, -1);
+
+  /* Watch the session secret collection for the OAuth2 URI */
+  secret_service_get (SECRET_SERVICE_LOAD_COLLECTIONS | SECRET_SERVICE_OPEN_SESSION,
+                      NULL,
+                      (GAsyncReadyCallback) secret_service_get_cb,
+                      self);
+  g_main_loop_run (priv->loop);
+  if (priv->error != NULL)
+    goto out;
+
+  /* Inform the user authentication should be completed in the browser */
+  response_id = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (response_id != GTK_RESPONSE_OK)
+    {
+      if (priv->error == NULL)
+        {
+          g_set_error (&priv->error,
+                       GOA_ERROR,
+                       GOA_ERROR_DIALOG_DISMISSED,
+                       _("Dialog was dismissed"));
+        }
+      goto out;
+    }
 
   /* We can have either the auth code, with which we'll obtain the token, or
    * the token directly if we are using a client side flow, since we don't
@@ -1044,12 +1148,14 @@ get_tokens_and_identity (GoaOAuth2Provider  *self,
     }
 
   ret = TRUE;
+  gtk_dialog_response (dialog, GTK_RESPONSE_OK);
 
  out:
-  g_free (url);
   g_free (escaped_redirect_uri);
   g_free (escaped_client_id);
   g_free (escaped_scope);
+  g_clear_pointer (&priv->request_uri, g_free);
+  g_clear_object (&priv->session);
   return ret;
 }
 
@@ -1113,6 +1219,7 @@ goa_oauth2_provider_add_account (GoaProvider *provider,
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
   priv = goa_oauth2_provider_get_instance_private (self);
+  priv->loop = g_main_loop_new (NULL, FALSE);
 
   if (!get_tokens_and_identity (self, TRUE, NULL, dialog, vbox))
     goto out;
@@ -1147,7 +1254,6 @@ goa_oauth2_provider_add_account (GoaProvider *provider,
                                 NULL, /* GCancellable* */
                                 (GAsyncReadyCallback) add_account_cb,
                                 self);
-  priv->loop = g_main_loop_new (NULL, FALSE);
   g_main_loop_run (priv->loop);
   if (priv->error != NULL)
     goto out;
@@ -1197,6 +1303,7 @@ goa_oauth2_provider_refresh_account (GoaProvider  *provider,
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   priv = goa_oauth2_provider_get_instance_private (self);
+  priv->loop = g_main_loop_new (NULL, FALSE);
 
   dialog = gtk_dialog_new_with_buttons (NULL,
                                         parent,
@@ -1607,6 +1714,8 @@ goa_oauth2_provider_finalize (GObject *object)
   g_free (priv->authorization_code);
   g_free (priv->access_token);
   g_free (priv->refresh_token);
+  g_clear_pointer (&priv->request_uri, g_free);
+  g_clear_object (&priv->session);
 
   G_OBJECT_CLASS (goa_oauth2_provider_parent_class)->finalize (object);
 }

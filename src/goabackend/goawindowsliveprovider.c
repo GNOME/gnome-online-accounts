@@ -93,7 +93,8 @@ get_token_uri (GoaOAuth2Provider *oauth2_provider)
 static const gchar *
 get_redirect_uri (GoaOAuth2Provider *oauth2_provider)
 {
-  return "https://login.live.com/oauth20_desktop.srf";
+  /* See: https://learn.microsoft.com/en-us/entra/identity-platform/reply-url */
+  return "goa-oauth2://localhost/"GOA_WINDOWS_LIVE_CLIENT_ID;
 }
 
 static const gchar *
