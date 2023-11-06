@@ -23,6 +23,7 @@ libgoa_backend_sources = files(
   'goasmtpauth.c',
   'goasouplogger.c',
   'goautils.c',
+  'goawebdavprovider.c',
   'goawindowsliveprovider.c',
   'nautilus-floating-bar.c'
 )
