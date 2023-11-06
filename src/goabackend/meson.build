@@ -22,7 +22,6 @@ libgoa_backend_sources = files(
   'goasmtpauth.c',
   'goasouplogger.c',
   'goautils.c',
-  'goawebview.c',
   'goawindowsliveprovider.c',
   'nautilus-floating-bar.c'
 )
@@ -83,14 +82,12 @@ incs = common_incs
 
 deps = [
   gtk_dep,
-  javascript_core_gtk_dep,
   json_glib_dep,
   libgoa_dep,
   libsecret_dep,
   libsoup_dep,
   libxml_dep,
   rest_dep,
-  webkit_gtk_dep
 ]
 
 cflags = [
@@ -98,7 +95,6 @@ cflags = [
   '-DGOA_API_IS_SUBJECT_TO_CHANGE',
   '-DGOA_BACKEND_COMPILATION',
   '-DPACKAGE_LOCALE_DIR="@0@"'.format(goa_localedir),
-  '-DPACKAGE_WEB_EXTENSIONS_DIR="@0@"'.format(join_paths(goa_pkglibdir, 'web-extensions'))
 ]
 
 if enable_fedora
@@ -143,22 +139,16 @@ pkg.generate(
   variables: 'exec_prefix=${prefix}'
 )
 
-libgoawebextension_sources = files(
-  'goawebextension.c',
-  'goawebextensionmain.c'
-)
-
-deps = [
-  rest_dep,
-  webkit_gtk_dep
-]
-
-libgoa_web_extension = shared_module(
-  'goawebextension',
-  libgoawebextension_sources,
-  include_directories: common_incs + [goa_inc],
-  dependencies: [deps, libgoa_backend_dep],
-  c_args: cflags,
+executable('goa-oauth2-handler',
+  'goaoauth2handler.c',
+  dependencies: [
+    glib_dep,
+    libsecret_dep,
+  ],
+  c_args: [
+    '-DG_LOG_DOMAIN="@0@"'.format('goa-oauth2-handler'),
+  ],
+  include_directories: common_incs,
   install: true,
-  install_dir: join_paths(goa_pkglibdir, 'web-extensions')
+  install_dir: goa_libexecdir,
 )
