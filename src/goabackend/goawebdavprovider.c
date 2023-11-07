@@ -35,7 +35,7 @@ G_DEFINE_TYPE_WITH_CODE (GoaWebDavProvider, goa_webdav_provider, GOA_TYPE_PROVID
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
 							 g_define_type_id,
 							 GOA_WEBDAV_NAME,
-							 0));
+							 0))
 
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -49,7 +49,7 @@ get_provider_type (GoaProvider *provider)
 static char *
 get_provider_name (GoaProvider *provider, GoaObject *object)
 {
-  return g_strdup(_("WebDAV"));
+  return g_strdup ("WebDAV");
 }
 
 static GoaProviderGroup

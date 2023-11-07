@@ -43,7 +43,7 @@ typedef struct
 void                 goa_dav_configuration_free                (GoaDavConfiguration *config);
 
 #define GOA_TYPE_DAV_CLIENT (goa_dav_client_get_type ())
-G_DECLARE_FINAL_TYPE (GoaDavClient, goa_dav_client, GOA, DAV_CLIENT, GObject);
+G_DECLARE_FINAL_TYPE (GoaDavClient, goa_dav_client, GOA, DAV_CLIENT, GObject)
 
 GoaDavClient        *goa_dav_client_new                        (void);
 void                 goa_dav_client_check                      (GoaDavClient         *self,

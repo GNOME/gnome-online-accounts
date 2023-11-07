@@ -34,7 +34,7 @@ struct _GoaDavClient
   GObject parent_instance;
 };
 
-G_DEFINE_TYPE (GoaDavClient, goa_dav_client, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GoaDavClient, goa_dav_client, G_TYPE_OBJECT)
 
 /* ---------------------------------------------------------------------------------------------------- */
 
@@ -53,7 +53,7 @@ goa_dav_client_class_init (GoaDavClientClass *klass)
 GoaDavClient *
 goa_dav_client_new (void)
 {
-  return GOA_DAV_CLIENT (g_object_new (GOA_TYPE_DAV_CLIENT, NULL));
+  return g_object_new (GOA_TYPE_DAV_CLIENT, NULL);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -82,9 +82,9 @@ dav_client_check_data_free (gpointer user_data)
       g_object_unref (data->cancellable);
     }
 
-  g_clear_pointer (&data->uri, g_free);
-  g_clear_pointer (&data->username, g_free);
-  g_clear_pointer (&data->password, g_free);
+  g_free (data->uri);
+  g_free (data->username);
+  g_free (data->password);
   g_clear_error (&data->error);
   g_clear_object (&data->msg);
   g_clear_object (&data->session);
@@ -105,8 +105,8 @@ dav_client_check_auth_data_free (gpointer  data,
 {
   CheckAuthData *auth = data;
 
-  g_clear_pointer (&auth->password, g_free);
-  g_clear_pointer (&auth->username, g_free);
+  g_free (auth->password);
+  g_free (auth->username);
   g_free (auth);
 }
 
@@ -795,8 +795,8 @@ goa_dav_client_discover_finish (GoaDavClient  *self,
 void
 goa_dav_configuration_free (GoaDavConfiguration *config)
 {
-  g_clear_pointer (&config->webdav_uri, g_free);
-  g_clear_pointer (&config->caldav_uri, g_free);
-  g_clear_pointer (&config->carddav_uri, g_free);
+  g_free (config->webdav_uri);
+  g_free (config->caldav_uri);
+  g_free (config->carddav_uri);
   g_free (config);
 }
