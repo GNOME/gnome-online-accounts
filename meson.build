@@ -186,6 +186,11 @@ config_h.set_quoted('GOA_OWNCLOUD_NAME', 'owncloud')
 enable_owncloud = get_option('owncloud')
 config_h.set('GOA_OWNCLOUD_ENABLED', enable_owncloud)
 
+# WebDAV
+config_h.set_quoted('GOA_WEBDAV_NAME', 'webdav')
+enable_webdav = get_option('webdav')
+config_h.set('GOA_WEBDAV_ENABLED', enable_webdav)
+
 # Windows Live
 config_h.set_quoted('GOA_WINDOWS_LIVE_NAME', 'windows_live')
 
@@ -295,6 +300,7 @@ summary({
     'Media Server': enable_media_server,
     'Microsoft Exchange': enable_exchange,
     'ownCloud': enable_owncloud,
+    'WebDAV': enable_webdav,
     'Windows Live': enable_windows_live,
   },
   bool_yn: true,

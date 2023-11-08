@@ -5,6 +5,7 @@ libgoa_backend_sources = files(
   'goaoauth2provider.c',
   'goabackendinit.c',
   'goadlnaservermanager.c',
+  'goadavclient.c',
   'goaewsclient.c',
   'goaexchangeprovider.c',
   'goagoogleprovider.c',
@@ -22,6 +23,7 @@ libgoa_backend_sources = files(
   'goasmtpauth.c',
   'goasouplogger.c',
   'goautils.c',
+  'goawebdavprovider.c',
   'goawindowsliveprovider.c',
   'nautilus-floating-bar.c'
 )

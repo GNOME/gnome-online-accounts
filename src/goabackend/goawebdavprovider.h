@@ -1,6 +1,7 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright © 2012 – 2017 Red Hat, Inc.
+ * Copyright © 2023 GNOME Foundation Inc.
+ * Contributor: Andy Holmes <andyholmes@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,18 +21,18 @@
 #error "Only <goabackend/goabackend.h> can be included directly."
 #endif
 
-#ifndef __GOA_OWNCLOUD_PROVIDER_H__
-#define __GOA_OWNCLOUD_PROVIDER_H__
+#ifndef __GOA_WEBDAV_PROVIDER_H__
+#define __GOA_WEBDAV_PROVIDER_H__
 
 #include <glib-object.h>
 
-#include "goawebdavprovider-priv.h"
+#include "goaprovider-priv.h"
 
 G_BEGIN_DECLS
 
-#define GOA_TYPE_OWNCLOUD_PROVIDER (goa_owncloud_provider_get_type ())
-G_DECLARE_FINAL_TYPE (GoaOwncloudProvider, goa_owncloud_provider, GOA, OWNCLOUD_PROVIDER, GoaWebDavProvider);
+#define GOA_TYPE_WEBDAV_PROVIDER (goa_webdav_provider_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GoaWebDavProvider, goa_webdav_provider, GOA, WEBDAV_PROVIDER, GoaProvider);
 
 G_END_DECLS
 
-#endif /* __GOA_OWNCLOUD_PROVIDER_H__ */
+#endif /* __GOA_WEBDAV_PROVIDER_H__ */
