@@ -29,7 +29,6 @@
 #include "goawebdavprovider.h"
 #include "goawindowsliveprovider.h"
 #include "goamediaserverprovider.h"
-#include "goalastfmprovider.h"
 
 #ifdef GOA_FEDORA_ENABLED
 #include "goafedoraprovider.h"
@@ -944,9 +943,6 @@ static struct
 #endif
 #ifdef GOA_EXCHANGE_ENABLED
   { GOA_EXCHANGE_NAME, goa_exchange_provider_get_type },
-#endif
-#ifdef GOA_LASTFM_ENABLED
-  { GOA_LASTFM_NAME, goa_lastfm_provider_get_type },
 #endif
 #ifdef GOA_FEDORA_ENABLED
   { GOA_FEDORA_NAME, goa_fedora_provider_get_type },

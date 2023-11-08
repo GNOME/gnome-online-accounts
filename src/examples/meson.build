@@ -2,9 +2,6 @@ programs = [
   # program name, deps
   ['list-accounts', libgoa_dep],
 ]
-if rest_dep.found()
-  ['lastfm-shout', [libgoa_dep, rest_dep]]
-endif
 if enable_goabackend
   programs += [
     ['introspect-providers', libgoa_backend_dep],
