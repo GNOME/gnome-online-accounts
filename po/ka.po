@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2023-11-06 21:57+0000\n"
-"PO-Revision-Date: 2023-11-07 06:07+0100\n"
+"POT-Creation-Date: 2023-11-08 18:17+0000\n"
+"PO-Revision-Date: 2023-11-09 03:22+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: \n"
 "Language: ka\n"
@@ -74,7 +74,7 @@ msgstr "Microsoft Exchange"
 #.
 #: src/goabackend/goaexchangeprovider.c:248
 #: src/goabackend/goalastfmprovider.c:279
-#: src/goabackend/goaowncloudprovider.c:293
+#: src/goabackend/goawebdavprovider.c:373
 #, c-format
 msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "არასწორი პაროლი მომხმარებლით “%s” (%s, %d): "
@@ -89,7 +89,7 @@ msgstr "ელ-ფოსტა"
 #: src/goabackend/goaimapsmtpprovider.c:667
 #: src/goabackend/goaimapsmtpprovider.c:687
 #: src/goabackend/goalastfmprovider.c:421
-#: src/goabackend/goaowncloudprovider.c:522
+#: src/goabackend/goawebdavprovider.c:511
 msgid "_Password"
 msgstr "_პაროლი"
 
@@ -102,12 +102,11 @@ msgstr "_ხელით"
 #: src/goabackend/goaimapsmtpprovider.c:666
 #: src/goabackend/goaimapsmtpprovider.c:686
 #: src/goabackend/goalastfmprovider.c:420
-#: src/goabackend/goaowncloudprovider.c:521
+#: src/goabackend/goawebdavprovider.c:510
 msgid "User_name"
 msgstr "მომხმარებლის სახელი"
 
 #: src/goabackend/goaexchangeprovider.c:410
-#: src/goabackend/goaowncloudprovider.c:520
 msgid "_Server"
 msgstr "_სერვერი"
 
@@ -118,7 +117,7 @@ msgstr "_სერვერი"
 #: src/goabackend/goakerberosprovider.c:583
 #: src/goabackend/goalastfmprovider.c:429
 #: src/goabackend/goaoauth2provider.c:939
-#: src/goabackend/goaowncloudprovider.c:536
+#: src/goabackend/goawebdavprovider.c:538
 msgid "_Cancel"
 msgstr "_გაუქმება"
 
@@ -126,7 +125,7 @@ msgstr "_გაუქმება"
 #: src/goabackend/goafedoraprovider.c:582
 #: src/goabackend/goakerberosprovider.c:584
 #: src/goabackend/goalastfmprovider.c:430
-#: src/goabackend/goaowncloudprovider.c:537
+#: src/goabackend/goawebdavprovider.c:539
 msgid "C_onnect"
 msgstr "_კავშირი"
 
@@ -135,7 +134,7 @@ msgstr "_კავშირი"
 #: src/goabackend/goaimapsmtpprovider.c:715
 #: src/goabackend/goakerberosprovider.c:599
 #: src/goabackend/goalastfmprovider.c:446
-#: src/goabackend/goaowncloudprovider.c:552
+#: src/goabackend/goawebdavprovider.c:554
 msgid "Connecting…"
 msgstr "დაკავშირება…"
 
@@ -153,8 +152,8 @@ msgstr "დაკავშირება…"
 #: src/goabackend/goamediaserverprovider.c:412
 #: src/goabackend/goaoauth2provider.c:962
 #: src/goabackend/goaoauth2provider.c:978
-#: src/goabackend/goaowncloudprovider.c:674
-#: src/goabackend/goaowncloudprovider.c:893
+#: src/goabackend/goawebdavprovider.c:746
+#: src/goabackend/goawebdavprovider.c:1034
 msgid "Dialog was dismissed"
 msgstr "ფანჯარა დახურულია"
 
@@ -167,8 +166,7 @@ msgstr "ფანჯარა დახურულია"
 #: src/goabackend/goaimapsmtpprovider.c:1353
 #: src/goabackend/goalastfmprovider.c:678
 #: src/goabackend/goalastfmprovider.c:831
-#: src/goabackend/goaowncloudprovider.c:719
-#: src/goabackend/goaowncloudprovider.c:920
+#: src/goabackend/goawebdavprovider.c:609
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "ფანჯარა დახურულია (%s, %d): "
@@ -176,7 +174,7 @@ msgstr "ფანჯარა დახურულია (%s, %d): "
 #: src/goabackend/goaexchangeprovider.c:588
 #: src/goabackend/goaimapsmtpprovider.c:946
 #: src/goabackend/goaimapsmtpprovider.c:1043
-#: src/goabackend/goaowncloudprovider.c:732
+#: src/goabackend/goawebdavprovider.c:621
 msgid "_Ignore"
 msgstr "_იგნორი"
 
@@ -190,8 +188,7 @@ msgstr "_იგნორი"
 #: src/goabackend/goakerberosprovider.c:1032
 #: src/goabackend/goalastfmprovider.c:690
 #: src/goabackend/goalastfmprovider.c:848
-#: src/goabackend/goaowncloudprovider.c:737
-#: src/goabackend/goaowncloudprovider.c:939
+#: src/goabackend/goawebdavprovider.c:626
 msgid "_Try Again"
 msgstr "_თავიდან სცადეთ"
 
@@ -479,82 +476,77 @@ msgstr "მომხმარებელი და პაროლი access_to
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "წვდომის კოდის განახლების შეცდომა (%s, %d): "
 
-#: src/goabackend/goaowncloudprovider.c:58
+#: src/goabackend/goaowncloudprovider.c:55
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: src/goabackend/goaowncloudprovider.c:742
-#: src/goabackend/goaowncloudprovider.c:932
-msgid "Error connecting to Nextcloud server"
-msgstr "Nextcloud-ის სერვერთან დაკავშირების პრობლემა"
-
-#: src/goabackend/goaprovider.c:109
+#: src/goabackend/goaprovider.c:110
 msgid "_Mail"
 msgstr "_ფოსტა"
 
-#: src/goabackend/goaprovider.c:114
+#: src/goabackend/goaprovider.c:115
 msgid "Cale_ndar"
 msgstr "კალე_ნდარი"
 
-#: src/goabackend/goaprovider.c:119
+#: src/goabackend/goaprovider.c:120
 msgid "_Contacts"
 msgstr "_კონტაქტები"
 
-#: src/goabackend/goaprovider.c:124
+#: src/goabackend/goaprovider.c:125
 msgid "C_hat"
 msgstr "_სასაუბრო"
 
-#: src/goabackend/goaprovider.c:129
+#: src/goabackend/goaprovider.c:130
 msgid "_Documents"
 msgstr "_დოკუმენტები"
 
-#: src/goabackend/goaprovider.c:134
+#: src/goabackend/goaprovider.c:135
 msgid "M_usic"
 msgstr "_მუსიკა"
 
-#: src/goabackend/goaprovider.c:139
+#: src/goabackend/goaprovider.c:140
 msgid "_Photos"
 msgstr "_ფოტოები"
 
-#: src/goabackend/goaprovider.c:144
+#: src/goabackend/goaprovider.c:145
 msgid "_Files"
 msgstr "_ფაილები"
 
-#: src/goabackend/goaprovider.c:149
+#: src/goabackend/goaprovider.c:150
 msgid "Network _Resources"
 msgstr "ქსელური _რესურსები"
 
-#: src/goabackend/goaprovider.c:154
+#: src/goabackend/goaprovider.c:155
 msgid "_Read Later"
 msgstr "_მოგვიანებით წაკითხვა"
 
-#: src/goabackend/goaprovider.c:159
+#: src/goabackend/goaprovider.c:160
 msgid "Prin_ters"
 msgstr "_პრინტერები"
 
-#: src/goabackend/goaprovider.c:164
+#: src/goabackend/goaprovider.c:165
 msgid "_Maps"
 msgstr "_რუკები"
 
-#: src/goabackend/goaprovider.c:169
+#: src/goabackend/goaprovider.c:170
 msgid "T_o Do"
 msgstr "_გასაკეთებელი საქმეები"
 
 #. Translators: This is a label for a series of
 #. * options switches. For example: “Use for Mail”.
-#: src/goabackend/goaprovider.c:567
+#: src/goabackend/goaprovider.c:568
 msgid "Use for"
 msgstr "გამოყენება"
 
-#: src/goabackend/goaprovider.c:822
+#: src/goabackend/goaprovider.c:823
 msgid "Account is disabled"
 msgstr "ანგარიში გათიშულია"
 
-#: src/goabackend/goaprovider.c:835
+#: src/goabackend/goaprovider.c:836
 msgid "Unknown error"
 msgstr "უცნობი შეცდომა"
 
-#: src/goabackend/goaprovider.c:854
+#: src/goabackend/goaprovider.c:855
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ამ ტიპზე (%s) ensure_credentials_sync ხელმიუწვდომელია"
@@ -673,6 +665,47 @@ msgstr "არასწორი სერტიფიკატი."
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "%s-ის პოვნა %s იდენტურობით მომხმარებელ/პაროლებში შეუძლებელია"
 
+#: src/goabackend/goawebdavprovider.c:509
+msgid "_URL"
+msgstr "_URL"
+
+#: src/goabackend/goawebdavprovider.c:514
+msgid "Advanced"
+msgstr "დამატებითი"
+
+#: src/goabackend/goawebdavprovider.c:523
+msgid "Files Endpoint"
+msgstr "ფაილების ბოლოწერტილი"
+
+#: src/goabackend/goawebdavprovider.c:524
+msgid "CalDAV Endpoint"
+msgstr "CalDAV ბოლოწერტილი"
+
+#: src/goabackend/goawebdavprovider.c:525
+#| msgid "Cannot find WebDAV endpoint"
+msgid "CardDAV Endpoint"
+msgstr "CardDAV ბოლოწერტილი"
+
+#: src/goabackend/goawebdavprovider.c:791
+msgid "Error connecting to server"
+msgstr "სერვერთან დაკავშირების შეცდომა"
+
+#: src/goabackend/goawebdavprovider.c:820
+msgid "Error connecting to Files endpoint"
+msgstr "ფაილების ბოლოწერტილთან მიერთების შეცდომა"
+
+#: src/goabackend/goawebdavprovider.c:854
+msgid "Error connecting to CalDAV endpoint"
+msgstr "CalDAV ბოლოწერტილთან მიერთების შეცდომა"
+
+#: src/goabackend/goawebdavprovider.c:882
+msgid "Error connecting to CardDAV endpoint"
+msgstr "CardDAV ბოლოწერტილთან მიერთების შეცდომა"
+
+#: src/goabackend/goawebdavprovider.c:1057
+msgid "Error connecting to WebDAV server"
+msgstr "WebDAV სერვერთან დაკავშირების შეცდომა"
+
 #: src/goabackend/goawindowsliveprovider.c:56
 msgid "Microsoft"
 msgstr "Microsoft"
@@ -753,6 +786,9 @@ msgstr "იდენტურობის პოვნის შეცდომ�
 #: src/goaidentity/goakerberosidentitymanager.c:937
 msgid "Could not create credential cache for identity"
 msgstr "იდენტურობისთვის მომხმარებლის/პაროლის ქეშის შექმნის შეცდომა"
+
+#~ msgid "Error connecting to Nextcloud server"
+#~ msgstr "Nextcloud-ის სერვერთან დაკავშირების პრობლემა"
 
 #~ msgid "Server does not support PLAIN"
 #~ msgstr "სერვერს არ აქვს PLAIN-ის მხარდაჭერა"
