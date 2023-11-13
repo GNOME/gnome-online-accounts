@@ -1361,7 +1361,7 @@ sign_in_identity_sync (GoaKerberosProvider  *self,
   if (!gcr_secret_exchange_receive (secret_exchange, return_key))
     {
       g_set_error (error,
-                   GCR_ERROR,
+                   GCR_DATA_ERROR,
                    GCR_ERROR_UNRECOGNIZED,
                    _("Identity service returned invalid key"));
       goto out;
