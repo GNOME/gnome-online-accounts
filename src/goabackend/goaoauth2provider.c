@@ -914,6 +914,7 @@ get_tokens_and_identity (GoaOAuth2Provider  *self,
                        "hexpand",     TRUE,
                        "valign",      GTK_ALIGN_CENTER,
                        "vexpand",     TRUE,
+                       "margin",      12,
                        NULL);
   gtk_container_add (GTK_CONTAINER (vbox), grid);
 
