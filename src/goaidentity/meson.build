@@ -52,6 +52,7 @@ sources += gnome.mkenums(
 
 deps = [
   gcr_dep,
+  gio_unix_dep,
   krb5_dep,
   libgoa_dep
 ]

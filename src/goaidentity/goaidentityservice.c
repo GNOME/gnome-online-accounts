@@ -559,7 +559,7 @@ on_caller_watched (GDBusConnection    *connection,
                                     input_key))
     {
       g_task_return_new_error (operation_result,
-                               GCR_ERROR,
+                               GCR_DATA_ERROR,
                                GCR_ERROR_UNRECOGNIZED,
                                _("Initial secret key is invalid"));
       return;

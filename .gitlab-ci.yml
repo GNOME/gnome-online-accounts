@@ -7,7 +7,7 @@ build-meson:
   before_script:
     - pacman -Syu --noconfirm
     - pacman -S --noconfirm
-      meson git gcc dbus gcr glib2 gobject-introspection
+      meson git gcc dbus gcr-4 glib2 gobject-introspection
       gtk-doc gtk3 json-glib krb5 libsecret
       libsoup3 vala
   script:
