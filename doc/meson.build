@@ -27,7 +27,6 @@ if enable_gtk_doc
     'goaimapauthlogin.h',
     'goaimapsmtpprovider.h',
     'goakerberosprovider.h',
-    'goalastfmprovider.h',
     'goamailauth.h',
     'goamailclient.h',
     'goamediaserverprovider.h',

@@ -169,18 +169,6 @@ config_h.set_quoted('GOA_MEDIA_SERVER_NAME', 'media-server')
 enable_media_server = get_option('media_server')
 config_h.set('GOA_MEDIA_SERVER_ENABLED', enable_media_server)
 
-# Last.fm
-config_h.set_quoted('GOA_LASTFM_NAME', 'lastfm')
-
-lastfm_client_id = get_option('lastfm_client_id')
-config_h.set_quoted('GOA_LASTFM_CLIENT_ID', lastfm_client_id)
-
-lastfm_client_secret = get_option('lastfm_client_secret')
-config_h.set_quoted('GOA_LASTFM_CLIENT_SECRET', lastfm_client_secret)
-
-enable_lastfm = get_option('lastfm')
-config_h.set('GOA_LASTFM_ENABLED', enable_lastfm)
-
 # ownCloud
 config_h.set_quoted('GOA_OWNCLOUD_NAME', 'owncloud')
 enable_owncloud = get_option('owncloud')
@@ -296,7 +284,6 @@ summary({
     'Google': enable_google,
     'IMAP/SMTP': enable_imap_smtp,
     'Kerberos': enable_kerberos,
-    'Last.fm': enable_lastfm,
     'Media Server': enable_media_server,
     'Microsoft Exchange': enable_exchange,
     'ownCloud': enable_owncloud,
@@ -313,15 +300,6 @@ if enable_google
       'secret': google_client_secret,
     },
     section: 'Google Provider OAuth 2.0',
-  )
-endif
-
-if enable_lastfm
-  summary({
-      'id': lastfm_client_id,
-      'secret': lastfm_client_secret,
-    },
-    section: 'Last.fm Provider OAuth 2.0',
   )
 endif
 

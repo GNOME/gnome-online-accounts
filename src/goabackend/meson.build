@@ -12,7 +12,6 @@ libgoa_backend_sources = files(
   'goahttpclient.c',
   'goaimapauthlogin.c',
   'goaimapsmtpprovider.c',
-  'goalastfmprovider.c',
   'goamailauth.c',
   'goamailclient.c',
   'goamediaserverprovider.c',
