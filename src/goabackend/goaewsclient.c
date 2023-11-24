@@ -27,6 +27,7 @@
 #include <glib/gi18n-lib.h>
 
 #include <libsoup/soup.h>
+#include <libxml/parser.h>
 #include <libxml/xmlIO.h>
 
 #include "goaewsclient.h"
