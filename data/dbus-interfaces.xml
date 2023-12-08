@@ -783,18 +783,27 @@
 
       An account object implements this interface if it provides
       media server like capabilities.
+
+      The #org.gnome.OnlineAccounts.MediaServer interface is not used by
+      any account.
   -->
   <interface name="org.gnome.OnlineAccounts.MediaServer">
+    <annotation name="org.freedesktop.DBus.Deprecated" value="true"/>
+
     <!-- DlnaSupported:
 
          True if media server device is DLNA supported.
       -->
-    <property name="DlnaSupported" type="b" access="read"/>
+    <property name="DlnaSupported" type="b" access="read">
+      <annotation name="org.freedesktop.DBus.Deprecated" value="true"/>
+    </property>
     <!-- Udn:
 
          Unique Device Name. Used to uniquely identify the device.
       -->
-    <property name="Udn" type="s" access="read"/>
+    <property name="Udn" type="s" access="read">
+      <annotation name="org.freedesktop.DBus.Deprecated" value="true"/>
+    </property>
   </interface>
 
   <!--

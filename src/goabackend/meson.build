@@ -4,7 +4,6 @@ libgoa_backend_headers_built = []
 libgoa_backend_sources = files(
   'goaoauth2provider.c',
   'goabackendinit.c',
-  'goadlnaservermanager.c',
   'goadavclient.c',
   'goaewsclient.c',
   'goaexchangeprovider.c',
@@ -14,7 +13,6 @@ libgoa_backend_sources = files(
   'goaimapsmtpprovider.c',
   'goamailauth.c',
   'goamailclient.c',
-  'goamediaserverprovider.c',
   'goaobjectskeletonutils.c',
   'goaowncloudprovider.c',
   'goaprovider.c',
@@ -52,32 +50,6 @@ enum_sources = gnome.mkenums(
 
 libgoa_backend_headers_built += enum_sources[1]
 libgoa_backend_sources += enum_sources
-
-dbus = 'goadleynaservermanager'
-
-dbus_sources = gnome.gdbus_codegen(
-  dbus,
-  dbus + '.xml',
-  interface_prefix: 'com.intel.dLeynaServer.',
-  namespace: 'DleynaServer',
-  autocleanup: 'all',
-)
-
-libgoa_backend_headers_built += dbus_sources[1]
-libgoa_backend_sources += dbus_sources
-
-dbus = 'goadleynaservermediadevice'
-
-dbus_sources = gnome.gdbus_codegen(
-  dbus,
-  dbus + '.xml',
-  interface_prefix: 'com.intel.dLeynaServer.',
-  namespace: 'DleynaServer',
-  autocleanup: 'all',
-)
-
-libgoa_backend_headers_built += dbus_sources[1]
-libgoa_backend_sources += dbus_sources
 
 incs = common_incs
 

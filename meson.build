@@ -163,12 +163,6 @@ if enable_goabackend and enable_kerberos
 endif
 config_h.set('GOA_KERBEROS_ENABLED', enable_kerberos)
 
-# Media Server
-config_h.set_quoted('GOA_MEDIA_SERVER_NAME', 'media-server')
-
-enable_media_server = get_option('media_server')
-config_h.set('GOA_MEDIA_SERVER_ENABLED', enable_media_server)
-
 # ownCloud
 config_h.set_quoted('GOA_OWNCLOUD_NAME', 'owncloud')
 enable_owncloud = get_option('owncloud')
@@ -284,7 +278,6 @@ summary({
     'Google': enable_google,
     'IMAP/SMTP': enable_imap_smtp,
     'Kerberos': enable_kerberos,
-    'Media Server': enable_media_server,
     'Microsoft Exchange': enable_exchange,
     'ownCloud': enable_owncloud,
     'WebDAV': enable_webdav,
