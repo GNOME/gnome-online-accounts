@@ -28,7 +28,6 @@
 #include "goaowncloudprovider.h"
 #include "goawebdavprovider.h"
 #include "goawindowsliveprovider.h"
-#include "goamediaserverprovider.h"
 
 #ifdef GOA_FEDORA_ENABLED
 #include "goafedoraprovider.h"
@@ -955,9 +954,6 @@ static struct
 #endif
 #ifdef GOA_KERBEROS_ENABLED
   { GOA_KERBEROS_NAME, goa_kerberos_provider_get_type },
-#endif
-#ifdef GOA_MEDIA_SERVER_ENABLED
-  { GOA_MEDIA_SERVER_NAME, goa_media_server_provider_get_type },
 #endif
   { NULL, NULL }
 };

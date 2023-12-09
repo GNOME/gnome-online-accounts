@@ -11,10 +11,6 @@ if enable_gtk_doc
   )
 
   ignored_headers = [
-    # builddir/goabackend
-    'goadleynaservermanager.h',
-    'goadleynaservermediadevice.h',
-
     # srcdir/goabackend
     'gconstructor.h',
     'goabackendenums-priv.h',
@@ -29,7 +25,6 @@ if enable_gtk_doc
     'goakerberosprovider.h',
     'goamailauth.h',
     'goamailclient.h',
-    'goamediaserverprovider.h',
     'goaoauth2provider-priv.h',
     'goaoauth2provider-web-extension.h',
     'goaoauth2provider-web-view.h',
