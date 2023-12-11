@@ -238,7 +238,7 @@ ews_client_autodiscover_response_cb (SoupSession *session, GAsyncResult *result,
   if (idx == size || data->pending == 0)
     {
       g_bytes_unref (body);
-      g_clear_object (&error);
+      g_clear_error (&error);
       g_object_unref (task);
       return;
     }
