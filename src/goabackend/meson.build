@@ -23,7 +23,6 @@ libgoa_backend_sources = files(
   'goautils.c',
   'goawebdavprovider.c',
   'goawindowsliveprovider.c',
-  'nautilus-floating-bar.c'
 )
 
 enum_headers = files('goabackendenums.h')
