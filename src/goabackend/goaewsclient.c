@@ -392,6 +392,8 @@ ews_client_autodiscover_response_cb (SoupSession *session, GAsyncResult *result,
       g_source_attach (idle_source, g_task_get_context (task));
     }
 
+  g_clear_pointer (&body, g_bytes_unref);
+  g_clear_pointer (&doc, xmlFreeDoc);
   g_clear_error (&error);
   g_object_unref (task);
 }
