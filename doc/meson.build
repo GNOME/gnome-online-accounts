@@ -38,7 +38,6 @@ if enable_gtk_doc
     'goautils.h',
     'goawebextension.h',
     'goawindowsliveprovider.h',
-    'nautilus-floating-bar.h',
   ]
 
   expand_content_files = files(
