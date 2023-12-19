@@ -28,6 +28,7 @@
 #include "goaowncloudprovider.h"
 #include "goawebdavprovider.h"
 #include "goawindowsliveprovider.h"
+#include "goamsgraphprovider.h"
 
 #ifdef GOA_FEDORA_ENABLED
 #include "goafedoraprovider.h"
@@ -954,6 +955,9 @@ static struct
 #endif
 #ifdef GOA_KERBEROS_ENABLED
   { GOA_KERBEROS_NAME, goa_kerberos_provider_get_type },
+#endif
+#ifdef GOA_MS_GRAPH_ENABLED
+  { GOA_MS_GRAPH_NAME, goa_ms_graph_provider_get_type },
 #endif
   { NULL, NULL }
 };

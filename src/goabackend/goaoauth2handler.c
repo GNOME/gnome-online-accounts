@@ -59,6 +59,12 @@ oauth2_providers[] =
     .provider = GOA_WINDOWS_LIVE_NAME,
   },
 #endif
+#ifdef GOA_MS_GRAPH_ENABLED
+    {
+    .client_id = GOA_MS_GRAPH_CLIENT_ID,
+    .provider = GOA_MS_GRAPH_NAME,
+    },
+#endif
   { NULL, NULL },
 };
 

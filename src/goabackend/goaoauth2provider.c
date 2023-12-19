@@ -61,6 +61,15 @@
  * need to be implemented - this type implements these methods..
  */
 
+typedef struct
+{
+  char *client_id;
+  char *client_secret;
+  char *token_uri;
+  char *authorization_uri;
+  char *redirect_uri;
+} OAuth2Data;
+
 struct _GoaOAuth2ProviderPrivate
 {
   GtkDialog *dialog;
@@ -80,6 +89,8 @@ struct _GoaOAuth2ProviderPrivate
   gchar *password;
   gchar *request_uri;
   SecretCollection *session;
+
+  OAuth2Data *data;
 };
 
 G_LOCK_DEFINE_STATIC (provider_lock);
@@ -451,6 +462,54 @@ goa_oauth2_provider_get_identity_sync (GoaOAuth2Provider    *self,
                                                                   error);
 }
 
+static void
+oauth2_data_free (OAuth2Data *data)
+{
+  g_clear_pointer (&data->client_id, g_free);
+  g_clear_pointer (&data->client_secret, g_free);
+  g_clear_pointer (&data->token_uri, g_free);
+  g_clear_pointer (&data->authorization_uri, g_free);
+  g_clear_pointer (&data->redirect_uri, g_free);
+  g_free (data);
+}
+
+static void
+oauth2_data_update (GoaOAuth2Provider *self,
+                    GoaObject         *object)
+{
+  GoaOAuth2ProviderPrivate *priv = goa_oauth2_provider_get_instance_private (self);
+  char *tmp;
+
+  g_clear_pointer (&priv->data, oauth2_data_free);
+  priv->data = g_new0 (OAuth2Data, 1);
+
+  if (object == NULL || (tmp = goa_util_lookup_keyfile_string (object, "OAuth2ClientId")) == NULL)
+      tmp = g_strdup (goa_oauth2_provider_get_client_id (self));
+  priv->data->client_id = tmp;
+
+  if (object == NULL || (tmp = goa_util_lookup_keyfile_string (object, "OAuth2ClientSecret")) == NULL)
+      tmp = g_strdup (goa_oauth2_provider_get_client_secret (self));
+  priv->data->client_secret = tmp;
+
+  if (object == NULL || (tmp = goa_util_lookup_keyfile_string (object, "OAuth2TokenUri")) == NULL)
+      tmp = g_strdup (goa_oauth2_provider_get_token_uri (self));
+  priv->data->token_uri = tmp;
+
+  if (object == NULL || (tmp = goa_util_lookup_keyfile_string (object, "OAuth2AuthorizationUri")) == NULL)
+      tmp = g_strdup (goa_oauth2_provider_get_authorization_uri (self));
+  priv->data->authorization_uri = tmp;
+
+  if (object == NULL || (tmp = goa_util_lookup_keyfile_string (object, "OAuth2RedirectUri")) == NULL)
+      tmp = g_strdup (goa_oauth2_provider_get_redirect_uri (self));
+  priv->data->redirect_uri = tmp;
+
+  g_debug ("- client_id=%s", priv->data->client_id);
+  g_debug ("- client_secret=%s", priv->data->client_secret);
+  g_debug ("- token_uri=%s", priv->data->token_uri);
+  g_debug ("- authorization_uri=%s", priv->data->authorization_uri);
+  g_debug ("- redirect_uri=%s", priv->data->redirect_uri);
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
@@ -462,6 +521,7 @@ get_tokens_sync (GoaOAuth2Provider  *self,
                  GCancellable       *cancellable,
                  GError            **error)
 {
+  GoaOAuth2ProviderPrivate *priv = goa_oauth2_provider_get_instance_private (self);
   GError *tokens_error = NULL;
   RestProxy *proxy;
   RestProxyCall *call;
@@ -472,18 +532,16 @@ get_tokens_sync (GoaOAuth2Provider  *self,
   gchar *ret_refresh_token = NULL;
   const gchar *payload;
   gsize payload_length;
-  const gchar *client_secret;
 
-  proxy = goa_rest_proxy_new (goa_oauth2_provider_get_token_uri (self), FALSE);
+  proxy = goa_rest_proxy_new (priv->data->token_uri, FALSE);
   call = rest_proxy_new_call (proxy);
 
   rest_proxy_call_set_method (call, "POST");
   rest_proxy_call_add_header (call, "Content-Type", "application/x-www-form-urlencoded");
-  rest_proxy_call_add_param (call, "client_id", goa_oauth2_provider_get_client_id (self));
+  rest_proxy_call_add_param (call, "client_id", priv->data->client_id);
 
-  client_secret = goa_oauth2_provider_get_client_secret (self);
-  if (client_secret != NULL)
-    rest_proxy_call_add_param (call, "client_secret", client_secret);
+  if (priv->data->client_secret != NULL)
+    rest_proxy_call_add_param (call, "client_secret", priv->data->client_secret);
 
   if (refresh_token != NULL)
     {
@@ -495,7 +553,7 @@ get_tokens_sync (GoaOAuth2Provider  *self,
     {
       /* No refresh code.. request an access token using the authorization code instead */
       rest_proxy_call_add_param (call, "grant_type", "authorization_code");
-      rest_proxy_call_add_param (call, "redirect_uri", goa_oauth2_provider_get_redirect_uri (self));
+      rest_proxy_call_add_param (call, "redirect_uri", priv->data->redirect_uri);
       rest_proxy_call_add_param (call, "code", authorization_code);
     }
 
@@ -611,8 +669,8 @@ get_tokens_sync (GoaOAuth2Provider  *self,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
-parse_requested_uri (GoaOAuth2Provider  *self,
-                     const char         *requested_uri)
+parse_requested_uri (GoaOAuth2Provider *self,
+                     const char        *requested_uri)
 {
   GoaOAuth2ProviderPrivate *priv = goa_oauth2_provider_get_instance_private (self);
   g_autoptr (GHashTable) key_value_pairs = NULL;
@@ -620,12 +678,10 @@ parse_requested_uri (GoaOAuth2Provider  *self,
   const gchar *fragment;
   const gchar *oauth2_error;
   const gchar *query;
-  const gchar *redirect_uri;
 
   g_assert (priv->error == NULL);
 
-  redirect_uri = goa_oauth2_provider_get_redirect_uri (self);
-  if (!g_str_has_prefix (requested_uri, redirect_uri))
+  if (!g_str_has_prefix (requested_uri, priv->data->redirect_uri))
     {
       g_set_error (&priv->error,
                    GOA_ERROR,
@@ -755,15 +811,13 @@ on_secrets_changed (SecretCollection  *collection,
                     GoaOAuth2Provider *self)
 {
   GoaOAuth2ProviderPrivate *priv = goa_oauth2_provider_get_instance_private (self);
-  const char *client_id = NULL;
   const char *provider_type = NULL;
   g_autofree char *requested_uri = NULL;
   GtkResponseType response_id = GTK_RESPONSE_NONE;
 
-  client_id = goa_oauth2_provider_get_client_id (self);
   provider_type = goa_provider_get_provider_type (GOA_PROVIDER (self));
   requested_uri = secret_password_lookup_sync (&oauth2_schema, NULL, NULL,
-                                               "goa-oauth2-client", client_id,
+                                               "goa-oauth2-client", priv->data->client_id,
                                                "goa-oauth2-provider", provider_type,
                                                NULL);
 
@@ -803,14 +857,12 @@ secret_service_get_cb (GObject           *object,
       /* The session collection is an empty string (?) */
       if (g_strcmp0 (label, "") == 0)
         {
-          const char *client_id = NULL;
           const char *provider_type = NULL;
 
           /* Ensure there's no dangling entry */
-          client_id = goa_oauth2_provider_get_client_id (self);
           provider_type = goa_provider_get_provider_type (GOA_PROVIDER (self));
           secret_password_clear_sync (&oauth2_schema, NULL, NULL,
-                                      "goa-oauth2-client", client_id,
+                                      "goa-oauth2-client", priv->data->client_id,
                                       "goa-oauth2-provider", provider_type,
                                       NULL);
 
@@ -892,15 +944,15 @@ get_tokens_and_identity (GoaOAuth2Provider  *self,
   g_clear_object (&priv->session);
 
   /* TODO: use oauth2_proxy_build_login_url_full() */
-  escaped_redirect_uri = g_uri_escape_string (goa_oauth2_provider_get_redirect_uri (self), NULL, TRUE);
-  escaped_client_id = g_uri_escape_string (goa_oauth2_provider_get_client_id (self), NULL, TRUE);
+  escaped_redirect_uri = g_uri_escape_string (priv->data->redirect_uri, NULL, TRUE);
+  escaped_client_id = g_uri_escape_string (priv->data->client_id, NULL, TRUE);
   scope = goa_oauth2_provider_get_scope (self);
   if (scope != NULL)
     escaped_scope = g_uri_escape_string (goa_oauth2_provider_get_scope (self), NULL, TRUE);
   else
     escaped_scope = NULL;
   priv->request_uri = goa_oauth2_provider_build_authorization_uri (self,
-                                                                   goa_oauth2_provider_get_authorization_uri (self),
+                                                                   priv->data->authorization_uri,
                                                                    escaped_redirect_uri,
                                                                    escaped_client_id,
                                                                    escaped_scope);
@@ -1073,11 +1125,11 @@ add_credentials_key_values (GoaOAuth2Provider *self,
 }
 
 static GoaObject *
-goa_oauth2_provider_add_account (GoaProvider *provider,
-                                         GoaClient          *client,
-                                         GtkDialog          *dialog,
-                                         GtkBox             *vbox,
-                                         GError            **error)
+goa_oauth2_provider_add_account (GoaProvider  *provider,
+                                 GoaClient    *client,
+                                 GtkDialog    *dialog,
+                                 GtkBox       *vbox,
+                                 GError      **error)
 {
   GoaOAuth2Provider *self = GOA_OAUTH2_PROVIDER (provider);
   GoaOAuth2ProviderPrivate *priv;
@@ -1093,6 +1145,8 @@ goa_oauth2_provider_add_account (GoaProvider *provider,
 
   priv = goa_oauth2_provider_get_instance_private (self);
   priv->loop = g_main_loop_new (NULL, FALSE);
+
+  oauth2_data_update (self, NULL);
 
   if (!get_tokens_and_identity (self, TRUE, NULL, dialog, vbox))
     goto out;
@@ -1190,6 +1244,8 @@ goa_oauth2_provider_refresh_account (GoaProvider  *provider,
   gtk_widget_show_all (dialog);
 
   account = goa_object_peek_account (object);
+
+  oauth2_data_update (self, object);
 
   /* We abuse presentation identity here because for some providers
    * identity can be a machine readable ID, which can not be used to
@@ -1484,6 +1540,9 @@ goa_oauth2_provider_build_object (GoaProvider         *provider,
                                   gboolean             just_added,
                                   GError             **error)
 {
+  GoaOAuth2Provider *self = GOA_OAUTH2_PROVIDER (provider);
+  GoaOAuth2ProviderPrivate *priv;
+
   GoaOAuth2Based *oauth2_based;
 
   oauth2_based = goa_object_get_oauth2_based (GOA_OBJECT (object));
@@ -1491,10 +1550,12 @@ goa_oauth2_provider_build_object (GoaProvider         *provider,
     goto out;
 
   oauth2_based = goa_oauth2_based_skeleton_new ();
-  goa_oauth2_based_set_client_id (oauth2_based,
-                                    goa_oauth2_provider_get_client_id (GOA_OAUTH2_PROVIDER (provider)));
-  goa_oauth2_based_set_client_secret (oauth2_based,
-                                       goa_oauth2_provider_get_client_secret (GOA_OAUTH2_PROVIDER (provider)));
+  priv = goa_oauth2_provider_get_instance_private (self);
+
+  oauth2_data_update (self, GOA_OBJECT (object));
+
+  goa_oauth2_based_set_client_id (oauth2_based, priv->data->client_id);
+  goa_oauth2_based_set_client_secret (oauth2_based, priv->data->client_secret);
   /* Ensure D-Bus method invocations run in their own thread */
   g_dbus_interface_skeleton_set_flags (G_DBUS_INTERFACE_SKELETON (oauth2_based),
                                        G_DBUS_INTERFACE_SKELETON_FLAGS_HANDLE_METHOD_INVOCATIONS_IN_THREAD);
@@ -1526,6 +1587,7 @@ goa_oauth2_provider_ensure_credentials_sync (GoaProvider   *provider,
   gboolean force_refresh = FALSE;
 
  again:
+  oauth2_data_update (self, object);
   access_token = goa_oauth2_provider_get_access_token_sync (self,
                                                             object,
                                                             force_refresh,
@@ -1579,6 +1641,7 @@ goa_oauth2_provider_finalize (GObject *object)
   priv = goa_oauth2_provider_get_instance_private (self);
 
   g_clear_pointer (&priv->loop, g_main_loop_unref);
+  g_clear_pointer (&priv->data, oauth2_data_free);
 
   g_free (priv->account_object_path);
   g_free (priv->password);
