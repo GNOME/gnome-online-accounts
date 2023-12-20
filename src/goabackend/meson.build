@@ -70,15 +70,11 @@ cflags = [
   '-DPACKAGE_LOCALE_DIR="@0@"'.format(goa_localedir),
 ]
 
-if enable_fedora
-  libgoa_backend_sources += files('goafedoraprovider.c')
-endif
-
 if enable_kerberos
   libgoa_backend_sources += files('goakerberosprovider.c')
 endif
 
-if enable_fedora or enable_kerberos
+if enable_kerberos
   libgoa_backend_sources += identity_dbus_sources + identity_manager_error_src
   incs += goaidentity_inc
   deps += [gcr_dep]

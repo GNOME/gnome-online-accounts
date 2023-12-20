@@ -120,19 +120,6 @@ config_h.set_quoted('GOA_EXCHANGE_NAME', 'exchange')
 enable_exchange = get_option('exchange')
 config_h.set('GOA_EXCHANGE_ENABLED', enable_exchange)
 
-# Fedora
-config_h.set_quoted('GOA_FEDORA_NAME', 'fedora')
-config_h.set_quoted('GOA_FEDORA_REALM', 'FEDORAPROJECT.ORG')
-
-enable_fedora = get_option('fedora')
-if enable_goabackend and enable_fedora
-  gcr_dep = dependency('gcr-4', version: '>= 4.1.0')
-  krb5_dep = dependency('krb5')
-
-  config_h.set('GCR_API_SUBJECT_TO_CHANGE', true)
-endif
-config_h.set('GOA_FEDORA_ENABLED', enable_fedora)
-
 # Google
 config_h.set_quoted('GOA_GOOGLE_NAME', 'google')
 
@@ -274,7 +261,6 @@ summary({
 )
 
 summary({
-    'Fedora Account System': enable_fedora,
     'Google': enable_google,
     'IMAP/SMTP': enable_imap_smtp,
     'Kerberos': enable_kerberos,

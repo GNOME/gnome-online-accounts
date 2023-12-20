@@ -187,7 +187,7 @@ find_object_with_principal (GoaIdentityService *self,
 
       provider_type = goa_account_get_provider_type (account);
 
-      if (g_strcmp0 (provider_type, GOA_FEDORA_NAME) != 0 && g_strcmp0 (provider_type, GOA_KERBEROS_NAME) != 0)
+      if (g_strcmp0 (provider_type, GOA_KERBEROS_NAME) != 0)
         continue;
 
       if (must_be_enabled)
@@ -755,110 +755,6 @@ on_identity_signed_in (GoaIdentityManager *manager,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-add_temporary_account_as_fedora_add_account (GObject *source_object, GAsyncResult *res, gpointer user_data)
-{
-  GoaIdentityService *self;
-  GDBusObjectManager *object_manager;
-  GError *error;
-  GTask *task = G_TASK (user_data);
-  GoaManager *manager = GOA_MANAGER (source_object);
-  GoaObject *object = NULL;
-  gchar *object_path = NULL;
-
-  self = GOA_IDENTITY_SERVICE (g_task_get_source_object (task));
-
-  error = NULL;
-  if (!goa_manager_call_add_account_finish (manager, &object_path, res, &error))
-    {
-      g_task_return_error (task, error);
-      goto out;
-    }
-
-  g_debug ("Created account for identity with object path %s", object_path);
-
-  object_manager = goa_client_get_object_manager (self->client);
-  object = GOA_OBJECT (g_dbus_object_manager_get_object (object_manager, object_path));
-  if (object == NULL)
-    {
-      g_task_return_new_error (task,
-                               GOA_ERROR,
-                               GOA_ERROR_FAILED, /* TODO: more specific */
-                               _("Couldn't get GoaObject for object path %s"),
-                               object_path);
-      goto out;
-    }
-
-  g_task_return_pointer (task, g_object_ref (object), g_object_unref);
-
- out:
-  g_free (object_path);
-  g_clear_object (&object);
-  g_object_unref (task);
-}
-
-static void
-add_temporary_account_as_fedora (GoaIdentityService *self,
-                                 GoaIdentity *identity,
-                                 GCancellable *cancellable,
-                                 GAsyncReadyCallback callback,
-                                 gpointer user_data)
-{
-  GTask *task = NULL;
-  GVariantBuilder credentials;
-  GVariantBuilder details;
-  GoaManager *manager;
-  const gchar *principal;
-  gchar *preauth_source = NULL;
-
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, add_temporary_account_as_fedora);
-  g_task_set_task_data (task, g_object_ref (identity), g_object_unref);
-
-  principal = goa_identity_get_identifier (identity);
-
-  g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
-
-  g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
-  g_variant_builder_add (&details, "{ss}", "IsTemporary", "true");
-
-  preauth_source = goa_kerberos_identity_get_preauthentication_source (GOA_KERBEROS_IDENTITY (identity));
-  if (preauth_source != NULL)
-    g_variant_builder_add (&details, "{ss}", "PreauthenticationSource", preauth_source);
-
-  g_variant_builder_add (&details, "{ss}", "TicketingEnabled", "true");
-
-  manager = goa_client_get_manager (self->client);
-  goa_manager_call_add_account (manager,
-                                GOA_FEDORA_NAME,
-                                principal,
-                                principal,
-                                g_variant_builder_end (&credentials),
-                                g_variant_builder_end (&details),
-                                NULL,
-                                add_temporary_account_as_fedora_add_account,
-                                g_object_ref (task));
-
-  g_free (preauth_source);
-  g_object_unref (task);
-}
-
-static GoaObject *
-add_temporary_account_as_fedora_finish (GoaIdentityService *self, GAsyncResult *res, GError **error)
-{
-  GTask *task;
-
-  g_return_val_if_fail (g_task_is_valid (res, self), NULL);
-  task = G_TASK (res);
-
-  g_return_val_if_fail (g_task_get_source_tag (task) == add_temporary_account_as_fedora, NULL);
-  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-
-  return g_task_propagate_pointer (task, error);
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-static void
 add_temporary_account_as_kerberos_add_account (GObject *source_object, GAsyncResult *res, gpointer user_data)
 {
   GoaIdentityService *self;
@@ -1000,49 +896,10 @@ on_temporary_account_added_as_kerberos (GObject *source_object, GAsyncResult *re
 }
 
 static void
-on_temporary_account_added_as_fedora (GObject *source_object, GAsyncResult *result, gpointer user_data)
-{
-  GoaIdentityService *self = GOA_IDENTITY_SERVICE (source_object);
-  GError *error;
-  GoaIdentity *identity = GOA_IDENTITY (user_data);
-  GoaObject *object = NULL;
-  const gchar *principal;
-
-  error = NULL;
-  object = add_temporary_account_as_fedora_finish (self, result, &error);
-  if (error != NULL)
-    {
-      const char *identifier;
-
-      identifier = goa_identity_get_identifier (identity);
-      g_debug ("Could not add temporary Fedora account for identity %s: %s", identifier, error->message);
-
-      add_temporary_account_as_kerberos (self,
-                                         identity,
-                                         NULL,
-                                         on_temporary_account_added_as_kerberos,
-                                         g_object_ref (identity));
-
-      g_error_free (error);
-      goto out;
-    }
-
-  principal = goa_identity_get_identifier (identity);
-  g_hash_table_remove (self->pending_temporary_account_results, principal);
-
-  ensure_account_credentials (self, object);
-
- out:
-  g_clear_object (&object);
-  g_object_unref (identity);
-}
-
-static void
 add_temporary_account (GoaIdentityService *self,
                        GoaIdentity        *identity)
 {
   const char *principal;
-  gchar *realm = NULL;
 
   principal = goa_identity_get_identifier (identity);
   if (g_hash_table_contains (self->pending_temporary_account_results, principal))
@@ -1059,26 +916,11 @@ add_temporary_account (GoaIdentityService *self,
   g_debug ("GoaIdentityService: asking to sign back in");
 
   g_hash_table_insert (self->pending_temporary_account_results, g_strdup (principal), g_object_ref (identity));
-
-  realm = goa_kerberos_identity_get_realm_name (GOA_KERBEROS_IDENTITY (identity));
-  if (g_strcmp0 (realm, GOA_FEDORA_REALM) == 0)
-    {
-      add_temporary_account_as_fedora (self,
-                                       identity,
-                                       NULL,
-                                       on_temporary_account_added_as_fedora,
-                                       g_object_ref (identity));
-    }
-  else
-    {
-      add_temporary_account_as_kerberos (self,
-                                         identity,
-                                         NULL,
-                                         on_temporary_account_added_as_kerberos,
-                                         g_object_ref (identity));
-    }
-
-  g_free (realm);
+  add_temporary_account_as_kerberos (self,
+                                     identity,
+                                     NULL,
+                                     on_temporary_account_added_as_kerberos,
+                                     g_object_ref (identity));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

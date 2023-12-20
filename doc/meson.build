@@ -17,7 +17,6 @@ if enable_gtk_doc
     'goadlnaservermanager.h',
     'goaewsclient.h',
     'goaexchangeprovider.h',
-    'goafedoraprovider.h',
     'goagoogleprovider.h',
     'goahttpclient.h',
     'goaimapauthlogin.h',
