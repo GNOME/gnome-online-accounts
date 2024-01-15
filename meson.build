@@ -182,6 +182,15 @@ config_h.set_quoted('GOA_WINDOWS_LIVE_CLIENT_ID', windows_live_client_id)
 enable_windows_live = get_option('windows_live')
 config_h.set('GOA_WINDOWS_LIVE_ENABLED', enable_windows_live)
 
+# Microsoft Graph API account
+config_h.set_quoted('GOA_MS_GRAPH_NAME', 'ms_graph')
+
+ms_graph_client_id = get_option('ms_graph_client_id')
+config_h.set_quoted('GOA_MS_GRAPH_CLIENT_ID', ms_graph_client_id)
+
+enable_ms_graph = get_option('ms_graph')
+config_h.set('GOA_MS_GRAPH_ENABLED', enable_ms_graph)
+
 # Optional timerfd support
 timerfd_support_src = '''
   #include <sys/timerfd.h>
@@ -282,6 +291,7 @@ summary({
     'ownCloud': enable_owncloud,
     'WebDAV': enable_webdav,
     'Windows Live': enable_windows_live,
+    'Microsoft 365': enable_ms_graph,
   },
   bool_yn: true,
   section: 'Providers',
@@ -301,5 +311,13 @@ if enable_windows_live
       'id': windows_live_client_id,
     },
     section: 'Windows Live Provider OAuth 2.0',
+  )
+endif
+
+if enable_ms_graph
+  summary({
+      'id': ms_graph_client_id,
+    },
+    section: 'Microsoft 365 Provider OAuth 2.0',
   )
 endif
