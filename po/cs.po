@@ -9,16 +9,16 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2023-02-05 21:07+0000\n"
-"PO-Revision-Date: 2023-03-03 12:38+0100\n"
-"Last-Translator: Marek Černocký <marek@manet.cz>\n"
+"POT-Creation-Date: 2023-12-10 12:57+0000\n"
+"PO-Revision-Date: 2024-01-22 17:38+0100\n"
+"Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Gtranslator 2.91.7\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: data/org.gnome.online-accounts.gschema.xml:6
 msgid "List of providers that are allowed to be loaded"
@@ -48,20 +48,20 @@ msgid "ProviderType property is not set for account"
 msgstr "Pro účet není nastavena vlastnost ProviderType (typ poskytovatele)"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:283
+#: src/goabackend/goaewsclient.c:284
 msgid "Failed to parse autodiscover response XML"
 msgstr "Selhalo zpracování odpovědi automatického vyhledávání v XML"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: src/goabackend/goaewsclient.c:294 src/goabackend/goaewsclient.c:309
-#: src/goabackend/goaewsclient.c:324
+#: src/goabackend/goaewsclient.c:295 src/goabackend/goaewsclient.c:310
+#: src/goabackend/goaewsclient.c:325
 #, c-format
 msgid "Failed to find “%s” element"
 msgstr "Selhalo vyhledání prvku „%s“"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:345
+#: src/goabackend/goaewsclient.c:346
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "Selhalo vyhledání ASUrl a OABUrl v odpovědi automatického vyhledávání"
 
@@ -74,8 +74,7 @@ msgstr "Microsoft Exchange"
 #. * (%s, %d) is the error domain and code.
 #.
 #: src/goabackend/goaexchangeprovider.c:248
-#: src/goabackend/goalastfmprovider.c:279
-#: src/goabackend/goaowncloudprovider.c:293
+#: src/goabackend/goawebdavprovider.c:373
 #, c-format
 msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "Neplatné heslo s uživatelským jménem „%s“ (%s, %d):"
@@ -89,8 +88,7 @@ msgstr "_E-mail"
 #: src/goabackend/goafedoraprovider.c:574
 #: src/goabackend/goaimapsmtpprovider.c:667
 #: src/goabackend/goaimapsmtpprovider.c:687
-#: src/goabackend/goalastfmprovider.c:421
-#: src/goabackend/goaowncloudprovider.c:522
+#: src/goabackend/goawebdavprovider.c:511
 msgid "_Password"
 msgstr "_Heslo"
 
@@ -102,13 +100,11 @@ msgstr "_Vlastní"
 #: src/goabackend/goafedoraprovider.c:573
 #: src/goabackend/goaimapsmtpprovider.c:666
 #: src/goabackend/goaimapsmtpprovider.c:686
-#: src/goabackend/goalastfmprovider.c:420
-#: src/goabackend/goaowncloudprovider.c:521
+#: src/goabackend/goawebdavprovider.c:510
 msgid "User_name"
 msgstr "Uživatelské j_méno"
 
 #: src/goabackend/goaexchangeprovider.c:410
-#: src/goabackend/goaowncloudprovider.c:520
 msgid "_Server"
 msgstr "_Server"
 
@@ -117,16 +113,15 @@ msgstr "_Server"
 #: src/goabackend/goafedoraprovider.c:581
 #: src/goabackend/goaimapsmtpprovider.c:699
 #: src/goabackend/goakerberosprovider.c:583
-#: src/goabackend/goalastfmprovider.c:429
-#: src/goabackend/goaowncloudprovider.c:536
+#: src/goabackend/goaoauth2provider.c:939
+#: src/goabackend/goawebdavprovider.c:538
 msgid "_Cancel"
 msgstr "_Zrušit"
 
 #: src/goabackend/goaexchangeprovider.c:421
 #: src/goabackend/goafedoraprovider.c:582
 #: src/goabackend/goakerberosprovider.c:584
-#: src/goabackend/goalastfmprovider.c:430
-#: src/goabackend/goaowncloudprovider.c:537
+#: src/goabackend/goawebdavprovider.c:539
 msgid "C_onnect"
 msgstr "Přip_ojit"
 
@@ -134,8 +129,7 @@ msgstr "Přip_ojit"
 #: src/goabackend/goafedoraprovider.c:597
 #: src/goabackend/goaimapsmtpprovider.c:715
 #: src/goabackend/goakerberosprovider.c:599
-#: src/goabackend/goalastfmprovider.c:446
-#: src/goabackend/goaowncloudprovider.c:552
+#: src/goabackend/goawebdavprovider.c:554
 msgid "Connecting…"
 msgstr "Připojuje se…"
 
@@ -148,12 +142,10 @@ msgstr "Připojuje se…"
 #: src/goabackend/goaimapsmtpprovider.c:1249
 #: src/goabackend/goaimapsmtpprovider.c:1325
 #: src/goabackend/goakerberosprovider.c:939
-#: src/goabackend/goalastfmprovider.c:644
-#: src/goabackend/goalastfmprovider.c:812
-#: src/goabackend/goamediaserverprovider.c:412
-#: src/goabackend/goaoauth2provider.c:1001
-#: src/goabackend/goaowncloudprovider.c:674
-#: src/goabackend/goaowncloudprovider.c:893
+#: src/goabackend/goaoauth2provider.c:962
+#: src/goabackend/goaoauth2provider.c:978
+#: src/goabackend/goawebdavprovider.c:746
+#: src/goabackend/goawebdavprovider.c:1034
 msgid "Dialog was dismissed"
 msgstr "Dialogové okno bylo zavřeno"
 
@@ -164,10 +156,7 @@ msgstr "Dialogové okno bylo zavřeno"
 #: src/goabackend/goaimapsmtpprovider.c:1030
 #: src/goabackend/goaimapsmtpprovider.c:1276
 #: src/goabackend/goaimapsmtpprovider.c:1353
-#: src/goabackend/goalastfmprovider.c:678
-#: src/goabackend/goalastfmprovider.c:831
-#: src/goabackend/goaowncloudprovider.c:719
-#: src/goabackend/goaowncloudprovider.c:920
+#: src/goabackend/goawebdavprovider.c:609
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
 msgstr "Dialogové okno bylo zavřeno (%s, %d): "
@@ -175,7 +164,7 @@ msgstr "Dialogové okno bylo zavřeno (%s, %d): "
 #: src/goabackend/goaexchangeprovider.c:588
 #: src/goabackend/goaimapsmtpprovider.c:946
 #: src/goabackend/goaimapsmtpprovider.c:1043
-#: src/goabackend/goaowncloudprovider.c:732
+#: src/goabackend/goawebdavprovider.c:621
 msgid "_Ignore"
 msgstr "_Ignorovat"
 
@@ -187,10 +176,7 @@ msgstr "_Ignorovat"
 #: src/goabackend/goaimapsmtpprovider.c:1295
 #: src/goabackend/goaimapsmtpprovider.c:1372
 #: src/goabackend/goakerberosprovider.c:1032
-#: src/goabackend/goalastfmprovider.c:690
-#: src/goabackend/goalastfmprovider.c:848
-#: src/goabackend/goaowncloudprovider.c:737
-#: src/goabackend/goaowncloudprovider.c:939
+#: src/goabackend/goawebdavprovider.c:626
 msgid "_Try Again"
 msgstr "Zkusi_t znovu"
 
@@ -233,8 +219,8 @@ msgstr "Služba identit vrátila neplatný klíč"
 msgid "Google"
 msgstr "Google"
 
-#: src/goabackend/goagoogleprovider.c:215
-#: src/goabackend/goawindowsliveprovider.c:157
+#: src/goabackend/goagoogleprovider.c:207
+#: src/goabackend/goawindowsliveprovider.c:158
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
@@ -243,24 +229,15 @@ msgstr ""
 "obdržen %d (%s)"
 
 #. TODO: more specific
-#: src/goabackend/goagoogleprovider.c:234
-#: src/goabackend/goagoogleprovider.c:245
-#: src/goabackend/goalastfmprovider.c:204
-#: src/goabackend/goalastfmprovider.c:213
-#: src/goabackend/goalastfmprovider.c:222
-#: src/goabackend/goalastfmprovider.c:230
-#: src/goabackend/goalastfmprovider.c:236
-#: src/goabackend/goalastfmprovider.c:504
-#: src/goabackend/goalastfmprovider.c:513
-#: src/goabackend/goalastfmprovider.c:530
-#: src/goabackend/goalastfmprovider.c:536
-#: src/goabackend/goaoauth2provider.c:660
-#: src/goabackend/goaoauth2provider.c:690
-#: src/goabackend/goaoauth2provider.c:701 src/goabackend/goautils.c:296
-#: src/goabackend/goawindowsliveprovider.c:176
-#: src/goabackend/goawindowsliveprovider.c:187
-#: src/goabackend/goawindowsliveprovider.c:196
-#: src/goabackend/goawindowsliveprovider.c:209
+#: src/goabackend/goagoogleprovider.c:226
+#: src/goabackend/goagoogleprovider.c:237
+#: src/goabackend/goaoauth2provider.c:536
+#: src/goabackend/goaoauth2provider.c:566
+#: src/goabackend/goaoauth2provider.c:577 src/goabackend/goautils.c:296
+#: src/goabackend/goawindowsliveprovider.c:177
+#: src/goabackend/goawindowsliveprovider.c:188
+#: src/goabackend/goawindowsliveprovider.c:197
+#: src/goabackend/goawindowsliveprovider.c:210
 msgid "Could not parse response"
 msgstr "Nelze zpracovat odpověď"
 
@@ -270,16 +247,12 @@ msgid "Service not available"
 msgstr "Služba není dostupná"
 
 #. TODO: more specific
-#: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goalastfmprovider.c:521
-#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:857
+#: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goasmtpauth.c:102
+#: src/goabackend/goautils.c:857
 msgid "Authentication failed"
 msgstr "Autentizace selhala"
 
-#: src/goabackend/goaimapauthlogin.c:129
-msgid "Server does not support PLAIN"
-msgstr "Server nepodporuje autentizaci PLAIN"
-
-#: src/goabackend/goaimapauthlogin.c:181 src/goabackend/goasmtpauth.c:600
+#: src/goabackend/goaimapauthlogin.c:166 src/goabackend/goasmtpauth.c:600
 msgid "Server does not support STARTTLS"
 msgstr "Server nepodporuje STARTTLS"
 
@@ -400,36 +373,7 @@ msgstr "Zapamatovat toto heslo"
 msgid "Error connecting to enterprise identity server"
 msgstr "Chyba při připojování k serveru s podnikovými identitami"
 
-#: src/goabackend/goalastfmprovider.c:57
-msgid "Last.fm"
-msgstr "Last.fm"
-
-#: src/goabackend/goalastfmprovider.c:692
-#: src/goabackend/goalastfmprovider.c:842
-msgid "Error connecting to Last.fm"
-msgstr "Chyba při připojování k Last.fm"
-
-#: src/goabackend/goamediaserverprovider.c:55
-msgid "Media Server"
-msgstr "Multimediální server"
-
-#: src/goabackend/goamediaserverprovider.c:308
-msgid ""
-"Personal content can be added to your applications through a media server "
-"account."
-msgstr ""
-"Osobní obsah může být do vaší aplikace přidán přes účet na multimediálním "
-"serveru."
-
-#: src/goabackend/goamediaserverprovider.c:321
-msgid "Available Media Servers"
-msgstr "Dostupné multimediální servery"
-
-#: src/goabackend/goamediaserverprovider.c:352
-msgid "No media servers found"
-msgstr "Nebyly nalezeny žádné multimediální servery"
-
-#: src/goabackend/goaoauth2provider.c:636
+#: src/goabackend/goaoauth2provider.c:512
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -437,113 +381,120 @@ msgstr ""
 "Při požadavku o přístupový tiket očekáván stavový kód 200, místo toho získán "
 "%d (%s)"
 
-#: src/goabackend/goaoauth2provider.c:818
+#: src/goabackend/goaoauth2provider.c:656
 msgid "Authorization response: "
 msgstr "Odezva autorizace: "
 
-#: src/goabackend/goaoauth2provider.c:888
+#: src/goabackend/goaoauth2provider.c:719
 #, c-format
 msgid "Authorization response: %s"
 msgstr "Odezva autorizace: %s"
 
-#: src/goabackend/goaoauth2provider.c:1027
+#: src/goabackend/goaoauth2provider.c:727
+msgid "Failed to authenticate"
+msgstr "Ověření selhalo"
+
+#: src/goabackend/goaoauth2provider.c:927
+msgid "Sign in with your browser to setup an account."
+msgstr "Chcete-li nastavit účet, přihlaste se pomocí svého prohlížeče."
+
+#: src/goabackend/goaoauth2provider.c:931
+msgid "Continue"
+msgstr "Pokračovat"
+
+#: src/goabackend/goaoauth2provider.c:1004
 msgid "Error getting an Access Token: "
 msgstr "Chyba při získávání přístupového tiketu: "
 
-#: src/goabackend/goaoauth2provider.c:1042
+#: src/goabackend/goaoauth2provider.c:1019
 msgid "Error getting identity: "
 msgstr "Chyba při získávání identity: "
 
-#: src/goabackend/goaoauth2provider.c:1236
+#: src/goabackend/goaoauth2provider.c:1216
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Bylo žádáno o přihlášení jako %s, ale provedlo se jako %s"
 
-#: src/goabackend/goaoauth2provider.c:1388
+#: src/goabackend/goaoauth2provider.c:1368
 msgid "Credentials do not contain access_token"
 msgstr "Pověření neobsahuje access_token"
 
-#: src/goabackend/goaoauth2provider.c:1427
+#: src/goabackend/goaoauth2provider.c:1407
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Selhalo občerstvení přístupového tiketu (%s, %d): "
 
-#: src/goabackend/goaowncloudprovider.c:58
+#: src/goabackend/goaowncloudprovider.c:55
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: src/goabackend/goaowncloudprovider.c:742
-#: src/goabackend/goaowncloudprovider.c:932
-msgid "Error connecting to Nextcloud server"
-msgstr "Chyba při připojování k serveru Nextcloud"
-
-#: src/goabackend/goaprovider.c:109
+#: src/goabackend/goaprovider.c:108
 msgid "_Mail"
 msgstr "_Pošta"
 
-#: src/goabackend/goaprovider.c:114
+#: src/goabackend/goaprovider.c:113
 msgid "Cale_ndar"
 msgstr "Kale_ndář"
 
-#: src/goabackend/goaprovider.c:119
+#: src/goabackend/goaprovider.c:118
 msgid "_Contacts"
 msgstr "_Kontakty"
 
-#: src/goabackend/goaprovider.c:124
+#: src/goabackend/goaprovider.c:123
 msgid "C_hat"
 msgstr "Disk_uze"
 
-#: src/goabackend/goaprovider.c:129
+#: src/goabackend/goaprovider.c:128
 msgid "_Documents"
 msgstr "_Dokumenty"
 
-#: src/goabackend/goaprovider.c:134
+#: src/goabackend/goaprovider.c:133
 msgid "M_usic"
 msgstr "H_udba"
 
-#: src/goabackend/goaprovider.c:139
+#: src/goabackend/goaprovider.c:138
 msgid "_Photos"
 msgstr "_Fotografie"
 
-#: src/goabackend/goaprovider.c:144
+#: src/goabackend/goaprovider.c:143
 msgid "_Files"
 msgstr "_Soubory"
 
-#: src/goabackend/goaprovider.c:149
+#: src/goabackend/goaprovider.c:148
 msgid "Network _Resources"
 msgstr "Síťové p_rostředky"
 
-#: src/goabackend/goaprovider.c:154
+#: src/goabackend/goaprovider.c:153
 msgid "_Read Later"
 msgstr "_Přečíst později"
 
-#: src/goabackend/goaprovider.c:159
+#: src/goabackend/goaprovider.c:158
 msgid "Prin_ters"
 msgstr "_Tiskárny"
 
-#: src/goabackend/goaprovider.c:164
+#: src/goabackend/goaprovider.c:163
 msgid "_Maps"
 msgstr "_Mapy"
 
-#: src/goabackend/goaprovider.c:169
+#: src/goabackend/goaprovider.c:168
 msgid "T_o Do"
 msgstr "Úk_oly"
 
 #. Translators: This is a label for a series of
 #. * options switches. For example: “Use for Mail”.
-#: src/goabackend/goaprovider.c:567
+#: src/goabackend/goaprovider.c:566
 msgid "Use for"
 msgstr "Použít pro"
 
-#: src/goabackend/goaprovider.c:822
+#: src/goabackend/goaprovider.c:821
 msgid "Account is disabled"
 msgstr "Účet je zakázaný"
 
-#: src/goabackend/goaprovider.c:835
+#: src/goabackend/goaprovider.c:834
 msgid "Unknown error"
 msgstr "Neznámá chyba"
 
-#: src/goabackend/goaprovider.c:854
+#: src/goabackend/goaprovider.c:853
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync není implementováno na typu %s"
@@ -663,11 +614,45 @@ msgstr "Neplatný certifikát."
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "V pověřeních nebyla nalezena položka %s s identitou „%s“"
 
-#. translators: %s here is the address of the web page
-#: src/goabackend/goawebview.c:88
-#, c-format
-msgid "Loading “%s”…"
-msgstr "Načítá se „%s“…"
+#: src/goabackend/goawebdavprovider.c:509
+msgid "_URL"
+msgstr "Adresa _URL"
+
+#: src/goabackend/goawebdavprovider.c:514
+msgid "Advanced"
+msgstr "Pokročilé"
+
+#: src/goabackend/goawebdavprovider.c:523
+msgid "Files Endpoint"
+msgstr "Koncový bod Souborů"
+
+#: src/goabackend/goawebdavprovider.c:524
+msgid "CalDAV Endpoint"
+msgstr "Koncový bod CalDAV"
+
+#: src/goabackend/goawebdavprovider.c:525
+msgid "CardDAV Endpoint"
+msgstr "Koncový bod CardDAV"
+
+#: src/goabackend/goawebdavprovider.c:791
+msgid "Error connecting to server"
+msgstr "Chyba při připojování k serveru"
+
+#: src/goabackend/goawebdavprovider.c:820
+msgid "Error connecting to Files endpoint"
+msgstr "Chyba při připojování k serveru Souborů"
+
+#: src/goabackend/goawebdavprovider.c:854
+msgid "Error connecting to CalDAV endpoint"
+msgstr "Chyba při připojování k serveru CalDAV"
+
+#: src/goabackend/goawebdavprovider.c:882
+msgid "Error connecting to CardDAV endpoint"
+msgstr "Chyba při připojování k serveru CardDAV"
+
+#: src/goabackend/goawebdavprovider.c:1057
+msgid "Error connecting to WebDAV server"
+msgstr "Chyba při připojování k serveru WebDAV"
 
 #: src/goabackend/goawindowsliveprovider.c:56
 msgid "Microsoft"
@@ -708,43 +693,75 @@ msgstr "Nezdařilo se prohledat pověření identit v mezipaměti: "
 msgid "Could not finish up sifting through identity credentials in cache: "
 msgstr "Nezdařilo se dokončit prohledání pověření identit v mezipaměti: "
 
-#: src/goaidentity/goakerberosidentity.c:1404
+#: src/goaidentity/goakerberosidentity.c:1406
 msgid "No associated identification found"
 msgstr "Nebyla nalezena žádná přidružená identifikace"
 
-#: src/goaidentity/goakerberosidentity.c:1533
+#: src/goaidentity/goakerberosidentity.c:1535
 msgid "Could not create credential cache: "
 msgstr "Nezdařilo se vytvořit mezipaměť pověření: "
 
-#: src/goaidentity/goakerberosidentity.c:1573
+#: src/goaidentity/goakerberosidentity.c:1575
 msgid "Could not initialize credentials cache: "
 msgstr "Nezdařilo se inicializovat mezipaměť pověření: "
 
-#: src/goaidentity/goakerberosidentity.c:1586
+#: src/goaidentity/goakerberosidentity.c:1588
 msgid "Could not store new credentials in credentials cache: "
 msgstr "Nezdařilo se uložit nová pověření do mezipaměti pověření: "
 
-#: src/goaidentity/goakerberosidentity.c:1852
+#: src/goaidentity/goakerberosidentity.c:1824
 msgid "Not signed in"
 msgstr "Nepřihlášeno"
 
-#: src/goaidentity/goakerberosidentity.c:1865
+#: src/goaidentity/goakerberosidentity.c:1837
 msgid "Could not get the default principal: "
 msgstr "Nezdařilo se získat výchozí principál: "
 
-#: src/goaidentity/goakerberosidentity.c:1878
+#: src/goaidentity/goakerberosidentity.c:1850
 #, c-format
 msgid "Could not get renewed credentials from the KDC for identity %s: "
 msgstr "Nezdařilo se z KDC získat obnovené pověření pro identitu %s: "
 
-#: src/goaidentity/goakerberosidentity.c:1926
+#: src/goaidentity/goakerberosidentity.c:1898
 msgid "Could not erase identity: "
 msgstr "Nezdařilo se smazat identitu: "
 
-#: src/goaidentity/goakerberosidentitymanager.c:837
+#: src/goaidentity/goakerberosidentitymanager.c:854
 msgid "Could not find identity"
 msgstr "Nezdařilo se najít identitu"
 
-#: src/goaidentity/goakerberosidentitymanager.c:920
+#: src/goaidentity/goakerberosidentitymanager.c:937
 msgid "Could not create credential cache for identity"
 msgstr "Nezdařilo se vytvořit mezipaměť pověření pro identitu"
+
+#~ msgid "Server does not support PLAIN"
+#~ msgstr "Server nepodporuje autentizaci PLAIN"
+
+#~ msgid "Last.fm"
+#~ msgstr "Last.fm"
+
+#~ msgid "Error connecting to Last.fm"
+#~ msgstr "Chyba při připojování k Last.fm"
+
+#~ msgid "Media Server"
+#~ msgstr "Multimediální server"
+
+#~ msgid ""
+#~ "Personal content can be added to your applications through a media server "
+#~ "account."
+#~ msgstr ""
+#~ "Osobní obsah může být do vaší aplikace přidán přes účet na multimediálním "
+#~ "serveru."
+
+#~ msgid "Available Media Servers"
+#~ msgstr "Dostupné multimediální servery"
+
+#~ msgid "No media servers found"
+#~ msgstr "Nebyly nalezeny žádné multimediální servery"
+
+#~ msgid "Error connecting to Nextcloud server"
+#~ msgstr "Chyba při připojování k serveru Nextcloud"
+
+#, c-format
+#~ msgid "Loading “%s”…"
+#~ msgstr "Načítá se „%s“…"
