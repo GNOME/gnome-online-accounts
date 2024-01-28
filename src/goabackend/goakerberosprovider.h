@@ -30,7 +30,7 @@
 G_BEGIN_DECLS
 
 #define GOA_TYPE_KERBEROS_PROVIDER   (goa_kerberos_provider_get_type ())
-G_DECLARE_FINAL_TYPE (GoaKerberosProvider, goa_kerberos_provider, GOA, KERBEROS_PROVIDER, GoaProvider);
+G_DECLARE_DERIVABLE_TYPE (GoaKerberosProvider, goa_kerberos_provider, GOA, KERBEROS_PROVIDER, GoaProvider);
 
 G_END_DECLS
 
