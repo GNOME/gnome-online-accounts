@@ -72,10 +72,9 @@ cflags = [
 ]
 
 if enable_fedora
+  libgoa_backend_sources += files('goakerberosprovider.c')
   libgoa_backend_sources += files('goafedoraprovider.c')
-endif
-
-if enable_kerberos
+elif enable_kerberos
   libgoa_backend_sources += files('goakerberosprovider.c')
 endif
 

@@ -26,11 +26,12 @@
 #include <glib-object.h>
 
 #include "goaprovider-priv.h"
+#include "goakerberosprovider-priv.h"
 
 G_BEGIN_DECLS
 
 #define GOA_TYPE_FEDORA_PROVIDER   (goa_fedora_provider_get_type ())
-G_DECLARE_FINAL_TYPE (GoaFedoraProvider, goa_fedora_provider, GOA, FEDORA_PROVIDER, GoaProvider);
+G_DECLARE_FINAL_TYPE (GoaFedoraProvider, goa_fedora_provider, GOA, FEDORA_PROVIDER, GoaKerberosProvider);
 
 G_END_DECLS
 
