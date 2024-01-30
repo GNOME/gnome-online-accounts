@@ -32,6 +32,20 @@
 G_BEGIN_DECLS
 
 /**
+ * GoaProviderFeaturesInfo:
+ *
+ * Structure for metadata about a provider feature.
+ */
+typedef struct
+{
+  GoaProviderFeatures feature;
+  const char *property;
+  const char *blurb;
+} GoaProviderFeaturesInfo;
+
+GoaProviderFeaturesInfo *goa_provider_get_provider_features_infos (void);
+
+/**
  * GoaProvider:
  *
  * The #GoaProvider structure contains only private data and should
@@ -60,21 +74,24 @@ struct _GoaProviderClass
   GObjectClass parent_class;
 
   /* pure virtual */
-  GoaObject              *(*add_account)                  (GoaProvider            *self,
+  void                    (*add_account)                  (GoaProvider            *self,
                                                            GoaClient              *client,
-                                                           GtkDialog              *dialog,
-                                                           GtkBox                 *vbox,
-                                                           GError                **error);
+                                                           GtkWindow              *parent,
+                                                           GCancellable           *cancellable,
+                                                           GAsyncReadyCallback     callback,
+                                                           gpointer                user_data);
+  void                    (*refresh_account)              (GoaProvider            *self,
+                                                           GoaClient              *client,
+                                                           GoaObject              *object,
+                                                           GtkWindow              *parent,
+                                                           GCancellable           *cancellable,
+                                                           GAsyncReadyCallback     callback,
+                                                           gpointer                user_data);
   GoaProviderFeatures     (*get_provider_features)        (GoaProvider            *self);
   GoaProviderGroup        (*get_provider_group)           (GoaProvider            *self);
   gchar                  *(*get_provider_name)            (GoaProvider            *self,
                                                            GoaObject              *object);
   const gchar            *(*get_provider_type)            (GoaProvider            *self);
-  gboolean                (*refresh_account)              (GoaProvider            *self,
-                                                           GoaClient              *client,
-                                                           GoaObject              *object,
-                                                           GtkWindow              *parent,
-                                                           GError                **error);
 
   /* virtual but with default implementation */
   gboolean                (*build_object)                 (GoaProvider            *self,
@@ -92,6 +109,12 @@ struct _GoaProviderClass
   guint                   (*get_credentials_generation)   (GoaProvider            *self);
   GIcon                  *(*get_provider_icon)            (GoaProvider            *self,
                                                            GoaObject              *object);
+  GoaObject              *(*add_account_finish)           (GoaProvider            *self,
+                                                           GAsyncResult           *result,
+                                                           GError                **error);
+  gboolean                (*refresh_account_finish)       (GoaProvider            *self,
+                                                           GAsyncResult           *result,
+                                                           GError                **error);
   void                    (*remove_account)               (GoaProvider            *self,
                                                            GoaObject              *object,
                                                            GCancellable           *cancellable,
@@ -103,9 +126,13 @@ struct _GoaProviderClass
   void                    (*show_account)                 (GoaProvider            *self,
                                                            GoaClient              *client,
                                                            GoaObject              *object,
-                                                           GtkBox                 *vbox,
-                                                           GtkGrid                *dummy1,
-                                                           GtkGrid                *dummy2);
+                                                           GtkWindow              *parent,
+                                                           GCancellable           *cancellable,
+                                                           GAsyncReadyCallback     callback,
+                                                           gpointer                user_data);
+  gboolean                (*show_account_finish)          (GoaProvider            *self,
+                                                           GAsyncResult           *result,
+                                                           GError                **error);
 };
 
 /**

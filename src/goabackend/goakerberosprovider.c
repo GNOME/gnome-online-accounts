@@ -20,6 +20,7 @@
 #include <glib/gi18n-lib.h>
 
 #include "goaprovider.h"
+#include "goaproviderdialog.h"
 #include "goakerberosprovider.h"
 #include "goakerberosprovider-priv.h"
 #include "goautils.h"
@@ -97,26 +98,6 @@ get_provider_icon (GoaProvider *provider, GoaObject *object)
   return g_themed_icon_new_with_default_fallbacks ("dialog-password-symbolic");
 }
 
-typedef struct
-{
-  GCancellable *cancellable;
-
-  GtkDialog *dialog;
-  GMainLoop *loop;
-
-  GtkWidget *cluebar;
-  GtkWidget *cluebar_label;
-  GtkWidget *connect_button;
-  GtkWidget *progress_grid;
-
-  GtkWidget *principal;
-
-  gchar *account_object_path;
-
-  GError *error;
-} SignInRequest;
-
-/* ---------------------------------------------------------------------------------------------------- */
 static void
 notify_is_temporary_cb (GObject *object, GParamSpec *pspec, gpointer user_data)
 {
@@ -262,217 +243,49 @@ build_object (GoaProvider         *provider,
   return ret;
 }
 
+/* ---------------------------------------------------------------------------------------------------- */
+
 static void
-add_entry (GtkWidget     *grid,
-           gint           row,
-           const gchar   *text,
-           GtkWidget    **out_entry)
+refresh_account_ticket_cb (GoaKerberosProvider *self,
+                           GAsyncResult        *result,
+                           gpointer             user_data)
 {
-  GtkStyleContext *context;
-  GtkWidget *label;
-  GtkWidget *entry;
+  g_autoptr (GTask) task = G_TASK (user_data);
+  GError *error = NULL;
 
-  label = gtk_label_new_with_mnemonic (text);
-  context = gtk_widget_get_style_context (label);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
-  gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), label, 0, row, 1, 1);
-
-  entry = gtk_entry_new ();
-  gtk_widget_set_hexpand (entry, TRUE);
-  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-  gtk_grid_attach (GTK_GRID (grid), entry, 1, row, 3, 1);
-
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-  if (out_entry != NULL)
-    *out_entry = entry;
-}
-
-static gchar *
-normalize_principal (const gchar *principal, gchar **out_realm)
-{
-  gchar *domain = NULL;
-  gchar *realm = NULL;
-  gchar *ret = NULL;
-  gchar *username = NULL;
-
-  if (!goa_utils_parse_email_address (principal, &username, &domain))
-    goto out;
-
-  realm = g_utf8_strup (domain, -1);
-  ret = g_strconcat (username, "@", realm, NULL);
-
-  if (out_realm != NULL)
-    {
-      *out_realm = realm;
-      realm = NULL;
-    }
-
- out:
-  g_free (domain);
-  g_free (realm);
-  g_free (username);
-  return ret;
+  if (!goa_kerberos_provider_get_ticket_finish (self, result, &error))
+    g_task_return_error (task, error);
+  else
+    g_task_return_boolean (task, TRUE);
 }
 
 static void
-on_principal_changed (GtkEditable *editable, gpointer user_data)
-{
-  SignInRequest *request = user_data;
-  gboolean can_add;
-  const gchar *principal;
-
-  principal = gtk_entry_get_text (GTK_ENTRY (request->principal));
-  can_add = goa_utils_parse_email_address (principal, NULL, NULL);
-  gtk_dialog_set_response_sensitive (request->dialog, GTK_RESPONSE_OK, can_add);
-}
-
-static void
-show_progress_ui (GtkContainer *container, gboolean progress)
-{
-  GList *children;
-  GList *l;
-
-  children = gtk_container_get_children (container);
-  for (l = children; l != NULL; l = l->next)
-    {
-      GtkWidget *widget = GTK_WIDGET (l->data);
-      gdouble opacity;
-
-      opacity = progress ? 1.0 : 0.0;
-      gtk_widget_set_opacity (widget, opacity);
-    }
-
-  g_list_free (children);
-}
-
-static void
-create_account_details_ui (GoaKerberosProvider *self,
-                           GtkDialog           *dialog,
-                           GtkWidget           *vbox,
-                           gboolean             new_account,
-                           SignInRequest       *request)
-{
-  GtkWidget *grid0;
-  GtkWidget *grid1;
-  GtkWidget *label;
-  GtkWidget *spinner;
-  gint row;
-  gint width;
-
-  goa_utils_set_dialog_title (GOA_PROVIDER (self), dialog, new_account);
-
-  grid0 = gtk_grid_new ();
-  gtk_container_set_border_width (GTK_CONTAINER (grid0), 5);
-  gtk_widget_set_margin_bottom (grid0, 6);
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid0), GTK_ORIENTATION_VERTICAL);
-  gtk_grid_set_row_spacing (GTK_GRID (grid0), 12);
-  gtk_container_add (GTK_CONTAINER (vbox), grid0);
-
-  request->cluebar = gtk_info_bar_new ();
-  gtk_info_bar_set_message_type (GTK_INFO_BAR (request->cluebar), GTK_MESSAGE_ERROR);
-  gtk_widget_set_hexpand (request->cluebar, TRUE);
-  gtk_widget_set_no_show_all (request->cluebar, TRUE);
-  gtk_container_add (GTK_CONTAINER (grid0), request->cluebar);
-
-  request->cluebar_label = gtk_label_new ("");
-  gtk_label_set_line_wrap (GTK_LABEL (request->cluebar_label), TRUE);
-  gtk_container_add (GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (request->cluebar))),
-                     request->cluebar_label);
-
-  grid1 = gtk_grid_new ();
-  gtk_grid_set_column_spacing (GTK_GRID (grid1), 12);
-  gtk_grid_set_row_spacing (GTK_GRID (grid1), 12);
-  gtk_container_add (GTK_CONTAINER (grid0), grid1);
-
-  row = 0;
-  add_entry (grid1, row++, _("_Principal"), &request->principal);
-
-  gtk_widget_grab_focus (request->principal);
-  g_signal_connect (request->principal, "changed", G_CALLBACK (on_principal_changed), request);
-
-  gtk_dialog_add_button (request->dialog, _("_Cancel"), GTK_RESPONSE_CANCEL);
-  request->connect_button = gtk_dialog_add_button (request->dialog, _("C_onnect"), GTK_RESPONSE_OK);
-  gtk_dialog_set_default_response (request->dialog, GTK_RESPONSE_OK);
-  gtk_dialog_set_response_sensitive (request->dialog, GTK_RESPONSE_OK, FALSE);
-
-  request->progress_grid = gtk_grid_new ();
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (request->progress_grid), GTK_ORIENTATION_HORIZONTAL);
-  gtk_grid_set_column_spacing (GTK_GRID (request->progress_grid), 3);
-  gtk_container_add (GTK_CONTAINER (grid0), request->progress_grid);
-
-  spinner = gtk_spinner_new ();
-  gtk_widget_set_opacity (spinner, 0.0);
-  gtk_widget_set_size_request (spinner, 20, 20);
-  gtk_spinner_start (GTK_SPINNER (spinner));
-  gtk_container_add (GTK_CONTAINER (request->progress_grid), spinner);
-
-  label = gtk_label_new (_("Connecting…"));
-  gtk_widget_set_opacity (label, 0.0);
-  gtk_container_add (GTK_CONTAINER (request->progress_grid), label);
-
-  gtk_window_get_size (GTK_WINDOW (request->dialog), &width, NULL);
-  gtk_window_set_default_size (GTK_WINDOW (request->dialog), width, -1);
-}
-
-static void
-add_account_cb (GoaManager   *manager,
-                GAsyncResult *result,
-                gpointer      user_data)
-{
-  SignInRequest *request = user_data;
-  goa_manager_call_add_account_finish (manager,
-                                       &request->account_object_path,
-                                       result,
-                                       &request->error);
-  if (request->error != NULL)
-    g_dbus_error_strip_remote_error (request->error);
-  g_main_loop_quit (request->loop);
-  gtk_widget_set_sensitive (request->connect_button, TRUE);
-  gtk_widget_set_sensitive (request->principal, TRUE);
-  show_progress_ui (GTK_CONTAINER (request->progress_grid), FALSE);
-}
-
-static void
-remove_account_cb (GoaAccount   *account,
-                   GAsyncResult *result,
-                   GMainLoop    *loop)
-{
-  goa_account_call_remove_finish (account, result, NULL);
-  g_main_loop_quit (loop);
-}
-
-static gboolean
-refresh_account (GoaProvider    *provider,
-                 GoaClient      *client,
-                 GoaObject      *object,
-                 GtkWindow      *parent,
-                 GError        **error)
+refresh_account (GoaProvider         *provider,
+                 GoaClient           *client,
+                 GoaObject           *object,
+                 GtkWindow           *parent,
+                 GCancellable        *cancellable,
+                 GAsyncReadyCallback  callback,
+                 gpointer             user_data)
 {
   GoaKerberosProvider *self = GOA_KERBEROS_PROVIDER (provider);
-  gboolean             got_ticket;
-  GError              *ticket_error = NULL;
+  g_autoptr (GTask) task = NULL;
 
-  g_return_val_if_fail (GOA_IS_KERBEROS_PROVIDER (provider), FALSE);
-  g_return_val_if_fail (GOA_IS_CLIENT (client), FALSE);
-  g_return_val_if_fail (GOA_IS_OBJECT (object), FALSE);
-  g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), FALSE);
-  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+  g_assert (GOA_IS_KERBEROS_PROVIDER (provider));
+  g_assert (GOA_IS_CLIENT (client));
+  g_assert (GOA_IS_OBJECT (object));
+  g_assert (parent == NULL || GTK_IS_WINDOW (parent));
+  g_assert (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
-  got_ticket = goa_kerberos_provider_get_ticket_sync (self,
-                                                      object,
-                                                      TRUE /* Allow interaction */,
-                                                      NULL,
-                                                      &ticket_error);
+  task = g_task_new (provider, cancellable, callback, user_data);
+  g_task_set_source_tag (task, refresh_account);
 
-  if (ticket_error != NULL)
-    {
-      g_dbus_error_strip_remote_error (ticket_error);
-      g_propagate_error (error, ticket_error);
-    }
-
-  return got_ticket;
+  goa_kerberos_provider_get_ticket (self,
+                                    object,
+                                    TRUE, /* Allow interaction */
+                                    g_task_get_cancellable (task),
+                                    (GAsyncReadyCallback) refresh_account_ticket_cb,
+                                    g_object_ref (task));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -703,82 +516,208 @@ perform_initial_sign_in_finish (GoaKerberosProvider  *self,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static void
-on_account_signed_in (GoaKerberosProvider  *self,
-                      GAsyncResult         *result,
-                      SignInRequest        *request)
+typedef struct
 {
-  perform_initial_sign_in_finish (self, result, &request->error);
-  g_main_loop_quit (request->loop);
+  GoaProviderDialog *dialog;
+  GoaClient *client;
+  GoaObject *object;
+
+  GtkWidget *principal;
+  GtkWidget *password;
+} AddAccountData;
+
+static void
+add_account_data_free (gpointer user_data)
+{
+  AddAccountData *data = (AddAccountData *)user_data;
+
+  g_clear_object (&data->client);
+  g_clear_object (&data->object);
+  g_free (data);
 }
 
-static GoaObject *
-add_account (GoaProvider    *provider,
-             GoaClient      *client,
-             GtkDialog      *dialog,
-             GtkBox         *vbox,
-             GError        **error)
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gchar *
+normalize_principal (const gchar *principal, gchar **out_realm)
 {
-  GoaKerberosProvider *self = GOA_KERBEROS_PROVIDER (provider);
-  SignInRequest request;
-  GVariantBuilder credentials;
-  GVariantBuilder details;
-  GoaObject   *object = NULL;
-  GoaAccount  *account;
-  char        *realm = NULL;
-  const char *principal_text;
-  const char *provider_type;
-  gchar      *principal = NULL;
-  gint        response;
+  gchar *domain = NULL;
+  gchar *realm = NULL;
+  gchar *ret = NULL;
+  gchar *username = NULL;
 
-  memset (&request, 0, sizeof (SignInRequest));
-  request.cancellable = g_cancellable_new ();
-  request.loop = g_main_loop_new (NULL, FALSE);
-  request.dialog = dialog;
-  request.error = NULL;
+  if (!goa_utils_parse_email_address (principal, &username, &domain))
+    goto out;
 
-  create_account_details_ui (self, dialog, GTK_WIDGET (vbox), TRUE, &request);
-  gtk_widget_show_all (GTK_WIDGET (vbox));
+  realm = g_utf8_strup (domain, -1);
+  ret = g_strconcat (username, "@", realm, NULL);
 
-start_over:
-  response = gtk_dialog_run (dialog);
-
-  if (response != GTK_RESPONSE_OK)
+  if (out_realm != NULL)
     {
-      g_set_error (&request.error,
-                   GOA_ERROR,
-                   GOA_ERROR_DIALOG_DISMISSED,
-                   _("Dialog was dismissed"));
-      goto out;
+      *out_realm = realm;
+      realm = NULL;
     }
 
-  principal_text = gtk_entry_get_text (GTK_ENTRY (request.principal));
+ out:
+  g_free (domain);
+  g_free (realm);
+  g_free (username);
+  return ret;
+}
+
+static void
+on_principal_changed (GtkEditable    *editable,
+                      AddAccountData *data)
+{
+  const char *principal;
+
+  principal = gtk_editable_get_text (GTK_EDITABLE (data->principal));
+  if (goa_utils_parse_email_address (principal, NULL, NULL))
+    goa_provider_dialog_set_state (data->dialog, GOA_DIALOG_READY);
+  else
+    goa_provider_dialog_set_state (data->dialog, GOA_DIALOG_IDLE);
+}
+
+static void
+create_account_details_ui (GoaProvider    *self,
+                           AddAccountData *data,
+                           gboolean        new_account)
+{
+  GoaProviderDialog *dialog = GOA_PROVIDER_DIALOG (data->dialog);
+  GtkWidget *group;
+
+  group = goa_provider_dialog_add_group (dialog, NULL);
+  data->principal = goa_provider_dialog_add_entry (dialog, group, _("_Principal"));
+
+  gtk_widget_grab_focus (data->principal);
+  g_signal_connect (data->principal, "changed", G_CALLBACK (on_principal_changed), data);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
+add_account_remove_cb (GoaAccount   *account,
+                       GAsyncResult *result,
+                       gpointer      user_data)
+{
+  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr (GError) error = NULL;
+
+  /* Failure to remove the temporary account is fatal */
+  if (!goa_account_call_remove_finish (account, result, &error))
+    {
+      goa_provider_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+}
+
+static void
+add_account_signin_cb (GoaKerberosProvider *self,
+                       GAsyncResult        *result,
+                       gpointer             user_data)
+{
+  g_autoptr (GTask) task = G_TASK (user_data);
+  AddAccountData *data = g_task_get_task_data (task);
+  GoaAccount *account = NULL;
+  g_autoptr (GError) error = NULL;
+
+  account = goa_object_peek_account (data->object);
+
+  /* If sign in fails, remove the temporary account before restarting */
+  if (!perform_initial_sign_in_finish (self, result, &error))
+    {
+      goa_provider_dialog_report_error (data->dialog, error);
+      goa_account_call_remove (account,
+                               NULL, /* Cancellable */
+                               (GAsyncReadyCallback) add_account_remove_cb,
+                               g_object_ref (task));
+      return;
+    }
+
+  goa_account_set_is_temporary (account, FALSE);
+  goa_provider_task_return_account (task, g_object_ref (data->object));
+}
+
+static void
+add_account_temporary_cb (GoaManager   *manager,
+                          GAsyncResult *res,
+                          gpointer      user_data)
+{
+  g_autoptr (GTask) task = G_TASK (user_data);
+  GoaProvider *provider = g_task_get_source_object (task);
+  AddAccountData *data = g_task_get_task_data (task);
+  g_autofree char *object_path = NULL;
+  g_autoptr (GDBusObject) object = NULL;
+  const char *principal = NULL;
+  g_autoptr (GError) error = NULL;
+
+  if (!goa_manager_call_add_account_finish (manager, &object_path, res, &error))
+    {
+      goa_provider_dialog_report_error (data->dialog, error);
+      return;
+    }
+
+  object = g_dbus_object_manager_get_object (goa_client_get_object_manager (data->client),
+                                             object_path);
+  g_set_object (&data->object, GOA_OBJECT (object));
+  principal = gtk_editable_get_text (GTK_EDITABLE (data->principal));
+
+  /* Sign in the temporary account */
+  perform_initial_sign_in (GOA_KERBEROS_PROVIDER (provider),
+                           GOA_OBJECT (object),
+                           principal,
+                           g_task_get_cancellable (task),
+                           (GAsyncReadyCallback) add_account_signin_cb,
+                           g_object_ref (task));
+}
+
+static void
+add_account_action_cb (GTask *task)
+{
+  GoaProvider *provider = g_task_get_source_object (task);
+  AddAccountData *data = g_task_get_task_data (task);
+  GVariantBuilder credentials;
+  GVariantBuilder details;
+  const char *principal_text;
+  const char *provider_type;
+  g_autofree char *principal = NULL;
+  g_autofree char *realm = NULL;
+  g_autoptr (GError) error = NULL;
+
+  if (goa_provider_dialog_get_state (data->dialog) != GOA_DIALOG_BUSY)
+    return;
+
+  g_signal_handlers_block_by_func (data->principal, on_principal_changed, data);
+  principal_text = gtk_editable_get_text (GTK_EDITABLE (data->principal));
   principal = normalize_principal (principal_text, &realm);
-  gtk_entry_set_text (GTK_ENTRY (request.principal), principal);
+  gtk_editable_set_text (GTK_EDITABLE (data->principal), principal);
+  g_signal_handlers_unblock_by_func (data->principal, on_principal_changed, data);
 
-  /* See if there's already an account of this type with the
-   * given identity
-   */
+  /* If this is duplicate account we're finished */
   provider_type = goa_provider_get_provider_type (provider);
-
-  if (!goa_utils_check_duplicate (client,
+  if (!goa_utils_check_duplicate (data->client,
                                   principal,
                                   principal,
                                   provider_type,
                                   (GoaPeekInterfaceFunc) goa_object_peek_account,
-                                  &request.error))
-    goto out;
+                                  &error))
+    {
+      goa_provider_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
 
-  if (!goa_utils_check_duplicate (client,
+  if (!goa_utils_check_duplicate (data->client,
                                   principal,
                                   principal,
                                   GOA_FEDORA_NAME,
                                   (GoaPeekInterfaceFunc) goa_object_peek_account,
-                                  &request.error))
-    goto out;
+                                  &error))
+    {
+      goa_provider_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
 
-  /* If there isn't an account, then go ahead and create one
-   */
+  /* Create a temporary account */
   g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
 
   g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
@@ -786,105 +725,47 @@ start_over:
   g_variant_builder_add (&details, "{ss}", "IsTemporary", "true");
   g_variant_builder_add (&details, "{ss}", "TicketingEnabled", "true");
 
-  goa_manager_call_add_account (goa_client_get_manager (client),
+  goa_manager_call_add_account (goa_client_get_manager (data->client),
                                 provider_type,
                                 principal,
                                 principal,
                                 g_variant_builder_end (&credentials),
                                 g_variant_builder_end (&details),
-                                NULL, /* GCancellable* */
-                                (GAsyncReadyCallback) add_account_cb,
-                                &request);
-  gtk_widget_set_sensitive (request.connect_button, FALSE);
-  gtk_widget_set_sensitive (request.principal, FALSE);
-  show_progress_ui (GTK_CONTAINER (request.progress_grid), TRUE);
-  g_main_loop_run (request.loop);
-  if (request.error != NULL)
-    goto out;
+                                g_task_get_cancellable (task),
+                                (GAsyncReadyCallback) add_account_temporary_cb,
+                                g_object_ref (task));
+}
 
-  object = GOA_OBJECT (g_dbus_object_manager_get_object (goa_client_get_object_manager (client),
-                                                         request.account_object_path));
-  account = goa_object_peek_account (object);
+/* ---------------------------------------------------------------------------------------------------- */
 
-  /* After the account is created, try to sign it in
-   */
-  perform_initial_sign_in (self,
-                           object,
-                           principal,
-                           request.cancellable,
-                           (GAsyncReadyCallback) on_account_signed_in,
-                           &request);
+static void
+add_account (GoaProvider         *provider,
+             GoaClient           *client,
+             GtkWindow           *parent,
+             GCancellable        *cancellable,
+             GAsyncReadyCallback  callback,
+             gpointer             user_data)
+{
+  AddAccountData *data;
+  g_autoptr (GTask) task = NULL;
 
-  gtk_widget_set_sensitive (request.connect_button, FALSE);
-  gtk_widget_set_sensitive (request.principal, FALSE);
-  show_progress_ui (GTK_CONTAINER (request.progress_grid), TRUE);
+  data = g_new0 (AddAccountData, 1);
+  data->dialog = goa_provider_dialog_new (provider, client, parent);
+  data->client = g_object_ref (client);
 
-  g_main_loop_run (request.loop);
+  task = g_task_new (provider, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
+  g_task_set_source_tag (task, add_account);
+  g_task_set_task_data (task, data, add_account_data_free);
+  goa_provider_task_bind_window (task, GTK_WINDOW (data->dialog));
 
-  gtk_widget_set_sensitive (request.connect_button, TRUE);
-  gtk_widget_set_sensitive (request.principal, TRUE);
-  show_progress_ui (GTK_CONTAINER (request.progress_grid), FALSE);
-
-  if (request.error != NULL)
-    {
-      gchar *markup;
-
-      g_dbus_error_strip_remote_error (request.error);
-
-      if (!g_error_matches (request.error,
-                            G_IO_ERROR,
-                            G_IO_ERROR_CANCELLED))
-        {
-          markup = g_strdup_printf ("<b>%s:</b>\n%s",
-                                    _("Error connecting to enterprise identity server"),
-                                    request.error->message);
-          gtk_label_set_markup (GTK_LABEL (request.cluebar_label), markup);
-          g_free (markup);
-
-          gtk_button_set_label (GTK_BUTTON (request.connect_button), _("_Try Again"));
-          gtk_widget_set_no_show_all (request.cluebar, FALSE);
-          gtk_widget_show_all (request.cluebar);
-        }
-      g_clear_error (&request.error);
-
-      /* If it couldn't be signed in, then delete it and start over
-       */
-      goa_account_call_remove (account,
-                               NULL,
-                               (GAsyncReadyCallback)
-                               remove_account_cb,
-                               request.loop);
-      g_main_loop_run (request.loop);
-
-      g_clear_object (&object);
-      g_clear_pointer (&principal, g_free);
-      g_clear_pointer (&realm, g_free);
-      g_clear_pointer (&request.account_object_path, g_free);
-      goto start_over;
-    }
-
-  goa_account_set_is_temporary (account, FALSE);
-
-  gtk_widget_hide (GTK_WIDGET (dialog));
-
- out:
-  /* We might have an object even when request.error is set.
-   * eg., if we failed to store the credentials in the keyring.
-   */
-  if (request.error != NULL)
-    {
-      g_dbus_error_strip_remote_error (request.error);
-      g_propagate_error (error, request.error);
-    }
-  else
-    g_assert (object != NULL);
-
-  g_free (request.account_object_path);
-  g_free (principal);
-  g_free (realm);
-  g_clear_pointer (&request.loop, g_main_loop_unref);
-  g_clear_object (&request.cancellable);
-  return object;
+  create_account_details_ui (provider, data, FALSE);
+  g_signal_connect_object (data->dialog,
+                           "notify::state",
+                           G_CALLBACK (add_account_action_cb),
+                           task,
+                           G_CONNECT_SWAPPED);
+  gtk_window_present (GTK_WINDOW (data->dialog));
 }
 
 static gboolean

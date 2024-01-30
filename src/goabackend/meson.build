@@ -17,6 +17,7 @@ libgoa_backend_sources = files(
   'goaobjectskeletonutils.c',
   'goaowncloudprovider.c',
   'goaprovider.c',
+  'goaproviderdialog.c',
   'goarestproxy.c',
   'goasmtpauth.c',
   'goasouplogger.c',
@@ -51,11 +52,21 @@ enum_sources = gnome.mkenums(
 libgoa_backend_headers_built += enum_sources[1]
 libgoa_backend_sources += enum_sources
 
+priv_enum_sources = gnome.mkenums_simple('goabackendenumtypes-priv',
+  body_prefix: '#include <glib-object.h>',
+  sources: ['goaproviderdialog.h'],
+  install_header: false,
+)
+
+libgoa_backend_headers_built += priv_enum_sources[1]
+libgoa_backend_sources += priv_enum_sources
+
 incs = common_incs
 
 deps = [
   gtk_dep,
   json_glib_dep,
+  libadwaita_dep,
   libgoa_dep,
   libsecret_dep,
   libsoup_dep,

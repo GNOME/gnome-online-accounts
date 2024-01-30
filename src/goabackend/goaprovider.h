@@ -54,24 +54,37 @@ void                   goa_provider_set_preseed_data             (GoaProvider   
 G_DEPRECATED
 GVariant              *goa_provider_get_preseed_data             (GoaProvider            *self);
 
-GoaObject             *goa_provider_add_account                  (GoaProvider            *self,
+void                   goa_provider_add_account                  (GoaProvider            *self,
                                                                   GoaClient              *client,
-                                                                  GtkDialog              *dialog,
-                                                                  GtkBox                 *vbox,
+                                                                  GtkWindow              *parent,
+                                                                  GCancellable           *cancellable,
+                                                                  GAsyncReadyCallback     callback,
+                                                                  gpointer                user_data);
+GoaObject             *goa_provider_add_account_finish           (GoaProvider            *self,
+                                                                  GAsyncResult           *result,
                                                                   GError                **error);
 
-gboolean               goa_provider_refresh_account              (GoaProvider            *self,
+void                   goa_provider_refresh_account              (GoaProvider            *self,
                                                                   GoaClient              *client,
                                                                   GoaObject              *object,
                                                                   GtkWindow              *parent,
+                                                                  GCancellable           *cancellable,
+                                                                  GAsyncReadyCallback     callback,
+                                                                  gpointer                user_data);
+gboolean               goa_provider_refresh_account_finish       (GoaProvider            *self,
+                                                                  GAsyncResult           *result,
                                                                   GError                **error);
 
 void                   goa_provider_show_account                 (GoaProvider            *self,
                                                                   GoaClient              *client,
                                                                   GoaObject              *object,
-                                                                  GtkBox                 *vbox,
-                                                                  GtkGrid                *dummy1,
-                                                                  GtkGrid                *dummy2);
+                                                                  GtkWindow              *parent,
+                                                                  GCancellable           *cancellable,
+                                                                  GAsyncReadyCallback     callback,
+                                                                  gpointer                user_data);
+gboolean               goa_provider_show_account_finish          (GoaProvider            *self,
+                                                                  GAsyncResult           *result,
+                                                                  GError                **error);
 
 guint                  goa_provider_get_credentials_generation   (GoaProvider            *self);
 
@@ -86,11 +99,6 @@ GoaProvider           *goa_provider_get_for_provider_type        (const gchar   
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-GtkWidget *goa_util_add_row_widget (GtkGrid      *grid,
-                                    gint          row,
-                                    const gchar  *label_text,
-                                    GtkWidget    *widget);
-
 gchar *
 goa_util_lookup_keyfile_string (GoaObject    *object,
                                 const gchar  *key);
@@ -101,13 +109,6 @@ goa_util_lookup_keyfile_boolean (GoaObject    *object,
 
 void
 goa_util_account_notify_property_cb (GObject *object, GParamSpec *pspec, gpointer user_data);
-
-GtkWidget *goa_util_add_row_switch_from_keyfile_with_blurb (GtkGrid      *grid,
-                                                            gint          row,
-                                                            GoaObject    *object,
-                                                            const gchar  *label_text,
-                                                            const gchar  *key,
-                                                            const gchar  *blurb);
 
 G_END_DECLS
 

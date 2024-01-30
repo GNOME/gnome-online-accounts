@@ -32,169 +32,6 @@ static const SecretSchema secret_password_schema =
   }
 };
 
-typedef struct
-{
-  GoaClient *client;
-  GoaObject *object;
-  GoaProvider *provider;
-} AttentionNeededData;
-
-static AttentionNeededData *
-attention_needed_data_new (GoaClient *client, GoaObject *object, GoaProvider *provider)
-{
-  AttentionNeededData *data;
-
-  data = g_slice_new0 (AttentionNeededData);
-  data->client = g_object_ref (client);
-  data->object = g_object_ref (object);
-  data->provider = g_object_ref (provider);
-
-  return data;
-}
-
-static void
-attention_needed_data_free (AttentionNeededData *data)
-{
-  g_object_unref (data->client);
-  g_object_unref (data->object);
-  g_object_unref (data->provider);
-  g_slice_free (AttentionNeededData, data);
-}
-
-static void
-goa_utils_account_add_attention_needed_info_bar_response (GtkInfoBar *info_bar,
-                                                          gint        response_id,
-                                                          gpointer    user_data)
-{
-  AttentionNeededData *data = (AttentionNeededData *) user_data;
-  GtkWidget *parent;
-  GError *error;
-
-  g_return_if_fail (response_id == GTK_RESPONSE_OK);
-
-  parent = gtk_widget_get_toplevel (GTK_WIDGET (info_bar));
-  if (!gtk_widget_is_toplevel (parent))
-    {
-      g_warning ("Unable to find a toplevel GtkWindow");
-      return;
-    }
-
-  error = NULL;
-  if (!goa_provider_refresh_account (data->provider, data->client, data->object, GTK_WINDOW (parent), &error))
-    {
-      if (!(error->domain == GOA_ERROR && error->code == GOA_ERROR_DIALOG_DISMISSED))
-        {
-          GtkWidget *dialog;
-          dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
-                                           GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           _("Error logging into the account"));
-          gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                                    "%s",
-                                                    error->message);
-          gtk_widget_show_all (dialog);
-          gtk_dialog_run (GTK_DIALOG (dialog));
-          gtk_widget_destroy (dialog);
-        }
-      g_error_free (error);
-    }
-}
-
-void
-goa_utils_account_add_attention_needed (GoaClient *client, GoaObject *object, GoaProvider *provider, GtkBox *vbox)
-{
-  AttentionNeededData *data;
-  GoaAccount *account;
-  GtkWidget *button;
-  GtkWidget *content_area;
-  GtkWidget *info_bar;
-  GtkWidget *label;
-  GtkWidget *labels_grid;
-  gchar *markup = NULL;
-
-  account = goa_object_peek_account (object);
-  if (!goa_account_get_attention_needed (account))
-    goto out;
-
-  info_bar = gtk_info_bar_new ();
-  gtk_container_add (GTK_CONTAINER (vbox), info_bar);
-
-  content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
-  gtk_widget_set_margin_start (content_area, 6);
-
-  labels_grid = gtk_grid_new ();
-  gtk_widget_set_halign (labels_grid, GTK_ALIGN_FILL);
-  gtk_widget_set_hexpand (labels_grid, TRUE);
-  gtk_widget_set_valign (labels_grid, GTK_ALIGN_CENTER);
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (labels_grid), GTK_ORIENTATION_VERTICAL);
-  gtk_grid_set_column_spacing (GTK_GRID (labels_grid), 0);
-  gtk_container_add (GTK_CONTAINER (content_area), labels_grid);
-
-  label = gtk_label_new ("");
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  markup = g_strdup_printf ("<b>%s</b>", _("Credentials have expired"));
-  gtk_label_set_markup (GTK_LABEL (label), markup);
-  gtk_container_add (GTK_CONTAINER (labels_grid), label);
-
-  label = gtk_label_new (_("Sign in to enable this account."));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_container_add (GTK_CONTAINER (labels_grid), label);
-
-  button = gtk_info_bar_add_button (GTK_INFO_BAR (info_bar), _("_Sign In"), GTK_RESPONSE_OK);
-  gtk_widget_set_margin_end (button, 6);
-
-  data = attention_needed_data_new (client, object, provider);
-  g_signal_connect_data (info_bar,
-                         "response",
-                         G_CALLBACK (goa_utils_account_add_attention_needed_info_bar_response),
-                         data,
-                         (GClosureNotify) attention_needed_data_free,
-                         0);
-
- out:
-  g_free (markup);
-}
-
-void
-goa_utils_account_add_header (GoaObject *object, GtkGrid *grid, gint row)
-{
-  GIcon *icon;
-  GoaAccount *account;
-  GtkWidget *image;
-  GtkWidget *label;
-  const gchar *icon_str;
-  const gchar *identity;
-  const gchar *name;
-  gchar *markup;
-
-  account = goa_object_peek_account (object);
-
-  icon_str = goa_account_get_provider_icon (account);
-  icon = g_icon_new_for_string (icon_str, NULL);
-  image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_DIALOG);
-  g_object_unref (icon);
-  gtk_widget_set_halign (image, GTK_ALIGN_END);
-  gtk_widget_set_hexpand (image, TRUE);
-  gtk_widget_set_margin_bottom (image, 12);
-  gtk_grid_attach (grid, image, 0, row, 1, 1);
-
-  name = goa_account_get_provider_name (account);
-  identity = goa_account_get_presentation_identity (account);
-  markup = g_strdup_printf ("<b>%s</b>\n%s",
-                            name,
-                            (identity == NULL || identity[0] == '\0') ? "\xe2\x80\x94" : identity);
-  label = gtk_label_new (NULL);
-  gtk_label_set_markup (GTK_LABEL (label), markup);
-  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-  gtk_label_set_max_width_chars (GTK_LABEL (label), 24);
-  gtk_label_set_width_chars (GTK_LABEL (label), 24);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_widget_set_margin_bottom (label, 12);
-  g_free (markup);
-  gtk_grid_attach (grid, label, 1, row, 3, 1);
-}
-
 gboolean
 goa_utils_check_duplicate (GoaClient              *client,
                            const gchar            *identity,
@@ -300,23 +137,6 @@ goa_utils_data_input_stream_read_line (GDataInputStream  *stream,
     g_propagate_error (error, local_error);
 
   return ret;
-}
-
-void
-goa_utils_set_dialog_title (GoaProvider *provider, GtkDialog *dialog, gboolean add_account)
-{
-  gchar *provider_name;
-  gchar *title;
-
-  provider_name = goa_provider_get_provider_name (GOA_PROVIDER (provider), NULL);
-  /* Translators: this is the title of the "Add Account" and "Refresh
-   * Account" dialogs. The %s is the name of the provider. eg.,
-   * 'Google'.
-   */
-  title = g_strdup_printf (_("%s Account"), provider_name);
-  gtk_window_set_title (GTK_WINDOW (dialog), title);
-  g_free (title);
-  g_free (provider_name);
 }
 
 gboolean
@@ -846,9 +666,13 @@ goa_utils_set_error_soup (GError **err, SoupMessage *msg)
   status_code = soup_message_get_status (msg);
   switch (status_code)
     {
+    case SOUP_STATUS_METHOD_NOT_ALLOWED:
     case SOUP_STATUS_INTERNAL_SERVER_ERROR:
+    case SOUP_STATUS_NOT_IMPLEMENTED:
+      error_msg = g_strdup (_("Not supported"));
+
     case SOUP_STATUS_NOT_FOUND:
-      error_msg = g_strdup (_("Cannot find WebDAV endpoint"));
+      error_msg = g_strdup (_("Not found"));
       break;
 
     default:
