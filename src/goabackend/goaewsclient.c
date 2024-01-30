@@ -210,7 +210,7 @@ static void
 ews_client_autodiscover_response_cb (SoupSession *session, GAsyncResult *result, gpointer user_data)
 {
   SoupMessage *msg;
-  GBytes *body;
+  GBytes *body = NULL;
   GError *error = NULL;
   AutodiscoverData *data;
   GTask *task = G_TASK (user_data);
@@ -218,7 +218,7 @@ ews_client_autodiscover_response_cb (SoupSession *session, GAsyncResult *result,
   guint idx;
   guint status;
   gsize size;
-  xmlDoc *doc;
+  xmlDoc *doc = NULL;
   xmlNode *node;
 
   msg = soup_session_get_async_result_message (session, result);
