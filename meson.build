@@ -96,9 +96,10 @@ endif
 
 enable_goabackend = get_option('goabackend')
 if enable_goabackend
-  gtk_dep = dependency('gtk+-3.0', version: '>= 3.19.12')
+  gtk_dep = dependency('gtk4', version: '>= 4.10')
   json_glib_dep = dependency('json-glib-1.0')
   libsecret_dep = dependency('libsecret-1')
+  libadwaita_dep = dependency('libadwaita-1', version: '>= 1.4')
   libsoup_dep = dependency('libsoup-3.0', version: '>= 3.0', fallback: ['libsoup'])
   libxml_dep = dependency('libxml-2.0')
 endif

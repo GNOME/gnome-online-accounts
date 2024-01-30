@@ -17,6 +17,7 @@ libgoa_backend_sources = files(
   'goaobjectskeletonutils.c',
   'goaowncloudprovider.c',
   'goaprovider.c',
+  'goaproviderdialog.c',
   'goarestproxy.c',
   'goasmtpauth.c',
   'goasouplogger.c',
@@ -56,6 +57,7 @@ incs = common_incs
 deps = [
   gtk_dep,
   json_glib_dep,
+  libadwaita_dep,
   libgoa_dep,
   libsecret_dep,
   libsoup_dep,

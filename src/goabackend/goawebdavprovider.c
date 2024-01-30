@@ -25,6 +25,7 @@
 
 #include "goadavclient.h"
 #include "goaprovider.h"
+#include "goaproviderdialog.h"
 #include "goawebdavprovider.h"
 #include "goawebdavprovider-priv.h"
 #include "goaobjectskeletonutils.h"
@@ -390,17 +391,16 @@ ensure_credentials_sync (GoaProvider         *provider,
 
 typedef struct
 {
-  GCancellable *cancellable;
+  GoaProviderDialog *dialog;
+  GoaClient *client;
+  GoaObject *object;
+  gboolean accept_ssl_errors;
 
-  GtkDialog *dialog;
-  GMainLoop *loop;
-
-  GtkWidget *cluebar;
-  GtkWidget *cluebar_label;
-  GtkWidget *connect_button;
-  GtkWidget *account_details;
-  GtkWidget *advanced_details;
-  GtkWidget *progress_grid;
+  GoaDavConfiguration *config;
+  GoaProviderFeatures check_stage;
+  char *check_uri;
+  char *presentation_identity;
+  gboolean is_template;
 
   GtkWidget *uri;
   GtkWidget *username;
@@ -408,42 +408,22 @@ typedef struct
   GtkWidget *webdav_uri;
   GtkWidget *caldav_uri;
   GtkWidget *carddav_uri;
-  gboolean accept_ssl_errors;
-
-  char *account_object_path;
-
-  GoaDavConfiguration *config;
-  GError *error;
 } AddAccountData;
 
-/* ---------------------------------------------------------------------------------------------------- */
-
 static void
-add_entry (GtkWidget     *grid,
-           int            row,
-           const char    *text,
-           GtkWidget    **out_entry)
+add_account_data_free (gpointer user_data)
 {
-  GtkStyleContext *context;
-  GtkWidget *label;
-  GtkWidget *entry;
+  AddAccountData *data = (AddAccountData *)user_data;
 
-  label = gtk_label_new_with_mnemonic (text);
-  context = gtk_widget_get_style_context (label);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
-  gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), label, 0, row, 1, 1);
-
-  entry = gtk_entry_new ();
-  gtk_widget_set_hexpand (entry, TRUE);
-  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-  gtk_grid_attach (GTK_GRID (grid), entry, 1, row, 3, 1);
-
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-  if (out_entry != NULL)
-    *out_entry = entry;
+  g_clear_object (&data->client);
+  g_clear_object (&data->object);
+  g_clear_pointer (&data->config, goa_dav_configuration_free);
+  g_clear_pointer (&data->check_uri, g_free);
+  g_clear_pointer (&data->presentation_identity, g_free);
+  g_free (data);
 }
+
+/* ---------------------------------------------------------------------------------------------------- */
 
 static void
 on_uri_username_or_password_changed (GtkEditable *editable, gpointer user_data)
@@ -453,80 +433,73 @@ on_uri_username_or_password_changed (GtkEditable *editable, gpointer user_data)
   const char *address;
   g_autofree char *uri = NULL;
 
-  address = gtk_entry_get_text (GTK_ENTRY (data->uri));
+  address = gtk_editable_get_text (GTK_EDITABLE (data->uri));
   uri = dav_normalize_uri (address, NULL, NULL);
 
   if (uri != NULL)
     {
-      can_add = gtk_entry_get_text_length (GTK_ENTRY (data->username)) != 0
-                && gtk_entry_get_text_length (GTK_ENTRY (data->password)) != 0;
+      const char *username = gtk_editable_get_text (GTK_EDITABLE (data->username));
+      const char *password = gtk_editable_get_text (GTK_EDITABLE (data->password));
+
+      can_add = ((username != NULL && *username != '\0')
+        && (password != NULL && *password != '\0'));
     }
 
-  gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, can_add);
+  goa_provider_dialog_set_state (data->dialog, can_add
+                                   ? GOA_DIALOG_READY
+                                   : GOA_DIALOG_IDLE);
 }
 
 static void
 create_account_details_ui (GoaProvider    *provider,
-                           GtkDialog      *dialog,
-                           GtkBox         *vbox,
-                           gboolean        new_account,
-                           gboolean        is_template,
-                           AddAccountData *data)
+                           AddAccountData *data,
+                           gboolean        new_account)
 {
-  GtkWidget *grid0;
-  GtkWidget *expander;
-  GtkWidget *label;
-  GtkWidget *spinner;
-  int row;
-  int width;
+  GoaProviderDialog *dialog = GOA_PROVIDER_DIALOG (data->dialog);
+  GtkWidget *group;
 
-  goa_utils_set_dialog_title (provider, dialog, new_account);
+  group = goa_provider_dialog_add_group (dialog, NULL);
+  data->uri = goa_provider_dialog_add_entry (dialog, group, _("_Server"));
+  data->username = goa_provider_dialog_add_entry (dialog, group, _("User_name"));
+  data->password = goa_provider_dialog_add_password_entry (dialog, group, _("_Password"));
 
-  grid0 = gtk_grid_new ();
-  gtk_container_set_border_width (GTK_CONTAINER (grid0), 5);
-  gtk_widget_set_margin_bottom (grid0, 6);
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid0), GTK_ORIENTATION_VERTICAL);
-  gtk_grid_set_row_spacing (GTK_GRID (grid0), 12);
-  gtk_container_add (GTK_CONTAINER (vbox), grid0);
+  if (new_account)
+    {
+      GtkWidget *subgroup;
 
-  data->cluebar = gtk_info_bar_new ();
-  gtk_info_bar_set_message_type (GTK_INFO_BAR (data->cluebar), GTK_MESSAGE_ERROR);
-  gtk_widget_set_hexpand (data->cluebar, TRUE);
-  gtk_widget_set_no_show_all (data->cluebar, TRUE);
-  gtk_container_add (GTK_CONTAINER (grid0), data->cluebar);
+      group = goa_provider_dialog_add_group (dialog, NULL);
+      subgroup = g_object_new (ADW_TYPE_EXPANDER_ROW,
+                               "title", _("Endpoint Settings"),
+                               NULL);
+      adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), subgroup);
 
-  data->cluebar_label = gtk_label_new ("");
-  gtk_label_set_line_wrap (GTK_LABEL (data->cluebar_label), TRUE);
-  gtk_container_add (GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (data->cluebar))),
-                     data->cluebar_label);
+      data->webdav_uri = goa_provider_dialog_add_entry (dialog, subgroup, _("Files Endpoint"));
+      data->caldav_uri = goa_provider_dialog_add_entry (dialog, subgroup, _("CalDAV Endpoint"));
+      data->carddav_uri = goa_provider_dialog_add_entry (dialog, subgroup, _("CardDAV Endpoint"));
+    }
 
-  data->account_details = gtk_grid_new ();
-  gtk_grid_set_column_spacing (GTK_GRID (data->account_details), 12);
-  gtk_grid_set_row_spacing (GTK_GRID (data->account_details), 12);
-  gtk_container_add (GTK_CONTAINER (grid0), data->account_details);
+  if (data->object != NULL)
+    {
+      GoaAccount *account = goa_object_peek_account (data->object);
+      const char *username = goa_account_get_identity (account);
+      const char *uri = goa_util_lookup_keyfile_string (data->object, "Uri");
 
-  row = 0;
-  add_entry (data->account_details, row++, _("_URL"), &data->uri);
-  add_entry (data->account_details, row++, _("User_name"), &data->username);
-  add_entry (data->account_details, row++, _("_Password"), &data->password);
-  gtk_entry_set_visibility (GTK_ENTRY (data->password), FALSE);
+      if (username == NULL || username[0] == '\0')
+        data->is_template = TRUE;
 
-  expander = gtk_expander_new (_("Advanced"));
-  gtk_container_add (GTK_CONTAINER (grid0), expander);
+      gtk_editable_set_text (GTK_EDITABLE (data->uri), uri);
+      gtk_editable_set_editable (GTK_EDITABLE (data->uri), FALSE);
 
-  data->advanced_details = gtk_grid_new ();
-  gtk_grid_set_column_spacing (GTK_GRID (data->advanced_details), 12);
-  gtk_grid_set_row_spacing (GTK_GRID (data->advanced_details), 12);
-  gtk_container_add (GTK_CONTAINER (expander), data->advanced_details);
-
-  row = 0;
-  add_entry (data->advanced_details, row++, _("Files Endpoint"), &data->webdav_uri);
-  add_entry (data->advanced_details, row++, _("CalDAV Endpoint"), &data->caldav_uri);
-  add_entry (data->advanced_details, row++, _("CardDAV Endpoint"), &data->carddav_uri);
+      if (!data->is_template)
+        {
+          gtk_editable_set_text (GTK_EDITABLE (data->username), username);
+          gtk_editable_set_editable (GTK_EDITABLE (data->username), FALSE);
+        }
+    }
 
   if (new_account)
     gtk_widget_grab_focus (data->uri);
-  else if (is_template)
+  else if (data->is_template)
     gtk_widget_grab_focus (data->username);
   else
     gtk_widget_grab_focus (data->password);
@@ -534,598 +507,534 @@ create_account_details_ui (GoaProvider    *provider,
   g_signal_connect (data->uri, "changed", G_CALLBACK (on_uri_username_or_password_changed), data);
   g_signal_connect (data->username, "changed", G_CALLBACK (on_uri_username_or_password_changed), data);
   g_signal_connect (data->password, "changed", G_CALLBACK (on_uri_username_or_password_changed), data);
-
-  gtk_dialog_add_button (data->dialog, _("_Cancel"), GTK_RESPONSE_CANCEL);
-  data->connect_button = gtk_dialog_add_button (data->dialog, _("C_onnect"), GTK_RESPONSE_OK);
-  gtk_dialog_set_default_response (data->dialog, GTK_RESPONSE_OK);
-  gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, FALSE);
-
-  data->progress_grid = gtk_grid_new ();
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (data->progress_grid), GTK_ORIENTATION_HORIZONTAL);
-  gtk_grid_set_column_spacing (GTK_GRID (data->progress_grid), 3);
-  gtk_container_add (GTK_CONTAINER (grid0), data->progress_grid);
-
-  spinner = gtk_spinner_new ();
-  gtk_widget_set_opacity (spinner, 0.0);
-  gtk_widget_set_size_request (spinner, 20, 20);
-  gtk_spinner_start (GTK_SPINNER (spinner));
-  gtk_container_add (GTK_CONTAINER (data->progress_grid), spinner);
-
-  label = gtk_label_new (_("Connecting…"));
-  gtk_widget_set_opacity (label, 0.0);
-  gtk_container_add (GTK_CONTAINER (data->progress_grid), label);
-
-  if (new_account)
-    {
-      gtk_window_get_size (GTK_WINDOW (data->dialog), &width, NULL);
-      gtk_window_set_default_size (GTK_WINDOW (data->dialog), width, -1);
-    }
-  else
-    {
-      GtkWindow *parent;
-
-      /* Keep in sync with GoaPanelAddAccountDialog in
-       * gnome-control-center.
-       */
-      parent = gtk_window_get_transient_for (GTK_WINDOW (data->dialog));
-      if (parent != NULL)
-        {
-          gtk_window_get_size (parent, &width, NULL);
-          gtk_window_set_default_size (GTK_WINDOW (data->dialog), (int) (0.5 * width), -1);
-        }
-    }
-}
-
-static void
-show_progress_ui (AddAccountData *data,
-                  gboolean        active)
-{
-  GList *children;
-  GList *l;
-
-  children = gtk_container_get_children (GTK_CONTAINER (data->progress_grid));
-  for (l = children; l != NULL; l = l->next)
-    {
-      GtkWidget *widget = GTK_WIDGET (l->data);
-
-      gtk_widget_set_opacity (widget, active ? 1.0 : 0.0);
-    }
-
-  g_list_free (children);
-  gtk_widget_set_sensitive (data->connect_button, !active);
-  gtk_widget_set_sensitive (data->account_details, !active);
-  gtk_widget_set_sensitive (data->advanced_details, !active);
-}
-
-static gboolean
-show_error_ui (AddAccountData *data,
-               const char     *summary,
-               int            *err_out)
-{
-  /* We may have been cancelled with or without an error */
-  if (g_cancellable_is_cancelled (data->cancellable))
-    {
-      g_prefix_error (&data->error,
-                      _("Dialog was dismissed (%s, %d): "),
-                      g_quark_to_string (data->error->domain),
-                      data->error->code);
-      data->error->domain = GOA_ERROR;
-      data->error->code = GOA_ERROR_DIALOG_DISMISSED;
-    }
-  else if (data->error != NULL)
-    {
-      g_autofree char *markup = NULL;
-
-      if (data->error->code == GOA_ERROR_SSL)
-        {
-          gtk_button_set_label (GTK_BUTTON (data->connect_button), _("_Ignore"));
-          data->accept_ssl_errors = TRUE;
-        }
-      else
-        {
-          gtk_button_set_label (GTK_BUTTON (data->connect_button), _("_Try Again"));
-          data->accept_ssl_errors = FALSE;
-        }
-
-      markup = g_strdup_printf ("<b>%s:</b>\n%s", summary, data->error->message);
-      gtk_label_set_markup (GTK_LABEL (data->cluebar_label), markup);
-
-      gtk_widget_set_no_show_all (data->cluebar, FALSE);
-      gtk_widget_show_all (data->cluebar);
-    }
-
-  /* Stop indicating progress and report the error code */
-  if (data->error != NULL)
-    {
-      show_progress_ui (data, FALSE);
-
-      if (err_out)
-        *err_out = data->error->code;
-
-      return TRUE;
-    }
-
-  return FALSE;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-add_account_cb (GoaManager   *manager,
-                GAsyncResult *res,
-                gpointer      user_data)
+add_account_credentials_cb (GoaManager   *manager,
+                            GAsyncResult *res,
+                            gpointer      user_data)
 {
-  AddAccountData *data = user_data;
-  goa_manager_call_add_account_finish (manager,
-                                       &data->account_object_path,
-                                       res,
-                                       &data->error);
-  g_main_loop_quit (data->loop);
+  g_autoptr (GTask) task = G_TASK (user_data);
+  AddAccountData *data = g_task_get_task_data (task);
+  GDBusObject *ret = NULL;
+  g_autofree char *object_path = NULL;
+  g_autoptr (GError) error = NULL;
+
+  if (goa_provider_task_return_if_completed (task))
+    return;
+
+  if (!goa_manager_call_add_account_finish (manager, &object_path, res, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  ret = g_dbus_object_manager_get_object (goa_client_get_object_manager (data->client),
+                                          object_path);
+  g_task_return_pointer (task, ret, g_object_unref);
 }
 
 static void
-check_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
+add_account_credentials (GTask *task)
 {
-  GoaDavClient *client = GOA_DAV_CLIENT (source_object);
-  AddAccountData *data = user_data;
-
-  goa_dav_client_check_finish (client, res, &data->error);
-  g_main_loop_quit (data->loop);
-}
-
-static void
-discover_cb (GObject      *source_object,
-             GAsyncResult *res,
-             gpointer      user_data)
-{
-  GoaDavClient *client = GOA_DAV_CLIENT (source_object);
-  AddAccountData *data = user_data;
-
-  g_clear_pointer (&data->config, goa_dav_configuration_free);
-  data->config = goa_dav_client_discover_finish (client, res, &data->error);
-  g_main_loop_quit (data->loop);
-}
-
-static void
-dialog_response_cb (GtkDialog *dialog,
-                    gint       response_id,
-                    gpointer   user_data)
-{
-  AddAccountData *data = user_data;
-
-  if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_DELETE_EVENT)
-    g_cancellable_cancel (data->cancellable);
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-static GoaObject *
-add_account (GoaProvider    *provider,
-             GoaClient      *client,
-             GtkDialog      *dialog,
-             GtkBox         *vbox,
-             GError        **error)
-{
-  AddAccountData data;
+  GoaProvider *provider = g_task_get_source_object (task);
+  AddAccountData *data = g_task_get_task_data (task);
   GVariantBuilder credentials;
   GVariantBuilder details;
-  GoaObject *ret = NULL;
-  const char *uri_text;
   const char *password;
   const char *username;
-  const char *provider_type;
-  const char *caldav_text;
-  const char *carddav_text;
-  const char *webdav_text;
-  g_autoptr (GoaDavClient) dav_client = NULL;
-  g_autofree char *presentation_identity = NULL;
-  g_autofree char *server = NULL;
-  g_autofree char *uri = NULL;
-  int response;
-  int err = 0;
 
-  memset (&data, 0, sizeof (AddAccountData));
-  data.cancellable = g_cancellable_new ();
-  data.loop = g_main_loop_new (NULL, FALSE);
-  data.dialog = dialog;
-  data.error = NULL;
-
-  create_account_details_ui (provider, dialog, vbox, TRUE, FALSE, &data);
-  gtk_widget_show_all (GTK_WIDGET (vbox));
-  g_signal_connect (dialog, "response", G_CALLBACK (dialog_response_cb), &data);
-
-  dav_client = goa_dav_client_new ();
-
-check_again:
-  response = gtk_dialog_run (dialog);
-  if (response != GTK_RESPONSE_OK)
-    {
-      g_set_error (&data.error,
-                   GOA_ERROR,
-                   GOA_ERROR_DIALOG_DISMISSED,
-                   _("Dialog was dismissed"));
-      goto out;
-    }
-
-  uri_text = gtk_entry_get_text (GTK_ENTRY (data.uri));
-  username = gtk_entry_get_text (GTK_ENTRY (data.username));
-  password = gtk_entry_get_text (GTK_ENTRY (data.password));
-
-  g_clear_pointer (&uri, g_free);
-  g_clear_pointer (&server, g_free);
-  g_clear_pointer (&presentation_identity, g_free);
-
-  uri = dav_normalize_uri (uri_text, NULL, &server);
-  if (strchr (username, '@') != NULL)
-    presentation_identity = g_strdup (username);
-  else
-    presentation_identity = g_strconcat (username, "@", server, NULL);
-
-  /* See if there's already an account of this type with the
-   * given identity
-   */
-  provider_type = goa_provider_get_provider_type (provider);
-  if (!goa_utils_check_duplicate (client,
-                                  username,
-                                  presentation_identity,
-                                  provider_type,
-                                  (GoaPeekInterfaceFunc) goa_object_peek_password_based,
-                                  &data.error))
-    goto out;
-
-  g_clear_object (&data.cancellable);
-  data.cancellable = g_cancellable_new ();
-
-  g_clear_pointer (&data.config, goa_dav_configuration_free);
-  goa_dav_client_discover (dav_client,
-                           uri,
-                           username,
-                           password,
-                           data.accept_ssl_errors,
-                           data.cancellable,
-                           discover_cb,
-                           &data);
-  show_progress_ui (&data, TRUE);
-  g_main_loop_run (data.loop);
-
-  if (show_error_ui (&data, _("Error connecting to server"), &err))
-    {
-      if (err == GOA_ERROR_DIALOG_DISMISSED)
-        goto out;
-
-      g_clear_error (&data.error);
-      goto check_again;
-    }
-
-  /* WebDAV: discover so we get the redirected URI for GVfs, but don't
-   * override previously discovered CalDAV/CardDAV endpoints.
-   */
-  webdav_text = gtk_entry_get_text (GTK_ENTRY (data.webdav_uri));
-  if (webdav_text != NULL && *webdav_text != '\0')
-    {
-      GoaDavConfiguration *config = g_steal_pointer (&data.config);
-      g_autofree char *check_uri = NULL;
-
-      check_uri = dav_normalize_uri (uri, webdav_text, NULL);
-      goa_dav_client_discover (dav_client,
-                               check_uri,
-                               username,
-                               password,
-                               data.accept_ssl_errors,
-                               data.cancellable,
-                               discover_cb,
-                               &data);
-      g_main_loop_run (data.loop);
-
-      if (show_error_ui (&data, _("Error connecting to Files endpoint"), &err))
-        {
-          if (err == GOA_ERROR_DIALOG_DISMISSED)
-            goto out;
-
-          g_clear_error (&data.error);
-          goto check_again;
-        }
-
-      g_set_str (&config->webdav_uri, data.config->webdav_uri);
-      g_clear_pointer (&data.config, goa_dav_configuration_free);
-      data.config = g_steal_pointer (&config);
-    }
-
-  /* CalDAV/CardDAV: user-defined URIs override discovered services even if
-   * the server doesn't claim support. They may be absolute or relative to
-   * the server URI.
-   */
-  caldav_text = gtk_entry_get_text (GTK_ENTRY (data.caldav_uri));
-  if (caldav_text != NULL && *caldav_text != '\0')
-    {
-      g_autofree char *check_uri = NULL;
-
-      check_uri = dav_normalize_uri (uri, caldav_text, NULL);
-      goa_dav_client_check (dav_client,
-                            check_uri,
-                            username,
-                            password,
-                            data.accept_ssl_errors,
-                            data.cancellable,
-                            check_cb,
-                            &data);
-      g_main_loop_run (data.loop);
-
-      if (show_error_ui (&data, _("Error connecting to CalDAV endpoint"), &err))
-        {
-          if (err == GOA_ERROR_DIALOG_DISMISSED)
-            goto out;
-
-          g_clear_error (&data.error);
-          goto check_again;
-        }
-
-      g_set_str (&data.config->caldav_uri, check_uri);
-    }
-
-  carddav_text = gtk_entry_get_text (GTK_ENTRY (data.carddav_uri));
-  if (carddav_text != NULL && *carddav_text != '\0')
-    {
-      g_autofree char *check_uri = NULL;
-
-      check_uri = dav_normalize_uri (uri, carddav_text, NULL);
-      goa_dav_client_check (dav_client,
-                            check_uri,
-                            username,
-                            password,
-                            data.accept_ssl_errors,
-                            data.cancellable,
-                            check_cb,
-                            &data);
-      g_main_loop_run (data.loop);
-
-      if (show_error_ui (&data, _("Error connecting to CardDAV endpoint"), &err))
-        {
-          if (err == GOA_ERROR_DIALOG_DISMISSED)
-            goto out;
-
-          g_clear_error (&data.error);
-          goto check_again;
-        }
-
-      g_set_str (&data.config->carddav_uri, check_uri);
-    }
-
-  g_debug ("%s(): configured \"%s\" (WebDAV %s, CalDAV %s, CardDAV %s)",
-           G_STRFUNC, server,
-           data.config->webdav_uri,
-           data.config->caldav_uri,
-           data.config->carddav_uri);
-
-  show_progress_ui (&data, FALSE);
-  gtk_widget_hide (GTK_WIDGET (dialog));
+  /* Account is confirmed */
+  username = gtk_editable_get_text (GTK_EDITABLE (data->username));
+  password = gtk_editable_get_text (GTK_EDITABLE (data->password));
 
   g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (password));
 
   g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
-  g_variant_builder_add (&details, "{ss}", "Uri", data.config->webdav_uri);
-  g_variant_builder_add (&details, "{ss}", "CalendarEnabled", data.config->caldav_uri ? "true" : "false");
-  g_variant_builder_add (&details, "{ss}", "CalDavUri", data.config->caldav_uri ? data.config->caldav_uri : "");
-  g_variant_builder_add (&details, "{ss}", "ContactsEnabled", data.config->carddav_uri ? "true" : "false");
-  g_variant_builder_add (&details, "{ss}", "CardDavUri", data.config->carddav_uri ? data.config->carddav_uri : "");
+  g_variant_builder_add (&details, "{ss}", "Uri", data->config->webdav_uri);
+  g_variant_builder_add (&details, "{ss}", "CalendarEnabled", data->config->caldav_uri ? "true" : "false");
+  g_variant_builder_add (&details, "{ss}", "CalDavUri", data->config->caldav_uri ? data->config->caldav_uri : "");
+  g_variant_builder_add (&details, "{ss}", "ContactsEnabled", data->config->carddav_uri ? "true" : "false");
+  g_variant_builder_add (&details, "{ss}", "CardDavUri", data->config->carddav_uri ? data->config->carddav_uri : "");
   g_variant_builder_add (&details, "{ss}", "FilesEnabled", "true");
-  g_variant_builder_add (&details, "{ss}", "AcceptSslErrors", (data.accept_ssl_errors) ? "true" : "false");
+  g_variant_builder_add (&details, "{ss}", "AcceptSslErrors", (data->accept_ssl_errors) ? "true" : "false");
 
-  /* OK, everything is dandy, add the account */
-  /* we want the GoaClient to update before this method returns (so it
-   * can create a proxy for the new object) so run the mainloop while
-   * waiting for this to complete
-   */
-  goa_manager_call_add_account (goa_client_get_manager (client),
+  goa_manager_call_add_account (goa_client_get_manager (data->client),
                                 goa_provider_get_provider_type (provider),
                                 username,
-                                presentation_identity,
+                                data->presentation_identity,
                                 g_variant_builder_end (&credentials),
                                 g_variant_builder_end (&details),
-                                NULL, /* GCancellable* */
-                                (GAsyncReadyCallback) add_account_cb,
-                                &data);
-  g_main_loop_run (data.loop);
-  if (data.error != NULL)
-    goto out;
+                                g_task_get_cancellable (task),
+                                (GAsyncReadyCallback) add_account_credentials_cb,
+                                g_object_ref (task));
+}
 
-  ret = GOA_OBJECT (g_dbus_object_manager_get_object (goa_client_get_object_manager (client),
-                                                      data.account_object_path));
+static gboolean
+add_account_handle_response (GTask               *task,
+                             GoaDavConfiguration *config)
+{
+  AddAccountData *data = g_task_get_task_data (task);
+  const char *base_uri = NULL;
+  const char *check_uri = NULL;
+  g_autoptr (GError) error = NULL;
 
-out:
-  /* We might have an object even when data.error is set.
-   * eg., if we failed to store the credentials in the keyring.
-   */
-  if (data.error != NULL)
-    g_propagate_error (error, data.error);
+  base_uri = gtk_editable_get_text (GTK_EDITABLE (data->uri));
+  g_clear_pointer (&data->check_uri, g_free);
+
+  while (TRUE)
+    {
+      switch (data->check_stage)
+        {
+        /* This is the primary discovery stage.
+         */
+        case GOA_PROVIDER_FEATURE_INVALID:
+          if (config != NULL)
+            {
+              g_clear_pointer (&data->config, goa_dav_configuration_free);
+              data->config = g_steal_pointer (&config);
+            }
+
+          data->check_stage = GOA_PROVIDER_FEATURE_FILES;
+          check_uri = gtk_editable_get_text (GTK_EDITABLE (data->webdav_uri));
+          break;
+
+        /* WebDAV: discover so we get the redirected URI for GVfs, but don't
+         * override previously discovered CalDAV/CardDAV endpoints.
+         */
+        case GOA_PROVIDER_FEATURE_FILES:
+          if (config != NULL)
+            {
+              g_set_str (&data->config->webdav_uri, config->webdav_uri);
+              g_clear_pointer (&config, goa_dav_configuration_free);
+            }
+
+          data->check_stage = GOA_PROVIDER_FEATURE_CALENDAR;
+          check_uri = gtk_editable_get_text (GTK_EDITABLE (data->caldav_uri));
+          break;
+
+        /* CalDAV/CardDAV: user-defined URIs override discovered services even
+         * if the server doesn't claim support.
+         */
+        case GOA_PROVIDER_FEATURE_CALENDAR:
+          if (data->check_uri != NULL)
+            {
+              g_free (data->config->caldav_uri);
+              data->config->caldav_uri = g_steal_pointer (&data->check_uri);
+            }
+
+          data->check_stage = GOA_PROVIDER_FEATURE_CONTACTS;
+          check_uri = gtk_editable_get_text (GTK_EDITABLE (data->carddav_uri));
+          break;
+
+        case GOA_PROVIDER_FEATURE_CONTACTS:
+          if (data->check_uri != NULL)
+            {
+              g_free (data->config->carddav_uri);
+              data->config->carddav_uri = g_steal_pointer (&data->check_uri);
+            }
+
+          /* Set the next stage to default to add_account_credentials() */
+          data->check_stage = GOA_PROVIDER_FEATURE_TICKETING;
+          break;
+
+        default:
+          add_account_credentials (task);
+          return FALSE;
+        }
+
+      /* The user entered a URI to be checked */
+      if (check_uri != NULL && *check_uri != '\0')
+        break;
+    }
+
+  /* If the user entered a bunk URI, they probably want to be notified */
+  data->check_uri = dav_normalize_uri (base_uri, check_uri, NULL);
+  if (data->check_uri == NULL)
+    {
+      g_set_error (&error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Invalid URI: %s"),
+                   check_uri);
+      goa_provider_dialog_report_error (data->dialog, error);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static void
+add_account_check_cb (GoaDavClient *client,
+                      GAsyncResult *result,
+                      gpointer      user_data)
+{
+  g_autoptr (GTask) task = G_TASK (user_data);
+  AddAccountData *data = g_task_get_task_data (task);
+  g_autoptr (GError) error = NULL;
+
+  if (goa_provider_task_return_if_completed (task))
+    return;
+
+  if (!goa_dav_client_check_finish (client, result, &error))
+    {
+      goa_provider_dialog_report_error (data->dialog, error);
+      return;
+    }
+
+  if (add_account_handle_response (task, NULL))
+    {
+      const char *username = NULL;
+      const char *password = NULL;
+
+      username = gtk_editable_get_text (GTK_EDITABLE (data->username));
+      password = gtk_editable_get_text (GTK_EDITABLE (data->password));
+
+      goa_dav_client_check (client,
+                            data->check_uri,
+                            username,
+                            password,
+                            data->accept_ssl_errors,
+                            g_task_get_cancellable (task),
+                            (GAsyncReadyCallback) add_account_check_cb,
+                            g_object_ref (task));
+    }
+}
+
+static void
+add_account_discover_cb (GoaDavClient *client,
+                         GAsyncResult *result,
+                         gpointer      user_data)
+{
+  g_autoptr (GTask) task = G_TASK (user_data);
+  AddAccountData *data = g_task_get_task_data (task);
+  GoaDavConfiguration *config = NULL;
+  const char *username = NULL;
+  const char *password = NULL;
+  g_autoptr (GError) error = NULL;
+
+  if (goa_provider_task_return_if_completed (task))
+    return;
+
+  config = goa_dav_client_discover_finish (client, result, &error);
+  if (config == NULL)
+    {
+      goa_provider_dialog_report_error (data->dialog, error);
+      return;
+    }
+
+  if (!add_account_handle_response (task, config))
+    return;
+
+  username = gtk_editable_get_text (GTK_EDITABLE (data->username));
+  password = gtk_editable_get_text (GTK_EDITABLE (data->password));
+
+  /* WebDAV needs discovery to get the redirected URI for GVfs */
+  if (data->check_stage == GOA_PROVIDER_FEATURE_FILES)
+    {
+      goa_dav_client_discover (client,
+                               data->check_uri,
+                               username,
+                               password,
+                               data->accept_ssl_errors,
+                               g_task_get_cancellable (task),
+                               (GAsyncReadyCallback) add_account_discover_cb,
+                               g_object_ref (task));
+    }
   else
-    g_assert (ret != NULL);
+    {
+      goa_dav_client_check (client,
+                            data->check_uri,
+                            username,
+                            password,
+                            data->accept_ssl_errors,
+                            g_task_get_cancellable (task),
+                            (GAsyncReadyCallback) add_account_check_cb,
+                            g_object_ref (task));
+    }
+}
 
-  g_signal_handlers_disconnect_by_func (dialog, dialog_response_cb, &data);
+static void
+add_account_action_cb (GTask *task)
+{
+  GoaProvider *provider = g_task_get_source_object (task);
+  AddAccountData *data = g_task_get_task_data (task);
+  const char *uri_text;
+  const char *password;
+  const char *username;
+  const char *provider_type;
+  g_autoptr (GoaDavClient) dav_client = NULL;
+  g_autofree char *server = NULL;
+  g_autofree char *uri = NULL;
+  g_autoptr (GError) error = NULL;
 
-  g_clear_pointer (&data.account_object_path, g_free);
-  g_clear_pointer (&data.config, goa_dav_configuration_free);
-  g_clear_pointer (&data.loop, g_main_loop_unref);
-  g_clear_object (&data.cancellable);
+  if (goa_provider_dialog_get_state (data->dialog) != GOA_DIALOG_BUSY)
+    return;
 
-  return ret;
+  uri_text = gtk_editable_get_text (GTK_EDITABLE (data->uri));
+  username = gtk_editable_get_text (GTK_EDITABLE (data->username));
+  password = gtk_editable_get_text (GTK_EDITABLE (data->password));
+
+  g_free (data->presentation_identity);
+  uri = dav_normalize_uri (uri_text, NULL, &server);
+  if (strchr (username, '@') != NULL)
+    data->presentation_identity = g_strdup (username);
+  else
+    data->presentation_identity = g_strconcat (username, "@", server, NULL);
+
+  /* If this is duplicate account we're finished */
+  provider_type = goa_provider_get_provider_type (provider);
+  if (!goa_utils_check_duplicate (data->client,
+                                  username,
+                                  data->presentation_identity,
+                                  provider_type,
+                                  (GoaPeekInterfaceFunc) goa_object_peek_password_based,
+                                  &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  /* Confirm the account */
+  g_clear_pointer (&data->config, goa_dav_configuration_free);
+  dav_client = goa_dav_client_new ();
+  goa_dav_client_discover (dav_client,
+                           uri,
+                           username,
+                           password,
+                           data->accept_ssl_errors,
+                           g_task_get_cancellable (task),
+                           (GAsyncReadyCallback) add_account_discover_cb,
+                           g_object_ref (task));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static gboolean
-refresh_account (GoaProvider    *provider,
-                 GoaClient      *client,
-                 GoaObject      *object,
-                 GtkWindow      *parent,
-                 GError        **error)
+static void
+add_account (GoaProvider         *provider,
+             GoaClient           *client,
+             GtkWindow           *parent,
+             GCancellable        *cancellable,
+             GAsyncReadyCallback  callback,
+             gpointer             user_data)
 {
-  AddAccountData data;
+  AddAccountData *data;
+  g_autoptr (GTask) task = NULL;
+
+  data = g_new0 (AddAccountData, 1);
+  data->dialog = goa_provider_dialog_new (provider, client, parent);
+  data->client = g_object_ref (client);
+
+  task = g_task_new (provider, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
+  g_task_set_source_tag (task, add_account);
+  g_task_set_task_data (task, data, add_account_data_free);
+  goa_provider_task_bind_window (task, GTK_WINDOW (data->dialog));
+
+  create_account_details_ui (provider, data, TRUE);
+  g_signal_connect_object (data->dialog,
+                           "notify::state",
+                           G_CALLBACK (add_account_action_cb),
+                           task,
+                           G_CONNECT_SWAPPED);
+  gtk_window_present (GTK_WINDOW (data->dialog));
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
+refresh_account_credentials_cb (GoaAccount   *account,
+                                GAsyncResult *res,
+                                gpointer      user_data)
+{
+  g_autoptr (GTask) task = G_TASK (user_data);
+  GError *error = NULL;
+
+  if (!goa_account_call_ensure_credentials_finish (account, NULL, res, &error))
+    {
+      g_task_return_error (task, error);
+      return;
+    }
+
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
+refresh_account_full_cb (GoaManager   *manager,
+                         GAsyncResult *res,
+                         gpointer      user_data)
+{
+  g_autoptr (GTask) task = G_TASK (user_data);
+  AddAccountData *data = g_task_get_task_data (task);
+  g_autofree char *object_path = NULL;
+  g_autoptr (GError) error = NULL;
+
+  if (goa_provider_task_return_if_completed (task))
+    return;
+
+  if (!goa_manager_call_add_account_finish (manager, &object_path, res, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  goa_account_call_ensure_credentials (goa_object_peek_account (data->object),
+                                       g_task_get_cancellable (task),
+                                       (GAsyncReadyCallback) refresh_account_credentials_cb,
+                                       g_object_ref (task));
+}
+
+static void
+refresh_account_check_cb (GoaDavClient *client,
+                          GAsyncResult *result,
+                          gpointer      user_data)
+{
+  g_autoptr (GTask) task = G_TASK (user_data);
+  GoaProvider *provider = g_task_get_source_object (task);
+  AddAccountData *data = g_task_get_task_data (task);
   GVariantBuilder credentials;
-  GoaAccount *account;
-  g_autoptr (GoaDavClient) dav_client = NULL;
-  GtkWidget *dialog;
-  GtkWidget *vbox;
-  gboolean is_template = FALSE;
-  gboolean ret = FALSE;
-  const char *password;
   const char *username;
-  g_autofree char *uri = NULL;
-  int err = 0;
-  int response;
+  const char *password;
+  g_autoptr (GError) error = NULL;
 
-  g_return_val_if_fail (GOA_IS_WEBDAV_PROVIDER (provider), FALSE);
-  g_return_val_if_fail (GOA_IS_CLIENT (client), FALSE);
-  g_return_val_if_fail (GOA_IS_OBJECT (object), FALSE);
-  g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), FALSE);
-  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+  if (goa_provider_task_return_if_completed (task))
+    return;
 
-  dialog = gtk_dialog_new_with_buttons (NULL,
-                                        parent,
-                                        GTK_DIALOG_MODAL
-                                        | GTK_DIALOG_DESTROY_WITH_PARENT
-                                        | GTK_DIALOG_USE_HEADER_BAR,
-                                        NULL,
-                                        NULL);
-  gtk_container_set_border_width (GTK_CONTAINER (dialog), 12);
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-
-  vbox = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-  gtk_box_set_spacing (GTK_BOX (vbox), 12);
-
-  memset (&data, 0, sizeof (AddAccountData));
-  data.cancellable = g_cancellable_new ();
-  data.loop = g_main_loop_new (NULL, FALSE);
-  data.dialog = GTK_DIALOG (dialog);
-  data.error = NULL;
-
-  account = goa_object_peek_account (object);
-  username = goa_account_get_identity (account);
-  if (username == NULL || username[0] == '\0')
-    is_template = TRUE;
-
-  create_account_details_ui (provider, GTK_DIALOG (dialog), GTK_BOX (vbox), FALSE, is_template, &data);
-
-  data.accept_ssl_errors = goa_util_lookup_keyfile_boolean (object, "AcceptSslErrors");
-  uri = goa_util_lookup_keyfile_string (object, "Uri");
-  gtk_entry_set_text (GTK_ENTRY (data.uri), uri);
-  gtk_editable_set_editable (GTK_EDITABLE (data.uri), FALSE);
-
-  if (!is_template)
+  if (!goa_dav_client_check_finish (client, result, &error))
     {
-      gtk_entry_set_text (GTK_ENTRY (data.username), username);
-      gtk_editable_set_editable (GTK_EDITABLE (data.username), FALSE);
+      goa_provider_dialog_report_error (data->dialog, error);
+      return;
     }
 
-  gtk_widget_show_all (dialog);
-  g_signal_connect (dialog, "response", G_CALLBACK (dialog_response_cb), &data);
+  username = gtk_editable_get_text (GTK_EDITABLE (data->username));
+  password = gtk_editable_get_text (GTK_EDITABLE (data->password));
 
-  dav_client = goa_dav_client_new ();
-
-check_again:
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-  if (response != GTK_RESPONSE_OK)
-    {
-      g_set_error (&data.error,
-                   GOA_ERROR,
-                   GOA_ERROR_DIALOG_DISMISSED,
-                   _("Dialog was dismissed"));
-      goto out;
-    }
-
-  if (is_template)
-    username = gtk_entry_get_text (GTK_ENTRY (data.username));
-
-  password = gtk_entry_get_text (GTK_ENTRY (data.password));
-
-  g_clear_object (&data.cancellable);
-  data.cancellable = g_cancellable_new ();
-
-  goa_dav_client_check (dav_client,
-                        uri,
-                        username,
-                        password,
-                        data.accept_ssl_errors,
-                        data.cancellable,
-                        check_cb,
-                        &data);
-  show_progress_ui (&data, TRUE);
-  g_main_loop_run (data.loop);
-
-  if (show_error_ui (&data, _("Error connecting to WebDAV server"), &err))
-    {
-      if (err == GOA_ERROR_DIALOG_DISMISSED)
-        goto out;
-
-      g_clear_error (&data.error);
-      goto check_again;
-    }
-
-  /* TODO: run in worker thread */
+  /* Account is confirmed */
   g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (password));
 
-  if (is_template)
+  if (data->is_template)
     {
       GVariantBuilder details;
-      GoaManager *manager;
+      GoaAccount *account;
       const char *id;
       const char *provider_type;
-      g_autofree char *dummy = NULL;
-      g_autofree char *presentation_identity = NULL;
-      g_autofree char *server = NULL;
 
-      manager = goa_client_get_manager (client);
+      account = goa_object_peek_account (data->object);
       id = goa_account_get_id (account);
-      provider_type = goa_provider_get_provider_type (provider);
-
-      dummy = dav_normalize_uri (uri, NULL, &server);
-      presentation_identity = g_strconcat (username, "@", server, NULL);
 
       g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
       g_variant_builder_add (&details, "{ss}", "Id", id);
 
-      goa_manager_call_add_account (manager,
+      provider_type = goa_provider_get_provider_type (provider);
+      goa_manager_call_add_account (goa_client_get_manager (data->client),
                                     provider_type,
                                     username,
-                                    presentation_identity,
+                                    data->presentation_identity,
                                     g_variant_builder_end (&credentials),
                                     g_variant_builder_end (&details),
-                                    NULL, /* GCancellable* */
-                                    (GAsyncReadyCallback) add_account_cb,
-                                    &data);
-
-      g_main_loop_run (data.loop);
-      if (data.error != NULL)
-        goto out;
+                                    g_task_get_cancellable (task),
+                                    (GAsyncReadyCallback) refresh_account_full_cb,
+                                    g_object_ref (task));
+      return;
     }
-  else
+
+  // TODO: run in worker thread
+  if (!goa_utils_store_credentials_for_object_sync (provider,
+                                                    data->object,
+                                                    g_variant_builder_end (&credentials),
+                                                    g_task_get_cancellable (task),
+                                                    &error))
     {
-      if (!goa_utils_store_credentials_for_object_sync (provider,
-                                                        object,
-                                                        g_variant_builder_end (&credentials),
-                                                        NULL, /* GCancellable */
-                                                        &data.error))
-        goto out;
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
     }
 
-  goa_account_call_ensure_credentials (account,
-                                       NULL, /* GCancellable */
-                                       NULL, NULL); /* callback, user_data */
+  goa_account_call_ensure_credentials (goa_object_peek_account (data->object),
+                                       g_task_get_cancellable (task),
+                                       (GAsyncReadyCallback) refresh_account_credentials_cb,
+                                       g_object_ref (task));
+}
 
-  ret = TRUE;
+static void
+refresh_account_action_cb (GTask *task)
+{
+  AddAccountData *data = g_task_get_task_data (task);
+  const char *uri_text;
+  const char *password;
+  const char *username;
+  g_autoptr (GoaDavClient) dav_client = NULL;
+  g_autofree char *server = NULL;
+  g_autofree char *uri = NULL;
 
-out:
-  if (data.error != NULL)
-    g_propagate_error (error, data.error);
+  if (goa_provider_dialog_get_state (data->dialog) != GOA_DIALOG_BUSY)
+    return;
 
-  gtk_widget_destroy (dialog);
-  g_clear_pointer (&data.account_object_path, g_free);
-  g_clear_pointer (&data.loop, g_main_loop_unref);
-  g_clear_object (&data.cancellable);
-  return ret;
+  uri_text = gtk_editable_get_text (GTK_EDITABLE (data->uri));
+  username = gtk_editable_get_text (GTK_EDITABLE (data->username));
+  password = gtk_editable_get_text (GTK_EDITABLE (data->password));
+
+  g_free (data->presentation_identity);
+  uri = dav_normalize_uri (uri_text, NULL, &server);
+  if (strchr (username, '@') != NULL)
+    g_set_str (&data->presentation_identity, username);
+  else
+    data->presentation_identity = g_strconcat (username, "@", server, NULL);
+
+  /* Confirm the account */
+  dav_client = goa_dav_client_new ();
+  goa_dav_client_check (dav_client,
+                        uri,
+                        username,
+                        password,
+                        data->accept_ssl_errors,
+                        g_task_get_cancellable (task),
+                        (GAsyncReadyCallback) refresh_account_check_cb,
+                        g_object_ref (task));
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
+refresh_account (GoaProvider         *provider,
+                 GoaClient           *client,
+                 GoaObject           *object,
+                 GtkWindow           *parent,
+                 GCancellable        *cancellable,
+                 GAsyncReadyCallback  callback,
+                 gpointer             user_data)
+{
+  AddAccountData *data;
+  g_autoptr (GTask) task = NULL;
+
+  g_assert (GOA_IS_WEBDAV_PROVIDER (provider));
+  g_assert (GOA_IS_CLIENT (client));
+  g_assert (GOA_IS_OBJECT (object));
+  g_assert (parent == NULL || GTK_IS_WINDOW (parent));
+  g_assert (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+
+  data = g_new0 (AddAccountData, 1);
+  data->dialog = goa_provider_dialog_new (provider, client, parent);
+  data->client = g_object_ref (client);
+  data->object = g_object_ref (object);
+  data->accept_ssl_errors = goa_util_lookup_keyfile_boolean (object, "AcceptSslErrors");
+
+  task = g_task_new (provider, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
+  g_task_set_source_tag (task, refresh_account);
+  g_task_set_task_data (task, data, add_account_data_free);
+  goa_provider_task_bind_window (task, GTK_WINDOW (data->dialog));
+
+  create_account_details_ui (provider, data, FALSE);
+  g_signal_connect_object (data->dialog,
+                           "notify::state",
+                           G_CALLBACK (refresh_account_action_cb),
+                           task,
+                           G_CONNECT_SWAPPED);
+  gtk_window_present (GTK_WINDOW (data->dialog));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
