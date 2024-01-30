@@ -1380,7 +1380,7 @@ goa_kerberos_provider_get_ticket_sync (GoaKerberosProvider  *self,
   const char *preauth_source = NULL;
   gboolean has_password;
   g_autofree char *object_path = NULL;
-  GError *lookup_error = NULL;
+  g_autoptr (GError) lookup_error = NULL;
   GError *sign_in_error = NULL;
 
   g_return_val_if_fail (GOA_IS_KERBEROS_PROVIDER (self), FALSE);
@@ -1414,6 +1414,7 @@ goa_kerberos_provider_get_ticket_sync (GoaKerberosProvider  *self,
       if (lookup_error != NULL)
         {
           g_propagate_error (error, lookup_error);
+          lookup_error = NULL;
         }
       else
         {
