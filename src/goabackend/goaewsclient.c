@@ -210,7 +210,7 @@ static void
 ews_client_autodiscover_response_cb (SoupSession *session, GAsyncResult *result, gpointer user_data)
 {
   SoupMessage *msg;
-  GBytes *body;
+  GBytes *body = NULL;
   GError *error = NULL;
   AutodiscoverData *data;
   GTask *task = G_TASK (user_data);
@@ -218,7 +218,7 @@ ews_client_autodiscover_response_cb (SoupSession *session, GAsyncResult *result,
   guint idx;
   guint status;
   gsize size;
-  xmlDoc *doc;
+  xmlDoc *doc = NULL;
   xmlNode *node;
 
   msg = soup_session_get_async_result_message (session, result);
@@ -238,7 +238,7 @@ ews_client_autodiscover_response_cb (SoupSession *session, GAsyncResult *result,
   if (idx == size || data->pending == 0)
     {
       g_bytes_unref (body);
-      g_clear_object (&error);
+      g_clear_error (&error);
       g_object_unref (task);
       return;
     }
@@ -392,6 +392,8 @@ ews_client_autodiscover_response_cb (SoupSession *session, GAsyncResult *result,
       g_source_attach (idle_source, g_task_get_context (task));
     }
 
+  g_clear_pointer (&body, g_bytes_unref);
+  g_clear_pointer (&doc, xmlFreeDoc);
   g_clear_error (&error);
   g_object_unref (task);
 }
