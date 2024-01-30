@@ -121,7 +121,7 @@ migrate_account (GKeyFile    *key_file,
   else
     base_uri = g_strdup (uri);
 
-  for (unsigned int i = 0; i < G_N_ELEMENTS (migration_table); i++)
+  for (size_t i = 0; i < G_N_ELEMENTS (migration_table); i++)
     {
       g_autofree char *value = NULL;
 
@@ -129,7 +129,7 @@ migrate_account (GKeyFile    *key_file,
       g_key_file_set_string (key_file, group, migration_table[i].key, value);
     }
 
-  path = g_strdup_printf ("%s/goa-1.0/accounts.conf", g_get_user_config_dir ());
+  path = g_build_filename (g_get_user_config_dir (), "goa-1.0", "accounts.conf", NULL);
   if (!g_key_file_save_to_file (key_file, path, &warning))
     g_warning ("Failed to save account migration: %s", warning->message);
 
