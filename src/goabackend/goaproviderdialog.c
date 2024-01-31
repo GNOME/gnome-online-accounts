@@ -738,6 +738,11 @@ goa_provider_dialog_push_content (GoaProviderDialog *self,
  * @error: (nullable): a `GError`
  *
  * Reveal a message bar, using @error for the text.
+ *
+ * If @error is not %NULL, the message bar will be revealed with actions
+ * appropriate for the error and [property@Goa.ProviderDialog:state] will be
+ * set to %GOA_DIALOG_ERROR. Otherwise the message bar will be hidden and the
+ * state left unchanged.
  */
 void
 goa_provider_dialog_report_error (GoaProviderDialog *self,
