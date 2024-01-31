@@ -412,6 +412,8 @@ goa_provider_get_provider_features (GoaProvider *self)
  * The order of features in the array reflects the order that should be used
  * by user interfaces.
  *
+ * It ends with an element with `feature` set to `GOA_PROVIDER_FEATURE_INVALID`.
+ *
  * Returns: (array) (element-type Goa.ProviderFeatureInfo): an array of structs
  */
 GoaProviderFeaturesInfo *
@@ -487,7 +489,7 @@ goa_provider_real_add_account_finish (GoaProvider   *provider,
  * The caller will always show an error dialog if @error is set unless
  * the error is %GOA_ERROR_DIALOG_DISMISSED.
  *
- * Returns: (transfer full) (nullable): a `GoaObject`, or %NULL with @error set
+ * Returns: (transfer full): a `GoaObject`, or %NULL with @error set
  */
 GoaObject *
 goa_provider_add_account_finish (GoaProvider   *provider,
@@ -565,7 +567,7 @@ goa_provider_real_refresh_account_finish (GoaProvider   *provider,
  * The caller will always show an error dialog if @error is set unless
  * the error is %GOA_ERROR_DIALOG_DISMISSED.
  *
- * Returns: (transfer full) (nullable): a `GoaObject`, or %NULL with @error set
+ * Returns: (transfer full): a `GoaObject`, or %NULL with @error set
  */
 gboolean
 goa_provider_refresh_account_finish (GoaProvider   *provider,
@@ -606,6 +608,7 @@ goa_provider_real_show_account (GoaProvider         *self,
 
   gtk_window_present (GTK_WINDOW (dialog));
 }
+
 /**
  * goa_provider_show_account: (vfunc show_account)
  * @self: a `GoaProvider`
@@ -661,7 +664,7 @@ goa_provider_real_show_account_finish (GoaProvider   *provider,
  *
  * Finish an operation started with [method@Goa.Provider.show_account].
  *
- * Returns: (transfer full) (nullable): a `GoaObject`, or %NULL with @error set
+ * Returns: (transfer full): a `GoaObject`, or %NULL with @error set
  */
 gboolean
 goa_provider_show_account_finish (GoaProvider   *provider,

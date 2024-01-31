@@ -172,10 +172,12 @@ goa_provider_dialog_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_CLIENT:
+      g_assert (self->client == NULL);
       self->client = g_value_dup_object (value);
       break;
 
     case PROP_PROVIDER:
+      g_assert (self->provider == NULL);
       self->provider = g_value_dup_object (value);
       break;
 
@@ -288,7 +290,7 @@ goa_provider_dialog_new (GoaProvider *provider,
  * goa_provider_dialog_get_client:
  * @self: a `GoaProviderDialog`
  *
- * Get the dialog provider.
+ * Get the dialog client.
  *
  * Returns: (transfer none): a `GoaClient`
  */
