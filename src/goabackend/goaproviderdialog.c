@@ -741,7 +741,7 @@ goa_provider_dialog_push_content (GoaProviderDialog *self,
  */
 void
 goa_provider_dialog_report_error (GoaProviderDialog *self,
-                                  GError            *error)
+                                  const GError      *error)
 {
   AdwNavigationPage *page;
   GtkWidget *banner;
@@ -768,14 +768,16 @@ goa_provider_dialog_report_error (GoaProviderDialog *self,
       /* If this was an aborted retry, don't overwrite an existing error */
       if (title == NULL || *title == '\0')
         {
-          if (g_dbus_error_is_remote_error (error))
-            g_dbus_error_strip_remote_error (error);
+          g_autoptr(GError) user_error = g_error_copy (error);
 
-          title = error->message;
+          if (g_dbus_error_is_remote_error (user_error))
+            g_dbus_error_strip_remote_error (user_error);
+
+          title = user_error->message;
           button_label = _("_Try Again");
 
           /* The user may choose to ignore SSL errors */
-          if (g_error_matches (error, GOA_ERROR, GOA_ERROR_SSL))
+          if (g_error_matches (user_error, GOA_ERROR, GOA_ERROR_SSL))
             button_label = _("_Ignore");
         }
     }

@@ -65,7 +65,7 @@ GtkWidget           *goa_provider_dialog_push_content       (GoaProviderDialog *
                                                              const char        *title,
                                                              GtkWidget         *content);
 void                 goa_provider_dialog_report_error       (GoaProviderDialog *self,
-                                                             GError            *error);
+                                                             const GError      *error);
 
 /* UI Helpers */
 GtkWidget           *goa_provider_dialog_add_page           (GoaProviderDialog *self,
