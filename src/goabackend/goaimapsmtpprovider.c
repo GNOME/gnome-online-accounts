@@ -621,7 +621,7 @@ add_account_credentials_cb (GoaManager   *manager,
                             GAsyncResult *res,
                             gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AddAccountData *data = g_task_get_task_data (task);
   GDBusObject *ret = NULL;
   g_autofree char *object_path = NULL;
@@ -721,7 +721,7 @@ add_account_check_smtp_cb (GoaMailClient *client,
                            GAsyncResult  *result,
                            gpointer       user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AddAccountData *data = g_task_get_task_data (task);
   g_autoptr (GError) error = NULL;
 
@@ -782,7 +782,7 @@ add_account_check_imap_cb (GoaMailClient *client,
                            GAsyncResult  *result,
                            gpointer       user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AddAccountData *data = g_task_get_task_data (task);
   g_autoptr (GError) error = NULL;
 
@@ -919,7 +919,7 @@ refresh_account_credentials_cb (GoaAccount   *account,
                                 GAsyncResult *res,
                                 gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   GError *error = NULL;
 
   if (goa_provider_task_return_if_completed (task))
@@ -975,7 +975,7 @@ refresh_account_check_smtp_cb (GoaMailClient *client,
                                GAsyncResult  *result,
                                gpointer       user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AddAccountData *data = g_task_get_task_data (task);
   g_autoptr (GError) error = NULL;
 
@@ -1036,7 +1036,7 @@ refresh_account_check_imap_cb (GoaMailClient *client,
                                GAsyncResult  *result,
                                gpointer       user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AddAccountData *data = g_task_get_task_data (task);
   g_autoptr (GError) error = NULL;
 

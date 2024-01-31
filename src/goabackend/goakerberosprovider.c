@@ -250,7 +250,7 @@ refresh_account_ticket_cb (GoaKerberosProvider *self,
                            GAsyncResult        *result,
                            gpointer             user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   GError *error = NULL;
 
   if (!goa_kerberos_provider_get_ticket_finish (self, result, &error))
@@ -600,7 +600,7 @@ add_account_remove_cb (GoaAccount   *account,
                        GAsyncResult *result,
                        gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   g_autoptr (GError) error = NULL;
 
   if (goa_provider_task_return_if_completed (task))
@@ -619,7 +619,7 @@ add_account_signin_cb (GoaKerberosProvider *self,
                        GAsyncResult        *result,
                        gpointer             user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AddAccountData *data = g_task_get_task_data (task);
   GoaAccount *account = NULL;
   g_autoptr (GError) error = NULL;
@@ -649,7 +649,7 @@ add_account_temporary_cb (GoaManager   *manager,
                           GAsyncResult *res,
                           gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   GoaProvider *provider = g_task_get_source_object (task);
   AddAccountData *data = g_task_get_task_data (task);
   g_autofree char *object_path = NULL;

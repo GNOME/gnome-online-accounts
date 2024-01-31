@@ -958,7 +958,7 @@ static gboolean
 goa_provider_task_bind_window_cb (GtkWindow *window,
                                   gpointer   user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
 
   g_signal_handlers_disconnect_by_func (window, goa_provider_task_bind_window_cb, task);
   g_signal_handlers_disconnect_by_func (task, gtk_window_close, window);

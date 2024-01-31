@@ -955,7 +955,7 @@ oauth2_secret_service_get_cb (GObject      *object,
                               GAsyncResult *result,
                               gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   GoaOAuth2Provider *self = g_task_get_source_object (task);
   AccountData *data = g_task_get_task_data (task);
   g_autoptr (SecretService) service = NULL;
@@ -1079,7 +1079,7 @@ add_account_credentials_cb (GoaManager   *manager,
                             GAsyncResult *res,
                             gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AccountData *data = g_task_get_task_data (task);
   g_autofree char *object_path = NULL;
   GDBusObject *ret = NULL;
@@ -1185,7 +1185,7 @@ refresh_account_credentials_cb (GoaAccount   *account,
                                 GAsyncResult *res,
                                 gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   GError *error = NULL;
 
   if (goa_provider_task_return_if_completed (task))
