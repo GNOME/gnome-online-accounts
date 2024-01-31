@@ -621,7 +621,7 @@ add_account_credentials_cb (GoaManager   *manager,
                             GAsyncResult *res,
                             gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AddAccountData *data = g_task_get_task_data (task);
   GDBusObject *ret = NULL;
   g_autofree char *object_path = NULL;
@@ -643,6 +643,7 @@ add_account_store_credentials (GTask *task)
 {
   GoaProvider *provider = g_task_get_source_object (task);
   AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   GVariantBuilder credentials;
   GVariantBuilder details;
   const char *name = NULL;
@@ -708,7 +709,7 @@ add_account_store_credentials (GTask *task)
                                 email_address,
                                 g_variant_builder_end (&credentials),
                                 g_variant_builder_end (&details),
-                                g_task_get_cancellable (task),
+                                cancellable,
                                 (GAsyncReadyCallback) add_account_credentials_cb,
                                 g_object_ref (task));
 }
@@ -718,9 +719,9 @@ add_account_check_smtp_cb (GoaMailClient *client,
                            GAsyncResult  *result,
                            gpointer       user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AddAccountData *data = g_task_get_task_data (task);
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (!goa_mail_client_check_finish (client, result, &error))
     {
@@ -741,7 +742,8 @@ static void
 add_account_action_smtp (GTask *task)
 {
   AddAccountData *data = g_task_get_task_data (task);
-  g_autoptr (GoaMailClient) mail_client = NULL;
+  GCancellable *cancellable = g_task_get_cancellable (task);
+  g_autoptr(GoaMailClient) mail_client = NULL;
   const char *email_address;
   const char *smtp_password;
   const char *smtp_server;
@@ -766,7 +768,7 @@ add_account_action_smtp (GTask *task)
                          data->smtp_accept_ssl_errors,
                          (smtp_tls_type == GOA_TLS_TYPE_SSL) ? 465 : 587,
                          data->smtp_auth,
-                         g_task_get_cancellable (task),
+                         cancellable,
                          (GAsyncReadyCallback) add_account_check_smtp_cb,
                          g_object_ref (task));
 }
@@ -776,9 +778,9 @@ add_account_check_imap_cb (GoaMailClient *client,
                            GAsyncResult  *result,
                            gpointer       user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AddAccountData *data = g_task_get_task_data (task);
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (!goa_mail_client_check_finish (client, result, &error))
     {
@@ -794,8 +796,9 @@ static void
 add_account_action_imap (GTask *task)
 {
   AddAccountData *data = g_task_get_task_data (task);
-  g_autoptr (GoaMailClient) mail_client = NULL;
-  g_autoptr (GoaMailAuth) imap_auth = NULL;
+  GCancellable *cancellable = g_task_get_cancellable (task);
+  g_autoptr(GoaMailClient) mail_client = NULL;
+  g_autoptr(GoaMailAuth) imap_auth = NULL;
   const char *imap_server;
   const char *imap_username;
   const char *imap_password;
@@ -815,7 +818,7 @@ add_account_action_imap (GTask *task)
                          data->imap_accept_ssl_errors,
                          (imap_tls_type == GOA_TLS_TYPE_SSL) ? 993 : 143,
                          imap_auth,
-                         g_task_get_cancellable (task),
+                         cancellable,
                          (GAsyncReadyCallback) add_account_check_imap_cb,
                          g_object_ref (task));
 }
@@ -825,7 +828,7 @@ add_account_action_email (GTask *task)
 {
   GoaProvider *provider = g_task_get_source_object (task);
   AddAccountData *data = g_task_get_task_data (task);
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
   const char *email_address;
   const char *provider_type;
 
@@ -848,7 +851,9 @@ add_account_action_email (GTask *task)
 }
 
 static void
-add_account_action_cb (GTask *task)
+add_account_action_cb (GoaProviderDialog *dialog,
+                       GParamSpec        *pspec,
+                       GTask             *task)
 {
   AddAccountData *data = g_task_get_task_data (task);
 
@@ -881,7 +886,7 @@ add_account (GoaProvider         *provider,
              gpointer             user_data)
 {
   AddAccountData *data;
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
 
   data = g_new0 (AddAccountData, 1);
   data->dialog = goa_provider_dialog_new (provider, client, parent);
@@ -898,7 +903,7 @@ add_account (GoaProvider         *provider,
                            "notify::state",
                            G_CALLBACK (add_account_action_cb),
                            task,
-                           G_CONNECT_SWAPPED);
+                           0 /* G_CONNECT_DEFAULT */);
   gtk_widget_grab_focus (data->email_address);
   gtk_window_present (GTK_WINDOW (data->dialog));
 }
@@ -910,7 +915,7 @@ refresh_account_credentials_cb (GoaAccount   *account,
                                 GAsyncResult *res,
                                 gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   GError *error = NULL;
 
   if (!goa_account_call_ensure_credentials_finish (account, NULL, res, &error))
@@ -927,10 +932,11 @@ refresh_account_store_credentials (GTask *task)
 {
   GoaProvider *provider = g_task_get_source_object (task);
   AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   GVariantBuilder credentials;
   const char *imap_password;
   const char *smtp_password;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   /* Account is confirmed */
   imap_password = gtk_editable_get_text (GTK_EDITABLE (data->imap_password));
@@ -945,7 +951,7 @@ refresh_account_store_credentials (GTask *task)
   if (!goa_utils_store_credentials_for_object_sync (provider,
                                                     data->object,
                                                     g_variant_builder_end (&credentials),
-                                                    g_task_get_cancellable (task),
+                                                    cancellable,
                                                     &error))
     {
       goa_provider_task_return_error (task, g_steal_pointer (&error));
@@ -953,7 +959,7 @@ refresh_account_store_credentials (GTask *task)
     }
 
   goa_account_call_ensure_credentials (goa_object_peek_account (data->object),
-                                       g_task_get_cancellable (task),
+                                       cancellable,
                                        (GAsyncReadyCallback) refresh_account_credentials_cb,
                                        g_object_ref (task));
 }
@@ -963,9 +969,9 @@ refresh_account_check_smtp_cb (GoaMailClient *client,
                                GAsyncResult  *result,
                                gpointer       user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AddAccountData *data = g_task_get_task_data (task);
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (!goa_mail_client_check_finish (client, result, &error))
     {
@@ -986,7 +992,8 @@ static void
 refresh_account_action_smtp (GTask *task)
 {
   AddAccountData *data = g_task_get_task_data (task);
-  g_autoptr (GoaMailClient) mail_client = NULL;
+  GCancellable *cancellable = g_task_get_cancellable (task);
+  g_autoptr(GoaMailClient) mail_client = NULL;
   const char *email_address;
   const char *smtp_password;
   const char *smtp_server;
@@ -1011,7 +1018,7 @@ refresh_account_action_smtp (GTask *task)
                          data->smtp_accept_ssl_errors,
                          (smtp_tls_type == GOA_TLS_TYPE_SSL) ? 465 : 587,
                          data->smtp_auth,
-                         g_task_get_cancellable (task),
+                         cancellable,
                          (GAsyncReadyCallback) refresh_account_check_smtp_cb,
                          g_object_ref (task));
 }
@@ -1021,9 +1028,9 @@ refresh_account_check_imap_cb (GoaMailClient *client,
                                GAsyncResult  *result,
                                gpointer       user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AddAccountData *data = g_task_get_task_data (task);
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (!goa_mail_client_check_finish (client, result, &error))
     {
@@ -1048,8 +1055,9 @@ static void
 refresh_account_action_imap (GTask *task)
 {
   AddAccountData *data = g_task_get_task_data (task);
-  g_autoptr (GoaMailClient) mail_client = NULL;
-  g_autoptr (GoaMailAuth) imap_auth = NULL;
+  GCancellable *cancellable = g_task_get_cancellable (task);
+  g_autoptr(GoaMailClient) mail_client = NULL;
+  g_autoptr(GoaMailAuth) imap_auth = NULL;
   const char *imap_password;
   const char *imap_server;
   const char *imap_username;
@@ -1069,13 +1077,15 @@ refresh_account_action_imap (GTask *task)
                          data->imap_accept_ssl_errors,
                          (imap_tls_type == GOA_TLS_TYPE_SSL) ? 993 : 143,
                          imap_auth,
-                         g_task_get_cancellable (task),
+                         cancellable,
                          (GAsyncReadyCallback) refresh_account_check_imap_cb,
                          g_object_ref (task));
 }
 
 static void
-refresh_account_action_cb (GTask *task)
+refresh_account_action_cb (GoaProviderDialog *dialog,
+                           GParamSpec        *pspec,
+                           GTask             *task)
 {
   AddAccountData *data = g_task_get_task_data (task);
 
@@ -1109,7 +1119,7 @@ refresh_account (GoaProvider         *provider,
                  gpointer             user_data)
 {
   AddAccountData *data;
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
   gboolean smtp_use_auth;
   g_autofree char *email_address = NULL;
   g_autofree char *imap_server = NULL;
@@ -1177,7 +1187,7 @@ refresh_account (GoaProvider         *provider,
                            "notify::state",
                            G_CALLBACK (refresh_account_action_cb),
                            task,
-                           G_CONNECT_SWAPPED);
+                           0 /* G_CONNECT_DEFAULT */);
   gtk_window_present (GTK_WINDOW (data->dialog));
 }
 
@@ -1281,7 +1291,7 @@ show_account (GoaProvider         *self,
               gpointer             user_data)
 {
   GoaProviderDialog *dialog;
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
   GtkWidget *content;
 
   dialog = goa_provider_dialog_new (self, client, parent);

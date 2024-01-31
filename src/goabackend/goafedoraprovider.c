@@ -207,11 +207,11 @@ add_account_credentials_cb (GoaManager   *manager,
                             GAsyncResult *res,
                             gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AddAccountData *data = g_task_get_task_data (task);
   GDBusObject *ret = NULL;
   g_autofree char *object_path = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (!goa_manager_call_add_account_finish (manager, &object_path, res, &error))
     {
@@ -272,10 +272,10 @@ add_account_signin_cb (GoaFedoraProvider *self,
                        GAsyncResult      *result,
                        gpointer           user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AddAccountData *data = g_task_get_task_data (task);
   g_autofree char *object_path = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   object_path = goa_kerberos_provider_sign_in_finish (GOA_KERBEROS_PROVIDER (self),
                                                       result,
@@ -301,7 +301,9 @@ add_account_signin_cb (GoaFedoraProvider *self,
 }
 
 static void
-add_account_action_cb (GTask *task)
+add_account_action_cb (GoaProviderDialog *dialog,
+                       GParamSpec        *pspec,
+                       GTask             *task)
 {
   GoaProvider *provider = g_task_get_source_object (task);
   AddAccountData *data = g_task_get_task_data (task);
@@ -309,7 +311,7 @@ add_account_action_cb (GTask *task)
   const char *username;
   const char *password;
   const char *provider_type;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (goa_provider_dialog_get_state (data->dialog) != GOA_DIALOG_BUSY)
     return;
@@ -375,7 +377,7 @@ add_account (GoaProvider         *provider,
              gpointer             user_data)
 {
   AddAccountData *data;
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
 
   data = g_new0 (AddAccountData, 1);
   data->dialog = goa_provider_dialog_new (provider, client, parent);
@@ -399,7 +401,7 @@ add_account (GoaProvider         *provider,
                            "notify::state",
                            G_CALLBACK (add_account_action_cb),
                            task,
-                           G_CONNECT_SWAPPED);
+                           0 /* G_CONNECT_DEFAULT */);
   gtk_window_present (GTK_WINDOW (data->dialog));
 }
 

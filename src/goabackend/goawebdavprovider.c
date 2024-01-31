@@ -516,11 +516,11 @@ add_account_credentials_cb (GoaManager   *manager,
                             GAsyncResult *res,
                             gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AddAccountData *data = g_task_get_task_data (task);
   GDBusObject *ret = NULL;
   g_autofree char *object_path = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (!goa_manager_call_add_account_finish (manager, &object_path, res, &error))
     {
@@ -538,6 +538,7 @@ add_account_credentials (GTask *task)
 {
   GoaProvider *provider = g_task_get_source_object (task);
   AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   GVariantBuilder credentials;
   GVariantBuilder details;
   const char *password;
@@ -565,7 +566,7 @@ add_account_credentials (GTask *task)
                                 data->presentation_identity,
                                 g_variant_builder_end (&credentials),
                                 g_variant_builder_end (&details),
-                                g_task_get_cancellable (task),
+                                cancellable,
                                 (GAsyncReadyCallback) add_account_credentials_cb,
                                 g_object_ref (task));
 }
@@ -577,7 +578,7 @@ add_account_handle_response (GTask               *task,
   AddAccountData *data = g_task_get_task_data (task);
   const char *base_uri = NULL;
   const char *check_uri = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   base_uri = gtk_editable_get_text (GTK_EDITABLE (data->uri));
   g_clear_pointer (&data->check_uri, g_free);
@@ -669,9 +670,10 @@ add_account_check_cb (GoaDavClient *client,
                       GAsyncResult *result,
                       gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AddAccountData *data = g_task_get_task_data (task);
-  g_autoptr (GError) error = NULL;
+  GCancellable *cancellable = g_task_get_cancellable (task);
+  g_autoptr(GError) error = NULL;
 
   if (!goa_dav_client_check_finish (client, result, &error))
     {
@@ -692,9 +694,9 @@ add_account_check_cb (GoaDavClient *client,
                             username,
                             password,
                             data->accept_ssl_errors,
-                            g_task_get_cancellable (task),
+                            cancellable,
                             (GAsyncReadyCallback) add_account_check_cb,
-                            g_object_ref (task));
+                            g_steal_pointer (&task));
     }
 }
 
@@ -703,12 +705,13 @@ add_account_discover_cb (GoaDavClient *client,
                          GAsyncResult *result,
                          gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   GoaDavConfiguration *config = NULL;
   const char *username = NULL;
   const char *password = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   config = goa_dav_client_discover_finish (client, result, &error);
   if (config == NULL)
@@ -731,9 +734,9 @@ add_account_discover_cb (GoaDavClient *client,
                                username,
                                password,
                                data->accept_ssl_errors,
-                               g_task_get_cancellable (task),
+                               cancellable,
                                (GAsyncReadyCallback) add_account_discover_cb,
-                               g_object_ref (task));
+                               g_steal_pointer (&task));
     }
   else
     {
@@ -742,25 +745,28 @@ add_account_discover_cb (GoaDavClient *client,
                             username,
                             password,
                             data->accept_ssl_errors,
-                            g_task_get_cancellable (task),
+                            cancellable,
                             (GAsyncReadyCallback) add_account_check_cb,
-                            g_object_ref (task));
+                            g_steal_pointer (&task));
     }
 }
 
 static void
-add_account_action_cb (GTask *task)
+add_account_action_cb (GoaProviderDialog *dialog,
+                       GParamSpec        *pspec,
+                       GTask             *task)
 {
   GoaProvider *provider = g_task_get_source_object (task);
   AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   const char *uri_text;
   const char *password;
   const char *username;
   const char *provider_type;
-  g_autoptr (GoaDavClient) dav_client = NULL;
+  g_autoptr(GoaDavClient) dav_client = NULL;
   g_autofree char *server = NULL;
   g_autofree char *uri = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (goa_provider_dialog_get_state (data->dialog) != GOA_DIALOG_BUSY)
     return;
@@ -797,7 +803,7 @@ add_account_action_cb (GTask *task)
                            username,
                            password,
                            data->accept_ssl_errors,
-                           g_task_get_cancellable (task),
+                           cancellable,
                            (GAsyncReadyCallback) add_account_discover_cb,
                            g_object_ref (task));
 }
@@ -813,7 +819,7 @@ add_account (GoaProvider         *provider,
              gpointer             user_data)
 {
   AddAccountData *data;
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
 
   data = g_new0 (AddAccountData, 1);
   data->dialog = goa_provider_dialog_new (provider, client, parent);
@@ -830,7 +836,7 @@ add_account (GoaProvider         *provider,
                            "notify::state",
                            G_CALLBACK (add_account_action_cb),
                            task,
-                           G_CONNECT_SWAPPED);
+                           0 /* G_CONNECT_DEFAULT */);
   gtk_window_present (GTK_WINDOW (data->dialog));
 }
 
@@ -841,7 +847,7 @@ refresh_account_credentials_cb (GoaAccount   *account,
                                 GAsyncResult *res,
                                 gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   GError *error = NULL;
 
   if (!goa_account_call_ensure_credentials_finish (account, NULL, res, &error))
@@ -858,10 +864,11 @@ refresh_account_full_cb (GoaManager   *manager,
                          GAsyncResult *res,
                          gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   g_autofree char *object_path = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (!goa_manager_call_add_account_finish (manager, &object_path, res, &error))
     {
@@ -870,9 +877,9 @@ refresh_account_full_cb (GoaManager   *manager,
     }
 
   goa_account_call_ensure_credentials (goa_object_peek_account (data->object),
-                                       g_task_get_cancellable (task),
+                                       cancellable,
                                        (GAsyncReadyCallback) refresh_account_credentials_cb,
-                                       g_object_ref (task));
+                                       g_steal_pointer (&task));
 }
 
 static void
@@ -880,13 +887,14 @@ refresh_account_check_cb (GoaDavClient *client,
                           GAsyncResult *result,
                           gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   GoaProvider *provider = g_task_get_source_object (task);
   AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   GVariantBuilder credentials;
   const char *username;
   const char *password;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (!goa_dav_client_check_finish (client, result, &error))
     {
@@ -921,9 +929,9 @@ refresh_account_check_cb (GoaDavClient *client,
                                     data->presentation_identity,
                                     g_variant_builder_end (&credentials),
                                     g_variant_builder_end (&details),
-                                    g_task_get_cancellable (task),
+                                    cancellable,
                                     (GAsyncReadyCallback) refresh_account_full_cb,
-                                    g_object_ref (task));
+                                    g_steal_pointer (&task));
       return;
     }
 
@@ -931,7 +939,7 @@ refresh_account_check_cb (GoaDavClient *client,
   if (!goa_utils_store_credentials_for_object_sync (provider,
                                                     data->object,
                                                     g_variant_builder_end (&credentials),
-                                                    g_task_get_cancellable (task),
+                                                    cancellable,
                                                     &error))
     {
       goa_provider_task_return_error (task, g_steal_pointer (&error));
@@ -939,19 +947,22 @@ refresh_account_check_cb (GoaDavClient *client,
     }
 
   goa_account_call_ensure_credentials (goa_object_peek_account (data->object),
-                                       g_task_get_cancellable (task),
+                                       cancellable,
                                        (GAsyncReadyCallback) refresh_account_credentials_cb,
-                                       g_object_ref (task));
+                                       g_steal_pointer (&task));
 }
 
 static void
-refresh_account_action_cb (GTask *task)
+refresh_account_action_cb (GoaProviderDialog *dialog,
+                           GParamSpec        *pspec,
+                           GTask             *task)
 {
   AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   const char *uri_text;
   const char *password;
   const char *username;
-  g_autoptr (GoaDavClient) dav_client = NULL;
+  g_autoptr(GoaDavClient) dav_client = NULL;
   g_autofree char *server = NULL;
   g_autofree char *uri = NULL;
 
@@ -976,7 +987,7 @@ refresh_account_action_cb (GTask *task)
                         username,
                         password,
                         data->accept_ssl_errors,
-                        g_task_get_cancellable (task),
+                        cancellable,
                         (GAsyncReadyCallback) refresh_account_check_cb,
                         g_object_ref (task));
 }
@@ -993,7 +1004,7 @@ refresh_account (GoaProvider         *provider,
                  gpointer             user_data)
 {
   AddAccountData *data;
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
 
   g_assert (GOA_IS_WEBDAV_PROVIDER (provider));
   g_assert (GOA_IS_CLIENT (client));
@@ -1018,7 +1029,7 @@ refresh_account (GoaProvider         *provider,
                            "notify::state",
                            G_CALLBACK (refresh_account_action_cb),
                            task,
-                           G_CONNECT_SWAPPED);
+                           0 /* G_CONNECT_DEFAULT */);
   gtk_window_present (GTK_WINDOW (data->dialog));
 }
 
@@ -1060,7 +1071,7 @@ on_handle_get_password (GoaPasswordBased      *interface,
   const char *method_name;
   const char *provider_type;
   const char *sender;
-  g_autoptr (GoaProvider) provider = NULL;
+  g_autoptr(GoaProvider) provider = NULL;
   g_autofree char *password = NULL;
   GError *error = NULL;
 

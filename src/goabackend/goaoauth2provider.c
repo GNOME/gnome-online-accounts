@@ -697,8 +697,8 @@ parse_request_uri (GoaOAuth2Provider  *self,
                    GError            **error)
 {
   AccountData *data = g_task_get_task_data (task);
-  g_autoptr (GHashTable) key_value_pairs = NULL;
-  g_autoptr (GUri) uri = NULL;
+  g_autoptr(GHashTable) key_value_pairs = NULL;
+  g_autoptr(GUri) uri = NULL;
   const char *fragment;
   const char *oauth2_error;
   const char *query;
@@ -922,7 +922,7 @@ oauth2_secret_handle_response (GTask            *task,
   AccountData *data = g_task_get_task_data (task);
   const char *provider_type = NULL;
   g_autofree char *requested_uri = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   provider_type = goa_provider_get_provider_type (GOA_PROVIDER (self));
   requested_uri = secret_password_lookup_sync (&oauth2_schema, NULL, NULL,
@@ -955,12 +955,12 @@ oauth2_secret_service_get_cb (GObject      *object,
                               GAsyncResult *result,
                               gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   GoaOAuth2Provider *self = g_task_get_source_object (task);
   AccountData *data = g_task_get_task_data (task);
-  g_autoptr (SecretService) service = NULL;
+  g_autoptr(SecretService) service = NULL;
   g_autolist (SecretCollection) collections = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_return_if_fail (G_IS_TASK (task));
 
@@ -1016,10 +1016,13 @@ oauth2_secret_service_get_cb (GObject      *object,
 }
 
 static void
-oauth2_secret_run_task (GTask *task)
+oauth2_secret_run_task (GoaProviderDialog *dialog,
+                        GParamSpec        *pspec,
+                        GTask             *task)
 {
   GoaOAuth2Provider *self = g_task_get_source_object (task);
   AccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   const char *scope;
   g_autofree char *escaped_redirect_uri = NULL;
   g_autofree char *escaped_client_id = NULL;
@@ -1046,7 +1049,7 @@ oauth2_secret_run_task (GTask *task)
 
   /* Watch the session secret collection for the OAuth2 URI */
   secret_service_get (SECRET_SERVICE_LOAD_COLLECTIONS | SECRET_SERVICE_OPEN_SESSION,
-                      g_task_get_cancellable (task),
+                      cancellable,
                       (GAsyncReadyCallback) oauth2_secret_service_get_cb,
                       g_object_ref (task));
 }
@@ -1079,7 +1082,7 @@ add_account_credentials_cb (GoaManager   *manager,
                             GAsyncResult *res,
                             gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AccountData *data = g_task_get_task_data (task);
   g_autofree char *object_path = NULL;
   GDBusObject *ret = NULL;
@@ -1103,9 +1106,10 @@ add_account_secret_cb (SecretCollection *collection,
 {
   GoaOAuth2Provider *self = g_task_get_source_object (task);
   AccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   GVariantBuilder credentials;
   GVariantBuilder details;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   /* On error the signal is disconnected and task completed, otherwise we're
    * returning to wait for the next collection change. */
@@ -1137,9 +1141,9 @@ add_account_secret_cb (SecretCollection *collection,
                                 data->presentation_identity,
                                 g_variant_builder_end (&credentials),
                                 g_variant_builder_end (&details),
-                                g_task_get_cancellable (task),
+                                cancellable,
                                 (GAsyncReadyCallback) add_account_credentials_cb,
-                                g_object_ref (task));
+                                g_steal_pointer (&task));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -1153,7 +1157,7 @@ goa_oauth2_provider_add_account (GoaProvider         *provider,
                                  gpointer             user_data)
 {
   AccountData *data;
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
 
   data = g_new0 (AccountData, 1);
   data->dialog = goa_provider_dialog_new (provider, client, parent);
@@ -1171,7 +1175,7 @@ goa_oauth2_provider_add_account (GoaProvider         *provider,
                            "notify::state",
                            G_CALLBACK (oauth2_secret_run_task),
                            task,
-                           G_CONNECT_SWAPPED);
+                           0 /* G_CONNECT_DEFAULT */);
   gtk_window_present (GTK_WINDOW (data->dialog));
 }
 
@@ -1182,7 +1186,7 @@ refresh_account_credentials_cb (GoaAccount   *account,
                                 GAsyncResult *res,
                                 gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   GError *error = NULL;
 
   if (!goa_account_call_ensure_credentials_finish (account, NULL, res, &error))
@@ -1201,10 +1205,11 @@ refresh_account_secret_cb (SecretCollection *collection,
 {
   GoaOAuth2Provider *self = g_task_get_source_object (task);
   AccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   GoaAccount *account;
   const char *existing_identity;
   GVariantBuilder credentials;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   /* On error the signal is disconnected and task completed, otherwise we're
    * returning to wait for the next collection change. */
@@ -1233,7 +1238,7 @@ refresh_account_secret_cb (SecretCollection *collection,
   if (!goa_utils_store_credentials_for_object_sync (GOA_PROVIDER (self),
                                                     data->object,
                                                     g_variant_builder_end (&credentials),
-                                                    g_task_get_cancellable (task),
+                                                    cancellable,
                                                     &error))
     {
       goa_provider_task_return_error (task, g_steal_pointer (&error));
@@ -1241,9 +1246,9 @@ refresh_account_secret_cb (SecretCollection *collection,
     }
 
   goa_account_call_ensure_credentials (goa_object_peek_account (data->object),
-                                       g_task_get_cancellable (task),
+                                       cancellable,
                                        (GAsyncReadyCallback) refresh_account_credentials_cb,
-                                       g_object_ref (task));
+                                       g_steal_pointer (&task));
 }
 
 static void
@@ -1256,7 +1261,7 @@ goa_oauth2_provider_refresh_account (GoaProvider         *provider,
                                      gpointer             user_data)
 {
   AccountData *data;
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
 
   g_assert (GOA_IS_OAUTH2_PROVIDER (provider));
   g_assert (GOA_IS_CLIENT (client));
@@ -1281,7 +1286,7 @@ goa_oauth2_provider_refresh_account (GoaProvider         *provider,
                            "notify::state",
                            G_CALLBACK (oauth2_secret_run_task),
                            task,
-                           G_CONNECT_SWAPPED);
+                           0 /* G_CONNECT_DEFAULT */);
   gtk_window_present (GTK_WINDOW (data->dialog));
 }
 

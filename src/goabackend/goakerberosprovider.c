@@ -250,7 +250,7 @@ refresh_account_ticket_cb (GoaKerberosProvider *self,
                            GAsyncResult        *result,
                            gpointer             user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   GError *error = NULL;
 
   if (!goa_kerberos_provider_get_ticket_finish (self, result, &error))
@@ -269,7 +269,7 @@ refresh_account (GoaProvider         *provider,
                  gpointer             user_data)
 {
   GoaKerberosProvider *self = GOA_KERBEROS_PROVIDER (provider);
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
 
   g_assert (GOA_IS_KERBEROS_PROVIDER (provider));
   g_assert (GOA_IS_CLIENT (client));
@@ -283,9 +283,9 @@ refresh_account (GoaProvider         *provider,
   goa_kerberos_provider_get_ticket (self,
                                     object,
                                     TRUE, /* Allow interaction */
-                                    g_task_get_cancellable (task),
+                                    cancellable,
                                     (GAsyncReadyCallback) refresh_account_ticket_cb,
-                                    g_object_ref (task));
+                                    g_steal_pointer (&task));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -600,8 +600,8 @@ add_account_remove_cb (GoaAccount   *account,
                        GAsyncResult *result,
                        gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
+  g_autoptr(GError) error = NULL;
 
   /* Failure to remove the temporary account is fatal */
   if (!goa_account_call_remove_finish (account, result, &error))
@@ -616,10 +616,10 @@ add_account_signin_cb (GoaKerberosProvider *self,
                        GAsyncResult        *result,
                        gpointer             user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AddAccountData *data = g_task_get_task_data (task);
   GoaAccount *account = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   account = goa_object_peek_account (data->object);
 
@@ -630,7 +630,7 @@ add_account_signin_cb (GoaKerberosProvider *self,
       goa_account_call_remove (account,
                                NULL, /* Cancellable */
                                (GAsyncReadyCallback) add_account_remove_cb,
-                               g_object_ref (task));
+                               g_steal_pointer (&task));
       return;
     }
 
@@ -643,13 +643,14 @@ add_account_temporary_cb (GoaManager   *manager,
                           GAsyncResult *res,
                           gpointer      user_data)
 {
-  g_autoptr (GTask) task = G_TASK (user_data);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   GoaProvider *provider = g_task_get_source_object (task);
   AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   g_autofree char *object_path = NULL;
-  g_autoptr (GDBusObject) object = NULL;
+  g_autoptr(GDBusObject) object = NULL;
   const char *principal = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (!goa_manager_call_add_account_finish (manager, &object_path, res, &error))
     {
@@ -666,23 +667,26 @@ add_account_temporary_cb (GoaManager   *manager,
   perform_initial_sign_in (GOA_KERBEROS_PROVIDER (provider),
                            GOA_OBJECT (object),
                            principal,
-                           g_task_get_cancellable (task),
+                           cancellable,
                            (GAsyncReadyCallback) add_account_signin_cb,
-                           g_object_ref (task));
+                           g_steal_pointer (&task));
 }
 
 static void
-add_account_action_cb (GTask *task)
+add_account_action_cb (GoaProviderDialog *dialog,
+                       GParamSpec        *pspec,
+                       GTask             *task)
 {
   GoaProvider *provider = g_task_get_source_object (task);
   AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   GVariantBuilder credentials;
   GVariantBuilder details;
   const char *principal_text;
   const char *provider_type;
   g_autofree char *principal = NULL;
   g_autofree char *realm = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (goa_provider_dialog_get_state (data->dialog) != GOA_DIALOG_BUSY)
     return;
@@ -731,7 +735,7 @@ add_account_action_cb (GTask *task)
                                 principal,
                                 g_variant_builder_end (&credentials),
                                 g_variant_builder_end (&details),
-                                g_task_get_cancellable (task),
+                                cancellable,
                                 (GAsyncReadyCallback) add_account_temporary_cb,
                                 g_object_ref (task));
 }
@@ -747,7 +751,7 @@ add_account (GoaProvider         *provider,
              gpointer             user_data)
 {
   AddAccountData *data;
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
 
   data = g_new0 (AddAccountData, 1);
   data->dialog = goa_provider_dialog_new (provider, client, parent);
@@ -764,7 +768,7 @@ add_account (GoaProvider         *provider,
                            "notify::state",
                            G_CALLBACK (add_account_action_cb),
                            task,
-                           G_CONNECT_SWAPPED);
+                           0 /* G_CONNECT_DEFAULT */);
   gtk_window_present (GTK_WINDOW (data->dialog));
 }
 
@@ -1195,7 +1199,7 @@ goa_kerberos_provider_get_ticket (GoaKerberosProvider *self,
                                   GAsyncReadyCallback  callback,
                                   gpointer             user_data)
 {
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
   GetTicketData *data;
 
   g_return_if_fail (GOA_IS_KERBEROS_PROVIDER (self));
@@ -1252,16 +1256,16 @@ goa_kerberos_provider_get_ticket_sync (GoaKerberosProvider  *self,
                                        GCancellable         *cancellable,
                                        GError              **error)
 {
-  g_autoptr (GoaAccount) account = NULL;
-  g_autoptr (GoaTicketing) ticketing = NULL;
-  g_autoptr (GVariant) credentials = NULL;
+  g_autoptr(GoaAccount) account = NULL;
+  g_autoptr(GoaTicketing) ticketing = NULL;
+  g_autoptr(GVariant) credentials = NULL;
   GVariant *details = NULL;
   const char *identifier = NULL;
   const char *password = NULL;
   const char *preauth_source = NULL;
   gboolean has_password;
   g_autofree char *object_path = NULL;
-  g_autoptr (GError) lookup_error = NULL;
+  g_autoptr(GError) lookup_error = NULL;
   GError *sign_in_error = NULL;
 
   g_return_val_if_fail (GOA_IS_KERBEROS_PROVIDER (self), FALSE);
@@ -1402,7 +1406,7 @@ goa_kerberos_provider_sign_in (GoaKerberosProvider *self,
                                GAsyncReadyCallback  callback,
                                gpointer             user_data)
 {
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
   SignInData *data;
 
   g_return_if_fail (GOA_IS_PROVIDER (self));

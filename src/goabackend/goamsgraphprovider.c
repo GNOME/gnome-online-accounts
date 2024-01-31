@@ -492,8 +492,9 @@ setup_tenant (GoaMsGraphProvider  *self,
 static void
 add_account_parent_cb (GoaProvider  *provider,
                        GAsyncResult *result,
-                       GTask        *task)
+                       gpointer      user_data)
 {
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   GoaObject *object = NULL;
   GError *error = NULL;
 
@@ -505,15 +506,18 @@ add_account_parent_cb (GoaProvider  *provider,
 }
 
 static void
-add_account_action_cb (GTask *task)
+add_account_action_cb (GoaProviderDialog *dialog,
+                       GParamSpec        *pspec,
+                       GTask             *task)
 {
   GoaMsGraphProvider *self = g_task_get_source_object (task);
   GoaProvider *provider = g_task_get_source_object (task);
   AccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   const char *email;
   const char *client_id;
   g_autofree char *domain = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (goa_provider_dialog_get_state (data->dialog) != GOA_DIALOG_BUSY)
     return;
@@ -541,9 +545,9 @@ add_account_action_cb (GTask *task)
   GOA_PROVIDER_CLASS (goa_ms_graph_provider_parent_class)->add_account (provider,
                                                                         data->client,
                                                                         GTK_WINDOW (data->dialog),
-                                                                        g_task_get_cancellable (task),
+                                                                        cancellable,
                                                                         (GAsyncReadyCallback)add_account_parent_cb,
-                                                                        task);
+                                                                        g_object_ref (task));
 }
 
 static void
@@ -555,7 +559,7 @@ add_account (GoaProvider         *provider,
              gpointer             user_data)
 {
   AccountData *data;
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
 
   data = g_new0 (AccountData, 1);
   data->dialog = goa_provider_dialog_new (provider, client, parent);
@@ -572,7 +576,7 @@ add_account (GoaProvider         *provider,
                            "notify::state",
                            G_CALLBACK (add_account_action_cb),
                            task,
-                           G_CONNECT_SWAPPED);
+                           0 /* G_CONNECT_DEFAULT */);
   gtk_window_present (GTK_WINDOW (data->dialog));
 
   // We chain-up in add_account_parent_cb() once the user input is confirmed
