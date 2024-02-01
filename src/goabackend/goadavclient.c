@@ -316,7 +316,7 @@ dav_client_check_response_cb (SoupSession  *session,
                               GAsyncResult *result,
                               gpointer      user_data)
 {
-  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
+  g_autoptr (GTask) task = G_TASK (user_data);
   g_autoptr (GBytes) body = NULL;
   SoupMessage *msg;
   CheckData *data;
@@ -555,7 +555,7 @@ dav_client_discover_response_cb (SoupSession  *session,
                                  GAsyncResult *result,
                                  gpointer      user_data)
 {
-  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
+  g_autoptr (GTask) task = G_TASK (user_data);
   CheckData *data = g_task_get_task_data (task);
   DiscoverData *discover = (DiscoverData *) data;
   SoupMessage *msg;

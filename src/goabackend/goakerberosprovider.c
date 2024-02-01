@@ -283,9 +283,9 @@ refresh_account (GoaProvider         *provider,
   goa_kerberos_provider_get_ticket (self,
                                     object,
                                     TRUE, /* Allow interaction */
-                                    g_task_get_cancellable (task),
+                                    cancellable,
                                     (GAsyncReadyCallback) refresh_account_ticket_cb,
-                                    g_object_ref (task));
+                                    g_steal_pointer (&task));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -636,7 +636,7 @@ add_account_signin_cb (GoaKerberosProvider *self,
       goa_account_call_remove (account,
                                NULL, /* Cancellable */
                                (GAsyncReadyCallback) add_account_remove_cb,
-                               g_object_ref (task));
+                               g_steal_pointer (&task));
       return;
     }
 
@@ -652,6 +652,7 @@ add_account_temporary_cb (GoaManager   *manager,
   g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   GoaProvider *provider = g_task_get_source_object (task);
   AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   g_autofree char *object_path = NULL;
   g_autoptr (GDBusObject) object = NULL;
   const char *principal = NULL;
@@ -675,16 +676,19 @@ add_account_temporary_cb (GoaManager   *manager,
   perform_initial_sign_in (GOA_KERBEROS_PROVIDER (provider),
                            GOA_OBJECT (object),
                            principal,
-                           g_task_get_cancellable (task),
+                           cancellable,
                            (GAsyncReadyCallback) add_account_signin_cb,
-                           g_object_ref (task));
+                           g_steal_pointer (&task));
 }
 
 static void
-add_account_action_cb (GTask *task)
+add_account_action_cb (GoaProviderDialog *dialog,
+                       GParamSpec        *pspec,
+                       GTask             *task)
 {
   GoaProvider *provider = g_task_get_source_object (task);
   AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   GVariantBuilder credentials;
   GVariantBuilder details;
   const char *principal_text;
@@ -740,7 +744,7 @@ add_account_action_cb (GTask *task)
                                 principal,
                                 g_variant_builder_end (&credentials),
                                 g_variant_builder_end (&details),
-                                g_task_get_cancellable (task),
+                                cancellable,
                                 (GAsyncReadyCallback) add_account_temporary_cb,
                                 g_object_ref (task));
 }
@@ -773,7 +777,7 @@ add_account (GoaProvider         *provider,
                            "notify::state",
                            G_CALLBACK (add_account_action_cb),
                            task,
-                           G_CONNECT_SWAPPED);
+                           0 /* G_CONNECT_DEFAULT */);
   gtk_window_present (GTK_WINDOW (data->dialog));
 }
 

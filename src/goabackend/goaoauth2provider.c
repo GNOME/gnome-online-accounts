@@ -1019,10 +1019,13 @@ oauth2_secret_service_get_cb (GObject      *object,
 }
 
 static void
-oauth2_secret_run_task (GTask *task)
+oauth2_secret_run_task (GoaProviderDialog *dialog,
+                        GParamSpec        *pspec,
+                        GTask             *task)
 {
   GoaOAuth2Provider *self = g_task_get_source_object (task);
   AccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   const char *scope;
   g_autofree char *escaped_redirect_uri = NULL;
   g_autofree char *escaped_client_id = NULL;
@@ -1046,7 +1049,7 @@ oauth2_secret_run_task (GTask *task)
 
   /* Watch the session secret collection for the OAuth2 URI */
   secret_service_get (SECRET_SERVICE_LOAD_COLLECTIONS | SECRET_SERVICE_OPEN_SESSION,
-                      g_task_get_cancellable (task),
+                      cancellable,
                       (GAsyncReadyCallback) oauth2_secret_service_get_cb,
                       g_object_ref (task));
 }
@@ -1106,6 +1109,7 @@ add_account_secret_cb (SecretCollection *collection,
 {
   GoaOAuth2Provider *self = g_task_get_source_object (task);
   AccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   GVariantBuilder credentials;
   GVariantBuilder details;
   g_autoptr (GError) error = NULL;
@@ -1140,9 +1144,9 @@ add_account_secret_cb (SecretCollection *collection,
                                 data->presentation_identity,
                                 g_variant_builder_end (&credentials),
                                 g_variant_builder_end (&details),
-                                g_task_get_cancellable (task),
+                                cancellable,
                                 (GAsyncReadyCallback) add_account_credentials_cb,
-                                g_object_ref (task));
+                                g_steal_pointer (&task));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -1174,7 +1178,7 @@ goa_oauth2_provider_add_account (GoaProvider         *provider,
                            "notify::state",
                            G_CALLBACK (oauth2_secret_run_task),
                            task,
-                           G_CONNECT_SWAPPED);
+                           0 /* G_CONNECT_DEFAULT */);
   gtk_window_present (GTK_WINDOW (data->dialog));
 }
 
@@ -1207,6 +1211,7 @@ refresh_account_secret_cb (SecretCollection *collection,
 {
   GoaOAuth2Provider *self = g_task_get_source_object (task);
   AccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   GoaAccount *account;
   const char *existing_identity;
   GVariantBuilder credentials;
@@ -1239,7 +1244,7 @@ refresh_account_secret_cb (SecretCollection *collection,
   if (!goa_utils_store_credentials_for_object_sync (GOA_PROVIDER (self),
                                                     data->object,
                                                     g_variant_builder_end (&credentials),
-                                                    g_task_get_cancellable (task),
+                                                    cancellable,
                                                     &error))
     {
       g_task_return_error (task, g_steal_pointer (&error));
@@ -1247,9 +1252,9 @@ refresh_account_secret_cb (SecretCollection *collection,
     }
 
   goa_account_call_ensure_credentials (goa_object_peek_account (data->object),
-                                       g_task_get_cancellable (task),
+                                       cancellable,
                                        (GAsyncReadyCallback) refresh_account_credentials_cb,
-                                       g_object_ref (task));
+                                       g_steal_pointer (&task));
 }
 
 static void
@@ -1287,7 +1292,7 @@ goa_oauth2_provider_refresh_account (GoaProvider         *provider,
                            "notify::state",
                            G_CALLBACK (oauth2_secret_run_task),
                            task,
-                           G_CONNECT_SWAPPED);
+                           0 /* G_CONNECT_DEFAULT */);
   gtk_window_present (GTK_WINDOW (data->dialog));
 }
 
