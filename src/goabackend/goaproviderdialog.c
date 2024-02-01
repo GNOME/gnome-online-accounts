@@ -263,7 +263,7 @@ goa_provider_dialog_class_init (GoaProviderDialogClass *klass)
  *
  * If @parent is given, the dialog will be modal.
  *
- * Returns: (transfer none): a `GoaProviderDialog`
+ * Returns: a `GoaProviderDialog`
  */
 GoaProviderDialog *
 goa_provider_dialog_new (GoaProvider *provider,
