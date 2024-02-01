@@ -382,7 +382,7 @@ goa_provider_dialog_set_state (GoaProviderDialog *self,
     }
 
   self->state = state;
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_STATE]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);
 }
 
 static GtkWidget *
