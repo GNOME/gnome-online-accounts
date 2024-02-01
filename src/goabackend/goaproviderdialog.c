@@ -37,6 +37,7 @@ struct _GoaProviderDialog
   GoaClient *client;
   GoaObject *object;
   GoaDialogState state;
+  GCancellable *cancellable;
 
   GtkWidget *view;
   GtkWidget *current_page;
@@ -121,10 +122,21 @@ goa_provider_dialog_constructed (GObject *object)
 }
 
 static void
+goa_provider_dialog_dispose (GObject *object)
+{
+  GoaProviderDialog *self = GOA_PROVIDER_DIALOG (object);
+
+  g_cancellable_cancel (self->cancellable);
+
+  G_OBJECT_CLASS (goa_provider_dialog_parent_class)->dispose (object);
+}
+
+static void
 goa_provider_dialog_finalize (GObject *object)
 {
   GoaProviderDialog *self = GOA_PROVIDER_DIALOG (object);
 
+  g_clear_object (&self->cancellable);
   g_clear_object (&self->client);
   g_clear_object (&self->object);
   g_clear_object (&self->provider);
@@ -209,6 +221,9 @@ goa_provider_dialog_init (GoaProviderDialog *self)
   self->view = g_object_new (ADW_TYPE_NAVIGATION_VIEW, NULL);
   adw_window_set_content (ADW_WINDOW (self), self->view);
 
+  /* Ensure the dialog refresh and remove tasks are cancelled on close */
+  self->cancellable = g_cancellable_new ();
+
   /* The default widget determines the visibility of the action bar */
   g_signal_connect (self,
                     "notify::default-widget",
@@ -222,6 +237,7 @@ goa_provider_dialog_class_init (GoaProviderDialogClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->constructed = goa_provider_dialog_constructed;
+  object_class->dispose = goa_provider_dialog_dispose;
   object_class->finalize = goa_provider_dialog_finalize;
   object_class->get_property = goa_provider_dialog_get_property;
   object_class->set_property = goa_provider_dialog_set_property;
@@ -423,7 +439,9 @@ goa_provider_refresh_account_cb (GoaProvider       *provider,
 
   if (!goa_provider_refresh_account_finish (provider, result, &error))
     {
-      goa_provider_dialog_report_error (self, error);
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        goa_provider_dialog_report_error (self, error);
+
       return;
     }
 
@@ -437,7 +455,7 @@ on_refresh_activated (GoaProviderDialog *self)
                                 self->client,
                                 self->object,
                                 GTK_WINDOW (self),
-                                NULL, /* cancellable */
+                                self->cancellable,
                                 (GAsyncReadyCallback) goa_provider_refresh_account_cb,
                                 self);
   goa_provider_dialog_set_state (self, GOA_DIALOG_BUSY);
@@ -453,7 +471,9 @@ goa_account_call_remove_cb (GoaAccount   *account,
 
   if (!goa_account_call_remove_finish (account, result, &error))
     {
-      goa_provider_dialog_report_error (self, error);
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        goa_provider_dialog_report_error (self, error);
+
       return;
     }
 
@@ -476,7 +496,7 @@ adw_message_dialog_choose_cb (AdwMessageDialog *dialog,
   if (g_strcmp0 (response, "remove") == 0)
     {
       goa_account_call_remove (goa_object_peek_account (self->object),
-                               NULL, /* cancellable */
+                               self->cancellable,
                                (GAsyncReadyCallback) goa_account_call_remove_cb,
                                g_object_ref (self));
       return;
@@ -501,7 +521,7 @@ on_remove_activated (GoaProviderDialog *self)
                                               "remove",
                                               ADW_RESPONSE_DESTRUCTIVE);
   adw_message_dialog_choose (ADW_MESSAGE_DIALOG (dialog),
-                             NULL /* cancellable */,
+                             self->cancellable,
                              (GAsyncReadyCallback) adw_message_dialog_choose_cb,
                              g_object_ref (self));
   goa_provider_dialog_set_state (self, GOA_DIALOG_BUSY);
