@@ -23,6 +23,7 @@
 #include <gtk/gtk.h>
 #include <adwaita.h>
 
+#include "goabackendenumtypes-priv.h"
 #include "goaprovider.h"
 #include "goaproviderdialog.h"
 #include "goaprovider-priv.h"
@@ -44,16 +45,14 @@ struct _GoaProviderDialog
 
 G_DEFINE_TYPE (GoaProviderDialog, goa_provider_dialog, ADW_TYPE_WINDOW)
 
-enum
+typedef enum
 {
-  PROP_0,
-  PROP_CLIENT,
+  PROP_CLIENT = 1,
   PROP_PROVIDER,
   PROP_STATE,
-  N_PROPERTIES
-};
+} GoaProviderDialogProperty;
 
-static GParamSpec *properties[N_PROPERTIES] = { NULL, };
+static GParamSpec *properties[PROP_STATE + 1] = { NULL, };
 
 
 static void
@@ -141,7 +140,7 @@ goa_provider_dialog_get_property (GObject      *object,
 {
   GoaProviderDialog *self = GOA_PROVIDER_DIALOG (object);
 
-  switch (property_id)
+  switch ((GoaProviderDialogProperty) property_id)
     {
     case PROP_CLIENT:
       g_value_set_object (value, self->client);
@@ -152,7 +151,7 @@ goa_provider_dialog_get_property (GObject      *object,
       break;
 
     case PROP_STATE:
-      g_value_set_uint (value, self->state);
+      g_value_set_enum (value, self->state);
       break;
 
     default:
@@ -169,7 +168,7 @@ goa_provider_dialog_set_property (GObject      *object,
 {
   GoaProviderDialog *self = GOA_PROVIDER_DIALOG (object);
 
-  switch (prop_id)
+  switch ((GoaProviderDialogProperty) prop_id)
     {
     case PROP_CLIENT:
       g_assert (self->client == NULL);
@@ -182,7 +181,7 @@ goa_provider_dialog_set_property (GObject      *object,
       break;
 
     case PROP_STATE:
-      goa_provider_dialog_set_state (self, g_value_get_uint (value));
+      goa_provider_dialog_set_state (self, g_value_get_enum (value));
       break;
 
     default:
@@ -244,14 +243,14 @@ goa_provider_dialog_class_init (GoaProviderDialogClass *klass)
                           G_PARAM_EXPLICIT_NOTIFY));
 
   properties[PROP_STATE] =
-    g_param_spec_uint ("state", NULL, NULL,
-                       GOA_DIALOG_IDLE, GOA_DIALOG_ERROR,
+    g_param_spec_enum ("state", NULL, NULL,
+                       GOA_TYPE_DIALOG_STATE,
                        GOA_DIALOG_IDLE,
                        (G_PARAM_READWRITE |
                         G_PARAM_STATIC_STRINGS |
                         G_PARAM_EXPLICIT_NOTIFY));
 
-  g_object_class_install_properties (object_class, N_PROPERTIES, properties);
+  g_object_class_install_properties (object_class, G_N_ELEMENTS (properties), properties);
 }
 
 /**
