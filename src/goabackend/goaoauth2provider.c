@@ -697,8 +697,8 @@ parse_request_uri (GoaOAuth2Provider  *self,
                    GError            **error)
 {
   AccountData *data = g_task_get_task_data (task);
-  g_autoptr (GHashTable) key_value_pairs = NULL;
-  g_autoptr (GUri) uri = NULL;
+  g_autoptr(GHashTable) key_value_pairs = NULL;
+  g_autoptr(GUri) uri = NULL;
   const char *fragment;
   const char *oauth2_error;
   const char *query;
@@ -922,7 +922,7 @@ oauth2_secret_handle_response (GTask            *task,
   AccountData *data = g_task_get_task_data (task);
   const char *provider_type = NULL;
   g_autofree char *requested_uri = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   provider_type = goa_provider_get_provider_type (GOA_PROVIDER (self));
   requested_uri = secret_password_lookup_sync (&oauth2_schema, NULL, NULL,
@@ -958,9 +958,9 @@ oauth2_secret_service_get_cb (GObject      *object,
   g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   GoaOAuth2Provider *self = g_task_get_source_object (task);
   AccountData *data = g_task_get_task_data (task);
-  g_autoptr (SecretService) service = NULL;
+  g_autoptr(SecretService) service = NULL;
   g_autolist (SecretCollection) collections = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_return_if_fail (G_IS_TASK (task));
 
@@ -1112,7 +1112,7 @@ add_account_secret_cb (SecretCollection *collection,
   GCancellable *cancellable = g_task_get_cancellable (task);
   GVariantBuilder credentials;
   GVariantBuilder details;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   /* On error the signal is disconnected and task completed, otherwise we're
    * returning to wait for the next collection change. */
@@ -1160,7 +1160,7 @@ goa_oauth2_provider_add_account (GoaProvider         *provider,
                                  gpointer             user_data)
 {
   AccountData *data;
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
 
   data = g_new0 (AccountData, 1);
   data->dialog = goa_provider_dialog_new (provider, client, parent);
@@ -1215,7 +1215,7 @@ refresh_account_secret_cb (SecretCollection *collection,
   GoaAccount *account;
   const char *existing_identity;
   GVariantBuilder credentials;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   /* On error the signal is disconnected and task completed, otherwise we're
    * returning to wait for the next collection change. */
@@ -1267,7 +1267,7 @@ goa_oauth2_provider_refresh_account (GoaProvider         *provider,
                                      gpointer             user_data)
 {
   AccountData *data;
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
 
   g_assert (GOA_IS_OAUTH2_PROVIDER (provider));
   g_assert (GOA_IS_CLIENT (client));

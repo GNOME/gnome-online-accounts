@@ -448,7 +448,7 @@ add_account_autodiscover_cb (GoaEwsClient *client,
   const gchar *server;
   const gchar *password;
   const gchar *username;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (goa_provider_task_return_if_completed (task))
     return;
@@ -495,7 +495,7 @@ add_account_action_cb (GoaProviderDialog *dialog,
   AddAccountData *data = g_task_get_task_data (task);
   GCancellable *cancellable = g_task_get_cancellable (task);
   g_autoptr(GoaEwsClient) ews_client = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
   const char *email_address;
   const char *server;
   const char *password;
@@ -547,7 +547,7 @@ add_account (GoaProvider         *provider,
              gpointer             user_data)
 {
   AddAccountData *data;
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
 
   data = g_new0 (AddAccountData, 1);
   data->dialog = goa_provider_dialog_new (provider, client, parent);
@@ -601,7 +601,7 @@ refresh_account_autodiscover_cb (GoaEwsClient *client,
   GCancellable *cancellable = g_task_get_cancellable (task);
   GVariantBuilder credentials;
   const gchar *password;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (goa_provider_task_return_if_completed (task))
     return;
@@ -692,7 +692,7 @@ refresh_account (GoaProvider         *provider,
                  gpointer             user_data)
 {
   AddAccountData *data;
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
 
   g_assert (GOA_IS_EXCHANGE_PROVIDER (provider));
   g_assert (GOA_IS_CLIENT (client));

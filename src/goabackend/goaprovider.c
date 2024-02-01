@@ -596,7 +596,7 @@ goa_provider_real_show_account (GoaProvider         *self,
                                 gpointer             user_data)
 {
   GoaProviderDialog *dialog;
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
 
   dialog = goa_provider_dialog_new (self, client, parent);
   goa_provider_dialog_push_account (dialog, object, NULL);

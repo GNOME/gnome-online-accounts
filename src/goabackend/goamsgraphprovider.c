@@ -517,7 +517,7 @@ add_account_action_cb (GoaProviderDialog *dialog,
   const char *email;
   const char *client_id;
   g_autofree char *domain = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (goa_provider_dialog_get_state (data->dialog) != GOA_DIALOG_BUSY)
     return;
@@ -559,7 +559,7 @@ add_account (GoaProvider         *provider,
              gpointer             user_data)
 {
   AccountData *data;
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
 
   data = g_new0 (AccountData, 1);
   data->dialog = goa_provider_dialog_new (provider, client, parent);

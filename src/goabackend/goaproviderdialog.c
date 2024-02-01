@@ -435,7 +435,7 @@ goa_provider_refresh_account_cb (GoaProvider       *provider,
                                 GAsyncResult      *result,
                                 GoaProviderDialog *self)
 {
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (!goa_provider_refresh_account_finish (provider, result, &error))
     {
@@ -466,8 +466,8 @@ goa_account_call_remove_cb (GoaAccount   *account,
                             GAsyncResult *result,
                             gpointer      user_data)
 {
-  g_autoptr (GoaProviderDialog) self = GOA_PROVIDER_DIALOG (user_data);
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GoaProviderDialog) self = GOA_PROVIDER_DIALOG (user_data);
+  g_autoptr(GError) error = NULL;
 
   if (!goa_account_call_remove_finish (account, result, &error))
     {
@@ -489,7 +489,7 @@ adw_message_dialog_choose_cb (AdwMessageDialog *dialog,
                               GAsyncResult     *result,
                               gpointer          user_data)
 {
-  g_autoptr (GoaProviderDialog) self = GOA_PROVIDER_DIALOG (user_data);
+  g_autoptr(GoaProviderDialog) self = GOA_PROVIDER_DIALOG (user_data);
   const char *response = NULL;
 
   response = adw_message_dialog_choose_finish (dialog, result);
@@ -545,7 +545,7 @@ goa_provider_dialog_push_account (GoaProviderDialog *self,
 {
   GoaAccount *account;
   const char *account_name;
-  g_autoptr (GIcon) provider_icon = NULL;
+  g_autoptr(GIcon) provider_icon = NULL;
   g_autofree char *provider_name = NULL;
   GdkDisplay *display;
   GtkIconPaintable *paintable;
@@ -889,7 +889,7 @@ goa_provider_dialog_add_combo (GoaProviderDialog *self,
                                GStrv              strings)
 {
   GtkWidget *child = NULL;
-  g_autoptr (GtkStringList) model = NULL;
+  g_autoptr(GtkStringList) model = NULL;
 
   g_return_val_if_fail (GOA_IS_PROVIDER_DIALOG (self), NULL);
   g_return_val_if_fail (strings != NULL && *strings != NULL, NULL);

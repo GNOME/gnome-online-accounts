@@ -520,7 +520,7 @@ add_account_credentials_cb (GoaManager   *manager,
   AddAccountData *data = g_task_get_task_data (task);
   GDBusObject *ret = NULL;
   g_autofree char *object_path = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (goa_provider_task_return_if_completed (task))
     return;
@@ -581,7 +581,7 @@ add_account_handle_response (GTask               *task,
   AddAccountData *data = g_task_get_task_data (task);
   const char *base_uri = NULL;
   const char *check_uri = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   base_uri = gtk_editable_get_text (GTK_EDITABLE (data->uri));
   g_clear_pointer (&data->check_uri, g_free);
@@ -676,7 +676,7 @@ add_account_check_cb (GoaDavClient *client,
   g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   AddAccountData *data = g_task_get_task_data (task);
   GCancellable *cancellable = g_task_get_cancellable (task);
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (goa_provider_task_return_if_completed (task))
     return;
@@ -717,7 +717,7 @@ add_account_discover_cb (GoaDavClient *client,
   GoaDavConfiguration *config = NULL;
   const char *username = NULL;
   const char *password = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (goa_provider_task_return_if_completed (task))
     return;
@@ -772,10 +772,10 @@ add_account_action_cb (GoaProviderDialog *dialog,
   const char *password;
   const char *username;
   const char *provider_type;
-  g_autoptr (GoaDavClient) dav_client = NULL;
+  g_autoptr(GoaDavClient) dav_client = NULL;
   g_autofree char *server = NULL;
   g_autofree char *uri = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (goa_provider_dialog_get_state (data->dialog) != GOA_DIALOG_BUSY)
     return;
@@ -828,7 +828,7 @@ add_account (GoaProvider         *provider,
              gpointer             user_data)
 {
   AddAccountData *data;
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
 
   data = g_new0 (AddAccountData, 1);
   data->dialog = goa_provider_dialog_new (provider, client, parent);
@@ -877,7 +877,7 @@ refresh_account_full_cb (GoaManager   *manager,
   AddAccountData *data = g_task_get_task_data (task);
   GCancellable *cancellable = g_task_get_cancellable (task);
   g_autofree char *object_path = NULL;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (goa_provider_task_return_if_completed (task))
     return;
@@ -906,7 +906,7 @@ refresh_account_check_cb (GoaDavClient *client,
   GVariantBuilder credentials;
   const char *username;
   const char *password;
-  g_autoptr (GError) error = NULL;
+  g_autoptr(GError) error = NULL;
 
   if (goa_provider_task_return_if_completed (task))
     return;
@@ -977,7 +977,7 @@ refresh_account_action_cb (GoaProviderDialog *dialog,
   const char *uri_text;
   const char *password;
   const char *username;
-  g_autoptr (GoaDavClient) dav_client = NULL;
+  g_autoptr(GoaDavClient) dav_client = NULL;
   g_autofree char *server = NULL;
   g_autofree char *uri = NULL;
 
@@ -1019,7 +1019,7 @@ refresh_account (GoaProvider         *provider,
                  gpointer             user_data)
 {
   AddAccountData *data;
-  g_autoptr (GTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
 
   g_assert (GOA_IS_WEBDAV_PROVIDER (provider));
   g_assert (GOA_IS_CLIENT (client));
@@ -1086,7 +1086,7 @@ on_handle_get_password (GoaPasswordBased      *interface,
   const char *method_name;
   const char *provider_type;
   const char *sender;
-  g_autoptr (GoaProvider) provider = NULL;
+  g_autoptr(GoaProvider) provider = NULL;
   g_autofree char *password = NULL;
   GError *error = NULL;
 
