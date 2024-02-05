@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: Gnome Online Account\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2023-12-10 12:57+0000\n"
-"PO-Revision-Date: 2024-01-25 11:41+0200\n"
+"POT-Creation-Date: 2024-01-28 18:53+0000\n"
+"PO-Revision-Date: 2024-02-05 21:34+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
@@ -94,6 +94,7 @@ msgid "_Password"
 msgstr "_ססמה"
 
 #: src/goabackend/goaexchangeprovider.c:398
+#: src/goabackend/goamsgraphprovider.c:382
 msgid "_Custom"
 msgstr "הת_אמה אישית"
 
@@ -114,7 +115,7 @@ msgstr "_שרת"
 #: src/goabackend/goafedoraprovider.c:581
 #: src/goabackend/goaimapsmtpprovider.c:699
 #: src/goabackend/goakerberosprovider.c:583
-#: src/goabackend/goaoauth2provider.c:939
+#: src/goabackend/goaoauth2provider.c:991
 #: src/goabackend/goawebdavprovider.c:538
 msgid "_Cancel"
 msgstr "_ביטול"
@@ -122,6 +123,7 @@ msgstr "_ביטול"
 #: src/goabackend/goaexchangeprovider.c:421
 #: src/goabackend/goafedoraprovider.c:582
 #: src/goabackend/goakerberosprovider.c:584
+#: src/goabackend/goamsgraphprovider.c:404
 #: src/goabackend/goawebdavprovider.c:539
 msgid "C_onnect"
 msgstr "הת_חברות"
@@ -143,8 +145,9 @@ msgstr "בהתחברות…"
 #: src/goabackend/goaimapsmtpprovider.c:1249
 #: src/goabackend/goaimapsmtpprovider.c:1325
 #: src/goabackend/goakerberosprovider.c:939
-#: src/goabackend/goaoauth2provider.c:962
-#: src/goabackend/goaoauth2provider.c:978
+#: src/goabackend/goamsgraphprovider.c:540
+#: src/goabackend/goaoauth2provider.c:1014
+#: src/goabackend/goaoauth2provider.c:1030
 #: src/goabackend/goawebdavprovider.c:746
 #: src/goabackend/goawebdavprovider.c:1034
 msgid "Dialog was dismissed"
@@ -221,6 +224,7 @@ msgid "Google"
 msgstr "Google"
 
 #: src/goabackend/goagoogleprovider.c:207
+#: src/goabackend/goamsgraphprovider.c:195
 #: src/goabackend/goawindowsliveprovider.c:158
 #, c-format
 msgid ""
@@ -230,9 +234,15 @@ msgstr "הציפייה הייתה למצב 200 בעת בקשת הזהות שלך
 #. TODO: more specific
 #: src/goabackend/goagoogleprovider.c:226
 #: src/goabackend/goagoogleprovider.c:237
-#: src/goabackend/goaoauth2provider.c:536
-#: src/goabackend/goaoauth2provider.c:566
-#: src/goabackend/goaoauth2provider.c:577 src/goabackend/goautils.c:296
+#: src/goabackend/goamsgraphprovider.c:214
+#: src/goabackend/goamsgraphprovider.c:225
+#: src/goabackend/goamsgraphprovider.c:236
+#: src/goabackend/goamsgraphprovider.c:462
+#: src/goabackend/goamsgraphprovider.c:475
+#: src/goabackend/goamsgraphprovider.c:489
+#: src/goabackend/goaoauth2provider.c:594
+#: src/goabackend/goaoauth2provider.c:624
+#: src/goabackend/goaoauth2provider.c:635 src/goabackend/goautils.c:296
 #: src/goabackend/goawindowsliveprovider.c:177
 #: src/goabackend/goawindowsliveprovider.c:188
 #: src/goabackend/goawindowsliveprovider.c:197
@@ -372,51 +382,59 @@ msgstr "שמירת ססמה זו"
 msgid "Error connecting to enterprise identity server"
 msgstr "אירעה שגיאה בעת ההתחברות לשרת הזיהוי הארגוני"
 
-#: src/goabackend/goaoauth2provider.c:512
+#: src/goabackend/goamsgraphprovider.c:78
+msgid "Microsoft 365"
+msgstr "Microsoft 365"
+
+#: src/goabackend/goamsgraphprovider.c:371
+msgid "E-Mail"
+msgstr "דוא״ל"
+
+#: src/goabackend/goaoauth2provider.c:570
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr "הציפייה הייתה למצב 200 בעת בקשת אסימון גישה, במקום התקבל המצב %d ‏(%s)"
 
-#: src/goabackend/goaoauth2provider.c:656
+#: src/goabackend/goaoauth2provider.c:712
 msgid "Authorization response: "
 msgstr "תגובה לאימות: "
 
-#: src/goabackend/goaoauth2provider.c:719
+#: src/goabackend/goaoauth2provider.c:775
 #, c-format
 msgid "Authorization response: %s"
 msgstr "תגובה לאימות: %s"
 
-#: src/goabackend/goaoauth2provider.c:727
+#: src/goabackend/goaoauth2provider.c:783
 msgid "Failed to authenticate"
 msgstr "ארע כשל באימות"
 
-#: src/goabackend/goaoauth2provider.c:927
+#: src/goabackend/goaoauth2provider.c:979
 msgid "Sign in with your browser to setup an account."
 msgstr "יש להתחבר באמצעות הדפדפן שלך על מנת להגדיר חשבון."
 
-#: src/goabackend/goaoauth2provider.c:931
+#: src/goabackend/goaoauth2provider.c:983
 msgid "Continue"
 msgstr "המשך"
 
-#: src/goabackend/goaoauth2provider.c:1004
+#: src/goabackend/goaoauth2provider.c:1056
 msgid "Error getting an Access Token: "
 msgstr "שגיאה בקבלת אסימון גישה: "
 
-#: src/goabackend/goaoauth2provider.c:1019
+#: src/goabackend/goaoauth2provider.c:1071
 msgid "Error getting identity: "
 msgstr "שגיאה בקבלת זהות: "
 
-#: src/goabackend/goaoauth2provider.c:1216
+#: src/goabackend/goaoauth2provider.c:1272
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "התקבלה בקשת כניסה בתור %s, אך הכניסה בוצעה בשם %s"
 
-#: src/goabackend/goaoauth2provider.c:1368
+#: src/goabackend/goaoauth2provider.c:1424
 msgid "Credentials do not contain access_token"
 msgstr "פרטי הגישה אינם מכילים access_token (אסימון גישה)"
 
-#: src/goabackend/goaoauth2provider.c:1407
+#: src/goabackend/goaoauth2provider.c:1463
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "רענון אסימון הגישה נכשל (%s, %d): "
@@ -425,73 +443,73 @@ msgstr "רענון אסימון הגישה נכשל (%s, %d): "
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: src/goabackend/goaprovider.c:108
+#: src/goabackend/goaprovider.c:109
 msgid "_Mail"
 msgstr "_דוא״ל"
 
-#: src/goabackend/goaprovider.c:113
+#: src/goabackend/goaprovider.c:114
 msgid "Cale_ndar"
 msgstr "_לוח שנה"
 
-#: src/goabackend/goaprovider.c:118
+#: src/goabackend/goaprovider.c:119
 msgid "_Contacts"
 msgstr "_אנשי קשר"
 
-#: src/goabackend/goaprovider.c:123
+#: src/goabackend/goaprovider.c:124
 msgid "C_hat"
 msgstr "_שיחה"
 
-#: src/goabackend/goaprovider.c:128
+#: src/goabackend/goaprovider.c:129
 msgid "_Documents"
 msgstr "מ_סמכים"
 
-#: src/goabackend/goaprovider.c:133
+#: src/goabackend/goaprovider.c:134
 msgid "M_usic"
 msgstr "_מוזיקה"
 
-#: src/goabackend/goaprovider.c:138
+#: src/goabackend/goaprovider.c:139
 msgid "_Photos"
 msgstr "_תמונות"
 
-#: src/goabackend/goaprovider.c:143
+#: src/goabackend/goaprovider.c:144
 msgid "_Files"
 msgstr "_קבצים"
 
-#: src/goabackend/goaprovider.c:148
+#: src/goabackend/goaprovider.c:149
 msgid "Network _Resources"
 msgstr "משאבי _רשת"
 
-#: src/goabackend/goaprovider.c:153
+#: src/goabackend/goaprovider.c:154
 msgid "_Read Later"
 msgstr "א_קרא אחר כך"
 
-#: src/goabackend/goaprovider.c:158
+#: src/goabackend/goaprovider.c:159
 msgid "Prin_ters"
 msgstr "_מדפסות"
 
-#: src/goabackend/goaprovider.c:163
+#: src/goabackend/goaprovider.c:164
 msgid "_Maps"
 msgstr "_מפות"
 
-#: src/goabackend/goaprovider.c:168
+#: src/goabackend/goaprovider.c:169
 msgid "T_o Do"
 msgstr "_לעשות"
 
 #. Translators: This is a label for a series of
 #. * options switches. For example: “Use for Mail”.
-#: src/goabackend/goaprovider.c:566
+#: src/goabackend/goaprovider.c:567
 msgid "Use for"
 msgstr "שימוש לצורך"
 
-#: src/goabackend/goaprovider.c:821
+#: src/goabackend/goaprovider.c:822
 msgid "Account is disabled"
 msgstr "חשבון זה מושבת"
 
-#: src/goabackend/goaprovider.c:834
+#: src/goabackend/goaprovider.c:835
 msgid "Unknown error"
 msgstr "שגיאה לא ידועה"
 
-#: src/goabackend/goaprovider.c:853
+#: src/goabackend/goaprovider.c:854
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "התכונה ensure_credentials_sync אינה מיושמת בסוג %s"
