@@ -15,16 +15,16 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2023-11-08 18:17+0000\n"
-"PO-Revision-Date: 2023-11-08 08:00+0300\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
+"POT-Creation-Date: 2024-01-28 18:53+0000\n"
+"PO-Revision-Date: 2024-02-02 15:21+0300\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <takim@gnome.org.tr>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: data/org.gnome.online-accounts.gschema.xml:6
 msgid "List of providers that are allowed to be loaded"
@@ -54,20 +54,20 @@ msgid "ProviderType property is not set for account"
 msgstr "Hesap için ProviderType belirtilmemiş"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:283
+#: src/goabackend/goaewsclient.c:284
 msgid "Failed to parse autodiscover response XML"
 msgstr "XML autodiscover yanıtı ayrıştırılamadı"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: src/goabackend/goaewsclient.c:294 src/goabackend/goaewsclient.c:309
-#: src/goabackend/goaewsclient.c:324
+#: src/goabackend/goaewsclient.c:295 src/goabackend/goaewsclient.c:310
+#: src/goabackend/goaewsclient.c:325
 #, c-format
 msgid "Failed to find “%s” element"
 msgstr "“%s” ögesi bulunamadı"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:345
+#: src/goabackend/goaewsclient.c:346
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "autodiscover yanıtında ASUrl ve OABUrl bulunamadı"
 
@@ -80,7 +80,6 @@ msgstr "Microsoft Exchange"
 #. * (%s, %d) is the error domain and code.
 #.
 #: src/goabackend/goaexchangeprovider.c:248
-#: src/goabackend/goalastfmprovider.c:279
 #: src/goabackend/goawebdavprovider.c:373
 #, c-format
 msgid "Invalid password with username “%s” (%s, %d): "
@@ -95,12 +94,12 @@ msgstr "_E-posta"
 #: src/goabackend/goafedoraprovider.c:574
 #: src/goabackend/goaimapsmtpprovider.c:667
 #: src/goabackend/goaimapsmtpprovider.c:687
-#: src/goabackend/goalastfmprovider.c:421
 #: src/goabackend/goawebdavprovider.c:511
 msgid "_Password"
 msgstr "_Parola"
 
 #: src/goabackend/goaexchangeprovider.c:398
+#: src/goabackend/goamsgraphprovider.c:382
 msgid "_Custom"
 msgstr "_Özel"
 
@@ -108,7 +107,6 @@ msgstr "_Özel"
 #: src/goabackend/goafedoraprovider.c:573
 #: src/goabackend/goaimapsmtpprovider.c:666
 #: src/goabackend/goaimapsmtpprovider.c:686
-#: src/goabackend/goalastfmprovider.c:420
 #: src/goabackend/goawebdavprovider.c:510
 msgid "User_name"
 msgstr "Kullanıcı a_dı"
@@ -122,8 +120,7 @@ msgstr "_Sunucu"
 #: src/goabackend/goafedoraprovider.c:581
 #: src/goabackend/goaimapsmtpprovider.c:699
 #: src/goabackend/goakerberosprovider.c:583
-#: src/goabackend/goalastfmprovider.c:429
-#: src/goabackend/goaoauth2provider.c:939
+#: src/goabackend/goaoauth2provider.c:991
 #: src/goabackend/goawebdavprovider.c:538
 msgid "_Cancel"
 msgstr "İ_ptal"
@@ -131,7 +128,7 @@ msgstr "İ_ptal"
 #: src/goabackend/goaexchangeprovider.c:421
 #: src/goabackend/goafedoraprovider.c:582
 #: src/goabackend/goakerberosprovider.c:584
-#: src/goabackend/goalastfmprovider.c:430
+#: src/goabackend/goamsgraphprovider.c:404
 #: src/goabackend/goawebdavprovider.c:539
 msgid "C_onnect"
 msgstr "B_ağlan"
@@ -140,7 +137,6 @@ msgstr "B_ağlan"
 #: src/goabackend/goafedoraprovider.c:597
 #: src/goabackend/goaimapsmtpprovider.c:715
 #: src/goabackend/goakerberosprovider.c:599
-#: src/goabackend/goalastfmprovider.c:446
 #: src/goabackend/goawebdavprovider.c:554
 msgid "Connecting…"
 msgstr "Bağlanıyor…"
@@ -154,11 +150,9 @@ msgstr "Bağlanıyor…"
 #: src/goabackend/goaimapsmtpprovider.c:1249
 #: src/goabackend/goaimapsmtpprovider.c:1325
 #: src/goabackend/goakerberosprovider.c:939
-#: src/goabackend/goalastfmprovider.c:644
-#: src/goabackend/goalastfmprovider.c:812
-#: src/goabackend/goamediaserverprovider.c:412
-#: src/goabackend/goaoauth2provider.c:962
-#: src/goabackend/goaoauth2provider.c:978
+#: src/goabackend/goamsgraphprovider.c:540
+#: src/goabackend/goaoauth2provider.c:1014
+#: src/goabackend/goaoauth2provider.c:1030
 #: src/goabackend/goawebdavprovider.c:746
 #: src/goabackend/goawebdavprovider.c:1034
 msgid "Dialog was dismissed"
@@ -171,8 +165,6 @@ msgstr "İletişim penceresi kapatıldı"
 #: src/goabackend/goaimapsmtpprovider.c:1030
 #: src/goabackend/goaimapsmtpprovider.c:1276
 #: src/goabackend/goaimapsmtpprovider.c:1353
-#: src/goabackend/goalastfmprovider.c:678
-#: src/goabackend/goalastfmprovider.c:831
 #: src/goabackend/goawebdavprovider.c:609
 #, c-format
 msgid "Dialog was dismissed (%s, %d): "
@@ -193,8 +185,6 @@ msgstr "_Yok say"
 #: src/goabackend/goaimapsmtpprovider.c:1295
 #: src/goabackend/goaimapsmtpprovider.c:1372
 #: src/goabackend/goakerberosprovider.c:1032
-#: src/goabackend/goalastfmprovider.c:690
-#: src/goabackend/goalastfmprovider.c:848
 #: src/goabackend/goawebdavprovider.c:626
 msgid "_Try Again"
 msgstr "_Yeniden Dene"
@@ -240,6 +230,7 @@ msgid "Google"
 msgstr "Google"
 
 #: src/goabackend/goagoogleprovider.c:207
+#: src/goabackend/goamsgraphprovider.c:195
 #: src/goabackend/goawindowsliveprovider.c:158
 #, c-format
 msgid ""
@@ -251,18 +242,15 @@ msgstr ""
 #. TODO: more specific
 #: src/goabackend/goagoogleprovider.c:226
 #: src/goabackend/goagoogleprovider.c:237
-#: src/goabackend/goalastfmprovider.c:204
-#: src/goabackend/goalastfmprovider.c:213
-#: src/goabackend/goalastfmprovider.c:222
-#: src/goabackend/goalastfmprovider.c:230
-#: src/goabackend/goalastfmprovider.c:236
-#: src/goabackend/goalastfmprovider.c:504
-#: src/goabackend/goalastfmprovider.c:513
-#: src/goabackend/goalastfmprovider.c:530
-#: src/goabackend/goalastfmprovider.c:536
-#: src/goabackend/goaoauth2provider.c:536
-#: src/goabackend/goaoauth2provider.c:566
-#: src/goabackend/goaoauth2provider.c:577 src/goabackend/goautils.c:296
+#: src/goabackend/goamsgraphprovider.c:214
+#: src/goabackend/goamsgraphprovider.c:225
+#: src/goabackend/goamsgraphprovider.c:236
+#: src/goabackend/goamsgraphprovider.c:462
+#: src/goabackend/goamsgraphprovider.c:475
+#: src/goabackend/goamsgraphprovider.c:489
+#: src/goabackend/goaoauth2provider.c:594
+#: src/goabackend/goaoauth2provider.c:624
+#: src/goabackend/goaoauth2provider.c:635 src/goabackend/goautils.c:296
 #: src/goabackend/goawindowsliveprovider.c:177
 #: src/goabackend/goawindowsliveprovider.c:188
 #: src/goabackend/goawindowsliveprovider.c:197
@@ -276,8 +264,8 @@ msgid "Service not available"
 msgstr "Hizmet kullanılabilir değil"
 
 #. TODO: more specific
-#: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goalastfmprovider.c:521
-#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:857
+#: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goasmtpauth.c:102
+#: src/goabackend/goautils.c:857
 msgid "Authentication failed"
 msgstr "Kimlik doğrulama başarısız"
 
@@ -402,36 +390,16 @@ msgstr "Bu parolayı anımsa"
 msgid "Error connecting to enterprise identity server"
 msgstr "Kurumsal kimlik sunucusuna bağlanırken hata oluştu"
 
-#: src/goabackend/goalastfmprovider.c:57
-msgid "Last.fm"
-msgstr "Last.fm"
+#: src/goabackend/goamsgraphprovider.c:78
+#| msgid "Microsoft"
+msgid "Microsoft 365"
+msgstr "Microsoft 365"
 
-#: src/goabackend/goalastfmprovider.c:692
-#: src/goabackend/goalastfmprovider.c:842
-msgid "Error connecting to Last.fm"
-msgstr "Last.fm’e bağlanırken hata"
+#: src/goabackend/goamsgraphprovider.c:371
+msgid "E-Mail"
+msgstr "E-Posta"
 
-#: src/goabackend/goamediaserverprovider.c:55
-msgid "Media Server"
-msgstr "Ortam Sunucusu"
-
-#: src/goabackend/goamediaserverprovider.c:308
-msgid ""
-"Personal content can be added to your applications through a media server "
-"account."
-msgstr ""
-"Uygulamalarınıza, bir ortam sunucusu hesabı aracılığıyla kişisel içerik "
-"ekleyebilirsiniz."
-
-#: src/goabackend/goamediaserverprovider.c:321
-msgid "Available Media Servers"
-msgstr "Kullanılabilir Ortam Sunucuları"
-
-#: src/goabackend/goamediaserverprovider.c:352
-msgid "No media servers found"
-msgstr "Hiçbir ortam sunucusu bulunamadı"
-
-#: src/goabackend/goaoauth2provider.c:512
+#: src/goabackend/goaoauth2provider.c:570
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -439,45 +407,45 @@ msgstr ""
 "Erişim jetonu istenirken durum kodu 200 bekleniyordu, ama durum kodu %d (%s) "
 "alındı"
 
-#: src/goabackend/goaoauth2provider.c:656
+#: src/goabackend/goaoauth2provider.c:712
 msgid "Authorization response: "
 msgstr "Yetkilendirme yanıtı:"
 
-#: src/goabackend/goaoauth2provider.c:719
+#: src/goabackend/goaoauth2provider.c:775
 #, c-format
 msgid "Authorization response: %s"
 msgstr "Yetkilendirme yanıtı: %s"
 
-#: src/goabackend/goaoauth2provider.c:727
+#: src/goabackend/goaoauth2provider.c:783
 msgid "Failed to authenticate"
 msgstr "Kimlik doğrulanamadı"
 
-#: src/goabackend/goaoauth2provider.c:927
+#: src/goabackend/goaoauth2provider.c:979
 msgid "Sign in with your browser to setup an account."
 msgstr "Bu hesabı kurmak için taryıcınızla giriş yapın."
 
-#: src/goabackend/goaoauth2provider.c:931
+#: src/goabackend/goaoauth2provider.c:983
 msgid "Continue"
 msgstr "Sürdür"
 
-#: src/goabackend/goaoauth2provider.c:1004
+#: src/goabackend/goaoauth2provider.c:1056
 msgid "Error getting an Access Token: "
 msgstr "Erişim Jetonu alırken hata oluştu: "
 
-#: src/goabackend/goaoauth2provider.c:1019
+#: src/goabackend/goaoauth2provider.c:1071
 msgid "Error getting identity: "
 msgstr "Kimlik alınırken hata oluştu: "
 
-#: src/goabackend/goaoauth2provider.c:1216
+#: src/goabackend/goaoauth2provider.c:1272
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "%s olarak giriş yapılması istendi, ancak %s olarak giriş yapıldı"
 
-#: src/goabackend/goaoauth2provider.c:1368
+#: src/goabackend/goaoauth2provider.c:1424
 msgid "Credentials do not contain access_token"
 msgstr "Kimlik bilgileri içinde access_token bulunmuyor"
 
-#: src/goabackend/goaoauth2provider.c:1407
+#: src/goabackend/goaoauth2provider.c:1463
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Erişim jetonu yenilenemedi (%s, %d): "
@@ -486,73 +454,73 @@ msgstr "Erişim jetonu yenilenemedi (%s, %d): "
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: src/goabackend/goaprovider.c:110
+#: src/goabackend/goaprovider.c:109
 msgid "_Mail"
 msgstr "_Posta"
 
-#: src/goabackend/goaprovider.c:115
+#: src/goabackend/goaprovider.c:114
 msgid "Cale_ndar"
 msgstr "_Takvim"
 
-#: src/goabackend/goaprovider.c:120
+#: src/goabackend/goaprovider.c:119
 msgid "_Contacts"
 msgstr "_Kişiler"
 
-#: src/goabackend/goaprovider.c:125
+#: src/goabackend/goaprovider.c:124
 msgid "C_hat"
 msgstr "S_ohbet"
 
-#: src/goabackend/goaprovider.c:130
+#: src/goabackend/goaprovider.c:129
 msgid "_Documents"
 msgstr "_Belgeler"
 
-#: src/goabackend/goaprovider.c:135
+#: src/goabackend/goaprovider.c:134
 msgid "M_usic"
 msgstr "M_üzik"
 
-#: src/goabackend/goaprovider.c:140
+#: src/goabackend/goaprovider.c:139
 msgid "_Photos"
 msgstr "_Fotoğraflar"
 
-#: src/goabackend/goaprovider.c:145
+#: src/goabackend/goaprovider.c:144
 msgid "_Files"
 msgstr "_Dosyalar"
 
-#: src/goabackend/goaprovider.c:150
+#: src/goabackend/goaprovider.c:149
 msgid "Network _Resources"
 msgstr "Ağ Ö_zkaynakları"
 
-#: src/goabackend/goaprovider.c:155
+#: src/goabackend/goaprovider.c:154
 msgid "_Read Later"
 msgstr "Daha Sonra _Oku"
 
-#: src/goabackend/goaprovider.c:160
+#: src/goabackend/goaprovider.c:159
 msgid "Prin_ters"
 msgstr "Ya_zıcılar"
 
-#: src/goabackend/goaprovider.c:165
+#: src/goabackend/goaprovider.c:164
 msgid "_Maps"
 msgstr "_Haritalar"
 
-#: src/goabackend/goaprovider.c:170
+#: src/goabackend/goaprovider.c:169
 msgid "T_o Do"
 msgstr "_Yapılacaklar"
 
 #. Translators: This is a label for a series of
 #. * options switches. For example: “Use for Mail”.
-#: src/goabackend/goaprovider.c:568
+#: src/goabackend/goaprovider.c:567
 msgid "Use for"
 msgstr "Şunun için kullanılacak"
 
-#: src/goabackend/goaprovider.c:823
+#: src/goabackend/goaprovider.c:822
 msgid "Account is disabled"
 msgstr "Hesap devre dışı bırakılmış"
 
-#: src/goabackend/goaprovider.c:836
+#: src/goabackend/goaprovider.c:835
 msgid "Unknown error"
 msgstr "Bilinmeyen hata"
 
-#: src/goabackend/goaprovider.c:855
+#: src/goabackend/goaprovider.c:854
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync, %s türüne uygulanmamıştır"
@@ -789,3 +757,25 @@ msgstr "Kimlik bulunamadı"
 #: src/goaidentity/goakerberosidentitymanager.c:937
 msgid "Could not create credential cache for identity"
 msgstr "Kimlik için kimlik bilgileri önbelleği oluşturulamadı"
+
+#~ msgid "Last.fm"
+#~ msgstr "Last.fm"
+
+#~ msgid "Error connecting to Last.fm"
+#~ msgstr "Last.fm’e bağlanırken hata"
+
+#~ msgid "Media Server"
+#~ msgstr "Ortam Sunucusu"
+
+#~ msgid ""
+#~ "Personal content can be added to your applications through a media server "
+#~ "account."
+#~ msgstr ""
+#~ "Uygulamalarınıza, bir ortam sunucusu hesabı aracılığıyla kişisel içerik "
+#~ "ekleyebilirsiniz."
+
+#~ msgid "Available Media Servers"
+#~ msgstr "Kullanılabilir Ortam Sunucuları"
+
+#~ msgid "No media servers found"
+#~ msgstr "Hiçbir ortam sunucusu bulunamadı"
