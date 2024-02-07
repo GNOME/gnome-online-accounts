@@ -32,10 +32,6 @@ static const SecretSchema oauth2_schema =
       .name = "goa-oauth2-client",
       .type = SECRET_SCHEMA_ATTRIBUTE_STRING,
     },
-    {
-      .name = "goa-oauth2-provider",
-      .type = SECRET_SCHEMA_ATTRIBUTE_STRING,
-    },
     { "NULL", 0 }
   }
 };
@@ -43,35 +39,30 @@ static const SecretSchema oauth2_schema =
 static struct
 {
   const char *client_id;
-  const char *provider;
 }
 oauth2_providers[] =
 {
 #ifdef GOA_GOOGLE_ENABLED
   {
     .client_id = GOA_GOOGLE_CLIENT_ID,
-    .provider = GOA_GOOGLE_NAME,
   },
 #endif
 #ifdef GOA_WINDOWS_LIVE_ENABLED
   {
     .client_id = GOA_WINDOWS_LIVE_CLIENT_ID,
-    .provider = GOA_WINDOWS_LIVE_NAME,
   },
 #endif
 #ifdef GOA_MS_GRAPH_ENABLED
     {
     .client_id = GOA_MS_GRAPH_CLIENT_ID,
-    .provider = GOA_MS_GRAPH_NAME,
     },
 #endif
-  { NULL, NULL },
+  { NULL },
 };
 
 static gboolean
 get_oauth2_provider (const char  *needle,
-                     const char **client_out,
-                     const char **provider_out)
+                     const char **client_out)
 {
   g_return_val_if_fail (needle != NULL, FALSE);
 
@@ -81,9 +72,6 @@ get_oauth2_provider (const char  *needle,
         {
           if (client_out)
             *client_out = oauth2_providers[i].client_id;
-
-          if (provider_out)
-            *provider_out = oauth2_providers[i].provider;
 
           return TRUE;
         }
@@ -100,7 +88,6 @@ main (int    argc,
   const char *scheme = NULL;
   const char *path = NULL;
   const char *client_id = NULL;
-  const char *provider_type = NULL;
   g_autoptr (GError) error = NULL;
 
   if (argc < 2)
@@ -132,11 +119,10 @@ main (int    argc,
           g_string_prepend (tmp, strv[i]);
         }
 
-      get_oauth2_provider (tmp->str, &client_id, &provider_type);
+      get_oauth2_provider (tmp->str, &client_id);
     }
 
-  /* Windows Live uses goa-oauth2:// with the client ID as the first path segment
-   */
+  /* Treat first path segment as client id */
   if (client_id == NULL)
     {
       path = g_uri_get_path (uri);
@@ -145,7 +131,7 @@ main (int    argc,
           g_auto (GStrv) strv = NULL;
 
           strv = g_strsplit (*path == '/' ? path +1 : path, "/", 1);
-          get_oauth2_provider (strv[0], &client_id, &provider_type);
+          client_id = g_strdup (strv[0]);
         }
     }
 
@@ -162,7 +148,6 @@ main (int    argc,
                                    NULL,
                                    &error,
                                    "goa-oauth2-client", client_id,
-                                   "goa-oauth2-provider", provider_type,
                                    NULL))
     {
       if (error != NULL)
