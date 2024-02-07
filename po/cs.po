@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2023-12-10 12:57+0000\n"
-"PO-Revision-Date: 2024-01-22 17:38+0100\n"
+"POT-Creation-Date: 2024-01-28 18:53+0000\n"
+"PO-Revision-Date: 2024-02-07 01:08+0100\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -93,6 +93,7 @@ msgid "_Password"
 msgstr "_Heslo"
 
 #: src/goabackend/goaexchangeprovider.c:398
+#: src/goabackend/goamsgraphprovider.c:382
 msgid "_Custom"
 msgstr "_Vlastní"
 
@@ -113,7 +114,7 @@ msgstr "_Server"
 #: src/goabackend/goafedoraprovider.c:581
 #: src/goabackend/goaimapsmtpprovider.c:699
 #: src/goabackend/goakerberosprovider.c:583
-#: src/goabackend/goaoauth2provider.c:939
+#: src/goabackend/goaoauth2provider.c:991
 #: src/goabackend/goawebdavprovider.c:538
 msgid "_Cancel"
 msgstr "_Zrušit"
@@ -121,6 +122,7 @@ msgstr "_Zrušit"
 #: src/goabackend/goaexchangeprovider.c:421
 #: src/goabackend/goafedoraprovider.c:582
 #: src/goabackend/goakerberosprovider.c:584
+#: src/goabackend/goamsgraphprovider.c:404
 #: src/goabackend/goawebdavprovider.c:539
 msgid "C_onnect"
 msgstr "Přip_ojit"
@@ -142,8 +144,9 @@ msgstr "Připojuje se…"
 #: src/goabackend/goaimapsmtpprovider.c:1249
 #: src/goabackend/goaimapsmtpprovider.c:1325
 #: src/goabackend/goakerberosprovider.c:939
-#: src/goabackend/goaoauth2provider.c:962
-#: src/goabackend/goaoauth2provider.c:978
+#: src/goabackend/goamsgraphprovider.c:540
+#: src/goabackend/goaoauth2provider.c:1014
+#: src/goabackend/goaoauth2provider.c:1030
 #: src/goabackend/goawebdavprovider.c:746
 #: src/goabackend/goawebdavprovider.c:1034
 msgid "Dialog was dismissed"
@@ -220,6 +223,7 @@ msgid "Google"
 msgstr "Google"
 
 #: src/goabackend/goagoogleprovider.c:207
+#: src/goabackend/goamsgraphprovider.c:195
 #: src/goabackend/goawindowsliveprovider.c:158
 #, c-format
 msgid ""
@@ -231,9 +235,15 @@ msgstr ""
 #. TODO: more specific
 #: src/goabackend/goagoogleprovider.c:226
 #: src/goabackend/goagoogleprovider.c:237
-#: src/goabackend/goaoauth2provider.c:536
-#: src/goabackend/goaoauth2provider.c:566
-#: src/goabackend/goaoauth2provider.c:577 src/goabackend/goautils.c:296
+#: src/goabackend/goamsgraphprovider.c:214
+#: src/goabackend/goamsgraphprovider.c:225
+#: src/goabackend/goamsgraphprovider.c:236
+#: src/goabackend/goamsgraphprovider.c:462
+#: src/goabackend/goamsgraphprovider.c:475
+#: src/goabackend/goamsgraphprovider.c:489
+#: src/goabackend/goaoauth2provider.c:594
+#: src/goabackend/goaoauth2provider.c:624
+#: src/goabackend/goaoauth2provider.c:635 src/goabackend/goautils.c:296
 #: src/goabackend/goawindowsliveprovider.c:177
 #: src/goabackend/goawindowsliveprovider.c:188
 #: src/goabackend/goawindowsliveprovider.c:197
@@ -373,7 +383,16 @@ msgstr "Zapamatovat toto heslo"
 msgid "Error connecting to enterprise identity server"
 msgstr "Chyba při připojování k serveru s podnikovými identitami"
 
-#: src/goabackend/goaoauth2provider.c:512
+#: src/goabackend/goamsgraphprovider.c:78
+msgid "Microsoft 365"
+msgstr "Microsoft 365"
+
+#: src/goabackend/goamsgraphprovider.c:371
+#| msgid "_Mail"
+msgid "E-Mail"
+msgstr "E-mail"
+
+#: src/goabackend/goaoauth2provider.c:570
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -381,45 +400,45 @@ msgstr ""
 "Při požadavku o přístupový tiket očekáván stavový kód 200, místo toho získán "
 "%d (%s)"
 
-#: src/goabackend/goaoauth2provider.c:656
+#: src/goabackend/goaoauth2provider.c:712
 msgid "Authorization response: "
 msgstr "Odezva autorizace: "
 
-#: src/goabackend/goaoauth2provider.c:719
+#: src/goabackend/goaoauth2provider.c:775
 #, c-format
 msgid "Authorization response: %s"
 msgstr "Odezva autorizace: %s"
 
-#: src/goabackend/goaoauth2provider.c:727
+#: src/goabackend/goaoauth2provider.c:783
 msgid "Failed to authenticate"
 msgstr "Ověření selhalo"
 
-#: src/goabackend/goaoauth2provider.c:927
+#: src/goabackend/goaoauth2provider.c:979
 msgid "Sign in with your browser to setup an account."
 msgstr "Chcete-li nastavit účet, přihlaste se pomocí svého prohlížeče."
 
-#: src/goabackend/goaoauth2provider.c:931
+#: src/goabackend/goaoauth2provider.c:983
 msgid "Continue"
 msgstr "Pokračovat"
 
-#: src/goabackend/goaoauth2provider.c:1004
+#: src/goabackend/goaoauth2provider.c:1056
 msgid "Error getting an Access Token: "
 msgstr "Chyba při získávání přístupového tiketu: "
 
-#: src/goabackend/goaoauth2provider.c:1019
+#: src/goabackend/goaoauth2provider.c:1071
 msgid "Error getting identity: "
 msgstr "Chyba při získávání identity: "
 
-#: src/goabackend/goaoauth2provider.c:1216
+#: src/goabackend/goaoauth2provider.c:1272
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Bylo žádáno o přihlášení jako %s, ale provedlo se jako %s"
 
-#: src/goabackend/goaoauth2provider.c:1368
+#: src/goabackend/goaoauth2provider.c:1424
 msgid "Credentials do not contain access_token"
 msgstr "Pověření neobsahuje access_token"
 
-#: src/goabackend/goaoauth2provider.c:1407
+#: src/goabackend/goaoauth2provider.c:1463
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Selhalo občerstvení přístupového tiketu (%s, %d): "
@@ -428,73 +447,73 @@ msgstr "Selhalo občerstvení přístupového tiketu (%s, %d): "
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: src/goabackend/goaprovider.c:108
+#: src/goabackend/goaprovider.c:109
 msgid "_Mail"
 msgstr "_Pošta"
 
-#: src/goabackend/goaprovider.c:113
+#: src/goabackend/goaprovider.c:114
 msgid "Cale_ndar"
 msgstr "Kale_ndář"
 
-#: src/goabackend/goaprovider.c:118
+#: src/goabackend/goaprovider.c:119
 msgid "_Contacts"
 msgstr "_Kontakty"
 
-#: src/goabackend/goaprovider.c:123
+#: src/goabackend/goaprovider.c:124
 msgid "C_hat"
 msgstr "Disk_uze"
 
-#: src/goabackend/goaprovider.c:128
+#: src/goabackend/goaprovider.c:129
 msgid "_Documents"
 msgstr "_Dokumenty"
 
-#: src/goabackend/goaprovider.c:133
+#: src/goabackend/goaprovider.c:134
 msgid "M_usic"
 msgstr "H_udba"
 
-#: src/goabackend/goaprovider.c:138
+#: src/goabackend/goaprovider.c:139
 msgid "_Photos"
 msgstr "_Fotografie"
 
-#: src/goabackend/goaprovider.c:143
+#: src/goabackend/goaprovider.c:144
 msgid "_Files"
 msgstr "_Soubory"
 
-#: src/goabackend/goaprovider.c:148
+#: src/goabackend/goaprovider.c:149
 msgid "Network _Resources"
 msgstr "Síťové p_rostředky"
 
-#: src/goabackend/goaprovider.c:153
+#: src/goabackend/goaprovider.c:154
 msgid "_Read Later"
 msgstr "_Přečíst později"
 
-#: src/goabackend/goaprovider.c:158
+#: src/goabackend/goaprovider.c:159
 msgid "Prin_ters"
 msgstr "_Tiskárny"
 
-#: src/goabackend/goaprovider.c:163
+#: src/goabackend/goaprovider.c:164
 msgid "_Maps"
 msgstr "_Mapy"
 
-#: src/goabackend/goaprovider.c:168
+#: src/goabackend/goaprovider.c:169
 msgid "T_o Do"
 msgstr "Úk_oly"
 
 #. Translators: This is a label for a series of
 #. * options switches. For example: “Use for Mail”.
-#: src/goabackend/goaprovider.c:566
+#: src/goabackend/goaprovider.c:567
 msgid "Use for"
 msgstr "Použít pro"
 
-#: src/goabackend/goaprovider.c:821
+#: src/goabackend/goaprovider.c:822
 msgid "Account is disabled"
 msgstr "Účet je zakázaný"
 
-#: src/goabackend/goaprovider.c:834
+#: src/goabackend/goaprovider.c:835
 msgid "Unknown error"
 msgstr "Neznámá chyba"
 
-#: src/goabackend/goaprovider.c:853
+#: src/goabackend/goaprovider.c:854
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync není implementováno na typu %s"
