@@ -1,7 +1,7 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
  * Copyright © 2019 Vilém Hořínek
- * Copyright © 2022-2023 Jan-Michael Brummer <jan-michael.brummer1@volkswagen.de>
+ * Copyright © 2022-2024 Jan-Michael Brummer <jan-michael.brummer1@volkswagen.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -257,7 +257,7 @@ build_object (GoaProvider        *provider,
 {
   GoaMsGraphProvider *self = GOA_MS_GRAPH_PROVIDER (provider);
   GoaAccount *account = NULL;
-  const gchar *email_address = NULL;
+  const gchar *identity = NULL;
   gboolean files_enabled = FALSE;
   gchar *uri_onedrive = NULL;
   gboolean ret = FALSE;
@@ -272,11 +272,11 @@ build_object (GoaProvider        *provider,
     goto out;
 
   account = goa_object_get_account (GOA_OBJECT (object));
-  email_address = goa_account_get_identity (account);
+  identity = goa_account_get_identity (account);
 
   /* Files */
   files_enabled = g_key_file_get_boolean (key_file, group, "FilesEnabled", NULL);
-  uri_onedrive = g_strconcat ("onedrive://", email_address, "/", NULL);
+  uri_onedrive = g_strconcat ("onedrive://", identity, "/", NULL);
   goa_object_skeleton_attach_files (object, uri_onedrive, files_enabled, FALSE);
   g_free (uri_onedrive);
 
@@ -326,8 +326,9 @@ typedef struct
   GoaClient *client;
   GoaObject *object;
 
-  GtkWidget *email_entry;
+  GtkWidget *issuer_combobox;
   GtkWidget *client_id_entry;
+  GtkWidget *custom_issuer_entry;
 } AccountData;
 
 static void
@@ -341,16 +342,11 @@ account_data_free (gpointer user_data)
 }
 
 static void
-on_email_entry_changed (GtkEditable *editable,
-                        AccountData *data)
+on_client_id_entry_changed (GtkEditable *editable,
+                            AccountData *data)
 {
-  GoaDialogState state = GOA_DIALOG_IDLE;
-  const char *email;
+  GoaDialogState state = GOA_DIALOG_READY;
   const char *client_id;
-
-  email = gtk_editable_get_text (GTK_EDITABLE (data->email_entry));
-  if (goa_utils_parse_email_address (email, NULL, NULL))
-    state = GOA_DIALOG_READY;
 
   /* Ensure there is client ID, since there is no build-system default */
   client_id = gtk_editable_get_text (GTK_EDITABLE (data->client_id_entry));
@@ -367,127 +363,40 @@ create_account_details_ui (GoaProvider *provider,
                            gboolean     new_account)
 {
   GoaProviderDialog *dialog = GOA_PROVIDER_DIALOG (data->dialog);
-  GtkWidget *group;
-
-  group = goa_provider_dialog_add_group (dialog, NULL);
-  data->email_entry = goa_provider_dialog_add_entry (dialog, group, _("_E-Mail"));
 
   if (new_account)
     {
-      GtkWidget *subgroup;
+      GtkWidget *group;
+      GtkWidget *row;
+      /* NOTE: In case further types needs to be added, ensure that the
+       * code in add_account_action_cb is also adjusted.
+       */
+      static const char * const types[] = {\
+        /* Translators: Microsoft account issuer type */
+        N_("Common"),
+        /* Translators: Microsoft account issuer type */
+        N_("Custom"),
+        NULL
+      };
 
       group = goa_provider_dialog_add_group (dialog, NULL);
-      subgroup = g_object_new (ADW_TYPE_EXPANDER_ROW,
-                               /* TRANSLATORS: Custom account setup options */
-                               "title", _("_Custom"),
-                               "use-underline", TRUE,
-                               NULL);
-      adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), subgroup);
-      data->client_id_entry = goa_provider_dialog_add_entry (dialog, subgroup, _("Client ID"));
+      data->client_id_entry = goa_provider_dialog_add_entry (dialog, group, _("_Client ID"));
+
+      row = g_object_new (ADW_TYPE_EXPANDER_ROW,
+                          "title",         _("Ad_vanced"),
+                          "use-underline", TRUE,
+                          NULL);
+      data->issuer_combobox = goa_provider_dialog_add_combo (dialog, row, _("_Issuer"), (GStrv) types);
+      data->custom_issuer_entry = goa_provider_dialog_add_entry (dialog, row, _("C_ustom Issuer"));
+      adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), row);
+
+      g_signal_connect (data->client_id_entry,
+                        "changed",
+                        G_CALLBACK (on_client_id_entry_changed),
+                        data);
+
+      on_client_id_entry_changed (GTK_EDITABLE (data->client_id_entry), data);
     }
-
-  g_signal_connect (data->email_entry,
-                    "changed",
-                    G_CALLBACK (on_email_entry_changed),
-                    data);
-}
-
-static gboolean
-setup_tenant (GoaMsGraphProvider  *self,
-              const char          *host,
-              GError             **error)
-{
-  g_autofree char *config_url = NULL;
-  SoupSession *session;
-  SoupMessage *msg;
-  GInputStream *res;
-  JsonParser *parser;
-
-  /* The OAuth configuration is re-built for each account being added,
-   * so when the provider chains up the parent sees the correct values.
-   */
-  g_clear_pointer (&self->client_id, g_free);
-  g_clear_pointer (&self->redirect_uri, g_free);
-  g_clear_pointer (&self->authorization_uri, g_free);
-  g_clear_pointer (&self->token_uri, g_free);
-
-  /* First try to read openid configuration and extract known tenant configuration */
-  config_url = g_strdup_printf ("https://login.microsoft.com/%s/v2.0/.well-known/openid-configuration", host);
-
-  session = soup_session_new ();
-  soup_session_add_feature_by_type (session, SOUP_TYPE_AUTH_NTLM);
-
-  msg = soup_message_new ("GET", config_url);
-  res = soup_session_send (session, msg, NULL, error);
-  if (res)
-    {
-      char buffer[2048];
-      gsize len;
-      GError *parse_error = NULL;
-      JsonObject *json_object;
-
-      memset(buffer, 0, sizeof (buffer));
-      g_input_stream_read_all (res, &buffer, sizeof (buffer) - 1, &len, NULL, NULL);
-
-      parser = json_parser_new ();
-      if (!json_parser_load_from_data (parser,
-                                       buffer,
-                                       len,
-                                       &parse_error))
-        {
-          g_debug ("json_parser_load_from_data() failed: %s (%s, %d)",
-                   parse_error->message,
-                   g_quark_to_string (parse_error->domain),
-                   parse_error->code);
-          g_set_error (error,
-                       GOA_ERROR,
-                       GOA_ERROR_FAILED,
-                       _("Could not parse response"));
-          return FALSE;
-        }
-
-      json_object = json_node_get_object (json_parser_get_root (parser));
-      if (!json_object_has_member (json_object, "error"))
-        {
-          if (!json_object_has_member (json_object, "authorization_endpoint"))
-            {
-              g_debug ("Did not find authorization_endpoint in JSON data");
-              g_set_error (error,
-                           GOA_ERROR,
-                           GOA_ERROR_FAILED,
-                           _("Could not parse response"));
-              return FALSE;
-            }
-
-          char *url = g_strdup (json_object_get_string_member (json_object, "authorization_endpoint"));
-          self->authorization_uri = url;
-
-          json_object = json_node_get_object (json_parser_get_root (parser));
-          if (!json_object_has_member (json_object, "token_endpoint"))
-            {
-              g_debug ("Did not find token_endpoint in JSON data");
-              g_set_error (error,
-                           GOA_ERROR,
-                           GOA_ERROR_FAILED,
-                           _("Could not parse response"));
-              return FALSE;
-            }
-
-          url = g_strdup (json_object_get_string_member (json_object, "token_endpoint"));
-          self->token_uri = url;
-        }
-      }
-
-    if (!self->authorization_uri)
-      {
-        g_debug ("No openid configuration, using defaults");
-        self->authorization_uri = g_strdup ("https://login.microsoftonline.com/common/oauth2/v2.0/authorize");
-        self->token_uri = g_strdup ("https://login.microsoftonline.com/common/oauth2/v2.0/token");
-      }
-  g_debug ("%s: authorization_uri=%s", __FUNCTION__, self->authorization_uri);
-  g_debug ("%s: token_uri=%s", __FUNCTION__, self->token_uri);
-
-  return TRUE;
 }
 
 static void
@@ -515,24 +424,35 @@ add_account_action_cb (GoaProviderDialog *dialog,
   GoaProvider *provider = g_task_get_source_object (task);
   AccountData *data = g_task_get_task_data (task);
   GCancellable *cancellable = g_task_get_cancellable (task);
-  const char *email;
   const char *client_id;
-  g_autofree char *domain = NULL;
+  g_autofree char *issuer = NULL;
   g_autoptr(GError) error = NULL;
+  char *tmp;
 
   if (goa_provider_dialog_get_state (data->dialog) != GOA_DIALOG_BUSY)
     return;
 
-  email = gtk_editable_get_text (GTK_EDITABLE (data->email_entry));
-  if (!goa_utils_parse_email_address (email, NULL, &domain))
-    g_return_if_reached ();
+  /* The OAuth configuration is re-built for each account being added,
+   * so when the provider chains up the parent sees the correct values.
+   */
+  g_clear_pointer (&self->client_id, g_free);
+  g_clear_pointer (&self->redirect_uri, g_free);
+  g_clear_pointer (&self->authorization_uri, g_free);
+  g_clear_pointer (&self->token_uri, g_free);
 
-  /* Setup tenant based on host, clearing the existing client configuration */
-  if (!setup_tenant (self, domain, &error))
+  if (adw_combo_row_get_selected (ADW_COMBO_ROW (data->issuer_combobox)) == 0)
     {
-      goa_provider_dialog_report_error (data->dialog, error);
-      return;
+      issuer = g_strdup ("common");
     }
+  else
+    {
+      issuer = g_strdup (gtk_editable_get_text (GTK_EDITABLE (data->custom_issuer_entry)));
+    }
+
+  tmp = g_uri_escape_string (issuer, NULL, TRUE);
+  self->authorization_uri = g_strdup_printf ("https://login.microsoftonline.com/%s/oauth2/v2.0/authorize", tmp);
+  self->token_uri = g_strdup_printf ("https://login.microsoftonline.com/%s/oauth2/v2.0/token", tmp);
+  g_clear_pointer (&tmp, g_free);
 
   /* Check for a custom client ID, then retrieve the effective client ID */
   client_id = gtk_editable_get_text (GTK_EDITABLE (data->client_id_entry));
