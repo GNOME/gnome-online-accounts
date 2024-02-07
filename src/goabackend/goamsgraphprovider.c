@@ -378,6 +378,7 @@ create_account_details_ui (GoaProvider *provider,
 
       group = goa_provider_dialog_add_group (dialog, NULL);
       subgroup = g_object_new (ADW_TYPE_EXPANDER_ROW,
+                               /* TRANSLATORS: Custom account setup options */
                                "title", _("_Custom"),
                                "use-underline", TRUE,
                                NULL);
