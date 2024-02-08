@@ -21,6 +21,7 @@
 
 #include "goaewsclient.h"
 #include "goaprovider.h"
+#include "goaproviderdialog.h"
 #include "goaexchangeprovider.h"
 #include "goaobjectskeletonutils.h"
 #include "goautils.h"
@@ -271,344 +272,192 @@ ensure_credentials_sync (GoaProvider         *provider,
 
 typedef struct
 {
-  GCancellable *cancellable;
-
-  GtkDialog *dialog;
-  GMainLoop *loop;
-
-  GtkWidget *cluebar;
-  GtkWidget *cluebar_label;
-  GtkWidget *connect_button;
-  GtkWidget *progress_grid;
+  GoaProviderDialog *dialog;
+  GoaClient *client;
+  GoaObject *object;
+  gboolean accept_ssl_errors;
 
   GtkWidget *email_address;
   GtkWidget *password;
-
-  GtkWidget *expander;
   GtkWidget *username;
   GtkWidget *server;
-
-  gchar *account_object_path;
-
-  GError *error;
 } AddAccountData;
 
+static void
+add_account_data_free (gpointer user_data)
+{
+  AddAccountData *data = (AddAccountData *)user_data;
+
+  g_clear_object (&data->client);
+  g_clear_object (&data->object);
+  g_free (data);
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-add_entry (GtkWidget     *grid,
-           gint           row,
-           const gchar   *text,
-           GtkWidget    **out_entry)
+on_username_or_server_changed (GtkEditable    *editable,
+                               AddAccountData *data)
 {
-  GtkStyleContext *context;
-  GtkWidget *label;
-  GtkWidget *entry;
+  GoaDialogState state = GOA_DIALOG_IDLE;
+  const char *password;
+  g_autofree char *server = NULL;
+  g_autofree char *username = NULL;
 
-  label = gtk_label_new_with_mnemonic (text);
-  context = gtk_widget_get_style_context (label);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
-  gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), label, 0, row, 1, 1);
+  /* User may override username/server */
+  username = g_strdup (gtk_editable_get_text (GTK_EDITABLE (data->username)));
+  server = g_strdup (gtk_editable_get_text (GTK_EDITABLE (data->server)));
 
-  entry = gtk_entry_new ();
-  gtk_widget_set_hexpand (entry, TRUE);
-  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-  gtk_grid_attach (GTK_GRID (grid), entry, 1, row, 3, 1);
+  if ((username == NULL || *username == '\0')
+      && (server == NULL || *server == '\0'))
+    {
+      const char *email;
 
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-  if (out_entry != NULL)
-    *out_entry = entry;
+      g_free (username);
+      g_free (server);
+      email = gtk_editable_get_text (GTK_EDITABLE (data->email_address));
+      goa_utils_parse_email_address (email, &username, &server);
+    }
+
+  password = gtk_editable_get_text (GTK_EDITABLE (data->password));
+  if ((password != NULL && *password != '\0')
+      && (username != NULL && *username != '\0')
+      && (server != NULL && *server != '\0'))
+    state = GOA_DIALOG_READY;
+
+  goa_provider_dialog_set_state (data->dialog, state);
 }
 
 static void
-on_email_address_or_password_changed (GtkEditable *editable, gpointer user_data)
+on_email_or_password_changed (GtkEditable    *editable,
+                              AddAccountData *data)
 {
-  AddAccountData *data = user_data;
-  gboolean can_add = FALSE;
-  const gchar *email;
-  gchar *domain = NULL;
-  gchar *url = NULL;
-  gchar *username = NULL;
+  GoaDialogState state = GOA_DIALOG_IDLE;
+  const char *email;
+  const char *password;
+  g_autofree char *server = NULL;
+  g_autofree char *username = NULL;
 
-  email = gtk_entry_get_text (GTK_ENTRY (data->email_address));
-  if (!goa_utils_parse_email_address (email, &username, &domain))
+  email = gtk_editable_get_text (GTK_EDITABLE (data->email_address));
+  if (!goa_utils_parse_email_address (email, &username, &server))
     goto out;
 
-  if (data->username != NULL)
-    gtk_entry_set_text (GTK_ENTRY (data->username), username);
+  /* If the e-mail changed update the username/server and let their handler
+   * decide the final state. */
+  if (data->username != NULL && data->server != NULL
+      && GTK_WIDGET (editable) == data->email_address)
+    {
+      gtk_editable_set_text (GTK_EDITABLE (data->username), username);
+      gtk_editable_set_text (GTK_EDITABLE (data->server), server);
+      return;
+    }
 
-  if (data->server != NULL)
-    gtk_entry_set_text (GTK_ENTRY (data->server), domain);
+  password = gtk_editable_get_text (GTK_EDITABLE (data->password));
+  if (password != NULL && *password != '\0')
+    state = GOA_DIALOG_READY;
 
-  can_add = gtk_entry_get_text_length (GTK_ENTRY (data->password)) != 0;
-
- out:
-  gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, can_add);
-  g_free (url);
-  g_free (domain);
-  g_free (username);
+out:
+  goa_provider_dialog_set_state (data->dialog, state);
 }
 
 static void
-create_account_details_ui (GoaProvider    *provider,
-                           GtkDialog      *dialog,
-                           GtkBox         *vbox,
-                           gboolean        new_account,
-                           AddAccountData *data)
+create_setup_page (GoaProvider    *provider,
+                   AddAccountData *data,
+                   gboolean        new_account)
 {
-  GtkWidget *grid0;
-  GtkWidget *grid1;
-  GtkWidget *label;
-  GtkWidget *spinner;
-  gint row;
-  gint width;
+  GoaProviderDialog *dialog = GOA_PROVIDER_DIALOG (data->dialog);
+  GtkWidget *group;
 
-  goa_utils_set_dialog_title (provider, dialog, new_account);
+  group = goa_provider_dialog_add_group (dialog, NULL);
+  data->email_address = goa_provider_dialog_add_entry (dialog, group, _("_E-mail"));
+  data->password = goa_provider_dialog_add_password_entry (dialog, group, _("_Password"));
 
-  grid0 = gtk_grid_new ();
-  gtk_container_set_border_width (GTK_CONTAINER (grid0), 5);
-  gtk_widget_set_margin_bottom (grid0, 6);
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid0), GTK_ORIENTATION_VERTICAL);
-  gtk_grid_set_row_spacing (GTK_GRID (grid0), 12);
-  gtk_container_add (GTK_CONTAINER (vbox), grid0);
-
-  data->cluebar = gtk_info_bar_new ();
-  gtk_info_bar_set_message_type (GTK_INFO_BAR (data->cluebar), GTK_MESSAGE_ERROR);
-  gtk_widget_set_hexpand (data->cluebar, TRUE);
-  gtk_widget_set_no_show_all (data->cluebar, TRUE);
-  gtk_container_add (GTK_CONTAINER (grid0), data->cluebar);
-
-  data->cluebar_label = gtk_label_new ("");
-  gtk_label_set_line_wrap (GTK_LABEL (data->cluebar_label), TRUE);
-  gtk_container_add (GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (data->cluebar))),
-                     data->cluebar_label);
-
-  grid1 = gtk_grid_new ();
-  gtk_grid_set_column_spacing (GTK_GRID (grid1), 12);
-  gtk_grid_set_row_spacing (GTK_GRID (grid1), 12);
-  gtk_container_add (GTK_CONTAINER (grid0), grid1);
-
-  row = 0;
-  add_entry (grid1, row++, _("_E-mail"), &data->email_address);
-  add_entry (grid1, row++, _("_Password"), &data->password);
   if (new_account)
     {
-      data->expander = gtk_expander_new_with_mnemonic (_("_Custom"));
-      gtk_expander_set_expanded (GTK_EXPANDER (data->expander), FALSE);
-      gtk_expander_set_resize_toplevel (GTK_EXPANDER (data->expander), TRUE);
-      gtk_container_add (GTK_CONTAINER (grid0), data->expander);
+      GtkWidget *row;
 
-      grid1 = gtk_grid_new ();
-      gtk_grid_set_column_spacing (GTK_GRID (grid1), 12);
-      gtk_grid_set_row_spacing (GTK_GRID (grid1), 12);
-      gtk_container_add (GTK_CONTAINER (data->expander), grid1);
+      group = goa_provider_dialog_add_group (dialog, NULL);
+      row = g_object_new (ADW_TYPE_EXPANDER_ROW,
+                          "title",         _("Ad_vanced"),
+                          "use-underline", TRUE,
+                          NULL);
+      data->username = goa_provider_dialog_add_entry (dialog, row, _("User_name"));
+      data->server = goa_provider_dialog_add_entry (dialog, row, _("_Server"));
+      adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), row);
 
-      row = 0;
-      add_entry (grid1, row++, _("User_name"), &data->username);
-      add_entry (grid1, row++, _("_Server"), &data->server);
+      g_signal_connect (data->username,
+                        "changed",
+                        G_CALLBACK (on_username_or_server_changed),
+                        data);
+      g_signal_connect (data->server,
+                        "changed",
+                        G_CALLBACK (on_username_or_server_changed),
+                        data);
     }
-
-  gtk_entry_set_visibility (GTK_ENTRY (data->password), FALSE);
 
   gtk_widget_grab_focus ((new_account) ? data->email_address : data->password);
-
-  g_signal_connect (data->email_address, "changed", G_CALLBACK (on_email_address_or_password_changed), data);
-  g_signal_connect (data->password, "changed", G_CALLBACK (on_email_address_or_password_changed), data);
-
-  gtk_dialog_add_button (data->dialog, _("_Cancel"), GTK_RESPONSE_CANCEL);
-  data->connect_button = gtk_dialog_add_button (data->dialog, _("C_onnect"), GTK_RESPONSE_OK);
-  gtk_dialog_set_default_response (data->dialog, GTK_RESPONSE_OK);
-  gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, FALSE);
-
-  data->progress_grid = gtk_grid_new ();
-  gtk_widget_set_no_show_all (data->progress_grid, TRUE);
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (data->progress_grid), GTK_ORIENTATION_HORIZONTAL);
-  gtk_grid_set_column_spacing (GTK_GRID (data->progress_grid), 3);
-  gtk_container_add (GTK_CONTAINER (grid0), data->progress_grid);
-
-  spinner = gtk_spinner_new ();
-  gtk_widget_set_size_request (spinner, 20, 20);
-  gtk_widget_show (spinner);
-  gtk_spinner_start (GTK_SPINNER (spinner));
-  gtk_container_add (GTK_CONTAINER (data->progress_grid), spinner);
-
-  label = gtk_label_new (_("Connecting…"));
-  gtk_widget_show (label);
-  gtk_container_add (GTK_CONTAINER (data->progress_grid), label);
-
-  if (new_account)
-    {
-      gtk_window_get_size (GTK_WINDOW (data->dialog), &width, NULL);
-      gtk_window_set_default_size (GTK_WINDOW (data->dialog), width, -1);
-    }
-  else
-    {
-      GtkWindow *parent;
-
-      /* Keep in sync with GoaPanelAddAccountDialog in
-       * gnome-control-center.
-       */
-      parent = gtk_window_get_transient_for (GTK_WINDOW (data->dialog));
-      if (parent != NULL)
-        {
-          gtk_window_get_size (parent, &width, NULL);
-          gtk_window_set_default_size (GTK_WINDOW (data->dialog), (gint) (0.5 * width), -1);
-        }
-    }
+  g_signal_connect (data->email_address,
+                    "changed",
+                    G_CALLBACK (on_email_or_password_changed),
+                    data);
+  g_signal_connect (data->password,
+                    "changed",
+                    G_CALLBACK (on_email_or_password_changed),
+                    data);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-add_account_cb (GoaManager *manager, GAsyncResult *res, gpointer user_data)
+add_account_credentials_cb (GoaManager   *manager,
+                            GAsyncResult *res,
+                            gpointer      user_data)
 {
-  AddAccountData *data = user_data;
-  goa_manager_call_add_account_finish (manager,
-                                       &data->account_object_path,
-                                       res,
-                                       &data->error);
-  g_main_loop_quit (data->loop);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
+  AddAccountData *data = g_task_get_task_data (task);
+  GDBusObject *ret = NULL;
+  g_autofree char *object_path = NULL;
+  GError *error = NULL;
+
+  if (!goa_manager_call_add_account_finish (manager, &object_path, res, &error))
+    {
+      goa_provider_task_return_error (task, error);
+      return;
+    }
+
+  ret = g_dbus_object_manager_get_object (goa_client_get_object_manager (data->client),
+                                          object_path);
+  goa_provider_task_return_account (task, GOA_OBJECT (ret));
 }
 
 static void
-autodiscover_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
+add_account_autodiscover_cb (GoaEwsClient *client,
+                             GAsyncResult *res,
+                             gpointer      user_data)
 {
-  GoaEwsClient *client = GOA_EWS_CLIENT (source_object);
-  AddAccountData *data = user_data;
-
-  goa_ews_client_autodiscover_finish (client, res, &data->error);
-  g_main_loop_quit (data->loop);
-  gtk_widget_set_sensitive (data->connect_button, TRUE);
-  gtk_widget_hide (data->progress_grid);
-}
-
-static void
-dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data)
-{
-  AddAccountData *data = user_data;
-
-  if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_DELETE_EVENT)
-    g_cancellable_cancel (data->cancellable);
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-static GoaObject *
-add_account (GoaProvider    *provider,
-             GoaClient      *client,
-             GtkDialog      *dialog,
-             GtkBox         *vbox,
-             GError        **error)
-{
-  AddAccountData data;
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
+  GoaProvider *provider = g_task_get_source_object (task);
+  AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   GVariantBuilder credentials;
   GVariantBuilder details;
-  GoaEwsClient *ews_client = NULL;
-  GoaObject *ret = NULL;
-  gboolean accept_ssl_errors = FALSE;
   const gchar *email_address;
   const gchar *server;
   const gchar *password;
   const gchar *username;
-  const gchar *provider_type;
-  gint response;
+  g_autoptr(GError) error = NULL;
 
-  memset (&data, 0, sizeof (AddAccountData));
-  data.cancellable = g_cancellable_new ();
-  data.loop = g_main_loop_new (NULL, FALSE);
-  data.dialog = dialog;
-  data.error = NULL;
-
-  create_account_details_ui (provider, dialog, vbox, TRUE, &data);
-  gtk_widget_show_all (GTK_WIDGET (vbox));
-  g_signal_connect (dialog, "response", G_CALLBACK (dialog_response_cb), &data);
-
-  ews_client = goa_ews_client_new ();
-
- ews_again:
-  response = gtk_dialog_run (dialog);
-  if (response != GTK_RESPONSE_OK)
+  if (!goa_ews_client_autodiscover_finish (client, res, &error))
     {
-      g_set_error (&data.error,
-                   GOA_ERROR,
-                   GOA_ERROR_DIALOG_DISMISSED,
-                   _("Dialog was dismissed"));
-      goto out;
+      goa_provider_dialog_report_error (data->dialog, error);
+      return;
     }
 
-  email_address = gtk_entry_get_text (GTK_ENTRY (data.email_address));
-  password = gtk_entry_get_text (GTK_ENTRY (data.password));
-  username = gtk_entry_get_text (GTK_ENTRY (data.username));
-  server = gtk_entry_get_text (GTK_ENTRY (data.server));
-
-  /* See if there's already an account of this type with the
-   * given identity
-   */
-  provider_type = goa_provider_get_provider_type (provider);
-  if (!goa_utils_check_duplicate (client,
-                                  username,
-                                  email_address,
-                                  provider_type,
-                                  (GoaPeekInterfaceFunc) goa_object_peek_password_based,
-                                  &data.error))
-    goto out;
-
-  g_cancellable_reset (data.cancellable);
-  goa_ews_client_autodiscover (ews_client,
-                               email_address,
-                               password,
-                               username,
-                               server,
-                               accept_ssl_errors,
-                               data.cancellable,
-                               autodiscover_cb,
-                               &data);
-  gtk_widget_set_sensitive (data.connect_button, FALSE);
-  gtk_widget_show (data.progress_grid);
-  g_main_loop_run (data.loop);
-
-  if (g_cancellable_is_cancelled (data.cancellable))
-    {
-      g_prefix_error (&data.error,
-                      _("Dialog was dismissed (%s, %d): "),
-                      g_quark_to_string (data.error->domain),
-                      data.error->code);
-      data.error->domain = GOA_ERROR;
-      data.error->code = GOA_ERROR_DIALOG_DISMISSED;
-      goto out;
-    }
-  else if (data.error != NULL)
-    {
-      gchar *markup;
-
-      if (data.error->code == GOA_ERROR_SSL)
-        {
-          gtk_button_set_label (GTK_BUTTON (data.connect_button), _("_Ignore"));
-          accept_ssl_errors = TRUE;
-        }
-      else
-        {
-          gtk_button_set_label (GTK_BUTTON (data.connect_button), _("_Try Again"));
-          accept_ssl_errors = FALSE;
-        }
-
-      markup = g_strdup_printf ("<b>%s:</b>\n%s",
-                                _("Error connecting to Microsoft Exchange server"),
-                                data.error->message);
-      g_clear_error (&data.error);
-
-      gtk_label_set_markup (GTK_LABEL (data.cluebar_label), markup);
-      g_free (markup);
-
-      gtk_expander_set_expanded (GTK_EXPANDER (data.expander), TRUE);
-      gtk_widget_set_no_show_all (data.cluebar, FALSE);
-      gtk_widget_show_all (data.cluebar);
-      goto ews_again;
-    }
-
-  gtk_widget_hide (GTK_WIDGET (dialog));
+  /* Account is confirmed */
+  email_address = gtk_editable_get_text (GTK_EDITABLE (data->email_address));
+  password = gtk_editable_get_text (GTK_EDITABLE (data->password));
+  username = gtk_editable_get_text (GTK_EDITABLE (data->username));
+  server = gtk_editable_get_text (GTK_EDITABLE (data->server));
 
   g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (password));
@@ -618,195 +467,245 @@ add_account (GoaProvider    *provider,
   g_variant_builder_add (&details, "{ss}", "CalendarEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "ContactsEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "Host", server);
-  g_variant_builder_add (&details, "{ss}", "AcceptSslErrors", (accept_ssl_errors) ? "true" : "false");
+  g_variant_builder_add (&details, "{ss}", "AcceptSslErrors", (data->accept_ssl_errors) ? "true" : "false");
 
-  /* OK, everything is dandy, add the account */
-  /* we want the GoaClient to update before this method returns (so it
-   * can create a proxy for the new object) so run the mainloop while
-   * waiting for this to complete
-   */
-  goa_manager_call_add_account (goa_client_get_manager (client),
+  goa_manager_call_add_account (goa_client_get_manager (data->client),
                                 goa_provider_get_provider_type (provider),
                                 username,
                                 email_address,
                                 g_variant_builder_end (&credentials),
                                 g_variant_builder_end (&details),
-                                NULL, /* GCancellable* */
-                                (GAsyncReadyCallback) add_account_cb,
-                                &data);
-  g_main_loop_run (data.loop);
-  if (data.error != NULL)
-    goto out;
+                                cancellable,
+                                (GAsyncReadyCallback) add_account_credentials_cb,
+                                g_steal_pointer (&task));
+}
 
-  ret = GOA_OBJECT (g_dbus_object_manager_get_object (goa_client_get_object_manager (client),
-                                                      data.account_object_path));
+static void
+add_account_action_cb (GoaProviderDialog *dialog,
+                       GParamSpec        *pspec,
+                       GTask             *task)
+{
+  GoaProvider *provider = g_task_get_source_object (task);
+  AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
+  g_autoptr(GoaEwsClient) ews_client = NULL;
+  g_autoptr(GError) error = NULL;
+  const char *email_address;
+  const char *server;
+  const char *password;
+  const char *username;
+  const char *provider_type;
 
- out:
-  /* We might have an object even when data.error is set.
-   * eg., if we failed to store the credentials in the keyring.
-   */
-  if (data.error != NULL)
-    g_propagate_error (error, data.error);
-  else
-    g_assert (ret != NULL);
+  if (goa_provider_dialog_get_state (data->dialog) != GOA_DIALOG_BUSY)
+    return;
 
-  g_signal_handlers_disconnect_by_func (dialog, dialog_response_cb, &data);
+  email_address = gtk_editable_get_text (GTK_EDITABLE (data->email_address));
+  password = gtk_editable_get_text (GTK_EDITABLE (data->password));
+  username = gtk_editable_get_text (GTK_EDITABLE (data->username));
+  server = gtk_editable_get_text (GTK_EDITABLE (data->server));
 
-  g_free (data.account_object_path);
-  g_clear_pointer (&data.loop, g_main_loop_unref);
-  g_clear_object (&data.cancellable);
-  g_clear_object (&ews_client);
-  return ret;
+  /* If this is duplicate account we're finished */
+  provider_type = goa_provider_get_provider_type (provider);
+  if (!goa_utils_check_duplicate (data->client,
+                                  username,
+                                  email_address,
+                                  provider_type,
+                                  (GoaPeekInterfaceFunc) goa_object_peek_password_based,
+                                  &error))
+    {
+      goa_provider_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  /* Confirm the account */
+  ews_client = goa_ews_client_new ();
+  goa_ews_client_autodiscover (ews_client,
+                               email_address,
+                               password,
+                               username,
+                               server,
+                               data->accept_ssl_errors,
+                               cancellable,
+                               (GAsyncReadyCallback)add_account_autodiscover_cb,
+                               g_object_ref (task));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static gboolean
-refresh_account (GoaProvider    *provider,
-                 GoaClient      *client,
-                 GoaObject      *object,
-                 GtkWindow      *parent,
-                 GError        **error)
+static void
+add_account (GoaProvider         *provider,
+             GoaClient           *client,
+             GtkWindow           *parent,
+             GCancellable        *cancellable,
+             GAsyncReadyCallback  callback,
+             gpointer             user_data)
 {
-  AddAccountData data;
-  GVariantBuilder builder;
-  GoaAccount *account;
-  GoaEwsClient *ews_client = NULL;
-  GoaExchange *exchange;
-  GtkWidget *dialog;
-  GtkWidget *vbox;
-  gboolean accept_ssl_errors;
-  gboolean ret = FALSE;
-  const gchar *email_address;
-  const gchar *server;
-  const gchar *password;
-  const gchar *username;
-  gint response;
+  AddAccountData *data;
+  g_autoptr(GTask) task = NULL;
 
-  g_return_val_if_fail (GOA_IS_EXCHANGE_PROVIDER (provider), FALSE);
-  g_return_val_if_fail (GOA_IS_CLIENT (client), FALSE);
-  g_return_val_if_fail (GOA_IS_OBJECT (object), FALSE);
-  g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), FALSE);
-  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+  data = g_new0 (AddAccountData, 1);
+  data->dialog = goa_provider_dialog_new (provider, client, parent);
+  data->client = g_object_ref (client);
 
-  dialog = gtk_dialog_new_with_buttons (NULL,
-                                        parent,
-                                        GTK_DIALOG_MODAL
-                                        | GTK_DIALOG_DESTROY_WITH_PARENT
-                                        | GTK_DIALOG_USE_HEADER_BAR,
-                                        NULL,
-                                        NULL);
-  gtk_container_set_border_width (GTK_CONTAINER (dialog), 12);
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+  task = g_task_new (provider, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
+  g_task_set_source_tag (task, add_account);
+  g_task_set_task_data (task, data, add_account_data_free);
+  goa_provider_task_bind_window (task, GTK_WINDOW (data->dialog));
 
-  vbox = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-  gtk_box_set_spacing (GTK_BOX (vbox), 12);
+  create_setup_page (provider, data, TRUE);
+  g_signal_connect_object (data->dialog,
+                           "notify::state",
+                           G_CALLBACK (add_account_action_cb),
+                           task,
+                           0 /* G_CONNECT_DEFAULT */);
+  gtk_window_present (GTK_WINDOW (data->dialog));
+}
 
-  memset (&data, 0, sizeof (AddAccountData));
-  data.cancellable = g_cancellable_new ();
-  data.loop = g_main_loop_new (NULL, FALSE);
-  data.dialog = GTK_DIALOG (dialog);
-  data.error = NULL;
+/* ---------------------------------------------------------------------------------------------------- */
 
-  create_account_details_ui (provider, GTK_DIALOG (dialog), GTK_BOX (vbox), FALSE, &data);
+static void
+refresh_account_credentials_cb (GoaAccount   *account,
+                                GAsyncResult *res,
+                                gpointer      user_data)
+{
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
+  GError *error = NULL;
 
-  account = goa_object_peek_account (object);
-  email_address = goa_account_get_presentation_identity (account);
-  gtk_entry_set_text (GTK_ENTRY (data.email_address), email_address);
-  gtk_editable_set_editable (GTK_EDITABLE (data.email_address), FALSE);
-
-  gtk_widget_show_all (dialog);
-  g_signal_connect (dialog, "response", G_CALLBACK (dialog_response_cb), &data);
-
-  ews_client = goa_ews_client_new ();
-
- ews_again:
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-  if (response != GTK_RESPONSE_OK)
+  if (!goa_account_call_ensure_credentials_finish (account, NULL, res, &error))
     {
-      g_set_error (&data.error,
-                   GOA_ERROR,
-                   GOA_ERROR_DIALOG_DISMISSED,
-                   _("Dialog was dismissed"));
-      goto out;
+      goa_provider_task_return_error (task, error);
+      return;
     }
 
-  password = gtk_entry_get_text (GTK_ENTRY (data.password));
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
+refresh_account_autodiscover_cb (GoaEwsClient *client,
+                                 GAsyncResult *res,
+                                 gpointer      user_data)
+{
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
+  GoaProvider *provider = g_task_get_source_object (task);
+  AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
+  GVariantBuilder credentials;
+  const gchar *password;
+  g_autoptr(GError) error = NULL;
+
+  if (!goa_ews_client_autodiscover_finish (client, res, &error))
+    {
+      data->accept_ssl_errors = (error->code == GOA_ERROR_SSL);
+      goa_provider_dialog_report_error (data->dialog, error);
+      return;
+    }
+
+  /* Account is confirmed */
+  password = gtk_editable_get_text (GTK_EDITABLE (data->password));
+
+  g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
+  g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (password));
+
+  // TODO: run in worker thread
+  if (!goa_utils_store_credentials_for_object_sync (provider,
+                                                    data->object,
+                                                    g_variant_builder_end (&credentials),
+                                                    g_task_get_cancellable (task),
+                                                    &error))
+    {
+      goa_provider_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  goa_account_call_ensure_credentials (goa_object_peek_account (data->object),
+                                       cancellable,
+                                       (GAsyncReadyCallback) refresh_account_credentials_cb,
+                                       g_steal_pointer (&task));
+}
+
+static void
+refresh_account_action_cb (GoaProviderDialog *dialog,
+                           GParamSpec        *pspec,
+                           GTask             *task)
+{
+  AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
+  GoaAccount *account;
+  GoaExchange *exchange;
+  g_autoptr(GoaEwsClient) ews_client = NULL;
+  const char *email_address;
+  const char *server;
+  const char *password;
+  const char *username;
+  gboolean accept_ssl_errors;
+
+  if (goa_provider_dialog_get_state (data->dialog) != GOA_DIALOG_BUSY)
+    return;
+
+  account = goa_object_peek_account (data->object);
+  exchange = goa_object_peek_exchange (data->object);
+
+  email_address = goa_account_get_presentation_identity (account);
+  password = gtk_editable_get_text (GTK_EDITABLE (data->password));
   username = goa_account_get_identity (account);
-
-  exchange = goa_object_peek_exchange (object);
-  accept_ssl_errors = goa_exchange_get_accept_ssl_errors (exchange);
   server = goa_exchange_get_host (exchange);
+  accept_ssl_errors = goa_exchange_get_accept_ssl_errors (exchange);
 
-  g_cancellable_reset (data.cancellable);
+  gtk_editable_set_editable (GTK_EDITABLE (data->email_address), FALSE);
+  gtk_editable_set_text (GTK_EDITABLE (data->email_address), email_address);
+
+  /* Confirm the account */
+  ews_client = goa_ews_client_new ();
   goa_ews_client_autodiscover (ews_client,
                                email_address,
                                password,
                                username,
                                server,
                                accept_ssl_errors,
-                               data.cancellable,
-                               autodiscover_cb,
-                               &data);
-  gtk_widget_set_sensitive (data.connect_button, FALSE);
-  gtk_widget_show (data.progress_grid);
-  g_main_loop_run (data.loop);
+                               cancellable,
+                               (GAsyncReadyCallback) refresh_account_autodiscover_cb,
+                               g_steal_pointer (&task));
+}
 
-  if (g_cancellable_is_cancelled (data.cancellable))
-    {
-      g_prefix_error (&data.error,
-                      _("Dialog was dismissed (%s, %d): "),
-                      g_quark_to_string (data.error->domain),
-                      data.error->code);
-      data.error->domain = GOA_ERROR;
-      data.error->code = GOA_ERROR_DIALOG_DISMISSED;
-      goto out;
-    }
-  else if (data.error != NULL)
-    {
-      gchar *markup;
+/* ---------------------------------------------------------------------------------------------------- */
 
-      markup = g_strdup_printf ("<b>%s:</b>\n%s",
-                                _("Error connecting to Microsoft Exchange server"),
-                                data.error->message);
-      g_clear_error (&data.error);
+static void
+refresh_account (GoaProvider         *provider,
+                 GoaClient           *client,
+                 GoaObject           *object,
+                 GtkWindow           *parent,
+                 GCancellable        *cancellable,
+                 GAsyncReadyCallback  callback,
+                 gpointer             user_data)
+{
+  AddAccountData *data;
+  g_autoptr(GTask) task = NULL;
 
-      gtk_label_set_markup (GTK_LABEL (data.cluebar_label), markup);
-      g_free (markup);
+  g_assert (GOA_IS_EXCHANGE_PROVIDER (provider));
+  g_assert (GOA_IS_CLIENT (client));
+  g_assert (GOA_IS_OBJECT (object));
+  g_assert (parent == NULL || GTK_IS_WINDOW (parent));
+  g_assert (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
-      gtk_button_set_label (GTK_BUTTON (data.connect_button), _("_Try Again"));
-      gtk_widget_set_no_show_all (data.cluebar, FALSE);
-      gtk_widget_show_all (data.cluebar);
-      goto ews_again;
-    }
+  data = g_new0 (AddAccountData, 1);
+  data->dialog = goa_provider_dialog_new (provider, client, parent);
+  data->client = g_object_ref (client);
+  data->object = g_object_ref (object);
 
-  /* TODO: run in worker thread */
-  g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
-  g_variant_builder_add (&builder, "{sv}", "password", g_variant_new_string (password));
+  task = g_task_new (provider, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
+  g_task_set_source_tag (task, refresh_account);
+  g_task_set_task_data (task, data, add_account_data_free);
+  goa_provider_task_bind_window (task, GTK_WINDOW (data->dialog));
 
-  if (!goa_utils_store_credentials_for_object_sync (provider,
-                                                    object,
-                                                    g_variant_builder_end (&builder),
-                                                    NULL, /* GCancellable */
-                                                    &data.error))
-    goto out;
-
-  goa_account_call_ensure_credentials (account,
-                                       NULL, /* GCancellable */
-                                       NULL, NULL); /* callback, user_data */
-
-  ret = TRUE;
-
- out:
-  if (data.error != NULL)
-    g_propagate_error (error, data.error);
-
-  gtk_widget_destroy (dialog);
-  g_clear_pointer (&data.loop, g_main_loop_unref);
-  g_clear_object (&data.cancellable);
-  g_clear_object (&ews_client);
-  return ret;
+  create_setup_page (provider, data, FALSE);
+  g_signal_connect_object (data->dialog,
+                           "notify::state",
+                           G_CALLBACK (refresh_account_action_cb),
+                           task,
+                           0 /* G_CONNECT_DEFAULT */);
+  gtk_window_present (GTK_WINDOW (data->dialog));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

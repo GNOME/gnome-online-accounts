@@ -24,6 +24,7 @@
 #include "goamailclient.h"
 #include "goaimapsmtpprovider.h"
 #include "goaprovider.h"
+#include "goaproviderdialog.h"
 #include "goasmtpauth.h"
 #include "goautils.h"
 
@@ -243,23 +244,6 @@ get_tls_type_from_object (GoaObject *object, const gchar *ssl_key, const gchar *
   return tls_type;
 }
 
-static GoaTlsType
-get_tls_type_from_string_id (const gchar *str)
-{
-  GoaTlsType tls_type;
-
-  if (g_strcmp0 (str, "none") == 0)
-    tls_type = GOA_TLS_TYPE_NONE;
-  else if (g_strcmp0 (str, "starttls") == 0)
-    tls_type = GOA_TLS_TYPE_STARTTLS;
-  else if (g_strcmp0 (str, "ssl") == 0)
-    tls_type = GOA_TLS_TYPE_SSL;
-  else
-    g_assert_not_reached ();
-
-  return tls_type;
-}
-
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
@@ -411,665 +395,285 @@ ensure_credentials_sync (GoaProvider         *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static void
-add_combo_box (GtkWidget     *grid,
-               gint           row,
-               const gchar   *text,
-               GtkWidget    **out_combo_box)
+enum
 {
-  GtkStyleContext *context;
-  GtkWidget *label;
-  GtkWidget *combo_box;
-
-  label = gtk_label_new_with_mnemonic (text);
-  context = gtk_widget_get_style_context (label);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
-  gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), label, 0, row, 1, 1);
-
-  combo_box = gtk_combo_box_text_new ();
-  gtk_widget_set_hexpand (combo_box, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), combo_box, 1, row, 3, 1);
-
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo_box);
-  if (out_combo_box != NULL)
-    *out_combo_box = combo_box;
-}
-
-static void
-add_entry (GtkWidget     *grid,
-           gint           row,
-           const gchar   *text,
-           GtkWidget    **out_entry)
-{
-  GtkStyleContext *context;
-  GtkWidget *label;
-  GtkWidget *entry;
-
-  label = gtk_label_new_with_mnemonic (text);
-  context = gtk_widget_get_style_context (label);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
-  gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), label, 0, row, 1, 1);
-
-  entry = gtk_entry_new ();
-  gtk_widget_set_hexpand (entry, TRUE);
-  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-  gtk_grid_attach (GTK_GRID (grid), entry, 1, row, 3, 1);
-
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-  if (out_entry != NULL)
-    *out_entry = entry;
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
+  CONFIG_PAGE_EMAIL,
+  CONFIG_PAGE_IMAP,
+  CONFIG_PAGE_SMTP,
+};
 
 typedef struct
 {
-  GCancellable *cancellable;
+  GoaProviderDialog *dialog;
+  GoaClient *client;
+  GoaObject *object;
 
-  GtkDialog *dialog;
-  GMainLoop *loop;
+  GoaMailAuth *smtp_auth;
+  gboolean imap_accept_ssl_errors;
+  gboolean imap_had_ssl_errors;
+  gboolean smtp_accept_ssl_errors;
+  gboolean smtp_had_ssl_errors;
+  gboolean smtp_use_auth;
+  gboolean smtp_auth_login;
+  gboolean smtp_auth_plain;
 
-  GtkWidget *cluebar;
-  GtkWidget *cluebar_label;
-  GtkWidget *notebook;
-  GtkWidget *forward_button;
-  GtkWidget *progress_grid;
-
-  GtkWidget *email_address;
   GtkWidget *name;
+  GtkWidget *email_address;
+  GtkWidget *email_password;
 
+  GtkWidget *imap_group;
   GtkWidget *imap_server;
   GtkWidget *imap_username;
   GtkWidget *imap_password;
   GtkWidget *imap_encryption;
 
+  GtkWidget *smtp_group;
   GtkWidget *smtp_server;
   GtkWidget *smtp_username;
   GtkWidget *smtp_password;
   GtkWidget *smtp_encryption;
-
-  gchar *account_object_path;
-
-  GError *error;
 } AddAccountData;
+
+static void
+add_account_data_free (gpointer user_data)
+{
+  AddAccountData *data = (AddAccountData *)user_data;
+
+  g_clear_object (&data->client);
+  g_clear_object (&data->object);
+  g_clear_object (&data->smtp_auth);
+  g_free (data);
+}
 
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-on_email_address_changed (GtkEditable *editable, gpointer user_data)
+on_login_changed (GtkEditable    *editable,
+                  AddAccountData *data)
 {
-  AddAccountData *data = user_data;
-  gboolean can_add;
-  const gchar *email;
+  const char *username;
+  const char *password;
+  const char *server;
+  GoaDialogState state = GOA_DIALOG_IDLE;
 
-  email = gtk_entry_get_text (GTK_ENTRY (data->email_address));
-  can_add = goa_utils_parse_email_address (email, NULL, NULL);
-  gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, can_add);
-}
+  /* IMAP */
+  server = gtk_editable_get_text (GTK_EDITABLE (data->imap_server));
+  username = gtk_editable_get_text (GTK_EDITABLE (data->imap_username));
+  password = gtk_editable_get_text (GTK_EDITABLE (data->imap_password));
 
-static void
-on_imap_changed (GtkEditable *editable, gpointer user_data)
-{
-  AddAccountData *data = user_data;
-  gboolean can_add;
-
-  can_add = gtk_entry_get_text_length (GTK_ENTRY (data->imap_password)) != 0
-            && gtk_entry_get_text_length (GTK_ENTRY (data->imap_server)) != 0
-            && gtk_entry_get_text_length (GTK_ENTRY (data->imap_username)) != 0;
-  gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, can_add);
-}
-
-static void
-on_smtp_changed (GtkEditable *editable, gpointer user_data)
-{
-  AddAccountData *data = user_data;
-  gboolean can_add = FALSE;
-
-  if (gtk_entry_get_text_length (GTK_ENTRY (data->smtp_server)) == 0)
-    goto out;
-
-  /* If you provide a password then you must provide a username, and
-   * vice versa. If the server does not require authentication then
-   * both should be left empty.
-   */
-  if (gtk_entry_get_text_length (GTK_ENTRY (data->smtp_password)) != 0
-      && gtk_entry_get_text_length (GTK_ENTRY (data->smtp_username)) == 0)
-    goto out;
-
-  if (gtk_entry_get_text_length (GTK_ENTRY (data->smtp_password)) == 0
-      && gtk_entry_get_text_length (GTK_ENTRY (data->smtp_username)) != 0)
-    goto out;
-
-  can_add = TRUE;
-
- out:
-  gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, can_add);
-}
-
-static void
-create_encryption_ui (GtkWidget  *grid,
-                      gint        row,
-                      GtkWidget **out_combo_box)
-{
-  /* Translators: the following four strings are used to show a
-   * combo box similar to the one in the evolution module.
-   * Encryption: None
-   *             STARTTLS after connecting
-   *             SSL on a dedicated port
-   */
-  add_combo_box (grid, row, _("_Encryption"), out_combo_box);
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (*out_combo_box),
-                             "none",
-                             _("None"));
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (*out_combo_box),
-                             "starttls",
-                             _("STARTTLS after connecting"));
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (*out_combo_box),
-                             "ssl",
-                             _("SSL on a dedicated port"));
-  gtk_combo_box_set_active_id (GTK_COMBO_BOX (*out_combo_box), "starttls");
-}
-
-static void
-show_progress_ui (GtkContainer *container, gboolean progress)
-{
-  GList *children;
-  GList *l;
-
-  children = gtk_container_get_children (container);
-  for (l = children; l != NULL; l = l->next)
+  if ((server == NULL || *server == '\0')
+      || (username == NULL || *username == '\0')
+      || (password == NULL || *password == '\0'))
     {
-      GtkWidget *widget = GTK_WIDGET (l->data);
-      gdouble opacity;
-
-      opacity = progress ? 1.0 : 0.0;
-      gtk_widget_set_opacity (widget, opacity);
+      goa_provider_dialog_set_state (data->dialog, state);
+      return;
     }
 
-  g_list_free (children);
+  /* SMTP */
+  server = gtk_editable_get_text (GTK_EDITABLE (data->smtp_server));
+  username = gtk_editable_get_text (GTK_EDITABLE (data->smtp_username));
+  password = gtk_editable_get_text (GTK_EDITABLE (data->smtp_password));
+
+  if (server != NULL && *server != '\0')
+    {
+      if ((username != NULL && *username != '\0')
+          && (password != NULL && *password != '\0'))
+        state = GOA_DIALOG_READY;
+
+      /* If the server does not require authentication both should be empty
+       */
+      else if ((username == NULL || *username == '\0')
+               && (password == NULL || *password == '\0'))
+        state = GOA_DIALOG_READY;
+    }
+
+  goa_provider_dialog_set_state (data->dialog, state);
+}
+
+static void
+on_email_changed (GtkEditable    *editable,
+                  AddAccountData *data)
+{
+  const char *email;
+  const char *password;
+  g_autofree char *username = NULL;
+  g_autofree char *domain = NULL;
+  g_autofree char *imap_domain = NULL;
+  g_autofree char *smtp_domain = NULL;
+
+  email = gtk_editable_get_text (GTK_EDITABLE (data->email_address));
+  password = gtk_editable_get_text (GTK_EDITABLE (data->email_password));
+
+  if (!goa_utils_parse_email_address (email, &username, &domain))
+    {
+      goa_provider_dialog_set_state (data->dialog, GOA_DIALOG_IDLE);
+      return;
+    }
+
+  /* Guess the IMAP/SMTP servers and update their UI */
+  imap_domain = g_strdup_printf ("imap.%s", domain);
+  gtk_editable_set_text (GTK_EDITABLE (data->imap_server), imap_domain);
+  gtk_editable_set_text (GTK_EDITABLE (data->imap_username), username);
+  gtk_editable_set_text (GTK_EDITABLE (data->imap_password), password);
+
+  smtp_domain = g_strdup_printf ("smtp.%s", domain);
+  gtk_editable_set_text (GTK_EDITABLE (data->smtp_server), smtp_domain);
+  gtk_editable_set_text (GTK_EDITABLE (data->smtp_username), username);
+  gtk_editable_set_text (GTK_EDITABLE (data->smtp_password), password);
 }
 
 static void
 create_account_details_ui (GoaProvider    *provider,
-                           GtkDialog      *dialog,
-                           GtkBox         *vbox,
-                           gboolean        new_account,
-                           AddAccountData *data)
+                           AddAccountData *data,
+                           gboolean        new_account)
 {
-  GtkWidget *grid0;
-  GtkWidget *grid1;
-  GtkWidget *label;
-  GtkWidget *spinner;
-  gint row;
-  gint width;
-  const gchar *real_name;
+  GoaProviderDialog *dialog = GOA_PROVIDER_DIALOG (data->dialog);
+  GtkWidget *group;
 
-  goa_utils_set_dialog_title (provider, dialog, new_account);
+  /* Keep in sync with GoaTlsType */
+  static const char * const encryption_types[] = {\
+    N_("None"),                      // GOA_TLS_TYPE_NONE
+    N_("STARTTLS after connecting"), // GOA_TLS_TYPE_STARTTLS
+    N_("SSL on a dedicated port"),   // GOA_TLS_TYPE_SSL
+    NULL,
+  };
 
-  grid0 = gtk_grid_new ();
-  gtk_container_set_border_width (GTK_CONTAINER (grid0), 5);
-  gtk_widget_set_margin_bottom (grid0, 6);
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid0), GTK_ORIENTATION_VERTICAL);
-  gtk_grid_set_row_spacing (GTK_GRID (grid0), 12);
-  gtk_container_add (GTK_CONTAINER (vbox), grid0);
-
-  data->cluebar = gtk_info_bar_new ();
-  gtk_info_bar_set_message_type (GTK_INFO_BAR (data->cluebar), GTK_MESSAGE_ERROR);
-  gtk_widget_set_hexpand (data->cluebar, TRUE);
-  gtk_widget_set_no_show_all (data->cluebar, TRUE);
-  gtk_container_add (GTK_CONTAINER (grid0), data->cluebar);
-
-  data->cluebar_label = gtk_label_new ("");
-  gtk_label_set_line_wrap (GTK_LABEL (data->cluebar_label), TRUE);
-  gtk_label_set_max_width_chars (GTK_LABEL (data->cluebar_label), 36);
-  gtk_container_add (GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (data->cluebar))),
-                     data->cluebar_label);
-
-  data->notebook = gtk_notebook_new ();
-  gtk_notebook_set_show_border (GTK_NOTEBOOK (data->notebook), FALSE);
-  gtk_notebook_set_show_tabs (GTK_NOTEBOOK (data->notebook), FALSE);
-  gtk_container_add (GTK_CONTAINER (grid0), data->notebook);
-
-  /* Introduction*/
+  /* General */
+  group = goa_provider_dialog_add_group (dialog, NULL);
+  data->name = goa_provider_dialog_add_entry (dialog, group, _("_Name"));
+  data->email_address = goa_provider_dialog_add_entry (dialog, group, _("_E-mail"));
+  data->email_password = goa_provider_dialog_add_password_entry (dialog, group, _("_Password"));
 
   if (new_account)
     {
-      grid1 = gtk_grid_new ();
-      gtk_grid_set_column_spacing (GTK_GRID (grid1), 12);
-      gtk_grid_set_row_spacing (GTK_GRID (grid1), 12);
-      gtk_notebook_append_page (GTK_NOTEBOOK (data->notebook), grid1, NULL);
-
-      row = 0;
-      add_entry (grid1, row++, _("_E-mail"), &data->email_address);
-      add_entry (grid1, row++, _("_Name"), &data->name);
+      const char *real_name;
 
       real_name = g_get_real_name ();
       if (g_strcmp0 (real_name, "Unknown") != 0)
-        gtk_entry_set_text (GTK_ENTRY (data->name), real_name);
-
-      g_signal_connect (data->email_address, "changed", G_CALLBACK (on_email_address_changed), data);
+        gtk_editable_set_text (GTK_EDITABLE (data->name), real_name);
     }
+
+  g_signal_connect (data->email_address, "changed", G_CALLBACK (on_email_changed), data);
+  g_signal_connect (data->email_password, "changed", G_CALLBACK (on_email_changed), data);
+
+  GtkWidget *box;
+  group = goa_provider_dialog_add_group (dialog, NULL);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
+  adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), box);
 
   /* IMAP */
+  group = adw_preferences_group_new ();
+  gtk_box_append (GTK_BOX (box), group);
 
-  grid1 = gtk_grid_new ();
-  gtk_grid_set_column_spacing (GTK_GRID (grid1), 12);
-  gtk_grid_set_row_spacing (GTK_GRID (grid1), 12);
-  gtk_notebook_append_page (GTK_NOTEBOOK (data->notebook), grid1, NULL);
+  data->imap_group = g_object_new (ADW_TYPE_EXPANDER_ROW,
+                                   "title", _("IMAP Settings"),
+                                   NULL);
+  adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), data->imap_group);
 
-  row = 0;
-  add_entry (grid1, row++, _("IMAP _Server"), &data->imap_server);
-  add_entry (grid1, row++, _("User_name"), &data->imap_username);
-  add_entry (grid1, row++, _("_Password"), &data->imap_password);
-  gtk_entry_set_visibility (GTK_ENTRY (data->imap_password), FALSE);
+  data->imap_server = goa_provider_dialog_add_entry (dialog, data->imap_group, _("IMAP _Server"));
+  data->imap_username = goa_provider_dialog_add_entry (dialog, data->imap_group, _("User_name"));
+  data->imap_password = goa_provider_dialog_add_password_entry (dialog, data->imap_group, _("_Password"));
 
   if (new_account)
-    create_encryption_ui (grid1, row++, &data->imap_encryption);
+    {
+      data->imap_encryption = goa_provider_dialog_add_combo (dialog,
+                                                             data->imap_group,
+                                                             _("Encryption"),
+                                                             (GStrv)encryption_types);
+      g_object_set (data->imap_encryption, "selected", GOA_TLS_TYPE_SSL, NULL);
+    }
 
-  g_signal_connect (data->imap_server, "changed", G_CALLBACK (on_imap_changed), data);
-  g_signal_connect (data->imap_username, "changed", G_CALLBACK (on_imap_changed), data);
-  g_signal_connect (data->imap_password, "changed", G_CALLBACK (on_imap_changed), data);
+  g_signal_connect (data->imap_server, "changed", G_CALLBACK (on_login_changed), data);
+  g_signal_connect (data->imap_username, "changed", G_CALLBACK (on_login_changed), data);
+  g_signal_connect (data->imap_password, "changed", G_CALLBACK (on_login_changed), data);
 
   /* SMTP */
+  group = adw_preferences_group_new ();
+  gtk_box_append (GTK_BOX (box), group);
 
-  grid1 = gtk_grid_new ();
-  gtk_grid_set_column_spacing (GTK_GRID (grid1), 12);
-  gtk_grid_set_row_spacing (GTK_GRID (grid1), 12);
-  gtk_notebook_append_page (GTK_NOTEBOOK (data->notebook), grid1, NULL);
+  data->smtp_group = g_object_new (ADW_TYPE_EXPANDER_ROW,
+                                   "title", _("SMTP Settings"),
+                                   NULL);
+  adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), data->smtp_group);
 
-  row = 0;
-  add_entry (grid1, row++, _("SMTP _Server"), &data->smtp_server);
-  add_entry (grid1, row++, _("User_name"), &data->smtp_username);
-  add_entry (grid1, row++, _("_Password"), &data->smtp_password);
-  gtk_entry_set_visibility (GTK_ENTRY (data->smtp_password), FALSE);
-
-  if (new_account)
-    create_encryption_ui (grid1, row++, &data->smtp_encryption);
-
-  g_signal_connect (data->smtp_server, "changed", G_CALLBACK (on_smtp_changed), data);
-  g_signal_connect (data->smtp_username, "changed", G_CALLBACK (on_smtp_changed), data);
-  g_signal_connect (data->smtp_password, "changed", G_CALLBACK (on_smtp_changed), data);
-
-  /* -- */
-
-  gtk_dialog_add_button (data->dialog, _("_Cancel"), GTK_RESPONSE_CANCEL);
-  data->forward_button = gtk_dialog_add_button (data->dialog, _("_Forward"), GTK_RESPONSE_OK);
-  gtk_dialog_set_default_response (data->dialog, GTK_RESPONSE_OK);
-  gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, FALSE);
-
-  data->progress_grid = gtk_grid_new ();
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (data->progress_grid), GTK_ORIENTATION_HORIZONTAL);
-  gtk_grid_set_column_spacing (GTK_GRID (data->progress_grid), 3);
-  gtk_container_add (GTK_CONTAINER (grid0), data->progress_grid);
-
-  spinner = gtk_spinner_new ();
-  gtk_widget_set_opacity (spinner, 0.0);
-  gtk_widget_set_size_request (spinner, 20, 20);
-  gtk_spinner_start (GTK_SPINNER (spinner));
-  gtk_container_add (GTK_CONTAINER (data->progress_grid), spinner);
-
-  label = gtk_label_new (_("Connecting…"));
-  gtk_widget_set_opacity (label, 0.0);
-  gtk_container_add (GTK_CONTAINER (data->progress_grid), label);
+  data->smtp_server = goa_provider_dialog_add_entry (dialog, data->smtp_group, _("SMTP _Server"));
+  data->smtp_username = goa_provider_dialog_add_entry (dialog, data->smtp_group, _("User_name"));
+  data->smtp_password = goa_provider_dialog_add_password_entry (dialog, data->smtp_group, _("_Password"));
 
   if (new_account)
     {
-      gtk_window_get_size (GTK_WINDOW (data->dialog), &width, NULL);
-      gtk_window_set_default_size (GTK_WINDOW (data->dialog), width, -1);
+      data->smtp_encryption = goa_provider_dialog_add_combo (dialog,
+                                                             data->smtp_group,
+                                                             _("Encryption"),
+                                                             (GStrv)encryption_types);
+      g_object_set (data->smtp_encryption, "selected", GOA_TLS_TYPE_SSL, NULL);
     }
-  else
+
+  g_signal_connect (data->smtp_server, "changed", G_CALLBACK (on_login_changed), data);
+  g_signal_connect (data->smtp_username, "changed", G_CALLBACK (on_login_changed), data);
+  g_signal_connect (data->smtp_password, "changed", G_CALLBACK (on_login_changed), data);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
+add_account_credentials_cb (GoaManager   *manager,
+                            GAsyncResult *res,
+                            gpointer      user_data)
+{
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
+  AddAccountData *data = g_task_get_task_data (task);
+  GDBusObject *ret = NULL;
+  g_autofree char *object_path = NULL;
+  GError *error = NULL;
+
+  if (!goa_manager_call_add_account_finish (manager, &object_path, res, &error))
     {
-      GtkWindow *parent;
-
-      /* Keep in sync with GoaPanelAddAccountDialog in
-       * gnome-control-center.
-       */
-      parent = gtk_window_get_transient_for (GTK_WINDOW (data->dialog));
-      if (parent != NULL)
-        {
-          gtk_window_get_size (parent, &width, NULL);
-          gtk_window_set_default_size (GTK_WINDOW (data->dialog), (gint) (0.5 * width), -1);
-        }
+      goa_provider_task_return_error (task, error);
+      return;
     }
-}
 
-/* ---------------------------------------------------------------------------------------------------- */
-
-static void
-guess_imap_smtp (AddAccountData *data)
-{
-  const gchar *email_address;
-  gchar *imap_server = NULL;
-  gchar *smtp_server = NULL;
-  gchar *username = NULL;
-  gchar *domain = NULL;
-
-  email_address = gtk_entry_get_text (GTK_ENTRY (data->email_address));
-  if (!goa_utils_parse_email_address (email_address, &username, &domain))
-    goto out;
-
-  /* TODO: Consult http://api.gnome.org/evolution/autoconfig/1.1/<domain> */
-
-  imap_server = g_strconcat ("imap.", domain, NULL);
-  smtp_server = g_strconcat ("smtp.", domain, NULL);
-
-  gtk_entry_set_text (GTK_ENTRY (data->imap_username), username);
-  gtk_entry_set_text (GTK_ENTRY (data->smtp_username), username);
-  gtk_entry_set_text (GTK_ENTRY (data->imap_server), imap_server);
-  gtk_entry_set_text (GTK_ENTRY (data->smtp_server), smtp_server);
-
- out:
-  g_free (imap_server);
-  g_free (smtp_server);
-  g_free (username);
-  g_free (domain);
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-static void
-add_account_cb (GoaManager *manager, GAsyncResult *res, gpointer user_data)
-{
-  AddAccountData *data = user_data;
-  goa_manager_call_add_account_finish (manager,
-                                       &data->account_object_path,
-                                       res,
-                                       &data->error);
-  g_main_loop_quit (data->loop);
+  ret = g_dbus_object_manager_get_object (goa_client_get_object_manager (data->client),
+                                          object_path);
+  goa_provider_task_return_account (task, GOA_OBJECT (ret));
 }
 
 static void
-dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data)
+add_account_store_credentials (GTask *task)
 {
-  AddAccountData *data = user_data;
-
-  if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_DELETE_EVENT)
-    g_cancellable_cancel (data->cancellable);
-}
-
-static void
-mail_check_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
-{
-  GoaMailClient *client = GOA_MAIL_CLIENT (source_object);
-  AddAccountData *data = user_data;
-
-  goa_mail_client_check_finish (client, res, &data->error);
-  g_main_loop_quit (data->loop);
-  gtk_widget_set_sensitive (data->forward_button, TRUE);
-  show_progress_ui (GTK_CONTAINER (data->progress_grid), FALSE);
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-static GoaObject *
-add_account (GoaProvider    *provider,
-             GoaClient      *client,
-             GtkDialog      *dialog,
-             GtkBox         *vbox,
-             GError        **error)
-{
-  AddAccountData data;
+  GoaProvider *provider = g_task_get_source_object (task);
+  AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   GVariantBuilder credentials;
   GVariantBuilder details;
-  GoaMailAuth *imap_auth = NULL;
-  GoaMailAuth *smtp_auth = NULL;
-  GoaMailClient *mail_client = NULL;
-  GoaObject *ret = NULL;
-  GoaTlsType imap_tls_type;
-  GoaTlsType smtp_tls_type;
-  gboolean imap_accept_ssl_errors;
-  gboolean smtp_accept_ssl_errors;
-  gboolean smtp_auth_login;
-  gboolean smtp_auth_plain;
-  gboolean smtp_use_auth;
-  const gchar *email_address;
-  const gchar *encryption;
-  const gchar *imap_password;
-  const gchar *imap_server;
-  const gchar *imap_username;
-  const gchar *name;
-  const gchar *provider_type;
-  const gchar *smtp_password;
-  const gchar *smtp_server;
-  const gchar *smtp_username;
-  gchar *domain = NULL;
-  gint response;
+  const char *name = NULL;
+  const char *email_address = NULL;
+  const char *imap_server = NULL;
+  const char *imap_username = NULL;
+  const char *imap_password = NULL;
+  GoaTlsType imap_tls_type = GOA_TLS_TYPE_NONE;
+  const char *smtp_server = NULL;
+  const char *smtp_username = NULL;
+  const char *smtp_password = NULL;
+  GoaTlsType smtp_tls_type = GOA_TLS_TYPE_NONE;
 
-  memset (&data, 0, sizeof (AddAccountData));
-  data.cancellable = g_cancellable_new ();
-  data.loop = g_main_loop_new (NULL, FALSE);
-  data.dialog = dialog;
-  data.error = NULL;
+  /* Account is confirmed */
+  name = gtk_editable_get_text (GTK_EDITABLE (data->name));
+  email_address = gtk_editable_get_text (GTK_EDITABLE (data->email_address));
 
-  create_account_details_ui (provider, dialog, vbox, TRUE, &data);
-  gtk_widget_show_all (GTK_WIDGET (vbox));
-  g_signal_connect (dialog, "response", G_CALLBACK (dialog_response_cb), &data);
+  imap_server = gtk_editable_get_text (GTK_EDITABLE (data->imap_server));
+  imap_username = gtk_editable_get_text (GTK_EDITABLE (data->imap_username));
+  imap_password = gtk_editable_get_text (GTK_EDITABLE (data->imap_password));
+  g_object_get (data->imap_encryption, "selected", &imap_tls_type, NULL);
 
-  mail_client = goa_mail_client_new ();
-
-  /* Introduction */
-
-  gtk_notebook_set_current_page (GTK_NOTEBOOK (data.notebook), 0);
-  gtk_widget_grab_focus (data.email_address);
-
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-  if (response != GTK_RESPONSE_OK)
-    {
-      g_set_error (&data.error,
-                   GOA_ERROR,
-                   GOA_ERROR_DIALOG_DISMISSED,
-                   _("Dialog was dismissed"));
-      goto out;
-    }
-
-  email_address = gtk_entry_get_text (GTK_ENTRY (data.email_address));
-  name = gtk_entry_get_text (GTK_ENTRY (data.name));
-
-  /* See if there's already an account of this type with the
-   * given identity
-   */
-  provider_type = goa_provider_get_provider_type (provider);
-  if (!goa_utils_check_duplicate (client,
-                                  email_address,
-                                  email_address,
-                                  provider_type,
-                                  (GoaPeekInterfaceFunc) goa_object_peek_password_based,
-                                  &data.error))
-    goto out;
-
-  guess_imap_smtp (&data);
-
-  /* IMAP */
-
-  gtk_notebook_next_page (GTK_NOTEBOOK (data.notebook));
-  gtk_widget_grab_focus (data.imap_password);
-
-  imap_accept_ssl_errors = FALSE;
-
- imap_again:
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-  if (response != GTK_RESPONSE_OK)
-    {
-      g_set_error (&data.error,
-                   GOA_ERROR,
-                   GOA_ERROR_DIALOG_DISMISSED,
-                   _("Dialog was dismissed"));
-      goto out;
-    }
-
-  gtk_widget_set_no_show_all (data.cluebar, TRUE);
-  gtk_widget_hide (data.cluebar);
-
-  encryption = gtk_combo_box_get_active_id (GTK_COMBO_BOX (data.imap_encryption));
-  imap_tls_type = get_tls_type_from_string_id (encryption);
-
-  imap_password = gtk_entry_get_text (GTK_ENTRY (data.imap_password));
-  imap_server = gtk_entry_get_text (GTK_ENTRY (data.imap_server));
-  imap_username = gtk_entry_get_text (GTK_ENTRY (data.imap_username));
-
-  g_cancellable_reset (data.cancellable);
-  imap_auth = goa_imap_auth_login_new (imap_username, imap_password);
-  goa_mail_client_check (mail_client,
-                         imap_server,
-                         imap_tls_type,
-                         imap_accept_ssl_errors,
-                         (imap_tls_type == GOA_TLS_TYPE_SSL) ? 993 : 143,
-                         imap_auth,
-                         data.cancellable,
-                         mail_check_cb,
-                         &data);
-
-  gtk_widget_set_sensitive (data.forward_button, FALSE);
-  show_progress_ui (GTK_CONTAINER (data.progress_grid), TRUE);
-  g_main_loop_run (data.loop);
-
-  if (g_cancellable_is_cancelled (data.cancellable))
-    {
-      g_prefix_error (&data.error,
-                      _("Dialog was dismissed (%s, %d): "),
-                      g_quark_to_string (data.error->domain),
-                      data.error->code);
-      data.error->domain = GOA_ERROR;
-      data.error->code = GOA_ERROR_DIALOG_DISMISSED;
-      goto out;
-    }
-  else if (data.error != NULL)
-    {
-      gchar *markup;
-
-      if (data.error->code == GOA_ERROR_SSL)
-        {
-          gtk_button_set_label (GTK_BUTTON (data.forward_button), _("_Ignore"));
-          imap_accept_ssl_errors = TRUE;
-        }
-      else
-        {
-          gtk_button_set_label (GTK_BUTTON (data.forward_button), _("_Try Again"));
-          imap_accept_ssl_errors = FALSE;
-        }
-
-      markup = g_strdup_printf ("<b>%s</b>\n%s",
-                                _("Error connecting to IMAP server"),
-                                data.error->message);
-      g_clear_error (&data.error);
-
-      gtk_label_set_markup (GTK_LABEL (data.cluebar_label), markup);
-      g_free (markup);
-
-      gtk_widget_set_no_show_all (data.cluebar, FALSE);
-      gtk_widget_show_all (data.cluebar);
-
-      g_clear_object (&imap_auth);
-      goto imap_again;
-    }
-
-  gtk_widget_set_no_show_all (data.cluebar, TRUE);
-  gtk_widget_hide (data.cluebar);
-  gtk_button_set_label (GTK_BUTTON (data.forward_button), _("_Forward"));
-
-  /* SMTP */
-
-  /* Re-use the username and password from the IMAP page */
-  gtk_entry_set_text (GTK_ENTRY (data.smtp_username), imap_username);
-  gtk_entry_set_text (GTK_ENTRY (data.smtp_password), imap_password);
-
-  gtk_notebook_next_page (GTK_NOTEBOOK (data.notebook));
-  gtk_widget_grab_focus (data.smtp_password);
-
-  smtp_accept_ssl_errors = FALSE;
-
- smtp_again:
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-  if (response != GTK_RESPONSE_OK)
-    {
-      g_set_error (&data.error,
-                   GOA_ERROR,
-                   GOA_ERROR_DIALOG_DISMISSED,
-                   _("Dialog was dismissed"));
-      goto out;
-    }
-
-  gtk_widget_set_no_show_all (data.cluebar, TRUE);
-  gtk_widget_hide (data.cluebar);
-
-  encryption = gtk_combo_box_get_active_id (GTK_COMBO_BOX (data.smtp_encryption));
-  smtp_tls_type = get_tls_type_from_string_id (encryption);
-
-  smtp_password = gtk_entry_get_text (GTK_ENTRY (data.smtp_password));
-  smtp_server = gtk_entry_get_text (GTK_ENTRY (data.smtp_server));
-  smtp_username = gtk_entry_get_text (GTK_ENTRY (data.smtp_username));
-
-  g_cancellable_reset (data.cancellable);
-  goa_utils_parse_email_address (email_address, NULL, &domain);
-  smtp_auth = goa_smtp_auth_new (domain, smtp_username, smtp_password);
-  goa_mail_client_check (mail_client,
-                         smtp_server,
-                         smtp_tls_type,
-                         smtp_accept_ssl_errors,
-                         (smtp_tls_type == GOA_TLS_TYPE_SSL) ? 465 : 587,
-                         smtp_auth,
-                         data.cancellable,
-                         mail_check_cb,
-                         &data);
-
-  gtk_widget_set_sensitive (data.forward_button, FALSE);
-  show_progress_ui (GTK_CONTAINER (data.progress_grid), TRUE);
-  g_main_loop_run (data.loop);
-
-  smtp_use_auth = goa_mail_auth_is_needed (smtp_auth);
-  smtp_auth_login = goa_smtp_auth_is_login (GOA_SMTP_AUTH (smtp_auth));
-  smtp_auth_plain = goa_smtp_auth_is_plain (GOA_SMTP_AUTH (smtp_auth));
-
-  if (g_cancellable_is_cancelled (data.cancellable))
-    {
-      g_prefix_error (&data.error,
-                      _("Dialog was dismissed (%s, %d): "),
-                      g_quark_to_string (data.error->domain),
-                      data.error->code);
-      data.error->domain = GOA_ERROR;
-      data.error->code = GOA_ERROR_DIALOG_DISMISSED;
-      goto out;
-    }
-  else if (data.error != NULL)
-    {
-      gchar *markup;
-
-      if (data.error->code == GOA_ERROR_SSL)
-        {
-          gtk_button_set_label (GTK_BUTTON (data.forward_button), _("_Ignore"));
-          smtp_accept_ssl_errors = TRUE;
-        }
-      else
-        {
-          gtk_button_set_label (GTK_BUTTON (data.forward_button), _("_Try Again"));
-          smtp_accept_ssl_errors = FALSE;
-        }
-
-      markup = g_strdup_printf ("<b>%s</b>\n%s",
-                                _("Error connecting to SMTP server"),
-                                data.error->message);
-      g_clear_error (&data.error);
-
-      gtk_label_set_markup (GTK_LABEL (data.cluebar_label), markup);
-      g_free (markup);
-
-      gtk_widget_set_no_show_all (data.cluebar, FALSE);
-      gtk_widget_show_all (data.cluebar);
-
-      g_clear_object (&smtp_auth);
-      g_clear_pointer (&domain, g_free);
-      goto smtp_again;
-    }
-
-  gtk_widget_hide (GTK_WIDGET (dialog));
+  smtp_server = gtk_editable_get_text (GTK_EDITABLE (data->smtp_server));
+  smtp_username = gtk_editable_get_text (GTK_EDITABLE (data->smtp_username));
+  smtp_password = gtk_editable_get_text (GTK_EDITABLE (data->smtp_password));
+  g_object_get (data->smtp_encryption, "selected", &smtp_tls_type, NULL);
 
   g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&credentials, "{sv}", "imap-password", g_variant_new_string (imap_password));
-  if (smtp_use_auth)
+  if (data->smtp_use_auth)
     g_variant_builder_add (&credentials, "{sv}", "smtp-password", g_variant_new_string (smtp_password));
 
   g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
@@ -1083,340 +687,508 @@ add_account (GoaProvider    *provider,
   g_variant_builder_add (&details, "{ss}",
                          "ImapUseTls", (imap_tls_type == GOA_TLS_TYPE_STARTTLS) ? "true" : "false");
   g_variant_builder_add (&details, "{ss}",
-                         "ImapAcceptSslErrors", (imap_accept_ssl_errors) ? "true" : "false");
+                         "ImapAcceptSslErrors", (data->imap_accept_ssl_errors) ? "true" : "false");
   g_variant_builder_add (&details, "{ss}", "SmtpHost", smtp_server);
-  g_variant_builder_add (&details, "{ss}", "SmtpUseAuth", (smtp_use_auth) ? "true" : "false");
-  if (smtp_use_auth)
+  g_variant_builder_add (&details, "{ss}", "SmtpUseAuth", (data->smtp_use_auth) ? "true" : "false");
+  if (data->smtp_use_auth)
     {
       g_variant_builder_add (&details, "{ss}", "SmtpUserName", smtp_username);
-      g_variant_builder_add (&details, "{ss}", "SmtpAuthLogin", (smtp_auth_login) ? "true" : "false");
-      g_variant_builder_add (&details, "{ss}", "SmtpAuthPlain", (smtp_auth_plain) ? "true" : "false");
+      g_variant_builder_add (&details, "{ss}", "SmtpAuthLogin", (data->smtp_auth_login) ? "true" : "false");
+      g_variant_builder_add (&details, "{ss}", "SmtpAuthPlain", (data->smtp_auth_plain) ? "true" : "false");
     }
   g_variant_builder_add (&details, "{ss}",
                          "SmtpUseSsl", (smtp_tls_type == GOA_TLS_TYPE_SSL) ? "true" : "false");
   g_variant_builder_add (&details, "{ss}",
                          "SmtpUseTls", (smtp_tls_type == GOA_TLS_TYPE_STARTTLS) ? "true" : "false");
   g_variant_builder_add (&details, "{ss}",
-                         "SmtpAcceptSslErrors", (smtp_accept_ssl_errors) ? "true" : "false");
+                         "SmtpAcceptSslErrors", (data->smtp_accept_ssl_errors) ? "true" : "false");
 
-  /* OK, everything is dandy, add the account */
-  /* we want the GoaClient to update before this method returns (so it
-   * can create a proxy for the new object) so run the mainloop while
-   * waiting for this to complete
-   */
-  goa_manager_call_add_account (goa_client_get_manager (client),
+  goa_manager_call_add_account (goa_client_get_manager (data->client),
                                 goa_provider_get_provider_type (provider),
                                 email_address,
                                 email_address,
                                 g_variant_builder_end (&credentials),
                                 g_variant_builder_end (&details),
-                                NULL, /* GCancellable* */
-                                (GAsyncReadyCallback) add_account_cb,
-                                &data);
-  g_main_loop_run (data.loop);
-  if (data.error != NULL)
-    goto out;
+                                cancellable,
+                                (GAsyncReadyCallback) add_account_credentials_cb,
+                                g_object_ref (task));
+}
 
-  ret = GOA_OBJECT (g_dbus_object_manager_get_object (goa_client_get_object_manager (client),
-                                                      data.account_object_path));
- out:
-  /* We might have an object even when data.error is set.
-   * eg., if we failed to store the credentials in the keyring.
-   */
-  if (data.error != NULL)
-    g_propagate_error (error, data.error);
-  else
-    g_assert (ret != NULL);
+static void
+add_account_check_smtp_cb (GoaMailClient *client,
+                           GAsyncResult  *result,
+                           gpointer       user_data)
+{
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
+  AddAccountData *data = g_task_get_task_data (task);
+  g_autoptr(GError) error = NULL;
 
-  g_signal_handlers_disconnect_by_func (dialog, dialog_response_cb, &data);
+  if (!goa_mail_client_check_finish (client, result, &error))
+    {
+      data->smtp_had_ssl_errors = (error->code == GOA_ERROR_SSL);
+      goa_provider_dialog_report_error (data->dialog, error);
+      return;
+    }
 
-  g_free (domain);
-  g_free (data.account_object_path);
-  g_clear_pointer (&data.loop, g_main_loop_unref);
-  g_clear_object (&data.cancellable);
-  g_clear_object (&imap_auth);
-  g_clear_object (&smtp_auth);
-  g_clear_object (&mail_client);
-  return ret;
+  data->smtp_use_auth = goa_mail_auth_is_needed (data->smtp_auth);
+  data->smtp_auth_login = goa_smtp_auth_is_login (GOA_SMTP_AUTH (data->smtp_auth));
+  data->smtp_auth_plain = goa_smtp_auth_is_plain (GOA_SMTP_AUTH (data->smtp_auth));
+
+  /* Proceed to credential storage */
+  add_account_store_credentials (task);
+}
+
+static void
+add_account_action_smtp (GTask *task)
+{
+  AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
+  g_autoptr(GoaMailClient) mail_client = NULL;
+  const char *email_address;
+  const char *smtp_password;
+  const char *smtp_server;
+  const char *smtp_username;
+  GoaTlsType smtp_tls_type;
+  g_autofree char *domain = NULL;
+
+  email_address = gtk_editable_get_text (GTK_EDITABLE (data->email_address));
+  smtp_server = gtk_editable_get_text (GTK_EDITABLE (data->smtp_server));
+  smtp_username = gtk_editable_get_text (GTK_EDITABLE (data->smtp_username));
+  smtp_password = gtk_editable_get_text (GTK_EDITABLE (data->smtp_password));
+  g_object_get (data->smtp_encryption, "selected", &smtp_tls_type, NULL);
+
+  g_clear_object (&data->smtp_auth);
+  goa_utils_parse_email_address (email_address, NULL, &domain);
+  data->smtp_auth = goa_smtp_auth_new (domain, smtp_username, smtp_password);
+
+  mail_client = goa_mail_client_new ();
+  goa_mail_client_check (mail_client,
+                         smtp_server,
+                         smtp_tls_type,
+                         data->smtp_accept_ssl_errors,
+                         (smtp_tls_type == GOA_TLS_TYPE_SSL) ? 465 : 587,
+                         data->smtp_auth,
+                         cancellable,
+                         (GAsyncReadyCallback) add_account_check_smtp_cb,
+                         g_object_ref (task));
+}
+
+static void
+add_account_check_imap_cb (GoaMailClient *client,
+                           GAsyncResult  *result,
+                           gpointer       user_data)
+{
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
+  AddAccountData *data = g_task_get_task_data (task);
+  g_autoptr(GError) error = NULL;
+
+  if (!goa_mail_client_check_finish (client, result, &error))
+    {
+      data->imap_had_ssl_errors = (error->code == GOA_ERROR_SSL);
+      goa_provider_dialog_report_error (data->dialog, error);
+      return;
+    }
+
+  add_account_action_smtp (task);
+}
+
+static void
+add_account_action_imap (GTask *task)
+{
+  AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
+  g_autoptr(GoaMailClient) mail_client = NULL;
+  g_autoptr(GoaMailAuth) imap_auth = NULL;
+  const char *imap_server;
+  const char *imap_username;
+  const char *imap_password;
+  GoaTlsType imap_tls_type;
+
+  imap_server = gtk_editable_get_text (GTK_EDITABLE (data->imap_server));
+  imap_username = gtk_editable_get_text (GTK_EDITABLE (data->imap_username));
+  imap_password = gtk_editable_get_text (GTK_EDITABLE (data->imap_password));
+  g_object_get (data->imap_encryption, "selected", &imap_tls_type, NULL);
+
+  imap_auth = goa_imap_auth_login_new (imap_username, imap_password);
+
+  mail_client = goa_mail_client_new ();
+  goa_mail_client_check (mail_client,
+                         imap_server,
+                         imap_tls_type,
+                         data->imap_accept_ssl_errors,
+                         (imap_tls_type == GOA_TLS_TYPE_SSL) ? 993 : 143,
+                         imap_auth,
+                         cancellable,
+                         (GAsyncReadyCallback) add_account_check_imap_cb,
+                         g_object_ref (task));
+}
+
+static void
+add_account_action_email (GTask *task)
+{
+  GoaProvider *provider = g_task_get_source_object (task);
+  AddAccountData *data = g_task_get_task_data (task);
+  g_autoptr(GError) error = NULL;
+  const char *email_address;
+  const char *provider_type;
+
+  email_address = gtk_editable_get_text (GTK_EDITABLE (data->email_address));
+
+  /* If this is duplicate account we're finished */
+  provider_type = goa_provider_get_provider_type (provider);
+  if (!goa_utils_check_duplicate (data->client,
+                                  email_address,
+                                  email_address,
+                                  provider_type,
+                                  (GoaPeekInterfaceFunc) goa_object_peek_password_based,
+                                  &error))
+    {
+      goa_provider_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  add_account_action_imap (task);
+}
+
+static void
+add_account_action_cb (GoaProviderDialog *dialog,
+                       GParamSpec        *pspec,
+                       GTask             *task)
+{
+  AddAccountData *data = g_task_get_task_data (task);
+
+  if (goa_provider_dialog_get_state (data->dialog) != GOA_DIALOG_BUSY)
+    return;
+
+  if (data->imap_had_ssl_errors)
+    {
+      data->imap_had_ssl_errors = FALSE;
+      data->imap_accept_ssl_errors = TRUE;
+    }
+
+  if (data->smtp_had_ssl_errors)
+    {
+      data->smtp_had_ssl_errors = FALSE;
+      data->smtp_accept_ssl_errors = TRUE;
+    }
+
+    add_account_action_email (task);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static gboolean
-refresh_account (GoaProvider    *provider,
-                 GoaClient      *client,
-                 GoaObject      *object,
-                 GtkWindow      *parent,
-                 GError        **error)
+static void
+add_account (GoaProvider         *provider,
+             GoaClient           *client,
+             GtkWindow           *parent,
+             GCancellable        *cancellable,
+             GAsyncReadyCallback  callback,
+             gpointer             user_data)
 {
-  AddAccountData data;
-  GVariantBuilder builder;
-  GoaAccount *account;
-  GoaMailAuth *imap_auth = NULL;
-  GoaMailAuth *smtp_auth = NULL;
-  GoaMailClient *mail_client = NULL;
-  GoaTlsType imap_tls_type;
+  AddAccountData *data;
+  g_autoptr(GTask) task = NULL;
+
+  data = g_new0 (AddAccountData, 1);
+  data->dialog = goa_provider_dialog_new (provider, client, parent);
+  data->client = g_object_ref (client);
+
+  task = g_task_new (provider, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
+  g_task_set_source_tag (task, add_account);
+  g_task_set_task_data (task, data, add_account_data_free);
+  goa_provider_task_bind_window (task, GTK_WINDOW (data->dialog));
+
+  create_account_details_ui (provider, data, TRUE);
+  g_signal_connect_object (data->dialog,
+                           "notify::state",
+                           G_CALLBACK (add_account_action_cb),
+                           task,
+                           0 /* G_CONNECT_DEFAULT */);
+  gtk_widget_grab_focus (data->email_address);
+  gtk_window_present (GTK_WINDOW (data->dialog));
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
+refresh_account_credentials_cb (GoaAccount   *account,
+                                GAsyncResult *res,
+                                gpointer      user_data)
+{
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
+  GError *error = NULL;
+
+  if (!goa_account_call_ensure_credentials_finish (account, NULL, res, &error))
+    {
+      goa_provider_task_return_error (task, error);
+      return;
+    }
+
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
+refresh_account_store_credentials (GTask *task)
+{
+  GoaProvider *provider = g_task_get_source_object (task);
+  AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
+  GVariantBuilder credentials;
+  const char *imap_password;
+  const char *smtp_password;
+  g_autoptr(GError) error = NULL;
+
+  /* Account is confirmed */
+  imap_password = gtk_editable_get_text (GTK_EDITABLE (data->imap_password));
+  smtp_password = gtk_editable_get_text (GTK_EDITABLE (data->smtp_password));
+
+  g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
+  g_variant_builder_add (&credentials, "{sv}", "imap-password", g_variant_new_string (imap_password));
+  if (data->smtp_use_auth)
+    g_variant_builder_add (&credentials, "{sv}", "smtp-password", g_variant_new_string (smtp_password));
+
+  // TODO: run in worker thread
+  if (!goa_utils_store_credentials_for_object_sync (provider,
+                                                    data->object,
+                                                    g_variant_builder_end (&credentials),
+                                                    cancellable,
+                                                    &error))
+    {
+      goa_provider_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  goa_account_call_ensure_credentials (goa_object_peek_account (data->object),
+                                       cancellable,
+                                       (GAsyncReadyCallback) refresh_account_credentials_cb,
+                                       g_object_ref (task));
+}
+
+static void
+refresh_account_check_smtp_cb (GoaMailClient *client,
+                               GAsyncResult  *result,
+                               gpointer       user_data)
+{
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
+  AddAccountData *data = g_task_get_task_data (task);
+  g_autoptr(GError) error = NULL;
+
+  if (!goa_mail_client_check_finish (client, result, &error))
+    {
+      data->smtp_had_ssl_errors = (error->code == GOA_ERROR_SSL);
+      goa_provider_dialog_report_error (data->dialog, error);
+      return;
+    }
+
+  data->smtp_use_auth = goa_mail_auth_is_needed (data->smtp_auth);
+  data->smtp_auth_login = goa_smtp_auth_is_login (GOA_SMTP_AUTH (data->smtp_auth));
+  data->smtp_auth_plain = goa_smtp_auth_is_plain (GOA_SMTP_AUTH (data->smtp_auth));
+
+  /* Proceed to credential storage */
+  refresh_account_store_credentials (task);
+}
+
+static void
+refresh_account_action_smtp (GTask *task)
+{
+  AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
+  g_autoptr(GoaMailClient) mail_client = NULL;
+  const char *email_address;
+  const char *smtp_password;
+  const char *smtp_server;
+  const char *smtp_username;
   GoaTlsType smtp_tls_type;
-  GtkWidget *dialog;
-  GtkWidget *vbox;
-  gboolean imap_accept_ssl_errors;
-  gboolean ret = FALSE;
-  gboolean smtp_accept_ssl_errors;
+  g_autofree char *domain = NULL;
+
+  email_address = gtk_editable_get_text (GTK_EDITABLE (data->email_address));
+  smtp_server = gtk_editable_get_text (GTK_EDITABLE (data->smtp_server));
+  smtp_username = gtk_editable_get_text (GTK_EDITABLE (data->smtp_username));
+  smtp_password = gtk_editable_get_text (GTK_EDITABLE (data->smtp_password));
+  g_object_get (data->smtp_encryption, "selected", &smtp_tls_type, NULL);
+
+  g_clear_object (&data->smtp_auth);
+  goa_utils_parse_email_address (email_address, NULL, &domain);
+  data->smtp_auth = goa_smtp_auth_new (domain, smtp_username, smtp_password);
+
+  mail_client = goa_mail_client_new ();
+  goa_mail_client_check (mail_client,
+                         smtp_server,
+                         smtp_tls_type,
+                         data->smtp_accept_ssl_errors,
+                         (smtp_tls_type == GOA_TLS_TYPE_SSL) ? 465 : 587,
+                         data->smtp_auth,
+                         cancellable,
+                         (GAsyncReadyCallback) refresh_account_check_smtp_cb,
+                         g_object_ref (task));
+}
+
+static void
+refresh_account_check_imap_cb (GoaMailClient *client,
+                               GAsyncResult  *result,
+                               gpointer       user_data)
+{
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
+  AddAccountData *data = g_task_get_task_data (task);
+  g_autoptr(GError) error = NULL;
+
+  if (!goa_mail_client_check_finish (client, result, &error))
+    {
+      data->imap_had_ssl_errors = (error->code == GOA_ERROR_SSL);
+      goa_provider_dialog_report_error (data->dialog, error);
+      return;
+    }
+
+  /* Skip SMTP and proceed to credential storage */
+  if (!data->smtp_use_auth)
+    {
+      g_debug ("%s(): skipping SMTP authorization", G_STRFUNC);
+      refresh_account_store_credentials (task);
+      return;
+    }
+
+  /* Proceed to SMTP */
+  refresh_account_action_smtp (task);
+}
+
+static void
+refresh_account_action_imap (GTask *task)
+{
+  AddAccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
+  g_autoptr(GoaMailClient) mail_client = NULL;
+  g_autoptr(GoaMailAuth) imap_auth = NULL;
+  const char *imap_password;
+  const char *imap_server;
+  const char *imap_username;
+  GoaTlsType imap_tls_type;
+
+  imap_password = gtk_editable_get_text (GTK_EDITABLE (data->imap_password));
+  imap_server = gtk_editable_get_text (GTK_EDITABLE (data->imap_server));
+  imap_username = gtk_editable_get_text (GTK_EDITABLE (data->imap_username));
+  g_object_get (data->imap_encryption, "selected", &imap_tls_type, NULL);
+
+  imap_auth = goa_imap_auth_login_new (imap_username, imap_password);
+
+  mail_client = goa_mail_client_new ();
+  goa_mail_client_check (mail_client,
+                         imap_server,
+                         imap_tls_type,
+                         data->imap_accept_ssl_errors,
+                         (imap_tls_type == GOA_TLS_TYPE_SSL) ? 993 : 143,
+                         imap_auth,
+                         cancellable,
+                         (GAsyncReadyCallback) refresh_account_check_imap_cb,
+                         g_object_ref (task));
+}
+
+static void
+refresh_account_action_cb (GoaProviderDialog *dialog,
+                           GParamSpec        *pspec,
+                           GTask             *task)
+{
+  AddAccountData *data = g_task_get_task_data (task);
+
+  if (goa_provider_dialog_get_state (data->dialog) != GOA_DIALOG_BUSY)
+    return;
+
+  if (data->imap_had_ssl_errors)
+    {
+      data->imap_had_ssl_errors = FALSE;
+      data->imap_accept_ssl_errors = TRUE;
+    }
+
+  if (data->smtp_had_ssl_errors)
+    {
+      data->smtp_had_ssl_errors = FALSE;
+      data->smtp_accept_ssl_errors = TRUE;
+    }
+
+  refresh_account_action_imap (task);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
+refresh_account (GoaProvider         *provider,
+                 GoaClient           *client,
+                 GoaObject           *object,
+                 GtkWindow           *parent,
+                 GCancellable        *cancellable,
+                 GAsyncReadyCallback  callback,
+                 gpointer             user_data)
+{
+  AddAccountData *data;
+  g_autoptr(GTask) task = NULL;
   gboolean smtp_use_auth;
-  const gchar *imap_password;
-  const gchar *smtp_password;
-  gchar *domain = NULL;
-  gchar *email_address = NULL;
-  gchar *imap_server = NULL;
-  gchar *imap_username = NULL;
-  gchar *smtp_server = NULL;
-  gchar *smtp_username = NULL;
-  gint response;
+  g_autofree char *email_address = NULL;
+  g_autofree char *imap_server = NULL;
+  g_autofree char *imap_username = NULL;
+  GoaTlsType imap_tls_type = GOA_TLS_TYPE_NONE;
+  g_autofree char *smtp_server = NULL;
+  g_autofree char *smtp_username = NULL;
+  GoaTlsType smtp_tls_type = GOA_TLS_TYPE_NONE;
 
-  g_return_val_if_fail (GOA_IS_IMAP_SMTP_PROVIDER (provider), FALSE);
-  g_return_val_if_fail (GOA_IS_CLIENT (client), FALSE);
-  g_return_val_if_fail (GOA_IS_OBJECT (object), FALSE);
-  g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), FALSE);
-  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+  g_assert (GOA_IS_IMAP_SMTP_PROVIDER (provider));
+  g_assert (GOA_IS_CLIENT (client));
+  g_assert (GOA_IS_OBJECT (object));
+  g_assert (parent == NULL || GTK_IS_WINDOW (parent));
+  g_assert (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
-  dialog = gtk_dialog_new_with_buttons (NULL,
-                                        parent,
-                                        GTK_DIALOG_MODAL
-                                        | GTK_DIALOG_DESTROY_WITH_PARENT
-                                        | GTK_DIALOG_USE_HEADER_BAR,
-                                        NULL,
-                                        NULL);
-  gtk_container_set_border_width (GTK_CONTAINER (dialog), 12);
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+  data = g_new0 (AddAccountData, 1);
+  data->dialog = goa_provider_dialog_new (provider, client, parent);
+  data->client = g_object_ref (client);
 
-  vbox = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-  gtk_box_set_spacing (GTK_BOX (vbox), 12);
+  task = g_task_new (provider, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
+  g_task_set_source_tag (task, add_account);
+  g_task_set_task_data (task, data, add_account_data_free);
+  goa_provider_task_bind_window (task, GTK_WINDOW (data->dialog));
 
-  memset (&data, 0, sizeof (AddAccountData));
-  data.cancellable = g_cancellable_new ();
-  data.loop = g_main_loop_new (NULL, FALSE);
-  data.dialog = GTK_DIALOG (dialog);
-  data.error = NULL;
-
-  create_account_details_ui (provider, GTK_DIALOG (dialog), GTK_BOX (vbox), FALSE, &data);
+  create_account_details_ui (provider, data, FALSE);
 
   email_address = goa_util_lookup_keyfile_string (object, "EmailAddress");
+  gtk_editable_set_text (GTK_EDITABLE (data->email_address), email_address);
+  gtk_editable_set_editable (GTK_EDITABLE (data->email_address), FALSE);
 
-  imap_accept_ssl_errors = goa_util_lookup_keyfile_boolean (object, "ImapAcceptSslErrors");
-  smtp_accept_ssl_errors = goa_util_lookup_keyfile_boolean (object, "SmtpAcceptSslErrors");
+  data->imap_accept_ssl_errors = goa_util_lookup_keyfile_boolean (object, "ImapAcceptSslErrors");
+  data->smtp_accept_ssl_errors = goa_util_lookup_keyfile_boolean (object, "SmtpAcceptSslErrors");
 
   imap_tls_type = get_tls_type_from_object (object, "ImapUseSsl", "ImapUseTls");
-  smtp_tls_type = get_tls_type_from_object (object, "SmtpUseSsl", "SmtpUseTls");
+  gtk_drop_down_set_selected (GTK_DROP_DOWN (data->imap_encryption), imap_tls_type);
 
   imap_server = goa_util_lookup_keyfile_string (object, "ImapHost");
-  gtk_entry_set_text (GTK_ENTRY (data.imap_server), imap_server);
-  gtk_editable_set_editable (GTK_EDITABLE (data.imap_server), FALSE);
+  gtk_editable_set_text (GTK_EDITABLE (data->imap_server), imap_server);
+  gtk_editable_set_editable (GTK_EDITABLE (data->imap_server), FALSE);
 
   imap_username = goa_util_lookup_keyfile_string (object, "ImapUserName");
-  gtk_entry_set_text (GTK_ENTRY (data.imap_username), imap_username);
-  gtk_editable_set_editable (GTK_EDITABLE (data.imap_username), FALSE);
+  gtk_editable_set_text (GTK_EDITABLE (data->imap_username), imap_username);
+  gtk_editable_set_editable (GTK_EDITABLE (data->imap_username), FALSE);
 
   smtp_use_auth = goa_util_lookup_keyfile_boolean (object, "SmtpUseAuth");
   if (smtp_use_auth)
     {
       smtp_server = goa_util_lookup_keyfile_string (object, "SmtpHost");
-      gtk_entry_set_text (GTK_ENTRY (data.smtp_server), smtp_server);
-      gtk_editable_set_editable (GTK_EDITABLE (data.smtp_server), FALSE);
+      gtk_editable_set_text (GTK_EDITABLE (data->smtp_server), smtp_server);
+      gtk_editable_set_editable (GTK_EDITABLE (data->smtp_server), FALSE);
 
       smtp_username = goa_util_lookup_keyfile_string (object, "SmtpUserName");
-      gtk_entry_set_text (GTK_ENTRY (data.smtp_username), smtp_username);
-      gtk_editable_set_editable (GTK_EDITABLE (data.smtp_username), FALSE);
+      gtk_editable_set_text (GTK_EDITABLE (data->smtp_username), smtp_username);
+      gtk_editable_set_editable (GTK_EDITABLE (data->smtp_username), FALSE);
+
+      smtp_tls_type = get_tls_type_from_object (object, "SmtpUseSsl", "SmtpUseTls");
+      gtk_drop_down_set_selected (GTK_DROP_DOWN (data->smtp_encryption), smtp_tls_type);
     }
 
-  gtk_widget_show_all (dialog);
-  g_signal_connect (dialog, "response", G_CALLBACK (dialog_response_cb), &data);
+  /* FIXME: Start on the IMAP page */
+  gtk_widget_grab_focus (data->imap_password);
 
-  mail_client = goa_mail_client_new ();
-
-  /* IMAP */
-
-  gtk_notebook_set_current_page (GTK_NOTEBOOK (data.notebook), 0);
-  gtk_widget_grab_focus (data.imap_password);
-
- imap_again:
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-  if (response != GTK_RESPONSE_OK)
-    {
-      g_set_error (&data.error,
-                   GOA_ERROR,
-                   GOA_ERROR_DIALOG_DISMISSED,
-                   _("Dialog was dismissed"));
-      goto out;
-    }
-
-  gtk_widget_set_no_show_all (data.cluebar, TRUE);
-  gtk_widget_hide (data.cluebar);
-
-  imap_password = gtk_entry_get_text (GTK_ENTRY (data.imap_password));
-  g_cancellable_reset (data.cancellable);
-  imap_auth = goa_imap_auth_login_new (imap_username, imap_password);
-  goa_mail_client_check (mail_client,
-                         imap_server,
-                         imap_tls_type,
-                         imap_accept_ssl_errors,
-                         (imap_tls_type == GOA_TLS_TYPE_SSL) ? 993 : 143,
-                         imap_auth,
-                         data.cancellable,
-                         mail_check_cb,
-                         &data);
-
-  gtk_widget_set_sensitive (data.forward_button, FALSE);
-  show_progress_ui (GTK_CONTAINER (data.progress_grid), TRUE);
-  g_main_loop_run (data.loop);
-
-  if (g_cancellable_is_cancelled (data.cancellable))
-    {
-      g_prefix_error (&data.error,
-                      _("Dialog was dismissed (%s, %d): "),
-                      g_quark_to_string (data.error->domain),
-                      data.error->code);
-      data.error->domain = GOA_ERROR;
-      data.error->code = GOA_ERROR_DIALOG_DISMISSED;
-      goto out;
-    }
-  else if (data.error != NULL)
-    {
-      gchar *markup;
-
-      markup = g_strdup_printf ("<b>%s</b>\n%s",
-                                _("Error connecting to IMAP server"),
-                                data.error->message);
-      g_clear_error (&data.error);
-
-      gtk_label_set_markup (GTK_LABEL (data.cluebar_label), markup);
-      g_free (markup);
-
-      gtk_button_set_label (GTK_BUTTON (data.forward_button), _("_Try Again"));
-      gtk_widget_set_no_show_all (data.cluebar, FALSE);
-      gtk_widget_show_all (data.cluebar);
-
-      g_clear_object (&imap_auth);
-      goto imap_again;
-    }
-
-  gtk_widget_set_no_show_all (data.cluebar, TRUE);
-  gtk_widget_hide (data.cluebar);
-  gtk_button_set_label (GTK_BUTTON (data.forward_button), _("_Forward"));
-
-  /* SMTP */
-
-  if (!smtp_use_auth)
-    goto smtp_done;
-
-  /* Re-use the password from the IMAP page */
-  gtk_entry_set_text (GTK_ENTRY (data.smtp_password), imap_password);
-
-  gtk_notebook_next_page (GTK_NOTEBOOK (data.notebook));
-  gtk_widget_grab_focus (data.smtp_password);
-
- smtp_again:
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-  if (response != GTK_RESPONSE_OK)
-    {
-      g_set_error (&data.error,
-                   GOA_ERROR,
-                   GOA_ERROR_DIALOG_DISMISSED,
-                   _("Dialog was dismissed"));
-      goto out;
-    }
-
-  gtk_widget_set_no_show_all (data.cluebar, TRUE);
-  gtk_widget_hide (data.cluebar);
-
-  smtp_password = gtk_entry_get_text (GTK_ENTRY (data.smtp_password));
-  g_cancellable_reset (data.cancellable);
-  goa_utils_parse_email_address (email_address, NULL, &domain);
-  smtp_auth = goa_smtp_auth_new (domain, smtp_username, smtp_password);
-  goa_mail_client_check (mail_client,
-                         smtp_server,
-                         smtp_tls_type,
-                         smtp_accept_ssl_errors,
-                         (smtp_tls_type == GOA_TLS_TYPE_SSL) ? 465 : 587,
-                         smtp_auth,
-                         data.cancellable,
-                         mail_check_cb,
-                         &data);
-
-  gtk_widget_set_sensitive (data.forward_button, FALSE);
-  show_progress_ui (GTK_CONTAINER (data.progress_grid), TRUE);
-  g_main_loop_run (data.loop);
-
-  if (g_cancellable_is_cancelled (data.cancellable))
-    {
-      g_prefix_error (&data.error,
-                      _("Dialog was dismissed (%s, %d): "),
-                      g_quark_to_string (data.error->domain),
-                      data.error->code);
-      data.error->domain = GOA_ERROR;
-      data.error->code = GOA_ERROR_DIALOG_DISMISSED;
-      goto out;
-    }
-  else if (data.error != NULL)
-    {
-      gchar *markup;
-
-      markup = g_strdup_printf ("<b>%s</b>\n%s",
-                                _("Error connecting to SMTP server"),
-                                data.error->message);
-      g_clear_error (&data.error);
-
-      gtk_label_set_markup (GTK_LABEL (data.cluebar_label), markup);
-      g_free (markup);
-
-      gtk_button_set_label (GTK_BUTTON (data.forward_button), _("_Try Again"));
-      gtk_widget_set_no_show_all (data.cluebar, FALSE);
-      gtk_widget_show_all (data.cluebar);
-
-      g_clear_object (&smtp_auth);
-      g_clear_pointer (&domain, g_free);
-      goto smtp_again;
-    }
-
- smtp_done:
-
-  /* TODO: run in worker thread */
-  g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
-  g_variant_builder_add (&builder, "{sv}", "imap-password", g_variant_new_string (imap_password));
-  if (smtp_use_auth)
-    g_variant_builder_add (&builder, "{sv}", "smtp-password", g_variant_new_string (smtp_password));
-
-  if (!goa_utils_store_credentials_for_object_sync (provider,
-                                                    object,
-                                                    g_variant_builder_end (&builder),
-                                                    NULL, /* GCancellable */
-                                                    &data.error))
-    goto out;
-
-  account = goa_object_peek_account (object);
-  goa_account_call_ensure_credentials (account,
-                                       NULL, /* GCancellable */
-                                       NULL, NULL); /* callback, user_data */
-
-  ret = TRUE;
-
- out:
-  if (data.error != NULL)
-    g_propagate_error (error, data.error);
-
-  gtk_widget_destroy (dialog);
-  g_free (domain);
-  g_free (email_address);
-  g_free (imap_server);
-  g_free (imap_username);
-  g_free (smtp_server);
-  g_free (smtp_username);
-  g_clear_pointer (&data.loop, g_main_loop_unref);
-  g_clear_object (&data.cancellable);
-  g_clear_object (&imap_auth);
-  g_clear_object (&smtp_auth);
-  g_clear_object (&mail_client);
-  return ret;
+  g_signal_connect_object (data->dialog,
+                           "notify::state",
+                           G_CALLBACK (refresh_account_action_cb),
+                           task,
+                           0 /* G_CONNECT_DEFAULT */);
+  gtk_window_present (GTK_WINDOW (data->dialog));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -1424,12 +1196,10 @@ refresh_account (GoaProvider    *provider,
 static void
 show_label (GtkWidget *grid, gint row, const gchar *left, const gchar *right)
 {
-  GtkStyleContext *context;
   GtkWidget *label;
 
   label = gtk_label_new (left);
-  context = gtk_widget_get_style_context (label);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
+  gtk_widget_add_css_class (label, "dim-label");
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   gtk_widget_set_hexpand (label, TRUE);
   gtk_grid_attach (GTK_GRID (grid), label, 0, row, 1, 1);
@@ -1442,73 +1212,98 @@ show_label (GtkWidget *grid, gint row, const gchar *left, const gchar *right)
   gtk_grid_attach (GTK_GRID (grid), label, 1, row, 3, 1);
 }
 
+static GtkWidget *
+create_show_account_ui (GoaProvider *self,
+                        GoaObject   *object)
+{
+  GtkWidget *ret;
+  GtkWidget *row;
+  char *subtitle = NULL;
+  char *username = NULL;
+
+  ret = adw_preferences_group_new ();
+
+  /* Name & E-mail */
+  subtitle = goa_util_lookup_keyfile_string (object, "Name");
+  row = g_object_new (ADW_TYPE_ACTION_ROW,
+                      "title",    _("Name"),
+                      "subtitle", subtitle,
+                      NULL);
+  gtk_widget_add_css_class (row, "property");
+  adw_preferences_group_add (ADW_PREFERENCES_GROUP (ret), row);
+  g_free (subtitle);
+
+  subtitle = goa_util_lookup_keyfile_string (object, "EmailAddress");
+  row = g_object_new (ADW_TYPE_ACTION_ROW,
+                      "title",    _("E-mail"),
+                      "subtitle", subtitle,
+                      NULL);
+  gtk_widget_add_css_class (row, "property");
+  adw_preferences_group_add (ADW_PREFERENCES_GROUP (ret), row);
+  g_free (subtitle);
+
+  /* IMAP */
+  subtitle = goa_util_lookup_keyfile_string (object, "ImapHost");
+  username = goa_util_lookup_keyfile_string (object, "ImapUserName");
+  if (g_strcmp0 (g_get_user_name (), subtitle) != 0)
+    {
+      g_autofree char *domain = g_steal_pointer (&subtitle);
+      subtitle = g_strconcat (username, "@", domain, NULL);
+    }
+
+  row = g_object_new (ADW_TYPE_ACTION_ROW,
+                      "title",    _("IMAP"),
+                      "subtitle", subtitle,
+                      NULL);
+  gtk_widget_add_css_class (row, "property");
+  adw_preferences_group_add (ADW_PREFERENCES_GROUP (ret), row);
+  g_free (subtitle);
+  g_free (username);
+
+  /* SMTP */
+  subtitle = goa_util_lookup_keyfile_string (object, "SmtpHost");
+  username = goa_util_lookup_keyfile_string (object, "SmtpUserName");
+  if (g_strcmp0 (g_get_user_name (), subtitle) != 0)
+    {
+      g_autofree char *domain = g_steal_pointer (&subtitle);
+      subtitle = g_strconcat (username, "@", domain, NULL);
+    }
+
+  row = g_object_new (ADW_TYPE_ACTION_ROW,
+                      "title",    _("SMTP"),
+                      "subtitle", subtitle,
+                      NULL);
+  gtk_widget_add_css_class (row, "property");
+  adw_preferences_group_add (ADW_PREFERENCES_GROUP (ret), row);
+  g_free (subtitle);
+  g_free (username);
+
+  return ret;
+}
+
 static void
-show_account (GoaProvider         *provider,
+show_account (GoaProvider         *self,
               GoaClient           *client,
               GoaObject           *object,
-              GtkBox              *vbox,
-              G_GNUC_UNUSED GtkGrid *dummy1,
-              G_GNUC_UNUSED GtkGrid *dummy2)
+              GtkWindow           *parent,
+              GCancellable        *cancellable,
+              GAsyncReadyCallback  callback,
+              gpointer             user_data)
 {
-  GtkWidget *grid;
-  const gchar *username;
-  gchar *value_str;
-  gchar *value_str_1;
-  gint row = 0;
+  GoaProviderDialog *dialog;
+  g_autoptr(GTask) task = NULL;
+  GtkWidget *content;
 
-  goa_utils_account_add_attention_needed (client, object, provider, vbox);
+  dialog = goa_provider_dialog_new (self, client, parent);
+  content = create_show_account_ui (self, object);
+  goa_provider_dialog_push_account (dialog, object, content);
 
-  grid = gtk_grid_new ();
-  gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
-  gtk_widget_set_hexpand (grid, TRUE);
-  gtk_widget_set_margin_end (grid, 72);
-  gtk_widget_set_margin_start (grid, 72);
-  gtk_widget_set_margin_top (grid, 24);
-  gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
-  gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
-  gtk_container_add (GTK_CONTAINER (vbox), grid);
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
+  g_task_set_source_tag (task, show_account);
+  goa_provider_task_bind_window (task, GTK_WINDOW (dialog));
 
-  goa_utils_account_add_header (object, GTK_GRID (grid), row++);
-
-  username = g_get_user_name ();
-
-  value_str = goa_util_lookup_keyfile_string (object, "EmailAddress");
-  show_label (GTK_WIDGET (grid), row++, _("E-mail"), value_str);
-  g_free (value_str);
-
-  value_str = goa_util_lookup_keyfile_string (object, "Name");
-  show_label (GTK_WIDGET (grid), row++, _("Name"), value_str);
-  g_free (value_str);
-
-  value_str = goa_util_lookup_keyfile_string (object, "ImapHost");
-  value_str_1 = goa_util_lookup_keyfile_string (object, "ImapUserName");
-  if (g_strcmp0 (username, value_str_1) != 0)
-    {
-      gchar *tmp;
-
-      tmp = g_strconcat (value_str_1, "@", value_str, NULL);
-      show_label (GTK_WIDGET (grid), row++, _("IMAP"), tmp);
-      g_free (tmp);
-    }
-  else
-      show_label (GTK_WIDGET (grid), row++, _("IMAP"), value_str);
-  g_free (value_str_1);
-  g_free (value_str);
-
-  value_str = goa_util_lookup_keyfile_string (object, "SmtpHost");
-  value_str_1 = goa_util_lookup_keyfile_string (object, "SmtpUserName");
-  if (value_str_1 != NULL && g_strcmp0 (username, value_str_1) != 0)
-    {
-      gchar *tmp;
-
-      tmp = g_strconcat (value_str_1, "@", value_str, NULL);
-      show_label (GTK_WIDGET (grid), row++, _("SMTP"), tmp);
-      g_free (tmp);
-    }
-  else
-      show_label (GTK_WIDGET (grid), row++, _("SMTP"), value_str);
-  g_free (value_str_1);
-  g_free (value_str);
+  gtk_window_present (GTK_WINDOW (dialog));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

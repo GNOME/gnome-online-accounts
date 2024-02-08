@@ -25,6 +25,7 @@
 #include <json-glib/json-glib.h>
 
 #include "goaprovider.h"
+#include "goaproviderdialog.h"
 #include "goaprovider-priv.h"
 #include "goamsgraphprovider.h"
 #include "goarestproxy.h"
@@ -47,21 +48,6 @@ G_DEFINE_TYPE_WITH_CODE (GoaMsGraphProvider, goa_ms_graph_provider, GOA_TYPE_OAU
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          GOA_MS_GRAPH_NAME, 0));
-
-typedef struct
-{
-  GCancellable *cancellable;
-
-  GtkDialog *dialog;
-  GMainLoop *loop;
-
-  GtkWidget *grid;
-  GtkWidget *email_entry;
-  GtkWidget *expander;
-  GtkWidget *client_id_entry;
-  GtkWidget *connect_button;
-  GError *error;
-} AddAccountData;
 
 /* -------------------------------------------------------------------------- */
 
@@ -332,101 +318,98 @@ add_account_key_values (GoaOAuth2Provider *oauth2_provider,
 
 }
 
-static void
-on_email_entry_changed (GtkWidget *entry,
-                        gpointer   user_data)
+/* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct
 {
-  AddAccountData *data = user_data;
-  const char *email = gtk_entry_get_text (GTK_ENTRY (entry));
-  g_auto (GStrv) split = NULL;
-  gboolean ret = FALSE;
+  GoaProviderDialog *dialog;
+  GoaClient *client;
+  GoaObject *object;
 
-  split = g_strsplit (email, "@", -1);
-  if (g_strv_length (split) == 2 && strlen (split[1]) > 0)
-      ret = TRUE;
+  GtkWidget *email_entry;
+  GtkWidget *client_id_entry;
+} AccountData;
 
-  gtk_widget_set_sensitive (data->connect_button, ret);
+static void
+account_data_free (gpointer user_data)
+{
+  AccountData *data = (AccountData *)user_data;
+
+  g_clear_object (&data->client);
+  g_clear_object (&data->object);
+  g_free (data);
 }
 
 static void
-create_account_details_ui (GoaProvider    *provider,
-                           GtkDialog      *dialog,
-                           GtkBox         *vbox,
-                           gboolean        new_account,
-                           AddAccountData *data)
+on_email_entry_changed (GtkEditable *editable,
+                        AccountData *data)
 {
-  GtkWidget *label;
-  GtkStyleContext *context;
-  GtkWidget *expander_grid;
+  GoaDialogState state = GOA_DIALOG_IDLE;
+  const char *email;
+  const char *client_id;
 
-  goa_utils_set_dialog_title (provider, dialog, new_account);
+  email = gtk_editable_get_text (GTK_EDITABLE (data->email_entry));
+  if (goa_utils_parse_email_address (email, NULL, NULL))
+    state = GOA_DIALOG_READY;
 
-  data->grid = gtk_grid_new ();
-  gtk_container_set_border_width (GTK_CONTAINER (data->grid), 12);
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (data->grid), GTK_ORIENTATION_VERTICAL);
-  gtk_grid_set_column_spacing (GTK_GRID (data->grid), 6);
-  gtk_grid_set_row_spacing (GTK_GRID (data->grid), 12);
-  gtk_container_add (GTK_CONTAINER (vbox), data->grid);
+  /* Ensure there is client ID, since there is no build-system default */
+  client_id = gtk_editable_get_text (GTK_EDITABLE (data->client_id_entry));
+  if ((client_id == NULL || *client_id == '\0')
+      && (GOA_MS_GRAPH_CLIENT_ID == NULL || *GOA_MS_GRAPH_CLIENT_ID == '\0'))
+    state = GOA_DIALOG_IDLE;
 
-  label = gtk_label_new_with_mnemonic (_("E-Mail"));
-  context = gtk_widget_get_style_context (label);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
-  gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_grid_attach (GTK_GRID (data->grid), label, 0, 0, 1, 1);
-
-  data->email_entry = gtk_entry_new ();
-  g_signal_connect (G_OBJECT (data->email_entry), "changed", G_CALLBACK (on_email_entry_changed), data);
-  gtk_widget_set_hexpand (data->email_entry, TRUE);
-  gtk_grid_attach (GTK_GRID (data->grid), data->email_entry, 1, 0, 1, 1);
-
-  data->expander = gtk_expander_new_with_mnemonic (_("_Custom"));
-  gtk_expander_set_expanded (GTK_EXPANDER (data->expander), FALSE);
-  gtk_expander_set_resize_toplevel (GTK_EXPANDER (data->expander), TRUE);
-  gtk_grid_attach (GTK_GRID (data->grid), data->expander, 0, 1, 2, 1);
-
-  expander_grid = gtk_grid_new ();
-  gtk_grid_set_column_spacing (GTK_GRID (expander_grid), 6);
-  gtk_grid_set_row_spacing (GTK_GRID (expander_grid), 12);
-  gtk_container_add (GTK_CONTAINER (data->expander), expander_grid);
-
-  label = gtk_label_new_with_mnemonic ("Client ID");
-  context = gtk_widget_get_style_context (label);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
-  gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_grid_attach (GTK_GRID (expander_grid), label, 0, 1, 1, 1);
-
-  data->client_id_entry = gtk_entry_new ();
-  gtk_widget_set_hexpand (data->client_id_entry, TRUE);
-  gtk_entry_set_activates_default (GTK_ENTRY (data->client_id_entry), TRUE);
-  gtk_entry_set_text (GTK_ENTRY (data->client_id_entry), get_client_id (GOA_OAUTH2_PROVIDER (provider)));
-  gtk_grid_attach (GTK_GRID (expander_grid), data->client_id_entry, 1, 1, 1, 1);
-
-  data->connect_button = gtk_dialog_add_button (data->dialog, _("C_onnect"), GTK_RESPONSE_OK);
-  gtk_dialog_set_default_response (data->dialog, GTK_RESPONSE_OK);
-  gtk_dialog_set_response_sensitive (data->dialog, GTK_RESPONSE_OK, FALSE);
-
-  gtk_widget_set_sensitive (data->connect_button, FALSE);
+  goa_provider_dialog_set_state (data->dialog, state);
 }
 
 static void
-dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data)
+create_account_details_ui (GoaProvider *provider,
+                           AccountData *data,
+                           gboolean     new_account)
 {
-  AddAccountData *data = user_data;
+  GoaProviderDialog *dialog = GOA_PROVIDER_DIALOG (data->dialog);
+  GtkWidget *group;
 
-  if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_DELETE_EVENT)
-    g_cancellable_cancel (data->cancellable);
+  group = goa_provider_dialog_add_group (dialog, NULL);
+  data->email_entry = goa_provider_dialog_add_entry (dialog, group, _("_E-Mail"));
+
+  if (new_account)
+    {
+      GtkWidget *subgroup;
+
+      group = goa_provider_dialog_add_group (dialog, NULL);
+      subgroup = g_object_new (ADW_TYPE_EXPANDER_ROW,
+                               /* TRANSLATORS: Custom account setup options */
+                               "title", _("_Custom"),
+                               "use-underline", TRUE,
+                               NULL);
+      adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), subgroup);
+      data->client_id_entry = goa_provider_dialog_add_entry (dialog, subgroup, _("Client ID"));
+    }
+
+  g_signal_connect (data->email_entry,
+                    "changed",
+                    G_CALLBACK (on_email_entry_changed),
+                    data);
 }
 
 static gboolean
-setup_tenant (GoaMsGraphProvider *self,
-              const char         *host)
+setup_tenant (GoaMsGraphProvider  *self,
+              const char          *host,
+              GError             **error)
 {
   g_autofree char *config_url = NULL;
   SoupSession *session;
   SoupMessage *msg;
   GInputStream *res;
   JsonParser *parser;
-  g_autoptr (GError) error = NULL;
+
+  /* The OAuth configuration is re-built for each account being added,
+   * so when the provider chains up the parent sees the correct values.
+   */
+  g_clear_pointer (&self->client_id, g_free);
+  g_clear_pointer (&self->redirect_uri, g_free);
+  g_clear_pointer (&self->authorization_uri, g_free);
+  g_clear_pointer (&self->token_uri, g_free);
 
   /* First try to read openid configuration and extract known tenant configuration */
   config_url = g_strdup_printf ("https://login.microsoft.com/%s/v2.0/.well-known/openid-configuration", host);
@@ -435,7 +418,7 @@ setup_tenant (GoaMsGraphProvider *self,
   soup_session_add_feature_by_type (session, SOUP_TYPE_AUTH_NTLM);
 
   msg = soup_message_new ("GET", config_url);
-  res = soup_session_send (session, msg, NULL, &error);
+  res = soup_session_send (session, msg, NULL, error);
   if (res)
     {
       char buffer[2048];
@@ -456,7 +439,7 @@ setup_tenant (GoaMsGraphProvider *self,
                    parse_error->message,
                    g_quark_to_string (parse_error->domain),
                    parse_error->code);
-          g_set_error (&error,
+          g_set_error (error,
                        GOA_ERROR,
                        GOA_ERROR_FAILED,
                        _("Could not parse response"));
@@ -469,7 +452,7 @@ setup_tenant (GoaMsGraphProvider *self,
           if (!json_object_has_member (json_object, "authorization_endpoint"))
             {
               g_debug ("Did not find authorization_endpoint in JSON data");
-              g_set_error (&error,
+              g_set_error (error,
                            GOA_ERROR,
                            GOA_ERROR_FAILED,
                            _("Could not parse response"));
@@ -483,7 +466,7 @@ setup_tenant (GoaMsGraphProvider *self,
           if (!json_object_has_member (json_object, "token_endpoint"))
             {
               g_debug ("Did not find token_endpoint in JSON data");
-              g_set_error (&error,
+              g_set_error (error,
                            GOA_ERROR,
                            GOA_ERROR_FAILED,
                            _("Could not parse response"));
@@ -507,57 +490,97 @@ setup_tenant (GoaMsGraphProvider *self,
   return TRUE;
 }
 
-static GoaObject *
-add_account (GoaProvider    *provider,
-             GoaClient      *client,
-             GtkDialog      *dialog,
-             GtkBox         *vbox,
-             GError        **error)
+static void
+add_account_parent_cb (GoaProvider  *provider,
+                       GAsyncResult *result,
+                       gpointer      user_data)
 {
-  AddAccountData data;
-  GoaObject *ret = NULL;
-  int response;
-  GoaMsGraphProvider *self = GOA_MS_GRAPH_PROVIDER (provider);
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
+  GoaObject *object = NULL;
+  GError *error = NULL;
+
+  object = goa_provider_add_account_finish (provider, result, &error);
+  if (object != NULL)
+    goa_provider_task_return_account (task, GOA_OBJECT (object));
+  else
+    goa_provider_task_return_error (task, error);
+}
+
+static void
+add_account_action_cb (GoaProviderDialog *dialog,
+                       GParamSpec        *pspec,
+                       GTask             *task)
+{
+  GoaMsGraphProvider *self = g_task_get_source_object (task);
+  GoaProvider *provider = g_task_get_source_object (task);
+  AccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   const char *email;
-  g_auto (GStrv) split = NULL;
+  const char *client_id;
+  g_autofree char *domain = NULL;
+  g_autoptr(GError) error = NULL;
 
-  memset (&data, 0, sizeof (AddAccountData));
-  data.cancellable = g_cancellable_new ();
-  data.loop = g_main_loop_new (NULL, FALSE);
-  data.dialog = dialog;
-  data.error = NULL;
+  if (goa_provider_dialog_get_state (data->dialog) != GOA_DIALOG_BUSY)
+    return;
 
-  create_account_details_ui (provider, dialog, vbox, TRUE, &data);
-  gtk_widget_show_all (GTK_WIDGET (vbox));
-  g_signal_connect (dialog, "response", G_CALLBACK (dialog_response_cb), &data);
+  email = gtk_editable_get_text (GTK_EDITABLE (data->email_entry));
+  if (!goa_utils_parse_email_address (email, NULL, &domain))
+    g_return_if_reached ();
 
-  response = gtk_dialog_run (dialog);
-  if (response != GTK_RESPONSE_OK)
+  /* Setup tenant based on host, clearing the existing client configuration */
+  if (!setup_tenant (self, domain, &error))
     {
-      g_set_error (&data.error,
-                   GOA_ERROR,
-                   GOA_ERROR_DIALOG_DISMISSED,
-                   _("Dialog was dismissed"));
-      return ret;
+      goa_provider_dialog_report_error (data->dialog, error);
+      return;
     }
 
-  email = gtk_entry_get_text (GTK_ENTRY (data.email_entry));
-  split = g_strsplit (email, "@", -1);
-  if (g_strv_length (split) != 2) {
-    return ret;
-  }
+  /* Check for a custom client ID, then retrieve the effective client ID */
+  client_id = gtk_editable_get_text (GTK_EDITABLE (data->client_id_entry));
+  if (client_id != NULL && *client_id != '\0')
+    g_set_str (&self->client_id, client_id);
 
-  /* Setup tenant based on host */
-  setup_tenant(self, split[1]);
+  client_id = goa_oauth2_provider_get_client_id (GOA_OAUTH2_PROVIDER (self));
+  self->redirect_uri = g_strdup_printf ("goa-oauth2://localhost/%s", client_id);
 
-  self->client_id = g_strdup (gtk_entry_get_text (GTK_ENTRY (data.client_id_entry)));
-  self->redirect_uri = g_strdup_printf ("goa-oauth2://localhost/%s", self->client_id);
+  /* With the provider configured for the client, we chain-up to authorize */
+  GOA_PROVIDER_CLASS (goa_ms_graph_provider_parent_class)->add_account (provider,
+                                                                        data->client,
+                                                                        GTK_WINDOW (data->dialog),
+                                                                        cancellable,
+                                                                        (GAsyncReadyCallback)add_account_parent_cb,
+                                                                        g_object_ref (task));
+}
 
-  gtk_widget_set_visible (data.grid, FALSE);
-  gtk_widget_set_no_show_all (data.grid, TRUE);
-  gtk_widget_set_sensitive (data.connect_button, FALSE);
+static void
+add_account (GoaProvider         *provider,
+             GoaClient           *client,
+             GtkWindow           *parent,
+             GCancellable        *cancellable,
+             GAsyncReadyCallback  callback,
+             gpointer             user_data)
+{
+  AccountData *data;
+  g_autoptr(GTask) task = NULL;
 
-  return GOA_PROVIDER_CLASS (goa_ms_graph_provider_parent_class)->add_account (provider, client, dialog, vbox, error);
+  data = g_new0 (AccountData, 1);
+  data->dialog = goa_provider_dialog_new (provider, client, parent);
+  data->client = g_object_ref (client);
+
+  task = g_task_new (provider, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
+  g_task_set_source_tag (task, add_account);
+  g_task_set_task_data (task, data, account_data_free);
+  goa_provider_task_bind_window (task, GTK_WINDOW (data->dialog));
+
+  create_account_details_ui (provider, data, TRUE);
+  g_signal_connect_object (data->dialog,
+                           "notify::state",
+                           G_CALLBACK (add_account_action_cb),
+                           task,
+                           0 /* G_CONNECT_DEFAULT */);
+  gtk_window_present (GTK_WINDOW (data->dialog));
+
+  // We chain-up in add_account_parent_cb() once the user input is confirmed
 }
 
 /* -------------------------------------------------------------------------- */
