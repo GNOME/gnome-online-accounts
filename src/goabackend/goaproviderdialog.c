@@ -569,7 +569,7 @@ on_remove_activated (GoaProviderDialog *self)
 
   dialog = adw_message_dialog_new (GTK_WINDOW (self),
                                    _("Remove this Account?"),
-                                   _("If you remove this Online Account you will have to connect to it again to use it with apps and servics."));
+                                   _("If you remove this Online Account you will have to connect to it again to use it with apps and services."));
   adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
                                     "cancel", _("_Cancel"),
                                     "remove", _("_Remove"),
