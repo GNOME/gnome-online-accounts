@@ -906,10 +906,6 @@ static const SecretSchema oauth2_schema =
       .name = "goa-oauth2-client",
       .type = SECRET_SCHEMA_ATTRIBUTE_STRING,
     },
-    {
-      .name = "goa-oauth2-provider",
-      .type = SECRET_SCHEMA_ATTRIBUTE_STRING,
-    },
     { "NULL", 0 }
   }
 };
@@ -920,14 +916,11 @@ oauth2_secret_handle_response (GTask            *task,
 {
   GoaOAuth2Provider *self = g_task_get_source_object (task);
   AccountData *data = g_task_get_task_data (task);
-  const char *provider_type = NULL;
   g_autofree char *requested_uri = NULL;
   g_autoptr(GError) error = NULL;
 
-  provider_type = goa_provider_get_provider_type (GOA_PROVIDER (self));
   requested_uri = secret_password_lookup_sync (&oauth2_schema, NULL, NULL,
                                                "goa-oauth2-client", data->client_id,
-                                               "goa-oauth2-provider", provider_type,
                                                NULL);
 
   if (requested_uri == NULL)
@@ -956,7 +949,6 @@ oauth2_secret_service_get_cb (GObject      *object,
                               gpointer      user_data)
 {
   g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
-  GoaOAuth2Provider *self = g_task_get_source_object (task);
   AccountData *data = g_task_get_task_data (task);
   g_autoptr(SecretService) service = NULL;
   g_autolist (SecretCollection) collections = NULL;
@@ -979,13 +971,9 @@ oauth2_secret_service_get_cb (GObject      *object,
       /* The session collection is an empty string (?) */
       if (g_strcmp0 (label, "") == 0)
         {
-          const char *provider_type = NULL;
-
           /* Ensure there's no dangling entry */
-          provider_type = goa_provider_get_provider_type (GOA_PROVIDER (self));
           secret_password_clear_sync (&oauth2_schema, NULL, NULL,
                                       "goa-oauth2-client", data->client_id,
-                                      "goa-oauth2-provider", provider_type,
                                       NULL);
 
           /* Watch the session collection for the requested URI */
