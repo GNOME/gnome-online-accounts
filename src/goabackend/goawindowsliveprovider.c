@@ -53,7 +53,7 @@ static gchar *
 get_provider_name (GoaProvider *provider,
                    GoaObject   *object)
 {
-  return g_strdup (_("Microsoft"));
+  return g_strdup (_("Outlook"));
 }
 
 static GIcon *
