@@ -70,7 +70,7 @@ get_provider_features (GoaProvider *provider)
 static GIcon *
 get_provider_icon (GoaProvider *provider, GoaObject *object)
 {
-  return g_themed_icon_new_with_default_fallbacks ("network-server-symbolic");
+  return g_themed_icon_new_with_default_fallbacks ("x-office-calendar-symbolic");
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
