@@ -77,7 +77,7 @@ get_provider_type (GoaProvider *provider)
 static gchar *
 get_provider_name (GoaProvider *provider, GoaObject *object)
 {
-  return g_strdup(_("Enterprise Login (Kerberos)"));
+  return g_strdup(_("Kerberos"));
 }
 
 static GoaProviderGroup
