@@ -68,7 +68,7 @@ static GIcon *
 get_provider_icon (GoaProvider *provider,
                    GoaObject   *object)
 {
-  return g_themed_icon_new_with_default_fallbacks ("goa-account-msn");
+  return g_themed_icon_new_with_default_fallbacks ("goa-account-ms365");
 }
 
 static GoaProviderGroup

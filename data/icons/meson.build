@@ -3,6 +3,7 @@ icon_scalable_data = [
   'goa-account-exchange.svg',
   'goa-account-fedora.svg',
   'goa-account-google.svg',
+  'goa-account-ms365.svg',
   'goa-account-msn.svg',
   'goa-account-owncloud.svg',
 ]
