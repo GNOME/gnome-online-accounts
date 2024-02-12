@@ -828,6 +828,7 @@ goa_provider_dialog_report_error (GoaProviderDialog *self,
   GtkWidget *banner;
   const char *title = NULL;
   const char *button_label = NULL;
+  g_autoptr(GError) user_error = NULL;
 
   g_return_if_fail (GOA_IS_PROVIDER_DIALOG (self));
 
@@ -849,7 +850,7 @@ goa_provider_dialog_report_error (GoaProviderDialog *self,
       /* If this was an aborted retry, don't overwrite an existing error */
       if (title == NULL || *title == '\0')
         {
-          g_autoptr(GError) user_error = g_error_copy (error);
+          user_error = g_error_copy (error);
 
           if (g_dbus_error_is_remote_error (user_error))
             g_dbus_error_strip_remote_error (user_error);
