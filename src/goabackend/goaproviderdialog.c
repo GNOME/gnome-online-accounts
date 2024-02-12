@@ -346,6 +346,7 @@ goa_provider_dialog_new (GoaProvider *provider,
                        "modal",               parent != NULL,
                        "transient-for",       parent,
                        "width-request",       360,
+                       "height-request",      294,
                        "default-width",       360,
                        NULL);
 }
