@@ -469,13 +469,13 @@ create_account_details_ui (GoaProvider    *provider,
 
       group = goa_provider_dialog_add_group (dialog, NULL);
       subgroup = g_object_new (ADW_TYPE_EXPANDER_ROW,
-                               "title", _("Endpoint Settings"),
+                               "title", _("Server Addresses"),
                                NULL);
       adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), subgroup);
 
-      data->webdav_uri = goa_provider_dialog_add_entry (dialog, subgroup, _("Files Endpoint"));
-      data->caldav_uri = goa_provider_dialog_add_entry (dialog, subgroup, _("CalDAV Endpoint"));
-      data->carddav_uri = goa_provider_dialog_add_entry (dialog, subgroup, _("CardDAV Endpoint"));
+      data->webdav_uri = goa_provider_dialog_add_entry (dialog, subgroup, _("Files Access"));
+      data->caldav_uri = goa_provider_dialog_add_entry (dialog, subgroup, _("Calendar (CalDAV)"));
+      data->carddav_uri = goa_provider_dialog_add_entry (dialog, subgroup, _("Contacts (CardDAV)"));
     }
 
   if (data->object != NULL)
