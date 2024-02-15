@@ -374,16 +374,9 @@ create_setup_page (GoaProvider    *provider,
 
   if (new_account)
     {
-      GtkWidget *row;
-
-      group = goa_provider_dialog_add_group (dialog, NULL);
-      row = g_object_new (ADW_TYPE_EXPANDER_ROW,
-                          "title",         _("Ad_vanced"),
-                          "use-underline", TRUE,
-                          NULL);
-      data->username = goa_provider_dialog_add_entry (dialog, row, _("User_name"));
-      data->server = goa_provider_dialog_add_entry (dialog, row, _("_Server"));
-      adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), row);
+      group = goa_provider_dialog_add_group (dialog, _("Server"));
+      data->username = goa_provider_dialog_add_entry (dialog, group, _("User_name"));
+      data->server = goa_provider_dialog_add_entry (dialog, group, _("_Server"));
 
       g_signal_connect (data->username,
                         "changed",
