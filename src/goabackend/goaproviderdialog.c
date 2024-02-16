@@ -881,7 +881,8 @@ goa_provider_dialog_report_error (GoaProviderDialog *self,
 /**
  * goa_provider_dialog_add_page:
  * @self: a `GoaProviderDialog`
- * @title: (nullable): a group label
+ * @title: (nullable): a page title
+ * @description: (nullable): a page description
  *
  * Add a page to the dialog.
  *
@@ -889,15 +890,17 @@ goa_provider_dialog_report_error (GoaProviderDialog *self,
  */
 GtkWidget *
 goa_provider_dialog_add_page (GoaProviderDialog *self,
-                              const char        *title)
+                              const char        *title,
+                              const char        *description)
 {
-  const char *page_title;
-
   g_return_val_if_fail (GOA_IS_PROVIDER_DIALOG (self), NULL);
 
-  page_title = title != NULL ? title : gtk_window_get_title (GTK_WINDOW (self));
+  if (title == NULL)
+    title = gtk_window_get_title (GTK_WINDOW (self));
+
   self->current_page = g_object_new (ADW_TYPE_PREFERENCES_PAGE,
-                                     "title", page_title,
+                                     "title",       title,
+                                     "description", description,
                                      NULL);
 
   return goa_provider_dialog_push_content (self, title, self->current_page);
@@ -921,7 +924,7 @@ goa_provider_dialog_add_group (GoaProviderDialog *self,
   g_return_val_if_fail (GOA_IS_PROVIDER_DIALOG (self), NULL);
 
   if (self->current_page == NULL)
-    goa_provider_dialog_add_page (self, NULL);
+    goa_provider_dialog_add_page (self, NULL, NULL);
 
   self->current_group = g_object_new (ADW_TYPE_PREFERENCES_GROUP,
                                       "title", title,
