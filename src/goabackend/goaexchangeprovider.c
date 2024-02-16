@@ -368,6 +368,10 @@ create_setup_page (GoaProvider    *provider,
   GoaProviderDialog *dialog = GOA_PROVIDER_DIALOG (data->dialog);
   GtkWidget *group;
 
+  goa_provider_dialog_add_page (dialog,
+                                NULL, // provider name
+                                _("Connect to a Microsoft Exchange provider to get access to calendar, contacts and files"));
+
   group = goa_provider_dialog_add_group (dialog, NULL);
   data->email_address = goa_provider_dialog_add_entry (dialog, group, _("_E-mail"));
   data->password = goa_provider_dialog_add_password_entry (dialog, group, _("_Password"));

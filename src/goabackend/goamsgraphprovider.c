@@ -378,6 +378,10 @@ create_account_details_ui (GoaProvider *provider,
         NULL
       };
 
+      goa_provider_dialog_add_page (dialog,
+                                    NULL, // provider name
+                                    _("Connect to a Microsoft 365 provider to get access to calendar, contacts and files"));
+
       group = goa_provider_dialog_add_group (dialog, NULL);
       data->client_id_entry = goa_provider_dialog_add_entry (dialog, group, _("_Client ID"));
 

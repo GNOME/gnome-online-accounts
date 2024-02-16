@@ -538,6 +538,10 @@ create_account_details_ui (GoaProvider    *provider,
     NULL,
   };
 
+  goa_provider_dialog_add_page (dialog,
+                                _("E-mail"),
+                                _("Add an e-mail account to access your inbox and send and receive mail"));
+
   /* General */
   group = goa_provider_dialog_add_group (dialog, NULL);
   data->name = goa_provider_dialog_add_entry (dialog, group, _("_Name"));
