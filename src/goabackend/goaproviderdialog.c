@@ -339,6 +339,12 @@ goa_provider_dialog_new (GoaProvider *provider,
   g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);
 
+  /* In the non-ideal case a provider needs to chain-up to a parent
+   * with it's own parent, we want the real root window.
+   */
+  if (GOA_IS_PROVIDER_DIALOG (parent))
+    parent = gtk_window_get_transient_for (parent);
+
   return g_object_new (GOA_TYPE_PROVIDER_DIALOG,
                        "provider",            provider,
                        "client",              client,
