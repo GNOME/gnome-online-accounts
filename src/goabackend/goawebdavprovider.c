@@ -465,17 +465,10 @@ create_account_details_ui (GoaProvider    *provider,
 
   if (new_account)
     {
-      GtkWidget *subgroup;
-
-      group = goa_provider_dialog_add_group (dialog, NULL);
-      subgroup = g_object_new (ADW_TYPE_EXPANDER_ROW,
-                               "title", _("Endpoint Settings"),
-                               NULL);
-      adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), subgroup);
-
-      data->webdav_uri = goa_provider_dialog_add_entry (dialog, subgroup, _("Files Endpoint"));
-      data->caldav_uri = goa_provider_dialog_add_entry (dialog, subgroup, _("CalDAV Endpoint"));
-      data->carddav_uri = goa_provider_dialog_add_entry (dialog, subgroup, _("CardDAV Endpoint"));
+      group = goa_provider_dialog_add_group (dialog, _("Endpoint Settings"));
+      data->webdav_uri = goa_provider_dialog_add_entry (dialog, group, _("Files Endpoint"));
+      data->caldav_uri = goa_provider_dialog_add_entry (dialog, group, _("CalDAV Endpoint"));
+      data->carddav_uri = goa_provider_dialog_add_entry (dialog, group, _("CardDAV Endpoint"));
     }
 
   if (data->object != NULL)

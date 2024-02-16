@@ -367,7 +367,6 @@ create_account_details_ui (GoaProvider *provider,
   if (new_account)
     {
       GtkWidget *group;
-      GtkWidget *row;
       /* NOTE: In case further types needs to be added, ensure that the
        * code in add_account_action_cb is also adjusted.
        */
@@ -382,13 +381,9 @@ create_account_details_ui (GoaProvider *provider,
       group = goa_provider_dialog_add_group (dialog, NULL);
       data->client_id_entry = goa_provider_dialog_add_entry (dialog, group, _("_Client ID"));
 
-      row = g_object_new (ADW_TYPE_EXPANDER_ROW,
-                          "title",         _("Ad_vanced"),
-                          "use-underline", TRUE,
-                          NULL);
-      data->issuer_combobox = goa_provider_dialog_add_combo (dialog, row, _("_Issuer"), (GStrv) types);
-      data->custom_issuer_entry = goa_provider_dialog_add_entry (dialog, row, _("C_ustom Issuer"));
-      adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), row);
+      group = goa_provider_dialog_add_group (dialog, _("Advanced"));
+      data->issuer_combobox = goa_provider_dialog_add_combo (dialog, group, _("_Issuer"), (GStrv) types);
+      data->custom_issuer_entry = goa_provider_dialog_add_entry (dialog, group, _("C_ustom Issuer"));
 
       g_signal_connect (data->client_id_entry,
                         "changed",

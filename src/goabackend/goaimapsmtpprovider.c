@@ -556,20 +556,8 @@ create_account_details_ui (GoaProvider    *provider,
   g_signal_connect (data->email_address, "changed", G_CALLBACK (on_email_changed), data);
   g_signal_connect (data->email_password, "changed", G_CALLBACK (on_email_changed), data);
 
-  GtkWidget *box;
-  group = goa_provider_dialog_add_group (dialog, NULL);
-  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
-  adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), box);
-
   /* IMAP */
-  group = adw_preferences_group_new ();
-  gtk_box_append (GTK_BOX (box), group);
-
-  data->imap_group = g_object_new (ADW_TYPE_EXPANDER_ROW,
-                                   "title", _("IMAP Settings"),
-                                   NULL);
-  adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), data->imap_group);
-
+  data->imap_group = goa_provider_dialog_add_group (dialog, _("IMAP Settings"));
   data->imap_server = goa_provider_dialog_add_entry (dialog, data->imap_group, _("IMAP _Server"));
   data->imap_username = goa_provider_dialog_add_entry (dialog, data->imap_group, _("User_name"));
   data->imap_password = goa_provider_dialog_add_password_entry (dialog, data->imap_group, _("_Password"));
@@ -588,14 +576,7 @@ create_account_details_ui (GoaProvider    *provider,
   g_signal_connect (data->imap_password, "changed", G_CALLBACK (on_login_changed), data);
 
   /* SMTP */
-  group = adw_preferences_group_new ();
-  gtk_box_append (GTK_BOX (box), group);
-
-  data->smtp_group = g_object_new (ADW_TYPE_EXPANDER_ROW,
-                                   "title", _("SMTP Settings"),
-                                   NULL);
-  adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), data->smtp_group);
-
+  data->smtp_group = goa_provider_dialog_add_group (dialog, _("SMTP Settings"));
   data->smtp_server = goa_provider_dialog_add_entry (dialog, data->smtp_group, _("SMTP _Server"));
   data->smtp_username = goa_provider_dialog_add_entry (dialog, data->smtp_group, _("User_name"));
   data->smtp_password = goa_provider_dialog_add_password_entry (dialog, data->smtp_group, _("_Password"));
