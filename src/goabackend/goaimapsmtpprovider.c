@@ -1180,9 +1180,6 @@ refresh_account (GoaProvider         *provider,
       g_object_set (data->smtp_encryption, "selected", smtp_tls_type, NULL);
     }
 
-  /* FIXME: Start on the IMAP page */
-  gtk_widget_grab_focus (data->imap_password);
-
   g_signal_connect_object (data->dialog,
                            "notify::state",
                            G_CALLBACK (refresh_account_action_cb),
