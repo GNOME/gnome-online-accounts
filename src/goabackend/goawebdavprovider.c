@@ -460,6 +460,8 @@ create_account_details_ui (GoaProvider    *provider,
 
   group = goa_provider_dialog_add_group (dialog, NULL);
   data->uri = goa_provider_dialog_add_entry (dialog, group, _("_Server"));
+
+  group = goa_provider_dialog_add_group (dialog, NULL);
   data->username = goa_provider_dialog_add_entry (dialog, group, _("User_name"));
   data->password = goa_provider_dialog_add_password_entry (dialog, group, _("_Password"));
 
