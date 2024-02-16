@@ -1048,6 +1048,55 @@ goa_provider_dialog_add_password_entry (GoaProviderDialog *self,
   return child;
 }
 
+/**
+ * goa_provider_dialog_add_description:
+ * @self: a `GoaProviderDialog`
+ * @target: (nullable): a `GtkWidget`
+ * @description: (nullable): a description
+ *
+ * Add a description label to the current group.
+ *
+ * If @target is given, it's accessible description will be update to refer
+ * to the new label.
+ *
+ * Returns: (transfer none): the new label
+ */
+GtkWidget *
+goa_provider_dialog_add_description (GoaProviderDialog *self,
+                                     GtkWidget         *target,
+                                     const char        *description)
+{
+  GtkWidget *child;
+
+  g_return_val_if_fail (GOA_IS_PROVIDER_DIALOG (self), NULL);
+  g_return_val_if_fail (target == NULL || GTK_IS_WIDGET (target), NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (self->current_group), NULL);
+
+  child = g_object_new (GTK_TYPE_LABEL,
+                        "label",       description,
+                        "visible",     description != NULL,
+                        "css-classes", (const char * const[]){"dim-label", NULL},
+                        "xalign",      0.0,
+                        "margin-top",  12,
+                        "wrap",        TRUE,
+                        NULL);
+
+  if (GTK_IS_ACCESSIBLE (target))
+    {
+      gtk_accessible_update_relation (GTK_ACCESSIBLE (target),
+                                      GTK_ACCESSIBLE_RELATION_DESCRIBED_BY,
+                                      child, NULL,
+                                      -1);
+    }
+
+  if (ADW_IS_PREFERENCES_GROUP (self->current_group))
+    adw_preferences_group_add (ADW_PREFERENCES_GROUP (self->current_group), child);
+  else if (ADW_IS_EXPANDER_ROW (self->current_group))
+    adw_expander_row_add_row (ADW_EXPANDER_ROW (self->current_group), child);
+
+  return child;
+}
+
 static gboolean
 goa_provider_task_bind_window_cb (GtkWindow *window,
                                   gpointer   user_data)
