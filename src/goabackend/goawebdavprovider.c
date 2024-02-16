@@ -467,15 +467,10 @@ create_account_details_ui (GoaProvider    *provider,
     {
       const char *provider_type;
 
-      group = goa_provider_dialog_add_group (dialog, NULL);
-      subgroup = g_object_new (ADW_TYPE_EXPANDER_ROW,
-                               "title", _("Endpoint Settings"),
-                               NULL);
-      adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), subgroup);
-
-      data->webdav_uri = goa_provider_dialog_add_entry (dialog, subgroup, _("Files Endpoint"));
-      data->caldav_uri = goa_provider_dialog_add_entry (dialog, subgroup, _("CalDAV Endpoint"));
-      data->carddav_uri = goa_provider_dialog_add_entry (dialog, subgroup, _("CardDAV Endpoint"));
+      group = goa_provider_dialog_add_group (dialog, _("Server Addresses"));
+      data->webdav_uri = goa_provider_dialog_add_entry (dialog, group, _("_File Storage"));
+      data->caldav_uri = goa_provider_dialog_add_entry (dialog, group, _("_Calendar (CalDAV)"));
+      data->carddav_uri = goa_provider_dialog_add_entry (dialog, group, _("C_ontacts (CardDAV)"));
 
       /* The only reason to subclass the WebDAV provider is to brand it, thus we
        * expect the provider to take responsibility for custom endpoints.
