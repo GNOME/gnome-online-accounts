@@ -380,7 +380,7 @@ create_account_details_ui (GoaProvider *provider,
 
       goa_provider_dialog_add_page (dialog,
                                     NULL, // provider name
-                                    _("Connect to a Microsoft 365 provider to get access to calendar, contacts and files"));
+                                    _("Connect to a Microsoft 365 provider to get access calendars, contacts and files"));
 
       group = goa_provider_dialog_add_group (dialog, NULL);
       data->client_id_entry = goa_provider_dialog_add_entry (dialog, group, _("_Client ID"));
@@ -388,6 +388,7 @@ create_account_details_ui (GoaProvider *provider,
       group = goa_provider_dialog_add_group (dialog, _("Advanced"));
       data->issuer_combobox = goa_provider_dialog_add_combo (dialog, group, _("_Issuer"), (GStrv) types);
       data->custom_issuer_entry = goa_provider_dialog_add_entry (dialog, group, _("C_ustom Issuer"));
+      goa_provider_dialog_add_description (dialog, data->custom_issuer_entry, _("Example provider: example.com"));
 
       g_signal_connect (data->client_id_entry,
                         "changed",

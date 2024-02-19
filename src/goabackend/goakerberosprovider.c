@@ -592,6 +592,7 @@ create_account_details_ui (GoaProvider    *self,
 
   group = goa_provider_dialog_add_group (dialog, NULL);
   data->principal = goa_provider_dialog_add_entry (dialog, group, _("_Principal"));
+  goa_provider_dialog_add_description (dialog, data->principal, _("Example principal: identity@DOMAIN.COM"));
 
   gtk_widget_grab_focus (data->principal);
   g_signal_connect (data->principal, "changed", G_CALLBACK (on_principal_changed), data);

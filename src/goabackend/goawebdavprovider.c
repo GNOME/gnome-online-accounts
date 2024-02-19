@@ -464,6 +464,7 @@ create_account_details_ui (GoaProvider    *provider,
 
   group = goa_provider_dialog_add_group (dialog, NULL);
   data->uri = goa_provider_dialog_add_entry (dialog, group, _("_Server"));
+  goa_provider_dialog_add_description (dialog, data->uri, _("Examples: example.com, 192.168.0.82"));
 
   group = goa_provider_dialog_add_group (dialog, NULL);
   data->username = goa_provider_dialog_add_entry (dialog, group, _("User_name"));

@@ -540,13 +540,14 @@ create_account_details_ui (GoaProvider    *provider,
 
   goa_provider_dialog_add_page (dialog,
                                 _("E-mail"),
-                                _("Add an e-mail account to access your inbox and send and receive mail"));
+                                _("Connect to an email account"));
 
   /* General */
   group = goa_provider_dialog_add_group (dialog, NULL);
   data->name = goa_provider_dialog_add_entry (dialog, group, _("_Name"));
   data->email_address = goa_provider_dialog_add_entry (dialog, group, _("_E-mail"));
   data->email_password = goa_provider_dialog_add_password_entry (dialog, group, _("_Password"));
+  goa_provider_dialog_add_description (dialog, NULL, _("IMAP and SMTP details will be auto-detected from your service provider when possible"));
 
   if (new_account)
     {
@@ -575,6 +576,8 @@ create_account_details_ui (GoaProvider    *provider,
       g_object_set (data->imap_encryption, "selected", GOA_TLS_TYPE_SSL, NULL);
     }
 
+  goa_provider_dialog_add_description (dialog, data->imap_server, _("Example server: imap.example.com"));
+
   g_signal_connect (data->imap_server, "changed", G_CALLBACK (on_login_changed), data);
   g_signal_connect (data->imap_username, "changed", G_CALLBACK (on_login_changed), data);
   g_signal_connect (data->imap_password, "changed", G_CALLBACK (on_login_changed), data);
@@ -593,6 +596,8 @@ create_account_details_ui (GoaProvider    *provider,
                                                              (GStrv)encryption_types);
       g_object_set (data->smtp_encryption, "selected", GOA_TLS_TYPE_SSL, NULL);
     }
+
+  goa_provider_dialog_add_description (dialog, data->smtp_server, _("Example server: smtp.example.com"));
 
   g_signal_connect (data->smtp_server, "changed", G_CALLBACK (on_login_changed), data);
   g_signal_connect (data->smtp_username, "changed", G_CALLBACK (on_login_changed), data);

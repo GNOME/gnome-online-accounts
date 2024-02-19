@@ -370,17 +370,19 @@ create_setup_page (GoaProvider    *provider,
 
   goa_provider_dialog_add_page (dialog,
                                 NULL, // provider name
-                                _("Connect to a Microsoft Exchange provider to get access to calendar, contacts and files"));
+                                _("Connect to a Microsoft Exchange provider to access calendars, contacts and files"));
 
   group = goa_provider_dialog_add_group (dialog, NULL);
   data->email_address = goa_provider_dialog_add_entry (dialog, group, _("_E-mail"));
   data->password = goa_provider_dialog_add_password_entry (dialog, group, _("_Password"));
+  goa_provider_dialog_add_description (dialog, NULL, _("Exchange account details will be auto-detected from your e-mail address when possible"));
 
   if (new_account)
     {
       group = goa_provider_dialog_add_group (dialog, _("Advanced"));
       data->username = goa_provider_dialog_add_entry (dialog, group, _("User_name"));
       data->server = goa_provider_dialog_add_entry (dialog, group, _("_Server"));
+      goa_provider_dialog_add_description (dialog, data->server, _("Example domain: example.com"));
 
       g_signal_connect (data->username,
                         "changed",
