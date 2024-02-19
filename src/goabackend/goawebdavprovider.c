@@ -463,7 +463,7 @@ create_account_details_ui (GoaProvider    *provider,
                                 _("Add a calendar, contacts and files account by entering your WebDAV server and account details"));
 
   group = goa_provider_dialog_add_group (dialog, NULL);
-  data->uri = goa_provider_dialog_add_entry (dialog, group, _("_Server"));
+  data->uri = goa_provider_dialog_add_entry (dialog, group, _("_Server Address"));
   goa_provider_dialog_add_description (dialog, data->uri, _("Examples: example.com, 192.168.0.82"));
 
   group = goa_provider_dialog_add_group (dialog, NULL);
@@ -474,10 +474,10 @@ create_account_details_ui (GoaProvider    *provider,
     {
       const char *provider_type;
 
-      group = goa_provider_dialog_add_group (dialog, _("Endpoint Settings"));
-      data->webdav_uri = goa_provider_dialog_add_entry (dialog, group, _("Files Endpoint"));
-      data->caldav_uri = goa_provider_dialog_add_entry (dialog, group, _("CalDAV Endpoint"));
-      data->carddav_uri = goa_provider_dialog_add_entry (dialog, group, _("CardDAV Endpoint"));
+      group = goa_provider_dialog_add_group (dialog, _("Server Addresses (Optional)"));
+      data->webdav_uri = goa_provider_dialog_add_entry (dialog, group, _("Files"));
+      data->caldav_uri = goa_provider_dialog_add_entry (dialog, group, _("Calendar (CalDAV)"));
+      data->carddav_uri = goa_provider_dialog_add_entry (dialog, group, _("Contacts (CardDAV)"));
 
       /* The only reason to subclass the WebDAV provider is to brand it, thus we
        * expect the provider to take responsibility for custom endpoints.

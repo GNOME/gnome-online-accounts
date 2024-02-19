@@ -539,13 +539,13 @@ create_account_details_ui (GoaProvider    *provider,
   };
 
   goa_provider_dialog_add_page (dialog,
-                                _("E-mail"),
+                                _("Email"),
                                 _("Connect to an email account"));
 
   /* General */
   group = goa_provider_dialog_add_group (dialog, NULL);
   data->name = goa_provider_dialog_add_entry (dialog, group, _("_Name"));
-  data->email_address = goa_provider_dialog_add_entry (dialog, group, _("_E-mail"));
+  data->email_address = goa_provider_dialog_add_entry (dialog, group, _("_Email"));
   data->email_password = goa_provider_dialog_add_password_entry (dialog, group, _("_Password"));
   goa_provider_dialog_add_description (dialog, NULL, _("IMAP and SMTP details will be auto-detected from your service provider when possible"));
 
@@ -1222,7 +1222,7 @@ create_show_account_ui (GoaProvider *self,
 
   subtitle = goa_util_lookup_keyfile_string (object, "EmailAddress");
   row = g_object_new (ADW_TYPE_ACTION_ROW,
-                      "title",    _("E-mail"),
+                      "title",    _("Email"),
                       "subtitle", subtitle,
                       NULL);
   gtk_widget_add_css_class (row, "property");
