@@ -879,7 +879,7 @@ add_account (GoaProvider         *provider,
   g_autoptr(GTask) task = NULL;
 
   data = g_new0 (AddAccountData, 1);
-  data->dialog = goa_provider_dialog_new (provider, client, parent);
+  data->dialog = goa_provider_dialog_new_full (provider, client, parent, 480, 600);
   data->client = g_object_ref (client);
 
   task = g_task_new (provider, cancellable, callback, user_data);
@@ -1126,7 +1126,7 @@ refresh_account (GoaProvider         *provider,
   g_assert (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   data = g_new0 (AddAccountData, 1);
-  data->dialog = goa_provider_dialog_new (provider, client, parent);
+  data->dialog = goa_provider_dialog_new_full (provider, client, parent, 480, 600);
   data->client = g_object_ref (client);
 
   task = g_task_new (provider, cancellable, callback, user_data);

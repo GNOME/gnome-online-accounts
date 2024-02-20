@@ -339,6 +339,34 @@ goa_provider_dialog_new (GoaProvider *provider,
   g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);
 
+  return goa_provider_dialog_new_full (provider, client, parent, 480, -1);
+}
+
+/**
+ * goa_provider_dialog_new_full:
+ * @provider: a `GoaProvider`
+ * @client: a `GoaClient`
+ * @parent: (nullable): a `GtkWindow`
+ * @default_width: default width, or `-1`
+ * @default_height: default height, or `-1`
+ *
+ * Create a new dialog for @provider.
+ *
+ * If @parent is given, the dialog will be modal.
+ *
+ * Returns: a `GoaProviderDialog`
+ */
+GoaProviderDialog *
+goa_provider_dialog_new_full (GoaProvider *provider,
+                         GoaClient   *client,
+                         GtkWindow   *parent,
+                         int          default_width,
+                         int          default_height)
+{
+  g_return_val_if_fail (GOA_IS_PROVIDER (provider), NULL);
+  g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
+  g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);
+
   /* In the non-ideal case a provider needs to chain-up to a parent
    * with it's own parent, we want the real root window.
    */
@@ -352,8 +380,8 @@ goa_provider_dialog_new (GoaProvider *provider,
                        "modal",               parent != NULL,
                        "transient-for",       parent,
                        "width-request",       360,
-                       "height-request",      294,
-                       "default-width",       360,
+                       "default-width",       default_width,
+                       "default-height",      default_height,
                        NULL);
 }
 

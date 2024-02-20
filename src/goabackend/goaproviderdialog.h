@@ -58,6 +58,11 @@ G_DECLARE_FINAL_TYPE (GoaProviderDialog, goa_provider_dialog, GOA, PROVIDER_DIAL
 GoaProviderDialog   *goa_provider_dialog_new                (GoaProvider       *provider,
                                                              GoaClient         *client,
                                                              GtkWindow         *parent);
+GoaProviderDialog   *goa_provider_dialog_new_full           (GoaProvider       *provider,
+                                                             GoaClient         *client,
+                                                             GtkWindow         *parent,
+                                                             int                default_width,
+                                                             int                default_height);
 GoaClient           *goa_provider_dialog_get_client         (GoaProviderDialog *self);
 GoaProvider         *goa_provider_dialog_get_provider       (GoaProviderDialog *self);
 GoaDialogState       goa_provider_dialog_get_state          (GoaProviderDialog *self);
