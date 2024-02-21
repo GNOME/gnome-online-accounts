@@ -7,18 +7,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts 3.3.1\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/iss"
-"ues\n"
-"POT-Creation-Date: 2019-09-25 11:16+0000\n"
-"PO-Revision-Date: 2019-10-08 19:02+0800\n"
-"Last-Translator: pan93412 <pan93412@gmail.com>\n"
-"Language-Team: Chinese <zh-l10n@linux.org.tw>\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
+"issues\n"
+"POT-Creation-Date: 2024-02-10 22:10+0000\n"
+"PO-Revision-Date: 2024-02-21 14:29+0000\n"
+"Last-Translator: Chao-Hsiung Liao <pesder@mail.edu.tw>\n"
+"Language-Team: Chinese (Traditional) <http://darkbear.mercusysddns.com/"
+"projects/gnome-45/gnome-online-accounts-po-ui-master/zh_Hant/>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 19.08.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: data/org.gnome.online-accounts.gschema.xml:6
 msgid "List of providers that are allowed to be loaded"
@@ -31,39 +32,39 @@ msgid ""
 msgstr "代表允許被載入的提供者文字列表 (預設值：all)。這只在啟動時被評估。"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1136 src/daemon/goadaemon.c:1433
+#: src/daemon/goadaemon.c:1141 src/daemon/goadaemon.c:1458
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "無法尋找到此提供者：%s"
 
-#: src/daemon/goadaemon.c:1376
+#: src/daemon/goadaemon.c:1401
 msgid "IsLocked property is set for account"
 msgstr "帳號設定 IsLocked 屬性"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1421
+#: src/daemon/goadaemon.c:1446
 msgid "ProviderType property is not set for account"
 msgstr "帳號沒有設定 ProviderType 屬性"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:258
+#: src/goabackend/goaewsclient.c:284
 msgid "Failed to parse autodiscover response XML"
 msgstr "無法解析自動探索回應 XML"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: src/goabackend/goaewsclient.c:269 src/goabackend/goaewsclient.c:284
-#: src/goabackend/goaewsclient.c:299
+#: src/goabackend/goaewsclient.c:295 src/goabackend/goaewsclient.c:310
+#: src/goabackend/goaewsclient.c:325
 #, c-format
 msgid "Failed to find “%s” element"
 msgstr "找不到「%s」元素"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:320
+#: src/goabackend/goaewsclient.c:346
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "在自動探索回應中找不到 ASUrl 與 OABUrl"
 
-#: src/goabackend/goaexchangeprovider.c:51
+#: src/goabackend/goaexchangeprovider.c:52
 msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
@@ -71,249 +72,92 @@ msgstr "Microsoft Exchange"
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
 #.
-#: src/goabackend/goaexchangeprovider.c:248
-#: src/goabackend/goalastfmprovider.c:287
-#: src/goabackend/goaowncloudprovider.c:291
+#: src/goabackend/goaexchangeprovider.c:249
+#: src/goabackend/goawebdavprovider.c:374
 #, c-format
 msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "使用者「%s」的密碼無效 (%s, %d)："
 
-#: src/goabackend/goaexchangeprovider.c:394
-#: src/goabackend/goaimapsmtpprovider.c:647
+#: src/goabackend/goaexchangeprovider.c:372
+#: src/goabackend/goaimapsmtpprovider.c:544
 msgid "_E-mail"
 msgstr "電子郵件(_E)"
 
-#: src/goabackend/goaexchangeprovider.c:395
-#: src/goabackend/goafedoraprovider.c:574
-#: src/goabackend/goaimapsmtpprovider.c:667
-#: src/goabackend/goaimapsmtpprovider.c:687
-#: src/goabackend/goalastfmprovider.c:429
-#: src/goabackend/goaowncloudprovider.c:509
+#: src/goabackend/goaexchangeprovider.c:373
+#: src/goabackend/goafedoraprovider.c:167
+#: src/goabackend/goaimapsmtpprovider.c:545
+#: src/goabackend/goaimapsmtpprovider.c:575
+#: src/goabackend/goaimapsmtpprovider.c:601
+#: src/goabackend/goawebdavprovider.c:464
 msgid "_Password"
 msgstr "密碼(_P)"
 
-#: src/goabackend/goaexchangeprovider.c:398
-msgid "_Custom"
-msgstr "自訂(_C)"
+#: src/goabackend/goaexchangeprovider.c:381
+#: src/goabackend/goamsgraphprovider.c:386
+msgid "Ad_vanced"
+msgstr "進階(_V)"
 
-#: src/goabackend/goaexchangeprovider.c:409
-#: src/goabackend/goafedoraprovider.c:573
-#: src/goabackend/goaimapsmtpprovider.c:666
-#: src/goabackend/goaimapsmtpprovider.c:686
-#: src/goabackend/goalastfmprovider.c:428
-#: src/goabackend/goaowncloudprovider.c:508
+#: src/goabackend/goaexchangeprovider.c:384
+#: src/goabackend/goafedoraprovider.c:166
+#: src/goabackend/goaimapsmtpprovider.c:574
+#: src/goabackend/goaimapsmtpprovider.c:600
+#: src/goabackend/goawebdavprovider.c:463
 msgid "User_name"
 msgstr "使用者名稱(_N)"
 
-#: src/goabackend/goaexchangeprovider.c:410
-#: src/goabackend/goaowncloudprovider.c:507
+#: src/goabackend/goaexchangeprovider.c:385
+#: src/goabackend/goawebdavprovider.c:462
 msgid "_Server"
 msgstr "伺服器(_S)"
 
-#. --
-#: src/goabackend/goaexchangeprovider.c:420
-#: src/goabackend/goafedoraprovider.c:581
-#: src/goabackend/goaimapsmtpprovider.c:699
-#: src/goabackend/goakerberosprovider.c:591
-#: src/goabackend/goalastfmprovider.c:437
-#: src/goabackend/goaowncloudprovider.c:523
-msgid "_Cancel"
-msgstr "取消(_C)"
+#: src/goabackend/goafedoraprovider.c:51
+msgid "Fedora"
+msgstr "Fedora"
 
-#: src/goabackend/goaexchangeprovider.c:421
-#: src/goabackend/goafedoraprovider.c:582
-#: src/goabackend/goakerberosprovider.c:592
-#: src/goabackend/goalastfmprovider.c:438
-#: src/goabackend/goaowncloudprovider.c:524
-msgid "C_onnect"
-msgstr "連線(_O)"
+#: src/goabackend/goagoogleprovider.c:57
+msgid "Google"
+msgstr "Google"
 
-#: src/goabackend/goaexchangeprovider.c:437
-#: src/goabackend/goafedoraprovider.c:597
-#: src/goabackend/goaimapsmtpprovider.c:715
-#: src/goabackend/goakerberosprovider.c:607
-#: src/goabackend/goalastfmprovider.c:454
-#: src/goabackend/goaowncloudprovider.c:539
-msgid "Connecting…"
-msgstr "連線中…"
-
-#: src/goabackend/goaexchangeprovider.c:537
-#: src/goabackend/goaexchangeprovider.c:731
-#: src/goabackend/goafedoraprovider.c:746
-#: src/goabackend/goaimapsmtpprovider.c:865
-#: src/goabackend/goaimapsmtpprovider.c:900
-#: src/goabackend/goaimapsmtpprovider.c:992
-#: src/goabackend/goaimapsmtpprovider.c:1249
-#: src/goabackend/goaimapsmtpprovider.c:1325
-#: src/goabackend/goakerberosprovider.c:947
-#: src/goabackend/goalastfmprovider.c:652
-#: src/goabackend/goalastfmprovider.c:820
-#: src/goabackend/goamediaserverprovider.c:420
-#: src/goabackend/goaoauth2provider.c:995 src/goabackend/goaoauthprovider.c:859
-#: src/goabackend/goaowncloudprovider.c:661
-#: src/goabackend/goaowncloudprovider.c:881
-msgid "Dialog was dismissed"
-msgstr "對話盒已放棄"
-
-#: src/goabackend/goaexchangeprovider.c:575
-#: src/goabackend/goaexchangeprovider.c:759
-#: src/goabackend/goafedoraprovider.c:792
-#: src/goabackend/goaimapsmtpprovider.c:933
-#: src/goabackend/goaimapsmtpprovider.c:1030
-#: src/goabackend/goaimapsmtpprovider.c:1276
-#: src/goabackend/goaimapsmtpprovider.c:1353
-#: src/goabackend/goalastfmprovider.c:686
-#: src/goabackend/goalastfmprovider.c:839
-#: src/goabackend/goaowncloudprovider.c:706
-#: src/goabackend/goaowncloudprovider.c:908
-#, c-format
-msgid "Dialog was dismissed (%s, %d): "
-msgstr "對話盒已放棄 (%s, %d)："
-
-#: src/goabackend/goaexchangeprovider.c:588
-#: src/goabackend/goaimapsmtpprovider.c:946
-#: src/goabackend/goaimapsmtpprovider.c:1043
-#: src/goabackend/goaowncloudprovider.c:719
-msgid "_Ignore"
-msgstr "忽略(_I)"
-
-#: src/goabackend/goaexchangeprovider.c:593
-#: src/goabackend/goaexchangeprovider.c:778
-#: src/goabackend/goafedoraprovider.c:803
-#: src/goabackend/goaimapsmtpprovider.c:951
-#: src/goabackend/goaimapsmtpprovider.c:1048
-#: src/goabackend/goaimapsmtpprovider.c:1295
-#: src/goabackend/goaimapsmtpprovider.c:1372
-#: src/goabackend/goakerberosprovider.c:1040
-#: src/goabackend/goalastfmprovider.c:698
-#: src/goabackend/goalastfmprovider.c:856
-#: src/goabackend/goaowncloudprovider.c:724
-#: src/goabackend/goaowncloudprovider.c:927
-msgid "_Try Again"
-msgstr "重試(_T)"
-
-#: src/goabackend/goaexchangeprovider.c:598
-#: src/goabackend/goaexchangeprovider.c:771
-msgid "Error connecting to Microsoft Exchange server"
-msgstr "連接至 Microsoft Exchange 伺服器時發生錯誤"
-
-#: src/goabackend/goafacebookprovider.c:56
-msgid "Facebook"
-msgstr "Facebook"
-
-#: src/goabackend/goafacebookprovider.c:183
-#: src/goabackend/goaflickrprovider.c:155
-#: src/goabackend/goafoursquareprovider.c:154
-#: src/goabackend/goagoogleprovider.c:184
-#: src/goabackend/goawindowsliveprovider.c:159
+#: src/goabackend/goagoogleprovider.c:207
+#: src/goabackend/goamsgraphprovider.c:181
+#: src/goabackend/goawindowsliveprovider.c:158
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
 msgstr "請求您的身分識別時預期的狀態為 200，但卻取得狀態 %d (%s)"
 
 #. TODO: more specific
-#: src/goabackend/goafacebookprovider.c:202
-#: src/goabackend/goafacebookprovider.c:213
-#: src/goabackend/goafacebookprovider.c:219
-#: src/goabackend/goaflickrprovider.c:174
-#: src/goabackend/goaflickrprovider.c:185
-#: src/goabackend/goaflickrprovider.c:196
-#: src/goabackend/goaflickrprovider.c:205
-#: src/goabackend/goaflickrprovider.c:218
-#: src/goabackend/goafoursquareprovider.c:173
-#: src/goabackend/goafoursquareprovider.c:184
-#: src/goabackend/goafoursquareprovider.c:195
-#: src/goabackend/goafoursquareprovider.c:206
-#: src/goabackend/goafoursquareprovider.c:215
-#: src/goabackend/goafoursquareprovider.c:228
-#: src/goabackend/goagoogleprovider.c:203
-#: src/goabackend/goagoogleprovider.c:214
-#: src/goabackend/goalastfmprovider.c:212
-#: src/goabackend/goalastfmprovider.c:221
-#: src/goabackend/goalastfmprovider.c:230
-#: src/goabackend/goalastfmprovider.c:238
-#: src/goabackend/goalastfmprovider.c:244
-#: src/goabackend/goalastfmprovider.c:512
-#: src/goabackend/goalastfmprovider.c:521
-#: src/goabackend/goalastfmprovider.c:538
-#: src/goabackend/goalastfmprovider.c:544
-#: src/goabackend/goaoauth2provider.c:656
-#: src/goabackend/goaoauth2provider.c:686
-#: src/goabackend/goaoauth2provider.c:697 src/goabackend/goautils.c:273
-#: src/goabackend/goawindowsliveprovider.c:178
-#: src/goabackend/goawindowsliveprovider.c:189
-#: src/goabackend/goawindowsliveprovider.c:198
-#: src/goabackend/goawindowsliveprovider.c:211
+#: src/goabackend/goagoogleprovider.c:226
+#: src/goabackend/goagoogleprovider.c:237
+#: src/goabackend/goamsgraphprovider.c:200
+#: src/goabackend/goamsgraphprovider.c:211
+#: src/goabackend/goamsgraphprovider.c:222
+#: src/goabackend/goaoauth2provider.c:616
+#: src/goabackend/goaoauth2provider.c:646
+#: src/goabackend/goaoauth2provider.c:657 src/goabackend/goautils.c:133
+#: src/goabackend/goawindowsliveprovider.c:177
+#: src/goabackend/goawindowsliveprovider.c:188
+#: src/goabackend/goawindowsliveprovider.c:197
+#: src/goabackend/goawindowsliveprovider.c:210
 msgid "Could not parse response"
 msgstr "無法解析回應"
 
-#: src/goabackend/goafedoraprovider.c:94
-msgid "Fedora"
-msgstr "Fedora"
-
-#: src/goabackend/goafedoraprovider.c:208
-#: src/goabackend/goakerberosprovider.c:248
-msgid "Ticketing is disabled for account"
-msgstr "帳號計費已停用"
-
-#: src/goabackend/goafedoraprovider.c:233
-#: src/goabackend/goakerberosprovider.c:273
-#, c-format
-msgid "Could not find saved credentials for principal “%s” in keyring"
-msgstr "在鑰匙圈中找不到主要「%s」儲存的身分憑證"
-
-#: src/goabackend/goafedoraprovider.c:246
-#: src/goabackend/goakerberosprovider.c:286
-#, c-format
-msgid "Did not find password for principal “%s” in credentials"
-msgstr "在憑證中找不到主要「%s」密碼"
-
-#: src/goabackend/goafedoraprovider.c:805
-#| msgid "Error connecting to Last.fm"
-msgid "Error connecting to Fedora"
-msgstr "連線至 Fedora 時發生錯誤"
-
-#: src/goabackend/goafedoraprovider.c:1198
-#: src/goabackend/goakerberosprovider.c:1374
-msgid "Identity service returned invalid key"
-msgstr "身分認證服務傳回無效的鍵值"
-
-#: src/goabackend/goaflickrprovider.c:56
-msgid "Flickr"
-msgstr "Flickr"
-
-#: src/goabackend/goaflickrprovider.c:271
-msgid "Your system time is invalid. Check your date and time settings."
-msgstr "您的系統時間無效。請檢查您的日期與時間設定值。"
-
-#: src/goabackend/goafoursquareprovider.c:57
-msgid "Foursquare"
-msgstr "Foursquare"
-
-#: src/goabackend/goagoogleprovider.c:56
-msgid "Google"
-msgstr "Google"
-
 #. TODO: more specific
-#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goasmtpauth.c:155
+#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goasmtpauth.c:149
 msgid "Service not available"
 msgstr "服務無法使用"
 
 #. TODO: more specific
-#: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goalastfmprovider.c:529
-#: src/goabackend/goasmtpauth.c:108 src/goabackend/goautils.c:838
+#: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goasmtpauth.c:102
+#: src/goabackend/goautils.c:681
 msgid "Authentication failed"
 msgstr "核對失敗"
 
-#: src/goabackend/goaimapauthlogin.c:129
-msgid "Server does not support PLAIN"
-msgstr "伺服器不支援 PLAIN"
-
-#: src/goabackend/goaimapauthlogin.c:181 src/goabackend/goasmtpauth.c:606
+#: src/goabackend/goaimapauthlogin.c:166 src/goabackend/goasmtpauth.c:600
 msgid "Server does not support STARTTLS"
 msgstr "伺服器不支援 STARTTLS"
 
-#: src/goabackend/goaimapsmtpprovider.c:53
+#: src/goabackend/goaimapsmtpprovider.c:54
 msgid "IMAP and SMTP"
 msgstr "IMAP 與 SMTP"
 
@@ -327,506 +171,629 @@ msgstr "IMAP 與 SMTP"
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: src/goabackend/goaimapsmtpprovider.c:327
-#: src/goabackend/goaimapsmtpprovider.c:378
+#: src/goabackend/goaimapsmtpprovider.c:311
+#: src/goabackend/goaimapsmtpprovider.c:362
 #, c-format
 msgid "Invalid %s with username “%s” (%s, %d): "
 msgstr "無效的 %s，使用者名稱「%s」(%s, %d)："
 
-#. Translators: the following four strings are used to show a
-#. * combo box similar to the one in the evolution module.
-#. * Encryption: None
-#. *             STARTTLS after connecting
-#. *             SSL on a dedicated port
-#.
-#: src/goabackend/goaimapsmtpprovider.c:564
-msgid "_Encryption"
-msgstr "加密(_E)"
-
-#: src/goabackend/goaimapsmtpprovider.c:567
+#. Keep in sync with GoaTlsType
+#: src/goabackend/goaimapsmtpprovider.c:535
 msgid "None"
 msgstr "沒有"
 
-#: src/goabackend/goaimapsmtpprovider.c:570
+#. GOA_TLS_TYPE_NONE
+#: src/goabackend/goaimapsmtpprovider.c:536
 msgid "STARTTLS after connecting"
 msgstr "連線後使用 STARTTLS"
 
-#: src/goabackend/goaimapsmtpprovider.c:573
+#. GOA_TLS_TYPE_STARTTLS
+#: src/goabackend/goaimapsmtpprovider.c:537
 msgid "SSL on a dedicated port"
 msgstr "SSL 於專用的連接埠"
 
-#: src/goabackend/goaimapsmtpprovider.c:648
+#: src/goabackend/goaimapsmtpprovider.c:543
 msgid "_Name"
 msgstr "名稱(_N)"
 
-#: src/goabackend/goaimapsmtpprovider.c:665
+#: src/goabackend/goaimapsmtpprovider.c:569
+msgid "IMAP Settings"
+msgstr "IMAP 設定"
+
+#: src/goabackend/goaimapsmtpprovider.c:573
 msgid "IMAP _Server"
 msgstr "IMAP 伺服器(_S)"
 
-#: src/goabackend/goaimapsmtpprovider.c:685
+#: src/goabackend/goaimapsmtpprovider.c:581
+#: src/goabackend/goaimapsmtpprovider.c:607
+msgid "Encryption"
+msgstr "加密"
+
+#: src/goabackend/goaimapsmtpprovider.c:595
+msgid "SMTP Settings"
+msgstr "SMTP 設定"
+
+#: src/goabackend/goaimapsmtpprovider.c:599
 msgid "SMTP _Server"
 msgstr "SMTP 伺服器(_S)"
 
-#: src/goabackend/goaimapsmtpprovider.c:700
-#: src/goabackend/goaimapsmtpprovider.c:972
-#: src/goabackend/goaimapsmtpprovider.c:1305
-msgid "_Forward"
-msgstr "向前(_F)"
-
-#: src/goabackend/goaimapsmtpprovider.c:956
-#: src/goabackend/goaimapsmtpprovider.c:1288
-msgid "Error connecting to IMAP server"
-msgstr "連接至 IMAP 伺服器時發生錯誤"
-
-#: src/goabackend/goaimapsmtpprovider.c:1053
-#: src/goabackend/goaimapsmtpprovider.c:1365
-msgid "Error connecting to SMTP server"
-msgstr "連接至 SMTP 伺服器時發生錯誤"
-
-#: src/goabackend/goaimapsmtpprovider.c:1476
-msgid "E-mail"
-msgstr "電子郵件"
-
-#: src/goabackend/goaimapsmtpprovider.c:1480
+#: src/goabackend/goaimapsmtpprovider.c:1229
 msgid "Name"
 msgstr "名稱"
 
-#: src/goabackend/goaimapsmtpprovider.c:1490
-#: src/goabackend/goaimapsmtpprovider.c:1494
+#: src/goabackend/goaimapsmtpprovider.c:1238
+msgid "E-mail"
+msgstr "電子郵件"
+
+#: src/goabackend/goaimapsmtpprovider.c:1255
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1505
-#: src/goabackend/goaimapsmtpprovider.c:1509
+#: src/goabackend/goaimapsmtpprovider.c:1273
 msgid "SMTP"
 msgstr "SMTP"
 
-#: src/goabackend/goakerberosprovider.c:100
-msgid "Enterprise Login (Kerberos)"
-msgstr "企業版登入 (Kerberos)"
+#: src/goabackend/goakerberosprovider.c:80
+msgid "Kerberos"
+msgstr "Kerberos"
 
-#: src/goabackend/goakerberosprovider.c:586
-msgid "_Principal"
-msgstr "主要的(_P)"
-
-#: src/goabackend/goakerberosprovider.c:801
+#: src/goabackend/goakerberosprovider.c:418
 msgid "Operation was cancelled"
 msgstr "動作被取消"
 
-#: src/goabackend/goakerberosprovider.c:845
-#: src/goaidentity/goaidentityservice.c:1287
+#: src/goabackend/goakerberosprovider.c:462
+#: src/goaidentity/goaidentityservice.c:1114
 msgid "Log In to Realm"
 msgstr "登入領域"
 
-#: src/goabackend/goakerberosprovider.c:846
+#: src/goabackend/goakerberosprovider.c:463
 msgid "Please enter your password below."
 msgstr "請在下面輸入您的密碼。"
 
-#: src/goabackend/goakerberosprovider.c:847
+#: src/goabackend/goakerberosprovider.c:464
 msgid "Remember this password"
 msgstr "記住這個密碼"
 
-#: src/goabackend/goakerberosprovider.c:1035
-msgid "Error connecting to enterprise identity server"
-msgstr "連線至企業身分認證伺服器時發生錯誤"
+#: src/goabackend/goakerberosprovider.c:590
+msgid "_Principal"
+msgstr "主要的(_P)"
 
-#: src/goabackend/goalastfmprovider.c:65
-msgid "Last.fm"
-msgstr "Last.fm"
+#: src/goabackend/goakerberosprovider.c:1282
+msgid "Ticketing is disabled for account"
+msgstr "帳號計費已停用"
 
-#: src/goabackend/goalastfmprovider.c:700
-#: src/goabackend/goalastfmprovider.c:850
-msgid "Error connecting to Last.fm"
-msgstr "連接至 Last.fm 時發生錯誤"
+#: src/goabackend/goakerberosprovider.c:1309
+#, c-format
+msgid "Could not find saved credentials for principal “%s” in keyring"
+msgstr "在鑰匙圈中找不到主要「%s」儲存的身分憑證"
 
-#: src/goabackend/goamediaserverprovider.c:63
-msgid "Media Server"
-msgstr "媒體伺服器"
+#: src/goabackend/goakerberosprovider.c:1322
+#, c-format
+msgid "Did not find password for principal “%s” in credentials"
+msgstr "在憑證中找不到主要「%s」密碼"
 
-#: src/goabackend/goamediaserverprovider.c:316
-msgid ""
-"Personal content can be added to your applications through a media server "
-"account."
-msgstr "個人內容可以透過媒體伺服器帳號加入您的應用程式。"
+#: src/goabackend/goakerberosprovider.c:1504
+msgid "Identity service returned invalid key"
+msgstr "身分認證服務傳回無效的鍵值"
 
-#: src/goabackend/goamediaserverprovider.c:329
-msgid "Available Media Servers"
-msgstr "可用的伺服器"
+#: src/goabackend/goamsgraphprovider.c:64
+msgid "Microsoft 365"
+msgstr "Microsoft 365"
 
-#: src/goabackend/goamediaserverprovider.c:360
-msgid "No media servers found"
-msgstr "找不到媒體伺服器"
+#. NOTE: In case further types needs to be added, ensure that the
+#. * code in add_account_action_cb is also adjusted.
+#.
+#. Translators: Microsoft account issuer type
+#: src/goabackend/goamsgraphprovider.c:376
+msgid "Common"
+msgstr "一般"
 
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: src/goabackend/goaoauth2provider.c:632 src/goabackend/goaoauthprovider.c:542
+#. Translators: Microsoft account issuer type
+#: src/goabackend/goamsgraphprovider.c:378
+msgid "Custom"
+msgstr "自訂"
+
+#: src/goabackend/goamsgraphprovider.c:383
+msgid "_Client ID"
+msgstr "客戶端 ID(_C)"
+
+#: src/goabackend/goamsgraphprovider.c:389
+msgid "_Issuer"
+msgstr "發照者(_I)"
+
+#: src/goabackend/goamsgraphprovider.c:390
+msgid "C_ustom Issuer"
+msgstr "自訂發照者(_U)"
+
+#: src/goabackend/goaoauth2provider.c:592
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr "請求存取記號時預期的狀態為 200，但卻取得狀態 %d (%s)"
 
-#: src/goabackend/goaoauth2provider.c:814
+#: src/goabackend/goaoauth2provider.c:736
 msgid "Authorization response: "
 msgstr "授權回應："
 
-#: src/goabackend/goaoauth2provider.c:884
+#: src/goabackend/goaoauth2provider.c:799
 #, c-format
 msgid "Authorization response: %s"
 msgstr "授權回應：%s"
 
-#: src/goabackend/goaoauth2provider.c:1021
-#: src/goabackend/goaoauthprovider.c:890
+#: src/goabackend/goaoauth2provider.c:807
+msgid "Failed to authenticate"
+msgstr "無法核對"
+
+#: src/goabackend/goaoauth2provider.c:843
 msgid "Error getting an Access Token: "
 msgstr "取得存取記號時發生錯誤："
 
-#: src/goabackend/goaoauth2provider.c:1036
-#: src/goabackend/goaoauthprovider.c:903
+#: src/goabackend/goaoauth2provider.c:859
 msgid "Error getting identity: "
 msgstr "取得身分時發生錯誤："
 
-#: src/goabackend/goaoauth2provider.c:1254
-#: src/goabackend/goaoauthprovider.c:1192
+#: src/goabackend/goaoauth2provider.c:880
+#, c-format
+msgid "Sign in to %s with your browser"
+msgstr "使用瀏覽器登入 %s"
+
+#: src/goabackend/goaoauth2provider.c:882
+#: src/goabackend/goaproviderdialog.c:654
+msgid "_Sign In…"
+msgstr "登入(_S)…"
+
+#: src/goabackend/goaoauth2provider.c:1215
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "要求以 %s 登入，卻以 %s 登入"
 
-#: src/goabackend/goaoauth2provider.c:1406
+#: src/goabackend/goaoauth2provider.c:1402
 msgid "Credentials do not contain access_token"
 msgstr "憑證不包含 access_token"
 
-#: src/goabackend/goaoauth2provider.c:1445
-#: src/goabackend/goaoauthprovider.c:1407
+#: src/goabackend/goaoauth2provider.c:1446
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "無法重新整理存取符令 (%s，%d)："
 
-#: src/goabackend/goaoauthprovider.c:565
-msgid "Missing access_token or access_token_secret headers in response"
-msgstr "回應遺失 access_token 或 access_token_secret 標頭"
-
-#: src/goabackend/goaoauthprovider.c:773
-msgid "Error getting a Request Token: "
-msgstr "取得請求記號時發生錯誤："
-
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: src/goabackend/goaoauthprovider.c:804
-#, c-format
-msgid ""
-"Expected status 200 for getting a Request Token, instead got status %d (%s)"
-msgstr "取得請求記號時預期的狀態為 200，但卻取得狀態 %d (%s)"
-
-#: src/goabackend/goaoauthprovider.c:821
-msgid "Missing request_token or request_token_secret headers in response"
-msgstr "回應遺失 request_token 或 request_token_secret 標頭"
-
-#: src/goabackend/goaoauthprovider.c:1363
-msgid "Credentials do not contain access_token or access_token_secret"
-msgstr "憑證不包含 access_token 或 access_token_secret"
-
-#: src/goabackend/goaowncloudprovider.c:60
+#: src/goabackend/goaowncloudprovider.c:55
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: src/goabackend/goaowncloudprovider.c:729
-#: src/goabackend/goaowncloudprovider.c:920
-#| msgid "Error connecting to ownCloud server"
-msgid "Error connecting to Nextcloud server"
-msgstr "連線至 Nextcloud 伺服器時發生錯誤"
-
-#: src/goabackend/goapocketprovider.c:74
-msgid "Pocket"
-msgstr "Pocket"
-
-#. TODO: more specific
-#: src/goabackend/goapocketprovider.c:249
-msgid "No username or access_token"
-msgstr "沒有使用者名稱或存取記號(_T)"
-
-#: src/goabackend/goaprovider.c:113
+#: src/goabackend/goaprovider.c:118
 msgid "_Mail"
 msgstr "郵件(_M)"
 
-#: src/goabackend/goaprovider.c:118
+#: src/goabackend/goaprovider.c:123
 msgid "Cale_ndar"
 msgstr "行事曆(_N)"
 
-#: src/goabackend/goaprovider.c:123
+#: src/goabackend/goaprovider.c:128
 msgid "_Contacts"
 msgstr "聯絡人(_C)"
 
-#: src/goabackend/goaprovider.c:128
+#: src/goabackend/goaprovider.c:133
 msgid "C_hat"
 msgstr "聊天(_H)"
 
-#: src/goabackend/goaprovider.c:133
+#: src/goabackend/goaprovider.c:138
 msgid "_Documents"
 msgstr "文件(_D)"
 
-#: src/goabackend/goaprovider.c:138
+#: src/goabackend/goaprovider.c:143
 msgid "M_usic"
 msgstr "音樂(_U)"
 
-#: src/goabackend/goaprovider.c:143
+#: src/goabackend/goaprovider.c:148
 msgid "_Photos"
 msgstr "相片(_P)"
 
-#: src/goabackend/goaprovider.c:148
+#: src/goabackend/goaprovider.c:153
 msgid "_Files"
 msgstr "檔案(_F)"
 
-#: src/goabackend/goaprovider.c:153
+#: src/goabackend/goaprovider.c:158
 msgid "Network _Resources"
 msgstr "網路資源(_R)"
 
-#: src/goabackend/goaprovider.c:158
+#: src/goabackend/goaprovider.c:163
 msgid "_Read Later"
 msgstr "稍後再閱讀(_R)"
 
-#: src/goabackend/goaprovider.c:163
+#: src/goabackend/goaprovider.c:168
 msgid "Prin_ters"
 msgstr "印表機(_T)"
 
-#: src/goabackend/goaprovider.c:168
+#: src/goabackend/goaprovider.c:173
 msgid "_Maps"
 msgstr "地圖(_M)"
 
-#: src/goabackend/goaprovider.c:173
+#: src/goabackend/goaprovider.c:178
 msgid "T_o Do"
 msgstr "待辦事項(_O)"
 
-#. Translators: This is a label for a series of
-#. * options switches. For example: “Use for Mail”.
-#: src/goabackend/goaprovider.c:571
-msgid "Use for"
-msgstr "使用於"
-
-#: src/goabackend/goaprovider.c:826
+#: src/goabackend/goaprovider.c:923
 msgid "Account is disabled"
 msgstr "帳號已停用"
 
-#: src/goabackend/goaprovider.c:839
+#: src/goabackend/goaprovider.c:936
 msgid "Unknown error"
 msgstr "未知錯誤"
 
-#: src/goabackend/goaprovider.c:858
+#: src/goabackend/goaprovider.c:955
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync 並非以 %s 類型實作"
-
-#. TODO: more specific
-#: src/goabackend/goasmtpauth.c:170
-msgid "TLS not available"
-msgstr "TLS 無法使用"
-
-#: src/goabackend/goasmtpauth.c:476
-msgid "Unknown authentication mechanism"
-msgstr "不明的核對機制"
-
-#: src/goabackend/goautils.c:92
-msgid "Error logging into the account"
-msgstr "登入帳號時發生錯誤"
-
-#: src/goabackend/goautils.c:136
-msgid "Credentials have expired"
-msgstr "憑證已逾期"
-
-#: src/goabackend/goautils.c:140
-msgid "Sign in to enable this account."
-msgstr "登入以啟用此帳號。"
-
-#: src/goabackend/goautils.c:144
-msgid "_Sign In"
-msgstr "登入(_S)"
-
-#: src/goabackend/goautils.c:240
-#, c-format
-msgid "A %s account already exists for %s"
-msgstr "%s 帳號已經存在用於 %s"
 
 #. Translators: this is the title of the "Add Account" and "Refresh
 #. * Account" dialogs. The %s is the name of the provider. eg.,
 #. * 'Google'.
 #.
-#: src/goabackend/goautils.c:293
+#: src/goabackend/goaproviderdialog.c:168
 #, c-format
 msgid "%s Account"
 msgstr "%s 帳號"
 
+#: src/goabackend/goaproviderdialog.c:571
+msgid "Remove this Account?"
+msgstr "移除此帳號？"
+
+#: src/goabackend/goaproviderdialog.c:572
+msgid ""
+"If you remove this Online Account you will have to connect to it again to "
+"use it with apps and services."
+msgstr "如果您移除此線上帳號，則必須再次連接到它才能將其用於程式和服務。"
+
+#: src/goabackend/goaproviderdialog.c:574
+msgid "_Cancel"
+msgstr "取消(_C)"
+
+#: src/goabackend/goaproviderdialog.c:575
+msgid "_Remove"
+msgstr "移除(_R)"
+
+#: src/goabackend/goaproviderdialog.c:653
+msgid "Sign in to reconnect to this account"
+msgstr "登入以重新連接到此帳號"
+
+#. Remove
+#: src/goabackend/goaproviderdialog.c:702
+msgid "_Remove…"
+msgstr "移除(_R)…"
+
+#: src/goabackend/goaproviderdialog.c:797
+msgid "_Sign In"
+msgstr "登入(_S)"
+
+#: src/goabackend/goaproviderdialog.c:858
+msgid "_Try Again"
+msgstr "重試(_T)"
+
+#: src/goabackend/goaproviderdialog.c:862
+msgid "_Ignore"
+msgstr "忽略(_I)"
+
+#: src/goabackend/goaproviderdialog.c:1055
+msgid "Dialog was dismissed"
+msgstr "對話盒已放棄"
+
 #. TODO: more specific
-#: src/goabackend/goautils.c:347
+#: src/goabackend/goasmtpauth.c:164
+msgid "TLS not available"
+msgstr "TLS 無法使用"
+
+#: src/goabackend/goasmtpauth.c:470
+msgid "Unknown authentication mechanism"
+msgstr "不明的核對機制"
+
+#: src/goabackend/goautils.c:77
+#, c-format
+msgid "A %s account already exists for %s"
+msgstr "%s 帳號已經存在用於 %s"
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:190
 msgid "Failed to delete credentials from the keyring"
 msgstr "無法從鑰匙圈刪除憑證"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:395
+#: src/goabackend/goautils.c:238
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "無法從鑰匙圈取回憑證"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:405
+#: src/goabackend/goautils.c:248
 msgid "No credentials found in the keyring"
 msgstr "鑰匙圈找不到憑證"
 
-#: src/goabackend/goautils.c:418
+#: src/goabackend/goautils.c:261
 msgid "Error parsing result obtained from the keyring: "
 msgstr "從鑰匙圈取得解析結果時發生錯誤："
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: src/goabackend/goautils.c:459
+#: src/goabackend/goautils.c:302
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "%2$s 身分的 GOA %1$s 憑證"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:476
+#: src/goabackend/goautils.c:319
 msgid "Failed to store credentials in the keyring"
 msgstr "無法儲存憑證到鑰匙圈"
 
-#: src/goabackend/goautils.c:825
-msgid "Cannot resolve hostname"
-msgstr "不能解析主機名稱"
+#: src/goabackend/goautils.c:672
+msgid "Not supported"
+msgstr "不支援"
 
-#: src/goabackend/goautils.c:829
-msgid "Cannot resolve proxy hostname"
-msgstr "不能解析代理伺服器主機名稱"
+#: src/goabackend/goautils.c:675
+msgid "Not found"
+msgstr "找不到"
 
-#: src/goabackend/goautils.c:834
-msgid "Cannot find WebDAV endpoint"
-msgstr "找不到 WebDAV 終結點"
-
-#: src/goabackend/goautils.c:843
+#: src/goabackend/goautils.c:686
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "代碼：%u — 從伺服器傳回未預期的回應"
 
-#: src/goabackend/goautils.c:859
+#: src/goabackend/goautils.c:703
 msgid "The signing certificate authority is not known."
 msgstr "簽署的憑證授權中心不明。"
 
-#: src/goabackend/goautils.c:863
+#: src/goabackend/goautils.c:707
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr "憑證與取回憑證的網站身分比對不符。"
 
-#: src/goabackend/goautils.c:868
+#: src/goabackend/goautils.c:712
 msgid "The certificate’s activation time is still in the future."
 msgstr "憑證的啟用時刻在未來。"
 
-#: src/goabackend/goautils.c:872
+#: src/goabackend/goautils.c:716
 msgid "The certificate has expired."
 msgstr "憑證已逾期。"
 
-#: src/goabackend/goautils.c:876
+#: src/goabackend/goautils.c:720
 msgid "The certificate has been revoked."
 msgstr "憑證已撤銷。"
 
-#: src/goabackend/goautils.c:880
+#: src/goabackend/goautils.c:724
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "憑證的演算法被認為是不安全的。"
 
-#: src/goabackend/goautils.c:886
+#: src/goabackend/goautils.c:730
 msgid "Invalid certificate."
 msgstr "憑證無效。"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:921
+#: src/goabackend/goautils.c:765
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "在憑證中找不到 %s 其「%s」身分的密碼"
 
-#. translators: %s here is the address of the web page
-#: src/goabackend/goawebview.c:94
+#: src/goabackend/goawebdavprovider.c:472
+msgid "Endpoint Settings"
+msgstr "端點設定"
+
+#: src/goabackend/goawebdavprovider.c:476
+msgid "Files Endpoint"
+msgstr "檔案端點"
+
+#: src/goabackend/goawebdavprovider.c:477
+msgid "CalDAV Endpoint"
+msgstr "CalDAV 端點"
+
+#: src/goabackend/goawebdavprovider.c:478
+msgid "CardDAV Endpoint"
+msgstr "CardDAV 端點"
+
+#: src/goabackend/goawebdavprovider.c:659
 #, c-format
-msgid "Loading “%s”…"
-msgstr "正載入「%s」..."
+msgid "Invalid URI: %s"
+msgstr "無效的 URI： %s"
 
 #: src/goabackend/goawindowsliveprovider.c:56
-msgid "Microsoft"
-msgstr "Microsoft"
+msgid "Microsoft Personal"
+msgstr "Microsoft 個人版"
 
-#: src/goaidentity/goaidentityservice.c:569
+#: src/goaidentity/goaidentityservice.c:564
 msgid "Initial secret key is invalid"
 msgstr "初始密鑰無效"
 
 #. TODO: more specific
-#: src/goaidentity/goaidentityservice.c:806
-#: src/goaidentity/goaidentityservice.c:910
+#: src/goaidentity/goaidentityservice.c:786
 #, c-format
 msgid "Couldn't get GoaObject for object path %s"
 msgstr "無法取得物件路徑 %s 的 GoaObject"
 
-#: src/goaidentity/goaidentityservice.c:1292
+#: src/goaidentity/goaidentityservice.c:1119
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "網路領域 %s 需要一些資訊才能讓您登入。"
 
-#: src/goaidentity/goakerberosidentity.c:274
-#: src/goaidentity/goakerberosidentity.c:282
-#: src/goaidentity/goakerberosidentity.c:706
+#: src/goaidentity/goakerberosidentity.c:293
+#: src/goaidentity/goakerberosidentity.c:301
+#: src/goaidentity/goakerberosidentity.c:695
 msgid "Could not find identity in credential cache: "
 msgstr "在憑證快取中找不到身分認證： "
 
-#: src/goaidentity/goakerberosidentity.c:719
+#: src/goaidentity/goakerberosidentity.c:707
 msgid "Could not find identity credentials in cache: "
 msgstr "在快取中找不到身分憑證： "
 
-#: src/goaidentity/goakerberosidentity.c:770
+#: src/goaidentity/goakerberosidentity.c:751
 msgid "Could not sift through identity credentials in cache: "
 msgstr "無法篩選快取中的身分憑證： "
 
-#: src/goaidentity/goakerberosidentity.c:787
+#: src/goaidentity/goakerberosidentity.c:763
 msgid "Could not finish up sifting through identity credentials in cache: "
 msgstr "無法結束篩選快取中的身分憑證： "
 
-#: src/goaidentity/goakerberosidentity.c:1102
+#: src/goaidentity/goakerberosidentity.c:1406
 msgid "No associated identification found"
 msgstr "找不到相關聯的身分認證"
 
-#: src/goaidentity/goakerberosidentity.c:1185
+#: src/goaidentity/goakerberosidentity.c:1535
 msgid "Could not create credential cache: "
 msgstr "無法建立憑證快取： "
 
-#: src/goaidentity/goakerberosidentity.c:1219
+#: src/goaidentity/goakerberosidentity.c:1575
 msgid "Could not initialize credentials cache: "
 msgstr "無法初始化憑證快取： "
 
-#: src/goaidentity/goakerberosidentity.c:1235
+#: src/goaidentity/goakerberosidentity.c:1588
 msgid "Could not store new credentials in credentials cache: "
 msgstr "無法在憑證快取中儲存新的憑證： "
 
-#: src/goaidentity/goakerberosidentity.c:1533
-msgid "Could not renew identity: Not signed in"
-msgstr "無法更新身分認證：尚未登入"
+#: src/goaidentity/goakerberosidentity.c:1824
+msgid "Not signed in"
+msgstr "尚未登入"
 
-#: src/goaidentity/goakerberosidentity.c:1545
-msgid "Could not renew identity: "
-msgstr "無法更新身分認證： "
+#: src/goaidentity/goakerberosidentity.c:1837
+msgid "Could not get the default principal: "
+msgstr "無法取得預設主體： "
 
-#: src/goaidentity/goakerberosidentity.c:1561
+#: src/goaidentity/goakerberosidentity.c:1850
 #, c-format
-msgid "Could not get new credentials to renew identity %s: "
-msgstr "無法取得新的憑證以更新身分認證 %s： "
+msgid "Could not get renewed credentials from the KDC for identity %s: "
+msgstr "無法從 KDC 取得識別 %s 的更新憑證： "
 
-#: src/goaidentity/goakerberosidentity.c:1603
+#: src/goaidentity/goakerberosidentity.c:1898
 msgid "Could not erase identity: "
 msgstr "無法消除身分認證： "
 
-#: src/goaidentity/goakerberosidentitymanager.c:827
+#: src/goaidentity/goakerberosidentitymanager.c:854
 msgid "Could not find identity"
 msgstr "找不到身分認證"
 
-#: src/goaidentity/goakerberosidentitymanager.c:919
+#: src/goaidentity/goakerberosidentitymanager.c:937
 msgid "Could not create credential cache for identity"
 msgstr "無法建立身分認證的憑證快取"
+
+#~ msgid "C_onnect"
+#~ msgstr "連線(_O)"
+
+#~ msgid "Connecting…"
+#~ msgstr "連線中…"
+
+#, c-format
+#~ msgid "Dialog was dismissed (%s, %d): "
+#~ msgstr "對話盒已放棄 (%s, %d)："
+
+#~ msgid "Error connecting to Microsoft Exchange server"
+#~ msgstr "連接至 Microsoft Exchange 伺服器時發生錯誤"
+
+#~ msgid "Facebook"
+#~ msgstr "Facebook"
+
+#~| msgid "Error connecting to Last.fm"
+#~ msgid "Error connecting to Fedora"
+#~ msgstr "連線至 Fedora 時發生錯誤"
+
+#~ msgid "Flickr"
+#~ msgstr "Flickr"
+
+#~ msgid "Your system time is invalid. Check your date and time settings."
+#~ msgstr "您的系統時間無效。請檢查您的日期與時間設定值。"
+
+#~ msgid "Foursquare"
+#~ msgstr "Foursquare"
+
+#~ msgid "Server does not support PLAIN"
+#~ msgstr "伺服器不支援 PLAIN"
+
+#~ msgid "_Forward"
+#~ msgstr "向前(_F)"
+
+#~ msgid "Error connecting to IMAP server"
+#~ msgstr "連接至 IMAP 伺服器時發生錯誤"
+
+#~ msgid "Error connecting to SMTP server"
+#~ msgstr "連接至 SMTP 伺服器時發生錯誤"
+
+#~ msgid "Enterprise Login (Kerberos)"
+#~ msgstr "企業版登入 (Kerberos)"
+
+#~ msgid "Error connecting to enterprise identity server"
+#~ msgstr "連線至企業身分認證伺服器時發生錯誤"
+
+#~ msgid "Last.fm"
+#~ msgstr "Last.fm"
+
+#~ msgid "Error connecting to Last.fm"
+#~ msgstr "連接至 Last.fm 時發生錯誤"
+
+#~ msgid "Media Server"
+#~ msgstr "媒體伺服器"
+
+#~ msgid ""
+#~ "Personal content can be added to your applications through a media server "
+#~ "account."
+#~ msgstr "個人內容可以透過媒體伺服器帳號加入您的應用程式。"
+
+#~ msgid "Available Media Servers"
+#~ msgstr "可用的伺服器"
+
+#~ msgid "No media servers found"
+#~ msgstr "找不到媒體伺服器"
+
+#~ msgid "Missing access_token or access_token_secret headers in response"
+#~ msgstr "回應遺失 access_token 或 access_token_secret 標頭"
+
+#~ msgid "Error getting a Request Token: "
+#~ msgstr "取得請求記號時發生錯誤："
+
+#, c-format
+#~ msgid ""
+#~ "Expected status 200 for getting a Request Token, instead got status %d "
+#~ "(%s)"
+#~ msgstr "取得請求記號時預期的狀態為 200，但卻取得狀態 %d (%s)"
+
+#~ msgid "Missing request_token or request_token_secret headers in response"
+#~ msgstr "回應遺失 request_token 或 request_token_secret 標頭"
+
+#~ msgid "Credentials do not contain access_token or access_token_secret"
+#~ msgstr "憑證不包含 access_token 或 access_token_secret"
+
+#~| msgid "Error connecting to ownCloud server"
+#~ msgid "Error connecting to Nextcloud server"
+#~ msgstr "連線至 Nextcloud 伺服器時發生錯誤"
+
+#~ msgid "Pocket"
+#~ msgstr "Pocket"
+
+#~ msgid "No username or access_token"
+#~ msgstr "沒有使用者名稱或存取記號(_T)"
+
+#~ msgid "Use for"
+#~ msgstr "使用於"
+
+#~ msgid "Error logging into the account"
+#~ msgstr "登入帳號時發生錯誤"
+
+#~ msgid "Credentials have expired"
+#~ msgstr "憑證已逾期"
+
+#~ msgid "Cannot resolve hostname"
+#~ msgstr "不能解析主機名稱"
+
+#~ msgid "Cannot resolve proxy hostname"
+#~ msgstr "不能解析代理伺服器主機名稱"
+
+#, c-format
+#~ msgid "Loading “%s”…"
+#~ msgstr "正載入「%s」..."
+
+#~ msgid "Could not renew identity: Not signed in"
+#~ msgstr "無法更新身分認證：尚未登入"
+
+#~ msgid "Could not renew identity: "
+#~ msgstr "無法更新身分認證： "
 
 #~ msgid "Telepathy chat account not found"
 #~ msgstr "找不到 Telepathy 聊天帳號"
 
 #~ msgid "Failed to create a user interface for %s"
 #~ msgstr "無法建立 %s 的使用者介面"
-
-#~ msgid "Connection Settings"
-#~ msgstr "連線設定值"
 
 #~ msgid "Personal Details"
 #~ msgstr "個人詳細資料"
