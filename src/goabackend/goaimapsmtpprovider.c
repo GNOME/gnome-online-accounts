@@ -1155,7 +1155,7 @@ refresh_account (GoaProvider         *provider,
   data->smtp_accept_ssl_errors = goa_util_lookup_keyfile_boolean (object, "SmtpAcceptSslErrors");
 
   imap_tls_type = get_tls_type_from_object (object, "ImapUseSsl", "ImapUseTls");
-  gtk_drop_down_set_selected (GTK_DROP_DOWN (data->imap_encryption), imap_tls_type);
+  g_object_set (data->imap_encryption, "selected", imap_tls_type, NULL);
 
   imap_server = goa_util_lookup_keyfile_string (object, "ImapHost");
   gtk_editable_set_text (GTK_EDITABLE (data->imap_server), imap_server);
@@ -1177,11 +1177,8 @@ refresh_account (GoaProvider         *provider,
       gtk_editable_set_editable (GTK_EDITABLE (data->smtp_username), FALSE);
 
       smtp_tls_type = get_tls_type_from_object (object, "SmtpUseSsl", "SmtpUseTls");
-      gtk_drop_down_set_selected (GTK_DROP_DOWN (data->smtp_encryption), smtp_tls_type);
+      g_object_set (data->smtp_encryption, "selected", smtp_tls_type, NULL);
     }
-
-  /* FIXME: Start on the IMAP page */
-  gtk_widget_grab_focus (data->imap_password);
 
   g_signal_connect_object (data->dialog,
                            "notify::state",
