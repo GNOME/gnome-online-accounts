@@ -368,22 +368,21 @@ create_setup_page (GoaProvider    *provider,
   GoaProviderDialog *dialog = GOA_PROVIDER_DIALOG (data->dialog);
   GtkWidget *group;
 
+  goa_provider_dialog_add_page (dialog,
+                                NULL, // provider name
+                                _("Connect to a Microsoft Exchange provider to access calendars, contacts and files"));
+
   group = goa_provider_dialog_add_group (dialog, NULL);
-  data->email_address = goa_provider_dialog_add_entry (dialog, group, _("_E-mail"));
+  data->email_address = goa_provider_dialog_add_entry (dialog, group, _("_Email"));
   data->password = goa_provider_dialog_add_password_entry (dialog, group, _("_Password"));
+  goa_provider_dialog_add_description (dialog, NULL, _("Exchange account details will be auto-detected from your e-mail address when possible"));
 
   if (new_account)
     {
-      GtkWidget *row;
-
-      group = goa_provider_dialog_add_group (dialog, NULL);
-      row = g_object_new (ADW_TYPE_EXPANDER_ROW,
-                          "title",         _("Ad_vanced"),
-                          "use-underline", TRUE,
-                          NULL);
-      data->username = goa_provider_dialog_add_entry (dialog, row, _("User_name"));
-      data->server = goa_provider_dialog_add_entry (dialog, row, _("_Server"));
-      adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), row);
+      group = goa_provider_dialog_add_group (dialog, _("Account Details"));
+      data->username = goa_provider_dialog_add_entry (dialog, group, _("User_name"));
+      data->server = goa_provider_dialog_add_entry (dialog, group, _("_Domain"));
+      goa_provider_dialog_add_description (dialog, data->server, _("Example domain: example.com"));
 
       g_signal_connect (data->username,
                         "changed",

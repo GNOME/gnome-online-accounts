@@ -538,11 +538,16 @@ create_account_details_ui (GoaProvider    *provider,
     NULL,
   };
 
+  goa_provider_dialog_add_page (dialog,
+                                _("Email"),
+                                _("Connect to an email account"));
+
   /* General */
   group = goa_provider_dialog_add_group (dialog, NULL);
   data->name = goa_provider_dialog_add_entry (dialog, group, _("_Name"));
-  data->email_address = goa_provider_dialog_add_entry (dialog, group, _("_E-mail"));
+  data->email_address = goa_provider_dialog_add_entry (dialog, group, _("_Email"));
   data->email_password = goa_provider_dialog_add_password_entry (dialog, group, _("_Password"));
+  goa_provider_dialog_add_description (dialog, NULL, _("IMAP and SMTP details will be auto-detected from your service provider when possible"));
 
   if (new_account)
     {
@@ -556,20 +561,8 @@ create_account_details_ui (GoaProvider    *provider,
   g_signal_connect (data->email_address, "changed", G_CALLBACK (on_email_changed), data);
   g_signal_connect (data->email_password, "changed", G_CALLBACK (on_email_changed), data);
 
-  GtkWidget *box;
-  group = goa_provider_dialog_add_group (dialog, NULL);
-  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
-  adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), box);
-
   /* IMAP */
-  group = adw_preferences_group_new ();
-  gtk_box_append (GTK_BOX (box), group);
-
-  data->imap_group = g_object_new (ADW_TYPE_EXPANDER_ROW,
-                                   "title", _("IMAP Settings"),
-                                   NULL);
-  adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), data->imap_group);
-
+  data->imap_group = goa_provider_dialog_add_group (dialog, _("IMAP Settings"));
   data->imap_server = goa_provider_dialog_add_entry (dialog, data->imap_group, _("IMAP _Server"));
   data->imap_username = goa_provider_dialog_add_entry (dialog, data->imap_group, _("User_name"));
   data->imap_password = goa_provider_dialog_add_password_entry (dialog, data->imap_group, _("_Password"));
@@ -583,19 +576,14 @@ create_account_details_ui (GoaProvider    *provider,
       g_object_set (data->imap_encryption, "selected", GOA_TLS_TYPE_SSL, NULL);
     }
 
+  goa_provider_dialog_add_description (dialog, data->imap_server, _("Example server: imap.example.com"));
+
   g_signal_connect (data->imap_server, "changed", G_CALLBACK (on_login_changed), data);
   g_signal_connect (data->imap_username, "changed", G_CALLBACK (on_login_changed), data);
   g_signal_connect (data->imap_password, "changed", G_CALLBACK (on_login_changed), data);
 
   /* SMTP */
-  group = adw_preferences_group_new ();
-  gtk_box_append (GTK_BOX (box), group);
-
-  data->smtp_group = g_object_new (ADW_TYPE_EXPANDER_ROW,
-                                   "title", _("SMTP Settings"),
-                                   NULL);
-  adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), data->smtp_group);
-
+  data->smtp_group = goa_provider_dialog_add_group (dialog, _("SMTP Settings"));
   data->smtp_server = goa_provider_dialog_add_entry (dialog, data->smtp_group, _("SMTP _Server"));
   data->smtp_username = goa_provider_dialog_add_entry (dialog, data->smtp_group, _("User_name"));
   data->smtp_password = goa_provider_dialog_add_password_entry (dialog, data->smtp_group, _("_Password"));
@@ -608,6 +596,8 @@ create_account_details_ui (GoaProvider    *provider,
                                                              (GStrv)encryption_types);
       g_object_set (data->smtp_encryption, "selected", GOA_TLS_TYPE_SSL, NULL);
     }
+
+  goa_provider_dialog_add_description (dialog, data->smtp_server, _("Example server: smtp.example.com"));
 
   g_signal_connect (data->smtp_server, "changed", G_CALLBACK (on_login_changed), data);
   g_signal_connect (data->smtp_username, "changed", G_CALLBACK (on_login_changed), data);
@@ -889,7 +879,7 @@ add_account (GoaProvider         *provider,
   g_autoptr(GTask) task = NULL;
 
   data = g_new0 (AddAccountData, 1);
-  data->dialog = goa_provider_dialog_new (provider, client, parent);
+  data->dialog = goa_provider_dialog_new_full (provider, client, parent, 480, 600);
   data->client = g_object_ref (client);
 
   task = g_task_new (provider, cancellable, callback, user_data);
@@ -1136,7 +1126,7 @@ refresh_account (GoaProvider         *provider,
   g_assert (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   data = g_new0 (AddAccountData, 1);
-  data->dialog = goa_provider_dialog_new (provider, client, parent);
+  data->dialog = goa_provider_dialog_new_full (provider, client, parent, 480, 600);
   data->client = g_object_ref (client);
 
   task = g_task_new (provider, cancellable, callback, user_data);
@@ -1232,7 +1222,7 @@ create_show_account_ui (GoaProvider *self,
 
   subtitle = goa_util_lookup_keyfile_string (object, "EmailAddress");
   row = g_object_new (ADW_TYPE_ACTION_ROW,
-                      "title",    _("E-mail"),
+                      "title",    _("Email"),
                       "subtitle", subtitle,
                       NULL);
   gtk_widget_add_css_class (row, "property");

@@ -339,6 +339,34 @@ goa_provider_dialog_new (GoaProvider *provider,
   g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);
 
+  return goa_provider_dialog_new_full (provider, client, parent, 480, -1);
+}
+
+/**
+ * goa_provider_dialog_new_full:
+ * @provider: a `GoaProvider`
+ * @client: a `GoaClient`
+ * @parent: (nullable): a `GtkWindow`
+ * @default_width: default width, or `-1`
+ * @default_height: default height, or `-1`
+ *
+ * Create a new dialog for @provider.
+ *
+ * If @parent is given, the dialog will be modal.
+ *
+ * Returns: a `GoaProviderDialog`
+ */
+GoaProviderDialog *
+goa_provider_dialog_new_full (GoaProvider *provider,
+                         GoaClient   *client,
+                         GtkWindow   *parent,
+                         int          default_width,
+                         int          default_height)
+{
+  g_return_val_if_fail (GOA_IS_PROVIDER (provider), NULL);
+  g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
+  g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);
+
   /* In the non-ideal case a provider needs to chain-up to a parent
    * with it's own parent, we want the real root window.
    */
@@ -352,8 +380,8 @@ goa_provider_dialog_new (GoaProvider *provider,
                        "modal",               parent != NULL,
                        "transient-for",       parent,
                        "width-request",       360,
-                       "height-request",      294,
-                       "default-width",       360,
+                       "default-width",       default_width,
+                       "default-height",      default_height,
                        NULL);
 }
 
@@ -881,7 +909,8 @@ goa_provider_dialog_report_error (GoaProviderDialog *self,
 /**
  * goa_provider_dialog_add_page:
  * @self: a `GoaProviderDialog`
- * @title: (nullable): a group label
+ * @title: (nullable): a page title
+ * @description: (nullable): a page description
  *
  * Add a page to the dialog.
  *
@@ -889,15 +918,17 @@ goa_provider_dialog_report_error (GoaProviderDialog *self,
  */
 GtkWidget *
 goa_provider_dialog_add_page (GoaProviderDialog *self,
-                              const char        *title)
+                              const char        *title,
+                              const char        *description)
 {
-  const char *page_title;
-
   g_return_val_if_fail (GOA_IS_PROVIDER_DIALOG (self), NULL);
 
-  page_title = title != NULL ? title : gtk_window_get_title (GTK_WINDOW (self));
+  if (title == NULL)
+    title = gtk_window_get_title (GTK_WINDOW (self));
+
   self->current_page = g_object_new (ADW_TYPE_PREFERENCES_PAGE,
-                                     "title", page_title,
+                                     "title",       title,
+                                     "description", description,
                                      NULL);
 
   return goa_provider_dialog_push_content (self, title, self->current_page);
@@ -921,7 +952,7 @@ goa_provider_dialog_add_group (GoaProviderDialog *self,
   g_return_val_if_fail (GOA_IS_PROVIDER_DIALOG (self), NULL);
 
   if (self->current_page == NULL)
-    goa_provider_dialog_add_page (self, NULL);
+    goa_provider_dialog_add_page (self, NULL, NULL);
 
   self->current_group = g_object_new (ADW_TYPE_PREFERENCES_GROUP,
                                       "title", title,
@@ -1041,6 +1072,55 @@ goa_provider_dialog_add_password_entry (GoaProviderDialog *self,
     adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), child);
   else if (ADW_IS_EXPANDER_ROW (group))
     adw_expander_row_add_row (ADW_EXPANDER_ROW (group), child);
+
+  return child;
+}
+
+/**
+ * goa_provider_dialog_add_description:
+ * @self: a `GoaProviderDialog`
+ * @target: (nullable): a `GtkWidget`
+ * @description: (nullable): a description
+ *
+ * Add a description label to the current group.
+ *
+ * If @target is given, it's accessible description will be update to refer
+ * to the new label.
+ *
+ * Returns: (transfer none): the new label
+ */
+GtkWidget *
+goa_provider_dialog_add_description (GoaProviderDialog *self,
+                                     GtkWidget         *target,
+                                     const char        *description)
+{
+  GtkWidget *child;
+
+  g_return_val_if_fail (GOA_IS_PROVIDER_DIALOG (self), NULL);
+  g_return_val_if_fail (target == NULL || GTK_IS_WIDGET (target), NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (self->current_group), NULL);
+
+  child = g_object_new (GTK_TYPE_LABEL,
+                        "label",       description,
+                        "visible",     description != NULL,
+                        "css-classes", (const char * const[]){"dim-label", NULL},
+                        "xalign",      0.0,
+                        "margin-top",  12,
+                        "wrap",        TRUE,
+                        NULL);
+
+  if (GTK_IS_ACCESSIBLE (target))
+    {
+      gtk_accessible_update_relation (GTK_ACCESSIBLE (target),
+                                      GTK_ACCESSIBLE_RELATION_DESCRIBED_BY,
+                                      child, NULL,
+                                      -1);
+    }
+
+  if (ADW_IS_PREFERENCES_GROUP (self->current_group))
+    adw_preferences_group_add (ADW_PREFERENCES_GROUP (self->current_group), child);
+  else if (ADW_IS_EXPANDER_ROW (self->current_group))
+    adw_expander_row_add_row (ADW_EXPANDER_ROW (self->current_group), child);
 
   return child;
 }

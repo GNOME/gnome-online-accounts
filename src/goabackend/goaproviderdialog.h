@@ -58,6 +58,11 @@ G_DECLARE_FINAL_TYPE (GoaProviderDialog, goa_provider_dialog, GOA, PROVIDER_DIAL
 GoaProviderDialog   *goa_provider_dialog_new                (GoaProvider       *provider,
                                                              GoaClient         *client,
                                                              GtkWindow         *parent);
+GoaProviderDialog   *goa_provider_dialog_new_full           (GoaProvider       *provider,
+                                                             GoaClient         *client,
+                                                             GtkWindow         *parent,
+                                                             int                default_width,
+                                                             int                default_height);
 GoaClient           *goa_provider_dialog_get_client         (GoaProviderDialog *self);
 GoaProvider         *goa_provider_dialog_get_provider       (GoaProviderDialog *self);
 GoaDialogState       goa_provider_dialog_get_state          (GoaProviderDialog *self);
@@ -74,7 +79,8 @@ void                 goa_provider_dialog_report_error       (GoaProviderDialog *
 
 /* UI Helpers */
 GtkWidget           *goa_provider_dialog_add_page           (GoaProviderDialog *self,
-                                                             const char        *title);
+                                                             const char        *title,
+                                                             const char        *description);
 GtkWidget           *goa_provider_dialog_add_group          (GoaProviderDialog *self,
                                                              const char        *title);
 GtkWidget           *goa_provider_dialog_add_combo          (GoaProviderDialog *self,
@@ -87,6 +93,9 @@ GtkWidget           *goa_provider_dialog_add_entry          (GoaProviderDialog *
 GtkWidget           *goa_provider_dialog_add_password_entry (GoaProviderDialog *self,
                                                              GtkWidget         *group,
                                                              const char        *label);
+GtkWidget           *goa_provider_dialog_add_description    (GoaProviderDialog *self,
+                                                             GtkWidget         *target,
+                                                             const char        *description);
 
 /* GTask Helpers */
 void                 goa_provider_task_bind_window          (GTask             *task,

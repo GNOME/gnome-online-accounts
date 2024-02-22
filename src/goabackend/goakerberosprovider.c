@@ -585,9 +585,18 @@ create_account_details_ui (GoaProvider    *self,
 {
   GoaProviderDialog *dialog = GOA_PROVIDER_DIALOG (data->dialog);
   GtkWidget *group;
+  GtkWidget *button;
+
+  goa_provider_dialog_add_page (dialog,
+                                NULL,
+                                _("Access restricted web and network resources for your organization"));
 
   group = goa_provider_dialog_add_group (dialog, NULL);
   data->principal = goa_provider_dialog_add_entry (dialog, group, _("_Principal"));
+  goa_provider_dialog_add_description (dialog, data->principal, _("Example principal: user@EXAMPLE.COM"));
+
+  button = gtk_window_get_default_widget (GTK_WINDOW (dialog));
+  gtk_button_set_label (GTK_BUTTON (button), _("_Sign in…"));
 
   gtk_widget_grab_focus (data->principal);
   g_signal_connect (data->principal, "changed", G_CALLBACK (on_principal_changed), data);

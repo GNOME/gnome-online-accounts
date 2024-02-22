@@ -458,24 +458,33 @@ create_account_details_ui (GoaProvider    *provider,
   GoaProviderDialog *dialog = GOA_PROVIDER_DIALOG (data->dialog);
   GtkWidget *group;
 
+  goa_provider_dialog_add_page (dialog,
+                                _("Calendar, Contacts and Files"),
+                                _("Add a calendar, contacts and files account by entering your WebDAV server and account details"));
+
   group = goa_provider_dialog_add_group (dialog, NULL);
-  data->uri = goa_provider_dialog_add_entry (dialog, group, _("_Server"));
+  data->uri = goa_provider_dialog_add_entry (dialog, group, _("_Server Address"));
+  goa_provider_dialog_add_description (dialog, data->uri, _("Examples: example.com, 192.168.0.82"));
+
+  group = goa_provider_dialog_add_group (dialog, NULL);
   data->username = goa_provider_dialog_add_entry (dialog, group, _("User_name"));
   data->password = goa_provider_dialog_add_password_entry (dialog, group, _("_Password"));
 
   if (new_account)
     {
-      GtkWidget *subgroup;
+      const char *provider_type;
 
-      group = goa_provider_dialog_add_group (dialog, NULL);
-      subgroup = g_object_new (ADW_TYPE_EXPANDER_ROW,
-                               "title", _("Endpoint Settings"),
-                               NULL);
-      adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), subgroup);
+      group = goa_provider_dialog_add_group (dialog, _("Server Addresses (Optional)"));
+      data->webdav_uri = goa_provider_dialog_add_entry (dialog, group, _("Files"));
+      data->caldav_uri = goa_provider_dialog_add_entry (dialog, group, _("Calendar (CalDAV)"));
+      data->carddav_uri = goa_provider_dialog_add_entry (dialog, group, _("Contacts (CardDAV)"));
 
-      data->webdav_uri = goa_provider_dialog_add_entry (dialog, subgroup, _("Files Endpoint"));
-      data->caldav_uri = goa_provider_dialog_add_entry (dialog, subgroup, _("CalDAV Endpoint"));
-      data->carddav_uri = goa_provider_dialog_add_entry (dialog, subgroup, _("CardDAV Endpoint"));
+      /* The only reason to subclass the WebDAV provider is to brand it, thus we
+       * expect the provider to take responsibility for custom endpoints.
+       */
+      provider_type = goa_provider_get_provider_type (provider);
+      if (!g_str_equal (GOA_WEBDAV_NAME, provider_type))
+        gtk_widget_set_visible (group, FALSE);
     }
 
   if (data->object != NULL)
