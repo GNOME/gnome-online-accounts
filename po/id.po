@@ -2,17 +2,19 @@
 # Copyright (C) 2011 gnome-online-accounts's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-online-accounts package.
 #
-# Andika Triwidada <andika@gmail.com>, 2011, 2012, 2013, 2014.
+# Andika Triwidada <andika@gmail.com>, 2011-2016, 2024.
 # Dirgita <dirgitadevina@yahoo.co.id>, 2012.
 # Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017, 2019, 2023, 2024.
+# Cahaya Maulidian Caturlipita <winluxhuman@gmail.com>, 2016.
+# Sendy Aditya Suryana <sendz@gitlab>, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-02-10 22:10+0000\n"
-"PO-Revision-Date: 2024-02-22 20:25+0700\n"
-"Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
+"POT-Creation-Date: 2024-02-24 20:57+0000\n"
+"PO-Revision-Date: 2024-02-25 13:23+0700\n"
+"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome@i15n.org>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
@@ -80,41 +82,66 @@ msgstr "Microsoft Exchange"
 msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "Sandi tidak valid dengan nama pengguna \"%s\" (%s, %d): "
 
-#: src/goabackend/goaexchangeprovider.c:372
-#: src/goabackend/goaimapsmtpprovider.c:544
-msgid "_E-mail"
+#. provider name
+#: src/goabackend/goaexchangeprovider.c:373
+msgid ""
+"Connect to a Microsoft Exchange provider to access calendars, contacts and "
+"files"
+msgstr ""
+"Menyambungkan ke penyedia Microsoft Exchange untuk mengakses kalender, "
+"kontak, dan berkas"
+
+#: src/goabackend/goaexchangeprovider.c:376
+#: src/goabackend/goaimapsmtpprovider.c:548
+msgid "_Email"
 msgstr "Sur_el"
 
-#: src/goabackend/goaexchangeprovider.c:373
-#: src/goabackend/goafedoraprovider.c:167
-#: src/goabackend/goaimapsmtpprovider.c:545
-#: src/goabackend/goaimapsmtpprovider.c:575
-#: src/goabackend/goaimapsmtpprovider.c:601
-#: src/goabackend/goawebdavprovider.c:464
+#: src/goabackend/goaexchangeprovider.c:377
+#: src/goabackend/goafedoraprovider.c:171
+#: src/goabackend/goaimapsmtpprovider.c:549
+#: src/goabackend/goaimapsmtpprovider.c:568
+#: src/goabackend/goaimapsmtpprovider.c:589
+#: src/goabackend/goawebdavprovider.c:471
 msgid "_Password"
 msgstr "San_di"
 
-#: src/goabackend/goaexchangeprovider.c:381
-#: src/goabackend/goamsgraphprovider.c:386
-msgid "Ad_vanced"
-msgstr "Tingk_at lanjut"
+#: src/goabackend/goaexchangeprovider.c:378
+msgid ""
+"Exchange account details will be auto-detected from your email address when "
+"possible"
+msgstr ""
+"Detail akun Exchange akan terdeteksi secara otomatis dari alamat surel Anda "
+"jika memungkinkan"
 
-#: src/goabackend/goaexchangeprovider.c:384
-#: src/goabackend/goafedoraprovider.c:166
-#: src/goabackend/goaimapsmtpprovider.c:574
-#: src/goabackend/goaimapsmtpprovider.c:600
-#: src/goabackend/goawebdavprovider.c:463
+#: src/goabackend/goaexchangeprovider.c:382
+msgid "Account Details"
+msgstr "Rincian Akun"
+
+#: src/goabackend/goaexchangeprovider.c:383
+#: src/goabackend/goafedoraprovider.c:170
+#: src/goabackend/goaimapsmtpprovider.c:567
+#: src/goabackend/goaimapsmtpprovider.c:588
+#: src/goabackend/goawebdavprovider.c:470
 msgid "User_name"
 msgstr "_Nama Pengguna"
 
+#: src/goabackend/goaexchangeprovider.c:384
+msgid "_Domain"
+msgstr "_Domain"
+
 #: src/goabackend/goaexchangeprovider.c:385
-#: src/goabackend/goawebdavprovider.c:462
-msgid "_Server"
-msgstr "_Peladen"
+msgid "Example domain: example.com"
+msgstr "Contoh domain: example.com"
 
 #: src/goabackend/goafedoraprovider.c:51
 msgid "Fedora"
 msgstr "Fedora"
+
+#: src/goabackend/goafedoraprovider.c:167
+#: src/goabackend/goakerberosprovider.c:592
+msgid "Access restricted web and network resources for your organization"
+msgstr ""
+"Mengakses sumber daya web dan jaringan yang dibatasi untuk organisasi Anda"
 
 #: src/goabackend/goagoogleprovider.c:57
 msgid "Google"
@@ -196,44 +223,67 @@ msgstr "STARTTLS setelah menyambung"
 msgid "SSL on a dedicated port"
 msgstr "SSL pada port tersendiri"
 
+#: src/goabackend/goaimapsmtpprovider.c:542
+#: src/goabackend/goaimapsmtpprovider.c:1225
+msgid "Email"
+msgstr "Surel"
+
 #: src/goabackend/goaimapsmtpprovider.c:543
+msgid "Connect to an email account"
+msgstr "Menyambungkan ke akun surel"
+
+#: src/goabackend/goaimapsmtpprovider.c:547
 msgid "_Name"
 msgstr "_Nama"
 
-#: src/goabackend/goaimapsmtpprovider.c:569
+#: src/goabackend/goaimapsmtpprovider.c:550
+msgid ""
+"IMAP and SMTP details will be auto-detected from your service provider when "
+"possible"
+msgstr ""
+"Rincian IMAP dan SMTP akan dideteksi secara otomatis dari penyedia layanan "
+"Anda jika memungkinkan"
+
+#. IMAP
+#: src/goabackend/goaimapsmtpprovider.c:565
 msgid "IMAP Settings"
 msgstr "Pengaturan IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:573
+#: src/goabackend/goaimapsmtpprovider.c:566
 msgid "IMAP _Server"
 msgstr "_Peladen IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:581
-#: src/goabackend/goaimapsmtpprovider.c:607
+#: src/goabackend/goaimapsmtpprovider.c:574
+#: src/goabackend/goaimapsmtpprovider.c:595
 msgid "Encryption"
 msgstr "Enkripsi"
 
-#: src/goabackend/goaimapsmtpprovider.c:595
+#: src/goabackend/goaimapsmtpprovider.c:579
+msgid "Example server: imap.example.com"
+msgstr "Contoh server: imap.example.com"
+
+#. SMTP
+#: src/goabackend/goaimapsmtpprovider.c:586
 msgid "SMTP Settings"
 msgstr "Pengaturan SMTP"
 
-#: src/goabackend/goaimapsmtpprovider.c:599
+#: src/goabackend/goaimapsmtpprovider.c:587
 msgid "SMTP _Server"
 msgstr "Peladen _SMTP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1229
+#: src/goabackend/goaimapsmtpprovider.c:600
+msgid "Example server: smtp.example.com"
+msgstr "Contoh server: smtp.example.com"
+
+#: src/goabackend/goaimapsmtpprovider.c:1216
 msgid "Name"
 msgstr "Nama"
 
-#: src/goabackend/goaimapsmtpprovider.c:1238
-msgid "E-mail"
-msgstr "Surel"
-
-#: src/goabackend/goaimapsmtpprovider.c:1255
+#: src/goabackend/goaimapsmtpprovider.c:1242
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1273
+#: src/goabackend/goaimapsmtpprovider.c:1260
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -258,27 +308,36 @@ msgstr "Harap masukkan sandi Anda di bawah."
 msgid "Remember this password"
 msgstr "Ingat sandi ini"
 
-#: src/goabackend/goakerberosprovider.c:590
+#: src/goabackend/goakerberosprovider.c:595
 msgid "_Principal"
 msgstr "_Principal"
 
-#: src/goabackend/goakerberosprovider.c:1282
+#: src/goabackend/goakerberosprovider.c:596
+msgid "Example principal: user@EXAMPLE.COM"
+msgstr "Contoh prinsipal: user@EXAMPLE.COM"
+
+#: src/goabackend/goakerberosprovider.c:599
+#: src/goabackend/goamsgraphprovider.c:396
+msgid "_Sign in…"
+msgstr "Ma_suk…"
+
+#: src/goabackend/goakerberosprovider.c:1291
 msgid "Ticketing is disabled for account"
 msgstr "Properti IsLocked disetel untuk akun"
 
-#: src/goabackend/goakerberosprovider.c:1309
+#: src/goabackend/goakerberosprovider.c:1318
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr ""
 "Tidak bisa menemukan kredensial yang tersimpan bagi principal \"%s\" dalam "
 "ring kunci"
 
-#: src/goabackend/goakerberosprovider.c:1322
+#: src/goabackend/goakerberosprovider.c:1331
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "Tidak menemukan sandi bagi principal \"%s\" dalam kredensial"
 
-#: src/goabackend/goakerberosprovider.c:1504
+#: src/goabackend/goakerberosprovider.c:1513
 msgid "Identity service returned invalid key"
 msgstr "Layanan identitas mengembalikan kunci yang tidak valid"
 
@@ -290,26 +349,42 @@ msgstr "Microsoft 365"
 #. * code in add_account_action_cb is also adjusted.
 #.
 #. Translators: Microsoft account issuer type
-#: src/goabackend/goamsgraphprovider.c:376
+#: src/goabackend/goamsgraphprovider.c:377
 msgid "Common"
 msgstr "Umum"
 
 #. Translators: Microsoft account issuer type
-#: src/goabackend/goamsgraphprovider.c:378
+#: src/goabackend/goamsgraphprovider.c:379
 msgid "Custom"
 msgstr "Ubahan"
 
-#: src/goabackend/goamsgraphprovider.c:383
+#. provider name
+#: src/goabackend/goamsgraphprovider.c:385
+msgid ""
+"Connect to a Microsoft 365 provider to access calendars, contacts and files"
+msgstr ""
+"Sambungkan ke penyedia Microsoft 365 untuk mengakses kalender, kontak, dan "
+"berkas"
+
+#: src/goabackend/goamsgraphprovider.c:388
 msgid "_Client ID"
 msgstr "ID _Klien"
 
-#: src/goabackend/goamsgraphprovider.c:389
+#: src/goabackend/goamsgraphprovider.c:390
+msgid "Advanced"
+msgstr "Tingkat lanjut"
+
+#: src/goabackend/goamsgraphprovider.c:391
 msgid "_Issuer"
 msgstr "Penerb_it"
 
-#: src/goabackend/goamsgraphprovider.c:390
+#: src/goabackend/goamsgraphprovider.c:392
 msgid "C_ustom Issuer"
 msgstr "Penerbit Kh_usus"
+
+#: src/goabackend/goamsgraphprovider.c:393
+msgid "Example provider: example.com"
+msgstr "Contoh penyedia: example.com"
 
 #: src/goabackend/goaoauth2provider.c:592
 #, c-format
@@ -346,7 +421,7 @@ msgid "Sign in to %s with your browser"
 msgstr "Masuk ke %s dengan peramban Anda"
 
 #: src/goabackend/goaoauth2provider.c:882
-#: src/goabackend/goaproviderdialog.c:654
+#: src/goabackend/goaproviderdialog.c:689
 msgid "_Sign In…"
 msgstr "Ma_suk…"
 
@@ -442,11 +517,11 @@ msgstr "ensure_credentials_sync tidak diimplementasi pada tipe %s"
 msgid "%s Account"
 msgstr "Akun %s"
 
-#: src/goabackend/goaproviderdialog.c:571
+#: src/goabackend/goaproviderdialog.c:606
 msgid "Remove this Account?"
 msgstr "Hapus Akun Ini?"
 
-#: src/goabackend/goaproviderdialog.c:572
+#: src/goabackend/goaproviderdialog.c:607
 msgid ""
 "If you remove this Online Account you will have to connect to it again to "
 "use it with apps and services."
@@ -454,36 +529,36 @@ msgstr ""
 "Jika Anda menghapus Akun Daring ini, Anda harus menghubungkannya lagi untuk "
 "menggunakannya dengan aplikasi dan layanan."
 
-#: src/goabackend/goaproviderdialog.c:574
+#: src/goabackend/goaproviderdialog.c:609
 msgid "_Cancel"
 msgstr "_Batal"
 
-#: src/goabackend/goaproviderdialog.c:575
+#: src/goabackend/goaproviderdialog.c:610
 msgid "_Remove"
 msgstr "_Hapus"
 
-#: src/goabackend/goaproviderdialog.c:653
+#: src/goabackend/goaproviderdialog.c:688
 msgid "Sign in to reconnect to this account"
 msgstr "Masuk untuk terhubung kembali ke akun ini"
 
 #. Remove
-#: src/goabackend/goaproviderdialog.c:702
+#: src/goabackend/goaproviderdialog.c:737
 msgid "_Remove…"
 msgstr "_Hapus…"
 
-#: src/goabackend/goaproviderdialog.c:797
+#: src/goabackend/goaproviderdialog.c:832
 msgid "_Sign In"
 msgstr "Ma_suk"
 
-#: src/goabackend/goaproviderdialog.c:858
+#: src/goabackend/goaproviderdialog.c:894
 msgid "_Try Again"
 msgstr "Coba _Lagi"
 
-#: src/goabackend/goaproviderdialog.c:862
+#: src/goabackend/goaproviderdialog.c:898
 msgid "_Ignore"
 msgstr "Aba_ikan"
 
-#: src/goabackend/goaproviderdialog.c:1055
+#: src/goabackend/goaproviderdialog.c:1143
 msgid "Dialog was dismissed"
 msgstr "Dialog telah diakhiri"
 
@@ -582,23 +657,44 @@ msgstr "Sertifikat tidak valid."
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "Tidak menemukan %s dengan identitas \"%s\" dalam kredensial"
 
-#: src/goabackend/goawebdavprovider.c:472
-msgid "Endpoint Settings"
-msgstr "Pengaturan Titik Akhir"
+#: src/goabackend/goawebdavprovider.c:462
+msgid "Calendar, Contacts and Files"
+msgstr "Kalender, Kontak, dan Berkas"
 
-#: src/goabackend/goawebdavprovider.c:476
-msgid "Files Endpoint"
-msgstr "Titik Akhir Berkas"
+#: src/goabackend/goawebdavprovider.c:463
+msgid ""
+"Add a calendar, contacts and files account by entering your WebDAV server "
+"and account details"
+msgstr ""
+"Tambahkan akun kalender, kontak, dan berkas dengan memasukkan server WebDAV "
+"dan detail akun Anda"
+
+#: src/goabackend/goawebdavprovider.c:466
+msgid "_Server Address"
+msgstr "Alamat _Server"
+
+#: src/goabackend/goawebdavprovider.c:467
+msgid "Examples: example.com, 192.168.0.82"
+msgstr "Contoh: example.com, 192.168.0.82"
 
 #: src/goabackend/goawebdavprovider.c:477
-msgid "CalDAV Endpoint"
-msgstr "Titik Akhir CalDAV"
+msgid "Server Addresses (Optional)"
+msgstr "Alamat Server (Opsional)"
 
 #: src/goabackend/goawebdavprovider.c:478
-msgid "CardDAV Endpoint"
-msgstr "Titik Akhir CardDAV"
+msgid "Files"
+msgstr "Berkas"
 
-#: src/goabackend/goawebdavprovider.c:659
+#: src/goabackend/goawebdavprovider.c:479
+#| msgid "Cale_ndar"
+msgid "Calendar (CalDAV)"
+msgstr "Kalender (CalDAV)"
+
+#: src/goabackend/goawebdavprovider.c:480
+msgid "Contacts (CardDAV)"
+msgstr "Kontak (CardDAV)"
+
+#: src/goabackend/goawebdavprovider.c:668
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "URI tidak valid: %s"
@@ -683,183 +779,3 @@ msgstr "Tidak bisa menemukan identitas"
 #: src/goaidentity/goakerberosidentitymanager.c:937
 msgid "Could not create credential cache for identity"
 msgstr "Tidak bisa membuat tembolok kredensial bagi identitas"
-
-#~ msgid "C_onnect"
-#~ msgstr "S_ambung"
-
-#~ msgid "Connecting…"
-#~ msgstr "Menyambung..."
-
-#, c-format
-#~ msgid "Dialog was dismissed (%s, %d): "
-#~ msgstr "Dialog telah diakhiri (%s, %d): "
-
-#~ msgid "Error connecting to Microsoft Exchange server"
-#~ msgstr "Galat ketika menyambung ke peladen Microsoft Exchange"
-
-#~ msgid "Error connecting to Fedora"
-#~ msgstr "Galat ketika menyambung ke Fedora"
-
-#~ msgid "Server does not support PLAIN"
-#~ msgstr "Server tidak mendukung PLAIN"
-
-#~ msgid "_Forward"
-#~ msgstr "_Lanjut"
-
-#~ msgid "Error connecting to IMAP server"
-#~ msgstr "Galat ketika menyambung ke peladen IMAP"
-
-#~ msgid "Error connecting to SMTP server"
-#~ msgstr "Galat ketika menyambung ke peladen SMTP"
-
-#~ msgid "Enterprise Login (Kerberos)"
-#~ msgstr "Log Masuk Enterprise (Kerberos)"
-
-#~ msgid "Error connecting to enterprise identity server"
-#~ msgstr "Galat ketika menyambung ke peladen identitas enterprise"
-
-#~ msgid "Last.fm"
-#~ msgstr "Last.fm"
-
-#~ msgid "Error connecting to Last.fm"
-#~ msgstr "Galat ketika menyambung ke Last.fm"
-
-#~ msgid "Media Server"
-#~ msgstr "Server Media"
-
-#~ msgid ""
-#~ "Personal content can be added to your applications through a media server "
-#~ "account."
-#~ msgstr ""
-#~ "Muatan personal dapat ditambahkan ke aplikasi Anda melalui sebuah akun "
-#~ "peladen media."
-
-#~ msgid "Available Media Servers"
-#~ msgstr "Server Media Yang Tersedia"
-
-#~ msgid "No media servers found"
-#~ msgstr "Tidak ada peladen media yang ditemukan"
-
-#~ msgid "Error connecting to Nextcloud server"
-#~ msgstr "Galat ketika menyambung ke peladen Nextcloud"
-
-#~ msgid "Use for"
-#~ msgstr "Gunakan untuk"
-
-#~ msgid "Error logging into the account"
-#~ msgstr "Galat saat log masuk ke akun"
-
-#~ msgid "Credentials have expired"
-#~ msgstr "Kredensial telah kedaluwarsa"
-
-#, c-format
-#~ msgid "Loading “%s”…"
-#~ msgstr "Memuat “%s”…"
-
-#~ msgid "Facebook"
-#~ msgstr "Facebook"
-
-#~ msgid "Flickr"
-#~ msgstr "Flickr"
-
-#~ msgid "Your system time is invalid. Check your date and time settings."
-#~ msgstr ""
-#~ "Waktu sistem Anda tidak valid. Periksa pengaturan tanggal dan waktu Anda."
-
-#~ msgid "Foursquare"
-#~ msgstr "Foursquare"
-
-#~ msgid "Missing access_token or access_token_secret headers in response"
-#~ msgstr "Kehilangan tajuk access_token atau access_token_secret dalam respon"
-
-#~ msgid "Error getting a Request Token: "
-#~ msgstr "Galat saat mengambil Token Request: "
-
-#~ msgid ""
-#~ "Expected status 200 for getting a Request Token, instead got status %d "
-#~ "(%s)"
-#~ msgstr ""
-#~ "Mengharapkan status 200 ketika mengambil Token Request, tetapi mendapat "
-#~ "status %d (%s)"
-
-#~ msgid "Missing request_token or request_token_secret headers in response"
-#~ msgstr ""
-#~ "Kehilangan tajuk request_token  atau request_token_secret dalam respon"
-
-#~ msgid "Credentials do not contain access_token or access_token_secret"
-#~ msgstr "Kredensial tidak berisi access_token atau access_token_secret"
-
-#~ msgid "Pocket"
-#~ msgstr "Pocket"
-
-#~ msgid "No username or access_token"
-#~ msgstr "Tidak ada nama pengguna atau access_token"
-
-#~ msgid "Cannot resolve hostname"
-#~ msgstr "Tidak bisa mengurai parameter koneksi"
-
-#~ msgid "Cannot resolve proxy hostname"
-#~ msgstr "Tidak bisa mengurai proksi hostname"
-
-#~ msgid "Could not renew identity: Not signed in"
-#~ msgstr "Tidak bisa memperbarui identitas: Belum masuk"
-
-#~ msgid "Could not renew identity: "
-#~ msgstr "Tidak bisa memperbarui identitas: "
-
-#~ msgid "Telepathy chat account not found"
-#~ msgstr "Akun obrolan Telepathy tidak ditemukan"
-
-#~ msgid "Failed to create a user interface for %s"
-#~ msgstr "Gagal membuat antarmuka pengguna untuk %s"
-
-#~ msgid "Personal Details"
-#~ msgstr "Rincian Pribadi"
-
-#~ msgid "_OK"
-#~ msgstr "_OK"
-
-#~ msgid "Cannot save the connection parameters"
-#~ msgstr "Tidak bisa menyimpan parameter koneksi"
-
-#~ msgid "Cannot save your personal information on the server"
-#~ msgstr "Tidak bisa menyimpan informasi pribadi Anda pada server"
-
-#~ msgid "_Connection Settings"
-#~ msgstr "_Pengaturan Koneksi"
-
-#~ msgid "_Personal Details"
-#~ msgstr "Rincian _Pribadi"
-
-#~ msgid "Todoist"
-#~ msgstr "Todoist"
-
-#~ msgid "_Domain"
-#~ msgstr "_Domain"
-
-#~ msgid "Enterprise domain or realm name"
-#~ msgstr "Domain enterprise atau nama realm"
-
-#~ msgid "The domain is not valid"
-#~ msgstr "Domain tidak valid"
-
-#~ msgid "org.gnome.OnlineAccounts.Mail is not available"
-#~ msgstr "org.gnome.OnlineAccounts.Mail tidak tersedia"
-
-#~ msgid "Failed to parse email address"
-#~ msgstr "Gagal mengurai alamat surel"
-
-#~ msgid "Cannot do SMTP authentication without a domain"
-#~ msgstr "Tidak bisa melaksanakan autentikasi SMTP tanpa sebuah domain"
-
-#~ msgid "Did not find smtp-password in credentials"
-#~ msgstr "Tidak menemukan smtp-password dalam kredensial"
-
-#~ msgid "Cannot do SMTP authentication without a password"
-#~ msgstr "Tidak bisa melaksanakan autentikasi SMTP tanpa sebuah sandi"
-
-#~ msgid "initial secret passed before secret key exchange"
-#~ msgstr "rahasia awal disampaikan sebelum pertukaran kunci rahasia"
-
-#~ msgid "ownCloud"
-#~ msgstr "ownCloud"
