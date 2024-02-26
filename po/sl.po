@@ -9,9 +9,9 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-02-14 23:54+0000\n"
-"PO-Revision-Date: 2024-02-19 12:41+0100\n"
-"Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
+"POT-Creation-Date: 2024-02-25 15:20+0000\n"
+"PO-Revision-Date: 2024-02-25 18:22+0100\n"
+"Last-Translator: Matej Urbančič <mateju@src.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
@@ -82,41 +82,65 @@ msgstr "Microsoft Exchange"
 msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "Neveljavno geslo za uporabniško ime »%s« (%s, %d): "
 
-#: src/goabackend/goaexchangeprovider.c:372
-#: src/goabackend/goaimapsmtpprovider.c:544
-msgid "_E-mail"
+#. provider name
+#: src/goabackend/goaexchangeprovider.c:373
+msgid ""
+"Connect to a Microsoft Exchange provider to access calendars, contacts and "
+"files"
+msgstr ""
+"Povezava s strežnikom Microsoft Exchange za dostop do koledarjev stikov in "
+"datotek"
+
+#: src/goabackend/goaexchangeprovider.c:376
+#: src/goabackend/goaimapsmtpprovider.c:548
+msgid "_Email"
 msgstr "_Elektronski naslov"
 
-#: src/goabackend/goaexchangeprovider.c:373
-#: src/goabackend/goafedoraprovider.c:167
-#: src/goabackend/goaimapsmtpprovider.c:545
-#: src/goabackend/goaimapsmtpprovider.c:575
-#: src/goabackend/goaimapsmtpprovider.c:601
-#: src/goabackend/goawebdavprovider.c:464
+#: src/goabackend/goaexchangeprovider.c:377
+#: src/goabackend/goafedoraprovider.c:171
+#: src/goabackend/goaimapsmtpprovider.c:549
+#: src/goabackend/goaimapsmtpprovider.c:568
+#: src/goabackend/goaimapsmtpprovider.c:589
+#: src/goabackend/goawebdavprovider.c:471
 msgid "_Password"
 msgstr "_Geslo"
 
-#: src/goabackend/goaexchangeprovider.c:381
-#: src/goabackend/goamsgraphprovider.c:386
-msgid "Ad_vanced"
-msgstr "_Napredno"
+#: src/goabackend/goaexchangeprovider.c:378
+msgid ""
+"Exchange account details will be auto-detected from your email address when "
+"possible"
+msgstr ""
+"Podrobnosti računa Exchange bodo samodejno določeni na podlagi elektronskega "
+"naslova, ko bo to mogoče"
 
-#: src/goabackend/goaexchangeprovider.c:384
-#: src/goabackend/goafedoraprovider.c:166
-#: src/goabackend/goaimapsmtpprovider.c:574
-#: src/goabackend/goaimapsmtpprovider.c:600
-#: src/goabackend/goawebdavprovider.c:463
+#: src/goabackend/goaexchangeprovider.c:382
+msgid "Account Details"
+msgstr "Podrobnosti računa"
+
+#: src/goabackend/goaexchangeprovider.c:383
+#: src/goabackend/goafedoraprovider.c:170
+#: src/goabackend/goaimapsmtpprovider.c:567
+#: src/goabackend/goaimapsmtpprovider.c:588
+#: src/goabackend/goawebdavprovider.c:470
 msgid "User_name"
 msgstr "_Uporabniško ime"
 
+#: src/goabackend/goaexchangeprovider.c:384
+msgid "_Domain"
+msgstr "_Domena"
+
 #: src/goabackend/goaexchangeprovider.c:385
-#: src/goabackend/goawebdavprovider.c:462
-msgid "_Server"
-msgstr "_Strežnik"
+msgid "Example domain: example.com"
+msgstr "Primer domene: domena.si"
 
 #: src/goabackend/goafedoraprovider.c:51
 msgid "Fedora"
 msgstr "Fedora"
+
+#: src/goabackend/goafedoraprovider.c:167
+#: src/goabackend/goakerberosprovider.c:592
+msgid "Access restricted web and network resources for your organization"
+msgstr "Za podatke te ustanove je dostop do spleta in omrežnih virov omejen"
 
 #: src/goabackend/goagoogleprovider.c:57
 msgid "Google"
@@ -198,44 +222,67 @@ msgstr "Po povezavi začni STARTTLS"
 msgid "SSL on a dedicated port"
 msgstr "Protokol SSL na določenih vratih"
 
+#: src/goabackend/goaimapsmtpprovider.c:542
+#: src/goabackend/goaimapsmtpprovider.c:1225
+msgid "Email"
+msgstr "Elektronski naslov"
+
 #: src/goabackend/goaimapsmtpprovider.c:543
+msgid "Connect to an email account"
+msgstr "Poveži z elektronski naslovom"
+
+#: src/goabackend/goaimapsmtpprovider.c:547
 msgid "_Name"
 msgstr "_Ime"
 
-#: src/goabackend/goaimapsmtpprovider.c:569
+#: src/goabackend/goaimapsmtpprovider.c:550
+msgid ""
+"IMAP and SMTP details will be auto-detected from your service provider when "
+"possible"
+msgstr ""
+"Podatki IMAP in SMTP bodo samodejno zaznani na podlagi storitev ponudnika, "
+"ko bo to mogoče"
+
+#. IMAP
+#: src/goabackend/goaimapsmtpprovider.c:565
 msgid "IMAP Settings"
 msgstr "Nastavitve IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:573
+#: src/goabackend/goaimapsmtpprovider.c:566
 msgid "IMAP _Server"
 msgstr "Strežnik _IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:581
-#: src/goabackend/goaimapsmtpprovider.c:607
+#: src/goabackend/goaimapsmtpprovider.c:574
+#: src/goabackend/goaimapsmtpprovider.c:595
 msgid "Encryption"
 msgstr "Šifriranje"
 
-#: src/goabackend/goaimapsmtpprovider.c:595
+#: src/goabackend/goaimapsmtpprovider.c:579
+msgid "Example server: imap.example.com"
+msgstr "Primer strežnika: imap.domena.si"
+
+#. SMTP
+#: src/goabackend/goaimapsmtpprovider.c:586
 msgid "SMTP Settings"
 msgstr "Nastavitve SMTP"
 
-#: src/goabackend/goaimapsmtpprovider.c:599
+#: src/goabackend/goaimapsmtpprovider.c:587
 msgid "SMTP _Server"
 msgstr "Strežnik _SMTP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1229
+#: src/goabackend/goaimapsmtpprovider.c:600
+msgid "Example server: smtp.example.com"
+msgstr "Primer strežnika: smtp.domena.si"
+
+#: src/goabackend/goaimapsmtpprovider.c:1216
 msgid "Name"
 msgstr "Ime"
 
-#: src/goabackend/goaimapsmtpprovider.c:1238
-msgid "E-mail"
-msgstr "Elektronski naslov"
-
-#: src/goabackend/goaimapsmtpprovider.c:1255
+#: src/goabackend/goaimapsmtpprovider.c:1242
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1273
+#: src/goabackend/goaimapsmtpprovider.c:1260
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -260,30 +307,38 @@ msgstr "Spodaj vnesite geslo."
 msgid "Remember this password"
 msgstr "Zapomni si geslo"
 
-#: src/goabackend/goakerberosprovider.c:590
+#: src/goabackend/goakerberosprovider.c:595
 msgid "_Principal"
 msgstr "_Poverila"
 
-#: src/goabackend/goakerberosprovider.c:1282
+#: src/goabackend/goakerberosprovider.c:596
+msgid "Example principal: user@EXAMPLE.COM"
+msgstr "Osnovni primer: uporabnik@domena.si"
+
+#: src/goabackend/goakerberosprovider.c:599
+#: src/goabackend/goamsgraphprovider.c:396
+msgid "_Sign in…"
+msgstr "Prijava …"
+
+#: src/goabackend/goakerberosprovider.c:1291
 msgid "Ticketing is disabled for account"
 msgstr "Ustvarjanje kartic je za ta račun onemogočeno"
 
-#: src/goabackend/goakerberosprovider.c:1309
+#: src/goabackend/goakerberosprovider.c:1318
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr "Shranjenih poveril za »%s« v zbirki ključev ni mogoče najti"
 
-#: src/goabackend/goakerberosprovider.c:1322
+#: src/goabackend/goakerberosprovider.c:1331
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "Gesla za »%s« med poverili ni mogoče najti"
 
-#: src/goabackend/goakerberosprovider.c:1504
+#: src/goabackend/goakerberosprovider.c:1513
 msgid "Identity service returned invalid key"
 msgstr "Storitev istovetnosti je vrnila neveljaven ključ"
 
 #: src/goabackend/goamsgraphprovider.c:64
-#| msgid "Microsoft"
 msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
@@ -291,26 +346,42 @@ msgstr "Microsoft 365"
 #. * code in add_account_action_cb is also adjusted.
 #.
 #. Translators: Microsoft account issuer type
-#: src/goabackend/goamsgraphprovider.c:376
+#: src/goabackend/goamsgraphprovider.c:377
 msgid "Common"
 msgstr "Splošno"
 
 #. Translators: Microsoft account issuer type
-#: src/goabackend/goamsgraphprovider.c:378
+#: src/goabackend/goamsgraphprovider.c:379
 msgid "Custom"
 msgstr "Po meri"
 
-#: src/goabackend/goamsgraphprovider.c:383
+#. provider name
+#: src/goabackend/goamsgraphprovider.c:385
+msgid ""
+"Connect to a Microsoft 365 provider to access calendars, contacts and files"
+msgstr ""
+"Povezava s strežnikom Microsoft 365 za dostop do koledarjev, stikov in "
+"datotek"
+
+#: src/goabackend/goamsgraphprovider.c:388
 msgid "_Client ID"
 msgstr "_ID odjemalca"
 
-#: src/goabackend/goamsgraphprovider.c:389
+#: src/goabackend/goamsgraphprovider.c:390
+msgid "Advanced"
+msgstr "Napredno"
+
+#: src/goabackend/goamsgraphprovider.c:391
 msgid "_Issuer"
 msgstr "_Izdajatelj"
 
-#: src/goabackend/goamsgraphprovider.c:390
+#: src/goabackend/goamsgraphprovider.c:392
 msgid "C_ustom Issuer"
 msgstr "Izdajatelj po _meri"
+
+#: src/goabackend/goamsgraphprovider.c:393
+msgid "Example provider: example.com"
+msgstr "Primer ponudnika: domena.si"
 
 #: src/goabackend/goaoauth2provider.c:592
 #, c-format
@@ -347,7 +418,7 @@ msgid "Sign in to %s with your browser"
 msgstr "Prijavite se v %s v oknu brskalnika"
 
 #: src/goabackend/goaoauth2provider.c:882
-#: src/goabackend/goaproviderdialog.c:655
+#: src/goabackend/goaproviderdialog.c:689
 msgid "_Sign In…"
 msgstr "_Prijava …"
 
@@ -443,11 +514,11 @@ msgstr "zahteva usklajevanja poverila ni podprta za vrsto %s"
 msgid "%s Account"
 msgstr "Račun %s"
 
-#: src/goabackend/goaproviderdialog.c:572
+#: src/goabackend/goaproviderdialog.c:606
 msgid "Remove this Account?"
 msgstr "Ali želite odstraniti ta račun?"
 
-#: src/goabackend/goaproviderdialog.c:573
+#: src/goabackend/goaproviderdialog.c:607
 msgid ""
 "If you remove this Online Account you will have to connect to it again to "
 "use it with apps and services."
@@ -455,36 +526,36 @@ msgstr ""
 "Če ta spletni račun odstranite, se boste morali pred uporabo teh programov "
 "in storitev znova povezati."
 
-#: src/goabackend/goaproviderdialog.c:575
+#: src/goabackend/goaproviderdialog.c:609
 msgid "_Cancel"
 msgstr "_Prekliči"
 
-#: src/goabackend/goaproviderdialog.c:576
+#: src/goabackend/goaproviderdialog.c:610
 msgid "_Remove"
 msgstr "_Odstrani"
 
-#: src/goabackend/goaproviderdialog.c:654
+#: src/goabackend/goaproviderdialog.c:688
 msgid "Sign in to reconnect to this account"
 msgstr "Za povezavo se je treba znova prijaviti."
 
 #. Remove
-#: src/goabackend/goaproviderdialog.c:703
+#: src/goabackend/goaproviderdialog.c:737
 msgid "_Remove…"
 msgstr "_Odstrani …"
 
-#: src/goabackend/goaproviderdialog.c:798
+#: src/goabackend/goaproviderdialog.c:832
 msgid "_Sign In"
 msgstr "_Prijava"
 
-#: src/goabackend/goaproviderdialog.c:860
+#: src/goabackend/goaproviderdialog.c:894
 msgid "_Try Again"
 msgstr "_Poskusi znova"
 
-#: src/goabackend/goaproviderdialog.c:864
+#: src/goabackend/goaproviderdialog.c:898
 msgid "_Ignore"
 msgstr "_Prezri"
 
-#: src/goabackend/goaproviderdialog.c:1057
+#: src/goabackend/goaproviderdialog.c:1143
 msgid "Dialog was dismissed"
 msgstr "Pogovorno okno je bilo opuščeno"
 
@@ -583,29 +654,48 @@ msgstr "Neveljavno potrdilo."
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "V poverilih %s za istovetnost »%s« ni mogoče najti gesla"
 
-#: src/goabackend/goawebdavprovider.c:472
-msgid "Endpoint Settings"
-msgstr "Nastavitve končne točke"
+#: src/goabackend/goawebdavprovider.c:462
+msgid "Calendar, Contacts and Files"
+msgstr "Koledarji, Stiki in Datoteke"
 
-#: src/goabackend/goawebdavprovider.c:476
-msgid "Files Endpoint"
-msgstr "Končna točka datotek"
+#: src/goabackend/goawebdavprovider.c:463
+msgid ""
+"Add a calendar, contacts and files account by entering your WebDAV server "
+"and account details"
+msgstr ""
+"Dodajanje računa koledarja, stikov ali datotek z vpisom strežnika WebDAV in "
+"podrobnosti računa"
+
+#: src/goabackend/goawebdavprovider.c:466
+msgid "_Server Address"
+msgstr "Naslov strežnika"
+
+#: src/goabackend/goawebdavprovider.c:467
+msgid "Examples: example.com, 192.168.0.82"
+msgstr "Primeri: domena.si, 192.168.0.09"
 
 #: src/goabackend/goawebdavprovider.c:477
-msgid "CalDAV Endpoint"
-msgstr "Končna točka CalDAV"
+msgid "Server Addresses (Optional)"
+msgstr "Naslovi strežnika (izbirno)"
 
 #: src/goabackend/goawebdavprovider.c:478
-msgid "CardDAV Endpoint"
-msgstr "Končna točka CardDAV"
+msgid "Files"
+msgstr "Datoteke"
 
-#: src/goabackend/goawebdavprovider.c:659
+#: src/goabackend/goawebdavprovider.c:479
+msgid "Calendar (CalDAV)"
+msgstr "Koledar (CalDAV)"
+
+#: src/goabackend/goawebdavprovider.c:480
+msgid "Contacts (CardDAV)"
+msgstr "Stiki (CardDAV)"
+
+#: src/goabackend/goawebdavprovider.c:668
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "Neveljaven naslov URI: %s"
 
 #: src/goabackend/goawindowsliveprovider.c:56
-#| msgid "Microsoft"
 msgid "Microsoft Personal"
 msgstr "Microsoft Osebno"
 
@@ -683,6 +773,18 @@ msgstr "Ni mogoče najti izbrane istovetnosti"
 #: src/goaidentity/goakerberosidentitymanager.c:937
 msgid "Could not create credential cache for identity"
 msgstr "Ni mogoče ustvariti predpomnilnika poverila za izbrano istovetnost"
+
+#~ msgid "Endpoint Settings"
+#~ msgstr "Nastavitve končne točke"
+
+#~ msgid "Files Endpoint"
+#~ msgstr "Končna točka datotek"
+
+#~ msgid "CalDAV Endpoint"
+#~ msgstr "Končna točka CalDAV"
+
+#~ msgid "CardDAV Endpoint"
+#~ msgstr "Končna točka CardDAV"
 
 #~ msgid "C_onnect"
 #~ msgstr "_Poveži"
@@ -817,9 +919,6 @@ msgstr "Ni mogoče ustvariti predpomnilnika poverila za izbrano istovetnost"
 #~ msgid "Failed to create a user interface for %s"
 #~ msgstr "Ustvarjanje uporabniškega vmesnika za %s je spodletelo"
 
-#~ msgid "Personal Details"
-#~ msgstr "Osebni podatki"
-
 #~ msgid "_OK"
 #~ msgstr "_V redu"
 
@@ -855,9 +954,6 @@ msgstr "Ni mogoče ustvariti predpomnilnika poverila za izbrano istovetnost"
 
 #~ msgid "initial secret passed before secret key exchange"
 #~ msgstr "paket poslan pred izmenjavo skrivnega ključa"
-
-#~ msgid "_Domain"
-#~ msgstr "_Domena"
 
 #~ msgid "Enterprise domain or realm name"
 #~ msgstr "Poslovna domena ali ime območja"
