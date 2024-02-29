@@ -1180,25 +1180,6 @@ refresh_account (GoaProvider         *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static void
-show_label (GtkWidget *grid, gint row, const gchar *left, const gchar *right)
-{
-  GtkWidget *label;
-
-  label = gtk_label_new (left);
-  gtk_widget_add_css_class (label, "dim-label");
-  gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), label, 0, row, 1, 1);
-
-  label = gtk_label_new (right);
-  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-  gtk_label_set_max_width_chars (GTK_LABEL (label), 24);
-  gtk_label_set_width_chars (GTK_LABEL (label), 24);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_grid_attach (GTK_GRID (grid), label, 1, row, 3, 1);
-}
-
 static GtkWidget *
 create_show_account_ui (GoaProvider *self,
                         GoaObject   *object)
