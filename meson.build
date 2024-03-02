@@ -44,7 +44,7 @@ goa_pkglibdir = join_paths(goa_libdir, goa_api_name)
 #
 # libversion = '@0@.@1@.@2@'.format(soversion, current, revision)
 goa_libversion = '0.0.0'
-goa_backend_libversion = '1.0.0'
+goa_backend_libversion = '2.0.0'
 
 goa_buildtype = get_option('buildtype')
 cc = meson.get_compiler('c')
