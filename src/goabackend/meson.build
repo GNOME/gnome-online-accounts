@@ -118,7 +118,7 @@ pkg.generate(
   description: 'Backends for GNOME Online Accounts Library',
   filebase: goa_backend_api_name,
   subdirs: goa_api_name,
-  requires: [goa_api_name, 'gtk+-3.0'],
+  requires: [goa_api_name, 'gtk4', 'libadwaita-1'],
   variables: 'exec_prefix=${prefix}'
 )
 
