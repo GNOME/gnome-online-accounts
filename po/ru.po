@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-02-10 22:10+0000\n"
-"PO-Revision-Date: 2024-02-12 17:21+0300\n"
+"POT-Creation-Date: 2024-02-24 20:57+0000\n"
+"PO-Revision-Date: 2024-02-25 12:57+0300\n"
 "Last-Translator: Artur So <arturios2005@mail.ru>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -39,7 +39,7 @@ msgstr ""
 #: src/daemon/goadaemon.c:1141 src/daemon/goadaemon.c:1458
 #, c-format
 msgid "Failed to find a provider for: %s"
-msgstr "Не удалось найти провайдер для: %s"
+msgstr "Не удалось найти поставщика для: %s"
 
 #: src/daemon/goadaemon.c:1401
 msgid "IsLocked property is set for account"
@@ -82,41 +82,65 @@ msgstr "Microsoft Exchange"
 msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "Неверный пароль с именем пользователя «%s» (%s, %d): "
 
-#: src/goabackend/goaexchangeprovider.c:372
-#: src/goabackend/goaimapsmtpprovider.c:544
-msgid "_E-mail"
+#. provider name
+#: src/goabackend/goaexchangeprovider.c:373
+msgid ""
+"Connect to a Microsoft Exchange provider to access calendars, contacts and "
+"files"
+msgstr ""
+"Подключиться к поставщику Microsoft Exchange для доступа к календарям, "
+"контактам и файлам"
+
+#: src/goabackend/goaexchangeprovider.c:376
+#: src/goabackend/goaimapsmtpprovider.c:548
+msgid "_Email"
 msgstr "_Эл. почта"
 
-#: src/goabackend/goaexchangeprovider.c:373
-#: src/goabackend/goafedoraprovider.c:167
-#: src/goabackend/goaimapsmtpprovider.c:545
-#: src/goabackend/goaimapsmtpprovider.c:575
-#: src/goabackend/goaimapsmtpprovider.c:601
-#: src/goabackend/goawebdavprovider.c:464
+#: src/goabackend/goaexchangeprovider.c:377
+#: src/goabackend/goafedoraprovider.c:171
+#: src/goabackend/goaimapsmtpprovider.c:549
+#: src/goabackend/goaimapsmtpprovider.c:568
+#: src/goabackend/goaimapsmtpprovider.c:589
+#: src/goabackend/goawebdavprovider.c:471
 msgid "_Password"
 msgstr "_Пароль"
 
-#: src/goabackend/goaexchangeprovider.c:381
-#: src/goabackend/goamsgraphprovider.c:386
-msgid "Ad_vanced"
-msgstr "Допо_лнительно"
+#: src/goabackend/goaexchangeprovider.c:378
+msgid ""
+"Exchange account details will be auto-detected from your email address when "
+"possible"
+msgstr ""
+"Данные учетной записи Exchange будут автоматически определяться по вашему "
+"адресу электронной почты, если это возможно"
 
-#: src/goabackend/goaexchangeprovider.c:384
-#: src/goabackend/goafedoraprovider.c:166
-#: src/goabackend/goaimapsmtpprovider.c:574
-#: src/goabackend/goaimapsmtpprovider.c:600
-#: src/goabackend/goawebdavprovider.c:463
+#: src/goabackend/goaexchangeprovider.c:382
+msgid "Account Details"
+msgstr "Данные учетной записи"
+
+#: src/goabackend/goaexchangeprovider.c:383
+#: src/goabackend/goafedoraprovider.c:170
+#: src/goabackend/goaimapsmtpprovider.c:567
+#: src/goabackend/goaimapsmtpprovider.c:588
+#: src/goabackend/goawebdavprovider.c:470
 msgid "User_name"
 msgstr "И_мя пользователя"
 
+#: src/goabackend/goaexchangeprovider.c:384
+msgid "_Domain"
+msgstr "_Домен"
+
 #: src/goabackend/goaexchangeprovider.c:385
-#: src/goabackend/goawebdavprovider.c:462
-msgid "_Server"
-msgstr "_Сервер"
+msgid "Example domain: example.com"
+msgstr "Пример домена: example.com"
 
 #: src/goabackend/goafedoraprovider.c:51
 msgid "Fedora"
 msgstr "Fedora"
+
+#: src/goabackend/goafedoraprovider.c:167
+#: src/goabackend/goakerberosprovider.c:592
+msgid "Access restricted web and network resources for your organization"
+msgstr "Доступ к ограниченным веб и сетевым ресурсам для вашей организации"
 
 #: src/goabackend/goagoogleprovider.c:57
 msgid "Google"
@@ -198,44 +222,67 @@ msgstr "STARTTLS после подключения"
 msgid "SSL on a dedicated port"
 msgstr "Порт для SSL"
 
+#: src/goabackend/goaimapsmtpprovider.c:542
+#: src/goabackend/goaimapsmtpprovider.c:1225
+msgid "Email"
+msgstr "Эл. почта"
+
 #: src/goabackend/goaimapsmtpprovider.c:543
+msgid "Connect to an email account"
+msgstr "Подключиться к учетной записи электронной почты"
+
+#: src/goabackend/goaimapsmtpprovider.c:547
 msgid "_Name"
 msgstr "_Имя"
 
-#: src/goabackend/goaimapsmtpprovider.c:569
+#: src/goabackend/goaimapsmtpprovider.c:550
+msgid ""
+"IMAP and SMTP details will be auto-detected from your service provider when "
+"possible"
+msgstr ""
+"Данные IMAP и SMTP будут автоматически определяться вашим поставщиком "
+"услуг, если это возможно"
+
+#. IMAP
+#: src/goabackend/goaimapsmtpprovider.c:565
 msgid "IMAP Settings"
 msgstr "Настройки IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:573
+#: src/goabackend/goaimapsmtpprovider.c:566
 msgid "IMAP _Server"
 msgstr "Сервер _IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:581
-#: src/goabackend/goaimapsmtpprovider.c:607
+#: src/goabackend/goaimapsmtpprovider.c:574
+#: src/goabackend/goaimapsmtpprovider.c:595
 msgid "Encryption"
 msgstr "Шифрование"
 
-#: src/goabackend/goaimapsmtpprovider.c:595
+#: src/goabackend/goaimapsmtpprovider.c:579
+msgid "Example server: imap.example.com"
+msgstr "Пример сервера: imap.example.com"
+
+#. SMTP
+#: src/goabackend/goaimapsmtpprovider.c:586
 msgid "SMTP Settings"
 msgstr "Настройки SMTP"
 
-#: src/goabackend/goaimapsmtpprovider.c:599
+#: src/goabackend/goaimapsmtpprovider.c:587
 msgid "SMTP _Server"
 msgstr "Сервер _SMTP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1229
+#: src/goabackend/goaimapsmtpprovider.c:600
+msgid "Example server: smtp.example.com"
+msgstr "Пример сервера: smtp.example.com"
+
+#: src/goabackend/goaimapsmtpprovider.c:1216
 msgid "Name"
 msgstr "Имя"
 
-#: src/goabackend/goaimapsmtpprovider.c:1238
-msgid "E-mail"
-msgstr "Эл. почта"
-
-#: src/goabackend/goaimapsmtpprovider.c:1255
+#: src/goabackend/goaimapsmtpprovider.c:1242
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1273
+#: src/goabackend/goaimapsmtpprovider.c:1260
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -260,28 +307,37 @@ msgstr "Введите ниже ваш пароль."
 msgid "Remember this password"
 msgstr "Запомнить пароль"
 
-#: src/goabackend/goakerberosprovider.c:590
+#: src/goabackend/goakerberosprovider.c:595
 msgid "_Principal"
 msgstr "_Администратор доступа"
 
-#: src/goabackend/goakerberosprovider.c:1282
+#: src/goabackend/goakerberosprovider.c:596
+msgid "Example principal: user@EXAMPLE.COM"
+msgstr "Пример администратора: user@EXAMPLE.COM"
+
+#: src/goabackend/goakerberosprovider.c:599
+#: src/goabackend/goamsgraphprovider.c:396
+msgid "_Sign in…"
+msgstr "_Войти…"
+
+#: src/goabackend/goakerberosprovider.c:1291
 msgid "Ticketing is disabled for account"
 msgstr "Выдача билетов отключена для этой учётной записи"
 
-#: src/goabackend/goakerberosprovider.c:1309
+#: src/goabackend/goakerberosprovider.c:1318
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr ""
 "Не удалось найти в связке ключей сохранённые учётные данные для "
 "администратора доступа «%s»"
 
-#: src/goabackend/goakerberosprovider.c:1322
+#: src/goabackend/goakerberosprovider.c:1331
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr ""
 "Не удалось найти в учётных данных пароль для администратора доступа «%s»"
 
-#: src/goabackend/goakerberosprovider.c:1504
+#: src/goabackend/goakerberosprovider.c:1513
 msgid "Identity service returned invalid key"
 msgstr "Служба идентификации вернула неверный ключ"
 
@@ -293,26 +349,42 @@ msgstr "Microsoft 365"
 #. * code in add_account_action_cb is also adjusted.
 #.
 #. Translators: Microsoft account issuer type
-#: src/goabackend/goamsgraphprovider.c:376
+#: src/goabackend/goamsgraphprovider.c:377
 msgid "Common"
 msgstr "Общий"
 
 #. Translators: Microsoft account issuer type
-#: src/goabackend/goamsgraphprovider.c:378
+#: src/goabackend/goamsgraphprovider.c:379
 msgid "Custom"
 msgstr "Пользовательский"
 
-#: src/goabackend/goamsgraphprovider.c:383
+#. provider name
+#: src/goabackend/goamsgraphprovider.c:385
+msgid ""
+"Connect to a Microsoft 365 provider to access calendars, contacts and files"
+msgstr ""
+"Подключиться к поставщику Microsoft 365 для доступа к календарям, "
+"контактам и файлам"
+
+#: src/goabackend/goamsgraphprovider.c:388
 msgid "_Client ID"
 msgstr "ID _клиента"
 
-#: src/goabackend/goamsgraphprovider.c:389
+#: src/goabackend/goamsgraphprovider.c:390
+msgid "Advanced"
+msgstr "Дополнительно"
+
+#: src/goabackend/goamsgraphprovider.c:391
 msgid "_Issuer"
 msgstr "_Эмитент"
 
-#: src/goabackend/goamsgraphprovider.c:390
+#: src/goabackend/goamsgraphprovider.c:392
 msgid "C_ustom Issuer"
 msgstr "Поль_зовательский эмитент"
+
+#: src/goabackend/goamsgraphprovider.c:393
+msgid "Example provider: example.com"
+msgstr "Пример поставщика: example.com"
 
 #: src/goabackend/goaoauth2provider.c:592
 #, c-format
@@ -349,7 +421,7 @@ msgid "Sign in to %s with your browser"
 msgstr "Войти в %s с помощью браузера"
 
 #: src/goabackend/goaoauth2provider.c:882
-#: src/goabackend/goaproviderdialog.c:654
+#: src/goabackend/goaproviderdialog.c:689
 msgid "_Sign In…"
 msgstr "_Войти…"
 
@@ -445,11 +517,11 @@ msgstr "ensure_credentials_sync не реализован в типе %s"
 msgid "%s Account"
 msgstr "Учётная запись %s"
 
-#: src/goabackend/goaproviderdialog.c:571
+#: src/goabackend/goaproviderdialog.c:606
 msgid "Remove this Account?"
 msgstr "Удалить эту учетную запись?"
 
-#: src/goabackend/goaproviderdialog.c:572
+#: src/goabackend/goaproviderdialog.c:607
 msgid ""
 "If you remove this Online Account you will have to connect to it again to "
 "use it with apps and services."
@@ -457,36 +529,36 @@ msgstr ""
 "Если вы удалите эту сетевую учетную запись, вам придется снова подключиться "
 "к ней, чтобы использовать ее в приложениях и службах."
 
-#: src/goabackend/goaproviderdialog.c:574
+#: src/goabackend/goaproviderdialog.c:609
 msgid "_Cancel"
 msgstr "_Отменить"
 
-#: src/goabackend/goaproviderdialog.c:575
+#: src/goabackend/goaproviderdialog.c:610
 msgid "_Remove"
 msgstr "_Удалить"
 
-#: src/goabackend/goaproviderdialog.c:653
+#: src/goabackend/goaproviderdialog.c:688
 msgid "Sign in to reconnect to this account"
 msgstr "Войти, чтобы снова подключиться к этой учетной записи"
 
 #. Remove
-#: src/goabackend/goaproviderdialog.c:702
+#: src/goabackend/goaproviderdialog.c:737
 msgid "_Remove…"
 msgstr "У_далить…"
 
-#: src/goabackend/goaproviderdialog.c:797
+#: src/goabackend/goaproviderdialog.c:832
 msgid "_Sign In"
 msgstr "_Войти"
 
-#: src/goabackend/goaproviderdialog.c:858
+#: src/goabackend/goaproviderdialog.c:894
 msgid "_Try Again"
 msgstr "Поп_робовать снова"
 
-#: src/goabackend/goaproviderdialog.c:862
+#: src/goabackend/goaproviderdialog.c:898
 msgid "_Ignore"
 msgstr "_Игнорировать"
 
-#: src/goabackend/goaproviderdialog.c:1055
+#: src/goabackend/goaproviderdialog.c:1143
 msgid "Dialog was dismissed"
 msgstr "Диалог отклонён"
 
@@ -583,23 +655,43 @@ msgstr "Неверный сертификат."
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "Не удалось найти поле %s с именем пользователя «%s» в учётных данных"
 
-#: src/goabackend/goawebdavprovider.c:472
-msgid "Endpoint Settings"
-msgstr "Настройки конечной точки"
+#: src/goabackend/goawebdavprovider.c:462
+msgid "Calendar, Contacts and Files"
+msgstr "Календарь, контакты и файлы"
 
-#: src/goabackend/goawebdavprovider.c:476
-msgid "Files Endpoint"
-msgstr "Конечная точка Файлов"
+#: src/goabackend/goawebdavprovider.c:463
+msgid ""
+"Add a calendar, contacts and files account by entering your WebDAV server "
+"and account details"
+msgstr ""
+"Добавить учетную запись календаря, контактов и файлов, введя данные сервера "
+"WebDAV и учетной записи"
+
+#: src/goabackend/goawebdavprovider.c:466
+msgid "_Server Address"
+msgstr "Адрес _сервера"
+
+#: src/goabackend/goawebdavprovider.c:467
+msgid "Examples: example.com, 192.168.0.82"
+msgstr "Примеры: example.com, 192.168.0.82"
 
 #: src/goabackend/goawebdavprovider.c:477
-msgid "CalDAV Endpoint"
-msgstr "Конечная точка CalDAV"
+msgid "Server Addresses (Optional)"
+msgstr "Адреса серверов (необязательно)"
 
 #: src/goabackend/goawebdavprovider.c:478
-msgid "CardDAV Endpoint"
-msgstr "Конечная точка CardDAV"
+msgid "Files"
+msgstr "Файлы"
 
-#: src/goabackend/goawebdavprovider.c:659
+#: src/goabackend/goawebdavprovider.c:479
+msgid "Calendar (CalDAV)"
+msgstr "Календарь (CalDAV)"
+
+#: src/goabackend/goawebdavprovider.c:480
+msgid "Contacts (CardDAV)"
+msgstr "Контакты (CardDAV)"
+
+#: src/goabackend/goawebdavprovider.c:668
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "Недопустимый URI: %s"
@@ -683,6 +775,18 @@ msgstr "Не удалось найти идентификатор"
 #: src/goaidentity/goakerberosidentitymanager.c:937
 msgid "Could not create credential cache for identity"
 msgstr "Не удалось создать кэш учётных данных для идентификатора"
+
+#~ msgid "Endpoint Settings"
+#~ msgstr "Настройки конечной точки"
+
+#~ msgid "Files Endpoint"
+#~ msgstr "Конечная точка Файлов"
+
+#~ msgid "CalDAV Endpoint"
+#~ msgstr "Конечная точка CalDAV"
+
+#~ msgid "CardDAV Endpoint"
+#~ msgstr "Конечная точка CardDAV"
 
 #~ msgid "C_onnect"
 #~ msgstr "_Подключиться"
@@ -841,9 +945,6 @@ msgstr "Не удалось создать кэш учётных данных д
 #~ msgid "Failed to create a user interface for %s"
 #~ msgstr "Не удалось создать интерфейс пользователя для %s"
 
-#~ msgid "Personal Details"
-#~ msgstr "Персональные данные"
-
 #~ msgid "_OK"
 #~ msgstr "_OK"
 
@@ -861,9 +962,6 @@ msgstr "Не удалось создать кэш учётных данных д
 
 #~ msgid "Todoist"
 #~ msgstr "Todoist"
-
-#~ msgid "_Domain"
-#~ msgstr "_Домен"
 
 #~ msgid "Enterprise domain or realm name"
 #~ msgstr "Корпоративный домен или имя области"
