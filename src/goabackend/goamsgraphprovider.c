@@ -226,7 +226,15 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
 
   id = g_strdup (json_object_get_string_member (json_object, "id"));
 
-  presentation_identity = g_strdup (json_object_get_string_member (json_object, "displayName"));
+  if (json_object_has_member (json_object, "email"))
+    {
+      presentation_identity = g_strdup (json_object_get_string_member (json_object, "email"));
+    }
+  else
+    {
+      presentation_identity = g_strdup (json_object_get_string_member (json_object, "displayName"));
+    }
+
   ret = id;
   id = NULL;
   if (out_presentation_identity != NULL)
