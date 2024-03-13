@@ -58,7 +58,6 @@ goa_identity_utils_escape_object_path (const char *data,
                                        gsize       length)
 {
   const char *p;
-  char *object_path;
   GString *string;
 
   g_return_val_if_fail (data != NULL, NULL);
@@ -84,11 +83,7 @@ goa_identity_utils_escape_object_path (const char *data,
       g_string_append_printf (string, "_%x_", character);
     }
 
-  object_path = string->str;
-
-  g_string_free (string, FALSE);
-
-  return object_path;
+  return g_string_free (string, FALSE);
 }
 
 static char *
