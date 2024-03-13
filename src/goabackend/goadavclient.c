@@ -18,6 +18,7 @@
  */
 
 #include "config.h"
+#include <glib/gi18n-lib.h>
 
 #include <libsoup/soup.h>
 
@@ -821,7 +822,7 @@ out:
       g_task_return_new_error (task,
                                GOA_ERROR,
                                GOA_ERROR_NOT_SUPPORTED,
-                               "Cannot find WebDAV endpoint");
+                               _("Cannot find WebDAV endpoint"));
     }
   else
     {
