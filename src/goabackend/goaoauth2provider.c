@@ -992,7 +992,7 @@ oauth2_secret_service_get_cb (GObject      *object,
       g_task_return_new_error (task,
                                GOA_ERROR,
                                GOA_ERROR_FAILED,
-                               "Failed to connect to session keyring");
+                               _("Failed to connect to session keyring"));
       return;
     }
 
