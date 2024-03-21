@@ -56,7 +56,11 @@ gchar       *goa_oauth2_provider_build_authorization_uri      (GoaOAuth2Provider
                                                                const gchar                   *authorization_uri,
                                                                const gchar                   *escaped_redirect_uri,
                                                                const gchar                   *escaped_client_id,
-                                                               const gchar                   *escaped_scope);
+                                                               const gchar                   *escaped_scope,
+                                                               const gchar                   *code_challenge_method,
+                                                               const gchar                   *code_challenge);
+gboolean     goa_oauth2_provider_get_use_pkce                 (GoaOAuth2Provider             *provider);
+
 gboolean     goa_oauth2_provider_get_use_mobile_browser       (GoaOAuth2Provider             *provider);
 void         goa_oauth2_provider_add_account_key_values       (GoaOAuth2Provider             *provider,
                                                                GVariantBuilder               *builder);
