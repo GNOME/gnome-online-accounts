@@ -109,6 +109,11 @@ gboolean         goa_utils_get_credentials (GoaProvider    *provider,
                                             GCancellable   *cancellable,
                                             GError        **error);
 
+gchar           *goa_utils_base64_url_encode (const guchar *data,
+                                              gsize len);
+gchar           *goa_utils_generate_code_verifier (void);
+gchar           *goa_utils_generate_code_challenge (const gchar *code_verifier);
+
 G_END_DECLS
 
 #endif /* __GOA_UTILS_H__ */
