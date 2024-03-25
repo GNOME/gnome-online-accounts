@@ -9,7 +9,7 @@ build-meson:
     - pacman -S --noconfirm
       meson git gcc dbus gcr-4 glib2 gobject-introspection
       gtk-doc gtk4 json-glib krb5 libadwaita libsecret
-      libsoup3 vala
+      libsoup3 python-packaging vala
   script:
     - meson setup -Dgtk_doc=true _build
     - meson compile -C _build
