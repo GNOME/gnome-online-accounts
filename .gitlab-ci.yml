@@ -31,6 +31,35 @@ build-meson-nobackend:
     - meson test -C _build
     - meson install -C _build
 
+clang-analyzer:
+  image: fedora:latest
+  stage: analysis
+  variables:
+    # Warnings from dependencies are irrelevant here
+    CFLAGS: "-Wno-strict-prototypes -Wno-deprecated-declarations"
+  before_script:
+    - dnf update -y
+    - dnf -y install
+      clang clang-analyzer meson gcr-devel dbus-devel glib2-devel
+      gobject-introspection-devel gtk4-devel krb5-devel libadwaita-devel
+      libsecret-devel rest-devel vala
+  script:
+    - meson setup --buildtype=debug
+                  -Dfedora=true
+                  -Dgtk_doc=false
+                  -Dwerror=true
+                  _scan_build
+    - export SCANBUILD="$PWD/.gitlab-ci/scanbuild-wrapper.sh"
+    - ninja -C _scan_build scan-build
+  after_script:
+    - .gitlab-ci/scanbuild-plist-to-junit.py _scan_build/meson-logs/scanbuild/ > _scan_build/junit-scan-build.xml
+  artifacts:
+    paths:
+      - _scan_build/meson-logs
+    reports:
+      junit: "_scan_build/junit-scan-build.xml"
+  allow_failure: true
+
 gcc-analyzer:
   image: fedora:latest
   stage: analysis
