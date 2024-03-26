@@ -493,7 +493,7 @@ goa_smtp_auth_run_sync (GoaMailAuth         *auth,
       /* AUTH LOGIN */
 
       auth_arg_plain = g_strdup (self->username);
-      auth_arg_plain_len = strlen (self->username);
+      auth_arg_plain_len = self->username ? strlen (self->username) : 0;
       auth_arg_base64 = g_base64_encode ((guchar *) auth_arg_plain, auth_arg_plain_len);
 
       request = g_strdup_printf ("AUTH LOGIN %s\r\n", auth_arg_base64);
@@ -513,7 +513,7 @@ goa_smtp_auth_run_sync (GoaMailAuth         *auth,
       g_free (auth_arg_base64);
 
       auth_arg_plain = g_strdup (self->password);
-      auth_arg_plain_len = strlen (self->password);
+      auth_arg_plain_len = self->password ? strlen (self->password) : 0;
       auth_arg_base64 = g_base64_encode ((guchar *) auth_arg_plain, auth_arg_plain_len);
 
       request = g_strdup_printf ("%s\r\n", auth_arg_base64);
