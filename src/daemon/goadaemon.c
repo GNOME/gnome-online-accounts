@@ -726,6 +726,7 @@ process_config_entries (GoaDaemon  *self,
           continue;
 
         id = account_group_to_id (group);
+        g_assert (id != NULL);
 
         /* create and validate object path */
         object_path = g_strdup_printf ("/org/gnome/OnlineAccounts/Accounts/%s", id);
