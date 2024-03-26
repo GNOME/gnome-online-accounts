@@ -1295,7 +1295,7 @@ goa_kerberos_identity_manager_name_identity (GoaIdentityManager *manager,
   GoaKerberosIdentityManager *self = GOA_KERBEROS_IDENTITY_MANAGER (manager);
   char *name;
   GList *other_identities;
-  gboolean other_identity_needs_rename;
+  gboolean other_identity_needs_rename = FALSE;
 
   name = goa_kerberos_identity_get_realm_name (GOA_KERBEROS_IDENTITY (identity));
 
