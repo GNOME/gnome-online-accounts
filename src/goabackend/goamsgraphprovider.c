@@ -394,11 +394,12 @@ create_account_details_ui (GoaProvider *provider,
 
       group = goa_provider_dialog_add_group (dialog, NULL);
       data->client_id_entry = goa_provider_dialog_add_entry (dialog, group, _("_Client ID"));
+      goa_provider_dialog_add_description (dialog, data->client_id_entry, _("Only necessary for organizations"));
 
       group = goa_provider_dialog_add_group (dialog, _("Advanced"));
       data->issuer_combobox = goa_provider_dialog_add_combo (dialog, group, _("_Issuer"), (GStrv) types);
       data->custom_issuer_entry = goa_provider_dialog_add_entry (dialog, group, _("C_ustom Issuer"));
-      goa_provider_dialog_add_description (dialog, data->custom_issuer_entry, _("Example provider: example.com"));
+      goa_provider_dialog_add_description (dialog, data->custom_issuer_entry, _("Example issuer: 00000000-0000-0000-4fd1-000000000000"));
 
       button = gtk_window_get_default_widget (GTK_WINDOW (dialog));
       gtk_button_set_label (GTK_BUTTON (button), _("_Sign in…"));
