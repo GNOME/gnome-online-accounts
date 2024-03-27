@@ -29,6 +29,11 @@
 #define WELL_KNOWN_CARDDAV   "/.well-known/carddav"
 #define WELL_KNOWN_NEXTCLOUD "remote.php/dav"
 
+#define MAILBOX_ORG_HOSTNAME "dav.mailbox.org"
+#define MAILBOX_ORG_WEBDAV   "https://dav.mailbox.org/servlet/webdav.infostore"
+#define MAILBOX_ORG_CALDAV   "https://dav.mailbox.org/.well-known/caldav"
+#define MAILBOX_ORG_CARDDAV  "https://dav.mailbox.org/.well-known/carddav"
+
 struct _GoaDavClient
 {
   GObject parent_instance;
@@ -228,6 +233,45 @@ _soup_message_get_dav_features (SoupMessage  *message,
     }
 
   return ret;
+}
+
+static gboolean
+goa_dav_configuration_autoconfig_mailbox_org (GoaDavConfiguration *config,
+                                              SoupMessage         *message)
+{
+  GUri *uri = NULL;
+  const char *host = NULL;
+
+  g_assert (config != NULL);
+  g_assert (SOUP_IS_MESSAGE (message));
+
+  uri = soup_message_get_uri (message);
+  if (uri != NULL)
+    host = g_uri_get_host (uri);
+
+  /* We can infer the endpoints from the hostname `dav.mailbox.org`.
+   *
+   * TODO: we may have scoped application credentials rather than user
+   * credentials, so it may be prudent to support a code path that can handle
+   * partial authentication failure as unsupported DAV features.
+   *
+   * https://kb.mailbox.org/en/private/drive-article/webdav-for-linux/
+   * https://office.mailbox.org/appsuite/help/l10n/en_US/ox.appsuite.user.sect.security.apppasswords.html
+   */
+  if (g_strcmp0 (host, MAILBOX_ORG_HOSTNAME) == 0)
+    {
+      g_set_str (&config->webdav_uri, MAILBOX_ORG_WEBDAV);
+      g_set_str (&config->caldav_uri, MAILBOX_ORG_CALDAV);
+      g_set_str (&config->carddav_uri, MAILBOX_ORG_CARDDAV);
+
+      config->features = GOA_PROVIDER_FEATURE_CALENDAR |
+                         GOA_PROVIDER_FEATURE_CONTACTS |
+                         GOA_PROVIDER_FEATURE_FILES;
+
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static gboolean
@@ -604,6 +648,14 @@ dav_client_discover_response_cb (SoupSession  *session,
   /* Short path for ownCloud/Nextcloud
    */
   if (goa_dav_configuration_autoconfig_nextcloud (discover->config, msg))
+    {
+      g_queue_clear_full (&discover->uris, g_free);
+      goto out;
+    }
+
+  /* Short path for mailbox.org
+   */
+  if (goa_dav_configuration_autoconfig_mailbox_org (discover->config, msg))
     {
       g_queue_clear_full (&discover->uris, g_free);
       goto out;
