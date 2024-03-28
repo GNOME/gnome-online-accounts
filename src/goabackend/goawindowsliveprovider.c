@@ -90,6 +90,13 @@ get_token_uri (GoaOAuth2Provider *oauth2_provider)
 }
 
 
+static gboolean
+get_use_pkce (GoaOAuth2Provider *oauth2_provider)
+{
+  return TRUE;
+}
+
+
 static const gchar *
 get_redirect_uri (GoaOAuth2Provider *oauth2_provider)
 {
@@ -343,6 +350,7 @@ goa_windows_live_provider_class_init (GoaWindowsLiveProviderClass *klass)
   oauth2_class = GOA_OAUTH2_PROVIDER_CLASS (klass);
   oauth2_class->get_authorization_uri    = get_authorization_uri;
   oauth2_class->get_token_uri            = get_token_uri;
+  oauth2_class->get_use_pkce             = get_use_pkce;
   oauth2_class->get_redirect_uri         = get_redirect_uri;
   oauth2_class->get_scope                = get_scope;
   oauth2_class->get_client_id            = get_client_id;
