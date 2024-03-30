@@ -124,25 +124,6 @@ get_client_secret (GoaOAuth2Provider *oauth2_provider)
   return "";
 }
 
-static gchar *
-build_authorization_uri (GoaOAuth2Provider *self,
-                         const gchar       *authorization_uri,
-                         const gchar       *escaped_redirect_uri,
-                         const gchar       *escaped_client_id,
-                         const gchar       *escaped_scope)
-{
-  return g_strdup_printf ("%s"
-                          "?client_id=%s"
-                          "&response_type=code"
-                          "&redirect_uri=%s"
-                          "&response_mode=query"
-                          "&scope=%s",
-                          authorization_uri,
-                          escaped_client_id,
-                          escaped_redirect_uri,
-                          escaped_scope);
-}
-
 /* -------------------------------------------------------------------------- */
 
 static gchar *
@@ -516,6 +497,12 @@ add_account (GoaProvider         *provider,
   // We chain-up in add_account_parent_cb() once the user input is confirmed
 }
 
+static gboolean
+get_use_pkce (GoaOAuth2Provider *oauth2_provider)
+{
+  return TRUE;
+}
+
 /* -------------------------------------------------------------------------- */
 
 static void
@@ -546,8 +533,7 @@ goa_ms_graph_provider_class_init (GoaMsGraphProviderClass *klass)
   oauth2_class->get_identity_sync = get_identity_sync;
   oauth2_class->get_redirect_uri = get_redirect_uri;
   oauth2_class->get_scope = get_scope;
+  oauth2_class->get_use_pkce = get_use_pkce;
   oauth2_class->get_token_uri = get_token_uri;
   oauth2_class->add_account_key_values = add_account_key_values;
-
-  oauth2_class->build_authorization_uri = build_authorization_uri;
 }

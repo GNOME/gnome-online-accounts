@@ -66,6 +66,8 @@ G_LOCK_DEFINE_STATIC (provider_lock);
 
 G_DEFINE_ABSTRACT_TYPE (GoaOAuth2Provider, goa_oauth2_provider, GOA_TYPE_PROVIDER);
 
+#define GOA_OAUTH2_CODE_CHALLENGE_METHOD_S256 "S256"
+
 static gboolean
 is_authorization_error (GError *error)
 {
@@ -84,6 +86,34 @@ is_authorization_error (GError *error)
       ret = TRUE;
     }
   return ret;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static gboolean
+goa_oauth2_provider_get_use_pkce_default (GoaOAuth2Provider  *self)
+{
+  return FALSE;
+}
+
+/**
+ * goa_oauth2_provider_get_use_pkce:
+ * @self: A #GoaOAuth2Provider.
+ *
+ * Returns whether the OAuth2 provider supports Proof Key for Code
+ * Exchange (PKCE) as defined by <ulink
+ * url="https://tools.ietf.org/html/rfc7636">RFC7636</ulink>.
+ *
+ * This is a virtual method where the default implementation returns
+ * %FALSE.
+ *
+ * Returns: %TRUE if the provider supports PKCE, %FALSE otherwise.
+ */
+gboolean
+goa_oauth2_provider_get_use_pkce (GoaOAuth2Provider *self)
+{
+  g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (self), FALSE);
+  return GOA_OAUTH2_PROVIDER_GET_CLASS (self)->get_use_pkce (self);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -145,13 +175,20 @@ goa_oauth2_provider_add_account_key_values (GoaOAuth2Provider  *self,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
-goa_oauth2_provider_build_authorization_uri_default (GoaOAuth2Provider  *self,
-                                                     const gchar        *authorization_uri,
-                                                     const gchar        *escaped_redirect_uri,
-                                                     const gchar        *escaped_client_id,
-                                                     const gchar        *escaped_scope)
+goa_oauth2_provider_build_authorization_uri_default (GoaOAuth2Provider *self,
+                                                     const gchar       *authorization_uri,
+                                                     const gchar       *escaped_redirect_uri,
+                                                     const gchar       *escaped_client_id,
+                                                     const gchar       *escaped_scope,
+                                                     const gchar       *code_challenge_method,
+                                                     const gchar       *code_challenge)
 {
-  return g_strdup_printf ("%s"
+  GString *ret;
+
+  g_debug ("%s: ********** ENTER\n", __FUNCTION__);
+  ret = g_string_new (NULL);
+  g_string_append_printf (ret,
+                          "%s"
                           "?response_type=code"
                           "&redirect_uri=%s"
                           "&client_id=%s"
@@ -160,6 +197,18 @@ goa_oauth2_provider_build_authorization_uri_default (GoaOAuth2Provider  *self,
                           escaped_redirect_uri,
                           escaped_client_id,
                           escaped_scope);
+
+  if (code_challenge_method != NULL && code_challenge != NULL)
+    {
+      g_string_append_printf (ret,
+                              "&code_challenge_method=%s"
+                              "&code_challenge=%s",
+                              code_challenge_method,
+                              code_challenge);
+    }
+
+  g_debug ("%s: ====> %s\n", __FUNCTION__, ret->str);
+  return g_string_free (ret, FALSE);
 }
 
 /**
@@ -168,7 +217,9 @@ goa_oauth2_provider_build_authorization_uri_default (GoaOAuth2Provider  *self,
  * @authorization_uri: An authorization URI.
  * @escaped_redirect_uri: An escaped redirect URI
  * @escaped_client_id: An escaped client id
- * @escaped_scope: (allow-none): The escaped scope or %NULL
+ * @escaped_scope: (nullable): The escaped scope or %NULL
+ * @code_challenge_method: (nullable): The code challenge method or %NULL
+ * @code_challenge: (nullable): The code challenge or %NULL
  *
  * Builds the URI that can be opened in a web browser (or embedded web
  * browser widget) to start authenticating an user.
@@ -182,16 +233,20 @@ goa_oauth2_provider_build_authorization_uri_default (GoaOAuth2Provider  *self,
  * and @escaped_scope parameters originate from the result of the
  * the goa_oauth2_provider_get_authorization_uri(), goa_oauth2_provider_get_redirect_uri(), goa_oauth2_provider_get_client_id()
  * and goa_oauth2_provider_get_scope() methods with the latter
- * three escaped using g_uri_escape_string().
+ * three escaped using g_uri_escape_string(). The @code_challenge_method and
+ * @code_challenge are used to support Proof Key for Code Exchange (PKCE) as
+ * defined by <ulink url="https://tools.ietf.org/html/rfc7636">RFC7636</ulink>.
  *
  * Returns: (transfer full): An authorization URI that must be freed with g_free().
  */
 gchar *
-goa_oauth2_provider_build_authorization_uri (GoaOAuth2Provider  *self,
-                                             const gchar        *authorization_uri,
-                                             const gchar        *escaped_redirect_uri,
-                                             const gchar        *escaped_client_id,
-                                             const gchar        *escaped_scope)
+goa_oauth2_provider_build_authorization_uri (GoaOAuth2Provider *self,
+                                             const gchar       *authorization_uri,
+                                             const gchar       *escaped_redirect_uri,
+                                             const gchar       *escaped_client_id,
+                                             const gchar       *escaped_scope,
+                                             const gchar       *code_challenge_method,
+                                             const gchar       *code_challenge)
 {
   g_return_val_if_fail (GOA_IS_OAUTH2_PROVIDER (self), NULL);
   g_return_val_if_fail (authorization_uri != NULL, NULL);
@@ -201,7 +256,9 @@ goa_oauth2_provider_build_authorization_uri (GoaOAuth2Provider  *self,
                                                                         authorization_uri,
                                                                         escaped_redirect_uri,
                                                                         escaped_client_id,
-                                                                        escaped_scope);
+                                                                        escaped_scope,
+                                                                        code_challenge_method,
+                                                                        code_challenge);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -453,6 +510,7 @@ typedef struct
   char *token_uri;
   char *authorization_uri;
   char *redirect_uri;
+  char *code_verifier;
 
   SecretCollection *session;
   GCallback session_callback;
@@ -478,6 +536,7 @@ account_data_sync (GoaOAuth2Provider *self,
   g_free (data->token_uri);
   g_free (data->authorization_uri);
   g_free (data->redirect_uri);
+  g_free (data->code_verifier);
 
   if (object == NULL || (tmp = goa_util_lookup_keyfile_string (object, "OAuth2ClientId")) == NULL)
       tmp = g_strdup (goa_oauth2_provider_get_client_id (self));
@@ -519,6 +578,7 @@ account_data_free (gpointer user_data)
   g_clear_pointer (&data->token_uri, g_free);
   g_clear_pointer (&data->authorization_uri, g_free);
   g_clear_pointer (&data->redirect_uri, g_free);
+  g_clear_pointer (&data->code_verifier, g_free);
 
   g_clear_pointer (&data->authorization_code, g_free);
   g_clear_pointer (&data->access_token, g_free);
@@ -578,6 +638,9 @@ get_tokens_sync (GoaOAuth2Provider  *self,
       rest_proxy_call_add_param (call, "redirect_uri", data->redirect_uri);
       rest_proxy_call_add_param (call, "code", authorization_code);
     }
+
+    if (data->code_verifier != NULL)
+      rest_proxy_call_add_param (call, "code_verifier", data->code_verifier);
 
   /* TODO: cancellable support? */
   if (!rest_proxy_call_sync (call, error))
@@ -1015,6 +1078,7 @@ oauth2_secret_run_task (GoaProviderDialog *dialog,
   g_autofree char *escaped_redirect_uri = NULL;
   g_autofree char *escaped_client_id = NULL;
   g_autofree char *escaped_scope = NULL;
+  g_autofree gchar *code_challenge = NULL;
 
   if (goa_provider_dialog_get_state (dialog) != GOA_DIALOG_BUSY)
     return;
@@ -1028,12 +1092,20 @@ oauth2_secret_run_task (GoaProviderDialog *dialog,
   if (scope != NULL)
     escaped_scope = g_uri_escape_string (goa_oauth2_provider_get_scope (self), NULL, TRUE);
 
+  if (goa_oauth2_provider_get_use_pkce (self))
+    {
+      data->code_verifier = goa_utils_generate_code_verifier ();
+      code_challenge = goa_utils_generate_code_challenge (data->code_verifier);
+    }
+
   g_message ("%s: %s - %s", G_STRFUNC, data->redirect_uri, data->client_id);
   data->request_uri = goa_oauth2_provider_build_authorization_uri (self,
                                                                    data->authorization_uri,
                                                                    escaped_redirect_uri,
                                                                    escaped_client_id,
-                                                                   escaped_scope);
+                                                                   escaped_scope,
+                                                                   code_challenge != NULL ? GOA_OAUTH2_CODE_CHALLENGE_METHOD_S256 : NULL,
+                                                                   code_challenge);
 
   /* Watch the session secret collection for the OAuth2 URI */
   secret_service_get (SECRET_SERVICE_LOAD_COLLECTIONS | SECRET_SERVICE_OPEN_SESSION,
@@ -1635,6 +1707,7 @@ goa_oauth2_provider_class_init (GoaOAuth2ProviderClass *klass)
   klass->build_authorization_uri  = goa_oauth2_provider_build_authorization_uri_default;
   klass->get_token_uri            = goa_oauth2_provider_get_token_uri_default;
   klass->get_scope                = goa_oauth2_provider_get_scope_default;
+  klass->get_use_pkce             = goa_oauth2_provider_get_use_pkce_default;
   klass->get_use_mobile_browser   = goa_oauth2_provider_get_use_mobile_browser_default;
   klass->add_account_key_values   = goa_oauth2_provider_add_account_key_values_default;
 }
