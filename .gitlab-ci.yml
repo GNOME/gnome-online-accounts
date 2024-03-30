@@ -47,6 +47,7 @@ clang-analyzer:
     - meson setup --buildtype=debug
                   -Dfedora=true
                   -Dgtk_doc=false
+                  -Dman=false
                   -Dwerror=true
                   _scan_build
     - export SCANBUILD="$PWD/.gitlab-ci/scanbuild-wrapper.sh"
@@ -75,6 +76,7 @@ gcc-analyzer:
     - meson setup --buildtype=debug
                   -Dfedora=true
                   -Dgtk_doc=false
+                  -Dman=false
                   -Dwerror=true
                   _build
     - meson compile -C _build
