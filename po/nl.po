@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts gnome-3-4\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-02-10 22:10+0000\n"
-"PO-Revision-Date: 2024-02-18 17:24+0100\n"
+"POT-Creation-Date: 2024-03-16 23:54+0000\n"
+"PO-Revision-Date: 2024-03-31 12:36+0200\n"
 "Last-Translator: Nathan Follens <nfollens@gnome.org>\n"
 "Language-Team: GNOME-NL https://matrix.to/#/#nl:gnome.org\n"
 "Language: nl\n"
@@ -84,41 +84,66 @@ msgstr "Microsoft Exchange"
 msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "Ongeldig wachtwoord bij gebruikersnaam “%s” (%s, %d): "
 
-#: src/goabackend/goaexchangeprovider.c:372
-#: src/goabackend/goaimapsmtpprovider.c:544
-msgid "_E-mail"
+#. provider name
+#: src/goabackend/goaexchangeprovider.c:373
+msgid ""
+"Connect to a Microsoft Exchange provider to access calendars, contacts and "
+"files"
+msgstr ""
+"Maak verbinding met een Microsoft Exchange-leverancier om uw agenda’s, "
+"contacten en bestanden te benaderen"
+
+#: src/goabackend/goaexchangeprovider.c:376
+#: src/goabackend/goaimapsmtpprovider.c:548
+msgid "_Email"
 msgstr "_E-mail"
 
-#: src/goabackend/goaexchangeprovider.c:373
-#: src/goabackend/goafedoraprovider.c:167
-#: src/goabackend/goaimapsmtpprovider.c:545
-#: src/goabackend/goaimapsmtpprovider.c:575
-#: src/goabackend/goaimapsmtpprovider.c:601
-#: src/goabackend/goawebdavprovider.c:464
+#: src/goabackend/goaexchangeprovider.c:377
+#: src/goabackend/goafedoraprovider.c:171
+#: src/goabackend/goaimapsmtpprovider.c:549
+#: src/goabackend/goaimapsmtpprovider.c:568
+#: src/goabackend/goaimapsmtpprovider.c:589
+#: src/goabackend/goawebdavprovider.c:471
 msgid "_Password"
 msgstr "_Wachtwoord"
 
-#: src/goabackend/goaexchangeprovider.c:381
-#: src/goabackend/goamsgraphprovider.c:386
-msgid "Ad_vanced"
-msgstr "Gea_vanceerd"
+#: src/goabackend/goaexchangeprovider.c:378
+msgid ""
+"Exchange account details will be auto-detected from your email address when "
+"possible"
+msgstr ""
+"Exchange-accountgegevens worden indien mogelijk automatisch gedetecteerd op "
+"basis van uw e-mailadres"
 
-#: src/goabackend/goaexchangeprovider.c:384
-#: src/goabackend/goafedoraprovider.c:166
-#: src/goabackend/goaimapsmtpprovider.c:574
-#: src/goabackend/goaimapsmtpprovider.c:600
-#: src/goabackend/goawebdavprovider.c:463
+#: src/goabackend/goaexchangeprovider.c:382
+msgid "Account Details"
+msgstr "Accountgegevens"
+
+#: src/goabackend/goaexchangeprovider.c:383
+#: src/goabackend/goafedoraprovider.c:170
+#: src/goabackend/goaimapsmtpprovider.c:567
+#: src/goabackend/goaimapsmtpprovider.c:588
+#: src/goabackend/goawebdavprovider.c:470
 msgid "User_name"
 msgstr "Gebruikers_naam"
 
+#: src/goabackend/goaexchangeprovider.c:384
+msgid "_Domain"
+msgstr "_Domein"
+
 #: src/goabackend/goaexchangeprovider.c:385
-#: src/goabackend/goawebdavprovider.c:462
-msgid "_Server"
-msgstr "_Server"
+msgid "Example domain: example.com"
+msgstr "Voorbeelddomein: voorbeeld.net"
 
 #: src/goabackend/goafedoraprovider.c:51
 msgid "Fedora"
 msgstr "Fedora"
+
+# Ik denk niet dat 'restricted' vertalen hier veel duidelijkheid zou verschaffen. - Nathan
+#: src/goabackend/goafedoraprovider.c:167
+#: src/goabackend/goakerberosprovider.c:592
+msgid "Access restricted web and network resources for your organization"
+msgstr "Verkrijg toegang tot web- en netwerkbronnen van uw organisatie"
 
 #: src/goabackend/goagoogleprovider.c:57
 msgid "Google"
@@ -200,44 +225,67 @@ msgstr "STARTTLS na verbinden"
 msgid "SSL on a dedicated port"
 msgstr "SSL op een specifieke poort"
 
+#: src/goabackend/goaimapsmtpprovider.c:542
+#: src/goabackend/goaimapsmtpprovider.c:1206
+msgid "Email"
+msgstr "E-mail"
+
 #: src/goabackend/goaimapsmtpprovider.c:543
+msgid "Connect to an email account"
+msgstr "Verbinden met een e-mailaccount"
+
+#: src/goabackend/goaimapsmtpprovider.c:547
 msgid "_Name"
 msgstr "_Naam"
 
-#: src/goabackend/goaimapsmtpprovider.c:569
+#: src/goabackend/goaimapsmtpprovider.c:550
+msgid ""
+"IMAP and SMTP details will be auto-detected from your service provider when "
+"possible"
+msgstr ""
+"IMAP- en SMTP-gegevens worden indien mogelijk automatisch gedetecteerd op "
+"basis van uw dienstleverancier"
+
+#. IMAP
+#: src/goabackend/goaimapsmtpprovider.c:565
 msgid "IMAP Settings"
 msgstr "IMAP-instellingen"
 
-#: src/goabackend/goaimapsmtpprovider.c:573
+#: src/goabackend/goaimapsmtpprovider.c:566
 msgid "IMAP _Server"
 msgstr "IMAP-_server"
 
-#: src/goabackend/goaimapsmtpprovider.c:581
-#: src/goabackend/goaimapsmtpprovider.c:607
+#: src/goabackend/goaimapsmtpprovider.c:574
+#: src/goabackend/goaimapsmtpprovider.c:595
 msgid "Encryption"
 msgstr "Versleuteling"
 
-#: src/goabackend/goaimapsmtpprovider.c:595
+#: src/goabackend/goaimapsmtpprovider.c:579
+msgid "Example server: imap.example.com"
+msgstr "Voorbeeldserver: imap.voorbeeld.net"
+
+#. SMTP
+#: src/goabackend/goaimapsmtpprovider.c:586
 msgid "SMTP Settings"
 msgstr "SMTP-instellingen"
 
-#: src/goabackend/goaimapsmtpprovider.c:599
+#: src/goabackend/goaimapsmtpprovider.c:587
 msgid "SMTP _Server"
 msgstr "SMTP-_server"
 
-#: src/goabackend/goaimapsmtpprovider.c:1229
+#: src/goabackend/goaimapsmtpprovider.c:600
+msgid "Example server: smtp.example.com"
+msgstr "Voorbeeldserver: smtp.voorbeeld.net"
+
+#: src/goabackend/goaimapsmtpprovider.c:1197
 msgid "Name"
 msgstr "Naam"
 
-#: src/goabackend/goaimapsmtpprovider.c:1238
-msgid "E-mail"
-msgstr "E-mail"
-
-#: src/goabackend/goaimapsmtpprovider.c:1255
+#: src/goabackend/goaimapsmtpprovider.c:1223
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1273
+#: src/goabackend/goaimapsmtpprovider.c:1241
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -262,26 +310,35 @@ msgstr "Voer hieronder uw wachtwoord in."
 msgid "Remember this password"
 msgstr "Dit wachtwoord onthouden"
 
-#: src/goabackend/goakerberosprovider.c:590
+#: src/goabackend/goakerberosprovider.c:595
 msgid "_Principal"
 msgstr "_Principal"
 
-#: src/goabackend/goakerberosprovider.c:1282
+#: src/goabackend/goakerberosprovider.c:596
+msgid "Example principal: user@EXAMPLE.COM"
+msgstr "Voorbeeldprincipal: gebruiker@VOORBEELD.NET"
+
+#: src/goabackend/goakerberosprovider.c:599
+#: src/goabackend/goamsgraphprovider.c:404
+msgid "_Sign in…"
+msgstr "_Aanmelden…"
+
+#: src/goabackend/goakerberosprovider.c:1291
 msgid "Ticketing is disabled for account"
 msgstr "Ticketing is uitgeschakeld voor account"
 
-#: src/goabackend/goakerberosprovider.c:1309
+#: src/goabackend/goakerberosprovider.c:1318
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr ""
 "Opgeslagen aanmeldgegevens voor principal “%s” niet gevonden in sleutelbos"
 
-#: src/goabackend/goakerberosprovider.c:1322
+#: src/goabackend/goakerberosprovider.c:1331
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "Wachtwoord bij principal “%s” ontbreekt in aanmeldgegevens"
 
-#: src/goabackend/goakerberosprovider.c:1504
+#: src/goabackend/goakerberosprovider.c:1513
 msgid "Identity service returned invalid key"
 msgstr "Identiteitsdienst gaf ongeldige sleutel terug"
 
@@ -293,26 +350,42 @@ msgstr "Microsoft 365"
 #. * code in add_account_action_cb is also adjusted.
 #.
 #. Translators: Microsoft account issuer type
-#: src/goabackend/goamsgraphprovider.c:376
+#: src/goabackend/goamsgraphprovider.c:385
 msgid "Common"
 msgstr "Algemeen"
 
 #. Translators: Microsoft account issuer type
-#: src/goabackend/goamsgraphprovider.c:378
+#: src/goabackend/goamsgraphprovider.c:387
 msgid "Custom"
 msgstr "Aangepast"
 
-#: src/goabackend/goamsgraphprovider.c:383
+#. provider name
+#: src/goabackend/goamsgraphprovider.c:393
+msgid ""
+"Connect to a Microsoft 365 provider to access calendars, contacts and files"
+msgstr ""
+"Maak verbinding met een Microsoft 365-leverancier om uw agenda’s, contacten "
+"en bestanden te benaderen"
+
+#: src/goabackend/goamsgraphprovider.c:396
 msgid "_Client ID"
 msgstr "_Cliënt-ID"
 
-#: src/goabackend/goamsgraphprovider.c:389
+#: src/goabackend/goamsgraphprovider.c:398
+msgid "Advanced"
+msgstr "Geavanceerd"
+
+#: src/goabackend/goamsgraphprovider.c:399
 msgid "_Issuer"
 msgstr "Uitgevende _instelling"
 
-#: src/goabackend/goamsgraphprovider.c:390
+#: src/goabackend/goamsgraphprovider.c:400
 msgid "C_ustom Issuer"
 msgstr "Aangepaste _uitgevende instelling"
+
+#: src/goabackend/goamsgraphprovider.c:401
+msgid "Example provider: example.com"
+msgstr "Voorbeeldleverancier: voorbeeld.net"
 
 #: src/goabackend/goaoauth2provider.c:592
 #, c-format
@@ -349,7 +422,7 @@ msgid "Sign in to %s with your browser"
 msgstr "Meld aan bij %s met uw browser"
 
 #: src/goabackend/goaoauth2provider.c:882
-#: src/goabackend/goaproviderdialog.c:654
+#: src/goabackend/goaproviderdialog.c:689
 msgid "_Sign In…"
 msgstr "_Aanmelden…"
 
@@ -446,11 +519,11 @@ msgstr "ensure_credentials_sync is niet geïmplementeerd op type %s"
 msgid "%s Account"
 msgstr "%s-account"
 
-#: src/goabackend/goaproviderdialog.c:571
+#: src/goabackend/goaproviderdialog.c:606
 msgid "Remove this Account?"
 msgstr "Account verwijderen?"
 
-#: src/goabackend/goaproviderdialog.c:572
+#: src/goabackend/goaproviderdialog.c:607
 msgid ""
 "If you remove this Online Account you will have to connect to it again to "
 "use it with apps and services."
@@ -458,36 +531,36 @@ msgstr ""
 "Als u deze online-account verwijdert, zult u er opnieuw verbinding mee "
 "moeten maken om hem met toepassingen en diensten te gebruiken ."
 
-#: src/goabackend/goaproviderdialog.c:574
+#: src/goabackend/goaproviderdialog.c:609
 msgid "_Cancel"
 msgstr "_Annuleren"
 
-#: src/goabackend/goaproviderdialog.c:575
+#: src/goabackend/goaproviderdialog.c:610
 msgid "_Remove"
 msgstr "Ve_rwijderen"
 
-#: src/goabackend/goaproviderdialog.c:653
+#: src/goabackend/goaproviderdialog.c:688
 msgid "Sign in to reconnect to this account"
 msgstr "Meld u aan om opnieuw te verbinden met deze account"
 
 #. Remove
-#: src/goabackend/goaproviderdialog.c:702
+#: src/goabackend/goaproviderdialog.c:737
 msgid "_Remove…"
 msgstr "Ve_rwijderen…"
 
-#: src/goabackend/goaproviderdialog.c:797
+#: src/goabackend/goaproviderdialog.c:832
 msgid "_Sign In"
 msgstr "_Aanmelden"
 
-#: src/goabackend/goaproviderdialog.c:858
+#: src/goabackend/goaproviderdialog.c:894
 msgid "_Try Again"
 msgstr "Opnieuw _proberen"
 
-#: src/goabackend/goaproviderdialog.c:862
+#: src/goabackend/goaproviderdialog.c:898
 msgid "_Ignore"
 msgstr "_Negeren"
 
-#: src/goabackend/goaproviderdialog.c:1055
+#: src/goabackend/goaproviderdialog.c:1143
 msgid "Dialog was dismissed"
 msgstr "Dialoogvenster werd gesloten"
 
@@ -586,23 +659,44 @@ msgstr "Ongeldig certificaat."
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "%s bij identiteit “%s” ontbreekt in aanmeldgegevens"
 
-#: src/goabackend/goawebdavprovider.c:472
-msgid "Endpoint Settings"
-msgstr "Eindpuntinstellingen"
+#: src/goabackend/goawebdavprovider.c:462
+msgid "Calendar, Contacts and Files"
+msgstr "Agenda, contacten en bestanden"
 
-#: src/goabackend/goawebdavprovider.c:476
-msgid "Files Endpoint"
-msgstr "Eindpunt voor bestanden"
+#: src/goabackend/goawebdavprovider.c:463
+msgid ""
+"Add a calendar, contacts and files account by entering your WebDAV server "
+"and account details"
+msgstr ""
+"Voeg een account toe voor uw agenda, contacten en bestanden door uw WebDAV-"
+"server en -accountgegevens in te voeren"
+
+#: src/goabackend/goawebdavprovider.c:466
+msgid "_Server Address"
+msgstr "_Serveradres"
+
+#: src/goabackend/goawebdavprovider.c:467
+msgid "Examples: example.com, 192.168.0.82"
+msgstr "Voorbeelden: voorbeeld.net, 192.168.0.82"
 
 #: src/goabackend/goawebdavprovider.c:477
-msgid "CalDAV Endpoint"
-msgstr "CalDAV-eindpunt"
+msgid "Server Addresses (Optional)"
+msgstr "Serveradressen (optioneel)"
 
 #: src/goabackend/goawebdavprovider.c:478
-msgid "CardDAV Endpoint"
-msgstr "CardDAV-eindpunt"
+msgid "Files"
+msgstr "Bestanden"
 
-#: src/goabackend/goawebdavprovider.c:659
+#: src/goabackend/goawebdavprovider.c:479
+#| msgid "Cale_ndar"
+msgid "Calendar (CalDAV)"
+msgstr "Agenda (CalDAV)"
+
+#: src/goabackend/goawebdavprovider.c:480
+msgid "Contacts (CardDAV)"
+msgstr "Contacten (CardDAV)"
+
+#: src/goabackend/goawebdavprovider.c:668
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "Ongeldige URI: %s"
@@ -692,6 +786,18 @@ msgstr "Kan identiteit niet vinden"
 #: src/goaidentity/goakerberosidentitymanager.c:937
 msgid "Could not create credential cache for identity"
 msgstr "Kan aanmeldgegevensbuffer voor identiteit niet aanmaken"
+
+#~ msgid "Endpoint Settings"
+#~ msgstr "Eindpuntinstellingen"
+
+#~ msgid "Files Endpoint"
+#~ msgstr "Eindpunt voor bestanden"
+
+#~ msgid "CalDAV Endpoint"
+#~ msgstr "CalDAV-eindpunt"
+
+#~ msgid "CardDAV Endpoint"
+#~ msgstr "CardDAV-eindpunt"
 
 #~ msgid "C_onnect"
 #~ msgstr "Ver_binden"
@@ -828,9 +934,6 @@ msgstr "Kan aanmeldgegevensbuffer voor identiteit niet aanmaken"
 #~ msgid "Failed to create a user interface for %s"
 #~ msgstr "Aanmaken van een gebruikersinterface voor %s is mislukt"
 
-#~ msgid "Personal Details"
-#~ msgstr "Persoonlijke details"
-
 #~ msgid "_OK"
 #~ msgstr "_Ok"
 
@@ -848,9 +951,6 @@ msgstr "Kan aanmeldgegevensbuffer voor identiteit niet aanmaken"
 
 #~ msgid "Todoist"
 #~ msgstr "Todoist"
-
-#~ msgid "_Domain"
-#~ msgstr "_Domein"
 
 #~ msgid "Enterprise domain or realm name"
 #~ msgstr "Enterprisedomein– of realmnaam"
