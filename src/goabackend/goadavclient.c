@@ -597,12 +597,6 @@ dav_client_discover_response_cb (SoupSession  *session,
       goto out;
     }
 
-  discover->config->features |= _soup_message_get_dav_features (msg, &error);
-  if (error != NULL)
-    goto out;
-
-  g_debug ("goa_dav_client_discover(): found: (%p, %s)", msg, data->uri);
-
   /* Short path for ownCloud/Nextcloud
    */
   if (goa_dav_configuration_autoconfig_nextcloud (discover->config, msg))
@@ -610,6 +604,12 @@ dav_client_discover_response_cb (SoupSession  *session,
       g_queue_clear_full (&discover->uris, g_free);
       goto out;
     }
+
+  discover->config->features |= _soup_message_get_dav_features (msg, &error);
+  if (error != NULL)
+    goto out;
+
+  g_debug ("goa_dav_client_discover(): found: (%p, %s)", msg, data->uri);
 
   /* GVfs won't follow redirects so the resolved URI is used for file access.
    */
