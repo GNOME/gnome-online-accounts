@@ -192,9 +192,10 @@ _soup_message_get_dav_features (SoupMessage  *message,
   GoaProviderFeatures ret = 0;
 
   headers = soup_message_get_response_headers (message);
-  dav_header = soup_message_headers_get_one (headers, "DAV");
+  dav_header = soup_message_headers_get_list (headers, "DAV");
   if (dav_header == NULL || *dav_header == '\0')
     {
+      g_debug ("%s(): no 'DAV' entry in response headers", G_STRFUNC);
       g_set_error_literal (error,
                            GOA_ERROR,
                            GOA_ERROR_NOT_SUPPORTED,
