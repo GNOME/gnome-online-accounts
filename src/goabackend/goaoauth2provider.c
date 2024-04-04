@@ -1007,12 +1007,49 @@ oauth2_secret_handle_response (GTask            *task,
 }
 
 static void
+oauth2_secret_collection_for_alias_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
+{
+  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
+  AccountData *data = g_task_get_task_data (task);
+  g_autoptr(GError) error = NULL;
+
+  g_return_if_fail (G_IS_TASK (task));
+
+  data->session = secret_collection_for_alias_finish (result, &error);
+  if (data->session == NULL)
+    {
+      goa_provider_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  /* Ensure there's no dangling entry */
+  secret_password_clear_sync (&oauth2_schema, NULL, NULL,
+                              "goa-oauth2-client", data->client_id,
+                              NULL);
+
+  /* Watch the session collection for the requested URI */
+  g_signal_connect_object (data->session,
+                           "notify::items",
+                           G_CALLBACK (data->session_callback),
+                           task,
+                           G_CONNECT_DEFAULT);
+
+  /* Launch the user's browser */
+  if (!g_app_info_launch_default_for_uri (data->request_uri, NULL, &error))
+    goa_provider_task_return_error (task, g_steal_pointer (&error));
+  else
+    goa_provider_dialog_set_state (data->dialog, GOA_DIALOG_BUSY);
+}
+
+static void
 oauth2_secret_service_get_cb (GObject      *object,
                               GAsyncResult *result,
                               gpointer      user_data)
 {
   g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
-  AccountData *data = g_task_get_task_data (task);
+  GCancellable *cancellable = g_task_get_cancellable (task);
   g_autoptr(SecretService) service = NULL;
   g_autolist (SecretCollection) collections = NULL;
   g_autoptr(GError) error = NULL;
@@ -1026,44 +1063,12 @@ oauth2_secret_service_get_cb (GObject      *object,
       return;
     }
 
-  collections = secret_service_get_collections (service);
-  for (const GList *iter = collections; iter != NULL; iter = iter->next)
-    {
-      g_autofree char *label = secret_collection_get_label (iter->data);
-
-      /* The session collection is an empty string (?) */
-      if (g_strcmp0 (label, "") == 0)
-        {
-          /* Ensure there's no dangling entry */
-          secret_password_clear_sync (&oauth2_schema, NULL, NULL,
-                                      "goa-oauth2-client", data->client_id,
-                                      NULL);
-
-          /* Watch the session collection for the requested URI */
-          data->session = g_object_ref (iter->data);
-          g_signal_connect_object (data->session,
-                                   "notify::items",
-                                   G_CALLBACK (data->session_callback),
-                                   task,
-                                   G_CONNECT_DEFAULT);
-          break;
-        }
-    }
-
-  if (data->session == NULL)
-    {
-      g_task_return_new_error (task,
-                               GOA_ERROR,
-                               GOA_ERROR_FAILED,
-                               "Failed to connect to session keyring");
-      return;
-    }
-
-  /* Launch the user's browser */
-  if (!g_app_info_launch_default_for_uri (data->request_uri, NULL, &error))
-    goa_provider_task_return_error (task, g_steal_pointer (&error));
-  else
-    goa_provider_dialog_set_state (data->dialog, GOA_DIALOG_BUSY);
+  secret_collection_for_alias (service,
+                               SECRET_COLLECTION_SESSION,
+                               SECRET_COLLECTION_LOAD_ITEMS,
+                               cancellable,
+                               (GAsyncReadyCallback) oauth2_secret_collection_for_alias_cb,
+                               g_object_ref (task));
 }
 
 static void
