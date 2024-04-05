@@ -30,6 +30,11 @@
 #define WELL_KNOWN_CARDDAV   "/.well-known/carddav"
 #define WELL_KNOWN_NEXTCLOUD "remote.php/dav"
 
+#define FASTMAIL_WEBDAV      "https://myfiles.fastmail.com"
+#define FASTMAIL_CALDAV      "https://caldav.fastmail.com/.well-known/caldav"
+#define FASTMAIL_CARDDAV     "https://carddav.fastmail.com/.well-known/carddav"
+#define FASTMAIL_CARDDAV_FMT "https://carddav.fastmail.com/dav/addressbooks/user/%s/Default"
+
 #define MAILBOX_ORG_HOSTNAME "dav.mailbox.org"
 #define MAILBOX_ORG_WEBDAV   "https://dav.mailbox.org/servlet/webdav.infostore"
 #define MAILBOX_ORG_CALDAV   "https://dav.mailbox.org/.well-known/caldav"
@@ -235,6 +240,95 @@ _soup_message_get_dav_features (SoupMessage  *message,
     }
 
   return ret;
+}
+
+static gboolean
+goa_dav_configuration_autoconfig_fastmail (GoaDavConfiguration *config,
+                                           SoupMessage         *message,
+                                           CheckData           *data)
+{
+  GUri *uri = NULL;
+  const char *host = NULL;
+  g_autofree char *username = NULL;
+  g_autofree char *domain = NULL;
+
+  g_assert (config != NULL);
+  g_assert (SOUP_IS_MESSAGE (message));
+  g_assert (data != NULL);
+
+  uri = soup_message_get_uri (message);
+  if (uri != NULL)
+    host = g_uri_get_host (uri);
+
+  if (!goa_utils_parse_email_address (data->username, &username, &domain))
+    {
+      g_warning ("%s(): invalid Fastmail username: %s", G_STRFUNC, data->username);
+      return FALSE;
+    }
+
+  /* We can infer the endpoints from the subdomain `*.fastmail.com`.
+   *
+   * FIXME: The generic WebDAV provider can not support multiple usernames or
+   * passwords, and we WILL have a scoped application password, so we have to
+   * choose the single appropriate service.
+   *
+   * In the case of WebDAV (Files) and CalDAV, the presentation identity is
+   * altered to include the subdomain to avoid false positives when checking
+   * for duplicate accounts.
+   *
+   * https://www.fastmail.help/hc/en-us/articles/1500000278342-Server-names-and-ports
+   * https://www.fastmail.help/hc/en-us/articles/1500000277882-Remote-file-access
+   * https://www.fastmail.help/hc/en-us/articles/360058752854-App-passwords
+   */
+  if (g_strcmp0 (host, "webdav.fastmail.com") == 0
+      || g_strcmp0 (host, "myfiles.fastmail.com") == 0)
+    {
+      g_debug ("%s(): Fastmail WebDAV account: %s", G_STRFUNC, data->username);
+      config->identity = g_strdup_printf ("%s@%s", username, host);
+      g_set_str (&config->webdav_uri, FASTMAIL_WEBDAV);
+      config->features = GOA_PROVIDER_FEATURE_FILES;
+
+      return TRUE;
+    }
+
+  if (g_strcmp0 (host, "caldav.fastmail.com") == 0)
+    {
+      g_debug ("%s(): Fastmail CalDAV account: %s", G_STRFUNC, data->username);
+      config->identity = g_strdup_printf ("%s@%s", username, host);
+      g_set_str (&config->caldav_uri, FASTMAIL_CALDAV);
+      config->features = GOA_PROVIDER_FEATURE_CALENDAR;
+
+      return TRUE;
+    }
+
+  if (g_strcmp0 (host, "carddav.fastmail.com") == 0)
+    {
+      /* If we're passed details for the "Default or "Shared" addressbook, we
+       * rely on the user having passed the full, correct URI and username.
+       */
+      if (g_str_has_suffix (username, "+Default")
+          || g_str_has_suffix (username, "+Shared"))
+        {
+          g_debug ("%s(): Fastmail CardDAV account: %s", G_STRFUNC, data->username);
+          config->identity = g_strdup_printf ("%s@%s", username, domain);
+          config->carddav_uri = g_uri_to_string (uri);
+          config->features = GOA_PROVIDER_FEATURE_CONTACTS;
+
+          return TRUE;
+        }
+
+      /* Otherwise, we can infer the details for the "Default" addressbook
+       */
+      g_debug ("%s(): Fastmail CardDAV account: %s", G_STRFUNC, data->username);
+      config->identity = g_strdup_printf ("%s+Default@%s", username, domain);
+      config->username = g_strdup_printf ("%s+Default@%s", username, domain);
+      config->carddav_uri = g_strdup_printf (FASTMAIL_CARDDAV_FMT, data->username);
+      config->features = GOA_PROVIDER_FEATURE_CONTACTS;
+
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static gboolean
@@ -638,6 +732,14 @@ dav_client_discover_response_cb (SoupSession  *session,
 
     default:
       goa_utils_set_error_soup (&data->error, msg);
+      goto out;
+    }
+
+  /* Short path for fastmail.com
+   */
+  if (goa_dav_configuration_autoconfig_fastmail (discover->config, msg, data))
+    {
+      g_queue_clear_full (&discover->uris, g_free);
       goto out;
     }
 
