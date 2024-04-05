@@ -569,6 +569,18 @@ add_account_credentials (GTask *task)
         : data->config->carddav_uri;
     }
 
+  /* HACK: The username may be amended during discovery for providers that use
+   * distinct logins with a scoped app password.
+   */
+  if (data->config->username != NULL)
+    username = data->config->username;
+
+  /* HACK: The identity may be adjusted during discovery to avoid false
+   * positives when checking for duplicate accounts.
+   */
+  if (data->config->identity != NULL)
+    g_set_str (&data->presentation_identity, data->config->identity);
+
   g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (password));
 
