@@ -315,9 +315,8 @@ typedef struct
   GoaClient *client;
   GoaObject *object;
 
-  GtkWidget *issuer_combobox;
   GtkWidget *client_id_entry;
-  GtkWidget *custom_issuer_entry;
+  GtkWidget *tenant_id_entry;
 } AccountData;
 
 static void
@@ -358,28 +357,16 @@ create_account_details_ui (GoaProvider *provider,
       GtkWidget *group;
       GtkWidget *button;
 
-      /* NOTE: In case further types needs to be added, ensure that the
-       * code in add_account_action_cb is also adjusted.
-       */
-      static const char * const types[] = {\
-        /* Translators: Microsoft account issuer type */
-        N_("Common"),
-        /* Translators: Microsoft account issuer type */
-        N_("Custom"),
-        NULL
-      };
-
       goa_provider_dialog_add_page (dialog,
                                     NULL, // provider name
-                                    _("Connect to a Microsoft 365 provider to access calendars, contacts and files"));
+                                    _("Connect to a Microsoft 365 provider to access files"));
 
-      group = goa_provider_dialog_add_group (dialog, NULL);
+      group = goa_provider_dialog_add_group (dialog, _("Authorization Details"));
+      adw_preferences_group_set_description (ADW_PREFERENCES_GROUP (group), _("A custom Client or Tenant ID may need to be provided depending on the settings for your organization."));
+
       data->client_id_entry = goa_provider_dialog_add_entry (dialog, group, _("_Client ID"));
-
-      group = goa_provider_dialog_add_group (dialog, _("Advanced"));
-      data->issuer_combobox = goa_provider_dialog_add_combo (dialog, group, _("_Issuer"), (GStrv) types);
-      data->custom_issuer_entry = goa_provider_dialog_add_entry (dialog, group, _("C_ustom Issuer"));
-      goa_provider_dialog_add_description (dialog, data->custom_issuer_entry, _("Example provider: example.com"));
+      data->tenant_id_entry = goa_provider_dialog_add_entry (dialog, group, _("_Tenant ID"));
+      goa_provider_dialog_add_description (dialog, data->tenant_id_entry, _("Example ID: 00000000-0000-0000-0000-000000000000"));
 
       button = gtk_window_get_default_widget (GTK_WINDOW (dialog));
       gtk_button_set_label (GTK_BUTTON (button), _("_Sign in…"));
@@ -421,6 +408,7 @@ add_account_action_cb (GoaProviderDialog *dialog,
   const char *client_id;
   g_autofree char *issuer = NULL;
   g_autoptr(GError) error = NULL;
+  const char *tenant;
   char *tmp;
 
   if (goa_provider_dialog_get_state (data->dialog) != GOA_DIALOG_BUSY)
@@ -434,14 +422,8 @@ add_account_action_cb (GoaProviderDialog *dialog,
   g_clear_pointer (&self->authorization_uri, g_free);
   g_clear_pointer (&self->token_uri, g_free);
 
-  if (adw_combo_row_get_selected (ADW_COMBO_ROW (data->issuer_combobox)) == 0)
-    {
-      issuer = g_strdup ("common");
-    }
-  else
-    {
-      issuer = g_strdup (gtk_editable_get_text (GTK_EDITABLE (data->custom_issuer_entry)));
-    }
+  tenant = gtk_editable_get_text (GTK_EDITABLE (data->tenant_id_entry));
+  issuer = strlen (tenant) == 0 ? g_strdup ("common") : g_strdup (tenant);
 
   tmp = g_uri_escape_string (issuer, NULL, TRUE);
   self->authorization_uri = g_strdup_printf ("https://login.microsoftonline.com/%s/oauth2/v2.0/authorize", tmp);
