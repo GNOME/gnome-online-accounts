@@ -550,23 +550,47 @@ add_account_credentials (GTask *task)
   GCancellable *cancellable = g_task_get_cancellable (task);
   GVariantBuilder credentials;
   GVariantBuilder details;
+  const char *server;
   const char *password;
   const char *username;
 
   /* Account is confirmed */
   username = gtk_editable_get_text (GTK_EDITABLE (data->username));
   password = gtk_editable_get_text (GTK_EDITABLE (data->password));
+  server = data->config->webdav_uri;
+
+  /* HACK: Account for providers without file access by leaving the feature
+   * disabled and swapping in an available URI for re-authentication.
+   */
+  if (server == NULL || *server == '\0')
+    {
+      server = data->config->caldav_uri
+        ? data->config->caldav_uri
+        : data->config->carddav_uri;
+    }
+
+  /* HACK: The username may be amended during discovery for providers that use
+   * distinct logins with a scoped app password.
+   */
+  if (data->config->username != NULL)
+    username = data->config->username;
+
+  /* HACK: The identity may be adjusted during discovery to avoid false
+   * positives when checking for duplicate accounts.
+   */
+  if (data->config->identity != NULL)
+    g_set_str (&data->presentation_identity, data->config->identity);
 
   g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (password));
 
   g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
-  g_variant_builder_add (&details, "{ss}", "Uri", data->config->webdav_uri);
+  g_variant_builder_add (&details, "{ss}", "Uri", server);
   g_variant_builder_add (&details, "{ss}", "CalendarEnabled", data->config->caldav_uri ? "true" : "false");
   g_variant_builder_add (&details, "{ss}", "CalDavUri", data->config->caldav_uri ? data->config->caldav_uri : "");
   g_variant_builder_add (&details, "{ss}", "ContactsEnabled", data->config->carddav_uri ? "true" : "false");
   g_variant_builder_add (&details, "{ss}", "CardDavUri", data->config->carddav_uri ? data->config->carddav_uri : "");
-  g_variant_builder_add (&details, "{ss}", "FilesEnabled", "true");
+  g_variant_builder_add (&details, "{ss}", "FilesEnabled", data->config->webdav_uri ? "true" : "false");
   g_variant_builder_add (&details, "{ss}", "AcceptSslErrors", (data->accept_ssl_errors) ? "true" : "false");
 
   goa_manager_call_add_account (goa_client_get_manager (data->client),

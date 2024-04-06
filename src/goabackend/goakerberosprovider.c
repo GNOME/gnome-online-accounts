@@ -1272,7 +1272,7 @@ goa_kerberos_provider_get_ticket_sync (GoaKerberosProvider  *self,
   const char *identifier = NULL;
   const char *password = NULL;
   const char *preauth_source = NULL;
-  gboolean has_password;
+  gboolean has_password = FALSE;
   g_autofree char *object_path = NULL;
   g_autoptr(GError) lookup_error = NULL;
   GError *sign_in_error = NULL;
@@ -1322,7 +1322,9 @@ goa_kerberos_provider_get_ticket_sync (GoaKerberosProvider  *self,
       return FALSE;
     }
 
-  has_password = g_variant_lookup (credentials, "password", "&s", &password);
+  if (credentials != NULL)
+    has_password = g_variant_lookup (credentials, "password", "&s", &password);
+
   if (!has_password && !is_interactive)
     {
       g_set_error (error,
