@@ -15,9 +15,9 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-02-24 20:57+0000\n"
-"PO-Revision-Date: 2024-02-25 00:25+0300\n"
-"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
+"POT-Creation-Date: 2024-04-05 19:09+0000\n"
+"PO-Revision-Date: 2024-04-09 02:29+0300\n"
+"Last-Translator: Sabri Ünal <yakushabb@gmail.com>\n"
 "Language-Team: Turkish <takim@gnome.org.tr>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -39,19 +39,23 @@ msgstr ""
 "(öntanımlı: 'all' [tümü]). Bu yalnızca başlangıçta değerlendirilir."
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1141 src/daemon/goadaemon.c:1458
+#: src/daemon/goadaemon.c:1142 src/daemon/goadaemon.c:1459
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "%s için sağlayıcı bulunamadı"
 
-#: src/daemon/goadaemon.c:1401
+#: src/daemon/goadaemon.c:1402
 msgid "IsLocked property is set for account"
 msgstr "Hesap için IsLocked özelliği ayarlanmış"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1446
+#: src/daemon/goadaemon.c:1447
 msgid "ProviderType property is not set for account"
 msgstr "Hesap için ProviderType belirtilmemiş"
+
+#: src/goabackend/goadavclient.c:723
+msgid "Cannot find WebDAV endpoint"
+msgstr "WebDAV uç noktası bulunamadı"
 
 #. TODO: more specific
 #: src/goabackend/goaewsclient.c:284
@@ -149,9 +153,9 @@ msgstr "Kuruluşunuza özel kısıtlı web ve ağ kaynaklarına erişin"
 msgid "Google"
 msgstr "Google"
 
-#: src/goabackend/goagoogleprovider.c:207
-#: src/goabackend/goamsgraphprovider.c:181
-#: src/goabackend/goawindowsliveprovider.c:158
+#: src/goabackend/goagoogleprovider.c:213
+#: src/goabackend/goamsgraphprovider.c:162
+#: src/goabackend/goawindowsliveprovider.c:165
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
@@ -160,18 +164,18 @@ msgstr ""
 "alındı"
 
 #. TODO: more specific
-#: src/goabackend/goagoogleprovider.c:226
-#: src/goabackend/goagoogleprovider.c:237
-#: src/goabackend/goamsgraphprovider.c:200
-#: src/goabackend/goamsgraphprovider.c:211
-#: src/goabackend/goamsgraphprovider.c:222
-#: src/goabackend/goaoauth2provider.c:616
-#: src/goabackend/goaoauth2provider.c:646
-#: src/goabackend/goaoauth2provider.c:657 src/goabackend/goautils.c:133
-#: src/goabackend/goawindowsliveprovider.c:177
-#: src/goabackend/goawindowsliveprovider.c:188
-#: src/goabackend/goawindowsliveprovider.c:197
-#: src/goabackend/goawindowsliveprovider.c:210
+#: src/goabackend/goagoogleprovider.c:232
+#: src/goabackend/goagoogleprovider.c:243
+#: src/goabackend/goamsgraphprovider.c:181
+#: src/goabackend/goamsgraphprovider.c:192
+#: src/goabackend/goamsgraphprovider.c:203
+#: src/goabackend/goaoauth2provider.c:679
+#: src/goabackend/goaoauth2provider.c:709
+#: src/goabackend/goaoauth2provider.c:720 src/goabackend/goautils.c:133
+#: src/goabackend/goawindowsliveprovider.c:184
+#: src/goabackend/goawindowsliveprovider.c:195
+#: src/goabackend/goawindowsliveprovider.c:204
+#: src/goabackend/goawindowsliveprovider.c:217
 msgid "Could not parse response"
 msgstr "Yanıt ayrıştırılamadı"
 
@@ -226,7 +230,7 @@ msgid "SSL on a dedicated port"
 msgstr "Adanmış bir bağlantı noktası üzerinden SSL"
 
 #: src/goabackend/goaimapsmtpprovider.c:542
-#: src/goabackend/goaimapsmtpprovider.c:1225
+#: src/goabackend/goaimapsmtpprovider.c:1206
 msgid "Email"
 msgstr "E-posta"
 
@@ -277,15 +281,15 @@ msgstr "SMTP _Sunucu"
 msgid "Example server: smtp.example.com"
 msgstr "Örnek sunucu: smtp.ornek.com"
 
-#: src/goabackend/goaimapsmtpprovider.c:1216
+#: src/goabackend/goaimapsmtpprovider.c:1197
 msgid "Name"
 msgstr "Ad"
 
-#: src/goabackend/goaimapsmtpprovider.c:1242
+#: src/goabackend/goaimapsmtpprovider.c:1223
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1260
+#: src/goabackend/goaimapsmtpprovider.c:1241
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -319,7 +323,7 @@ msgid "Example principal: user@EXAMPLE.COM"
 msgstr "Örnek tanıtıcı kimlik: kullanici@ORNEK.COM"
 
 #: src/goabackend/goakerberosprovider.c:599
-#: src/goabackend/goamsgraphprovider.c:396
+#: src/goabackend/goamsgraphprovider.c:372
 msgid "_Sign in…"
 msgstr "Giriş _Yap…"
 
@@ -346,48 +350,36 @@ msgstr "Kimlik hizmeti geçersiz anahtar gönderdi"
 msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
-#. NOTE: In case further types needs to be added, ensure that the
-#. * code in add_account_action_cb is also adjusted.
-#.
-#. Translators: Microsoft account issuer type
-#: src/goabackend/goamsgraphprovider.c:377
-msgid "Common"
-msgstr "Genel"
-
-#. Translators: Microsoft account issuer type
-#: src/goabackend/goamsgraphprovider.c:379
-msgid "Custom"
-msgstr "Özel"
-
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:385
-msgid ""
-"Connect to a Microsoft 365 provider to access calendars, contacts and files"
-msgstr ""
-"Takvimlere, kişilere ve dosyalara erişmek için Microsoft 365 sağlayıcısına "
-"bağlan"
+#: src/goabackend/goamsgraphprovider.c:362
+msgid "Connect to a Microsoft 365 provider to access files"
+msgstr "Dosyalara erişmek için Microsoft 365 sağlayıcısına bağlan"
 
-#: src/goabackend/goamsgraphprovider.c:388
+#: src/goabackend/goamsgraphprovider.c:364
+msgid "Authorization Details"
+msgstr "Yetkilendirme Ayrıntıları"
+
+#: src/goabackend/goamsgraphprovider.c:365
+msgid ""
+"A custom Client or Tenant ID may need to be provided depending on the "
+"settings for your organization."
+msgstr ""
+"Kuruluşunuzun ayarlarına bağlı olarak özel bir İstemci ya da Kiracı Kimliği "
+"sağlanması gerekebilir."
+
+#: src/goabackend/goamsgraphprovider.c:367
 msgid "_Client ID"
 msgstr "İ_stemci Kimliği"
 
-#: src/goabackend/goamsgraphprovider.c:390
-msgid "Advanced"
-msgstr "Gelişmiş"
+#: src/goabackend/goamsgraphprovider.c:368
+msgid "_Tenant ID"
+msgstr "_Kiracı Kimliği"
 
-#: src/goabackend/goamsgraphprovider.c:391
-msgid "_Issuer"
-msgstr "İ_mzacı"
+#: src/goabackend/goamsgraphprovider.c:369
+msgid "Example ID: 00000000-0000-0000-0000-000000000000"
+msgstr "Örnek Kimlik: 00000000-0000-0000-0000-000000000000"
 
-#: src/goabackend/goamsgraphprovider.c:392
-msgid "C_ustom Issuer"
-msgstr "Özel İ_mzacı"
-
-#: src/goabackend/goamsgraphprovider.c:393
-msgid "Example provider: example.com"
-msgstr "Örnek sağlayıcı: ornek.com"
-
-#: src/goabackend/goaoauth2provider.c:592
+#: src/goabackend/goaoauth2provider.c:655
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -395,47 +387,47 @@ msgstr ""
 "Erişim jetonu istenirken durum kodu 200 bekleniyordu, ama durum kodu %d (%s) "
 "alındı"
 
-#: src/goabackend/goaoauth2provider.c:736
+#: src/goabackend/goaoauth2provider.c:799
 msgid "Authorization response: "
 msgstr "Yetkilendirme yanıtı: "
 
-#: src/goabackend/goaoauth2provider.c:799
+#: src/goabackend/goaoauth2provider.c:862
 #, c-format
 msgid "Authorization response: %s"
 msgstr "Yetkilendirme yanıtı: %s"
 
-#: src/goabackend/goaoauth2provider.c:807
+#: src/goabackend/goaoauth2provider.c:870
 msgid "Failed to authenticate"
 msgstr "Kimlik doğrulanamadı"
 
-#: src/goabackend/goaoauth2provider.c:843
+#: src/goabackend/goaoauth2provider.c:906
 msgid "Error getting an Access Token: "
 msgstr "Erişim Jetonu alırken hata oluştu: "
 
-#: src/goabackend/goaoauth2provider.c:859
+#: src/goabackend/goaoauth2provider.c:922
 msgid "Error getting identity: "
 msgstr "Kimlik alınırken hata oluştu: "
 
-#: src/goabackend/goaoauth2provider.c:880
+#: src/goabackend/goaoauth2provider.c:943
 #, c-format
 msgid "Sign in to %s with your browser"
 msgstr "Tarayıcınızla %s hesabınıza giriş yapın"
 
-#: src/goabackend/goaoauth2provider.c:882
+#: src/goabackend/goaoauth2provider.c:945
 #: src/goabackend/goaproviderdialog.c:689
 msgid "_Sign In…"
 msgstr "Giriş _Yap…"
 
-#: src/goabackend/goaoauth2provider.c:1215
+#: src/goabackend/goaoauth2provider.c:1292
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "%s olarak giriş yapılması istendi, ancak %s olarak giriş yapıldı"
 
-#: src/goabackend/goaoauth2provider.c:1402
+#: src/goabackend/goaoauth2provider.c:1479
 msgid "Credentials do not contain access_token"
 msgstr "Kimlik bilgileri içinde access_token bulunmuyor"
 
-#: src/goabackend/goaoauth2provider.c:1446
+#: src/goabackend/goaoauth2provider.c:1523
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Erişim jetonu yenilenemedi (%s, %d): "
@@ -692,15 +684,14 @@ msgstr "Takvim (CalDAV)"
 msgid "Contacts (CardDAV)"
 msgstr "Kişiler (CardDAV)"
 
-#: src/goabackend/goawebdavprovider.c:668
+#: src/goabackend/goawebdavprovider.c:680
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "Geçersiz URI: %s"
 
-# Çevirisiz halini veya kendi tercih ettikleri hali kullanalım.
 #: src/goabackend/goawindowsliveprovider.c:56
-msgid "Microsoft Personal"
-msgstr "Microsoft Bireysel"
+msgid "Microsoft"
+msgstr "Microsoft"
 
 #: src/goaidentity/goaidentityservice.c:564
 msgid "Initial secret key is invalid"
@@ -775,3 +766,25 @@ msgstr "Kimlik bulunamadı"
 #: src/goaidentity/goakerberosidentitymanager.c:937
 msgid "Could not create credential cache for identity"
 msgstr "Kimlik için kimlik bilgileri önbelleği oluşturulamadı"
+
+#~ msgid "Common"
+#~ msgstr "Genel"
+
+#~ msgid "Custom"
+#~ msgstr "Özel"
+
+#~ msgid "Advanced"
+#~ msgstr "Gelişmiş"
+
+#~ msgid "_Issuer"
+#~ msgstr "İ_mzacı"
+
+#~ msgid "C_ustom Issuer"
+#~ msgstr "Özel İ_mzacı"
+
+#~ msgid "Example provider: example.com"
+#~ msgstr "Örnek sağlayıcı: ornek.com"
+
+# Çevirisiz halini veya kendi tercih ettikleri hali kullanalım.
+#~ msgid "Microsoft Personal"
+#~ msgstr "Microsoft Bireysel"
