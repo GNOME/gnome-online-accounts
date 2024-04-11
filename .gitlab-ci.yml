@@ -1,6 +1,13 @@
 stages:
+  - review
   - build
   - analysis
+
+potfile_check:
+  image: fedora:latest
+  stage: review
+  script:
+    - ./.gitlab-ci/check-potfiles.sh
 
 build-meson:
   image: archlinux:latest
