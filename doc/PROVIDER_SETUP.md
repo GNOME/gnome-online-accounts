@@ -7,6 +7,25 @@ passwords for specific services.
 If you notice any incorrect or out-of-date information here, please don't
 hesitate to open a merge request or issue.
 
+## Google
+
+Google accounts are authorized using OAuth 2.0 with PKCE support. See the
+`GoaOAuth2Provider.get_scope()` method in [`goagoogleprovider.c`][google-source]
+for and up to date list of all OAuth scopes requested.
+
+[google-source]: https://gitlab.gnome.org/GNOME/gnome-online-accounts/blob/master/src/goabackend/goagoogleprovider.c
+
+#### Calendars
+
+Google accounts are authorized to see, edit, share, and permanently delete all
+the calendars you can access using Google Calendar. If you are experiencing
+troubles syncing some calendars, ensure they are enabled in
+[Sync Settings](https://calendar.google.com/calendar/u/0/syncselect).
+
+**References**
+- [Google Calendar Sync Settings](https://calendar.google.com/calendar/u/0/syncselect)
+- [Google Calendar API scopes](https://developers.google.com/calendar/api/auth)
+
 ## WebDAV
 
 ### Fastmail
