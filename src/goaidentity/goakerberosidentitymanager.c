@@ -201,6 +201,7 @@ static GSource *
 goa_kerberos_identity_manager_keyring_source_new (GError **error)
 {
   GSource *ret = NULL;
+  gint fds[2] = { -1, -1 };
 
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
@@ -208,7 +209,6 @@ goa_kerberos_identity_manager_keyring_source_new (GError **error)
   {
     g_autoptr (GInputStream) stream = NULL;
     gint error_code;
-    gint fds[2] = { -1, -1 };
 
     error_code = pipe2 (fds, O_NOTIFICATION_PIPE);
     if (error_code == -1)
@@ -271,6 +271,12 @@ goa_kerberos_identity_manager_keyring_source_new (GError **error)
 #endif
 
  out:
+  if (ret == NULL)
+    {
+      g_close (fds[0], NULL);
+      g_close (fds[1], NULL);
+    }
+
   return ret;
 }
 
