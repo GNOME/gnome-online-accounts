@@ -1,20 +1,42 @@
 Title: Services
 
-## Supported providers and services
+## Supported Providers and Services
 
 | Provider           | Mail | Calendar | Contacts | Maps | Photos | Files | Ticketing | Printers | Music |
 |--------------------|------|----------|----------|------|--------|-------|-----------|----------|-------|
-| Google             | yes  | yes      | yes      | no   | yes    | yes   | no        | yes      | no    |
-| Microsoft Personal | yes  | no       | no       | no   | no     | no    | no        | no       | no    |
-| Microsoft Exchange | yes  | yes      | yes      | no   | no     | no    | no        | no       | no    |
-| NextCloud          | no   | yes      | yes      | no   | no     | yes   | no        | no       | no    |
+| Google             | yes  | yes      | yes      | no   | no     | yes   | no        | no       | no    |
 | IMAP/SMTP          | yes  | no       | no       | no   | no     | no    | no        | no       | no    |
+| Microsoft          | yes  | no       | no       | no   | no     | no    | no        | no       | no    |
+| Microsoft 365      | no   | no       | no       | no   | no     | yes   | no        | no       | no    |
+| Microsoft Exchange | yes  | yes      | yes      | no   | no     | no    | no        | no       | no    |
+| WebDAV             | no   | yes      | yes      | no   | no     | yes   | no        | no       | no    |
+| NextCloud (WebDAV) | no   | yes      | yes      | no   | no     | yes   | no        | no       | no    |
 | Kerberos           | no   | no       | no       | no   | no     | no    | yes       | no       | no    |
-| Last.fm            | no   | no       | no       | no   | no     | no    | no        | no       | yes   |
+| Fedora (Kerberos)  | no   | no       | no       | no   | no     | no    | yes       | no       | no    |
 
-## API Keys
+## Provider Administration
 
-The list of API keys used in GNOME is available [on the wiki](https://wiki.gnome.org/Initiatives/OnlineServicesAPIKeys).
+GNOME maintains a number of accounts with associated API keys and credentials.
+Access to the accounts is usually administrated by the [GNOME Infrastructure]
+team, although some older accounts may be held by GNOME Foundation members.
+
+| Provider           | Contact                            | Added      | Removed    |
+|--------------------|------------------------------------|------------|------------|
+| Facebook           | [Debarshi Ray], [Xavier Claessens] | GNOME 3.4  | GNOME 43   |
+| Flickr             | [Debarshi Ray]                     | GNOME 3.8  | GNOME 43   |
+| Foursquare         | [Marcus Lundblad]                  | GNOME 3.16 | GNOME 43   |
+| Google             | [GNOME Infrastructure]             | GNOME 3.2  |            |
+| Last.fm            | [Felipe Borges]                    | GNOME 3.18 | GNOME 46   |
+| Microsoft          | [GNOME Infrastructure]             | GNOME 46   |            |
+| Microsoft (legacy) | [Debarshi Ray]                     | GNOME 3.4  | GNOME 46   |
+| Pocket             | [Bastien Nocera]                   | GNOME 3.12 | GNOME 3.36 |
+
+[GNOME Infrastructure]: https://gitlab.gnome.org/Infrastructure/Infrastructure
+[Debarshi Ray]: https://gitlab.gnome.org/debarshir
+[Xavier Claessens]: https://gitlab.gnome.org/xclaessens
+[Marcus Lundblad]: https://gitlab.gnome.org/mlundblad
+[Felipe Borges]: https://gitlab.gnome.org/felipeborges
+[Bastien Nocera]: https://gitlab.gnome.org/hadess
 
 ## Google
 
