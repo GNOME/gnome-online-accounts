@@ -1,4 +1,4 @@
-Title: Goals
+# Goals
 
 GNOME Online Accounts aims to provide a way for users to setup online accounts
 to be used by *the core system and applications*.
@@ -16,8 +16,7 @@ team first*.
 Accounts offered through GNOME Online Accounts should appeal to a wide range
 of users.
 
-Account policy
---------------
+## Account policy
 
 Online Accounts uses a predefined list of online accounts that users can setup.
 Accounts are included that conform to the following policy:
