@@ -3,7 +3,7 @@ project(
   version: '3.51.0',
   license: 'LGPL2+',
   default_options: 'buildtype=debugoptimized',
-  meson_version: '>= 0.57.0',
+  meson_version: '>= 0.63.0',
 )
 
 goa_name = 'goa'
