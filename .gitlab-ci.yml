@@ -9,22 +9,7 @@ potfile_check:
   script:
     - ./.gitlab-ci/check-potfiles.sh
 
-build-meson:
-  image: archlinux:latest
-  stage: build
-  before_script:
-    - pacman -Syu --noconfirm
-    - pacman -S --noconfirm
-      meson git gcc dbus gcr-4 gi-docgen glib2 gobject-introspection
-      gtk4 json-glib krb5 libadwaita libsecret
-      libsoup3 python-packaging vala
-  script:
-    - meson setup -Ddocumentation=true _build
-    - meson compile -C _build
-    - meson test -C _build
-    - meson install -C _build
-
-build-meson-nobackend:
+build:
   image: fedora:latest
   stage: build
   before_script:
@@ -34,6 +19,23 @@ build-meson-nobackend:
       gtk4-devel rest-devel vala
   script:
     - meson setup -Ddocumentation=false -Dgoabackend=false _build
+    - meson compile -C _build
+    - meson test -C _build
+    - meson install -C _build
+
+build-full:
+  image: fedora:latest
+  stage: build
+  before_script:
+    - dnf update -y
+    - dnf -y install
+      meson git gcc dbus-devel docbook-style-xsl gcr-devel gi-docgen glib2-devel
+      gobject-introspection-devel gtk4-devel json-glib-devel krb5-devel
+      libadwaita-devel libsecret-devel libsoup3-devel rest-devel vala
+  script:
+    - meson setup -Ddocumentation=true
+                  -Dfedora=true
+                  _build
     - meson compile -C _build
     - meson test -C _build
     - meson install -C _build
