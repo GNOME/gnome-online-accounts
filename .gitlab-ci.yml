@@ -2,6 +2,7 @@ stages:
   - review
   - build
   - analysis
+  - deploy
 
 potfile_check:
   image: fedora:latest
@@ -39,6 +40,9 @@ build-full:
     - meson compile -C _build
     - meson test -C _build
     - meson install -C _build
+  artifacts:
+    paths:
+    - _build/doc
 
 clang-analyzer:
   image: fedora:latest
@@ -90,4 +94,16 @@ gcc-analyzer:
                   _build
     - meson compile -C _build
   allow_failure: true
+
+pages:
+  stage: deploy
+  dependencies:
+  - build-full
+  script:
+  - mv _build/doc/gnome-online-accounts/Goa-1.0 public
+  artifacts:
+    paths:
+    - public
+  only:
+  - master
 
