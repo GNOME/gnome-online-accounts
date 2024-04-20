@@ -31,9 +31,11 @@
 
 static GMainLoop *loop = NULL;
 static gboolean opt_replace = FALSE;
+static gboolean opt_version = FALSE;
 static GOptionEntry opt_entries[] =
 {
   {"replace", 0, 0, G_OPTION_ARG_NONE, &opt_replace, "Replace existing daemon", NULL},
+  {"version", 0, 0, G_OPTION_ARG_NONE, &opt_version, "Print version", NULL},
   {NULL }
 };
 static GoaDaemon *the_daemon = NULL;
@@ -103,6 +105,12 @@ main (int    argc,
       g_critical ("Error parsing options: %s", error->message);
       g_error_free (error);
       goto out;
+    }
+
+  if (opt_version)
+    {
+      g_print ("goa-daemon %s\n", PACKAGE_VERSION);
+      return EXIT_SUCCESS;
     }
 
   g_message ("goa-daemon version %s starting", PACKAGE_VERSION);
