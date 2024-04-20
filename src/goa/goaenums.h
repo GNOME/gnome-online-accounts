@@ -36,7 +36,7 @@ G_BEGIN_DECLS
  * @GOA_ERROR_NOT_AUTHORIZED: Not authorized to perform operation.
  * @GOA_ERROR_SSL: Invalid SSL certificate.
  *
- * Error codes for the #GOA_ERROR error domain and the
+ * Error codes for the [type@Goa.Error] error domain and the
  * corresponding D-Bus error names.
  */
 typedef enum

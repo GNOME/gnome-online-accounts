@@ -25,19 +25,10 @@
 G_LOCK_DEFINE_STATIC (init_lock);
 
 /**
- * SECTION:goaclient
- * @title: GoaClient
- * @short_description: Object for accessing account information
- *
- * #GoaClient is used for accessing the GNOME Online Accounts service
- * from a client program.
- */
-
-/**
  * GoaClient:
  *
- * The #GoaClient structure contains only private data and should
- * only be accessed using the provided API.
+ * [class@Goa.Client] is used for accessing the GNOME Online Accounts service
+ * from a client program.
  */
 struct _GoaClient
 {
@@ -154,9 +145,9 @@ goa_client_class_init (GoaClientClass *klass)
   gobject_class->get_property = goa_client_get_property;
 
   /**
-   * GoaClient:object-manager:
+   * GoaClient:object-manager: (getter get_object_manager)
    *
-   * The #GDBusObjectManager used by the #GoaClient instance.
+   * The [iface@Gio.DBusObjectManager] used by the [class@Goa.Client] instance.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_OBJECT_MANAGER,
@@ -169,12 +160,11 @@ goa_client_class_init (GoaClientClass *klass)
 
   /**
    * GoaClient::account-added:
-   * @client: The #GoaClient object emitting the signal.
-   * @object: The #GoaObject for the added account.
+   * @client: The `GoaClient` object emitting the signal
+   * @object: The `GoaObject` for the added account
    *
-   * Emitted when @object has been added. See
-   * goa_client_get_accounts() for information about how to use this
-   * object.
+   * Emitted when @object has been added. See [method@Goa.Client.get_accounts]
+   * for information about how to use this object.
    */
   signals[ACCOUNT_ADDED_SIGNAL] =
     g_signal_new ("account-added",
@@ -190,8 +180,8 @@ goa_client_class_init (GoaClientClass *klass)
 
   /**
    * GoaClient::account-removed:
-   * @client: The #GoaClient object emitting the signal.
-   * @object: The #GoaObject for the removed account.
+   * @client: The `GoaClient` object emitting the signal
+   * @object: The `GoaObject` for the removed account
    *
    * Emitted when @object has been removed.
    */
@@ -209,8 +199,8 @@ goa_client_class_init (GoaClientClass *klass)
 
   /**
    * GoaClient::account-changed:
-   * @client: The #GoaClient object emitting the signal.
-   * @object: The #GoaObject for the account with changes.
+   * @client: The `GoaClient` object emitting the signal
+   * @object: The `GoaObject` for the account with changes
    *
    * Emitted when something on @object changes.
    */
@@ -229,15 +219,16 @@ goa_client_class_init (GoaClientClass *klass)
 }
 
 /**
- * goa_client_new:
- * @cancellable: A #GCancellable or %NULL.
- * @callback: Function that will be called when the result is ready.
- * @user_data: Data to pass to @callback.
+ * goa_client_new: (finish-func new_finish)
+ * @cancellable: (nullable): A `GCancellable`
+ * @callback: A callback to call when the operation is complete
+ * @user_data: Data to pass to @callback
  *
- * Asynchronously gets a #GoaClient. When the operation is
- * finished, @callback will be invoked in the <link
- * linkend="g-main-context-push-thread-default">thread-default main
- * loop</link> of the thread you are calling this method from.
+ * Asynchronously gets a [class@Goa.Client].
+ *
+ * This is a failable asynchronous constructor - when the client is ready,
+ * @callback will be invoked and you can use [ctor@Goa.Client.new_finish] to
+ * get the result.
  */
 void
 goa_client_new (GCancellable        *cancellable,
@@ -254,13 +245,12 @@ goa_client_new (GCancellable        *cancellable,
 
 /**
  * goa_client_new_finish:
- * @res: A #GAsyncResult.
- * @error: Return location for error or %NULL.
+ * @res: A `GAsyncResult`
+ * @error: (nullable): a `GError`
  *
- * Finishes an operation started with goa_client_new().
+ * Finishes an operation started with [func@Goa.Client.new].
  *
- * Returns: A #GoaClient or %NULL if @error is set. Free with
- * g_object_unref() when done with it.
+ * Returns: (transfer full): A `GoaClient`, or %NULL with @error set
  */
 GoaClient *
 goa_client_new_finish (GAsyncResult        *res,
@@ -279,13 +269,12 @@ goa_client_new_finish (GAsyncResult        *res,
 
 /**
  * goa_client_new_sync:
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @error: (allow-none): Return location for error or %NULL.
+ * @cancellable: (nullable): A `GCancellable`
+ * @error: (nullable): A `GError`
  *
- * Synchronously gets a #GoaClient for the local system.
+ * Synchronously gets a [class@Goa.Client].
  *
- * Returns: A #GoaClient or %NULL if @error is set. Free with
- * g_object_unref() when done with it.
+ * Returns: (transfer full): A `GoaClient`, or %NULL with @error set
  */
 GoaClient *
 goa_client_new_sync (GCancellable  *cancellable,
@@ -382,13 +371,12 @@ async_initable_iface_init (GAsyncInitableIface *async_initable_iface)
 }
 
 /**
- * goa_client_get_object_manager:
- * @self: A #GoaClient.
+ * goa_client_get_object_manager: (get-property object-manager)
+ * @self: A `GoaClient`
  *
- * Gets the #GDBusObjectManager used by @self.
+ * Gets the [iface@Gio.DBusObjectManager] used by @self.
  *
- * Returns: (transfer none): A #GDBusObjectManager. Do not free, the
- * instance is owned by @self.
+ * Returns: (transfer none): A `GDBusObjectManager`
  */
 GDBusObjectManager *
 goa_client_get_object_manager (GoaClient        *self)
@@ -399,12 +387,11 @@ goa_client_get_object_manager (GoaClient        *self)
 
 /**
  * goa_client_get_manager:
- * @self: A #GoaClient.
+ * @self: A `GoaClient`
  *
- * Gets the #GoaManager for @self, if any.
+ * Gets the [iface@Goa.Manager] for @self, if any.
  *
- * Returns: (nullable) (transfer none): A #GoaManager or %NULL. Do not
- * free, the returned object belongs to @self.
+ * Returns: (nullable) (transfer none): A `GoaManager` or %NULL
  */
 GoaManager *
 goa_client_get_manager (GoaClient *self)
@@ -425,17 +412,17 @@ goa_client_get_manager (GoaClient *self)
 
 /**
  * goa_client_get_accounts:
- * @self: A #GoaClient.
+ * @self: A `GoaClient`
  *
- * Gets all accounts that @self knows about. The result is a list of
- * #GoaObject instances where each object at least has an #GoaAccount
- * interface (that can be obtained via the goa_object_get_account()
- * method) but may also implement other interfaces such as
- * #GoaMail or #GoaFiles.
+ * Gets all accounts that @self knows about.
  *
- * Returns: (transfer full) (element-type GoaObject): A list of
- * #GoaObject instances that must be freed with g_list_free() after
- * each element has been freed with g_object_unref().
+ * The result is a list of [iface@Goa.Object] instances where each object at
+ * least has an [iface@Goa.Account] interface (that can be obtained via the
+ * [method@Goa.Object.get_account] method) but may also implement other
+ * interfaces such as [iface@Goa.Mail] or [iface@Goa.Files].
+ *
+ * Returns: (transfer full) (element-type Goa.Object): A list of `GoaObject`
+ *     instances
  */
 GList *
 goa_client_get_accounts (GoaClient *self)
@@ -461,16 +448,13 @@ goa_client_get_accounts (GoaClient *self)
 
 /**
  * goa_client_lookup_by_id:
- * @self: A #GoaClient.
- * @id: The ID to look for.
+ * @self: A `GoaClient`
+ * @id: The ID to look for
  *
- * Finds and returns the #GoaObject instance whose
- * <link
- * linkend="gdbus-property-org-gnome-OnlineAccounts-Account.Id">"Id"</link>
- * D-Bus property matches @id.
+ * Finds and returns the [iface@Goa.Object] instance whose
+ * [property@Goa.Account:id] D-Bus property matches @id.
  *
- * Returns: (transfer full): A #GoaObject. Free the returned
- * object with g_object_unref().
+ * Returns: (transfer full): A `GoaObject`
  *
  * Since: 3.6
  */
