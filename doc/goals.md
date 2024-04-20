@@ -1,4 +1,4 @@
-# Goals
+Title: Goals
 
 GNOME Online Accounts aims to provide a way for users to setup online accounts
 to be used by *the core system and applications*.

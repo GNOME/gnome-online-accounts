@@ -249,9 +249,9 @@ top_inc = include_directories('.')
 subdir('data')
 subdir('src')
 
-enable_gtk_doc = get_option('gtk_doc')
+enable_documentation = get_option('documentation')
 enable_man = get_option('man')
-if enable_goabackend and (enable_gtk_doc or enable_man)
+if enable_goabackend and (enable_documentation or enable_man)
   subdir('doc')
 endif
 
@@ -276,7 +276,7 @@ summary({
     'Introspection': enable_introspection,
     'Template tile': template_file,
     'Vala support': enable_vapi,
-    'API docs': enable_gtk_doc,
+    'API docs': enable_documentation,
     'Man pages': enable_man,
   },
   bool_yn: true,
