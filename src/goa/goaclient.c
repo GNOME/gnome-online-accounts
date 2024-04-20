@@ -422,7 +422,7 @@ goa_client_get_manager (GoaClient *self)
  * interfaces such as [iface@Goa.Mail] or [iface@Goa.Files].
  *
  * Returns: (transfer full) (element-type Goa.Object): A list of `GoaObject`
- *     instances
+ *   instances
  */
 GList *
 goa_client_get_accounts (GoaClient *self)
@@ -454,7 +454,7 @@ goa_client_get_accounts (GoaClient *self)
  * Finds and returns the [iface@Goa.Object] instance whose
  * [property@Goa.Account:id] D-Bus property matches @id.
  *
- * Returns: (transfer full): A `GoaObject`
+ * Returns: (transfer full): the object for the given id
  *
  * Since: 3.6
  */

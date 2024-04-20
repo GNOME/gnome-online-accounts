@@ -71,7 +71,7 @@
  * See [func@Goa.check_version] for a runtime check.
  *
  * Returns: %TRUE if the version of the GOA header files is the same as or
- *     newer than the passed-in version.
+ *   newer than the passed-in version.
  *
  * Since: 3.8
  */

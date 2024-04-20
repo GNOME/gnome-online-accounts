@@ -30,7 +30,9 @@ G_BEGIN_DECLS
 /**
  * GOA_ERROR:
  *
- * Error domain for Goa. Errors in this domain will be from the [type@Goa.Error]
+ * Error domain for Goa.
+ * 
+ * Errors in this domain will be from the [type@Goa.Error]
  * enumeration. See [struct@GLib.Error] for more information on error domains.
  */
 #define GOA_ERROR (goa_error_quark ())
