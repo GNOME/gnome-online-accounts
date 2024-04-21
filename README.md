@@ -10,3 +10,19 @@ e-mail in Evolution, online storages are exposed as GVolumes, and so on.
 
 For more information on the goals of the GNOME Online Accounts project, please
 see the [goals documentation](./doc/goals.md).
+
+## Documentation
+
+* [Developer Documentation](https://gnome.pages.gitlab.gnome.org/gnome-online-accounts/)
+
+  The API documentation is intended for GNOME Core applications that need
+  access to account credentials and login information.
+* [User Documentation](https://help.gnome.org/users/gnome-help/stable/accounts.html)
+
+  The user documentation provides basic guidance for adding, removing and
+  configuring account with [GNOME Settings](https://apps.gnome.org/Settings/).
+* [Provider Setup](doc/PROVIDER_SETUP.md)
+
+  This documentation provides extra instruction and helpful links for accounts
+  that may need some setup to be performed by the user, such as app passwords.
+
