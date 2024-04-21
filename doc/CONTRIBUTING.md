@@ -51,6 +51,17 @@ being fixed by the change.
 
 These changes will be reviewed for correctness, and then merged once this is complete.
 
+## Service Providers
+
+The [Project Goals](goals.md) details the criteria for new service providers being added.
+
+As a part of your merge request, you must document the Terms of Service and any restrictions
+or Rate Limits in [`PROVIDER_POLICIES.md`](PROVIDER_POLICIES.md). Any and all API keys, client IDs
+and account credentials must be setup in coordination with the [Infrastructure Team], who will
+administrate access to the account.
+
+[Infrastructure Team]: https://gitlab.gnome.org/Infrastructure/Infrastructure
+
 ## User Experience Changes
 
 Changes that impact the user experience require approval from the
