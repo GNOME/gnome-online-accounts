@@ -14,6 +14,7 @@ When the change is ready, submit a merge request.
 
 The following guidelines will help your change be successfully merged:
 
+ * Read the [Project Goals](goals.md) before adding or requesting new service providers.
  * Keep the change as small as possible. If you can split it into multiple merge requests please do
    so.
  * Use multiple commits. This makes is easier to review and helps to diagnose bugs in the future.
