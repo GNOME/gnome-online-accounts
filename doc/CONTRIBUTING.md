@@ -14,6 +14,7 @@ When the change is ready, submit a merge request.
 
 The following guidelines will help your change be successfully merged:
 
+ * Read the [Project Goals](goals.md) before adding or requesting new service providers.
  * Keep the change as small as possible. If you can split it into multiple merge requests please do
    so.
  * Use multiple commits. This makes is easier to review and helps to diagnose bugs in the future.
@@ -49,6 +50,17 @@ Please include clear information in the commit message(s) and merge request that
 being fixed by the change.
 
 These changes will be reviewed for correctness, and then merged once this is complete.
+
+## Service Providers
+
+The [Project Goals](goals.md) details the criteria for new service providers being added.
+
+As a part of your merge request, you must document the Terms of Service and any restrictions
+or Rate Limits in [`PROVIDER_POLICIES.md`](PROVIDER_POLICIES.md). Any and all API keys, client IDs
+and account credentials must be setup in coordination with the [Infrastructure Team], who will
+administrate access to the account.
+
+[Infrastructure Team]: https://gitlab.gnome.org/Infrastructure/Infrastructure
 
 ## User Experience Changes
 

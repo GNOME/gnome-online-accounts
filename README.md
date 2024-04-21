@@ -13,7 +13,10 @@ see the [goals documentation](./doc/goals.md).
 
 ## Documentation
 
-* [Developer Documentation](https://gnome.pages.gitlab.gnome.org/gnome-online-accounts/)
+General documentation and debugging tips can be found in the [Project Wiki],
+including extra instructions for [Account Setup] required by some providers.
+
+* [API Documentation](https://gnome.pages.gitlab.gnome.org/gnome-online-accounts/)
 
   The API documentation is intended for GNOME Core applications that need
   access to account credentials and login information.
@@ -21,8 +24,7 @@ see the [goals documentation](./doc/goals.md).
 
   The user documentation provides basic guidance for adding, removing and
   configuring account with [GNOME Settings](https://apps.gnome.org/Settings/).
-* [Provider Setup](doc/PROVIDER_SETUP.md)
 
-  This documentation provides extra instruction and helpful links for accounts
-  that may need some setup to be performed by the user, such as app passwords.
+[Project Wiki]: https://gitlab.gnome.org/GNOME/gnome-online-accounts/-/wikis
+[Account Setup]: https://gitlab.gnome.org/GNOME/gnome-online-accounts/-/wikis/Account-Setup
 
