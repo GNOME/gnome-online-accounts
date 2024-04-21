@@ -20,16 +20,6 @@
 #include "goaversion.h"
 
 /**
- * SECTION:goaversion
- * @Title: Version Information
- * @Short_description: variables and functions to check the GOA version
- *
- * GOA provides version information, primarily useful in configure
- * checks for builds that have a configure script. Applications will
- * not typically use the features described here.
- */
-
-/**
  * GOA_MAJOR_VERSION:
  *
  * The major version number of the GOA daemon and library.
@@ -71,21 +61,17 @@
  * @minor: the minor version to check for
  * @micro: the micro version to check for
  *
- * Checks the version of the GOA library that is being compiled
- * against.
+ * Checks the version of the GOA library that is being compiled against.
  *
- * <example>
- * <title>Checking the version of the GOA library</title>
- * <programlisting>
- *   if (!GOA_CHECK_VERSION (3, 8, 0))
- *     g_error ("GOA version 3.8.0 or above is needed");
- * </programlisting>
- * </example>
+ * ```c
+ * if (!GOA_CHECK_VERSION (3, 8, 0))
+ *   g_error ("GOA version 3.8.0 or above is needed");
+ * ```
  *
- * See goa_check_version() for a runtime check.
+ * See [func@Goa.check_version] for a runtime check.
  *
- * Returns: %TRUE if the version of the GOA header files
- * is the same as or newer than the passed-in version.
+ * Returns: %TRUE if the version of the GOA header files is the same as or
+ *   newer than the passed-in version.
  *
  * Since: 3.8
  */
@@ -100,25 +86,22 @@ const guint goa_micro_version = GOA_MICRO_VERSION;
  * @required_minor: the required minor version.
  * @required_micro: the required micro version.
  *
- * Checks that the GOA library in use is compatible with the
- * given version. Generally you would pass in the constants
- * #GOA_MAJOR_VERSION, #GOA_MINOR_VERSION, #GOA_MICRO_VERSION
- * as the three arguments to this function; that produces
- * a check that the library in use is compatible with
- * the version of GOA the application or module was compiled
- * against.
+ * Checks that the GOA library in use is compatible with the given version.
  *
- * Compatibility is defined by two things: first the version
- * of the running library is newer than the version
- * @required_major.@required_minor.@required_micro. Second
- * the running library must be binary compatible with the
- * version @required_major.@required_minor.@required_micro
- * (same major and minor version).
+ * Generally you would pass in the constants [const@Goa.MAJOR_VERSION],
+ * [const@Goa.MINOR_VERSION], [const@Goa.MICRO_VERSION] as three arguments to
+ * this function; that produces a check that the library in use is compatible
+ * with the version of GOA the application or module was compiled against.
  *
- * Return value: %NULL if the GOA library is compatible with the
+ * Compatibility is defined by two things: first the version of the running
+ * library is newer than the version
+ * @required_major.@required_minor.@required_micro. Second the running library
+ * must be binary compatible with the version
+ * @required_major.@required_minor.@required_micro (same major and minor
+ * version).
+ *
+ * Returns: (transfer none): %NULL if the GOA library is compatible with the
  *   given version, or a string describing the version mismatch.
- *   The returned string is owned by GOA and must not be modified
- *   or freed.
  *
  * Since: 3.8
  */

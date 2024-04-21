@@ -23,14 +23,6 @@
 #include "goaenums.h"
 #include "goaerror.h"
 
-/**
- * SECTION:goaerror
- * @title: GoaError
- * @short_description: Error codes
- *
- * Error codes and D-Bus errors.
- */
-
 static const GDBusErrorEntry dbus_error_entries[] =
 {
   {GOA_ERROR_FAILED,                       "org.freedesktop.Goa.Error.Failed"},
@@ -41,6 +33,13 @@ static const GDBusErrorEntry dbus_error_entries[] =
   {GOA_ERROR_SSL,                          "org.gnome.OnlineAccounts.Error.SSL"}
 };
 
+/**
+ * goa_error_quark:
+ *
+ * Registers an error quark for `Goa` errors and a domain for D-Bus errors
+ *
+ * Returns: The error quark used for `Goa` errors.
+ **/
 GQuark
 goa_error_quark (void)
 {

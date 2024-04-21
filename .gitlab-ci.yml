@@ -15,11 +15,11 @@ build-meson:
   before_script:
     - pacman -Syu --noconfirm
     - pacman -S --noconfirm
-      meson git gcc dbus gcr-4 glib2 gobject-introspection
-      gtk-doc gtk4 json-glib krb5 libadwaita libsecret
+      meson git gcc dbus gcr-4 gi-docgen glib2 gobject-introspection
+      gtk4 json-glib krb5 libadwaita libsecret
       libsoup3 python-packaging vala
   script:
-    - meson setup -Dgtk_doc=true _build
+    - meson setup -Ddocumentation=true _build
     - meson compile -C _build
     - meson test -C _build
     - meson install -C _build
@@ -33,7 +33,7 @@ build-meson-nobackend:
       meson gcc dbus-devel glib2-devel gobject-introspection-devel
       gtk4-devel rest-devel vala
   script:
-    - meson setup -Dgtk_doc=false -Dgoabackend=false _build
+    - meson setup -Ddocumentation=false -Dgoabackend=false _build
     - meson compile -C _build
     - meson test -C _build
     - meson install -C _build
@@ -53,7 +53,7 @@ clang-analyzer:
   script:
     - meson setup --buildtype=debug
                   -Dfedora=true
-                  -Dgtk_doc=false
+                  -Ddocumentation=false
                   -Dman=false
                   -Dwerror=true
                   _scan_build
@@ -82,7 +82,7 @@ gcc-analyzer:
   script:
     - meson setup --buildtype=debug
                   -Dfedora=true
-                  -Dgtk_doc=false
+                  -Ddocumentation=false
                   -Dman=false
                   -Dwerror=true
                   _build

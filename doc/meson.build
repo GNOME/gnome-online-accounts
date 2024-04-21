@@ -1,61 +1,74 @@
-if enable_gtk_doc
-  version_conf = configuration_data()
-  version_conf.set('VERSION', goa_version)
-
-  version_xml = 'version.xml'
-
-  configure_file(
-    input: version_xml + '.in',
-    output: version_xml,
-    configuration: version_conf
+if get_option('documentation') and get_option('introspection')
+  gdbus_codegen = find_program('gdbus-codegen')
+  dbus_md = custom_target('dbus-md',
+    input: dbus_ifaces,
+    output: [
+      'dbus-org.gnome.OnlineAccounts.Account.md',
+      'dbus-org.gnome.OnlineAccounts.OAuthBased.md',
+      'dbus-org.gnome.OnlineAccounts.OAuth2Based.md',
+      'dbus-org.gnome.OnlineAccounts.PasswordBased.md',
+      'dbus-org.gnome.OnlineAccounts.Manager.md',
+      'dbus-org.gnome.OnlineAccounts.Mail.md',
+      'dbus-org.gnome.OnlineAccounts.Calendar.md',
+      'dbus-org.gnome.OnlineAccounts.Contacts.md',
+      'dbus-org.gnome.OnlineAccounts.Chat.md',
+      'dbus-org.gnome.OnlineAccounts.Documents.md',
+      'dbus-org.gnome.OnlineAccounts.Maps.md',
+      'dbus-org.gnome.OnlineAccounts.Music.md',
+      'dbus-org.gnome.OnlineAccounts.Photos.md',
+      'dbus-org.gnome.OnlineAccounts.Files.md',
+      'dbus-org.gnome.OnlineAccounts.Exchange.md',
+      'dbus-org.gnome.OnlineAccounts.MediaServer.md',
+      'dbus-org.gnome.OnlineAccounts.Ticketing.md',
+      'dbus-org.gnome.OnlineAccounts.Todo.md',
+      'dbus-org.gnome.OnlineAccounts.ReadLater.md',
+      'dbus-org.gnome.OnlineAccounts.Printers.md',
+    ],
+    command: [
+      gdbus_codegen,
+      '--generate-md', 'dbus',
+      '--output-directory', '@OUTDIR@',
+      '@INPUT@',
+    ],
+    build_by_default: true,
   )
 
-  ignored_headers = [
-    # srcdir/goabackend
-    'gconstructor.h',
-    'goabackendenums-priv.h',
-    'goadlnaservermanager.h',
-    'goaewsclient.h',
-    'goaexchangeprovider.h',
-    'goafedoraprovider.h',
-    'goagoogleprovider.h',
-    'goahttpclient.h',
-    'goaimapauthlogin.h',
-    'goaimapsmtpprovider.h',
-    'goakerberosprovider.h',
-    'goamailauth.h',
-    'goamailclient.h',
-    'goaoauth2provider-priv.h',
-    'goaoauth2provider-web-extension.h',
-    'goaoauth2provider-web-view.h',
-    'goaoauth2provider.h',
-    'goaobjectskeletonutils.h',
-    'goaowncloudprovider.h',
-    'goaprovider-priv.h',
-    'goarestproxy.h',
-    'goasmtpauth.h',
-    'goasouplogger.h',
-    'goautils.h',
-    'goawebextension.h',
-    'goawindowsliveprovider.h',
-  ]
+  gidocgen = find_program('gi-docgen', required: true)
+  goa_include_dir = join_paths(meson.project_build_root(), 'goa')
+  goa_docdir = join_paths(goa_datadir, 'doc')
 
-  expand_content_files = files(
-    'goa-daemon.xml',
-    'goa-overview.xml'
+  toml_conf = configuration_data()
+  toml_conf.set('version', meson.project_version())
+  goa_toml = configure_file(
+            input: 'goa.toml.in',
+           output: 'goa.toml',
+    configuration: toml_conf
   )
 
-  gnome.gtkdoc(
-    goa_name,
-    main_xml: goa_name + '-docs.xml',
-    src_dir: [goa_inc, goabackend_inc],
-    ignore_headers: ignored_headers,
-    dependencies: libgoa_backend_dep,
-    mkdb_args: '--name-space=' + goa_name,
-    fixxref_args: '--html-dir=' + join_paths(goa_prefix, gnome.gtkdoc_html_dir(goa_name)),
-    gobject_typesfile: files(goa_name + '.types'),
-    expand_content_files: expand_content_files,
+  custom_target('goa-doc',
+    input: [goa_toml, libgoa_gir[0]],
+    output: meson.project_name(),
+    command: [
+      gidocgen,
+      'generate',
+      '--quiet',
+      '--fatal-warnings',
+      '--add-include-path=@0@'.format(goa_include_dir),
+      '--config=@INPUT0@',
+      '--output-dir=@OUTPUT@',
+      '--content-dir=@0@'.format(meson.current_build_dir()),
+      '--content-dir=@0@'.format(meson.current_source_dir()),
+      '@INPUT1@',
+    ],
+    depends: [libgoa_gir[0], dbus_md],
+    depend_files: [
+      'overview.md',
+      'services.md',
+      'goals.md',
+    ],
+    build_by_default: true,
     install: true,
+    install_dir: goa_docdir,
   )
 endif
 
