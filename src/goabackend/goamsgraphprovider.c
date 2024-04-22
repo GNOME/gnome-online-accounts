@@ -362,9 +362,11 @@ create_account_details_ui (GoaProvider *provider,
                                     _("Connect to a Microsoft 365 provider to access files"));
 
       group = goa_provider_dialog_add_group (dialog, _("Authorization Details"));
+      /* Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology */
       adw_preferences_group_set_description (ADW_PREFERENCES_GROUP (group), _("A custom Client or Tenant ID may need to be provided depending on the settings for your organization"));
 
       data->client_id_entry = goa_provider_dialog_add_entry (dialog, group, _("_Client ID"));
+      /* Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology */
       data->tenant_id_entry = goa_provider_dialog_add_entry (dialog, group, _("_Tenant ID"));
       goa_provider_dialog_add_description (dialog, data->tenant_id_entry, _("Example ID: 00000000-0000-0000-0000-000000000000"));
 
