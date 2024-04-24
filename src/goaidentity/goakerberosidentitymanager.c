@@ -28,13 +28,13 @@
 #include "goaidentitymanagerprivate.h"
 #include "goakerberosidentityinquiry.h"
 #include "goalinuxnotificationstream.h"
+#include "goalinuxwatchqueue-priv.h"
 
 #include <errno.h>
 #include <fcntl.h>
 #include <keyutils.h>
 #include <string.h>
 #include <unistd.h>
-#include <linux/watch_queue.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -131,17 +131,6 @@ G_DEFINE_TYPE_WITH_CODE (GoaKerberosIdentityManager,
                          G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE,
                                                 initable_interface_init));
 #define FALLBACK_POLLING_INTERVAL 5
-
-enum
-{
-  WATCH_QUEUE_BUFFER_SIZE = 256
-};
-
-static const struct watch_notification_filter watch_queue_notification_filter =
-{
-  .nr_filters = 1,
-  .filters = { [0] = { .type = WATCH_TYPE_KEY_NOTIFY, .info_filter = 0, .info_mask = 0, .subtype_filter[0] = G_MAXUINT } }
-};
 
 static Operation *
 operation_new (GoaKerberosIdentityManager *self,
