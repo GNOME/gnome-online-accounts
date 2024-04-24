@@ -18,17 +18,13 @@
 
 #include "config.h"
 
-#ifndef _GNU_SOURCE
 #define _GNU_SOURCE 1
-#endif
 
 #include "goakerberosidentitymanager.h"
 #include "goaidentitymanager.h"
 #include "goaidentitymanagererror.h"
 #include "goaidentitymanagerprivate.h"
 #include "goakerberosidentityinquiry.h"
-#include "goalinuxnotificationstream.h"
-#include "goalinuxwatchqueue-priv.h"
 
 #include <errno.h>
 #include <fcntl.h>
@@ -45,6 +41,11 @@
 #include <gio/gio.h>
 
 #include <krb5.h>
+
+#ifdef __linux__
+#include "goalinuxnotificationstream.h"
+#include "goalinuxwatchqueue-priv.h"
+#endif /* __linux__ */
 
 struct _GoaKerberosIdentityManager
 {
@@ -194,7 +195,17 @@ goa_kerberos_identity_manager_keyring_source_new (GError **error)
 
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-#ifdef HAVE_PIPE2
+#if !defined(__linux__)
+  {
+    g_set_error_literal (error, G_UNIX_ERROR, 0, "KEYRING only supported on Linux");
+    return NULL;
+  }
+#elif !defined(HAVE_PIPE2)
+  {
+    g_set_error_literal (error, G_UNIX_ERROR, 0, "pipe2(2) not supported");
+    return NULL;
+  }
+#else
   {
     g_autoptr (GInputStream) stream = NULL;
     gint error_code;
@@ -251,11 +262,6 @@ goa_kerberos_identity_manager_keyring_source_new (GError **error)
 
     stream = goa_linux_notification_stream_new (fds[0], fds[1]);
     ret = g_pollable_input_stream_create_source (G_POLLABLE_INPUT_STREAM (stream), NULL);
-  }
-#else
-  {
-    g_set_error_literal (error, G_UNIX_ERROR, 0, "pipe2(2) not supported");
-    goto out;
   }
 #endif
 
