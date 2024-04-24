@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-02-24 20:57+0000\n"
-"PO-Revision-Date: 2024-03-02 02:15+0900\n"
+"POT-Creation-Date: 2024-04-23 15:23+0000\n"
+"PO-Revision-Date: 2024-04-24 13:32+0900\n"
 "Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>\n"
 "Language-Team: 한국어 <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -142,9 +142,9 @@ msgstr "조직에서 웹 및 네트워크 자원 접근을 제한했습니다"
 msgid "Google"
 msgstr "구글"
 
-#: src/goabackend/goagoogleprovider.c:207
-#: src/goabackend/goamsgraphprovider.c:181
-#: src/goabackend/goawindowsliveprovider.c:158
+#: src/goabackend/goagoogleprovider.c:213
+#: src/goabackend/goamsgraphprovider.c:162
+#: src/goabackend/goawindowsliveprovider.c:165
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
@@ -152,18 +152,18 @@ msgstr ""
 "신원 인증을 요청할 때 상태 200을 기대했지만, %d 상태를 가져왔습니다(%s)"
 
 #. TODO: more specific
-#: src/goabackend/goagoogleprovider.c:226
-#: src/goabackend/goagoogleprovider.c:237
-#: src/goabackend/goamsgraphprovider.c:200
-#: src/goabackend/goamsgraphprovider.c:211
-#: src/goabackend/goamsgraphprovider.c:222
-#: src/goabackend/goaoauth2provider.c:616
-#: src/goabackend/goaoauth2provider.c:646
-#: src/goabackend/goaoauth2provider.c:657 src/goabackend/goautils.c:133
-#: src/goabackend/goawindowsliveprovider.c:177
-#: src/goabackend/goawindowsliveprovider.c:188
-#: src/goabackend/goawindowsliveprovider.c:197
-#: src/goabackend/goawindowsliveprovider.c:210
+#: src/goabackend/goagoogleprovider.c:232
+#: src/goabackend/goagoogleprovider.c:243
+#: src/goabackend/goamsgraphprovider.c:181
+#: src/goabackend/goamsgraphprovider.c:192
+#: src/goabackend/goamsgraphprovider.c:203
+#: src/goabackend/goaoauth2provider.c:679
+#: src/goabackend/goaoauth2provider.c:709
+#: src/goabackend/goaoauth2provider.c:720 src/goabackend/goautils.c:133
+#: src/goabackend/goawindowsliveprovider.c:184
+#: src/goabackend/goawindowsliveprovider.c:195
+#: src/goabackend/goawindowsliveprovider.c:204
+#: src/goabackend/goawindowsliveprovider.c:217
 msgid "Could not parse response"
 msgstr "응답을 해석할 수 없습니다"
 
@@ -218,7 +218,7 @@ msgid "SSL on a dedicated port"
 msgstr "제공 포트를 통해 SSL 연결"
 
 #: src/goabackend/goaimapsmtpprovider.c:542
-#: src/goabackend/goaimapsmtpprovider.c:1225
+#: src/goabackend/goaimapsmtpprovider.c:1206
 msgid "Email"
 msgstr "전자메일"
 
@@ -269,15 +269,15 @@ msgstr "SMTP 서버(_S)"
 msgid "Example server: smtp.example.com"
 msgstr "예제 서버 주소: smtp.example.com"
 
-#: src/goabackend/goaimapsmtpprovider.c:1216
+#: src/goabackend/goaimapsmtpprovider.c:1197
 msgid "Name"
 msgstr "이름"
 
-#: src/goabackend/goaimapsmtpprovider.c:1242
+#: src/goabackend/goaimapsmtpprovider.c:1223
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1260
+#: src/goabackend/goaimapsmtpprovider.c:1241
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -311,7 +311,7 @@ msgid "Example principal: user@EXAMPLE.COM"
 msgstr "예제 신원 정보: user@EXAMPLE.COM"
 
 #: src/goabackend/goakerberosprovider.c:599
-#: src/goabackend/goamsgraphprovider.c:396
+#: src/goabackend/goamsgraphprovider.c:374
 msgid "_Sign in…"
 msgstr "접속(_S)…"
 
@@ -325,12 +325,12 @@ msgstr "계정 티케팅을 비활성화했습니다"
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr "키 모음에 저장한 “%s” 본인의 자격 정보를 찾을 수 없습니다"
 
-#: src/goabackend/goakerberosprovider.c:1331
+#: src/goabackend/goakerberosprovider.c:1333
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "“%s” 자격 정보에서 암호를 찾을 수 없습니다"
 
-#: src/goabackend/goakerberosprovider.c:1513
+#: src/goabackend/goakerberosprovider.c:1515
 msgid "Identity service returned invalid key"
 msgstr "인증 서비스에서 잘못된 키를 반환했습니다"
 
@@ -339,93 +339,83 @@ msgstr "인증 서비스에서 잘못된 키를 반환했습니다"
 msgid "Microsoft 365"
 msgstr "마이크로소프트 365"
 
-#. NOTE: In case further types needs to be added, ensure that the
-#. * code in add_account_action_cb is also adjusted.
-#.
-#. Translators: Microsoft account issuer type
-#: src/goabackend/goamsgraphprovider.c:377
-msgid "Common"
-msgstr "일반 설정"
-
-#. Translators: Microsoft account issuer type
-#: src/goabackend/goamsgraphprovider.c:379
-msgid "Custom"
-msgstr "개별 설정"
-
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:385
-msgid ""
-"Connect to a Microsoft 365 provider to access calendars, contacts and files"
-msgstr "마이크로소프트 365에 연결하여 달력, 연락처, 파일에 접근"
+#: src/goabackend/goamsgraphprovider.c:362
+msgid "Connect to a Microsoft 365 provider to access files"
+msgstr "마이크로소프트 365 서비스 제공자에 연결하여 파일에 접근합니다"
 
-#: src/goabackend/goamsgraphprovider.c:388
+#: src/goabackend/goamsgraphprovider.c:364
+msgid "Authorization Details"
+msgstr "인증 세부 내용"
+
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:366
+msgid ""
+"A custom Client or Tenant ID may need to be provided depending on the "
+"settings for your organization"
+msgstr "조직 설정에 따라 개별 클라이언트 또는 테넌트 ID가 필요할 수 있습니다"
+
+#: src/goabackend/goamsgraphprovider.c:368
 msgid "_Client ID"
 msgstr "클라이언트 ID(_C)"
 
-#: src/goabackend/goamsgraphprovider.c:390
-msgid "Advanced"
-msgstr "고급 설정"
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:370
+msgid "_Tenant ID"
+msgstr "테넌트 ID(_T)"
 
-#: src/goabackend/goamsgraphprovider.c:391
-msgid "_Issuer"
-msgstr "발급자(_I)"
+#: src/goabackend/goamsgraphprovider.c:371
+msgid "Example ID: 00000000-0000-0000-0000-000000000000"
+msgstr "ID 예제: 00000000-0000-0000-0000-000000000000"
 
-#: src/goabackend/goamsgraphprovider.c:392
-msgid "C_ustom Issuer"
-msgstr "개별 발급자(_U)"
-
-#: src/goabackend/goamsgraphprovider.c:393
-msgid "Example provider: example.com"
-msgstr "예제 발급자 도메인: example.com"
-
-#: src/goabackend/goaoauth2provider.c:592
+#: src/goabackend/goaoauth2provider.c:655
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr ""
 "접근 토큰을 요청하는데 상태 200을 기대했지만, %d 상태를 가져왔습니다(%s)"
 
-#: src/goabackend/goaoauth2provider.c:736
+#: src/goabackend/goaoauth2provider.c:799
 msgid "Authorization response: "
 msgstr "인증 응답: "
 
-#: src/goabackend/goaoauth2provider.c:799
+#: src/goabackend/goaoauth2provider.c:862
 #, c-format
 msgid "Authorization response: %s"
 msgstr "인증 응답: %s"
 
-#: src/goabackend/goaoauth2provider.c:807
+#: src/goabackend/goaoauth2provider.c:870
 msgid "Failed to authenticate"
 msgstr "인증에 실패했습니다"
 
-#: src/goabackend/goaoauth2provider.c:843
+#: src/goabackend/goaoauth2provider.c:906
 msgid "Error getting an Access Token: "
 msgstr "접근 토큰을 가져오는데 오류가 발생했습니다: "
 
-#: src/goabackend/goaoauth2provider.c:859
+#: src/goabackend/goaoauth2provider.c:922
 msgid "Error getting identity: "
 msgstr "신원 정보를 가져오는데 오류가 발생했습니다: "
 
-#: src/goabackend/goaoauth2provider.c:880
+#: src/goabackend/goaoauth2provider.c:943
 #, c-format
 msgid "Sign in to %s with your browser"
 msgstr "브라우저로 %s에 접속"
 
-#: src/goabackend/goaoauth2provider.c:882
+#: src/goabackend/goaoauth2provider.c:945
 #: src/goabackend/goaproviderdialog.c:689
 msgid "_Sign In…"
 msgstr "접속(_S)…"
 
-#: src/goabackend/goaoauth2provider.c:1215
+#: src/goabackend/goaoauth2provider.c:1292
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "%s 계정 로그인을 요청받았지만, %s 계정으로 로그인했습니다"
 
-#: src/goabackend/goaoauth2provider.c:1402
+#: src/goabackend/goaoauth2provider.c:1479
 msgid "Credentials do not contain access_token"
 msgstr "자격 정보에 access_token이 없습니다"
 
-#: src/goabackend/goaoauth2provider.c:1446
+#: src/goabackend/goaoauth2provider.c:1523
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "접근 토큰을 새로 고치는데 실패했습니다(%s, %d): "
@@ -680,15 +670,15 @@ msgstr "달력 (CalDAV)"
 msgid "Contacts (CardDAV)"
 msgstr "연락처 (CardDAV)"
 
-#: src/goabackend/goawebdavprovider.c:668
+#: src/goabackend/goawebdavprovider.c:692
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "잘못된 URI: %s"
 
 #  * NOTE: 그냥 음역할 것.
 #: src/goabackend/goawindowsliveprovider.c:56
-msgid "Microsoft Personal"
-msgstr "마이크로소프트 개인"
+msgid "Microsoft"
+msgstr "마이크로소프트"
 
 #: src/goaidentity/goaidentityservice.c:564
 msgid "Initial secret key is invalid"
@@ -763,6 +753,28 @@ msgstr "신원 정보를 찾을 수 없습니다"
 #: src/goaidentity/goakerberosidentitymanager.c:937
 msgid "Could not create credential cache for identity"
 msgstr "신원에 대한 자격 정보 캐시를 만들 수 없습니다"
+
+#~ msgid "Common"
+#~ msgstr "일반 설정"
+
+#~ msgid "Custom"
+#~ msgstr "개별 설정"
+
+#~ msgid "Advanced"
+#~ msgstr "고급 설정"
+
+#~ msgid "_Issuer"
+#~ msgstr "발급자(_I)"
+
+#~ msgid "C_ustom Issuer"
+#~ msgstr "개별 발급자(_U)"
+
+#~ msgid "Example provider: example.com"
+#~ msgstr "예제 발급자 도메인: example.com"
+
+#  * NOTE: 그냥 음역할 것.
+#~ msgid "Microsoft Personal"
+#~ msgstr "마이크로소프트 개인"
 
 #~ msgid "C_onnect"
 #~ msgstr "연결(_O)"
