@@ -23,6 +23,8 @@
 #ifndef __GOA_MAIL_CLIENT_H__
 #define __GOA_MAIL_CLIENT_H__
 
+#include <stdint.h>
+
 #include <gio/gio.h>
 #include <glib.h>
 #include <glib-object.h>
@@ -55,6 +57,14 @@ gboolean        goa_mail_client_check_sync        (GoaMailClient        *self,
                                                    guint16               default_port,
                                                    GoaMailAuth          *auth,
                                                    GCancellable         *cancellable,
+                                                   GError              **error);
+void            goa_mail_client_discover          (GoaMailClient        *self,
+                                                   const char           *email_address,
+                                                   GCancellable         *cancellable,
+                                                   GAsyncReadyCallback   callback,
+                                                   gpointer              user_data);
+GPtrArray      *goa_mail_client_discover_finish   (GoaMailClient        *self,
+                                                   GAsyncResult         *res,
                                                    GError              **error);
 
 G_END_DECLS
