@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-02-24 20:57+0000\n"
-"PO-Revision-Date: 2024-02-26 14:13+0330\n"
+"POT-Creation-Date: 2024-04-23 15:23+0000\n"
+"PO-Revision-Date: 2024-04-24 17:36+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
-"Language-Team: Persian <>\n"
+"Language-Team: Persian <dani.behzi@ubuntu.com>\n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 3.2.2\n"
 
@@ -134,8 +134,8 @@ msgstr "دسترسی به منابع شبکه و وب محدود به سازما
 msgid "Google"
 msgstr "گوگل"
 
-#: src/goabackend/goagoogleprovider.c:207 src/goabackend/goamsgraphprovider.c:181
-#: src/goabackend/goawindowsliveprovider.c:158
+#: src/goabackend/goagoogleprovider.c:213 src/goabackend/goamsgraphprovider.c:162
+#: src/goabackend/goawindowsliveprovider.c:165
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
@@ -143,14 +143,14 @@ msgstr ""
 "هنگام درخواست هویت شما انتظار وضعیت ۲۰۰ را داشتیم، در عوض وضعیت %Id دریافت شد (%s)"
 
 #. TODO: more specific
-#: src/goabackend/goagoogleprovider.c:226 src/goabackend/goagoogleprovider.c:237
-#: src/goabackend/goamsgraphprovider.c:200 src/goabackend/goamsgraphprovider.c:211
-#: src/goabackend/goamsgraphprovider.c:222 src/goabackend/goaoauth2provider.c:616
-#: src/goabackend/goaoauth2provider.c:646 src/goabackend/goaoauth2provider.c:657
-#: src/goabackend/goautils.c:133 src/goabackend/goawindowsliveprovider.c:177
-#: src/goabackend/goawindowsliveprovider.c:188
-#: src/goabackend/goawindowsliveprovider.c:197
-#: src/goabackend/goawindowsliveprovider.c:210
+#: src/goabackend/goagoogleprovider.c:232 src/goabackend/goagoogleprovider.c:243
+#: src/goabackend/goamsgraphprovider.c:181 src/goabackend/goamsgraphprovider.c:192
+#: src/goabackend/goamsgraphprovider.c:203 src/goabackend/goaoauth2provider.c:679
+#: src/goabackend/goaoauth2provider.c:709 src/goabackend/goaoauth2provider.c:720
+#: src/goabackend/goautils.c:133 src/goabackend/goawindowsliveprovider.c:184
+#: src/goabackend/goawindowsliveprovider.c:195
+#: src/goabackend/goawindowsliveprovider.c:204
+#: src/goabackend/goawindowsliveprovider.c:217
 msgid "Could not parse response"
 msgstr "نمی‌توان پاسخ را تجزیه کرد"
 
@@ -204,7 +204,7 @@ msgid "SSL on a dedicated port"
 msgstr "‫SSL روی درگاه تخصیص داده شده"
 
 #: src/goabackend/goaimapsmtpprovider.c:542
-#: src/goabackend/goaimapsmtpprovider.c:1225
+#: src/goabackend/goaimapsmtpprovider.c:1206
 msgid "Email"
 msgstr "رایانامه"
 
@@ -254,15 +254,15 @@ msgstr "_کارساز SMTP"
 msgid "Example server: smtp.example.com"
 msgstr "کارساز نمونه: smtp.example.com"
 
-#: src/goabackend/goaimapsmtpprovider.c:1216
+#: src/goabackend/goaimapsmtpprovider.c:1197
 msgid "Name"
 msgstr "نام"
 
-#: src/goabackend/goaimapsmtpprovider.c:1242
+#: src/goabackend/goaimapsmtpprovider.c:1223
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1260
+#: src/goabackend/goaimapsmtpprovider.c:1241
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -295,7 +295,7 @@ msgstr "_مؤسّسه"
 msgid "Example principal: user@EXAMPLE.COM"
 msgstr "مؤسّسهٔ نمونه: user@EXAMPLE.COM"
 
-#: src/goabackend/goakerberosprovider.c:599 src/goabackend/goamsgraphprovider.c:396
+#: src/goabackend/goakerberosprovider.c:599 src/goabackend/goamsgraphprovider.c:374
 msgid "_Sign in…"
 msgstr "_ورود…"
 
@@ -308,12 +308,12 @@ msgstr "مشخّصهٔ Ticketing برای حساب از کار افتاده"
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr "گواهی‌نامهٔ ذخیره شده برای صفت «%s» در جاکلیدی یافت نشد"
 
-#: src/goabackend/goakerberosprovider.c:1331
+#: src/goabackend/goakerberosprovider.c:1333
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "گذرواژه برای صفت «%s» در گواهی‌نامه پیدا نشد"
 
-#: src/goabackend/goakerberosprovider.c:1513
+#: src/goabackend/goakerberosprovider.c:1515
 msgid "Identity service returned invalid key"
 msgstr "خدمت شناسه کلیدی نامعتبر برگرداند"
 
@@ -321,92 +321,82 @@ msgstr "خدمت شناسه کلیدی نامعتبر برگرداند"
 msgid "Microsoft 365"
 msgstr "۳۶۵ مایکروسافت"
 
-#. NOTE: In case further types needs to be added, ensure that the
-#. * code in add_account_action_cb is also adjusted.
-#.
-#. Translators: Microsoft account issuer type
-#: src/goabackend/goamsgraphprovider.c:377
-msgid "Common"
-msgstr "معمول"
-
-#. Translators: Microsoft account issuer type
-#: src/goabackend/goamsgraphprovider.c:379
-msgid "Custom"
-msgstr "سفارشی"
-
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:385
-msgid "Connect to a Microsoft 365 provider to access calendars, contacts and files"
-msgstr ""
-"وصل شدن به فراهم‌کنندهٔ ۳۶۵ مایکروسافت برای دسترسی به تقویم‌ها، آشنایان و پرونده‌ها"
+#: src/goabackend/goamsgraphprovider.c:362
+msgid "Connect to a Microsoft 365 provider to access files"
+msgstr "وصل شدن به فراهم‌کنندهٔ ۳۶۵ مایکروسافت برای دسترسی به پرونده‌ها"
 
-#: src/goabackend/goamsgraphprovider.c:388
+#: src/goabackend/goamsgraphprovider.c:364
+msgid "Authorization Details"
+msgstr "جزییات تصدیق‌هویت"
+
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:366
+msgid ""
+"A custom Client or Tenant ID may need to be provided depending on the settings "
+"for your organization"
+msgstr "بسته به تنظیمات سازمانتان ممکن است نیاز به شناسهٔ اجاره یا کارخواه شخصی باشد"
+
+#: src/goabackend/goamsgraphprovider.c:368
 msgid "_Client ID"
-msgstr "_شناسهٔ کارخواه"
+msgstr "شناسهٔ _کارخواه"
 
-#: src/goabackend/goamsgraphprovider.c:390
-msgid "Advanced"
-msgstr "پیش‌رفته"
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:370
+msgid "_Tenant ID"
+msgstr "شناسهٔ _اجاره"
 
-#: src/goabackend/goamsgraphprovider.c:391
-msgid "_Issuer"
-msgstr "_صادرکننده"
+#: src/goabackend/goamsgraphprovider.c:371
+msgid "Example ID: 00000000-0000-0000-0000-000000000000"
+msgstr "شناسهٔ نمونه: 00000000-0000-0000-0000-000000000000"
 
-#: src/goabackend/goamsgraphprovider.c:392
-msgid "C_ustom Issuer"
-msgstr "صادرکنندهٔ _سفارشی"
-
-#: src/goabackend/goamsgraphprovider.c:393
-msgid "Example provider: example.com"
-msgstr "فراهمگر نمونه: smtp.example.com"
-
-#: src/goabackend/goaoauth2provider.c:592
+#: src/goabackend/goaoauth2provider.c:655
 #, c-format
 msgid "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr ""
 "هنگام درخواست رمز دسترسی (access token) انتظار وضعیت ۲۰۰ را داشتیم، در عوض وضعیت "
 "%Id دریافت شد (%s)"
 
-#: src/goabackend/goaoauth2provider.c:736
+#: src/goabackend/goaoauth2provider.c:799
 msgid "Authorization response: "
 msgstr "پاسخ به تصدیق‌هویت: "
 
-#: src/goabackend/goaoauth2provider.c:799
+#: src/goabackend/goaoauth2provider.c:862
 #, c-format
 msgid "Authorization response: %s"
 msgstr "پاسخ به تصدیق‌هویت: %s"
 
-#: src/goabackend/goaoauth2provider.c:807
+#: src/goabackend/goaoauth2provider.c:870
 msgid "Failed to authenticate"
 msgstr "شکست در هویت‌سنجی"
 
-#: src/goabackend/goaoauth2provider.c:843
+#: src/goabackend/goaoauth2provider.c:906
 msgid "Error getting an Access Token: "
 msgstr "خطا در هنگام دریافت رمز دسترسی: "
 
-#: src/goabackend/goaoauth2provider.c:859
+#: src/goabackend/goaoauth2provider.c:922
 msgid "Error getting identity: "
 msgstr "خطا در هنگام دریافت شناسه: "
 
-#: src/goabackend/goaoauth2provider.c:880
+#: src/goabackend/goaoauth2provider.c:943
 #, c-format
 msgid "Sign in to %s with your browser"
 msgstr "ورود به %s با مرورگرتان"
 
-#: src/goabackend/goaoauth2provider.c:882 src/goabackend/goaproviderdialog.c:689
+#: src/goabackend/goaoauth2provider.c:945 src/goabackend/goaproviderdialog.c:689
 msgid "_Sign In…"
 msgstr "_ورود…"
 
-#: src/goabackend/goaoauth2provider.c:1215
+#: src/goabackend/goaoauth2provider.c:1292
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "درخواست ورود به عنوان %s شده بود، ولی به عنوان %s وارد شد"
 
-#: src/goabackend/goaoauth2provider.c:1402
+#: src/goabackend/goaoauth2provider.c:1479
 msgid "Credentials do not contain access_token"
 msgstr "گواهینامه‌ها حاوی رمز دسترسی (access_token) نیستند"
 
-#: src/goabackend/goaoauth2provider.c:1446
+#: src/goabackend/goaoauth2provider.c:1523
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "نوسازی رمز دسترسی شکست خورد (%s، %Id): "
@@ -662,14 +652,14 @@ msgstr "تقویم (CalDAV)"
 msgid "Contacts (CardDAV)"
 msgstr "آشنایان (CardDAV)"
 
-#: src/goabackend/goawebdavprovider.c:668
+#: src/goabackend/goawebdavprovider.c:692
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "نشانی نامعتبر: %s"
 
 #: src/goabackend/goawindowsliveprovider.c:56
-msgid "Microsoft Personal"
-msgstr "مایکروسافت شخصی"
+msgid "Microsoft"
+msgstr "مایکروسافت"
 
 #: src/goaidentity/goaidentityservice.c:564
 msgid "Initial secret key is invalid"
@@ -744,6 +734,27 @@ msgstr "نمی‌توان شناسه را یافت"
 #: src/goaidentity/goakerberosidentitymanager.c:937
 msgid "Could not create credential cache for identity"
 msgstr "نمی‌توان انبارهٔ گواهی را برای شناسه ایجاد کرد"
+
+#~ msgid "Common"
+#~ msgstr "معمول"
+
+#~ msgid "Custom"
+#~ msgstr "سفارشی"
+
+#~ msgid "Advanced"
+#~ msgstr "پیش‌رفته"
+
+#~ msgid "_Issuer"
+#~ msgstr "_صادرکننده"
+
+#~ msgid "C_ustom Issuer"
+#~ msgstr "صادرکنندهٔ _سفارشی"
+
+#~ msgid "Example provider: example.com"
+#~ msgstr "فراهمگر نمونه: smtp.example.com"
+
+#~ msgid "Microsoft Personal"
+#~ msgstr "مایکروسافت شخصی"
 
 #~ msgid "Endpoint Settings"
 #~ msgstr "تنظیمات نقطهٔ پایانی"
