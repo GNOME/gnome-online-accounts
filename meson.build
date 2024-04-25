@@ -164,8 +164,14 @@ if enable_goabackend and enable_kerberos
 endif
 config_h.set('GOA_KERBEROS_ENABLED', enable_kerberos)
 
+# Nextcloud
+# NOTE: for historical reasons, this provider's type name is "owncloud"
+config_h.set_quoted('GOA_NEXTCLOUD_NAME', 'owncloud')
+enable_nextcloud = get_option('nextcloud')
+config_h.set('GOA_NEXTCLOUD_ENABLED', enable_nextcloud)
+
 # ownCloud
-config_h.set_quoted('GOA_OWNCLOUD_NAME', 'owncloud')
+config_h.set_quoted('GOA_OWNCLOUD_NAME', 'webdav-owncloud')
 enable_owncloud = get_option('owncloud')
 config_h.set('GOA_OWNCLOUD_ENABLED', enable_owncloud)
 

@@ -14,6 +14,7 @@ libgoa_backend_sources = files(
   'goamailauth.c',
   'goamailclient.c',
   'goamsgraphprovider.c',
+  'goanextcloudprovider.c',
   'goaobjectskeletonutils.c',
   'goaowncloudprovider.c',
   'goaprovider.c',
