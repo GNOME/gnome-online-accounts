@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-03-14 23:26+0000\n"
-"PO-Revision-Date: 2024-03-23 06:20+0100\n"
+"POT-Creation-Date: 2024-04-23 15:23+0000\n"
+"PO-Revision-Date: 2024-04-24 17:07+0200\n"
 "Last-Translator: sa\n"
 "Language-Team: \n"
 "Language: kab\n"
@@ -141,9 +141,9 @@ msgstr "Anekcum ɣer yiɣbula web d uzeṭṭa yesεa tilas i tkebbanit-ik"
 msgid "Google"
 msgstr "Google"
 
-#: src/goabackend/goagoogleprovider.c:207
-#: src/goabackend/goamsgraphprovider.c:181
-#: src/goabackend/goawindowsliveprovider.c:158
+#: src/goabackend/goagoogleprovider.c:213
+#: src/goabackend/goamsgraphprovider.c:162
+#: src/goabackend/goawindowsliveprovider.c:165
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
@@ -152,18 +152,18 @@ msgstr ""
 "addad %d (%s)"
 
 #. TODO: more specific
-#: src/goabackend/goagoogleprovider.c:226
-#: src/goabackend/goagoogleprovider.c:237
-#: src/goabackend/goamsgraphprovider.c:200
-#: src/goabackend/goamsgraphprovider.c:211
-#: src/goabackend/goamsgraphprovider.c:222
-#: src/goabackend/goaoauth2provider.c:616
-#: src/goabackend/goaoauth2provider.c:646
-#: src/goabackend/goaoauth2provider.c:657 src/goabackend/goautils.c:133
-#: src/goabackend/goawindowsliveprovider.c:177
-#: src/goabackend/goawindowsliveprovider.c:188
-#: src/goabackend/goawindowsliveprovider.c:197
-#: src/goabackend/goawindowsliveprovider.c:210
+#: src/goabackend/goagoogleprovider.c:232
+#: src/goabackend/goagoogleprovider.c:243
+#: src/goabackend/goamsgraphprovider.c:181
+#: src/goabackend/goamsgraphprovider.c:192
+#: src/goabackend/goamsgraphprovider.c:203
+#: src/goabackend/goaoauth2provider.c:679
+#: src/goabackend/goaoauth2provider.c:709
+#: src/goabackend/goaoauth2provider.c:720 src/goabackend/goautils.c:133
+#: src/goabackend/goawindowsliveprovider.c:184
+#: src/goabackend/goawindowsliveprovider.c:195
+#: src/goabackend/goawindowsliveprovider.c:204
+#: src/goabackend/goawindowsliveprovider.c:217
 msgid "Could not parse response"
 msgstr "D awezɣi tasleḍt n tririt"
 
@@ -311,7 +311,7 @@ msgid "Example principal: user@EXAMPLE.COM"
 msgstr "Amedya agejdan: user@EXAMPLE.COM"
 
 #: src/goabackend/goakerberosprovider.c:599
-#: src/goabackend/goamsgraphprovider.c:404
+#: src/goabackend/goamsgraphprovider.c:374
 msgid "_Sign in…"
 msgstr "Qqen… (_S)"
 
@@ -325,12 +325,12 @@ msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr ""
 "YEgguma ad yaf inekcam yettwaskelsen i \"%s\" agejdan deg uqettun n tsura"
 
-#: src/goabackend/goakerberosprovider.c:1331
+#: src/goabackend/goakerberosprovider.c:1333
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "Ur yufi ara awal n uεeddi i \"%s\" agejdan deg yinekcam"
 
-#: src/goabackend/goakerberosprovider.c:1513
+#: src/goabackend/goakerberosprovider.c:1515
 msgid "Identity service returned invalid key"
 msgstr "Ameẓlu n tmagit yerra-d tasarut tarmeɣtut"
 
@@ -338,48 +338,38 @@ msgstr "Ameẓlu n tmagit yerra-d tasarut tarmeɣtut"
 msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
-#. NOTE: In case further types needs to be added, ensure that the
-#. * code in add_account_action_cb is also adjusted.
-#.
-#. Translators: Microsoft account issuer type
-#: src/goabackend/goamsgraphprovider.c:385
-msgid "Common"
-msgstr "Ucrik"
-
-#. Translators: Microsoft account issuer type
-#: src/goabackend/goamsgraphprovider.c:387
-msgid "Custom"
-msgstr "Sagen"
-
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:393
-msgid ""
-"Connect to a Microsoft 365 provider to access calendars, contacts and files"
-msgstr ""
-"Qqen ɣer usaǧǧaw Microsoft 365 i wakken ad tkecmeḍ ɣer yiwitayen, yinermisen "
-"d yifuyla"
+#: src/goabackend/goamsgraphprovider.c:362
+msgid "Connect to a Microsoft 365 provider to access files"
+msgstr "Qqen ɣer usaǧǧaw Microsoft 365 i wakken ad tkecmeḍ ɣer yifuyla"
 
-#: src/goabackend/goamsgraphprovider.c:396
+#: src/goabackend/goamsgraphprovider.c:364
+msgid "Authorization Details"
+msgstr "Talqayt n usireg:"
+
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:366
+msgid ""
+"A custom Client or Tenant ID may need to be provided depending on the "
+"settings for your organization"
+msgstr ""
+"Amsaɣ udmawan neɣ asulay Tenant yezmer ad yettunefk almend n yiɣewwaren n "
+"tkebbanit-ik"
+
+#: src/goabackend/goamsgraphprovider.c:368
 msgid "_Client ID"
 msgstr "Asulay n umsaɣ (_c)"
 
-#: src/goabackend/goamsgraphprovider.c:398
-msgid "Advanced"
-msgstr "Talqayt"
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:370
+msgid "_Tenant ID"
+msgstr "Asulay n Tenant (_T)"
 
-#: src/goabackend/goamsgraphprovider.c:399
-msgid "_Issuer"
-msgstr "Amesgal (_I)"
+#: src/goabackend/goamsgraphprovider.c:371
+msgid "Example ID: 00000000-0000-0000-0000-000000000000"
+msgstr "Amedya n usulay: 00000000-0000-0000-0000-000000000000"
 
-#: src/goabackend/goamsgraphprovider.c:400
-msgid "C_ustom Issuer"
-msgstr "Sagen amesgal (u)"
-
-#: src/goabackend/goamsgraphprovider.c:401
-msgid "Example provider: example.com"
-msgstr "Amedya n usaǧǧaw: example.com"
-
-#: src/goabackend/goaoauth2provider.c:592
+#: src/goabackend/goaoauth2provider.c:655
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -387,47 +377,47 @@ msgstr ""
 "Yetturaǧǧu waddad 200 mi d-tella tuttra n tiddest n wadduf, neṭṭef-d deg "
 "wemkan-is addad %d (%s)"
 
-#: src/goabackend/goaoauth2provider.c:736
+#: src/goabackend/goaoauth2provider.c:799
 msgid "Authorization response: "
 msgstr "Tiririt ɣef usireg: "
 
-#: src/goabackend/goaoauth2provider.c:799
+#: src/goabackend/goaoauth2provider.c:862
 #, c-format
 msgid "Authorization response: %s"
 msgstr "Tiririt ɣef usireg: %s"
 
-#: src/goabackend/goaoauth2provider.c:807
+#: src/goabackend/goaoauth2provider.c:870
 msgid "Failed to authenticate"
 msgstr "Yecceḍ uswel"
 
-#: src/goabackend/goaoauth2provider.c:843
+#: src/goabackend/goaoauth2provider.c:906
 msgid "Error getting an Access Token: "
 msgstr "Anezri deg waggay n tiddest n wadduf: "
 
-#: src/goabackend/goaoauth2provider.c:859
+#: src/goabackend/goaoauth2provider.c:922
 msgid "Error getting identity: "
 msgstr "Anezri deg waggay n tmagit: "
 
-#: src/goabackend/goaoauth2provider.c:880
+#: src/goabackend/goaoauth2provider.c:943
 #, c-format
 msgid "Sign in to %s with your browser"
 msgstr "Qqen ɣer %s s yiminig-ik"
 
-#: src/goabackend/goaoauth2provider.c:882
+#: src/goabackend/goaoauth2provider.c:945
 #: src/goabackend/goaproviderdialog.c:689
 msgid "_Sign In…"
 msgstr "Qqen… (_S)"
 
-#: src/goabackend/goaoauth2provider.c:1215
+#: src/goabackend/goaoauth2provider.c:1292
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Yella-d usuter i tuqqna d %s, maca tuqqna tella-d am %s"
 
-#: src/goabackend/goaoauth2provider.c:1402
+#: src/goabackend/goaoauth2provider.c:1479
 msgid "Credentials do not contain access_token"
 msgstr "Isefka n usnekwu ur sɛin ara access_token"
 
-#: src/goabackend/goaoauth2provider.c:1446
+#: src/goabackend/goaoauth2provider.c:1523
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Anezri deg uwennez n tiddest n unekcum (%s, %d) : "
@@ -684,14 +674,14 @@ msgstr "Awitay (CaIDAV)"
 msgid "Contacts (CardDAV)"
 msgstr "Inermisen (CardDAV)"
 
-#: src/goabackend/goawebdavprovider.c:668
+#: src/goabackend/goawebdavprovider.c:692
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "URI d arameɣtu: %s"
 
 #: src/goabackend/goawindowsliveprovider.c:56
-msgid "Microsoft Personal"
-msgstr "Microsoft Personal"
+msgid "Microsoft"
+msgstr "Microsoft"
 
 #: src/goaidentity/goaidentityservice.c:564
 msgid "Initial secret key is invalid"
@@ -766,6 +756,27 @@ msgstr "Ur d-nufi ara tamagit"
 #: src/goaidentity/goakerberosidentitymanager.c:937
 msgid "Could not create credential cache for identity"
 msgstr "D awezɣi asnulfu n tzarkatut n isefka n usnekwu i nekwa"
+
+#~ msgid "Common"
+#~ msgstr "Ucrik"
+
+#~ msgid "Custom"
+#~ msgstr "Sagen"
+
+#~ msgid "Advanced"
+#~ msgstr "Talqayt"
+
+#~ msgid "_Issuer"
+#~ msgstr "Amesgal (_I)"
+
+#~ msgid "C_ustom Issuer"
+#~ msgstr "Sagen amesgal (u)"
+
+#~ msgid "Example provider: example.com"
+#~ msgstr "Amedya n usaǧǧaw: example.com"
+
+#~ msgid "Microsoft Personal"
+#~ msgstr "Microsoft Personal"
 
 #~ msgid "C_onnect"
 #~ msgstr "Tu_qqna"
