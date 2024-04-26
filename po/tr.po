@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-04-05 19:09+0000\n"
-"PO-Revision-Date: 2024-04-09 02:29+0300\n"
+"POT-Creation-Date: 2024-04-25 19:55+0000\n"
+"PO-Revision-Date: 2024-04-26 01:02+0300\n"
 "Last-Translator: Sabri Ünal <yakushabb@gmail.com>\n"
 "Language-Team: Turkish <takim@gnome.org.tr>\n"
 "Language: tr\n"
@@ -53,7 +53,7 @@ msgstr "Hesap için IsLocked özelliği ayarlanmış"
 msgid "ProviderType property is not set for account"
 msgstr "Hesap için ProviderType belirtilmemiş"
 
-#: src/goabackend/goadavclient.c:723
+#: src/goabackend/goadavclient.c:825
 msgid "Cannot find WebDAV endpoint"
 msgstr "WebDAV uç noktası bulunamadı"
 
@@ -323,7 +323,7 @@ msgid "Example principal: user@EXAMPLE.COM"
 msgstr "Örnek tanıtıcı kimlik: kullanici@ORNEK.COM"
 
 #: src/goabackend/goakerberosprovider.c:599
-#: src/goabackend/goamsgraphprovider.c:372
+#: src/goabackend/goamsgraphprovider.c:374
 msgid "_Sign in…"
 msgstr "Giriş _Yap…"
 
@@ -337,12 +337,12 @@ msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr ""
 "Tanıtıcı kimlik “%s” için anahtarlıkta kayıtlı kimlik bilgisi bulunamadı"
 
-#: src/goabackend/goakerberosprovider.c:1331
+#: src/goabackend/goakerberosprovider.c:1333
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "Tanıtıcı kimlik “%s” için kimlik bilgilerinde parola bulunamadı"
 
-#: src/goabackend/goakerberosprovider.c:1513
+#: src/goabackend/goakerberosprovider.c:1515
 msgid "Identity service returned invalid key"
 msgstr "Kimlik hizmeti geçersiz anahtar gönderdi"
 
@@ -359,23 +359,25 @@ msgstr "Dosyalara erişmek için Microsoft 365 sağlayıcısına bağlan"
 msgid "Authorization Details"
 msgstr "Yetkilendirme Ayrıntıları"
 
-#: src/goabackend/goamsgraphprovider.c:365
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:366
 msgid ""
 "A custom Client or Tenant ID may need to be provided depending on the "
-"settings for your organization."
+"settings for your organization"
 msgstr ""
 "Kuruluşunuzun ayarlarına bağlı olarak özel bir İstemci ya da Kiracı Kimliği "
 "sağlanması gerekebilir."
 
-#: src/goabackend/goamsgraphprovider.c:367
+#: src/goabackend/goamsgraphprovider.c:368
 msgid "_Client ID"
 msgstr "İ_stemci Kimliği"
 
-#: src/goabackend/goamsgraphprovider.c:368
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:370
 msgid "_Tenant ID"
 msgstr "_Kiracı Kimliği"
 
-#: src/goabackend/goamsgraphprovider.c:369
+#: src/goabackend/goamsgraphprovider.c:371
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "Örnek Kimlik: 00000000-0000-0000-0000-000000000000"
 
@@ -684,7 +686,7 @@ msgstr "Takvim (CalDAV)"
 msgid "Contacts (CardDAV)"
 msgstr "Kişiler (CardDAV)"
 
-#: src/goabackend/goawebdavprovider.c:680
+#: src/goabackend/goawebdavprovider.c:692
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "Geçersiz URI: %s"
