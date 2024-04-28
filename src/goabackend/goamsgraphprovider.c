@@ -292,19 +292,20 @@ out:
 }
 
 static void
-add_account_key_values (GoaOAuth2Provider *oauth2_provider,
+add_account_key_values (GoaOAuth2Provider *provider,
                         GVariantBuilder   *builder)
 {
-  GoaMsGraphProvider *self = GOA_MS_GRAPH_PROVIDER (oauth2_provider);
+  g_assert (GOA_IS_MS_GRAPH_PROVIDER (provider));
+  g_assert (builder != NULL);
 
   g_variant_builder_add (builder, "{ss}", "FilesEnabled", "true");
 
-  g_variant_builder_add (builder, "{ss}", "OAuth2AuthorizationUri", self->authorization_uri);
-  g_variant_builder_add (builder, "{ss}", "OAuth2TokenUri", self->token_uri);
-  g_variant_builder_add (builder, "{ss}", "OAuth2ClientId", self->client_id);
-  g_variant_builder_add (builder, "{ss}", "OAuth2RedirectUri", self->redirect_uri);
-  g_variant_builder_add (builder, "{ss}", "OAuth2ClientSecret", "");
-
+  /* The class getter implementations are used, since they handle fallbacks */
+  g_variant_builder_add (builder, "{ss}", "OAuth2AuthorizationUri", goa_oauth2_provider_get_authorization_uri (provider));
+  g_variant_builder_add (builder, "{ss}", "OAuth2TokenUri", goa_oauth2_provider_get_token_uri (provider));
+  g_variant_builder_add (builder, "{ss}", "OAuth2ClientId", goa_oauth2_provider_get_client_id (provider));
+  g_variant_builder_add (builder, "{ss}", "OAuth2RedirectUri", goa_oauth2_provider_get_redirect_uri (provider));
+  g_variant_builder_add (builder, "{ss}", "OAuth2ClientSecret", "" /* always empty */);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
