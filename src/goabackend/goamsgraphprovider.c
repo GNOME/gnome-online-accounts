@@ -140,8 +140,8 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
   RestProxyCall *call = NULL;
   GError *identity_error = NULL;
   gchar *authorization = NULL;
-  gchar *presentation_identity = NULL;
   const char *id = NULL;
+  const char *presentation_identity = NULL;
   gchar *ret = NULL;
 
   authorization = g_strconcat ("Bearer ", access_token, NULL);
@@ -208,20 +208,35 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
     }
   id = json_node_get_string (json_member);
 
-  if (json_object_has_member (json_object, "email"))
+  // Prefer "mail" then "displayName" for "PresentationIdentity", failing if neither is available
+  json_member = json_object_get_member (json_object, "mail");
+  if (json_member != NULL && json_node_get_value_type (json_member) == G_TYPE_STRING)
     {
-      presentation_identity = g_strdup (json_object_get_string_member (json_object, "email"));
+      presentation_identity = json_node_get_string (json_member);
     }
-  else
+
+  if (presentation_identity == NULL)
     {
-      presentation_identity = g_strdup (json_object_get_string_member (json_object, "displayName"));
+      json_member = json_object_get_member (json_object, "displayName");
+      if (json_member != NULL && json_node_get_value_type (json_member) == G_TYPE_STRING)
+        {
+          presentation_identity = json_node_get_string (json_member);
+        }
+      else
+        {
+          g_debug ("%s(): expected \"mail\" or \"displayName\" field holding a string", G_STRFUNC);
+          g_set_error (error,
+                       GOA_ERROR,
+                       GOA_ERROR_FAILED,
+                       _("Could not parse response"));
+          goto out;
+        }
     }
 
   ret = g_strdup (id);
   if (out_presentation_identity != NULL)
     {
-      *out_presentation_identity = presentation_identity;
-      presentation_identity = NULL;
+      *out_presentation_identity = g_strdup (presentation_identity);
     }
 
 out:
@@ -230,7 +245,6 @@ out:
   g_clear_object (&call);
   g_clear_object (&proxy);
   g_free (authorization);
-  g_free (presentation_identity);
   return ret;
 }
 
