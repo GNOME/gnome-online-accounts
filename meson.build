@@ -132,7 +132,10 @@ enable_fedora = get_option('fedora')
 if enable_goabackend and enable_fedora
   gcr_dep = dependency('gcr-4', version: '>= 4.1.0')
   krb5_dep = dependency('krb5')
-  libkeyutils_dep = dependency('libkeyutils', version: '>= 1.6.2')
+  libkeyutils_dep = dependency('libkeyutils',
+     version: '>= 1.6.2',
+    required: target_machine.system() == 'linux',
+  )
 
   config_h.set('GCR_API_SUBJECT_TO_CHANGE', true)
 endif
@@ -163,7 +166,10 @@ enable_kerberos = get_option('kerberos')
 if enable_goabackend and enable_kerberos
   gcr_dep = dependency('gcr-4', version: '>= 4.1.0')
   krb5_dep = dependency('krb5')
-  libkeyutils_dep = dependency('libkeyutils', version: '>= 1.6.2')
+  libkeyutils_dep = dependency('libkeyutils',
+     version: '>= 1.6.2',
+    required: target_machine.system() == 'linux',
+  )
 
   config_h.set('GCR_API_SUBJECT_TO_CHANGE', true)
 endif

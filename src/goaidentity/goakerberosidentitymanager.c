@@ -28,7 +28,6 @@
 
 #include <errno.h>
 #include <fcntl.h>
-#include <keyutils.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
@@ -43,6 +42,7 @@
 #include <krb5.h>
 
 #ifdef __linux__
+#include <keyutils.h>
 #include "goalinuxnotificationstream.h"
 #include "goalinuxwatchqueue-priv.h"
 #endif /* __linux__ */
