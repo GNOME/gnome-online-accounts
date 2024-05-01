@@ -1626,8 +1626,11 @@ monitor_credentials_cache (GoaKerberosIdentityManager  *self,
           g_error_free (monitoring_error);
         }
 
-      g_source_set_callback (keyring_source, (GSourceFunc) credentials_cache_keyring_notification, self, NULL);
-      self->credentials_cache_keyring_notification_id = g_source_attach (keyring_source, NULL);
+      if (keyring_source != NULL)
+        {
+          g_source_set_callback (keyring_source, (GSourceFunc) credentials_cache_keyring_notification, self, NULL);
+          self->credentials_cache_keyring_notification_id = g_source_attach (keyring_source, NULL);
+        }
 
       g_clear_pointer (&keyring_source, g_source_unref);
     }
