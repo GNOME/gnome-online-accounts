@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-04-29 15:29+0000\n"
+"POT-Creation-Date: 2024-05-05 18:55+0000\n"
 "PO-Revision-Date: 2024-05-05 20:53+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -35,19 +35,23 @@ msgstr ""
 "läsas in (standard: ”all”). Detta utvärderas bara vid uppstart."
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1141 src/daemon/goadaemon.c:1458
+#: src/daemon/goadaemon.c:1142 src/daemon/goadaemon.c:1459
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Kunde inte hitta en modul för: %s"
 
-#: src/daemon/goadaemon.c:1401
+#: src/daemon/goadaemon.c:1402
 msgid "IsLocked property is set for account"
 msgstr "Egenskapen IsLocked är satt för konto"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1446
+#: src/daemon/goadaemon.c:1447
 msgid "ProviderType property is not set for account"
 msgstr "Egenskapen ProviderType är inte satt för konto"
+
+#: src/goabackend/goadavclient.c:775
+msgid "Cannot find WebDAV endpoint"
+msgstr "Kan inte hitta WebDAV-ändpunkt"
 
 #. TODO: more specific
 #: src/goabackend/goaewsclient.c:284
@@ -146,7 +150,7 @@ msgid "Google"
 msgstr "Google"
 
 #: src/goabackend/goagoogleprovider.c:213
-#: src/goabackend/goamsgraphprovider.c:162
+#: src/goabackend/goamsgraphprovider.c:163
 #: src/goabackend/goawindowsliveprovider.c:165
 #, c-format
 msgid ""
@@ -158,9 +162,10 @@ msgstr ""
 #. TODO: more specific
 #: src/goabackend/goagoogleprovider.c:232
 #: src/goabackend/goagoogleprovider.c:243
-#: src/goabackend/goamsgraphprovider.c:181
-#: src/goabackend/goamsgraphprovider.c:192
-#: src/goabackend/goamsgraphprovider.c:203
+#: src/goabackend/goamsgraphprovider.c:182
+#: src/goabackend/goamsgraphprovider.c:193
+#: src/goabackend/goamsgraphprovider.c:206
+#: src/goabackend/goamsgraphprovider.c:231
 #: src/goabackend/goaoauth2provider.c:679
 #: src/goabackend/goaoauth2provider.c:709
 #: src/goabackend/goaoauth2provider.c:720 src/goabackend/goautils.c:133
@@ -315,7 +320,7 @@ msgid "Example principal: user@EXAMPLE.COM"
 msgstr "Exempelhuvudman: användare@EXAMPLE.COM"
 
 #: src/goabackend/goakerberosprovider.c:599
-#: src/goabackend/goamsgraphprovider.c:375
+#: src/goabackend/goamsgraphprovider.c:388
 msgid "_Sign in…"
 msgstr "_Logga in…"
 
@@ -344,16 +349,16 @@ msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:363
+#: src/goabackend/goamsgraphprovider.c:376
 msgid "Connect to a Microsoft 365 provider to access files"
 msgstr "Anslut till en Microsoft 365-leverantör för att komma åt filer"
 
-#: src/goabackend/goamsgraphprovider.c:365
+#: src/goabackend/goamsgraphprovider.c:378
 msgid "Authorization Details"
 msgstr "Auktoriseringsdetaljer"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:367
+#: src/goabackend/goamsgraphprovider.c:380
 msgid ""
 "A custom Client or Tenant ID may need to be provided depending on the "
 "settings for your organization"
@@ -361,16 +366,16 @@ msgstr ""
 "Ett anpassat Klient- eller Tenant-ID kan behöva tillhandahållas beroende på "
 "inställningarna för din organisation"
 
-#: src/goabackend/goamsgraphprovider.c:369
+#: src/goabackend/goamsgraphprovider.c:382
 msgid "_Client ID"
 msgstr "_Klient-ID"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:371
+#: src/goabackend/goamsgraphprovider.c:384
 msgid "_Tenant ID"
 msgstr "_Tenant-ID"
 
-#: src/goabackend/goamsgraphprovider.c:372
+#: src/goabackend/goamsgraphprovider.c:385
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "Exempel-ID: 00000000-0000-0000-0000-000000000000"
 
@@ -843,9 +848,6 @@ msgstr "Kunde inte skapa inloggningsuppgiftscache för identitet"
 
 #~ msgid "Credentials have expired"
 #~ msgstr "Autentiseringsuppgifterna har gått ut"
-
-#~ msgid "Cannot find WebDAV endpoint"
-#~ msgstr "Kan inte hitta WebDAV-ändpunkt"
 
 #~ msgid "_URL"
 #~ msgstr "_URL"
