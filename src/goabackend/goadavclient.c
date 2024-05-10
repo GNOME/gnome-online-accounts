@@ -574,6 +574,8 @@ goa_dav_client_discover_data_free (gpointer task_data)
   dav_client_check_data_free (check);
 }
 
+static void dav_client_discover_iterate (GTask *task);
+
 static gboolean
 dav_client_discover_postconfig_nexcloud (DiscoverData *discover,
                                          SoupMessage  *message)
@@ -651,9 +653,9 @@ dav_client_discover_postconfig_nexcloud (DiscoverData *discover,
 }
 
 static void
-dav_client_discover_response_cb (SoupSession  *session,
-                                 GAsyncResult *result,
-                                 gpointer      user_data)
+dav_client_discover_options_cb (SoupSession  *session,
+                                GAsyncResult *result,
+                                gpointer      user_data)
 {
   g_autoptr (GTask) task = G_TASK (user_data);
   CheckData *data = g_task_get_task_data (task);
@@ -751,11 +753,37 @@ dav_client_discover_response_cb (SoupSession  *session,
     }
 
 out:
+  dav_client_discover_iterate (task);
+}
+
+/*< private >
+ * dav_client_discover_iterate:
+ * @task: a discover operation task
+ *
+ * This function drives the discovery process, recursively testing candidates
+ * until exhausted or a fatal error occurs.
+ */
+static void
+dav_client_discover_iterate (GTask *task)
+{
+  CheckData *data = g_task_get_task_data (task);
+  DiscoverData *discover = (DiscoverData *) data;
+
   if (data->error != NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&data->error));
+      /* Only certificate errors and cancellation are immediately fatal */
+      if (g_error_matches (data->error, GOA_ERROR, GOA_ERROR_SSL)
+          || g_error_matches (data->error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        {
+          g_task_return_error (task, g_steal_pointer (&data->error));
+          return;
+        }
+
+      g_debug ("%s(): %s", G_STRFUNC, data->error->message);
+      g_clear_error (&data->error);
     }
-  else if (!g_queue_is_empty (&discover->uris))
+
+  if (!g_queue_is_empty (&discover->uris))
     {
       g_clear_pointer (&data->uri, g_free);
       g_clear_object (&data->msg);
@@ -768,7 +796,7 @@ out:
                                         data->msg,
                                         G_PRIORITY_DEFAULT,
                                         data->cancellable,
-                                        (GAsyncReadyCallback)dav_client_discover_response_cb,
+                                        (GAsyncReadyCallback)dav_client_discover_options_cb,
                                         g_object_ref (task));
     }
   else if (discover->services->len == 0)
@@ -887,8 +915,6 @@ goa_dav_client_discover (GoaDavClient        *self,
   logger = goa_soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
   soup_session_add_feature (data->session, SOUP_SESSION_FEATURE (logger));
 
-  data->msg = soup_message_new (SOUP_METHOD_OPTIONS, uri);
-  data->uri = g_strdup (uri);
   data->username = g_strdup (username);
   data->password = g_strdup (password);
   data->accept_ssl_errors = accept_ssl_errors;
@@ -914,13 +940,7 @@ goa_dav_client_discover (GoaDavClient        *self,
                                                     NULL);
     }
 
-  dav_client_authenticate_task (task);
-  soup_session_send_and_read_async (data->session,
-                                    data->msg,
-                                    G_PRIORITY_DEFAULT,
-                                    data->cancellable,
-                                    (GAsyncReadyCallback)dav_client_discover_response_cb,
-                                    g_object_ref (task));
+  dav_client_discover_iterate (task);
 }
 
 /**
