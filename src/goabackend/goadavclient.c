@@ -627,6 +627,7 @@ typedef struct
 
   GoaDavConfiguration *config;
   GQueue uris;
+  gboolean auth_error;
 } DiscoverData;
 
 static void
@@ -678,6 +679,13 @@ dav_client_discover_response_cb (SoupSession  *session,
     case SOUP_STATUS_METHOD_NOT_ALLOWED:
     case SOUP_STATUS_INTERNAL_SERVER_ERROR:
     case SOUP_STATUS_NOT_IMPLEMENTED:
+      goto out;
+
+    /* Defer authentication errors to support content restricted passwords */
+    case SOUP_STATUS_UNAUTHORIZED:
+    case SOUP_STATUS_FORBIDDEN:
+    case SOUP_STATUS_PRECONDITION_FAILED:
+      discover->auth_error = TRUE;
       goto out;
 
     default:
@@ -769,10 +777,20 @@ out:
     }
   else if (discover->config->features == 0)
     {
-      g_task_return_new_error (task,
-                               GOA_ERROR,
-                               GOA_ERROR_NOT_SUPPORTED,
-                               _("Cannot find WebDAV endpoint"));
+      if (discover->auth_error)
+        {
+          g_task_return_new_error (task,
+                                   GOA_ERROR,
+                                   GOA_ERROR_NOT_AUTHORIZED,
+                                   _("Authentication failed"));
+        }
+      else
+        {
+          g_task_return_new_error (task,
+                                   GOA_ERROR,
+                                   GOA_ERROR_NOT_SUPPORTED,
+                                   _("Cannot find WebDAV endpoint"));
+        }
     }
   else
     {
