@@ -31,13 +31,13 @@
 #define WELL_KNOWN_NEXTCLOUD "remote.php/dav"
 
 #define FASTMAIL_WEBDAV      "https://myfiles.fastmail.com"
-#define FASTMAIL_CALDAV      "https://caldav.fastmail.com/"
-#define FASTMAIL_CARDDAV     "https://carddav.fastmail.com/"
+#define FASTMAIL_CALDAV      "https://caldav.fastmail.com/.well-known/caldav"
+#define FASTMAIL_CARDDAV     "https://carddav.fastmail.com/.well-known/carddav"
 
 #define MAILBOX_ORG_HOSTNAME "dav.mailbox.org"
 #define MAILBOX_ORG_WEBDAV   "https://dav.mailbox.org/servlet/webdav.infostore"
-#define MAILBOX_ORG_CALDAV   "https://dav.mailbox.org/.well-known/caldav"
-#define MAILBOX_ORG_CARDDAV  "https://dav.mailbox.org/.well-known/carddav"
+#define MAILBOX_ORG_CALDAV   "https://dav.mailbox.org/caldav"
+#define MAILBOX_ORG_CARDDAV  "https://dav.mailbox.org/carddav"
 
 struct _GoaDavClient
 {
