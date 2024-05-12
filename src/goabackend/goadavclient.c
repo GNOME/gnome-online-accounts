@@ -723,14 +723,18 @@ dav_client_discover_response_cb (SoupSession  *session,
 
   g_debug ("goa_dav_client_discover(): found: (%p, %s)", msg, data->uri);
 
-  /* GVfs won't follow redirects so the resolved URI is used for file access.
+  /* TODO: implement PROPFIND behaviour emulating GVfs. Workaround by only
+   *       accepting endpoints  without support for CalDAV/CardDAV.
    */
-  if ((discover->config->features & GOA_PROVIDER_FEATURE_FILES) != 0
+  if (discover->config->features == GOA_PROVIDER_FEATURE_FILES
       && discover->config->webdav_uri == NULL)
     {
-      GUri *uri = soup_message_get_uri (msg);
+      GUri *uri = NULL;
 
-      discover->config->webdav_uri = g_uri_to_string (uri);
+      /* GVfs won't follow redirects, so return the resolved URI */
+      uri = soup_message_get_uri (msg);
+      if (uri != NULL)
+        discover->config->webdav_uri = g_uri_to_string (uri);
     }
 
   /* CalDAV/CardDAV clients MUST handle HTTP redirects on the ".well-known" URI,
