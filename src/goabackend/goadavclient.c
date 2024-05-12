@@ -737,25 +737,15 @@ dav_client_discover_response_cb (SoupSession  *session,
         discover->config->webdav_uri = g_uri_to_string (uri);
     }
 
-  /* CalDAV/CardDAV clients MUST handle HTTP redirects on the ".well-known" URI,
-   * and they take precedence when available.
-   *
-   * See: https://datatracker.ietf.org/doc/html/rfc6764#section-5
-   */
-  if ((discover->config->features & GOA_PROVIDER_FEATURE_CALENDAR) != 0)
+  if ((discover->config->features & GOA_PROVIDER_FEATURE_CALENDAR) != 0
+      && discover->config->caldav_uri == NULL)
     {
-      if (g_str_has_suffix (data->uri, WELL_KNOWN_CALDAV))
-        g_set_str (&discover->config->caldav_uri, data->uri);
-      else if (discover->config->caldav_uri == NULL)
-        discover->config->caldav_uri = g_strdup (data->uri);
+      discover->config->caldav_uri = g_strdup (data->uri);
     }
 
   if ((discover->config->features & GOA_PROVIDER_FEATURE_CONTACTS) != 0)
     {
-      if (g_str_has_suffix (data->uri, WELL_KNOWN_CARDDAV))
-        g_set_str (&discover->config->carddav_uri, data->uri);
-      else if (discover->config->carddav_uri == NULL)
-        discover->config->carddav_uri = g_strdup (data->uri);
+      discover->config->carddav_uri = g_strdup (data->uri);
     }
 
 out:
