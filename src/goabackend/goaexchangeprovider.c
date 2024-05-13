@@ -300,31 +300,22 @@ on_username_or_server_changed (GtkEditable    *editable,
                                AddAccountData *data)
 {
   GoaDialogState state = GOA_DIALOG_IDLE;
-  const char *password;
-  g_autofree char *server = NULL;
-  g_autofree char *username = NULL;
+  const char *email = NULL;
+  const char *password = NULL;
+  const char *server = NULL;
+  const char *username = NULL;
 
-  /* User may override username/server */
-  username = g_strdup (gtk_editable_get_text (GTK_EDITABLE (data->username)));
-  server = g_strdup (gtk_editable_get_text (GTK_EDITABLE (data->server)));
-
-  if ((username == NULL || *username == '\0')
-      && (server == NULL || *server == '\0'))
-    {
-      const char *email;
-
-      g_free (username);
-      g_free (server);
-      email = gtk_editable_get_text (GTK_EDITABLE (data->email_address));
-      goa_utils_parse_email_address (email, &username, &server);
-    }
+  email = gtk_editable_get_text (GTK_EDITABLE (data->email_address));
+  if (!goa_utils_parse_email_address (email, NULL, NULL))
+    goto out;
 
   password = gtk_editable_get_text (GTK_EDITABLE (data->password));
-  if ((password != NULL && *password != '\0')
-      && (username != NULL && *username != '\0')
-      && (server != NULL && *server != '\0'))
+  username = gtk_editable_get_text (GTK_EDITABLE (data->username));
+  server = gtk_editable_get_text (GTK_EDITABLE (data->server));
+  if (*password != '\0' && *username != '\0' && *server != '\0')
     state = GOA_DIALOG_READY;
 
+out:
   goa_provider_dialog_set_state (data->dialog, state);
 }
 
@@ -333,23 +324,33 @@ on_email_or_password_changed (GtkEditable    *editable,
                               AddAccountData *data)
 {
   GoaDialogState state = GOA_DIALOG_IDLE;
-  const char *email;
-  const char *password;
-  g_autofree char *server = NULL;
-  g_autofree char *username = NULL;
+  const char *email = NULL;
+  const char *password = NULL;
+  g_autofree char *email_localpart = NULL;
+  g_autofree char *email_domain = NULL;
 
   email = gtk_editable_get_text (GTK_EDITABLE (data->email_address));
-  if (!goa_utils_parse_email_address (email, &username, &server))
+  if (!goa_utils_parse_email_address (email, &email_localpart, &email_domain))
     goto out;
 
-  /* If the e-mail changed update the username/server and let their handler
-   * decide the final state. */
-  if (data->username != NULL && data->server != NULL
-      && GTK_WIDGET (editable) == data->email_address)
+  /* These fields are only present for a new account */
+  if (data->username != NULL && data->server != NULL)
     {
-      gtk_editable_set_text (GTK_EDITABLE (data->username), username);
-      gtk_editable_set_text (GTK_EDITABLE (data->server), server);
-      return;
+      const char *username = NULL;
+      const char *server = NULL;
+
+      /* If the email changed, update the username/server and defer to its handler */
+      if (GTK_WIDGET (editable) == data->email_address)
+        {
+          gtk_editable_set_text (GTK_EDITABLE (data->username), email_localpart);
+          gtk_editable_set_text (GTK_EDITABLE (data->server), email_domain);
+          return;
+        }
+
+      username = gtk_editable_get_text (GTK_EDITABLE (data->username));
+      server = gtk_editable_get_text (GTK_EDITABLE (data->server));
+      if (*username == '\0' || *server == '\0')
+        goto out;
     }
 
   password = gtk_editable_get_text (GTK_EDITABLE (data->password));

@@ -135,17 +135,18 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
 {
   JsonParser *parser = NULL;
   JsonObject *json_object = NULL;
+  JsonNode *json_member = NULL;
   RestProxy *proxy = NULL;
   RestProxyCall *call = NULL;
   GError *identity_error = NULL;
   gchar *authorization = NULL;
-  gchar *presentation_identity = NULL;
-  gchar *id = NULL;
+  const char *id = NULL;
+  const char *presentation_identity = NULL;
   gchar *ret = NULL;
 
   authorization = g_strconcat ("Bearer ", access_token, NULL);
 
-  proxy = goa_rest_proxy_new ("https://graph.microsoft.com/v1.0/me/drive", FALSE);
+  proxy = goa_rest_proxy_new ("https://graph.microsoft.com/v1.0/me", FALSE);
   call = rest_proxy_new_call (proxy);
   rest_proxy_call_set_method (call, "GET");
   rest_proxy_call_add_header (call, "Authorization", authorization);
@@ -182,46 +183,60 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
       goto out;
     }
 
-  json_object = json_node_get_object (json_parser_get_root (parser));
-  if (!json_object_has_member (json_object, "owner"))
+  json_member = json_parser_get_root (parser);
+  if (json_member == NULL || !JSON_NODE_HOLDS_OBJECT (json_member))
     {
-      g_debug ("Did not find owner in JSON data");
+      g_debug ("%s(): expected root node to be an object", G_STRFUNC);
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
                    _("Could not parse response"));
       goto out;
     }
+  json_object = json_node_get_object (json_member);
 
-  json_object = json_object_get_object_member (json_object, "owner");
-  if (!json_object_has_member (json_object, "user"))
+  // Use the "id" field as the "Identity"
+  json_member = json_object_get_member (json_object, "id");
+  if (json_member == NULL || json_node_get_value_type (json_member) != G_TYPE_STRING)
     {
-      g_debug ("Did not find user in JSON data");
+      g_debug ("%s(): expected \"id\" field holding a string", G_STRFUNC);
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
                    _("Could not parse response"));
       goto out;
     }
-  json_object = json_object_get_object_member (json_object, "user");
+  id = json_node_get_string (json_member);
 
-  id = g_strdup (json_object_get_string_member (json_object, "id"));
-
-  if (json_object_has_member (json_object, "email"))
+  // Prefer "mail" then "displayName" for "PresentationIdentity", failing if neither is available
+  json_member = json_object_get_member (json_object, "mail");
+  if (json_member != NULL && json_node_get_value_type (json_member) == G_TYPE_STRING)
     {
-      presentation_identity = g_strdup (json_object_get_string_member (json_object, "email"));
-    }
-  else
-    {
-      presentation_identity = g_strdup (json_object_get_string_member (json_object, "displayName"));
+      presentation_identity = json_node_get_string (json_member);
     }
 
-  ret = id;
-  id = NULL;
+  if (presentation_identity == NULL)
+    {
+      json_member = json_object_get_member (json_object, "displayName");
+      if (json_member != NULL && json_node_get_value_type (json_member) == G_TYPE_STRING)
+        {
+          presentation_identity = json_node_get_string (json_member);
+        }
+      else
+        {
+          g_debug ("%s(): expected \"mail\" or \"displayName\" field holding a string", G_STRFUNC);
+          g_set_error (error,
+                       GOA_ERROR,
+                       GOA_ERROR_FAILED,
+                       _("Could not parse response"));
+          goto out;
+        }
+    }
+
+  ret = g_strdup (id);
   if (out_presentation_identity != NULL)
     {
-      *out_presentation_identity = presentation_identity;
-      presentation_identity = NULL;
+      *out_presentation_identity = g_strdup (presentation_identity);
     }
 
 out:
@@ -230,8 +245,6 @@ out:
   g_clear_object (&call);
   g_clear_object (&proxy);
   g_free (authorization);
-  g_free (id);
-  g_free (presentation_identity);
   return ret;
 }
 

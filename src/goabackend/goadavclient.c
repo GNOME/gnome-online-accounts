@@ -18,6 +18,7 @@
  */
 
 #include "config.h"
+#include <glib/gi18n-lib.h>
 
 #include <libsoup/soup.h>
 
@@ -29,15 +30,20 @@
 #define WELL_KNOWN_CARDDAV   "/.well-known/carddav"
 #define WELL_KNOWN_NEXTCLOUD "remote.php/dav"
 
+/* Fastmail
+ * See: https://www.fastmail.help/hc/en-us/articles/1500000278342-Server-names-and-ports
+ */
 #define FASTMAIL_WEBDAV      "https://myfiles.fastmail.com"
 #define FASTMAIL_CALDAV      "https://caldav.fastmail.com/.well-known/caldav"
 #define FASTMAIL_CARDDAV     "https://carddav.fastmail.com/.well-known/carddav"
-#define FASTMAIL_CARDDAV_FMT "https://carddav.fastmail.com/dav/addressbooks/user/%s/Default"
 
+/* mailbox.org
+ * See: https://kb.mailbox.org/en/private/drive-article/webdav-for-linux/
+ */
 #define MAILBOX_ORG_HOSTNAME "dav.mailbox.org"
 #define MAILBOX_ORG_WEBDAV   "https://dav.mailbox.org/servlet/webdav.infostore"
-#define MAILBOX_ORG_CALDAV   "https://dav.mailbox.org/.well-known/caldav"
-#define MAILBOX_ORG_CARDDAV  "https://dav.mailbox.org/.well-known/carddav"
+#define MAILBOX_ORG_CALDAV   "https://dav.mailbox.org/caldav"
+#define MAILBOX_ORG_CARDDAV  "https://dav.mailbox.org/carddav"
 
 struct _GoaDavClient
 {
@@ -239,134 +245,6 @@ _soup_message_get_dav_features (SoupMessage  *message,
     }
 
   return ret;
-}
-
-static gboolean
-goa_dav_configuration_autoconfig_fastmail (GoaDavConfiguration *config,
-                                           SoupMessage         *message,
-                                           CheckData           *data)
-{
-  GUri *uri = NULL;
-  const char *host = NULL;
-  g_autofree char *username = NULL;
-  g_autofree char *domain = NULL;
-
-  g_assert (config != NULL);
-  g_assert (SOUP_IS_MESSAGE (message));
-  g_assert (data != NULL);
-
-  uri = soup_message_get_uri (message);
-  if (uri != NULL)
-    host = g_uri_get_host (uri);
-
-  if (!goa_utils_parse_email_address (data->username, &username, &domain))
-    {
-      g_warning ("%s(): invalid Fastmail username: %s", G_STRFUNC, data->username);
-      return FALSE;
-    }
-
-  /* We can infer the endpoints from the subdomain `*.fastmail.com`.
-   *
-   * FIXME: The generic WebDAV provider can not support multiple usernames or
-   * passwords, and we WILL have a scoped application password, so we have to
-   * choose the single appropriate service.
-   *
-   * In the case of WebDAV (Files) and CalDAV, the presentation identity is
-   * altered to include the subdomain to avoid false positives when checking
-   * for duplicate accounts.
-   *
-   * https://www.fastmail.help/hc/en-us/articles/1500000278342-Server-names-and-ports
-   * https://www.fastmail.help/hc/en-us/articles/1500000277882-Remote-file-access
-   * https://www.fastmail.help/hc/en-us/articles/360058752854-App-passwords
-   */
-  if (g_strcmp0 (host, "webdav.fastmail.com") == 0
-      || g_strcmp0 (host, "myfiles.fastmail.com") == 0)
-    {
-      g_debug ("%s(): Fastmail WebDAV account: %s", G_STRFUNC, data->username);
-      config->identity = g_strdup_printf ("%s@%s", username, host);
-      g_set_str (&config->webdav_uri, FASTMAIL_WEBDAV);
-      config->features = GOA_PROVIDER_FEATURE_FILES;
-
-      return TRUE;
-    }
-
-  if (g_strcmp0 (host, "caldav.fastmail.com") == 0)
-    {
-      g_debug ("%s(): Fastmail CalDAV account: %s", G_STRFUNC, data->username);
-      config->identity = g_strdup_printf ("%s@%s", username, host);
-      g_set_str (&config->caldav_uri, FASTMAIL_CALDAV);
-      config->features = GOA_PROVIDER_FEATURE_CALENDAR;
-
-      return TRUE;
-    }
-
-  if (g_strcmp0 (host, "carddav.fastmail.com") == 0)
-    {
-      /* If we're passed details for the "Default or "Shared" addressbook, we
-       * rely on the user having passed the full, correct URI and username.
-       */
-      if (g_str_has_suffix (username, "+Default")
-          || g_str_has_suffix (username, "+Shared"))
-        {
-          g_debug ("%s(): Fastmail CardDAV account: %s", G_STRFUNC, data->username);
-          config->identity = g_strdup_printf ("%s@%s", username, domain);
-          config->carddav_uri = g_uri_to_string (uri);
-          config->features = GOA_PROVIDER_FEATURE_CONTACTS;
-
-          return TRUE;
-        }
-
-      /* Otherwise, we can infer the details for the "Default" addressbook
-       */
-      g_debug ("%s(): Fastmail CardDAV account: %s", G_STRFUNC, data->username);
-      config->identity = g_strdup_printf ("%s+Default@%s", username, domain);
-      config->username = g_strdup_printf ("%s+Default@%s", username, domain);
-      config->carddav_uri = g_strdup_printf (FASTMAIL_CARDDAV_FMT, data->username);
-      config->features = GOA_PROVIDER_FEATURE_CONTACTS;
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
-goa_dav_configuration_autoconfig_mailbox_org (GoaDavConfiguration *config,
-                                              SoupMessage         *message)
-{
-  GUri *uri = NULL;
-  const char *host = NULL;
-
-  g_assert (config != NULL);
-  g_assert (SOUP_IS_MESSAGE (message));
-
-  uri = soup_message_get_uri (message);
-  if (uri != NULL)
-    host = g_uri_get_host (uri);
-
-  /* We can infer the endpoints from the hostname `dav.mailbox.org`.
-   *
-   * TODO: we may have scoped application credentials rather than user
-   * credentials, so it may be prudent to support a code path that can handle
-   * partial authentication failure as unsupported DAV features.
-   *
-   * https://kb.mailbox.org/en/private/drive-article/webdav-for-linux/
-   * https://office.mailbox.org/appsuite/help/l10n/en_US/ox.appsuite.user.sect.security.apppasswords.html
-   */
-  if (g_strcmp0 (host, MAILBOX_ORG_HOSTNAME) == 0)
-    {
-      g_set_str (&config->webdav_uri, MAILBOX_ORG_WEBDAV);
-      g_set_str (&config->caldav_uri, MAILBOX_ORG_CALDAV);
-      g_set_str (&config->carddav_uri, MAILBOX_ORG_CARDDAV);
-
-      config->features = GOA_PROVIDER_FEATURE_CALENDAR |
-                         GOA_PROVIDER_FEATURE_CONTACTS |
-                         GOA_PROVIDER_FEATURE_FILES;
-
-      return TRUE;
-    }
-
-  return FALSE;
 }
 
 static gboolean
@@ -676,6 +554,7 @@ typedef struct
 
   GoaDavConfiguration *config;
   GQueue uris;
+  gboolean auth_error;
 } DiscoverData;
 
 static void
@@ -697,6 +576,7 @@ dav_client_discover_response_cb (SoupSession  *session,
   g_autoptr (GTask) task = G_TASK (user_data);
   CheckData *data = g_task_get_task_data (task);
   DiscoverData *discover = (DiscoverData *) data;
+  GoaProviderFeatures features = GOA_PROVIDER_FEATURE_INVALID;
   SoupMessage *msg;
   unsigned int status;
   g_autoptr (GBytes) body = NULL;
@@ -729,24 +609,15 @@ dav_client_discover_response_cb (SoupSession  *session,
     case SOUP_STATUS_NOT_IMPLEMENTED:
       goto out;
 
+    /* Defer authentication errors to support content restricted passwords */
+    case SOUP_STATUS_UNAUTHORIZED:
+    case SOUP_STATUS_FORBIDDEN:
+    case SOUP_STATUS_PRECONDITION_FAILED:
+      discover->auth_error = TRUE;
+      goto out;
+
     default:
       goa_utils_set_error_soup (&data->error, msg);
-      goto out;
-    }
-
-  /* Short path for fastmail.com
-   */
-  if (goa_dav_configuration_autoconfig_fastmail (discover->config, msg, data))
-    {
-      g_queue_clear_full (&discover->uris, g_free);
-      goto out;
-    }
-
-  /* Short path for mailbox.org
-   */
-  if (goa_dav_configuration_autoconfig_mailbox_org (discover->config, msg))
-    {
-      g_queue_clear_full (&discover->uris, g_free);
       goto out;
     }
 
@@ -758,41 +629,41 @@ dav_client_discover_response_cb (SoupSession  *session,
       goto out;
     }
 
-  discover->config->features |= _soup_message_get_dav_features (msg, &error);
+  features |= _soup_message_get_dav_features (msg, &error);
   if (error != NULL)
     goto out;
 
   g_debug ("goa_dav_client_discover(): found: (%p, %s)", msg, data->uri);
 
-  /* GVfs won't follow redirects so the resolved URI is used for file access.
+  /* TODO: implement PROPFIND behaviour emulating GVfs. Workaround by only
+   *       accepting endpoints  without support for CalDAV/CardDAV.
    */
-  if ((discover->config->features & GOA_PROVIDER_FEATURE_FILES) != 0
+  if (features == GOA_PROVIDER_FEATURE_FILES
       && discover->config->webdav_uri == NULL)
     {
-      GUri *uri = soup_message_get_uri (msg);
+      GUri *uri = NULL;
 
-      discover->config->webdav_uri = g_uri_to_string (uri);
+      /* GVfs won't follow redirects, so return the resolved URI */
+      uri = soup_message_get_uri (msg);
+      if (uri != NULL)
+        {
+          discover->config->webdav_uri = g_uri_to_string (uri);
+          discover->config->features |= GOA_PROVIDER_FEATURE_FILES;
+        }
     }
 
-  /* CalDAV/CardDAV clients MUST handle HTTP redirects on the ".well-known" URI,
-   * and they take precedence when available.
-   *
-   * See: https://datatracker.ietf.org/doc/html/rfc6764#section-5
-   */
-  if ((discover->config->features & GOA_PROVIDER_FEATURE_CALENDAR) != 0)
+  if ((features & GOA_PROVIDER_FEATURE_CALENDAR) != 0
+      && discover->config->caldav_uri == NULL)
     {
-      if (g_str_has_suffix (data->uri, WELL_KNOWN_CALDAV))
-        g_set_str (&discover->config->caldav_uri, data->uri);
-      else if (discover->config->caldav_uri == NULL)
-        discover->config->caldav_uri = g_strdup (data->uri);
+      discover->config->caldav_uri = g_strdup (data->uri);
+      discover->config->features |= GOA_PROVIDER_FEATURE_CALENDAR;
     }
 
-  if ((discover->config->features & GOA_PROVIDER_FEATURE_CONTACTS) != 0)
+  if ((features & GOA_PROVIDER_FEATURE_CONTACTS) != 0
+      && discover->config->carddav_uri == NULL)
     {
-      if (g_str_has_suffix (data->uri, WELL_KNOWN_CARDDAV))
-        g_set_str (&discover->config->carddav_uri, data->uri);
-      else if (discover->config->carddav_uri == NULL)
-        discover->config->carddav_uri = g_strdup (data->uri);
+      discover->config->carddav_uri = g_strdup (data->uri);
+      discover->config->features |= GOA_PROVIDER_FEATURE_CONTACTS;
     }
 
 out:
@@ -818,10 +689,20 @@ out:
     }
   else if (discover->config->features == 0)
     {
-      g_task_return_new_error (task,
-                               GOA_ERROR,
-                               GOA_ERROR_NOT_SUPPORTED,
-                               "Cannot find WebDAV endpoint");
+      if (discover->auth_error)
+        {
+          g_task_return_new_error (task,
+                                   GOA_ERROR,
+                                   GOA_ERROR_NOT_AUTHORIZED,
+                                   _("Authentication failed"));
+        }
+      else
+        {
+          g_task_return_new_error (task,
+                                   GOA_ERROR,
+                                   GOA_ERROR_NOT_SUPPORTED,
+                                   _("Cannot find WebDAV endpoint"));
+        }
     }
   else
     {
@@ -829,6 +710,46 @@ out:
                              g_steal_pointer (&discover->config),
                              (GDestroyNotify) goa_dav_configuration_free);
     }
+}
+
+static gboolean
+dav_client_discover_preconfig (DiscoverData *discover,
+                               const char   *uri)
+{
+  g_autoptr (GUri) guri = NULL;
+  const char *host = NULL;
+  const char *base_domain = NULL;
+
+  g_assert (discover != NULL);
+
+  guri = g_uri_parse (uri, G_URI_FLAGS_NONE, NULL);
+  if (guri == NULL)
+    return FALSE;
+
+  host = g_uri_get_host (guri);
+  base_domain = soup_tld_get_base_domain (host, NULL);
+
+  if (g_strcmp0 (host, "fastmail.com") == 0
+      || g_strcmp0 (base_domain, "fastmail.com") == 0)
+    {
+      g_queue_push_tail (&discover->uris, g_strdup (FASTMAIL_WEBDAV));
+      g_queue_push_tail (&discover->uris, g_strdup (FASTMAIL_CALDAV));
+      g_queue_push_tail (&discover->uris, g_strdup (FASTMAIL_CARDDAV));
+
+      return TRUE;
+    }
+
+  if (g_strcmp0 (host, "mailbox.org") == 0
+      || g_strcmp0 (base_domain, "mailbox.org") == 0)
+    {
+      g_queue_push_tail (&discover->uris, g_strdup (MAILBOX_ORG_WEBDAV));
+      g_queue_push_tail (&discover->uris, g_strdup (MAILBOX_ORG_CALDAV));
+      g_queue_push_tail (&discover->uris, g_strdup (MAILBOX_ORG_CARDDAV));
+
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 /**
@@ -890,9 +811,15 @@ goa_dav_client_discover (GoaDavClient        *self,
 
   discover->config = g_new0 (GoaDavConfiguration, 1);
   g_queue_init (&discover->uris);
-  g_queue_push_tail (&discover->uris, g_uri_resolve_relative (uri, WELL_KNOWN_NEXTCLOUD, 0, NULL));
-  g_queue_push_tail (&discover->uris, g_uri_resolve_relative (uri, WELL_KNOWN_CALDAV, 0, NULL));
-  g_queue_push_tail (&discover->uris, g_uri_resolve_relative (uri, WELL_KNOWN_CARDDAV, 0, NULL));
+
+  /* Check if the host can be preconfigured, falling back to well-known paths.
+   */
+  if (!dav_client_discover_preconfig (discover, uri))
+    {
+      g_queue_push_tail (&discover->uris, g_uri_resolve_relative (uri, WELL_KNOWN_NEXTCLOUD, 0, NULL));
+      g_queue_push_tail (&discover->uris, g_uri_resolve_relative (uri, WELL_KNOWN_CALDAV, 0, NULL));
+      g_queue_push_tail (&discover->uris, g_uri_resolve_relative (uri, WELL_KNOWN_CARDDAV, 0, NULL));
+    }
 
   if (cancellable != NULL)
     {
