@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-04-23 15:23+0000\n"
-"PO-Revision-Date: 2024-04-29 18:18+0200\n"
+"POT-Creation-Date: 2024-05-13 18:12+0000\n"
+"PO-Revision-Date: 2024-05-13 20:25+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -48,6 +48,16 @@ msgid "ProviderType property is not set for account"
 msgstr "Nie ustawiono własności typu dostawcy dla konta"
 
 #. TODO: more specific
+#: src/goabackend/goadavclient.c:697 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:681
+msgid "Authentication failed"
+msgstr "Uwierzytelnienie się nie powiodło"
+
+#: src/goabackend/goadavclient.c:704
+msgid "Cannot find WebDAV endpoint"
+msgstr "Nie można odnaleźć punktu końcowego WebDAV"
+
+#. TODO: more specific
 #: src/goabackend/goaewsclient.c:284
 msgid "Failed to parse autodiscover response XML"
 msgstr ""
@@ -83,7 +93,7 @@ msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "Nieprawidłowe hasło dla nazwy użytkownika „%s” (%s, %d): "
 
 #. provider name
-#: src/goabackend/goaexchangeprovider.c:373
+#: src/goabackend/goaexchangeprovider.c:374
 msgid ""
 "Connect to a Microsoft Exchange provider to access calendars, contacts and "
 "files"
@@ -91,12 +101,12 @@ msgstr ""
 "Połączenie z dostawcą Microsoft Exchange umożliwia dostęp do kalendarzy, "
 "kontaktów i plików"
 
-#: src/goabackend/goaexchangeprovider.c:376
+#: src/goabackend/goaexchangeprovider.c:377
 #: src/goabackend/goaimapsmtpprovider.c:548
 msgid "_Email"
 msgstr "_E-mail"
 
-#: src/goabackend/goaexchangeprovider.c:377
+#: src/goabackend/goaexchangeprovider.c:378
 #: src/goabackend/goafedoraprovider.c:171
 #: src/goabackend/goaimapsmtpprovider.c:549
 #: src/goabackend/goaimapsmtpprovider.c:568
@@ -105,7 +115,7 @@ msgstr "_E-mail"
 msgid "_Password"
 msgstr "_Hasło"
 
-#: src/goabackend/goaexchangeprovider.c:378
+#: src/goabackend/goaexchangeprovider.c:379
 msgid ""
 "Exchange account details will be auto-detected from your email address when "
 "possible"
@@ -113,11 +123,11 @@ msgstr ""
 "Informacje o koncie Exchange zostaną automatycznie wykryte z adresu e-mail "
 "użytkownika, kiedy to możliwe"
 
-#: src/goabackend/goaexchangeprovider.c:382
+#: src/goabackend/goaexchangeprovider.c:383
 msgid "Account Details"
 msgstr "Informacje o koncie"
 
-#: src/goabackend/goaexchangeprovider.c:383
+#: src/goabackend/goaexchangeprovider.c:384
 #: src/goabackend/goafedoraprovider.c:170
 #: src/goabackend/goaimapsmtpprovider.c:567
 #: src/goabackend/goaimapsmtpprovider.c:588
@@ -125,11 +135,11 @@ msgstr "Informacje o koncie"
 msgid "User_name"
 msgstr "_Nazwa użytkownika"
 
-#: src/goabackend/goaexchangeprovider.c:384
+#: src/goabackend/goaexchangeprovider.c:385
 msgid "_Domain"
 msgstr "_Domena"
 
-#: src/goabackend/goaexchangeprovider.c:385
+#: src/goabackend/goaexchangeprovider.c:386
 msgid "Example domain: example.com"
 msgstr "Przykładowa domena: example.com"
 
@@ -147,7 +157,7 @@ msgid "Google"
 msgstr "Google"
 
 #: src/goabackend/goagoogleprovider.c:213
-#: src/goabackend/goamsgraphprovider.c:162
+#: src/goabackend/goamsgraphprovider.c:163
 #: src/goabackend/goawindowsliveprovider.c:165
 #, c-format
 msgid ""
@@ -159,9 +169,10 @@ msgstr ""
 #. TODO: more specific
 #: src/goabackend/goagoogleprovider.c:232
 #: src/goabackend/goagoogleprovider.c:243
-#: src/goabackend/goamsgraphprovider.c:181
-#: src/goabackend/goamsgraphprovider.c:192
-#: src/goabackend/goamsgraphprovider.c:203
+#: src/goabackend/goamsgraphprovider.c:182
+#: src/goabackend/goamsgraphprovider.c:193
+#: src/goabackend/goamsgraphprovider.c:206
+#: src/goabackend/goamsgraphprovider.c:231
 #: src/goabackend/goaoauth2provider.c:679
 #: src/goabackend/goaoauth2provider.c:709
 #: src/goabackend/goaoauth2provider.c:720 src/goabackend/goautils.c:133
@@ -176,12 +187,6 @@ msgstr "Nie można przetworzyć odpowiedzi"
 #: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goasmtpauth.c:149
 msgid "Service not available"
 msgstr "Usługa jest niedostępna"
-
-#. TODO: more specific
-#: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goasmtpauth.c:102
-#: src/goabackend/goautils.c:681
-msgid "Authentication failed"
-msgstr "Uwierzytelnienie się nie powiodło"
 
 #: src/goabackend/goaimapauthlogin.c:166 src/goabackend/goasmtpauth.c:600
 msgid "Server does not support STARTTLS"
@@ -316,7 +321,7 @@ msgid "Example principal: user@EXAMPLE.COM"
 msgstr "Przykładowy naczelnik: użytkownik@EXAMPLE.COM"
 
 #: src/goabackend/goakerberosprovider.c:599
-#: src/goabackend/goamsgraphprovider.c:374
+#: src/goabackend/goamsgraphprovider.c:388
 msgid "_Sign in…"
 msgstr "_Zaloguj się…"
 
@@ -345,16 +350,16 @@ msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:362
+#: src/goabackend/goamsgraphprovider.c:376
 msgid "Connect to a Microsoft 365 provider to access files"
 msgstr "Połączenie z dostawcą Microsoft 365 umożliwia dostęp do plików"
 
-#: src/goabackend/goamsgraphprovider.c:364
+#: src/goabackend/goamsgraphprovider.c:378
 msgid "Authorization Details"
 msgstr "Informacje o upoważnieniu"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:366
+#: src/goabackend/goamsgraphprovider.c:380
 msgid ""
 "A custom Client or Tenant ID may need to be provided depending on the "
 "settings for your organization"
@@ -362,16 +367,16 @@ msgstr ""
 "W zależności od ustawień organizacji być może trzeba podać niestandardowy "
 "identyfikator klienta lub dzierżawcy"
 
-#: src/goabackend/goamsgraphprovider.c:368
+#: src/goabackend/goamsgraphprovider.c:382
 msgid "_Client ID"
 msgstr "_Identyfikator klienta"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:370
+#: src/goabackend/goamsgraphprovider.c:384
 msgid "_Tenant ID"
 msgstr "Identyfikator _dzierżawcy"
 
-#: src/goabackend/goamsgraphprovider.c:371
+#: src/goabackend/goamsgraphprovider.c:385
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "Przykładowy identyfikator: 00000000-0000-0000-0000-000000000000"
 
@@ -414,16 +419,16 @@ msgstr "Proszę zalogować się na %s w przeglądarce"
 msgid "_Sign In…"
 msgstr "_Zaloguj się…"
 
-#: src/goabackend/goaoauth2provider.c:1292
+#: src/goabackend/goaoauth2provider.c:1291
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Poproszono o zalogowanie jako %s, ale zalogowano jako %s"
 
-#: src/goabackend/goaoauth2provider.c:1479
+#: src/goabackend/goaoauth2provider.c:1478
 msgid "Credentials do not contain access_token"
 msgstr "Dane uwierzytelniające nie zawierają „access_token”"
 
-#: src/goabackend/goaoauth2provider.c:1523
+#: src/goabackend/goaoauth2provider.c:1522
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Odświeżenie tokenu dostępu się nie powiodło (%s, %d): "
