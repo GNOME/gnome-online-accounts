@@ -576,6 +576,7 @@ dav_client_discover_response_cb (SoupSession  *session,
   g_autoptr (GTask) task = G_TASK (user_data);
   CheckData *data = g_task_get_task_data (task);
   DiscoverData *discover = (DiscoverData *) data;
+  GoaProviderFeatures features = GOA_PROVIDER_FEATURE_INVALID;
   SoupMessage *msg;
   unsigned int status;
   g_autoptr (GBytes) body = NULL;
@@ -628,7 +629,7 @@ dav_client_discover_response_cb (SoupSession  *session,
       goto out;
     }
 
-  discover->config->features |= _soup_message_get_dav_features (msg, &error);
+  features |= _soup_message_get_dav_features (msg, &error);
   if (error != NULL)
     goto out;
 
@@ -637,7 +638,7 @@ dav_client_discover_response_cb (SoupSession  *session,
   /* TODO: implement PROPFIND behaviour emulating GVfs. Workaround by only
    *       accepting endpoints  without support for CalDAV/CardDAV.
    */
-  if (discover->config->features == GOA_PROVIDER_FEATURE_FILES
+  if (features == GOA_PROVIDER_FEATURE_FILES
       && discover->config->webdav_uri == NULL)
     {
       GUri *uri = NULL;
@@ -645,19 +646,24 @@ dav_client_discover_response_cb (SoupSession  *session,
       /* GVfs won't follow redirects, so return the resolved URI */
       uri = soup_message_get_uri (msg);
       if (uri != NULL)
-        discover->config->webdav_uri = g_uri_to_string (uri);
+        {
+          discover->config->webdav_uri = g_uri_to_string (uri);
+          discover->config->features |= GOA_PROVIDER_FEATURE_FILES;
+        }
     }
 
-  if ((discover->config->features & GOA_PROVIDER_FEATURE_CALENDAR) != 0
+  if ((features & GOA_PROVIDER_FEATURE_CALENDAR) != 0
       && discover->config->caldav_uri == NULL)
     {
       discover->config->caldav_uri = g_strdup (data->uri);
+      discover->config->features |= GOA_PROVIDER_FEATURE_CALENDAR;
     }
 
-  if ((discover->config->features & GOA_PROVIDER_FEATURE_CONTACTS) != 0
+  if ((features & GOA_PROVIDER_FEATURE_CONTACTS) != 0
       && discover->config->carddav_uri == NULL)
     {
       discover->config->carddav_uri = g_strdup (data->uri);
+      discover->config->features |= GOA_PROVIDER_FEATURE_CONTACTS;
     }
 
 out:
