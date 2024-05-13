@@ -1051,7 +1051,6 @@ oauth2_secret_service_get_cb (GObject      *object,
   g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
   GCancellable *cancellable = g_task_get_cancellable (task);
   g_autoptr(SecretService) service = NULL;
-  g_autolist (SecretCollection) collections = NULL;
   g_autoptr(GError) error = NULL;
 
   g_return_if_fail (G_IS_TASK (task));
