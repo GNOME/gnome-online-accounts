@@ -654,7 +654,8 @@ dav_client_discover_response_cb (SoupSession  *session,
       discover->config->caldav_uri = g_strdup (data->uri);
     }
 
-  if ((discover->config->features & GOA_PROVIDER_FEATURE_CONTACTS) != 0)
+  if ((discover->config->features & GOA_PROVIDER_FEATURE_CONTACTS) != 0
+      && discover->config->carddav_uri == NULL)
     {
       discover->config->carddav_uri = g_strdup (data->uri);
     }
