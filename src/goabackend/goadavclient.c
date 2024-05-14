@@ -790,14 +790,21 @@ dav_client_discover_iterate (GTask *task)
 
       data->uri = g_queue_pop_head (&discover->uris);
       data->msg = soup_message_new (SOUP_METHOD_OPTIONS, data->uri);
-
-      dav_client_authenticate_task (task);
-      soup_session_send_and_read_async (data->session,
-                                        data->msg,
-                                        G_PRIORITY_DEFAULT,
-                                        data->cancellable,
-                                        (GAsyncReadyCallback)dav_client_discover_options_cb,
-                                        g_object_ref (task));
+      if (data->msg != NULL)
+        {
+          dav_client_authenticate_task (task);
+          soup_session_send_and_read_async (data->session,
+                                            data->msg,
+                                            G_PRIORITY_DEFAULT,
+                                            data->cancellable,
+                                            (GAsyncReadyCallback)dav_client_discover_options_cb,
+                                            g_object_ref (task));
+        }
+      else
+        {
+          g_warning ("Failed to create message for \"%s\"", data->uri);
+          dav_client_discover_iterate (task);
+        }
     }
   else if (discover->services->len == 0)
     {
