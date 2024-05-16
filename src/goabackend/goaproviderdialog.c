@@ -269,19 +269,6 @@ goa_provider_dialog_set_property (GObject      *object,
 static void
 goa_provider_dialog_init (GoaProviderDialog *self)
 {
-  GtkEventController *controller;
-  GtkShortcut *shortcut;
-
-  controller = gtk_shortcut_controller_new ();
-  gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (controller),
-                                     GTK_SHORTCUT_SCOPE_GLOBAL);
-  gtk_widget_add_controller (GTK_WIDGET (self), controller);
-
-  shortcut = gtk_shortcut_new (gtk_shortcut_trigger_parse_string ("Escape|<Control>w"),
-                               gtk_shortcut_action_parse_string ("action(window.close)"));
-  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller),
-                                        shortcut);
-
   self->view = g_object_new (ADW_TYPE_NAVIGATION_VIEW, NULL);
   adw_dialog_set_child (ADW_DIALOG (self), self->view);
 
