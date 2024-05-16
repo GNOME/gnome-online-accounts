@@ -423,7 +423,6 @@ add_account_action_cb (GoaProviderDialog *dialog,
   GCancellable *cancellable = g_task_get_cancellable (task);
   const char *client_id;
   g_autofree char *issuer = NULL;
-  g_autoptr(GError) error = NULL;
   const char *tenant;
   char *tmp;
 
