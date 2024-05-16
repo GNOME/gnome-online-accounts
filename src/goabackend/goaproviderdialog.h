@@ -53,7 +53,7 @@ typedef enum
 } GoaDialogState;
 
 #define GOA_TYPE_PROVIDER_DIALOG (goa_provider_dialog_get_type ())
-G_DECLARE_FINAL_TYPE (GoaProviderDialog, goa_provider_dialog, GOA, PROVIDER_DIALOG, AdwWindow)
+G_DECLARE_FINAL_TYPE (GoaProviderDialog, goa_provider_dialog, GOA, PROVIDER_DIALOG, AdwDialog)
 
 GoaProviderDialog   *goa_provider_dialog_new                (GoaProvider       *provider,
                                                              GoaClient         *client,
