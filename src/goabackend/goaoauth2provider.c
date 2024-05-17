@@ -1232,7 +1232,6 @@ goa_oauth2_provider_add_account (GoaProvider         *provider,
   g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, goa_oauth2_provider_add_account);
   g_task_set_task_data (task, data, account_data_free);
-  goa_provider_task_bind_window (task, GTK_WINDOW (data->dialog));
 
   create_account_details_ui (provider, data, TRUE);
   g_signal_connect_object (data->dialog,
@@ -1240,7 +1239,7 @@ goa_oauth2_provider_add_account (GoaProvider         *provider,
                            G_CALLBACK (oauth2_secret_run_task),
                            task,
                            0 /* G_CONNECT_DEFAULT */);
-  gtk_window_present (GTK_WINDOW (data->dialog));
+  goa_provider_task_run_in_dialog (task, data->dialog);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -1343,7 +1342,6 @@ goa_oauth2_provider_refresh_account (GoaProvider         *provider,
   g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, goa_oauth2_provider_refresh_account);
   g_task_set_task_data (task, data, account_data_free);
-  goa_provider_task_bind_window (task, GTK_WINDOW (data->dialog));
 
   create_account_details_ui (provider, data, FALSE);
   g_signal_connect_object (data->dialog,
@@ -1351,7 +1349,7 @@ goa_oauth2_provider_refresh_account (GoaProvider         *provider,
                            G_CALLBACK (oauth2_secret_run_task),
                            task,
                            0 /* G_CONNECT_DEFAULT */);
-  gtk_window_present (GTK_WINDOW (data->dialog));
+  goa_provider_task_run_in_dialog (task, data->dialog);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
