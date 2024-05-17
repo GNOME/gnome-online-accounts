@@ -604,9 +604,7 @@ goa_provider_real_show_account (GoaProvider         *self,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, goa_provider_real_show_account);
-  goa_provider_task_bind_window (task, GTK_WINDOW (dialog));
-
-  gtk_window_present (GTK_WINDOW (dialog));
+  goa_provider_task_run_in_dialog (task, dialog);
 }
 
 /**

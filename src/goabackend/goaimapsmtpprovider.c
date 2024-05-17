@@ -886,7 +886,6 @@ add_account (GoaProvider         *provider,
   g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, add_account);
   g_task_set_task_data (task, data, add_account_data_free);
-  goa_provider_task_bind_window (task, GTK_WINDOW (data->dialog));
 
   create_account_details_ui (provider, data, TRUE);
   g_signal_connect_object (data->dialog,
@@ -895,7 +894,7 @@ add_account (GoaProvider         *provider,
                            task,
                            0 /* G_CONNECT_DEFAULT */);
   gtk_widget_grab_focus (data->email_address);
-  gtk_window_present (GTK_WINDOW (data->dialog));
+  goa_provider_task_run_in_dialog (task, data->dialog);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -1133,7 +1132,6 @@ refresh_account (GoaProvider         *provider,
   g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, add_account);
   g_task_set_task_data (task, data, add_account_data_free);
-  goa_provider_task_bind_window (task, GTK_WINDOW (data->dialog));
 
   create_account_details_ui (provider, data, FALSE);
 
@@ -1175,7 +1173,7 @@ refresh_account (GoaProvider         *provider,
                            G_CALLBACK (refresh_account_action_cb),
                            task,
                            0 /* G_CONNECT_DEFAULT */);
-  gtk_window_present (GTK_WINDOW (data->dialog));
+  goa_provider_task_run_in_dialog (task, data->dialog);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -1269,9 +1267,7 @@ show_account (GoaProvider         *self,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, show_account);
-  goa_provider_task_bind_window (task, GTK_WINDOW (dialog));
-
-  gtk_window_present (GTK_WINDOW (dialog));
+  goa_provider_task_run_in_dialog (task, dialog);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
