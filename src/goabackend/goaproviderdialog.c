@@ -88,6 +88,9 @@ struct _GoaProviderDialog
   GoaDialogState state;
   GCancellable *cancellable;
 
+  GCancellable *task_cancellable;
+  unsigned long task_cancellable_id;
+
   GtkWidget *view;
   GtkWidget *current_page;
   GtkWidget *current_group;
@@ -185,6 +188,7 @@ goa_provider_dialog_finalize (GObject *object)
 {
   GoaProviderDialog *self = GOA_PROVIDER_DIALOG (object);
 
+  g_clear_object (&self->task_cancellable);
   g_clear_object (&self->cancellable);
   g_clear_object (&self->client);
   g_clear_object (&self->object);
@@ -1134,6 +1138,12 @@ goa_provider_task_bind_window_cb (GtkWindow *window,
 
   g_signal_handlers_disconnect_by_func (window, goa_provider_task_bind_window_cb, task);
 
+  if (self->task_cancellable != NULL && self->task_cancellable_id != 0)
+    {
+      g_cancellable_disconnect (self->task_cancellable, self->task_cancellable_id);
+      self->task_cancellable_id = 0;
+    }
+
   if (self->state != GOA_DIALOG_DONE)
     {
       goa_provider_dialog_set_state (self, GOA_DIALOG_DONE);
@@ -1144,6 +1154,13 @@ goa_provider_task_bind_window_cb (GtkWindow *window,
     }
 
   return FALSE;
+}
+
+static void
+goa_provider_task_cancelled_cb (GCancellable *cancellable,
+                                GtkWindow    *window)
+{
+  gtk_window_destroy (window);
 }
 
 /**
@@ -1162,6 +1179,9 @@ void
 goa_provider_task_bind_window (GTask     *task,
                                GtkWindow *window)
 {
+  GoaProviderDialog *self = GOA_PROVIDER_DIALOG (window);
+  GCancellable *cancellable = NULL;
+
   g_return_if_fail (GTK_WINDOW (window));
   g_return_if_fail (G_IS_TASK (task));
 
@@ -1172,6 +1192,17 @@ goa_provider_task_bind_window (GTask     *task,
                            g_object_ref (task),
                            0 /* G_CONNECT_DEFAULT */);
   g_object_set_data (G_OBJECT (task), "goa-provider-dialog", window);
+
+  /* Ensure the handler runs if the task is cancelled.
+   */
+  cancellable = g_task_get_cancellable (task);
+  if (cancellable != NULL)
+    {
+      self->task_cancellable = g_object_ref (cancellable);
+      self->task_cancellable_id = g_cancellable_connect (cancellable,
+                                                         G_CALLBACK (goa_provider_task_cancelled_cb),
+                                                         window, NULL);
+    }
 }
 
 /**
