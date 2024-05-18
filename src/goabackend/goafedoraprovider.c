@@ -391,7 +391,6 @@ add_account (GoaProvider         *provider,
   g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, add_account);
   g_task_set_task_data (task, data, add_account_data_free);
-  goa_provider_task_bind_window (task, GTK_WINDOW (data->dialog));
 
   /* We need the ID from the temporary account
    */
@@ -406,7 +405,7 @@ add_account (GoaProvider         *provider,
                            G_CALLBACK (add_account_action_cb),
                            task,
                            0 /* G_CONNECT_DEFAULT */);
-  gtk_window_present (GTK_WINDOW (data->dialog));
+  goa_provider_task_run_in_dialog (task, data->dialog);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

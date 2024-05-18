@@ -482,7 +482,6 @@ add_account (GoaProvider         *provider,
   g_task_set_check_cancellable (task, FALSE);
   g_task_set_source_tag (task, add_account);
   g_task_set_task_data (task, data, account_data_free);
-  goa_provider_task_bind_window (task, GTK_WINDOW (data->dialog));
 
   create_account_details_ui (provider, data, TRUE);
   g_signal_connect_object (data->dialog,
@@ -490,7 +489,7 @@ add_account (GoaProvider         *provider,
                            G_CALLBACK (add_account_action_cb),
                            task,
                            0 /* G_CONNECT_DEFAULT */);
-  gtk_window_present (GTK_WINDOW (data->dialog));
+  goa_provider_task_run_in_dialog (task, data->dialog);
 
   // We chain-up in add_account_parent_cb() once the user input is confirmed
 }
