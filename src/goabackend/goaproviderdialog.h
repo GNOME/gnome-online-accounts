@@ -104,7 +104,6 @@ void                 goa_provider_task_return_account       (GTask             *
                                                              GoaObject         *object);
 void                 goa_provider_task_return_error         (GTask             *task,
                                                              GError            *error);
-gboolean             goa_provider_task_return_if_completed  (GTask             *task);
 
 G_END_DECLS
 
