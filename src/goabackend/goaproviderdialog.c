@@ -580,14 +580,14 @@ goa_account_call_remove_cb (GoaAccount   *account,
 }
 
 static void
-adw_message_dialog_choose_cb (AdwMessageDialog *dialog,
-                              GAsyncResult     *result,
-                              gpointer          user_data)
+adw_alert_dialog_choose_cb (AdwAlertDialog *dialog,
+                            GAsyncResult   *result,
+                            gpointer        user_data)
 {
   g_autoptr(GoaProviderDialog) self = GOA_PROVIDER_DIALOG (user_data);
   const char *response = NULL;
 
-  response = adw_message_dialog_choose_finish (dialog, result);
+  response = adw_alert_dialog_choose_finish (dialog, result);
   if (g_strcmp0 (response, "remove") == 0)
     {
       goa_account_call_remove (goa_object_peek_account (self->object),
@@ -603,22 +603,22 @@ adw_message_dialog_choose_cb (AdwMessageDialog *dialog,
 static void
 on_remove_activated (GoaProviderDialog *self)
 {
-  GtkWidget *dialog;
+  AdwDialog *dialog;
 
-  dialog = adw_message_dialog_new (self->parent,
-                                   _("Remove this Account?"),
-                                   _("If you remove this Online Account you will have to connect to it again to use it with apps and services."));
-  adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
-                                    "cancel", _("_Cancel"),
-                                    "remove", _("_Remove"),
-                                    NULL);
-  adw_message_dialog_set_response_appearance (ADW_MESSAGE_DIALOG (dialog),
-                                              "remove",
-                                              ADW_RESPONSE_DESTRUCTIVE);
-  adw_message_dialog_choose (ADW_MESSAGE_DIALOG (dialog),
-                             self->cancellable,
-                             (GAsyncReadyCallback) adw_message_dialog_choose_cb,
-                             g_object_ref (self));
+  dialog = adw_alert_dialog_new (_("Remove this Account?"),
+                                 _("If you remove this Online Account you will have to connect to it again to use it with apps and services."));
+  adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
+                                  "cancel", _("_Cancel"),
+                                  "remove", _("_Remove"),
+                                  NULL);
+  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog),
+                                            "remove",
+                                            ADW_RESPONSE_DESTRUCTIVE);
+  adw_alert_dialog_choose (ADW_ALERT_DIALOG (dialog),
+                           GTK_WIDGET (self),
+                           self->cancellable,
+                           (GAsyncReadyCallback) adw_alert_dialog_choose_cb,
+                           g_object_ref (self));
   goa_provider_dialog_set_state (self, GOA_DIALOG_BUSY);
 }
 
