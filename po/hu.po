@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/iss"
 "ues\n"
-"POT-Creation-Date: 2024-02-24 20:57+0000\n"
-"PO-Revision-Date: 2024-03-10 15:28+0100\n"
+"POT-Creation-Date: 2024-05-13 18:12+0000\n"
+"PO-Revision-Date: 2024-05-19 08:30+0200\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <openscope at fsf dot hu>\n"
 "Language: hu\n"
@@ -49,6 +49,16 @@ msgid "ProviderType property is not set for account"
 msgstr "A ProviderType tulajdonság nincs beállítva a fiók számára"
 
 #. TODO: more specific
+#: src/goabackend/goadavclient.c:697 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:681
+msgid "Authentication failed"
+msgstr "A hitelesítés meghiúsult"
+
+#: src/goabackend/goadavclient.c:704
+msgid "Cannot find WebDAV endpoint"
+msgstr "A WebDAV végpont nem található"
+
+#. TODO: more specific
 #: src/goabackend/goaewsclient.c:284
 msgid "Failed to parse autodiscover response XML"
 msgstr "Az automatikus felderítésre adott válasz XML feldolgozása sikertelen."
@@ -82,21 +92,20 @@ msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "Érvénytelen jelszó a(z) „%s” felhasználónévhez (%s, %d): "
 
 #. provider name
-#: src/goabackend/goaexchangeprovider.c:373
+#: src/goabackend/goaexchangeprovider.c:374
 msgid ""
 "Connect to a Microsoft Exchange provider to access calendars, contacts and "
 "files"
 msgstr ""
-"Kapcsolódás egy Microsoft Exchange szolgáltatóhoz a naptárak, névjegyek és"
-" fájlok eléréséhez"
+"Kapcsolódás egy Microsoft Exchange szolgáltatóhoz a naptárak, névjegyek és "
+"fájlok eléréséhez"
 
-#: src/goabackend/goaexchangeprovider.c:376
+#: src/goabackend/goaexchangeprovider.c:377
 #: src/goabackend/goaimapsmtpprovider.c:548
-#| msgid "_E-mail"
 msgid "_Email"
 msgstr "_E-mail"
 
-#: src/goabackend/goaexchangeprovider.c:377
+#: src/goabackend/goaexchangeprovider.c:378
 #: src/goabackend/goafedoraprovider.c:171
 #: src/goabackend/goaimapsmtpprovider.c:549
 #: src/goabackend/goaimapsmtpprovider.c:568
@@ -105,19 +114,19 @@ msgstr "_E-mail"
 msgid "_Password"
 msgstr "_Jelszó"
 
-#: src/goabackend/goaexchangeprovider.c:378
+#: src/goabackend/goaexchangeprovider.c:379
 msgid ""
 "Exchange account details will be auto-detected from your email address when "
 "possible"
 msgstr ""
-"Az Exchange-fiók részletei automatikusan felismerésre kerülnek az"
-" e-mail-címéből, ha lehetséges"
+"Az Exchange-fiók részletei automatikusan felismerésre kerülnek az e-mail-"
+"címéből, ha lehetséges"
 
-#: src/goabackend/goaexchangeprovider.c:382
+#: src/goabackend/goaexchangeprovider.c:383
 msgid "Account Details"
 msgstr "Fiók részletei"
 
-#: src/goabackend/goaexchangeprovider.c:383
+#: src/goabackend/goaexchangeprovider.c:384
 #: src/goabackend/goafedoraprovider.c:170
 #: src/goabackend/goaimapsmtpprovider.c:567
 #: src/goabackend/goaimapsmtpprovider.c:588
@@ -125,11 +134,11 @@ msgstr "Fiók részletei"
 msgid "User_name"
 msgstr "_Felhasználónév"
 
-#: src/goabackend/goaexchangeprovider.c:384
+#: src/goabackend/goaexchangeprovider.c:385
 msgid "_Domain"
 msgstr "_Tartomány"
 
-#: src/goabackend/goaexchangeprovider.c:385
+#: src/goabackend/goaexchangeprovider.c:386
 msgid "Example domain: example.com"
 msgstr "Példa tartomány: example.com"
 
@@ -146,9 +155,9 @@ msgstr "Hozzáférés a szervezete korlátozott webes és hálózati erőforrás
 msgid "Google"
 msgstr "Google"
 
-#: src/goabackend/goagoogleprovider.c:207
-#: src/goabackend/goamsgraphprovider.c:181
-#: src/goabackend/goawindowsliveprovider.c:158
+#: src/goabackend/goagoogleprovider.c:213
+#: src/goabackend/goamsgraphprovider.c:163
+#: src/goabackend/goawindowsliveprovider.c:165
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
@@ -157,18 +166,19 @@ msgstr ""
 "érkezett (%s)"
 
 #. TODO: more specific
-#: src/goabackend/goagoogleprovider.c:226
-#: src/goabackend/goagoogleprovider.c:237
-#: src/goabackend/goamsgraphprovider.c:200
-#: src/goabackend/goamsgraphprovider.c:211
-#: src/goabackend/goamsgraphprovider.c:222
-#: src/goabackend/goaoauth2provider.c:616
-#: src/goabackend/goaoauth2provider.c:646
-#: src/goabackend/goaoauth2provider.c:657 src/goabackend/goautils.c:133
-#: src/goabackend/goawindowsliveprovider.c:177
-#: src/goabackend/goawindowsliveprovider.c:188
-#: src/goabackend/goawindowsliveprovider.c:197
-#: src/goabackend/goawindowsliveprovider.c:210
+#: src/goabackend/goagoogleprovider.c:232
+#: src/goabackend/goagoogleprovider.c:243
+#: src/goabackend/goamsgraphprovider.c:182
+#: src/goabackend/goamsgraphprovider.c:193
+#: src/goabackend/goamsgraphprovider.c:206
+#: src/goabackend/goamsgraphprovider.c:231
+#: src/goabackend/goaoauth2provider.c:679
+#: src/goabackend/goaoauth2provider.c:709
+#: src/goabackend/goaoauth2provider.c:720 src/goabackend/goautils.c:133
+#: src/goabackend/goawindowsliveprovider.c:184
+#: src/goabackend/goawindowsliveprovider.c:195
+#: src/goabackend/goawindowsliveprovider.c:204
+#: src/goabackend/goawindowsliveprovider.c:217
 msgid "Could not parse response"
 msgstr "A válasz nem elemezhető"
 
@@ -176,12 +186,6 @@ msgstr "A válasz nem elemezhető"
 #: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goasmtpauth.c:149
 msgid "Service not available"
 msgstr "A szolgáltatás nem érhető el"
-
-#. TODO: more specific
-#: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goasmtpauth.c:102
-#: src/goabackend/goautils.c:681
-msgid "Authentication failed"
-msgstr "A hitelesítés meghiúsult"
 
 #: src/goabackend/goaimapauthlogin.c:166 src/goabackend/goasmtpauth.c:600
 msgid "Server does not support STARTTLS"
@@ -223,8 +227,7 @@ msgid "SSL on a dedicated port"
 msgstr "SSL kijelölt porton"
 
 #: src/goabackend/goaimapsmtpprovider.c:542
-#: src/goabackend/goaimapsmtpprovider.c:1225
-#| msgid "E-mail"
+#: src/goabackend/goaimapsmtpprovider.c:1206
 msgid "Email"
 msgstr "E-mail"
 
@@ -241,8 +244,8 @@ msgid ""
 "IMAP and SMTP details will be auto-detected from your service provider when "
 "possible"
 msgstr ""
-"Az IMAP és SMTP részletei automatikusan felismerésre kerülnek a"
-" szolgáltatójából, ha lehetséges"
+"Az IMAP és SMTP részletei automatikusan felismerésre kerülnek a "
+"szolgáltatójából, ha lehetséges"
 
 #. IMAP
 #: src/goabackend/goaimapsmtpprovider.c:565
@@ -255,7 +258,6 @@ msgstr "_IMAP kiszolgáló"
 
 #: src/goabackend/goaimapsmtpprovider.c:574
 #: src/goabackend/goaimapsmtpprovider.c:595
-#| msgid "_Encryption"
 msgid "Encryption"
 msgstr "Titkosítás"
 
@@ -276,15 +278,15 @@ msgstr "S_MTP kiszolgáló"
 msgid "Example server: smtp.example.com"
 msgstr "Példa kiszolgáló: smtp.example.com"
 
-#: src/goabackend/goaimapsmtpprovider.c:1216
+#: src/goabackend/goaimapsmtpprovider.c:1197
 msgid "Name"
 msgstr "Név"
 
-#: src/goabackend/goaimapsmtpprovider.c:1242
+#: src/goabackend/goaimapsmtpprovider.c:1223
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1260
+#: src/goabackend/goaimapsmtpprovider.c:1241
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -318,8 +320,7 @@ msgid "Example principal: user@EXAMPLE.COM"
 msgstr "Példa résztvevő: felhasznalo@EXAMPLE.COM"
 
 #: src/goabackend/goakerberosprovider.c:599
-#: src/goabackend/goamsgraphprovider.c:396
-#| msgid "_Sign In"
+#: src/goabackend/goamsgraphprovider.c:388
 msgid "_Sign in…"
 msgstr "_Bejelentkezés…"
 
@@ -334,64 +335,57 @@ msgstr ""
 "Nem találhatók mentett hitelesítési adatok a(z) „%s” résztvevőhöz a "
 "kulcstartón"
 
-#: src/goabackend/goakerberosprovider.c:1331
+#: src/goabackend/goakerberosprovider.c:1333
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr ""
 "Nem található jelszó a(z) „%s” résztvevőhöz a hitelesítési adatok között"
 
-#: src/goabackend/goakerberosprovider.c:1513
+#: src/goabackend/goakerberosprovider.c:1515
 msgid "Identity service returned invalid key"
 msgstr "A személyazonosság szolgáltatás érvénytelen kulcsot adott vissza"
 
 #: src/goabackend/goamsgraphprovider.c:64
-#| msgid "Microsoft"
 msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
-#. NOTE: In case further types needs to be added, ensure that the
-#. * code in add_account_action_cb is also adjusted.
-#.
-#. Translators: Microsoft account issuer type
-#: src/goabackend/goamsgraphprovider.c:377
-msgid "Common"
-msgstr "Általános"
-
-#. Translators: Microsoft account issuer type
-#: src/goabackend/goamsgraphprovider.c:379
-#| msgid "_Custom"
-msgid "Custom"
-msgstr "Egyéni"
-
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:385
-msgid ""
-"Connect to a Microsoft 365 provider to access calendars, contacts and files"
-msgstr ""
-"Kapcsolódás egy Microsoft 365 szolgáltatóhoz a naptárak, névjegyek és fájlok"
-" eléréséhez"
+#: src/goabackend/goamsgraphprovider.c:376
+#| msgid ""
+#| "Connect to a Microsoft 365 provider to access calendars, contacts and "
+#| "files"
+msgid "Connect to a Microsoft 365 provider to access files"
+msgstr "Kapcsolódás egy Microsoft 365 szolgáltatóhoz a fájlok eléréséhez"
 
-#: src/goabackend/goamsgraphprovider.c:388
+#: src/goabackend/goamsgraphprovider.c:378
+#| msgid "Authorization response: "
+msgid "Authorization Details"
+msgstr "Felhatalmazási részletei"
+
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:380
+msgid ""
+"A custom Client or Tenant ID may need to be provided depending on the "
+"settings for your organization"
+msgstr ""
+"Egyéni ügyfél- vagy bérlőazonosító megadása lehet szükséges a szervezete"
+" beállításaitól függően"
+
+#: src/goabackend/goamsgraphprovider.c:382
 msgid "_Client ID"
 msgstr "Ügy_félazonosító"
 
-#: src/goabackend/goamsgraphprovider.c:390
-msgid "Advanced"
-msgstr "Speciális"
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:384
+#| msgid "_Client ID"
+msgid "_Tenant ID"
+msgstr "_Bérlőazonosító"
 
-#: src/goabackend/goamsgraphprovider.c:391
-msgid "_Issuer"
-msgstr "_Kibocsátó"
+#: src/goabackend/goamsgraphprovider.c:385
+msgid "Example ID: 00000000-0000-0000-0000-000000000000"
+msgstr "Példaazonosító: 00000000-0000-0000-0000-000000000000"
 
-#: src/goabackend/goamsgraphprovider.c:392
-msgid "C_ustom Issuer"
-msgstr "_Egyéni kibocsátó"
-
-#: src/goabackend/goamsgraphprovider.c:393
-msgid "Example provider: example.com"
-msgstr "Példa szolgáltató: example.com"
-
-#: src/goabackend/goaoauth2provider.c:592
+#: src/goabackend/goaoauth2provider.c:655
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -399,48 +393,47 @@ msgstr ""
 "A hozzáférési jelsor kérésekor a várt 200-as állapot helyett %d állapot "
 "érkezett (%s)"
 
-#: src/goabackend/goaoauth2provider.c:736
+#: src/goabackend/goaoauth2provider.c:799
 msgid "Authorization response: "
 msgstr "A felhatalmazási válasz: "
 
-#: src/goabackend/goaoauth2provider.c:799
+#: src/goabackend/goaoauth2provider.c:862
 #, c-format
 msgid "Authorization response: %s"
 msgstr "A felhatalmazási válasz: %s"
 
-#: src/goabackend/goaoauth2provider.c:807
+#: src/goabackend/goaoauth2provider.c:870
 msgid "Failed to authenticate"
 msgstr "Nem sikerült hitelesíteni"
 
-#: src/goabackend/goaoauth2provider.c:843
+#: src/goabackend/goaoauth2provider.c:906
 msgid "Error getting an Access Token: "
 msgstr "Hiba a hozzáférési jelsor lekérésekor: "
 
-#: src/goabackend/goaoauth2provider.c:859
+#: src/goabackend/goaoauth2provider.c:922
 msgid "Error getting identity: "
 msgstr "Hiba a személyazonosság lekérésekor: "
 
-#: src/goabackend/goaoauth2provider.c:880
+#: src/goabackend/goaoauth2provider.c:943
 #, c-format
 msgid "Sign in to %s with your browser"
 msgstr "Jelentkezzen be a(z) %s fiókba a böngészőjével"
 
-#: src/goabackend/goaoauth2provider.c:882
+#: src/goabackend/goaoauth2provider.c:945
 #: src/goabackend/goaproviderdialog.c:689
-#| msgid "_Sign In"
 msgid "_Sign In…"
 msgstr "_Bejelentkezés…"
 
-#: src/goabackend/goaoauth2provider.c:1215
+#: src/goabackend/goaoauth2provider.c:1291
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "A(z) %s néven való bejelentkezésre kérés után %s néven jelentkezett be"
 
-#: src/goabackend/goaoauth2provider.c:1402
+#: src/goabackend/goaoauth2provider.c:1478
 msgid "Credentials do not contain access_token"
 msgstr "A hitelesítési adatok nem tartalmaznak access_token tagot"
 
-#: src/goabackend/goaoauth2provider.c:1446
+#: src/goabackend/goaoauth2provider.c:1522
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "A hozzáférési jelsor frissítése sikertelen (%s, %d): "
@@ -524,7 +517,6 @@ msgid "%s Account"
 msgstr "%s fiók"
 
 #: src/goabackend/goaproviderdialog.c:606
-#| msgid "%s Account"
 msgid "Remove this Account?"
 msgstr "Eltávolítja ezt a fiókot?"
 
@@ -533,8 +525,8 @@ msgid ""
 "If you remove this Online Account you will have to connect to it again to "
 "use it with apps and services."
 msgstr ""
-"Ha eltávolítja ezt az online fiókot, akkor újra kapcsolódnia kell hozzá az"
-" alkalmazásokkal és szolgáltatásokkal való használatához."
+"Ha eltávolítja ezt az online fiókot, akkor újra kapcsolódnia kell hozzá az "
+"alkalmazásokkal és szolgáltatásokkal való használatához."
 
 #: src/goabackend/goaproviderdialog.c:609
 msgid "_Cancel"
@@ -545,7 +537,6 @@ msgid "_Remove"
 msgstr "_Eltávolítás"
 
 #: src/goabackend/goaproviderdialog.c:688
-#| msgid "Sign in to enable this account."
 msgid "Sign in to reconnect to this account"
 msgstr "Jelentkezzen be a fiókhoz való újrakapcsolódásához"
 
@@ -675,11 +666,10 @@ msgid ""
 "Add a calendar, contacts and files account by entering your WebDAV server "
 "and account details"
 msgstr ""
-"Naptár, névjegyek és fájlok fiók hozzáadása a WebDAV-kiszolgáló és a fiók"
-" részleteinek megadásával"
+"Naptár, névjegyek és fájlok fiók hozzáadása a WebDAV-kiszolgáló és a fiók "
+"részleteinek megadásával"
 
 #: src/goabackend/goawebdavprovider.c:466
-#| msgid "_Server"
 msgid "_Server Address"
 msgstr "_Kiszolgáló címe"
 
@@ -692,12 +682,10 @@ msgid "Server Addresses (Optional)"
 msgstr "Kiszolgálócímek (elhagyható)"
 
 #: src/goabackend/goawebdavprovider.c:478
-#| msgid "_Files"
 msgid "Files"
 msgstr "Fájlok"
 
 #: src/goabackend/goawebdavprovider.c:479
-#| msgid "Cale_ndar"
 msgid "Calendar (CalDAV)"
 msgstr "Naptár (CalDAV)"
 
@@ -705,15 +693,15 @@ msgstr "Naptár (CalDAV)"
 msgid "Contacts (CardDAV)"
 msgstr "Névjegyek (CardDAV)"
 
-#: src/goabackend/goawebdavprovider.c:668
+#: src/goabackend/goawebdavprovider.c:692
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "Érvénytelen URI: %s"
 
 #: src/goabackend/goawindowsliveprovider.c:56
-#| msgid "Microsoft"
-msgid "Microsoft Personal"
-msgstr "Microsoft Egyszemélyes"
+#| msgid "Microsoft 365"
+msgid "Microsoft"
+msgstr "Microsoft"
 
 #: src/goaidentity/goaidentityservice.c:564
 msgid "Initial secret key is invalid"
