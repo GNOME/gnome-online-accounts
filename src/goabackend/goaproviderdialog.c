@@ -661,7 +661,6 @@ goa_provider_dialog_push_account (GoaProviderDialog *self,
   GtkWidget *view;
   GtkWidget *headerbar;
   GtkWidget *banner;
-  GtkWidget *clamp;
   GtkWidget *status;
   GtkWidget *box;
   GtkWidget *group;
@@ -710,9 +709,6 @@ goa_provider_dialog_push_account (GoaProviderDialog *self,
   adw_toolbar_view_add_top_bar (ADW_TOOLBAR_VIEW (view), banner);
 
   /* Content */
-  clamp = adw_clamp_new ();
-  adw_toolbar_view_set_content (ADW_TOOLBAR_VIEW (view), clamp);
-
   status = g_object_new (ADW_TYPE_STATUS_PAGE,
                          "title",       provider_name,
                          "description", account_name,
@@ -720,7 +716,7 @@ goa_provider_dialog_push_account (GoaProviderDialog *self,
                          NULL);
   gtk_widget_add_css_class (status, "compact");
   gtk_widget_add_css_class (status, "icon-dropshadow");
-  adw_clamp_set_child (ADW_CLAMP (clamp), status);
+  adw_toolbar_view_set_content (ADW_TOOLBAR_VIEW (view), status);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 24);
   adw_status_page_set_child (ADW_STATUS_PAGE (status), box);
