@@ -165,19 +165,22 @@ dav_client_authenticate_task (GTask *task)
   CheckData *data = (CheckData *) g_task_get_task_data (task);
   CheckAuthData *auth;
 
-  auth = g_new0 (CheckAuthData, 1);
-  auth->username = g_strdup (data->username);
-  auth->password = g_strdup (data->password);
-  g_signal_connect_data (data->msg,
-                         "authenticate",
-                         G_CALLBACK (dav_client_authenticate),
-                         auth,
-                         dav_client_check_auth_data_free,
-                         0);
-  g_signal_connect (data->msg,
-                    "accept-certificate",
-                    G_CALLBACK (dav_client_accept_certificate),
-                    task);
+  if (data->username != NULL && data->password != NULL)
+    {
+      auth = g_new0 (CheckAuthData, 1);
+      auth->username = g_strdup (data->username);
+      auth->password = g_strdup (data->password);
+      g_signal_connect_data (data->msg,
+                             "authenticate",
+                             G_CALLBACK (dav_client_authenticate),
+                             auth,
+                             dav_client_check_auth_data_free,
+                             0);
+      g_signal_connect (data->msg,
+                        "accept-certificate",
+                        G_CALLBACK (dav_client_accept_certificate),
+                        task);
+    }
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -1097,8 +1100,8 @@ goa_dav_client_discover (GoaDavClient        *self,
 
   g_return_if_fail (GOA_IS_DAV_CLIENT (self));
   g_return_if_fail (uri != NULL && uri[0] != '\0');
-  g_return_if_fail (username != NULL && username[0] != '\0');
-  g_return_if_fail (password != NULL && password[0] != '\0');
+  /* g_return_if_fail (username != NULL && username[0] != '\0'); */
+  /* g_return_if_fail (password != NULL && password[0] != '\0'); */
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   server = g_uri_parse (uri, SOUP_HTTP_URI_FLAGS, NULL);
