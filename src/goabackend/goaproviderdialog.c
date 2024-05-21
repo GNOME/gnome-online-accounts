@@ -150,6 +150,21 @@ goa_provider_dialog_default_widget_cb (GtkWindow *window,
 }
 
 static void
+goa_provider_dialog_page_changed_cb (AdwNavigationView *view,
+                                     GParamSpec        *pspec,
+                                     GoaProviderDialog *self)
+{
+  AdwNavigationPage *page = NULL;
+  GtkWidget *widget = NULL;
+
+  page = adw_navigation_view_get_visible_page (view);
+  if (page != NULL)
+    widget = g_object_get_data (G_OBJECT (page), "goa-dialog-default-widget");
+
+  gtk_window_set_default_widget (GTK_WINDOW (self), widget);
+}
+
+static void
 goa_provider_dialog_constructed (GObject *object)
 {
   GoaProviderDialog *self = GOA_PROVIDER_DIALOG (object);
@@ -282,6 +297,12 @@ goa_provider_dialog_init (GoaProviderDialog *self)
                     "notify::default-widget",
                     G_CALLBACK (goa_provider_dialog_default_widget_cb),
                     NULL);
+
+  g_signal_connect_object (self->view,
+                           "notify::visible-page",
+                           G_CALLBACK (goa_provider_dialog_page_changed_cb),
+                           self,
+                           G_CONNECT_AFTER);
 }
 
 static void
@@ -839,11 +860,10 @@ goa_provider_dialog_push_content (GoaProviderDialog *self,
   gtk_widget_add_css_class (button, "suggested-action");
   gtk_widget_add_css_class (button, "pill");
   gtk_action_bar_set_center_widget (GTK_ACTION_BAR (actionbar), button);
+  g_object_set_data (G_OBJECT (page), "goa-dialog-default-widget", button);
 
-  /* Set the default widget after it's a child of the window */
   adw_navigation_view_push (ADW_NAVIGATION_VIEW (self->view),
                             ADW_NAVIGATION_PAGE (page));
-  gtk_window_set_default_widget (GTK_WINDOW (self), button);
 
   return content;
 }
