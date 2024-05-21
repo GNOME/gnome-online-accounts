@@ -707,6 +707,7 @@ goa_provider_dialog_push_account (GoaProviderDialog *self,
                          "paintable",   paintable,
                          NULL);
   gtk_widget_add_css_class (status, "compact");
+  gtk_widget_add_css_class (status, "icon-dropshadow");
   adw_clamp_set_child (ADW_CLAMP (clamp), status);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 24);
