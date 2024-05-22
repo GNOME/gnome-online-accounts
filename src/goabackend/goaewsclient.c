@@ -335,7 +335,7 @@ ews_client_autodiscover_response_cb (SoupSession *session, GAsyncResult *result,
       g_set_error (&error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED, /* TODO: more specific*/
-                   _("Failed to find ASUrl and OABUrl in autodiscover response"));
+                   _("Failed to find ASUrl in autodiscover response"));
       goto out;
     }
 
