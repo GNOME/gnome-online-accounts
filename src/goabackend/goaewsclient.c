@@ -175,21 +175,13 @@ ews_client_autodiscover_cancelled_cb (GCancellable *cancellable, gpointer user_d
 static gboolean
 ews_client_autodiscover_parse_protocol (xmlNode *node)
 {
-  gboolean as_url = FALSE;
-  gboolean oab_url = FALSE;
-
   for (node = node->children; node; node = node->next)
     {
       if (ews_client_check_node (node, "ASUrl"))
-        as_url = TRUE;
-      else if (ews_client_check_node (node, "OABUrl"))
-        oab_url = TRUE;
-
-      if (as_url && oab_url)
-        break;
+        return TRUE;
     }
 
-  return as_url && oab_url;
+  return FALSE;
 }
 
 static gboolean
