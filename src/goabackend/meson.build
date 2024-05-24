@@ -19,6 +19,7 @@ libgoa_backend_sources = files(
   'goaprovider.c',
   'goaproviderdialog.c',
   'goarestproxy.c',
+  'goaserviceconfig.c',
   'goasmtpauth.c',
   'goasouplogger.c',
   'goautils.c',
