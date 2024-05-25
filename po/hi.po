@@ -11,15 +11,15 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-04-23 15:23+0000\n"
-"PO-Revision-Date: 2024-04-24 16:27+0530\n"
+"POT-Creation-Date: 2024-05-13 18:12+0000\n"
+"PO-Revision-Date: 2024-05-14 15:46+0530\n"
 "Last-Translator: Scrambled777 <weblate.scrambled777@simplelogin.com>\n"
-"Language-Team: Hindi\n"
+"Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
 "Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 46.1\n"
 
 #: data/org.gnome.online-accounts.gschema.xml:6
@@ -47,7 +47,17 @@ msgstr "IsLocked गुण खाते के लिए निर्धार�
 #. TODO: more specific
 #: src/daemon/goadaemon.c:1446
 msgid "ProviderType property is not set for account"
-msgstr "ProviderType गुण खाते के लिए सेट नहीं है"
+msgstr "ProviderType गुण खाते के लिए निर्धारित नहीं है"
+
+#. TODO: more specific
+#: src/goabackend/goadavclient.c:697 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:681
+msgid "Authentication failed"
+msgstr "सत्यापन असफल"
+
+#: src/goabackend/goadavclient.c:704
+msgid "Cannot find WebDAV endpoint"
+msgstr "WebDAV समापनबिंदु नहीं मिल सका"
 
 #. TODO: more specific
 #: src/goabackend/goaewsclient.c:284
@@ -82,18 +92,18 @@ msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "उपयोक्तानाम “%s” (%s, %d) के साथ अमान्य कूटशब्द: "
 
 #. provider name
-#: src/goabackend/goaexchangeprovider.c:373
+#: src/goabackend/goaexchangeprovider.c:374
 msgid ""
 "Connect to a Microsoft Exchange provider to access calendars, contacts and "
 "files"
 msgstr "कैलेंडर, संपर्क और फाइलों तक पहुँचने के लिए Microsoft Exchange प्रदाता से जुड़ें"
 
-#: src/goabackend/goaexchangeprovider.c:376
+#: src/goabackend/goaexchangeprovider.c:377
 #: src/goabackend/goaimapsmtpprovider.c:548
 msgid "_Email"
 msgstr "ईमेल (_E)"
 
-#: src/goabackend/goaexchangeprovider.c:377
+#: src/goabackend/goaexchangeprovider.c:378
 #: src/goabackend/goafedoraprovider.c:171
 #: src/goabackend/goaimapsmtpprovider.c:549
 #: src/goabackend/goaimapsmtpprovider.c:568
@@ -102,17 +112,17 @@ msgstr "ईमेल (_E)"
 msgid "_Password"
 msgstr "कूटशब्द (_P)"
 
-#: src/goabackend/goaexchangeprovider.c:378
+#: src/goabackend/goaexchangeprovider.c:379
 msgid ""
 "Exchange account details will be auto-detected from your email address when "
 "possible"
 msgstr "जब संभव हो तो Exchange खाते का विवरण आपके ईमेल पते से स्वतः पता लगाया जाएगा"
 
-#: src/goabackend/goaexchangeprovider.c:382
+#: src/goabackend/goaexchangeprovider.c:383
 msgid "Account Details"
 msgstr "खाता विवरण"
 
-#: src/goabackend/goaexchangeprovider.c:383
+#: src/goabackend/goaexchangeprovider.c:384
 #: src/goabackend/goafedoraprovider.c:170
 #: src/goabackend/goaimapsmtpprovider.c:567
 #: src/goabackend/goaimapsmtpprovider.c:588
@@ -120,11 +130,11 @@ msgstr "खाता विवरण"
 msgid "User_name"
 msgstr "उपयोक्ता नाम (_n)"
 
-#: src/goabackend/goaexchangeprovider.c:384
+#: src/goabackend/goaexchangeprovider.c:385
 msgid "_Domain"
 msgstr "डोमेन (_D)"
 
-#: src/goabackend/goaexchangeprovider.c:385
+#: src/goabackend/goaexchangeprovider.c:386
 msgid "Example domain: example.com"
 msgstr "उदाहरण डोमेन: example.com"
 
@@ -142,7 +152,7 @@ msgid "Google"
 msgstr "Google"
 
 #: src/goabackend/goagoogleprovider.c:213
-#: src/goabackend/goamsgraphprovider.c:162
+#: src/goabackend/goamsgraphprovider.c:163
 #: src/goabackend/goawindowsliveprovider.c:165
 #, c-format
 msgid ""
@@ -153,9 +163,10 @@ msgstr ""
 #. TODO: more specific
 #: src/goabackend/goagoogleprovider.c:232
 #: src/goabackend/goagoogleprovider.c:243
-#: src/goabackend/goamsgraphprovider.c:181
-#: src/goabackend/goamsgraphprovider.c:192
-#: src/goabackend/goamsgraphprovider.c:203
+#: src/goabackend/goamsgraphprovider.c:182
+#: src/goabackend/goamsgraphprovider.c:193
+#: src/goabackend/goamsgraphprovider.c:206
+#: src/goabackend/goamsgraphprovider.c:231
 #: src/goabackend/goaoauth2provider.c:679
 #: src/goabackend/goaoauth2provider.c:709
 #: src/goabackend/goaoauth2provider.c:720 src/goabackend/goautils.c:133
@@ -170,12 +181,6 @@ msgstr "अनुक्रिया विश्लेषित नहीं क
 #: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goasmtpauth.c:149
 msgid "Service not available"
 msgstr "सेव उपलब्ध नहीं है"
-
-#. TODO: more specific
-#: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goasmtpauth.c:102
-#: src/goabackend/goautils.c:681
-msgid "Authentication failed"
-msgstr "सत्यापन असफल"
 
 #: src/goabackend/goaimapauthlogin.c:166 src/goabackend/goasmtpauth.c:600
 msgid "Server does not support STARTTLS"
@@ -309,7 +314,7 @@ msgid "Example principal: user@EXAMPLE.COM"
 msgstr "उदाहरण प्रिंसिपल: user@EXAMPLE.COM"
 
 #: src/goabackend/goakerberosprovider.c:599
-#: src/goabackend/goamsgraphprovider.c:374
+#: src/goabackend/goamsgraphprovider.c:388
 msgid "_Sign in…"
 msgstr "साइन इन (_S)…"
 
@@ -336,16 +341,16 @@ msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:362
+#: src/goabackend/goamsgraphprovider.c:376
 msgid "Connect to a Microsoft 365 provider to access files"
 msgstr "फाइलों तक पहुँचने के लिए Microsoft 365 प्रदाता से जुड़ें"
 
-#: src/goabackend/goamsgraphprovider.c:364
+#: src/goabackend/goamsgraphprovider.c:378
 msgid "Authorization Details"
 msgstr "प्राधिकरण विवरण"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:366
+#: src/goabackend/goamsgraphprovider.c:380
 msgid ""
 "A custom Client or Tenant ID may need to be provided depending on the "
 "settings for your organization"
@@ -353,16 +358,16 @@ msgstr ""
 "आपके संगठन की सेटिंग्स के आधार पर एक तदनुकूल क्लाइंट या टेनेंट ID प्रदान करने की आवश्यकता हो "
 "सकती है"
 
-#: src/goabackend/goamsgraphprovider.c:368
+#: src/goabackend/goamsgraphprovider.c:382
 msgid "_Client ID"
 msgstr "क्लाइंट ID (_C)"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:370
+#: src/goabackend/goamsgraphprovider.c:384
 msgid "_Tenant ID"
 msgstr "टेनेंट ID (_T)"
 
-#: src/goabackend/goamsgraphprovider.c:371
+#: src/goabackend/goamsgraphprovider.c:385
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "उदाहरण ID: 00000000-0000-0000-0000-000000000000"
 
@@ -404,16 +409,16 @@ msgstr "अपने ब्राउज़र से %s में साइन �
 msgid "_Sign In…"
 msgstr "साइन इन (_S)…"
 
-#: src/goabackend/goaoauth2provider.c:1292
+#: src/goabackend/goaoauth2provider.c:1291
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "%s के रूप में प्रवेश करने के लिए कहा गया था, लेकिन %s के रूप में लॉग इन हुआ"
 
-#: src/goabackend/goaoauth2provider.c:1479
+#: src/goabackend/goaoauth2provider.c:1478
 msgid "Credentials do not contain access_token"
 msgstr "क्रेडेंशियल में access_token शामिल नहीं है"
 
-#: src/goabackend/goaoauth2provider.c:1523
+#: src/goabackend/goaoauth2provider.c:1522
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "पहुँच टोकन को ताज़ा करने में विफल (%s, %d): "
@@ -452,7 +457,7 @@ msgstr "फोटो (_P)"
 
 #: src/goabackend/goaprovider.c:153
 msgid "_Files"
-msgstr "फ़ाइलें (_F)"
+msgstr "फाइलें (_F)"
 
 #: src/goabackend/goaprovider.c:158
 msgid "Network _Resources"
@@ -751,308 +756,3 @@ msgstr "पहचान नहीं मिल पाई"
 #: src/goaidentity/goakerberosidentitymanager.c:937
 msgid "Could not create credential cache for identity"
 msgstr "पहचान के लिए प्रमाण कैश नहीं बना सका"
-
-#, c-format
-#~| msgid "Did not find password with identity `%s' in credentials"
-#~ msgid "Did not find password with identity ‘%s’ in credentials"
-#~ msgstr "उपयोगकर्ता नाम ‘%s’ के साथ क्रेडेंशियल में पासवर्ड नहीं मिला"
-
-#~ msgid "_Custom"
-#~ msgstr "मनपसंद (_C)"
-
-#~| msgid "Connecting…"
-#~ msgid "C_onnect"
-#~ msgstr "कनेक्ट (_o)"
-
-#~ msgid "Connecting…"
-#~ msgstr "कनेक्ट कर रहा है…"
-
-#, c-format
-#~ msgid "Dialog was dismissed (%s, %d): "
-#~ msgstr "संवाद को खारिज कर दिया गया था (%s, %d):  "
-
-#~ msgid "Error connecting to Microsoft Exchange server"
-#~ msgstr "माइक्रोसॉफ्ट एक्सचेंज सर्वर से कनेक्ट करने में त्रुटि"
-
-#~ msgid "Use for"
-#~ msgstr "के लिए प्रयोग करें"
-
-#~ msgid "Facebook"
-#~ msgstr "फेसबुक"
-
-#~ msgid "Flickr"
-#~ msgstr "फ्लिकर"
-
-#~ msgid "Your system time is invalid. Check your date and time settings."
-#~ msgstr "अपने सिस्टम का समय अमान्य है. अपने दिनांक और समय सेटिंग्स की जाँच करें."
-
-#, c-format
-#~ msgid "Server does not support PLAIN"
-#~ msgstr "सर्वर PLAIN का समर्थन नहीं करता"
-
-#~ msgid "_Forward"
-#~ msgstr "आगे (_F)"
-
-#~ msgid "Error connecting to IMAP server"
-#~ msgstr "IMAP सर्वर से कनेक्ट करने में त्रुटि"
-
-#~ msgid "Error connecting to SMTP server"
-#~ msgstr "SMTP सर्वर से कनेक्ट करने में त्रुटि"
-
-#~ msgid "Enterprise Login (Kerberos)"
-#~ msgstr "उद्यम लॉगिन (कर्बेरॉस)"
-
-#~ msgid "Enterprise domain or realm name"
-#~ msgstr "एंटरप्राइज डोमेन नाम या रियल्म नाम"
-
-#, c-format
-#~ msgid "The domain is not valid"
-#~ msgstr "डोमेन मान्य नहीं है"
-
-#~ msgid "Error connecting to enterprise identity server"
-#~ msgstr "उद्यम पहचान सर्वर से कनेक्ट करने में त्रुटि"
-
-#~| msgid "IMAP _Server"
-#~ msgid "Media Server"
-#~ msgstr "मीडिया सर्वर"
-
-#~ msgid ""
-#~ "Personal content can be added to your applications through a media server "
-#~ "account."
-#~ msgstr ""
-#~ "मीडिया सर्वर खाता के द्वारा निजी सामग्री को आपके अनुप्रयोग पर जोड़ा जा सकता है."
-
-#~ msgid "Available Media Servers"
-#~ msgstr "उपलब्ध मीडिया सर्वर"
-
-#~ msgid "No media servers found"
-#~ msgstr "कोई मीडिया नहीं मिला"
-
-#, c-format
-#~ msgid "Missing access_token or access_token_secret headers in response"
-#~ msgstr "प्रतिक्रिया में access_token या access_token_secret हेडर लापता"
-
-#~ msgid "Error getting a Request Token: "
-#~ msgstr "अनुरोध टोकन प्राप्त करने में त्रुटि: "
-
-#, c-format
-#~ msgid ""
-#~ "Expected status 200 for getting a Request Token, instead got status %d "
-#~ "(%s)"
-#~ msgstr ""
-#~ "एक अनुरोध टोकन प्राप्त करने के लिए 200 स्थिति की उम्मीद है, इसके अलावा  स्थिति %d "
-#~ "(%s) प्राप्त हुआ."
-
-#, c-format
-#~ msgid "Missing request_token or request_token_secret headers in response"
-#~ msgstr "प्रतिक्रिया में request_token या request_token_secret हेडर लापता"
-
-#, c-format
-#~ msgid "Credentials do not contain access_token or access_token_secret"
-#~ msgstr "क्रेडेंशियल में access_token या access_token_secret शामिल नहीं है"
-
-#~ msgid "ownCloud"
-#~ msgstr "ownCloud"
-
-#~ msgid "Error connecting to ownCloud server"
-#~ msgstr "ownCloud सर्वर से कनेक्ट करने में त्रुटि"
-
-#~ msgid "Pocket"
-#~ msgstr "पॉकेट"
-
-#, c-format
-#~ msgid "No username or access_token"
-#~ msgstr "कोई उपयोक्तानाम या पहुँच टोकन नहीं (_t)"
-
-#, c-format
-#~ msgid "org.gnome.OnlineAccounts.Mail is not available"
-#~ msgstr "org.gnome.OnlineAccounts.Mail उपलब्ध नहीं"
-
-#, c-format
-#~ msgid "Failed to parse email address"
-#~ msgstr "ई-मेल पता पार्स करने में विफल "
-
-#, c-format
-#~| msgid "Cannot do SMTP PLAIN without a domain"
-#~ msgid "Cannot do SMTP authentication without a domain"
-#~ msgstr "SMTP सत्यापन एक डोमेन के बिना नहीं कर सकते"
-
-#, c-format
-#~ msgid "Did not find smtp-password in credentials"
-#~ msgstr "साख में SMTP पासवर्ड नहीं मिला"
-
-#, c-format
-#~| msgid "Cannot do SMTP PLAIN without a password"
-#~ msgid "Cannot do SMTP authentication without a password"
-#~ msgstr "कूटशब्द के बिना SMTP सत्यापन नहीं कर सकते"
-
-#, c-format
-#~ msgid "Telepathy chat account not found"
-#~ msgstr "टेलिपैथी चैट खाता नहीं मिला"
-
-#, c-format
-#~| msgid "Failed to find Account element"
-#~ msgid "Failed to initialize a GOA client"
-#~ msgstr "गोवा क्लायंट आरंभ करने में विफल"
-
-#, c-format
-#~| msgid "Failed to find a provider for: %s"
-#~ msgid "Failed to create a user interface for %s"
-#~ msgstr "%s के लिए उपयोक्ता अंतरफलक बनाने में विफल"
-
-#~| msgid "Connecting…"
-#~ msgid "Connection Settings"
-#~ msgstr "कनेक्शन सेटिंग"
-
-#~ msgid "_OK"
-#~ msgstr "ठीक (_O)"
-
-#~ msgid "Cannot save the connection parameters"
-#~ msgstr "कनेक्शन पैरामीटर नहीं सहेज सकता है"
-
-#~ msgid "Cannot save your personal information on the server"
-#~ msgstr "सर्वर पर निजी सूचना सहेज नहीं सकता है"
-
-#~| msgid "Connecting…"
-#~ msgid "_Connection Settings"
-#~ msgstr "कनेक्शन सेटिंग (_C)"
-
-#~ msgid "_Personal Details"
-#~ msgstr "निजी विवरण (_P)"
-
-#, c-format
-#~ msgid "Loading “%s”…"
-#~ msgstr "लोड किया जा रहा है “%s”…"
-
-#~ msgid "Windows Live"
-#~ msgstr "विंडोज लाइव"
-
-#~ msgid "Yahoo"
-#~ msgstr "याहू"
-
-#, c-format
-#~ msgid "Expected status 200 when requesting name, instead got status %d (%s)"
-#~ msgstr ""
-#~ "उम्मीद की गयी स्थिति 200 जब नाम के लिए अनुरोध किया, के बजाय स्थिति %d (%s) पाया"
-
-#~ msgid "initial secret passed before secret key exchange"
-#~ msgstr "प्रारंभिक गुप्त रहस्य कुंजी विनिमय से पहले पारित"
-
-#, c-format
-#~ msgid "Could not renew identity: Not signed in"
-#~ msgstr "पहचान का नवीनीकरण नहीं किया जा सका: साइन इन नहीं"
-
-#~ msgid "Could not renew identity: %k"
-#~ msgstr "पहचान का नवीनीकरण नहीं किया जा सका: %k"
-
-#~ msgid "Failed to find Autodiscover element"
-#~ msgstr "Autodiscover तत्व को खोजने में असफल"
-
-#~ msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
-#~ msgstr ""
-#~ "उम्मीद की गयी स्थिति 200 जब guid के लिए अनुरोध किया, के बजाय स्थिति %d (%s) पाया"
-
-#~| msgid "Did not find password with username `%s' in credentials"
-#~ msgid "Did not find imap-password with identity `%s' in credentials"
-#~ msgstr "पहचान `%s'के साथ क्रेडेंशियल्स में  imap पासवर्ड नहीं मिला"
-
-#~| msgid "Did not find password with username `%s' in credentials"
-#~ msgid "Invalid imap-password with username `%s' (%s, %d): "
-#~ msgstr "अवैध imap-कूटशब्द उपयोगकर्ता नाम  `%s' (%s, %d) के साथ: "
-
-#~| msgid "Did not find password with username `%s' in credentials"
-#~ msgid "Did not find smtp-password with identity `%s' in credentials"
-#~ msgstr "उपयोगकर्ता नाम `%s' के साथ क्रेडेंशियल में smtp-पासवर्ड नहीं मिला  "
-
-#~| msgid "Did not find password with username `%s' in credentials"
-#~ msgid "Invalid smtp-password with username `%s' (%s, %d): "
-#~ msgstr "उपयोगकर्ता नाम `%s' (%s, %d) के साथ क्रेडेंशियल में smtp-पासवर्ड नहीं मिला"
-
-#~ msgid ""
-#~ "Paste authorization code obtained from the <a href=\"%s\">authorization "
-#~ "page</a>:"
-#~ msgstr "पेस्ट प्राधिकरण कोड<a href=\"%s\"> प्राधिकरण पृष्ठ से प्राप्त हुआ</a>:"
-
-#~ msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
-#~ msgstr "<a href=\"%s\"> प्राधिकरण पृष्ठ </ a> से प्राप्त पेस्ट टोकन."
-
-#~ msgid "Time"
-#~ msgstr "समय"
-
-#~ msgid "Time to fire"
-#~ msgstr "आग करने के लिए समय"
-
-#~ msgid "Online Accounts"
-#~ msgstr "ऑनलाइन खाता"
-
-#~ msgid "An online account needs attention"
-#~ msgstr "एक ऑनलाइन खाते पर ध्यान देने की जरूरत है"
-
-#~ msgid "Open Online Accounts..."
-#~ msgstr "ऑनलाइन खाता खोलें ..."
-
-#~ msgid "Credentials not found in keyring (%s, %d): "
-#~ msgstr "कीरिंग में क्रेडेंशियल नहीं मिला (%s, %d): "
-
-#~ msgid "New Microsoft Exchange Account"
-#~ msgstr "नई माइक्रोसॉफ्ट एक्सचेंज खाता"
-
-#~ msgid "Microsoft Exchange Account"
-#~ msgstr "माइक्रोसॉफ्ट एक्सचेंज खाता"
-
-#~ msgid "Error parsing response as JSON: "
-#~ msgstr "JSON के रूप में त्रुटि पार्सिंग प्रतिक्रिया:"
-
-#~ msgid "Didn't find id member in JSON data"
-#~ msgstr "JSON डेटा में आईडी सदस्य नहीं मिला"
-
-#~ msgid "Didn't find email member in JSON data"
-#~ msgstr "JSON डेटा में ईमेल सदस्य नहीं मिला"
-
-#~ msgid "Chat"
-#~ msgstr "गपशप"
-
-#~ msgid "Didn't find data member in JSON data"
-#~ msgstr "JSON डेटा में डेटा सदस्य नहीं मिला"
-
-#~ msgid "Didn't find account email member in JSON data"
-#~ msgstr "JSON डेटा में खाता ईमेल सदस्य नहीं मिला"
-
-#~ msgid "Didn't find access_token in non-JSON data"
-#~ msgstr " गैर JSON डेटा में access_token नही मिला"
-
-#~ msgid "Didn't find access_token in JSON data"
-#~ msgstr " JSON डेटा में access_token नही मिला"
-
-#~ msgid "Error storing credentials in keyring (%s, %d): "
-#~ msgstr "कीरिंग के क्रेडेंशियल भंडारण में त्रुटि (%s, %d): "
-
-#~ msgid "Twitter"
-#~ msgstr "Twitter"
-
-#~ msgid "Didn't find id_str member in JSON data"
-#~ msgstr "JSON डेटा में सदस्य id_str नहीं मिला."
-
-#~ msgid "Didn't find screen_name member in JSON data"
-#~ msgstr "JSON डेटा में सदस्य screen_name नहीं मिला है"
-
-#~ msgid "Add %s"
-#~ msgstr "जोड़ें %s"
-
-#~ msgid "Refresh %s"
-#~ msgstr "ताज़ा करें %s"
-
-#~ msgid "Didn't find guid member in JSON data"
-#~ msgstr "JSON डेटा में  guid सदस्य नहीं मिला"
-
-#~ msgid "Didn't find value member in JSON data"
-#~ msgstr "JSON डेटा में मान सदस्य नहीं मिला"
-
-#~ msgid "Error parsing usercard response as JSON: "
-#~ msgstr "JSON के रूप में usercard प्रतिक्रिया  पार्स करने में त्रुटि:"
-
-#~ msgid "Didn't find profile member in JSON data"
-#~ msgstr "JSON डेटा में प्रोफ़ाइल सदस्य नहीं मिला"
-
-#~ msgid "Didn't find nickname member in JSON data"
-#~ msgstr "JSON डेटा में उपनाम सदस्य नहीं मिला"
