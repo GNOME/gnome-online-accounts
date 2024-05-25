@@ -38,10 +38,10 @@
  * which the provider is responsible for setting and responding to. Once the
  * state reaches %GOA_DIALOG_DONE any attempt to change the state will fail.
  *
- * Providers should call `goa_provider_task_bind_window()` to bind the lifetime
- * of a [vfunc@Goa.Provider.add_account] GTask to the dialog and call
- * `goa_provider_task_return_account()` or `goa_provider_task_return_error()`
- * to complete it.
+ * Providers should call `goa_provider_task_run_in_dialog() to bind the lifetime
+ * of a [vfunc@Goa.Provider.add_account] GTask to the dialog and present it to
+ * the user, then call `goa_provider_task_return_account()` or
+ * `goa_provider_task_return_error()` to complete it.
  *
  * Note that the state may change from any state to %GOA_DIALOG_DONE and
  * providers are responsible for aborting any ancillary tasks (e.g. another
@@ -87,6 +87,9 @@ struct _GoaProviderDialog
   GoaObject *object;
   GoaDialogState state;
   GCancellable *cancellable;
+
+  GCancellable *task_cancellable;
+  unsigned long task_cancellable_id;
 
   GtkWidget *view;
   GtkWidget *current_page;
@@ -185,6 +188,7 @@ goa_provider_dialog_finalize (GObject *object)
 {
   GoaProviderDialog *self = GOA_PROVIDER_DIALOG (object);
 
+  g_clear_object (&self->task_cancellable);
   g_clear_object (&self->cancellable);
   g_clear_object (&self->client);
   g_clear_object (&self->object);
@@ -703,6 +707,7 @@ goa_provider_dialog_push_account (GoaProviderDialog *self,
                          "paintable",   paintable,
                          NULL);
   gtk_widget_add_css_class (status, "compact");
+  gtk_widget_add_css_class (status, "icon-dropshadow");
   adw_clamp_set_child (ADW_CLAMP (clamp), status);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 24);
@@ -1126,13 +1131,18 @@ goa_provider_dialog_add_description (GoaProviderDialog *self,
 }
 
 static gboolean
-goa_provider_task_bind_window_cb (GtkWindow *window,
-                                  gpointer   user_data)
+goa_provider_task_run_in_dialog_cb (GoaProviderDialog *self,
+                                    gpointer           user_data)
 {
-  GoaProviderDialog *self = GOA_PROVIDER_DIALOG (window);
   g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
 
-  g_signal_handlers_disconnect_by_func (window, goa_provider_task_bind_window_cb, task);
+  g_signal_handlers_disconnect_by_func (self, goa_provider_task_run_in_dialog_cb, task);
+
+  if (self->task_cancellable != NULL && self->task_cancellable_id != 0)
+    {
+      g_cancellable_disconnect (self->task_cancellable, self->task_cancellable_id);
+      self->task_cancellable_id = 0;
+    }
 
   if (self->state != GOA_DIALOG_DONE)
     {
@@ -1146,32 +1156,55 @@ goa_provider_task_bind_window_cb (GtkWindow *window,
   return FALSE;
 }
 
+static void
+goa_provider_task_cancelled_cb (GCancellable *cancellable,
+                                GtkWindow    *window)
+{
+  gtk_window_destroy (window);
+}
+
 /**
- * goa_provider_task_bind_window
+ * goa_provider_task_run_in_dialog
  * @task: a `GTask`
- * @window: a `GtkWindow`
+ * @dialog: a `GoaProviderDialog`
  *
- * Bind the completion of @task to the lifetime of @window.
+ * Bind the completion of @task to the lifetime of @dialog and present it.
  *
- * The window holds a reference on @task and when it completes @window is
- * closed. If @window is closed before @task completes, the task will return an
+ * The dialog holds a reference on @task and when it completes @dialog is
+ * closed. If @dialog is closed before @task completes, the task will return an
  * error with domain and code set to %GOA_ERROR and %GOA_ERROR_DIALOG_DISMISSED,
  * respectively.
  */
 void
-goa_provider_task_bind_window (GTask     *task,
-                               GtkWindow *window)
+goa_provider_task_run_in_dialog (GTask             *task,
+                                 GoaProviderDialog *dialog)
 {
-  g_return_if_fail (GTK_WINDOW (window));
-  g_return_if_fail (G_IS_TASK (task));
+  GCancellable *cancellable = NULL;
 
-  /* The close-request handler holds the reference to @task */
-  g_signal_connect_object (window,
+  g_return_if_fail (G_IS_TASK (task));
+  g_return_if_fail (GOA_IS_PROVIDER_DIALOG (dialog));
+
+  /* The signal handler holds the reference to @task.
+   */
+  g_signal_connect_object (dialog,
                            "close-request",
-                           G_CALLBACK (goa_provider_task_bind_window_cb),
+                           G_CALLBACK (goa_provider_task_run_in_dialog_cb),
                            g_object_ref (task),
                            0 /* G_CONNECT_DEFAULT */);
-  g_object_set_data (G_OBJECT (task), "goa-provider-dialog", window);
+  g_object_set_data (G_OBJECT (task), "goa-provider-dialog", dialog);
+
+  /* Ensure the handler runs if the task is cancelled.
+   */
+  cancellable = g_task_get_cancellable (task);
+  if (cancellable != NULL)
+    {
+      dialog->task_cancellable = g_object_ref (cancellable);
+      dialog->task_cancellable_id = g_cancellable_connect (cancellable,
+                                                           G_CALLBACK (goa_provider_task_cancelled_cb),
+                                                           dialog, NULL);
+    }
+
+  gtk_window_present (GTK_WINDOW (dialog));
 }
 
 /**

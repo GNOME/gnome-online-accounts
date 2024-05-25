@@ -98,8 +98,8 @@ GtkWidget           *goa_provider_dialog_add_description    (GoaProviderDialog *
                                                              const char        *description);
 
 /* GTask Helpers */
-void                 goa_provider_task_bind_window          (GTask             *task,
-                                                             GtkWindow         *window);
+void                 goa_provider_task_run_in_dialog        (GTask             *task,
+                                                             GoaProviderDialog *dialog);
 void                 goa_provider_task_return_account       (GTask             *task,
                                                              GoaObject         *object);
 void                 goa_provider_task_return_error         (GTask             *task,
