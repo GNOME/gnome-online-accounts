@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-04-11 17:40+0000\n"
-"PO-Revision-Date: 2024-04-11 22:01+0200\n"
+"POT-Creation-Date: 2024-05-25 17:00+0000\n"
+"PO-Revision-Date: 2024-05-27 14:22+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl\n"
@@ -49,28 +49,33 @@ msgstr "Za ta račun je nastavljena zastavica zaklepa"
 msgid "ProviderType property is not set for account"
 msgstr "Za ta račun ni nastavljena zastavica lastnosti vrste ponudnika"
 
-#: src/goabackend/goadavclient.c:825
+#. TODO: more specific
+#: src/goabackend/goadavclient.c:697 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:681
+msgid "Authentication failed"
+msgstr "Overitev je spodletela"
+
+#: src/goabackend/goadavclient.c:704
 msgid "Cannot find WebDAV endpoint"
 msgstr "Končne točke WebDAV ni mogoče najti"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:284
+#: src/goabackend/goaewsclient.c:276
 msgid "Failed to parse autodiscover response XML"
 msgstr "Spodletelo je razčlenjevanje predmeta XML samodejne zaznave"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: src/goabackend/goaewsclient.c:295 src/goabackend/goaewsclient.c:310
-#: src/goabackend/goaewsclient.c:325
+#: src/goabackend/goaewsclient.c:287 src/goabackend/goaewsclient.c:302
+#: src/goabackend/goaewsclient.c:317
 #, c-format
 msgid "Failed to find “%s” element"
 msgstr "Iskanje predmeta »%s« je spodletelo"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:346
-msgid "Failed to find ASUrl and OABUrl in autodiscover response"
-msgstr ""
-"Iskanje predmetov ASUrl in OABUrl v odzivu samodejne zaznave je spodletelo"
+#: src/goabackend/goaewsclient.c:338
+msgid "Failed to find ASUrl in autodiscover response"
+msgstr "Iskanje predmetov ASUrl v odzivu samodejne zaznave je spodletelo"
 
 #: src/goabackend/goaexchangeprovider.c:52
 msgid "Microsoft Exchange"
@@ -87,7 +92,7 @@ msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "Neveljavno geslo za uporabniško ime »%s« (%s, %d): "
 
 #. provider name
-#: src/goabackend/goaexchangeprovider.c:373
+#: src/goabackend/goaexchangeprovider.c:374
 msgid ""
 "Connect to a Microsoft Exchange provider to access calendars, contacts and "
 "files"
@@ -95,12 +100,12 @@ msgstr ""
 "Povezava s strežnikom Microsoft Exchange za dostop do koledarjev stikov in "
 "datotek"
 
-#: src/goabackend/goaexchangeprovider.c:376
+#: src/goabackend/goaexchangeprovider.c:377
 #: src/goabackend/goaimapsmtpprovider.c:548
 msgid "_Email"
 msgstr "_Elektronski naslov"
 
-#: src/goabackend/goaexchangeprovider.c:377
+#: src/goabackend/goaexchangeprovider.c:378
 #: src/goabackend/goafedoraprovider.c:171
 #: src/goabackend/goaimapsmtpprovider.c:549
 #: src/goabackend/goaimapsmtpprovider.c:568
@@ -109,7 +114,7 @@ msgstr "_Elektronski naslov"
 msgid "_Password"
 msgstr "_Geslo"
 
-#: src/goabackend/goaexchangeprovider.c:378
+#: src/goabackend/goaexchangeprovider.c:379
 msgid ""
 "Exchange account details will be auto-detected from your email address when "
 "possible"
@@ -117,11 +122,11 @@ msgstr ""
 "Podrobnosti računa Exchange bodo samodejno določeni na podlagi elektronskega "
 "naslova, ko bo to mogoče"
 
-#: src/goabackend/goaexchangeprovider.c:382
+#: src/goabackend/goaexchangeprovider.c:383
 msgid "Account Details"
 msgstr "Podrobnosti računa"
 
-#: src/goabackend/goaexchangeprovider.c:383
+#: src/goabackend/goaexchangeprovider.c:384
 #: src/goabackend/goafedoraprovider.c:170
 #: src/goabackend/goaimapsmtpprovider.c:567
 #: src/goabackend/goaimapsmtpprovider.c:588
@@ -129,11 +134,11 @@ msgstr "Podrobnosti računa"
 msgid "User_name"
 msgstr "_Uporabniško ime"
 
-#: src/goabackend/goaexchangeprovider.c:384
+#: src/goabackend/goaexchangeprovider.c:385
 msgid "_Domain"
 msgstr "_Domena"
 
-#: src/goabackend/goaexchangeprovider.c:385
+#: src/goabackend/goaexchangeprovider.c:386
 msgid "Example domain: example.com"
 msgstr "Primer domene: domena.si"
 
@@ -151,7 +156,7 @@ msgid "Google"
 msgstr "Google"
 
 #: src/goabackend/goagoogleprovider.c:213
-#: src/goabackend/goamsgraphprovider.c:162
+#: src/goabackend/goamsgraphprovider.c:163
 #: src/goabackend/goawindowsliveprovider.c:165
 #, c-format
 msgid ""
@@ -163,9 +168,10 @@ msgstr ""
 #. TODO: more specific
 #: src/goabackend/goagoogleprovider.c:232
 #: src/goabackend/goagoogleprovider.c:243
-#: src/goabackend/goamsgraphprovider.c:181
-#: src/goabackend/goamsgraphprovider.c:192
-#: src/goabackend/goamsgraphprovider.c:203
+#: src/goabackend/goamsgraphprovider.c:182
+#: src/goabackend/goamsgraphprovider.c:193
+#: src/goabackend/goamsgraphprovider.c:206
+#: src/goabackend/goamsgraphprovider.c:231
 #: src/goabackend/goaoauth2provider.c:679
 #: src/goabackend/goaoauth2provider.c:709
 #: src/goabackend/goaoauth2provider.c:720 src/goabackend/goautils.c:133
@@ -180,12 +186,6 @@ msgstr "Odgovora ni mogoče razčleniti"
 #: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goasmtpauth.c:149
 msgid "Service not available"
 msgstr "Storitev ni na vojo"
-
-#. TODO: more specific
-#: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goasmtpauth.c:102
-#: src/goabackend/goautils.c:681
-msgid "Authentication failed"
-msgstr "Overitev je spodletela"
 
 #: src/goabackend/goaimapauthlogin.c:166 src/goabackend/goasmtpauth.c:600
 msgid "Server does not support STARTTLS"
@@ -227,7 +227,7 @@ msgid "SSL on a dedicated port"
 msgstr "Protokol SSL na določenih vratih"
 
 #: src/goabackend/goaimapsmtpprovider.c:542
-#: src/goabackend/goaimapsmtpprovider.c:1206
+#: src/goabackend/goaimapsmtpprovider.c:1204
 msgid "Email"
 msgstr "Elektronski naslov"
 
@@ -278,15 +278,15 @@ msgstr "Strežnik _SMTP"
 msgid "Example server: smtp.example.com"
 msgstr "Primer strežnika: smtp.domena.si"
 
-#: src/goabackend/goaimapsmtpprovider.c:1197
+#: src/goabackend/goaimapsmtpprovider.c:1195
 msgid "Name"
 msgstr "Ime"
 
-#: src/goabackend/goaimapsmtpprovider.c:1223
+#: src/goabackend/goaimapsmtpprovider.c:1221
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1241
+#: src/goabackend/goaimapsmtpprovider.c:1239
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -320,25 +320,25 @@ msgid "Example principal: user@EXAMPLE.COM"
 msgstr "Osnovni primer: uporabnik@domena.si"
 
 #: src/goabackend/goakerberosprovider.c:599
-#: src/goabackend/goamsgraphprovider.c:372
+#: src/goabackend/goamsgraphprovider.c:388
 msgid "_Sign in…"
 msgstr "Prijava …"
 
-#: src/goabackend/goakerberosprovider.c:1291
+#: src/goabackend/goakerberosprovider.c:1290
 msgid "Ticketing is disabled for account"
 msgstr "Ustvarjanje kartic je za ta račun onemogočeno"
 
-#: src/goabackend/goakerberosprovider.c:1318
+#: src/goabackend/goakerberosprovider.c:1317
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr "Shranjenih poveril za »%s« v zbirki ključev ni mogoče najti"
 
-#: src/goabackend/goakerberosprovider.c:1333
+#: src/goabackend/goakerberosprovider.c:1332
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "Gesla za »%s« med poverili ni mogoče najti"
 
-#: src/goabackend/goakerberosprovider.c:1515
+#: src/goabackend/goakerberosprovider.c:1514
 msgid "Identity service returned invalid key"
 msgstr "Storitev istovetnosti je vrnila neveljaven ključ"
 
@@ -347,15 +347,16 @@ msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:362
+#: src/goabackend/goamsgraphprovider.c:376
 msgid "Connect to a Microsoft 365 provider to access files"
 msgstr "Povežite se s ponudnikom storitve Microsoft 365 za dostop do datotek"
 
-#: src/goabackend/goamsgraphprovider.c:364
+#: src/goabackend/goamsgraphprovider.c:378
 msgid "Authorization Details"
 msgstr "Podrobnosti overitve"
 
-#: src/goabackend/goamsgraphprovider.c:365
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:380
 msgid ""
 "A custom Client or Tenant ID may need to be provided depending on the "
 "settings for your organization"
@@ -363,15 +364,16 @@ msgstr ""
 "Morda boste morali navesti ID odjemalca ali najemnika po meri, odvisno od "
 "nastavitev vaše organizacije."
 
-#: src/goabackend/goamsgraphprovider.c:367
+#: src/goabackend/goamsgraphprovider.c:382
 msgid "_Client ID"
 msgstr "_ID odjemalca"
 
-#: src/goabackend/goamsgraphprovider.c:368
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:384
 msgid "_Tenant ID"
 msgstr "ID na_jemnika"
 
-#: src/goabackend/goamsgraphprovider.c:369
+#: src/goabackend/goamsgraphprovider.c:385
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "Primer ID: 00000000-0000-0000-0000-0000000000000"
 
@@ -410,20 +412,20 @@ msgid "Sign in to %s with your browser"
 msgstr "Prijavite se v %s v oknu brskalnika"
 
 #: src/goabackend/goaoauth2provider.c:945
-#: src/goabackend/goaproviderdialog.c:689
+#: src/goabackend/goaproviderdialog.c:693
 msgid "_Sign In…"
 msgstr "_Prijava …"
 
-#: src/goabackend/goaoauth2provider.c:1292
+#: src/goabackend/goaoauth2provider.c:1290
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Zahtevana je prijava %s, prijavljen pa je uporabnik %s"
 
-#: src/goabackend/goaoauth2provider.c:1479
+#: src/goabackend/goaoauth2provider.c:1476
 msgid "Credentials do not contain access_token"
 msgstr "Poverila ne vključujejo žetona dostopa"
 
-#: src/goabackend/goaoauth2provider.c:1523
+#: src/goabackend/goaoauth2provider.c:1520
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Osveževanje žetona dostopa je spodletelo (%s, %d): "
@@ -484,15 +486,15 @@ msgstr "_Zemljevidi"
 msgid "T_o Do"
 msgstr "_Opravila"
 
-#: src/goabackend/goaprovider.c:923
+#: src/goabackend/goaprovider.c:921
 msgid "Account is disabled"
 msgstr "Račun je onemogočen"
 
-#: src/goabackend/goaprovider.c:936
+#: src/goabackend/goaprovider.c:934
 msgid "Unknown error"
 msgstr "Neznana napaka"
 
-#: src/goabackend/goaprovider.c:955
+#: src/goabackend/goaprovider.c:953
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "zahteva usklajevanja poverila ni podprta za vrsto %s"
@@ -501,16 +503,16 @@ msgstr "zahteva usklajevanja poverila ni podprta za vrsto %s"
 #. * Account" dialogs. The %s is the name of the provider. eg.,
 #. * 'Google'.
 #.
-#: src/goabackend/goaproviderdialog.c:168
+#: src/goabackend/goaproviderdialog.c:171
 #, c-format
 msgid "%s Account"
 msgstr "Račun %s"
 
-#: src/goabackend/goaproviderdialog.c:606
+#: src/goabackend/goaproviderdialog.c:610
 msgid "Remove this Account?"
 msgstr "Ali želite odstraniti ta račun?"
 
-#: src/goabackend/goaproviderdialog.c:607
+#: src/goabackend/goaproviderdialog.c:611
 msgid ""
 "If you remove this Online Account you will have to connect to it again to "
 "use it with apps and services."
@@ -518,36 +520,36 @@ msgstr ""
 "Če ta spletni račun odstranite, se boste morali pred uporabo teh programov "
 "in storitev znova povezati."
 
-#: src/goabackend/goaproviderdialog.c:609
+#: src/goabackend/goaproviderdialog.c:613
 msgid "_Cancel"
 msgstr "_Prekliči"
 
-#: src/goabackend/goaproviderdialog.c:610
+#: src/goabackend/goaproviderdialog.c:614
 msgid "_Remove"
 msgstr "_Odstrani"
 
-#: src/goabackend/goaproviderdialog.c:688
+#: src/goabackend/goaproviderdialog.c:692
 msgid "Sign in to reconnect to this account"
 msgstr "Za povezavo se je treba znova prijaviti."
 
 #. Remove
-#: src/goabackend/goaproviderdialog.c:737
+#: src/goabackend/goaproviderdialog.c:742
 msgid "_Remove…"
 msgstr "_Odstrani …"
 
-#: src/goabackend/goaproviderdialog.c:832
+#: src/goabackend/goaproviderdialog.c:837
 msgid "_Sign In"
 msgstr "_Prijava"
 
-#: src/goabackend/goaproviderdialog.c:894
+#: src/goabackend/goaproviderdialog.c:899
 msgid "_Try Again"
 msgstr "_Poskusi znova"
 
-#: src/goabackend/goaproviderdialog.c:898
+#: src/goabackend/goaproviderdialog.c:903
 msgid "_Ignore"
 msgstr "_Prezri"
 
-#: src/goabackend/goaproviderdialog.c:1143
+#: src/goabackend/goaproviderdialog.c:1153
 msgid "Dialog was dismissed"
 msgstr "Pogovorno okno je bilo opuščeno"
 
