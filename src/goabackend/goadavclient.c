@@ -22,9 +22,11 @@
 
 #include <libsoup/soup.h>
 
-#include "goadavclient.h"
+#include "goadavconfig.h"
 #include "goasouplogger.h"
 #include "goautils.h"
+
+#include "goadavclient.h"
 
 #define WELL_KNOWN_CALDAV    "/.well-known/caldav"
 #define WELL_KNOWN_CARDDAV   "/.well-known/carddav"
@@ -473,7 +475,7 @@ typedef struct
 {
   CheckData check;
 
-  GoaDavConfiguration *config;
+  GPtrArray *services;
   GQueue uris;
   gboolean auth_error;
 } DiscoverData;
@@ -484,7 +486,7 @@ goa_dav_client_discover_data_free (gpointer task_data)
   CheckData *check = task_data;
   DiscoverData *data = (DiscoverData *) check;
 
-  g_clear_pointer (&data->config, goa_dav_configuration_free);
+  g_clear_pointer (&data->services, g_ptr_array_unref);
   g_queue_clear_full (&data->uris, g_free);
   dav_client_check_data_free (check);
 }
@@ -509,7 +511,9 @@ dav_client_discover_postconfig_nexcloud (DiscoverData *discover,
       const char *scheme = NULL;
       g_autofree char *base_path = NULL;
       g_autofree char *dav_path = NULL;
+      g_autofree char *dav_uri = NULL;
       g_autofree char *webdav_path = NULL;
+      g_autofree char *webdav_uri = NULL;
 
       port = g_uri_get_port (uri);
       scheme = g_uri_get_scheme (uri);
@@ -526,41 +530,36 @@ dav_client_discover_postconfig_nexcloud (DiscoverData *discover,
        *
        * See: https://github.com/nextcloud/server/issues/25867
        */
-      g_clear_pointer (&discover->config->webdav_uri, g_free);
-      discover->config->webdav_uri = g_uri_join_with_user (G_URI_FLAGS_PARSE_RELAXED,
-                                                           g_uri_get_scheme (uri),
-                                                           g_uri_get_user (uri),
-                                                           g_uri_get_password (uri),
-                                                           g_uri_get_auth_params (uri),
-                                                           g_uri_get_host (uri),
-                                                           port,
-                                                           webdav_path,
-                                                           g_uri_get_query (uri),
-                                                           g_uri_get_fragment (uri));
+      webdav_uri = g_uri_join_with_user (G_URI_FLAGS_PARSE_RELAXED,
+                                         g_uri_get_scheme (uri),
+                                         g_uri_get_user (uri),
+                                         g_uri_get_password (uri),
+                                         g_uri_get_auth_params (uri),
+                                         g_uri_get_host (uri),
+                                         port,
+                                         webdav_path,
+                                         g_uri_get_query (uri),
+                                         g_uri_get_fragment (uri));
+      g_ptr_array_add (discover->services, goa_dav_config_new (GOA_PROVIDER_FEATURE_FILES,
+                                                               webdav_uri,
+                                                               ((CheckData *)discover)->username);
 
-      g_clear_pointer (&discover->config->caldav_uri, g_free);
-      discover->config->caldav_uri = g_uri_join_with_user (G_URI_FLAGS_PARSE_RELAXED,
-                                                           g_uri_get_scheme (uri),
-                                                           g_uri_get_user (uri),
-                                                           g_uri_get_password (uri),
-                                                           g_uri_get_auth_params (uri),
-                                                           g_uri_get_host (uri),
-                                                           port,
-                                                           dav_path,
-                                                           g_uri_get_query (uri),
-                                                           g_uri_get_fragment (uri));
-
-      g_clear_pointer (&discover->config->carddav_uri, g_free);
-      discover->config->carddav_uri = g_strdup (discover->config->caldav_uri);
-
-      /* Ensure the feature flags are set, since ownCloud/Nextcloud doesn't set
-       * "addressbook"/"calendar-access" in the DAV header.
-       *
-       * See: https://github.com/nextcloud/server/issues/37374
-       */
-      discover->config->features = GOA_PROVIDER_FEATURE_CALENDAR |
-                                   GOA_PROVIDER_FEATURE_CONTACTS |
-                                   GOA_PROVIDER_FEATURE_FILES;
+      dav_uri = g_uri_join_with_user (G_URI_FLAGS_PARSE_RELAXED,
+                                      g_uri_get_scheme (uri),
+                                      g_uri_get_user (uri),
+                                      g_uri_get_password (uri),
+                                      g_uri_get_auth_params (uri),
+                                      g_uri_get_host (uri),
+                                      port,
+                                      dav_path,
+                                      g_uri_get_query (uri),
+                                      g_uri_get_fragment (uri));
+      g_ptr_array_add (discover->services, goa_dav_config_new (GOA_PROVIDER_FEATURE_CALENDAR,
+                                                               dav_uri,
+                                                               ((CheckData *)discover)->username));
+      g_ptr_array_add (discover->services, goa_dav_config_new (GOA_PROVIDER_FEATURE_CONTACTS,
+                                                               dav_uri,
+                                                               ((CheckData *)discover)->username));
 
       return TRUE;
     }
@@ -638,8 +637,7 @@ dav_client_discover_response_cb (SoupSession  *session,
   /* TODO: implement PROPFIND behaviour emulating GVfs. Workaround by only
    *       accepting endpoints  without support for CalDAV/CardDAV.
    */
-  if (features == GOA_PROVIDER_FEATURE_FILES
-      && discover->config->webdav_uri == NULL)
+  if (features == GOA_PROVIDER_FEATURE_FILES)
     {
       GUri *uri = NULL;
 
@@ -647,23 +645,29 @@ dav_client_discover_response_cb (SoupSession  *session,
       uri = soup_message_get_uri (msg);
       if (uri != NULL)
         {
-          discover->config->webdav_uri = g_uri_to_string (uri);
-          discover->config->features |= GOA_PROVIDER_FEATURE_FILES;
+          GoaDavConfig *config = NULL;
+          g_autofree char *webdav_uri = NULL;
+
+          webdav_uri = g_uri_to_string (uri);
+          config = goa_dav_config_new (GOA_PROVIDER_FEATURE_FILES, webdav_uri, data->username);
+          g_ptr_array_add (discover->services, g_steal_pointer (&config));
         }
     }
 
-  if ((features & GOA_PROVIDER_FEATURE_CALENDAR) != 0
-      && discover->config->caldav_uri == NULL)
+  if ((features & GOA_PROVIDER_FEATURE_CALENDAR) != 0)
     {
-      discover->config->caldav_uri = g_strdup (data->uri);
-      discover->config->features |= GOA_PROVIDER_FEATURE_CALENDAR;
+      GoaDavConfig *config = NULL;
+
+      config = goa_dav_config_new (GOA_PROVIDER_FEATURE_CALENDAR, data->uri, data->username);
+      g_ptr_array_add (discover->services, g_steal_pointer (&config));
     }
 
-  if ((features & GOA_PROVIDER_FEATURE_CONTACTS) != 0
-      && discover->config->carddav_uri == NULL)
+  if ((features & GOA_PROVIDER_FEATURE_CONTACTS) != 0)
     {
-      discover->config->carddav_uri = g_strdup (data->uri);
-      discover->config->features |= GOA_PROVIDER_FEATURE_CONTACTS;
+      GoaDavConfig *config = NULL;
+
+      config = goa_dav_config_new (GOA_PROVIDER_FEATURE_CONTACTS, data->uri, data->username);
+      g_ptr_array_add (discover->services, g_steal_pointer (&config));
     }
 
 out:
@@ -687,7 +691,7 @@ out:
                                         (GAsyncReadyCallback)dav_client_discover_response_cb,
                                         g_object_ref (task));
     }
-  else if (discover->config->features == 0)
+  else if (discover->services->len == 0)
     {
       if (discover->auth_error)
         {
@@ -707,8 +711,8 @@ out:
   else
     {
       g_task_return_pointer (task,
-                             g_steal_pointer (&discover->config),
-                             (GDestroyNotify) goa_dav_configuration_free);
+                             g_steal_pointer (&discover->services),
+                             g_object_unref);
     }
 }
 
@@ -809,7 +813,7 @@ goa_dav_client_discover (GoaDavClient        *self,
   data->password = g_strdup (password);
   data->accept_ssl_errors = accept_ssl_errors;
 
-  discover->config = g_new0 (GoaDavConfiguration, 1);
+  discover->services = g_ptr_array_new_with_free_func (g_object_unref);
   g_queue_init (&discover->uris);
 
   /* Check if the host can be preconfigured, falling back to well-known paths.
@@ -848,10 +852,10 @@ goa_dav_client_discover (GoaDavClient        *self,
  *
  * Get the result of an operation started with goa_dav_client_resolve().
  *
- * Returns: (transfer full) (nullable): a `GoaDavConfiguration`, or %NULL with
- *    @error set
+ * Returns: (transfer container) (element-type Goa.ServiceConfig) (nullable): a list of services,
+ *   or %NULL with @error set
  */
-GoaDavConfiguration *
+GPtrArray *
 goa_dav_client_discover_finish (GoaDavClient  *self,
                                 GAsyncResult  *res,
                                 GError       **error)
@@ -868,19 +872,3 @@ goa_dav_client_discover_finish (GoaDavClient  *self,
   return g_task_propagate_pointer (task, error);
 }
 
-/**
- * goa_dav_configuration_free:
- * @config: (transfer full): a `GoaDavConfiguration`
- *
- * Free a DAV configuration.
- */
-void
-goa_dav_configuration_free (GoaDavConfiguration *config)
-{
-  g_free (config->webdav_uri);
-  g_free (config->caldav_uri);
-  g_free (config->carddav_uri);
-  g_free (config->identity);
-  g_free (config->username);
-  g_free (config);
-}
