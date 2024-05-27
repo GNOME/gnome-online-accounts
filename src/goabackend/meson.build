@@ -5,6 +5,7 @@ libgoa_backend_sources = files(
   'goaoauth2provider.c',
   'goabackendinit.c',
   'goadavclient.c',
+  'goadavconfig.c',
   'goaewsclient.c',
   'goaexchangeprovider.c',
   'goagoogleprovider.c',
