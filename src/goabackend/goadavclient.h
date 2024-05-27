@@ -32,20 +32,6 @@
 
 G_BEGIN_DECLS
 
-typedef struct
-{
-  char *webdav_uri;
-  char *caldav_uri;
-  char *carddav_uri;
-  GoaProviderFeatures features;
-
-  /* Identity amendments made during discovery */
-  char *identity;
-  char *username;
-} GoaDavConfiguration;
-
-void                 goa_dav_configuration_free                (GoaDavConfiguration *config);
-
 #define GOA_TYPE_DAV_CLIENT (goa_dav_client_get_type ())
 G_DECLARE_FINAL_TYPE (GoaDavClient, goa_dav_client, GOA, DAV_CLIENT, GObject)
 
@@ -76,7 +62,7 @@ void                 goa_dav_client_discover                   (GoaDavClient    
                                                                 GCancellable         *cancellable,
                                                                 GAsyncReadyCallback   callback,
                                                                 gpointer              user_data);
-GoaDavConfiguration *goa_dav_client_discover_finish            (GoaDavClient         *self,
+GPtrArray           *goa_dav_client_discover_finish            (GoaDavClient         *self,
                                                                 GAsyncResult         *res,
                                                                 GError              **error);
 
