@@ -2,7 +2,10 @@ project(
   'gnome-online-accounts', 'c',
   version: '3.51.0',
   license: 'LGPL2+',
-  default_options: 'buildtype=debugoptimized',
+  default_options: [
+    'buildtype=debugoptimized',
+    'c_std=gnu99',
+  ],
   meson_version: '>= 0.63.0',
 )
 
@@ -129,6 +132,10 @@ enable_fedora = get_option('fedora')
 if enable_goabackend and enable_fedora
   gcr_dep = dependency('gcr-4', version: '>= 4.1.0')
   krb5_dep = dependency('krb5')
+  libkeyutils_dep = dependency('libkeyutils',
+     version: '>= 1.6.2',
+    required: target_machine.system() == 'linux',
+  )
 
   config_h.set('GCR_API_SUBJECT_TO_CHANGE', true)
 endif
@@ -159,6 +166,10 @@ enable_kerberos = get_option('kerberos')
 if enable_goabackend and enable_kerberos
   gcr_dep = dependency('gcr-4', version: '>= 4.1.0')
   krb5_dep = dependency('krb5')
+  libkeyutils_dep = dependency('libkeyutils',
+     version: '>= 1.6.2',
+    required: target_machine.system() == 'linux',
+  )
 
   config_h.set('GCR_API_SUBJECT_TO_CHANGE', true)
 endif
@@ -233,6 +244,10 @@ if cc.compiles(timerfd_support_src, name: 'timerfd support')
   if not cc.compiles(timerfd_cancel_on_set_support_src, name: 'timerfd cancel-on-set support')
     config_h.set('TFD_TIMER_CANCEL_ON_SET', '(1 << 1)')
   endif
+endif
+
+if cc.has_function('pipe2')
+  config_h.set('HAVE_PIPE2', true)
 endif
 
 configure_file(
