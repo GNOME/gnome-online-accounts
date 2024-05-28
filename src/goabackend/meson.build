@@ -56,7 +56,10 @@ libgoa_backend_sources += enum_sources
 
 priv_enum_sources = gnome.mkenums_simple('goabackendenumtypes-priv',
   body_prefix: '#include <glib-object.h>',
-  sources: ['goaproviderdialog.h'],
+  sources: [
+    'goabackendenums-priv.h',
+    'goaproviderdialog.h',
+  ],
   install_header: false,
 )
 
