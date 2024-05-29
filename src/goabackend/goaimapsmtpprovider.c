@@ -23,6 +23,7 @@
 #include "goaimapauthlogin.h"
 #include "goamailclient.h"
 #include "goaimapsmtpprovider.h"
+#include "goamailconfig.h"
 #include "goaprovider.h"
 #include "goaproviderdialog.h"
 #include "goasmtpauth.h"
@@ -432,6 +433,12 @@ typedef struct
   GtkWidget *smtp_username;
   GtkWidget *smtp_password;
   GtkWidget *smtp_encryption;
+
+  GCancellable *discovery;
+  GtkWidget *discovery_status;
+  GtkWidget *discovery_spinner;
+  GtkWidget *imap_discovery;
+  GtkWidget *smtp_discovery;
 } AddAccountData;
 
 static void
@@ -441,6 +448,9 @@ add_account_data_free (gpointer user_data)
 
   g_clear_object (&data->client);
   g_clear_object (&data->object);
+
+  g_cancellable_cancel (data->discovery);
+  g_clear_object (&data->discovery);
   g_clear_object (&data->smtp_auth);
   g_free (data);
 }
@@ -448,13 +458,26 @@ add_account_data_free (gpointer user_data)
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-on_login_changed (GtkEditable    *editable,
+on_login_changed (GtkWidget      *widget,
+                  GParamSpec     *pspec,
                   AddAccountData *data)
 {
   const char *username;
   const char *password;
   const char *server;
   GoaDialogState state = GOA_DIALOG_IDLE;
+
+  /* Discovery */
+  g_cancellable_cancel (data->discovery);
+  g_clear_object (&data->discovery);
+
+  if ((data->discovery_status != NULL)
+      && (data->imap_password != widget && data->smtp_password != widget))
+    {
+      gtk_widget_set_visible (data->discovery_status, FALSE);
+      gtk_widget_set_visible (data->imap_discovery, FALSE);
+      gtk_widget_set_visible (data->smtp_discovery, FALSE);
+    }
 
   /* IMAP */
   server = gtk_editable_get_text (GTK_EDITABLE (data->imap_server));
@@ -490,35 +513,136 @@ on_login_changed (GtkEditable    *editable,
   goa_provider_dialog_set_state (data->dialog, state);
 }
 
+static gpointer
+find_preferred_config (GPtrArray  *services,
+                       const char *name)
+{
+  if (services == NULL || name == NULL)
+    return NULL;
+
+  for (unsigned int i = 0; i < services->len; i++)
+    {
+      GoaServiceConfig *config = g_ptr_array_index (services, i);
+
+      if (g_ascii_strcasecmp (goa_service_config_get_service (config), name) == 0)
+        return config;
+    }
+
+  return NULL;
+}
+
+static void
+update_account_details_ui (AddAccountData *data,
+                           GPtrArray      *services)
+{
+  GoaMailConfig *imap_config = find_preferred_config (services, GOA_SERVICE_TYPE_IMAP);
+  GoaMailConfig *smtp_config = find_preferred_config (services, GOA_SERVICE_TYPE_SMTP);
+
+  /* IMAP */
+  gtk_editable_set_text (GTK_EDITABLE (data->imap_server),
+                         imap_config ? goa_mail_config_get_hostname (imap_config) : "");
+  gtk_editable_set_text (GTK_EDITABLE (data->imap_username),
+                         imap_config ? goa_mail_config_get_username (imap_config) : "");
+  g_object_set (data->imap_encryption,
+                "selected", imap_config
+                  ? goa_mail_config_get_encryption (imap_config)
+                  : GOA_TLS_TYPE_NONE,
+                NULL);
+
+  /* SMTP */
+  gtk_editable_set_text (GTK_EDITABLE (data->smtp_server),
+                         smtp_config ? goa_mail_config_get_hostname (smtp_config) : "");
+  gtk_editable_set_text (GTK_EDITABLE (data->smtp_username),
+                         smtp_config ? goa_mail_config_get_username (smtp_config) : "");
+  g_object_set (data->smtp_encryption,
+                "selected", smtp_config
+                  ? goa_mail_config_get_encryption (smtp_config)
+                  : GOA_TLS_TYPE_NONE,
+                NULL);
+
+  /* Discovery */
+  g_cancellable_cancel (data->discovery);
+  g_clear_object (&data->discovery);
+  gtk_widget_set_visible (data->discovery_status, (imap_config || smtp_config));
+  gtk_widget_set_visible (data->discovery_spinner, FALSE);
+  gtk_widget_set_visible (data->imap_discovery, (imap_config != NULL));
+  gtk_widget_set_visible (data->smtp_discovery, (smtp_config != NULL));
+}
+
+static void
+goa_mail_client_discover_cb (GoaMailClient  *client,
+                             GAsyncResult   *result,
+                             AddAccountData *data)
+{
+  g_autoptr(GPtrArray) services = NULL;
+  g_autoptr(GError) error = NULL;
+
+  services = goa_mail_client_discover_finish (client, result, &error);
+  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    return;
+
+  if (error != NULL)
+    {
+      g_debug ("%s(): %s", G_STRFUNC, error->message);
+      goa_provider_dialog_add_toast (data->dialog,
+                                     adw_toast_new (_("Unable to auto-detect IMAP and SMTP settings")));
+    }
+
+  update_account_details_ui (data, services);
+}
+
 static void
 on_email_changed (GtkEditable    *editable,
                   AddAccountData *data)
 {
-  const char *email;
-  const char *password;
-  g_autofree char *username = NULL;
-  g_autofree char *domain = NULL;
-  g_autofree char *imap_domain = NULL;
-  g_autofree char *smtp_domain = NULL;
+  g_autoptr(GoaMailClient) client = NULL;
+  const char *email_address;
 
-  email = gtk_editable_get_text (GTK_EDITABLE (data->email_address));
-  password = gtk_editable_get_text (GTK_EDITABLE (data->email_password));
+  update_account_details_ui (data, NULL);
 
-  if (!goa_utils_parse_email_address (email, &username, &domain))
+  email_address = gtk_editable_get_text (GTK_EDITABLE (data->email_address));
+  if (!goa_utils_parse_email_address (email_address, NULL, NULL))
     {
       goa_provider_dialog_set_state (data->dialog, GOA_DIALOG_IDLE);
       return;
     }
 
-  /* Guess the IMAP/SMTP servers and update their UI */
-  imap_domain = g_strdup_printf ("imap.%s", domain);
-  gtk_editable_set_text (GTK_EDITABLE (data->imap_server), imap_domain);
-  gtk_editable_set_text (GTK_EDITABLE (data->imap_username), username);
-  gtk_editable_set_text (GTK_EDITABLE (data->imap_password), password);
+  data->discovery = g_cancellable_new ();
+  gtk_widget_set_visible (data->discovery_status,
+                          TRUE);
+  gtk_widget_set_visible (data->discovery_spinner,
+                          TRUE);
 
-  smtp_domain = g_strdup_printf ("smtp.%s", domain);
-  gtk_editable_set_text (GTK_EDITABLE (data->smtp_server), smtp_domain);
-  gtk_editable_set_text (GTK_EDITABLE (data->smtp_username), username);
+  client = goa_mail_client_new ();
+  goa_mail_client_discover (client,
+                            email_address,
+                            data->discovery,
+                            (GAsyncReadyCallback)goa_mail_client_discover_cb,
+                            data);
+}
+
+static void
+on_password_changed (GtkEditable    *editable,
+                     AddAccountData *data)
+{
+  const char *email_address;
+  const char *password;
+
+  email_address = gtk_editable_get_text (GTK_EDITABLE (data->email_address));
+  if (!goa_utils_parse_email_address (email_address, NULL, NULL))
+    {
+      goa_provider_dialog_set_state (data->dialog, GOA_DIALOG_IDLE);
+      return;
+    }
+
+  password = gtk_editable_get_text (GTK_EDITABLE (data->email_password));
+  if (password == NULL || *password == '\0')
+    {
+      goa_provider_dialog_set_state (data->dialog, GOA_DIALOG_IDLE);
+      return;
+    }
+
+  gtk_editable_set_text (GTK_EDITABLE (data->imap_password), password);
   gtk_editable_set_text (GTK_EDITABLE (data->smtp_password), password);
 }
 
@@ -552,14 +676,37 @@ create_account_details_ui (GoaProvider    *provider,
   if (new_account)
     {
       const char *real_name;
+      GtkWidget *icon;
 
       real_name = g_get_real_name ();
       if (g_strcmp0 (real_name, "Unknown") != 0)
         gtk_editable_set_text (GTK_EDITABLE (data->name), real_name);
+
+      /* Discovery */
+      data->discovery_status = g_object_new (GTK_TYPE_BOX,
+                                             "margin-start",   8,
+                                             "margin-end",     2,
+                                             "width-request",  24,
+                                             "height-request", 24,
+                                             NULL);
+      adw_entry_row_add_suffix (ADW_ENTRY_ROW (data->email_address), data->discovery_status);
+
+      icon = gtk_image_new_from_icon_name ("emblem-default-symbolic");
+      gtk_widget_add_css_class (GTK_WIDGET (icon), "success");
+      gtk_box_append (GTK_BOX (data->discovery_status), GTK_WIDGET (icon));
+
+      data->discovery_spinner = gtk_spinner_new ();
+      g_object_bind_property (data->discovery_spinner, "visible",
+                              icon,                    "visible",
+                              G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
+      g_object_bind_property (data->discovery_spinner, "visible",
+                              data->discovery_spinner, "spinning",
+                              G_BINDING_SYNC_CREATE);
+      gtk_box_append (GTK_BOX (data->discovery_status), data->discovery_spinner);
     }
 
   g_signal_connect (data->email_address, "changed", G_CALLBACK (on_email_changed), data);
-  g_signal_connect (data->email_password, "changed", G_CALLBACK (on_email_changed), data);
+  g_signal_connect (data->email_password, "changed", G_CALLBACK (on_password_changed), data);
 
   /* IMAP */
   data->imap_group = goa_provider_dialog_add_group (dialog, _("IMAP Settings"));
@@ -574,13 +721,22 @@ create_account_details_ui (GoaProvider    *provider,
                                                              _("Encryption"),
                                                              (GStrv)encryption_types);
       g_object_set (data->imap_encryption, "selected", GOA_TLS_TYPE_SSL, NULL);
+      g_signal_connect (data->imap_encryption, "notify::selected", G_CALLBACK (on_login_changed), data);
+
+      /* Discovery */
+      data->imap_discovery = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
+      gtk_widget_add_css_class (data->imap_discovery, "success");
+      gtk_box_append (GTK_BOX (data->imap_discovery), gtk_label_new (_("Auto-detected")));
+      gtk_box_append (GTK_BOX (data->imap_discovery), gtk_image_new_from_icon_name ("emblem-default-symbolic"));
+      adw_preferences_group_set_header_suffix (ADW_PREFERENCES_GROUP (data->imap_group),
+                                               data->imap_discovery);
     }
 
   goa_provider_dialog_add_description (dialog, data->imap_server, _("Example server: imap.example.com"));
 
-  g_signal_connect (data->imap_server, "changed", G_CALLBACK (on_login_changed), data);
-  g_signal_connect (data->imap_username, "changed", G_CALLBACK (on_login_changed), data);
-  g_signal_connect (data->imap_password, "changed", G_CALLBACK (on_login_changed), data);
+  g_signal_connect (data->imap_server, "notify::text", G_CALLBACK (on_login_changed), data);
+  g_signal_connect (data->imap_username, "notify::text", G_CALLBACK (on_login_changed), data);
+  g_signal_connect (data->imap_password, "notify::text", G_CALLBACK (on_login_changed), data);
 
   /* SMTP */
   data->smtp_group = goa_provider_dialog_add_group (dialog, _("SMTP Settings"));
@@ -595,13 +751,24 @@ create_account_details_ui (GoaProvider    *provider,
                                                              _("Encryption"),
                                                              (GStrv)encryption_types);
       g_object_set (data->smtp_encryption, "selected", GOA_TLS_TYPE_SSL, NULL);
+      g_signal_connect (data->smtp_encryption, "notify::selected", G_CALLBACK (on_login_changed), data);
+
+      /* Discovery */
+      data->smtp_discovery = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
+      gtk_widget_add_css_class (data->smtp_discovery, "success");
+      gtk_box_append (GTK_BOX (data->smtp_discovery), gtk_label_new (_("Auto-detected")));
+      gtk_box_append (GTK_BOX (data->smtp_discovery), gtk_image_new_from_icon_name ("emblem-default-symbolic"));
+      adw_preferences_group_set_header_suffix (ADW_PREFERENCES_GROUP (data->smtp_group),
+                                               data->smtp_discovery);
     }
 
   goa_provider_dialog_add_description (dialog, data->smtp_server, _("Example server: smtp.example.com"));
 
-  g_signal_connect (data->smtp_server, "changed", G_CALLBACK (on_login_changed), data);
-  g_signal_connect (data->smtp_username, "changed", G_CALLBACK (on_login_changed), data);
-  g_signal_connect (data->smtp_password, "changed", G_CALLBACK (on_login_changed), data);
+  g_signal_connect (data->smtp_server, "notify::text", G_CALLBACK (on_login_changed), data);
+  g_signal_connect (data->smtp_username, "notify::text", G_CALLBACK (on_login_changed), data);
+  g_signal_connect (data->smtp_password, "notify::text", G_CALLBACK (on_login_changed), data);
+
+  update_account_details_ui (data, NULL);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
