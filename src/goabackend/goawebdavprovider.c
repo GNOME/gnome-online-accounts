@@ -566,7 +566,7 @@ add_account_credentials (GTask *task)
   g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (password));
 
   g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
-  g_variant_builder_add (&details, "{ss}", "Uri", data->caldav ? goa_dav_config_get_uri (data->webdav) : "");
+  g_variant_builder_add (&details, "{ss}", "Uri", data->webdav ? goa_dav_config_get_uri (data->webdav) : "");
   g_variant_builder_add (&details, "{ss}", "CalendarEnabled", data->caldav ? "true" : "false");
   g_variant_builder_add (&details, "{ss}", "CalDavUri", data->caldav ? goa_dav_config_get_uri (data->caldav) : "");
   g_variant_builder_add (&details, "{ss}", "ContactsEnabled", data->carddav ? "true" : "false");
