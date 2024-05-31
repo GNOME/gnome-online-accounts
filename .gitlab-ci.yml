@@ -53,13 +53,14 @@ clang-analyzer:
   before_script:
     - dnf update -y
     - dnf -y install
-      clang clang-analyzer meson gcr-devel dbus-devel glib2-devel
+      clang clang-analyzer meson gcr-devel dbus-devel gi-docgen glib2-devel
       gobject-introspection-devel gtk4-devel krb5-devel libadwaita-devel
       libsecret-devel rest-devel vala
   script:
     - meson setup --buildtype=debug
                   -Dfedora=true
                   -Ddocumentation=false
+                  -Dintrospection=false
                   -Dman=false
                   -Dwerror=true
                   _scan_build
