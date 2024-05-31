@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright © 2023 GNOME Foundation Inc.
+ * Copyright © 2024 GNOME Foundation Inc.
  * Contributor: Andy Holmes <andyholmes@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
