@@ -80,6 +80,7 @@ typedef struct
 {
   SoupSession *session;
   SoupMessage *msg;
+  GoaDavConfig *config;
   char *uri;
   char *username;
   char *password;
@@ -104,6 +105,7 @@ dav_client_check_data_free (gpointer user_data)
   g_free (data->username);
   g_free (data->password);
   g_clear_error (&data->error);
+  g_clear_object (&data->config);
   g_clear_object (&data->msg);
   g_clear_object (&data->session);
   g_free (data);
@@ -252,9 +254,9 @@ _soup_message_get_dav_features (SoupMessage  *message,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-dav_client_check_response_cb (SoupSession  *session,
-                              GAsyncResult *result,
-                              gpointer      user_data)
+dav_client_check_options_cb (SoupSession  *session,
+                             GAsyncResult *result,
+                             gpointer      user_data)
 {
   g_autoptr (GTask) task = G_TASK (user_data);
   g_autoptr (GBytes) body = NULL;
@@ -295,8 +297,7 @@ out:
 /**
  * goa_dav_client_check:
  * @self: a `GoaDavClient`
- * @uri: a WebDAV URI
- * @username: DAV user
+ * @config: a `GoaDavConfig`
  * @password: DAV password
  * @accept_ssl_errors: whether to ignore SSL errors
  * @cancellable: (nullable): a `GCancellable`
@@ -311,8 +312,7 @@ out:
  */
 void
 goa_dav_client_check (GoaDavClient        *self,
-                      const char          *uri,
-                      const char          *username,
+                      GoaDavConfig        *config,
                       const char          *password,
                       gboolean             accept_ssl_errors,
                       GCancellable        *cancellable,
@@ -324,8 +324,7 @@ goa_dav_client_check (GoaDavClient        *self,
   CheckData *data;
 
   g_return_if_fail (GOA_IS_DAV_CLIENT (self));
-  g_return_if_fail (uri != NULL && uri[0] != '\0');
-  g_return_if_fail (username != NULL && username[0] != '\0');
+  g_return_if_fail (GOA_IS_DAV_CONFIG (config));
   g_return_if_fail (password != NULL && password[0] != '\0');
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
@@ -341,9 +340,9 @@ goa_dav_client_check (GoaDavClient        *self,
   logger = goa_soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
   soup_session_add_feature (data->session, SOUP_SESSION_FEATURE (logger));
 
-  data->msg = soup_message_new (SOUP_METHOD_OPTIONS, uri);
-  data->uri = g_strdup (uri);
-  data->username = g_strdup (username);
+  data->config = g_object_ref (config);
+  data->msg = soup_message_new (SOUP_METHOD_OPTIONS, goa_dav_config_get_uri (config));
+  data->username = g_strdup (goa_dav_config_get_username (config));
   data->password = g_strdup (password);
   data->accept_ssl_errors = accept_ssl_errors;
 
@@ -361,7 +360,7 @@ goa_dav_client_check (GoaDavClient        *self,
                                     data->msg,
                                     G_PRIORITY_DEFAULT,
                                     data->cancellable,
-                                    (GAsyncReadyCallback)dav_client_check_response_cb,
+                                    (GAsyncReadyCallback)dav_client_check_options_cb,
                                     g_object_ref (task));
 }
 
@@ -415,8 +414,7 @@ dav_client_check_sync_cb (GObject      *source_object,
 /**
  * goa_dav_client_check_sync:
  * @self: a `GoaDavClient`
- * @uri: a WebDAV URI
- * @username: DAV user
+ * @config: a `GoaDavConfig`
  * @password: DAV password
  * @accept_ssl_errors: whether to ignore SSL errors
  * @cancellable: (nullable): a `GCancellable`
@@ -430,8 +428,7 @@ dav_client_check_sync_cb (GObject      *source_object,
  */
 gboolean
 goa_dav_client_check_sync (GoaDavClient  *self,
-                           const char    *uri,
-                           const char    *username,
+                           GoaDavConfig  *config,
                            const char    *password,
                            gboolean       accept_ssl_errors,
                            GCancellable  *cancellable,
@@ -441,8 +438,7 @@ goa_dav_client_check_sync (GoaDavClient  *self,
   GMainContext *context = NULL;
 
   g_return_val_if_fail (GOA_IS_DAV_CLIENT (self), FALSE);
-  g_return_val_if_fail (uri != NULL && uri[0] != '\0', FALSE);
-  g_return_val_if_fail (username != NULL && username[0] != '\0', FALSE);
+  g_return_val_if_fail (GOA_IS_DAV_CONFIG (config), FALSE);
   g_return_val_if_fail (password != NULL && password[0] != '\0', FALSE);
   g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -453,8 +449,7 @@ goa_dav_client_check_sync (GoaDavClient  *self,
   data.error = error;
 
   goa_dav_client_check (self,
-                        uri,
-                        username,
+                        config,
                         password,
                         accept_ssl_errors,
                         cancellable,
@@ -628,14 +623,11 @@ dav_client_discover_response_cb (SoupSession  *session,
       goto out;
     }
 
-  features |= _soup_message_get_dav_features (msg, &error);
+  features = _soup_message_get_dav_features (msg, &error);
   if (error != NULL)
     goto out;
 
-  g_debug ("goa_dav_client_discover(): found: (%p, %s)", msg, data->uri);
-
-  /* TODO: implement PROPFIND behaviour emulating GVfs. Workaround by only
-   *       accepting endpoints  without support for CalDAV/CardDAV.
+  /* TODO: implement PROPFIND behaviour emulating GVfs.
    */
   if (features == GOA_PROVIDER_FEATURE_FILES)
     {
