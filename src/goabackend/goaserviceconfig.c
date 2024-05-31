@@ -1,6 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 /*
- * Copyright © 2023 GNOME Foundation Inc.
+ * Copyright © 2024 GNOME Foundation Inc.
  * Contributor: Andy Holmes <andyholmes@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -19,11 +19,8 @@
 
 #include "config.h"
 
-#include <glib/gprintf.h>
-#include <gio/gio.h>
+#include <glib-object.h>
 
-#include "goabackendenums.h"
-#include "goabackendenumtypes.h"
 #include "goaserviceconfig.h"
 
 typedef struct
@@ -33,7 +30,7 @@ typedef struct
   char *service;
 } GoaServiceConfigPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (GoaServiceConfig, goa_service_config, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GoaServiceConfig, goa_service_config, G_TYPE_OBJECT)
 
 typedef enum
 {
@@ -128,24 +125,6 @@ goa_service_config_class_init (GoaServiceConfigClass *klass)
                           G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_properties (object_class, G_N_ELEMENTS (properties), properties);
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-/**
- * goa_service_config_new:
- * @service: (nullable): a service type
- *
- * Create a new, empty service configuration.
- *
- * Returns: (transfer full): a service configuration
- */
-GoaServiceConfig *
-goa_service_config_new (const char *service)
-{
-  return g_object_new (GOA_TYPE_SERVICE_CONFIG,
-                       "service", service,
-                       NULL);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

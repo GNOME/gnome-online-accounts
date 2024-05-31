@@ -19,11 +19,8 @@
 
 #include "config.h"
 
-#include <glib/gprintf.h>
-#include <gio/gio.h>
+#include <glib-object.h>
 
-#include "goabackendenums.h"
-#include "goabackendenumtypes.h"
 #include "goaserviceconfig.h"
 
 #include "goadavconfig.h"
@@ -163,18 +160,14 @@ goa_dav_config_class_init (GoaDavConfigClass *klass)
  * Returns: (transfer full): a service configuration
  */
 GoaDavConfig *
-goa_dav_config_new (GoaProviderFeatures  features,
-                    const char          *uri,
-                    const char          *username)
+goa_dav_config_new (const char *service,
+                    const char *uri,
+                    const char *username)
 {
-  const char *service = "unknown";
-
-  if (features == GOA_PROVIDER_FEATURE_CALENDAR)
-    service = "caldav";
-  else if (features == GOA_PROVIDER_FEATURE_CONTACTS)
-    service = "carddav";
-  else if (features == GOA_PROVIDER_FEATURE_FILES)
-    service = "webdav";
+  g_return_val_if_fail (service != NULL, NULL);
+  g_return_val_if_fail (g_str_equal (service, GOA_SERVICE_TYPE_CALDAV) ||
+                        g_str_equal (service, GOA_SERVICE_TYPE_CARDDAV) ||
+                        g_str_equal (service, GOA_SERVICE_TYPE_WEBDAV), NULL);
 
   return g_object_new (GOA_TYPE_DAV_CONFIG,
                        "service",  service,

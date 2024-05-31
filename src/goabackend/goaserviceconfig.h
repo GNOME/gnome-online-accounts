@@ -24,10 +24,7 @@
 #ifndef __GOA_SERVICE_CONFIG_H__
 #define __GOA_SERVICE_CONFIG_H__
 
-#include <gio/gio.h>
-
-#include "goabackendenums.h"
-#include "goabackendenums-priv.h"
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
@@ -50,7 +47,6 @@ struct _GoaServiceConfigClass
   gpointer              reserved[8];
 };
 
-GoaServiceConfig     *goa_service_config_new              (const char           *service);
 const char           *goa_service_config_get_service      (GoaServiceConfig     *config);
 
 G_END_DECLS

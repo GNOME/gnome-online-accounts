@@ -540,7 +540,7 @@ dav_client_discover_postconfig_nexcloud (DiscoverData *discover,
                                          webdav_path,
                                          g_uri_get_query (uri),
                                          g_uri_get_fragment (uri));
-      g_ptr_array_add (discover->services, goa_dav_config_new (GOA_PROVIDER_FEATURE_FILES,
+      g_ptr_array_add (discover->services, goa_dav_config_new (GOA_SERVICE_TYPE_WEBDAV,
                                                                webdav_uri,
                                                                ((CheckData *)discover)->username));
 
@@ -554,10 +554,10 @@ dav_client_discover_postconfig_nexcloud (DiscoverData *discover,
                                       dav_path,
                                       g_uri_get_query (uri),
                                       g_uri_get_fragment (uri));
-      g_ptr_array_add (discover->services, goa_dav_config_new (GOA_PROVIDER_FEATURE_CALENDAR,
+      g_ptr_array_add (discover->services, goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV,
                                                                dav_uri,
                                                                ((CheckData *)discover)->username));
-      g_ptr_array_add (discover->services, goa_dav_config_new (GOA_PROVIDER_FEATURE_CONTACTS,
+      g_ptr_array_add (discover->services, goa_dav_config_new (GOA_SERVICE_TYPE_CARDDAV,
                                                                dav_uri,
                                                                ((CheckData *)discover)->username));
 
@@ -649,7 +649,7 @@ dav_client_discover_response_cb (SoupSession  *session,
           g_autofree char *webdav_uri = NULL;
 
           webdav_uri = g_uri_to_string (uri);
-          config = goa_dav_config_new (GOA_PROVIDER_FEATURE_FILES, webdav_uri, data->username);
+          config = goa_dav_config_new (GOA_SERVICE_TYPE_WEBDAV, webdav_uri, data->username);
           g_ptr_array_add (discover->services, g_steal_pointer (&config));
         }
     }
@@ -658,7 +658,7 @@ dav_client_discover_response_cb (SoupSession  *session,
     {
       GoaDavConfig *config = NULL;
 
-      config = goa_dav_config_new (GOA_PROVIDER_FEATURE_CALENDAR, data->uri, data->username);
+      config = goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV, data->uri, data->username);
       g_ptr_array_add (discover->services, g_steal_pointer (&config));
     }
 
@@ -666,7 +666,7 @@ dav_client_discover_response_cb (SoupSession  *session,
     {
       GoaDavConfig *config = NULL;
 
-      config = goa_dav_config_new (GOA_PROVIDER_FEATURE_CONTACTS, data->uri, data->username);
+      config = goa_dav_config_new (GOA_SERVICE_TYPE_CARDDAV, data->uri, data->username);
       g_ptr_array_add (discover->services, g_steal_pointer (&config));
     }
 

@@ -696,7 +696,7 @@ add_account_handle_response (GTask     *task,
           if (data->check_uri != NULL)
             {
               g_clear_object (&data->caldav);
-              data->caldav = goa_dav_config_new (GOA_PROVIDER_FEATURE_CALENDAR,
+              data->caldav = goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV,
                                                  data->check_uri, username);
             }
 
@@ -708,7 +708,7 @@ add_account_handle_response (GTask     *task,
           if (data->check_uri != NULL)
             {
               g_clear_object (&data->carddav);
-              data->carddav = goa_dav_config_new (GOA_PROVIDER_FEATURE_CONTACTS,
+              data->carddav = goa_dav_config_new (GOA_SERVICE_TYPE_CARDDAV,
                                                   data->check_uri, username);
             }
 
