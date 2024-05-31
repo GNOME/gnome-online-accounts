@@ -50,7 +50,6 @@ struct _GoaServiceConfigClass
   gpointer              reserved[8];
 };
 
-GoaServiceConfig     *goa_service_config_new              (const char           *service);
 const char           *goa_service_config_get_service      (GoaServiceConfig     *config);
 
 G_END_DECLS

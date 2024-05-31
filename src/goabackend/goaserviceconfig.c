@@ -33,7 +33,7 @@ typedef struct
   char *service;
 } GoaServiceConfigPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (GoaServiceConfig, goa_service_config, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GoaServiceConfig, goa_service_config, G_TYPE_OBJECT)
 
 typedef enum
 {
@@ -128,24 +128,6 @@ goa_service_config_class_init (GoaServiceConfigClass *klass)
                           G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_properties (object_class, G_N_ELEMENTS (properties), properties);
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-/**
- * goa_service_config_new:
- * @service: (nullable): a service type
- *
- * Create a new, empty service configuration.
- *
- * Returns: (transfer full): a service configuration
- */
-GoaServiceConfig *
-goa_service_config_new (const char *service)
-{
-  return g_object_new (GOA_TYPE_SERVICE_CONFIG,
-                       "service", service,
-                       NULL);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
