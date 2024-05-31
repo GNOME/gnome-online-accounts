@@ -80,11 +80,12 @@
  */
 struct _GoaProviderDialog
 {
-  AdwWindow parent_instance;
+  AdwDialog parent_instance;
 
   GoaProvider *provider;
   GoaClient *client;
   GoaObject *object;
+  GtkWindow *parent;
   GoaDialogState state;
   GCancellable *cancellable;
 
@@ -96,16 +97,17 @@ struct _GoaProviderDialog
   GtkWidget *current_group;
 };
 
-G_DEFINE_TYPE (GoaProviderDialog, goa_provider_dialog, ADW_TYPE_WINDOW)
+G_DEFINE_TYPE (GoaProviderDialog, goa_provider_dialog, ADW_TYPE_DIALOG)
 
 typedef enum
 {
   PROP_CLIENT = 1,
   PROP_PROVIDER,
   PROP_STATE,
+  PROP_TRANSIENT_FOR,
 } GoaProviderDialogProperty;
 
-static GParamSpec *properties[PROP_STATE + 1] = { NULL, };
+static GParamSpec *properties[PROP_TRANSIENT_FOR + 1] = { NULL, };
 
 
 static void
@@ -115,22 +117,22 @@ on_action_activated (GoaProviderDialog *self)
 }
 
 static void
-goa_provider_dialog_default_widget_cb (GtkWindow *window,
+goa_provider_dialog_default_widget_cb (AdwDialog *dialog,
                                        gpointer   user_data)
 {
-  GoaProviderDialog *self = GOA_PROVIDER_DIALOG (window);
+  GoaProviderDialog *self = GOA_PROVIDER_DIALOG (dialog);
   AdwNavigationPage *page;
   GtkWidget *actionbar;
   GtkWidget *widget;
 
-  widget = gtk_window_get_default_widget (window);
+  widget = adw_dialog_get_default_widget (dialog);
   if (GTK_IS_BUTTON (widget))
     {
-      g_signal_handlers_disconnect_by_func (widget, on_action_activated, window);
+      g_signal_handlers_disconnect_by_func (widget, on_action_activated, dialog);
       g_signal_connect_object (widget,
                                "clicked",
                                G_CALLBACK (on_action_activated),
-                               window,
+                               dialog,
                                G_CONNECT_SWAPPED);
     }
 
@@ -157,8 +159,8 @@ goa_provider_dialog_constructed (GObject *object)
 
   G_OBJECT_CLASS (goa_provider_dialog_parent_class)->constructed (object);
 
-  title = gtk_window_get_title (GTK_WINDOW (self));
-  if (title == NULL && self->provider != NULL)
+  title = adw_dialog_get_title (ADW_DIALOG (self));
+  if ((title == NULL || *title == '\0') && self->provider != NULL)
     {
       g_autofree char *provider_name = NULL;
       g_autofree char *title = NULL;
@@ -169,7 +171,7 @@ goa_provider_dialog_constructed (GObject *object)
        * 'Google'.
        */
       title = g_strdup_printf (_("%s Account"), provider_name);
-      gtk_window_set_title (GTK_WINDOW (self), title);
+      adw_dialog_set_title (ADW_DIALOG (self), title);
     }
 }
 
@@ -219,6 +221,10 @@ goa_provider_dialog_get_property (GObject      *object,
       g_value_set_enum (value, self->state);
       break;
 
+    case PROP_TRANSIENT_FOR:
+      g_value_set_object (value, self->parent);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -249,6 +255,11 @@ goa_provider_dialog_set_property (GObject      *object,
       goa_provider_dialog_set_state (self, g_value_get_enum (value));
       break;
 
+    case PROP_TRANSIENT_FOR:
+      g_assert (self->parent == NULL);
+      self->parent = g_value_dup_object (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -258,21 +269,8 @@ goa_provider_dialog_set_property (GObject      *object,
 static void
 goa_provider_dialog_init (GoaProviderDialog *self)
 {
-  GtkEventController *controller;
-  GtkShortcut *shortcut;
-
-  controller = gtk_shortcut_controller_new ();
-  gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (controller),
-                                     GTK_SHORTCUT_SCOPE_GLOBAL);
-  gtk_widget_add_controller (GTK_WIDGET (self), controller);
-
-  shortcut = gtk_shortcut_new (gtk_shortcut_trigger_parse_string ("Escape|<Control>w"),
-                               gtk_shortcut_action_parse_string ("action(window.close)"));
-  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller),
-                                        shortcut);
-
   self->view = g_object_new (ADW_TYPE_NAVIGATION_VIEW, NULL);
-  adw_window_set_content (ADW_WINDOW (self), self->view);
+  adw_dialog_set_child (ADW_DIALOG (self), self->view);
 
   /* Ensure the dialog refresh and remove tasks are cancelled on close */
   self->cancellable = g_cancellable_new ();
@@ -319,6 +317,14 @@ goa_provider_dialog_class_init (GoaProviderDialogClass *klass)
                         G_PARAM_STATIC_STRINGS |
                         G_PARAM_EXPLICIT_NOTIFY));
 
+  properties[PROP_TRANSIENT_FOR] =
+    g_param_spec_object ("transient-for", NULL, NULL,
+                         GTK_TYPE_WINDOW,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS |
+                          G_PARAM_EXPLICIT_NOTIFY));
+
   g_object_class_install_properties (object_class, G_N_ELEMENTS (properties), properties);
 }
 
@@ -343,7 +349,7 @@ goa_provider_dialog_new (GoaProvider *provider,
   g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);
 
-  return goa_provider_dialog_new_full (provider, client, parent, 480, -1);
+  return goa_provider_dialog_new_full (provider, client, parent, -1, -1);
 }
 
 /**
@@ -371,21 +377,14 @@ goa_provider_dialog_new_full (GoaProvider *provider,
   g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
   g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);
 
-  /* In the non-ideal case a provider needs to chain-up to a parent
-   * with it's own parent, we want the real root window.
-   */
-  if (GOA_IS_PROVIDER_DIALOG (parent))
-    parent = gtk_window_get_transient_for (parent);
-
   return g_object_new (GOA_TYPE_PROVIDER_DIALOG,
-                       "provider",            provider,
-                       "client",              client,
-                       "destroy-with-parent", parent != NULL,
-                       "modal",               parent != NULL,
-                       "transient-for",       parent,
-                       "width-request",       360,
-                       "default-width",       default_width,
-                       "default-height",      default_height,
+                       "provider",             provider,
+                       "client",               client,
+                       "transient-for",        parent,
+                       "content-width",        default_width,
+                       "content-height",       default_height,
+                       "follows-content-size", (default_width == -1 && default_height == -1),
+                       "width-request",        360,
                        NULL);
 }
 
@@ -470,7 +469,7 @@ goa_provider_dialog_set_state (GoaProviderDialog *self,
     return;
 
   /* Update the default widget */
-  button = gtk_window_get_default_widget (GTK_WINDOW (self));
+  button = adw_dialog_get_default_widget (ADW_DIALOG (self));
   if (button != NULL)
     gtk_widget_set_sensitive (button, state == GOA_DIALOG_READY);
 
@@ -494,7 +493,7 @@ goa_provider_dialog_set_state (GoaProviderDialog *self,
 
   // Destroy the window after handlers have run
   if (self->state == GOA_DIALOG_DONE)
-    gtk_window_destroy (GTK_WINDOW (self));
+    adw_dialog_force_close (ADW_DIALOG (self));
 }
 
 static GtkWidget *
@@ -541,7 +540,7 @@ goa_provider_refresh_account_cb (GoaProvider       *provider,
       return;
     }
 
-  gtk_window_destroy (GTK_WINDOW (self));
+  adw_dialog_force_close (ADW_DIALOG (self));
 }
 
 static void
@@ -550,7 +549,7 @@ on_refresh_activated (GoaProviderDialog *self)
   goa_provider_refresh_account (self->provider,
                                 self->client,
                                 self->object,
-                                GTK_WINDOW (self),
+                                self->parent,
                                 self->cancellable,
                                 (GAsyncReadyCallback) goa_provider_refresh_account_cb,
                                 self);
@@ -577,18 +576,18 @@ goa_account_call_remove_cb (GoaAccount   *account,
            goa_account_get_provider_name (account),
            goa_account_get_presentation_identity (account));
 
-  gtk_window_destroy (GTK_WINDOW (self));
+  adw_dialog_force_close (ADW_DIALOG (self));
 }
 
 static void
-adw_message_dialog_choose_cb (AdwMessageDialog *dialog,
-                              GAsyncResult     *result,
-                              gpointer          user_data)
+adw_alert_dialog_choose_cb (AdwAlertDialog *dialog,
+                            GAsyncResult   *result,
+                            gpointer        user_data)
 {
   g_autoptr(GoaProviderDialog) self = GOA_PROVIDER_DIALOG (user_data);
   const char *response = NULL;
 
-  response = adw_message_dialog_choose_finish (dialog, result);
+  response = adw_alert_dialog_choose_finish (dialog, result);
   if (g_strcmp0 (response, "remove") == 0)
     {
       goa_account_call_remove (goa_object_peek_account (self->object),
@@ -604,22 +603,22 @@ adw_message_dialog_choose_cb (AdwMessageDialog *dialog,
 static void
 on_remove_activated (GoaProviderDialog *self)
 {
-  GtkWidget *dialog;
+  AdwDialog *dialog;
 
-  dialog = adw_message_dialog_new (GTK_WINDOW (self),
-                                   _("Remove this Account?"),
-                                   _("If you remove this Online Account you will have to connect to it again to use it with apps and services."));
-  adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
-                                    "cancel", _("_Cancel"),
-                                    "remove", _("_Remove"),
-                                    NULL);
-  adw_message_dialog_set_response_appearance (ADW_MESSAGE_DIALOG (dialog),
-                                              "remove",
-                                              ADW_RESPONSE_DESTRUCTIVE);
-  adw_message_dialog_choose (ADW_MESSAGE_DIALOG (dialog),
-                             self->cancellable,
-                             (GAsyncReadyCallback) adw_message_dialog_choose_cb,
-                             g_object_ref (self));
+  dialog = adw_alert_dialog_new (_("Remove this Account?"),
+                                 _("If you remove this Online Account you will have to connect to it again to use it with apps and services."));
+  adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
+                                  "cancel", _("_Cancel"),
+                                  "remove", _("_Remove"),
+                                  NULL);
+  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog),
+                                            "remove",
+                                            ADW_RESPONSE_DESTRUCTIVE);
+  adw_alert_dialog_choose (ADW_ALERT_DIALOG (dialog),
+                           GTK_WIDGET (self),
+                           self->cancellable,
+                           (GAsyncReadyCallback) adw_alert_dialog_choose_cb,
+                           g_object_ref (self));
   goa_provider_dialog_set_state (self, GOA_DIALOG_BUSY);
 }
 
@@ -649,7 +648,6 @@ goa_provider_dialog_push_account (GoaProviderDialog *self,
   GtkWidget *view;
   GtkWidget *headerbar;
   GtkWidget *banner;
-  GtkWidget *clamp;
   GtkWidget *status;
   GtkWidget *box;
   GtkWidget *group;
@@ -698,9 +696,6 @@ goa_provider_dialog_push_account (GoaProviderDialog *self,
   adw_toolbar_view_add_top_bar (ADW_TOOLBAR_VIEW (view), banner);
 
   /* Content */
-  clamp = adw_clamp_new ();
-  adw_toolbar_view_set_content (ADW_TOOLBAR_VIEW (view), clamp);
-
   status = g_object_new (ADW_TYPE_STATUS_PAGE,
                          "title",       provider_name,
                          "description", account_name,
@@ -708,7 +703,7 @@ goa_provider_dialog_push_account (GoaProviderDialog *self,
                          NULL);
   gtk_widget_add_css_class (status, "compact");
   gtk_widget_add_css_class (status, "icon-dropshadow");
-  adw_clamp_set_child (ADW_CLAMP (clamp), status);
+  adw_toolbar_view_set_content (ADW_TOOLBAR_VIEW (view), status);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 24);
   adw_status_page_set_child (ADW_STATUS_PAGE (status), box);
@@ -789,7 +784,7 @@ goa_provider_dialog_push_content (GoaProviderDialog *self,
   g_return_val_if_fail (GOA_IS_PROVIDER_DIALOG (self), NULL);
 
   if (title == NULL || *title == '\0')
-    title = gtk_window_get_title (GTK_WINDOW (self));
+    title = adw_dialog_get_title (ADW_DIALOG (self));
 
   page = g_object_new (ADW_TYPE_NAVIGATION_PAGE,
                        "title", title,
@@ -843,7 +838,7 @@ goa_provider_dialog_push_content (GoaProviderDialog *self,
   /* Set the default widget after it's a child of the window */
   adw_navigation_view_push (ADW_NAVIGATION_VIEW (self->view),
                             ADW_NAVIGATION_PAGE (page));
-  gtk_window_set_default_widget (GTK_WINDOW (self), button);
+  adw_dialog_set_default_widget (ADW_DIALOG (self), button);
 
   return content;
 }
@@ -929,7 +924,7 @@ goa_provider_dialog_add_page (GoaProviderDialog *self,
   g_return_val_if_fail (GOA_IS_PROVIDER_DIALOG (self), NULL);
 
   if (title == NULL)
-    title = gtk_window_get_title (GTK_WINDOW (self));
+    title = adw_dialog_get_title (ADW_DIALOG (self));
 
   self->current_page = g_object_new (ADW_TYPE_PREFERENCES_PAGE,
                                      "title",       title,
@@ -1130,7 +1125,7 @@ goa_provider_dialog_add_description (GoaProviderDialog *self,
   return child;
 }
 
-static gboolean
+static void
 goa_provider_task_run_in_dialog_cb (GoaProviderDialog *self,
                                     gpointer           user_data)
 {
@@ -1152,8 +1147,6 @@ goa_provider_task_run_in_dialog_cb (GoaProviderDialog *self,
                                GOA_ERROR_DIALOG_DISMISSED,
                                _("Dialog was dismissed"));
     }
-
-  return FALSE;
 }
 
 static void
@@ -1187,7 +1180,7 @@ goa_provider_task_run_in_dialog (GTask             *task,
   /* The signal handler holds the reference to @task.
    */
   g_signal_connect_object (dialog,
-                           "close-request",
+                           "closed",
                            G_CALLBACK (goa_provider_task_run_in_dialog_cb),
                            g_object_ref (task),
                            0 /* G_CONNECT_DEFAULT */);
@@ -1204,7 +1197,7 @@ goa_provider_task_run_in_dialog (GTask             *task,
                                                            dialog, NULL);
     }
 
-  gtk_window_present (GTK_WINDOW (dialog));
+  adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (dialog->parent));
 }
 
 /**

@@ -955,7 +955,7 @@ create_account_details_ui (GoaProvider *provider,
   goa_provider_dialog_push_content (dialog, NULL, content);
 
   /* Set the default widget after it's a child of the window */
-  gtk_window_set_default_widget (GTK_WINDOW (dialog), button);
+  adw_dialog_set_default_widget (ADW_DIALOG (dialog), button);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

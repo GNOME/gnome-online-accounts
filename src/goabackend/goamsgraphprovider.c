@@ -384,7 +384,7 @@ create_account_details_ui (GoaProvider *provider,
       data->tenant_id_entry = goa_provider_dialog_add_entry (dialog, group, _("_Tenant ID"));
       goa_provider_dialog_add_description (dialog, data->tenant_id_entry, _("Example ID: 00000000-0000-0000-0000-000000000000"));
 
-      button = gtk_window_get_default_widget (GTK_WINDOW (dialog));
+      button = adw_dialog_get_default_widget (ADW_DIALOG (dialog));
       gtk_button_set_label (GTK_BUTTON (button), _("_Sign in…"));
 
       g_signal_connect (data->client_id_entry,
@@ -421,6 +421,7 @@ add_account_action_cb (GoaProviderDialog *dialog,
   GoaProvider *provider = g_task_get_source_object (task);
   AccountData *data = g_task_get_task_data (task);
   GCancellable *cancellable = g_task_get_cancellable (task);
+  g_autoptr (GtkWindow) parent = NULL;
   const char *client_id;
   g_autofree char *issuer = NULL;
   const char *tenant;
@@ -454,9 +455,10 @@ add_account_action_cb (GoaProviderDialog *dialog,
   self->redirect_uri = g_strdup_printf ("goa-oauth2://localhost/%s", client_id);
 
   /* With the provider configured for the client, we chain-up to authorize */
+  g_object_get (data->dialog, "transient-for", &parent, NULL);
   GOA_PROVIDER_CLASS (goa_ms_graph_provider_parent_class)->add_account (provider,
                                                                         data->client,
-                                                                        GTK_WINDOW (data->dialog),
+                                                                        parent,
                                                                         cancellable,
                                                                         (GAsyncReadyCallback)add_account_parent_cb,
                                                                         g_object_ref (task));
