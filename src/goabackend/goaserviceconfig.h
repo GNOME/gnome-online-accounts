@@ -24,10 +24,7 @@
 #ifndef __GOA_SERVICE_CONFIG_H__
 #define __GOA_SERVICE_CONFIG_H__
 
-#include <gio/gio.h>
-
-#include "goabackendenums.h"
-#include "goabackendenums-priv.h"
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 

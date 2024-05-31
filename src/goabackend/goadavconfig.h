@@ -24,7 +24,7 @@
 #ifndef __GOA_DAV_CONFIG_H__
 #define __GOA_DAV_CONFIG_H__
 
-#include <gio/gio.h>
+#include <glib-object.h>
 
 #include "goaserviceconfig.h"
 
@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 #define GOA_TYPE_DAV_CONFIG (goa_dav_config_get_type ())
 G_DECLARE_FINAL_TYPE (GoaDavConfig, goa_dav_config, GOA, DAV_CONFIG, GoaServiceConfig);
 
-GoaDavConfig        *goa_dav_config_new              (GoaProviderFeatures features,
+GoaDavConfig        *goa_dav_config_new              (const char          *service,
                                                       const char          *uri,
                                                       const char          *username);
 const char          *goa_dav_config_get_uri          (GoaDavConfig        *config);

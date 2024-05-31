@@ -19,11 +19,8 @@
 
 #include "config.h"
 
-#include <glib/gprintf.h>
-#include <gio/gio.h>
+#include <glib-object.h>
 
-#include "goabackendenums.h"
-#include "goabackendenumtypes.h"
 #include "goaserviceconfig.h"
 
 typedef struct
