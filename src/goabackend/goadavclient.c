@@ -305,6 +305,7 @@ dav_client_check_options_cb (SoupSession  *session,
   if (data->error != NULL)
     goto fallback;
 
+  service = goa_service_config_get_service (GOA_SERVICE_CONFIG (data->config));
   if (g_strcmp0 (service, GOA_SERVICE_TYPE_CALDAV) == 0)
     {
       if ((features & GOA_PROVIDER_FEATURE_CALENDAR) != GOA_PROVIDER_FEATURE_CALENDAR)
@@ -341,7 +342,6 @@ dav_client_check_options_cb (SoupSession  *session,
 fallback:
   if (!data->well_known_fallback)
     {
-      const char *service = goa_service_config_get_service (GOA_SERVICE_CONFIG (data->config));
       const char *uri = goa_dav_config_get_uri (data->config);
       g_autofree char *fallback_uri = NULL;
 
