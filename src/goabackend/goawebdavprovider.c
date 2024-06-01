@@ -329,12 +329,12 @@ build_object (GoaProvider         *provider,
 
 static struct
 {
-  GoaProviderFeatures feature;
+  const char *service;
   const char *key;
 } keyfile_endpoints[] = {
-  { GOA_PROVIDER_FEATURE_CALENDAR, "CalDavUri" },
-  { GOA_PROVIDER_FEATURE_CONTACTS, "CardDavUri" },
-  { GOA_PROVIDER_FEATURE_FILES, "Uri" },
+  { GOA_SERVICE_TYPE_CALDAV, "CalDavUri" },
+  { GOA_SERVICE_TYPE_CARDDAV, "CardDavUri" },
+  { GOA_SERVICE_TYPE_WEBDAV, "Uri" },
 };
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -374,9 +374,11 @@ ensure_credentials_sync (GoaProvider         *provider,
       uri = goa_util_lookup_keyfile_string (object, keyfile_endpoints[i].key);
       if (uri != NULL && *uri != '\0')
         {
+          g_autoptr(GoaDavConfig) config = NULL;
+
+          config = goa_dav_config_new (keyfile_endpoints[i].service, uri, username);
           ret = goa_dav_client_check_sync (dav_client,
-                                           uri,
-                                           username,
+                                           config,
                                            password,
                                            accept_ssl_errors,
                                            cancellable,
@@ -430,8 +432,8 @@ typedef struct
   GoaDavConfig *caldav;
   GoaDavConfig *carddav;
   GoaDavConfig *webdav;
+  GoaDavConfig *check_config;
   GoaProviderFeatures check_stage;
-  char *check_uri;
   char *presentation_identity;
   gboolean is_template;
 
@@ -453,7 +455,7 @@ add_account_data_free (gpointer user_data)
   g_clear_object (&data->caldav);
   g_clear_object (&data->carddav);
   g_clear_object (&data->webdav);
-  g_clear_pointer (&data->check_uri, g_free);
+  g_clear_object (&data->check_config);
   g_clear_pointer (&data->presentation_identity, g_free);
   g_free (data);
 }
@@ -533,7 +535,10 @@ create_account_details_ui (GoaProvider    *provider,
         {
           uri = goa_util_lookup_keyfile_string (data->object, keyfile_endpoints[i].key);
           if (uri != NULL && *uri != '\0')
-            break;
+            {
+              data->check_config = goa_dav_config_new (keyfile_endpoints[i].service, uri, username);
+              break;
+            }
 
           g_clear_pointer (&uri, g_free);
         }
@@ -648,11 +653,12 @@ add_account_handle_response (GTask     *task,
   const char *username = NULL;
   const char *base_uri = NULL;
   const char *check_uri = NULL;
+  const char *service = NULL;
+  g_autofree char *normalized_uri = NULL;
   g_autoptr(GError) error = NULL;
 
   username = gtk_editable_get_text (GTK_EDITABLE (data->username));
   base_uri = gtk_editable_get_text (GTK_EDITABLE (data->uri));
-  g_clear_pointer (&data->check_uri, g_free);
 
   while (TRUE)
     {
@@ -672,6 +678,7 @@ add_account_handle_response (GTask     *task,
             }
 
           data->check_stage = GOA_PROVIDER_FEATURE_FILES;
+          service = GOA_SERVICE_TYPE_WEBDAV;
           check_uri = gtk_editable_get_text (GTK_EDITABLE (data->webdav_uri));
           break;
 
@@ -686,6 +693,7 @@ add_account_handle_response (GTask     *task,
             }
 
           data->check_stage = GOA_PROVIDER_FEATURE_CALENDAR;
+          service = GOA_SERVICE_TYPE_CALDAV;
           check_uri = gtk_editable_get_text (GTK_EDITABLE (data->caldav_uri));
           break;
 
@@ -693,23 +701,22 @@ add_account_handle_response (GTask     *task,
          * if the server doesn't claim support.
          */
         case GOA_PROVIDER_FEATURE_CALENDAR:
-          if (data->check_uri != NULL)
+          if (data->check_config != NULL)
             {
               g_clear_object (&data->caldav);
-              data->caldav = goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV,
-                                                 data->check_uri, username);
+              data->caldav = g_steal_pointer (&data->check_config);
             }
 
           data->check_stage = GOA_PROVIDER_FEATURE_CONTACTS;
+          service = GOA_SERVICE_TYPE_CARDDAV;
           check_uri = gtk_editable_get_text (GTK_EDITABLE (data->carddav_uri));
           break;
 
         case GOA_PROVIDER_FEATURE_CONTACTS:
-          if (data->check_uri != NULL)
+          if (data->check_config != NULL)
             {
               g_clear_object (&data->carddav);
-              data->carddav = goa_dav_config_new (GOA_SERVICE_TYPE_CARDDAV,
-                                                  data->check_uri, username);
+              data->carddav = g_steal_pointer (&data->check_config);
             }
 
           /* Set the next stage to default to add_account_credentials() */
@@ -727,8 +734,8 @@ add_account_handle_response (GTask     *task,
     }
 
   /* If the user entered a bunk URI, they probably want to be notified */
-  data->check_uri = dav_normalize_uri (base_uri, check_uri, NULL);
-  if (data->check_uri == NULL)
+  normalized_uri = dav_normalize_uri (base_uri, check_uri, NULL);
+  if (normalized_uri == NULL)
     {
       g_set_error (&error,
                    GOA_ERROR,
@@ -738,6 +745,8 @@ add_account_handle_response (GTask     *task,
       goa_provider_dialog_report_error (data->dialog, error);
       return FALSE;
     }
+
+  data->check_config = goa_dav_config_new (service, normalized_uri, username);
 
   return TRUE;
 }
@@ -760,15 +769,11 @@ add_account_check_cb (GoaDavClient *client,
 
   if (add_account_handle_response (task, NULL))
     {
-      const char *username = NULL;
       const char *password = NULL;
 
-      username = gtk_editable_get_text (GTK_EDITABLE (data->username));
       password = gtk_editable_get_text (GTK_EDITABLE (data->password));
-
       goa_dav_client_check (client,
-                            data->check_uri,
-                            username,
+                            data->check_config,
                             password,
                             data->accept_ssl_errors,
                             cancellable,
@@ -786,7 +791,6 @@ add_account_discover_cb (GoaDavClient *client,
   AddAccountData *data = g_task_get_task_data (task);
   GCancellable *cancellable = g_task_get_cancellable (task);
   g_autoptr(GPtrArray) services = NULL;
-  const char *username = NULL;
   const char *password = NULL;
   g_autoptr(GError) error = NULL;
 
@@ -800,15 +804,14 @@ add_account_discover_cb (GoaDavClient *client,
   if (!add_account_handle_response (task, services))
     return;
 
-  username = gtk_editable_get_text (GTK_EDITABLE (data->username));
   password = gtk_editable_get_text (GTK_EDITABLE (data->password));
 
   /* WebDAV needs discovery to get the redirected URI for GVfs */
   if (data->check_stage == GOA_PROVIDER_FEATURE_FILES)
     {
       goa_dav_client_discover (client,
-                               data->check_uri,
-                               username,
+                               goa_dav_config_get_uri (data->check_config),
+                               goa_dav_config_get_username (data->check_config),
                                password,
                                data->accept_ssl_errors,
                                cancellable,
@@ -818,8 +821,7 @@ add_account_discover_cb (GoaDavClient *client,
   else
     {
       goa_dav_client_check (client,
-                            data->check_uri,
-                            username,
+                            data->check_config,
                             password,
                             data->accept_ssl_errors,
                             cancellable,
@@ -1034,23 +1036,18 @@ refresh_account_action_cb (GoaProviderDialog *dialog,
 {
   AddAccountData *data = g_task_get_task_data (task);
   GCancellable *cancellable = g_task_get_cancellable (task);
-  const char *uri;
   const char *password;
-  const char *username;
   g_autoptr(GoaDavClient) dav_client = NULL;
 
   if (goa_provider_dialog_get_state (data->dialog) != GOA_DIALOG_BUSY)
     return;
 
-  uri = gtk_editable_get_text (GTK_EDITABLE (data->uri));
-  username = gtk_editable_get_text (GTK_EDITABLE (data->username));
   password = gtk_editable_get_text (GTK_EDITABLE (data->password));
 
   /* Confirm the account */
   dav_client = goa_dav_client_new ();
   goa_dav_client_check (dav_client,
-                        uri,
-                        username,
+                        data->check_config,
                         password,
                         data->accept_ssl_errors,
                         cancellable,

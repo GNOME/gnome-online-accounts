@@ -29,6 +29,7 @@
 #include <glib-object.h>
 
 #include "goabackendenums.h"
+#include "goadavconfig.h"
 
 G_BEGIN_DECLS
 
@@ -37,8 +38,7 @@ G_DECLARE_FINAL_TYPE (GoaDavClient, goa_dav_client, GOA, DAV_CLIENT, GObject)
 
 GoaDavClient        *goa_dav_client_new                        (void);
 void                 goa_dav_client_check                      (GoaDavClient         *self,
-                                                                const char           *uri,
-                                                                const char           *username,
+                                                                GoaDavConfig         *config,
                                                                 const char           *password,
                                                                 gboolean              accept_ssl_errors,
                                                                 GCancellable         *cancellable,
@@ -48,8 +48,7 @@ gboolean             goa_dav_client_check_finish               (GoaDavClient    
                                                                 GAsyncResult         *res,
                                                                 GError              **error);
 gboolean             goa_dav_client_check_sync                 (GoaDavClient         *self,
-                                                                const char           *uri,
-                                                                const char           *username,
+                                                                GoaDavConfig         *config,
                                                                 const char           *password,
                                                                 gboolean              accept_ssl_errors,
                                                                 GCancellable         *cancellable,
