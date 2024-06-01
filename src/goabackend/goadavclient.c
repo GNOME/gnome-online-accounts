@@ -359,6 +359,9 @@ fallback:
           data->msg = soup_message_new (SOUP_METHOD_OPTIONS, fallback_uri);
           if (data->msg != NULL)
             {
+              data->well_known_fallback = TRUE;
+              g_clear_error (&data->error);
+
               dav_client_authenticate_task (task);
               soup_session_send_and_read_async (data->session,
                                                 data->msg,
@@ -366,14 +369,13 @@ fallback:
                                                 data->cancellable,
                                                 (GAsyncReadyCallback)dav_client_check_options_cb,
                                                 g_object_ref (task));
-
-              data->well_known_fallback = TRUE;
               return;
             }
         }
     }
 
 out:
+  data->well_known_fallback = FALSE;
   if (data->error != NULL)
     g_task_return_error (task, g_steal_pointer (&data->error));
   else
