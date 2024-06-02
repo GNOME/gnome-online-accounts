@@ -576,6 +576,21 @@ goa_dav_client_discover_data_free (gpointer task_data)
 
 static void dav_client_discover_iterate (GTask *task);
 
+static int
+services_sort_func (gconstpointer a,
+                    gconstpointer b)
+{
+  const char *uri_a = goa_dav_config_get_uri (*((GoaDavConfig **) a));
+  const char *uri_b = goa_dav_config_get_uri (*((GoaDavConfig **) a));
+  const char *scheme_a = g_uri_peek_scheme (uri_a);
+  const char *scheme_b = g_uri_peek_scheme (uri_b);
+
+  if (g_str_equal (scheme_a, scheme_b))
+    return strcmp (uri_a, uri_b);
+
+  return g_str_equal (scheme_a, "https") ? -1 : 1;
+}
+
 static gboolean
 dav_client_discover_postconfig_nexcloud (DiscoverData *discover,
                                          SoupMessage  *message)
@@ -825,6 +840,7 @@ dav_client_discover_iterate (GTask *task)
     }
   else
     {
+      g_ptr_array_sort (discover->services, services_sort_func);
       g_task_return_pointer (task,
                              g_steal_pointer (&discover->services),
                              g_object_unref);
