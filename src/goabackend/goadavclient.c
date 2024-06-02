@@ -1017,39 +1017,26 @@ dav_client_discover_options_cb (SoupSession  *session,
   if (error != NULL)
     goto out;
 
-  /* TODO: implement PROPFIND behaviour emulating GVfs.
-   */
-  if (features == GOA_PROVIDER_FEATURE_FILES)
+  if (g_strcmp0 (service, GOA_SERVICE_TYPE_CALDAV) == 0
+      && (features & GOA_PROVIDER_FEATURE_CALENDAR) != 0)
     {
-      GUri *guri = NULL;
+      g_ptr_array_add (discover->services, g_steal_pointer (&discover->candidate));
+    }
+  else if (g_strcmp0 (service, GOA_SERVICE_TYPE_CARDDAV) == 0
+           && (features & GOA_PROVIDER_FEATURE_CONTACTS) != 0)
+    {
+      g_ptr_array_add (discover->services, g_steal_pointer (&discover->candidate));
+    }
+  else if (g_strcmp0 (service, GOA_SERVICE_TYPE_WEBDAV) == 0
+           && (features & GOA_PROVIDER_FEATURE_FILES) != 0)
+    {
+      g_autofree char *resolved_uri = NULL;
 
       /* GVfs won't follow redirects, so return the resolved URI */
-      guri = soup_message_get_uri (msg);
-      if (guri != NULL)
-        {
-          GoaDavConfig *config = NULL;
-          g_autofree char *webdav_uri = NULL;
+      resolved_uri = g_uri_to_string (soup_message_get_uri (msg));
+      goa_dav_config_set_uri (discover->candidate, resolved_uri);
 
-          webdav_uri = g_uri_to_string (guri);
-          config = goa_dav_config_new (GOA_SERVICE_TYPE_WEBDAV, webdav_uri, data->username);
-          g_ptr_array_add (discover->services, g_steal_pointer (&config));
-        }
-    }
-
-  if ((features & GOA_PROVIDER_FEATURE_CALENDAR) != 0)
-    {
-      GoaDavConfig *config = NULL;
-
-      config = goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV, uri, data->username);
-      g_ptr_array_add (discover->services, g_steal_pointer (&config));
-    }
-
-  if ((features & GOA_PROVIDER_FEATURE_CONTACTS) != 0)
-    {
-      GoaDavConfig *config = NULL;
-
-      config = goa_dav_config_new (GOA_SERVICE_TYPE_CARDDAV, uri, data->username);
-      g_ptr_array_add (discover->services, g_steal_pointer (&config));
+      g_ptr_array_add (discover->services, g_steal_pointer (&discover->candidate));
     }
 
   /* If the initial "context path" derived from a TXT record
