@@ -838,6 +838,7 @@ typedef struct
   GQueue candidates;
   GPtrArray *services;
   int pending;
+  gboolean uri_fallback;
   gboolean well_known_fallback;
   gboolean auth_error;
 } DiscoverData;
@@ -1181,7 +1182,17 @@ dav_client_discover_iterate (GTask *task)
     }
   else if (discover->services->len == 0)
     {
-      if (discover->auth_error)
+      if (!discover->uri_fallback)
+        {
+          g_queue_push_tail (&discover->candidates,
+                             goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV, discover->uri, NULL));
+          g_queue_push_tail (&discover->candidates,
+                             goa_dav_config_new (GOA_SERVICE_TYPE_CARDDAV, discover->uri, NULL));
+
+          discover->uri_fallback = TRUE;
+          dav_client_discover_iterate (task);
+        }
+      else if (discover->auth_error)
         {
           g_task_return_new_error (task,
                                    GOA_ERROR,
