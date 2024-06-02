@@ -21,6 +21,7 @@
 #include <glib/gi18n-lib.h>
 #include <rest/rest-xml-parser.h>
 
+#include "goadavconfig.h"
 #include "goamailconfig.h"
 #include "goasouplogger.h"
 #include "goautils.h"
@@ -501,6 +502,51 @@ goa_mail_client_check_sync (GoaMailClient  *self,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static GoaDavConfig *
+goa_dav_config_new_from_autoconfig_xml (RestXmlNode *server,
+                                        const char  *email_address,
+                                        const char  *email_localpart,
+                                        const char  *email_domain)
+{
+  g_autoptr (GoaDavConfig) config = NULL;
+  const char *server_type = NULL;
+  RestXmlNode *uri = NULL;
+  RestXmlNode *username = NULL;
+
+  g_return_val_if_fail (g_str_equal (server->name, "addressBook")
+                        || g_str_equal (server->name, "calendar")
+                        || g_str_equal (server->name, "fileShare"), NULL);
+
+  server_type = rest_xml_node_get_attr (server, "type");
+  g_return_val_if_fail (server_type != NULL, NULL);
+
+  if (!g_str_equal (server_type, GOA_SERVICE_TYPE_CALDAV)
+      && !g_str_equal (server_type, GOA_SERVICE_TYPE_CARDDAV)
+      && !g_str_equal (server_type, GOA_SERVICE_TYPE_WEBDAV))
+    {
+      return NULL;
+    }
+
+  config = goa_dav_config_new (server_type, uri->content, NULL);
+
+  uri = rest_xml_node_find (server, "serverUrl");
+  if (uri != NULL && uri->content != NULL)
+    goa_dav_config_set_uri (config, uri->content);
+
+  username = rest_xml_node_find (server, "username");
+  if (username != NULL && username->content != NULL)
+    {
+      if (g_ascii_strcasecmp (username->content, "%EMAILADDRESS%") == 0)
+        goa_dav_config_set_username (config, email_address);
+      else if (g_ascii_strcasecmp (username->content, "%EMAILLOCALPART%") == 0)
+        goa_dav_config_set_username (config, email_localpart);
+      else if (g_ascii_strcasecmp (username->content, "%EMAILDOMAIN%") == 0)
+        goa_dav_config_set_username (config, email_domain);
+    }
+
+  return g_steal_pointer (&config);
+}
+
 static GoaMailConfig *
 goa_mail_config_new_from_autoconfig_xml (RestXmlNode *server,
                                          const char  *email_address,
@@ -586,6 +632,9 @@ mail_client_parse_autoconfig_xml (GBytes      *xml_bytes,
   g_autoptr(RestXmlParser) parser = NULL;
   g_autoptr(RestXmlNode) root_node = NULL;
   RestXmlNode *email_node = NULL;
+  RestXmlNode *calendar_node = NULL;
+  RestXmlNode *contacts_node = NULL;
+  RestXmlNode *files_node = NULL;
   const char *xml_data = NULL;
   gsize xml_len = 0;
 
@@ -638,6 +687,51 @@ mail_client_parse_autoconfig_xml (GBytes      *xml_bytes,
           if (server != NULL)
             g_ptr_array_add (services, g_steal_pointer (&server));
         }
+    }
+
+  /* Calendar
+   */
+  calendar_node = rest_xml_node_find (root_node, "calendar");
+  for (RestXmlNode *node = calendar_node; node != NULL; node = node->next)
+    {
+      GoaDavConfig *config = NULL;
+
+      config = goa_dav_config_new_from_autoconfig_xml (node,
+                                                       email_address,
+                                                       email_localpart,
+                                                       email_domain);
+      if (config != NULL)
+        g_ptr_array_add (services, g_steal_pointer (&config));
+    }
+
+  /* Contacts
+   */
+  contacts_node = rest_xml_node_find (root_node, "addressBook");
+  for (RestXmlNode *node = contacts_node; node != NULL; node = node->next)
+    {
+      GoaDavConfig *config = NULL;
+
+      config = goa_dav_config_new_from_autoconfig_xml (node,
+                                                       email_address,
+                                                       email_localpart,
+                                                       email_domain);
+      if (config != NULL)
+        g_ptr_array_add (services, g_steal_pointer (&config));
+    }
+
+  /* Files
+   */
+  files_node = rest_xml_node_find (root_node, "fileShare");
+  for (RestXmlNode *node = files_node; node != NULL; node = node->next)
+    {
+      GoaDavConfig *config = NULL;
+
+      config = goa_dav_config_new_from_autoconfig_xml (node,
+                                                       email_address,
+                                                       email_localpart,
+                                                       email_domain);
+      if (config != NULL)
+        g_ptr_array_add (services, g_steal_pointer (&config));
     }
 
   return g_steal_pointer (&services);
