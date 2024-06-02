@@ -305,6 +305,7 @@ dav_client_check_options_cb (SoupSession  *session,
   if (data->error != NULL)
     goto fallback;
 
+  service = goa_service_config_get_service (GOA_SERVICE_CONFIG (data->config));
   if (g_strcmp0 (service, GOA_SERVICE_TYPE_CALDAV) == 0)
     {
       if ((features & GOA_PROVIDER_FEATURE_CALENDAR) != GOA_PROVIDER_FEATURE_CALENDAR)
@@ -341,7 +342,6 @@ dav_client_check_options_cb (SoupSession  *session,
 fallback:
   if (!data->well_known_fallback)
     {
-      const char *service = goa_service_config_get_service (GOA_SERVICE_CONFIG (data->config));
       const char *uri = goa_dav_config_get_uri (data->config);
       g_autofree char *fallback_uri = NULL;
 
@@ -359,6 +359,9 @@ fallback:
           data->msg = soup_message_new (SOUP_METHOD_OPTIONS, fallback_uri);
           if (data->msg != NULL)
             {
+              data->well_known_fallback = TRUE;
+              g_clear_error (&data->error);
+
               dav_client_authenticate_task (task);
               soup_session_send_and_read_async (data->session,
                                                 data->msg,
@@ -366,14 +369,13 @@ fallback:
                                                 data->cancellable,
                                                 (GAsyncReadyCallback)dav_client_check_options_cb,
                                                 g_object_ref (task));
-
-              data->well_known_fallback = TRUE;
               return;
             }
         }
     }
 
 out:
+  data->well_known_fallback = FALSE;
   if (data->error != NULL)
     g_task_return_error (task, g_steal_pointer (&data->error));
   else
@@ -572,6 +574,23 @@ goa_dav_client_discover_data_free (gpointer task_data)
   dav_client_check_data_free (check);
 }
 
+static void dav_client_discover_iterate (GTask *task);
+
+static int
+services_sort_func (gconstpointer a,
+                    gconstpointer b)
+{
+  const char *uri_a = goa_dav_config_get_uri (*((GoaDavConfig **) a));
+  const char *uri_b = goa_dav_config_get_uri (*((GoaDavConfig **) a));
+  const char *scheme_a = g_uri_peek_scheme (uri_a);
+  const char *scheme_b = g_uri_peek_scheme (uri_b);
+
+  if (g_str_equal (scheme_a, scheme_b))
+    return strcmp (uri_a, uri_b);
+
+  return g_str_equal (scheme_a, "https") ? -1 : 1;
+}
+
 static gboolean
 dav_client_discover_postconfig_nexcloud (DiscoverData *discover,
                                          SoupMessage  *message)
@@ -649,9 +668,9 @@ dav_client_discover_postconfig_nexcloud (DiscoverData *discover,
 }
 
 static void
-dav_client_discover_response_cb (SoupSession  *session,
-                                 GAsyncResult *result,
-                                 gpointer      user_data)
+dav_client_discover_options_cb (SoupSession  *session,
+                                GAsyncResult *result,
+                                gpointer      user_data)
 {
   g_autoptr (GTask) task = G_TASK (user_data);
   CheckData *data = g_task_get_task_data (task);
@@ -749,25 +768,58 @@ dav_client_discover_response_cb (SoupSession  *session,
     }
 
 out:
+  dav_client_discover_iterate (task);
+}
+
+/*< private >
+ * dav_client_discover_iterate:
+ * @task: a discover operation task
+ *
+ * This function drives the discovery process, recursively testing candidates
+ * until exhausted or a fatal error occurs.
+ */
+static void
+dav_client_discover_iterate (GTask *task)
+{
+  CheckData *data = g_task_get_task_data (task);
+  DiscoverData *discover = (DiscoverData *) data;
+
   if (data->error != NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&data->error));
+      /* Only certificate errors and cancellation are immediately fatal */
+      if (g_error_matches (data->error, GOA_ERROR, GOA_ERROR_SSL)
+          || g_error_matches (data->error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        {
+          g_task_return_error (task, g_steal_pointer (&data->error));
+          return;
+        }
+
+      g_debug ("%s(): %s", G_STRFUNC, data->error->message);
+      g_clear_error (&data->error);
     }
-  else if (!g_queue_is_empty (&discover->uris))
+
+  if (!g_queue_is_empty (&discover->uris))
     {
       g_clear_pointer (&data->uri, g_free);
       g_clear_object (&data->msg);
 
       data->uri = g_queue_pop_head (&discover->uris);
       data->msg = soup_message_new (SOUP_METHOD_OPTIONS, data->uri);
-
-      dav_client_authenticate_task (task);
-      soup_session_send_and_read_async (data->session,
-                                        data->msg,
-                                        G_PRIORITY_DEFAULT,
-                                        data->cancellable,
-                                        (GAsyncReadyCallback)dav_client_discover_response_cb,
-                                        g_object_ref (task));
+      if (data->msg != NULL)
+        {
+          dav_client_authenticate_task (task);
+          soup_session_send_and_read_async (data->session,
+                                            data->msg,
+                                            G_PRIORITY_DEFAULT,
+                                            data->cancellable,
+                                            (GAsyncReadyCallback)dav_client_discover_options_cb,
+                                            g_object_ref (task));
+        }
+      else
+        {
+          g_warning ("Failed to create message for \"%s\"", data->uri);
+          dav_client_discover_iterate (task);
+        }
     }
   else if (discover->services->len == 0)
     {
@@ -788,6 +840,7 @@ out:
     }
   else
     {
+      g_ptr_array_sort (discover->services, services_sort_func);
       g_task_return_pointer (task,
                              g_steal_pointer (&discover->services),
                              g_object_unref);
@@ -885,8 +938,6 @@ goa_dav_client_discover (GoaDavClient        *self,
   logger = goa_soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
   soup_session_add_feature (data->session, SOUP_SESSION_FEATURE (logger));
 
-  data->msg = soup_message_new (SOUP_METHOD_OPTIONS, uri);
-  data->uri = g_strdup (uri);
   data->username = g_strdup (username);
   data->password = g_strdup (password);
   data->accept_ssl_errors = accept_ssl_errors;
@@ -912,13 +963,7 @@ goa_dav_client_discover (GoaDavClient        *self,
                                                     NULL);
     }
 
-  dav_client_authenticate_task (task);
-  soup_session_send_and_read_async (data->session,
-                                    data->msg,
-                                    G_PRIORITY_DEFAULT,
-                                    data->cancellable,
-                                    (GAsyncReadyCallback)dav_client_discover_response_cb,
-                                    g_object_ref (task));
+  dav_client_discover_iterate (task);
 }
 
 /**
