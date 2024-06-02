@@ -838,6 +838,7 @@ typedef struct
   GQueue candidates;
   GPtrArray *services;
   int pending;
+  gboolean well_known_fallback;
   gboolean auth_error;
 } DiscoverData;
 
@@ -955,6 +956,7 @@ dav_client_discover_options_cb (SoupSession  *session,
   CheckData *data = g_task_get_task_data (task);
   DiscoverData *discover = (DiscoverData *) data;
   GoaProviderFeatures features = GOA_PROVIDER_FEATURE_INVALID;
+  const char *service = NULL;
   const char *uri = NULL;
   SoupMessage *msg;
   unsigned int status;
@@ -975,6 +977,7 @@ dav_client_discover_options_cb (SoupSession  *session,
   if (data->error != NULL)
     goto out;
 
+  service = goa_service_config_get_service (GOA_SERVICE_CONFIG (discover->candidate));
   uri = goa_dav_config_get_uri (discover->candidate);
   status = soup_message_get_status (msg);
   switch (status)
@@ -987,7 +990,7 @@ dav_client_discover_options_cb (SoupSession  *session,
     case SOUP_STATUS_METHOD_NOT_ALLOWED:
     case SOUP_STATUS_INTERNAL_SERVER_ERROR:
     case SOUP_STATUS_NOT_IMPLEMENTED:
-      goto out;
+      goto fallback;
 
     /* Defer authentication errors to support content restricted passwords */
     case SOUP_STATUS_UNAUTHORIZED:
@@ -1048,7 +1051,47 @@ dav_client_discover_options_cb (SoupSession  *session,
       g_ptr_array_add (discover->services, g_steal_pointer (&config));
     }
 
+  /* If the initial "context path" derived from a TXT record
+   * generates HTTP errors when targeted by requests, the client
+   * SHOULD repeat its "bootstrapping" procedure using the
+   * appropriate ".well-known" URI instead.
+   *
+   * See RFC 6764 6.3.3 (https://datatracker.ietf.org/doc/html/rfc6764#section-6)
+   */
+fallback:
+  if (!discover->well_known_fallback && discover->candidate != NULL)
+    {
+      g_autofree char *fallback_uri = NULL;
+
+      if (g_strcmp0 (service, GOA_SERVICE_TYPE_CALDAV) == 0)
+        fallback_uri = g_uri_resolve_relative (uri, WELL_KNOWN_CALDAV, G_URI_FLAGS_NONE, NULL);
+      else if (g_strcmp0 (service, GOA_SERVICE_TYPE_CARDDAV) == 0)
+        fallback_uri = g_uri_resolve_relative (uri, WELL_KNOWN_CARDDAV, G_URI_FLAGS_NONE, NULL);
+      else
+        g_debug ("%s(): no well-known path for \"%s\"", G_STRFUNC, service);
+
+      if (fallback_uri != NULL && g_strcmp0 (fallback_uri, uri) != 0)
+        {
+          g_clear_object (&data->msg);
+
+          data->msg = soup_message_new (SOUP_METHOD_OPTIONS, fallback_uri);
+          if (data->msg != NULL)
+            {
+              discover->well_known_fallback = TRUE;
+              dav_client_authenticate_task (task);
+              soup_session_send_and_read_async (data->session,
+                                                data->msg,
+                                                G_PRIORITY_DEFAULT,
+                                                data->cancellable,
+                                                (GAsyncReadyCallback)dav_client_discover_options_cb,
+                                                g_object_ref (task));
+              return;
+            }
+        }
+    }
+
 out:
+  discover->well_known_fallback = FALSE;
   dav_client_discover_iterate (task);
 }
 
