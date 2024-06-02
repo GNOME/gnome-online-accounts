@@ -30,7 +30,6 @@
 
 #define WELL_KNOWN_CALDAV    "/.well-known/caldav"
 #define WELL_KNOWN_CARDDAV   "/.well-known/carddav"
-#define WELL_KNOWN_NEXTCLOUD "remote.php/dav"
 
 /* Fastmail
  * See: https://www.fastmail.help/hc/en-us/articles/1500000278342-Server-names-and-ports
@@ -81,7 +80,6 @@ typedef struct
   SoupSession *session;
   SoupMessage *msg;
   GoaDavConfig *config;
-  char *uri;
   char *username;
   char *password;
   gboolean accept_ssl_errors;
@@ -102,7 +100,6 @@ dav_client_check_data_free (gpointer user_data)
       g_object_unref (data->cancellable);
     }
 
-  g_free (data->uri);
   g_free (data->username);
   g_free (data->password);
   g_clear_error (&data->error);
@@ -556,10 +553,293 @@ goa_dav_client_check_sync (GoaDavClient  *self,
 
 typedef struct
 {
+  char *service;
+  char *domain;
+  GSrvTarget *srv_target;
+  gboolean base_domain_fallback;
+} SrvLookupData;
+
+static void
+srv_lookup_data_free (gpointer user_data)
+{
+  SrvLookupData *data = user_data;
+
+  g_clear_pointer (&data->service, g_free);
+  g_clear_pointer (&data->domain, g_free);
+  g_clear_pointer (&data->srv_target, g_srv_target_free);
+  g_free (data);
+}
+
+static char *
+_g_srv_target_build_uri (GSrvTarget *srv_target,
+                         const char *service,
+                         const char *path)
+{
+  g_autoptr(GUri) uri = NULL;
+  const char *scheme = "https";
+
+  g_assert (srv_target != NULL);
+  g_assert (service != NULL);
+
+  if (g_str_equal (service, "caldavs") || g_str_equal (service, "carddavs"))
+    scheme = "https";
+  else if (g_str_equal (service, "caldav") || g_str_equal (service, "carddav"))
+    scheme = "http";
+
+  uri = g_uri_build (SOUP_HTTP_URI_FLAGS,
+                     scheme,
+                     NULL,
+                     g_srv_target_get_hostname (srv_target),
+                     g_srv_target_get_port (srv_target),
+                     path ? path : "",
+                     NULL,
+                     NULL);
+
+  if (uri == NULL)
+    return NULL;
+
+  return g_uri_to_string (uri);
+}
+
+static char *
+_txt_records_get_key (GList      *records,
+                      const char *key)
+{
+  for (const GList *iter = records; iter != NULL; iter = iter->next)
+    {
+      g_autoptr(GVariantIter) entries = NULL;
+      g_autofree char *prefix = NULL;
+      const char *entry = NULL;
+
+      prefix = g_strdup_printf ("%s=", key);
+
+      g_variant_get (iter->data, "(as)", &entries);
+      while (g_variant_iter_loop (entries, "&s", &entry))
+        {
+          g_auto(GStrv) keypairs = NULL;
+
+          if (!strstr (entry, prefix))
+            continue;
+
+          keypairs = g_strsplit (entry, " ", -1);
+          for (size_t i = 0; keypairs[i] != NULL; i++)
+            {
+              if (g_str_has_prefix (keypairs[i], prefix))
+                return g_strdup (keypairs[i] + strlen (prefix));
+            }
+        }
+    }
+
+  return NULL;
+}
+
+static void
+g_resolver_lookup_records_cb (GResolver    *resolver,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+  g_autoptr (GTask) task = G_TASK (user_data);
+  SrvLookupData *data = g_task_get_task_data (task);
+  g_autoptr(GoaDavConfig) config = NULL;
+  g_autolist(GVariant) records = NULL;
+  g_autofree char *path = NULL;
+  g_autofree char *uri = NULL;
+  g_autoptr(GError) error = NULL;
+
+  records = g_resolver_lookup_records_finish (resolver, result, &error);
+  if (records != NULL)
+    {
+      path = _txt_records_get_key (records, path);
+    }
+  else if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  /* When an initial "context path" has not been determined from a
+   * TXT record, the initial "context path" is taken to be
+   * "/.well-known/caldav" (for CalDAV) or "/.well-known/carddav"
+   * (for CardDAV).
+   *
+   * See RFC 6764 6.3.2 (https://datatracker.ietf.org/doc/html/rfc6764#section-6)
+   */
+  if (path == NULL)
+    {
+      if (g_str_equal (data->service, "caldav") || g_str_equal (data->service, "caldavs"))
+        path = WELL_KNOWN_CALDAV;
+      else if (g_str_equal (data->service, "carddav") || g_str_equal (data->service, "carddavs"))
+        path = WELL_KNOWN_CARDDAV;
+    }
+
+  uri = _g_srv_target_build_uri (data->srv_target, data->service, path);
+  if (uri == NULL)
+    {
+      g_task_return_new_error (task,
+                               GOA_ERROR,
+                               GOA_ERROR_FAILED,
+                               "Failed to build %s URI for %s",
+                               data->service, data->domain);
+      return;
+    }
+
+  if (g_str_equal (data->service, "caldav") || g_str_equal (data->service, "caldavs"))
+    config = goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV, uri, NULL);
+  else if (g_str_equal (data->service, "carddav") || g_str_equal (data->service, "carddavs"))
+    config = goa_dav_config_new (GOA_SERVICE_TYPE_CARDDAV, uri, NULL);
+
+  g_task_return_pointer (task, g_steal_pointer (&config), g_object_unref);
+}
+
+static void
+g_resolver_lookup_service_cb (GResolver    *resolver,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+  g_autoptr (GTask) task = G_TASK (user_data);
+  SrvLookupData *data = g_task_get_task_data (task);
+  GList *services = NULL;
+  GError *error = NULL;
+
+  services = g_resolver_lookup_service_finish (resolver, result, &error);
+  if (services != NULL)
+    {
+      const char *hostname = NULL;
+
+      services = g_srv_target_list_sort (services);
+      hostname = g_srv_target_get_hostname (services->data);
+      if (hostname != NULL && *hostname != '\0')
+        data->srv_target = g_srv_target_copy (services->data);
+      g_clear_pointer (&services, g_resolver_free_targets);
+    }
+  else if (!g_error_matches (error, G_RESOLVER_ERROR, G_RESOLVER_ERROR_NOT_FOUND))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  /* When an SRV lookup is done and a valid SRV record returned,
+   * the client MUST also query for a corresponding TXT record and
+   * check for the presence of a "path" key in its response.
+   *
+   * See RFC 6764 6.3.1 (https://datatracker.ietf.org/doc/html/rfc6764#section-6)
+   */
+  if (data->srv_target != NULL)
+    {
+      g_resolver_lookup_records_async (resolver,
+                                       g_srv_target_get_hostname (data->srv_target),
+                                       G_RESOLVER_RECORD_TXT,
+                                       g_task_get_cancellable (task),
+                                       (GAsyncReadyCallback) g_resolver_lookup_records_cb,
+                                       g_object_ref (task));
+    }
+  else if (!data->base_domain_fallback)
+    {
+      const char *base_domain = NULL;
+
+      base_domain = soup_tld_get_base_domain (data->domain, NULL);
+      if (base_domain == NULL || g_strcmp0 (data->domain, base_domain) == 0)
+        {
+          g_task_return_error (task, g_steal_pointer (&error));
+          return;
+        }
+
+      data->base_domain_fallback = TRUE;
+      g_clear_pointer (&data->srv_target, g_srv_target_free);
+      g_resolver_lookup_service_async (resolver,
+                                       data->service, "tcp", base_domain,
+                                       g_task_get_cancellable (task),
+                                       (GAsyncReadyCallback)g_resolver_lookup_service_cb,
+                                       g_object_ref (task));
+    }
+  else
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+    }
+}
+
+/*< private >
+ * goa_dav_client_srv_lookup:
+ * @self: a `GoaClient`
+ * @service: an SRV name
+ * @domain: a hostname
+ * @cancellable: (nullable): a `GCancellable`
+ * @callback: (nullable): a `GAsyncReadyCallback`
+ * @user_data: user data
+ *
+ * Lookup a [class@Goa.DavConfig] for @service on @domain.
+ *
+ * Call [method@Goa.DavClient.srv_lookup_finish] to get the result.
+ */
+static void
+goa_dav_client_srv_lookup (GoaDavClient        *self,
+                           const char          *service,
+                           const char          *domain,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
+{
+  g_autoptr (GTask) task = NULL;
+  g_autoptr (GResolver) resolver = NULL;
+  SrvLookupData *data;
+
+  g_return_if_fail (GOA_IS_DAV_CLIENT (self));
+  g_return_if_fail (service != NULL && *service != '\0');
+  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+
+  data = g_new0 (SrvLookupData, 1);
+  data->service = g_strdup (service);
+  data->domain = g_strdup (domain);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, goa_dav_client_srv_lookup);
+  g_task_set_task_data (task, data, srv_lookup_data_free);
+
+  resolver = g_resolver_get_default ();
+  g_resolver_lookup_service_async (resolver,
+                                   data->service, "tcp", data->domain,
+                                   g_task_get_cancellable (task),
+                                   (GAsyncReadyCallback)g_resolver_lookup_service_cb,
+                                   g_object_ref (task));
+}
+
+/*< private >
+ * goa_dav_client_srv_lookup_finish:
+ * @self: a `GoaDavClient`
+ * @result: a `GAsyncResult`
+ * @error: (nullable): a `GError`
+ *
+ * Get the result of an operation started with [method@Goa.DavClient.srv_lookup].
+ *
+ * Returns: (transfer full) (nullable): a DAV config, or %NULL with @error set
+ */
+static GoaDavConfig *
+goa_dav_client_srv_lookup_finish (GoaDavClient  *self,
+                                  GAsyncResult  *result,
+                                  GError       **error)
+{
+  g_return_val_if_fail (GOA_IS_DAV_CLIENT (self), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == goa_dav_client_srv_lookup, NULL);
+
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct
+{
   CheckData check;
 
+  char *domain;
+  char *uri;
+  GoaDavConfig *candidate;
+  GQueue candidates;
   GPtrArray *services;
-  GQueue uris;
+  int pending;
+  gboolean uri_fallback;
+  gboolean well_known_fallback;
   gboolean auth_error;
 } DiscoverData;
 
@@ -570,7 +850,8 @@ goa_dav_client_discover_data_free (gpointer task_data)
   DiscoverData *data = (DiscoverData *) check;
 
   g_clear_pointer (&data->services, g_ptr_array_unref);
-  g_queue_clear_full (&data->uris, g_free);
+  g_clear_object (&data->candidate);
+  g_queue_clear_full (&data->candidates, g_object_unref);
   dav_client_check_data_free (check);
 }
 
@@ -676,6 +957,8 @@ dav_client_discover_options_cb (SoupSession  *session,
   CheckData *data = g_task_get_task_data (task);
   DiscoverData *discover = (DiscoverData *) data;
   GoaProviderFeatures features = GOA_PROVIDER_FEATURE_INVALID;
+  const char *service = NULL;
+  const char *uri = NULL;
   SoupMessage *msg;
   unsigned int status;
   g_autoptr (GBytes) body = NULL;
@@ -695,6 +978,8 @@ dav_client_discover_options_cb (SoupSession  *session,
   if (data->error != NULL)
     goto out;
 
+  service = goa_service_config_get_service (GOA_SERVICE_CONFIG (discover->candidate));
+  uri = goa_dav_config_get_uri (discover->candidate);
   status = soup_message_get_status (msg);
   switch (status)
     {
@@ -706,7 +991,7 @@ dav_client_discover_options_cb (SoupSession  *session,
     case SOUP_STATUS_METHOD_NOT_ALLOWED:
     case SOUP_STATUS_INTERNAL_SERVER_ERROR:
     case SOUP_STATUS_NOT_IMPLEMENTED:
-      goto out;
+      goto fallback;
 
     /* Defer authentication errors to support content restricted passwords */
     case SOUP_STATUS_UNAUTHORIZED:
@@ -724,7 +1009,7 @@ dav_client_discover_options_cb (SoupSession  *session,
    */
   if (dav_client_discover_postconfig_nexcloud (discover, msg))
     {
-      g_queue_clear_full (&discover->uris, g_free);
+      g_queue_clear_full (&discover->candidates, g_object_unref);
       goto out;
     }
 
@@ -732,43 +1017,102 @@ dav_client_discover_options_cb (SoupSession  *session,
   if (error != NULL)
     goto out;
 
-  /* TODO: implement PROPFIND behaviour emulating GVfs.
-   */
-  if (features == GOA_PROVIDER_FEATURE_FILES)
+  if (g_strcmp0 (service, GOA_SERVICE_TYPE_CALDAV) == 0
+      && (features & GOA_PROVIDER_FEATURE_CALENDAR) != 0)
     {
-      GUri *uri = NULL;
+      g_ptr_array_add (discover->services, g_steal_pointer (&discover->candidate));
+    }
+  else if (g_strcmp0 (service, GOA_SERVICE_TYPE_CARDDAV) == 0
+           && (features & GOA_PROVIDER_FEATURE_CONTACTS) != 0)
+    {
+      g_ptr_array_add (discover->services, g_steal_pointer (&discover->candidate));
+    }
+  else if (g_strcmp0 (service, GOA_SERVICE_TYPE_WEBDAV) == 0
+           && (features & GOA_PROVIDER_FEATURE_FILES) != 0)
+    {
+      g_autofree char *resolved_uri = NULL;
 
       /* GVfs won't follow redirects, so return the resolved URI */
-      uri = soup_message_get_uri (msg);
-      if (uri != NULL)
-        {
-          GoaDavConfig *config = NULL;
-          g_autofree char *webdav_uri = NULL;
+      resolved_uri = g_uri_to_string (soup_message_get_uri (msg));
+      goa_dav_config_set_uri (discover->candidate, resolved_uri);
 
-          webdav_uri = g_uri_to_string (uri);
-          config = goa_dav_config_new (GOA_SERVICE_TYPE_WEBDAV, webdav_uri, data->username);
-          g_ptr_array_add (discover->services, g_steal_pointer (&config));
+      g_ptr_array_add (discover->services, g_steal_pointer (&discover->candidate));
+    }
+
+  /* If the initial "context path" derived from a TXT record
+   * generates HTTP errors when targeted by requests, the client
+   * SHOULD repeat its "bootstrapping" procedure using the
+   * appropriate ".well-known" URI instead.
+   *
+   * See RFC 6764 6.3.3 (https://datatracker.ietf.org/doc/html/rfc6764#section-6)
+   */
+fallback:
+  if (!discover->well_known_fallback && discover->candidate != NULL)
+    {
+      g_autofree char *fallback_uri = NULL;
+
+      if (g_strcmp0 (service, GOA_SERVICE_TYPE_CALDAV) == 0)
+        fallback_uri = g_uri_resolve_relative (uri, WELL_KNOWN_CALDAV, G_URI_FLAGS_NONE, NULL);
+      else if (g_strcmp0 (service, GOA_SERVICE_TYPE_CARDDAV) == 0)
+        fallback_uri = g_uri_resolve_relative (uri, WELL_KNOWN_CARDDAV, G_URI_FLAGS_NONE, NULL);
+      else
+        g_debug ("%s(): no well-known path for \"%s\"", G_STRFUNC, service);
+
+      if (fallback_uri != NULL && g_strcmp0 (fallback_uri, uri) != 0)
+        {
+          g_clear_object (&data->msg);
+
+          data->msg = soup_message_new (SOUP_METHOD_OPTIONS, fallback_uri);
+          if (data->msg != NULL)
+            {
+              discover->well_known_fallback = TRUE;
+              dav_client_authenticate_task (task);
+              soup_session_send_and_read_async (data->session,
+                                                data->msg,
+                                                G_PRIORITY_DEFAULT,
+                                                data->cancellable,
+                                                (GAsyncReadyCallback)dav_client_discover_options_cb,
+                                                g_object_ref (task));
+              return;
+            }
         }
     }
 
-  if ((features & GOA_PROVIDER_FEATURE_CALENDAR) != 0)
-    {
-      GoaDavConfig *config = NULL;
-
-      config = goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV, data->uri, data->username);
-      g_ptr_array_add (discover->services, g_steal_pointer (&config));
-    }
-
-  if ((features & GOA_PROVIDER_FEATURE_CONTACTS) != 0)
-    {
-      GoaDavConfig *config = NULL;
-
-      config = goa_dav_config_new (GOA_SERVICE_TYPE_CARDDAV, data->uri, data->username);
-      g_ptr_array_add (discover->services, g_steal_pointer (&config));
-    }
-
 out:
+  discover->well_known_fallback = FALSE;
   dav_client_discover_iterate (task);
+}
+
+static void
+dav_client_discover_lookup_cb (GoaDavClient *client,
+                               GAsyncResult *result,
+                               gpointer      user_data)
+{
+  g_autoptr (GTask) task = G_TASK (user_data);
+  CheckData *data = g_task_get_task_data (task);
+  DiscoverData *discover = (DiscoverData *) data;
+  g_autoptr(GoaDavConfig) config = NULL;
+  g_autoptr(GError) error = NULL;
+
+  config = goa_dav_client_srv_lookup_finish (client, result, &error);
+  if (config != NULL)
+    {
+      goa_dav_config_set_username (config, data->username);
+      g_queue_push_tail (&discover->candidates, g_steal_pointer (&config));
+    }
+  else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    {
+      g_debug ("%s(): %s", G_STRFUNC, error->message);
+      g_clear_error (&error);
+    }
+
+  if (g_atomic_int_dec_and_test (&discover->pending))
+    {
+      if (data->error == NULL && error != NULL)
+        g_propagate_error (&data->error, g_steal_pointer (&error));
+
+      dav_client_discover_iterate (task);
+    }
 }
 
 /*< private >
@@ -798,13 +1142,14 @@ dav_client_discover_iterate (GTask *task)
       g_clear_error (&data->error);
     }
 
-  if (!g_queue_is_empty (&discover->uris))
+  if (!g_queue_is_empty (&discover->candidates))
     {
-      g_clear_pointer (&data->uri, g_free);
+      g_clear_object (&discover->candidate);
       g_clear_object (&data->msg);
 
-      data->uri = g_queue_pop_head (&discover->uris);
-      data->msg = soup_message_new (SOUP_METHOD_OPTIONS, data->uri);
+      discover->candidate = g_queue_pop_head (&discover->candidates);
+      data->msg = soup_message_new (SOUP_METHOD_OPTIONS,
+                                    goa_dav_config_get_uri (discover->candidate));
       if (data->msg != NULL)
         {
           dav_client_authenticate_task (task);
@@ -817,13 +1162,24 @@ dav_client_discover_iterate (GTask *task)
         }
       else
         {
-          g_warning ("Failed to create message for \"%s\"", data->uri);
+          g_warning ("Failed to create message for \"%s\"",
+                     goa_dav_config_get_uri (discover->candidate));
           dav_client_discover_iterate (task);
         }
     }
   else if (discover->services->len == 0)
     {
-      if (discover->auth_error)
+      if (!discover->uri_fallback)
+        {
+          g_queue_push_tail (&discover->candidates,
+                             goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV, discover->uri, NULL));
+          g_queue_push_tail (&discover->candidates,
+                             goa_dav_config_new (GOA_SERVICE_TYPE_CARDDAV, discover->uri, NULL));
+
+          discover->uri_fallback = TRUE;
+          dav_client_discover_iterate (task);
+        }
+      else if (discover->auth_error)
         {
           g_task_return_new_error (task,
                                    GOA_ERROR,
@@ -867,9 +1223,12 @@ dav_client_discover_preconfig (DiscoverData *discover,
   if (g_strcmp0 (host, "fastmail.com") == 0
       || g_strcmp0 (base_domain, "fastmail.com") == 0)
     {
-      g_queue_push_tail (&discover->uris, g_strdup (FASTMAIL_WEBDAV));
-      g_queue_push_tail (&discover->uris, g_strdup (FASTMAIL_CALDAV));
-      g_queue_push_tail (&discover->uris, g_strdup (FASTMAIL_CARDDAV));
+      g_queue_push_tail (&discover->candidates,
+                         goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV, FASTMAIL_CALDAV, NULL));
+      g_queue_push_tail (&discover->candidates,
+                         goa_dav_config_new (GOA_SERVICE_TYPE_CARDDAV, FASTMAIL_CARDDAV, NULL));
+      g_queue_push_tail (&discover->candidates,
+                         goa_dav_config_new (GOA_SERVICE_TYPE_WEBDAV, FASTMAIL_WEBDAV, NULL));
 
       return TRUE;
     }
@@ -877,9 +1236,12 @@ dav_client_discover_preconfig (DiscoverData *discover,
   if (g_strcmp0 (host, "mailbox.org") == 0
       || g_strcmp0 (base_domain, "mailbox.org") == 0)
     {
-      g_queue_push_tail (&discover->uris, g_strdup (MAILBOX_ORG_WEBDAV));
-      g_queue_push_tail (&discover->uris, g_strdup (MAILBOX_ORG_CALDAV));
-      g_queue_push_tail (&discover->uris, g_strdup (MAILBOX_ORG_CARDDAV));
+      g_queue_push_tail (&discover->candidates,
+                         goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV, MAILBOX_ORG_WEBDAV, NULL));
+      g_queue_push_tail (&discover->candidates,
+                         goa_dav_config_new (GOA_SERVICE_TYPE_CARDDAV, MAILBOX_ORG_CARDDAV, NULL));
+      g_queue_push_tail (&discover->candidates,
+                         goa_dav_config_new (GOA_SERVICE_TYPE_WEBDAV, MAILBOX_ORG_WEBDAV, NULL));
 
       return TRUE;
     }
@@ -916,14 +1278,28 @@ goa_dav_client_discover (GoaDavClient        *self,
 {
   g_autoptr (GTask) task = NULL;
   g_autoptr (SoupLogger) logger = NULL;
+  g_autoptr (GUri) guri = NULL;
   CheckData *data;
   DiscoverData *discover;
+  const char * const services[] = { "caldavs", "caldav", "carddavs", "carddav" };
 
   g_return_if_fail (GOA_IS_DAV_CLIENT (self));
   g_return_if_fail (uri != NULL && uri[0] != '\0');
   g_return_if_fail (username != NULL && username[0] != '\0');
   g_return_if_fail (password != NULL && password[0] != '\0');
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+
+  guri = g_uri_parse (uri, SOUP_HTTP_URI_FLAGS, NULL);
+  if (guri == NULL)
+    {
+      g_task_report_new_error (self, callback, user_data,
+                               goa_dav_client_discover,
+                               GOA_ERROR,
+                               GOA_ERROR_FAILED,
+                               _("Invalid URI: %s"),
+                               uri);
+      return;
+    }
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, goa_dav_client_discover);
@@ -943,16 +1319,9 @@ goa_dav_client_discover (GoaDavClient        *self,
   data->accept_ssl_errors = accept_ssl_errors;
 
   discover->services = g_ptr_array_new_with_free_func (g_object_unref);
-  g_queue_init (&discover->uris);
-
-  /* Check if the host can be preconfigured, falling back to well-known paths.
-   */
-  if (!dav_client_discover_preconfig (discover, uri))
-    {
-      g_queue_push_tail (&discover->uris, g_uri_resolve_relative (uri, WELL_KNOWN_NEXTCLOUD, 0, NULL));
-      g_queue_push_tail (&discover->uris, g_uri_resolve_relative (uri, WELL_KNOWN_CALDAV, 0, NULL));
-      g_queue_push_tail (&discover->uris, g_uri_resolve_relative (uri, WELL_KNOWN_CARDDAV, 0, NULL));
-    }
+  discover->uri = g_uri_to_string (guri);
+  discover->domain = g_strdup (g_uri_get_host (guri));
+  g_queue_init (&discover->candidates);
 
   if (cancellable != NULL)
     {
@@ -963,7 +1332,24 @@ goa_dav_client_discover (GoaDavClient        *self,
                                                     NULL);
     }
 
-  dav_client_discover_iterate (task);
+  /* Check if the host can be preconfigured without lookup.
+   */
+  if (dav_client_discover_preconfig (discover, uri))
+    {
+      dav_client_discover_iterate (task);
+      return;
+    }
+
+  g_atomic_int_set (&discover->pending, (int) G_N_ELEMENTS (services));
+  for (size_t i = 0; i < G_N_ELEMENTS (services); i++)
+    {
+      goa_dav_client_srv_lookup (self,
+                                 services[i],
+                                 discover->domain,
+                                 cancellable,
+                                 (GAsyncReadyCallback) dav_client_discover_lookup_cb,
+                                 g_object_ref (task));
+    }
 }
 
 /**
