@@ -667,9 +667,9 @@ g_resolver_lookup_records_cb (GResolver    *resolver,
   if (path == NULL)
     {
       if (g_str_equal (data->service, "caldav") || g_str_equal (data->service, "caldavs"))
-        path = WELL_KNOWN_CALDAV;
+        path = g_strdup (WELL_KNOWN_CALDAV);
       else if (g_str_equal (data->service, "carddav") || g_str_equal (data->service, "carddavs"))
-        path = WELL_KNOWN_CARDDAV;
+        path = g_strdup (WELL_KNOWN_CARDDAV);
     }
 
   uri = _g_srv_target_build_uri (data->srv_target, data->service, path);
