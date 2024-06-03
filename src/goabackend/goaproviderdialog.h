@@ -96,6 +96,8 @@ GtkWidget           *goa_provider_dialog_add_password_entry (GoaProviderDialog *
 GtkWidget           *goa_provider_dialog_add_description    (GoaProviderDialog *self,
                                                              GtkWidget         *target,
                                                              const char        *description);
+void                 goa_provider_dialog_add_toast          (GoaProviderDialog *self,
+                                                             AdwToast          *toast);
 
 /* GTask Helpers */
 void                 goa_provider_task_run_in_dialog        (GTask             *task,

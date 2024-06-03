@@ -92,6 +92,7 @@ struct _GoaProviderDialog
   GCancellable *task_cancellable;
   unsigned long task_cancellable_id;
 
+  GtkWidget *toast_overlay;
   GtkWidget *view;
   GtkWidget *current_page;
   GtkWidget *current_group;
@@ -269,8 +270,11 @@ goa_provider_dialog_set_property (GObject      *object,
 static void
 goa_provider_dialog_init (GoaProviderDialog *self)
 {
+  self->toast_overlay = adw_toast_overlay_new ();
+  adw_dialog_set_child (ADW_DIALOG (self), self->toast_overlay);
+
   self->view = g_object_new (ADW_TYPE_NAVIGATION_VIEW, NULL);
-  adw_dialog_set_child (ADW_DIALOG (self), self->view);
+  adw_toast_overlay_set_child (ADW_TOAST_OVERLAY (self->toast_overlay), self->view);
 
   /* Ensure the dialog refresh and remove tasks are cancelled on close */
   self->cancellable = g_cancellable_new ();
@@ -1123,6 +1127,25 @@ goa_provider_dialog_add_description (GoaProviderDialog *self,
     adw_expander_row_add_row (ADW_EXPANDER_ROW (self->current_group), child);
 
   return child;
+}
+
+/**
+ * goa_provider_dialog_add_toast:
+ * @self: a `GoaProviderDialog`
+ * @toast: (transfer full): an `AdwToast`
+ *
+ * Displays @toast.
+ *
+ * See [method@Adw.ToastOverly.add_toast].
+ */
+void
+goa_provider_dialog_add_toast (GoaProviderDialog *self,
+                               AdwToast          *toast)
+{
+  g_return_if_fail (GOA_IS_PROVIDER_DIALOG (self));
+  g_return_if_fail (ADW_IS_TOAST (toast));
+
+  adw_toast_overlay_add_toast (ADW_TOAST_OVERLAY (self->toast_overlay), toast);
 }
 
 static void
