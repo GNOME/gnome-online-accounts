@@ -597,7 +597,7 @@ mail_client_parse_autoconfig_xml (GBytes      *xml_bytes,
 
   parser = rest_xml_parser_new ();
   root_node = rest_xml_parser_parse_from_data (parser, xml_data, xml_len);
-  if (root_node == NULL)
+  if (root_node == NULL || g_strcmp0 (root_node->name, "clientConfig") != 0)
     {
       g_set_error_literal (error,
                            G_IO_ERROR,
