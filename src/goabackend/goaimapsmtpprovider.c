@@ -92,6 +92,8 @@ build_object (GoaProvider         *provider,
   GoaAccount *account = NULL;
   GoaMail *mail = NULL;
   GoaPasswordBased *password_based = NULL;
+  GKeyFile *goa_conf;
+  const gchar *provider_type;
   gboolean enabled;
   gboolean imap_accept_ssl_errors;
   gboolean imap_use_ssl;
@@ -134,11 +136,17 @@ build_object (GoaProvider         *provider,
                         NULL);
     }
 
+  provider_type = goa_provider_get_provider_type (provider);
+  goa_conf = goa_util_open_goa_conf ();
   account = goa_object_get_account (GOA_OBJECT (object));
 
   /* Email */
   mail = goa_object_get_mail (GOA_OBJECT (object));
-  enabled = g_key_file_get_boolean (key_file, group, "Enabled", NULL);
+  enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_MAIL) &&
+            g_key_file_get_boolean (key_file, group, "Enabled", NULL);
+
+  g_clear_pointer (&goa_conf, g_key_file_free);
+
   if (enabled)
     {
       if (mail == NULL)

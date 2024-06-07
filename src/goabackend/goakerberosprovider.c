@@ -173,6 +173,8 @@ build_object (GoaProvider         *provider,
 {
   GoaAccount   *account;
   GoaTicketing *ticketing = NULL;
+  GKeyFile     *goa_conf;
+  const gchar  *provider_type;
   gboolean      ticketing_enabled;
   gboolean      ret = FALSE;
 
@@ -185,10 +187,15 @@ build_object (GoaProvider         *provider,
                                                                               error))
     goto out;
 
+  provider_type = goa_provider_get_provider_type (provider);
+  goa_conf = goa_util_open_goa_conf ();
   account = goa_object_get_account (GOA_OBJECT (object));
 
   ticketing = goa_object_get_ticketing (GOA_OBJECT (object));
-  ticketing_enabled = g_key_file_get_boolean (key_file, group, "TicketingEnabled", NULL);
+  ticketing_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_TICKETING) &&
+                      g_key_file_get_boolean (key_file, group, "TicketingEnabled", NULL);
+
+  g_clear_pointer (&goa_conf, g_key_file_free);
 
   if (ticketing_enabled)
     {

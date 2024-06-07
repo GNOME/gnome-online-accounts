@@ -84,6 +84,7 @@ cflags = [
   '-DG_LOG_DOMAIN="GoaBackend"',
   '-DGOA_API_IS_SUBJECT_TO_CHANGE',
   '-DGOA_BACKEND_COMPILATION',
+  '-DGOA_CONF_FILENAME="@0@"'.format(join_paths(get_option('sysconfdir'), 'goa.conf')),
   '-DPACKAGE_LOCALE_DIR="@0@"'.format(goa_localedir),
 ]
 

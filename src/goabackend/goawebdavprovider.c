@@ -243,6 +243,8 @@ build_object (GoaProvider         *provider,
 {
   GoaAccount *account = NULL;
   g_autoptr (GoaPasswordBased) password_based = NULL;
+  g_autoptr (GKeyFile) goa_conf = NULL;
+  const gchar *provider_type;
   g_autofree char *uri_encoded = NULL;
   g_autofree char *uri_caldav = NULL;
   g_autofree char *uri_carddav = NULL;
@@ -277,26 +279,31 @@ build_object (GoaProvider         *provider,
                         NULL);
     }
 
+  provider_type = goa_provider_get_provider_type (provider);
+  goa_conf = goa_util_open_goa_conf ();
   account = goa_object_get_account (GOA_OBJECT (object));
   identity = goa_account_get_identity (account);
   accept_ssl_errors = g_key_file_get_boolean (key_file, group, "AcceptSslErrors", NULL);
 
   /* Calendar */
-  calendar_enabled = g_key_file_get_boolean (key_file, group, "CalendarEnabled", NULL);
+  calendar_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_CALENDAR) &&
+                     g_key_file_get_boolean (key_file, group, "CalendarEnabled", NULL);
   uri_caldav = g_key_file_get_string (key_file, group, "CalDavUri", NULL);
   uri_encoded = uri_encode_identity (uri_caldav, identity, FALSE);
   goa_object_skeleton_attach_calendar (object, uri_encoded, calendar_enabled, accept_ssl_errors);
   g_clear_pointer (&uri_encoded, g_free);
 
   /* Contacts */
-  contacts_enabled = g_key_file_get_boolean (key_file, group, "ContactsEnabled", NULL);
+  contacts_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_CONTACTS) &&
+                     g_key_file_get_boolean (key_file, group, "ContactsEnabled", NULL);
   uri_carddav = g_key_file_get_string (key_file, group, "CardDavUri", NULL);
   uri_encoded = uri_encode_identity (uri_carddav, identity, FALSE);
   goa_object_skeleton_attach_contacts (object, uri_encoded, contacts_enabled, accept_ssl_errors);
   g_clear_pointer (&uri_encoded, g_free);
 
   /* Files */
-  files_enabled = g_key_file_get_boolean (key_file, group, "FilesEnabled", NULL);
+  files_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_FILES) &&
+                  g_key_file_get_boolean (key_file, group, "FilesEnabled", NULL);
   uri_vfs = g_key_file_get_string (key_file, group, "Uri", NULL);
   uri_encoded = uri_encode_identity (uri_vfs, identity, TRUE);
   goa_object_skeleton_attach_files (object, uri_encoded, files_enabled, accept_ssl_errors);

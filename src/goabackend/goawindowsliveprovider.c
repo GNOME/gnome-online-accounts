@@ -251,6 +251,8 @@ build_object (GoaProvider         *provider,
 {
   GoaAccount *account = NULL;
   GoaMail *mail = NULL;
+  GKeyFile *goa_conf;
+  const gchar *provider_type;
   gboolean mail_enabled;
   gboolean ret = FALSE;
   const gchar *email_address;
@@ -265,12 +267,18 @@ build_object (GoaProvider         *provider,
                                                                               error))
     goto out;
 
+  provider_type = goa_provider_get_provider_type (provider);
+  goa_conf = goa_util_open_goa_conf ();
   account = goa_object_get_account (GOA_OBJECT (object));
   email_address = goa_account_get_presentation_identity (account);
 
   /* Email */
   mail = goa_object_get_mail (GOA_OBJECT (object));
-  mail_enabled = g_key_file_get_boolean (key_file, group, "MailEnabled", NULL);
+  mail_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_MAIL) &&
+                 g_key_file_get_boolean (key_file, group, "MailEnabled", NULL);
+
+  g_clear_pointer (&goa_conf, g_key_file_free);
+
   if (mail_enabled)
     {
       if (mail == NULL)
