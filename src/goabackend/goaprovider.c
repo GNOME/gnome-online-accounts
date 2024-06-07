@@ -1215,14 +1215,35 @@ goa_provider_ensure_builtins_loaded (void)
 
   if (g_once_init_enter (&once_init_value))
     {
-      GSettings *settings;
-      gchar **whitelisted_providers;
+      GKeyFile *goa_conf;
+      gchar **whitelisted_providers = NULL;
       guint i;
       guint j;
       gboolean all = FALSE;
 
-      settings = g_settings_new (GOA_SETTINGS_SCHEMA);
-      whitelisted_providers = g_settings_get_strv (settings, GOA_SETTINGS_WHITELISTED_PROVIDERS);
+      goa_conf = goa_util_open_goa_conf ();
+      if (goa_conf)
+        {
+          whitelisted_providers = g_key_file_get_string_list (goa_conf, "providers", "enable", NULL, NULL);
+          /* Let the empty array be like 'all' */
+          if (whitelisted_providers && !*whitelisted_providers)
+            {
+              g_strfreev (whitelisted_providers);
+              whitelisted_providers = g_new0 (gchar *, 2);
+              whitelisted_providers[0] = g_strdup ("all");
+              whitelisted_providers[1] = NULL;
+            }
+          g_clear_pointer (&goa_conf, g_key_file_free);
+        }
+
+      if (!whitelisted_providers)
+        {
+          GSettings *settings;
+
+          settings = g_settings_new (GOA_SETTINGS_SCHEMA);
+          whitelisted_providers = g_settings_get_strv (settings, GOA_SETTINGS_WHITELISTED_PROVIDERS);
+          g_object_unref (settings);
+        }
 
       /* Enable everything if there is 'all'. */
       for (i = 0; whitelisted_providers[i] != NULL; i++)
@@ -1261,7 +1282,6 @@ goa_provider_ensure_builtins_loaded (void)
 
     cleanup:
       g_strfreev (whitelisted_providers);
-      g_object_unref (settings);
       g_once_init_leave (&once_init_value, 1);
     }
 }
