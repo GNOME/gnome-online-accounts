@@ -385,6 +385,151 @@ goa_provider_get_provider_group (GoaProvider *self)
   return GOA_PROVIDER_GET_CLASS (self)->get_provider_group (self);
 }
 
+static const gchar *
+goa_get_feature_alias (GoaProviderFeatures feature)
+{
+  switch (feature) {
+  case GOA_PROVIDER_FEATURE_MAIL:
+    return "mail";
+  case GOA_PROVIDER_FEATURE_CALENDAR:
+    return "calendar";
+  case GOA_PROVIDER_FEATURE_CONTACTS:
+    return "contacts";
+  case GOA_PROVIDER_FEATURE_CHAT:
+    return "chat";
+  case GOA_PROVIDER_FEATURE_DOCUMENTS:
+    return "documents";
+  case GOA_PROVIDER_FEATURE_PHOTOS:
+    return "photos";
+  case GOA_PROVIDER_FEATURE_FILES:
+    return "files";
+  case GOA_PROVIDER_FEATURE_TICKETING:
+    return "ticketing";
+  case GOA_PROVIDER_FEATURE_READ_LATER:
+    return "read-later";
+  case GOA_PROVIDER_FEATURE_PRINTERS:
+    return "printers";
+  case GOA_PROVIDER_FEATURE_MAPS:
+    return "maps";
+  case GOA_PROVIDER_FEATURE_MUSIC:
+    return "music";
+  case GOA_PROVIDER_FEATURE_TODO:
+    return "todo";
+  case GOA_PROVIDER_FEATURE_BRANDED:
+  case GOA_PROVIDER_FEATURE_INVALID:
+    break;
+  }
+  return NULL;
+}
+
+/**
+ * goa_util_open_goa_conf:
+ *
+ * Reads goa.conf file from the system config directory and
+ * returns it for use for example by goa_util_provider_feature_is_enabled().
+ * It returns %NULL, when the file cannot be opened.
+ *
+ * Free the returned #GKeyFile with g_key_file_free(), when no longer needed.
+ *
+ * Returns: (nullable) (transfer full): a new #GKeyFile containing goa.conf
+ *    file, or %NULL, when it cannot be opened.
+ *
+ * Since: 3.52
+ */
+GKeyFile *
+goa_util_open_goa_conf (void)
+{
+  GKeyFile *goa_conf;
+  GError *error = NULL;
+
+  goa_conf = g_key_file_new ();
+  if (!g_key_file_load_from_file (goa_conf, GOA_CONF_FILENAME, G_KEY_FILE_NONE, &error))
+    {
+      g_debug ("Failed to load '%s': %s", GOA_CONF_FILENAME, error ? error->message : "Unknown error");
+      g_clear_error (&error);
+      g_key_file_free (goa_conf);
+      goa_conf = NULL;
+    }
+
+  return goa_conf;
+}
+
+/**
+ * goa_util_provider_feature_is_enabled:
+ * @goa_conf: (nullable): a #GKeyFile with loaded goa.conf file, or %NULL
+ * @provider_type: a provider type string
+ * @feature: a feature to check, one of %GoaProviderFeatures
+ *
+ * Checks in the @goa_conf, whether the @provider_type can use
+ * the @feature. The @goa_conf is a %GKeyFile returned by
+ * goa_util_open_goa_conf(), it can be %NULL, in which case
+ * the @feature is considered enabled.
+ *
+ * Returns: %TRUE, when the @feature is enabled, %FALSE otherwise
+ *
+ * Since: 3.52
+ */
+gboolean
+goa_util_provider_feature_is_enabled (GKeyFile *goa_conf,
+				      const gchar *provider_type,
+				      GoaProviderFeatures feature)
+{
+  GError *error = NULL;
+  const gchar *feature_alias;
+  gboolean enabled;
+
+  if (!goa_conf)
+    return TRUE;
+
+  g_return_val_if_fail (provider_type != NULL, TRUE);
+
+  feature_alias = goa_get_feature_alias (feature);
+  g_return_val_if_fail (feature_alias != NULL, TRUE);
+
+  enabled = g_key_file_get_boolean (goa_conf, provider_type, feature_alias, &error);
+  if (error)
+    {
+      g_clear_error (&error);
+      enabled = g_key_file_get_boolean (goa_conf, "all", feature_alias, &error);
+      if (error)
+        {
+          g_clear_error (&error);
+          enabled = TRUE;
+        }
+    }
+
+  return enabled;
+}
+
+static GoaProviderFeatures
+goa_provider_filter_features (GoaProvider *self,
+			      GoaProviderFeatures features)
+{
+  GKeyFile *goa_conf;
+  const gchar *provider_type;
+  guint i;
+
+  goa_conf = goa_util_open_goa_conf ();
+  if (!goa_conf)
+    return features;
+
+  provider_type = goa_provider_get_provider_type (self);
+
+  for (i = 0; provider_features_info[i].property != NULL; i++)
+    {
+      GoaProviderFeatures feature = provider_features_info[i].feature;
+      if ((features & feature) != 0 &&
+	  !goa_util_provider_feature_is_enabled (goa_conf, provider_type, feature))
+        {
+          features = features & (~feature);
+        }
+    }
+
+  g_key_file_free (goa_conf);
+
+  return features;
+}
+
 /**
  * goa_provider_get_provider_features:
  * @self: A #GoaProvider.
@@ -401,7 +546,7 @@ goa_provider_get_provider_features (GoaProvider *self)
 {
   g_return_val_if_fail (GOA_IS_PROVIDER (self), GOA_PROVIDER_FEATURE_INVALID);
   g_return_val_if_fail (GOA_PROVIDER_GET_CLASS (self)->get_provider_features != NULL, GOA_PROVIDER_FEATURE_INVALID);
-  return GOA_PROVIDER_GET_CLASS (self)->get_provider_features (self);
+  return goa_provider_filter_features (self, GOA_PROVIDER_GET_CLASS (self)->get_provider_features (self));
 }
 
 /*< private >
@@ -1070,14 +1215,35 @@ goa_provider_ensure_builtins_loaded (void)
 
   if (g_once_init_enter (&once_init_value))
     {
-      GSettings *settings;
-      gchar **whitelisted_providers;
+      GKeyFile *goa_conf;
+      gchar **whitelisted_providers = NULL;
       guint i;
       guint j;
       gboolean all = FALSE;
 
-      settings = g_settings_new (GOA_SETTINGS_SCHEMA);
-      whitelisted_providers = g_settings_get_strv (settings, GOA_SETTINGS_WHITELISTED_PROVIDERS);
+      goa_conf = goa_util_open_goa_conf ();
+      if (goa_conf)
+        {
+          whitelisted_providers = g_key_file_get_string_list (goa_conf, "providers", "enable", NULL, NULL);
+          /* Let the empty array be like 'all' */
+          if (whitelisted_providers && !*whitelisted_providers)
+            {
+              g_strfreev (whitelisted_providers);
+              whitelisted_providers = g_new0 (gchar *, 2);
+              whitelisted_providers[0] = g_strdup ("all");
+              whitelisted_providers[1] = NULL;
+            }
+          g_clear_pointer (&goa_conf, g_key_file_free);
+        }
+
+      if (!whitelisted_providers)
+        {
+          GSettings *settings;
+
+          settings = g_settings_new (GOA_SETTINGS_SCHEMA);
+          whitelisted_providers = g_settings_get_strv (settings, GOA_SETTINGS_WHITELISTED_PROVIDERS);
+          g_object_unref (settings);
+        }
 
       /* Enable everything if there is 'all'. */
       for (i = 0; whitelisted_providers[i] != NULL; i++)
@@ -1116,7 +1282,6 @@ goa_provider_ensure_builtins_loaded (void)
 
     cleanup:
       g_strfreev (whitelisted_providers);
-      g_object_unref (settings);
       g_once_init_leave (&once_init_value, 1);
     }
 }

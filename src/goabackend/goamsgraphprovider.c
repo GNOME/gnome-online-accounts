@@ -259,6 +259,8 @@ build_object (GoaProvider        *provider,
 {
   GoaMsGraphProvider *self = GOA_MS_GRAPH_PROVIDER (provider);
   GoaAccount *account = NULL;
+  GKeyFile *goa_conf;
+  const gchar  *provider_type;
   const gchar *identity = NULL;
   gboolean files_enabled = FALSE;
   gchar *uri_onedrive = NULL;
@@ -273,14 +275,18 @@ build_object (GoaProvider        *provider,
                                                                               error))
     goto out;
 
+  provider_type = goa_provider_get_provider_type (provider);
+  goa_conf = goa_util_open_goa_conf ();
   account = goa_object_get_account (GOA_OBJECT (object));
   identity = goa_account_get_identity (account);
 
   /* Files */
-  files_enabled = g_key_file_get_boolean (key_file, group, "FilesEnabled", NULL);
+  files_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_FILES) &&
+                  g_key_file_get_boolean (key_file, group, "FilesEnabled", NULL);
   uri_onedrive = g_strconcat ("onedrive://", identity, "/", NULL);
   goa_object_skeleton_attach_files (object, uri_onedrive, files_enabled, FALSE);
   g_free (uri_onedrive);
+  g_clear_pointer (&goa_conf, g_key_file_free);
 
   self->client_id = g_key_file_get_string (key_file, group, "client_id", NULL);
   self->redirect_uri = g_key_file_get_string (key_file, group, "redirect_uri", NULL);

@@ -110,6 +110,11 @@ goa_util_lookup_keyfile_boolean (GoaObject    *object,
 void
 goa_util_account_notify_property_cb (GObject *object, GParamSpec *pspec, gpointer user_data);
 
+GKeyFile *      goa_util_open_goa_conf               (void);
+gboolean        goa_util_provider_feature_is_enabled (GKeyFile *goa_conf,
+                                                      const gchar *provider_type,
+                                                      GoaProviderFeatures feature);
+
 G_END_DECLS
 
 #endif /* __GOA_PROVIDER_H__ */
