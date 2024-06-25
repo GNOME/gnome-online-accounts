@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-04-23 15:23+0000\n"
+"POT-Creation-Date: 2024-06-11 20:56+0000\n"
 "PO-Revision-Date: 2024-04-24 11:04+0800\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
@@ -56,6 +56,16 @@ msgid "ProviderType property is not set for account"
 msgstr "账号的提供方类型（ProviderType）属性未设置"
 
 #. TODO: more specific
+#: src/goabackend/goadavclient.c:697 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:681
+msgid "Authentication failed"
+msgstr "认证失败"
+
+#: src/goabackend/goadavclient.c:704
+msgid "Cannot find WebDAV endpoint"
+msgstr "找不到 WebDAV 端点"
+
+#. TODO: more specific
 #: src/goabackend/goaewsclient.c:284
 msgid "Failed to parse autodiscover response XML"
 msgstr "无法解析自动发现响应 XML"
@@ -88,18 +98,18 @@ msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "用户“%s”的密码无效 (%s, %d)："
 
 #. provider name
-#: src/goabackend/goaexchangeprovider.c:373
+#: src/goabackend/goaexchangeprovider.c:374
 msgid ""
 "Connect to a Microsoft Exchange provider to access calendars, contacts and "
 "files"
 msgstr "连接到 Microsoft Exchange 提供商以访问日历、联系人和文件"
 
-#: src/goabackend/goaexchangeprovider.c:376
+#: src/goabackend/goaexchangeprovider.c:377
 #: src/goabackend/goaimapsmtpprovider.c:548
 msgid "_Email"
 msgstr "电子邮箱(_E)"
 
-#: src/goabackend/goaexchangeprovider.c:377
+#: src/goabackend/goaexchangeprovider.c:378
 #: src/goabackend/goafedoraprovider.c:171
 #: src/goabackend/goaimapsmtpprovider.c:549
 #: src/goabackend/goaimapsmtpprovider.c:568
@@ -108,17 +118,17 @@ msgstr "电子邮箱(_E)"
 msgid "_Password"
 msgstr "密码(_P)"
 
-#: src/goabackend/goaexchangeprovider.c:378
+#: src/goabackend/goaexchangeprovider.c:379
 msgid ""
 "Exchange account details will be auto-detected from your email address when "
 "possible"
 msgstr "如果可能，将从您的电子邮件地址自动检测 Exchange 账号详细信息"
 
-#: src/goabackend/goaexchangeprovider.c:382
+#: src/goabackend/goaexchangeprovider.c:383
 msgid "Account Details"
 msgstr "账号详情"
 
-#: src/goabackend/goaexchangeprovider.c:383
+#: src/goabackend/goaexchangeprovider.c:384
 #: src/goabackend/goafedoraprovider.c:170
 #: src/goabackend/goaimapsmtpprovider.c:567
 #: src/goabackend/goaimapsmtpprovider.c:588
@@ -126,11 +136,11 @@ msgstr "账号详情"
 msgid "User_name"
 msgstr "用户名(_N)"
 
-#: src/goabackend/goaexchangeprovider.c:384
+#: src/goabackend/goaexchangeprovider.c:385
 msgid "_Domain"
 msgstr "域(_D)"
 
-#: src/goabackend/goaexchangeprovider.c:385
+#: src/goabackend/goaexchangeprovider.c:386
 msgid "Example domain: example.com"
 msgstr "示例域：example.com"
 
@@ -148,7 +158,7 @@ msgid "Google"
 msgstr "谷歌"
 
 #: src/goabackend/goagoogleprovider.c:213
-#: src/goabackend/goamsgraphprovider.c:162
+#: src/goabackend/goamsgraphprovider.c:163
 #: src/goabackend/goawindowsliveprovider.c:165
 #, c-format
 msgid ""
@@ -158,9 +168,10 @@ msgstr "在请求您的身份时应得到状态 200，但却得到了状态 %d (
 #. TODO: more specific
 #: src/goabackend/goagoogleprovider.c:232
 #: src/goabackend/goagoogleprovider.c:243
-#: src/goabackend/goamsgraphprovider.c:181
-#: src/goabackend/goamsgraphprovider.c:192
-#: src/goabackend/goamsgraphprovider.c:203
+#: src/goabackend/goamsgraphprovider.c:182
+#: src/goabackend/goamsgraphprovider.c:193
+#: src/goabackend/goamsgraphprovider.c:206
+#: src/goabackend/goamsgraphprovider.c:231
 #: src/goabackend/goaoauth2provider.c:679
 #: src/goabackend/goaoauth2provider.c:709
 #: src/goabackend/goaoauth2provider.c:720 src/goabackend/goautils.c:133
@@ -175,12 +186,6 @@ msgstr "无法解析响应信息"
 #: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goasmtpauth.c:149
 msgid "Service not available"
 msgstr "服务不可用"
-
-#. TODO: more specific
-#: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goasmtpauth.c:102
-#: src/goabackend/goautils.c:681
-msgid "Authentication failed"
-msgstr "认证失败"
 
 #: src/goabackend/goaimapauthlogin.c:166 src/goabackend/goasmtpauth.c:600
 msgid "Server does not support STARTTLS"
@@ -222,7 +227,7 @@ msgid "SSL on a dedicated port"
 msgstr "在特定端口上使用 SSL"
 
 #: src/goabackend/goaimapsmtpprovider.c:542
-#: src/goabackend/goaimapsmtpprovider.c:1206
+#: src/goabackend/goaimapsmtpprovider.c:1204
 msgid "Email"
 msgstr "电子邮箱"
 
@@ -271,15 +276,15 @@ msgstr "SMTP 服务器(_S)"
 msgid "Example server: smtp.example.com"
 msgstr "示例服务器：smtp.example.com"
 
-#: src/goabackend/goaimapsmtpprovider.c:1197
+#: src/goabackend/goaimapsmtpprovider.c:1195
 msgid "Name"
 msgstr "姓名"
 
-#: src/goabackend/goaimapsmtpprovider.c:1223
+#: src/goabackend/goaimapsmtpprovider.c:1221
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1241
+#: src/goabackend/goaimapsmtpprovider.c:1239
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -313,25 +318,25 @@ msgid "Example principal: user@EXAMPLE.COM"
 msgstr "示例主体：user@EXAMPLE.COM"
 
 #: src/goabackend/goakerberosprovider.c:599
-#: src/goabackend/goamsgraphprovider.c:374
+#: src/goabackend/goamsgraphprovider.c:388
 msgid "_Sign in…"
 msgstr "登录(_S)…"
 
-#: src/goabackend/goakerberosprovider.c:1291
+#: src/goabackend/goakerberosprovider.c:1290
 msgid "Ticketing is disabled for account"
 msgstr "账号票据已被禁用"
 
-#: src/goabackend/goakerberosprovider.c:1318
+#: src/goabackend/goakerberosprovider.c:1317
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr "无法在密钥环中为主体“%s”找到保存的凭据"
 
-#: src/goabackend/goakerberosprovider.c:1333
+#: src/goabackend/goakerberosprovider.c:1332
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "未在凭据中找到主体“%s”的密码"
 
-#: src/goabackend/goakerberosprovider.c:1515
+#: src/goabackend/goakerberosprovider.c:1514
 msgid "Identity service returned invalid key"
 msgstr "认证服务返回了无效密钥"
 
@@ -340,31 +345,31 @@ msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:362
+#: src/goabackend/goamsgraphprovider.c:376
 msgid "Connect to a Microsoft 365 provider to access files"
 msgstr "连接到 Microsoft 365 提供商以访问文件"
 
-#: src/goabackend/goamsgraphprovider.c:364
+#: src/goabackend/goamsgraphprovider.c:378
 msgid "Authorization Details"
 msgstr "认证详情"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:366
+#: src/goabackend/goamsgraphprovider.c:380
 msgid ""
 "A custom Client or Tenant ID may need to be provided depending on the "
 "settings for your organization"
 msgstr "根据您组织的设置，可能需要提供自定义客户端或租户 ID"
 
-#: src/goabackend/goamsgraphprovider.c:368
+#: src/goabackend/goamsgraphprovider.c:382
 msgid "_Client ID"
 msgstr "客户端 ID(_C)"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:370
+#: src/goabackend/goamsgraphprovider.c:384
 msgid "_Tenant ID"
 msgstr "租户 ID(_T)"
 
-#: src/goabackend/goamsgraphprovider.c:371
+#: src/goabackend/goamsgraphprovider.c:385
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "示例 ID：00000000-0000-0000-0000-000000000000"
 
@@ -401,20 +406,20 @@ msgid "Sign in to %s with your browser"
 msgstr "使用浏览器登录 %s"
 
 #: src/goabackend/goaoauth2provider.c:945
-#: src/goabackend/goaproviderdialog.c:689
+#: src/goabackend/goaproviderdialog.c:693
 msgid "_Sign In…"
 msgstr "登录(_S)…"
 
-#: src/goabackend/goaoauth2provider.c:1292
+#: src/goabackend/goaoauth2provider.c:1290
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "要求以 %s 身份登录，但却登录为 %s"
 
-#: src/goabackend/goaoauth2provider.c:1479
+#: src/goabackend/goaoauth2provider.c:1476
 msgid "Credentials do not contain access_token"
 msgstr "凭据中不包含访问令牌（access_token）"
 
-#: src/goabackend/goaoauth2provider.c:1523
+#: src/goabackend/goaoauth2provider.c:1520
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "刷新访问令牌 (%s，%d) 失败："
@@ -475,15 +480,15 @@ msgstr "地图(_M)"
 msgid "T_o Do"
 msgstr "待办(_O)"
 
-#: src/goabackend/goaprovider.c:923
+#: src/goabackend/goaprovider.c:921
 msgid "Account is disabled"
 msgstr "账号已禁用"
 
-#: src/goabackend/goaprovider.c:936
+#: src/goabackend/goaprovider.c:934
 msgid "Unknown error"
 msgstr "未知错误"
 
-#: src/goabackend/goaprovider.c:955
+#: src/goabackend/goaprovider.c:953
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "未在 %s 类型上实现 ensure_credentials_sync"
@@ -492,51 +497,51 @@ msgstr "未在 %s 类型上实现 ensure_credentials_sync"
 #. * Account" dialogs. The %s is the name of the provider. eg.,
 #. * 'Google'.
 #.
-#: src/goabackend/goaproviderdialog.c:168
+#: src/goabackend/goaproviderdialog.c:171
 #, c-format
 msgid "%s Account"
 msgstr "%s 账号"
 
-#: src/goabackend/goaproviderdialog.c:606
+#: src/goabackend/goaproviderdialog.c:610
 msgid "Remove this Account?"
 msgstr "移除此账号？"
 
-#: src/goabackend/goaproviderdialog.c:607
+#: src/goabackend/goaproviderdialog.c:611
 msgid ""
 "If you remove this Online Account you will have to connect to it again to "
 "use it with apps and services."
 msgstr "如果您移除此在线账号，则必须再次连接才能在应用和服务中使用它。"
 
-#: src/goabackend/goaproviderdialog.c:609
+#: src/goabackend/goaproviderdialog.c:613
 msgid "_Cancel"
 msgstr "取消(_C)"
 
-#: src/goabackend/goaproviderdialog.c:610
+#: src/goabackend/goaproviderdialog.c:614
 msgid "_Remove"
 msgstr "移除(_R)"
 
-#: src/goabackend/goaproviderdialog.c:688
+#: src/goabackend/goaproviderdialog.c:692
 msgid "Sign in to reconnect to this account"
 msgstr "登录以重新连接到此账号"
 
 #. Remove
-#: src/goabackend/goaproviderdialog.c:737
+#: src/goabackend/goaproviderdialog.c:742
 msgid "_Remove…"
 msgstr "移除(_R)…"
 
-#: src/goabackend/goaproviderdialog.c:832
+#: src/goabackend/goaproviderdialog.c:837
 msgid "_Sign In"
 msgstr "登录(_S)"
 
-#: src/goabackend/goaproviderdialog.c:894
+#: src/goabackend/goaproviderdialog.c:899
 msgid "_Try Again"
 msgstr "重试(_T)"
 
-#: src/goabackend/goaproviderdialog.c:898
+#: src/goabackend/goaproviderdialog.c:903
 msgid "_Ignore"
 msgstr "忽略(_I)"
 
-#: src/goabackend/goaproviderdialog.c:1143
+#: src/goabackend/goaproviderdialog.c:1153
 msgid "Dialog was dismissed"
 msgstr "对话框已关闭"
 
@@ -836,9 +841,6 @@ msgstr "无法为身份创建凭据缓存"
 
 #~ msgid "Credentials have expired"
 #~ msgstr "凭据已过期"
-
-#~ msgid "Cannot find WebDAV endpoint"
-#~ msgstr "找不到 WebDAV 端点"
 
 #, c-format
 #~ msgid "Loading “%s”…"
