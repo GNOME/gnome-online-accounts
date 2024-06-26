@@ -381,7 +381,7 @@ add_account_action_cb (GoaProviderDialog *dialog,
 static void
 add_account (GoaProvider         *provider,
              GoaClient           *client,
-             GtkWindow           *parent,
+             GtkWidget           *parent,
              GCancellable        *cancellable,
              GAsyncReadyCallback  callback,
              gpointer             user_data)

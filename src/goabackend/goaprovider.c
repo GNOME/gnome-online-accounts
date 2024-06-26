@@ -97,7 +97,7 @@ static gboolean goa_provider_remove_account_finish_real (GoaProvider   *self,
 static void goa_provider_real_show_account (GoaProvider         *provider,
                                             GoaClient           *client,
                                             GoaObject           *object,
-                                            GtkWindow           *parent,
+                                            GtkWidget           *parent,
                                             GCancellable        *cancellable,
                                             GAsyncReadyCallback  callback,
                                             gpointer             user_data);
@@ -573,7 +573,7 @@ goa_provider_get_provider_features_infos (void)
  * goa_provider_add_account: (vfunc add_account)
  * @self: a `GoaProvider`
  * @client: a `GoaClient`
- * @parent: (nullable): a `GtkWindow`
+ * @parent: (nullable): a `GtkWidget`
  * @cancellable: (nullable): a `GCancellable`
  * @callback: (scope async): a `GAsyncReadyCallback`
  * @user_data: (closure): user supplied data
@@ -590,14 +590,14 @@ goa_provider_get_provider_features_infos (void)
 void
 goa_provider_add_account (GoaProvider         *self,
                           GoaClient           *client,
-                          GtkWindow           *parent,
+                          GtkWidget           *parent,
                           GCancellable        *cancellable,
                           GAsyncReadyCallback  callback,
                           gpointer             user_data)
 {
   g_return_if_fail (GOA_IS_PROVIDER (self));
   g_return_if_fail (GOA_IS_CLIENT (client));
-  g_return_if_fail (parent == NULL || GTK_IS_WINDOW (parent));
+  g_return_if_fail (parent == NULL || GTK_IS_WIDGET (parent));
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   GOA_PROVIDER_GET_CLASS (self)->add_account (self,
@@ -657,7 +657,7 @@ goa_provider_add_account_finish (GoaProvider   *provider,
  * @self: a `GoaProvider`
  * @client: a `GoaClient`
  * @object: A `GoaObject` with a `GoaAccount` interface
- * @parent: (nullable): a `GtkWindow`
+ * @parent: (nullable): a `GtkWidget`
  * @cancellable: (nullable): a `GCancellable`
  * @callback: (scope async): a `GAsyncReadyCallback`
  * @user_data: (closure): user supplied data
@@ -673,7 +673,7 @@ void
 goa_provider_refresh_account (GoaProvider         *self,
                               GoaClient           *client,
                               GoaObject           *object,
-                              GtkWindow           *parent,
+                              GtkWidget           *parent,
                               GCancellable        *cancellable,
                               GAsyncReadyCallback  callback,
                               gpointer             user_data)
@@ -681,7 +681,7 @@ goa_provider_refresh_account (GoaProvider         *self,
   g_return_if_fail (GOA_IS_PROVIDER (self));
   g_return_if_fail (GOA_IS_CLIENT (client));
   g_return_if_fail (GOA_IS_OBJECT (object) && goa_object_peek_account (object) != NULL);
-  g_return_if_fail (parent == NULL || GTK_IS_WINDOW (parent));
+  g_return_if_fail (parent == NULL || GTK_IS_WIDGET (parent));
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   return GOA_PROVIDER_GET_CLASS (self)->refresh_account (self,
@@ -735,7 +735,7 @@ static void
 goa_provider_real_show_account (GoaProvider         *self,
                                 GoaClient           *client,
                                 GoaObject           *object,
-                                GtkWindow           *parent,
+                                GtkWidget           *parent,
                                 GCancellable        *cancellable,
                                 GAsyncReadyCallback  callback,
                                 gpointer             user_data)
@@ -757,7 +757,7 @@ goa_provider_real_show_account (GoaProvider         *self,
  * @self: a `GoaProvider`
  * @client: a `GoaClient`
  * @object: A `GoaObject` with a `GoaAccount` interface
- * @parent: (nullable): a `GtkWindow`
+ * @parent: (nullable): a `GtkWidget`
  * @cancellable: (nullable): a `GCancellable`
  * @callback: (scope async): a `GAsyncReadyCallback`
  * @user_data: (closure): user supplied data
@@ -771,7 +771,7 @@ void
 goa_provider_show_account (GoaProvider         *self,
                            GoaClient           *client,
                            GoaObject           *object,
-                           GtkWindow           *parent,
+                           GtkWidget           *parent,
                            GCancellable        *cancellable,
                            GAsyncReadyCallback  callback,
                            gpointer             user_data)
@@ -779,7 +779,7 @@ goa_provider_show_account (GoaProvider         *self,
   g_return_if_fail (GOA_IS_PROVIDER (self));
   g_return_if_fail (GOA_IS_CLIENT (client));
   g_return_if_fail (GOA_IS_OBJECT (object) && goa_object_peek_account (object) != NULL);
-  g_return_if_fail (parent == NULL || GTK_IS_WINDOW (parent));
+  g_return_if_fail (parent == NULL || GTK_IS_WIDGET (parent));
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   return GOA_PROVIDER_GET_CLASS (self)->show_account (self,

@@ -544,7 +544,7 @@ add_account_action_cb (GoaProviderDialog *dialog,
 static void
 add_account (GoaProvider         *provider,
              GoaClient           *client,
-             GtkWindow           *parent,
+             GtkWidget           *parent,
              GCancellable        *cancellable,
              GAsyncReadyCallback  callback,
              gpointer             user_data)
@@ -682,7 +682,7 @@ static void
 refresh_account (GoaProvider         *provider,
                  GoaClient           *client,
                  GoaObject           *object,
-                 GtkWindow           *parent,
+                 GtkWidget           *parent,
                  GCancellable        *cancellable,
                  GAsyncReadyCallback  callback,
                  gpointer             user_data)
@@ -693,7 +693,7 @@ refresh_account (GoaProvider         *provider,
   g_assert (GOA_IS_EXCHANGE_PROVIDER (provider));
   g_assert (GOA_IS_CLIENT (client));
   g_assert (GOA_IS_OBJECT (object));
-  g_assert (parent == NULL || GTK_IS_WINDOW (parent));
+  g_assert (parent == NULL || GTK_IS_WIDGET (parent));
   g_assert (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   data = g_new0 (AddAccountData, 1);

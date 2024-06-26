@@ -76,14 +76,14 @@ struct _GoaProviderClass
   /* pure virtual */
   void                    (*add_account)                  (GoaProvider            *self,
                                                            GoaClient              *client,
-                                                           GtkWindow              *parent,
+                                                           GtkWidget              *parent,
                                                            GCancellable           *cancellable,
                                                            GAsyncReadyCallback     callback,
                                                            gpointer                user_data);
   void                    (*refresh_account)              (GoaProvider            *self,
                                                            GoaClient              *client,
                                                            GoaObject              *object,
-                                                           GtkWindow              *parent,
+                                                           GtkWidget              *parent,
                                                            GCancellable           *cancellable,
                                                            GAsyncReadyCallback     callback,
                                                            gpointer                user_data);
@@ -126,7 +126,7 @@ struct _GoaProviderClass
   void                    (*show_account)                 (GoaProvider            *self,
                                                            GoaClient              *client,
                                                            GoaObject              *object,
-                                                           GtkWindow              *parent,
+                                                           GtkWidget              *parent,
                                                            GCancellable           *cancellable,
                                                            GAsyncReadyCallback     callback,
                                                            gpointer                user_data);

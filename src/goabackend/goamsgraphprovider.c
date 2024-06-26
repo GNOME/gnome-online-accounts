@@ -427,7 +427,6 @@ add_account_action_cb (GoaProviderDialog *dialog,
   GoaProvider *provider = g_task_get_source_object (task);
   AccountData *data = g_task_get_task_data (task);
   GCancellable *cancellable = g_task_get_cancellable (task);
-  g_autoptr (GtkWindow) parent = NULL;
   const char *client_id;
   g_autofree char *issuer = NULL;
   const char *tenant;
@@ -461,10 +460,9 @@ add_account_action_cb (GoaProviderDialog *dialog,
   self->redirect_uri = g_strdup_printf ("goa-oauth2://localhost/%s", client_id);
 
   /* With the provider configured for the client, we chain-up to authorize */
-  g_object_get (data->dialog, "transient-for", &parent, NULL);
   GOA_PROVIDER_CLASS (goa_ms_graph_provider_parent_class)->add_account (provider,
                                                                         data->client,
-                                                                        parent,
+                                                                        GTK_WIDGET (data->dialog),
                                                                         cancellable,
                                                                         (GAsyncReadyCallback)add_account_parent_cb,
                                                                         g_object_ref (task));
@@ -473,7 +471,7 @@ add_account_action_cb (GoaProviderDialog *dialog,
 static void
 add_account (GoaProvider         *provider,
              GoaClient           *client,
-             GtkWindow           *parent,
+             GtkWidget           *parent,
              GCancellable        *cancellable,
              GAsyncReadyCallback  callback,
              gpointer             user_data)

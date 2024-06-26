@@ -85,7 +85,7 @@ struct _GoaProviderDialog
   GoaProvider *provider;
   GoaClient *client;
   GoaObject *object;
-  GtkWindow *parent;
+  GtkWidget *parent;
   GoaDialogState state;
   GCancellable *cancellable;
 
@@ -323,7 +323,7 @@ goa_provider_dialog_class_init (GoaProviderDialogClass *klass)
 
   properties[PROP_TRANSIENT_FOR] =
     g_param_spec_object ("transient-for", NULL, NULL,
-                         GTK_TYPE_WINDOW,
+                         GTK_TYPE_WIDGET,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS |
@@ -336,7 +336,7 @@ goa_provider_dialog_class_init (GoaProviderDialogClass *klass)
  * goa_provider_dialog_new:
  * @provider: a `GoaProvider`
  * @client: a `GoaClient`
- * @parent: (nullable): a `GtkWindow`
+ * @parent: (nullable): a `GtkWidget`
  *
  * Create a new dialog for @provider.
  *
@@ -347,11 +347,11 @@ goa_provider_dialog_class_init (GoaProviderDialogClass *klass)
 GoaProviderDialog *
 goa_provider_dialog_new (GoaProvider *provider,
                          GoaClient   *client,
-                         GtkWindow   *parent)
+                         GtkWidget   *parent)
 {
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), NULL);
   g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
-  g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);
+  g_return_val_if_fail (parent == NULL || GTK_IS_WIDGET (parent), NULL);
 
   return goa_provider_dialog_new_full (provider, client, parent, -1, -1);
 }
@@ -360,7 +360,7 @@ goa_provider_dialog_new (GoaProvider *provider,
  * goa_provider_dialog_new_full:
  * @provider: a `GoaProvider`
  * @client: a `GoaClient`
- * @parent: (nullable): a `GtkWindow`
+ * @parent: (nullable): a `GtkWidget`
  * @default_width: default width, or `-1`
  * @default_height: default height, or `-1`
  *
@@ -372,14 +372,14 @@ goa_provider_dialog_new (GoaProvider *provider,
  */
 GoaProviderDialog *
 goa_provider_dialog_new_full (GoaProvider *provider,
-                         GoaClient   *client,
-                         GtkWindow   *parent,
-                         int          default_width,
-                         int          default_height)
+                              GoaClient   *client,
+                              GtkWidget   *parent,
+                              int          default_width,
+                              int          default_height)
 {
   g_return_val_if_fail (GOA_IS_PROVIDER (provider), NULL);
   g_return_val_if_fail (GOA_IS_CLIENT (client), NULL);
-  g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);
+  g_return_val_if_fail (parent == NULL || GTK_IS_WIDGET (parent), NULL);
 
   return g_object_new (GOA_TYPE_PROVIDER_DIALOG,
                        "provider",             provider,
@@ -553,7 +553,7 @@ on_refresh_activated (GoaProviderDialog *self)
   goa_provider_refresh_account (self->provider,
                                 self->client,
                                 self->object,
-                                self->parent,
+                                GTK_WIDGET (self->parent),
                                 self->cancellable,
                                 (GAsyncReadyCallback) goa_provider_refresh_account_cb,
                                 self);
