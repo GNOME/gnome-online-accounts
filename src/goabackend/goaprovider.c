@@ -597,7 +597,7 @@ goa_provider_add_account (GoaProvider         *self,
 {
   g_return_if_fail (GOA_IS_PROVIDER (self));
   g_return_if_fail (GOA_IS_CLIENT (client));
-  g_return_if_fail (GTK_IS_WINDOW (parent));
+  g_return_if_fail (parent == NULL || GTK_IS_WINDOW (parent));
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   GOA_PROVIDER_GET_CLASS (self)->add_account (self,
