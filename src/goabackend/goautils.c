@@ -670,6 +670,7 @@ goa_utils_set_error_soup (GError **err, SoupMessage *msg)
     case SOUP_STATUS_INTERNAL_SERVER_ERROR:
     case SOUP_STATUS_NOT_IMPLEMENTED:
       error_msg = g_strdup (_("Not supported"));
+      break;
 
     case SOUP_STATUS_NOT_FOUND:
       error_msg = g_strdup (_("Not found"));
