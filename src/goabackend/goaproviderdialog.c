@@ -1174,9 +1174,9 @@ goa_provider_task_run_in_dialog_cb (GoaProviderDialog *self,
 
 static void
 goa_provider_task_cancelled_cb (GCancellable *cancellable,
-                                GtkWindow    *window)
+                                AdwDialog    *dialog)
 {
-  gtk_window_destroy (window);
+  adw_dialog_force_close (dialog);
 }
 
 /**
