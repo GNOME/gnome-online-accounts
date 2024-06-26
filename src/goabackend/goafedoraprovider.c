@@ -321,18 +321,24 @@ add_account_action_cb (GoaProviderDialog *dialog,
     return;
 
   /* Reset the temporary account watch */
-  g_free (data->identity);
+  g_clear_pointer (&data->identity, g_free);
   g_clear_object (&data->object);
   if (data->client_source != NULL)
     {
       g_source_destroy (data->client_source);
       g_source_unref (data->client_source);
+      data->client_source = NULL;
     }
 
   username = gtk_editable_get_text (GTK_EDITABLE (data->username));
   password = gtk_editable_get_text (GTK_EDITABLE (data->password));
   provider_type = goa_provider_get_provider_type (provider);
-  parse_principal (username, &data->identity);
+  if (!parse_principal (username, &data->identity))
+    {
+      error = g_error_new (G_IO_ERROR, G_IO_ERROR_FAILED, _("Faild to get principal from user name “%s”"), username);
+      goa_provider_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
 
   /* If this is duplicate account we're finished */
   if (!goa_utils_check_duplicate (data->client,
