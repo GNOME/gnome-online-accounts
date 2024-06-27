@@ -56,7 +56,7 @@ GVariant              *goa_provider_get_preseed_data             (GoaProvider   
 
 void                   goa_provider_add_account                  (GoaProvider            *self,
                                                                   GoaClient              *client,
-                                                                  GtkWindow              *parent,
+                                                                  GtkWidget              *parent,
                                                                   GCancellable           *cancellable,
                                                                   GAsyncReadyCallback     callback,
                                                                   gpointer                user_data);
@@ -67,7 +67,7 @@ GoaObject             *goa_provider_add_account_finish           (GoaProvider   
 void                   goa_provider_refresh_account              (GoaProvider            *self,
                                                                   GoaClient              *client,
                                                                   GoaObject              *object,
-                                                                  GtkWindow              *parent,
+                                                                  GtkWidget              *parent,
                                                                   GCancellable           *cancellable,
                                                                   GAsyncReadyCallback     callback,
                                                                   gpointer                user_data);
@@ -78,7 +78,7 @@ gboolean               goa_provider_refresh_account_finish       (GoaProvider   
 void                   goa_provider_show_account                 (GoaProvider            *self,
                                                                   GoaClient              *client,
                                                                   GoaObject              *object,
-                                                                  GtkWindow              *parent,
+                                                                  GtkWidget              *parent,
                                                                   GCancellable           *cancellable,
                                                                   GAsyncReadyCallback     callback,
                                                                   gpointer                user_data);

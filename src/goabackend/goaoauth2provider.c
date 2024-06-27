@@ -1215,7 +1215,7 @@ add_account_secret_cb (SecretCollection *collection,
 static void
 goa_oauth2_provider_add_account (GoaProvider         *provider,
                                  GoaClient           *client,
-                                 GtkWindow           *parent,
+                                 GtkWidget           *parent,
                                  GCancellable        *cancellable,
                                  GAsyncReadyCallback  callback,
                                  gpointer             user_data)
@@ -1318,7 +1318,7 @@ static void
 goa_oauth2_provider_refresh_account (GoaProvider         *provider,
                                      GoaClient           *client,
                                      GoaObject           *object,
-                                     GtkWindow           *parent,
+                                     GtkWidget           *parent,
                                      GCancellable        *cancellable,
                                      GAsyncReadyCallback  callback,
                                      gpointer             user_data)
@@ -1329,7 +1329,7 @@ goa_oauth2_provider_refresh_account (GoaProvider         *provider,
   g_assert (GOA_IS_OAUTH2_PROVIDER (provider));
   g_assert (GOA_IS_CLIENT (client));
   g_assert (GOA_IS_OBJECT (object));
-  g_assert (parent == NULL || GTK_IS_WINDOW (parent));
+  g_assert (parent == NULL || GTK_IS_WIDGET (parent));
   g_assert (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   data = g_new0 (AccountData, 1);
