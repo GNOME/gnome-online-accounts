@@ -1,5 +1,3 @@
-goa_inc = include_directories('.')
-
 libgoa_deps_public = [
   gio_dep,
   glib_dep,
@@ -98,10 +96,12 @@ libgoa = shared_library(
 
 libgoa_dep = declare_dependency(
   sources: libgoa_headers_built,
-  include_directories: goa_inc,
+  include_directories: src_inc,
   dependencies: libgoa_deps_public,
   link_with: libgoa
 )
+
+meson.override_dependency(goa_api_name, libgoa_dep)
 
 pkg.generate(
   libraries: libgoa,
