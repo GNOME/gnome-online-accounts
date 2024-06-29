@@ -880,7 +880,5 @@ goa_dav_configuration_free (GoaDavConfiguration *config)
   g_free (config->webdav_uri);
   g_free (config->caldav_uri);
   g_free (config->carddav_uri);
-  g_free (config->identity);
-  g_free (config->username);
   g_free (config);
 }

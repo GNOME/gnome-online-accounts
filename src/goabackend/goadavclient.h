@@ -38,10 +38,6 @@ typedef struct
   char *caldav_uri;
   char *carddav_uri;
   GoaProviderFeatures features;
-
-  /* Identity amendments made during discovery */
-  char *identity;
-  char *username;
 } GoaDavConfiguration;
 
 void                 goa_dav_configuration_free                (GoaDavConfiguration *config);
