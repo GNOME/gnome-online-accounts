@@ -326,6 +326,18 @@ build_object (GoaProvider         *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static struct
+{
+  GoaProviderFeatures feature;
+  const char *key;
+} keyfile_endpoints[] = {
+  { GOA_PROVIDER_FEATURE_CALENDAR, "CalDavUri" },
+  { GOA_PROVIDER_FEATURE_CONTACTS, "CardDavUri" },
+  { GOA_PROVIDER_FEATURE_FILES, "Uri" },
+};
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static gboolean
 ensure_credentials_sync (GoaProvider         *provider,
                          GoaObject           *object,
@@ -336,7 +348,6 @@ ensure_credentials_sync (GoaProvider         *provider,
   g_autoptr (GoaDavClient) dav_client = NULL;
   g_autofree char *username = NULL;
   g_autofree char *password = NULL;
-  g_autofree char *uri = NULL;
   gboolean accept_ssl_errors;
   gboolean ret = FALSE;
 
@@ -351,32 +362,51 @@ ensure_credentials_sync (GoaProvider         *provider,
       return ret;
     }
 
-  /* All WebDAV servers support some file access, so check that URI */
-  uri = goa_util_lookup_keyfile_string (object, "Uri");
+  /* Find a URI to confirm the account */
+  dav_client = goa_dav_client_new ();
   accept_ssl_errors = goa_util_lookup_keyfile_boolean (object, "AcceptSslErrors");
 
-  dav_client = goa_dav_client_new ();
-  ret = goa_dav_client_check_sync (dav_client,
-                                   uri,
-                                   username,
-                                   password,
-                                   accept_ssl_errors,
-                                   cancellable,
-                                   error);
-
-  if (!ret && error != NULL && *error != NULL)
+  for (size_t i = 0; i < G_N_ELEMENTS (keyfile_endpoints); i++)
     {
-      g_prefix_error (error,
-                      /* Translators: the first %s is the username
-                       * (eg., debarshi.ray@gmail.com or rishi), and the
-                       * (%s, %d) is the error domain and code.
-                       */
-                      _("Invalid password with username “%s” (%s, %d): "),
-                      username,
-                      g_quark_to_string ((*error)->domain),
-                      (*error)->code);
-      (*error)->domain = GOA_ERROR;
-      (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
+      g_autofree char *uri = NULL;
+
+      uri = goa_util_lookup_keyfile_string (object, keyfile_endpoints[i].key);
+      if (uri != NULL && *uri != '\0')
+        {
+          ret = goa_dav_client_check_sync (dav_client,
+                                           uri,
+                                           username,
+                                           password,
+                                           accept_ssl_errors,
+                                           cancellable,
+                                           error);
+          break;
+        }
+    }
+
+  if (!ret && error != NULL)
+    {
+      if (*error == NULL)
+        {
+          g_set_error_literal (error,
+                               GOA_ERROR,
+                               GOA_ERROR_FAILED,
+                               _("Unknown error"));
+        }
+      else
+        {
+          g_prefix_error (error,
+                          /* Translators: the first %s is the username
+                           * (eg., debarshi.ray@gmail.com or rishi), and the
+                           * (%s, %d) is the error domain and code.
+                           */
+                          _("Invalid password with username “%s” (%s, %d): "),
+                          username,
+                          g_quark_to_string ((*error)->domain),
+                          (*error)->code);
+          (*error)->domain = GOA_ERROR;
+          (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
+        }
 
       return ret;
     }
@@ -491,7 +521,17 @@ create_account_details_ui (GoaProvider    *provider,
     {
       GoaAccount *account = goa_object_peek_account (data->object);
       const char *username = goa_account_get_identity (account);
-      const char *uri = goa_util_lookup_keyfile_string (data->object, "Uri");
+      g_autofree char *uri = NULL;
+
+      /* Find a URI to confirm the account */
+      for (size_t i = 0; i < G_N_ELEMENTS (keyfile_endpoints); i++)
+        {
+          uri = goa_util_lookup_keyfile_string (data->object, keyfile_endpoints[i].key);
+          if (uri != NULL && *uri != '\0')
+            break;
+
+          g_clear_pointer (&uri, g_free);
+        }
 
       if (username == NULL || username[0] == '\0')
         data->is_template = TRUE;
@@ -550,42 +590,18 @@ add_account_credentials (GTask *task)
   GCancellable *cancellable = g_task_get_cancellable (task);
   GVariantBuilder credentials;
   GVariantBuilder details;
-  const char *server;
   const char *password;
   const char *username;
 
   /* Account is confirmed */
   username = gtk_editable_get_text (GTK_EDITABLE (data->username));
   password = gtk_editable_get_text (GTK_EDITABLE (data->password));
-  server = data->config->webdav_uri;
-
-  /* HACK: Account for providers without file access by leaving the feature
-   * disabled and swapping in an available URI for re-authentication.
-   */
-  if (server == NULL || *server == '\0')
-    {
-      server = data->config->caldav_uri
-        ? data->config->caldav_uri
-        : data->config->carddav_uri;
-    }
-
-  /* HACK: The username may be amended during discovery for providers that use
-   * distinct logins with a scoped app password.
-   */
-  if (data->config->username != NULL)
-    username = data->config->username;
-
-  /* HACK: The identity may be adjusted during discovery to avoid false
-   * positives when checking for duplicate accounts.
-   */
-  if (data->config->identity != NULL)
-    g_set_str (&data->presentation_identity, data->config->identity);
 
   g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&credentials, "{sv}", "password", g_variant_new_string (password));
 
   g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
-  g_variant_builder_add (&details, "{ss}", "Uri", server);
+  g_variant_builder_add (&details, "{ss}", "Uri", data->config->webdav_uri ? data->config->webdav_uri : "");
   g_variant_builder_add (&details, "{ss}", "CalendarEnabled", data->config->caldav_uri ? "true" : "false");
   g_variant_builder_add (&details, "{ss}", "CalDavUri", data->config->caldav_uri ? data->config->caldav_uri : "");
   g_variant_builder_add (&details, "{ss}", "ContactsEnabled", data->config->carddav_uri ? "true" : "false");
@@ -991,26 +1007,17 @@ refresh_account_action_cb (GoaProviderDialog *dialog,
 {
   AddAccountData *data = g_task_get_task_data (task);
   GCancellable *cancellable = g_task_get_cancellable (task);
-  const char *uri_text;
+  const char *uri;
   const char *password;
   const char *username;
   g_autoptr(GoaDavClient) dav_client = NULL;
-  g_autofree char *server = NULL;
-  g_autofree char *uri = NULL;
 
   if (goa_provider_dialog_get_state (data->dialog) != GOA_DIALOG_BUSY)
     return;
 
-  uri_text = gtk_editable_get_text (GTK_EDITABLE (data->uri));
+  uri = gtk_editable_get_text (GTK_EDITABLE (data->uri));
   username = gtk_editable_get_text (GTK_EDITABLE (data->username));
   password = gtk_editable_get_text (GTK_EDITABLE (data->password));
-
-  g_free (data->presentation_identity);
-  uri = dav_normalize_uri (uri_text, NULL, &server);
-  if (strchr (username, '@') != NULL)
-    g_set_str (&data->presentation_identity, username);
-  else
-    data->presentation_identity = g_strconcat (username, "@", server, NULL);
 
   /* Confirm the account */
   dav_client = goa_dav_client_new ();
@@ -1049,6 +1056,7 @@ refresh_account (GoaProvider         *provider,
   data->client = g_object_ref (client);
   data->object = g_object_ref (object);
   data->accept_ssl_errors = goa_util_lookup_keyfile_boolean (object, "AcceptSslErrors");
+  data->presentation_identity = goa_util_lookup_keyfile_string (object, "PresentationIdentity");
 
   task = g_task_new (provider, cancellable, callback, user_data);
   g_task_set_check_cancellable (task, FALSE);

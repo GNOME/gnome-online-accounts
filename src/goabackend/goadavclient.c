@@ -247,85 +247,6 @@ _soup_message_get_dav_features (SoupMessage  *message,
   return ret;
 }
 
-static gboolean
-goa_dav_configuration_autoconfig_nextcloud (GoaDavConfiguration *config,
-                                            SoupMessage         *message)
-{
-  GUri *uri = soup_message_get_uri (message);
-  const char *path = g_uri_get_path (uri);
-  const char *server_root = NULL;
-
-  /* Try to infer the server root from common endpoints
-   */
-  server_root = g_strrstr (path, "/remote.php/dav");
-  if (server_root == NULL)
-    server_root = g_strrstr (path, "/remote.php/webdav");
-
-  if (server_root != NULL)
-    {
-      int port = -1;
-      const char *scheme = NULL;
-      g_autofree char *base_path = NULL;
-      g_autofree char *dav_path = NULL;
-      g_autofree char *webdav_path = NULL;
-
-      port = g_uri_get_port (uri);
-      scheme = g_uri_get_scheme (uri);
-      if (g_strcmp0 (scheme, "https") == 0)
-        port = port != 443 ? port : -1;
-      else if (g_strcmp0 (scheme, "http") == 0)
-        port = port != 80 ? port : -1;
-
-      base_path = g_strndup (path, server_root - path);
-      dav_path = g_build_path ("/", base_path, "/remote.php/dav", NULL);
-      webdav_path = g_build_path ("/", base_path, "/remote.php/webdav", NULL);
-
-      /* TODO: the proper path is `remote.php/dav/files/<username>`
-       *
-       * See: https://github.com/nextcloud/server/issues/25867
-       */
-      g_clear_pointer (&config->webdav_uri, g_free);
-      config->webdav_uri = g_uri_join_with_user (G_URI_FLAGS_PARSE_RELAXED,
-                                                 g_uri_get_scheme (uri),
-                                                 g_uri_get_user (uri),
-                                                 g_uri_get_password (uri),
-                                                 g_uri_get_auth_params (uri),
-                                                 g_uri_get_host (uri),
-                                                 port,
-                                                 webdav_path,
-                                                 g_uri_get_query (uri),
-                                                 g_uri_get_fragment (uri));
-
-      g_clear_pointer (&config->caldav_uri, g_free);
-      config->caldav_uri = g_uri_join_with_user (G_URI_FLAGS_PARSE_RELAXED,
-                                                 g_uri_get_scheme (uri),
-                                                 g_uri_get_user (uri),
-                                                 g_uri_get_password (uri),
-                                                 g_uri_get_auth_params (uri),
-                                                 g_uri_get_host (uri),
-                                                 port,
-                                                 dav_path,
-                                                 g_uri_get_query (uri),
-                                                 g_uri_get_fragment (uri));
-
-      g_clear_pointer (&config->carddav_uri, g_free);
-      config->carddav_uri = g_strdup (config->caldav_uri);
-
-      /* Ensure the feature flags are set, since ownCloud/Nextcloud doesn't set
-       * "addressbook"/"calendar-access" in the DAV header.
-       *
-       * See: https://github.com/nextcloud/server/issues/37374
-       */
-      config->features = GOA_PROVIDER_FEATURE_CALENDAR |
-                         GOA_PROVIDER_FEATURE_CONTACTS |
-                         GOA_PROVIDER_FEATURE_FILES;
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
@@ -568,6 +489,85 @@ goa_dav_client_discover_data_free (gpointer task_data)
   dav_client_check_data_free (check);
 }
 
+static gboolean
+dav_client_discover_postconfig_nexcloud (DiscoverData *discover,
+                                         SoupMessage  *message)
+{
+  GUri *uri = soup_message_get_uri (message);
+  const char *path = g_uri_get_path (uri);
+  const char *server_root = NULL;
+
+  /* Try to infer the server root from common endpoints
+   */
+  server_root = g_strrstr (path, "/remote.php/dav");
+  if (server_root == NULL)
+    server_root = g_strrstr (path, "/remote.php/webdav");
+
+  if (server_root != NULL)
+    {
+      int port = -1;
+      const char *scheme = NULL;
+      g_autofree char *base_path = NULL;
+      g_autofree char *dav_path = NULL;
+      g_autofree char *webdav_path = NULL;
+
+      port = g_uri_get_port (uri);
+      scheme = g_uri_get_scheme (uri);
+      if (g_strcmp0 (scheme, "https") == 0)
+        port = port != 443 ? port : -1;
+      else if (g_strcmp0 (scheme, "http") == 0)
+        port = port != 80 ? port : -1;
+
+      base_path = g_strndup (path, server_root - path);
+      dav_path = g_build_path ("/", base_path, "/remote.php/dav", NULL);
+      webdav_path = g_build_path ("/", base_path, "/remote.php/webdav", NULL);
+
+      /* TODO: the proper path is `remote.php/dav/files/<username>`
+       *
+       * See: https://github.com/nextcloud/server/issues/25867
+       */
+      g_clear_pointer (&discover->config->webdav_uri, g_free);
+      discover->config->webdav_uri = g_uri_join_with_user (G_URI_FLAGS_PARSE_RELAXED,
+                                                           g_uri_get_scheme (uri),
+                                                           g_uri_get_user (uri),
+                                                           g_uri_get_password (uri),
+                                                           g_uri_get_auth_params (uri),
+                                                           g_uri_get_host (uri),
+                                                           port,
+                                                           webdav_path,
+                                                           g_uri_get_query (uri),
+                                                           g_uri_get_fragment (uri));
+
+      g_clear_pointer (&discover->config->caldav_uri, g_free);
+      discover->config->caldav_uri = g_uri_join_with_user (G_URI_FLAGS_PARSE_RELAXED,
+                                                           g_uri_get_scheme (uri),
+                                                           g_uri_get_user (uri),
+                                                           g_uri_get_password (uri),
+                                                           g_uri_get_auth_params (uri),
+                                                           g_uri_get_host (uri),
+                                                           port,
+                                                           dav_path,
+                                                           g_uri_get_query (uri),
+                                                           g_uri_get_fragment (uri));
+
+      g_clear_pointer (&discover->config->carddav_uri, g_free);
+      discover->config->carddav_uri = g_strdup (discover->config->caldav_uri);
+
+      /* Ensure the feature flags are set, since ownCloud/Nextcloud doesn't set
+       * "addressbook"/"calendar-access" in the DAV header.
+       *
+       * See: https://github.com/nextcloud/server/issues/37374
+       */
+      discover->config->features = GOA_PROVIDER_FEATURE_CALENDAR |
+                                   GOA_PROVIDER_FEATURE_CONTACTS |
+                                   GOA_PROVIDER_FEATURE_FILES;
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 dav_client_discover_response_cb (SoupSession  *session,
                                  GAsyncResult *result,
@@ -623,7 +623,7 @@ dav_client_discover_response_cb (SoupSession  *session,
 
   /* Short path for ownCloud/Nextcloud
    */
-  if (goa_dav_configuration_autoconfig_nextcloud (discover->config, msg))
+  if (dav_client_discover_postconfig_nexcloud (discover, msg))
     {
       g_queue_clear_full (&discover->uris, g_free);
       goto out;
@@ -880,7 +880,5 @@ goa_dav_configuration_free (GoaDavConfiguration *config)
   g_free (config->webdav_uri);
   g_free (config->caldav_uri);
   g_free (config->carddav_uri);
-  g_free (config->identity);
-  g_free (config->username);
   g_free (config);
 }
