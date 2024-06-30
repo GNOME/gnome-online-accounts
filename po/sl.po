@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-06-08 16:45+0000\n"
-"PO-Revision-Date: 2024-06-08 21:25+0200\n"
+"POT-Creation-Date: 2024-06-26 16:11+0000\n"
+"PO-Revision-Date: 2024-06-30 12:10+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl\n"
@@ -55,7 +55,7 @@ msgstr "Za ta račun ni nastavljena zastavica lastnosti vrste ponudnika"
 
 #. TODO: more specific
 #: src/goabackend/goadavclient.c:1187 src/goabackend/goaimapauthlogin.c:104
-#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:681
+#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:682
 msgid "Authentication failed"
 msgstr "Overitev je spodletela"
 
@@ -159,6 +159,11 @@ msgstr "Fedora"
 #: src/goabackend/goakerberosprovider.c:599
 msgid "Access restricted web and network resources for your organization"
 msgstr "Za podatke te ustanove je dostop do spleta in omrežnih virov omejen"
+
+#: src/goabackend/goafedoraprovider.c:338
+#, c-format
+msgid "Faild to get principal from user name “%s”"
+msgstr "Iz uporabniškega imena »%s« ni bilo mogoče dobiti poveril"
 
 #: src/goabackend/goagoogleprovider.c:57
 msgid "Google"
@@ -335,7 +340,7 @@ msgstr "_Poverila"
 
 #: src/goabackend/goakerberosprovider.c:603
 msgid "Example principal: user@EXAMPLE.COM"
-msgstr "Osnovni primer: uporabnik@domena.si"
+msgstr "Primer poveril: uporabnik@domena.si"
 
 #: src/goabackend/goakerberosprovider.c:606
 #: src/goabackend/goamsgraphprovider.c:394
@@ -624,20 +629,20 @@ msgstr "Shranjevanje poveril v zbirko ključev je spodletelo"
 msgid "Not supported"
 msgstr "Možnost ni podprta"
 
-#: src/goabackend/goautils.c:675
+#: src/goabackend/goautils.c:676
 msgid "Not found"
 msgstr "Predmeta ni mogoče najti"
 
-#: src/goabackend/goautils.c:686
+#: src/goabackend/goautils.c:687
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Koda: %u – Nepričakovan odziv strežnika"
 
-#: src/goabackend/goautils.c:703
+#: src/goabackend/goautils.c:704
 msgid "The signing certificate authority is not known."
 msgstr "Podpisnik potrdil ni znan."
 
-#: src/goabackend/goautils.c:707
+#: src/goabackend/goautils.c:708
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
@@ -645,28 +650,28 @@ msgstr ""
 "Potrdilo ni skladno s pričakovano istovetnostjo strani, s katere je "
 "pridobljen."
 
-#: src/goabackend/goautils.c:712
+#: src/goabackend/goautils.c:713
 msgid "The certificate’s activation time is still in the future."
 msgstr "Čas omogočenosti potrdila je v prihodnosti."
 
-#: src/goabackend/goautils.c:716
+#: src/goabackend/goautils.c:717
 msgid "The certificate has expired."
 msgstr "Potrdilo je poteklo."
 
-#: src/goabackend/goautils.c:720
+#: src/goabackend/goautils.c:721
 msgid "The certificate has been revoked."
 msgstr "Potrdilo je bilo preklicano."
 
-#: src/goabackend/goautils.c:724
+#: src/goabackend/goautils.c:725
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Algoritem potrdila ni dovolj varen."
 
-#: src/goabackend/goautils.c:730
+#: src/goabackend/goautils.c:731
 msgid "Invalid certificate."
 msgstr "Neveljavno potrdilo."
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:765
+#: src/goabackend/goautils.c:766
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "V poverilih %s za istovetnost »%s« ni mogoče najti gesla"
