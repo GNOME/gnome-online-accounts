@@ -335,7 +335,7 @@ add_account_action_cb (GoaProviderDialog *dialog,
   provider_type = goa_provider_get_provider_type (provider);
   if (!parse_principal (username, &data->identity))
     {
-      error = g_error_new (G_IO_ERROR, G_IO_ERROR_FAILED, _("Faild to get principal from user name “%s”"), username);
+      error = g_error_new (G_IO_ERROR, G_IO_ERROR_FAILED, _("Failed to get principal from user name “%s”"), username);
       goa_provider_task_return_error (task, g_steal_pointer (&error));
       return;
     }
