@@ -379,7 +379,7 @@ create_account_details_ui (GoaProvider *provider,
 
       goa_provider_dialog_add_page (dialog,
                                     NULL, // provider name
-                                    _("Connect to a Microsoft 365 provider to access files"));
+                                    _("Connect to Microsoft 365 to access files stored in OneDrive"));
 
       group = goa_provider_dialog_add_group (dialog, _("Authorization Details"));
       /* Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology */
