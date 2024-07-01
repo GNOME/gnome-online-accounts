@@ -1,4 +1,3 @@
-goabackend_inc = include_directories('.')
 libgoa_backend_headers_built = []
 
 libgoa_backend_sources = files(
@@ -113,10 +112,12 @@ libgoa_backend = shared_library(
 
 libgoa_backend_dep = declare_dependency(
   sources: libgoa_backend_headers_built,
-  include_directories: goabackend_inc,
+  include_directories: src_inc,
   dependencies: [gtk_dep, libgoa_dep],
   link_with: libgoa_backend
 )
+
+meson.override_dependency(goa_backend_api_name, libgoa_backend_dep)
 
 pkg.generate(
   libraries: libgoa_backend,
