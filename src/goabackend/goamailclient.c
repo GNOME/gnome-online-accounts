@@ -586,9 +586,6 @@ mail_client_parse_autoconfig_xml (GBytes      *xml_bytes,
   g_autoptr(RestXmlParser) parser = NULL;
   g_autoptr(RestXmlNode) root_node = NULL;
   RestXmlNode *email_node = NULL;
-  RestXmlNode *calendar_node = NULL;
-  RestXmlNode *contacts_node = NULL;
-  RestXmlNode *files_node = NULL;
   const char *xml_data = NULL;
   gsize xml_len = 0;
 
