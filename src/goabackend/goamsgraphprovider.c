@@ -111,7 +111,7 @@ get_redirect_uri (GoaOAuth2Provider *oauth2_provider)
 static const gchar *
 get_scope (GoaOAuth2Provider *oauth2_provider)
 {
-  return "offline_access files.readwrite files.readwrite.all sites.read.all sites.readwrite.all user.read mail.readwrite contacts.readwrite";
+  return "offline_access files.readwrite files.readwrite.all sites.read.all sites.readwrite.all user.read mail.readwrite contacts.readwrite calendars.readwrite";
 }
 
 static const gchar *
