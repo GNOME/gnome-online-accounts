@@ -81,6 +81,9 @@ static GoaProviderFeatures
 get_provider_features (GoaProvider *provider)
 {
   return GOA_PROVIDER_FEATURE_BRANDED |
+         GOA_PROVIDER_FEATURE_MAIL |
+         GOA_PROVIDER_FEATURE_CALENDAR |
+         GOA_PROVIDER_FEATURE_CONTACTS |
          GOA_PROVIDER_FEATURE_FILES;
 }
 
