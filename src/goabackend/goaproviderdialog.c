@@ -181,6 +181,12 @@ goa_provider_dialog_dispose (GObject *object)
 {
   GoaProviderDialog *self = GOA_PROVIDER_DIALOG (object);
 
+  if (self->task_cancellable != NULL && self->task_cancellable_id != 0)
+    {
+      g_cancellable_disconnect (self->task_cancellable, self->task_cancellable_id);
+      self->task_cancellable_id = 0;
+    }
+
   g_cancellable_cancel (self->cancellable);
 
   G_OBJECT_CLASS (goa_provider_dialog_parent_class)->dispose (object);
@@ -1156,7 +1162,10 @@ goa_provider_task_run_in_dialog_cb (GoaProviderDialog *self,
 
   g_signal_handlers_disconnect_by_func (self, goa_provider_task_run_in_dialog_cb, task);
 
-  if (self->task_cancellable != NULL && self->task_cancellable_id != 0)
+  /* If the cancellable was triggered we would deadlock disconnecting here,
+   * so we'll do it later in dispose().
+   */
+  if (!g_cancellable_is_cancelled (self->task_cancellable) && self->task_cancellable_id != 0)
     {
       g_cancellable_disconnect (self->task_cancellable, self->task_cancellable_id);
       self->task_cancellable_id = 0;
