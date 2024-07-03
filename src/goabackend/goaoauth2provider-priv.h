@@ -90,6 +90,15 @@ struct _GoaOAuth2ProviderClass
                                                 GError                      **error);
 };
 
+void    goa_oauth2_provider_authorize_uri        (GoaOAuth2Provider            *provider,
+                                                  const char                   *request_uri,
+                                                  GCancellable                 *cancellable,
+                                                  GAsyncReadyCallback           callback,
+                                                  gpointer                      user_data);
+char   *goa_oauth2_provider_authorize_uri_finish (GoaOAuth2Provider            *provider,
+                                                  GAsyncResult                 *result,
+                                                  GError                      **error);
+
 G_END_DECLS
 
 #endif /* __GOA_OAUTH2_PROVIDER_PRIV_H__ */
