@@ -411,11 +411,14 @@ add_account_parent_cb (GoaProvider  *provider,
   GoaObject *object = NULL;
   GError *error = NULL;
 
+  /* The dialog will already be in the %GOA_DIALOG_DONE state, so the task
+   * is completed manually.
+   */
   object = goa_provider_add_account_finish (provider, result, &error);
   if (object != NULL)
-    goa_provider_task_return_account (task, GOA_OBJECT (object));
+    g_task_return_pointer (task, g_steal_pointer (&object), g_object_unref);
   else
-    goa_provider_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
 }
 
 static void

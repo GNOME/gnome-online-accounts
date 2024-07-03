@@ -1224,7 +1224,6 @@ goa_oauth2_provider_add_account (GoaProvider         *provider,
   g_autoptr(GTask) task = NULL;
 
   data = g_new0 (AccountData, 1);
-  data->dialog = goa_provider_dialog_new (provider, client, parent);
   data->client = g_object_ref (client);
   data->session_callback = G_CALLBACK (add_account_secret_cb);
 
@@ -1233,13 +1232,29 @@ goa_oauth2_provider_add_account (GoaProvider         *provider,
   g_task_set_source_tag (task, goa_oauth2_provider_add_account);
   g_task_set_task_data (task, data, account_data_free);
 
-  create_account_details_ui (provider, data, TRUE);
-  g_signal_connect_object (data->dialog,
-                           "notify::state",
-                           G_CALLBACK (oauth2_secret_run_task),
-                           task,
-                           0 /* G_CONNECT_DEFAULT */);
-  goa_provider_task_run_in_dialog (task, data->dialog);
+  /* If the parent is a provider dialog, then a derived class is chaining up
+   * and has handled the setup UI.
+   */
+  if (GOA_IS_PROVIDER_DIALOG (parent))
+    {
+      data->dialog = GOA_PROVIDER_DIALOG (parent);
+      g_object_set_data_full (G_OBJECT (task),
+                              "goa-provider-dialog",
+                              g_object_ref (data->dialog),
+                              g_object_unref);
+      oauth2_secret_run_task (data->dialog, NULL, task);
+    }
+  else
+    {
+      data->dialog = goa_provider_dialog_new (provider, client, parent);
+      create_account_details_ui (provider, data, TRUE);
+      g_signal_connect_object (data->dialog,
+                               "notify::state",
+                               G_CALLBACK (oauth2_secret_run_task),
+                               task,
+                               0 /* G_CONNECT_DEFAULT */);
+      goa_provider_task_run_in_dialog (task, data->dialog);
+    }
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -1333,7 +1348,6 @@ goa_oauth2_provider_refresh_account (GoaProvider         *provider,
   g_assert (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   data = g_new0 (AccountData, 1);
-  data->dialog = goa_provider_dialog_new (provider, client, parent);
   data->client = g_object_ref (client);
   data->object = g_object_ref (object);
   data->session_callback = G_CALLBACK (refresh_account_secret_cb);
@@ -1343,13 +1357,29 @@ goa_oauth2_provider_refresh_account (GoaProvider         *provider,
   g_task_set_source_tag (task, goa_oauth2_provider_refresh_account);
   g_task_set_task_data (task, data, account_data_free);
 
-  create_account_details_ui (provider, data, FALSE);
-  g_signal_connect_object (data->dialog,
-                           "notify::state",
-                           G_CALLBACK (oauth2_secret_run_task),
-                           task,
-                           0 /* G_CONNECT_DEFAULT */);
-  goa_provider_task_run_in_dialog (task, data->dialog);
+  /* If the parent is a provider dialog, then a derived class is chaining up
+   * and has handled the setup UI.
+   */
+  if (GOA_IS_PROVIDER_DIALOG (parent))
+    {
+      data->dialog = GOA_PROVIDER_DIALOG (parent);
+      g_object_set_data_full (G_OBJECT (task),
+                              "goa-provider-dialog",
+                              g_object_ref (data->dialog),
+                              g_object_unref);
+      oauth2_secret_run_task (data->dialog, NULL, task);
+    }
+  else
+    {
+      data->dialog = goa_provider_dialog_new (provider, client, parent);
+      create_account_details_ui (provider, data, TRUE);
+      g_signal_connect_object (data->dialog,
+                               "notify::state",
+                               G_CALLBACK (oauth2_secret_run_task),
+                               task,
+                               0 /* G_CONNECT_DEFAULT */);
+      goa_provider_task_run_in_dialog (task, data->dialog);
+    }
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
