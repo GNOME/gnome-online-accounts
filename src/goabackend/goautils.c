@@ -663,6 +663,15 @@ goa_utils_set_error_soup (GError **err, SoupMessage *msg)
   gint error_code = GOA_ERROR_FAILED; /* TODO: more specific */
   guint status_code;
 
+  if (err && *err)
+    {
+      g_debug ("%s(): amending error (%s:%u:%s)",
+               G_STRFUNC,
+               g_quark_to_string ((*err)->domain),
+               (*err)->code,
+               (*err)->message);
+    }
+
   status_code = soup_message_get_status (msg);
   switch (status_code)
     {
@@ -699,6 +708,15 @@ void
 goa_utils_set_error_ssl (GError **err, GTlsCertificateFlags flags)
 {
   const gchar *error_msg;
+
+  if (err && *err)
+    {
+      g_debug ("%s(): amending error (%s:%u:%s)",
+               G_STRFUNC,
+               g_quark_to_string ((*err)->domain),
+               (*err)->code,
+               (*err)->message);
+    }
 
   switch (flags)
     {
