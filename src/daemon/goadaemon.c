@@ -53,6 +53,11 @@ struct _GoaDaemon
 
   guint config_timeout_id;
   guint credentials_timeout_id;
+
+  gboolean notification_active;
+  uint32_t notification_id;
+  unsigned int notification_signal_id;
+  gboolean accounts_need_attention;
 };
 
 enum
@@ -94,6 +99,8 @@ static void ensure_credentials_queue_check (GoaDaemon *self);
 
 static void goa_daemon_check_credentials (GoaDaemon *self);
 static void goa_daemon_reload_configuration (GoaDaemon *self);
+static void goa_daemon_send_notification (GoaDaemon *self);
+static void goa_daemon_withdraw_notification (GoaDaemon *self);
 
 G_DEFINE_TYPE (GoaDaemon, goa_daemon, G_TYPE_OBJECT);
 
@@ -115,6 +122,12 @@ static void
 goa_daemon_finalize (GObject *object)
 {
   GoaDaemon *self = GOA_DAEMON (object);
+
+  if (self->notification_signal_id != 0)
+    {
+      g_dbus_connection_signal_unsubscribe (self->connection, self->notification_signal_id);
+      goa_daemon_withdraw_notification (self);
+    }
 
   if (self->config_timeout_id != 0)
     {
@@ -1487,6 +1500,156 @@ on_account_handle_remove (GoaAccount            *account,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static void
+weak_ref_free (GWeakRef *weak_ref)
+{
+  g_assert (weak_ref != NULL);
+
+  g_weak_ref_clear (weak_ref);
+  g_free (weak_ref);
+}
+
+static void
+on_notification_signal (GDBusConnection *connection,
+                        const char      *sender_name,
+                        const char      *object_path,
+                        const char      *interface_name,
+                        const char      *signal_name,
+                        GVariant        *parameters,
+                        gpointer         user_data)
+{
+  g_autoptr(GoaDaemon) self = g_weak_ref_get ((GWeakRef *) user_data);
+
+  if (self == NULL)
+    return;
+
+  if (g_strcmp0 (signal_name, "ActionInvoked") == 0)
+    {
+      uint32_t id;
+
+      g_variant_get (parameters, "(u&s)", &id, NULL);
+      if (self->notification_id == id)
+        {
+          const char *parameters = "('launch-panel', [<('online-accounts', @av [])>], @a{sv} {})";
+
+          g_dbus_connection_call (self->connection,
+                                  "org.gnome.Settings",
+                                  "/org/gnome/Settings",
+                                  "org.freedesktop.Application",
+                                  "ActivateAction",
+                                  g_variant_new_parsed (parameters),
+                                  NULL,
+                                  G_DBUS_CALL_FLAGS_NONE,
+                                  -1,
+                                  NULL,
+                                  NULL,
+                                  NULL);
+        }
+    }
+  else if (g_strcmp0 (signal_name, "NotificationClosed") == 0)
+    {
+      uint32_t id;
+
+      g_variant_get (parameters, "(uu)", &id, NULL);
+      if (self->notification_id == id)
+        {
+          self->notification_active = FALSE;
+          self->notification_id = 0;
+        }
+    }
+}
+
+static void
+goa_daemon_send_notification_cb (GDBusConnection *connection,
+                                 GAsyncResult    *result,
+                                 gpointer         user_data)
+{
+  g_autoptr(GoaDaemon) self = GOA_DAEMON (g_steal_pointer (&user_data));
+  g_autoptr(GVariant) reply = NULL;
+  g_autoptr(GError) error = NULL;
+
+  reply = g_dbus_connection_call_finish (connection, result, &error);
+  if (reply == NULL)
+    {
+      g_warning ("Failed to notify of required account action: %s", error->message);
+      self->notification_active = FALSE;
+      return;
+    }
+
+  g_variant_get (reply, "(u)", &self->notification_id);
+}
+
+static void
+goa_daemon_send_notification (GoaDaemon *self)
+{
+  if (self->notification_signal_id == 0)
+    {
+      GWeakRef *weak_ref;
+
+      weak_ref = g_new0 (GWeakRef, 1);
+      g_weak_ref_init (weak_ref, self);
+
+      self->notification_signal_id =
+        g_dbus_connection_signal_subscribe (self->connection,
+                                            "org.freedesktop.Notifications",
+                                            "org.freedesktop.Notifications",
+                                            NULL, /* NotificationClosed/ActionInvoked */
+                                            "/org/freedesktop/Notifications",
+                                            NULL,
+                                            G_DBUS_SIGNAL_FLAGS_NONE,
+                                            on_notification_signal,
+                                            g_steal_pointer (&weak_ref),
+                                            (GDestroyNotify) weak_ref_free);
+    }
+
+  if (!self->notification_active)
+    {
+      self->notification_active = TRUE;
+      g_dbus_connection_call (self->connection,
+                              "org.freedesktop.Notifications",
+                              "/org/freedesktop/Notifications",
+                              "org.freedesktop.Notifications",
+                              "Notify",
+                              g_variant_new ("(susss@as@a{sv}i)",
+                                             _("Online Accounts"),
+                                             self->notification_id,
+                                             "dialog-warning",
+                                             _("Account Action Required"),
+                                             _("One or more online accounts failed to authenticate"),
+                                             g_variant_new_parsed ("@as ['default', '']"),
+                                             g_variant_new_parsed ("@a{sv} {}"),
+                                             -1),
+                              NULL, /* reply type */
+                              G_DBUS_CALL_FLAGS_NONE,
+                              -1,
+                              NULL, /* cancellable */
+                              (GAsyncReadyCallback) goa_daemon_send_notification_cb,
+                              g_object_ref (self));
+    }
+}
+
+static void
+goa_daemon_withdraw_notification (GoaDaemon *self)
+{
+  if (self->notification_id > 0)
+    {
+      g_dbus_connection_call (self->connection,
+                              "org.freedesktop.Notifications",
+                              "/org/freedesktop/Notifications",
+                              "org.freedesktop.Notifications",
+                              "CloseNotification",
+                              g_variant_new ("(u)", self->notification_id),
+                              NULL,
+                              G_DBUS_CALL_FLAGS_NONE,
+                              -1,
+                              NULL,
+                              NULL,
+                              NULL);
+    }
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 static gboolean
 is_authorization_error (GError *error)
 {
@@ -1569,6 +1732,8 @@ ensure_credentials_queue_collector (GObject *source_object, GAsyncResult *res, g
                          g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)),
                          error->message, g_quark_to_string (error->domain), error->code);
             }
+
+          self->accounts_need_attention = TRUE;
         }
 
       ensure_credentials_queue_complete (data->invocations, account, 0, error);
@@ -1622,7 +1787,14 @@ ensure_credentials_queue_check (GoaDaemon *self)
     goto out;
 
   if (self->ensure_credentials_queue->length == 0)
-    goto out;
+    {
+      if (self->accounts_need_attention)
+        goa_daemon_send_notification (self);
+      else
+        goa_daemon_withdraw_notification (self);
+
+      goto out;
+    }
 
   g_queue_sort (self->ensure_credentials_queue, ensure_credentials_queue_sort, NULL);
 
@@ -1766,6 +1938,7 @@ goa_daemon_check_credentials (GoaDaemon *self)
   GList *l;
   GList *objects;
 
+  self->accounts_need_attention = FALSE;
   objects = g_dbus_object_manager_get_objects (G_DBUS_OBJECT_MANAGER (self->object_manager));
   for (l = objects; l != NULL; l = l->next)
     {
