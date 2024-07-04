@@ -676,16 +676,18 @@ goa_utils_set_error_soup (GError **err, SoupMessage *msg)
       error_msg = g_strdup (_("Not found"));
       break;
 
+    case SOUP_STATUS_UNAUTHORIZED:
+    case SOUP_STATUS_FORBIDDEN:
+    case SOUP_STATUS_PROXY_AUTHENTICATION_REQUIRED:
+    case SOUP_STATUS_PRECONDITION_FAILED:
+      {
+        error_msg = g_strdup (_("Authentication failed"));
+        error_code = GOA_ERROR_NOT_AUTHORIZED;
+      }
+      break;
+
     default:
-      if (SOUP_STATUS_IS_CLIENT_ERROR (status_code))
-        {
-          error_msg = g_strdup (_("Authentication failed"));
-          error_code = GOA_ERROR_NOT_AUTHORIZED;
-        }
-      else
-        {
-          error_msg = g_strdup_printf (_("Code: %u — Unexpected response from server"), status_code);
-        }
+      error_msg = g_strdup_printf (_("Code: %u — Unexpected response from server"), status_code);
       break;
     }
 
