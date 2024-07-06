@@ -309,7 +309,7 @@ ensure_credentials_sync (GoaProvider         *provider,
                                    cancellable,
                                    error))
     {
-      if (error != NULL)
+      if (error != NULL && g_error_matches (*error, GOA_ERROR, GOA_ERROR_NOT_AUTHORIZED))
         {
           g_prefix_error (error,
                           /* Translators: the first %s is a field name. The
@@ -322,8 +322,6 @@ ensure_credentials_sync (GoaProvider         *provider,
                           imap_username,
                           g_quark_to_string ((*error)->domain),
                           (*error)->code);
-          (*error)->domain = GOA_ERROR;
-          (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
         }
       goto out;
     }
@@ -360,7 +358,7 @@ ensure_credentials_sync (GoaProvider         *provider,
                                    cancellable,
                                    error))
     {
-      if (error != NULL)
+      if (error != NULL && g_error_matches (*error, GOA_ERROR, GOA_ERROR_NOT_AUTHORIZED))
         {
           g_prefix_error (error,
                           /* Translators: the first %s is a field name. The
@@ -373,8 +371,6 @@ ensure_credentials_sync (GoaProvider         *provider,
                           smtp_username,
                           g_quark_to_string ((*error)->domain),
                           (*error)->code);
-          (*error)->domain = GOA_ERROR;
-          (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
         }
       goto out;
     }

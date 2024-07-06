@@ -663,6 +663,15 @@ goa_utils_set_error_soup (GError **err, SoupMessage *msg)
   gint error_code = GOA_ERROR_FAILED; /* TODO: more specific */
   guint status_code;
 
+  if (err && *err)
+    {
+      g_debug ("%s(): amending error (%s:%u:%s)",
+               G_STRFUNC,
+               g_quark_to_string ((*err)->domain),
+               (*err)->code,
+               (*err)->message);
+    }
+
   status_code = soup_message_get_status (msg);
   switch (status_code)
     {
@@ -676,16 +685,18 @@ goa_utils_set_error_soup (GError **err, SoupMessage *msg)
       error_msg = g_strdup (_("Not found"));
       break;
 
+    case SOUP_STATUS_UNAUTHORIZED:
+    case SOUP_STATUS_FORBIDDEN:
+    case SOUP_STATUS_PROXY_AUTHENTICATION_REQUIRED:
+    case SOUP_STATUS_PRECONDITION_FAILED:
+      {
+        error_msg = g_strdup (_("Authentication failed"));
+        error_code = GOA_ERROR_NOT_AUTHORIZED;
+      }
+      break;
+
     default:
-      if (SOUP_STATUS_IS_CLIENT_ERROR (status_code))
-        {
-          error_msg = g_strdup (_("Authentication failed"));
-          error_code = GOA_ERROR_NOT_AUTHORIZED;
-        }
-      else
-        {
-          error_msg = g_strdup_printf (_("Code: %u — Unexpected response from server"), status_code);
-        }
+      error_msg = g_strdup_printf (_("Code: %u — Unexpected response from server"), status_code);
       break;
     }
 
@@ -697,6 +708,15 @@ void
 goa_utils_set_error_ssl (GError **err, GTlsCertificateFlags flags)
 {
   const gchar *error_msg;
+
+  if (err && *err)
+    {
+      g_debug ("%s(): amending error (%s:%u:%s)",
+               G_STRFUNC,
+               g_quark_to_string ((*err)->domain),
+               (*err)->code,
+               (*err)->message);
+    }
 
   switch (flags)
     {

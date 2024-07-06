@@ -1700,10 +1700,9 @@ is_authorization_error (GError *error)
       if (SOUP_STATUS_IS_CLIENT_ERROR (error->code))
         ret = TRUE;
     }
-  else if (error->domain == GOA_ERROR)
+  else if (g_error_matches (error, GOA_ERROR, GOA_ERROR_NOT_AUTHORIZED))
     {
-      if (error->code == GOA_ERROR_NOT_AUTHORIZED)
-        ret = TRUE;
+      ret = TRUE;
     }
   return ret;
 }
