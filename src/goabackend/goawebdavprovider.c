@@ -394,16 +394,9 @@ ensure_credentials_sync (GoaProvider         *provider,
         }
     }
 
-  if (!ret && error != NULL)
+  if (!ret)
     {
-      if (*error == NULL)
-        {
-          g_set_error_literal (error,
-                               GOA_ERROR,
-                               GOA_ERROR_FAILED,
-                               _("Unknown error"));
-        }
-      else if (g_error_matches (*error, GOA_ERROR, GOA_ERROR_NOT_AUTHORIZED))
+      if (error != NULL && g_error_matches (*error, GOA_ERROR, GOA_ERROR_NOT_AUTHORIZED))
         {
           g_prefix_error (error,
                           /* Translators: the first %s is the username
