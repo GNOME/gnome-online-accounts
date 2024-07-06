@@ -403,7 +403,7 @@ ensure_credentials_sync (GoaProvider         *provider,
                                GOA_ERROR_FAILED,
                                _("Unknown error"));
         }
-      else
+      else if (g_error_matches (*error, GOA_ERROR, GOA_ERROR_NOT_AUTHORIZED))
         {
           g_prefix_error (error,
                           /* Translators: the first %s is the username
@@ -414,8 +414,6 @@ ensure_credentials_sync (GoaProvider         *provider,
                           username,
                           g_quark_to_string ((*error)->domain),
                           (*error)->code);
-          (*error)->domain = GOA_ERROR;
-          (*error)->code = GOA_ERROR_NOT_AUTHORIZED;
         }
 
       return ret;
