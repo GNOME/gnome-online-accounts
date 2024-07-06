@@ -57,7 +57,7 @@ struct _GoaDaemon
   gboolean notification_active;
   uint32_t notification_id;
   unsigned int notification_signal_id;
-  gboolean accounts_need_attention;
+  GPtrArray *accounts_needing_attention;
 };
 
 enum
@@ -101,6 +101,7 @@ static void goa_daemon_check_credentials (GoaDaemon *self);
 static void goa_daemon_reload_configuration (GoaDaemon *self);
 static void goa_daemon_send_notification (GoaDaemon *self);
 static void goa_daemon_withdraw_notification (GoaDaemon *self);
+static void goa_daemon_update_notification (GoaDaemon *self);
 
 G_DEFINE_TYPE (GoaDaemon, goa_daemon, G_TYPE_OBJECT);
 
@@ -128,6 +129,7 @@ goa_daemon_finalize (GObject *object)
       g_dbus_connection_signal_unsubscribe (self->connection, self->notification_signal_id);
       goa_daemon_withdraw_notification (self);
     }
+  g_clear_pointer (&self->accounts_needing_attention, g_ptr_array_unref);
 
   if (self->config_timeout_id != 0)
     {
@@ -316,6 +318,9 @@ goa_daemon_init (GoaDaemon *self)
                            G_CALLBACK (on_network_monitor_network_changed),
                            self,
                            G_CONNECT_SWAPPED);
+
+  /* Notifications */
+  self->accounts_needing_attention = g_ptr_array_new_with_free_func (g_object_unref);
 
   self->ensure_credentials_queue = g_queue_new ();
   queue_check_credentials (self);
@@ -1388,6 +1393,9 @@ remove_account_cb (GObject *source_object, GAsyncResult *res, gpointer user_data
   invocation = G_DBUS_METHOD_INVOCATION (data->invocations->data);
   goa_account_complete_remove (account, invocation);
 
+  g_ptr_array_remove (self->accounts_needing_attention, account);
+  goa_daemon_update_notification (self);
+
   g_object_unref (task);
 }
 
@@ -1648,6 +1656,15 @@ goa_daemon_withdraw_notification (GoaDaemon *self)
     }
 }
 
+static void
+goa_daemon_update_notification (GoaDaemon *self)
+{
+  if (self->accounts_needing_attention->len > 0)
+    goa_daemon_send_notification (self);
+  else
+    goa_daemon_withdraw_notification (self);
+}
+
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean
@@ -1731,9 +1748,8 @@ ensure_credentials_queue_collector (GObject *source_object, GAsyncResult *res, g
               g_message ("%s: Setting AttentionNeeded to TRUE because EnsureCredentials() failed with: %s (%s, %d)",
                          g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)),
                          error->message, g_quark_to_string (error->domain), error->code);
+              g_ptr_array_add (self->accounts_needing_attention, g_object_ref (account));
             }
-
-          self->accounts_need_attention = TRUE;
         }
 
       ensure_credentials_queue_complete (data->invocations, account, 0, error);
@@ -1748,6 +1764,7 @@ ensure_credentials_queue_collector (GObject *source_object, GAsyncResult *res, g
           g_dbus_interface_skeleton_flush (G_DBUS_INTERFACE_SKELETON (account));
           g_message ("%s: Setting AttentionNeeded to FALSE because EnsureCredentials() succeded\n",
                      g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)));
+          g_ptr_array_remove (self->accounts_needing_attention, account);
         }
 
       ensure_credentials_queue_complete (data->invocations, account, expires_in, NULL);
@@ -1788,11 +1805,7 @@ ensure_credentials_queue_check (GoaDaemon *self)
 
   if (self->ensure_credentials_queue->length == 0)
     {
-      if (self->accounts_need_attention)
-        goa_daemon_send_notification (self);
-      else
-        goa_daemon_withdraw_notification (self);
-
+      goa_daemon_update_notification (self);
       goto out;
     }
 
@@ -1938,7 +1951,6 @@ goa_daemon_check_credentials (GoaDaemon *self)
   GList *l;
   GList *objects;
 
-  self->accounts_need_attention = FALSE;
   objects = g_dbus_object_manager_get_objects (G_DBUS_OBJECT_MANAGER (self->object_manager));
   for (l = objects; l != NULL; l = l->next)
     {
