@@ -54,10 +54,9 @@ struct _GoaDaemon
   guint config_timeout_id;
   guint credentials_timeout_id;
 
-  gboolean notification_active;
   uint32_t notification_id;
   unsigned int notification_signal_id;
-  gboolean accounts_need_attention;
+  GPtrArray *accounts_needing_attention;
 };
 
 enum
@@ -101,6 +100,7 @@ static void goa_daemon_check_credentials (GoaDaemon *self);
 static void goa_daemon_reload_configuration (GoaDaemon *self);
 static void goa_daemon_send_notification (GoaDaemon *self);
 static void goa_daemon_withdraw_notification (GoaDaemon *self);
+static void goa_daemon_update_notification (GoaDaemon *self);
 
 G_DEFINE_TYPE (GoaDaemon, goa_daemon, G_TYPE_OBJECT);
 
@@ -128,6 +128,7 @@ goa_daemon_finalize (GObject *object)
       g_dbus_connection_signal_unsubscribe (self->connection, self->notification_signal_id);
       goa_daemon_withdraw_notification (self);
     }
+  g_clear_pointer (&self->accounts_needing_attention, g_ptr_array_unref);
 
   if (self->config_timeout_id != 0)
     {
@@ -316,6 +317,9 @@ goa_daemon_init (GoaDaemon *self)
                            G_CALLBACK (on_network_monitor_network_changed),
                            self,
                            G_CONNECT_SWAPPED);
+
+  /* Notifications */
+  self->accounts_needing_attention = g_ptr_array_new_with_free_func (g_object_unref);
 
   self->ensure_credentials_queue = g_queue_new ();
   queue_check_credentials (self);
@@ -1388,6 +1392,9 @@ remove_account_cb (GObject *source_object, GAsyncResult *res, gpointer user_data
   invocation = G_DBUS_METHOD_INVOCATION (data->invocations->data);
   goa_account_complete_remove (account, invocation);
 
+  g_ptr_array_remove (self->accounts_needing_attention, account);
+  goa_daemon_update_notification (self);
+
   g_object_unref (task);
 }
 
@@ -1500,6 +1507,8 @@ on_account_handle_remove (GoaAccount            *account,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+#define NOTIFICATION_ACTION_FMT "('launch-panel', [<('online-accounts', @av [%s])>], @a{sv} {})"
+
 static void
 weak_ref_free (GWeakRef *weak_ref)
 {
@@ -1530,14 +1539,27 @@ on_notification_signal (GDBusConnection *connection,
       g_variant_get (parameters, "(u&s)", &id, NULL);
       if (self->notification_id == id)
         {
-          const char *parameters = "('launch-panel', [<('online-accounts', @av [])>], @a{sv} {})";
+          g_autofree char *target = NULL;
+
+          if (self->accounts_needing_attention->len == 1)
+            {
+              GoaAccount *account = g_ptr_array_index (self->accounts_needing_attention, 0);
+              g_autofree char *account_id = NULL;
+
+              account_id = g_strdup_printf ("<'%s'>", goa_account_get_id (account));
+              target = g_strdup_printf (NOTIFICATION_ACTION_FMT, account_id);
+            }
+          else
+            {
+              target = g_strdup_printf (NOTIFICATION_ACTION_FMT, "");
+            }
 
           g_dbus_connection_call (self->connection,
                                   "org.gnome.Settings",
                                   "/org/gnome/Settings",
                                   "org.freedesktop.Application",
                                   "ActivateAction",
-                                  g_variant_new_parsed (parameters),
+                                  g_variant_new_parsed (target),
                                   NULL,
                                   G_DBUS_CALL_FLAGS_NONE,
                                   -1,
@@ -1552,10 +1574,7 @@ on_notification_signal (GDBusConnection *connection,
 
       g_variant_get (parameters, "(uu)", &id, NULL);
       if (self->notification_id == id)
-        {
-          self->notification_active = FALSE;
-          self->notification_id = 0;
-        }
+        self->notification_id = 0;
     }
 }
 
@@ -1572,7 +1591,6 @@ goa_daemon_send_notification_cb (GDBusConnection *connection,
   if (reply == NULL)
     {
       g_warning ("Failed to notify of required account action: %s", error->message);
-      self->notification_active = FALSE;
       return;
     }
 
@@ -1582,6 +1600,8 @@ goa_daemon_send_notification_cb (GDBusConnection *connection,
 static void
 goa_daemon_send_notification (GoaDaemon *self)
 {
+  g_autofree char *message = NULL;
+
   if (self->notification_signal_id == 0)
     {
       GWeakRef *weak_ref;
@@ -1602,30 +1622,38 @@ goa_daemon_send_notification (GoaDaemon *self)
                                             (GDestroyNotify) weak_ref_free);
     }
 
-  if (!self->notification_active)
+  if (self->accounts_needing_attention->len == 1)
     {
-      self->notification_active = TRUE;
-      g_dbus_connection_call (self->connection,
-                              "org.freedesktop.Notifications",
-                              "/org/freedesktop/Notifications",
-                              "org.freedesktop.Notifications",
-                              "Notify",
-                              g_variant_new ("(susss@as@a{sv}i)",
-                                             _("Online Accounts"),
-                                             self->notification_id,
-                                             "dialog-warning",
-                                             _("Account Action Required"),
-                                             _("One or more online accounts failed to authenticate"),
-                                             g_variant_new_parsed ("@as ['default', '']"),
-                                             g_variant_new_parsed ("@a{sv} {}"),
-                                             -1),
-                              NULL, /* reply type */
-                              G_DBUS_CALL_FLAGS_NONE,
-                              -1,
-                              NULL, /* cancellable */
-                              (GAsyncReadyCallback) goa_daemon_send_notification_cb,
-                              g_object_ref (self));
+      GoaAccount *account = g_ptr_array_index (self->accounts_needing_attention, 0);
+
+      message = g_strdup_printf (_("Failed to sign in to “%s”"),
+                                 goa_account_get_presentation_identity (account));
     }
+  else
+    {
+      message = g_strdup (_("Failed to sign in to multiple accounts"));
+    }
+
+  g_dbus_connection_call (self->connection,
+                          "org.freedesktop.Notifications",
+                          "/org/freedesktop/Notifications",
+                          "org.freedesktop.Notifications",
+                          "Notify",
+                          g_variant_new ("(susss@as@a{sv}i)",
+                                         _("Online Accounts"),
+                                         self->notification_id,
+                                         "dialog-warning",
+                                         _("Account Action Required"),
+                                         message,
+                                         g_variant_new_parsed ("@as ['default', '']"),
+                                         g_variant_new_parsed ("@a{sv} {}"),
+                                         -1),
+                          NULL, /* reply type */
+                          G_DBUS_CALL_FLAGS_NONE,
+                          -1,
+                          NULL, /* cancellable */
+                          (GAsyncReadyCallback) goa_daemon_send_notification_cb,
+                          g_object_ref (self));
 }
 
 static void
@@ -1646,6 +1674,15 @@ goa_daemon_withdraw_notification (GoaDaemon *self)
                               NULL,
                               NULL);
     }
+}
+
+static void
+goa_daemon_update_notification (GoaDaemon *self)
+{
+  if (self->accounts_needing_attention->len > 0)
+    goa_daemon_send_notification (self);
+  else
+    goa_daemon_withdraw_notification (self);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -1731,9 +1768,8 @@ ensure_credentials_queue_collector (GObject *source_object, GAsyncResult *res, g
               g_message ("%s: Setting AttentionNeeded to TRUE because EnsureCredentials() failed with: %s (%s, %d)",
                          g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)),
                          error->message, g_quark_to_string (error->domain), error->code);
+              g_ptr_array_add (self->accounts_needing_attention, g_object_ref (account));
             }
-
-          self->accounts_need_attention = TRUE;
         }
 
       ensure_credentials_queue_complete (data->invocations, account, 0, error);
@@ -1748,6 +1784,7 @@ ensure_credentials_queue_collector (GObject *source_object, GAsyncResult *res, g
           g_dbus_interface_skeleton_flush (G_DBUS_INTERFACE_SKELETON (account));
           g_message ("%s: Setting AttentionNeeded to FALSE because EnsureCredentials() succeded\n",
                      g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)));
+          g_ptr_array_remove (self->accounts_needing_attention, account);
         }
 
       ensure_credentials_queue_complete (data->invocations, account, expires_in, NULL);
@@ -1788,11 +1825,7 @@ ensure_credentials_queue_check (GoaDaemon *self)
 
   if (self->ensure_credentials_queue->length == 0)
     {
-      if (self->accounts_need_attention)
-        goa_daemon_send_notification (self);
-      else
-        goa_daemon_withdraw_notification (self);
-
+      goa_daemon_update_notification (self);
       goto out;
     }
 
@@ -1938,7 +1971,6 @@ goa_daemon_check_credentials (GoaDaemon *self)
   GList *l;
   GList *objects;
 
-  self->accounts_need_attention = FALSE;
   objects = g_dbus_object_manager_get_objects (G_DBUS_OBJECT_MANAGER (self->object_manager));
   for (l = objects; l != NULL; l = l->next)
     {
