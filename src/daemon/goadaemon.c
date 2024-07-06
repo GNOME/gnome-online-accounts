@@ -54,7 +54,6 @@ struct _GoaDaemon
   guint config_timeout_id;
   guint credentials_timeout_id;
 
-  gboolean notification_active;
   uint32_t notification_id;
   unsigned int notification_signal_id;
   GPtrArray *accounts_needing_attention;
@@ -1508,6 +1507,8 @@ on_account_handle_remove (GoaAccount            *account,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+#define NOTIFICATION_ACTION_FMT "('launch-panel', [<('online-accounts', @av [%s])>], @a{sv} {})"
+
 static void
 weak_ref_free (GWeakRef *weak_ref)
 {
@@ -1538,14 +1539,27 @@ on_notification_signal (GDBusConnection *connection,
       g_variant_get (parameters, "(u&s)", &id, NULL);
       if (self->notification_id == id)
         {
-          const char *parameters = "('launch-panel', [<('online-accounts', @av [])>], @a{sv} {})";
+          g_autofree char *target = NULL;
+
+          if (self->accounts_needing_attention->len == 1)
+            {
+              GoaAccount *account = g_ptr_array_index (self->accounts_needing_attention, 0);
+              g_autofree char *account_id = NULL;
+
+              account_id = g_strdup_printf ("<'%s'>", goa_account_get_id (account));
+              target = g_strdup_printf (NOTIFICATION_ACTION_FMT, account_id);
+            }
+          else
+            {
+              target = g_strdup_printf (NOTIFICATION_ACTION_FMT, "");
+            }
 
           g_dbus_connection_call (self->connection,
                                   "org.gnome.Settings",
                                   "/org/gnome/Settings",
                                   "org.freedesktop.Application",
                                   "ActivateAction",
-                                  g_variant_new_parsed (parameters),
+                                  g_variant_new_parsed (target),
                                   NULL,
                                   G_DBUS_CALL_FLAGS_NONE,
                                   -1,
@@ -1560,10 +1574,7 @@ on_notification_signal (GDBusConnection *connection,
 
       g_variant_get (parameters, "(uu)", &id, NULL);
       if (self->notification_id == id)
-        {
-          self->notification_active = FALSE;
-          self->notification_id = 0;
-        }
+        self->notification_id = 0;
     }
 }
 
@@ -1580,7 +1591,6 @@ goa_daemon_send_notification_cb (GDBusConnection *connection,
   if (reply == NULL)
     {
       g_warning ("Failed to notify of required account action: %s", error->message);
-      self->notification_active = FALSE;
       return;
     }
 
@@ -1590,6 +1600,8 @@ goa_daemon_send_notification_cb (GDBusConnection *connection,
 static void
 goa_daemon_send_notification (GoaDaemon *self)
 {
+  g_autofree char *message = NULL;
+
   if (self->notification_signal_id == 0)
     {
       GWeakRef *weak_ref;
@@ -1610,30 +1622,38 @@ goa_daemon_send_notification (GoaDaemon *self)
                                             (GDestroyNotify) weak_ref_free);
     }
 
-  if (!self->notification_active)
+  if (self->accounts_needing_attention->len == 1)
     {
-      self->notification_active = TRUE;
-      g_dbus_connection_call (self->connection,
-                              "org.freedesktop.Notifications",
-                              "/org/freedesktop/Notifications",
-                              "org.freedesktop.Notifications",
-                              "Notify",
-                              g_variant_new ("(susss@as@a{sv}i)",
-                                             _("Online Accounts"),
-                                             self->notification_id,
-                                             "dialog-warning",
-                                             _("Account Action Required"),
-                                             _("One or more online accounts failed to authenticate"),
-                                             g_variant_new_parsed ("@as ['default', '']"),
-                                             g_variant_new_parsed ("@a{sv} {}"),
-                                             -1),
-                              NULL, /* reply type */
-                              G_DBUS_CALL_FLAGS_NONE,
-                              -1,
-                              NULL, /* cancellable */
-                              (GAsyncReadyCallback) goa_daemon_send_notification_cb,
-                              g_object_ref (self));
+      GoaAccount *account = g_ptr_array_index (self->accounts_needing_attention, 0);
+
+      message = g_strdup_printf (_("Failed to sign in to “%s”"),
+                                 goa_account_get_presentation_identity (account));
     }
+  else
+    {
+      message = g_strdup (_("Failed to sign in to multiple accounts"));
+    }
+
+  g_dbus_connection_call (self->connection,
+                          "org.freedesktop.Notifications",
+                          "/org/freedesktop/Notifications",
+                          "org.freedesktop.Notifications",
+                          "Notify",
+                          g_variant_new ("(susss@as@a{sv}i)",
+                                         _("Online Accounts"),
+                                         self->notification_id,
+                                         "dialog-warning",
+                                         _("Account Action Required"),
+                                         message,
+                                         g_variant_new_parsed ("@as ['default', '']"),
+                                         g_variant_new_parsed ("@a{sv} {}"),
+                                         -1),
+                          NULL, /* reply type */
+                          G_DBUS_CALL_FLAGS_NONE,
+                          -1,
+                          NULL, /* cancellable */
+                          (GAsyncReadyCallback) goa_daemon_send_notification_cb,
+                          g_object_ref (self));
 }
 
 static void
