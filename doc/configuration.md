@@ -7,11 +7,14 @@ service configuration.
 
 ## Service Configuration
 
-Service restrictions for providers are stored in `$SYSCONFDIR/goa.conf` (i.e. `/etc/goa.conf`).
-All services are enabled for all providers by default, such that the effective default
+Restrictions for providers and services are stored in `$SYSCONFDIR/goa.conf` (i.e. `/etc/goa.conf`).
+All providers and all services are enabled by default, such that the effective default
 configuration is:
 
 ```ini
+[providers]
+enable=all
+
 [all]
 mail=true
 calendar=true
@@ -28,12 +31,35 @@ music=true
 todo=true
 ```
 
+### Restricting Providers
+
+Providers can be restricted to a subset of available providers, which can not be overridden
+by users or circumvented by adding new providers. The settings are read following this procedure:
+
+1. If there is a `[providers]` group and the `enable` key is missing or set to `all`, the provider
+  is enabled
+2. If there is a `[providers]` group and the `enable` key includes the provider, the provider
+  is enabled
+3. If there are legacy GSettings<sup>[1](#legacy-gsettings)</sup>, those settings are used
+4. If neither are present, the provider is enabled
+
+The following configuration file restricts providers to those using open protocols:
+
+```ini
+[providers]
+enable=imap_smtp;webdav;kerberos
+```
+
+<sup id="legacy-gsettings">1: Legacy GSettings are not documented or supported</sup>
+
+### Restricting Services
+
 Services can be enabled or disabled for all providers using the special `[all]` group, allowing
 specific providers to override these settings. The settings are read following this procedure:
 
 1. If there is a provider group with key for the service, that setting is used
 2. If there is a `[all]` group with a key for the service, that setting is used
-3. If neither are present, the service is enabled.
+3. If neither are present, the service is enabled
 
 The example below disables calendar, contacts and files for all providers, except `google`:
 
