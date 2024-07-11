@@ -744,15 +744,22 @@ goa_provider_dialog_push_account (GoaProviderDialog *self,
     gtk_box_append (GTK_BOX (box), content);
 
   /* Remove */
-  action_button = gtk_button_new_with_mnemonic (_("_Remove…"));
-  gtk_widget_set_halign (action_button, GTK_ALIGN_CENTER);
-  gtk_widget_add_css_class (action_button, "pill");
-  gtk_box_append (GTK_BOX (box), action_button);
+  group = gtk_list_box_new ();
+  gtk_widget_add_css_class (group, "boxed-list");
+  gtk_box_append (GTK_BOX (box), group);
+
+  action_button = g_object_new (ADW_TYPE_BUTTON_ROW,
+                                "activatable",   TRUE,
+                                "selectable",    FALSE,
+                                "title",         _("_Remove…"),
+                                "use-underline", TRUE,
+                                NULL);
+  gtk_list_box_append (GTK_LIST_BOX (group), action_button);
 
   g_object_set_data (G_OBJECT (page), "goa-dialog-banner", banner);
 
   g_signal_connect_object (action_button,
-                           "clicked",
+                           "activated",
                            G_CALLBACK (on_remove_activated),
                            self,
                            G_CONNECT_SWAPPED);
