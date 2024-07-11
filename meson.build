@@ -99,12 +99,33 @@ endif
 
 enable_goabackend = get_option('goabackend')
 if enable_goabackend
-  gtk_dep = dependency('gtk4', version: '>= 4.10')
   json_glib_dep = dependency('json-glib-1.0')
   libsecret_dep = dependency('libsecret-1')
-  libadwaita_dep = dependency('libadwaita-1', version: '>= 1.4')
   libsoup_dep = dependency('libsoup-3.0', version: '>= 3.0', fallback: ['libsoup'])
   libxml_dep = dependency('libxml-2.0')
+  gtk_dep = dependency(
+    'gtk4',
+    version: '>= 4.15.2',
+    fallback: 'gtk',
+    default_options: [
+      'introspection=disabled',
+      'build-demos=false',
+      'build-testsuite=false',
+      'build-tests=false',
+      'build-examples=false',
+    ]
+  )
+  libadwaita_dep = dependency(
+    'libadwaita-1',
+    version: '1.6.beta',
+    fallback: 'libadwaita',
+    default_options: [
+      'examples=false',
+      'introspection=disabled',
+      'tests=false',
+      'vapi=false',
+    ],
+  )
 endif
 rest_dep = dependency('rest-1.0',
   version: '>= 0.9.0',
