@@ -29,10 +29,11 @@ build-full:
   stage: build
   before_script:
     - dnf update -y
-    - dnf -y install
+    - dnf -y install dnf-plugins-core
       meson git gcc dbus-devel docbook-style-xsl gcr-devel gi-docgen glib2-devel
       gobject-introspection-devel gtk4-devel json-glib-devel krb5-devel
       libadwaita-devel libsecret-devel libsoup3-devel rest-devel vala
+    - dnf -y builddep gtk4 libadwaita
   script:
     - meson setup -Ddocumentation=true
                   -Dfedora=true
@@ -52,10 +53,11 @@ clang-analyzer:
     CFLAGS: "-Wno-strict-prototypes -Wno-deprecated-declarations"
   before_script:
     - dnf update -y
-    - dnf -y install
+    - dnf -y install dnf-plugins-core
       clang clang-analyzer meson gcr-devel dbus-devel gi-docgen glib2-devel
       gobject-introspection-devel gtk4-devel krb5-devel libadwaita-devel
       libsecret-devel rest-devel vala
+    - dnf -y builddep gtk4 libadwaita
   script:
     - meson setup --buildtype=debug
                   -Dfedora=true
@@ -83,9 +85,10 @@ gcc-analyzer:
     CFLAGS: "-fanalyzer -Wno-analyzer-null-argument -Wno-analyzer-null-dereference -Wno-strict-prototypes -Wno-deprecated-declarations"
   before_script:
     - dnf update -y
-    - dnf -y install
+    - dnf -y install dnf-plugins-core
       meson gcc gcr-devel dbus-devel glib2-devel gobject-introspection-devel
       gtk4-devel krb5-devel libadwaita-devel libsecret-devel rest-devel vala
+    - dnf -y builddep gtk4 libadwaita
   script:
     - meson setup --buildtype=debug
                   -Dfedora=true
