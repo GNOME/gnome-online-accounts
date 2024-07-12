@@ -378,24 +378,6 @@ create_setup_page (GoaProvider    *provider,
   data->password = goa_provider_dialog_add_password_entry (dialog, group, _("_Password"));
   goa_provider_dialog_add_description (dialog, NULL, _("Exchange account details will be auto-detected from your email address when possible"));
 
-  if (new_account)
-    {
-      group = goa_provider_dialog_add_group (dialog, _("Account Details"));
-      data->username = goa_provider_dialog_add_entry (dialog, group, _("User_name"));
-      data->server = goa_provider_dialog_add_entry (dialog, group, _("_Domain"));
-      goa_provider_dialog_add_description (dialog, data->server, _("Example domain: example.com"));
-
-      g_signal_connect (data->username,
-                        "changed",
-                        G_CALLBACK (on_username_or_server_changed),
-                        data);
-      g_signal_connect (data->server,
-                        "changed",
-                        G_CALLBACK (on_username_or_server_changed),
-                        data);
-    }
-
-  gtk_widget_grab_focus ((new_account) ? data->email_address : data->password);
   g_signal_connect (data->email_address,
                     "changed",
                     G_CALLBACK (on_email_or_password_changed),
@@ -404,6 +386,22 @@ create_setup_page (GoaProvider    *provider,
                     "changed",
                     G_CALLBACK (on_email_or_password_changed),
                     data);
+
+  group = goa_provider_dialog_add_group (dialog, _("Account Details"));
+  data->username = goa_provider_dialog_add_entry (dialog, group, _("User_name"));
+  data->server = goa_provider_dialog_add_entry (dialog, group, _("_Domain"));
+  goa_provider_dialog_add_description (dialog, data->server, _("Example domain: example.com"));
+
+  g_signal_connect (data->username,
+                    "changed",
+                    G_CALLBACK (on_username_or_server_changed),
+                    data);
+  g_signal_connect (data->server,
+                    "changed",
+                    G_CALLBACK (on_username_or_server_changed),
+                    data);
+
+  gtk_widget_grab_focus ((new_account) ? data->email_address : data->password);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
