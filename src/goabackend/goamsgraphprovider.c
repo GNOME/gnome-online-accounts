@@ -335,6 +335,7 @@ typedef struct
   GoaClient *client;
   GoaObject *object;
 
+  GtkWidget *organization_switch;
   GtkWidget *client_id_entry;
   GtkWidget *tenant_id_entry;
 } AccountData;
@@ -350,11 +351,16 @@ account_data_free (gpointer user_data)
 }
 
 static void
-on_client_id_entry_changed (GtkEditable *editable,
-                            AccountData *data)
+on_entry_changed (GtkEditable *editable,
+                  AccountData *data)
 {
   GoaDialogState state = GOA_DIALOG_READY;
-  const char *client_id;
+  const char *client_id = NULL;
+  const char *tenant_id = NULL;
+
+  tenant_id = gtk_editable_get_text (GTK_EDITABLE (data->tenant_id_entry));
+  if (tenant_id == NULL || *tenant_id == '\0')
+    state = GOA_DIALOG_IDLE;
 
   /* Ensure there is client ID, since there is no build-system default */
   client_id = gtk_editable_get_text (GTK_EDITABLE (data->client_id_entry));
@@ -363,6 +369,17 @@ on_client_id_entry_changed (GtkEditable *editable,
     state = GOA_DIALOG_IDLE;
 
   goa_provider_dialog_set_state (data->dialog, state);
+}
+
+static void
+on_organization_changed (AdwSwitchRow *row,
+                         GParamSpec   *pspec,
+                         AccountData  *data)
+{
+  if (adw_switch_row_get_active (row))
+    on_entry_changed (NULL, data);
+  else
+    goa_provider_dialog_set_state (data->dialog, GOA_DIALOG_READY);
 }
 
 static void
@@ -379,26 +396,44 @@ create_account_details_ui (GoaProvider *provider,
 
       goa_provider_dialog_add_page (dialog,
                                     NULL, // provider name
-                                    _("Connect to a Microsoft 365 provider to access files"));
+                                    _("Connect to Microsoft 365 to access files stored in OneDrive"));
 
-      group = goa_provider_dialog_add_group (dialog, _("Authorization Details"));
+      group = goa_provider_dialog_add_group (dialog, NULL);
+      data->organization_switch = g_object_new (ADW_TYPE_SWITCH_ROW,
+                                                "title", _("Use Organization Account"),
+                                                "subtitle", _("Connect using details from an organization or developer account"),
+                                                "active", FALSE,
+                                                NULL);
+      adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), data->organization_switch);
+
+      group = goa_provider_dialog_add_group (dialog, NULL);
       /* Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology */
-      adw_preferences_group_set_description (ADW_PREFERENCES_GROUP (group), _("A custom Client or Tenant ID may need to be provided depending on the settings for your organization"));
+      adw_preferences_group_set_description (ADW_PREFERENCES_GROUP (group), _("Enter the details provided by your organization"));
 
-      data->client_id_entry = goa_provider_dialog_add_entry (dialog, group, _("_Client ID"));
+      data->client_id_entry = goa_provider_dialog_add_entry (dialog, group, _("_Client ID (Optional)"));
       /* Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology */
       data->tenant_id_entry = goa_provider_dialog_add_entry (dialog, group, _("_Tenant ID"));
       goa_provider_dialog_add_description (dialog, data->tenant_id_entry, _("Example ID: 00000000-0000-0000-0000-000000000000"));
 
       button = adw_dialog_get_default_widget (ADW_DIALOG (dialog));
-      gtk_button_set_label (GTK_BUTTON (button), _("_Sign in…"));
+      gtk_button_set_label (GTK_BUTTON (button), _("_Sign In…"));
 
+      g_object_bind_property (data->organization_switch, "active",
+                              group, "visible",
+                              G_BINDING_SYNC_CREATE);
+      g_signal_connect (data->organization_switch,
+                        "notify::active",
+                        G_CALLBACK (on_organization_changed),
+                        data);
       g_signal_connect (data->client_id_entry,
                         "changed",
-                        G_CALLBACK (on_client_id_entry_changed),
+                        G_CALLBACK (on_entry_changed),
                         data);
-
-      on_client_id_entry_changed (GTK_EDITABLE (data->client_id_entry), data);
+      g_signal_connect (data->tenant_id_entry,
+                        "changed",
+                        G_CALLBACK (on_entry_changed),
+                        data);
+      on_organization_changed (ADW_SWITCH_ROW (data->organization_switch), NULL, data);
     }
 }
 
@@ -483,7 +518,7 @@ add_account (GoaProvider         *provider,
   g_autoptr(GTask) task = NULL;
 
   data = g_new0 (AccountData, 1);
-  data->dialog = goa_provider_dialog_new (provider, client, parent);
+  data->dialog = goa_provider_dialog_new_full (provider, client, parent, 480, 460);
   data->client = g_object_ref (client);
 
   task = g_task_new (provider, cancellable, callback, user_data);
