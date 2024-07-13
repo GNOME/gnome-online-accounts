@@ -97,6 +97,10 @@ void             goa_utils_keyfile_set_string (GoaAccount *account, const gchar 
 
 gboolean         goa_utils_parse_email_address (const gchar *email, gchar **out_username, gchar **out_domain);
 
+char            *goa_utils_normalize_url (const char  *base_uri,
+                                          const char  *uri_ref,
+                                          char       **server);
+
 void             goa_utils_set_error_soup (GError **err, SoupMessage *msg);
 
 void             goa_utils_set_error_ssl (GError **err, GTlsCertificateFlags flags);

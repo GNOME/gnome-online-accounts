@@ -123,108 +123,6 @@ uri_encode_identity (const char *uri_string,
   return NULL;
 }
 
-/*< private >
- * dav_normalize_uri:
- * @base_uri: a URI
- * @uri_ref: (nullable): an absolute or relative URI
- * @server: (nullable) (out): location for server name
- *
- * Normalize a URI to http(s) with a trailing `/`.
- *
- * If @uri_ref is given it will be resolved relative to @base_uri, before
- * the trailing `/` is applied.
- *
- * If @server is not %NULL, it will be set to a presentable name.
- *
- * Returns: (transfer full): a new URI, or %NULL
- */
-static char *
-dav_normalize_uri (const char  *base_uri,
-                   const char  *uri_ref,
-                   char       **server)
-{
-  g_autoptr (GUri) uri = NULL;
-  g_autoptr (GUri) uri_out = NULL;
-  const char *scheme;
-  const char *path;
-  g_autofree char *new_path = NULL;
-  g_autofree char *uri_string = NULL;
-  int std_port = 0;
-
-  /* dav(s) is used by DNS-SD and gvfs */
-  scheme = g_uri_peek_scheme (base_uri);
-  if (scheme == NULL)
-    {
-      uri_string = g_strconcat ("https://", base_uri, NULL);
-      scheme = "https";
-      std_port = 443;
-    }
-  else if (g_str_equal (scheme, "https")
-           || g_str_equal (scheme, "davs"))
-    {
-      uri_string = g_strdup (base_uri);
-      scheme = "https";
-      std_port = 443;
-    }
-  else if (g_str_equal (scheme, "http")
-           || g_str_equal (scheme, "dav"))
-    {
-      uri_string = g_strdup (base_uri);
-      scheme = "http";
-      std_port = 80;
-    }
-  else
-    {
-      g_critical ("Unsupported URI scheme \"%s\"", scheme);
-      return NULL;
-    }
-
-  uri = g_uri_parse (uri_string, G_URI_FLAGS_ENCODED | G_URI_FLAGS_PARSE_RELAXED, NULL);
-  if (uri == NULL)
-    return NULL;
-
-  if (uri_ref != NULL)
-    {
-      uri_out = g_uri_parse_relative (uri, uri_ref, G_URI_FLAGS_ENCODED | G_URI_FLAGS_PARSE_RELAXED, NULL);
-      if (uri_out == NULL)
-        return NULL;
-
-      g_uri_unref (uri);
-      uri = g_steal_pointer (&uri_out);
-    }
-
-  path = g_uri_get_path (uri);
-  if (!g_str_has_suffix (path, "/"))
-    new_path = g_strconcat (path, "/", NULL);
-
-  uri_out = g_uri_build (g_uri_get_flags (uri),
-                         scheme,
-                         g_uri_get_userinfo (uri),
-                         g_uri_get_host (uri),
-                         g_uri_get_port (uri),
-                         new_path ? new_path : path,
-                         g_uri_get_query (uri),
-                         g_uri_get_fragment (uri));
-
-  if (server != NULL)
-    {
-      g_autofree char *port_string = NULL;
-      g_autofree char *pretty_path = NULL;
-      int port;
-
-      port = g_uri_get_port (uri_out);
-      port_string = g_strdup_printf (":%d", port);
-
-      path = g_uri_get_path (uri_out);
-      pretty_path = g_strdup (path);
-      pretty_path[strlen(pretty_path) - 1] = '\0';
-
-      *server = g_strconcat (g_uri_get_host (uri), (port == std_port || port == -1) ? "" : port_string, pretty_path, NULL);
-    }
-
-  return g_uri_to_string (uri_out);
-}
-
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gboolean on_handle_get_password (GoaPasswordBased      *interface,
@@ -473,7 +371,7 @@ on_uri_username_or_password_changed (GtkEditable *editable, gpointer user_data)
   data->accept_ssl_errors = FALSE;
 
   address = gtk_editable_get_text (GTK_EDITABLE (data->uri));
-  uri = dav_normalize_uri (address, NULL, NULL);
+  uri = goa_utils_normalize_url (address, NULL, NULL);
 
   if (uri != NULL)
     {
@@ -736,7 +634,7 @@ add_account_handle_response (GTask     *task,
     }
 
   /* If the user entered a bunk URI, they probably want to be notified */
-  normalized_uri = dav_normalize_uri (base_uri, check_uri, NULL);
+  normalized_uri = goa_utils_normalize_url (base_uri, check_uri, NULL);
   if (normalized_uri == NULL)
     {
       g_set_error (&error,
@@ -859,7 +757,7 @@ add_account_action_cb (GoaProviderDialog *dialog,
   password = gtk_editable_get_text (GTK_EDITABLE (data->password));
 
   g_free (data->presentation_identity);
-  uri = dav_normalize_uri (uri_text, NULL, &server);
+  uri = goa_utils_normalize_url (uri_text, NULL, &server);
   if (strchr (username, '@') != NULL)
     data->presentation_identity = g_strdup (username);
   else
@@ -1161,3 +1059,4 @@ on_handle_get_password (GoaPasswordBased      *interface,
 
   return TRUE; /* invocation was handled */
 }
+

@@ -656,6 +656,112 @@ goa_utils_parse_email_address (const gchar *email, gchar **out_username, gchar *
   return TRUE;
 }
 
+/**
+ * goa_utils_normalize_url:
+ * @base_uri: a URI
+ * @uri_ref: (nullable): an absolute or relative URI
+ * @server: (nullable) (out): location for server name
+ *
+ * Normalize @base_uri to an http(s) URL, with a trailing `/`. The port will be
+ * included if and only if it is non-standard for the URL type.
+ *
+ * If @uri_ref is given it will be resolved relative to @base_uri, before
+ * the trailing `/` is applied.
+ *
+ * If @server is not %NULL, it will be set to the hostname and path, including
+ * the port (if non-standard).
+ *
+ * Returns: (transfer full): a new http(s) URL string, or %NULL
+ */
+char *
+goa_utils_normalize_url (const char  *base_uri,
+                         const char  *uri_ref,
+                         char       **server)
+{
+  g_autoptr (GUri) uri = NULL;
+  g_autoptr (GUri) uri_out = NULL;
+  const char *scheme;
+  const char *path;
+  g_autofree char *new_path = NULL;
+  g_autofree char *uri_string = NULL;
+  int std_port = 0;
+
+  g_return_val_if_fail (base_uri != NULL && *base_uri != '\0', NULL);
+  g_return_val_if_fail (server == NULL || *server == NULL, NULL);
+
+  /* dav(s) is used by DNS-SD and gvfs */
+  scheme = g_uri_peek_scheme (base_uri);
+  if (scheme == NULL)
+    {
+      uri_string = g_strconcat ("https://", base_uri, NULL);
+      scheme = "https";
+      std_port = 443;
+    }
+  else if (g_str_equal (scheme, "https")
+           || g_str_equal (scheme, "davs"))
+    {
+      uri_string = g_strdup (base_uri);
+      scheme = "https";
+      std_port = 443;
+    }
+  else if (g_str_equal (scheme, "http")
+           || g_str_equal (scheme, "dav"))
+    {
+      uri_string = g_strdup (base_uri);
+      scheme = "http";
+      std_port = 80;
+    }
+  else
+    {
+      g_debug ("%s(): Unsupported URI scheme \"%s\"", G_STRFUNC, scheme);
+      return NULL;
+    }
+
+  uri = g_uri_parse (uri_string, G_URI_FLAGS_ENCODED | G_URI_FLAGS_PARSE_RELAXED, NULL);
+  if (uri == NULL)
+    return NULL;
+
+  if (uri_ref != NULL)
+    {
+      uri_out = g_uri_parse_relative (uri, uri_ref, G_URI_FLAGS_ENCODED | G_URI_FLAGS_PARSE_RELAXED, NULL);
+      if (uri_out == NULL)
+        return NULL;
+
+      g_uri_unref (uri);
+      uri = g_steal_pointer (&uri_out);
+    }
+
+  path = g_uri_get_path (uri);
+  if (!g_str_has_suffix (path, "/"))
+    new_path = g_strconcat (path, "/", NULL);
+
+  uri_out = g_uri_build (g_uri_get_flags (uri),
+                         scheme,
+                         g_uri_get_userinfo (uri),
+                         g_uri_get_host (uri),
+                         g_uri_get_port (uri),
+                         new_path ? new_path : path,
+                         g_uri_get_query (uri),
+                         g_uri_get_fragment (uri));
+
+  if (server != NULL)
+    {
+      g_autofree char *port_string = NULL;
+      g_autofree char *pretty_path = NULL;
+      int port;
+
+      port = g_uri_get_port (uri_out);
+      port_string = g_strdup_printf (":%d", port);
+
+      path = g_uri_get_path (uri_out);
+      pretty_path = g_strndup (path, strlen (path) - 1);
+
+      *server = g_strconcat (g_uri_get_host (uri), (port == std_port || port == -1) ? "" : port_string, pretty_path, NULL);
+    }
+
+  return g_uri_to_string (uri_out);
+}
+
 void
 goa_utils_set_error_soup (GError **err, SoupMessage *msg)
 {
