@@ -1199,7 +1199,7 @@ dav_client_discover_iterate (GTask *task)
       g_ptr_array_sort (discover->services, services_sort_func);
       g_task_return_pointer (task,
                              g_steal_pointer (&discover->services),
-                             g_object_unref);
+                             (GDestroyNotify) g_ptr_array_unref);
     }
 }
 
