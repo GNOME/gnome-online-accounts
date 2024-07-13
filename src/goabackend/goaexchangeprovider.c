@@ -312,6 +312,10 @@ on_username_or_server_changed (GtkEditable    *editable,
   const char *server = NULL;
   const char *username = NULL;
 
+  /* Reset the preference to ignore SSL/TLS errors
+   */
+  data->accept_ssl_errors = FALSE;
+
   email = gtk_editable_get_text (GTK_EDITABLE (data->email_address));
   if (!goa_utils_parse_email_address (email, NULL, NULL))
     goto out;
@@ -335,6 +339,10 @@ on_email_or_password_changed (GtkEditable    *editable,
   const char *password = NULL;
   g_autofree char *email_localpart = NULL;
   g_autofree char *email_domain = NULL;
+
+  /* Reset the preference to ignore SSL/TLS errors
+   */
+  data->accept_ssl_errors = FALSE;
 
   email = gtk_editable_get_text (GTK_EDITABLE (data->email_address));
   if (!goa_utils_parse_email_address (email, &email_localpart, &email_domain))
@@ -454,6 +462,7 @@ add_account_autodiscover_cb (GoaEwsClient *client,
 
   if (!goa_ews_client_autodiscover_finish (client, res, &error))
     {
+      data->accept_ssl_errors = (error->code == GOA_ERROR_SSL);
       goa_provider_dialog_report_error (data->dialog, error);
       return;
     }
