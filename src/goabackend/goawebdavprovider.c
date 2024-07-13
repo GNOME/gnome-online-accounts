@@ -468,6 +468,10 @@ on_uri_username_or_password_changed (GtkEditable *editable, gpointer user_data)
   const char *address;
   g_autofree char *uri = NULL;
 
+  /* Reset the preference to ignore SSL/TLS errors
+   */
+  data->accept_ssl_errors = FALSE;
+
   address = gtk_editable_get_text (GTK_EDITABLE (data->uri));
   uri = dav_normalize_uri (address, NULL, NULL);
 
@@ -761,6 +765,7 @@ add_account_check_cb (GoaDavClient *client,
 
   if (!goa_dav_client_check_finish (client, result, &error))
     {
+      data->accept_ssl_errors = (error->code == GOA_ERROR_SSL);
       goa_provider_dialog_report_error (data->dialog, error);
       return;
     }
@@ -795,6 +800,7 @@ add_account_discover_cb (GoaDavClient *client,
   services = goa_dav_client_discover_finish (client, result, &error);
   if (services == NULL)
     {
+      data->accept_ssl_errors = (error->code == GOA_ERROR_SSL);
       goa_provider_dialog_report_error (data->dialog, error);
       return;
     }
@@ -923,10 +929,12 @@ refresh_account_credentials_cb (GoaAccount   *account,
                                 gpointer      user_data)
 {
   g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
+  AddAccountData *data = g_task_get_task_data (task);
   GError *error = NULL;
 
   if (!goa_account_call_ensure_credentials_finish (account, NULL, res, &error))
     {
+      data->accept_ssl_errors = (error->code == GOA_ERROR_SSL);
       goa_provider_task_return_error (task, error);
       return;
     }
