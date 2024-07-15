@@ -1218,7 +1218,8 @@ dav_client_discover_preconfig (DiscoverData *discover,
     return FALSE;
 
   host = g_uri_get_host (guri);
-  base_domain = soup_tld_get_base_domain (host, NULL);
+  if (host != NULL)
+    base_domain = soup_tld_get_base_domain (host, NULL);
 
   if (g_strcmp0 (host, "fastmail.com") == 0
       || g_strcmp0 (base_domain, "fastmail.com") == 0)
