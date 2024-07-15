@@ -277,7 +277,7 @@ ensure_credentials_sync (GoaProvider         *provider,
       g_autofree char *uri = NULL;
 
       uri = goa_util_lookup_keyfile_string (object, keyfile_endpoints[i].key);
-      if (uri != NULL && *uri != '\0')
+      if (uri != NULL && g_uri_is_valid (uri, SOUP_HTTP_URI_FLAGS, NULL))
         {
           g_autoptr(GoaDavConfig) config = NULL;
 
@@ -434,7 +434,7 @@ create_account_details_ui (GoaProvider    *provider,
       for (size_t i = 0; i < G_N_ELEMENTS (keyfile_endpoints); i++)
         {
           uri = goa_util_lookup_keyfile_string (data->object, keyfile_endpoints[i].key);
-          if (uri != NULL && *uri != '\0')
+          if (uri != NULL && g_uri_is_valid (uri, SOUP_HTTP_URI_FLAGS, NULL))
             {
               data->check_config = goa_dav_config_new (keyfile_endpoints[i].service, uri, username);
               break;
