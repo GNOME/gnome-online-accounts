@@ -550,6 +550,7 @@ add_account_handle_response (GTask     *task,
                              GPtrArray *services)
 {
   AddAccountData *data = g_task_get_task_data (task);
+  GtkEditable *editable = NULL;
   const char *username = NULL;
   const char *base_uri = NULL;
   const char *check_uri = NULL;
@@ -579,7 +580,8 @@ add_account_handle_response (GTask     *task,
 
           data->check_stage = GOA_PROVIDER_FEATURE_FILES;
           service = GOA_SERVICE_TYPE_WEBDAV;
-          check_uri = gtk_editable_get_text (GTK_EDITABLE (data->webdav_uri));
+          editable = GTK_EDITABLE (data->webdav_uri);
+          check_uri = gtk_editable_get_text (editable);
           break;
 
         /* WebDAV: discover so we get the redirected URI for GVfs, but don't
@@ -594,7 +596,8 @@ add_account_handle_response (GTask     *task,
 
           data->check_stage = GOA_PROVIDER_FEATURE_CALENDAR;
           service = GOA_SERVICE_TYPE_CALDAV;
-          check_uri = gtk_editable_get_text (GTK_EDITABLE (data->caldav_uri));
+          editable = GTK_EDITABLE (data->caldav_uri);
+          check_uri = gtk_editable_get_text (editable);
           break;
 
         /* CalDAV/CardDAV: user-defined URIs override discovered services even
@@ -609,7 +612,8 @@ add_account_handle_response (GTask     *task,
 
           data->check_stage = GOA_PROVIDER_FEATURE_CONTACTS;
           service = GOA_SERVICE_TYPE_CARDDAV;
-          check_uri = gtk_editable_get_text (GTK_EDITABLE (data->carddav_uri));
+          editable = GTK_EDITABLE (data->carddav_uri);
+          check_uri = gtk_editable_get_text (editable);
           break;
 
         case GOA_PROVIDER_FEATURE_CONTACTS:
@@ -621,6 +625,7 @@ add_account_handle_response (GTask     *task,
 
           /* Set the next stage to default to add_account_credentials() */
           data->check_stage = GOA_PROVIDER_FEATURE_TICKETING;
+          editable = NULL;
           break;
 
         default:
@@ -644,6 +649,12 @@ add_account_handle_response (GTask     *task,
                    check_uri);
       goa_provider_dialog_report_error (data->dialog, error);
       return FALSE;
+    }
+  else if (editable != NULL)
+    {
+      g_signal_handlers_block_by_func (editable, on_uri_username_or_password_changed, data);
+      gtk_editable_set_text (editable, normalized_uri);
+      g_signal_handlers_unblock_by_func (editable, on_uri_username_or_password_changed, data);
     }
 
   data->check_config = goa_dav_config_new (service, normalized_uri, username);
@@ -775,6 +786,12 @@ add_account_action_cb (GoaProviderDialog *dialog,
       goa_provider_task_return_error (task, g_steal_pointer (&error));
       return;
     }
+
+  /* Update the entry field with the URL we're actually using.
+   */
+  g_signal_handlers_block_by_func (data->uri, on_uri_username_or_password_changed, data);
+  gtk_editable_set_text (GTK_EDITABLE (data->uri), uri);
+  g_signal_handlers_unblock_by_func (data->uri, on_uri_username_or_password_changed, data);
 
   /* Confirm the account */
   dav_client = goa_dav_client_new ();
