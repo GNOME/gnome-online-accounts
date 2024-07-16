@@ -237,9 +237,9 @@ static struct
   const char *service;
   const char *key;
 } keyfile_endpoints[] = {
+  { GOA_SERVICE_TYPE_WEBDAV, "Uri" },
   { GOA_SERVICE_TYPE_CALDAV, "CalDavUri" },
   { GOA_SERVICE_TYPE_CARDDAV, "CardDavUri" },
-  { GOA_SERVICE_TYPE_WEBDAV, "Uri" },
 };
 
 /* ---------------------------------------------------------------------------------------------------- */
