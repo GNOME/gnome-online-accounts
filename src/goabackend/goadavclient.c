@@ -1205,19 +1205,14 @@ dav_client_discover_iterate (GTask *task)
 
 static gboolean
 dav_client_discover_preconfig (DiscoverData *discover,
-                               const char   *uri)
+                               GUri         *uri)
 {
-  g_autoptr (GUri) guri = NULL;
   const char *host = NULL;
   const char *base_domain = NULL;
 
   g_assert (discover != NULL);
 
-  guri = g_uri_parse (uri, G_URI_FLAGS_NONE, NULL);
-  if (guri == NULL)
-    return FALSE;
-
-  host = g_uri_get_host (guri);
+  host = g_uri_get_host (uri);
   if (host != NULL)
     base_domain = soup_tld_get_base_domain (host, NULL);
 
@@ -1335,7 +1330,7 @@ goa_dav_client_discover (GoaDavClient        *self,
 
   /* Check if the host can be preconfigured without lookup.
    */
-  if (dav_client_discover_preconfig (discover, uri))
+  if (dav_client_discover_preconfig (discover, guri))
     {
       dav_client_discover_iterate (task);
       return;
