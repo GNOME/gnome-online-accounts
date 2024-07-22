@@ -81,6 +81,9 @@ static GoaProviderFeatures
 get_provider_features (GoaProvider *provider)
 {
   return GOA_PROVIDER_FEATURE_BRANDED |
+         GOA_PROVIDER_FEATURE_MAIL |
+         GOA_PROVIDER_FEATURE_CALENDAR |
+         GOA_PROVIDER_FEATURE_CONTACTS |
          GOA_PROVIDER_FEATURE_FILES;
 }
 
@@ -108,7 +111,25 @@ get_redirect_uri (GoaOAuth2Provider *oauth2_provider)
 static const gchar *
 get_scope (GoaOAuth2Provider *oauth2_provider)
 {
-  return "offline_access files.readwrite files.readwrite.all sites.read.all sites.readwrite.all user.read mail.readwrite contacts.readwrite";
+  return "offline_access" \
+         " calendars.readwrite" \
+         " calendars.readwrite.shared" \
+         " contacts.readwrite" \
+         " contacts.readwrite.shared" \
+         " files.readwrite" \
+         " files.readwrite.all" \
+         " mail.readwrite" \
+         " mail.readwrite.shared" \
+         " mail.send" \
+         " mail.send.shared" \
+         " mailboxsettings.read" \
+         " people.read" \
+         " sites.read.all" \
+         " sites.readwrite.all" \
+         " tasks.readwrite" \
+         " tasks.readwrite.shared" \
+         " user.read" \
+         " user.readbasic.all";
 }
 
 static const gchar *
@@ -260,9 +281,13 @@ build_object (GoaProvider        *provider,
   GoaMsGraphProvider *self = GOA_MS_GRAPH_PROVIDER (provider);
   GoaAccount *account = NULL;
   GKeyFile *goa_conf;
+  GoaMail *mail = NULL;
   const gchar  *provider_type;
   const gchar *identity = NULL;
   gboolean files_enabled = FALSE;
+  gboolean calendar_enabled;
+  gboolean contacts_enabled;
+  gboolean mail_enabled;
   gchar *uri_onedrive = NULL;
   gboolean ret = FALSE;
 
@@ -286,6 +311,39 @@ build_object (GoaProvider        *provider,
   uri_onedrive = g_strconcat ("onedrive://", identity, "/", NULL);
   goa_object_skeleton_attach_files (object, uri_onedrive, files_enabled, FALSE);
   g_free (uri_onedrive);
+
+  /* Email */
+  mail = goa_object_get_mail (GOA_OBJECT (object));
+  mail_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_MAIL) &&
+                 g_key_file_get_boolean (key_file, group, "MailEnabled", NULL);
+  if (mail_enabled)
+    {
+      if (mail == NULL)
+        {
+          const gchar *email_address;
+
+          email_address = goa_account_get_presentation_identity (account);
+          mail = goa_mail_skeleton_new ();
+          g_object_set (G_OBJECT (mail), "email-address", email_address, NULL);
+          goa_object_skeleton_set_mail (object, mail);
+        }
+    }
+  else
+    {
+      if (mail != NULL)
+        goa_object_skeleton_set_mail (object, NULL);
+    }
+
+  /* Calendar */
+  calendar_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_CALENDAR) &&
+                     g_key_file_get_boolean (key_file, group, "CalendarEnabled", NULL);
+  goa_object_skeleton_attach_calendar (object, NULL, calendar_enabled, FALSE);
+
+  /* Contacts */
+  contacts_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_CONTACTS) &&
+                     g_key_file_get_boolean (key_file, group, "ContactsEnabled", NULL);
+  goa_object_skeleton_attach_contacts (object, NULL, contacts_enabled, FALSE);
+
   g_clear_pointer (&goa_conf, g_key_file_free);
 
   self->client_id = g_key_file_get_string (key_file, group, "client_id", NULL);
@@ -296,16 +354,32 @@ build_object (GoaProvider        *provider,
   if (just_added)
     {
       goa_account_set_files_disabled (account, !files_enabled);
+      goa_account_set_mail_disabled (account, !mail_enabled);
+      goa_account_set_calendar_disabled (account, !calendar_enabled);
+      goa_account_set_contacts_disabled (account, !contacts_enabled);
 
       g_signal_connect (account,
                         "notify::files-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
                         (gpointer) "FilesEnabled");
+      g_signal_connect (account,
+                        "notify::mail-disabled",
+                        G_CALLBACK (goa_util_account_notify_property_cb),
+                        (gpointer) "MailEnabled");
+      g_signal_connect (account,
+                        "notify::calendar-disabled",
+                        G_CALLBACK (goa_util_account_notify_property_cb),
+                        (gpointer) "CalendarEnabled");
+      g_signal_connect (account,
+                        "notify::contacts-disabled",
+                        G_CALLBACK (goa_util_account_notify_property_cb),
+                        (gpointer) "ContactsEnabled");
     }
 
   ret = TRUE;
 
 out:
+  g_clear_object (&mail);
   g_clear_object (&account);
   return ret;
 }
@@ -318,6 +392,9 @@ add_account_key_values (GoaOAuth2Provider *provider,
   g_assert (builder != NULL);
 
   g_variant_builder_add (builder, "{ss}", "FilesEnabled", "true");
+  g_variant_builder_add (builder, "{ss}", "MailEnabled", "true");
+  g_variant_builder_add (builder, "{ss}", "CalendarEnabled", "true");
+  g_variant_builder_add (builder, "{ss}", "ContactsEnabled", "true");
 
   /* The class getter implementations are used, since they handle fallbacks */
   g_variant_builder_add (builder, "{ss}", "OAuth2AuthorizationUri", goa_oauth2_provider_get_authorization_uri (provider));
@@ -551,6 +628,12 @@ goa_ms_graph_provider_init (GoaMsGraphProvider *self)
   self->setup_done = FALSE;
 }
 
+static guint
+get_credentials_generation (GoaProvider *provider)
+{
+  return 1;
+}
+
 static void
 goa_ms_graph_provider_class_init (GoaMsGraphProviderClass *klass)
 {
@@ -565,6 +648,7 @@ goa_ms_graph_provider_class_init (GoaMsGraphProviderClass *klass)
   provider_class->get_provider_features = get_provider_features;
   provider_class->build_object = build_object;
   provider_class->add_account = add_account;
+  provider_class->get_credentials_generation = get_credentials_generation;
 
   oauth2_class = GOA_OAUTH2_PROVIDER_CLASS (klass);
   oauth2_class->get_authorization_uri = get_authorization_uri;
