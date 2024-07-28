@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-05-23 11:25+0000\n"
-"PO-Revision-Date: 2024-05-23 19:04+0200\n"
+"POT-Creation-Date: 2024-05-27 12:24+0000\n"
+"PO-Revision-Date: 2024-07-28 08:28+0200\n"
 "Last-Translator: Quentin PAGÈS\n"
 "Language-Team: Tot En Òc\n"
 "Language: oc\n"
@@ -226,7 +226,7 @@ msgid "SSL on a dedicated port"
 msgstr "SSL sus un pòrt dedicat"
 
 #: src/goabackend/goaimapsmtpprovider.c:542
-#: src/goabackend/goaimapsmtpprovider.c:1206
+#: src/goabackend/goaimapsmtpprovider.c:1204
 msgid "Email"
 msgstr "Corrièl"
 
@@ -277,15 +277,15 @@ msgstr "_Servidor SMTP"
 msgid "Example server: smtp.example.com"
 msgstr "Exemple de servidor : smtp.exemple.com"
 
-#: src/goabackend/goaimapsmtpprovider.c:1197
+#: src/goabackend/goaimapsmtpprovider.c:1195
 msgid "Name"
 msgstr "Nom"
 
-#: src/goabackend/goaimapsmtpprovider.c:1223
+#: src/goabackend/goaimapsmtpprovider.c:1221
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1241
+#: src/goabackend/goaimapsmtpprovider.c:1239
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -323,25 +323,25 @@ msgstr "Exemple principal : user@EXEMPLE.COM"
 msgid "_Sign in…"
 msgstr "_S’identificar…"
 
-#: src/goabackend/goakerberosprovider.c:1291
+#: src/goabackend/goakerberosprovider.c:1290
 msgid "Ticketing is disabled for account"
 msgstr "La proprietat Ticketing es definida per aqueste compte"
 
-#: src/goabackend/goakerberosprovider.c:1318
+#: src/goabackend/goakerberosprovider.c:1317
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr ""
 "Impossible de trobar las donadas d’autentificacion del principal « %s » "
 "enregistradas dins lo trossèl de claus"
 
-#: src/goabackend/goakerberosprovider.c:1333
+#: src/goabackend/goakerberosprovider.c:1332
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr ""
 "Impossible de trobar lo senhal del principal « %s » dins las donadas "
 "d’autentificacion"
 
-#: src/goabackend/goakerberosprovider.c:1515
+#: src/goabackend/goakerberosprovider.c:1514
 msgid "Identity service returned invalid key"
 msgstr "Lo servici d'autentificacion a renviat « clau invalida »"
 
@@ -364,6 +364,8 @@ msgid ""
 "A custom Client or Tenant ID may need to be provided depending on the "
 "settings for your organization"
 msgstr ""
+"Un client personalizat o un ID de Tenant poiriá èsser fornit segon los "
+"paramètres de vòstra organizacion"
 
 #: src/goabackend/goamsgraphprovider.c:382
 msgid "_Client ID"
@@ -372,7 +374,7 @@ msgstr "_ID client"
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
 #: src/goabackend/goamsgraphprovider.c:384
 msgid "_Tenant ID"
-msgstr ""
+msgstr "_ID Tenant"
 
 #: src/goabackend/goamsgraphprovider.c:385
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
@@ -413,22 +415,22 @@ msgid "Sign in to %s with your browser"
 msgstr "Identificatz-vos a %s amb vòstre navegador"
 
 #: src/goabackend/goaoauth2provider.c:945
-#: src/goabackend/goaproviderdialog.c:689
+#: src/goabackend/goaproviderdialog.c:693
 msgid "_Sign In…"
 msgstr "_S’identificar…"
 
-#: src/goabackend/goaoauth2provider.c:1291
+#: src/goabackend/goaoauth2provider.c:1290
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr ""
 "Èra demandat de se connectar en tant que %s, mas la connexion es estada "
 "establida en tant que %s"
 
-#: src/goabackend/goaoauth2provider.c:1478
+#: src/goabackend/goaoauth2provider.c:1476
 msgid "Credentials do not contain access_token"
 msgstr "Las donadas d'autentificacion contenon pas access_token"
 
-#: src/goabackend/goaoauth2provider.c:1522
+#: src/goabackend/goaoauth2provider.c:1520
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Fracàs de l'actualizacion del geton d'accès (%s, %d) : "
@@ -489,15 +491,15 @@ msgstr "_Mapas"
 msgid "T_o Do"
 msgstr "Prèt_zfaits"
 
-#: src/goabackend/goaprovider.c:923
+#: src/goabackend/goaprovider.c:921
 msgid "Account is disabled"
 msgstr "Lo compte es desactivat"
 
-#: src/goabackend/goaprovider.c:936
+#: src/goabackend/goaprovider.c:934
 msgid "Unknown error"
 msgstr "Error desconeguda"
 
-#: src/goabackend/goaprovider.c:955
+#: src/goabackend/goaprovider.c:953
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync es pas implementat pel tipe %s"
@@ -506,51 +508,53 @@ msgstr "ensure_credentials_sync es pas implementat pel tipe %s"
 #. * Account" dialogs. The %s is the name of the provider. eg.,
 #. * 'Google'.
 #.
-#: src/goabackend/goaproviderdialog.c:168
+#: src/goabackend/goaproviderdialog.c:171
 #, c-format
 msgid "%s Account"
 msgstr "Compte %s"
 
-#: src/goabackend/goaproviderdialog.c:606
+#: src/goabackend/goaproviderdialog.c:610
 msgid "Remove this Account?"
 msgstr "Suprimir aqueste compte ?"
 
-#: src/goabackend/goaproviderdialog.c:607
+#: src/goabackend/goaproviderdialog.c:611
 msgid ""
 "If you remove this Online Account you will have to connect to it again to "
 "use it with apps and services."
 msgstr ""
+"Se suprimissètz aqueste compte en linha vos i deuretz connectar tornamai per "
+"l’utilizar amb d’aplicacions e servicis."
 
-#: src/goabackend/goaproviderdialog.c:609
+#: src/goabackend/goaproviderdialog.c:613
 msgid "_Cancel"
 msgstr "_Anullar"
 
-#: src/goabackend/goaproviderdialog.c:610
+#: src/goabackend/goaproviderdialog.c:614
 msgid "_Remove"
 msgstr "_Suprimir"
 
-#: src/goabackend/goaproviderdialog.c:688
+#: src/goabackend/goaproviderdialog.c:692
 msgid "Sign in to reconnect to this account"
 msgstr "Identificatz-vos per vos reconnectar a aqueste compte"
 
 #. Remove
-#: src/goabackend/goaproviderdialog.c:737
+#: src/goabackend/goaproviderdialog.c:742
 msgid "_Remove…"
 msgstr "_Suprimir…"
 
-#: src/goabackend/goaproviderdialog.c:832
+#: src/goabackend/goaproviderdialog.c:837
 msgid "_Sign In"
 msgstr "_S’identificar"
 
-#: src/goabackend/goaproviderdialog.c:894
+#: src/goabackend/goaproviderdialog.c:899
 msgid "_Try Again"
 msgstr "_Ensajatz tornamai"
 
-#: src/goabackend/goaproviderdialog.c:898
+#: src/goabackend/goaproviderdialog.c:903
 msgid "_Ignore"
 msgstr "_Ignorar"
 
-#: src/goabackend/goaproviderdialog.c:1143
+#: src/goabackend/goaproviderdialog.c:1153
 msgid "Dialog was dismissed"
 msgstr "Lo dialòg es estat regetat"
 
