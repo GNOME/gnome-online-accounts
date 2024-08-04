@@ -117,7 +117,7 @@ if enable_goabackend
   )
   libadwaita_dep = dependency(
     'libadwaita-1',
-    version: '1.6.beta',
+    version: '>= 1.6.beta',
     fallback: 'libadwaita',
     default_options: [
       'examples=false',
