@@ -56,6 +56,7 @@ struct _GoaDaemon
 
   uint32_t notification_id;
   unsigned int notification_signal_id;
+  gboolean accounts_need_notification;
   GPtrArray *accounts_needing_attention;
 };
 
@@ -1392,8 +1393,8 @@ remove_account_cb (GObject *source_object, GAsyncResult *res, gpointer user_data
   invocation = G_DBUS_METHOD_INVOCATION (data->invocations->data);
   goa_account_complete_remove (account, invocation);
 
-  g_ptr_array_remove (self->accounts_needing_attention, account);
-  goa_daemon_update_notification (self);
+  if (g_ptr_array_remove (self->accounts_needing_attention, account))
+    goa_daemon_update_notification (self);
 
   g_object_unref (task);
 }
@@ -1679,10 +1680,12 @@ goa_daemon_withdraw_notification (GoaDaemon *self)
 static void
 goa_daemon_update_notification (GoaDaemon *self)
 {
-  if (self->accounts_needing_attention->len > 0)
+  if (self->accounts_need_notification)
     goa_daemon_send_notification (self);
-  else
+  else if (self->accounts_needing_attention->len == 0)
     goa_daemon_withdraw_notification (self);
+
+  self->accounts_need_notification = FALSE;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -1768,6 +1771,7 @@ ensure_credentials_queue_collector (GObject *source_object, GAsyncResult *res, g
                          g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)),
                          error->message, g_quark_to_string (error->domain), error->code);
               g_ptr_array_add (self->accounts_needing_attention, g_object_ref (account));
+              self->accounts_need_notification = TRUE;
             }
         }
 
