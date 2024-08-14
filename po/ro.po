@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2023-11-06 21:57+0000\n"
-"PO-Revision-Date: 2023-11-07 12:59+0200\n"
+"POT-Creation-Date: 2024-07-28 06:28+0000\n"
+"PO-Revision-Date: 2024-08-11 15:10+0300\n"
 "Last-Translator: Florentina Mușat <florentina [dot] musat [dot] 28 [at] "
 "gmail [dot] com>\n"
 "Language-Team: Gnome Romanian Translation Team\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2);;\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Generator: Poedit 3.4.4\n"
 "X-Project-Style: gnome\n"
 
 #: data/org.gnome.online-accounts.gschema.xml:6
@@ -51,24 +51,34 @@ msgid "ProviderType property is not set for account"
 msgstr "Proprietatea ProviderType nu este stabilită pentru cont"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:283
+#: src/goabackend/goadavclient.c:697 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:682
+msgid "Authentication failed"
+msgstr "Autentificare eșuată"
+
+#: src/goabackend/goadavclient.c:704
+msgid "Cannot find WebDAV endpoint"
+msgstr "Nu s-a putut găsi punctul final WebDAV"
+
+#. TODO: more specific
+#: src/goabackend/goaewsclient.c:284
 msgid "Failed to parse autodiscover response XML"
 msgstr "Parsare răspunsului de autodescoperire XML a eșuat"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: src/goabackend/goaewsclient.c:294 src/goabackend/goaewsclient.c:309
-#: src/goabackend/goaewsclient.c:324
+#: src/goabackend/goaewsclient.c:295 src/goabackend/goaewsclient.c:310
+#: src/goabackend/goaewsclient.c:325
 #, c-format
 msgid "Failed to find “%s” element"
 msgstr "Eșec la găsirea elementului „%s”"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:345
+#: src/goabackend/goaewsclient.c:346
 msgid "Failed to find ASUrl and OABUrl in autodiscover response"
 msgstr "Eșec la găsirea ASUrl și OABUrl în răspunsul de autodescoperire"
 
-#: src/goabackend/goaexchangeprovider.c:51
+#: src/goabackend/goaexchangeprovider.c:52
 msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
@@ -76,171 +86,79 @@ msgstr "Microsoft Exchange"
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
 #.
-#: src/goabackend/goaexchangeprovider.c:248
-#: src/goabackend/goalastfmprovider.c:279
-#: src/goabackend/goaowncloudprovider.c:293
+#: src/goabackend/goaexchangeprovider.c:249
+#: src/goabackend/goawebdavprovider.c:403
 #, c-format
 msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "Parolă nevalidă cu utilizatorul „%s” (%s, %d): "
 
-#: src/goabackend/goaexchangeprovider.c:394
-#: src/goabackend/goaimapsmtpprovider.c:647
-msgid "_E-mail"
+#. provider name
+#: src/goabackend/goaexchangeprovider.c:382
+msgid ""
+"Connect to a Microsoft Exchange provider to access calendars, contacts and "
+"files"
+msgstr ""
+"Conectați-vă la un furnizor Microsoft Exchange pentru a accesa calendare, "
+"contacte și fișiere"
+
+#: src/goabackend/goaexchangeprovider.c:385
+#: src/goabackend/goaimapsmtpprovider.c:548
+msgid "_Email"
 msgstr "_Email"
 
-#: src/goabackend/goaexchangeprovider.c:395
-#: src/goabackend/goafedoraprovider.c:574
-#: src/goabackend/goaimapsmtpprovider.c:667
-#: src/goabackend/goaimapsmtpprovider.c:687
-#: src/goabackend/goalastfmprovider.c:421
-#: src/goabackend/goaowncloudprovider.c:522
+#: src/goabackend/goaexchangeprovider.c:386
+#: src/goabackend/goafedoraprovider.c:171
+#: src/goabackend/goaimapsmtpprovider.c:549
+#: src/goabackend/goaimapsmtpprovider.c:568
+#: src/goabackend/goaimapsmtpprovider.c:589
+#: src/goabackend/goawebdavprovider.c:505
 msgid "_Password"
 msgstr "_Parolă"
 
-#: src/goabackend/goaexchangeprovider.c:398
-msgid "_Custom"
-msgstr "_Personalizat"
+#: src/goabackend/goaexchangeprovider.c:387
+msgid ""
+"Exchange account details will be auto-detected from your email address when "
+"possible"
+msgstr ""
+"Detaliile contului Exchange vor fi detectate automat de la adresa de email "
+"atunci când este posibil"
 
-#: src/goabackend/goaexchangeprovider.c:409
-#: src/goabackend/goafedoraprovider.c:573
-#: src/goabackend/goaimapsmtpprovider.c:666
-#: src/goabackend/goaimapsmtpprovider.c:686
-#: src/goabackend/goalastfmprovider.c:420
-#: src/goabackend/goaowncloudprovider.c:521
+#: src/goabackend/goaexchangeprovider.c:398
+msgid "Account Details"
+msgstr "Detalii cont"
+
+#: src/goabackend/goaexchangeprovider.c:399
+#: src/goabackend/goafedoraprovider.c:170
+#: src/goabackend/goaimapsmtpprovider.c:567
+#: src/goabackend/goaimapsmtpprovider.c:588
+#: src/goabackend/goawebdavprovider.c:504
 msgid "User_name"
 msgstr "_Nume de utilizator"
 
-#: src/goabackend/goaexchangeprovider.c:410
-#: src/goabackend/goaowncloudprovider.c:520
-msgid "_Server"
-msgstr "_Server"
+#: src/goabackend/goaexchangeprovider.c:400
+msgid "_Domain"
+msgstr "_Domeniu"
 
-#. --
-#: src/goabackend/goaexchangeprovider.c:420
-#: src/goabackend/goafedoraprovider.c:581
-#: src/goabackend/goaimapsmtpprovider.c:699
-#: src/goabackend/goakerberosprovider.c:583
-#: src/goabackend/goalastfmprovider.c:429
-#: src/goabackend/goaoauth2provider.c:939
-#: src/goabackend/goaowncloudprovider.c:536
-msgid "_Cancel"
-msgstr "_Anulează"
+#: src/goabackend/goaexchangeprovider.c:401
+msgid "Example domain: example.com"
+msgstr "Exemplu de domeniu: exemplu.com"
 
-#: src/goabackend/goaexchangeprovider.c:421
-#: src/goabackend/goafedoraprovider.c:582
-#: src/goabackend/goakerberosprovider.c:584
-#: src/goabackend/goalastfmprovider.c:430
-#: src/goabackend/goaowncloudprovider.c:537
-msgid "C_onnect"
-msgstr "C_onectează"
-
-#: src/goabackend/goaexchangeprovider.c:437
-#: src/goabackend/goafedoraprovider.c:597
-#: src/goabackend/goaimapsmtpprovider.c:715
-#: src/goabackend/goakerberosprovider.c:599
-#: src/goabackend/goalastfmprovider.c:446
-#: src/goabackend/goaowncloudprovider.c:552
-msgid "Connecting…"
-msgstr "Se conectează…"
-
-#: src/goabackend/goaexchangeprovider.c:537
-#: src/goabackend/goaexchangeprovider.c:731
-#: src/goabackend/goafedoraprovider.c:746
-#: src/goabackend/goaimapsmtpprovider.c:865
-#: src/goabackend/goaimapsmtpprovider.c:900
-#: src/goabackend/goaimapsmtpprovider.c:992
-#: src/goabackend/goaimapsmtpprovider.c:1249
-#: src/goabackend/goaimapsmtpprovider.c:1325
-#: src/goabackend/goakerberosprovider.c:939
-#: src/goabackend/goalastfmprovider.c:644
-#: src/goabackend/goalastfmprovider.c:812
-#: src/goabackend/goamediaserverprovider.c:412
-#: src/goabackend/goaoauth2provider.c:962
-#: src/goabackend/goaoauth2provider.c:978
-#: src/goabackend/goaowncloudprovider.c:674
-#: src/goabackend/goaowncloudprovider.c:893
-msgid "Dialog was dismissed"
-msgstr "Fereastra de dialog a fost închisă"
-
-#: src/goabackend/goaexchangeprovider.c:575
-#: src/goabackend/goaexchangeprovider.c:759
-#: src/goabackend/goafedoraprovider.c:792
-#: src/goabackend/goaimapsmtpprovider.c:933
-#: src/goabackend/goaimapsmtpprovider.c:1030
-#: src/goabackend/goaimapsmtpprovider.c:1276
-#: src/goabackend/goaimapsmtpprovider.c:1353
-#: src/goabackend/goalastfmprovider.c:678
-#: src/goabackend/goalastfmprovider.c:831
-#: src/goabackend/goaowncloudprovider.c:719
-#: src/goabackend/goaowncloudprovider.c:920
-#, c-format
-msgid "Dialog was dismissed (%s, %d): "
-msgstr "Fereastra de dialog a fost închisă (%s, %d): "
-
-#: src/goabackend/goaexchangeprovider.c:588
-#: src/goabackend/goaimapsmtpprovider.c:946
-#: src/goabackend/goaimapsmtpprovider.c:1043
-#: src/goabackend/goaowncloudprovider.c:732
-msgid "_Ignore"
-msgstr "_Ignoră"
-
-#: src/goabackend/goaexchangeprovider.c:593
-#: src/goabackend/goaexchangeprovider.c:778
-#: src/goabackend/goafedoraprovider.c:803
-#: src/goabackend/goaimapsmtpprovider.c:951
-#: src/goabackend/goaimapsmtpprovider.c:1048
-#: src/goabackend/goaimapsmtpprovider.c:1295
-#: src/goabackend/goaimapsmtpprovider.c:1372
-#: src/goabackend/goakerberosprovider.c:1032
-#: src/goabackend/goalastfmprovider.c:690
-#: src/goabackend/goalastfmprovider.c:848
-#: src/goabackend/goaowncloudprovider.c:737
-#: src/goabackend/goaowncloudprovider.c:939
-msgid "_Try Again"
-msgstr "Î_ncearcă din nou"
-
-#: src/goabackend/goaexchangeprovider.c:598
-#: src/goabackend/goaexchangeprovider.c:771
-msgid "Error connecting to Microsoft Exchange server"
-msgstr "Eroare la conectarea la serverul Microsoft Exchange"
-
-#: src/goabackend/goafedoraprovider.c:94
+#: src/goabackend/goafedoraprovider.c:51
 msgid "Fedora"
 msgstr "Fedora"
 
-#: src/goabackend/goafedoraprovider.c:208
-#: src/goabackend/goakerberosprovider.c:240
-msgid "Ticketing is disabled for account"
-msgstr "Avizarea este dezactivată pentru acest cont"
-
-#: src/goabackend/goafedoraprovider.c:233
-#: src/goabackend/goakerberosprovider.c:265
-#, c-format
-msgid "Could not find saved credentials for principal “%s” in keyring"
-msgstr ""
-"Nu s-au găsit credențiale salvate pentru principalul „%s” în inelul de chei"
-
-#: src/goabackend/goafedoraprovider.c:246
-#: src/goabackend/goakerberosprovider.c:278
-#, c-format
-msgid "Did not find password for principal “%s” in credentials"
-msgstr "Nu s-a găsit parola pentru principalul „%s” în credențiale"
-
-#: src/goabackend/goafedoraprovider.c:805
-msgid "Error connecting to Fedora"
-msgstr "Eroare de conectare la Fedora"
-
-#: src/goabackend/goafedoraprovider.c:1198
-#: src/goabackend/goakerberosprovider.c:1366
-msgid "Identity service returned invalid key"
-msgstr "Serviciul de identități a returnat o cheie invalidă"
+#: src/goabackend/goafedoraprovider.c:167
+#: src/goabackend/goakerberosprovider.c:592
+msgid "Access restricted web and network resources for your organization"
+msgstr "Accesați resurse web și de rețea restricționate pentru organizație"
 
 #: src/goabackend/goagoogleprovider.c:57
 msgid "Google"
 msgstr "Google"
 
-#: src/goabackend/goagoogleprovider.c:207
-#: src/goabackend/goawindowsliveprovider.c:158
+#: src/goabackend/goagoogleprovider.c:213
+#: src/goabackend/goamsgraphprovider.c:163
+#: src/goabackend/goawindowsliveprovider.c:165
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
@@ -249,24 +167,19 @@ msgstr ""
 "primit statusul %d (%s)"
 
 #. TODO: more specific
-#: src/goabackend/goagoogleprovider.c:226
-#: src/goabackend/goagoogleprovider.c:237
-#: src/goabackend/goalastfmprovider.c:204
-#: src/goabackend/goalastfmprovider.c:213
-#: src/goabackend/goalastfmprovider.c:222
-#: src/goabackend/goalastfmprovider.c:230
-#: src/goabackend/goalastfmprovider.c:236
-#: src/goabackend/goalastfmprovider.c:504
-#: src/goabackend/goalastfmprovider.c:513
-#: src/goabackend/goalastfmprovider.c:530
-#: src/goabackend/goalastfmprovider.c:536
-#: src/goabackend/goaoauth2provider.c:536
-#: src/goabackend/goaoauth2provider.c:566
-#: src/goabackend/goaoauth2provider.c:577 src/goabackend/goautils.c:296
-#: src/goabackend/goawindowsliveprovider.c:177
-#: src/goabackend/goawindowsliveprovider.c:188
-#: src/goabackend/goawindowsliveprovider.c:197
-#: src/goabackend/goawindowsliveprovider.c:210
+#: src/goabackend/goagoogleprovider.c:232
+#: src/goabackend/goagoogleprovider.c:243
+#: src/goabackend/goamsgraphprovider.c:182
+#: src/goabackend/goamsgraphprovider.c:193
+#: src/goabackend/goamsgraphprovider.c:206
+#: src/goabackend/goamsgraphprovider.c:231
+#: src/goabackend/goaoauth2provider.c:679
+#: src/goabackend/goaoauth2provider.c:709
+#: src/goabackend/goaoauth2provider.c:720 src/goabackend/goautils.c:133
+#: src/goabackend/goawindowsliveprovider.c:184
+#: src/goabackend/goawindowsliveprovider.c:195
+#: src/goabackend/goawindowsliveprovider.c:204
+#: src/goabackend/goawindowsliveprovider.c:217
 msgid "Could not parse response"
 msgstr "Nu s-a putut parsa răspunsul"
 
@@ -275,17 +188,11 @@ msgstr "Nu s-a putut parsa răspunsul"
 msgid "Service not available"
 msgstr "Serviciul nu ete disponibil"
 
-#. TODO: more specific
-#: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goalastfmprovider.c:521
-#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:857
-msgid "Authentication failed"
-msgstr "Autentificare eșuată"
-
 #: src/goabackend/goaimapauthlogin.c:166 src/goabackend/goasmtpauth.c:600
 msgid "Server does not support STARTTLS"
 msgstr "Serverul nu suportă STARTTLS"
 
-#: src/goabackend/goaimapsmtpprovider.c:53
+#: src/goabackend/goaimapsmtpprovider.c:54
 msgid "IMAP and SMTP"
 msgstr "IMAP și SMTP"
 
@@ -299,139 +206,180 @@ msgstr "IMAP și SMTP"
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: src/goabackend/goaimapsmtpprovider.c:327
-#: src/goabackend/goaimapsmtpprovider.c:378
+#: src/goabackend/goaimapsmtpprovider.c:311
+#: src/goabackend/goaimapsmtpprovider.c:362
 #, c-format
 msgid "Invalid %s with username “%s” (%s, %d): "
 msgstr "%s nevalid cu numele de utilizator „%s” (%s, %d): "
 
-#. Translators: the following four strings are used to show a
-#. * combo box similar to the one in the evolution module.
-#. * Encryption: None
-#. *             STARTTLS after connecting
-#. *             SSL on a dedicated port
-#.
-#: src/goabackend/goaimapsmtpprovider.c:564
-msgid "_Encryption"
-msgstr "Criptar_e"
-
-#: src/goabackend/goaimapsmtpprovider.c:567
+#. Keep in sync with GoaTlsType
+#: src/goabackend/goaimapsmtpprovider.c:535
 msgid "None"
 msgstr "Nespecificat"
 
-#: src/goabackend/goaimapsmtpprovider.c:570
+#. GOA_TLS_TYPE_NONE
+#: src/goabackend/goaimapsmtpprovider.c:536
 msgid "STARTTLS after connecting"
 msgstr "STARTTLS după conectare"
 
-#: src/goabackend/goaimapsmtpprovider.c:573
+#. GOA_TLS_TYPE_STARTTLS
+#: src/goabackend/goaimapsmtpprovider.c:537
 msgid "SSL on a dedicated port"
 msgstr "SSL pe un port dedicat"
 
-#: src/goabackend/goaimapsmtpprovider.c:648
+#: src/goabackend/goaimapsmtpprovider.c:542
+#: src/goabackend/goaimapsmtpprovider.c:1204
+msgid "Email"
+msgstr "Email"
+
+#: src/goabackend/goaimapsmtpprovider.c:543
+msgid "Connect to an email account"
+msgstr "Conectați-vă la un cont email"
+
+#: src/goabackend/goaimapsmtpprovider.c:547
 msgid "_Name"
 msgstr "_Nume"
 
-#: src/goabackend/goaimapsmtpprovider.c:665
+#: src/goabackend/goaimapsmtpprovider.c:550
+msgid ""
+"IMAP and SMTP details will be auto-detected from your service provider when "
+"possible"
+msgstr ""
+"Detaliile IMAP și SMTP vor fi detectate automat de la furnizorul de servicii "
+"atunci când este posibil"
+
+#. IMAP
+#: src/goabackend/goaimapsmtpprovider.c:565
+msgid "IMAP Settings"
+msgstr "Configurări IMAP"
+
+#: src/goabackend/goaimapsmtpprovider.c:566
 msgid "IMAP _Server"
 msgstr "_Server IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:685
+#: src/goabackend/goaimapsmtpprovider.c:574
+#: src/goabackend/goaimapsmtpprovider.c:595
+msgid "Encryption"
+msgstr "Criptare"
+
+#: src/goabackend/goaimapsmtpprovider.c:579
+msgid "Example server: imap.example.com"
+msgstr "Exemplu de server: imap.exemplu.com"
+
+#. SMTP
+#: src/goabackend/goaimapsmtpprovider.c:586
+msgid "SMTP Settings"
+msgstr "Configurări SMTP"
+
+#: src/goabackend/goaimapsmtpprovider.c:587
 msgid "SMTP _Server"
 msgstr "_Server SMTP"
 
-#: src/goabackend/goaimapsmtpprovider.c:700
-#: src/goabackend/goaimapsmtpprovider.c:972
-#: src/goabackend/goaimapsmtpprovider.c:1305
-msgid "_Forward"
-msgstr "Î_naintează"
+#: src/goabackend/goaimapsmtpprovider.c:600
+msgid "Example server: smtp.example.com"
+msgstr "Exemplu de server: smtp.exemplu.com"
 
-#: src/goabackend/goaimapsmtpprovider.c:956
-#: src/goabackend/goaimapsmtpprovider.c:1288
-msgid "Error connecting to IMAP server"
-msgstr "Eroare de conectare la serverul IMAP"
-
-#: src/goabackend/goaimapsmtpprovider.c:1053
-#: src/goabackend/goaimapsmtpprovider.c:1365
-msgid "Error connecting to SMTP server"
-msgstr "Eroare de conectare la serverul SMTP"
-
-#: src/goabackend/goaimapsmtpprovider.c:1476
-msgid "E-mail"
-msgstr "Email"
-
-#: src/goabackend/goaimapsmtpprovider.c:1480
+#: src/goabackend/goaimapsmtpprovider.c:1195
 msgid "Name"
 msgstr "Nume"
 
-#: src/goabackend/goaimapsmtpprovider.c:1490
-#: src/goabackend/goaimapsmtpprovider.c:1494
+#: src/goabackend/goaimapsmtpprovider.c:1221
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1505
-#: src/goabackend/goaimapsmtpprovider.c:1509
+#: src/goabackend/goaimapsmtpprovider.c:1239
 msgid "SMTP"
 msgstr "SMTP"
 
-#: src/goabackend/goakerberosprovider.c:92
-msgid "Enterprise Login (Kerberos)"
-msgstr "Autentificare de întreprindere (Kerberos)"
+#: src/goabackend/goakerberosprovider.c:80
+msgid "Kerberos"
+msgstr "Kerberos"
 
-#: src/goabackend/goakerberosprovider.c:578
-msgid "_Principal"
-msgstr "_Principal"
-
-#: src/goabackend/goakerberosprovider.c:793
+#: src/goabackend/goakerberosprovider.c:418
 msgid "Operation was cancelled"
 msgstr "Operațiunea a fost anulată"
 
-#: src/goabackend/goakerberosprovider.c:837
-#: src/goaidentity/goaidentityservice.c:1265
+#: src/goabackend/goakerberosprovider.c:462
+#: src/goaidentity/goaidentityservice.c:1114
 msgid "Log In to Realm"
 msgstr "Autentificare la domeniu"
 
-#: src/goabackend/goakerberosprovider.c:838
+#: src/goabackend/goakerberosprovider.c:463
 msgid "Please enter your password below."
 msgstr "Introduceți parola dedesubt."
 
-#: src/goabackend/goakerberosprovider.c:839
+#: src/goabackend/goakerberosprovider.c:464
 msgid "Remember this password"
 msgstr "Memorează parola"
 
-#: src/goabackend/goakerberosprovider.c:1027
-msgid "Error connecting to enterprise identity server"
-msgstr "Eroare la conectarea la serverul de identități al întreprinderii"
+#: src/goabackend/goakerberosprovider.c:595
+msgid "_Principal"
+msgstr "_Principal"
 
-#: src/goabackend/goalastfmprovider.c:57
-msgid "Last.fm"
-msgstr "Last.fm"
+#: src/goabackend/goakerberosprovider.c:596
+msgid "Example principal: user@EXAMPLE.COM"
+msgstr "Exemplu de principal: utilizator@EXEMPLU.COM"
 
-#: src/goabackend/goalastfmprovider.c:692
-#: src/goabackend/goalastfmprovider.c:842
-msgid "Error connecting to Last.fm"
-msgstr "Eroare de conectare Last.fm"
+#: src/goabackend/goakerberosprovider.c:599
+#: src/goabackend/goamsgraphprovider.c:388
+msgid "_Sign in…"
+msgstr "_Autentificare…"
 
-#: src/goabackend/goamediaserverprovider.c:55
-msgid "Media Server"
-msgstr "Server media"
+#: src/goabackend/goakerberosprovider.c:1290
+msgid "Ticketing is disabled for account"
+msgstr "Avizarea este dezactivată pentru acest cont"
 
-#: src/goabackend/goamediaserverprovider.c:308
-msgid ""
-"Personal content can be added to your applications through a media server "
-"account."
+#: src/goabackend/goakerberosprovider.c:1317
+#, c-format
+msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr ""
-"Conținutul personal poate fi adăugat aplicațiilor dumneavoastră printr-un "
-"cont la server media."
+"Nu s-au găsit credențiale salvate pentru principalul „%s” în inelul de chei"
 
-#: src/goabackend/goamediaserverprovider.c:321
-msgid "Available Media Servers"
-msgstr "Servere media disponibile"
+#: src/goabackend/goakerberosprovider.c:1332
+#, c-format
+msgid "Did not find password for principal “%s” in credentials"
+msgstr "Nu s-a găsit parola pentru principalul „%s” în credențiale"
 
-#: src/goabackend/goamediaserverprovider.c:352
-msgid "No media servers found"
-msgstr "Nu s-au găsit servere media"
+#: src/goabackend/goakerberosprovider.c:1514
+msgid "Identity service returned invalid key"
+msgstr "Serviciul de identități a returnat o cheie invalidă"
 
-#: src/goabackend/goaoauth2provider.c:512
+#: src/goabackend/goamsgraphprovider.c:64
+msgid "Microsoft 365"
+msgstr "Microsoft 365"
+
+#. provider name
+#: src/goabackend/goamsgraphprovider.c:376
+msgid "Connect to a Microsoft 365 provider to access files"
+msgstr "Conectați-vă la un furnizor Microsoft 365 pentru a accesa fișiere"
+
+#: src/goabackend/goamsgraphprovider.c:378
+msgid "Authorization Details"
+msgstr "Detalii de autorizare"
+
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:380
+msgid ""
+"A custom Client or Tenant ID may need to be provided depending on the "
+"settings for your organization"
+msgstr ""
+"Poate fi necesar să fie furnizat un ID personalizat de client sau de "
+"chiriaș, în funcție de configurările organizației"
+
+#: src/goabackend/goamsgraphprovider.c:382
+msgid "_Client ID"
+msgstr "ID _client"
+
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:384
+msgid "_Tenant ID"
+msgstr "ID _chiriaș"
+
+#: src/goabackend/goamsgraphprovider.c:385
+msgid "Example ID: 00000000-0000-0000-0000-000000000000"
+msgstr "Exemplu de ID: 00000000-0000-0000-0000-000000000000"
+
+#: src/goabackend/goaoauth2provider.c:655
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -439,128 +387,173 @@ msgstr ""
 "Status 200 așteptat la cererea identificatorului de acces, dar în loc s-a "
 "primit statusul %d (%s)"
 
-#: src/goabackend/goaoauth2provider.c:656
+#: src/goabackend/goaoauth2provider.c:799
 msgid "Authorization response: "
 msgstr "Răspuns de autorizare: "
 
-#: src/goabackend/goaoauth2provider.c:719
+#: src/goabackend/goaoauth2provider.c:862
 #, c-format
 msgid "Authorization response: %s"
 msgstr "Răspuns de autorizare: %s"
 
-#: src/goabackend/goaoauth2provider.c:727
+#: src/goabackend/goaoauth2provider.c:870
 msgid "Failed to authenticate"
 msgstr "Nu s-a putut autentifica"
 
-#: src/goabackend/goaoauth2provider.c:927
-msgid "Sign in with your browser to setup an account."
-msgstr "Autentificați-vă cu navigatorul pentru a configura un cont."
-
-#: src/goabackend/goaoauth2provider.c:931
-msgid "Continue"
-msgstr "Continuă"
-
-#: src/goabackend/goaoauth2provider.c:1004
+#: src/goabackend/goaoauth2provider.c:906
 msgid "Error getting an Access Token: "
 msgstr "Eroare la primirea identificatorului de acces: "
 
-#: src/goabackend/goaoauth2provider.c:1019
+#: src/goabackend/goaoauth2provider.c:922
 msgid "Error getting identity: "
 msgstr "Eroare la primirea identității: "
 
-#: src/goabackend/goaoauth2provider.c:1216
+#: src/goabackend/goaoauth2provider.c:943
+#, c-format
+msgid "Sign in to %s with your browser"
+msgstr "Autentificați-vă la %s cu navigatorul"
+
+#: src/goabackend/goaoauth2provider.c:945
+#: src/goabackend/goaproviderdialog.c:693
+msgid "_Sign In…"
+msgstr "_Autentificare…"
+
+#: src/goabackend/goaoauth2provider.c:1290
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "S-a cerut autentificarea ca %s, dar s-a autentificat ca %s"
 
-#: src/goabackend/goaoauth2provider.c:1368
+#: src/goabackend/goaoauth2provider.c:1476
 msgid "Credentials do not contain access_token"
 msgstr "Credențialele nu conțin „access_token”"
 
-#: src/goabackend/goaoauth2provider.c:1407
+#: src/goabackend/goaoauth2provider.c:1520
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Reîmprospătarea identificatorului de acces a eșuat (%s, %d): "
 
-#: src/goabackend/goaowncloudprovider.c:58
+#: src/goabackend/goaowncloudprovider.c:55
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: src/goabackend/goaowncloudprovider.c:742
-#: src/goabackend/goaowncloudprovider.c:932
-msgid "Error connecting to Nextcloud server"
-msgstr "Eroare de conectare la serverul Nextcloud"
-
-#: src/goabackend/goaprovider.c:109
+#: src/goabackend/goaprovider.c:118
 msgid "_Mail"
 msgstr "E_mail"
 
-#: src/goabackend/goaprovider.c:114
+#: src/goabackend/goaprovider.c:123
 msgid "Cale_ndar"
 msgstr "Cale_ndar"
 
-#: src/goabackend/goaprovider.c:119
+#: src/goabackend/goaprovider.c:128
 msgid "_Contacts"
 msgstr "_Contacte"
 
-#: src/goabackend/goaprovider.c:124
+#: src/goabackend/goaprovider.c:133
 msgid "C_hat"
 msgstr "C_hat"
 
-#: src/goabackend/goaprovider.c:129
+#: src/goabackend/goaprovider.c:138
 msgid "_Documents"
 msgstr "_Documente"
 
-#: src/goabackend/goaprovider.c:134
+#: src/goabackend/goaprovider.c:143
 msgid "M_usic"
 msgstr "M_uzică"
 
-#: src/goabackend/goaprovider.c:139
+#: src/goabackend/goaprovider.c:148
 msgid "_Photos"
 msgstr "_Fotografii"
 
-#: src/goabackend/goaprovider.c:144
+#: src/goabackend/goaprovider.c:153
 msgid "_Files"
 msgstr "_Fișiere"
 
-#: src/goabackend/goaprovider.c:149
+#: src/goabackend/goaprovider.c:158
 msgid "Network _Resources"
 msgstr "_Resursele rețelei"
 
-#: src/goabackend/goaprovider.c:154
+#: src/goabackend/goaprovider.c:163
 msgid "_Read Later"
 msgstr "Citește mai tâ_rziu"
 
-#: src/goabackend/goaprovider.c:159
+#: src/goabackend/goaprovider.c:168
 msgid "Prin_ters"
 msgstr "Impriman_te"
 
-#: src/goabackend/goaprovider.c:164
+#: src/goabackend/goaprovider.c:173
 msgid "_Maps"
 msgstr "_Hărți"
 
-#: src/goabackend/goaprovider.c:169
+#: src/goabackend/goaprovider.c:178
 msgid "T_o Do"
 msgstr "T_o Do"
 
-#. Translators: This is a label for a series of
-#. * options switches. For example: “Use for Mail”.
-#: src/goabackend/goaprovider.c:567
-msgid "Use for"
-msgstr "Utilizează pentru"
-
-#: src/goabackend/goaprovider.c:822
+#: src/goabackend/goaprovider.c:921
 msgid "Account is disabled"
 msgstr "Contul este dezactivat"
 
-#: src/goabackend/goaprovider.c:835
+#: src/goabackend/goaprovider.c:934 src/goabackend/goawebdavprovider.c:394
 msgid "Unknown error"
 msgstr "Eroare necunoscută"
 
-#: src/goabackend/goaprovider.c:854
+#: src/goabackend/goaprovider.c:953
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "„ensure_credentials_sync” nu este implementată pe tipul %s"
+
+#. Translators: this is the title of the "Add Account" and "Refresh
+#. * Account" dialogs. The %s is the name of the provider. eg.,
+#. * 'Google'.
+#.
+#: src/goabackend/goaproviderdialog.c:171
+#, c-format
+msgid "%s Account"
+msgstr "cont %s"
+
+#: src/goabackend/goaproviderdialog.c:610
+msgid "Remove this Account?"
+msgstr "Eliminați acest cont?"
+
+#: src/goabackend/goaproviderdialog.c:611
+msgid ""
+"If you remove this Online Account you will have to connect to it again to "
+"use it with apps and services."
+msgstr ""
+"Dacă eliminați acest Cont online va trebui să vă conectați din nou la acesta "
+"pentru a îl utiliza cu aplicații și servicii."
+
+#: src/goabackend/goaproviderdialog.c:613
+msgid "_Cancel"
+msgstr "_Anulează"
+
+#: src/goabackend/goaproviderdialog.c:614
+msgid "_Remove"
+msgstr "_Elimină"
+
+#: src/goabackend/goaproviderdialog.c:692
+msgid "Sign in to reconnect to this account"
+msgstr "Autentificați-vă pentru a vă reconecta la acest cont"
+
+#. Remove
+#: src/goabackend/goaproviderdialog.c:742
+msgid "_Remove…"
+msgstr "_Elimină…"
+
+#: src/goabackend/goaproviderdialog.c:837
+msgid "_Sign In"
+msgstr "Autentifica_re"
+
+#: src/goabackend/goaproviderdialog.c:899
+msgid "_Try Again"
+msgstr "Î_ncearcă din nou"
+
+#: src/goabackend/goaproviderdialog.c:903
+msgid "_Ignore"
+msgstr "_Ignoră"
+
+#: src/goabackend/goaproviderdialog.c:1153
+msgid "Dialog was dismissed"
+msgstr "Fereastra de dialog a fost închisă"
 
 #. TODO: more specific
 #: src/goabackend/goasmtpauth.c:164
@@ -571,80 +564,59 @@ msgstr "TLS nu este disponibil"
 msgid "Unknown authentication mechanism"
 msgstr "Mecanism de autentificare necunoscut"
 
-#: src/goabackend/goautils.c:92
-msgid "Error logging into the account"
-msgstr "Eroare la autentificare"
-
-#: src/goabackend/goautils.c:136
-msgid "Credentials have expired"
-msgstr "Credențialele au expirat"
-
-#: src/goabackend/goautils.c:140
-msgid "Sign in to enable this account."
-msgstr "Autentificați-vă pentru a activa acest cont."
-
-#: src/goabackend/goautils.c:144
-msgid "_Sign In"
-msgstr "Autentifica_re"
-
-#: src/goabackend/goautils.c:240
+#: src/goabackend/goautils.c:77
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "Un cont %s există deja pentru %s"
 
-#. Translators: this is the title of the "Add Account" and "Refresh
-#. * Account" dialogs. The %s is the name of the provider. eg.,
-#. * 'Google'.
-#.
-#: src/goabackend/goautils.c:316
-#, c-format
-msgid "%s Account"
-msgstr "cont %s"
-
 #. TODO: more specific
-#: src/goabackend/goautils.c:370
+#: src/goabackend/goautils.c:190
 msgid "Failed to delete credentials from the keyring"
 msgstr "Ștergerea credențialelor din inelul de chei a eșuat"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:418
+#: src/goabackend/goautils.c:238
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Preluarea credențialelor din inelul de chei a eșuat"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:428
+#: src/goabackend/goautils.c:248
 msgid "No credentials found in the keyring"
 msgstr "Nu s-au găsit credențialele în inelul de chei"
 
-#: src/goabackend/goautils.c:441
+#: src/goabackend/goautils.c:261
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Eroare la parsarea rezultatului obținut de la inelul de chei: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: src/goabackend/goautils.c:482
+#: src/goabackend/goautils.c:302
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Credențialele GOA %s pentru identitatea %s"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:499
+#: src/goabackend/goautils.c:319
 msgid "Failed to store credentials in the keyring"
 msgstr "Stocarea credențialelor în inelul de chei a eșuat"
 
-#: src/goabackend/goautils.c:851
-msgid "Cannot find WebDAV endpoint"
-msgstr "Nu s-a putut găsi punctul final WebDAV"
+#: src/goabackend/goautils.c:672
+msgid "Not supported"
+msgstr "Nu este suportat"
 
-#: src/goabackend/goautils.c:862
+#: src/goabackend/goautils.c:676
+msgid "Not found"
+msgstr "Nu a fost găsit"
+
+#: src/goabackend/goautils.c:687
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Cod: %u — Răspuns neașteptat de la server"
 
-#: src/goabackend/goautils.c:879
+#: src/goabackend/goautils.c:704
 msgid "The signing certificate authority is not known."
 msgstr "Autoritatea de certificare semnatară nu este cunoscută."
 
-#: src/goabackend/goautils.c:883
+#: src/goabackend/goautils.c:708
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
@@ -652,31 +624,72 @@ msgstr ""
 "Certificatul nu se potrivește identității așteptate a sitului de unde a fost "
 "preluată."
 
-#: src/goabackend/goautils.c:888
+#: src/goabackend/goautils.c:713
 msgid "The certificate’s activation time is still in the future."
 msgstr "Timpul de activare al certificatului este încă în viitor."
 
-#: src/goabackend/goautils.c:892
+#: src/goabackend/goautils.c:717
 msgid "The certificate has expired."
 msgstr "Certificatul a expirat."
 
-#: src/goabackend/goautils.c:896
+#: src/goabackend/goautils.c:721
 msgid "The certificate has been revoked."
 msgstr "Certificatul a fost anulat."
 
-#: src/goabackend/goautils.c:900
+#: src/goabackend/goautils.c:725
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Algoritmul certificatului este considerat nesigur."
 
-#: src/goabackend/goautils.c:906
+#: src/goabackend/goautils.c:731
 msgid "Invalid certificate."
 msgstr "Certificat nevalid."
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:941
+#: src/goabackend/goautils.c:766
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "Nu s-a găsit %s cu identitatea „%s” în credențiale"
+
+#: src/goabackend/goawebdavprovider.c:496
+msgid "Calendar, Contacts and Files"
+msgstr "Calendar, contacte și fișiere"
+
+#: src/goabackend/goawebdavprovider.c:497
+msgid ""
+"Add a calendar, contacts and files account by entering your WebDAV server "
+"and account details"
+msgstr ""
+"Adăugați un cont de calendar, contacte și fișiere prin introducerea "
+"serverului WebDAV și detaliilor contului"
+
+#: src/goabackend/goawebdavprovider.c:500
+msgid "_Server Address"
+msgstr "Adresă de _server"
+
+#: src/goabackend/goawebdavprovider.c:501
+msgid "Examples: example.com, 192.168.0.82"
+msgstr "Exemple: exemplu.com, 192.168.0.82"
+
+#: src/goabackend/goawebdavprovider.c:511
+msgid "Server Addresses (Optional)"
+msgstr "Adrese de server (opțional)"
+
+#: src/goabackend/goawebdavprovider.c:512
+msgid "Files"
+msgstr "Fișiere"
+
+#: src/goabackend/goawebdavprovider.c:513
+msgid "Calendar (CalDAV)"
+msgstr "Calendar (CalDAV)"
+
+#: src/goabackend/goawebdavprovider.c:514
+msgid "Contacts (CardDAV)"
+msgstr "Contacte (CardDAV)"
+
+#: src/goabackend/goawebdavprovider.c:712
+#, c-format
+msgid "Invalid URI: %s"
+msgstr "URI nevalid: %s"
 
 #: src/goabackend/goawindowsliveprovider.c:56
 msgid "Microsoft"
@@ -688,12 +701,11 @@ msgstr "Cheia secretă inițială este nevalidă"
 
 #. TODO: more specific
 #: src/goaidentity/goaidentityservice.c:786
-#: src/goaidentity/goaidentityservice.c:890
 #, c-format
 msgid "Couldn't get GoaObject for object path %s"
 msgstr "Nu s-a putut obține GoaObject pentru calea obiectului %s"
 
-#: src/goaidentity/goaidentityservice.c:1270
+#: src/goaidentity/goaidentityservice.c:1119
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "Domeniul rețelei %s necesită niște informații pentru a vă autentifica."
@@ -764,6 +776,77 @@ msgstr "Nu s-a putut găsi identitatea"
 #: src/goaidentity/goakerberosidentitymanager.c:937
 msgid "Could not create credential cache for identity"
 msgstr "Nu s-a putut creea spațiul de prestocare pentru identitate"
+
+#~ msgid "_Custom"
+#~ msgstr "_Personalizat"
+
+#~ msgid "C_onnect"
+#~ msgstr "C_onectează"
+
+#~ msgid "Connecting…"
+#~ msgstr "Se conectează…"
+
+#, c-format
+#~ msgid "Dialog was dismissed (%s, %d): "
+#~ msgstr "Fereastra de dialog a fost închisă (%s, %d): "
+
+#~ msgid "Error connecting to Microsoft Exchange server"
+#~ msgstr "Eroare la conectarea la serverul Microsoft Exchange"
+
+#~ msgid "Error connecting to Fedora"
+#~ msgstr "Eroare de conectare la Fedora"
+
+#~ msgid "_Forward"
+#~ msgstr "Î_naintează"
+
+#~ msgid "Error connecting to IMAP server"
+#~ msgstr "Eroare de conectare la serverul IMAP"
+
+#~ msgid "Error connecting to SMTP server"
+#~ msgstr "Eroare de conectare la serverul SMTP"
+
+#~ msgid "Enterprise Login (Kerberos)"
+#~ msgstr "Autentificare de întreprindere (Kerberos)"
+
+#~ msgid "Error connecting to enterprise identity server"
+#~ msgstr "Eroare la conectarea la serverul de identități al întreprinderii"
+
+#~ msgid "Last.fm"
+#~ msgstr "Last.fm"
+
+#~ msgid "Error connecting to Last.fm"
+#~ msgstr "Eroare de conectare Last.fm"
+
+#~ msgid "Media Server"
+#~ msgstr "Server media"
+
+#~ msgid ""
+#~ "Personal content can be added to your applications through a media server "
+#~ "account."
+#~ msgstr ""
+#~ "Conținutul personal poate fi adăugat aplicațiilor dumneavoastră printr-un "
+#~ "cont la server media."
+
+#~ msgid "Available Media Servers"
+#~ msgstr "Servere media disponibile"
+
+#~ msgid "No media servers found"
+#~ msgstr "Nu s-au găsit servere media"
+
+#~ msgid "Continue"
+#~ msgstr "Continuă"
+
+#~ msgid "Error connecting to Nextcloud server"
+#~ msgstr "Eroare de conectare la serverul Nextcloud"
+
+#~ msgid "Use for"
+#~ msgstr "Utilizează pentru"
+
+#~ msgid "Error logging into the account"
+#~ msgstr "Eroare la autentificare"
+
+#~ msgid "Credentials have expired"
+#~ msgstr "Credențialele au expirat"
 
 #~ msgid "Server does not support PLAIN"
 #~ msgstr "Serverul nu suportă PLAIN"
@@ -837,9 +920,6 @@ msgstr "Nu s-a putut creea spațiul de prestocare pentru identitate"
 #~ msgid "Connection Settings"
 #~ msgstr "Configurări de conexiune"
 
-#~ msgid "Personal Details"
-#~ msgstr "Detalii personale"
-
 #~ msgid "_OK"
 #~ msgstr "_OK"
 
@@ -860,9 +940,6 @@ msgstr "Nu s-a putut creea spațiul de prestocare pentru identitate"
 
 #~ msgid "Did not find password with identity ‘%s’ in credentials"
 #~ msgstr "Nu s-a găsit parola cu identitatea „%s” în credențiale"
-
-#~ msgid "_Domain"
-#~ msgstr "_Domeniu"
 
 #~ msgid "Enterprise domain or realm name"
 #~ msgstr "Domaniu de întreprindere sau un nume de domeniu"
