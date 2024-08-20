@@ -473,7 +473,7 @@ create_account_details_ui (GoaProvider *provider,
 
       goa_provider_dialog_add_page (dialog,
                                     NULL, // provider name
-                                    _("Connect to Microsoft 365 to access files stored in OneDrive"));
+                                    _("Connect to Microsoft 365 to access email, calendars, contacts and files"));
 
       group = goa_provider_dialog_add_group (dialog, NULL);
       data->organization_switch = g_object_new (ADW_TYPE_SWITCH_ROW,
