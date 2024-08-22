@@ -9,17 +9,17 @@ msgstr ""
 "Project-Id-Version: Gnome Online Account\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-07-16 00:47+0000\n"
-"PO-Revision-Date: 2024-07-19 16:39+0300\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"POT-Creation-Date: 2024-08-20 15:00+0000\n"
+"PO-Revision-Date: 2024-08-22 18:43+0300\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Gtranslator 46.1\n"
 
 #: data/org.gnome.online-accounts.gschema.xml:6
 msgid "List of providers that are allowed to be loaded"
@@ -38,34 +38,34 @@ msgstr ""
 "השירות מופרדת בפסיקים."
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1159 src/daemon/goadaemon.c:1479
+#: src/daemon/goadaemon.c:1160 src/daemon/goadaemon.c:1480
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "נכשל חיפוש הספק עבור: %s"
 
-#: src/daemon/goadaemon.c:1422
+#: src/daemon/goadaemon.c:1423
 msgid "IsLocked property is set for account"
 msgstr "מאפיין IsLocked הוגדר לחשבון"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1467
+#: src/daemon/goadaemon.c:1468
 msgid "ProviderType property is not set for account"
 msgstr "מאפיין ProviderType לא מוגדר לחשבון"
 
-#: src/daemon/goadaemon.c:1629
+#: src/daemon/goadaemon.c:1630
 #, c-format
 msgid "Failed to sign in to “%s”"
 msgstr "הכניסה ל־„%s“ נכשלה"
 
-#: src/daemon/goadaemon.c:1634
+#: src/daemon/goadaemon.c:1635
 msgid "Failed to sign in to multiple accounts"
 msgstr "כניסה למספר חשבונות כשלה"
 
-#: src/daemon/goadaemon.c:1643
+#: src/daemon/goadaemon.c:1644
 msgid "Online Accounts"
 msgstr "חשבונות מקוונים"
 
-#: src/daemon/goadaemon.c:1646
+#: src/daemon/goadaemon.c:1647
 msgid "Account Action Required"
 msgstr "נדרשת פעולת חשבון"
 
@@ -183,7 +183,7 @@ msgid "Google"
 msgstr "Google"
 
 #: src/goabackend/goagoogleprovider.c:213
-#: src/goabackend/goamsgraphprovider.c:163
+#: src/goabackend/goamsgraphprovider.c:184
 #: src/goabackend/goawindowsliveprovider.c:165
 #, c-format
 msgid ""
@@ -193,10 +193,10 @@ msgstr "אמור היה להגיע מצב 200 בעת בקשת הזהות שלך,
 #. TODO: more specific
 #: src/goabackend/goagoogleprovider.c:232
 #: src/goabackend/goagoogleprovider.c:243
-#: src/goabackend/goamsgraphprovider.c:182
-#: src/goabackend/goamsgraphprovider.c:193
-#: src/goabackend/goamsgraphprovider.c:206
-#: src/goabackend/goamsgraphprovider.c:231
+#: src/goabackend/goamsgraphprovider.c:203
+#: src/goabackend/goamsgraphprovider.c:214
+#: src/goabackend/goamsgraphprovider.c:227
+#: src/goabackend/goamsgraphprovider.c:252
 #: src/goabackend/goaoauth2provider.c:677
 #: src/goabackend/goaoauth2provider.c:707
 #: src/goabackend/goaoauth2provider.c:718 src/goabackend/goautils.c:133
@@ -383,37 +383,37 @@ msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:399
-msgid "Connect to Microsoft 365 to access files stored in OneDrive"
-msgstr "יש להתחבר לספק Microsoft 365 כדי לגשת לקבצים שמאוחסנים ב־OneDrive"
+#: src/goabackend/goamsgraphprovider.c:476
+msgid "Connect to Microsoft 365 to access email, calendars, contacts and files"
+msgstr "אפשר להתחבר לספק Microsoft 365 כדי לגשת ללוחות שנה, אנשי קשר וקבצים"
 
-#: src/goabackend/goamsgraphprovider.c:403
+#: src/goabackend/goamsgraphprovider.c:480
 msgid "Use Organization Account"
 msgstr "להשתמש בחשבון תאגידי"
 
-#: src/goabackend/goamsgraphprovider.c:404
+#: src/goabackend/goamsgraphprovider.c:481
 msgid "Connect using details from an organization or developer account"
 msgstr "התחברות עם פרטים מארגון או מחשבון פיתוח"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:411
+#: src/goabackend/goamsgraphprovider.c:488
 msgid "Enter the details provided by your organization"
 msgstr "נא למלא את הפרטים שסופקו על ידי הארגון שלך"
 
-#: src/goabackend/goamsgraphprovider.c:413
+#: src/goabackend/goamsgraphprovider.c:490
 msgid "_Client ID (Optional)"
 msgstr "מזהה _לקוח (רשות)"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:415
+#: src/goabackend/goamsgraphprovider.c:492
 msgid "_Tenant ID"
 msgstr "מזהה _דייר (Tenant)"
 
-#: src/goabackend/goamsgraphprovider.c:416
+#: src/goabackend/goamsgraphprovider.c:493
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "מזהה לדוגמה: 00000000-0000-0000-0000-000000000000"
 
-#: src/goabackend/goamsgraphprovider.c:419
+#: src/goabackend/goamsgraphprovider.c:496
 #: src/goabackend/goaoauth2provider.c:943
 #: src/goabackend/goaproviderdialog.c:701
 msgid "_Sign In…"
@@ -798,6 +798,9 @@ msgstr "לא ניתן ליצור מאגר פרטי זיהוי לזהות"
 #, c-format
 msgid "Error closing file descriptor: %s"
 msgstr "שגיאה בסגירת מתאר קובץ: %s"
+
+#~ msgid "Connect to Microsoft 365 to access files stored in OneDrive"
+#~ msgstr "יש להתחבר לספק Microsoft 365 כדי לגשת לקבצים שמאוחסנים ב־OneDrive"
 
 #~ msgid "Authorization Details"
 #~ msgstr "פרטי אימות"
