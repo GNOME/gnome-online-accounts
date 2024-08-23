@@ -553,6 +553,16 @@ update_account_details_ui (AddAccountData *data,
                   : GOA_TLS_TYPE_NONE,
                 NULL);
 
+  if (imap_config != NULL)
+    {
+      gtk_accessible_announce (GTK_ACCESSIBLE (data->imap_group),
+                               adw_preferences_group_get_title (ADW_PREFERENCES_GROUP (data->imap_group)),
+                               GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_MEDIUM);
+      gtk_accessible_announce (GTK_ACCESSIBLE (data->imap_group),
+                               _("Auto-detected"),
+                               GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_MEDIUM);
+    }
+
   /* SMTP */
   gtk_editable_set_text (GTK_EDITABLE (data->smtp_server),
                          smtp_config ? goa_mail_config_get_hostname (smtp_config) : "");
@@ -563,6 +573,16 @@ update_account_details_ui (AddAccountData *data,
                   ? goa_mail_config_get_encryption (smtp_config)
                   : GOA_TLS_TYPE_NONE,
                 NULL);
+
+  if (smtp_config != NULL)
+    {
+      gtk_accessible_announce (GTK_ACCESSIBLE (data->smtp_group),
+                               adw_preferences_group_get_title (ADW_PREFERENCES_GROUP (data->smtp_group)),
+                               GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_MEDIUM);
+      gtk_accessible_announce (GTK_ACCESSIBLE (data->smtp_group),
+                               _("Auto-detected"),
+                               GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_MEDIUM);
+    }
 
   /* Discovery */
   g_cancellable_cancel (data->discovery);
@@ -696,6 +716,7 @@ create_account_details_ui (GoaProvider    *provider,
       adw_entry_row_add_suffix (ADW_ENTRY_ROW (data->email_address), data->discovery_status);
 
       icon = gtk_image_new_from_icon_name ("emblem-default-symbolic");
+      gtk_widget_set_tooltip_text (GTK_WIDGET (icon), _("Auto-detected"));
       gtk_widget_add_css_class (GTK_WIDGET (icon), "success");
       gtk_box_append (GTK_BOX (data->discovery_status), GTK_WIDGET (icon));
 
@@ -720,6 +741,9 @@ create_account_details_ui (GoaProvider    *provider,
 
   if (new_account)
     {
+      GtkWidget *discovery_image;
+      GtkWidget *discovery_label;
+
       data->imap_encryption = goa_provider_dialog_add_combo (dialog,
                                                              data->imap_group,
                                                              _("Encryption"),
@@ -728,10 +752,21 @@ create_account_details_ui (GoaProvider    *provider,
       g_signal_connect (data->imap_encryption, "notify::selected", G_CALLBACK (on_login_changed), data);
 
       /* Discovery */
-      data->imap_discovery = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
+      data->imap_discovery = g_object_new (GTK_TYPE_BOX,
+                                           "accessible-role", GTK_ACCESSIBLE_ROLE_GROUP,
+                                           "spacing",         8,
+                                           NULL);
       gtk_widget_add_css_class (data->imap_discovery, "success");
-      gtk_box_append (GTK_BOX (data->imap_discovery), gtk_label_new (_("Auto-detected")));
-      gtk_box_append (GTK_BOX (data->imap_discovery), gtk_image_new_from_icon_name ("emblem-default-symbolic"));
+      discovery_label = gtk_label_new (_("Auto-detected"));
+      gtk_accessible_update_relation (GTK_ACCESSIBLE (data->imap_discovery),
+                                      GTK_ACCESSIBLE_RELATION_LABELLED_BY, discovery_label, NULL,
+                                      -1);
+      gtk_box_append (GTK_BOX (data->imap_discovery), discovery_label);
+      discovery_image = g_object_new (GTK_TYPE_IMAGE,
+                                      "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
+                                      "icon-name",       "emblem-default-symbolic",
+                                      NULL);
+      gtk_box_append (GTK_BOX (data->imap_discovery), discovery_image);
       adw_preferences_group_set_header_suffix (ADW_PREFERENCES_GROUP (data->imap_group),
                                                data->imap_discovery);
     }
@@ -750,6 +785,9 @@ create_account_details_ui (GoaProvider    *provider,
 
   if (new_account)
     {
+      GtkWidget *discovery_image;
+      GtkWidget *discovery_label;
+
       data->smtp_encryption = goa_provider_dialog_add_combo (dialog,
                                                              data->smtp_group,
                                                              _("Encryption"),
@@ -758,10 +796,21 @@ create_account_details_ui (GoaProvider    *provider,
       g_signal_connect (data->smtp_encryption, "notify::selected", G_CALLBACK (on_login_changed), data);
 
       /* Discovery */
-      data->smtp_discovery = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
+      data->smtp_discovery = g_object_new (GTK_TYPE_BOX,
+                                           "accessible-role", GTK_ACCESSIBLE_ROLE_GROUP,
+                                           "spacing",         8,
+                                           NULL);
       gtk_widget_add_css_class (data->smtp_discovery, "success");
-      gtk_box_append (GTK_BOX (data->smtp_discovery), gtk_label_new (_("Auto-detected")));
-      gtk_box_append (GTK_BOX (data->smtp_discovery), gtk_image_new_from_icon_name ("emblem-default-symbolic"));
+      discovery_label = gtk_label_new (_("Auto-detected"));
+      gtk_accessible_update_relation (GTK_ACCESSIBLE (data->smtp_discovery),
+                                      GTK_ACCESSIBLE_RELATION_LABELLED_BY, discovery_label, NULL,
+                                      -1);
+      gtk_box_append (GTK_BOX (data->smtp_discovery), discovery_label);
+      discovery_image = g_object_new (GTK_TYPE_IMAGE,
+                                      "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
+                                      "icon-name",       "emblem-default-symbolic",
+                                      NULL);
+      gtk_box_append (GTK_BOX (data->smtp_discovery), discovery_image);
       adw_preferences_group_set_header_suffix (ADW_PREFERENCES_GROUP (data->smtp_group),
                                                data->smtp_discovery);
     }
