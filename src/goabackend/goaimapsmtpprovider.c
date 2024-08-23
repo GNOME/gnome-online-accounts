@@ -553,6 +553,16 @@ update_account_details_ui (AddAccountData *data,
                   : GOA_TLS_TYPE_NONE,
                 NULL);
 
+  if (imap_config != NULL)
+    {
+      gtk_accessible_announce (GTK_ACCESSIBLE (data->imap_group),
+                               adw_preferences_group_get_title (ADW_PREFERENCES_GROUP (data->imap_group)),
+                               GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_MEDIUM);
+      gtk_accessible_announce (GTK_ACCESSIBLE (data->imap_group),
+                               _("Auto-detected"),
+                               GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_MEDIUM);
+    }
+
   /* SMTP */
   gtk_editable_set_text (GTK_EDITABLE (data->smtp_server),
                          smtp_config ? goa_mail_config_get_hostname (smtp_config) : "");
@@ -563,6 +573,16 @@ update_account_details_ui (AddAccountData *data,
                   ? goa_mail_config_get_encryption (smtp_config)
                   : GOA_TLS_TYPE_NONE,
                 NULL);
+
+  if (smtp_config != NULL)
+    {
+      gtk_accessible_announce (GTK_ACCESSIBLE (data->smtp_group),
+                               adw_preferences_group_get_title (ADW_PREFERENCES_GROUP (data->smtp_group)),
+                               GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_MEDIUM);
+      gtk_accessible_announce (GTK_ACCESSIBLE (data->smtp_group),
+                               _("Auto-detected"),
+                               GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_MEDIUM);
+    }
 
   /* Discovery */
   g_cancellable_cancel (data->discovery);
@@ -696,6 +716,7 @@ create_account_details_ui (GoaProvider    *provider,
       adw_entry_row_add_suffix (ADW_ENTRY_ROW (data->email_address), data->discovery_status);
 
       icon = gtk_image_new_from_icon_name ("emblem-default-symbolic");
+      gtk_widget_set_tooltip_text (GTK_WIDGET (icon), _("Auto-detected"));
       gtk_widget_add_css_class (GTK_WIDGET (icon), "success");
       gtk_box_append (GTK_BOX (data->discovery_status), GTK_WIDGET (icon));
 
