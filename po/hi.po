@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-07-13 18:23+0000\n"
-"PO-Revision-Date: 2024-07-15 19:28+0530\n"
+"POT-Creation-Date: 2024-08-22 15:50+0000\n"
+"PO-Revision-Date: 2024-08-24 10:50+0800\n"
 "Last-Translator: Scrambled777 <weblate.scrambled777@simplelogin.com>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
 "Language: hi\n"
@@ -38,40 +38,40 @@ msgstr ""
 "enable=all के साथ। कुंजी प्रदाता नामों की अल्पविराम से अलग की गई सूची है।"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1159 src/daemon/goadaemon.c:1479
+#: src/daemon/goadaemon.c:1160 src/daemon/goadaemon.c:1480
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "प्रदाता खोजने में विफल:%s के लिए"
 
-#: src/daemon/goadaemon.c:1422
+#: src/daemon/goadaemon.c:1423
 msgid "IsLocked property is set for account"
 msgstr "IsLocked गुण खाते के लिए निर्धारित नहीं है"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1467
+#: src/daemon/goadaemon.c:1468
 msgid "ProviderType property is not set for account"
 msgstr "ProviderType गुण खाते के लिए निर्धारित नहीं है"
 
-#: src/daemon/goadaemon.c:1629
+#: src/daemon/goadaemon.c:1630
 #, c-format
 msgid "Failed to sign in to “%s”"
 msgstr "“%s” में साइन इन करने में विफल"
 
-#: src/daemon/goadaemon.c:1634
+#: src/daemon/goadaemon.c:1635
 msgid "Failed to sign in to multiple accounts"
 msgstr "एकाधिक खातों में साइन इन करने में विफल"
 
-#: src/daemon/goadaemon.c:1643
+#: src/daemon/goadaemon.c:1644
 msgid "Online Accounts"
 msgstr "ऑनलाइन खाते"
 
-#: src/daemon/goadaemon.c:1646
+#: src/daemon/goadaemon.c:1647
 msgid "Account Action Required"
 msgstr "खाता कार्रवाई आवश्यक"
 
 #. TODO: more specific
 #: src/goabackend/goadavclient.c:1187 src/goabackend/goaimapauthlogin.c:104
-#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:693
+#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:799
 msgid "Authentication failed"
 msgstr "सत्यापन असफल"
 
@@ -79,7 +79,7 @@ msgstr "सत्यापन असफल"
 msgid "Cannot find WebDAV endpoint"
 msgstr "WebDAV समापनबिंदु नहीं मिल सका"
 
-#: src/goabackend/goadavclient.c:1299 src/goabackend/goawebdavprovider.c:741
+#: src/goabackend/goadavclient.c:1295 src/goabackend/goawebdavprovider.c:648
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "अमान्य URI: %s"
@@ -111,55 +111,55 @@ msgstr "Microsoft Exchange"
 #. * (%s, %d) is the error domain and code.
 #.
 #: src/goabackend/goaexchangeprovider.c:258
-#: src/goabackend/goawebdavprovider.c:406
+#: src/goabackend/goawebdavprovider.c:304
 #, c-format
 msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "उपयोक्तानाम “%s” (%s, %d) के साथ अमान्य पासवर्ड: "
 
 #. provider name
-#: src/goabackend/goaexchangeprovider.c:381
+#: src/goabackend/goaexchangeprovider.c:389
 msgid ""
 "Connect to a Microsoft Exchange provider to access calendars, contacts and "
 "files"
 msgstr "कैलेंडर, संपर्क और फाइलों तक पहुंचने के लिए Microsoft Exchange प्रदाता से जुड़ें"
 
-#: src/goabackend/goaexchangeprovider.c:384
+#: src/goabackend/goaexchangeprovider.c:392
 #: src/goabackend/goaimapsmtpprovider.c:676
 msgid "_Email"
 msgstr "ईमेल (_E)"
 
-#: src/goabackend/goaexchangeprovider.c:385
+#: src/goabackend/goaexchangeprovider.c:393
 #: src/goabackend/goafedoraprovider.c:171
 #: src/goabackend/goaimapsmtpprovider.c:677
 #: src/goabackend/goaimapsmtpprovider.c:719
 #: src/goabackend/goaimapsmtpprovider.c:749
-#: src/goabackend/goawebdavprovider.c:506
+#: src/goabackend/goawebdavprovider.c:408
 msgid "_Password"
 msgstr "पासवर्ड (_P)"
 
-#: src/goabackend/goaexchangeprovider.c:386
+#: src/goabackend/goaexchangeprovider.c:394
 msgid ""
 "Exchange account details will be auto-detected from your email address when "
 "possible"
 msgstr "जब संभव हो तो Exchange खाते का विवरण आपके ईमेल पते से स्वतः पता लगाया जाएगा"
 
-#: src/goabackend/goaexchangeprovider.c:397
+#: src/goabackend/goaexchangeprovider.c:405
 msgid "Account Details"
 msgstr "खाता विवरण"
 
-#: src/goabackend/goaexchangeprovider.c:398
+#: src/goabackend/goaexchangeprovider.c:406
 #: src/goabackend/goafedoraprovider.c:170
 #: src/goabackend/goaimapsmtpprovider.c:718
 #: src/goabackend/goaimapsmtpprovider.c:748
-#: src/goabackend/goawebdavprovider.c:505
+#: src/goabackend/goawebdavprovider.c:407
 msgid "User_name"
 msgstr "उपयोक्ता नाम (_n)"
 
-#: src/goabackend/goaexchangeprovider.c:399
+#: src/goabackend/goaexchangeprovider.c:407
 msgid "_Domain"
 msgstr "डोमेन (_D)"
 
-#: src/goabackend/goaexchangeprovider.c:400
+#: src/goabackend/goaexchangeprovider.c:408
 msgid "Example domain: example.com"
 msgstr "उदाहरण डोमेन: example.com"
 
@@ -182,7 +182,7 @@ msgid "Google"
 msgstr "Google"
 
 #: src/goabackend/goagoogleprovider.c:213
-#: src/goabackend/goamsgraphprovider.c:163
+#: src/goabackend/goamsgraphprovider.c:184
 #: src/goabackend/goawindowsliveprovider.c:165
 #, c-format
 msgid ""
@@ -193,10 +193,10 @@ msgstr ""
 #. TODO: more specific
 #: src/goabackend/goagoogleprovider.c:232
 #: src/goabackend/goagoogleprovider.c:243
-#: src/goabackend/goamsgraphprovider.c:182
-#: src/goabackend/goamsgraphprovider.c:193
-#: src/goabackend/goamsgraphprovider.c:206
-#: src/goabackend/goamsgraphprovider.c:231
+#: src/goabackend/goamsgraphprovider.c:203
+#: src/goabackend/goamsgraphprovider.c:214
+#: src/goabackend/goamsgraphprovider.c:227
+#: src/goabackend/goamsgraphprovider.c:252
 #: src/goabackend/goaoauth2provider.c:677
 #: src/goabackend/goaoauth2provider.c:707
 #: src/goabackend/goaoauth2provider.c:718 src/goabackend/goautils.c:133
@@ -384,37 +384,37 @@ msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:399
-msgid "Connect to Microsoft 365 to access files stored in OneDrive"
-msgstr "OneDrive में संग्रहीत फाइलों तक पहुंचने के लिए Microsoft 365 से जुड़ें"
+#: src/goabackend/goamsgraphprovider.c:476
+msgid "Connect to Microsoft 365 to access email, calendars, contacts and files"
+msgstr "ईमेल, कैलेंडर, संपर्क और फाइलों तक पहुंचने के लिए Microsoft 365 से जुड़ें"
 
-#: src/goabackend/goamsgraphprovider.c:403
+#: src/goabackend/goamsgraphprovider.c:480
 msgid "Use Organization Account"
 msgstr "संगठन खाते का उपयोग करें"
 
-#: src/goabackend/goamsgraphprovider.c:404
+#: src/goabackend/goamsgraphprovider.c:481
 msgid "Connect using details from an organization or developer account"
 msgstr "किसी संगठन या डेवलपर खाते से जानकारी का उपयोग करके जुड़ें"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:411
+#: src/goabackend/goamsgraphprovider.c:488
 msgid "Enter the details provided by your organization"
 msgstr "अपने संगठन द्वारा प्रदान किया गया विवरण दर्ज करें"
 
-#: src/goabackend/goamsgraphprovider.c:413
+#: src/goabackend/goamsgraphprovider.c:490
 msgid "_Client ID (Optional)"
 msgstr "क्लाइंट ID (वैकल्पिक)(_C)"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:415
+#: src/goabackend/goamsgraphprovider.c:492
 msgid "_Tenant ID"
 msgstr "टेनेंट ID (_T)"
 
-#: src/goabackend/goamsgraphprovider.c:416
+#: src/goabackend/goamsgraphprovider.c:493
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "उदाहरण ID: 00000000-0000-0000-0000-000000000000"
 
-#: src/goabackend/goamsgraphprovider.c:419
+#: src/goabackend/goamsgraphprovider.c:496
 #: src/goabackend/goaoauth2provider.c:943
 #: src/goabackend/goaproviderdialog.c:701
 msgid "_Sign In…"
@@ -633,87 +633,87 @@ msgstr "पहचान %s के लिए GOA %s क्रेडेंशि�
 msgid "Failed to store credentials in the keyring"
 msgstr "कीरिंग में क्रेडेंशियल को भंडारित में विफल"
 
-#: src/goabackend/goautils.c:681
+#: src/goabackend/goautils.c:787
 msgid "Not supported"
 msgstr "समर्थित नहीं"
 
-#: src/goabackend/goautils.c:685
+#: src/goabackend/goautils.c:791
 msgid "Not found"
 msgstr "नहीं मिला"
 
-#: src/goabackend/goautils.c:699
+#: src/goabackend/goautils.c:805
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "कोड: %u — सर्वर से अप्रत्याशित अनुक्रिया"
 
-#: src/goabackend/goautils.c:724
+#: src/goabackend/goautils.c:830
 msgid "The signing certificate authority is not known."
 msgstr "प्रमाणपत्र पर हस्ताक्षर करने का प्राधिकार ज्ञात नहीं है।"
 
-#: src/goabackend/goautils.c:728
+#: src/goabackend/goautils.c:834
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr ""
 "प्रमाणपत्र उस साइट की अपेक्षित पहचान से मेल नहीं खाता जहां से इसे पुनर्प्राप्त किया गया था।"
 
-#: src/goabackend/goautils.c:733
+#: src/goabackend/goautils.c:839
 msgid "The certificate’s activation time is still in the future."
 msgstr "प्रमाणपत्र सक्रियकरण समय अभी भी भविष्य में है।"
 
-#: src/goabackend/goautils.c:737
+#: src/goabackend/goautils.c:843
 msgid "The certificate has expired."
 msgstr "प्रमाणपत्र की मियाद ख़त्म हो चुकी है।"
 
-#: src/goabackend/goautils.c:741
+#: src/goabackend/goautils.c:847
 msgid "The certificate has been revoked."
 msgstr "प्रमाणपत्र रद्द कर दिया गया है।"
 
-#: src/goabackend/goautils.c:745
+#: src/goabackend/goautils.c:851
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "प्रमाणपत्र की कलन विधि असुरक्षित माना जाता है।"
 
-#: src/goabackend/goautils.c:751
+#: src/goabackend/goautils.c:857
 msgid "Invalid certificate."
 msgstr "अमान्य प्रमाणपत्र।"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:786
+#: src/goabackend/goautils.c:892
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "क्रेडेंशियल्स में पहचान “%s” के साथ %s नहीं मिला"
 
-#: src/goabackend/goawebdavprovider.c:497
+#: src/goabackend/goawebdavprovider.c:399
 msgid "Calendar, Contacts and Files"
 msgstr "कैलेंडर, संपर्क एवं फाइलें"
 
-#: src/goabackend/goawebdavprovider.c:498
+#: src/goabackend/goawebdavprovider.c:400
 msgid ""
 "Add a calendar, contacts and files account by entering your WebDAV server "
 "and account details"
 msgstr "अपना WebDAV सर्वर और खाता विवरण दर्ज करके एक कैलेंडर, संपर्क और फाइलें खाता जोड़ें"
 
-#: src/goabackend/goawebdavprovider.c:501
+#: src/goabackend/goawebdavprovider.c:403
 msgid "_Server Address"
 msgstr "सर्वर पता (_S)"
 
-#: src/goabackend/goawebdavprovider.c:502
+#: src/goabackend/goawebdavprovider.c:404
 msgid "Examples: example.com, 192.168.0.82"
 msgstr "उदाहरण: example.com, 192.168.0.82"
 
-#: src/goabackend/goawebdavprovider.c:512
+#: src/goabackend/goawebdavprovider.c:414
 msgid "Server Addresses (Optional)"
 msgstr "सर्वर पते (वैकल्पिक)"
 
-#: src/goabackend/goawebdavprovider.c:513
+#: src/goabackend/goawebdavprovider.c:415
 msgid "Files"
 msgstr "फाइलें"
 
-#: src/goabackend/goawebdavprovider.c:514
+#: src/goabackend/goawebdavprovider.c:416
 msgid "Calendar (CalDAV)"
 msgstr "कैलेंडर (CalDAV)"
 
-#: src/goabackend/goawebdavprovider.c:515
+#: src/goabackend/goawebdavprovider.c:417
 msgid "Contacts (CardDAV)"
 msgstr "संपर्क (CardDAV)"
 
@@ -799,13 +799,3 @@ msgstr "पहचान के लिए प्रमाण कैश नही�
 #, c-format
 msgid "Error closing file descriptor: %s"
 msgstr "फाइल डिस्क्रिप्टर बंद करते समय त्रुटि: %s"
-
-#~ msgid "Authorization Details"
-#~ msgstr "प्राधिकरण विवरण"
-
-#~ msgid ""
-#~ "A custom Client or Tenant ID may need to be provided depending on the "
-#~ "settings for your organization"
-#~ msgstr ""
-#~ "आपके संगठन की सेटिंग्स के आधार पर एक तदनुकूल क्लाइंट या टेनेंट ID प्रदान करने की आवश्यकता "
-#~ "हो सकती है"
