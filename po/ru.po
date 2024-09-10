@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-07-12 00:57+0000\n"
-"PO-Revision-Date: 2024-07-12 13:53+0300\n"
+"POT-Creation-Date: 2024-08-22 15:50+0000\n"
+"PO-Revision-Date: 2024-08-22 23:34+0300\n"
 "Last-Translator: Artur So <arturios2005@mail.ru>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -41,40 +41,40 @@ msgstr ""
 "запятыми."
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1159 src/daemon/goadaemon.c:1479
+#: src/daemon/goadaemon.c:1160 src/daemon/goadaemon.c:1480
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Не удалось найти поставщика для: %s"
 
-#: src/daemon/goadaemon.c:1422
+#: src/daemon/goadaemon.c:1423
 msgid "IsLocked property is set for account"
 msgstr "Для учётной записи установлено свойство IsLocked"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1467
+#: src/daemon/goadaemon.c:1468
 msgid "ProviderType property is not set for account"
 msgstr "Свойство ProviderType не установлено для учётной записи"
 
-#: src/daemon/goadaemon.c:1629
+#: src/daemon/goadaemon.c:1630
 #, c-format
 msgid "Failed to sign in to “%s”"
 msgstr "Не удалось войти в “%s”"
 
-#: src/daemon/goadaemon.c:1634
+#: src/daemon/goadaemon.c:1635
 msgid "Failed to sign in to multiple accounts"
 msgstr "Не удалось войти в несколько учетных записей"
 
-#: src/daemon/goadaemon.c:1643
+#: src/daemon/goadaemon.c:1644
 msgid "Online Accounts"
 msgstr "Сетевые учетные записи"
 
-#: src/daemon/goadaemon.c:1646
+#: src/daemon/goadaemon.c:1647
 msgid "Account Action Required"
 msgstr "Требуется действие с учетной записью"
 
 #. TODO: more specific
 #: src/goabackend/goadavclient.c:1187 src/goabackend/goaimapauthlogin.c:104
-#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:693
+#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:799
 msgid "Authentication failed"
 msgstr "Сбой аутентификации"
 
@@ -82,7 +82,7 @@ msgstr "Сбой аутентификации"
 msgid "Cannot find WebDAV endpoint"
 msgstr "Не удалось найти конечную точку WebDAV"
 
-#: src/goabackend/goadavclient.c:1299 src/goabackend/goawebdavprovider.c:741
+#: src/goabackend/goadavclient.c:1295 src/goabackend/goawebdavprovider.c:648
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "Недопустимый URI: %s"
@@ -114,13 +114,13 @@ msgstr "Microsoft Exchange"
 #. * (%s, %d) is the error domain and code.
 #.
 #: src/goabackend/goaexchangeprovider.c:258
-#: src/goabackend/goawebdavprovider.c:406
+#: src/goabackend/goawebdavprovider.c:304
 #, c-format
 msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "Неверный пароль с именем пользователя «%s» (%s, %d): "
 
 #. provider name
-#: src/goabackend/goaexchangeprovider.c:381
+#: src/goabackend/goaexchangeprovider.c:389
 msgid ""
 "Connect to a Microsoft Exchange provider to access calendars, contacts and "
 "files"
@@ -128,21 +128,21 @@ msgstr ""
 "Подключиться к поставщику Microsoft Exchange для доступа к календарям, "
 "контактам и файлам"
 
-#: src/goabackend/goaexchangeprovider.c:384
+#: src/goabackend/goaexchangeprovider.c:392
 #: src/goabackend/goaimapsmtpprovider.c:676
 msgid "_Email"
 msgstr "_Эл. почта"
 
-#: src/goabackend/goaexchangeprovider.c:385
+#: src/goabackend/goaexchangeprovider.c:393
 #: src/goabackend/goafedoraprovider.c:171
 #: src/goabackend/goaimapsmtpprovider.c:677
 #: src/goabackend/goaimapsmtpprovider.c:719
 #: src/goabackend/goaimapsmtpprovider.c:749
-#: src/goabackend/goawebdavprovider.c:506
+#: src/goabackend/goawebdavprovider.c:408
 msgid "_Password"
 msgstr "_Пароль"
 
-#: src/goabackend/goaexchangeprovider.c:386
+#: src/goabackend/goaexchangeprovider.c:394
 msgid ""
 "Exchange account details will be auto-detected from your email address when "
 "possible"
@@ -150,23 +150,23 @@ msgstr ""
 "Данные учетной записи Exchange будут автоматически определяться по вашему "
 "адресу электронной почты, если это возможно"
 
-#: src/goabackend/goaexchangeprovider.c:397
+#: src/goabackend/goaexchangeprovider.c:405
 msgid "Account Details"
 msgstr "Данные учетной записи"
 
-#: src/goabackend/goaexchangeprovider.c:398
+#: src/goabackend/goaexchangeprovider.c:406
 #: src/goabackend/goafedoraprovider.c:170
 #: src/goabackend/goaimapsmtpprovider.c:718
 #: src/goabackend/goaimapsmtpprovider.c:748
-#: src/goabackend/goawebdavprovider.c:505
+#: src/goabackend/goawebdavprovider.c:407
 msgid "User_name"
 msgstr "И_мя пользователя"
 
-#: src/goabackend/goaexchangeprovider.c:399
+#: src/goabackend/goaexchangeprovider.c:407
 msgid "_Domain"
 msgstr "_Домен"
 
-#: src/goabackend/goaexchangeprovider.c:400
+#: src/goabackend/goaexchangeprovider.c:408
 msgid "Example domain: example.com"
 msgstr "Пример домена: example.com"
 
@@ -190,7 +190,7 @@ msgid "Google"
 msgstr "Google"
 
 #: src/goabackend/goagoogleprovider.c:213
-#: src/goabackend/goamsgraphprovider.c:163
+#: src/goabackend/goamsgraphprovider.c:184
 #: src/goabackend/goawindowsliveprovider.c:165
 #, c-format
 msgid ""
@@ -202,10 +202,10 @@ msgstr ""
 #. TODO: more specific
 #: src/goabackend/goagoogleprovider.c:232
 #: src/goabackend/goagoogleprovider.c:243
-#: src/goabackend/goamsgraphprovider.c:182
-#: src/goabackend/goamsgraphprovider.c:193
-#: src/goabackend/goamsgraphprovider.c:206
-#: src/goabackend/goamsgraphprovider.c:231
+#: src/goabackend/goamsgraphprovider.c:203
+#: src/goabackend/goamsgraphprovider.c:214
+#: src/goabackend/goamsgraphprovider.c:227
+#: src/goabackend/goamsgraphprovider.c:252
 #: src/goabackend/goaoauth2provider.c:677
 #: src/goabackend/goaoauth2provider.c:707
 #: src/goabackend/goaoauth2provider.c:718 src/goabackend/goautils.c:133
@@ -397,40 +397,41 @@ msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:399
-msgid "Connect to Microsoft 365 to access files stored in OneDrive"
+#: src/goabackend/goamsgraphprovider.c:476
+msgid "Connect to Microsoft 365 to access email, calendars, contacts and files"
 msgstr ""
-"Подключение к Microsoft 365 для доступа к файлам, хранящимся в OneDrive"
+"Подключиться к Microsoft 365 для доступа к эл. почте, календарям, "
+"контактам и файлам"
 
-#: src/goabackend/goamsgraphprovider.c:403
+#: src/goabackend/goamsgraphprovider.c:480
 msgid "Use Organization Account"
 msgstr "Использовать учетную запись организации"
 
-#: src/goabackend/goamsgraphprovider.c:404
+#: src/goabackend/goamsgraphprovider.c:481
 msgid "Connect using details from an organization or developer account"
 msgstr ""
 "Подключение с использованием данных организации или учетной записи "
 "разработчика"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:411
+#: src/goabackend/goamsgraphprovider.c:488
 msgid "Enter the details provided by your organization"
 msgstr "Введите данные, предоставленные вашей организацией"
 
-#: src/goabackend/goamsgraphprovider.c:413
+#: src/goabackend/goamsgraphprovider.c:490
 msgid "_Client ID (Optional)"
 msgstr "ID _клиента (необязательно)"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:415
+#: src/goabackend/goamsgraphprovider.c:492
 msgid "_Tenant ID"
 msgstr "ID _арендатора"
 
-#: src/goabackend/goamsgraphprovider.c:416
+#: src/goabackend/goamsgraphprovider.c:493
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "Пример ID: 00000000-0000-0000-0000-000000000000"
 
-#: src/goabackend/goamsgraphprovider.c:419
+#: src/goabackend/goamsgraphprovider.c:496
 #: src/goabackend/goaoauth2provider.c:943
 #: src/goabackend/goaproviderdialog.c:701
 msgid "_Sign In…"
@@ -650,60 +651,60 @@ msgstr "Учётные данные GOA %s для идентификатора %
 msgid "Failed to store credentials in the keyring"
 msgstr "Не удалось сохранить учётные данные в связке ключей"
 
-#: src/goabackend/goautils.c:681
+#: src/goabackend/goautils.c:787
 msgid "Not supported"
 msgstr "Не поддерживается"
 
-#: src/goabackend/goautils.c:685
+#: src/goabackend/goautils.c:791
 msgid "Not found"
 msgstr "Не найдено"
 
-#: src/goabackend/goautils.c:699
+#: src/goabackend/goautils.c:805
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Код: %u — неожиданный ответ от сервера"
 
-#: src/goabackend/goautils.c:724
+#: src/goabackend/goautils.c:830
 msgid "The signing certificate authority is not known."
 msgstr "Неизвестный центр сертификации."
 
-#: src/goabackend/goautils.c:728
+#: src/goabackend/goautils.c:834
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr "Сертификат, полученный с сайта, не соответствует подлинности сайта."
 
-#: src/goabackend/goautils.c:733
+#: src/goabackend/goautils.c:839
 msgid "The certificate’s activation time is still in the future."
 msgstr "Время активации сертификата ещё не наступило."
 
-#: src/goabackend/goautils.c:737
+#: src/goabackend/goautils.c:843
 msgid "The certificate has expired."
 msgstr "Сертификат устарел."
 
-#: src/goabackend/goautils.c:741
+#: src/goabackend/goautils.c:847
 msgid "The certificate has been revoked."
 msgstr "Сертификат был отозван."
 
-#: src/goabackend/goautils.c:745
+#: src/goabackend/goautils.c:851
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Небезопасный алгоритм сертификата."
 
-#: src/goabackend/goautils.c:751
+#: src/goabackend/goautils.c:857
 msgid "Invalid certificate."
 msgstr "Неверный сертификат."
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:786
+#: src/goabackend/goautils.c:892
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "Не удалось найти поле %s с именем пользователя «%s» в учётных данных"
 
-#: src/goabackend/goawebdavprovider.c:497
+#: src/goabackend/goawebdavprovider.c:399
 msgid "Calendar, Contacts and Files"
 msgstr "Календарь, контакты и файлы"
 
-#: src/goabackend/goawebdavprovider.c:498
+#: src/goabackend/goawebdavprovider.c:400
 msgid ""
 "Add a calendar, contacts and files account by entering your WebDAV server "
 "and account details"
@@ -711,27 +712,27 @@ msgstr ""
 "Добавить учетную запись календаря, контактов и файлов, введя данные сервера "
 "WebDAV и учетной записи"
 
-#: src/goabackend/goawebdavprovider.c:501
+#: src/goabackend/goawebdavprovider.c:403
 msgid "_Server Address"
 msgstr "Адрес _сервера"
 
-#: src/goabackend/goawebdavprovider.c:502
+#: src/goabackend/goawebdavprovider.c:404
 msgid "Examples: example.com, 192.168.0.82"
 msgstr "Примеры: example.com, 192.168.0.82"
 
-#: src/goabackend/goawebdavprovider.c:512
+#: src/goabackend/goawebdavprovider.c:414
 msgid "Server Addresses (Optional)"
 msgstr "Адреса серверов (необязательно)"
 
-#: src/goabackend/goawebdavprovider.c:513
+#: src/goabackend/goawebdavprovider.c:415
 msgid "Files"
 msgstr "Файлы"
 
-#: src/goabackend/goawebdavprovider.c:514
+#: src/goabackend/goawebdavprovider.c:416
 msgid "Calendar (CalDAV)"
 msgstr "Календарь (CalDAV)"
 
-#: src/goabackend/goawebdavprovider.c:515
+#: src/goabackend/goawebdavprovider.c:417
 msgid "Contacts (CardDAV)"
 msgstr "Контакты (CardDAV)"
 
@@ -819,6 +820,10 @@ msgstr "Не удалось создать кэш учётных данных д
 #, c-format
 msgid "Error closing file descriptor: %s"
 msgstr "Ошибка при закрытии дескриптора файла: %s"
+
+#~ msgid "Connect to Microsoft 365 to access files stored in OneDrive"
+#~ msgstr ""
+#~ "Подключение к Microsoft 365 для доступа к файлам, хранящимся в OneDrive"
 
 #~ msgid "Authorization Details"
 #~ msgstr "Данные для авторизации"
