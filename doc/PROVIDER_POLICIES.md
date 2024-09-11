@@ -9,6 +9,8 @@ link, please open an issue or merge request as soon as possible.
 The policies here apply to the `google` provider, including recommended and
 required authentication practices.
 
+* [Google APIs Terms of Service](https://developers.google.com/terms)
+
 ### OAuth 2.0
 
 * [OAuth 2.0 Policies](https://developers.google.com/identity/protocols/oauth2/policies)
