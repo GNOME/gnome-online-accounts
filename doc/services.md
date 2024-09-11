@@ -7,7 +7,7 @@ Title: Services
 | Google             | yes  | yes      | yes      | no   | no     | yes   | no        | no       | no    |
 | IMAP/SMTP          | yes  | no       | no       | no   | no     | no    | no        | no       | no    |
 | Microsoft          | yes  | no       | no       | no   | no     | no    | no        | no       | no    |
-| Microsoft 365      | no   | no       | no       | no   | no     | yes   | no        | no       | no    |
+| Microsoft 365      | yes  | yes      | yes      | no   | no     | yes   | no        | no       | no    |
 | Microsoft Exchange | yes  | yes      | yes      | no   | no     | no    | no        | no       | no    |
 | WebDAV             | no   | yes      | yes      | no   | no     | yes   | no        | no       | no    |
 | NextCloud (WebDAV) | no   | yes      | yes      | no   | no     | yes   | no        | no       | no    |
