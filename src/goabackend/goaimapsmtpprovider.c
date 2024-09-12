@@ -511,6 +511,9 @@ on_email_changed (GtkEditable    *editable,
     }
 
   /* Guess the IMAP/SMTP servers and update their UI */
+  if (g_str_equal (domain, "yahoo.com"))
+    g_set_str (&domain, "mail.yahoo.com");
+
   imap_domain = g_strdup_printf ("imap.%s", domain);
   gtk_editable_set_text (GTK_EDITABLE (data->imap_server), imap_domain);
   gtk_editable_set_text (GTK_EDITABLE (data->imap_username), username);
