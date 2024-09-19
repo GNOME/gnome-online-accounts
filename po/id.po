@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts gnome-46\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-04-23 15:23+0000\n"
-"PO-Revision-Date: 2024-04-24 15:12+0700\n"
+"POT-Creation-Date: 2024-09-14 22:48+0000\n"
+"PO-Revision-Date: 2024-09-19 07:58+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome@i15n.org>\n"
 "Language: id\n"
@@ -21,11 +21,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.5\n"
 
 #: data/org.gnome.online-accounts.gschema.xml:6
 msgid "List of providers that are allowed to be loaded"
-msgstr "Daftar penyedia yang diijinkan untuk dimuat"
+msgstr "Daftar penyedia yang diizinkan untuk dimuat"
 
 #: data/org.gnome.online-accounts.gschema.xml:7
 msgid ""
@@ -49,6 +49,16 @@ msgstr "Properti IsLocked disetel untuk akun"
 #: src/daemon/goadaemon.c:1446
 msgid "ProviderType property is not set for account"
 msgstr "Properti ProviderType tidak disetel untuk akun"
+
+#. TODO: more specific
+#: src/goabackend/goadavclient.c:697 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:682
+msgid "Authentication failed"
+msgstr "Autentikasi gagal"
+
+#: src/goabackend/goadavclient.c:704
+msgid "Cannot find WebDAV endpoint"
+msgstr "Tidak bisa menemukan titik akhir WebDAV"
 
 #. TODO: more specific
 #: src/goabackend/goaewsclient.c:284
@@ -77,13 +87,13 @@ msgstr "Microsoft Exchange"
 #. * (%s, %d) is the error domain and code.
 #.
 #: src/goabackend/goaexchangeprovider.c:249
-#: src/goabackend/goawebdavprovider.c:374
+#: src/goabackend/goawebdavprovider.c:403
 #, c-format
 msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "Sandi tidak valid dengan nama pengguna \"%s\" (%s, %d): "
 
 #. provider name
-#: src/goabackend/goaexchangeprovider.c:373
+#: src/goabackend/goaexchangeprovider.c:382
 msgid ""
 "Connect to a Microsoft Exchange provider to access calendars, contacts and "
 "files"
@@ -91,21 +101,21 @@ msgstr ""
 "Menyambungkan ke penyedia Microsoft Exchange untuk mengakses kalender, "
 "kontak, dan berkas"
 
-#: src/goabackend/goaexchangeprovider.c:376
-#: src/goabackend/goaimapsmtpprovider.c:548
+#: src/goabackend/goaexchangeprovider.c:385
+#: src/goabackend/goaimapsmtpprovider.c:551
 msgid "_Email"
 msgstr "Sur_el"
 
-#: src/goabackend/goaexchangeprovider.c:377
+#: src/goabackend/goaexchangeprovider.c:386
 #: src/goabackend/goafedoraprovider.c:171
-#: src/goabackend/goaimapsmtpprovider.c:549
-#: src/goabackend/goaimapsmtpprovider.c:568
-#: src/goabackend/goaimapsmtpprovider.c:589
-#: src/goabackend/goawebdavprovider.c:471
+#: src/goabackend/goaimapsmtpprovider.c:552
+#: src/goabackend/goaimapsmtpprovider.c:571
+#: src/goabackend/goaimapsmtpprovider.c:592
+#: src/goabackend/goawebdavprovider.c:505
 msgid "_Password"
 msgstr "San_di"
 
-#: src/goabackend/goaexchangeprovider.c:378
+#: src/goabackend/goaexchangeprovider.c:387
 msgid ""
 "Exchange account details will be auto-detected from your email address when "
 "possible"
@@ -113,23 +123,23 @@ msgstr ""
 "Detail akun Exchange akan terdeteksi secara otomatis dari alamat surel Anda "
 "jika memungkinkan"
 
-#: src/goabackend/goaexchangeprovider.c:382
+#: src/goabackend/goaexchangeprovider.c:398
 msgid "Account Details"
 msgstr "Rincian Akun"
 
-#: src/goabackend/goaexchangeprovider.c:383
+#: src/goabackend/goaexchangeprovider.c:399
 #: src/goabackend/goafedoraprovider.c:170
-#: src/goabackend/goaimapsmtpprovider.c:567
-#: src/goabackend/goaimapsmtpprovider.c:588
-#: src/goabackend/goawebdavprovider.c:470
+#: src/goabackend/goaimapsmtpprovider.c:570
+#: src/goabackend/goaimapsmtpprovider.c:591
+#: src/goabackend/goawebdavprovider.c:504
 msgid "User_name"
 msgstr "_Nama Pengguna"
 
-#: src/goabackend/goaexchangeprovider.c:384
+#: src/goabackend/goaexchangeprovider.c:400
 msgid "_Domain"
 msgstr "_Domain"
 
-#: src/goabackend/goaexchangeprovider.c:385
+#: src/goabackend/goaexchangeprovider.c:401
 msgid "Example domain: example.com"
 msgstr "Contoh domain: example.com"
 
@@ -148,7 +158,7 @@ msgid "Google"
 msgstr "Google"
 
 #: src/goabackend/goagoogleprovider.c:213
-#: src/goabackend/goamsgraphprovider.c:162
+#: src/goabackend/goamsgraphprovider.c:163
 #: src/goabackend/goawindowsliveprovider.c:165
 #, c-format
 msgid ""
@@ -160,9 +170,10 @@ msgstr ""
 #. TODO: more specific
 #: src/goabackend/goagoogleprovider.c:232
 #: src/goabackend/goagoogleprovider.c:243
-#: src/goabackend/goamsgraphprovider.c:181
-#: src/goabackend/goamsgraphprovider.c:192
-#: src/goabackend/goamsgraphprovider.c:203
+#: src/goabackend/goamsgraphprovider.c:182
+#: src/goabackend/goamsgraphprovider.c:193
+#: src/goabackend/goamsgraphprovider.c:206
+#: src/goabackend/goamsgraphprovider.c:231
 #: src/goabackend/goaoauth2provider.c:679
 #: src/goabackend/goaoauth2provider.c:709
 #: src/goabackend/goaoauth2provider.c:720 src/goabackend/goautils.c:133
@@ -177,12 +188,6 @@ msgstr "Tidak bisa mengurai respon"
 #: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goasmtpauth.c:149
 msgid "Service not available"
 msgstr "Layanan tidak tersedia"
-
-#. TODO: more specific
-#: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goasmtpauth.c:102
-#: src/goabackend/goautils.c:681
-msgid "Authentication failed"
-msgstr "Autentikasi gagal"
 
 #: src/goabackend/goaimapauthlogin.c:166 src/goabackend/goasmtpauth.c:600
 msgid "Server does not support STARTTLS"
@@ -209,34 +214,34 @@ msgid "Invalid %s with username “%s” (%s, %d): "
 msgstr "%s tidak valid dengan nama pengguna \"%s\" (%s, %d): "
 
 #. Keep in sync with GoaTlsType
-#: src/goabackend/goaimapsmtpprovider.c:535
+#: src/goabackend/goaimapsmtpprovider.c:538
 msgid "None"
 msgstr "Nihil"
 
 #. GOA_TLS_TYPE_NONE
-#: src/goabackend/goaimapsmtpprovider.c:536
+#: src/goabackend/goaimapsmtpprovider.c:539
 msgid "STARTTLS after connecting"
 msgstr "STARTTLS setelah menyambung"
 
 #. GOA_TLS_TYPE_STARTTLS
-#: src/goabackend/goaimapsmtpprovider.c:537
+#: src/goabackend/goaimapsmtpprovider.c:540
 msgid "SSL on a dedicated port"
 msgstr "SSL pada port tersendiri"
 
-#: src/goabackend/goaimapsmtpprovider.c:542
-#: src/goabackend/goaimapsmtpprovider.c:1206
+#: src/goabackend/goaimapsmtpprovider.c:545
+#: src/goabackend/goaimapsmtpprovider.c:1207
 msgid "Email"
 msgstr "Surel"
 
-#: src/goabackend/goaimapsmtpprovider.c:543
+#: src/goabackend/goaimapsmtpprovider.c:546
 msgid "Connect to an email account"
 msgstr "Menyambungkan ke akun surel"
 
-#: src/goabackend/goaimapsmtpprovider.c:547
+#: src/goabackend/goaimapsmtpprovider.c:550
 msgid "_Name"
 msgstr "_Nama"
 
-#: src/goabackend/goaimapsmtpprovider.c:550
+#: src/goabackend/goaimapsmtpprovider.c:553
 msgid ""
 "IMAP and SMTP details will be auto-detected from your service provider when "
 "possible"
@@ -245,45 +250,45 @@ msgstr ""
 "Anda jika memungkinkan"
 
 #. IMAP
-#: src/goabackend/goaimapsmtpprovider.c:565
+#: src/goabackend/goaimapsmtpprovider.c:568
 msgid "IMAP Settings"
 msgstr "Pengaturan IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:566
+#: src/goabackend/goaimapsmtpprovider.c:569
 msgid "IMAP _Server"
 msgstr "_Peladen IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:574
-#: src/goabackend/goaimapsmtpprovider.c:595
+#: src/goabackend/goaimapsmtpprovider.c:577
+#: src/goabackend/goaimapsmtpprovider.c:598
 msgid "Encryption"
 msgstr "Enkripsi"
 
-#: src/goabackend/goaimapsmtpprovider.c:579
+#: src/goabackend/goaimapsmtpprovider.c:582
 msgid "Example server: imap.example.com"
 msgstr "Contoh server: imap.example.com"
 
 #. SMTP
-#: src/goabackend/goaimapsmtpprovider.c:586
+#: src/goabackend/goaimapsmtpprovider.c:589
 msgid "SMTP Settings"
 msgstr "Pengaturan SMTP"
 
-#: src/goabackend/goaimapsmtpprovider.c:587
+#: src/goabackend/goaimapsmtpprovider.c:590
 msgid "SMTP _Server"
 msgstr "Peladen _SMTP"
 
-#: src/goabackend/goaimapsmtpprovider.c:600
+#: src/goabackend/goaimapsmtpprovider.c:603
 msgid "Example server: smtp.example.com"
 msgstr "Contoh server: smtp.example.com"
 
-#: src/goabackend/goaimapsmtpprovider.c:1197
+#: src/goabackend/goaimapsmtpprovider.c:1198
 msgid "Name"
 msgstr "Nama"
 
-#: src/goabackend/goaimapsmtpprovider.c:1223
+#: src/goabackend/goaimapsmtpprovider.c:1224
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1241
+#: src/goabackend/goaimapsmtpprovider.c:1242
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -317,27 +322,27 @@ msgid "Example principal: user@EXAMPLE.COM"
 msgstr "Contoh prinsipal: user@EXAMPLE.COM"
 
 #: src/goabackend/goakerberosprovider.c:599
-#: src/goabackend/goamsgraphprovider.c:374
+#: src/goabackend/goamsgraphprovider.c:388
 msgid "_Sign in…"
 msgstr "Ma_suk…"
 
-#: src/goabackend/goakerberosprovider.c:1291
+#: src/goabackend/goakerberosprovider.c:1290
 msgid "Ticketing is disabled for account"
 msgstr "Properti IsLocked disetel untuk akun"
 
-#: src/goabackend/goakerberosprovider.c:1318
+#: src/goabackend/goakerberosprovider.c:1317
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr ""
 "Tidak bisa menemukan kredensial yang tersimpan bagi principal \"%s\" dalam "
 "ring kunci"
 
-#: src/goabackend/goakerberosprovider.c:1333
+#: src/goabackend/goakerberosprovider.c:1332
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "Tidak menemukan sandi bagi principal \"%s\" dalam kredensial"
 
-#: src/goabackend/goakerberosprovider.c:1515
+#: src/goabackend/goakerberosprovider.c:1514
 msgid "Identity service returned invalid key"
 msgstr "Layanan identitas mengembalikan kunci yang tidak valid"
 
@@ -346,16 +351,16 @@ msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:362
+#: src/goabackend/goamsgraphprovider.c:376
 msgid "Connect to a Microsoft 365 provider to access files"
 msgstr "Sambungkan ke penyedia Microsoft 365 untuk mengakses berkas"
 
-#: src/goabackend/goamsgraphprovider.c:364
+#: src/goabackend/goamsgraphprovider.c:378
 msgid "Authorization Details"
 msgstr "Rincian Otorisasi"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:366
+#: src/goabackend/goamsgraphprovider.c:380
 msgid ""
 "A custom Client or Tenant ID may need to be provided depending on the "
 "settings for your organization"
@@ -363,16 +368,16 @@ msgstr ""
 "ID Klien atau Penyewa ubahan mungkin perlu disediakan tergantung pada "
 "pengaturan untuk organisasi Anda"
 
-#: src/goabackend/goamsgraphprovider.c:368
+#: src/goabackend/goamsgraphprovider.c:382
 msgid "_Client ID"
 msgstr "ID _Klien"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:370
+#: src/goabackend/goamsgraphprovider.c:384
 msgid "_Tenant ID"
 msgstr "ID _Tenant"
 
-#: src/goabackend/goamsgraphprovider.c:371
+#: src/goabackend/goamsgraphprovider.c:385
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "Example ID: 00000000-0000-0000-0000-000000000000"
 
@@ -411,20 +416,20 @@ msgid "Sign in to %s with your browser"
 msgstr "Masuk ke %s dengan peramban Anda"
 
 #: src/goabackend/goaoauth2provider.c:945
-#: src/goabackend/goaproviderdialog.c:689
+#: src/goabackend/goaproviderdialog.c:693
 msgid "_Sign In…"
 msgstr "Ma_suk…"
 
-#: src/goabackend/goaoauth2provider.c:1292
+#: src/goabackend/goaoauth2provider.c:1290
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Diminta untuk masuk sebagai %s, tetapi masuk sebagai %s"
 
-#: src/goabackend/goaoauth2provider.c:1479
+#: src/goabackend/goaoauth2provider.c:1476
 msgid "Credentials do not contain access_token"
 msgstr "Kredensial tidak berisi access_token"
 
-#: src/goabackend/goaoauth2provider.c:1523
+#: src/goabackend/goaoauth2provider.c:1520
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Gagal menyegarkan token akses (%s, %d): "
@@ -485,15 +490,15 @@ msgstr "_Peta"
 msgid "T_o Do"
 msgstr "Unt_uk Dilakukan"
 
-#: src/goabackend/goaprovider.c:923
+#: src/goabackend/goaprovider.c:921
 msgid "Account is disabled"
 msgstr "Akun dinonaktifkan"
 
-#: src/goabackend/goaprovider.c:936
+#: src/goabackend/goaprovider.c:934 src/goabackend/goawebdavprovider.c:394
 msgid "Unknown error"
 msgstr "Galat tak dikenal"
 
-#: src/goabackend/goaprovider.c:955
+#: src/goabackend/goaprovider.c:953
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync tidak diimplementasi pada tipe %s"
@@ -502,16 +507,16 @@ msgstr "ensure_credentials_sync tidak diimplementasi pada tipe %s"
 #. * Account" dialogs. The %s is the name of the provider. eg.,
 #. * 'Google'.
 #.
-#: src/goabackend/goaproviderdialog.c:168
+#: src/goabackend/goaproviderdialog.c:171
 #, c-format
 msgid "%s Account"
 msgstr "Akun %s"
 
-#: src/goabackend/goaproviderdialog.c:606
+#: src/goabackend/goaproviderdialog.c:610
 msgid "Remove this Account?"
 msgstr "Hapus Akun Ini?"
 
-#: src/goabackend/goaproviderdialog.c:607
+#: src/goabackend/goaproviderdialog.c:611
 msgid ""
 "If you remove this Online Account you will have to connect to it again to "
 "use it with apps and services."
@@ -519,36 +524,36 @@ msgstr ""
 "Jika Anda menghapus Akun Daring ini, Anda harus menghubungkannya lagi untuk "
 "menggunakannya dengan aplikasi dan layanan."
 
-#: src/goabackend/goaproviderdialog.c:609
+#: src/goabackend/goaproviderdialog.c:613
 msgid "_Cancel"
 msgstr "_Batal"
 
-#: src/goabackend/goaproviderdialog.c:610
+#: src/goabackend/goaproviderdialog.c:614
 msgid "_Remove"
 msgstr "_Hapus"
 
-#: src/goabackend/goaproviderdialog.c:688
+#: src/goabackend/goaproviderdialog.c:692
 msgid "Sign in to reconnect to this account"
 msgstr "Masuk untuk terhubung kembali ke akun ini"
 
 #. Remove
-#: src/goabackend/goaproviderdialog.c:737
+#: src/goabackend/goaproviderdialog.c:742
 msgid "_Remove…"
 msgstr "_Hapus…"
 
-#: src/goabackend/goaproviderdialog.c:832
+#: src/goabackend/goaproviderdialog.c:837
 msgid "_Sign In"
 msgstr "Ma_suk"
 
-#: src/goabackend/goaproviderdialog.c:894
+#: src/goabackend/goaproviderdialog.c:899
 msgid "_Try Again"
 msgstr "Coba _Lagi"
 
-#: src/goabackend/goaproviderdialog.c:898
+#: src/goabackend/goaproviderdialog.c:903
 msgid "_Ignore"
 msgstr "Aba_ikan"
 
-#: src/goabackend/goaproviderdialog.c:1143
+#: src/goabackend/goaproviderdialog.c:1153
 msgid "Dialog was dismissed"
 msgstr "Dialog telah diakhiri"
 
@@ -600,20 +605,20 @@ msgstr "Gagal menyimpan kredensial dalam ring kunci"
 msgid "Not supported"
 msgstr "Tak didukung"
 
-#: src/goabackend/goautils.c:675
+#: src/goabackend/goautils.c:676
 msgid "Not found"
 msgstr "Tak ditemukan"
 
-#: src/goabackend/goautils.c:686
+#: src/goabackend/goautils.c:687
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Kode: %u — Respon tidak terduga dari peladen"
 
-#: src/goabackend/goautils.c:703
+#: src/goabackend/goautils.c:704
 msgid "The signing certificate authority is not known."
 msgstr "Otoritas penandatangan sertifikat tidak dikenal."
 
-#: src/goabackend/goautils.c:707
+#: src/goabackend/goautils.c:708
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
@@ -621,37 +626,37 @@ msgstr ""
 "Sertifikat tidak cocok dengan identitas yang diharapkan dari situs asal "
 "sertifikasi tersebut diambil."
 
-#: src/goabackend/goautils.c:712
+#: src/goabackend/goautils.c:713
 msgid "The certificate’s activation time is still in the future."
 msgstr "Waktu aktifasi sertifikat masih di masa mendatang."
 
-#: src/goabackend/goautils.c:716
+#: src/goabackend/goautils.c:717
 msgid "The certificate has expired."
 msgstr "Sertifikat telah kedaluwarsa."
 
-#: src/goabackend/goautils.c:720
+#: src/goabackend/goautils.c:721
 msgid "The certificate has been revoked."
 msgstr "Sertifikat telah dicabut."
 
-#: src/goabackend/goautils.c:724
+#: src/goabackend/goautils.c:725
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Algoritma sertifikat dianggap tidak aman."
 
-#: src/goabackend/goautils.c:730
+#: src/goabackend/goautils.c:731
 msgid "Invalid certificate."
 msgstr "Sertifikat tidak valid."
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:765
+#: src/goabackend/goautils.c:766
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "Tidak menemukan %s dengan identitas \"%s\" dalam kredensial"
 
-#: src/goabackend/goawebdavprovider.c:462
+#: src/goabackend/goawebdavprovider.c:496
 msgid "Calendar, Contacts and Files"
 msgstr "Kalender, Kontak, dan Berkas"
 
-#: src/goabackend/goawebdavprovider.c:463
+#: src/goabackend/goawebdavprovider.c:497
 msgid ""
 "Add a calendar, contacts and files account by entering your WebDAV server "
 "and account details"
@@ -659,37 +664,36 @@ msgstr ""
 "Tambahkan akun kalender, kontak, dan berkas dengan memasukkan server WebDAV "
 "dan detail akun Anda"
 
-#: src/goabackend/goawebdavprovider.c:466
+#: src/goabackend/goawebdavprovider.c:500
 msgid "_Server Address"
 msgstr "Alamat _Server"
 
-#: src/goabackend/goawebdavprovider.c:467
+#: src/goabackend/goawebdavprovider.c:501
 msgid "Examples: example.com, 192.168.0.82"
 msgstr "Contoh: example.com, 192.168.0.82"
 
-#: src/goabackend/goawebdavprovider.c:477
+#: src/goabackend/goawebdavprovider.c:511
 msgid "Server Addresses (Optional)"
 msgstr "Alamat Server (Opsional)"
 
-#: src/goabackend/goawebdavprovider.c:478
+#: src/goabackend/goawebdavprovider.c:512
 msgid "Files"
 msgstr "Berkas"
 
-#: src/goabackend/goawebdavprovider.c:479
+#: src/goabackend/goawebdavprovider.c:513
 msgid "Calendar (CalDAV)"
 msgstr "Kalender (CalDAV)"
 
-#: src/goabackend/goawebdavprovider.c:480
+#: src/goabackend/goawebdavprovider.c:514
 msgid "Contacts (CardDAV)"
 msgstr "Kontak (CardDAV)"
 
-#: src/goabackend/goawebdavprovider.c:692
+#: src/goabackend/goawebdavprovider.c:712
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "URI tidak valid: %s"
 
 #: src/goabackend/goawindowsliveprovider.c:56
-#| msgid "Microsoft 365"
 msgid "Microsoft"
 msgstr "Microsoft"
 
