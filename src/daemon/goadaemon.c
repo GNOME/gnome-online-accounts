@@ -32,6 +32,8 @@
 #include "goabackend/goaprovider-priv.h"
 #include "goabackend/goautils.h"
 
+#define CREDENTIALS_CHECK_TIMEOUT (60)
+
 struct _GoaDaemon
 {
   GObject parent_instance;
@@ -1812,11 +1814,19 @@ ensure_credentials_queue_sort (gconstpointer a, gconstpointer b, gpointer user_d
   return priority_a - priority_b;
 }
 
+static gboolean
+ensure_credentials_timeout_cb (gpointer user_data)
+{
+  g_cancellable_cancel (G_CANCELLABLE (user_data));
+  return G_SOURCE_REMOVE;
+}
+
 static void
 ensure_credentials_queue_check (GoaDaemon *self)
 {
   GoaAccount *account;
   GoaProvider *provider = NULL;
+  GCancellable *cancellable = NULL;
   GTask *task;
   ObjectInvocationData *data;
   const gchar *id;
@@ -1848,13 +1858,22 @@ ensure_credentials_queue_check (GoaDaemon *self)
   provider = goa_provider_get_for_provider_type (provider_type);
   g_assert_nonnull (provider);
 
+  /* Ensure credential checks without an implicit timeout don't hang forever
+   */
+  cancellable = g_cancellable_new ();
+  g_timeout_add_seconds_full (G_PRIORITY_DEFAULT,
+                              CREDENTIALS_CHECK_TIMEOUT,
+                              ensure_credentials_timeout_cb,
+                              g_object_ref (cancellable),
+                              g_object_unref);
   goa_provider_ensure_credentials (provider,
                                    data->object,
-                                   NULL, /* GCancellable */
+                                   cancellable,
                                    ensure_credentials_queue_collector,
                                    task);
 
  out:
+  g_clear_object (&cancellable);
   g_clear_object (&provider);
 }
 
