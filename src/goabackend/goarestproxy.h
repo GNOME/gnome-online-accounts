@@ -33,6 +33,10 @@ G_DECLARE_FINAL_TYPE (GoaRestProxy, goa_rest_proxy, GOA, REST_PROXY, RestProxy);
 RestProxy     *goa_rest_proxy_new                (const gchar  *url_format,
                                                   gboolean      binding_required);
 
+gboolean       goa_rest_proxy_call_sync          (RestProxyCall  *call,
+                                                  GCancellable   *cancellable,
+                                                  GError        **error);
+
 G_END_DECLS
 
 #endif /* __GOA_REST_PROXY_H__ */

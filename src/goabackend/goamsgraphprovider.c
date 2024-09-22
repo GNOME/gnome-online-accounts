@@ -172,7 +172,7 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
   rest_proxy_call_set_method (call, "GET");
   rest_proxy_call_add_header (call, "Authorization", authorization);
 
-  if (!rest_proxy_call_sync (call, error))
+  if (!goa_rest_proxy_call_sync (call, cancellable, error))
     {
         goto out;
     }

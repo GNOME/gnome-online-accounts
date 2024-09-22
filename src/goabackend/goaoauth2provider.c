@@ -640,8 +640,7 @@ get_tokens_sync (GoaOAuth2Provider  *self,
     if (data->code_verifier != NULL)
       rest_proxy_call_add_param (call, "code_verifier", data->code_verifier);
 
-  /* TODO: cancellable support? */
-  if (!rest_proxy_call_sync (call, error))
+  if (!goa_rest_proxy_call_sync (call, cancellable, error))
     goto out;
 
   status_code = rest_proxy_call_get_status_code (call);

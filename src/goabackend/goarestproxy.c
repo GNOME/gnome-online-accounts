@@ -63,3 +63,64 @@ goa_rest_proxy_new (const gchar  *url_format,
 {
   return g_object_new (GOA_TYPE_REST_PROXY, "url-format", url_format, "binding-required", binding_required, NULL);
 }
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct
+{
+  GMainLoop *loop;
+  gboolean success;
+  GError **error;
+} CallSyncData;
+
+static void
+goa_rest_proxy_call_sync_cb (RestProxyCall *call,
+                             GAsyncResult  *result,
+                             gpointer       user_data)
+{
+  CallSyncData *data = (CallSyncData *)user_data;
+
+  data->success = rest_proxy_call_invoke_finish (call, result, data->error);
+  g_main_loop_quit (data->loop);
+}
+
+/**
+ * goa_rest_proxy_call_sync:
+ * @call: a `RestProxyCall`
+ * @cancellable: (nullable): a cancellable for the operation
+ * @error: (nullable): a return location for an error
+ *
+ * An alternative to [method@Rest.ProxyCall.sync] that takes a [class@Gio.Cancellable] argument.
+ *
+ * Returns: %TRUE, or %FALSE with @error set
+ */
+gboolean
+goa_rest_proxy_call_sync (RestProxyCall  *call,
+                          GCancellable   *cancellable,
+                          GError        **error)
+{
+  CallSyncData data;
+  GMainContext *context = NULL;
+
+  g_return_val_if_fail (REST_IS_PROXY_CALL (call), FALSE);
+  g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  context = g_main_context_new ();
+  g_main_context_push_thread_default (context);
+  data.loop = g_main_loop_new (context, FALSE);
+  data.error = error;
+
+  rest_proxy_call_invoke_async (call,
+                                cancellable,
+                                (GAsyncReadyCallback) goa_rest_proxy_call_sync_cb,
+                                &data);
+  g_main_loop_run (data.loop);
+  g_main_loop_unref (data.loop);
+
+  g_main_context_pop_thread_default (context);
+  g_main_context_unref (context);
+
+  return data.success;
+}
+
