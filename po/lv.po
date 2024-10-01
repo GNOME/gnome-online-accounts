@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/iss"
 "ues\n"
-"POT-Creation-Date: 2024-02-27 22:30+0000\n"
-"PO-Revision-Date: 2024-03-09 14:34+0200\n"
+"POT-Creation-Date: 2024-09-15 02:13+0000\n"
+"PO-Revision-Date: 2024-10-01 21:49+0300\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.5\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 :"
 " 2);\n"
 
@@ -26,45 +26,87 @@ msgid "List of providers that are allowed to be loaded"
 msgstr "Saraksts ar pakalpojumu sniedzējiem, kurus drīkst ielādēt"
 
 #: data/org.gnome.online-accounts.gschema.xml:7
+#, fuzzy
+#| msgid ""
+#| "A list of strings representing the providers that are allowed to be "
+#| "loaded (default: 'all'). This is only evaluated on startup."
 msgid ""
 "A list of strings representing the providers that are allowed to be loaded "
-"(default: 'all'). This is only evaluated on startup."
+"(default: 'all'). This is only evaluated on startup. Deprecated: use goa."
+"conf in the system config directory instead, with a key [providers] "
+"enable=all instead. The key is comma-separated list of the provider names."
 msgstr ""
 "Saraksts ar virknēm, kas reprezentē pakalpojumu sniedzējus, kurus drīkst "
 "ielādēt (noklusējuma — “all”). Tie tiek pārbaudīti tikai ielādējot."
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1141 src/daemon/goadaemon.c:1458
+#: src/daemon/goadaemon.c:1160 src/daemon/goadaemon.c:1480
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Neizdevās atrast %s piegādātāju"
 
-#: src/daemon/goadaemon.c:1401
+#: src/daemon/goadaemon.c:1423
 msgid "IsLocked property is set for account"
 msgstr "Kontam ir iestatīta IsLocked īpašība"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1446
+#: src/daemon/goadaemon.c:1468
 msgid "ProviderType property is not set for account"
 msgstr "Kontam nav iestatīta ProviderType īpašība"
 
+#: src/daemon/goadaemon.c:1630
+#, c-format
+#| msgid "Failed to find “%s” element"
+msgid "Failed to sign in to “%s”"
+msgstr "Neizdevās ierakstīties “%s”"
+
+#: src/daemon/goadaemon.c:1635
+msgid "Failed to sign in to multiple accounts"
+msgstr "Neizdevās ierakstīties vairākos kontos"
+
+#: src/daemon/goadaemon.c:1644
+#| msgid "%s Account"
+msgid "Online Accounts"
+msgstr "Tiešsaistes konti"
+
+#: src/daemon/goadaemon.c:1647
+#| msgid "Account is disabled"
+msgid "Account Action Required"
+msgstr "Nepieciešama konta darbība"
+
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:284
+#: src/goabackend/goadavclient.c:1187 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:799
+msgid "Authentication failed"
+msgstr "Neizdevās autentificēties"
+
+#: src/goabackend/goadavclient.c:1194
+msgid "Cannot find WebDAV endpoint"
+msgstr "Nevar atrast WebDAV beigu punktu"
+
+#: src/goabackend/goadavclient.c:1295 src/goabackend/goawebdavprovider.c:648
+#, c-format
+msgid "Invalid URI: %s"
+msgstr "Nederīgs URI — “%s”"
+
+#. TODO: more specific
+#: src/goabackend/goaewsclient.c:276
 msgid "Failed to parse autodiscover response XML"
 msgstr "Neizdevās saprast automātiskās atklāšanas atbildes XML"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: src/goabackend/goaewsclient.c:295 src/goabackend/goaewsclient.c:310
-#: src/goabackend/goaewsclient.c:325
+#: src/goabackend/goaewsclient.c:287 src/goabackend/goaewsclient.c:302
+#: src/goabackend/goaewsclient.c:317
 #, c-format
 msgid "Failed to find “%s” element"
 msgstr "Neizdevās atrast “%s” elementu"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:346
-msgid "Failed to find ASUrl and OABUrl in autodiscover response"
-msgstr "Neizdevās atrast ASUrl un OABUrl automātiskās atklāšanas atbildē"
+#: src/goabackend/goaewsclient.c:338
+#| msgid "Failed to find ASUrl and OABUrl in autodiscover response"
+msgid "Failed to find ASUrl in autodiscover response"
+msgstr "Neizdevās atrast ASUrl automātiskās atklāšanas atbildē"
 
 #: src/goabackend/goaexchangeprovider.c:52
 msgid "Microsoft Exchange"
@@ -74,14 +116,14 @@ msgstr "Microsoft Exchange"
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
 #.
-#: src/goabackend/goaexchangeprovider.c:249
-#: src/goabackend/goawebdavprovider.c:374
+#: src/goabackend/goaexchangeprovider.c:258
+#: src/goabackend/goawebdavprovider.c:304
 #, c-format
 msgid "Invalid password with username “%s” (%s, %d): "
 msgstr "Nederīga parole lietotājam “%s” (%s, %d): "
 
 #. provider name
-#: src/goabackend/goaexchangeprovider.c:373
+#: src/goabackend/goaexchangeprovider.c:389
 msgid ""
 "Connect to a Microsoft Exchange provider to access calendars, contacts and "
 "files"
@@ -89,21 +131,21 @@ msgstr ""
 "Savienoties ar Microsoft Exchange pakalpojuma sniedzēju, lai piekļūtu "
 "kalendāriem, kontaktiem un datnēm"
 
-#: src/goabackend/goaexchangeprovider.c:376
-#: src/goabackend/goaimapsmtpprovider.c:548
+#: src/goabackend/goaexchangeprovider.c:392
+#: src/goabackend/goaimapsmtpprovider.c:696
 msgid "_Email"
 msgstr "_E-pasts"
 
-#: src/goabackend/goaexchangeprovider.c:377
+#: src/goabackend/goaexchangeprovider.c:393
 #: src/goabackend/goafedoraprovider.c:171
-#: src/goabackend/goaimapsmtpprovider.c:549
-#: src/goabackend/goaimapsmtpprovider.c:568
-#: src/goabackend/goaimapsmtpprovider.c:589
-#: src/goabackend/goawebdavprovider.c:471
+#: src/goabackend/goaimapsmtpprovider.c:697
+#: src/goabackend/goaimapsmtpprovider.c:740
+#: src/goabackend/goaimapsmtpprovider.c:784
+#: src/goabackend/goawebdavprovider.c:408
 msgid "_Password"
 msgstr "_Parole"
 
-#: src/goabackend/goaexchangeprovider.c:378
+#: src/goabackend/goaexchangeprovider.c:394
 msgid ""
 "Exchange account details will be auto-detected from your email address when "
 "possible"
@@ -111,23 +153,23 @@ msgstr ""
 "Ja iespējams, Exchange konta informācija tiks automātiski noteikta no jūsu e-"
 "pasta adreses"
 
-#: src/goabackend/goaexchangeprovider.c:382
+#: src/goabackend/goaexchangeprovider.c:405
 msgid "Account Details"
 msgstr "Konta informācija"
 
-#: src/goabackend/goaexchangeprovider.c:383
+#: src/goabackend/goaexchangeprovider.c:406
 #: src/goabackend/goafedoraprovider.c:170
-#: src/goabackend/goaimapsmtpprovider.c:567
-#: src/goabackend/goaimapsmtpprovider.c:588
-#: src/goabackend/goawebdavprovider.c:470
+#: src/goabackend/goaimapsmtpprovider.c:739
+#: src/goabackend/goaimapsmtpprovider.c:783
+#: src/goabackend/goawebdavprovider.c:407
 msgid "User_name"
 msgstr "_Lietotājvārds"
 
-#: src/goabackend/goaexchangeprovider.c:384
+#: src/goabackend/goaexchangeprovider.c:407
 msgid "_Domain"
 msgstr "_Domēns"
 
-#: src/goabackend/goaexchangeprovider.c:385
+#: src/goabackend/goaexchangeprovider.c:408
 msgid "Example domain: example.com"
 msgstr "Domēna piemērs — example.com"
 
@@ -136,17 +178,22 @@ msgid "Fedora"
 msgstr "Fedora"
 
 #: src/goabackend/goafedoraprovider.c:167
-#: src/goabackend/goakerberosprovider.c:592
+#: src/goabackend/goakerberosprovider.c:598
 msgid "Access restricted web and network resources for your organization"
 msgstr "Piekļūt ierobežotiem jūsu organizācijas tīmekļa un tīkla resursiem"
+
+#: src/goabackend/goafedoraprovider.c:338
+#, c-format
+msgid "Failed to get principal from user name “%s”"
+msgstr "Neizdevās saņemt principāli no lietotāja “%s”"
 
 #: src/goabackend/goagoogleprovider.c:57
 msgid "Google"
 msgstr "Google"
 
-#: src/goabackend/goagoogleprovider.c:207
-#: src/goabackend/goamsgraphprovider.c:181
-#: src/goabackend/goawindowsliveprovider.c:158
+#: src/goabackend/goagoogleprovider.c:213
+#: src/goabackend/goamsgraphprovider.c:184
+#: src/goabackend/goawindowsliveprovider.c:165
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
@@ -155,18 +202,19 @@ msgstr ""
 "(%s)"
 
 #. TODO: more specific
-#: src/goabackend/goagoogleprovider.c:226
-#: src/goabackend/goagoogleprovider.c:237
-#: src/goabackend/goamsgraphprovider.c:200
-#: src/goabackend/goamsgraphprovider.c:211
-#: src/goabackend/goamsgraphprovider.c:222
-#: src/goabackend/goaoauth2provider.c:616
-#: src/goabackend/goaoauth2provider.c:646
-#: src/goabackend/goaoauth2provider.c:657 src/goabackend/goautils.c:133
-#: src/goabackend/goawindowsliveprovider.c:177
-#: src/goabackend/goawindowsliveprovider.c:188
-#: src/goabackend/goawindowsliveprovider.c:197
-#: src/goabackend/goawindowsliveprovider.c:210
+#: src/goabackend/goagoogleprovider.c:232
+#: src/goabackend/goagoogleprovider.c:243
+#: src/goabackend/goamsgraphprovider.c:203
+#: src/goabackend/goamsgraphprovider.c:214
+#: src/goabackend/goamsgraphprovider.c:227
+#: src/goabackend/goamsgraphprovider.c:252
+#: src/goabackend/goaoauth2provider.c:677
+#: src/goabackend/goaoauth2provider.c:707
+#: src/goabackend/goaoauth2provider.c:718 src/goabackend/goautils.c:133
+#: src/goabackend/goawindowsliveprovider.c:184
+#: src/goabackend/goawindowsliveprovider.c:195
+#: src/goabackend/goawindowsliveprovider.c:204
+#: src/goabackend/goawindowsliveprovider.c:217
 msgid "Could not parse response"
 msgstr "Neizdevās parsēt atbildi"
 
@@ -175,17 +223,11 @@ msgstr "Neizdevās parsēt atbildi"
 msgid "Service not available"
 msgstr "Serviss nav pieejams"
 
-#. TODO: more specific
-#: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goasmtpauth.c:102
-#: src/goabackend/goautils.c:681
-msgid "Authentication failed"
-msgstr "Neizdevās autentificēties"
-
 #: src/goabackend/goaimapauthlogin.c:166 src/goabackend/goasmtpauth.c:600
 msgid "Server does not support STARTTLS"
 msgstr "Serveris neatbalsta STARTTLS"
 
-#: src/goabackend/goaimapsmtpprovider.c:54
+#: src/goabackend/goaimapsmtpprovider.c:55
 msgid "IMAP and SMTP"
 msgstr "IMAP un SMTP"
 
@@ -199,41 +241,53 @@ msgstr "IMAP un SMTP"
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: src/goabackend/goaimapsmtpprovider.c:311
-#: src/goabackend/goaimapsmtpprovider.c:362
+#: src/goabackend/goaimapsmtpprovider.c:320
+#: src/goabackend/goaimapsmtpprovider.c:369
 #, c-format
 msgid "Invalid %s with username “%s” (%s, %d): "
 msgstr "Nederīgs %s lietotājam “%s” (%s, %d): "
 
+#: src/goabackend/goaimapsmtpprovider.c:562
+#: src/goabackend/goaimapsmtpprovider.c:583
+#: src/goabackend/goaimapsmtpprovider.c:719
+#: src/goabackend/goaimapsmtpprovider.c:760
+#: src/goabackend/goaimapsmtpprovider.c:804
+msgid "Auto-detected"
+msgstr "Automātiski atklāt"
+
+#: src/goabackend/goaimapsmtpprovider.c:612
+msgid "Unable to auto-detect IMAP and SMTP settings"
+msgstr "Neizdevās automātiski atklāt IMAP un SMTP iestatījumus"
+
 #. Keep in sync with GoaTlsType
-#: src/goabackend/goaimapsmtpprovider.c:535
+#: src/goabackend/goaimapsmtpprovider.c:683
 msgid "None"
 msgstr "Nav"
 
 #. GOA_TLS_TYPE_NONE
-#: src/goabackend/goaimapsmtpprovider.c:536
+#: src/goabackend/goaimapsmtpprovider.c:684
 msgid "STARTTLS after connecting"
 msgstr "STARTTLS pēc savienošanās"
 
 #. GOA_TLS_TYPE_STARTTLS
-#: src/goabackend/goaimapsmtpprovider.c:537
+#: src/goabackend/goaimapsmtpprovider.c:685
 msgid "SSL on a dedicated port"
 msgstr "SSL uz atsevišķa porta"
 
-#: src/goabackend/goaimapsmtpprovider.c:542
-#: src/goabackend/goaimapsmtpprovider.c:1225
+#: src/goabackend/goaimapsmtpprovider.c:690
+#: src/goabackend/goaimapsmtpprovider.c:1424
 msgid "Email"
 msgstr "E-pasts"
 
-#: src/goabackend/goaimapsmtpprovider.c:543
+#: src/goabackend/goaimapsmtpprovider.c:691
 msgid "Connect to an email account"
 msgstr "Savienoties ar e-pasta kontu"
 
-#: src/goabackend/goaimapsmtpprovider.c:547
+#: src/goabackend/goaimapsmtpprovider.c:695
 msgid "_Name"
 msgstr "_Nosaukums"
 
-#: src/goabackend/goaimapsmtpprovider.c:550
+#: src/goabackend/goaimapsmtpprovider.c:698
 msgid ""
 "IMAP and SMTP details will be auto-detected from your service provider when "
 "possible"
@@ -242,45 +296,45 @@ msgstr ""
 "pakalpojuma sniedzēja"
 
 #. IMAP
-#: src/goabackend/goaimapsmtpprovider.c:565
+#: src/goabackend/goaimapsmtpprovider.c:737
 msgid "IMAP Settings"
 msgstr "IMAP iestatījumi"
 
-#: src/goabackend/goaimapsmtpprovider.c:566
+#: src/goabackend/goaimapsmtpprovider.c:738
 msgid "IMAP _Server"
 msgstr "IMAP _serveris"
 
-#: src/goabackend/goaimapsmtpprovider.c:574
-#: src/goabackend/goaimapsmtpprovider.c:595
+#: src/goabackend/goaimapsmtpprovider.c:749
+#: src/goabackend/goaimapsmtpprovider.c:793
 msgid "Encryption"
 msgstr "Šifrēšana"
 
-#: src/goabackend/goaimapsmtpprovider.c:579
+#: src/goabackend/goaimapsmtpprovider.c:774
 msgid "Example server: imap.example.com"
 msgstr "Servera piemērs — imap.example.com"
 
 #. SMTP
-#: src/goabackend/goaimapsmtpprovider.c:586
+#: src/goabackend/goaimapsmtpprovider.c:781
 msgid "SMTP Settings"
 msgstr "SMTP iestatījumi"
 
-#: src/goabackend/goaimapsmtpprovider.c:587
+#: src/goabackend/goaimapsmtpprovider.c:782
 msgid "SMTP _Server"
 msgstr "SMTP _serveris"
 
-#: src/goabackend/goaimapsmtpprovider.c:600
+#: src/goabackend/goaimapsmtpprovider.c:818
 msgid "Example server: smtp.example.com"
 msgstr "Servera piemērs — smtp.example.com"
 
-#: src/goabackend/goaimapsmtpprovider.c:1216
+#: src/goabackend/goaimapsmtpprovider.c:1415
 msgid "Name"
 msgstr "Vārds"
 
-#: src/goabackend/goaimapsmtpprovider.c:1242
+#: src/goabackend/goaimapsmtpprovider.c:1441
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1260
+#: src/goabackend/goaimapsmtpprovider.c:1459
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -288,103 +342,104 @@ msgstr "SMTP"
 msgid "Kerberos"
 msgstr "Kerberos"
 
-#: src/goabackend/goakerberosprovider.c:418
+#: src/goabackend/goakerberosprovider.c:425
 msgid "Operation was cancelled"
 msgstr "Darbība tika atcelta"
 
-#: src/goabackend/goakerberosprovider.c:462
+#: src/goabackend/goakerberosprovider.c:469
 #: src/goaidentity/goaidentityservice.c:1114
 msgid "Log In to Realm"
 msgstr "Ierakstīties nogabalā"
 
-#: src/goabackend/goakerberosprovider.c:463
+#: src/goabackend/goakerberosprovider.c:470
 msgid "Please enter your password below."
 msgstr "Lūdzu, ievadiet savu paroli zemāk."
 
-#: src/goabackend/goakerberosprovider.c:464
+#: src/goabackend/goakerberosprovider.c:471
 msgid "Remember this password"
 msgstr "Atcerēties šo paroli"
 
-#: src/goabackend/goakerberosprovider.c:595
+#: src/goabackend/goakerberosprovider.c:601
 msgid "_Principal"
 msgstr "_Identitāte"
 
-#: src/goabackend/goakerberosprovider.c:596
+#: src/goabackend/goakerberosprovider.c:602
 msgid "Example principal: user@EXAMPLE.COM"
 msgstr "Identitātes piemērs — user@EXAMPLE.COM"
 
-#: src/goabackend/goakerberosprovider.c:599
-#: src/goabackend/goamsgraphprovider.c:396
-msgid "_Sign in…"
-msgstr "Ierak_stīties…"
-
-#: src/goabackend/goakerberosprovider.c:1291
+#: src/goabackend/goakerberosprovider.c:1293
 msgid "Ticketing is disabled for account"
 msgstr "Kontam ir izslēgta biļetēšana"
 
-#: src/goabackend/goakerberosprovider.c:1318
+#: src/goabackend/goakerberosprovider.c:1320
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr "Atslēgu saišķī netika atrasti akreditācijas dati identitātei “%s”"
 
-#: src/goabackend/goakerberosprovider.c:1331
+#: src/goabackend/goakerberosprovider.c:1335
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "Akreditācijas datos neatrada paroli identitātei “%s”"
 
-#: src/goabackend/goakerberosprovider.c:1513
+#: src/goabackend/goakerberosprovider.c:1517
 msgid "Identity service returned invalid key"
 msgstr "Identitātes serviss atgrieza nederīgu atslēgu"
+
+#: src/goabackend/goamailclient.c:851
+#, c-format
+msgid "Invalid email address “%s”"
+msgstr "Nederīga e-pasta adrese “%s”"
 
 #: src/goabackend/goamsgraphprovider.c:64
 msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
-#. NOTE: In case further types needs to be added, ensure that the
-#. * code in add_account_action_cb is also adjusted.
-#.
-#. Translators: Microsoft account issuer type
-#: src/goabackend/goamsgraphprovider.c:377
-msgid "Common"
-msgstr "Kopējs"
-
-#. Translators: Microsoft account issuer type
-#: src/goabackend/goamsgraphprovider.c:379
-msgid "Custom"
-msgstr "Pielāgots"
-
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:385
+#: src/goabackend/goamsgraphprovider.c:476
 #| msgid ""
-#| "Connect to a Microsoft 365 provider to get access calendars, contacts and "
+#| "Connect to a Microsoft 365 provider to access calendars, contacts and "
 #| "files"
-msgid ""
-"Connect to a Microsoft 365 provider to access calendars, contacts and files"
+msgid "Connect to Microsoft 365 to access email, calendars, contacts and files"
 msgstr ""
-"Savienoties ar Microsoft 365 pakalpojuma sniedzēju, lai piekļūtu "
-"kalendāriem, kontaktiem un datnēm"
+"Savienoties ar Microsoft 365, lai piekļūtu kalendāriem, e-pastam,  kontaktiem"
+" un datnēm"
 
-#: src/goabackend/goamsgraphprovider.c:388
-msgid "_Client ID"
-msgstr "_Klienta ID"
+#: src/goabackend/goamsgraphprovider.c:480
+msgid "Use Organization Account"
+msgstr "Izmantot organizācijas kontu"
 
-#: src/goabackend/goamsgraphprovider.c:390
-msgid "Advanced"
-msgstr "Paplašināti"
+#: src/goabackend/goamsgraphprovider.c:481
+msgid "Connect using details from an organization or developer account"
+msgstr ""
+"Savienoties izmantojot informāciju no organizācijas vai izstrādātāja konta"
 
-#: src/goabackend/goamsgraphprovider.c:391
-msgid "_Issuer"
-msgstr "_Izdevējs"
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:488
+msgid "Enter the details provided by your organization"
+msgstr "Ievadiet informāciju, ko sniedz jūsu organizācija"
 
-#: src/goabackend/goamsgraphprovider.c:392
-msgid "C_ustom Issuer"
-msgstr "_Pielāgots izdevējs"
+#: src/goabackend/goamsgraphprovider.c:490
+#| msgid "_Client ID"
+msgid "_Client ID (Optional)"
+msgstr "_Klienta ID (neobligāts)"
 
-#: src/goabackend/goamsgraphprovider.c:393
-msgid "Example provider: example.com"
-msgstr "Pakalpojuma sniedzēja piemērs — example.com"
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:492
+#| msgid "_Client ID"
+msgid "_Tenant ID"
+msgstr "_Tenant ID"
 
-#: src/goabackend/goaoauth2provider.c:592
+#: src/goabackend/goamsgraphprovider.c:493
+msgid "Example ID: 00000000-0000-0000-0000-000000000000"
+msgstr "Piemēra ID: 00000000-0000-0000-0000-000000000000"
+
+#: src/goabackend/goamsgraphprovider.c:496
+#: src/goabackend/goaoauth2provider.c:943
+#: src/goabackend/goaproviderdialog.c:701
+msgid "_Sign In…"
+msgstr "Ierak_stīties…"
+
+#: src/goabackend/goaoauth2provider.c:653
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -392,47 +447,42 @@ msgstr ""
 "Kad pieprasīja piekļuves marķieri, tika gaidīts statuss 200, tā vietā saņēma "
 "statusu %d (%s)"
 
-#: src/goabackend/goaoauth2provider.c:736
+#: src/goabackend/goaoauth2provider.c:797
 msgid "Authorization response: "
 msgstr "Pilnvarošanas atbilde:"
 
-#: src/goabackend/goaoauth2provider.c:799
+#: src/goabackend/goaoauth2provider.c:860
 #, c-format
 msgid "Authorization response: %s"
 msgstr "Pilnvarošanas atbilde: %s"
 
-#: src/goabackend/goaoauth2provider.c:807
+#: src/goabackend/goaoauth2provider.c:868
 msgid "Failed to authenticate"
 msgstr "Neizdevās autentificēt"
 
-#: src/goabackend/goaoauth2provider.c:843
+#: src/goabackend/goaoauth2provider.c:904
 msgid "Error getting an Access Token: "
 msgstr "Kļūda, saņemto pieejas marķieri: "
 
-#: src/goabackend/goaoauth2provider.c:859
+#: src/goabackend/goaoauth2provider.c:920
 msgid "Error getting identity: "
 msgstr "Kļūda, saņemot identitāti: "
 
-#: src/goabackend/goaoauth2provider.c:880
+#: src/goabackend/goaoauth2provider.c:941
 #, c-format
 msgid "Sign in to %s with your browser"
 msgstr "Ierakstieties %s ar savu pārlūku"
 
-#: src/goabackend/goaoauth2provider.c:882
-#: src/goabackend/goaproviderdialog.c:689
-msgid "_Sign In…"
-msgstr "Ierak_stīties…"
-
-#: src/goabackend/goaoauth2provider.c:1215
+#: src/goabackend/goaoauth2provider.c:1530
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Tika prasīts, lai ierakstās kā %s, bet ierakstījās kā %s"
 
-#: src/goabackend/goaoauth2provider.c:1402
+#: src/goabackend/goaoauth2provider.c:1758
 msgid "Credentials do not contain access_token"
 msgstr "Akreditācijas dati nesatur access_token"
 
-#: src/goabackend/goaoauth2provider.c:1446
+#: src/goabackend/goaoauth2provider.c:1802
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Neizdevās atsvaidzināt piekļuves marķieri (%s, %d): "
@@ -493,15 +543,15 @@ msgstr "_Kartes"
 msgid "T_o Do"
 msgstr "_Darāmie darbi"
 
-#: src/goabackend/goaprovider.c:923
+#: src/goabackend/goaprovider.c:1066
 msgid "Account is disabled"
 msgstr "Konts ir izslēgts"
 
-#: src/goabackend/goaprovider.c:936
+#: src/goabackend/goaprovider.c:1079
 msgid "Unknown error"
 msgstr "Nezināma kļūda"
 
-#: src/goabackend/goaprovider.c:955
+#: src/goabackend/goaprovider.c:1098
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ensure_credentials_sync nav implementēta tipam %s"
@@ -510,16 +560,16 @@ msgstr "ensure_credentials_sync nav implementēta tipam %s"
 #. * Account" dialogs. The %s is the name of the provider. eg.,
 #. * 'Google'.
 #.
-#: src/goabackend/goaproviderdialog.c:168
+#: src/goabackend/goaproviderdialog.c:174
 #, c-format
 msgid "%s Account"
 msgstr "%s konts"
 
-#: src/goabackend/goaproviderdialog.c:606
+#: src/goabackend/goaproviderdialog.c:618
 msgid "Remove this Account?"
 msgstr "Izņemt šo kontu?"
 
-#: src/goabackend/goaproviderdialog.c:607
+#: src/goabackend/goaproviderdialog.c:619
 msgid ""
 "If you remove this Online Account you will have to connect to it again to "
 "use it with apps and services."
@@ -527,36 +577,35 @@ msgstr ""
 "Ja izņemsiet šo tiešsaistes kontu, jums būs ar to atkal jāsavienojas, lai to "
 "izmantotu ar lietotnēm uz pakalpojumiem."
 
-#: src/goabackend/goaproviderdialog.c:609
+#: src/goabackend/goaproviderdialog.c:621
 msgid "_Cancel"
 msgstr "At_celt"
 
-#: src/goabackend/goaproviderdialog.c:610
+#: src/goabackend/goaproviderdialog.c:622
 msgid "_Remove"
 msgstr "_Izņemt"
 
-#: src/goabackend/goaproviderdialog.c:688
+#: src/goabackend/goaproviderdialog.c:700
 msgid "Sign in to reconnect to this account"
 msgstr "Ierakstieties, lai atkal savienotos ar šo kontu"
 
-#. Remove
-#: src/goabackend/goaproviderdialog.c:737
+#: src/goabackend/goaproviderdialog.c:754
 msgid "_Remove…"
 msgstr "_Izņemt…"
 
-#: src/goabackend/goaproviderdialog.c:832
+#: src/goabackend/goaproviderdialog.c:849
 msgid "_Sign In"
 msgstr "Ierak_stīties"
 
-#: src/goabackend/goaproviderdialog.c:894
+#: src/goabackend/goaproviderdialog.c:911
 msgid "_Try Again"
 msgstr "Mēģinā_t vēlreiz"
 
-#: src/goabackend/goaproviderdialog.c:898
+#: src/goabackend/goaproviderdialog.c:915
 msgid "_Ignore"
 msgstr "_Ignorēt"
 
-#: src/goabackend/goaproviderdialog.c:1143
+#: src/goabackend/goaproviderdialog.c:1187
 msgid "Dialog was dismissed"
 msgstr "Dialoglodziņš tika atmests"
 
@@ -604,24 +653,24 @@ msgstr "GOA %s akreditācijas dati identitātei %s"
 msgid "Failed to store credentials in the keyring"
 msgstr "Neizdevās noglabāt akreditācijas datus atslēgu saišķī"
 
-#: src/goabackend/goautils.c:672
+#: src/goabackend/goautils.c:787
 msgid "Not supported"
 msgstr "Nav atbalstīts"
 
-#: src/goabackend/goautils.c:675
+#: src/goabackend/goautils.c:791
 msgid "Not found"
 msgstr "Nav atrasts"
 
-#: src/goabackend/goautils.c:686
+#: src/goabackend/goautils.c:805
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Kods: %u — negaidīta atbilde no servera"
 
-#: src/goabackend/goautils.c:703
+#: src/goabackend/goautils.c:830
 msgid "The signing certificate authority is not known."
 msgstr "Parakstošā sertifikātu institūcija nav zināma."
 
-#: src/goabackend/goautils.c:707
+#: src/goabackend/goautils.c:834
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
@@ -629,37 +678,37 @@ msgstr ""
 "Sertifikāts neatbilst gaidītajai vietnes identitātei, no kuras tas tika "
 "saņemts."
 
-#: src/goabackend/goautils.c:712
+#: src/goabackend/goautils.c:839
 msgid "The certificate’s activation time is still in the future."
 msgstr "Sertifikāta aktivizēšanas laiks vēl aizvien ir nākotnē."
 
-#: src/goabackend/goautils.c:716
+#: src/goabackend/goautils.c:843
 msgid "The certificate has expired."
 msgstr "Sertifikāta derīgums ir beidzies."
 
-#: src/goabackend/goautils.c:720
+#: src/goabackend/goautils.c:847
 msgid "The certificate has been revoked."
 msgstr "Sertifikāts tika atsaukts."
 
-#: src/goabackend/goautils.c:724
+#: src/goabackend/goautils.c:851
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Sertifikāta algoritms tiek uzskatīts par nedrošu."
 
-#: src/goabackend/goautils.c:730
+#: src/goabackend/goautils.c:857
 msgid "Invalid certificate."
 msgstr "Nederīgs sertifikāts."
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:765
+#: src/goabackend/goautils.c:892
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "Akreditācijas datos neizdevās atrast %s ar identitāti “%s”"
 
-#: src/goabackend/goawebdavprovider.c:462
+#: src/goabackend/goawebdavprovider.c:399
 msgid "Calendar, Contacts and Files"
 msgstr "Kalendārs, kontakti un datnes"
 
-#: src/goabackend/goawebdavprovider.c:463
+#: src/goabackend/goawebdavprovider.c:400
 msgid ""
 "Add a calendar, contacts and files account by entering your WebDAV server "
 "and account details"
@@ -667,38 +716,34 @@ msgstr ""
 "Pievienojiet kalendāra, kontaktu, un datņu kontu, ievadot sava WebDAV "
 "servera un konta informāciju"
 
-#: src/goabackend/goawebdavprovider.c:466
+#: src/goabackend/goawebdavprovider.c:403
 msgid "_Server Address"
 msgstr "_Servera adrese"
 
-#: src/goabackend/goawebdavprovider.c:467
+#: src/goabackend/goawebdavprovider.c:404
 msgid "Examples: example.com, 192.168.0.82"
 msgstr "Piemēri — example.com, 192.168.0.82"
 
-#: src/goabackend/goawebdavprovider.c:477
+#: src/goabackend/goawebdavprovider.c:414
 msgid "Server Addresses (Optional)"
 msgstr "Servera adrese (neobligāti)"
 
-#: src/goabackend/goawebdavprovider.c:478
+#: src/goabackend/goawebdavprovider.c:415
 msgid "Files"
 msgstr "Datnes"
 
-#: src/goabackend/goawebdavprovider.c:479
+#: src/goabackend/goawebdavprovider.c:416
 msgid "Calendar (CalDAV)"
 msgstr "Kalendārs (CalDAV)"
 
-#: src/goabackend/goawebdavprovider.c:480
+#: src/goabackend/goawebdavprovider.c:417
 msgid "Contacts (CardDAV)"
 msgstr "Kontakti (CardDAV)"
 
-#: src/goabackend/goawebdavprovider.c:668
-#, c-format
-msgid "Invalid URI: %s"
-msgstr "Nederīgs URI — “%s”"
-
 #: src/goabackend/goawindowsliveprovider.c:56
-msgid "Microsoft Personal"
-msgstr "Microsoft Personal"
+#| msgid "Microsoft 365"
+msgid "Microsoft"
+msgstr "Microsoft"
 
 #: src/goaidentity/goaidentityservice.c:564
 msgid "Initial secret key is invalid"
@@ -767,13 +812,42 @@ msgstr "Nevarēja atjaunot akreditācijas datus no KDC identitātei %s: "
 msgid "Could not erase identity: "
 msgstr "Nevarēja izdzēst identitāti: "
 
-#: src/goaidentity/goakerberosidentitymanager.c:854
+#: src/goaidentity/goakerberosidentitymanager.c:955
 msgid "Could not find identity"
 msgstr "Nevarēja atrast identitāti"
 
-#: src/goaidentity/goakerberosidentitymanager.c:937
+#: src/goaidentity/goakerberosidentitymanager.c:1038
 msgid "Could not create credential cache for identity"
 msgstr "Neizdevās izveidot akreditācijas datu kešu identitātei"
+
+#: src/goaidentity/goalinuxnotificationstream.c:58
+#, c-format
+msgid "Error closing file descriptor: %s"
+msgstr "Kļūda, aizverot datnes deskriptoru — %s"
+
+#~ msgid "_Sign in…"
+#~ msgstr "Ierak_stīties…"
+
+#~ msgid "Common"
+#~ msgstr "Kopējs"
+
+#~ msgid "Custom"
+#~ msgstr "Pielāgots"
+
+#~ msgid "Advanced"
+#~ msgstr "Paplašināti"
+
+#~ msgid "_Issuer"
+#~ msgstr "_Izdevējs"
+
+#~ msgid "C_ustom Issuer"
+#~ msgstr "_Pielāgots izdevējs"
+
+#~ msgid "Example provider: example.com"
+#~ msgstr "Pakalpojuma sniedzēja piemērs — example.com"
+
+#~ msgid "Microsoft Personal"
+#~ msgstr "Microsoft Personal"
 
 #~ msgid "C_onnect"
 #~ msgstr "Savien_oties"
@@ -888,9 +962,6 @@ msgstr "Neizdevās izveidot akreditācijas datu kešu identitātei"
 
 #~ msgid "Cannot resolve proxy hostname"
 #~ msgstr "Nevar atšķetināt starpnieka servera nosaukumu"
-
-#~ msgid "Cannot find WebDAV endpoint"
-#~ msgstr "Nevar atrast WebDAV beigu punktu"
 
 #, c-format
 #~ msgid "Loading “%s”…"
