@@ -9,10 +9,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
-"issues\n"
-"POT-Creation-Date: 2024-08-27 22:12+0000\n"
-"PO-Revision-Date: 2024-09-01 21:29+0200\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/issues\n"
+"POT-Creation-Date: 2024-10-01 04:40+0000\n"
+"PO-Revision-Date: 2024-10-11 21:29+0200\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -29,8 +28,8 @@ msgstr "Llista de proveïdors que es poden carregar"
 #: data/org.gnome.online-accounts.gschema.xml:7
 msgid ""
 "A list of strings representing the providers that are allowed to be loaded "
-"(default: 'all'). This is only evaluated on startup. Deprecated: use goa."
-"conf in the system config directory instead, with a key [providers] "
+"(default: 'all'). This is only evaluated on startup. Deprecated: use "
+"goa.conf in the system config directory instead, with a key [providers] "
 "enable=all instead. The key is comma-separated list of the provider names."
 msgstr ""
 "Una llista de cadenes que representen els proveïdors que es poden carregar "
@@ -69,7 +68,7 @@ msgstr "Comptes de xarxa"
 
 #: src/daemon/goadaemon.c:1647
 msgid "Account Action Required"
-msgstr "Es requereix un acció al compte"
+msgstr "Es requereix una acció al compte"
 
 #. TODO: more specific
 #: src/goabackend/goadavclient.c:1187 src/goabackend/goaimapauthlogin.c:104
@@ -84,7 +83,7 @@ msgstr "No s'ha pogut trobar el punt final WebDAV"
 #: src/goabackend/goadavclient.c:1295 src/goabackend/goawebdavprovider.c:648
 #, c-format
 msgid "Invalid URI: %s"
-msgstr "URI invàlida: %s"
+msgstr "URI invàlid: %s"
 
 #. TODO: more specific
 #: src/goabackend/goaewsclient.c:276
@@ -111,7 +110,6 @@ msgstr "Microsoft Exchange"
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
-#.
 #: src/goabackend/goaexchangeprovider.c:258
 #: src/goabackend/goawebdavprovider.c:304
 #, c-format
@@ -182,7 +180,7 @@ msgstr ""
 #: src/goabackend/goafedoraprovider.c:338
 #, c-format
 msgid "Failed to get principal from user name “%s”"
-msgstr ""
+msgstr "No s'ha pogut obtenir el principal del nom d'usuari «%s»"
 
 #: src/goabackend/goagoogleprovider.c:57
 msgid "Google"
@@ -193,7 +191,8 @@ msgstr "Google"
 #: src/goabackend/goawindowsliveprovider.c:165
 #, c-format
 msgid ""
-"Expected status 200 when requesting your identity, instead got status %d (%s)"
+"Expected status 200 when requesting your identity, instead got status %d "
+"(%s)"
 msgstr ""
 "En sol·licitar la vostra identitat s'esperava l'estat 200, però s'ha rebut "
 "l'estat %d (%s)"
@@ -232,12 +231,10 @@ msgstr "IMAP i SMTP"
 #. * second %s is the IMAP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
-#.
 #. Translators: the first %s is a field name. The
 #. * second %s is the SMTP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
-#.
 #: src/goabackend/goaimapsmtpprovider.c:320
 #: src/goabackend/goaimapsmtpprovider.c:369
 #, c-format
@@ -396,7 +393,8 @@ msgstr "Microsoft 365"
 
 #. provider name
 #: src/goabackend/goamsgraphprovider.c:476
-msgid "Connect to Microsoft 365 to access email, calendars, contacts and files"
+msgid ""
+"Connect to Microsoft 365 to access email, calendars, contacts and files"
 msgstr ""
 "Connecta a Microsoft 365 per accedir al correu, calendaris, contactes i "
 "fitxers"
@@ -408,9 +406,11 @@ msgstr "Usa el compte de l'organització"
 #: src/goabackend/goamsgraphprovider.c:481
 msgid "Connect using details from an organization or developer account"
 msgstr ""
-"Connecta usant els detalls d'un compte de desenvolupador o d'una organització"
+"Connecta usant els detalls d'un compte de desenvolupador o d'una "
+"organització"
 
-#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#. Translators: See
+#. https://learn.microsoft.com/globalization/reference/microsoft-terminology
 #: src/goabackend/goamsgraphprovider.c:488
 msgid "Enter the details provided by your organization"
 msgstr "Introduïu els detalls proporcionats per la vostra organització"
@@ -419,7 +419,8 @@ msgstr "Introduïu els detalls proporcionats per la vostra organització"
 msgid "_Client ID (Optional)"
 msgstr "Identificador de _client (opcional)"
 
-#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#. Translators: See
+#. https://learn.microsoft.com/globalization/reference/microsoft-terminology
 #: src/goabackend/goamsgraphprovider.c:492
 msgid "_Tenant ID"
 msgstr "_Identificador d'inquilí"
@@ -439,8 +440,8 @@ msgstr "Inicia la _sessió…"
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr ""
-"S'esperava l'estat 200 en sol·licitar el testimoni d'autenticació, però s'ha "
-"rebut l'estat %d (%s)"
+"S'esperava l'estat 200 en sol·licitar el testimoni d'autenticació, però s'ha"
+" rebut l'estat %d (%s)"
 
 #: src/goabackend/goaoauth2provider.c:797
 msgid "Authorization response: "
@@ -554,7 +555,6 @@ msgstr "«ensure_credentials_sync» no està implementat al tipus %s"
 #. Translators: this is the title of the "Add Account" and "Refresh
 #. * Account" dialogs. The %s is the name of the provider. eg.,
 #. * 'Google'.
-#.
 #: src/goabackend/goaproviderdialog.c:174
 #, c-format
 msgid "%s Account"
@@ -636,7 +636,8 @@ msgstr "No s'han trobat credencials a l'anell de claus"
 #: src/goabackend/goautils.c:261
 msgid "Error parsing result obtained from the keyring: "
 msgstr ""
-"S'ha produït un error en analitzar el resultat obtingut de l'anell de claus: "
+"S'ha produït un error en analitzar el resultat obtingut de l'anell de claus:"
+" "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
 #: src/goabackend/goautils.c:302
@@ -668,8 +669,8 @@ msgstr "Es desconeix l'autoritat de certificació que signa."
 
 #: src/goabackend/goautils.c:834
 msgid ""
-"The certificate does not match the expected identity of the site that it was "
-"retrieved from."
+"The certificate does not match the expected identity of the site that it was"
+" retrieved from."
 msgstr ""
 "El certificat no coincideix amb la identitat que s'esperava del lloc del "
 "qual s'ha recollit."
@@ -770,8 +771,8 @@ msgstr ""
 #: src/goaidentity/goakerberosidentity.c:751
 msgid "Could not sift through identity credentials in cache: "
 msgstr ""
-"No s'han pogut examinar amb detall les credencials d'identitat de la memòria "
-"cau: "
+"No s'han pogut examinar amb detall les credencials d'identitat de la memòria"
+" cau: "
 
 #: src/goaidentity/goakerberosidentity.c:763
 msgid "Could not finish up sifting through identity credentials in cache: "
