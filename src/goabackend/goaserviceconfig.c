@@ -28,13 +28,15 @@ typedef struct
   GObject parent_instance;
 
   char *service;
+  gboolean accept_ssl_errors;
 } GoaServiceConfigPrivate;
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GoaServiceConfig, goa_service_config, G_TYPE_OBJECT)
 
 typedef enum
 {
-  PROP_SERVICE = 1,
+  PROP_ACCEPT_SSL_ERRORS = 1,
+  PROP_SERVICE,
 } GoaServiceConfigProperty;
 
 static GParamSpec *properties[PROP_SERVICE + 1] = { NULL, };
@@ -63,6 +65,10 @@ goa_service_config_get_property (GObject    *object,
 
   switch ((GoaServiceConfigProperty) prop_id)
     {
+    case PROP_ACCEPT_SSL_ERRORS:
+      g_value_set_boolean (value, priv->accept_ssl_errors);
+      break;
+
     case PROP_SERVICE:
       g_value_set_string (value, priv->service);
       break;
@@ -84,6 +90,10 @@ goa_service_config_set_property (GObject      *object,
 
   switch ((GoaServiceConfigProperty) prop_id)
     {
+    case PROP_ACCEPT_SSL_ERRORS:
+      goa_service_config_set_accept_ssl_errors (self, g_value_get_boolean (value));
+      break;
+
     case PROP_SERVICE:
       g_assert (priv->service == NULL);
       priv->service = g_value_dup_string (value);
@@ -112,7 +122,19 @@ goa_service_config_class_init (GoaServiceConfigClass *klass)
   object_class->set_property = goa_service_config_set_property;
 
   /**
-   * GoaServiceProvider:service: (getter get_service)
+   * GoaServiceConfig:accept-ssl-errors: (getter get_accept_ssl_errors) (setter set_accept_ssl_errors)
+   *
+   * The authentication state of the configuration.
+   */
+  properties[PROP_ACCEPT_SSL_ERRORS] =
+    g_param_spec_boolean ("accept-ssl-errors", NULL, NULL,
+                          FALSE,
+                          (G_PARAM_READWRITE |
+                           G_PARAM_STATIC_STRINGS |
+                           G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GoaServiceConfig:service: (getter get_service)
    *
    * The service type name, such as `imap` or `caldav`.
    */
@@ -125,6 +147,49 @@ goa_service_config_class_init (GoaServiceConfigClass *klass)
                           G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_properties (object_class, G_N_ELEMENTS (properties), properties);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+/**
+ * goa_service_config_get_accept_ssl_errors: (get-property accept-ssl-errors)
+ * @config: a `GoaServiceConfig`
+ *
+ * Get whether certificate errors are ignored when authenticating @config.
+ *
+ * Returns: %TRUE if SSL errors are ignored, %FALSE otherwise
+ */
+gboolean
+goa_service_config_get_accept_ssl_errors (GoaServiceConfig *config)
+{
+  GoaServiceConfigPrivate *priv = goa_service_config_get_instance_private (config);
+
+  g_return_val_if_fail (GOA_IS_SERVICE_CONFIG (config), FALSE);
+
+  return priv->accept_ssl_errors;
+}
+
+/**
+ * goa_service_config_set_accept_ssl_errors: (set-property accept-ssl-errors)
+ * @config: a `GoaServiceConfig`
+ * @accept_ssl_errors: %TRUE to ignore SSL errors, or %FALSE
+ *
+ * Set whether certificate errors are ignored when authenticating @config.
+ */
+void
+goa_service_config_set_accept_ssl_errors (GoaServiceConfig *config,
+                                          gboolean          accept_ssl_errors)
+{
+  GoaServiceConfigPrivate *priv = goa_service_config_get_instance_private (config);
+
+  g_return_if_fail (GOA_IS_SERVICE_CONFIG (config));
+
+  accept_ssl_errors = !!accept_ssl_errors;
+  if (priv->accept_ssl_errors != accept_ssl_errors)
+    {
+      priv->accept_ssl_errors = accept_ssl_errors;
+      g_object_notify_by_pspec (G_OBJECT (config), properties[PROP_ACCEPT_SSL_ERRORS]);
+    }
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
