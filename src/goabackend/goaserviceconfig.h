@@ -47,7 +47,10 @@ struct _GoaServiceConfigClass
   gpointer              reserved[8];
 };
 
-const char           *goa_service_config_get_service      (GoaServiceConfig     *config);
+const char           *goa_service_config_get_service           (GoaServiceConfig     *config);
+gboolean              goa_service_config_get_accept_ssl_errors (GoaServiceConfig     *config);
+void                  goa_service_config_set_accept_ssl_errors (GoaServiceConfig     *config,
+                                                                gboolean              accept_ssl_errors);
 
 G_END_DECLS
 
