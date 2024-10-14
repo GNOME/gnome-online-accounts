@@ -23,12 +23,20 @@
 
 #include "goaserviceconfig.h"
 
+G_DEFINE_ENUM_TYPE (GoaAuthState, goa_auth_state,
+  G_DEFINE_ENUM_VALUE (GOA_AUTH_STATE_UNKNOWN, "unknown"),
+  G_DEFINE_ENUM_VALUE (GOA_AUTH_STATE_ACCEPTED, "accepted"),
+  G_DEFINE_ENUM_VALUE (GOA_AUTH_STATE_REJECTED, "rejected"),
+  G_DEFINE_ENUM_VALUE (GOA_AUTH_STATE_REQUIRED, "required"),
+  G_DEFINE_ENUM_VALUE (GOA_AUTH_STATE_SSL_ERROR, "ssl-error"))
+
 typedef struct
 {
   GObject parent_instance;
 
   char *service;
   gboolean accept_ssl_errors;
+  GoaAuthState auth_state;
 } GoaServiceConfigPrivate;
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GoaServiceConfig, goa_service_config, G_TYPE_OBJECT)
@@ -36,6 +44,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GoaServiceConfig, goa_service_config, G_TYP
 typedef enum
 {
   PROP_ACCEPT_SSL_ERRORS = 1,
+  PROP_AUTH_STATE,
   PROP_SERVICE,
 } GoaServiceConfigProperty;
 
@@ -69,6 +78,10 @@ goa_service_config_get_property (GObject    *object,
       g_value_set_boolean (value, priv->accept_ssl_errors);
       break;
 
+    case PROP_AUTH_STATE:
+      g_value_set_enum (value, priv->auth_state);
+      break;
+
     case PROP_SERVICE:
       g_value_set_string (value, priv->service);
       break;
@@ -92,6 +105,10 @@ goa_service_config_set_property (GObject      *object,
     {
     case PROP_ACCEPT_SSL_ERRORS:
       goa_service_config_set_accept_ssl_errors (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_AUTH_STATE:
+      goa_service_config_set_auth_state (self, g_value_get_enum (value));
       break;
 
     case PROP_SERVICE:
@@ -132,6 +149,19 @@ goa_service_config_class_init (GoaServiceConfigClass *klass)
                           (G_PARAM_READWRITE |
                            G_PARAM_STATIC_STRINGS |
                            G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GoaServiceConfig:auth-state: (getter get_auth_state) (setter set_auth_state)
+   *
+   * The authentication state of the configuration.
+   */
+  properties[PROP_AUTH_STATE] =
+    g_param_spec_enum ("auth-state", NULL, NULL,
+                       GOA_TYPE_AUTH_STATE,
+                       GOA_AUTH_STATE_UNKNOWN,
+                       (G_PARAM_READWRITE |
+                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GoaServiceConfig:service: (getter get_service)
@@ -189,6 +219,50 @@ goa_service_config_set_accept_ssl_errors (GoaServiceConfig *config,
     {
       priv->accept_ssl_errors = accept_ssl_errors;
       g_object_notify_by_pspec (G_OBJECT (config), properties[PROP_ACCEPT_SSL_ERRORS]);
+    }
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+/**
+ * goa_service_config_get_auth_state: (get-property auth-state)
+ * @config: a `GoaServiceConfig`
+ *
+ * Get the authentication state of @config.
+ *
+ * Returns: the authentication state
+ */
+GoaAuthState
+goa_service_config_get_auth_state (GoaServiceConfig *config)
+{
+  GoaServiceConfigPrivate *priv = goa_service_config_get_instance_private (config);
+
+  g_return_val_if_fail (GOA_IS_SERVICE_CONFIG (config), GOA_AUTH_STATE_UNKNOWN);
+
+  return priv->auth_state;
+}
+
+/**
+ * goa_service_config_set_auth_state: (set-property auth-state)
+ * @config: a `GoaServiceConfig`
+ * @auth_state: the new authentication state
+ *
+ * Set the authentication of @config.
+ */
+void
+goa_service_config_set_auth_state (GoaServiceConfig *config,
+                                   GoaAuthState      auth_state)
+{
+  GoaServiceConfigPrivate *priv = goa_service_config_get_instance_private (config);
+
+  g_return_if_fail (GOA_IS_SERVICE_CONFIG (config));
+  g_return_if_fail (auth_state >= GOA_AUTH_STATE_UNKNOWN
+                    && auth_state <= GOA_AUTH_STATE_SSL_ERROR);
+
+  if (priv->auth_state != auth_state)
+    {
+      priv->auth_state = auth_state;
+      g_object_notify_by_pspec (G_OBJECT (config), properties[PROP_AUTH_STATE]);
     }
 }
 
