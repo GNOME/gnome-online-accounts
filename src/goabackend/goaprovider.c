@@ -23,6 +23,7 @@
 #include "goaprovider.h"
 #include "goaproviderdialog.h"
 #include "goaprovider-priv.h"
+#include "goacollectionprovider.h"
 #include "goaexchangeprovider.h"
 #include "goagoogleprovider.h"
 #include "goaimapsmtpprovider.h"
@@ -1190,6 +1191,9 @@ static struct
 #endif
 #ifdef GOA_FEDORA_ENABLED
   { GOA_FEDORA_NAME, goa_fedora_provider_get_type },
+#endif
+#ifdef GOA_COLLECTION_ENABLED
+  { GOA_COLLECTION_NAME, goa_collection_provider_get_type },
 #endif
 #ifdef GOA_IMAP_SMTP_ENABLED
   { GOA_IMAP_SMTP_NAME, goa_imap_smtp_provider_get_type },
