@@ -530,6 +530,33 @@ add_account_credentials (GTask *task)
                                 g_object_ref (task));
 }
 
+static gboolean
+services_check_errors (GPtrArray  *services,
+                       GError    **error)
+{
+  g_assert (error == NULL || *error == NULL);
+
+  for (unsigned int i = 0; i < services->len; i++)
+    {
+      GoaServiceConfig *config = g_ptr_array_index (services, i);
+
+      switch (goa_service_config_get_auth_state (config))
+        {
+        case GOA_AUTH_STATE_UNKNOWN:
+        case GOA_AUTH_STATE_REJECTED:
+        case GOA_AUTH_STATE_REQUIRED:
+        case GOA_AUTH_STATE_SSL_ERROR:
+          g_set_error (error,
+                       GOA_ERROR,
+                       GOA_ERROR_NOT_AUTHORIZED,
+                       _("Authentication failed"));
+          return FALSE;
+        }
+    }
+
+  return TRUE;
+}
+
 static gpointer
 services_find_preferred (GPtrArray  *services,
                          const char *name)
@@ -563,6 +590,12 @@ add_account_handle_response (GTask     *task,
 
   while (TRUE)
     {
+      if (services != NULL && !services_check_errors (services, &error))
+        {
+          goa_provider_dialog_report_error (data->dialog, error);
+          return FALSE;
+        }
+
       switch (data->check_stage)
         {
         /* This is the primary discovery stage.

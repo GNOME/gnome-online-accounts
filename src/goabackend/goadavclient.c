@@ -167,15 +167,19 @@ dav_client_authenticate_task (GTask *task)
   CheckData *data = (CheckData *) g_task_get_task_data (task);
   CheckAuthData *auth;
 
-  auth = g_new0 (CheckAuthData, 1);
-  auth->username = g_strdup (data->username);
-  auth->password = g_strdup (data->password);
-  g_signal_connect_data (data->msg,
-                         "authenticate",
-                         G_CALLBACK (dav_client_authenticate),
-                         auth,
-                         dav_client_check_auth_data_free,
-                         0);
+  if (data->username != NULL && data->password != NULL)
+    {
+      auth = g_new0 (CheckAuthData, 1);
+      auth->username = g_strdup (data->username);
+      auth->password = g_strdup (data->password);
+      g_signal_connect_data (data->msg,
+                             "authenticate",
+                             G_CALLBACK (dav_client_authenticate),
+                             auth,
+                             dav_client_check_auth_data_free,
+                             G_CONNECT_DEFAULT);
+    }
+
   g_signal_connect (data->msg,
                     "accept-certificate",
                     G_CALLBACK (dav_client_accept_certificate),
@@ -840,7 +844,6 @@ typedef struct
   int pending;
   gboolean uri_fallback;
   gboolean well_known_fallback;
-  gboolean auth_error;
 } DiscoverData;
 
 static void
@@ -888,6 +891,7 @@ dav_client_discover_postconfig_nexcloud (DiscoverData *discover,
 
   if (server_root != NULL)
     {
+      GoaDavConfig *config = NULL;
       int port = -1;
       const char *scheme = NULL;
       g_autofree char *base_path = NULL;
@@ -895,6 +899,7 @@ dav_client_discover_postconfig_nexcloud (DiscoverData *discover,
       g_autofree char *dav_uri = NULL;
       g_autofree char *webdav_path = NULL;
       g_autofree char *webdav_uri = NULL;
+      GoaAuthState auth_state = GOA_AUTH_STATE_UNKNOWN;
 
       port = g_uri_get_port (uri);
       scheme = g_uri_get_scheme (uri);
@@ -906,6 +911,9 @@ dav_client_discover_postconfig_nexcloud (DiscoverData *discover,
       base_path = g_strndup (path, server_root - path);
       dav_path = g_build_path ("/", base_path, "/remote.php/dav", NULL);
       webdav_path = g_build_path ("/", base_path, "/remote.php/webdav", NULL);
+
+      if (((CheckData *)discover)->password != NULL)
+        auth_state = GOA_AUTH_STATE_ACCEPTED;
 
       /* TODO: the proper path is `remote.php/dav/files/<username>`
        *
@@ -921,9 +929,13 @@ dav_client_discover_postconfig_nexcloud (DiscoverData *discover,
                                          webdav_path,
                                          g_uri_get_query (uri),
                                          g_uri_get_fragment (uri));
-      g_ptr_array_add (discover->services, goa_dav_config_new (GOA_SERVICE_TYPE_WEBDAV,
-                                                               webdav_uri,
-                                                               ((CheckData *)discover)->username));
+      config = g_object_new (GOA_TYPE_DAV_CONFIG,
+                             "service",    GOA_SERVICE_TYPE_WEBDAV,
+                             "auth-state", auth_state,
+                             "uri",        webdav_uri,
+                             "username",   ((CheckData *)discover)->username,
+                             NULL);
+      g_ptr_array_add (discover->services, g_steal_pointer (&config));
 
       dav_uri = g_uri_join_with_user (G_URI_FLAGS_PARSE_RELAXED,
                                       g_uri_get_scheme (uri),
@@ -935,12 +947,20 @@ dav_client_discover_postconfig_nexcloud (DiscoverData *discover,
                                       dav_path,
                                       g_uri_get_query (uri),
                                       g_uri_get_fragment (uri));
-      g_ptr_array_add (discover->services, goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV,
-                                                               dav_uri,
-                                                               ((CheckData *)discover)->username));
-      g_ptr_array_add (discover->services, goa_dav_config_new (GOA_SERVICE_TYPE_CARDDAV,
-                                                               dav_uri,
-                                                               ((CheckData *)discover)->username));
+      config = g_object_new (GOA_TYPE_DAV_CONFIG,
+                             "service",    GOA_SERVICE_TYPE_CALDAV,
+                             "auth-state", auth_state,
+                             "uri",        dav_uri,
+                             "username",   ((CheckData *)discover)->username,
+                             NULL);
+      g_ptr_array_add (discover->services, g_steal_pointer (&config));
+      config = g_object_new (GOA_TYPE_DAV_CONFIG,
+                             "service",    GOA_SERVICE_TYPE_CARDDAV,
+                             "auth-state", auth_state,
+                             "uri",        dav_uri,
+                             "username",   ((CheckData *)discover)->username,
+                             NULL);
+      g_ptr_array_add (discover->services, g_steal_pointer (&config));
 
       return TRUE;
     }
@@ -993,11 +1013,28 @@ dav_client_discover_options_cb (SoupSession  *session,
     case SOUP_STATUS_NOT_IMPLEMENTED:
       goto fallback;
 
-    /* Defer authentication errors to support content restricted passwords */
+    /* Authentication errors are secondary to discovery and may be expected
+     * for some services, so they are deferred for the caller to interpret.
+     */
     case SOUP_STATUS_UNAUTHORIZED:
     case SOUP_STATUS_FORBIDDEN:
     case SOUP_STATUS_PRECONDITION_FAILED:
-      discover->auth_error = TRUE;
+      goa_service_config_set_auth_state (GOA_SERVICE_CONFIG (discover->candidate),
+                                         data->password != NULL
+                                           ? GOA_AUTH_STATE_REJECTED
+                                           : GOA_AUTH_STATE_REQUIRED);
+
+      /* GVfs won't follow redirects, so return the resolved URI
+       */
+      if (g_strcmp0 (service, GOA_SERVICE_TYPE_WEBDAV) == 0)
+        {
+          g_autofree char *resolved_uri = NULL;
+
+          resolved_uri = g_uri_to_string (soup_message_get_uri (msg));
+          goa_dav_config_set_uri (discover->candidate, resolved_uri);
+        }
+
+      g_ptr_array_add (discover->services, g_steal_pointer (&discover->candidate));
       goto out;
 
     default:
@@ -1011,6 +1048,12 @@ dav_client_discover_options_cb (SoupSession  *session,
     {
       g_queue_clear_full (&discover->candidates, g_object_unref);
       goto out;
+    }
+
+  if (data->password != NULL)
+    {
+      goa_service_config_set_auth_state (GOA_SERVICE_CONFIG (discover->candidate),
+                                         GOA_AUTH_STATE_ACCEPTED);
     }
 
   features = _soup_message_get_dav_features (msg, &error);
@@ -1179,13 +1222,6 @@ dav_client_discover_iterate (GTask *task)
           discover->uri_fallback = TRUE;
           dav_client_discover_iterate (task);
         }
-      else if (discover->auth_error)
-        {
-          g_task_return_new_error (task,
-                                   GOA_ERROR,
-                                   GOA_ERROR_NOT_AUTHORIZED,
-                                   _("Authentication failed"));
-        }
       else
         {
           g_task_return_new_error (task,
@@ -1282,7 +1318,6 @@ goa_dav_client_discover (GoaDavClient        *self,
   g_return_if_fail (GOA_IS_DAV_CLIENT (self));
   g_return_if_fail (uri != NULL && uri[0] != '\0');
   g_return_if_fail (username != NULL && username[0] != '\0');
-  g_return_if_fail (password != NULL && password[0] != '\0');
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
   guri = g_uri_parse (uri, SOUP_HTTP_URI_FLAGS, NULL);
