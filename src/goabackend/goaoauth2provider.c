@@ -1020,6 +1020,15 @@ oauth2_secret_collection_for_alias_cb (GObject      *object,
   data->session = secret_collection_for_alias_finish (result, &error);
   if (data->session == NULL)
     {
+      if (error == NULL)
+        {
+          g_warning ("%s(): Failed to get session keyring", G_STRFUNC);
+          g_set_error_literal (&error,
+                               GOA_ERROR,
+                               GOA_ERROR_FAILED,
+                               _("Unknown error"));
+        }
+
       goa_provider_task_return_error (task, g_steal_pointer (&error));
       return;
     }
