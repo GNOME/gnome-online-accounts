@@ -875,11 +875,26 @@ ensure_credentials_sync (GoaProvider    *provider,
       if (!ticket_synced)
         {
           g_dbus_error_strip_remote_error (lookup_error);
-          g_set_error_literal (error,
-                               GOA_ERROR,
-                               GOA_ERROR_NOT_AUTHORIZED,
-                               lookup_error->message);
-          g_error_free (lookup_error);
+          if (lookup_error->domain == GOA_IDENTITY_MANAGER_ERROR)
+            {
+              lookup_error->domain = GOA_ERROR;
+
+              switch ((GoaIdentityManagerError)lookup_error->code)
+                {
+                case GOA_IDENTITY_MANAGER_ERROR_INITIALIZING:
+                  lookup_error->code = GOA_ERROR_FAILED;
+                  break;
+
+                case GOA_IDENTITY_MANAGER_ERROR_IDENTITY_NOT_FOUND:
+                case GOA_IDENTITY_MANAGER_ERROR_CREATING_IDENTITY:
+                case GOA_IDENTITY_MANAGER_ERROR_ACCESSING_CREDENTIALS:
+                case GOA_IDENTITY_MANAGER_ERROR_UNSUPPORTED_CREDENTIALS:
+                  lookup_error->code = GOA_ERROR_NOT_AUTHORIZED;
+                  break;
+                }
+            }
+
+          g_propagate_error (error, g_steal_pointer (&lookup_error));
           goto out;
         }
 

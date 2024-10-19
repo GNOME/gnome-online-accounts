@@ -1133,6 +1133,15 @@ authorize_uri_get_collection_cb (SecretService *service,
   data->collection = secret_collection_for_alias_finish (result, &error);
   if (data->collection == NULL)
     {
+      if (error == NULL)
+        {
+          g_warning ("%s(): Failed to get session keyring", G_STRFUNC);
+          g_set_error_literal (&error,
+                               GOA_ERROR,
+                               GOA_ERROR_FAILED,
+                               _("Unknown error"));
+        }
+
       g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
