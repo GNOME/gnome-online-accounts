@@ -148,14 +148,12 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
   gchar *id = NULL;
   gchar *presentation_identity = NULL;
 
-  /* TODO: cancellable */
-
   proxy = goa_rest_proxy_new ("https://apis.live.net/v5.0/me", FALSE);
   call = rest_proxy_new_call (proxy);
   rest_proxy_call_set_method (call, "GET");
   rest_proxy_call_add_param (call, "access_token", access_token);
 
-  if (!rest_proxy_call_sync (call, error))
+  if (!goa_rest_proxy_call_sync (call, cancellable, error))
     goto out;
   if (rest_proxy_call_get_status_code (call) != 200)
     {
