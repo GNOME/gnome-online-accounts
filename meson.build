@@ -140,6 +140,11 @@ config_h.set_quoted('GOA_TEMPLATE_FILE', template_file)
 
 enable_vapi = get_option('vapi')
 
+# Generic Collection
+config_h.set_quoted('GOA_COLLECTION_NAME', 'collection')
+enable_collection = get_option('collection')
+config_h.set('GOA_COLLECTION_ENABLED', enable_collection)
+
 # Microsoft Exchange
 config_h.set_quoted('GOA_EXCHANGE_NAME', 'exchange')
 enable_exchange = get_option('exchange')
@@ -320,6 +325,7 @@ summary({
 )
 
 summary({
+    'Collection': enable_collection,
     'Fedora Account System': enable_fedora,
     'Google': enable_google,
     'IMAP/SMTP': enable_imap_smtp,
