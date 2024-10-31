@@ -30,6 +30,20 @@
 G_BEGIN_DECLS
 
 /**
+ * GoaAuthFlowFlags:
+ * @GOA_AUTH_FLOW_DEFAULT: default operation for the given flow
+ * @GOA_AUTH_FLOW_DO_NOT_LAUNCH_URI: do not launch the given request URI,
+ *   allowing the client control the launch context.
+ *
+ * Flags for authorization flows.
+ */
+typedef enum
+{
+  GOA_AUTH_FLOW_DEFAULT           = 0,
+  GOA_AUTH_FLOW_DO_NOT_LAUNCH_URI = (1 << 0),
+} GoaAuthFlowFlags;
+
+/**
  * GoaOAuth2Provider:
  *
  * The #GoaOAuth2Provider structure contains only private data and should
@@ -92,6 +106,7 @@ struct _GoaOAuth2ProviderClass
 
 void    goa_oauth2_provider_authorize_uri        (GoaOAuth2Provider            *provider,
                                                   const char                   *request_uri,
+                                                  GoaAuthFlowFlags              flags,
                                                   GCancellable                 *cancellable,
                                                   GAsyncReadyCallback           callback,
                                                   gpointer                      user_data);
