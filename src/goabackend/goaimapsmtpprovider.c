@@ -241,14 +241,14 @@ build_object (GoaProvider         *provider,
 static GoaTlsType
 get_tls_type_from_object (GoaObject *object, const gchar *ssl_key, const gchar *starttls_key)
 {
-  GoaTlsType tls_type;
+  GoaTlsType tls_type = GOA_TLS_TYPE_SSL;
 
   if (goa_util_lookup_keyfile_boolean (object, ssl_key))
     tls_type = GOA_TLS_TYPE_SSL;
   else if (goa_util_lookup_keyfile_boolean (object, starttls_key))
     tls_type = GOA_TLS_TYPE_STARTTLS;
   else
-    tls_type = GOA_TLS_TYPE_NONE;
+    g_debug ("%s(): ignoring unencrypted setting", G_STRFUNC);
 
   return tls_type;
 }
@@ -541,17 +541,21 @@ update_account_details_ui (AddAccountData *data,
 {
   GoaMailConfig *imap_config = find_preferred_config (services, GOA_SERVICE_TYPE_IMAP);
   GoaMailConfig *smtp_config = find_preferred_config (services, GOA_SERVICE_TYPE_SMTP);
+  GoaTlsType imap_encryption = GOA_TLS_TYPE_SSL;
+  GoaTlsType smtp_encryption = GOA_TLS_TYPE_SSL;
 
   /* IMAP */
   gtk_editable_set_text (GTK_EDITABLE (data->imap_server),
                          imap_config ? goa_mail_config_get_hostname (imap_config) : "");
   gtk_editable_set_text (GTK_EDITABLE (data->imap_username),
                          imap_config ? goa_mail_config_get_username (imap_config) : "");
-  g_object_set (data->imap_encryption,
-                "selected", imap_config
-                  ? goa_mail_config_get_encryption (imap_config)
-                  : GOA_TLS_TYPE_NONE,
-                NULL);
+  if (imap_config != NULL)
+    {
+      imap_encryption = goa_mail_config_get_encryption (imap_config);
+      if (imap_encryption == GOA_TLS_TYPE_NONE)
+        imap_encryption = GOA_TLS_TYPE_SSL;
+    }
+  g_object_set (data->imap_encryption, "selected", imap_encryption - 1, NULL);
 
   if (imap_config != NULL)
     {
@@ -568,11 +572,13 @@ update_account_details_ui (AddAccountData *data,
                          smtp_config ? goa_mail_config_get_hostname (smtp_config) : "");
   gtk_editable_set_text (GTK_EDITABLE (data->smtp_username),
                          smtp_config ? goa_mail_config_get_username (smtp_config) : "");
-  g_object_set (data->smtp_encryption,
-                "selected", smtp_config
-                  ? goa_mail_config_get_encryption (smtp_config)
-                  : GOA_TLS_TYPE_NONE,
-                NULL);
+  if (smtp_config != NULL)
+    {
+      smtp_encryption = goa_mail_config_get_encryption (smtp_config);
+      if (smtp_encryption == GOA_TLS_TYPE_NONE)
+        smtp_encryption = GOA_TLS_TYPE_SSL;
+    }
+  g_object_set (data->smtp_encryption, "selected", smtp_encryption - 1, NULL);
 
   if (smtp_config != NULL)
     {
@@ -679,8 +685,7 @@ create_account_details_ui (GoaProvider    *provider,
   GtkWidget *group;
 
   /* Keep in sync with GoaTlsType */
-  static const char * const encryption_types[] = {\
-    N_("None"),                      // GOA_TLS_TYPE_NONE
+  static const char * const encryption_types[] = {
     N_("STARTTLS after connecting"), // GOA_TLS_TYPE_STARTTLS
     N_("SSL on a dedicated port"),   // GOA_TLS_TYPE_SSL
     NULL,
@@ -748,7 +753,7 @@ create_account_details_ui (GoaProvider    *provider,
                                                              data->imap_group,
                                                              _("Encryption"),
                                                              (GStrv)encryption_types);
-      g_object_set (data->imap_encryption, "selected", GOA_TLS_TYPE_SSL, NULL);
+      g_object_set (data->imap_encryption, "selected", GOA_TLS_TYPE_SSL - 1, NULL);
       g_signal_connect (data->imap_encryption, "notify::selected", G_CALLBACK (on_login_changed), data);
 
       /* Discovery */
@@ -792,7 +797,7 @@ create_account_details_ui (GoaProvider    *provider,
                                                              data->smtp_group,
                                                              _("Encryption"),
                                                              (GStrv)encryption_types);
-      g_object_set (data->smtp_encryption, "selected", GOA_TLS_TYPE_SSL, NULL);
+      g_object_set (data->smtp_encryption, "selected", GOA_TLS_TYPE_SSL - 1, NULL);
       g_signal_connect (data->smtp_encryption, "notify::selected", G_CALLBACK (on_login_changed), data);
 
       /* Discovery */
@@ -861,11 +866,11 @@ add_account_store_credentials (GTask *task)
   const char *imap_server = NULL;
   const char *imap_username = NULL;
   const char *imap_password = NULL;
-  GoaTlsType imap_tls_type = GOA_TLS_TYPE_NONE;
+  GoaTlsType imap_tls_type = GOA_TLS_TYPE_SSL;
   const char *smtp_server = NULL;
   const char *smtp_username = NULL;
   const char *smtp_password = NULL;
-  GoaTlsType smtp_tls_type = GOA_TLS_TYPE_NONE;
+  GoaTlsType smtp_tls_type = GOA_TLS_TYPE_SSL;
 
   /* Account is confirmed */
   name = gtk_editable_get_text (GTK_EDITABLE (data->name));
@@ -875,11 +880,13 @@ add_account_store_credentials (GTask *task)
   imap_username = gtk_editable_get_text (GTK_EDITABLE (data->imap_username));
   imap_password = gtk_editable_get_text (GTK_EDITABLE (data->imap_password));
   g_object_get (data->imap_encryption, "selected", &imap_tls_type, NULL);
+  imap_tls_type += 1;
 
   smtp_server = gtk_editable_get_text (GTK_EDITABLE (data->smtp_server));
   smtp_username = gtk_editable_get_text (GTK_EDITABLE (data->smtp_username));
   smtp_password = gtk_editable_get_text (GTK_EDITABLE (data->smtp_password));
   g_object_get (data->smtp_encryption, "selected", &smtp_tls_type, NULL);
+  smtp_tls_type += 1;
 
   g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&credentials, "{sv}", "imap-password", g_variant_new_string (imap_password));
@@ -966,6 +973,7 @@ add_account_action_smtp (GTask *task)
   smtp_username = gtk_editable_get_text (GTK_EDITABLE (data->smtp_username));
   smtp_password = gtk_editable_get_text (GTK_EDITABLE (data->smtp_password));
   g_object_get (data->smtp_encryption, "selected", &smtp_tls_type, NULL);
+  smtp_tls_type += 1;
 
   g_clear_object (&data->smtp_auth);
   goa_utils_parse_email_address (email_address, NULL, &domain);
@@ -1018,6 +1026,7 @@ add_account_action_imap (GTask *task)
   imap_username = gtk_editable_get_text (GTK_EDITABLE (data->imap_username));
   imap_password = gtk_editable_get_text (GTK_EDITABLE (data->imap_password));
   g_object_get (data->imap_encryption, "selected", &imap_tls_type, NULL);
+  imap_tls_type += 1;
 
   imap_auth = goa_imap_auth_login_new (imap_username, imap_password);
 
@@ -1215,6 +1224,7 @@ refresh_account_action_smtp (GTask *task)
   smtp_username = gtk_editable_get_text (GTK_EDITABLE (data->smtp_username));
   smtp_password = gtk_editable_get_text (GTK_EDITABLE (data->smtp_password));
   g_object_get (data->smtp_encryption, "selected", &smtp_tls_type, NULL);
+  smtp_tls_type += 1;
 
   g_clear_object (&data->smtp_auth);
   goa_utils_parse_email_address (email_address, NULL, &domain);
@@ -1276,6 +1286,7 @@ refresh_account_action_imap (GTask *task)
   imap_server = gtk_editable_get_text (GTK_EDITABLE (data->imap_server));
   imap_username = gtk_editable_get_text (GTK_EDITABLE (data->imap_username));
   g_object_get (data->imap_encryption, "selected", &imap_tls_type, NULL);
+  imap_tls_type += 1;
 
   imap_auth = goa_imap_auth_login_new (imap_username, imap_password);
 
@@ -1333,10 +1344,10 @@ refresh_account (GoaProvider         *provider,
   g_autofree char *email_address = NULL;
   g_autofree char *imap_server = NULL;
   g_autofree char *imap_username = NULL;
-  GoaTlsType imap_tls_type = GOA_TLS_TYPE_NONE;
+  GoaTlsType imap_tls_type = GOA_TLS_TYPE_SSL;
   g_autofree char *smtp_server = NULL;
   g_autofree char *smtp_username = NULL;
-  GoaTlsType smtp_tls_type = GOA_TLS_TYPE_NONE;
+  GoaTlsType smtp_tls_type = GOA_TLS_TYPE_SSL;
 
   g_assert (GOA_IS_IMAP_SMTP_PROVIDER (provider));
   g_assert (GOA_IS_CLIENT (client));
@@ -1363,7 +1374,7 @@ refresh_account (GoaProvider         *provider,
   data->smtp_accept_ssl_errors = goa_util_lookup_keyfile_boolean (object, "SmtpAcceptSslErrors");
 
   imap_tls_type = get_tls_type_from_object (object, "ImapUseSsl", "ImapUseTls");
-  g_object_set (data->imap_encryption, "selected", imap_tls_type, NULL);
+  g_object_set (data->imap_encryption, "selected", imap_tls_type - 1, NULL);
 
   imap_server = goa_util_lookup_keyfile_string (object, "ImapHost");
   gtk_editable_set_text (GTK_EDITABLE (data->imap_server), imap_server);
@@ -1385,7 +1396,7 @@ refresh_account (GoaProvider         *provider,
       gtk_editable_set_editable (GTK_EDITABLE (data->smtp_username), FALSE);
 
       smtp_tls_type = get_tls_type_from_object (object, "SmtpUseSsl", "SmtpUseTls");
-      g_object_set (data->smtp_encryption, "selected", smtp_tls_type, NULL);
+      g_object_set (data->smtp_encryption, "selected", smtp_tls_type - 1, NULL);
     }
 
   g_signal_connect_object (data->dialog,
