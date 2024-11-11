@@ -415,6 +415,8 @@ typedef struct
   GtkWidget *organization_switch;
   GtkWidget *client_id_entry;
   GtkWidget *tenant_id_entry;
+  GtkWidget *copy_button;
+  GoaAuthFlowFlags flags;
 } AccountData;
 
 static void
@@ -460,6 +462,13 @@ on_organization_changed (AdwSwitchRow *row,
 }
 
 static void
+on_copylink_activated (AccountData *data)
+{
+  data->flags |= GOA_AUTH_FLOW_DO_NOT_LAUNCH_URI;
+  goa_provider_dialog_set_state (data->dialog, GOA_DIALOG_BUSY);
+}
+
+static void
 create_account_details_ui (GoaProvider *provider,
                            AccountData *data,
                            gboolean     new_account)
@@ -470,6 +479,7 @@ create_account_details_ui (GoaProvider *provider,
     {
       GtkWidget *group;
       GtkWidget *button;
+      GtkWidget *copy_desc;
 
       goa_provider_dialog_add_page (dialog,
                                     NULL, // provider name
@@ -492,9 +502,6 @@ create_account_details_ui (GoaProvider *provider,
       data->tenant_id_entry = goa_provider_dialog_add_entry (dialog, group, _("_Tenant ID"));
       goa_provider_dialog_add_description (dialog, data->tenant_id_entry, _("Example ID: 00000000-0000-0000-0000-000000000000"));
 
-      button = adw_dialog_get_default_widget (ADW_DIALOG (dialog));
-      gtk_button_set_label (GTK_BUTTON (button), _("_Sign In…"));
-
       g_object_bind_property (data->organization_switch, "active",
                               group, "visible",
                               G_BINDING_SYNC_CREATE);
@@ -511,6 +518,48 @@ create_account_details_ui (GoaProvider *provider,
                         G_CALLBACK (on_entry_changed),
                         data);
       on_organization_changed (ADW_SWITCH_ROW (data->organization_switch), NULL, data);
+
+      /* Auth Flow */
+      group = goa_provider_dialog_add_group (dialog, NULL);
+      adw_preferences_group_set_separate_rows (ADW_PREFERENCES_GROUP (group), TRUE);
+      gtk_widget_set_valign (group, GTK_ALIGN_END);
+      gtk_widget_set_vexpand (group, TRUE);
+
+      button = g_object_new (ADW_TYPE_BUTTON_ROW,
+                             "title", _("_Sign In…"),
+                             "use-underline", TRUE,
+                             NULL);
+      gtk_widget_add_css_class (button, "suggested-action");
+      adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), button);
+
+      /* When "Copy Link" is clicked, we pin the flags for the auth flow */
+      data->copy_button = g_object_new (ADW_TYPE_BUTTON_ROW,
+                                        "title", _("_Copy Link"),
+                                        "use-underline", TRUE,
+                                        "start-icon-name", "edit-copy-symbolic",
+                                        NULL);
+      g_signal_connect_swapped (data->copy_button,
+                                "activated",
+                                G_CALLBACK (on_copylink_activated),
+                                data);
+      g_object_bind_property (button, "sensitive",
+                              data->copy_button, "sensitive",
+                              G_BINDING_DEFAULT);
+      adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), data->copy_button);
+
+      copy_desc = gtk_label_new (_("Copy the authorization URL to continue with a specific web browser."));
+      gtk_label_set_justify (GTK_LABEL (copy_desc), GTK_JUSTIFY_CENTER);
+      gtk_label_set_wrap (GTK_LABEL (copy_desc), TRUE);
+      gtk_widget_set_halign (copy_desc, GTK_ALIGN_CENTER);
+      gtk_widget_set_margin_top (copy_desc, 18);
+      gtk_widget_add_css_class (copy_desc, "caption");
+      gtk_accessible_update_relation (GTK_ACCESSIBLE (data->copy_button),
+                                      GTK_ACCESSIBLE_RELATION_DESCRIBED_BY, copy_desc, NULL,
+                                      -1);
+      adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), copy_desc);
+
+      /* Set the default widget after it's a child of the window */
+      adw_dialog_set_default_widget (ADW_DIALOG (dialog), button);
     }
 }
 
@@ -575,6 +624,9 @@ add_account_action_cb (GoaProviderDialog *dialog,
   self->redirect_uri = g_strdup_printf ("goa-oauth2://localhost/%s", client_id);
 
   /* With the provider configured for the client, we chain-up to authorize */
+  g_object_set_data (G_OBJECT (data->dialog),
+                     "goa-auth-flow-flags",
+                     GUINT_TO_POINTER (data->flags));
   GOA_PROVIDER_CLASS (goa_ms_graph_provider_parent_class)->add_account (provider,
                                                                         data->client,
                                                                         GTK_WIDGET (data->dialog),
