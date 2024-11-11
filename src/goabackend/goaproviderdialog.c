@@ -136,6 +136,15 @@ goa_provider_dialog_default_widget_cb (AdwDialog *dialog,
                                dialog,
                                G_CONNECT_SWAPPED);
     }
+  else if (ADW_IS_BUTTON_ROW (widget))
+    {
+      g_signal_handlers_disconnect_by_func (widget, on_action_activated, dialog);
+      g_signal_connect_object (widget,
+                               "activated",
+                               G_CALLBACK (on_action_activated),
+                               dialog,
+                               G_CONNECT_SWAPPED);
+    }
 
   /* Hide the action bar if the default widget is not a descendant */
   page = adw_navigation_view_get_visible_page (ADW_NAVIGATION_VIEW (self->view));
