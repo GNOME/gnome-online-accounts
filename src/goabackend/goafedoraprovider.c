@@ -204,6 +204,7 @@ client_account_added_cb (GoaClient *client, GoaObject *object, gpointer user_dat
 
   g_return_if_fail (data->object == NULL);
   data->object = g_object_ref (object);
+  g_signal_handlers_disconnect_by_func (data->client, client_account_added_cb, task);
 }
 
 static void
@@ -265,7 +266,7 @@ add_account_credentials (GTask *task)
                                 (GAsyncReadyCallback) add_account_credentials_cb,
                                 g_object_ref (task));
 
-  g_signal_handlers_disconnect_by_func (data->client, task, client_account_added_cb);
+  g_signal_handlers_disconnect_by_func (data->client, client_account_added_cb, task);
   g_clear_pointer (&data->client_source, g_source_unref);
 
   return G_SOURCE_REMOVE;
