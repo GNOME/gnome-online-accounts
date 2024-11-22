@@ -632,6 +632,133 @@ on_remove_activated (GoaProviderDialog *self)
   goa_provider_dialog_set_state (self, GOA_DIALOG_BUSY);
 }
 
+static void
+update_account_name_entry (GtkEditable *editable,
+                           const char  *message)
+{
+  GtkWidget *revealer = g_object_get_data (G_OBJECT (editable), "goa-entry-error");
+
+  if (message != NULL)
+    {
+      GtkWidget *label;
+
+      label = gtk_revealer_get_child (GTK_REVEALER (revealer));
+      gtk_label_set_label (GTK_LABEL (label), message);
+
+      gtk_widget_add_css_class (GTK_WIDGET (editable), "warning");
+      gtk_revealer_set_reveal_child (GTK_REVEALER (revealer), TRUE);
+    }
+  else
+    {
+      gtk_widget_remove_css_class (GTK_WIDGET (editable), "warning");
+      gtk_revealer_set_reveal_child (GTK_REVEALER (revealer), FALSE);
+    }
+}
+
+static void
+on_account_entry_leave (GoaProviderDialog *self,
+                        GParamSpec        *pspec,
+                        AdwEntryRow       *row)
+{
+  GtkWidget *widget = adw_dialog_get_focus (ADW_DIALOG (self));
+
+  if (widget == NULL ||
+      (widget != GTK_WIDGET (row) && !gtk_widget_is_ancestor (widget, GTK_WIDGET (row))))
+    {
+      GoaAccount *account = goa_object_peek_account (self->object);
+      const char *presentation_identity = goa_account_get_presentation_identity (account);
+
+      adw_entry_row_set_show_apply_button (row, FALSE);
+      gtk_editable_set_text (GTK_EDITABLE (row), presentation_identity);
+      adw_entry_row_set_show_apply_button (row, TRUE);
+    }
+}
+
+static void
+on_account_entry_change (GtkEditable *editable)
+{
+  update_account_name_entry (editable, NULL);
+}
+
+static void
+on_account_entry_apply_cb (GoaManager   *manager,
+                           GAsyncResult *result,
+                           AdwEntryRow  *row)
+{
+  GtkRoot *root = NULL;
+  g_autofree char *object_path = NULL;
+  g_autoptr (GError) error = NULL;
+
+  if (!goa_manager_call_add_account_finish (manager, &object_path, result, &error) &&
+      g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    {
+      /* Dialog was closed */
+      return;
+    }
+
+  root = gtk_widget_get_root (GTK_WIDGET (row));
+  update_account_name_entry (GTK_EDITABLE (row), error ? error->message : NULL);
+  gtk_widget_set_sensitive (GTK_WIDGET (row), TRUE);
+  g_signal_handlers_unblock_by_func (root, on_account_entry_leave, row);
+}
+
+static void
+on_account_entry_apply (AdwEntryRow       *row,
+                        GoaProviderDialog *self)
+{
+  GoaAccount *account;
+  const char *identity;
+  const char *presentation_identity;
+  const char *new_presentation_identity;
+  const char *provider_type;
+
+  account = goa_object_peek_account (self->object);
+  presentation_identity = goa_account_get_presentation_identity (account);
+  if (adw_entry_row_get_text_length (row) == 0)
+    {
+      adw_entry_row_set_show_apply_button (row, FALSE);
+      gtk_editable_set_text (GTK_EDITABLE (row), presentation_identity);
+      adw_entry_row_set_show_apply_button (row, TRUE);
+      return;
+    }
+
+  new_presentation_identity = gtk_editable_get_text (GTK_EDITABLE (row));
+  if (g_strcmp0 (new_presentation_identity, presentation_identity) == 0)
+    return;
+
+  identity = goa_account_get_identity (account);
+  provider_type = goa_provider_get_provider_type (self->provider);
+  if (goa_utils_check_duplicate (self->client,
+                                 identity,
+                                 new_presentation_identity,
+                                 provider_type,
+                                 NULL,
+                                 NULL))
+    {
+      GVariantBuilder credentials;
+      GVariantBuilder details;
+
+      g_variant_builder_init (&credentials, G_VARIANT_TYPE_VARDICT);
+      g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
+      g_variant_builder_add (&details, "{ss}", "Id", goa_account_get_id (account));
+      goa_manager_call_add_account (goa_client_get_manager (self->client),
+                                    provider_type,
+                                    identity,
+                                    new_presentation_identity,
+                                    g_variant_builder_end (&credentials),
+                                    g_variant_builder_end (&details),
+                                    self->cancellable,
+                                    (GAsyncReadyCallback) on_account_entry_apply_cb,
+                                    row);
+      g_signal_handlers_block_by_func (self, on_account_entry_leave, row);
+      gtk_widget_set_sensitive (GTK_WIDGET (row), FALSE);
+    }
+  else
+    {
+      update_account_name_entry (GTK_EDITABLE (row), _("An account with that name already exists"));
+    }
+}
+
 /**
  * goa_provider_dialog_push_account:
  * @self: a `GoaProviderDialog`
@@ -661,6 +788,9 @@ goa_provider_dialog_push_account (GoaProviderDialog *self,
   GtkWidget *status;
   GtkWidget *box;
   GtkWidget *group;
+  GtkWidget *row;
+  GtkWidget *revealer;
+  GtkWidget *error_label;
   GtkWidget *action_button;
   GoaProviderFeatures account_features;
   GoaProviderFeaturesInfo *feature_infos = NULL;
@@ -708,7 +838,6 @@ goa_provider_dialog_push_account (GoaProviderDialog *self,
   /* Content */
   status = g_object_new (ADW_TYPE_STATUS_PAGE,
                          "title",       provider_name,
-                         "description", account_name,
                          "paintable",   paintable,
                          NULL);
   gtk_widget_add_css_class (status, "compact");
@@ -717,6 +846,56 @@ goa_provider_dialog_push_account (GoaProviderDialog *self,
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 24);
   adw_status_page_set_child (ADW_STATUS_PAGE (status), box);
+
+  /* PresentationIdentity */
+  group = adw_preferences_group_new ();
+  adw_preferences_group_set_separate_rows (ADW_PREFERENCES_GROUP (group), TRUE);
+  g_object_bind_property (account, "attention-needed",
+                          group,   "sensitive",
+                          G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
+  gtk_box_append (GTK_BOX (box), group);
+
+  row = g_object_new (ADW_TYPE_ENTRY_ROW,
+                      "title", _("_Account Name"),
+                      "text", account_name,
+                      "show-apply-button", TRUE,
+                      "use-underline", TRUE,
+                      "input-hints", (GTK_INPUT_HINT_SPELLCHECK |
+                                      GTK_INPUT_HINT_WORD_COMPLETION |
+                                      GTK_INPUT_HINT_UPPERCASE_WORDS),
+                      "input-purpose", GTK_INPUT_PURPOSE_FREE_FORM,
+                      NULL);
+  g_signal_connect (self,
+                    "notify::focus-widget",
+                    G_CALLBACK (on_account_entry_leave),
+                    row);
+  g_signal_connect (row,
+                    "apply",
+                    G_CALLBACK (on_account_entry_apply),
+                    self);
+  g_signal_connect (row,
+                    "notify::text-length",
+                    G_CALLBACK (on_account_entry_change),
+                    self);
+  update_account_name_entry (GTK_EDITABLE (row), NULL);
+  adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), row);
+
+  revealer = gtk_revealer_new ();
+  gtk_revealer_set_transition_type (GTK_REVEALER (revealer), GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
+  adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), revealer);
+  g_object_set_data (G_OBJECT (row), "goa-entry-error", revealer);
+
+  error_label = g_object_new (GTK_TYPE_LABEL,
+                              "margin-top", 6,
+                              "xalign", 0.0,
+                              NULL);
+  gtk_widget_add_css_class (error_label, "caption");
+  gtk_widget_add_css_class (error_label, "warning");
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (row),
+                                  GTK_ACCESSIBLE_RELATION_DESCRIBED_BY,
+                                  error_label, NULL,
+                                  -1);
+  gtk_revealer_set_child (GTK_REVEALER (revealer), error_label);
 
   /* Features */
   group = adw_preferences_group_new ();
@@ -730,8 +909,6 @@ goa_provider_dialog_push_account (GoaProviderDialog *self,
     {
       if ((account_features & feature_infos[i].feature) != 0)
         {
-          GtkWidget *row;
-
           row = create_feature_row (account,
                                     feature_infos[i].property,
                                     _(feature_infos[i].blurb));
@@ -771,6 +948,7 @@ goa_provider_dialog_push_account (GoaProviderDialog *self,
 
   adw_navigation_view_push (ADW_NAVIGATION_VIEW (self->view),
                             ADW_NAVIGATION_PAGE (page));
+  g_object_set (self, "focus-widget", action_button, NULL);
 }
 
 /**
