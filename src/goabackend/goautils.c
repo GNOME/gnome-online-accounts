@@ -55,9 +55,12 @@ goa_utils_check_duplicate (GoaClient              *client,
       const gchar *provider_type_from_object;
 
       account = goa_object_peek_account (object);
-      interface = (*func) (object);
-      if (interface == NULL)
-        continue;
+      if (func != NULL)
+        {
+          interface = (*func) (object);
+          if (interface == NULL)
+            continue;
+        }
 
       provider_type_from_object = goa_account_get_provider_type (account);
       if (g_strcmp0 (provider_type_from_object, provider_type) != 0)
