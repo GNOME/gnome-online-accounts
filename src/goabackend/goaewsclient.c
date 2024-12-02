@@ -71,6 +71,7 @@ typedef struct
 typedef struct
 {
   GCancellable *cancellable;
+  GCancellable *req_cancellable;
   GError *error;
   SoupMessage *msgs[2];
   SoupSession *session;
@@ -100,6 +101,7 @@ ews_client_autodiscover_data_free (gpointer user_data)
       g_object_unref (data->cancellable);
     }
 
+  g_clear_object (&data->req_cancellable);
   g_clear_error (&data->error);
 
   xmlOutputBufferClose (data->buf);
@@ -359,7 +361,7 @@ ews_client_autodiscover_response_cb (SoupSession *session, GAsyncResult *result,
           /* The callback (ie. this function) will be invoked after we
            * have returned to the main loop.
            */
-          g_cancellable_cancel (data->cancellable);
+          g_cancellable_cancel (data->req_cancellable);
         }
     }
 
@@ -540,6 +542,7 @@ goa_ews_client_autodiscover (GoaEwsClient        *self,
   data->session = soup_session_new ();
   soup_session_add_feature_by_type (data->session, SOUP_TYPE_AUTH_NTLM);
   data->accept_ssl_errors = accept_ssl_errors;
+  data->req_cancellable = g_cancellable_new ();
 
   if (cancellable != NULL)
     {
@@ -553,13 +556,13 @@ goa_ews_client_autodiscover (GoaEwsClient        *self,
   soup_session_send_and_read_async (data->session,
                                     data->msgs[0],
                                     G_PRIORITY_DEFAULT,
-                                    data->cancellable,
+                                    data->req_cancellable,
                                     (GAsyncReadyCallback)ews_client_autodiscover_response_cb,
                                     g_object_ref (task));
   soup_session_send_and_read_async (data->session,
                                     data->msgs[1],
                                     G_PRIORITY_DEFAULT,
-                                    data->cancellable,
+                                    data->req_cancellable,
                                     (GAsyncReadyCallback)ews_client_autodiscover_response_cb,
                                     g_object_ref (task));
 
