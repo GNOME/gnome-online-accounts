@@ -505,6 +505,7 @@ typedef struct
   char *presentation_identity;
   char *refresh_token;
   char *request_uri;
+  GoaAuthFlowFlags flags;
 
   char *client_id;
   char *client_secret;
@@ -926,28 +927,67 @@ identity_from_auth (GoaOAuth2Provider  *self,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
+on_copylink_activated (AccountData *data)
+{
+  data->flags |= GOA_AUTH_FLOW_DO_NOT_LAUNCH_URI;
+  goa_provider_dialog_set_state (data->dialog, GOA_DIALOG_BUSY);
+}
+
+static void
 create_account_details_ui (GoaProvider *provider,
                            AccountData *data,
                            gboolean     new_account)
 {
   GoaProviderDialog *dialog = GOA_PROVIDER_DIALOG (data->dialog);
+  GtkWidget *content, *content_box;
+  GtkWidget *buttons;
   GtkWidget *button;
-  GtkWidget *content;
+  GtkWidget *copy_button, *copy_desc;
   g_autofree char *provider_name = NULL;
   g_autofree char *description = NULL;
 
   provider_name = goa_provider_get_provider_name (provider, NULL);
   description = g_strdup_printf (_("Sign in to %s with your browser"), provider_name);
+  content_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
 
-  button = gtk_button_new_with_mnemonic (_("_Sign In…"));
-  gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
-  gtk_widget_add_css_class (button, "pill");
+  buttons = gtk_list_box_new ();
+  gtk_widget_add_css_class (buttons, "boxed-list-separate");
+  gtk_list_box_set_selection_mode (GTK_LIST_BOX (buttons), GTK_SELECTION_NONE);
+  gtk_box_append (GTK_BOX (content_box), buttons);
+
+  button = g_object_new (ADW_TYPE_BUTTON_ROW,
+                         "title", _("_Sign In…"),
+                         "use-underline", TRUE,
+                         NULL);
   gtk_widget_add_css_class (button, "suggested-action");
+  gtk_list_box_append (GTK_LIST_BOX (buttons), button);
+
+  /* When "Copy Link" is clicked, we pin the flags for the auth flow */
+  copy_button = g_object_new (ADW_TYPE_BUTTON_ROW,
+                              "title", _("_Copy Link"),
+                              "use-underline", TRUE,
+                              "start-icon-name", "edit-copy-symbolic",
+                              NULL);
+  g_signal_connect_swapped (copy_button,
+                            "activated",
+                            G_CALLBACK (on_copylink_activated),
+                            data);
+  gtk_list_box_append (GTK_LIST_BOX (buttons), copy_button);
+
+  copy_desc = gtk_label_new (_("Copy the authorization URL to continue with a specific web browser."));
+  gtk_label_set_justify (GTK_LABEL (copy_desc), GTK_JUSTIFY_CENTER);
+  gtk_label_set_wrap (GTK_LABEL (copy_desc), TRUE);
+  gtk_widget_set_halign (copy_desc, GTK_ALIGN_CENTER);
+  gtk_widget_add_css_class (copy_desc, "caption");
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (copy_button),
+                                  GTK_ACCESSIBLE_RELATION_DESCRIBED_BY, copy_desc, NULL,
+                                  -1);
+  gtk_box_append (GTK_BOX (content_box), copy_desc);
 
   content = g_object_new (ADW_TYPE_STATUS_PAGE,
                           "icon-name",   "web-browser-symbolic",
                           "description", description,
-                          "child",       button,
+                          "child",       content_box,
                           NULL);
   goa_provider_dialog_push_content (dialog, NULL, content);
 
@@ -973,6 +1013,7 @@ static const SecretSchema oauth2_schema =
 typedef struct
 {
   char *request_uri;
+  GoaAuthFlowFlags flags;
   SecretCollection *collection;
   GCancellable *cancellable;
   unsigned long cancellable_id;
@@ -1059,26 +1100,13 @@ authorize_uri_launch_uri_cb (GObject      *object,
                              gpointer      user_data)
 {
   g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
-  GCancellable *cancellable = g_task_get_cancellable (task);
   AuthorizeUriData *data = g_task_get_task_data (task);
   GError *error = NULL;
 
   if (!g_app_info_launch_default_for_uri_finish (result, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
       g_signal_handlers_disconnect_by_data (data->collection, task);
-      return;
-    }
-
-  /* If the operation is cancelled, the callback will complete the task and
-   * disconnect the signal handler holding the final reference on the task.
-   */
-  if (cancellable != NULL)
-    {
-      data->cancellable = g_object_ref (cancellable);
-      data->cancellable_id = g_cancellable_connect (cancellable,
-                                                    G_CALLBACK (authorize_uri_cancelled),
-                                                    task, NULL);
+      g_task_return_error (task, g_steal_pointer (&error));
     }
 }
 
@@ -1109,11 +1137,25 @@ authorize_uri_reset_collection_cb (SecretCollection *collection,
                          (GClosureNotify)g_object_unref,
                          G_CONNECT_DEFAULT);
 
-  g_app_info_launch_default_for_uri_async (data->request_uri,
-                                           NULL,
-                                           cancellable,
-                                           (GAsyncReadyCallback) authorize_uri_launch_uri_cb,
-                                           g_object_ref (task));
+  /* If the operation is cancelled, the callback will complete the task and
+   * disconnect the signal handler holding the final reference on the task.
+   */
+  if (cancellable != NULL)
+    {
+      data->cancellable = g_object_ref (cancellable);
+      data->cancellable_id = g_cancellable_connect (cancellable,
+                                                    G_CALLBACK (authorize_uri_cancelled),
+                                                    task, NULL);
+    }
+
+  if ((data->flags & GOA_AUTH_FLOW_DO_NOT_LAUNCH_URI) == 0)
+    {
+      g_app_info_launch_default_for_uri_async (data->request_uri,
+                                               NULL,
+                                               cancellable,
+                                               (GAsyncReadyCallback) authorize_uri_launch_uri_cb,
+                                               g_object_ref (task));
+    }
 }
 
 static void
@@ -1185,17 +1227,22 @@ authorize_uri_get_service_cb (GObject      *object,
  * goa_oauth2_provider_authorize_uri:
  * @self: a `GoaOAuth2Provider`
  * @request_uri: a request URI
+ * @flags: flags for the authorization flow
  * @cancellable: (nullable): a `GCancellable`
  * @callback: (nullable): a `GAsyncReadyCallback`
  * @user_data: user data
  *
  * Request authorization of @uri in the default application (i.e. web browser).
  *
+ * The @flags argument controls how the authorization flow is executed, such as
+ * whether the URI will be launched automatically.
+ *
  * Call [method@Goa.OAuth2Provider.authorize_uri_finish] to get the result.
  */
 void
 goa_oauth2_provider_authorize_uri (GoaOAuth2Provider   *provider,
                                    const char          *request_uri,
+                                   GoaAuthFlowFlags     flags,
                                    GCancellable        *cancellable,
                                    GAsyncReadyCallback  callback,
                                    gpointer             user_data)
@@ -1209,6 +1256,7 @@ goa_oauth2_provider_authorize_uri (GoaOAuth2Provider   *provider,
 
   data = g_new0 (AuthorizeUriData, 1);
   data->request_uri = g_strdup (request_uri);
+  data->flags = flags;
 
   task = g_task_new (provider, cancellable, callback, user_data);
   g_task_set_check_cancellable (task, FALSE);
@@ -1421,8 +1469,17 @@ add_account_action_cb (GoaProviderDialog *dialog,
   if (goa_provider_dialog_get_state (dialog) == GOA_DIALOG_BUSY)
     {
       oauth2_task_prepare_request_uri (task);
+
+      if ((data->flags & GOA_AUTH_FLOW_DO_NOT_LAUNCH_URI) != 0)
+        {
+          gdk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (dialog)),
+                                  data->request_uri);
+          goa_provider_dialog_add_toast (dialog, adw_toast_new (_("Copied to clipboard")));
+        }
+
       goa_oauth2_provider_authorize_uri (self,
                                          data->request_uri,
+                                         data->flags,
                                          data->cancellable,
                                          (GAsyncReadyCallback) add_account_authorize_uri_cb,
                                          g_object_ref (task));
@@ -1457,6 +1514,8 @@ goa_oauth2_provider_add_account (GoaProvider         *provider,
   if (GOA_IS_PROVIDER_DIALOG (parent))
     {
       data->dialog = GOA_PROVIDER_DIALOG (parent);
+      data->flags = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (data->dialog),
+                                                         "goa-auth-flow-flags"));
       g_object_set_data_full (G_OBJECT (task),
                               "goa-provider-dialog",
                               g_object_ref (data->dialog),
@@ -1578,8 +1637,17 @@ refresh_account_action_cb (GoaProviderDialog *dialog,
   if (goa_provider_dialog_get_state (dialog) == GOA_DIALOG_BUSY)
     {
       oauth2_task_prepare_request_uri (task);
+
+      if ((data->flags & GOA_AUTH_FLOW_DO_NOT_LAUNCH_URI) != 0)
+        {
+          gdk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (dialog)),
+                                  data->request_uri);
+          goa_provider_dialog_add_toast (dialog, adw_toast_new (_("Copied to clipboard")));
+        }
+
       goa_oauth2_provider_authorize_uri (self,
                                          data->request_uri,
+                                         data->flags,
                                          data->cancellable,
                                          (GAsyncReadyCallback) refresh_account_authorize_uri_cb,
                                          g_object_ref (task));
