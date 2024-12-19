@@ -1323,18 +1323,13 @@ goa_kerberos_provider_get_ticket_sync (GoaKerberosProvider  *self,
   if (credentials == NULL && !is_interactive)
     {
       if (lookup_error != NULL)
-        {
-          g_propagate_error (error, lookup_error);
-          lookup_error = NULL;
-        }
-      else
-        {
-          g_set_error (error,
-                       GOA_ERROR,
-                       GOA_ERROR_NOT_AUTHORIZED,
-                       _("Could not find saved credentials for principal “%s” in keyring"),
-                       identifier);
-        }
+        g_debug ("%s(): %s", G_STRFUNC, lookup_error->message);
+
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_NOT_AUTHORIZED,
+                   _("Could not find saved credentials for principal “%s” in keyring"),
+                   identifier);
 
       return FALSE;
     }
