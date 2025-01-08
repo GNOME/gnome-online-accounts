@@ -551,13 +551,13 @@ add_config_file (GoaDaemon     *self,
                   if (provider_type != NULL)
                     provider = goa_provider_get_for_provider_type (provider_type);
 
+                  needs_update = g_key_file_remove_group (key_file, groups[n], NULL) || needs_update;
+
                   if (provider == NULL)
                     {
                       g_warning ("Unsupported account type %s for ID %s (no provider)", provider_type, id);
                       goto cleanup_and_continue;
                     }
-
-                  needs_update = g_key_file_remove_group (key_file, groups[n], NULL) || needs_update;
 
                   error = NULL;
                   if (!goa_utils_delete_credentials_for_id_sync (provider, id, NULL, &error))
