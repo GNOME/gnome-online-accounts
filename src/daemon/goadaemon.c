@@ -537,7 +537,7 @@ add_config_file (GoaDaemon     *self,
 
                   if (provider == NULL)
                     {
-                      g_warning ("Unsupported account type %s for ID %s (no provider)", provider_type, id);
+                      g_debug ("Unsupported account type %s for ID %s (no provider)", provider_type, id);
                       goto cleanup_and_continue;
                     }
 
@@ -645,7 +645,7 @@ update_account_object (GoaDaemon           *self,
   provider = goa_provider_get_for_provider_type (type);
   if (provider == NULL)
     {
-      g_warning ("Unsupported account type %s for identity %s (no provider)", type, identity);
+      g_debug ("Unsupported account type %s for identity %s (no provider)", type, identity);
       goto out;
     }
 
