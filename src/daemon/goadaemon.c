@@ -539,7 +539,7 @@ add_config_file (GoaDaemon     *self,
                       goto cleanup_and_continue;
                     }
 
-                  needs_update = g_key_file_remove_group (key_file, groups[n], NULL);
+                  needs_update = g_key_file_remove_group (key_file, groups[n], NULL) || needs_update;
 
                   error = NULL;
                   if (!goa_utils_delete_credentials_for_id_sync (provider, id, NULL, &error))
@@ -560,7 +560,7 @@ add_config_file (GoaDaemon     *self,
             }
           else
             {
-              needs_update = g_key_file_remove_key (key_file, groups[n], "SessionId", NULL);
+              needs_update = g_key_file_remove_key (key_file, groups[n], "SessionId", NULL) || needs_update;
             }
 
           g_hash_table_insert (group_name_to_key_file_data,
