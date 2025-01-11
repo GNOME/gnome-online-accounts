@@ -1,8 +1,16 @@
+include:
+  - component: gitlab.gnome.org/GNOME/citemplates/release-service@master
+    inputs:
+      job-stage: release
+      dist-job-name: build-full
+      tarball-artifact-path: "_build/meson-dist/$CI_PROJECT_NAME-$CI_COMMIT_TAG.tar.xz"
+
 stages:
   - review
   - build
   - analysis
   - deploy
+  - release
 
 potfile_check:
   image: fedora:latest
@@ -41,9 +49,13 @@ build-full:
     - meson compile -C _build
     - meson test -C _build
     - meson install -C _build
+    - meson dist -C _build
   artifacts:
+    name: "${CI_JOB_NAME}-${CI_COMMIT_REF_NAME}"
+    when: always
     paths:
-    - _build/doc
+      - _build/doc
+      - _build/meson-dist/*.tar.xz
 
 clang-analyzer:
   image: fedora:latest
