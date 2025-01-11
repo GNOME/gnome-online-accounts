@@ -28,6 +28,8 @@
 
 #include "goadavclient.h"
 
+#define DAV_CLIENT_TIMEOUT   (30)
+
 #define WELL_KNOWN_CALDAV    "/.well-known/caldav"
 #define WELL_KNOWN_CARDDAV   "/.well-known/carddav"
 
@@ -420,6 +422,7 @@ goa_dav_client_check (GoaDavClient        *self,
   g_task_set_task_data (task, data, dav_client_check_data_free);
 
   data->session = soup_session_new ();
+  soup_session_set_timeout (data->session, DAV_CLIENT_TIMEOUT);
   soup_session_set_user_agent (data->session, "gnome-online-accounts/" PACKAGE_VERSION " ");
 
   logger = goa_soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
@@ -1305,6 +1308,7 @@ goa_dav_client_discover (GoaDavClient        *self,
   g_task_set_task_data (task, discover, goa_dav_client_discover_data_free);
 
   data->session = soup_session_new ();
+  soup_session_set_timeout (data->session, DAV_CLIENT_TIMEOUT);
   soup_session_set_user_agent (data->session, "gnome-online-accounts/" PACKAGE_VERSION " ");
 
   logger = goa_soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
