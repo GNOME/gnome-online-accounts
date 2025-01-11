@@ -1,17 +1,25 @@
+include:
+  - component: gitlab.gnome.org/GNOME/citemplates/release-service@master
+    inputs:
+      job-stage: release
+      dist-job-name: build-full
+      tarball-artifact-path: "_build/meson-dist/$CI_PROJECT_NAME-$CI_COMMIT_TAG.tar.xz"
+
 stages:
   - review
   - build
   - analysis
   - deploy
+  - release
 
 potfile_check:
-  image: fedora:40
+  image: fedora:latest
   stage: review
   script:
     - ./.gitlab-ci/check-potfiles.sh
 
 build:
-  image: fedora:40
+  image: fedora:latest
   stage: build
   before_script:
     - dnf update -y
@@ -19,47 +27,53 @@ build:
       meson gcc dbus-devel glib2-devel gobject-introspection-devel
       gtk4-devel rest-devel vala
   script:
-    - meson setup -Dgtk_doc=false -Dgoabackend=false _build
+    - meson setup -Ddocumentation=false -Dgoabackend=false _build
     - meson compile -C _build
     - meson test -C _build
     - meson install -C _build
 
 build-full:
-  image: fedora:40
+  image: fedora:latest
   stage: build
   before_script:
     - dnf update -y
-    - dnf -y install
+    - dnf -y install dnf-plugins-core
       meson git gcc dbus-devel docbook-style-xsl gcr-devel gi-docgen glib2-devel
-      gobject-introspection-devel gtk-doc gtk4-devel json-glib-devel krb5-devel
+      gobject-introspection-devel gtk4-devel json-glib-devel krb5-devel
       libadwaita-devel libsecret-devel libsoup3-devel rest-devel vala
+    - dnf -y builddep gtk4 libadwaita
   script:
-    - meson setup -Dgtk_doc=true
+    - meson setup -Ddocumentation=true
                   -Dfedora=true
                   _build
     - meson compile -C _build
     - meson test -C _build
     - meson install -C _build
+    - meson dist -C _build
   artifacts:
+    name: "${CI_JOB_NAME}-${CI_COMMIT_REF_NAME}"
+    when: always
     paths:
-    - _build/doc
+      - _build/doc
+      - _build/meson-dist/*.tar.xz
 
 clang-analyzer:
-  image: fedora:40
+  image: fedora:latest
   stage: analysis
   variables:
     # Warnings from dependencies are irrelevant here
     CFLAGS: "-Wno-strict-prototypes -Wno-deprecated-declarations"
   before_script:
     - dnf update -y
-    - dnf -y install
-      clang clang-analyzer meson gcr-devel dbus-devel gi-docgen glib2-devel
+    - dnf -y install dnf-plugins-core
+      clang clang-analyzer meson git gcr-devel dbus-devel gi-docgen glib2-devel
       gobject-introspection-devel gtk4-devel krb5-devel libadwaita-devel
       libsecret-devel rest-devel vala
+    - dnf -y builddep gtk4 libadwaita
   script:
     - meson setup --buildtype=debug
                   -Dfedora=true
-                  -Dgtk_doc=false
+                  -Ddocumentation=false
                   -Dintrospection=false
                   -Dman=false
                   -Dwerror=true
@@ -76,20 +90,21 @@ clang-analyzer:
   allow_failure: true
 
 gcc-analyzer:
-  image: fedora:40
+  image: fedora:latest
   stage: analysis
   variables:
     # `-Wanalyzer-null-*` is absurd, and the others are irrelevant here
     CFLAGS: "-fanalyzer -Wno-analyzer-null-argument -Wno-analyzer-null-dereference -Wno-strict-prototypes -Wno-deprecated-declarations"
   before_script:
     - dnf update -y
-    - dnf -y install
-      meson gcc gcr-devel dbus-devel glib2-devel gobject-introspection-devel
+    - dnf -y install dnf-plugins-core
+      meson git gcc gcr-devel dbus-devel glib2-devel gobject-introspection-devel
       gtk4-devel krb5-devel libadwaita-devel libsecret-devel rest-devel vala
+    - dnf -y builddep gtk4 libadwaita
   script:
     - meson setup --buildtype=debug
                   -Dfedora=true
-                  -Dgtk_doc=false
+                  -Ddocumentation=false
                   -Dman=false
                   -Dwerror=true
                   _build
@@ -107,3 +122,4 @@ pages:
     - public
   only:
   - master
+
