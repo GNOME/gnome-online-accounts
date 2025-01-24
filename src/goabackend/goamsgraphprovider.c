@@ -283,7 +283,7 @@ build_object (GoaProvider        *provider,
   GKeyFile *goa_conf;
   GoaMail *mail = NULL;
   const gchar  *provider_type;
-  const gchar *identity = NULL;
+  const gchar *presentation_identity = NULL;
   gboolean files_enabled = FALSE;
   gboolean calendar_enabled;
   gboolean contacts_enabled;
@@ -303,12 +303,12 @@ build_object (GoaProvider        *provider,
   provider_type = goa_provider_get_provider_type (provider);
   goa_conf = goa_util_open_goa_conf ();
   account = goa_object_get_account (GOA_OBJECT (object));
-  identity = goa_account_get_identity (account);
+  presentation_identity = goa_account_get_presentation_identity (account);
 
   /* Files */
   files_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_FILES) &&
                   g_key_file_get_boolean (key_file, group, "FilesEnabled", NULL);
-  uri_onedrive = g_strconcat ("onedrive://", identity, "/", NULL);
+  uri_onedrive = g_strconcat ("onedrive://", presentation_identity, "/", NULL);
   goa_object_skeleton_attach_files (object, uri_onedrive, files_enabled, FALSE);
   g_free (uri_onedrive);
 
