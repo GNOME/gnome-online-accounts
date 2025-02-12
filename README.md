@@ -20,7 +20,7 @@ including extra instructions for [Account Setup] required by some providers.
 
   The API documentation is intended for GNOME Core applications that need
   access to account credentials and login information.
-* [User Documentation](https://help.gnome.org/users/gnome-help/stable/accounts.html)
+* [User Documentation](https://help.gnome.org/users/gnome-help/stable/accounts.html.en)
 
   The user documentation provides basic guidance for adding, removing and
   configuring account with [GNOME Settings](https://apps.gnome.org/Settings/).
