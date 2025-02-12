@@ -8,7 +8,6 @@ libgoa_backend_sources = files(
   'goaewsclient.c',
   'goaexchangeprovider.c',
   'goagoogleprovider.c',
-  'goahttpclient.c',
   'goaimapauthlogin.c',
   'goaimapsmtpprovider.c',
   'goamailauth.c',
