@@ -2,6 +2,7 @@
 /*
  * Copyright © 2023 GNOME Foundation Inc.
  * Contributor: Andy Holmes <andyholmes@gnome.org>
+ * Contributor: Jan-Michael Brummer <jan-michael.brummer1@volkswagen.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,21 +21,9 @@
 #include "config.h"
 
 #include <glib.h>
-#include <libsecret/secret.h>
+#include <gio/gio.h>
 
-
-static const SecretSchema oauth2_schema =
-{
-  .name = "org.gnome.OnlineAccounts.OAuth2",
-  .flags = SECRET_SCHEMA_NONE,
-  .attributes = {
-    {
-      .name = "goa-oauth2-client",
-      .type = SECRET_SCHEMA_ATTRIBUTE_STRING,
-    },
-    { "NULL", 0 }
-  }
-};
+static char *uri_str = NULL;
 
 static struct
 {
@@ -80,6 +69,39 @@ get_oauth2_provider (const char  *needle,
   return FALSE;
 }
 
+static void
+got_bus_cb (GObject      *source_object,
+            GAsyncResult *result,
+            gpointer      user_data)
+{
+  GMainLoop *loop = user_data;
+  g_autoptr (GError) error = NULL;
+  g_autoptr (GDBusConnection) connection = NULL;
+  g_autoptr (GDBusMessage) message = NULL;
+  g_autoptr (GVariant) body = NULL;
+
+  connection = g_bus_get_finish (result, &error);
+  if (!connection)
+    {
+      g_warning ("Failed to get D-Bus session: %s", error ? error->message : "Unknown error");
+      g_main_loop_quit (loop);
+      return;
+    }
+
+  message = g_dbus_message_new_method_call ("org.gnome.OnlineAccounts.Helper",
+                                            "/org/gnome/OnlineAccounts/Helper",
+                                            "org.gnome.OnlineAccounts.Helper.Interface",
+                                            "Response");
+  body = g_variant_new ("(s)", uri_str);
+
+  g_dbus_message_set_body (message, body);
+  g_dbus_connection_send_message (connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, NULL, &error);
+  if (error)
+      g_warning ("Failed to send D-Bus message: %s", error ? error->message : "Unknown error");
+
+  g_main_loop_quit (loop);
+}
+
 int
 main (int    argc,
       char **argv)
@@ -89,6 +111,9 @@ main (int    argc,
   const char *path = NULL;
   const char *client_id = NULL;
   g_autoptr (GError) error = NULL;
+  g_autoptr (GMainLoop) loop = NULL;
+
+  g_set_prgname ("goa-oauth2-handler");
 
   if (argc < 2)
     {
@@ -141,20 +166,13 @@ main (int    argc,
       return EXIT_FAILURE;
     }
 
-  if (!secret_password_store_sync (&oauth2_schema,
-                                   SECRET_COLLECTION_SESSION,
-                                   "GNOME Online Accounts OAuth2 URI",
-                                   argv[1], /* Secret */
-                                   NULL,
-                                   &error,
-                                   "goa-oauth2-client", client_id,
-                                   NULL))
-    {
-      if (error != NULL)
-        g_printerr ("%s: Failed to store OAuth2 URI: %s\n", argv[0], error->message);
 
-      return EXIT_FAILURE;
-    }
+  uri_str = argv[1];
+  loop = g_main_loop_new (NULL, FALSE);
+
+  g_bus_get (G_BUS_TYPE_SESSION, NULL, got_bus_cb, loop);
+
+  g_main_loop_run (loop);
 
   return EXIT_SUCCESS;
 }
