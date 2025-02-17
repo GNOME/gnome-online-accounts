@@ -134,7 +134,7 @@ executable('goa-oauth2-handler',
   'goaoauth2handler.c',
   dependencies: [
     glib_dep,
-    libsecret_dep,
+    gio_dep,
   ],
   c_args: [
     '-DG_LOG_DOMAIN="@0@"'.format('goa-oauth2-handler'),
