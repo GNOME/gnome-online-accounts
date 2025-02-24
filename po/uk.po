@@ -1,14 +1,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Daniel Korostil <ted.korostiled@gmail.com>, 2013, 2014, 2015, 2016, 2017.
-# Yuri Chornoivan <yurchor@ukr.net>, 2020, 2022, 2023, 2024.
+# Yuri Chornoivan <yurchor@ukr.net>, 2020, 2022, 2023, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/is"
 "sues\n"
-"POT-Creation-Date: 2024-08-22 15:50+0000\n"
-"PO-Revision-Date: 2024-08-23 12:26+0300\n"
+"POT-Creation-Date: 2025-02-12 23:03+0000\n"
+"PO-Revision-Date: 2025-02-24 16:00+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -25,9 +25,6 @@ msgid "List of providers that are allowed to be loaded"
 msgstr "Список надавачів даних, дані яких можна завантажувати"
 
 #: data/org.gnome.online-accounts.gschema.xml:7
-#| msgid ""
-#| "A list of strings representing the providers that are allowed to be "
-#| "loaded (default: 'all'). This is only evaluated on startup."
 msgid ""
 "A list of strings representing the providers that are allowed to be loaded "
 "(default: 'all'). This is only evaluated on startup. Deprecated: use goa."
@@ -36,76 +33,72 @@ msgid ""
 msgstr ""
 "Список рядків надавачів даних, дані яких можна завантажувати (типове "
 "значення — «all» (усіх)). Це значення буде прочитано лише один раз, під час "
-"запуску програми. Застаріле: скористайтеся замість цього goa."
-"conf у каталозі налаштувань системи з ключем [providers] enable=all. Ключем"
-" є список відокремлених комами записів назв надавачів даних."
+"запуску програми. Застаріле: скористайтеся замість цього goa.conf у каталозі "
+"налаштувань системи з ключем [providers] enable=all. Ключем є список "
+"відокремлених комами записів назв надавачів даних."
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1160 src/daemon/goadaemon.c:1480
+#: src/daemon/goadaemon.c:1162 src/daemon/goadaemon.c:1482
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Не вдалось знайти постачальника для: %s"
 
-#: src/daemon/goadaemon.c:1423
+#: src/daemon/goadaemon.c:1425
 msgid "IsLocked property is set for account"
 msgstr "Властивість IsLocked встановлено для облікового запису"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1468
+#: src/daemon/goadaemon.c:1470
 msgid "ProviderType property is not set for account"
 msgstr "Властивість ProviderType не вказана для облікового запису"
 
-#: src/daemon/goadaemon.c:1630
+#: src/daemon/goadaemon.c:1632
 #, c-format
-#| msgid "Failed to find “%s” element"
 msgid "Failed to sign in to “%s”"
 msgstr "Не вдалося увійти до «%s»"
 
-#: src/daemon/goadaemon.c:1635
+#: src/daemon/goadaemon.c:1637
 msgid "Failed to sign in to multiple accounts"
 msgstr "Не вдалося увійти до декількох облікових записів одночасно"
 
-#: src/daemon/goadaemon.c:1644
-#| msgid "%s Account"
+#: src/daemon/goadaemon.c:1646
 msgid "Online Accounts"
 msgstr "Облікові записи в інтернеті"
 
-#: src/daemon/goadaemon.c:1647
-#| msgid "Account is disabled"
+#: src/daemon/goadaemon.c:1649
 msgid "Account Action Required"
 msgstr "Потрібна дія з обліковим записом"
 
 #. TODO: more specific
-#: src/goabackend/goadavclient.c:1187 src/goabackend/goaimapauthlogin.c:104
-#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:799
+#: src/goabackend/goadavclient.c:1190 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:802
 msgid "Authentication failed"
 msgstr "Помилка автентифікації"
 
-#: src/goabackend/goadavclient.c:1194
+#: src/goabackend/goadavclient.c:1197
 msgid "Cannot find WebDAV endpoint"
 msgstr "Неможливо знайти кінцевої точки WebDAV"
 
-#: src/goabackend/goadavclient.c:1295 src/goabackend/goawebdavprovider.c:648
+#: src/goabackend/goadavclient.c:1298 src/goabackend/goawebdavprovider.c:648
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "Некоректна адреса: %s"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:276
+#: src/goabackend/goaewsclient.c:278
 msgid "Failed to parse autodiscover response XML"
 msgstr "Не вдалось розібрати відповідь autodiscover XML"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: src/goabackend/goaewsclient.c:287 src/goabackend/goaewsclient.c:302
-#: src/goabackend/goaewsclient.c:317
+#: src/goabackend/goaewsclient.c:289 src/goabackend/goaewsclient.c:304
+#: src/goabackend/goaewsclient.c:319
 #, c-format
 msgid "Failed to find “%s” element"
 msgstr "Не вдалося знайти елемент «%s»"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:338
-#| msgid "Failed to find ASUrl and OABUrl in autodiscover response"
+#: src/goabackend/goaewsclient.c:340
 msgid "Failed to find ASUrl in autodiscover response"
 msgstr "Не вдалось знайти ASUrl у відповіді autodiscover"
 
@@ -133,15 +126,15 @@ msgstr ""
 "до календарів, контактів та файлів"
 
 #: src/goabackend/goaexchangeprovider.c:392
-#: src/goabackend/goaimapsmtpprovider.c:676
+#: src/goabackend/goaimapsmtpprovider.c:701
 msgid "_Email"
 msgstr "По_шта"
 
 #: src/goabackend/goaexchangeprovider.c:393
 #: src/goabackend/goafedoraprovider.c:171
-#: src/goabackend/goaimapsmtpprovider.c:677
-#: src/goabackend/goaimapsmtpprovider.c:719
-#: src/goabackend/goaimapsmtpprovider.c:749
+#: src/goabackend/goaimapsmtpprovider.c:702
+#: src/goabackend/goaimapsmtpprovider.c:745
+#: src/goabackend/goaimapsmtpprovider.c:789
 #: src/goabackend/goawebdavprovider.c:408
 msgid "_Password"
 msgstr "_Пароль"
@@ -160,8 +153,8 @@ msgstr "Параметри облікового запису"
 
 #: src/goabackend/goaexchangeprovider.c:406
 #: src/goabackend/goafedoraprovider.c:170
-#: src/goabackend/goaimapsmtpprovider.c:718
-#: src/goabackend/goaimapsmtpprovider.c:748
+#: src/goabackend/goaimapsmtpprovider.c:744
+#: src/goabackend/goaimapsmtpprovider.c:788
 #: src/goabackend/goawebdavprovider.c:407
 msgid "User_name"
 msgstr "_Користувач"
@@ -179,11 +172,11 @@ msgid "Fedora"
 msgstr "Fedora"
 
 #: src/goabackend/goafedoraprovider.c:167
-#: src/goabackend/goakerberosprovider.c:599
+#: src/goabackend/goakerberosprovider.c:598
 msgid "Access restricted web and network resources for your organization"
 msgstr "Доступ до ресурсів інтернету та мережі для вашої організації обмежено"
 
-#: src/goabackend/goafedoraprovider.c:338
+#: src/goabackend/goafedoraprovider.c:339
 #, c-format
 msgid "Failed to get principal from user name “%s”"
 msgstr "Не вдалося отримати реєстраційні дані з імені користувача «%s»"
@@ -192,9 +185,9 @@ msgstr "Не вдалося отримати реєстраційні дані �
 msgid "Google"
 msgstr "Google"
 
-#: src/goabackend/goagoogleprovider.c:213
+#: src/goabackend/goagoogleprovider.c:211
 #: src/goabackend/goamsgraphprovider.c:184
-#: src/goabackend/goawindowsliveprovider.c:165
+#: src/goabackend/goawindowsliveprovider.c:163
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
@@ -203,19 +196,19 @@ msgstr ""
 "стан %d (%s)"
 
 #. TODO: more specific
-#: src/goabackend/goagoogleprovider.c:232
-#: src/goabackend/goagoogleprovider.c:243
+#: src/goabackend/goagoogleprovider.c:230
+#: src/goabackend/goagoogleprovider.c:241
 #: src/goabackend/goamsgraphprovider.c:203
 #: src/goabackend/goamsgraphprovider.c:214
 #: src/goabackend/goamsgraphprovider.c:227
 #: src/goabackend/goamsgraphprovider.c:252
 #: src/goabackend/goaoauth2provider.c:677
 #: src/goabackend/goaoauth2provider.c:707
-#: src/goabackend/goaoauth2provider.c:718 src/goabackend/goautils.c:133
-#: src/goabackend/goawindowsliveprovider.c:184
-#: src/goabackend/goawindowsliveprovider.c:195
-#: src/goabackend/goawindowsliveprovider.c:204
-#: src/goabackend/goawindowsliveprovider.c:217
+#: src/goabackend/goaoauth2provider.c:718 src/goabackend/goautils.c:136
+#: src/goabackend/goawindowsliveprovider.c:182
+#: src/goabackend/goawindowsliveprovider.c:193
+#: src/goabackend/goawindowsliveprovider.c:202
+#: src/goabackend/goawindowsliveprovider.c:215
 msgid "Could not parse response"
 msgstr "Не вдалося розібрати відповідь"
 
@@ -248,39 +241,41 @@ msgstr "IMAP і SMTP"
 msgid "Invalid %s with username “%s” (%s, %d): "
 msgstr "Неправильний %s з користувачем «%s» (%s, %d): "
 
-#: src/goabackend/goaimapsmtpprovider.c:592
+#: src/goabackend/goaimapsmtpprovider.c:566
+#: src/goabackend/goaimapsmtpprovider.c:589
+#: src/goabackend/goaimapsmtpprovider.c:724
+#: src/goabackend/goaimapsmtpprovider.c:765
+#: src/goabackend/goaimapsmtpprovider.c:809
+msgid "Auto-detected"
+msgstr "Автовиявлення"
+
+#: src/goabackend/goaimapsmtpprovider.c:618
 msgid "Unable to auto-detect IMAP and SMTP settings"
 msgstr "Не вдалося автоматично визначити параметри IMAP і SMTP"
 
-#. Keep in sync with GoaTlsType
-#: src/goabackend/goaimapsmtpprovider.c:663
-msgid "None"
-msgstr "Немає"
-
-#. GOA_TLS_TYPE_NONE
-#: src/goabackend/goaimapsmtpprovider.c:664
+#: src/goabackend/goaimapsmtpprovider.c:689
 msgid "STARTTLS after connecting"
 msgstr "STARTTLS після з'єднання"
 
 #. GOA_TLS_TYPE_STARTTLS
-#: src/goabackend/goaimapsmtpprovider.c:665
+#: src/goabackend/goaimapsmtpprovider.c:690
 msgid "SSL on a dedicated port"
 msgstr "SSL на особливому порті"
 
-#: src/goabackend/goaimapsmtpprovider.c:670
-#: src/goabackend/goaimapsmtpprovider.c:1375
+#: src/goabackend/goaimapsmtpprovider.c:695
+#: src/goabackend/goaimapsmtpprovider.c:1435
 msgid "Email"
 msgstr "Електронна пошта"
 
-#: src/goabackend/goaimapsmtpprovider.c:671
+#: src/goabackend/goaimapsmtpprovider.c:696
 msgid "Connect to an email account"
 msgstr "З'єднатися із обліковим записом електронної пошти"
 
-#: src/goabackend/goaimapsmtpprovider.c:675
+#: src/goabackend/goaimapsmtpprovider.c:700
 msgid "_Name"
 msgstr "_Назва"
 
-#: src/goabackend/goaimapsmtpprovider.c:678
+#: src/goabackend/goaimapsmtpprovider.c:703
 msgid ""
 "IMAP and SMTP details will be auto-detected from your service provider when "
 "possible"
@@ -289,50 +284,45 @@ msgstr ""
 "даних вашого надавача послуг"
 
 #. IMAP
-#: src/goabackend/goaimapsmtpprovider.c:716
+#: src/goabackend/goaimapsmtpprovider.c:742
 msgid "IMAP Settings"
 msgstr "Параметри IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:717
+#: src/goabackend/goaimapsmtpprovider.c:743
 msgid "IMAP _Server"
 msgstr "_Сервер IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:725
-#: src/goabackend/goaimapsmtpprovider.c:755
+#: src/goabackend/goaimapsmtpprovider.c:754
+#: src/goabackend/goaimapsmtpprovider.c:798
 msgid "Encryption"
 msgstr "Шифрування"
 
-#: src/goabackend/goaimapsmtpprovider.c:733
-#: src/goabackend/goaimapsmtpprovider.c:763
-msgid "Auto-detected"
-msgstr "Автовиявлення"
-
-#: src/goabackend/goaimapsmtpprovider.c:739
+#: src/goabackend/goaimapsmtpprovider.c:779
 msgid "Example server: imap.example.com"
 msgstr "Приклад сервера: imap.example.com"
 
 #. SMTP
-#: src/goabackend/goaimapsmtpprovider.c:746
+#: src/goabackend/goaimapsmtpprovider.c:786
 msgid "SMTP Settings"
 msgstr "Параметри SMTP"
 
-#: src/goabackend/goaimapsmtpprovider.c:747
+#: src/goabackend/goaimapsmtpprovider.c:787
 msgid "SMTP _Server"
 msgstr "_Сервер SMTP"
 
-#: src/goabackend/goaimapsmtpprovider.c:769
+#: src/goabackend/goaimapsmtpprovider.c:823
 msgid "Example server: smtp.example.com"
 msgstr "Приклад сервера: smtp.example.com"
 
-#: src/goabackend/goaimapsmtpprovider.c:1366
+#: src/goabackend/goaimapsmtpprovider.c:1426
 msgid "Name"
 msgstr "Ім'я"
 
-#: src/goabackend/goaimapsmtpprovider.c:1392
+#: src/goabackend/goaimapsmtpprovider.c:1452
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1410
+#: src/goabackend/goaimapsmtpprovider.c:1470
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -357,34 +347,30 @@ msgstr "Введіть пароль нижче."
 msgid "Remember this password"
 msgstr "Запам'ятати цей пароль"
 
-#: src/goabackend/goakerberosprovider.c:602
+#: src/goabackend/goakerberosprovider.c:601
 msgid "_Principal"
 msgstr "_Основний"
 
-#: src/goabackend/goakerberosprovider.c:603
+#: src/goabackend/goakerberosprovider.c:602
 msgid "Example principal: user@EXAMPLE.COM"
 msgstr "Приклад реєстраційного запису: user@EXAMPLE.COM"
 
-#: src/goabackend/goakerberosprovider.c:606
-msgid "_Sign in…"
-msgstr "_Увійти…"
-
-#: src/goabackend/goakerberosprovider.c:1297
+#: src/goabackend/goakerberosprovider.c:1308
 msgid "Ticketing is disabled for account"
 msgstr "Квитки заблоковано для цього облікового запису"
 
-#: src/goabackend/goakerberosprovider.c:1324
+#: src/goabackend/goakerberosprovider.c:1331
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr ""
 "Неможливо знайти збережені реєстраційні дані для основи «%s» у сховищі ключів"
 
-#: src/goabackend/goakerberosprovider.c:1339
+#: src/goabackend/goakerberosprovider.c:1345
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "Не знайдено паролю для основи «%s» у реєстраційних даних"
 
-#: src/goabackend/goakerberosprovider.c:1521
+#: src/goabackend/goakerberosprovider.c:1527
 msgid "Identity service returned invalid key"
 msgstr "Служба профілів повернула неправильний ключ"
 
@@ -398,50 +384,58 @@ msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:476
-#| msgid ""
-#| "Connect to a Microsoft Exchange provider to access calendars, contacts "
-#| "and files"
+#: src/goabackend/goamsgraphprovider.c:486
 msgid ""
 "Connect to Microsoft 365 to access email, calendars, contacts and files"
 msgstr ""
 "Встановіть з'єднання з надавачем даних Microsoft 365 для отримання доступу "
 "до пошти, календарів, записів контактів та файлів"
 
-#: src/goabackend/goamsgraphprovider.c:480
+#: src/goabackend/goamsgraphprovider.c:490
 msgid "Use Organization Account"
 msgstr "Скористатися обліковим записом організації"
 
-#: src/goabackend/goamsgraphprovider.c:481
+#: src/goabackend/goamsgraphprovider.c:491
 msgid "Connect using details from an organization or developer account"
 msgstr ""
-"Встановити з'єднання на основі даних з облікового запису організації або"
-" розробника"
+"Встановити з'єднання на основі даних з облікового запису організації або "
+"розробника"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:488
+#: src/goabackend/goamsgraphprovider.c:498
 msgid "Enter the details provided by your organization"
 msgstr "Введіть дані, які надано вам вашою організацією"
 
-#: src/goabackend/goamsgraphprovider.c:490
-#| msgid "_Client ID"
+#: src/goabackend/goamsgraphprovider.c:500
 msgid "_Client ID (Optional)"
 msgstr "_Ідентифікатор клієнта (необов'язковий)"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:492
+#: src/goabackend/goamsgraphprovider.c:502
 msgid "_Tenant ID"
 msgstr "Ідентифікатор _тенанта"
 
-#: src/goabackend/goamsgraphprovider.c:493
+#: src/goabackend/goamsgraphprovider.c:503
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "Приклад ідентифікатора: 00000000-0000-0000-0000-000000000000"
 
-#: src/goabackend/goamsgraphprovider.c:496
-#: src/goabackend/goaoauth2provider.c:943
-#: src/goabackend/goaproviderdialog.c:701
+#: src/goabackend/goamsgraphprovider.c:529
+#: src/goabackend/goaoauth2provider.c:959
+#: src/goabackend/goaproviderdialog.c:840
 msgid "_Sign In…"
 msgstr "_Увійти…"
+
+#: src/goabackend/goamsgraphprovider.c:537
+#: src/goabackend/goaoauth2provider.c:967
+msgid "_Copy Link"
+msgstr "_Копіювати посилання"
+
+#: src/goabackend/goamsgraphprovider.c:550
+#: src/goabackend/goaoauth2provider.c:977
+msgid "Copy the authorization URL to continue with a specific web browser."
+msgstr ""
+"Копіювати адресу уповноваження для продовження процедури у відповідному"
+" браузері."
 
 #: src/goabackend/goaoauth2provider.c:653
 #, c-format
@@ -472,21 +466,31 @@ msgstr "Помилка одержання маркера доступу:"
 msgid "Error getting identity: "
 msgstr "Помилка під час спроби отримання профілю: "
 
-#: src/goabackend/goaoauth2provider.c:941
+#: src/goabackend/goaoauth2provider.c:950
 #, c-format
 msgid "Sign in to %s with your browser"
 msgstr "Увійдіть до %s за допомогою вашого браузера"
 
-#: src/goabackend/goaoauth2provider.c:1530
+#: src/goabackend/goaoauth2provider.c:1182
+#| msgid "Failed to store credentials in the keyring"
+msgid "Failed to get session keyring"
+msgstr "Не вдалося отримати сховище ключів сеансу"
+
+#: src/goabackend/goaoauth2provider.c:1477
+#: src/goabackend/goaoauth2provider.c:1645
+msgid "Copied to clipboard"
+msgstr "Скопійовано до буфера обміну"
+
+#: src/goabackend/goaoauth2provider.c:1596
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Просили увійти як %s, але знайдено як %s"
 
-#: src/goabackend/goaoauth2provider.c:1758
+#: src/goabackend/goaoauth2provider.c:1833
 msgid "Credentials do not contain access_token"
 msgstr "Дані реєстрації не містять _маркера доступу"
 
-#: src/goabackend/goaoauth2provider.c:1802
+#: src/goabackend/goaoauth2provider.c:1877
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Не вдалось очистити маркер доступу (%s, %d): "
@@ -564,16 +568,16 @@ msgstr "ensure_credentials_sync не реалізовано на типі %s"
 #. * Account" dialogs. The %s is the name of the provider. eg.,
 #. * 'Google'.
 #.
-#: src/goabackend/goaproviderdialog.c:174
+#: src/goabackend/goaproviderdialog.c:183
 #, c-format
 msgid "%s Account"
 msgstr "Обліковий запис %s"
 
-#: src/goabackend/goaproviderdialog.c:618
+#: src/goabackend/goaproviderdialog.c:627
 msgid "Remove this Account?"
 msgstr "Вилучити цей обліковий запис"
 
-#: src/goabackend/goaproviderdialog.c:619
+#: src/goabackend/goaproviderdialog.c:628
 msgid ""
 "If you remove this Online Account you will have to connect to it again to "
 "use it with apps and services."
@@ -582,35 +586,45 @@ msgstr ""
 "встановлювати з ним з'єднання для того, щоб користуватися ним у програмах і "
 "службах."
 
-#: src/goabackend/goaproviderdialog.c:621
+#: src/goabackend/goaproviderdialog.c:630
 msgid "_Cancel"
 msgstr "_Скасувати"
 
-#: src/goabackend/goaproviderdialog.c:622
+#: src/goabackend/goaproviderdialog.c:631
 msgid "_Remove"
 msgstr "В_илучити"
 
-#: src/goabackend/goaproviderdialog.c:700
+#: src/goabackend/goaproviderdialog.c:767
+#| msgid "A %s account already exists for %s"
+msgid "An account with that name already exists"
+msgstr "Обліковий запис із такою назвою вже існує"
+
+#: src/goabackend/goaproviderdialog.c:839
 msgid "Sign in to reconnect to this account"
 msgstr "Увійдіть, щоб знову встановити з'єднання з цим обліковим записом"
 
-#: src/goabackend/goaproviderdialog.c:754
+#: src/goabackend/goaproviderdialog.c:868
+#| msgid "Account Details"
+msgid "_Account Name"
+msgstr "_Назва облікового запису"
+
+#: src/goabackend/goaproviderdialog.c:940
 msgid "_Remove…"
 msgstr "Ви_лучити…"
 
-#: src/goabackend/goaproviderdialog.c:849
+#: src/goabackend/goaproviderdialog.c:1036
 msgid "_Sign In"
 msgstr "_Увімкнути"
 
-#: src/goabackend/goaproviderdialog.c:911
+#: src/goabackend/goaproviderdialog.c:1098
 msgid "_Try Again"
 msgstr "Спробувати _ще раз"
 
-#: src/goabackend/goaproviderdialog.c:915
+#: src/goabackend/goaproviderdialog.c:1102
 msgid "_Ignore"
 msgstr "_Проігнорувати"
 
-#: src/goabackend/goaproviderdialog.c:1187
+#: src/goabackend/goaproviderdialog.c:1374
 msgid "Dialog was dismissed"
 msgstr "Вікно розпущено"
 
@@ -623,86 +637,86 @@ msgstr "TLS недоступний"
 msgid "Unknown authentication mechanism"
 msgstr "Помилка механізму автентифікації"
 
-#: src/goabackend/goautils.c:77
+#: src/goabackend/goautils.c:80
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "Обліковий запис %s уже існує для %s"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:190
+#: src/goabackend/goautils.c:193
 msgid "Failed to delete credentials from the keyring"
 msgstr "Не вдалось вилучити дані реєстрації зі сховища ключів"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:238
+#: src/goabackend/goautils.c:241
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Не вдалось одержати дані реєстрації зі сховища ключів"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:248
+#: src/goabackend/goautils.c:251
 msgid "No credentials found in the keyring"
 msgstr "Не вдалось знайти дані реєстрації у сховищі ключів"
 
-#: src/goabackend/goautils.c:261
+#: src/goabackend/goautils.c:264
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Помилка оброблення результатів, одержаних зі сховища ключів: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: src/goabackend/goautils.c:302
+#: src/goabackend/goautils.c:305
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Реєстраційні дані GOA %s для профілю %s"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:319
+#: src/goabackend/goautils.c:322
 msgid "Failed to store credentials in the keyring"
 msgstr "Не вдалось зберегти дані реєстрації у сховищі ключів"
 
-#: src/goabackend/goautils.c:787
+#: src/goabackend/goautils.c:790
 msgid "Not supported"
 msgstr "Немає підтримки"
 
-#: src/goabackend/goautils.c:791
+#: src/goabackend/goautils.c:794
 msgid "Not found"
 msgstr "Не знайдено"
 
-#: src/goabackend/goautils.c:805
+#: src/goabackend/goautils.c:808
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Код:%u — неочікувана відповідь від сервера"
 
-#: src/goabackend/goautils.c:830
+#: src/goabackend/goautils.c:833
 msgid "The signing certificate authority is not known."
 msgstr "Видавець підписаного сертифікату невідомий."
 
-#: src/goabackend/goautils.c:834
+#: src/goabackend/goautils.c:837
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr "Сертифікат не відповідає очікуваному, який одержано зі сторінки."
 
-#: src/goabackend/goautils.c:839
+#: src/goabackend/goautils.c:842
 msgid "The certificate’s activation time is still in the future."
 msgstr "Час активації сертифікату все ще у майбутньому."
 
-#: src/goabackend/goautils.c:843
+#: src/goabackend/goautils.c:846
 msgid "The certificate has expired."
 msgstr "Сертифікат застарів."
 
-#: src/goabackend/goautils.c:847
+#: src/goabackend/goautils.c:850
 msgid "The certificate has been revoked."
 msgstr "Сертифікат анульовано."
 
-#: src/goabackend/goautils.c:851
+#: src/goabackend/goautils.c:854
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Алгоритм сертифікату — небезпечний."
 
-#: src/goabackend/goautils.c:857
+#: src/goabackend/goautils.c:860
 msgid "Invalid certificate."
 msgstr "Хибний сертифікат."
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:892
+#: src/goabackend/goautils.c:895
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "Не знайдено %s з ідентифікатором «%s» у реєстраційних даних"
@@ -825,6 +839,12 @@ msgstr "Неможливо створити кеш реєстраційних д
 #, c-format
 msgid "Error closing file descriptor: %s"
 msgstr "Помилка при закритті файлового дескриптора: %s"
+
+#~ msgid "None"
+#~ msgstr "Немає"
+
+#~ msgid "_Sign in…"
+#~ msgstr "_Увійти…"
 
 #~| msgid ""
 #~| "Connect to a Microsoft 365 provider to access calendars, contacts and "
