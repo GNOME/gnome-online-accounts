@@ -4,12 +4,12 @@
 #
 # Julen Ruiz Aizpuru <julenx@gmail.com>, 2011.
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2012, 2013, 2014, 2015, 2016, 2017.
-# Asier Sarasua Garmendia  <asier.sarasua@gmail.com>, 2013, 2019, 2023, 2024.
+# Asier Sarasua Garmendia  <asier.sarasua@gmail.com>, 2013, 2019, 2023, 2024, 2025.
 msgid ""
 msgstr "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/issues\n"
-"POT-Creation-Date: 2024-08-20 15:00+0000\n"
-"PO-Revision-Date: 2024-08-25 19:00+0100\n"
+"POT-Creation-Date: 2025-02-12 23:03+0000\n"
+"PO-Revision-Date: 2025-02-27 19:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asier.sarasua@gmail.com>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -32,67 +32,67 @@ msgid ""
 msgstr "Kargatzea baimenduta dauden hornitzaileak adierazten dituzten kateen zerrenda (lehenetsia: 'all'). Abioan soilik ebaluatzen da hau. Zaharkituta: erabili sistemaren konfigurazio-direktorioko goa.conf horren ordez. Erabili [providers] enable=all gakoa. Gakoa hornitzaile-izenen zerrenda da, komaz bereizitakoa."
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1160 src/daemon/goadaemon.c:1480
+#: src/daemon/goadaemon.c:1162 src/daemon/goadaemon.c:1482
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Huts egin du honentzako hornitzailea bilatzean: %s"
 
-#: src/daemon/goadaemon.c:1423
+#: src/daemon/goadaemon.c:1425
 msgid "IsLocked property is set for account"
 msgstr "IsLocked propietatea kontuarentzako ezarri da"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1468
+#: src/daemon/goadaemon.c:1470
 msgid "ProviderType property is not set for account"
 msgstr "Ez da kontuaren ProviderType propietatea ezarri"
 
-#: src/daemon/goadaemon.c:1630
+#: src/daemon/goadaemon.c:1632
 #, c-format
 msgid "Failed to sign in to “%s”"
 msgstr "Huts egin du “%s” kontuan saioa hasteak"
 
-#: src/daemon/goadaemon.c:1635
+#: src/daemon/goadaemon.c:1637
 msgid "Failed to sign in to multiple accounts"
 msgstr "Huts egin du kontu anitzetan saioa hasteak"
 
-#: src/daemon/goadaemon.c:1644
+#: src/daemon/goadaemon.c:1646
 msgid "Online Accounts"
 msgstr "Lineako kontuak"
 
-#: src/daemon/goadaemon.c:1647
+#: src/daemon/goadaemon.c:1649
 msgid "Account Action Required"
 msgstr "Ekintza bat behar da kontuan"
 
 #. TODO: more specific
-#: src/goabackend/goadavclient.c:1187 src/goabackend/goaimapauthlogin.c:104
-#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:799
+#: src/goabackend/goadavclient.c:1190 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:802
 msgid "Authentication failed"
 msgstr "Autentifikazioak huts egin du"
 
-#: src/goabackend/goadavclient.c:1194
+#: src/goabackend/goadavclient.c:1197
 msgid "Cannot find WebDAV endpoint"
 msgstr "Ez da aurkitu WebDAV amaiera-puntua"
 
-#: src/goabackend/goadavclient.c:1295 src/goabackend/goawebdavprovider.c:648
+#: src/goabackend/goadavclient.c:1298 src/goabackend/goawebdavprovider.c:648
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "URI baliogabea: %s"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:276
+#: src/goabackend/goaewsclient.c:278
 msgid "Failed to parse autodiscover response XML"
 msgstr "Huts egin du autodiscover (automatikoki ezagutu) XML erantzuna analizatzean"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: src/goabackend/goaewsclient.c:287 src/goabackend/goaewsclient.c:302
-#: src/goabackend/goaewsclient.c:317
+#: src/goabackend/goaewsclient.c:289 src/goabackend/goaewsclient.c:304
+#: src/goabackend/goaewsclient.c:319
 #, c-format
 msgid "Failed to find “%s” element"
 msgstr "Huts egin du “%s” elementua bilatzean"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:338
+#: src/goabackend/goaewsclient.c:340
 msgid "Failed to find ASUrl in autodiscover response"
 msgstr "Huts egin du ASUrl bilatzeak autodiscover (automatikoki ezagutu) erantzunean"
 
@@ -118,15 +118,15 @@ msgid ""
 msgstr "Konektatu Microsoft Exchange hornitzaile batekin egutegiak, kontaktuak eta fitxategiak atzitzeko"
 
 #: src/goabackend/goaexchangeprovider.c:392
-#: src/goabackend/goaimapsmtpprovider.c:676
+#: src/goabackend/goaimapsmtpprovider.c:701
 msgid "_Email"
 msgstr "Posta e_lektronikoa"
 
 #: src/goabackend/goaexchangeprovider.c:393
 #: src/goabackend/goafedoraprovider.c:171
-#: src/goabackend/goaimapsmtpprovider.c:677
-#: src/goabackend/goaimapsmtpprovider.c:719
-#: src/goabackend/goaimapsmtpprovider.c:749
+#: src/goabackend/goaimapsmtpprovider.c:702
+#: src/goabackend/goaimapsmtpprovider.c:745
+#: src/goabackend/goaimapsmtpprovider.c:789
 #: src/goabackend/goawebdavprovider.c:408
 msgid "_Password"
 msgstr "_Pasahitza"
@@ -143,8 +143,8 @@ msgstr "Kontuaren xehetasunak"
 
 #: src/goabackend/goaexchangeprovider.c:406
 #: src/goabackend/goafedoraprovider.c:170
-#: src/goabackend/goaimapsmtpprovider.c:718
-#: src/goabackend/goaimapsmtpprovider.c:748
+#: src/goabackend/goaimapsmtpprovider.c:744
+#: src/goabackend/goaimapsmtpprovider.c:788
 #: src/goabackend/goawebdavprovider.c:407
 msgid "User_name"
 msgstr "_Erabiltzaile-izena"
@@ -162,11 +162,11 @@ msgid "Fedora"
 msgstr "Fedora"
 
 #: src/goabackend/goafedoraprovider.c:167
-#: src/goabackend/goakerberosprovider.c:599
+#: src/goabackend/goakerberosprovider.c:598
 msgid "Access restricted web and network resources for your organization"
 msgstr "Atzitu zure erakundearen sarbide mugatuko sareko baliabideak"
 
-#: src/goabackend/goafedoraprovider.c:338
+#: src/goabackend/goafedoraprovider.c:339
 #, c-format
 msgid "Failed to get principal from user name “%s”"
 msgstr "Huts egin du “%s” erabiltzaile-izenaren nagusia eskuratzeak"
@@ -175,28 +175,28 @@ msgstr "Huts egin du “%s” erabiltzaile-izenaren nagusia eskuratzeak"
 msgid "Google"
 msgstr "Google"
 
-#: src/goabackend/goagoogleprovider.c:213
+#: src/goabackend/goagoogleprovider.c:211
 #: src/goabackend/goamsgraphprovider.c:184
-#: src/goabackend/goawindowsliveprovider.c:165
+#: src/goabackend/goawindowsliveprovider.c:163
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
 msgstr "'200' egoera espero zen zure IDa eskatzean, horren ordez '%d' (%s) egoera jaso da"
 
 #. TODO: more specific
-#: src/goabackend/goagoogleprovider.c:232
-#: src/goabackend/goagoogleprovider.c:243
+#: src/goabackend/goagoogleprovider.c:230
+#: src/goabackend/goagoogleprovider.c:241
 #: src/goabackend/goamsgraphprovider.c:203
 #: src/goabackend/goamsgraphprovider.c:214
 #: src/goabackend/goamsgraphprovider.c:227
 #: src/goabackend/goamsgraphprovider.c:252
 #: src/goabackend/goaoauth2provider.c:677
 #: src/goabackend/goaoauth2provider.c:707
-#: src/goabackend/goaoauth2provider.c:718 src/goabackend/goautils.c:133
-#: src/goabackend/goawindowsliveprovider.c:184
-#: src/goabackend/goawindowsliveprovider.c:195
-#: src/goabackend/goawindowsliveprovider.c:204
-#: src/goabackend/goawindowsliveprovider.c:217
+#: src/goabackend/goaoauth2provider.c:718 src/goabackend/goautils.c:136
+#: src/goabackend/goawindowsliveprovider.c:182
+#: src/goabackend/goawindowsliveprovider.c:193
+#: src/goabackend/goawindowsliveprovider.c:202
+#: src/goabackend/goawindowsliveprovider.c:215
 msgid "Could not parse response"
 msgstr "Ezin izan da erantzuna aztertu"
 
@@ -229,89 +229,86 @@ msgstr "IMAP eta SMTP"
 msgid "Invalid %s with username “%s” (%s, %d): "
 msgstr "“%s” eremu baliogabea “%s” erabiltzailearekin (%s, %d): "
 
-#: src/goabackend/goaimapsmtpprovider.c:592
+#: src/goabackend/goaimapsmtpprovider.c:566
+#: src/goabackend/goaimapsmtpprovider.c:589
+#: src/goabackend/goaimapsmtpprovider.c:724
+#: src/goabackend/goaimapsmtpprovider.c:765
+#: src/goabackend/goaimapsmtpprovider.c:809
+msgid "Auto-detected"
+msgstr "Detekzio automatikoa"
+
+#: src/goabackend/goaimapsmtpprovider.c:618
 msgid "Unable to auto-detect IMAP and SMTP settings"
 msgstr "Ezin dira IMAP eta SMTP ezarpenak automatikoki detektatu"
 
-#. Keep in sync with GoaTlsType
-#: src/goabackend/goaimapsmtpprovider.c:663
-msgid "None"
-msgstr "Bat ere ez"
-
-#. GOA_TLS_TYPE_NONE
-#: src/goabackend/goaimapsmtpprovider.c:664
+#: src/goabackend/goaimapsmtpprovider.c:689
 msgid "STARTTLS after connecting"
 msgstr "STARTTLS konektatu ostean"
 
 #. GOA_TLS_TYPE_STARTTLS
-#: src/goabackend/goaimapsmtpprovider.c:665
+#: src/goabackend/goaimapsmtpprovider.c:690
 msgid "SSL on a dedicated port"
 msgstr "SSL ataka dedikatu batean"
 
-#: src/goabackend/goaimapsmtpprovider.c:670
-#: src/goabackend/goaimapsmtpprovider.c:1375
+#: src/goabackend/goaimapsmtpprovider.c:695
+#: src/goabackend/goaimapsmtpprovider.c:1435
 msgid "Email"
 msgstr "Posta elektronikoa"
 
-#: src/goabackend/goaimapsmtpprovider.c:671
+#: src/goabackend/goaimapsmtpprovider.c:696
 msgid "Connect to an email account"
 msgstr "Konektatu posta elektronikoko kontu batekin"
 
-#: src/goabackend/goaimapsmtpprovider.c:675
+#: src/goabackend/goaimapsmtpprovider.c:700
 msgid "_Name"
 msgstr "_Izena"
 
-#: src/goabackend/goaimapsmtpprovider.c:678
+#: src/goabackend/goaimapsmtpprovider.c:703
 msgid ""
 "IMAP and SMTP details will be auto-detected from your service provider when "
 "possible"
 msgstr "IMAP eta SMTP xehetasunak automatikoki detektatuko dira zure zerbitzu-hornitzailearen bidez, posible bada"
 
 #. IMAP
-#: src/goabackend/goaimapsmtpprovider.c:716
+#: src/goabackend/goaimapsmtpprovider.c:742
 msgid "IMAP Settings"
 msgstr "IMAP ezarpenak"
 
-#: src/goabackend/goaimapsmtpprovider.c:717
+#: src/goabackend/goaimapsmtpprovider.c:743
 msgid "IMAP _Server"
 msgstr "IMAP _zerbitzaria"
 
-#: src/goabackend/goaimapsmtpprovider.c:725
-#: src/goabackend/goaimapsmtpprovider.c:755
+#: src/goabackend/goaimapsmtpprovider.c:754
+#: src/goabackend/goaimapsmtpprovider.c:798
 msgid "Encryption"
 msgstr "Zifratzea"
 
-#: src/goabackend/goaimapsmtpprovider.c:733
-#: src/goabackend/goaimapsmtpprovider.c:763
-msgid "Auto-detected"
-msgstr "Detekzio automatikoa"
-
-#: src/goabackend/goaimapsmtpprovider.c:739
+#: src/goabackend/goaimapsmtpprovider.c:779
 msgid "Example server: imap.example.com"
 msgstr "Adibideko zerbitzaria: imap.adibidea.com"
 
 #. SMTP
-#: src/goabackend/goaimapsmtpprovider.c:746
+#: src/goabackend/goaimapsmtpprovider.c:786
 msgid "SMTP Settings"
 msgstr "SMTP ezarpenak"
 
-#: src/goabackend/goaimapsmtpprovider.c:747
+#: src/goabackend/goaimapsmtpprovider.c:787
 msgid "SMTP _Server"
 msgstr "_SMTP zerbitzaria"
 
-#: src/goabackend/goaimapsmtpprovider.c:769
+#: src/goabackend/goaimapsmtpprovider.c:823
 msgid "Example server: smtp.example.com"
 msgstr "Adibideko zerbitzaria: smtp.adibidea.com"
 
-#: src/goabackend/goaimapsmtpprovider.c:1366
+#: src/goabackend/goaimapsmtpprovider.c:1426
 msgid "Name"
 msgstr "Izena"
 
-#: src/goabackend/goaimapsmtpprovider.c:1392
+#: src/goabackend/goaimapsmtpprovider.c:1452
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1410
+#: src/goabackend/goaimapsmtpprovider.c:1470
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -336,33 +333,29 @@ msgstr "Sartu zure pasahitza behean."
 msgid "Remember this password"
 msgstr "Gogoratu pasahitz hau"
 
-#: src/goabackend/goakerberosprovider.c:602
+#: src/goabackend/goakerberosprovider.c:601
 msgid "_Principal"
 msgstr "_Nagusia"
 
-#: src/goabackend/goakerberosprovider.c:603
+#: src/goabackend/goakerberosprovider.c:602
 msgid "Example principal: user@EXAMPLE.COM"
 msgstr "Adibide nagusia: erabiltzailea@ADIBIDEA.COM"
 
-#: src/goabackend/goakerberosprovider.c:606
-msgid "_Sign in…"
-msgstr "_Hasi saioa…"
-
-#: src/goabackend/goakerberosprovider.c:1297
+#: src/goabackend/goakerberosprovider.c:1308
 msgid "Ticketing is disabled for account"
 msgstr "Kontuaren tiketa sortzea desgaituta dago"
 
-#: src/goabackend/goakerberosprovider.c:1324
+#: src/goabackend/goakerberosprovider.c:1331
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr "Ezin izan da gordetako “%s” nagusiaren kredentzialik aurkitu gako-sortan"
 
-#: src/goabackend/goakerberosprovider.c:1339
+#: src/goabackend/goakerberosprovider.c:1345
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "Ez da “%s” nagusiaren pasahitzik aurkitu kredentzialetan"
 
-#: src/goabackend/goakerberosprovider.c:1521
+#: src/goabackend/goakerberosprovider.c:1527
 msgid "Identity service returned invalid key"
 msgstr "Identitatearen zerbitzuak baliogabeko gakoa itzuli du"
 
@@ -376,41 +369,51 @@ msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:476
+#: src/goabackend/goamsgraphprovider.c:486
 msgid "Connect to Microsoft 365 to access email, calendars, contacts and files"
 msgstr "Konektatu Microsoft 365ekin egutegiak, kontaktuak eta fitxategiak atzitzeko"
 
-#: src/goabackend/goamsgraphprovider.c:480
+#: src/goabackend/goamsgraphprovider.c:490
 msgid "Use Organization Account"
 msgstr "Erabili erakundearen kontua"
 
-#: src/goabackend/goamsgraphprovider.c:481
+#: src/goabackend/goamsgraphprovider.c:491
 msgid "Connect using details from an organization or developer account"
 msgstr "Konektatu erakundearen edo garatzaile-kontu bateko xehetasunak erabiliz"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:488
+#: src/goabackend/goamsgraphprovider.c:498
 msgid "Enter the details provided by your organization"
 msgstr "Sartu zure erakundeak emandako xehetasunak"
 
-#: src/goabackend/goamsgraphprovider.c:490
+#: src/goabackend/goamsgraphprovider.c:500
 msgid "_Client ID (Optional)"
 msgstr "_Bezeroaren IDa (aukerakoa)"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:492
+#: src/goabackend/goamsgraphprovider.c:502
 msgid "_Tenant ID"
 msgstr "_Maizterraren IDa"
 
-#: src/goabackend/goamsgraphprovider.c:493
+#: src/goabackend/goamsgraphprovider.c:503
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "Adibideko IDa: 00000000-0000-0000-0000-000000000000"
 
-#: src/goabackend/goamsgraphprovider.c:496
-#: src/goabackend/goaoauth2provider.c:943
-#: src/goabackend/goaproviderdialog.c:701
+#: src/goabackend/goamsgraphprovider.c:529
+#: src/goabackend/goaoauth2provider.c:959
+#: src/goabackend/goaproviderdialog.c:840
 msgid "_Sign In…"
 msgstr "_Hasi saioa…"
+
+#: src/goabackend/goamsgraphprovider.c:537
+#: src/goabackend/goaoauth2provider.c:967
+msgid "_Copy Link"
+msgstr "_Kopiatu esteka"
+
+#: src/goabackend/goamsgraphprovider.c:550
+#: src/goabackend/goaoauth2provider.c:977
+msgid "Copy the authorization URL to continue with a specific web browser."
+msgstr "Kopiatu baimenaren URLa web arakatzaile jakin batekin jarraitzeko."
 
 #: src/goabackend/goaoauth2provider.c:653
 #, c-format
@@ -439,21 +442,30 @@ msgstr "Errorea atzipen-tokena lortzean: "
 msgid "Error getting identity: "
 msgstr "Errorea identitatea lortzean: "
 
-#: src/goabackend/goaoauth2provider.c:941
+#: src/goabackend/goaoauth2provider.c:950
 #, c-format
 msgid "Sign in to %s with your browser"
 msgstr "Hasi saioa %s gunean zure nabigatzailearekin"
 
-#: src/goabackend/goaoauth2provider.c:1530
+#: src/goabackend/goaoauth2provider.c:1182
+msgid "Failed to get session keyring"
+msgstr "Huts egin du saioaren gako sorta eskuratzeak"
+
+#: src/goabackend/goaoauth2provider.c:1477
+#: src/goabackend/goaoauth2provider.c:1645
+msgid "Copied to clipboard"
+msgstr "Kopiatu arbelean"
+
+#: src/goabackend/goaoauth2provider.c:1596
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "'%s' gisa saioa hasteko eskatu da, baina '%s' gisa hasi da saioa"
 
-#: src/goabackend/goaoauth2provider.c:1758
+#: src/goabackend/goaoauth2provider.c:1833
 msgid "Credentials do not contain access_token"
 msgstr "Kredentzialek ez daukate 'access_token'"
 
-#: src/goabackend/goaoauth2provider.c:1802
+#: src/goabackend/goaoauth2provider.c:1877
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Huts egin du atzipen-tokena freskatzean (%s, %d): "
@@ -531,50 +543,58 @@ msgstr "'ensure_credentials_sync' ez dago inplementatuta %s motan"
 #. * Account" dialogs. The %s is the name of the provider. eg.,
 #. * 'Google'.
 #.
-#: src/goabackend/goaproviderdialog.c:174
+#: src/goabackend/goaproviderdialog.c:183
 #, c-format
 msgid "%s Account"
 msgstr "%s kontua"
 
-#: src/goabackend/goaproviderdialog.c:618
+#: src/goabackend/goaproviderdialog.c:627
 msgid "Remove this Account?"
 msgstr "Kendu kontu hau?"
 
-#: src/goabackend/goaproviderdialog.c:619
+#: src/goabackend/goaproviderdialog.c:628
 msgid ""
 "If you remove this Online Account you will have to connect to it again to "
 "use it with apps and services."
 msgstr "Lineako kontu hau kentzen baduzu, berriro konektatu beharko duzu kontua aplikazioekin eta zerbitzuekin erabiltzeko."
 
-#: src/goabackend/goaproviderdialog.c:621
+#: src/goabackend/goaproviderdialog.c:630
 msgid "_Cancel"
 msgstr "_Utzi"
 
-#: src/goabackend/goaproviderdialog.c:622
+#: src/goabackend/goaproviderdialog.c:631
 msgid "_Remove"
 msgstr "_Kendu"
 
-#: src/goabackend/goaproviderdialog.c:700
+#: src/goabackend/goaproviderdialog.c:767
+msgid "An account with that name already exists"
+msgstr "Izen hori duen kontu bat badago lehendik ere"
+
+#: src/goabackend/goaproviderdialog.c:839
 msgid "Sign in to reconnect to this account"
 msgstr "Hasi saioa kontu honekin berriro konektatzeko"
 
-#: src/goabackend/goaproviderdialog.c:754
+#: src/goabackend/goaproviderdialog.c:868
+msgid "_Account Name"
+msgstr "K_ontuaren izena"
+
+#: src/goabackend/goaproviderdialog.c:940
 msgid "_Remove…"
 msgstr "_Kendu…"
 
-#: src/goabackend/goaproviderdialog.c:849
+#: src/goabackend/goaproviderdialog.c:1036
 msgid "_Sign In"
 msgstr "_Hasi saioa"
 
-#: src/goabackend/goaproviderdialog.c:911
+#: src/goabackend/goaproviderdialog.c:1098
 msgid "_Try Again"
 msgstr "_Saiatu berriro"
 
-#: src/goabackend/goaproviderdialog.c:915
+#: src/goabackend/goaproviderdialog.c:1102
 msgid "_Ignore"
 msgstr "_Ez ikusi egin"
 
-#: src/goabackend/goaproviderdialog.c:1187
+#: src/goabackend/goaproviderdialog.c:1374
 msgid "Dialog was dismissed"
 msgstr "Elkarrizketa-koadroa itxi egin da"
 
@@ -587,86 +607,86 @@ msgstr "TLS ez dago erabilgarri"
 msgid "Unknown authentication mechanism"
 msgstr "Autentifikazioaren protokoloa ezezaguna"
 
-#: src/goabackend/goautils.c:77
+#: src/goabackend/goautils.c:80
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "%2$s(r)en %1$s kontua badago lehendik ere"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:190
+#: src/goabackend/goautils.c:193
 msgid "Failed to delete credentials from the keyring"
 msgstr "Huts egin du kredentzialak gako-sortatik ezabatzean"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:238
+#: src/goabackend/goautils.c:241
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Huts egin du kredentzialak gako-sortatik eskuratzean"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:248
+#: src/goabackend/goautils.c:251
 msgid "No credentials found in the keyring"
 msgstr "Ez da kredentzialik aurkitu gako-sortan"
 
-#: src/goabackend/goautils.c:261
+#: src/goabackend/goautils.c:264
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Errorea gako-sortatik eskuratutako erantzuna analizatzean: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: src/goabackend/goautils.c:302
+#: src/goabackend/goautils.c:305
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "GOA %s kredentzialak %s identitatearentzako"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:319
+#: src/goabackend/goautils.c:322
 msgid "Failed to store credentials in the keyring"
 msgstr "Huts egin du kredentzialak gako-sortan gordetzean"
 
-#: src/goabackend/goautils.c:787
+#: src/goabackend/goautils.c:790
 msgid "Not supported"
 msgstr "Ez dago onartuta"
 
-#: src/goabackend/goautils.c:791
+#: src/goabackend/goautils.c:794
 msgid "Not found"
 msgstr "Ez da aurkitu"
 
-#: src/goabackend/goautils.c:805
+#: src/goabackend/goautils.c:808
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Kodea: %u - Zerbitzariaren ustekabeko erantzuna"
 
-#: src/goabackend/goautils.c:830
+#: src/goabackend/goautils.c:833
 msgid "The signing certificate authority is not known."
 msgstr "Sinaduraren ziurtagiri-emailea ezezaguna da."
 
-#: src/goabackend/goautils.c:834
+#: src/goabackend/goautils.c:837
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr "Ziurtagiria ez dator bat eskuratu den guneko (eta espero zen) identitatearekin."
 
-#: src/goabackend/goautils.c:839
+#: src/goabackend/goautils.c:842
 msgid "The certificate’s activation time is still in the future."
 msgstr "Ziurtagiria aktibatzeko data oraindik etorkizunekoa da."
 
-#: src/goabackend/goautils.c:843
+#: src/goabackend/goautils.c:846
 msgid "The certificate has expired."
 msgstr "Ziurtagiria iraungi da."
 
-#: src/goabackend/goautils.c:847
+#: src/goabackend/goautils.c:850
 msgid "The certificate has been revoked."
 msgstr "Ziurtagiria errebokatu da."
 
-#: src/goabackend/goautils.c:851
+#: src/goabackend/goautils.c:854
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Ziurtagiriaren algoritmoa ez da segurutzat jotzen."
 
-#: src/goabackend/goautils.c:857
+#: src/goabackend/goautils.c:860
 msgid "Invalid certificate."
 msgstr "Baliogabeko ziurtagiria."
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:892
+#: src/goabackend/goautils.c:895
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "Ez du “%2$s” identitateko “%1$s” eremurik aurkitu kredentzialetan"
@@ -787,6 +807,12 @@ msgstr "Ezin izan da kredentzialaren cachea sortu identitatearentzako"
 #, c-format
 msgid "Error closing file descriptor: %s"
 msgstr "Errorea fitxategiaren deskriptorea ixtean: %s"
+
+#~ msgid "None"
+#~ msgstr "Bat ere ez"
+
+#~ msgid "_Sign in…"
+#~ msgstr "_Hasi saioa…"
 
 #~ msgid "Connect to a Microsoft 365 provider to access files"
 #~ msgstr "Konektatu Microsoft 365 hornitzaile batekin fitxategiak atzitzeko"
