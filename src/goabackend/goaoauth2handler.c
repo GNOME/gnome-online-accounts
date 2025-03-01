@@ -2,6 +2,7 @@
 /*
  * Copyright © 2023 GNOME Foundation Inc.
  * Contributor: Andy Holmes <andyholmes@gnome.org>
+ * Contributor: Jan-Michael Brummer <jan-michael.brummer1@volkswagen.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,21 +21,11 @@
 #include "config.h"
 
 #include <glib.h>
-#include <libsecret/secret.h>
+#include <gio/gio.h>
 
-
-static const SecretSchema oauth2_schema =
-{
-  .name = "org.gnome.OnlineAccounts.OAuth2",
-  .flags = SECRET_SCHEMA_NONE,
-  .attributes = {
-    {
-      .name = "goa-oauth2-client",
-      .type = SECRET_SCHEMA_ATTRIBUTE_STRING,
-    },
-    { "NULL", 0 }
-  }
-};
+#define OAUTH2_DBUS_HANDLER_NAME  "org.gnome.OnlineAccounts.OAuth2"
+#define OAUTH2_DBUS_HANDLER_PATH  "/org/gnome/OnlineAccounts/OAuth2"
+#define OAUTH2_DBUS_HANDLER_IFACE "org.gnome.OnlineAccounts.OAuth2"
 
 static struct
 {
@@ -88,7 +79,11 @@ main (int    argc,
   const char *scheme = NULL;
   const char *path = NULL;
   const char *client_id = NULL;
+  g_autoptr (GDBusConnection) connection = NULL;
+  g_autoptr (GVariant) reply = NULL;
   g_autoptr (GError) error = NULL;
+
+  g_set_prgname ("goa-oauth2-handler");
 
   if (argc < 2)
     {
@@ -141,18 +136,27 @@ main (int    argc,
       return EXIT_FAILURE;
     }
 
-  if (!secret_password_store_sync (&oauth2_schema,
-                                   SECRET_COLLECTION_SESSION,
-                                   "GNOME Online Accounts OAuth2 URI",
-                                   argv[1], /* Secret */
-                                   NULL,
-                                   &error,
-                                   "goa-oauth2-client", client_id,
-                                   NULL))
+  connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
+  if (connection == NULL)
     {
-      if (error != NULL)
-        g_printerr ("%s: Failed to store OAuth2 URI: %s\n", argv[0], error->message);
+      g_printerr ("Failed to get session bus: %s\n", error->message);
+      return EXIT_FAILURE;
+    }
 
+  reply = g_dbus_connection_call_sync (connection,
+                                       OAUTH2_DBUS_HANDLER_NAME,
+                                       OAUTH2_DBUS_HANDLER_PATH,
+                                       OAUTH2_DBUS_HANDLER_IFACE,
+                                       "Response",
+                                       g_variant_new ("(ss)", client_id, argv[1] /* redirect URI */),
+                                       NULL,
+                                       G_DBUS_CALL_FLAGS_NO_AUTO_START, /* not applicable */
+                                       -1,
+                                       NULL,
+                                       &error);
+  if (reply == NULL)
+    {
+      g_printerr ("Failed to forward authorization response: %s\n", error->message);
       return EXIT_FAILURE;
     }
 

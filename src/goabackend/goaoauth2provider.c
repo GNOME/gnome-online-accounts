@@ -32,6 +32,10 @@
 #include "goaoauth2provider-priv.h"
 #include "goarestproxy.h"
 
+#define OAUTH2_DBUS_HANDLER_NAME  "org.gnome.OnlineAccounts.OAuth2"
+#define OAUTH2_DBUS_HANDLER_PATH  "/org/gnome/OnlineAccounts/OAuth2"
+#define OAUTH2_DBUS_HANDLER_IFACE "org.gnome.OnlineAccounts.OAuth2"
+
 /**
  * SECTION:goaoauth2provider
  * @title: GoaOAuth2Provider
@@ -997,24 +1001,161 @@ create_account_details_ui (GoaProvider *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static const SecretSchema oauth2_schema =
+static GHashTable *oauth2_handler_authorization_tasks = NULL;
+static GDBusNodeInfo *oauth2_handler_dbus_info = NULL;
+static const char oauth2_handler_dbus_xml[] =
+  "<node>"
+  "  <interface name='"OAUTH2_DBUS_HANDLER_IFACE"'>"
+  "    <method name='Response'>"
+  "      <arg type='s' name='client-id' direction='in'/>"
+  "      <arg type='s' name='response' direction='in'/>"
+  "    </method>"
+  "  </interface>"
+  "</node>";
+
+static void
+oauth2_handler_dbus_method_call (GDBusConnection       *connection,
+                                 const char            *sender,
+                                 const char            *object_path,
+                                 const char            *interface_name,
+                                 const char            *method_name,
+                                 GVariant              *parameters,
+                                 GDBusMethodInvocation *invocation,
+                                 gpointer               user_data)
 {
-  .name = "org.gnome.OnlineAccounts.OAuth2",
-  .flags = SECRET_SCHEMA_NONE,
-  .attributes = {
+  g_assert (oauth2_handler_authorization_tasks != NULL);
+
+  if (g_strcmp0 (method_name, "Response") == 0)
     {
-      .name = "goa-oauth2-client",
-      .type = SECRET_SCHEMA_ATTRIBUTE_STRING,
-    },
-    { "NULL", 0 }
-  }
-};
+      const char *client_id = NULL;
+      const char *response = NULL;
+      g_autofree char *request_key = NULL;
+      g_autoptr(GTask) request_task = NULL;
+
+      g_variant_get (parameters, "(&s&s)", &client_id, &response);
+      if (!g_hash_table_steal_extended (oauth2_handler_authorization_tasks,
+                                        client_id,
+                                        (gpointer *)&request_key,
+                                        (gpointer *)&request_task))
+        {
+          g_dbus_method_invocation_return_error (invocation,
+                                                 G_DBUS_ERROR,
+                                                 G_DBUS_ERROR_INVALID_ARGS,
+                                                 "Unknown request for response \"%s\"",
+                                                 response);
+          return;
+        }
+
+      g_dbus_method_invocation_return_value (invocation, NULL);
+      g_task_return_pointer (request_task, g_strdup (response), g_free);
+      return;
+    }
+
+  g_dbus_method_invocation_return_error (invocation,
+                                         G_DBUS_ERROR,
+                                         G_DBUS_ERROR_UNKNOWN_METHOD,
+                                         "Unknown method %s on %s",
+                                         method_name,
+                                         interface_name);
+}
+
+static const GDBusInterfaceVTable oauth2_handler_dbus_vtable =
+  {
+    oauth2_handler_dbus_method_call,
+    NULL,
+    NULL
+  };
+
+static void
+on_bus_acquired (GDBusConnection *connection,
+                 const char      *name,
+                 gpointer         user_data)
+{
+  GError *error = NULL;
+
+  g_dbus_connection_register_object (connection,
+                                     OAUTH2_DBUS_HANDLER_PATH,
+                                     oauth2_handler_dbus_info->interfaces[0],
+                                     &oauth2_handler_dbus_vtable,
+                                     NULL,
+                                     NULL,
+                                     &error);
+  g_assert_no_error (error);
+}
+
+static void
+goa_oauth2_provider_register_authorization_task (GoaOAuth2Provider *provider,
+                                                 GTask             *task)
+{
+  static size_t guard = 0;
+  const char *client_id = NULL;
+  g_autofree char *concurrent_client_id = NULL;
+  g_autoptr(GTask) concurrent_task = NULL;
+
+  g_assert (GOA_IS_OAUTH2_PROVIDER (provider));
+  g_assert (G_IS_TASK (task));
+
+  if (g_once_init_enter (&guard))
+    {
+      oauth2_handler_authorization_tasks = g_hash_table_new_full (g_str_hash,
+                                                            g_str_equal,
+                                                            g_free,
+                                                            g_object_unref);
+      oauth2_handler_dbus_info = g_dbus_node_info_new_for_xml (oauth2_handler_dbus_xml, NULL);
+      g_bus_own_name (G_BUS_TYPE_SESSION,
+                      OAUTH2_DBUS_HANDLER_NAME,
+                      G_BUS_NAME_OWNER_FLAGS_NONE,
+                      on_bus_acquired,
+                      NULL,
+                      NULL,
+                      NULL,
+                      NULL);
+      g_once_init_leave (&guard, 1);
+    }
+
+  /* If there is an existing authorization request, we assume it's a
+   * dangling task, return an error and proceed with the new request.
+   */
+  client_id = goa_oauth2_provider_get_client_id (provider);
+  if (g_hash_table_steal_extended (oauth2_handler_authorization_tasks,
+                                   client_id,
+                                   (gpointer *)&concurrent_client_id,
+                                   (gpointer *)&concurrent_task))
+    {
+      g_task_return_new_error (concurrent_task,
+                               GOA_ERROR,
+                               GOA_ERROR_FAILED,
+                               "Superseded by new authorization request for \"%s\"",
+                               goa_provider_get_provider_name (GOA_PROVIDER (provider), NULL));
+    }
+
+  g_hash_table_replace (oauth2_handler_authorization_tasks,
+                        g_strdup (client_id),
+                        g_object_ref (task));
+}
+
+static void
+goa_oauth2_provider_unregister_authorization_task (GoaOAuth2Provider *provider,
+                                                   GTask             *task)
+{
+  const char *client_id = NULL;
+
+  g_assert (GOA_IS_OAUTH2_PROVIDER (provider));
+  g_assert (G_IS_TASK (task));
+
+  /* Ensure we're not removing a task that's been superseded
+   */
+  client_id = goa_oauth2_provider_get_client_id (provider);
+  if (g_hash_table_lookup (oauth2_handler_authorization_tasks, client_id) == task)
+    g_hash_table_remove (oauth2_handler_authorization_tasks, client_id);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
 
 typedef struct
 {
   char *request_uri;
   GoaAuthFlowFlags flags;
-  SecretCollection *collection;
   GCancellable *cancellable;
   unsigned long cancellable_id;
   unsigned int completed : 1;
@@ -1029,69 +1170,8 @@ authorize_uri_data_free (gpointer user_data)
     g_cancellable_disconnect (data->cancellable, data->cancellable_id);
 
   g_clear_object (&data->cancellable);
-  g_clear_object (&data->collection);
   g_clear_pointer (&data->request_uri, g_free);
   g_free (data);
-}
-
-static void
-authorize_uri_cancelled (GCancellable *cancellable,
-                         GTask        *task)
-{
-  AuthorizeUriData *data = g_task_get_task_data (task);
-
-  if (!data->completed)
-    {
-      g_task_return_error_if_cancelled (task);
-      g_signal_handlers_disconnect_by_data (data->collection, task);
-      data->completed = TRUE;
-    }
-}
-
-static void
-authorize_uri_check_response_cb (GObject      *object,
-                                 GAsyncResult *result,
-                                 gpointer      user_data)
-{
-  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
-  AuthorizeUriData *data = g_task_get_task_data (task);
-  g_autofree char *response_uri = NULL;
-  GError *error = NULL;
-
-  /* A lookup may resolve after the task has completed or cancelled.
-   */
-  if (data->completed)
-    return;
-
-  response_uri = secret_password_lookup_finish (result, &error);
-  if (response_uri != NULL)
-    {
-      g_task_return_pointer (task, g_steal_pointer (&response_uri), g_free);
-      g_signal_handlers_disconnect_by_data (data->collection, task);
-      data->completed = TRUE;
-    }
-  else if (error != NULL)
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      g_signal_handlers_disconnect_by_data (data->collection, task);
-      data->completed = TRUE;
-    }
-}
-
-static void
-authorize_uri_collection_changed_cb (SecretCollection *collection,
-                                     GParamSpec       *pspec,
-                                     GTask            *task)
-{
-  GoaOAuth2Provider *self = g_task_get_source_object (task);
-  GCancellable *cancellable = g_task_get_cancellable (task);
-
-  secret_password_lookup (&oauth2_schema,
-                          cancellable,
-                          (GAsyncReadyCallback) authorize_uri_check_response_cb,
-                          g_object_ref (task),
-                          "goa-oauth2-client", goa_oauth2_provider_get_client_id (self),
-                          NULL);
 }
 
 static void
@@ -1100,127 +1180,14 @@ authorize_uri_launch_uri_cb (GObject      *object,
                              gpointer      user_data)
 {
   g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
-  AuthorizeUriData *data = g_task_get_task_data (task);
+  GoaOAuth2Provider *provider = g_task_get_source_object (task);
   GError *error = NULL;
 
   if (!g_app_info_launch_default_for_uri_finish (result, &error))
     {
-      g_signal_handlers_disconnect_by_data (data->collection, task);
+      goa_oauth2_provider_unregister_authorization_task (provider, task);
       g_task_return_error (task, g_steal_pointer (&error));
     }
-}
-
-static void
-authorize_uri_reset_collection_cb (SecretCollection *collection,
-                                   GAsyncResult     *result,
-                                   gpointer          user_data)
-{
-  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
-  GCancellable *cancellable = g_task_get_cancellable (task);
-  AuthorizeUriData *data = g_task_get_task_data (task);
-  GError *error = NULL;
-
-  secret_password_clear_finish (result, &error);
-  if (error != NULL)
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
-  /* The signal handler holds a final reference on the task object, until
-   * the secret is added to the collection or an error occurs.
-   */
-  g_signal_connect_data (data->collection,
-                         "notify::items",
-                         G_CALLBACK (authorize_uri_collection_changed_cb),
-                         g_object_ref (task),
-                         (GClosureNotify)g_object_unref,
-                         G_CONNECT_DEFAULT);
-
-  /* If the operation is cancelled, the callback will complete the task and
-   * disconnect the signal handler holding the final reference on the task.
-   */
-  if (cancellable != NULL)
-    {
-      data->cancellable = g_object_ref (cancellable);
-      data->cancellable_id = g_cancellable_connect (cancellable,
-                                                    G_CALLBACK (authorize_uri_cancelled),
-                                                    task, NULL);
-    }
-
-  if ((data->flags & GOA_AUTH_FLOW_DO_NOT_LAUNCH_URI) == 0)
-    {
-      g_app_info_launch_default_for_uri_async (data->request_uri,
-                                               NULL,
-                                               cancellable,
-                                               (GAsyncReadyCallback) authorize_uri_launch_uri_cb,
-                                               g_object_ref (task));
-    }
-}
-
-static void
-authorize_uri_get_collection_cb (SecretService *service,
-                                 GAsyncResult  *result,
-                                 gpointer       user_data)
-{
-  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
-  GoaOAuth2Provider *self = g_task_get_source_object (task);
-  GCancellable *cancellable = g_task_get_cancellable (task);
-  AuthorizeUriData *data = g_task_get_task_data (task);
-  GError *error = NULL;
-
-  g_return_if_fail (G_IS_TASK (task));
-
-  data->collection = secret_collection_for_alias_finish (result, &error);
-  if (data->collection == NULL)
-    {
-      if (error == NULL)
-        {
-          g_set_error_literal (&error,
-                               GOA_ERROR,
-                               GOA_ERROR_FAILED,
-                               _("Failed to get session keyring"));
-        }
-
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
-  /* Ensure there's no old authorization URI hanging around.
-   */
-  secret_password_clear (&oauth2_schema,
-                         cancellable,
-                         (GAsyncReadyCallback) authorize_uri_reset_collection_cb,
-                         g_object_ref (task),
-                         "goa-oauth2-client", goa_oauth2_provider_get_client_id (self),
-                         NULL);
-}
-
-static void
-authorize_uri_get_service_cb (GObject      *object,
-                              GAsyncResult *result,
-                              gpointer      user_data)
-{
-  g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
-  GCancellable *cancellable = g_task_get_cancellable (task);
-  g_autoptr(SecretService) service = NULL;
-  GError *error = NULL;
-
-  g_return_if_fail (G_IS_TASK (task));
-
-  service = secret_service_get_finish (result, &error);
-  if (service == NULL)
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
-  secret_collection_for_alias (service,
-                               SECRET_COLLECTION_SESSION,
-                               SECRET_COLLECTION_LOAD_ITEMS,
-                               cancellable,
-                               (GAsyncReadyCallback) authorize_uri_get_collection_cb,
-                               g_object_ref (task));
 }
 
 /*< private >
@@ -1263,10 +1230,15 @@ goa_oauth2_provider_authorize_uri (GoaOAuth2Provider   *provider,
   g_task_set_source_tag (task, goa_oauth2_provider_authorize_uri);
   g_task_set_task_data (task, data, authorize_uri_data_free);
 
-  secret_service_get (SECRET_SERVICE_LOAD_COLLECTIONS | SECRET_SERVICE_OPEN_SESSION,
-                      cancellable,
-                      (GAsyncReadyCallback) authorize_uri_get_service_cb,
-                      g_object_ref (task));
+  goa_oauth2_provider_register_authorization_task (provider, task);
+  if ((data->flags & GOA_AUTH_FLOW_DO_NOT_LAUNCH_URI) == 0)
+    {
+      g_app_info_launch_default_for_uri_async (data->request_uri,
+                                               NULL,
+                                               cancellable,
+                                               (GAsyncReadyCallback) authorize_uri_launch_uri_cb,
+                                               g_object_ref (task));
+    }
 }
 
 /*< private >
