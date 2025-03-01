@@ -88,9 +88,9 @@ got_bus_cb (GObject      *source_object,
       return;
     }
 
-  message = g_dbus_message_new_method_call ("org.gnome.OnlineAccounts.Helper",
-                                            "/org/gnome/OnlineAccounts/Helper",
-                                            "org.gnome.OnlineAccounts.Helper.Interface",
+  message = g_dbus_message_new_method_call ("org.gnome.OnlineAccounts.OAuth2",
+                                            "/org/gnome/OnlineAccounts/OAuth2",
+                                            "org.gnome.OnlineAccounts.OAuth2",
                                             "Response");
   body = g_variant_new ("(s)", uri_str);
 

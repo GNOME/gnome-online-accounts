@@ -1076,7 +1076,7 @@ on_bus_acquired (GDBusConnection *connection,
   GTask *task = user_data;
 
   registration_id = g_dbus_connection_register_object (connection,
-                                                       "/org/gnome/OnlineAccounts/Helper",
+                                                       "/org/gnome/OnlineAccounts/OAuth2",
                                                        introspection_data->interfaces[0],
                                                        &interface_vtable,
                                                        g_object_ref (task),
@@ -1088,7 +1088,7 @@ on_bus_acquired (GDBusConnection *connection,
 /* Introspection data for the service we are exporting */
 static const gchar introspection_xml[] =
   "<node>"
-  "  <interface name='org.gnome.OnlineAccounts.Helper.Interface'>"
+  "  <interface name='org.gnome.OnlineAccounts.OAuth2'>"
   "    <method name='Response'>"
   "      <arg type='s' name='response' direction='in'/>"
   "    </method>"
