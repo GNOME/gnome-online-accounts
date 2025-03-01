@@ -1001,7 +1001,6 @@ typedef struct
 {
   char *request_uri;
   GoaAuthFlowFlags flags;
-  SecretCollection *collection;
   GCancellable *cancellable;
   unsigned long cancellable_id;
   unsigned int completed : 1;
@@ -1016,7 +1015,6 @@ authorize_uri_data_free (gpointer user_data)
     g_cancellable_disconnect (data->cancellable, data->cancellable_id);
 
   g_clear_object (&data->cancellable);
-  g_clear_object (&data->collection);
   g_clear_pointer (&data->request_uri, g_free);
   g_free (data);
 }
@@ -1027,12 +1025,10 @@ authorize_uri_launch_uri_cb (GObject      *object,
                              gpointer      user_data)
 {
   g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
-  AuthorizeUriData *data = g_task_get_task_data (task);
   GError *error = NULL;
 
   if (!g_app_info_launch_default_for_uri_finish (result, &error))
     {
-      g_signal_handlers_disconnect_by_data (data->collection, task);
       g_task_return_error (task, g_steal_pointer (&error));
     }
 }
