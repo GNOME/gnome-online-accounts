@@ -1072,17 +1072,17 @@ on_bus_acquired (GDBusConnection *connection,
                  const gchar     *name,
                  gpointer         user_data)
 {
-  guint registration_id;
   GTask *task = user_data;
+  GError *error = NULL
 
-  registration_id = g_dbus_connection_register_object (connection,
-                                                       "/org/gnome/OnlineAccounts/OAuth2",
-                                                       introspection_data->interfaces[0],
-                                                       &interface_vtable,
-                                                       g_object_ref (task),
-                                                       NULL,
-                                                       NULL);
-  g_assert (registration_id > 0);
+  g_dbus_connection_register_object (connection,
+                                     "/org/gnome/OnlineAccounts/OAuth2",
+                                     introspection_data->interfaces[0],
+                                     &interface_vtable,
+                                     g_object_ref (task),
+                                     NULL,
+                                     &error);
+  g_assert_no_error (error);
 }
 
 /* Introspection data for the service we are exporting */
