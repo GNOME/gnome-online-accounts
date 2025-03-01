@@ -72,6 +72,19 @@ G_DEFINE_ABSTRACT_TYPE (GoaOAuth2Provider, goa_oauth2_provider, GOA_TYPE_PROVIDE
 
 #define GOA_OAUTH2_CODE_CHALLENGE_METHOD_S256 "S256"
 
+/* Error Responses for Access Token Request
+ *
+ * See:
+ *  - https://datatracker.ietf.org/doc/html/rfc6749#section-5.2
+ *  - https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-auth-code-flow#error-codes-for-token-endpoint-errors
+ */
+#define GOA_OAUTH2_ACCESS_ERROR_INVALID_REQUEST         "invalid_request"
+#define GOA_OAUTH2_ACCESS_ERROR_INVALID_CLIENT          "invalid_client"
+#define GOA_OAUTH2_ACCESS_ERROR_INVALID_GRANT           "invalid_grant"
+#define GOA_OAUTH2_ACCESS_ERROR_UNAUTHORIZED_CLIENT     "unauthorized_client"
+#define GOA_OAUTH2_ACCESS_ERROR_UNAUTHORIZED_GRANT_TYPE "unauthorized_grant_type"
+#define GOA_OAUTH2_ACCESS_ERROR_INVALID_SCOPE           "invalid_scope"
+
 static gboolean
 is_authorization_error (GError *error)
 {
@@ -607,6 +620,7 @@ get_tokens_sync (GoaOAuth2Provider  *self,
                  GCancellable       *cancellable,
                  GError            **error)
 {
+  g_autoptr (GError) rest_error = NULL;
   GError *tokens_error = NULL;
   RestProxy *proxy;
   RestProxyCall *call;
@@ -645,12 +659,60 @@ get_tokens_sync (GoaOAuth2Provider  *self,
     if (data->code_verifier != NULL)
       rest_proxy_call_add_param (call, "code_verifier", data->code_verifier);
 
-  if (!goa_rest_proxy_call_sync (call, cancellable, error))
-    goto out;
-
-  status_code = rest_proxy_call_get_status_code (call);
-  if (status_code != 200)
+  if (!goa_rest_proxy_call_sync (call, cancellable, &rest_error))
     {
+      status_code = rest_proxy_call_get_status_code (call);
+      if (SOUP_STATUS_IS_CLIENT_ERROR (status_code))
+        {
+          g_autoptr (JsonParser) parser = NULL;
+          JsonObject *object;
+          const char *response_err;
+          const char *response_desc;
+          const char *response_suberr;
+
+          payload = rest_proxy_call_get_payload (call);
+          payload_length = rest_proxy_call_get_payload_length (call);
+
+          parser = json_parser_new ();
+          if (!json_parser_load_from_data (parser, payload, payload_length, &tokens_error))
+            {
+              g_warning ("json_parser_load_from_data() failed: %s (%s, %d)",
+                         tokens_error->message,
+                         g_quark_to_string (tokens_error->domain),
+                         tokens_error->code);
+              g_set_error (error,
+                           GOA_ERROR,
+                           GOA_ERROR_FAILED,
+                           _("Could not parse response"));
+              goto out;
+            }
+
+          object = json_node_get_object (json_parser_get_root (parser));
+          response_err = json_object_get_string_member_with_default (object, "error", NULL);
+          response_desc = json_object_get_string_member_with_default (object, "error_description", NULL);
+          response_suberr = json_object_get_string_member_with_default (object, "suberror", NULL);
+
+          if (response_suberr != NULL)
+            g_debug ("%s(): [%s/%s] %s", G_STRFUNC, response_err, response_suberr, response_desc);
+          else
+            g_debug ("%s(): [%s] %s", G_STRFUNC, response_err, response_desc);
+
+          /* Some OAuth providers have access policies controlled by the service. These cases may
+           * require re-authentication rather than simply refreshing.
+           */
+          if (g_strcmp0 (response_err, GOA_OAUTH2_ACCESS_ERROR_INVALID_GRANT) == 0)
+            {
+              g_set_error (error,
+                           GOA_ERROR,
+                           GOA_ERROR_NOT_AUTHORIZED,
+                           _("Authorization response: %s"),
+                           response_desc ? response_desc : rest_error->message);
+              goto out;
+            }
+        }
+
+      /* Any errors not known to require special handling return a generic error.
+       */
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
