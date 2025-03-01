@@ -32,6 +32,10 @@
 #include "goaoauth2provider-priv.h"
 #include "goarestproxy.h"
 
+#define OAUTH2_DBUS_HANDLER_NAME  "org.gnome.OnlineAccounts.OAuth2"
+#define OAUTH2_DBUS_HANDLER_PATH  "/org/gnome/OnlineAccounts/OAuth2"
+#define OAUTH2_DBUS_HANDLER_IFACE "org.gnome.OnlineAccounts.OAuth2"
+
 /**
  * SECTION:goaoauth2provider
  * @title: GoaOAuth2Provider
@@ -1001,7 +1005,7 @@ static GHashTable *oauth2_handler_authorization_tasks = NULL;
 static GDBusNodeInfo *oauth2_handler_dbus_info = NULL;
 static const char oauth2_handler_dbus_xml[] =
   "<node>"
-  "  <interface name='org.gnome.OnlineAccounts.OAuth2'>"
+  "  <interface name='"OAUTH2_DBUS_HANDLER_IFACE"'>"
   "    <method name='Response'>"
   "      <arg type='s' name='client-id' direction='in'/>"
   "      <arg type='s' name='response' direction='in'/>"
@@ -1070,7 +1074,7 @@ on_bus_acquired (GDBusConnection *connection,
   GError *error = NULL;
 
   g_dbus_connection_register_object (connection,
-                                     "/org/gnome/OnlineAccounts/OAuth2",
+                                     OAUTH2_DBUS_HANDLER_PATH,
                                      oauth2_handler_dbus_info->interfaces[0],
                                      &oauth2_handler_dbus_vtable,
                                      NULL,
@@ -1099,7 +1103,7 @@ goa_oauth2_provider_register_authorization_task (GoaOAuth2Provider *provider,
                                                             g_object_unref);
       oauth2_handler_dbus_info = g_dbus_node_info_new_for_xml (oauth2_handler_dbus_xml, NULL);
       g_bus_own_name (G_BUS_TYPE_SESSION,
-                      "org.gnome.OnlineAccounts.OAuth2",
+                      OAUTH2_DBUS_HANDLER_NAME,
                       G_BUS_NAME_OWNER_FLAGS_NONE,
                       on_bus_acquired,
                       NULL,

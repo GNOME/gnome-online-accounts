@@ -23,6 +23,10 @@
 #include <glib.h>
 #include <gio/gio.h>
 
+#define OAUTH2_DBUS_HANDLER_NAME  "org.gnome.OnlineAccounts.OAuth2"
+#define OAUTH2_DBUS_HANDLER_PATH  "/org/gnome/OnlineAccounts/OAuth2"
+#define OAUTH2_DBUS_HANDLER_IFACE "org.gnome.OnlineAccounts.OAuth2"
+
 static struct
 {
   const char *client_id;
@@ -140,9 +144,9 @@ main (int    argc,
     }
 
   reply = g_dbus_connection_call_sync (connection,
-                                       "org.gnome.OnlineAccounts.OAuth2",
-                                       "/org/gnome/OnlineAccounts/OAuth2",
-                                       "org.gnome.OnlineAccounts.OAuth2",
+                                       OAUTH2_DBUS_HANDLER_NAME,
+                                       OAUTH2_DBUS_HANDLER_PATH,
+                                       OAUTH2_DBUS_HANDLER_IFACE,
                                        "Response",
                                        g_variant_new ("(ss)", client_id, argv[1] /* redirect URI */),
                                        NULL,
