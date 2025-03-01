@@ -23,8 +23,6 @@
 #include <glib.h>
 #include <gio/gio.h>
 
-static char *uri_str = NULL;
-
 static struct
 {
   const char *client_id;
@@ -69,39 +67,6 @@ get_oauth2_provider (const char  *needle,
   return FALSE;
 }
 
-static void
-got_bus_cb (GObject      *source_object,
-            GAsyncResult *result,
-            gpointer      user_data)
-{
-  GMainLoop *loop = user_data;
-  g_autoptr (GError) error = NULL;
-  g_autoptr (GDBusConnection) connection = NULL;
-  g_autoptr (GDBusMessage) message = NULL;
-  g_autoptr (GVariant) body = NULL;
-
-  connection = g_bus_get_finish (result, &error);
-  if (!connection)
-    {
-      g_warning ("Failed to get D-Bus session: %s", error ? error->message : "Unknown error");
-      g_main_loop_quit (loop);
-      return;
-    }
-
-  message = g_dbus_message_new_method_call ("org.gnome.OnlineAccounts.OAuth2",
-                                            "/org/gnome/OnlineAccounts/OAuth2",
-                                            "org.gnome.OnlineAccounts.OAuth2",
-                                            "Response");
-  body = g_variant_new ("(s)", uri_str);
-
-  g_dbus_message_set_body (message, body);
-  g_dbus_connection_send_message (connection, message, G_DBUS_SEND_MESSAGE_FLAGS_NONE, NULL, &error);
-  if (error)
-      g_warning ("Failed to send D-Bus message: %s", error ? error->message : "Unknown error");
-
-  g_main_loop_quit (loop);
-}
-
 int
 main (int    argc,
       char **argv)
@@ -110,8 +75,9 @@ main (int    argc,
   const char *scheme = NULL;
   const char *path = NULL;
   const char *client_id = NULL;
+  g_autoptr (GDBusConnection) connection = NULL;
+  g_autoptr (GVariant) reply = NULL;
   g_autoptr (GError) error = NULL;
-  g_autoptr (GMainLoop) loop = NULL;
 
   g_set_prgname ("goa-oauth2-handler");
 
@@ -166,13 +132,29 @@ main (int    argc,
       return EXIT_FAILURE;
     }
 
+  connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
+  if (connection == NULL)
+    {
+      g_printerr ("Failed to get session bus: %s\n", error->message);
+      return EXIT_FAILURE;
+    }
 
-  uri_str = argv[1];
-  loop = g_main_loop_new (NULL, FALSE);
-
-  g_bus_get (G_BUS_TYPE_SESSION, NULL, got_bus_cb, loop);
-
-  g_main_loop_run (loop);
+  reply = g_dbus_connection_call_sync (connection,
+                                       "org.gnome.OnlineAccounts.OAuth2",
+                                       "/org/gnome/OnlineAccounts/OAuth2",
+                                       "org.gnome.OnlineAccounts.OAuth2",
+                                       "Response",
+                                       g_variant_new ("(s)", argv[1]), /* redirect URI */
+                                       NULL,
+                                       G_DBUS_CALL_FLAGS_NO_AUTO_START, /* not applicable */
+                                       -1,
+                                       NULL,
+                                       &error);
+  if (reply == NULL)
+    {
+      g_printerr ("Failed to forward authorization response: %s\n", error->message);
+      return EXIT_FAILURE;
+    }
 
   return EXIT_SUCCESS;
 }
