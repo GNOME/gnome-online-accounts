@@ -144,7 +144,7 @@ main (int    argc,
                                        "/org/gnome/OnlineAccounts/OAuth2",
                                        "org.gnome.OnlineAccounts.OAuth2",
                                        "Response",
-                                       g_variant_new ("(s)", argv[1]), /* redirect URI */
+                                       g_variant_new ("(ss)", client_id, argv[1] /* redirect URI */),
                                        NULL,
                                        G_DBUS_CALL_FLAGS_NO_AUTO_START, /* not applicable */
                                        -1,

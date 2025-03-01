@@ -997,6 +997,157 @@ create_account_details_ui (GoaProvider *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+static GHashTable *oauth2_handler_authorization_tasks = NULL;
+static GDBusNodeInfo *oauth2_handler_dbus_info = NULL;
+static const char oauth2_handler_dbus_xml[] =
+  "<node>"
+  "  <interface name='org.gnome.OnlineAccounts.OAuth2'>"
+  "    <method name='Response'>"
+  "      <arg type='s' name='client-id' direction='in'/>"
+  "      <arg type='s' name='response' direction='in'/>"
+  "    </method>"
+  "  </interface>"
+  "</node>";
+
+static void
+oauth2_handler_dbus_method_call (GDBusConnection       *connection,
+                                 const char            *sender,
+                                 const char            *object_path,
+                                 const char            *interface_name,
+                                 const char            *method_name,
+                                 GVariant              *parameters,
+                                 GDBusMethodInvocation *invocation,
+                                 gpointer               user_data)
+{
+  g_assert (oauth2_handler_authorization_tasks != NULL);
+
+  if (g_strcmp0 (method_name, "Response") == 0)
+    {
+      const char *client_id = NULL;
+      const char *response = NULL;
+      g_autofree char *request_key = NULL;
+      g_autoptr(GTask) request_task = NULL;
+
+      g_variant_get (parameters, "(&s&s)", &client_id, &response);
+      if (!g_hash_table_steal_extended (oauth2_handler_authorization_tasks,
+                                        client_id,
+                                        (gpointer *)&request_key,
+                                        (gpointer *)&request_task))
+        {
+          g_dbus_method_invocation_return_error (invocation,
+                                                 G_DBUS_ERROR,
+                                                 G_DBUS_ERROR_INVALID_ARGS,
+                                                 "Unknown request for response \"%s\"",
+                                                 response);
+          return;
+        }
+
+      g_dbus_method_invocation_return_value (invocation, NULL);
+      g_task_return_pointer (request_task, g_strdup (response), g_free);
+      return;
+    }
+
+  g_dbus_method_invocation_return_error (invocation,
+                                         G_DBUS_ERROR,
+                                         G_DBUS_ERROR_UNKNOWN_METHOD,
+                                         "Unknown method %s on %s",
+                                         method_name,
+                                         interface_name);
+}
+
+static const GDBusInterfaceVTable oauth2_handler_dbus_vtable =
+  {
+    oauth2_handler_dbus_method_call,
+    NULL,
+    NULL
+  };
+
+static void
+on_bus_acquired (GDBusConnection *connection,
+                 const char      *name,
+                 gpointer         user_data)
+{
+  GError *error = NULL;
+
+  g_dbus_connection_register_object (connection,
+                                     "/org/gnome/OnlineAccounts/OAuth2",
+                                     oauth2_handler_dbus_info->interfaces[0],
+                                     &oauth2_handler_dbus_vtable,
+                                     NULL,
+                                     NULL,
+                                     &error);
+  g_assert_no_error (error);
+}
+
+static void
+goa_oauth2_provider_register_authorization_task (GoaOAuth2Provider *provider,
+                                                 GTask             *task)
+{
+  static size_t guard = 0;
+  const char *client_id = NULL;
+  g_autofree char *concurrent_client_id = NULL;
+  g_autoptr(GTask) concurrent_task = NULL;
+
+  g_assert (GOA_IS_OAUTH2_PROVIDER (provider));
+  g_assert (G_IS_TASK (task));
+
+  if (g_once_init_enter (&guard))
+    {
+      oauth2_handler_authorization_tasks = g_hash_table_new_full (g_str_hash,
+                                                            g_str_equal,
+                                                            g_free,
+                                                            g_object_unref);
+      oauth2_handler_dbus_info = g_dbus_node_info_new_for_xml (oauth2_handler_dbus_xml, NULL);
+      g_bus_own_name (G_BUS_TYPE_SESSION,
+                      "org.gnome.OnlineAccounts.OAuth2",
+                      G_BUS_NAME_OWNER_FLAGS_NONE,
+                      on_bus_acquired,
+                      NULL,
+                      NULL,
+                      NULL,
+                      NULL);
+      g_once_init_leave (&guard, 1);
+    }
+
+  /* If there is an existing authorization request, we assume it's a
+   * dangling task, return an error and proceed with the new request.
+   */
+  client_id = goa_oauth2_provider_get_client_id (provider);
+  if (g_hash_table_steal_extended (oauth2_handler_authorization_tasks,
+                                   client_id,
+                                   (gpointer *)&concurrent_client_id,
+                                   (gpointer *)&concurrent_task))
+    {
+      g_task_return_new_error (concurrent_task,
+                               GOA_ERROR,
+                               GOA_ERROR_FAILED,
+                               "Superseded by new authorization request for \"%s\"",
+                               goa_provider_get_provider_name (GOA_PROVIDER (provider), NULL));
+    }
+
+  g_hash_table_replace (oauth2_handler_authorization_tasks,
+                        g_strdup (client_id),
+                        g_object_ref (task));
+}
+
+static void
+goa_oauth2_provider_unregister_authorization_task (GoaOAuth2Provider *provider,
+                                                   GTask             *task)
+{
+  const char *client_id = NULL;
+
+  g_assert (GOA_IS_OAUTH2_PROVIDER (provider));
+  g_assert (G_IS_TASK (task));
+
+  /* Ensure we're not removing a task that's been superseded
+   */
+  client_id = goa_oauth2_provider_get_client_id (provider);
+  if (g_hash_table_lookup (oauth2_handler_authorization_tasks, client_id) == task)
+    g_hash_table_remove (oauth2_handler_authorization_tasks, client_id);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
 typedef struct
 {
   char *request_uri;
@@ -1025,96 +1176,14 @@ authorize_uri_launch_uri_cb (GObject      *object,
                              gpointer      user_data)
 {
   g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
+  GoaOAuth2Provider *provider = g_task_get_source_object (task);
   GError *error = NULL;
 
   if (!g_app_info_launch_default_for_uri_finish (result, &error))
     {
+      goa_oauth2_provider_unregister_authorization_task (provider, task);
       g_task_return_error (task, g_steal_pointer (&error));
     }
-}
-
-static GDBusNodeInfo *introspection_data = NULL;
-
-static void
-handle_method_call (GDBusConnection       *connection,
-                    const char            *sender,
-                    const char            *object_path,
-                    const char            *interface_name,
-                    const char            *method_name,
-                    GVariant              *parameters,
-                    GDBusMethodInvocation *invocation,
-                    gpointer               user_data)
-{
-  GTask *task = user_data;
-
-  if (g_strcmp0 (method_name, "Response") == 0)
-    {
-      const gchar *response;
-
-      g_variant_get (parameters, "(&s)", &response);
-      g_dbus_method_invocation_return_value (invocation, NULL);
-      if (response != NULL)
-        {
-          g_task_return_pointer (task, g_strdup (response), g_free);
-        }
-    }
-}
-
-static const GDBusInterfaceVTable interface_vtable =
-{
-  handle_method_call,
-  NULL,
-  NULL
-};
-
-static void
-on_bus_acquired (GDBusConnection *connection,
-                 const gchar     *name,
-                 gpointer         user_data)
-{
-  GTask *task = user_data;
-  GError *error = NULL
-
-  g_dbus_connection_register_object (connection,
-                                     "/org/gnome/OnlineAccounts/OAuth2",
-                                     introspection_data->interfaces[0],
-                                     &interface_vtable,
-                                     g_object_ref (task),
-                                     NULL,
-                                     &error);
-  g_assert_no_error (error);
-}
-
-/* Introspection data for the service we are exporting */
-static const gchar introspection_xml[] =
-  "<node>"
-  "  <interface name='org.gnome.OnlineAccounts.OAuth2'>"
-  "    <method name='Response'>"
-  "      <arg type='s' name='response' direction='in'/>"
-  "    </method>"
-  "  </interface>"
-  "</node>";
-
-static void
-start_dbus_helper (GTask *task)
-{
-  static gboolean started = FALSE;
-
-  if (started)
-    return;
-
-  started = TRUE;
-
-  introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, NULL);
-  g_bus_own_name (G_BUS_TYPE_SESSION,
-                  "org.gnome.OnlineAccounts.Helper",
-                  G_BUS_NAME_OWNER_FLAGS_NONE,
-                  on_bus_acquired,
-                  NULL,
-                  NULL,
-                  task,
-                  NULL);
-
 }
 
 /*< private >
@@ -1157,8 +1226,7 @@ goa_oauth2_provider_authorize_uri (GoaOAuth2Provider   *provider,
   g_task_set_source_tag (task, goa_oauth2_provider_authorize_uri);
   g_task_set_task_data (task, data, authorize_uri_data_free);
 
-  start_dbus_helper (task);
-
+  goa_oauth2_provider_register_authorization_task (provider, task);
   if ((data->flags & GOA_AUTH_FLOW_DO_NOT_LAUNCH_URI) == 0)
     {
       g_app_info_launch_default_for_uri_async (data->request_uri,
