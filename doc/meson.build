@@ -19,7 +19,6 @@ if enable_gtk_doc
     'goaexchangeprovider.h',
     'goafedoraprovider.h',
     'goagoogleprovider.h',
-    'goahttpclient.h',
     'goaimapauthlogin.h',
     'goaimapsmtpprovider.h',
     'goakerberosprovider.h',
