@@ -34,7 +34,7 @@ main (int argc, char **argv)
 
   client = goa_client_new_sync (NULL, &error);
   if (!client) {
-    g_error ("Could not create GoaClient: %s", error->message);
+    g_critical ("Could not create GoaClient: %s", error->message);
     return 1;
   }
 
