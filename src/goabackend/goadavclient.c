@@ -1178,6 +1178,8 @@ dav_client_discover_iterate (GTask *task)
                              goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV, discover->uri, NULL));
           g_queue_push_tail (&discover->candidates,
                              goa_dav_config_new (GOA_SERVICE_TYPE_CARDDAV, discover->uri, NULL));
+          g_queue_push_tail (&discover->candidates,
+                             goa_dav_config_new (GOA_SERVICE_TYPE_WEBDAV, discover->uri, NULL));
 
           discover->uri_fallback = TRUE;
           dav_client_discover_iterate (task);
@@ -1350,9 +1352,6 @@ goa_dav_client_discover (GoaDavClient        *self,
                                  (GAsyncReadyCallback) dav_client_discover_lookup_cb,
                                  g_object_ref (task));
     }
-
-  g_queue_push_tail (&discover->candidates,
-                     goa_dav_config_new (GOA_SERVICE_TYPE_WEBDAV, discover->uri, NULL));
 }
 
 /**
