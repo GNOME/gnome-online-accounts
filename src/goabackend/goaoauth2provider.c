@@ -2036,7 +2036,6 @@ goa_oauth2_provider_ensure_credentials_sync (GoaProvider   *provider,
   gchar *identity = NULL;
   gboolean force_refresh = FALSE;
 
- again:
   access_token = goa_oauth2_provider_get_access_token_sync (self,
                                                             object,
                                                             force_refresh,
@@ -2046,28 +2045,6 @@ goa_oauth2_provider_ensure_credentials_sync (GoaProvider   *provider,
   if (access_token == NULL)
     goto out;
 
-  identity = goa_oauth2_provider_get_identity_sync (self,
-                                                    access_token,
-                                                    NULL, /* out_presentation_identity */
-                                                    cancellable,
-                                                    error);
-  if (identity == NULL)
-    {
-      /* OK, try again, with forcing the locally cached credentials to be refreshed */
-      if (!force_refresh)
-        {
-          force_refresh = TRUE;
-          g_free (access_token); access_token = NULL;
-          g_clear_error (error);
-          goto again;
-        }
-      else
-        {
-          goto out;
-        }
-    }
-
-  /* TODO: maybe check with the identity we have */
   ret = TRUE;
   if (out_expires_in != NULL)
     *out_expires_in = access_token_expires_in;
