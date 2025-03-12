@@ -180,7 +180,7 @@ imap_auth_login_escape0 (const gchar *str)
   ret = g_string_new ("");
   for (size_t i = 0; str && str[i]; i++)
     {
-      if (str[i] == '\\')
+      if (str[i] == '\\' || str[i] == '"' || str[i] == '{' || str[i] == '}')
         g_string_append_c (ret, '\\');
       g_string_append_c (ret, str[i]);
     }
