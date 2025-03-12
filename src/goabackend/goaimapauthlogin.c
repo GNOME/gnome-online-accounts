@@ -354,8 +354,10 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *auth,
   gchar *request = NULL;
   gchar *response = NULL;
   gboolean ret = FALSE;
+  gchar *username = NULL;
   gchar *password = NULL;
 
+  username = imap_auth_login_escape0 (self->username);
   password = imap_auth_login_escape0 (self->password);
 
   input = goa_mail_auth_get_input (auth);
@@ -378,7 +380,7 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *auth,
 
   /* Send LOGIN */
 
-  request = g_strdup_printf ("%s LOGIN \"%s\" \"%s\"\r\n", IMAP_TAG, self->username, password);
+  request = g_strdup_printf ("%s LOGIN \"%s\" \"%s\"\r\n", IMAP_TAG, username, password);
   g_debug ("> %s LOGIN \"********************\" \"********************\"", IMAP_TAG);
   if (!g_data_output_stream_put_string (output, request, cancellable, error))
     goto out;
@@ -409,6 +411,7 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *auth,
  out:
   g_free (response);
   g_free (request);
+  g_free (username);
   g_free (password);
   return ret;
 }
