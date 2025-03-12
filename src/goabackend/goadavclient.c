@@ -1174,6 +1174,15 @@ dav_client_discover_iterate (GTask *task)
     {
       if (!discover->uri_fallback)
         {
+          g_autofree char *nc_uri = NULL;
+
+          /* Start with Nextcloud, everyone's favourite sort of compliant DAV server, since
+           * we can return early if we recognize the path.
+           */
+          nc_uri = g_uri_resolve_relative (discover->uri, "remote.php/dav", G_URI_FLAGS_NONE, NULL);
+          g_queue_push_tail (&discover->candidates,
+                             goa_dav_config_new (GOA_SERVICE_TYPE_WEBDAV, nc_uri, NULL));
+
           g_queue_push_tail (&discover->candidates,
                              goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV, discover->uri, NULL));
           g_queue_push_tail (&discover->candidates,
