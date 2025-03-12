@@ -886,13 +886,13 @@ goa_provider_dialog_push_account (GoaProviderDialog *self,
                     "notify::text-length",
                     G_CALLBACK (on_account_entry_change),
                     self);
-  update_account_name_entry (GTK_EDITABLE (row), NULL);
   adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), row);
 
   revealer = gtk_revealer_new ();
   gtk_revealer_set_transition_type (GTK_REVEALER (revealer), GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
   adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), revealer);
   g_object_set_data (G_OBJECT (row), "goa-entry-error", revealer);
+  update_account_name_entry (GTK_EDITABLE (row), NULL);
 
   error_label = g_object_new (GTK_TYPE_LABEL,
                               "margin-top", 6,
