@@ -173,16 +173,12 @@ imap_auth_login_check_not_STARTTLS (const gchar *response, GError **error)
 /* ---------------------------------------------------------------------------------------------------- */
 
 static gchar *
-imap_auth_escape_backslash (const gchar *str)
+imap_auth_login_escape0 (const gchar *str)
 {
   GString *ret;
-  gsize i;
-  gsize len;
 
   ret = g_string_new ("");
-  len = strlen (str);
-
-  for (i = 0; i < len; i++)
+  for (size_t i = 0; str && str[i]; i++)
     {
       if (str[i] == '\\')
         g_string_append_c (ret, '\\');
@@ -360,7 +356,7 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *auth,
   gboolean ret = FALSE;
   gchar *password = NULL;
 
-  password = imap_auth_escape_backslash (self->password);
+  password = imap_auth_login_escape0 (self->password);
 
   input = goa_mail_auth_get_input (auth);
   output = goa_mail_auth_get_output (auth);
