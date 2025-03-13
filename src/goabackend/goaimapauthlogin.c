@@ -386,27 +386,40 @@ goa_imap_auth_login_run_sync (GoaMailAuth         *auth,
     goto out;
   g_clear_pointer (&request, g_free);
 
-  /* Skip post-login CAPABILITY, if any */
-  response = goa_utils_data_input_stream_read_line (input, NULL, cancellable, error);
-  if (response == NULL)
-    goto out;
-  g_debug ("< %s", response);
-  if (imap_auth_login_check_not_CAPABILITY (response))
-    goto check_login_response;
-  g_clear_pointer (&response, g_free);
+  /* Look for the tagged OK */
 
-  response = goa_utils_data_input_stream_read_line (input, NULL, cancellable, error);
-  if (response == NULL)
-    goto out;
-  g_debug ("< %s", response);
- check_login_response:
-  if (imap_auth_login_check_NO (response, error))
-    goto out;
-  if (imap_auth_login_check_not_OK (response, TRUE, error))
-    goto out;
-  g_clear_pointer (&response, g_free);
+  while (TRUE)
+    {
+      response = goa_utils_data_input_stream_read_line (input, NULL, cancellable, error);
+      if (response == NULL)
+        goto out;
+      g_debug("< %s", response);
 
-  ret = TRUE;
+      if (g_str_has_prefix(response, "* "))
+        {
+          if (imap_auth_login_check_BYE (response, error))
+            goto out;
+
+          /* Skip post-login CAPABILITY, if any */
+          if (imap_auth_login_check_not_CAPABILITY (response))
+            {
+              g_clear_pointer (&response, g_free);
+              continue;
+            }
+        }
+
+      if (g_str_has_prefix (response, IMAP_TAG))
+        {
+          if (imap_auth_login_check_NO (response, error))
+            goto out;
+          if (imap_auth_login_check_not_OK (response, TRUE, error))
+            goto out;
+          g_clear_pointer (&response, g_free);
+
+          ret = TRUE;
+          break;
+        }
+    }
 
  out:
   g_free (response);
