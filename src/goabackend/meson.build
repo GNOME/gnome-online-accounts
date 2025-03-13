@@ -24,7 +24,6 @@ libgoa_backend_sources = files(
   'goasouplogger.c',
   'goautils.c',
   'goawebdavprovider.c',
-  'goawindowsliveprovider.c',
 )
 
 enum_headers = files('goabackendenums.h')

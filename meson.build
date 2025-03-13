@@ -206,15 +206,6 @@ config_h.set_quoted('GOA_WEBDAV_NAME', 'webdav')
 enable_webdav = get_option('webdav')
 config_h.set('GOA_WEBDAV_ENABLED', enable_webdav)
 
-# Windows Live
-config_h.set_quoted('GOA_WINDOWS_LIVE_NAME', 'windows_live')
-
-windows_live_client_id = get_option('windows_live_client_id')
-config_h.set_quoted('GOA_WINDOWS_LIVE_CLIENT_ID', windows_live_client_id)
-
-enable_windows_live = get_option('windows_live')
-config_h.set('GOA_WINDOWS_LIVE_ENABLED', enable_windows_live)
-
 # Microsoft Graph API account
 config_h.set_quoted('GOA_MS_GRAPH_NAME', 'ms_graph')
 
@@ -327,7 +318,6 @@ summary({
     'Microsoft Exchange': enable_exchange,
     'ownCloud': enable_owncloud,
     'WebDAV': enable_webdav,
-    'Windows Live': enable_windows_live,
     'Microsoft 365': enable_ms_graph,
   },
   bool_yn: true,
@@ -340,14 +330,6 @@ if enable_google
       'secret': google_client_secret,
     },
     section: 'Google Provider OAuth 2.0',
-  )
-endif
-
-if enable_windows_live
-  summary({
-      'id': windows_live_client_id,
-    },
-    section: 'Windows Live Provider OAuth 2.0',
   )
 endif
 
