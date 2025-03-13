@@ -27,50 +27,6 @@
 #define OAUTH2_DBUS_HANDLER_PATH  "/org/gnome/OnlineAccounts/OAuth2"
 #define OAUTH2_DBUS_HANDLER_IFACE "org.gnome.OnlineAccounts.OAuth2"
 
-static struct
-{
-  const char *client_id;
-}
-oauth2_providers[] =
-{
-#ifdef GOA_GOOGLE_ENABLED
-  {
-    .client_id = GOA_GOOGLE_CLIENT_ID,
-  },
-#endif
-#ifdef GOA_WINDOWS_LIVE_ENABLED
-  {
-    .client_id = GOA_WINDOWS_LIVE_CLIENT_ID,
-  },
-#endif
-#ifdef GOA_MS_GRAPH_ENABLED
-    {
-    .client_id = GOA_MS_GRAPH_CLIENT_ID,
-    },
-#endif
-  { NULL },
-};
-
-static gboolean
-get_oauth2_provider (const char  *needle,
-                     const char **client_out)
-{
-  g_return_val_if_fail (needle != NULL, FALSE);
-
-  for (unsigned int i = 0; oauth2_providers[i].client_id != NULL; i++)
-    {
-      if (g_str_equal (needle, oauth2_providers[i].client_id))
-        {
-          if (client_out)
-            *client_out = oauth2_providers[i].client_id;
-
-          return TRUE;
-        }
-    }
-
-  return FALSE;
-}
-
 int
 main (int    argc,
       char **argv)
@@ -102,10 +58,10 @@ main (int    argc,
    * See: https://developers.google.com/identity/protocols/oauth2/native-app
    */
   scheme = g_uri_get_scheme (uri);
-  if (scheme != NULL)
+  if (scheme != NULL && strstr (scheme, "."))
     {
       g_auto (GStrv) strv = g_strsplit (scheme, ".", -1);
-      g_autoptr (GString) tmp = g_string_new ("");
+      GString *tmp = g_string_new ("");
 
       for (unsigned int i = 0; strv[i] != NULL; i++)
         {
@@ -114,7 +70,7 @@ main (int    argc,
           g_string_prepend (tmp, strv[i]);
         }
 
-      get_oauth2_provider (tmp->str, &client_id);
+      client_id = g_string_free (tmp, FALSE);
     }
 
   /* Treat first path segment as client id */
