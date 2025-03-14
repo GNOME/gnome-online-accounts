@@ -1063,7 +1063,6 @@ create_account_details_ui (GoaProvider *provider,
 
 /* ---------------------------------------------------------------------------------------------------- */
 
-static GHashTable *oauth2_handler_authorization_tasks = NULL;
 static GDBusNodeInfo *oauth2_handler_dbus_info = NULL;
 static const char oauth2_handler_dbus_xml[] =
   "<node>"
@@ -1075,6 +1074,74 @@ static const char oauth2_handler_dbus_xml[] =
   "  </interface>"
   "</node>";
 
+typedef struct
+{
+  char *request_uri;
+  GoaAuthFlowFlags flags;
+  GCancellable *cancellable;
+  unsigned long cancellable_id;
+
+  /* D-Bus */
+  GDBusConnection *connection;
+  unsigned int name_owner_id;
+  unsigned int register_object_id;
+} AuthorizeUriData;
+
+static void
+authorize_uri_task_complete (GCancellable *cancellable,
+                             GTask        *task)
+{
+  AuthorizeUriData *data = g_task_get_task_data (task);
+
+  g_assert (data != NULL);
+
+  /* If @cancellable is not %NULL, we're in the callback and the task needs to
+   * be completed manually. Otherwise, it's safe to disconnect the callback.
+   */
+  if (cancellable != NULL)
+    {
+      g_task_return_error_if_cancelled (task);
+    }
+  else if (data->cancellable != NULL && data->cancellable_id != 0)
+    {
+      g_cancellable_disconnect (data->cancellable, data->cancellable_id);
+      g_clear_object (&data->cancellable);
+    }
+
+  if (data->register_object_id != 0)
+    {
+      g_dbus_connection_unregister_object (data->connection, data->register_object_id);
+      data->register_object_id = 0;
+    }
+
+  if (data->name_owner_id != 0)
+    {
+      g_bus_unown_name (data->name_owner_id);
+      data->name_owner_id = 0;
+    }
+
+  g_clear_object (&data->connection);
+}
+
+static void
+authorize_uri_data_free (gpointer user_data)
+{
+  AuthorizeUriData *data = user_data;
+
+  /* If the cancellable is triggered, we couldn't disconnect in the callback
+   * without deadlocking. Either way, this function is only called after
+   * the D-Bus bits are released and drop their references on the task.
+   */
+  if (data->cancellable != NULL && data->cancellable_id != 0)
+    {
+      g_cancellable_disconnect (data->cancellable, data->cancellable_id);
+      g_clear_object (&data->cancellable);
+    }
+
+  g_clear_pointer (&data->request_uri, g_free);
+  g_free (data);
+}
+
 static void
 oauth2_handler_dbus_method_call (GDBusConnection       *connection,
                                  const char            *sender,
@@ -1085,31 +1152,35 @@ oauth2_handler_dbus_method_call (GDBusConnection       *connection,
                                  GDBusMethodInvocation *invocation,
                                  gpointer               user_data)
 {
-  g_assert (oauth2_handler_authorization_tasks != NULL);
+  GTask *task = G_TASK (user_data);
 
   if (g_strcmp0 (method_name, "Response") == 0)
     {
       const char *client_id = NULL;
       const char *response = NULL;
-      g_autofree char *request_key = NULL;
-      g_autoptr(GTask) request_task = NULL;
+      GError *error = NULL;
 
       g_variant_get (parameters, "(&s&s)", &client_id, &response);
-      if (!g_hash_table_steal_extended (oauth2_handler_authorization_tasks,
-                                        client_id,
-                                        (gpointer *)&request_key,
-                                        (gpointer *)&request_task))
+      if (g_uri_is_valid (response, G_URI_FLAGS_ENCODED | G_URI_FLAGS_PARSE_RELAXED, &error))
         {
+          g_debug ("Received OAuth2 response for client ID \"%s\"", client_id);
+
+          g_dbus_method_invocation_return_value (invocation, NULL);
+          g_task_return_pointer (task, g_strdup (response), g_free);
+        }
+      else
+        {
+          g_debug ("Received invalid OAuth2 response for client ID \"%s\"", client_id);
+
           g_dbus_method_invocation_return_error (invocation,
                                                  G_DBUS_ERROR,
                                                  G_DBUS_ERROR_INVALID_ARGS,
-                                                 "Unknown request for response \"%s\"",
+                                                 "Invalid URI \"%s\"",
                                                  response);
-          return;
+          g_task_return_error (task, g_steal_pointer (&error));
         }
 
-      g_dbus_method_invocation_return_value (invocation, NULL);
-      g_task_return_pointer (request_task, g_strdup (response), g_free);
+      authorize_uri_task_complete (NULL, task);
       return;
     }
 
@@ -1129,128 +1200,92 @@ static const GDBusInterfaceVTable oauth2_handler_dbus_vtable =
   };
 
 static void
-on_bus_acquired (GDBusConnection *connection,
-                 const char      *name,
-                 gpointer         user_data)
-{
-  GError *error = NULL;
-
-  g_dbus_connection_register_object (connection,
-                                     OAUTH2_DBUS_HANDLER_PATH,
-                                     oauth2_handler_dbus_info->interfaces[0],
-                                     &oauth2_handler_dbus_vtable,
-                                     NULL,
-                                     NULL,
-                                     &error);
-  g_assert_no_error (error);
-}
-
-static void
-goa_oauth2_provider_register_authorization_task (GoaOAuth2Provider *provider,
-                                                 GTask             *task)
-{
-  static size_t guard = 0;
-  const char *client_id = NULL;
-  g_autofree char *concurrent_client_id = NULL;
-  g_autoptr(GTask) concurrent_task = NULL;
-
-  g_assert (GOA_IS_OAUTH2_PROVIDER (provider));
-  g_assert (G_IS_TASK (task));
-
-  if (g_once_init_enter (&guard))
-    {
-      oauth2_handler_authorization_tasks = g_hash_table_new_full (g_str_hash,
-                                                            g_str_equal,
-                                                            g_free,
-                                                            g_object_unref);
-      oauth2_handler_dbus_info = g_dbus_node_info_new_for_xml (oauth2_handler_dbus_xml, NULL);
-      g_bus_own_name (G_BUS_TYPE_SESSION,
-                      OAUTH2_DBUS_HANDLER_NAME,
-                      G_BUS_NAME_OWNER_FLAGS_NONE,
-                      on_bus_acquired,
-                      NULL,
-                      NULL,
-                      NULL,
-                      NULL);
-      g_once_init_leave (&guard, 1);
-    }
-
-  /* If there is an existing authorization request, we assume it's a
-   * dangling task, return an error and proceed with the new request.
-   */
-  client_id = goa_oauth2_provider_get_client_id (provider);
-  if (g_hash_table_steal_extended (oauth2_handler_authorization_tasks,
-                                   client_id,
-                                   (gpointer *)&concurrent_client_id,
-                                   (gpointer *)&concurrent_task))
-    {
-      g_task_return_new_error (concurrent_task,
-                               GOA_ERROR,
-                               GOA_ERROR_FAILED,
-                               "Superseded by new authorization request for \"%s\"",
-                               goa_provider_get_provider_name (GOA_PROVIDER (provider), NULL));
-    }
-
-  g_hash_table_replace (oauth2_handler_authorization_tasks,
-                        g_strdup (client_id),
-                        g_object_ref (task));
-}
-
-static void
-goa_oauth2_provider_unregister_authorization_task (GoaOAuth2Provider *provider,
-                                                   GTask             *task)
-{
-  const char *client_id = NULL;
-
-  g_assert (GOA_IS_OAUTH2_PROVIDER (provider));
-  g_assert (G_IS_TASK (task));
-
-  /* Ensure we're not removing a task that's been superseded
-   */
-  client_id = goa_oauth2_provider_get_client_id (provider);
-  if (g_hash_table_lookup (oauth2_handler_authorization_tasks, client_id) == task)
-    g_hash_table_remove (oauth2_handler_authorization_tasks, client_id);
-}
-
-/* ---------------------------------------------------------------------------------------------------- */
-
-typedef struct
-{
-  char *request_uri;
-  GoaAuthFlowFlags flags;
-  GCancellable *cancellable;
-  unsigned long cancellable_id;
-  unsigned int completed : 1;
-} AuthorizeUriData;
-
-static void
-authorize_uri_data_free (gpointer user_data)
-{
-  AuthorizeUriData *data = user_data;
-
-  if (data->cancellable != NULL && data->cancellable_id != 0)
-    g_cancellable_disconnect (data->cancellable, data->cancellable_id);
-
-  g_clear_object (&data->cancellable);
-  g_clear_pointer (&data->request_uri, g_free);
-  g_free (data);
-}
-
-static void
 authorize_uri_launch_uri_cb (GObject      *object,
                              GAsyncResult *result,
                              gpointer      user_data)
 {
   g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
-  GoaOAuth2Provider *provider = g_task_get_source_object (task);
   GError *error = NULL;
 
   if (!g_app_info_launch_default_for_uri_finish (result, &error))
     {
-      goa_oauth2_provider_unregister_authorization_task (provider, task);
       g_task_return_error (task, g_steal_pointer (&error));
+      authorize_uri_task_complete (NULL, task);
     }
 }
+
+static void
+on_oauth2_bus_acquired (GDBusConnection *connection,
+                        const char      *name,
+                        gpointer         user_data)
+{
+  static size_t guard = 0;
+  GTask *task = G_TASK (user_data);
+  AuthorizeUriData *data = g_task_get_task_data (task);
+  GError *error = NULL;
+
+  if (g_once_init_enter (&guard))
+    {
+      oauth2_handler_dbus_info = g_dbus_node_info_new_for_xml (oauth2_handler_dbus_xml, NULL);
+      g_once_init_leave (&guard, 1);
+    }
+
+  data->connection = g_object_ref (connection);
+  data->register_object_id =
+    g_dbus_connection_register_object (data->connection,
+                                       OAUTH2_DBUS_HANDLER_PATH,
+                                       oauth2_handler_dbus_info->interfaces[0],
+                                       &oauth2_handler_dbus_vtable,
+                                       g_object_ref (task),
+                                       g_object_unref,
+                                       &error);
+
+  if (data->register_object_id == 0)
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      authorize_uri_task_complete (NULL, task);
+    }
+}
+
+static void
+on_oauth2_name_acquired (GDBusConnection *connection,
+                         const char      *name,
+                         gpointer         user_data)
+{
+  GTask *task = G_TASK (user_data);
+  GCancellable *cancellable = g_task_get_cancellable (task);
+  AuthorizeUriData *data = g_task_get_task_data (task);
+
+  if ((data->flags & GOA_AUTH_FLOW_DO_NOT_LAUNCH_URI) == 0)
+    {
+      g_app_info_launch_default_for_uri_async (data->request_uri,
+                                               NULL,
+                                               cancellable,
+                                               (GAsyncReadyCallback) authorize_uri_launch_uri_cb,
+                                               g_object_ref (task));
+    }
+}
+
+static void
+on_oauth2_name_lost (GDBusConnection *connection,
+                     const char      *name,
+                     gpointer         user_data)
+{
+  GTask *task = G_TASK (user_data);
+
+  if (connection == NULL)
+    g_warning ("%s(): Failed to connect to the session bus", G_STRFUNC);
+  else
+    g_warning ("%s(): Failed to own %s on the session bus", G_STRFUNC, name);
+
+  g_task_return_new_error_literal (task,
+                                   GOA_ERROR,
+                                   GOA_ERROR_FAILED,
+                                   _("Service not available"));
+  authorize_uri_task_complete (NULL, task);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
 
 /*< private >
  * goa_oauth2_provider_authorize_uri:
@@ -1292,15 +1327,23 @@ goa_oauth2_provider_authorize_uri (GoaOAuth2Provider   *provider,
   g_task_set_source_tag (task, goa_oauth2_provider_authorize_uri);
   g_task_set_task_data (task, data, authorize_uri_data_free);
 
-  goa_oauth2_provider_register_authorization_task (provider, task);
-  if ((data->flags & GOA_AUTH_FLOW_DO_NOT_LAUNCH_URI) == 0)
+  if (cancellable != NULL)
     {
-      g_app_info_launch_default_for_uri_async (data->request_uri,
-                                               NULL,
-                                               cancellable,
-                                               (GAsyncReadyCallback) authorize_uri_launch_uri_cb,
-                                               g_object_ref (task));
+      data->cancellable = g_object_ref (cancellable);
+      data->cancellable_id = g_cancellable_connect (cancellable,
+                                                    G_CALLBACK (authorize_uri_task_complete),
+                                                    task,
+                                                    NULL);
     }
+
+  data->name_owner_id = g_bus_own_name (G_BUS_TYPE_SESSION,
+                                        OAUTH2_DBUS_HANDLER_NAME,
+                                        G_BUS_NAME_OWNER_FLAGS_NONE,
+                                        on_oauth2_bus_acquired,
+                                        on_oauth2_name_acquired,
+                                        on_oauth2_name_lost,
+                                        g_object_ref (task),
+                                        g_object_unref);
 }
 
 /*< private >
