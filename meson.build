@@ -168,6 +168,9 @@ config_h.set_quoted('GOA_GOOGLE_NAME', 'google')
 google_client_id = get_option('google_client_id')
 config_h.set_quoted('GOA_GOOGLE_CLIENT_ID', google_client_id)
 
+google_client_secret = get_option('google_client_secret')
+config_h.set_quoted('GOA_GOOGLE_CLIENT_SECRET', google_client_secret)
+
 enable_google = get_option('google')
 config_h.set('GOA_GOOGLE_ENABLED', enable_google)
 
@@ -334,6 +337,7 @@ summary({
 if enable_google
   summary({
       'id': google_client_id,
+      'secret': google_client_secret,
     },
     section: 'Google Provider OAuth 2.0',
   )
