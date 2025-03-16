@@ -169,7 +169,7 @@ get_client_id (GoaOAuth2Provider *oauth2_provider)
 static const gchar *
 get_client_secret (GoaOAuth2Provider *oauth2_provider)
 {
-  return "";
+  return GOA_GOOGLE_CLIENT_SECRET;
 }
 
 static gboolean
