@@ -1,0 +1,837 @@
+# Uzbek (Latin) translation for gnome-online-accounts.
+# Copyright (C) 2025 gnome-online-accounts's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-online-accounts package.
+# Elchin Toyirov <elchintoyirov@gmail.com>,  2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-online-accounts gnome-48\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
+"issues\n"
+"POT-Creation-Date: 2025-03-23 23:44+0000\n"
+"PO-Revision-Date: 2025-03-25 09:50+0500\n"
+"Last-Translator: \n"
+"Language-Team: Uzbek (Latin) <uz@li.org>\n"
+"Language: uz\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.5\n"
+
+#: data/org.gnome.online-accounts.gschema.xml:6
+msgid "List of providers that are allowed to be loaded"
+msgstr "Yuklashga ruxsat berilgan provayderlar ro'yxati"
+
+#: data/org.gnome.online-accounts.gschema.xml:7
+msgid ""
+"A list of strings representing the providers that are allowed to be loaded "
+"(default: 'all'). This is only evaluated on startup. Deprecated: use goa."
+"conf in the system config directory instead, with a key [providers] "
+"enable=all instead. The key is comma-separated list of the provider names."
+msgstr ""
+"Yuklashga ruxsat berilgan provayderlarni ifodalovchi qatorlar roʻyxati "
+"(standart: “barchasi”). Bu faqat ishga tushirilganda baholanadi. Eskirgan: "
+"tizim konfiguratsiyasi katalogidagi goa.conf dan foydalaning, oʻrniga "
+"[provayderlar] enable=all kaliti bilan. Kalit provayder nomlarining vergul "
+"bilan ajratilgan ro'yxati."
+
+#. TODO: more specific
+#: src/daemon/goadaemon.c:1162 src/daemon/goadaemon.c:1482
+#, c-format
+msgid "Failed to find a provider for: %s"
+msgstr "Quyidagilar uchun provayder topilmadi: %s"
+
+#: src/daemon/goadaemon.c:1425
+msgid "IsLocked property is set for account"
+msgstr "IsLocked xususiyati hisob uchun o'rnatiladi"
+
+#. TODO: more specific
+#: src/daemon/goadaemon.c:1470
+msgid "ProviderType property is not set for account"
+msgstr "ProviderType xususiyati hisob uchun sozlanmagan"
+
+#: src/daemon/goadaemon.c:1632
+#, c-format
+msgid "Failed to sign in to “%s”"
+msgstr "“%s” hisobiga kirib bo‘lmadi"
+
+#: src/daemon/goadaemon.c:1637
+msgid "Failed to sign in to multiple accounts"
+msgstr "Bir nechta hisoblarga kirib bo‘lmadi"
+
+#: src/daemon/goadaemon.c:1646
+msgid "Online Accounts"
+msgstr "Onlayn hisoblar"
+
+#: src/daemon/goadaemon.c:1649
+msgid "Account Action Required"
+msgstr "Hisob harakati talab qilinadi"
+
+#. TODO: more specific
+#: src/goabackend/goadavclient.c:1201 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:802
+msgid "Authentication failed"
+msgstr "Autentifikatsiya amalga oshmadi"
+
+#: src/goabackend/goadavclient.c:1208
+msgid "Cannot find WebDAV endpoint"
+msgstr "WebDAV tugatish nuqtasi topilmadi"
+
+#: src/goabackend/goadavclient.c:1309 src/goabackend/goawebdavprovider.c:648
+#, c-format
+msgid "Invalid URI: %s"
+msgstr "Noto‘g‘ri URI: %s"
+
+#. TODO: more specific
+#: src/goabackend/goaewsclient.c:278
+msgid "Failed to parse autodiscover response XML"
+msgstr "Avtomatik topish javobining XML formatini tahlil qilish amalga oshmadi"
+
+#. TODO: more specific
+#. Translators: the parameter is an XML element name.
+#: src/goabackend/goaewsclient.c:289 src/goabackend/goaewsclient.c:304
+#: src/goabackend/goaewsclient.c:319
+#, c-format
+msgid "Failed to find “%s” element"
+msgstr "\"%s\" elementi topilmadi"
+
+#. TODO: more specific
+#: src/goabackend/goaewsclient.c:340
+msgid "Failed to find ASUrl in autodiscover response"
+msgstr "Avtomatik aniqlash javobida ASUrl topilmadi"
+
+#: src/goabackend/goaexchangeprovider.c:52
+msgid "Microsoft Exchange"
+msgstr "Microsoft Exchange"
+
+#. Translators: the first %s is the username
+#. * (eg., debarshi.ray@gmail.com or rishi), and the
+#. * (%s, %d) is the error domain and code.
+#.
+#: src/goabackend/goaexchangeprovider.c:258
+#: src/goabackend/goawebdavprovider.c:304
+#, c-format
+msgid "Invalid password with username “%s” (%s, %d): "
+msgstr "\"%s\" foydalanuvchi nomi bilan kiritilgan parol noto‘g‘ri (%s, %d): "
+
+#. provider name
+#: src/goabackend/goaexchangeprovider.c:389
+msgid ""
+"Connect to a Microsoft Exchange provider to access calendars, contacts and "
+"files"
+msgstr ""
+"Taqvimlar, kontaktlar va fayllarga kirish uchun Microsoft Exchange "
+"provayderiga ulanishingiz kerak"
+
+#: src/goabackend/goaexchangeprovider.c:392
+#: src/goabackend/goaimapsmtpprovider.c:701
+msgid "_Email"
+msgstr "_Email"
+
+#: src/goabackend/goaexchangeprovider.c:393
+#: src/goabackend/goafedoraprovider.c:171
+#: src/goabackend/goaimapsmtpprovider.c:702
+#: src/goabackend/goaimapsmtpprovider.c:745
+#: src/goabackend/goaimapsmtpprovider.c:789
+#: src/goabackend/goawebdavprovider.c:408
+msgid "_Password"
+msgstr "_Parol"
+
+#: src/goabackend/goaexchangeprovider.c:394
+msgid ""
+"Exchange account details will be auto-detected from your email address when "
+"possible"
+msgstr ""
+"Imkon qadar, elektron pochta manzilingizdan almashish hisobi ma’lumotlari "
+"avtomatik aniqlanadi"
+
+#: src/goabackend/goaexchangeprovider.c:405
+msgid "Account Details"
+msgstr "Hisob ma’lumotlari"
+
+#: src/goabackend/goaexchangeprovider.c:406
+#: src/goabackend/goafedoraprovider.c:170
+#: src/goabackend/goaimapsmtpprovider.c:744
+#: src/goabackend/goaimapsmtpprovider.c:788
+#: src/goabackend/goawebdavprovider.c:407
+msgid "User_name"
+msgstr "Foydalanuvchi_ismi"
+
+#: src/goabackend/goaexchangeprovider.c:407
+msgid "_Domain"
+msgstr "_Domen"
+
+#: src/goabackend/goaexchangeprovider.c:408
+msgid "Example domain: example.com"
+msgstr "Namunaviy domen: example.com"
+
+#: src/goabackend/goafedoraprovider.c:51
+msgid "Fedora"
+msgstr "Fedora"
+
+#: src/goabackend/goafedoraprovider.c:167
+#: src/goabackend/goakerberosprovider.c:598
+msgid "Access restricted web and network resources for your organization"
+msgstr ""
+"Tashkilotingiz uchun cheklangan veb va tarmoq resurslariga kirishni "
+"ta’minlash"
+
+#: src/goabackend/goafedoraprovider.c:339
+#, c-format
+msgid "Failed to get principal from user name “%s”"
+msgstr ""
+"\"%s\" foydalanuvchi nomidan asosiy ma’lumotlarni olishda xatolik yuz berdi"
+
+#: src/goabackend/goagoogleprovider.c:57
+msgid "Google"
+msgstr "Google"
+
+#: src/goabackend/goagoogleprovider.c:211
+#: src/goabackend/goamsgraphprovider.c:184
+#: src/goabackend/goawindowsliveprovider.c:163
+#, c-format
+msgid ""
+"Expected status 200 when requesting your identity, instead got status %d (%s)"
+msgstr ""
+"Shaxsingizni tasdiqlashni so‘rashda 200-holat kutilgan edi, buning o‘rniga "
+"%d (%s) holatini oldi"
+
+#. TODO: more specific
+#: src/goabackend/goagoogleprovider.c:230
+#: src/goabackend/goagoogleprovider.c:241
+#: src/goabackend/goamsgraphprovider.c:203
+#: src/goabackend/goamsgraphprovider.c:214
+#: src/goabackend/goamsgraphprovider.c:227
+#: src/goabackend/goamsgraphprovider.c:252
+#: src/goabackend/goaoauth2provider.c:686
+#: src/goabackend/goaoauth2provider.c:743
+#: src/goabackend/goaoauth2provider.c:773
+#: src/goabackend/goaoauth2provider.c:784 src/goabackend/goautils.c:136
+#: src/goabackend/goawindowsliveprovider.c:182
+#: src/goabackend/goawindowsliveprovider.c:193
+#: src/goabackend/goawindowsliveprovider.c:202
+#: src/goabackend/goawindowsliveprovider.c:215
+msgid "Could not parse response"
+msgstr "Javobni tahlil qilib bo‘lmadi"
+
+#. TODO: more specific
+#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goaoauth2provider.c:1284
+#: src/goabackend/goasmtpauth.c:149
+msgid "Service not available"
+msgstr "Xizmat mavjud emas"
+
+#: src/goabackend/goaimapauthlogin.c:166 src/goabackend/goasmtpauth.c:625
+msgid "Server does not support STARTTLS"
+msgstr "Server STARTTLS-ni qo‘llab-quvvatlamaydi"
+
+#: src/goabackend/goaimapsmtpprovider.c:55
+msgid "IMAP and SMTP"
+msgstr "IMAP va SMTP"
+
+#. Translators: the first %s is a field name. The
+#. * second %s is the IMAP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#. Translators: the first %s is a field name. The
+#. * second %s is the SMTP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#: src/goabackend/goaimapsmtpprovider.c:320
+#: src/goabackend/goaimapsmtpprovider.c:369
+#, c-format
+msgid "Invalid %s with username “%s” (%s, %d): "
+msgstr "\"%s\" foydalanuvchi nomiga ega noto‘g‘ri %s (%s, %d): "
+
+#: src/goabackend/goaimapsmtpprovider.c:566
+#: src/goabackend/goaimapsmtpprovider.c:589
+#: src/goabackend/goaimapsmtpprovider.c:724
+#: src/goabackend/goaimapsmtpprovider.c:765
+#: src/goabackend/goaimapsmtpprovider.c:809
+msgid "Auto-detected"
+msgstr "Avtomatik aniqlandi"
+
+#: src/goabackend/goaimapsmtpprovider.c:618
+msgid "Unable to auto-detect IMAP and SMTP settings"
+msgstr "IMAP va SMTP sozlamalarini avtomatik aniqlab bo‘lmadi"
+
+#: src/goabackend/goaimapsmtpprovider.c:689
+msgid "STARTTLS after connecting"
+msgstr "Ulanishdan so‘ng STARTTLS protokoli ishga tushadi"
+
+#. GOA_TLS_TYPE_STARTTLS
+#: src/goabackend/goaimapsmtpprovider.c:690
+msgid "SSL on a dedicated port"
+msgstr "SSL ajratilgan portda"
+
+#: src/goabackend/goaimapsmtpprovider.c:695
+#: src/goabackend/goaimapsmtpprovider.c:1435
+msgid "Email"
+msgstr "Email"
+
+#: src/goabackend/goaimapsmtpprovider.c:696
+msgid "Connect to an email account"
+msgstr "E-pochta hisobiga ulanish"
+
+#: src/goabackend/goaimapsmtpprovider.c:700
+msgid "_Name"
+msgstr "_Ism"
+
+#: src/goabackend/goaimapsmtpprovider.c:703
+msgid ""
+"IMAP and SMTP details will be auto-detected from your service provider when "
+"possible"
+msgstr ""
+"IMAP va SMTP tafsilotlari xizmat provayderingizdan imkon qadar avtomatik "
+"aniqlanadi"
+
+#. IMAP
+#: src/goabackend/goaimapsmtpprovider.c:742
+msgid "IMAP Settings"
+msgstr "IMAP sozlamalari"
+
+#: src/goabackend/goaimapsmtpprovider.c:743
+msgid "IMAP _Server"
+msgstr "IMAP _Serveri"
+
+#: src/goabackend/goaimapsmtpprovider.c:754
+#: src/goabackend/goaimapsmtpprovider.c:798
+msgid "Encryption"
+msgstr "Shifrlash"
+
+#: src/goabackend/goaimapsmtpprovider.c:779
+msgid "Example server: imap.example.com"
+msgstr "Namunaviy server: imap.example.com"
+
+#. SMTP
+#: src/goabackend/goaimapsmtpprovider.c:786
+msgid "SMTP Settings"
+msgstr "SMTP sozlamalari"
+
+#: src/goabackend/goaimapsmtpprovider.c:787
+msgid "SMTP _Server"
+msgstr "SMTP _Server"
+
+#: src/goabackend/goaimapsmtpprovider.c:823
+msgid "Example server: smtp.example.com"
+msgstr "Namunaviy server: smtp.example.com"
+
+#: src/goabackend/goaimapsmtpprovider.c:1426
+msgid "Name"
+msgstr "Ism"
+
+#: src/goabackend/goaimapsmtpprovider.c:1452
+msgid "IMAP"
+msgstr "IMAP"
+
+#: src/goabackend/goaimapsmtpprovider.c:1470
+msgid "SMTP"
+msgstr "SMTP"
+
+#: src/goabackend/goakerberosprovider.c:80
+msgid "Kerberos"
+msgstr "Kerberos"
+
+#: src/goabackend/goakerberosprovider.c:425
+msgid "Operation was cancelled"
+msgstr "Amaliyot bekor qilindi"
+
+#: src/goabackend/goakerberosprovider.c:469
+#: src/goaidentity/goaidentityservice.c:1114
+msgid "Log In to Realm"
+msgstr "Realmga kirish"
+
+#: src/goabackend/goakerberosprovider.c:470
+msgid "Please enter your password below."
+msgstr "Iltimos, parolingizni quyidagi joyga kiriting."
+
+#: src/goabackend/goakerberosprovider.c:471
+msgid "Remember this password"
+msgstr "Ushbu parolni eslab qoling"
+
+#: src/goabackend/goakerberosprovider.c:601
+msgid "_Principal"
+msgstr "_Asosiy"
+
+#: src/goabackend/goakerberosprovider.c:602
+msgid "Example principal: user@EXAMPLE.COM"
+msgstr "Asosiyga misol: user@ EXAMPLE.COM"
+
+#: src/goabackend/goakerberosprovider.c:1308
+msgid "Ticketing is disabled for account"
+msgstr "Hisob uchun chipta olish faolsizlantirilgan"
+
+#: src/goabackend/goakerberosprovider.c:1331
+#, c-format
+msgid "Could not find saved credentials for principal “%s” in keyring"
+msgstr ""
+"Keyringda \"%s\" asosiy foydalanuvchi uchun saqlangan kirish ma’lumotlari "
+"topilmadi"
+
+#: src/goabackend/goakerberosprovider.c:1345
+#, c-format
+msgid "Did not find password for principal “%s” in credentials"
+msgstr ""
+"\"%s\" asosiy foydalanuvchisi uchun hisob ma’lumotlarida parol topilmadi"
+
+#: src/goabackend/goakerberosprovider.c:1527
+msgid "Identity service returned invalid key"
+msgstr "Identifikatsiya xizmati yaroqsiz kalit qaytardi"
+
+#: src/goabackend/goamailclient.c:851
+#, c-format
+msgid "Invalid email address “%s”"
+msgstr "\"%s\" email manzili yaroqsiz"
+
+#: src/goabackend/goamsgraphprovider.c:64
+msgid "Microsoft 365"
+msgstr "Microsoft 365"
+
+#. provider name
+#: src/goabackend/goamsgraphprovider.c:486
+msgid "Connect to Microsoft 365 to access email, calendars, contacts and files"
+msgstr ""
+"E-pochta, taqvimlar, kontaktlar va fayllarga kirish uchun Microsoft 365 ga "
+"ulaning"
+
+#: src/goabackend/goamsgraphprovider.c:490
+msgid "Use Organization Account"
+msgstr "Tashkilot hisobidan foydalanish"
+
+#: src/goabackend/goamsgraphprovider.c:491
+msgid "Connect using details from an organization or developer account"
+msgstr "Tashkilot yoki dasturchi hisobidagi tafsilotlar yordamida ulanish"
+
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:498
+msgid "Enter the details provided by your organization"
+msgstr "Tashkilotingiz tomonidan berilgan ma'lumotlarni kiriting"
+
+#: src/goabackend/goamsgraphprovider.c:500
+msgid "_Client ID (Optional)"
+msgstr "_Foydalanuvchi ID (Ixtiyoriy)"
+
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:502
+msgid "_Tenant ID"
+msgstr "_Ijarachi ID"
+
+#: src/goabackend/goamsgraphprovider.c:503
+msgid "Example ID: 00000000-0000-0000-0000-000000000000"
+msgstr "Namuna ID: 00000000-0000-0000-0000-000000000000"
+
+#: src/goabackend/goamsgraphprovider.c:529
+#: src/goabackend/goaoauth2provider.c:1025
+#: src/goabackend/goaproviderdialog.c:840
+msgid "_Sign In…"
+msgstr "_Hisobga Kirish…"
+
+#: src/goabackend/goamsgraphprovider.c:537
+#: src/goabackend/goaoauth2provider.c:1033
+msgid "_Copy Link"
+msgstr "_Link Nusxalash"
+
+#: src/goabackend/goamsgraphprovider.c:550
+#: src/goabackend/goaoauth2provider.c:1043
+msgid "Copy the authorization URL to continue with a specific web browser."
+msgstr "Maxsus brauzerda ishni davom ettirish uchun URL ni nusxalang."
+
+#: src/goabackend/goaoauth2provider.c:708
+#: src/goabackend/goaoauth2provider.c:926
+#, c-format
+msgid "Authorization response: %s"
+msgstr "Avtorizatsiyaga javob: %s"
+
+#: src/goabackend/goaoauth2provider.c:719
+#, c-format
+msgid ""
+"Expected status 200 when requesting access token, instead got status %d (%s)"
+msgstr ""
+"Ruxsat tokenini so‘rashda 200-holat kutilgan edi, buning o‘rniga %d (%s) "
+"holati olindi"
+
+#: src/goabackend/goaoauth2provider.c:863
+msgid "Authorization response: "
+msgstr "Avtorizatsiyaga javob: "
+
+#: src/goabackend/goaoauth2provider.c:934
+msgid "Failed to authenticate"
+msgstr "Tasdiqlanmadi"
+
+#: src/goabackend/goaoauth2provider.c:970
+msgid "Error getting an Access Token: "
+msgstr "Kirish tokeni olinmadi: "
+
+#: src/goabackend/goaoauth2provider.c:986
+msgid "Error getting identity: "
+msgstr "Shaxsni aniqlashda xatolik: "
+
+#: src/goabackend/goaoauth2provider.c:1016
+#, c-format
+msgid "Sign in to %s with your browser"
+msgstr "Brauzer orqali %s hisobiga kiring"
+
+#: src/goabackend/goaoauth2provider.c:1554
+#: src/goabackend/goaoauth2provider.c:1722
+msgid "Copied to clipboard"
+msgstr "Vaqtinchalik xotiraga nusxalandi"
+
+#: src/goabackend/goaoauth2provider.c:1673
+#, c-format
+msgid "Was asked to log in as %s, but logged in as %s"
+msgstr "%s sifatida kirish so‘raldi, lekin %s sifatida kirildi"
+
+#: src/goabackend/goaoauth2provider.c:1910
+msgid "Credentials do not contain access_token"
+msgstr "Hisob ma’lumotlarida kirish_tokeni mavjud emas"
+
+#: src/goabackend/goaoauth2provider.c:1954
+#, c-format
+msgid "Failed to refresh access token (%s, %d): "
+msgstr "Kirish tokeni yangilanmadi (%s, %d): "
+
+#: src/goabackend/goaowncloudprovider.c:55
+msgid "Nextcloud"
+msgstr "Nextcloud"
+
+#: src/goabackend/goaprovider.c:118
+msgid "_Mail"
+msgstr "_Pochta"
+
+#: src/goabackend/goaprovider.c:123
+msgid "Cale_ndar"
+msgstr "Kale_ndar"
+
+#: src/goabackend/goaprovider.c:128
+msgid "_Contacts"
+msgstr "_Kontaktlar"
+
+#: src/goabackend/goaprovider.c:133
+msgid "C_hat"
+msgstr "C_hat"
+
+#: src/goabackend/goaprovider.c:138
+msgid "_Documents"
+msgstr "_Hujjatlar"
+
+#: src/goabackend/goaprovider.c:143
+msgid "M_usic"
+msgstr "M_usiqa"
+
+#: src/goabackend/goaprovider.c:148
+msgid "_Photos"
+msgstr "Rasmlar"
+
+#: src/goabackend/goaprovider.c:153
+msgid "_Files"
+msgstr "_Fayllar"
+
+#: src/goabackend/goaprovider.c:158
+msgid "Network _Resources"
+msgstr "Tarmoq _Resurslari"
+
+#: src/goabackend/goaprovider.c:163
+msgid "_Read Later"
+msgstr "_Keyinroq Oqing"
+
+#: src/goabackend/goaprovider.c:168
+msgid "Prin_ters"
+msgstr "Prin_terlar"
+
+#: src/goabackend/goaprovider.c:173
+msgid "_Maps"
+msgstr "_Xarita"
+
+#: src/goabackend/goaprovider.c:178
+msgid "T_o Do"
+msgstr "T_o Do"
+
+#: src/goabackend/goaprovider.c:1066
+msgid "Account is disabled"
+msgstr "Hisob faolsizlantirilgan"
+
+#: src/goabackend/goaprovider.c:1079
+msgid "Unknown error"
+msgstr "Noma’lum xatolik"
+
+#: src/goabackend/goaprovider.c:1098
+#, c-format
+msgid "ensure_credentials_sync is not implemented on type %s"
+msgstr "ensure_credentials_sync is not implemented on type %s"
+
+#. Translators: this is the title of the "Add Account" and "Refresh
+#. * Account" dialogs. The %s is the name of the provider. eg.,
+#. * 'Google'.
+#.
+#: src/goabackend/goaproviderdialog.c:183
+#, c-format
+msgid "%s Account"
+msgstr "%s Hisob"
+
+#: src/goabackend/goaproviderdialog.c:627
+msgid "Remove this Account?"
+msgstr "Bu hisob olib tashlansinmi?"
+
+#: src/goabackend/goaproviderdialog.c:628
+msgid ""
+"If you remove this Online Account you will have to connect to it again to "
+"use it with apps and services."
+msgstr ""
+"Agar ushbu Onlayn hisobni olib tashlasangiz, undan ilova va xizmatlarda "
+"foydalanish uchun unga qaytadan ulanishingiz kerak bo‘ladi."
+
+#: src/goabackend/goaproviderdialog.c:630
+msgid "_Cancel"
+msgstr "_Bekor qilish"
+
+#: src/goabackend/goaproviderdialog.c:631
+msgid "_Remove"
+msgstr "_O’chirish"
+
+#: src/goabackend/goaproviderdialog.c:767
+msgid "An account with that name already exists"
+msgstr "Bunday nomli hisob allaqachon mavjud"
+
+#: src/goabackend/goaproviderdialog.c:839
+msgid "Sign in to reconnect to this account"
+msgstr "Bu hisobga qayta ulanish uchun hisobingizga kiring"
+
+#: src/goabackend/goaproviderdialog.c:868
+msgid "_Account Name"
+msgstr "_Hisob nomi"
+
+#: src/goabackend/goaproviderdialog.c:940
+msgid "_Remove…"
+msgstr "_Oʻchirish…"
+
+#: src/goabackend/goaproviderdialog.c:1036
+msgid "_Sign In"
+msgstr "_Tizimga kirish"
+
+#: src/goabackend/goaproviderdialog.c:1098
+msgid "_Try Again"
+msgstr "_Qayta urinib ko’ring"
+
+#: src/goabackend/goaproviderdialog.c:1102
+msgid "_Ignore"
+msgstr "_E’tibor bermang"
+
+#: src/goabackend/goaproviderdialog.c:1374
+msgid "Dialog was dismissed"
+msgstr "Muloqot rad etildi"
+
+#. TODO: more specific
+#: src/goabackend/goasmtpauth.c:164
+msgid "TLS not available"
+msgstr "TLS mavjud emas"
+
+#: src/goabackend/goasmtpauth.c:492
+msgid "Unknown authentication mechanism"
+msgstr "Noma’lum autentifikatsiya mexanizmi"
+
+#: src/goabackend/goautils.c:80
+#, c-format
+msgid "A %s account already exists for %s"
+msgstr "%s hisobi %s uchun allaqachon mavjud"
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:193
+msgid "Failed to delete credentials from the keyring"
+msgstr "Hisob ma’lumotlari keyringdan o‘chirilmadi"
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:241
+msgid "Failed to retrieve credentials from the keyring"
+msgstr "Keyringdan hisob ma’lumotlari olinmadi"
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:251
+msgid "No credentials found in the keyring"
+msgstr "Keyringda hisob ma’lumotlari topilmadi"
+
+#: src/goabackend/goautils.c:264
+msgid "Error parsing result obtained from the keyring: "
+msgstr "Keyringdan olingan xato tahlili natijasi: "
+
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#: src/goabackend/goautils.c:305
+#, c-format
+msgid "GOA %s credentials for identity %s"
+msgstr "%s ID uchun GOA %s hisob ma’lumotlari"
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:322
+msgid "Failed to store credentials in the keyring"
+msgstr "Hisob ma’lumotlari keyringda saqlanmadi"
+
+#: src/goabackend/goautils.c:790
+msgid "Not supported"
+msgstr "Qo'llab quvvatlanmaydi"
+
+#: src/goabackend/goautils.c:794
+msgid "Not found"
+msgstr "Topilmadi"
+
+#: src/goabackend/goautils.c:808
+#, c-format
+msgid "Code: %u — Unexpected response from server"
+msgstr "Kod: %u - Serverdan kutilmagan javob"
+
+#: src/goabackend/goautils.c:833
+msgid "The signing certificate authority is not known."
+msgstr "Imzo qo‘yuvchi sertifikat organi ma’lum emas."
+
+#: src/goabackend/goautils.c:837
+msgid ""
+"The certificate does not match the expected identity of the site that it was "
+"retrieved from."
+msgstr "Sertifikat olingan saytning kutilgan identifikatoriga mos kelmaydi."
+
+#: src/goabackend/goautils.c:842
+msgid "The certificate’s activation time is still in the future."
+msgstr "Sertifikatni faollashtirish vaqti hali oldinda."
+
+#: src/goabackend/goautils.c:846
+msgid "The certificate has expired."
+msgstr "Sertifikatning amal qilish muddati tugagan."
+
+#: src/goabackend/goautils.c:850
+msgid "The certificate has been revoked."
+msgstr "Sertifikat bekor qilindi."
+
+#: src/goabackend/goautils.c:854
+msgid "The certificate’s algorithm is considered insecure."
+msgstr "Sertifikatning algoritmi ishonchsiz hisoblanadi."
+
+#: src/goabackend/goautils.c:860
+msgid "Invalid certificate."
+msgstr "Yaroqsiz sertifikat."
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:895
+#, c-format
+msgid "Did not find %s with identity “%s” in credentials"
+msgstr "Hisob ma’lumotlarida \"%s\" identifikatoriga ega %s topilmadi"
+
+#: src/goabackend/goawebdavprovider.c:399
+msgid "Calendar, Contacts and Files"
+msgstr "Kalendar, kontaktlar va fayllar"
+
+#: src/goabackend/goawebdavprovider.c:400
+msgid ""
+"Add a calendar, contacts and files account by entering your WebDAV server "
+"and account details"
+msgstr ""
+"WebDAV server va hisob tafsilotlarini kiritish orqali taqvim, kontaktlar va "
+"fayllar hisobini qo‘shing"
+
+#: src/goabackend/goawebdavprovider.c:403
+msgid "_Server Address"
+msgstr "_Server Manzili"
+
+#: src/goabackend/goawebdavprovider.c:404
+msgid "Examples: example.com, 192.168.0.82"
+msgstr "Masalan: example.com, 192.168.0.82"
+
+#: src/goabackend/goawebdavprovider.c:414
+msgid "Server Addresses (Optional)"
+msgstr "Server manzillari (Ixtiyoriy)"
+
+#: src/goabackend/goawebdavprovider.c:415
+msgid "Files"
+msgstr "Fayllar"
+
+#: src/goabackend/goawebdavprovider.c:416
+msgid "Calendar (CalDAV)"
+msgstr "Kalendar (CalDAV)"
+
+#: src/goabackend/goawebdavprovider.c:417
+msgid "Contacts (CardDAV)"
+msgstr "Kontaktlar (CardDAV)"
+
+#: src/goabackend/goawindowsliveprovider.c:56
+msgid "Microsoft"
+msgstr "Microsoft"
+
+#: src/goaidentity/goaidentityservice.c:564
+msgid "Initial secret key is invalid"
+msgstr "Dastlabki maxfiy kalit yaroqsiz"
+
+#. TODO: more specific
+#: src/goaidentity/goaidentityservice.c:786
+#, c-format
+msgid "Couldn't get GoaObject for object path %s"
+msgstr "%s obyekt yo‘li uchun GoaObject olinmadi"
+
+#: src/goaidentity/goaidentityservice.c:1119
+#, c-format
+msgid "The network realm %s needs some information to sign you in."
+msgstr ""
+"Tarmoq mintaqasi %s hisobingizga kirishi uchun ayrim ma’lumotlarni talab "
+"qiladi."
+
+#: src/goaidentity/goakerberosidentity.c:293
+#: src/goaidentity/goakerberosidentity.c:301
+#: src/goaidentity/goakerberosidentity.c:695
+msgid "Could not find identity in credential cache: "
+msgstr "Hisob ma’lumotlari keshida shaxs topilmadi: "
+
+#: src/goaidentity/goakerberosidentity.c:707
+msgid "Could not find identity credentials in cache: "
+msgstr "Keshda shaxsni tasdiqlovchi ma’lumotlar topilmadi: "
+
+#: src/goaidentity/goakerberosidentity.c:751
+msgid "Could not sift through identity credentials in cache: "
+msgstr "Keshdagi shaxsiy ma’lumotlar tekshirilmadi: "
+
+#: src/goaidentity/goakerberosidentity.c:763
+msgid "Could not finish up sifting through identity credentials in cache: "
+msgstr "Keshdagi shaxsiy ma’lumotlarni saralash yakunlanmadi: "
+
+#: src/goaidentity/goakerberosidentity.c:1406
+msgid "No associated identification found"
+msgstr "Hech qanday aloqador identifikatsiya topilmadi"
+
+#: src/goaidentity/goakerberosidentity.c:1535
+msgid "Could not create credential cache: "
+msgstr "Hisob ma’lumotlari keshi yaratilmadi: "
+
+#: src/goaidentity/goakerberosidentity.c:1575
+msgid "Could not initialize credentials cache: "
+msgstr "Hisob ma’lumotlari keshi ishga tushirilmadi: "
+
+#: src/goaidentity/goakerberosidentity.c:1588
+msgid "Could not store new credentials in credentials cache: "
+msgstr "Yangi hisob ma’lumotlari hisob ma’lumotlari keshiga saqlanmadi: "
+
+#: src/goaidentity/goakerberosidentity.c:1824
+msgid "Not signed in"
+msgstr "Kirilmagan"
+
+#: src/goaidentity/goakerberosidentity.c:1837
+msgid "Could not get the default principal: "
+msgstr "Birlamchi prinsip olinmadi: "
+
+#: src/goaidentity/goakerberosidentity.c:1850
+#, c-format
+msgid "Could not get renewed credentials from the KDC for identity %s: "
+msgstr ""
+"%s identifikatori uchun KDCdan yangilangan hisob ma’lumotlari olinmadi: "
+
+#: src/goaidentity/goakerberosidentity.c:1898
+msgid "Could not erase identity: "
+msgstr "Identifikator o‘chirilmadi: "
+
+#: src/goaidentity/goakerberosidentitymanager.c:955
+msgid "Could not find identity"
+msgstr "Identifikator topilmadi"
+
+#: src/goaidentity/goakerberosidentitymanager.c:1038
+msgid "Could not create credential cache for identity"
+msgstr "Shaxs identifikatori keshi yaratilmadi"
+
+#: src/goaidentity/goalinuxnotificationstream.c:58
+#, c-format
+msgid "Error closing file descriptor: %s"
+msgstr "Error closing file descriptor: %s"
