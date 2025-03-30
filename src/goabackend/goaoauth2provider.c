@@ -1459,10 +1459,14 @@ goa_oauth2_provider_add_account (GoaProvider         *provider,
   if (GOA_IS_PROVIDER_DIALOG (parent))
     {
       data->dialog = GOA_PROVIDER_DIALOG (parent);
-      g_object_set_data_full (G_OBJECT (task),
-                              "goa-provider-dialog",
-                              g_object_ref (data->dialog),
-                              g_object_unref);
+      /* The signal handler holds the reference to @task.
+       */
+      g_signal_connect_object (data->dialog,
+                               "notify::state",
+                               G_CALLBACK (add_account_action_cb),
+                               g_object_ref (task),
+                               G_CONNECT_DEFAULT);
+      g_object_set_data (G_OBJECT (task), "goa-provider-dialog", parent);
       add_account_action_cb (data->dialog, NULL, task);
     }
   else
@@ -1624,10 +1628,14 @@ goa_oauth2_provider_refresh_account (GoaProvider         *provider,
   if (GOA_IS_PROVIDER_DIALOG (parent))
     {
       data->dialog = GOA_PROVIDER_DIALOG (parent);
-      g_object_set_data_full (G_OBJECT (task),
-                              "goa-provider-dialog",
-                              g_object_ref (data->dialog),
-                              g_object_unref);
+      /* The signal handler holds the reference to @task.
+       */
+      g_signal_connect_object (data->dialog,
+                               "notify::state",
+                               G_CALLBACK (refresh_account_action_cb),
+                               g_object_ref (task),
+                               G_CONNECT_DEFAULT);
+      g_object_set_data (G_OBJECT (task), "goa-provider-dialog", parent);
       refresh_account_action_cb (data->dialog, NULL, task);
     }
   else
