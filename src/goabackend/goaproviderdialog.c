@@ -503,7 +503,7 @@ goa_provider_dialog_set_state (GoaProviderDialog *self,
         adw_banner_set_revealed (ADW_BANNER (banner), state == GOA_DIALOG_ERROR);
 
       content = g_object_get_data (G_OBJECT (page), "goa-dialog-content");
-      if (content != NULL)
+      if (ADW_IS_PREFERENCES_PAGE (content))
         gtk_widget_set_sensitive (content, state != GOA_DIALOG_BUSY);
     }
 

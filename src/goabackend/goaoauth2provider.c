@@ -1000,11 +1000,25 @@ on_copylink_activated (AccountData *data)
 }
 
 static void
+on_state_changed (GoaProviderDialog *dialog,
+                  GParamSpec        *pspec,
+                  GtkStack          *stack)
+{
+  GoaDialogState state = goa_provider_dialog_get_state (dialog);
+
+  if (state == GOA_DIALOG_BUSY || state == GOA_DIALOG_DONE)
+    gtk_stack_set_visible_child_name (stack, "busy");
+  else
+    gtk_stack_set_visible_child_name (stack, "ready");
+}
+
+static void
 create_account_details_ui (GoaProvider *provider,
                            AccountData *data,
                            gboolean     new_account)
 {
   GoaProviderDialog *dialog = GOA_PROVIDER_DIALOG (data->dialog);
+  GtkWidget *stack, *spinner;
   GtkWidget *content, *content_box;
   GtkWidget *buttons;
   GtkWidget *button;
@@ -1014,6 +1028,19 @@ create_account_details_ui (GoaProvider *provider,
 
   provider_name = goa_provider_get_provider_name (provider, NULL);
   description = g_strdup_printf (_("Sign in to %s with your browser"), provider_name);
+
+  stack = g_object_new (GTK_TYPE_STACK,
+                        "transition-type", GTK_STACK_TRANSITION_TYPE_CROSSFADE,
+                        "valign", GTK_ALIGN_END,
+                        "vexpand", TRUE,
+                        "vhomogeneous", TRUE,
+                        NULL);
+  g_signal_connect_object (dialog,
+                           "notify::state",
+                           G_CALLBACK (on_state_changed),
+                           stack,
+                           G_CONNECT_DEFAULT);
+
   content_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
 
   buttons = gtk_list_box_new ();
@@ -1049,11 +1076,18 @@ create_account_details_ui (GoaProvider *provider,
                                   GTK_ACCESSIBLE_RELATION_DESCRIBED_BY, copy_desc, NULL,
                                   -1);
   gtk_box_append (GTK_BOX (content_box), copy_desc);
+  gtk_stack_add_named (GTK_STACK (stack), content_box, "ready");
+
+  spinner = g_object_new (ADW_TYPE_SPINNER,
+                          "height-request", 32,
+                          "valign", GTK_ALIGN_CENTER,
+                          NULL);
+  gtk_stack_add_named (GTK_STACK (stack), spinner, "busy");
 
   content = g_object_new (ADW_TYPE_STATUS_PAGE,
                           "icon-name",   "web-browser-symbolic",
                           "description", description,
-                          "child",       content_box,
+                          "child",       stack,
                           NULL);
   goa_provider_dialog_push_content (dialog, NULL, content);
 
