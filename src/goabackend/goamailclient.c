@@ -726,8 +726,9 @@ goa_mail_client_mx_domain_cb (GResolver    *resolver,
 {
   g_autoptr(GTask) task = G_TASK (user_data);
   DiscoverData *data = g_task_get_task_data (task);
-  const char *mx_full_domain = NULL;
+  const char *mx_raw_domain = NULL;
   const char *mx_base_domain = NULL;
+  g_autofree char *mx_full_domain = NULL;
   g_autolist(GVariant) records = NULL;
   g_autoptr(GError) error = NULL;
 
@@ -746,7 +747,8 @@ goa_mail_client_mx_domain_cb (GResolver    *resolver,
     }
 
   records = g_list_sort (records, sort_mx_domains);
-  g_variant_get ((GVariant *)records->data, "(q&s)", NULL, &mx_full_domain);
+  g_variant_get ((GVariant *)records->data, "(q&s)", NULL, &mx_raw_domain);
+  mx_full_domain = g_utf8_casefold (mx_raw_domain, -1);
   mx_base_domain = soup_tld_get_base_domain (mx_full_domain, NULL);
 
   /* Lookup by the highest priority %MXFULLDOMAIN% and %MXBASEDOMAIN */
