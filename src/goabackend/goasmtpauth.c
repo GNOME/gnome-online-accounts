@@ -202,7 +202,7 @@ smtp_auth_check_greeting (GDataInputStream *input, GCancellable *cancellable, GE
 /* ---------------------------------------------------------------------------------------------------- */
 
 static char *
-imap_auth_escape0 (const char *str,
+smtp_auth_escape0 (const char *str,
                    size_t     *length)
 {
   GString *ret;
@@ -503,8 +503,8 @@ goa_smtp_auth_run_sync (GoaMailAuth         *auth,
 
       /* AUTH PLAIN */
 
-      username_esc = imap_auth_escape0 (self->username, &username_len);
-      password_esc = imap_auth_escape0 (self->password, &password_len);
+      username_esc = smtp_auth_escape0 (self->username, &username_len);
+      password_esc = smtp_auth_escape0 (self->password, &password_len);
       auth_arg_plain = g_strdup_printf ("%s%c%s%c%s", username_esc, '\0', username_esc, '\0', password_esc);
       auth_arg_plain_len = 2 * username_len + 2 + password_len;
       auth_arg_base64 = g_base64_encode ((guchar *) auth_arg_plain, auth_arg_plain_len);
@@ -519,7 +519,7 @@ goa_smtp_auth_run_sync (GoaMailAuth         *auth,
     {
       /* AUTH LOGIN */
 
-      auth_arg_plain = imap_auth_escape0 (self->username, &auth_arg_plain_len);
+      auth_arg_plain = smtp_auth_escape0 (self->username, &auth_arg_plain_len);
       auth_arg_base64 = g_base64_encode ((guchar *) auth_arg_plain, auth_arg_plain_len);
 
       request = g_strdup_printf ("AUTH LOGIN %s\r\n", auth_arg_base64);
@@ -538,7 +538,7 @@ goa_smtp_auth_run_sync (GoaMailAuth         *auth,
       g_free (auth_arg_plain);
       g_free (auth_arg_base64);
 
-      auth_arg_plain = imap_auth_escape0 (self->password, &auth_arg_plain_len);
+      auth_arg_plain = smtp_auth_escape0 (self->password, &auth_arg_plain_len);
       auth_arg_base64 = g_base64_encode ((guchar *) auth_arg_plain, auth_arg_plain_len);
 
       request = g_strdup_printf ("%s\r\n", auth_arg_base64);
