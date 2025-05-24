@@ -738,10 +738,11 @@ g_resolver_lookup_service_cb (GResolver    *resolver,
     }
   else if (!data->base_domain_fallback)
     {
+      g_autofree char *domain_lowercase = g_utf8_casefold (data->domain, -1);
       const char *base_domain = NULL;
 
-      base_domain = soup_tld_get_base_domain (data->domain, NULL);
-      if (base_domain == NULL || g_strcmp0 (data->domain, base_domain) == 0)
+      base_domain = soup_tld_get_base_domain (domain_lowercase, NULL);
+      if (base_domain == NULL || g_strcmp0 (domain_lowercase, base_domain) == 0)
         {
           g_task_return_error (task, g_steal_pointer (&error));
           return;
@@ -1221,12 +1222,13 @@ static gboolean
 dav_client_discover_preconfig (DiscoverData *discover,
                                GUri         *uri)
 {
-  const char *host = NULL;
+  g_autofree char *host = NULL;
   const char *base_domain = NULL;
 
   g_assert (discover != NULL);
 
-  host = g_uri_get_host (uri);
+  if (g_uri_get_host (uri))
+    host = g_utf8_casefold (g_uri_get_host (uri), -1);
   if (host != NULL)
     base_domain = soup_tld_get_base_domain (host, NULL);
 
