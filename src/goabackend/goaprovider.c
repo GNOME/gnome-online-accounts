@@ -28,7 +28,6 @@
 #include "goaimapsmtpprovider.h"
 #include "goaowncloudprovider.h"
 #include "goawebdavprovider.h"
-#include "goawindowsliveprovider.h"
 #include "goamsgraphprovider.h"
 
 #ifdef GOA_FEDORA_ENABLED
@@ -1181,9 +1180,6 @@ static struct
 #endif
 #ifdef GOA_OWNCLOUD_ENABLED
   { GOA_OWNCLOUD_NAME, goa_owncloud_provider_get_type },
-#endif
-#ifdef GOA_WINDOWS_LIVE_ENABLED
-  { GOA_WINDOWS_LIVE_NAME, goa_windows_live_provider_get_type },
 #endif
 #ifdef GOA_EXCHANGE_ENABLED
   { GOA_EXCHANGE_NAME, goa_exchange_provider_get_type },
