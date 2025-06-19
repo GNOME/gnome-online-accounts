@@ -24,6 +24,7 @@
 #include <rest/rest-proxy.h>
 #include <json-glib/json-glib.h>
 
+#include "goaauthflowbutton.h"
 #include "goaprovider.h"
 #include "goaproviderdialog.h"
 #include "goaprovider-priv.h"
@@ -462,10 +463,20 @@ on_organization_changed (AdwSwitchRow *row,
 }
 
 static void
-on_copylink_activated (AccountData *data)
+on_copy_activated (GoaAuthflowButton *widget,
+                   AccountData       *data)
 {
   data->flags |= GOA_AUTH_FLOW_DO_NOT_LAUNCH_URI;
   goa_provider_dialog_set_state (data->dialog, GOA_DIALOG_BUSY);
+  goa_authflow_button_set_active (widget, TRUE);
+}
+
+static void
+on_link_activated (GoaAuthflowButton *widget,
+                   AccountData       *data)
+{
+  goa_provider_dialog_set_state (data->dialog, GOA_DIALOG_BUSY);
+  goa_authflow_button_set_active (widget, TRUE);
 }
 
 static void
@@ -479,7 +490,6 @@ create_account_details_ui (GoaProvider *provider,
     {
       GtkWidget *group;
       GtkWidget *button;
-      GtkWidget *copy_desc;
 
       goa_provider_dialog_add_page (dialog,
                                     NULL, // provider name
@@ -521,42 +531,18 @@ create_account_details_ui (GoaProvider *provider,
 
       /* Auth Flow */
       group = goa_provider_dialog_add_group (dialog, NULL);
-      adw_preferences_group_set_separate_rows (ADW_PREFERENCES_GROUP (group), TRUE);
-      gtk_widget_set_valign (group, GTK_ALIGN_END);
-      gtk_widget_set_vexpand (group, TRUE);
-
-      button = g_object_new (ADW_TYPE_BUTTON_ROW,
-                             "title", _("_Sign In…"),
-                             "use-underline", TRUE,
-                             NULL);
-      gtk_widget_add_css_class (button, "suggested-action");
+      button = goa_authflow_button_new ();
+      gtk_widget_set_valign (button, GTK_ALIGN_END);
+      gtk_widget_set_vexpand (button, TRUE);
+      g_signal_connect (button,
+                        "copy-activated",
+                        G_CALLBACK (on_copy_activated),
+                        data);
+      g_signal_connect (button,
+                        "link-activated",
+                        G_CALLBACK (on_link_activated),
+                        data);
       adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), button);
-
-      /* When "Copy Link" is clicked, we pin the flags for the auth flow */
-      data->copy_button = g_object_new (ADW_TYPE_BUTTON_ROW,
-                                        "title", _("_Copy Link"),
-                                        "use-underline", TRUE,
-                                        "start-icon-name", "edit-copy-symbolic",
-                                        NULL);
-      g_signal_connect_swapped (data->copy_button,
-                                "activated",
-                                G_CALLBACK (on_copylink_activated),
-                                data);
-      g_object_bind_property (button, "sensitive",
-                              data->copy_button, "sensitive",
-                              G_BINDING_DEFAULT);
-      adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), data->copy_button);
-
-      copy_desc = gtk_label_new (_("Copy the authorization URL to continue with a specific web browser."));
-      gtk_label_set_justify (GTK_LABEL (copy_desc), GTK_JUSTIFY_CENTER);
-      gtk_label_set_wrap (GTK_LABEL (copy_desc), TRUE);
-      gtk_widget_set_halign (copy_desc, GTK_ALIGN_CENTER);
-      gtk_widget_set_margin_top (copy_desc, 18);
-      gtk_widget_add_css_class (copy_desc, "caption");
-      gtk_accessible_update_relation (GTK_ACCESSIBLE (data->copy_button),
-                                      GTK_ACCESSIBLE_RELATION_DESCRIBED_BY, copy_desc, NULL,
-                                      -1);
-      adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), copy_desc);
 
       /* Set the default widget after it's a child of the window */
       adw_dialog_set_default_widget (ADW_DIALOG (dialog), button);
