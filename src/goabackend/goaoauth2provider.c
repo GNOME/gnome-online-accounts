@@ -25,6 +25,7 @@
 #include <libsecret/secret.h>
 #include <json-glib/json-glib.h>
 
+#include "goaauthflowbutton.h"
 #include "goaprovider.h"
 #include "goaproviderdialog.h"
 #include "goautils.h"
@@ -993,23 +994,20 @@ identity_from_auth (GoaOAuth2Provider  *self,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
-on_copylink_activated (AccountData *data)
+on_copy_activated (GoaAuthflowButton *widget,
+                   AccountData       *data)
 {
   data->flags |= GOA_AUTH_FLOW_DO_NOT_LAUNCH_URI;
   goa_provider_dialog_set_state (data->dialog, GOA_DIALOG_BUSY);
+  goa_authflow_button_set_active (widget, TRUE);
 }
 
 static void
-on_state_changed (GoaProviderDialog *dialog,
-                  GParamSpec        *pspec,
-                  GtkStack          *stack)
+on_link_activated (GoaAuthflowButton *widget,
+                   AccountData       *data)
 {
-  GoaDialogState state = goa_provider_dialog_get_state (dialog);
-
-  if (state == GOA_DIALOG_BUSY || state == GOA_DIALOG_DONE)
-    gtk_stack_set_visible_child_name (stack, "busy");
-  else
-    gtk_stack_set_visible_child_name (stack, "ready");
+  goa_provider_dialog_set_state (data->dialog, GOA_DIALOG_BUSY);
+  goa_authflow_button_set_active (widget, TRUE);
 }
 
 static void
@@ -1018,76 +1016,28 @@ create_account_details_ui (GoaProvider *provider,
                            gboolean     new_account)
 {
   GoaProviderDialog *dialog = GOA_PROVIDER_DIALOG (data->dialog);
-  GtkWidget *stack, *spinner;
-  GtkWidget *content, *content_box;
-  GtkWidget *buttons;
+  GtkWidget *content;
   GtkWidget *button;
-  GtkWidget *copy_button, *copy_desc;
   g_autofree char *provider_name = NULL;
   g_autofree char *description = NULL;
 
   provider_name = goa_provider_get_provider_name (provider, NULL);
   description = g_strdup_printf (_("Sign in to %s with your browser"), provider_name);
 
-  stack = g_object_new (GTK_TYPE_STACK,
-                        "transition-type", GTK_STACK_TRANSITION_TYPE_CROSSFADE,
-                        "valign", GTK_ALIGN_END,
-                        "vexpand", TRUE,
-                        "vhomogeneous", TRUE,
-                        NULL);
-  g_signal_connect_object (dialog,
-                           "notify::state",
-                           G_CALLBACK (on_state_changed),
-                           stack,
-                           G_CONNECT_DEFAULT);
-
-  content_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
-
-  buttons = gtk_list_box_new ();
-  gtk_widget_add_css_class (buttons, "boxed-list-separate");
-  gtk_list_box_set_selection_mode (GTK_LIST_BOX (buttons), GTK_SELECTION_NONE);
-  gtk_box_append (GTK_BOX (content_box), buttons);
-
-  button = g_object_new (ADW_TYPE_BUTTON_ROW,
-                         "title", _("_Sign In…"),
-                         "use-underline", TRUE,
-                         NULL);
-  gtk_widget_add_css_class (button, "suggested-action");
-  gtk_list_box_append (GTK_LIST_BOX (buttons), button);
-
-  /* When "Copy Link" is clicked, we pin the flags for the auth flow */
-  copy_button = g_object_new (ADW_TYPE_BUTTON_ROW,
-                              "title", _("_Copy Link"),
-                              "use-underline", TRUE,
-                              "start-icon-name", "edit-copy-symbolic",
-                              NULL);
-  g_signal_connect_swapped (copy_button,
-                            "activated",
-                            G_CALLBACK (on_copylink_activated),
-                            data);
-  gtk_list_box_append (GTK_LIST_BOX (buttons), copy_button);
-
-  copy_desc = gtk_label_new (_("Copy the authorization URL to continue with a specific web browser."));
-  gtk_label_set_justify (GTK_LABEL (copy_desc), GTK_JUSTIFY_CENTER);
-  gtk_label_set_wrap (GTK_LABEL (copy_desc), TRUE);
-  gtk_widget_set_halign (copy_desc, GTK_ALIGN_CENTER);
-  gtk_widget_add_css_class (copy_desc, "caption");
-  gtk_accessible_update_relation (GTK_ACCESSIBLE (copy_button),
-                                  GTK_ACCESSIBLE_RELATION_DESCRIBED_BY, copy_desc, NULL,
-                                  -1);
-  gtk_box_append (GTK_BOX (content_box), copy_desc);
-  gtk_stack_add_named (GTK_STACK (stack), content_box, "ready");
-
-  spinner = g_object_new (ADW_TYPE_SPINNER,
-                          "height-request", 32,
-                          "valign", GTK_ALIGN_CENTER,
-                          NULL);
-  gtk_stack_add_named (GTK_STACK (stack), spinner, "busy");
+  button = goa_authflow_button_new ();
+  g_signal_connect (button,
+                    "copy-activated",
+                    G_CALLBACK (on_copy_activated),
+                    data);
+  g_signal_connect (button,
+                    "link-activated",
+                    G_CALLBACK (on_link_activated),
+                    data);
 
   content = g_object_new (ADW_TYPE_STATUS_PAGE,
                           "icon-name",   "web-browser-symbolic",
                           "description", description,
-                          "child",       stack,
+                          "child",       button,
                           NULL);
   goa_provider_dialog_push_content (dialog, NULL, content);
 
