@@ -48,6 +48,14 @@
 #define MAILBOX_ORG_CALDAV   "https://dav.mailbox.org/caldav"
 #define MAILBOX_ORG_CARDDAV  "https://dav.mailbox.org/carddav"
 
+/* mail.ru
+ * See: https://help.mail.ru/cloud_web/app/webdav/#linux
+ *      https://help.mail.ru/calendar-help/synchronization/about/
+ */
+#define MAIL_RU_HOSTNAME     "mail.ru"
+#define MAIL_RU_WEBDAV       "https://webdav.cloud.mail.ru"
+#define MAIL_RU_CALDAV       "https://calendar.mail.ru"
+
 struct _GoaDavClient
 {
   GObject parent_instance;
@@ -1253,6 +1261,17 @@ dav_client_discover_preconfig (DiscoverData *discover,
                          goa_dav_config_new (GOA_SERVICE_TYPE_CARDDAV, MAILBOX_ORG_CARDDAV, NULL));
       g_queue_push_tail (&discover->candidates,
                          goa_dav_config_new (GOA_SERVICE_TYPE_WEBDAV, MAILBOX_ORG_WEBDAV, NULL));
+
+      return TRUE;
+    }
+
+  if (g_strcmp0 (host, "mail.ru") == 0
+      || g_strcmp0 (base_domain, "mail.ru") == 0)
+    {
+      g_queue_push_tail (&discover->candidates,
+                         goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV, MAIL_RU_CALDAV, NULL));
+      g_queue_push_tail (&discover->candidates,
+                         goa_dav_config_new (GOA_SERVICE_TYPE_WEBDAV, MAIL_RU_WEBDAV, NULL));
 
       return TRUE;
     }
