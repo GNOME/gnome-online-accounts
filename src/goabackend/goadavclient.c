@@ -1248,7 +1248,7 @@ dav_client_discover_preconfig (DiscoverData *discover,
       || g_strcmp0 (base_domain, "mailbox.org") == 0)
     {
       g_queue_push_tail (&discover->candidates,
-                         goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV, MAILBOX_ORG_WEBDAV, NULL));
+                         goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV, MAILBOX_ORG_CALDAV, NULL));
       g_queue_push_tail (&discover->candidates,
                          goa_dav_config_new (GOA_SERVICE_TYPE_CARDDAV, MAILBOX_ORG_CARDDAV, NULL));
       g_queue_push_tail (&discover->candidates,
