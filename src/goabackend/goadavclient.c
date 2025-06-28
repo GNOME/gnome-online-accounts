@@ -48,6 +48,14 @@
 #define MAILBOX_ORG_CALDAV   "https://dav.mailbox.org/caldav"
 #define MAILBOX_ORG_CARDDAV  "https://dav.mailbox.org/carddav"
 
+/* mail.ru
+ * See: https://help.mail.ru/cloud_web/app/webdav/#linux
+ *      https://help.mail.ru/calendar-help/synchronization/about/
+ */
+#define MAIL_RU_HOSTNAME     "mail.ru"
+#define MAIL_RU_WEBDAV       "https://webdav.cloud.mail.ru"
+#define MAIL_RU_CALDAV       "https://calendar.mail.ru"
+
 struct _GoaDavClient
 {
   GObject parent_instance;
@@ -1177,19 +1185,18 @@ dav_client_discover_iterate (GTask *task)
         {
           g_autofree char *nc_uri = NULL;
 
-          /* Start with Nextcloud, everyone's favourite sort of compliant DAV server, since
-           * we can return early if we recognize the path.
-           */
-          nc_uri = g_uri_resolve_relative (discover->uri, "remote.php/dav", G_URI_FLAGS_NONE, NULL);
-          g_queue_push_tail (&discover->candidates,
-                             goa_dav_config_new (GOA_SERVICE_TYPE_WEBDAV, nc_uri, NULL));
-
           g_queue_push_tail (&discover->candidates,
                              goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV, discover->uri, NULL));
           g_queue_push_tail (&discover->candidates,
                              goa_dav_config_new (GOA_SERVICE_TYPE_CARDDAV, discover->uri, NULL));
           g_queue_push_tail (&discover->candidates,
                              goa_dav_config_new (GOA_SERVICE_TYPE_WEBDAV, discover->uri, NULL));
+
+          /* Fallback to making an OPTIONS request to a known path for Nextcloud/ownCloud
+           */
+          nc_uri = g_uri_resolve_relative (discover->uri, "remote.php/dav", G_URI_FLAGS_NONE, NULL);
+          g_queue_push_tail (&discover->candidates,
+                             goa_dav_config_new (GOA_SERVICE_TYPE_WEBDAV, nc_uri, NULL));
 
           discover->uri_fallback = TRUE;
           dav_client_discover_iterate (task);
@@ -1249,11 +1256,22 @@ dav_client_discover_preconfig (DiscoverData *discover,
       || g_strcmp0 (base_domain, "mailbox.org") == 0)
     {
       g_queue_push_tail (&discover->candidates,
-                         goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV, MAILBOX_ORG_WEBDAV, NULL));
+                         goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV, MAILBOX_ORG_CALDAV, NULL));
       g_queue_push_tail (&discover->candidates,
                          goa_dav_config_new (GOA_SERVICE_TYPE_CARDDAV, MAILBOX_ORG_CARDDAV, NULL));
       g_queue_push_tail (&discover->candidates,
                          goa_dav_config_new (GOA_SERVICE_TYPE_WEBDAV, MAILBOX_ORG_WEBDAV, NULL));
+
+      return TRUE;
+    }
+
+  if (g_strcmp0 (host, "mail.ru") == 0
+      || g_strcmp0 (base_domain, "mail.ru") == 0)
+    {
+      g_queue_push_tail (&discover->candidates,
+                         goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV, MAIL_RU_CALDAV, NULL));
+      g_queue_push_tail (&discover->candidates,
+                         goa_dav_config_new (GOA_SERVICE_TYPE_WEBDAV, MAIL_RU_WEBDAV, NULL));
 
       return TRUE;
     }
