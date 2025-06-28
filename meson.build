@@ -1,6 +1,6 @@
 project(
   'gnome-online-accounts', 'c',
-  version: '3.54.4',
+  version: '3.54.5',
   license: 'LGPL2+',
   default_options: [
     'buildtype=debugoptimized',
