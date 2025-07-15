@@ -1150,6 +1150,7 @@ oauth2_handler_dbus_method_call (GDBusConnection       *connection,
           g_debug ("Received OAuth2 response for client ID \"%s\"", client_id);
 
           g_dbus_method_invocation_return_value (invocation, NULL);
+          authorize_uri_task_complete (NULL, task);
           g_task_return_pointer (task, g_strdup (response), g_free);
         }
       else
@@ -1161,10 +1162,10 @@ oauth2_handler_dbus_method_call (GDBusConnection       *connection,
                                                  G_DBUS_ERROR_INVALID_ARGS,
                                                  "Invalid URI \"%s\"",
                                                  response);
+          authorize_uri_task_complete (NULL, task);
           g_task_return_error (task, g_steal_pointer (&error));
         }
 
-      authorize_uri_task_complete (NULL, task);
       return;
     }
 
@@ -1193,8 +1194,8 @@ authorize_uri_launch_uri_cb (GObject      *object,
 
   if (!g_app_info_launch_default_for_uri_finish (result, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
       authorize_uri_task_complete (NULL, task);
+      g_task_return_error (task, g_steal_pointer (&error));
     }
 }
 
@@ -1226,8 +1227,8 @@ on_oauth2_bus_acquired (GDBusConnection *connection,
 
   if (data->register_object_id == 0)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
       authorize_uri_task_complete (NULL, task);
+      g_task_return_error (task, g_steal_pointer (&error));
     }
 }
 
@@ -1262,11 +1263,11 @@ on_oauth2_name_lost (GDBusConnection *connection,
   else
     g_warning ("%s(): Failed to own %s on the session bus", G_STRFUNC, name);
 
+  authorize_uri_task_complete (NULL, task);
   g_task_return_new_error_literal (task,
                                    GOA_ERROR,
                                    GOA_ERROR_FAILED,
                                    _("Service not available"));
-  authorize_uri_task_complete (NULL, task);
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
