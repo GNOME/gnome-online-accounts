@@ -827,13 +827,23 @@ parse_request_uri (GoaOAuth2Provider  *self,
   AccountData *data = g_task_get_task_data (task);
   g_autoptr(GHashTable) key_value_pairs = NULL;
   g_autoptr(GUri) uri = NULL;
+  g_autoptr(GUri) redirect_uri = NULL;
   const char *fragment;
   const char *oauth2_error;
   const char *query;
 
   g_assert (error == NULL || *error == NULL);
 
-  if (!g_str_has_prefix (requested_uri, data->redirect_uri))
+  uri = g_uri_parse (requested_uri, G_URI_FLAGS_ENCODED | G_URI_FLAGS_PARSE_RELAXED, error);
+  if (uri == NULL)
+    return FALSE;
+
+  redirect_uri = g_uri_parse (data->redirect_uri, G_URI_FLAGS_ENCODED | G_URI_FLAGS_PARSE_RELAXED, error);
+  if (redirect_uri == NULL)
+    return FALSE;
+
+  if (g_strcmp0 (g_uri_get_scheme (uri), g_uri_get_scheme (redirect_uri)) != 0
+      || g_strcmp0 (g_uri_get_path (uri), g_uri_get_path (redirect_uri)) != 0)
     {
       g_set_error (error,
                    GOA_ERROR,
@@ -842,10 +852,6 @@ parse_request_uri (GoaOAuth2Provider  *self,
                    requested_uri);
       return FALSE;
     }
-
-  uri = g_uri_parse (requested_uri, G_URI_FLAGS_ENCODED | G_URI_FLAGS_PARSE_RELAXED, error);
-  if (uri == NULL)
-    return FALSE;
 
   /* Three cases:
    * 1) we can either have the backend handle the URI for us, or
