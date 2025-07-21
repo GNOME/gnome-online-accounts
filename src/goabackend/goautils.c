@@ -721,7 +721,7 @@ goa_utils_normalize_url (const char  *base_uri,
     }
 
   uri = g_uri_parse (uri_string, G_URI_FLAGS_ENCODED | G_URI_FLAGS_PARSE_RELAXED, NULL);
-  if (uri == NULL)
+  if (uri == NULL || g_uri_get_host (uri) == NULL || g_uri_get_host (uri)[0] == '\0')
     return NULL;
 
   if (uri_ref != NULL)
