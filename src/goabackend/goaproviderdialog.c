@@ -865,7 +865,7 @@ goa_provider_dialog_push_account (GoaProviderDialog *self,
   gtk_box_append (GTK_BOX (box), group);
 
   row = g_object_new (ADW_TYPE_ENTRY_ROW,
-                      "title", _("_Account Name"),
+                      "title", _("_Account Description"),
                       "text", account_name,
                       "show-apply-button", TRUE,
                       "use-underline", TRUE,
