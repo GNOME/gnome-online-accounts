@@ -3,11 +3,6 @@ subdir('icons')
 dbus_ifaces = files('dbus-interfaces.xml')
 
 if enable_goabackend
-  install_data(
-    'org.gnome.online-accounts.gschema.xml',
-    install_dir: join_paths(goa_datadir, 'glib-2.0', 'schemas')
-  )
-
   services = ['org.gnome.OnlineAccounts.service']
   if enable_kerberos
     services += 'org.gnome.Identity.service'
