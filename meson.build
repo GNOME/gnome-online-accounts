@@ -285,7 +285,6 @@ endif
 subdir('po')
 
 gnome.post_install(
-  glib_compile_schemas: enable_goabackend,
   gtk_update_icon_cache: true,
 )
 

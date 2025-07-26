@@ -50,7 +50,8 @@ The following configuration file restricts providers to those using open protoco
 enable=imap_smtp;webdav;kerberos
 ```
 
-<sup id="legacy-gsettings">1: Legacy GSettings are not documented or supported</sup>
+<sup id="legacy-gsettings">1: Legacy GSettings are not documented or supported. They were
+removed entirely in version 3.56.0 (GNOME 49)</sup>
 
 ### Restricting Services
 
