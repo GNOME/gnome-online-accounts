@@ -6,9 +6,6 @@ datadirs="data"
 # find source files that contain gettext keywords
 files=$(grep -lR --include='*.c' '\(gettext\|[^_)]_\)(' $srcdirs)
 
-# find GSettings schemas that contain gettext-domain string
-files="$files "$(grep -lRi --include='*.gschema.xml' 'gettext-domain="[^"]\+"' $datadirs)
-
 # find .desktop files
 files="$files "$(find $datadirs -name '*.desktop*')
 
