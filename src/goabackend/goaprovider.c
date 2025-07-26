@@ -1221,24 +1221,18 @@ goa_provider_ensure_builtins_loaded (void)
       if (goa_conf)
         {
           whitelisted_providers = g_key_file_get_string_list (goa_conf, "providers", "enable", NULL, NULL);
-          /* Let the empty array be like 'all' */
           if (whitelisted_providers && !*whitelisted_providers)
-            {
-              g_strfreev (whitelisted_providers);
-              whitelisted_providers = g_new0 (gchar *, 2);
-              whitelisted_providers[0] = g_strdup ("all");
-              whitelisted_providers[1] = NULL;
-            }
+            g_clear_pointer (&whitelisted_providers, g_strfreev);
+
           g_clear_pointer (&goa_conf, g_key_file_free);
         }
 
-      if (!whitelisted_providers)
+      /* Default to enabling all providers */
+      if (whitelisted_providers == NULL)
         {
-          GSettings *settings;
-
-          settings = g_settings_new (GOA_SETTINGS_SCHEMA);
-          whitelisted_providers = g_settings_get_strv (settings, GOA_SETTINGS_WHITELISTED_PROVIDERS);
-          g_object_unref (settings);
+          whitelisted_providers = g_new0 (gchar *, 2);
+          whitelisted_providers[0] = g_strdup ("all");
+          whitelisted_providers[1] = NULL;
         }
 
       /* Enable everything if there is 'all'. */
