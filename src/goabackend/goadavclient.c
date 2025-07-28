@@ -898,6 +898,25 @@ dav_client_discover_postconfig_nexcloud (DiscoverData *discover,
   if (server_root == NULL)
     server_root = g_strrstr (path, "/remote.php/webdav");
 
+  /* Check the DAV headers for a Nextcloud-specific entry, which may
+   * have matched on a well-known without a proper redirect
+   */
+  if (server_root == NULL)
+    {
+      SoupMessageHeaders *headers = NULL;
+      const char *dav_header = NULL;
+
+      headers = soup_message_get_response_headers (message);
+      dav_header = soup_message_headers_get_list (headers, "DAV");
+
+      if (dav_header != NULL && g_strrstr (dav_header, "nextcloud-checksum-update") != NULL)
+        {
+          server_root = g_strrstr (path, WELL_KNOWN_CALDAV);
+          if (server_root == NULL)
+            server_root = g_strrstr (path, WELL_KNOWN_CARDDAV);
+        }
+    }
+
   if (server_root != NULL)
     {
       int port = -1;
