@@ -1396,6 +1396,7 @@ remove_account_cb (GObject *source_object, GAsyncResult *res, gpointer user_data
   if (g_ptr_array_remove (self->accounts_needing_attention, account))
     goa_daemon_update_notification (self);
 
+  g_task_return_boolean (task, TRUE);
   g_object_unref (task);
 }
 
@@ -1795,6 +1796,8 @@ ensure_credentials_queue_collector (GObject *source_object, GAsyncResult *res, g
 
   self->ensure_credentials_running = FALSE;
   ensure_credentials_queue_check (self);
+
+  g_task_return_boolean (task, TRUE);
   g_object_unref (task);
 }
 

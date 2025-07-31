@@ -229,8 +229,9 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
     }
   id = json_node_get_string (json_member);
 
-  // Prefer "mail" then "displayName" for "PresentationIdentity", failing if neither is available
-  json_member = json_object_get_member (json_object, "mail");
+  // Prefer "userPrincipalName" then "mail", failing if neither is available, since Gvfs requires
+  // a user and host for the GMountSpec
+  json_member = json_object_get_member (json_object, "userPrincipalName");
   if (json_member != NULL && json_node_get_value_type (json_member) == G_TYPE_STRING)
     {
       presentation_identity = json_node_get_string (json_member);
@@ -238,14 +239,15 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
 
   if (presentation_identity == NULL)
     {
-      json_member = json_object_get_member (json_object, "displayName");
+      json_member = json_object_get_member (json_object, "mail");
       if (json_member != NULL && json_node_get_value_type (json_member) == G_TYPE_STRING)
         {
           presentation_identity = json_node_get_string (json_member);
         }
       else
         {
-          g_debug ("%s(): expected \"mail\" or \"displayName\" field holding a string", G_STRFUNC);
+          g_debug ("%s(): expected \"userPrincipalName\" or \"mail\" field holding a string",
+                   G_STRFUNC);
           g_set_error (error,
                        GOA_ERROR,
                        GOA_ERROR_FAILED,
