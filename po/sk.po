@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-08-27 22:12+0000\n"
-"PO-Revision-Date: 2024-09-10 13:33+0200\n"
+"POT-Creation-Date: 2025-08-10 18:26+0000\n"
+"PO-Revision-Date: 2025-08-13 08:51+0200\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.6\n"
 "X-Project-Style: gnome\n"
 
 #: data/org.gnome.online-accounts.gschema.xml:6
@@ -28,8 +28,8 @@ msgstr "Zoznam poskytovateľov, ktoré majú povolené načítania"
 #: data/org.gnome.online-accounts.gschema.xml:7
 msgid ""
 "A list of strings representing the providers that are allowed to be loaded "
-"(default: 'all'). This is only evaluated on startup. Deprecated: use goa."
-"conf in the system config directory instead, with a key [providers] "
+"(default: 'all'). This is only evaluated on startup. Deprecated: use "
+"goa.conf in the system config directory instead, with a key [providers] "
 "enable=all instead. The key is comma-separated list of the provider names."
 msgstr ""
 "Zoznam reťazcov reprezentujúcich poskytovateľov, ktoré majú povolené "
@@ -39,69 +39,69 @@ msgstr ""
 "zoznam s názvami poskytovateľov."
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1160 src/daemon/goadaemon.c:1480
+#: src/daemon/goadaemon.c:1162 src/daemon/goadaemon.c:1483
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Zlyhalo nájdenie poskytovateľa pre: %s"
 
-#: src/daemon/goadaemon.c:1423
+#: src/daemon/goadaemon.c:1426
 msgid "IsLocked property is set for account"
 msgstr "Vlastnosť „IsLocked“ je nastavená pre účet"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1468
+#: src/daemon/goadaemon.c:1471
 msgid "ProviderType property is not set for account"
 msgstr "Vlastnosť „ProviderType“ nie je pre účet nastavená"
 
-#: src/daemon/goadaemon.c:1630
+#: src/daemon/goadaemon.c:1633
 #, c-format
 msgid "Failed to sign in to “%s”"
 msgstr "Zlyhalo prihlásenie do účtu „%s“"
 
-#: src/daemon/goadaemon.c:1635
+#: src/daemon/goadaemon.c:1638
 msgid "Failed to sign in to multiple accounts"
 msgstr "Zlyhalo prihlásenie do viacerých účtov"
 
 # PM: neviem či by nemalo byť Účet %s/Účet k (službe) %s
 # dialog title
-#: src/daemon/goadaemon.c:1644
+#: src/daemon/goadaemon.c:1647
 msgid "Online Accounts"
 msgstr "Účty služieb"
 
-#: src/daemon/goadaemon.c:1647
+#: src/daemon/goadaemon.c:1650
 msgid "Account Action Required"
 msgstr "Vyžaduje sa akcia s účtom"
 
 #. TODO: more specific
-#: src/goabackend/goadavclient.c:1187 src/goabackend/goaimapauthlogin.c:104
-#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:799
+#: src/goabackend/goadavclient.c:1228 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:802
 msgid "Authentication failed"
 msgstr "Zlyhalo overenie totožnosti"
 
-#: src/goabackend/goadavclient.c:1194
+#: src/goabackend/goadavclient.c:1235
 msgid "Cannot find WebDAV endpoint"
 msgstr "Nedá sa nájsť koncový bod protokolu WebDAV"
 
-#: src/goabackend/goadavclient.c:1295 src/goabackend/goawebdavprovider.c:648
+#: src/goabackend/goadavclient.c:1348 src/goabackend/goawebdavprovider.c:648
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "Neplatný odkaz URI: %s"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:276
+#: src/goabackend/goaewsclient.c:278
 msgid "Failed to parse autodiscover response XML"
 msgstr "Zlyhala analýza XML odpovede autopreskúmania"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: src/goabackend/goaewsclient.c:287 src/goabackend/goaewsclient.c:302
-#: src/goabackend/goaewsclient.c:317
+#: src/goabackend/goaewsclient.c:289 src/goabackend/goaewsclient.c:304
+#: src/goabackend/goaewsclient.c:319
 #, c-format
 msgid "Failed to find “%s” element"
 msgstr "Zlyhalo nájdenie prvku „%s“"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:338
+#: src/goabackend/goaewsclient.c:340
 msgid "Failed to find ASUrl in autodiscover response"
 msgstr "Zlyhalo nájdenie ASUrl v odpovedi automatického preskúmania"
 
@@ -131,17 +131,16 @@ msgstr ""
 
 # Label
 #: src/goabackend/goaexchangeprovider.c:392
-#: src/goabackend/goaimapsmtpprovider.c:696
-#| msgid "_E-mail"
+#: src/goabackend/goaimapsmtpprovider.c:701
 msgid "_Email"
 msgstr "_Email"
 
 # Label
 #: src/goabackend/goaexchangeprovider.c:393
 #: src/goabackend/goafedoraprovider.c:171
-#: src/goabackend/goaimapsmtpprovider.c:697
-#: src/goabackend/goaimapsmtpprovider.c:740
-#: src/goabackend/goaimapsmtpprovider.c:784
+#: src/goabackend/goaimapsmtpprovider.c:702
+#: src/goabackend/goaimapsmtpprovider.c:745
+#: src/goabackend/goaimapsmtpprovider.c:789
 #: src/goabackend/goawebdavprovider.c:408
 msgid "_Password"
 msgstr "_Heslo"
@@ -161,8 +160,8 @@ msgstr "Podrobnosti o účte"
 # Label
 #: src/goabackend/goaexchangeprovider.c:406
 #: src/goabackend/goafedoraprovider.c:170
-#: src/goabackend/goaimapsmtpprovider.c:739
-#: src/goabackend/goaimapsmtpprovider.c:783
+#: src/goabackend/goaimapsmtpprovider.c:744
+#: src/goabackend/goaimapsmtpprovider.c:788
 #: src/goabackend/goawebdavprovider.c:407
 msgid "User_name"
 msgstr "Používateľské me_no"
@@ -186,7 +185,7 @@ msgid "Access restricted web and network resources for your organization"
 msgstr ""
 "Pristupujte k obmedzeným webovým a sieťovým prostriedkom vašej spoločnosti"
 
-#: src/goabackend/goafedoraprovider.c:338
+#: src/goabackend/goafedoraprovider.c:339
 #, c-format
 msgid "Failed to get principal from user name “%s”"
 msgstr "Zlyhalo získanie splnomocniteľa z používateľského mena „%s“"
@@ -197,9 +196,9 @@ msgid "Google"
 msgstr "Google"
 
 # MČ: Našiel som čo znamená guid (http://developer.yahoo.com/social/rest_api_guide/introspective-guid-resource.html) asi by som to neprekladal.
-#: src/goabackend/goagoogleprovider.c:213
+#: src/goabackend/goagoogleprovider.c:211
 #: src/goabackend/goamsgraphprovider.c:184
-#: src/goabackend/goawindowsliveprovider.c:165
+#: src/goabackend/goawindowsliveprovider.c:163
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
@@ -208,28 +207,30 @@ msgstr ""
 "stav %d (%s)"
 
 #. TODO: more specific
-#: src/goabackend/goagoogleprovider.c:232
-#: src/goabackend/goagoogleprovider.c:243
+#: src/goabackend/goagoogleprovider.c:230
+#: src/goabackend/goagoogleprovider.c:241
 #: src/goabackend/goamsgraphprovider.c:203
 #: src/goabackend/goamsgraphprovider.c:214
 #: src/goabackend/goamsgraphprovider.c:227
-#: src/goabackend/goamsgraphprovider.c:252
-#: src/goabackend/goaoauth2provider.c:677
-#: src/goabackend/goaoauth2provider.c:707
-#: src/goabackend/goaoauth2provider.c:718 src/goabackend/goautils.c:133
-#: src/goabackend/goawindowsliveprovider.c:184
-#: src/goabackend/goawindowsliveprovider.c:195
-#: src/goabackend/goawindowsliveprovider.c:204
-#: src/goabackend/goawindowsliveprovider.c:217
+#: src/goabackend/goamsgraphprovider.c:254
+#: src/goabackend/goaoauth2provider.c:686
+#: src/goabackend/goaoauth2provider.c:743
+#: src/goabackend/goaoauth2provider.c:773
+#: src/goabackend/goaoauth2provider.c:784 src/goabackend/goautils.c:136
+#: src/goabackend/goawindowsliveprovider.c:182
+#: src/goabackend/goawindowsliveprovider.c:193
+#: src/goabackend/goawindowsliveprovider.c:202
+#: src/goabackend/goawindowsliveprovider.c:215
 msgid "Could not parse response"
 msgstr "Nepodarilo sa analyzovať odpoveď"
 
 #. TODO: more specific
-#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goasmtpauth.c:149
+#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goaoauth2provider.c:1292
+#: src/goabackend/goasmtpauth.c:149
 msgid "Service not available"
 msgstr "Služba nie je dostupná"
 
-#: src/goabackend/goaimapauthlogin.c:166 src/goabackend/goasmtpauth.c:600
+#: src/goabackend/goaimapauthlogin.c:157 src/goabackend/goasmtpauth.c:625
 msgid "Server does not support STARTTLS"
 msgstr "Server nepodporuje STARTTLS"
 
@@ -253,50 +254,42 @@ msgstr "IMAP a SMTP"
 msgid "Invalid %s with username “%s” (%s, %d): "
 msgstr "Neplatné pole %s pre používateľské meno „%s“ (%s, %d): "
 
-#: src/goabackend/goaimapsmtpprovider.c:562
-#: src/goabackend/goaimapsmtpprovider.c:583
-#: src/goabackend/goaimapsmtpprovider.c:719
-#: src/goabackend/goaimapsmtpprovider.c:760
-#: src/goabackend/goaimapsmtpprovider.c:804
+#: src/goabackend/goaimapsmtpprovider.c:566
+#: src/goabackend/goaimapsmtpprovider.c:589
+#: src/goabackend/goaimapsmtpprovider.c:724
+#: src/goabackend/goaimapsmtpprovider.c:765
+#: src/goabackend/goaimapsmtpprovider.c:809
 msgid "Auto-detected"
 msgstr "Automaticky rozpoznané"
 
-#: src/goabackend/goaimapsmtpprovider.c:612
+#: src/goabackend/goaimapsmtpprovider.c:618
 msgid "Unable to auto-detect IMAP and SMTP settings"
 msgstr "Nie je možné automaticky rozpoznať nastavenia IMAP a SMTP"
 
-# DK: šifrovanie
-#. Keep in sync with GoaTlsType
-#: src/goabackend/goaimapsmtpprovider.c:683
-msgid "None"
-msgstr "Žiadne"
-
-#. GOA_TLS_TYPE_NONE
-#: src/goabackend/goaimapsmtpprovider.c:684
+#: src/goabackend/goaimapsmtpprovider.c:689
 msgid "STARTTLS after connecting"
 msgstr "STARTTLS po pripojení"
 
 #. GOA_TLS_TYPE_STARTTLS
-#: src/goabackend/goaimapsmtpprovider.c:685
+#: src/goabackend/goaimapsmtpprovider.c:690
 msgid "SSL on a dedicated port"
 msgstr "SSL na dedikovanom porte"
 
 # Label
-#: src/goabackend/goaimapsmtpprovider.c:690
-#: src/goabackend/goaimapsmtpprovider.c:1424
-#| msgid "E-mail"
+#: src/goabackend/goaimapsmtpprovider.c:695
+#: src/goabackend/goaimapsmtpprovider.c:1435
 msgid "Email"
 msgstr "Email"
 
-#: src/goabackend/goaimapsmtpprovider.c:691
+#: src/goabackend/goaimapsmtpprovider.c:696
 msgid "Connect to an email account"
 msgstr "Pripojte sa k emailovému účtu"
 
-#: src/goabackend/goaimapsmtpprovider.c:695
+#: src/goabackend/goaimapsmtpprovider.c:700
 msgid "_Name"
 msgstr "_Meno"
 
-#: src/goabackend/goaimapsmtpprovider.c:698
+#: src/goabackend/goaimapsmtpprovider.c:703
 msgid ""
 "IMAP and SMTP details will be auto-detected from your service provider when "
 "possible"
@@ -305,47 +298,47 @@ msgstr ""
 "služby, ak je to možné"
 
 #. IMAP
-#: src/goabackend/goaimapsmtpprovider.c:737
+#: src/goabackend/goaimapsmtpprovider.c:742
 msgid "IMAP Settings"
 msgstr "Nastavenia IMAP"
 
 # Label
-#: src/goabackend/goaimapsmtpprovider.c:738
+#: src/goabackend/goaimapsmtpprovider.c:743
 msgid "IMAP _Server"
 msgstr "_Server IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:749
-#: src/goabackend/goaimapsmtpprovider.c:793
+#: src/goabackend/goaimapsmtpprovider.c:754
+#: src/goabackend/goaimapsmtpprovider.c:798
 msgid "Encryption"
 msgstr "Šifrovanie"
 
-#: src/goabackend/goaimapsmtpprovider.c:774
+#: src/goabackend/goaimapsmtpprovider.c:779
 msgid "Example server: imap.example.com"
 msgstr "Príklad serveru: imap.priklad.sk"
 
 #. SMTP
-#: src/goabackend/goaimapsmtpprovider.c:781
+#: src/goabackend/goaimapsmtpprovider.c:786
 msgid "SMTP Settings"
 msgstr "Nastavenia SMTP"
 
 # Label
-#: src/goabackend/goaimapsmtpprovider.c:782
+#: src/goabackend/goaimapsmtpprovider.c:787
 msgid "SMTP _Server"
 msgstr "_Server SMTP"
 
-#: src/goabackend/goaimapsmtpprovider.c:818
+#: src/goabackend/goaimapsmtpprovider.c:823
 msgid "Example server: smtp.example.com"
 msgstr "Príklad serveru: smtp.priklad.sk"
 
-#: src/goabackend/goaimapsmtpprovider.c:1415
+#: src/goabackend/goaimapsmtpprovider.c:1426
 msgid "Name"
 msgstr "Meno"
 
-#: src/goabackend/goaimapsmtpprovider.c:1441
+#: src/goabackend/goaimapsmtpprovider.c:1452
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1459
+#: src/goabackend/goaimapsmtpprovider.c:1470
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -383,13 +376,13 @@ msgstr "S_plnomocniteľ"
 msgid "Example principal: user@EXAMPLE.COM"
 msgstr "Príklad splnomocniteľa: pouzivatel@PRIKLAD.SK"
 
-#: src/goabackend/goakerberosprovider.c:1293
+#: src/goabackend/goakerberosprovider.c:1308
 msgid "Ticketing is disabled for account"
 msgstr "Vydávanie lístkov je pre tento účet zakázané"
 
 # PM: http://sospreskoly.org/kerberos principal = splnomocniteľ
 # principal, http://web.mit.edu/kerberos/krb5-1.5/krb5-1.5.4/doc/krb5-user/What-is-a-Kerberos-Principal_003f.html
-#: src/goabackend/goakerberosprovider.c:1320
+#: src/goabackend/goakerberosprovider.c:1331
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr ""
@@ -397,67 +390,85 @@ msgstr ""
 
 # PM: http://sospreskoly.org/kerberos principal = splnomocniteľ
 # principal, http://web.mit.edu/kerberos/krb5-1.5/krb5-1.5.4/doc/krb5-user/What-is-a-Kerberos-Principal_003f.html
-#: src/goabackend/goakerberosprovider.c:1335
+#: src/goabackend/goakerberosprovider.c:1345
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "Nepodarilo sa nájsť heslo pre splnomocniteľa „%s“ v povereniach"
 
-#: src/goabackend/goakerberosprovider.c:1517
+#: src/goabackend/goakerberosprovider.c:1527
 msgid "Identity service returned invalid key"
 msgstr "Identifikačná služba vrátila neplatný kľúč"
 
-#: src/goabackend/goamailclient.c:851
+#: src/goabackend/goamailclient.c:853
 #, c-format
 msgid "Invalid email address “%s”"
 msgstr "Neplatná emailová adresa „%s“"
 
 # provider name
 #: src/goabackend/goamsgraphprovider.c:64
-#| msgid "Microsoft"
 msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:476
+#: src/goabackend/goamsgraphprovider.c:488
 msgid "Connect to Microsoft 365 to access email, calendars, contacts and files"
 msgstr ""
 "Pripojte sa k službe Microsoft 365 a pristupujte k emailom, kalendárom, "
 "kontaktom a súborom"
 
-#: src/goabackend/goamsgraphprovider.c:480
+#: src/goabackend/goamsgraphprovider.c:492
 msgid "Use Organization Account"
 msgstr "Použiť účet spoločnosti"
 
-#: src/goabackend/goamsgraphprovider.c:481
+#: src/goabackend/goamsgraphprovider.c:493
 msgid "Connect using details from an organization or developer account"
 msgstr ""
 "Pripojte sa pomocou podrobností od vašej spoločnosti alebo vývojárskym účtom"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:488
+#: src/goabackend/goamsgraphprovider.c:500
 msgid "Enter the details provided by your organization"
 msgstr "Zadajte podrobnosti poskytnuté vašou spoločnosťou"
 
-#: src/goabackend/goamsgraphprovider.c:490
+#: src/goabackend/goamsgraphprovider.c:502
 msgid "_Client ID (Optional)"
 msgstr "ID _klienta (voliteľné)"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:492
+#: src/goabackend/goamsgraphprovider.c:504
 msgid "_Tenant ID"
 msgstr "ID _nájomníka"
 
-#: src/goabackend/goamsgraphprovider.c:493
+#: src/goabackend/goamsgraphprovider.c:505
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "Príklad ID: 00000000-0000-0000-0000-000000000000"
 
-#: src/goabackend/goamsgraphprovider.c:496
-#: src/goabackend/goaoauth2provider.c:943
-#: src/goabackend/goaproviderdialog.c:701
+#: src/goabackend/goamsgraphprovider.c:531
+#: src/goabackend/goaoauth2provider.c:1031
+#: src/goabackend/goaproviderdialog.c:840
 msgid "_Sign In…"
 msgstr "_Prihlásiť sa…"
 
-#: src/goabackend/goaoauth2provider.c:653
+#: src/goabackend/goamsgraphprovider.c:539
+#: src/goabackend/goaoauth2provider.c:1039
+msgid "_Copy Link"
+msgstr "_Kopírovať odkaz"
+
+# gtk label
+#: src/goabackend/goamsgraphprovider.c:552
+#: src/goabackend/goaoauth2provider.c:1049
+msgid "Copy the authorization URL to continue with a specific web browser."
+msgstr ""
+"Skopírujte autorizačný odkaz URL na pokračovanie vo webovom prehliadači."
+
+# PM: asi Odpoveď pri overení totožnosti bola, pokial viem snažíme sa vyhýbať cudzím slovám ako autorizačný, prejdite aj ostatné reťazce
+#: src/goabackend/goaoauth2provider.c:708
+#: src/goabackend/goaoauth2provider.c:932
+#, c-format
+msgid "Authorization response: %s"
+msgstr "Odpoveď pri potvrdzovaní prístupu: %s"
+
+#: src/goabackend/goaoauth2provider.c:719
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -466,43 +477,42 @@ msgstr ""
 "prišiel stav %d (%s)"
 
 # PM: asi Odpoveď pri overení totožnosti bola, pokial viem snažíme sa vyhýbať cudzím slovám ako autorizačný, prejdite aj ostatné reťazce
-#: src/goabackend/goaoauth2provider.c:797
+#: src/goabackend/goaoauth2provider.c:869
 msgid "Authorization response: "
 msgstr "Odpoveď pri potvrdzovaní prístupu: "
 
-# PM: asi Odpoveď pri overení totožnosti bola, pokial viem snažíme sa vyhýbať cudzím slovám ako autorizačný, prejdite aj ostatné reťazce
-#: src/goabackend/goaoauth2provider.c:860
-#, c-format
-msgid "Authorization response: %s"
-msgstr "Odpoveď pri potvrdzovaní prístupu: %s"
-
-#: src/goabackend/goaoauth2provider.c:868
+#: src/goabackend/goaoauth2provider.c:940
 msgid "Failed to authenticate"
 msgstr "Zlyhalo overenie totožnosti"
 
-#: src/goabackend/goaoauth2provider.c:904
+#: src/goabackend/goaoauth2provider.c:976
 msgid "Error getting an Access Token: "
 msgstr "Chyba pri získavaní prístupového reťazca: "
 
-#: src/goabackend/goaoauth2provider.c:920
+#: src/goabackend/goaoauth2provider.c:992
 msgid "Error getting identity: "
 msgstr "Chyba pri získavaní identity: "
 
-#: src/goabackend/goaoauth2provider.c:941
+#: src/goabackend/goaoauth2provider.c:1022
 #, c-format
 msgid "Sign in to %s with your browser"
 msgstr "Prihláste sa do účtu %s pomocou vášho prehliadača"
 
-#: src/goabackend/goaoauth2provider.c:1530
+#: src/goabackend/goaoauth2provider.c:1561
+#: src/goabackend/goaoauth2provider.c:1733
+msgid "Copied to clipboard"
+msgstr "Skopírované do schránky"
+
+#: src/goabackend/goaoauth2provider.c:1684
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Bolo požadované prihlásenie ako %s, prihlásený ste ale ako %s"
 
-#: src/goabackend/goaoauth2provider.c:1758
+#: src/goabackend/goaoauth2provider.c:1927
 msgid "Credentials do not contain access_token"
 msgstr "Poverenia neobsahujú access_token"
 
-#: src/goabackend/goaoauth2provider.c:1802
+#: src/goabackend/goaoauth2provider.c:1971
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Zlyhalo obnovenie prístupového reťazca (%s, %d): "
@@ -590,18 +600,18 @@ msgstr ""
 #. * Account" dialogs. The %s is the name of the provider. eg.,
 #. * 'Google'.
 #.
-#: src/goabackend/goaproviderdialog.c:174
+#: src/goabackend/goaproviderdialog.c:183
 #, c-format
 msgid "%s Account"
 msgstr "Účet %s"
 
 # PM: neviem či by nemalo byť Účet %s/Účet k (službe) %s
 # dialog title
-#: src/goabackend/goaproviderdialog.c:618
+#: src/goabackend/goaproviderdialog.c:627
 msgid "Remove this Account?"
 msgstr "Odstrániť tento účet?"
 
-#: src/goabackend/goaproviderdialog.c:619
+#: src/goabackend/goaproviderdialog.c:628
 msgid ""
 "If you remove this Online Account you will have to connect to it again to "
 "use it with apps and services."
@@ -609,37 +619,45 @@ msgstr ""
 "Ak odstránite tento účet služieb, budete sa musieť k nemu opätovne pripojiť, "
 "aby ho bolo možné použiť v aplikáciách a službách."
 
-#: src/goabackend/goaproviderdialog.c:621
+#: src/goabackend/goaproviderdialog.c:630
 msgid "_Cancel"
 msgstr "_Zrušiť"
 
-#: src/goabackend/goaproviderdialog.c:622
+#: src/goabackend/goaproviderdialog.c:631
 msgid "_Remove"
 msgstr "O_dstrániť"
 
-#: src/goabackend/goaproviderdialog.c:700
+#: src/goabackend/goaproviderdialog.c:767
+msgid "An account with that name already exists"
+msgstr "Účet s takým názvom už existuje"
+
+#: src/goabackend/goaproviderdialog.c:839
 msgid "Sign in to reconnect to this account"
 msgstr "Prihlásením sa opätovne pripojíte tento účet"
 
-#: src/goabackend/goaproviderdialog.c:754
+#: src/goabackend/goaproviderdialog.c:868
+msgid "_Account Name"
+msgstr "_Názov účtu"
+
+#: src/goabackend/goaproviderdialog.c:947
 msgid "_Remove…"
 msgstr "O_dstrániť…"
 
-#: src/goabackend/goaproviderdialog.c:849
+#: src/goabackend/goaproviderdialog.c:1043
 msgid "_Sign In"
 msgstr "_Prihlásiť sa"
 
 # goa_spinner_button label
-#: src/goabackend/goaproviderdialog.c:911
+#: src/goabackend/goaproviderdialog.c:1105
 msgid "_Try Again"
 msgstr "_Skúsiť znovu"
 
-#: src/goabackend/goaproviderdialog.c:915
+#: src/goabackend/goaproviderdialog.c:1109
 msgid "_Ignore"
 msgstr "_Ignorovať"
 
 # MČ: odhadujem na reakciu na nevyplnený autorizačný kód.
-#: src/goabackend/goaproviderdialog.c:1187
+#: src/goabackend/goaproviderdialog.c:1381
 msgid "Dialog was dismissed"
 msgstr "Dialógové okno bolo odmietnuté"
 
@@ -648,31 +666,31 @@ msgstr "Dialógové okno bolo odmietnuté"
 msgid "TLS not available"
 msgstr "TLS nie je dostupné"
 
-#: src/goabackend/goasmtpauth.c:470
+#: src/goabackend/goasmtpauth.c:492
 msgid "Unknown authentication mechanism"
 msgstr "Neznámy mechanizmus overenia totožnosti"
 
-#: src/goabackend/goautils.c:77
+#: src/goabackend/goautils.c:80
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "Účet %s už pre používateľa %s existuje"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:190
+#: src/goabackend/goautils.c:193
 msgid "Failed to delete credentials from the keyring"
 msgstr "Zlyhalo odstránenie poverenia zo zväzku kľúčov"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:238
+#: src/goabackend/goautils.c:241
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Zlyhalo získanie poverenia zo zväzku kľúčov"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:248
+#: src/goabackend/goautils.c:251
 msgid "No credentials found in the keyring"
 msgstr "Nenašli sa žiadne poverenia v zväzku kľúčov"
 
-#: src/goabackend/goautils.c:261
+#: src/goabackend/goautils.c:264
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Chyba pri analýze výsledku získaného zo zväzku kľúčov: "
 
@@ -680,34 +698,34 @@ msgstr "Chyba pri analýze výsledku získaného zo zväzku kľúčov: "
 # PM: tiež si nie som istý či preklad skratiek je najlepší nápad, pokiaľ skratk nie je zaužívaná, navyše je tu zlý slovosled dal by som Poverenia GOÚ %s pre identitu %s
 # PK: necham GOA, lebo je to backend a vsade v docs je GOA (dev guide napr.)
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: src/goabackend/goautils.c:302
+#: src/goabackend/goautils.c:305
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "Poverenia GOA %s pre identitu %s"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:319
+#: src/goabackend/goautils.c:322
 msgid "Failed to store credentials in the keyring"
 msgstr "Zlyhalo uloženie poverenia v zväzku kľúčov"
 
-#: src/goabackend/goautils.c:787
+#: src/goabackend/goautils.c:790
 msgid "Not supported"
 msgstr "Nepodporované"
 
-#: src/goabackend/goautils.c:791
+#: src/goabackend/goautils.c:794
 msgid "Not found"
 msgstr "Nenájdené"
 
-#: src/goabackend/goautils.c:805
+#: src/goabackend/goautils.c:808
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Kód: %u — Neočakávaná odpoveď od servera"
 
-#: src/goabackend/goautils.c:830
+#: src/goabackend/goautils.c:833
 msgid "The signing certificate authority is not known."
 msgstr "Autorita, ktorá podpísala certifikát nie je známa."
 
-#: src/goabackend/goautils.c:834
+#: src/goabackend/goautils.c:837
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
@@ -716,29 +734,29 @@ msgstr ""
 "prevzatý."
 
 # DK: fraza pouzita v module Epiphany
-#: src/goabackend/goautils.c:839
+#: src/goabackend/goautils.c:842
 msgid "The certificate’s activation time is still in the future."
 msgstr "Doposiaľ nenastal čas aktivácie certifikátu."
 
-#: src/goabackend/goautils.c:843
+#: src/goabackend/goautils.c:846
 msgid "The certificate has expired."
 msgstr "Platnosť certifikátu skončila."
 
 # DK:odmietnutý=použité v module Epiphany
-#: src/goabackend/goautils.c:847
+#: src/goabackend/goautils.c:850
 msgid "The certificate has been revoked."
 msgstr "Certifikát bol odmietnutý."
 
-#: src/goabackend/goautils.c:851
+#: src/goabackend/goautils.c:854
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Algoritmus certifikátu nie je považovaný za bezpečný."
 
-#: src/goabackend/goautils.c:857
+#: src/goabackend/goautils.c:860
 msgid "Invalid certificate."
 msgstr "Neplatný certifikát."
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:892
+#: src/goabackend/goautils.c:895
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "V povereniach sa nenašlo pole %s pre identitu „%s“"
@@ -775,7 +793,6 @@ msgstr "Súbory"
 
 # switch
 #: src/goabackend/goawebdavprovider.c:416
-#| msgid "Cale_ndar"
 msgid "Calendar (CalDAV)"
 msgstr "Kalendár (CalDAV)"
 
@@ -876,6 +893,10 @@ msgstr "Nepodarilo sa vytvoriť vyrovnávaciu pamäť poverení pre identitu"
 #, c-format
 msgid "Error closing file descriptor: %s"
 msgstr "Chyba pri zatváraní popisovača súboru: %s"
+
+# DK: šifrovanie
+#~ msgid "None"
+#~ msgstr "Žiadne"
 
 # expander
 #~ msgid "_Custom"
