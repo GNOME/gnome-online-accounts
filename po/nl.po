@@ -4,16 +4,18 @@
 # Rachid  <rachidbm@gmail.com>, 2012.
 # Reinout van Schouwen <reinouts@gnome.org>, 2012, 2013, 2014.
 # Erwin Poeze <donnut@outlook.com>, 2013.
-# Nathan Follens <nfollens@gnome.org>, 2015-2017, 2019, 2023-2024.
+# Nathan Follens <nfollens@gnome.org>, 2015-2017, 2019, 2023-2025.
 # Hannie Dumoleyn <hannie@ubuntu-nl.org>, 2015, 2017.
 # Justin van Steijn <jvs@fsfe.org>, 2016, 2017.
+# Youpie <youplamb@hotmail.nl>, 2025.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts gnome-3-4\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2024-09-15 02:13+0000\n"
-"PO-Revision-Date: 2024-10-27 23:27+0100\n"
+"POT-Creation-Date: 2025-07-31 19:12+0000\n"
+"PO-Revision-Date: 2025-08-20 01:09+0200\n"
 "Last-Translator: Nathan Follens <nfollens@gnome.org>\n"
 "Language-Team: GNOME-NL https://matrix.to/#/#nl:gnome.org\n"
 "Language: nl\n"
@@ -21,8 +23,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.4\n"
+"X-Generator: Poedit 3.6\n"
 "X-Project-Style: gnome\n"
+"X-DL-Lang: nl\n"
+"X-DL-Module: gnome-online-accounts\n"
+"X-DL-Branch: master\n"
+"X-DL-Domain: po\n"
+"X-DL-State: None\n"
 
 #: data/org.gnome.online-accounts.gschema.xml:6
 msgid "List of providers that are allowed to be loaded"
@@ -31,8 +38,8 @@ msgstr "Lijst van leveranciers die geladen mogen worden"
 #: data/org.gnome.online-accounts.gschema.xml:7
 msgid ""
 "A list of strings representing the providers that are allowed to be loaded "
-"(default: 'all'). This is only evaluated on startup. Deprecated: use goa."
-"conf in the system config directory instead, with a key [providers] "
+"(default: 'all'). This is only evaluated on startup. Deprecated: use "
+"goa.conf in the system config directory instead, with a key [providers] "
 "enable=all instead. The key is comma-separated list of the provider names."
 msgstr ""
 "Een lijst van tekenreeksen, die de leveranciers die geladen mogen worden "
@@ -42,67 +49,67 @@ msgstr ""
 "is een kommagescheiden lijst van leveranciernamen."
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1160 src/daemon/goadaemon.c:1480
+#: src/daemon/goadaemon.c:1162 src/daemon/goadaemon.c:1483
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Leverancier voor %s niet gevonden"
 
-#: src/daemon/goadaemon.c:1423
+#: src/daemon/goadaemon.c:1426
 msgid "IsLocked property is set for account"
 msgstr "IsLocked-eigenschap is ingesteld voor account"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1468
+#: src/daemon/goadaemon.c:1471
 msgid "ProviderType property is not set for account"
 msgstr "ProviderType-eigenschap is niet ingesteld voor account"
 
-#: src/daemon/goadaemon.c:1630
+#: src/daemon/goadaemon.c:1633
 #, c-format
 msgid "Failed to sign in to “%s”"
 msgstr "Aanmelden bij ‘%s’ is mislukt"
 
-#: src/daemon/goadaemon.c:1635
+#: src/daemon/goadaemon.c:1638
 msgid "Failed to sign in to multiple accounts"
 msgstr "Kon bij meerdere accounts niet aanmelden"
 
-#: src/daemon/goadaemon.c:1644
+#: src/daemon/goadaemon.c:1647
 msgid "Online Accounts"
 msgstr "Online-accounts"
 
-#: src/daemon/goadaemon.c:1647
+#: src/daemon/goadaemon.c:1650
 msgid "Account Action Required"
 msgstr "Actie vereist voor account"
 
 #. TODO: more specific
-#: src/goabackend/goadavclient.c:1187 src/goabackend/goaimapauthlogin.c:104
-#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:799
+#: src/goabackend/goadavclient.c:1228 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:802
 msgid "Authentication failed"
 msgstr "Aanmelden mislukt"
 
-#: src/goabackend/goadavclient.c:1194
+#: src/goabackend/goadavclient.c:1235
 msgid "Cannot find WebDAV endpoint"
 msgstr "Kan WebDAV-eindpunt niet vinden"
 
-#: src/goabackend/goadavclient.c:1295 src/goabackend/goawebdavprovider.c:648
+#: src/goabackend/goadavclient.c:1348 src/goabackend/goawebdavprovider.c:648
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "Ongeldige URI: %s"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:276
+#: src/goabackend/goaewsclient.c:278
 msgid "Failed to parse autodiscover response XML"
 msgstr "Interpreteren van XML auto-ontdek-antwoord mislukt"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: src/goabackend/goaewsclient.c:287 src/goabackend/goaewsclient.c:302
-#: src/goabackend/goaewsclient.c:317
+#: src/goabackend/goaewsclient.c:289 src/goabackend/goaewsclient.c:304
+#: src/goabackend/goaewsclient.c:319
 #, c-format
 msgid "Failed to find “%s” element"
 msgstr "Element “%s” niet gevonden"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:338
+#: src/goabackend/goaewsclient.c:340
 msgid "Failed to find ASUrl in autodiscover response"
 msgstr "Kon ASUrl niet vinden in auto-ontdek-antwoord"
 
@@ -130,15 +137,15 @@ msgstr ""
 "contacten en bestanden te benaderen"
 
 #: src/goabackend/goaexchangeprovider.c:392
-#: src/goabackend/goaimapsmtpprovider.c:696
+#: src/goabackend/goaimapsmtpprovider.c:701
 msgid "_Email"
 msgstr "_E-mail"
 
 #: src/goabackend/goaexchangeprovider.c:393
 #: src/goabackend/goafedoraprovider.c:171
-#: src/goabackend/goaimapsmtpprovider.c:697
-#: src/goabackend/goaimapsmtpprovider.c:740
-#: src/goabackend/goaimapsmtpprovider.c:784
+#: src/goabackend/goaimapsmtpprovider.c:702
+#: src/goabackend/goaimapsmtpprovider.c:745
+#: src/goabackend/goaimapsmtpprovider.c:789
 #: src/goabackend/goawebdavprovider.c:408
 msgid "_Password"
 msgstr "_Wachtwoord"
@@ -157,8 +164,8 @@ msgstr "Accountgegevens"
 
 #: src/goabackend/goaexchangeprovider.c:406
 #: src/goabackend/goafedoraprovider.c:170
-#: src/goabackend/goaimapsmtpprovider.c:739
-#: src/goabackend/goaimapsmtpprovider.c:783
+#: src/goabackend/goaimapsmtpprovider.c:744
+#: src/goabackend/goaimapsmtpprovider.c:788
 #: src/goabackend/goawebdavprovider.c:407
 msgid "User_name"
 msgstr "Gebruikers_naam"
@@ -181,7 +188,7 @@ msgstr "Fedora"
 msgid "Access restricted web and network resources for your organization"
 msgstr "Verkrijg toegang tot web- en netwerkbronnen van uw organisatie"
 
-#: src/goabackend/goafedoraprovider.c:338
+#: src/goabackend/goafedoraprovider.c:339
 #, c-format
 msgid "Failed to get principal from user name “%s”"
 msgstr "Kon principal niet ophalen uit gebruikersnaam ‘%s’"
@@ -190,9 +197,9 @@ msgstr "Kon principal niet ophalen uit gebruikersnaam ‘%s’"
 msgid "Google"
 msgstr "Google"
 
-#: src/goabackend/goagoogleprovider.c:213
+#: src/goabackend/goagoogleprovider.c:211
 #: src/goabackend/goamsgraphprovider.c:184
-#: src/goabackend/goawindowsliveprovider.c:165
+#: src/goabackend/goawindowsliveprovider.c:163
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
@@ -201,28 +208,30 @@ msgstr ""
 "plaats daarvan status %d (%s)"
 
 #. TODO: more specific
-#: src/goabackend/goagoogleprovider.c:232
-#: src/goabackend/goagoogleprovider.c:243
+#: src/goabackend/goagoogleprovider.c:230
+#: src/goabackend/goagoogleprovider.c:241
 #: src/goabackend/goamsgraphprovider.c:203
 #: src/goabackend/goamsgraphprovider.c:214
 #: src/goabackend/goamsgraphprovider.c:227
-#: src/goabackend/goamsgraphprovider.c:252
-#: src/goabackend/goaoauth2provider.c:677
-#: src/goabackend/goaoauth2provider.c:707
-#: src/goabackend/goaoauth2provider.c:718 src/goabackend/goautils.c:133
-#: src/goabackend/goawindowsliveprovider.c:184
-#: src/goabackend/goawindowsliveprovider.c:195
-#: src/goabackend/goawindowsliveprovider.c:204
-#: src/goabackend/goawindowsliveprovider.c:217
+#: src/goabackend/goamsgraphprovider.c:254
+#: src/goabackend/goaoauth2provider.c:686
+#: src/goabackend/goaoauth2provider.c:743
+#: src/goabackend/goaoauth2provider.c:773
+#: src/goabackend/goaoauth2provider.c:784 src/goabackend/goautils.c:136
+#: src/goabackend/goawindowsliveprovider.c:182
+#: src/goabackend/goawindowsliveprovider.c:193
+#: src/goabackend/goawindowsliveprovider.c:202
+#: src/goabackend/goawindowsliveprovider.c:215
 msgid "Could not parse response"
 msgstr "Antwoord kon niet worden verwerkt"
 
 #. TODO: more specific
-#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goasmtpauth.c:149
+#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goaoauth2provider.c:1292
+#: src/goabackend/goasmtpauth.c:149
 msgid "Service not available"
 msgstr "Dienst is niet beschikbaar"
 
-#: src/goabackend/goaimapauthlogin.c:166 src/goabackend/goasmtpauth.c:600
+#: src/goabackend/goaimapauthlogin.c:157 src/goabackend/goasmtpauth.c:625
 msgid "Server does not support STARTTLS"
 msgstr "Server ondersteunt STARTTLS niet"
 
@@ -246,47 +255,41 @@ msgstr "IMAP en SMTP"
 msgid "Invalid %s with username “%s” (%s, %d): "
 msgstr "Ongeldig %s bij gebruikersnaam “%s” (%s, %d): "
 
-#: src/goabackend/goaimapsmtpprovider.c:562
-#: src/goabackend/goaimapsmtpprovider.c:583
-#: src/goabackend/goaimapsmtpprovider.c:719
-#: src/goabackend/goaimapsmtpprovider.c:760
-#: src/goabackend/goaimapsmtpprovider.c:804
+#: src/goabackend/goaimapsmtpprovider.c:566
+#: src/goabackend/goaimapsmtpprovider.c:589
+#: src/goabackend/goaimapsmtpprovider.c:724
+#: src/goabackend/goaimapsmtpprovider.c:765
+#: src/goabackend/goaimapsmtpprovider.c:809
 msgid "Auto-detected"
 msgstr "Automatisch gedetecteerd"
 
-#: src/goabackend/goaimapsmtpprovider.c:612
+#: src/goabackend/goaimapsmtpprovider.c:618
 msgid "Unable to auto-detect IMAP and SMTP settings"
 msgstr "Kan IMAP- en SMTP-instellingen niet automatisch detecteren"
 
-#. Keep in sync with GoaTlsType
-#: src/goabackend/goaimapsmtpprovider.c:683
-msgid "None"
-msgstr "Geen"
-
-#. GOA_TLS_TYPE_NONE
-#: src/goabackend/goaimapsmtpprovider.c:684
+#: src/goabackend/goaimapsmtpprovider.c:689
 msgid "STARTTLS after connecting"
 msgstr "STARTTLS na verbinden"
 
 #. GOA_TLS_TYPE_STARTTLS
-#: src/goabackend/goaimapsmtpprovider.c:685
+#: src/goabackend/goaimapsmtpprovider.c:690
 msgid "SSL on a dedicated port"
 msgstr "SSL op een specifieke poort"
 
-#: src/goabackend/goaimapsmtpprovider.c:690
-#: src/goabackend/goaimapsmtpprovider.c:1424
+#: src/goabackend/goaimapsmtpprovider.c:695
+#: src/goabackend/goaimapsmtpprovider.c:1435
 msgid "Email"
 msgstr "E-mail"
 
-#: src/goabackend/goaimapsmtpprovider.c:691
+#: src/goabackend/goaimapsmtpprovider.c:696
 msgid "Connect to an email account"
 msgstr "Verbinden met een e-mailaccount"
 
-#: src/goabackend/goaimapsmtpprovider.c:695
+#: src/goabackend/goaimapsmtpprovider.c:700
 msgid "_Name"
 msgstr "_Naam"
 
-#: src/goabackend/goaimapsmtpprovider.c:698
+#: src/goabackend/goaimapsmtpprovider.c:703
 msgid ""
 "IMAP and SMTP details will be auto-detected from your service provider when "
 "possible"
@@ -295,45 +298,45 @@ msgstr ""
 "basis van uw dienstleverancier"
 
 #. IMAP
-#: src/goabackend/goaimapsmtpprovider.c:737
+#: src/goabackend/goaimapsmtpprovider.c:742
 msgid "IMAP Settings"
 msgstr "IMAP-instellingen"
 
-#: src/goabackend/goaimapsmtpprovider.c:738
+#: src/goabackend/goaimapsmtpprovider.c:743
 msgid "IMAP _Server"
 msgstr "IMAP-_server"
 
-#: src/goabackend/goaimapsmtpprovider.c:749
-#: src/goabackend/goaimapsmtpprovider.c:793
+#: src/goabackend/goaimapsmtpprovider.c:754
+#: src/goabackend/goaimapsmtpprovider.c:798
 msgid "Encryption"
 msgstr "Versleuteling"
 
-#: src/goabackend/goaimapsmtpprovider.c:774
+#: src/goabackend/goaimapsmtpprovider.c:779
 msgid "Example server: imap.example.com"
 msgstr "Voorbeeldserver: imap.voorbeeld.net"
 
 #. SMTP
-#: src/goabackend/goaimapsmtpprovider.c:781
+#: src/goabackend/goaimapsmtpprovider.c:786
 msgid "SMTP Settings"
 msgstr "SMTP-instellingen"
 
-#: src/goabackend/goaimapsmtpprovider.c:782
+#: src/goabackend/goaimapsmtpprovider.c:787
 msgid "SMTP _Server"
 msgstr "SMTP-_server"
 
-#: src/goabackend/goaimapsmtpprovider.c:818
+#: src/goabackend/goaimapsmtpprovider.c:823
 msgid "Example server: smtp.example.com"
 msgstr "Voorbeeldserver: smtp.voorbeeld.net"
 
-#: src/goabackend/goaimapsmtpprovider.c:1415
+#: src/goabackend/goaimapsmtpprovider.c:1426
 msgid "Name"
 msgstr "Naam"
 
-#: src/goabackend/goaimapsmtpprovider.c:1441
+#: src/goabackend/goaimapsmtpprovider.c:1452
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1459
+#: src/goabackend/goaimapsmtpprovider.c:1470
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -366,26 +369,26 @@ msgstr "_Principal"
 msgid "Example principal: user@EXAMPLE.COM"
 msgstr "Voorbeeldprincipal: gebruiker@VOORBEELD.NET"
 
-#: src/goabackend/goakerberosprovider.c:1293
+#: src/goabackend/goakerberosprovider.c:1308
 msgid "Ticketing is disabled for account"
 msgstr "Ticketing is uitgeschakeld voor account"
 
-#: src/goabackend/goakerberosprovider.c:1320
+#: src/goabackend/goakerberosprovider.c:1331
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr ""
 "Opgeslagen aanmeldgegevens voor principal “%s” niet gevonden in sleutelbos"
 
-#: src/goabackend/goakerberosprovider.c:1335
+#: src/goabackend/goakerberosprovider.c:1345
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "Wachtwoord bij principal “%s” ontbreekt in aanmeldgegevens"
 
-#: src/goabackend/goakerberosprovider.c:1517
+#: src/goabackend/goakerberosprovider.c:1527
 msgid "Identity service returned invalid key"
 msgstr "Identiteitsdienst gaf ongeldige sleutel terug"
 
-#: src/goabackend/goamailclient.c:851
+#: src/goabackend/goamailclient.c:853
 #, c-format
 msgid "Invalid email address “%s”"
 msgstr "Ongeldig e-mailadres ‘%s’"
@@ -395,46 +398,63 @@ msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:476
+#: src/goabackend/goamsgraphprovider.c:488
 msgid "Connect to Microsoft 365 to access email, calendars, contacts and files"
 msgstr ""
 "Verbind met Microsoft 365 om uw e-mail, agenda’s, contacten en bestanden te "
 "benaderen"
 
-#: src/goabackend/goamsgraphprovider.c:480
+#: src/goabackend/goamsgraphprovider.c:492
 msgid "Use Organization Account"
 msgstr "Account van organisatie gebruiken"
 
-#: src/goabackend/goamsgraphprovider.c:481
+#: src/goabackend/goamsgraphprovider.c:493
 msgid "Connect using details from an organization or developer account"
 msgstr ""
 "Maak verbinding met gegevens van een organisatie- of ontwikkelaarsaccount"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:488
+#: src/goabackend/goamsgraphprovider.c:500
 msgid "Enter the details provided by your organization"
 msgstr "Voor de gegevens in die u van uw organisatie gekregen hebt"
 
-#: src/goabackend/goamsgraphprovider.c:490
+#: src/goabackend/goamsgraphprovider.c:502
 msgid "_Client ID (Optional)"
 msgstr "_Cliënt-ID (optioneel)"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:492
+#: src/goabackend/goamsgraphprovider.c:504
 msgid "_Tenant ID"
 msgstr "_Tenant-ID"
 
-#: src/goabackend/goamsgraphprovider.c:493
+#: src/goabackend/goamsgraphprovider.c:505
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "Voorbeeld-ID: 00000000-0000-0000-0000-000000000000"
 
-#: src/goabackend/goamsgraphprovider.c:496
-#: src/goabackend/goaoauth2provider.c:943
-#: src/goabackend/goaproviderdialog.c:701
+#: src/goabackend/goamsgraphprovider.c:531
+#: src/goabackend/goaoauth2provider.c:1031
+#: src/goabackend/goaproviderdialog.c:840
 msgid "_Sign In…"
 msgstr "_Aanmelden…"
 
-#: src/goabackend/goaoauth2provider.c:653
+#: src/goabackend/goamsgraphprovider.c:539
+#: src/goabackend/goaoauth2provider.c:1039
+msgid "_Copy Link"
+msgstr "Verwijzing _kopiëren"
+
+#: src/goabackend/goamsgraphprovider.c:552
+#: src/goabackend/goaoauth2provider.c:1049
+msgid "Copy the authorization URL to continue with a specific web browser."
+msgstr ""
+"Kopieer de autorisatie-URL om door te gaan in een specifieke webbrowser."
+
+#: src/goabackend/goaoauth2provider.c:708
+#: src/goabackend/goaoauth2provider.c:932
+#, c-format
+msgid "Authorization response: %s"
+msgstr "Autorisatieantwoord: ‘%s’"
+
+#: src/goabackend/goaoauth2provider.c:719
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -442,43 +462,43 @@ msgstr ""
 "Bij het opvragen van het toegangsbewijs werd status 200 verwacht. In plaats "
 "daarvan werd status %d (%s) ontvangen."
 
-#: src/goabackend/goaoauth2provider.c:797
+#: src/goabackend/goaoauth2provider.c:869
 msgid "Authorization response: "
 msgstr "Autorisatieantwoord: "
 
-#: src/goabackend/goaoauth2provider.c:860
-#, c-format
-msgid "Authorization response: %s"
-msgstr "Autorisatieantwoord: ‘%s’"
-
-#: src/goabackend/goaoauth2provider.c:868
+#: src/goabackend/goaoauth2provider.c:940
 msgid "Failed to authenticate"
 msgstr "Aanmeldingscontrole mislukt"
 
-#: src/goabackend/goaoauth2provider.c:904
+#: src/goabackend/goaoauth2provider.c:976
 msgid "Error getting an Access Token: "
 msgstr "Fout bij het ophalen van het toegangsbewijs: "
 
-#: src/goabackend/goaoauth2provider.c:920
+#: src/goabackend/goaoauth2provider.c:992
 msgid "Error getting identity: "
 msgstr "Fout bij ophalen identiteit: "
 
-#: src/goabackend/goaoauth2provider.c:941
+#: src/goabackend/goaoauth2provider.c:1022
 #, c-format
 msgid "Sign in to %s with your browser"
 msgstr "Meld aan bij %s met uw browser"
 
-#: src/goabackend/goaoauth2provider.c:1530
+#: src/goabackend/goaoauth2provider.c:1561
+#: src/goabackend/goaoauth2provider.c:1733
+msgid "Copied to clipboard"
+msgstr "Gekopieerd naar klembord"
+
+#: src/goabackend/goaoauth2provider.c:1684
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr ""
 "Er werd verzocht om aan te melden als %s, maar er werd aangemeld als %s"
 
-#: src/goabackend/goaoauth2provider.c:1758
+#: src/goabackend/goaoauth2provider.c:1927
 msgid "Credentials do not contain access_token"
 msgstr "Aanmeldgegevens bevatten geen access_token"
 
-#: src/goabackend/goaoauth2provider.c:1802
+#: src/goabackend/goaoauth2provider.c:1971
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Vernieuwen van toegangsbewijs mislukt (%s, %d): "
@@ -556,16 +576,16 @@ msgstr "ensure_credentials_sync is niet geïmplementeerd op type %s"
 #. * Account" dialogs. The %s is the name of the provider. eg.,
 #. * 'Google'.
 #.
-#: src/goabackend/goaproviderdialog.c:174
+#: src/goabackend/goaproviderdialog.c:183
 #, c-format
 msgid "%s Account"
 msgstr "%s-account"
 
-#: src/goabackend/goaproviderdialog.c:618
+#: src/goabackend/goaproviderdialog.c:627
 msgid "Remove this Account?"
 msgstr "Account verwijderen?"
 
-#: src/goabackend/goaproviderdialog.c:619
+#: src/goabackend/goaproviderdialog.c:628
 msgid ""
 "If you remove this Online Account you will have to connect to it again to "
 "use it with apps and services."
@@ -573,35 +593,43 @@ msgstr ""
 "Als u deze online-account verwijdert, zult u er opnieuw verbinding mee "
 "moeten maken om hem met toepassingen en diensten te gebruiken."
 
-#: src/goabackend/goaproviderdialog.c:621
+#: src/goabackend/goaproviderdialog.c:630
 msgid "_Cancel"
 msgstr "_Annuleren"
 
-#: src/goabackend/goaproviderdialog.c:622
+#: src/goabackend/goaproviderdialog.c:631
 msgid "_Remove"
 msgstr "Ve_rwijderen"
 
-#: src/goabackend/goaproviderdialog.c:700
+#: src/goabackend/goaproviderdialog.c:767
+msgid "An account with that name already exists"
+msgstr "Een account met die naam bestaat al"
+
+#: src/goabackend/goaproviderdialog.c:839
 msgid "Sign in to reconnect to this account"
 msgstr "Meld u aan om opnieuw te verbinden met deze account"
 
-#: src/goabackend/goaproviderdialog.c:754
+#: src/goabackend/goaproviderdialog.c:868
+msgid "_Account Name"
+msgstr "_Accountnaam"
+
+#: src/goabackend/goaproviderdialog.c:947
 msgid "_Remove…"
 msgstr "Ve_rwijderen…"
 
-#: src/goabackend/goaproviderdialog.c:849
+#: src/goabackend/goaproviderdialog.c:1043
 msgid "_Sign In"
 msgstr "_Aanmelden"
 
-#: src/goabackend/goaproviderdialog.c:911
+#: src/goabackend/goaproviderdialog.c:1105
 msgid "_Try Again"
 msgstr "Opnieuw _proberen"
 
-#: src/goabackend/goaproviderdialog.c:915
+#: src/goabackend/goaproviderdialog.c:1109
 msgid "_Ignore"
 msgstr "_Negeren"
 
-#: src/goabackend/goaproviderdialog.c:1187
+#: src/goabackend/goaproviderdialog.c:1381
 msgid "Dialog was dismissed"
 msgstr "Dialoogvenster werd gesloten"
 
@@ -610,63 +638,63 @@ msgstr "Dialoogvenster werd gesloten"
 msgid "TLS not available"
 msgstr "TLS is niet beschikbaar"
 
-#: src/goabackend/goasmtpauth.c:470
+#: src/goabackend/goasmtpauth.c:492
 msgid "Unknown authentication mechanism"
 msgstr "Onbekende authenticatiemethode"
 
-#: src/goabackend/goautils.c:77
+#: src/goabackend/goautils.c:80
 #, c-format
 msgid "A %s account already exists for %s"
 msgstr "Een %s-account bestaat al voor %s"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:190
+#: src/goabackend/goautils.c:193
 msgid "Failed to delete credentials from the keyring"
 msgstr "Verwijderen van de aanmeldgegevens uit de sleutelbos mislukt"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:238
+#: src/goabackend/goautils.c:241
 msgid "Failed to retrieve credentials from the keyring"
 msgstr "Ophalen van de aanmeldgegevens uit de sleutelbos mislukt"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:248
+#: src/goabackend/goautils.c:251
 msgid "No credentials found in the keyring"
 msgstr "Aanmeldgegevens ontbreken in de sleutelbos"
 
-#: src/goabackend/goautils.c:261
+#: src/goabackend/goautils.c:264
 msgid "Error parsing result obtained from the keyring: "
 msgstr "Fout tijdens ontleden van het resultaat van de sleutelbos: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: src/goabackend/goautils.c:302
+#: src/goabackend/goautils.c:305
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "GOA %s-aanmeldgegevens voor identiteit %s"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:319
+#: src/goabackend/goautils.c:322
 msgid "Failed to store credentials in the keyring"
 msgstr "Fout bij het opslaan van de aanmeldgegevens in de sleutelbos"
 
-#: src/goabackend/goautils.c:787
+#: src/goabackend/goautils.c:790
 msgid "Not supported"
 msgstr "Niet ondersteund"
 
-#: src/goabackend/goautils.c:791
+#: src/goabackend/goautils.c:794
 msgid "Not found"
 msgstr "Niet gevonden"
 
-#: src/goabackend/goautils.c:805
+#: src/goabackend/goautils.c:808
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Code: %u — Onverwacht antwoord van server"
 
-#: src/goabackend/goautils.c:830
+#: src/goabackend/goautils.c:833
 msgid "The signing certificate authority is not known."
 msgstr "De autoriteit voor het ondertekenen van het certificaat is onbekend."
 
-#: src/goabackend/goautils.c:834
+#: src/goabackend/goautils.c:837
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
@@ -674,28 +702,28 @@ msgstr ""
 "Het certificaat komt niet overeen met de verwachte identiteit van de website "
 "waar hij van is opgehaald."
 
-#: src/goabackend/goautils.c:839
+#: src/goabackend/goautils.c:842
 msgid "The certificate’s activation time is still in the future."
 msgstr "De activeringsdatum van het certificaat ligt in de toekomst."
 
-#: src/goabackend/goautils.c:843
+#: src/goabackend/goautils.c:846
 msgid "The certificate has expired."
 msgstr "Het certificaat is verlopen."
 
-#: src/goabackend/goautils.c:847
+#: src/goabackend/goautils.c:850
 msgid "The certificate has been revoked."
 msgstr "Het certificaat is ingetrokken."
 
-#: src/goabackend/goautils.c:851
+#: src/goabackend/goautils.c:854
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Het algoritme van het certificaat wordt beschouwd als onveilig."
 
-#: src/goabackend/goautils.c:857
+#: src/goabackend/goautils.c:860
 msgid "Invalid certificate."
 msgstr "Ongeldig certificaat."
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:892
+#: src/goabackend/goautils.c:895
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "%s bij identiteit “%s” ontbreekt in aanmeldgegevens"
@@ -737,7 +765,6 @@ msgid "Contacts (CardDAV)"
 msgstr "Contacten (CardDAV)"
 
 #: src/goabackend/goawindowsliveprovider.c:56
-#| msgid "Microsoft 365"
 msgid "Microsoft"
 msgstr "Microsoft"
 
@@ -826,6 +853,9 @@ msgstr "Kan aanmeldgegevensbuffer voor identiteit niet aanmaken"
 #, c-format
 msgid "Error closing file descriptor: %s"
 msgstr "Fout bij sluiten van bestandsdescriptor: %s"
+
+#~ msgid "None"
+#~ msgstr "Geen"
 
 #~ msgid "_Sign in…"
 #~ msgstr "_Aanmelden…"
