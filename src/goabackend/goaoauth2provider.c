@@ -626,7 +626,6 @@ get_tokens_sync (GoaOAuth2Provider  *self,
   RestProxy *proxy;
   RestProxyCall *call;
   gchar *ret = NULL;
-  guint status_code;
   gchar *ret_access_token = NULL;
   gint ret_access_token_expires_in = 0;
   gchar *ret_refresh_token = NULL;
@@ -643,6 +642,9 @@ get_tokens_sync (GoaOAuth2Provider  *self,
   if (data->client_secret != NULL)
     rest_proxy_call_add_param (call, "client_secret", data->client_secret);
 
+  if (data->code_verifier != NULL)
+    rest_proxy_call_add_param (call, "code_verifier", data->code_verifier);
+
   if (refresh_token != NULL)
     {
       /* Swell, we have a refresh code - just use that */
@@ -657,11 +659,10 @@ get_tokens_sync (GoaOAuth2Provider  *self,
       rest_proxy_call_add_param (call, "code", authorization_code);
     }
 
-    if (data->code_verifier != NULL)
-      rest_proxy_call_add_param (call, "code_verifier", data->code_verifier);
-
   if (!goa_rest_proxy_call_sync (call, cancellable, &rest_error))
     {
+      guint status_code;
+
       status_code = rest_proxy_call_get_status_code (call);
       if (SOUP_STATUS_IS_CLIENT_ERROR (status_code))
         {
