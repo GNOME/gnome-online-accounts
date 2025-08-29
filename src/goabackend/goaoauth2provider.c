@@ -83,7 +83,7 @@ G_DEFINE_ABSTRACT_TYPE (GoaOAuth2Provider, goa_oauth2_provider, GOA_TYPE_PROVIDE
 #define GOA_OAUTH2_ACCESS_ERROR_INVALID_CLIENT          "invalid_client"
 #define GOA_OAUTH2_ACCESS_ERROR_INVALID_GRANT           "invalid_grant"
 #define GOA_OAUTH2_ACCESS_ERROR_UNAUTHORIZED_CLIENT     "unauthorized_client"
-#define GOA_OAUTH2_ACCESS_ERROR_UNAUTHORIZED_GRANT_TYPE "unauthorized_grant_type"
+#define GOA_OAUTH2_ACCESS_ERROR_UNSUPPORTED_GRANT_TYPE  "unsupported_grant_type"
 #define GOA_OAUTH2_ACCESS_ERROR_INVALID_SCOPE           "invalid_scope"
 
 static gboolean
