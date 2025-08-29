@@ -671,6 +671,7 @@ get_tokens_sync (GoaOAuth2Provider  *self,
           const char *response_err;
           const char *response_desc;
           const char *response_suberr;
+          g_autofree char *error_str = NULL;
 
           payload = rest_proxy_call_get_payload (call);
           payload_length = rest_proxy_call_get_payload_length (call);
@@ -695,32 +696,63 @@ get_tokens_sync (GoaOAuth2Provider  *self,
           response_suberr = json_object_get_string_member_with_default (object, "suberror", NULL);
 
           if (response_suberr != NULL)
-            g_debug ("%s(): [%s/%s] %s", G_STRFUNC, response_err, response_suberr, response_desc);
+            error_str = g_strdup_printf ("[%s/%s] %s", response_err, response_suberr, response_desc);
           else
-            g_debug ("%s(): [%s] %s", G_STRFUNC, response_err, response_desc);
+            error_str = g_strdup_printf ("[%s] %s", response_err, response_desc);
 
           /* Some OAuth providers have access policies controlled by the service. These cases may
            * require re-authentication rather than simply refreshing.
            */
-          if (g_strcmp0 (response_err, GOA_OAUTH2_ACCESS_ERROR_INVALID_GRANT) == 0)
+          if (g_strcmp0 (response_err, GOA_OAUTH2_ACCESS_ERROR_INVALID_CLIENT) == 0
+              || g_strcmp0 (response_err, GOA_OAUTH2_ACCESS_ERROR_INVALID_GRANT) == 0)
             {
+              g_debug ("%s(): %s", G_STRFUNC, error_str);
               g_set_error (error,
                            GOA_ERROR,
                            GOA_ERROR_NOT_AUTHORIZED,
                            _("Authorization response: %s"),
                            response_desc ? response_desc : rest_error->message);
-              goto out;
+            }
+          else if (g_strcmp0 (response_err, GOA_OAUTH2_ACCESS_ERROR_UNAUTHORIZED_CLIENT) == 0
+                   || g_strcmp0 (response_err, GOA_OAUTH2_ACCESS_ERROR_UNSUPPORTED_GRANT_TYPE) == 0)
+            {
+              g_warning ("%s(): %s", G_STRFUNC, error_str);
+              g_set_error (error,
+                           GOA_ERROR,
+                           GOA_ERROR_NOT_SUPPORTED,
+                           _("Authorization response: %s"),
+                           response_desc ? response_desc : rest_error->message);
+            }
+          else if (g_strcmp0 (response_err, GOA_OAUTH2_ACCESS_ERROR_INVALID_REQUEST) == 0
+                   || g_strcmp0 (response_err, GOA_OAUTH2_ACCESS_ERROR_INVALID_SCOPE) == 0)
+            {
+              g_critical ("%s(): %s", G_STRFUNC, error_str);
+              g_set_error (error,
+                           GOA_ERROR,
+                           GOA_ERROR_FAILED,
+                           _("Authorization response: %s"),
+                           response_desc ? response_desc : rest_error->message);
+            }
+          else
+            {
+              g_debug ("%s(): %s", G_STRFUNC, error_str);
+              g_set_error (error,
+                           GOA_ERROR,
+                           GOA_ERROR_FAILED,
+                           _("Authorization response: %s"),
+                           error_str);
             }
         }
+      else
+        {
+          g_set_error (error,
+                       GOA_ERROR,
+                       GOA_ERROR_FAILED,
+                       _("Expected status 200 when requesting access token, instead got status %d (%s)"),
+                       status_code,
+                       rest_proxy_call_get_status_message (call));
+        }
 
-      /* Any errors not known to require special handling return a generic error.
-       */
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   _("Expected status 200 when requesting access token, instead got status %d (%s)"),
-                   status_code,
-                   rest_proxy_call_get_status_message (call));
       goto out;
     }
 
