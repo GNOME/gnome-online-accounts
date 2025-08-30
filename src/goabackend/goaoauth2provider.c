@@ -915,16 +915,21 @@ parse_request_uri (GoaOAuth2Provider  *self,
       key_value_pairs = soup_form_decode (query);
 
       data->authorization_code = g_strdup (g_hash_table_lookup (key_value_pairs, "code"));
-      g_clear_pointer (&key_value_pairs, g_hash_table_unref);
-
       if (data->authorization_code != NULL)
         return TRUE;
+    }
+  else
+    {
+      g_warning ("Did not find access_token, code or error in response");
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Could not parse response"));
     }
 
   /* In case we don't find the access_token or auth code, then look
    * for the error in the query part of the URI.
    */
-  key_value_pairs = soup_form_decode (query);
   oauth2_error = (const gchar *) g_hash_table_lookup (key_value_pairs, "error");
   if (g_strcmp0 (oauth2_error, GOA_OAUTH2_ACCESS_DENIED) == 0)
     {
