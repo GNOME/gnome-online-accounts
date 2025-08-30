@@ -73,6 +73,20 @@ G_DEFINE_ABSTRACT_TYPE (GoaOAuth2Provider, goa_oauth2_provider, GOA_TYPE_PROVIDE
 
 #define GOA_OAUTH2_CODE_CHALLENGE_METHOD_S256 "S256"
 
+/* Error Responses for Authorization Response
+ *
+ * See:
+ *  - https://datatracker.ietf.org/doc/html/rfc6749#section-4.2
+ *  - https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-auth-code-flow#error-codes-for-authorization-endpoint-errors
+ */
+#define GOA_OAUTH2_AUTH_ERROR_INVALID_REQUEST           "invalid_request"
+#define GOA_OAUTH2_AUTH_ERROR_UNAUTHORIZED_CLIENT       "unauthorized_client"
+#define GOA_OAUTH2_AUTH_ERROR_ACCESS_DENIED             "access_denied"
+#define GOA_OAUTH2_AUTH_ERROR_UNSUPPORTED_RESPONSE_TYPE "unsupported_response_type"
+#define GOA_OAUTH2_AUTH_ERROR_INVALID_SCOPE             "invalid_scope"
+#define GOA_OAUTH2_AUTH_ERROR_SERVER_ERROR              "server_error"
+#define GOA_OAUTH2_AUTH_ERROR_TEMPORARILY_UNAVAILABLE   "temporarily_unavailable"
+
 /* Error Responses for Access Token Request
  *
  * See:
@@ -851,8 +865,9 @@ parse_request_uri (GoaOAuth2Provider  *self,
   g_autoptr(GUri) uri = NULL;
   g_autoptr(GUri) redirect_uri = NULL;
   const char *fragment;
-  const char *oauth2_error;
   const char *query;
+  const char *response_err;
+  const char *response_desc;
 
   g_assert (error == NULL || *error == NULL);
 
@@ -951,21 +966,49 @@ parse_request_uri (GoaOAuth2Provider  *self,
   /* In case we don't find the access_token or auth code, then look
    * for the error in the query part of the URI.
    */
-  oauth2_error = (const gchar *) g_hash_table_lookup (key_value_pairs, "error");
-  if (g_strcmp0 (oauth2_error, GOA_OAUTH2_ACCESS_DENIED) == 0)
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_NOT_AUTHORIZED,
-                   _("Authorization response: %s"),
-                   oauth2_error);
-    }
-  else
+  response_err = (const char *) g_hash_table_lookup (key_value_pairs, "error");
+  response_desc = (const char *) g_hash_table_lookup (key_value_pairs, "error_description");
+  if (g_strcmp0 (response_err, GOA_OAUTH2_AUTH_ERROR_ACCESS_DENIED) == 0)
     {
       g_set_error_literal (error,
                            GOA_ERROR,
+                           GOA_ERROR_NOT_AUTHORIZED,
+                           response_desc ? response_desc : response_err);
+    }
+  else if (g_strcmp0 (response_err, GOA_OAUTH2_AUTH_ERROR_UNAUTHORIZED_CLIENT) == 0
+           || g_strcmp0 (response_err, GOA_OAUTH2_AUTH_ERROR_UNSUPPORTED_RESPONSE_TYPE) == 0)
+    {
+      g_warning ("%s(): [%s] %s", G_STRFUNC, response_err, response_desc);
+      g_set_error_literal (error,
+                           GOA_ERROR,
+                           GOA_ERROR_NOT_SUPPORTED,
+                           response_desc ? response_desc : response_err);
+    }
+  else if (g_strcmp0 (response_err, GOA_OAUTH2_AUTH_ERROR_INVALID_REQUEST) == 0
+           || g_strcmp0 (response_err, GOA_OAUTH2_AUTH_ERROR_INVALID_SCOPE) == 0)
+    {
+      g_critical ("%s(): [%s] %s", G_STRFUNC, response_err, response_desc);
+      g_set_error_literal (error,
+                           GOA_ERROR,
                            GOA_ERROR_FAILED,
-                           _("Failed to authenticate"));
+                           response_desc ? response_desc : response_err);
+    }
+  else if (g_strcmp0 (response_err, GOA_OAUTH2_AUTH_ERROR_SERVER_ERROR) == 0
+           || g_strcmp0 (response_err, GOA_OAUTH2_AUTH_ERROR_TEMPORARILY_UNAVAILABLE) == 0)
+    {
+      g_warning ("%s(): [%s] %s", G_STRFUNC, response_err, response_desc);
+      g_set_error_literal (error,
+                           GOA_ERROR,
+                           GOA_ERROR_FAILED,
+                           response_desc ? response_desc : response_err);
+    }
+  else
+    {
+      g_debug ("%s(): [%s] %s", G_STRFUNC, response_err, response_desc);
+      g_set_error_literal (error,
+                           GOA_ERROR,
+                           GOA_ERROR_FAILED,
+                           response_desc ? response_desc : response_err);
     }
 
   return FALSE;
