@@ -9,77 +9,75 @@ msgstr ""
 "Project-Id-Version: Gnome Online Account\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2025-02-12 23:03+0000\n"
-"PO-Revision-Date: 2025-02-24 17:08+0200\n"
-"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
+"POT-Creation-Date: 2025-08-29 12:27+0000\n"
+"PO-Revision-Date: 2025-08-30 07:59+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Gtranslator 47.1\n"
-
-#: data/org.gnome.online-accounts.gschema.xml:6
-msgid "List of providers that are allowed to be loaded"
-msgstr "רשימת ספקי שרות שמורשים להיטען"
-
-#: data/org.gnome.online-accounts.gschema.xml:7
-msgid ""
-"A list of strings representing the providers that are allowed to be loaded "
-"(default: 'all'). This is only evaluated on startup. Deprecated: use goa."
-"conf in the system config directory instead, with a key [providers] "
-"enable=all instead. The key is comma-separated list of the provider names."
-msgstr ""
-"רשימת מחרוזות שמייצגות את ספקי השרות שמותר לטעון (ברירת מחדל: ‚all’ - הכול). "
-"מחושב רק בעת האתחול. הוצא משימוש: נא להשתמש במקום זאת ב־goa.conf במחיצת "
-"תצורת המערכת, עם המפתח [providers] enable=all. המפתח הוא רשימת שמות הספקי "
-"השירות מופרדת בפסיקים."
+"X-Generator: Poedit 3.6\n"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1162 src/daemon/goadaemon.c:1482
+#: src/daemon/goadaemon.c:1162 src/daemon/goadaemon.c:1483
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "נכשל חיפוש הספק עבור: %s"
 
-#: src/daemon/goadaemon.c:1425
+#: src/daemon/goadaemon.c:1426
 msgid "IsLocked property is set for account"
 msgstr "מאפיין IsLocked הוגדר לחשבון"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1470
+#: src/daemon/goadaemon.c:1471
 msgid "ProviderType property is not set for account"
 msgstr "מאפיין ProviderType לא מוגדר לחשבון"
 
-#: src/daemon/goadaemon.c:1632
+#: src/daemon/goadaemon.c:1633
 #, c-format
 msgid "Failed to sign in to “%s”"
 msgstr "הכניסה ל־„%s“ נכשלה"
 
-#: src/daemon/goadaemon.c:1637
+#: src/daemon/goadaemon.c:1638
 msgid "Failed to sign in to multiple accounts"
 msgstr "כניסה למספר חשבונות כשלה"
 
-#: src/daemon/goadaemon.c:1646
+#: src/daemon/goadaemon.c:1647
 msgid "Online Accounts"
 msgstr "חשבונות מקוונים"
 
-#: src/daemon/goadaemon.c:1649
+#: src/daemon/goadaemon.c:1650
 msgid "Account Action Required"
 msgstr "נדרשת פעולת חשבון"
 
+#: src/goabackend/goaauthflowbutton.c:148
+#: src/goabackend/goaproviderdialog.c:840
+msgid "_Sign In…"
+msgstr "_כניסה…"
+
+#: src/goabackend/goaauthflowbutton.c:162
+msgid "_Copy Link"
+msgstr "ה_עתקת קישור"
+
+#: src/goabackend/goaauthflowbutton.c:173
+msgid "Copy the authorization URL to continue with a specific web browser."
+msgstr "העתקת כתובת האישור כדי להמשיך עם דפדפן אינטרנט מסוים."
+
 #. TODO: more specific
-#: src/goabackend/goadavclient.c:1190 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goadavclient.c:1228 src/goabackend/goaimapauthlogin.c:104
 #: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:802
 msgid "Authentication failed"
 msgstr "האימות נכשל"
 
-#: src/goabackend/goadavclient.c:1197
+#: src/goabackend/goadavclient.c:1235
 msgid "Cannot find WebDAV endpoint"
 msgstr "לא ניתן למצוא נקודת קצה WebDAV"
 
-#: src/goabackend/goadavclient.c:1298 src/goabackend/goawebdavprovider.c:648
+#: src/goabackend/goadavclient.c:1348 src/goabackend/goaowncloudprovider.c:622
+#: src/goabackend/goawebdavprovider.c:648
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "כתובת שגויה: %s"
@@ -183,8 +181,7 @@ msgid "Google"
 msgstr "Google"
 
 #: src/goabackend/goagoogleprovider.c:211
-#: src/goabackend/goamsgraphprovider.c:184
-#: src/goabackend/goawindowsliveprovider.c:163
+#: src/goabackend/goamsgraphprovider.c:185
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
@@ -193,26 +190,28 @@ msgstr "אמור היה להגיע מצב 200 בעת בקשת הזהות שלך,
 #. TODO: more specific
 #: src/goabackend/goagoogleprovider.c:230
 #: src/goabackend/goagoogleprovider.c:241
-#: src/goabackend/goamsgraphprovider.c:203
-#: src/goabackend/goamsgraphprovider.c:214
-#: src/goabackend/goamsgraphprovider.c:227
-#: src/goabackend/goamsgraphprovider.c:252
-#: src/goabackend/goaoauth2provider.c:677
-#: src/goabackend/goaoauth2provider.c:707
-#: src/goabackend/goaoauth2provider.c:718 src/goabackend/goautils.c:136
-#: src/goabackend/goawindowsliveprovider.c:182
-#: src/goabackend/goawindowsliveprovider.c:193
-#: src/goabackend/goawindowsliveprovider.c:202
-#: src/goabackend/goawindowsliveprovider.c:215
+#: src/goabackend/goamsgraphprovider.c:204
+#: src/goabackend/goamsgraphprovider.c:215
+#: src/goabackend/goamsgraphprovider.c:228
+#: src/goabackend/goamsgraphprovider.c:255
+#: src/goabackend/goaoauth2provider.c:687
+#: src/goabackend/goaoauth2provider.c:744
+#: src/goabackend/goaoauth2provider.c:774
+#: src/goabackend/goaoauth2provider.c:785
+#: src/goabackend/goaowncloudprovider.c:338
+#: src/goabackend/goaowncloudprovider.c:538
+#: src/goabackend/goaowncloudprovider.c:548
+#: src/goabackend/goaowncloudprovider.c:568 src/goabackend/goautils.c:136
 msgid "Could not parse response"
 msgstr "לא ניתן לנתח את הבקשה"
 
 #. TODO: more specific
-#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goasmtpauth.c:149
+#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goaoauth2provider.c:1276
+#: src/goabackend/goasmtpauth.c:149
 msgid "Service not available"
 msgstr "השירות לא זמין"
 
-#: src/goabackend/goaimapauthlogin.c:166 src/goabackend/goasmtpauth.c:600
+#: src/goabackend/goaimapauthlogin.c:157 src/goabackend/goasmtpauth.c:625
 msgid "Server does not support STARTTLS"
 msgstr "השרת לא תומך ב־STARTTLS"
 
@@ -366,182 +365,184 @@ msgstr "לא נמצאה ססמה המיועדת למשאב „%s“ באישור
 msgid "Identity service returned invalid key"
 msgstr "שירות הזהות החזיר מפתח שגוי"
 
-#: src/goabackend/goamailclient.c:851
+#: src/goabackend/goamailclient.c:853
 #, c-format
 msgid "Invalid email address “%s”"
 msgstr "כתובת דוא״ל „%s” שגויה"
 
-#: src/goabackend/goamsgraphprovider.c:64
+#: src/goabackend/goamsgraphprovider.c:65
 msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:486
+#: src/goabackend/goamsgraphprovider.c:498
 msgid "Connect to Microsoft 365 to access email, calendars, contacts and files"
 msgstr "אפשר להתחבר לספק Microsoft 365 כדי לגשת ללוחות שנה, אנשי קשר וקבצים"
 
-#: src/goabackend/goamsgraphprovider.c:490
+#: src/goabackend/goamsgraphprovider.c:502
 msgid "Use Organization Account"
 msgstr "להשתמש בחשבון תאגידי"
 
-#: src/goabackend/goamsgraphprovider.c:491
+#: src/goabackend/goamsgraphprovider.c:503
 msgid "Connect using details from an organization or developer account"
 msgstr "התחברות עם פרטים מארגון או מחשבון פיתוח"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:498
+#: src/goabackend/goamsgraphprovider.c:510
 msgid "Enter the details provided by your organization"
 msgstr "נא למלא את הפרטים שסופקו על ידי הארגון שלך"
 
-#: src/goabackend/goamsgraphprovider.c:500
+#: src/goabackend/goamsgraphprovider.c:512
 msgid "_Client ID (Optional)"
 msgstr "מזהה _לקוח (רשות)"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:502
+#: src/goabackend/goamsgraphprovider.c:514
 msgid "_Tenant ID"
 msgstr "מזהה _דייר (Tenant)"
 
-#: src/goabackend/goamsgraphprovider.c:503
+#: src/goabackend/goamsgraphprovider.c:515
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "מזהה לדוגמה: 00000000-0000-0000-0000-000000000000"
 
-#: src/goabackend/goamsgraphprovider.c:529
-#: src/goabackend/goaoauth2provider.c:959
-#: src/goabackend/goaproviderdialog.c:840
-msgid "_Sign In…"
-msgstr "_כניסה…"
+#: src/goabackend/goaoauth2provider.c:709
+#: src/goabackend/goaoauth2provider.c:933
+#, c-format
+msgid "Authorization response: %s"
+msgstr "תגובת אימות: %s"
 
-#: src/goabackend/goamsgraphprovider.c:537
-#: src/goabackend/goaoauth2provider.c:967
-msgid "_Copy Link"
-msgstr "ה_עתקת קישור"
-
-#: src/goabackend/goamsgraphprovider.c:550
-#: src/goabackend/goaoauth2provider.c:977
-msgid "Copy the authorization URL to continue with a specific web browser."
-msgstr "העתקת כתובת האישור כדי להמשיך עם דפדפן אינטרנט מסוים."
-
-#: src/goabackend/goaoauth2provider.c:653
+#: src/goabackend/goaoauth2provider.c:720
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr "אמור היה להגיע מצב 200 בעת בקשת אסימון גישה, במקום התקבל מצב %d (%s)"
 
-#: src/goabackend/goaoauth2provider.c:797
+#: src/goabackend/goaoauth2provider.c:870
 msgid "Authorization response: "
 msgstr "תגובת אימות: "
 
-#: src/goabackend/goaoauth2provider.c:860
-#, c-format
-msgid "Authorization response: %s"
-msgstr "תגובת אימות: %s"
-
-#: src/goabackend/goaoauth2provider.c:868
+#: src/goabackend/goaoauth2provider.c:941
 msgid "Failed to authenticate"
 msgstr "האימות נכשל"
 
-#: src/goabackend/goaoauth2provider.c:904
+#: src/goabackend/goaoauth2provider.c:977
 msgid "Error getting an Access Token: "
 msgstr "שגיאה בקבלת אסימון גישה: "
 
-#: src/goabackend/goaoauth2provider.c:920
+#: src/goabackend/goaoauth2provider.c:993
 msgid "Error getting identity: "
 msgstr "שגיאה בקבלת זהות: "
 
-#: src/goabackend/goaoauth2provider.c:950
+#: src/goabackend/goaoauth2provider.c:1031
 #, c-format
 msgid "Sign in to %s with your browser"
 msgstr "נא להיכנס אל %s עם הדפדפן שלך"
 
-#: src/goabackend/goaoauth2provider.c:1182
-msgid "Failed to get session keyring"
-msgstr "אחזור צרור המפתחות של ההפעלה נכשל"
-
-#: src/goabackend/goaoauth2provider.c:1477
-#: src/goabackend/goaoauth2provider.c:1645
+#: src/goabackend/goaoauth2provider.c:1545
+#: src/goabackend/goaoauth2provider.c:1717
+#: src/goabackend/goaowncloudprovider.c:824
 msgid "Copied to clipboard"
 msgstr "הועתק ללוח הגזירים"
 
-#: src/goabackend/goaoauth2provider.c:1596
+#: src/goabackend/goaoauth2provider.c:1668
+#: src/goabackend/goaowncloudprovider.c:1139
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "התקבלה בקשת כניסה בתור %s, אך הכניסה בוצעה בשם %s"
 
-#: src/goabackend/goaoauth2provider.c:1833
+#: src/goabackend/goaoauth2provider.c:1911
 msgid "Credentials do not contain access_token"
 msgstr "פרטי הגישה אינם מכילים access_token (אסימון גישה)"
 
-#: src/goabackend/goaoauth2provider.c:1877
+#: src/goabackend/goaoauth2provider.c:1955
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "רענון אסימון הגישה נכשל (%s, %d): "
 
-#: src/goabackend/goaowncloudprovider.c:55
+#: src/goabackend/goaowncloudprovider.c:65
+#: src/goabackend/goaowncloudprovider.c:849
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: src/goabackend/goaprovider.c:118
+#: src/goabackend/goaowncloudprovider.c:526 src/goabackend/goautils.c:790
+msgid "Not supported"
+msgstr "לא נתמך"
+
+#: src/goabackend/goaowncloudprovider.c:850
+msgid "Add a Nextcloud account by providing your server address"
+msgstr "אפשר להוסיף חשבון Nextcloud על ידי ציון כתובת השרת שלך"
+
+#: src/goabackend/goaowncloudprovider.c:853
+#: src/goabackend/goawebdavprovider.c:403
+msgid "_Server Address"
+msgstr "כתובת _שרת"
+
+#: src/goabackend/goaowncloudprovider.c:854
+#: src/goabackend/goawebdavprovider.c:404
+msgid "Examples: example.com, 192.168.0.82"
+msgstr "דוגמאות: example.com, 192.168.0.82"
+
+#: src/goabackend/goaprovider.c:117
 msgid "_Mail"
 msgstr "_דוא״ל"
 
-#: src/goabackend/goaprovider.c:123
+#: src/goabackend/goaprovider.c:122
 msgid "Cale_ndar"
 msgstr "_לוח שנה"
 
-#: src/goabackend/goaprovider.c:128
+#: src/goabackend/goaprovider.c:127
 msgid "_Contacts"
 msgstr "_אנשי קשר"
 
-#: src/goabackend/goaprovider.c:133
+#: src/goabackend/goaprovider.c:132
 msgid "C_hat"
 msgstr "_שיחה"
 
-#: src/goabackend/goaprovider.c:138
+#: src/goabackend/goaprovider.c:137
 msgid "_Documents"
 msgstr "מ_סמכים"
 
-#: src/goabackend/goaprovider.c:143
+#: src/goabackend/goaprovider.c:142
 msgid "M_usic"
 msgstr "_מוזיקה"
 
-#: src/goabackend/goaprovider.c:148
+#: src/goabackend/goaprovider.c:147
 msgid "_Photos"
 msgstr "_תמונות"
 
-#: src/goabackend/goaprovider.c:153
+#: src/goabackend/goaprovider.c:152
 msgid "_Files"
 msgstr "_קבצים"
 
-#: src/goabackend/goaprovider.c:158
+#: src/goabackend/goaprovider.c:157
 msgid "Network _Resources"
 msgstr "משאבי _רשת"
 
-#: src/goabackend/goaprovider.c:163
+#: src/goabackend/goaprovider.c:162
 msgid "_Read Later"
 msgstr "א_קרא אחר כך"
 
-#: src/goabackend/goaprovider.c:168
+#: src/goabackend/goaprovider.c:167
 msgid "Prin_ters"
 msgstr "_מדפסות"
 
-#: src/goabackend/goaprovider.c:173
+#: src/goabackend/goaprovider.c:172
 msgid "_Maps"
 msgstr "_מפות"
 
-#: src/goabackend/goaprovider.c:178
+#: src/goabackend/goaprovider.c:177
 msgid "T_o Do"
 msgstr "_לעשות"
 
-#: src/goabackend/goaprovider.c:1066
+#: src/goabackend/goaprovider.c:1065
 msgid "Account is disabled"
 msgstr "חשבון מושבת"
 
-#: src/goabackend/goaprovider.c:1079
+#: src/goabackend/goaprovider.c:1078
 msgid "Unknown error"
 msgstr "שגיאה לא ידועה"
 
-#: src/goabackend/goaprovider.c:1098
+#: src/goabackend/goaprovider.c:1097
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "התכונה ensure_credentials_sync לא מיושמת בסוג %s"
@@ -584,26 +585,26 @@ msgid "Sign in to reconnect to this account"
 msgstr "יש להיכנס כדי להתחבר לחשבון הזה מחדש"
 
 #: src/goabackend/goaproviderdialog.c:868
-msgid "_Account Name"
-msgstr "_שם חשבון"
+msgid "_Account Description"
+msgstr "_תיאור חשבון"
 
-#: src/goabackend/goaproviderdialog.c:940
+#: src/goabackend/goaproviderdialog.c:947
 msgid "_Remove…"
 msgstr "הס_רה…"
 
-#: src/goabackend/goaproviderdialog.c:1036
+#: src/goabackend/goaproviderdialog.c:1043
 msgid "_Sign In"
 msgstr "ה_תחברות"
 
-#: src/goabackend/goaproviderdialog.c:1098
+#: src/goabackend/goaproviderdialog.c:1105
 msgid "_Try Again"
 msgstr "לנסות _שוב"
 
-#: src/goabackend/goaproviderdialog.c:1102
+#: src/goabackend/goaproviderdialog.c:1109
 msgid "_Ignore"
 msgstr "להת_עלם"
 
-#: src/goabackend/goaproviderdialog.c:1374
+#: src/goabackend/goaproviderdialog.c:1381
 msgid "Dialog was dismissed"
 msgstr "דו־שיח סולק"
 
@@ -612,7 +613,7 @@ msgstr "דו־שיח סולק"
 msgid "TLS not available"
 msgstr "TLS לא זמין"
 
-#: src/goabackend/goasmtpauth.c:470
+#: src/goabackend/goasmtpauth.c:492
 msgid "Unknown authentication mechanism"
 msgstr "מנגנון האימות אינו ידוע"
 
@@ -650,10 +651,6 @@ msgstr "פרטי הגישה %s של מנהל החשבונות המקוונים �
 #: src/goabackend/goautils.c:322
 msgid "Failed to store credentials in the keyring"
 msgstr "אחסון פרטי הגישה במחזיק המפתחות נכשל"
-
-#: src/goabackend/goautils.c:790
-msgid "Not supported"
-msgstr "לא נתמך"
 
 #: src/goabackend/goautils.c:794
 msgid "Not found"
@@ -712,14 +709,6 @@ msgstr ""
 "אפשר להוסיף לוח שנה, אנשי קשר וקבצים על ידי מילוי כתובת ה־WebDAV ופרטי "
 "החשבון שלך"
 
-#: src/goabackend/goawebdavprovider.c:403
-msgid "_Server Address"
-msgstr "כתובת _שרת"
-
-#: src/goabackend/goawebdavprovider.c:404
-msgid "Examples: example.com, 192.168.0.82"
-msgstr "דוגמאות: example.com, 192.168.0.82"
-
 #: src/goabackend/goawebdavprovider.c:414
 msgid "Server Addresses (Optional)"
 msgstr "כתובות שרתים (רשות)"
@@ -735,10 +724,6 @@ msgstr "לוח שנה (CalDAV)"
 #: src/goabackend/goawebdavprovider.c:417
 msgid "Contacts (CardDAV)"
 msgstr "אנשי קשר (CardDAV)"
-
-#: src/goabackend/goawindowsliveprovider.c:56
-msgid "Microsoft"
-msgstr "Microsoft"
 
 #: src/goaidentity/goaidentityservice.c:564
 msgid "Initial secret key is invalid"
@@ -818,6 +803,30 @@ msgstr "לא ניתן ליצור מאגר פרטי זיהוי לזהות"
 #, c-format
 msgid "Error closing file descriptor: %s"
 msgstr "שגיאה בסגירת מתאר קובץ: %s"
+
+#~ msgid "List of providers that are allowed to be loaded"
+#~ msgstr "רשימת ספקי שרות שמורשים להיטען"
+
+#~ msgid ""
+#~ "A list of strings representing the providers that are allowed to be "
+#~ "loaded (default: 'all'). This is only evaluated on startup. Deprecated: "
+#~ "use goa.conf in the system config directory instead, with a key "
+#~ "[providers] enable=all instead. The key is comma-separated list of the "
+#~ "provider names."
+#~ msgstr ""
+#~ "רשימת מחרוזות שמייצגות את ספקי השרות שמותר לטעון (ברירת מחדל: ‚all’ - "
+#~ "הכול). מחושב רק בעת האתחול. הוצא משימוש: נא להשתמש במקום זאת ב־goa.conf "
+#~ "במחיצת תצורת המערכת, עם המפתח [providers] enable=all. המפתח הוא רשימת "
+#~ "שמות הספקי השירות מופרדת בפסיקים."
+
+#~ msgid "Failed to get session keyring"
+#~ msgstr "אחזור צרור המפתחות של ההפעלה נכשל"
+
+#~ msgid "_Account Name"
+#~ msgstr "_שם חשבון"
+
+#~ msgid "Microsoft"
+#~ msgstr "Microsoft"
 
 #~ msgid "None"
 #~ msgstr "אין"
