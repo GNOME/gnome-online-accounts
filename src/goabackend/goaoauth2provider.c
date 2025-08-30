@@ -849,7 +849,7 @@ parse_request_uri (GoaOAuth2Provider  *self,
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
-                   "Invalid URI: %s",
+                   _("Invalid URI: %s"),
                    requested_uri);
       return FALSE;
     }
