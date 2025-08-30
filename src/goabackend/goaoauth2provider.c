@@ -73,6 +73,20 @@ G_DEFINE_ABSTRACT_TYPE (GoaOAuth2Provider, goa_oauth2_provider, GOA_TYPE_PROVIDE
 
 #define GOA_OAUTH2_CODE_CHALLENGE_METHOD_S256 "S256"
 
+/* Error Responses for Authorization Response
+ *
+ * See:
+ *  - https://datatracker.ietf.org/doc/html/rfc6749#section-4.2
+ *  - https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-auth-code-flow#error-codes-for-authorization-endpoint-errors
+ */
+#define GOA_OAUTH2_AUTH_ERROR_INVALID_REQUEST           "invalid_request"
+#define GOA_OAUTH2_AUTH_ERROR_UNAUTHORIZED_CLIENT       "unauthorized_client"
+#define GOA_OAUTH2_AUTH_ERROR_ACCESS_DENIED             "access_denied"
+#define GOA_OAUTH2_AUTH_ERROR_UNSUPPORTED_RESPONSE_TYPE "unsupported_response_type"
+#define GOA_OAUTH2_AUTH_ERROR_INVALID_SCOPE             "invalid_scope"
+#define GOA_OAUTH2_AUTH_ERROR_SERVER_ERROR              "server_error"
+#define GOA_OAUTH2_AUTH_ERROR_TEMPORARILY_UNAVAILABLE   "temporarily_unavailable"
+
 /* Error Responses for Access Token Request
  *
  * See:
@@ -83,7 +97,7 @@ G_DEFINE_ABSTRACT_TYPE (GoaOAuth2Provider, goa_oauth2_provider, GOA_TYPE_PROVIDE
 #define GOA_OAUTH2_ACCESS_ERROR_INVALID_CLIENT          "invalid_client"
 #define GOA_OAUTH2_ACCESS_ERROR_INVALID_GRANT           "invalid_grant"
 #define GOA_OAUTH2_ACCESS_ERROR_UNAUTHORIZED_CLIENT     "unauthorized_client"
-#define GOA_OAUTH2_ACCESS_ERROR_UNAUTHORIZED_GRANT_TYPE "unauthorized_grant_type"
+#define GOA_OAUTH2_ACCESS_ERROR_UNSUPPORTED_GRANT_TYPE  "unsupported_grant_type"
 #define GOA_OAUTH2_ACCESS_ERROR_INVALID_SCOPE           "invalid_scope"
 
 static gboolean
@@ -626,7 +640,6 @@ get_tokens_sync (GoaOAuth2Provider  *self,
   RestProxy *proxy;
   RestProxyCall *call;
   gchar *ret = NULL;
-  guint status_code;
   gchar *ret_access_token = NULL;
   gint ret_access_token_expires_in = 0;
   gchar *ret_refresh_token = NULL;
@@ -643,6 +656,9 @@ get_tokens_sync (GoaOAuth2Provider  *self,
   if (data->client_secret != NULL)
     rest_proxy_call_add_param (call, "client_secret", data->client_secret);
 
+  if (data->code_verifier != NULL)
+    rest_proxy_call_add_param (call, "code_verifier", data->code_verifier);
+
   if (refresh_token != NULL)
     {
       /* Swell, we have a refresh code - just use that */
@@ -657,11 +673,10 @@ get_tokens_sync (GoaOAuth2Provider  *self,
       rest_proxy_call_add_param (call, "code", authorization_code);
     }
 
-    if (data->code_verifier != NULL)
-      rest_proxy_call_add_param (call, "code_verifier", data->code_verifier);
-
   if (!goa_rest_proxy_call_sync (call, cancellable, &rest_error))
     {
+      guint status_code;
+
       status_code = rest_proxy_call_get_status_code (call);
       if (SOUP_STATUS_IS_CLIENT_ERROR (status_code))
         {
@@ -669,7 +684,6 @@ get_tokens_sync (GoaOAuth2Provider  *self,
           JsonObject *object;
           const char *response_err;
           const char *response_desc;
-          const char *response_suberr;
 
           payload = rest_proxy_call_get_payload (call);
           payload_length = rest_proxy_call_get_payload_length (call);
@@ -691,35 +705,57 @@ get_tokens_sync (GoaOAuth2Provider  *self,
           object = json_node_get_object (json_parser_get_root (parser));
           response_err = json_object_get_string_member_with_default (object, "error", NULL);
           response_desc = json_object_get_string_member_with_default (object, "error_description", NULL);
-          response_suberr = json_object_get_string_member_with_default (object, "suberror", NULL);
-
-          if (response_suberr != NULL)
-            g_debug ("%s(): [%s/%s] %s", G_STRFUNC, response_err, response_suberr, response_desc);
-          else
-            g_debug ("%s(): [%s] %s", G_STRFUNC, response_err, response_desc);
 
           /* Some OAuth providers have access policies controlled by the service. These cases may
            * require re-authentication rather than simply refreshing.
            */
-          if (g_strcmp0 (response_err, GOA_OAUTH2_ACCESS_ERROR_INVALID_GRANT) == 0)
+          if (g_strcmp0 (response_err, GOA_OAUTH2_ACCESS_ERROR_INVALID_CLIENT) == 0
+              || g_strcmp0 (response_err, GOA_OAUTH2_ACCESS_ERROR_INVALID_GRANT) == 0)
             {
-              g_set_error (error,
-                           GOA_ERROR,
-                           GOA_ERROR_NOT_AUTHORIZED,
-                           _("Authorization response: %s"),
-                           response_desc ? response_desc : rest_error->message);
-              goto out;
+              g_debug ("%s(): [%s] %s", G_STRFUNC, response_err, response_desc);
+              g_set_error_literal (error,
+                                   GOA_ERROR,
+                                   GOA_ERROR_NOT_AUTHORIZED,
+                                   response_desc ? response_desc : response_err);
+            }
+          else if (g_strcmp0 (response_err, GOA_OAUTH2_ACCESS_ERROR_UNAUTHORIZED_CLIENT) == 0
+                   || g_strcmp0 (response_err, GOA_OAUTH2_ACCESS_ERROR_UNSUPPORTED_GRANT_TYPE) == 0)
+            {
+              g_warning ("%s(): [%s] %s", G_STRFUNC, response_err, response_desc);
+              g_set_error_literal (error,
+                                   GOA_ERROR,
+                                   GOA_ERROR_NOT_SUPPORTED,
+                                   response_desc ? response_desc : response_err);
+            }
+          else if (g_strcmp0 (response_err, GOA_OAUTH2_ACCESS_ERROR_INVALID_REQUEST) == 0
+                   || g_strcmp0 (response_err, GOA_OAUTH2_ACCESS_ERROR_INVALID_SCOPE) == 0)
+            {
+              g_critical ("%s(): [%s] %s", G_STRFUNC, response_err, response_desc);
+              g_set_error_literal (error,
+                                   GOA_ERROR,
+                                   GOA_ERROR_FAILED,
+                                   response_desc ? response_desc : response_err);
+            }
+          else
+            {
+              g_debug ("%s(): [%s] %s", G_STRFUNC, response_err, response_desc);
+              g_set_error_literal (error,
+                                   GOA_ERROR,
+                                   GOA_ERROR_FAILED,
+                                   response_desc ? response_desc : response_err);
             }
         }
+      else
+        {
+          g_debug ("%s(): %s", G_STRFUNC, rest_error->message);
+          g_set_error (error,
+                       GOA_ERROR,
+                       GOA_ERROR_FAILED,
+                       _("Expected status 200 when requesting access token, instead got status %d (%s)"),
+                       status_code,
+                       rest_proxy_call_get_status_message (call));
+        }
 
-      /* Any errors not known to require special handling return a generic error.
-       */
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   _("Expected status 200 when requesting access token, instead got status %d (%s)"),
-                   status_code,
-                   rest_proxy_call_get_status_message (call));
       goto out;
     }
 
@@ -829,8 +865,9 @@ parse_request_uri (GoaOAuth2Provider  *self,
   g_autoptr(GUri) uri = NULL;
   g_autoptr(GUri) redirect_uri = NULL;
   const char *fragment;
-  const char *oauth2_error;
   const char *query;
+  const char *response_err;
+  const char *response_desc;
 
   g_assert (error == NULL || *error == NULL);
 
@@ -848,7 +885,7 @@ parse_request_uri (GoaOAuth2Provider  *self,
       g_set_error (error,
                    GOA_ERROR,
                    GOA_ERROR_FAILED,
-                   "Invalid URI: %s",
+                   _("Invalid URI: %s"),
                    requested_uri);
       return FALSE;
     }
@@ -914,31 +951,64 @@ parse_request_uri (GoaOAuth2Provider  *self,
       key_value_pairs = soup_form_decode (query);
 
       data->authorization_code = g_strdup (g_hash_table_lookup (key_value_pairs, "code"));
-      g_clear_pointer (&key_value_pairs, g_hash_table_unref);
-
       if (data->authorization_code != NULL)
         return TRUE;
+    }
+  else
+    {
+      g_warning ("Did not find access_token, code or error in response");
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Could not parse response"));
     }
 
   /* In case we don't find the access_token or auth code, then look
    * for the error in the query part of the URI.
    */
-  key_value_pairs = soup_form_decode (query);
-  oauth2_error = (const gchar *) g_hash_table_lookup (key_value_pairs, "error");
-  if (g_strcmp0 (oauth2_error, GOA_OAUTH2_ACCESS_DENIED) == 0)
-    {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_NOT_AUTHORIZED,
-                   _("Authorization response: %s"),
-                   oauth2_error);
-    }
-  else
+  response_err = (const char *) g_hash_table_lookup (key_value_pairs, "error");
+  response_desc = (const char *) g_hash_table_lookup (key_value_pairs, "error_description");
+  if (g_strcmp0 (response_err, GOA_OAUTH2_AUTH_ERROR_ACCESS_DENIED) == 0)
     {
       g_set_error_literal (error,
                            GOA_ERROR,
+                           GOA_ERROR_NOT_AUTHORIZED,
+                           response_desc ? response_desc : response_err);
+    }
+  else if (g_strcmp0 (response_err, GOA_OAUTH2_AUTH_ERROR_UNAUTHORIZED_CLIENT) == 0
+           || g_strcmp0 (response_err, GOA_OAUTH2_AUTH_ERROR_UNSUPPORTED_RESPONSE_TYPE) == 0)
+    {
+      g_warning ("%s(): [%s] %s", G_STRFUNC, response_err, response_desc);
+      g_set_error_literal (error,
+                           GOA_ERROR,
+                           GOA_ERROR_NOT_SUPPORTED,
+                           response_desc ? response_desc : response_err);
+    }
+  else if (g_strcmp0 (response_err, GOA_OAUTH2_AUTH_ERROR_INVALID_REQUEST) == 0
+           || g_strcmp0 (response_err, GOA_OAUTH2_AUTH_ERROR_INVALID_SCOPE) == 0)
+    {
+      g_critical ("%s(): [%s] %s", G_STRFUNC, response_err, response_desc);
+      g_set_error_literal (error,
+                           GOA_ERROR,
                            GOA_ERROR_FAILED,
-                           _("Failed to authenticate"));
+                           response_desc ? response_desc : response_err);
+    }
+  else if (g_strcmp0 (response_err, GOA_OAUTH2_AUTH_ERROR_SERVER_ERROR) == 0
+           || g_strcmp0 (response_err, GOA_OAUTH2_AUTH_ERROR_TEMPORARILY_UNAVAILABLE) == 0)
+    {
+      g_warning ("%s(): [%s] %s", G_STRFUNC, response_err, response_desc);
+      g_set_error_literal (error,
+                           GOA_ERROR,
+                           GOA_ERROR_FAILED,
+                           response_desc ? response_desc : response_err);
+    }
+  else
+    {
+      g_debug ("%s(): [%s] %s", G_STRFUNC, response_err, response_desc);
+      g_set_error_literal (error,
+                           GOA_ERROR,
+                           GOA_ERROR_FAILED,
+                           response_desc ? response_desc : response_err);
     }
 
   return FALSE;
