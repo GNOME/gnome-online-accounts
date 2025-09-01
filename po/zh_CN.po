@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2025-02-12 23:03+0000\n"
-"PO-Revision-Date: 2025-02-25 09:04+0800\n"
+"POT-Creation-Date: 2025-08-30 23:50+0000\n"
+"PO-Revision-Date: 2025-09-01 08:21+0800\n"
 "Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -28,66 +28,66 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Gtranslator 47.1\n"
-
-#: data/org.gnome.online-accounts.gschema.xml:6
-msgid "List of providers that are allowed to be loaded"
-msgstr "允许加载的提供方列表"
-
-#: data/org.gnome.online-accounts.gschema.xml:7
-msgid ""
-"A list of strings representing the providers that are allowed to be loaded "
-"(default: 'all'). This is only evaluated on startup. Deprecated: use goa."
-"conf in the system config directory instead, with a key [providers] "
-"enable=all instead. The key is comma-separated list of the provider names."
-msgstr ""
-"代表允许被加载的提供方的字符串列表（默认：“all”）。该列表仅在启动时进行评估。"
-"已废弃：请使用系统配置目录里的 goa.conf 替代，带有设定键 [providers] "
-"enable=all。该键为英文逗号分隔的提供方名称列表。"
+"X-Generator: Gtranslator 48.0\n"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1162 src/daemon/goadaemon.c:1482
+#: src/daemon/goadaemon.c:1162 src/daemon/goadaemon.c:1483
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "找不到 %s 的提供方"
 
-#: src/daemon/goadaemon.c:1425
+#: src/daemon/goadaemon.c:1426
 msgid "IsLocked property is set for account"
 msgstr "账号属性已设置为锁定（IsLocked）"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1470
+#: src/daemon/goadaemon.c:1471
 msgid "ProviderType property is not set for account"
 msgstr "账号的提供方类型（ProviderType）属性未设置"
 
-#: src/daemon/goadaemon.c:1632
+#: src/daemon/goadaemon.c:1633
 #, c-format
 msgid "Failed to sign in to “%s”"
 msgstr "登录“%s”失败"
 
-#: src/daemon/goadaemon.c:1637
+#: src/daemon/goadaemon.c:1638
 msgid "Failed to sign in to multiple accounts"
 msgstr "登录多个账号失败"
 
-#: src/daemon/goadaemon.c:1646
+#: src/daemon/goadaemon.c:1647
 msgid "Online Accounts"
 msgstr "在线账号"
 
-#: src/daemon/goadaemon.c:1649
+#: src/daemon/goadaemon.c:1650
 msgid "Account Action Required"
 msgstr "需要账号操作"
 
+#: src/goabackend/goaauthflowbutton.c:148
+#: src/goabackend/goaproviderdialog.c:840
+msgid "_Sign In…"
+msgstr "登录(_S)…"
+
+#: src/goabackend/goaauthflowbutton.c:162
+msgid "_Copy Link"
+msgstr "复制链接(_C)"
+
+#: src/goabackend/goaauthflowbutton.c:173
+msgid "Copy the authorization URL to continue with a specific web browser."
+msgstr "复制认证 URL 以通过指定网络浏览器继续认证步骤。"
+
 #. TODO: more specific
-#: src/goabackend/goadavclient.c:1190 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goadavclient.c:1228 src/goabackend/goaimapauthlogin.c:104
 #: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:802
 msgid "Authentication failed"
 msgstr "认证失败"
 
-#: src/goabackend/goadavclient.c:1197
+#: src/goabackend/goadavclient.c:1235
 msgid "Cannot find WebDAV endpoint"
 msgstr "找不到 WebDAV 端点"
 
-#: src/goabackend/goadavclient.c:1298 src/goabackend/goawebdavprovider.c:648
+#: src/goabackend/goadavclient.c:1348 src/goabackend/goaoauth2provider.c:888
+#: src/goabackend/goaowncloudprovider.c:622
+#: src/goabackend/goawebdavprovider.c:648
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "无效的 URI：%s"
@@ -190,8 +190,7 @@ msgid "Google"
 msgstr "谷歌"
 
 #: src/goabackend/goagoogleprovider.c:211
-#: src/goabackend/goamsgraphprovider.c:184
-#: src/goabackend/goawindowsliveprovider.c:163
+#: src/goabackend/goamsgraphprovider.c:185
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
@@ -200,26 +199,29 @@ msgstr "在请求您的身份时应得到状态 200，但却得到了状态 %d (
 #. TODO: more specific
 #: src/goabackend/goagoogleprovider.c:230
 #: src/goabackend/goagoogleprovider.c:241
-#: src/goabackend/goamsgraphprovider.c:203
-#: src/goabackend/goamsgraphprovider.c:214
-#: src/goabackend/goamsgraphprovider.c:227
-#: src/goabackend/goamsgraphprovider.c:252
-#: src/goabackend/goaoauth2provider.c:677
-#: src/goabackend/goaoauth2provider.c:707
-#: src/goabackend/goaoauth2provider.c:718 src/goabackend/goautils.c:136
-#: src/goabackend/goawindowsliveprovider.c:182
-#: src/goabackend/goawindowsliveprovider.c:193
-#: src/goabackend/goawindowsliveprovider.c:202
-#: src/goabackend/goawindowsliveprovider.c:215
+#: src/goabackend/goamsgraphprovider.c:204
+#: src/goabackend/goamsgraphprovider.c:215
+#: src/goabackend/goamsgraphprovider.c:228
+#: src/goabackend/goamsgraphprovider.c:255
+#: src/goabackend/goaoauth2provider.c:701
+#: src/goabackend/goaoauth2provider.c:780
+#: src/goabackend/goaoauth2provider.c:810
+#: src/goabackend/goaoauth2provider.c:821
+#: src/goabackend/goaoauth2provider.c:963
+#: src/goabackend/goaowncloudprovider.c:338
+#: src/goabackend/goaowncloudprovider.c:538
+#: src/goabackend/goaowncloudprovider.c:548
+#: src/goabackend/goaowncloudprovider.c:568 src/goabackend/goautils.c:136
 msgid "Could not parse response"
 msgstr "无法解析响应信息"
 
 #. TODO: more specific
-#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goasmtpauth.c:149
+#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goaoauth2provider.c:1346
+#: src/goabackend/goasmtpauth.c:149
 msgid "Service not available"
 msgstr "服务不可用"
 
-#: src/goabackend/goaimapauthlogin.c:166 src/goabackend/goasmtpauth.c:600
+#: src/goabackend/goaimapauthlogin.c:157 src/goabackend/goasmtpauth.c:625
 msgid "Server does not support STARTTLS"
 msgstr "服务器不支持 STARTTLS"
 
@@ -373,182 +375,174 @@ msgstr "未在凭据中找到主体“%s”的密码"
 msgid "Identity service returned invalid key"
 msgstr "认证服务返回了无效密钥"
 
-#: src/goabackend/goamailclient.c:851
+#: src/goabackend/goamailclient.c:853
 #, c-format
 msgid "Invalid email address “%s”"
 msgstr "无效的电子邮箱地址“%s”"
 
-#: src/goabackend/goamsgraphprovider.c:64
+#: src/goabackend/goamsgraphprovider.c:65
 msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:486
+#: src/goabackend/goamsgraphprovider.c:498
 msgid "Connect to Microsoft 365 to access email, calendars, contacts and files"
 msgstr "连接到 Microsoft 365 以访问电子邮箱、日历、联系人和文件"
 
-#: src/goabackend/goamsgraphprovider.c:490
+#: src/goabackend/goamsgraphprovider.c:502
 msgid "Use Organization Account"
 msgstr "使用组织账号"
 
-#: src/goabackend/goamsgraphprovider.c:491
+#: src/goabackend/goamsgraphprovider.c:503
 msgid "Connect using details from an organization or developer account"
 msgstr "使用来自组织或开发者账号的详情进行连接"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:498
+#: src/goabackend/goamsgraphprovider.c:510
 msgid "Enter the details provided by your organization"
 msgstr "输入由您组织提供的详情"
 
-#: src/goabackend/goamsgraphprovider.c:500
+#: src/goabackend/goamsgraphprovider.c:512
 msgid "_Client ID (Optional)"
 msgstr "客户端 ID（可选）(_C)"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:502
+#: src/goabackend/goamsgraphprovider.c:514
 msgid "_Tenant ID"
 msgstr "租户 ID(_T)"
 
-#: src/goabackend/goamsgraphprovider.c:503
+#: src/goabackend/goamsgraphprovider.c:515
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "示例 ID：00000000-0000-0000-0000-000000000000"
 
-#: src/goabackend/goamsgraphprovider.c:529
-#: src/goabackend/goaoauth2provider.c:959
-#: src/goabackend/goaproviderdialog.c:840
-msgid "_Sign In…"
-msgstr "登录(_S)…"
-
-#: src/goabackend/goamsgraphprovider.c:537
-#: src/goabackend/goaoauth2provider.c:967
-msgid "_Copy Link"
-msgstr "复制链接(_C)"
-
-#: src/goabackend/goamsgraphprovider.c:550
-#: src/goabackend/goaoauth2provider.c:977
-msgid "Copy the authorization URL to continue with a specific web browser."
-msgstr "复制认证 URL 以通过指定网络浏览器继续认证步骤。"
-
-#: src/goabackend/goaoauth2provider.c:653
+#: src/goabackend/goaoauth2provider.c:754
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
 msgstr "在请求访问令牌时应得到状态 200，但却得到了状态 %d (%s)"
 
-#: src/goabackend/goaoauth2provider.c:797
+#: src/goabackend/goaoauth2provider.c:907
 msgid "Authorization response: "
 msgstr "认证响应为："
 
-#: src/goabackend/goaoauth2provider.c:860
-#, c-format
-msgid "Authorization response: %s"
-msgstr "认证响应为：%s"
-
-#: src/goabackend/goaoauth2provider.c:868
-msgid "Failed to authenticate"
-msgstr "验证失败"
-
-#: src/goabackend/goaoauth2provider.c:904
+#: src/goabackend/goaoauth2provider.c:1047
 msgid "Error getting an Access Token: "
 msgstr "获取访问令牌出错："
 
-#: src/goabackend/goaoauth2provider.c:920
+#: src/goabackend/goaoauth2provider.c:1063
 msgid "Error getting identity: "
 msgstr "获取身份信息出错："
 
-#: src/goabackend/goaoauth2provider.c:950
+#: src/goabackend/goaoauth2provider.c:1101
 #, c-format
 msgid "Sign in to %s with your browser"
 msgstr "使用浏览器登录 %s"
 
-#: src/goabackend/goaoauth2provider.c:1182
-msgid "Failed to get session keyring"
-msgstr "获取会话密钥环失败"
-
-#: src/goabackend/goaoauth2provider.c:1477
-#: src/goabackend/goaoauth2provider.c:1645
+#: src/goabackend/goaoauth2provider.c:1615
+#: src/goabackend/goaoauth2provider.c:1787
+#: src/goabackend/goaowncloudprovider.c:824
 msgid "Copied to clipboard"
 msgstr "已复制到剪贴板"
 
-#: src/goabackend/goaoauth2provider.c:1596
+#: src/goabackend/goaoauth2provider.c:1738
+#: src/goabackend/goaowncloudprovider.c:1139
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "要求以 %s 身份登录，但却登录为 %s"
 
-#: src/goabackend/goaoauth2provider.c:1833
+#: src/goabackend/goaoauth2provider.c:1981
 msgid "Credentials do not contain access_token"
 msgstr "凭据中不包含访问令牌（access_token）"
 
-#: src/goabackend/goaoauth2provider.c:1877
+#: src/goabackend/goaoauth2provider.c:2025
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "刷新访问令牌 (%s，%d) 失败："
 
-#: src/goabackend/goaowncloudprovider.c:55
+#: src/goabackend/goaowncloudprovider.c:65
+#: src/goabackend/goaowncloudprovider.c:849
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: src/goabackend/goaprovider.c:118
+#: src/goabackend/goaowncloudprovider.c:526 src/goabackend/goautils.c:790
+msgid "Not supported"
+msgstr "不支持"
+
+#: src/goabackend/goaowncloudprovider.c:850
+msgid "Add a Nextcloud account by providing your server address"
+msgstr "通过提供您的服务器地址来添加 Nextcloud 账户"
+
+#: src/goabackend/goaowncloudprovider.c:853
+#: src/goabackend/goawebdavprovider.c:403
+msgid "_Server Address"
+msgstr "服务器地址(_S)"
+
+#: src/goabackend/goaowncloudprovider.c:854
+#: src/goabackend/goawebdavprovider.c:404
+msgid "Examples: example.com, 192.168.0.82"
+msgstr "示例：example.com，192.168.0.82"
+
+#: src/goabackend/goaprovider.c:117
 msgid "_Mail"
 msgstr "邮件(_M)"
 
-#: src/goabackend/goaprovider.c:123
+#: src/goabackend/goaprovider.c:122
 msgid "Cale_ndar"
 msgstr "日历(_N)"
 
-#: src/goabackend/goaprovider.c:128
+#: src/goabackend/goaprovider.c:127
 msgid "_Contacts"
 msgstr "联系人(_C)"
 
-#: src/goabackend/goaprovider.c:133
+#: src/goabackend/goaprovider.c:132
 msgid "C_hat"
 msgstr "聊天(_H)"
 
-#: src/goabackend/goaprovider.c:138
+#: src/goabackend/goaprovider.c:137
 msgid "_Documents"
 msgstr "文档(_D)"
 
-#: src/goabackend/goaprovider.c:143
+#: src/goabackend/goaprovider.c:142
 msgid "M_usic"
 msgstr "音乐(_U)"
 
-#: src/goabackend/goaprovider.c:148
+#: src/goabackend/goaprovider.c:147
 msgid "_Photos"
 msgstr "照片(_P)"
 
-#: src/goabackend/goaprovider.c:153
+#: src/goabackend/goaprovider.c:152
 msgid "_Files"
 msgstr "文件(_F)"
 
-#: src/goabackend/goaprovider.c:158
+#: src/goabackend/goaprovider.c:157
 msgid "Network _Resources"
 msgstr "网络资源(_R)"
 
-#: src/goabackend/goaprovider.c:163
+#: src/goabackend/goaprovider.c:162
 msgid "_Read Later"
 msgstr "稍后阅读(_R)"
 
-#: src/goabackend/goaprovider.c:168
+#: src/goabackend/goaprovider.c:167
 msgid "Prin_ters"
 msgstr "打印机(_T)"
 
-#: src/goabackend/goaprovider.c:173
+#: src/goabackend/goaprovider.c:172
 msgid "_Maps"
 msgstr "地图(_M)"
 
-#: src/goabackend/goaprovider.c:178
+#: src/goabackend/goaprovider.c:177
 msgid "T_o Do"
 msgstr "待办(_O)"
 
-#: src/goabackend/goaprovider.c:1066
+#: src/goabackend/goaprovider.c:1065
 msgid "Account is disabled"
 msgstr "账号已禁用"
 
-#: src/goabackend/goaprovider.c:1079
+#: src/goabackend/goaprovider.c:1078
 msgid "Unknown error"
 msgstr "未知错误"
 
-#: src/goabackend/goaprovider.c:1098
+#: src/goabackend/goaprovider.c:1097
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "未在 %s 类型上实现 ensure_credentials_sync"
@@ -589,26 +583,26 @@ msgid "Sign in to reconnect to this account"
 msgstr "登录以重新连接到此账号"
 
 #: src/goabackend/goaproviderdialog.c:868
-msgid "_Account Name"
-msgstr "账号名称(_A)"
+msgid "_Account Description"
+msgstr "账号描述(_A)"
 
-#: src/goabackend/goaproviderdialog.c:940
+#: src/goabackend/goaproviderdialog.c:947
 msgid "_Remove…"
 msgstr "移除(_R)…"
 
-#: src/goabackend/goaproviderdialog.c:1036
+#: src/goabackend/goaproviderdialog.c:1043
 msgid "_Sign In"
 msgstr "登录(_S)"
 
-#: src/goabackend/goaproviderdialog.c:1098
+#: src/goabackend/goaproviderdialog.c:1105
 msgid "_Try Again"
 msgstr "重试(_T)"
 
-#: src/goabackend/goaproviderdialog.c:1102
+#: src/goabackend/goaproviderdialog.c:1109
 msgid "_Ignore"
 msgstr "忽略(_I)"
 
-#: src/goabackend/goaproviderdialog.c:1374
+#: src/goabackend/goaproviderdialog.c:1381
 msgid "Dialog was dismissed"
 msgstr "对话框已关闭"
 
@@ -617,7 +611,7 @@ msgstr "对话框已关闭"
 msgid "TLS not available"
 msgstr "TLS 不可用"
 
-#: src/goabackend/goasmtpauth.c:470
+#: src/goabackend/goasmtpauth.c:492
 msgid "Unknown authentication mechanism"
 msgstr "未知认证机制"
 
@@ -655,10 +649,6 @@ msgstr "实体 %2$s 的 GOA %1$s 凭据"
 #: src/goabackend/goautils.c:322
 msgid "Failed to store credentials in the keyring"
 msgstr "保存凭据至秘钥环失败"
-
-#: src/goabackend/goautils.c:790
-msgid "Not supported"
-msgstr "不支持"
 
 #: src/goabackend/goautils.c:794
 msgid "Not found"
@@ -715,14 +705,6 @@ msgid ""
 "and account details"
 msgstr "通过输入您的 WebDAV 服务器和账号详细信息来添加日历、联系人和文件账号"
 
-#: src/goabackend/goawebdavprovider.c:403
-msgid "_Server Address"
-msgstr "服务器地址(_S)"
-
-#: src/goabackend/goawebdavprovider.c:404
-msgid "Examples: example.com, 192.168.0.82"
-msgstr "示例：example.com，192.168.0.82"
-
 #: src/goabackend/goawebdavprovider.c:414
 msgid "Server Addresses (Optional)"
 msgstr "服务器地址（可选）"
@@ -738,10 +720,6 @@ msgstr "日历（CalDAV）"
 #: src/goabackend/goawebdavprovider.c:417
 msgid "Contacts (CardDAV)"
 msgstr "联系人（CardDAV）"
-
-#: src/goabackend/goawindowsliveprovider.c:56
-msgid "Microsoft"
-msgstr "微软"
 
 #: src/goaidentity/goaidentityservice.c:564
 msgid "Initial secret key is invalid"
@@ -821,6 +799,36 @@ msgstr "无法为身份创建凭据缓存"
 #, c-format
 msgid "Error closing file descriptor: %s"
 msgstr "关闭文件描述符时出错：%s"
+
+#~ msgid "List of providers that are allowed to be loaded"
+#~ msgstr "允许加载的提供方列表"
+
+#~ msgid ""
+#~ "A list of strings representing the providers that are allowed to be "
+#~ "loaded (default: 'all'). This is only evaluated on startup. Deprecated: "
+#~ "use goa.conf in the system config directory instead, with a key "
+#~ "[providers] enable=all instead. The key is comma-separated list of the "
+#~ "provider names."
+#~ msgstr ""
+#~ "代表允许被加载的提供方的字符串列表（默认：“all”）。该列表仅在启动时进行评"
+#~ "估。已废弃：请使用系统配置目录里的 goa.conf 替代，带有设定键 [providers] "
+#~ "enable=all。该键为英文逗号分隔的提供方名称列表。"
+
+#, c-format
+#~ msgid "Authorization response: %s"
+#~ msgstr "认证响应为：%s"
+
+#~ msgid "Failed to authenticate"
+#~ msgstr "验证失败"
+
+#~ msgid "Failed to get session keyring"
+#~ msgstr "获取会话密钥环失败"
+
+#~ msgid "_Account Name"
+#~ msgstr "账号名称(_A)"
+
+#~ msgid "Microsoft"
+#~ msgstr "微软"
 
 #~ msgid "None"
 #~ msgstr "无"
