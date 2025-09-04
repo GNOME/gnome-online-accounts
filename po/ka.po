@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2025-02-12 23:03+0000\n"
-"PO-Revision-Date: 2025-02-23 06:48+0100\n"
+"POT-Creation-Date: 2025-09-01 00:23+0000\n"
+"PO-Revision-Date: 2025-09-04 11:27+0200\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -17,68 +17,66 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.5\n"
-
-#: data/org.gnome.online-accounts.gschema.xml:6
-msgid "List of providers that are allowed to be loaded"
-msgstr "ჩასატვირთი მომწოდებლების სია"
-
-#: data/org.gnome.online-accounts.gschema.xml:7
-msgid ""
-"A list of strings representing the providers that are allowed to be loaded "
-"(default: 'all'). This is only evaluated on startup. Deprecated: use goa."
-"conf in the system config directory instead, with a key [providers] "
-"enable=all instead. The key is comma-separated list of the provider names."
-msgstr ""
-"სტრიქონების სია, რომელიც წარმოადგენს მომწოდებლების სიას, რომლებიც იტვირთება "
-"სისტემის გაშვების დროს (ნაგულისხმები: 'ყველა'). ეს, მხოლოდ, გაშვებისას "
-"მოწმდება. მოძველებულია: ამის მაგიერ გამოიყენეთ goa.conf სისტემურ "
-"კონფიგურაციის საქაღალდეში გასაღებით [providers] enable-all. გასაღები "
-"მომწოდებლის სახელების მძიმით გამოყოფილი სიაა."
+"X-Generator: Poedit 3.7\n"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1162 src/daemon/goadaemon.c:1482
+#: src/daemon/goadaemon.c:1162 src/daemon/goadaemon.c:1483
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "მომწოდებლის პოვნის შეცდომა: %s"
 
-#: src/daemon/goadaemon.c:1425
+#: src/daemon/goadaemon.c:1426
 msgid "IsLocked property is set for account"
 msgstr "ანგარიშს დაყენებული აქვს isLocked თვისება"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1470
+#: src/daemon/goadaemon.c:1471
 msgid "ProviderType property is not set for account"
 msgstr "ანგარიშს არ აქვს დაყენებული ProviderType თვისება"
 
-#: src/daemon/goadaemon.c:1632
+#: src/daemon/goadaemon.c:1633
 #, c-format
 msgid "Failed to sign in to “%s”"
 msgstr "\"%s\"-ში შესვლა ჩავარდა"
 
-#: src/daemon/goadaemon.c:1637
+#: src/daemon/goadaemon.c:1638
 msgid "Failed to sign in to multiple accounts"
 msgstr "ერთზე მეტ ანგარიშზე შესვლა ჩავარდა"
 
-#: src/daemon/goadaemon.c:1646
+#: src/daemon/goadaemon.c:1647
 msgid "Online Accounts"
 msgstr "ონლაინ ანგარიშები"
 
-#: src/daemon/goadaemon.c:1649
+#: src/daemon/goadaemon.c:1650
 msgid "Account Action Required"
 msgstr "აუცილებელია ანგარიშის ქმედება"
 
+#: src/goabackend/goaauthflowbutton.c:148
+#: src/goabackend/goaproviderdialog.c:840
+msgid "_Sign In…"
+msgstr "შე_სვლა…"
+
+#: src/goabackend/goaauthflowbutton.c:162
+msgid "_Copy Link"
+msgstr "ბმულის _კოპირება"
+
+#: src/goabackend/goaauthflowbutton.c:173
+msgid "Copy the authorization URL to continue with a specific web browser."
+msgstr "დააკოპირეთ ავტორიზაციის ბმული სპეციფიკურ ბრაუზერში გასაგრძელებლად."
+
 #. TODO: more specific
-#: src/goabackend/goadavclient.c:1190 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goadavclient.c:1228 src/goabackend/goaimapauthlogin.c:104
 #: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:802
 msgid "Authentication failed"
 msgstr "ავთენტიკაციის შეცდომა"
 
-#: src/goabackend/goadavclient.c:1197
+#: src/goabackend/goadavclient.c:1235
 msgid "Cannot find WebDAV endpoint"
 msgstr "WebDAV-ის საბოლოო წერტილის პოვნა შეუძლებელია"
 
-#: src/goabackend/goadavclient.c:1298 src/goabackend/goawebdavprovider.c:648
+#: src/goabackend/goadavclient.c:1348 src/goabackend/goaoauth2provider.c:888
+#: src/goabackend/goaowncloudprovider.c:622
+#: src/goabackend/goawebdavprovider.c:648
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "არასწორი URI: %s"
@@ -186,8 +184,7 @@ msgid "Google"
 msgstr "Google"
 
 #: src/goabackend/goagoogleprovider.c:211
-#: src/goabackend/goamsgraphprovider.c:184
-#: src/goabackend/goawindowsliveprovider.c:163
+#: src/goabackend/goamsgraphprovider.c:185
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
@@ -198,26 +195,29 @@ msgstr ""
 #. TODO: more specific
 #: src/goabackend/goagoogleprovider.c:230
 #: src/goabackend/goagoogleprovider.c:241
-#: src/goabackend/goamsgraphprovider.c:203
-#: src/goabackend/goamsgraphprovider.c:214
-#: src/goabackend/goamsgraphprovider.c:227
-#: src/goabackend/goamsgraphprovider.c:252
-#: src/goabackend/goaoauth2provider.c:677
-#: src/goabackend/goaoauth2provider.c:707
-#: src/goabackend/goaoauth2provider.c:718 src/goabackend/goautils.c:136
-#: src/goabackend/goawindowsliveprovider.c:182
-#: src/goabackend/goawindowsliveprovider.c:193
-#: src/goabackend/goawindowsliveprovider.c:202
-#: src/goabackend/goawindowsliveprovider.c:215
+#: src/goabackend/goamsgraphprovider.c:204
+#: src/goabackend/goamsgraphprovider.c:215
+#: src/goabackend/goamsgraphprovider.c:228
+#: src/goabackend/goamsgraphprovider.c:255
+#: src/goabackend/goaoauth2provider.c:701
+#: src/goabackend/goaoauth2provider.c:780
+#: src/goabackend/goaoauth2provider.c:810
+#: src/goabackend/goaoauth2provider.c:821
+#: src/goabackend/goaoauth2provider.c:963
+#: src/goabackend/goaowncloudprovider.c:338
+#: src/goabackend/goaowncloudprovider.c:538
+#: src/goabackend/goaowncloudprovider.c:548
+#: src/goabackend/goaowncloudprovider.c:568 src/goabackend/goautils.c:136
 msgid "Could not parse response"
 msgstr "პასუხის დამუშავების შეცდომა"
 
 #. TODO: more specific
-#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goasmtpauth.c:149
+#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goaoauth2provider.c:1346
+#: src/goabackend/goasmtpauth.c:149
 msgid "Service not available"
 msgstr "სერვისი ხელმიუწვდომელია"
 
-#: src/goabackend/goaimapauthlogin.c:166 src/goabackend/goasmtpauth.c:600
+#: src/goabackend/goaimapauthlogin.c:157 src/goabackend/goasmtpauth.c:625
 msgid "Server does not support STARTTLS"
 msgstr "სერვერს არ აქვს STARTTLS-ის მხარდაჭერა"
 
@@ -375,65 +375,49 @@ msgstr "ვერ ვიპოვე ძირითადი „%s“ პარ
 msgid "Identity service returned invalid key"
 msgstr "იდენტურობის სერვისმა არასწორი გასაღები დააბრუნა"
 
-#: src/goabackend/goamailclient.c:851
+#: src/goabackend/goamailclient.c:853
 #, c-format
 msgid "Invalid email address “%s”"
 msgstr "არასწორი ელფოსტის მისამართი \"%s\""
 
-#: src/goabackend/goamsgraphprovider.c:64
+#: src/goabackend/goamsgraphprovider.c:65
 msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:486
+#: src/goabackend/goamsgraphprovider.c:498
 msgid "Connect to Microsoft 365 to access email, calendars, contacts and files"
 msgstr ""
 "დაუკავშირდით Microsoft 365-ს ელფოსტასთან, კალენდართან, კონტაქტებთან და "
 "ფაილებთან წვდომისთვის"
 
-#: src/goabackend/goamsgraphprovider.c:490
+#: src/goabackend/goamsgraphprovider.c:502
 msgid "Use Organization Account"
 msgstr "ორგანიზაციის ანგარიშის გამოყენება"
 
-#: src/goabackend/goamsgraphprovider.c:491
+#: src/goabackend/goamsgraphprovider.c:503
 msgid "Connect using details from an organization or developer account"
 msgstr "დაკავშირება ორგანიზაციის ან პროგრამისტის ანგარიშის დეტალებით"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:498
+#: src/goabackend/goamsgraphprovider.c:510
 msgid "Enter the details provided by your organization"
 msgstr "შეიყვანეთ დეტალები, რომლებიც თქვენმა ორგანიზაციამ მოგაწოდათ"
 
-#: src/goabackend/goamsgraphprovider.c:500
+#: src/goabackend/goamsgraphprovider.c:512
 msgid "_Client ID (Optional)"
 msgstr "_კლიენტის ID (არასავალდებულო)"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:502
+#: src/goabackend/goamsgraphprovider.c:514
 msgid "_Tenant ID"
 msgstr "_პატრონის ID"
 
-#: src/goabackend/goamsgraphprovider.c:503
+#: src/goabackend/goamsgraphprovider.c:515
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "ID-ის მაგალითი: 00000000-0000-0000-0000-000000000000"
 
-#: src/goabackend/goamsgraphprovider.c:529
-#: src/goabackend/goaoauth2provider.c:959
-#: src/goabackend/goaproviderdialog.c:840
-msgid "_Sign In…"
-msgstr "შე_სვლა…"
-
-#: src/goabackend/goamsgraphprovider.c:537
-#: src/goabackend/goaoauth2provider.c:967
-msgid "_Copy Link"
-msgstr "ბმულის _კოპირება"
-
-#: src/goabackend/goamsgraphprovider.c:550
-#: src/goabackend/goaoauth2provider.c:977
-msgid "Copy the authorization URL to continue with a specific web browser."
-msgstr "დააკოპირეთ ავტორიზაციის ბმული სპეციფიკურ ბრაუზერში გასაგრძელებლად."
-
-#: src/goabackend/goaoauth2provider.c:653
+#: src/goabackend/goaoauth2provider.c:754
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -441,120 +425,128 @@ msgstr ""
 "წვდომის კოდის გამოთხოვნისას მოსალოდნელი 200-ე პასუხის მაგიერ მიღებული "
 "პასუხია %d (%s)"
 
-#: src/goabackend/goaoauth2provider.c:797
+#: src/goabackend/goaoauth2provider.c:907
 msgid "Authorization response: "
 msgstr "ავტორიზაციის პასუხი: "
 
-#: src/goabackend/goaoauth2provider.c:860
-#, c-format
-msgid "Authorization response: %s"
-msgstr "ავტორიზაციის პასუხი: %s"
-
-#: src/goabackend/goaoauth2provider.c:868
-msgid "Failed to authenticate"
-msgstr "ავთენტიკაციის შეცდომა"
-
-#: src/goabackend/goaoauth2provider.c:904
+#: src/goabackend/goaoauth2provider.c:1047
 msgid "Error getting an Access Token: "
 msgstr "წვდომის კოდის მიღების შეცდომა: "
 
-#: src/goabackend/goaoauth2provider.c:920
+#: src/goabackend/goaoauth2provider.c:1063
 msgid "Error getting identity: "
 msgstr "იდენტობის მიღების შეცდომა: "
 
-#: src/goabackend/goaoauth2provider.c:950
+#: src/goabackend/goaoauth2provider.c:1101
 #, c-format
 msgid "Sign in to %s with your browser"
 msgstr "შედით %s-ში თქვენი ბრაუზერიდან"
 
-#: src/goabackend/goaoauth2provider.c:1182
-msgid "Failed to get session keyring"
-msgstr "სესიის ბრელოკის მიღება ჩავარდა"
-
-#: src/goabackend/goaoauth2provider.c:1477
-#: src/goabackend/goaoauth2provider.c:1645
+#: src/goabackend/goaoauth2provider.c:1615
+#: src/goabackend/goaoauth2provider.c:1787
+#: src/goabackend/goaowncloudprovider.c:824
 msgid "Copied to clipboard"
 msgstr "დაკოპირდა გაცვლის ბაფერში"
 
-#: src/goabackend/goaoauth2provider.c:1596
+#: src/goabackend/goaoauth2provider.c:1738
+#: src/goabackend/goaowncloudprovider.c:1139
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "მოთხოვნა შეეხებოდა შესვლას %s მაგრამ შეხვედით, როგორც %s"
 
-#: src/goabackend/goaoauth2provider.c:1833
+#: src/goabackend/goaoauth2provider.c:1981
 msgid "Credentials do not contain access_token"
 msgstr "მომხმარებელი და პაროლი access_token-ს არ შეიცავენ"
 
-#: src/goabackend/goaoauth2provider.c:1877
+#: src/goabackend/goaoauth2provider.c:2025
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "წვდომის კოდის განახლების შეცდომა (%s, %d): "
 
-#: src/goabackend/goaowncloudprovider.c:55
+#: src/goabackend/goaowncloudprovider.c:65
+#: src/goabackend/goaowncloudprovider.c:849
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: src/goabackend/goaprovider.c:118
+#: src/goabackend/goaowncloudprovider.c:526 src/goabackend/goautils.c:790
+msgid "Not supported"
+msgstr "მხარდაუჭერელია"
+
+#: src/goabackend/goaowncloudprovider.c:850
+msgid "Add a Nextcloud account by providing your server address"
+msgstr "დაამატეთ Nextcloud-ის ანგარიში თქვენი სერვერის მისამართის შეყვანით"
+
+#: src/goabackend/goaowncloudprovider.c:853
+#: src/goabackend/goawebdavprovider.c:403
+msgid "_Server Address"
+msgstr "_სერვერის მისამართი"
+
+#: src/goabackend/goaowncloudprovider.c:854
+#: src/goabackend/goawebdavprovider.c:404
+msgid "Examples: example.com, 192.168.0.82"
+msgstr "მაგალითები: example.com, 192.168.0.82"
+
+#: src/goabackend/goaprovider.c:117
 msgid "_Mail"
 msgstr "_ფოსტა"
 
-#: src/goabackend/goaprovider.c:123
+#: src/goabackend/goaprovider.c:122
 msgid "Cale_ndar"
 msgstr "კალე_ნდარი"
 
-#: src/goabackend/goaprovider.c:128
+#: src/goabackend/goaprovider.c:127
 msgid "_Contacts"
 msgstr "_კონტაქტები"
 
-#: src/goabackend/goaprovider.c:133
+#: src/goabackend/goaprovider.c:132
 msgid "C_hat"
 msgstr "_სასაუბრო"
 
-#: src/goabackend/goaprovider.c:138
+#: src/goabackend/goaprovider.c:137
 msgid "_Documents"
 msgstr "_დოკუმენტები"
 
-#: src/goabackend/goaprovider.c:143
+#: src/goabackend/goaprovider.c:142
 msgid "M_usic"
 msgstr "_მუსიკა"
 
-#: src/goabackend/goaprovider.c:148
+#: src/goabackend/goaprovider.c:147
 msgid "_Photos"
 msgstr "_ფოტოები"
 
-#: src/goabackend/goaprovider.c:153
+#: src/goabackend/goaprovider.c:152
 msgid "_Files"
 msgstr "_ფაილები"
 
-#: src/goabackend/goaprovider.c:158
+#: src/goabackend/goaprovider.c:157
 msgid "Network _Resources"
 msgstr "ქსელური _რესურსები"
 
-#: src/goabackend/goaprovider.c:163
+#: src/goabackend/goaprovider.c:162
 msgid "_Read Later"
 msgstr "_მოგვიანებით წაკითხვა"
 
-#: src/goabackend/goaprovider.c:168
+#: src/goabackend/goaprovider.c:167
 msgid "Prin_ters"
 msgstr "_პრინტერები"
 
-#: src/goabackend/goaprovider.c:173
+#: src/goabackend/goaprovider.c:172
 msgid "_Maps"
 msgstr "_რუკები"
 
-#: src/goabackend/goaprovider.c:178
+#: src/goabackend/goaprovider.c:177
 msgid "T_o Do"
 msgstr "_გასაკეთებელი საქმეები"
 
-#: src/goabackend/goaprovider.c:1066
+#: src/goabackend/goaprovider.c:1065
 msgid "Account is disabled"
 msgstr "ანგარიში გათიშულია"
 
-#: src/goabackend/goaprovider.c:1079
+#: src/goabackend/goaprovider.c:1078
 msgid "Unknown error"
 msgstr "უცნობი შეცდომა"
 
-#: src/goabackend/goaprovider.c:1098
+#: src/goabackend/goaprovider.c:1097
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
 msgstr "ამ ტიპზე (%s) ensure_credentials_sync ხელმიუწვდომელია"
@@ -597,26 +589,26 @@ msgid "Sign in to reconnect to this account"
 msgstr "ანგარიშის ჩასართავად შედით შიგნით"
 
 #: src/goabackend/goaproviderdialog.c:868
-msgid "_Account Name"
-msgstr "_ანგარიშის სახელი"
+msgid "_Account Description"
+msgstr "_ანგარშის აღწერა"
 
-#: src/goabackend/goaproviderdialog.c:940
+#: src/goabackend/goaproviderdialog.c:947
 msgid "_Remove…"
 msgstr "_წაშლა…"
 
-#: src/goabackend/goaproviderdialog.c:1036
+#: src/goabackend/goaproviderdialog.c:1043
 msgid "_Sign In"
 msgstr "_შესვლა"
 
-#: src/goabackend/goaproviderdialog.c:1098
+#: src/goabackend/goaproviderdialog.c:1105
 msgid "_Try Again"
 msgstr "_თავიდან სცადეთ"
 
-#: src/goabackend/goaproviderdialog.c:1102
+#: src/goabackend/goaproviderdialog.c:1109
 msgid "_Ignore"
 msgstr "_იგნორი"
 
-#: src/goabackend/goaproviderdialog.c:1374
+#: src/goabackend/goaproviderdialog.c:1381
 msgid "Dialog was dismissed"
 msgstr "ფანჯარა დახურულია"
 
@@ -625,7 +617,7 @@ msgstr "ფანჯარა დახურულია"
 msgid "TLS not available"
 msgstr "TLS მიუწვდომელია"
 
-#: src/goabackend/goasmtpauth.c:470
+#: src/goabackend/goasmtpauth.c:492
 msgid "Unknown authentication mechanism"
 msgstr "ავთენტიკაციის უცნობი მექანიზმი"
 
@@ -663,10 +655,6 @@ msgstr "GOA-ის %s-ის მომხმარებელი/პარო�
 #: src/goabackend/goautils.c:322
 msgid "Failed to store credentials in the keyring"
 msgstr "გასაღების რგოლში მომხმარებლის/პაროლის დამახსოვრების შეცდომა"
-
-#: src/goabackend/goautils.c:790
-msgid "Not supported"
-msgstr "მხარდაუჭერელია"
 
 #: src/goabackend/goautils.c:794
 msgid "Not found"
@@ -725,14 +713,6 @@ msgstr ""
 "დაამატეთ კალენდარი, კონტაქტები და ფაილები ანგარიშს თქვენი WebDAV სერვერისა "
 "და ანგარიშის დეტალების შეყვანით"
 
-#: src/goabackend/goawebdavprovider.c:403
-msgid "_Server Address"
-msgstr "_სერვერის მისამართი"
-
-#: src/goabackend/goawebdavprovider.c:404
-msgid "Examples: example.com, 192.168.0.82"
-msgstr "მაგალითები: example.com, 192.168.0.82"
-
 #: src/goabackend/goawebdavprovider.c:414
 msgid "Server Addresses (Optional)"
 msgstr "სერვერის მისამართები (არასავალდებულო)"
@@ -748,10 +728,6 @@ msgstr "კალენდარი (CalDAV)"
 #: src/goabackend/goawebdavprovider.c:417
 msgid "Contacts (CardDAV)"
 msgstr "კონტაქტები (CardDAV)"
-
-#: src/goabackend/goawindowsliveprovider.c:56
-msgid "Microsoft"
-msgstr "Microsoft"
 
 #: src/goaidentity/goaidentityservice.c:564
 msgid "Initial secret key is invalid"
@@ -833,6 +809,38 @@ msgstr "იდენტურობისთვის მომხმარე�
 #, c-format
 msgid "Error closing file descriptor: %s"
 msgstr "შეცდომა ფაილის დესკრიპტორის დახურვისას: %s"
+
+#~ msgid "List of providers that are allowed to be loaded"
+#~ msgstr "ჩასატვირთი მომწოდებლების სია"
+
+#~ msgid ""
+#~ "A list of strings representing the providers that are allowed to be "
+#~ "loaded (default: 'all'). This is only evaluated on startup. Deprecated: "
+#~ "use goa.conf in the system config directory instead, with a key "
+#~ "[providers] enable=all instead. The key is comma-separated list of the "
+#~ "provider names."
+#~ msgstr ""
+#~ "სტრიქონების სია, რომელიც წარმოადგენს მომწოდებლების სიას, რომლებიც "
+#~ "იტვირთება სისტემის გაშვების დროს (ნაგულისხმები: 'ყველა'). ეს, მხოლოდ, "
+#~ "გაშვებისას მოწმდება. მოძველებულია: ამის მაგიერ გამოიყენეთ goa.conf "
+#~ "სისტემურ კონფიგურაციის საქაღალდეში გასაღებით [providers] enable-all. "
+#~ "გასაღები მომწოდებლის სახელების მძიმით გამოყოფილი სიაა."
+
+#, c-format
+#~ msgid "Authorization response: %s"
+#~ msgstr "ავტორიზაციის პასუხი: %s"
+
+#~ msgid "Failed to authenticate"
+#~ msgstr "ავთენტიკაციის შეცდომა"
+
+#~ msgid "Failed to get session keyring"
+#~ msgstr "სესიის ბრელოკის მიღება ჩავარდა"
+
+#~ msgid "_Account Name"
+#~ msgstr "_ანგარიშის სახელი"
+
+#~ msgid "Microsoft"
+#~ msgstr "Microsoft"
 
 #~ msgid "None"
 #~ msgstr "არც_ერთი"
