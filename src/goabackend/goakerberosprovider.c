@@ -215,11 +215,11 @@ build_object (GoaProvider         *provider,
 
           g_variant_builder_init (&details, G_VARIANT_TYPE ("a{ss}"));
 
-	  preauthentication_source = g_key_file_get_string (key_file, group, "PreauthenticationSource", NULL);
+          preauthentication_source = g_key_file_get_string (key_file, group, "PreauthenticationSource", NULL);
           if (preauthentication_source)
             g_variant_builder_add (&details, "{ss}", "preauthentication-source", preauthentication_source);
 
-	  g_object_set (G_OBJECT (ticketing), "details", g_variant_builder_end (&details), NULL);
+          g_object_set (G_OBJECT (ticketing), "details", g_variant_builder_end (&details), NULL);
         }
     }
   else if (ticketing != NULL)

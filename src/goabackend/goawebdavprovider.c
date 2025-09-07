@@ -35,9 +35,9 @@
 G_DEFINE_TYPE_WITH_CODE (GoaWebDavProvider, goa_webdav_provider, GOA_TYPE_PROVIDER,
                          goa_provider_ensure_extension_points_registered ();
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
-							 g_define_type_id,
-							 GOA_WEBDAV_NAME,
-							 0))
+                                                         g_define_type_id,
+                                                         GOA_WEBDAV_NAME,
+                                                         0))
 
 
 /* ---------------------------------------------------------------------------------------------------- */

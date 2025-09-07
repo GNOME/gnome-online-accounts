@@ -38,9 +38,9 @@ struct _GoaGoogleProvider
 G_DEFINE_TYPE_WITH_CODE (GoaGoogleProvider, goa_google_provider, GOA_TYPE_OAUTH2_PROVIDER,
                          goa_provider_ensure_extension_points_registered ();
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
-							 g_define_type_id,
-							 GOA_GOOGLE_NAME,
-							 0));
+                                                         g_define_type_id,
+                                                         GOA_GOOGLE_NAME,
+                                                         0));
 
 /* ---------------------------------------------------------------------------------------------------- */
 
