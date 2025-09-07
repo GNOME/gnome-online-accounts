@@ -34,9 +34,9 @@ struct _GoaExchangeProvider
 G_DEFINE_TYPE_WITH_CODE (GoaExchangeProvider, goa_exchange_provider, GOA_TYPE_PROVIDER,
                          goa_provider_ensure_extension_points_registered ();
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
-							 g_define_type_id,
-							 GOA_EXCHANGE_NAME,
-							 0));
+                                                         g_define_type_id,
+                                                         GOA_EXCHANGE_NAME,
+                                                         0));
 
 /* ---------------------------------------------------------------------------------------------------- */
 

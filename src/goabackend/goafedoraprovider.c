@@ -193,12 +193,10 @@ client_account_added_cb (GoaClient *client, GoaObject *object, gpointer user_dat
     return;
 
   provider_type = goa_account_get_provider_type (account);
-  g_message ("client_account_added_cb: %s", provider_type);
   if (g_strcmp0 (provider_type, GOA_FEDORA_NAME) != 0)
     return;
 
   identity = goa_account_get_identity (account);
-  g_message ("client_account_added_cb: %s", identity);
   if (g_strcmp0 (identity, data->identity) != 0)
     return;
 

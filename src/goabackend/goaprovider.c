@@ -469,9 +469,9 @@ goa_util_open_goa_conf (void)
  * Since: 3.52
  */
 gboolean
-goa_util_provider_feature_is_enabled (GKeyFile *goa_conf,
-				      const gchar *provider_type,
-				      GoaProviderFeatures feature)
+goa_util_provider_feature_is_enabled (GKeyFile            *goa_conf,
+                                      const gchar         *provider_type,
+                                      GoaProviderFeatures  feature)
 {
   GError *error = NULL;
   const gchar *feature_alias;
@@ -501,8 +501,8 @@ goa_util_provider_feature_is_enabled (GKeyFile *goa_conf,
 }
 
 static GoaProviderFeatures
-goa_provider_filter_features (GoaProvider *self,
-			      GoaProviderFeatures features)
+goa_provider_filter_features (GoaProvider         *self,
+                              GoaProviderFeatures  features)
 {
   GKeyFile *goa_conf;
   const gchar *provider_type;
@@ -518,7 +518,7 @@ goa_provider_filter_features (GoaProvider *self,
     {
       GoaProviderFeatures feature = provider_features_info[i].feature;
       if ((features & feature) != 0 &&
-	  !goa_util_provider_feature_is_enabled (goa_conf, provider_type, feature))
+          !goa_util_provider_feature_is_enabled (goa_conf, provider_type, feature))
         {
           features = features & (~feature);
         }

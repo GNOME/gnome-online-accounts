@@ -1770,9 +1770,9 @@ ensure_credentials_queue_collector (GObject *source_object, GAsyncResult *res, g
             {
               goa_account_set_attention_needed (account, TRUE);
               g_dbus_interface_skeleton_flush (G_DBUS_INTERFACE_SKELETON (account));
-              g_message ("%s: Setting AttentionNeeded to TRUE because EnsureCredentials() failed with: %s (%s, %d)",
-                         g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)),
-                         error->message, g_quark_to_string (error->domain), error->code);
+              g_debug ("%s: Setting AttentionNeeded to TRUE because EnsureCredentials() failed with: %s (%s, %d)",
+                       g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)),
+                       error->message, g_quark_to_string (error->domain), error->code);
               g_ptr_array_add (self->accounts_needing_attention, g_object_ref (account));
               self->accounts_need_notification = TRUE;
             }
@@ -1788,8 +1788,8 @@ ensure_credentials_queue_collector (GObject *source_object, GAsyncResult *res, g
         {
           goa_account_set_attention_needed (account, FALSE);
           g_dbus_interface_skeleton_flush (G_DBUS_INTERFACE_SKELETON (account));
-          g_message ("%s: Setting AttentionNeeded to FALSE because EnsureCredentials() succeded\n",
-                     g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)));
+          g_debug ("%s: Setting AttentionNeeded to FALSE because EnsureCredentials() succeeded",
+                   g_dbus_object_get_object_path (G_DBUS_OBJECT (data->object)));
           g_ptr_array_remove (self->accounts_needing_attention, account);
         }
 

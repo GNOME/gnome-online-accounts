@@ -1458,7 +1458,6 @@ oauth2_task_prepare_request_uri (GTask *task)
       code_challenge = goa_utils_generate_code_challenge (data->code_verifier);
     }
 
-  g_message ("%s: %s - %s", G_STRFUNC, data->redirect_uri, data->client_id);
   data->request_uri = goa_oauth2_provider_build_authorization_uri (self,
                                                                    data->authorization_uri,
                                                                    escaped_redirect_uri,

@@ -37,9 +37,9 @@ struct _GoaImapSmtpProvider
 G_DEFINE_TYPE_WITH_CODE (GoaImapSmtpProvider, goa_imap_smtp_provider, GOA_TYPE_PROVIDER,
                          goa_provider_ensure_extension_points_registered ();
                          g_io_extension_point_implement (GOA_PROVIDER_EXTENSION_POINT_NAME,
-							 g_define_type_id,
-							 GOA_IMAP_SMTP_NAME,
-							 0));
+                                                         g_define_type_id,
+                                                         GOA_IMAP_SMTP_NAME,
+                                                         0));
 
 /* ---------------------------------------------------------------------------------------------------- */
 
