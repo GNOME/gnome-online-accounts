@@ -3,6 +3,7 @@ goaidentity_inc = include_directories('.')
 headers = files(
   'goaalarm.h',
   'goaidentity.h',
+  'goaidentityerror.h',
   'goaidentityinquiry.h',
   'goaidentityinquiryprivate.h',
   'goaidentityservice.h',
@@ -27,9 +28,12 @@ identity_dbus_sources = gnome.gdbus_codegen(
   annotations: [dbus, 'org.gtk.GDBus.C.Name', 'Identity']
 )
 
-identity_manager_error_src = files('goaidentitymanagererror.c')
+identity_error_sources = files(
+  'goaidentityerror.c',
+  'goaidentitymanagererror.c',
+)
 
-sources = identity_manager_error_src + files(
+sources = identity_error_sources + files(
   'goaalarm.c',
   'goaidentity.c',
   'goaidentityinquiry.c',

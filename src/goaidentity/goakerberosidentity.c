@@ -19,6 +19,7 @@
 #include "config.h"
 
 #include "goaidentity.h"
+#include "goaidentityerror.h"
 #include "goakerberosidentity.h"
 #include "goakerberosidentityinquiry.h"
 #include "goaalarm.h"

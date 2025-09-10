@@ -25,6 +25,7 @@
 #include "goakerberosprovider-priv.h"
 #include "goautils.h"
 #include "goaidentity.h"
+#include "goaidentityerror.h"
 #include "goaidentitymanagererror.h"
 
 #include <gcr/gcr.h>
@@ -1165,6 +1166,7 @@ goa_kerberos_provider_class_init (GoaKerberosProviderClass *kerberos_class)
    * g_dbus_error_register_error_domain().
    */
   goa_identity_manager_error_quark ();
+  goa_identity_error_quark ();
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

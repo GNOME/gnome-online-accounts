@@ -27,8 +27,6 @@ G_BEGIN_DECLS
 #define GOA_TYPE_IDENTITY (goa_identity_get_type ())
 G_DECLARE_INTERFACE (GoaIdentity, goa_identity, GOA, IDENTITY, GObject);
 
-#define GOA_IDENTITY_ERROR (goa_identity_error_quark ())
-
 struct _GoaIdentityInterface
 {
   GTypeInterface base_interface;
@@ -39,27 +37,11 @@ struct _GoaIdentityInterface
 
 typedef enum
 {
-  GOA_IDENTITY_ERROR_NOT_FOUND,
-  GOA_IDENTITY_ERROR_VERIFYING,
-  GOA_IDENTITY_ERROR_RENEWING,
-  GOA_IDENTITY_ERROR_CREDENTIALS_UNAVAILABLE,
-  GOA_IDENTITY_ERROR_ENUMERATING_CREDENTIALS,
-  GOA_IDENTITY_ERROR_ALLOCATING_CREDENTIALS,
-  GOA_IDENTITY_ERROR_AUTHENTICATION_FAILED,
-  GOA_IDENTITY_ERROR_SAVING_CREDENTIALS,
-  GOA_IDENTITY_ERROR_REMOVING_CREDENTIALS,
-  GOA_IDENTITY_ERROR_PARSING_IDENTIFIER,
-} GoaIdentityError;
-
-typedef enum
-{
   GOA_IDENTITY_SIGN_IN_FLAGS_NONE                        = 0,
   GOA_IDENTITY_SIGN_IN_FLAGS_DISALLOW_RENEWAL            = 1,
   GOA_IDENTITY_SIGN_IN_FLAGS_DISALLOW_FORWARDING         = 1 << 1,
   GOA_IDENTITY_SIGN_IN_FLAGS_DISALLOW_PROXYING           = 1 << 2
 } GoaIdentitySignInFlags;
-
-GQuark goa_identity_error_quark (void);
 
 const char  *goa_identity_get_identifier            (GoaIdentity *identity);
 gboolean     goa_identity_is_signed_in              (GoaIdentity *identity);
