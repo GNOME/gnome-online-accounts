@@ -1421,6 +1421,169 @@ goa_kerberos_provider_get_ticket_sync (GoaKerberosProvider  *self,
 
 typedef struct
 {
+  GcrSecretExchange *secret_exchange;
+  gboolean remember_password;
+} PromptPasswordData;
+
+static void
+prompt_password_data_free (gpointer user_data)
+{
+  PromptPasswordData *data = (PromptPasswordData *)user_data;
+
+  g_clear_object (&data->secret_exchange);
+  g_free (data);
+}
+
+static void
+prompt_password_thread (GTask        *task,
+                        gpointer      source_object,
+                        gpointer      task_data,
+                        GCancellable *cancellable)
+{
+  GoaKerberosProvider *self = GOA_KERBEROS_PROVIDER (source_object);
+  PromptPasswordData *data = (PromptPasswordData *) task_data;
+  GError *error = NULL;
+
+  data->secret_exchange = goa_kerberos_provider_prompt_password_sync (self,
+                                                                      &data->remember_password,
+                                                                      cancellable,
+                                                                      &error);
+  if (data->secret_exchange == NULL)
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+}
+
+/*< private >
+ * goa_kerberos_provider_prompt_password:
+ * @self: a `GoaKerberosProvider`
+ * @cancellable: (nullable): a `GCancellable`
+ * @callback: (scope async): a `GAsyncReadyCallback`
+ * @user_data: (closure): user supplied data
+ *
+ * Prompt the user for a password.
+ *
+ * Call [method@Goa.KerberosProvider.prompt_password_finish] to get the result.
+ */
+void
+goa_kerberos_provider_prompt_password (GoaKerberosProvider *self,
+                                       GCancellable        *cancellable,
+                                       GAsyncReadyCallback  callback,
+                                       gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  g_return_if_fail (GOA_IS_KERBEROS_PROVIDER (self));
+  g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, goa_kerberos_provider_prompt_password);
+  g_task_set_task_data (task, g_new0 (PromptPasswordData, 1), prompt_password_data_free);
+  g_task_run_in_thread (task, prompt_password_thread);
+}
+
+/*< private >
+ * goa_kerberos_provider_prompt_password_finish:
+ * @self: a `GoaKerberosProvider`
+ * @remember_password_out: (nullable) (out): whether to
+ * @result: a `GAsyncResult`
+ * @error: (nullable): a `GError`
+ *
+ * Finish an operation started with [method@Goa.KerberosProvider.prompt_password].
+ *
+ * If @remember_password_out is not %NULL, the user's preference for
+ * remembering the password will be set to %TRUE or %FALSE.
+ *
+ * Returns: (nullable) (transfer full): a secret exchange on success,
+ *   or %NULL with @error set
+ */
+GcrSecretExchange *
+goa_kerberos_provider_prompt_password_finish (GoaKerberosProvider  *self,
+                                              gboolean             *remember_password_out,
+                                              GAsyncResult         *result,
+                                              GError              **error)
+{
+  PromptPasswordData *data;
+
+  g_return_val_if_fail (GOA_IS_KERBEROS_PROVIDER (self), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  if (!g_task_propagate_boolean (G_TASK (result), error))
+    return NULL;
+
+  data = g_task_get_task_data (G_TASK (result));
+  if (remember_password_out != NULL)
+    *remember_password_out = data->remember_password;
+
+  return g_object_ref (data->secret_exchange);
+}
+
+/*< private >
+ * goa_kerberos_provider_prompt_password_sync:
+ * @self: a `GoaKerberosProvider`
+ * @remember_password_out: (nullable) (out): whether password should be saved
+ * @cancellable: (nullable): a `GCancellable`
+ * @error: (nullable): a `GError`
+ *
+ * Prompt the user for a password.
+ *
+ * If @remember_password_out is not %NULL, the user's preference for
+ * remembering the password will be set to %TRUE or %FALSE.
+ *
+ * Returns: (nullable) (transfer full): the secret exchange on success,
+ *   or %NULL with @error set
+ */
+GcrSecretExchange *
+goa_kerberos_provider_prompt_password_sync (GoaKerberosProvider  *self,
+                                            gboolean             *remember_password_out,
+                                            GCancellable         *cancellable,
+                                            GError              **error)
+{
+  g_autoptr(GcrPrompt) prompt = NULL;
+  GcrSecretExchange *secret_exchange = NULL;
+
+  g_return_val_if_fail (GOA_IS_KERBEROS_PROVIDER (self), NULL);
+  g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  prompt = gcr_system_prompt_open (-1, cancellable, error);
+  if (prompt == NULL)
+    {
+      return NULL;
+    }
+
+  gcr_prompt_set_title (prompt, _("Log In to Realm"));
+  gcr_prompt_set_description (prompt, _("Please enter your password below."));
+  gcr_prompt_set_choice_label (prompt, _("Remember this password"));
+
+  if (gcr_prompt_password (prompt, cancellable, error) == NULL)
+    {
+      gcr_system_prompt_close (GCR_SYSTEM_PROMPT (prompt), NULL, NULL);
+      if (error != NULL && *error == NULL)
+        {
+          g_set_error_literal (error,
+                               G_IO_ERROR,
+                               G_IO_ERROR_CANCELLED,
+                               _("Operation was cancelled"));
+        }
+
+      return NULL;
+    }
+
+  secret_exchange = gcr_system_prompt_get_secret_exchange (GCR_SYSTEM_PROMPT (prompt));
+  if (remember_password_out != NULL)
+    *remember_password_out = gcr_prompt_get_choice_chosen (prompt);
+
+  gcr_system_prompt_close (GCR_SYSTEM_PROMPT (prompt), NULL, NULL);
+
+  return g_object_ref (secret_exchange);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+typedef struct
+{
   char *identifier;
   char *password;
   char *preauth_source;
