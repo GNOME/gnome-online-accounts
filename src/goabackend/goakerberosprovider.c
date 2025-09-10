@@ -25,6 +25,7 @@
 #include "goakerberosprovider-priv.h"
 #include "goautils.h"
 #include "goaidentity.h"
+#include "goaidentityerror.h"
 #include "goaidentitymanagererror.h"
 
 #include <gcr/gcr.h>
@@ -1160,11 +1161,12 @@ goa_kerberos_provider_class_init (GoaKerberosProviderClass *kerberos_class)
   provider_class->remove_account_finish      = remove_account_finish;
 
   /* this will force associating errors in the
-   * GOA_IDENTITY_MANAGER_ERROR error domain with
-   * org.gnome.Identity.Manager.Error.* errors via
-   * g_dbus_error_register_error_domain().
+   * GOA_IDENTITY_ERROR and GOA_IDENTITY_MANAGER_ERROR error domains
+   * with org.gnome.Identity.Error.* and org.gnome.Identity.Manager.Error.*
+   * errors via g_dbus_error_register_error_domain().
    */
   goa_identity_manager_error_quark ();
+  goa_identity_error_quark ();
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
