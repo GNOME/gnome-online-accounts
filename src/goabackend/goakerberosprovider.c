@@ -1345,6 +1345,8 @@ goa_kerberos_provider_get_ticket_sync (GoaKerberosProvider  *self,
   const char *preauth_source = NULL;
   gboolean has_password = FALSE;
   g_autofree char *object_path = NULL;
+  g_autoptr(GcrSecretExchange) password_exchange = NULL;
+  gboolean remember_password = FALSE;
   g_autoptr(GError) lookup_error = NULL;
   GError *sign_in_error = NULL;
 
@@ -1391,14 +1393,26 @@ goa_kerberos_provider_get_ticket_sync (GoaKerberosProvider  *self,
   if (credentials != NULL)
     has_password = g_variant_lookup (credentials, "password", "&s", &password);
 
-  if (!has_password && !is_interactive)
+  if (!has_password)
     {
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_NOT_AUTHORIZED,
-                   _("Did not find password for principal “%s” in credentials"),
-                   identifier);
-      return FALSE;
+      if (!is_interactive)
+        {
+          g_set_error (error,
+                       GOA_ERROR,
+                       GOA_ERROR_NOT_AUTHORIZED,
+                       _("Did not find password for principal “%s” in credentials"),
+                       identifier);
+          return FALSE;
+        }
+
+      password_exchange = goa_kerberos_provider_prompt_password_sync (self,
+                                                                      &remember_password,
+                                                                      cancellable,
+                                                                      error);
+      if (password_exchange == NULL)
+        return FALSE;
+
+      password = gcr_secret_exchange_get_secret (password_exchange, NULL);
     }
 
   object_path = goa_kerberos_provider_sign_in_sync (self,
@@ -1407,11 +1421,34 @@ goa_kerberos_provider_get_ticket_sync (GoaKerberosProvider  *self,
                                                     preauth_source,
                                                     cancellable,
                                                     &sign_in_error);
-
   if (sign_in_error != NULL)
     {
       g_propagate_error (error, sign_in_error);
       return FALSE;
+    }
+
+  if (object_path != NULL && remember_password)
+    {
+      GVariantBuilder builder;
+      g_autoptr(GError) password_error = NULL;
+
+      /* FIXME: we go to great lengths to keep the password in non-pageable memory,
+       * and then just duplicate it into a gvariant here
+       */
+      g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
+      g_variant_builder_add (&builder,
+                             "{sv}",
+                             "password",
+                             g_variant_new_string (password));
+
+      if (!goa_utils_store_credentials_for_object_sync (GOA_PROVIDER (self),
+                                                        object,
+                                                        g_variant_builder_end (&builder),
+                                                        NULL,
+                                                        &password_error))
+        {
+          g_warning ("%s(): %s", G_STRFUNC, password_error->message);
+        }
     }
 
   return TRUE;
