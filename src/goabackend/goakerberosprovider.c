@@ -1627,13 +1627,16 @@ sign_in_thread (GTask        *task,
  * goa_kerberos_provider_sign_in:
  * @self: a `GoaKerberosProvider`
  * @identity: the identity
- * @password: the password
+ * @password: (nullable): the password
  * @preauth_source: (nullable): a pre-auth source
  * @cancellable: (nullable): a `GCancellable`
  * @callback: (scope async): a `GAsyncReadyCallback`
  * @user_data: (closure): user supplied data
  *
  * Sign in a kerberos identity.
+ *
+ * If @password is %NULL, the user will be prompted to provide it,
+ * but it will not be saved in the keyring.
  *
  * Returns: %TRUE on success, or %FALSE with @error set
  */
@@ -1651,7 +1654,7 @@ goa_kerberos_provider_sign_in (GoaKerberosProvider *self,
 
   g_return_if_fail (GOA_IS_PROVIDER (self));
   g_return_if_fail (identifier != NULL && *identifier != '\0');
-  g_return_if_fail (password != NULL && *password != '\0');
+  g_return_if_fail (password == NULL || *password != '\0');
   g_return_if_fail (preauth_source == NULL || *preauth_source != '\0');
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
@@ -1692,12 +1695,15 @@ goa_kerberos_provider_sign_in_finish (GoaKerberosProvider  *self,
  * goa_kerberos_provider_sign_in_sync:
  * @self: a `GoaKerberosProvider`
  * @identity: the identity
- * @password: the password
+ * @password: (nullable): the password
  * @preauth_source: (nullable): a pre-auth source
  * @cancellable: (nullable): a `GCancellable`
  * @error: (nullable): a `GError`
  *
  * Sign in a kerberos identity.
+ *
+ * If @password is %NULL, the user will be prompted to provide it,
+ * but it will not be saved in the keyring.
  *
  * Returns: %TRUE on success, or %FALSE with @error set
  */
