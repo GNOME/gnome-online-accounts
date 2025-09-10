@@ -27,6 +27,7 @@
 #include <gio/gio.h>
 #include <goabackend/goaprovider-priv.h>
 #include <goabackend/goakerberosprovider.h>
+#include <gcr/gcr.h>
 
 G_BEGIN_DECLS
 
@@ -71,6 +72,18 @@ char                *goa_kerberos_provider_sign_in_sync      (GoaKerberosProvide
                                                               const char           *preauth_source,
                                                               GCancellable         *cancellable,
                                                               GError              **error);
+void                 goa_kerberos_provider_prompt_password        (GoaKerberosProvider  *self,
+                                                                   GCancellable         *cancellable,
+                                                                   GAsyncReadyCallback   callback,
+                                                                   gpointer              user_data);
+GcrSecretExchange   *goa_kerberos_provider_prompt_password_finish (GoaKerberosProvider  *self,
+                                                                   gboolean             *remember_password_out,
+                                                                   GAsyncResult         *result,
+                                                                   GError              **error);
+GcrSecretExchange   *goa_kerberos_provider_prompt_password_sync   (GoaKerberosProvider  *self,
+                                                                   gboolean             *remember_password_out,
+                                                                   GCancellable         *cancellable,
+                                                                   GError              **error);
 
 G_END_DECLS
 
