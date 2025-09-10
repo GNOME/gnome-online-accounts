@@ -254,6 +254,77 @@ build_object (GoaProvider         *provider,
 /* ---------------------------------------------------------------------------------------------------- */
 
 static void
+goa_kerberos_provider_set_error (GError **error)
+{
+  GQuark error_domain = GOA_ERROR;
+  int error_code = GOA_ERROR_FAILED;
+  g_autofree char *error_message = NULL;
+
+  if (error != NULL && *error != NULL)
+    {
+      g_debug ("%s(): amending error (%s:%u:%s)",
+               G_STRFUNC,
+               g_quark_to_string ((*error)->domain),
+               (*error)->code,
+               (*error)->message);
+
+      g_dbus_error_strip_remote_error (*error);
+      error_domain = (*error)->domain;
+      error_code = (*error)->code;
+      error_message = g_strdup ((*error)->message);
+    }
+
+  if (error_domain == GOA_IDENTITY_MANAGER_ERROR)
+    {
+      switch ((GoaIdentityManagerError)error_code)
+        {
+        case GOA_IDENTITY_MANAGER_ERROR_INITIALIZING:
+        case GOA_IDENTITY_MANAGER_ERROR_IDENTITY_NOT_FOUND:
+        case GOA_IDENTITY_MANAGER_ERROR_ACCESSING_CREDENTIALS:
+        case GOA_IDENTITY_MANAGER_ERROR_UNSUPPORTED_CREDENTIALS:
+          error_code = GOA_ERROR_FAILED;
+          break;
+
+        case GOA_IDENTITY_MANAGER_ERROR_CREATING_IDENTITY:
+          error_code = GOA_ERROR_NOT_AUTHORIZED;
+          g_set_str (&error_message, _("Authentication failed"));
+          break;
+        }
+    }
+  else if (error_domain == GOA_IDENTITY_ERROR)
+    {
+      switch ((GoaIdentityError)error_code)
+        {
+        case GOA_IDENTITY_ERROR_NOT_FOUND:
+        case GOA_IDENTITY_ERROR_VERIFYING:
+        case GOA_IDENTITY_ERROR_RENEWING:
+        case GOA_IDENTITY_ERROR_CREDENTIALS_UNAVAILABLE:
+        case GOA_IDENTITY_ERROR_ENUMERATING_CREDENTIALS:
+        case GOA_IDENTITY_ERROR_ALLOCATING_CREDENTIALS:
+        case GOA_IDENTITY_ERROR_SAVING_CREDENTIALS:
+        case GOA_IDENTITY_ERROR_REMOVING_CREDENTIALS:
+        case GOA_IDENTITY_ERROR_PARSING_IDENTIFIER:
+          error_code = GOA_ERROR_FAILED;
+          break;
+
+        case GOA_IDENTITY_ERROR_AUTHENTICATION_FAILED:
+          error_code = GOA_ERROR_NOT_AUTHORIZED;
+          g_set_str (&error_message, _("Authentication failed"));
+          break;
+        }
+    }
+  else if (error_message == NULL)
+    {
+      error_message = g_strdup (_("Unknown error"));
+    }
+
+  g_clear_error (error);
+  g_set_error_literal (error, GOA_ERROR, error_code, error_message);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static void
 refresh_account_ticket_cb (GoaKerberosProvider *self,
                            GAsyncResult        *result,
                            gpointer             user_data)
@@ -875,26 +946,7 @@ ensure_credentials_sync (GoaProvider    *provider,
 
       if (!ticket_synced)
         {
-          g_dbus_error_strip_remote_error (lookup_error);
-          if (lookup_error->domain == GOA_IDENTITY_MANAGER_ERROR)
-            {
-              lookup_error->domain = GOA_ERROR;
-
-              switch ((GoaIdentityManagerError)lookup_error->code)
-                {
-                case GOA_IDENTITY_MANAGER_ERROR_INITIALIZING:
-                  lookup_error->code = GOA_ERROR_FAILED;
-                  break;
-
-                case GOA_IDENTITY_MANAGER_ERROR_IDENTITY_NOT_FOUND:
-                case GOA_IDENTITY_MANAGER_ERROR_CREATING_IDENTITY:
-                case GOA_IDENTITY_MANAGER_ERROR_ACCESSING_CREDENTIALS:
-                case GOA_IDENTITY_MANAGER_ERROR_UNSUPPORTED_CREDENTIALS:
-                  lookup_error->code = GOA_ERROR_NOT_AUTHORIZED;
-                  break;
-                }
-            }
-
+          goa_kerberos_provider_set_error (&lookup_error);
           g_propagate_error (error, g_steal_pointer (&lookup_error));
           goto out;
         }
