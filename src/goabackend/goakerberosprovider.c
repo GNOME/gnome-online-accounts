@@ -1378,7 +1378,7 @@ sign_in_data_free (gpointer user_data)
   SignInData *data = (SignInData *)user_data;
 
   g_clear_pointer (&data->identifier, g_free);
-  g_clear_pointer (&data->password, g_free);
+  g_clear_pointer (&data->password, gcr_secure_memory_free);
   g_clear_pointer (&data->preauth_source, g_free);
   g_free (data);
 }
@@ -1440,7 +1440,7 @@ goa_kerberos_provider_sign_in (GoaKerberosProvider *self,
 
   data = g_new0 (SignInData, 1);
   data->identifier = g_strdup (identifier);
-  data->password = g_strdup (password);
+  data->password = gcr_secure_memory_strdup (password);
   data->preauth_source = g_strdup (preauth_source);
 
   task = g_task_new (self, cancellable, callback, user_data);
