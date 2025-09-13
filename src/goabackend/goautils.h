@@ -27,6 +27,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <libsoup/soup.h>
+#include <gcr/gcr.h>
 
 #include "goaprovider.h"
 
@@ -76,6 +77,12 @@ gboolean         goa_utils_store_credentials_for_object_sync (GoaProvider    *pr
                                                               GVariant       *credentials,
                                                               GCancellable   *cancellable,
                                                               GError        **error);
+
+gboolean         goa_utils_store_secret_for_object_sync (GoaProvider        *provider,
+                                                         GoaObject          *object,
+                                                         GcrSecretExchange  *secret,
+                                                         GCancellable       *cancellable,
+                                                         GError            **error);
 
 gboolean         goa_utils_keyfile_copy_group (GKeyFile     *src_key_file,
                                                const gchar  *src_group_name,

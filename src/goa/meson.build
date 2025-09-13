@@ -1,6 +1,7 @@
 libgoa_deps_public = [
   gio_dep,
   glib_dep,
+  gcr_dep,
 ]
 
 libgoa_deps = libgoa_deps_public + [
