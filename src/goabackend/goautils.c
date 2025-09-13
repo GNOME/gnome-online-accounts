@@ -20,6 +20,7 @@
 
 #include <glib/gi18n-lib.h>
 #include <libsecret/secret.h>
+#include <gcr/gcr.h>
 
 #include "goautils.h"
 
@@ -141,6 +142,34 @@ goa_utils_data_input_stream_read_line (GDataInputStream  *stream,
 
   return ret;
 }
+
+#if 0
+static char *
+goa_utils_create_credentials_key (GoaProvider  *provider,
+                                  GoaAccount   *object,
+                                  const char   *id,
+                                  char        **description_out)
+{
+  g_assert (GOA_IS_PROVIDER (provider));
+  g_assert (GOA_IS_OBJECT (object) || id != NULL);
+
+  if (id == NULL)
+    id = goa_account_get_id (object);
+
+  if (description_out != NULL)
+    {
+      /* Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo' */
+      *description_out = g_strdup_printf (_("GOA %s credentials for identity %s"),
+                                          goa_provider_get_provider_type (GOA_PROVIDER (provider)),
+                                          id);
+    }
+
+  return g_strdup_printf ("%s:gen%d:%s",
+                          goa_provider_get_provider_type (provider),
+                          goa_provider_get_credentials_generation (provider),
+                          id);
+}
+#endif
 
 gboolean
 goa_utils_delete_credentials_for_account_sync (GoaProvider   *provider,
@@ -351,6 +380,176 @@ goa_utils_store_credentials_for_object_sync (GoaProvider   *provider,
 
   id = goa_account_get_id (goa_object_peek_account (object));
   return goa_utils_store_credentials_for_id_sync (provider, id, credentials, cancellable, error);
+}
+
+/*< private >
+ * build_password_variant:
+ * @str: a secure string
+ *
+ * Build a GVariant format string for a password key-value pair,
+ * using Gcr to keep the string in non-pageable memory.
+ *
+ * Returns: (transfer full): a GVariant format string that should be
+ *   freed with gcr_secure_memory_free()
+ */
+static char *
+build_password_variant (const char *str)
+{
+  char *credentials_str;
+  size_t credentials_len;
+  size_t allocated_len;
+
+  size_t prefix_len = strlen ("{'password': <'");
+  size_t suffix_len = strlen ("'>}");
+
+  // Worst case is 10-bytes per unicode escape
+  allocated_len = prefix_len + (strlen (str) * 10) + suffix_len + 1;
+  credentials_str = gcr_secure_memory_alloc (allocated_len);
+
+  memcpy (credentials_str, "{'password': <'", prefix_len);
+  credentials_len = prefix_len;
+
+  while (*str)
+    {
+      gunichar c = g_utf8_get_char (str);
+
+      if (g_unichar_isprint (c))
+        {
+          if (c == '\'' || c == '\\')
+            credentials_str[credentials_len++] = '\\';
+
+          credentials_len += g_unichar_to_utf8 (c, credentials_str + credentials_len);
+        }
+      else
+        {
+          credentials_str[credentials_len++] = '\\';
+          if (c < 0x10000)
+            {
+              switch (c)
+                {
+                case '\a':
+                  credentials_str[credentials_len++] = 'a';
+                  break;
+
+                case '\b':
+                  credentials_str[credentials_len++] = 'b';
+                  break;
+
+                case '\f':
+                  credentials_str[credentials_len++] = 'f';
+                  break;
+
+                case '\n':
+                  credentials_str[credentials_len++] = 'n';
+                  break;
+
+                case '\r':
+                  credentials_str[credentials_len++] = 'r';
+                  break;
+
+                case '\t':
+                  credentials_str[credentials_len++] = 't';
+                  break;
+
+                case '\v':
+                  credentials_str[credentials_len++] = 'v';
+                  break;
+
+                default:
+                  credentials_len += snprintf (credentials_str + credentials_len,
+                                               allocated_len - credentials_len,
+                                               "u%04x", c);
+                  break;
+                }
+            }
+          else
+            {
+              credentials_len += snprintf (credentials_str + credentials_len,
+                                           allocated_len - credentials_len,
+                                           "U%08x", c);
+            }
+        }
+
+      str = g_utf8_next_char (str);
+    }
+
+  memcpy (credentials_str + credentials_len, "'>}", suffix_len);
+  credentials_len += suffix_len;
+  credentials_str[credentials_len] = '\0';
+
+  return gcr_secure_memory_realloc (credentials_str, credentials_len + 1);
+}
+
+/**
+ * goa_utils_store_secret_for_object_sync:
+ * @provider: a `GoaProvider`
+ * @object: a `GoaObject`
+ * @secret: a `GcrSecretExchange`
+ * @cancellable: (nullable): a `GCancellable`
+ * @error: (nullable): a `GError`
+ *
+ * Store @secret as a password, constructing a GVariant string
+ * in non-pageable memory before passing directly to the keyring.
+ *
+ * Returns: %TRUE, or %FALSE with @error set
+ */
+gboolean
+goa_utils_store_secret_for_object_sync (GoaProvider        *provider,
+                                        GoaObject          *object,
+                                        GcrSecretExchange  *secret,
+                                        GCancellable       *cancellable,
+                                        GError            **error)
+{
+  const char *id;
+  const char *password;
+  g_autofree char *password_key = NULL;
+  g_autofree char *password_description = NULL;
+  char *credentials_str;
+  gboolean ret = TRUE;
+  g_autoptr (GError) sec_error = NULL;
+
+  g_return_val_if_fail (GOA_IS_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (GOA_IS_OBJECT (object) && goa_object_peek_account (object) != NULL, FALSE);
+  g_return_val_if_fail (GCR_IS_SECRET_EXCHANGE (secret), FALSE);
+  g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  id = goa_account_get_id (goa_object_peek_account (object));
+  password_key = g_strdup_printf ("%s:gen%d:%s",
+                                  goa_provider_get_provider_type (provider),
+                                  goa_provider_get_credentials_generation (provider),
+                                  id);
+  /* Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo' */
+  password_description = g_strdup_printf (_("GOA %s credentials for identity %s"),
+                                          goa_provider_get_provider_type (GOA_PROVIDER (provider)),
+                                          id);
+
+  password = gcr_secret_exchange_get_secret (secret, NULL);
+  credentials_str = build_password_variant (password);
+
+  if (!secret_password_store_sync (&secret_password_schema,
+                                   SECRET_COLLECTION_DEFAULT, /* default keyring */
+                                   password_description,
+                                   credentials_str,
+                                   cancellable,
+                                   &sec_error,
+                                   "goa-identity", password_key,
+                                   NULL))
+    {
+      g_debug ("secret_password_store_sync() failed: %s", sec_error->message);
+      g_set_error_literal (error,
+                           GOA_ERROR,
+                           GOA_ERROR_FAILED, /* TODO: more specific */
+                           _("Failed to store credentials in the keyring"));
+      ret = FALSE;
+      goto out;
+    }
+
+  g_debug ("Stored keyring credentials for identity: %s", id);
+
+ out:
+  gcr_secure_memory_strfree (credentials_str);
+  return ret;
 }
 
 gboolean
