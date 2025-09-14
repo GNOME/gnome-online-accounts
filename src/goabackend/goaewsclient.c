@@ -85,8 +85,8 @@ typedef struct
 static void
 ews_client_autodiscover_auth_data_free (AutodiscoverAuthData *auth)
 {
-  g_free (auth->password);
   g_free (auth->username);
+  gcr_secure_memory_free (auth->password);
   g_slice_free (AutodiscoverAuthData, auth);
 }
 
@@ -525,7 +525,7 @@ goa_ews_client_autodiscover (GoaEwsClient        *self,
 
   auth = g_slice_new0 (AutodiscoverAuthData);
   auth->username = g_strdup (username);
-  auth->password = g_strdup (password);
+  data->password = gcr_secure_memory_strdup (password);
   data->auth = auth;
   data->buf = buf;
   data->msgs[0] = ews_client_create_msg_for_url (url1, buf, auth, task);

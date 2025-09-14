@@ -111,7 +111,7 @@ dav_client_check_data_free (gpointer user_data)
     }
 
   g_free (data->username);
-  g_free (data->password);
+  gcr_secure_memory_free (data->password);
   g_clear_error (&data->error);
   g_clear_object (&data->config);
   g_clear_object (&data->msg);
@@ -133,8 +133,8 @@ dav_client_check_auth_data_free (gpointer  data,
 {
   CheckAuthData *auth = data;
 
-  g_free (auth->password);
   g_free (auth->username);
+  gcr_secure_memory_free (data->password);
   g_free (auth);
 }
 
@@ -439,7 +439,7 @@ goa_dav_client_check (GoaDavClient        *self,
   data->config = g_object_ref (config);
   data->msg = soup_message_new (SOUP_METHOD_OPTIONS, goa_dav_config_get_uri (config));
   data->username = g_strdup (goa_dav_config_get_username (config));
-  data->password = g_strdup (password);
+  data->password = gcr_secure_memory_strdup (password);
   data->accept_ssl_errors = accept_ssl_errors;
 
   if (cancellable != NULL)
@@ -1365,7 +1365,7 @@ goa_dav_client_discover (GoaDavClient        *self,
   soup_session_add_feature (data->session, SOUP_SESSION_FEATURE (logger));
 
   data->username = g_strdup (username);
-  data->password = g_strdup (password);
+  data->password = gcr_secure_memory_strdup (password);
   data->accept_ssl_errors = accept_ssl_errors;
 
   discover->services = g_ptr_array_new_with_free_func (g_object_unref);
