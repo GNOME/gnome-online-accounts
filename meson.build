@@ -99,6 +99,7 @@ endif
 
 enable_goabackend = get_option('goabackend')
 if enable_goabackend
+  gcr_dep = dependency('gcr-4', version: '>= 4.1.0')
   json_glib_dep = dependency('json-glib-1.0')
   libsecret_dep = dependency('libsecret-1')
   libsoup_dep = dependency('libsoup-3.0', version: '>= 3.0', fallback: ['libsoup'])
@@ -126,6 +127,8 @@ if enable_goabackend
       'vapi=false',
     ],
   )
+
+  config_h.set('GCR_API_SUBJECT_TO_CHANGE', true)
 endif
 rest_dep = dependency('rest-1.0',
   version: '>= 0.9.0',
@@ -151,14 +154,11 @@ config_h.set_quoted('GOA_FEDORA_REALM', 'FEDORAPROJECT.ORG')
 
 enable_fedora = get_option('fedora')
 if enable_goabackend and enable_fedora
-  gcr_dep = dependency('gcr-4', version: '>= 4.1.0')
   krb5_dep = dependency('krb5')
   libkeyutils_dep = dependency('libkeyutils',
      version: '>= 1.6.2',
     required: target_machine.system() == 'linux',
   )
-
-  config_h.set('GCR_API_SUBJECT_TO_CHANGE', true)
 endif
 config_h.set('GOA_FEDORA_ENABLED', enable_fedora)
 
@@ -185,14 +185,11 @@ config_h.set_quoted('GOA_KERBEROS_NAME', 'kerberos')
 
 enable_kerberos = get_option('kerberos')
 if enable_goabackend and enable_kerberos
-  gcr_dep = dependency('gcr-4', version: '>= 4.1.0')
   krb5_dep = dependency('krb5')
   libkeyutils_dep = dependency('libkeyutils',
      version: '>= 1.6.2',
     required: target_machine.system() == 'linux',
   )
-
-  config_h.set('GCR_API_SUBJECT_TO_CHANGE', true)
 endif
 config_h.set('GOA_KERBEROS_ENABLED', enable_kerberos)
 

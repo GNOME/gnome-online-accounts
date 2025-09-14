@@ -68,6 +68,7 @@ libgoa_backend_sources += priv_enum_sources
 incs = common_incs
 
 deps = [
+  gcr_dep,
   gtk_dep,
   json_glib_dep,
   libadwaita_dep,
@@ -96,7 +97,6 @@ endif
 if enable_fedora or enable_kerberos
   libgoa_backend_sources += identity_dbus_sources + identity_manager_error_src
   incs += goaidentity_inc
-  deps += [gcr_dep]
 endif
 
 libgoa_backend = shared_library(
