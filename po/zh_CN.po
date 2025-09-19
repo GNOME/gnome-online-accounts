@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2025-08-30 23:50+0000\n"
-"PO-Revision-Date: 2025-09-01 08:21+0800\n"
+"POT-Creation-Date: 2025-09-19 21:39+0000\n"
+"PO-Revision-Date: 2025-09-20 07:35+0800\n"
 "Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Gtranslator 48.0\n"
+"X-Generator: Gtranslator 49.0\n"
 
 #. TODO: more specific
 #: src/daemon/goadaemon.c:1162 src/daemon/goadaemon.c:1483
@@ -73,11 +73,12 @@ msgstr "复制链接(_C)"
 
 #: src/goabackend/goaauthflowbutton.c:173
 msgid "Copy the authorization URL to continue with a specific web browser."
-msgstr "复制认证 URL 以通过指定网络浏览器继续认证步骤。"
+msgstr "复制授权 URL 以通过指定网络浏览器继续授权步骤。"
 
 #. TODO: more specific
 #: src/goabackend/goadavclient.c:1228 src/goabackend/goaimapauthlogin.c:104
 #: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:802
+#, c-format
 msgid "Authentication failed"
 msgstr "认证失败"
 
@@ -94,6 +95,7 @@ msgstr "无效的 URI：%s"
 
 #. TODO: more specific
 #: src/goabackend/goaewsclient.c:278
+#, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "无法解析自动发现响应 XML"
 
@@ -107,6 +109,7 @@ msgstr "没有找到“%s”元素"
 
 #. TODO: more specific
 #: src/goabackend/goaewsclient.c:340
+#, c-format
 msgid "Failed to find ASUrl in autodiscover response"
 msgstr "在自动发现响应中查找 ASUrl 失败"
 
@@ -176,11 +179,11 @@ msgid "Fedora"
 msgstr "Fedora"
 
 #: src/goabackend/goafedoraprovider.c:167
-#: src/goabackend/goakerberosprovider.c:598
+#: src/goabackend/goakerberosprovider.c:557
 msgid "Access restricted web and network resources for your organization"
 msgstr "访问组织的受限 Web 和网络资源"
 
-#: src/goabackend/goafedoraprovider.c:339
+#: src/goabackend/goafedoraprovider.c:337
 #, c-format
 msgid "Failed to get principal from user name “%s”"
 msgstr "从用户名“%s”获取主体失败"
@@ -212,16 +215,19 @@ msgstr "在请求您的身份时应得到状态 200，但却得到了状态 %d (
 #: src/goabackend/goaowncloudprovider.c:538
 #: src/goabackend/goaowncloudprovider.c:548
 #: src/goabackend/goaowncloudprovider.c:568 src/goabackend/goautils.c:136
+#, c-format
 msgid "Could not parse response"
 msgstr "无法解析响应信息"
 
 #. TODO: more specific
 #: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goaoauth2provider.c:1346
 #: src/goabackend/goasmtpauth.c:149
+#, c-format
 msgid "Service not available"
 msgstr "服务不可用"
 
 #: src/goabackend/goaimapauthlogin.c:157 src/goabackend/goasmtpauth.c:625
+#, c-format
 msgid "Server does not support STARTTLS"
 msgstr "服务器不支持 STARTTLS"
 
@@ -328,50 +334,61 @@ msgstr "IMAP"
 msgid "SMTP"
 msgstr "SMTP"
 
-#: src/goabackend/goakerberosprovider.c:80
+#: src/goabackend/goakerberosprovider.c:81
 msgid "Kerberos"
 msgstr "Kerberos"
 
-#: src/goabackend/goakerberosprovider.c:425
-msgid "Operation was cancelled"
-msgstr "操作被取消"
+#: src/goabackend/goakerberosprovider.c:290
+#: src/goabackend/goakerberosprovider.c:312
+msgid "Authorization failed"
+msgstr "授权失败"
 
-#: src/goabackend/goakerberosprovider.c:469
-#: src/goaidentity/goaidentityservice.c:1114
-msgid "Log In to Realm"
-msgstr "登录到 Realm"
+#: src/goabackend/goakerberosprovider.c:318 src/goabackend/goaprovider.c:1078
+msgid "Unknown error"
+msgstr "未知错误"
 
-#: src/goabackend/goakerberosprovider.c:470
-msgid "Please enter your password below."
-msgstr "请在下方输入您的密码。"
-
-#: src/goabackend/goakerberosprovider.c:471
-msgid "Remember this password"
-msgstr "记住密码"
-
-#: src/goabackend/goakerberosprovider.c:601
+#: src/goabackend/goakerberosprovider.c:560
 msgid "_Principal"
 msgstr "主体(_P)"
 
-#: src/goabackend/goakerberosprovider.c:602
+#: src/goabackend/goakerberosprovider.c:561
 msgid "Example principal: user@EXAMPLE.COM"
 msgstr "示例主体：user@EXAMPLE.COM"
 
-#: src/goabackend/goakerberosprovider.c:1308
+#: src/goabackend/goakerberosprovider.c:1249
+#, c-format
 msgid "Ticketing is disabled for account"
 msgstr "账号票据已被禁用"
 
-#: src/goabackend/goakerberosprovider.c:1331
+#: src/goabackend/goakerberosprovider.c:1272
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr "无法在密钥环中为主体“%s”找到保存的凭据"
 
-#: src/goabackend/goakerberosprovider.c:1345
+#: src/goabackend/goakerberosprovider.c:1288
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "未在凭据中找到主体“%s”的密码"
 
-#: src/goabackend/goakerberosprovider.c:1527
+#: src/goabackend/goakerberosprovider.c:1478
+#: src/goaidentity/goaidentityservice.c:1115
+msgid "Log In to Realm"
+msgstr "登录到 Realm"
+
+#: src/goabackend/goakerberosprovider.c:1479
+msgid "Please enter your password below."
+msgstr "请在下方输入您的密码。"
+
+#: src/goabackend/goakerberosprovider.c:1480
+msgid "Remember this password"
+msgstr "记住密码"
+
+#: src/goabackend/goakerberosprovider.c:1490
+msgid "Operation was cancelled"
+msgstr "操作被取消"
+
+#: src/goabackend/goakerberosprovider.c:1672
+#, c-format
 msgid "Identity service returned invalid key"
 msgstr "认证服务返回了无效密钥"
 
@@ -423,7 +440,7 @@ msgstr "在请求访问令牌时应得到状态 200，但却得到了状态 %d (
 
 #: src/goabackend/goaoauth2provider.c:907
 msgid "Authorization response: "
-msgstr "认证响应为："
+msgstr "授权响应："
 
 #: src/goabackend/goaoauth2provider.c:1047
 msgid "Error getting an Access Token: "
@@ -438,23 +455,24 @@ msgstr "获取身份信息出错："
 msgid "Sign in to %s with your browser"
 msgstr "使用浏览器登录 %s"
 
-#: src/goabackend/goaoauth2provider.c:1615
-#: src/goabackend/goaoauth2provider.c:1787
+#: src/goabackend/goaoauth2provider.c:1614
+#: src/goabackend/goaoauth2provider.c:1786
 #: src/goabackend/goaowncloudprovider.c:824
 msgid "Copied to clipboard"
 msgstr "已复制到剪贴板"
 
-#: src/goabackend/goaoauth2provider.c:1738
+#: src/goabackend/goaoauth2provider.c:1737
 #: src/goabackend/goaowncloudprovider.c:1139
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "要求以 %s 身份登录，但却登录为 %s"
 
-#: src/goabackend/goaoauth2provider.c:1981
+#: src/goabackend/goaoauth2provider.c:1980
+#, c-format
 msgid "Credentials do not contain access_token"
 msgstr "凭据中不包含访问令牌（access_token）"
 
-#: src/goabackend/goaoauth2provider.c:2025
+#: src/goabackend/goaoauth2provider.c:2024
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "刷新访问令牌 (%s，%d) 失败："
@@ -538,10 +556,6 @@ msgstr "待办(_O)"
 msgid "Account is disabled"
 msgstr "账号已禁用"
 
-#: src/goabackend/goaprovider.c:1078
-msgid "Unknown error"
-msgstr "未知错误"
-
 #: src/goabackend/goaprovider.c:1097
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
@@ -608,10 +622,12 @@ msgstr "对话框已关闭"
 
 #. TODO: more specific
 #: src/goabackend/goasmtpauth.c:164
+#, c-format
 msgid "TLS not available"
 msgstr "TLS 不可用"
 
 #: src/goabackend/goasmtpauth.c:492
+#, c-format
 msgid "Unknown authentication mechanism"
 msgstr "未知认证机制"
 
@@ -721,69 +737,71 @@ msgstr "日历（CalDAV）"
 msgid "Contacts (CardDAV)"
 msgstr "联系人（CardDAV）"
 
-#: src/goaidentity/goaidentityservice.c:564
+#: src/goaidentity/goaidentityservice.c:565
 msgid "Initial secret key is invalid"
 msgstr "初始私钥无效"
 
 #. TODO: more specific
-#: src/goaidentity/goaidentityservice.c:786
+#: src/goaidentity/goaidentityservice.c:787
 #, c-format
 msgid "Couldn't get GoaObject for object path %s"
 msgstr "无法获取对象路径 %s 的 GoaObject"
 
-#: src/goaidentity/goaidentityservice.c:1119
+#: src/goaidentity/goaidentityservice.c:1120
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "网络 realm %s 让您登录前需要一些信息。"
 
-#: src/goaidentity/goakerberosidentity.c:293
-#: src/goaidentity/goakerberosidentity.c:301
-#: src/goaidentity/goakerberosidentity.c:695
+#: src/goaidentity/goakerberosidentity.c:294
+#: src/goaidentity/goakerberosidentity.c:302
+#: src/goaidentity/goakerberosidentity.c:696
 msgid "Could not find identity in credential cache: "
 msgstr "在凭据缓存器中找不到身份："
 
-#: src/goaidentity/goakerberosidentity.c:707
+#: src/goaidentity/goakerberosidentity.c:708
 msgid "Could not find identity credentials in cache: "
 msgstr "在缓存中无法找到身份凭据："
 
-#: src/goaidentity/goakerberosidentity.c:751
+#: src/goaidentity/goakerberosidentity.c:752
 msgid "Could not sift through identity credentials in cache: "
 msgstr "身份凭据在缓存中无法通过审查："
 
-#: src/goaidentity/goakerberosidentity.c:763
+#: src/goaidentity/goakerberosidentity.c:764
 msgid "Could not finish up sifting through identity credentials in cache: "
 msgstr "在缓存中无法完成身份凭据的审查工作："
 
-#: src/goaidentity/goakerberosidentity.c:1406
+#: src/goaidentity/goakerberosidentity.c:1407
+#, c-format
 msgid "No associated identification found"
 msgstr "找不到相关的身份标识"
 
-#: src/goaidentity/goakerberosidentity.c:1535
+#: src/goaidentity/goakerberosidentity.c:1536
 msgid "Could not create credential cache: "
 msgstr "无法创建凭据缓存："
 
-#: src/goaidentity/goakerberosidentity.c:1575
+#: src/goaidentity/goakerberosidentity.c:1576
 msgid "Could not initialize credentials cache: "
 msgstr "无法初始化凭据缓存："
 
-#: src/goaidentity/goakerberosidentity.c:1588
+#: src/goaidentity/goakerberosidentity.c:1589
 msgid "Could not store new credentials in credentials cache: "
 msgstr "在凭据缓存中无法存储新的凭据："
 
-#: src/goaidentity/goakerberosidentity.c:1824
+#: src/goaidentity/goakerberosidentity.c:1825
+#, c-format
 msgid "Not signed in"
 msgstr "未登录"
 
-#: src/goaidentity/goakerberosidentity.c:1837
+#: src/goaidentity/goakerberosidentity.c:1838
 msgid "Could not get the default principal: "
 msgstr "无法获取默认主体："
 
-#: src/goaidentity/goakerberosidentity.c:1850
+#: src/goaidentity/goakerberosidentity.c:1851
 #, c-format
 msgid "Could not get renewed credentials from the KDC for identity %s: "
 msgstr "无法从 KDC 获得身份 %s 的更新凭据： "
 
-#: src/goaidentity/goakerberosidentity.c:1898
+#: src/goaidentity/goakerberosidentity.c:1899
 msgid "Could not erase identity: "
 msgstr "无法删除身份："
 
