@@ -287,7 +287,7 @@ goa_kerberos_provider_set_error (GError **error)
 
         case GOA_IDENTITY_MANAGER_ERROR_CREATING_IDENTITY:
           error_code = GOA_ERROR_NOT_AUTHORIZED;
-          g_set_str (&error_message, _("Authorization failed"));
+          g_set_str (&error_message, _("Authentication failed"));
           break;
         }
     }
@@ -309,7 +309,7 @@ goa_kerberos_provider_set_error (GError **error)
 
         case GOA_IDENTITY_ERROR_AUTHENTICATION_FAILED:
           error_code = GOA_ERROR_NOT_AUTHORIZED;
-          g_set_str (&error_message, _("Authorization failed"));
+          g_set_str (&error_message, _("Authentication failed"));
           break;
         }
     }
