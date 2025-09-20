@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2025-08-02 20:25+0000\n"
-"PO-Revision-Date: 2025-08-08 17:40+0330\n"
+"POT-Creation-Date: 2025-09-20 06:05+0000\n"
+"PO-Revision-Date: 2025-09-20 09:55+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <dani.behzi@ubuntu.com>\n"
 "Language: fa\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.7\n"
 
 #. TODO: more specific
 #: src/daemon/goadaemon.c:1162 src/daemon/goadaemon.c:1483
@@ -68,6 +68,7 @@ msgstr "رونوشت از نشانی تأیید برای ادامه با مرو�
 #. TODO: more specific
 #: src/goabackend/goadavclient.c:1228 src/goabackend/goaimapauthlogin.c:104
 #: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:802
+#, c-format
 msgid "Authentication failed"
 msgstr "تصدیق‌هویت شکست خورد"
 
@@ -75,7 +76,8 @@ msgstr "تصدیق‌هویت شکست خورد"
 msgid "Cannot find WebDAV endpoint"
 msgstr "امکان یافتن مقصد WebDAV نبود"
 
-#: src/goabackend/goadavclient.c:1348 src/goabackend/goaowncloudprovider.c:622
+#: src/goabackend/goadavclient.c:1348 src/goabackend/goaoauth2provider.c:888
+#: src/goabackend/goaowncloudprovider.c:622
 #: src/goabackend/goawebdavprovider.c:648
 #, c-format
 msgid "Invalid URI: %s"
@@ -83,6 +85,7 @@ msgstr "نشانی نامعتبر: %s"
 
 #. TODO: more specific
 #: src/goabackend/goaewsclient.c:278
+#, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "تجزیهٔ XML پاسخ کشف خودکار با شکست مواجه شد"
 
@@ -96,6 +99,7 @@ msgstr "شکست در یافتن عنصر «%s»"
 
 #. TODO: more specific
 #: src/goabackend/goaewsclient.c:340
+#, c-format
 msgid "Failed to find ASUrl in autodiscover response"
 msgstr "شکست در یافتن ASUrl در پاسخ کشف خودکار"
 
@@ -111,7 +115,7 @@ msgstr "اکسچنج مایکروسافت"
 #: src/goabackend/goawebdavprovider.c:304
 #, c-format
 msgid "Invalid password with username “%s” (%s, %d): "
-msgstr "گذرواژه با نام کاربری «%s» نامعتبر است (%s، %Id): "
+msgstr "گذرواژه با نام کاربری «%s» نامعتبر است (%s، ‏%Id): "
 
 #. provider name
 #: src/goabackend/goaexchangeprovider.c:389
@@ -169,11 +173,11 @@ msgid "Fedora"
 msgstr "فدورا"
 
 #: src/goabackend/goafedoraprovider.c:167
-#: src/goabackend/goakerberosprovider.c:598
+#: src/goabackend/goakerberosprovider.c:557
 msgid "Access restricted web and network resources for your organization"
 msgstr "دسترسی به منابع شبکه و وب محدود به سازمانتان"
 
-#: src/goabackend/goafedoraprovider.c:339
+#: src/goabackend/goafedoraprovider.c:337
 #, c-format
 msgid "Failed to get principal from user name “%s”"
 msgstr "شکست در گرفتن اصل از کاربر «%s»"
@@ -195,23 +199,26 @@ msgstr ""
 #: src/goabackend/goamsgraphprovider.c:204
 #: src/goabackend/goamsgraphprovider.c:215
 #: src/goabackend/goamsgraphprovider.c:228
-#: src/goabackend/goamsgraphprovider.c:255 src/goabackend/goaoauth2provider.c:687
-#: src/goabackend/goaoauth2provider.c:744 src/goabackend/goaoauth2provider.c:774
-#: src/goabackend/goaoauth2provider.c:785
+#: src/goabackend/goamsgraphprovider.c:255 src/goabackend/goaoauth2provider.c:701
+#: src/goabackend/goaoauth2provider.c:780 src/goabackend/goaoauth2provider.c:810
+#: src/goabackend/goaoauth2provider.c:821 src/goabackend/goaoauth2provider.c:963
 #: src/goabackend/goaowncloudprovider.c:338
 #: src/goabackend/goaowncloudprovider.c:538
 #: src/goabackend/goaowncloudprovider.c:548
 #: src/goabackend/goaowncloudprovider.c:568 src/goabackend/goautils.c:136
+#, c-format
 msgid "Could not parse response"
 msgstr "نمی‌توان پاسخ را تجزیه کرد"
 
 #. TODO: more specific
-#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goaoauth2provider.c:1276
+#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goaoauth2provider.c:1346
 #: src/goabackend/goasmtpauth.c:149
+#, c-format
 msgid "Service not available"
 msgstr "خدمت در دسترس نیست"
 
 #: src/goabackend/goaimapauthlogin.c:157 src/goabackend/goasmtpauth.c:625
+#, c-format
 msgid "Server does not support STARTTLS"
 msgstr "کارساز از STARTTLS پشتیبانی نمی‌کند"
 
@@ -233,7 +240,7 @@ msgstr "رایانامه"
 #: src/goabackend/goaimapsmtpprovider.c:369
 #, c-format
 msgid "Invalid %s with username “%s” (%s, %d): "
-msgstr "%s با نام کاربری «%s» نامعتبر است (%s، %Id): "
+msgstr "‏%s با نام کاربری «%s» نامعتبر است (%s، ‏%Id): "
 
 #: src/goabackend/goaimapsmtpprovider.c:566
 #: src/goabackend/goaimapsmtpprovider.c:589
@@ -320,50 +327,61 @@ msgstr "IMAP"
 msgid "SMTP"
 msgstr "SMTP"
 
-#: src/goabackend/goakerberosprovider.c:80
+#: src/goabackend/goakerberosprovider.c:81
 msgid "Kerberos"
 msgstr "کربروس"
 
-#: src/goabackend/goakerberosprovider.c:425
-msgid "Operation was cancelled"
-msgstr "عملیات لغو شد"
+#: src/goabackend/goakerberosprovider.c:290
+#: src/goabackend/goakerberosprovider.c:312
+msgid "Authorization failed"
+msgstr "هویت‌سنجی شکست خورد"
 
-#: src/goabackend/goakerberosprovider.c:469
-#: src/goaidentity/goaidentityservice.c:1114
-msgid "Log In to Realm"
-msgstr "ورود به محدوده"
+#: src/goabackend/goakerberosprovider.c:318 src/goabackend/goaprovider.c:1078
+msgid "Unknown error"
+msgstr "خطای ناشناخته"
 
-#: src/goabackend/goakerberosprovider.c:470
-msgid "Please enter your password below."
-msgstr "لطفاً گذرواژه‌تان را در زیر وارد کنید."
-
-#: src/goabackend/goakerberosprovider.c:471
-msgid "Remember this password"
-msgstr "این گذرواژه به‌خاطر سپرده شود"
-
-#: src/goabackend/goakerberosprovider.c:601
+#: src/goabackend/goakerberosprovider.c:560
 msgid "_Principal"
 msgstr "_مؤسّسه"
 
-#: src/goabackend/goakerberosprovider.c:602
+#: src/goabackend/goakerberosprovider.c:561
 msgid "Example principal: user@EXAMPLE.COM"
 msgstr "مؤسّسهٔ نمونه: user@EXAMPLE.COM"
 
-#: src/goabackend/goakerberosprovider.c:1308
+#: src/goabackend/goakerberosprovider.c:1249
+#, c-format
 msgid "Ticketing is disabled for account"
-msgstr "مشخّصهٔ Ticketing برای حساب از کار افتاده"
+msgstr "بلیت‌زنی برای حساب از کار افتاده"
 
-#: src/goabackend/goakerberosprovider.c:1331
+#: src/goabackend/goakerberosprovider.c:1272
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr "گواهی‌نامهٔ ذخیره شده برای صفت «%s» در جاکلیدی یافت نشد"
 
-#: src/goabackend/goakerberosprovider.c:1345
+#: src/goabackend/goakerberosprovider.c:1288
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "گذرواژه برای صفت «%s» در گواهی‌نامه پیدا نشد"
 
-#: src/goabackend/goakerberosprovider.c:1527
+#: src/goabackend/goakerberosprovider.c:1478
+#: src/goaidentity/goaidentityservice.c:1115
+msgid "Log In to Realm"
+msgstr "ورود به محدوده"
+
+#: src/goabackend/goakerberosprovider.c:1479
+msgid "Please enter your password below."
+msgstr "لطفاً گذرواژه‌تان را در زیر وارد کنید."
+
+#: src/goabackend/goakerberosprovider.c:1480
+msgid "Remember this password"
+msgstr "به خاطر سپردن این گذرواژه"
+
+#: src/goabackend/goakerberosprovider.c:1490
+msgid "Operation was cancelled"
+msgstr "عملیات لغو شد"
+
+#: src/goabackend/goakerberosprovider.c:1672
+#, c-format
 msgid "Identity service returned invalid key"
 msgstr "خدمت شناسه کلیدی نامعتبر برگرداند"
 
@@ -408,12 +426,7 @@ msgstr "شناسهٔ _اجاره"
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "شناسهٔ نمونه: 00000000-0000-0000-0000-000000000000"
 
-#: src/goabackend/goaoauth2provider.c:709 src/goabackend/goaoauth2provider.c:933
-#, c-format
-msgid "Authorization response: %s"
-msgstr "پاسخ به تصدیق‌هویت: %s"
-
-#: src/goabackend/goaoauth2provider.c:720
+#: src/goabackend/goaoauth2provider.c:754
 #, c-format
 msgid ""
 "Expected status 200 when requesting access token, instead got status %d (%s)"
@@ -421,47 +434,44 @@ msgstr ""
 "هنگام درخواست رمز دسترسی (access token) انتظار وضعیت ۲۰۰ را داشتیم، در عوض "
 "وضعیت %Id دریافت شد (%s)"
 
-#: src/goabackend/goaoauth2provider.c:870
+#: src/goabackend/goaoauth2provider.c:907
 msgid "Authorization response: "
 msgstr "پاسخ به تصدیق‌هویت: "
 
-#: src/goabackend/goaoauth2provider.c:941
-msgid "Failed to authenticate"
-msgstr "شکست در هویت‌سنجی"
-
-#: src/goabackend/goaoauth2provider.c:977
+#: src/goabackend/goaoauth2provider.c:1047
 msgid "Error getting an Access Token: "
 msgstr "خطا در هنگام دریافت رمز دسترسی: "
 
-#: src/goabackend/goaoauth2provider.c:993
+#: src/goabackend/goaoauth2provider.c:1063
 msgid "Error getting identity: "
 msgstr "خطا در هنگام دریافت شناسه: "
 
-#: src/goabackend/goaoauth2provider.c:1031
+#: src/goabackend/goaoauth2provider.c:1101
 #, c-format
 msgid "Sign in to %s with your browser"
 msgstr "ورود به %s با مرورگرتان"
 
-#: src/goabackend/goaoauth2provider.c:1545
-#: src/goabackend/goaoauth2provider.c:1717
+#: src/goabackend/goaoauth2provider.c:1614
+#: src/goabackend/goaoauth2provider.c:1786
 #: src/goabackend/goaowncloudprovider.c:824
 msgid "Copied to clipboard"
 msgstr "در تخته‌گیره رونوشت شد"
 
-#: src/goabackend/goaoauth2provider.c:1668
+#: src/goabackend/goaoauth2provider.c:1737
 #: src/goabackend/goaowncloudprovider.c:1139
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "درخواست ورود به عنوان %s شده بود، ولی به عنوان %s وارد شد"
 
-#: src/goabackend/goaoauth2provider.c:1911
+#: src/goabackend/goaoauth2provider.c:1980
+#, c-format
 msgid "Credentials do not contain access_token"
 msgstr "گواهینامه‌ها حاوی رمز دسترسی (access_token) نیستند"
 
-#: src/goabackend/goaoauth2provider.c:1955
+#: src/goabackend/goaoauth2provider.c:2024
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
-msgstr "نوسازی رمز دسترسی شکست خورد (%s، %Id): "
+msgstr "نوسازی رمز دسترسی شکست خورد (%s، ‏%Id): "
 
 #: src/goabackend/goaowncloudprovider.c:65
 #: src/goabackend/goaowncloudprovider.c:849
@@ -484,7 +494,7 @@ msgstr "نشانی _کارساز"
 #: src/goabackend/goaowncloudprovider.c:854
 #: src/goabackend/goawebdavprovider.c:404
 msgid "Examples: example.com, 192.168.0.82"
-msgstr "نمونه: example.com, 192.168.0.82"
+msgstr "نمونه: example.com, ‏192.168.0.82"
 
 #: src/goabackend/goaprovider.c:117
 msgid "_Mail"
@@ -541,10 +551,6 @@ msgstr "برای انجام"
 #: src/goabackend/goaprovider.c:1065
 msgid "Account is disabled"
 msgstr "حساب غیرفعال شده است"
-
-#: src/goabackend/goaprovider.c:1078
-msgid "Unknown error"
-msgstr "خطای ناشناخته"
 
 #: src/goabackend/goaprovider.c:1097
 #, c-format
@@ -614,10 +620,12 @@ msgstr "گفت‌وگو رد شد"
 
 #. TODO: more specific
 #: src/goabackend/goasmtpauth.c:164
+#, c-format
 msgid "TLS not available"
 msgstr "‫TLS در دسترس نیست"
 
 #: src/goabackend/goasmtpauth.c:492
+#, c-format
 msgid "Unknown authentication mechanism"
 msgstr "ساز و کار تأیید هویت ناشناخته"
 
@@ -729,69 +737,71 @@ msgstr "تقویم (CalDAV)"
 msgid "Contacts (CardDAV)"
 msgstr "آشنایان (CardDAV)"
 
-#: src/goaidentity/goaidentityservice.c:564
+#: src/goaidentity/goaidentityservice.c:565
 msgid "Initial secret key is invalid"
 msgstr "کلید رمز ابتدایی نامعتبر است"
 
 #. TODO: more specific
-#: src/goaidentity/goaidentityservice.c:786
+#: src/goaidentity/goaidentityservice.c:787
 #, c-format
 msgid "Couldn't get GoaObject for object path %s"
 msgstr "نمی‌توان GoaObject را برای مسیر شی %s گرفت"
 
-#: src/goaidentity/goaidentityservice.c:1119
+#: src/goaidentity/goaidentityservice.c:1120
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "محدودهٔ شبکهٔ %s برای ورودتان نیاز به برخی اطلاعات دارد."
 
-#: src/goaidentity/goakerberosidentity.c:293
-#: src/goaidentity/goakerberosidentity.c:301
-#: src/goaidentity/goakerberosidentity.c:695
+#: src/goaidentity/goakerberosidentity.c:294
+#: src/goaidentity/goakerberosidentity.c:302
+#: src/goaidentity/goakerberosidentity.c:696
 msgid "Could not find identity in credential cache: "
 msgstr "شناسه در انبارهٔ گواهی‌ها پیدا نشد: "
 
-#: src/goaidentity/goakerberosidentity.c:707
+#: src/goaidentity/goakerberosidentity.c:708
 msgid "Could not find identity credentials in cache: "
 msgstr "گواهی‌های شناسه در انباره پیدا نشد: "
 
-#: src/goaidentity/goakerberosidentity.c:751
+#: src/goaidentity/goakerberosidentity.c:752
 msgid "Could not sift through identity credentials in cache: "
 msgstr "وارسی بین گواهی‌های شناسه در انباره امکان‌پذیر نبود: "
 
-#: src/goaidentity/goakerberosidentity.c:763
+#: src/goaidentity/goakerberosidentity.c:764
 msgid "Could not finish up sifting through identity credentials in cache: "
 msgstr "اتمام وارسی بین گواهی‌های شناسه در انباره امکان‌پذیر نبود: "
 
-#: src/goaidentity/goakerberosidentity.c:1406
+#: src/goaidentity/goakerberosidentity.c:1407
+#, c-format
 msgid "No associated identification found"
 msgstr "شناسهٔ مرتبطی پیدا نشد"
 
-#: src/goaidentity/goakerberosidentity.c:1535
+#: src/goaidentity/goakerberosidentity.c:1536
 msgid "Could not create credential cache: "
 msgstr "نمی‌توان انبارهٔ گواهی‌نامه را ایجاد کرد: "
 
-#: src/goaidentity/goakerberosidentity.c:1575
+#: src/goaidentity/goakerberosidentity.c:1576
 msgid "Could not initialize credentials cache: "
 msgstr "مقداردهی نخستین انبارهٔ گواهی‌ها امکان‌پذیر نبود: "
 
-#: src/goaidentity/goakerberosidentity.c:1588
+#: src/goaidentity/goakerberosidentity.c:1589
 msgid "Could not store new credentials in credentials cache: "
 msgstr "نمی‌توان گواهی‌های جدید را در انبارهٔ گواهی‌ها ذخیره کرد: "
 
-#: src/goaidentity/goakerberosidentity.c:1824
+#: src/goaidentity/goakerberosidentity.c:1825
+#, c-format
 msgid "Not signed in"
 msgstr "وارد نشده"
 
-#: src/goaidentity/goakerberosidentity.c:1837
+#: src/goaidentity/goakerberosidentity.c:1838
 msgid "Could not get the default principal: "
 msgstr "نتوانست اصل پیش‌گزیده را بگیرد: "
 
-#: src/goaidentity/goakerberosidentity.c:1850
+#: src/goaidentity/goakerberosidentity.c:1851
 #, c-format
 msgid "Could not get renewed credentials from the KDC for identity %s: "
 msgstr "نتوانست گواهی‌های تازه شده را برای هویت %s از KDC بگیرد: "
 
-#: src/goaidentity/goakerberosidentity.c:1898
+#: src/goaidentity/goakerberosidentity.c:1899
 msgid "Could not erase identity: "
 msgstr "نمی‌توان شناسه را پاک کرد: "
 
@@ -807,6 +817,13 @@ msgstr "نمی‌توان انبارهٔ گواهی را برای شناسه ا�
 #, c-format
 msgid "Error closing file descriptor: %s"
 msgstr "خطا در بستن توصیف‌گر پرونده: %s"
+
+#, c-format
+#~ msgid "Authorization response: %s"
+#~ msgstr "پاسخ به تصدیق‌هویت: %s"
+
+#~ msgid "Failed to authenticate"
+#~ msgstr "شکست در هویت‌سنجی"
 
 #~ msgid "List of providers that are allowed to be loaded"
 #~ msgstr "سیاههٔ فراهم‌کنندگانی که مجازند بار شوند"
@@ -838,9 +855,6 @@ msgstr "خطا در بستن توصیف‌گر پرونده: %s"
 
 #~ msgid "Connect to a Microsoft 365 provider to access files"
 #~ msgstr "وصل شدن به فراهم‌کنندهٔ ۳۶۵ مایکروسافت برای دسترسی به پرونده‌ها"
-
-#~ msgid "Authorization Details"
-#~ msgstr "جزییات تصدیق‌هویت"
 
 #~ msgid ""
 #~ "A custom Client or Tenant ID may need to be provided depending on the "
