@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2025-09-11 18:35+0000\n"
+"POT-Creation-Date: 2025-09-20 06:26+0000\n"
 "PO-Revision-Date: 2025-09-13 13:35+0200\n"
 "Last-Translator: Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>\n"
 "Language-Team: Esperanto <gnome-eo-list@gnome.org>\n"
@@ -126,7 +126,9 @@ msgstr "Nevalida pasvorto kun uzantonomo “%s” (%s, %d): "
 msgid ""
 "Connect to a Microsoft Exchange provider to access calendars, contacts and "
 "files"
-msgstr "Konektiĝu al Microsoft Exchange por aliri kalendarojn, kontaktarojn kaj dosierojn"
+msgstr ""
+"Konektiĝu al Microsoft Exchange por aliri kalendarojn, kontaktarojn kaj "
+"dosierojn"
 
 #: src/goabackend/goaexchangeprovider.c:392
 #: src/goabackend/goaimapsmtpprovider.c:701
@@ -146,7 +148,9 @@ msgstr "_Pasvorto"
 msgid ""
 "Exchange account details will be auto-detected from your email address when "
 "possible"
-msgstr "Detaloj de Exchange-konto estos aŭtomate detektitaj el via retpoŝta adreso kiam eble"
+msgstr ""
+"Detaloj de Exchange-konto estos aŭtomate detektitaj el via retpoŝta adreso "
+"kiam eble"
 
 #: src/goabackend/goaexchangeprovider.c:405
 msgid "Account Details"
@@ -173,7 +177,7 @@ msgid "Fedora"
 msgstr "Fedora"
 
 #: src/goabackend/goafedoraprovider.c:167
-#: src/goabackend/goakerberosprovider.c:598
+#: src/goabackend/goakerberosprovider.c:557
 msgid "Access restricted web and network resources for your organization"
 msgstr "Aliri retajn kaj retsistemajn rimedojn limigitajn al via organizo"
 
@@ -285,7 +289,9 @@ msgstr "_Nomo"
 msgid ""
 "IMAP and SMTP details will be auto-detected from your service provider when "
 "possible"
-msgstr "IMAP- kaj SMTP-detaloj estos aŭtomate detektitaj de via servoprovizanto kiam eble"
+msgstr ""
+"IMAP- kaj SMTP-detaloj estos aŭtomate detektitaj de via servoprovizanto kiam "
+"eble"
 
 #. IMAP
 #: src/goabackend/goaimapsmtpprovider.c:742
@@ -330,51 +336,61 @@ msgstr "IMAP"
 msgid "SMTP"
 msgstr "SMTP"
 
-#: src/goabackend/goakerberosprovider.c:80
+#: src/goabackend/goakerberosprovider.c:81
 msgid "Kerberos"
 msgstr "Kerberos"
 
-#: src/goabackend/goakerberosprovider.c:425
-msgid "Operation was cancelled"
-msgstr "Operacio nuliĝis"
+#: src/goabackend/goakerberosprovider.c:290
+#: src/goabackend/goakerberosprovider.c:312
+#| msgid "Authentication failed"
+msgid "Authorization failed"
+msgstr "Rajtigo malsukcesis"
 
-#: src/goabackend/goakerberosprovider.c:469
-#: src/goaidentity/goaidentityservice.c:1114
-msgid "Log In to Realm"
-msgstr "Saluti al regno"
+#: src/goabackend/goakerberosprovider.c:318 src/goabackend/goaprovider.c:1078
+msgid "Unknown error"
+msgstr "Nekonata eraro"
 
-#: src/goabackend/goakerberosprovider.c:470
-msgid "Please enter your password below."
-msgstr "Bonvole entajpu vian pasvorton sube."
-
-#: src/goabackend/goakerberosprovider.c:471
-msgid "Remember this password"
-msgstr "Memorigi ĉi tiun pasvorton"
-
-#: src/goabackend/goakerberosprovider.c:601
+#: src/goabackend/goakerberosprovider.c:560
 msgid "_Principal"
 msgstr "Ĉ_efa"
 
-#: src/goabackend/goakerberosprovider.c:602
+#: src/goabackend/goakerberosprovider.c:561
 msgid "Example principal: user@EXAMPLE.COM"
 msgstr "Ekzemplo de ĉefa: user@EXAMPLE.COM"
 
-#: src/goabackend/goakerberosprovider.c:1308
+#: src/goabackend/goakerberosprovider.c:1249
 #, c-format
 msgid "Ticketing is disabled for account"
 msgstr "Biletumo estas malŝaltita por konto"
 
-#: src/goabackend/goakerberosprovider.c:1331
+#: src/goabackend/goakerberosprovider.c:1272
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr "Ne eblis trovi konservitajn salutilojn por ĉefa “%s” en ŝlosilaro"
 
-#: src/goabackend/goakerberosprovider.c:1345
+#: src/goabackend/goakerberosprovider.c:1288
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "Ne trovis pasvorton por ĉefa “%s” en salutiloj"
 
-#: src/goabackend/goakerberosprovider.c:1527
+#: src/goabackend/goakerberosprovider.c:1478
+#: src/goaidentity/goaidentityservice.c:1115
+msgid "Log In to Realm"
+msgstr "Saluti al regno"
+
+#: src/goabackend/goakerberosprovider.c:1479
+msgid "Please enter your password below."
+msgstr "Bonvole entajpu vian pasvorton sube."
+
+#: src/goabackend/goakerberosprovider.c:1480
+msgid "Remember this password"
+msgstr "Memorigi ĉi tiun pasvorton"
+
+#: src/goabackend/goakerberosprovider.c:1490
+msgid "Operation was cancelled"
+msgstr "Operacio nuliĝis"
+
+#: src/goabackend/goakerberosprovider.c:1672
 #, c-format
 msgid "Identity service returned invalid key"
 msgstr "Identeca servo liveris nevalidan klavon"
@@ -391,7 +407,9 @@ msgstr "Microsoft 365"
 #. provider name
 #: src/goabackend/goamsgraphprovider.c:498
 msgid "Connect to Microsoft 365 to access email, calendars, contacts and files"
-msgstr "Konekti al Microsoft 365 por aliri retpoŝton, kalendarojn, kontaktaron kaj dosierojn"
+msgstr ""
+"Konekti al Microsoft 365 por aliri retpoŝton, kalendarojn, kontaktaron kaj "
+"dosierojn"
 
 #: src/goabackend/goamsgraphprovider.c:502
 msgid "Use Organization Account"
@@ -544,10 +562,6 @@ msgstr "T_askoj"
 msgid "Account is disabled"
 msgstr "Konto estas malŝaltita"
 
-#: src/goabackend/goaprovider.c:1078
-msgid "Unknown error"
-msgstr "Nekonata eraro"
-
 #: src/goabackend/goaprovider.c:1097
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
@@ -570,7 +584,9 @@ msgstr "Ĉu forigi ĉi tiun konton?"
 msgid ""
 "If you remove this Online Account you will have to connect to it again to "
 "use it with apps and services."
-msgstr "Se vi forigos ĉi tiun retan konton, vi devos konektiĝi al ĝi denove por uzi ĝin kun apoj kaj servoj."
+msgstr ""
+"Se vi forigos ĉi tiun retan konton, vi devos konektiĝi al ĝi denove por uzi "
+"ĝin kun apoj kaj servoj."
 
 #: src/goabackend/goaproviderdialog.c:630
 msgid "_Cancel"
@@ -713,7 +729,9 @@ msgstr "Kalendaro, kontaktaro kaj dosieroj"
 msgid ""
 "Add a calendar, contacts and files account by entering your WebDAV server "
 "and account details"
-msgstr "Aldoni konton por kalendaro, kontaktaro kaj dosieroj entajpante la adreson de via WebDAV-servilo kaj la kontdetalojn"
+msgstr ""
+"Aldoni konton por kalendaro, kontaktaro kaj dosieroj entajpante la adreson "
+"de via WebDAV-servilo kaj la kontdetalojn"
 
 #: src/goabackend/goawebdavprovider.c:414
 msgid "Server Addresses (Optional)"
@@ -731,71 +749,71 @@ msgstr "Kalendaro (CalDAV)"
 msgid "Contacts (CardDAV)"
 msgstr "Kontaktaro (CardDAV)"
 
-#: src/goaidentity/goaidentityservice.c:564
+#: src/goaidentity/goaidentityservice.c:565
 msgid "Initial secret key is invalid"
 msgstr "Komenca sekreta key estas nevalida"
 
 #. TODO: more specific
-#: src/goaidentity/goaidentityservice.c:786
+#: src/goaidentity/goaidentityservice.c:787
 #, c-format
 msgid "Couldn't get GoaObject for object path %s"
 msgstr "Ne eblis akiri GoaObject por objektvojo %s"
 
-#: src/goaidentity/goaidentityservice.c:1119
+#: src/goaidentity/goaidentityservice.c:1120
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "La reta regno %s bezonas iun informon por saluti vin."
 
-#: src/goaidentity/goakerberosidentity.c:293
-#: src/goaidentity/goakerberosidentity.c:301
-#: src/goaidentity/goakerberosidentity.c:695
+#: src/goaidentity/goakerberosidentity.c:294
+#: src/goaidentity/goakerberosidentity.c:302
+#: src/goaidentity/goakerberosidentity.c:696
 msgid "Could not find identity in credential cache: "
 msgstr "Ne povis trovi indentecon en salutila kaŝmemoro: "
 
-#: src/goaidentity/goakerberosidentity.c:707
+#: src/goaidentity/goakerberosidentity.c:708
 msgid "Could not find identity credentials in cache: "
 msgstr "Ne povis trovi indentecajn salutilojn en kaŝmemoro: "
 
-#: src/goaidentity/goakerberosidentity.c:751
+#: src/goaidentity/goakerberosidentity.c:752
 msgid "Could not sift through identity credentials in cache: "
 msgstr "Ne eblis traserĉi identecajn salutilojn en kaŝmemoro: "
 
-#: src/goaidentity/goakerberosidentity.c:763
+#: src/goaidentity/goakerberosidentity.c:764
 msgid "Could not finish up sifting through identity credentials in cache: "
 msgstr "Ne eblis fini traserĉon de identecaj salutiloj en kaŝmemoro: "
 
-#: src/goaidentity/goakerberosidentity.c:1406
+#: src/goaidentity/goakerberosidentity.c:1407
 #, c-format
 msgid "No associated identification found"
 msgstr "Ne trovis asociigita identecon"
 
-#: src/goaidentity/goakerberosidentity.c:1535
+#: src/goaidentity/goakerberosidentity.c:1536
 msgid "Could not create credential cache: "
 msgstr "Ne povis krei salutilan kaŝmemoron: "
 
-#: src/goaidentity/goakerberosidentity.c:1575
+#: src/goaidentity/goakerberosidentity.c:1576
 msgid "Could not initialize credentials cache: "
 msgstr "Ne eblis pravalorizi salutilan kaŝmemoron: "
 
-#: src/goaidentity/goakerberosidentity.c:1588
+#: src/goaidentity/goakerberosidentity.c:1589
 msgid "Could not store new credentials in credentials cache: "
 msgstr "Ne eblis enmemorigi novajn salutilojn en kaŝmemron de salutiloj: "
 
-#: src/goaidentity/goakerberosidentity.c:1824
+#: src/goaidentity/goakerberosidentity.c:1825
 #, c-format
 msgid "Not signed in"
 msgstr "Ne ensalutinta"
 
-#: src/goaidentity/goakerberosidentity.c:1837
+#: src/goaidentity/goakerberosidentity.c:1838
 msgid "Could not get the default principal: "
 msgstr "Ne eblis akiri la defaŭltan ĉefon: "
 
-#: src/goaidentity/goakerberosidentity.c:1850
+#: src/goaidentity/goakerberosidentity.c:1851
 #, c-format
 msgid "Could not get renewed credentials from the KDC for identity %s: "
 msgstr "Ne eblis ricevi renovigitajn akreditaĵojn de la KDC por identeco %s:"
 
-#: src/goaidentity/goakerberosidentity.c:1898
+#: src/goaidentity/goakerberosidentity.c:1899
 msgid "Could not erase identity: "
 msgstr "Ne povis viŝi identecon: "
 
