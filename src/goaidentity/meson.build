@@ -47,13 +47,9 @@ sources = identity_error_sources + files(
   'main.c'
 )
 
-enum = 'goaidentityenumtypes'
-
-sources += gnome.mkenums(
-  enum,
+sources += gnome.mkenums_simple(
+  'goaidentityenumtypes',
   sources: headers,
-  c_template: enum + '.c.in',
-  h_template: enum + '.h.in'
 )
 
 deps = [
