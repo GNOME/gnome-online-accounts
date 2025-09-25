@@ -215,47 +215,9 @@ config_h.set_quoted('GOA_MS_GRAPH_CLIENT_ID', ms_graph_client_id)
 enable_ms_graph = get_option('ms_graph')
 config_h.set('GOA_MS_GRAPH_ENABLED', enable_ms_graph)
 
-# Optional timerfd support
-timerfd_support_src = '''
-  #include <sys/timerfd.h>
-  #include <unistd.h>
-  int
-  main (void)
-  {
-    struct itimerspec timer_spec = { 0 };
-    timerfd_settime (timerfd_create (CLOCK_MONOTONIC, TFD_CLOEXEC),
-                     TFD_TIMER_ABSTIME,
-                     &timer_spec,
-                     NULL);
-
-    return 0;
-  };
-'''
-
-if cc.compiles(timerfd_support_src, name: 'timerfd support')
+# Optional timerfd and pipe2() support
+if cc.has_function('timerfd_create')
   config_h.set('HAVE_TIMERFD', true)
-
-  # libc headers tend to trail kernel support
-  # so compensate if necessary
-  timerfd_cancel_on_set_support_src = '''
-    #include <sys/timerfd.h>
-    #include <unistd.h>
-    int
-    main (void)
-    {
-      struct itimerspec timer_spec = { 0 };
-      timerfd_settime (timerfd_create (CLOCK_MONOTONIC, TFD_CLOEXEC),
-                       TFD_TIMER_ABSTIME | TFD_TIMER_CANCEL_ON_SET,
-                       &timer_spec,
-                       NULL);
-
-      return 0;
-    };
-  '''
-
-  if not cc.compiles(timerfd_cancel_on_set_support_src, name: 'timerfd cancel-on-set support')
-    config_h.set('TFD_TIMER_CANCEL_ON_SET', '(1 << 1)')
-  endif
 endif
 
 if cc.has_function('pipe2')
