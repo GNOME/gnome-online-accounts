@@ -262,7 +262,7 @@ summary({
 summary({
     'Backend': enable_goabackend,
     'Introspection': enable_introspection,
-    'Template tile': template_file,
+    'Template file': template_file,
     'Vala support': enable_vapi,
     'API docs': enable_documentation,
     'Man pages': enable_man,
