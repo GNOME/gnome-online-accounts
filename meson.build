@@ -90,13 +90,6 @@ dbus_service_dir = dbus_dep.get_variable(pkgconfig: 'session_bus_services_dir',
                                          pkgconfig_define: ['datadir', goa_datadir])
 
 # Libraries
-# introspection support
-enable_introspection = get_option('introspection')
-if enable_introspection
-  # Check do enough recent version
-  dependency('gobject-introspection-1.0', version: '>= 0.6.2')
-endif
-
 enable_goabackend = get_option('goabackend')
 if enable_goabackend
   json_glib_dep = dependency('json-glib-1.0')
@@ -143,6 +136,7 @@ config_h.set('GOA_BACKEND_ENABLED', enable_goabackend)
 template_file = get_option('template_file')
 config_h.set_quoted('GOA_TEMPLATE_FILE', template_file)
 
+enable_introspection = get_option('introspection')
 enable_vapi = get_option('vapi')
 
 # Microsoft Exchange
