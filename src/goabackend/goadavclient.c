@@ -36,6 +36,7 @@
 /* Fastmail
  * See: https://www.fastmail.help/hc/en-us/articles/1500000278342-Server-names-and-ports
  */
+#define FASTMAIL_HOSTNAME    "fastmail.com"
 #define FASTMAIL_WEBDAV      "https://myfiles.fastmail.com"
 #define FASTMAIL_CALDAV      "https://caldav.fastmail.com/.well-known/caldav"
 #define FASTMAIL_CARDDAV     "https://carddav.fastmail.com/.well-known/carddav"
@@ -43,7 +44,7 @@
 /* mailbox.org
  * See: https://kb.mailbox.org/en/private/drive/webdav-for-linux/
  */
-#define MAILBOX_ORG_HOSTNAME "dav.mailbox.org"
+#define MAILBOX_ORG_HOSTNAME "mailbox.org"
 #define MAILBOX_ORG_WEBDAV   "https://dav.mailbox.org/servlet/webdav.infostore/"
 #define MAILBOX_ORG_CALDAV   "https://dav.mailbox.org/caldav"
 #define MAILBOX_ORG_CARDDAV  "https://dav.mailbox.org/carddav"
@@ -1258,8 +1259,8 @@ dav_client_discover_preconfig (DiscoverData *discover,
   if (host != NULL)
     base_domain = soup_tld_get_base_domain (host, NULL);
 
-  if (g_strcmp0 (host, "fastmail.com") == 0
-      || g_strcmp0 (base_domain, "fastmail.com") == 0)
+  if (g_strcmp0 (host, FASTMAIL_HOSTNAME) == 0
+      || g_strcmp0 (base_domain, FASTMAIL_HOSTNAME) == 0)
     {
       g_queue_push_tail (&discover->candidates,
                          goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV, FASTMAIL_CALDAV, NULL));
@@ -1271,8 +1272,8 @@ dav_client_discover_preconfig (DiscoverData *discover,
       return TRUE;
     }
 
-  if (g_strcmp0 (host, "mailbox.org") == 0
-      || g_strcmp0 (base_domain, "mailbox.org") == 0)
+  if (g_strcmp0 (host, MAILBOX_ORG_HOSTNAME) == 0
+      || g_strcmp0 (base_domain, MAILBOX_ORG_HOSTNAME) == 0)
     {
       g_queue_push_tail (&discover->candidates,
                          goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV, MAILBOX_ORG_CALDAV, NULL));
@@ -1284,8 +1285,8 @@ dav_client_discover_preconfig (DiscoverData *discover,
       return TRUE;
     }
 
-  if (g_strcmp0 (host, "mail.ru") == 0
-      || g_strcmp0 (base_domain, "mail.ru") == 0)
+  if (g_strcmp0 (host, MAIL_RU_HOSTNAME) == 0
+      || g_strcmp0 (base_domain, MAIL_RU_HOSTNAME) == 0)
     {
       g_queue_push_tail (&discover->candidates,
                          goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV, MAIL_RU_CALDAV, NULL));
