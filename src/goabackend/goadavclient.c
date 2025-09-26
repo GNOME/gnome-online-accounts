@@ -295,6 +295,9 @@ dav_client_check_options_cb (SoupSession  *session,
   switch (status)
     {
     case SOUP_STATUS_OK:
+    case SOUP_STATUS_NON_AUTHORITATIVE:
+    case SOUP_STATUS_NO_CONTENT:
+    case SOUP_STATUS_MULTI_STATUS:
       break;
 
     case SOUP_STATUS_NOT_FOUND:
@@ -1015,6 +1018,9 @@ dav_client_discover_options_cb (SoupSession  *session,
   switch (status)
     {
     case SOUP_STATUS_OK:
+    case SOUP_STATUS_NON_AUTHORITATIVE:
+    case SOUP_STATUS_NO_CONTENT:
+    case SOUP_STATUS_MULTI_STATUS:
       break;
 
     /* Some responses are non-fatal for discovery */
