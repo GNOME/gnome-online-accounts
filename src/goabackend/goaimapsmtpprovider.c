@@ -193,7 +193,7 @@ build_object (GoaProvider         *provider,
                         "imap-use-ssl", imap_use_ssl,
                         "imap-use-tls", imap_use_tls,
                         "imap-accept-ssl-errors", imap_accept_ssl_errors,
-                        "smtp-supported", TRUE,
+                        "smtp-supported", (smtp_host != NULL),
                         "smtp-host", smtp_host,
                         "smtp-user-name", smtp_username,
                         "smtp-use-auth", smtp_use_auth,
@@ -501,7 +501,12 @@ on_login_changed (GtkWidget      *widget,
   username = gtk_editable_get_text (GTK_EDITABLE (data->smtp_username));
   password = gtk_editable_get_text (GTK_EDITABLE (data->smtp_password));
 
-  if (server != NULL && *server != '\0')
+  if (server == NULL || *server == '\0')
+    {
+      goa_provider_dialog_set_state (data->dialog, GOA_DIALOG_READY);
+      return;
+    }
+  else
     {
       if ((username != NULL && *username != '\0')
           && (password != NULL && *password != '\0'))
@@ -905,20 +910,24 @@ add_account_store_credentials (GTask *task)
                          "ImapUseTls", (imap_tls_type == GOA_TLS_TYPE_STARTTLS) ? "true" : "false");
   g_variant_builder_add (&details, "{ss}",
                          "ImapAcceptSslErrors", (data->imap_accept_ssl_errors) ? "true" : "false");
-  g_variant_builder_add (&details, "{ss}", "SmtpHost", smtp_server);
-  g_variant_builder_add (&details, "{ss}", "SmtpUseAuth", (data->smtp_use_auth) ? "true" : "false");
-  if (data->smtp_use_auth)
+
+  if (smtp_server != NULL && *smtp_server != '\0')
     {
-      g_variant_builder_add (&details, "{ss}", "SmtpUserName", smtp_username);
-      g_variant_builder_add (&details, "{ss}", "SmtpAuthLogin", (data->smtp_auth_login) ? "true" : "false");
-      g_variant_builder_add (&details, "{ss}", "SmtpAuthPlain", (data->smtp_auth_plain) ? "true" : "false");
+      g_variant_builder_add (&details, "{ss}", "SmtpHost", smtp_server);
+      g_variant_builder_add (&details, "{ss}", "SmtpUseAuth", (data->smtp_use_auth) ? "true" : "false");
+      if (data->smtp_use_auth)
+        {
+          g_variant_builder_add (&details, "{ss}", "SmtpUserName", smtp_username);
+          g_variant_builder_add (&details, "{ss}", "SmtpAuthLogin", (data->smtp_auth_login) ? "true" : "false");
+          g_variant_builder_add (&details, "{ss}", "SmtpAuthPlain", (data->smtp_auth_plain) ? "true" : "false");
+        }
+      g_variant_builder_add (&details, "{ss}",
+                             "SmtpUseSsl", (smtp_tls_type == GOA_TLS_TYPE_SSL) ? "true" : "false");
+      g_variant_builder_add (&details, "{ss}",
+                             "SmtpUseTls", (smtp_tls_type == GOA_TLS_TYPE_STARTTLS) ? "true" : "false");
+      g_variant_builder_add (&details, "{ss}",
+                             "SmtpAcceptSslErrors", (data->smtp_accept_ssl_errors) ? "true" : "false");
     }
-  g_variant_builder_add (&details, "{ss}",
-                         "SmtpUseSsl", (smtp_tls_type == GOA_TLS_TYPE_SSL) ? "true" : "false");
-  g_variant_builder_add (&details, "{ss}",
-                         "SmtpUseTls", (smtp_tls_type == GOA_TLS_TYPE_STARTTLS) ? "true" : "false");
-  g_variant_builder_add (&details, "{ss}",
-                         "SmtpAcceptSslErrors", (data->smtp_accept_ssl_errors) ? "true" : "false");
 
   goa_manager_call_add_account (goa_client_get_manager (data->client),
                                 goa_provider_get_provider_type (provider),
@@ -974,6 +983,14 @@ add_account_action_smtp (GTask *task)
   smtp_password = gtk_editable_get_text (GTK_EDITABLE (data->smtp_password));
   g_object_get (data->smtp_encryption, "selected", &smtp_tls_type, NULL);
   smtp_tls_type += 1;
+
+  /* If no server was provided, this is an IMAP-only account
+   */
+  if (smtp_server == NULL || *smtp_server == '\0')
+    {
+      add_account_store_credentials (task);
+      return;
+    }
 
   g_clear_object (&data->smtp_auth);
   goa_utils_parse_email_address (email_address, NULL, &domain);
