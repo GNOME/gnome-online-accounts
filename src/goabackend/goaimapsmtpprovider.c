@@ -1476,21 +1476,24 @@ create_show_account_ui (GoaProvider *self,
 
   /* SMTP */
   subtitle = goa_util_lookup_keyfile_string (object, "SmtpHost");
-  username = goa_util_lookup_keyfile_string (object, "SmtpUserName");
-  if (g_strcmp0 (g_get_user_name (), subtitle) != 0)
+  if (subtitle != NULL)
     {
-      g_autofree char *domain = g_steal_pointer (&subtitle);
-      subtitle = g_strconcat (username, "@", domain, NULL);
-    }
+      username = goa_util_lookup_keyfile_string (object, "SmtpUserName");
+      if (g_strcmp0 (g_get_user_name (), subtitle) != 0)
+        {
+          g_autofree char *domain = g_steal_pointer (&subtitle);
+          subtitle = g_strconcat (username, "@", domain, NULL);
+        }
 
-  row = g_object_new (ADW_TYPE_ACTION_ROW,
-                      "title",    _("SMTP"),
-                      "subtitle", subtitle,
-                      NULL);
-  gtk_widget_add_css_class (row, "property");
-  adw_preferences_group_add (ADW_PREFERENCES_GROUP (ret), row);
-  g_free (subtitle);
-  g_free (username);
+      row = g_object_new (ADW_TYPE_ACTION_ROW,
+                          "title",    _("SMTP"),
+                          "subtitle", subtitle,
+                          NULL);
+      gtk_widget_add_css_class (row, "property");
+      adw_preferences_group_add (ADW_PREFERENCES_GROUP (ret), row);
+      g_free (username);
+      g_free (subtitle);
+    }
 
   return ret;
 }
