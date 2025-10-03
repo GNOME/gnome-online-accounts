@@ -39,13 +39,10 @@ install_headers(
   install_dir: join_paths(goa_pkgincludedir, 'goabackend')
 )
 
-enum = 'goabackendenumtypes'
-
-enum_sources = gnome.mkenums(
-  enum,
+enum_sources = gnome.mkenums_simple(
+  'goabackendenumtypes',
+  body_prefix: '#include <glib-object.h>',
   sources: enum_headers,
-  c_template: enum + '.c.template',
-  h_template: enum + '.h.template',
   install_header: true,
   install_dir: join_paths(goa_pkgincludedir, 'goabackend')
 )
@@ -53,7 +50,8 @@ enum_sources = gnome.mkenums(
 libgoa_backend_headers_built += enum_sources[1]
 libgoa_backend_sources += enum_sources
 
-priv_enum_sources = gnome.mkenums_simple('goabackendenumtypes-priv',
+priv_enum_sources = gnome.mkenums_simple(
+  'goabackendenumtypes-priv',
   body_prefix: '#include <glib-object.h>',
   sources: [
     'goabackendenums-priv.h',
