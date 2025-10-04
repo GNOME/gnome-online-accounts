@@ -1416,7 +1416,7 @@ goa_provider_task_run_in_dialog (GTask             *task,
                            "closed",
                            G_CALLBACK (goa_provider_task_run_in_dialog_cb),
                            g_object_ref (task),
-                           0 /* G_CONNECT_DEFAULT */);
+                           G_CONNECT_DEFAULT);
   g_object_set_data (G_OBJECT (task), "goa-provider-dialog", dialog);
 
   /* Ensure the handler runs if the task is cancelled.

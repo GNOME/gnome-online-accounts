@@ -736,7 +736,7 @@ add_account (GoaProvider         *provider,
                            "notify::state",
                            G_CALLBACK (add_account_action_cb),
                            task,
-                           0 /* G_CONNECT_DEFAULT */);
+                           G_CONNECT_DEFAULT);
   goa_provider_task_run_in_dialog (task, data->dialog);
 }
 
