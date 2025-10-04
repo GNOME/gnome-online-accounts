@@ -60,13 +60,9 @@ dbus_sources = gnome.gdbus_codegen(
 libgoa_headers_built += dbus_sources[1]
 libgoa_sources += dbus_sources
 
-enum = 'goaenumtypes'
-
-enum_sources = gnome.mkenums(
-  enum,
+enum_sources = gnome.mkenums_simple(
+  'goaenumtypes',
   sources: enum_headers,
-  c_template: enum + '.c.template',
-  h_template: enum + '.h.template',
   install_header: true,
   install_dir: join_paths(goa_pkgincludedir, goa_name)
 )

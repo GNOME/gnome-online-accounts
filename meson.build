@@ -90,19 +90,23 @@ dbus_service_dir = dbus_dep.get_variable(pkgconfig: 'session_bus_services_dir',
                                          pkgconfig_define: ['datadir', goa_datadir])
 
 # Libraries
-# introspection support
-enable_introspection = get_option('introspection')
-if enable_introspection
-  # Check do enough recent version
-  dependency('gobject-introspection-1.0', version: '>= 0.6.2')
-endif
-
 enable_goabackend = get_option('goabackend')
 if enable_goabackend
   json_glib_dep = dependency('json-glib-1.0')
   libsecret_dep = dependency('libsecret-1')
   libsoup_dep = dependency('libsoup-3.0', version: '>= 3.0', fallback: ['libsoup'])
   libxml_dep = dependency('libxml-2.0')
+  rest_dep = dependency(
+    'rest-1.0',
+    version: '>= 0.9.0',
+    fallback: ['librest', 'librest_dep'],
+    default_options: [
+      'soup2=false',
+      'examples=false',
+      'tests=false',
+      'gtk_doc=false',
+    ],
+  )
   gtk_dep = dependency(
     'gtk4',
     version: '>= 4.15.2',
@@ -127,17 +131,12 @@ if enable_goabackend
     ],
   )
 endif
-rest_dep = dependency('rest-1.0',
-  version: '>= 0.9.0',
-  fallback: ['librest', 'librest_dep'],
-  required: enable_goabackend,
-  default_options: ['soup2=false', 'examples=false', 'tests=false', 'gtk_doc=false'],
-)
 config_h.set('GOA_BACKEND_ENABLED', enable_goabackend)
 
 template_file = get_option('template_file')
 config_h.set_quoted('GOA_TEMPLATE_FILE', template_file)
 
+enable_introspection = get_option('introspection')
 enable_vapi = get_option('vapi')
 
 # Microsoft Exchange
@@ -215,47 +214,9 @@ config_h.set_quoted('GOA_MS_GRAPH_CLIENT_ID', ms_graph_client_id)
 enable_ms_graph = get_option('ms_graph')
 config_h.set('GOA_MS_GRAPH_ENABLED', enable_ms_graph)
 
-# Optional timerfd support
-timerfd_support_src = '''
-  #include <sys/timerfd.h>
-  #include <unistd.h>
-  int
-  main (void)
-  {
-    struct itimerspec timer_spec = { 0 };
-    timerfd_settime (timerfd_create (CLOCK_MONOTONIC, TFD_CLOEXEC),
-                     TFD_TIMER_ABSTIME,
-                     &timer_spec,
-                     NULL);
-
-    return 0;
-  };
-'''
-
-if cc.compiles(timerfd_support_src, name: 'timerfd support')
+# Optional timerfd and pipe2() support
+if cc.has_function('timerfd_create')
   config_h.set('HAVE_TIMERFD', true)
-
-  # libc headers tend to trail kernel support
-  # so compensate if necessary
-  timerfd_cancel_on_set_support_src = '''
-    #include <sys/timerfd.h>
-    #include <unistd.h>
-    int
-    main (void)
-    {
-      struct itimerspec timer_spec = { 0 };
-      timerfd_settime (timerfd_create (CLOCK_MONOTONIC, TFD_CLOEXEC),
-                       TFD_TIMER_ABSTIME | TFD_TIMER_CANCEL_ON_SET,
-                       &timer_spec,
-                       NULL);
-
-      return 0;
-    };
-  '''
-
-  if not cc.compiles(timerfd_cancel_on_set_support_src, name: 'timerfd cancel-on-set support')
-    config_h.set('TFD_TIMER_CANCEL_ON_SET', '(1 << 1)')
-  endif
 endif
 
 if cc.has_function('pipe2')
@@ -300,7 +261,7 @@ summary({
 summary({
     'Backend': enable_goabackend,
     'Introspection': enable_introspection,
-    'Template tile': template_file,
+    'Template file': template_file,
     'Vala support': enable_vapi,
     'API docs': enable_documentation,
     'Man pages': enable_man,
