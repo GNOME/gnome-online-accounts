@@ -62,19 +62,6 @@ goa_identity_default_init (GoaIdentityInterface *interface)
                                                            -1, G_PARAM_READABLE));
 }
 
-GQuark
-goa_identity_error_quark (void)
-{
-  static GQuark error_quark = 0;
-
-  if (error_quark == 0)
-    {
-      error_quark = g_quark_from_static_string ("goa-identity-error");
-    }
-
-  return error_quark;
-}
-
 const char *
 goa_identity_get_identifier (GoaIdentity *self)
 {

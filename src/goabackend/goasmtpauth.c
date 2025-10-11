@@ -369,11 +369,14 @@ goa_smtp_auth_class_init (GoaSmtpAuthClass *klass)
 /**
  * goa_smtp_auth_new:
  * @domain: The domain to use.
- * @username: The user name to use.
- * @password: The password to use.
+ * @username: (nullable): The user name to use.
+ * @password: (nullable): The password to use.
  *
  * Creates a new #GoaMailAuth to be used for username/password
  * authentication using LOGIN or PLAIN over SMTP.
+ *
+ * If either @username or @password are %NULL, authentication will only
+ * succeed if the service supports it.
  *
  * Returns: (type GoaSmtpAuth): A #GoaSmtpAuth. Free with
  * g_object_unref().
@@ -384,8 +387,8 @@ goa_smtp_auth_new (const gchar       *domain,
                    const gchar       *password)
 {
   g_return_val_if_fail (domain != NULL && domain[0] != '\0', NULL);
-  g_return_val_if_fail (username != NULL, NULL);
-  g_return_val_if_fail (password != NULL && password[0] != '\0', NULL);
+  g_return_val_if_fail (username != NULL || (username == NULL && password == NULL), NULL);
+  g_return_val_if_fail (password == NULL || password[0] != '\0', NULL);
 
   return GOA_MAIL_AUTH (g_object_new (GOA_TYPE_SMTP_AUTH,
                                       "domain", domain,
@@ -482,6 +485,14 @@ goa_smtp_auth_run_sync (GoaMailAuth         *auth,
   else if (!self->auth_supported)
     {
       ret = TRUE;
+      goto out;
+    }
+  else if (self->username == NULL && self->password == NULL)
+    {
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_NOT_AUTHORIZED,
+                   _("Authentication failed"));
       goto out;
     }
   else if (!self->login_supported && !self->plain_supported)
