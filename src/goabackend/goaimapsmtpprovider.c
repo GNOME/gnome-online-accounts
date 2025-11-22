@@ -725,7 +725,7 @@ create_account_details_ui (GoaProvider    *provider,
                                              NULL);
       adw_entry_row_add_suffix (ADW_ENTRY_ROW (data->email_address), data->discovery_status);
 
-      icon = gtk_image_new_from_icon_name ("emblem-default-symbolic");
+      icon = gtk_image_new_from_icon_name ("check-outlined-symbolic");
       gtk_widget_set_tooltip_text (GTK_WIDGET (icon), _("Auto-detected"));
       gtk_widget_add_css_class (GTK_WIDGET (icon), "success");
       gtk_box_append (GTK_BOX (data->discovery_status), GTK_WIDGET (icon));
@@ -774,7 +774,7 @@ create_account_details_ui (GoaProvider    *provider,
       gtk_box_append (GTK_BOX (data->imap_discovery), discovery_label);
       discovery_image = g_object_new (GTK_TYPE_IMAGE,
                                       "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
-                                      "icon-name",       "emblem-default-symbolic",
+                                      "icon-name",       "check-outlined-symbolic",
                                       NULL);
       gtk_box_append (GTK_BOX (data->imap_discovery), discovery_image);
       adw_preferences_group_set_header_suffix (ADW_PREFERENCES_GROUP (data->imap_group),
@@ -818,7 +818,7 @@ create_account_details_ui (GoaProvider    *provider,
       gtk_box_append (GTK_BOX (data->smtp_discovery), discovery_label);
       discovery_image = g_object_new (GTK_TYPE_IMAGE,
                                       "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
-                                      "icon-name",       "emblem-default-symbolic",
+                                      "icon-name",       "check-outlined-symbolic",
                                       NULL);
       gtk_box_append (GTK_BOX (data->smtp_discovery), discovery_image);
       adw_preferences_group_set_header_suffix (ADW_PREFERENCES_GROUP (data->smtp_group),
