@@ -239,7 +239,7 @@ subdir('src')
 
 enable_documentation = get_option('documentation')
 enable_man = get_option('man')
-if enable_goabackend and (enable_documentation or enable_man)
+if enable_documentation or enable_man
   subdir('doc')
 endif
 
