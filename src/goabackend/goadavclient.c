@@ -770,6 +770,14 @@ g_resolver_lookup_service_cb (GResolver    *resolver,
     }
   else
     {
+      if (error == NULL)
+        {
+          g_set_error (&error,
+                       G_RESOLVER_ERROR,
+                       G_RESOLVER_ERROR_NOT_FOUND,
+                       _("Unknown error"));
+        }
+
       g_task_return_error (task, g_steal_pointer (&error));
     }
 }
