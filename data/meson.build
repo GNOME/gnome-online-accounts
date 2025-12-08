@@ -1,8 +1,8 @@
-subdir('icons')
-
 dbus_ifaces = files('dbus-interfaces.xml')
 
 if enable_goabackend
+  subdir('icons')
+
   services = ['org.gnome.OnlineAccounts.service']
   if enable_kerberos
     services += 'org.gnome.Identity.service'
