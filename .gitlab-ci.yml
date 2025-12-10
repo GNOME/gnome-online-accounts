@@ -25,7 +25,7 @@ build:
     - dnf update -y
     - dnf -y install
       meson gcc dbus-devel docbook-style-xsl glib2-devel
-      gobject-introspection-devel gtk4-devel rest-devel vala
+      gobject-introspection-devel libxslt rest-devel vala
   script:
     - meson setup -Ddocumentation=false -Dgoabackend=false _build
     - meson compile -C _build
