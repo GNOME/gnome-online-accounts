@@ -888,13 +888,6 @@ goa_provider_dialog_push_account (GoaProviderDialog *self,
                     self);
   adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), row);
 
-  // Gvfs requires a user and host for OneDrive mount spec, so disallow
-  // custom presentation identities for this provider
-  if (g_str_equal (goa_provider_get_provider_type (self->provider), GOA_MS_GRAPH_NAME))
-    {
-      gtk_editable_set_editable (GTK_EDITABLE (row), FALSE);
-    }
-
   revealer = gtk_revealer_new ();
   gtk_revealer_set_transition_type (GTK_REVEALER (revealer), GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
   adw_preferences_group_add (ADW_PREFERENCES_GROUP (group), revealer);
