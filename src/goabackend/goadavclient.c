@@ -770,6 +770,14 @@ g_resolver_lookup_service_cb (GResolver    *resolver,
     }
   else
     {
+      if (error == NULL)
+        {
+          g_set_error (&error,
+                       G_RESOLVER_ERROR,
+                       G_RESOLVER_ERROR_NOT_FOUND,
+                       _("Unknown error"));
+        }
+
       g_task_return_error (task, g_steal_pointer (&error));
     }
 }
@@ -1137,11 +1145,6 @@ dav_client_discover_lookup_cb (GoaDavClient *client,
     {
       goa_dav_config_set_username (config, data->username);
       g_queue_push_tail (&discover->candidates, g_steal_pointer (&config));
-    }
-  else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-    {
-      g_debug ("%s(): %s", G_STRFUNC, error->message);
-      g_clear_error (&error);
     }
 
   if (g_atomic_int_dec_and_test (&discover->pending))
