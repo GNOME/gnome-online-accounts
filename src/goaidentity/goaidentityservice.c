@@ -1281,7 +1281,11 @@ sign_in (GoaIdentityService     *self,
   operation_result = g_task_new (self, cancellable, callback, user_data);
   g_task_set_task_data (operation_result, user_data, NULL);
 
-  g_signal_connect_object (self->identity_manager, "identity-refreshed", G_CALLBACK (cancel_sign_in), operation_result, 0);
+  g_signal_connect_object (self->identity_manager,
+                           "identity-refreshed",
+                           G_CALLBACK (cancel_sign_in),
+                           operation_result,
+                           G_CONNECT_DEFAULT);
 
   goa_identity_manager_sign_identity_in (self->identity_manager,
                                          identifier,
