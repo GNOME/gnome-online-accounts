@@ -991,6 +991,70 @@ dav_client_discover_postconfig_nexcloud (DiscoverData *discover,
   return FALSE;
 }
 
+static gboolean
+dav_client_discover_postconfig_sogo (DiscoverData *discover,
+                                     SoupMessage  *message)
+{
+  GUri *uri = soup_message_get_uri (message);
+  const char *path = g_uri_get_path (uri);
+  const char *server_root = NULL;
+
+  /* Check for the standard SOGo DAV path
+   *
+   * See: https://www.sogo.nu/files/docs/SOGoInstallationGuide.html
+   */
+  server_root = g_strrstr (path, "/SOGo/dav");
+  if (server_root != NULL)
+    {
+      int port = -1;
+      const char *scheme = NULL;
+      g_autofree char *base_path = NULL;
+      g_autofree char *sogo_path = NULL;
+      g_autofree char *dav_uri = NULL;
+      g_autofree char *user_suffix = NULL;
+      const char *username = ((CheckData *)discover)->username;
+
+      /* If path already contains username at the end, do nothing (we are already checking it)
+       */
+      user_suffix = g_strdup_printf ("/%s/", username);
+      if (g_str_has_suffix (path, user_suffix) || g_str_has_suffix (path, username))
+        return FALSE;
+
+      port = g_uri_get_port (uri);
+      scheme = g_uri_get_scheme (uri);
+      if (g_strcmp0 (scheme, "https") == 0)
+        port = port != 443 ? port : -1;
+      else if (g_strcmp0 (scheme, "http") == 0)
+        port = port != 80 ? port : -1;
+
+      /* Construct the user specific path (i.e. `/SOGo/dav/<username>/`)
+       */
+      base_path = g_strndup (path, server_root - path);
+      sogo_path = g_build_path ("/", base_path, "/SOGo/dav", username, "/", NULL);
+      dav_uri = g_uri_join_with_user (G_URI_FLAGS_PARSE_RELAXED,
+                                      g_uri_get_scheme (uri),
+                                      g_uri_get_user (uri),
+                                      g_uri_get_password (uri),
+                                      g_uri_get_auth_params (uri),
+                                      g_uri_get_host (uri),
+                                      port,
+                                      sogo_path,
+                                      g_uri_get_query (uri),
+                                      g_uri_get_fragment (uri));
+      
+      g_ptr_array_add (discover->services, goa_dav_config_new (GOA_SERVICE_TYPE_CALDAV,
+                                                               dav_uri,
+                                                               ((CheckData *)discover)->username));
+      g_ptr_array_add (discover->services, goa_dav_config_new (GOA_SERVICE_TYPE_CARDDAV,
+                                                               dav_uri,
+                                                               ((CheckData *)discover)->username));
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 dav_client_discover_options_cb (SoupSession  *session,
                                 GAsyncResult *result,
@@ -1054,6 +1118,14 @@ dav_client_discover_options_cb (SoupSession  *session,
   /* Short path for ownCloud/Nextcloud
    */
   if (dav_client_discover_postconfig_nexcloud (discover, msg))
+    {
+      g_queue_clear_full (&discover->candidates, g_object_unref);
+      goto out;
+    }
+
+  /* Short path for SOGo
+   */
+  if (dav_client_discover_postconfig_sogo (discover, msg))
     {
       g_queue_clear_full (&discover->candidates, g_object_unref);
       goto out;
