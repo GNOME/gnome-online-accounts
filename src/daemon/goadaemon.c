@@ -648,6 +648,12 @@ update_account_object (GoaDaemon           *self,
   g_debug ("updating %s %d", g_dbus_object_get_object_path (G_DBUS_OBJECT (object)), just_added);
 
   type = g_key_file_get_string (key_file, group, "Provider", NULL);
+  if (type == NULL)
+    {
+      /* Provider is a required key; if not present, the account is misconfigured and should be removed */
+      g_key_file_remove_group (key_file, group, NULL);
+      return FALSE;
+    }
   identity = g_key_file_get_string (key_file, group, "Identity", NULL);
   presentation_identity = g_key_file_get_string (key_file, group, "PresentationIdentity", NULL);
   is_locked = g_key_file_get_boolean (key_file, group, "IsLocked", NULL);
