@@ -992,8 +992,8 @@ add_account_loginflow2_cb (GObject      *unused,
                          g_uri_get_path (uri),
                          g_uri_get_query (uri),
                          g_uri_get_fragment (uri));
-  webdav_uri = goa_utils_normalize_url (base_uri, "remote.php/webdav", NULL);
-  dav_uri = goa_utils_normalize_url (base_uri, "remote.php/dav", NULL);
+  webdav_uri = goa_utils_normalize_url (goa_utils_ensure_trailing_slash (base_uri), "remote.php/webdav", NULL);
+  dav_uri = goa_utils_normalize_url (goa_utils_ensure_trailing_slash (base_uri), "remote.php/dav", NULL);
 
   /* Add the account
    */

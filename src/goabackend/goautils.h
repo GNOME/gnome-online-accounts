@@ -113,6 +113,8 @@ gchar           *goa_utils_base64_url_encode (const guchar *data,
 gchar           *goa_utils_generate_code_verifier (void);
 gchar           *goa_utils_generate_code_challenge (const gchar *code_verifier);
 
+
+gchar *goa_utils_ensure_trailing_slash (const gchar *url);
 G_END_DECLS
 
 #endif /* __GOA_UTILS_H__ */

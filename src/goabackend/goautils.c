@@ -980,3 +980,18 @@ goa_utils_generate_code_challenge (const gchar *code_verifier)
 
   return goa_utils_base64_url_encode (digest, digest_len);
 }
+
+
+gchar *
+goa_utils_ensure_trailing_slash (const gchar *url)
+{
+  g_autofree gchar *new_url = NULL;
+
+  g_return_val_if_fail (url != NULL, NULL);
+
+  if (g_str_has_suffix (url, "/"))
+    return g_strdup (url);
+
+  new_url = g_strdup_printf ("%s/", url);
+  return g_steal_pointer (&new_url);
+}

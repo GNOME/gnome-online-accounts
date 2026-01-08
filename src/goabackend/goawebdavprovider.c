@@ -639,7 +639,7 @@ add_account_handle_response (GTask     *task,
     }
 
   /* If the user entered a bunk URI, they probably want to be notified */
-  normalized_uri = goa_utils_normalize_url (base_uri, check_uri, NULL);
+  normalized_uri = goa_utils_normalize_url (goa_utils_ensure_trailing_slash (base_uri), check_uri, NULL);
   if (normalized_uri == NULL)
     {
       g_set_error (&error,
