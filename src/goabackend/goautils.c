@@ -668,8 +668,8 @@ goa_utils_parse_email_address (const gchar *email, gchar **out_username, gchar *
  * Normalize @base_uri to an http(s) URL, with a trailing `/`. The port will be
  * included if and only if it is non-standard for the URL type.
  *
- * If @uri_ref is given it will be resolved relative to @base_uri, before
- * the trailing `/` is applied.
+ * If @uri_ref is given it will be resolved relative to @base_uri, after
+ * the trailing `/` has been applied.
  *
  * If @server is not %NULL, it will be set to the hostname and path, including
  * the port (if non-standard).
@@ -692,25 +692,31 @@ goa_utils_normalize_url (const char  *base_uri,
   g_return_val_if_fail (base_uri != NULL && *base_uri != '\0', NULL);
   g_return_val_if_fail (server == NULL || *server == NULL, NULL);
 
+  /* Ensure a trailing slash, so resolving @uri_ref works as expected */
+  if (!g_str_has_suffix (base_uri, "/"))
+    uri_string = g_strconcat (base_uri, "/", NULL);
+  else
+    uri_string = g_strdup (base_uri);
+
   /* dav(s) is used by DNS-SD and gvfs */
   scheme = g_uri_peek_scheme (base_uri);
   if (scheme == NULL)
     {
-      uri_string = g_strconcat ("https://", base_uri, NULL);
+      g_autofree char *tmp = g_steal_pointer (&uri_string);
+
+      uri_string = g_strconcat ("https://", tmp, NULL);
       scheme = "https";
       std_port = 443;
     }
   else if (g_str_equal (scheme, "https")
            || g_str_equal (scheme, "davs"))
     {
-      uri_string = g_strdup (base_uri);
       scheme = "https";
       std_port = 443;
     }
   else if (g_str_equal (scheme, "http")
            || g_str_equal (scheme, "dav"))
     {
-      uri_string = g_strdup (base_uri);
       scheme = "http";
       std_port = 80;
     }
