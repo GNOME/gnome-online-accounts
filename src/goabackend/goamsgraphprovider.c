@@ -217,19 +217,6 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
     }
   json_object = json_node_get_object (json_member);
 
-  // Use the "id" field as the "Identity"
-  json_member = json_object_get_member (json_object, "id");
-  if (json_member == NULL || json_node_get_value_type (json_member) != G_TYPE_STRING)
-    {
-      g_debug ("%s(): expected \"id\" field holding a string", G_STRFUNC);
-      g_set_error (error,
-                   GOA_ERROR,
-                   GOA_ERROR_FAILED,
-                   _("Could not parse response"));
-      goto out;
-    }
-  id = json_node_get_string (json_member);
-
   // Prefer "userPrincipalName" then "mail", failing if neither is available, since Gvfs requires
   // a user and host for the GMountSpec
   json_member = json_object_get_member (json_object, "userPrincipalName");
@@ -238,23 +225,26 @@ get_identity_sync (GoaOAuth2Provider  *oauth2_provider,
       presentation_identity = json_node_get_string (json_member);
     }
 
-  if (presentation_identity == NULL)
+  // Use the "mail" field as the "Identity"
+  json_member = json_object_get_member (json_object, "mail");
+  if (json_member != NULL && json_node_get_value_type (json_member) == G_TYPE_STRING)
     {
-      json_member = json_object_get_member (json_object, "mail");
-      if (json_member != NULL && json_node_get_value_type (json_member) == G_TYPE_STRING)
+      if (presentation_identity == NULL)
         {
           presentation_identity = json_node_get_string (json_member);
         }
-      else
-        {
-          g_debug ("%s(): expected \"userPrincipalName\" or \"mail\" field holding a string",
-                   G_STRFUNC);
-          g_set_error (error,
-                       GOA_ERROR,
-                       GOA_ERROR_FAILED,
-                       _("Could not parse response"));
-          goto out;
-        }
+      id = json_node_get_string (json_member);
+    }
+
+  if (!presentation_identity || !id)
+    {
+      g_debug ("%s(): expected \"userPrincipalName\" and \"mail\" field holding a string",
+               G_STRFUNC);
+      g_set_error (error,
+                   GOA_ERROR,
+                   GOA_ERROR_FAILED,
+                   _("Could not parse response"));
+      goto out;
     }
 
   ret = g_strdup (id);
@@ -286,7 +276,7 @@ build_object (GoaProvider        *provider,
   GKeyFile *goa_conf;
   GoaMail *mail = NULL;
   const gchar  *provider_type;
-  const gchar *presentation_identity = NULL;
+  const gchar *identity = NULL;
   gboolean files_enabled = FALSE;
   gboolean calendar_enabled;
   gboolean contacts_enabled;
@@ -306,12 +296,12 @@ build_object (GoaProvider        *provider,
   provider_type = goa_provider_get_provider_type (provider);
   goa_conf = goa_util_open_goa_conf ();
   account = goa_object_get_account (GOA_OBJECT (object));
-  presentation_identity = goa_account_get_presentation_identity (account);
+  identity = goa_account_get_identity (account);
 
   /* Files */
   files_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_FILES) &&
                   g_key_file_get_boolean (key_file, group, "FilesEnabled", NULL);
-  uri_onedrive = g_strconcat ("onedrive://", presentation_identity, "/", NULL);
+  uri_onedrive = g_strconcat ("onedrive://", identity, "/", NULL);
   goa_object_skeleton_attach_files (object, uri_onedrive, files_enabled, FALSE);
   g_free (uri_onedrive);
 
