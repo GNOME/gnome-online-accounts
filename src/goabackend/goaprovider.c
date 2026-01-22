@@ -1213,6 +1213,7 @@ goa_provider_ensure_builtins_loaded (void)
     {
       GKeyFile *goa_conf;
       gchar **whitelisted_providers = NULL;
+      gchar **disabled_providers = NULL;
       guint i;
       guint j;
       gboolean all = FALSE;
@@ -1224,6 +1225,10 @@ goa_provider_ensure_builtins_loaded (void)
           if (whitelisted_providers && !*whitelisted_providers)
             g_clear_pointer (&whitelisted_providers, g_strfreev);
 
+          disabled_providers = g_key_file_get_string_list (goa_conf, "providers", "disable", NULL, NULL);
+          if (disabled_providers && !*disabled_providers)
+            g_clear_pointer (&disabled_providers, g_strfreev);
+
           g_clear_pointer (&goa_conf, g_key_file_free);
         }
 
@@ -1233,6 +1238,26 @@ goa_provider_ensure_builtins_loaded (void)
           whitelisted_providers = g_new0 (gchar *, 2);
           whitelisted_providers[0] = g_strdup ("all");
           whitelisted_providers[1] = NULL;
+        }
+
+      if (disabled_providers != NULL)
+        {
+          g_debug ("Loading all but disabled providers: ");
+          for (i = 0; ordered_builtins_map[i].name != NULL; i++)
+            {
+              for (j = 0; disabled_providers[j] != NULL; j++)
+                {
+                  if (g_strcmp0 (disabled_providers[j], ordered_builtins_map[i].name) == 0)
+                    break;
+                }
+              /* it means it's not disabled, when read to the end */
+              if (disabled_providers[j] == NULL)
+                {
+                  g_debug (" - %s", ordered_builtins_map[i].name);
+                  g_type_ensure ((*ordered_builtins_map[i].get_type) ());
+                }
+            }
+            goto cleanup;
         }
 
       /* Enable everything if there is 'all'. */
@@ -1272,6 +1297,7 @@ goa_provider_ensure_builtins_loaded (void)
 
     cleanup:
       g_strfreev (whitelisted_providers);
+      g_strfreev (disabled_providers);
       g_once_init_leave (&once_init_value, 1);
     }
 }
