@@ -1,18 +1,25 @@
-icon_scalable_data = [
-  'goa-account.svg',
-  'goa-account-exchange.svg',
-  'goa-account-fedora.svg',
-  'goa-account-google.svg',
-  'goa-account-ms365.svg',
-  'goa-account-owncloud.svg',
-]
+icon_scalable_data = []
 
 icon_symbolic_data = [
-  'goa-account-symbolic.svg',
-  'goa-account-exchange-symbolic.svg',
-  'goa-account-google-symbolic.svg',
-  'goa-account-owncloud-symbolic.svg',
+  'org.gnome.goa-daemon-symbolic.svg',
 ]
+
+if enable_goabackend
+  icon_scalable_data += [
+    'goa-account.svg',
+    'goa-account-exchange.svg',
+    'goa-account-fedora.svg',
+    'goa-account-google.svg',
+    'goa-account-ms365.svg',
+    'goa-account-owncloud.svg',
+  ]
+  icon_symbolic_data += [
+    'goa-account-symbolic.svg',
+    'goa-account-exchange-symbolic.svg',
+    'goa-account-google-symbolic.svg',
+    'goa-account-owncloud-symbolic.svg',
+  ]
+endif
 
 icons = [
   ['scalable', icon_scalable_data],
