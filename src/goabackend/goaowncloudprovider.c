@@ -868,7 +868,7 @@ create_account_details_ui (GoaProvider    *provider,
                                          NULL);
   adw_entry_row_add_suffix (ADW_ENTRY_ROW (data->uri), data->discovery_status);
 
-  icon = gtk_image_new_from_icon_name ("emblem-default-symbolic");
+  icon = gtk_image_new_from_icon_name ("check-outlined-symbolic");
   gtk_widget_add_css_class (GTK_WIDGET (icon), "success");
   gtk_box_append (GTK_BOX (data->discovery_status), GTK_WIDGET (icon));
 
