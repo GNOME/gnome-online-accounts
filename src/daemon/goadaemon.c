@@ -1610,6 +1610,7 @@ goa_daemon_send_notification_cb (GDBusConnection *connection,
 static void
 goa_daemon_send_notification (GoaDaemon *self)
 {
+  GVariantBuilder builder;
   g_autofree char *message = NULL;
 
   if (self->notification_signal_id == 0)
@@ -1644,6 +1645,10 @@ goa_daemon_send_notification (GoaDaemon *self)
       message = g_strdup (_("Failed to sign in to multiple accounts"));
     }
 
+  g_variant_builder_init_static (&builder, G_VARIANT_TYPE ("a{sv}"));
+  g_variant_builder_add (&builder, "{sv}", "desktop-entry", g_variant_new_string ("org.gnome.goa-daemon"));
+  g_variant_builder_add (&builder, "{sv}", "sender-pid", g_variant_new_int64 (getpid ()));
+
   g_dbus_connection_call (self->connection,
                           "org.freedesktop.Notifications",
                           "/org/freedesktop/Notifications",
@@ -1656,7 +1661,7 @@ goa_daemon_send_notification (GoaDaemon *self)
                                          _("Account Action Required"),
                                          message,
                                          g_variant_new_parsed ("@as ['default', '']"),
-                                         g_variant_new_parsed ("@a{sv} {}"),
+                                         g_variant_builder_end (&builder),
                                          -1),
                           NULL, /* reply type */
                           G_DBUS_CALL_FLAGS_NONE,

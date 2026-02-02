@@ -1,8 +1,8 @@
 dbus_ifaces = files('dbus-interfaces.xml')
 
-if enable_goabackend
-  subdir('icons')
+subdir('icons')
 
+if enable_goabackend
   services = ['org.gnome.OnlineAccounts.service']
   if enable_kerberos
     services += 'org.gnome.Identity.service'
@@ -43,3 +43,19 @@ if enable_goabackend
     install_dir: goa_datadir / 'applications'
   )
 endif
+
+daemon_conf = configuration_data()
+daemon_conf.set('libexecdir', goa_libexecdir)
+i18n.merge_file(
+  input:
+    configure_file(
+      input: 'org.gnome.goa-daemon.desktop.in',
+      output: 'org.gnome.goa-daemon.desktop.tmp',
+      configuration: daemon_conf,
+    ),
+  output: 'org.gnome.goa-daemon.desktop',
+  type: 'desktop',
+  po_dir: join_paths(meson.project_source_root(), 'po'),
+  install: true,
+  install_dir: join_paths(goa_datadir, 'applications')
+)
