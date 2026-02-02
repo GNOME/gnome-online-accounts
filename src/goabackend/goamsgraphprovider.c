@@ -661,7 +661,7 @@ goa_ms_graph_provider_init (GoaMsGraphProvider *self)
 static guint
 get_credentials_generation (GoaProvider *provider)
 {
-  return 1;
+  return 2;
 }
 
 static void
