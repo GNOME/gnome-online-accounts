@@ -952,6 +952,7 @@ add_account_check_smtp_cb (GoaMailClient *client,
   if (!goa_mail_client_check_finish (client, result, &error))
     {
       data->smtp_had_ssl_errors = (error->code == GOA_ERROR_SSL);
+      g_prefix_error_literal (&error, "SMTP: ");
       goa_provider_dialog_report_error (data->dialog, error);
       return;
     }
@@ -1020,6 +1021,7 @@ add_account_check_imap_cb (GoaMailClient *client,
   if (!goa_mail_client_check_finish (client, result, &error))
     {
       data->imap_had_ssl_errors = (error->code == GOA_ERROR_SSL);
+      g_prefix_error_literal (&error, "IMAP: ");
       goa_provider_dialog_report_error (data->dialog, error);
       return;
     }
