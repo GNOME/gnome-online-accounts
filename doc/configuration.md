@@ -14,6 +14,7 @@ configuration is:
 ```ini
 [providers]
 enable=all
+disable=
 
 [all]
 mail=true
@@ -36,12 +37,14 @@ todo=true
 Providers can be restricted to a subset of available providers, which can not be overridden
 by users or circumvented by adding new providers. The settings are read following this procedure:
 
-1. If there is a `[providers]` group and the `enable` key is missing or set to `all`, the provider
-  is enabled
-2. If there is a `[providers]` group and the `enable` key includes the provider, the provider
-  is enabled
-3. If there are legacy GSettings<sup>[1](#legacy-gsettings)</sup>, those settings are used
-4. If neither are present, the provider is enabled
+1. If there is a `[providers]` group and the `disable` key includes the provider, the provider
+  is disabled
+2. If there is a `[providers]` group and the `disable` key is missing and the `enable` key is
+  missing or set to `all`, the provider is enabled
+3. If there is a `[providers]` group and the `disable` key is missing and the `enable` key includes
+  the provider, the provider is enabled
+4. If there are legacy GSettings<sup>[1](#legacy-gsettings)</sup>, those settings are used
+5. If neither are present, the provider is enabled
 
 The following configuration file restricts providers to those using open protocols:
 
@@ -49,6 +52,17 @@ The following configuration file restricts providers to those using open protoco
 [providers]
 enable=imap_smtp;webdav;kerberos
 ```
+
+The following configuration file allows all providers except `webdav` and `kerberos`:
+
+```ini
+[providers]
+enable=imap_smtp
+disable=webdav;kerberos
+```
+
+Note the `enable` key is ignored in this case, the same as the legacy GSettings<sup>[1](#legacy-gsettings)</sup>,
+because the `disable` key has a precedence over the others.
 
 <sup id="legacy-gsettings">1: Legacy GSettings are not documented or supported. They were
 removed entirely in version 3.56.0 (GNOME 49)</sup>
