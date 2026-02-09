@@ -10,53 +10,57 @@
 # Benjamin Steinwender <b@stbe.at>, 2013-2014.
 # Bernd Homuth <dev@hmt.im>, 2014, 2015.
 # Tim Sabsch <tim@sabsch.com>, 2017, 2019, 2023-2024.
-# Jürgen Benvenuti <gastornis@posteo.org>, 2023, 2025.
+# Jürgen Benvenuti <gastornis@posteo.org>, 2023, 2025, 2026.
 # Philipp Kiemle <philipp.kiemle@gmail.com>, 2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/issues\n"
-"POT-Creation-Date: 2025-09-20 16:44+0000\n"
-"PO-Revision-Date: 2025-09-22 18:32+0200\n"
-"Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
+"POT-Creation-Date: 2026-02-04 07:52+0000\n"
+"PO-Revision-Date: 2026-02-09 21:15+0100\n"
+"Last-Translator: Jürgen Benvenuti <gastornis@posteo.org>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.8\n"
+
+#: data/org.gnome.goa-daemon.desktop.in:3 src/daemon/goadaemon.c:1658
+msgid "Online Accounts"
+msgstr "Online-Konten"
+
+#: data/org.gnome.goa-daemon.desktop.in:4
+msgid "Notifications shown by Online Accounts daemon"
+msgstr "Benachrichtigungen, die vom Online-Konten-Dämon angezeigt werden"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1162 src/daemon/goadaemon.c:1483
+#: src/daemon/goadaemon.c:1168 src/daemon/goadaemon.c:1489
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Das Finden eines Anbieters für %s ist fehlgeschlagen"
 
-#: src/daemon/goadaemon.c:1426
+#: src/daemon/goadaemon.c:1432
 msgid "IsLocked property is set for account"
 msgstr "Die Eigenschaft »IsLocked« ist festgelegt für das Konto"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1471
+#: src/daemon/goadaemon.c:1477
 msgid "ProviderType property is not set for account"
 msgstr "Die Eigenschaft des Providertyps ist für dieses Konto nicht eingestellt"
 
-#: src/daemon/goadaemon.c:1633
+#: src/daemon/goadaemon.c:1640
 #, c-format
 msgid "Failed to sign in to “%s”"
 msgstr "Das Anmelden bei »%s« ist fehlgeschlagen"
 
-#: src/daemon/goadaemon.c:1638
+#: src/daemon/goadaemon.c:1645
 msgid "Failed to sign in to multiple accounts"
 msgstr "Das Anmelden bei mehreren Konten ist fehlgeschlagen"
 
-#: src/daemon/goadaemon.c:1647
-msgid "Online Accounts"
-msgstr "Online-Konten"
-
-#: src/daemon/goadaemon.c:1650
+#: src/daemon/goadaemon.c:1661
 msgid "Account Action Required"
 msgstr "Kontenaktion erforderlich"
 
@@ -74,19 +78,24 @@ msgstr ""
 "Kopieren Sie die Legitimierungsadresse, um mit einem bestimmten Webbrowser "
 "fortzufahren."
 
+#: src/goabackend/goadavclient.c:778 src/goabackend/goakerberosprovider.c:318
+#: src/goabackend/goaprovider.c:1078
+msgid "Unknown error"
+msgstr "Unbekannter Fehler"
+
 #. TODO: more specific
-#: src/goabackend/goadavclient.c:1228 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goadavclient.c:1310 src/goabackend/goaimapauthlogin.c:104
 #: src/goabackend/goakerberosprovider.c:290 src/goabackend/goakerberosprovider.c:312
-#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:802
-#, c-format
+#: src/goabackend/goasmtpauth.c:102 src/goabackend/goasmtpauth.c:495
+#: src/goabackend/goautils.c:808
 msgid "Authentication failed"
 msgstr "Legitimierung gescheitert"
 
-#: src/goabackend/goadavclient.c:1235
+#: src/goabackend/goadavclient.c:1317
 msgid "Cannot find WebDAV endpoint"
 msgstr "WebDAV-Endpunkt konnte nicht gefunden werden"
 
-#: src/goabackend/goadavclient.c:1348 src/goabackend/goaoauth2provider.c:888
+#: src/goabackend/goadavclient.c:1430 src/goabackend/goaoauth2provider.c:888
 #: src/goabackend/goaowncloudprovider.c:622 src/goabackend/goawebdavprovider.c:648
 #, c-format
 msgid "Invalid URI: %s"
@@ -94,7 +103,6 @@ msgstr "Ungültige Adresse: %s"
 
 #. TODO: more specific
 #: src/goabackend/goaewsclient.c:278
-#, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "Das Verarbeiten der automatischen XML-Erkennungsantwort ist fehlgeschlagen"
 
@@ -108,7 +116,6 @@ msgstr "Das Finden des Elementes »%s« ist fehlgeschlagen"
 
 #. TODO: more specific
 #: src/goabackend/goaewsclient.c:340
-#, c-format
 msgid "Failed to find ASUrl in autodiscover response"
 msgstr "Das Finden von ASUrl in der automatischen Erkennungsantwort ist fehlgeschlagen"
 
@@ -132,13 +139,13 @@ msgstr ""
 "Verbinden Sie sich mit einem Microsoft Exchange-Anbieter, um auf Kalender, Kontakte "
 "und Dateien zuzugreifen"
 
-#: src/goabackend/goaexchangeprovider.c:392 src/goabackend/goaimapsmtpprovider.c:701
+#: src/goabackend/goaexchangeprovider.c:392 src/goabackend/goaimapsmtpprovider.c:706
 msgid "_Email"
 msgstr "_E-Mail"
 
 #: src/goabackend/goaexchangeprovider.c:393 src/goabackend/goafedoraprovider.c:171
-#: src/goabackend/goaimapsmtpprovider.c:702 src/goabackend/goaimapsmtpprovider.c:745
-#: src/goabackend/goaimapsmtpprovider.c:789 src/goabackend/goawebdavprovider.c:408
+#: src/goabackend/goaimapsmtpprovider.c:707 src/goabackend/goaimapsmtpprovider.c:750
+#: src/goabackend/goaimapsmtpprovider.c:794 src/goabackend/goawebdavprovider.c:408
 msgid "_Password"
 msgstr "_Passwort"
 
@@ -154,7 +161,7 @@ msgid "Account Details"
 msgstr "Kontodetails"
 
 #: src/goabackend/goaexchangeprovider.c:406 src/goabackend/goafedoraprovider.c:170
-#: src/goabackend/goaimapsmtpprovider.c:744 src/goabackend/goaimapsmtpprovider.c:788
+#: src/goabackend/goaimapsmtpprovider.c:749 src/goabackend/goaimapsmtpprovider.c:793
 #: src/goabackend/goawebdavprovider.c:407
 msgid "User_name"
 msgstr "Benutzer_name"
@@ -195,25 +202,22 @@ msgstr ""
 #. TODO: more specific
 #: src/goabackend/goagoogleprovider.c:230 src/goabackend/goagoogleprovider.c:241
 #: src/goabackend/goamsgraphprovider.c:204 src/goabackend/goamsgraphprovider.c:215
-#: src/goabackend/goamsgraphprovider.c:228 src/goabackend/goamsgraphprovider.c:255
-#: src/goabackend/goaoauth2provider.c:701 src/goabackend/goaoauth2provider.c:780
-#: src/goabackend/goaoauth2provider.c:810 src/goabackend/goaoauth2provider.c:821
-#: src/goabackend/goaoauth2provider.c:963 src/goabackend/goaowncloudprovider.c:338
-#: src/goabackend/goaowncloudprovider.c:538 src/goabackend/goaowncloudprovider.c:548
-#: src/goabackend/goaowncloudprovider.c:568 src/goabackend/goautils.c:136
-#, c-format
+#: src/goabackend/goamsgraphprovider.c:246 src/goabackend/goaoauth2provider.c:701
+#: src/goabackend/goaoauth2provider.c:780 src/goabackend/goaoauth2provider.c:810
+#: src/goabackend/goaoauth2provider.c:821 src/goabackend/goaoauth2provider.c:963
+#: src/goabackend/goaowncloudprovider.c:338 src/goabackend/goaowncloudprovider.c:538
+#: src/goabackend/goaowncloudprovider.c:548 src/goabackend/goaowncloudprovider.c:568
+#: src/goabackend/goautils.c:136
 msgid "Could not parse response"
 msgstr "Antwort konnte nicht analysiert werden"
 
 #. TODO: more specific
 #: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goaoauth2provider.c:1346
 #: src/goabackend/goasmtpauth.c:149
-#, c-format
 msgid "Service not available"
 msgstr "Dienst nicht erreichbar"
 
-#: src/goabackend/goaimapauthlogin.c:157 src/goabackend/goasmtpauth.c:625
-#, c-format
+#: src/goabackend/goaimapauthlogin.c:157 src/goabackend/goasmtpauth.c:636
 msgid "Server does not support STARTTLS"
 msgstr "Server unterstützt STARTTLS nicht"
 
@@ -236,38 +240,38 @@ msgstr "IMAP und SMTP"
 msgid "Invalid %s with username “%s” (%s, %d): "
 msgstr "Ungültiges Feld »%s« für Benutzername »%s« (%s, %d): "
 
-#: src/goabackend/goaimapsmtpprovider.c:566 src/goabackend/goaimapsmtpprovider.c:589
-#: src/goabackend/goaimapsmtpprovider.c:724 src/goabackend/goaimapsmtpprovider.c:765
-#: src/goabackend/goaimapsmtpprovider.c:809
+#: src/goabackend/goaimapsmtpprovider.c:571 src/goabackend/goaimapsmtpprovider.c:594
+#: src/goabackend/goaimapsmtpprovider.c:729 src/goabackend/goaimapsmtpprovider.c:770
+#: src/goabackend/goaimapsmtpprovider.c:814
 msgid "Auto-detected"
 msgstr "Automatisch erkannt"
 
-#: src/goabackend/goaimapsmtpprovider.c:618
+#: src/goabackend/goaimapsmtpprovider.c:623
 msgid "Unable to auto-detect IMAP and SMTP settings"
 msgstr "IMAP- und SMTP-Einstellungen konnten nicht automatisch erkannt werden"
 
-#: src/goabackend/goaimapsmtpprovider.c:689
+#: src/goabackend/goaimapsmtpprovider.c:694
 msgid "STARTTLS after connecting"
 msgstr "STARTTLS nach Verbinden"
 
 #. GOA_TLS_TYPE_STARTTLS
-#: src/goabackend/goaimapsmtpprovider.c:690
+#: src/goabackend/goaimapsmtpprovider.c:695
 msgid "SSL on a dedicated port"
 msgstr "SSL auf einem dedizierten Port"
 
-#: src/goabackend/goaimapsmtpprovider.c:695 src/goabackend/goaimapsmtpprovider.c:1435
+#: src/goabackend/goaimapsmtpprovider.c:700 src/goabackend/goaimapsmtpprovider.c:1454
 msgid "Email"
 msgstr "E-Mail"
 
-#: src/goabackend/goaimapsmtpprovider.c:696
+#: src/goabackend/goaimapsmtpprovider.c:701
 msgid "Connect to an email account"
 msgstr "Mit einem E-Mail-Konto verbinden"
 
-#: src/goabackend/goaimapsmtpprovider.c:700
+#: src/goabackend/goaimapsmtpprovider.c:705
 msgid "_Name"
 msgstr "_Name"
 
-#: src/goabackend/goaimapsmtpprovider.c:703
+#: src/goabackend/goaimapsmtpprovider.c:708
 msgid ""
 "IMAP and SMTP details will be auto-detected from your service provider when possible"
 msgstr ""
@@ -275,54 +279,50 @@ msgstr ""
 "automatisch erkannt"
 
 #. IMAP
-#: src/goabackend/goaimapsmtpprovider.c:742
+#: src/goabackend/goaimapsmtpprovider.c:747
 msgid "IMAP Settings"
 msgstr "IMAP-Einstellungen"
 
-#: src/goabackend/goaimapsmtpprovider.c:743
+#: src/goabackend/goaimapsmtpprovider.c:748
 msgid "IMAP _Server"
 msgstr "IMAP-_Server"
 
-#: src/goabackend/goaimapsmtpprovider.c:754 src/goabackend/goaimapsmtpprovider.c:798
+#: src/goabackend/goaimapsmtpprovider.c:759 src/goabackend/goaimapsmtpprovider.c:803
 msgid "Encryption"
 msgstr "Verschlüsselung"
 
-#: src/goabackend/goaimapsmtpprovider.c:779
+#: src/goabackend/goaimapsmtpprovider.c:784
 msgid "Example server: imap.example.com"
 msgstr "Beispiel-Server: imap.beispiel.de"
 
 #. SMTP
-#: src/goabackend/goaimapsmtpprovider.c:786
+#: src/goabackend/goaimapsmtpprovider.c:791
 msgid "SMTP Settings"
 msgstr "SMTP-Einstellungen"
 
-#: src/goabackend/goaimapsmtpprovider.c:787
+#: src/goabackend/goaimapsmtpprovider.c:792
 msgid "SMTP _Server"
 msgstr "SMTP-_Server"
 
-#: src/goabackend/goaimapsmtpprovider.c:823
+#: src/goabackend/goaimapsmtpprovider.c:828
 msgid "Example server: smtp.example.com"
 msgstr "Beispiel-Server: smtp.beispiel.de"
 
-#: src/goabackend/goaimapsmtpprovider.c:1426
+#: src/goabackend/goaimapsmtpprovider.c:1445
 msgid "Name"
 msgstr "Name"
 
-#: src/goabackend/goaimapsmtpprovider.c:1452
+#: src/goabackend/goaimapsmtpprovider.c:1471
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1470
+#: src/goabackend/goaimapsmtpprovider.c:1491
 msgid "SMTP"
 msgstr "SMTP"
 
 #: src/goabackend/goakerberosprovider.c:81
 msgid "Kerberos"
 msgstr "Kerberos"
-
-#: src/goabackend/goakerberosprovider.c:318 src/goabackend/goaprovider.c:1078
-msgid "Unknown error"
-msgstr "Unbekannter Fehler"
 
 #: src/goabackend/goakerberosprovider.c:560
 msgid "_Principal"
@@ -333,7 +333,6 @@ msgid "Example principal: user@EXAMPLE.COM"
 msgstr "Beispiel-Prinzipal: Benutzer@BEISPIEL.DE"
 
 #: src/goabackend/goakerberosprovider.c:1249
-#, c-format
 msgid "Ticketing is disabled for account"
 msgstr "Ticketanforderung ist für das Konto deaktiviert"
 
@@ -366,7 +365,6 @@ msgid "Operation was cancelled"
 msgstr "Vorgang wurde abgebrochen"
 
 #: src/goabackend/goakerberosprovider.c:1672
-#, c-format
 msgid "Identity service returned invalid key"
 msgstr "Identitätsdienst gab ungültigen Schlüssel zurück"
 
@@ -380,35 +378,35 @@ msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:498
+#: src/goabackend/goamsgraphprovider.c:488
 msgid "Connect to Microsoft 365 to access email, calendars, contacts and files"
 msgstr ""
 "Verbinden Sie sich mit Microsoft 365, um auf E-Mails, Kalender, Kontakte und Dateien "
 "zuzugreifen"
 
-#: src/goabackend/goamsgraphprovider.c:502
+#: src/goabackend/goamsgraphprovider.c:492
 msgid "Use Organization Account"
 msgstr "Organisationskonto verwenden"
 
-#: src/goabackend/goamsgraphprovider.c:503
+#: src/goabackend/goamsgraphprovider.c:493
 msgid "Connect using details from an organization or developer account"
 msgstr "Verbinden mittels Details eines Organisations- oder Entwicklerkontos"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:510
+#: src/goabackend/goamsgraphprovider.c:500
 msgid "Enter the details provided by your organization"
 msgstr "Geben Sie die von Ihrer Organisation bereitgestellten Details ein"
 
-#: src/goabackend/goamsgraphprovider.c:512
+#: src/goabackend/goamsgraphprovider.c:502
 msgid "_Client ID (Optional)"
 msgstr "_Client-Kennung (optional)"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:514
+#: src/goabackend/goamsgraphprovider.c:504
 msgid "_Tenant ID"
 msgstr "_Mandant-Kennung"
 
-#: src/goabackend/goamsgraphprovider.c:515
+#: src/goabackend/goamsgraphprovider.c:505
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "Beispiel-Kennung: 00000000-0000-0000-0000-000000000000"
 
@@ -447,7 +445,6 @@ msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Anmeldung als %s wurde angefragt, aber als %s angemeldet"
 
 #: src/goabackend/goaoauth2provider.c:1980
-#, c-format
 msgid "Credentials do not contain access_token"
 msgstr "Anmeldedaten enthalten nicht »access_token«"
 
@@ -460,7 +457,7 @@ msgstr "Fehler beim Holen des Zugriffs-Tokens (%s, %d): "
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: src/goabackend/goaowncloudprovider.c:526 src/goabackend/goautils.c:790
+#: src/goabackend/goaowncloudprovider.c:526 src/goabackend/goautils.c:796
 msgid "Not supported"
 msgstr "Nicht unterstützt"
 
@@ -579,34 +576,32 @@ msgstr "Melden Sie sich an, um sich mit diesem Konto wieder zu verbinden"
 msgid "_Account Description"
 msgstr "_Kontobeschreibung"
 
-#: src/goabackend/goaproviderdialog.c:947
+#: src/goabackend/goaproviderdialog.c:940
 msgid "_Remove…"
 msgstr "_Entfernen …"
 
-#: src/goabackend/goaproviderdialog.c:1043
+#: src/goabackend/goaproviderdialog.c:1036
 msgid "_Sign In"
 msgstr "_Anmelden"
 
-#: src/goabackend/goaproviderdialog.c:1105
+#: src/goabackend/goaproviderdialog.c:1098
 msgid "_Try Again"
 msgstr "Erneut _versuchen"
 
-#: src/goabackend/goaproviderdialog.c:1109
+#: src/goabackend/goaproviderdialog.c:1102
 msgid "_Ignore"
 msgstr "_Ignorieren"
 
-#: src/goabackend/goaproviderdialog.c:1381
+#: src/goabackend/goaproviderdialog.c:1374
 msgid "Dialog was dismissed"
 msgstr "Dialog wurde abgebrochen"
 
 #. TODO: more specific
 #: src/goabackend/goasmtpauth.c:164
-#, c-format
 msgid "TLS not available"
 msgstr "TLS nicht verfügbar"
 
-#: src/goabackend/goasmtpauth.c:492
-#, c-format
+#: src/goabackend/goasmtpauth.c:503
 msgid "Unknown authentication mechanism"
 msgstr "Unbekannter Legitimierungsmodus"
 
@@ -645,20 +640,20 @@ msgstr "GOA %s-Anmeldedaten für Identität %s"
 msgid "Failed to store credentials in the keyring"
 msgstr "Fehler beim Speichern der Anmeldedaten im Schlüsselbund"
 
-#: src/goabackend/goautils.c:794
+#: src/goabackend/goautils.c:800
 msgid "Not found"
 msgstr "Nicht gefunden"
 
-#: src/goabackend/goautils.c:808
+#: src/goabackend/goautils.c:814
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Code: %u — Unerwartete Antwort vom Server"
 
-#: src/goabackend/goautils.c:833
+#: src/goabackend/goautils.c:839
 msgid "The signing certificate authority is not known."
 msgstr "Der Zertifikatsaussteller ist nicht bekannt."
 
-#: src/goabackend/goautils.c:837
+#: src/goabackend/goautils.c:843
 msgid ""
 "The certificate does not match the expected identity of the site that it was retrieved "
 "from."
@@ -666,28 +661,28 @@ msgstr ""
 "Das Zertifikat entspricht nicht der erwarteten Identität der Seite, von der es bezogen "
 "wurde."
 
-#: src/goabackend/goautils.c:842
+#: src/goabackend/goautils.c:848
 msgid "The certificate’s activation time is still in the future."
 msgstr "Die Aktivierungszeit des Zertifikats liegt in der Zukunft."
 
-#: src/goabackend/goautils.c:846
+#: src/goabackend/goautils.c:852
 msgid "The certificate has expired."
 msgstr "Das Zertifikat ist abgelaufen."
 
-#: src/goabackend/goautils.c:850
+#: src/goabackend/goautils.c:856
 msgid "The certificate has been revoked."
 msgstr "Das Zertifikat wurde zurückgezogen."
 
-#: src/goabackend/goautils.c:854
+#: src/goabackend/goautils.c:860
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Der Algorithmus des Zertifikats gilt als unsicher."
 
-#: src/goabackend/goautils.c:860
+#: src/goabackend/goautils.c:866
 msgid "Invalid certificate."
 msgstr "Ungültiges Zertifikat."
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:895
+#: src/goabackend/goautils.c:901
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "»%s« wurde in den Anmeldedaten für »%s« nicht gefunden"
@@ -754,7 +749,6 @@ msgstr ""
 "Durchsuchen der Anmeldedaten der Identität im Cache konnte nicht abgeschlossen werden: "
 
 #: src/goaidentity/goakerberosidentity.c:1407
-#, c-format
 msgid "No associated identification found"
 msgstr "Keine zugehörige Identifikation gefunden"
 
@@ -771,7 +765,6 @@ msgid "Could not store new credentials in credentials cache: "
 msgstr "Neue Anmeldedaten konnten nicht im Anmeldedaten-Cache gespeichert werden: "
 
 #: src/goaidentity/goakerberosidentity.c:1825
-#, c-format
 msgid "Not signed in"
 msgstr "Nicht angemeldet"
 
