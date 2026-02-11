@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2025-09-05 17:32+0000\n"
-"PO-Revision-Date: 2025-09-05 22:49+0300\n"
-"Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
+"POT-Creation-Date: 2026-02-04 07:52+0000\n"
+"PO-Revision-Date: 2026-02-11 22:42+0200\n"
+"Last-Translator: Aurimas Černius <aurimas.cernius@mailo.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
@@ -18,37 +18,41 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "(n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.8\n"
+
+#: data/org.gnome.goa-daemon.desktop.in:3 src/daemon/goadaemon.c:1658
+msgid "Online Accounts"
+msgstr "Internetinės paskyros"
+
+#: data/org.gnome.goa-daemon.desktop.in:4
+msgid "Notifications shown by Online Accounts daemon"
+msgstr "Internetinių paskyrų tarnybos rodomi pranešimai"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1162 src/daemon/goadaemon.c:1483
+#: src/daemon/goadaemon.c:1168 src/daemon/goadaemon.c:1489
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Nepavyko rasti tiekėjo: %s"
 
-#: src/daemon/goadaemon.c:1426
+#: src/daemon/goadaemon.c:1432
 msgid "IsLocked property is set for account"
 msgstr "IsLocked savybė nenustatyta paskyrai"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1471
+#: src/daemon/goadaemon.c:1477
 msgid "ProviderType property is not set for account"
 msgstr "ProviderType savybė nenustatyta paskyrai"
 
-#: src/daemon/goadaemon.c:1633
+#: src/daemon/goadaemon.c:1640
 #, c-format
 msgid "Failed to sign in to “%s”"
 msgstr "Nepavyko prisijungti prie „%s“"
 
-#: src/daemon/goadaemon.c:1638
+#: src/daemon/goadaemon.c:1645
 msgid "Failed to sign in to multiple accounts"
 msgstr "Nepavyko prisijungti prie kelių paskyrų"
 
-#: src/daemon/goadaemon.c:1647
-msgid "Online Accounts"
-msgstr "Internetinės paskyros"
-
-#: src/daemon/goadaemon.c:1650
+#: src/daemon/goadaemon.c:1661
 msgid "Account Action Required"
 msgstr "Paskyroje reikia imtis veiksmų"
 
@@ -65,18 +69,24 @@ msgstr "_Kopijuoti saitą"
 msgid "Copy the authorization URL to continue with a specific web browser."
 msgstr "Kopijuoti autorizacijos URL ir tęsti specifinėje interneto naršyklėje."
 
+#: src/goabackend/goadavclient.c:778 src/goabackend/goakerberosprovider.c:318
+#: src/goabackend/goaprovider.c:1078
+msgid "Unknown error"
+msgstr "Nežinoma klaida"
+
 #. TODO: more specific
-#: src/goabackend/goadavclient.c:1228 src/goabackend/goaimapauthlogin.c:104
-#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:802
-#, c-format
+#: src/goabackend/goadavclient.c:1310 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goakerberosprovider.c:290
+#: src/goabackend/goakerberosprovider.c:312 src/goabackend/goasmtpauth.c:102
+#: src/goabackend/goasmtpauth.c:495 src/goabackend/goautils.c:808
 msgid "Authentication failed"
 msgstr "Nepavyko patvirtinti tapatybės"
 
-#: src/goabackend/goadavclient.c:1235
+#: src/goabackend/goadavclient.c:1317
 msgid "Cannot find WebDAV endpoint"
 msgstr "Nepavyko rasti WebDAV prisijungimo taško"
 
-#: src/goabackend/goadavclient.c:1348 src/goabackend/goaoauth2provider.c:888
+#: src/goabackend/goadavclient.c:1430 src/goabackend/goaoauth2provider.c:888
 #: src/goabackend/goaowncloudprovider.c:622
 #: src/goabackend/goawebdavprovider.c:648
 #, c-format
@@ -85,7 +95,6 @@ msgstr "Netinkamas URI: %s"
 
 #. TODO: more specific
 #: src/goabackend/goaewsclient.c:278
-#, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "Nepavyko perskaityti automatinio aptikimo atsakymo XML"
 
@@ -99,7 +108,6 @@ msgstr "Nepavyko rasti „%s“ elemento"
 
 #. TODO: more specific
 #: src/goabackend/goaewsclient.c:340
-#, c-format
 msgid "Failed to find ASUrl in autodiscover response"
 msgstr "Nepavyko rasti ASUrl automatinio aptikimo atsakyme"
 
@@ -127,15 +135,15 @@ msgstr ""
 "failams pasiekti"
 
 #: src/goabackend/goaexchangeprovider.c:392
-#: src/goabackend/goaimapsmtpprovider.c:701
+#: src/goabackend/goaimapsmtpprovider.c:706
 msgid "_Email"
 msgstr "_El. pašas"
 
 #: src/goabackend/goaexchangeprovider.c:393
 #: src/goabackend/goafedoraprovider.c:171
-#: src/goabackend/goaimapsmtpprovider.c:702
-#: src/goabackend/goaimapsmtpprovider.c:745
-#: src/goabackend/goaimapsmtpprovider.c:789
+#: src/goabackend/goaimapsmtpprovider.c:707
+#: src/goabackend/goaimapsmtpprovider.c:750
+#: src/goabackend/goaimapsmtpprovider.c:794
 #: src/goabackend/goawebdavprovider.c:408
 msgid "_Password"
 msgstr "Sla_ptažodis"
@@ -154,8 +162,8 @@ msgstr "Paskyros informacija"
 
 #: src/goabackend/goaexchangeprovider.c:406
 #: src/goabackend/goafedoraprovider.c:170
-#: src/goabackend/goaimapsmtpprovider.c:744
-#: src/goabackend/goaimapsmtpprovider.c:788
+#: src/goabackend/goaimapsmtpprovider.c:749
+#: src/goabackend/goaimapsmtpprovider.c:793
 #: src/goabackend/goawebdavprovider.c:407
 msgid "User_name"
 msgstr "_Naudotojo vardas"
@@ -173,11 +181,11 @@ msgid "Fedora"
 msgstr "Fedora"
 
 #: src/goabackend/goafedoraprovider.c:167
-#: src/goabackend/goakerberosprovider.c:598
+#: src/goabackend/goakerberosprovider.c:557
 msgid "Access restricted web and network resources for your organization"
 msgstr "Ribotos prieigos žiniatinklio bei tinklo ištekliai jūsų organizacijai"
 
-#: src/goabackend/goafedoraprovider.c:339
+#: src/goabackend/goafedoraprovider.c:337
 #, c-format
 msgid "Failed to get principal from user name “%s”"
 msgstr "Nepavyko gauti įstaigos pagal naudotojo vardą „%s“"
@@ -198,8 +206,7 @@ msgstr "Tikėtasi būsenos 200 prašant jūsų identiteto, bet gauta būsena %d 
 #: src/goabackend/goagoogleprovider.c:241
 #: src/goabackend/goamsgraphprovider.c:204
 #: src/goabackend/goamsgraphprovider.c:215
-#: src/goabackend/goamsgraphprovider.c:228
-#: src/goabackend/goamsgraphprovider.c:255
+#: src/goabackend/goamsgraphprovider.c:246
 #: src/goabackend/goaoauth2provider.c:701
 #: src/goabackend/goaoauth2provider.c:780
 #: src/goabackend/goaoauth2provider.c:810
@@ -209,19 +216,16 @@ msgstr "Tikėtasi būsenos 200 prašant jūsų identiteto, bet gauta būsena %d 
 #: src/goabackend/goaowncloudprovider.c:538
 #: src/goabackend/goaowncloudprovider.c:548
 #: src/goabackend/goaowncloudprovider.c:568 src/goabackend/goautils.c:136
-#, c-format
 msgid "Could not parse response"
 msgstr "Nepavyko perskaityti atsakymo"
 
 #. TODO: more specific
 #: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goaoauth2provider.c:1346
 #: src/goabackend/goasmtpauth.c:149
-#, c-format
 msgid "Service not available"
 msgstr "Tarnyba nepasiekiama"
 
-#: src/goabackend/goaimapauthlogin.c:157 src/goabackend/goasmtpauth.c:625
-#, c-format
+#: src/goabackend/goaimapauthlogin.c:157 src/goabackend/goasmtpauth.c:636
 msgid "Server does not support STARTTLS"
 msgstr "Serveris nepalaiko STARTTLS"
 
@@ -245,41 +249,41 @@ msgstr "IMAP ir SMTP"
 msgid "Invalid %s with username “%s” (%s, %d): "
 msgstr "Netinkamas %s naudotojo vardui „%s“ (%s, %d): "
 
-#: src/goabackend/goaimapsmtpprovider.c:566
-#: src/goabackend/goaimapsmtpprovider.c:589
-#: src/goabackend/goaimapsmtpprovider.c:724
-#: src/goabackend/goaimapsmtpprovider.c:765
-#: src/goabackend/goaimapsmtpprovider.c:809
+#: src/goabackend/goaimapsmtpprovider.c:571
+#: src/goabackend/goaimapsmtpprovider.c:594
+#: src/goabackend/goaimapsmtpprovider.c:729
+#: src/goabackend/goaimapsmtpprovider.c:770
+#: src/goabackend/goaimapsmtpprovider.c:814
 msgid "Auto-detected"
 msgstr "Automatiškai aptikta"
 
-#: src/goabackend/goaimapsmtpprovider.c:618
+#: src/goabackend/goaimapsmtpprovider.c:623
 msgid "Unable to auto-detect IMAP and SMTP settings"
 msgstr "Nepavyko automatiškai aptikti IMAP ir SMTP nuostatų"
 
-#: src/goabackend/goaimapsmtpprovider.c:689
+#: src/goabackend/goaimapsmtpprovider.c:694
 msgid "STARTTLS after connecting"
 msgstr "STARTTLS po prisijungimo"
 
 #. GOA_TLS_TYPE_STARTTLS
-#: src/goabackend/goaimapsmtpprovider.c:690
+#: src/goabackend/goaimapsmtpprovider.c:695
 msgid "SSL on a dedicated port"
 msgstr "SSL dedikuotame prievade"
 
-#: src/goabackend/goaimapsmtpprovider.c:695
-#: src/goabackend/goaimapsmtpprovider.c:1435
+#: src/goabackend/goaimapsmtpprovider.c:700
+#: src/goabackend/goaimapsmtpprovider.c:1454
 msgid "Email"
 msgstr "El. pašas"
 
-#: src/goabackend/goaimapsmtpprovider.c:696
+#: src/goabackend/goaimapsmtpprovider.c:701
 msgid "Connect to an email account"
 msgstr "Prisijunkite prie el. pašto paskyros"
 
-#: src/goabackend/goaimapsmtpprovider.c:700
+#: src/goabackend/goaimapsmtpprovider.c:705
 msgid "_Name"
 msgstr "_Vardas"
 
-#: src/goabackend/goaimapsmtpprovider.c:703
+#: src/goabackend/goaimapsmtpprovider.c:708
 msgid ""
 "IMAP and SMTP details will be auto-detected from your service provider when "
 "possible"
@@ -288,94 +292,92 @@ msgstr ""
 "tiekėją, kai tai įmanoma"
 
 #. IMAP
-#: src/goabackend/goaimapsmtpprovider.c:742
+#: src/goabackend/goaimapsmtpprovider.c:747
 msgid "IMAP Settings"
 msgstr "IMAP nuostatos"
 
-#: src/goabackend/goaimapsmtpprovider.c:743
+#: src/goabackend/goaimapsmtpprovider.c:748
 msgid "IMAP _Server"
 msgstr "IMAP _Serveris"
 
-#: src/goabackend/goaimapsmtpprovider.c:754
-#: src/goabackend/goaimapsmtpprovider.c:798
+#: src/goabackend/goaimapsmtpprovider.c:759
+#: src/goabackend/goaimapsmtpprovider.c:803
 msgid "Encryption"
 msgstr "Šifravimas"
 
-#: src/goabackend/goaimapsmtpprovider.c:779
+#: src/goabackend/goaimapsmtpprovider.c:784
 msgid "Example server: imap.example.com"
 msgstr "Pavyzdinis serveris: imap.example.com"
 
 #. SMTP
-#: src/goabackend/goaimapsmtpprovider.c:786
+#: src/goabackend/goaimapsmtpprovider.c:791
 msgid "SMTP Settings"
 msgstr "SMTP nuostatos"
 
-#: src/goabackend/goaimapsmtpprovider.c:787
+#: src/goabackend/goaimapsmtpprovider.c:792
 msgid "SMTP _Server"
 msgstr "SMTP _Serveris"
 
-#: src/goabackend/goaimapsmtpprovider.c:823
+#: src/goabackend/goaimapsmtpprovider.c:828
 msgid "Example server: smtp.example.com"
 msgstr "Pavyzdinis serveris: smtp.example.com"
 
-#: src/goabackend/goaimapsmtpprovider.c:1426
+#: src/goabackend/goaimapsmtpprovider.c:1445
 msgid "Name"
 msgstr "Vardas"
 
-#: src/goabackend/goaimapsmtpprovider.c:1452
+#: src/goabackend/goaimapsmtpprovider.c:1471
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1470
+#: src/goabackend/goaimapsmtpprovider.c:1491
 msgid "SMTP"
 msgstr "SMTP"
 
-#: src/goabackend/goakerberosprovider.c:80
+#: src/goabackend/goakerberosprovider.c:81
 msgid "Kerberos"
 msgstr "Kerberos"
 
-#: src/goabackend/goakerberosprovider.c:425
-msgid "Operation was cancelled"
-msgstr "Veiksmo buvo atsisakyta"
-
-#: src/goabackend/goakerberosprovider.c:469
-#: src/goaidentity/goaidentityservice.c:1114
-msgid "Log In to Realm"
-msgstr "Prisijungti prie srities"
-
-#: src/goabackend/goakerberosprovider.c:470
-msgid "Please enter your password below."
-msgstr "Įveskite savo slaptažodį žemiau."
-
-#: src/goabackend/goakerberosprovider.c:471
-msgid "Remember this password"
-msgstr "Prisiminti šį slaptažodį"
-
-#: src/goabackend/goakerberosprovider.c:601
+#: src/goabackend/goakerberosprovider.c:560
 msgid "_Principal"
 msgstr "Į_staiga"
 
-#: src/goabackend/goakerberosprovider.c:602
+#: src/goabackend/goakerberosprovider.c:561
 msgid "Example principal: user@EXAMPLE.COM"
 msgstr "Pavyzdys: user@EXMPLE.COM"
 
-#: src/goabackend/goakerberosprovider.c:1308
-#, c-format
+#: src/goabackend/goakerberosprovider.c:1249
 msgid "Ticketing is disabled for account"
 msgstr "Aprūpinimas bilietais paskyrai yra išjungtas"
 
-#: src/goabackend/goakerberosprovider.c:1331
+#: src/goabackend/goakerberosprovider.c:1272
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr "Nepavyko rasti raktinėje įrašytų įgaliojimų pagrindui „%s“"
 
-#: src/goabackend/goakerberosprovider.c:1345
+#: src/goabackend/goakerberosprovider.c:1288
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "Įgaliojimuose nerastas slaptažodis pagrindui „%s“"
 
-#: src/goabackend/goakerberosprovider.c:1527
-#, c-format
+#: src/goabackend/goakerberosprovider.c:1478
+#: src/goaidentity/goaidentityservice.c:1115
+msgid "Log In to Realm"
+msgstr "Prisijungti prie srities"
+
+#: src/goabackend/goakerberosprovider.c:1479
+msgid "Please enter your password below."
+msgstr "Įveskite savo slaptažodį žemiau."
+
+#: src/goabackend/goakerberosprovider.c:1480
+msgid "Remember this password"
+msgstr "Prisiminti šį slaptažodį"
+
+#: src/goabackend/goakerberosprovider.c:1490
+msgid "Operation was cancelled"
+msgstr "Veiksmo buvo atsisakyta"
+
+#: src/goabackend/goakerberosprovider.c:1672
 msgid "Identity service returned invalid key"
 msgstr "Identiteto tarnyba grąžino netinkamą raktą"
 
@@ -389,35 +391,35 @@ msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:498
+#: src/goabackend/goamsgraphprovider.c:488
 msgid "Connect to Microsoft 365 to access email, calendars, contacts and files"
 msgstr ""
 "Prisijunkite prie Microsoft 365 el. paštui, kalendoriams, kontaktams bei "
 "failams pasiekti"
 
-#: src/goabackend/goamsgraphprovider.c:502
+#: src/goabackend/goamsgraphprovider.c:492
 msgid "Use Organization Account"
 msgstr "Naudoti organizacijos paskyrą"
 
-#: src/goabackend/goamsgraphprovider.c:503
+#: src/goabackend/goamsgraphprovider.c:493
 msgid "Connect using details from an organization or developer account"
 msgstr "Prisijungti naudojant organizacijos ar kūrėjo paskyros informaciją"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:510
+#: src/goabackend/goamsgraphprovider.c:500
 msgid "Enter the details provided by your organization"
 msgstr "Įveskite jūsų organizacijos pateiktą informaciją"
 
-#: src/goabackend/goamsgraphprovider.c:512
+#: src/goabackend/goamsgraphprovider.c:502
 msgid "_Client ID (Optional)"
 msgstr "_Kliento ID (nebūtinas)"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:514
+#: src/goabackend/goamsgraphprovider.c:504
 msgid "_Tenant ID"
 msgstr "_Nuomininko ID"
 
-#: src/goabackend/goamsgraphprovider.c:515
+#: src/goabackend/goamsgraphprovider.c:505
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "Pavyzdinis ID: 00000000-0000-0000-0000-000000000000"
 
@@ -446,24 +448,23 @@ msgstr "Klaida gaunant identifikatorių: "
 msgid "Sign in to %s with your browser"
 msgstr "Prisijunkite prie %s naršyklėje"
 
-#: src/goabackend/goaoauth2provider.c:1615
-#: src/goabackend/goaoauth2provider.c:1787
+#: src/goabackend/goaoauth2provider.c:1614
+#: src/goabackend/goaoauth2provider.c:1786
 #: src/goabackend/goaowncloudprovider.c:824
 msgid "Copied to clipboard"
 msgstr "Nukopijuota į iškarpinę"
 
-#: src/goabackend/goaoauth2provider.c:1738
+#: src/goabackend/goaoauth2provider.c:1737
 #: src/goabackend/goaowncloudprovider.c:1139
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Prašyta prisijungti kaip %s, bet prisijungta kaip %s"
 
-#: src/goabackend/goaoauth2provider.c:1981
-#, c-format
+#: src/goabackend/goaoauth2provider.c:1980
 msgid "Credentials do not contain access_token"
 msgstr "Įgaliojimai neturi access_token"
 
-#: src/goabackend/goaoauth2provider.c:2025
+#: src/goabackend/goaoauth2provider.c:2024
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Nepavyko atnaujinti prieigos leksemos (%s, %d): "
@@ -473,7 +474,7 @@ msgstr "Nepavyko atnaujinti prieigos leksemos (%s, %d): "
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: src/goabackend/goaowncloudprovider.c:526 src/goabackend/goautils.c:790
+#: src/goabackend/goaowncloudprovider.c:526 src/goabackend/goautils.c:796
 msgid "Not supported"
 msgstr "Nepalaikoma"
 
@@ -547,10 +548,6 @@ msgstr "_Darbai"
 msgid "Account is disabled"
 msgstr "Paskyra išjungta"
 
-#: src/goabackend/goaprovider.c:1078
-msgid "Unknown error"
-msgstr "Nežinoma klaida"
-
 #: src/goabackend/goaprovider.c:1097
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
@@ -597,34 +594,32 @@ msgstr "Prisijunkite šiai paskyrai vėl įjungti"
 msgid "_Account Description"
 msgstr "P_askyros aprašymas"
 
-#: src/goabackend/goaproviderdialog.c:947
+#: src/goabackend/goaproviderdialog.c:940
 msgid "_Remove…"
 msgstr "P_ašalinti…"
 
-#: src/goabackend/goaproviderdialog.c:1043
+#: src/goabackend/goaproviderdialog.c:1036
 msgid "_Sign In"
 msgstr "_Prisijungti"
 
-#: src/goabackend/goaproviderdialog.c:1105
+#: src/goabackend/goaproviderdialog.c:1098
 msgid "_Try Again"
 msgstr "Bandy_ti dar kartą"
 
-#: src/goabackend/goaproviderdialog.c:1109
+#: src/goabackend/goaproviderdialog.c:1102
 msgid "_Ignore"
 msgstr "_Nepaisyti"
 
-#: src/goabackend/goaproviderdialog.c:1381
+#: src/goabackend/goaproviderdialog.c:1374
 msgid "Dialog was dismissed"
 msgstr "Dialogas buvo uždarytas"
 
 #. TODO: more specific
 #: src/goabackend/goasmtpauth.c:164
-#, c-format
 msgid "TLS not available"
 msgstr "TLS neprieinamas"
 
-#: src/goabackend/goasmtpauth.c:492
-#, c-format
+#: src/goabackend/goasmtpauth.c:503
 msgid "Unknown authentication mechanism"
 msgstr "Nežinomas tapatybės patvirtinimo mechanizmas"
 
@@ -663,48 +658,48 @@ msgstr "GOA %s įgaliojimai identifikatoriui %s"
 msgid "Failed to store credentials in the keyring"
 msgstr "Nepavyko įrašyti įgaliojimų į raktinę"
 
-#: src/goabackend/goautils.c:794
+#: src/goabackend/goautils.c:800
 msgid "Not found"
 msgstr "Nerasta"
 
-#: src/goabackend/goautils.c:808
+#: src/goabackend/goautils.c:814
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Kodas: %u - nelaukas atsakymas iš serverio"
 
-#: src/goabackend/goautils.c:833
+#: src/goabackend/goautils.c:839
 msgid "The signing certificate authority is not known."
 msgstr "Nežinoma pasirašanti liudijimų įstaiga."
 
-#: src/goabackend/goautils.c:837
+#: src/goabackend/goautils.c:843
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
 msgstr ""
 "Liudijimas neatitinka laukto tinklalapio, iš kurio jis gautas, identiteto."
 
-#: src/goabackend/goautils.c:842
+#: src/goabackend/goautils.c:848
 msgid "The certificate’s activation time is still in the future."
 msgstr "Liudijimo aktyvavimo laikas vis dar ateityje."
 
-#: src/goabackend/goautils.c:846
+#: src/goabackend/goautils.c:852
 msgid "The certificate has expired."
 msgstr "Liudijimo galiojimas baigėsi."
 
-#: src/goabackend/goautils.c:850
+#: src/goabackend/goautils.c:856
 msgid "The certificate has been revoked."
 msgstr "Liudijimas buvo atšauktas."
 
-#: src/goabackend/goautils.c:854
+#: src/goabackend/goautils.c:860
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "Liudijimo algoritmas laikomas nesaugiu."
 
-#: src/goabackend/goautils.c:860
+#: src/goabackend/goautils.c:866
 msgid "Invalid certificate."
 msgstr "Netinkamas liudijimas."
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:895
+#: src/goabackend/goautils.c:901
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "Įgaliojimuose nerastas %s su tapatybe „%s“"
@@ -737,72 +732,70 @@ msgstr "Kalendorius (CalDAV)"
 msgid "Contacts (CardDAV)"
 msgstr "Kontaktai (CardDAV)"
 
-#: src/goaidentity/goaidentityservice.c:564
+#: src/goaidentity/goaidentityservice.c:565
 msgid "Initial secret key is invalid"
 msgstr "Pradinis paslapties raktas netinkamas"
 
 #. TODO: more specific
-#: src/goaidentity/goaidentityservice.c:786
+#: src/goaidentity/goaidentityservice.c:787
 #, c-format
 msgid "Couldn't get GoaObject for object path %s"
 msgstr "Nepavyko gauti GoaObject objekto keliui %s"
 
-#: src/goaidentity/goaidentityservice.c:1119
+#: src/goaidentity/goaidentityservice.c:1120
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr ""
 "Tinklo sritis %s reikalauja kai kurios informacijos jūsų prisijungimui."
 
-#: src/goaidentity/goakerberosidentity.c:293
-#: src/goaidentity/goakerberosidentity.c:301
-#: src/goaidentity/goakerberosidentity.c:695
+#: src/goaidentity/goakerberosidentity.c:294
+#: src/goaidentity/goakerberosidentity.c:302
+#: src/goaidentity/goakerberosidentity.c:696
 msgid "Could not find identity in credential cache: "
 msgstr "Nepavyko rasti identiteto įgaliojimų podėlyje: "
 
-#: src/goaidentity/goakerberosidentity.c:707
+#: src/goaidentity/goakerberosidentity.c:708
 msgid "Could not find identity credentials in cache: "
 msgstr "Nepavyko rasti identiteto įgaliojimų podėlyje: "
 
-#: src/goaidentity/goakerberosidentity.c:751
+#: src/goaidentity/goakerberosidentity.c:752
 msgid "Could not sift through identity credentials in cache: "
 msgstr "Nepavyko persijoti identitetų įgaliojimų podėlyje: "
 
-#: src/goaidentity/goakerberosidentity.c:763
+#: src/goaidentity/goakerberosidentity.c:764
 msgid "Could not finish up sifting through identity credentials in cache: "
 msgstr "Nepavyko baigti identitetų įgaliojimų podėlio sijojimo: "
 
-#: src/goaidentity/goakerberosidentity.c:1406
-#, c-format
+#: src/goaidentity/goakerberosidentity.c:1407
 msgid "No associated identification found"
 msgstr "Nerastas susietas idetitetas"
 
-#: src/goaidentity/goakerberosidentity.c:1535
+#: src/goaidentity/goakerberosidentity.c:1536
 msgid "Could not create credential cache: "
 msgstr "Nepavyko sukurti įgaliojimų podėlio: "
 
-#: src/goaidentity/goakerberosidentity.c:1575
+#: src/goaidentity/goakerberosidentity.c:1576
 msgid "Could not initialize credentials cache: "
 msgstr "Nepavyko inicijuoti įgaliojimų podėlio: "
 
-#: src/goaidentity/goakerberosidentity.c:1588
+#: src/goaidentity/goakerberosidentity.c:1589
 msgid "Could not store new credentials in credentials cache: "
 msgstr "Nepavyko įrašyti įgaliojimų į podėlį: "
 
-#: src/goaidentity/goakerberosidentity.c:1824
-#, c-format
+#: src/goaidentity/goakerberosidentity.c:1825
 msgid "Not signed in"
 msgstr "Neprisijungta"
 
-#: src/goaidentity/goakerberosidentity.c:1837
+#: src/goaidentity/goakerberosidentity.c:1838
 msgid "Could not get the default principal: "
 msgstr "Nepavyko gauti numatytojo valdytojo: "
 
-#: src/goaidentity/goakerberosidentity.c:1850
+#: src/goaidentity/goakerberosidentity.c:1851
 #, c-format
 msgid "Could not get renewed credentials from the KDC for identity %s: "
 msgstr "Nepavyko gauti naujų įgaliojimų iš KDC identitetui %s atnaujinti: "
 
-#: src/goaidentity/goakerberosidentity.c:1898
+#: src/goaidentity/goakerberosidentity.c:1899
 msgid "Could not erase identity: "
 msgstr "Nepavyko ištrinti identiteto: "
 
