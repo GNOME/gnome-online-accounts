@@ -1481,7 +1481,7 @@ create_show_account_ui (GoaProvider *self,
   if (subtitle != NULL)
     {
       username = goa_util_lookup_keyfile_string (object, "SmtpUserName");
-      if (g_strcmp0 (g_get_user_name (), subtitle) != 0)
+      if (username != NULL && *username != '\0' && g_strcmp0 (g_get_user_name (), subtitle) != 0)
         {
           g_autofree char *domain = g_steal_pointer (&subtitle);
           subtitle = g_strconcat (username, "@", domain, NULL);
