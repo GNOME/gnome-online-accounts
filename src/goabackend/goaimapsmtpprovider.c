@@ -995,7 +995,7 @@ add_account_action_smtp (GTask *task)
 
   g_clear_object (&data->smtp_auth);
   goa_utils_parse_email_address (email_address, NULL, &domain);
-  data->smtp_auth = goa_smtp_auth_new (domain, smtp_username, smtp_password);
+  data->smtp_auth = goa_smtp_auth_new (domain, smtp_username, *smtp_password != '\0' ? smtp_password : NULL);
 
   mail_client = goa_mail_client_new ();
   goa_mail_client_check (mail_client,
