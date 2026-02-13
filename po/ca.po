@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2025-09-05 11:57+0000\n"
-"PO-Revision-Date: 2025-09-05 18:36+0200\n"
+"POT-Creation-Date: 2026-02-03 01:32+0000\n"
+"PO-Revision-Date: 2026-02-03 20:25+0100\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -22,35 +22,39 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Poedit 3.6\n"
 
+#: data/org.gnome.goa-daemon.desktop.in:3 src/daemon/goadaemon.c:1658
+msgid "Online Accounts"
+msgstr "Comptes en línia"
+
+#: data/org.gnome.goa-daemon.desktop.in:4
+msgid "Notifications shown by Online Accounts daemon"
+msgstr "Notificacions mostrades pel dimoni de comptes en línia"
+
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1162 src/daemon/goadaemon.c:1483
+#: src/daemon/goadaemon.c:1168 src/daemon/goadaemon.c:1489
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "No s'ha trobat cap proveïdor per a: %s"
 
-#: src/daemon/goadaemon.c:1426
+#: src/daemon/goadaemon.c:1432
 msgid "IsLocked property is set for account"
 msgstr "La propietat «IsLocked» està establerta pel compte"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1471
+#: src/daemon/goadaemon.c:1477
 msgid "ProviderType property is not set for account"
 msgstr "El compte no té cap valor a la propietat «ProviderType»"
 
-#: src/daemon/goadaemon.c:1633
+#: src/daemon/goadaemon.c:1640
 #, c-format
 msgid "Failed to sign in to “%s”"
 msgstr "No s'ha pogut iniciar la sessió a «%s»"
 
-#: src/daemon/goadaemon.c:1638
+#: src/daemon/goadaemon.c:1645
 msgid "Failed to sign in to multiple accounts"
 msgstr "No s'ha pogut iniciar la sessió en diversos comptes"
 
-#: src/daemon/goadaemon.c:1647
-msgid "Online Accounts"
-msgstr "Comptes de xarxa"
-
-#: src/daemon/goadaemon.c:1650
+#: src/daemon/goadaemon.c:1661
 msgid "Account Action Required"
 msgstr "Es requereix una acció al compte"
 
@@ -68,18 +72,24 @@ msgid "Copy the authorization URL to continue with a specific web browser."
 msgstr ""
 "Copia l'URL d'autorització per a continuar amb un navegador web específic."
 
+#: src/goabackend/goadavclient.c:778 src/goabackend/goakerberosprovider.c:318
+#: src/goabackend/goaprovider.c:1078
+msgid "Unknown error"
+msgstr "Error desconegut"
+
 #. TODO: more specific
-#: src/goabackend/goadavclient.c:1228 src/goabackend/goaimapauthlogin.c:104
-#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:802
-#, c-format
+#: src/goabackend/goadavclient.c:1310 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goakerberosprovider.c:290
+#: src/goabackend/goakerberosprovider.c:312 src/goabackend/goasmtpauth.c:102
+#: src/goabackend/goasmtpauth.c:495 src/goabackend/goautils.c:808
 msgid "Authentication failed"
 msgstr "Ha fallat l'autenticació"
 
-#: src/goabackend/goadavclient.c:1235
+#: src/goabackend/goadavclient.c:1317
 msgid "Cannot find WebDAV endpoint"
 msgstr "No s'ha pogut trobar el punt final WebDAV"
 
-#: src/goabackend/goadavclient.c:1348 src/goabackend/goaoauth2provider.c:888
+#: src/goabackend/goadavclient.c:1430 src/goabackend/goaoauth2provider.c:888
 #: src/goabackend/goaowncloudprovider.c:622
 #: src/goabackend/goawebdavprovider.c:648
 #, c-format
@@ -88,7 +98,6 @@ msgstr "URI invàlid: %s"
 
 #. TODO: more specific
 #: src/goabackend/goaewsclient.c:278
-#, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "No s'ha pogut analitzar l'XML de la resposta d'autodescoberta"
 
@@ -102,7 +111,6 @@ msgstr "No s'ha pogut trobar l'element «%s»"
 
 #. TODO: more specific
 #: src/goabackend/goaewsclient.c:340
-#, c-format
 msgid "Failed to find ASUrl in autodiscover response"
 msgstr "No s'ha pogut trobar l'ASUrl en la resposta d'autodescoberta"
 
@@ -130,15 +138,15 @@ msgstr ""
 "contactes i fitxers"
 
 #: src/goabackend/goaexchangeprovider.c:392
-#: src/goabackend/goaimapsmtpprovider.c:701
+#: src/goabackend/goaimapsmtpprovider.c:706
 msgid "_Email"
 msgstr "Correu _electrònic"
 
 #: src/goabackend/goaexchangeprovider.c:393
 #: src/goabackend/goafedoraprovider.c:171
-#: src/goabackend/goaimapsmtpprovider.c:702
-#: src/goabackend/goaimapsmtpprovider.c:745
-#: src/goabackend/goaimapsmtpprovider.c:789
+#: src/goabackend/goaimapsmtpprovider.c:707
+#: src/goabackend/goaimapsmtpprovider.c:750
+#: src/goabackend/goaimapsmtpprovider.c:794
 #: src/goabackend/goawebdavprovider.c:408
 msgid "_Password"
 msgstr "_Contrasenya"
@@ -157,8 +165,8 @@ msgstr "Detalls del compte"
 
 #: src/goabackend/goaexchangeprovider.c:406
 #: src/goabackend/goafedoraprovider.c:170
-#: src/goabackend/goaimapsmtpprovider.c:744
-#: src/goabackend/goaimapsmtpprovider.c:788
+#: src/goabackend/goaimapsmtpprovider.c:749
+#: src/goabackend/goaimapsmtpprovider.c:793
 #: src/goabackend/goawebdavprovider.c:407
 msgid "User_name"
 msgstr "Nom d'_usuari"
@@ -176,12 +184,12 @@ msgid "Fedora"
 msgstr "Fedora"
 
 #: src/goabackend/goafedoraprovider.c:167
-#: src/goabackend/goakerberosprovider.c:598
+#: src/goabackend/goakerberosprovider.c:557
 msgid "Access restricted web and network resources for your organization"
 msgstr ""
 "Accedeix a recursos web i de xarxa restringits per a la teva organització"
 
-#: src/goabackend/goafedoraprovider.c:339
+#: src/goabackend/goafedoraprovider.c:337
 #, c-format
 msgid "Failed to get principal from user name “%s”"
 msgstr "No s'ha pogut obtenir el principal del nom d'usuari «%s»"
@@ -204,8 +212,7 @@ msgstr ""
 #: src/goabackend/goagoogleprovider.c:241
 #: src/goabackend/goamsgraphprovider.c:204
 #: src/goabackend/goamsgraphprovider.c:215
-#: src/goabackend/goamsgraphprovider.c:228
-#: src/goabackend/goamsgraphprovider.c:255
+#: src/goabackend/goamsgraphprovider.c:246
 #: src/goabackend/goaoauth2provider.c:701
 #: src/goabackend/goaoauth2provider.c:780
 #: src/goabackend/goaoauth2provider.c:810
@@ -215,19 +222,16 @@ msgstr ""
 #: src/goabackend/goaowncloudprovider.c:538
 #: src/goabackend/goaowncloudprovider.c:548
 #: src/goabackend/goaowncloudprovider.c:568 src/goabackend/goautils.c:136
-#, c-format
 msgid "Could not parse response"
 msgstr "No s'ha pogut analitzar la resposta"
 
 #. TODO: more specific
 #: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goaoauth2provider.c:1346
 #: src/goabackend/goasmtpauth.c:149
-#, c-format
 msgid "Service not available"
 msgstr "El servei no està disponible"
 
-#: src/goabackend/goaimapauthlogin.c:157 src/goabackend/goasmtpauth.c:625
-#, c-format
+#: src/goabackend/goaimapauthlogin.c:157 src/goabackend/goasmtpauth.c:636
 msgid "Server does not support STARTTLS"
 msgstr "El servidor no permet utilitzar «STARTTLS»"
 
@@ -251,41 +255,41 @@ msgstr "IMAP i SMTP"
 msgid "Invalid %s with username “%s” (%s, %d): "
 msgstr "%s no vàlid amb l'usuari «%s» (%s, %d): "
 
-#: src/goabackend/goaimapsmtpprovider.c:566
-#: src/goabackend/goaimapsmtpprovider.c:589
-#: src/goabackend/goaimapsmtpprovider.c:724
-#: src/goabackend/goaimapsmtpprovider.c:765
-#: src/goabackend/goaimapsmtpprovider.c:809
+#: src/goabackend/goaimapsmtpprovider.c:571
+#: src/goabackend/goaimapsmtpprovider.c:594
+#: src/goabackend/goaimapsmtpprovider.c:729
+#: src/goabackend/goaimapsmtpprovider.c:770
+#: src/goabackend/goaimapsmtpprovider.c:814
 msgid "Auto-detected"
 msgstr "Detectat automàticament"
 
-#: src/goabackend/goaimapsmtpprovider.c:618
+#: src/goabackend/goaimapsmtpprovider.c:623
 msgid "Unable to auto-detect IMAP and SMTP settings"
 msgstr "No s'han pogut detectar automàticament els paràmetres IMAP o SMTP"
 
-#: src/goabackend/goaimapsmtpprovider.c:689
+#: src/goabackend/goaimapsmtpprovider.c:694
 msgid "STARTTLS after connecting"
 msgstr "Utilitza l'STARTTLS després de connectar"
 
 #. GOA_TLS_TYPE_STARTTLS
-#: src/goabackend/goaimapsmtpprovider.c:690
+#: src/goabackend/goaimapsmtpprovider.c:695
 msgid "SSL on a dedicated port"
 msgstr "Utilitza l'SSL en un port dedicat"
 
-#: src/goabackend/goaimapsmtpprovider.c:695
-#: src/goabackend/goaimapsmtpprovider.c:1435
+#: src/goabackend/goaimapsmtpprovider.c:700
+#: src/goabackend/goaimapsmtpprovider.c:1454
 msgid "Email"
 msgstr "Correu electrònic"
 
-#: src/goabackend/goaimapsmtpprovider.c:696
+#: src/goabackend/goaimapsmtpprovider.c:701
 msgid "Connect to an email account"
 msgstr "Connecta a un compte de correu"
 
-#: src/goabackend/goaimapsmtpprovider.c:700
+#: src/goabackend/goaimapsmtpprovider.c:705
 msgid "_Name"
 msgstr "_Nom"
 
-#: src/goabackend/goaimapsmtpprovider.c:703
+#: src/goabackend/goaimapsmtpprovider.c:708
 msgid ""
 "IMAP and SMTP details will be auto-detected from your service provider when "
 "possible"
@@ -294,97 +298,95 @@ msgstr ""
 "proveïdor del servei"
 
 #. IMAP
-#: src/goabackend/goaimapsmtpprovider.c:742
+#: src/goabackend/goaimapsmtpprovider.c:747
 msgid "IMAP Settings"
 msgstr "Paràmetres IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:743
+#: src/goabackend/goaimapsmtpprovider.c:748
 msgid "IMAP _Server"
 msgstr "_Servidor d'IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:754
-#: src/goabackend/goaimapsmtpprovider.c:798
+#: src/goabackend/goaimapsmtpprovider.c:759
+#: src/goabackend/goaimapsmtpprovider.c:803
 msgid "Encryption"
 msgstr "Xifratge"
 
-#: src/goabackend/goaimapsmtpprovider.c:779
+#: src/goabackend/goaimapsmtpprovider.c:784
 msgid "Example server: imap.example.com"
 msgstr "Servidor d'exemple: imap.exemple.cat"
 
 #. SMTP
-#: src/goabackend/goaimapsmtpprovider.c:786
+#: src/goabackend/goaimapsmtpprovider.c:791
 msgid "SMTP Settings"
 msgstr "Paràmetres SMTP"
 
-#: src/goabackend/goaimapsmtpprovider.c:787
+#: src/goabackend/goaimapsmtpprovider.c:792
 msgid "SMTP _Server"
 msgstr "Servidor d'_SMTP"
 
-#: src/goabackend/goaimapsmtpprovider.c:823
+#: src/goabackend/goaimapsmtpprovider.c:828
 msgid "Example server: smtp.example.com"
 msgstr "Servidor d'exemple: smtp.exemple.cat"
 
-#: src/goabackend/goaimapsmtpprovider.c:1426
+#: src/goabackend/goaimapsmtpprovider.c:1445
 msgid "Name"
 msgstr "Nom"
 
-#: src/goabackend/goaimapsmtpprovider.c:1452
+#: src/goabackend/goaimapsmtpprovider.c:1471
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1470
+#: src/goabackend/goaimapsmtpprovider.c:1491
 msgid "SMTP"
 msgstr "SMTP"
 
-#: src/goabackend/goakerberosprovider.c:80
+#: src/goabackend/goakerberosprovider.c:81
 msgid "Kerberos"
 msgstr "Kerberos"
 
-#: src/goabackend/goakerberosprovider.c:425
-msgid "Operation was cancelled"
-msgstr "S'ha cancel·lat l'operació"
-
-#: src/goabackend/goakerberosprovider.c:469
-#: src/goaidentity/goaidentityservice.c:1114
-msgid "Log In to Realm"
-msgstr "Entra al regne"
-
-#: src/goabackend/goakerberosprovider.c:470
-msgid "Please enter your password below."
-msgstr "Introduïu la contrasenya a sota."
-
-#: src/goabackend/goakerberosprovider.c:471
-msgid "Remember this password"
-msgstr "Recorda la contrasenya"
-
-#: src/goabackend/goakerberosprovider.c:601
+#: src/goabackend/goakerberosprovider.c:560
 msgid "_Principal"
 msgstr "_Principal"
 
-#: src/goabackend/goakerberosprovider.c:602
+#: src/goabackend/goakerberosprovider.c:561
 msgid "Example principal: user@EXAMPLE.COM"
 msgstr "Exemple principal: user@exemple.com"
 
-#: src/goabackend/goakerberosprovider.c:1308
-#, c-format
+#: src/goabackend/goakerberosprovider.c:1249
 msgid "Ticketing is disabled for account"
 msgstr "La creació de tiquets està bloquejada pel compte"
 
-#: src/goabackend/goakerberosprovider.c:1331
+#: src/goabackend/goakerberosprovider.c:1272
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr ""
 "No s'han pogut trobar les credencials desades pel principal «%s» a l'anell "
 "de claus"
 
-#: src/goabackend/goakerberosprovider.c:1345
+#: src/goabackend/goakerberosprovider.c:1288
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr ""
 "No s'ha pogut trobar la contrasenya pel principal «%s» a les credencials"
 
-#: src/goabackend/goakerberosprovider.c:1527
-#, c-format
+#: src/goabackend/goakerberosprovider.c:1478
+#: src/goaidentity/goaidentityservice.c:1115
+msgid "Log In to Realm"
+msgstr "Entra al regne"
+
+#: src/goabackend/goakerberosprovider.c:1479
+msgid "Please enter your password below."
+msgstr "Introduïu la contrasenya a sota."
+
+#: src/goabackend/goakerberosprovider.c:1480
+msgid "Remember this password"
+msgstr "Recorda la contrasenya"
+
+#: src/goabackend/goakerberosprovider.c:1490
+msgid "Operation was cancelled"
+msgstr "S'ha cancel·lat l'operació"
+
+#: src/goabackend/goakerberosprovider.c:1672
 msgid "Identity service returned invalid key"
 msgstr "El servei d'identitat ha retornat una clau no vàlida"
 
@@ -398,36 +400,36 @@ msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:498
+#: src/goabackend/goamsgraphprovider.c:488
 msgid "Connect to Microsoft 365 to access email, calendars, contacts and files"
 msgstr ""
 "Connecta a Microsoft 365 per accedir al correu, calendaris, contactes i "
 "fitxers"
 
-#: src/goabackend/goamsgraphprovider.c:502
+#: src/goabackend/goamsgraphprovider.c:492
 msgid "Use Organization Account"
 msgstr "Usa el compte de l'organització"
 
-#: src/goabackend/goamsgraphprovider.c:503
+#: src/goabackend/goamsgraphprovider.c:493
 msgid "Connect using details from an organization or developer account"
 msgstr ""
 "Connecta usant els detalls d'un compte de desenvolupador o d'una organització"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:510
+#: src/goabackend/goamsgraphprovider.c:500
 msgid "Enter the details provided by your organization"
 msgstr "Introduïu els detalls proporcionats per la vostra organització"
 
-#: src/goabackend/goamsgraphprovider.c:512
+#: src/goabackend/goamsgraphprovider.c:502
 msgid "_Client ID (Optional)"
 msgstr "Identificador de _client (opcional)"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:514
+#: src/goabackend/goamsgraphprovider.c:504
 msgid "_Tenant ID"
 msgstr "_Identificador d'inquilí"
 
-#: src/goabackend/goamsgraphprovider.c:515
+#: src/goabackend/goamsgraphprovider.c:505
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "Identificador d'exemple: 00000000-0000-0000-0000-000000000000"
 
@@ -456,24 +458,23 @@ msgstr "S'ha produït un error en obtenir la identitat: "
 msgid "Sign in to %s with your browser"
 msgstr "Inicieu la sessió a %s amb el navegador"
 
-#: src/goabackend/goaoauth2provider.c:1615
-#: src/goabackend/goaoauth2provider.c:1787
+#: src/goabackend/goaoauth2provider.c:1614
+#: src/goabackend/goaoauth2provider.c:1786
 #: src/goabackend/goaowncloudprovider.c:824
 msgid "Copied to clipboard"
 msgstr "Copiat al porta-retalls"
 
-#: src/goabackend/goaoauth2provider.c:1738
+#: src/goabackend/goaoauth2provider.c:1737
 #: src/goabackend/goaowncloudprovider.c:1139
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "S'ha demanat identificar-se com a %s, però s'ha connectat com a %s"
 
-#: src/goabackend/goaoauth2provider.c:1981
-#, c-format
+#: src/goabackend/goaoauth2provider.c:1980
 msgid "Credentials do not contain access_token"
 msgstr "Les credencials no contenen el testimoni d'autenticació"
 
-#: src/goabackend/goaoauth2provider.c:2025
+#: src/goabackend/goaoauth2provider.c:2024
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "No s'ha pogut actualitzar el testimoni d'autenticació (%s, %d): "
@@ -483,7 +484,7 @@ msgstr "No s'ha pogut actualitzar el testimoni d'autenticació (%s, %d): "
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: src/goabackend/goaowncloudprovider.c:526 src/goabackend/goautils.c:790
+#: src/goabackend/goaowncloudprovider.c:526 src/goabackend/goautils.c:796
 msgid "Not supported"
 msgstr "No és compatible"
 
@@ -558,10 +559,6 @@ msgstr "T_o Do"
 msgid "Account is disabled"
 msgstr "El compte està inhabilitat"
 
-#: src/goabackend/goaprovider.c:1078
-msgid "Unknown error"
-msgstr "Error desconegut"
-
 #: src/goabackend/goaprovider.c:1097
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
@@ -608,34 +605,32 @@ msgstr "Inicieu la sessió per tornar a connectar amb aquest compte"
 msgid "_Account Description"
 msgstr "_Descripció del compte"
 
-#: src/goabackend/goaproviderdialog.c:947
+#: src/goabackend/goaproviderdialog.c:940
 msgid "_Remove…"
 msgstr "Sup_rimeix…"
 
-#: src/goabackend/goaproviderdialog.c:1043
+#: src/goabackend/goaproviderdialog.c:1036
 msgid "_Sign In"
 msgstr "_Inicia la sessió"
 
-#: src/goabackend/goaproviderdialog.c:1105
+#: src/goabackend/goaproviderdialog.c:1098
 msgid "_Try Again"
 msgstr "_Torna-ho a intentar"
 
-#: src/goabackend/goaproviderdialog.c:1109
+#: src/goabackend/goaproviderdialog.c:1102
 msgid "_Ignore"
 msgstr "_Ignora"
 
-#: src/goabackend/goaproviderdialog.c:1381
+#: src/goabackend/goaproviderdialog.c:1374
 msgid "Dialog was dismissed"
 msgstr "S'ha descartat el diàleg"
 
 #. TODO: more specific
 #: src/goabackend/goasmtpauth.c:164
-#, c-format
 msgid "TLS not available"
 msgstr "El TLS no està disponible"
 
-#: src/goabackend/goasmtpauth.c:492
-#, c-format
+#: src/goabackend/goasmtpauth.c:503
 msgid "Unknown authentication mechanism"
 msgstr "Es desconeix el mecanisme d'autenticació"
 
@@ -675,20 +670,20 @@ msgstr "Credencials de %s del GOA per a la identitat %s"
 msgid "Failed to store credentials in the keyring"
 msgstr "No s'han pogut emmagatzemar les credencials a l'anell de claus"
 
-#: src/goabackend/goautils.c:794
+#: src/goabackend/goautils.c:800
 msgid "Not found"
 msgstr "No s'ha trobat"
 
-#: src/goabackend/goautils.c:808
+#: src/goabackend/goautils.c:814
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Codi: %u — resposta inesperada del servidor"
 
-#: src/goabackend/goautils.c:833
+#: src/goabackend/goautils.c:839
 msgid "The signing certificate authority is not known."
 msgstr "Es desconeix l'autoritat de certificació que signa."
 
-#: src/goabackend/goautils.c:837
+#: src/goabackend/goautils.c:843
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
@@ -696,28 +691,28 @@ msgstr ""
 "El certificat no coincideix amb la identitat que s'esperava del lloc del "
 "qual s'ha recollit."
 
-#: src/goabackend/goautils.c:842
+#: src/goabackend/goautils.c:848
 msgid "The certificate’s activation time is still in the future."
 msgstr "La data d'activació del certificat és en el futur."
 
-#: src/goabackend/goautils.c:846
+#: src/goabackend/goautils.c:852
 msgid "The certificate has expired."
 msgstr "El certificat ha vençut."
 
-#: src/goabackend/goautils.c:850
+#: src/goabackend/goautils.c:856
 msgid "The certificate has been revoked."
 msgstr "S'ha revocat el certificat."
 
-#: src/goabackend/goautils.c:854
+#: src/goabackend/goautils.c:860
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "L'algorisme del certificat es considera insegur."
 
-#: src/goabackend/goautils.c:860
+#: src/goabackend/goautils.c:866
 msgid "Invalid certificate."
 msgstr "El certificat no és vàlid."
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:895
+#: src/goabackend/goautils.c:901
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "No s'ha trobat %s per la identitat «%s» a les credencials"
@@ -750,81 +745,79 @@ msgstr "Calendari (CalDAV)"
 msgid "Contacts (CardDAV)"
 msgstr "Contactes (CardDAV)"
 
-#: src/goaidentity/goaidentityservice.c:564
+#: src/goaidentity/goaidentityservice.c:565
 msgid "Initial secret key is invalid"
 msgstr "La clau inicial secreta no és vàlida"
 
 #. TODO: more specific
-#: src/goaidentity/goaidentityservice.c:786
+#: src/goaidentity/goaidentityservice.c:787
 #, c-format
 msgid "Couldn't get GoaObject for object path %s"
 msgstr "No s'ha pogut obtenir un camí per l'objecte GoaObject %s"
 
-#: src/goaidentity/goaidentityservice.c:1119
+#: src/goaidentity/goaidentityservice.c:1120
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr ""
 "El regne de xarxa %s necessita informació per a poder deixar-vos entrar."
 
-#: src/goaidentity/goakerberosidentity.c:293
-#: src/goaidentity/goakerberosidentity.c:301
-#: src/goaidentity/goakerberosidentity.c:695
+#: src/goaidentity/goakerberosidentity.c:294
+#: src/goaidentity/goakerberosidentity.c:302
+#: src/goaidentity/goakerberosidentity.c:696
 msgid "Could not find identity in credential cache: "
 msgstr "No s'ha pogut trobar la identitat a la memòria cau de credencials: "
 
-#: src/goaidentity/goakerberosidentity.c:707
+#: src/goaidentity/goakerberosidentity.c:708
 msgid "Could not find identity credentials in cache: "
 msgstr ""
 "No s'han pogut trobar les credencials de la identitat a la memòria cau: "
 
-#: src/goaidentity/goakerberosidentity.c:751
+#: src/goaidentity/goakerberosidentity.c:752
 msgid "Could not sift through identity credentials in cache: "
 msgstr ""
 "No s'han pogut examinar amb detall les credencials d'identitat de la memòria "
 "cau: "
 
-#: src/goaidentity/goakerberosidentity.c:763
+#: src/goaidentity/goakerberosidentity.c:764
 msgid "Could not finish up sifting through identity credentials in cache: "
 msgstr ""
 "No s'ha pogut finalitzar l'examinació en detall de les credencials "
 "d'identitat de la memòria cau: "
 
-#: src/goaidentity/goakerberosidentity.c:1406
-#, c-format
+#: src/goaidentity/goakerberosidentity.c:1407
 msgid "No associated identification found"
 msgstr "No s'ha trobat cap identificació associada"
 
-#: src/goaidentity/goakerberosidentity.c:1535
+#: src/goaidentity/goakerberosidentity.c:1536
 msgid "Could not create credential cache: "
 msgstr "No s'ha pogut crear la memòria cau de credencials: "
 
-#: src/goaidentity/goakerberosidentity.c:1575
+#: src/goaidentity/goakerberosidentity.c:1576
 msgid "Could not initialize credentials cache: "
 msgstr "No s'ha pogut inicialitzar la memòria cau de credencials: "
 
-#: src/goaidentity/goakerberosidentity.c:1588
+#: src/goaidentity/goakerberosidentity.c:1589
 msgid "Could not store new credentials in credentials cache: "
 msgstr ""
 "No s'han pogut emmagatzemar les credencials noves a la memòria cau de "
 "credencials: "
 
-#: src/goaidentity/goakerberosidentity.c:1824
-#, c-format
+#: src/goaidentity/goakerberosidentity.c:1825
 msgid "Not signed in"
 msgstr "No heu iniciat la sessió"
 
-#: src/goaidentity/goakerberosidentity.c:1837
+#: src/goaidentity/goakerberosidentity.c:1838
 msgid "Could not get the default principal: "
 msgstr "No s'ha pogut obtenir el principal predeterminat: "
 
-#: src/goaidentity/goakerberosidentity.c:1850
+#: src/goaidentity/goakerberosidentity.c:1851
 #, c-format
 msgid "Could not get renewed credentials from the KDC for identity %s: "
 msgstr ""
 "No s'han pogut obtenir les credencials renovades del KDC per a la identitat "
 "%s: "
 
-#: src/goaidentity/goakerberosidentity.c:1898
+#: src/goaidentity/goakerberosidentity.c:1899
 msgid "Could not erase identity: "
 msgstr "No s'ha pogut suprimir la identitat: "
 
