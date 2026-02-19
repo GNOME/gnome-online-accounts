@@ -70,7 +70,10 @@ get_provider_features (GoaProvider *provider)
          GOA_PROVIDER_FEATURE_MAIL |
          GOA_PROVIDER_FEATURE_CALENDAR |
          GOA_PROVIDER_FEATURE_CONTACTS |
-         GOA_PROVIDER_FEATURE_FILES;
+#if GOA_GOOGLE_FILES_ENABLED
+         GOA_PROVIDER_FEATURE_FILES |
+#endif
+         GOA_PROVIDER_FEATURE_INVALID;
 }
 
 static const gchar *
@@ -140,12 +143,10 @@ get_scope (GoaOAuth2Provider *oauth2_provider)
          /* Google Contacts API (CardDAV) - undocumented */
          "https://www.googleapis.com/auth/carddav "
 
+#if GOA_GOOGLE_FILES_ENABLED
          /* Google Drive API */
          "https://www.googleapis.com/auth/drive "
-
-         /* Google Documents List Data API */
-         "https://docs.googleusercontent.com/ "
-         "https://spreadsheets.google.com/feeds/ "
+#endif
 
          /* GMail IMAP and SMTP access */
          "https://mail.google.com/ "
@@ -157,7 +158,7 @@ get_scope (GoaOAuth2Provider *oauth2_provider)
 static guint
 get_credentials_generation (GoaProvider *provider)
 {
-  return 12;
+  return 13;
 }
 
 static const gchar *
@@ -274,13 +275,15 @@ build_object (GoaProvider         *provider,
   GKeyFile *goa_conf;
   const gchar *provider_type;
   gchar *uri_caldav;
-  gchar *uri_drive;
   gboolean ret = FALSE;
   gboolean mail_enabled;
   gboolean calendar_enabled;
   gboolean contacts_enabled;
-  gboolean files_enabled;
   const gchar *email_address;
+#if GOA_GOOGLE_FILES_ENABLED
+  gchar *uri_drive;
+  gboolean files_enabled;
+#endif
 
   /* Chain up */
   if (!GOA_PROVIDER_CLASS (goa_google_provider_parent_class)->build_object (provider,
@@ -345,11 +348,13 @@ build_object (GoaProvider         *provider,
                                        FALSE);
 
   /* Files */
+#if GOA_GOOGLE_FILES_ENABLED
   files_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_FILES) &&
                   g_key_file_get_boolean (key_file, group, "FilesEnabled", NULL);
   uri_drive = g_strconcat ("google-drive://", email_address, "/", NULL);
   goa_object_skeleton_attach_files (object, uri_drive, files_enabled, FALSE);
   g_free (uri_drive);
+#endif
 
   g_clear_pointer (&goa_conf, g_key_file_free);
 
@@ -358,7 +363,9 @@ build_object (GoaProvider         *provider,
       goa_account_set_mail_disabled (account, !mail_enabled);
       goa_account_set_calendar_disabled (account, !calendar_enabled);
       goa_account_set_contacts_disabled (account, !contacts_enabled);
+#if GOA_GOOGLE_FILES_ENABLED
       goa_account_set_files_disabled (account, !files_enabled);
+#endif
 
       g_signal_connect (account,
                         "notify::mail-disabled",
@@ -372,10 +379,12 @@ build_object (GoaProvider         *provider,
                         "notify::contacts-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
                         (gpointer) "ContactsEnabled");
+#if GOA_GOOGLE_FILES_ENABLED
       g_signal_connect (account,
                         "notify::files-disabled",
                         G_CALLBACK (goa_util_account_notify_property_cb),
                         (gpointer) "FilesEnabled");
+#endif
     }
 
   ret = TRUE;
@@ -395,7 +404,9 @@ add_account_key_values (GoaOAuth2Provider  *oauth2_provider,
   g_variant_builder_add (builder, "{ss}", "MailEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "CalendarEnabled", "true");
   g_variant_builder_add (builder, "{ss}", "ContactsEnabled", "true");
+#if GOA_GOOGLE_FILES_ENABLED
   g_variant_builder_add (builder, "{ss}", "FilesEnabled", "true");
+#endif
 }
 
 /* ---------------------------------------------------------------------------------------------------- */

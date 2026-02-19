@@ -173,6 +173,9 @@ config_h.set_quoted('GOA_GOOGLE_CLIENT_SECRET', google_client_secret)
 enable_google = get_option('google')
 config_h.set('GOA_GOOGLE_ENABLED', enable_google)
 
+enable_google_files = get_option('google_files')
+config_h.set('GOA_GOOGLE_FILES_ENABLED', enable_google_files)
+
 # IMAP/SMTP
 config_h.set_quoted('GOA_IMAP_SMTP_NAME', 'imap_smtp')
 
@@ -290,6 +293,7 @@ if enable_google
   summary({
       'id': google_client_id,
       'secret': google_client_secret,
+      'Files': enable_google_files,
     },
     section: 'Google Provider OAuth 2.0',
   )
