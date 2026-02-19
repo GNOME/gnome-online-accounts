@@ -148,10 +148,6 @@ get_scope (GoaOAuth2Provider *oauth2_provider)
          "https://www.googleapis.com/auth/drive "
 #endif
 
-         /* Google Documents List Data API */
-         "https://docs.googleusercontent.com/ "
-         "https://spreadsheets.google.com/feeds/ "
-
          /* GMail IMAP and SMTP access */
          "https://mail.google.com/ "
 
