@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the gnome-online-accounts package.
 # Jorge González <jorgegonz@svn.gnome.org>, 2011.
 # Daniel Mustieles <daniel.mustieles@gmail.com>, 2011-2024.
-# Daniel Mustieles García <daniel.mustieles@gmail.com>, 2024-2025.
+# Daniel Mustieles García <daniel.mustieles@gmail.com>, 2024-2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2025-09-04 15:55+0000\n"
-"PO-Revision-Date: 2025-09-05 13:56+0200\n"
+"POT-Creation-Date: 2026-02-04 07:52+0000\n"
+"PO-Revision-Date: 2026-02-12 15:37+0100\n"
 "Last-Translator: Daniel Mustieles García <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -19,37 +19,41 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Gtranslator 48.0\n"
+"X-Generator: Gtranslator 49.0\n"
+
+#: data/org.gnome.goa-daemon.desktop.in:3 src/daemon/goadaemon.c:1658
+msgid "Online Accounts"
+msgstr "Cuentas en línea"
+
+#: data/org.gnome.goa-daemon.desktop.in:4
+msgid "Notifications shown by Online Accounts daemon"
+msgstr "Notificaciones mostradas por el demonio de Cuentas en línea"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1162 src/daemon/goadaemon.c:1483
+#: src/daemon/goadaemon.c:1168 src/daemon/goadaemon.c:1489
 #, c-format
 msgid "Failed to find a provider for: %s"
 msgstr "Falló al buscar un proveedor para: %s"
 
-#: src/daemon/goadaemon.c:1426
+#: src/daemon/goadaemon.c:1432
 msgid "IsLocked property is set for account"
 msgstr "Propiedad «IsLocked» establecida para la cuenta"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1471
+#: src/daemon/goadaemon.c:1477
 msgid "ProviderType property is not set for account"
 msgstr "Propiedad «ProviderType» no establecida para la cuenta"
 
-#: src/daemon/goadaemon.c:1633
+#: src/daemon/goadaemon.c:1640
 #, c-format
 msgid "Failed to sign in to “%s”"
 msgstr "Falló al iniciar sesión en «%s»"
 
-#: src/daemon/goadaemon.c:1638
+#: src/daemon/goadaemon.c:1645
 msgid "Failed to sign in to multiple accounts"
 msgstr "Falló al iniciar sesión en varias cuentas"
 
-#: src/daemon/goadaemon.c:1647
-msgid "Online Accounts"
-msgstr "Cuentas en línea"
-
-#: src/daemon/goadaemon.c:1650
+#: src/daemon/goadaemon.c:1661
 msgid "Account Action Required"
 msgstr "Acción sobre la cuenta requerida"
 
@@ -67,18 +71,24 @@ msgid "Copy the authorization URL to continue with a specific web browser."
 msgstr ""
 "Copie el URL de autorización para continuar con un navegador específico."
 
+#: src/goabackend/goadavclient.c:778 src/goabackend/goakerberosprovider.c:318
+#: src/goabackend/goaprovider.c:1078
+msgid "Unknown error"
+msgstr "Error desconocido"
+
 #. TODO: more specific
-#: src/goabackend/goadavclient.c:1228 src/goabackend/goaimapauthlogin.c:104
-#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:802
-#, c-format
+#: src/goabackend/goadavclient.c:1310 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goakerberosprovider.c:290
+#: src/goabackend/goakerberosprovider.c:312 src/goabackend/goasmtpauth.c:102
+#: src/goabackend/goasmtpauth.c:495 src/goabackend/goautils.c:808
 msgid "Authentication failed"
 msgstr "Falló la autenticación"
 
-#: src/goabackend/goadavclient.c:1235
+#: src/goabackend/goadavclient.c:1317
 msgid "Cannot find WebDAV endpoint"
 msgstr "No se pudo encontrae el punto final WebDAV"
 
-#: src/goabackend/goadavclient.c:1348 src/goabackend/goaoauth2provider.c:888
+#: src/goabackend/goadavclient.c:1430 src/goabackend/goaoauth2provider.c:888
 #: src/goabackend/goaowncloudprovider.c:622
 #: src/goabackend/goawebdavprovider.c:648
 #, c-format
@@ -87,7 +97,6 @@ msgstr "URI no válido: %s"
 
 #. TODO: more specific
 #: src/goabackend/goaewsclient.c:278
-#, c-format
 msgid "Failed to parse autodiscover response XML"
 msgstr "Falló al analizar la respuesta XML de la autodetección"
 
@@ -101,7 +110,6 @@ msgstr "Falló al buscar el elemento «%s»"
 
 #. TODO: more specific
 #: src/goabackend/goaewsclient.c:340
-#, c-format
 msgid "Failed to find ASUrl in autodiscover response"
 msgstr "Falló al buscar «ASUrl» y en la respuesta de la autodetección"
 
@@ -112,7 +120,6 @@ msgstr "Microsoft Exchange"
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
-#.
 #: src/goabackend/goaexchangeprovider.c:258
 #: src/goabackend/goawebdavprovider.c:304
 #, c-format
@@ -129,15 +136,15 @@ msgstr ""
 "contactos y archivos"
 
 #: src/goabackend/goaexchangeprovider.c:392
-#: src/goabackend/goaimapsmtpprovider.c:701
+#: src/goabackend/goaimapsmtpprovider.c:706
 msgid "_Email"
 msgstr "Correo-_e"
 
 #: src/goabackend/goaexchangeprovider.c:393
 #: src/goabackend/goafedoraprovider.c:171
-#: src/goabackend/goaimapsmtpprovider.c:702
-#: src/goabackend/goaimapsmtpprovider.c:745
-#: src/goabackend/goaimapsmtpprovider.c:789
+#: src/goabackend/goaimapsmtpprovider.c:707
+#: src/goabackend/goaimapsmtpprovider.c:750
+#: src/goabackend/goaimapsmtpprovider.c:794
 #: src/goabackend/goawebdavprovider.c:408
 msgid "_Password"
 msgstr "_Contraseña"
@@ -156,8 +163,8 @@ msgstr "Detalles de la cuenta"
 
 #: src/goabackend/goaexchangeprovider.c:406
 #: src/goabackend/goafedoraprovider.c:170
-#: src/goabackend/goaimapsmtpprovider.c:744
-#: src/goabackend/goaimapsmtpprovider.c:788
+#: src/goabackend/goaimapsmtpprovider.c:749
+#: src/goabackend/goaimapsmtpprovider.c:793
 #: src/goabackend/goawebdavprovider.c:407
 msgid "User_name"
 msgstr "Nombre de _usuario"
@@ -175,11 +182,11 @@ msgid "Fedora"
 msgstr "Fedora"
 
 #: src/goabackend/goafedoraprovider.c:167
-#: src/goabackend/goakerberosprovider.c:598
+#: src/goabackend/goakerberosprovider.c:557
 msgid "Access restricted web and network resources for your organization"
 msgstr "Acceso web y a los recursos de red restringido para su organización"
 
-#: src/goabackend/goafedoraprovider.c:339
+#: src/goabackend/goafedoraprovider.c:337
 #, c-format
 msgid "Failed to get principal from user name “%s”"
 msgstr "Falló al obtener el principal del nombre de usuario «%s» "
@@ -202,8 +209,7 @@ msgstr ""
 #: src/goabackend/goagoogleprovider.c:241
 #: src/goabackend/goamsgraphprovider.c:204
 #: src/goabackend/goamsgraphprovider.c:215
-#: src/goabackend/goamsgraphprovider.c:228
-#: src/goabackend/goamsgraphprovider.c:255
+#: src/goabackend/goamsgraphprovider.c:246
 #: src/goabackend/goaoauth2provider.c:701
 #: src/goabackend/goaoauth2provider.c:780
 #: src/goabackend/goaoauth2provider.c:810
@@ -213,19 +219,16 @@ msgstr ""
 #: src/goabackend/goaowncloudprovider.c:538
 #: src/goabackend/goaowncloudprovider.c:548
 #: src/goabackend/goaowncloudprovider.c:568 src/goabackend/goautils.c:136
-#, c-format
 msgid "Could not parse response"
 msgstr "No se pudo analizar la respuesta"
 
 #. TODO: more specific
 #: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goaoauth2provider.c:1346
 #: src/goabackend/goasmtpauth.c:149
-#, c-format
 msgid "Service not available"
 msgstr "Servicio no disponible"
 
-#: src/goabackend/goaimapauthlogin.c:157 src/goabackend/goasmtpauth.c:625
-#, c-format
+#: src/goabackend/goaimapauthlogin.c:157 src/goabackend/goasmtpauth.c:636
 msgid "Server does not support STARTTLS"
 msgstr "El servidor no soporta STARTTLS"
 
@@ -237,53 +240,51 @@ msgstr "IMAP y SMTP"
 #. * second %s is the IMAP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
-#.
 #. Translators: the first %s is a field name. The
 #. * second %s is the SMTP
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
-#.
 #: src/goabackend/goaimapsmtpprovider.c:320
 #: src/goabackend/goaimapsmtpprovider.c:369
 #, c-format
 msgid "Invalid %s with username “%s” (%s, %d): "
 msgstr "%s no válida para el nombre de usuario «%s» (%s, %d): "
 
-#: src/goabackend/goaimapsmtpprovider.c:566
-#: src/goabackend/goaimapsmtpprovider.c:589
-#: src/goabackend/goaimapsmtpprovider.c:724
-#: src/goabackend/goaimapsmtpprovider.c:765
-#: src/goabackend/goaimapsmtpprovider.c:809
+#: src/goabackend/goaimapsmtpprovider.c:571
+#: src/goabackend/goaimapsmtpprovider.c:594
+#: src/goabackend/goaimapsmtpprovider.c:729
+#: src/goabackend/goaimapsmtpprovider.c:770
+#: src/goabackend/goaimapsmtpprovider.c:814
 msgid "Auto-detected"
 msgstr "Detectado automáticamente"
 
-#: src/goabackend/goaimapsmtpprovider.c:618
+#: src/goabackend/goaimapsmtpprovider.c:623
 msgid "Unable to auto-detect IMAP and SMTP settings"
 msgstr "No se pudo detectar la configuración IMAP y SMTP automáticamente"
 
-#: src/goabackend/goaimapsmtpprovider.c:689
+#: src/goabackend/goaimapsmtpprovider.c:694
 msgid "STARTTLS after connecting"
 msgstr "STARTTLS después de conectar"
 
 #. GOA_TLS_TYPE_STARTTLS
-#: src/goabackend/goaimapsmtpprovider.c:690
+#: src/goabackend/goaimapsmtpprovider.c:695
 msgid "SSL on a dedicated port"
 msgstr "SSL en un puerto dedicado"
 
-#: src/goabackend/goaimapsmtpprovider.c:695
-#: src/goabackend/goaimapsmtpprovider.c:1435
+#: src/goabackend/goaimapsmtpprovider.c:700
+#: src/goabackend/goaimapsmtpprovider.c:1454
 msgid "Email"
 msgstr "Correo-e"
 
-#: src/goabackend/goaimapsmtpprovider.c:696
+#: src/goabackend/goaimapsmtpprovider.c:701
 msgid "Connect to an email account"
 msgstr "Conectar a una cuenta de correo-e"
 
-#: src/goabackend/goaimapsmtpprovider.c:700
+#: src/goabackend/goaimapsmtpprovider.c:705
 msgid "_Name"
 msgstr "_Nombre"
 
-#: src/goabackend/goaimapsmtpprovider.c:703
+#: src/goabackend/goaimapsmtpprovider.c:708
 msgid ""
 "IMAP and SMTP details will be auto-detected from your service provider when "
 "possible"
@@ -292,96 +293,94 @@ msgstr ""
 "dirección de correo-e, cuando sea posible"
 
 #. IMAP
-#: src/goabackend/goaimapsmtpprovider.c:742
+#: src/goabackend/goaimapsmtpprovider.c:747
 msgid "IMAP Settings"
 msgstr "Configuración de IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:743
+#: src/goabackend/goaimapsmtpprovider.c:748
 msgid "IMAP _Server"
 msgstr "_Servidor IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:754
-#: src/goabackend/goaimapsmtpprovider.c:798
+#: src/goabackend/goaimapsmtpprovider.c:759
+#: src/goabackend/goaimapsmtpprovider.c:803
 msgid "Encryption"
 msgstr "Cifrado"
 
-#: src/goabackend/goaimapsmtpprovider.c:779
+#: src/goabackend/goaimapsmtpprovider.c:784
 msgid "Example server: imap.example.com"
 msgstr "Servidor de ejemplo: imap.ejemplo.com"
 
 #. SMTP
-#: src/goabackend/goaimapsmtpprovider.c:786
+#: src/goabackend/goaimapsmtpprovider.c:791
 msgid "SMTP Settings"
 msgstr "Configuración de SMTP"
 
-#: src/goabackend/goaimapsmtpprovider.c:787
+#: src/goabackend/goaimapsmtpprovider.c:792
 msgid "SMTP _Server"
 msgstr "_Servidor SMTP"
 
-#: src/goabackend/goaimapsmtpprovider.c:823
+#: src/goabackend/goaimapsmtpprovider.c:828
 msgid "Example server: smtp.example.com"
 msgstr "Servidor de ejemplo: smtp.ejemplo.com"
 
-#: src/goabackend/goaimapsmtpprovider.c:1426
+#: src/goabackend/goaimapsmtpprovider.c:1445
 msgid "Name"
 msgstr "Nombre"
 
-#: src/goabackend/goaimapsmtpprovider.c:1452
+#: src/goabackend/goaimapsmtpprovider.c:1471
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1470
+#: src/goabackend/goaimapsmtpprovider.c:1491
 msgid "SMTP"
 msgstr "SMTP"
 
-#: src/goabackend/goakerberosprovider.c:80
+#: src/goabackend/goakerberosprovider.c:81
 msgid "Kerberos"
 msgstr "Kerberos"
 
-#: src/goabackend/goakerberosprovider.c:425
-msgid "Operation was cancelled"
-msgstr "Operación cancelada"
-
-#: src/goabackend/goakerberosprovider.c:469
-#: src/goaidentity/goaidentityservice.c:1114
-msgid "Log In to Realm"
-msgstr "Iniciar sesión en el dominio"
-
-#: src/goabackend/goakerberosprovider.c:470
-msgid "Please enter your password below."
-msgstr "Introduzca su contraseña a continuación."
-
-#: src/goabackend/goakerberosprovider.c:471
-msgid "Remember this password"
-msgstr "Recordar esta contraseña"
-
-#: src/goabackend/goakerberosprovider.c:601
+#: src/goabackend/goakerberosprovider.c:560
 msgid "_Principal"
 msgstr "_Principal"
 
-#: src/goabackend/goakerberosprovider.c:602
+#: src/goabackend/goakerberosprovider.c:561
 msgid "Example principal: user@EXAMPLE.COM"
 msgstr "Ejemplo principal: usuario@EJEMPLO.COM"
 
-#: src/goabackend/goakerberosprovider.c:1308
-#, c-format
+#: src/goabackend/goakerberosprovider.c:1249
 msgid "Ticketing is disabled for account"
 msgstr "Creación de tiques bloqueado para esta cuenta"
 
-#: src/goabackend/goakerberosprovider.c:1331
+#: src/goabackend/goakerberosprovider.c:1272
 #, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
 msgstr ""
 "No se pudieron guardar las credenciales guardadas para «%s» en el depósito "
 "de claves"
 
-#: src/goabackend/goakerberosprovider.c:1345
+#: src/goabackend/goakerberosprovider.c:1288
 #, c-format
 msgid "Did not find password for principal “%s” in credentials"
 msgstr "No se encontró la contraseña para «%s» en las credenciales"
 
-#: src/goabackend/goakerberosprovider.c:1527
-#, c-format
+#: src/goabackend/goakerberosprovider.c:1478
+#: src/goaidentity/goaidentityservice.c:1115
+msgid "Log In to Realm"
+msgstr "Iniciar sesión en el dominio"
+
+#: src/goabackend/goakerberosprovider.c:1479
+msgid "Please enter your password below."
+msgstr "Introduzca su contraseña a continuación."
+
+#: src/goabackend/goakerberosprovider.c:1480
+msgid "Remember this password"
+msgstr "Recordar esta contraseña"
+
+#: src/goabackend/goakerberosprovider.c:1490
+msgid "Operation was cancelled"
+msgstr "Operación cancelada"
+
+#: src/goabackend/goakerberosprovider.c:1672
 msgid "Identity service returned invalid key"
 msgstr "El servicio de identidad devolvió una clave no válida"
 
@@ -395,36 +394,38 @@ msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:498
+#: src/goabackend/goamsgraphprovider.c:488
 msgid "Connect to Microsoft 365 to access email, calendars, contacts and files"
 msgstr ""
 "Conectar a Microsoft 365 para acceder a correo, calendarios, contactos y "
 "archivos"
 
-#: src/goabackend/goamsgraphprovider.c:502
+#: src/goabackend/goamsgraphprovider.c:492
 msgid "Use Organization Account"
 msgstr "Usar cuenta corporativa"
 
-#: src/goabackend/goamsgraphprovider.c:503
+#: src/goabackend/goamsgraphprovider.c:493
 msgid "Connect using details from an organization or developer account"
 msgstr ""
 "Conectar usando los detalles de una organización o cuenta de desarrollador"
 
-#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:510
+#. Translators: See
+#. https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:500
 msgid "Enter the details provided by your organization"
 msgstr "Introduzca los detalles proporcionados por su organización"
 
-#: src/goabackend/goamsgraphprovider.c:512
+#: src/goabackend/goamsgraphprovider.c:502
 msgid "_Client ID (Optional)"
 msgstr "ID de _cliente (opcional)"
 
-#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:514
+#. Translators: See
+#. https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:504
 msgid "_Tenant ID"
 msgstr "ID de _Tenant"
 
-#: src/goabackend/goamsgraphprovider.c:515
+#: src/goabackend/goamsgraphprovider.c:505
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "ID de ejemplo: 00000000-0000-0000-0000-000000000000"
 
@@ -453,24 +454,23 @@ msgstr "Error al obtener la identidad: "
 msgid "Sign in to %s with your browser"
 msgstr "Inicie sesión en %s con su navegador"
 
-#: src/goabackend/goaoauth2provider.c:1615
-#: src/goabackend/goaoauth2provider.c:1787
+#: src/goabackend/goaoauth2provider.c:1614
+#: src/goabackend/goaoauth2provider.c:1786
 #: src/goabackend/goaowncloudprovider.c:824
 msgid "Copied to clipboard"
 msgstr "Copiado al portapapeles"
 
-#: src/goabackend/goaoauth2provider.c:1738
+#: src/goabackend/goaoauth2provider.c:1737
 #: src/goabackend/goaowncloudprovider.c:1139
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
 msgstr "Se solicitó iniciar sesión como %s, pero se inició sesión como %s"
 
-#: src/goabackend/goaoauth2provider.c:1981
-#, c-format
+#: src/goabackend/goaoauth2provider.c:1980
 msgid "Credentials do not contain access_token"
 msgstr "Las credenciales no contienen el «access_token»"
 
-#: src/goabackend/goaoauth2provider.c:2025
+#: src/goabackend/goaoauth2provider.c:2024
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
 msgstr "Falló al actualizar el acceso al «token» (%s, %d): "
@@ -480,7 +480,7 @@ msgstr "Falló al actualizar el acceso al «token» (%s, %d): "
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: src/goabackend/goaowncloudprovider.c:526 src/goabackend/goautils.c:790
+#: src/goabackend/goaowncloudprovider.c:526 src/goabackend/goautils.c:796
 msgid "Not supported"
 msgstr "No está soportado"
 
@@ -554,10 +554,6 @@ msgstr "Tareas _pendientes"
 msgid "Account is disabled"
 msgstr "La cuenta está desactivada"
 
-#: src/goabackend/goaprovider.c:1078
-msgid "Unknown error"
-msgstr "Error desconocido"
-
 #: src/goabackend/goaprovider.c:1097
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
@@ -566,7 +562,6 @@ msgstr "«ensure_credentials_sync» no está implementado en el tipo %s"
 #. Translators: this is the title of the "Add Account" and "Refresh
 #. * Account" dialogs. The %s is the name of the provider. eg.,
 #. * 'Google'.
-#.
 #: src/goabackend/goaproviderdialog.c:183
 #, c-format
 msgid "%s Account"
@@ -604,34 +599,32 @@ msgstr "Inicie sesión para volver a conectar esta cuenta"
 msgid "_Account Description"
 msgstr "Descripción de la cuent_a"
 
-#: src/goabackend/goaproviderdialog.c:947
+#: src/goabackend/goaproviderdialog.c:940
 msgid "_Remove…"
 msgstr "_Quitar…"
 
-#: src/goabackend/goaproviderdialog.c:1043
+#: src/goabackend/goaproviderdialog.c:1036
 msgid "_Sign In"
 msgstr "Iniciar _sesión"
 
-#: src/goabackend/goaproviderdialog.c:1105
+#: src/goabackend/goaproviderdialog.c:1098
 msgid "_Try Again"
 msgstr "In_tentarlo de nuevo"
 
-#: src/goabackend/goaproviderdialog.c:1109
+#: src/goabackend/goaproviderdialog.c:1102
 msgid "_Ignore"
 msgstr "_Ignorar"
 
-#: src/goabackend/goaproviderdialog.c:1381
+#: src/goabackend/goaproviderdialog.c:1374
 msgid "Dialog was dismissed"
 msgstr "Se descartó el diálogo"
 
 #. TODO: more specific
 #: src/goabackend/goasmtpauth.c:164
-#, c-format
 msgid "TLS not available"
 msgstr "TLS no disponible"
 
-#: src/goabackend/goasmtpauth.c:492
-#, c-format
+#: src/goabackend/goasmtpauth.c:503
 msgid "Unknown authentication mechanism"
 msgstr "Mecanismo de autenticación desconocido"
 
@@ -670,20 +663,20 @@ msgstr "Credenciales GOA de %s para la identidad %s"
 msgid "Failed to store credentials in the keyring"
 msgstr "Falló al almacenar las credenciales en el depósito de claves"
 
-#: src/goabackend/goautils.c:794
+#: src/goabackend/goautils.c:800
 msgid "Not found"
 msgstr "No encontrado"
 
-#: src/goabackend/goautils.c:808
+#: src/goabackend/goautils.c:814
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Código: %u: respuesta inesperada del servidor"
 
-#: src/goabackend/goautils.c:833
+#: src/goabackend/goautils.c:839
 msgid "The signing certificate authority is not known."
 msgstr "La autoridad de firma del certificado es desconocida."
 
-#: src/goabackend/goautils.c:837
+#: src/goabackend/goautils.c:843
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
@@ -691,28 +684,28 @@ msgstr ""
 "El certificado no coincide con la identidad del sitio esperada del que se "
 "obtuvo."
 
-#: src/goabackend/goautils.c:842
+#: src/goabackend/goautils.c:848
 msgid "The certificate’s activation time is still in the future."
 msgstr "La fecha de activación del certificado todavía está en el futuro."
 
-#: src/goabackend/goautils.c:846
+#: src/goabackend/goautils.c:852
 msgid "The certificate has expired."
 msgstr "El certificado ha caducado."
 
-#: src/goabackend/goautils.c:850
+#: src/goabackend/goautils.c:856
 msgid "The certificate has been revoked."
 msgstr "El certificado se ha revocado."
 
-#: src/goabackend/goautils.c:854
+#: src/goabackend/goautils.c:860
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "El algoritmo del certificado se considera no seguro."
 
-#: src/goabackend/goautils.c:860
+#: src/goabackend/goautils.c:866
 msgid "Invalid certificate."
 msgstr "Certificado no válido."
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:895
+#: src/goabackend/goautils.c:901
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr "No se encontró %s con la identidad «%s» en las credenciales"
@@ -745,77 +738,75 @@ msgstr "Calendario (CalDAV)"
 msgid "Contacts (CardDAV)"
 msgstr "Contactos (CardDAV)"
 
-#: src/goaidentity/goaidentityservice.c:564
+#: src/goaidentity/goaidentityservice.c:565
 msgid "Initial secret key is invalid"
 msgstr "La clave secreta inicial no es válida"
 
 #. TODO: more specific
-#: src/goaidentity/goaidentityservice.c:786
+#: src/goaidentity/goaidentityservice.c:787
 #, c-format
 msgid "Couldn't get GoaObject for object path %s"
 msgstr "No se pudo obtener el GoaObject para la ruta del objeto %s"
 
-#: src/goaidentity/goaidentityservice.c:1119
+#: src/goaidentity/goaidentityservice.c:1120
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
 msgstr "El dominio de red %s necesita cierta información para verificarle."
 
-#: src/goaidentity/goakerberosidentity.c:293
-#: src/goaidentity/goakerberosidentity.c:301
-#: src/goaidentity/goakerberosidentity.c:695
+#: src/goaidentity/goakerberosidentity.c:294
+#: src/goaidentity/goakerberosidentity.c:302
+#: src/goaidentity/goakerberosidentity.c:696
 msgid "Could not find identity in credential cache: "
 msgstr "No se pudo encontrar la identidad en la caché de credenciales: "
 
-#: src/goaidentity/goakerberosidentity.c:707
+#: src/goaidentity/goakerberosidentity.c:708
 msgid "Could not find identity credentials in cache: "
 msgstr "No se pudo encontrar la identidad de las credenciales en la caché: "
 
-#: src/goaidentity/goakerberosidentity.c:751
+#: src/goaidentity/goakerberosidentity.c:752
 msgid "Could not sift through identity credentials in cache: "
 msgstr ""
 "No se pudo filtrar a través de las credenciales de identidad en la caché: "
 
-#: src/goaidentity/goakerberosidentity.c:763
+#: src/goaidentity/goakerberosidentity.c:764
 msgid "Could not finish up sifting through identity credentials in cache: "
 msgstr ""
 "No se pudo terminar de filtrar a través de credenciales de identidad en la "
 "caché: "
 
-#: src/goaidentity/goakerberosidentity.c:1406
-#, c-format
+#: src/goaidentity/goakerberosidentity.c:1407
 msgid "No associated identification found"
 msgstr "No se encontró ninguna identificación asociada"
 
-#: src/goaidentity/goakerberosidentity.c:1535
+#: src/goaidentity/goakerberosidentity.c:1536
 msgid "Could not create credential cache: "
 msgstr "No se pudo crear la caché de credenciales: "
 
-#: src/goaidentity/goakerberosidentity.c:1575
+#: src/goaidentity/goakerberosidentity.c:1576
 msgid "Could not initialize credentials cache: "
 msgstr "No se pudo inicializar la caché de credenciales: "
 
-#: src/goaidentity/goakerberosidentity.c:1588
+#: src/goaidentity/goakerberosidentity.c:1589
 msgid "Could not store new credentials in credentials cache: "
 msgstr ""
 "No se pudieron almacenar las nuevas credenciales en la caché de "
 "credenciales: "
 
-#: src/goaidentity/goakerberosidentity.c:1824
-#, c-format
+#: src/goaidentity/goakerberosidentity.c:1825
 msgid "Not signed in"
 msgstr "No firmado"
 
-#: src/goaidentity/goakerberosidentity.c:1837
+#: src/goaidentity/goakerberosidentity.c:1838
 msgid "Could not get the default principal: "
 msgstr "No se pudo crear el principal predeterminado: "
 
-#: src/goaidentity/goakerberosidentity.c:1850
+#: src/goaidentity/goakerberosidentity.c:1851
 #, c-format
 msgid "Could not get renewed credentials from the KDC for identity %s: "
 msgstr ""
 "No se pudieron obtener credenciales nuevas del KDC para esta identidad %s: "
 
-#: src/goaidentity/goakerberosidentity.c:1898
+#: src/goaidentity/goakerberosidentity.c:1899
 msgid "Could not erase identity: "
 msgstr "No se pudo eliminar la identidad: "
 
@@ -832,9 +823,11 @@ msgstr "No se pudo crear la caché de credenciales para la identidad"
 msgid "Error closing file descriptor: %s"
 msgstr "Error al cerrar el descriptor del archivo: %s"
 
+#, fuzzy
 #~ msgid "List of providers that are allowed to be loaded"
-#~ msgstr "Lista de proveedores que se pueden cargar"
+#~ msgstr "Lista de proveedores que pueden cargarse"
 
+#, fuzzy
 #~ msgid ""
 #~ "A list of strings representing the providers that are allowed to be "
 #~ "loaded (default: 'all'). This is only evaluated on startup. Deprecated: "
@@ -842,441 +835,547 @@ msgstr "Error al cerrar el descriptor del archivo: %s"
 #~ "[providers] enable=all instead. The key is comma-separated list of the "
 #~ "provider names."
 #~ msgstr ""
-#~ "Una lista de cadenas que representan los proveedores que se pueden cargar "
-#~ "(predeterminado: 'all'). Esto sólo se evalúa al inicio. Obsoleto: use goa."
-#~ "conf en la carpeta de configuración del sistema en su lugar, con una "
-#~ "clave [providers] enable=all en su lugar. La clave es una lista de "
-#~ "nombres de proveedores separados por comas."
+#~ "Una lista de cadenas que representan los proveedores que pueden cargarse "
+#~ "(predeterminado: 'todos'). "
 
-#, c-format
+#, fuzzy, c-format
 #~ msgid "Authorization response: %s"
-#~ msgstr "Respuesta a la autorización: %s"
+#~ msgstr "Respuesta de autorización: %s"
 
+#, fuzzy
 #~ msgid "Failed to authenticate"
-#~ msgstr "Falló al autenticar"
+#~ msgstr "No se pudo autenticar"
 
+#, fuzzy
 #~ msgid "_Account Name"
-#~ msgstr "_Nombre de la cuenta"
+#~ msgstr "_Nombre de cuenta"
 
+#, fuzzy
 #~ msgid "Microsoft"
-#~ msgstr "Microsoft"
+#~ msgstr "microsoft"
 
+#, fuzzy
 #~ msgid "None"
 #~ msgstr "Ninguno"
 
+#, fuzzy
 #~ msgid "_Sign in…"
-#~ msgstr "Iniciar _sesión…"
+#~ msgstr "_Iniciar sesión…"
 
+#, fuzzy
 #~ msgid "Common"
-#~ msgstr "Comunes"
+#~ msgstr "Común"
 
+#, fuzzy
 #~ msgid "Custom"
-#~ msgstr "Personalizado"
+#~ msgstr "Costumbre"
 
+#, fuzzy
 #~ msgid "Advanced"
 #~ msgstr "Avanzado"
 
+#, fuzzy
 #~ msgid "_Issuer"
-#~ msgstr "_Emisor"
+#~ msgstr "_Editor"
 
+#, fuzzy
 #~ msgid "C_ustom Issuer"
-#~ msgstr "Emisor co_mún"
+#~ msgstr "Emisor personalizado"
 
+#, fuzzy
 #~ msgid "Example provider: example.com"
-#~ msgstr "Ejemplo de proveedor: ejemplo.com"
+#~ msgstr "Proveedor de ejemplo: ejemplo.com"
 
+#, fuzzy
 #~ msgid "Microsoft Personal"
-#~ msgstr "Microsoft Personal"
+#~ msgstr "Personal de Microsoft"
 
+#, fuzzy
 #~ msgid "Endpoint Settings"
-#~ msgstr "Configuración del punto final"
+#~ msgstr "Configuración de punto final"
 
+#, fuzzy
 #~ msgid "Files Endpoint"
 #~ msgstr "Punto final de archivos"
 
+#, fuzzy
 #~ msgid "CalDAV Endpoint"
 #~ msgstr "Punto final CalDAV"
 
+#, fuzzy
 #~ msgid "C_onnect"
-#~ msgstr "C_onectar"
+#~ msgstr "Conectar"
 
+#, fuzzy
 #~ msgid "Connecting…"
 #~ msgstr "Conectando…"
 
-#, c-format
+#, fuzzy, c-format
 #~ msgid "Dialog was dismissed (%s, %d): "
-#~ msgstr "Se descartó el diálogo (%s, %d): "
+#~ msgstr "El diálogo fue descartado (%s, %d):"
 
+#, fuzzy
 #~ msgid "Error connecting to Microsoft Exchange server"
-#~ msgstr "Error al conectar al servidor de Microsoft Exchange"
+#~ msgstr "Error al conectarse al servidor Microsoft Exchange"
 
+#, fuzzy
 #~ msgid "Error connecting to Fedora"
-#~ msgstr "Error al conectar a Fedora"
+#~ msgstr "Error al conectarse a Fedora"
 
+#, fuzzy
 #~ msgid "Server does not support PLAIN"
 #~ msgstr "El servidor no soporta PLAIN"
 
+#, fuzzy
 #~ msgid "_Forward"
 #~ msgstr "_Adelante"
 
+#, fuzzy
 #~ msgid "Error connecting to IMAP server"
-#~ msgstr "Error al conectar al servidor IMAP"
+#~ msgstr "Error al conectarse al servidor IMAP"
 
+#, fuzzy
 #~ msgid "Error connecting to SMTP server"
-#~ msgstr "Error al conectar al servidor SMTP"
+#~ msgstr "Error al conectarse al servidor SMTP"
 
+#, fuzzy
 #~ msgid "Enterprise Login (Kerberos)"
 #~ msgstr "Inicio de sesión empresarial (Kerberos)"
 
+#, fuzzy
 #~ msgid "Error connecting to enterprise identity server"
-#~ msgstr "Error al conectar al servidor empresarial de identidad"
+#~ msgstr "Error al conectarse al servidor de identidad empresarial"
 
+#, fuzzy
 #~ msgid "Last.fm"
 #~ msgstr "Last.fm"
 
+#, fuzzy
 #~ msgid "Error connecting to Last.fm"
-#~ msgstr "Error al conectar a Last.fm"
+#~ msgstr "Error al conectarse a Last.fm"
 
+#, fuzzy
 #~ msgid "Media Server"
-#~ msgstr "Servidor multimedia"
+#~ msgstr "Servidor de medios"
 
+#, fuzzy
 #~ msgid ""
 #~ "Personal content can be added to your applications through a media server "
 #~ "account."
 #~ msgstr ""
-#~ "Puede añadir contenido personal a sus aplicaciones usando una cuenta en "
-#~ "un servidor multimedia."
+#~ "Se puede agregar contenido personal a sus aplicaciones a través de una "
+#~ "cuenta de servidor de medios."
 
+#, fuzzy
 #~ msgid "Available Media Servers"
-#~ msgstr "Servidores multimedia disponibles"
+#~ msgstr "Servidores de medios disponibles"
 
+#, fuzzy
 #~ msgid "No media servers found"
-#~ msgstr "No se han encontrado servidores multimedia"
+#~ msgstr "No se encontraron servidores de medios"
 
+#, fuzzy
 #~ msgid "Error connecting to Nextcloud server"
-#~ msgstr "Error al conectar al servidor de Nextcloud"
+#~ msgstr "Error al conectarse al servidor Nextcloud"
 
+#, fuzzy
 #~ msgid "Use for"
 #~ msgstr "Usar para"
 
+#, fuzzy
 #~ msgid "Error logging into the account"
-#~ msgstr "Error al iniciar sesión en la cuenta"
+#~ msgstr "Error al iniciar sesión en la cuenta"
 
+#, fuzzy
 #~ msgid "Credentials have expired"
 #~ msgstr "Las credenciales han caducado"
 
-#, c-format
+#, fuzzy, c-format
 #~ msgid "Loading “%s”…"
-#~ msgstr "Cargando «%s»…"
+#~ msgstr "Cargando “%s”…"
 
+#, fuzzy
 #~ msgid "Facebook"
 #~ msgstr "Facebook"
 
+#, fuzzy
 #~ msgid "Flickr"
 #~ msgstr "Flickr"
 
+#, fuzzy
 #~ msgid "Your system time is invalid. Check your date and time settings."
-#~ msgstr ""
-#~ "La hora de su sistema no es válida. Compruebe su configuración de fecha y "
-#~ "hora."
+#~ msgstr "La hora de su sistema no es válida. "
 
+#, fuzzy
 #~ msgid "Foursquare"
-#~ msgstr "Foursquare"
+#~ msgstr "Firme"
 
+#, fuzzy
 #~ msgid "Missing access_token or access_token_secret headers in response"
-#~ msgstr ""
-#~ "Faltan las cabeceras del «access_token» o del «access_token_secret» en la "
-#~ "respuesta"
+#~ msgstr "Faltan encabezados access_token o access_token_secret en respuesta"
 
+#, fuzzy
 #~ msgid "Error getting a Request Token: "
-#~ msgstr "Error al obtener el «token» solicitado: "
+#~ msgstr "Error al obtener un token de solicitud:"
 
-#, c-format
+#, fuzzy, c-format
 #~ msgid ""
 #~ "Expected status 200 for getting a Request Token, instead got status %d "
 #~ "(%s)"
 #~ msgstr ""
-#~ "Se esperaba un estado 200 al solicitar el «token», en su lugar se obtuvo "
-#~ "el estado %d (%s)"
+#~ "Estado esperado 200 para obtener un token de solicitud, en su lugar "
+#~ "obtuvo el estado %d (%s)"
 
+#, fuzzy
 #~ msgid "Missing request_token or request_token_secret headers in response"
 #~ msgstr ""
-#~ "Faltan las cabeceras «request_token» o «request_token_secret» en la "
-#~ "respuesta"
+#~ "Faltan encabezados request_token o request_token_secret en respuesta"
 
+#, fuzzy
 #~ msgid "Credentials do not contain access_token or access_token_secret"
-#~ msgstr ""
-#~ "Las credenciales no contienen «access_token» o «access_token_secret»"
+#~ msgstr "Las credenciales no contienen access_token o access_token_secret"
 
+#, fuzzy
 #~ msgid "Pocket"
-#~ msgstr "Pocket"
+#~ msgstr "Bolsillo"
 
+#, fuzzy
 #~ msgid "No username or access_token"
-#~ msgstr "No hay nombre de usuario o _token de acceso"
+#~ msgstr "Sin nombre de usuario ni token de acceso"
 
+#, fuzzy
 #~ msgid "Cannot resolve hostname"
-#~ msgstr "No se resolver el nombre del equipo"
+#~ msgstr "No se puede resolver el nombre de host"
 
+#, fuzzy
 #~ msgid "Cannot resolve proxy hostname"
-#~ msgstr "No se puede resolver el nombre de equipo del proxy"
+#~ msgstr "No se puede resolver el nombre de host del proxy"
 
+#, fuzzy
 #~ msgid "Could not renew identity: Not signed in"
-#~ msgstr "No se pudo renovar la identidad: no está firmada"
+#~ msgstr "No se pudo renovar la identidad: no ha iniciado sesión"
 
+#, fuzzy
 #~ msgid "Could not renew identity: "
-#~ msgstr "No se pudo renovar la identidad: "
+#~ msgstr "No se pudo renovar la identidad:"
 
+#, fuzzy
 #~ msgid "Telepathy chat account not found"
-#~ msgstr "No se puede encontrar la cuenta de Telepathy"
+#~ msgstr "Cuenta de chat de telepatía no encontrada"
 
+#, fuzzy
 #~ msgid "Failed to create a user interface for %s"
-#~ msgstr "Falló al crear una interfaz de usuario para %s"
+#~ msgstr "No se pudo crear una interfaz de usuario para %s"
 
+#, fuzzy
 #~ msgid "_OK"
-#~ msgstr "_Aceptar"
+#~ msgstr "_DE ACUERDO"
 
+#, fuzzy
 #~ msgid "Cannot save the connection parameters"
-#~ msgstr "No se pueden guardar los parámetros de la conexión"
+#~ msgstr "No se pueden guardar los parámetros de conexión."
 
+#, fuzzy
 #~ msgid "Cannot save your personal information on the server"
 #~ msgstr "No se puede guardar su información personal en el servidor"
 
+#, fuzzy
 #~ msgid "_Connection Settings"
-#~ msgstr "_Configuración de la conexión"
+#~ msgstr "_Configuración de conexión"
 
+#, fuzzy
 #~ msgid "_Personal Details"
-#~ msgstr "_Detalles personales"
+#~ msgstr "_Datos personales"
 
+#, fuzzy
 #~ msgid "Todoist"
 #~ msgstr "Todoist"
 
+#, fuzzy
 #~ msgid "Enterprise domain or realm name"
-#~ msgstr "Dominio empresarial o nombre del dominio"
+#~ msgstr "Nombre de dominio o reino empresarial"
 
+#, fuzzy
 #~ msgid "The domain is not valid"
 #~ msgstr "El dominio no es válido"
 
+#, fuzzy
 #~ msgid "org.gnome.OnlineAccounts.Mail is not available"
 #~ msgstr "org.gnome.OnlineAccounts.Mail no está disponible"
 
+#, fuzzy
 #~ msgid "Failed to parse email address"
-#~ msgstr "Falló al analizar la dirección de correo-e"
+#~ msgstr "No se pudo analizar la dirección de correo electrónico"
 
+#, fuzzy
 #~ msgid "Cannot do SMTP authentication without a domain"
-#~ msgstr "No se puede hacer una autenticación SMTP sin un dominio"
+#~ msgstr "No se puede realizar la autenticación SMTP sin un dominio"
 
+#, fuzzy
 #~ msgid "Did not find smtp-password in credentials"
-#~ msgstr "No se encontró la contraseña de SMTP en las credenciales"
+#~ msgstr "No encontré la contraseña SMTP en las credenciales"
 
+#, fuzzy
 #~ msgid "Cannot do SMTP authentication without a password"
-#~ msgstr "No se puede hacer una autenticación SMTP sin una contraseña"
+#~ msgstr "No se puede realizar la autenticación SMTP sin una contraseña"
 
+#, fuzzy
 #~ msgid "initial secret passed before secret key exchange"
-#~ msgstr "secreto inicial pasado antes del intercambio de la clave secreta"
+#~ msgstr "secreto inicial pasado antes del intercambio de clave secreta"
 
+#, fuzzy
 #~ msgid "ownCloud"
-#~ msgstr "ownCloud"
+#~ msgstr "propia nube"
 
+#, fuzzy
 #~ msgid "Did not find password with identity ‘%s’ in credentials"
-#~ msgstr ""
-#~ "No se encontró la contraseña con la identidad «%s» en las credenciales"
+#~ msgstr "No encontré la contraseña con identidad '%s' en las credenciales"
 
+#, fuzzy
 #~ msgid "Windows Live"
-#~ msgstr "Windows Live"
+#~ msgstr "ventanas vivas"
 
+#, fuzzy
 #~ msgid "Yahoo"
-#~ msgstr "Yahoo"
+#~ msgstr "yahoo"
 
+#, fuzzy
 #~ msgid "Expected status 200 when requesting name, instead got status %d (%s)"
 #~ msgstr ""
-#~ "Se esperaba un estado 200 al solicitar el nombre, en su lugar se obtuvo "
-#~ "el estado %d (%s)"
+#~ "Estado esperado 200 al solicitar el nombre, en su lugar obtuvo el estado "
+#~ "%d (%s)"
 
+#, fuzzy
 #~ msgid ""
 #~ "Paste authorization code obtained from the <a href=\"%s\">authorization "
 #~ "page</a>:"
 #~ msgstr ""
-#~ "Pegue el código de autorización obtenido en la <a href=\"%s\">página de "
+#~ "Pegue el código de autorización obtenido de la <a href=\"%s\">página de "
 #~ "autorización</a>:"
 
+#, fuzzy
 #~ msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
 #~ msgstr ""
-#~ "Pegue el «token» obtenido en la <a href=\"%s\">página de autorización</a>:"
+#~ "Pegue el token obtenido de la <a href=\"%s\">página de autorización</a>:"
 
+#, fuzzy
 #~ msgid "Time"
 #~ msgstr "Tiempo"
 
+#, fuzzy
 #~ msgid "Time to fire"
-#~ msgstr "Tiempo para la ejecución"
+#~ msgstr "hora de disparar"
 
+#, fuzzy
 #~ msgid "Twitter"
-#~ msgstr "Twitter"
+#~ msgstr "Gorjeo"
 
+#, fuzzy
 #~ msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 #~ msgstr ""
-#~ "Se esperaba el estado 200 al solicitar el guid, pero se obtuvo el estado "
-#~ "%d (%s)"
+#~ "Estado esperado 200 al solicitar guid, en su lugar obtuvo el estado %d "
+#~ "(%s)"
 
+#, fuzzy
 #~ msgid "Did not find imap-password with identity `%s' in credentials"
 #~ msgstr ""
-#~ "No se encontró la contraseña de IMAP con la identidad «%s» en las "
-#~ "credenciales"
+#~ "No encontré la contraseña imap con identidad \"%s\" en las credenciales"
 
+#, fuzzy
 #~ msgid "Invalid imap-password with username `%s' (%s, %d): "
-#~ msgstr ""
-#~ "Contraseña de IMAP incorrecta para el nombre de usuario «%s» (%s, %d): "
+#~ msgstr "Contraseña imap no válida con nombre de usuario `%s' (%s, %d):"
 
+#, fuzzy
 #~ msgid "Did not find smtp-password with identity `%s' in credentials"
 #~ msgstr ""
-#~ "No se encontró la contraseña de SMTP con la identidad «%s» en las "
-#~ "credenciales"
+#~ "No encontré la contraseña SMTP con identidad \"%s\" en las credenciales"
 
+#, fuzzy
 #~ msgid "Invalid smtp-password with username `%s' (%s, %d): "
-#~ msgstr ""
-#~ "Contraseña de SMTP incorrecta para el nombre de usuario «%s» (%s, %d): "
+#~ msgstr "Contraseña SMTP no válida con nombre de usuario `%s' (%s, %d):"
 
+#, fuzzy
 #~ msgid "Failed to find Autodiscover element"
-#~ msgstr "Falló al buscar el elemento «Autodiscover»"
+#~ msgstr "No se pudo encontrar el elemento de detección automática"
 
+#, fuzzy
 #~ msgid "Failed to find Account element"
-#~ msgstr "Falló al buscar el elemento «Account»"
+#~ msgstr "No se pudo encontrar el elemento Cuenta"
 
+#, fuzzy
 #~ msgid "Provides the org.gnome.OnlinesAccounts name on the session bus"
 #~ msgstr ""
-#~ "Proporciona el nombre org.gnome.OnlinesAccounts en el bus de la sesión"
+#~ "Proporciona el nombre de org.gnome.OnlinesAccounts en el bus de sesión."
 
+#, fuzzy
 #~ msgid "An online account needs attention"
-#~ msgstr "Una cuenta en línea necesita su atención"
+#~ msgstr "Una cuenta en línea necesita atención"
 
+#, fuzzy
 #~ msgid "Open Online Accounts..."
-#~ msgstr "Abrir cuentas en línea…"
+#~ msgstr "Abrir cuentas en línea..."
 
+#, fuzzy
 #~ msgid "Error parsing response as JSON: "
-#~ msgstr "Error al analizar la respuesta como JSON: "
+#~ msgstr "Error al analizar la respuesta como JSON:"
 
+#, fuzzy
 #~ msgid "Didn't find id member in JSON data"
-#~ msgstr "No se encontró el miembro «id» en los datos JSON"
+#~ msgstr "No encontré el miembro de identificación en los datos JSON"
 
+#, fuzzy
 #~ msgid "Didn't find email member in JSON data"
-#~ msgstr "No se encontró el correo-e del miembro en los datos JSON"
+#~ msgstr "No encontré miembro de correo electrónico en los datos JSON"
 
+#, fuzzy
 #~ msgid "Didn't find user member in JSON data"
-#~ msgstr "No se encontró miembro «user» en los datos JSON"
+#~ msgstr "No encontré miembro de usuario en los datos JSON"
 
+#, fuzzy
 #~ msgid "Didn't find user.id member in JSON data"
-#~ msgstr "No se encontró el miembro user.id member en los datos JSON"
+#~ msgstr "No encontré el miembro user.id en los datos JSON"
 
+#, fuzzy
 #~ msgid "Didn't find user.username member in JSON data"
-#~ msgstr "No se encontró el miembro user.username en los datos JSON"
+#~ msgstr "No encontré el miembro usuario.nombre de usuario en los datos JSON"
 
+#, fuzzy
 #~ msgid "Didn't find user.username._content member in JSON data"
-#~ msgstr "No se encontró el miembro user.username._content en los datos JSON"
+#~ msgstr "No encontré el miembro user.username._content en los datos JSON"
 
+#, fuzzy
 #~ msgid "Didn't find access_token in non-JSON data"
-#~ msgstr "No se encontró el «access_token» en los datos que no eran JSON"
+#~ msgstr "No encontré access_token en datos que no son JSON"
 
+#, fuzzy
 #~ msgid "Didn't find access_token in JSON data"
-#~ msgstr "No se encontró el «access_token» en los datos JSON"
+#~ msgstr "No encontré access_token en los datos JSON"
 
+#, fuzzy
 #~ msgid "Didn't find id_str member in JSON data"
-#~ msgstr "No se encontró el miembro «id_str» en los datos JSON"
+#~ msgstr "No encontré el miembro id_str en los datos JSON"
 
+#, fuzzy
 #~ msgid "Didn't find screen_name member in JSON data"
-#~ msgstr "No se encontró el miembro «screen_name» en los datos JSON"
+#~ msgstr "No encontré el miembro screen_name en los datos JSON"
 
+#, fuzzy
 #~ msgid "Didn't find account email member in JSON data"
-#~ msgstr "No se encontró la cuenta de correo-e del miembro en los datos JSON"
+#~ msgstr ""
+#~ "No encontré el miembro de correo electrónico de la cuenta en los datos "
+#~ "JSON"
 
+#, fuzzy
 #~ msgid "Didn't find guid member in JSON data"
-#~ msgstr "No se encontró el miembro «guid» en los datos JSON"
+#~ msgstr "No encontré miembro guid en datos JSON"
 
+#, fuzzy
 #~ msgid "Didn't find value member in JSON data"
-#~ msgstr "No se encontró el miembro de valor en los datos JSON"
+#~ msgstr "No encontré miembro de valor en datos JSON"
 
+#, fuzzy
 #~ msgid "Error parsing usercard response as JSON: "
 #~ msgstr "Error al analizar la respuesta de la tarjeta de usuario como JSON:"
 
+#, fuzzy
 #~ msgid "Didn't find profile member in JSON data"
-#~ msgstr "No se encontró el miembro de perfil en los datos JSON"
+#~ msgstr "No encontré miembro del perfil en los datos JSON"
 
+#, fuzzy
 #~ msgid "Didn't find nickname member in JSON data"
-#~ msgstr "No se encontró el apodo del miembro en los datos JSON"
+#~ msgstr "No encontré miembro de apodo en los datos JSON"
 
+#, fuzzy
 #~ msgid "Credentials not found in keyring (%s, %d): "
-#~ msgstr ""
-#~ "No se encontraron las credenciales en el depósito de claves (%s, %d): "
+#~ msgstr "Credenciales no encontradas en el llavero (%s, %d):"
 
+#, fuzzy
 #~ msgid "Error storing credentials in keyring (%s, %d): "
 #~ msgstr ""
-#~ "Error al almacenar las credenciales en el depósito de claves (%s, %d): "
+#~ "Error al almacenar las credenciales en el conjunto de claves (%s, %d):"
 
+#, fuzzy
 #~ msgid "Domain Administrator Login"
-#~ msgstr "Inicio de sesión del administrador del dominio"
+#~ msgstr "Inicio de sesión de administrador de dominio"
 
+#, fuzzy
 #~ msgid "Could not find supported credentials"
-#~ msgstr "No se pudieron encontrar credenciales soportadas"
+#~ msgstr "No se pudieron encontrar credenciales admitidas"
 
+#, fuzzy
 #~ msgid ""
 #~ "In order to use this enterprise identity, the computer needs to be "
 #~ "enrolled in the domain. Please have your network administrator type their "
 #~ "domain password here."
 #~ msgstr ""
-#~ "Para usar la identidad empresarial, el equipo debe formar parte del "
-#~ "dominio. Pida al administrador de su red que escriba aquí la contraseña "
-#~ "del dominio."
+#~ "Para utilizar esta identidad empresarial, la computadora debe estar "
+#~ "inscrita en el dominio. "
 
+#, fuzzy
 #~ msgid ""
 #~ "In order to use this enterprise identity, the computer needs to be "
 #~ "enrolled in the domain. Please have your network administrator type their "
 #~ "domain username here."
 #~ msgstr ""
-#~ "Para usar la identidad empresarial, el equipo debe formar parte del "
-#~ "dominio. Pida al administrador de su red que escriba aquí el nombre de "
-#~ "usuario del dominio."
+#~ "Para utilizar esta identidad empresarial, la computadora debe estar "
+#~ "inscrita en el dominio. "
 
+#, fuzzy
 #~ msgid "No such domain or realm found"
-#~ msgstr "No existe el dominio o no se encontró"
+#~ msgstr "No se ha encontrado ningún dominio o reino"
 
+#, fuzzy
 #~ msgid "Cannot log in as %s at the %s domain"
-#~ msgstr "No se puede iniciar sesión como %s en el dominio %s"
+#~ msgstr "No puedo iniciar sesión como %s en el dominio %s"
 
+#, fuzzy
 #~ msgid "Invalid password, please try again"
-#~ msgstr "Contraseña incorrecta, inténtelo de nuevo"
+#~ msgstr "Contraseña no válida, por favor inténtalo de nuevo"
 
+#, fuzzy
 #~ msgid "Couldn't connect to the %s domain: %s"
 #~ msgstr "No se pudo conectar al dominio %s: %s"
 
+#, fuzzy
 #~ msgid "Chat"
-#~ msgstr "Chat"
+#~ msgstr "Charlar"
 
+#, fuzzy
 #~ msgid "Didn't find data member in JSON data"
-#~ msgstr "No se encontraron los datos del miembro en los datos JSON"
+#~ msgstr "No encontré miembro de datos en datos JSON"
 
+#, fuzzy
 #~ msgid "New Microsoft Exchange Account"
 #~ msgstr "Nueva cuenta de Microsoft Exchange"
 
+#, fuzzy
 #~ msgid "New Enterprise Login (Kerberos)"
 #~ msgstr "Nuevo inicio de sesión empresarial (Kerberos)"
 
+#, fuzzy
 #~ msgid "Add %s"
-#~ msgstr "Añadir %s"
+#~ msgstr "Agregar %s"
 
+#, fuzzy
 #~ msgid "Refresh %s"
 #~ msgstr "Actualizar %s"
 
+#, fuzzy
 #~ msgid "Email _Address"
-#~ msgstr "_Dirección de correo-e"
+#~ msgstr "Dirección de correo electrónico"
 
+#, fuzzy
 #~ msgid "There is already an account for the identity %s"
 #~ msgstr "Ya existe una cuenta para la identidad %s"
 
+#, fuzzy
 #~ msgid "User Name"
 #~ msgstr "Nombre de usuario"
 
+#, fuzzy
 #~ msgid "Didn't find name member in JSON data"
-#~ msgstr "No se encontró el nombre del miembro en los datos JSON"
+#~ msgstr "No encontré el nombre del miembro en los datos JSON"
 
+#, fuzzy
 #~ msgid "Expected 200 for getting a Request Token, got %d (%s)"
-#~ msgstr ""
-#~ "Se esperaba un estado 200 para obtener un «token» de solicitud, se obtuvo "
-#~ "el estado %d (%s)"
+#~ msgstr "Se esperaban 200 para obtener un token de solicitud, obtuve %d (%s)"
