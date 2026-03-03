@@ -4,286 +4,215 @@
 # Abdalrahim G. Fakhouri <abdilra7eem@yahoo.com>, 2011.
 # Anass Ahmed <anass[dot]1430[at]Gmail[dot]com>, 2011.
 # Khaled Hosny <khaledhosny@eglug.org>, 2012, 2013, 2015, 2018.
+# Ali Aljishi <ahj696@hotmail.com>, 2022.
+# Ahmed Najmawi <iramosu@protonmail.com>, 2025.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
-"issues\n"
-"POT-Creation-Date: 2018-07-19 15:36+0000\n"
-"PO-Revision-Date: 2018-08-20 14:58+0300\n"
-"Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/issues\n"
+"POT-Creation-Date: 2025-07-02 20:18+0000\n"
+"PO-Revision-Date: 2025-07-10 02:39+0300\n"
+"Last-Translator: Ahmed Najmawi <iramosu@protonmail.com>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Virtaal 1.0.0-beta1\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && "
+"n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Poedit 3.6\n"
 "X-Project-Style: gnome\n"
 
 #: data/org.gnome.online-accounts.gschema.xml:6
 msgid "List of providers that are allowed to be loaded"
-msgstr ""
+msgstr "قائمة الموفِّرين المسموح بتحميلهم"
 
 #: data/org.gnome.online-accounts.gschema.xml:7
 msgid ""
-"A list of strings representing the providers that are allowed to be loaded "
-"(default: 'all'). This is only evaluated on startup."
+"A list of strings representing the providers that are allowed to be loaded (default: "
+"'all'). This is only evaluated on startup. Deprecated: use goa.conf in the system "
+"config directory instead, with a key [providers] enable=all instead. The key is "
+"comma-separated list of the provider names."
 msgstr ""
+"قائمة سلاسل تمثِّل الموفرِّين الذين يُسمح تحميلهم (الإعداد المبدئي: «الكل»). يُقيَّم هذا عند "
+"البدء فقط. مهجور: استخدم goa.conf في دليل إعدادات النظام بدلًا من ذلك، ومع مفتاح "
+"[providers] enable=all بدلاً عنه. المفتاح هو قائمة مفصولة بالفواصل لأسماء موفري "
+"الخدمات."
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1131 src/daemon/goadaemon.c:1415
+#: src/daemon/goadaemon.c:1162 src/daemon/goadaemon.c:1482
 #, c-format
 msgid "Failed to find a provider for: %s"
-msgstr "فشل العثور على مُزوّد: %s"
+msgstr "تعذَّر العثور على موفِّر لـ: %s"
 
-#: src/daemon/goadaemon.c:1358
+#: src/daemon/goadaemon.c:1425
 msgid "IsLocked property is set for account"
-msgstr ""
+msgstr "خاصية IsLocked معيَّنة للحساب"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1403
+#: src/daemon/goadaemon.c:1470
 msgid "ProviderType property is not set for account"
-msgstr ""
+msgstr "خاصية ProviderType غير معيَّنة للحساب"
+
+#: src/daemon/goadaemon.c:1632
+#, c-format
+msgid "Failed to sign in to “%s”"
+msgstr "تعذَّر الولوج إلى «%s»"
+
+#: src/daemon/goadaemon.c:1637
+msgid "Failed to sign in to multiple accounts"
+msgstr "تعذَّر الولوج إلى حسابات متعددة"
+
+#: src/daemon/goadaemon.c:1646
+msgid "Online Accounts"
+msgstr "حسابات الإنترنت"
+
+#: src/daemon/goadaemon.c:1649
+msgid "Account Action Required"
+msgstr "يتطلَّب إجراء للحساب"
+
+#: src/goabackend/goaauthflowbutton.c:148 src/goabackend/goaproviderdialog.c:840
+msgid "_Sign In…"
+msgstr "_لِج…"
+
+#: src/goabackend/goaauthflowbutton.c:162
+msgid "_Copy Link"
+msgstr "ا_نسخ المسار"
+
+#: src/goabackend/goaauthflowbutton.c:173
+msgid "Copy the authorization URL to continue with a specific web browser."
+msgstr "انسخ مسار الاستيثاق للاستمرار في متصفح وِب معيَّن."
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:238
+#: src/goabackend/goadavclient.c:1209 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goasmtpauth.c:102 src/goabackend/goautils.c:802
+msgid "Authentication failed"
+msgstr "تعذَّر الاستيثاق"
+
+#: src/goabackend/goadavclient.c:1216
+msgid "Cannot find WebDAV endpoint"
+msgstr "تعذَّر العثور على نقطة نهاية WebDAV"
+
+#: src/goabackend/goadavclient.c:1329 src/goabackend/goawebdavprovider.c:648
+#, c-format
+msgid "Invalid URI: %s"
+msgstr "المعرِّف النظامي للموارد (URI) غير صالح: %s"
+
+#. TODO: more specific
+#: src/goabackend/goaewsclient.c:278
 msgid "Failed to parse autodiscover response XML"
-msgstr ""
+msgstr "تعذَّر تحليل XML الكشف الآلي"
 
 #. TODO: more specific
 #. Translators: the parameter is an XML element name.
-#: src/goabackend/goaewsclient.c:249 src/goabackend/goaewsclient.c:264
-#: src/goabackend/goaewsclient.c:279
+#: src/goabackend/goaewsclient.c:289 src/goabackend/goaewsclient.c:304
+#: src/goabackend/goaewsclient.c:319
 #, c-format
 msgid "Failed to find “%s” element"
-msgstr ""
+msgstr "تعذَّر العثور على العنصر «%s»"
 
 #. TODO: more specific
-#: src/goabackend/goaewsclient.c:300
-msgid "Failed to find ASUrl and OABUrl in autodiscover response"
-msgstr ""
+#: src/goabackend/goaewsclient.c:340
+msgid "Failed to find ASUrl in autodiscover response"
+msgstr "تعذَّر العثور على ASUrl في إجابة الكشف الآلي"
 
-#: src/goabackend/goaexchangeprovider.c:51
+#: src/goabackend/goaexchangeprovider.c:52
 msgid "Microsoft Exchange"
-msgstr "ميكروسوفت إكستشينج"
+msgstr "مايكروسوفت إكستشينج"
 
 #. Translators: the first %s is the username
 #. * (eg., debarshi.ray@gmail.com or rishi), and the
 #. * (%s, %d) is the error domain and code.
 #.
-#: src/goabackend/goaexchangeprovider.c:248
-#: src/goabackend/goalastfmprovider.c:287
-#: src/goabackend/goaowncloudprovider.c:291
+#: src/goabackend/goaexchangeprovider.c:258 src/goabackend/goawebdavprovider.c:304
 #, c-format
-#| msgid "Invalid password with username ‘%s’ (%s, %d): "
 msgid "Invalid password with username “%s” (%s, %d): "
-msgstr "كلمة سر غير صحيحة لاسم المستخدم ”%s“ ‏(%s،‏ %d):"
+msgstr "كلمة سر غير صحيحة لاسم المستخدم «%s» ‏(%s،‏ %d): "
 
-#: src/goabackend/goaexchangeprovider.c:396
-#: src/goabackend/goaimapsmtpprovider.c:647
-msgid "_E-mail"
-msgstr "بريد إل_كتروني"
+#. provider name
+#: src/goabackend/goaexchangeprovider.c:389
+msgid ""
+"Connect to a Microsoft Exchange provider to access calendars, contacts and files"
+msgstr "اتَّصل بموفِّر مايكروسوفت إكستشينج للنفاذ إلى التقويمات، والمتراسلين، والملفات"
 
-#: src/goabackend/goaexchangeprovider.c:397
-#: src/goabackend/goaimapsmtpprovider.c:667
-#: src/goabackend/goaimapsmtpprovider.c:687
-#: src/goabackend/goalastfmprovider.c:429
-#: src/goabackend/goaowncloudprovider.c:530
+#: src/goabackend/goaexchangeprovider.c:392 src/goabackend/goaimapsmtpprovider.c:701
+msgid "_Email"
+msgstr "البريد إل_كتروني"
+
+#: src/goabackend/goaexchangeprovider.c:393 src/goabackend/goafedoraprovider.c:171
+#: src/goabackend/goaimapsmtpprovider.c:702 src/goabackend/goaimapsmtpprovider.c:745
+#: src/goabackend/goaimapsmtpprovider.c:789 src/goabackend/goawebdavprovider.c:408
 msgid "_Password"
-msgstr "كلمة ال_سر"
+msgstr "_كلمة السر"
 
-#: src/goabackend/goaexchangeprovider.c:400
-msgid "_Custom"
-msgstr "_مُخصَّص"
+#: src/goabackend/goaexchangeprovider.c:394
+msgid ""
+"Exchange account details will be auto-detected from your email address when possible"
+msgstr "ستُكتشف تفاصيل حساب إكستشينج آليا من خلال بريدك الإلكتروني حينما أمكن ذلك"
 
-#: src/goabackend/goaexchangeprovider.c:411
-#: src/goabackend/goaimapsmtpprovider.c:666
-#: src/goabackend/goaimapsmtpprovider.c:686
-#: src/goabackend/goalastfmprovider.c:428
-#: src/goabackend/goaowncloudprovider.c:529
+#: src/goabackend/goaexchangeprovider.c:405
+msgid "Account Details"
+msgstr "تفاصيل الحساب"
+
+#: src/goabackend/goaexchangeprovider.c:406 src/goabackend/goafedoraprovider.c:170
+#: src/goabackend/goaimapsmtpprovider.c:744 src/goabackend/goaimapsmtpprovider.c:788
+#: src/goabackend/goawebdavprovider.c:407
 msgid "User_name"
 msgstr "اسم ال_مستخدم"
 
-#: src/goabackend/goaexchangeprovider.c:412
-#: src/goabackend/goaowncloudprovider.c:528
-msgid "_Server"
-msgstr "ال_خادوم"
+#: src/goabackend/goaexchangeprovider.c:407
+msgid "_Domain"
+msgstr "الن_طاق"
 
-#. --
-#: src/goabackend/goaexchangeprovider.c:422
-#: src/goabackend/goaimapsmtpprovider.c:699
-#: src/goabackend/goakerberosprovider.c:563
-#: src/goabackend/goalastfmprovider.c:437
-#: src/goabackend/goaowncloudprovider.c:544
-msgid "_Cancel"
-msgstr "أ_لغِ"
+#: src/goabackend/goaexchangeprovider.c:408
+msgid "Example domain: example.com"
+msgstr "مثال لنطاق: example.com"
 
-#: src/goabackend/goaexchangeprovider.c:423
-#: src/goabackend/goakerberosprovider.c:564
-#: src/goabackend/goalastfmprovider.c:438
-#: src/goabackend/goaowncloudprovider.c:545
-msgid "C_onnect"
-msgstr "ا_تّصل"
+#: src/goabackend/goafedoraprovider.c:51
+msgid "Fedora"
+msgstr "فيدورا"
 
-#: src/goabackend/goaexchangeprovider.c:439
-#: src/goabackend/goaimapsmtpprovider.c:715
-#: src/goabackend/goakerberosprovider.c:579
-#: src/goabackend/goalastfmprovider.c:454
-#: src/goabackend/goaowncloudprovider.c:560
-msgid "Connecting…"
-msgstr "يتّصل…"
+#: src/goabackend/goafedoraprovider.c:167 src/goabackend/goakerberosprovider.c:598
+msgid "Access restricted web and network resources for your organization"
+msgstr "قُيِّد الوصول إلى موارد الوِب والشابكة لمنظمتك"
 
-#: src/goabackend/goaexchangeprovider.c:539
-#: src/goabackend/goaexchangeprovider.c:733
-#: src/goabackend/goaimapsmtpprovider.c:865
-#: src/goabackend/goaimapsmtpprovider.c:900
-#: src/goabackend/goaimapsmtpprovider.c:992
-#: src/goabackend/goaimapsmtpprovider.c:1249
-#: src/goabackend/goaimapsmtpprovider.c:1325
-#: src/goabackend/goakerberosprovider.c:896
-#: src/goabackend/goalastfmprovider.c:652
-#: src/goabackend/goalastfmprovider.c:820
-#: src/goabackend/goamediaserverprovider.c:420
-#: src/goabackend/goaoauth2provider.c:995 src/goabackend/goaoauthprovider.c:859
-#: src/goabackend/goaowncloudprovider.c:663
-#: src/goabackend/goaowncloudprovider.c:883
-msgid "Dialog was dismissed"
-msgstr "أُغلقت نافذة الحوار"
-
-#: src/goabackend/goaexchangeprovider.c:577
-#: src/goabackend/goaexchangeprovider.c:761
-#: src/goabackend/goaimapsmtpprovider.c:933
-#: src/goabackend/goaimapsmtpprovider.c:1030
-#: src/goabackend/goaimapsmtpprovider.c:1276
-#: src/goabackend/goaimapsmtpprovider.c:1353
-#: src/goabackend/goalastfmprovider.c:686
-#: src/goabackend/goalastfmprovider.c:839
-#: src/goabackend/goaowncloudprovider.c:708
-#: src/goabackend/goaowncloudprovider.c:910
+#: src/goabackend/goafedoraprovider.c:339
 #, c-format
-msgid "Dialog was dismissed (%s, %d): "
-msgstr "أُغلقت نافذة الحوار (%s،‏ %d):"
+msgid "Failed to get principal from user name “%s”"
+msgstr "تعذَّر الحصول على الأساس من اسم المستخدم «%s»"
 
-#: src/goabackend/goaexchangeprovider.c:590
-#: src/goabackend/goaimapsmtpprovider.c:946
-#: src/goabackend/goaimapsmtpprovider.c:1043
-#: src/goabackend/goaowncloudprovider.c:721
-msgid "_Ignore"
-msgstr "_تجاهل"
-
-#: src/goabackend/goaexchangeprovider.c:595
-#: src/goabackend/goaexchangeprovider.c:780
-#: src/goabackend/goaimapsmtpprovider.c:951
-#: src/goabackend/goaimapsmtpprovider.c:1048
-#: src/goabackend/goaimapsmtpprovider.c:1295
-#: src/goabackend/goaimapsmtpprovider.c:1372
-#: src/goabackend/goakerberosprovider.c:981
-#: src/goabackend/goalastfmprovider.c:698
-#: src/goabackend/goalastfmprovider.c:856
-#: src/goabackend/goaowncloudprovider.c:726
-#: src/goabackend/goaowncloudprovider.c:929
-msgid "_Try Again"
-msgstr "أ_عد المحاولة"
-
-#: src/goabackend/goaexchangeprovider.c:600
-#: src/goabackend/goaexchangeprovider.c:773
-msgid "Error connecting to Microsoft Exchange server"
-msgstr "عطل أثناء الاتصال بخادوم ميكروسوفت إكستشينج"
-
-#: src/goabackend/goafacebookprovider.c:56
-msgid "Facebook"
-msgstr "فيسبوك"
-
-#: src/goabackend/goafacebookprovider.c:183
-#: src/goabackend/goaflickrprovider.c:155
-#: src/goabackend/goafoursquareprovider.c:154
-#: src/goabackend/goagoogleprovider.c:183
-#: src/goabackend/goatodoistprovider.c:193
-#: src/goabackend/goawindowsliveprovider.c:159
-#, c-format
-msgid ""
-"Expected status 200 when requesting your identity, instead got status %d (%s)"
-msgstr ""
-"النتيجة المتوقعة عند طلب المعرّف هي 200؛ عوضاً عن هذا، تم الحصول على النتيجة %d"
-" ‏(%s)"
-
-#. TODO: more specific
-#: src/goabackend/goafacebookprovider.c:202
-#: src/goabackend/goafacebookprovider.c:213
-#: src/goabackend/goafacebookprovider.c:219
-#: src/goabackend/goaflickrprovider.c:174
-#: src/goabackend/goaflickrprovider.c:185
-#: src/goabackend/goaflickrprovider.c:196
-#: src/goabackend/goaflickrprovider.c:205
-#: src/goabackend/goaflickrprovider.c:218
-#: src/goabackend/goafoursquareprovider.c:173
-#: src/goabackend/goafoursquareprovider.c:184
-#: src/goabackend/goafoursquareprovider.c:195
-#: src/goabackend/goafoursquareprovider.c:206
-#: src/goabackend/goafoursquareprovider.c:215
-#: src/goabackend/goafoursquareprovider.c:228
-#: src/goabackend/goagoogleprovider.c:202
-#: src/goabackend/goagoogleprovider.c:213
-#: src/goabackend/goalastfmprovider.c:212
-#: src/goabackend/goalastfmprovider.c:221
-#: src/goabackend/goalastfmprovider.c:230
-#: src/goabackend/goalastfmprovider.c:238
-#: src/goabackend/goalastfmprovider.c:244
-#: src/goabackend/goalastfmprovider.c:512
-#: src/goabackend/goalastfmprovider.c:521
-#: src/goabackend/goalastfmprovider.c:538
-#: src/goabackend/goalastfmprovider.c:544
-#: src/goabackend/goaoauth2provider.c:656
-#: src/goabackend/goaoauth2provider.c:686
-#: src/goabackend/goaoauth2provider.c:697
-#: src/goabackend/goatodoistprovider.c:212
-#: src/goabackend/goatodoistprovider.c:223
-#: src/goabackend/goatodoistprovider.c:234 src/goabackend/goautils.c:273
-#: src/goabackend/goawindowsliveprovider.c:178
-#: src/goabackend/goawindowsliveprovider.c:189
-#: src/goabackend/goawindowsliveprovider.c:198
-#: src/goabackend/goawindowsliveprovider.c:211
-msgid "Could not parse response"
-msgstr "تعذّر تحليل الاستجابة"
-
-#: src/goabackend/goaflickrprovider.c:56
-msgid "Flickr"
-msgstr "فلِكَر"
-
-#: src/goabackend/goaflickrprovider.c:271
-msgid "Your system time is invalid. Check your date and time settings."
-msgstr "وقت النظام غير صحيح. راجع إعدادات الوقت والتاريخ."
-
-#: src/goabackend/goafoursquareprovider.c:57
-msgid "Foursquare"
-msgstr "Foursquare"
-
-#: src/goabackend/goagoogleprovider.c:56
+#: src/goabackend/goagoogleprovider.c:57
 msgid "Google"
 msgstr "جوجل"
 
+#: src/goabackend/goagoogleprovider.c:211 src/goabackend/goamsgraphprovider.c:185
+#, c-format
+msgid "Expected status 200 when requesting your identity, instead got status %d (%s)"
+msgstr ""
+"النتيجة المتوقعة عند طلب المعرِّف هي 200؛ عوضًا عن هذا، فقد حُصل على النتيجة %d ‏(%s)"
+
 #. TODO: more specific
-#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goasmtpauth.c:155
+#: src/goabackend/goagoogleprovider.c:230 src/goabackend/goagoogleprovider.c:241
+#: src/goabackend/goamsgraphprovider.c:204 src/goabackend/goamsgraphprovider.c:215
+#: src/goabackend/goamsgraphprovider.c:228 src/goabackend/goamsgraphprovider.c:255
+#: src/goabackend/goaoauth2provider.c:687 src/goabackend/goaoauth2provider.c:744
+#: src/goabackend/goaoauth2provider.c:774 src/goabackend/goaoauth2provider.c:785
+#: src/goabackend/goautils.c:136
+msgid "Could not parse response"
+msgstr "تعذَّر تحليل الاستجابة"
+
+#. TODO: more specific
+#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goaoauth2provider.c:1268
+#: src/goabackend/goasmtpauth.c:149
 msgid "Service not available"
 msgstr "الخدمة غير متوفرة"
 
-#. TODO: more specific
-#: src/goabackend/goaimapauthlogin.c:104 src/goabackend/goalastfmprovider.c:529
-#: src/goabackend/goasmtpauth.c:108 src/goabackend/goautils.c:838
-msgid "Authentication failed"
-msgstr "فشل الاستيثاق"
-
-#: src/goabackend/goaimapauthlogin.c:129
-msgid "Server does not support PLAIN"
-msgstr "لا يدعم الخادوم PLAIN"
-
-#: src/goabackend/goaimapauthlogin.c:181 src/goabackend/goasmtpauth.c:606
+#: src/goabackend/goaimapauthlogin.c:166 src/goabackend/goasmtpauth.c:625
 msgid "Server does not support STARTTLS"
 msgstr "لا يدعم الخادوم STARTTLS"
 
-#: src/goabackend/goaimapsmtpprovider.c:53
+#: src/goabackend/goaimapsmtpprovider.c:55
 msgid "IMAP and SMTP"
 msgstr "IMAP و SMTP"
 
@@ -297,538 +226,668 @@ msgstr "IMAP و SMTP"
 #. * username (eg., rishi), and the (%s, %d)
 #. * is the error domain and code.
 #.
-#: src/goabackend/goaimapsmtpprovider.c:327
-#: src/goabackend/goaimapsmtpprovider.c:378
+#: src/goabackend/goaimapsmtpprovider.c:320 src/goabackend/goaimapsmtpprovider.c:369
 #, c-format
-#| msgid "Invalid %s with username ‘%s’ (%s, %d): "
 msgid "Invalid %s with username “%s” (%s, %d): "
-msgstr "‏%s غير صحيح لاسم المستخدم ”%s“ ‏(%s،‏ %d):"
+msgstr "%s غير صالح لاسم المستخدم «%s» ‏(%s،‏ %d): "
 
-#. Translators: the following four strings are used to show a
-#. * combo box similar to the one in the evolution module.
-#. * Encryption: None
-#. *             STARTTLS after connecting
-#. *             SSL on a dedicated port
-#.
-#: src/goabackend/goaimapsmtpprovider.c:564
-msgid "_Encryption"
-msgstr "الت_عمية"
+#: src/goabackend/goaimapsmtpprovider.c:566 src/goabackend/goaimapsmtpprovider.c:589
+#: src/goabackend/goaimapsmtpprovider.c:724 src/goabackend/goaimapsmtpprovider.c:765
+#: src/goabackend/goaimapsmtpprovider.c:809
+msgid "Auto-detected"
+msgstr "مُكتشَف آليًا"
 
-#: src/goabackend/goaimapsmtpprovider.c:567
-msgid "None"
-msgstr "لا شيء"
+#: src/goabackend/goaimapsmtpprovider.c:618
+msgid "Unable to auto-detect IMAP and SMTP settings"
+msgstr "تعذَّر اكتشاف إعدادات IMAP وSMTP آليًا"
 
-#: src/goabackend/goaimapsmtpprovider.c:570
+#: src/goabackend/goaimapsmtpprovider.c:689
 msgid "STARTTLS after connecting"
-msgstr ""
+msgstr "بعد الاتصال STARTTLS"
 
-#: src/goabackend/goaimapsmtpprovider.c:573
+#. GOA_TLS_TYPE_STARTTLS
+#: src/goabackend/goaimapsmtpprovider.c:690
 msgid "SSL on a dedicated port"
-msgstr ""
+msgstr "على المنفذ المُكرَّس SSL"
 
-#: src/goabackend/goaimapsmtpprovider.c:648
+#: src/goabackend/goaimapsmtpprovider.c:695 src/goabackend/goaimapsmtpprovider.c:1435
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+#: src/goabackend/goaimapsmtpprovider.c:696
+msgid "Connect to an email account"
+msgstr "اتَّصل بحساب بريد إلكتروني"
+
+#: src/goabackend/goaimapsmtpprovider.c:700
 msgid "_Name"
 msgstr "الا_سم"
 
-#: src/goabackend/goaimapsmtpprovider.c:665
+#: src/goabackend/goaimapsmtpprovider.c:703
+msgid ""
+"IMAP and SMTP details will be auto-detected from your service provider when possible"
+msgstr "ستكتشف تفاصيل IMAP وSMTP آليًا من خلال موفِّر خدمتك حينما أمكن ذلك"
+
+#. IMAP
+#: src/goabackend/goaimapsmtpprovider.c:742
+msgid "IMAP Settings"
+msgstr "إعدادات IMAP"
+
+#: src/goabackend/goaimapsmtpprovider.c:743
 msgid "IMAP _Server"
 msgstr "_خادوم IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:685
+#: src/goabackend/goaimapsmtpprovider.c:754 src/goabackend/goaimapsmtpprovider.c:798
+msgid "Encryption"
+msgstr "التعمية"
+
+#: src/goabackend/goaimapsmtpprovider.c:779
+msgid "Example server: imap.example.com"
+msgstr "مثال لخادوم: imap.example.com"
+
+#. SMTP
+#: src/goabackend/goaimapsmtpprovider.c:786
+msgid "SMTP Settings"
+msgstr "إعدادات SMTP"
+
+#: src/goabackend/goaimapsmtpprovider.c:787
 msgid "SMTP _Server"
 msgstr "_خادوم SMTP"
 
-#: src/goabackend/goaimapsmtpprovider.c:700
-#: src/goabackend/goaimapsmtpprovider.c:972
-#: src/goabackend/goaimapsmtpprovider.c:1305
-msgid "_Forward"
-msgstr "للأ_مام"
+#: src/goabackend/goaimapsmtpprovider.c:823
+msgid "Example server: smtp.example.com"
+msgstr "مثال لخادوم: smtp.example.com"
 
-#: src/goabackend/goaimapsmtpprovider.c:956
-#: src/goabackend/goaimapsmtpprovider.c:1288
-msgid "Error connecting to IMAP server"
-msgstr "عطل أثناء الاتصال بخادوم IMAP"
-
-#: src/goabackend/goaimapsmtpprovider.c:1053
-#: src/goabackend/goaimapsmtpprovider.c:1365
-msgid "Error connecting to SMTP server"
-msgstr "عطل أثناء الاتصال بخادوم SMTP"
-
-#: src/goabackend/goaimapsmtpprovider.c:1476
-msgid "E-mail"
-msgstr "البريد الإلكتروني"
-
-#: src/goabackend/goaimapsmtpprovider.c:1480
+#: src/goabackend/goaimapsmtpprovider.c:1426
 msgid "Name"
 msgstr "الاسم"
 
-#: src/goabackend/goaimapsmtpprovider.c:1490
-#: src/goabackend/goaimapsmtpprovider.c:1494
+#: src/goabackend/goaimapsmtpprovider.c:1452
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1505
-#: src/goabackend/goaimapsmtpprovider.c:1509
+#: src/goabackend/goaimapsmtpprovider.c:1470
 msgid "SMTP"
 msgstr "SMTP"
 
-#: src/goabackend/goakerberosprovider.c:100
-msgid "Enterprise Login (Kerberos)"
-msgstr "ولوج المؤسسات"
+#: src/goabackend/goakerberosprovider.c:80
+msgid "Kerberos"
+msgstr "كيربيروس"
 
-#: src/goabackend/goakerberosprovider.c:220
-msgid "Ticketing is disabled for account"
-msgstr ""
-
-#: src/goabackend/goakerberosprovider.c:245
-#, fuzzy, c-format
-msgid "Could not find saved credentials for principal “%s” in keyring"
-msgstr "أوراق اعتماد GOA %s للهوية %s"
-
-#: src/goabackend/goakerberosprovider.c:258
-#, c-format
-msgid "Did not find password for principal “%s” in credentials"
-msgstr ""
-
-#: src/goabackend/goakerberosprovider.c:558
-msgid "_Principal"
-msgstr ""
-
-#: src/goabackend/goakerberosprovider.c:744
+#: src/goabackend/goakerberosprovider.c:425
 msgid "Operation was cancelled"
 msgstr "أُلغيت العملية"
 
-#: src/goabackend/goakerberosprovider.c:794
-#: src/goaidentity/goaidentityservice.c:1069
+#: src/goabackend/goakerberosprovider.c:469 src/goaidentity/goaidentityservice.c:1114
 msgid "Log In to Realm"
 msgstr "لِج إلى النطاق"
 
-#: src/goabackend/goakerberosprovider.c:795
+#: src/goabackend/goakerberosprovider.c:470
 msgid "Please enter your password below."
-msgstr "رجاء أدخل كلمة السرّ."
+msgstr "أدخل كلمة السر."
 
-#: src/goabackend/goakerberosprovider.c:796
+#: src/goabackend/goakerberosprovider.c:471
 msgid "Remember this password"
-msgstr "تذكّر كلمة السرّ هذه"
+msgstr "تذكَّر كلمة السر هذه"
 
-#: src/goabackend/goakerberosprovider.c:976
-msgid "Error connecting to enterprise identity server"
-msgstr "عطل أثناء الاتصال بخادوم هوية المؤسسات"
+#: src/goabackend/goakerberosprovider.c:601
+msgid "_Principal"
+msgstr "الأ_ساس"
 
-#: src/goabackend/goakerberosprovider.c:1315
-msgid "Identity service returned invalid key"
-msgstr ""
+#: src/goabackend/goakerberosprovider.c:602
+msgid "Example principal: user@EXAMPLE.COM"
+msgstr "مثال للأساس: user@EXAMPLE.COM"
 
-#: src/goabackend/goalastfmprovider.c:65
-msgid "Last.fm"
-msgstr ""
+#: src/goabackend/goakerberosprovider.c:1308
+msgid "Ticketing is disabled for account"
+msgstr "الاستقسام معطَّل للحساب"
 
-#: src/goabackend/goalastfmprovider.c:700
-#: src/goabackend/goalastfmprovider.c:850
-#, fuzzy
-#| msgid "Error connecting to IMAP server"
-msgid "Error connecting to Last.fm"
-msgstr "عطل أثناء الاتصال بخادوم IMAP"
-
-#: src/goabackend/goamediaserverprovider.c:63
-msgid "Media Server"
-msgstr "خادوم الوسائط"
-
-#: src/goabackend/goamediaserverprovider.c:316
-msgid ""
-"Personal content can be added to your applications through a media server "
-"account."
-msgstr ""
-
-#: src/goabackend/goamediaserverprovider.c:329
-msgid "Available Media Servers"
-msgstr "خواديم الوسائط المتاحة"
-
-#: src/goabackend/goamediaserverprovider.c:360
-msgid "No media servers found"
-msgstr "لم يعثر على أي خواديم وسائط"
-
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: src/goabackend/goaoauth2provider.c:632 src/goabackend/goaoauthprovider.c:542
+#: src/goabackend/goakerberosprovider.c:1331
 #, c-format
-msgid ""
-"Expected status 200 when requesting access token, instead got status %d (%s)"
-msgstr ""
-"النتيجة المتوقعة عند طلب رمز الوصول هي 200؛ عوضاً عن هذا، تم الحصول على "
-"النتيجة %d (%s)"
+msgid "Could not find saved credentials for principal “%s” in keyring"
+msgstr "تعذَّر العثور على بيانات اعتماد محفوظة في حلقة المفاتيح للأساس «%s»"
 
-#: src/goabackend/goaoauth2provider.c:814
-msgid "Authorization response: "
-msgstr "ردّ التخويل:"
+#: src/goabackend/goakerberosprovider.c:1345
+#, c-format
+msgid "Did not find password for principal “%s” in credentials"
+msgstr "لم يُعثر على كلمة سر للأساس «%s» في بيانات الاعتماد"
 
-#: src/goabackend/goaoauth2provider.c:884
+#: src/goabackend/goakerberosprovider.c:1527
+msgid "Identity service returned invalid key"
+msgstr "أرجعت خدمة الهوية مفتاحًا غير صالح"
+
+#: src/goabackend/goamailclient.c:853
+#, c-format
+msgid "Invalid email address “%s”"
+msgstr "بريد إلكتروني غير صالح «%s»"
+
+#: src/goabackend/goamsgraphprovider.c:65
+msgid "Microsoft 365"
+msgstr "مايكروسوفت 365"
+
+#. provider name
+#: src/goabackend/goamsgraphprovider.c:498
+msgid "Connect to Microsoft 365 to access email, calendars, contacts and files"
+msgstr "اتَّصل بمايكروسوفت 365 للنفاذ إلى التقويمات، والمتراسلين، والملفات"
+
+#: src/goabackend/goamsgraphprovider.c:502
+msgid "Use Organization Account"
+msgstr "استخدم حساب المؤسسة"
+
+#: src/goabackend/goamsgraphprovider.c:503
+msgid "Connect using details from an organization or developer account"
+msgstr "اتَّصِل مستعملًا التفاصيل من منظمة أو حساب مطور"
+
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:510
+msgid "Enter the details provided by your organization"
+msgstr "أدخِل التفاصيل الموفَّرة من منظمتك"
+
+#: src/goabackend/goamsgraphprovider.c:512
+msgid "_Client ID (Optional)"
+msgstr "مُعرِّف ال_عميل (اختياري)"
+
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:514
+msgid "_Tenant ID"
+msgstr "مُعرِّف الم_ستأجر"
+
+#: src/goabackend/goamsgraphprovider.c:515
+msgid "Example ID: 00000000-0000-0000-0000-000000000000"
+msgstr "مثال لمعرِّف: 00000000-0000-0000-0000-000000000000"
+
+#: src/goabackend/goaoauth2provider.c:709 src/goabackend/goaoauth2provider.c:927
 #, c-format
 msgid "Authorization response: %s"
-msgstr "ردّ التخويل: %s"
+msgstr "رد التخويل: %s"
 
-#: src/goabackend/goaoauth2provider.c:1021
-#: src/goabackend/goaoauthprovider.c:890
+#: src/goabackend/goaoauth2provider.c:720
+#, c-format
+msgid "Expected status 200 when requesting access token, instead got status %d (%s)"
+msgstr ""
+"النتيجة المتوقعة عند طلب رمز الوصول هي 200؛ عوضًا عن هذا، فقد حُصل على النتيجة %d (%s)"
+
+#: src/goabackend/goaoauth2provider.c:864
+msgid "Authorization response: "
+msgstr "رد التخويل: "
+
+#: src/goabackend/goaoauth2provider.c:935
+msgid "Failed to authenticate"
+msgstr "تعذَّر الاستيثاق"
+
+#: src/goabackend/goaoauth2provider.c:971
 msgid "Error getting an Access Token: "
-msgstr "خطأ في الحصول على رمز الوصول"
+msgstr "خطأ في الحصول على رمز الوصول: "
 
-#: src/goabackend/goaoauth2provider.c:1036
-#: src/goabackend/goaoauthprovider.c:903
+#: src/goabackend/goaoauth2provider.c:987
 msgid "Error getting identity: "
-msgstr "خطأ في الحصول على هويّة"
+msgstr "خطأ في الحصول على هوية: "
 
-#: src/goabackend/goaoauth2provider.c:1254
-#: src/goabackend/goaoauthprovider.c:1192
+#: src/goabackend/goaoauth2provider.c:1025
+#, c-format
+msgid "Sign in to %s with your browser"
+msgstr "لِج إلى %s بمتصفحك"
+
+#: src/goabackend/goaoauth2provider.c:1538 src/goabackend/goaoauth2provider.c:1710
+msgid "Copied to clipboard"
+msgstr "نُسِخ إلى الحافظة"
+
+#: src/goabackend/goaoauth2provider.c:1661
 #, c-format
 msgid "Was asked to log in as %s, but logged in as %s"
-msgstr "طُلب الولوج كـ%s، لكن تم الولوج كـ%s"
+msgstr "طُلب الولوج بصفة %s، ولكن وُلِج بصفة %s"
 
-#: src/goabackend/goaoauth2provider.c:1406
+#: src/goabackend/goaoauth2provider.c:1904
 msgid "Credentials do not contain access_token"
-msgstr "لا تحوي الشهادات رمز وصول"
+msgstr "لا تحوي بيانات الاعتماد رمز الوصول"
 
-#: src/goabackend/goaoauth2provider.c:1445
-#: src/goabackend/goaoauthprovider.c:1407
+#: src/goabackend/goaoauth2provider.c:1948
 #, c-format
 msgid "Failed to refresh access token (%s, %d): "
-msgstr "فشل تحديث رمز الوصول (%s, %d): "
+msgstr "تعذَّر تحديث رمز الوصول (%s, %d): "
 
-#: src/goabackend/goaoauthprovider.c:565
-msgid "Missing access_token or access_token_secret headers in response"
-msgstr "رمز الوصول أو ترويسة \"رمز الوصول السرّي\" في الردّ مفقودة"
-
-#: src/goabackend/goaoauthprovider.c:773
-msgid "Error getting a Request Token: "
-msgstr "خطأ في الحصول على رمز الطلب"
-
-#. Translators: the %d is a HTTP status code and the %s is a textual description of it
-#: src/goabackend/goaoauthprovider.c:804
-#, c-format
-msgid ""
-"Expected status 200 for getting a Request Token, instead got status %d (%s)"
-msgstr ""
-"النتيجة المتوقعة للحصول على رمز الطلب هي 200؛ عوضاً عن هذا، تم الحصول على "
-"النتيجة %d (%s)"
-
-#: src/goabackend/goaoauthprovider.c:821
-msgid "Missing request_token or request_token_secret headers in response"
-msgstr ""
-"رمز الطلب request_token أو ترويسة رمز الطلب السرّي request_token_secret في "
-"الردّ مفقودة"
-
-#: src/goabackend/goaoauthprovider.c:1363
-msgid "Credentials do not contain access_token or access_token_secret"
-msgstr "لا تحوي الشهادات رمز وصول أو رمز وصول سرّيّ"
-
-#: src/goabackend/goaowncloudprovider.c:60
+#: src/goabackend/goaowncloudprovider.c:55
 msgid "Nextcloud"
-msgstr ""
+msgstr "نِكست‌كلاود"
 
-#: src/goabackend/goaowncloudprovider.c:731
-#: src/goabackend/goaowncloudprovider.c:922
-msgid "Error connecting to ownCloud server"
-msgstr "عطل أثناء الاتصال بخادوم ownCloud"
-
-#: src/goabackend/goapocketprovider.c:74
-msgid "Pocket"
-msgstr ""
-
-#. TODO: more specific
-#: src/goabackend/goapocketprovider.c:249
-msgid "No username or access_token"
-msgstr ""
-
-#: src/goabackend/goaprovider.c:110
+#: src/goabackend/goaprovider.c:117
 msgid "_Mail"
 msgstr "ال_بريد"
 
-#: src/goabackend/goaprovider.c:115
+#: src/goabackend/goaprovider.c:122
 msgid "Cale_ndar"
 msgstr "الت_قويم"
 
-#: src/goabackend/goaprovider.c:120
+#: src/goabackend/goaprovider.c:127
 msgid "_Contacts"
 msgstr "المترا_سلون"
 
-#: src/goabackend/goaprovider.c:125
+#: src/goabackend/goaprovider.c:132
 msgid "C_hat"
 msgstr "الدر_دشة"
 
-#: src/goabackend/goaprovider.c:130
+#: src/goabackend/goaprovider.c:137
 msgid "_Documents"
 msgstr "المست_ندات"
 
-#: src/goabackend/goaprovider.c:135
+#: src/goabackend/goaprovider.c:142
 msgid "M_usic"
 msgstr "_موسيقى"
 
-#: src/goabackend/goaprovider.c:140
+#: src/goabackend/goaprovider.c:147
 msgid "_Photos"
 msgstr "ال_صور"
 
-#: src/goabackend/goaprovider.c:145
+#: src/goabackend/goaprovider.c:152
 msgid "_Files"
 msgstr "الم_لفات"
 
-#: src/goabackend/goaprovider.c:150
+#: src/goabackend/goaprovider.c:157
 msgid "Network _Resources"
 msgstr "موارد ال_شبكة"
 
-#: src/goabackend/goaprovider.c:155
+#: src/goabackend/goaprovider.c:162
 msgid "_Read Later"
-msgstr "ا_قرأ لاحقًا"
+msgstr "لل_قراءة لاحقًا"
 
-#: src/goabackend/goaprovider.c:160
+#: src/goabackend/goaprovider.c:167
 msgid "Prin_ters"
 msgstr "ال_طابعات"
 
-#: src/goabackend/goaprovider.c:165
+#: src/goabackend/goaprovider.c:172
 msgid "_Maps"
 msgstr "ال_خرائط"
 
-#: src/goabackend/goaprovider.c:170
+#: src/goabackend/goaprovider.c:177
 msgid "T_o Do"
 msgstr "الم_هام"
 
-#. Translators: This is a label for a series of
-#. * options switches. For example: “Use for Mail”.
-#: src/goabackend/goaprovider.c:568
-msgid "Use for"
-msgstr "استخدم ل‍"
-
-#: src/goabackend/goaprovider.c:823
+#: src/goabackend/goaprovider.c:1065
 msgid "Account is disabled"
-msgstr "الحساب معطّل"
+msgstr "الحساب معطَّل"
 
-#: src/goabackend/goaprovider.c:836
+#: src/goabackend/goaprovider.c:1078
 msgid "Unknown error"
 msgstr "خطأ مجهول"
 
-#: src/goabackend/goaprovider.c:855
+#: src/goabackend/goaprovider.c:1097
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
-msgstr "ensure_credentials_sync غير منطبق على النوع %s"
-
-#. TODO: more specific
-#: src/goabackend/goasmtpauth.c:170
-msgid "TLS not available"
-msgstr ""
-
-#: src/goabackend/goasmtpauth.c:476
-#, fuzzy
-msgid "Unknown authentication mechanism"
-msgstr "فشل الاستيثاق"
-
-#: src/goabackend/goatodoistprovider.c:58
-msgid "Todoist"
-msgstr ""
-
-#: src/goabackend/goautils.c:92
-msgid "Error logging into the account"
-msgstr ""
-
-#: src/goabackend/goautils.c:136
-#, fuzzy
-#| msgid "The certificate has expired."
-msgid "Credentials have expired"
-msgstr "انتهت صلاحية الشهادة."
-
-#: src/goabackend/goautils.c:140
-msgid "Sign in to enable this account."
-msgstr ""
-
-#: src/goabackend/goautils.c:144
-msgid "_Sign In"
-msgstr "_لج"
-
-#: src/goabackend/goautils.c:240
-#, c-format
-msgid "A %s account already exists for %s"
-msgstr "يوجد حساب %s للمستخدم %s من قبل"
+msgstr "إن ensure_credentials_sync ليس مطبقًّا على النوع %s"
 
 #. Translators: this is the title of the "Add Account" and "Refresh
 #. * Account" dialogs. The %s is the name of the provider. eg.,
 #. * 'Google'.
 #.
-#: src/goabackend/goautils.c:293
-#, fuzzy, c-format
-#| msgid "%s account"
+#: src/goabackend/goaproviderdialog.c:183
+#, c-format
 msgid "%s Account"
 msgstr "حساب %s"
 
+#: src/goabackend/goaproviderdialog.c:627
+msgid "Remove this Account?"
+msgstr "أأزيل هذا الحساب؟"
+
+#: src/goabackend/goaproviderdialog.c:628
+msgid ""
+"If you remove this Online Account you will have to connect to it again to use it "
+"with apps and services."
+msgstr "إذا أزلت حساب الإنترنت هذا، فستحتاج للاتصال به مجددًا مع التطبيقات والخدمات."
+
+#: src/goabackend/goaproviderdialog.c:630
+msgid "_Cancel"
+msgstr "أ_لغِ"
+
+#: src/goabackend/goaproviderdialog.c:631
+msgid "_Remove"
+msgstr "أ_زِل"
+
+#: src/goabackend/goaproviderdialog.c:767
+msgid "An account with that name already exists"
+msgstr "هناك حساب بهذا الاسم من قبل"
+
+#: src/goabackend/goaproviderdialog.c:839
+msgid "Sign in to reconnect to this account"
+msgstr "لِج لتعيد الاتصال بهذا الحساب"
+
+#: src/goabackend/goaproviderdialog.c:868
+msgid "_Account Name"
+msgstr "اسم ال_حساب"
+
+#: src/goabackend/goaproviderdialog.c:947
+msgid "_Remove…"
+msgstr "أ_زِل…"
+
+#: src/goabackend/goaproviderdialog.c:1043
+msgid "_Sign In"
+msgstr "_لِج"
+
+#: src/goabackend/goaproviderdialog.c:1105
+msgid "_Try Again"
+msgstr "أ_عِد المحاولة"
+
+#: src/goabackend/goaproviderdialog.c:1109
+msgid "_Ignore"
+msgstr "_تجاهل"
+
+#: src/goabackend/goaproviderdialog.c:1381
+msgid "Dialog was dismissed"
+msgstr "أُغلقت نافذة الحوار"
+
 #. TODO: more specific
-#: src/goabackend/goautils.c:347
+#: src/goabackend/goasmtpauth.c:164
+msgid "TLS not available"
+msgstr "إن TLS غير متوفِّر"
+
+#: src/goabackend/goasmtpauth.c:492
+msgid "Unknown authentication mechanism"
+msgstr "آلية استيثاق مجهولة"
+
+#: src/goabackend/goautils.c:80
+#, c-format
+msgid "A %s account already exists for %s"
+msgstr "يوجد حساب %s للمستخدم %s من قبل"
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:193
 msgid "Failed to delete credentials from the keyring"
-msgstr "فشل حذف الشهادات من حلقة المفاتيح"
+msgstr "تعذَّر حذف بيانات الاعتماد من حلقة المفاتيح"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:395
+#: src/goabackend/goautils.c:241
 msgid "Failed to retrieve credentials from the keyring"
-msgstr "فشل جلب الشهادات من حلقة المفاتيح"
+msgstr "تعذَّر جلب بيانات الاعتماد من حلقة المفاتيح"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:405
-#, fuzzy
+#: src/goabackend/goautils.c:251
 msgid "No credentials found in the keyring"
-msgstr "فشل حفظ الشهادات في حلقة المفاتيح"
+msgstr "لم يُعثر على بيانات اعتماد في حلقة المفاتيح"
 
-#: src/goabackend/goautils.c:418
+#: src/goabackend/goautils.c:264
 msgid "Error parsing result obtained from the keyring: "
-msgstr "خطأ في إعراب النتائج التي تم الحصول عليها من حلقة المفاتيح: "
+msgstr "خطأ في تحليل النتائج التي حُصل عليها من حلقة المفاتيح: "
 
 #. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
-#: src/goabackend/goautils.c:459
+#: src/goabackend/goautils.c:305
 #, c-format
 msgid "GOA %s credentials for identity %s"
 msgstr "أوراق اعتماد GOA %s للهوية %s"
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:476
+#: src/goabackend/goautils.c:322
 msgid "Failed to store credentials in the keyring"
-msgstr "فشل حفظ الشهادات في حلقة المفاتيح"
+msgstr "تعذَّر حفظ بيانات الاعتماد في حلقة المفاتيح"
 
-#: src/goabackend/goautils.c:825
-msgid "Cannot resolve hostname"
-msgstr ""
+#: src/goabackend/goautils.c:790
+msgid "Not supported"
+msgstr "غير مدعوم"
 
-#: src/goabackend/goautils.c:829
-msgid "Cannot resolve proxy hostname"
-msgstr ""
+#: src/goabackend/goautils.c:794
+msgid "Not found"
+msgstr "غير موجود"
 
-#: src/goabackend/goautils.c:834
-msgid "Cannot find WebDAV endpoint"
-msgstr ""
-
-#: src/goabackend/goautils.c:843
+#: src/goabackend/goautils.c:808
 #, c-format
 msgid "Code: %u — Unexpected response from server"
-msgstr ""
+msgstr "الشفرة: %u  — رد غير متوقَّع من الخادوم"
 
-#: src/goabackend/goautils.c:859
+#: src/goabackend/goautils.c:833
 msgid "The signing certificate authority is not known."
-msgstr "سلطة الشهادات المُوقِّعة غير معروفة."
+msgstr "سلطة توقيع الشهادات غير معروفة."
 
-#: src/goabackend/goautils.c:863
+#: src/goabackend/goautils.c:837
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
-msgstr ""
+msgstr "لا تُطابق الشهادةُ الهوية المتوقعة للموقع الذي جُلبت منه."
 
-#: src/goabackend/goautils.c:868
+#: src/goabackend/goautils.c:842
 msgid "The certificate’s activation time is still in the future."
-msgstr "وقت تفعيل الشهادة في المستقبل."
+msgstr "لا يزال وقت تفعيل الشهادة في المستقبل."
 
-#: src/goabackend/goautils.c:872
+#: src/goabackend/goautils.c:846
 msgid "The certificate has expired."
 msgstr "انتهت صلاحية الشهادة."
 
-#: src/goabackend/goautils.c:876
+#: src/goabackend/goautils.c:850
 msgid "The certificate has been revoked."
-msgstr "نُقِضت الشهادة."
+msgstr "أُبطلت الشهادة."
 
-#: src/goabackend/goautils.c:880
+#: src/goabackend/goautils.c:854
 msgid "The certificate’s algorithm is considered insecure."
-msgstr ""
+msgstr "تُعتبر خوارزمية الشهادة غير آمنة."
 
-#: src/goabackend/goautils.c:886
+#: src/goabackend/goautils.c:860
 msgid "Invalid certificate."
-msgstr ""
+msgstr "شهادة غير صالحة."
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:921
+#: src/goabackend/goautils.c:895
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
-msgstr ""
+msgstr "لم يُعثر على %s بالهوية «%s» في بيانات الاعتماد"
 
-#. translators: %s here is the address of the web page
-#: src/goabackend/goawebview.c:94
-#, c-format
-msgid "Loading “%s”…"
-msgstr "يُحمل ”%s“…"
+#: src/goabackend/goawebdavprovider.c:399
+msgid "Calendar, Contacts and Files"
+msgstr "التقويم، والمتراسلين، والملفات"
 
-#: src/goabackend/goawindowsliveprovider.c:56
-#| msgid "Microsoft Exchange"
-msgid "Microsoft"
-msgstr "ميكروسوفت"
+#: src/goabackend/goawebdavprovider.c:400
+msgid ""
+"Add a calendar, contacts and files account by entering your WebDAV server and "
+"account details"
+msgstr "أضِف حساب تقويم، ومتراسلين، وملفات عبر إدخال تفاصيل حسابك وخادوم WebDAV"
 
-#: src/goaidentity/goaidentityservice.c:568
+#: src/goabackend/goawebdavprovider.c:403
+msgid "_Server Address"
+msgstr "عنوان ال_خادوم"
+
+#: src/goabackend/goawebdavprovider.c:404
+msgid "Examples: example.com, 192.168.0.82"
+msgstr "أمثلة: example.com، أو 192.168.0.82"
+
+#: src/goabackend/goawebdavprovider.c:414
+msgid "Server Addresses (Optional)"
+msgstr "عناوين الخادوم (اختياري)"
+
+#: src/goabackend/goawebdavprovider.c:415
+msgid "Files"
+msgstr "الملفات"
+
+#: src/goabackend/goawebdavprovider.c:416
+msgid "Calendar (CalDAV)"
+msgstr "التقويم (CalDAV)"
+
+#: src/goabackend/goawebdavprovider.c:417
+msgid "Contacts (CardDAV)"
+msgstr "المتراسلين (CardDAV)"
+
+#: src/goaidentity/goaidentityservice.c:564
 msgid "Initial secret key is invalid"
-msgstr ""
+msgstr "المفتاح السري الابتدائي غير صالح"
 
-#: src/goaidentity/goaidentityservice.c:1074
+#. TODO: more specific
+#: src/goaidentity/goaidentityservice.c:786
+#, c-format
+msgid "Couldn't get GoaObject for object path %s"
+msgstr "تعذَّر الحصول على GoaObject لمسار الكائن %s"
+
+#: src/goaidentity/goaidentityservice.c:1119
 #, c-format
 msgid "The network realm %s needs some information to sign you in."
-msgstr ""
+msgstr "يحتاج نطاق الشبكة %s بعض المعلومات ليولجك."
 
-#: src/goaidentity/goakerberosidentity.c:275
-#: src/goaidentity/goakerberosidentity.c:283
-#: src/goaidentity/goakerberosidentity.c:707
-#, fuzzy
+#: src/goaidentity/goakerberosidentity.c:293 src/goaidentity/goakerberosidentity.c:301
+#: src/goaidentity/goakerberosidentity.c:695
 msgid "Could not find identity in credential cache: "
-msgstr "أوراق اعتماد GOA %s للهوية %s"
+msgstr "تعذَّر العثور على الهوية في خبيئة بيانات الاعتماد: "
 
-#: src/goaidentity/goakerberosidentity.c:720
-#, fuzzy
+#: src/goaidentity/goakerberosidentity.c:707
 msgid "Could not find identity credentials in cache: "
-msgstr "أوراق اعتماد GOA %s للهوية %s"
+msgstr "تعذَّر العثور على بيانات اعتماد الهوية في الخبيئة: "
 
-#: src/goaidentity/goakerberosidentity.c:771
-#, fuzzy
+#: src/goaidentity/goakerberosidentity.c:751
 msgid "Could not sift through identity credentials in cache: "
-msgstr "أوراق اعتماد GOA %s للهوية %s"
+msgstr "تعذَّر التدقيق في بيانات اعتماد الهوية في الخبيئة: "
 
-#: src/goaidentity/goakerberosidentity.c:788
+#: src/goaidentity/goakerberosidentity.c:763
 msgid "Could not finish up sifting through identity credentials in cache: "
-msgstr ""
+msgstr "تعذَّر إكمال التدقيق في بيانات اعتماد الهوية في الخبيئة: "
 
-#: src/goaidentity/goakerberosidentity.c:1103
+#: src/goaidentity/goakerberosidentity.c:1406
 msgid "No associated identification found"
-msgstr ""
+msgstr "لم يُعثر على هوية مرتبطة"
 
-#: src/goaidentity/goakerberosidentity.c:1186
-#, fuzzy
+#: src/goaidentity/goakerberosidentity.c:1535
 msgid "Could not create credential cache: "
-msgstr "أوراق اعتماد GOA %s للهوية %s"
+msgstr "تعذَّر إنشاء خبيئة بيانات الاعتماد "
 
-#: src/goaidentity/goakerberosidentity.c:1220
-#, fuzzy
+#: src/goaidentity/goakerberosidentity.c:1575
 msgid "Could not initialize credentials cache: "
-msgstr "أوراق اعتماد GOA %s للهوية %s"
+msgstr "تعذَّر بدء خبيئة بيانات الاعتماد "
 
-#: src/goaidentity/goakerberosidentity.c:1236
-#, fuzzy
+#: src/goaidentity/goakerberosidentity.c:1588
 msgid "Could not store new credentials in credentials cache: "
-msgstr "أوراق اعتماد GOA %s للهوية %s"
+msgstr "تعذَّر تخزين بيانات اعتماد جديدة في خبيئة بيانات الاعتماد: "
 
-#: src/goaidentity/goakerberosidentity.c:1534
-msgid "Could not renew identity: Not signed in"
-msgstr ""
+#: src/goaidentity/goakerberosidentity.c:1824
+msgid "Not signed in"
+msgstr "ليس والجًا"
 
-#: src/goaidentity/goakerberosidentity.c:1546
-#, fuzzy
-msgid "Could not renew identity: "
-msgstr "أوراق اعتماد GOA %s للهوية %s"
+#: src/goaidentity/goakerberosidentity.c:1837
+msgid "Could not get the default principal: "
+msgstr "تعذَّر الحصول على الأساس المبدئيّ: "
 
-#: src/goaidentity/goakerberosidentity.c:1562
-#, fuzzy, c-format
-msgid "Could not get new credentials to renew identity %s: "
-msgstr "أوراق اعتماد GOA %s للهوية %s"
+#: src/goaidentity/goakerberosidentity.c:1850
+#, c-format
+msgid "Could not get renewed credentials from the KDC for identity %s: "
+msgstr "تعذَّر الحصول على بيانات اعتماد مجدَّدة من مركز توزيع المفاتيح (KDC) للهويّة %s: "
 
-#: src/goaidentity/goakerberosidentity.c:1604
-#, fuzzy
+#: src/goaidentity/goakerberosidentity.c:1898
 msgid "Could not erase identity: "
-msgstr "أوراق اعتماد GOA %s للهوية %s"
+msgstr "تعذَّر محو الهوية: "
 
-#: src/goaidentity/goakerberosidentitymanager.c:749
+#: src/goaidentity/goakerberosidentitymanager.c:955
 msgid "Could not find identity"
-msgstr ""
+msgstr "تعذَّر العثور على الهوية"
 
-#: src/goaidentity/goakerberosidentitymanager.c:845
-#, fuzzy
+#: src/goaidentity/goakerberosidentitymanager.c:1038
 msgid "Could not create credential cache for identity"
-msgstr "أوراق اعتماد GOA %s للهوية %s"
+msgstr "تعذَّر إنشاء خبيئة بيانات اعتماد للهوية"
 
-#~ msgid "_Domain"
-#~ msgstr "الن_طاق"
+#: src/goaidentity/goalinuxnotificationstream.c:58
+#, c-format
+msgid "Error closing file descriptor: %s"
+msgstr "تعذَّر إغلاق واصف الملف: %s"
+
+#~ msgid "_Custom"
+#~ msgstr "_مُخصَّص"
+
+#~ msgid "C_onnect"
+#~ msgstr "ا_تّصل"
+
+#~ msgid "Connecting…"
+#~ msgstr "قيد الاتصال…"
+
+#, c-format
+#~ msgid "Dialog was dismissed (%s, %d): "
+#~ msgstr "أُغلقت نافذة الحوار (%s،‏ %d): "
+
+#~ msgid "Error connecting to Microsoft Exchange server"
+#~ msgstr "خطأ أثناء الاتصال بخادوم مايكروسوفت إكستشينج"
+
+#~ msgid "Error connecting to Fedora"
+#~ msgstr "خطأ أثناء الاتصال بفِدُورَا"
+
+#~ msgid "Server does not support PLAIN"
+#~ msgstr "لا يدعم الخادوم PLAIN"
+
+#~ msgid "None"
+#~ msgstr "لا شيء"
+
+#~ msgid "_Forward"
+#~ msgstr "للأ_مام"
+
+#~ msgid "Error connecting to IMAP server"
+#~ msgstr "خطأ أثناء الاتصال بخادوم IMAP"
+
+#~ msgid "Error connecting to SMTP server"
+#~ msgstr "خطأ أثناء الاتصال بخادوم SMTP"
+
+#~ msgid "Enterprise Login (Kerberos)"
+#~ msgstr "ولوج المؤسسات (كيربروس)"
+
+#~ msgid "Error connecting to enterprise identity server"
+#~ msgstr "خطأ أثناء الاتصال بخادوم هوية المؤسسات"
+
+#~ msgid "Last.fm"
+#~ msgstr "Last.fm"
+
+#~ msgid "Error connecting to Last.fm"
+#~ msgstr "خطأ أثناء الاتصال ب‍ Last.fm"
+
+#~ msgid "Media Server"
+#~ msgstr "خادوم الوسائط"
+
+#~ msgid ""
+#~ "Personal content can be added to your applications through a media server account."
+#~ msgstr "يمكن إضافة المحتوى الشخصيّ لتطبيقاتك باستخدام حساب خادم وسائط."
+
+#~ msgid "Available Media Servers"
+#~ msgstr "خواديم الوسائط المتاحة"
+
+#~ msgid "No media servers found"
+#~ msgstr "لم يُعثر على أيّ خواديم وسائط"
+
+#~ msgid "Error connecting to Nextcloud server"
+#~ msgstr "خطأ أثناء الاتصال بخادم نِكست‌كلاود"
+
+#~ msgid "Use for"
+#~ msgstr "استخدم ل‍"
+
+#~ msgid "Error logging into the account"
+#~ msgstr "خطأ في الولوج للحساب"
+
+#~ msgid "Credentials have expired"
+#~ msgstr "انتهت صلاحية بيانات الاعتماد"
+
+#, c-format
+#~ msgid "Loading “%s”…"
+#~ msgstr "قيد تحميل تحميل «%s»…"
+
+#~ msgid "Facebook"
+#~ msgstr "فيسبوك"
+
+#~ msgid "Flickr"
+#~ msgstr "فلِكَر"
+
+#~ msgid "Your system time is invalid. Check your date and time settings."
+#~ msgstr "وقت النظام غير صحيح. راجع إعدادات الوقت والتاريخ."
+
+#~ msgid "Foursquare"
+#~ msgstr "Foursquare"
+
+#~ msgid "Missing access_token or access_token_secret headers in response"
+#~ msgstr "رمز الوصول أو ترويسة \"رمز الوصول السرّي\" في الردّ مفقودة"
+
+#~ msgid "Error getting a Request Token: "
+#~ msgstr "خطأ في الحصول على رمز الطلب"
+
+#, c-format
+#~ msgid "Expected status 200 for getting a Request Token, instead got status %d (%s)"
+#~ msgstr ""
+#~ "النتيجة المتوقعة للحصول على رمز الطلب هي 200؛ عوضاً عن هذا، تم الحصول على النتيجة "
+#~ "%d (%s)"
+
+#~ msgid "Missing request_token or request_token_secret headers in response"
+#~ msgstr ""
+#~ "رمز الطلب request_token أو ترويسة رمز الطلب السرّي request_token_secret في الردّ "
+#~ "مفقودة"
+
+#~ msgid "Credentials do not contain access_token or access_token_secret"
+#~ msgstr "لا تحوي الشهادات رمز وصول أو رمز وصول سرّيّ"
+
+#, fuzzy
+#~ msgid "Could not renew identity: "
+#~ msgstr "أوراق اعتماد GOA %s للهوية %s"
 
 #~ msgid "Enterprise domain or realm name"
 #~ msgstr "نطاق مؤسسة أو اسم حقيقي"
@@ -846,9 +905,6 @@ msgstr "أوراق اعتماد GOA %s للهوية %s"
 #~ msgid "Connection Settings"
 #~ msgstr "إعدادات الاتصال"
 
-#~ msgid "Personal Details"
-#~ msgstr "البيانات الشخصية"
-
 #~ msgid "_OK"
 #~ msgstr "_موافق"
 
@@ -862,8 +918,7 @@ msgstr "أوراق اعتماد GOA %s للهوية %s"
 #~ msgstr "وندوز لايف"
 
 #~ msgid ""
-#~ "Paste authorization code obtained from the <a href=\"%s\">authorization "
-#~ "page</a>:"
+#~ "Paste authorization code obtained from the <a href=\"%s\">authorization page</a>:"
 #~ msgstr "ألصق كود التخويل الذي تحصل عليه من <a href=\"%s\">صفحة التخويل</a>:"
 
 #~ msgid "Paste token obtained from the <a href=\"%s\">authorization page</a>:"
@@ -877,8 +932,7 @@ msgstr "أوراق اعتماد GOA %s للهوية %s"
 
 #~ msgid "Expected status 200 when requesting name, instead got status %d (%s)"
 #~ msgstr ""
-#~ "النتيجة المتوقعة عند طلب الاسم هي 200؛ عوضاً عن هذا، تم الحصول على النتيجة "
-#~ "%d ‏(%s)"
+#~ "النتيجة المتوقعة عند طلب الاسم هي 200؛ عوضاً عن هذا، تم الحصول على النتيجة %d ‏(%s)"
 
 #~ msgid "Time"
 #~ msgstr "الوقت"
@@ -888,11 +942,8 @@ msgstr "أوراق اعتماد GOA %s للهوية %s"
 
 #~ msgid "Expected status 200 when requesting guid, instead got status %d (%s)"
 #~ msgstr ""
-#~ "النتيجة المتوقعة عند طلب المعرّف العالمي الفريد GUID هي 200؛ عوضاً عن هذا، "
-#~ "تم الحصول على النتيجة %d (%s)"
-
-#~ msgid "Online Accounts"
-#~ msgstr "حسابات الإنترنت"
+#~ "النتيجة المتوقعة عند طلب المعرّف العالمي الفريد GUID هي 200؛ عوضاً عن هذا، تم "
+#~ "الحصول على النتيجة %d (%s)"
 
 #~ msgid "An online account needs attention"
 #~ msgstr "حساب إنرنت بحاجة إلى اهتمام"
