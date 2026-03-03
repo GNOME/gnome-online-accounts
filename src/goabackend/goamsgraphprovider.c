@@ -277,6 +277,7 @@ build_object (GoaProvider        *provider,
   GoaMail *mail = NULL;
   const gchar  *provider_type;
   const gchar *identity = NULL;
+  const gchar *presentation_identity = NULL;
   gboolean files_enabled = FALSE;
   gboolean calendar_enabled;
   gboolean contacts_enabled;
@@ -297,6 +298,7 @@ build_object (GoaProvider        *provider,
   goa_conf = goa_util_open_goa_conf ();
   account = goa_object_get_account (GOA_OBJECT (object));
   identity = goa_account_get_identity (account);
+  presentation_identity = goa_account_get_presentation_identity (account);
 
   /* Files */
   files_enabled = goa_util_provider_feature_is_enabled (goa_conf, provider_type, GOA_PROVIDER_FEATURE_FILES) &&
@@ -313,11 +315,9 @@ build_object (GoaProvider        *provider,
     {
       if (mail == NULL)
         {
-          const gchar *email_address;
-
-          email_address = goa_account_get_presentation_identity (account);
           mail = goa_mail_skeleton_new ();
-          g_object_set (G_OBJECT (mail), "email-address", email_address, NULL);
+          g_object_set (G_OBJECT (mail), "email-address", identity, NULL);
+          g_object_set (G_OBJECT (mail), "name", presentation_identity, NULL);
           goa_object_skeleton_set_mail (object, mail);
         }
     }
