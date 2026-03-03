@@ -280,6 +280,7 @@ build_object (GoaProvider         *provider,
   gboolean calendar_enabled;
   gboolean contacts_enabled;
   const gchar *email_address;
+  const gchar *name;
 #if GOA_GOOGLE_FILES_ENABLED
   gchar *uri_drive;
   gboolean files_enabled;
@@ -309,7 +310,9 @@ build_object (GoaProvider         *provider,
       if (mail == NULL)
         {
           mail = goa_mail_skeleton_new ();
+          name = goa_account_get_presentation_identity (account);
           g_object_set (G_OBJECT (mail),
+                        "name",            name,
                         "email-address",   email_address,
                         "imap-supported",  TRUE,
                         "imap-host",       "imap.gmail.com",
