@@ -137,8 +137,8 @@ get_scope (GoaOAuth2Provider *oauth2_provider)
          /* Google Calendar API (CalDAV and GData) */
          "https://www.googleapis.com/auth/calendar "
 
-         /* Google Contacts API (GData) */
-         "https://www.google.com/m8/feeds/ "
+         /* Google People API */
+         "https://www.googleapis.com/auth/contacts "
 
          /* Google Contacts API (CardDAV) - undocumented */
          "https://www.googleapis.com/auth/carddav "
@@ -158,7 +158,7 @@ get_scope (GoaOAuth2Provider *oauth2_provider)
 static guint
 get_credentials_generation (GoaProvider *provider)
 {
-  return 13;
+  return 14;
 }
 
 static const gchar *
