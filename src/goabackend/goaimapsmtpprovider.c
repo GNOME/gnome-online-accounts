@@ -995,7 +995,7 @@ add_account_action_smtp (GTask *task)
 
   g_clear_object (&data->smtp_auth);
   goa_utils_parse_email_address (email_address, NULL, &domain);
-  data->smtp_auth = goa_smtp_auth_new (domain, smtp_username, smtp_password);
+  data->smtp_auth = goa_smtp_auth_new (domain, smtp_username, *smtp_password != '\0' ? smtp_password : NULL);
 
   mail_client = goa_mail_client_new ();
   goa_mail_client_check (mail_client,
@@ -1481,7 +1481,7 @@ create_show_account_ui (GoaProvider *self,
   if (subtitle != NULL)
     {
       username = goa_util_lookup_keyfile_string (object, "SmtpUserName");
-      if (g_strcmp0 (g_get_user_name (), subtitle) != 0)
+      if (username != NULL && *username != '\0' && g_strcmp0 (g_get_user_name (), subtitle) != 0)
         {
           g_autofree char *domain = g_steal_pointer (&subtitle);
           subtitle = g_strconcat (username, "@", domain, NULL);
