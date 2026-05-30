@@ -8,15 +8,17 @@
 # Claudio Arseni <claudio.arseni@ubuntu.com>, 2011, 2012, 2013, 2014, 2015,
 # 2016.
 # Gianvito Cavasoli <gianvito@gmx.it>, 2016-2023.
+# Leonardo Pantani <leonardo.pantani@gmail.com>, 2026.
+# Davide Ferracin <davide.ferracin@icloud.com>, 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version:  gnome-online-accounts\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2025-12-31 15:48+0000\n"
-"PO-Revision-Date: 2025-03-27 19:31+0100\n"
-"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
+"POT-Creation-Date: 2026-03-17 08:10+0000\n"
+"PO-Revision-Date: 2026-05-30 14:09+0200\n"
+"Last-Translator: Davide Ferracin <davide.ferracin@icloud.com>\n"
 "Language-Team: Italian <gnome-it-list@gnome.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -24,37 +26,42 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Generated-By: Babel 2.15.0\n"
+"X-Generator: Gtranslator 50.0\n"
+
+#: data/org.gnome.goa-daemon.desktop.in:3 src/daemon/goadaemon.c:1658
+msgid "Online Accounts"
+msgstr "Account online"
+
+#: data/org.gnome.goa-daemon.desktop.in:4
+msgid "Notifications shown by Online Accounts daemon"
+msgstr "Notifiche mostrate dal demone di Account online"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1162 src/daemon/goadaemon.c:1483
+#: src/daemon/goadaemon.c:1168 src/daemon/goadaemon.c:1489
 #, c-format
 msgid "Failed to find a provider for: %s"
-msgstr "Ricerca di un fornitori non riuscita: %s"
+msgstr "Ricerca di un provider fallita per: %s"
 
-#: src/daemon/goadaemon.c:1426
+#: src/daemon/goadaemon.c:1432
 msgid "IsLocked property is set for account"
 msgstr "Proprietà IsLocked impostata per l'account"
 
 #. TODO: more specific
-#: src/daemon/goadaemon.c:1471
+#: src/daemon/goadaemon.c:1477
 msgid "ProviderType property is not set for account"
 msgstr "Proprietà ProviderType non impostata per l'account"
 
 #
-#: src/daemon/goadaemon.c:1633
+#: src/daemon/goadaemon.c:1640
 #, c-format
 msgid "Failed to sign in to “%s”"
 msgstr "Accesso a «%s» non riuscito"
 
-#: src/daemon/goadaemon.c:1638
+#: src/daemon/goadaemon.c:1645
 msgid "Failed to sign in to multiple accounts"
 msgstr "Accesso non riuscito a più di un account"
 
-#: src/daemon/goadaemon.c:1647
-msgid "Online Accounts"
-msgstr "Account in linea"
-
-#: src/daemon/goadaemon.c:1650
+#: src/daemon/goadaemon.c:1661
 msgid "Account Action Required"
 msgstr "Richiesta azione per un account"
 
@@ -82,7 +89,7 @@ msgstr "Errore sconosciuto"
 #: src/goabackend/goadavclient.c:1310 src/goabackend/goaimapauthlogin.c:104
 #: src/goabackend/goakerberosprovider.c:290
 #: src/goabackend/goakerberosprovider.c:312 src/goabackend/goasmtpauth.c:102
-#: src/goabackend/goasmtpauth.c:495 src/goabackend/goautils.c:802
+#: src/goabackend/goasmtpauth.c:473 src/goabackend/goautils.c:808
 msgid "Authentication failed"
 msgstr "Autenticazione non riuscita"
 
@@ -198,22 +205,21 @@ msgstr "Acquisizione del principale dal nome utente «%s» non riuscita"
 msgid "Google"
 msgstr "Google"
 
-#: src/goabackend/goagoogleprovider.c:211
+#: src/goabackend/goagoogleprovider.c:212
 #: src/goabackend/goamsgraphprovider.c:185
 #, c-format
 msgid ""
 "Expected status 200 when requesting your identity, instead got status %d (%s)"
 msgstr ""
-"Atteso stato 200 durante la richiesta dell'identità, ottenuto invece lo "
+"Previsto stato 200 durante la richiesta dell'identità, ottenuto invece lo "
 "stato %d (%s)"
 
 #. TODO: more specific
-#: src/goabackend/goagoogleprovider.c:230
-#: src/goabackend/goagoogleprovider.c:241
+#: src/goabackend/goagoogleprovider.c:231
+#: src/goabackend/goagoogleprovider.c:242
 #: src/goabackend/goamsgraphprovider.c:204
 #: src/goabackend/goamsgraphprovider.c:215
-#: src/goabackend/goamsgraphprovider.c:228
-#: src/goabackend/goamsgraphprovider.c:255
+#: src/goabackend/goamsgraphprovider.c:246
 #: src/goabackend/goaoauth2provider.c:701
 #: src/goabackend/goaoauth2provider.c:780
 #: src/goabackend/goaoauth2provider.c:810
@@ -232,7 +238,7 @@ msgstr "Impossibile elaborare la risposta"
 msgid "Service not available"
 msgstr "Servizio non disponibile"
 
-#: src/goabackend/goaimapauthlogin.c:157 src/goabackend/goasmtpauth.c:636
+#: src/goabackend/goaimapauthlogin.c:157 src/goabackend/goasmtpauth.c:616
 msgid "Server does not support STARTTLS"
 msgstr "Il server non supporta STARTTLS"
 
@@ -278,13 +284,13 @@ msgid "SSL on a dedicated port"
 msgstr "SSL su porta dedicata"
 
 #: src/goabackend/goaimapsmtpprovider.c:700
-#: src/goabackend/goaimapsmtpprovider.c:1452
+#: src/goabackend/goaimapsmtpprovider.c:1454
 msgid "Email"
 msgstr "Email"
 
 #: src/goabackend/goaimapsmtpprovider.c:701
 msgid "Connect to an email account"
-msgstr "Connettersi a un account di posta elettronica"
+msgstr "Connettersi ad un account di posta elettronica"
 
 #: src/goabackend/goaimapsmtpprovider.c:705
 msgid "_Name"
@@ -329,15 +335,15 @@ msgstr "_Server SMTP"
 msgid "Example server: smtp.example.com"
 msgstr "Server di esempio: smtp.example.com"
 
-#: src/goabackend/goaimapsmtpprovider.c:1443
+#: src/goabackend/goaimapsmtpprovider.c:1445
 msgid "Name"
 msgstr "Nome"
 
-#: src/goabackend/goaimapsmtpprovider.c:1469
+#: src/goabackend/goaimapsmtpprovider.c:1471
 msgid "IMAP"
 msgstr "IMAP"
 
-#: src/goabackend/goaimapsmtpprovider.c:1489
+#: src/goabackend/goaimapsmtpprovider.c:1491
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -401,36 +407,36 @@ msgid "Microsoft 365"
 msgstr "Microsoft 365"
 
 #. provider name
-#: src/goabackend/goamsgraphprovider.c:498
+#: src/goabackend/goamsgraphprovider.c:488
 msgid "Connect to Microsoft 365 to access email, calendars, contacts and files"
 msgstr ""
-"Connettersi Microsoft 365 per accedere a email, calendari, contatti e file"
+"Connettersi a Microsoft 365 per accedere a email, calendari, contatti e file"
 
-#: src/goabackend/goamsgraphprovider.c:502
+#: src/goabackend/goamsgraphprovider.c:492
 msgid "Use Organization Account"
 msgstr "Usa account di un'organizzazione"
 
-#: src/goabackend/goamsgraphprovider.c:503
+#: src/goabackend/goamsgraphprovider.c:493
 msgid "Connect using details from an organization or developer account"
 msgstr ""
 "Connettersi usando i dettagli di un account sviluppatore o di "
 "un'organizzazione"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:510
+#: src/goabackend/goamsgraphprovider.c:500
 msgid "Enter the details provided by your organization"
 msgstr "Inserire i dettagli forniti dalla propria organizzazione"
 
-#: src/goabackend/goamsgraphprovider.c:512
+#: src/goabackend/goamsgraphprovider.c:502
 msgid "_Client ID (Optional)"
 msgstr "_Client ID (facoltativo)"
 
 #. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
-#: src/goabackend/goamsgraphprovider.c:514
+#: src/goabackend/goamsgraphprovider.c:504
 msgid "_Tenant ID"
 msgstr "_Tenant ID"
 
-#: src/goabackend/goamsgraphprovider.c:515
+#: src/goabackend/goamsgraphprovider.c:505
 msgid "Example ID: 00000000-0000-0000-0000-000000000000"
 msgstr "ID di esempio: 00000000-0000-0000-0000-000000000000"
 
@@ -485,13 +491,14 @@ msgstr "Aggiornamento del token di accesso non riuscito (%s, %d): "
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: src/goabackend/goaowncloudprovider.c:526 src/goabackend/goautils.c:790
+#: src/goabackend/goaowncloudprovider.c:526 src/goabackend/goautils.c:796
 msgid "Not supported"
 msgstr "Non supportato"
 
 #: src/goabackend/goaowncloudprovider.c:850
 msgid "Add a Nextcloud account by providing your server address"
 msgstr ""
+"Aggiungere un account Nextcloud fornendo l'indirizzo del proprio server"
 
 #: src/goabackend/goaowncloudprovider.c:853
 #: src/goabackend/goawebdavprovider.c:403
@@ -583,7 +590,7 @@ msgid ""
 "use it with apps and services."
 msgstr ""
 "Se si rimuove questo account online, bisognerà connettersi nuovamente ad "
-"esso per utilizzarlo con app e servizi."
+"esso per utilizzarlo con applicazioni e servizi."
 
 #: src/goabackend/goaproviderdialog.c:630
 msgid "_Cancel"
@@ -605,32 +612,32 @@ msgstr "Accedere per riconnettersi a questo account"
 msgid "_Account Description"
 msgstr "_Descrizione dell'account"
 
-#: src/goabackend/goaproviderdialog.c:947
+#: src/goabackend/goaproviderdialog.c:940
 msgid "_Remove…"
 msgstr "_Rimuovi…"
 
-#: src/goabackend/goaproviderdialog.c:1043
+#: src/goabackend/goaproviderdialog.c:1036
 msgid "_Sign In"
 msgstr "_Accedi"
 
-#: src/goabackend/goaproviderdialog.c:1105
+#: src/goabackend/goaproviderdialog.c:1098
 msgid "_Try Again"
 msgstr "_Riprova"
 
-#: src/goabackend/goaproviderdialog.c:1109
+#: src/goabackend/goaproviderdialog.c:1102
 msgid "_Ignore"
 msgstr "_Ignora"
 
-#: src/goabackend/goaproviderdialog.c:1381
+#: src/goabackend/goaproviderdialog.c:1374
 msgid "Dialog was dismissed"
-msgstr "Il dialogo è stato respinto"
+msgstr "La finestra di dialogo è stata chiusa"
 
 #. TODO: more specific
 #: src/goabackend/goasmtpauth.c:164
 msgid "TLS not available"
 msgstr "TLS non disponibile"
 
-#: src/goabackend/goasmtpauth.c:503
+#: src/goabackend/goasmtpauth.c:481
 msgid "Unknown authentication mechanism"
 msgstr "Meccanismo di autenticazione sconosciuto"
 
@@ -669,20 +676,20 @@ msgstr "Credenziali GOA %s per l'identità %s"
 msgid "Failed to store credentials in the keyring"
 msgstr "Archiviazione delle credenziali nel portachiavi non riuscita"
 
-#: src/goabackend/goautils.c:794
+#: src/goabackend/goautils.c:800
 msgid "Not found"
 msgstr "Non trovato"
 
-#: src/goabackend/goautils.c:808
+#: src/goabackend/goautils.c:814
 #, c-format
 msgid "Code: %u — Unexpected response from server"
 msgstr "Codice: %u — risposta dal server inattesa"
 
-#: src/goabackend/goautils.c:833
+#: src/goabackend/goautils.c:839
 msgid "The signing certificate authority is not known."
 msgstr "La firma dell'autorità di certificazione è sconosciuta."
 
-#: src/goabackend/goautils.c:837
+#: src/goabackend/goautils.c:843
 msgid ""
 "The certificate does not match the expected identity of the site that it was "
 "retrieved from."
@@ -690,28 +697,28 @@ msgstr ""
 "Il certificato non corrisponde all'identità attesa del sito da cui è stato "
 "ricevuto."
 
-#: src/goabackend/goautils.c:842
+#: src/goabackend/goautils.c:848
 msgid "The certificate’s activation time is still in the future."
 msgstr "Il periodo di attivazione del certificato non è ancora attivo."
 
-#: src/goabackend/goautils.c:846
+#: src/goabackend/goautils.c:852
 msgid "The certificate has expired."
 msgstr "Il certificato è scaduto."
 
-#: src/goabackend/goautils.c:850
+#: src/goabackend/goautils.c:856
 msgid "The certificate has been revoked."
 msgstr "Il certificato è stato revocato."
 
-#: src/goabackend/goautils.c:854
+#: src/goabackend/goautils.c:860
 msgid "The certificate’s algorithm is considered insecure."
 msgstr "L'algoritmo del certificato è considerato non sicuro."
 
-#: src/goabackend/goautils.c:860
+#: src/goabackend/goautils.c:866
 msgid "Invalid certificate."
 msgstr "Certificato non valido."
 
 #. TODO: more specific
-#: src/goabackend/goautils.c:895
+#: src/goabackend/goautils.c:901
 #, c-format
 msgid "Did not find %s with identity “%s” in credentials"
 msgstr ""
@@ -726,8 +733,8 @@ msgid ""
 "Add a calendar, contacts and files account by entering your WebDAV server "
 "and account details"
 msgstr ""
-"Aggiungere un account di calendario, contatti e file inserendo il server "
-"WebDAV e i dettagli dell'account"
+"Aggiungere un account di calendario, contatti e file inserendo  i dettagli "
+"del server WebDAV e dell'account"
 
 #: src/goabackend/goawebdavprovider.c:414
 msgid "Server Addresses (Optional)"
@@ -803,7 +810,7 @@ msgstr "Nessun accesso"
 
 #: src/goaidentity/goakerberosidentity.c:1838
 msgid "Could not get the default principal: "
-msgstr "Impossibile ottenere la principale predefinita: "
+msgstr "Impossibile ottenere il principale predefinito: "
 
 #: src/goaidentity/goakerberosidentity.c:1851
 #, c-format
@@ -826,132 +833,3 @@ msgstr "Impossibile creare la cache delle credenziali per l'identità"
 #, c-format
 msgid "Error closing file descriptor: %s"
 msgstr "Errore nella chiusura del descrittore file: %s"
-
-#~ msgid "List of providers that are allowed to be loaded"
-#~ msgstr "Elenco di fornitori che è possibile caricare"
-
-#~ msgid ""
-#~ "A list of strings representing the providers that are allowed to be "
-#~ "loaded (default: 'all'). This is only evaluated on startup. Deprecated: "
-#~ "use goa.conf in the system config directory instead, with a key "
-#~ "[providers] enable=all instead. The key is comma-separated list of the "
-#~ "provider names."
-#~ msgstr ""
-#~ "Un elenco di stringhe che rappresentano i fornitori che è possibile "
-#~ "caricare (valore predefinito: «all», cioè tutti). Viene letto solamente "
-#~ "in fase di avvio. È obsoleto: usare al suo posto goa.conf nella directory "
-#~ "«config» di sistema, con la chiave [providers] enable=all. La chiave è "
-#~ "una lista dei nomi dei fornitori, separati da virgole."
-
-#, c-format
-#~ msgid "Authorization response: %s"
-#~ msgstr "Risposta di autorizzazione: «%s»"
-
-#~ msgid "Failed to authenticate"
-#~ msgstr "Impossibile autenticarsi"
-
-#~ msgid "_Account Name"
-#~ msgstr "Dettagli _account"
-
-#~ msgid "Microsoft"
-#~ msgstr "Microsoft"
-
-#~ msgid "None"
-#~ msgstr "Nessuna"
-
-#~ msgid "_Sign in…"
-#~ msgstr "_Accedi…"
-
-#~ msgid "Connect to a Microsoft 365 provider to access files"
-#~ msgstr "Connettersi a un fornitore Microsoft 365 per accedere ai file"
-
-#~ msgid "Authorization Details"
-#~ msgstr "Dettagli dell'autorizzazione"
-
-#~ msgid "Common"
-#~ msgstr "Comune"
-
-#~ msgid "Custom"
-#~ msgstr "Personalizzato"
-
-#~ msgid "Advanced"
-#~ msgstr "Avanzate"
-
-#~ msgid "_Issuer"
-#~ msgstr "_Emittente"
-
-#~ msgid "Example provider: example.com"
-#~ msgstr "Fornitore di esempio: example.com"
-
-#~ msgid "Microsoft Personal"
-#~ msgstr "Microsoft Personale"
-
-#~ msgid "C_onnect"
-#~ msgstr "C_onnetti"
-
-#~ msgid "Connecting…"
-#~ msgstr "Connessione…"
-
-#~ msgid "Dialog was dismissed (%s, %d): "
-#~ msgstr "Il dialogo è stato respinto (%s, %d):"
-
-#~ msgid "Error connecting to Microsoft Exchange server"
-#~ msgstr "Errore durante la connessione al server Microsoft Exchange"
-
-#~ msgid "Error connecting to Fedora"
-#~ msgstr "Errore durante la connessione a Fedora"
-
-#~ msgid "Server does not support PLAIN"
-#~ msgstr "Il server non supporta PLAIN"
-
-#~ msgid "_Forward"
-#~ msgstr "_Inoltra"
-
-#~ msgid "Error connecting to IMAP server"
-#~ msgstr "Errore durante la connessione al server IMAP"
-
-#~ msgid "Error connecting to SMTP server"
-#~ msgstr "Errore durante la connessione al server SMTP"
-
-#~ msgid "Enterprise Login (Kerberos)"
-#~ msgstr "Accesso aziendale (Kerberos)"
-
-#~ msgid "Error connecting to enterprise identity server"
-#~ msgstr "Errore durante la connessione al server aziendale dell'identità"
-
-#~ msgid "Last.fm"
-#~ msgstr "Last.fm"
-
-#~ msgid "Error connecting to Last.fm"
-#~ msgstr "Errore durante la connessione a Last.fm"
-
-#~ msgid "Media Server"
-#~ msgstr "Server multimediale"
-
-#~ msgid ""
-#~ "Personal content can be added to your applications through a media server "
-#~ "account."
-#~ msgstr ""
-#~ "I contenuti personali possono essere aggiunti alle applicazioni "
-#~ "attraverso un account di un server multimediale."
-
-#~ msgid "Available Media Servers"
-#~ msgstr "Server multimediali disponibili"
-
-#~ msgid "No media servers found"
-#~ msgstr "Nessun server mutlimediale trovato"
-
-#~ msgid "Error connecting to Nextcloud server"
-#~ msgstr "Errore durante la connessione al server Nextcloud"
-
-#~ msgid "Use for"
-#~ msgstr "Usa per"
-
-#~ msgid "Error logging into the account"
-#~ msgstr "Errore durante l'accesso all'account"
-
-#~ msgid "Credentials have expired"
-#~ msgstr "Le credenziali sono scadute"
-
-#~ msgid "Loading “%s”…"
-#~ msgstr "Caricamento di «%s»…"
