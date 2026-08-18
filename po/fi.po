@@ -11,16 +11,16 @@ msgstr ""
 "Project-Id-Version: gnome-online-accounts master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
 "issues\n"
-"POT-Creation-Date: 2026-02-04 07:52+0000\n"
-"PO-Revision-Date: 2026-02-18 12:44+0200\n"
-"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
+"POT-Creation-Date: 2026-03-17 08:10+0000\n"
+"PO-Revision-Date: 2026-08-18 19:25+0300\n"
+"Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: suomi <lokalisointi-lista@googlegroups.com>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 "X-POT-Import-Date: 2012-02-19 15:16:12+0000\n"
 
 #: data/org.gnome.goa-daemon.desktop.in:3 src/daemon/goadaemon.c:1658
@@ -81,7 +81,7 @@ msgstr "Tuntematon virhe"
 #: src/goabackend/goadavclient.c:1310 src/goabackend/goaimapauthlogin.c:104
 #: src/goabackend/goakerberosprovider.c:290
 #: src/goabackend/goakerberosprovider.c:312 src/goabackend/goasmtpauth.c:102
-#: src/goabackend/goasmtpauth.c:495 src/goabackend/goautils.c:808
+#: src/goabackend/goasmtpauth.c:473 src/goabackend/goautils.c:808
 msgid "Authentication failed"
 msgstr "Todennus epäonnistui"
 
@@ -201,7 +201,7 @@ msgstr "Prinsipaalin saaminen käyttäjänimestä “%s” epäonnistui"
 msgid "Google"
 msgstr "Google"
 
-#: src/goabackend/goagoogleprovider.c:211
+#: src/goabackend/goagoogleprovider.c:212
 #: src/goabackend/goamsgraphprovider.c:185
 #, c-format
 msgid ""
@@ -211,8 +211,8 @@ msgstr ""
 "%d (%s)"
 
 #. TODO: more specific
-#: src/goabackend/goagoogleprovider.c:230
-#: src/goabackend/goagoogleprovider.c:241
+#: src/goabackend/goagoogleprovider.c:231
+#: src/goabackend/goagoogleprovider.c:242
 #: src/goabackend/goamsgraphprovider.c:204
 #: src/goabackend/goamsgraphprovider.c:215
 #: src/goabackend/goamsgraphprovider.c:246
@@ -234,7 +234,7 @@ msgstr "Vastauksen jäsentäminen ei onnistu"
 msgid "Service not available"
 msgstr "Palvelu ei ole käytettävissä"
 
-#: src/goabackend/goaimapauthlogin.c:157 src/goabackend/goasmtpauth.c:636
+#: src/goabackend/goaimapauthlogin.c:157 src/goabackend/goasmtpauth.c:616
 msgid "Server does not support STARTTLS"
 msgstr "Palvelin ei tue STARTTLS:ää"
 
@@ -357,19 +357,19 @@ msgstr "Esimerkkiprinsipaali: user@EXAMPLE.COM"
 
 #: src/goabackend/goakerberosprovider.c:1249
 msgid "Ticketing is disabled for account"
-msgstr ""
+msgstr "Tiketöinti on poistettu käytöstä tältä tililtä"
 
 #: src/goabackend/goakerberosprovider.c:1272
-#, fuzzy, c-format
-#| msgid "Did not find password with identity `%s' in credentials"
+#, c-format
 msgid "Could not find saved credentials for principal “%s” in keyring"
-msgstr "Käyttäjätunnukselle `%s' ei löytynyt salasanaa valtuutuksista"
+msgstr ""
+"Avainnipusta ei löytynyt tallennettuja kirjautumistietoja prinsipaalille “%s”"
 
 #: src/goabackend/goakerberosprovider.c:1288
-#, fuzzy, c-format
+#, c-format
 #| msgid "Did not find password with identity `%s' in credentials"
 msgid "Did not find password for principal “%s” in credentials"
-msgstr "Käyttäjätunnukselle `%s' ei löytynyt salasanaa valtuutuksista"
+msgstr "Kirjautumistiedoista ei löytynyt salasanaa prinsipaalille “%s”"
 
 #: src/goabackend/goakerberosprovider.c:1478
 #: src/goaidentity/goaidentityservice.c:1115
@@ -565,7 +565,7 @@ msgstr "Tili on pois käytöstä"
 #: src/goabackend/goaprovider.c:1097
 #, c-format
 msgid "ensure_credentials_sync is not implemented on type %s"
-msgstr ""
+msgstr "ensure_credentials_sync ei ole toteutettu tyypissä %s"
 
 #. Translators: this is the title of the "Add Account" and "Refresh
 #. * Account" dialogs. The %s is the name of the provider. eg.,
@@ -633,7 +633,7 @@ msgstr "Valintaikkuna ohitettiin"
 msgid "TLS not available"
 msgstr "TLS ei ole käytettävissä"
 
-#: src/goabackend/goasmtpauth.c:503
+#: src/goabackend/goasmtpauth.c:481
 msgid "Unknown authentication mechanism"
 msgstr "Tuntematon tunnistautumistapa"
 
@@ -766,16 +766,12 @@ msgstr "Verkkoalue %s vaatii lisätietoja kirjatakseen sinut sisään."
 #: src/goaidentity/goakerberosidentity.c:294
 #: src/goaidentity/goakerberosidentity.c:302
 #: src/goaidentity/goakerberosidentity.c:696
-#, fuzzy
-#| msgid "Could not find identity"
 msgid "Could not find identity in credential cache: "
-msgstr "Identiteettiä ei löytynyt"
+msgstr "Identiteettiä ei löytynyt kirjautumistietojen välimuistista: "
 
 #: src/goaidentity/goakerberosidentity.c:708
-#, fuzzy
-#| msgid "Could not find identity"
 msgid "Could not find identity credentials in cache: "
-msgstr "Identiteettiä ei löytynyt"
+msgstr "Identiteetin kirjautumistietoja ei löytynyt välimuistista: "
 
 #: src/goaidentity/goakerberosidentity.c:752
 msgid "Could not sift through identity credentials in cache: "
@@ -798,26 +794,23 @@ msgid "Could not initialize credentials cache: "
 msgstr "Kirjautumistietojen välimuistia ei voitu alustaa: "
 
 #: src/goaidentity/goakerberosidentity.c:1589
-#, fuzzy
-#| msgid "Failed to store credentials in the keyring"
 msgid "Could not store new credentials in credentials cache: "
-msgstr "Valtuutuksien tallennus avainnippuun epäonnistui"
+msgstr ""
+"Uusien kirjautumistietojen tallettaminen kirjautumistietojen välimuistiin "
+"epäonnistui: "
 
 #: src/goaidentity/goakerberosidentity.c:1825
 msgid "Not signed in"
 msgstr "Ei sisäänkirjautunut"
 
 #: src/goaidentity/goakerberosidentity.c:1838
-#, fuzzy
-#| msgid "Could not create credential cache: "
 msgid "Could not get the default principal: "
-msgstr "Identiteettivälimuistin luominen epäonnistui: "
+msgstr "Ei saatu oletusprinsipaalia: "
 
 #: src/goaidentity/goakerberosidentity.c:1851
-#, fuzzy, c-format
-#| msgid "Could not renew identity: %k"
+#, c-format
 msgid "Could not get renewed credentials from the KDC for identity %s: "
-msgstr "Identiteetin uusiminen epäonnistui: %k"
+msgstr "Uusittuja kirjautumistietoja ei saatu KDC:ltä identiteettiin %s: "
 
 #: src/goaidentity/goakerberosidentity.c:1899
 msgid "Could not erase identity: "
@@ -829,12 +822,12 @@ msgstr "Identiteettiä ei löytynyt"
 
 #: src/goaidentity/goakerberosidentitymanager.c:1038
 msgid "Could not create credential cache for identity"
-msgstr ""
+msgstr "Kirjautumistietojen välimuistia ei voitu luoda identeettiä varten"
 
 #: src/goaidentity/goalinuxnotificationstream.c:58
 #, c-format
 msgid "Error closing file descriptor: %s"
-msgstr ""
+msgstr "Tiedostokahvan sulkeminen epäonnistui: %s"
 
 #~ msgid "List of providers that are allowed to be loaded"
 #~ msgstr "Lista tarjoajista, joiden lataaminen sallitaan"
