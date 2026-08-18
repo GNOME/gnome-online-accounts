@@ -264,8 +264,9 @@ loginflow2_poll_cb (SoupSession  *session,
    * from another thread.
    */
   body = soup_session_send_and_read_finish (session, result, &error);
-  if (error == NULL && data->error != NULL)
+  if (data->error != NULL)
     {
+      g_clear_error (&error);
       g_propagate_error (&error, g_steal_pointer (&data->error));
     }
 
@@ -498,6 +499,7 @@ goa_loginflow2_query_cb (SoupSession  *session,
                          gpointer      user_data)
 {
   g_autoptr(GTask) task = G_TASK (g_steal_pointer (&user_data));
+  LoginFlow2Data *data = (LoginFlow2Data *) g_task_get_task_data (task);
   SoupMessage *message = NULL;
   g_autoptr(GBytes) body = NULL;
   g_autoptr(JsonParser) parser = NULL;
@@ -511,6 +513,12 @@ goa_loginflow2_query_cb (SoupSession  *session,
    * from another thread.
    */
   body = soup_session_send_and_read_finish (session, result, &error);
+  if (data->error != NULL)
+    {
+      g_clear_error (&error);
+      g_propagate_error (&error, g_steal_pointer (&data->error));
+    }
+
   if (error != NULL)
     {
       g_task_return_error (task, g_steal_pointer (&error));
@@ -1007,7 +1015,7 @@ add_account_loginflow2_cb (GObject      *unused,
   g_variant_builder_add (&details, "{ss}", "CalDavUri", dav_uri);
   g_variant_builder_add (&details, "{ss}", "ContactsEnabled", "true");
   g_variant_builder_add (&details, "{ss}", "CardDavUri", dav_uri);
-  g_variant_builder_add (&details, "{ss}", "AcceptSslErrors", "false");
+  g_variant_builder_add (&details, "{ss}", "AcceptSslErrors", data->accept_ssl_errors ? "true" : "false");
 
   goa_manager_call_add_account (goa_client_get_manager (data->client),
                                 goa_provider_get_provider_type (provider),
