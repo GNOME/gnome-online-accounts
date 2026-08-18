@@ -818,7 +818,7 @@ on_entry_changed (GtkEditable    *editable,
    * discovery after a short delay.
    */
   data->accept_ssl_errors = FALSE;
-  data->discovery_id = g_timeout_add_once (250, loginflow2_query, data);
+  data->discovery_id = g_timeout_add_seconds_once (1, loginflow2_query, data);
 }
 
 static void
