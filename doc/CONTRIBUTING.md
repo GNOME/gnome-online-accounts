@@ -4,7 +4,7 @@ Thank you for considering contributing to GNOME Online Accounts!
 
 All code contributions are made using merge requests.
 
-This project has a [Code of Conduct](https://wiki.gnome.org/Foundation/CodeOfConduct); please,
+This project has a [Code of Conduct](https://conduct.gnome.org/); please,
 follow it in all your interactions with members of the project and the GNOME community.
 
 ## Creating Merge Requests
