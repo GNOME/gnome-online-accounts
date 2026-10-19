@@ -1,0 +1,826 @@
+# Māori translation of gnome-online-accounts.
+# Copyright (C) 2026 the gnome-online-accounts authors.
+# This file is distributed under the same licence as the gnome-online-accounts package.
+# Arlewatyerre Tuhoro-Bell <aidan@ursa.nz>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-online-accounts master\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-online-accounts/"
+"issues\n"
+"POT-Creation-Date: 2026-03-17 08:10+0000\n"
+"PO-Revision-Date: 2026-10-19 13:37+1300\n"
+"Last-Translator: Arlewatyerre Tuhoro-Bell <aidan@ursa.nz>\n"
+"Language-Team: Māori <https://gitlab.gnome.org/Teams/Translation/mi>\n"
+"Language: mi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: gnomi\n"
+
+#: data/org.gnome.goa-daemon.desktop.in:3 src/daemon/goadaemon.c:1658
+msgid "Online Accounts"
+msgstr "Ngā Pūkete Tuihono"
+
+#: data/org.gnome.goa-daemon.desktop.in:4
+msgid "Notifications shown by Online Accounts daemon"
+msgstr "Ngā whakamōhiotanga e whakaaturia ana e te ratonga Pūkete Tuihono"
+
+#. TODO: more specific
+#: src/daemon/goadaemon.c:1168 src/daemon/goadaemon.c:1489
+#, c-format
+msgid "Failed to find a provider for: %s"
+msgstr "Kāore i kitea he kaiwhakarato mō: %s"
+
+#: src/daemon/goadaemon.c:1432
+msgid "IsLocked property is set for account"
+msgstr "Kua tautuhia te āhuatanga IsLocked mō te pūkete"
+
+#. TODO: more specific
+#: src/daemon/goadaemon.c:1477
+msgid "ProviderType property is not set for account"
+msgstr "Kāore i tautuhia te āhuatanga ProviderType mō te pūkete"
+
+#: src/daemon/goadaemon.c:1640
+#, c-format
+msgid "Failed to sign in to “%s”"
+msgstr "I rahua te takiuru ki “%s”"
+
+#: src/daemon/goadaemon.c:1645
+msgid "Failed to sign in to multiple accounts"
+msgstr "I rahua te takiuru ki ngā pūkete maha"
+
+#: src/daemon/goadaemon.c:1661
+msgid "Account Action Required"
+msgstr "E Hiahiatia Ana he Mahi mō te Pūkete"
+
+#: src/goabackend/goaauthflowbutton.c:148
+#: src/goabackend/goaproviderdialog.c:840
+msgid "_Sign In…"
+msgstr "_Takiuru…"
+
+#: src/goabackend/goaauthflowbutton.c:162
+msgid "_Copy Link"
+msgstr "_Tārua Hono"
+
+#: src/goabackend/goaauthflowbutton.c:173
+msgid "Copy the authorization URL to continue with a specific web browser."
+msgstr ""
+"Tāruatia te URL whakamana kia haere tonu ai mā tētahi pūtirotiro tukutuku "
+"motuhake."
+
+#: src/goabackend/goadavclient.c:778 src/goabackend/goakerberosprovider.c:318
+#: src/goabackend/goaprovider.c:1078
+msgid "Unknown error"
+msgstr "Hapa tē mōhiotia"
+
+#. TODO: more specific
+#: src/goabackend/goadavclient.c:1310 src/goabackend/goaimapauthlogin.c:104
+#: src/goabackend/goakerberosprovider.c:290
+#: src/goabackend/goakerberosprovider.c:312 src/goabackend/goasmtpauth.c:102
+#: src/goabackend/goasmtpauth.c:473 src/goabackend/goautils.c:808
+msgid "Authentication failed"
+msgstr "Kua rahua te motuhēhēnga"
+
+#: src/goabackend/goadavclient.c:1317
+msgid "Cannot find WebDAV endpoint"
+msgstr "Kāore e kitea te pito mutunga WebDAV"
+
+#: src/goabackend/goadavclient.c:1430 src/goabackend/goaoauth2provider.c:888
+#: src/goabackend/goaowncloudprovider.c:622
+#: src/goabackend/goawebdavprovider.c:648
+#, c-format
+msgid "Invalid URI: %s"
+msgstr "URI muhu: %s"
+
+#. TODO: more specific
+#: src/goabackend/goaewsclient.c:278
+msgid "Failed to parse autodiscover response XML"
+msgstr "I rahua te wetewete i te XML o te urupare autodiscover"
+
+#. TODO: more specific
+#. Translators: the parameter is an XML element name.
+#: src/goabackend/goaewsclient.c:289 src/goabackend/goaewsclient.c:304
+#: src/goabackend/goaewsclient.c:319
+#, c-format
+msgid "Failed to find “%s” element"
+msgstr "Kāore i kitea te huānga “%s”"
+
+#. TODO: more specific
+#: src/goabackend/goaewsclient.c:340
+msgid "Failed to find ASUrl in autodiscover response"
+msgstr "Kāore i kitea te ASUrl i te urupare autodiscover"
+
+#: src/goabackend/goaexchangeprovider.c:52
+msgid "Microsoft Exchange"
+msgstr "Microsoft Exchange"
+
+#. Translators: the first %s is the username
+#. * (eg., debarshi.ray@gmail.com or rishi), and the
+#. * (%s, %d) is the error domain and code.
+#.
+#: src/goabackend/goaexchangeprovider.c:258
+#: src/goabackend/goawebdavprovider.c:304
+#, c-format
+msgid "Invalid password with username “%s” (%s, %d): "
+msgstr "Kupuhuna muhu mō te ingoa kaiwhakamahi “%s” (%s, %d): "
+
+#. provider name
+#: src/goabackend/goaexchangeprovider.c:389
+msgid ""
+"Connect to a Microsoft Exchange provider to access calendars, contacts and "
+"files"
+msgstr ""
+"Hono ki tētahi kaiwhakarato Microsoft Exchange hei uru ki ngā maramataka, "
+"ngā hoapā me ngā kōnae"
+
+#: src/goabackend/goaexchangeprovider.c:392
+#: src/goabackend/goaimapsmtpprovider.c:706
+msgid "_Email"
+msgstr "Ī_mēra"
+
+#: src/goabackend/goaexchangeprovider.c:393
+#: src/goabackend/goafedoraprovider.c:171
+#: src/goabackend/goaimapsmtpprovider.c:707
+#: src/goabackend/goaimapsmtpprovider.c:750
+#: src/goabackend/goaimapsmtpprovider.c:794
+#: src/goabackend/goawebdavprovider.c:408
+msgid "_Password"
+msgstr "_Kupuhuna"
+
+#: src/goabackend/goaexchangeprovider.c:394
+msgid ""
+"Exchange account details will be auto-detected from your email address when "
+"possible"
+msgstr ""
+"Ka kitea aunoa ngā taipitopito pūkete Exchange mai i tō wāhitau īmēra ina "
+"taea"
+
+#: src/goabackend/goaexchangeprovider.c:405
+msgid "Account Details"
+msgstr "Ngā Taipitopito Pūkete"
+
+#: src/goabackend/goaexchangeprovider.c:406
+#: src/goabackend/goafedoraprovider.c:170
+#: src/goabackend/goaimapsmtpprovider.c:749
+#: src/goabackend/goaimapsmtpprovider.c:793
+#: src/goabackend/goawebdavprovider.c:407
+msgid "User_name"
+msgstr "_Ingoa kaiwhakamahi"
+
+#: src/goabackend/goaexchangeprovider.c:407
+msgid "_Domain"
+msgstr "_Rohe"
+
+#: src/goabackend/goaexchangeprovider.c:408
+msgid "Example domain: example.com"
+msgstr "Rohe tauira: example.com"
+
+#: src/goabackend/goafedoraprovider.c:51
+msgid "Fedora"
+msgstr "Fedora"
+
+#: src/goabackend/goafedoraprovider.c:167
+#: src/goabackend/goakerberosprovider.c:557
+msgid "Access restricted web and network resources for your organization"
+msgstr ""
+"Uru ki ngā rauemi tukutuku me ngā rauemi whatunga kua whakawhāitihia o tō "
+"umanga"
+
+#: src/goabackend/goafedoraprovider.c:337
+#, c-format
+msgid "Failed to get principal from user name “%s”"
+msgstr "I rahua te tiki i te principal mai i te ingoa kaiwhakamahi “%s”"
+
+#: src/goabackend/goagoogleprovider.c:57
+msgid "Google"
+msgstr "Google"
+
+#: src/goabackend/goagoogleprovider.c:212
+#: src/goabackend/goamsgraphprovider.c:185
+#, c-format
+msgid ""
+"Expected status 200 when requesting your identity, instead got status %d (%s)"
+msgstr ""
+"I tūmanakohia te tūnga 200 i te tono i tō tuakiri, engari i whiwhi kē i te "
+"tūnga %d (%s)"
+
+#. TODO: more specific
+#: src/goabackend/goagoogleprovider.c:231
+#: src/goabackend/goagoogleprovider.c:242
+#: src/goabackend/goamsgraphprovider.c:204
+#: src/goabackend/goamsgraphprovider.c:215
+#: src/goabackend/goamsgraphprovider.c:246
+#: src/goabackend/goaoauth2provider.c:701
+#: src/goabackend/goaoauth2provider.c:780
+#: src/goabackend/goaoauth2provider.c:810
+#: src/goabackend/goaoauth2provider.c:821
+#: src/goabackend/goaoauth2provider.c:963
+#: src/goabackend/goaowncloudprovider.c:338
+#: src/goabackend/goaowncloudprovider.c:538
+#: src/goabackend/goaowncloudprovider.c:548
+#: src/goabackend/goaowncloudprovider.c:568 src/goabackend/goautils.c:136
+msgid "Could not parse response"
+msgstr "Kāore i taea te wetewete i te urupare"
+
+#. TODO: more specific
+#: src/goabackend/goaimapauthlogin.c:84 src/goabackend/goaoauth2provider.c:1346
+#: src/goabackend/goasmtpauth.c:149
+msgid "Service not available"
+msgstr "Kāore te ratonga e wātea"
+
+#: src/goabackend/goaimapauthlogin.c:157 src/goabackend/goasmtpauth.c:616
+msgid "Server does not support STARTTLS"
+msgstr "Kāore te tūmau e tautoko i te STARTTLS"
+
+#: src/goabackend/goaimapsmtpprovider.c:55
+msgid "IMAP and SMTP"
+msgstr "IMAP me SMTP"
+
+#. Translators: the first %s is a field name. The
+#. * second %s is the IMAP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#. Translators: the first %s is a field name. The
+#. * second %s is the SMTP
+#. * username (eg., rishi), and the (%s, %d)
+#. * is the error domain and code.
+#.
+#: src/goabackend/goaimapsmtpprovider.c:320
+#: src/goabackend/goaimapsmtpprovider.c:369
+#, c-format
+msgid "Invalid %s with username “%s” (%s, %d): "
+msgstr "%s muhu mō te ingoa kaiwhakamahi “%s” (%s, %d): "
+
+#: src/goabackend/goaimapsmtpprovider.c:571
+#: src/goabackend/goaimapsmtpprovider.c:594
+#: src/goabackend/goaimapsmtpprovider.c:729
+#: src/goabackend/goaimapsmtpprovider.c:770
+#: src/goabackend/goaimapsmtpprovider.c:814
+msgid "Auto-detected"
+msgstr "Kua kitea aunoa"
+
+#: src/goabackend/goaimapsmtpprovider.c:623
+msgid "Unable to auto-detect IMAP and SMTP settings"
+msgstr "Kāore i taea te kite aunoa i ngā tautuhinga IMAP me SMTP"
+
+#: src/goabackend/goaimapsmtpprovider.c:694
+msgid "STARTTLS after connecting"
+msgstr "STARTTLS i muri i te hono"
+
+#. GOA_TLS_TYPE_STARTTLS
+#: src/goabackend/goaimapsmtpprovider.c:695
+msgid "SSL on a dedicated port"
+msgstr "SSL i tētahi tauranga motuhake"
+
+#: src/goabackend/goaimapsmtpprovider.c:700
+#: src/goabackend/goaimapsmtpprovider.c:1454
+msgid "Email"
+msgstr "Īmēra"
+
+#: src/goabackend/goaimapsmtpprovider.c:701
+msgid "Connect to an email account"
+msgstr "Hono ki tētahi pūkete īmēra"
+
+#: src/goabackend/goaimapsmtpprovider.c:705
+msgid "_Name"
+msgstr "_Ingoa"
+
+#: src/goabackend/goaimapsmtpprovider.c:708
+msgid ""
+"IMAP and SMTP details will be auto-detected from your service provider when "
+"possible"
+msgstr ""
+"Ka kitea aunoa ngā taipitopito IMAP me SMTP mai i tō kaiwhakarato ratonga "
+"ina taea"
+
+#. IMAP
+#: src/goabackend/goaimapsmtpprovider.c:747
+msgid "IMAP Settings"
+msgstr "Tautuhinga IMAP"
+
+#: src/goabackend/goaimapsmtpprovider.c:748
+msgid "IMAP _Server"
+msgstr "_Tūmau IMAP"
+
+#: src/goabackend/goaimapsmtpprovider.c:759
+#: src/goabackend/goaimapsmtpprovider.c:803
+msgid "Encryption"
+msgstr "Whakamuna"
+
+#: src/goabackend/goaimapsmtpprovider.c:784
+msgid "Example server: imap.example.com"
+msgstr "Tūmau tauira: imap.example.com"
+
+#. SMTP
+#: src/goabackend/goaimapsmtpprovider.c:791
+msgid "SMTP Settings"
+msgstr "Tautuhinga SMTP"
+
+#: src/goabackend/goaimapsmtpprovider.c:792
+msgid "SMTP _Server"
+msgstr "_Tūmau SMTP"
+
+#: src/goabackend/goaimapsmtpprovider.c:828
+msgid "Example server: smtp.example.com"
+msgstr "Tūmau tauira: smtp.example.com"
+
+#: src/goabackend/goaimapsmtpprovider.c:1445
+msgid "Name"
+msgstr "Ingoa"
+
+#: src/goabackend/goaimapsmtpprovider.c:1471
+msgid "IMAP"
+msgstr "IMAP"
+
+#: src/goabackend/goaimapsmtpprovider.c:1491
+msgid "SMTP"
+msgstr "SMTP"
+
+#: src/goabackend/goakerberosprovider.c:81
+msgid "Kerberos"
+msgstr "Kerberos"
+
+#: src/goabackend/goakerberosprovider.c:560
+msgid "_Principal"
+msgstr "_Principal"
+
+#: src/goabackend/goakerberosprovider.c:561
+msgid "Example principal: user@EXAMPLE.COM"
+msgstr "Principal tauira: user@EXAMPLE.COM"
+
+#: src/goabackend/goakerberosprovider.c:1249
+msgid "Ticketing is disabled for account"
+msgstr "Kua monokia ngā tīkiti mō te pūkete"
+
+#: src/goabackend/goakerberosprovider.c:1272
+#, c-format
+msgid "Could not find saved credentials for principal “%s” in keyring"
+msgstr ""
+"Kāore i kitea ngā tohu takiuru kua tiakina mō te principal “%s” i te mōwhiti "
+"kī"
+
+#: src/goabackend/goakerberosprovider.c:1288
+#, c-format
+msgid "Did not find password for principal “%s” in credentials"
+msgstr "Kāore i kitea te kupuhuna mō te principal “%s” i ngā tohu takiuru"
+
+#: src/goabackend/goakerberosprovider.c:1478
+#: src/goaidentity/goaidentityservice.c:1115
+msgid "Log In to Realm"
+msgstr "Takiuru ki te Realm"
+
+#: src/goabackend/goakerberosprovider.c:1479
+msgid "Please enter your password below."
+msgstr "Tēnā, tāurua tō kupuhuna ki raro nei."
+
+#: src/goabackend/goakerberosprovider.c:1480
+msgid "Remember this password"
+msgstr "Maumahara ki tēnei kupuhuna"
+
+#: src/goabackend/goakerberosprovider.c:1490
+msgid "Operation was cancelled"
+msgstr "I whakakorea te mahinga"
+
+#: src/goabackend/goakerberosprovider.c:1672
+msgid "Identity service returned invalid key"
+msgstr "I whakahoki te ratonga tuakiri i tētahi kī muhu"
+
+#: src/goabackend/goamailclient.c:853
+#, c-format
+msgid "Invalid email address “%s”"
+msgstr "Wāhitau īmēra muhu “%s”"
+
+#: src/goabackend/goamsgraphprovider.c:65
+msgid "Microsoft 365"
+msgstr "Microsoft 365"
+
+#. provider name
+#: src/goabackend/goamsgraphprovider.c:488
+msgid "Connect to Microsoft 365 to access email, calendars, contacts and files"
+msgstr ""
+"Hono ki Microsoft 365 hei uru ki te īmēra, ngā maramataka, ngā hoapā me ngā "
+"kōnae"
+
+#: src/goabackend/goamsgraphprovider.c:492
+msgid "Use Organization Account"
+msgstr "Whakamahi Pūkete Umanga"
+
+#: src/goabackend/goamsgraphprovider.c:493
+msgid "Connect using details from an organization or developer account"
+msgstr ""
+"Hono mā ngā taipitopito o tētahi pūkete umanga, pūkete kaiwhakawhanake rānei"
+
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:500
+msgid "Enter the details provided by your organization"
+msgstr "Tāurua ngā taipitopito i tukuna mai e tō umanga"
+
+#: src/goabackend/goamsgraphprovider.c:502
+msgid "_Client ID (Optional)"
+msgstr "ID _Kiritaki (Kōwhiringa)"
+
+#. Translators: See https://learn.microsoft.com/globalization/reference/microsoft-terminology
+#: src/goabackend/goamsgraphprovider.c:504
+msgid "_Tenant ID"
+msgstr "ID Kai_rīhi"
+
+#: src/goabackend/goamsgraphprovider.c:505
+msgid "Example ID: 00000000-0000-0000-0000-000000000000"
+msgstr "ID tauira: 00000000-0000-0000-0000-000000000000"
+
+#: src/goabackend/goaoauth2provider.c:754
+#, c-format
+msgid ""
+"Expected status 200 when requesting access token, instead got status %d (%s)"
+msgstr ""
+"I tūmanakohia te tūnga 200 i te tono i te tohu uru, engari i whiwhi kē i te "
+"tūnga %d (%s)"
+
+#: src/goabackend/goaoauth2provider.c:907
+msgid "Authorization response: "
+msgstr "Urupare whakamana: "
+
+#: src/goabackend/goaoauth2provider.c:1047
+msgid "Error getting an Access Token: "
+msgstr "Hapa i te tiki i tētahi tohu uru: "
+
+#: src/goabackend/goaoauth2provider.c:1063
+msgid "Error getting identity: "
+msgstr "Hapa i te tiki i te tuakiri: "
+
+#: src/goabackend/goaoauth2provider.c:1101
+#, c-format
+msgid "Sign in to %s with your browser"
+msgstr "Takiuru ki %s mā tō pūtirotiro"
+
+#: src/goabackend/goaoauth2provider.c:1614
+#: src/goabackend/goaoauth2provider.c:1786
+#: src/goabackend/goaowncloudprovider.c:824
+msgid "Copied to clipboard"
+msgstr ""
+
+#: src/goabackend/goaoauth2provider.c:1737
+#: src/goabackend/goaowncloudprovider.c:1139
+#, c-format
+msgid "Was asked to log in as %s, but logged in as %s"
+msgstr "I tonoa kia takiuru hei %s, engari i takiuru hei %s"
+
+#: src/goabackend/goaoauth2provider.c:1980
+msgid "Credentials do not contain access_token"
+msgstr "Kāore he access_token i ngā tohu takiuru"
+
+#: src/goabackend/goaoauth2provider.c:2024
+#, c-format
+msgid "Failed to refresh access token (%s, %d): "
+msgstr "I rahua te whakahou i te tohu uru (%s, %d): "
+
+#: src/goabackend/goaowncloudprovider.c:65
+#: src/goabackend/goaowncloudprovider.c:849
+msgid "Nextcloud"
+msgstr "Nextcloud"
+
+#: src/goabackend/goaowncloudprovider.c:526 src/goabackend/goautils.c:796
+msgid "Not supported"
+msgstr "Kāore i tautokona"
+
+#: src/goabackend/goaowncloudprovider.c:850
+msgid "Add a Nextcloud account by providing your server address"
+msgstr "Tāpirihia he pūkete Nextcloud mā te tuku i tō wāhitau tūmau"
+
+#: src/goabackend/goaowncloudprovider.c:853
+#: src/goabackend/goawebdavprovider.c:403
+msgid "_Server Address"
+msgstr "Wāhitau _Tūmau"
+
+#: src/goabackend/goaowncloudprovider.c:854
+#: src/goabackend/goawebdavprovider.c:404
+msgid "Examples: example.com, 192.168.0.82"
+msgstr "Ngā tauira: example.com, 192.168.0.82"
+
+#: src/goabackend/goaprovider.c:117
+msgid "_Mail"
+msgstr "Ī_mēra"
+
+#: src/goabackend/goaprovider.c:122
+msgid "Cale_ndar"
+msgstr "M_aramataka"
+
+#: src/goabackend/goaprovider.c:127
+msgid "_Contacts"
+msgstr "_Ngā hoapā"
+
+#: src/goabackend/goaprovider.c:132
+msgid "C_hat"
+msgstr "_Kōrerorero"
+
+#: src/goabackend/goaprovider.c:137
+msgid "_Documents"
+msgstr "Ngā _Tuhinga"
+
+#: src/goabackend/goaprovider.c:142
+msgid "M_usic"
+msgstr "_Puoro"
+
+#: src/goabackend/goaprovider.c:147
+msgid "_Photos"
+msgstr "_Ngā whakaahua"
+
+#: src/goabackend/goaprovider.c:152
+msgid "_Files"
+msgstr "Ngā _Kōnae"
+
+#: src/goabackend/goaprovider.c:157
+msgid "Network _Resources"
+msgstr "Ngā _Rauemi Whatunga"
+
+#: src/goabackend/goaprovider.c:162
+msgid "_Read Later"
+msgstr "Pānui ā _Muri"
+
+#: src/goabackend/goaprovider.c:167
+msgid "Prin_ters"
+msgstr "_Ngā pūreretā"
+
+#: src/goabackend/goaprovider.c:172
+msgid "_Maps"
+msgstr "_Ngā Mahere"
+
+#: src/goabackend/goaprovider.c:177
+msgid "T_o Do"
+msgstr "Ngā Tūma_hi"
+
+#: src/goabackend/goaprovider.c:1065
+msgid "Account is disabled"
+msgstr "Kua monokia te pūkete"
+
+#: src/goabackend/goaprovider.c:1097
+#, c-format
+msgid "ensure_credentials_sync is not implemented on type %s"
+msgstr "Kāore i whakatinanahia te ensure_credentials_sync mō te momo %s"
+
+#. Translators: this is the title of the "Add Account" and "Refresh
+#. * Account" dialogs. The %s is the name of the provider. eg.,
+#. * 'Google'.
+#.
+#: src/goabackend/goaproviderdialog.c:183
+#, c-format
+msgid "%s Account"
+msgstr "Pūkete %s"
+
+#: src/goabackend/goaproviderdialog.c:627
+msgid "Remove this Account?"
+msgstr "Tango i tēnei Pūkete?"
+
+#: src/goabackend/goaproviderdialog.c:628
+msgid ""
+"If you remove this Online Account you will have to connect to it again to "
+"use it with apps and services."
+msgstr ""
+"Ki te tangohia e koe tēnei Pūkete Tuihono, me hono anō koe ki taua pūkete "
+"kia whakamahia ai ki ngā taupānga me ngā ratonga."
+
+#: src/goabackend/goaproviderdialog.c:630
+msgid "_Cancel"
+msgstr "_Whakakore"
+
+#: src/goabackend/goaproviderdialog.c:631
+msgid "_Remove"
+msgstr "_Tango"
+
+#: src/goabackend/goaproviderdialog.c:767
+msgid "An account with that name already exists"
+msgstr "Kei tētahi pūkete kē taua ingoa"
+
+#: src/goabackend/goaproviderdialog.c:839
+msgid "Sign in to reconnect to this account"
+msgstr "Takiuru kia hono anō ki tēnei pūkete"
+
+#: src/goabackend/goaproviderdialog.c:868
+msgid "_Account Description"
+msgstr "_Whakaahuatanga Pūkete"
+
+#: src/goabackend/goaproviderdialog.c:940
+msgid "_Remove…"
+msgstr "_Tango…"
+
+#: src/goabackend/goaproviderdialog.c:1036
+msgid "_Sign In"
+msgstr "_Takiuru"
+
+#: src/goabackend/goaproviderdialog.c:1098
+msgid "_Try Again"
+msgstr "_Ngana Anō"
+
+#: src/goabackend/goaproviderdialog.c:1102
+msgid "_Ignore"
+msgstr "_Waiho"
+
+#: src/goabackend/goaproviderdialog.c:1374
+msgid "Dialog was dismissed"
+msgstr "I katia te pouaka kōrero"
+
+#. TODO: more specific
+#: src/goabackend/goasmtpauth.c:164
+msgid "TLS not available"
+msgstr "Kāore te TLS e wātea"
+
+#: src/goabackend/goasmtpauth.c:481
+msgid "Unknown authentication mechanism"
+msgstr "Tikanga motuhēhēnga tē mōhiotia"
+
+#: src/goabackend/goautils.c:80
+#, c-format
+msgid "A %s account already exists for %s"
+msgstr "Kua tāpirihia kē he pūkete %s mō %s"
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:193
+msgid "Failed to delete credentials from the keyring"
+msgstr "I rahua te muku i ngā tohu takiuru i te mōwhiti kī"
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:241
+msgid "Failed to retrieve credentials from the keyring"
+msgstr "I rahua te tiki i ngā tohu takiuru mai i te mōwhiti kī"
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:251
+msgid "No credentials found in the keyring"
+msgstr "Kāore i kitea he tohu takiuru i te mōwhiti kī"
+
+#: src/goabackend/goautils.c:264
+msgid "Error parsing result obtained from the keyring: "
+msgstr "Hapa i te poroporo i te hua i whiwhi mai i te mōwhiti kī: "
+
+#. Translators: The %s is the type of the provider, e.g. 'google' or 'yahoo'
+#: src/goabackend/goautils.c:305
+#, c-format
+msgid "GOA %s credentials for identity %s"
+msgstr "Ngā tohu takiuru GOA %s mō te tuakiri %s"
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:322
+msgid "Failed to store credentials in the keyring"
+msgstr "I rahua te penapena i ngā tohu takiuru ki te mōwhiti kī"
+
+#: src/goabackend/goautils.c:800
+msgid "Not found"
+msgstr "Kīhai i kitea"
+
+#: src/goabackend/goautils.c:814
+#, c-format
+msgid "Code: %u — Unexpected response from server"
+msgstr "Waehere: %u — He urupare ohorere mai i te tūmau"
+
+#: src/goabackend/goautils.c:839
+msgid "The signing certificate authority is not known."
+msgstr "Tē mōhiotia te mana tiwhikete waitohu."
+
+#: src/goabackend/goautils.c:843
+msgid ""
+"The certificate does not match the expected identity of the site that it was "
+"retrieved from."
+msgstr ""
+"Kāore te tiwhikete e hāngai ki te tuakiri e tūmanakohia ana o te pae i "
+"tikina mai ai."
+
+#: src/goabackend/goautils.c:848
+msgid "The certificate’s activation time is still in the future."
+msgstr "Kei te anamata tonu te wā whakahohe o te tiwhikete."
+
+#: src/goabackend/goautils.c:852
+msgid "The certificate has expired."
+msgstr "Kua pau te wā o te tiwhikete."
+
+#: src/goabackend/goautils.c:856
+msgid "The certificate has been revoked."
+msgstr "Kua whakakorea te tiwhikete."
+
+#: src/goabackend/goautils.c:860
+msgid "The certificate’s algorithm is considered insecure."
+msgstr "E kīia ana he haumarukore te hātepe o te tiwhikete."
+
+#: src/goabackend/goautils.c:866
+msgid "Invalid certificate."
+msgstr "Tiwhikete muhu."
+
+#. TODO: more specific
+#: src/goabackend/goautils.c:901
+#, c-format
+msgid "Did not find %s with identity “%s” in credentials"
+msgstr "Kāore i kitea te %s me te tuakiri “%s” i ngā tohu takiuru"
+
+#: src/goabackend/goawebdavprovider.c:399
+msgid "Calendar, Contacts and Files"
+msgstr "Maramataka, Hoapā me Ngā Kōnae"
+
+#: src/goabackend/goawebdavprovider.c:400
+msgid ""
+"Add a calendar, contacts and files account by entering your WebDAV server "
+"and account details"
+msgstr ""
+"Tāpirihia he pūkete mō ngā maramataka, ngā hoapā me ngā kōnae mā te tāuru i "
+"tō tūmau WebDAV me ō taipitopito pūkete"
+
+#: src/goabackend/goawebdavprovider.c:414
+msgid "Server Addresses (Optional)"
+msgstr "Ngā Wāhitau Tūmau (Kōwhiringa)"
+
+#: src/goabackend/goawebdavprovider.c:415
+msgid "Files"
+msgstr ""
+
+#: src/goabackend/goawebdavprovider.c:416
+msgid "Calendar (CalDAV)"
+msgstr "Maramataka (CalDAV)"
+
+#: src/goabackend/goawebdavprovider.c:417
+msgid "Contacts (CardDAV)"
+msgstr "Ngā Hoapā (CardDAV)"
+
+#: src/goaidentity/goaidentityservice.c:565
+msgid "Initial secret key is invalid"
+msgstr "He muhu te kī matatapu tīmatanga"
+
+#. TODO: more specific
+#: src/goaidentity/goaidentityservice.c:787
+#, c-format
+msgid "Couldn't get GoaObject for object path %s"
+msgstr "Kāore i taea te tiki i te GoaObject mō te ara ahanoa %s"
+
+#: src/goaidentity/goaidentityservice.c:1120
+#, c-format
+msgid "The network realm %s needs some information to sign you in."
+msgstr "Me whai mōhiohio te realm whatunga %s hei whakatakiuru i a koe."
+
+#: src/goaidentity/goakerberosidentity.c:294
+#: src/goaidentity/goakerberosidentity.c:302
+#: src/goaidentity/goakerberosidentity.c:696
+msgid "Could not find identity in credential cache: "
+msgstr "Kāore i kitea te tuakiri i te keteroki tohu takiuru: "
+
+#: src/goaidentity/goakerberosidentity.c:708
+msgid "Could not find identity credentials in cache: "
+msgstr "Kāore i kitea ngā tohu takiuru tuakiri i te keteroki: "
+
+#: src/goaidentity/goakerberosidentity.c:752
+msgid "Could not sift through identity credentials in cache: "
+msgstr "Kāore i taea te tātari i ngā tohu takiuru tuakiri i te keteroki: "
+
+#: src/goaidentity/goakerberosidentity.c:764
+msgid "Could not finish up sifting through identity credentials in cache: "
+msgstr ""
+"Kāore i taea te whakaoti i te tātari i ngā tohu takiuru tuakiri i te "
+"keteroki: "
+
+#: src/goaidentity/goakerberosidentity.c:1407
+msgid "No associated identification found"
+msgstr "Kāore i kitea he tuakiri e hono ana"
+
+#: src/goaidentity/goakerberosidentity.c:1536
+msgid "Could not create credential cache: "
+msgstr "Kāore i taea te waihanga i te keteroki tohu takiuru: "
+
+#: src/goaidentity/goakerberosidentity.c:1576
+msgid "Could not initialize credentials cache: "
+msgstr "Kāore i taea te tīmata i te keteroki tohu takiuru: "
+
+#: src/goaidentity/goakerberosidentity.c:1589
+msgid "Could not store new credentials in credentials cache: "
+msgstr ""
+"Kāore i taea te penapena i ngā tohu takiuru hou ki te keteroki tohu takiuru: "
+
+#: src/goaidentity/goakerberosidentity.c:1825
+msgid "Not signed in"
+msgstr ""
+
+#: src/goaidentity/goakerberosidentity.c:1838
+msgid "Could not get the default principal: "
+msgstr "Kāore i taea te tiki i te principal taunoa: "
+
+#: src/goaidentity/goakerberosidentity.c:1851
+#, c-format
+msgid "Could not get renewed credentials from the KDC for identity %s: "
+msgstr ""
+"Kāore i taea te tiki i ngā tohu takiuru kua whakahoutia mai i te KDC mō te "
+"tuakiri %s: "
+
+#: src/goaidentity/goakerberosidentity.c:1899
+msgid "Could not erase identity: "
+msgstr "Kāore i taea te ūkui i te tuakiri: "
+
+#: src/goaidentity/goakerberosidentitymanager.c:955
+msgid "Could not find identity"
+msgstr "Kāore i kitea te tuakiri"
+
+#: src/goaidentity/goakerberosidentitymanager.c:1038
+msgid "Could not create credential cache for identity"
+msgstr "Kāore i taea te waihanga i te keteroki tohu takiuru mō te tuakiri"
+
+#: src/goaidentity/goalinuxnotificationstream.c:58
+#, c-format
+msgid "Error closing file descriptor: %s"
+msgstr "Hapa i te kati i te file descriptor: %s"
