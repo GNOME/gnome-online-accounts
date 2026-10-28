@@ -89,6 +89,11 @@ dbus_dep = dependency('dbus-1')
 dbus_service_dir = dbus_dep.get_variable(pkgconfig: 'session_bus_services_dir',
                                          pkgconfig_define: ['datadir', goa_datadir])
 
+systemd_dep = dependency('systemd', required: false)
+if systemd_dep.found()
+  userunitdir = systemd_dep.get_variable(pkgconfig: 'systemduserunitdir')
+endif
+
 # Libraries
 enable_goabackend = get_option('goabackend')
 if enable_goabackend
