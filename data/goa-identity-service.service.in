@@ -1,0 +1,10 @@
+[Unit]
+Description=GNOME Online Accounts Kerberos identity service
+PartOf=graphical-session.target
+Requisite=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=dbus
+BusName=org.gnome.Identity
+ExecStart=@libexecdir@/goa-identity-service

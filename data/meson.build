@@ -21,6 +21,23 @@ if enable_goabackend
     )
   endforeach
 
+  if systemd_dep.found()
+    systemd_units = ['goa-daemon.service']
+    if enable_kerberos
+      systemd_units += 'goa-identity-service.service'
+    endif
+
+    foreach unit: systemd_units
+      configure_file(
+        input: unit + '.in',
+        output: unit,
+        configuration: service_conf,
+        install: true,
+        install_dir: userunitdir
+      )
+    endforeach
+  endif
+
   oauth2_schemes = ['x-scheme-handler/goa-oauth2']
   if enable_google
     parts = google_client_id.split('.')

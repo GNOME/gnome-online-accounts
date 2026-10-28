@@ -1,0 +1,10 @@
+[Unit]
+Description=GNOME Online Accounts daemon
+PartOf=graphical-session.target
+Requisite=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=dbus
+BusName=org.gnome.OnlineAccounts
+ExecStart=@libexecdir@/goa-daemon
